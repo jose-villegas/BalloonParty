@@ -179,7 +179,8 @@ namespace BalloonParty.Balloon.Controller
             // the (potentially different) model-slot position during a mid-balance move. The
             // collider's centre specifically, so an offset one would still reflect where it is drawn.
             _deflectedPublisher.Publish(
-                new BalloonDeflectedMessage(_model, viewPos, msg.ProjectileDirection, _view.ContactRadius));
+                new BalloonDeflectedMessage(
+                    _model, msg.Context.Projectile, viewPos, msg.ProjectileDirection, _view.ContactRadius));
 
             if (_model is IHasDeflectStamp stamper && stamper.DeflectStampScale > 0f)
             {

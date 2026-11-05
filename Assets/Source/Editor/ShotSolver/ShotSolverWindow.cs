@@ -87,7 +87,7 @@ namespace BalloonParty.Editor.ShotSolver
         private float _lastSampleTime;
         private float _maxDivergence;
         private float _maxDivergenceTime;
-        private ProjectilePositionProvider _positionProvider;
+        private IProjectileRegistry _projectiles;
         private Vector2 _windowListScroll;
         private WorldPolylineGizmo _pathGizmo;
 
@@ -534,7 +534,7 @@ namespace BalloonParty.Editor.ShotSolver
             _predictedTimes.Clear();
             _predictedTimes.AddRange(_bestWindowTimes);
             _actualSamples.Clear();
-            _positionProvider = scope.Container.Resolve<ProjectilePositionProvider>();
+            _projectiles = scope.Container.Resolve<IProjectileRegistry>();
             _fireStartTime = Time.time;
             _lastSampleTime = float.NegativeInfinity;
             _maxDivergence = 0f;
@@ -551,7 +551,7 @@ namespace BalloonParty.Editor.ShotSolver
             }
 
             var flightTime = Time.time - _fireStartTime;
-            if (_positionProvider == null || !_positionProvider.IsActive)
+            if (_projectiles == null || !_projectiles.TryGetLatestInFlight(out _, out var shotPosition))
             {
                 // Grace window for the shot's first free physics frame; afterwards, gone = flight over.
                 if (flightTime > 0.5f)
@@ -568,7 +568,7 @@ namespace BalloonParty.Editor.ShotSolver
             }
 
             _lastSampleTime = flightTime;
-            var actual = (Vector2)_positionProvider.Position;
+            var actual = (Vector2)shotPosition;
             var predicted = PredictedPositionAt(flightTime);
             var divergence = Vector2.Distance(actual, predicted);
             if (divergence > _maxDivergence)

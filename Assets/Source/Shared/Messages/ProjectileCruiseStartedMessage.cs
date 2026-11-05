@@ -1,3 +1,4 @@
+using BalloonParty.Projectile.Model;
 using UnityEngine;
 
 namespace BalloonParty.Shared.Messages
@@ -7,12 +8,15 @@ namespace BalloonParty.Shared.Messages
     /// the long flight read as a reward (the motion resolver already accelerates it by its shields).</summary>
     internal readonly struct ProjectileCruiseStartedMessage
     {
+        public readonly IProjectileModel Projectile;
         public readonly Vector3 WorldPosition;
         public readonly Vector3 Direction;
         public readonly int ShieldsRemaining;
 
-        public ProjectileCruiseStartedMessage(Vector3 worldPosition, Vector3 direction, int shieldsRemaining)
+        public ProjectileCruiseStartedMessage(
+            IProjectileModel projectile, Vector3 worldPosition, Vector3 direction, int shieldsRemaining)
         {
+            Projectile = projectile;
             WorldPosition = worldPosition;
             Direction = direction;
             ShieldsRemaining = shieldsRemaining;

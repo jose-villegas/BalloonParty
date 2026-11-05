@@ -7,10 +7,12 @@ using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Item;
 using BalloonParty.Item.Snipe;
+using BalloonParty.Projectile;
 using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pool;
+using BalloonParty.Slots.Capabilities;
 using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
@@ -31,7 +33,7 @@ namespace BalloonParty.Tests.Item
         private const float SpeedMultiplier = 1.6f;
 
         private SnipeItemHandler _handler;
-        private IMessageHandler<ProjectileLoadedMessage> _loadedHandler;
+        private ProjectileRegistry _registry;
         private IMessageHandler<PierceDischargedMessage> _dischargedHandler;
         private IGamePalette _palette;
         private IProjectileBuffs _buffs;
@@ -44,12 +46,7 @@ namespace BalloonParty.Tests.Item
             itemConfig[ItemType.Snipe].Returns(snipeSettings);
             itemConfig.Items.Returns(new List<ItemSettings> { snipeSettings });
 
-            var loadedSubscriber = Substitute.For<ISubscriber<ProjectileLoadedMessage>>();
-            loadedSubscriber
-                .Subscribe(
-                    Arg.Do<IMessageHandler<ProjectileLoadedMessage>>(h => _loadedHandler = h),
-                    Arg.Any<MessageHandlerFilter<ProjectileLoadedMessage>[]>())
-                .Returns(Substitute.For<IDisposable>());
+            _registry = new ProjectileRegistry();
 
             var dischargedSubscriber = Substitute.For<ISubscriber<PierceDischargedMessage>>();
             dischargedSubscriber
@@ -67,7 +64,7 @@ namespace BalloonParty.Tests.Item
                 _palette,
                 new ItemEffectPlayer(new PoolManager(), _palette),
                 _buffs,
-                loadedSubscriber,
+                _registry,
                 dischargedSubscriber);
 
             _handler.Start();
@@ -82,7 +79,36 @@ namespace BalloonParty.Tests.Item
 
             Assert.IsTrue(projectile.IsPiercing.Value);
             Assert.AreEqual(0, projectile.Flight.BankedPierceCharges, "an unarmed shot arms now, banks nothing");
-            _buffs.Received(1).Apply(Arg.Is<ProjectileBuff>(b => b.Id == ProjectileBuffId.Speed));
+            _buffs.Received(1).Apply(Arg.Any<IProjectileModel>(), Arg.Is<ProjectileBuff>(b => b.Id == ProjectileBuffId.Speed));
+        }
+
+        [Test]
+        public void Activate_ContextNamesABallAlreadyGone_ArmsTheCurrentBall()
+        {
+            var dead = new ProjectileModel();
+            _registry.Load(dead, null);
+            _registry.Launch(dead);
+            _registry.Land(dead);
+            var current = LoadProjectile();
+
+            Activate(dead);
+
+            Assert.IsTrue(current.IsPiercing.Value);
+            Assert.IsFalse(dead.IsPiercing.Value);
+        }
+
+        [Test]
+        public void PierceDischarged_OfAnotherBall_DoesNotSpendThisBallsBankedCharge()
+        {
+            var projectile = LoadProjectile();
+            projectile.IsPiercing.Value = true;
+            Activate(projectile);
+            var other = new ProjectileModel();
+
+            Discharge(other);
+
+            Assert.AreEqual(1, projectile.Flight.BankedPierceCharges);
+            _buffs.DidNotReceive().Apply(Arg.Any<IProjectileModel>(), Arg.Any<ProjectileBuff>());
         }
 
         [Test]
@@ -95,7 +121,7 @@ namespace BalloonParty.Tests.Item
 
             Assert.AreEqual(1, projectile.Flight.BankedPierceCharges);
             Assert.IsTrue(projectile.IsPiercing.Value, "the running pierce is untouched");
-            _buffs.DidNotReceive().Apply(Arg.Any<ProjectileBuff>());
+            _buffs.DidNotReceive().Apply(Arg.Any<IProjectileModel>(), Arg.Any<ProjectileBuff>());
         }
 
         [Test]
@@ -108,7 +134,7 @@ namespace BalloonParty.Tests.Item
 
             Assert.AreEqual(1, projectile.Flight.BankedRainbowPierceCharges);
             Assert.AreEqual(0, projectile.Flight.BankedPierceCharges);
-            _buffs.DidNotReceive().Apply(Arg.Any<ProjectileBuff>());
+            _buffs.DidNotReceive().Apply(Arg.Any<IProjectileModel>(), Arg.Any<ProjectileBuff>());
         }
 
         // The discharge leaves IsPiercing armed when a charge is banked (ProjectileModelExtensions
@@ -120,11 +146,11 @@ namespace BalloonParty.Tests.Item
             projectile.IsPiercing.Value = true;
             Activate(projectile);
 
-            Discharge();
+            Discharge(projectile);
 
             Assert.AreEqual(0, projectile.Flight.BankedPierceCharges, "the charge is spent, not re-usable");
             Assert.IsTrue(projectile.IsPiercing.Value, "the lance is re-armed");
-            _buffs.Received(1).Apply(Arg.Is<ProjectileBuff>(
+            _buffs.Received(1).Apply(Arg.Any<IProjectileModel>(), Arg.Is<ProjectileBuff>(
                 b => b.Id == ProjectileBuffId.Speed && Mathf.Approximately(b.Value, SpeedMultiplier)));
         }
 
@@ -140,10 +166,10 @@ namespace BalloonParty.Tests.Item
             Activate(projectile);
             Assert.AreEqual(3, projectile.Flight.BankedPierceCharges);
 
-            Discharge();
+            Discharge(projectile);
             Assert.AreEqual(2, projectile.Flight.BankedPierceCharges);
 
-            Discharge();
+            Discharge(projectile);
             Assert.AreEqual(1, projectile.Flight.BankedPierceCharges);
         }
 
@@ -156,11 +182,11 @@ namespace BalloonParty.Tests.Item
             Activate(projectile);
             Activate(projectile, isRainbowHost: true);
 
-            Discharge();
+            Discharge(projectile);
 
             Assert.AreEqual(0, projectile.Flight.BankedRainbowPierceCharges);
             Assert.AreEqual(1, projectile.Flight.BankedPierceCharges, "the plain charge waits for the next discharge");
-            _buffs.Received(1).Apply(Arg.Is<ProjectileBuff>(b => b.Id == ProjectileBuffId.RainbowShield));
+            _buffs.Received(1).Apply(Arg.Any<IProjectileModel>(), Arg.Is<ProjectileBuff>(b => b.Id == ProjectileBuffId.RainbowShield));
         }
 
         // "Piercing re-arms as long as the projectile still has shields": the discharge flush also runs
@@ -174,10 +200,10 @@ namespace BalloonParty.Tests.Item
             Activate(projectile);
             projectile.ShieldsRemaining.Value = -1;
 
-            Discharge();
+            Discharge(projectile);
 
             Assert.AreEqual(1, projectile.Flight.BankedPierceCharges);
-            _buffs.DidNotReceive().Apply(Arg.Any<ProjectileBuff>());
+            _buffs.DidNotReceive().Apply(Arg.Any<IProjectileModel>(), Arg.Any<ProjectileBuff>());
         }
 
         // A rainbow Shield item's grant ends at the next plain wall bounce; a rainbow lance's must last the
@@ -195,11 +221,11 @@ namespace BalloonParty.Tests.Item
                 .Returns(Substitute.For<IDisposable>());
             projectile.AddBuff(new ProjectileBuff(
                 ProjectileBuffId.RainbowShield, 0f, BuffModifierOp.Flat,
-                new WallBounceEndCondition(wallBounces)));
+                new WallBounceEndCondition(wallBounces, projectile)));
 
             Activate(projectile, isRainbowHost: true);
 
-            _buffs.Received(1).Apply(Arg.Is<ProjectileBuff>(
+            _buffs.Received(1).Apply(Arg.Any<IProjectileModel>(), Arg.Is<ProjectileBuff>(
                 b => b.Id == ProjectileBuffId.RainbowShield && b.EndCondition is PierceEndedEndCondition));
         }
 
@@ -209,16 +235,16 @@ namespace BalloonParty.Tests.Item
             var projectile = LoadProjectile();
             projectile.IsPiercing.Value = true;
 
-            Discharge();
+            Discharge(projectile);
 
-            _buffs.DidNotReceive().Apply(Arg.Any<ProjectileBuff>());
+            _buffs.DidNotReceive().Apply(Arg.Any<IProjectileModel>(), Arg.Any<ProjectileBuff>());
         }
 
         private ProjectileModel LoadProjectile()
         {
             var projectile = new ProjectileModel();
             projectile.ShieldsRemaining.Value = 3;
-            _loadedHandler.Handle(new ProjectileLoadedMessage(projectile));
+            _registry.Load(projectile, null);
             return projectile;
         }
 
@@ -231,12 +257,14 @@ namespace BalloonParty.Tests.Item
 
             // The handler reports no buff as riding until the test's own substitute says otherwise; a
             // real shot's buff list is owned by ProjectileBuffService, which these tests substitute out.
-            _handler.Activate(new ItemActivationContext(balloon, Vector3.zero, Vector3.zero));
+            _handler.Activate(new ItemActivationContext(
+                balloon, Vector3.zero, Vector3.zero, new DamageContext(1, DamageFlags.Normal, "Red", projectile)));
         }
 
-        private void Discharge()
+        private void Discharge(IProjectileModel projectile)
         {
-            _dischargedHandler.Handle(new PierceDischargedMessage(Vector3.zero, 1, false, Vector3.zero, Vector3.zero));
+            _dischargedHandler.Handle(
+                new PierceDischargedMessage(projectile, Vector3.zero, 1, false, Vector3.zero, Vector3.zero));
         }
 
         private static ItemSettings CreateSnipeSettings()

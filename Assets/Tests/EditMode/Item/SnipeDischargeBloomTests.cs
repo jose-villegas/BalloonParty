@@ -64,7 +64,7 @@ namespace BalloonParty.Tests.Item
             var justOutside = PlaceBalloon(new Vector2Int(3, 6), "Blue");
 
             _dischargedHandler.Handle(new PierceDischargedMessage(
-                center, toughCount: 2, isRainbow: true, direction: Vector3.zero, position: Vector3.zero));
+                null, center, toughCount: 2, isRainbow: true, direction: Vector3.zero, position: Vector3.zero));
 
             Assert.AreEqual(GamePalette.RainbowColorId, wellInside.Color.Value);
             Assert.AreEqual(GamePalette.RainbowColorId, chargeWidenedInside.Color.Value);
@@ -86,7 +86,7 @@ namespace BalloonParty.Tests.Item
 
             Assert.DoesNotThrow(() =>
                 _dischargedHandler.Handle(new PierceDischargedMessage(
-                    center, toughCount: 2, isRainbow: true, direction: Vector3.zero, position: Vector3.zero)));
+                    null, center, toughCount: 2, isRainbow: true, direction: Vector3.zero, position: Vector3.zero)));
 
             Assert.AreEqual(GamePalette.RainbowColorId, stillConverted.Color.Value);
         }
@@ -107,7 +107,7 @@ namespace BalloonParty.Tests.Item
             var behind = PlaceBalloon(new Vector2Int(1, 5), "Blue");
 
             _dischargedHandler.Handle(new PierceDischargedMessage(
-                center, toughCount: 2, isRainbow: true, direction: Vector3.right, position: center));
+                null, center, toughCount: 2, isRainbow: true, direction: Vector3.right, position: center));
 
             Assert.AreEqual("Red", ahead.Color.Value, "a balloon ahead of the shot's travel must stay untouched");
             Assert.AreEqual(GamePalette.RainbowColorId, behind.Color.Value);
@@ -126,7 +126,7 @@ namespace BalloonParty.Tests.Item
             var perpendicular = PlaceBalloon(new Vector2Int(2, 4), "Red");
 
             _dischargedHandler.Handle(new PierceDischargedMessage(
-                center, toughCount: 2, isRainbow: true, direction: Vector3.right, position: center));
+                null, center, toughCount: 2, isRainbow: true, direction: Vector3.right, position: center));
 
             Assert.AreEqual(GamePalette.RainbowColorId, perpendicular.Color.Value,
                 "a balloon exactly on the dot==0 boundary is not \"ahead\" and must still bloom");
@@ -150,7 +150,7 @@ namespace BalloonParty.Tests.Item
             var inTheReturnPath = PlaceBalloon(new Vector2Int(2, 5), "Red");
 
             _dischargedHandler.Handle(new PierceDischargedMessage(
-                center, toughCount: 2, isRainbow: true, direction: direction, position: position));
+                null, center, toughCount: 2, isRainbow: true, direction: direction, position: position));
 
             Assert.AreEqual("Red", inTheReturnPath.Color.Value,
                 "anchored at Position (not Center), this balloon is ahead of the shot and must stay untouched");
@@ -166,7 +166,7 @@ namespace BalloonParty.Tests.Item
             var wellInside = PlaceBalloon(new Vector2Int(2, 5), "Red");
 
             _dischargedHandler.Handle(new PierceDischargedMessage(
-                center, toughCount: 2, isRainbow: true, direction: Vector3.zero, position: Vector3.zero));
+                null, center, toughCount: 2, isRainbow: true, direction: Vector3.zero, position: Vector3.zero));
 
             Assert.AreEqual(GamePalette.RainbowColorId, wellInside.Color.Value);
         }
@@ -181,7 +181,7 @@ namespace BalloonParty.Tests.Item
             var atCentre = PlaceBalloon(new Vector2Int(2, 5), "Red");
 
             _dischargedHandler.Handle(new PierceDischargedMessage(
-                center, toughCount: 2, isRainbow: false, direction: Vector3.zero, position: Vector3.zero));
+                null, center, toughCount: 2, isRainbow: false, direction: Vector3.zero, position: Vector3.zero));
 
             Assert.AreEqual("Red", atCentre.Color.Value);
         }

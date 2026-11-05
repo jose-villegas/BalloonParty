@@ -1,3 +1,4 @@
+using BalloonParty.Projectile.Model;
 using UnityEngine;
 
 namespace BalloonParty.Shared.Messages
@@ -15,17 +16,22 @@ namespace BalloonParty.Shared.Messages
     ///     <see cref="Position" /> are both required (no defaulting) — an anti-exploit guard that silently
     ///     falls back to "exclude nothing" on a forgotten argument is worse than a compile error. The
     ///     discharge feel subscribes: the rainbow bloom, and (later) lights/shockwave.
+    ///     <see cref="Projectile" /> is the shot that discharged.
     /// </summary>
     public readonly struct PierceDischargedMessage
     {
+        public IProjectileModel Projectile { get; }
         public Vector3 Center { get; }
         public int ToughCount { get; }
         public bool IsRainbow { get; }
         public Vector3 Direction { get; }
         public Vector3 Position { get; }
 
-        public PierceDischargedMessage(Vector3 center, int toughCount, bool isRainbow, Vector3 direction, Vector3 position)
+        public PierceDischargedMessage(
+            IProjectileModel projectile, Vector3 center, int toughCount, bool isRainbow, Vector3 direction,
+            Vector3 position)
         {
+            Projectile = projectile;
             Center = center;
             ToughCount = toughCount;
             IsRainbow = isRainbow;

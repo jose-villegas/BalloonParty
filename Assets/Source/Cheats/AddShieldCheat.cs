@@ -1,25 +1,20 @@
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
 
-using System;
 using System.Collections.Generic;
+using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
-using BalloonParty.Shared.Messages;
-using MessagePipe;
 using UnityEngine;
-using VContainer.Unity;
 
 namespace BalloonParty.Cheats
 {
     /// <summary>
-    ///     Adds shields to the shot currently loaded in the thrower. Bumps the reactive count directly;
+    ///     Adds shields to the latest shot in flight, else the one loaded in the thrower. Bumps the reactive count directly;
     ///     the shield view observes it and plays the gain feedback on the change.
     /// </summary>
-    internal class AddShieldCheat : ICheat, ICheatControls, IStartable, IDisposable
+    internal class AddShieldCheat : ICheat, ICheatControls
     {
-        private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
+        private readonly IProjectileRegistry _projectiles;
 
-        private IWriteableProjectileModel _activeProjectile;
-        private IDisposable _subscription;
         private int _amount = 1;
 
         public string Name => "Add Shields";
@@ -27,30 +22,19 @@ namespace BalloonParty.Cheats
         public IReadOnlyList<string> Tags => new[] { "projectile", "shield" };
         public bool Compact => false;
 
-        public AddShieldCheat(ISubscriber<ProjectileLoadedMessage> loadedSubscriber)
+        public AddShieldCheat(IProjectileRegistry projectiles)
         {
-            _loadedSubscriber = loadedSubscriber;
-        }
-
-        public void Start()
-        {
-            _subscription = _loadedSubscriber.Subscribe(
-                msg => _activeProjectile = (IWriteableProjectileModel)msg.Model);
-        }
-
-        public void Dispose()
-        {
-            _subscription?.Dispose();
+            _projectiles = projectiles;
         }
 
         public void Execute()
         {
-            if (_activeProjectile == null)
+            if (_projectiles.ShotOrCurrent(null) is not IWriteableProjectileModel shot)
             {
                 return;
             }
 
-            _activeProjectile.ShieldsRemaining.Value += Mathf.Max(1, _amount);
+            shot.ShieldsRemaining.Value += Mathf.Max(1, _amount);
         }
 
         public void DrawControls()

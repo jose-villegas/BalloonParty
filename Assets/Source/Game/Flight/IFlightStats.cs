@@ -3,9 +3,9 @@ using BalloonParty.Balloon.Type;
 namespace BalloonParty.Game.Flight
 {
     /// <summary>
-    ///     What happened during the flight in progress. Zeroed when the next projectile loads.
-    ///     Read by audio (as pitch steps) and by metrics (as gameplay facts) — one owner, so the two
-    ///     can never disagree about how many Toughs died this shot.
+    ///     What happened during one shot's flight, from its load until its death. Read by audio (as pitch
+    ///     steps) and by metrics (as gameplay facts) — one owner, so the two can never disagree about how
+    ///     many Toughs died this shot. Get one through <see cref="IFlightStatsSource" />.
     /// </summary>
     internal interface IFlightStats
     {

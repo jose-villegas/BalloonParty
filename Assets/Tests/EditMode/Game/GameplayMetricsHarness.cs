@@ -9,6 +9,7 @@ using BalloonParty.Game.Flight;
 using BalloonParty.Game.Run;
 using BalloonParty.Game.Telemetry;
 using BalloonParty.Projectile.Controller;
+using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
@@ -89,6 +90,11 @@ namespace BalloonParty.Tests.Game
             var flightScope = Substitute.For<IFlightScope>();
             flightScope.IsLoaded.Returns(FlightLoaded);
 
+            // One canned stats object for every ball: these tests drive a single flight, and the per-ball
+            // keying itself is FlightStatsServiceTests' concern.
+            var flightStatsSource = Substitute.For<IFlightStatsSource>();
+            flightStatsSource.Of(Arg.Any<IProjectileModel>()).Returns(FlightStats);
+
             var runScore = Substitute.For<IRunScore>();
             runScore.TotalScore.Returns(TotalScore);
 
@@ -124,7 +130,7 @@ namespace BalloonParty.Tests.Game
                 Wired,
                 new SessionTelemetryContext(),
                 flightScope,
-                FlightStats,
+                flightStatsSource,
                 HoldState,
                 runScore,
                 RetryState,

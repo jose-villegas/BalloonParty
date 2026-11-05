@@ -24,10 +24,10 @@ namespace BalloonParty.Item.Lightning
     /// <summary>
     ///     Handles the Lightning item: chains through same-color balloons nearest-first and destroys
     ///     them. A rainbow holder instead <em>converts</em> a whole colour group to rainbow (never
-    ///     destroys) — the colour chosen by the last projectile fired, so it seeds a combo rather than
+    ///     destroys) — the colour chosen by the shot that set it off, so it seeds a combo rather than
     ///     clearing the board.
     /// </summary>
-    internal class LightningItemHandler : IBalloonItem, IStartable, IDisposable
+    internal class LightningItemHandler : IBalloonItem
     {
         private sealed class ByDistanceComparer : IComparer<(IBalloonModel model, Vector3 worldPos)>
         {
@@ -40,16 +40,12 @@ namespace BalloonParty.Item.Lightning
         private readonly IHitDispatcher _hitDispatcher;
         private readonly IItemConfiguration _itemConfig;
         private readonly IGamePalette _palette;
-        private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
         private readonly PoolManager _poolManager;
         private readonly SlotGrid _grid;
         private readonly SceneLightFieldService _lightField;
 
         // Safe to share: set and consumed synchronously within one CollectSortedTargets call.
         private readonly ByDistanceComparer _distanceComparer = new();
-
-        private IProjectileModel _activeProjectile;
-        private IDisposable _subscription;
 
         public ItemType Type => ItemType.Lightning;
 
@@ -58,7 +54,6 @@ namespace BalloonParty.Item.Lightning
             IItemConfiguration itemConfig,
             IHitDispatcher hitDispatcher,
             IGamePalette palette,
-            ISubscriber<ProjectileLoadedMessage> loadedSubscriber,
             SlotGrid grid,
             PoolManager poolManager,
             SceneLightFieldService lightField)
@@ -66,20 +61,9 @@ namespace BalloonParty.Item.Lightning
             _itemConfig = itemConfig;
             _hitDispatcher = hitDispatcher;
             _palette = palette;
-            _loadedSubscriber = loadedSubscriber;
             _grid = grid;
             _poolManager = poolManager;
             _lightField = lightField;
-        }
-
-        public void Start()
-        {
-            _subscription = _loadedSubscriber.Subscribe(msg => _activeProjectile = msg.Model);
-        }
-
-        public void Dispose()
-        {
-            _subscription?.Dispose();
         }
 
         public UniTask Activate(ItemActivationContext activation)
@@ -91,9 +75,10 @@ namespace BalloonParty.Item.Lightning
             var sourceColorId = balloon.GetColorId();
             var convertsToRainbow = _palette.IsRainbow(sourceColorId);
 
-            // A rainbow holder converts a whole colour group to rainbow (chosen by the last projectile's
-            // colour) instead of destroying; a concrete holder chains and destroys its own colour.
-            var matchColor = convertsToRainbow ? _activeProjectile?.ColorName.Value : sourceColorId;
+            // A rainbow holder converts a whole colour group to rainbow (chosen by the colour of the shot
+            // that set it off) instead of destroying; a concrete holder chains and destroys its own colour.
+            var shot = activation.DamageContext.Projectile;
+            var matchColor = convertsToRainbow ? shot?.ColorName.Value : sourceColorId;
             if (convertsToRainbow && (string.IsNullOrEmpty(matchColor) || _palette.IsRainbow(matchColor)))
             {
                 matchColor = _grid.FindNearestColorId(balloon.SlotIndex.Value, balloon, _palette);
@@ -113,7 +98,7 @@ namespace BalloonParty.Item.Lightning
                 return UniTask.CompletedTask;
             }
 
-            var context = new DamageContext(settings.Damage, settings.Flags, sourceColorId);
+            var context = new DamageContext(settings.Damage, settings.Flags, sourceColorId, shot);
 
             void ApplyTo(IBalloonModel model, Vector3 pos)
             {

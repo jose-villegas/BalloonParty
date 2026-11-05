@@ -24,7 +24,7 @@ accumulator.
 ```mermaid
 graph TD
     Bus["MessagePipe — 21 message subscriptions"] --> Svc["GameplayMetricsService"]
-    Stats["FlightStatsService via IFlightStats"] --> Svc
+    Stats["FlightStatsService via IFlightStatsSource"] --> Svc
     Hold["IHoldSpeedUpState"] --> Svc
     Danger["IDangerLevel.Level"] --> Svc
     Pause["PauseService.IsAnyPaused"] --> Svc
@@ -204,6 +204,12 @@ to, immediately before that publish — `HitPipeline` for pops and deflects, `Pr
 for wall bounces, `ProjectileHitResolver` for pierce discharges. The count is therefore
 fixed before any subscriber runs: `CombatSoundRouter` reads it post-increment for its pitch
 ramps, metrics folds it at flight seal, and neither depends on subscription order.
+
+Counts are per ball: metrics asks `IFlightStatsSource.Of(ball)` for the dying ball named by
+`ProjectileDestroyedMessage` (or the ball it remembered at `ProjectileLoadedMessage`, for the
+game-over seal). The metric Flight *scope* itself is still a single one, reset on each load
+and sealed on each death, so it is exact only while one ball flies at a time. A scope per
+ball is the rapid-fire phase of @ref plan_fast_paced.
 
 The one exception: `CombatSoundRouter._colorPopsThisFlight` **stays private to audio**. It
 resets on streak break as well as on load, and counts only pops that use the generic

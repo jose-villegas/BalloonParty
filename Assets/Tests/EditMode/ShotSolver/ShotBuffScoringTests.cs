@@ -4,6 +4,7 @@ using System.Linq;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Score;
+using BalloonParty.Projectile;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Solver;
@@ -49,7 +50,8 @@ namespace BalloonParty.Tests.ShotSolver
                 .Returns(Substitute.For<IDisposable>());
 
             return new ColorStreakTracker(
-                Substitute.For<IPublisher<StreakChangedMessage>>(), levelUpSubscriber, projectileLoadedSubscriber);
+                Substitute.For<IPublisher<StreakChangedMessage>>(), levelUpSubscriber, projectileLoadedSubscriber,
+                new ProjectileRegistry());
         }
 
         [Test]
@@ -60,7 +62,7 @@ namespace BalloonParty.Tests.ShotSolver
             // green again — see ProjectileHitResolver.cs:154 adopt-then-record ordering), then checks
             // the sim's RawScore against the tracker's own multipliers — the field-mapping proof that
             // RecordColor really does mirror ColorStreakTracker.Record.
-            var tracker = CreateTracker();
+            var tracker = CreateTracker().For(null);
             var expectedMultipliers = new[]
             {
                 tracker.Record("Red"),
@@ -90,7 +92,7 @@ namespace BalloonParty.Tests.ShotSolver
         {
             // Mirrors RecordDeferred/RecordDeferred/Record's fold (ColorStreakTrackerTests'
             // RecordDeferred_ThenRecord_FoldsIntoStreak, live-side).
-            var tracker = CreateTracker();
+            var tracker = CreateTracker().For(null);
             tracker.RecordDeferred();
             var expectedFold = tracker.RecordDeferred();
             var expectedFoldedStreak = tracker.Record("Red");

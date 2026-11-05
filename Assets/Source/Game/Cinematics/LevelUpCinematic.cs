@@ -28,7 +28,7 @@ namespace BalloonParty.Game.Cinematics
         private readonly ILevelProgress _levelProgress;
         private readonly ILossForecast _lossForecast;
         private readonly ScoreTrailService _scoreTrailService;
-        private readonly ProjectilePositionProvider _positionProvider;
+        private readonly IProjectileRegistry _projectiles;
         private readonly PauseService _pauseService;
         private readonly Rect _outerBounds;
 
@@ -51,7 +51,7 @@ namespace BalloonParty.Game.Cinematics
             ILevelProgress levelProgress,
             ILossForecast lossForecast,
             ScoreTrailService scoreTrailService,
-            ProjectilePositionProvider positionProvider,
+            IProjectileRegistry projectiles,
             PauseService pauseService,
             IProjectileFlightConfig flightConfig)
             : base(director, rig, timeScale, settings)
@@ -62,7 +62,7 @@ namespace BalloonParty.Game.Cinematics
             _levelProgress = levelProgress;
             _lossForecast = lossForecast;
             _scoreTrailService = scoreTrailService;
-            _positionProvider = positionProvider;
+            _projectiles = projectiles;
             _pauseService = pauseService;
 
             var limits = new WallLimits(flightConfig.LimitsClockwise);
@@ -118,8 +118,8 @@ namespace BalloonParty.Game.Cinematics
             }
 
             _sessionActive = true;
-            _lastProjectilePosition = _positionProvider.IsActive
-                ? _positionProvider.Position
+            _lastProjectilePosition = _projectiles.TryGetLatestInFlight(out _, out var shotPosition)
+                ? shotPosition
                 : msg.WorldPosition;
 
             BeginCinematic();
@@ -204,9 +204,9 @@ namespace BalloonParty.Game.Cinematics
 
         private Vector3 GetCameraTarget()
         {
-            if (_positionProvider.IsActive)
+            if (_projectiles.TryGetLatestInFlight(out _, out var shotPosition))
             {
-                _lastProjectilePosition = _positionProvider.Position;
+                _lastProjectilePosition = shotPosition;
             }
 
             return _lastProjectilePosition;

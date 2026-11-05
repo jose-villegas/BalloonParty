@@ -210,7 +210,7 @@ namespace BalloonParty.Tests.Audio
             EnterGame();
             _player.ClearReceivedCalls();
 
-            _firedHandler.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+            _firedHandler.Handle(new ProjectileFiredMessage(null, Vector3.zero, Vector3.up));
 
             _player.Received().SetVolumeFactor(_dayHandle, 0f);
             _player.Received().SetVolumeFactor(_nightHandle, 0f);
@@ -221,7 +221,7 @@ namespace BalloonParty.Tests.Audio
         {
             _timeOfDayNight.IsNight.Returns(false);
             EnterGame();
-            _firedHandler.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+            _firedHandler.Handle(new ProjectileFiredMessage(null, Vector3.zero, Vector3.up));
             _player.ClearReceivedCalls();
 
             _loadedHandler.Handle(new ProjectileLoadedMessage(null));
@@ -235,7 +235,7 @@ namespace BalloonParty.Tests.Audio
         {
             _timeOfDayNight.IsNight.Returns(false);
             EnterGame();
-            _firedHandler.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+            _firedHandler.Handle(new ProjectileFiredMessage(null, Vector3.zero, Vector3.up));
             _player.ClearReceivedCalls();
 
             _destroyedHandler.Handle(new ProjectileDestroyedMessage());
@@ -251,7 +251,7 @@ namespace BalloonParty.Tests.Audio
             EnterGame();
             _player.ClearReceivedCalls();
 
-            _firedHandler.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+            _firedHandler.Handle(new ProjectileFiredMessage(null, Vector3.zero, Vector3.up));
 
             // Both loops duck, even though night is the active one.
             _player.Received().SetVolumeFactor(_dayHandle, 0f);
@@ -263,7 +263,7 @@ namespace BalloonParty.Tests.Audio
         {
             _timeOfDayNight.IsNight.Returns(true);
             EnterGame();
-            _firedHandler.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+            _firedHandler.Handle(new ProjectileFiredMessage(null, Vector3.zero, Vector3.up));
             _player.ClearReceivedCalls();
 
             _loadedHandler.Handle(new ProjectileLoadedMessage(null));
@@ -377,7 +377,7 @@ namespace BalloonParty.Tests.Audio
         {
             _timeOfDayNight.IsNight.Returns(false);
             EnterGame();
-            _firedHandler.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+            _firedHandler.Handle(new ProjectileFiredMessage(null, Vector3.zero, Vector3.up));
             _player.ClearReceivedCalls();
 
             // Night falls while in flight — should still be ducked.

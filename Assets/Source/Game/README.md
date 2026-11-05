@@ -17,7 +17,7 @@ The entry point that starts and runs the game.
 | `Health/` | Player hit-point pool and loss forecast — see `Health/README.md` |
 | `Danger/` | Space-pressure early-warning signal — see `Danger/README.md` |
 | `Cinematics/` | Cinematic director, camera rig, and the level-up / heart-drain producers — see `Cinematics/README.md` |
-| `Flight/` | `FlightStatsService` — the single owner of per-flight counts (pops, deflects, wall bounces, pierce discharges), exposed read-only via `IFlightStats` and read by both audio and telemetry so neither keeps its own copy |
+| `Flight/` | `FlightStatsService` — the single owner of per-ball flight counts (pops, deflects, wall bounces, pierce discharges), read per ball via `IFlightStatsSource.Of(ball)` by both audio and telemetry so neither keeps its own copy |
 | `Telemetry/` | Gameplay metrics — counts what happens during play at four nested scopes (Session ⊃ Run ⊃ Level ⊃ Flight) and serves the level-up/game-over popups, a local JSON Lines log, and (unbuilt) an external analytics export — see `Telemetry/README.md` |
 
 ## Architecture
@@ -39,6 +39,8 @@ resolving `AppLifetimeScope`'s registrations from the parent where needed (e.g. 
 `CameraShakeController` drives the App-owned `CameraShakeView`).
 
 Scene-placed child scopes (`ScoreUILifetimeScope`, `LevelUpLifetimeScope`, `ShieldUILifetimeScope`, `HealthUILifetimeScope`, `DangerUILifetimeScope`, `GameOverLifetimeScope`, `ThrowerLifetimeScope`) extend `LifetimeScope` directly. Parent scope is wired via VContainer's `parentReference` field in the Inspector.
+
+`ProjectileRegistry` (`Projectile/`) is registered here as a game-scope singleton under both `IProjectileRegistry` (read: held ball, balls in flight, `Retired`) and `IProjectileRegistryWriter`; systems that need "the ball" ask it instead of caching the last-loaded one. See `Projectile/README.md`.
 
 **Pooled prefabs (balloons, projectiles)** do not use child scopes. Their `[Inject]` fields are populated via `InjectingPoolChannel`, which injects from the parent container — skipping container creation entirely.
 

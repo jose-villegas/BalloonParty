@@ -7,6 +7,7 @@ using BalloonParty.Game.Danger;
 using BalloonParty.Game.Flight;
 using BalloonParty.Game.Run;
 using BalloonParty.Projectile.Controller;
+using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
@@ -61,7 +62,7 @@ namespace BalloonParty.Game.Telemetry
         private readonly ITelemetrySink _sink;
         private readonly SessionTelemetryContext _sessionContext;
         private readonly IFlightScope _flightScope;
-        private readonly IFlightStats _flightStats;
+        private readonly IFlightStatsSource _flightStats;
         private readonly IHoldSpeedUpState _holdState;
         private readonly IRunScore _runScore;
         private readonly IRetryState _retryState;
@@ -110,6 +111,7 @@ namespace BalloonParty.Game.Telemetry
         private int _pendingNewLevel;
         private int _flightIndexInLevel;
         private int _currentLevelIndex;
+        private IProjectileModel _flightProjectile;
 
         public IReadOnlyReactiveProperty<LevelMetricsSnapshot> CeremonyLevel => _ceremonyLevel;
 
@@ -148,7 +150,7 @@ namespace BalloonParty.Game.Telemetry
             ITelemetrySink sink,
             SessionTelemetryContext sessionContext,
             IFlightScope flightScope,
-            IFlightStats flightStats,
+            IFlightStatsSource flightStats,
             IHoldSpeedUpState holdState,
             IRunScore runScore,
             IRetryState retryState,
@@ -376,6 +378,7 @@ namespace BalloonParty.Game.Telemetry
             // interflight window cannot alias the previous flight (R2).
             _flightScopeMetrics.Reset();
             _holdEngagedThisFlight = false;
+            _flightProjectile = message.Model;
             _flightIndexInLevel++;
             _levelMetrics.Increment(MetricId.FlightsStarted);
         }
@@ -403,7 +406,7 @@ namespace BalloonParty.Game.Telemetry
             _levelDirty = true;
 
             SampleHold();
-            SealFlight();
+            SealFlight(message.Projectile);
         }
 
         private void OnActorHit(ActorHitMessage message)
@@ -744,7 +747,7 @@ namespace BalloonParty.Game.Telemetry
             // taps, pierce clears and the entire FlightStats breakdown.
             if (_flightScope.IsLoaded.Value)
             {
-                SealFlight();
+                SealFlight(_flightProjectile);
             }
 
             // FinalLevel, not FinalLevel - 1. The two sources are offset from each other:
@@ -843,8 +846,11 @@ namespace BalloonParty.Game.Telemetry
             _levelMetrics.Reset();
         }
 
-        private void SealFlight()
+        // One metric flight scope, exact while one ball flies at a time; concurrent balls need a scope
+        // per ball (PLAN-FastPaced, rapid-fire phase).
+        private void SealFlight(IProjectileModel projectile)
         {
+            var stats = _flightStats.Of(projectile);
             // Per-flight balloon-type counts, wall bounces and pierce discharges have exactly one owner
             // (FlightStatsService, written by HitPipeline before the publish). Metrics folds them in at
             // the seal rather than recounting them — RK-2a is two owners drifting apart.
@@ -852,22 +858,22 @@ namespace BalloonParty.Game.Telemetry
             {
                 var type = BalloonTypes[i];
 
-                var pops = _flightStats.PopsOf(type);
+                var pops = stats.PopsOf(type);
                 if (pops > 0)
                 {
                     _flightScopeMetrics.AddAxis(MetricId.Pops, MetricAxis.BalloonType, (int)type, pops);
                 }
 
-                var deflects = _flightStats.DeflectsOf(type);
+                var deflects = stats.DeflectsOf(type);
                 if (deflects > 0)
                 {
                     _flightScopeMetrics.AddAxis(MetricId.Deflects, MetricAxis.BalloonType, (int)type, deflects);
                 }
             }
 
-            var wallBounces = _flightStats.WallBounces;
+            var wallBounces = stats.WallBounces;
             _flightScopeMetrics.Add(MetricId.WallBounces, wallBounces);
-            _flightScopeMetrics.Add(MetricId.PierceDischarges, _flightStats.PierceDischarges);
+            _flightScopeMetrics.Add(MetricId.PierceDischarges, stats.PierceDischarges);
 
             _levelMetrics.RecordMax(MetricId.MaxWallBouncesInFlight, wallBounces);
             if (_holdEngagedThisFlight)

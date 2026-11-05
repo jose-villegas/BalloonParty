@@ -4,7 +4,9 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Flight;
+using BalloonParty.Projectile;
 using BalloonParty.Projectile.Controller;
+using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
@@ -37,12 +39,13 @@ namespace BalloonParty.Audio.Routing
         private readonly ISubscriber<StreakChangedMessage> _streakChangedSubscriber;
         private readonly IProjectileFlightConfig _flightConfig;
         private readonly IActiveProjectilePierce _activePierce;
-        private readonly IFlightStats _flightStats;
+        private readonly IFlightStatsSource _flightStats;
+        private readonly IProjectileRegistry _projectiles;
         private readonly IGamePalette _palette;
         private readonly CompositeDisposable _subscriptions = new();
         private readonly Dictionary<string, int> _colorPopsThisFlight = new();
+        private readonly Dictionary<IProjectileModel, SoundHandle> _cruiseHandles = new();
 
-        private SoundHandle _cruiseHandle = SoundHandle.None;
         private SoundHandle _pierceLoopHandle = SoundHandle.None;
 
         [Inject]
@@ -62,7 +65,8 @@ namespace BalloonParty.Audio.Routing
             ISubscriber<StreakChangedMessage> streakChangedSubscriber,
             IProjectileFlightConfig flightConfig,
             IActiveProjectilePierce activePierce,
-            IFlightStats flightStats,
+            IFlightStatsSource flightStats,
+            IProjectileRegistry projectiles,
             IGamePalette palette)
         {
             _player = player;
@@ -82,6 +86,7 @@ namespace BalloonParty.Audio.Routing
             _flightConfig = flightConfig;
             _activePierce = activePierce;
             _flightStats = flightStats;
+            _projectiles = projectiles;
             _palette = palette;
         }
 
@@ -101,6 +106,9 @@ namespace BalloonParty.Audio.Routing
             _speedTapSubscriber.Subscribe(OnSpeedTapMinted).AddTo(_subscriptions);
             _streakChangedSubscriber.Subscribe(OnStreakChanged).AddTo(_subscriptions);
             _activePierce.IsPiercing.Subscribe(OnPierceStateChanged).AddTo(_subscriptions);
+
+            // A ball scaled away by game over or a reset publishes neither CruiseEnded nor Destroyed.
+            _projectiles.Retired.Subscribe(StopCruise).AddTo(_subscriptions);
         }
 
         public void Dispose()
@@ -128,7 +136,7 @@ namespace BalloonParty.Audio.Routing
                 }
                 else
                 {
-                    var offset = PopSemitoneOffset(popId, message.Actor);
+                    var offset = PopSemitoneOffset(popId, message.Actor, message.Context.Projectile);
                     _player.Play(popId, message.WorldPosition, semitoneOffset: offset);
                 }
             }
@@ -146,7 +154,8 @@ namespace BalloonParty.Audio.Routing
                 }
                 else if (deflectId == GameSoundId.BalloonDeflectUnbreakable)
                 {
-                    var step = _flightStats.DeflectsOf(BalloonType.Unbreakable) - 1;
+                    // Clamped: a deflect no ball caused (a cheat) isn't counted, and would play below the root.
+                    var step = Math.Max(0, _flightStats.Of(message.Context.Projectile).DeflectsOf(BalloonType.Unbreakable) - 1);
                     _player.Play(deflectId, message.WorldPosition, semitoneOffset: step);
                 }
                 else
@@ -202,15 +211,16 @@ namespace BalloonParty.Audio.Routing
             _player.Play(GameSoundId.ShotReload, null);
         }
 
+        // Keyed by shot: one ball's cruise ending must not cut another's loop.
         private void OnCruiseStarted(ProjectileCruiseStartedMessage message)
         {
-            _cruiseHandle = _player.Play(GameSoundId.CruiseLoopStart, message.WorldPosition);
+            StopCruise(message.Projectile);
+            _cruiseHandles[message.Projectile] = _player.Play(GameSoundId.CruiseLoopStart, message.WorldPosition);
         }
 
         private void OnCruiseEnded(ProjectileCruiseEndedMessage message)
         {
-            _player.Stop(_cruiseHandle);
-            _cruiseHandle = SoundHandle.None;
+            StopCruise(message.Projectile);
         }
 
         private void OnDoomedStarted(ProjectileDoomedStartedMessage message)
@@ -220,6 +230,7 @@ namespace BalloonParty.Audio.Routing
 
         private void OnProjectileDestroyed(ProjectileDestroyedMessage message)
         {
+            StopCruise(message.Projectile);
             _player.Play(GameSoundId.ProjectileDeath, null);
             var depth = _flightConfig.ShieldToneThreshold;
             _player.Play(GameSoundId.WallHit, null, melodicStreak: depth, semitoneOffset: -MusicalPitchExtensions.TritoneSemitones, volumeScale: 5f);
@@ -227,7 +238,7 @@ namespace BalloonParty.Audio.Routing
 
         private void OnPierceDischarged(PierceDischargedMessage message)
         {
-            var step = _flightStats.PierceDischarges - 1;
+            var step = _flightStats.Of(message.Projectile).PierceDischarges - 1;
             var offset = step * MusicalPitchExtensions.WholeToneSemitones;
             _player.Play(GameSoundId.PierceDischarge, message.Center, semitoneOffset: offset);
         }
@@ -264,7 +275,7 @@ namespace BalloonParty.Audio.Routing
         private void OnWallHit(WallHitMessage message)
         {
             var depth = Math.Max(0, _flightConfig.ShieldToneThreshold - message.ShieldsRemaining);
-            var offset = -Math.Min(_flightStats.WallBounces - 1, MaxRampSemitones);
+            var offset = -Math.Min(_flightStats.Of(message.Projectile).WallBounces - 1, MaxRampSemitones);
 
             _player.Play(GameSoundId.WallHit, message.Position, depth, semitoneOffset: offset);
         }
@@ -289,15 +300,23 @@ namespace BalloonParty.Audio.Routing
         // Only types with a dedicated pop id ramp. Flight stats count every balloon type, but a type that
         // falls through to the generic BalloonPop without a colour (BubbleCluster today) has no voice of
         // its own to climb, and never ramped before this counter was shared.
-        private int PopSemitoneOffset(GameSoundId popId, ISlotActor actor)
+        private int PopSemitoneOffset(GameSoundId popId, ISlotActor actor, IProjectileModel projectile)
         {
             if (popId == GameSoundId.BalloonPop || actor is not IBalloonModel balloon)
             {
                 return 0;
             }
 
-            var step = _flightStats.PopsOf(balloon.TypeName) - 1;
+            var step = Math.Max(0, _flightStats.Of(projectile).PopsOf(balloon.TypeName) - 1);
             return Math.Min(step * MusicalPitchExtensions.WholeToneSemitones, MaxRampSemitones);
+        }
+
+        private void StopCruise(IProjectileModel projectile)
+        {
+            if (projectile != null && _cruiseHandles.Remove(projectile, out var handle))
+            {
+                _player.Stop(handle);
+            }
         }
     }
 }

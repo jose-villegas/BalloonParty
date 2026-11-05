@@ -70,7 +70,7 @@ namespace BalloonParty.Tests.Projectile
             _timeScale.Claim(TimeScaleSource.HoldSpeedUp, 1.5f);
             Assert.AreEqual(1.5f, Time.timeScale, 0.001f);
 
-            _firedHandler.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+            _firedHandler.Handle(new ProjectileFiredMessage(null, Vector3.zero, Vector3.up));
             _destroyedHandler.Handle(new ProjectileDestroyedMessage());
 
             // The claim must be gone — timeScale restored to 1.
@@ -83,7 +83,7 @@ namespace BalloonParty.Tests.Projectile
             _timeScale.Claim(TimeScaleSource.Cinematic, 0.3f);
             _timeScale.Claim(TimeScaleSource.HoldSpeedUp, 1.5f);
 
-            _firedHandler.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+            _firedHandler.Handle(new ProjectileFiredMessage(null, Vector3.zero, Vector3.up));
             _destroyedHandler.Handle(new ProjectileDestroyedMessage());
 
             // HoldSpeedUp released; Cinematic's 0.3 is the only remaining claim.
@@ -130,7 +130,7 @@ namespace BalloonParty.Tests.Projectile
         [Test]
         public void OnDestroyed_AfterFired_ResetsInFlightSoTickIsInert()
         {
-            _firedHandler.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+            _firedHandler.Handle(new ProjectileFiredMessage(null, Vector3.zero, Vector3.up));
             _destroyedHandler.Handle(new ProjectileDestroyedMessage());
 
             // Tick after destroyed should be a no-op (no claim made). In EditMode

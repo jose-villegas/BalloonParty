@@ -3,6 +3,7 @@ using BalloonParty.Audio;
 using BalloonParty.Audio.Routing;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Level;
+using BalloonParty.Projectile;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 using NSubstitute;
@@ -37,8 +38,6 @@ namespace BalloonParty.Tests.Audio
             var ascendStartedSubscriber = CaptureSubscriber<LevelAscendStartedMessage>(_ => { });
             var descendStartedSubscriber = CaptureSubscriber<LevelDescendStartedMessage>(_ => { });
             var progressBarCompletedSubscriber = CaptureSubscriber<ProgressBarCompletedMessage>(h => _progressBarHandler = h);
-            var projectileLoadedSubscriber = CaptureSubscriber<ProjectileLoadedMessage>(_ => { });
-            var projectileDestroyedSubscriber = CaptureSubscriber<ProjectileDestroyedMessage>(_ => { });
 
             var palette = Substitute.For<IGamePalette>();
             palette.ProgressColorNames.Returns(new[] { "Red", "Blue", "Green", "Yellow" });
@@ -51,7 +50,7 @@ namespace BalloonParty.Tests.Audio
                 levelUpFillSubscriber, levelUpDismissedSubscriber, levelTransitionSubscriber,
                 boardClearSubscriber, gameOverSubscriber, gameOverDismissedSubscriber,
                 ascendStartedSubscriber, descendStartedSubscriber, progressBarCompletedSubscriber,
-                projectileLoadedSubscriber, projectileDestroyedSubscriber);
+                new ProjectileRegistry());
             router.Start();
         }
 

@@ -1,7 +1,7 @@
 using System;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Level;
-using BalloonParty.Projectile.Model;
+using BalloonParty.Projectile;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
@@ -29,11 +29,8 @@ namespace BalloonParty.Audio.Routing
         private readonly ISubscriber<LevelAscendStartedMessage> _ascendStartedSubscriber;
         private readonly ISubscriber<LevelDescendStartedMessage> _descendStartedSubscriber;
         private readonly ISubscriber<ProgressBarCompletedMessage> _progressBarCompletedSubscriber;
-        private readonly ISubscriber<ProjectileLoadedMessage> _projectileLoadedSubscriber;
-        private readonly ISubscriber<ProjectileDestroyedMessage> _projectileDestroyedSubscriber;
+        private readonly IProjectileRegistry _projectiles;
         private readonly CompositeDisposable _subscriptions = new();
-
-        private IProjectileModel _activeProjectile;
 
         [Inject]
         public ProgressionSoundRouter(ISoundPlayer player, IMelodicContext melodic, IGamePalette palette,
@@ -50,8 +47,7 @@ namespace BalloonParty.Audio.Routing
             ISubscriber<LevelAscendStartedMessage> ascendStartedSubscriber,
             ISubscriber<LevelDescendStartedMessage> descendStartedSubscriber,
             ISubscriber<ProgressBarCompletedMessage> progressBarCompletedSubscriber,
-            ISubscriber<ProjectileLoadedMessage> projectileLoadedSubscriber,
-            ISubscriber<ProjectileDestroyedMessage> projectileDestroyedSubscriber)
+            IProjectileRegistry projectiles)
         {
             _player = player;
             _melodic = melodic;
@@ -69,8 +65,7 @@ namespace BalloonParty.Audio.Routing
             _ascendStartedSubscriber = ascendStartedSubscriber;
             _descendStartedSubscriber = descendStartedSubscriber;
             _progressBarCompletedSubscriber = progressBarCompletedSubscriber;
-            _projectileLoadedSubscriber = projectileLoadedSubscriber;
-            _projectileDestroyedSubscriber = projectileDestroyedSubscriber;
+            _projectiles = projectiles;
         }
 
         public void Start()
@@ -87,8 +82,6 @@ namespace BalloonParty.Audio.Routing
             _ascendStartedSubscriber.Subscribe(OnAscendStarted).AddTo(_subscriptions);
             _descendStartedSubscriber.Subscribe(OnDescendStarted).AddTo(_subscriptions);
             _progressBarCompletedSubscriber.Subscribe(OnProgressBarCompleted).AddTo(_subscriptions);
-            _projectileLoadedSubscriber.Subscribe(m => _activeProjectile = m.Model).AddTo(_subscriptions);
-            _projectileDestroyedSubscriber.Subscribe(_ => _activeProjectile = null).AddTo(_subscriptions);
 
             _levelProgress.Phase
                 .Where(p => p == LevelUpPhase.Completing)
@@ -165,7 +158,8 @@ namespace BalloonParty.Audio.Routing
 
         private void PlayLevelCompletePop()
         {
-            var colorName = _activeProjectile?.ColorName.Value;
+            // Completing is claimed mid-flight by the pop that filled the last bar: the latest ball's colour.
+            var colorName = _projectiles.ShotOrCurrent(null)?.ColorName.Value;
             var offset = string.IsNullOrEmpty(colorName)
                 ? 0
                 : MusicalPitchExtensions.ColorRootOffset(_palette.ProgressColorNames, colorName);

@@ -316,7 +316,7 @@ namespace BalloonParty.Tests.Game
             _harness.EnterGame();
             var balloon = GameplayMetricsHarness.Balloon(BalloonType.Simple, GameplayMetricsHarness.Red);
 
-            _harness.ProjectileFired.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+            _harness.ProjectileFired.Handle(new ProjectileFiredMessage(null, Vector3.zero, Vector3.up));
             _harness.ActorHit.Handle(GameplayMetricsHarness.Hit(balloon, HitOutcome.Pop));
 
             // An item/AOE pop carries no DirectHit flag (R13) — counting it would make accuracy > 100%.
@@ -390,7 +390,7 @@ namespace BalloonParty.Tests.Game
 
             _harness.ProjectileLoaded.Handle(new ProjectileLoadedMessage(null));
             _harness.FlightLoaded.Value = true;
-            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage());
+            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage(null));
             _harness.FlightLoaded.Value = false;
 
             _harness.CompleteLevel(2);
@@ -411,7 +411,7 @@ namespace BalloonParty.Tests.Game
             _harness.EnterGame();
             _harness.ProjectileLoaded.Handle(new ProjectileLoadedMessage(null));
             _harness.FlightLoaded.Value = true;
-            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage());
+            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage(null));
             _harness.FlightLoaded.Value = false;
 
             // R2: the [Destroyed, next Loaded) window is interflight — a board-clear or cheat pop here
@@ -435,11 +435,11 @@ namespace BalloonParty.Tests.Game
             _harness.FlightLoaded.Value = true;
 
             _harness.HoldState.IsHolding.Returns(true);
-            _harness.ProjectileFired.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+            _harness.ProjectileFired.Handle(new ProjectileFiredMessage(null, Vector3.zero, Vector3.up));
 
             _harness.Now = 3f;
             _harness.HoldState.IsHolding.Returns(false);
-            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage());
+            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage(null));
             _harness.FlightLoaded.Value = false;
 
             _harness.CompleteLevel(2);
@@ -506,7 +506,7 @@ namespace BalloonParty.Tests.Game
         {
             using var harness = new GameplayMetricsHarness(new ThrowingSink());
             harness.EnterGame();
-            harness.ProjectileFired.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+            harness.ProjectileFired.Handle(new ProjectileFiredMessage(null, Vector3.zero, Vector3.up));
 
             // MessagePipe runs handlers on the publisher's stack with no exception isolation, and both
             // flush points publish before releasing critical state — an escape here soft-locks the game.
@@ -569,8 +569,8 @@ namespace BalloonParty.Tests.Game
         {
             _harness.EnterGame();
             Play();
-            _harness.PierceDischarged.Handle(new PierceDischargedMessage(Vector3.zero, 3, false, Vector3.zero, Vector3.zero));
-            _harness.PierceDischarged.Handle(new PierceDischargedMessage(Vector3.zero, 2, true, Vector3.zero, Vector3.zero));
+            _harness.PierceDischarged.Handle(new PierceDischargedMessage(null, Vector3.zero, 3, false, Vector3.zero, Vector3.zero));
+            _harness.PierceDischarged.Handle(new PierceDischargedMessage(null, Vector3.zero, 2, true, Vector3.zero, Vector3.zero));
             _harness.CompleteLevel(2);
 
             var level = _harness.LastOf(RecordKind.Level);
@@ -583,9 +583,9 @@ namespace BalloonParty.Tests.Game
         {
             _harness.EnterGame();
             Play();
-            _harness.SpeedTapMinted.Handle(new SpeedTapMintedMessage(Vector3.zero, 1));
-            _harness.SpeedTapMinted.Handle(new SpeedTapMintedMessage(Vector3.zero, 4));
-            _harness.SpeedTapMinted.Handle(new SpeedTapMintedMessage(Vector3.zero, 2));
+            _harness.SpeedTapMinted.Handle(new SpeedTapMintedMessage(null, Vector3.zero, 1));
+            _harness.SpeedTapMinted.Handle(new SpeedTapMintedMessage(null, Vector3.zero, 4));
+            _harness.SpeedTapMinted.Handle(new SpeedTapMintedMessage(null, Vector3.zero, 2));
             _harness.CompleteLevel(2);
 
             var level = _harness.LastOf(RecordKind.Level);
@@ -616,9 +616,9 @@ namespace BalloonParty.Tests.Game
             Play();
             _harness.Strikethrough.Handle(new StrikethroughArrivedMessage(0));
             _harness.Strikethrough.Handle(new StrikethroughArrivedMessage(1));
-            _harness.ShieldGained.Handle(new ShieldGainedMessage(Vector2Int.zero));
-            _harness.ShieldLost.Handle(new ShieldLostMessage(Vector3.zero));
-            _harness.ShieldLost.Handle(new ShieldLostMessage(Vector3.zero));
+            _harness.ShieldGained.Handle(new ShieldGainedMessage(null, Vector2Int.zero));
+            _harness.ShieldLost.Handle(new ShieldLostMessage(null, Vector3.zero));
+            _harness.ShieldLost.Handle(new ShieldLostMessage(null, Vector3.zero));
             _harness.CompleteLevel(2);
 
             var level = _harness.LastOf(RecordKind.Level);
@@ -760,8 +760,8 @@ namespace BalloonParty.Tests.Game
             for (var i = 0; i < 3; i++)
             {
                 _harness.ProjectileLoaded.Handle(new ProjectileLoadedMessage(null));
-                _harness.ProjectileFired.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
-                _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage());
+                _harness.ProjectileFired.Handle(new ProjectileFiredMessage(null, Vector3.zero, Vector3.up));
+                _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage(null));
             }
 
             var flights = _harness.AllOf(RecordKind.Flight);
@@ -782,7 +782,7 @@ namespace BalloonParty.Tests.Game
             _harness.ActorHit.Handle(GameplayMetricsHarness.Hit(
                 GameplayMetricsHarness.Balloon(BalloonType.Simple, GameplayMetricsHarness.Red),
                 HitOutcome.Pop));
-            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage());
+            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage(null));
 
             var first = _harness.LastOf(RecordKind.Flight);
             Assert.AreEqual(4f, first.Metrics[TimerId.Gameplay], 0.01f, "time of flight, not level time");
@@ -792,7 +792,7 @@ namespace BalloonParty.Tests.Game
             // a running total wearing a flight's name.
             _harness.ProjectileLoaded.Handle(new ProjectileLoadedMessage(null));
             _harness.Now = 6f;
-            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage());
+            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage(null));
 
             var second = _harness.LastOf(RecordKind.Flight);
             Assert.AreEqual(2f, second.Metrics[TimerId.Gameplay], 0.01f);
@@ -804,12 +804,12 @@ namespace BalloonParty.Tests.Game
         {
             _harness.EnterGame();
             _harness.ProjectileLoaded.Handle(new ProjectileLoadedMessage(null));
-            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage());
+            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage(null));
             Play();
             _harness.CompleteLevel(2);
 
             _harness.ProjectileLoaded.Handle(new ProjectileLoadedMessage(null));
-            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage());
+            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage(null));
 
             var flights = _harness.AllOf(RecordKind.Flight);
             Assert.AreEqual(1, flights[flights.Count - 1].FlightIndex, "first flight of the new level");
@@ -818,7 +818,7 @@ namespace BalloonParty.Tests.Game
 
         private void Play()
         {
-            _harness.ProjectileFired.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+            _harness.ProjectileFired.Handle(new ProjectileFiredMessage(null, Vector3.zero, Vector3.up));
         }
 
         private sealed class ThrowingSink : ITelemetrySink

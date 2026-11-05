@@ -11,6 +11,7 @@ using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.SceneLight;
+using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using BalloonParty.Configuration.Effects;
 using MessagePipe;
@@ -80,7 +81,6 @@ namespace BalloonParty.Tests.Item
                 itemConfig,
                 _hitDispatcher,
                 palette,
-                Substitute.For<ISubscriber<ProjectileLoadedMessage>>(),
                 _grid,
                 new PoolManager(),
                 lightField);
@@ -131,16 +131,17 @@ namespace BalloonParty.Tests.Item
         {
             var projectile = Substitute.For<IProjectileModel>();
             projectile.ColorName.Returns(new ReactiveProperty<string>("Red"));
-            SetField(_handler, "_activeProjectile", projectile);
 
             var source = PlaceBalloon(0, 0, GamePalette.RainbowColorId);
             var red1 = PlaceBalloon(1, 0, "Red");
             var red2 = PlaceBalloon(2, 0, "Red");
             var blue = PlaceBalloon(3, 0, "Blue");
 
-            _handler.Activate(new ItemActivationContext(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)), Vector3.zero));
+            _handler.Activate(new ItemActivationContext(
+                source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)), Vector3.zero,
+                new DamageContext(1, DamageFlags.Normal, "Red", projectile)));
 
-            // The last-projectile colour group turns rainbow; other colours are untouched.
+            // The colour group of the shot that set it off turns rainbow; other colours are untouched.
             Assert.AreEqual(GamePalette.RainbowColorId, red1.Color.Value);
             Assert.AreEqual(GamePalette.RainbowColorId, red2.Color.Value);
             Assert.AreEqual("Blue", blue.Color.Value);
@@ -217,8 +218,7 @@ namespace BalloonParty.Tests.Item
                 Substitute.For<IGamePalette>(),
                 Substitute.For<ISceneLightFieldSettings>());
             var handler = new LightningItemHandler(
-                itemConfig, dispatcher, Substitute.For<IGamePalette>(),
-                Substitute.For<ISubscriber<ProjectileLoadedMessage>>(), _grid, new PoolManager(), lightField);
+                itemConfig, dispatcher, Substitute.For<IGamePalette>(), _grid, new PoolManager(), lightField);
 
             var sourceA = PlaceBalloon(0, 0, "Red");
             var target1 = PlaceBalloon(1, 0, "Red");

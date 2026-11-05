@@ -4,8 +4,7 @@ using UnityEngine;
 namespace BalloonParty.Prediction
 {
     /// <summary>
-    ///     Shared reference to the current aim-prediction trace, decoupled from direct access — mirrors
-    ///     <see cref="BalloonParty.Projectile.ProjectilePositionProvider"/>. Readers (e.g. per-actor hit
+    ///     Shared reference to the current aim-prediction trace, decoupled from direct access. Readers (e.g. per-actor hit
     ///     markers) poll <see cref="Version"/> instead of subscribing, so 50+ pooled views can cheaply skip
     ///     work on frames where the trace hasn't changed.
     /// </summary>

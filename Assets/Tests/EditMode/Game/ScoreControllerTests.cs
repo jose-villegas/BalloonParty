@@ -6,6 +6,8 @@ using BalloonParty.Configuration;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Game.Score;
+using BalloonParty.Projectile;
+using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.SceneLight;
 using BalloonParty.Slots.Capabilities;
@@ -30,6 +32,7 @@ namespace BalloonParty.Tests.Game
         private ITimeOfDayNight _timeOfDayNight;
         private ScoreController _controller;
         private ColorStreakTracker _streakTracker;
+        private ProjectileRegistry _registry;
         private IMessageHandler<ScoreTrailArrivedMessage> _trailArrivedHandler;
         private IMessageHandler<ScoreLevelUpMessage> _scoreLevelUpHandler;
 
@@ -81,8 +84,10 @@ namespace BalloonParty.Tests.Game
                 .Subscribe(Arg.Any<IMessageHandler<ProjectileLoadedMessage>>(),
                     Arg.Any<MessageHandlerFilter<ProjectileLoadedMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
+            _registry = new ProjectileRegistry();
             _streakTracker = new ColorStreakTracker(
-                Substitute.For<IPublisher<StreakChangedMessage>>(), levelUpSubscriber, projectileLoadedSubscriber);
+                Substitute.For<IPublisher<StreakChangedMessage>>(), levelUpSubscriber, projectileLoadedSubscriber,
+                _registry);
 
             var scoreLevelUpSubscriber = Substitute.For<ISubscriber<ScoreLevelUpMessage>>();
             scoreLevelUpSubscriber
@@ -330,6 +335,74 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void Streak_TwoBalls_EachPopRecordsOnItsOwnBallsStreak()
+        {
+            var ballA = NewBall();
+            var ballB = NewBall();
+            FirePopFrom(ballA, Red);
+            FirePopFrom(ballA, Red);
+
+            _scoredPublisher.ClearReceivedCalls();
+            FirePopFrom(ballB, Red);
+
+            Assert.AreEqual(2, _streakTracker.For(ballA).CurrentStreak);
+            Assert.AreEqual(1, _streakTracker.For(ballB).CurrentStreak);
+            _scoredPublisher.Received(1).Publish(Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 1));
+        }
+
+        [Test]
+        public void Streak_TwoBalls_AnotherBallsColorChangeDoesNotBreakTheFirst()
+        {
+            var ballA = NewBall();
+            var ballB = NewBall();
+            FirePopFrom(ballA, Red);
+            FirePopFrom(ballA, Red);
+
+            FirePopFrom(ballB, Blue);
+
+            Assert.AreEqual(2, _streakTracker.For(ballA).CurrentStreak);
+            Assert.AreEqual(Red, _streakTracker.For(ballA).LastColor);
+        }
+
+        // The rainbow self-feeding shape: a shot that rainbow-converts balloons and re-pops them climbs a
+        // wildcard/carry streak. That climb must belong to the shot doing it, never be credited to (or cash
+        // in) another ball's streak.
+        [Test]
+        public void Streak_BallBWildcardAndCarryPops_NeverTouchBallAsStreak()
+        {
+            var ballA = NewBall();
+            var ballB = NewBall();
+            FirePopFrom(ballA, Red);
+            FirePopFrom(ballA, Red);
+
+            FireRainbowPopFrom(ballB, DamageFlags.DirectHit | DamageFlags.WildcardStreak);
+            FireRainbowPopFrom(ballB, DamageFlags.DirectHit | DamageFlags.CarryStreak);
+            FireRainbowPopFrom(ballB, DamageFlags.DirectHit | DamageFlags.WildcardStreak);
+
+            Assert.AreEqual(3, _streakTracker.For(ballB).CurrentStreak);
+            Assert.AreEqual(2, _streakTracker.For(ballA).CurrentStreak);
+            Assert.AreEqual(Red, _streakTracker.For(ballA).LastColor);
+
+            _scoredPublisher.ClearReceivedCalls();
+            FirePopFrom(ballA, Red);
+            _scoredPublisher.Received(1).Publish(Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 3));
+            Assert.AreEqual(3, _streakTracker.For(ballA).CurrentStreak, "A resumes from its own x2, not B's x3");
+        }
+
+        [Test]
+        public void Streak_HitNoBallCaused_RecordsOnTheSharedStreak_NotOnAnyBall()
+        {
+            var ball = NewBall();
+            FirePopFrom(ball, Red);
+
+            FirePop(Blue);
+
+            Assert.AreEqual(1, _streakTracker.For(ball).CurrentStreak);
+            Assert.AreEqual(Red, _streakTracker.For(ball).LastColor);
+            Assert.AreEqual(Blue, _streakTracker.For(null).LastColor);
+        }
+
+        [Test]
         public void Streak_MultipliesPoints()
         {
             // The streak multiplier scales the single group's point total (was: point-message count).
@@ -435,6 +508,29 @@ namespace BalloonParty.Tests.Game
             var context = new DamageContext(damage, flags);
             var outcome = model.EvaluateHit(context);
             _controller.OnActorHit(new ActorHitMessage(model, Vector3.zero, Vector3.up, outcome, context));
+        }
+
+        // A ball only owns a streak while the registry tracks it; an untracked one reads the shared streak.
+        private ProjectileModel NewBall()
+        {
+            var ball = new ProjectileModel();
+            _registry.Load(ball, null);
+            _registry.Launch(ball);
+            return ball;
+        }
+
+        private void FirePopFrom(IProjectileModel ball, string color)
+        {
+            var model = CreateModel(color, 1);
+            var context = new DamageContext(1, DamageFlags.DirectHit, "", ball);
+            _controller.OnActorHit(new ActorHitMessage(model, Vector3.zero, Vector3.up, model.EvaluateHit(context), context));
+        }
+
+        private void FireRainbowPopFrom(IProjectileModel ball, DamageFlags flags)
+        {
+            var model = CreateRainbowModel(1);
+            var context = new DamageContext(1, flags, Red, ball);
+            _controller.OnActorHit(new ActorHitMessage(model, Vector3.zero, Vector3.up, model.EvaluateHit(context), context));
         }
 
         private void FirePop(string color, int scoreValue = 1)

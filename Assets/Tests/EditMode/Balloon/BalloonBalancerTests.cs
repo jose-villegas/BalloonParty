@@ -2,6 +2,7 @@ using System;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
+using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
@@ -21,7 +22,7 @@ namespace BalloonParty.Tests.Balloon
         private SlotGrid _grid;
         private IBalloonsConfiguration _balloonsConfig;
         private PauseService _pauseService;
-        private IMessageHandler<ProjectileLoadedMessage> _loadedHandler;
+        private ProjectileRegistry _registry;
         private IMessageHandler<BalanceBalloonsMessage> _balanceHandler;
         private BalloonBalancer _balancer;
 
@@ -40,12 +41,14 @@ namespace BalloonParty.Tests.Balloon
             _pauseService = new PauseService(
                 Substitute.For<IPublisher<PausedMessage>>(), Substitute.For<IPublisher<ResumedMessage>>());
 
+            _registry = new ProjectileRegistry();
+
             // DisturbanceField is only dereferenced when animating a non-empty balance, so these
             // grid-only tests can omit it.
             _balancer = new BalloonBalancer(
                 _grid, balanceQuery, _balloonsConfig, pathHolder,
                 CaptureBalanceRequests(),
-                CaptureLoaded(), StubSubscriber<ProjectileDestroyedMessage>(),
+                _registry, StubSubscriber<ProjectileDestroyedMessage>(),
                 _pauseService, null, new BalloonMotionTicker());
             _balancer.Start();
         }
@@ -161,6 +164,35 @@ namespace BalloonParty.Tests.Balloon
             Assert.IsFalse(_balancer.TickFlightRebalance(5f));
         }
 
+        [Test]
+        public void FlightPulse_OnlyBallInFlightIsOnItsLastShieldApproach_FreezesTheBoard()
+        {
+            PlaceUnbalancedBalloon();
+            LoadFreeProjectile().IsLastShieldApproach.Value = true;
+
+            Assert.IsFalse(_balancer.TickFlightRebalance(5f));
+        }
+
+        [Test]
+        public void FlightPulse_OneOfTwoBallsDoomed_KeepsRebalancing()
+        {
+            PlaceUnbalancedBalloon();
+            LoadFreeProjectile().IsLastShieldApproach.Value = true;
+            LoadFreeProjectile();
+
+            Assert.IsTrue(_balancer.TickFlightRebalance(5f), "one ball's doom never freezes the board under the other");
+        }
+
+        [Test]
+        public void FlightPulse_OnlyNonFreeBallsInFlight_DoesNotTrigger()
+        {
+            PlaceUnbalancedBalloon();
+            var projectile = LoadFreeProjectile();
+            projectile.IsFree = false;
+
+            Assert.IsFalse(_balancer.TickFlightRebalance(5f));
+        }
+
         // A balloon at (1,1) over an empty (1,0) — unbalanced and free to fall.
         private void PlaceUnbalancedBalloon()
         {
@@ -172,9 +204,12 @@ namespace BalloonParty.Tests.Balloon
             _balanceHandler.Handle(default);
         }
 
-        private void LoadFreeProjectile()
+        private ProjectileModel LoadFreeProjectile()
         {
-            _loadedHandler.Handle(new ProjectileLoadedMessage(new ProjectileModel { IsFree = true }));
+            var projectile = new ProjectileModel { IsFree = true };
+            _registry.Load(projectile, null);
+            _registry.Launch(projectile);
+            return projectile;
         }
 
         private ISubscriber<BalanceBalloonsMessage> CaptureBalanceRequests()
@@ -184,17 +219,6 @@ namespace BalloonParty.Tests.Balloon
                 .Subscribe(
                     Arg.Do<IMessageHandler<BalanceBalloonsMessage>>(h => _balanceHandler = h),
                     Arg.Any<MessageHandlerFilter<BalanceBalloonsMessage>[]>())
-                .Returns(Substitute.For<IDisposable>());
-            return subscriber;
-        }
-
-        private ISubscriber<ProjectileLoadedMessage> CaptureLoaded()
-        {
-            var subscriber = Substitute.For<ISubscriber<ProjectileLoadedMessage>>();
-            subscriber
-                .Subscribe(
-                    Arg.Do<IMessageHandler<ProjectileLoadedMessage>>(h => _loadedHandler = h),
-                    Arg.Any<MessageHandlerFilter<ProjectileLoadedMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
             return subscriber;
         }

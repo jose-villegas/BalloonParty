@@ -71,7 +71,8 @@ namespace BalloonParty.Item.Bomb
                 settings.Bomb.NudgeOverrides));
 
             var sourceColorId = balloon.GetColorId();
-            var context = new DamageContext(settings.Damage, settings.Flags, sourceColorId);
+            var context = new DamageContext(
+                settings.Damage, settings.Flags, sourceColorId, activation.DamageContext.Projectile);
             var isRainbow = _palette.IsRainbow(sourceColorId);
 
             List<IPaintable> converts = null;
@@ -134,7 +135,8 @@ namespace BalloonParty.Item.Bomb
             HexCoordinates.HexNeighborIndices(bombSlot.x, bombSlot.y, _neighborBuffer);
 
             // Direct hex neighbors always take piercing damage (guaranteed kill).
-            var piercingContext = new DamageContext(context.Damage, DamageFlags.Piercing, context.SourceColorId);
+            var piercingContext = new DamageContext(
+                context.Damage, DamageFlags.Piercing, context.SourceColorId, context.Projectile);
 
             var count = Physics2D.OverlapCircle(worldPosition, radius, _overlap.Filter, _overlapResults);
 
@@ -176,7 +178,8 @@ namespace BalloonParty.Item.Bomb
             var outerRadius = bomb.Radius + bomb.RainbowConversionRange;
             var killSqr = killRadius * killRadius;
             var outerSqr = outerRadius * outerRadius;
-            var piercingContext = new DamageContext(context.Damage, DamageFlags.Piercing, context.SourceColorId);
+            var piercingContext = new DamageContext(
+                context.Damage, DamageFlags.Piercing, context.SourceColorId, context.Projectile);
 
             List<IPaintable> converts = null;
             var count = Physics2D.OverlapCircle(worldPosition, outerRadius, _overlap.Filter, _overlapResults);

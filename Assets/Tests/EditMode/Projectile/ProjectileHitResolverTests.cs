@@ -5,6 +5,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Score;
+using BalloonParty.Projectile;
 using BalloonParty.Projectile.Buffs;
 using BalloonParty.Game.Flight;
 using BalloonParty.Projectile.Controller;
@@ -66,7 +67,8 @@ namespace BalloonParty.Tests.Projectile
                 .Returns(Substitute.For<IDisposable>());
 
             _streakTracker = new ColorStreakTracker(
-                Substitute.For<IPublisher<StreakChangedMessage>>(), levelUpSubscriber, projectileLoadedSubscriber);
+                Substitute.For<IPublisher<StreakChangedMessage>>(), levelUpSubscriber, projectileLoadedSubscriber,
+                new ProjectileRegistry());
 
             _resolver = new ProjectileHitResolver(
                 _hitDispatcher, _shieldGainedPublisher, _dischargedPublisher,
@@ -396,8 +398,8 @@ namespace BalloonParty.Tests.Projectile
             // Seeds the tracker as if a prior pop already ran through ScoreController's HitPipeline
             // stage — the shield check reads the tracker directly, same as production (see Resolve's
             // "Dispatch runs the streak stage synchronously" comment); _hitDispatcher is a substitute.
-            _streakTracker.Record("Blue", false);
-            _streakTracker.Record("Blue", false);
+            _streakTracker.For(_projectile).Record("Blue", false);
+            _streakTracker.For(_projectile).Record("Blue", false);
 
             var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
             balloon.Color.Value = GamePalette.RainbowColorId;
@@ -415,8 +417,8 @@ namespace BalloonParty.Tests.Projectile
         public void Resolve_StreakAtTwo_GrantsNoShield_WhenTheConfigTurnsStreakShieldsOff()
         {
             _runConfig.StreakGrantsShields.Returns(false);
-            _streakTracker.Record("Blue", false);
-            _streakTracker.Record("Blue", false);
+            _streakTracker.For(_projectile).Record("Blue", false);
+            _streakTracker.For(_projectile).Record("Blue", false);
 
             var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
             balloon.Color.Value = GamePalette.RainbowColorId;
@@ -497,7 +499,7 @@ namespace BalloonParty.Tests.Projectile
                 .Returns(Substitute.For<IDisposable>());
             var buff = new ProjectileBuff(
                 ProjectileBuffId.RainbowShield, 0f, BuffModifierOp.Flat,
-                new WallBounceEndCondition(wallBounces));
+                new WallBounceEndCondition(wallBounces, _projectile));
             _projectile.AddBuff(buff);
             return buff;
         }

@@ -56,12 +56,19 @@ namespace BalloonParty.Thrower
         private readonly PoolManager _poolManager;
         private readonly ThrowerSettings _settings;
         private readonly ThrowerView _view;
-        private readonly ProjectilePositionProvider _positionProvider;
+        private readonly IProjectileRegistryWriter _registry;
         private readonly ThrowerOriginProvider _originProvider;
         private readonly PredictionTraceProvider _traceProvider;
         private readonly SceneLightFieldService _lightField;
         private readonly IGamePalette _palette;
         private readonly CompositeDisposable _subscriptions = new();
+
+        // Every shot that has left the thrower and not yet died, oldest first. The registry mirrors
+        // these for readers; the thrower keeps the views because only it pools them.
+        private readonly List<ProjectileView> _inFlight = new();
+
+        // Reused so killing every shot (whose deaths edit _inFlight) never iterates the live list.
+        private readonly List<ProjectileView> _killBuffer = new();
 
         // Cached since Object.name allocates; Reload() hits this twice per shot.
         private readonly string _projectilePoolKey;
@@ -71,8 +78,9 @@ namespace BalloonParty.Thrower
         // earlier rather than re-deriving it from a raw sample.
         private readonly AimDirectionHistory _aimHistory = new(AimHistoryCapacity);
 
-        private IWriteableProjectileModel _activeProjectile;
-        private ProjectileView _activeView;
+        // The shot held in the thrower, aiming. Null from the moment it fires until the next load.
+        private IWriteableProjectileModel _loadedProjectile;
+        private ProjectileView _loadedView;
         private Vector3 _direction = Vector3.up;
         private bool _isMovable;
         private bool _tracePublished;
@@ -109,7 +117,7 @@ namespace BalloonParty.Thrower
             ILevelProgress levelProgress,
             PauseService pauseService,
             HoldSpeedUpController holdSpeedUp,
-            ProjectilePositionProvider positionProvider,
+            IProjectileRegistryWriter registry,
             ThrowerOriginProvider originProvider,
             PredictionTraceProvider traceProvider,
             SceneLightFieldService lightField,
@@ -136,7 +144,7 @@ namespace BalloonParty.Thrower
             _levelProgress = levelProgress;
             _pauseService = pauseService;
             _holdSpeedUp = holdSpeedUp;
-            _positionProvider = positionProvider;
+            _registry = registry;
             _originProvider = originProvider;
             _traceProvider = traceProvider;
             _lightField = lightField;
@@ -170,15 +178,15 @@ namespace BalloonParty.Thrower
 
             // The spent shot scales away while the fresh one loads — unless a level-up claimed the
             // window, in which case the new shot arrives with the new level (LevelTransitionCompleted).
-            _destroyedSubscriber.Subscribe(_ => HandleProjectileDestroyed()).AddTo(_subscriptions);
+            _destroyedSubscriber.Subscribe(HandleProjectileDestroyed).AddTo(_subscriptions);
 
             // Completing was abandoned (run ending/restarting), so the skipped reload happens now or the
             // thrower stays empty forever.
             _levelUpAbandonedSubscriber.Subscribe(_ => LoadProjectile()).AddTo(_subscriptions);
 
-            // Force-destroy: the level controller commands the projectile to die through its canonical
+            // Force-destroy: the level controller commands every shot to die through its canonical
             // death path (board depleted, or the CompletingCap timed out).
-            _forceDestroySubscriber.Subscribe(_ => ForceDestroyActiveProjectile()).AddTo(_subscriptions);
+            _forceDestroySubscriber.Subscribe(_ => ForceDestroyProjectiles()).AddTo(_subscriptions);
             _levelTransitionCompletedSubscriber.Subscribe(_ => LoadProjectile()).AddTo(_subscriptions);
 
             // A shot fired in the very frame the level-up triggers never takes a physics step before the
@@ -192,7 +200,7 @@ namespace BalloonParty.Thrower
             _boardClearSubscriber.Subscribe(_ => Reload()).AddTo(_subscriptions);
 
             // A projectile fired just before loss keeps flying on physics alone; scale it away.
-            _gameOverSubscriber.Subscribe(_ => ScaleAwayActiveProjectile()).AddTo(_subscriptions);
+            _gameOverSubscriber.Subscribe(_ => ScaleAwayAllProjectiles()).AddTo(_subscriptions);
 
             Navigation.Current
                 .Where(state => state == NavigationState.Game)
@@ -244,15 +252,15 @@ namespace BalloonParty.Thrower
         // range on purpose (see its README) — clamping here would silently defeat that.
         internal void FireAt(Vector3 direction)
         {
-            if (!_isMovable || _activeProjectile == null || _activeView == null || _activeProjectile.IsFree)
+            if (!_isMovable || _loadedProjectile == null || _loadedView == null)
             {
                 return;
             }
 
             _direction = direction.normalized;
             _view.RotateTo(_direction);
-            _activeView.transform.position = _view.SpawnPointPosition;
-            _activeView.transform.rotation = _view.Rotation;
+            _loadedView.transform.position = _view.SpawnPointPosition;
+            _loadedView.transform.rotation = _view.Rotation;
             Fire();
         }
 
@@ -298,47 +306,85 @@ namespace BalloonParty.Thrower
 
         private void LoadProjectile()
         {
-            _activeView = _poolManager.Get<ProjectileView>(_projectilePoolKey);
-            _activeView.transform.position = _view.Position;
-            _activeView.transform.rotation = _view.Rotation;
+            // The only shot still held here is one un-fired at a level-up; a load always starts a fresh
+            // shot (and a fresh ProjectileLoadedMessage), so pool that one rather than orphan it.
+            if (_loadedView != null)
+            {
+                _registry.Retire(_loadedProjectile);
+                _poolManager.Return(_projectilePoolKey, _loadedView);
+                ClearLoaded();
+            }
 
-            _activeProjectile = new ProjectileModel
+            _loadedView = _poolManager.Get<ProjectileView>(_projectilePoolKey);
+            _loadedView.transform.position = _view.Position;
+            _loadedView.transform.rotation = _view.Rotation;
+
+            _loadedProjectile = new ProjectileModel
             {
                 Speed = _flightConfig.ProjectileSpeed,
                 IsFree = false,
                 Direction = _direction
             };
-            _activeProjectile.ShieldsRemaining.Value = _flightConfig.ProjectileStartingShields;
+            _loadedProjectile.ShieldsRemaining.Value = _flightConfig.ProjectileStartingShields;
 
             // A held shot isn't stepping yet, so nothing has resolved a flight speed for it — seed the one
             // feedback reads (the shield field's ripple) with base speed rather than leaving it at zero.
-            _activeProjectile.Flight.CurrentSpeed = _activeProjectile.Speed;
+            _loadedProjectile.Flight.CurrentSpeed = _loadedProjectile.Speed;
 
-            _activeView.Bind(_activeProjectile);
-            _positionProvider.Set(_activeView.transform);
-            _loadedPublisher.Publish(new ProjectileLoadedMessage(_activeProjectile));
+            _loadedView.Bind(_loadedProjectile);
+            _registry.Load(_loadedProjectile, _loadedView.transform);
+            _loadedPublisher.Publish(new ProjectileLoadedMessage(_loadedProjectile));
 
             _loadElapsed = 0f;
             _loadDuration = _flightConfig.ProjectileLoadDuration;
         }
 
+        // A shot fired in the level-up frame never took a step: it goes back in the thrower as the held
+        // shot. Any other unflown shot (the thrower already holds one) is pooled outright.
         private void UnfireIfNeverFlown()
         {
-            if (_activeProjectile == null || _activeView == null
-                || !_activeProjectile.IsFree || _activeView.HasFlown)
+            for (var i = _inFlight.Count - 1; i >= 0; i--)
             {
-                return;
-            }
+                var view = _inFlight[i];
+                if (view.HasFlown)
+                {
+                    continue;
+                }
 
-            _activeProjectile.IsFree = false;
-            _positionProvider.SetFree(false);
+                _inFlight.RemoveAt(i);
+                if (_loadedView == null)
+                {
+                    view.Model.IsFree = false;
+                    _loadedView = view;
+                    _loadedProjectile = view.Model;
+                    _registry.Unlaunch(view.Model);
+                }
+                else
+                {
+                    _registry.Retire(view.Model);
+                    _poolManager.Return(_projectilePoolKey, view);
+                }
+            }
         }
 
         // Scales the spent shot away (it returns to the pool only once its disappear finishes) and loads a
         // fresh instance now, so Get() never hands back one still mid-disappear.
-        private void HandleProjectileDestroyed()
+        private void HandleProjectileDestroyed(ProjectileDestroyedMessage message)
         {
-            ScaleAwayActiveProjectile();
+            var index = IndexOfInFlight(message.Projectile);
+            if (index >= 0)
+            {
+                var view = _inFlight[index];
+                _inFlight.RemoveAt(index);
+                ScaleAway(view);
+            }
+            else if (_loadedView != null && message.Projectile == _loadedProjectile)
+            {
+                // Force-destroying an empty-handed thrower kills the held shot (see ForceDestroyProjectiles).
+                var view = _loadedView;
+                ClearLoaded();
+                ScaleAway(view);
+            }
 
             if (_levelProgress.Phase.Value == LevelUpPhase.Playing)
             {
@@ -346,32 +392,76 @@ namespace BalloonParty.Thrower
             }
         }
 
-        // Force-destroys the projectile through its canonical death path (pierce discharge, state
-        // cleanup, ProjectileDestroyedMessage). The subsequent DestroyedMessage triggers
-        // HandleProjectileDestroyed which handles the visual cleanup and pool return.
-        private void ForceDestroyActiveProjectile()
+        // Force-destroys through each shot's canonical death path (pierce discharge, state cleanup,
+        // ProjectileDestroyedMessage), whose DestroyedMessage then scales it away and pools it. With
+        // nothing in flight it kills the held shot instead, as the single-shot thrower always did.
+        private void ForceDestroyProjectiles()
         {
-            if (_activeView == null)
+            if (_inFlight.Count == 0)
             {
+                if (_loadedView != null)
+                {
+                    _loadedView.ForceDestroy();
+                }
+
                 return;
             }
 
-            _activeView.ForceDestroy();
+            _killBuffer.Clear();
+            _killBuffer.AddRange(_inFlight);
+            foreach (var view in _killBuffer)
+            {
+                view.ForceDestroy();
+            }
+
+            _killBuffer.Clear();
         }
 
-        // Scales the shot away and pools it, without loading a replacement (game-over reloads only on restart).
-        private void ScaleAwayActiveProjectile()
+        // Scales every shot away and pools it, without loading a replacement (game-over reloads only on
+        // restart). No Destroyed is published, so Clear retires them all.
+        private void ScaleAwayAllProjectiles()
         {
-            if (_activeView == null)
+            foreach (var view in _inFlight)
             {
-                return;
+                ScaleAway(view);
             }
 
-            var view = _activeView;
-            _positionProvider.Clear();
-            _activeProjectile = null;
-            _activeView = null;
+            _inFlight.Clear();
+
+            if (_loadedView != null)
+            {
+                var view = _loadedView;
+                ClearLoaded();
+                ScaleAway(view);
+            }
+
+            _registry.Clear();
+        }
+
+        // Lands only: on the Destroyed path the dying view retires its own ball once that dispatch ends.
+        private void ScaleAway(ProjectileView view)
+        {
+            _registry.Land(view.Model);
             view.PlayDisappear(() => _poolManager.Return(_projectilePoolKey, view));
+        }
+
+        private void ClearLoaded()
+        {
+            _loadedProjectile = null;
+            _loadedView = null;
+        }
+
+        private int IndexOfInFlight(IProjectileModel projectile)
+        {
+            for (var i = 0; i < _inFlight.Count; i++)
+            {
+                if (_inFlight[i].Model == projectile)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
         }
 
         private void OnRunReset(RunResetMessage message)
@@ -388,21 +478,27 @@ namespace BalloonParty.Thrower
         {
             // Tick is gated during resets, so a trace left active at reset time would strand a stale marker.
             ClearPredictionTrace();
-            _positionProvider.Clear();
+            _registry.Clear();
 
-            if (_activeView != null)
+            foreach (var view in _inFlight)
             {
-                _poolManager.Return(_projectilePoolKey, _activeView);
+                _poolManager.Return(_projectilePoolKey, view);
             }
 
-            _activeProjectile = null;
-            _activeView = null;
+            _inFlight.Clear();
+
+            if (_loadedView != null)
+            {
+                _poolManager.Return(_projectilePoolKey, _loadedView);
+            }
+
+            ClearLoaded();
             LoadProjectile();
         }
 
         private void TryFire()
         {
-            if (_activeProjectile == null || _activeView == null || _activeProjectile.IsFree)
+            if (_loadedProjectile == null || _loadedView == null)
             {
                 return;
             }
@@ -441,9 +537,11 @@ namespace BalloonParty.Thrower
 
         private void Fire()
         {
-            _activeProjectile.IsFree = true;
-            _activeProjectile.Direction = _direction;
-            _positionProvider.SetFree(true);
+            _loadedProjectile.IsFree = true;
+            _loadedProjectile.Direction = _direction;
+            _registry.Launch(_loadedProjectile);
+            _inFlight.Add(_loadedView);
+            ClearLoaded();
             ClearPredictionTrace();
             _view.PlayRecoil(_direction);
             // A fast follow-up shot must not latch onto a direction recorded before this one fired.
@@ -468,7 +566,7 @@ namespace BalloonParty.Thrower
 
         private void UpdateLoadedProjectilePosition()
         {
-            if (_activeProjectile == null || _activeView == null || _activeProjectile.IsFree)
+            if (_loadedProjectile == null || _loadedView == null)
             {
                 return;
             }
@@ -478,20 +576,20 @@ namespace BalloonParty.Thrower
                 _loadElapsed += Time.deltaTime;
                 var t = Mathf.Clamp01(_loadElapsed / _loadDuration);
                 var eased = DOVirtual.EasedValue(0f, 1f, t, Ease.OutBack);
-                _activeView.transform.position = Vector3.Lerp(_view.Position, _view.SpawnPointPosition, eased);
+                _loadedView.transform.position = Vector3.Lerp(_view.Position, _view.SpawnPointPosition, eased);
             }
             else
             {
-                _activeView.transform.position = _view.SpawnPointPosition;
+                _loadedView.transform.position = _view.SpawnPointPosition;
             }
 
-            _activeView.transform.rotation = _view.Rotation;
-            _activeProjectile.Direction = _direction;
+            _loadedView.transform.rotation = _view.Rotation;
+            _loadedProjectile.Direction = _direction;
         }
 
         private void UpdatePredictionTrace()
         {
-            if (_activeProjectile == null || _activeProjectile.IsFree || !_view.IsAiming)
+            if (_loadedProjectile == null || !_view.IsAiming)
             {
                 ClearPredictionTrace();
                 return;
@@ -500,7 +598,7 @@ namespace BalloonParty.Thrower
             // From the contact circle, not the transform: the collider leads the origin, so a trace
             // started at the transform begins behind where the shot really is.
             _traceCalculator.Calculate(
-                _activeView.ContactCenter, _direction, _activeView.ContactRadius, _tracePoints,
+                _loadedView.ContactCenter, _direction, _loadedView.ContactRadius, _tracePoints,
                 out var traceEnd);
             _view.SetTrace(_tracePoints);
             _traceProvider.SetTrace(_tracePoints, traceEnd);

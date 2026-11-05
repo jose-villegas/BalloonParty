@@ -1,5 +1,6 @@
 using System;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Projectile;
 using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Extensions;
@@ -13,7 +14,7 @@ using BalloonParty.Configuration.Items;
 namespace BalloonParty.Item.Snipe
 {
     /// <summary>
-    ///     Handles the Snipe item: arms the active projectile as a piercing lance — it plows through
+    ///     Handles the Snipe item: arms the shot that popped the holder as a piercing lance — it plows through
     ///     balloons like a cruise-earned pierce, but without entering cruise (so it skips cruise's
     ///     per-shield speed tap) — and grants a single, non-stacking multiplicative
     ///     <see cref="ProjectileBuffId.Speed" /> buff. A rainbow-balloon host also arms the shared
@@ -29,11 +30,9 @@ namespace BalloonParty.Item.Snipe
         private readonly IGamePalette _palette;
         private readonly ItemEffectPlayer _effectPlayer;
         private readonly IProjectileBuffs _buffs;
-        private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
+        private readonly IProjectileRegistry _projectiles;
         private readonly ISubscriber<PierceDischargedMessage> _dischargedSubscriber;
 
-        private IWriteableProjectileModel _activeProjectile;
-        private IDisposable _subscription;
         private IDisposable _dischargedSubscription;
 
         public ItemType Type => ItemType.Snipe;
@@ -44,26 +43,24 @@ namespace BalloonParty.Item.Snipe
             IGamePalette palette,
             ItemEffectPlayer effectPlayer,
             IProjectileBuffs buffs,
-            ISubscriber<ProjectileLoadedMessage> loadedSubscriber,
+            IProjectileRegistry projectiles,
             ISubscriber<PierceDischargedMessage> dischargedSubscriber)
         {
             _itemConfig = itemConfig;
             _palette = palette;
             _effectPlayer = effectPlayer;
             _buffs = buffs;
-            _loadedSubscriber = loadedSubscriber;
+            _projectiles = projectiles;
             _dischargedSubscriber = dischargedSubscriber;
         }
 
         public void Start()
         {
-            _subscription = _loadedSubscriber.Subscribe(msg => _activeProjectile = (IWriteableProjectileModel)msg.Model);
-            _dischargedSubscription = _dischargedSubscriber.Subscribe(_ => TrySpendBankedCharge());
+            _dischargedSubscription = _dischargedSubscriber.Subscribe(msg => TrySpendBankedCharge(msg.Projectile));
         }
 
         public void Dispose()
         {
-            _subscription?.Dispose();
             _dischargedSubscription?.Dispose();
         }
 
@@ -72,26 +69,30 @@ namespace BalloonParty.Item.Snipe
             var settings = _itemConfig[ItemType.Snipe];
             var isRainbowHost = _palette.IsRainbow(activation.Balloon.GetColorId());
 
-            if (_activeProjectile != null)
+            // Activation runs a frame after the pop: if the ball that popped the holder is already gone,
+            // the lance arms the current ball instead of being lost, as it always armed the next shot.
+            var shot = (_projectiles.ShotOrCurrent(activation.DamageContext.Projectile)
+                ?? _projectiles.ShotOrCurrent(null)) as IWriteableProjectileModel;
+            if (shot != null)
             {
                 // Two pierces can't overlap, so a pickup landing on an already-armed shot is BANKED whole
                 // — pierce, speed and rainbow together — and activates at the discharge that spends the
                 // current pierce (TrySpendBankedCharge). Granting the speed buff here instead would
                 // compound it onto the ramp the running pierce already earned.
-                if (_activeProjectile.IsPiercing.Value)
+                if (shot.IsPiercing.Value)
                 {
                     if (isRainbowHost)
                     {
-                        _activeProjectile.Flight.BankedRainbowPierceCharges++;
+                        shot.Flight.BankedRainbowPierceCharges++;
                     }
                     else
                     {
-                        _activeProjectile.Flight.BankedPierceCharges++;
+                        shot.Flight.BankedPierceCharges++;
                     }
                 }
                 else
                 {
-                    ArmLance(settings.Snipe.SpeedBuffMultiplier, isRainbowHost);
+                    ArmLance(shot, settings.Snipe.SpeedBuffMultiplier, isRainbowHost);
                 }
             }
 
@@ -103,15 +104,15 @@ namespace BalloonParty.Item.Snipe
         // level-up hold keyed off IsPiercing never releases mid-flight) — activate that saved pickup now.
         // A shot that died on the discharge wall has already overspent its shields: its charges die with
         // it, matching "piercing re-arms as long as the projectile still has shields".
-        private void TrySpendBankedCharge()
+        private void TrySpendBankedCharge(IProjectileModel projectile)
         {
-            if (_activeProjectile == null || _activeProjectile.ShieldsRemaining.Value < 0
-                || !_activeProjectile.IsPiercing.Value)
+            if (projectile is not IWriteableProjectileModel shot || shot.ShieldsRemaining.Value < 0
+                || !shot.IsPiercing.Value)
             {
                 return;
             }
 
-            var flight = _activeProjectile.Flight;
+            var flight = shot.Flight;
             var isRainbowCharge = flight.BankedRainbowPierceCharges > 0;
             if (isRainbowCharge)
             {
@@ -126,24 +127,24 @@ namespace BalloonParty.Item.Snipe
                 return;
             }
 
-            ArmLance(_itemConfig[ItemType.Snipe].Snipe.SpeedBuffMultiplier, isRainbowCharge);
+            ArmLance(shot, _itemConfig[ItemType.Snipe].Snipe.SpeedBuffMultiplier, isRainbowCharge);
         }
 
         // IsPiercing may already be true here — a banked charge re-arms a shot the discharge deliberately
         // left armed — and the write is idempotent either way (ReactiveProperty dedupes, so no subscriber
         // sees a spurious edge).
-        private void ArmLance(float speedBuffMultiplier, bool isRainbowHost)
+        private void ArmLance(IWriteableProjectileModel shot, float speedBuffMultiplier, bool isRainbowHost)
         {
-            _activeProjectile.IsPiercing.Value = true;
+            shot.IsPiercing.Value = true;
 
             // Non-stacking: while a speed buff is already riding the shot a second lance only re-arms the
             // (idempotent) pierce, it doesn't compound the speed. Once the pierce is spent the buff is
             // gone, so a later Snipe grants afresh.
-            if (!_activeProjectile.HasBuff(ProjectileBuffId.Speed))
+            if (!shot.HasBuff(ProjectileBuffId.Speed))
             {
-                _buffs.Apply(new ProjectileBuff(
+                _buffs.Apply(shot, new ProjectileBuff(
                     ProjectileBuffId.Speed, speedBuffMultiplier, BuffModifierOp.Multiplicative,
-                    new PierceEndedEndCondition(_activeProjectile.IsPiercing)));
+                    new PierceEndedEndCondition(shot.IsPiercing)));
             }
 
             // A rainbow host turns the lance iridescent: it scores colour-agnostically and rainbow-converts
@@ -158,9 +159,9 @@ namespace BalloonParty.Item.Snipe
             // wall-ended and pierce-ended grants as two independent flags (ShotFlightState).
             if (isRainbowHost)
             {
-                _buffs.Apply(new ProjectileBuff(
+                _buffs.Apply(shot, new ProjectileBuff(
                     ProjectileBuffId.RainbowShield, 0f, BuffModifierOp.Flat,
-                    new PierceEndedEndCondition(_activeProjectile.IsPiercing)));
+                    new PierceEndedEndCondition(shot.IsPiercing)));
             }
         }
     }

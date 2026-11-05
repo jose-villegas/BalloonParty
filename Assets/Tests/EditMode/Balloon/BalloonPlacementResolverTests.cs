@@ -2,6 +2,7 @@ using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Shared;
+using BalloonParty.Projectile;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
 using BalloonParty.Slots.Actor.Archetype;
@@ -132,7 +133,7 @@ namespace BalloonParty.Tests.Balloon
             _balancer = new BalloonBalancer(
                 _grid, balanceQuery, balloonsConfig, new BalancePathHolder(),
                 Substitute.For<ISubscriber<BalanceBalloonsMessage>>(),
-                Substitute.For<ISubscriber<ProjectileLoadedMessage>>(),
+                Substitute.For<IProjectileRegistry>(),
                 Substitute.For<ISubscriber<ProjectileDestroyedMessage>>(),
                 pauseService, null, new BalloonMotionTicker());
 

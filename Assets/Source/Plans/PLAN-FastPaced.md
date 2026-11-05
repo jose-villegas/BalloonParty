@@ -78,6 +78,18 @@ mechanical meaning and would need its own start/end rules.
 
 **DECISION: Fired starts a flight, Destroyed ends it; Load only means "in the thrower".**
 
+**DECISION: one lifetime for per-ball state, owned by the registry.** A ball leaves in two
+steps. *Land* (right before its Destroyed is published): it is no longer loaded or in flight,
+so every query sees it gone. *Retire* (right after that dispatch): the registry fires
+`Retired` and every per-ball store drops it. Every exit retires, including the ones with no
+Destroyed (game over, reset, a replaced held ball). Values folded over all balls (any
+airborne, any piercing, any doomed) are read from the registry, not tracked from messages, so
+nothing goes stale when a ball leaves without its paired message.
+
+**DECISION: a late item reward isn't lost.** Items activate a frame after the pop. If the ball
+that popped a Shield or Snipe holder is already gone, the reward goes to the current ball
+(latest in flight, else the held one), as it always went to the next shot.
+
 | Change | Files |
 |---|---|
 | Add the projectile (`ProjectileModel` or a small id) to every projectile message, and to `ActorHitMessage`'s context and `ItemActivationContext` so items know which ball hit them | `Shared/Messages/Projectile*`, `ActorHitMessage`, `Item/ItemActivationContext.cs` |
@@ -115,6 +127,10 @@ converted for A's multiplier.
 | Level-up with balls in flight | On `Completing`: block firing, play the slow-mo beat, then retire the remaining balls with a pop (force-destroy all, no score) after a short grace. `PresentLevelUp` then sees zero in flight. The 15 s watchdog stays. |
 | Shield HUD | Shows the held ball's shields, or becomes a ball-count/cooldown meter. Decide in the playtest. |
 | Aim trace | Stays. It's a static prediction; with spawns mid-flight it's only a guide (`Solver/ShotBoardDynamics.cs:61` assumes no spawns). |
+| Carried over from Phase 1 (exact at cap 1, global with N balls) | Telemetry flight scope per ball (`GameplayMetricsService` keeps one scope and seals it with the dying ball's stats). Per-ball pitch cursors in `CombatSoundRouter` (colour-pop ramp) and `ItemSoundRouter` (pickups this flight), both still reset on every Loaded. The doomed slow-mo follows the latest doomed ball and `BalloonSpawner` holds lines while any ball is doomed; apply the "only ball in flight" rule above to both, as `BalloonBalancer` already does. |
+| Thrower load semantics | `LoadProjectile` replaces a held ball, and every death reloads. With a cooldown the cooldown alone loads, and a load with a ball already held does nothing; otherwise each death throws away the aimed ball. |
+| `IsLoaded` stops meaning "a flight is on" | The thrower always holds a ball once reloads run on a cooldown, so `IFlightScope.IsLoaded` stays true and `GameplayMetricsService.ActiveScope` routes everything to the flight scope. Settle it with the per-ball telemetry scope. |
+| `StreakChangedMessage` names its ball | Today it carries only colour and count, so with two balls a reset of one reads as "the streak broke" to audio and telemetry. |
 
 **Done when:** a playtest at cap 3 feels fast and readable, level-up and game over clean up
 every ball, and nothing waits on a single flight.
@@ -182,6 +198,7 @@ level, and a test pins that the same seed gives the same mix.
 | **DECISION: unlimited retries from the level reached** | The retry path already exists: `GameOverScreen` → `RetryTracker.PrepareRetry(level)` → `RunController.RestartRun`. Today `RetryTracker` caps it at `IRunConfig.MaxRetries`; make `MaxRetries <= 0` mean unlimited and set the asset to 0, so the cap stays available for a later mode. The game-over screen always offers Retry (same level, same seeded mix) beside a fresh run from level 1: `GameOverScreen.cs:89` shows the button only while `RetriesRemaining > 0` and `:117` prints the count, so both read an `IsUnlimited` flag on `IRetryState`. |
 | Deeper levels pay more | Score multiplier per level, like NewMoonShooter's `scoreBonusPerRound`, so score stays a meaningful best-run number. |
 | Upgrades at level-up | A pick of cards at the level-up popup (§13 run modifiers in @ref plan_future_ideas). First cards: +1 ball cap, faster reload, +1 shield per ball, item odds. Run-scoped (`IRunResettable`). |
+| **DECISION: ads only on failure, behind a seam** | The game's only monetization will be ads at game over. Not built now, but the failure flow must leave room for it, with no ad SDK in the code yet. Two uses: a **rewarded** ad buys a small advantage (a revive with one heart, or one extra card for the retry); a **required** ad gates a retry once `RetriesUsed` reaches a configured N. Shape: `IFailureOffers` decides what the game-over screen offers (plain retry, ad-gated retry, rewarded advantage) from `IRetryState`; an `IAdService` with a no-op implementation (always "watched") stands in for the SDK. Keep `RetryTracker`'s used-retry counter even though retries are unlimited; it's what the gate reads. Never let an ad buy the ball cap or score: the advantage is small and per-attempt. The same shape applies to NewMoonShooter's game over. |
 | **DECISION: the ball cap grows through cards only** | The configured `MaxBallsInFlight` is the run's starting cap and never rises with level; only a card raises it. Pressure grows with level (spawn clock, budget), power grows with the player's picks, which keeps the choice meaningful. A retry keeps the cards held when the level started. |
 
 Telemetry stays telemetry: nothing here persists metrics client-side as progression.

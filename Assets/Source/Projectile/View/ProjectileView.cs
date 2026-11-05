@@ -49,6 +49,7 @@ namespace BalloonParty.Projectile.View
         [Inject] private IPublisher<ShieldLostMessage> _shieldLostPublisher;
         [Inject] private IPublisher<WallHitMessage> _wallHitPublisher;
         [Inject] private IFlightStatsWriter _flightStats;
+        [Inject] private IProjectileRegistryWriter _registry;
         [Inject] private IPublisher<SpeedTapMintedMessage> _speedTapPublisher;
         [Inject] private IPublisher<ProjectileFiredMessage> _firedPublisher;
         [Inject] private IPublisher<ProjectileCruiseStartedMessage> _cruiseStartedPublisher;
@@ -114,6 +115,8 @@ namespace BalloonParty.Projectile.View
 
         /// <summary>True once the fired shot has taken at least one physics step.</summary>
         internal bool HasFlown => _hasFlown;
+
+        internal IWriteableProjectileModel Model => _model;
 
         private void Awake()
         {
@@ -418,8 +421,13 @@ namespace BalloonParty.Projectile.View
 
             // Publish now, not after the scale-down: the thrower scales this shot away (it returns to the
             // pool once that finishes) and loads a fresh instance, so it never reuses one mid-disappear.
+            // Land first, so every subscriber of either message already sees this shot gone; retire after,
+            // so they can all still read its per-ball state. Captured: the dispatch may rebind this view.
+            var model = _model;
+            _registry.Land(model);
             _balancePublisher.Publish(default);
-            _destroyedPublisher.Publish(default);
+            _destroyedPublisher.Publish(new ProjectileDestroyedMessage(model));
+            _registry.Retire(model);
         }
 
         /// <summary>Forces the projectile through its full death sequence (pierce discharge, state
@@ -509,10 +517,11 @@ namespace BalloonParty.Projectile.View
             if (step.Outcome == ProjectileStepOutcome.Bounced)
             {
                 _shieldView?.OnBounce((Vector2)travelDirection, (Vector2)step.Direction, step.Speed);
-                _shieldLostPublisher.Publish(new ShieldLostMessage(step.WallContact));
+                _shieldLostPublisher.Publish(new ShieldLostMessage(_model, step.WallContact));
                 // Count before publishing, so every subscriber sees a total including this bounce.
-                _flightStats.RecordWallHit();
-                _wallHitPublisher.Publish(new WallHitMessage(step.WallContact, _model.ShieldsRemaining.Value));
+                _flightStats.RecordWallHit(_model);
+                _wallHitPublisher.Publish(
+                    new WallHitMessage(_model, step.WallContact, _model.ShieldsRemaining.Value));
                 TryAwardSweepTap(step.WallContact, travelDirection);
 
                 // One rung of the speed ladder was earned at this wall — by either rule, and at most once
@@ -521,7 +530,7 @@ namespace BalloonParty.Projectile.View
                 if (_model.Flight.TotalCruiseTaps > tapsBefore)
                 {
                     _speedTapPublisher.Publish(
-                        new SpeedTapMintedMessage(step.WallContact, _model.Flight.TotalCruiseTaps));
+                        new SpeedTapMintedMessage(_model, step.WallContact, _model.Flight.TotalCruiseTaps));
                 }
 
 #if UNITY_EDITOR
@@ -602,7 +611,7 @@ namespace BalloonParty.Projectile.View
                 StampSource.ProjectileFire, transform.position, heading,
                 _palette.PaletteIndexOf(GamePalette.ProjectileColorId));
 
-            _firedPublisher.Publish(new ProjectileFiredMessage(transform.position, heading));
+            _firedPublisher.Publish(new ProjectileFiredMessage(_model, transform.position, heading));
         }
 
         // Everything the pierce owes a wall bounce: the tunneling safety net, spending the pierce when the
@@ -640,7 +649,7 @@ namespace BalloonParty.Projectile.View
 
         private void OnBalloonDeflected(BalloonDeflectedMessage msg)
         {
-            if (_destroyed || _model == null || msg.Balloon != _model.LastHitBalloon)
+            if (_destroyed || _model == null || msg.Projectile != _model || msg.Balloon != _model.LastHitBalloon)
             {
                 return;
             }
@@ -819,11 +828,11 @@ namespace BalloonParty.Projectile.View
             if (isCruising)
             {
                 _cruiseStartedPublisher.Publish(new ProjectileCruiseStartedMessage(
-                    transform.position, _model.Direction, _model.ShieldsRemaining.Value));
+                    _model, transform.position, _model.Direction, _model.ShieldsRemaining.Value));
             }
             else
             {
-                _cruiseEndedPublisher.Publish(new ProjectileCruiseEndedMessage(transform.position));
+                _cruiseEndedPublisher.Publish(new ProjectileCruiseEndedMessage(_model, transform.position));
             }
         }
 
@@ -999,11 +1008,11 @@ namespace BalloonParty.Projectile.View
         {
             if (doomed)
             {
-                _doomedStartedPublisher.Publish(new ProjectileDoomedStartedMessage(transform.position));
+                _doomedStartedPublisher.Publish(new ProjectileDoomedStartedMessage(_model, transform.position));
             }
             else
             {
-                _doomedEndedPublisher.Publish(new ProjectileDoomedEndedMessage());
+                _doomedEndedPublisher.Publish(new ProjectileDoomedEndedMessage(_model));
             }
         }
 

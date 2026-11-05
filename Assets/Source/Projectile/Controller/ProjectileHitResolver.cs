@@ -117,7 +117,7 @@ namespace BalloonParty.Projectile.Controller
 
                 resolvedCount++;
                 center += hit.Position;
-                var context = new DamageContext(1, flags, projectile.ColorName.Value);
+                var context = new DamageContext(1, flags, projectile.ColorName.Value, projectile);
                 var outcome = balloon.EvaluateHit(context);
                 _hitDispatcher.Dispatch(new ActorHitMessage(balloon, hit.Position, projectile.Direction, outcome, context));
             }
@@ -131,13 +131,13 @@ namespace BalloonParty.Projectile.Controller
             // Announce the discharge so its feel can play — the rainbow bloom, and (later) lights /
             // shockwave / slow-mo. Centred on the plowed line, carrying the charge (tough count) and
             // whether the shot was rainbow.
-            _flightStats.RecordPierceDischarge();
+            _flightStats.RecordPierceDischarge(projectile);
             // The plowed line's centroid ("center") sits behind the shot by the time it discharges — the
             // wall bounce already moved it on to SegmentStartPosition, which the bloom needs as the ANCHOR
             // for its "don't repaint what I'm about to fly back through" exclusion (the centroid would
             // exclude the wrong half — see PierceDischargedMessage's doc).
             _dischargedPublisher.Publish(new PierceDischargedMessage(
-                center / resolvedCount, resolvedCount, isRainbowBuff,
+                projectile, center / resolvedCount, resolvedCount, isRainbowBuff,
                 projectile.Direction, projectile.Flight.SegmentStartPosition));
 
             pending.Clear();
@@ -154,14 +154,15 @@ namespace BalloonParty.Projectile.Controller
             var flags = (isRainbowBuff ? DamageFlags.WildcardStreak : DamageFlags.Normal)
                         | (isPiercing ? DamageFlags.Piercing : DamageFlags.Normal)
                         | DamageFlags.DirectHit;
-            var damageContext = new DamageContext(1, flags, projectile.ColorName.Value);
+            var damageContext = new DamageContext(1, flags, projectile.ColorName.Value, projectile);
             var wasOneHitBalloon = balloon is IHasDurability durable && durable.HitsRemaining.Value == 1;
             var outcome = balloon.EvaluateHit(damageContext);
 
             if (outcome == HitOutcome.Absorb)
             {
                 _hitDispatcher.Dispatch(new ActorHitMessage(
-                    balloon, balloonWorldPosition, projectile.Direction, HitOutcome.Absorb));
+                    balloon, balloonWorldPosition, projectile.Direction, HitOutcome.Absorb,
+                    new DamageContext(default, default, null, projectile)));
                 projectile.IsFree = false;
                 return ProjectileHitVisual.Destroyed;
             }
@@ -177,7 +178,8 @@ namespace BalloonParty.Projectile.Controller
                 damageContext = new DamageContext(
                     damageContext.Damage,
                     damageContext.Flags | DamageFlags.DeferredStreak,
-                    damageContext.SourceColorId);
+                    damageContext.SourceColorId,
+                    projectile);
             }
             else if (isWildcardPop && !isRainbowBuff && !string.IsNullOrEmpty(projectile.ColorName.Value))
             {
@@ -185,7 +187,8 @@ namespace BalloonParty.Projectile.Controller
                 damageContext = new DamageContext(
                     damageContext.Damage,
                     damageContext.Flags | DamageFlags.CarryStreak,
-                    damageContext.SourceColorId);
+                    damageContext.SourceColorId,
+                    projectile);
             }
 
             var recolored = ApplyColorChange(projectile, balloon, outcome, isWildcardPop);
@@ -203,13 +206,15 @@ namespace BalloonParty.Projectile.Controller
                 projectile.Flight.SegmentSweepValid = false;
             }
 
-            // Dispatch runs the streak stage synchronously, so the tracker is already current here.
+            // Dispatch runs the streak stage synchronously, so this ball's streak is already current here.
+            var streak = _streakTracker.For(projectile);
             if (StreakShieldRule.GrantsShield(
                     _runConfig.StreakGrantsShields, outcome == HitOutcome.Pop, balloon is IHasColor,
-                    _streakTracker.CurrentStreak, _streakTracker.LastColor, projectile.ColorName.Value))
+                    streak.CurrentStreak, streak.LastColor, projectile.ColorName.Value))
             {
                 projectile.ShieldsRemaining.Value++;
-                _shieldGainedPublisher.Publish(new ShieldGainedMessage(projectile.LastHitBalloon.SlotIndex.Value));
+                _shieldGainedPublisher.Publish(
+                    new ShieldGainedMessage(projectile, projectile.LastHitBalloon.SlotIndex.Value));
             }
 
             // The pop has already left the grid (dispatch routed it synchronously), but its slot index

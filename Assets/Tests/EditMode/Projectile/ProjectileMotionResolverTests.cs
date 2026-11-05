@@ -184,7 +184,7 @@ namespace BalloonParty.Tests.Projectile
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
             model.AddBuff(new ProjectileBuff(
                 ProjectileBuffId.Speed, 2f, BuffModifierOp.Multiplicative,
-                new WallBounceEndCondition(NeverFiringWallBounces())));
+                new WallBounceEndCondition(NeverFiringWallBounces(), model)));
 
             var step = _resolver.Step(model, Vector3.zero, 1f);
 
@@ -662,7 +662,7 @@ namespace BalloonParty.Tests.Projectile
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
             model.AddBuff(new ProjectileBuff(
                 ProjectileBuffId.Speed, 3f, BuffModifierOp.Multiplicative,
-                new WallBounceEndCondition(NeverFiringWallBounces())));
+                new WallBounceEndCondition(NeverFiringWallBounces(), model)));
 
             var step = resolver.Step(model, Vector3.zero, 1f);
 

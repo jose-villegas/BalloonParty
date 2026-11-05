@@ -6,6 +6,7 @@ using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
+using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
@@ -332,6 +333,62 @@ namespace BalloonParty.Tests.Game
             _navigation.Received(1).TransitionTo(NavigationState.LevelUp);
             Assert.AreEqual(LevelUpPhase.Pending, _controller.Phase.Value);
             Assert.AreEqual(1, _controller.Level.Value, "level advances only on dismissal");
+        }
+
+        [Test]
+        public void FlightEnded_TwoBallsInFlight_PresentsOnlyWhenTheLastOneLands()
+        {
+            _thresholds.PointsRequiredForLevel(1).Returns(2);
+            var first = new ProjectileModel();
+            var second = new ProjectileModel();
+            _firedHandler.Handle(new ProjectileFiredMessage(first, Vector3.zero, Vector3.up));
+            _firedHandler.Handle(new ProjectileFiredMessage(second, Vector3.zero, Vector3.up));
+            ScoreColor(Red, 2);
+            ScoreColor(Blue, 2);
+
+            _destroyedHandler.Handle(new ProjectileDestroyedMessage(first));
+
+            _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
+            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value, "still waiting on the second ball");
+
+            _destroyedHandler.Handle(new ProjectileDestroyedMessage(second));
+
+            _levelUpPublisher.Received(1).Publish(Arg.Is<ScoreLevelUpMessage>(m => m.NewLevel == 2));
+            Assert.AreEqual(LevelUpPhase.Pending, _controller.Phase.Value);
+        }
+
+        [Test]
+        public void FlightEnded_TwoBallsLandInEitherOrder_PresentsOnce()
+        {
+            _thresholds.PointsRequiredForLevel(1).Returns(2);
+            var first = new ProjectileModel();
+            var second = new ProjectileModel();
+            _firedHandler.Handle(new ProjectileFiredMessage(first, Vector3.zero, Vector3.up));
+            _firedHandler.Handle(new ProjectileFiredMessage(second, Vector3.zero, Vector3.up));
+            ScoreColor(Red, 2);
+            ScoreColor(Blue, 2);
+
+            _destroyedHandler.Handle(new ProjectileDestroyedMessage(second));
+            _destroyedHandler.Handle(new ProjectileDestroyedMessage(first));
+
+            _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
+        }
+
+        [Test]
+        public void FlightEnded_BallThatLandedBeforeTheClaim_DoesNotHoldTheCeremony()
+        {
+            _thresholds.PointsRequiredForLevel(1).Returns(2);
+            var early = new ProjectileModel();
+            var late = new ProjectileModel();
+            _firedHandler.Handle(new ProjectileFiredMessage(early, Vector3.zero, Vector3.up));
+            _firedHandler.Handle(new ProjectileFiredMessage(late, Vector3.zero, Vector3.up));
+            _destroyedHandler.Handle(new ProjectileDestroyedMessage(early));
+
+            ScoreColor(Red, 2);
+            ScoreColor(Blue, 2);
+            _destroyedHandler.Handle(new ProjectileDestroyedMessage(late));
+
+            _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
         }
 
         [Test]
@@ -966,7 +1023,7 @@ namespace BalloonParty.Tests.Game
 
         private void FireProjectileFired()
         {
-            _firedHandler.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+            _firedHandler.Handle(new ProjectileFiredMessage(null, Vector3.zero, Vector3.up));
         }
 
         private void FireGameOver()

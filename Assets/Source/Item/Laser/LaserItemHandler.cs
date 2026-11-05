@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
+using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
@@ -98,7 +99,7 @@ namespace BalloonParty.Item.Laser
 
             var isRainbow = _palette.IsRainbow(balloon.GetColorId());
 
-            CastCross(balloon, worldPosition, settings, laserRotation);
+            CastCross(balloon, worldPosition, settings, laserRotation, activation.DamageContext.Projectile);
 
             // A rainbow holder converts the survivors bordering the blasted cross to rainbow.
             if (isRainbow)
@@ -173,12 +174,14 @@ namespace BalloonParty.Item.Laser
             }
         }
 
-        private void CastCross(IBalloonModel balloon, Vector3 worldPosition, ItemSettings settings, Quaternion laserRotation)
+        private void CastCross(
+            IBalloonModel balloon, Vector3 worldPosition, ItemSettings settings, Quaternion laserRotation,
+            IProjectileModel projectile)
         {
             var radius = settings.Laser.CircleCastRadius;
             var distance = settings.Laser.RaycastDistance;
             var context =
-                new DamageContext(settings.Damage, settings.Flags, balloon.GetColorId());
+                new DamageContext(settings.Damage, settings.Flags, balloon.GetColorId(), projectile);
 
             var right = laserRotation * Vector3.right;
             var left = laserRotation * Vector3.left;

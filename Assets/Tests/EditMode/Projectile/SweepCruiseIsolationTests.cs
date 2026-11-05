@@ -4,6 +4,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Score;
+using BalloonParty.Projectile;
 using BalloonParty.Game.Flight;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Projectile.Model;
@@ -70,7 +71,8 @@ namespace BalloonParty.Tests.Projectile
                 .Returns(Substitute.For<IDisposable>());
 
             var streakTracker = new ColorStreakTracker(
-                Substitute.For<IPublisher<StreakChangedMessage>>(), levelUpSubscriber, projectileLoadedSubscriber);
+                Substitute.For<IPublisher<StreakChangedMessage>>(), levelUpSubscriber, projectileLoadedSubscriber,
+                new ProjectileRegistry());
 
             var runConfig = Substitute.For<IRunConfig>();
             runConfig.StreakGrantsShields.Returns(true);

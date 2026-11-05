@@ -37,7 +37,7 @@ and `Assets/Source/Game/Telemetry/README.md` carries its full subscription list.
   `LevelController.TryBeginCompleting`)
 - `ProjectileView` → `ProjectileDestroyedMessage` → (`ThrowerController`,
   `BalloonSpawner`, `BalloonBalancer`, `ProjectileFacingSource`, `ShieldCounterAnimation`,
-  `LevelController`, `CombatSoundRouter`) — signals that the projectile has been
+  `LevelController`, `CombatSoundRouter`) — signals that a ball (named in the message) has been
   destroyed; `LevelController` uses it as the sole trigger for presenting the level-up
   popup
 

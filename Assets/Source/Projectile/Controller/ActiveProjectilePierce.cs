@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 using UniRx;
@@ -6,51 +8,105 @@ using VContainer.Unity;
 
 namespace BalloonParty.Projectile.Controller
 {
-    /// <summary>Whether the active shot is currently piercing.</summary>
+    /// <summary>Whether any live shot is currently piercing.</summary>
     internal interface IActiveProjectilePierce
     {
         IReadOnlyReactiveProperty<bool> IsPiercing { get; }
     }
 
     /// <summary>
-    ///     Mirrors the currently-loaded projectile's piercing state as one shared signal, so systems that
-    ///     must hold off while a shot plows through the board (the level-up ceremony) can gate on it and
-    ///     re-evaluate the moment the pierce ends — without each tracking the active projectile themselves.
+    ///     Folds every live shot's piercing state into one shared signal, so systems that must hold off
+    ///     while a shot plows through the board (the level-up ceremony) can gate on it and re-evaluate the
+    ///     moment the last pierce ends — without each tracking the shots themselves.
     /// </summary>
     internal sealed class ActiveProjectilePierce : IActiveProjectilePierce, IStartable, IDisposable
     {
+        private readonly IProjectileRegistry _projectiles;
         private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
         private readonly ReactiveProperty<bool> _isPiercing = new(false);
         private readonly CompositeDisposable _subscriptions = new();
-
-        private IDisposable _activeSubscription;
+        private readonly List<Tracked> _tracked = new();
 
         public IReadOnlyReactiveProperty<bool> IsPiercing => _isPiercing;
 
-        internal ActiveProjectilePierce(ISubscriber<ProjectileLoadedMessage> loadedSubscriber)
+        internal ActiveProjectilePierce(
+            IProjectileRegistry projectiles, ISubscriber<ProjectileLoadedMessage> loadedSubscriber)
         {
+            _projectiles = projectiles;
             _loadedSubscriber = loadedSubscriber;
         }
 
         public void Start()
         {
             _loadedSubscriber.Subscribe(OnProjectileLoaded).AddTo(_subscriptions);
+            _projectiles.Retired.Subscribe(OnRetired).AddTo(_subscriptions);
         }
 
         public void Dispose()
         {
-            _activeSubscription?.Dispose();
+            foreach (var tracked in _tracked)
+            {
+                tracked.Subscription.Dispose();
+            }
+
+            _tracked.Clear();
             _subscriptions.Dispose();
             _isPiercing.Dispose();
         }
 
-        // Track the freshly-loaded shot's piercing state; the previous shot's tracking is dropped so the
-        // signal always follows the live projectile. ReactiveProperty dedupes, so a new (not-piercing)
-        // shot after a piercing one that already ended emits nothing.
+        // ReactiveProperty dedupes, so a fresh (not-piercing) shot after a pierce that already ended
+        // emits nothing.
         private void OnProjectileLoaded(ProjectileLoadedMessage msg)
         {
-            _activeSubscription?.Dispose();
-            _activeSubscription = msg.Model.IsPiercing.Subscribe(piercing => _isPiercing.Value = piercing);
+            if (msg.Model != null)
+            {
+                // Added before subscribing: the subscription fires at once and Refresh must see it.
+                var index = _tracked.Count;
+                _tracked.Add(new Tracked(msg.Model, Disposable.Empty));
+                var subscription = msg.Model.IsPiercing.Subscribe(_ => Refresh());
+                _tracked[index] = new Tracked(msg.Model, subscription);
+            }
+
+            Refresh();
+        }
+
+        // A dying shot stops piercing before it publishes Destroyed, so retiring it later changes the
+        // fold only for a ball that left without dying (game over, reset).
+        private void OnRetired(IProjectileModel projectile)
+        {
+            for (var i = _tracked.Count - 1; i >= 0; i--)
+            {
+                if (_tracked[i].Projectile == projectile)
+                {
+                    _tracked[i].Subscription.Dispose();
+                    _tracked.RemoveAt(i);
+                }
+            }
+
+            Refresh();
+        }
+
+        private void Refresh()
+        {
+            var any = false;
+            foreach (var tracked in _tracked)
+            {
+                any |= tracked.Projectile.IsPiercing.Value;
+            }
+
+            _isPiercing.Value = any;
+        }
+
+        private readonly struct Tracked
+        {
+            internal readonly IProjectileModel Projectile;
+            internal readonly IDisposable Subscription;
+
+            internal Tracked(IProjectileModel projectile, IDisposable subscription)
+            {
+                Projectile = projectile;
+                Subscription = subscription;
+            }
         }
     }
 }

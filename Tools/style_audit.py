@@ -114,7 +114,9 @@ class AuditResult:
 def cs_files(root: Path):
     """Yield all .cs files under root, skipping Editor~ and hidden dirs."""
     for p in sorted(root.rglob("*.cs")):
-        if any(part.startswith(".") for part in p.parts):
+        # Relative parts only: a git worktree lives under .claude/worktrees/, and testing the absolute
+        # path would skip every file in it.
+        if any(part.startswith(".") for part in p.relative_to(root).parts):
             continue
         yield p
 

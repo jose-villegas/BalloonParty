@@ -101,7 +101,7 @@ Current claimants:
   `Projectile/README.md` § Pierce & Discharge Feel.
 - **`ProjectileDoomedTimeScaleController`** (`TimeScaleSource.LastShield`, `Projectile/Controller/`) —
   bullet-time while a shot on its last shield drifts toward the wall it's doomed to die on,
-  curve-sampled over the doomed approach's progress.
+  curve-sampled over the doomed approach's progress. It follows the latest ball to start its last breath; an earlier ball's end doesn't cut it short, and a ball scaled away without a `DoomedEnded` (game over, reset) is detected through the registry.
 - **`BoardPopWave`** (`TimeScaleSource.LevelTransition`, `Game/Cinematics/`) — slow-mo while the
   Ascent pop wave clears the old level's balloons band by band.
 - **`HoldSpeedUpController`** (`TimeScaleSource.HoldSpeedUp`, `Projectile/Controller/`) — while

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Run;
-using BalloonParty.Projectile.Model;
+using BalloonParty.Projectile;
 using BalloonParty.Balloon.View;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
@@ -38,7 +38,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly SlotGrid _grid;
         private readonly GridBalanceQuery _balanceQuery;
         private readonly ISubscriber<BalanceBalloonsMessage> _subscriber;
-        private readonly ISubscriber<ProjectileLoadedMessage> _projectileLoadedSubscriber;
+        private readonly IProjectileRegistry _projectiles;
         private readonly ISubscriber<ProjectileDestroyedMessage> _projectileDestroyedSubscriber;
         private readonly PauseService _pauseService;
         private readonly DisturbanceFieldService _disturbanceField;
@@ -57,7 +57,6 @@ namespace BalloonParty.Balloon.Controller
 
         private bool _balanceRequested;
         private int _generation;
-        private IProjectileModel _activeProjectile;
         private float _flightRebalanceElapsed;
 
         public int ResetOrder => RunResetOrder.Quiesce;
@@ -72,7 +71,7 @@ namespace BalloonParty.Balloon.Controller
             IBalloonsConfiguration balloonsConfig,
             BalancePathHolder balancePathHolder,
             ISubscriber<BalanceBalloonsMessage> subscriber,
-            ISubscriber<ProjectileLoadedMessage> projectileLoadedSubscriber,
+            IProjectileRegistry projectiles,
             ISubscriber<ProjectileDestroyedMessage> projectileDestroyedSubscriber,
             PauseService pauseService,
             DisturbanceFieldService disturbanceField,
@@ -84,7 +83,7 @@ namespace BalloonParty.Balloon.Controller
             _balloonsConfig = balloonsConfig;
             _balancePathHolder = balancePathHolder;
             _subscriber = subscriber;
-            _projectileLoadedSubscriber = projectileLoadedSubscriber;
+            _projectiles = projectiles;
             _projectileDestroyedSubscriber = projectileDestroyedSubscriber;
             _pauseService = pauseService;
             _disturbanceField = disturbanceField;
@@ -97,7 +96,6 @@ namespace BalloonParty.Balloon.Controller
         public void Start()
         {
             _subscriber.Subscribe(_ => RequestBalance()).AddTo(_subscriptions);
-            _projectileLoadedSubscriber.Subscribe(msg => _activeProjectile = msg.Model).AddTo(_subscriptions);
             _projectileDestroyedSubscriber.Subscribe(_ => OnProjectileDestroyed()).AddTo(_subscriptions);
         }
 
@@ -117,7 +115,6 @@ namespace BalloonParty.Balloon.Controller
             // Bumping the generation drops any balance already scheduled this frame.
             _generation = generation;
             _balanceRequested = false;
-            _activeProjectile = null;
             _flightRebalanceElapsed = 0f;
             _turnSteps.Clear();
             _motionTicker.CancelAllBalanceMoves();
@@ -436,14 +433,13 @@ namespace BalloonParty.Balloon.Controller
         internal bool TickFlightRebalance(float deltaTime)
         {
             var interval = _balloonsConfig.FlightRebalanceInterval;
-            if (interval <= 0f || _activeProjectile == null || !_activeProjectile.IsFree
-                || _activeProjectile.IsLastShieldApproach.Value
+            if (interval <= 0f || !AnyShotFree() || DoomedShotFliesAlone()
                 || _pauseService.IsAnyPaused.Value)
             {
-                // Freeze the board while a doomed shot glides its last-breath segment: with respawn
+                // Freeze the board while a lone doomed shot glides its last-breath segment: with respawn
                 // already held (BalloonSpawner) and rebalance stopped here, nothing can drift into the
                 // computed glide path, so the eased traversal is safe for any curve. Resumes when the
-                // shot dies and a fresh one loads (IsLastShieldApproach clears with the new model).
+                // shot dies. One ball's doom never freezes the board under other balls.
                 _flightRebalanceElapsed = 0f;
                 return false;
             }
@@ -496,8 +492,25 @@ namespace BalloonParty.Balloon.Controller
         // the spawn wave's, and the next flight's pulses as one allowance.
         private void OnProjectileDestroyed()
         {
-            _activeProjectile = null;
             _turnSteps.Clear();
+        }
+
+        private bool AnyShotFree()
+        {
+            for (var i = 0; i < _projectiles.InFlightCount; i++)
+            {
+                if (_projectiles.InFlightAt(i).IsFree)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool DoomedShotFliesAlone()
+        {
+            return _projectiles.InFlightCount == 1 && _projectiles.InFlightAt(0).IsLastShieldApproach.Value;
         }
 
         private void RequestBalance()

@@ -278,11 +278,11 @@ namespace BalloonParty.Solver
                 armsPierce: false, speedBuffMultiplier: 0f, damage: settings.Damage, flags: settings.Flags);
         }
 
-        // Mirrors LightningItemHandler.Activate's selection (verified 2026-07-25): the chain/glow/light
-        // presentation is unmodeled, but the same-colour chain geometry itself is LightningChain, run
-        // over the bound effect board. matchColor precedence mirrors LightningItemHandler.cs:96-100
-        // exactly: a rainbow host matches PROJECTILE colour (projectileColorId — the sim's own mirror of
-        // the live "last-loaded ProjectileLoadedMessage" state, _activeProjectile?.ColorName.Value) when
+        // Mirrors LightningItemHandler.Activate's selection: the chain/glow/light presentation is
+        // unmodeled, but the same-colour chain geometry itself is LightningChain, run over the bound
+        // effect board. matchColor precedence mirrors LightningItemHandler.Activate exactly: a rainbow
+        // host matches PROJECTILE colour (projectileColorId — the sim's own mirror of the colour of the
+        // shot that set the item off, activation.DamageContext.Projectile.ColorName.Value) when
         // it's non-empty and itself not rainbow; otherwise it falls back to
         // LightningChain.FindNearestConcreteColor (mirrors SlotGrid.FindNearestColorId's ring walk). A
         // normal host always matches its OWN colour (activation.SourceColorId) — it never reads the

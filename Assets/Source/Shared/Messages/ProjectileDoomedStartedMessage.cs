@@ -1,3 +1,4 @@
+using BalloonParty.Projectile.Model;
 using UnityEngine;
 
 namespace BalloonParty.Shared.Messages
@@ -7,10 +8,12 @@ namespace BalloonParty.Shared.Messages
     /// (spawning) or claiming a slow-motion time scale for the moment.</summary>
     internal readonly struct ProjectileDoomedStartedMessage
     {
+        public readonly IProjectileModel Projectile;
         public readonly Vector3 WorldPosition;
 
-        public ProjectileDoomedStartedMessage(Vector3 worldPosition)
+        public ProjectileDoomedStartedMessage(IProjectileModel projectile, Vector3 worldPosition)
         {
+            Projectile = projectile;
             WorldPosition = worldPosition;
         }
     }

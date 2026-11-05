@@ -9,10 +9,10 @@ using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Slots.Actor.Archetype
 {
-    /// <summary>Spawns rustle VFX when the projectile passes near a bush slot, or an impact lands within one.</summary>
+    /// <summary>Spawns rustle VFX when any shot in flight passes near a bush slot, or an impact lands within one.</summary>
     internal sealed class BushRustleController
     {
-        private readonly ProjectilePositionProvider _projectileProvider;
+        private readonly IProjectileRegistry _projectiles;
         private readonly ImpactEventBus _impactBus;
         private readonly PoolManager _poolManager;
         private readonly IBushSettings _settings;
@@ -21,12 +21,12 @@ namespace BalloonParty.Slots.Actor.Archetype
         private IReadOnlyList<Vector2> _slotPositions = System.Array.Empty<Vector2>();
 
         internal BushRustleController(
-            ProjectilePositionProvider projectileProvider,
+            IProjectileRegistry projectiles,
             ImpactEventBus impactBus,
             PoolManager poolManager,
             IBushSettings settings)
         {
-            _projectileProvider = projectileProvider;
+            _projectiles = projectiles;
             _impactBus = impactBus;
             _poolManager = poolManager;
             _settings = settings;
@@ -40,7 +40,7 @@ namespace BalloonParty.Slots.Actor.Archetype
 
         internal void Tick()
         {
-            if (_projectileProvider == null || _settings == null)
+            if (_projectiles == null || _settings == null)
             {
                 return;
             }
@@ -53,7 +53,7 @@ namespace BalloonParty.Slots.Actor.Archetype
 
             ProcessImpacts(vfxPrefab);
 
-            if (!_projectileProvider.IsActive)
+            if (_projectiles.InFlightCount == 0)
             {
                 if (_rustledSlots.Count > 0)
                 {
@@ -63,16 +63,16 @@ namespace BalloonParty.Slots.Actor.Archetype
                 return;
             }
 
-            UpdateRustleProximity(_projectileProvider.Position, vfxPrefab);
+            UpdateRustleProximity(vfxPrefab);
         }
 
-        private void UpdateRustleProximity(Vector3 projectilePos, ParticleSystem vfxPrefab)
+        private void UpdateRustleProximity(ParticleSystem vfxPrefab)
         {
             for (var i = 0; i < _slotPositions.Count; i++)
             {
                 var slotPos = _slotPositions[i];
 
-                if (!projectilePos.WithinRadius(slotPos, _settings.RustleProximityRadius))
+                if (!AnyShotWithin(slotPos))
                 {
                     // Re-arm so a later pass (e.g. after a bounce) rustles again.
                     _rustledSlots.Remove(i);
@@ -85,6 +85,19 @@ namespace BalloonParty.Slots.Actor.Archetype
                     SpawnRustleVfx(vfxPrefab, slotPos);
                 }
             }
+        }
+
+        private bool AnyShotWithin(Vector2 slotPos)
+        {
+            for (var i = 0; i < _projectiles.InFlightCount; i++)
+            {
+                if (_projectiles.InFlightPositionAt(i).WithinRadius(slotPos, _settings.RustleProximityRadius))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void ProcessImpacts(ParticleSystem vfxPrefab)

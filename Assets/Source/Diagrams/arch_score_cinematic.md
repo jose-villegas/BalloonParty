@@ -33,8 +33,8 @@ See @ref arch_cinematics_architecture and `Game/Level/README.md`.
 `LevelUpCinematic` (a plain C# producer over the `CameraRigCinematic` runner — see
 @ref arch_cinematics_architecture) subscribes to `ILevelProgress.Phase`. When the phase
 transitions to `Completing` (detection at claim time via `LevelController.TryBeginCompleting`),
-the hit beat begins immediately. The camera follows the **projectile** (via
-`ProjectilePositionProvider`) with box-in-box clamped bounds — no trail interception is
+the hit beat begins immediately. The camera follows the **latest ball in flight** (via
+`IProjectileRegistry.TryGetLatestInFlight`) with box-in-box clamped bounds — no trail interception is
 involved. `LevelController` drives an exclusive `ITimeScaleClaims.ClaimExclusive` during the
 beat; the authored beat curve IS the time-scale warp. The beat ends on a **duration basis**
 (authored curve length elapses), not on trail arrival. After the beat ends, a non-exclusive

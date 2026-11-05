@@ -16,8 +16,8 @@ currently in flight by their `TrailId`. `ScoreTrailService` calls
 arrival. A consumer that wants a trail that may not have spawned yet simply awaits
 `Contains(id)`, then takes the `TrailFlight` handle via `Get(id)`. (Note:
 `LevelUpCinematic` no longer uses this registry — it triggers on
-`ILevelProgress.Phase == Completing` and follows the **projectile** position via
-`ProjectilePositionProvider` for camera pan-in. The beat end is duration-based, not
+`ILevelProgress.Phase == Completing` and follows the **latest ball in flight** via
+`IProjectileRegistry.TryGetLatestInFlight` for camera pan-in. The beat end is duration-based, not
 trail-arrival-based. Score trails still use the registry for their actual flight.)
 
 `ScoreTrailService` exposes `Flights` (a `TrailFlightRegistry<TrailId>`: per-id `Register`

@@ -128,7 +128,9 @@ namespace BalloonParty.Game.Score
             using var incompletePool = UnityEngine.Pool.ListPool<string>.Get(out var incompleteColors);
             CollectIncompleteColors(incompleteColors);
             scoreColor.ResolveScoreAttribution(in msg.Context, incompleteColors, attributions);
-            PublishAttributionGroup(attributions, msg.WorldPosition, msg.Context.Flags, msg.ProjectileDirection);
+            PublishAttributionGroup(
+                attributions, msg.WorldPosition, msg.Context.Flags, msg.ProjectileDirection,
+                _streakTracker.For(msg.Context.Projectile));
         }
 
         // Colours still short of the level's threshold — a scatter pop confines its split to these, so
@@ -147,7 +149,7 @@ namespace BalloonParty.Game.Score
 
         private void PublishAttributionGroup(
             IReadOnlyList<ScoreAttribution> attributions, Vector3 worldPosition, DamageFlags flags,
-            Vector3 hitDirection)
+            Vector3 hitDirection, ColorStreak streak)
         {
             if (attributions.Count == 0)
             {
@@ -157,7 +159,7 @@ namespace BalloonParty.Game.Score
             using var resolvedPool =
                 UnityEngine.Pool.ListPool<(string Color, int Points, int BaseProgress)>.Get(out var resolved);
 
-            var multiplier = RecordStreakMultiplier(attributions, flags);
+            var multiplier = RecordStreakMultiplier(attributions, flags, streak);
             if (_timeOfDayNight.IsNight)
             {
                 multiplier *= NightScoreMultiplier;
@@ -176,7 +178,8 @@ namespace BalloonParty.Game.Score
 
         // A mixed group breaks the streak — unless exactly one entry is a wildcard's streak anchor
         // (e.g. the rainbow balloon), in which case the streak records against that colour instead.
-        private int RecordStreakMultiplier(IReadOnlyList<ScoreAttribution> attributions, DamageFlags flags)
+        private static int RecordStreakMultiplier(
+            IReadOnlyList<ScoreAttribution> attributions, DamageFlags flags, ColorStreak streak)
         {
             // WildcardStreak/CarryStreak are only ever meant to ride a direct hit (ProjectileHitResolver
             // is their sole producer today) — but DamageFlags is also plain serialized data on
@@ -194,13 +197,13 @@ namespace BalloonParty.Game.Score
             // branch already excludes bombs/lasers/lightning without needing its own DirectHit check.
             if (flags.HasFlag(DamageFlags.WildcardStreak))
             {
-                return _streakTracker.RecordWildcard();
+                return streak.RecordWildcard();
             }
 
             // A colourless projectile popping a rainbow — bank the pop for a later colour hit.
             if (flags.HasFlag(DamageFlags.DeferredStreak))
             {
-                _streakTracker.RecordDeferred();
+                streak.RecordDeferred();
                 return 1;
             }
 
@@ -208,7 +211,7 @@ namespace BalloonParty.Game.Score
             // (like a wildcard) and arm carry so the multiplier transfers to the next real colour.
             if (flags.HasFlag(DamageFlags.CarryStreak))
             {
-                return _streakTracker.RecordWildcard();
+                return streak.RecordWildcard();
             }
 
             // Only the shot itself (contact pop or pierce discharge) grows the streak. An item/AOE pop
@@ -219,7 +222,7 @@ namespace BalloonParty.Game.Score
 
             if (attributions.Count == 1)
             {
-                return _streakTracker.Record(attributions[0].ColorId, attributions[0].BreaksStreak, canIncrement);
+                return streak.Record(attributions[0].ColorId, attributions[0].BreaksStreak, canIncrement);
             }
 
             var primaryIndex = -1;
@@ -243,12 +246,12 @@ namespace BalloonParty.Game.Score
             if (primaryIndex >= 0)
             {
                 var primary = attributions[primaryIndex];
-                return _streakTracker.Record(primary.ColorId, primary.BreaksStreak, canIncrement);
+                return streak.Record(primary.ColorId, primary.BreaksStreak, canIncrement);
             }
 
             // breaksStreak short-circuits Record before canIncrement is ever read — pass false, not
             // canIncrement, so this reads as the unconditional break it actually is.
-            _streakTracker.Record(null, true, canIncrement: false);
+            streak.Record(null, true, canIncrement: false);
             return 1;
         }
 

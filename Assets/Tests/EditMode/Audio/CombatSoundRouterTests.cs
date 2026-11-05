@@ -6,7 +6,9 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Flight;
+using BalloonParty.Projectile;
 using BalloonParty.Projectile.Controller;
+using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
@@ -23,6 +25,8 @@ namespace BalloonParty.Tests.Audio
     public class CombatSoundRouterTests
     {
         private ISoundPlayer _player;
+        private ProjectileModel _ball;
+        private ProjectileRegistry _registry;
         private IMessageHandler<ActorHitMessage> _hitHandler;
         private IMessageHandler<ProjectileFiredMessage> _firedHandler;
         private IMessageHandler<ProjectileLoadedMessage> _loadedHandler;
@@ -40,6 +44,8 @@ namespace BalloonParty.Tests.Audio
         public void SetUp()
         {
             _player = Substitute.For<ISoundPlayer>();
+            _ball = new ProjectileModel();
+            _registry = new ProjectileRegistry();
 
             var hitFanout = new Fanout<ActorHitMessage>();
             var firedFanout = new Fanout<ProjectileFiredMessage>();
@@ -76,26 +82,32 @@ namespace BalloonParty.Tests.Audio
             // Started first so it counts a wall hit or discharge before the router reads the total —
             // the same order registration guarantees in the game.
             var flightStats = new FlightStatsService(
-                loadedSubscriber, firedSubscriber, destroyedSubscriber);
+                _registry, loadedSubscriber, firedSubscriber, destroyedSubscriber);
             flightStats.Start();
 
             var router = new CombatSoundRouter(
                 _player, hitSubscriber, firedSubscriber, loadedSubscriber,
                 cruiseStartedSubscriber, cruiseEndedSubscriber, doomedSubscriber, destroyedSubscriber,
                 pierceSubscriber, shieldGainedSubscriber, shieldLostSubscriber, wallHitSubscriber,
-                speedTapSubscriber, streakChangedSubscriber, flightConfig, activePierce, flightStats, palette);
+                speedTapSubscriber, streakChangedSubscriber, flightConfig, activePierce, flightStats, _registry, palette);
             router.Start();
 
             // Each of these mirrors its real publisher, which records into flight stats immediately
             // before publishing — so the router always reads a total that includes the event it is
             // reacting to, with no dependence on subscription order.
-            _hitHandler = new HitPipelineStub(flightStats, hitFanout);
-            _wallHitHandler = new RecordingPublisher<WallHitMessage>(flightStats.RecordWallHit, wallHitFanout);
+            _hitHandler = new HitPipelineStub(flightStats, hitFanout, () => _ball);
+            _wallHitHandler = new RecordingPublisher<WallHitMessage>(
+                m => flightStats.RecordWallHit(m.Projectile), wallHitFanout);
             _pierceHandler = new RecordingPublisher<PierceDischargedMessage>(
-                flightStats.RecordPierceDischarge, pierceFanout);
+                m => flightStats.RecordPierceDischarge(m.Projectile), pierceFanout);
             _firedHandler = firedFanout;
             _loadedHandler = loadedFanout;
             _destroyedHandler = destroyedFanout;
+
+            // The thrower's ball, loaded and fired as in a real turn; the stats and the per-ball pitch
+            // ramps below all key off it. Its own reload cue isn't what any test is about.
+            LoadAndFire(_ball);
+            _player.ClearReceivedCalls();
         }
 
         [Test]
@@ -103,8 +115,8 @@ namespace BalloonParty.Tests.Audio
         {
             // Authored as MelodicMode.ScaleWalkUp, so the tap count IS the scale degree — each rung of the
             // speed ladder sounds a degree higher than the last.
-            _speedTapHandler.Handle(new SpeedTapMintedMessage(Vector3.zero, 1));
-            _speedTapHandler.Handle(new SpeedTapMintedMessage(Vector3.zero, 2));
+            _speedTapHandler.Handle(new SpeedTapMintedMessage(_ball, Vector3.zero, 1));
+            _speedTapHandler.Handle(new SpeedTapMintedMessage(_ball, Vector3.zero, 2));
 
             _player.Received(1).Play(GameSoundId.SpeedTap, Arg.Any<Vector3?>(), 1, 0, 1f);
             _player.Received(1).Play(GameSoundId.SpeedTap, Arg.Any<Vector3?>(), 2, 0, 1f);
@@ -253,7 +265,7 @@ namespace BalloonParty.Tests.Audio
         [Test]
         public void OnProjectileDestroyed_PlaysProjectileDeath()
         {
-            _destroyedHandler.Handle(new ProjectileDestroyedMessage());
+            _destroyedHandler.Handle(new ProjectileDestroyedMessage(_ball));
 
             _player.Received(1).Play(GameSoundId.ProjectileDeath, null);
         }
@@ -263,7 +275,7 @@ namespace BalloonParty.Tests.Audio
         {
             var position = new Vector3(3f, 4f, 0f);
 
-            _firedHandler.Handle(new ProjectileFiredMessage(position, Vector3.right));
+            _firedHandler.Handle(new ProjectileFiredMessage(_ball, position, Vector3.right));
 
             _player.Received(1).Play(GameSoundId.ShotFired, position);
         }
@@ -271,7 +283,7 @@ namespace BalloonParty.Tests.Audio
         [Test]
         public void OnLoaded_ForwardsShotReloadWithNullPosition()
         {
-            _loadedHandler.Handle(new ProjectileLoadedMessage(null));
+            _loadedHandler.Handle(new ProjectileLoadedMessage(new ProjectileModel()));
 
             _player.Received(1).Play(GameSoundId.ShotReload, null);
         }
@@ -282,8 +294,8 @@ namespace BalloonParty.Tests.Audio
             var handle = new SoundHandle(7, 1u);
             _player.Play(GameSoundId.CruiseLoopStart, Arg.Any<Vector3?>()).Returns(handle);
 
-            _cruiseStartedHandler.Handle(new ProjectileCruiseStartedMessage(Vector3.zero, Vector3.right, 1));
-            _cruiseEndedHandler.Handle(new ProjectileCruiseEndedMessage(Vector3.zero));
+            _cruiseStartedHandler.Handle(new ProjectileCruiseStartedMessage(_ball, Vector3.zero, Vector3.right, 1));
+            _cruiseEndedHandler.Handle(new ProjectileCruiseEndedMessage(_ball, Vector3.zero));
 
             _player.Received(1).Stop(handle);
         }
@@ -293,7 +305,7 @@ namespace BalloonParty.Tests.Audio
         {
             var position = new Vector3(1f, 2f, 0f);
 
-            _shieldLostHandler.Handle(new ShieldLostMessage(position));
+            _shieldLostHandler.Handle(new ShieldLostMessage(_ball, position));
 
             // The melodic descent lives on WallHit now, so ShieldLost just plays (no streak override).
             _player.Received(1).Play(GameSoundId.ShieldLost, position);
@@ -302,7 +314,7 @@ namespace BalloonParty.Tests.Audio
         [Test]
         public void OnShieldGained_PlaysPlain()
         {
-            _shieldGainedHandler.Handle(new ShieldGainedMessage(Vector2Int.zero));
+            _shieldGainedHandler.Handle(new ShieldGainedMessage(_ball, Vector2Int.zero));
 
             _player.Received(1).Play(GameSoundId.ShieldGained, null);
         }
@@ -315,9 +327,9 @@ namespace BalloonParty.Tests.Audio
             // hit of the flight — so the second hit also carries offset -1.
             var position = new Vector3(3f, -1f, 0f);
 
-            _firedHandler.Handle(new ProjectileFiredMessage(position, Vector3.up));
-            _wallHitHandler.Handle(new WallHitMessage(position, 4));
-            _wallHitHandler.Handle(new WallHitMessage(position, 2));
+            _firedHandler.Handle(new ProjectileFiredMessage(_ball, position, Vector3.up));
+            _wallHitHandler.Handle(new WallHitMessage(_ball, position, 4));
+            _wallHitHandler.Handle(new WallHitMessage(_ball, position, 2));
 
             _player.Received(1).Play(GameSoundId.WallHit, position, 1);
             _player.Received(1).Play(GameSoundId.WallHit, position, 3, -1);
@@ -331,9 +343,9 @@ namespace BalloonParty.Tests.Audio
             // flight sounds at the root.
             var position = new Vector3(3f, -1f, 0f);
 
-            _firedHandler.Handle(new ProjectileFiredMessage(position, Vector3.up));
-            _wallHitHandler.Handle(new WallHitMessage(position, 5));
-            _wallHitHandler.Handle(new WallHitMessage(position, 9));
+            _firedHandler.Handle(new ProjectileFiredMessage(_ball, position, Vector3.up));
+            _wallHitHandler.Handle(new WallHitMessage(_ball, position, 5));
+            _wallHitHandler.Handle(new WallHitMessage(_ball, position, 9));
 
             _player.Received(1).Play(GameSoundId.WallHit, position, 0);
             _player.Received(1).Play(GameSoundId.WallHit, position, 0, -1);
@@ -411,7 +423,7 @@ namespace BalloonParty.Tests.Audio
             _hitHandler.Handle(new ActorHitMessage(tough, Vector3.zero, Vector3.zero, HitOutcome.Pop));
 
             // New flight — all counters reset.
-            _loadedHandler.Handle(new ProjectileLoadedMessage(null));
+            NextBall();
 
             _hitHandler.Handle(new ActorHitMessage(rainbow, Vector3.zero, Vector3.zero, HitOutcome.Pop));
             _hitHandler.Handle(new ActorHitMessage(tough, Vector3.zero, Vector3.zero, HitOutcome.Pop));
@@ -444,9 +456,9 @@ namespace BalloonParty.Tests.Audio
         [Test]
         public void OnPierceDischarged_PitchRampsAcrossConsecutiveDischarges()
         {
-            _pierceHandler.Handle(new PierceDischargedMessage(Vector3.zero, 2, false, Vector3.zero, Vector3.zero));
-            _pierceHandler.Handle(new PierceDischargedMessage(Vector3.zero, 3, false, Vector3.zero, Vector3.zero));
-            _pierceHandler.Handle(new PierceDischargedMessage(Vector3.zero, 1, false, Vector3.zero, Vector3.zero));
+            _pierceHandler.Handle(new PierceDischargedMessage(_ball, Vector3.zero, 2, false, Vector3.zero, Vector3.zero));
+            _pierceHandler.Handle(new PierceDischargedMessage(_ball, Vector3.zero, 3, false, Vector3.zero, Vector3.zero));
+            _pierceHandler.Handle(new PierceDischargedMessage(_ball, Vector3.zero, 1, false, Vector3.zero, Vector3.zero));
 
             // First discharge at offset 0, second at +2 (whole tone), third at +4.
             _player.Received(1).Play(GameSoundId.PierceDischarge, Vector3.zero, null, 0, 1f);
@@ -459,16 +471,117 @@ namespace BalloonParty.Tests.Audio
         [Test]
         public void OnLoaded_ResetsPierceDischargeCounter()
         {
-            _pierceHandler.Handle(new PierceDischargedMessage(Vector3.zero, 2, false, Vector3.zero, Vector3.zero));
-            _pierceHandler.Handle(new PierceDischargedMessage(Vector3.zero, 3, false, Vector3.zero, Vector3.zero));
+            _pierceHandler.Handle(new PierceDischargedMessage(_ball, Vector3.zero, 2, false, Vector3.zero, Vector3.zero));
+            _pierceHandler.Handle(new PierceDischargedMessage(_ball, Vector3.zero, 3, false, Vector3.zero, Vector3.zero));
 
             // New flight — counter resets.
-            _loadedHandler.Handle(new ProjectileLoadedMessage(null));
+            NextBall();
 
-            _pierceHandler.Handle(new PierceDischargedMessage(Vector3.zero, 1, false, Vector3.zero, Vector3.zero));
+            _pierceHandler.Handle(new PierceDischargedMessage(_ball, Vector3.zero, 1, false, Vector3.zero, Vector3.zero));
 
             // After reset, discharge should be at offset 0 again.
             _player.Received().Play(GameSoundId.PierceDischarge, Vector3.zero, null, 0, 1f);
+        }
+
+        [Test]
+        public void OnActorHit_TwoBallsInFlight_PopRampsAreIndependentPerBall()
+        {
+            var tough = Substitute.For<IBalloonModel>();
+            tough.TypeName.Returns(BalloonType.Tough);
+            var other = LaunchSecondBall();
+
+            _hitHandler.Handle(new ActorHitMessage(tough, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+            _hitHandler.Handle(new ActorHitMessage(tough, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+            _hitHandler.Handle(new ActorHitMessage(
+                tough, Vector3.zero, Vector3.zero, HitOutcome.Pop, new DamageContext(1, DamageFlags.Normal, "", other)));
+
+            // The second ball's first Tough pop sounds at the root, not as the third rung of the first ball's ramp.
+            _player.Received(2).Play(GameSoundId.BalloonPopTough, Vector3.zero, null, 0, 1f);
+            _player.Received(1).Play(GameSoundId.BalloonPopTough, Vector3.zero, null, 2, 1f);
+        }
+
+        [Test]
+        public void OnWallHit_TwoBallsInFlight_BounceDescentIsPerBall()
+        {
+            var other = LaunchSecondBall();
+            var position = new Vector3(3f, -1f, 0f);
+
+            _wallHitHandler.Handle(new WallHitMessage(_ball, position, 9));
+            _wallHitHandler.Handle(new WallHitMessage(_ball, position, 9));
+            _wallHitHandler.Handle(new WallHitMessage(other, position, 9));
+
+            _player.Received(2).Play(GameSoundId.WallHit, position, 0);
+            _player.Received(1).Play(GameSoundId.WallHit, position, 0, -1);
+        }
+
+        [Test]
+        public void OnCruiseEnded_TwoCruisingBalls_OnlyStopsThatBallsLoop()
+        {
+            var other = LaunchSecondBall();
+            var handleA = new SoundHandle(7, 1u);
+            var handleB = new SoundHandle(8, 1u);
+            _player.Play(GameSoundId.CruiseLoopStart, Arg.Any<Vector3?>()).Returns(handleA, handleB);
+            _cruiseStartedHandler.Handle(new ProjectileCruiseStartedMessage(_ball, Vector3.zero, Vector3.right, 1));
+            _cruiseStartedHandler.Handle(new ProjectileCruiseStartedMessage(other, Vector3.zero, Vector3.right, 1));
+
+            _cruiseEndedHandler.Handle(new ProjectileCruiseEndedMessage(_ball, Vector3.zero));
+
+            _player.Received(1).Stop(handleA);
+            _player.DidNotReceive().Stop(handleB);
+        }
+
+        [Test]
+        public void OnProjectileDestroyed_CruisingBall_StopsItsOwnLoopOnly()
+        {
+            var other = LaunchSecondBall();
+            var handleA = new SoundHandle(7, 1u);
+            var handleB = new SoundHandle(8, 1u);
+            _player.Play(GameSoundId.CruiseLoopStart, Arg.Any<Vector3?>()).Returns(handleA, handleB);
+            _cruiseStartedHandler.Handle(new ProjectileCruiseStartedMessage(_ball, Vector3.zero, Vector3.right, 1));
+            _cruiseStartedHandler.Handle(new ProjectileCruiseStartedMessage(other, Vector3.zero, Vector3.right, 1));
+
+            _destroyedHandler.Handle(new ProjectileDestroyedMessage(_ball));
+
+            _player.Received(1).Stop(handleA);
+            _player.DidNotReceive().Stop(handleB);
+        }
+
+        [Test]
+        public void OnBallRetired_WithoutCruiseEndedOrDestroyed_StopsItsLoop()
+        {
+            var handle = new SoundHandle(7, 1u);
+            _player.Play(GameSoundId.CruiseLoopStart, Arg.Any<Vector3?>()).Returns(handle);
+            _cruiseStartedHandler.Handle(new ProjectileCruiseStartedMessage(_ball, Vector3.zero, Vector3.right, 1));
+
+            _registry.Retire(_ball);
+
+            _player.Received(1).Stop(handle);
+        }
+
+        // Retires the ball in play and loads a fresh one, as the thrower does between turns.
+        private void NextBall()
+        {
+            _destroyedHandler.Handle(new ProjectileDestroyedMessage(_ball));
+            _registry.Retire(_ball);
+            _ball = new ProjectileModel();
+            LoadAndFire(_ball);
+        }
+
+        private void LoadAndFire(IProjectileModel ball)
+        {
+            _registry.Load(ball, null);
+            _loadedHandler.Handle(new ProjectileLoadedMessage(ball));
+            _registry.Launch(ball);
+            _firedHandler.Handle(new ProjectileFiredMessage(ball, Vector3.zero, Vector3.up));
+        }
+
+        // A second ball loaded and fired while the first is still airborne.
+        private IProjectileModel LaunchSecondBall()
+        {
+            var other = new ProjectileModel();
+            LoadAndFire(other);
+            _player.ClearReceivedCalls();
+            return other;
         }
 
         private static ISubscriber<T> CaptureSubscriber<T>(Action<IMessageHandler<T>> capture)
@@ -506,10 +619,10 @@ namespace BalloonParty.Tests.Audio
         // Stands in for a publisher that records before it publishes.
         private sealed class RecordingPublisher<T> : IMessageHandler<T>
         {
-            private readonly Action _record;
+            private readonly Action<T> _record;
             private readonly IMessageHandler<T> _subscribers;
 
-            public RecordingPublisher(Action record, IMessageHandler<T> subscribers)
+            public RecordingPublisher(Action<T> record, IMessageHandler<T> subscribers)
             {
                 _record = record;
                 _subscribers = subscribers;
@@ -517,7 +630,7 @@ namespace BalloonParty.Tests.Audio
 
             public void Handle(T message)
             {
-                _record();
+                _record(message);
                 _subscribers.Handle(message);
             }
         }
@@ -529,15 +642,27 @@ namespace BalloonParty.Tests.Audio
         {
             private readonly IFlightStatsWriter _flightStats;
             private readonly IMessageHandler<ActorHitMessage> _subscribers;
+            private readonly Func<IProjectileModel> _currentBall;
 
-            public HitPipelineStub(IFlightStatsWriter flightStats, IMessageHandler<ActorHitMessage> subscribers)
+            public HitPipelineStub(
+                IFlightStatsWriter flightStats, IMessageHandler<ActorHitMessage> subscribers,
+                Func<IProjectileModel> currentBall)
             {
                 _flightStats = flightStats;
                 _subscribers = subscribers;
+                _currentBall = currentBall;
             }
 
+            // A hit that names no ball is attributed to the ball in play, as the shot that caused it would be.
             public void Handle(ActorHitMessage message)
             {
+                if (message.Context.Projectile == null)
+                {
+                    message = new ActorHitMessage(
+                        message.Actor, message.WorldPosition, message.ProjectileDirection, message.Outcome,
+                        new DamageContext(1, DamageFlags.Normal, "", _currentBall()));
+                }
+
                 _flightStats.Record(message);
                 _subscribers.Handle(message);
             }

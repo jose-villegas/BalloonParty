@@ -204,7 +204,7 @@ namespace BalloonParty.Tests.Game
         // Any real play at all, so the partial level record at game over is not skipped as a phantom.
         private void Play()
         {
-            _harness.ProjectileFired.Handle(new ProjectileFiredMessage(Vector3.zero, Vector3.up));
+            _harness.ProjectileFired.Handle(new ProjectileFiredMessage(null, Vector3.zero, Vector3.up));
             _harness.ActorHit.Handle(GameplayMetricsHarness.Hit(
                 GameplayMetricsHarness.Balloon(BalloonType.Simple, GameplayMetricsHarness.Red),
                 HitOutcome.Pop));

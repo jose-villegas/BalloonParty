@@ -24,11 +24,11 @@ Unity audio only (`AudioSource` + `AudioMixer`), no middleware.
 | `AudioPoolKeys` | The `PoolManager` key string for the voice pool |
 | `SfxVoicePoolBootstrap` | `IStartable` — registers and pre-warms the `AudioSourceVoice` pool before any router can play a sound |
 | `View/AudioSourceVoice` | **View** — the only `MonoBehaviour` in this feature, and the only type that touches `AudioSource` directly. Wraps one `AudioSource`; pooled; schedules its own real-time return |
-| `Routing/CombatSoundRouter` | Hits, shots, reload, cruise loop, doomed warning, pierce, shield gained/lost |
-| `Routing/ProgressionSoundRouter` | Streak, score chime, level-up (+ fill, dismiss), level transition, board clear, game-over (+ dismiss) |
+| `Routing/CombatSoundRouter` | Hits, shots, reload, cruise loop (one handle per ball, stopped when that ball's cruise ends or the registry retires it), doomed warning, pierce, shield gained/lost |
+| `Routing/ProgressionSoundRouter` | Streak, score chime (the level-complete pop is pitched by the latest ball's colour, via `IProjectileRegistry.ShotOrCurrent`), level-up (+ fill, dismiss), level transition, board clear, game-over (+ dismiss) |
 | `Routing/ItemSoundRouter` | Per-item activation, overflow heart |
 | `Routing/DangerSoundRouter` | Starts/stops the `DangerWarn` loop as `IDangerLevel` crosses `DangerLevelThreshold` |
-| `Routing/WindSoundRouter` | Drives the `WindLoop` volume from cruise speed (TotalCruiseTaps) via `SetVolumeFactor` |
+| `Routing/WindSoundRouter` | Drives the `WindLoop` volume from the fastest cruising ball in flight (TotalCruiseTaps, read from `IProjectileRegistry`) via `SetVolumeFactor` |
 | `Routing/MusicSoundRouter` | Navigation-driven music: plays `LaunchMusic` in the Launch state, stops it (fading) on the move to Game. In `Game`, crossfades a day/night gameplay-loop pair (the current time-of-day loop at full volume, the other ducked, swapping smoothly as `IsNight` flips); both loops duck while a shot is in flight — the window opens on `ProjectileFiredMessage`, not on `ProjectileLoadedMessage` — and pitch down together as danger level rises, toward a tritone at max danger |
 | `Routing/ItemSightSoundRouter` | Plays `ItemSighted` as an ascending run whenever the settled chain of item-hosting balloons the aim's prediction line crosses changes — see *The item-sighted cue* below. Detection itself lives in `Item/ItemSightTracker`, not here |
 | `Configuration/GameSoundId`, `SfxChannel`, `SfxEntry`, `ISoundBankConfiguration`, `SoundBankConfiguration` | The data side — see *Configuration* below |
@@ -243,7 +243,7 @@ is `_colorPopsThisFlight`, a dictionary counting pops per palette colour name, s
 to this router. The other — per-`BalloonType` pops and deflects, pierce discharges and wall
 bounces — moved to `FlightStatsService` (`Game/Flight/`), because "how many Toughs died this
 flight" is a gameplay fact that metrics wants too, and two systems counting it separately
-would eventually disagree. The router reads those through `IFlightStats`.
+would eventually disagree. The router reads those through `IFlightStatsSource.Of(ball)`, naming the ball its message carries. `_colorPopsThisFlight` is still one shared dictionary, reset on every load, so with several balls it is global (exact at today's one-ball cap).
 
 The read is **post-increment**: `HitPipeline` records the hit before publishing it, so by the
 time the router's handler runs the count already includes this pop. The step is therefore the
@@ -299,7 +299,8 @@ knowing which is what keeps this mechanism debuggable:
   shot loading or the last broken streak" — a streak break resets it mid-flight, before the next
   reload.
 - Everything in `FlightStatsService` — type pops and deflects, pierce discharges, wall bounces —
-  clears on `ProjectileLoadedMessage`. A broken streak does not touch them. The bounce counter
+  is kept per ball: a ball's counts start when it loads and are dropped when the registry retires
+  it, and routers read them with `Of(message.Projectile)`. A broken streak does not touch them. The bounce counter
   used to reset a beat later, on `ProjectileFiredMessage`; moving it onto the same boundary is
   safe only because a wall hit cannot arrive before launch, which
   `FlightStatsServiceTests.WallBounces_AreZeroBetweenLoadingAndFiring` pins.

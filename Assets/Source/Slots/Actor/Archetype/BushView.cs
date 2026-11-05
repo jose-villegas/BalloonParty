@@ -18,7 +18,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         [SerializeField] private bool _debugBranchSegments;
 #endif
 
-        [Inject] private ProjectilePositionProvider _projectileProvider;
+        [Inject] private IProjectileRegistry _projectiles;
         [Inject] private ImpactEventBus _impactBus;
         [Inject] private PoolManager _poolManager;
 
@@ -149,7 +149,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         {
             _materials ??= new BushMaterialSet(_settings);
             _builder ??= new BushRenderDataBuilder(_settings, _materials);
-            _rustle ??= new BushRustleController(_projectileProvider, _impactBus, _poolManager, _settings);
+            _rustle ??= new BushRustleController(_projectiles, _impactBus, _poolManager, _settings);
         }
 
         private Vector2[] CollectSlotPositions()

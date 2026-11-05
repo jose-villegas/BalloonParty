@@ -1,35 +1,30 @@
-using System;
-using BalloonParty.Projectile.Model;
+using BalloonParty.Projectile;
 using BalloonParty.Shared;
-using BalloonParty.Shared.Messages;
-using MessagePipe;
-using UniRx;
 using UnityEngine;
 using VContainer.Unity;
 
 namespace BalloonParty.Audio.Routing
 {
-    // A wind loop whose volume tracks cruise speed. Cruise speed is a pure function of TotalCruiseTaps
+    // A wind loop whose volume tracks cruise speed — of the fastest cruising ball, so one loop serves
+    // every ball in flight. Cruise speed is a pure function of TotalCruiseTaps
     // (sweep + wall-bounce taps both feed it), so this reads that off the live projectile and maps it to
     // 0-1: 0 at the first tap, 1 at the tap count that reaches the cruise speed cap. The loop starts at
     // the first tap and stops when cruising ends OR the shot dies — both clear IsCruising, so a single
     // gate covers both. Each new step ramps over the entry's FadeInSeconds; the stop fades out.
-    internal sealed class WindSoundRouter : IStartable, ITickable, IDisposable
+    internal sealed class WindSoundRouter : ITickable
     {
         private readonly ISoundPlayer _player;
-        private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
+        private readonly IProjectileRegistry _projectiles;
         private readonly float _maxTaps;
-        private readonly CompositeDisposable _subscriptions = new();
 
-        private IProjectileModel _projectile;
         private SoundHandle _handle = SoundHandle.None;
         private int _lastTaps = -1;
 
-        public WindSoundRouter(ISoundPlayer player, ISubscriber<ProjectileLoadedMessage> loadedSubscriber,
+        public WindSoundRouter(ISoundPlayer player, IProjectileRegistry projectiles,
             IProjectileFlightConfig flightConfig)
         {
             _player = player;
-            _loadedSubscriber = loadedSubscriber;
+            _projectiles = projectiles;
 
             // Taps at full speed. Taps stop accruing once piercing arms, so the arming threshold IS the
             // ceiling; only with piercing disabled does the speed cap bind instead, and converting that
@@ -42,21 +37,9 @@ namespace BalloonParty.Audio.Routing
                 : Mathf.Max(1f, (flightConfig.MaxSpeedMultiplier - 1f) / gainPerTap);
         }
 
-        public void Start()
-        {
-            _loadedSubscriber.Subscribe(OnLoaded).AddTo(_subscriptions);
-        }
-
-        public void Dispose()
-        {
-            _subscriptions.Dispose();
-        }
-
         public void Tick()
         {
-            var taps = _projectile != null && _projectile.IsCruising.Value
-                ? _projectile.Flight.TotalCruiseTaps
-                : 0;
+            var taps = MaxCruiseTaps();
 
             if (taps >= 1)
             {
@@ -81,18 +64,20 @@ namespace BalloonParty.Audio.Routing
             }
         }
 
-        private void OnLoaded(ProjectileLoadedMessage message)
+        // A shot that died or landed is gone from the registry, so its wind stops with it.
+        private int MaxCruiseTaps()
         {
-            // Fresh shot: silence any wind still tracking the old one, then follow the new model. The
-            // loop won't sound until this shot earns its first tap.
-            if (_handle.IsValid)
+            var taps = 0;
+            for (var i = 0; i < _projectiles.InFlightCount; i++)
             {
-                _player.Stop(_handle);
-                _handle = SoundHandle.None;
+                var projectile = _projectiles.InFlightAt(i);
+                if (projectile.IsCruising.Value)
+                {
+                    taps = Mathf.Max(taps, projectile.Flight.TotalCruiseTaps);
+                }
             }
 
-            _projectile = message.Model;
-            _lastTaps = -1;
+            return taps;
         }
     }
 }

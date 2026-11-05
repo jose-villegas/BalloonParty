@@ -29,16 +29,16 @@ keeps flying and the animations have a stable state to play against:
 
 1. **`Playing → Completing`** — detection is at **claim-time** (`TryBeginCompleting`): when `ClaimProgress`
    projects that all colours will reach threshold, it immediately flags `Completing` and claims an
-   exclusive time-scale (`ITimeScaleClaims.ClaimExclusive`). The projectile keeps flying — no pause.
+   exclusive time-scale (`ITimeScaleClaims.ClaimExclusive`). The ball keeps flying — no pause.
    The exclusive claim drives the authored **beat curve** (evaluated in unscaled time over the curve's
    duration). When the curve completes (`t ≥ 1`), the exclusive claim is released and a **ramp-up**
    begins: time linearly interpolates from 1 → `LevelCompleteRampUpScale` over
    `LevelCompleteRampUpDuration` (both from `IRunConfig`), using a **non-exclusive** `Claim` — the
    min-wins rule means any freeze (e.g. a popup pause) still overrides. The flight continues at the
-   ramping speed until the projectile dies. A 15 s watchdog (diagnostic only — it logs and abandons,
-   never force-destroys) fires if the projectile still hasn't died.
-2. **`Completing → Pending`** — `ProjectileDestroyedMessage` is the **sole trigger** for presenting the
-   popup. `OnFlightEnded` releases any remaining time-scale claims, then — if the run is still in
+   ramping speed until the **last** ball in flight dies. A 15 s watchdog (diagnostic only — it logs and abandons,
+   never force-destroys) fires if a ball still hasn't died.
+2. **`Completing → Pending`** — `ProjectileDestroyedMessage` of the last ball in flight is the **sole trigger** for presenting the
+   popup (`LevelController` tracks fired-and-not-yet-destroyed balls by the ball each message carries; the ceremony waits for the last one, not the first to land). `OnFlightEnded` releases any remaining time-scale claims, then — if the run is still in
    `NavigationState.Game` — snapshots the completed colours, publishes
    `ScoreLevelUpMessage(newLevel, colours)`, transitions nav to `LevelUp`, and records the pending
    level. **The `Level` integer and progress have not changed yet.** While `Completing` the spawn wave,

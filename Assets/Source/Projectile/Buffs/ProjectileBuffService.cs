@@ -1,46 +1,48 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Projectile.Model;
-using BalloonParty.Shared.Messages;
-using MessagePipe;
 using UniRx;
 using VContainer.Unity;
 
 namespace BalloonParty.Projectile.Buffs
 {
     /// <summary>
-    ///     Owns projectile-buff storage and lifecycle: applies buffs onto the active projectile and drops
-    ///     one the first time its end-condition's <c>Expired</c> fires. Knows nothing about any buff's
-    ///     effect or end-condition — it only observes the exposed signal.
+    ///     Owns projectile-buff storage and lifecycle: applies buffs onto a shot and drops one the first
+    ///     time its end-condition's <c>Expired</c> fires, or when the registry retires its shot. Knows nothing about any
+    ///     buff's effect or end-condition — it only observes the exposed signal.
     /// </summary>
     internal sealed class ProjectileBuffService : IProjectileBuffs, IStartable, IDisposable
     {
-        private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
-        private readonly Dictionary<ProjectileBuff, IDisposable> _expiries = new();
+        private readonly IProjectileRegistry _projectiles;
+        private readonly Dictionary<ProjectileBuff, Entry> _entries = new();
+        private readonly List<ProjectileBuff> _dropBuffer = new();
         private readonly CompositeDisposable _subscriptions = new();
 
-        private IWriteableProjectileModel _active;
-
-        internal ProjectileBuffService(ISubscriber<ProjectileLoadedMessage> loadedSubscriber)
+        internal ProjectileBuffService(IProjectileRegistry projectiles)
         {
-            _loadedSubscriber = loadedSubscriber;
+            _projectiles = projectiles;
         }
 
         public void Start()
         {
-            _loadedSubscriber.Subscribe(OnProjectileLoaded).AddTo(_subscriptions);
+            _projectiles.Retired.Subscribe(DropBuffsOf).AddTo(_subscriptions);
         }
 
-        public void Apply(ProjectileBuff buff)
+        public void Apply(IProjectileModel projectile, ProjectileBuff buff)
         {
-            if (_active == null)
+            if (projectile is not IWriteableProjectileModel target || !_projectiles.IsAlive(projectile))
             {
                 buff.Dispose();
                 return;
             }
 
-            _active.AddBuff(buff);
-            _expiries[buff] = buff.EndCondition.Expired
+            target.AddBuff(buff);
+
+            // Recorded before subscribing: an already-expired condition fires inside Subscribe, and
+            // Remove must find the entry to undo the add.
+            var expiry = new UniRx.SingleAssignmentDisposable();
+            _entries[buff] = new Entry(target, expiry);
+            expiry.Disposable = buff.EndCondition.Expired
                 .Where(expired => expired)
                 .Take(1)
                 .Subscribe(_ => Remove(buff));
@@ -48,40 +50,60 @@ namespace BalloonParty.Projectile.Buffs
 
         public void Dispose()
         {
-            ClearActiveBuffs();
+            _dropBuffer.Clear();
+            _dropBuffer.AddRange(_entries.Keys);
+            RemoveBuffered();
             _subscriptions.Dispose();
         }
 
-        // A fresh projectile carries no buffs; any left on the previous one are dropped so their
-        // subscriptions never outlive it.
-        private void OnProjectileLoaded(ProjectileLoadedMessage msg)
+        // On retire, after the shot's Destroyed dispatch, so every subscriber of it still sees its buffs.
+        private void DropBuffsOf(IProjectileModel projectile)
         {
-            ClearActiveBuffs();
-            _active = (IWriteableProjectileModel)msg.Model;
+            _dropBuffer.Clear();
+            foreach (var pair in _entries)
+            {
+                if (pair.Value.Target == projectile)
+                {
+                    _dropBuffer.Add(pair.Key);
+                }
+            }
+
+            RemoveBuffered();
+        }
+
+        private void RemoveBuffered()
+        {
+            foreach (var buff in _dropBuffer)
+            {
+                Remove(buff);
+            }
+
+            _dropBuffer.Clear();
         }
 
         private void Remove(ProjectileBuff buff)
         {
-            if (_expiries.TryGetValue(buff, out var expiry))
+            if (!_entries.TryGetValue(buff, out var entry))
             {
-                expiry.Dispose();
-                _expiries.Remove(buff);
+                return;
             }
 
-            _active?.RemoveBuff(buff);
+            _entries.Remove(buff);
+            entry.Expiry.Dispose();
+            entry.Target.RemoveBuff(buff);
             buff.Dispose();
         }
 
-        private void ClearActiveBuffs()
+        private readonly struct Entry
         {
-            foreach (var pair in _expiries)
-            {
-                pair.Value.Dispose();
-                _active?.RemoveBuff(pair.Key);
-                pair.Key.Dispose();
-            }
+            internal readonly IWriteableProjectileModel Target;
+            internal readonly IDisposable Expiry;
 
-            _expiries.Clear();
+            internal Entry(IWriteableProjectileModel target, IDisposable expiry)
+            {
+                Target = target;
+                Expiry = expiry;
+            }
         }
     }
 }

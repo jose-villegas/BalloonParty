@@ -1,6 +1,6 @@
 # Flight
 
-Owns the per-shot boundary and the counts scoped to it. A **gameplay** service, not part of
+Owns the per-ball boundary and the counts scoped to each ball. A **gameplay** service, not part of
 the telemetry subsystem — audio depends on it, so making it telemetry's would put a
 shipping feature downstream of metrics.
 
@@ -8,17 +8,24 @@ shipping feature downstream of metrics.
 
 | File | What it does |
 |---|---|
-| `IFlightScope` | The shot's boundary as two reactive windows plus `FlightIndex`. `IsLoaded` spans `[Loaded, Destroyed)` — the whole shot including aiming; `IsAirborne` spans `[Fired, Destroyed)` |
-| `IFlightStats` | What happened this flight: pops and deflects per `BalloonType`, pierce discharges, wall bounces. Zeroed when the next projectile loads |
-| `IFlightStatsWriter` | The write half, segregated so no reader can mutate. `HitPipeline` is the only caller |
-| `FlightStatsService` | Implements all three. Plain C#, `IStartable`/`IDisposable` |
+| `IFlightScope` | The boundary as two reactive windows plus `FlightIndex`. `IsLoaded` is true while any ball is in `[Loaded, Destroyed)` — including aiming; `IsAirborne` while any ball is in `[Fired, Destroyed)`. They are "any ball" flags, not one ball's state |
+| `IFlightStats` | What happened to one ball: pops and deflects per `BalloonType`, pierce discharges, wall bounces |
+| `IFlightStatsSource` | `Of(ball)` returns that ball's `IFlightStats`. A ball's stats stay readable through its own `ProjectileDestroyedMessage`; an unknown or null ball reads as all zeroes |
+| `IFlightStatsWriter` | The write half, segregated so no reader can mutate. Each write names the ball it counts for. `HitPipeline` is the only caller of the hit counts |
+| `FlightStatsService` | Implements all four. Plain C#, `IStartable`/`IDisposable` |
+
+Several balls can exist at once (the cap is one today, but nothing here assumes it), so a
+reader never asks "the flight's" stats. It takes the ball its message carries
+(`message.Projectile`, or `DamageContext`'s ball) and calls `Of(ball)`. Stats are created when
+the ball loads and dropped when `IProjectileRegistry.Retired` fires for it, which is *after* its
+Destroyed dispatch (see the Land/Retire rule in `Projectile/README.md`).
 
 ## Which window to gate on
 
 `IsAirborne` is almost always the one you want for effects — ducking, time-scale, anything
 that should stop when the shot dies. `IsLoaded` stays true while the player is *aiming*, so
 gating a duck on it holds the effect permanently between shots. `IsLoaded` exists because
-per-flight counts are scoped to it: they reset on load, not on fire.
+a ball's counts start at its load, not at its fire.
 
 ## The publisher counts, then publishes
 
@@ -34,11 +41,11 @@ that publish:
 That is what makes the counts safe to share: every subscriber reads a total that already
 includes the event it is reacting to, so **no reader depends on MessagePipe's subscription
 order**, which is enforced nowhere. `CombatSoundRouter` relies on this directly, reading the
-post-increment count and subtracting one so the flight's first pop of a type lands on the
+post-increment count and subtracting one so the ball's first pop of a type lands on the
 root.
 
-Only the flight *boundary* (`ProjectileLoadedMessage`, `Fired`, `Destroyed`) is a
-subscription here, because nothing reads a boundary flag mid-dispatch and expects it to
+Only the flight *boundary* (`ProjectileLoadedMessage`, `Fired`, `Destroyed`, and the
+registry's `Retired`) is a subscription here, because nothing reads a boundary flag mid-dispatch and expects it to
 already have flipped.
 
 If a subscriber ever counts one of these instead, the value each reader sees becomes

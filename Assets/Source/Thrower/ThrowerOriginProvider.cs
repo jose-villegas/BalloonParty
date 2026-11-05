@@ -8,8 +8,7 @@ namespace BalloonParty.Thrower
     /// <remarks>
     ///     <see cref="ThrowerView" /> lives in <c>ThrowerLifetimeScope</c>, a child of the game scope,
     ///     so systems registered above it — <c>ItemAssigner</c>, which needs a launch point to plan a
-    ///     shield chain from — cannot inject it. Same shape as
-    ///     <c>ProjectilePositionProvider</c>: a plain game-scope singleton the thrower fills in.
+    ///     shield chain from — cannot inject it. So it is a plain game-scope singleton the thrower fills in.
     /// </remarks>
     internal sealed class ThrowerOriginProvider
     {
