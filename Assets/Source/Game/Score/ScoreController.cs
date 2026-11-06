@@ -299,7 +299,7 @@ namespace BalloonParty.Game.Score
                     multiplier,
                     hitDirection));
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
                 // Level lock: the trail flies for show but never banks (see OnTrailArrived) — keep the
                 // projected total in step so a later snap can't reveal the withheld points.
                 if (BalloonParty.Cheats.CheatState.BlockLevelUp)
@@ -318,7 +318,7 @@ namespace BalloonParty.Game.Score
                 return;
             }
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
             // Level lock (BlockLevelUpCheat): the trail still flew to the counter, but the score doesn't tick up.
             if (BalloonParty.Cheats.CheatState.BlockLevelUp)
             {

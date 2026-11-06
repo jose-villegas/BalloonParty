@@ -8,11 +8,15 @@ Toggle the console window in Play Mode with the **backtick** (`` ` ``) key, or �
 
 `Debug.Log` output isn't visible on a device without a wired-up console. The project depends on yasirkula's [In-game Debug Console](https://github.com/yasirkula/UnityIngameDebugConsole) (`com.yasirkula.ingamedebugconsole`, a UPM git dependency in `Packages/manifest.json`) for this.
 
-`DevLogConsole` (a `MonoBehaviour`) spawns the console prefab at startup and `DontDestroyOnLoad`s it — **mobile development builds only** (plus mobile release builds made with `CHEATS_IN_RELEASE`). Its guard, `UNITY_EDITOR || ((DEVELOPMENT_BUILD || CHEATS_IN_RELEASE) && (UNITY_ANDROID || UNITY_IOS))`, keeps the component wireable in the editor but strips it from desktop dev builds and ordinary release builds (the serialized prefab reference goes with it, so the console never ships there). At runtime it no-ops in the editor (the editor has its own Console window). Place one `DevLogConsole` in the **Launch scene** and assign the package's `IngameDebugConsole` prefab to its field.
+`DevLogConsole` (a `MonoBehaviour`) spawns the console prefab at startup and `DontDestroyOnLoad`s it — **mobile development builds only** (plus mobile release builds made with `CHEATS_IN_RELEASE`). Its guard, `UNITY_EDITOR || ((UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE) && (UNITY_ANDROID || UNITY_IOS))`, keeps the component wireable in the editor but strips it from desktop dev builds and ordinary release builds (the serialized prefab reference goes with it, so the console never ships there). At runtime it no-ops in the editor (the editor has its own Console window). Place one `DevLogConsole` in the **Launch scene** and assign the package's `IngameDebugConsole` prefab to its field.
 
 ## Build visibility
 
-The entire `Cheats/` system — console, `ICheat`, and all cheat implementations — is wrapped in `#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE`. It compiles out completely in ordinary release builds. Registration in `GameLifetimeScope` and the `CheatState` checks sprinkled through gameplay controllers are guarded by the same directive.
+The entire `Cheats/` system — console, `ICheat`, and all cheat implementations — is wrapped in `#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE`. It compiles out completely in ordinary release builds.
+
+Since Unity 6.6 the **Development Build** checkbox no longer decides this: `UNITY_ENABLE_CHECKS` comes from the per-platform **Managed Code Variant** (*Project Settings ▸ Player ▸ Other Settings*). The editor always defines it; a player gets it only with the **Checked** or **Debug** variant. The default variant is Release, so a development build made by hand with the default has no cheats, no `Log.Info`/`Log.Assert` and no telemetry sink — set the variant to Checked first. **Tools → BalloonParty → Upload Release** does this itself: its dev APK builds Checked (Debug when script debugging is on), and both release APKs build Release, restoring your setting afterwards.
+
+Registration in `GameLifetimeScope` and the `CheatState` checks sprinkled through gameplay controllers are guarded by the same directive.
 
 ### Release builds with cheats (`CHEATS_IN_RELEASE`)
 

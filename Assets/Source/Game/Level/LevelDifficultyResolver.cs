@@ -84,7 +84,7 @@ namespace BalloonParty.Game.Level
                 return _retryState.RetryLevel;
             }
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
             var start = BalloonParty.Cheats.CheatState.StartLevel;
             return start < 0 ? start : Mathf.Max(1, start);
 #else

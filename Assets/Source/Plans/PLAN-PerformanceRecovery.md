@@ -640,7 +640,7 @@ via Package Manager (José, in-editor).
 | `_LOW_QUALITY_*` keywords | the per-material EnableKeyword sites (currently `ScreenSpaceLightService.cs:175`, `BackgroundFieldService.cs:63`, +G4's) relocate here, re-applied on tier change |
 
 - Editor/dev override: `_forceTierInEditor` + forced tier on the SO
-  (`#if UNITY_EDITOR || DEVELOPMENT_BUILD`), plus a cheat to cycle tiers on device.
+  (`#if UNITY_ENABLE_CHECKS`), plus a cheat to cycle tiers on device.
 - No provider (editor / non-Google device) → default High, honor override, no crash path.
 
 **Verify (José)**: 15-min continuous play — tier steps down *before* frame time degrades;

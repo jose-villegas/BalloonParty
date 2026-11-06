@@ -1,4 +1,4 @@
-#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
 using BalloonParty.Cheats;
 #endif
 
@@ -207,7 +207,7 @@ namespace BalloonParty.Game
         // compiled out, only the JsonLinesTelemetrySink branch inside it.
         internal static void RegisterTelemetrySinks(this IContainerBuilder builder)
         {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_ENABLE_CHECKS
             builder.RegisterEntryPoint<JsonLinesTelemetrySink>().AsSelf();
             builder.Register<ITelemetrySink>(resolver =>
                 new CompositeTelemetrySink(new ITelemetrySink[] { resolver.Resolve<JsonLinesTelemetrySink>() }),
@@ -412,7 +412,7 @@ namespace BalloonParty.Game
             return new ScoreTrailBehaviourResolver(container.Resolve<IScoreTrailBehaviourConfiguration>(), handlers);
         }
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
         internal static void RegisterCheats(this IContainerBuilder builder)
         {
             builder.Register<SpawnBalloonLineCheat>(Lifetime.Singleton).AsImplementedInterfaces();

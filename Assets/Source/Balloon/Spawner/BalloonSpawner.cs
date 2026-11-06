@@ -289,7 +289,7 @@ namespace BalloonParty.Balloon.Spawner
 
         // Snapshot each column's reachable capacity BEFORE the fill — afterwards the board is full and the
         // probe reads ~0. Stripped from release with LogInitialFillDiagnostics.
-        [System.Diagnostics.Conditional("UNITY_EDITOR"), System.Diagnostics.Conditional("DEVELOPMENT_BUILD")]
+        [System.Diagnostics.Conditional("UNITY_ENABLE_CHECKS")]
         private void CaptureFillCapacity()
         {
             _fillCapacityDiag.Clear();
@@ -299,7 +299,7 @@ namespace BalloonParty.Balloon.Spawner
             }
         }
 
-        [System.Diagnostics.Conditional("UNITY_EDITOR"), System.Diagnostics.Conditional("DEVELOPMENT_BUILD")]
+        [System.Diagnostics.Conditional("UNITY_ENABLE_CHECKS")]
         private void LogInitialFillDiagnostics(int lines)
         {
             var expected = lines * _grid.Columns;

@@ -1,4 +1,4 @@
-#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
 
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;

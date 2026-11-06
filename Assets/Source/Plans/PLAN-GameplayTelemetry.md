@@ -33,7 +33,7 @@ local balance work — the JSON log below already answers those.
 
 ### Where the JSON goes
 
-`JsonLinesTelemetrySink` is compiled in under `#if UNITY_EDITOR || DEVELOPMENT_BUILD` and
+`JsonLinesTelemetrySink` is compiled in under `#if UNITY_ENABLE_CHECKS` and
 writes one JSON object per line to:
 
 ```
@@ -222,12 +222,12 @@ Numbered so task specs can cite them. Each is testable.
   append through `CultureInfo.InvariantCulture`.
 - **R28** — Build gating is **three tiers**, not one `#if`:
   - **R28a** — the dev-only tier: `JsonLinesTelemetrySink` and the viewer window are
-    wrapped in `#if UNITY_EDITOR || DEVELOPMENT_BUILD`.
+    wrapped in `#if UNITY_ENABLE_CHECKS`.
   - **R28b** — the export tier: the decorator chain registers unconditionally and is
     inert until consent. When no leaf sink is registered, `CompositeTelemetrySink` holds an
     empty array and `Write` is an empty loop — do **not** add a `NullTelemetrySink`.
   - **R28c** — the cheat-read tier: the triple guard
-    `#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE` **with an `#else`
+    `#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE` **with an `#else`
     defaulting `cheatActive = false`**, verified by a rebuild with `UNITY_EDITOR` stripped.
 
 ### Performance

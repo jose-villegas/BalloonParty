@@ -80,7 +80,7 @@ snapshot) has no arrow into `Env` — it feeds the popup and nothing else, and i
 | `ITelemetrySink` / `TelemetrySinkBase` | Write seam. The base owns the never-throw guard: `Write`/`FlushAsync` share one latch that permanently no-ops both once either hook throws; `Dispose` is guarded and idempotent independently, so a prior write failure never leaks the sink's resource |
 | `CompositeTelemetrySink` | Fans out to an array of leaf sinks; an empty array is the inert "no export configured" state — no `NullTelemetrySink`. Registered unconditionally in `GameScopeRegistration.RegisterTelemetrySinks`, wrapping `{ JsonLinesTelemetrySink }` under the dev guard or an empty array otherwise |
 | `ConsentGateSink` / `BatchingTelemetrySink` | *(Not built)* Cross-cutting decorators — one concern each |
-| `JsonLinesTelemetrySink` | Dev-only local sink (`#if UNITY_EDITOR \|\| DEVELOPMENT_BUILD`): one JSON object per line, one `StreamWriter` opened in `Start()` and kept for the session, rotating log files in `Application.persistentDataPath/telemetry/` (20 most recent, sorted by file name) |
+| `JsonLinesTelemetrySink` | Dev-only local sink (`#if UNITY_ENABLE_CHECKS`): one JSON object per line, one `StreamWriter` opened in `Start()` and kept for the session, rotating log files in `Application.persistentDataPath/telemetry/` (20 most recent, sorted by file name) |
 | `HttpAnalyticsSink` | *(Not built)* Batched export to an external analytics service; gated on choosing a provider |
 
 ## Every scope runs its own clocks
@@ -146,8 +146,9 @@ adb pull /sdcard/Android/data/<package>/files/telemetry/ .
 Simulators* ▸ select the app ▸ gear ▸ *Download Container* gives a `.xcappdata` bundle;
 the logs are inside under `AppData/Library/Application Support/telemetry/`.
 
-The sink is dev-only (`#if UNITY_EDITOR || DEVELOPMENT_BUILD`), so a device build must be a
-**development build** for any of this to exist.
+The sink is dev-only (`#if UNITY_ENABLE_CHECKS`), so a device build must use the
+**Checked** or **Debug** Managed Code Variant for any of this to exist — the Development Build
+checkbox alone no longer enables it (see `Cheats/README.md` ▸ Build visibility).
 
 ## A record per flight
 

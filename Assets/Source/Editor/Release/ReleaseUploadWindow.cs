@@ -199,6 +199,7 @@ namespace BalloonParty.Editor.Release
             Repaint();
 
             var builtApks = new List<string>();
+            var originalCodeVariant = PlayerSettings.GetManagedCodeVariant(NamedBuildTarget.Android);
 
             try
             {
@@ -286,6 +287,7 @@ namespace BalloonParty.Editor.Release
             {
                 redactToken = "";
                 SetCheatsDefine(false);
+                PlayerSettings.SetManagedCodeVariant(NamedBuildTarget.Android, originalCodeVariant);
                 CleanupBuildInfo(projectRoot);
                 isRunning = false;
                 Repaint();
@@ -308,6 +310,7 @@ namespace BalloonParty.Editor.Release
             Repaint();
 
             SetCheatsDefine(addCheatsDefine);
+            SetCodeVariant(options);
             WriteBuildInfo(ver, commitSha, treeHash, variant);
 
             var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
@@ -389,6 +392,23 @@ namespace BalloonParty.Editor.Release
                 defines.Remove(CheatsDefine);
                 PlayerSettings.SetScriptingDefineSymbols(target, string.Join(";", defines));
             }
+        }
+
+        // Dev-only code (cheats, Log.Info/Assert, the telemetry sink) is gated on UNITY_ENABLE_CHECKS,
+        // which since Unity 6.6 follows the Managed Code Variant rather than the Development flag. The
+        // release APKs stay Release so they remain performance-representative; script debugging is the
+        // Debug variant, which keeps the checks too.
+        private static void SetCodeVariant(BuildOptions options)
+        {
+            var variant = ManagedCodeVariant.Release;
+            if ((options & BuildOptions.Development) != 0)
+            {
+                variant = (options & BuildOptions.AllowDebugging) != 0
+                    ? ManagedCodeVariant.Debug
+                    : ManagedCodeVariant.Checked;
+            }
+
+            PlayerSettings.SetManagedCodeVariant(NamedBuildTarget.Android, variant);
         }
 
         private static string[] GetBuildScenes()

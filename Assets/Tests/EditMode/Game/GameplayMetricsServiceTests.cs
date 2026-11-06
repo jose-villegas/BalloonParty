@@ -642,7 +642,7 @@ namespace BalloonParty.Tests.Game
             Assert.AreEqual(80, _harness.LastOf(RecordKind.Level).Metrics[MetricId.MaxDangerLevel]);
         }
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
         [Test]
         public void CheatTag_IsStickyForTheWholeRun()
         {

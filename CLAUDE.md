@@ -79,7 +79,8 @@ Compile C# without opening Unity:
 dotnet build BalloonParty.Runtime.csproj -nologo -clp:ErrorsOnly   # also .Editor.csproj / .Tests.EditMode.csproj
 ```
 - **`dotnet build` does NOT compile shaders** (`.shader`/HLSL) — only Unity validates those. Flag shader edits as needing an in-editor check.
-- **`dotnet build` defines `UNITY_EDITOR`**, so `#if !UNITY_EDITOR` (device-only) code is silently skipped. To compile-check it, rebuild with `-p:DefineConstants` overridden to strip `UNITY_EDITOR` (escape `;` as `%3B`, add `-p:BuildProjectReferences=false`).
+- **`dotnet build` defines `UNITY_EDITOR`** (and `UNITY_ENABLE_CHECKS`/`UNITY_INCLUDE_INSTRUMENTATION`, which the editor always defines), so `#if !UNITY_EDITOR` (device-only) code is silently skipped. To compile-check it, rebuild with `-p:DefineConstants` overridden to strip `UNITY_EDITOR` (escape `;` as `%3B`, add `-p:BuildProjectReferences=false`); strip `UNITY_ENABLE_CHECKS` too to check a Release-variant player, where the cheats and `Log.Info` compile out.
+- **Dev-only code gates on `UNITY_ENABLE_CHECKS`**, never `DEVELOPMENT_BUILD` (deprecated in Unity 6.6, removed in 6.8). It follows the per-platform Managed Code Variant (Checked/Debug), not the Development Build checkbox.
 - It also can't run the game; behavior/visual changes (rendering, animation, the level-up cinematic) need an in-editor playtest. Say so rather than claiming verified.
 
 Style audit (the same rules the pre-commit hook runs on staged `.cs`):

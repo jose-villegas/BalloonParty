@@ -315,7 +315,7 @@ namespace BalloonParty.Game.Telemetry
 
         private static int FreshRunStartLevel()
         {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
             return Mathf.Max(1, BalloonParty.Cheats.CheatState.StartLevel);
 #else
             return 1;
@@ -328,7 +328,7 @@ namespace BalloonParty.Game.Telemetry
         // trace at all.
         private static bool ReadCheatActive()
         {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
             return BalloonParty.Cheats.CheatState.AnyCheatUsed
                 || BalloonParty.Cheats.CheatState.BlockLevelUp
                 || BalloonParty.Cheats.CheatState.InstantScoreTrails

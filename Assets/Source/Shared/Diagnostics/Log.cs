@@ -9,8 +9,9 @@ namespace BalloonParty.Shared.Diagnostics
     /// </summary>
     /// <remarks>
     /// <see cref="Info"/> and <see cref="Assert"/> are decorated with
-    /// <c>[Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]</c>,
-    /// so they compile out of release builds automatically — no <c>#if</c> guards needed.
+    /// <c>[Conditional("UNITY_ENABLE_CHECKS")]</c>, so they compile out of any player whose
+    /// Managed Code Variant is Release or Instrumented — no <c>#if</c> guards needed. The editor
+    /// always defines the symbol; a development build gets it only when built Checked or Debug.
     /// <para/>
     /// <b>Important:</b> pass interpolated strings directly as arguments
     /// (<c>Log.Info("Tag", $"value {x}")</c>). Do not hoist them into a local variable
@@ -19,13 +20,13 @@ namespace BalloonParty.Shared.Diagnostics
     /// </remarks>
     internal static class Log
     {
-        [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+        [Conditional("UNITY_ENABLE_CHECKS")]
         internal static void Info(string tag, string message)
         {
             Debug.Log(FormatTagged(tag, message));
         }
 
-        [Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]
+        [Conditional("UNITY_ENABLE_CHECKS")]
         internal static void Assert(bool condition, string tag, string message)
         {
             Debug.Assert(condition, FormatTagged(tag, message));

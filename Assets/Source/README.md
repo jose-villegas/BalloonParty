@@ -557,7 +557,7 @@ Prefabs carrying multiple MonoBehaviours that need injection (e.g. projectile, b
 
 ## Cheat Console
 
-A runtime debug console in `Cheats/`. Press the **backtick** (`` ` ``) key to toggle. The entire system is wrapped in `#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE` and compiles out in ordinary release builds; **Tools → BalloonParty → Cheats In Release Builds** toggles the define to ship a release build with the console in (see `Cheats/README.md`).
+A runtime debug console in `Cheats/`. Press the **backtick** (`` ` ``) key to toggle. The entire system is wrapped in `#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE` and compiles out in ordinary release builds; **Tools → BalloonParty → Cheats In Release Builds** toggles the define to ship a release build with the console in (see `Cheats/README.md`).
 
 **Adding a cheat:**
 1. Implement `ICheat` — provide `Name`, `Section`, and `Tags[]`.

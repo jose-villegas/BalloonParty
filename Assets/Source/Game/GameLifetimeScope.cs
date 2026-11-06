@@ -83,7 +83,7 @@ namespace BalloonParty.Game
             builder.RegisterPresentation();
             builder.RegisterAudioRouters();
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
             builder.RegisterCheats();
 #endif
         }

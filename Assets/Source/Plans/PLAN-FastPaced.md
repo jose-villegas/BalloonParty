@@ -221,5 +221,11 @@ Telemetry stays telemetry: nothing here persists metrics client-side as progress
 2. ~~**Retry rules.**~~ Answered: unlimited retries from the level reached (Phase 5).
 3. ~~**How many authored levels stay.**~~ Answered: none; generated from level 1 (Phase 4).
 4. ~~**Ball-cap growth.**~~ Answered: cards only (Phase 5).
+5. **Does the level-up screen stay?** Raised for later; it blocks no phase. In a fast-paced run
+   the level-up popup is a hard stop, and today it is mostly information. The direction is to
+   stop the game only when the player has won something to act on: a card pick (Phase 5), an
+   unlockable, a power-up or a collectible. A level with no reward would pass with an
+   in-play beat instead of a screen. Settle it with Phase 5, since its card pick is the first
+   interruption that earns its stop.
 
-No questions are open; every phase can start.
+Phases 2–4 can start; question 5 is due before Phase 5.

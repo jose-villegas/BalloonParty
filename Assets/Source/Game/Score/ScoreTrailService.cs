@@ -145,7 +145,7 @@ namespace BalloonParty.Game.Score
                 return;
             }
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD || CHEATS_IN_RELEASE
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
             // Bulk cheat fill (ScoreCheatHelper): confirm the whole group at once instead of spawning one
             // flying pen per point. This is the exact arrival a landed trail would publish (LastScore is the
             // colour's cumulative progress the LevelController watermark reads), so score, bars and progress
