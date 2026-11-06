@@ -1,8 +1,8 @@
 using System.Collections;
-using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Grid;
+using BalloonParty.Thrower;
 using MessagePipe;
 using NUnit.Framework;
 using UnityEngine;
@@ -25,7 +25,8 @@ namespace BalloonParty.Tests.PlayMode
             yield return LoadGameScene();
 
             var grid = Resolve<SlotGrid>();
-            var positions = Resolve<ProjectilePositionProvider>();
+            // A held ball rests on the spawn point, so the origin is where this one leaves from.
+            var origin = Resolve<ThrowerOriginProvider>();
 
             // The thrower loads a projectile after its entrance animation (post scene-load), so this
             // subscription catches that load; the message carries the active model.
@@ -50,7 +51,7 @@ namespace BalloonParty.Tests.PlayMode
 
             // Launch straight at the target — the projectile view moves on IsFree; once free the thrower's
             // Tick leaves it alone (TryFire / reposition both early-return on IsFree).
-            projectile.Direction = ((Vector2)(grid.IndexToWorldPosition(slot) - positions.Position)).normalized;
+            projectile.Direction = ((Vector2)grid.IndexToWorldPosition(slot) - origin.Origin).normalized;
             projectile.IsFree = true;
 
             yield return WaitUntil(() => BalloonCount(grid) < before,
