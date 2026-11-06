@@ -271,12 +271,12 @@ Tests `PickRandom` weighted selection with `MaxCount` cap logic.
 
 ### `ItemAssignerTests` — 5 tests
 
-Tests the item-assignment pipeline: turn filtering, max-cap enforcement via grid scan, `IHasWriteableItemSlot` eligibility gating, and the happy path.
+Tests the item-assignment pipeline: wave (cadence) filtering, max-cap enforcement via grid scan, `IHasWriteableItemSlot` eligibility gating, and the happy path.
 
 | Area | Tests | What could break |
 |---|---|---|
 | Empty `NewBalloons` → early return | 1 | Null guard missed |
-| Turn not on the item cadence (`ItemCadence`) → skipped | 1 | Modulo check wrong |
+| Wave not on the item cadence (`ItemCadence`) → skipped | 1 | Modulo check wrong |
 | All items at max → no assignment | 1 | Cap off-by-one in `CountBalloonsWithItem` |
 | No eligible balloons (do not implement `IHasWriteableItemSlot`) | 1 | Missing interface filter |
 | Eligible balloon gets item assigned | 1 | Assignment path broken |
@@ -522,6 +522,24 @@ Tests Catmull-Rom path generation, array sampling, prefix sum, and midpoint disp
 | MidpointDisplacement preserves endpoints | 1 | Endpoints overwritten |
 | MidpointDisplacement count ≤ 2 → only endpoints | 1 | Missing early return |
 
+### `SpawnClockTests` — 17 tests
+
+Tests when `SpawnClock` publishes `SpawnBalloonLineMessage`. Drives `Advance(deltaTime)` directly (`Time.deltaTime` isn't injectable) against a stubbed level-progress/pacing config and a real `PauseService` and `ProjectileRegistry`.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Grace, then one line per interval | 3 | First line arrives early/late, or the interval isn't restarted after a line |
+| A huge frame delta lands at most one line, then waits a full interval | 2 | A frame hitch dumps a backlog of lines |
+| Level-up → new level's interval after a fresh grace | 1 | Stale interval or no grace after level-up |
+| Frozen while paused, level not `Playing`, off the `Game` screen, or a lone doomed ball flies; resumes after | 5 | A line lands in a moment that must hold still |
+| Doomed ball with company, or non-doomed ball → keeps running | 2 | One ball's last breath freezes the clock under other balls |
+| Run reset / level change mid-window → grace restarts | 2 | A new run inherits the old run's countdown |
+| `NextLineProgress` runs 0 → 1 per window, restarts after a line | 2 | Danger-heart countdown jumps or sticks |
+
+### `SpawnClockSettingsTests` — 5 tests
+
+Tests `SpawnClockSettings.IntervalForLevel`: level 1 is the first interval, later levels decay geometrically, deep levels stop at the floor, levels ≤ 0 run at level 1's pace, and a decay of 1 keeps the interval constant.
+
 ### `BalloonBalancerTests` — 3 tests
 
 Tests the run-reset cancellation guard added so a balance scheduled before a restart is dropped (it would otherwise animate pooled actors against an emptied grid). The frame-deferred timing itself is a PlayMode concern; here the generation guard is exercised synchronously on an empty grid.
@@ -579,7 +597,7 @@ HP loss model: starts at configured hit points; a blocked spawn costs one HP; re
 
 ### `SpaceDangerTests` — 5 tests
 
-Danger-level scaling from overflow vs remaining hearts: none → safe; partial → scales; overflow ≥ hearts (or zero hearts) → clamps to max danger.
+Danger-level scaling from the next line's overflow vs remaining hearts: none → safe; partial → scales; overflow ≥ hearts (or zero hearts) → clamps to max danger.
 
 ### `CinematicsSettingsTests` — 5 tests
 
@@ -827,7 +845,7 @@ These systems are not tested because they are either too coupled to Unity runtim
 | `BombItemHandler` | `BlastBalloons` uses `Physics2D.OverlapCircle` — needs real colliders and physics simulation. Shockwave nudge publish is covered indirectly by NudgeService tests. |
 | `LaserItemHandler` | `CastCross` uses `Physics2D.CircleCast` — needs real colliders and physics simulation. |
 | `BalloonBalancer` | Scan+move loop depends on well-tested `IsUnbalanced`/`OptimalNextEmptySlot` + DOTween animation — still deferred. The run-reset cancellation guard *is* covered (`BalloonBalancerTests`); the frame-deferred `.Forget()` timing is a PlayMode concern. |
-| `BalloonSpawner` | Heavy Unity/DI coupling (`PoolManager`, `IObjectResolver`, DOTween). Little pure logic beyond forwarding. |
+| `BalloonSpawner` | Heavy Unity/DI coupling (`PoolManager`, `IObjectResolver`, DOTween). Little pure logic beyond forwarding; *when* lines arrive is `SpawnClock`, which is tested. |
 | `ProjectileModel` | Pure data bag — too simple to break |
 | `OrthogonalSizeCameraController` | Forwards config lookup to camera — simple delegation |
 | `ThrowerView.RotateTo` | Single `AngleAxis` call — too simple |

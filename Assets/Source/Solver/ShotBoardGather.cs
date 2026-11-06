@@ -79,12 +79,13 @@ namespace BalloonParty.Solver
     internal static class ShotBoardGather
     {
         /// <summary>Snapshots the live game. <paramref name="pulseExecutionDelay" /> models the
-        /// balancer's render-frame lag (callers estimate ~1.5 × frame time).</summary>
+        /// balancer's render-frame lag (callers estimate ~1.5 × frame time); <paramref name="firstPulseIn" />
+        /// is the live balancer's <c>SecondsUntilNextPulse</c>.</summary>
         internal static ShotSolveContext Gather(
             SlotGrid grid, IProjectileFlightConfig config, ISlotGridConfig gridConfig,
             IBalloonsConfiguration balloonsConfig, IItemConfiguration itemConfig, ThrowerView thrower,
             ThrowerSettings throwerSettings, IGamePalette palette, IActiveLevelParameters levelParams,
-            IRunConfig runConfig, float pulseExecutionDelay)
+            IRunConfig runConfig, float pulseExecutionDelay, float firstPulseIn)
         {
             var targets = new List<ShotBalloonSnapshot>();
             var otherDynamicActors = new List<ShotDynamicActorSnapshot>();
@@ -92,7 +93,8 @@ namespace BalloonParty.Solver
             CollectBoard(grid, balloonsConfig, palette, targets, otherDynamicActors, staticActors);
 
             var dynamics = new ShotBoardDynamics(
-                gridConfig, balloonsConfig, targets, otherDynamicActors, staticActors, pulseExecutionDelay);
+                gridConfig, balloonsConfig, targets, otherDynamicActors, staticActors, pulseExecutionDelay,
+                firstPulseIn);
             var cruiseConfig = new ShotCruiseConfig(config);
             var lattice = ShotSlotLattice.From(gridConfig);
             var items = new ShotItemLayer(

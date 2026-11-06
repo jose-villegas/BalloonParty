@@ -8,13 +8,12 @@ namespace BalloonParty.Shared.Pause
         /// <summary>A modal overlay has taken control of the screen (e.g. level-up popup).</summary>
         LevelUp,
 
-        /// <summary>Holds the thrower during overflow pops so the player can't fire into an unresolved board.</summary>
-        Overflow,
+        // Explicit values keep the numbering from before Overflow (2) was removed.
 
         /// <summary>The board is being cleared and re-populated for the new level (the Ascent).</summary>
-        LevelTransition,
+        LevelTransition = 3,
 
         /// <summary>The debug cheat console is open — holds the thrower so stray fires don't disturb testing.</summary>
-        Cheat
+        Cheat = 4
     }
 }

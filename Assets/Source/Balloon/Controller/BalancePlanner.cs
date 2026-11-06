@@ -134,8 +134,8 @@ namespace BalloonParty.Balloon.Controller
                 return false;
             }
 
-            // Physical weight: a heavy actor only moves so many slots per TURN. The budget spans every
-            // balance run between projectile deaths (pre/post-spawn, flight pulses) — a per-run cap would
+            // Physical weight: a heavy actor only moves so many slots per balance window. The budget spans
+            // every run from one wave's start (or rebalance pulse) to the next — a per-run cap would
             // grant one step per run and read as multi-step hops.
             var stepCap = (dynamicActor as IBalanceInfluence)?.MaxBalanceSteps ?? 0;
             if (stepCap > 0 && turnSteps.GetValueOrDefault(dynamicActor) >= stepCap)

@@ -1,3 +1,4 @@
+using BalloonParty.Balloon.Spawner;
 using BalloonParty.Game.Danger;
 using BalloonParty.Shared.Animation;
 using UniRx;
@@ -8,8 +9,9 @@ using VContainer;
 namespace BalloonParty.UI.Danger
 {
     /// <summary>
-    ///     Displays how many hearts the next wave will cost. Fades in when danger is non-zero,
-    ///     speeds up the shine sweep proportionally, and shows "-{N}" via rolling text.
+    ///     Displays how many hearts the next line will cost. Fades in when danger is non-zero, shows
+    ///     "-{N}" via rolling text, and is the countdown to that line: the shine sweep starts each
+    ///     interval at the danger level's speed and quickens to full speed as the line arrives.
     /// </summary>
     /// <remarks>
     ///     The shine is the <c>BalloonParty/Sprite/ShinyDefault</c> material on
@@ -36,8 +38,10 @@ namespace BalloonParty.UI.Danger
         [SerializeField] private float _shineSpeedAtMaxDanger = 3.5f;
 
         private IDangerLevel _danger;
+        private ISpawnClock _spawnClock;
 
         private Material _shineMaterial;
+        private float _dangerLevel;
         private float _shineLevel;
         private float _targetAlpha;
         private CompositeDisposable _subscriptions;
@@ -63,6 +67,12 @@ namespace BalloonParty.UI.Danger
 
         private void Update()
         {
+            if (_targetAlpha > 0f && _spawnClock != null)
+            {
+                _shineLevel = Mathf.Lerp(_dangerLevel, 1f, _spawnClock.NextLineProgress);
+                ApplyShineSpeed();
+            }
+
             if (Mathf.Approximately(_canvasGroup.alpha, _targetAlpha))
             {
                 return;
@@ -83,9 +93,10 @@ namespace BalloonParty.UI.Danger
         }
 
         [Inject]
-        private void Construct(IDangerLevel danger)
+        private void Construct(IDangerLevel danger, ISpawnClock spawnClock)
         {
             _danger = danger;
+            _spawnClock = spawnClock;
 
             _subscriptions = new CompositeDisposable();
 
@@ -114,6 +125,7 @@ namespace BalloonParty.UI.Danger
         // second and rises with danger — the inverse of the duration the old UIShiny player took.
         private void OnDangerLevelChanged(float level)
         {
+            _dangerLevel = level;
             _shineLevel = level;
             ApplyShineSpeed();
         }

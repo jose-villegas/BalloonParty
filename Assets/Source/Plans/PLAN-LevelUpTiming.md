@@ -475,7 +475,7 @@ Three independent reviewers converged on this.
 
 | System | Exact edit |
 |---|---|
-| **Spawn wave** | `BalloonSpawner.OnProjectileDestroyed` (`Balloon/Spawner/BalloonSpawner.cs:186`) — first statement, BEFORE `_turnCount++`: `if (_levelProgress.Phase.Value != LevelUpPhase.Playing) { return; }`. The turn is cancelled, so it must not count toward `FirstSpawnTurn`. |
+| **Spawn wave** | `BalloonSpawner.OnProjectileDestroyed` (`Balloon/Spawner/BalloonSpawner.cs:186`) — first statement, BEFORE `_turnCount++`: `if (_levelProgress.Phase.Value != LevelUpPhase.Playing) { return; }`. The turn is cancelled, so it must not count toward `FirstSpawnTurn`. *(Superseded: spawning no longer hangs off ball death. `SpawnClock` holds while `Phase != Playing`; see @ref plan_fast_paced.)* |
 | **Loose pop-spawns** | `BalloonSpawner.OnActorHit` (~line 199) — same guard, first statement. |
 | Injection | `BalloonSpawner` already has `using BalloonParty.Game.Level;`; add an `ILevelProgress _levelProgress` ctor param + field. |
 | Balance pulses | allowed; the board is live while the shot flies. |

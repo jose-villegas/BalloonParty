@@ -8,7 +8,6 @@ using BalloonParty.Configuration.Level;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
-using BalloonParty.Projectile;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
@@ -41,8 +40,6 @@ namespace BalloonParty.Balloon.Spawner
         private readonly ILevelPacingConfiguration _pacing;
         private readonly CancellationTokenSource _cts = new();
         private readonly CompositeDisposable _subscriptions = new();
-        private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
-        private readonly IProjectileRegistry _projectiles;
         private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
         private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private readonly SlotGrid _grid;
@@ -65,11 +62,9 @@ namespace BalloonParty.Balloon.Spawner
         private readonly Comparison<int> _byColumnKey;
 
         private int[] _columnSortKeys;
-        private int _turnCount;
-        private int _generation;
+        // Lines spawned this level; waves (ISpawnClockSettings.LinesPerWave) are counted from it.
+        private int _linesThisLevel;
         private int _batchCursor;
-        private int _queuedWaveLines;
-        private bool _waveRunning;
         private bool _prewarmed;
 
         public SpawnStage SpawnPriority => SpawnStage.BalloonActors;
@@ -87,8 +82,6 @@ namespace BalloonParty.Balloon.Spawner
             BalloonBalancer balancer,
             BalloonFactory factory,
             IPublisher<BalanceBalloonsMessage> balancePublisher,
-            ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
-            IProjectileRegistry projectiles,
             ISubscriber<ActorHitMessage> hitSubscriber,
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
             IPublisher<ItemCheckMessage> itemCheckPublisher,
@@ -107,8 +100,6 @@ namespace BalloonParty.Balloon.Spawner
             _balancer = balancer;
             _factory = factory;
             _balancePublisher = balancePublisher;
-            _destroyedSubscriber = destroyedSubscriber;
-            _projectiles = projectiles;
             _hitSubscriber = hitSubscriber;
             _levelUpSubscriber = levelUpSubscriber;
             _itemCheckPublisher = itemCheckPublisher;
@@ -130,11 +121,10 @@ namespace BalloonParty.Balloon.Spawner
             }
 
             _lineSubscriber.Subscribe(msg => OnSpawnLinesRequested(msg.LineCount)).AddTo(_subscriptions);
-            _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed()).AddTo(_subscriptions);
             _hitSubscriber.Subscribe(OnActorHit).AddTo(_subscriptions);
 
-            // Reset per level-up so FirstSpawnTurn is a fresh per-level grace period.
-            _levelUpSubscriber.Subscribe(_ => _turnCount = 0).AddTo(_subscriptions);
+            // Each level's waves, and so its item cadence, count from its own first line.
+            _levelUpSubscriber.Subscribe(_ => _linesThisLevel = 0).AddTo(_subscriptions);
 
             PrewarmThenFlagAsync(_cts.Token).Forget();
         }
@@ -149,22 +139,16 @@ namespace BalloonParty.Balloon.Spawner
 
         public void ResetRun(int generation)
         {
-            // New generation drops any in-flight delayed line spawns.
-            _generation = generation;
             _activeCounts.Clear();
-            _turnCount = 0;
+            _linesThisLevel = 0;
             _newlySpawnedBalloons.Clear();
             _spawnBatch.Clear();
             _batchCursor = 0;
-
-            // The old run's wave stops at its next line on its own; a new run's wave needn't wait for it.
-            _queuedWaveLines = 0;
-            _waveRunning = false;
         }
 
         public void Dispose()
         {
-            // The generation guard only covers run resets, not scope teardown.
+            // Stops a prewarm still running when the scope tears down.
             _cts.Cancel();
             _cts.Dispose();
             _subscriptions.Dispose();
@@ -188,64 +172,6 @@ namespace BalloonParty.Balloon.Spawner
                 }
 
                 await _poolManager.PrewarmAsync(entry.PoolKey, count, ct);
-            }
-        }
-
-        private void OnProjectileDestroyed()
-        {
-            if (_levelProgress.Phase.Value != LevelUpPhase.Playing)
-            {
-                return;
-            }
-
-            _turnCount++;
-            if (_turnCount < _levelParams.Current.FirstSpawnTurn)
-            {
-                return;
-            }
-
-            QueueWave(_levelParams.Current.SpawnLines);
-        }
-
-        // A wave owns the shared batch from its first line to its last, so waves run one at a time. With
-        // several balls in flight deaths come faster than a wave lasts; deaths that land while a wave
-        // runs merge into one queued wave rather than stacking a backlog that spawns long after the
-        // shots that caused it. Interim pacing: the spawn clock (PLAN-FastPaced Phase 3) replaces it.
-        private void QueueWave(int lineCount)
-        {
-            _queuedWaveLines = Mathf.Max(_queuedWaveLines, lineCount);
-            if (!_waveRunning)
-            {
-                RunQueuedWavesAsync(_cts.Token, _generation).Forget();
-            }
-        }
-
-        private async UniTaskVoid RunQueuedWavesAsync(CancellationToken ct, int generation)
-        {
-            _waveRunning = true;
-            try
-            {
-                while (_queuedWaveLines > 0 && generation == _generation)
-                {
-                    var lines = _queuedWaveLines;
-                    _queuedWaveLines = 0;
-
-                    // A wave queued before the level completed belongs to the level that ended.
-                    if (_levelProgress.Phase.Value != LevelUpPhase.Playing)
-                    {
-                        break;
-                    }
-
-                    await SpawnLinesWithDelayAsync(lines, ct, generation);
-                }
-            }
-            finally
-            {
-                // A reset already handed the flag to the new run.
-                if (generation == _generation)
-                {
-                    _waveRunning = false;
-                }
             }
         }
 
@@ -284,20 +210,23 @@ namespace BalloonParty.Balloon.Spawner
                 }
             }
 
-            // Also never outpace the pacing itself: at most one turn-wave's worth of headroom counts.
-            var waveCap = _levelParams.Current.SpawnLines * _grid.Columns;
-            return Mathf.Max(0, Mathf.Min(capacity - occupied, waveCap));
+            // Also never outpace the pacing itself: at most one line's worth of headroom counts.
+            return Mathf.Max(0, Mathf.Min(capacity - occupied, _grid.Columns));
         }
 
+        // The spawn clock asks for one line per tick; the cheat console may ask for more at once. The pools
+        // must be warm first, which the clock's grace normally covers; a zero grace must not race it.
         private void OnSpawnLinesRequested(int lineCount)
         {
-            if (lineCount <= 1 && !_waveRunning)
+            if (!_prewarmed)
             {
-                SpawnLine();
                 return;
             }
 
-            QueueWave(lineCount);
+            for (var i = 0; i < lineCount; i++)
+            {
+                SpawnLine();
+            }
         }
 
         private void PopulateInitialGrid()
@@ -362,18 +291,18 @@ namespace BalloonParty.Balloon.Spawner
             }
         }
 
-        private void PublishItemCheck(bool isInitial)
+        private void PublishItemCheck(bool isInitial, int wave = 0)
         {
             if (_newlySpawnedBalloons.Count > 0)
             {
                 // Copy — the live buffer is cleared right after, before a deferred subscriber could read it.
                 _itemCheckPublisher.Publish(
-                    new ItemCheckMessage(new List<IBalloonModel>(_newlySpawnedBalloons), _turnCount, isInitial));
+                    new ItemCheckMessage(new List<IBalloonModel>(_newlySpawnedBalloons), wave, isInitial));
                 _newlySpawnedBalloons.Clear();
             }
         }
 
-        // The entry comes from the wave's pre-picked batch; its active count was taken at batch time.
+        // The entry comes from the batch picked for this fill or line; its active count was taken at batch time.
         private void SpawnBalloon(Vector2Int slot, BalloonPrefabEntry entry)
         {
             var source = new Vector2Int(slot.x, slot.y + _balloonsConfig.SpawnEntryRowOffset);
@@ -396,31 +325,49 @@ namespace BalloonParty.Balloon.Spawner
 
         private void SpawnLine()
         {
-            _balancer.Balance(relocateRoamers: true);
+            // A wave's first line rolls its quotas and moves the roamers; its last line rolls for items,
+            // over that line's balloons (earlier lines' may already be popped).
+            var linesPerWave = _pacing.SpawnClock.LinesPerWave;
+            var waveStart = _linesThisLevel % linesPerWave == 0;
+            _linesThisLevel++;
+            var waveEnd = _linesThisLevel % linesPerWave == 0;
+
+            _balancer.Balance(atWaveStart: waveStart);
 
             var deficit = WaveDeficitCalculator.Calculate(
                 _grid.CountEmpty(), _grid.Columns, _grid.Columns);
 
-            if (deficit.HeartsLost > 0)
+            // A line that costs hearts still spawns, tagged doomed, so the overflow pile has balloons
+            // for the strikethrough; the damage goes out after them for the same reason.
+            var doomed = deficit.HeartsLost > 0;
+            PrepareSpawnBatch(lineCount: 1, rollQuotas: waveStart);
+            if (doomed)
             {
-                // Spawn the doomed line so the overflow pile can visualize it for the strikethrough.
-                PrepareSpawnBatch(lineCount: 1);
                 _rejectedBalloon.BeginDoomedLine(0);
-                SpawnLineInternal(PlacementReach.Pressure);
-                _rejectedBalloon.EndDoomedLine();
-                ReleaseUnspawnedBatch();
-
-                _waveDamagePublisher.Publish(
-                    new WaveDamageMessage(deficit.HeartsLost, deficit.UnspawnedSlots, _grid.Columns));
-                PublishItemCheck(isInitial: false);
-                _balancePublisher.Publish(default);
-                return;
             }
 
-            PrepareSpawnBatch(lineCount: 1);
             SpawnLineInternal(PlacementReach.Pressure);
+            if (doomed)
+            {
+                _rejectedBalloon.EndDoomedLine();
+            }
+
             ReleaseUnspawnedBatch();
-            PublishItemCheck(isInitial: false);
+            if (doomed)
+            {
+                _waveDamagePublisher.Publish(
+                    new WaveDamageMessage(deficit.HeartsLost, deficit.UnspawnedSlots, _grid.Columns));
+            }
+
+            if (waveEnd)
+            {
+                PublishItemCheck(isInitial: false, _linesThisLevel / linesPerWave);
+            }
+            else
+            {
+                _newlySpawnedBalloons.Clear();
+            }
+
             _balancePublisher.Publish(default);
         }
 
@@ -446,7 +393,7 @@ namespace BalloonParty.Balloon.Spawner
                     continue;
                 }
 
-                // Only turn spawns overflow below the grid; initial fill just stops at the board's capacity.
+                // Only clock lines overflow below the grid; initial fill just stops at the board's capacity.
                 if (reach == PlacementReach.Pressure)
                 {
                     _rejectedBalloon.Play(_lineColumns[i], rejectIndex++, _activeCounts);
@@ -454,15 +401,20 @@ namespace BalloonParty.Balloon.Spawner
             }
         }
 
-        // Picks the whole wave's entries upfront, then orders them for depth. The plain order is
-        // lightest-first (earlier/higher lines take light types, heavier ones enter below); the initial
-        // fill instead arranges heavy types into repeating vertical layers (see ArrangeInitialLayers).
-        // Neither reorders which types spawn: active counts are taken here so MaxCount holds across the
-        // wave, and each type's rolled wave quota (its count-weights curve) caps how many this wave adds.
-        private void PrepareSpawnBatch(int lineCount, bool isInitial = false)
+        // Picks every entry of the batch (the initial fill's lines, or one clock line) upfront, then orders
+        // them for depth. The plain order is lightest-first (earlier/higher lines take light types, heavier
+        // ones enter below); the initial fill instead arranges heavy types into repeating vertical layers
+        // (see ArrangeInitialLayers). Neither reorders which types spawn: active counts are taken here so
+        // MaxCount holds across the batch, and each type's rolled quota (its count-weights curve) caps how
+        // many the batch adds.
+        // rollQuotas: false carries the wave's remaining quotas into its next line.
+        private void PrepareSpawnBatch(int lineCount, bool isInitial = false, bool rollQuotas = true)
         {
             ReleaseUnspawnedBatch();
-            _levelParams.Current.RollWaveQuotas(_waveQuotas, isInitial);
+            if (isInitial || rollQuotas)
+            {
+                _levelParams.Current.RollWaveQuotas(_waveQuotas, isInitial);
+            }
 
             var target = lineCount * _grid.Columns;
 
@@ -582,7 +534,7 @@ namespace BalloonParty.Balloon.Spawner
             return _columnSortKeys[a] - _columnSortKeys[b];
         }
 
-        // Hands back the counts of entries the wave never placed (unresolvable columns, aborts).
+        // Hands back the counts of entries the batch never placed (unresolvable columns, aborts).
         private void ReleaseUnspawnedBatch()
         {
             for (var i = _batchCursor; i < _spawnBatch.Count; i++)
@@ -596,7 +548,7 @@ namespace BalloonParty.Balloon.Spawner
 
         // Spawns up to count balloons at their columns' own entries — no rehoming, no pressure, no
         // overflow charge; columns without room are skipped. Kept out of the item check: these are
-        // per-pop extras, not a wave, and only ever the simple family so a pop can't gift a tough type.
+        // per-pop extras, not a line, and only ever the simple family so a pop can't gift a tough type.
         private void SpawnLooseBalloons(int count)
         {
             _popSpawnColumns.Clear();
@@ -633,90 +585,6 @@ namespace BalloonParty.Balloon.Spawner
             }
 
             _newlySpawnedBalloons.RemoveRange(itemCheckStart, _newlySpawnedBalloons.Count - itemCheckStart);
-        }
-
-        private async UniTask SpawnLinesWithDelayAsync(int lineCount, CancellationToken ct, int generation)
-        {
-            // Keeps the overflow hold (thrower lock) across the gaps between lines.
-            _rejectedBalloon.BeginSpawnSequence();
-            try
-            {
-                _balancer.Balance(relocateRoamers: true);
-
-                // Line-based deficit: compute damage before spawning so the wave only spawns lines that fit.
-                var deficit = WaveDeficitCalculator.Calculate(
-                    _grid.CountEmpty(), lineCount * _grid.Columns, _grid.Columns);
-
-                var effectiveLines = lineCount - deficit.HeartsLost;
-                PrepareSpawnBatch(lineCount);
-
-                for (var i = 0; i < lineCount; i++)
-                {
-                    if (generation != _generation)
-                    {
-                        return;
-                    }
-
-                    // Hold new lines out of a lone shot's doomed 'last breath' — spawning balloons into
-                    // the frozen death moment reads wrong. Resume once it ends (or the run moves on).
-                    // With other balls flying the moment isn't frozen, so nothing is held. Read off the
-                    // registry rather than tracked from Doomed messages: a ball scaled away by game over
-                    // or a reset never publishes DoomedEnded, and a stale flag would stall every wave.
-                    while (_projectiles.DoomedShotFliesAlone() && generation == _generation)
-                    {
-                        await UniTask.Yield(ct);
-                    }
-
-                    if (generation != _generation)
-                    {
-                        return;
-                    }
-
-                    // Tag overflow balloons from doomed lines so they wait for the strikethrough.
-                    var isDoomedLine = i >= effectiveLines;
-                    if (isDoomedLine)
-                    {
-                        _rejectedBalloon.BeginDoomedLine(i - effectiveLines);
-                    }
-
-                    SpawnLineInternal(PlacementReach.Pressure);
-
-                    if (isDoomedLine)
-                    {
-                        _rejectedBalloon.EndDoomedLine();
-                    }
-
-                    await UniTask.Delay(
-                        (int)(_balloonsConfig.NewBalloonLinesTimeInterval * 1000),
-                        cancellationToken: ct);
-                }
-
-                if (generation != _generation)
-                {
-                    return;
-                }
-
-                // Publish damage after doomed lines are spawned so the strikethrough has balloons to cross.
-                if (deficit.HeartsLost > 0)
-                {
-                    _waveDamagePublisher.Publish(
-                        new WaveDamageMessage(deficit.HeartsLost, deficit.UnspawnedSlots, _grid.Columns));
-                }
-
-                PublishItemCheck(isInitial: false);
-                _balancePublisher.Publish(default);
-            }
-            finally
-            {
-                // A stale wave must not touch the batch — the reset wiped the counts, and a newer run may
-                // already own it.
-                if (generation == _generation)
-                {
-                    ReleaseUnspawnedBatch();
-                }
-
-                _rejectedBalloon.EndSpawnSequence();
-            }
         }
     }
 }

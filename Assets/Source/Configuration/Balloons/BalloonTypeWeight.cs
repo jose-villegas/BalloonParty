@@ -18,7 +18,7 @@ namespace BalloonParty.Configuration.Balloons
                  "The last keyframe's X value defines MaxCount for this type. Empty = uncapped.")]
         [SerializeField] private AnimationCurve _initialCountWeights;
 
-        [Tooltip("Weighted chance of how many of this type each turn's spawn wave may add (X = count, Y = weight). " +
+        [Tooltip("Weighted chance of how many of this type each spawn wave (a few consecutive lines) may add (X = count, Y = weight). " +
                  "Empty = defaults to the initial count curve.")]
         [SerializeField] private AnimationCurve _waveCountWeights;
 

@@ -183,7 +183,6 @@ MonoBehaviour:
   _rainbowPopFlashRadius: 1.5
   _rainbowPopFlashIntensity: 3
   _rainbowPopFlashSeconds: 0.2
-  _newBalloonLinesTimeInterval: 0.35
   _defaultBalloonMoveSpeed: 8
   _moveSpeedVariation: 0.125
   _spawnEntryRowOffset: 4

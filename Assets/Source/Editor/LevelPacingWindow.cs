@@ -26,15 +26,16 @@ namespace BalloonParty.Editor
         private const float SwatchSize = 10f;
         private const float CurveFieldWidth = 80f;
         private const float GroupGap = 20f;
-        private const int BalloonColIndex = 5;
-        private const int ItemColIndex = 9;
-        private const int ActorColIndex = 10;
+        private const int BalloonColIndex = 3;
+        private const int ItemColIndex = 7;
+        private const int ActorColIndex = 8;
+        private const int FirstButtonColIndex = 9;
         private const float BalloonExpandedWidth = 340f;
         private const float ItemExpandedWidth = 200f;
         private const float ActorExpandedWidth = 260f;
 
         // Columns that have a visual gap before them (group separators)
-        private static readonly int[] GapBeforeCols = { 1, 4, 6, 10 };
+        private static readonly int[] GapBeforeCols = { 1, 2, 4, 8 };
 
         private static readonly Color GroupBorderColor = new(0.4f, 0.4f, 0.4f, 0.9f);
         private static readonly Color ColSepColor = new(0.35f, 0.35f, 0.35f, 0.5f);
@@ -52,20 +53,18 @@ namespace BalloonParty.Editor
         private static readonly float[] ColWidths =
         {
             90f,   // 0: Range
-            40f,   // 1: Spawn (single int)
-            40f,   // 2: Board (single int)
-            40f,   // 3: 1st Turn (single int)
-            130f,  // 4: Colors (dropdown + swatches)
-            100f,  // 5: Balloons (collapsed) — dynamic when expanded
-            130f,  // 6: Cadence (min/max + mode)
-            80f,   // 7: Initial Count curve
-            80f,   // 8: Wave Count curve
-            100f,  // 9: Items — dynamic when expanded
-            100f,  // 10: Actors — dynamic when expanded
-            34f,   // 11: Expand (foldout icon)
-            34f,   // 12: Duplicate icon
-            34f,   // 13: Delete (trash icon)
-            34f,   // 14: Play from this level
+            40f,   // 1: Board (single int)
+            130f,  // 2: Colors (dropdown + swatches)
+            100f,  // 3: Balloons (collapsed) — dynamic when expanded
+            130f,  // 4: Cadence (min/max + mode)
+            80f,   // 5: Initial Count curve
+            80f,   // 6: Wave Count curve
+            100f,  // 7: Items — dynamic when expanded
+            100f,  // 8: Actors — dynamic when expanded
+            34f,   // 9: Expand (foldout icon)
+            34f,   // 10: Duplicate icon
+            34f,   // 11: Delete (trash icon)
+            34f,   // 12: Play from this level
         };
 
         private static readonly string[] BalloonDropdownNames = BuildFocusDropdownNames<BalloonType>("Focus All…");
@@ -74,7 +73,7 @@ namespace BalloonParty.Editor
 
         private static readonly string[] ColHeaders =
         {
-            "Range", "Spawn", "Board", "1st Turn", "Colors", "Balloons", "Cadence", "Init Count", "Wave Count", "Items", "Actors", "Expand", "Dupe", "Delete", "Play"
+            "Range", "Board", "Colors", "Balloons", "Cadence", "Init Count", "Wave Count", "Items", "Actors", "Expand", "Dupe", "Delete", "Play"
         };
 
         private readonly EditorAssetCache<LevelPacingConfiguration> _assetCache = new();
@@ -354,7 +353,7 @@ namespace BalloonParty.Editor
 
         private Rect CellRect(Rect rowRect, int col)
         {
-            if (col >= 11)
+            if (col >= FirstButtonColIndex)
             {
                 return RightAnchoredCellRect(rowRect, col);
             }
@@ -461,26 +460,26 @@ namespace BalloonParty.Editor
             var g1End = rowRect.x + ColX(0) + EffectiveColWidth(0);
             EditorGUI.LabelField(new Rect(g1Start, rowRect.y, g1End - g1Start, rowRect.height), "Range", style);
 
-            // Group 2: Spawning (cols 1–3)
+            // Group 2: Board (col 1). Line timing is the spawn clock's, a formula on the asset, not per range.
             var g2Start = rowRect.x + ColX(1);
-            var g2End = rowRect.x + ColX(3) + EffectiveColWidth(3);
-            EditorGUI.LabelField(new Rect(g2Start, rowRect.y, g2End - g2Start, rowRect.height), "Spawning", style);
+            var g2End = rowRect.x + ColX(1) + EffectiveColWidth(1);
+            EditorGUI.LabelField(new Rect(g2Start, rowRect.y, g2End - g2Start, rowRect.height), "Board", style);
 
-            // Group 3: Balloons (cols 4–5) with focus dropdown
-            var g3Start = rowRect.x + ColX(4);
-            var g3End = rowRect.x + ColX(5) + EffectiveColWidth(5);
+            // Group 3: Balloons (cols 2–3) with focus dropdown
+            var g3Start = rowRect.x + ColX(2);
+            var g3End = rowRect.x + ColX(BalloonColIndex) + EffectiveColWidth(BalloonColIndex);
             var g3Rect = new Rect(g3Start, rowRect.y, g3End - g3Start, rowRect.height);
             DrawBalloonFocusGroup(g3Rect, style);
 
-            // Group 4: Items (cols 6–9) with focus dropdown
-            var g4Start = rowRect.x + ColX(6);
-            var g4End = rowRect.x + ColX(9) + EffectiveColWidth(9);
+            // Group 4: Items (cols 4–7) with focus dropdown
+            var g4Start = rowRect.x + ColX(4);
+            var g4End = rowRect.x + ColX(ItemColIndex) + EffectiveColWidth(ItemColIndex);
             var g4Rect = new Rect(g4Start, rowRect.y, g4End - g4Start, rowRect.height);
             DrawItemFocusGroup(g4Rect, style);
 
-            // Group 5: Actors (col 10) with focus dropdown
-            var g5Start = rowRect.x + ColX(10);
-            var g5End = rowRect.x + ColX(10) + EffectiveColWidth(10);
+            // Group 5: Actors (col 8) with focus dropdown
+            var g5Start = rowRect.x + ColX(ActorColIndex);
+            var g5End = rowRect.x + ColX(ActorColIndex) + EffectiveColWidth(ActorColIndex);
             var g5Rect = new Rect(g5Start, rowRect.y, g5End - g5Start, rowRect.height);
             DrawActorFocusGroup(g5Rect, style);
         }
@@ -670,7 +669,7 @@ namespace BalloonParty.Editor
                 }
 
                 // Separator (skip right-anchored columns and last col before gap)
-                if (i >= 11 || HasGapBefore(i + 1))
+                if (i >= FirstButtonColIndex || HasGapBefore(i + 1))
                 {
                     continue;
                 }
@@ -719,7 +718,7 @@ namespace BalloonParty.Editor
 
             DrawRowBackground(rowRect, index, from, to, isFallback);
 
-            // Separators (only for left-anchored columns 0–10)
+            // Separators (only for left-anchored columns 0–8)
             for (var i = 0; i < ColWidths.Length - 4; i++)
             {
                 if (HasGapBefore(i + 1))
@@ -742,18 +741,16 @@ namespace BalloonParty.Editor
 
             if (paramsProp != null)
             {
-                PropertyCellDrawer.IntCell(CellRect(rowRect, 1), paramsProp, "_spawnLines");
-                PropertyCellDrawer.IntCell(CellRect(rowRect, 2), paramsProp, "_boardLines");
-                PropertyCellDrawer.IntCell(CellRect(rowRect, 3), paramsProp, "_firstSpawnTurn");
-                DrawMaskCell(CellRect(rowRect, 4), paramsProp);
+                PropertyCellDrawer.IntCell(CellRect(rowRect, 1), paramsProp, "_boardLines");
+                DrawMaskCell(CellRect(rowRect, 2), paramsProp);
 
                 DrawTypedCell(
                     CellRect(rowRect, BalloonColIndex), _balloonsExpanded, balloonsProp, index,
                     _balloonCell.DrawExpanded, _balloonCell.DrawCollapsed);
 
-                DrawRangedIntCell(CellRect(rowRect, 6), paramsProp, "_itemCadence");
-                PropertyCellDrawer.CurveCell(CellRect(rowRect, 7), paramsProp, "_initialItemCountWeights");
-                PropertyCellDrawer.CurveCell(CellRect(rowRect, 8), paramsProp, "_itemCountWeights");
+                DrawRangedIntCell(CellRect(rowRect, 4), paramsProp, "_itemCadence");
+                PropertyCellDrawer.CurveCell(CellRect(rowRect, 5), paramsProp, "_initialItemCountWeights");
+                PropertyCellDrawer.CurveCell(CellRect(rowRect, 6), paramsProp, "_itemCountWeights");
 
                 var itemsProp = paramsProp.FindPropertyRelative("_itemWeights");
                 DrawTypedCell(
@@ -835,12 +832,12 @@ namespace BalloonParty.Editor
             }
         }
 
-        // Action icons (cols 11-14) — right-anchored. Returns true if the row's own array element was
+        // Action icons (cols 9-12) — right-anchored. Returns true if the row's own array element was
         // mutated (duplicate/delete), so the caller must stop drawing this now-stale row immediately.
         private bool DrawRowActionIcons(Rect rowRect, int index, bool isFallback, int from)
         {
             var expanded = _expandedRow == index;
-            var expandRect = CellRect(rowRect, 11);
+            var expandRect = CellRect(rowRect, FirstButtonColIndex);
             if (IconButtonHelper.DrawButton(expandRect,
                     expanded ? "d_winbtn_win_restore" : "d_winbtn_win_max",
                     expanded ? "▼" : "►", expanded ? "Collapse details" : "Expand details"))
@@ -848,14 +845,14 @@ namespace BalloonParty.Editor
                 _expandedRow = expanded ? -1 : index;
             }
 
-            var dupeRect = CellRect(rowRect, 12);
+            var dupeRect = CellRect(rowRect, FirstButtonColIndex + 1);
             if (IconButtonHelper.DrawButton(dupeRect, "TreeEditor.Duplicate", "⧉", "Duplicate range"))
             {
                 _rangesProp.InsertArrayElementAtIndex(index);
                 return true;
             }
 
-            var delRect = CellRect(rowRect, 13);
+            var delRect = CellRect(rowRect, FirstButtonColIndex + 2);
             if (IconButtonHelper.DrawButton(delRect, "TreeEditor.Trash", "−", "Delete range"))
             {
                 _rangesProp.DeleteArrayElementAtIndex(index);
@@ -870,7 +867,7 @@ namespace BalloonParty.Editor
             // Start a run beginning at this range's first level (dev only — the cheat menu has the
             // in-play equivalent). Fallback rows pass their negative FromLevel as the ID so the
             // difficulty resolver picks the correct named fallback.
-            var playRect = CellRect(rowRect, 14);
+            var playRect = CellRect(rowRect, FirstButtonColIndex + 3);
             var playLevel = isFallback ? from : Mathf.Max(1, from);
             var playTip = isFallback ? $"Play fallback ID {from}" : "Play from this level";
             if (IconButtonHelper.DrawButton(playRect, "PlayButton", "▶", playTip))

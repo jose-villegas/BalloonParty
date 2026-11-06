@@ -16,13 +16,11 @@ MonoBehaviour:
   - _fromLevel: 1
     _toLevel: 1
     _parameters:
-      _spawnLines: 3
       _boardLines: 8
       _itemCadence:
         _min: 1
         _max: 1
         _mode: 0
-      _firstSpawnTurn: 0
       _initialItemCountWeights:
         serializedVersion: 2
         m_Curve:
@@ -211,13 +209,11 @@ MonoBehaviour:
   - _fromLevel: 2
     _toLevel: 2
     _parameters:
-      _spawnLines: 3
       _boardLines: 5
       _itemCadence:
         _min: 1
         _max: 1
         _mode: 0
-      _firstSpawnTurn: 1
       _initialItemCountWeights:
         serializedVersion: 2
         m_Curve:
@@ -560,13 +556,11 @@ MonoBehaviour:
   - _fromLevel: 3
     _toLevel: 3
     _parameters:
-      _spawnLines: 3
       _boardLines: 5
       _itemCadence:
         _min: 1
         _max: 1
         _mode: 0
-      _firstSpawnTurn: 1
       _initialItemCountWeights:
         serializedVersion: 2
         m_Curve:
@@ -910,13 +904,11 @@ MonoBehaviour:
   - _fromLevel: 4
     _toLevel: 4
     _parameters:
-      _spawnLines: 3
       _boardLines: 5
       _itemCadence:
         _min: 1
         _max: 1
         _mode: 0
-      _firstSpawnTurn: 1
       _initialItemCountWeights:
         serializedVersion: 2
         m_Curve:
@@ -1338,13 +1330,11 @@ MonoBehaviour:
   - _fromLevel: 5
     _toLevel: 5
     _parameters:
-      _spawnLines: 3
       _boardLines: 4
       _itemCadence:
         _min: 1
         _max: 1
         _mode: 0
-      _firstSpawnTurn: 2
       _initialItemCountWeights:
         serializedVersion: 2
         m_Curve:
@@ -1844,13 +1834,11 @@ MonoBehaviour:
   - _fromLevel: 6
     _toLevel: 6
     _parameters:
-      _spawnLines: 3
       _boardLines: 4
       _itemCadence:
         _min: 1
         _max: 1
         _mode: 0
-      _firstSpawnTurn: 2
       _initialItemCountWeights:
         serializedVersion: 2
         m_Curve:
@@ -2327,13 +2315,11 @@ MonoBehaviour:
   - _fromLevel: 7
     _toLevel: 7
     _parameters:
-      _spawnLines: 3
       _boardLines: 4
       _itemCadence:
         _min: 1
         _max: 1
         _mode: 0
-      _firstSpawnTurn: 2
       _initialItemCountWeights:
         serializedVersion: 2
         m_Curve:
@@ -2997,13 +2983,11 @@ MonoBehaviour:
   - _fromLevel: 8
     _toLevel: 8
     _parameters:
-      _spawnLines: 3
       _boardLines: 4
       _itemCadence:
         _min: 1
         _max: 1
         _mode: 0
-      _firstSpawnTurn: 2
       _initialItemCountWeights:
         serializedVersion: 2
         m_Curve:
@@ -3664,13 +3648,11 @@ MonoBehaviour:
   - _fromLevel: 9
     _toLevel: 9
     _parameters:
-      _spawnLines: 3
       _boardLines: 4
       _itemCadence:
         _min: 1
         _max: 1
         _mode: 0
-      _firstSpawnTurn: 2
       _initialItemCountWeights:
         serializedVersion: 2
         m_Curve:
@@ -4325,13 +4307,11 @@ MonoBehaviour:
   - _fromLevel: 10
     _toLevel: 10
     _parameters:
-      _spawnLines: 3
       _boardLines: 4
       _itemCadence:
         _min: 1
         _max: 1
         _mode: 0
-      _firstSpawnTurn: 2
       _initialItemCountWeights:
         serializedVersion: 2
         m_Curve:
@@ -4921,13 +4901,11 @@ MonoBehaviour:
   - _fromLevel: 11
     _toLevel: 11
     _parameters:
-      _spawnLines: 3
       _boardLines: 4
       _itemCadence:
         _min: 1
         _max: 1
         _mode: 0
-      _firstSpawnTurn: 2
       _initialItemCountWeights:
         serializedVersion: 2
         m_Curve:
@@ -5604,13 +5582,11 @@ MonoBehaviour:
   - _fromLevel: 12
     _toLevel: 12
     _parameters:
-      _spawnLines: 3
       _boardLines: 4
       _itemCadence:
         _min: 1
         _max: 1
         _mode: 0
-      _firstSpawnTurn: 2
       _initialItemCountWeights:
         serializedVersion: 2
         m_Curve:
@@ -6290,13 +6266,11 @@ MonoBehaviour:
   - _fromLevel: 13
     _toLevel: 13
     _parameters:
-      _spawnLines: 5
       _boardLines: 4
       _itemCadence:
         _min: 1
         _max: 1
         _mode: 0
-      _firstSpawnTurn: 2
       _initialItemCountWeights:
         serializedVersion: 2
         m_Curve:
@@ -6775,13 +6749,11 @@ MonoBehaviour:
   - _fromLevel: 14
     _toLevel: 14
     _parameters:
-      _spawnLines: 4
       _boardLines: 4
       _itemCadence:
         _min: 1
         _max: 1
         _mode: 0
-      _firstSpawnTurn: 2
       _initialItemCountWeights:
         serializedVersion: 2
         m_Curve:
@@ -7296,13 +7268,11 @@ MonoBehaviour:
   - _fromLevel: 15
     _toLevel: 15
     _parameters:
-      _spawnLines: 3
       _boardLines: 4
       _itemCadence:
         _min: 1
         _max: 1
         _mode: 0
-      _firstSpawnTurn: 2
       _initialItemCountWeights:
         serializedVersion: 2
         m_Curve:
@@ -8002,13 +7972,11 @@ MonoBehaviour:
   - _fromLevel: -1
     _toLevel: -1
     _parameters:
-      _spawnLines: 3
       _boardLines: 3
       _itemCadence:
         _min: 1
         _max: 1
         _mode: 0
-      _firstSpawnTurn: 2
       _initialItemCountWeights:
         serializedVersion: 2
         m_Curve:
@@ -8736,13 +8704,11 @@ MonoBehaviour:
   - _fromLevel: -100
     _toLevel: -1
     _parameters:
-      _spawnLines: 3
       _boardLines: 3
       _itemCadence:
         _min: 1
         _max: 1
         _mode: 0
-      _firstSpawnTurn: 2
       _initialItemCountWeights:
         serializedVersion: 2
         m_Curve:
@@ -9470,13 +9436,11 @@ MonoBehaviour:
   - _fromLevel: -101
     _toLevel: -1
     _parameters:
-      _spawnLines: 4
       _boardLines: 7
       _itemCadence:
         _min: 1
         _max: 1
         _mode: 0
-      _firstSpawnTurn: 0
       _initialItemCountWeights:
         serializedVersion: 2
         m_Curve:
@@ -9724,13 +9688,11 @@ MonoBehaviour:
   - _fromLevel: -102
     _toLevel: -1
     _parameters:
-      _spawnLines: 4
       _boardLines: 7
       _itemCadence:
         _min: 1
         _max: 1
         _mode: 0
-      _firstSpawnTurn: 0
       _initialItemCountWeights:
         serializedVersion: 2
         m_Curve:
@@ -9880,6 +9842,12 @@ MonoBehaviour:
         _maxPerCluster: 5
       _allowedColorsMask: 15
   _thresholdRounding: 50
+  _spawnClock:
+    _firstLevelInterval: 3
+    _intervalDecayPerLevel: 0.96
+    _minInterval: 1.25
+    _graceSeconds: 4
+    _linesPerWave: 3
   _scoringCurve:
     _controlPoints:
     - _level: 1

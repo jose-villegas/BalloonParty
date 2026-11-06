@@ -15,7 +15,7 @@ namespace BalloonParty.Balloon.Spawner
         /// <summary>Own entry, else rehome into the nearest column with an open entry (initial fill).</summary>
         Rehome,
 
-        /// <summary>Rehome, then shove existing balloons aside to open a slot (turn spawns).</summary>
+        /// <summary>Rehome, then shove existing balloons aside to open a slot (clock lines).</summary>
         Pressure,
     }
 
@@ -79,7 +79,7 @@ namespace BalloonParty.Balloon.Spawner
                 return rehome;
             }
 
-            // Only turn spawns may shove balloons aside; initial fill takes what is genuinely reachable.
+            // Only clock lines may shove balloons aside; initial fill takes what is genuinely reachable.
             if (reach == PlacementReach.Pressure
                 && TryNearestColumn(col, startDistance: 0, _resolvePressureOpen, out var pressured))
             {

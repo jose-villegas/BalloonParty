@@ -47,17 +47,17 @@ the exhaustive subscriber list when it matters.
 | Message | Published by | Consumed by |
 |---|---|---|
 | `BalanceBalloonsMessage` | `ProjectileView`, `BalloonSpawner` | `BalloonBalancer` |
-| `SpawnBalloonLineMessage` | `SceneTransition` (game start), cheats | `BalloonSpawner` |
+| `SpawnBalloonLineMessage` | `SpawnClock` (one line per tick), cheats | `BalloonSpawner` |
 | `ActorHitMessage` | `HitPipeline` only — producers (`ProjectileHitResolver`, item handlers, cheats) route through `IHitDispatcher.Dispatch`, which runs the score/streak stage first, then broadcasts | `BalloonController`, `NudgeService`, `ItemActivator`, `GridActorHitController` (`ScoreController` is invoked as a pipeline stage, not a subscriber) — carries `ISlotActor Actor`, `WorldPosition`, `ProjectileDirection`, `HitOutcome Outcome`, and a `DamageContext Context` (whose `Damage` defaults to 1, and which carries the `IProjectileModel` ball that caused the hit — null for a hit no ball caused, such as a cheat); item handlers pass `ItemSettings.Damage`, projectile hits always use 1. Subscribers downcast `Actor` to the specific interface they need (`IBalloonModel`, `IHasColor`, `IHasNudge`, etc.) |
 | `BalloonDeflectedMessage` | `BalloonController` (on deflect) | `ProjectileView` (color-tracking on deflect hit) |
 | `ScorePointsGroupMessage` | `ScoreController` | `ScoreTrailService`, `LevelUpCinematic` — one message per resolved attribution color; carries `ColorName`, `WorldPosition`, `Points` (group total, post-multiplier post-cap), `LastScore` (cumulative per-color number of the group's last point), `Multiplier` (the streak multiplier, data only), and a `FirstScore` convenience property |
 | `ScoreLevelUpMessage` | `LevelController` | `ColorProgressBar`, `LevelUpPopUp`, `ColorStreakTracker` (auto-resets the streak), `ScoreController`, `ThrowerController`, `BalloonSpawner`, `PlayerHealthController`, `LevelDifficultyResolver`, `WallNetView`, `ProgressionSoundRouter` |
 | `ScoreTrailArrivedMessage` | `ScoreTrailService` | `ScoreController`, `ColorProgressBar`, `LevelUpCinematic` — carries `ColorName`, `Score` (the level progress value this trail represents), `Level` (the level the trail was spawned during), and `WorldPosition` |
 | `LevelUpDismissedMessage` | `LevelUpPopUp` | `LevelUpCinematic` |
-| `ProjectileDestroyedMessage` | `ProjectileView` | `ThrowerController`, `BalloonSpawner`, `BalloonBalancer`, `ProjectileFacingSource`, `ShieldCounterAnimation`, `LevelController`, `CombatSoundRouter` |
+| `ProjectileDestroyedMessage` | `ProjectileView` | `ThrowerController`, `ProjectileFacingSource`, `ShieldCounterAnimation`, `LevelController`, `CombatSoundRouter` |
 | `ProjectileLoadedMessage` | `ThrowerController` | `ShieldCounterLabel`, `ShieldCounterAnimation` |
 | `ThrowerReadyMessage` | `ThrowerController` | `CombatSoundRouter` — once per ball, when it reaches the muzzle with a slot free (a release now fires) |
-| `ItemCheckMessage` | `BalloonSpawner` | `ItemAssigner` |
+| `ItemCheckMessage` | `BalloonSpawner` (once per wave of lines, or once for the initial fill) | `ItemAssigner` — carries `Wave`, the count of waves this level, which the item cadence reads |
 | `ItemActivatedMessage` | `ItemActivator` | `BalloonController` — also carries the triggering projectile |
 | `ItemRotationCapturedMessage` | `BalloonController` | `LaserItemHandler` |
 | `ShieldGainedMessage` | `ShieldItemHandler` | `ShieldTrailController` |

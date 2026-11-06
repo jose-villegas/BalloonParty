@@ -39,7 +39,6 @@ namespace BalloonParty.Balloon.Controller
         private readonly GridBalanceQuery _balanceQuery;
         private readonly ISubscriber<BalanceBalloonsMessage> _subscriber;
         private readonly IProjectileRegistry _projectiles;
-        private readonly ISubscriber<ProjectileDestroyedMessage> _projectileDestroyedSubscriber;
         private readonly PauseService _pauseService;
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly BalloonMotionTicker _motionTicker;
@@ -64,6 +63,11 @@ namespace BalloonParty.Balloon.Controller
         // Exposed for tests.
         internal int Generation => _generation;
 
+        // For the shot solver: the pulse runs all through play, so a shot fired now meets its first one
+        // this soon, not a full interval after the fire.
+        internal float SecondsUntilNextPulse =>
+            Mathf.Max(0f, _balloonsConfig.FlightRebalanceInterval - _flightRebalanceElapsed);
+
         [Inject]
         internal BalloonBalancer(
             SlotGrid grid,
@@ -72,7 +76,6 @@ namespace BalloonParty.Balloon.Controller
             BalancePathHolder balancePathHolder,
             ISubscriber<BalanceBalloonsMessage> subscriber,
             IProjectileRegistry projectiles,
-            ISubscriber<ProjectileDestroyedMessage> projectileDestroyedSubscriber,
             PauseService pauseService,
             DisturbanceFieldService disturbanceField,
             BalloonMotionTicker motionTicker,
@@ -84,7 +87,6 @@ namespace BalloonParty.Balloon.Controller
             _balancePathHolder = balancePathHolder;
             _subscriber = subscriber;
             _projectiles = projectiles;
-            _projectileDestroyedSubscriber = projectileDestroyedSubscriber;
             _pauseService = pauseService;
             _disturbanceField = disturbanceField;
             _motionTicker = motionTicker;
@@ -96,7 +98,6 @@ namespace BalloonParty.Balloon.Controller
         public void Start()
         {
             _subscriber.Subscribe(_ => RequestBalance()).AddTo(_subscriptions);
-            _projectileDestroyedSubscriber.Subscribe(_ => OnProjectileDestroyed()).AddTo(_subscriptions);
         }
 
         public void Dispose()
@@ -104,7 +105,7 @@ namespace BalloonParty.Balloon.Controller
             _subscriptions.Dispose();
         }
 
-        // Pulses a rebalance at intervals while a projectile is airborne.
+        // Pulses a rebalance at intervals all through play: lines arrive on a clock, not only after a shot.
         public void Tick()
         {
             TickFlightRebalance(Time.deltaTime);
@@ -200,16 +201,18 @@ namespace BalloonParty.Balloon.Controller
             _balancePathHolder.Release(actor);
         }
 
-        // relocateRoamers: true only at the turn boundary (pre-spawn), so roaming types jump once per turn,
-        // not on every deferred/flight rebalance. A direct run services any pending deferred request, so
-        // the death-frame publish and the spawner's pre-spawn call coalesce into one sweep.
-        internal void Balance(bool relocateRoamers = false)
+        // atWaveStart: true only for the spawner's sweep before a wave's first line. Roaming types jump once
+        // per wave, not on every line, deferred or pulse rebalance, and the heavy-step budget refreshes
+        // there, covering the wave's sweeps and the pulses until the next wave as one allowance. A direct
+        // run services any pending deferred request, so a publish in the same frame coalesces into one sweep.
+        internal void Balance(bool atWaveStart = false)
         {
             _balanceRequested = false;
             ReleasePaths();
 
-            if (relocateRoamers)
+            if (atWaveStart)
             {
+                _turnSteps.Clear();
                 RelocateRoamers();
             }
 
@@ -433,11 +436,10 @@ namespace BalloonParty.Balloon.Controller
         internal bool TickFlightRebalance(float deltaTime)
         {
             var interval = _balloonsConfig.FlightRebalanceInterval;
-            if (interval <= 0f || !AnyShotFree() || _projectiles.DoomedShotFliesAlone()
-                || _pauseService.IsAnyPaused.Value)
+            if (interval <= 0f || _projectiles.DoomedShotFliesAlone() || _pauseService.IsAnyPaused.Value)
             {
-                // Freeze the board while a lone doomed shot glides its last-breath segment: with respawn
-                // already held (BalloonSpawner) and rebalance stopped here, nothing can drift into the
+                // Freeze the board while a lone doomed shot glides its last-breath segment: with the spawn clock
+                // already held (SpawnClock) and rebalance stopped here, nothing can drift into the
                 // computed glide path, so the eased traversal is safe for any curve. Resumes when the
                 // shot dies. One ball's doom never freezes the board under other balls.
                 _flightRebalanceElapsed = 0f;
@@ -458,8 +460,8 @@ namespace BalloonParty.Balloon.Controller
             }
 
             // Each pulse opens a fresh step window: pulses are already paced by the interval, so a
-            // 1-step heavy crawls one slot per pulse instead of sitting exhausted for the whole flight
-            // (the shared budget exists to stop multi-hops within the turn's clustered runs).
+            // 1-step heavy crawls one slot per pulse instead of sitting exhausted until the next wave
+            // (the shared budget exists to stop multi-hops within one sweep's clustered runs).
             _turnSteps.Clear();
             RequestBalance();
             return true;
@@ -482,26 +484,6 @@ namespace BalloonParty.Balloon.Controller
                     {
                         return true;
                     }
-                }
-            }
-
-            return false;
-        }
-
-        // The turn boundary: the heavy-step budget refreshes here, covering the death-frame balances,
-        // the spawn wave's, and the next flight's pulses as one allowance.
-        private void OnProjectileDestroyed()
-        {
-            _turnSteps.Clear();
-        }
-
-        private bool AnyShotFree()
-        {
-            for (var i = 0; i < _projectiles.InFlightCount; i++)
-            {
-                if (_projectiles.InFlightAt(i).IsFree)
-                {
-                    return true;
                 }
             }
 

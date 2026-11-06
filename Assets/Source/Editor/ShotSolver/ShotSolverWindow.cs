@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
+using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
@@ -662,7 +663,8 @@ namespace BalloonParty.Editor.ShotSolver
                 scope.Container.Resolve<IGamePalette>(),
                 scope.Container.Resolve<IActiveLevelParameters>(),
                 scope.Container.Resolve<IRunConfig>(),
-                pulseDelay);
+                pulseDelay,
+                scope.Container.Resolve<BalloonBalancer>().SecondsUntilNextPulse);
             return true;
         }
 

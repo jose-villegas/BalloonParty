@@ -518,6 +518,8 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     _restartBalloonCue: 0.7
+  _heartDrainMinGapSeconds: 10
+  _heartDrainMaxSeconds: 4
   _boardFloatAway:
     _floatDuration: 5
     _riseCurve:

@@ -36,7 +36,7 @@ and `Assets/Source/Game/Telemetry/README.md` carries its full subscription list.
   triggers off `ILevelProgress.Phase == Completing` — detection at claim time in
   `LevelController.TryBeginCompleting`)
 - `ProjectileView` → `ProjectileDestroyedMessage` → (`ThrowerController`,
-  `BalloonSpawner`, `BalloonBalancer`, `ProjectileFacingSource`, `ShieldCounterAnimation`,
+  `ProjectileFacingSource`, `ShieldCounterAnimation`,
   `LevelController`, `CombatSoundRouter`) — signals that a ball (named in the message) has been
   destroyed; `LevelController` uses it as the sole trigger for presenting the level-up
   popup

@@ -17,7 +17,7 @@ features compose across the whole game.
 | `arch_scope_hierarchy` | VContainer `LifetimeScope` tree and registration inheritance |
 | `arch_message_flow` | MessagePipe publisher/subscriber routing across systems |
 | `arch_static_state` | Static `Navigation` / `Cinematic` reactive state machines |
-| `arch_turn_pipeline` | End-to-end flow of a single thrown projectile turn |
+| `arch_turn_pipeline` | Ball hits, the spawn clock's line flow and balance passes (no per-shot turn) |
 | `arch_balance_flow` | Balloon balancing pass and path animation |
 | `arch_spawner_coordination` | `GridSpawnerCoordinator` staging of `IGridSpawner` runs |
 | `arch_slot_actor` | Slot grid actor model and archetype rendering |

@@ -73,13 +73,13 @@ namespace BalloonParty.Tests.Item
             _current.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>()).Returns(bomb);
 
             var model = new BalloonModel();
-            FireItemCheck(Array.Empty<IBalloonModel>(), turnCount: 1);
+            FireItemCheck(Array.Empty<IBalloonModel>(), wave: 1);
 
             Assert.AreEqual(ItemType.None, model.Item.Value);
         }
 
         [Test]
-        public void OnItemCheck_TurnNotOnCadence_NoAssignment()
+        public void OnItemCheck_WaveNotOnCadence_NoAssignment()
         {
             _current.ItemCadence.Returns(3);
             var bomb = CreateItemSettings(ItemType.Bomb);
@@ -87,7 +87,7 @@ namespace BalloonParty.Tests.Item
             _current.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>()).Returns(bomb);
 
             var model = new BalloonModel();
-            FireItemCheck(new IBalloonModel[] { model }, turnCount: 2);
+            FireItemCheck(new IBalloonModel[] { model }, wave: 2);
 
             Assert.AreEqual(ItemType.None, model.Item.Value);
         }
@@ -97,7 +97,7 @@ namespace BalloonParty.Tests.Item
         {
             // _current.Items defaults to empty (SetUp) — every type gated out of this level.
             var model = new BalloonModel();
-            FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
+            FireItemCheck(new IBalloonModel[] { model }, wave: 1);
 
             Assert.AreEqual(ItemType.None, model.Item.Value);
         }
@@ -111,7 +111,7 @@ namespace BalloonParty.Tests.Item
             _current.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>()).Returns((ItemSettings)null);
 
             var model = new BalloonModel();
-            FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
+            FireItemCheck(new IBalloonModel[] { model }, wave: 1);
 
             Assert.AreEqual(ItemType.None, model.Item.Value);
         }
@@ -124,7 +124,7 @@ namespace BalloonParty.Tests.Item
             _current.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>()).Returns(bomb);
 
             var model = new ToughBalloonModel(new BalloonModelConfig());
-            FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
+            FireItemCheck(new IBalloonModel[] { model }, wave: 1);
 
             // ToughBalloonModel does not implement IHasItemSlot — ItemAssigner skips it
             Assert.IsFalse(model is IHasItemSlot);
@@ -138,7 +138,7 @@ namespace BalloonParty.Tests.Item
             _current.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>()).Returns(bomb);
 
             var model = new BalloonModel();
-            FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
+            FireItemCheck(new IBalloonModel[] { model }, wave: 1);
 
             Assert.AreEqual(ItemType.Bomb, model.Item.Value);
         }
@@ -161,7 +161,7 @@ namespace BalloonParty.Tests.Item
             _grid.Place(existing, null, new Vector2Int(0, 0));
 
             var model = new BalloonModel();
-            FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
+            FireItemCheck(new IBalloonModel[] { model }, wave: 1);
 
             Assert.AreEqual(1, bombCountAtPick);
         }
@@ -174,7 +174,7 @@ namespace BalloonParty.Tests.Item
             _current.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>()).Returns(bomb);
 
             var model = new BalloonModel(new BalloonModelConfig(itemActivationWeight: 0f));
-            FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
+            FireItemCheck(new IBalloonModel[] { model }, wave: 1);
 
             Assert.AreEqual(ItemType.None, model.Item.Value);
         }
@@ -188,7 +188,7 @@ namespace BalloonParty.Tests.Item
             _current.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>()).Returns(bomb);
 
             var models = new[] { new BalloonModel(), new BalloonModel(), new BalloonModel() };
-            FireItemCheck(models, turnCount: 1);
+            FireItemCheck(models, wave: 1);
 
             var assigned = 0;
             foreach (var m in models)
@@ -211,7 +211,7 @@ namespace BalloonParty.Tests.Item
             _current.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>()).Returns(bomb);
 
             var model = new BalloonModel();
-            FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
+            FireItemCheck(new IBalloonModel[] { model }, wave: 1);
 
             Assert.AreEqual(ItemType.Bomb, model.Item.Value);
         }
@@ -219,7 +219,7 @@ namespace BalloonParty.Tests.Item
         [Test]
         public void OnItemCheck_InitialSpawn_SeedsInitialItemsIgnoringCadence()
         {
-            _current.ItemCadence.Returns(3); // turnCount 0 is a cadence turn anyway; prove it's unused
+            _current.ItemCadence.Returns(3); // wave 0 is a cadence wave anyway; prove it's unused
             _current.InitialItemCountWeights.Returns(WeightsForCount(2));
             _current.ItemCountWeights.Returns(WeightsForCount(0));
             var bomb = CreateItemSettings(ItemType.Bomb);
@@ -227,7 +227,7 @@ namespace BalloonParty.Tests.Item
             _current.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>()).Returns(bomb);
 
             var models = new[] { new BalloonModel(), new BalloonModel(), new BalloonModel() };
-            FireItemCheck(models, turnCount: 0, isInitial: true);
+            FireItemCheck(models, wave: 0, isInitial: true);
 
             var assigned = 0;
             foreach (var m in models)
@@ -250,7 +250,7 @@ namespace BalloonParty.Tests.Item
             _current.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>()).Returns(bomb);
 
             var model = new BalloonModel();
-            FireItemCheck(new IBalloonModel[] { model }, turnCount: 0, isInitial: true);
+            FireItemCheck(new IBalloonModel[] { model }, wave: 0, isInitial: true);
 
             Assert.AreEqual(ItemType.None, model.Item.Value);
         }
@@ -319,9 +319,9 @@ namespace BalloonParty.Tests.Item
             Assert.AreEqual(1, ItemAssigner.PickWeightedIndex(candidates, 0.999f));
         }
 
-        private void FireItemCheck(IReadOnlyList<IBalloonModel> balloons, int turnCount, bool isInitial = false)
+        private void FireItemCheck(IReadOnlyList<IBalloonModel> balloons, int wave, bool isInitial = false)
         {
-            _handler.Handle(new ItemCheckMessage(balloons, turnCount, isInitial));
+            _handler.Handle(new ItemCheckMessage(balloons, wave, isInitial));
         }
 
         // A curve whose only non-zero weight is at X = count, so SampleCount deterministically returns

@@ -1,6 +1,5 @@
 using System;
 using BalloonParty.Game.Health;
-using BalloonParty.Game.Level;
 using BalloonParty.Slots.Grid;
 using UniRx;
 using UnityEngine;
@@ -8,12 +7,11 @@ using VContainer.Unity;
 
 namespace BalloonParty.Game.Danger
 {
-    /// <summary>0→1 "how close are we to dying" signal: next turn's spawn overflow relative to hearts left to absorb it.</summary>
+    /// <summary>0→1 "how close are we to dying" signal: the next line's overflow relative to hearts left to absorb it.</summary>
     internal class SpaceDanger : IStartable, ILateTickable, IDisposable, IDangerLevel
     {
         private readonly SlotGrid _grid;
         private readonly IPlayerHealth _health;
-        private readonly IActiveLevelParameters _levelParams;
         private readonly ReactiveProperty<float> _level = new(0f);
         private readonly ReactiveProperty<int> _heartsAtRisk = new(0);
         private readonly CompositeDisposable _subscriptions = new();
@@ -22,11 +20,10 @@ namespace BalloonParty.Game.Danger
         public IReadOnlyReactiveProperty<float> Level => _level;
         public IReadOnlyReactiveProperty<int> HeartsAtRisk => _heartsAtRisk;
 
-        public SpaceDanger(SlotGrid grid, IPlayerHealth health, IActiveLevelParameters levelParams)
+        public SpaceDanger(SlotGrid grid, IPlayerHealth health)
         {
             _grid = grid;
             _health = health;
-            _levelParams = levelParams;
         }
 
         public void Start()
@@ -53,7 +50,7 @@ namespace BalloonParty.Game.Danger
 
         // Pure danger curve, exposed for unit testing. Uses line-based granularity:
         // only full lines of overflow count as hearts at risk.
-        internal static float Evaluate(int hearts, int availableSpace, int spawnPerTurn, int columns)
+        internal static float Evaluate(int hearts, int availableSpace, int spawnPerLine, int columns)
         {
             if (hearts <= 0)
             {
@@ -65,7 +62,7 @@ namespace BalloonParty.Game.Danger
                 return 0f;
             }
 
-            var overflow = Mathf.Max(0, spawnPerTurn - availableSpace);
+            var overflow = Mathf.Max(0, spawnPerLine - availableSpace);
             var heartsAtRisk = overflow / columns;
             return Mathf.Clamp01((float)heartsAtRisk / hearts);
         }
@@ -74,13 +71,12 @@ namespace BalloonParty.Game.Danger
         {
             _dirty = false;
 
-            // Must read the resolved per-level value — the catalog misreports on ramped levels.
-            var spawnPerTurn = _levelParams.Current.SpawnLines * _grid.Columns;
-            var availableSpace = _grid.CountEmpty();
+            // The spawn clock brings one line per tick.
             var columns = _grid.Columns;
+            var availableSpace = _grid.CountEmpty();
 
-            _level.Value = Evaluate(_health.Current.Value, availableSpace, spawnPerTurn, columns);
-            _heartsAtRisk.Value = WaveDeficitCalculator.Calculate(availableSpace, spawnPerTurn, columns).HeartsLost;
+            _level.Value = Evaluate(_health.Current.Value, availableSpace, columns, columns);
+            _heartsAtRisk.Value = WaveDeficitCalculator.Calculate(availableSpace, columns, columns).HeartsLost;
         }
     }
 }

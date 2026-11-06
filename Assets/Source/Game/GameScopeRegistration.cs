@@ -246,6 +246,7 @@ namespace BalloonParty.Game
             // Registered before BalloonSpawner, which reads IActiveLevelParameters during prewarm sizing.
             builder.RegisterEntryPoint<LevelDifficultyResolver>().AsSelf().As<IActiveLevelParameters>().As<ILevelThresholds>().As<IRunResettable>();
             builder.RegisterEntryPoint<BalloonSpawner>().As<IGridSpawner>().AsSelf().As<IRunResettable>();
+            builder.RegisterEntryPoint<SpawnClock>().As<ISpawnClock>().As<IRunResettable>();
             builder.RegisterEntryPoint<ScoreController>().AsSelf().As<IRunScore>().As<IRunResettable>();
             builder.RegisterEntryPoint<LevelController>().AsSelf().As<ILevelProgress>().As<IRunResettable>();
             builder.RegisterEntryPoint<TimeOfDayCycle>().As<IRunResettable>();
@@ -334,7 +335,7 @@ namespace BalloonParty.Game
 
             builder.RegisterEntryPoint<CinematicDirector>().AsSelf();
             builder.RegisterEntryPoint<LevelUpCinematic>();
-            builder.RegisterEntryPoint<HeartDrainCinematic>();
+            builder.RegisterEntryPoint<HeartDrainCinematic>().As<IRunResettable>();
             builder.RegisterEntryPoint<GameOverLossCinematic>();
             builder.RegisterEntryPoint<LevelTransitionController>();
             builder.RegisterComponentInHierarchy<GameOverScreen>();

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using BalloonParty.Balloon.Controller;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
@@ -142,7 +143,8 @@ namespace BalloonParty.Cheats
             var pulseDelay = Mathf.Clamp(1.5f * Time.smoothDeltaTime, 0f, 0.1f);
             var context = ShotBoardGather.Gather(
                 _grid, _config, _gridConfig, _balloonsConfig, _itemConfig, _cachedView, _throwerSettings, _palette,
-                _levelParams, _runConfig, pulseDelay);
+                _levelParams, _runConfig, pulseDelay,
+                _cachedScope.Container.Resolve<BalloonBalancer>().SecondsUntilNextPulse);
             if (context.Board.Count == 0)
             {
                 return;
@@ -169,7 +171,8 @@ namespace BalloonParty.Cheats
             var pulseDelay = Mathf.Clamp(1.5f * Time.smoothDeltaTime, 0f, 0.1f);
             var context = ShotBoardGather.Gather(
                 _grid, _config, _gridConfig, _balloonsConfig, _itemConfig, _cachedView, _throwerSettings, _palette,
-                _levelParams, _runConfig, pulseDelay);
+                _levelParams, _runConfig, pulseDelay,
+                _cachedScope.Container.Resolve<BalloonBalancer>().SecondsUntilNextPulse);
             if (context.Board.Count == 0)
             {
                 Log.Warn("FireBestShotCheat", "no targets on the board.");

@@ -10,12 +10,10 @@ namespace BalloonParty.Configuration.Level
     /// <summary>The read surface of a fully-resolved level; cross-level queries stay on the resolver instead.</summary>
     internal interface ILevelParameters
     {
-        int SpawnLines { get; }
         int BoardLines { get; }
-        int ItemCadence { get; }
 
-        /// <summary>The turn this level begins spawning lines; earlier turns are a grace period.</summary>
-        int FirstSpawnTurn { get; }
+        /// <summary>Every this many spawn waves, the wave rolls for items. 0 = never.</summary>
+        int ItemCadence { get; }
         AnimationCurve InitialItemCountWeights { get; }
         AnimationCurve ItemCountWeights { get; }
 

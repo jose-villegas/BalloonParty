@@ -6,15 +6,16 @@ namespace BalloonParty.Shared.Messages
     public readonly struct ItemCheckMessage
     {
         public readonly IReadOnlyList<IBalloonModel> NewBalloons;
-        public readonly int TurnCount;
+        // Waves spawned so far this level, this one included; the item cadence counts these. 0 on an initial fill.
+        public readonly int Wave;
 
-        // Fresh-board fill (level start/transition); bypasses the turn-cadence gate.
+        // Fresh-board fill (level start/transition); bypasses the cadence gate.
         public readonly bool IsInitialSpawn;
 
-        public ItemCheckMessage(IReadOnlyList<IBalloonModel> newBalloons, int turnCount, bool isInitialSpawn)
+        public ItemCheckMessage(IReadOnlyList<IBalloonModel> newBalloons, int wave, bool isInitialSpawn)
         {
             NewBalloons = newBalloons;
-            TurnCount = turnCount;
+            Wave = wave;
             IsInitialSpawn = isInitialSpawn;
         }
     }

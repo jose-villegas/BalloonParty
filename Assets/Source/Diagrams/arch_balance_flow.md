@@ -27,8 +27,8 @@ the guard). Because settling can take several passes, one actor's final path can
 chain of hops across multiple slots, not a single jump.
 
 Heavy actors are metered by `MaxBalanceSteps`: each planned hop counts against a shared
-`turnSteps` budget that spans every balance run between projectile deaths (pre-spawn,
-post-spawn, and any in-flight pulses), so a heavy balloon visibly rises one slot per turn
+`turnSteps` budget that spans every balance run from one wave's start to the next (pre-line,
+post-line; a pulse opens a fresh one), so a heavy balloon visibly rises one slot per window
 instead of teleporting clear across the board in a single settle.
 
 Planning only touches the grid — no views, tweens, or `IsStable` flips happen mid-plan.
@@ -71,23 +71,23 @@ vacate into a genuinely empty slot, favoring cheaper (lighter) chains. This is a
 resolve path from the priority race above, used specifically to open room for a spawn.
 
 **Entry points — when a balance run happens:**
-- A death-frame pass: `ProjectileView` publishes `BalanceBalloonsMessage` when the shot
+- A death-frame pass: `ProjectileView` publishes `BalanceBalloonsMessage` when a shot
   dies. This is deferred one frame (`RequestBalance` → `BalanceNextFrameAsync`).
-- The pre-spawn pass: `BalloonSpawner` calls `Balance(relocateRoamers: true)` directly,
-  synchronously, before placing new lines. Because a direct call services any pending
-  deferred request immediately, this coalesces with the death-frame publish above into one
-  sweep. `relocateRoamers: true` also runs the `IPreBalanceRelocatable` pre-pass once per
-  turn — each roamer (an `IPreBalanceRelocatable` implementer; today only Unbreakable)
+- The pre-line pass: `BalloonSpawner` calls `Balance()` directly,
+  synchronously, before placing each line. Because a direct call services any pending
+  deferred request immediately, this coalesces with a same-frame publish into one
+  sweep. `atWaveStart: true` (a wave's first line) also runs the `IPreBalanceRelocatable` pre-pass once per
+  wave — each roamer (an `IPreBalanceRelocatable` implementer; today only Unbreakable)
   picks its own destination among already-settled empty slots, in `BalancePriority` order,
   before the balance race resolves everything around it — rather than being swept toward
   the nearest gap like an ordinary actor.
-- The post-spawn pass: after all lines are placed, `BalloonSpawner` publishes
+- The post-line pass: after each line is placed, `BalloonSpawner` publishes
   `BalanceBalloonsMessage` again — deferred to the next frame — to settle any gap the fresh
   spawn just created.
-- In-flight rebalance pulses: while a shot is airborne, `BalloonBalancer.Tick` fires a
-  deferred balance every `FlightRebalanceInterval` seconds, but only when
-  `HasPossibleMove()` finds something to do — most flights, the board is already settled
-  and no pulse is scheduled.
+- Rebalance pulses: all through play (not paused, not while a lone doomed ball glides),
+  `BalloonBalancer.Tick` fires a deferred balance every `FlightRebalanceInterval` seconds,
+  but only when `HasPossibleMove()` finds something to do — when the board is already
+  settled no pulse is scheduled.
 
 **Transit tracking — `BalancePathHolder`:**
 `ApplyBalanceMoves` reserves every slot along an actor's full move chain — its original
@@ -105,12 +105,12 @@ contested slot. Sorting each pass by `BalancePriority` and letting higher-priori
 move (and thus occupy contested slots) before lower-priority ones gives every actor type a
 lever over its own timing without hardcoding per-type logic into the planner.
 
-**Why the step budget is per-turn, not per-run:**
-A `BalloonBalancer.Balance()` call can run several times between one projectile's death
-and the next shot (pre-spawn, post-spawn, flight pulses). If `MaxBalanceSteps` reset on
+**Why the step budget is per-wave, not per-run:**
+A `BalloonBalancer.Balance()` call can run several times within one wave
+(pre-line, post-line, pulses). If `MaxBalanceSteps` reset on
 every one of those runs, a "slow" heavy actor would actually take one step per run and
 read as just as fast as anything else, only choppier. Keeping the budget in `_turnSteps`
-across the whole turn is what makes a step cap actually read as "moves slower."
+across the whole wave is what makes a step cap actually read as "moves slower."
 
 **`BalancePathHolder` is your read point for in-flight balance moves:**
 If you're writing a system that needs to know whether a given slot is currently being

@@ -12,7 +12,7 @@ This package separates those concerns.
 
 | Type | Role |
 |---|---|
-| `PauseSource` | Enum identifying *why* something is paused (`Cinematic`, `LevelUp`, …) |
+| `PauseSource` | Enum identifying *why* something is paused (`Cinematic`, `LevelUp`, `LevelTransition`, `Cheat`). Members carry explicit numbers; the old `Overflow` (2) is gone, so don't renumber |
 | `PausedMessage` | Published via MessagePipe on the unpaused → paused edge (registered as a broker; no live subscriber today) |
 | `ResumedMessage` | Published via MessagePipe on the paused → unpaused edge (registered as a broker; no live subscriber today) |
 | `PauseService` | Singleton coordinator. Reference-counted per source; exposes `IsAnyPaused` (reactive) and `IsPaused(source)` |

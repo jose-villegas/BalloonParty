@@ -14,7 +14,7 @@
 |------|----------------|
 | @subpage arch_mvc "MVC Pattern" | Layer separation, data flow rules, when to split View vs Controller |
 | @subpage arch_scope_hierarchy "Scope Hierarchy" | VContainer scope tree, where to register new services, child scope rules |
-| @subpage arch_turn_pipeline "Turn Pipeline" | Hit → Balance → Spawn → Post-Balance sequence and extension points |
+| @subpage arch_turn_pipeline "Hit, Spawn and Balance Pipeline" | Ball hits, the spawn clock's one-line-per-tick flow, balance passes, and extension points |
 | @subpage arch_balance_flow "Balance Flow" | Balance algorithm, transit slot tracking, `BalancePathHolder` |
 | @subpage arch_spawner_coordination "Spawner Coordination" | Staged grid spawner pipeline, how to add a new spawner |
 | @subpage arch_message_flow "Message Flow" | All pub/sub connections, when to use MessagePipe vs direct injection |

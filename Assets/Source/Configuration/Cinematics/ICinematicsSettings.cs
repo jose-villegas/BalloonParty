@@ -18,5 +18,17 @@ namespace BalloonParty.Configuration.Cinematics
 
         /// <summary>Tuning for the float-away board effect (level-clear balloons rise + zigzag + shrink).</summary>
         BoardFloatAwaySettings BoardFloatAway { get; }
+
+        /// <summary>
+        ///     Least real time between two heart-drain cinematics. Hearts still drain in between, with no
+        ///     camera move. 0 = every wave-damage event may play one.
+        /// </summary>
+        float HeartDrainMinGapSeconds { get; }
+
+        /// <summary>
+        ///     Longest real time a heart-drain cinematic holds the camera. Lines keep arriving during it,
+        ///     so the overflow pile may never empty on its own.
+        /// </summary>
+        float HeartDrainMaxSeconds { get; }
     }
 }

@@ -22,8 +22,6 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>Seconds the rainbow-pop flash is held before it cuts. 0 = no flash.</summary>
         float RainbowPopFlashSeconds { get; }
 
-        float NewBalloonLinesTimeInterval { get; }
-
         /// <summary>Fallback spawn/balance travel speed (world units/sec) for entries whose own
         /// <see cref="BalloonPrefabEntry.MoveSpeed" /> is 0. Movement duration is distance ÷ speed, so
         /// every balloon travels at a constant speed regardless of how far it must go.</summary>

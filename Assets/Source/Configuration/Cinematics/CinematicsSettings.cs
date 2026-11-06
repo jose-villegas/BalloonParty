@@ -20,9 +20,22 @@ namespace BalloonParty.Configuration.Cinematics
         [Tooltip("Tuning for the float-away board effect (level-clear balloons rise + zigzag + shrink).")]
         [SerializeField] private BoardFloatAwaySettings _boardFloatAway;
 
+        [Tooltip("Least real time, in seconds, between two heart-drain cinematics. Lines arrive on a clock, so " +
+                 "an overflowing board loses hearts every few seconds; in between, hearts drain without the " +
+                 "camera move. 0 = every heart loss may play one.")]
+        [SerializeField] [Min(0f)] private float _heartDrainMinGapSeconds = 10f;
+
+        [Tooltip("Longest real time, in seconds, a heart-drain cinematic holds the camera. Lines keep arriving " +
+                 "during it, so the overflow pile may never empty on its own.")]
+        [SerializeField] [Min(0.5f)] private float _heartDrainMaxSeconds = 4f;
+
         public LevelAscendSettings LevelAscend => _levelAscend;
 
         public BoardFloatAwaySettings BoardFloatAway => _boardFloatAway;
+
+        public float HeartDrainMinGapSeconds => _heartDrainMinGapSeconds;
+
+        public float HeartDrainMaxSeconds => _heartDrainMaxSeconds;
 
         private void OnValidate()
         {

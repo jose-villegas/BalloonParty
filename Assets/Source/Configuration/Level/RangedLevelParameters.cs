@@ -17,22 +17,17 @@ namespace BalloonParty.Configuration.Level
     [Serializable]
     public class RangedLevelParameters : IPaletteColorMasked
     {
-        [SerializeField] private int _spawnLines = 1;
         [SerializeField] private int _boardLines = 5;
 
-        [Tooltip("How often (in turns) an item-drop opportunity happens. 0 = never.")]
+        [Tooltip("How often, in spawn waves, an item-drop opportunity happens. 0 = never.")]
         [SerializeField] private RangedInt _itemCadence = new(5, 5);
-
-        [Tooltip("The turn this level starts spawning lines — earlier turns (after entry, and after " +
-                 "each level-up) are a grace period. 2 = start on the second shot.")]
-        [SerializeField] private int _firstSpawnTurn = 2;
 
         [Tooltip("Weighted distribution for how many items to seed on the initial board fill (level " +
                  "start / transition), rolled once. X = item count (0, 1, 2…), Y = weight. Empty = none.")]
         [SerializeField] private AnimationCurve _initialItemCountWeights = new();
 
-        [Tooltip("Weighted distribution for how many items to grant on each cadence turn, rolled per " +
-                 "turn. X = item count (0, 1, 2…), Y = weight. Capped by the eligible new balloons.")]
+        [Tooltip("Weighted distribution for how many items to grant on each cadence wave, rolled per " +
+                 "wave. X = item count (0, 1, 2…), Y = weight. Capped by the eligible new balloons.")]
         [SerializeField] private AnimationCurve _itemCountWeights =
             new(new Keyframe(0f, 0f), new Keyframe(1f, 1f));
 
@@ -51,12 +46,10 @@ namespace BalloonParty.Configuration.Level
         [Tooltip("All bits set (default) = every palette color allowed.")]
         [SerializeField] [PaletteColorMask] private int _allowedColorsMask = ~0;
 
-        public int SpawnLines => _spawnLines;
         public int BoardLines => _boardLines;
         public RangedInt ItemCadence => _itemCadence;
-        public int FirstSpawnTurn => _firstSpawnTurn;
 
-        // Curves pass through Resolve unchanged — sampled per turn at runtime.
+        // Curves pass through Resolve unchanged — sampled per wave at runtime.
         public AnimationCurve InitialItemCountWeights => _initialItemCountWeights;
         public AnimationCurve ItemCountWeights => _itemCountWeights;
         public BalloonTypeWeight[] BalloonWeights => _balloonWeights;
@@ -70,10 +63,8 @@ namespace BalloonParty.Configuration.Level
         internal LevelParameters Resolve(float positionInRange, System.Random rng)
         {
             return new LevelParameters(
-                _spawnLines,
                 _boardLines,
                 _itemCadence.Resolve(positionInRange, rng),
-                _firstSpawnTurn,
                 _initialItemCountWeights,
                 _itemCountWeights,
                 _balloonWeights,

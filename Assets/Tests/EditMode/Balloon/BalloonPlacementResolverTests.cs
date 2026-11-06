@@ -134,7 +134,6 @@ namespace BalloonParty.Tests.Balloon
                 _grid, balanceQuery, balloonsConfig, new BalancePathHolder(),
                 Substitute.For<ISubscriber<BalanceBalloonsMessage>>(),
                 Substitute.For<IProjectileRegistry>(),
-                Substitute.For<ISubscriber<ProjectileDestroyedMessage>>(),
                 pauseService, null, new BalloonMotionTicker());
 
             _resolver = new BalloonPlacementResolver(_grid, _balancer);

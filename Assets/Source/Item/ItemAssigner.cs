@@ -88,13 +88,13 @@ namespace BalloonParty.Item
                 return;
             }
 
-            // Initial board fills skip the cadence gate; later spawns roll only on a cadence turn.
+            // Initial board fills skip the cadence gate; later waves roll only on a cadence wave.
             AnimationCurve weights;
             if (msg.IsInitialSpawn)
             {
                 weights = _levelParams.Current.InitialItemCountWeights;
             }
-            else if (IsCadenceTurn(msg.TurnCount))
+            else if (IsCadenceWave(msg.Wave))
             {
                 weights = _levelParams.Current.ItemCountWeights;
             }
@@ -329,10 +329,10 @@ namespace BalloonParty.Item
             return candidates.Count - 1;
         }
 
-        private bool IsCadenceTurn(int turns)
+        private bool IsCadenceWave(int wave)
         {
             var cadence = _levelParams.Current.ItemCadence;
-            return cadence > 0 && turns % cadence == 0;
+            return cadence > 0 && wave % cadence == 0;
         }
 
         private void CollectEligibleSlots(IReadOnlyList<IBalloonModel> newBalloons)

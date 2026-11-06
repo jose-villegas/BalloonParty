@@ -137,12 +137,12 @@ namespace BalloonParty.Tests.Game
             var resolver = BuildResolver();
             resolver.Start();
 
-            Assert.AreEqual(1, resolver.Current.SpawnLines);
+            Assert.AreEqual(1, resolver.Current.BoardLines);
             Assert.AreSame(early, resolver.Current.PickBalloonEntry(new Dictionary<string, int>()));
 
             _levelUpHandler.Handle(new ScoreLevelUpMessage(5));
 
-            Assert.AreEqual(3, resolver.Current.SpawnLines);
+            Assert.AreEqual(3, resolver.Current.BoardLines);
             Assert.AreSame(late, resolver.Current.PickBalloonEntry(new Dictionary<string, int>()));
         }
 
@@ -159,11 +159,11 @@ namespace BalloonParty.Tests.Game
             var resolver = BuildResolver();
             resolver.Start();
             _levelUpHandler.Handle(new ScoreLevelUpMessage(5));
-            Assert.AreEqual(9, resolver.Current.SpawnLines);
+            Assert.AreEqual(9, resolver.Current.BoardLines);
 
             resolver.ResetRun(2);
 
-            Assert.AreEqual(1, resolver.Current.SpawnLines);
+            Assert.AreEqual(1, resolver.Current.BoardLines);
         }
 
         [Test]
@@ -266,7 +266,7 @@ namespace BalloonParty.Tests.Game
         {
             var entry = CreateCatalogEntry("Simple", BalloonType.Simple, weight: 1f, maxCount: 0);
             _balloonsConfig.Entries.Returns(new[] { entry });
-            SetSingleRange(1, 0, BalloonType.Simple, 1f, spawnLines: 5);
+            SetSingleRange(1, 0, BalloonType.Simple, 1f, boardLines: 5);
 
             var resolver = BuildResolver();
             resolver.Start();
@@ -285,7 +285,7 @@ namespace BalloonParty.Tests.Game
 
         private void SetSingleRange(
             int fromLevel, int toLevel, BalloonType type, float weight,
-            int spawnLines = 1, AnimationCurve initialCountCurve = null)
+            int boardLines = 1, AnimationCurve initialCountCurve = null)
         {
             var balloonWeight = new BalloonTypeWeight(type, weight);
             if (initialCountCurve != null)
@@ -293,14 +293,14 @@ namespace BalloonParty.Tests.Game
                 SetStructField(ref balloonWeight, "_initialCountWeights", initialCountCurve);
             }
 
-            var range = MakeRange(fromLevel, toLevel, spawnLines, new[] { balloonWeight });
+            var range = MakeRange(fromLevel, toLevel, boardLines, new[] { balloonWeight });
             _pacing.Ranges.Returns(new[] { range });
         }
 
-        private static LevelRangeEntry MakeRange(int fromLevel, int toLevel, int spawnLines, BalloonTypeWeight[] weights)
+        private static LevelRangeEntry MakeRange(int fromLevel, int toLevel, int boardLines, BalloonTypeWeight[] weights)
         {
             var parameters = new RangedLevelParameters();
-            SetField(parameters, "_spawnLines", spawnLines);
+            SetField(parameters, "_boardLines", boardLines);
             SetField(parameters, "_balloonWeights", weights);
             return new LevelRangeEntry(fromLevel, toLevel, parameters);
         }

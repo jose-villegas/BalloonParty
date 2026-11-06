@@ -23,7 +23,11 @@ namespace BalloonParty.Configuration.Level
                  "interpolated via Fritsch–Carlson monotone cubic; beyond the last point the tail extrapolates.")]
         [SerializeField] private LevelScoringCurve _scoringCurve;
 
+        [Tooltip("When balloon lines arrive: one line per interval, shorter each level.")]
+        [SerializeField] private SpawnClockSettings _spawnClock = new();
+
         public IReadOnlyList<LevelRangeEntry> Ranges => _ranges;
+        public ISpawnClockSettings SpawnClock => _spawnClock;
         internal LevelScoringCurve ScoringCurve => _scoringCurve;
 
         private void OnValidate()

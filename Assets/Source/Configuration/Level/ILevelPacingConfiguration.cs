@@ -11,6 +11,9 @@ namespace BalloonParty.Configuration.Level
     {
         IReadOnlyList<LevelRangeEntry> Ranges { get; }
 
+        /// <summary>When balloon lines arrive; read by the spawn clock.</summary>
+        ISpawnClockSettings SpawnClock { get; }
+
         /// <summary>Points required per colour to complete <paramref name="level" /> — derived from the scoring curve's cumulative milestones, divided by colour count, and snapped to a clean multiple.</summary>
         int ThresholdForLevel(int level);
 

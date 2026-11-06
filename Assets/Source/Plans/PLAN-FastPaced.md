@@ -6,7 +6,7 @@ Turn BalloonParty from a turn-based puzzle shooter into a fast, endless arcade g
 keeping the balloon grid, the items, the grid actors and the visual language it already has.
 
 **Status:** all decisions settled. Phase 1 (projectile identity) is built. Phase 2 (rapid fire) is
-implemented, pending the owner's playtest at cap 3. Phase 3 is not started. Items marked
+implemented, pending the owner's playtest at cap 3. Phase 3 (spawn clock) is implemented, pending the owner's playtest. Phase 4 is not started. Items marked
 **DECISION** are settled: don't re-derive them. §10 records the owner's answers.
 
 ---
@@ -127,10 +127,11 @@ wording; the built behaviour lives in `Thrower/README.md` (Rapid fire), `Game/Le
 | Pool prewarm | `2 * MaxBallsInFlight + 1`, not cap + 1: a dead ball stays out of the pool until its disappear animation finishes. |
 | Reload | The held ball slides pivot to muzzle over `max(ProjectileLoadDuration, ReloadCooldownSeconds)`, advancing only while a slot is free (`ThrowerReload`). `ThrowerReadyMessage` marks "a release now fires" and drives the reload sound. |
 | Level-up with balls in flight | After the beat plus `LevelCompleteFlightGrace`, remaining balls are force-destroyed once. Pierce toughs already plowed through still discharge and score; progress past the cap is banked. So "no score" in the row below is not literal. |
-| Spawning (open) | Still per ball death. `BalloonSpawner` now runs waves one at a time and merges deaths during a wave into one queued wave. Interim: Phase 3's spawn clock is the real fix. |
+| Spawning | Was per ball death with an interim queued wave; Phase 3's spawn clock replaced it (§6). |
 | Shorter flights (open) | No lever left: starting shields are already 1, so a ball cannot be made shorter. |
 | Pierce-discharge time dip (open) | Still world-wide: one ball's discharge dips time for every ball. |
 | Shield HUD (open) | Built as the held ball's shields (bind on load, unbind when that ball dies). Held-ball vs ball-count/cooldown meter is for the playtest. |
+| Rapid-fire feedback (later) | First playtest: rapid fire works but doesn't read as rapid fire. The only cues are the held ball's slide and the reload sound; the player can't see the cap, how many balls are out, or that the next release counts. Needs its own visual pass; it blocks no phase. |
 | Hold-to-speed-up | Deleted, with its config fields and `TimerId.Hold`. The `Tooltip` object is still nested, inert, in GameCanvas; remove it in the editor. |
 
 | Change | Notes |
@@ -155,26 +156,41 @@ every ball, and nothing waits on a single flight.
 
 ## 6. Phase 3: spawn clock
 
-Lines enter from below and rise to the topmost free slot (`BalloonPlacementResolver`); rejects
-fall into the overflow pile and cost hearts (`WaveDeficitCalculator`). None of that changes.
-What changes is *when* a line arrives.
+**Implemented, pending the owner's playtest.** The rows below keep the original design wording; the
+built behaviour lives in `Balloon/Spawner/README.md`, `Game/Danger/README.md`,
+`Game/Cinematics/README.md`, `Shared/Pause/README.md` and `Diagrams/arch_turn_pipeline.md`.
+In short: `SpawnClock` publishes one `SpawnBalloonLineMessage(1)` per interval of scaled time (3 s at
+level 1, x0.96 per level, floor 1.25 s, after a 4 s grace; all in `LevelPacingConfiguration`'s
+`_spawnClock` block), holding through pauses, the level-up, off the `Game` screen and while a lone
+doomed ball glides. `BalloonSpawner` no longer spawns on ball death; every line is the synchronous
+`SpawnLine()`. Lines group into waves of `LinesPerWave` (3): a wave's first line rolls quotas and
+relocates roamers, its last publishes the item check. Differences and open items:
 
-**DECISION: one line per tick, on scaled game time.** A `SpawnClock` (`ITickable`,
-`IRunResettable`, generation guard like `BalloonSpawner.cs:153`) counts down and requests one
-line. Scaled time means slow-mo slows the clock with everything else; pauses
-(`PauseService`, `Transitioning`, `Completing`) stop it.
+| Item | State |
+|---|---|
+| Tuning (open) | Interval, decay, floor, grace and heart-drain gap/cap are first guesses; tune in the playtest. |
+| `LinesPerWave` = 3 (open) | Keeps the per-turn tuning (wave-quota curves, item cadence, roamer jumps) meaningful instead of re-tuning it now. Drop it to 1 and re-tune per line once the clock feels right. |
+| Strikethrough on leftover rejects (open, P2) | The heart strikethrough can cross a row of rejects left from an earlier line. Visual only. |
+| Danger signal fires late (open, P2) | `SpaceDanger` only goes non-zero when the board is 100% full (one line overflows only then), so it warns one interval ahead, not earlier. |
+| Pulse rebalance off the Game screen (open, P2) | The balancer's pulse now runs all through play, including when the navigation state is not `Game`. |
+| Aim trace (open) | Stays static: it predicts the board as it is at fire time, but lines now land mid-flight. A guide only. |
+| Overflow lock | Gone, as designed: `PauseSource.Overflow` is removed (other members keep their numbers). `RejectedBalloonEffect.IsOverflowActive` (pile non-empty) still holds the level transition. |
+| Heart-drain cinematic | At most one per `HeartDrainMinGapSeconds` (10, real time, reset per run), ending at `HeartDrainMaxSeconds` (4) at the latest, since the pile may never empty on a full board. |
+| Danger UI | The heart-loss shine quickens toward the next line via `ISpawnClock.NextLineProgress`. |
+| Shot solver | Pulse timing starts from the balancer's `SecondsUntilNextPulse` (`ShotBoardGather.Gather`, `ShotBoardDynamics`). Shot Solver window and Fire Best Shot cheat pass it. |
+| Pop-spawn cap | One line's worth (one row of columns), no longer a wave's. |
 
 | Change | Files |
 |---|---|
 | `SpawnClock` replaces `_turnCount` and `OnProjectileDestroyed` spawning; grace becomes seconds | `Balloon/Spawner/BalloonSpawner.cs:140, 158, 193-207` |
 | Collapse the async multi-line wave into the synchronous `SpawnLine()` path, which already does deficit and doomed lines. Avoids overlapping waves sharing `_spawnBatch` / `_batchCursor` | `BalloonSpawner.cs:354, 595-674` |
-| Item cadence counts spawn ticks, not turns | `Item/ItemAssigner.cs:84-108, 332-336`, `ItemCheckMessage.TurnCount` |
-| Balancer: roamers and the heavy-step budget refresh per spawn tick; the flight pulse runs all the time, not only during a flight | `Balloon/Controller/BalloonBalancer.cs:209, 436-470, 497` |
-| Overflow no longer locks the thrower (`PauseSource.Overflow`), and `BeginSpawnSequence` no longer locks firing | `RejectedBalloonEffect.cs:305-325`, `BalloonSpawner.cs:595` |
-| Heart-drain cinematic throttled (minimum gap), or kept only for the last heart | `Game/Cinematics/HeartDrainCinematic.cs:62-76` |
+| Item cadence counts spawn waves, not turns | `Item/ItemAssigner.cs`, `ItemCheckMessage.Wave` |
+| Balancer: roamers and the heavy-step budget refresh per wave; the pulse runs all the time, not only during a flight | `Balloon/Controller/BalloonBalancer.cs` |
+| Overflow no longer locks the thrower (`PauseSource.Overflow`), and `BeginSpawnSequence` no longer locks firing | `RejectedBalloonEffect.cs`, `BalloonSpawner.cs` |
+| Heart-drain cinematic throttled (minimum gap) and capped | `Game/Cinematics/HeartDrainCinematic.cs` |
 | Danger UI gains a time-to-next-line cue | `Game/Danger/SpaceDanger.cs`, `UI/Danger/*` |
-| Config: `SpawnIntervalSeconds` and `GraceSeconds` replace `SpawnLines`, `FirstSpawnTurn`; `ItemCadence` in ticks; pop-spawn `waveCap` per tick; wave-quota curves re-tuned | `ILevelParameters`, `RangedLevelParameters`, `LevelParameters`, `BalloonTypeWeight`, `BalloonPrefabEntry` tooltips, `Editor/LevelPacingWindow.cs:57, 77` |
-| Docs | `Balloon/Spawner/README.md` (also fix its stale claim that `SceneTransition` publishes `SpawnBalloonLineMessage`) |
+| Config: `SpawnClockSettings` (interval, decay, floor, grace, `LinesPerWave`) replaces `SpawnLines`, `FirstSpawnTurn`; `ItemCadence` counts waves; wave-quota curves keep their authored values | `ILevelParameters`, `RangedLevelParameters`, `LevelParameters`, `BalloonTypeWeight`, `BalloonPrefabEntry` tooltips, `Editor/LevelPacingWindow.cs` |
+| Docs | `Balloon/Spawner/README.md` (its stale claim that `SceneTransition` publishes `SpawnBalloonLineMessage` is fixed: only `SpawnClock` and the cheat do) |
 
 **Done when:** lines arrive on the timer whatever the player does, overflow costs hearts in
 real time without freezing the thrower, and the danger UI warns ahead of the next line.

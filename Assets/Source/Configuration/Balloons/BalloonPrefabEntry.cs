@@ -30,7 +30,7 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Per-type balance-weight bias strength. Each balloon type interprets this differently: colored balloons bias toward diagonal same-color neighbours, tough balloons bias toward straight-line (wall) formations. 0 = off.")]
         [SerializeField] private float _balanceBias;
 
-        [Tooltip("Max slots this balloon rises per balance window (the turn's spawn cluster, or each in-flight pulse) — lower reads heavier/slower. 0 = unlimited.")]
+        [Tooltip("Max slots this balloon rises per balance window (a wave's sweeps, or each rebalance pulse) — lower reads heavier/slower. 0 = unlimited.")]
         [SerializeField] private int _maxBalanceSteps;
 
         [Tooltip("Travel speed (world units/sec) for this type's spawn entry and balance moves — heavier types author a lower value to move slower. 0 = use the config's Default Balloon Move Speed.")]
@@ -48,7 +48,7 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("A projectile deflecting off this balloon stamps the disturbance field at its slot, radius = BalloonDeflect profile × this (unbreakable ~3 for a heavy jolt, tough 1 for the elastic bounce). 0 = no stamp.")]
         [SerializeField] private float _deflectStampScale;
 
-        [Tooltip("Physical spawn weight: within a spawn wave, heavier types fill the later (lower) lines, entering under lighter ones. 0 = neutral.")]
+        [Tooltip("Physical spawn weight: heavier types take the lower slots, entering under lighter ones (across the initial fill's lines, and across the columns of a line). 0 = neutral.")]
         [SerializeField] private int _spawnWeight;
 
         public BalloonView Prefab => _prefab;

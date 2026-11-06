@@ -48,8 +48,7 @@ namespace BalloonParty.Tests.Balloon
             _balancer = new BalloonBalancer(
                 _grid, balanceQuery, _balloonsConfig, pathHolder,
                 CaptureBalanceRequests(),
-                _registry, StubSubscriber<ProjectileDestroyedMessage>(),
-                _pauseService, null, new BalloonMotionTicker());
+                _registry, _pauseService, null, new BalloonMotionTicker());
             _balancer.Start();
         }
 
@@ -129,11 +128,13 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void FlightPulse_NoProjectile_DoesNotTrigger()
+        public void FlightPulse_NoBallInFlight_StillTriggers()
         {
+            // Lines arrive on the spawn clock, not after a shot, so the board keeps settling while
+            // nothing flies.
             PlaceUnbalancedBalloon();
 
-            Assert.IsFalse(_balancer.TickFlightRebalance(5f));
+            Assert.IsTrue(_balancer.TickFlightRebalance(5f));
         }
 
         [Test]
@@ -183,16 +184,6 @@ namespace BalloonParty.Tests.Balloon
             Assert.IsTrue(_balancer.TickFlightRebalance(5f), "one ball's doom never freezes the board under the other");
         }
 
-        [Test]
-        public void FlightPulse_OnlyNonFreeBallsInFlight_DoesNotTrigger()
-        {
-            PlaceUnbalancedBalloon();
-            var projectile = LoadFreeProjectile();
-            projectile.IsFree = false;
-
-            Assert.IsFalse(_balancer.TickFlightRebalance(5f));
-        }
-
         // A balloon at (1,1) over an empty (1,0) — unbalanced and free to fall.
         private void PlaceUnbalancedBalloon()
         {
@@ -219,15 +210,6 @@ namespace BalloonParty.Tests.Balloon
                 .Subscribe(
                     Arg.Do<IMessageHandler<BalanceBalloonsMessage>>(h => _balanceHandler = h),
                     Arg.Any<MessageHandlerFilter<BalanceBalloonsMessage>[]>())
-                .Returns(Substitute.For<IDisposable>());
-            return subscriber;
-        }
-
-        private static ISubscriber<T> StubSubscriber<T>()
-        {
-            var subscriber = Substitute.For<ISubscriber<T>>();
-            subscriber
-                .Subscribe(Arg.Any<IMessageHandler<T>>(), Arg.Any<MessageHandlerFilter<T>[]>())
                 .Returns(Substitute.For<IDisposable>());
             return subscriber;
         }

@@ -111,7 +111,7 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   Approximation: a pierced colourless pop scores through the flat tough rule, ignoring the
   game's projectile-colour attribution nuance for unbreakables under a Target Colour filter.
 - **Balance & nudge (dynamic board)** — when the window supplies `ShotBoardDynamics`, rebalance
-  pulses fire at \f$k \times \text{FlightRebalanceInterval}\f$ running the REAL `BalancePlanner` over a real
+  pulses fire at \f$\text{firstPulseIn} + k \times \text{FlightRebalanceInterval}\f$ (`firstPulseIn` is the live balancer's `SecondsUntilNextPulse`, since the pulse runs all through play; a full interval when there is no live board) running the REAL `BalancePlanner` over a real
   `SlotGrid` (no mirrored rules — rule drift is impossible); moved balloons follow their hop
   waypoints as an arc-length polyline with OutQuad-eased progress over a per-move duration of
   path length ÷ the balloon's resolved `MoveSpeed` (per-type `BalloonPrefabEntry.MoveSpeed`, or
@@ -174,9 +174,9 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   frame time (~1.5 × `Time.smoothDeltaTime`), an estimate rather than the exact per-frame lag.
 - Balance motion is the eased waypoint POLYLINE — Catmull-Rom's corner rounding between hops is
   the one part of the live path shape not reproduced.
-- Heavy step budgets reset per simulated shot; in-game the turn budget may be part-spent at fire
+- Heavy step budgets reset per simulated shot; in-game the wave's budget may be part-spent at fire
   time (unknowable from a snapshot).
-- Flight pulses never relocate roamers (`relocateRoamers: false`) — matches the live code.
+- Pulses never relocate roamers (`atWaveStart: false`) — matches the live code.
 - Idle sway/animator drift is not modeled (visual-only).
 - Contact search against moving balloons linearizes at the segment-start instantaneous velocity,
   then re-solves once at the candidate hit time (two-pass fixed point) — the easing's curvature

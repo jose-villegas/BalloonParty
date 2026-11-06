@@ -7,16 +7,16 @@ gradient so the player can feel the board getting dangerous before they actually
 
 | File | What it does |
 |---|---|
-| `SpaceDanger` | Plain C# entry point (`IStartable`, `ILateTickable`, `IDisposable`). Exposes `IReadOnlyReactiveProperty<float> Level` (the 0→1 gradient value) and `IReadOnlyReactiveProperty<int> HeartsAtRisk` (how many hearts the *next* wave would cost, computed via `WaveDeficitCalculator.Calculate`). Grid changes (`SlotGrid.OnChanged`) and hit-point changes (`IPlayerHealth.Current`) only flag it dirty — a bomb pop or balance sweep can fire `OnChanged` a dozen+ times in one frame, so the actual recompute is debounced to once per frame in `LateTick`, after the frame's mutations have settled. `Evaluate` is a pure, unit-tested function so the curve can be reasoned about in isolation |
+| `SpaceDanger` | Plain C# entry point (`IStartable`, `ILateTickable`, `IDisposable`). Exposes `IReadOnlyReactiveProperty<float> Level` (the 0→1 gradient value) and `IReadOnlyReactiveProperty<int> HeartsAtRisk` (how many hearts the *next* line would cost, computed via `WaveDeficitCalculator.Calculate`). Grid changes (`SlotGrid.OnChanged`) and hit-point changes (`IPlayerHealth.Current`) only flag it dirty — a bomb pop or balance sweep can fire `OnChanged` a dozen+ times in one frame, so the actual recompute is debounced to once per frame in `LateTick`, after the frame's mutations have settled. `Evaluate` is a pure, unit-tested function so the curve can be reasoned about in isolation |
 | `IDangerLevel` | Read-only seam (`Level`, `HeartsAtRisk`) consumers bind against — registered alongside `SpaceDanger` in `GameLifetimeScope` |
 
 ## The danger curve
 
 \f[
-\text{overflow} = \max(0, \text{spawnPerTurn} - \text{availableSpace})
+\text{overflow} = \max(0, \text{spawnPerLine} - \text{availableSpace})
 \f]
 
-(the balloons a turn couldn't place — which is exactly the hearts it'd cost)
+(the balloons the next line couldn't place — which is exactly the hearts it'd cost)
 
 \f[
 \text{Level} =
@@ -26,17 +26,17 @@ gradient so the player can feel the board getting dangerous before they actually
 \end{cases}
 \f]
 
-- **0** — the board can still absorb the next turn's spawn; no warning.
+- **0** — the board can still absorb the next line; no warning.
 - **rising** — as free space shrinks, the would-be overflow grows; `Level` is the fraction of the heart
-  pool a single turn would burn.
-- **1** — a single turn could empty the heart pool (\f$\text{overflow} \ge \text{hearts}\f$), or there are no hearts left.
+  pool the next line would burn.
+- **1** — the next line could empty the heart pool (\f$\text{overflow} \ge \text{hearts}\f$), or there are no hearts left.
   The consumer shows the gradient's final colour.
 
 Two inputs are deliberately simple heuristics and double as tuning knobs:
 
 - **`availableSpace`** = the empty-slot count. Re-home + pressure balance fill nearly every empty, so
   this approximates "how many balloons the board can still take" without re-deriving reachability.
-- **`spawnPerTurn`** = `IActiveLevelParameters.Current.SpawnLines × Columns`, the worst case a turn can throw at the board.
+- **`spawnPerLine`** = `Columns`: the spawn clock (`Balloon/Spawner/`) brings exactly one line per tick, so that is the most the board is ever asked to take at once. Because a line only overflows once the board is completely full, the signal is 0 until then and warns about one clock interval ahead.
 
 ## Consumers
 
@@ -53,4 +53,4 @@ binds every `DangerGradientView` under its hierarchy to `IDangerLevel.Level` at 
 (optionally) set the container + Y offset in the inspector — nothing renders until those are wired.
 
 `UI/Danger/DangerHeartLossView` — shows the number of hearts at risk (alpha lerp + UIShiny effect),
-bound to `IDangerLevel.HeartsAtRisk`.
+bound to `IDangerLevel.HeartsAtRisk`. It doubles as the countdown to that line: its shine sweep starts each interval at the danger level's speed and quickens to full speed as `ISpawnClock.NextLineProgress` reaches 1.

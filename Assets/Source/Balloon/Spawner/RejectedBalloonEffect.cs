@@ -7,7 +7,6 @@ using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Grid;
 using MessagePipe;
@@ -28,19 +27,18 @@ namespace BalloonParty.Balloon.Spawner
         private readonly BalloonPopPresenter _popPresenter;
         private readonly IPublisher<OverflowHeartRequestedMessage> _heartRequestPublisher;
         private readonly SlotGrid _grid;
-        private readonly PauseService _pauseService;
         private readonly Dictionary<int, List<OverflowBalloon>> _columns = new();
 
-        private bool _overflowPaused;
-        private int _sequenceDepth;
         private int _nextId;
         private float _launchCooldown;
         private int _currentDoomedLineIndex = -1;
 
         public int ResetOrder => RunResetOrder.Counters;
 
-        // True while the overflow pile is resolving; the level transition waits for this to clear.
-        internal bool IsOverflowActive => _overflowPaused;
+        // True while the overflow pile is resolving; the level transition waits for this to clear. Play
+        // carries on meanwhile: with lines on a clock, freezing the thrower and the balls for every
+        // overflow would stop the game each time the board fills.
+        internal bool IsOverflowActive => HasActiveBalloons();
 
         [Inject]
         internal RejectedBalloonEffect(
@@ -50,8 +48,7 @@ namespace BalloonParty.Balloon.Spawner
             IGamePalette palette,
             PoolManager poolManager,
             BalloonPopPresenter popPresenter,
-            IPublisher<OverflowHeartRequestedMessage> heartRequestPublisher,
-            PauseService pauseService)
+            IPublisher<OverflowHeartRequestedMessage> heartRequestPublisher)
         {
             _grid = grid;
             _levelParams = levelParams;
@@ -60,7 +57,6 @@ namespace BalloonParty.Balloon.Spawner
             _poolManager = poolManager;
             _popPresenter = popPresenter;
             _heartRequestPublisher = heartRequestPublisher;
-            _pauseService = pauseService;
         }
 
         public void Tick()
@@ -102,9 +98,7 @@ namespace BalloonParty.Balloon.Spawner
         public void ResetRun(int generation)
         {
             ReturnAll();
-            _sequenceDepth = 0;
             _launchCooldown = 0f;
-            TryReleaseOverflowHold();
         }
 
         /// <summary>Queues reject feedback for a blocked column; <paramref name="staggerIndex"/> delays its appearance.</summary>
@@ -135,7 +129,6 @@ namespace BalloonParty.Balloon.Spawner
 
             queue.Add(new OverflowBalloon(entry.PoolKey, view, model, col, _nextId++,
                 staggerIndex * _settings.AppearStaggerSeconds, _currentDoomedLineIndex));
-            BeginOverflowHold();
         }
 
         /// <summary>Pops the overflow balloon matching a landed heart trail; no-op if it's already gone.</summary>
@@ -173,22 +166,6 @@ namespace BalloonParty.Balloon.Spawner
 
             position = default;
             return false;
-        }
-
-        /// <summary>Brackets a turn's spawn sequence; the overflow hold won't release until it ends and the pile is empty.</summary>
-        public void BeginSpawnSequence()
-        {
-            _sequenceDepth++;
-        }
-
-        public void EndSpawnSequence()
-        {
-            if (_sequenceDepth > 0)
-            {
-                _sequenceDepth--;
-            }
-
-            TryReleaseOverflowHold();
         }
 
         /// <summary>Tags subsequent overflow balloons as part of a doomed line so they aren't auto-popped.</summary>
@@ -268,8 +245,6 @@ namespace BalloonParty.Balloon.Spawner
 
             QueueFor(balloon.Column).Remove(balloon);
             _poolManager.Return(balloon.PoolKey, balloon.View);
-
-            TryReleaseOverflowHold();
         }
 
         private void ReturnAll()
@@ -299,29 +274,6 @@ namespace BalloonParty.Balloon.Spawner
         private Vector3 RowPosition(int col, int rowOffset)
         {
             return _grid.IndexToWorldPosition(new Vector2Int(col, _grid.Rows + rowOffset));
-        }
-
-        // Holds the thrower while overflow is resolving so the player can't fire into a board mid-pile.
-        private void BeginOverflowHold()
-        {
-            if (_overflowPaused)
-            {
-                return;
-            }
-
-            _pauseService.Pause(PauseSource.Overflow);
-            _overflowPaused = true;
-        }
-
-        private void TryReleaseOverflowHold()
-        {
-            if (!_overflowPaused || _sequenceDepth > 0 || HasActiveBalloons())
-            {
-                return;
-            }
-
-            _pauseService.Resume(PauseSource.Overflow);
-            _overflowPaused = false;
         }
 
         private bool HasActiveBalloons()

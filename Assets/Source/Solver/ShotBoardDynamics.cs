@@ -27,6 +27,7 @@ namespace BalloonParty.Solver
         private readonly NudgeOverrideResolver _nudgeResolver;
         private readonly float _flightRebalanceInterval;
         private readonly float _pulseExecutionDelay;
+        private readonly float _firstPulseIn;
         private readonly IReadOnlyList<ShotBalloonSnapshot> _targets;
         private readonly IReadOnlyList<ShotDynamicActorSnapshot> _otherDynamicSnapshots;
         private readonly IReadOnlyList<ShotStaticActorSnapshot> _staticSnapshots;
@@ -52,7 +53,8 @@ namespace BalloonParty.Solver
             IReadOnlyList<ShotBalloonSnapshot> targets,
             IReadOnlyList<ShotDynamicActorSnapshot> otherDynamicActors,
             IReadOnlyList<ShotStaticActorSnapshot> staticActors,
-            float pulseExecutionDelay = 0f)
+            float pulseExecutionDelay = 0f,
+            float firstPulseIn = float.NaN)
         {
             _grid = new SlotGrid(gridConfig, new BalancePathHolder());
             _balanceQuery = new GridBalanceQuery(_grid);
@@ -65,6 +67,10 @@ namespace BalloonParty.Solver
             // Balance() one more frame (BalanceNextFrameAsync) — the caller estimates that lag from
             // its real frame time so the sim's moves start when the game's tweens actually do.
             _pulseExecutionDelay = Mathf.Max(pulseExecutionDelay, 0f);
+
+            // The live pulse runs all through play, so the first one lands when the balancer's timer
+            // says, not a full interval after the fire. NaN (no live board, e.g. tests) = a full interval.
+            _firstPulseIn = float.IsNaN(firstPulseIn) ? _flightRebalanceInterval : Mathf.Max(firstPulseIn, 0f);
 
             _targets = targets;
             _otherDynamicSnapshots = otherDynamicActors;
@@ -161,7 +167,7 @@ namespace BalloonParty.Solver
 
             _turnSteps.Clear();
             _nextPulseTime = _flightRebalanceInterval > 0f
-                ? _flightRebalanceInterval + _pulseExecutionDelay
+                ? _firstPulseIn + _pulseExecutionDelay
                 : float.PositiveInfinity;
             _pulsesRun = 0;
         }

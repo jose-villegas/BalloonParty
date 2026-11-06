@@ -27,8 +27,6 @@ namespace BalloonParty.Configuration.Balloons
         [SerializeField] [Min(0f)] private float _rainbowPopFlashSeconds = 0.2f;
 
         [Header("Spawning")]
-        [SerializeField] private float _newBalloonLinesTimeInterval;
-
         [Tooltip("Fallback travel speed (world units/sec) for balloons whose per-type Move Speed is 0. " +
                  "Movement duration is distance ÷ speed, so every balloon moves at a constant speed " +
                  "instead of a fixed duration — no distance-driven speed jump on spawn.")]
@@ -74,7 +72,6 @@ namespace BalloonParty.Configuration.Balloons
         public float RainbowPopFlashRadius => _rainbowPopFlashRadius;
         public float RainbowPopFlashIntensity => _rainbowPopFlashIntensity;
         public float RainbowPopFlashSeconds => _rainbowPopFlashSeconds;
-        public float NewBalloonLinesTimeInterval => _newBalloonLinesTimeInterval;
         public float DefaultBalloonMoveSpeed => _defaultBalloonMoveSpeed;
         public float MoveSpeedVariation => _moveSpeedVariation;
         public int SpawnEntryRowOffset => _spawnEntryRowOffset;
