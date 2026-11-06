@@ -890,7 +890,7 @@ namespace BalloonParty.Editor
             if (Application.isPlaying)
             {
                 CheatState.StartLevel = level;
-                var scope = UnityEngine.Object.FindFirstObjectByType<GameLifetimeScope>();
+                var scope = UnityEngine.Object.FindAnyObjectByType<GameLifetimeScope>();
                 scope?.Container.Resolve<RunController>().RestartRun();
                 return;
             }

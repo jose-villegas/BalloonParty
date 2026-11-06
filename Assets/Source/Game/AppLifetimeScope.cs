@@ -126,7 +126,7 @@ namespace BalloonParty.Game
 
         private static void InjectUiSfxEmitters(IObjectResolver resolver)
         {
-            foreach (var emitter in FindObjectsByType<Audio.View.UiSfxEmitter>(FindObjectsSortMode.None))
+            foreach (var emitter in FindObjectsByType<Audio.View.UiSfxEmitter>())
             {
                 resolver.Inject(emitter);
             }

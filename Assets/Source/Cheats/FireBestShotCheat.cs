@@ -212,8 +212,8 @@ namespace BalloonParty.Cheats
         {
             if (_cachedScope == null || _cachedView == null)
             {
-                _cachedScope = UnityEngine.Object.FindFirstObjectByType<ThrowerLifetimeScope>();
-                _cachedView = UnityEngine.Object.FindFirstObjectByType<ThrowerView>();
+                _cachedScope = UnityEngine.Object.FindAnyObjectByType<ThrowerLifetimeScope>();
+                _cachedView = UnityEngine.Object.FindAnyObjectByType<ThrowerView>();
             }
         }
 

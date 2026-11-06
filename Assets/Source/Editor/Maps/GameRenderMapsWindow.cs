@@ -356,7 +356,7 @@ namespace BalloonParty.Editor.Maps
 
             // Ping-ponged (see ScreenSpaceLightService.LightTexture) — re-resolved every call
             // rather than cached, so a repaint always sees whichever buffer is current.
-            var service = UnityEngine.Object.FindFirstObjectByType<ScreenSpaceLightService>();
+            var service = UnityEngine.Object.FindAnyObjectByType<ScreenSpaceLightService>();
             return service != null ? service.LightTexture : null;
         }
 

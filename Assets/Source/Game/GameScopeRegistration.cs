@@ -346,8 +346,7 @@ namespace BalloonParty.Game
 
             void InjectTints(IObjectResolver resolver)
             {
-                foreach (var tint in UnityEngine.Object.FindObjectsByType<TimeOfDayTint>(
-                             UnityEngine.FindObjectsSortMode.None))
+                foreach (var tint in UnityEngine.Object.FindObjectsByType<TimeOfDayTint>())
                 {
                     resolver.Inject(tint);
                 }
@@ -355,8 +354,7 @@ namespace BalloonParty.Game
 
             void InjectTooltips(IObjectResolver resolver)
             {
-                foreach (var tooltip in UnityEngine.Object.FindObjectsByType<HoldSpeedUpTooltip>(
-                             UnityEngine.FindObjectsSortMode.None))
+                foreach (var tooltip in UnityEngine.Object.FindObjectsByType<HoldSpeedUpTooltip>())
                 {
                     resolver.Inject(tooltip);
                 }

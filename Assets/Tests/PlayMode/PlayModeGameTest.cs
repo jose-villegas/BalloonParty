@@ -69,7 +69,7 @@ namespace BalloonParty.Tests.PlayMode
 
         internal static GameLifetimeScope Scope()
         {
-            var scope = UnityEngine.Object.FindFirstObjectByType<GameLifetimeScope>();
+            var scope = UnityEngine.Object.FindAnyObjectByType<GameLifetimeScope>();
             Assert.IsNotNull(scope, "GameLifetimeScope not found in the Game scene.");
             return scope;
         }

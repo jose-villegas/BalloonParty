@@ -255,7 +255,7 @@ namespace BalloonParty.Editor.ShieldChains
                 return false;
             }
 
-            var scope = Object.FindFirstObjectByType<ThrowerLifetimeScope>();
+            var scope = Object.FindAnyObjectByType<ThrowerLifetimeScope>();
             if (scope == null)
             {
                 return false;

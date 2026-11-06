@@ -197,7 +197,7 @@ namespace BalloonParty.Tests.Item
 
         private List<HighlightTrail> FindActivePens()
         {
-            return Object.FindObjectsByType<HighlightTrail>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+            return Object.FindObjectsByType<HighlightTrail>(FindObjectsInactive.Include)
                 .Where(pen => pen != _penPrefab)
                 .ToList();
         }

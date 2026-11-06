@@ -510,7 +510,7 @@ namespace BalloonParty.Editor.ShotSolver
                 return;
             }
 
-            var scope = UnityEngine.Object.FindFirstObjectByType<ThrowerLifetimeScope>();
+            var scope = UnityEngine.Object.FindAnyObjectByType<ThrowerLifetimeScope>();
             if (scope == null)
             {
                 return;
@@ -636,13 +636,13 @@ namespace BalloonParty.Editor.ShotSolver
         {
             context = default;
 
-            var scope = UnityEngine.Object.FindFirstObjectByType<GameLifetimeScope>();
+            var scope = UnityEngine.Object.FindAnyObjectByType<GameLifetimeScope>();
             if (scope == null)
             {
                 return false;
             }
 
-            var thrower = UnityEngine.Object.FindFirstObjectByType<ThrowerView>();
+            var thrower = UnityEngine.Object.FindAnyObjectByType<ThrowerView>();
             if (thrower == null)
             {
                 return false;

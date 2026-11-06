@@ -90,8 +90,7 @@ namespace BalloonParty.Tests.Item
         public void TearDown()
         {
             FakeChainEffect.Prepared.Clear();
-            foreach (var fake in UnityEngine.Object.FindObjectsByType<FakeChainEffect>(
-                         FindObjectsInactive.Include, FindObjectsSortMode.None))
+            foreach (var fake in UnityEngine.Object.FindObjectsByType<FakeChainEffect>(FindObjectsInactive.Include))
             {
                 UnityEngine.Object.DestroyImmediate(fake.gameObject);
             }

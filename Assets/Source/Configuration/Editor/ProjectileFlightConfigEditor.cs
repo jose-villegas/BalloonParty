@@ -151,7 +151,7 @@ namespace BalloonParty.Configuration.Editor
             // from Play mode correctly triggers a re-find on the next repaint.
             if (_cachedThrower == null)
             {
-                _cachedThrower = UnityEngine.Object.FindFirstObjectByType<ThrowerView>();
+                _cachedThrower = UnityEngine.Object.FindAnyObjectByType<ThrowerView>();
             }
 
             if (_cachedThrower == null)

@@ -28,7 +28,7 @@ namespace BalloonParty.Configuration.Editor
                 return;
             }
 
-            var scope = UnityEngine.Object.FindFirstObjectByType<GameLifetimeScope>();
+            var scope = UnityEngine.Object.FindAnyObjectByType<GameLifetimeScope>();
             var tracker = scope?.Container.Resolve<ItemSightTracker>();
             if (tracker == null)
             {
