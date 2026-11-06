@@ -17,6 +17,34 @@ namespace BalloonParty.Configuration.Level
         /// </summary>
         float OverlapShotPull { get; }
 
+        /// <summary>
+        ///     How much faster the clock runs on an empty board. It scales down with the board's fill
+        ///     to 1 (normal pace) once the board is back to the level's starting fill and at
+        ///     <see cref="TargetOccupancy" />.
+        /// </summary>
+        float SparseBoardSpeedup { get; }
+
+        /// <summary>Share of the board's open slots the clock pushes balloons towards, 0–1.</summary>
+        float TargetOccupancy { get; }
+
+        /// <summary>
+        ///     How much the board's fill is read as occupancy against <see cref="TargetOccupancy" />
+        ///     rather than against the level's starting fill: 0 = starting fill only, 1 = occupancy only.
+        /// </summary>
+        float OccupancyWeight { get; }
+
+        /// <summary>
+        ///     Pace balls in flight add on top of the board's: at full flight pressure the clock runs
+        ///     this many times faster than the board alone would have it (1 = flight never matters).
+        /// </summary>
+        float FlightSpeedup { get; }
+
+        /// <summary>
+        ///     Summed flight seconds of every ball in the air that reach full flight pressure: 6 = one ball
+        ///     cruising 6 s, or three balls 2 s each.
+        /// </summary>
+        float FlightPressureSeconds { get; }
+
         /// <summary>Seconds between lines at <paramref name="level" />; levels below 1 run at level 1's pace.</summary>
         float IntervalForLevel(int level);
     }

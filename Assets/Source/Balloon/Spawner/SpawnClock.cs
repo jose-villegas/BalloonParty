@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
@@ -23,6 +24,10 @@ namespace BalloonParty.Balloon.Spawner
     ///     landing in that frozen moment read wrong, and the board must hold still under the glide.
     ///     Firing while another ball is still flying pulls the next line closer
     ///     (<see cref="ISpawnClockSettings.OverlapShotPull" />), so every extra ball in the air costs room.
+    ///     A sparse board runs the clock faster (<see cref="ISpawnClockSettings.SparseBoardSpeedup" />), so
+    ///     clearing it never leaves the player waiting on an empty screen. Balls in the air push it too, by
+    ///     how long each has flown (<see cref="ISpawnClockSettings.FlightSpeedup" />): the board refills
+    ///     while long ricochets and rapid fire clear it.
     /// </summary>
     internal sealed class SpawnClock : IStartable, ITickable, IRunResettable, IDisposable, ISpawnClock
     {
@@ -30,9 +35,13 @@ namespace BalloonParty.Balloon.Spawner
         private readonly ILevelProgress _levelProgress;
         private readonly PauseService _pauseService;
         private readonly IProjectileRegistry _projectiles;
+        private readonly IBoardFill _boardFill;
         private readonly IPublisher<SpawnBalloonLineMessage> _linePublisher;
         private readonly ISubscriber<ProjectileFiredMessage> _firedSubscriber;
         private readonly CompositeDisposable _subscriptions = new();
+
+        // Each in-flight ball's flight time while the clock runs; dropped when the ball retires.
+        private readonly Dictionary<IProjectileModel, float> _flightAges = new();
 
         // The current wait (a grace or an interval) and how much of it is left.
         private float _window;
@@ -47,6 +56,7 @@ namespace BalloonParty.Balloon.Spawner
             ILevelProgress levelProgress,
             PauseService pauseService,
             IProjectileRegistry projectiles,
+            IBoardFill boardFill,
             IPublisher<SpawnBalloonLineMessage> linePublisher,
             ISubscriber<ProjectileFiredMessage> firedSubscriber)
         {
@@ -54,6 +64,7 @@ namespace BalloonParty.Balloon.Spawner
             _levelProgress = levelProgress;
             _pauseService = pauseService;
             _projectiles = projectiles;
+            _boardFill = boardFill;
             _linePublisher = linePublisher;
             _firedSubscriber = firedSubscriber;
             StartWindow(_settings.GraceSeconds);
@@ -64,6 +75,7 @@ namespace BalloonParty.Balloon.Spawner
             // Skip the current value: construction already started level 1's grace.
             _levelProgress.Level.Skip(1).Subscribe(_ => StartWindow(_settings.GraceSeconds)).AddTo(_subscriptions);
             _firedSubscriber.Subscribe(OnFired).AddTo(_subscriptions);
+            _projectiles.Retired.Subscribe(ball => _flightAges.Remove(ball)).AddTo(_subscriptions);
         }
 
         public void Tick()
@@ -73,6 +85,7 @@ namespace BalloonParty.Balloon.Spawner
 
         public void ResetRun(int generation)
         {
+            _flightAges.Clear();
             StartWindow(_settings.GraceSeconds);
         }
 
@@ -89,7 +102,7 @@ namespace BalloonParty.Balloon.Spawner
                 return;
             }
 
-            _remaining -= deltaTime;
+            _remaining -= deltaTime * Pace(AgeFlights(deltaTime));
             if (_remaining > 0f)
             {
                 return;
@@ -121,6 +134,34 @@ namespace BalloonParty.Balloon.Spawner
             }
 
             return false;
+        }
+
+        // Ages every ball in the air and returns their summed flight seconds.
+        private float AgeFlights(float deltaTime)
+        {
+            var total = 0f;
+            for (var i = 0; i < _projectiles.InFlightCount; i++)
+            {
+                var ball = _projectiles.InFlightAt(i);
+                _flightAges.TryGetValue(ball, out var age);
+                age += deltaTime;
+                _flightAges[ball] = age;
+                total += age;
+            }
+
+            return total;
+        }
+
+        // The board sets the base: full speedup on an empty board, easing to normal pace as it reaches both
+        // the level's starting fill and the target occupancy (blended by OccupancyWeight). Flight adds on
+        // top, so a healthy board still speeds up while balls cruise.
+        private float Pace(float flightSeconds)
+        {
+            var occupancy = Mathf.Clamp01(_boardFill.Occupancy / _settings.TargetOccupancy);
+            var fill = Mathf.Lerp(_boardFill.StartingFill, occupancy, _settings.OccupancyWeight);
+            var boardPace = Mathf.Lerp(_settings.SparseBoardSpeedup, 1f, fill);
+            var flightPressure = Mathf.Clamp01(flightSeconds / _settings.FlightPressureSeconds);
+            return boardPace + (_settings.FlightSpeedup - 1f) * flightPressure;
         }
 
         private bool IsRunning()

@@ -1161,6 +1161,11 @@ MonoBehaviour:
     _graceSeconds: 4
     _linesPerWave: 3
     _overlapShotPull: 0.35
+    _sparseBoardSpeedup: 8
+    _targetOccupancy: 0.5
+    _occupancyWeight: 0.5
+    _flightSpeedup: 3
+    _flightPressureSeconds: 6
   _scoringCurve:
     _controlPoints:
     - _level: 1

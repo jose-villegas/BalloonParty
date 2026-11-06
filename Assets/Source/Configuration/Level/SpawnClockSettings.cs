@@ -34,8 +34,36 @@ namespace BalloonParty.Configuration.Level
                  "rapid fire trades board space for firepower. 0 = firing never moves the clock.")]
         [SerializeField] [Range(0f, 1f)] private float _overlapShotPull = 0.35f;
 
+        [Tooltip("How much faster the clock runs on an empty board: 8 = eight times the pace. It scales down " +
+                 "with the board's fill, back to normal once the board is at the level's starting fill and " +
+                 "the target occupancy, so a cleared board refills in moments. 1 = fill never matters.")]
+        [SerializeField] [Min(1f)] private float _sparseBoardSpeedup = 8f;
+
+        [Tooltip("Share of the board's open slots (those no grid actor holds) the clock pushes balloons " +
+                 "towards: 0.5 = it runs fast until half the board is balloons.")]
+        [SerializeField] [Range(0.05f, 1f)] private float _targetOccupancy = 0.5f;
+
+        [Tooltip("How the board's fill is read: 0 = only against the level's starting fill, 1 = only as " +
+                 "occupancy against the target, 0.5 = an even blend.")]
+        [SerializeField] [Range(0f, 1f)] private float _occupancyWeight = 0.5f;
+
+        [Tooltip("How much balls in the air push the clock: at full flight pressure it runs this many times " +
+                 "faster than the board alone would have it, the extra added on top. Pressure grows with " +
+                 "every ball's flight time, so long ricochets and rapid fire both bring lines sooner while " +
+                 "they clear. 1 = flight never matters.")]
+        [SerializeField] [Min(1f)] private float _flightSpeedup = 3f;
+
+        [Tooltip("Summed flight seconds of all balls in the air that reach full flight pressure: 6 = one " +
+                 "ball cruising 6 s, or three balls 2 s each.")]
+        [SerializeField] [Min(0.1f)] private float _flightPressureSeconds = 6f;
+
         public float GraceSeconds => _graceSeconds;
         public float OverlapShotPull => _overlapShotPull;
+        public float SparseBoardSpeedup => Mathf.Max(1f, _sparseBoardSpeedup);
+        public float TargetOccupancy => Mathf.Clamp(_targetOccupancy, 0.05f, 1f);
+        public float OccupancyWeight => Mathf.Clamp01(_occupancyWeight);
+        public float FlightSpeedup => Mathf.Max(1f, _flightSpeedup);
+        public float FlightPressureSeconds => Mathf.Max(0.1f, _flightPressureSeconds);
         public int LinesPerWave => Mathf.Max(1, _linesPerWave);
 
         public SpawnClockSettings()
@@ -43,7 +71,9 @@ namespace BalloonParty.Configuration.Level
         }
 
         internal SpawnClockSettings(float firstLevelInterval, float intervalDecayPerLevel, float minInterval,
-            float graceSeconds, int linesPerWave = 1, float overlapShotPull = 0f)
+            float graceSeconds, int linesPerWave = 1, float overlapShotPull = 0f, float sparseBoardSpeedup = 1f,
+            float targetOccupancy = 0.5f, float occupancyWeight = 0f, float flightSpeedup = 1f,
+            float flightPressureSeconds = 6f)
         {
             _firstLevelInterval = firstLevelInterval;
             _intervalDecayPerLevel = intervalDecayPerLevel;
@@ -51,6 +81,11 @@ namespace BalloonParty.Configuration.Level
             _graceSeconds = graceSeconds;
             _linesPerWave = linesPerWave;
             _overlapShotPull = overlapShotPull;
+            _sparseBoardSpeedup = sparseBoardSpeedup;
+            _targetOccupancy = targetOccupancy;
+            _occupancyWeight = occupancyWeight;
+            _flightSpeedup = flightSpeedup;
+            _flightPressureSeconds = flightPressureSeconds;
         }
 
         // Levels below 1 (the negative debug presets) run at level 1's pace.

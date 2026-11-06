@@ -164,7 +164,9 @@ level 1, x0.96 per level, floor 1.25 s, after a 4 s grace; all in `LevelPacingCo
 `_spawnClock` block), holding through pauses, the level-up, off the `Game` screen and while a lone
 doomed ball glides. **DECISION (owner):** firing feeds the clock. A ball fired while another is still
 flying pulls the next line 35% of an interval sooner (`OverlapShotPull`); one ball at a time is free, so
-rapid fire trades board room for firepower. `BalloonSpawner` no longer spawns on ball death; every line is the synchronous
+rapid fire trades board room for firepower. **DECISION (owner):** board tension feeds it too. The clock
+runs up to 8x faster on an empty board (`SparseBoardSpeedup`), easing to normal pace as the board reaches
+both the level's starting fill and half occupancy (`TargetOccupancy`, blended by `OccupancyWeight`), so a cleared board never lingers. Balls in the air add pace on top, by their summed flight time (`FlightSpeedup`, `FlightPressureSeconds`), so long flights and rapid fire refill the board while they clear it. `BalloonSpawner` no longer spawns on ball death; every line is the synchronous
 `SpawnLine()`. Lines group into waves of `LinesPerWave` (3): a wave's first line rolls quotas and
 relocates roamers, its last publishes the item check. Differences and open items:
 

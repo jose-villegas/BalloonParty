@@ -246,6 +246,7 @@ namespace BalloonParty.Game
             // Registered before BalloonSpawner, which reads IActiveLevelParameters during prewarm sizing.
             builder.RegisterEntryPoint<LevelDifficultyResolver>().AsSelf().As<IActiveLevelParameters>().As<ILevelThresholds>().As<IRunResettable>();
             builder.RegisterEntryPoint<BalloonSpawner>().As<IGridSpawner>().AsSelf().As<IRunResettable>();
+            builder.Register<BoardFill>(Lifetime.Singleton).As<IBoardFill>();
             builder.RegisterEntryPoint<SpawnClock>().As<ISpawnClock>().As<IRunResettable>();
             builder.RegisterEntryPoint<ScoreController>().AsSelf().As<IRunScore>().As<IRunResettable>();
             builder.RegisterEntryPoint<LevelController>().AsSelf().As<ILevelProgress>().As<IRunResettable>();

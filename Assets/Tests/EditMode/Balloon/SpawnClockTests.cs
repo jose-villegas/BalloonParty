@@ -24,6 +24,9 @@ namespace BalloonParty.Tests.Balloon
         private ProjectileRegistry _registry;
         private IPublisher<SpawnBalloonLineMessage> _publisher;
         private IMessageHandler<ProjectileFiredMessage> _firedHandler;
+        private IBoardFill _boardFill;
+        private ILevelProgress _progress;
+        private ISubscriber<ProjectileFiredMessage> _firedSubscriber;
         private SpawnClock _clock;
         private NavigationState _previousNavigation;
         private int _lines;
@@ -37,13 +40,18 @@ namespace BalloonParty.Tests.Balloon
             _level = new ReactiveProperty<int>(1);
             _phase = new ReactiveProperty<LevelUpPhase>(LevelUpPhase.Playing);
 
-            var progress = Substitute.For<ILevelProgress>();
-            progress.Level.Returns(_level);
-            progress.Phase.Returns(_phase);
+            _progress = Substitute.For<ILevelProgress>();
+            _progress.Level.Returns(_level);
+            _progress.Phase.Returns(_phase);
 
             // Grace 4s, then 3s at level 1 and 1.5s at level 2 (halving, floor 1s); an overlap shot pulls 25%.
-            var pacing = Substitute.For<ILevelPacingConfiguration>();
-            pacing.SpawnClock.Returns(new SpawnClockSettings(3f, 0.5f, 1f, 4f, overlapShotPull: 0.25f));
+            // An empty board runs the clock 3x; a full one (the default here) at normal pace. Fill reads as an
+            // even blend of the starting fill and occupancy against a 50% target. Flight never matters here;
+            // the flight tests build their own clock.
+
+            _boardFill = Substitute.For<IBoardFill>();
+            _boardFill.StartingFill.Returns(1f);
+            _boardFill.Occupancy.Returns(1f);
 
             _pauseService = new PauseService(
                 Substitute.For<IPublisher<PausedMessage>>(), Substitute.For<IPublisher<ResumedMessage>>());
@@ -53,15 +61,16 @@ namespace BalloonParty.Tests.Balloon
             _publisher = Substitute.For<IPublisher<SpawnBalloonLineMessage>>();
             _publisher.When(p => p.Publish(Arg.Any<SpawnBalloonLineMessage>())).Do(_ => _lines++);
 
-            var firedSubscriber = Substitute.For<ISubscriber<ProjectileFiredMessage>>();
-            firedSubscriber
+            _firedSubscriber = Substitute.For<ISubscriber<ProjectileFiredMessage>>();
+            _firedSubscriber
                 .Subscribe(
                     Arg.Do<IMessageHandler<ProjectileFiredMessage>>(h => _firedHandler = h),
                     Arg.Any<MessageHandlerFilter<ProjectileFiredMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
-            _clock = new SpawnClock(pacing, progress, _pauseService, _registry, _publisher, firedSubscriber);
-            _clock.Start();
+            _clock = null;
+            BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, overlapShotPull: 0.25f,
+                sparseBoardSpeedup: 3f, targetOccupancy: 0.5f, occupancyWeight: 0.5f));
         }
 
         [TearDown]
@@ -320,6 +329,160 @@ namespace BalloonParty.Tests.Balloon
 
             _clock.Advance(0.25f);
             Assert.AreEqual(2, _lines, "1s left of the 3s interval, minus a 0.75s pull");
+        }
+
+        [Test]
+        public void Advance_OnAnEmptyBoard_RunsAtTheFullSpeedup()
+        {
+            _boardFill.StartingFill.Returns(0f);
+            _boardFill.Occupancy.Returns(0f);
+
+            _clock.Advance(1.3f);
+            Assert.AreEqual(0, _lines);
+
+            _clock.Advance(0.05f);
+            Assert.AreEqual(1, _lines, "the 4s grace at 3x is over in 1.33s");
+        }
+
+        [Test]
+        public void Advance_OnAHalfFullBoard_RunsBetweenNormalAndFullSpeedup()
+        {
+            _boardFill.StartingFill.Returns(0.5f);
+            _boardFill.Occupancy.Returns(0.25f);
+
+            _clock.Advance(1.9f);
+            Assert.AreEqual(0, _lines);
+
+            _clock.Advance(0.15f);
+            Assert.AreEqual(1, _lines, "half full runs at 2x, so the 4s grace takes 2s");
+        }
+
+        [Test]
+        public void Advance_AtTheStartingFillButBelowTargetOccupancy_StillRunsFast()
+        {
+            _boardFill.Occupancy.Returns(0f);
+
+            _clock.Advance(1.9f);
+            Assert.AreEqual(0, _lines);
+
+            _clock.Advance(0.15f);
+            Assert.AreEqual(1, _lines, "occupancy weighs half, so a sparse board at its starting fill runs at 2x");
+        }
+
+        [Test]
+        public void Advance_OccupancyAboveTarget_CountsAsFull()
+        {
+            _boardFill.StartingFill.Returns(0f);
+            _boardFill.Occupancy.Returns(0.8f);
+
+            _clock.Advance(1.9f);
+            Assert.AreEqual(0, _lines);
+
+            _clock.Advance(0.15f);
+            Assert.AreEqual(1, _lines, "past the target, occupancy reads as 1, so the blend is 0.5 and the pace 2x");
+        }
+
+        [Test]
+        public void Advance_OnAFullBoard_RunsAtNormalPace()
+        {
+            _clock.Advance(3.9f);
+
+            Assert.AreEqual(0, _lines);
+        }
+
+        [Test]
+        public void Flight_ABallInTheAir_SpeedsTheClockUpAsItFlies()
+        {
+            UseFlightPressure();
+            Fly();
+
+            _clock.Advance(1f);
+            _clock.Advance(1f);
+            Assert.AreEqual(0, _lines, "1.5x then 2x: 3.5s of the 4s grace gone");
+
+            _clock.Advance(1f);
+            Assert.AreEqual(1, _lines, "at 3s of flight the pace is 2.5x");
+        }
+
+        [Test]
+        public void Flight_Pressure_CapsAtTheFlightSpeedup()
+        {
+            UseFlightPressure();
+            for (var i = 0; i < 8; i++)
+            {
+                Fly();
+            }
+
+            _clock.Advance(1f);
+            Assert.AreEqual(0, _lines, "8 flight seconds is past the 4s of full pressure, so the pace caps at 3x");
+
+            _clock.Advance(1f);
+            Assert.AreEqual(1, _lines);
+        }
+
+        [Test]
+        public void Flight_AddsOnTopOfTheBoardPace()
+        {
+            UseFlightPressure();
+            _boardFill.StartingFill.Returns(0f);
+            _boardFill.Occupancy.Returns(0f);
+            for (var i = 0; i < 8; i++)
+            {
+                Fly();
+            }
+
+            _clock.Advance(0.75f);
+            Assert.AreEqual(0, _lines, "3x from the empty board plus 2x from full flight pressure: 3.75s");
+
+            _clock.Advance(0.1f);
+            Assert.AreEqual(1, _lines);
+        }
+
+        [Test]
+        public void Flight_ARetiredBallFliesAgain_StartsItsFlightTimeOver()
+        {
+            UseFlightPressure();
+            var ball = Fly();
+            _clock.Advance(1f);
+
+            _registry.Retire(ball);
+            _registry.Load(ball, null);
+            _registry.Launch(ball);
+            _clock.Advance(1f);
+            _clock.Advance(0.5f);
+
+            Assert.AreEqual(0, _lines, "1.5s + 1.5s + 0.875s, short of the 4s grace; a carried age would land it");
+        }
+
+        [Test]
+        public void Flight_StoppedClock_DoesNotAgeTheBalls()
+        {
+            UseFlightPressure();
+            Fly();
+            _phase.Value = LevelUpPhase.Pending;
+            _clock.Advance(10f);
+            _phase.Value = LevelUpPhase.Playing;
+
+            _clock.Advance(1.5f);
+
+            Assert.AreEqual(0, _lines, "1.5 counted seconds run the clock at 1.75x, not a capped 3x");
+        }
+
+        private void BuildClock(SpawnClockSettings settings)
+        {
+            _clock?.Dispose();
+            var pacing = Substitute.For<ILevelPacingConfiguration>();
+            pacing.SpawnClock.Returns(settings);
+            _clock = new SpawnClock(pacing, _progress, _pauseService, _registry, _boardFill, _publisher,
+                _firedSubscriber);
+            _clock.Start();
+        }
+
+        // Full flight pressure (3x on a full board) at 4 summed flight seconds; no overlap pull.
+        private void UseFlightPressure()
+        {
+            BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, sparseBoardSpeedup: 3f, targetOccupancy: 0.5f,
+                occupancyWeight: 0.5f, flightSpeedup: 3f, flightPressureSeconds: 4f));
         }
 
         private void Fire(ProjectileModel ball)
