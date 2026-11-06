@@ -132,7 +132,8 @@ namespace BalloonParty.Tests.Game
 
             var earlyRange = MakeRange(1, 4, 1, new[] { new BalloonTypeWeight(BalloonType.Simple, 1f) });
             var lateRange = MakeRange(5, 0, 3, new[] { new BalloonTypeWeight(BalloonType.Tough, 1f) });
-            _pacing.Ranges.Returns(new[] { earlyRange, lateRange });
+            SetLevel(1, earlyRange.Parameters);
+            SetLevel(5, lateRange.Parameters);
 
             var resolver = BuildResolver();
             resolver.Start();
@@ -154,7 +155,8 @@ namespace BalloonParty.Tests.Game
 
             var earlyRange = MakeRange(1, 4, 1, new[] { new BalloonTypeWeight(BalloonType.Simple, 1f) });
             var lateRange = MakeRange(5, 0, 9, new[] { new BalloonTypeWeight(BalloonType.Simple, 1f) });
-            _pacing.Ranges.Returns(new[] { earlyRange, lateRange });
+            SetLevel(1, earlyRange.Parameters);
+            SetLevel(5, lateRange.Parameters);
 
             var resolver = BuildResolver();
             resolver.Start();
@@ -171,7 +173,7 @@ namespace BalloonParty.Tests.Game
         {
             var range = MakeRange(1, 0, 1, new[] { new BalloonTypeWeight(BalloonType.Simple, 1f) });
             SetField(range.Parameters, "_gridActorGates", new[] { new GridActorTypeGate(GridActorType.Puff, new RangedInt(5, 5)) });
-            _pacing.Ranges.Returns(new[] { range });
+            _pacing.ParametersForLevel(Arg.Any<int>()).Returns(range.Parameters);
 
             var resolver = BuildResolver();
             resolver.Start();
@@ -185,7 +187,7 @@ namespace BalloonParty.Tests.Game
         {
             var range = MakeRange(1, 0, 1, new[] { new BalloonTypeWeight(BalloonType.Simple, 1f) });
             SetField(range.Parameters, "_gridActorGates", new[] { new GridActorTypeGate(GridActorType.Puff, new RangedInt(5, 5)) });
-            _pacing.Ranges.Returns(new[] { range });
+            _pacing.ParametersForLevel(Arg.Any<int>()).Returns(range.Parameters);
 
             var resolver = BuildResolver();
             resolver.Start();
@@ -197,7 +199,7 @@ namespace BalloonParty.Tests.Game
         public void ItemCadence_ReturnsResolvedValue()
         {
             var range = MakeRangeWithItems(1, 0, new RangedInt(4, 4), Array.Empty<ItemTypeWeight>());
-            _pacing.Ranges.Returns(new[] { range });
+            _pacing.ParametersForLevel(Arg.Any<int>()).Returns(range.Parameters);
 
             var resolver = BuildResolver();
             resolver.Start();
@@ -213,7 +215,7 @@ namespace BalloonParty.Tests.Game
             _itemConfig.Items.Returns(new List<ItemSettings> { bomb, shield });
 
             var range = MakeRangeWithItems(1, 0, new RangedInt(1, 1), new[] { new ItemTypeWeight(ItemType.Bomb, 1f) });
-            _pacing.Ranges.Returns(new[] { range });
+            _pacing.ParametersForLevel(Arg.Any<int>()).Returns(range.Parameters);
 
             var resolver = BuildResolver();
             resolver.Start();
@@ -229,7 +231,7 @@ namespace BalloonParty.Tests.Game
             _itemConfig.Items.Returns(new List<ItemSettings> { bomb, shield });
 
             var range = MakeRangeWithItems(1, 0, new RangedInt(1, 1), new[] { new ItemTypeWeight(ItemType.Bomb, 1f) });
-            _pacing.Ranges.Returns(new[] { range });
+            _pacing.ParametersForLevel(Arg.Any<int>()).Returns(range.Parameters);
 
             var resolver = BuildResolver();
             resolver.Start();
@@ -251,7 +253,7 @@ namespace BalloonParty.Tests.Game
             var range = MakeRangeWithItems(
                 1, 0, new RangedInt(1, 1),
                 new[] { new ItemTypeWeight(ItemType.Bomb, 1f, maximumAllowedOverride: 2) });
-            _pacing.Ranges.Returns(new[] { range });
+            _pacing.ParametersForLevel(Arg.Any<int>()).Returns(range.Parameters);
 
             var resolver = BuildResolver();
             resolver.Start();
@@ -259,6 +261,45 @@ namespace BalloonParty.Tests.Game
             var activeCounts = new Dictionary<string, int> { [ItemType.Bomb.ToString()] = 2 };
 
             Assert.IsNull(resolver.Current.PickItemEntry(activeCounts));
+        }
+
+        [Test]
+        public void ResolveFor_SeedsTheRollWithTheLevelSeedSalted_SoARetryResolvesTheSameMix()
+        {
+            // A random-mode cadence is the one thing Resolve rolls with the rng, so it exposes the stream.
+            const int salt = 0x5BD1E995;
+            var cadence = new RangedInt(1, 1000, RangeMode.Random);
+            var parameters = MakeRangeWithItems(1, 0, cadence, Array.Empty<ItemTypeWeight>()).Parameters;
+            _pacing.ParametersForLevel(3).Returns(parameters);
+            _pacing.SeedForLevel(3).Returns(77);
+            var retry = Substitute.For<IRetryState>();
+            retry.RetryLevel.Returns(3);
+
+            var resolver = BuildResolver(retry);
+            resolver.Start();
+            var first = resolver.Current.ItemCadence;
+            resolver.ResetRun(2);
+            var second = resolver.Current.ItemCadence;
+
+            Assert.AreEqual(cadence.Resolve(0f, new System.Random(77 ^ salt)), first);
+            Assert.AreEqual(first, second, "a retry of the same level must roll the same counts");
+        }
+
+        [Test]
+        public void ResolveFor_DifferentLevelSeeds_CanRollDifferentCounts()
+        {
+            var cadence = new RangedInt(1, 100000, RangeMode.Random);
+            var parameters = MakeRangeWithItems(1, 0, cadence, Array.Empty<ItemTypeWeight>()).Parameters;
+            _pacing.ParametersForLevel(Arg.Any<int>()).Returns(parameters);
+            _pacing.SeedForLevel(1).Returns(1);
+            _pacing.SeedForLevel(2).Returns(2);
+
+            var resolver = BuildResolver();
+            resolver.Start();
+            var levelOne = resolver.Current.ItemCadence;
+            _levelUpHandler.Handle(new ScoreLevelUpMessage(2));
+
+            Assert.AreNotEqual(levelOne, resolver.Current.ItemCadence);
         }
 
         [Test]
@@ -278,9 +319,15 @@ namespace BalloonParty.Tests.Game
             }
         }
 
-        private LevelDifficultyResolver BuildResolver()
+        private LevelDifficultyResolver BuildResolver(IRetryState retryState = null)
         {
-            return new LevelDifficultyResolver(_pacing, _balloonsConfig, _itemConfig, _palette, Substitute.For<IRetryState>(), _levelUpSubscriber);
+            return new LevelDifficultyResolver(_pacing, _balloonsConfig, _itemConfig, _palette,
+                retryState ?? Substitute.For<IRetryState>(), _levelUpSubscriber);
+        }
+
+        private void SetLevel(int level, RangedLevelParameters parameters)
+        {
+            _pacing.ParametersForLevel(level).Returns(parameters);
         }
 
         private void SetSingleRange(
@@ -294,7 +341,7 @@ namespace BalloonParty.Tests.Game
             }
 
             var range = MakeRange(fromLevel, toLevel, boardLines, new[] { balloonWeight });
-            _pacing.Ranges.Returns(new[] { range });
+            _pacing.ParametersForLevel(Arg.Any<int>()).Returns(range.Parameters);
         }
 
         private static LevelRangeEntry MakeRange(int fromLevel, int toLevel, int boardLines, BalloonTypeWeight[] weights)

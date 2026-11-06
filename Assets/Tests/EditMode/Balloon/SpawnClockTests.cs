@@ -1,3 +1,4 @@
+using System;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Game.Level;
@@ -10,6 +11,7 @@ using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
 using UniRx;
+using UnityEngine;
 
 namespace BalloonParty.Tests.Balloon
 {
@@ -21,6 +23,7 @@ namespace BalloonParty.Tests.Balloon
         private PauseService _pauseService;
         private ProjectileRegistry _registry;
         private IPublisher<SpawnBalloonLineMessage> _publisher;
+        private IMessageHandler<ProjectileFiredMessage> _firedHandler;
         private SpawnClock _clock;
         private NavigationState _previousNavigation;
         private int _lines;
@@ -38,9 +41,9 @@ namespace BalloonParty.Tests.Balloon
             progress.Level.Returns(_level);
             progress.Phase.Returns(_phase);
 
-            // Grace 4s, then 3s at level 1 and 1.5s at level 2 (halving, floor 1s).
+            // Grace 4s, then 3s at level 1 and 1.5s at level 2 (halving, floor 1s); an overlap shot pulls 25%.
             var pacing = Substitute.For<ILevelPacingConfiguration>();
-            pacing.SpawnClock.Returns(new SpawnClockSettings(3f, 0.5f, 1f, 4f));
+            pacing.SpawnClock.Returns(new SpawnClockSettings(3f, 0.5f, 1f, 4f, overlapShotPull: 0.25f));
 
             _pauseService = new PauseService(
                 Substitute.For<IPublisher<PausedMessage>>(), Substitute.For<IPublisher<ResumedMessage>>());
@@ -50,7 +53,14 @@ namespace BalloonParty.Tests.Balloon
             _publisher = Substitute.For<IPublisher<SpawnBalloonLineMessage>>();
             _publisher.When(p => p.Publish(Arg.Any<SpawnBalloonLineMessage>())).Do(_ => _lines++);
 
-            _clock = new SpawnClock(pacing, progress, _pauseService, _registry, _publisher);
+            var firedSubscriber = Substitute.For<ISubscriber<ProjectileFiredMessage>>();
+            firedSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<ProjectileFiredMessage>>(h => _firedHandler = h),
+                    Arg.Any<MessageHandlerFilter<ProjectileFiredMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
+            _clock = new SpawnClock(pacing, progress, _pauseService, _registry, _publisher, firedSubscriber);
             _clock.Start();
         }
 
@@ -247,6 +257,74 @@ namespace BalloonParty.Tests.Balloon
 
             _clock.Advance(1.5f);
             Assert.AreEqual(0.5f, _clock.NextLineProgress, 0.0001f);
+        }
+
+        [Test]
+        public void Fire_WithNoOtherBallFlying_LeavesTheClockAlone()
+        {
+            Fire(Fly());
+
+            _clock.Advance(3.5f);
+
+            Assert.AreEqual(0, _lines, "a lone ball costs nothing");
+        }
+
+        [Test]
+        public void Fire_WhileAnotherBallFlies_PullsTheNextLineCloser()
+        {
+            Fly();
+            Fire(Fly());
+
+            _clock.Advance(2.9f);
+            Assert.AreEqual(0, _lines);
+
+            _clock.Advance(0.1f);
+            Assert.AreEqual(1, _lines, "the 4s grace lost a quarter, so the line lands at 3s");
+        }
+
+        [Test]
+        public void Fire_EachOverlapShot_PullsAgain()
+        {
+            Fly();
+            Fire(Fly());
+            Fire(Fly());
+
+            _clock.Advance(2f);
+
+            Assert.AreEqual(1, _lines, "two pulls of 1s each off the 4s grace");
+        }
+
+        [Test]
+        public void Fire_PullingPastZero_LandsOneLineOnTheNextTick()
+        {
+            Fly();
+            for (var i = 0; i < 6; i++)
+            {
+                Fire(Fly());
+            }
+
+            Assert.AreEqual(0, _lines, "the pull only shortens the wait");
+
+            _clock.Advance(0.01f);
+            Assert.AreEqual(1, _lines, "however far past zero, one line per tick");
+        }
+
+        [Test]
+        public void Fire_PullsAShareOfTheWindow_NotOfWhatIsLeft()
+        {
+            _clock.Advance(4f);
+            _clock.Advance(2f);
+
+            Fly();
+            Fire(Fly());
+
+            _clock.Advance(0.25f);
+            Assert.AreEqual(2, _lines, "1s left of the 3s interval, minus a 0.75s pull");
+        }
+
+        private void Fire(ProjectileModel ball)
+        {
+            _firedHandler.Handle(new ProjectileFiredMessage(ball, Vector3.zero, Vector3.up));
         }
 
         private ProjectileModel Fly()

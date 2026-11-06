@@ -11,6 +11,12 @@ namespace BalloonParty.Configuration.Level
         /// </summary>
         int LinesPerWave { get; }
 
+        /// <summary>
+        ///     Share of the current wait a ball fired while another is still flying takes off the next line:
+        ///     0.35 = that line arrives 35% of an interval sooner. One ball at a time costs nothing.
+        /// </summary>
+        float OverlapShotPull { get; }
+
         /// <summary>Seconds between lines at <paramref name="level" />; levels below 1 run at level 1's pace.</summary>
         float IntervalForLevel(int level);
     }

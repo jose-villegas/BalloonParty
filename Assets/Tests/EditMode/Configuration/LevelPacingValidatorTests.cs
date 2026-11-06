@@ -21,13 +21,9 @@ namespace BalloonParty.Tests.Configuration
         }
 
         [Test]
-        public void Validate_SingleOpenEndedRangeWithDefaultFallback_ReturnsNoIssues()
+        public void Validate_NoPresets_ReturnsNoIssues()
         {
-            _config.Ranges.Returns(new[]
-            {
-                MakeFallbackRange(),
-                new LevelRangeEntry(1, 0, new RangedLevelParameters()),
-            });
+            _config.DebugPresets.Returns(Array.Empty<LevelRangeEntry>());
 
             var issues = LevelPacingValidator.Validate(_config, levelsToCheck: 10, "Test");
 
@@ -35,74 +31,75 @@ namespace BalloonParty.Tests.Configuration
         }
 
         [Test]
-        public void Validate_GapBetweenRanges_ReportsIssue()
+        public void Validate_ValidPreset_ReturnsNoIssues()
         {
-            _config.Ranges.Returns(new[]
+            _config.DebugPresets.Returns(new[] { MakePreset(-100) });
+
+            CollectionAssert.IsEmpty(LevelPacingValidator.Validate(_config, levelsToCheck: 0, "Test"));
+        }
+
+        [Test]
+        public void Validate_PositiveIdPreset_ReportsItIsIgnored()
+        {
+            _config.DebugPresets.Returns(new[] { new LevelRangeEntry(3, 5, new RangedLevelParameters()) });
+
+            var issues = LevelPacingValidator.Validate(_config, levelsToCheck: 0, "Test");
+
+            Assert.That(issues, Has.Some.Contains("positive level"));
+        }
+
+        [Test]
+        public void Validate_PositiveIdPreset_DoesNotAlsoCountAsADuplicate()
+        {
+            _config.DebugPresets.Returns(new[]
             {
-                MakeFallbackRange(),
-                new LevelRangeEntry(1, 5, new RangedLevelParameters()),
-                new LevelRangeEntry(7, 10, new RangedLevelParameters()), // level 6 is a gap
+                new LevelRangeEntry(3, 5, new RangedLevelParameters()),
+                new LevelRangeEntry(3, 5, new RangedLevelParameters()),
             });
 
             var issues = LevelPacingValidator.Validate(_config, levelsToCheck: 0, "Test");
 
-            Assert.That(issues, Has.Some.Contains("gap or overlap"));
+            Assert.That(issues, Has.None.Contains("duplicate"));
         }
 
         [Test]
-        public void Validate_OpenEndedRangeFollowedByAnother_ReportsUnreachable()
+        public void Validate_DuplicatePresetId_ReportsIssue()
         {
-            _config.Ranges.Returns(new[]
-            {
-                MakeFallbackRange(),
-                new LevelRangeEntry(1, 0, new RangedLevelParameters()), // open-ended — eats everything after
-                new LevelRangeEntry(10, 20, new RangedLevelParameters()), // unreachable
-            });
+            _config.DebugPresets.Returns(new[] { MakePreset(-100), MakePreset(-100) });
 
             var issues = LevelPacingValidator.Validate(_config, levelsToCheck: 0, "Test");
 
-            Assert.That(issues, Has.Some.Contains("unreachable"));
+            Assert.That(issues, Has.Some.Contains("duplicate preset ID"));
         }
 
         [Test]
-        public void Validate_MissingDefaultFallback_ReportsIssue()
-        {
-            _config.Ranges.Returns(new[]
-            {
-                new LevelRangeEntry(1, 0, new RangedLevelParameters()),
-            });
-
-            var issues = LevelPacingValidator.Validate(_config, levelsToCheck: 0, "Test");
-
-            Assert.That(issues, Has.Some.Contains("missing default fallback"));
-        }
-
-        [Test]
-        public void Validate_DuplicateFallbackId_ReportsIssue()
-        {
-            _config.Ranges.Returns(new[]
-            {
-                MakeFallbackRange(),
-                MakeFallbackRange(),
-                new LevelRangeEntry(1, 0, new RangedLevelParameters()),
-            });
-
-            var issues = LevelPacingValidator.Validate(_config, levelsToCheck: 0, "Test");
-
-            Assert.That(issues, Has.Some.Contains("duplicate fallback ID"));
-        }
-
-        [Test]
-        public void Validate_RangeWithNoPositiveWeight_ReportsIssue()
+        public void Validate_PresetWithNoPositiveWeight_ReportsIssue()
         {
             var emptyParameters = new RangedLevelParameters();
             SetField(emptyParameters, "_balloonWeights", Array.Empty<BalloonTypeWeight>());
+            _config.DebugPresets.Returns(new[] { new LevelRangeEntry(-100, -1, emptyParameters) });
 
-            _config.Ranges.Returns(new[]
-            {
-                MakeFallbackRange(),
-                new LevelRangeEntry(1, 0, emptyParameters),
-            });
+            var issues = LevelPacingValidator.Validate(_config, levelsToCheck: 0, "Test");
+
+            Assert.That(issues, Has.Some.Contains("no balloon type with a positive weight"));
+        }
+
+        [Test]
+        public void Validate_PresetWithOnlyZeroWeights_ReportsIssue()
+        {
+            var parameters = new RangedLevelParameters();
+            SetField(parameters, "_balloonWeights", new[] { new BalloonTypeWeight(BalloonParty.Balloon.Type.BalloonType.Simple, 0f) });
+            _config.DebugPresets.Returns(new[] { new LevelRangeEntry(-100, -1, parameters) });
+
+            var issues = LevelPacingValidator.Validate(_config, levelsToCheck: 0, "Test");
+
+            Assert.That(issues, Has.Some.Contains("no balloon type with a positive weight"));
+        }
+
+        [Test]
+        public void Validate_PresetWithNoParameters_ReportsIssueInsteadOfThrowing()
+        {
+            _config.DebugPresets.Returns(new[] { new LevelRangeEntry(-100, -1, null) });
 
             var issues = LevelPacingValidator.Validate(_config, levelsToCheck: 0, "Test");
 
@@ -112,7 +109,7 @@ namespace BalloonParty.Tests.Configuration
         [Test]
         public void Validate_NonPositiveThreshold_ReportsIssue()
         {
-            _config.Ranges.Returns(new[] { MakeFallbackRange(), new LevelRangeEntry(1, 0, new RangedLevelParameters()) });
+            _config.DebugPresets.Returns(Array.Empty<LevelRangeEntry>());
             _config.ThresholdForLevel(3).Returns(0);
 
             var issues = LevelPacingValidator.Validate(_config, levelsToCheck: 5, "Test");
@@ -123,7 +120,7 @@ namespace BalloonParty.Tests.Configuration
         [Test]
         public void Validate_DroppingTotalDifficulty_ReportsIssue()
         {
-            _config.Ranges.Returns(new[] { MakeFallbackRange(), new LevelRangeEntry(1, 0, new RangedLevelParameters()) });
+            _config.DebugPresets.Returns(Array.Empty<LevelRangeEntry>());
             _config.ThresholdForLevel(1).Returns(100);
             _config.ThresholdForLevel(2).Returns(10);
 
@@ -135,7 +132,7 @@ namespace BalloonParty.Tests.Configuration
         [Test]
         public void Validate_ZeroLevelsToCheck_SkipsThresholdScanEntirely()
         {
-            _config.Ranges.Returns(new[] { MakeFallbackRange(), new LevelRangeEntry(1, 0, new RangedLevelParameters()) });
+            _config.DebugPresets.Returns(Array.Empty<LevelRangeEntry>());
             _config.ThresholdForLevel(Arg.Any<int>()).Returns(0); // would report if the scan ever ran
 
             var issues = LevelPacingValidator.Validate(_config, levelsToCheck: 0, "Test");
@@ -143,9 +140,9 @@ namespace BalloonParty.Tests.Configuration
             CollectionAssert.IsEmpty(issues);
         }
 
-        private static LevelRangeEntry MakeFallbackRange()
+        private static LevelRangeEntry MakePreset(int id)
         {
-            return new LevelRangeEntry(-1, -1, new RangedLevelParameters());
+            return new LevelRangeEntry(id, -1, new RangedLevelParameters());
         }
 
         private static void SetField(object target, string fieldName, object value)

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace BalloonParty.Editor
 {
     /// <summary>Shows <c>LevelRangeEntry</c> array elements as "Level N", "Level N–M", or
-    /// "Fallback" instead of the default "Element 0, 1, …".</summary>
+    /// "Preset N" instead of the default "Element 0, 1, …".</summary>
     [CustomPropertyDrawer(typeof(LevelRangeEntry))]
     internal class LevelRangeEntryDrawer : PropertyDrawer
     {
@@ -21,7 +21,7 @@ namespace BalloonParty.Editor
 
             if (from < 0 || to < 0)
             {
-                label.text = "Fallback";
+                label.text = $"Preset {from}";
             }
             else if (from == to)
             {

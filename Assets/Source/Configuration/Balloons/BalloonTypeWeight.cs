@@ -47,5 +47,15 @@ namespace BalloonParty.Configuration.Balloons
             _waveCountWeights = null;
             _guaranteedInitialCount = guaranteedInitialCount;
         }
+
+        internal BalloonTypeWeight(BalloonType type, float weight, AnimationCurve initialCountWeights,
+            AnimationCurve waveCountWeights, int guaranteedInitialCount)
+        {
+            _type = type;
+            _weight = weight;
+            _initialCountWeights = initialCountWeights;
+            _waveCountWeights = waveCountWeights;
+            _guaranteedInitialCount = guaranteedInitialCount;
+        }
     }
 }

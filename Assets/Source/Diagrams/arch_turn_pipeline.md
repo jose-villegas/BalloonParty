@@ -24,7 +24,7 @@ and only then broadcasts the message for order-independent observers (`NudgeServ
 (`ProjectileDestroyedMessage`) spawns nothing.
 
 **Spawn clock**
-`SpawnClock` counts down scaled game time (3 s at level 1, shrinking per level to a floor,
+`SpawnClock` counts down scaled game time (2 s at level 1, shrinking per level to a floor,
 after a grace at each level start) and publishes `SpawnBalloonLineMessage(1)`. It holds while
 paused, off the `Game` screen, during a level-up, and while a lone doomed ball glides its
 last breath. One line per tick, however long the frame. `BalloonSpawner` handles each message

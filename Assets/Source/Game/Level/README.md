@@ -12,7 +12,7 @@ scoring only tallies points and hands them to `ILevelProgress`.
 | `LevelController.cs` | The progression owner (plain C# `IStartable`/`ITickable`/`IRunResettable`, implements `ILevelProgress`). Holds the current `Level`, per-colour confirmed + projected progress, and the `LevelUpPhase`. Detects a level-up at claim-time via projected progress (`TryBeginCompleting`), waits for `ProjectileDestroyedMessage` → `OnFlightEnded`, publishes `ScoreLevelUpMessage`, and drives the ceremony. An `ITimeScaleClaims` exclusive claim drives the slow-mo beat curve, followed by a non-exclusive ramp-up through the remainder of the flight. |
 | `LevelUpPhase.cs` | The ceremony as one explicit state — `Playing → Completing → Pending → Transitioning → Playing`. Replaces the old scattered guard flags: a level-up is only *detected* in `Playing`, the projectile finishes its flight during `Completing`, and every out-of-phase input is rejected. |
 | `ILevelProgress.cs` | Read surface of progression: `Level`, `Phase`, `GetRequiredPoints`/`GetProgress`, `WillLevelUp` (projected), `ClaimProgress` (the scoring write-back, capped per level, banking the excess), and `ExcessPoints`/`TotalExcessPoints` (the run-scoped banked excess). |
-| `LevelDifficultyResolver.cs` | Resolves and caches the live per-level mix (implements `IActiveLevelParameters` + `ILevelThresholds`). On level-up it re-resolves `LevelParameters` for the new level, bridging range weights onto the balloon/item catalogs and computing the allowed-colour set. Also exposes the per-level points threshold, delegating to `ILevelPacingConfiguration.ThresholdForLevel`. |
+| `LevelDifficultyResolver.cs` | Resolves and caches the live per-level mix (implements `IActiveLevelParameters` + `ILevelThresholds`). On level-up it re-resolves `LevelParameters` for the new level, bridging the level's weights onto the balloon/item catalogs and computing the allowed-colour set. Also exposes the per-level points threshold, delegating to `ILevelPacingConfiguration.ThresholdForLevel`. |
 | `IActiveLevelParameters.cs` | Single read surface for the live difficulty mix (`Current`). Never read `ILevelPacingConfiguration` directly. |
 | `ILevelThresholds.cs` | The per-level score goal (`PointsRequiredForLevel(level)`) for any level, not just the active one. |
 | `LevelTransitionController.cs` | The **Ascent** — the level-transition cinematic. Phase-driven (see below); holds `PauseSource.LevelTransition` for the whole sequence. |
@@ -94,11 +94,13 @@ camera. Its tuning is `ICinematicsSettings.LevelAscend` — see `Game/Cinematics
 ## Difficulty resolution
 
 `LevelDifficultyResolver` resolves `LevelParameters` for the current level on start, on level-up, and
-on run reset (before the grid respawns, `RunResetOrder.Derived`). It looks up the authored
-`LevelRangeEntry` whose bounds contain the level, falling back to the entry flagged `IsFallback` (a
-`-1` level bound) when none matches, resolves its `RangedValue`
-bands with the run's seeded RNG, then bridges the result onto the catalogs: balloon/item **type
-gates** (a type absent or zero-weight in the range's set is excluded) with effective weight
-`catalogEntry.Weight × rangeWeight.Weight`, and the allowed-colour set from the range's colour mask.
+on run reset (before the grid respawns, `RunResetOrder.Derived`). It asks
+`ILevelPacingConfiguration.ParametersForLevel(level)` for the level's `RangedLevelParameters`. Every positive
+level is **generated** (`LevelGenerator`, see `Configuration/Level/`); only a negative level, reached by the
+start-level cheat, picks an authored debug preset. It then resolves the `RangedValue` bands with an rng seeded
+from `SeedForLevel(level)` (xor a separate salt, so it doesn't share the generator's stream) rather than a
+per-run one, so a retry of a level rolls the same counts. Finally it bridges the result onto the catalogs:
+balloon/item **type gates** (a type absent or zero-weight in the level's set is excluded) with effective
+weight `catalogEntry.Weight × levelWeight.Weight`, and the allowed-colour set from the level's colour mask.
 Consumers read only `IActiveLevelParameters.Current` — see `Configuration/Level/` for the authored
 config and `LevelParameters`.

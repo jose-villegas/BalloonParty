@@ -18,10 +18,14 @@ using BalloonParty.Configuration.Palette;
 namespace BalloonParty.Game.Level
 {
     /// <summary>
-    ///     Resolves and caches the live per-level difficulty mix, bridging range weights onto the balloon/item catalogs.
+    ///     Resolves and caches the live per-level difficulty mix (generated, or a debug preset), bridging its
+    ///     weights onto the balloon/item catalogs.
     /// </summary>
     internal class LevelDifficultyResolver : IStartable, IDisposable, IRunResettable, IActiveLevelParameters, ILevelThresholds
     {
+        // Keeps the resolve stream apart from the generator's, which is seeded by the same level seed.
+        private const int ResolveSeedSalt = 0x5BD1E995;
+
         // The rainbow balloon's band colours are the level's allowed set — identical for every rainbow on
         // the board — so they ride GLOBAL shader properties pushed once per level here (this resolver is the
         // single owner of the allowed-colours change) instead of per-renderer. See RainbowBalloon.shader.
@@ -38,7 +42,6 @@ namespace BalloonParty.Game.Level
         private readonly IRetryState _retryState;
         private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
 
-        private System.Random _rng = new();
         private LevelParameters _current = new();
         private IDisposable _subscription;
 
@@ -71,12 +74,11 @@ namespace BalloonParty.Game.Level
 
         public void ResetRun(int generation)
         {
-            _rng = new System.Random(generation);
             ResolveFor(StartLevel());
         }
 
         // Dev "play from level N" override (CheatState.StartLevel); 1 in release. Negative values select a
-        // named fallback entry by its FromLevel id (e.g. -999). A pending retry overrides both.
+        // debug preset by its FromLevel id (e.g. -100). A pending retry overrides both.
         private int StartLevel()
         {
             if (_retryState.RetryLevel > 0)
@@ -104,11 +106,9 @@ namespace BalloonParty.Game.Level
 
         private void ResolveFor(int level)
         {
-            var range = ResolveRange(level);
-            // A cleared Ranges list or an unassigned Parameters (both inspector misconfigurations) would
-            // otherwise NRE here — fall back to defaults, matching the guarded sibling lookups.
-            var parameters = range.Parameters ?? new RangedLevelParameters();
-            _current = parameters.Resolve(range.PositionOf(level), _rng);
+            // Seeded by the level, so a retry rolls the same counts as the first attempt did.
+            var rng = new System.Random(_pacing.SeedForLevel(level) ^ ResolveSeedSalt);
+            _current = _pacing.ParametersForLevel(level).Resolve(0f, rng);
 
             var itemPickList = new List<ResolvedItemEntry>();
             var activeItems = new List<ItemSettings>();
@@ -150,44 +150,6 @@ namespace BalloonParty.Game.Level
             }
 
             return _palette.GetColor(colors[Mathf.Clamp(index, 0, colors.Count - 1)]);
-        }
-
-        // The entry with FromLevel == -1 is the default gameplay fallback. Other negative IDs are
-        // debug presets reachable only when a negative level is explicitly requested (cheat override).
-        private LevelRangeEntry ResolveRange(int level)
-        {
-            var ranges = _pacing.Ranges;
-            var fallback = default(LevelRangeEntry);
-
-            for (var i = 0; i < ranges.Count; i++)
-            {
-                if (ranges[i].IsFallback)
-                {
-                    if (level < 0 && ranges[i].FromLevel == level)
-                    {
-                        return ranges[i];
-                    }
-
-                    if (ranges[i].FromLevel == -1)
-                    {
-                        fallback = ranges[i];
-                    }
-
-                    continue;
-                }
-
-                if (ranges[i].Contains(level))
-                {
-                    return ranges[i];
-                }
-            }
-
-            if (level < 0)
-            {
-                Log.Warn("LevelDifficulty", $"No fallback entry with FromLevel={level}; using default (-1) fallback.");
-            }
-
-            return fallback;
         }
 
         private List<ResolvedBalloonEntry> BuildBalloonPickList(LevelParameters parameters)

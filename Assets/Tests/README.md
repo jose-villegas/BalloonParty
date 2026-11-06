@@ -540,6 +540,10 @@ Tests when `SpawnClock` publishes `SpawnBalloonLineMessage`. Drives `Advance(del
 
 Tests `SpawnClockSettings.IntervalForLevel`: level 1 is the first interval, later levels decay geometrically, deep levels stop at the floor, levels ≤ 0 run at level 1's pace, and a decay of 1 keeps the interval constant.
 
+### Level generation (`LevelGeneratorTests`, `LevelGenerationSettingsTests`, `ShippedEarlyLevelsTests`, plus the updated pacing and resolver tests) — roughly 40 tests
+
+Tests the generated-level pipeline: the same level and seed give the same mix, staples and featured pieces are always in, budgets bound the optional picks, weight ramps and unlock levels behave, the catalogue validates itself, and the resolver rolls counts from a level-seeded rng. `ShippedEarlyLevelsTests` pins levels 1–3 of the real asset (the 12 guaranteed Shields and Tough balloons of level 1). `LevelPacingValidatorTests` and `LevelPacingConfigurationTests` cover the debug presets only.
+
 ### `BalloonBalancerTests` — 3 tests
 
 Tests the run-reset cancellation guard added so a balance scheduled before a restart is dropped (it would otherwise animate pooled actors against an emptied grid). The frame-deferred timing itself is a PlayMode concern; here the generation guard is exercised synchronously on an empty grid.

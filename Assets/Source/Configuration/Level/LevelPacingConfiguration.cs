@@ -1,19 +1,23 @@
+using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Type;
+using BalloonParty.Shared.Diagnostics;
 using UnityEngine;
 
 namespace BalloonParty.Configuration.Level
 {
-    /// <summary>Per-colour points-required per level. The <see cref="_scoringCurve"/> defines cumulative score
-    /// milestones; the per-colour bar at each level is the delta from the previous milestone split across that
-    /// level's active colours, rounded to a clean multiple.</summary>
+    /// <summary>
+    ///     How levels pace: every positive level's mix is generated from <see cref="_generation" />; the
+    ///     scoring curve sets each level's cumulative score milestone, split across that level's colours and
+    ///     rounded to a clean multiple; the spawn clock sets when lines arrive. Negative levels are authored
+    ///     debug presets, reached only through the start-level cheat.
+    /// </summary>
     [CreateAssetMenu(menuName = "Configuration/Level Pacing", fileName = "LevelPacingConfiguration")]
     internal class LevelPacingConfiguration : ScriptableObject, ILevelPacingConfiguration
     {
-        [SerializeField] private LevelRangeEntry[] _ranges =
-        {
-            new(0, 0, new RangedLevelParameters()),
-        };
+        [Tooltip("Debug presets, each keyed by a negative FromLevel (e.g. -100) that the start-level cheat " +
+                 "selects. Positive levels are generated, so a positive entry here is ignored.")]
+        [SerializeField] private LevelRangeEntry[] _ranges = Array.Empty<LevelRangeEntry>();
 
         [Tooltip("Cap each level's points-required DOWN to a multiple of this (e.g. 50 or 70) for clean " +
                  "targets — 732 caps to 700, not 750. 0 or 1 = no capping.")]
@@ -26,9 +30,14 @@ namespace BalloonParty.Configuration.Level
         [Tooltip("When balloon lines arrive: one line per interval, shorter each level.")]
         [SerializeField] private SpawnClockSettings _spawnClock = new();
 
-        public IReadOnlyList<LevelRangeEntry> Ranges => _ranges;
+        [Tooltip("What every positive level is generated from: a budget formula and a catalogue of " +
+                 "content pieces that unlock by level.")]
+        [SerializeField] private LevelGenerationSettings _generation = new();
+
+        public IReadOnlyList<LevelRangeEntry> DebugPresets => _ranges;
         public ISpawnClockSettings SpawnClock => _spawnClock;
         internal LevelScoringCurve ScoringCurve => _scoringCurve;
+        internal LevelGenerationSettings Generation => _generation;
 
         private void OnValidate()
         {
@@ -49,7 +58,34 @@ namespace BalloonParty.Configuration.Level
             {
                 Debug.LogWarning(issue);
             }
+
+            foreach (var issue in _generation.Validate(name))
+            {
+                Debug.LogWarning(issue);
+            }
 #endif
+        }
+
+        public RangedLevelParameters ParametersForLevel(int level)
+        {
+            if (level > 0)
+            {
+                return LevelGenerator.Generate(_generation, level, SeedForLevel(level));
+            }
+
+            if (TryFindPreset(level, out var preset))
+            {
+                // An unassigned Parameters is an inspector misconfiguration; play the defaults over an NRE.
+                return preset.Parameters ?? new RangedLevelParameters();
+            }
+
+            Log.Warn("LevelPacing", $"No debug preset with FromLevel={level}; generating level 1 instead.");
+            return LevelGenerator.Generate(_generation, 1, SeedForLevel(1));
+        }
+
+        public int SeedForLevel(int level)
+        {
+            return _generation.SeedForLevel(level);
         }
 
         public int ThresholdForLevel(int level)
@@ -61,22 +97,27 @@ namespace BalloonParty.Configuration.Level
             return Mathf.Max(1, RoundThreshold(perColor));
         }
 
-        private int RoundThreshold(int rawPoints)
-        {
-            if (_thresholdRounding <= 1)
-            {
-                return rawPoints;
-            }
-
-            return Mathf.Max(_thresholdRounding, rawPoints / _thresholdRounding * _thresholdRounding);
-        }
-
         public int MaxConcurrentBalloons(BalloonType type, int columns)
         {
             var max = 0;
-            foreach (var range in _ranges)
+            var generatedBoard = columns * _generation.MaxBoardLines;
+            foreach (var entry in _generation.Balloons)
             {
-                var parameters = range.Parameters;
+                if (entry.Type == type && entry.Weight.PeakWeight > 0f)
+                {
+                    max = Mathf.Max(max, entry.MaxCount > 0 ? entry.MaxCount : generatedBoard);
+                }
+            }
+
+            // The fallback Simple a balloon-less catalogue generates (see LevelGenerator) is uncapped.
+            if (type == BalloonType.Simple && max == 0)
+            {
+                max = generatedBoard;
+            }
+
+            foreach (var preset in _ranges)
+            {
+                var parameters = preset.Parameters;
                 if (parameters == null)
                 {
                     continue;
@@ -101,7 +142,12 @@ namespace BalloonParty.Configuration.Level
 
         public int ColorsForLevel(int level)
         {
-            var bits = (uint)MaskForLevel(level);
+            if (level > 0 || !TryFindPreset(level, out var preset))
+            {
+                return _generation.ColorsForLevel(Mathf.Max(1, level));
+            }
+
+            var bits = (uint)(preset.Parameters?.AllowedColorsMask ?? 0);
             var count = 0;
             while (bits != 0)
             {
@@ -112,25 +158,29 @@ namespace BalloonParty.Configuration.Level
             return Mathf.Max(1, count);
         }
 
-        private int MaskForLevel(int level)
+        private int RoundThreshold(int rawPoints)
         {
-            var fallbackMask = 0;
-
-            for (var i = 0; i < _ranges.Length; i++)
+            if (_thresholdRounding <= 1)
             {
-                if (_ranges[i].IsFallback)
-                {
-                    fallbackMask = _ranges[i].Parameters?.AllowedColorsMask ?? 0;
-                    continue;
-                }
+                return rawPoints;
+            }
 
-                if (_ranges[i].Contains(level))
+            return Mathf.Max(_thresholdRounding, rawPoints / _thresholdRounding * _thresholdRounding);
+        }
+
+        private bool TryFindPreset(int level, out LevelRangeEntry preset)
+        {
+            foreach (var entry in _ranges)
+            {
+                if (entry.IsPreset && entry.FromLevel == level)
                 {
-                    return _ranges[i].Parameters?.AllowedColorsMask ?? 0;
+                    preset = entry;
+                    return true;
                 }
             }
 
-            return fallbackMask;
+            preset = default;
+            return false;
         }
     }
 }

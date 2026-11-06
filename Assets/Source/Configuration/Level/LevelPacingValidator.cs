@@ -4,7 +4,8 @@ namespace BalloonParty.Configuration.Level
 {
     /// <summary>Plain-C# level-pacing invariant checks — shared by <see cref="LevelPacingConfiguration" />'s
     /// editor-only <c>OnValidate</c> warnings and EditMode test coverage, so authoring checks and test
-    /// checks can't drift by verifying the same invariants two different ways.</summary>
+    /// checks can't drift by verifying the same invariants two different ways. The generation catalogue
+    /// checks its own entries (<see cref="LevelGenerationSettings.Validate" />).</summary>
     internal static class LevelPacingValidator
     {
         /// <summary>Returns one issue message per problem found; an empty list means the config is clean.
@@ -14,84 +15,42 @@ namespace BalloonParty.Configuration.Level
             ILevelPacingConfiguration config, int levelsToCheck, string configName)
         {
             var issues = new List<string>();
-            WarnOnGapsAndOverlaps(config, configName, issues);
-            WarnOnFallbackIssues(config, configName, issues);
+            WarnOnPresetIssues(config, configName, issues);
             WarnOnEmptyWeightedSets(config, configName, issues);
             WarnOnNonMonotonicThreshold(config, levelsToCheck, configName, issues);
             return issues;
         }
 
-        private static void WarnOnGapsAndOverlaps(ILevelPacingConfiguration config, string configName, List<string> issues)
+        private static void WarnOnPresetIssues(ILevelPacingConfiguration config, string configName, List<string> issues)
         {
-            var ranges = config.Ranges;
-            for (var i = 1; i < ranges.Count; i++)
-            {
-                var previous = ranges[i - 1];
-                var current = ranges[i];
-
-                if (previous.IsFallback || current.IsFallback)
-                {
-                    continue;
-                }
-
-                if (previous.IsOpenEnded)
-                {
-                    issues.Add(
-                        $"LevelPacingConfiguration ({configName}): range starting at {previous.FromLevel} is open-ended " +
-                        $"but is followed by a range starting at {current.FromLevel} — the later range is unreachable.");
-                    continue;
-                }
-
-                if (current.FromLevel != previous.ToLevel + 1)
-                {
-                    issues.Add(
-                        $"LevelPacingConfiguration ({configName}): gap or overlap between ranges " +
-                        $"[{previous.FromLevel}-{previous.ToLevel}] and [{current.FromLevel}-{current.ToLevel}] " +
-                        "— ranges must be contiguous.");
-                }
-            }
-        }
-
-        private static void WarnOnFallbackIssues(ILevelPacingConfiguration config, string configName, List<string> issues)
-        {
-            var ranges = config.Ranges;
-            var hasDefault = false;
+            var presets = config.DebugPresets;
             var seenIds = new HashSet<int>();
 
-            for (var i = 0; i < ranges.Count; i++)
+            for (var i = 0; i < presets.Count; i++)
             {
-                if (!ranges[i].IsFallback)
+                if (!presets[i].IsPreset)
                 {
+                    issues.Add(
+                        $"LevelPacingConfiguration ({configName}): preset starting at {presets[i].FromLevel} is " +
+                        "for a positive level, which is generated; it's ignored. Key presets by a negative FromLevel.");
                     continue;
                 }
 
-                if (ranges[i].FromLevel == -1)
-                {
-                    hasDefault = true;
-                }
-
-                if (!seenIds.Add(ranges[i].FromLevel))
+                if (!seenIds.Add(presets[i].FromLevel))
                 {
                     issues.Add(
-                        $"LevelPacingConfiguration ({configName}): duplicate fallback ID {ranges[i].FromLevel} " +
-                        "— each fallback must have a unique FromLevel.");
+                        $"LevelPacingConfiguration ({configName}): duplicate preset ID {presets[i].FromLevel} " +
+                        "— each preset must have a unique FromLevel.");
                 }
-            }
-
-            if (!hasDefault)
-            {
-                issues.Add(
-                    $"LevelPacingConfiguration ({configName}): missing default fallback (FromLevel = -1). " +
-                    "Normal gameplay requires exactly one entry with FromLevel = -1.");
             }
         }
 
         private static void WarnOnEmptyWeightedSets(ILevelPacingConfiguration config, string configName, List<string> issues)
         {
-            var ranges = config.Ranges;
-            for (var i = 0; i < ranges.Count; i++)
+            var presets = config.DebugPresets;
+            for (var i = 0; i < presets.Count; i++)
             {
-                var weights = ranges[i].Parameters?.BalloonWeights;
+                var weights = presets[i].Parameters?.BalloonWeights;
                 var hasPositiveWeight = false;
                 if (weights != null)
                 {
@@ -108,7 +67,7 @@ namespace BalloonParty.Configuration.Level
                 if (!hasPositiveWeight)
                 {
                     issues.Add(
-                        $"LevelPacingConfiguration ({configName}): range starting at {ranges[i].FromLevel} has no " +
+                        $"LevelPacingConfiguration ({configName}): preset {presets[i].FromLevel} has no " +
                         "balloon type with a positive weight — nothing could spawn.");
                 }
             }

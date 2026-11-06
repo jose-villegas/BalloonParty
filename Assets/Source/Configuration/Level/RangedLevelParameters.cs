@@ -12,7 +12,9 @@ using BalloonParty.Configuration.Ranges;
 namespace BalloonParty.Configuration.Level
 {
     /// <summary>
-    ///     The range-authored form of a level's difficulty mix; <see cref="Resolve" /> is a pure function, so it's EditMode-testable with a seeded rng.
+    ///     A level's difficulty mix before its ranges are rolled: what <see cref="LevelGenerator" /> outputs
+    ///     for every positive level, and what the authored debug presets hold. <see cref="Resolve" /> is
+    ///     pure, so it's EditMode-testable with a seeded rng.
     /// </summary>
     [Serializable]
     public class RangedLevelParameters : IPaletteColorMasked
@@ -59,6 +61,24 @@ namespace BalloonParty.Configuration.Level
 
         // IPaletteColorMasked: a range maps its difficulty mix to the level's allowed palette colours.
         int IPaletteColorMasked.ColorMask => _allowedColorsMask;
+
+        public RangedLevelParameters()
+        {
+        }
+
+        internal RangedLevelParameters(int boardLines, RangedInt itemCadence, AnimationCurve initialItemCountWeights,
+            AnimationCurve itemCountWeights, BalloonTypeWeight[] balloonWeights, ItemTypeWeight[] itemWeights,
+            GridActorTypeGate[] gridActorGates, int allowedColorsMask)
+        {
+            _boardLines = boardLines;
+            _itemCadence = itemCadence;
+            _initialItemCountWeights = initialItemCountWeights ?? new AnimationCurve();
+            _itemCountWeights = itemCountWeights ?? new AnimationCurve();
+            _balloonWeights = balloonWeights;
+            _itemWeights = itemWeights;
+            _gridActorGates = gridActorGates;
+            _allowedColorsMask = allowedColorsMask;
+        }
 
         internal LevelParameters Resolve(float positionInRange, System.Random rng)
         {

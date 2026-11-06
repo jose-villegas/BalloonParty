@@ -6,7 +6,7 @@ Turn BalloonParty from a turn-based puzzle shooter into a fast, endless arcade g
 keeping the balloon grid, the items, the grid actors and the visual language it already has.
 
 **Status:** all decisions settled. Phase 1 (projectile identity) is built. Phase 2 (rapid fire) is
-implemented, pending the owner's playtest at cap 3. Phase 3 (spawn clock) is implemented, pending the owner's playtest. Phase 4 is not started. Items marked
+implemented, pending the owner's playtest at cap 3. Phase 3 (spawn clock) is implemented, pending the owner's playtest. Phase 4 (generated levels) is implemented, pending the owner's playtest. Items marked
 **DECISION** are settled: don't re-derive them. §10 records the owner's answers.
 
 ---
@@ -159,10 +159,12 @@ every ball, and nothing waits on a single flight.
 **Implemented, pending the owner's playtest.** The rows below keep the original design wording; the
 built behaviour lives in `Balloon/Spawner/README.md`, `Game/Danger/README.md`,
 `Game/Cinematics/README.md`, `Shared/Pause/README.md` and `Diagrams/arch_turn_pipeline.md`.
-In short: `SpawnClock` publishes one `SpawnBalloonLineMessage(1)` per interval of scaled time (3 s at
+In short: `SpawnClock` publishes one `SpawnBalloonLineMessage(1)` per interval of scaled time (2 s at
 level 1, x0.96 per level, floor 1.25 s, after a 4 s grace; all in `LevelPacingConfiguration`'s
 `_spawnClock` block), holding through pauses, the level-up, off the `Game` screen and while a lone
-doomed ball glides. `BalloonSpawner` no longer spawns on ball death; every line is the synchronous
+doomed ball glides. **DECISION (owner):** firing feeds the clock. A ball fired while another is still
+flying pulls the next line 35% of an interval sooner (`OverlapShotPull`); one ball at a time is free, so
+rapid fire trades board room for firepower. `BalloonSpawner` no longer spawns on ball death; every line is the synchronous
 `SpawnLine()`. Lines group into waves of `LinesPerWave` (3): a wave's first line rolls quotas and
 relocates roamers, its last publishes the item check. Differences and open items:
 
@@ -199,27 +201,46 @@ real time without freezing the thrower, and the danger UI warns ahead of the nex
 
 ## 7. Phase 4: generated levels
 
+**Implemented, pending the owner's playtest.** The rows below record what was decided and built; the
+built behaviour lives in `Configuration/README.md`, `Game/Level/README.md` and `Editor/README.md`.
+
 **DECISION: generate a `RangedLevelParameters`, don't replace it.** Spawning, items and
 balancing already consume `RangedLevelParameters.Resolve(...)`. A generator that *outputs*
 one leaves every consumer untouched.
 
 | Piece | What it is |
 |---|---|
-| `ContentCatalog` (SO) | One entry per content piece: a balloon type, an item, a grid actor, or "one more colour". Each has `UnlockLevel`, `Cost`, and a weight range. Ordered by the introduction order in @ref plan_future_ideas §4.3. |
-| `LevelFormula` (on the same SO) | Budget per level, spawn interval per level (`max(floor, base × decay^level)`, NewMoonShooter's "12% faster" with a floor), board and spawn lines, item cadence. |
-| `LevelGenerator` (pure C#) | `Generate(level, seed) → RangedLevelParameters`: always-on basics, then spends the budget on unlocked pieces by weight. Pure and seeded, so it's EditMode-testable. |
-| `LevelDifficultyResolver` | **DECISION: no authored levels.** Every positive level comes from the generator. Only the negative debug presets (`-100`, `-101`, `-102`, reached through the start-level cheat) stay authored; the `-1` fallback and the level 1–15 entries are deleted. |
-| The opening | Level 1 must come out as today's level 1 does: one colour, simple balloons, no items or grid actors, a slow clock. Encoded in the formula, not in data: the colour count, the budget and every unlock start at their minimum. A test pins levels 1–3 to that shape. Before deleting the 1–15 entries, read off when each piece first appears and at what weight: that's the starting tuning for the catalogue's unlock levels and costs. |
-| What else read the ranges | `ThresholdForLevel` divides by `ColorsForLevel`, and `MaxConcurrentBalloons` (pool prewarm) scans every range; both move onto the generator (colour count from the formula; prewarm from the catalogue's caps). `LevelPacingValidator`, `LevelPacingCurvePanel`, `LevelPacingMigrationTool` and their tests shrink to the debug presets or go. |
-| Seed | `hash(level, a fixed salt)`, so a retry replays the same mix. |
+| `LevelGenerationSettings` (a `_generation` block on `LevelPacingConfiguration`) | **DECISION: a block on the pacing asset, not a separate `ContentCatalog` SO.** It holds two budget formulas, the featured-levels count, level-stepped colours and board lines, item-count curves, the item cadence, a seed salt, and three catalogues (balloons, items, grid actors). One authoring surface, one asset. |
+| Catalogue entries | `BalloonContentEntry`, `ItemContentEntry`, `GridActorContentEntry`. Each has an `UnlockLevel`, a `Cost`, a `ContentRole` (items are always Aid, actors always Threat; balloons choose), a `ContentWeightRamp` (early range to late range over `RampLevels`, with an optional intro weight on the unlock level) and intro/regular guaranteed counts. |
+| Budgets | **DECISION: separate threat and aid budgets, plus featured levels and weight ramps.** Staples (cost 0) and pieces inside their featured levels (the unlock level and the next one by default) are always in; each role's budget then buys a cost-weighted pick of the other unlocked pieces. Threats get a growing budget so depth reliably means more threats; aids get a small one so they rotate. |
+| Colours | **DECISION: level steps, not a "one more colour" catalogue piece.** `IntLevelStep[]`: a count that holds from its level until the next step. Board lines use the same shape. |
+| Spawn interval | **DECISION: not part of this phase.** It already lives in Phase 3's spawn clock (`_spawnClock`). |
+| `LevelGenerator` (pure C#) | `Generate(settings, level, seed) -> RangedLevelParameters`. Pure and seeded, so it's EditMode-testable. |
+| `LevelDifficultyResolver` | **DECISION: no authored levels.** Every positive level comes from the generator. Only the negative debug presets (`-100`, `-101`, `-102`, reached through the start-level cheat with a negative level) stay authored; the `-1` fallback and the level 1-15 entries are deleted. `ILevelPacingConfiguration.Ranges` became `DebugPresets`; `ParametersForLevel` and `SeedForLevel` were added. `LevelRangeEntry` lost `Contains`, `PositionOf` and `IsOpenEnded`, and `IsFallback` became `IsPreset`. |
+| The opening | Level 1 is not "no items": today's level 1 gives 12 guaranteed Shield items and Tough balloons, and the generator keeps that through the unlock-level intro guarantees. A test pins levels 1-3 of the real asset to that shape. |
+| What else read the ranges | `ThresholdForLevel` divides by `ColorsForLevel`, and `MaxConcurrentBalloons` (pool prewarm) scanned every range; both now read the generation settings (colour count from the steps; prewarm from the catalogue's caps and the tallest board), plus the presets. `LevelPacingValidator` now checks presets only; the catalogue validates itself (`LevelGenerationSettings.Validate`). |
+| Seed | `SeedForLevel(level)`: a hash of the level and a salt, so a retry replays the same mix. The resolver rolls counts from a separately salted, level-seeded rng instead of a per-run one. |
 | Score targets | No change: `LevelScoringCurve` already extrapolates forever. |
-| Editor | `LevelPacingWindow` gets a preview column for generated levels so they can be eyeballed without playing. |
+| Editor | `LevelPacingWindow` has a "Level Generation" foldout (the settings) and a "Generated Levels" preview table (per level: budgets, board, colours, balloons, items, actors, new pieces starred, play button), drawn by `LevelGenerationPreview`. The range table edits debug presets only; "+ Add Preset" picks the next free negative ID. |
 
 **Adding content later** means one catalogue entry with an unlock level and a cost, not a new
 level entry.
 
-**Done when:** levels 1–50 resolve without error, every catalogue piece appears by its unlock
+**Done when:** levels 1-50 resolve without error, every catalogue piece appears by its unlock
 level, and a test pins that the same seed gives the same mix.
+
+Open items for the playtest. All tuning numbers are first guesses read off the authored levels:
+
+| Item | State |
+|---|---|
+| Shield caps (open) | Flat 8; the authored levels ran 11 down to 5. |
+| Helper items (open) | They no longer fade as hard at L8-11 as the authored ones did. |
+| Puff counts (open) | Ramp 7-9 up to 10-13 instead of the authored breathers. |
+| L16+ board and rare balloons (open) | The board is 4 lines (the old fallback was 3), and Gold/Silver weights are far lower than the old fallback's. |
+| Same mix every run (open) | Every run's level N is now the same mix (seeded by level). That is by design, but a feel change. |
+| Depth after L7 (open) | From L7 all threats are in, so depth after that comes from weight ramps, colours and the spawn clock. |
+| Telemetry (open) | It doesn't yet record the level seed or the included pieces. |
+| Tuning (open) | Budgets, costs, unlock levels, weights and ramps are first guesses; tune in the playtest with the Generated Levels table. |
 
 ---
 
@@ -245,7 +266,7 @@ Telemetry stays telemetry: nothing here persists metrics client-side as progress
 | Global time-scale stacking (doomed, heart drain, level-up beat) | Ref-counted claims on `TimeScaleService`; per-ball events don't claim global slow-mo when other balls fly. |
 | Screen readability with N balls | Shorter flights, cap starts low (2–3), playtest before raising it. |
 | Phase 1 is a wide refactor with no visible payoff | It's the only way rapid fire works; keep the cap at 1 so behaviour is unchanged and existing tests stay valid. |
-| Generated levels feel samey | Budget plus unlock order guarantees new pieces keep arriving; the catalogue is where future variety lands. |
+| Generated levels feel samey | New pieces keep arriving only until every one is unlocked (all threats are in by L7); after that depth comes from weight ramps, colours, board lines and the spawn clock, and the per-level seed means every run's level N is identical. Watch this in the playtest; the catalogue is where future variety lands. |
 
 ## 10. Open questions
 

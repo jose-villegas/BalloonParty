@@ -17,8 +17,9 @@ using VContainer;
 
 namespace BalloonParty.Editor
 {
-    /// <summary>Spreadsheet-style view of <see cref="LevelPacingConfiguration"/>: each range is a row,
-    /// parameters are columns. Easier to compare across levels than the default vertical Inspector.</summary>
+    /// <summary>The Level Pacing editor: the scoring curve, the level generator's settings with a preview of
+    /// what it generates, and a spreadsheet of the authored debug presets (one row each, parameters as
+    /// columns).</summary>
     internal sealed class LevelPacingWindow : EditorWindow
     {
         private const float RowHeight = 22f;
@@ -44,7 +45,7 @@ namespace BalloonParty.Editor
         private static readonly Color TitleBgColor = new(0.18f, 0.18f, 0.18f, 1f);
         private static readonly Color FocusedRowColor = new(0.28f, 0.26f, 0.18f, 1f);
         private static readonly Color ActiveRowColor = new(0.22f, 0.30f, 0.22f, 1f);
-        private static readonly Color FallbackRowColor = new(0.25f, 0.32f, 0.38f, 1f);
+        private static readonly Color PresetRowColor = new(0.25f, 0.32f, 0.38f, 1f);
         private static readonly Color OddRowColor = new(0.24f, 0.24f, 0.24f, 1f);
         private static readonly Color EvenRowColor = new(0.19f, 0.19f, 0.19f, 1f);
         private static readonly Color FocusAccentColor = new(0.9f, 0.7f, 0.2f, 0.9f);
@@ -52,7 +53,7 @@ namespace BalloonParty.Editor
 
         private static readonly float[] ColWidths =
         {
-            90f,   // 0: Range
+            90f,   // 0: Preset ID
             40f,   // 1: Board (single int)
             130f,  // 2: Colors (dropdown + swatches)
             100f,  // 3: Balloons (collapsed) — dynamic when expanded
@@ -73,7 +74,7 @@ namespace BalloonParty.Editor
 
         private static readonly string[] ColHeaders =
         {
-            "Range", "Board", "Colors", "Balloons", "Cadence", "Init Count", "Wave Count", "Items", "Actors", "Expand", "Dupe", "Delete", "Play"
+            "ID", "Board", "Colors", "Balloons", "Cadence", "Init Count", "Wave Count", "Items", "Actors", "Expand", "Dupe", "Delete", "Play"
         };
 
         private readonly EditorAssetCache<LevelPacingConfiguration> _assetCache = new();
@@ -218,6 +219,9 @@ namespace BalloonParty.Editor
 
             LevelPacingCurvePanel.Draw(_asset, _serialized);
             EditorGUILayout.Space(4f);
+            LevelGenerationPreview.Draw(_asset, _serialized, StartFromLevel);
+            EditorGUILayout.Space(4f);
+            EditorGUILayout.LabelField("Debug Presets", EditorStyles.boldLabel);
             DrawTable();
             _serialized.ApplyModifiedProperties();
         }
@@ -251,7 +255,7 @@ namespace BalloonParty.Editor
             var count = _rangesProp.arraySize;
             if (count == 0)
             {
-                EditorGUILayout.HelpBox("No ranges defined.", MessageType.Warning);
+                EditorGUILayout.HelpBox("No debug presets defined.", MessageType.Info);
             }
 
             // Only recompute collapsed widths when data changes.
@@ -269,10 +273,10 @@ namespace BalloonParty.Editor
             var groupTitleRect = GUILayoutUtility.GetRect(TotalWidth(), RowHeight);
             EditorGUI.DrawRect(groupTitleRect, GapBgColor);
             DrawGroupBackground(groupTitleRect, 0, 0, TitleBgColor);
-            DrawGroupBackground(groupTitleRect, 1, 3, TitleBgColor);
-            DrawGroupBackground(groupTitleRect, 4, 5, TitleBgColor);
-            DrawGroupBackground(groupTitleRect, 6, 9, TitleBgColor);
-            DrawGroupBackground(groupTitleRect, 10, 10, TitleBgColor);
+            DrawGroupBackground(groupTitleRect, 1, 1, TitleBgColor);
+            DrawGroupBackground(groupTitleRect, 2, BalloonColIndex, TitleBgColor);
+            DrawGroupBackground(groupTitleRect, 4, ItemColIndex, TitleBgColor);
+            DrawGroupBackground(groupTitleRect, ActorColIndex, ActorColIndex, TitleBgColor);
             DrawGroupTitles(groupTitleRect);
             DrawGroupBorderSeparators(groupTitleRect);
 
@@ -282,10 +286,10 @@ namespace BalloonParty.Editor
             var headerRect = GUILayoutUtility.GetRect(TotalWidth(), RowHeight);
             EditorGUI.DrawRect(headerRect, GapBgColor);
             DrawGroupBackground(headerRect, 0, 0, TitleBgColor);
-            DrawGroupBackground(headerRect, 1, 3, TitleBgColor);
-            DrawGroupBackground(headerRect, 4, 5, TitleBgColor);
-            DrawGroupBackground(headerRect, 6, 9, TitleBgColor);
-            DrawGroupBackground(headerRect, 10, 10, TitleBgColor);
+            DrawGroupBackground(headerRect, 1, 1, TitleBgColor);
+            DrawGroupBackground(headerRect, 2, BalloonColIndex, TitleBgColor);
+            DrawGroupBackground(headerRect, 4, ItemColIndex, TitleBgColor);
+            DrawGroupBackground(headerRect, ActorColIndex, ActorColIndex, TitleBgColor);
             DrawHeaderCells(headerRect);
             TableDrawHelper.DrawHorizontalSeparator(headerRect, ColSepColor);
 
@@ -302,9 +306,9 @@ namespace BalloonParty.Editor
             }
 
             EditorGUILayout.Space(4f);
-            if (GUILayout.Button("+ Add Range", GUILayout.Width(120f)))
+            if (GUILayout.Button("+ Add Preset", GUILayout.Width(120f)))
             {
-                _rangesProp.InsertArrayElementAtIndex(_rangesProp.arraySize);
+                AddPreset();
             }
 
             EditorGUILayout.EndScrollView();
@@ -455,10 +459,10 @@ namespace BalloonParty.Editor
                 fontSize = 11
             });
 
-            // Group 1: Range (col 0)
+            // Group 1: Preset (col 0)
             var g1Start = rowRect.x + ColX(0);
             var g1End = rowRect.x + ColX(0) + EffectiveColWidth(0);
-            EditorGUI.LabelField(new Rect(g1Start, rowRect.y, g1End - g1Start, rowRect.height), "Range", style);
+            EditorGUI.LabelField(new Rect(g1Start, rowRect.y, g1End - g1Start, rowRect.height), "Preset", style);
 
             // Group 2: Board (col 1). Line timing is the spawn clock's, a formula on the asset, not per range.
             var g2Start = rowRect.x + ColX(1);
@@ -708,7 +712,7 @@ namespace BalloonParty.Editor
 
             var from = fromProp.intValue;
             var to = toProp.intValue;
-            var isFallback = from < 0 || to < 0;
+            var isPreset = from < 0 || to < 0;
 
             var balloonsProp = paramsProp?.FindPropertyRelative("_balloonWeights");
             var rowRect = GUILayoutUtility.GetRect(TotalWidth(), RowHeight);
@@ -716,7 +720,7 @@ namespace BalloonParty.Editor
             // Track keyboard focus entering this row
             var controlBefore = GUIUtility.keyboardControl;
 
-            DrawRowBackground(rowRect, index, from, to, isFallback);
+            DrawRowBackground(rowRect, index, from, to, isPreset);
 
             // Separators (only for left-anchored columns 0–8)
             for (var i = 0; i < ColWidths.Length - 4; i++)
@@ -737,7 +741,7 @@ namespace BalloonParty.Editor
             TableDrawHelper.DrawHorizontalSeparator(rowRect);
 
             // Range (col 0)
-            DrawRangeCell(CellRect(rowRect, 0), fromProp, toProp, isFallback);
+            DrawRangeCell(CellRect(rowRect, 0), fromProp, toProp, isPreset);
 
             if (paramsProp != null)
             {
@@ -763,7 +767,7 @@ namespace BalloonParty.Editor
                     _actorCell.DrawExpanded, _actorCell.DrawCollapsed);
             }
 
-            if (DrawRowActionIcons(rowRect, index, isFallback, from))
+            if (DrawRowActionIcons(rowRect, index, isPreset, from))
             {
                 return;
             }
@@ -780,19 +784,19 @@ namespace BalloonParty.Editor
             }
         }
 
-        private void DrawRowBackground(Rect rowRect, int index, int from, int to, bool isFallback)
+        private void DrawRowBackground(Rect rowRect, int index, int from, int to, bool isPreset)
         {
             var selectedLevel = LevelPacingCurvePanel.SelectedLevel;
-            var isActiveRow = RowColorResolver.IsInRange(selectedLevel, from, to, isFallback);
+            var isActiveRow = RowColorResolver.IsInRange(selectedLevel, from, to, isPreset);
             var isFocusedRow = _focusedRow == index;
             var rowBg = RowColorResolver.Resolve(
                 isFocusedRow,
                 isActiveRow,
-                isFallback,
+                isPreset,
                 index,
                 FocusedRowColor,
                 ActiveRowColor,
-                FallbackRowColor,
+                PresetRowColor,
                 OddRowColor,
                 EvenRowColor);
 
@@ -834,7 +838,7 @@ namespace BalloonParty.Editor
 
         // Action icons (cols 9-12) — right-anchored. Returns true if the row's own array element was
         // mutated (duplicate/delete), so the caller must stop drawing this now-stale row immediately.
-        private bool DrawRowActionIcons(Rect rowRect, int index, bool isFallback, int from)
+        private bool DrawRowActionIcons(Rect rowRect, int index, bool isPreset, int from)
         {
             var expanded = _expandedRow == index;
             var expandRect = CellRect(rowRect, FirstButtonColIndex);
@@ -846,14 +850,14 @@ namespace BalloonParty.Editor
             }
 
             var dupeRect = CellRect(rowRect, FirstButtonColIndex + 1);
-            if (IconButtonHelper.DrawButton(dupeRect, "TreeEditor.Duplicate", "⧉", "Duplicate range"))
+            if (IconButtonHelper.DrawButton(dupeRect, "TreeEditor.Duplicate", "⧉", "Duplicate preset"))
             {
                 _rangesProp.InsertArrayElementAtIndex(index);
                 return true;
             }
 
             var delRect = CellRect(rowRect, FirstButtonColIndex + 2);
-            if (IconButtonHelper.DrawButton(delRect, "TreeEditor.Trash", "−", "Delete range"))
+            if (IconButtonHelper.DrawButton(delRect, "TreeEditor.Trash", "−", "Delete preset"))
             {
                 _rangesProp.DeleteArrayElementAtIndex(index);
                 if (_expandedRow == index)
@@ -864,12 +868,11 @@ namespace BalloonParty.Editor
                 return true;
             }
 
-            // Start a run beginning at this range's first level (dev only — the cheat menu has the
-            // in-play equivalent). Fallback rows pass their negative FromLevel as the ID so the
-            // difficulty resolver picks the correct named fallback.
+            // Start a run on this preset (dev only — the cheat menu has the in-play equivalent). A preset
+            // row passes its negative FromLevel as the ID the difficulty resolver selects it by.
             var playRect = CellRect(rowRect, FirstButtonColIndex + 3);
-            var playLevel = isFallback ? from : Mathf.Max(1, from);
-            var playTip = isFallback ? $"Play fallback ID {from}" : "Play from this level";
+            var playLevel = isPreset ? from : Mathf.Max(1, from);
+            var playTip = isPreset ? $"Play preset {from}" : "Positive levels are generated: plays that level";
             if (IconButtonHelper.DrawButton(playRect, "PlayButton", "▶", playTip))
             {
                 StartFromLevel(playLevel);
@@ -896,12 +899,29 @@ namespace BalloonParty.Editor
             EditorApplication.isPlaying = true;
         }
 
-        private static void DrawRangeCell(Rect cell, SerializedProperty fromProp, SerializedProperty toProp, bool isFallback)
+        // A new preset takes the next free negative ID below the existing ones, so it's a preset from the start.
+        private void AddPreset()
         {
-            if (isFallback)
+            var id = -1;
+            for (var i = 0; i < _rangesProp.arraySize; i++)
+            {
+                var from = _rangesProp.GetArrayElementAtIndex(i).FindPropertyRelative("_fromLevel").intValue;
+                id = Mathf.Min(id, from - 1);
+            }
+
+            var index = _rangesProp.arraySize;
+            _rangesProp.InsertArrayElementAtIndex(index);
+            var entry = _rangesProp.GetArrayElementAtIndex(index);
+            entry.FindPropertyRelative("_fromLevel").intValue = id;
+            entry.FindPropertyRelative("_toLevel").intValue = -1;
+        }
+
+        private static void DrawRangeCell(Rect cell, SerializedProperty fromProp, SerializedProperty toProp, bool isPreset)
+        {
+            if (isPreset)
             {
                 var labelRect = new Rect(cell.x, cell.y, 18f, cell.height);
-                EditorGUI.LabelField(labelRect, "FB", EditorStyles.miniLabel);
+                EditorGUI.LabelField(labelRect, "ID", EditorStyles.miniLabel);
                 var idRect = new Rect(cell.x + 18f, cell.y + 2f, cell.width - 20f, cell.height - 4f);
                 fromProp.intValue = EditorGUI.IntField(idRect, fromProp.intValue);
                 return;

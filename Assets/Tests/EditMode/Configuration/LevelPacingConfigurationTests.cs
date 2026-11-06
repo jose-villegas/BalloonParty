@@ -1,4 +1,7 @@
+using System.Linq;
 using System.Reflection;
+using BalloonParty.Balloon.Type;
+using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration;
 using NUnit.Framework;
 using UnityEngine;
@@ -10,6 +13,7 @@ namespace BalloonParty.Tests.Configuration
     public class LevelPacingConfigurationTests
     {
         private LevelPacingConfiguration _config;
+        private LevelGenerationSettings _generation;
 
         [SetUp]
         public void SetUp()
@@ -24,13 +28,12 @@ namespace BalloonParty.Tests.Configuration
         }
 
         [Test]
-        public void Defaults_HaveOneOpenEndedRangeWithAPositiveWeight()
+        public void Defaults_HaveNoDebugPresets_AndGenerateAPlayableLevelOne()
         {
             ILevelPacingConfiguration pacing = _config;
 
-            Assert.AreEqual(1, pacing.Ranges.Count);
-            Assert.IsTrue(pacing.Ranges[0].IsOpenEnded);
-            Assert.Greater(pacing.Ranges[0].Parameters.BalloonWeights[0].Weight, 0f);
+            Assert.AreEqual(0, pacing.DebugPresets.Count);
+            Assert.Greater(pacing.ParametersForLevel(1).BalloonWeights[0].Weight, 0f);
         }
 
         [Test]
@@ -48,20 +51,136 @@ namespace BalloonParty.Tests.Configuration
             }
         }
 
-        // Auto-sorting on validate was deliberately removed (4d3ec62c) — OnValidate only warns,
-        // leaving the authored order intact.
         [Test]
-        public void OnValidate_DoesNotReorderRanges()
+        public void OnValidate_DoesNotReorderPresets()
         {
-            var second = MakeRange(10, 0);
-            var first = MakeRange(1, 9);
-            SetField(_config, "_ranges", new[] { second, first });
+            SetField(_config, "_ranges", new[] { MakePreset(-200), MakePreset(-100) });
 
             InvokeOnValidate();
 
             ILevelPacingConfiguration pacing = _config;
-            Assert.AreEqual(10, pacing.Ranges[0].FromLevel);
-            Assert.AreEqual(1, pacing.Ranges[1].FromLevel);
+            Assert.AreEqual(-200, pacing.DebugPresets[0].FromLevel);
+            Assert.AreEqual(-100, pacing.DebugPresets[1].FromLevel);
+        }
+
+        [Test]
+        public void ParametersForLevel_PositiveLevel_IsGeneratedFromTheSeed()
+        {
+            SetGeneration(ShippedLevelCatalogue.Build());
+            ILevelPacingConfiguration pacing = _config;
+
+            var viaConfig = pacing.ParametersForLevel(7);
+            var direct = LevelGenerator.Generate(_generation, 7, pacing.SeedForLevel(7));
+
+            Assert.AreEqual(Describe(direct), Describe(viaConfig));
+        }
+
+        [Test]
+        public void ParametersForLevel_PositivePresetIsIgnored()
+        {
+            SetGeneration(ShippedLevelCatalogue.Build());
+            SetField(_config, "_ranges", new[] { new LevelRangeEntry(3, 3, MakeParameters(boardLines: 99)) });
+            ILevelPacingConfiguration pacing = _config;
+
+            Assert.AreNotEqual(99, pacing.ParametersForLevel(3).BoardLines);
+        }
+
+        [Test]
+        public void ParametersForLevel_NegativeLevel_ReturnsTheMatchingPreset()
+        {
+            var preset = MakeParameters(boardLines: 42);
+            SetField(_config, "_ranges", new[] { MakePreset(-200), new LevelRangeEntry(-100, -1, preset) });
+            ILevelPacingConfiguration pacing = _config;
+
+            Assert.AreSame(preset, pacing.ParametersForLevel(-100));
+        }
+
+        [Test]
+        public void ParametersForLevel_PresetWithNoParameters_FallsBackToDefaultsNotNull()
+        {
+            SetField(_config, "_ranges", new[] { new LevelRangeEntry(-100, -1, null) });
+            ILevelPacingConfiguration pacing = _config;
+
+            Assert.IsNotNull(pacing.ParametersForLevel(-100));
+        }
+
+        [Test]
+        public void ParametersForLevel_UnknownPreset_GeneratesLevelOne()
+        {
+            SetGeneration(ShippedLevelCatalogue.Build());
+            ILevelPacingConfiguration pacing = _config;
+            UnityEngine.TestTools.LogAssert.ignoreFailingMessages = true;
+
+            try
+            {
+                var fallback = pacing.ParametersForLevel(-999);
+
+                Assert.AreEqual(Describe(pacing.ParametersForLevel(1)), Describe(fallback));
+            }
+            finally
+            {
+                UnityEngine.TestTools.LogAssert.ignoreFailingMessages = false;
+            }
+        }
+
+        [Test]
+        public void ColorsForLevel_PositiveLevel_FollowsTheGenerationSteps()
+        {
+            SetGeneration(ShippedLevelCatalogue.Build());
+            ILevelPacingConfiguration pacing = _config;
+
+            Assert.AreEqual(1, pacing.ColorsForLevel(1));
+            Assert.AreEqual(2, pacing.ColorsForLevel(2));
+            Assert.AreEqual(3, pacing.ColorsForLevel(5));
+        }
+
+        [Test]
+        public void ColorsForLevel_Preset_CountsTheMaskBits_WithAFloorOfOne()
+        {
+            var threeColors = MakeParameters(mask: 0b10101);
+            var noColors = MakeParameters(mask: 0);
+            SetField(_config, "_ranges", new[] { new LevelRangeEntry(-100, -1, threeColors), new LevelRangeEntry(-101, -1, noColors) });
+            ILevelPacingConfiguration pacing = _config;
+
+            Assert.AreEqual(3, pacing.ColorsForLevel(-100));
+            Assert.AreEqual(1, pacing.ColorsForLevel(-101));
+        }
+
+        [Test]
+        public void MaxConcurrentBalloons_UncappedCataloguedType_ScalesToTheLargestBoard()
+        {
+            SetGeneration(ShippedLevelCatalogue.Build());
+            ILevelPacingConfiguration pacing = _config;
+
+            Assert.AreEqual(6 * 8, pacing.MaxConcurrentBalloons(BalloonType.Simple, columns: 6));
+        }
+
+        [Test]
+        public void MaxConcurrentBalloons_CappedType_UsesItsCap()
+        {
+            SetGeneration(ShippedLevelCatalogue.Build());
+            ILevelPacingConfiguration pacing = _config;
+
+            Assert.AreEqual(5, pacing.MaxConcurrentBalloons(BalloonType.Tough, columns: 6));
+        }
+
+        [Test]
+        public void MaxConcurrentBalloons_TypeNoLevelCanInclude_IsZero()
+        {
+            ILevelPacingConfiguration pacing = _config;
+
+            Assert.AreEqual(0, pacing.MaxConcurrentBalloons(BalloonType.Tough, columns: 6));
+        }
+
+        [Test]
+        public void MaxConcurrentBalloons_PresetOnlyType_UsesThePresetBoard()
+        {
+            var preset = MakeParameters(boardLines: 2);
+            SetField(preset, "_balloonWeights", new[] { new BalloonTypeWeight(BalloonType.Tough, 1f) });
+            SetField(_config, "_ranges", new[] { new LevelRangeEntry(-100, -1, preset) });
+            ILevelPacingConfiguration pacing = _config;
+
+            Assert.AreEqual(12, pacing.MaxConcurrentBalloons(BalloonType.Tough, columns: 6));
         }
 
         [Test]
@@ -70,9 +189,33 @@ namespace BalloonParty.Tests.Configuration
             Assert.DoesNotThrow(InvokeOnValidate);
         }
 
-        private static LevelRangeEntry MakeRange(int fromLevel, int toLevel)
+        private static LevelRangeEntry MakePreset(int id)
         {
-            return new LevelRangeEntry(fromLevel, toLevel, new RangedLevelParameters());
+            return new LevelRangeEntry(id, -1, new RangedLevelParameters());
+        }
+
+        private static RangedLevelParameters MakeParameters(int boardLines = 5, int mask = ~0)
+        {
+            var parameters = new RangedLevelParameters();
+            SetField(parameters, "_boardLines", boardLines);
+            SetField(parameters, "_allowedColorsMask", mask);
+            return parameters;
+        }
+
+        private static string Describe(RangedLevelParameters p)
+        {
+            return string.Join("|",
+                string.Join(",", p.BalloonWeights.Select(w => $"{w.Type}:{w.Weight}:{w.GuaranteedInitialCount}")),
+                string.Join(",", p.ItemWeights.Select(w => $"{w.Type}:{w.Weight}:{w.MaximumAllowedOverride}")),
+                string.Join(",", p.GridActorGates.Select(g => g.Type)),
+                p.BoardLines,
+                p.AllowedColorsMask);
+        }
+
+        private void SetGeneration(LevelGenerationSettings generation)
+        {
+            _generation = generation;
+            SetField(_config, "_generation", generation);
         }
 
         private void InvokeOnValidate()
