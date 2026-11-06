@@ -23,6 +23,23 @@ namespace BalloonParty.Game.Score
         private readonly Dictionary<IProjectileModel, ColorStreak> _byBall = new();
         private readonly Stack<ColorStreak> _spare = new();
 
+        public int HighestStreak
+        {
+            get
+            {
+                var best = _unattributed.CurrentStreak;
+                foreach (var pair in _byBall)
+                {
+                    if (_projectiles.IsAlive(pair.Key))
+                    {
+                        best = Math.Max(best, pair.Value.CurrentStreak);
+                    }
+                }
+
+                return best;
+            }
+        }
+
         internal ColorStreakTracker(
             IPublisher<StreakChangedMessage> changedPublisher,
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
@@ -76,31 +93,47 @@ namespace BalloonParty.Game.Score
             if (!_byBall.TryGetValue(projectile, out var streak))
             {
                 streak = _spare.Count > 0 ? _spare.Pop() : new ColorStreak(_changedPublisher);
+                streak.Owner = projectile;
                 _byBall[projectile] = streak;
             }
 
             return streak;
         }
 
-        /// <summary>Resets every streak and announces it once.</summary>
+        /// <summary>Resets every streak and announces it once, if any had anything to reset.</summary>
         internal void Reset()
         {
+            var changed = !_unattributed.IsClear;
             foreach (var streak in _byBall.Values)
             {
+                changed |= !streak.IsClear;
                 streak.Clear();
             }
 
-            _unattributed.Reset();
+            _unattributed.Clear();
+            if (changed)
+            {
+                _changedPublisher.Publish(new StreakChangedMessage(null, null, 0));
+            }
         }
 
-        // Silent: the ball's streak already stopped counting when it landed (GetStreak skips it), and
-        // the load that follows a death announces the reset.
+        // The ball's streak stopped counting when it landed (GetStreak skips it), but readers only
+        // re-query on a message, and with rapid fire no load follows a death to announce it. So a ball
+        // that ends with a streak announces its own end, once; a ball with nothing to end stays silent.
         private void OnRetired(IProjectileModel projectile)
         {
-            if (_byBall.Remove(projectile, out var streak))
+            if (!_byBall.Remove(projectile, out var streak))
             {
-                streak.Clear();
-                _spare.Push(streak);
+                return;
+            }
+
+            var hadStreak = !streak.IsClear;
+            streak.Clear();
+            streak.Owner = null;
+            _spare.Push(streak);
+            if (hadStreak)
+            {
+                _changedPublisher.Publish(new StreakChangedMessage(projectile, null, 0));
             }
         }
     }

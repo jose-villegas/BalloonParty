@@ -27,12 +27,18 @@ namespace BalloonParty.Configuration
         [Tooltip("Peak timeScale during the post-flight ramp-up (e.g. 2 = double speed).")]
         [SerializeField] [Min(1f)] private float _levelCompleteRampUpScale = 2f;
 
+        [Tooltip("Unscaled seconds after the level-complete beat before balls still in flight are popped " +
+                 "(no new hits) so the level-up can present. With rapid fire several balls may still be " +
+                 "cruising. 0 = wait for them to die on their own.")]
+        [SerializeField] [Min(0f)] private float _levelCompleteFlightGrace = 1f;
+
         public int StartingHitPoints => _startingHitPoints;
         public int MaxRetries => _maxRetries;
         public bool StreakGrantsShields => _streakGrantsShields;
         public bool PlanShieldChains => _planShieldChains;
         public IShieldChainSettings ShieldChain => _shieldChain;
         public float LevelCompleteRampUpDuration => _levelCompleteRampUpDuration;
+        public float LevelCompleteFlightGrace => _levelCompleteFlightGrace;
         public float LevelCompleteRampUpScale => _levelCompleteRampUpScale;
     }
 }

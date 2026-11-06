@@ -168,35 +168,20 @@ namespace BalloonParty.Tests.Game
             _registry.Retire(_ball);
 
             Assert.IsFalse(_service.IsAirborne.Value);
-            Assert.IsFalse(_service.IsLoaded.Value);
         }
 
         [Test]
-        public void FlightIndex_IncrementsOncePerLoadedProjectile()
+        public void IsAirborne_SpansFiredToDestroyed_NotAiming()
         {
-            Load();
-            var first = _service.FlightIndex;
-            Load();
-
-            Assert.AreEqual(first + 1, _service.FlightIndex);
-        }
-
-        [Test]
-        public void IsLoaded_SpansLoadedToDestroyed_AndIsAirborneOnlySpansFiredToDestroyed()
-        {
-            Assert.IsFalse(_service.IsLoaded.Value, "before loading");
             Assert.IsFalse(_service.IsAirborne.Value, "before loading");
 
             Load();
-            Assert.IsTrue(_service.IsLoaded.Value, "loaded but not fired");
             Assert.IsFalse(_service.IsAirborne.Value, "aiming is not airborne");
 
             _fired.Handle(new ProjectileFiredMessage(_ball, Vector3.zero, Vector3.up));
-            Assert.IsTrue(_service.IsLoaded.Value, "fired");
             Assert.IsTrue(_service.IsAirborne.Value, "fired");
 
             _destroyed.Handle(new ProjectileDestroyedMessage(_ball));
-            Assert.IsFalse(_service.IsLoaded.Value, "destroyed");
             Assert.IsFalse(_service.IsAirborne.Value, "destroyed");
         }
 

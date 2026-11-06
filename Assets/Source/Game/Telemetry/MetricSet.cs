@@ -12,7 +12,7 @@ namespace BalloonParty.Game.Telemetry
     // construction.
     internal sealed class MetricSet : IReadOnlyMetricSet
     {
-        private static readonly int MetricCount = Enum.GetValues(typeof(MetricId)).Length;
+        private static readonly int MetricCount = MetricCatalog.OrdinalCount;
 
         private readonly int[] _counters;
         private readonly int[][] _axisSlots;

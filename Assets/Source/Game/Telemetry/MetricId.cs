@@ -18,8 +18,10 @@ namespace BalloonParty.Game.Telemetry
         SpeedTapsMinted,
         MaxWallBouncesInFlight,
         MaxSpeedTapsInFlight,
-        HoldSpeedUpFlights,
-        PointsBanked,
+
+        // 13 was hold_speed_up_flights (hold-to-speed-up is gone). MetricBinding serializes a MetricId
+        // as its int in prefabs, so the members after it keep their numbers and 13 stays unused.
+        PointsBanked = 14,
         PointsProjected,
         MaxMultiplier,
         MaxStreak,

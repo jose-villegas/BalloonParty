@@ -486,10 +486,6 @@ namespace BalloonParty.Tests.Audio
         {
             public ReactiveProperty<bool> Airborne { get; } = new();
 
-            public int FlightIndex => 0;
-
-            IReadOnlyReactiveProperty<bool> IFlightScope.IsLoaded => Airborne;
-
             IReadOnlyReactiveProperty<bool> IFlightScope.IsAirborne => Airborne;
         }
 

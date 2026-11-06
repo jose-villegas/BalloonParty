@@ -70,12 +70,14 @@ Numbered so task specs can cite them. Each is testable.
 ### Scopes and boundaries
 
 - **R1** — Metrics are collected at four nested scopes: **Session ⊃ Run ⊃ Level ⊃ Flight**.
-- **R2** — A **Flight** opens on `ProjectileLoadedMessage` (`Thrower/ThrowerController.cs:232`)
-  and **seals** on `ProjectileDestroyedMessage` (`Projectile/View/ProjectileView.cs:406`).
-  The `[Destroyed, next Loaded)` window is *interflight*: increments there belong to the
-  Level and to no flight. This deliberately differs from `CombatSoundRouter`'s boundary
-  (which clears only on `Loaded`, so its "flight" straddles the ceremony); the metrics
-  definition is chosen so that **Σ flights ⊆ level** holds.
+- **R2** — A **Flight** is one ball: it opens on that ball's `ProjectileFiredMessage` and
+  **seals** on its `ProjectileDestroyedMessage`, and several can be open at once (rapid
+  fire, @ref plan_fast_paced). Each event goes to the flight of the ball its message names;
+  an event naming no ball, or a ball not in flight, belongs to the Level and to no flight.
+  A ball retired without a Destroyed folds its counts into the level without a flight
+  record (the game over seals open flights first). The definition keeps
+  **Σ flights ⊆ level**. (Originally a single flight on `[Loaded, Destroyed)`; a cooldown
+  reload loads the next ball while earlier ones fly, so Loaded no longer marks a flight.)
 - **R3** — A **Level** flushes on `LevelTransitionCompletedMessage` (not on
   `LevelUpDismissedMessage` — straggler trail points land in between and would be charged
   to the next level). A **Run** flushes on `GameOverMessage`.
@@ -129,14 +131,11 @@ Numbered so task specs can cite them. Each is testable.
 - **R10** — `WaveDamageMessage` contributes three metrics, not one: `HeartsLost`
   (rename `OverflowCount` → `HeartsLost`), `BlockedSlots`, and a derived
   hearts-lost-per-wave max. `RowLength` is context, not a metric.
-- **R11** — Hold-to-speed-up is measured explicitly: `hold_seconds` per level and
-  `hold_speed_up_flights`. Duration metrics stay on `Time.unscaledTime` — the hold metric is what makes a fast-forwarded level distinguishable from a
-  slow one. `HoldSpeedUpController` publishes nothing and samples `Input.GetMouseButton(0)`
-  inside its own `Tick()`, so this requires a **sanctioned read interface**:
-  `internal interface IHoldSpeedUpState { bool IsHolding { get; } }` implemented by
-  `HoldSpeedUpController`, registered `AsImplementedInterfaces()`. No new message type; no
-  polling on the metrics side (**R30**) — the service samples it on the frame boundaries it
-  already observes.
+- **R11** — *Retired.* Hold-to-speed-up was measured as `hold_seconds` and
+  `hold_speed_up_flights` through an `IHoldSpeedUpState` read interface. Rapid fire removed
+  the mechanic (@ref plan_fast_paced), and both metrics and the interface went with it.
+  `MetricId` ordinal 13 stays unused because labels serialize ids as ints. Duration metrics
+  stay on `Time.unscaledTime`.
 - **R12** — Pops break down by **both** color and balloon type. Unknown color ids
   (rainbow, paint-converted) and actors without `IHasColor` fall into a trailing
   *other* bucket and must never throw or index out of range.
@@ -257,7 +256,7 @@ remaining waves must not thicken.
 Where the coupling stands today, measured rather than assumed. `GameplayMetricsService` is
 the game's **translator** — every gameplay message, `IRetryState`, `IDangerLevel`,
 `IRunScore`, `PauseService`, `INavigation`, `IGamePalette`, `IFlightStats` and
-`IHoldSpeedUpState` terminate there, and it is the file that stays behind at extraction.
+`IProjectileRegistry` terminate there, and it is the file that stays behind at extraction.
 That part of the line holds: the dependency arrow runs from telemetry to the game and never
 back.
 

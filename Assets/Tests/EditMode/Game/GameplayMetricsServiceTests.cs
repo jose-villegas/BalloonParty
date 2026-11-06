@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Items;
+using BalloonParty.Game.Flight;
 using BalloonParty.Game.Telemetry;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
@@ -284,15 +285,58 @@ namespace BalloonParty.Tests.Game
         {
             _harness.EnterGame();
             Play();
-            _harness.StreakChanged.Handle(new StreakChangedMessage(GameplayMetricsHarness.Red, 3));
-            _harness.StreakChanged.Handle(new StreakChangedMessage(GameplayMetricsHarness.Red, 9));
-            _harness.StreakChanged.Handle(new StreakChangedMessage(GameplayMetricsHarness.Red, 0));
-            _harness.StreakChanged.Handle(new StreakChangedMessage(GameplayMetricsHarness.Blue, 2));
+            _harness.StreakChanged.Handle(new StreakChangedMessage(null, GameplayMetricsHarness.Red, 3));
+            _harness.StreakChanged.Handle(new StreakChangedMessage(null, GameplayMetricsHarness.Red, 9));
+            _harness.StreakChanged.Handle(new StreakChangedMessage(null, GameplayMetricsHarness.Red, 0));
+            _harness.StreakChanged.Handle(new StreakChangedMessage(null, GameplayMetricsHarness.Blue, 2));
             _harness.CompleteLevel(2);
 
             var level = _harness.LastOf(RecordKind.Level);
             Assert.AreEqual(9, level.Metrics[MetricId.MaxStreak]);
             Assert.AreEqual(1, level.Metrics[MetricId.StreakBreaks]);
+        }
+
+        // Each ball keeps its own streak, so one ball's reset (or the shared streak's reset on every
+        // load) is not another ball's streak breaking.
+        [Test]
+        public void StreakBreaks_CountOnlyARunningStreakOfTheSameBallDroppingToZero()
+        {
+            _harness.EnterGame();
+            var first = GameplayMetricsHarness.Ball();
+            var second = GameplayMetricsHarness.Ball();
+            _harness.Fire(first);
+            _harness.Fire(second);
+
+            _harness.StreakChanged.Handle(new StreakChangedMessage(first, GameplayMetricsHarness.Red, 3));
+            _harness.StreakChanged.Handle(new StreakChangedMessage(second, null, 0));
+            _harness.StreakChanged.Handle(new StreakChangedMessage(null, null, 0));
+            _harness.StreakChanged.Handle(new StreakChangedMessage(first, null, 0));
+            _harness.StreakChanged.Handle(new StreakChangedMessage(second, GameplayMetricsHarness.Blue, 2));
+            _harness.Destroy(second);
+            _harness.CompleteLevel(2);
+
+            var level = _harness.LastOf(RecordKind.Level);
+            Assert.AreEqual(1, level.Metrics[MetricId.StreakBreaks], "only the first ball's own break: not the second ball's reset, the shared reset or a flight's end");
+            Assert.AreEqual(3, level.Metrics[MetricId.MaxStreak]);
+        }
+
+        // The tracker announces a ball's streak ending when the ball retires, after its flight sealed.
+        // With a shared streak running, that must not read as the shared streak breaking.
+        [Test]
+        public void StreakBreaks_ABallsEndAnnouncedAfterItsFlight_IsNotABreak()
+        {
+            _harness.EnterGame();
+            var ball = GameplayMetricsHarness.Ball();
+            _harness.Fire(ball);
+            _harness.StreakChanged.Handle(new StreakChangedMessage(null, GameplayMetricsHarness.Red, 2));
+            _harness.StreakChanged.Handle(new StreakChangedMessage(ball, GameplayMetricsHarness.Blue, 4));
+            _harness.Destroy(ball);
+
+            _harness.StreakChanged.Handle(new StreakChangedMessage(ball, null, 0));
+            _harness.CompleteLevel(2);
+
+            var level = _harness.LastOf(RecordKind.Level);
+            Assert.AreEqual(0, level.Metrics[MetricId.StreakBreaks]);
         }
 
         [Test]
@@ -388,10 +432,9 @@ namespace BalloonParty.Tests.Game
             _harness.FlightStats.WallBounces.Returns(4);
             _harness.FlightStats.PierceDischarges.Returns(1);
 
-            _harness.ProjectileLoaded.Handle(new ProjectileLoadedMessage(null));
-            _harness.FlightLoaded.Value = true;
-            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage(null));
-            _harness.FlightLoaded.Value = false;
+            var ball = GameplayMetricsHarness.Ball();
+            _harness.Fire(ball);
+            _harness.Destroy(ball);
 
             _harness.CompleteLevel(2);
 
@@ -409,44 +452,212 @@ namespace BalloonParty.Tests.Game
         public void InterflightPops_BelongToTheLevelAndToNoFlight()
         {
             _harness.EnterGame();
-            _harness.ProjectileLoaded.Handle(new ProjectileLoadedMessage(null));
-            _harness.FlightLoaded.Value = true;
-            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage(null));
-            _harness.FlightLoaded.Value = false;
+            var ball = GameplayMetricsHarness.Ball();
+            _harness.Fire(ball);
+            _harness.Destroy(ball);
 
-            // R2: the [Destroyed, next Loaded) window is interflight — a board-clear or cheat pop here
-            // belongs to the Level. FlightStatsService zeroes at the next Loaded, so nothing would ever
-            // seal it.
+            // R2: after a ball's Destroyed, a pop naming it, or naming no ball at all (a board clear,
+            // a cheat), belongs to the Level. There is no flight left to seal it into.
             _harness.ActorHit.Handle(GameplayMetricsHarness.Hit(
                 GameplayMetricsHarness.Balloon(BalloonType.Simple, GameplayMetricsHarness.Blue),
                 HitOutcome.Pop));
+            _harness.ActorHit.Handle(GameplayMetricsHarness.Hit(
+                GameplayMetricsHarness.Balloon(BalloonType.Simple, GameplayMetricsHarness.Blue),
+                HitOutcome.Pop, ball: ball));
             _harness.CompleteLevel(2);
 
             var level = _harness.LastOf(RecordKind.Level);
-            Assert.AreEqual(1, level.Metrics[MetricId.Pops]);
-            Assert.AreEqual(1, level.Metrics.AxisBucketsOf(MetricId.Pops, MetricAxis.BalloonType)[(int)BalloonType.Simple]);
+            Assert.AreEqual(2, level.Metrics[MetricId.Pops]);
+            Assert.AreEqual(2, level.Metrics.AxisBucketsOf(MetricId.Pops, MetricAxis.BalloonType)[(int)BalloonType.Simple]);
+            Assert.AreEqual(0, _harness.LastOf(RecordKind.Flight).Metrics[MetricId.Pops]);
+        }
+
+        // Rapid fire: the next ball loads right after each shot, so up to three fly at once. Each one's
+        // hits must land in its own record, or every record is a blend of whatever was in the air.
+        [Test]
+        public void OverlappingBalls_EachBallsPopsAndDeflectsLandInItsOwnFlightRecord()
+        {
+            _harness.EnterGame();
+            var first = GameplayMetricsHarness.Ball();
+            var second = GameplayMetricsHarness.Ball();
+            var simple = GameplayMetricsHarness.Balloon(BalloonType.Simple, GameplayMetricsHarness.Red);
+
+            _harness.Fire(first);
+            _harness.Fire(second);
+            _harness.ActorHit.Handle(GameplayMetricsHarness.Hit(simple, HitOutcome.Pop, ball: first));
+            _harness.ActorHit.Handle(GameplayMetricsHarness.Hit(simple, HitOutcome.Deflect, ball: second));
+            _harness.ActorHit.Handle(GameplayMetricsHarness.Hit(simple, HitOutcome.Pop, ball: second));
+            _harness.Destroy(first);
+
+            // The second ball is still open: a hit after the first one's seal is still its own.
+            _harness.ActorHit.Handle(GameplayMetricsHarness.Hit(simple, HitOutcome.Pop, ball: second));
+            Assert.AreEqual(1, _harness.CountOf(RecordKind.Flight), "sealing one ball leaves the other open");
+            _harness.Destroy(second);
+
+            var flights = _harness.AllOf(RecordKind.Flight);
+            Assert.AreEqual(2, flights.Count);
+            Assert.AreEqual(1, flights[0].Metrics[MetricId.Pops]);
+            Assert.AreEqual(0, flights[0].Metrics[MetricId.Deflects]);
+            Assert.AreEqual(2, flights[1].Metrics[MetricId.Pops]);
+            Assert.AreEqual(1, flights[1].Metrics[MetricId.Deflects]);
+
+            _harness.CompleteLevel(2);
+            var level = _harness.LastOf(RecordKind.Level);
+            Assert.AreEqual(3, level.Metrics[MetricId.Pops], "both flights fold into the level");
+            Assert.AreEqual(2, level.Metrics[MetricId.FlightsStarted]);
         }
 
         [Test]
-        public void HoldSpeedUp_TagsTheFlightAndRunsItsOwnClock()
+        public void OverlappingBalls_EachSealReadsThatBallsOwnFlightStats()
         {
             _harness.EnterGame();
-            _harness.ProjectileLoaded.Handle(new ProjectileLoadedMessage(null));
-            _harness.FlightLoaded.Value = true;
+            var first = GameplayMetricsHarness.Ball();
+            var second = GameplayMetricsHarness.Ball();
+            var firstStats = Substitute.For<IFlightStats>();
+            var secondStats = Substitute.For<IFlightStats>();
+            firstStats.WallBounces.Returns(2);
+            secondStats.WallBounces.Returns(5);
+            secondStats.PopsOf(BalloonType.Tough).Returns(1);
+            _harness.FlightStatsSource.Of(first).Returns(firstStats);
+            _harness.FlightStatsSource.Of(second).Returns(secondStats);
 
-            _harness.HoldState.IsHolding.Returns(true);
-            _harness.ProjectileFired.Handle(new ProjectileFiredMessage(null, Vector3.zero, Vector3.up));
+            _harness.Fire(first);
+            _harness.Fire(second);
+            _harness.Destroy(second);
+            _harness.Destroy(first);
 
+            var flights = _harness.AllOf(RecordKind.Flight);
+            Assert.AreEqual(5, flights[0].Metrics[MetricId.WallBounces], "the second ball died first");
+            Assert.AreEqual(1,
+                flights[0].Metrics.AxisBucketsOf(MetricId.Pops, MetricAxis.BalloonType)[(int)BalloonType.Tough]);
+            Assert.AreEqual(2, flights[1].Metrics[MetricId.WallBounces]);
+            Assert.AreEqual(0,
+                flights[1].Metrics.AxisBucketsOf(MetricId.Pops, MetricAxis.BalloonType)[(int)BalloonType.Tough]);
+            Assert.AreEqual(1, flights[0].FlightIndex, "numbered in the order the records are written");
+            Assert.AreEqual(2, flights[1].FlightIndex);
+        }
+
+        // [Fired, Destroyed) per ball: the next ball's Fired must not restart a flight still in the air.
+        [Test]
+        public void OverlappingBalls_EachTimesItsOwnFlight()
+        {
+            _harness.EnterGame();
+            var first = GameplayMetricsHarness.Ball();
+            var second = GameplayMetricsHarness.Ball();
+
+            _harness.Fire(first);
+            _harness.Now = 1f;
+            _harness.Fire(second);
             _harness.Now = 3f;
-            _harness.HoldState.IsHolding.Returns(false);
-            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage(null));
-            _harness.FlightLoaded.Value = false;
+            _harness.Destroy(first);
+            _harness.Now = 5f;
+            _harness.Destroy(second);
+
+            var flights = _harness.AllOf(RecordKind.Flight);
+            Assert.AreEqual(3f, flights[0].Metrics[TimerId.Gameplay], 0.01f);
+            Assert.AreEqual(4f, flights[1].Metrics[TimerId.Gameplay], 0.01f);
+        }
+
+        [Test]
+        public void EventsNamingNoBall_GoToTheLevelEvenWhileABallFlies()
+        {
+            _harness.EnterGame();
+            var ball = GameplayMetricsHarness.Ball();
+            _harness.Fire(ball);
+
+            _harness.ActorHit.Handle(GameplayMetricsHarness.Hit(
+                GameplayMetricsHarness.Balloon(BalloonType.Simple, GameplayMetricsHarness.Red), HitOutcome.Pop));
+            _harness.SpeedTapMinted.Handle(new SpeedTapMintedMessage(null, Vector3.zero, 1));
+            _harness.PierceDischarged.Handle(new PierceDischargedMessage(null, Vector3.zero, 2, false, Vector3.zero,
+                Vector3.zero));
+            _harness.Destroy(ball);
+
+            var flight = _harness.LastOf(RecordKind.Flight);
+            Assert.AreEqual(0, flight.Metrics[MetricId.Pops]);
+            Assert.AreEqual(0, flight.Metrics[MetricId.SpeedTapsMinted]);
+            Assert.AreEqual(0, flight.Metrics[MetricId.PierceToughsCleared]);
 
             _harness.CompleteLevel(2);
-
             var level = _harness.LastOf(RecordKind.Level);
-            Assert.AreEqual(1, level.Metrics[MetricId.HoldSpeedUpFlights]);
-            Assert.AreEqual(3f, level.Metrics[TimerId.Hold], 0.01f);
+            Assert.AreEqual(1, level.Metrics[MetricId.Pops]);
+            Assert.AreEqual(1, level.Metrics.AxisBucketsOf(MetricId.Pops, MetricAxis.BalloonType)[(int)BalloonType.Simple],
+                "a level-routed pop counts its own balloon type; no flight seal will");
+            Assert.AreEqual(1, level.Metrics[MetricId.SpeedTapsMinted]);
+            Assert.AreEqual(2, level.Metrics[MetricId.PierceToughsCleared]);
+        }
+
+        // Every exit retires, including the ones with no Destroyed. A scope left behind would keep
+        // catching hits for a ball that no longer exists and never be sealed or reused.
+        [Test]
+        public void ABallRetiredWithoutADestroyed_WritesNoRecordAndLeaksNoScope()
+        {
+            _harness.EnterGame();
+            var retired = GameplayMetricsHarness.Ball();
+            _harness.Fire(retired);
+            _harness.ActorHit.Handle(GameplayMetricsHarness.Hit(
+                GameplayMetricsHarness.Balloon(BalloonType.Simple, GameplayMetricsHarness.Red), HitOutcome.Pop,
+                ball: retired));
+            _harness.Retired.OnNext(retired);
+
+            Assert.AreEqual(0, _harness.CountOf(RecordKind.Flight), "only a seal writes a flight record");
+
+            // A straggler naming the retired ball lands on the level, not on a leftover scope.
+            _harness.ActorHit.Handle(GameplayMetricsHarness.Hit(
+                GameplayMetricsHarness.Balloon(BalloonType.Tough, GameplayMetricsHarness.Red), HitOutcome.Pop,
+                ball: retired));
+
+            var next = GameplayMetricsHarness.Ball();
+            _harness.Fire(next);
+            _harness.Destroy(next);
+            var flight = _harness.LastOf(RecordKind.Flight);
+            Assert.AreEqual(1, flight.FlightIndex, "the retired flight took no index");
+            Assert.AreEqual(0, flight.Metrics[MetricId.Pops], "a reused scope starts empty");
+
+            _harness.CompleteLevel(2);
+            var level = _harness.LastOf(RecordKind.Level);
+            Assert.AreEqual(2, level.Metrics[MetricId.Pops], "what the retired ball counted still happened");
+            Assert.AreEqual(1, level.Metrics.AxisBucketsOf(MetricId.Pops, MetricAxis.BalloonType)[(int)BalloonType.Tough]);
+        }
+
+        // The reset cascade runs before RunResetMessage, so the thrower's clear retires the balls only
+        // after this; none of what they counted may reach the next run.
+        [Test]
+        public void ResetRunWithBallsInFlight_DiscardsTheirFlights()
+        {
+            _harness.EnterGame();
+            var ball = GameplayMetricsHarness.Ball();
+            _harness.Fire(ball);
+            _harness.ActorHit.Handle(GameplayMetricsHarness.Hit(
+                GameplayMetricsHarness.Balloon(BalloonType.Simple, GameplayMetricsHarness.Red), HitOutcome.Pop,
+                ball: ball));
+
+            _harness.RetryState.RetryLevel.Returns(0);
+            _harness.Service.ResetRun(2);
+            _harness.Retired.OnNext(ball);
+            _harness.Destroy(ball);
+
+            Assert.AreEqual(0, _harness.Sink.Written.Count, "a reset is not a flush");
+
+            Play();
+            _harness.CompleteLevel(2);
+            Assert.AreEqual(0, _harness.LastOf(RecordKind.Level).Metrics[MetricId.Pops]);
+        }
+
+        // The level-up un-fires a ball that never took a step, and it is fired again later.
+        [Test]
+        public void ABallFiredTwice_IsOneFreshFlight()
+        {
+            _harness.EnterGame();
+            var ball = GameplayMetricsHarness.Ball();
+            _harness.Fire(ball);
+            _harness.Now = 2f;
+            _harness.Fire(ball);
+            _harness.Now = 3f;
+            _harness.Destroy(ball);
+
+            var flights = _harness.AllOf(RecordKind.Flight);
+            Assert.AreEqual(1, flights.Count);
+            Assert.AreEqual(1f, flights[0].Metrics[TimerId.Gameplay], 0.01f, "timed from the second Fired");
         }
 
         [Test]
@@ -696,26 +907,52 @@ namespace BalloonParty.Tests.Game
             Assert.AreEqual(1, _harness.LastOf(RecordKind.Run).Metrics[MetricId.LevelsCompleted]);
         }
 
-        // Hearts reach zero from a wave while the shot is still in the air, so the fatal flight's
-        // ProjectileDestroyedMessage lands after Ended and is dropped. Everything it counted has to be
-        // folded at the loss instead, or the most interesting flight of the run is discarded whole.
+        // Hearts reach zero from a wave while balls are still in the air, and the thrower scales them
+        // away at the loss without a Destroyed. Everything they counted has to be sealed at the loss
+        // instead, or the most interesting flights of the run are discarded whole.
         [Test]
-        public void GameOverWithAProjectileStillAirborne_FoldsThatFlightIntoTheLevelRecord()
+        public void GameOverWithBallsStillAirborne_SealsEachFlightIntoTheLevelRecord()
         {
             _harness.EnterGame();
-            _harness.FlightLoaded.Value = true;
-            Play();
+            var first = GameplayMetricsHarness.Ball();
+            var second = GameplayMetricsHarness.Ball();
+            _harness.Fire(first);
+            _harness.Fire(second);
             _harness.ActorHit.Handle(GameplayMetricsHarness.Hit(
                 GameplayMetricsHarness.Balloon(BalloonType.Simple, GameplayMetricsHarness.Red),
-                HitOutcome.Pop));
+                HitOutcome.Pop, ball: second));
             _harness.FlightStats.WallBounces.Returns(3);
 
             _harness.GameOver.Handle(new GameOverMessage(1, 250));
+            _harness.Retired.OnNext(first);
+            _harness.Retired.OnNext(second);
+
+            var flights = _harness.AllOf(RecordKind.Flight);
+            Assert.AreEqual(2, flights.Count, "one record per ball still in the air");
+            Assert.AreEqual(1, flights[1].Metrics[MetricId.Pops]);
 
             var level = _harness.LastOf(RecordKind.Level);
-            Assert.AreEqual(1, level.Metrics[MetricId.Pops], "the pop happened during the fatal flight");
-            Assert.AreEqual(3, level.Metrics[MetricId.WallBounces]);
+            Assert.AreEqual(1, level.Metrics[MetricId.Pops], "the pop happened during a fatal flight");
+            Assert.AreEqual(6, level.Metrics[MetricId.WallBounces]);
             Assert.AreEqual(3, level.Metrics[MetricId.MaxWallBouncesInFlight]);
+        }
+
+        // Should the thrower's game-over clear ever reach the registry before this service sees the
+        // GameOver, the balls retire first. Their counts must still reach the partial level record.
+        [Test]
+        public void BallsRetiredJustBeforeTheGameOver_StillCountInTheLevelRecord()
+        {
+            _harness.EnterGame();
+            var ball = GameplayMetricsHarness.Ball();
+            _harness.Fire(ball);
+            _harness.ActorHit.Handle(GameplayMetricsHarness.Hit(
+                GameplayMetricsHarness.Balloon(BalloonType.Simple, GameplayMetricsHarness.Red),
+                HitOutcome.Pop, ball: ball));
+
+            _harness.Retired.OnNext(ball);
+            _harness.GameOver.Handle(new GameOverMessage(1, 250));
+
+            Assert.AreEqual(1, _harness.LastOf(RecordKind.Level).Metrics[MetricId.Pops]);
         }
 
         [Test]
@@ -750,8 +987,8 @@ namespace BalloonParty.Tests.Game
         }
 
         // One record per shot, so a level's flights can be read individually rather than only as
-        // level totals. The flight scope is Reset() at ProjectileLoadedMessage and Reset() zeroes its
-        // stopwatches, so the record's own gameplay timer IS the time of flight.
+        // level totals. Each ball's scope is Reset() at its ProjectileFiredMessage and Reset() zeroes
+        // its stopwatches, so the record's own gameplay timer IS the time of flight.
         [Test]
         public void EveryFlight_WritesItsOwnRecord_OrdinalCountingFromOneWithinTheLevel()
         {
@@ -759,9 +996,9 @@ namespace BalloonParty.Tests.Game
 
             for (var i = 0; i < 3; i++)
             {
-                _harness.ProjectileLoaded.Handle(new ProjectileLoadedMessage(null));
-                _harness.ProjectileFired.Handle(new ProjectileFiredMessage(null, Vector3.zero, Vector3.up));
-                _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage(null));
+                var ball = GameplayMetricsHarness.Ball();
+                _harness.Fire(ball);
+                _harness.Destroy(ball);
             }
 
             var flights = _harness.AllOf(RecordKind.Flight);
@@ -776,13 +1013,13 @@ namespace BalloonParty.Tests.Game
         {
             _harness.EnterGame();
 
-            _harness.ProjectileLoaded.Handle(new ProjectileLoadedMessage(null));
-            _harness.FlightLoaded.Value = true;
+            var firstBall = GameplayMetricsHarness.Ball();
+            _harness.Fire(firstBall);
             _harness.Now = 4f;
             _harness.ActorHit.Handle(GameplayMetricsHarness.Hit(
                 GameplayMetricsHarness.Balloon(BalloonType.Simple, GameplayMetricsHarness.Red),
-                HitOutcome.Pop));
-            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage(null));
+                HitOutcome.Pop, ball: firstBall));
+            _harness.Destroy(firstBall);
 
             var first = _harness.LastOf(RecordKind.Flight);
             Assert.AreEqual(4f, first.Metrics[TimerId.Gameplay], 0.01f, "time of flight, not level time");
@@ -790,9 +1027,10 @@ namespace BalloonParty.Tests.Game
 
             // A second flight must start from zero on both, or every record after the first would be
             // a running total wearing a flight's name.
-            _harness.ProjectileLoaded.Handle(new ProjectileLoadedMessage(null));
+            var nextBall = GameplayMetricsHarness.Ball();
+            _harness.Fire(nextBall);
             _harness.Now = 6f;
-            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage(null));
+            _harness.Destroy(nextBall);
 
             var second = _harness.LastOf(RecordKind.Flight);
             Assert.AreEqual(2f, second.Metrics[TimerId.Gameplay], 0.01f);
@@ -803,19 +1041,21 @@ namespace BalloonParty.Tests.Game
         public void FlightOrdinal_RestartsWithEachLevel()
         {
             _harness.EnterGame();
-            _harness.ProjectileLoaded.Handle(new ProjectileLoadedMessage(null));
-            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage(null));
-            Play();
+            var first = GameplayMetricsHarness.Ball();
+            _harness.Fire(first);
+            _harness.Destroy(first);
             _harness.CompleteLevel(2);
 
-            _harness.ProjectileLoaded.Handle(new ProjectileLoadedMessage(null));
-            _harness.ProjectileDestroyed.Handle(new ProjectileDestroyedMessage(null));
+            var second = GameplayMetricsHarness.Ball();
+            _harness.Fire(second);
+            _harness.Destroy(second);
 
             var flights = _harness.AllOf(RecordKind.Flight);
             Assert.AreEqual(1, flights[flights.Count - 1].FlightIndex, "first flight of the new level");
             Assert.AreEqual(2, flights[flights.Count - 1].LevelIndex);
         }
 
+        // A shot with no ball behind it: dirties the level without opening a flight.
         private void Play()
         {
             _harness.ProjectileFired.Handle(new ProjectileFiredMessage(null, Vector3.zero, Vector3.up));

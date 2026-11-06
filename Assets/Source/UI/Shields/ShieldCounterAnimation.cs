@@ -26,6 +26,10 @@ namespace BalloonParty.UI.Shields
         private int _lastShieldValue;
         private IDisposable _shieldSubscription;
 
+        // The ball the counter shows: the one held in the thrower. Other balls dying around it leave
+        // the counter alone, since the next ball loads the moment a shot leaves.
+        private IProjectileModel _bound;
+
         private void Awake()
         {
             _animator = GetComponent<Animator>();
@@ -42,12 +46,13 @@ namespace BalloonParty.UI.Shields
         private void Initialize()
         {
             _loadedSubscriber.Subscribe(OnProjectileLoaded).AddTo(_disposable);
-            _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed()).AddTo(_disposable);
+            _destroyedSubscriber.Subscribe(OnProjectileDestroyed).AddTo(_disposable);
         }
 
         private void BindProjectile(IProjectileModel model)
         {
             _shieldSubscription?.Dispose();
+            _bound = model;
             _lastShieldValue = model.ShieldsRemaining.Value;
 
             _shieldSubscription = model.ShieldsRemaining
@@ -72,8 +77,14 @@ namespace BalloonParty.UI.Shields
             _animator.SetTrigger(ReadyTrigger);
         }
 
-        private void OnProjectileDestroyed()
+        private void OnProjectileDestroyed(ProjectileDestroyedMessage msg)
         {
+            if (msg.Projectile != _bound)
+            {
+                return;
+            }
+
+            _bound = null;
             _animator.SetTrigger(WaitingTrigger);
             _shieldSubscription?.Dispose();
             foreach (var label in _labels)

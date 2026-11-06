@@ -6,7 +6,7 @@ using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Danger;
 using BalloonParty.Game.Flight;
 using BalloonParty.Game.Run;
-using BalloonParty.Projectile.Controller;
+using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.GameState;
@@ -37,7 +37,6 @@ namespace BalloonParty.Game.Telemetry
 
         private static readonly BalloonType[] BalloonTypes = (BalloonType[])Enum.GetValues(typeof(BalloonType));
 
-        private readonly ISubscriber<ProjectileLoadedMessage> _projectileLoadedSubscriber;
         private readonly ISubscriber<ProjectileFiredMessage> _projectileFiredSubscriber;
         private readonly ISubscriber<ProjectileDestroyedMessage> _projectileDestroyedSubscriber;
         private readonly ISubscriber<ActorHitMessage> _actorHitSubscriber;
@@ -61,28 +60,37 @@ namespace BalloonParty.Game.Telemetry
 
         private readonly ITelemetrySink _sink;
         private readonly SessionTelemetryContext _sessionContext;
-        private readonly IFlightScope _flightScope;
+        private readonly IProjectileRegistry _projectiles;
         private readonly IFlightStatsSource _flightStats;
-        private readonly IHoldSpeedUpState _holdState;
         private readonly IRunScore _runScore;
         private readonly IRetryState _retryState;
         private readonly IDangerLevel _dangerLevel;
         private readonly INavigation _navigation;
         private readonly PauseService _pauseService;
 
-        // All ~21 subscriptions live here and are disposed as a unit — fourteen-plus individually named
+        // All ~21 subscriptions live here and are disposed as a unit — twenty-odd individually named
         // IDisposable fields would fight the field-ordering rule and guarantee that one is eventually
         // forgotten in Dispose.
         private readonly CompositeDisposable _subscriptions = new();
 
-        private readonly MetricScope _flightScopeMetrics;
         private readonly MetricScope _levelMetrics;
         private readonly MetricScope _runMetrics;
         private readonly MetricScope _sessionMetrics;
 
-        // Iterated whenever a clock changes state: one loop over the scopes per transition, never one
-        // call per scope per timer. Every scope runs its own clocks and Absorb never folds timers.
+        // Iterated whenever a clock changes state, together with every open flight: one loop over the
+        // scopes per transition, never one call per scope per timer. Every scope runs its own clocks
+        // and Absorb never folds timers.
         private readonly MetricScope[] _scopes;
+
+        // One per ball between its Fired and its Destroyed, oldest first. A handful long at most
+        // (MaxBallsInFlight), so a linear scan is cheaper than hashing and allocates nothing.
+        private readonly List<BallFlight> _flights = new();
+
+        // Closed flights come back here, so steady-state play reuses the same few scopes instead of
+        // allocating one per shot.
+        private readonly Stack<BallFlight> _spareFlights = new();
+        private readonly Func<float> _clock;
+        private readonly int _colorAxisSize;
 
         private readonly Dictionary<string, int> _colorIndexByName;
         private readonly int _otherColorIndex;
@@ -99,8 +107,6 @@ namespace BalloonParty.Game.Telemetry
 
         private LevelState _state = LevelState.Idle;
         private bool _paused;
-        private bool _holding;
-        private bool _holdEngagedThisFlight;
         private bool _runCheatActive;
         private bool _levelDirty;
         private int _runId = 1;
@@ -111,7 +117,9 @@ namespace BalloonParty.Game.Telemetry
         private int _pendingNewLevel;
         private int _flightIndexInLevel;
         private int _currentLevelIndex;
-        private IProjectileModel _flightProjectile;
+
+        // The last value of the streak no ball in flight owns (see OnStreakChanged).
+        private int _sharedStreak;
 
         public IReadOnlyReactiveProperty<LevelMetricsSnapshot> CeremonyLevel => _ceremonyLevel;
 
@@ -126,7 +134,6 @@ namespace BalloonParty.Game.Telemetry
 
         [Inject]
         internal GameplayMetricsService(
-            ISubscriber<ProjectileLoadedMessage> projectileLoadedSubscriber,
             ISubscriber<ProjectileFiredMessage> projectileFiredSubscriber,
             ISubscriber<ProjectileDestroyedMessage> projectileDestroyedSubscriber,
             ISubscriber<ActorHitMessage> actorHitSubscriber,
@@ -149,9 +156,8 @@ namespace BalloonParty.Game.Telemetry
             ISubscriber<GameOverMessage> gameOverSubscriber,
             ITelemetrySink sink,
             SessionTelemetryContext sessionContext,
-            IFlightScope flightScope,
+            IProjectileRegistry projectiles,
             IFlightStatsSource flightStats,
-            IHoldSpeedUpState holdState,
             IRunScore runScore,
             IRetryState retryState,
             IDangerLevel dangerLevel,
@@ -160,7 +166,6 @@ namespace BalloonParty.Game.Telemetry
             IGamePalette palette,
             Func<float> clock)
         {
-            _projectileLoadedSubscriber = projectileLoadedSubscriber;
             _projectileFiredSubscriber = projectileFiredSubscriber;
             _projectileDestroyedSubscriber = projectileDestroyedSubscriber;
             _actorHitSubscriber = actorHitSubscriber;
@@ -183,9 +188,8 @@ namespace BalloonParty.Game.Telemetry
             _gameOverSubscriber = gameOverSubscriber;
             _sink = sink;
             _sessionContext = sessionContext;
-            _flightScope = flightScope;
+            _projectiles = projectiles;
             _flightStats = flightStats;
-            _holdState = holdState;
             _runScore = runScore;
             _retryState = retryState;
             _dangerLevel = dangerLevel;
@@ -204,13 +208,13 @@ namespace BalloonParty.Game.Telemetry
             // The trailing bucket catches rainbow, paint-converted and colourless actors, so an unknown
             // id can never throw or index out of range.
             _otherColorIndex = progressColors.Count;
-            var colorAxisSize = progressColors.Count + 1;
+            _colorAxisSize = progressColors.Count + 1;
+            _clock = clock;
 
-            _flightScopeMetrics = MetricScope.Create(MetricScopeKind.Flight, colorAxisSize, clock);
-            _levelMetrics = MetricScope.Create(MetricScopeKind.Level, colorAxisSize, clock);
-            _runMetrics = MetricScope.Create(MetricScopeKind.Run, colorAxisSize, clock);
-            _sessionMetrics = MetricScope.Create(MetricScopeKind.Session, colorAxisSize, clock);
-            _scopes = new[] { _flightScopeMetrics, _levelMetrics, _runMetrics, _sessionMetrics };
+            _levelMetrics = MetricScope.Create(MetricScopeKind.Level, _colorAxisSize, clock);
+            _runMetrics = MetricScope.Create(MetricScopeKind.Run, _colorAxisSize, clock);
+            _sessionMetrics = MetricScope.Create(MetricScopeKind.Session, _colorAxisSize, clock);
+            _scopes = new[] { _levelMetrics, _runMetrics, _sessionMetrics };
 
             // R20: every consumer must render against an empty snapshot, so the read model is never
             // null — sealed here while the scopes are still pristine.
@@ -225,7 +229,6 @@ namespace BalloonParty.Game.Telemetry
         // start during the Launcher's additive preload, long before the player taps Play.
         public void Start()
         {
-            _projectileLoadedSubscriber.Subscribe(OnProjectileLoaded).AddTo(_subscriptions);
             _projectileFiredSubscriber.Subscribe(OnProjectileFired).AddTo(_subscriptions);
             _projectileDestroyedSubscriber.Subscribe(OnProjectileDestroyed).AddTo(_subscriptions);
             _actorHitSubscriber.Subscribe(OnActorHit).AddTo(_subscriptions);
@@ -256,6 +259,7 @@ namespace BalloonParty.Game.Telemetry
             _pauseService.IsAnyPaused.Subscribe(OnPauseChanged).AddTo(_subscriptions);
 
             _dangerLevel.Level.Subscribe(OnDangerLevelChanged).AddTo(_subscriptions);
+            _projectiles.Retired.Subscribe(OnProjectileRetired).AddTo(_subscriptions);
         }
 
         public void Dispose()
@@ -289,14 +293,15 @@ namespace BalloonParty.Game.Telemetry
                 _levelAttemptsByLevel.Clear();
             }
 
-            _flightScopeMetrics.Reset();
+            // A reset is not a flush: a flight still open belongs to the run being thrown away. This
+            // runs before RunResetMessage, so the thrower's clear that follows finds nothing to retire.
+            DiscardFlights();
             _levelMetrics.Reset();
             _runMetrics.Reset();
             _runMetrics.SetLast(MetricId.RetriesUsed, _attemptIndex);
 
             _runCheatActive = false;
-            _holding = false;
-            _holdEngagedThisFlight = false;
+            _sharedStreak = 0;
             _ceremonyLevelIndex = 0;
             _pendingNewLevel = 0;
             _ceremonyLevel.Value = _emptyLevel;
@@ -367,22 +372,8 @@ namespace BalloonParty.Game.Telemetry
             _levelMetrics.RecordMax(MetricId.MaxDangerLevel, Mathf.RoundToInt(level * DangerLevelScale));
         }
 
-        private void OnProjectileLoaded(ProjectileLoadedMessage message)
-        {
-            if (_state == LevelState.Ended)
-            {
-                return;
-            }
-
-            // The flight scope is reset here rather than at the seal so the [Destroyed, next Loaded)
-            // interflight window cannot alias the previous flight (R2).
-            _flightScopeMetrics.Reset();
-            _holdEngagedThisFlight = false;
-            _flightProjectile = message.Model;
-            _flightIndexInLevel++;
-            _levelMetrics.Increment(MetricId.FlightsStarted);
-        }
-
+        // Fired, not Loaded, opens a flight: the thrower loads the next ball right after each shot, so
+        // a load only means "in the thrower" while earlier balls still fly.
         private void OnProjectileFired(ProjectileFiredMessage message)
         {
             if (_state == LevelState.Ended)
@@ -392,8 +383,8 @@ namespace BalloonParty.Game.Telemetry
 
             _levelDirty = true;
 
-            SampleHold();
             _levelMetrics.Increment(MetricId.ShotsFired);
+            OpenFlight(message.Projectile);
         }
 
         private void OnProjectileDestroyed(ProjectileDestroyedMessage message)
@@ -405,8 +396,33 @@ namespace BalloonParty.Game.Telemetry
 
             _levelDirty = true;
 
-            SampleHold();
-            SealFlight(message.Projectile);
+            var flight = Find(message.Projectile);
+            if (flight != null)
+            {
+                SealFlight(flight);
+            }
+        }
+
+        // Every exit retires, so this is where a flight that never got its Destroyed closes. Nothing is
+        // written for it (a flight record is what the seal produces), but what it counted happened in
+        // this level, so it folds in rather than vanishing. The game over seals every open flight
+        // itself and a reset discards them before the thrower clears, so mid-level this is reached
+        // only if the thrower's game-over clear ran first, or for a ball un-fired back into the
+        // thrower and then dropped.
+        private void OnProjectileRetired(IProjectileModel projectile)
+        {
+            var flight = Find(projectile);
+            if (flight == null)
+            {
+                return;
+            }
+
+            if (_state != LevelState.Ended && _state != LevelState.Idle)
+            {
+                _levelMetrics.Absorb(flight.Metrics);
+            }
+
+            ReleaseFlight(flight);
         }
 
         private void OnActorHit(ActorHitMessage message)
@@ -418,9 +434,7 @@ namespace BalloonParty.Game.Telemetry
 
             _levelDirty = true;
 
-            SampleHold();
-
-            var scope = ActiveScope();
+            var scope = ScopeOf(message.Context.Projectile);
 
             if ((message.Outcome & HitOutcome.Pop) != 0)
             {
@@ -428,7 +442,8 @@ namespace BalloonParty.Game.Telemetry
                 scope.IncrementAxis(MetricId.Pops, MetricAxis.Color, ColorIndexOf(message.Actor));
 
                 // Inside a flight the balloon-type breakdown has exactly one owner (FlightStatsService,
-                // folded in at the seal); outside one there is no flight to seal, so it is counted here.
+                // folded in at the seal); a hit with no ball in flight behind it has no flight to seal,
+                // so it is counted here.
                 if (scope.Scope != MetricScopeKind.Flight && message.Actor is IBalloonModel popped)
                 {
                     scope.IncrementAxis(MetricId.Pops, MetricAxis.BalloonType, (int)popped.TypeName);
@@ -472,11 +487,9 @@ namespace BalloonParty.Game.Telemetry
 
             _levelDirty = true;
 
-            SampleHold();
-
             // PierceDischarges itself is folded from IFlightStats at the seal — only the payload-derived
             // counters are read off the message.
-            var scope = ActiveScope();
+            var scope = ScopeOf(message.Projectile);
             scope.Add(MetricId.PierceToughsCleared, message.ToughCount);
             if (message.IsRainbow)
             {
@@ -493,8 +506,7 @@ namespace BalloonParty.Game.Telemetry
 
             _levelDirty = true;
 
-            SampleHold();
-            ActiveScope().Increment(MetricId.SpeedTapsMinted);
+            ScopeOf(message.Projectile).Increment(MetricId.SpeedTapsMinted);
             _levelMetrics.RecordMax(MetricId.MaxSpeedTapsInFlight, message.TotalTaps);
         }
 
@@ -536,9 +548,31 @@ namespace BalloonParty.Game.Telemetry
             _levelDirty = true;
 
             _levelMetrics.RecordMax(MetricId.MaxStreak, message.Streak);
-            if (message.Streak == 0)
+
+            // A break is a running streak dropping to zero, judged per ball: with several balls in
+            // flight one ball's reset says nothing about another's, and resetting a streak already at
+            // zero breaks nothing. A message with no ball is about the shared streak. One naming a ball
+            // no longer in flight is that ball's streak ending with it (announced on retire, after its
+            // flight sealed), and a flight ending is never a break.
+            var flight = Find(message.Projectile);
+            if (flight == null && message.Projectile != null)
+            {
+                return;
+            }
+
+            var previous = flight?.Streak ?? _sharedStreak;
+            if (message.Streak == 0 && previous > 0)
             {
                 _levelMetrics.Increment(MetricId.StreakBreaks);
+            }
+
+            if (flight != null)
+            {
+                flight.Streak = message.Streak;
+            }
+            else
+            {
+                _sharedStreak = message.Streak;
             }
         }
 
@@ -642,6 +676,10 @@ namespace BalloonParty.Game.Telemetry
             // the number rendered next to it.
             _levelMetrics.SetLast(MetricId.PointsProjected, _runScore.TotalScore.Value);
 
+            // ColorStreakTracker clears every streak at level-up but announces it once, unattributed.
+            // Forget the per-ball values too, so a later reset of a cleared streak isn't a break.
+            ForgetStreaks();
+
             _state = LevelState.Ceremony;
             RefreshClocks();
 
@@ -740,14 +778,14 @@ namespace BalloonParty.Game.Telemetry
                 OpenLevel(nextLevel);
             }
 
-            // The fatal flight is still airborne on the ordinary death (hearts reach zero from a wave
-            // while the projectile is mid-air), and its ProjectileDestroyedMessage arrives during the
-            // loss cinematic — after Ended, where OnProjectileDestroyed returns early. Without this the
-            // most interesting flight of the run is discarded whole: its pops, deflects, absorbs, speed
-            // taps, pierce clears and the entire FlightStats breakdown.
-            if (_flightScope.IsLoaded.Value)
+            // On the ordinary death (hearts reach zero from a wave) balls are still in the air, and none
+            // of them publishes a Destroyed: the thrower scales them away and the registry retires them.
+            // Each is sealed here, oldest first, while FlightStatsService still holds its counts.
+            // Without this the most interesting flights of the run are discarded whole: their pops,
+            // deflects, absorbs, speed taps, pierce clears and the entire FlightStats breakdown.
+            while (_flights.Count > 0)
             {
-                SealFlight(_flightProjectile);
+                SealFlight(_flights[0]);
             }
 
             // FinalLevel, not FinalLevel - 1. The two sources are offset from each other:
@@ -846,11 +884,45 @@ namespace BalloonParty.Game.Telemetry
             _levelMetrics.Reset();
         }
 
-        // One metric flight scope, exact while one ball flies at a time; concurrent balls need a scope
-        // per ball (PLAN-FastPaced, rapid-fire phase).
-        private void SealFlight(IProjectileModel projectile)
+        // A flight per ball, so with several in the air each pop, deflect and tap lands on the ball
+        // that made it (PLAN-FastPaced: a flight is one ball, from its Fired to its Destroyed).
+        private void OpenFlight(IProjectileModel projectile)
         {
-            var stats = _flightStats.Of(projectile);
+            if (projectile == null)
+            {
+                return;
+            }
+
+            // A second Fired for a ball still open is a shot the level-up un-fired back into the
+            // thrower before it ever moved. What it counted stays with the level, and the re-fire
+            // starts a fresh flight.
+            var flight = Find(projectile);
+            if (flight != null)
+            {
+                _levelMetrics.Absorb(flight.Metrics);
+            }
+            else
+            {
+                flight = _spareFlights.Count > 0
+                    ? _spareFlights.Pop()
+                    : new BallFlight(MetricScope.Create(MetricScopeKind.Flight, _colorAxisSize, _clock));
+                flight.Projectile = projectile;
+                _flights.Add(flight);
+            }
+
+            // Clocks before Reset: a pooled scope still has the running state it was sealed with, and
+            // Reset re-samples a running clock, so the flight's clocks start from zero now.
+            ApplyClocks(flight.Metrics);
+            flight.Metrics.Reset();
+            flight.Streak = 0;
+            _levelMetrics.Increment(MetricId.FlightsStarted);
+        }
+
+        private void SealFlight(BallFlight flight)
+        {
+            var scope = flight.Metrics;
+            var stats = _flightStats.Of(flight.Projectile);
+
             // Per-flight balloon-type counts, wall bounces and pierce discharges have exactly one owner
             // (FlightStatsService, written by HitPipeline before the publish). Metrics folds them in at
             // the seal rather than recounting them — RK-2a is two owners drifting apart.
@@ -861,69 +933,104 @@ namespace BalloonParty.Game.Telemetry
                 var pops = stats.PopsOf(type);
                 if (pops > 0)
                 {
-                    _flightScopeMetrics.AddAxis(MetricId.Pops, MetricAxis.BalloonType, (int)type, pops);
+                    scope.AddAxis(MetricId.Pops, MetricAxis.BalloonType, (int)type, pops);
                 }
 
                 var deflects = stats.DeflectsOf(type);
                 if (deflects > 0)
                 {
-                    _flightScopeMetrics.AddAxis(MetricId.Deflects, MetricAxis.BalloonType, (int)type, deflects);
+                    scope.AddAxis(MetricId.Deflects, MetricAxis.BalloonType, (int)type, deflects);
                 }
             }
 
             var wallBounces = stats.WallBounces;
-            _flightScopeMetrics.Add(MetricId.WallBounces, wallBounces);
-            _flightScopeMetrics.Add(MetricId.PierceDischarges, stats.PierceDischarges);
+            scope.Add(MetricId.WallBounces, wallBounces);
+            scope.Add(MetricId.PierceDischarges, stats.PierceDischarges);
 
             _levelMetrics.RecordMax(MetricId.MaxWallBouncesInFlight, wallBounces);
-            if (_holdEngagedThisFlight)
-            {
-                _levelMetrics.Increment(MetricId.HoldSpeedUpFlights);
-            }
+
+            // Numbered at the seal, not at the Fired, so the indices stay 1..N in the order records are
+            // written even when balls die out of the order they were thrown.
+            _flightIndexInLevel++;
 
             // Before the fold, while the scope still holds this flight alone. Its own clocks are the
-            // time of flight: OnProjectileLoaded resets the scope, and Reset() zeroes the stopwatches
-            // too, so gameplay_seconds here is [Loaded, Destroyed) minus any pause.
-            WriteEnvelope(RecordKind.Flight, _flightScopeMetrics.SealFlight(_flightIndexInLevel),
+            // time of flight: OpenFlight resets them, so gameplay_seconds here is [Fired, Destroyed)
+            // minus any pause.
+            WriteEnvelope(RecordKind.Flight, scope.SealFlight(_flightIndexInLevel),
                 _currentLevelIndex, _levelAttemptOrdinal, false, _runCheatActive, null,
                 _flightIndexInLevel);
 
-            _levelMetrics.Absorb(_flightScopeMetrics);
-            _flightScopeMetrics.Reset();
-            _holdEngagedThisFlight = false;
+            _levelMetrics.Absorb(scope);
+            ReleaseFlight(flight);
         }
 
-        // R2's [Loaded, Destroyed) window, read off its single owner rather than re-derived: increments
-        // in the interflight window belong to the Level and to no flight.
-        private MetricScope ActiveScope()
+        private void ReleaseFlight(BallFlight flight)
         {
-            return _flightScope.IsLoaded.Value ? _flightScopeMetrics : _levelMetrics;
+            _flights.Remove(flight);
+            flight.Projectile = null;
+            _spareFlights.Push(flight);
         }
 
-        // R11/R30: HoldSpeedUpController publishes nothing and metrics owns no tick, so the hold state
-        // is sampled on the message boundaries the service already observes. hold_seconds is therefore
-        // accurate to the gap between two such messages, not to the frame.
-        private void SampleHold()
+        private void DiscardFlights()
         {
-            var holding = _holdState.IsHolding;
-            if (holding)
+            while (_flights.Count > 0)
             {
-                _holdEngagedThisFlight = true;
+                ReleaseFlight(_flights[_flights.Count - 1]);
+            }
+        }
+
+        private void ForgetStreaks()
+        {
+            _sharedStreak = 0;
+            for (var i = 0; i < _flights.Count; i++)
+            {
+                _flights[i].Streak = 0;
+            }
+        }
+
+        private BallFlight Find(IProjectileModel projectile)
+        {
+            if (projectile == null)
+            {
+                return null;
             }
 
-            if (holding == _holding)
+            for (var i = 0; i < _flights.Count; i++)
             {
-                return;
+                if (_flights[i].Projectile == projectile)
+                {
+                    return _flights[i];
+                }
             }
 
-            _holding = holding;
-            RefreshClocks();
+            return null;
+        }
+
+        // The flight of the ball a message names. An event no ball made, or one naming a ball not in
+        // flight (already sealed, or never fired), belongs to the Level and to no flight (R2).
+        private MetricScope ScopeOf(IProjectileModel projectile)
+        {
+            var flight = Find(projectile);
+            return flight != null ? flight.Metrics : _levelMetrics;
         }
 
         // One loop over the scopes per transition — never one call per scope per timer. Each scope owns
         // its own instance of each clock and measures its own window, which is why Absorb never folds
         // timers (a Run scope's Gameplay stopwatch has already measured the whole run).
         private void RefreshClocks()
+        {
+            for (var i = 0; i < _scopes.Length; i++)
+            {
+                ApplyClocks(_scopes[i]);
+            }
+
+            for (var i = 0; i < _flights.Count; i++)
+            {
+                ApplyClocks(_flights[i].Metrics);
+            }
+        }
+
+        private void ApplyClocks(MetricScope scope)
         {
             var counting = _state != LevelState.Idle && _state != LevelState.Ended;
 
@@ -934,16 +1041,10 @@ namespace BalloonParty.Game.Telemetry
             // interruption, so gating Wall would collapse it toward the gameplay duration.
             var gameplay = _state == LevelState.Playing && !_paused;
             var ceremony = _state == LevelState.Ceremony;
-            var hold = counting && _holding;
 
-            for (var i = 0; i < _scopes.Length; i++)
-            {
-                var scope = _scopes[i];
-                SetRunning(scope.Timer(TimerId.Gameplay), gameplay);
-                SetRunning(scope.Timer(TimerId.Ceremony), ceremony);
-                SetRunning(scope.Timer(TimerId.Wall), counting);
-                SetRunning(scope.Timer(TimerId.Hold), hold);
-            }
+            SetRunning(scope.Timer(TimerId.Gameplay), gameplay);
+            SetRunning(scope.Timer(TimerId.Ceremony), ceremony);
+            SetRunning(scope.Timer(TimerId.Wall), counting);
         }
 
         private void WriteEnvelope(RecordKind kind, ISealedMetrics metrics, int levelIndex, int levelAttemptOrdinal,
@@ -1011,6 +1112,20 @@ namespace BalloonParty.Game.Telemetry
             Ceremony,
             Transitioning,
             Ended
+        }
+
+        // One ball's open flight. Streak is the last value that ball's streak announced, so a reset can
+        // be told apart from a break (see OnStreakChanged). Pooled: reused across shots, never freed.
+        private sealed class BallFlight
+        {
+            public readonly MetricScope Metrics;
+            public IProjectileModel Projectile;
+            public int Streak;
+
+            public BallFlight(MetricScope metrics)
+            {
+                Metrics = metrics;
+            }
         }
     }
 }

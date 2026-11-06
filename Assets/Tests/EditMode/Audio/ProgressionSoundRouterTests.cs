@@ -3,7 +3,9 @@ using BalloonParty.Audio;
 using BalloonParty.Audio.Routing;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Level;
+using BalloonParty.Game.Score;
 using BalloonParty.Projectile;
+using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 using NSubstitute;
@@ -17,6 +19,7 @@ namespace BalloonParty.Tests.Audio
     {
         private ISoundPlayer _player;
         private IMelodicContext _melodic;
+        private IColorStreak _colorStreak;
         private IMessageHandler<StreakChangedMessage> _streakHandler;
         private IMessageHandler<ProgressBarCompletedMessage> _progressBarHandler;
 
@@ -45,22 +48,36 @@ namespace BalloonParty.Tests.Audio
             var levelProgress = Substitute.For<ILevelProgress>();
             levelProgress.Phase.Returns(new ReactiveProperty<LevelUpPhase>(LevelUpPhase.Playing));
 
+            _colorStreak = Substitute.For<IColorStreak>();
             var router = new ProgressionSoundRouter(
                 _player, _melodic, palette, levelProgress, streakSubscriber, scoreTrailSubscriber, levelUpSubscriber,
                 levelUpFillSubscriber, levelUpDismissedSubscriber, levelTransitionSubscriber,
                 boardClearSubscriber, gameOverSubscriber, gameOverDismissedSubscriber,
                 ascendStartedSubscriber, descendStartedSubscriber, progressBarCompletedSubscriber,
-                new ProjectileRegistry());
+                new ProjectileRegistry(), _colorStreak);
             router.Start();
         }
 
         [Test]
         public void OnStreakChanged_SetsMelodicStreakAndPlaysStreakStep()
         {
-            _streakHandler.Handle(new StreakChangedMessage("Red", 4));
+            _colorStreak.HighestStreak.Returns(4);
+            _streakHandler.Handle(new StreakChangedMessage(null, "Red", 1));
 
             _melodic.Received(1).SetStreak(4);
             _player.Received(1).Play(GameSoundId.StreakStep, null);
+        }
+
+        [Test]
+        public void OnStreakChanged_OneBallBreaks_MelodyFollowsTheBestRemainingStreak()
+        {
+            // Another ball is still on a streak of 3 when this ball's resets to 0: the melody must not drop.
+            _colorStreak.HighestStreak.Returns(3);
+
+            _streakHandler.Handle(new StreakChangedMessage(new ProjectileModel(), null, 0));
+
+            _melodic.Received(1).SetStreak(3);
+            _melodic.DidNotReceive().SetStreak(0);
         }
 
         [Test]

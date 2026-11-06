@@ -30,7 +30,6 @@ namespace BalloonParty.Game.Flight
         private readonly ISubscriber<ProjectileFiredMessage> _firedSubscriber;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly CompositeDisposable _subscriptions = new();
-        private readonly ReactiveProperty<bool> _isLoaded = new();
         private readonly ReactiveProperty<bool> _isAirborne = new();
 
         // One per tracked ball; dropped when the registry retires it, which is after its Destroyed
@@ -38,10 +37,6 @@ namespace BalloonParty.Game.Flight
         private readonly List<FlightRecord> _records = new();
         private readonly Stack<FlightRecord> _spare = new();
 
-        private int _flightIndex;
-
-        public int FlightIndex => _flightIndex;
-        public IReadOnlyReactiveProperty<bool> IsLoaded => _isLoaded;
         public IReadOnlyReactiveProperty<bool> IsAirborne => _isAirborne;
 
         [Inject]
@@ -124,7 +119,6 @@ namespace BalloonParty.Game.Flight
 
         private void OnLoaded(IProjectileModel projectile)
         {
-            _flightIndex++;
             var record = _spare.Count > 0 ? _spare.Pop() : new FlightRecord(BalloonTypeCount);
             record.Begin(projectile);
             _records.Add(record);
@@ -147,7 +141,6 @@ namespace BalloonParty.Game.Flight
             var record = Find(projectile);
             if (record != null)
             {
-                record.IsAlive = false;
                 record.IsAirborne = false;
             }
 
@@ -171,15 +164,12 @@ namespace BalloonParty.Game.Flight
 
         private void RefreshWindows()
         {
-            var loaded = false;
             var airborne = false;
             foreach (var record in _records)
             {
-                loaded |= record.IsAlive;
                 airborne |= record.IsAirborne;
             }
 
-            _isLoaded.Value = loaded;
             _isAirborne.Value = airborne;
         }
 
@@ -207,7 +197,6 @@ namespace BalloonParty.Game.Flight
             internal readonly int[] Deflects;
 
             internal IProjectileModel Projectile;
-            internal bool IsAlive;
             internal bool IsAirborne;
             internal int WallBouncesCount;
             internal int PierceDischargesCount;
@@ -234,7 +223,6 @@ namespace BalloonParty.Game.Flight
             internal void Begin(IProjectileModel projectile)
             {
                 Projectile = projectile;
-                IsAlive = true;
                 IsAirborne = false;
                 WallBouncesCount = 0;
                 PierceDischargesCount = 0;

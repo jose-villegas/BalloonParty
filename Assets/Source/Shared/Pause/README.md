@@ -101,13 +101,12 @@ Current claimants:
   `Projectile/README.md` § Pierce & Discharge Feel.
 - **`ProjectileDoomedTimeScaleController`** (`TimeScaleSource.LastShield`, `Projectile/Controller/`) —
   bullet-time while a shot on its last shield drifts toward the wall it's doomed to die on,
-  curve-sampled over the doomed approach's progress. It follows the latest ball to start its last breath; an earlier ball's end doesn't cut it short, and a ball scaled away without a `DoomedEnded` (game over, reset) is detected through the registry.
+  curve-sampled over the doomed approach's progress. It applies only while the doomed ball flies
+  alone (`ProjectileRegistryExtensions.DoomedShotFliesAlone`, read off the registry every tick), so
+  one ball's last breath never slows the others. It keeps each ball's doom-start time on its own
+  wall-time clock, so a ball left alone resumes its last breath where it now is.
 - **`BoardPopWave`** (`TimeScaleSource.LevelTransition`, `Game/Cinematics/`) — slow-mo while the
   Ascent pop wave clears the old level's balloons band by band.
-- **`HoldSpeedUpController`** (`TimeScaleSource.HoldSpeedUp`, `Projectile/Controller/`) — while
-  the projectile is in flight, holding a finger ramps timeScale up to
-  `IProjectileFlightConfig.HoldSpeedUpMax` (default 2×); releasing or projectile death ramps
-  back to 1×. Min-wins means any freeze or slow-mo from another source overrides the speed-up.
 
 `PauseService` handles *logical* pause coordination (projectile, trail spawning);
 `TimeScaleService` handles *visual* time warping. The two are independent.

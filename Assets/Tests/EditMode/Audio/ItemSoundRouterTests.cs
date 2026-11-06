@@ -3,6 +3,7 @@ using BalloonParty.Audio;
 using BalloonParty.Audio.Routing;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration.Items;
+using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
@@ -16,6 +17,7 @@ namespace BalloonParty.Tests.Audio
     public class ItemSoundRouterTests
     {
         private ISoundPlayer _player;
+        private ProjectileRegistry _registry;
         private IMessageHandler<ItemActivatedMessage> _itemActivatedHandler;
         private IMessageHandler<OverflowHeartRequestedMessage> _overflowHeartHandler;
         private IMessageHandler<ProjectileLoadedMessage> _loadedHandler;
@@ -24,12 +26,14 @@ namespace BalloonParty.Tests.Audio
         public void SetUp()
         {
             _player = Substitute.For<ISoundPlayer>();
+            _registry = new ProjectileRegistry();
 
             var itemActivatedSubscriber = CaptureSubscriber<ItemActivatedMessage>(h => _itemActivatedHandler = h);
             var overflowHeartSubscriber = CaptureSubscriber<OverflowHeartRequestedMessage>(h => _overflowHeartHandler = h);
             var loadedSubscriber = CaptureSubscriber<ProjectileLoadedMessage>(h => _loadedHandler = h);
 
-            var router = new ItemSoundRouter(_player, itemActivatedSubscriber, overflowHeartSubscriber, loadedSubscriber);
+            var router = new ItemSoundRouter(
+                _player, itemActivatedSubscriber, overflowHeartSubscriber, loadedSubscriber, _registry);
             router.Start();
         }
 
@@ -144,6 +148,66 @@ namespace BalloonParty.Tests.Audio
         }
 
         [Test]
+        public void OnItemActivated_TwoBalls_EachClimbsItsOwnRamp()
+        {
+            var ballA = Fly();
+            var ballB = Fly();
+
+            Pickup(ItemType.Bomb, ballA);
+            Pickup(ItemType.Laser, ballA);
+            Pickup(ItemType.Paint, ballB);
+
+            _player.Received(1).Play(GameSoundId.ItemBomb, null, null, 0, 1f);
+            _player.Received(1).Play(GameSoundId.ItemLaser, null, null, 2, 1f);
+            _player.Received(1).Play(GameSoundId.ItemPaint, null, null, 0, 1f);
+        }
+
+        [Test]
+        public void OnProjectileLoaded_ClearsOnlyTheSharedRamp_NotAFlyingBallsRamp()
+        {
+            var ball = Fly();
+            Pickup(ItemType.Bomb, ball);
+            Pickup(ItemType.Bomb, null);
+
+            _loadedHandler.Handle(new ProjectileLoadedMessage(null));
+            Pickup(ItemType.Laser, ball);
+            Pickup(ItemType.Paint, null);
+
+            _player.Received(1).Play(GameSoundId.ItemLaser, null, null, 2, 1f);
+            _player.Received(1).Play(GameSoundId.ItemPaint, null, null, 0, 1f);
+        }
+
+        [Test]
+        public void OnBallRetired_ItsRampIsDropped()
+        {
+            var ball = Fly();
+            Pickup(ItemType.Bomb, ball);
+            Pickup(ItemType.Bomb, ball);
+
+            _registry.Land(ball);
+            _registry.Retire(ball);
+            _registry.Load(ball, null);
+            _registry.Launch(ball);
+            Pickup(ItemType.Laser, ball);
+
+            _player.Received(1).Play(GameSoundId.ItemLaser, null, null, 0, 1f);
+        }
+
+        [Test]
+        public void OnItemActivated_BallNoLongerTracked_SharesTheUnattributedRamp()
+        {
+            var retired = new ProjectileModel();
+
+            Pickup(ItemType.Bomb, retired);
+            Pickup(ItemType.Laser, retired);
+            Pickup(ItemType.Paint, null);
+
+            _player.Received(1).Play(GameSoundId.ItemBomb, null, null, 0, 1f);
+            _player.Received(1).Play(GameSoundId.ItemLaser, null, null, 2, 1f);
+            _player.Received(1).Play(GameSoundId.ItemPaint, null, null, 4, 1f);
+        }
+
+        [Test]
         public void OnItemActivated_ItemTypeNone_DoesNotPlay()
         {
             var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
@@ -175,6 +239,21 @@ namespace BalloonParty.Tests.Audio
             _overflowHeartHandler.Handle(new OverflowHeartRequestedMessage(3, position));
 
             _player.Received(1).Play(GameSoundId.HeartDrain, position);
+        }
+
+        private ProjectileModel Fly()
+        {
+            var ball = new ProjectileModel();
+            _registry.Load(ball, null);
+            _registry.Launch(ball);
+            return ball;
+        }
+
+        private void Pickup(ItemType item, IProjectileModel ball)
+        {
+            var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            balloon.Item.Value = item;
+            _itemActivatedHandler.Handle(new ItemActivatedMessage(balloon, ball));
         }
 
         private static ISubscriber<T> CaptureSubscriber<T>(Action<IMessageHandler<T>> capture)

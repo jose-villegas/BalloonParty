@@ -25,7 +25,6 @@ Each self-contained UI section has its own VContainer child scope, inheriting al
 | `Health/` | Hit-point counter label and heart trails to overflow pops | `HealthUILifetimeScope` (child of `GameLifetimeScope`) |
 | `Danger/` | Space-danger gradient overlay (`DangerGradientView`) | `DangerUILifetimeScope` (child of `GameLifetimeScope`) |
 | `GameOver/` | Loss screen (`GameOverScreen`) — see `GameOver/README.md` | `GameOverLifetimeScope` (child of `GameLifetimeScope`) |
-| `Tooltip/` | One-time gameplay hints — `HoldSpeedUpTooltip` (fades in after a configurable flight delay, persists dismissal via PlayerPrefs so it shows only once) | Injected via `FindObjectsByType` in `GameScopeRegistration` (no child scope) |
 | `Telemetry/` | Catalog-driven stats labels — drop `MetricLabel` on a `TMP_Text`, author the format string, and pick a value from a dropdown generated out of `MetricCatalog`; no code needed per label. Any UI scope that wants labels must call `MetricLabelRegistration.RegisterMetricLabels(scope)` — see `Telemetry/README.md` | Already wired into `LevelUpLifetimeScope` and `GameOverLifetimeScope` |
 | `Binding/` | Shared reactive binding helpers — `IReactiveBindable<T>`, `ICounterDisplay` (strategy interface for counter rendering), `ReactivePropertyBinder`, and the `RegisterBoundViews` scope extension used by the Health and Danger scopes | — |
 
@@ -40,5 +39,5 @@ Scene loading is handled by `SceneTransition` (in `Shared/`) — a MonoBehaviour
 - **ScoreController / LevelController** — all score UI subscribes to `TotalScore` / `Level` reactive properties and `ScorePointsGroupMessage` (from `ScoreController`) / `ScoreLevelUpMessage` (from `LevelController`) events; `ColorProgressBar` reads the current streak via `ScoreController.GetStreak` for displaying streak notices
 - **ScoreTrailService** — `ColorProgressBar` registers trail target providers and subscribes to `ScoreTrailArrivedMessage`; `LevelUpPopUp` reads target positions for fill trail origins
 - **LevelUpPopUp ↔ ColorProgressBar** — popup publishes `LevelUpFillTrailsMessage` to drain bars in sync with fill trails, and `LevelUpDismissedMessage` to apply the new max and reset
-- **ThrowerController** — publishes `ProjectileLoadedMessage` on each reload; `ShieldCounterAnimation` subscribes and rebinds the shield labels to the newly loaded (held) `ProjectileModel` — it does not yet follow balls already in flight (Phase 2 of `plan_fast_paced`)
+- **ThrowerController** — publishes `ProjectileLoadedMessage` on each reload; `ShieldCounterAnimation` subscribes and binds the shield labels to the newly loaded (held) `ProjectileModel`. It unbinds only when *that* ball dies; other balls dying leave it alone. It does not follow balls already in flight
 - **ILevelThresholds / IScoreTrailConfig** — read for point thresholds and trail animation timing

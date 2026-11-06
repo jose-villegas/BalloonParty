@@ -3,9 +3,8 @@ using System.Collections.Generic;
 
 namespace BalloonParty.Game.Telemetry
 {
-    // Timer-side counterpart to MetricCatalog, and the only home for TimerId's four wire names.
-    // Without it the
-    // serializer to hardcode four string literals into what are permanent, append-only wire names —
+    // Timer-side counterpart to MetricCatalog, and the only home for TimerId's wire names. Without it
+    // the serializer would hardcode string literals into what are permanent, append-only wire names —
     // exactly what the counter catalog exists to prevent (R6, guardrail 14). Kept as its own static
     // table rather than folded into MetricCatalog: TimerId carries no FoldRule, Scope or MetricAxis —
     // Absorb never folds timers (every scope runs its own clocks; see MetricScope.Absorb) — so merging
@@ -17,7 +16,6 @@ namespace BalloonParty.Game.Telemetry
             new(TimerId.Gameplay, "gameplay_seconds", "seconds"),
             new(TimerId.Ceremony, "ceremony_seconds", "seconds"),
             new(TimerId.Wall, "wall_seconds", "seconds"),
-            new(TimerId.Hold, "hold_seconds", "seconds"),
         };
 
         private static readonly Dictionary<TimerId, Entry> ById;
@@ -59,7 +57,7 @@ namespace BalloonParty.Game.Telemetry
             return map;
         }
 
-        // W2's serializer loops this rather than hardcoding four TimerId literals — the same
+        // W2's serializer loops this rather than hardcoding TimerId literals — the same
         // mechanical-loop discipline MetricCatalog.AllIds gives the counter side (R27).
         private static TimerId[] BuildIds()
         {

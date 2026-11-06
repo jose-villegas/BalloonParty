@@ -56,13 +56,14 @@ the exhaustive subscriber list when it matters.
 | `LevelUpDismissedMessage` | `LevelUpPopUp` | `LevelUpCinematic` |
 | `ProjectileDestroyedMessage` | `ProjectileView` | `ThrowerController`, `BalloonSpawner`, `BalloonBalancer`, `ProjectileFacingSource`, `ShieldCounterAnimation`, `LevelController`, `CombatSoundRouter` |
 | `ProjectileLoadedMessage` | `ThrowerController` | `ShieldCounterLabel`, `ShieldCounterAnimation` |
+| `ThrowerReadyMessage` | `ThrowerController` | `CombatSoundRouter` — once per ball, when it reaches the muzzle with a slot free (a release now fires) |
 | `ItemCheckMessage` | `BalloonSpawner` | `ItemAssigner` |
-| `ItemActivatedMessage` | `ItemActivator` | `BalloonController` |
+| `ItemActivatedMessage` | `ItemActivator` | `BalloonController` — also carries the triggering projectile |
 | `ItemRotationCapturedMessage` | `BalloonController` | `LaserItemHandler` |
 | `ShieldGainedMessage` | `ShieldItemHandler` | `ShieldTrailController` |
 | `LevelUpAbandonedMessage` | `LevelController` | `ThrowerController` |
 | `ForceDestroyProjectileMessage` | `LevelController` | `ThrowerController` |
 
-> Every projectile message (`ProjectileLoaded/Fired/Destroyed`, `Doomed*`, `Cruise*`, `ShieldLost`, `PierceDischarged`, `BalloonDeflected`, `ForceDestroyProjectile`) names the ball it is about (`IProjectileModel`). A subscriber keys its per-ball state off that ball instead of caching "the last loaded one"; see `IProjectileRegistry` in `Projectile/README.md` for when a ball counts as gone.
+> Every projectile message (`ProjectileLoaded/Fired/Destroyed`, `ThrowerReady`, `StreakChanged` (null for the shared streak), `Doomed*`, `Cruise*`, `ShieldLost`, `PierceDischarged`, `BalloonDeflected`, `ForceDestroyProjectile`) names the ball it is about (`IProjectileModel`). A subscriber keys its per-ball state off that ball instead of caching "the last loaded one"; see `IProjectileRegistry` in `Projectile/README.md` for when a ball counts as gone.
 
 > `NudgeMessage` lives in `Nudge/` (not `Messages/`) — it is specific to the nudge system and carries `NudgeType` and `NudgeOverride[]` types from that namespace.

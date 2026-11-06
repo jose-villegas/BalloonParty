@@ -175,7 +175,7 @@ namespace BalloonParty.Game.Telemetry
         }
 
         // Unlike counters, every timer is always emitted — a level with a genuine 0-second ceremony is
-        // data, not clutter, and there are only ever four of them.
+        // data, not clutter, and there are only ever a handful of them.
         private void AppendTimers(ISealedMetrics metrics)
         {
             BeginField();

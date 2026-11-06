@@ -5,8 +5,9 @@
 Turn BalloonParty from a turn-based puzzle shooter into a fast, endless arcade game, while
 keeping the balloon grid, the items, the grid actors and the visual language it already has.
 
-**Status:** design, all decisions settled. Nothing is built. Items marked **DECISION** are
-settled: don't re-derive them. §10 records the owner's answers.
+**Status:** all decisions settled. Phase 1 (projectile identity) is built. Phase 2 (rapid fire) is
+implemented, pending the owner's playtest at cap 3. Phase 3 is not started. Items marked
+**DECISION** are settled: don't re-derive them. §10 records the owner's answers.
 
 ---
 
@@ -117,9 +118,24 @@ converted for A's multiplier.
 
 ## 5. Phase 2: rapid fire
 
+**Implemented, pending the owner's playtest at cap 3.** The rows below keep the original design
+wording; the built behaviour lives in `Thrower/README.md` (Rapid fire), `Game/Level/README.md`,
+`Balloon/Spawner/README.md` and `Shared/Pause/README.md`. Differences and open items:
+
+| Item | State |
+|---|---|
+| Pool prewarm | `2 * MaxBallsInFlight + 1`, not cap + 1: a dead ball stays out of the pool until its disappear animation finishes. |
+| Reload | The held ball slides pivot to muzzle over `max(ProjectileLoadDuration, ReloadCooldownSeconds)`, advancing only while a slot is free (`ThrowerReload`). `ThrowerReadyMessage` marks "a release now fires" and drives the reload sound. |
+| Level-up with balls in flight | After the beat plus `LevelCompleteFlightGrace`, remaining balls are force-destroyed once. Pierce toughs already plowed through still discharge and score; progress past the cap is banked. So "no score" in the row below is not literal. |
+| Spawning (open) | Still per ball death. `BalloonSpawner` now runs waves one at a time and merges deaths during a wave into one queued wave. Interim: Phase 3's spawn clock is the real fix. |
+| Shorter flights (open) | No lever left: starting shields are already 1, so a ball cannot be made shorter. |
+| Pierce-discharge time dip (open) | Still world-wide: one ball's discharge dips time for every ball. |
+| Shield HUD (open) | Built as the held ball's shields (bind on load, unbind when that ball dies). Held-ball vs ball-count/cooldown meter is for the playtest. |
+| Hold-to-speed-up | Deleted, with its config fields and `TimerId.Hold`. The `Tooltip` object is still nested, inert, in GameCanvas; remove it in the editor. |
+
 | Change | Notes |
 |---|---|
-| Reload on a cooldown: `ReloadCooldownSeconds`, `MaxBallsInFlight` | Config on `IProjectileFlightConfig` (or a new `IRapidFireConfig`), never hardcoded. Pool prewarm becomes cap + 1. |
+| Reload on a cooldown: `ReloadCooldownSeconds`, `MaxBallsInFlight` | Config on `IProjectileFlightConfig` (or a new `IRapidFireConfig`), never hardcoded. Pool prewarm becomes cap + 1 (built as 2 x cap + 1, see above). |
 | **DECISION: release to fire** | Kept from today: hold to aim (with the trace), release fires one ball. Aiming is allowed while balls fly. A release with no ball ready (cooldown running, or cap reached) fires nothing and isn't queued; the thrower shows the reload so the player knows when the next release counts. |
 | **DECISION: remove hold-to-speed-up** | `HoldSpeedUpController`, `HoldSpeedUpTooltip`. It fights aiming the next ball (same button, `ConsumedInput` blocks aim) and would speed up the spawn clock too. Rapid fire replaces the need for it. |
 | **DECISION: shorter flights** | Lower starting shields per ball so balls die sooner and the screen stays readable. Tune in the playtest. |

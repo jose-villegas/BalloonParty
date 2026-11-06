@@ -1,3 +1,4 @@
+using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 
@@ -16,6 +17,12 @@ namespace BalloonParty.Game.Score
 
         public string LastColor { get; private set; }
         public int CurrentStreak { get; private set; }
+
+        // The ball this streak belongs to, named on every change it announces. Null for the shared
+        // streak. Set by the tracker when it hands a pooled streak to a ball.
+        internal IProjectileModel Owner { get; set; }
+
+        internal bool IsClear => LastColor == null && CurrentStreak == 0 && _deferredPops == 0 && !_carryOnColorChange;
 
         internal ColorStreak(IPublisher<StreakChangedMessage> changedPublisher)
         {
@@ -109,8 +116,15 @@ namespace BalloonParty.Game.Score
             return _deferredPops;
         }
 
+        // Announces only a real change: the shared streak resets on every load, which with rapid fire
+        // is every shot, and each announcement plays a StreakStep.
         internal void Reset()
         {
+            if (IsClear)
+            {
+                return;
+            }
+
             Clear();
             PublishChanged();
         }
@@ -126,7 +140,7 @@ namespace BalloonParty.Game.Score
 
         private void PublishChanged()
         {
-            _changedPublisher.Publish(new StreakChangedMessage(LastColor, CurrentStreak));
+            _changedPublisher.Publish(new StreakChangedMessage(Owner, LastColor, CurrentStreak));
         }
     }
 }

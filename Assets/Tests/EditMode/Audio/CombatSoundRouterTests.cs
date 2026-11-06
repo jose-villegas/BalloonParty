@@ -30,6 +30,7 @@ namespace BalloonParty.Tests.Audio
         private IMessageHandler<ActorHitMessage> _hitHandler;
         private IMessageHandler<ProjectileFiredMessage> _firedHandler;
         private IMessageHandler<ProjectileLoadedMessage> _loadedHandler;
+        private IMessageHandler<ThrowerReadyMessage> _readyHandler;
         private IMessageHandler<ProjectileCruiseStartedMessage> _cruiseStartedHandler;
         private IMessageHandler<ProjectileCruiseEndedMessage> _cruiseEndedHandler;
         private IMessageHandler<ShieldGainedMessage> _shieldGainedHandler;
@@ -37,6 +38,7 @@ namespace BalloonParty.Tests.Audio
         private IMessageHandler<WallHitMessage> _wallHitHandler;
         private IMessageHandler<SpeedTapMintedMessage> _speedTapHandler;
         private IMessageHandler<ProjectileDestroyedMessage> _destroyedHandler;
+        private IMessageHandler<StreakChangedMessage> _streakHandler;
 
         private IMessageHandler<PierceDischargedMessage> _pierceHandler;
 
@@ -57,6 +59,7 @@ namespace BalloonParty.Tests.Audio
             var hitSubscriber = CaptureSubscriber<ActorHitMessage>(hitFanout.Add);
             var firedSubscriber = CaptureSubscriber<ProjectileFiredMessage>(firedFanout.Add);
             var loadedSubscriber = CaptureSubscriber<ProjectileLoadedMessage>(loadedFanout.Add);
+            var readySubscriber = CaptureSubscriber<ThrowerReadyMessage>(h => _readyHandler = h);
             var cruiseStartedSubscriber = CaptureSubscriber<ProjectileCruiseStartedMessage>(h => _cruiseStartedHandler = h);
             var cruiseEndedSubscriber = CaptureSubscriber<ProjectileCruiseEndedMessage>(h => _cruiseEndedHandler = h);
             var doomedSubscriber = CaptureSubscriber<ProjectileDoomedStartedMessage>(_ => { });
@@ -66,7 +69,7 @@ namespace BalloonParty.Tests.Audio
             var shieldLostSubscriber = CaptureSubscriber<ShieldLostMessage>(h => _shieldLostHandler = h);
             var wallHitSubscriber = CaptureSubscriber<WallHitMessage>(wallHitFanout.Add);
             var speedTapSubscriber = CaptureSubscriber<SpeedTapMintedMessage>(h => _speedTapHandler = h);
-            var streakChangedSubscriber = CaptureSubscriber<StreakChangedMessage>(_ => { });
+            var streakChangedSubscriber = CaptureSubscriber<StreakChangedMessage>(h => _streakHandler = h);
 
             var flightConfig = Substitute.For<IProjectileFlightConfig>();
             flightConfig.ShieldToneThreshold.Returns(5);
@@ -86,7 +89,7 @@ namespace BalloonParty.Tests.Audio
             flightStats.Start();
 
             var router = new CombatSoundRouter(
-                _player, hitSubscriber, firedSubscriber, loadedSubscriber,
+                _player, hitSubscriber, firedSubscriber, loadedSubscriber, readySubscriber,
                 cruiseStartedSubscriber, cruiseEndedSubscriber, doomedSubscriber, destroyedSubscriber,
                 pierceSubscriber, shieldGainedSubscriber, shieldLostSubscriber, wallHitSubscriber,
                 speedTapSubscriber, streakChangedSubscriber, flightConfig, activePierce, flightStats, _registry, palette);
@@ -105,7 +108,7 @@ namespace BalloonParty.Tests.Audio
             _destroyedHandler = destroyedFanout;
 
             // The thrower's ball, loaded and fired as in a real turn; the stats and the per-ball pitch
-            // ramps below all key off it. Its own reload cue isn't what any test is about.
+            // ramps below all key off it.
             LoadAndFire(_ball);
             _player.ClearReceivedCalls();
         }
@@ -281,11 +284,20 @@ namespace BalloonParty.Tests.Audio
         }
 
         [Test]
-        public void OnLoaded_ForwardsShotReloadWithNullPosition()
+        public void ThrowerReady_ForwardsShotReloadWithNullPosition()
+        {
+            _readyHandler.Handle(new ThrowerReadyMessage(new ProjectileModel()));
+
+            _player.Received(1).Play(GameSoundId.ShotReload, null);
+        }
+
+        [Test]
+        public void OnLoaded_PlaysNoReloadCue_TheBallIsNotReadyYet()
         {
             _loadedHandler.Handle(new ProjectileLoadedMessage(new ProjectileModel()));
 
-            _player.Received(1).Play(GameSoundId.ShotReload, null);
+            _player.DidNotReceive().Play(
+                GameSoundId.ShotReload, Arg.Any<Vector3?>(), Arg.Any<int?>(), Arg.Any<int>(), Arg.Any<float>());
         }
 
         [Test]
@@ -558,6 +570,131 @@ namespace BalloonParty.Tests.Audio
             _player.Received(1).Stop(handle);
         }
 
+        // --- Colour-pop ramps per ball ---
+
+        [Test]
+        public void OnActorHit_ColorPops_TwoBallsClimbTheirOwnRamps()
+        {
+            var other = LaunchSecondBall();
+            var root = BlueRoot();
+
+            Pop("Blue", _ball);
+            Pop("Blue", _ball);
+            Pop("Blue", other);
+
+            // The second ball's first Blue pop sounds at the colour root, not as the third rung of the first ball's ramp.
+            _player.Received(2).Play(GameSoundId.BalloonPop, Vector3.zero, null, root, 1f);
+            _player.Received(1).Play(GameSoundId.BalloonPop, Vector3.zero, null, root + 2, 1f);
+        }
+
+        [Test]
+        public void OnStreakChanged_OneBallsBreak_ClearsOnlyThatBallsRamp()
+        {
+            var other = LaunchSecondBall();
+            var root = BlueRoot();
+            Pop("Blue", _ball);
+            Pop("Blue", _ball);
+            Pop("Blue", other);
+            Pop("Blue", other);
+            _player.ClearReceivedCalls();
+
+            _streakHandler.Handle(new StreakChangedMessage(_ball, null, 0));
+            Pop("Blue", _ball);
+            Pop("Blue", other);
+
+            _player.Received(1).Play(GameSoundId.BalloonPop, Vector3.zero, null, root, 1f);
+            _player.Received(1).Play(GameSoundId.BalloonPop, Vector3.zero, null, root + 4, 1f);
+        }
+
+        [Test]
+        public void OnStreakChanged_ShortOfABreak_LeavesTheRamp()
+        {
+            var root = BlueRoot();
+            Pop("Blue", _ball);
+            _player.ClearReceivedCalls();
+
+            _streakHandler.Handle(new StreakChangedMessage(_ball, "Blue", 2));
+            Pop("Blue", _ball);
+
+            _player.Received(1).Play(GameSoundId.BalloonPop, Vector3.zero, null, root + 2, 1f);
+        }
+
+        [Test]
+        public void OnStreakChanged_BallLessBreak_ClearsOnlyTheSharedRamp()
+        {
+            var untracked = new ProjectileModel();
+            var root = BlueRoot();
+            Pop("Blue", untracked);
+            Pop("Blue", untracked);
+            Pop("Blue", _ball);
+            _player.ClearReceivedCalls();
+
+            // The shared streak resets on every load (every shot) — that must not undo a flying ball's ramp.
+            _streakHandler.Handle(new StreakChangedMessage(null, null, 0));
+            Pop("Blue", untracked);
+            Pop("Blue", _ball);
+
+            _player.Received(1).Play(GameSoundId.BalloonPop, Vector3.zero, null, root, 1f);
+            _player.Received(1).Play(GameSoundId.BalloonPop, Vector3.zero, null, root + 2, 1f);
+        }
+
+        [Test]
+        public void OnLoaded_ClearsOnlyTheSharedRamp_NotAFlyingBallsRamp()
+        {
+            var untracked = new ProjectileModel();
+            var root = BlueRoot();
+            Pop("Blue", untracked);
+            Pop("Blue", _ball);
+            _player.ClearReceivedCalls();
+
+            LoadAndFire(new ProjectileModel());
+            _player.ClearReceivedCalls();
+            Pop("Blue", untracked);
+            Pop("Blue", _ball);
+
+            _player.Received(1).Play(GameSoundId.BalloonPop, Vector3.zero, null, root, 1f);
+            _player.Received(1).Play(GameSoundId.BalloonPop, Vector3.zero, null, root + 2, 1f);
+        }
+
+        [Test]
+        public void OnBallRetired_ItsRampIsDropped_SoTheNextBallStartsAtTheRoot()
+        {
+            var root = BlueRoot();
+            var first = _ball;
+            Pop("Blue", first);
+            Pop("Blue", first);
+
+            _registry.Land(first);
+            _registry.Retire(first);
+            var second = new ProjectileModel();
+            LoadAndFire(second);
+            _player.ClearReceivedCalls();
+            Pop("Blue", second);
+
+            // A pooled map handed to the next ball must come back empty.
+            _player.Received(1).Play(GameSoundId.BalloonPop, Vector3.zero, null, root, 1f);
+        }
+
+        [Test]
+        public void OnActorHit_PopCreditedToARetiredBall_UsesTheSharedRampWithoutCreatingAnEntry()
+        {
+            var root = BlueRoot();
+            var first = _ball;
+            _registry.Land(first);
+            _registry.Retire(first);
+
+            Pop("Blue", first);
+            Pop("Blue", first);
+            _registry.Load(first, null);
+            _registry.Launch(first);
+            _player.ClearReceivedCalls();
+            Pop("Blue", first);
+
+            // Had the late pops created an entry for the retired ball, re-registering it would resume at +4.
+            _player.Received(1).Play(GameSoundId.BalloonPop, Vector3.zero, null, root, 1f);
+        }
+
+
         // Retires the ball in play and loads a fresh one, as the thrower does between turns.
         private void NextBall()
         {
@@ -582,6 +719,22 @@ namespace BalloonParty.Tests.Audio
             LoadAndFire(other);
             _player.ClearReceivedCalls();
             return other;
+        }
+
+        private int BlueRoot()
+        {
+            return MusicalPitchExtensions.ColorRootOffset(
+                new[] { "Red", "Blue", "Green", "Yellow", "Purple" }, "Blue");
+        }
+
+        // A plain colour pop credited to the given ball, as the hit pipeline would stamp it.
+        private void Pop(string color, IProjectileModel ball)
+        {
+            var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            balloon.Color.Value = color;
+            _hitHandler.Handle(new ActorHitMessage(
+                balloon, Vector3.zero, Vector3.zero, HitOutcome.Pop,
+                new DamageContext(1, DamageFlags.Normal, "", ball)));
         }
 
         private static ISubscriber<T> CaptureSubscriber<T>(Action<IMessageHandler<T>> capture)

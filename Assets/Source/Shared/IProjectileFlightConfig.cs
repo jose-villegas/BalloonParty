@@ -30,14 +30,13 @@ namespace BalloonParty.Shared
         AnimationCurve LastShieldTimeScaleCurve { get; }
         float ShieldTrailDuration { get; }
 
-        /// <summary>Maximum time-scale multiplier when holding during flight (e.g. 2 = double speed).</summary>
-        float HoldSpeedUpMax { get; }
+        /// <summary>Most balls in flight at once; at the cap a release fires nothing.</summary>
+        int MaxBallsInFlight { get; }
 
-        /// <summary>Seconds to lerp from 1× to <see cref="HoldSpeedUpMax"/> while holding.</summary>
-        float HoldSpeedUpLerpDuration { get; }
-
-        /// <summary>Seconds of flight before the "hold to speed up" tooltip appears (0 = disabled).</summary>
-        float HoldSpeedUpTooltipDelay { get; }
+        /// <summary>
+        ///     Seconds from a shot until the next ball can fire (at least <see cref="ProjectileLoadDuration" />).
+        /// </summary>
+        float ReloadCooldownSeconds { get; }
 
         /// <summary>Minimum angular subdivision (degrees) the aim direction snaps to. 0 = continuous aim.</summary>
         float AimAngleStepDegrees { get; }

@@ -4,7 +4,7 @@ using BalloonParty.Configuration.Cinematics;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Run;
-using BalloonParty.Projectile.Model;
+using BalloonParty.Projectile;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Extensions;
@@ -42,10 +42,10 @@ namespace BalloonParty.Game.Level
         private readonly ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
         private readonly ISubscriber<LevelTransitionCompletedMessage> _transitionCompletedSubscriber;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
-        private readonly ISubscriber<ProjectileFiredMessage> _firedSubscriber;
-        // Balls fired and not yet destroyed. A list, not a set: a message without a ball (tests, cheats)
-        // pairs its null Fired with its null Destroyed.
-        private readonly List<IProjectileModel> _shotsInFlight = new();
+
+        // Read for "is any ball still flying", never counted from Fired/Destroyed: game over scales its
+        // balls away without a Destroyed, which would strand a message-kept count until the next run.
+        private readonly IProjectileRegistry _projectiles;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
         private readonly ISubscriber<BoardDepletedMessage> _boardDepletedSubscriber;
         private readonly IPublisher<ForceDestroyProjectileMessage> _forceDestroyPublisher;
@@ -62,7 +62,6 @@ namespace BalloonParty.Game.Level
         private IDisposable _dismissedSubscription;
         private IDisposable _transitionCompletedSubscription;
         private IDisposable _destroyedSubscription;
-        private IDisposable _firedSubscription;
         private IDisposable _gameOverSubscription;
         private IDisposable _boardDepletedSubscription;
         private AnimationCurve _beatCurve;
@@ -71,6 +70,11 @@ namespace BalloonParty.Game.Level
         private float _rampUpElapsed;
         private bool _windowAOpen;
         private bool _rampingUp;
+
+        // When the beat ended (on _completingElapsed's clock), -1 while it still plays; and whether the
+        // balls still flying have already been told to die, so they are popped once.
+        private float _graceStartedAt = -1f;
+        private bool _flightsRetired;
 
         // The target level for the deferred increment; applied when the popup is dismissed.
         private int _pendingNewLevel;
@@ -92,10 +96,10 @@ namespace BalloonParty.Game.Level
             ISubscriber<LevelUpDismissedMessage> dismissedSubscriber,
             ISubscriber<LevelTransitionCompletedMessage> transitionCompletedSubscriber,
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
-            ISubscriber<ProjectileFiredMessage> firedSubscriber,
             ISubscriber<GameOverMessage> gameOverSubscriber,
             ISubscriber<BoardDepletedMessage> boardDepletedSubscriber,
-            IPublisher<ForceDestroyProjectileMessage> forceDestroyPublisher)
+            IPublisher<ForceDestroyProjectileMessage> forceDestroyPublisher,
+            IProjectileRegistry projectiles)
         {
             _levelParams = levelParams;
             _thresholds = thresholds;
@@ -113,10 +117,10 @@ namespace BalloonParty.Game.Level
             _dismissedSubscriber = dismissedSubscriber;
             _transitionCompletedSubscriber = transitionCompletedSubscriber;
             _destroyedSubscriber = destroyedSubscriber;
-            _firedSubscriber = firedSubscriber;
             _gameOverSubscriber = gameOverSubscriber;
             _boardDepletedSubscriber = boardDepletedSubscriber;
             _forceDestroyPublisher = forceDestroyPublisher;
+            _projectiles = projectiles;
         }
 
         public IReadOnlyReactiveProperty<int> Level => _level;
@@ -140,8 +144,7 @@ namespace BalloonParty.Game.Level
             _dismissedSubscription = _dismissedSubscriber.Subscribe(_ => OnLevelUpDismissed());
             _transitionCompletedSubscription = _transitionCompletedSubscriber.Subscribe(_ => OnTransitionCompleted());
 
-            _destroyedSubscription = _destroyedSubscriber.Subscribe(msg => OnFlightEnded(msg.Projectile));
-            _firedSubscription = _firedSubscriber.Subscribe(msg => _shotsInFlight.Add(msg.Projectile));
+            _destroyedSubscription = _destroyedSubscriber.Subscribe(_ => OnFlightEnded());
             _gameOverSubscription = _gameOverSubscriber.Subscribe(_ => AbandonCeremony("game over"));
             _boardDepletedSubscription = _boardDepletedSubscriber.Subscribe(_ => OnBoardDepleted());
         }
@@ -159,7 +162,6 @@ namespace BalloonParty.Game.Level
             _dismissedSubscription?.Dispose();
             _transitionCompletedSubscription?.Dispose();
             _destroyedSubscription?.Dispose();
-            _firedSubscription?.Dispose();
             _gameOverSubscription?.Dispose();
             _boardDepletedSubscription?.Dispose();
         }
@@ -275,6 +277,7 @@ namespace BalloonParty.Game.Level
                     if (t >= 1f)
                     {
                         _windowAOpen = false;
+                        _graceStartedAt = _completingElapsed;
                         _timeScale.ReleaseExclusive(TimeScaleSource.LevelUpCeremony);
 
                         // Cinematic ended — ramp up to speed through the remaining flight.
@@ -287,6 +290,11 @@ namespace BalloonParty.Game.Level
                         _timeScale.ClaimExclusive(TimeScaleSource.LevelUpCeremony, _beatCurve.Evaluate(t));
                     }
                 }
+            }
+
+            if (_phase.Value == LevelUpPhase.Completing)
+            {
+                TryRetireRemainingFlights();
             }
 
             if (_rampingUp)
@@ -324,7 +332,8 @@ namespace BalloonParty.Game.Level
             _pendingNewLevel = 0;
             _windowAOpen = false;
             _completingElapsed = 0f;
-            _shotsInFlight.Clear();
+            _graceStartedAt = -1f;
+            _flightsRetired = false;
             ReleaseCeremonyTimeScale();
             // The excess bank is run-scoped — cleared here (fresh run), but NOT at level-up, where it keeps
             // accumulating across the run.
@@ -452,7 +461,7 @@ namespace BalloonParty.Game.Level
             }
 
             // No active flight (e.g. cheat-triggered): skip the cinematic hold and present immediately.
-            if (_shotsInFlight.Count == 0)
+            if (_projectiles.InFlightCount == 0)
             {
                 Log.Info("Level", $"Level {_level.Value} completed (no flight) — presenting immediately");
                 _phase.Value = LevelUpPhase.Completing;
@@ -462,22 +471,19 @@ namespace BalloonParty.Game.Level
 
             _phase.Value = LevelUpPhase.Completing;
             _completingElapsed = 0f;
+            _graceStartedAt = -1f;
+            _flightsRetired = false;
             _windowAOpen = true;
             _timeScale.ClaimExclusive(TimeScaleSource.LevelUpCeremony, _beatCurve.Evaluate(0f));
 
             Log.Info("Level", $"Level {_level.Value} completed at claim time — holding for end of flight");
         }
 
-        // The ceremony waits for the LAST ball in flight, not the first to land.
-        private void OnFlightEnded(IProjectileModel projectile)
+        // The ceremony waits for the LAST ball in flight, not the first to land. A dying ball has left
+        // the registry's flights before its Destroyed goes out, so the count here already excludes it.
+        private void OnFlightEnded()
         {
-            if (!_shotsInFlight.Remove(projectile) && projectile == null)
-            {
-                // A destroy no Fired preceded (a loaded shot, or a bare test message): nothing flies.
-                _shotsInFlight.Clear();
-            }
-
-            if (_phase.Value != LevelUpPhase.Completing || _shotsInFlight.Count > 0)
+            if (_phase.Value != LevelUpPhase.Completing || _projectiles.InFlightCount > 0)
             {
                 return;
             }
@@ -497,7 +503,7 @@ namespace BalloonParty.Game.Level
 
         private void PresentLevelUp()
         {
-            Log.Assert(_shotsInFlight.Count == 0, "Level", "PresentLevelUp called with projectile still in flight");
+            Log.Assert(_projectiles.InFlightCount == 0, "Level", "PresentLevelUp called with projectile still in flight");
             var completedColors = _levelParams.Current.AllowedColors;
             _phase.Value = LevelUpPhase.Pending;
             _pendingNewLevel = _level.Value + 1;
@@ -529,10 +535,27 @@ namespace BalloonParty.Game.Level
         // force it to die so the ceremony can proceed instead of stalling until the watchdog.
         private void OnBoardDepleted()
         {
-            if (_phase.Value == LevelUpPhase.Completing && _shotsInFlight.Count > 0)
+            if (_phase.Value == LevelUpPhase.Completing && _projectiles.InFlightCount > 0)
             {
                 _forceDestroyPublisher.Publish(default);
             }
+        }
+
+        // With rapid fire several balls can still be cruising when the level completes. Once the beat
+        // has played and the grace has passed, pop them through their canonical death so the level-up
+        // presents; OnFlightEnded then sees the last one land. Toughs a ball already plowed through
+        // still discharge and score; level progress past the cap is banked, as for any late pop.
+        private void TryRetireRemainingFlights()
+        {
+            var grace = _runConfig.LevelCompleteFlightGrace;
+            if (_flightsRetired || grace <= 0f || _graceStartedAt < 0f || _projectiles.InFlightCount == 0
+                || _completingElapsed - _graceStartedAt < grace)
+            {
+                return;
+            }
+
+            _flightsRetired = true;
+            _forceDestroyPublisher.Publish(default);
         }
 
         private void ReleaseCeremonyTimeScale()

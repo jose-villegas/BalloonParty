@@ -36,13 +36,13 @@ keeps flying and the animations have a stable state to play against:
    `LevelCompleteRampUpDuration` (both from `IRunConfig`), using a **non-exclusive** `Claim` — the
    min-wins rule means any freeze (e.g. a popup pause) still overrides. The flight continues at the
    ramping speed until the **last** ball in flight dies. A 15 s watchdog (diagnostic only — it logs and abandons,
-   never force-destroys) fires if a ball still hasn't died.
+   never force-destroys) fires if a ball still hasn't died. Separately, once the beat has played and `IRunConfig.LevelCompleteFlightGrace` more seconds have passed, any balls still flying are force-destroyed once (`ForceDestroyProjectileMessage`) so the level-up can present; a tough a piercing ball already plowed through still discharges and scores, and progress past the cap is banked.
 2. **`Completing → Pending`** — `ProjectileDestroyedMessage` of the last ball in flight is the **sole trigger** for presenting the
-   popup (`LevelController` tracks fired-and-not-yet-destroyed balls by the ball each message carries; the ceremony waits for the last one, not the first to land). `OnFlightEnded` releases any remaining time-scale claims, then — if the run is still in
+   popup (`LevelController` asks `IProjectileRegistry.InFlightCount` whether balls are still flying; the ceremony waits for the last one, not the first to land). `OnFlightEnded` releases any remaining time-scale claims, then — if the run is still in
    `NavigationState.Game` — snapshots the completed colours, publishes
    `ScoreLevelUpMessage(newLevel, colours)`, transitions nav to `LevelUp`, and records the pending
    level. **The `Level` integer and progress have not changed yet.** While `Completing` the spawn wave,
-   thrower reload, and loose pop-spawns are held (they see `Phase != Playing`).
+   the thrower's reload, and loose pop-spawns are held (they see `Phase != Playing`).
 3. **`Pending → Transitioning`** — the player dismisses the popup (`LevelUpDismissedMessage`). *Now*
    `Level` advances to the pending value and progress resets to zero.
 4. **`Transitioning → Playing`** — the Ascent reports it has settled (`LevelTransitionCompletedMessage`),

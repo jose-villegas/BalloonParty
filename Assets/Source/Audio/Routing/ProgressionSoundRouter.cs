@@ -1,6 +1,7 @@
 using System;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Level;
+using BalloonParty.Game.Score;
 using BalloonParty.Projectile;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
@@ -30,6 +31,7 @@ namespace BalloonParty.Audio.Routing
         private readonly ISubscriber<LevelDescendStartedMessage> _descendStartedSubscriber;
         private readonly ISubscriber<ProgressBarCompletedMessage> _progressBarCompletedSubscriber;
         private readonly IProjectileRegistry _projectiles;
+        private readonly IColorStreak _colorStreak;
         private readonly CompositeDisposable _subscriptions = new();
 
         [Inject]
@@ -47,7 +49,8 @@ namespace BalloonParty.Audio.Routing
             ISubscriber<LevelAscendStartedMessage> ascendStartedSubscriber,
             ISubscriber<LevelDescendStartedMessage> descendStartedSubscriber,
             ISubscriber<ProgressBarCompletedMessage> progressBarCompletedSubscriber,
-            IProjectileRegistry projectiles)
+            IProjectileRegistry projectiles,
+            IColorStreak colorStreak)
         {
             _player = player;
             _melodic = melodic;
@@ -66,6 +69,7 @@ namespace BalloonParty.Audio.Routing
             _descendStartedSubscriber = descendStartedSubscriber;
             _progressBarCompletedSubscriber = progressBarCompletedSubscriber;
             _projectiles = projectiles;
+            _colorStreak = colorStreak;
         }
 
         public void Start()
@@ -94,9 +98,11 @@ namespace BalloonParty.Audio.Routing
             _subscriptions.Dispose();
         }
 
+        // The melodic streak follows the best run still in play, not the message: with several balls,
+        // one ball's reset must not drop the melody under another ball's climbing streak.
         private void OnStreakChanged(StreakChangedMessage message)
         {
-            _melodic.SetStreak(message.Streak);
+            _melodic.SetStreak(_colorStreak.HighestStreak);
             _player.Play(GameSoundId.StreakStep, null);
         }
 

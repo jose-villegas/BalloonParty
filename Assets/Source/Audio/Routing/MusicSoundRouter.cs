@@ -55,9 +55,8 @@ namespace BalloonParty.Audio.Routing
         {
             _navigation.Current.Subscribe(OnNavigationChanged).AddTo(_subscriptions);
             _dangerLevel.Level.Subscribe(_ => ApplyPitch()).AddTo(_subscriptions);
-            // IsAirborne, not IsLoaded: ducking must lift the moment the shot dies, and a loaded-but-
-            // unfired projectile is the aiming state — ducking on that would hold the music down
-            // permanently between shots.
+            // Airborne only: ducking must lift the moment the shot dies, and the thrower always holds an
+            // aiming ball — ducking on that would hold the music down permanently.
             _flightScope.IsAirborne.Subscribe(OnFlightChanged).AddTo(_subscriptions);
         }
 

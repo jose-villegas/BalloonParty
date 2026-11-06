@@ -200,7 +200,6 @@ namespace BalloonParty.Tests.Projectile
             _registry.Clear();
 
             Assert.IsFalse(_stats.IsAirborne.Value);
-            Assert.IsFalse(_stats.IsLoaded.Value);
         }
 
         [Test]

@@ -10,8 +10,8 @@ accumulator.
 
 > **Everything here is built and in use** — the vocabulary and scopes, the
 > envelope/serializer/sink layer, `GameplayMetricsService`, and the catalog-driven metric
-> labels in `UI/Telemetry/` that render it. Two sanctioned non-message touches live outside
-> this folder: `CheatState.AnyCheatUsed` and `IHoldSpeedUpState` on `HoldSpeedUpController`.
+> labels in `UI/Telemetry/` that render it. One sanctioned non-message touch lives outside
+> this folder: `CheatState.AnyCheatUsed`.
 >
 > **Not built:** `ConsentGateSink`, `BatchingTelemetrySink` and `HttpAnalyticsSink` — those
 > rows below are the target layout, not current code, and are out of scope until a consent
@@ -23,17 +23,17 @@ accumulator.
 
 ```mermaid
 graph TD
-    Bus["MessagePipe — 21 message subscriptions"] --> Svc["GameplayMetricsService"]
+    Bus["MessagePipe — 20 message subscriptions"] --> Svc["GameplayMetricsService"]
     Stats["FlightStatsService via IFlightStatsSource"] --> Svc
-    Hold["IHoldSpeedUpState"] --> Svc
+    Reg["IProjectileRegistry.Retired"] --> Svc
     Danger["IDangerLevel.Level"] --> Svc
     Pause["PauseService.IsAnyPaused"] --> Svc
     Nav["INavigation.Current"] --> Svc
 
-    Svc -->|"increment while a projectile is loaded"| F["Flight MetricScope"]
-    Svc -->|"increment interflight and level-owned metrics"| L["Level MetricScope"]
+    Svc -->|"increment for the ball the message names"| F["Flight MetricScope — one per ball in flight, pooled"]
+    Svc -->|"increment ball-less and level-owned metrics"| L["Level MetricScope"]
 
-    F -->|"Absorb on ProjectileDestroyedMessage"| L
+    F -->|"Absorb on that ball's ProjectileDestroyedMessage"| L
     L -->|"Absorb on LevelTransitionCompletedMessage"| R["Run MetricScope"]
     R -->|"Absorb on GameOverMessage"| S["Session MetricScope — accumulates, never written"]
 
@@ -61,14 +61,14 @@ snapshot) has no arrow into `Env` — it feeds the popup and nothing else, and i
 
 | File | What it does |
 |---|---|
-| `MetricId` / `TimerId` / `MetricAxis` / `MetricScopeKind` | The vocabulary — counters, clocks, dimension axes (color, balloon type, item type), and the four nested scope kinds. Append-only once shipped |
+| `MetricId` / `TimerId` / `MetricAxis` / `MetricScopeKind` | The vocabulary — counters, clocks, dimension axes (color, balloon type, item type), and the four nested scope kinds. Append-only once shipped. `MetricBinding` serializes a `MetricId` as its int in prefabs, so a retired id leaves its ordinal unused (13, once `hold_speed_up_flights`) instead of renumbering the rest; arrays indexed by id are sized by `MetricCatalog.OrdinalCount`, not the member count |
 | `MetricCatalog` | Static table: metric id → wire name, unit, fold rule (`Sum`/`Max`/`Last`), scope (`Flight`/`Level`/`Run`) and dimension axes. The single browsable list of what the game measures; also owns the dense `AxisSlot` assignment for `(MetricId, MetricAxis)` pairs, and asserts (at static init) that `BalloonType`, `ItemType`, `MetricAxis` are contiguous from zero and that `MetricScopeKind` stays ordered `Flight < Level < Run < Session` |
 | `TimerCatalog` | Static table: timer id → wire name, unit. Kept separate from `MetricCatalog` because a timer has no `FoldRule`, `Scope` or `MetricAxis` — `Absorb` never folds timers (see *Every scope runs its own clocks* below) |
 | `AxisBucketNaming` | Bucket ↔ name for the three axes, in one place: palette colour names plus a trailing `other`, and the two enums by ordinal. `TelemetryEnvelopeSerializer` needs the forward direction for the wire, `MetricValueResolver` (`UI/Telemetry/`) needs the inverse because a label's binding stores a colour by **name**. Two copies would drift, and the symptom would be a label disagreeing with the exported column |
 | `AxisSlot` / `AxisSlotInfo` | A dense index into `MetricSet`'s per-slot axis storage, and the catalog row describing it. One slot per `(MetricId, MetricAxis)` pair — not one array per axis kind — so metrics that share an axis kind (e.g. `Pops` and `Deflects`, both `BalloonType`) never alias the same table |
 | `MetricSet` / `IReadOnlyMetricSet` | Dense `int[]` counters plus one `int[]` per declared `AxisSlot`. Allocation-free increments. `IReadOnlyMetricSet` is a read-only *view*, not an immutability guarantee — `MetricScope.Metrics` is the one legitimate place a live view belongs |
 | `ISealedMetrics` | The envelope's actual contract: `IReadOnlyMetricSet` plus `this[TimerId]`, implemented only by the two snapshots — never by `MetricSet` — so a reference typed as `ISealedMetrics` really is immutable |
-| `MetricScope` / `MetricScopeState` | One scope's metric set and timers, with `Seal()` (immutable snapshot) and `Reset()` (reuse without reallocation). Four instances, built only through `MetricScope.Create`. `Absorb` requires its argument to be exactly one scope below (rejects itself, a sibling, or a non-adjacent scope); `Seal(int, bool)`/`Seal()` each validate the scope they run on |
+| `MetricScope` / `MetricScopeState` | One scope's metric set and timers, with `Seal()` (immutable snapshot) and `Reset()` (reuse without reallocation). One Level, Run and Session instance, plus one Flight instance per ball in flight (pooled by the service), built only through `MetricScope.Create`. `Absorb` requires its argument to be exactly one scope below (rejects itself, a sibling, or a non-adjacent scope); `Seal(int, bool)`/`Seal()` each validate the scope they run on |
 | `TelemetryStopwatch` | Pure C# timer that owns its injected `Func<float>` clock and folds elapsed time on `Pause()`/`Resume()`/`Elapsed` reads. Deterministic in tests via a fake clock |
 | `MetricsSnapshotBase` / `FlightMetricsSnapshot` / `LevelMetricsSnapshot` / `RunMetricsSnapshot` | Sealed immutable read surfaces implementing `ISealedMetrics` — what the popups render and what the sink receives. The shared payload (counters, timers, axis slots, named breakdowns) lives once in the base; `LevelMetricsSnapshot` adds only `LevelIndex`/`Completed`, and `FlightMetricsSnapshot` only `FlightIndex` |
 | `ColorCount` / `BalloonTypeCount` / `ItemActivationCount` | The breakdown shapes the snapshots expose (`PopsByColor`, `PointsByColor`, `PopsByBalloonType`, `DeflectsByBalloonType`, `ItemsActivated`) |
@@ -101,7 +101,6 @@ removed, not just left unused.
 | `gameplay_seconds` | `Playing` **and** not paused | Thumb-on-screen play. The one to compare levels by |
 | `ceremony_seconds` | `Ceremony` | How long the level-up popup was up |
 | `wall_seconds` | Any state except `Idle`/`Ended` | The level end to end — gameplay + ceremony + transition |
-| `hold_seconds` | Counting **and** hold-to-speed-up engaged | How much of the level was fast-forwarded |
 
 **`ceremony_seconds` is deliberately not pause-gated.** The ceremony *is* a pause —
 `LevelUpCinematic` holds `PauseSource.Cinematic` and `LevelUpPopUp` holds
@@ -110,9 +109,7 @@ removed, not just left unused.
 ceremony-owned rather than a user interruption, so gating it would collapse it toward
 `gameplay_seconds` and the two would stop being different measurements.
 
-So `wall − gameplay − ceremony` is transition time, and `hold / gameplay` is the fraction
-of a level that was fast-forwarded — which is what makes a rushed level distinguishable
-from a slow one rather than just "shorter".
+So `wall − gameplay − ceremony` is transition time.
 
 ## Units on the wire
 
@@ -152,19 +149,47 @@ checkbox alone no longer enables it (see `Cheats/README.md` ▸ Build visibility
 
 ## A record per flight
 
-Every projectile writes a `RecordKind.Flight` envelope when it is destroyed, before its
-counters fold into the level — so a level's shots can be read individually rather than only
-as level totals.
+A flight is one ball, from its `ProjectileFiredMessage` to its `ProjectileDestroyedMessage`.
+`ProjectileLoadedMessage` means only "in the thrower": the thrower loads the next ball right
+after each shot, while earlier ones still fly, so metrics doesn't subscribe to it at all.
 
-**The duration comes free.** `OnProjectileLoaded` calls `_flightScopeMetrics.Reset()`, and
-`MetricScope.Reset()` zeroes its stopwatches as well as its counters, so by the seal the
-Flight scope's own `gameplay_seconds` is exactly `[Loaded, Destroyed)` minus any pause —
-the time of flight — and `hold_seconds` is how much of that shot was fast-forwarded. No
-metric had to be added for it; the clocks were already running and were being thrown away.
+With rapid fire up to `MaxBallsInFlight` balls are in the air at once, so each gets its own
+Flight scope. The service keeps the open flights in a short list and pools closed ones, so
+steady-state play creates no scope per shot (the sealed snapshot handed to the sink is
+still a per-flight allocation).
 
-`FlightIndex` counts from 1 within the level and resets when a level opens, so records
-order without a timestamp sort and a gap reads as a dropped record rather than a slow
-frame.
+- **Routing.** Each event goes to the scope of the ball its message names: `ActorHitMessage`
+  through `DamageContext.Projectile`, `PierceDischargedMessage` and `SpeedTapMintedMessage`
+  through their `Projectile`. An event that names no ball, or a ball not in flight (already
+  sealed, or never fired), goes to the Level scope and to no flight.
+- **Seal.** On the ball's `ProjectileDestroyedMessage` its scope takes that ball's
+  `IFlightStatsSource.Of(ball)` counts, writes a `RecordKind.Flight` envelope, folds into
+  the level and goes back to the pool.
+- **Game over.** Balls still in the air at the loss never publish a Destroyed: the thrower
+  scales them away and the registry retires them. `OnGameOver` seals every open flight
+  first, oldest first, so they are written and counted like any other.
+- **Retired without a seal.** Every exit retires (`IProjectileRegistry.Retired`), so a
+  flight still open then is closed there: no record is written, but whatever it counted
+  folds into the level while the level is live. That covers a game-over clear reaching
+  the registry before this service sees the `GameOverMessage`, and a ball un-fired by the
+  level-up and then dropped. Its FlightStats breakdown (balloon types, wall bounces, pierce
+  discharges) is lost, since only the seal reads it.
+- **Reset.** `ResetRun` discards every open flight before the thrower's reset clears the
+  registry: a reset is not a flush.
+- **Fired twice.** A ball the level-up un-fired before it moved is fired again later; the
+  second Fired folds the old scope into the level and starts the flight afresh.
+
+**The duration comes free.** A ball's scope is `Reset()` at its Fired, and
+`MetricScope.Reset()` zeroes the stopwatches as well as the counters, so by the seal the
+Flight scope's own `gameplay_seconds` is exactly `[Fired, Destroyed)` minus any pause —
+the time of flight, not including the time the ball sat in the thrower being aimed. No
+metric had to be added for it.
+
+`FlightIndex` counts from 1 within the level, is assigned at the seal and resets when a
+level opens. Records therefore number in the order they are written (the order balls
+died, not the order they were thrown), and a gap reads as a dropped record rather than a
+slow frame. `flights_started` counts Fired messages that named a ball, so it equals
+`shots_fired` in play.
 
 **This is the highest-volume record kind by an order of magnitude** — one per shot against
 one per level. That is fine for the local JSON Lines log it feeds today; it is the first
@@ -207,14 +232,27 @@ fixed before any subscriber runs: `CombatSoundRouter` reads it post-increment fo
 ramps, metrics folds it at flight seal, and neither depends on subscription order.
 
 Counts are per ball: metrics asks `IFlightStatsSource.Of(ball)` for the dying ball named by
-`ProjectileDestroyedMessage` (or the ball it remembered at `ProjectileLoadedMessage`, for the
-game-over seal). The metric Flight *scope* itself is still a single one, reset on each load
-and sealed on each death, so it is exact only while one ball flies at a time. A scope per
-ball is the rapid-fire phase of @ref plan_fast_paced.
+`ProjectileDestroyedMessage`, or for each ball still open at the game-over seal. Each ball's
+stats stay readable through its own Destroyed dispatch and are dropped when the registry
+retires it, which is why the game over seals before the thrower's clear (see *A record per
+flight*).
 
 The one exception: `CombatSoundRouter._colorPopsThisFlight` **stays private to audio**. It
 resets on streak break as well as on load, and counts only pops that use the generic
 `BalloonPop` sound — a pitch cursor, not a statistic. Do not "unify" it.
+
+## Streak breaks
+
+`max_streak` is the highest streak any `StreakChangedMessage` reported. `streak_breaks`
+counts a running streak dropping to zero, judged per ball: every ball has its own streak
+(`ColorStreakTracker`), and the message names it. The service remembers the last value
+each open flight announced, plus one shared value for messages with no ball or naming one
+not in flight (the tracker's shared streak). A zero after a positive value of the *same*
+streak is a break. A zero for a streak already at zero is not (the shared streak resets on
+every load), one ball's reset never reads as another's break, and a ball's streak ending
+with its flight is silent, so a flight ending is never a break. At level-up the tracker
+clears every streak and announces it once, so the service forgets the remembered values
+too.
 
 ## Pause handling
 
@@ -265,9 +303,9 @@ stateDiagram-v2
 The three arrows into `Ended` are the point of the picture — one message, `GameOverMessage`, owns the
 terminal transition no matter which state it lands from.
 
-`GameplayMetricsService` is a subscriber and nothing else: ~21 message subscriptions plus
-`PauseService.IsAnyPaused`, `INavigation.Current` and `IDangerLevel.Level`, all in one
-`CompositeDisposable`.
+`GameplayMetricsService` is a subscriber and nothing else: 20 message subscriptions plus
+`PauseService.IsAnyPaused`, `INavigation.Current`, `IDangerLevel.Level` and
+`IProjectileRegistry.Retired`, all in one `CompositeDisposable`.
 
 - **Boundaries.** A level flushes on `LevelTransitionCompletedMessage`, never on
   `LevelUpDismissedMessage` — straggler score trails land between the two and belong to the
@@ -276,13 +314,11 @@ terminal transition no matter which state it lands from.
   `Ceremony → Playing` and are idempotent; `LevelUpAbandonedMessage` is a *nested re-publish*
   from inside both the abort and the game-over handler, so treating it as terminal would
   wedge the gameplay clock on abort and drop every lost run's record.
-- **Per-flight counts come from `FlightStatsService`**, folded in at
-  `ProjectileDestroyedMessage` — and at `GameOverMessage` if a projectile is still airborne,
-  which is the ordinary death: hearts reach zero from a wave mid-flight, and that flight's
-  `ProjectileDestroyedMessage` arrives during the loss cinematic, after the terminal state
-  drops it. Only the interflight window — `[Destroyed, next Loaded)`, which that service
-  zeroes without ever sealing — is counted from the message directly, and it lands on the
-  Level scope, which is what R2 asks for.
+- **Per-flight counts come from `FlightStatsService`**, folded in at each ball's
+  `ProjectileDestroyedMessage` — and at `GameOverMessage` for every ball still airborne,
+  which is the ordinary death: hearts reach zero from a wave mid-flight, and those balls are
+  scaled away without a Destroyed. Events with no ball in flight behind them are counted
+  from the message directly and land on the Level scope, which is what R2 asks for.
 - **Three ids plus an ordinal.** `RunId` (the chain, held across a retry), `AttemptId` (the
   generation), `AttemptIndex` (0 for the original) and `LevelAttemptOrdinal` (per level
   number, incremented when the level opens). The run's total points are taken from

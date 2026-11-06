@@ -86,6 +86,22 @@ namespace BalloonParty.Tests.Game
             Assert.AreEqual(FoldRule.Last, MetricCatalog.FoldOf(MetricId.PointsProjected));
         }
 
+        // MetricBinding stores a MetricId as its int in prefabs, so a retired id leaves a hole rather
+        // than renumbering every id after it. Pinned on both sides of the hole, plus storage indexed
+        // past it.
+        [Test]
+        public void RetiredOrdinal_StaysUnused_AndTheIdsAfterItKeepTheirNumbers()
+        {
+            Assert.IsFalse(Enum.IsDefined(typeof(MetricId), 13), "13 was hold_speed_up_flights");
+            Assert.AreEqual(14, (int)MetricId.PointsBanked);
+            Assert.AreEqual(30, (int)MetricId.TotalScore);
+
+            var set = new MetricSet(1);
+            set.Add(MetricId.TotalScore, 7);
+            Assert.AreEqual(7, set[MetricId.TotalScore]);
+            Assert.AreEqual(FoldRule.Last, MetricCatalog.FoldOf(MetricId.TotalScore));
+        }
+
         // SlotOf on an undeclared (id, axis) pair used to return an AxisSlot with Index == -1, which
         // surfaced later as a bare IndexOutOfRangeException naming neither the metric nor the axis.
         [Test]
@@ -137,7 +153,6 @@ namespace BalloonParty.Tests.Game
             yield return new GoldenRow(nameof(MetricId.SpeedTapsMinted), "speed_taps_minted", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Flight));
             yield return new GoldenRow(nameof(MetricId.MaxWallBouncesInFlight), "max_wall_bounces_in_flight", "count", nameof(FoldRule.Max), nameof(MetricScopeKind.Level));
             yield return new GoldenRow(nameof(MetricId.MaxSpeedTapsInFlight), "max_speed_taps_in_flight", "count", nameof(FoldRule.Max), nameof(MetricScopeKind.Level));
-            yield return new GoldenRow(nameof(MetricId.HoldSpeedUpFlights), "hold_speed_up_flights", "count", nameof(FoldRule.Sum), nameof(MetricScopeKind.Level));
             yield return new GoldenRow(nameof(MetricId.PointsBanked), "points_banked", "points", nameof(FoldRule.Sum), nameof(MetricScopeKind.Level), nameof(MetricAxis.Color));
             yield return new GoldenRow(nameof(MetricId.PointsProjected), "points_projected", "points", nameof(FoldRule.Last), nameof(MetricScopeKind.Level));
             yield return new GoldenRow(nameof(MetricId.MaxMultiplier), "max_multiplier", "multiplier", nameof(FoldRule.Max), nameof(MetricScopeKind.Level));

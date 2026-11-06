@@ -36,7 +36,6 @@ namespace BalloonParty.Game.Telemetry
             new(MetricId.SpeedTapsMinted, "speed_taps_minted", "count", FoldRule.Sum, MetricScopeKind.Flight, NoAxes),
             new(MetricId.MaxWallBouncesInFlight, "max_wall_bounces_in_flight", "count", FoldRule.Max, MetricScopeKind.Level, NoAxes),
             new(MetricId.MaxSpeedTapsInFlight, "max_speed_taps_in_flight", "count", FoldRule.Max, MetricScopeKind.Level, NoAxes),
-            new(MetricId.HoldSpeedUpFlights, "hold_speed_up_flights", "count", FoldRule.Sum, MetricScopeKind.Level, NoAxes),
             new(MetricId.PointsBanked, "points_banked", "points", FoldRule.Sum, MetricScopeKind.Level, ColorAxisOnly),
             new(MetricId.PointsProjected, "points_projected", "points", FoldRule.Last, MetricScopeKind.Level, NoAxes),
             new(MetricId.MaxMultiplier, "max_multiplier", "multiplier", FoldRule.Max, MetricScopeKind.Level, NoAxes),
@@ -63,6 +62,10 @@ namespace BalloonParty.Game.Telemetry
 
         internal static readonly MetricId[] AllIds;
 
+        // Highest MetricId ordinal + 1: the length of every array indexed by (int)MetricId. Not the
+        // member count, because a retired id leaves its ordinal unused (see MetricId).
+        internal static readonly int OrdinalCount;
+
         internal static IReadOnlyList<AxisSlotInfo> AllSlots => Slots;
 
         static MetricCatalog()
@@ -77,6 +80,7 @@ namespace BalloonParty.Game.Telemetry
 
             ById = BuildIndex();
             AllIds = BuildIds();
+            OrdinalCount = BuildOrdinalCount();
             FoldByOrdinal = BuildFoldByOrdinal();
             (SlotIndexByIdAndAxis, Slots) = BuildSlots();
 
@@ -155,9 +159,23 @@ namespace BalloonParty.Game.Telemetry
             return ids;
         }
 
+        private static int BuildOrdinalCount()
+        {
+            var max = -1;
+            foreach (var entry in Entries)
+            {
+                if ((int)entry.Id > max)
+                {
+                    max = (int)entry.Id;
+                }
+            }
+
+            return max + 1;
+        }
+
         private static FoldRule[] BuildFoldByOrdinal()
         {
-            var byOrdinal = new FoldRule[Entries.Length];
+            var byOrdinal = new FoldRule[OrdinalCount];
             foreach (var entry in Entries)
             {
                 byOrdinal[(int)entry.Id] = entry.Fold;
@@ -172,8 +190,8 @@ namespace BalloonParty.Game.Telemetry
         private static (int[,] SlotIndexByIdAndAxis, AxisSlotInfo[] Slots) BuildSlots()
         {
             var axisCount = Enum.GetValues(typeof(MetricAxis)).Length;
-            var slotIndexByIdAndAxis = new int[Entries.Length, axisCount];
-            for (var i = 0; i < Entries.Length; i++)
+            var slotIndexByIdAndAxis = new int[OrdinalCount, axisCount];
+            for (var i = 0; i < OrdinalCount; i++)
             {
                 for (var a = 0; a < axisCount; a++)
                 {

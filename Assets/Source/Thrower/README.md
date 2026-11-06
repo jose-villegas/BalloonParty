@@ -6,7 +6,8 @@ The thrower is the player-controlled launcher at the bottom of the screen. It ai
 
 | File | What it does |
 |---|---|
-| `ThrowerController` | Plain C# class (`IStartable`, `ITickable`) — aiming, loading, firing, prediction trace, and reload logic |
+| `ThrowerController` | Plain C# class (`IStartable`, `ITickable`) — aiming, loading, firing and the prediction trace; owns a `ThrowerReload` |
+| `ThrowerReload` | Plain C# class owned by the controller — the reload rules: how far the held ball has slid out and whether a release may fire it (see Rapid fire below) |
 | `ThrowerView` | MonoBehaviour — owns the thrower's transform, rotation, entrance animation, prediction trace display, and pointer input (`IsAiming`, `FireReleased`, `TryGetAimDirection` — the only place that touches `Input`/`Camera`) |
 | `ThrowerLifetimeScope` | Child `LifetimeScope` on the Thrower GameObject — registers `ThrowerView` and `ThrowerController` (`.AsSelf()`, so editor tooling can resolve the concrete controller — see `FireAt` below) |
 | `ThrowerSettings` | Holds the `ProjectileView` prefab reference for pool creation (registered in `GameLifetimeScope`) |
@@ -14,7 +15,7 @@ The thrower is the player-controlled launcher at the bottom of the screen. It ai
 
 ## Gameplay
 
-The player holds the mouse button to aim — the thrower rotates to face the cursor. Releasing the mouse fires the loaded projectile. Once the projectile is destroyed (shields depleted), the thrower automatically reloads and is ready for the next shot.
+The player holds the mouse button to aim — the thrower rotates to face the cursor. Releasing the mouse fires the loaded projectile. The next ball loads the moment a shot leaves, so the player can keep firing while earlier balls are still in flight (see Rapid fire).
 
 The pointer itself always moves freely — `ThrowerView.TryGetAimDirection` just reports where it is. `ThrowerController` resolves the *angle* that produces through `ClampAndQuantizeAimDirection` before storing it: unlike quantization, the clamp into `[IProjectileFlightConfig.AimAngleMinDegrees, AimAngleMaxDegrees]` is never opt-in — it always applies, so the player can never aim sideways or below the horizontal, whatever the step. On top of the clamp, a positive `AimAngleStepDegrees` also snaps the angle to the nearest multiple of the step, so the aim (and everything derived from it — the thrower's own rotation, the prediction trace) jumps between fixed headings instead of following the cursor continuously; `AimAngleStepDegrees` defaults to 0, meaning continuous aim within the range (still clamped, just not snapped) — today's exact behaviour with the range added.
 
@@ -34,35 +35,48 @@ The shot fires on touch release, but on a touchscreen the act of lifting a finge
 
 Because firing now reads a moment in the past, the very last frame's prediction trace (drawn from the live direction) can differ slightly from where the shot actually goes — that's the intended trade: the player aimed at the pre-lift trace, not the post-lift one. A non-zero latch also delays mouse aiming's responsiveness by the same amount, since mouse input has no lift-off to correct for; at 60-120ms that delay is expected to be imperceptible against the reaction-time gains on touch.
 
+### Rapid fire — several balls at once
+
+Up to `IProjectileFlightConfig.MaxBallsInFlight` balls (3 in the shipped asset) fly at the same time. The thrower always holds a ball: `ThrowerController.EnsureLoaded` loads a fresh one right after a shot leaves, and only into an empty thrower, so a ball being aimed is never thrown away.
+
+A freshly loaded ball does not fire straight away. It slides from the thrower's pivot out to the muzzle over `max(ProjectileLoadDuration, ReloadCooldownSeconds)`, in scaled time (so a freeze or slow-mo stretches it too). `ThrowerReload` owns that slide:
+
+- It advances only while a slot under the cap is free. With the cap full the ball waits short of the muzzle, which is the player's "not yet" cue.
+- The ease is `OutCubic`, which never overshoots: the ball cannot reach the muzzle before the reload has ended, so "ball at the muzzle" reliably means "a release fires".
+- A release fires only when a ball is held, the slide is finished, a slot is free and the level is in the `Playing` phase. A release with nothing ready fires nothing and is not queued for later.
+- `ThrowerReadyMessage` is published once per ball, on the tick it becomes ready (`CombatSoundRouter` plays the reload "cock" on it).
+
+`FireAt` skips the slide but still honours the cap and the phase (`ThrowerReload.CanLaunch`). The pool is pre-warmed with `2 * MaxBallsInFlight + 1` balls, because a dead ball stays out of the pool until its disappear animation finishes.
+
 ## How it works
 
-`ThrowerController` is a plain C# class registered as an entry point in `ThrowerLifetimeScope`. It delegates all visual operations *and pointer input* to `ThrowerView`, keeping the controller free of Unity engine APIs. On start it registers the projectile pool and pre-warms two instances. It subscribes reactively to `Navigation.State` — when the state becomes `Game` (via `NavigationTrigger` on the Launch button), it plays the entrance animation. After the entrance animation completes, input is enabled.
+`ThrowerController` is a plain C# class registered as an entry point in `ThrowerLifetimeScope`. It delegates all visual operations *and pointer input* to `ThrowerView`, keeping the controller free of Unity engine APIs. On start it registers the projectile pool and pre-warms it (see Rapid fire for the size). It subscribes reactively to `Navigation.State` — when the state becomes `Game` (via `NavigationTrigger` on the Launch button), it plays the entrance animation. After the entrance animation completes, input is enabled.
 
 Each frame (`Tick`), only when navigation state is `Game` and the entrance animation is complete, the controller:
 - Updates its aim direction from the view's pointer read (`_view.IsAiming` / `TryGetAimDirection`)
 - Tells the view to rotate to match that direction
-- Eases the loaded projectile into the spawn point position using `Ease.OutBack`
+- Slides the held projectile from the pivot toward the spawn point along `ThrowerReload.SlidePosition`, and publishes `ThrowerReadyMessage` once it is ready
 - Updates the prediction trace line while the mouse button is held, mirroring it into `PredictionTraceProvider` (`Prediction/`) so other readers (e.g. a balloon's `TraceHitMarker`) can react to the same-frame trace without depending on the Thrower's view chain
-- Fires on mouse-up
+- Fires on mouse-up, if `ThrowerReload` says a ball is ready
 
-`Tick` is a no-op outside the `Game` navigation state, while any `PauseService` source is paused, or while `HoldSpeedUpController.ConsumedInput` is true — the thrower cannot aim or fire during the level-up ceremony, cinematics, the overflow heart-drain lock, or while the player's finger is still down from a speed-up hold. The `ConsumedInput` gate prevents the finger-lift that ended a speed-up from accidentally aiming or firing the next shot; the player must lift and tap fresh.
+`Tick` is a no-op outside the `Game` navigation state or while any `PauseService` source is paused — the thrower cannot aim or fire during the level-up ceremony, cinematics or the overflow heart-drain lock.
 
-`FireAt(Vector3 direction)` is an internal entry point bypassing mouse input entirely — it snaps the loaded shot to the spawn point, aims it at the given direction, and fires. It exists for editor tooling (the Shot Solver window and the Fire-Best-Shot cheat), which is why `ThrowerLifetimeScope` also registers the controller `.AsSelf()`.
+`FireAt(Vector3 direction)` is an internal entry point bypassing mouse input entirely — it snaps the loaded shot to the spawn point, aims it at the given direction, and fires (subject to the cap and phase check above). It exists for editor tooling (the Shot Solver window and the Fire-Best-Shot cheat), which is why `ThrowerLifetimeScope` also registers the controller `.AsSelf()`.
 
 When a `ProjectileDestroyedMessage` or a `LevelUpDismissedMessage` arrives, `ThrowerController` swaps the ball: the one the message names (looked up among the balls in flight, or the held one) plays its scale-away disappear animation and only returns to the pool once that finishes, while a fresh instance loads immediately — so the thrower never hands out a shot still mid-disappear. A `ScoreLevelUpMessage` (the level-up freeze) un-fires a shot that was fired the very same frame, before it ever took a physics step, so the dismissal swap doesn't scale-drift a phantom shot away from the muzzle. A `GameOverMessage` scales every ball (held and in flight) away without loading a replacement (the thrower only reloads on restart). A `BoardClearMessage` or `RunResetMessage` triggers a synchronous reload — the old projectile returns to the pool immediately and a fresh one loads — so a fresh run or a cleared board starts with a fresh projectile (default shields and position). Projectiles are created through `ProjectilePoolChannel` (an `InjectingPoolChannel` — `[Inject]` fields resolved from the parent container, no child scope on the prefab). The pool key is derived from the prefab's name.
 
 ## Interactions
 
-- **PoolManager / ProjectilePoolChannel** — registers and serves the projectile pool (pre-warmed with two instances)
+- **PoolManager / ProjectilePoolChannel** — registers and serves the projectile pool (pre-warmed with `2 * MaxBallsInFlight + 1` instances)
 - **ProjectileDestroyedMessage / LevelUpDismissedMessage** — trigger the scale-away swap (spent shot returns to pool once its disappear finishes; a fresh one loads immediately)
 - **ScoreLevelUpMessage** — un-fires a shot fired the same frame the level-up freeze lands, before the dismissal swap runs
 - **GameOverMessage** — scales every held and in-flight ball away with no replacement load
 - **BoardClearMessage / RunResetMessage** — trigger a synchronous reload so a cleared board or a fresh run starts with a fresh projectile
 - **PauseService** — any paused source blocks `Tick` (aim/fire)
-- **HoldSpeedUpController** (`Projectile/Controller/`) — `ConsumedInput` blocks `Tick` while the player's speed-up hold hasn't been released yet
 - **IProjectileRegistryWriter** (`Projectile/`) — the thrower is the registry's main writer: `Load` on each load, `Launch` on fire, `Unlaunch` when a ball fired in the level-up frame goes back to the muzzle, and `Retire`/`Clear` for every exit that publishes no `ProjectileDestroyedMessage` (game over, reset, board clear, a held ball replaced). A ball that dies in flight lands and retires itself in `ProjectileView`; the thrower only scales it away. See the Land/Retire rule in `Projectile/README.md`
 - **ProjectileLoadedMessage** — published after each load so shield UI can self-bind
-- **IProjectileFlightConfig** — provides `LimitsClockwise`, `ProjectileSpeed`, `ProjectileStartingShields`, `ProjectileLoadDuration`, `AimAngleMinDegrees`/`AimAngleMaxDegrees` (5/175 by default, always in effect), `AimAngleStepDegrees` (0 = continuous aim, the default), `AimLatchSeconds` (0 = fire the live direction, the default); **IPredictionTraceConfig** — provides `LineColor` plus the optional capsule-light tuning (`LightingEnabled` and friends — see `Prediction/README.md`)
+- **ThrowerReadyMessage** (`Shared/Messages/`) — published once per ball when it reaches the muzzle with a slot free
+- **IProjectileFlightConfig** — provides `LimitsClockwise`, `ProjectileSpeed`, `ProjectileStartingShields`, `ProjectileLoadDuration`, `ReloadCooldownSeconds`, `MaxBallsInFlight`, `AimAngleMinDegrees`/`AimAngleMaxDegrees` (5/175 by default, always in effect), `AimAngleStepDegrees` (0 = continuous aim, the default), `AimLatchSeconds` (0 = fire the live direction, the default); **IPredictionTraceConfig** — provides `LineColor` plus the optional capsule-light tuning (`LightingEnabled` and friends — see `Prediction/README.md`)
 - **PredictionTraceCalculator / ThrowerView** — calculates and renders the aim trajectory line while the player holds the mouse button
 - **PredictionTraceProvider** — written each `Tick` alongside the view (set on aim, cleared on fire/release/reload) so non-Thrower readers can find where the trace currently sits
 - **PredictionTraceLights** (`Prediction/`) — mirrors the same trace into optional per-leg capsule scene-lights, off by default; see `Prediction/README.md`

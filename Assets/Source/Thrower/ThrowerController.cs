@@ -39,6 +39,7 @@ namespace BalloonParty.Thrower
         private readonly IPierceItemField _pierceItemField;
         private readonly IProjectileFlightConfig _flightConfig;
         private readonly IPublisher<ProjectileLoadedMessage> _loadedPublisher;
+        private readonly IPublisher<ThrowerReadyMessage> _readyPublisher;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly ISubscriber<RunResetMessage> _resetSubscriber;
         private readonly ISubscriber<RunRestartCompletedMessage> _restartCompletedSubscriber;
@@ -50,7 +51,6 @@ namespace BalloonParty.Thrower
         private readonly ISubscriber<LevelUpAbandonedMessage> _levelUpAbandonedSubscriber;
         private readonly ILevelProgress _levelProgress;
         private readonly PauseService _pauseService;
-        private readonly HoldSpeedUpController _holdSpeedUp;
         private readonly IObjectResolver _resolver;
         private readonly List<Vector3> _tracePoints = new();
         private readonly PoolManager _poolManager;
@@ -77,15 +77,16 @@ namespace BalloonParty.Thrower
         // the player), so a latched fire reproduces exactly the heading that was on screen a moment
         // earlier rather than re-deriving it from a raw sample.
         private readonly AimDirectionHistory _aimHistory = new(AimHistoryCapacity);
+        private readonly ThrowerReload _reload;
 
-        // The shot held in the thrower, aiming. Null from the moment it fires until the next load.
+        // The ball held in the thrower, aiming. The next one loads the moment a shot leaves, so this is
+        // null only around level transitions, game over, and before the entrance finishes.
         private IWriteableProjectileModel _loadedProjectile;
         private ProjectileView _loadedView;
         private Vector3 _direction = Vector3.up;
         private bool _isMovable;
         private bool _tracePublished;
-        private float _loadElapsed;
-        private float _loadDuration;
+        private bool _wasReady;
         private PredictionTraceCalculator _traceCalculator;
         private PredictionTraceLights _traceLights;
 
@@ -106,6 +107,7 @@ namespace BalloonParty.Thrower
             ThrowerSettings settings,
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
             IPublisher<ProjectileLoadedMessage> loadedPublisher,
+            IPublisher<ThrowerReadyMessage> readyPublisher,
             ISubscriber<RunResetMessage> resetSubscriber,
             ISubscriber<RunRestartCompletedMessage> restartCompletedSubscriber,
             ISubscriber<BoardClearMessage> boardClearSubscriber,
@@ -116,7 +118,6 @@ namespace BalloonParty.Thrower
             ISubscriber<LevelUpAbandonedMessage> levelUpAbandonedSubscriber,
             ILevelProgress levelProgress,
             PauseService pauseService,
-            HoldSpeedUpController holdSpeedUp,
             IProjectileRegistryWriter registry,
             ThrowerOriginProvider originProvider,
             PredictionTraceProvider traceProvider,
@@ -133,6 +134,7 @@ namespace BalloonParty.Thrower
             _settings = settings;
             _destroyedSubscriber = destroyedSubscriber;
             _loadedPublisher = loadedPublisher;
+            _readyPublisher = readyPublisher;
             _resetSubscriber = resetSubscriber;
             _restartCompletedSubscriber = restartCompletedSubscriber;
             _boardClearSubscriber = boardClearSubscriber;
@@ -143,13 +145,13 @@ namespace BalloonParty.Thrower
             _levelUpAbandonedSubscriber = levelUpAbandonedSubscriber;
             _levelProgress = levelProgress;
             _pauseService = pauseService;
-            _holdSpeedUp = holdSpeedUp;
             _registry = registry;
             _originProvider = originProvider;
             _traceProvider = traceProvider;
             _lightField = lightField;
             _palette = palette;
             _projectilePoolKey = settings.ProjectilePrefab.name;
+            _reload = new ThrowerReload(flightConfig);
         }
 
         public void Start()
@@ -174,10 +176,14 @@ namespace BalloonParty.Thrower
             _poolManager.Register(_projectilePoolKey,
                 new ProjectilePoolChannel(_resolver, _settings.ProjectilePrefab));
 
-            _poolManager.Prewarm(_projectilePoolKey, 2);
+            // Every ball the cap allows in flight, the one held, and as many again still playing their
+            // disappear: a dead ball returns to the pool only once that ends, so a burst of deaths
+            // would otherwise Instantiate mid-play.
+            _poolManager.Prewarm(_projectilePoolKey, _flightConfig.MaxBallsInFlight * 2 + 1);
 
-            // The spent shot scales away while the fresh one loads — unless a level-up claimed the
-            // window, in which case the new shot arrives with the new level (LevelTransitionCompleted).
+            // The spent shot scales away. The thrower normally already holds the next ball (it loads on
+            // fire); this only reloads an empty thrower, and never during a level-up, whose new ball
+            // arrives with the new level (LevelTransitionCompleted).
             _destroyedSubscriber.Subscribe(HandleProjectileDestroyed).AddTo(_subscriptions);
 
             // Completing was abandoned (run ending/restarting), so the skipped reload happens now or the
@@ -219,13 +225,10 @@ namespace BalloonParty.Thrower
         {
             if (!_isMovable
                 || Navigation.Current.Value != NavigationState.Game
-                || _pauseService.IsAnyPaused.Value
-                || _holdSpeedUp.ConsumedInput)
+                || _pauseService.IsAnyPaused.Value)
             {
                 // A pause or state change mid-aim must take the trace down with it, or the aim line
                 // and hit markers linger through the overflow/level-up/loss windows.
-                // ConsumedInput: the hold that sped up the previous flight hasn't been released yet —
-                // suppress aiming so the player must tap fresh to aim the next shot.
                 ClearPredictionTrace();
                 return;
             }
@@ -235,6 +238,7 @@ namespace BalloonParty.Thrower
             UpdateLoadedProjectilePosition();
             UpdatePredictionTrace();
             TryFire();
+            AnnounceReady();
         }
 
         // Editor-tooling entry (Shot Solver window / Fire Best Shot cheat): aim the thrower at the
@@ -250,9 +254,13 @@ namespace BalloonParty.Thrower
         // its angles are already in range by construction; ShotSolverWindow's arc is deliberately
         // user-editable for experimentation and is allowed to probe outside the player's reachable
         // range on purpose (see its README) — clamping here would silently defeat that.
+        //
+        // Skips the reload (it snaps the ball to the muzzle anyway) but not the ball cap or the level
+        // phase, so a tool can never put more balls in flight than play allows, nor fire into a level-up.
         internal void FireAt(Vector3 direction)
         {
-            if (!_isMovable || _loadedProjectile == null || _loadedView == null)
+            if (!_isMovable || _loadedProjectile == null || _loadedView == null
+                || !_reload.CanLaunch(_inFlight.Count, _levelProgress.Phase.Value))
             {
                 return;
             }
@@ -304,10 +312,21 @@ namespace BalloonParty.Thrower
             });
         }
 
+        // Loads only into an empty thrower: fire and death must never throw away the ball being aimed.
+        private void EnsureLoaded()
+        {
+            if (_loadedView != null || !_isMovable || _levelProgress.Phase.Value != LevelUpPhase.Playing)
+            {
+                return;
+            }
+
+            LoadProjectile();
+        }
+
+        // A fresh ball (and a fresh ProjectileLoadedMessage) for a new level, a restart or the entrance.
+        // The ball still held here carried the old level's state, so it is pooled rather than kept.
         private void LoadProjectile()
         {
-            // The only shot still held here is one un-fired at a level-up; a load always starts a fresh
-            // shot (and a fresh ProjectileLoadedMessage), so pool that one rather than orphan it.
             if (_loadedView != null)
             {
                 _registry.Retire(_loadedProjectile);
@@ -334,9 +353,7 @@ namespace BalloonParty.Thrower
             _loadedView.Bind(_loadedProjectile);
             _registry.Load(_loadedProjectile, _loadedView.transform);
             _loadedPublisher.Publish(new ProjectileLoadedMessage(_loadedProjectile));
-
-            _loadElapsed = 0f;
-            _loadDuration = _flightConfig.ProjectileLoadDuration;
+            _reload.Restart();
         }
 
         // A shot fired in the level-up frame never took a step: it goes back in the thrower as the held
@@ -386,10 +403,7 @@ namespace BalloonParty.Thrower
                 ScaleAway(view);
             }
 
-            if (_levelProgress.Phase.Value == LevelUpPhase.Playing)
-            {
-                LoadProjectile();
-            }
+            EnsureLoaded();
         }
 
         // Force-destroys through each shot's canonical death path (pierce discharge, state cleanup,
@@ -496,14 +510,11 @@ namespace BalloonParty.Thrower
             LoadProjectile();
         }
 
+        // A release with no ball ready fires nothing and is not queued: the held ball's place in the
+        // thrower already told the player it wasn't ready.
         private void TryFire()
         {
-            if (_loadedProjectile == null || _loadedView == null)
-            {
-                return;
-            }
-
-            if (!_view.FireReleased)
+            if (!_view.FireReleased || !IsReadyToFire())
             {
                 return;
             }
@@ -546,6 +557,27 @@ namespace BalloonParty.Thrower
             _view.PlayRecoil(_direction);
             // A fast follow-up shot must not latch onto a direction recorded before this one fired.
             _aimHistory.Clear();
+            EnsureLoaded();
+        }
+
+        private bool IsReadyToFire()
+        {
+            return _loadedProjectile != null
+                   && _loadedView != null
+                   && _reload.IsReady(_inFlight.Count, _levelProgress.Phase.Value);
+        }
+
+        // Once per ball, on the tick it becomes ready: the cue that a release now fires. After TryFire,
+        // so a ball fired the tick it got ready doesn't cue a release that already happened.
+        private void AnnounceReady()
+        {
+            var isReady = IsReadyToFire();
+            if (isReady && !_wasReady)
+            {
+                _readyPublisher.Publish(new ThrowerReadyMessage(_loadedProjectile));
+            }
+
+            _wasReady = isReady;
         }
 
         private void UpdateDirection()
@@ -571,18 +603,9 @@ namespace BalloonParty.Thrower
                 return;
             }
 
-            if (_loadElapsed < _loadDuration)
-            {
-                _loadElapsed += Time.deltaTime;
-                var t = Mathf.Clamp01(_loadElapsed / _loadDuration);
-                var eased = DOVirtual.EasedValue(0f, 1f, t, Ease.OutBack);
-                _loadedView.transform.position = Vector3.Lerp(_view.Position, _view.SpawnPointPosition, eased);
-            }
-            else
-            {
-                _loadedView.transform.position = _view.SpawnPointPosition;
-            }
-
+            _reload.Advance(Time.deltaTime, _inFlight.Count);
+            _loadedView.transform.position =
+                Vector3.Lerp(_view.Position, _view.SpawnPointPosition, _reload.SlidePosition);
             _loadedView.transform.rotation = _view.Rotation;
             _loadedProjectile.Direction = _direction;
         }

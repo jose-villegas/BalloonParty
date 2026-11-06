@@ -13,9 +13,9 @@ Displays the remaining shields of the ball held in the thrower, animates state c
 
 ## How it works
 
-`ShieldCounterAnimation` subscribes to `ProjectileLoadedMessage` / `ProjectileDestroyedMessage` and owns the labels' binding: on load it binds every `ShieldCounterLabel` to the new projectile's `ShieldsRemaining` (the labels show "--" until then); on destroy it unbinds them, returning the display to "--" for the between-turns wait.
+`ShieldCounterAnimation` subscribes to `ProjectileLoadedMessage` / `ProjectileDestroyedMessage` and owns the labels' binding: on load it binds every `ShieldCounterLabel` to the new projectile's `ShieldsRemaining` (the labels show "--" until then); on destroy it unbinds them, but only when the destroyed ball is the one it is bound to: other balls dying leave the held ball's display alone. Unbinding returns the display to "--".
 
-It also drives an Animator: `"Ready"` on load, `"Lost"` when `ShieldsRemaining` decrements, `"Gain"` when it increments (from shield item activation), and `"Waiting"` from projectile death until the next load. It binds directly to the `ShieldsRemaining` reactive property of the ball carried in `ProjectileLoadedMessage` (the held ball). It only tracks the held ball, not balls already in flight; that matters only once more than one ball can exist, and is Phase 2 work of @ref plan_fast_paced.
+It also drives an Animator: `"Ready"` on load, `"Lost"` when `ShieldsRemaining` decrements, `"Gain"` when it increments (from shield item activation), and `"Waiting"` from projectile death until the next load. It binds directly to the `ShieldsRemaining` reactive property of the ball carried in `ProjectileLoadedMessage` (the held ball). It only tracks the held ball, not balls already in flight. Whether the HUD should stay a held-ball readout or become a ball-count/cooldown meter is an open question for the rapid-fire playtest (@ref plan_fast_paced).
 
 `ShieldTrailController` is a plain C# `IStartable` + `IDisposable` registered as an entry point in `ShieldUILifetimeScope`. It flies shield orbs in both directions between a world point and the `Shield` trail endpoint (the HUD anchor, resolved from the shared `TrailEndpointRegistry` — see `Shared/Pool`), reusing one composed `TrailSpawner`:
 

@@ -16,10 +16,10 @@ Source is organized into per-context subfolders: `Balloons/`, `Buffs/`, `Cinemat
 
 | Asset | Interface | What it holds |
 |---|---|---|
-| `ProjectileFlightConfig` | `IProjectileFlightConfig` (in `Shared/`) | Projectile flight behavior — initial velocity, gravity, deflection, and feel params, plus launch load duration. Hold-to-speed-up tuning: `HoldSpeedUpMax` (time-scale ceiling, default 2×), `HoldSpeedUpLerpDuration` (ramp time, default 0.3 s), `HoldSpeedUpTooltipDelay` (seconds of flight before the one-time tooltip appears, default 4 s). |
+| `ProjectileFlightConfig` | `IProjectileFlightConfig` (in `Shared/`) | Projectile flight behavior — initial velocity, gravity, deflection, and feel params, plus launch load duration and the rapid-fire limits: `MaxBallsInFlight` (balls flying at once, 3) and `ReloadCooldownSeconds` (floor on the reload slide). |
 | `SlotGridConfig` | `ISlotGridConfig` (in `Shared/`) | Slot grid layout — play-area dimensions and slot positioning. |
 | `PredictionTraceConfig` | `IPredictionTraceConfig` (in `Shared/`) | Prediction trace visualization — path rendering params and styling. |
-| `RunConfig` | `IRunConfig` (in `Shared/`) | Run rules — starting hit points (consumed by `PlayerHealthController`). |
+| `RunConfig` | `IRunConfig` (in `Shared/`) | Run rules — starting hit points (consumed by `PlayerHealthController`) and `LevelCompleteFlightGrace` (seconds after the level-complete beat before balls still flying are force-destroyed). |
 | `ProjectileVisualConfig` | `IProjectileVisualConfig` (in `Shared/`) | Projectile visual tuning — glow, pierce spiral, scene light, shield-loss/pierce flash FX, and the death (disappear) presentation (`ProjectileDisappearDuration`/`Ease`/`DeadDriftFactor`). |
 | `BalloonsConfiguration` | `IBalloonsConfiguration` | Balloon-specific configuration — `BalloonPrefabEntry` entries with per-type weight/cap/nudge/VFX, default pop VFX, spawn line counts, spawn animation range, balance delay, global nudge defaults |
 | `GridActorConfiguration` | `IGridActorConfiguration` | Grid actor entries with per-type weight, max-count cap, and `HitsToPop` for destructible actors (Gatekeeper). Used by `StaticActorSpawner` and the procedural `GridSpawner` |

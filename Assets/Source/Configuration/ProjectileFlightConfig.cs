@@ -108,15 +108,15 @@ namespace BalloonParty.Configuration
                  "slow-mo in and/or out for dramatic pacing.")]
         [SerializeField] private AnimationCurve _lastShieldTimeScaleCurve = AnimationCurve.Constant(0f, 1f, 0.3f);
 
-        [Header("Hold Speed-Up")]
-        [Tooltip("Maximum time-scale multiplier when holding during flight (e.g. 2 = double speed).")]
-        [SerializeField] [Min(1f)] private float _holdSpeedUpMax = 2f;
+        [Header("Rapid Fire")]
+        [Tooltip("Most balls in flight at once. A release with this many already flying fires nothing; " +
+                 "the next ball waits inside the thrower until one dies.")]
+        [SerializeField] [Min(1)] private int _maxBallsInFlight = 3;
 
-        [Tooltip("Seconds to lerp from 1× to max while holding. 0 = instant.")]
-        [SerializeField] [Min(0f)] private float _holdSpeedUpLerpDuration = 0.3f;
-
-        [Tooltip("Seconds of uninterrupted flight before the hold-to-speed-up tooltip appears. 0 = disabled.")]
-        [SerializeField] [Min(0f)] private float _holdSpeedUpTooltipDelay = 4f;
+        [Tooltip("Seconds of game time (scaled: slow-mo stretches it) from a shot until the next ball " +
+                 "reaches the muzzle and can fire. The ball slides out over this time, so its position " +
+                 "is the reload cue. Never shorter than the load animation.")]
+        [SerializeField] [Min(0f)] private float _reloadCooldownSeconds = 0.5f;
 
         [Header("Aiming")]
         [Tooltip("Minimum angular subdivision (degrees) the aim direction snaps to. The pointer still " +
@@ -160,9 +160,8 @@ namespace BalloonParty.Configuration
         public float LastShieldApproachDuration => _lastShieldApproachDuration;
         public AnimationCurve LastShieldTimeScaleCurve => _lastShieldTimeScaleCurve;
         public float ShieldTrailDuration => _shieldTrailDuration;
-        public float HoldSpeedUpMax => _holdSpeedUpMax;
-        public float HoldSpeedUpLerpDuration => _holdSpeedUpLerpDuration;
-        public float HoldSpeedUpTooltipDelay => _holdSpeedUpTooltipDelay;
+        public int MaxBallsInFlight => _maxBallsInFlight;
+        public float ReloadCooldownSeconds => _reloadCooldownSeconds;
         public float AimAngleStepDegrees => _aimAngleStepDegrees;
         public float AimAngleMinDegrees => _aimAngleMinDegrees;
         public float AimAngleMaxDegrees => _aimAngleMaxDegrees;

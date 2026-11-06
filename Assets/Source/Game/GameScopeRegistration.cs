@@ -56,7 +56,6 @@ using BalloonParty.UI.GameOver;
 using BalloonParty.Slots.Grid;
 using BalloonParty.Thrower;
 using BalloonParty.UI;
-using BalloonParty.UI.Tooltip;
 using MessagePipe;
 using UnityEngine;
 using VContainer;
@@ -101,6 +100,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<BoardDepletedMessage>(options);
             builder.RegisterMessageBroker<ForceDestroyProjectileMessage>(options);
             builder.RegisterMessageBroker<ProjectileLoadedMessage>(options);
+            builder.RegisterMessageBroker<ThrowerReadyMessage>(options);
             builder.RegisterMessageBroker<ProjectileFiredMessage>(options);
             builder.RegisterMessageBroker<ProjectileCruiseStartedMessage>(options);
             builder.RegisterMessageBroker<ProjectileCruiseEndedMessage>(options);
@@ -166,7 +166,6 @@ namespace BalloonParty.Game
             builder.Register<PauseService>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<TimeScaleService>().AsSelf().As<ITimeScaleClaims>().As<IRunResettable>();
             builder.RegisterEntryPoint<ProjectileDoomedTimeScaleController>();
-            builder.RegisterEntryPoint<HoldSpeedUpController>().AsSelf().As<IHoldSpeedUpState>();
             builder.Register<ProjectileRegistry>(Lifetime.Singleton)
                 .As<IProjectileRegistry>().As<IProjectileRegistryWriter>();
             // Game scope, not the thrower's: ItemAssigner plans shield chains from it and cannot
@@ -341,7 +340,6 @@ namespace BalloonParty.Game
             builder.RegisterComponentInHierarchy<GameOverScreen>();
 
             builder.RegisterBuildCallback(InjectTints);
-            builder.RegisterBuildCallback(InjectTooltips);
             return;
 
             void InjectTints(IObjectResolver resolver)
@@ -349,14 +347,6 @@ namespace BalloonParty.Game
                 foreach (var tint in UnityEngine.Object.FindObjectsByType<TimeOfDayTint>())
                 {
                     resolver.Inject(tint);
-                }
-            }
-
-            void InjectTooltips(IObjectResolver resolver)
-            {
-                foreach (var tooltip in UnityEngine.Object.FindObjectsByType<HoldSpeedUpTooltip>())
-                {
-                    resolver.Inject(tooltip);
                 }
             }
         }

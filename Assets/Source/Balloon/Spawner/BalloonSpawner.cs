@@ -68,6 +68,8 @@ namespace BalloonParty.Balloon.Spawner
         private int _turnCount;
         private int _generation;
         private int _batchCursor;
+        private int _queuedWaveLines;
+        private bool _waveRunning;
         private bool _prewarmed;
 
         public SpawnStage SpawnPriority => SpawnStage.BalloonActors;
@@ -154,6 +156,10 @@ namespace BalloonParty.Balloon.Spawner
             _newlySpawnedBalloons.Clear();
             _spawnBatch.Clear();
             _batchCursor = 0;
+
+            // The old run's wave stops at its next line on its own; a new run's wave needn't wait for it.
+            _queuedWaveLines = 0;
+            _waveRunning = false;
         }
 
         public void Dispose()
@@ -185,21 +191,6 @@ namespace BalloonParty.Balloon.Spawner
             }
         }
 
-        // Read off the registry rather than tracked from Doomed messages: a ball scaled away by game over
-        // or a reset never publishes DoomedEnded, and a stale flag would stall every later wave.
-        private bool AnyShotDoomed()
-        {
-            for (var i = 0; i < _projectiles.InFlightCount; i++)
-            {
-                if (_projectiles.InFlightAt(i).IsLastShieldApproach.Value)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         private void OnProjectileDestroyed()
         {
             if (_levelProgress.Phase.Value != LevelUpPhase.Playing)
@@ -213,7 +204,49 @@ namespace BalloonParty.Balloon.Spawner
                 return;
             }
 
-            SpawnLinesWithDelayAsync(_levelParams.Current.SpawnLines, _cts.Token, _generation).Forget();
+            QueueWave(_levelParams.Current.SpawnLines);
+        }
+
+        // A wave owns the shared batch from its first line to its last, so waves run one at a time. With
+        // several balls in flight deaths come faster than a wave lasts; deaths that land while a wave
+        // runs merge into one queued wave rather than stacking a backlog that spawns long after the
+        // shots that caused it. Interim pacing: the spawn clock (PLAN-FastPaced Phase 3) replaces it.
+        private void QueueWave(int lineCount)
+        {
+            _queuedWaveLines = Mathf.Max(_queuedWaveLines, lineCount);
+            if (!_waveRunning)
+            {
+                RunQueuedWavesAsync(_cts.Token, _generation).Forget();
+            }
+        }
+
+        private async UniTaskVoid RunQueuedWavesAsync(CancellationToken ct, int generation)
+        {
+            _waveRunning = true;
+            try
+            {
+                while (_queuedWaveLines > 0 && generation == _generation)
+                {
+                    var lines = _queuedWaveLines;
+                    _queuedWaveLines = 0;
+
+                    // A wave queued before the level completed belongs to the level that ended.
+                    if (_levelProgress.Phase.Value != LevelUpPhase.Playing)
+                    {
+                        break;
+                    }
+
+                    await SpawnLinesWithDelayAsync(lines, ct, generation);
+                }
+            }
+            finally
+            {
+                // A reset already handed the flag to the new run.
+                if (generation == _generation)
+                {
+                    _waveRunning = false;
+                }
+            }
         }
 
         // Direct projectile pops (never AOE items — DamageFlags.DirectHit) can each earn one extra
@@ -258,13 +291,13 @@ namespace BalloonParty.Balloon.Spawner
 
         private void OnSpawnLinesRequested(int lineCount)
         {
-            if (lineCount <= 1)
+            if (lineCount <= 1 && !_waveRunning)
             {
                 SpawnLine();
                 return;
             }
 
-            SpawnLinesWithDelayAsync(lineCount, _cts.Token, _generation).Forget();
+            QueueWave(lineCount);
         }
 
         private void PopulateInitialGrid()
@@ -602,7 +635,7 @@ namespace BalloonParty.Balloon.Spawner
             _newlySpawnedBalloons.RemoveRange(itemCheckStart, _newlySpawnedBalloons.Count - itemCheckStart);
         }
 
-        private async UniTaskVoid SpawnLinesWithDelayAsync(int lineCount, CancellationToken ct, int generation)
+        private async UniTask SpawnLinesWithDelayAsync(int lineCount, CancellationToken ct, int generation)
         {
             // Keeps the overflow hold (thrower lock) across the gaps between lines.
             _rejectedBalloon.BeginSpawnSequence();
@@ -624,9 +657,12 @@ namespace BalloonParty.Balloon.Spawner
                         return;
                     }
 
-                    // Hold new lines out of a shot's doomed 'last breath' — spawning balloons into
+                    // Hold new lines out of a lone shot's doomed 'last breath' — spawning balloons into
                     // the frozen death moment reads wrong. Resume once it ends (or the run moves on).
-                    while (AnyShotDoomed() && generation == _generation)
+                    // With other balls flying the moment isn't frozen, so nothing is held. Read off the
+                    // registry rather than tracked from Doomed messages: a ball scaled away by game over
+                    // or a reset never publishes DoomedEnded, and a stale flag would stall every wave.
+                    while (_projectiles.DoomedShotFliesAlone() && generation == _generation)
                     {
                         await UniTask.Yield(ct);
                     }

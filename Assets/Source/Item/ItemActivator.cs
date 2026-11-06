@@ -87,7 +87,8 @@ namespace BalloonParty.Item
                 await UniTask.Yield(_cts.Token);
 
                 await handler.Activate(context);
-                _itemActivatedPublisher.Publish(new ItemActivatedMessage(context.Balloon));
+                _itemActivatedPublisher.Publish(
+                    new ItemActivatedMessage(context.Balloon, context.DamageContext.Projectile));
             }
             catch (OperationCanceledException)
             {

@@ -6,6 +6,7 @@ using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
+using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
@@ -41,7 +42,7 @@ namespace BalloonParty.Tests.Game
         private IMessageHandler<LevelUpDismissedMessage> _dismissedHandler;
         private IMessageHandler<LevelTransitionCompletedMessage> _completedHandler;
         private IMessageHandler<ProjectileDestroyedMessage> _destroyedHandler;
-        private IMessageHandler<ProjectileFiredMessage> _firedHandler;
+        private ProjectileRegistry _registry;
         private IMessageHandler<GameOverMessage> _gameOverHandler;
         private IMessageHandler<BoardDepletedMessage> _boardDepletedHandler;
         private IPublisher<ForceDestroyProjectileMessage> _forceDestroyPublisher;
@@ -87,6 +88,7 @@ namespace BalloonParty.Tests.Game
             _abandonedPublisher = Substitute.For<IPublisher<LevelUpAbandonedMessage>>();
             _forceDestroyPublisher = Substitute.For<IPublisher<ForceDestroyProjectileMessage>>();
 
+            _registry = new ProjectileRegistry();
             _controller = BuildController();
             _controller.Start();
             FireProjectileFired();
@@ -96,6 +98,7 @@ namespace BalloonParty.Tests.Game
         public void TearDown()
         {
             _controller.Dispose();
+            _registry.Dispose();
         }
 
         private LevelController BuildController()
@@ -135,13 +138,6 @@ namespace BalloonParty.Tests.Game
                     Arg.Any<MessageHandlerFilter<ProjectileDestroyedMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
-            var loadedSubscriber = Substitute.For<ISubscriber<ProjectileFiredMessage>>();
-            loadedSubscriber
-                .Subscribe(
-                    Arg.Do<IMessageHandler<ProjectileFiredMessage>>(h => _firedHandler = h),
-                    Arg.Any<MessageHandlerFilter<ProjectileFiredMessage>[]>())
-                .Returns(Substitute.For<IDisposable>());
-
             var gameOverSubscriber = Substitute.For<ISubscriber<GameOverMessage>>();
             gameOverSubscriber
                 .Subscribe(
@@ -161,8 +157,8 @@ namespace BalloonParty.Tests.Game
                 Substitute.For<IRetryState>(), _timeScale, _cinematics, Substitute.For<IRunConfig>(),
                 _levelUpPublisher, _abandonedPublisher,
                 trailArrivedSubscriber, abortedSubscriber, dismissedSubscriber, completedSubscriber,
-                destroyedSubscriber, loadedSubscriber, gameOverSubscriber,
-                boardDepletedSubscriber, _forceDestroyPublisher);
+                destroyedSubscriber, gameOverSubscriber,
+                boardDepletedSubscriber, _forceDestroyPublisher, _registry);
         }
 
         [Test]
@@ -341,17 +337,17 @@ namespace BalloonParty.Tests.Game
             _thresholds.PointsRequiredForLevel(1).Returns(2);
             var first = new ProjectileModel();
             var second = new ProjectileModel();
-            _firedHandler.Handle(new ProjectileFiredMessage(first, Vector3.zero, Vector3.up));
-            _firedHandler.Handle(new ProjectileFiredMessage(second, Vector3.zero, Vector3.up));
+            Launch(first);
+            Launch(second);
             ScoreColor(Red, 2);
             ScoreColor(Blue, 2);
 
-            _destroyedHandler.Handle(new ProjectileDestroyedMessage(first));
+            Land(first);
 
             _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
             Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value, "still waiting on the second ball");
 
-            _destroyedHandler.Handle(new ProjectileDestroyedMessage(second));
+            Land(second);
 
             _levelUpPublisher.Received(1).Publish(Arg.Is<ScoreLevelUpMessage>(m => m.NewLevel == 2));
             Assert.AreEqual(LevelUpPhase.Pending, _controller.Phase.Value);
@@ -363,13 +359,13 @@ namespace BalloonParty.Tests.Game
             _thresholds.PointsRequiredForLevel(1).Returns(2);
             var first = new ProjectileModel();
             var second = new ProjectileModel();
-            _firedHandler.Handle(new ProjectileFiredMessage(first, Vector3.zero, Vector3.up));
-            _firedHandler.Handle(new ProjectileFiredMessage(second, Vector3.zero, Vector3.up));
+            Launch(first);
+            Launch(second);
             ScoreColor(Red, 2);
             ScoreColor(Blue, 2);
 
-            _destroyedHandler.Handle(new ProjectileDestroyedMessage(second));
-            _destroyedHandler.Handle(new ProjectileDestroyedMessage(first));
+            Land(second);
+            Land(first);
 
             _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
         }
@@ -380,13 +376,13 @@ namespace BalloonParty.Tests.Game
             _thresholds.PointsRequiredForLevel(1).Returns(2);
             var early = new ProjectileModel();
             var late = new ProjectileModel();
-            _firedHandler.Handle(new ProjectileFiredMessage(early, Vector3.zero, Vector3.up));
-            _firedHandler.Handle(new ProjectileFiredMessage(late, Vector3.zero, Vector3.up));
-            _destroyedHandler.Handle(new ProjectileDestroyedMessage(early));
+            Launch(early);
+            Launch(late);
+            Land(early);
 
             ScoreColor(Red, 2);
             ScoreColor(Blue, 2);
-            _destroyedHandler.Handle(new ProjectileDestroyedMessage(late));
+            Land(late);
 
             _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
         }
@@ -1016,14 +1012,37 @@ namespace BalloonParty.Tests.Game
             _trailArrivedHandler.Handle(new ScoreTrailArrivedMessage(color, score, points: 1, Vector3.zero));
         }
 
+        // Lands the oldest ball still flying; with none, a bare Destroyed (a shot that never flew).
         private void FireFlightEnded()
         {
-            _destroyedHandler.Handle(new ProjectileDestroyedMessage());
+            Land(_registry.InFlightCount > 0 ? _registry.InFlightAt(0) : null);
         }
 
         private void FireProjectileFired()
         {
-            _firedHandler.Handle(new ProjectileFiredMessage(null, Vector3.zero, Vector3.up));
+            Launch(new ProjectileModel());
+        }
+
+        private void Launch(IProjectileModel ball)
+        {
+            _registry.Load(ball, null);
+            _registry.Launch(ball);
+        }
+
+        // As a dying ball does it: it leaves the registry's flights, then its Destroyed goes out.
+        private void Land(IProjectileModel ball)
+        {
+            if (ball != null)
+            {
+                _registry.Land(ball);
+            }
+
+            _destroyedHandler.Handle(new ProjectileDestroyedMessage(ball));
+
+            if (ball != null)
+            {
+                _registry.Retire(ball);
+            }
         }
 
         private void FireGameOver()
@@ -1099,11 +1118,13 @@ namespace BalloonParty.Tests.Game
         // ─────────────────────────────────────────────────────────────────────
 
         [Test]
-        public void ResetRun_ClearsProjectileInFlight_SoCompletionPresentsImmediately()
+        public void ResetRun_TheThrowerClearedTheFlights_CompletionPresentsImmediately()
         {
-            // A projectile is in flight, then we reset (simulating a retry mid-shot).
+            // A projectile is in flight, then we reset (simulating a retry mid-shot). The thrower
+            // clears the registry on a reset; no Destroyed is published.
             Assert.AreEqual(LevelUpPhase.Playing, _controller.Phase.Value);
 
+            _registry.Clear();
             _controller.ResetRun(2);
 
             // Now if we complete without firing, it should present immediately (no flight hold).
@@ -1113,6 +1134,151 @@ namespace BalloonParty.Tests.Game
 
             Assert.AreEqual(LevelUpPhase.Pending, _controller.Phase.Value,
                 "should present immediately, not hold for a stale flight");
+        }
+
+        [Test]
+        public void GameOver_BallsScaledAwayWithoutDestroyed_ALateCompletionDoesNotHoldForThem()
+        {
+            // Game over scales every ball away and clears the registry, publishing no Destroyed. A
+            // count kept from messages would still hold one, and a late claim would wait on it.
+            FireGameOver();
+            _registry.Clear();
+
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
+            _controller.ClaimProgress(Red, 1);
+            _controller.ClaimProgress(Blue, 1);
+
+            Assert.AreNotEqual(LevelUpPhase.Completing, _controller.Phase.Value,
+                "a completion with nothing in flight must not hold the ceremony");
+        }
+
+        // ─────────────────────────────────────────────────────────────────────
+        // Level complete with balls still in flight (rapid fire): the flight grace
+        // ─────────────────────────────────────────────────────────────────────
+
+        [Test]
+        public void Tick_GracePassedAfterTheBeat_BallStillFlying_ForceDestroysOnce()
+        {
+            CompleteLevelWithBallFlying(graceSeconds: 1f);
+
+            EndBeat();
+            _forceDestroyPublisher.DidNotReceive().Publish(Arg.Any<ForceDestroyProjectileMessage>());
+
+            SetField("_completingElapsed", 1.5f);
+            _controller.Tick();
+            _controller.Tick();
+
+            _forceDestroyPublisher.Received(1).Publish(Arg.Any<ForceDestroyProjectileMessage>());
+        }
+
+        [Test]
+        public void Tick_GraceNotYetPassed_DoesNotForceDestroy()
+        {
+            CompleteLevelWithBallFlying(graceSeconds: 1f);
+            EndBeat();
+
+            SetField("_completingElapsed", 0.8f);
+            _controller.Tick();
+
+            _forceDestroyPublisher.DidNotReceive().Publish(Arg.Any<ForceDestroyProjectileMessage>());
+        }
+
+        [Test]
+        public void Tick_GraceDisabled_NeverForceDestroysAndWaitsForTheBallsToDie()
+        {
+            // IRunConfig.LevelCompleteFlightGrace is 0 by default on the substitute.
+            CompleteLevelWithBallFlying(graceSeconds: 0f);
+            EndBeat();
+
+            SetField("_completingElapsed", 10f);
+            _controller.Tick();
+
+            _forceDestroyPublisher.DidNotReceive().Publish(Arg.Any<ForceDestroyProjectileMessage>());
+            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value);
+        }
+
+        [Test]
+        public void Tick_BeatStillPlaying_DoesNotForceDestroy()
+        {
+            CompleteLevelWithBallFlying(graceSeconds: 0.05f);
+
+            SetField("_completingElapsed", 0.1f);
+            _controller.Tick();
+
+            _forceDestroyPublisher.DidNotReceive().Publish(Arg.Any<ForceDestroyProjectileMessage>());
+        }
+
+        [Test]
+        public void Tick_BeatEndsOnAVeryLateTick_GraceStillCountsFromTheBeatEnd()
+        {
+            // A hitch that carries the elapsed clock far past the beat must not let the grace pass in the
+            // very tick the beat ends — it counts from that tick.
+            CompleteLevelWithBallFlying(graceSeconds: 1f);
+
+            SetField("_completingElapsed", 5f);
+            _controller.Tick();
+
+            _forceDestroyPublisher.DidNotReceive().Publish(Arg.Any<ForceDestroyProjectileMessage>());
+        }
+
+        [Test]
+        public void Tick_BallsDieWithinTheGrace_PresentsWithoutForceDestroy()
+        {
+            CompleteLevelWithBallFlying(graceSeconds: 1f);
+            EndBeat();
+
+            FireFlightEnded();
+            SetField("_completingElapsed", 5f);
+            _controller.Tick();
+
+            Assert.AreEqual(LevelUpPhase.Pending, _controller.Phase.Value);
+            _forceDestroyPublisher.DidNotReceive().Publish(Arg.Any<ForceDestroyProjectileMessage>());
+        }
+
+        [Test]
+        public void Tick_NextLevelCompletesWithBallFlying_GraceAndOncePerCeremonyAreFresh()
+        {
+            CompleteLevelWithBallFlying(graceSeconds: 1f);
+            EndBeat();
+            SetField("_completingElapsed", 1.5f);
+            _controller.Tick();
+            _forceDestroyPublisher.Received(1).Publish(Arg.Any<ForceDestroyProjectileMessage>());
+
+            FireFlightEnded();
+            FireDismissed();
+            FireTransitionComplete();
+
+            FireProjectileFired();
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
+            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value);
+            EndBeat();
+            _forceDestroyPublisher.Received(1).Publish(Arg.Any<ForceDestroyProjectileMessage>());
+
+            SetField("_completingElapsed", 1.5f);
+            _controller.Tick();
+
+            _forceDestroyPublisher.Received(2).Publish(Arg.Any<ForceDestroyProjectileMessage>());
+        }
+
+        // Level 1 completes (every colour needs one point) while a ball is airborne.
+        private void CompleteLevelWithBallFlying(float graceSeconds)
+        {
+            var runConfig = Substitute.For<IRunConfig>();
+            runConfig.LevelCompleteFlightGrace.Returns(graceSeconds);
+            RebuildWithRunConfig(runConfig);
+
+            _thresholds.PointsRequiredForLevel(Arg.Any<int>()).Returns(1);
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
+            Assert.AreEqual(LevelUpPhase.Completing, _controller.Phase.Value);
+        }
+
+        // Pushes the clock just past the 0.3s beat curve so the next Tick closes the beat and starts the grace.
+        private void EndBeat()
+        {
+            SetField("_completingElapsed", 0.31f);
+            _controller.Tick();
         }
 
         private void SetField(string fieldName, object value)
@@ -1125,6 +1291,8 @@ namespace BalloonParty.Tests.Game
         private void RebuildWithRunConfig(IRunConfig runConfig)
         {
             _controller.Dispose();
+            _registry.Dispose();
+            _registry = new ProjectileRegistry();
 
             var trailArrivedSubscriber = Substitute.For<ISubscriber<ScoreTrailArrivedMessage>>();
             trailArrivedSubscriber
@@ -1161,13 +1329,6 @@ namespace BalloonParty.Tests.Game
                     Arg.Any<MessageHandlerFilter<ProjectileDestroyedMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
-            var loadedSubscriber = Substitute.For<ISubscriber<ProjectileFiredMessage>>();
-            loadedSubscriber
-                .Subscribe(
-                    Arg.Do<IMessageHandler<ProjectileFiredMessage>>(h => _firedHandler = h),
-                    Arg.Any<MessageHandlerFilter<ProjectileFiredMessage>[]>())
-                .Returns(Substitute.For<IDisposable>());
-
             var gameOverSubscriber = Substitute.For<ISubscriber<GameOverMessage>>();
             gameOverSubscriber
                 .Subscribe(
@@ -1187,8 +1348,8 @@ namespace BalloonParty.Tests.Game
                 Substitute.For<IRetryState>(), _timeScale, _cinematics, runConfig,
                 _levelUpPublisher, _abandonedPublisher,
                 trailArrivedSubscriber, abortedSubscriber, dismissedSubscriber, completedSubscriber,
-                destroyedSubscriber, loadedSubscriber, gameOverSubscriber,
-                boardDepletedSubscriber, _forceDestroyPublisher);
+                destroyedSubscriber, gameOverSubscriber,
+                boardDepletedSubscriber, _forceDestroyPublisher, _registry);
             _controller.Start();
             FireProjectileFired();
         }

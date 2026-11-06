@@ -232,7 +232,7 @@ namespace BalloonParty.Tests.Game
         // Highest-value test gap the review flagged: a real exporter loops the catalog calling
         // AxisBucketsOf on whatever snapshot it is handed, and reads every TimerId through the
         // indexer — neither was exercised on a sealed snapshot anywhere before this. This also
-        // exercises Wall and Hold, previously untouched by any test.
+        // exercises Wall, previously untouched by any test.
         [Test]
         public void Seal_Level_ExposesAxisBucketsOfAndEveryTimerThroughTheIndexer()
         {
@@ -242,7 +242,6 @@ namespace BalloonParty.Tests.Game
             scope.Timer(TimerId.Gameplay).Resume();
             scope.Timer(TimerId.Ceremony).Resume();
             scope.Timer(TimerId.Wall).Resume();
-            scope.Timer(TimerId.Hold).Resume();
             _now = 5f;
 
             var snapshot = scope.Seal(0, false);
@@ -251,7 +250,6 @@ namespace BalloonParty.Tests.Game
             Assert.AreEqual(5f, snapshot[TimerId.Gameplay]);
             Assert.AreEqual(5f, snapshot[TimerId.Ceremony]);
             Assert.AreEqual(5f, snapshot[TimerId.Wall]);
-            Assert.AreEqual(5f, snapshot[TimerId.Hold]);
         }
 
         [Test]
@@ -260,14 +258,12 @@ namespace BalloonParty.Tests.Game
             var scope = BuildScope(MetricScopeKind.Run);
             scope.IncrementAxis(MetricId.ItemsActivated, MetricAxis.ItemType, (int)ItemType.Bomb);
             scope.Timer(TimerId.Wall).Resume();
-            scope.Timer(TimerId.Hold).Resume();
             _now = 3f;
 
             var snapshot = scope.Seal();
 
             Assert.AreEqual(1, snapshot.AxisBucketsOf(MetricId.ItemsActivated, MetricAxis.ItemType)[(int)ItemType.Bomb]);
             Assert.AreEqual(3f, snapshot[TimerId.Wall]);
-            Assert.AreEqual(3f, snapshot[TimerId.Hold]);
         }
 
         // Seal_ThenReset_DoesNotMutateThePriorSnapshot above only covers Level — RunMetricsSnapshot has

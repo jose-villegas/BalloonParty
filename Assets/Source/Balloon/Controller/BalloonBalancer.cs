@@ -433,7 +433,7 @@ namespace BalloonParty.Balloon.Controller
         internal bool TickFlightRebalance(float deltaTime)
         {
             var interval = _balloonsConfig.FlightRebalanceInterval;
-            if (interval <= 0f || !AnyShotFree() || DoomedShotFliesAlone()
+            if (interval <= 0f || !AnyShotFree() || _projectiles.DoomedShotFliesAlone()
                 || _pauseService.IsAnyPaused.Value)
             {
                 // Freeze the board while a lone doomed shot glides its last-breath segment: with respawn
@@ -506,11 +506,6 @@ namespace BalloonParty.Balloon.Controller
             }
 
             return false;
-        }
-
-        private bool DoomedShotFliesAlone()
-        {
-            return _projectiles.InFlightCount == 1 && _projectiles.InFlightAt(0).IsLastShieldApproach.Value;
         }
 
         private void RequestBalance()

@@ -6,7 +6,6 @@ namespace BalloonParty.Game.Telemetry
     {
         Gameplay,
         Ceremony,
-        Wall,
-        Hold
+        Wall
     }
 }

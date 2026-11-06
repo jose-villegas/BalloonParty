@@ -364,6 +364,84 @@ Tests the streak state machine — consecutive same-color tracking, reset on col
 | `GetStreak` matching color | 1 | Wrong comparison |
 | `GetStreak` non-matching → 0 | 1 | Returns stale streak for wrong color |
 
+### `ColorStreakAnnouncementTests` — 17 tests
+
+Tests when `ColorStreak`/`ColorStreakTracker` publish `StreakChangedMessage`, which ball it names, and `HighestStreak`.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Record names its ball (shared streak and untracked ball → null/shared) | 3 | A reader attributes one ball's streak change to another |
+| `Reset` publishes only on a real change (nothing to reset → silent; state or banked deferred pops → once) | 3 | Phantom "streak broke" announcements, or a real break going unannounced |
+| Load announces the shared streak's reset once; level-up announces one reset for all | 4 | Duplicate or missing resets reaching audio and telemetry |
+| Retiring a ball with a streak announces its end once; a ball with none stays silent | 2 | Streak-end never reaches listeners, or fires twice |
+| `HighestStreak` takes the best across balls and the shared streak, ignoring landed and retired balls | 5 | The melodic streak sticks to a dead ball's value |
+
+### `ThrowerReloadTests` — 11 tests
+
+Tests `ThrowerReload`, the reload rules (headless, no `GameObject`).
+
+| Area | Tests | What could break |
+|---|---|---|
+| Ready only when slid out, a slot is free and the phase is `Playing` | 5 | A release fires a ball still sliding, over the cap, or during the level-up |
+| `Restart`: `ReloadCooldownSeconds` floors a shorter slide; a longer slide wins | 2 | Reload ends before the cooldown |
+| `Advance` holds at the cap and resumes where it stopped when a slot frees | 2 | The slide creeps while capped, or restarts from zero |
+| `SlidePosition` never reaches the muzzle before the ball is ready | 1 | The ease overshoots, showing the ball at the muzzle when a release would fire nothing |
+| `CanLaunch` skips the reload but not the cap or phase | 1 | Editor tools bypass the cap |
+
+### `ThrowerControllerRapidFireTests` — 10 tests
+
+Tests the held-ball and `FireAt` guards on `ThrowerController` (the reload rules themselves are in `ThrowerReloadTests`).
+
+| Area | Tests | What could break |
+|---|---|---|
+| `IsReadyToFire`: held and reloaded, cap reached, nothing held | 3 | A release fires with nothing held, or past the cap |
+| `EnsureLoaded` never replaces a held ball; does not load before the entrance ends or outside `Playing`; loads into an empty, movable thrower | 4 | A fire or death throws away the ball being aimed, or loads during the level-up |
+| `FireAt` fires nothing at the cap, outside `Playing`, or with nothing held | 3 | Shot Solver / Fire-Best-Shot tools exceed the cap |
+
+### `ProjectileDoomedTimeScaleControllerTests` — 9 tests
+
+Tests the doomed slow-mo's lone-ball rule.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Doomed ball alone claims the slow-mo; with company it does not; others dying hands it the claim | 3 | One ball's last breath slows the game under the others |
+| A second ball launching during the slow-mo releases the claim | 1 | Slow-mo outlives its lone-ball condition |
+| A ball left alone resumes where its last breath now is, not from the start; the earlier doomed ball gets it when the later dies first | 2 | The slow-mo restarts or the wrong ball's clock is used |
+| Doom ending or the ball retiring without an end message releases the claim; an untracked ball is ignored | 3 | A stuck slow-mo after game over or reset |
+
+### `ProjectileRegistryExtensionsTests` — 9 tests
+
+Tests the lone-ball predicates (`FliesAlone`, `DoomedShotFliesAlone`).
+
+| Area | Tests | What could break |
+|---|---|---|
+| `FliesAlone`: only ball, company, company lands, null, a ball merely held | 5 | Held or null balls counted as flying |
+| `DoomedShotFliesAlone`: lone doomed, lone not doomed, doomed with company, nothing in flight | 4 | Line hold, balancer freeze or slow-mo fires with several balls up |
+
+### `LevelControllerTests` — 66 tests
+
+Tests the level-complete ceremony. The table lists only the flight-related areas added with rapid fire; the registry (`IProjectileRegistry.InFlightCount`) is the source of "balls still flying".
+
+| Area | Tests | What could break |
+|---|---|---|
+| Level-up waits for the last ball to land (registry-driven, no Fired subscription) | covered by existing completion tests | The ceremony presents while a ball still flies |
+| Run reset: the thrower cleared the flights, so completion presents immediately | 1 | A stale "in flight" state blocks the level-up after a restart |
+| Game over: balls scaled away without `Destroyed` don't hold a late completion | 1 | The level-up never presents after a game over |
+| Grace: after the beat plus `LevelCompleteFlightGrace`, remaining balls are force-destroyed once; not before, not while the beat plays, not when grace is 0; counts from the beat end on a late tick; balls dying within the grace present without force-destroy; a later level gets a fresh grace | 7 | Balls linger and stall the level-up, or are popped too early or repeatedly |
+
+### `FlightStatsServiceTests` — 11 tests
+
+Tests per-ball counts and the airborne window. The `IsLoaded` and `FlightIndex` tests were removed with those members (the thrower always holds a ball); `IsAirborne` is covered by `IsAirborne_SpansFiredToDestroyed_NotAiming`.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Pops/deflects per type, no bleed between types or from non-balloon actors | 3 | Router pitch steps drift |
+| Per-ball lifetime: counters start at zero on load, unknown ball reads zero, dead ball readable until retired, recycled record starts clean | 4 | A new ball inherits an old ball's counts |
+| `IsAirborne` spans Fired to Destroyed (not aiming); retire closes the window; wall bounces are zero before firing | 3 | Effects gated on `IsAirborne` stick on or start early |
+| Hit with no shot behind it counts in no flight | 1 | Cheat pops credited to a random ball |
+
+> `HoldSpeedUpControllerTests` was deleted together with `HoldSpeedUpController` (hold-to-speed-up was removed in rapid fire).
+
 ### `WeightedPickTests` — 4 tests
 
 Tests `WeightedPickExtensions.PickRandom` weighted selection with max-count capping. Uses deterministic single-candidate scenarios.
@@ -646,9 +724,9 @@ Tests the `Shared/Extensions` semitone ↔ pitch-multiplier helper the melodic p
 | -12 semitones → halves pitch | 1 | Sign handling wrong |
 | `int` overload matches the `float` overload | 1 | Overload drift |
 
-### `CombatSoundRouterTests` — 8 tests
+### `CombatSoundRouterTests` — 43 tests
 
-Tests message → `(GameSoundId, position)` translation for hits, shots, reload, and the cruise loop handle.
+Tests message → `(GameSoundId, position)` translation for hits, shots, reload, and the cruise loop handle, plus the per-ball pitch ramps. The table lists the main areas, not every test.
 
 | Area | Tests | What could break |
 |---|---|---|
@@ -657,10 +735,14 @@ Tests message → `(GameSoundId, position)` translation for hits, shots, reload,
 | `Absorb` / `PassThrough` outcomes → `BalloonResist` | 2 | Missing flag check drops a resist sound |
 | `Pop` combined with `Deflect` → resolves to `Pop` | 1 | Branch precedence order flips, changing which sound wins on a combined outcome |
 | Fired → `ShotFired` at world position | 1 | Position not forwarded |
-| Loaded → `ShotReload` with null position | 1 | Non-positional sound wrongly spatialized |
+| `ThrowerReadyMessage` → `ShotReload` with null position | 1 | Non-positional sound wrongly spatialized |
+| `ProjectileLoadedMessage` → no reload cue | 1 | Reload sound played when the ball is only loaded, before it can fire (it may still be sliding out or waiting for a free slot) |
 | Cruise started then ended → stops the stored handle | 1 | Loop handle not retained across start/end, leaking the cruise loop |
+| Two balls in flight: pop, wall-bounce and colour ramps are per ball | 4 | One ball's pops step another ball's pitch |
+| Cruise end, destroy or retire stops only that ball's loop | 3 | One ball ending silences another ball's cruise loop, or a retired ball's loop leaks |
+| Streak break clears only the named ball's colour ramp (ball-less break clears the shared one); retirement drops a ball's ramp | 5 | A break on one ball resets everyone, or a retired ball's ramp state leaks into the next ball |
 
-### `ItemSoundRouterTests` — 10 tests
+### `ItemSoundRouterTests` — 14 tests
 
 Tests per-`ItemType` sound mapping and the item-slot downcast guard.
 
@@ -671,12 +753,14 @@ Tests per-`ItemType` sound mapping and the item-slot downcast guard.
 | Balloon not `IHasItemSlot` (e.g. `ToughBalloonModel`) → no play, no throw | 1 | Downcast guard missing — router crashes on a non-item-eligible balloon |
 | Overflow heart → `HeartDrain` at target position | 1 | Danger-beat sound dropped or mispositioned |
 | Spawn blocked → `OverflowThud` at position | 1 | Column-keyed thud not forwarded |
+| Pickup pitch ramp is per ball; a retired ball's ramp is dropped; load clears only the shared ramp | 4 | Two balls' pickups step each other's pitch |
 
-### `ProgressionSoundRouterTests` — 1 test
+### `ProgressionSoundRouterTests` — 4 tests
 
 | Area | Tests | What could break |
 |---|---|---|
 | Streak changed → forwards to `IMelodicContext.SetStreak` and plays `StreakStep` | 1 | Melodic pop system never learns the current streak, freezing the scale-walk at the root |
+| One ball's streak breaks → melody follows `HighestStreak` (the best remaining) | 1 | A break on one ball drops the melody while another ball's streak is still alive |
 
 ### `RegisterAudioTests` — 3 tests
 

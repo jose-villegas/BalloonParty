@@ -149,7 +149,6 @@ GameObject:
   - component: {fileID: 2897899703615711672}
   - component: {fileID: 5523862426854879204}
   - component: {fileID: 6892919829937505524}
-  - component: {fileID: 5045519060765817075}
   m_Layer: 5
   m_Name: SpeedUptip
   m_TagString: Untagged
@@ -227,22 +226,6 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
---- !u!114 &5045519060765817075
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5970238015647049437}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b028cd7dbc3be4e0bb74d63c80ef0207, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.Tooltip.HoldSpeedUpTooltip
-  _canvasGroup: {fileID: 6892919829937505524}
-  _fadeDuration: 0.4
-  _holdDuration: 3
-  _targetAlpha: 0.7
 --- !u!1 &8144384464363206753
 GameObject:
   m_ObjectHideFlags: 0

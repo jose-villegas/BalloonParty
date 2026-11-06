@@ -8,7 +8,7 @@ using BalloonParty.Game.Danger;
 using BalloonParty.Game.Flight;
 using BalloonParty.Game.Run;
 using BalloonParty.Game.Telemetry;
-using BalloonParty.Projectile.Controller;
+using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
@@ -21,7 +21,7 @@ using UniRx;
 namespace BalloonParty.Tests.Game
 {
     // Shared rig for the two W3 fixtures (RunIdentityTests, GameplayMetricsServiceTests). Built once
-    // here rather than duplicated per fixture because the service takes 32 constructor arguments and a
+    // here rather than duplicated per fixture because the service takes 31 constructor arguments and a
     // capture that is silently missing from one copy compiles, asserts nothing and passes green — the
     // exact failure the plan's test-strategy section warns about.
     //
@@ -37,16 +37,15 @@ namespace BalloonParty.Tests.Game
         internal readonly ITelemetrySink Wired;
         internal readonly IRetryState RetryState = Substitute.For<IRetryState>();
         internal readonly IFlightStats FlightStats = Substitute.For<IFlightStats>();
-        internal readonly IHoldSpeedUpState HoldState = Substitute.For<IHoldSpeedUpState>();
+        internal readonly IFlightStatsSource FlightStatsSource = Substitute.For<IFlightStatsSource>();
+        internal readonly Subject<IProjectileModel> Retired = new();
         internal readonly ReactiveProperty<NavigationState> Navigation = new(NavigationState.Launch);
-        internal readonly ReactiveProperty<bool> FlightLoaded = new(false);
         internal readonly ReactiveProperty<int> TotalScore = new(0);
         internal readonly ReactiveProperty<float> Danger = new(0f);
 
         internal readonly PauseService Pause;
         internal readonly GameplayMetricsService Service;
 
-        internal IMessageHandler<ProjectileLoadedMessage> ProjectileLoaded;
         internal IMessageHandler<ProjectileFiredMessage> ProjectileFired;
         internal IMessageHandler<ProjectileDestroyedMessage> ProjectileDestroyed;
         internal IMessageHandler<ActorHitMessage> ActorHit;
@@ -87,13 +86,14 @@ namespace BalloonParty.Tests.Game
             var navigation = Substitute.For<INavigation>();
             navigation.Current.Returns(Navigation);
 
-            var flightScope = Substitute.For<IFlightScope>();
-            flightScope.IsLoaded.Returns(FlightLoaded);
+            // The registry matters to metrics only as the place balls retire; which balls are loaded or
+            // in flight is read off the Fired/Destroyed messages instead.
+            var projectiles = Substitute.For<IProjectileRegistry>();
+            projectiles.Retired.Returns(Retired);
 
-            // One canned stats object for every ball: these tests drive a single flight, and the per-ball
-            // keying itself is FlightStatsServiceTests' concern.
-            var flightStatsSource = Substitute.For<IFlightStatsSource>();
-            flightStatsSource.Of(Arg.Any<IProjectileModel>()).Returns(FlightStats);
+            // One canned stats object for every ball unless a test keys one to a specific ball; the
+            // per-ball keying itself is FlightStatsServiceTests' concern.
+            FlightStatsSource.Of(Arg.Any<IProjectileModel>()).Returns(FlightStats);
 
             var runScore = Substitute.For<IRunScore>();
             runScore.TotalScore.Returns(TotalScore);
@@ -106,7 +106,6 @@ namespace BalloonParty.Tests.Game
                 Substitute.For<IPublisher<ResumedMessage>>());
 
             Service = new GameplayMetricsService(
-                Capture<ProjectileLoadedMessage>(h => ProjectileLoaded = h),
                 Capture<ProjectileFiredMessage>(h => ProjectileFired = h),
                 Capture<ProjectileDestroyedMessage>(h => ProjectileDestroyed = h),
                 Capture<ActorHitMessage>(h => ActorHit = h),
@@ -129,9 +128,8 @@ namespace BalloonParty.Tests.Game
                 Capture<GameOverMessage>(h => GameOver = h),
                 Wired,
                 new SessionTelemetryContext(),
-                flightScope,
-                flightStatsSource,
-                HoldState,
+                projectiles,
+                FlightStatsSource,
                 runScore,
                 RetryState,
                 dangerLevel,
@@ -146,6 +144,11 @@ namespace BalloonParty.Tests.Game
         public void Dispose()
         {
             Service.Dispose();
+        }
+
+        internal static IProjectileModel Ball()
+        {
+            return Substitute.For<IProjectileModel>();
         }
 
         internal static IBalloonModel Balloon(BalloonType type, string color)
@@ -180,11 +183,12 @@ namespace BalloonParty.Tests.Game
                 new DamageContext(1, DamageFlags.DirectHit));
         }
 
+        // ball: the shot behind the hit, or null for one no ball made (a cheat, a board effect).
         internal static ActorHitMessage Hit(IBalloonModel balloon, HitOutcome outcome,
-            DamageFlags flags = DamageFlags.DirectHit)
+            DamageFlags flags = DamageFlags.DirectHit, IProjectileModel ball = null)
         {
             return new ActorHitMessage(balloon, UnityEngine.Vector3.zero, UnityEngine.Vector3.right, outcome,
-                new DamageContext(1, flags));
+                new DamageContext(1, flags, projectile: ball));
         }
 
         // Drives the service out of Idle exactly the way the game does (R23): entry points start during
@@ -192,6 +196,18 @@ namespace BalloonParty.Tests.Game
         internal void EnterGame()
         {
             Navigation.Value = NavigationState.Game;
+        }
+
+        internal void Fire(IProjectileModel ball)
+        {
+            ProjectileFired.Handle(new ProjectileFiredMessage(ball, UnityEngine.Vector3.zero, UnityEngine.Vector3.up));
+        }
+
+        // The runtime order of a death: the Destroyed dispatch, then the registry retires the ball.
+        internal void Destroy(IProjectileModel ball)
+        {
+            ProjectileDestroyed.Handle(new ProjectileDestroyedMessage(ball));
+            Retired.OnNext(ball);
         }
 
         // The full clean level boundary: ceremony, dismissal, then the transition that actually flushes.

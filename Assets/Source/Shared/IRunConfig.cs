@@ -28,5 +28,11 @@ namespace BalloonParty.Shared
 
         /// <summary>Peak timeScale during the post-flight ramp-up (e.g. 2 = double speed).</summary>
         float LevelCompleteRampUpScale { get; }
+
+        /// <summary>
+        ///     Unscaled seconds after the level-complete beat before balls still in flight are popped
+        ///     (force-destroyed; no new hits) so the level-up can present. 0 = wait for them to die.
+        /// </summary>
+        float LevelCompleteFlightGrace { get; }
     }
 }

@@ -161,9 +161,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _holdSpeedUpMax: 3
-  _holdSpeedUpLerpDuration: 2
-  _holdSpeedUpTooltipDelay: 7
+  _maxBallsInFlight: 3
+  _reloadCooldownSeconds: 0.5
   _aimAngleStepDegrees: 0.33333334
   _aimAngleMinDegrees: 5
   _aimAngleMaxDegrees: 175

@@ -343,7 +343,7 @@ brokers are already registered at `Game/GameScopeRegistration.cs:59-94`.
 | Deflect | `ActorHitMessage` (`Deflect`) | `HitPipeline.cs:34` | `BalloonDeflect` | Combat | Branch on `Outcome`; prefer the single `ActorHitMessage` sub over `BalloonDeflectedMessage`. |
 | Absorb / pass-through | `ActorHitMessage` (`Absorb`/`PassThrough`) | `HitPipeline.cs:34` | `BalloonResist` | Combat | Distinguish via `HitOutcome` flags (`Slots/Capabilities/HitOutcome.cs`). |
 | Shot fired | `ProjectileFiredMessage` | `Projectile/View/ProjectileView.cs:561` | `ShotFired` | Combat | Muzzle pos + heading. |
-| Reload | `ProjectileLoadedMessage` | `Thrower/ThrowerController.cs:194` | `ShotReload` | Combat | "cock" sound. |
+| Reload | `ThrowerReadyMessage` | `Thrower/ThrowerController.cs` (`AnnounceReady`) | `ShotReload` | Combat | "cock" sound, once per ball when it can fire (not on load: with rapid fire a loaded ball may still be sliding out or waiting for a free slot). |
 | Cruise start/end | `ProjectileCruiseStarted/EndedMessage` | `ProjectileView.cs:753`/`:758` | `CruiseLoopStart`/`Stop` | Combat | **Loop** — start returns `SoundHandle`, end calls `Stop(handle)`. |
 | Doomed start/end | `ProjectileDoomedStarted/EndedMessage` | `ProjectileView.cs:921`/`:925` | `DoomedWarn` | Combat | Optional tension cue. |
 | Pierce discharge | `PierceDischargedMessage` | `Projectile/Controller/ProjectileHitResolver.cs:111` | `PierceDischarge` | Combat | `isRainbow` → variant. |

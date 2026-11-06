@@ -57,7 +57,6 @@ namespace BalloonParty.Tests.Game
             yield return new GoldenRow(nameof(TimerId.Gameplay), "gameplay_seconds", "seconds");
             yield return new GoldenRow(nameof(TimerId.Ceremony), "ceremony_seconds", "seconds");
             yield return new GoldenRow(nameof(TimerId.Wall), "wall_seconds", "seconds");
-            yield return new GoldenRow(nameof(TimerId.Hold), "hold_seconds", "seconds");
         }
 
         public readonly struct GoldenRow

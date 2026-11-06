@@ -70,7 +70,7 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void Serialize_AlwaysEmitsAllFourTimers_EvenAtZero()
+        public void Serialize_AlwaysEmitsEveryTimer_EvenAtZero()
         {
             var scope = MetricScope.Create(MetricScopeKind.Level, 1, () => 0f);
 
@@ -79,7 +79,6 @@ namespace BalloonParty.Tests.Game
             Assert.That(json, Does.Contain("\"gameplay_seconds\":0"));
             Assert.That(json, Does.Contain("\"ceremony_seconds\":0"));
             Assert.That(json, Does.Contain("\"wall_seconds\":0"));
-            Assert.That(json, Does.Contain("\"hold_seconds\":0"));
         }
 
         [Test]

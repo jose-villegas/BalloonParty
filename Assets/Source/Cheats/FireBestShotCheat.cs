@@ -120,9 +120,10 @@ namespace BalloonParty.Cheats
                 return;
             }
 
-            // Precompute best direction and set the override so the player's next tap fires it.
-            // ProjectileLoadedMessage is always published on a later frame than FireAt, so this
-            // cannot re-enter.
+            // Precompute best direction and set the override so the player's next tap fires it. The
+            // next ball loads in the same frame a shot fires, so this solves against the board before
+            // that shot lands: with rapid fire the override is a fair guess, not the exact best. It
+            // only sets the override and never fires, so the load inside FireAt cannot re-enter it.
             SetDirectionOverride();
         }
 

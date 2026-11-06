@@ -27,6 +27,7 @@ namespace BalloonParty.Audio.Routing
         private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
         private readonly ISubscriber<ProjectileFiredMessage> _firedSubscriber;
         private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
+        private readonly ISubscriber<ThrowerReadyMessage> _readySubscriber;
         private readonly ISubscriber<ProjectileCruiseStartedMessage> _cruiseStartedSubscriber;
         private readonly ISubscriber<ProjectileCruiseEndedMessage> _cruiseEndedSubscriber;
         private readonly ISubscriber<ProjectileDoomedStartedMessage> _doomedSubscriber;
@@ -43,7 +44,11 @@ namespace BalloonParty.Audio.Routing
         private readonly IProjectileRegistry _projectiles;
         private readonly IGamePalette _palette;
         private readonly CompositeDisposable _subscriptions = new();
-        private readonly Dictionary<string, int> _colorPopsThisFlight = new();
+        // Same-colour pops per ball, each ball climbing its own ramp. Inner maps are pooled so a ball
+        // per shot allocates nothing once warm; pops no ball caused share the unattributed map.
+        private readonly Dictionary<IProjectileModel, Dictionary<string, int>> _colorPopsByBall = new();
+        private readonly Stack<Dictionary<string, int>> _spareColorPops = new();
+        private readonly Dictionary<string, int> _unattributedColorPops = new();
         private readonly Dictionary<IProjectileModel, SoundHandle> _cruiseHandles = new();
 
         private SoundHandle _pierceLoopHandle = SoundHandle.None;
@@ -53,6 +58,7 @@ namespace BalloonParty.Audio.Routing
             ISubscriber<ActorHitMessage> hitSubscriber,
             ISubscriber<ProjectileFiredMessage> firedSubscriber,
             ISubscriber<ProjectileLoadedMessage> loadedSubscriber,
+            ISubscriber<ThrowerReadyMessage> readySubscriber,
             ISubscriber<ProjectileCruiseStartedMessage> cruiseStartedSubscriber,
             ISubscriber<ProjectileCruiseEndedMessage> cruiseEndedSubscriber,
             ISubscriber<ProjectileDoomedStartedMessage> doomedSubscriber,
@@ -73,6 +79,7 @@ namespace BalloonParty.Audio.Routing
             _hitSubscriber = hitSubscriber;
             _firedSubscriber = firedSubscriber;
             _loadedSubscriber = loadedSubscriber;
+            _readySubscriber = readySubscriber;
             _cruiseStartedSubscriber = cruiseStartedSubscriber;
             _cruiseEndedSubscriber = cruiseEndedSubscriber;
             _doomedSubscriber = doomedSubscriber;
@@ -95,6 +102,10 @@ namespace BalloonParty.Audio.Routing
             _hitSubscriber.Subscribe(OnActorHit).AddTo(_subscriptions);
             _firedSubscriber.Subscribe(OnFired).AddTo(_subscriptions);
             _loadedSubscriber.Subscribe(OnLoaded).AddTo(_subscriptions);
+
+            // The "cock" plays when a release would fire, not at the load: the next ball loads the
+            // instant a shot leaves, so a cue there would only echo the shot.
+            _readySubscriber.Subscribe(_ => _player.Play(GameSoundId.ShotReload, null)).AddTo(_subscriptions);
             _cruiseStartedSubscriber.Subscribe(OnCruiseStarted).AddTo(_subscriptions);
             _cruiseEndedSubscriber.Subscribe(OnCruiseEnded).AddTo(_subscriptions);
             _doomedSubscriber.Subscribe(OnDoomedStarted).AddTo(_subscriptions);
@@ -108,7 +119,7 @@ namespace BalloonParty.Audio.Routing
             _activePierce.IsPiercing.Subscribe(OnPierceStateChanged).AddTo(_subscriptions);
 
             // A ball scaled away by game over or a reset publishes neither CruiseEnded nor Destroyed.
-            _projectiles.Retired.Subscribe(StopCruise).AddTo(_subscriptions);
+            _projectiles.Retired.Subscribe(OnRetired).AddTo(_subscriptions);
         }
 
         public void Dispose()
@@ -128,11 +139,12 @@ namespace BalloonParty.Audio.Routing
                 if (popId == GameSoundId.BalloonPop && message.Actor is IHasColor colored)
                 {
                     var color = colored.Color.Value;
-                    _colorPopsThisFlight.TryGetValue(color, out var count);
+                    var colorPops = ColorPopsOf(message.Context.Projectile);
+                    colorPops.TryGetValue(color, out var count);
                     var rootOffset = MusicalPitchExtensions.ColorRootOffset(_palette.ProgressColorNames, color);
                     var ramp = Math.Min(count * MusicalPitchExtensions.WholeToneSemitones, MaxRampSemitones);
                     _player.Play(popId, message.WorldPosition, semitoneOffset: rootOffset + ramp);
-                    _colorPopsThisFlight[color] = count + 1;
+                    colorPops[color] = count + 1;
                 }
                 else
                 {
@@ -203,12 +215,12 @@ namespace BalloonParty.Audio.Routing
         }
 
         // The type/deflect/pierce/bounce counters live in FlightStatsService and reset with the flight
-        // there. The colour dictionary stays local: it also clears on a streak break, so its scope is
-        // "since the later of flight start and the last broken streak" — a pitch cursor, not a statistic.
+        // there. The colour maps stay local: they also clear on a streak break, so each ball's scope is
+        // "since the later of its flight start and its last broken streak" — a pitch cursor, not a
+        // statistic. A load only resets the unattributed map; each ball's map starts empty.
         private void OnLoaded(ProjectileLoadedMessage message)
         {
-            _colorPopsThisFlight.Clear();
-            _player.Play(GameSoundId.ShotReload, null);
+            _unattributedColorPops.Clear();
         }
 
         // Keyed by shot: one ball's cruise ending must not cut another's loop.
@@ -262,11 +274,24 @@ namespace BalloonParty.Audio.Routing
             _player.Play(GameSoundId.SpeedTap, message.Position, message.TotalTaps);
         }
 
+        // A break clears only the ramp of the ball whose streak broke. A ball-less reset is the shared
+        // streak's, which resets on every load (every shot) — clearing every ball's ramp there would undo
+        // the per-ball ramps. That reset also covers the level-up reset of every streak, whose balls are
+        // popped moments later anyway.
         private void OnStreakChanged(StreakChangedMessage message)
         {
-            if (message.Streak == 0)
+            if (message.Streak != 0)
             {
-                _colorPopsThisFlight.Clear();
+                return;
+            }
+
+            if (message.Projectile == null)
+            {
+                _unattributedColorPops.Clear();
+            }
+            else if (_colorPopsByBall.TryGetValue(message.Projectile, out var colorPops))
+            {
+                colorPops.Clear();
             }
         }
 
@@ -309,6 +334,34 @@ namespace BalloonParty.Audio.Routing
 
             var step = Math.Max(0, _flightStats.Of(projectile).PopsOf(balloon.TypeName) - 1);
             return Math.Min(step * MusicalPitchExtensions.WholeToneSemitones, MaxRampSemitones);
+        }
+
+        private void OnRetired(IProjectileModel projectile)
+        {
+            StopCruise(projectile);
+            if (_colorPopsByBall.Remove(projectile, out var colorPops))
+            {
+                colorPops.Clear();
+                _spareColorPops.Push(colorPops);
+            }
+        }
+
+        // A ball the registry no longer tracks shares the unattributed map, so a late pop can't create
+        // an entry nothing would ever drop.
+        private Dictionary<string, int> ColorPopsOf(IProjectileModel projectile)
+        {
+            if (projectile == null || !_projectiles.IsTracked(projectile))
+            {
+                return _unattributedColorPops;
+            }
+
+            if (!_colorPopsByBall.TryGetValue(projectile, out var colorPops))
+            {
+                colorPops = _spareColorPops.Count > 0 ? _spareColorPops.Pop() : new Dictionary<string, int>();
+                _colorPopsByBall[projectile] = colorPops;
+            }
+
+            return colorPops;
         }
 
         private void StopCruise(IProjectileModel projectile)

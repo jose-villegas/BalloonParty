@@ -6,5 +6,8 @@ namespace BalloonParty.Game.Score
     internal interface IColorStreak
     {
         int GetStreak(string colorName);
+
+        /// <summary>The highest streak of any colour among balls still in play.</summary>
+        int HighestStreak { get; }
     }
 }

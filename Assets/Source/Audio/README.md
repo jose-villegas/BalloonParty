@@ -24,7 +24,7 @@ Unity audio only (`AudioSource` + `AudioMixer`), no middleware.
 | `AudioPoolKeys` | The `PoolManager` key string for the voice pool |
 | `SfxVoicePoolBootstrap` | `IStartable` — registers and pre-warms the `AudioSourceVoice` pool before any router can play a sound |
 | `View/AudioSourceVoice` | **View** — the only `MonoBehaviour` in this feature, and the only type that touches `AudioSource` directly. Wraps one `AudioSource`; pooled; schedules its own real-time return |
-| `Routing/CombatSoundRouter` | Hits, shots, reload, cruise loop (one handle per ball, stopped when that ball's cruise ends or the registry retires it), doomed warning, pierce, shield gained/lost |
+| `Routing/CombatSoundRouter` | Hits, shots, reload (on `ThrowerReadyMessage`), cruise loop (one handle per ball, stopped when that ball's cruise ends or the registry retires it), doomed warning, pierce, shield gained/lost |
 | `Routing/ProgressionSoundRouter` | Streak, score chime (the level-complete pop is pitched by the latest ball's colour, via `IProjectileRegistry.ShotOrCurrent`), level-up (+ fill, dismiss), level transition, board clear, game-over (+ dismiss) |
 | `Routing/ItemSoundRouter` | Per-item activation, overflow heart |
 | `Routing/DangerSoundRouter` | Starts/stops the `DangerWarn` loop as `IDangerLevel` crosses `DangerLevelThreshold` |
@@ -206,7 +206,7 @@ first, then works up), and `Tension` (deflect/wall-hit; offsets `SfxEntry.Tensio
 against whatever semitone the pop system is currently on). `MelodicMaxOctaves` and
 `MelodicSkipSteps` are per-`SfxEntry` fields, so each `ScaleWalkUp`/`ScaleWalkDown` sound
 tunes its own climb independently. `ProgressionSoundRouter` feeds the pop streak in via
-`IMelodicContext.SetStreak` on every `StreakChangedMessage`; `SfxService` remembers the last
+`IMelodicContext.SetStreak` (the value is `IColorStreak.HighestStreak`) on every `StreakChangedMessage`; `SfxService` remembers the last
 melodic semitone so a `Tension` entry can react against it.
 
 `WallHit` carries a melodic descent tied to shields left. `WallHitMessage` includes the
@@ -239,11 +239,11 @@ streak* (`StreakChangedMessage`) is a separate scoring concept, and it is not de
 breaking it resets one of the two counter families, as the reset rules below spell out.
 
 The counters come in two families that never mix, and they now live in different places. One
-is `_colorPopsThisFlight`, a dictionary counting pops per palette colour name, still private
-to this router. The other — per-`BalloonType` pops and deflects, pierce discharges and wall
+is the colour counters (`_colorPopsByBall`, one dictionary of pops per palette colour name
+per ball, plus a shared one for pops no ball caused), still private to this router. The other — per-`BalloonType` pops and deflects, pierce discharges and wall
 bounces — moved to `FlightStatsService` (`Game/Flight/`), because "how many Toughs died this
 flight" is a gameplay fact that metrics wants too, and two systems counting it separately
-would eventually disagree. The router reads those through `IFlightStatsSource.Of(ball)`, naming the ball its message carries. `_colorPopsThisFlight` is still one shared dictionary, reset on every load, so with several balls it is global (exact at today's one-ball cap).
+would eventually disagree. The router reads those through `IFlightStatsSource.Of(ball)`, naming the ball its message carries. Each ball ramps its own pitch, so two balls in flight never step each other's notes; a ball's colour counters are dropped when the registry retires it, as are `ItemSoundRouter`'s per-ball pickup ramps.
 
 The read is **post-increment**: `HitPipeline` records the hit before publishing it, so by the
 time the router's handler runs the count already includes this pop. The step is therefore the
@@ -294,10 +294,9 @@ long unbroken run.
 The two main families also don't share a reset schedule — each has its own boundary, and
 knowing which is what keeps this mechanism debuggable:
 
-- `_colorPopsThisFlight` clears on `ProjectileLoadedMessage` **and** whenever the combo streak
-  breaks (`StreakChangedMessage` with `Streak == 0`). Its real scope is "since the later of the
-  shot loading or the last broken streak" — a streak break resets it mid-flight, before the next
-  reload.
+- A ball's colour counters clear whenever its combo streak breaks (`StreakChangedMessage` with
+  `Streak == 0` naming that ball) and are dropped on its retirement; the shared counters for
+  unattributed pops clear on `ProjectileLoadedMessage` and on a broken shared streak.
 - Everything in `FlightStatsService` — type pops and deflects, pierce discharges, wall bounces —
   is kept per ball: a ball's counts start when it loads and are dropped when the registry retires
   it, and routers read them with `Of(message.Projectile)`. A broken streak does not touch them. The bounce counter

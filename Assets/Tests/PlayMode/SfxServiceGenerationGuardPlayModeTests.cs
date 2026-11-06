@@ -153,9 +153,8 @@ namespace BalloonParty.Tests.PlayMode
             public float LastShieldApproachDuration => 0f;
             public AnimationCurve LastShieldTimeScaleCurve => null;
             public float ShieldTrailDuration => 0f;
-            public float HoldSpeedUpMax => 2f;
-            public float HoldSpeedUpLerpDuration => 0.3f;
-            public float HoldSpeedUpTooltipDelay => 4f;
+            public int MaxBallsInFlight => 1;
+            public float ReloadCooldownSeconds => 0.5f;
             public float AimAngleStepDegrees => 0f;
             public float AimAngleMinDegrees => 0f;
             public float AimAngleMaxDegrees => 0f;

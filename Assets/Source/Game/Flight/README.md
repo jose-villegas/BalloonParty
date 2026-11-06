@@ -8,13 +8,13 @@ shipping feature downstream of metrics.
 
 | File | What it does |
 |---|---|
-| `IFlightScope` | The boundary as two reactive windows plus `FlightIndex`. `IsLoaded` is true while any ball is in `[Loaded, Destroyed)` — including aiming; `IsAirborne` while any ball is in `[Fired, Destroyed)`. They are "any ball" flags, not one ball's state |
+| `IFlightScope` | The boundary as one reactive window: `IsAirborne` is true while any ball is in `[Fired, Destroyed)`. It is an "any ball" flag, not one ball's state. (There is no "loaded" flag: the thrower always holds a ball, so it would never be false) |
 | `IFlightStats` | What happened to one ball: pops and deflects per `BalloonType`, pierce discharges, wall bounces |
 | `IFlightStatsSource` | `Of(ball)` returns that ball's `IFlightStats`. A ball's stats stay readable through its own `ProjectileDestroyedMessage`; an unknown or null ball reads as all zeroes |
 | `IFlightStatsWriter` | The write half, segregated so no reader can mutate. Each write names the ball it counts for. `HitPipeline` is the only caller of the hit counts |
 | `FlightStatsService` | Implements all four. Plain C#, `IStartable`/`IDisposable` |
 
-Several balls can exist at once (the cap is one today, but nothing here assumes it), so a
+Several balls can exist at once (up to `MaxBallsInFlight` fly at once), so a
 reader never asks "the flight's" stats. It takes the ball its message carries
 (`message.Projectile`, or `DamageContext`'s ball) and calls `Of(ball)`. Stats are created when
 the ball loads and dropped when `IProjectileRegistry.Retired` fires for it, which is *after* its
@@ -22,10 +22,9 @@ Destroyed dispatch (see the Land/Retire rule in `Projectile/README.md`).
 
 ## Which window to gate on
 
-`IsAirborne` is almost always the one you want for effects — ducking, time-scale, anything
-that should stop when the shot dies. `IsLoaded` stays true while the player is *aiming*, so
-gating a duck on it holds the effect permanently between shots. `IsLoaded` exists because
-a ball's counts start at its load, not at its fire.
+`IsAirborne` is the one to use for effects — ducking, time-scale, anything that should stop
+when the last shot dies. A ball's counts start at its load, not at its fire, but the scope
+exposes no flag for that: the thrower always holds a ball, so such a flag would be constant.
 
 ## The publisher counts, then publishes
 
