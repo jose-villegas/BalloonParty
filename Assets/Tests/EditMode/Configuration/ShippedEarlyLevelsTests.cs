@@ -100,7 +100,7 @@ namespace BalloonParty.Tests.Configuration
             Assert.AreEqual(5, level.BoardLines);
             Assert.IsTrue(level.BalloonWeights.Any(w => w.Type == BalloonType.Rainbow));
             Assert.IsTrue(level.ItemWeights.Any(w => w.Type == ItemType.Paint));
-            Assert.AreEqual(2, level.ItemWeights.Single(w => w.Type == ItemType.Shield).GuaranteedInitialCount,
+            Assert.AreEqual(1, level.ItemWeights.Single(w => w.Type == ItemType.Shield).GuaranteedInitialCount,
                 "the shield's 12 is a level-1 introduction only");
         }
 

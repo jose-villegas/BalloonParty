@@ -1155,14 +1155,14 @@ MonoBehaviour:
       _allowedColorsMask: 15
   _thresholdRounding: 50
   _spawnClock:
-    _firstLevelInterval: 2
-    _intervalDecayPerLevel: 0.96
-    _minInterval: 1.25
-    _graceSeconds: 4
+    _firstLevelInterval: 1.7
+    _intervalDecayPerLevel: 0.95
+    _minInterval: 0.9
+    _graceSeconds: 2.5
     _linesPerWave: 3
-    _overlapShotPull: 0.35
+    _overlapShotPull: 0.5
     _sparseBoardSpeedup: 8
-    _targetOccupancy: 0.5
+    _targetOccupancy: 0.7
     _occupancyWeight: 0.5
     _flightSpeedup: 3
     _flightPressureSeconds: 6
@@ -1266,12 +1266,12 @@ MonoBehaviour:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 0
-          inSlope: 0.45
-          outSlope: 0.45
-          tangentMode: 34
+          value: 0.3
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
           weightedMode: 0
-          inWeight: 0
+          inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
           time: 1
@@ -1284,15 +1284,6 @@ MonoBehaviour:
           outWeight: 0.33333334
         - serializedVersion: 3
           time: 2
-          value: 0.4
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 3
           value: 0.3
           inSlope: 0
           outSlope: 0
@@ -1301,23 +1292,14 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 4
-          value: 0.2
+          time: 3
+          value: 0.1
           inSlope: 0
           outSlope: 0
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
           outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 12
-          value: 0.015
-          inSlope: -0.023125
-          outSlope: -0.023125
-          tangentMode: 34
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
@@ -1360,12 +1342,12 @@ MonoBehaviour:
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 0
-          inSlope: 0.45
-          outSlope: 0.45
-          tangentMode: 34
+          value: 0.3
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
           weightedMode: 0
-          inWeight: 0
+          inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
           time: 1
@@ -1377,8 +1359,8 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 3.0419805
-          value: 0.33902135
+          time: 2
+          value: 0.3
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -1386,32 +1368,14 @@ MonoBehaviour:
           inWeight: 0.33333334
           outWeight: 0.33333334
         - serializedVersion: 3
-          time: 4.0419807
-          value: 0.23902136
+          time: 3
+          value: 0.1
           inSlope: 0
           outSlope: 0
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
           outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 5.0419807
-          value: 0.13902135
-          inSlope: 0
-          outSlope: 0
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 8
-          value: 0.085
-          inSlope: -0.018262677
-          outSlope: -0.018262677
-          tangentMode: 34
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
@@ -2149,9 +2113,9 @@ MonoBehaviour:
         _lateMinWeight: 2
         _lateMaxWeight: 2.35
         _rampLevels: 12
-      _maximumAllowedOverride: 8
+      _maximumAllowedOverride: 4
       _introGuaranteedCount: 12
-      _guaranteedInitialCount: 2
+      _guaranteedInitialCount: 1
     - _type: 5
       _unlockLevel: 2
       _cost: 1

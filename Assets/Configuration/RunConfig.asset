@@ -55,6 +55,6 @@ MonoBehaviour:
     - _kind: 3
       _title: Lucky Find
       _description: More items on the board
-      _amount: 0.5
+      _amount: 0.25
       _maxStacks: 4
       _weight: 1
