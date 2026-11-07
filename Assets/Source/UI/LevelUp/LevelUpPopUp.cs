@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using BalloonParty.Configuration;
+using BalloonParty.Game.Level;
 using BalloonParty.Game.Score;
+using BalloonParty.Game.Upgrades;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
@@ -92,6 +95,12 @@ namespace BalloonParty.UI.LevelUp
         [FormerlySerializedAs("_glowTargetMaxAngle")]
         [SerializeField] private float _fillTargetMaxAngle = 360f;
 
+        [Header("Upgrade Cards")]
+        [Tooltip("The card slots a pick deals into, in order. Shown once the fill completes on a level-up " +
+            "that deals cards; a pick closes the popup in place of Continue. Unassigned, Continue takes the " +
+            "first card dealt.")]
+        [SerializeField] private UpgradeCardView[] _cardViews;
+
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         [Inject] private IPublisher<LevelUpDismissedMessage> _dismissedPublisher;
         [Inject] private IPublisher<LevelUpFillTrailsMessage> _fillTrailsPublisher;
@@ -101,6 +110,8 @@ namespace BalloonParty.UI.LevelUp
         [Inject] private IGamePalette _palette;
         [Inject] private PoolManager _poolManager;
         [Inject] private ScoreTrailService _scoreTrailService;
+        [Inject] private IUpgradeDraft _draft;
+        [Inject] private ILevelProgress _levelProgress;
 
         private readonly CompositeDisposable _disposable = new();
         private readonly Dictionary<string, TrailSpawner> _trailSpawners = new();
@@ -112,9 +123,18 @@ namespace BalloonParty.UI.LevelUp
         private int _fillTrailTotalCount;
         private bool _isShowing;
 
+        // Each ceremony's show; a show still waiting on the gate when a newer one starts is stale.
+        private int _showId;
+        private int _wiredCards;
+        private bool _warnedUnwired;
+
+        // A card level-up with slots to deal into: only a pick may close it.
+        private bool AwaitsPick => _draft.Offer.Count > 0 && _wiredCards > 0;
+
         private void Start()
         {
             _animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+            _wiredCards = CountWiredCards();
 
             _levelUpSubscriber
                 .Subscribe(msg => ShowAfterGateAsync(msg).Forget())
@@ -134,22 +154,54 @@ namespace BalloonParty.UI.LevelUp
             // lands here — without this gate each one published a dismissal and vanished the live shot.
             // _fillComplete is the second half of the same idea: the button is also non-interactable
             // until then, but the raycast reaches this method either way.
-            if (!_isShowing || !_fillComplete)
+            if (!_isShowing || !_fillComplete || AwaitsPick)
             {
                 return;
             }
 
-            _isShowing = false;
-            _animator.ResetTrigger(AppearTrigger);
-            _animator.SetTrigger(HideTrigger);
-            Resume();
+            // No card slots to deal into: Continue stays the way out, so the run still grows its weapon.
+            if (_draft.Offer.Count > 0)
+            {
+                WarnUnwiredOnce();
+                _draft.Pick(0);
+            }
+
+            Close();
+        }
+
+        private void OnCardPicked(int slot)
+        {
+            if (!_isShowing || !_fillComplete || !_draft.Pick(slot))
+            {
+                return;
+            }
+
+            Close();
         }
 
         private async UniTaskVoid ShowAfterGateAsync(ScoreLevelUpMessage msg)
         {
+            var show = ++_showId;
             _pauseService.Pause(PauseSource.LevelUp);
 
             await _gate.WaitAsync(destroyCancellationToken);
+
+            // The hit beat also ends when the level-up is aborted (a loss became certain), and a level-up
+            // re-detected after that starts a newer show. Either way this one is stale: its hand is void
+            // and its dismissal would land on a ceremony that isn't pending.
+            if (show != _showId || _levelProgress.Phase.Value != LevelUpPhase.Pending)
+            {
+                _pauseService.Resume(PauseSource.LevelUp);
+                return;
+            }
+
+            // A level-up that deals no cards passes in play: the hit beat has played, and the Ascent
+            // follows with no screen and no freeze.
+            if (_draft.Offer.Count == 0)
+            {
+                Resume(passedInPlay: true);
+                return;
+            }
 
             _timeScaleService.Claim(TimeScaleSource.LevelUpPopup, 0f);
 
@@ -276,9 +328,10 @@ namespace BalloonParty.UI.LevelUp
             _fillComplete = true;
             if (_continueButton != null)
             {
-                _continueButton.interactable = true;
+                _continueButton.interactable = !AwaitsPick;
             }
 
+            ShowCards();
             RevealStatsAsync().Forget();
         }
 
@@ -342,11 +395,64 @@ namespace BalloonParty.UI.LevelUp
             }
         }
 
-        // Every show starts from covered stats and a locked Continue, including a second ceremony in
-        // the same run — the popup object is never destroyed between them.
+        private void ShowCards()
+        {
+            if (_cardViews == null)
+            {
+                return;
+            }
+
+            var offer = _draft.Offer;
+            for (var i = 0; i < _cardViews.Length; i++)
+            {
+                var view = _cardViews[i];
+                if (view == null)
+                {
+                    continue;
+                }
+
+                if (i < offer.Count && view.IsWired)
+                {
+                    view.Show(offer[i], _draft.StacksOf(offer[i]), i, OnCardPicked);
+                }
+                else
+                {
+                    view.Hide();
+                }
+            }
+        }
+
+        private void HideCards()
+        {
+            if (_cardViews == null)
+            {
+                return;
+            }
+
+            foreach (var view in _cardViews)
+            {
+                if (view != null)
+                {
+                    view.Hide();
+                }
+            }
+        }
+
+        private void Close()
+        {
+            _isShowing = false;
+            HideCards();
+            _animator.ResetTrigger(AppearTrigger);
+            _animator.SetTrigger(HideTrigger);
+            Resume();
+        }
+
+        // Every show starts from covered stats, a locked Continue and no cards, including a second
+        // ceremony in the same run — the popup object is never destroyed between them.
         private void ResetReveal()
         {
             _fillComplete = false;
+            HideCards();
             if (_continueButton != null)
             {
                 _continueButton.interactable = false;
@@ -421,10 +527,40 @@ namespace BalloonParty.UI.LevelUp
             return spawner;
         }
 
-        private void Resume()
+        private int CountWiredCards()
+        {
+            var wired = 0;
+            if (_cardViews == null)
+            {
+                return wired;
+            }
+
+            foreach (var view in _cardViews)
+            {
+                if (view != null && view.IsWired)
+                {
+                    wired++;
+                }
+            }
+
+            return wired;
+        }
+
+        private void WarnUnwiredOnce()
+        {
+            if (_warnedUnwired)
+            {
+                return;
+            }
+
+            _warnedUnwired = true;
+            Log.Warn("LevelUp", "No wired card slots on the level-up popup; Continue takes the first card dealt");
+        }
+
+        private void Resume(bool passedInPlay = false)
         {
             // Publish before releasing the freeze so the hand-back never flashes full speed.
-            _dismissedPublisher.Publish(new LevelUpDismissedMessage());
+            _dismissedPublisher.Publish(new LevelUpDismissedMessage(passedInPlay));
             _timeScaleService.Release(TimeScaleSource.LevelUpPopup);
             _pauseService.Resume(PauseSource.LevelUp);
         }

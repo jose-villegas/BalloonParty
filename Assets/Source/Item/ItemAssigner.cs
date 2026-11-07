@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Level;
+using BalloonParty.Game.Upgrades;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
@@ -31,6 +32,7 @@ namespace BalloonParty.Item
         private readonly BalloonContactRadii _radii;
         private readonly IProjectileFlightConfig _flightConfig;
         private readonly IRunConfig _runConfig;
+        private readonly IWeaponStats _weapon;
         private readonly ThrowerOriginProvider _origin;
         private readonly IDeflectorField _deflectorField;
 
@@ -56,6 +58,7 @@ namespace BalloonParty.Item
             BalloonContactRadii radii,
             IProjectileFlightConfig flightConfig,
             IRunConfig runConfig,
+            IWeaponStats weapon,
             ThrowerOriginProvider origin,
             IDeflectorField deflectorField,
             ISubscriber<ItemCheckMessage> checkSubscriber)
@@ -66,6 +69,7 @@ namespace BalloonParty.Item
             _radii = radii;
             _flightConfig = flightConfig;
             _runConfig = runConfig;
+            _weapon = weapon;
             _origin = origin;
             _deflectorField = deflectorField;
             _checkSubscriber = checkSubscriber;
@@ -103,7 +107,7 @@ namespace BalloonParty.Item
                 return;
             }
 
-            var count = SampleCount(weights, Random.value);
+            var count = SampleCount(weights, Random.value) + ExtraItems(_weapon.ExtraItemChance, Random.value);
             AssignItems(msg.NewBalloons, count, msg.IsInitialSpawn);
         }
 
@@ -239,7 +243,7 @@ namespace BalloonParty.Item
             var planner = new ShieldChainPlanner(
                 new WallLimits(_flightConfig.LimitsClockwise), _deflectorBuffer, _runConfig.ShieldChain);
             planner.PlanChain(
-                _origin.Origin, _fanBuffer, _flightConfig.ProjectileStartingShields,
+                _origin.Origin, _fanBuffer, _weapon.StartingShields,
                 _eligibleBuffer.Count, _candidateBuffer, _chainBuffer);
         }
 
@@ -301,32 +305,22 @@ namespace BalloonParty.Item
             return weights.SampleWeightedCount(roll01);
         }
 
+        // Item Odds cards: the whole part of the chance always adds an item, the fraction is a roll.
+        internal static int ExtraItems(float chance, float roll01)
+        {
+            if (chance <= 0f)
+            {
+                return 0;
+            }
+
+            var whole = Mathf.FloorToInt(chance);
+            return whole + (roll01 < chance - whole ? 1 : 0);
+        }
+
         // Weighted-random index into candidates, biased by ItemActivationWeight; -1 if every weight is 0.
         internal static int PickWeightedIndex(IReadOnlyList<IHasWriteableItemSlot> candidates, float roll01)
         {
-            var total = 0f;
-            for (var i = 0; i < candidates.Count; i++)
-            {
-                total += candidates[i].ItemActivationWeight;
-            }
-
-            if (total <= 0f)
-            {
-                return -1;
-            }
-
-            var target = Mathf.Clamp01(roll01) * total;
-            var accumulated = 0f;
-            for (var i = 0; i < candidates.Count; i++)
-            {
-                accumulated += candidates[i].ItemActivationWeight;
-                if (target < accumulated)
-                {
-                    return i;
-                }
-            }
-
-            return candidates.Count - 1;
+            return candidates.PickWeightedIndex(slot => slot.ItemActivationWeight, roll01);
         }
 
         private bool IsCadenceWave(int wave)

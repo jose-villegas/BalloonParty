@@ -58,7 +58,7 @@ namespace BalloonParty.Tests.Thrower
             Set("_loadedView", _heldView);
             Set("_loadedProjectile", new ProjectileModel());
 
-            var reload = new ThrowerReload(config);
+            var reload = new ThrowerReload(ThrowerReloadTests.WeaponOf(config));
             reload.Restart();
             reload.Advance(Cooldown, 0);
             Set("_reload", reload);

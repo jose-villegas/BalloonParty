@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Level;
+using BalloonParty.Game.Upgrades;
 using BalloonParty.Prediction;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Controller;
@@ -50,6 +51,7 @@ namespace BalloonParty.Thrower
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
         private readonly ISubscriber<LevelUpAbandonedMessage> _levelUpAbandonedSubscriber;
         private readonly ILevelProgress _levelProgress;
+        private readonly IWeaponStats _weapon;
         private readonly PauseService _pauseService;
         private readonly IObjectResolver _resolver;
         private readonly List<Vector3> _tracePoints = new();
@@ -87,6 +89,9 @@ namespace BalloonParty.Thrower
         private bool _isMovable;
         private bool _tracePublished;
         private bool _wasReady;
+
+        // The cap the pool was last warmed for; an Extra Ball card raises the cap mid-run.
+        private int _warmedCap;
         private PredictionTraceCalculator _traceCalculator;
         private PredictionTraceLights _traceLights;
 
@@ -117,6 +122,7 @@ namespace BalloonParty.Thrower
             ISubscriber<GameOverMessage> gameOverSubscriber,
             ISubscriber<LevelUpAbandonedMessage> levelUpAbandonedSubscriber,
             ILevelProgress levelProgress,
+            IWeaponStats weapon,
             PauseService pauseService,
             IProjectileRegistryWriter registry,
             ThrowerOriginProvider originProvider,
@@ -144,6 +150,7 @@ namespace BalloonParty.Thrower
             _gameOverSubscriber = gameOverSubscriber;
             _levelUpAbandonedSubscriber = levelUpAbandonedSubscriber;
             _levelProgress = levelProgress;
+            _weapon = weapon;
             _pauseService = pauseService;
             _registry = registry;
             _originProvider = originProvider;
@@ -151,7 +158,7 @@ namespace BalloonParty.Thrower
             _lightField = lightField;
             _palette = palette;
             _projectilePoolKey = settings.ProjectilePrefab.name;
-            _reload = new ThrowerReload(flightConfig);
+            _reload = new ThrowerReload(weapon);
         }
 
         public void Start()
@@ -179,7 +186,8 @@ namespace BalloonParty.Thrower
             // Every ball the cap allows in flight, the one held, and as many again still playing their
             // disappear: a dead ball returns to the pool only once that ends, so a burst of deaths
             // would otherwise Instantiate mid-play.
-            _poolManager.Prewarm(_projectilePoolKey, _flightConfig.MaxBallsInFlight * 2 + 1);
+            _warmedCap = _weapon.MaxBallsInFlight;
+            _poolManager.Prewarm(_projectilePoolKey, _warmedCap * 2 + 1);
 
             // The spent shot scales away. The thrower normally already holds the next ball (it loads on
             // fire); this only reloads an empty thrower, and never during a level-up, whose new ball
@@ -325,8 +333,24 @@ namespace BalloonParty.Thrower
 
         // A fresh ball (and a fresh ProjectileLoadedMessage) for a new level, a restart or the entrance.
         // The ball still held here carried the old level's state, so it is pooled rather than kept.
+        // Loads run after the Ascent and after a reset, which is where a new card takes effect, so a raised
+        // cap Instantiates its extra balls there rather than mid-play.
+        private void WarmPoolForCap()
+        {
+            var cap = _weapon.MaxBallsInFlight;
+            if (cap <= _warmedCap)
+            {
+                return;
+            }
+
+            _poolManager.Prewarm(_projectilePoolKey, (cap - _warmedCap) * 2);
+            _warmedCap = cap;
+        }
+
         private void LoadProjectile()
         {
+            WarmPoolForCap();
+
             if (_loadedView != null)
             {
                 _registry.Retire(_loadedProjectile);
@@ -344,7 +368,7 @@ namespace BalloonParty.Thrower
                 IsFree = false,
                 Direction = _direction
             };
-            _loadedProjectile.ShieldsRemaining.Value = _flightConfig.ProjectileStartingShields;
+            _loadedProjectile.ShieldsRemaining.Value = _weapon.StartingShields;
 
             // A held shot isn't stepping yet, so nothing has resolved a flight speed for it — seed the one
             // feedback reads (the shield field's ripple) with base speed rather than leaving it at zero.

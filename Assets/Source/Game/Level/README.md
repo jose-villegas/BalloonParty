@@ -43,7 +43,7 @@ keeps flying and the animations have a stable state to play against:
    `ScoreLevelUpMessage(newLevel, colours)`, transitions nav to `LevelUp`, and records the pending
    level. **The `Level` integer and progress have not changed yet.** While `Completing` the spawn wave,
    the thrower's reload, and loose pop-spawns are held (they see `Phase != Playing`).
-3. **`Pending → Transitioning`** — the player dismisses the popup (`LevelUpDismissedMessage`). *Now*
+3. **`Pending → Transitioning`** — the popup is dismissed (`LevelUpDismissedMessage`): by a card pick on a level-up that deals cards, or straight after the hit beat on one that doesn't (see `UI/LevelUp/README.md`). *Now*
    `Level` advances to the pending value and progress resets to zero.
 4. **`Transitioning → Playing`** — the Ascent reports it has settled (`LevelTransitionCompletedMessage`),
    so scoring reopens. `LevelController.OnTransitionCompleted` also owns the nav return to

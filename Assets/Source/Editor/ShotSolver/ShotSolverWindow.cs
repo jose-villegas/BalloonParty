@@ -11,6 +11,7 @@ using BalloonParty.EditorUI.Charts;
 using BalloonParty.EditorUI.Utilities;
 using BalloonParty.Game;
 using BalloonParty.Game.Level;
+using BalloonParty.Game.Upgrades;
 using BalloonParty.Nudge;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.View;
@@ -655,6 +656,7 @@ namespace BalloonParty.Editor.ShotSolver
             context = ShotBoardGather.Gather(
                 scope.Container.Resolve<SlotGrid>(),
                 scope.Container.Resolve<IProjectileFlightConfig>(),
+                scope.Container.Resolve<IWeaponStats>().StartingShields,
                 scope.Container.Resolve<ISlotGridConfig>(),
                 scope.Container.Resolve<IBalloonsConfiguration>(),
                 scope.Container.Resolve<IItemConfiguration>(),

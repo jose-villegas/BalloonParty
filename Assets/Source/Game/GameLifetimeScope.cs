@@ -94,6 +94,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance<ISlotGridConfig>(_slotGridConfig);
             builder.RegisterInstance<IPredictionTraceConfig>(_predictionTraceConfig);
             builder.RegisterInstance<IRunConfig>(_runConfig);
+            builder.RegisterInstance<IUpgradeSettings>(_runConfig.Upgrades);
             builder.RegisterInstance<IItemConfiguration>(_itemConfiguration);
             builder.RegisterInstance<IGamePalette>(_gamePalette);
             builder.RegisterInstance<IBalloonsConfiguration>(_balloonsConfiguration);

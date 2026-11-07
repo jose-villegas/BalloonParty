@@ -37,6 +37,9 @@ namespace BalloonParty.Configuration
                  "cruising. 0 = wait for them to die on their own.")]
         [SerializeField] [Min(0f)] private float _levelCompleteFlightGrace = 1f;
 
+        [Header("Upgrades")]
+        [SerializeField] private UpgradeSettings _upgrades = new();
+
         public int StartingHitPoints => _startingHitPoints;
         public int MaxRetries => _maxRetries;
         public int RetriesBeforeAd => Mathf.Max(0, _retriesBeforeAd);
@@ -46,5 +49,6 @@ namespace BalloonParty.Configuration
         public float LevelCompleteRampUpDuration => _levelCompleteRampUpDuration;
         public float LevelCompleteFlightGrace => _levelCompleteFlightGrace;
         public float LevelCompleteRampUpScale => _levelCompleteRampUpScale;
+        public IUpgradeSettings Upgrades => _upgrades;
     }
 }

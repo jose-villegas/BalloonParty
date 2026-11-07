@@ -82,7 +82,7 @@ namespace BalloonParty.Solver
         /// balancer's render-frame lag (callers estimate ~1.5 × frame time); <paramref name="firstPulseIn" />
         /// is the live balancer's <c>SecondsUntilNextPulse</c>.</summary>
         internal static ShotSolveContext Gather(
-            SlotGrid grid, IProjectileFlightConfig config, ISlotGridConfig gridConfig,
+            SlotGrid grid, IProjectileFlightConfig config, int startingShields, ISlotGridConfig gridConfig,
             IBalloonsConfiguration balloonsConfig, IItemConfiguration itemConfig, ThrowerView thrower,
             ThrowerSettings throwerSettings, IGamePalette palette, IActiveLevelParameters levelParams,
             IRunConfig runConfig, float pulseExecutionDelay, float firstPulseIn)
@@ -117,7 +117,7 @@ namespace BalloonParty.Solver
                 config.LimitsClockwise,
                 thrower.Position,
                 spawnLocalOffset,
-                config.ProjectileStartingShields,
+                startingShields,
                 runConfig?.StreakGrantsShields ?? true,
                 ResolveProjectileContactRadius(throwerSettings),
                 config.ProjectileSpeed,

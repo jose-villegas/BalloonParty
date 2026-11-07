@@ -7,8 +7,8 @@ keeping the balloon grid, the items, the grid actors and the visual language it 
 
 **Status:** all decisions settled. Phase 1 (projectile identity) is built. Phase 2 (rapid fire) is
 implemented, pending the owner's playtest at cap 3. Phase 3 (spawn clock) is implemented, pending the owner's playtest. Phase 4 (generated levels) is implemented, pending the owner's playtest. Phase 5 is split: 5a
-(unlimited retries and the ad seam) is implemented, pending review and playtest; 5b (upgrade cards and
-the level-up change) is next. Items marked
+(unlimited retries and the ad seam) is built, pending playtest; 5b (upgrade cards and the level-up
+change) is implemented, pending review and playtest. Items marked
 **DECISION** are settled: don't re-derive them. §10 records the owner's answers.
 
 ---
@@ -37,8 +37,9 @@ checkpoint you continue from; a loss replays the same target.
   content pieces and a budget that grows by formula. The first levels are simple because the
   budget is small and little is unlocked, not because they're authored.
 - **Checkpoint retry.** Losing replays the level you reached, with the same seeded mix.
-- **Incremental power (later).** The ball cap and the reload cooldown are the "weapon level";
-  they grow through level-up rewards (§13 run modifiers in @ref plan_future_ideas).
+- **Incremental power.** The ball cap, the reload, the shields per ball and the item odds are the
+  "weapon level"; they grow only through upgrade cards picked at level-ups (§13 run modifiers in
+  @ref plan_future_ideas).
 
 ## 3. Phases
 
@@ -257,7 +258,8 @@ seam. **5b:** upgrade cards and the level-up change (§10 question 5).
 |---|---|
 | **DECISION: unlimited retries from the level reached** | **Built in 5a.** `IRunConfig.MaxRetries` of 0 or less means unlimited, and the asset is 0. The game-over screen always offers Retry (same level, same seeded mix) beside a fresh run from level 1. `RetryTracker` still counts retries used, since the ad gate reads the count. |
 | ~~Deeper levels pay more~~ | Dropped: already true. Points are capped at each level's threshold (`ILevelProgress.ClaimProgress`), so a run's score is the sum of each completed level's threshold across its colours, plus the losing level's partial progress. That grows per level, and is fixed per level reached. Score and level progress are the same number, so a per-level score multiplier would only make deeper levels shorter. |
-| Upgrades at level-up (5b) | A pick of cards every N level-ups (§10 question 5; N configurable, starting at 2), §13 run modifiers in @ref plan_future_ideas. First cards: +1 ball cap, faster reload, +1 shield per ball, item odds. Run-scoped (`IRunResettable`). |
+| Upgrades at level-up (5b) | **Built in 5b** (`Game/Upgrades/`). A pick of cards every N level-ups (§10 question 5): `IRunConfig.Upgrades.CardEveryLevels`, 2 in the asset, so entering levels 3, 5, 7. Three cards are dealt by weight from the ones not maxed, seeded by the level so a retry is dealt the same hand. First deck: Extra Ball (+1 cap, 3 stacks), Quick Hands (reload 15% faster, 4 stacks), Thick Skin (+1 shield per ball, 3 stacks), Lucky Find (+0.5 extra items per item roll, 4 stacks). `IWeaponStats` is the weapon the thrower and the item assigner read: the configured base plus the cards. A pick is held only once its level-up advances the level, so an aborted level-up grants nothing. Run-scoped: a fresh run drops the cards, a retry keeps them. Every other level-up passes in play: the hit beat and the Ascent, no popup and no freeze. The picks are dealt into `UpgradeCardView` slots on the level-up popup, which need laying out in the editor; until they are, Continue takes the first card dealt. |
+| Rewarded advantage (open) | Not built. The ad seam is ready (`IAdService`); the advantage (an extra card for the retry, or a revive with one heart) needs a second game-over button and a pick at the retry's start. A retry keeping the cards held is what makes an extra card a fair per-attempt boost. |
 | **DECISION: ads only on failure, behind a seam** | The game's only monetization will be ads at game over. Not built now, but the failure flow must leave room for it, with no ad SDK in the code yet. Two uses: a **rewarded** ad buys a small advantage (a revive with one heart, or one extra card for the retry); a **required** ad gates a retry once `RetriesUsed` reaches a configured N. Shape: `IFailureOffers` decides what the game-over screen offers (plain retry, ad-gated retry, rewarded advantage) from `IRetryState`; an `IAdService` with a no-op implementation (always "watched") stands in for the SDK. Keep `RetryTracker`'s used-retry counter even though retries are unlimited; it's what the gate reads. Never let an ad buy the ball cap or score: the advantage is small and per-attempt. The same shape applies to NewMoonShooter's game over. **Built in 5a:** the ad-gated retry (`IRunConfig.RetriesBeforeAd`, 0 in the asset, so no gate until an SDK lands) and the seam (`IFailureOffers.TryRetryAsync` settles the ad and stages the retry in one step; `IAdService` reports `Watched`, `Skipped` or `Unavailable`; `NoAdService`). Only a skip costs the retry: no fill or an SDK error grants it. The rewarded advantage waits for 5b, since its natural form is an extra card; it will widen the staged retry from a level to a level plus an advantage. Ad readiness (so the screen can show a loading state) waits for a real SDK. |
 | **DECISION: the ball cap grows through cards only** | The configured `MaxBallsInFlight` is the run's starting cap and never rises with level; only a card raises it. Pressure grows with level (spawn clock, budget), power grows with the player's picks, which keeps the choice meaningful. A retry keeps the cards held when the level started. |
 

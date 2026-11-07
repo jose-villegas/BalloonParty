@@ -7,6 +7,7 @@ using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Level;
+using BalloonParty.Game.Upgrades;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Messages;
@@ -41,6 +42,7 @@ namespace BalloonParty.Cheats
         private readonly IGamePalette _palette;
         private readonly IActiveLevelParameters _levelParams;
         private readonly IRunConfig _runConfig;
+        private readonly IWeaponStats _weapon;
         private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
 
         private IDisposable _subscription;
@@ -63,6 +65,7 @@ namespace BalloonParty.Cheats
             IGamePalette palette,
             IActiveLevelParameters levelParams,
             IRunConfig runConfig,
+            IWeaponStats weapon,
             ISubscriber<ProjectileLoadedMessage> loadedSubscriber)
         {
             _grid = grid;
@@ -74,6 +77,7 @@ namespace BalloonParty.Cheats
             _palette = palette;
             _levelParams = levelParams;
             _runConfig = runConfig;
+            _weapon = weapon;
             _loadedSubscriber = loadedSubscriber;
         }
 
@@ -142,7 +146,7 @@ namespace BalloonParty.Cheats
 
             var pulseDelay = Mathf.Clamp(1.5f * Time.smoothDeltaTime, 0f, 0.1f);
             var context = ShotBoardGather.Gather(
-                _grid, _config, _gridConfig, _balloonsConfig, _itemConfig, _cachedView, _throwerSettings, _palette,
+                _grid, _config, _weapon.StartingShields, _gridConfig, _balloonsConfig, _itemConfig, _cachedView, _throwerSettings, _palette,
                 _levelParams, _runConfig, pulseDelay,
                 _cachedScope.Container.Resolve<BalloonBalancer>().SecondsUntilNextPulse);
             if (context.Board.Count == 0)
@@ -170,7 +174,7 @@ namespace BalloonParty.Cheats
 
             var pulseDelay = Mathf.Clamp(1.5f * Time.smoothDeltaTime, 0f, 0.1f);
             var context = ShotBoardGather.Gather(
-                _grid, _config, _gridConfig, _balloonsConfig, _itemConfig, _cachedView, _throwerSettings, _palette,
+                _grid, _config, _weapon.StartingShields, _gridConfig, _balloonsConfig, _itemConfig, _cachedView, _throwerSettings, _palette,
                 _levelParams, _runConfig, pulseDelay,
                 _cachedScope.Container.Resolve<BalloonBalancer>().SecondsUntilNextPulse);
             if (context.Board.Count == 0)

@@ -22,6 +22,7 @@ using BalloonParty.Game.Run;
 using BalloonParty.Game.Score;
 using BalloonParty.Game.Score.Behaviours;
 using BalloonParty.Game.Telemetry;
+using BalloonParty.Game.Upgrades;
 using BalloonParty.Item;
 using BalloonParty.Item.Bomb;
 using BalloonParty.Item.Laser;
@@ -185,6 +186,8 @@ namespace BalloonParty.Game
                 .As<IRetryState>().As<IRetryStaging>().As<IRunResettable>();
             builder.Register<IAdService, NoAdService>(Lifetime.Singleton);
             builder.Register<IFailureOffers, FailureOffers>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<RunUpgrades>()
+                .As<IWeaponStats>().As<IUpgradeDraft>().As<IRunResettable>();
 
 #if UNITY_ANDROID && !UNITY_EDITOR
             builder.Register<IThermalSource, AndroidThermalSource>(Lifetime.Singleton);

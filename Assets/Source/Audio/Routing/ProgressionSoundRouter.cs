@@ -123,6 +123,12 @@ namespace BalloonParty.Audio.Routing
 
         private void OnLevelUpDismissed(LevelUpDismissedMessage message)
         {
+            // The confirm is the popup's button; a level-up that passed in play pressed nothing.
+            if (message.PassedInPlay)
+            {
+                return;
+            }
+
             _player.Play(GameSoundId.UiConfirm, null);
         }
 

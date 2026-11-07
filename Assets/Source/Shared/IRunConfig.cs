@@ -1,6 +1,6 @@
 namespace BalloonParty.Shared
 {
-    /// <summary>Run-level rules — starting hit points, retry allowance, and (future) loss thresholds.</summary>
+    /// <summary>Run-level rules: starting hit points, retry allowance, the level-complete beat and upgrade cards.</summary>
     public interface IRunConfig
     {
         int StartingHitPoints { get; }
@@ -39,5 +39,8 @@ namespace BalloonParty.Shared
         ///     (force-destroyed; no new hits) so the level-up can present. 0 = wait for them to die.
         /// </summary>
         float LevelCompleteFlightGrace { get; }
+
+        /// <summary>The upgrade cards a level-up deals, and how often.</summary>
+        IUpgradeSettings Upgrades { get; }
     }
 }

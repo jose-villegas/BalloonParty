@@ -1,5 +1,7 @@
 using BalloonParty.Game.Level;
+using BalloonParty.Game.Upgrades;
 using BalloonParty.Shared;
+using BalloonParty.Tests.Game;
 using BalloonParty.Thrower;
 using NSubstitute;
 using NUnit.Framework;
@@ -28,8 +30,14 @@ namespace BalloonParty.Tests.Thrower
             _config.ReloadCooldownSeconds.Returns(Cooldown);
             _config.ProjectileLoadDuration.Returns(0.2f);
 
-            _reload = new ThrowerReload(_config);
+            _reload = new ThrowerReload(WeaponOf(_config));
             _reload.Restart();
+        }
+
+        // The run's weapon with no cards held: exactly the configured base.
+        internal static RunUpgrades WeaponOf(IProjectileFlightConfig config)
+        {
+            return new UpgradeRig(config).Upgrades;
         }
 
         [Test]
@@ -38,6 +46,45 @@ namespace BalloonParty.Tests.Thrower
             _reload.Advance(Cooldown, 0);
 
             Assert.IsTrue(_reload.IsReady(0, LevelUpPhase.Playing));
+        }
+
+        [Test]
+        public void HasFreeSlot_AfterABallCapPick_OpensTheExtraSlotLive()
+        {
+            var rig = new UpgradeRig(_config);
+            var reload = new ThrowerReload(rig.Upgrades);
+            Assert.IsFalse(reload.HasFreeSlot(Cap));
+
+            rig.Hold(UpgradeRig.Card(UpgradeKind.BallCap, 1f));
+
+            Assert.IsTrue(reload.HasFreeSlot(Cap), "the same reload object sees the new cap, no rebuild");
+            Assert.IsFalse(reload.HasFreeSlot(Cap + 1));
+        }
+
+        [Test]
+        public void Restart_AfterAFasterReloadPick_SlidesInLessTime()
+        {
+            var rig = new UpgradeRig(_config);
+            var reload = new ThrowerReload(rig.Upgrades);
+            rig.Hold(UpgradeRig.Card(UpgradeKind.FasterReload, 0.5f));
+            reload.Restart();
+
+            reload.Advance(Cooldown * 0.5f, 0);
+
+            Assert.IsTrue(reload.IsLoaded);
+        }
+
+        [Test]
+        public void Advance_PickMidSlide_AppliesFromTheNextRestart()
+        {
+            var rig = new UpgradeRig(_config);
+            var reload = new ThrowerReload(rig.Upgrades);
+            reload.Restart();
+            rig.Hold(UpgradeRig.Card(UpgradeKind.FasterReload, 0.5f));
+
+            reload.Advance(Cooldown * 0.5f, 0);
+
+            Assert.IsFalse(reload.IsLoaded, "the slide in progress keeps the duration it started with");
         }
 
         [Test]

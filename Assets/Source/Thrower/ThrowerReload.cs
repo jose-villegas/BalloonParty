@@ -1,5 +1,5 @@
 using BalloonParty.Game.Level;
-using BalloonParty.Shared;
+using BalloonParty.Game.Upgrades;
 using DG.Tweening;
 using UnityEngine;
 
@@ -9,6 +9,8 @@ namespace BalloonParty.Thrower
     ///     The thrower's reload rules: how far the held ball has slid from the pivot to the muzzle, and
     ///     whether a release fires it. The slide advances only while a slot under the ball cap is free,
     ///     so a ball held short of the muzzle is the player's "not yet" cue, and one at the muzzle fires.
+    ///     The cap and the reload time are the run's, cards included, read each time so a pick applies
+    ///     from the next shot.
     /// </summary>
     internal sealed class ThrowerReload
     {
@@ -16,7 +18,7 @@ namespace BalloonParty.Thrower
         // not get there before the reload has ended.
         private const Ease SlideEase = Ease.OutCubic;
 
-        private readonly IProjectileFlightConfig _config;
+        private readonly IWeaponStats _weapon;
 
         private float _elapsed;
         private float _duration;
@@ -28,17 +30,15 @@ namespace BalloonParty.Thrower
 
         internal bool IsLoaded => _elapsed >= _duration;
 
-        internal ThrowerReload(IProjectileFlightConfig config)
+        internal ThrowerReload(IWeaponStats weapon)
         {
-            _config = config;
+            _weapon = weapon;
         }
 
         internal void Restart()
         {
             _elapsed = 0f;
-
-            // The cooldown is a floor on the slide: a slide shorter than it would read ready too early.
-            _duration = Mathf.Max(_config.ProjectileLoadDuration, _config.ReloadCooldownSeconds);
+            _duration = _weapon.ReloadSeconds;
         }
 
         internal void Advance(float deltaTime, int inFlight)
@@ -51,7 +51,7 @@ namespace BalloonParty.Thrower
 
         internal bool HasFreeSlot(int inFlight)
         {
-            return inFlight < _config.MaxBallsInFlight;
+            return inFlight < _weapon.MaxBallsInFlight;
         }
 
         /// <summary>Whether a ball may leave the thrower at all, reload aside: tools that skip the slide

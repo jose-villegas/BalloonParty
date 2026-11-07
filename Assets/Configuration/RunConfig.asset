@@ -30,3 +30,31 @@ MonoBehaviour:
   _levelCompleteRampUpDuration: 15
   _levelCompleteRampUpScale: 12
   _levelCompleteFlightGrace: 1
+  _upgrades:
+    _cardEveryLevels: 2
+    _cardsOffered: 3
+    _cards:
+    - _kind: 0
+      _title: Extra Ball
+      _description: +1 ball in flight
+      _amount: 1
+      _maxStacks: 3
+      _weight: 1
+    - _kind: 1
+      _title: Quick Hands
+      _description: Reload 15% faster
+      _amount: 0.15
+      _maxStacks: 4
+      _weight: 1
+    - _kind: 2
+      _title: Thick Skin
+      _description: +1 shield on every ball
+      _amount: 1
+      _maxStacks: 3
+      _weight: 1
+    - _kind: 3
+      _title: Lucky Find
+      _description: More items on the board
+      _amount: 0.5
+      _maxStacks: 4
+      _weight: 1

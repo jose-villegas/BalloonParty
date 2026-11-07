@@ -37,16 +37,16 @@ Because firing now reads a moment in the past, the very last frame's prediction 
 
 ### Rapid fire — several balls at once
 
-Up to `IProjectileFlightConfig.MaxBallsInFlight` balls (3 in the shipped asset) fly at the same time. The thrower always holds a ball: `ThrowerController.EnsureLoaded` loads a fresh one right after a shot leaves, and only into an empty thrower, so a ball being aimed is never thrown away.
+Up to `IWeaponStats.MaxBallsInFlight` balls fly at the same time: `IProjectileFlightConfig.MaxBallsInFlight` (3 in the shipped asset) plus any Extra Ball cards (see `Game/Upgrades/README.md`). The thrower always holds a ball: `ThrowerController.EnsureLoaded` loads a fresh one right after a shot leaves, and only into an empty thrower, so a ball being aimed is never thrown away.
 
-A freshly loaded ball does not fire straight away. It slides from the thrower's pivot out to the muzzle over `max(ProjectileLoadDuration, ReloadCooldownSeconds)`, in scaled time (so a freeze or slow-mo stretches it too). `ThrowerReload` owns that slide:
+A freshly loaded ball does not fire straight away. It slides from the thrower's pivot out to the muzzle over `IWeaponStats.ReloadSeconds`, which is `max(ProjectileLoadDuration, ReloadCooldownSeconds)` shortened by reload cards, in scaled time (so a freeze or slow-mo stretches it too). `ThrowerReload` owns that slide:
 
 - It advances only while a slot under the cap is free. With the cap full the ball waits short of the muzzle, which is the player's "not yet" cue.
 - The ease is `OutCubic`, which never overshoots: the ball cannot reach the muzzle before the reload has ended, so "ball at the muzzle" reliably means "a release fires".
 - A release fires only when a ball is held, the slide is finished, a slot is free and the level is in the `Playing` phase. A release with nothing ready fires nothing and is not queued for later.
 - `ThrowerReadyMessage` is published once per ball, on the tick it becomes ready (`CombatSoundRouter` plays the reload "cock" on it).
 
-`FireAt` skips the slide but still honours the cap and the phase (`ThrowerReload.CanLaunch`). The pool is pre-warmed with `2 * MaxBallsInFlight + 1` balls, because a dead ball stays out of the pool until its disappear animation finishes.
+`FireAt` skips the slide but still honours the cap and the phase (`ThrowerReload.CanLaunch`). The pool is pre-warmed with `2 * MaxBallsInFlight + 1` balls of the configured cap, because a dead ball stays out of the pool until its disappear animation finishes. A cap raised by a card is topped up (two more balls per extra slot) on the next load, which comes after the level-up's Ascent or a reset, so nothing Instantiates mid-play. Each loaded ball starts with `IWeaponStats.StartingShields`.
 
 ## How it works
 
