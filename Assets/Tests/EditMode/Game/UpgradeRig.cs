@@ -4,6 +4,8 @@ using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Game.Upgrades;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Messages;
+using MessagePipe;
 using NSubstitute;
 using UniRx;
 
@@ -20,6 +22,8 @@ namespace BalloonParty.Tests.Game
         internal readonly List<IUpgradeCardSettings> Cards = new();
         internal readonly IUpgradeSettings Settings = Substitute.For<IUpgradeSettings>();
         internal readonly IRetryState RetryState = Substitute.For<IRetryState>();
+        internal readonly IPublisher<BonusCardDealtMessage> BonusDealt =
+            Substitute.For<IPublisher<BonusCardDealtMessage>>();
         internal readonly RunUpgrades Upgrades;
 
         internal UpgradeRig(IProjectileFlightConfig flight)
@@ -35,7 +39,7 @@ namespace BalloonParty.Tests.Game
             levelProgress.Phase.Returns(Phase);
             levelProgress.Level.Returns(Level);
 
-            Upgrades = new RunUpgrades(flight, Settings, pacing, RetryState, levelProgress);
+            Upgrades = new RunUpgrades(flight, Settings, pacing, RetryState, levelProgress, BonusDealt);
             Upgrades.Start();
         }
 
@@ -59,6 +63,20 @@ namespace BalloonParty.Tests.Game
         internal void Abort()
         {
             Phase.Value = LevelUpPhase.Playing;
+        }
+
+        /// <summary>
+        ///     The reset of a retry at <paramref name="level" />, bought with a rewarded ad when
+        ///     <paramref name="withBonusCard" />. The staged retry is consumed afterwards, as RetryTracker would.
+        /// </summary>
+        internal void Retry(int level, bool withBonusCard)
+        {
+            RetryState.RetryLevel.Returns(level);
+            RetryState.RetryWithBonusCard.Returns(withBonusCard);
+            Level.Value = level;
+            Upgrades.ResetRun(1);
+            RetryState.RetryLevel.Returns(0);
+            RetryState.RetryWithBonusCard.Returns(false);
         }
 
         /// <summary>Holds <paramref name="card" /> through a real deal, pick and advance.</summary>

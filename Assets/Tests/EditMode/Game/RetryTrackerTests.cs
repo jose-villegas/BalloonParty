@@ -53,13 +53,25 @@ namespace BalloonParty.Tests.Game
         public void ResetRun_ConsumesTheStagedLevel()
         {
             var tracker = Tracker(0);
-            tracker.PrepareRetry(5);
+            tracker.PrepareRetry(5, withBonusCard: false);
             Assert.AreEqual(5, tracker.RetryLevel, "read by the reset cascade before the tracker's own stage");
 
             tracker.ResetRun(0);
 
             Assert.AreEqual(0, tracker.RetryLevel);
             Assert.AreEqual(1, tracker.RetriesUsed);
+        }
+
+        [Test]
+        public void BonusCard_IsStagedWithTheRetryAndClearedByTheReset()
+        {
+            var tracker = Tracker(0);
+            tracker.PrepareRetry(5, withBonusCard: true);
+            Assert.IsTrue(tracker.RetryWithBonusCard, "read by RunUpgrades during the reset cascade");
+
+            tracker.ResetRun(0);
+
+            Assert.IsFalse(tracker.RetryWithBonusCard, "a later plain retry must not inherit the bonus");
         }
 
         [Test]
@@ -87,7 +99,7 @@ namespace BalloonParty.Tests.Game
         {
             var tracker = Tracker(2);
 
-            tracker.PrepareRetry(4);
+            tracker.PrepareRetry(4, withBonusCard: false);
 
             Assert.AreEqual(0, tracker.RetriesUsed);
             Assert.AreEqual(2, tracker.RetriesRemaining);
@@ -113,7 +125,7 @@ namespace BalloonParty.Tests.Game
 
         private static void Retry(RetryTracker tracker, int level)
         {
-            tracker.PrepareRetry(level);
+            tracker.PrepareRetry(level, withBonusCard: false);
             tracker.ResetRun(0);
         }
     }

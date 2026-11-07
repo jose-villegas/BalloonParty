@@ -30,67 +30,17 @@ namespace BalloonParty.Editor
         [MenuItem(MenuPath)]
         private static void Build()
         {
-            var path = FindPopupPrefab();
-            if (path == null)
-            {
-                EditorUtility.DisplayDialog(DialogTitle, "No prefab with a LevelUpPopUp on its root was found.", "OK");
-                return;
-            }
-
-            var root = PrefabUtility.LoadPrefabContents(path);
-            try
-            {
-                var existing = root.transform.Find(RowName);
-                if (existing != null)
-                {
-                    if (!EditorUtility.DisplayDialog(DialogTitle,
-                            $"{path} already has upgrade card slots. Rebuild them? Hand edits to the row are lost.",
-                            "Rebuild", "Cancel"))
-                    {
-                        return;
-                    }
-
-                    Object.DestroyImmediate(existing.gameObject);
-                }
-
-                if (!TryBuild(root, out var error))
-                {
-                    EditorUtility.DisplayDialog(DialogTitle, error, "OK");
-                    return;
-                }
-
-                PrefabUtility.SaveAsPrefabAsset(root, path);
-                Debug.Log($"[UpgradeCardSlotBuilder] Built {SlotCount} upgrade card slots on {path}.");
-            }
-            finally
-            {
-                PrefabUtility.UnloadPrefabContents(root);
-            }
+            PrefabRebuild.Run(DialogTitle, PrefabRebuild.FindPrefabWithRoot<LevelUpPopUp>("LevelUp"), RowName,
+                BuildRow);
         }
 
-        private static string FindPopupPrefab()
-        {
-            foreach (var guid in AssetDatabase.FindAssets("LevelUp t:Prefab"))
-            {
-                var path = AssetDatabase.GUIDToAssetPath(guid);
-                var asset = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-                if (asset != null && asset.GetComponent<LevelUpPopUp>() != null)
-                {
-                    return path;
-                }
-            }
-
-            return null;
-        }
-
-        private static bool TryBuild(GameObject root, out string error)
+        private static string BuildRow(GameObject root)
         {
             var popup = new SerializedObject(root.GetComponent<LevelUpPopUp>());
             var continueButton = popup.FindProperty("_continueButton").objectReferenceValue as Button;
             if (continueButton == null || continueButton.GetComponentInChildren<TMP_Text>(true) == null)
             {
-                error = "The popup's Continue button (with a text label) isn't assigned; the cards copy its look.";
-                return false;
+                return "The popup's Continue button (with a text label) isn't assigned; the cards copy its look.";
             }
 
             var row = CreateRow(root.transform);
@@ -102,8 +52,7 @@ namespace BalloonParty.Editor
             }
 
             popup.ApplyModifiedPropertiesWithoutUndo();
-            error = null;
-            return true;
+            return null;
         }
 
         private static Transform CreateRow(Transform parent)

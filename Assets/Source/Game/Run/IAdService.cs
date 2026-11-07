@@ -7,7 +7,10 @@ namespace BalloonParty.Game.Run
     internal enum AdPlacement
     {
         /// <summary>A retry past the run's free ones (<see cref="Shared.IRunConfig.RetriesBeforeAd" />).</summary>
-        RetryGate
+        RetryGate,
+
+        /// <summary>A retry with a bonus card for that attempt, chosen from the game-over screen.</summary>
+        BonusRetry
     }
 
     /// <summary>How a rewarded ad ended.</summary>

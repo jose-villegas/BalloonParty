@@ -16,6 +16,7 @@ namespace BalloonParty.Tests.Game
         private IRetryStaging _staging;
         private IRunConfig _config;
         private IAdService _ads;
+        private IBonusCardSource _bonusCards;
         private FailureOffers _offers;
 
         [SetUp]
@@ -32,7 +33,10 @@ namespace BalloonParty.Tests.Game
             _ads = Substitute.For<IAdService>();
             AdEnds(AdResult.Watched);
 
-            _offers = new FailureOffers(_retryState, _staging, _config, _ads);
+            _bonusCards = Substitute.For<IBonusCardSource>();
+            _bonusCards.CanDealBonus.Returns(true);
+
+            _offers = new FailureOffers(_retryState, _staging, _config, _ads, _bonusCards);
         }
 
         [Test]
@@ -89,7 +93,7 @@ namespace BalloonParty.Tests.Game
         {
             Assert.IsTrue(TryRetry(7));
 
-            _staging.Received(1).PrepareRetry(7);
+            _staging.Received(1).PrepareRetry(7, false);
             _ads.DidNotReceiveWithAnyArgs().ShowRewardedAsync(default, default);
         }
 
@@ -101,7 +105,7 @@ namespace BalloonParty.Tests.Game
             Assert.IsTrue(TryRetry(7));
 
             _ads.Received(1).ShowRewardedAsync(AdPlacement.RetryGate, Arg.Any<CancellationToken>());
-            _staging.Received(1).PrepareRetry(7);
+            _staging.Received(1).PrepareRetry(7, false);
         }
 
         [Test]
@@ -111,7 +115,7 @@ namespace BalloonParty.Tests.Game
             AdEnds(AdResult.Skipped);
 
             Assert.IsFalse(TryRetry(7));
-            _staging.DidNotReceiveWithAnyArgs().PrepareRetry(default);
+            _staging.DidNotReceiveWithAnyArgs().PrepareRetry(default, default);
         }
 
         [Test]
@@ -121,7 +125,7 @@ namespace BalloonParty.Tests.Game
             AdEnds(AdResult.Unavailable);
 
             Assert.IsTrue(TryRetry(7), "no fill isn't the player's doing");
-            _staging.Received(1).PrepareRetry(7);
+            _staging.Received(1).PrepareRetry(7, false);
         }
 
         [Test]
@@ -132,7 +136,7 @@ namespace BalloonParty.Tests.Game
                 .Throws(new InvalidOperationException("sdk down"));
 
             Assert.IsTrue(TryRetry(7), "a broken SDK reads as no ad, not as a skip");
-            _staging.Received(1).PrepareRetry(7);
+            _staging.Received(1).PrepareRetry(7, false);
         }
 
         [Test]
@@ -145,7 +149,7 @@ namespace BalloonParty.Tests.Game
             var staged = _offers.TryRetryAsync(7, cts.Token).GetAwaiter().GetResult();
 
             Assert.IsFalse(staged, "a screen that moved on must not leave a retry staged for the next reset");
-            _staging.DidNotReceiveWithAnyArgs().PrepareRetry(default);
+            _staging.DidNotReceiveWithAnyArgs().PrepareRetry(default, default);
         }
 
         [Test]
@@ -155,7 +159,178 @@ namespace BalloonParty.Tests.Game
 
             Assert.IsFalse(TryRetry(7));
             _ads.DidNotReceiveWithAnyArgs().ShowRewardedAsync(default, default);
-            _staging.DidNotReceiveWithAnyArgs().PrepareRetry(default);
+            _staging.DidNotReceiveWithAnyArgs().PrepareRetry(default, default);
+        }
+
+        [Test]
+        public void Current_ABonusCardCanBeDealt_OffersTheBonusRetry()
+        {
+            Assert.IsTrue(_offers.Current.CanBonusRetry);
+        }
+
+        [Test]
+        public void Current_NoBonusCardLeft_OffersNoBonusRetry()
+        {
+            _bonusCards.CanDealBonus.Returns(false);
+
+            Assert.IsFalse(_offers.Current.CanBonusRetry, "the ad is never sold for a card that can't be dealt");
+        }
+
+        [Test]
+        public void Current_NoRetryLeft_OffersNoBonusRetry()
+        {
+            RunOutOfRetries();
+
+            Assert.IsFalse(_offers.Current.CanBonusRetry);
+        }
+
+        [Test]
+        public void TryBonusRetry_AdWatched_StagesTheRetryWithABonusCard()
+        {
+            Assert.IsTrue(TryBonusRetry(7));
+
+            _ads.Received(1).ShowRewardedAsync(AdPlacement.BonusRetry, Arg.Any<CancellationToken>());
+            _staging.Received(1).PrepareRetry(7, true);
+        }
+
+        [Test]
+        public void TryBonusRetry_RetryAlsoGated_OneAdPaysForBoth()
+        {
+            _retryState.RetriesUsed.Returns(2);
+
+            Assert.IsTrue(TryBonusRetry(7));
+
+            _ads.Received(1).ShowRewardedAsync(Arg.Any<AdPlacement>(), Arg.Any<CancellationToken>());
+            _ads.DidNotReceive().ShowRewardedAsync(AdPlacement.RetryGate, Arg.Any<CancellationToken>());
+            _staging.Received(1).PrepareRetry(7, true);
+        }
+
+        [Test]
+        public void TryBonusRetry_AdSkipped_StagesNothing()
+        {
+            AdEnds(AdResult.Skipped);
+
+            Assert.IsFalse(TryBonusRetry(7), "a reward needs its ad watched; the plain retry stays on offer");
+            _staging.DidNotReceiveWithAnyArgs().PrepareRetry(default, default);
+        }
+
+        [Test]
+        public void TryBonusRetry_AdUnavailable_StagesNothing()
+        {
+            AdEnds(AdResult.Unavailable);
+
+            Assert.IsFalse(TryBonusRetry(7), "no ad shown, no reward: unlike the retry gate, nothing is owed");
+            _staging.DidNotReceiveWithAnyArgs().PrepareRetry(default, default);
+        }
+
+        [Test]
+        public void TryBonusRetry_AdServiceThrows_StagesNothing()
+        {
+            _ads.ShowRewardedAsync(Arg.Any<AdPlacement>(), Arg.Any<CancellationToken>())
+                .Throws(new InvalidOperationException("sdk down"));
+
+            Assert.IsFalse(TryBonusRetry(7));
+            _staging.DidNotReceiveWithAnyArgs().PrepareRetry(default, default);
+        }
+
+        [Test]
+        public void TryBonusRetry_NoBonusCardLeft_RefusesWithoutAnAd()
+        {
+            _bonusCards.CanDealBonus.Returns(false);
+
+            Assert.IsFalse(TryBonusRetry(7));
+            _ads.DidNotReceiveWithAnyArgs().ShowRewardedAsync(default, default);
+        }
+
+        [Test]
+        public void TryRetry_AdCancelledMidFlight_StagesNothing()
+        {
+            _retryState.RetriesUsed.Returns(2);
+            _ads.ShowRewardedAsync(Arg.Any<AdPlacement>(), Arg.Any<CancellationToken>())
+                .Throws(new OperationCanceledException());
+
+            Assert.IsFalse(TryRetry(7), "a cancelled ad reads as skipped, not as no fill");
+            _staging.DidNotReceiveWithAnyArgs().PrepareRetry(default, default);
+        }
+
+        [Test]
+        public void TryRetry_ScreenMovesOnWhileTheAdPlays_StagesNothing()
+        {
+            _retryState.RetriesUsed.Returns(2);
+            using var cts = new CancellationTokenSource();
+            _ads.ShowRewardedAsync(Arg.Any<AdPlacement>(), Arg.Any<CancellationToken>())
+                .Returns(_ =>
+                {
+                    cts.Cancel();
+                    return UniTask.FromResult(AdResult.Watched);
+                });
+
+            var staged = _offers.TryRetryAsync(7, cts.Token).GetAwaiter().GetResult();
+
+            Assert.IsFalse(staged, "a watched ad can't stage a retry for a screen that is gone");
+            _staging.DidNotReceiveWithAnyArgs().PrepareRetry(default, default);
+        }
+
+        [Test]
+        public void TryRetry_FreeRetryCancelledBeforeStaging_StagesNothing()
+        {
+            using var cts = new CancellationTokenSource();
+            cts.Cancel();
+
+            var staged = _offers.TryRetryAsync(7, cts.Token).GetAwaiter().GetResult();
+
+            Assert.IsFalse(staged);
+            _ads.DidNotReceiveWithAnyArgs().ShowRewardedAsync(default, default);
+            _staging.DidNotReceiveWithAnyArgs().PrepareRetry(default, default);
+        }
+
+        [Test]
+        public void TryBonusRetry_AdCancelledMidFlight_StagesNothing()
+        {
+            _ads.ShowRewardedAsync(Arg.Any<AdPlacement>(), Arg.Any<CancellationToken>())
+                .Throws(new OperationCanceledException());
+
+            Assert.IsFalse(TryBonusRetry(7));
+            _staging.DidNotReceiveWithAnyArgs().PrepareRetry(default, default);
+        }
+
+        [Test]
+        public void TryBonusRetry_ScreenMovesOnWhileTheAdPlays_StagesNothing()
+        {
+            using var cts = new CancellationTokenSource();
+            _ads.ShowRewardedAsync(Arg.Any<AdPlacement>(), Arg.Any<CancellationToken>())
+                .Returns(_ =>
+                {
+                    cts.Cancel();
+                    return UniTask.FromResult(AdResult.Watched);
+                });
+
+            var staged = _offers.TryBonusRetryAsync(7, cts.Token).GetAwaiter().GetResult();
+
+            Assert.IsFalse(staged, "the reward must not be staged for a screen that is gone");
+            _staging.DidNotReceiveWithAnyArgs().PrepareRetry(default, default);
+        }
+
+        [Test]
+        public void TryBonusRetry_NoRetryLeft_RefusesWithoutAnAd()
+        {
+            RunOutOfRetries();
+
+            Assert.IsFalse(TryBonusRetry(7));
+            _ads.DidNotReceiveWithAnyArgs().ShowRewardedAsync(default, default);
+            _staging.DidNotReceiveWithAnyArgs().PrepareRetry(default, default);
+        }
+
+        [Test]
+        public void TryBonusRetry_Cancelled_StagesNothing()
+        {
+            using var cts = new CancellationTokenSource();
+            cts.Cancel();
+
+            var staged = _offers.TryBonusRetryAsync(7, cts.Token).GetAwaiter().GetResult();
+
+            Assert.IsFalse(staged);
+            _staging.DidNotReceiveWithAnyArgs().PrepareRetry(default, default);
         }
 
         [Test]
@@ -170,6 +345,11 @@ namespace BalloonParty.Tests.Game
         private bool TryRetry(int level)
         {
             return _offers.TryRetryAsync(level, CancellationToken.None).GetAwaiter().GetResult();
+        }
+
+        private bool TryBonusRetry(int level)
+        {
+            return _offers.TryBonusRetryAsync(level, CancellationToken.None).GetAwaiter().GetResult();
         }
 
         private void AdEnds(AdResult result)

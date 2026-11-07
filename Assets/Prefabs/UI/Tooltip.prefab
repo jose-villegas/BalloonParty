@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: hold to speed up time
+  m_text: Level 2
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 30803236da9104a3e9e1345227e4b512, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 25e31d7330acf4bff9041ebfa20ec863, type: 2}
@@ -149,8 +149,9 @@ GameObject:
   - component: {fileID: 2897899703615711672}
   - component: {fileID: 5523862426854879204}
   - component: {fileID: 6892919829937505524}
+  - component: {fileID: 4471925386102937155}
   m_Layer: 5
-  m_Name: SpeedUptip
+  m_Name: Banner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -226,6 +227,24 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
+--- !u!114 &4471925386102937155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5970238015647049437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b5fbde6b6c84078a08f6f9b4e25e397, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.Tooltip.TooltipBanner
+  _group: {fileID: 6892919829937505524}
+  _label: {fileID: 7610147346401824726}
+  _fadeDuration: 0.3
+  _holdDuration: 1.6
+  _visibleAlpha: 0.7
+  _bonusCardFormat: 'Bonus card: {0}'
 --- !u!1 &8144384464363206753
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,8 +10,8 @@ particular never rises with level, only through a card.
 | File | Responsibility |
 |---|---|
 | `IWeaponStats` | The run's weapon after its cards: `MaxBallsInFlight`, `ReloadSeconds`, `StartingShields`, `ExtraItemChance`. Each value is the configured base (`IProjectileFlightConfig`) plus every card held. Read these, not the flight config, wherever a card can change the value |
-| `IUpgradeDraft` | The cards side: `Offer` (the hand of the level-up being presented, empty when none is pending or it deals none), `StacksOf(card)`, and `Pick(slot)`, which stages a card of the hand as the level-up's pick |
-| `RunUpgrades` | Implements both, plus `IRunResettable` and `IStartable` (it follows `ILevelProgress.Phase`). Holds the stack count per card and recomputes the weapon when a pick is held |
+| `IUpgradeDraft` | The cards side: `Offer` (the hand of the level-up being presented, empty when none is pending or it deals none), `BonusCard` (the current attempt's bonus card, or null), `StacksOf(card)`, and `Pick(slot)`, which stages a card of the hand as the level-up's pick |
+| `RunUpgrades` | Implements both, plus `Game/Run`'s `IBonusCardSource`, `IRunResettable` and `IStartable` (it follows `ILevelProgress.Phase`). Holds the stack count per card and the bonus card, and recomputes the weapon when either changes |
 
 The deck and its rules are `IUpgradeSettings` (authored in `RunConfig` as `Upgrades`, and registered
 on its own so `RunUpgrades` depends on the deck alone): `CardEveryLevels` (2), `CardsOffered` (3)
@@ -72,10 +72,28 @@ re-detected level-up after an abort.
 `ResetRun` drops every card on a fresh run and keeps them on a retry (`IRetryState.RetryLevel > 0`).
 It runs at `RunResetOrder.Counters`, before `RetryTracker` consumes the staged retry level.
 
+## The bonus card
+
+The game-over screen can offer a retry with a bonus card, bought with a rewarded ad
+(`IFailureOffers.TryBonusRetryAsync`, see `Game/Run/README.md`). When that retry's reset runs
+(`IRetryState.RetryWithBonusCard`), `ResetRun` deals one card by weight and publishes
+`BonusCardDealtMessage`; the on-screen tooltip names it once play resumes (see `UI/Tooltip/README.md`).
+
+| Rule | Why |
+|---|---|
+| Never an Extra Ball | An ad never buys the ball cap (`Plans/PLAN-FastPaced.md` §8) |
+| Never a maxed card | So a bonus never takes a card past its max |
+| Applied on top of the held cards, not counted in `StacksOf` | It isn't a pick: it doesn't fill a card's stacks or change the next hand |
+| Dropped when the attempt ends: on `Transitioning` (the level is won) and on any reset | The advantage is per attempt, so repeated ads never stack power. An aborted level-up doesn't end the attempt, so it keeps the bonus |
+| Seeded by the level and the retries used | Each bought retry of a level can deal a different card |
+
+`CanDealBonus` (its `IBonusCardSource` side) is false once only Extra Ball and maxed cards are
+left, and the screen then hides the bonus button.
+
 ## Not built yet
 
-- **The rewarded advantage** (an extra card for a retry, bought with an ad): see
-  `Plans/PLAN-FastPaced.md` §8.
+- **A pick for the bonus card.** It's dealt at random and named in the tooltip; a quick pick screen
+  (three cards, as at a level-up) is banked for later.
 - **Stable card ids.** Held stacks are keyed by the card's settings object, which is enough while
   nothing persists or reports cards. Saving a run, per-card telemetry or staging a card across a
   reset will need an id on `IUpgradeCardSettings`.

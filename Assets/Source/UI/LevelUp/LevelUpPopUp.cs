@@ -101,9 +101,15 @@ namespace BalloonParty.UI.LevelUp
             "first card dealt.")]
         [SerializeField] private UpgradeCardView[] _cardViews;
 
+        [Header("In-Play Level-Up")]
+        [Tooltip("The tooltip a level-up that deals no cards shows as it passes in play; {0} is the level " +
+            "entered.")]
+        [SerializeField] private string _inPlayTooltipFormat = "Level {0}";
+
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         [Inject] private IPublisher<LevelUpDismissedMessage> _dismissedPublisher;
         [Inject] private IPublisher<LevelUpFillTrailsMessage> _fillTrailsPublisher;
+        [Inject] private IPublisher<TooltipMessage> _tooltipPublisher;
         [Inject] private CinematicEndGate _gate;
         [Inject] private PauseService _pauseService;
         [Inject] private TimeScaleService _timeScaleService;
@@ -200,6 +206,7 @@ namespace BalloonParty.UI.LevelUp
             if (_draft.Offer.Count == 0)
             {
                 Resume(passedInPlay: true);
+                ShowTooltip(_inPlayTooltipFormat.FormatOrRaw(msg.NewLevel));
                 return;
             }
 
@@ -555,6 +562,14 @@ namespace BalloonParty.UI.LevelUp
 
             _warnedUnwired = true;
             Log.Warn("LevelUp", "No wired card slots on the level-up popup; Continue takes the first card dealt");
+        }
+
+        private void ShowTooltip(string text)
+        {
+            if (text.Length > 0)
+            {
+                _tooltipPublisher.Publish(new TooltipMessage(text));
+            }
         }
 
         private void Resume(bool passedInPlay = false)

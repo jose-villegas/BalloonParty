@@ -25,6 +25,10 @@ namespace BalloonParty.UI.GameOver
         [SerializeField] private UnityEngine.UI.Button _retryButton;
         [SerializeField] private TMP_Text _retryLabel;
 
+        [Tooltip("Retries with a bonus card for that attempt, bought with a rewarded ad. Hidden while no bonus " +
+            "card can be dealt. Optional.")]
+        [SerializeField] private UnityEngine.UI.Button _bonusRetryButton;
+
         [Inject] private ISubscriber<GameOverMessage> _gameOverSubscriber;
         [Inject] private IRunMeta _runMeta;
         [Inject] private IFailureOffers _failureOffers;
@@ -98,7 +102,18 @@ namespace BalloonParty.UI.GameOver
                 return;
             }
 
-            RetryAsync(_offerCts.Token).Forget();
+            RetryAsync(withBonusCard: false, _offerCts.Token).Forget();
+        }
+
+        // Wired to the bonus retry button's onClick: the rewarded ad, then the retry with a bonus card.
+        public void OnBonusRetryPressed()
+        {
+            if (_claimingRetry || _offerCts == null)
+            {
+                return;
+            }
+
+            RetryAsync(withBonusCard: true, _offerCts.Token).Forget();
         }
 
         // Labels are filled now; the reveal waits for the loss cinematic to open the gate.
@@ -115,14 +130,16 @@ namespace BalloonParty.UI.GameOver
             RevealAfterGateAsync().Forget();
         }
 
-        private async UniTaskVoid RetryAsync(CancellationToken ct)
+        private async UniTaskVoid RetryAsync(bool withBonusCard, CancellationToken ct)
         {
             _claimingRetry = true;
             _canvasGroup.interactable = false;
             bool staged;
             try
             {
-                staged = await _failureOffers.TryRetryAsync(_deathLevel, ct);
+                staged = withBonusCard
+                    ? await _failureOffers.TryBonusRetryAsync(_deathLevel, ct)
+                    : await _failureOffers.TryRetryAsync(_deathLevel, ct);
             }
             finally
             {
@@ -136,7 +153,7 @@ namespace BalloonParty.UI.GameOver
 
             if (!staged)
             {
-                // A skipped ad leaves the screen up with the same offer.
+                // A skipped ad leaves the screen up with the same offers.
                 _canvasGroup.interactable = true;
                 ShowRetryOffer(_failureOffers.Current);
                 return;
@@ -180,6 +197,11 @@ namespace BalloonParty.UI.GameOver
         private void ShowRetryOffer(FailureOffer offer)
         {
             SetRetryInteractable(offer.CanRetry);
+            if (_bonusRetryButton != null)
+            {
+                _bonusRetryButton.gameObject.SetActive(offer.CanBonusRetry);
+            }
+
             if (_retryLabel == null)
             {
                 return;

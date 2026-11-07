@@ -17,6 +17,12 @@ namespace BalloonParty.Game.Upgrades
         /// </summary>
         IReadOnlyList<IUpgradeCardSettings> Offer { get; }
 
+        /// <summary>
+        ///     The bonus card a retry bought with a rewarded ad was dealt, for that attempt only; null when
+        ///     none. Never an Extra Ball, and not counted in <see cref="StacksOf" />.
+        /// </summary>
+        IUpgradeCardSettings BonusCard { get; }
+
         /// <summary>How many times the run holds <paramref name="card" />.</summary>
         int StacksOf(IUpgradeCardSettings card);
 

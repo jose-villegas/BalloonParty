@@ -13,13 +13,16 @@ namespace BalloonParty.Game.Run
 
         private int _retriesUsed;
         private int _retryLevel;
+        private bool _retryWithBonusCard;
 
         public bool IsUnlimited => _maxRetries <= 0;
         public int RetriesRemaining => IsUnlimited ? int.MaxValue : _maxRetries - _retriesUsed;
         public int RetriesUsed => _retriesUsed;
         public int RetryLevel => _retryLevel;
+        public bool RetryWithBonusCard => _retryWithBonusCard;
 
-        // Runs after LevelController (100) and LevelDifficultyResolver (40) have consumed RetryLevel.
+        // Runs after RunUpgrades (60), LevelDifficultyResolver (40) and LevelController (100) have read
+        // RetryLevel and RetryWithBonusCard.
         public int ResetOrder => RunResetOrder.Score + 10;
 
         public RetryTracker(IRunConfig config)
@@ -27,10 +30,12 @@ namespace BalloonParty.Game.Run
             _maxRetries = config.MaxRetries;
         }
 
-        public void PrepareRetry(int level)
+        public void PrepareRetry(int level, bool withBonusCard)
         {
             _retryLevel = level;
-            Log.Info("RetryTracker", $"Prepared retry at level {level} (used {_retriesUsed}/{CapLabel()})");
+            _retryWithBonusCard = withBonusCard;
+            var bonus = withBonusCard ? " with a bonus card" : "";
+            Log.Info("RetryTracker", $"Prepared retry at level {level}{bonus} (used {_retriesUsed}/{CapLabel()})");
         }
 
         public void ResetRun(int generation)
@@ -46,6 +51,7 @@ namespace BalloonParty.Game.Run
             }
 
             _retryLevel = 0;
+            _retryWithBonusCard = false;
         }
 
         private string CapLabel()

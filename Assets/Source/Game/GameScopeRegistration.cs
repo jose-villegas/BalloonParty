@@ -54,6 +54,7 @@ using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Spawner;
 using BalloonParty.UI.GameOver;
+using BalloonParty.UI.Tooltip;
 using BalloonParty.Slots.Grid;
 using BalloonParty.Thrower;
 using BalloonParty.UI;
@@ -120,6 +121,8 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<LevelUpAbortedMessage>(options);
             builder.RegisterMessageBroker<LevelUpAbandonedMessage>(options);
             builder.RegisterMessageBroker<LevelUpDismissedMessage>(options);
+            builder.RegisterMessageBroker<TooltipMessage>(options);
+            builder.RegisterMessageBroker<BonusCardDealtMessage>(options);
             builder.RegisterMessageBroker<GameOverDismissedMessage>(options);
             builder.RegisterMessageBroker<LevelTransitionCompletedMessage>(options);
             builder.RegisterMessageBroker<LevelAscendStartedMessage>(options);
@@ -187,7 +190,7 @@ namespace BalloonParty.Game
             builder.Register<IAdService, NoAdService>(Lifetime.Singleton);
             builder.Register<IFailureOffers, FailureOffers>(Lifetime.Singleton);
             builder.RegisterEntryPoint<RunUpgrades>()
-                .As<IWeaponStats>().As<IUpgradeDraft>().As<IRunResettable>();
+                .As<IWeaponStats>().As<IUpgradeDraft>().As<IBonusCardSource>().As<IRunResettable>();
 
 #if UNITY_ANDROID && !UNITY_EDITOR
             builder.Register<IThermalSource, AndroidThermalSource>(Lifetime.Singleton);
@@ -346,6 +349,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<GameOverLossCinematic>();
             builder.RegisterEntryPoint<LevelTransitionController>();
             builder.RegisterComponentInHierarchy<GameOverScreen>();
+            builder.RegisterComponentInHierarchy<TooltipBanner>();
 
             builder.RegisterBuildCallback(InjectTints);
             return;

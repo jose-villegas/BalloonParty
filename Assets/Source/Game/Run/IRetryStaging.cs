@@ -6,7 +6,10 @@ namespace BalloonParty.Game.Run
     /// </summary>
     internal interface IRetryStaging
     {
-        /// <summary>The next reset restarts at <paramref name="level" /> instead of a fresh run.</summary>
-        void PrepareRetry(int level);
+        /// <summary>
+        ///     The next reset restarts at <paramref name="level" /> instead of a fresh run, dealing a bonus card
+        ///     for that attempt when <paramref name="withBonusCard" />.
+        /// </summary>
+        void PrepareRetry(int level, bool withBonusCard);
     }
 }

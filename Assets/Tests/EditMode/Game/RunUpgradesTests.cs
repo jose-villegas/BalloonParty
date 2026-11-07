@@ -4,6 +4,7 @@ using BalloonParty.Game.Run;
 using BalloonParty.Game.Upgrades;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
+using BalloonParty.Shared.Messages;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -356,6 +357,281 @@ namespace BalloonParty.Tests.Game
 
             Assert.IsEmpty(Upgrades.Offer);
             Assert.IsFalse(Upgrades.Pick(0));
+        }
+
+        [Test]
+        public void BonusRetry_DealsABonusCardOnTopOfTheHeldOnes()
+        {
+            _rig.Hold(_shield);
+
+            _rig.Retry(4, withBonusCard: true);
+
+            var bonus = Upgrades.BonusCard;
+            Assert.IsNotNull(bonus);
+            Assert.AreEqual(1, Upgrades.StacksOf(_shield), "the retry keeps the held card");
+            Assert.AreEqual(0, Upgrades.StacksOf(bonus) - (bonus == _shield ? 1 : 0), "a bonus isn't a stack");
+            _rig.BonusDealt.Received(1).Publish(Arg.Is<BonusCardDealtMessage>(m => m.Card == bonus));
+        }
+
+        [Test]
+        public void BonusRetry_AppliesTheBonusToTheWeapon()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_shield);
+
+            _rig.Retry(4, withBonusCard: true);
+
+            Assert.AreSame(_shield, Upgrades.BonusCard);
+            Assert.AreEqual(BaseShields + 1, Upgrades.StartingShields);
+        }
+
+        [Test]
+        public void BonusRetry_NeverDealsAnExtraBall()
+        {
+            for (var level = 2; level < 40; level++)
+            {
+                _rig.Retry(level, withBonusCard: true);
+
+                Assert.AreNotSame(_ballCap, Upgrades.BonusCard, $"an ad never buys the ball cap (level {level})");
+                Assert.AreEqual(BaseCap, Upgrades.MaxBallsInFlight);
+            }
+        }
+
+        [Test]
+        public void BonusRetry_NeverDealsAMaxedCard()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.AddRange(new[] { UpgradeRig.Card(UpgradeKind.Shield, 1f, maxStacks: 1), _reload });
+            var shield = _rig.Cards[0];
+            _rig.Hold(shield);
+
+            for (var level = 2; level < 20; level++)
+            {
+                _rig.Retry(level, withBonusCard: true);
+
+                Assert.AreSame(_reload, Upgrades.BonusCard, "a maxed card is out of the bonus deal");
+            }
+        }
+
+        [Test]
+        public void CanDealBonus_OnlyExtraBallOrMaxedCardsLeft_IsFalse()
+        {
+            _rig.Cards.Clear();
+            var shield = UpgradeRig.Card(UpgradeKind.Shield, 1f, maxStacks: 1);
+            _rig.Cards.AddRange(new[] { _ballCap, shield });
+            Assert.IsTrue(Upgrades.CanDealBonus);
+
+            _rig.Hold(shield);
+
+            Assert.IsFalse(Upgrades.CanDealBonus);
+        }
+
+        [Test]
+        public void BonusRetry_TheAttemptIsWon_TheBonusGoes()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_shield);
+            _rig.Retry(4, withBonusCard: true);
+
+            _rig.Present(5);
+            _rig.Advance();
+
+            Assert.IsNull(Upgrades.BonusCard);
+            Assert.AreEqual(BaseShields, Upgrades.StartingShields, "the bonus lasted one attempt");
+        }
+
+        [Test]
+        public void BonusRetry_TheAttemptIsLostAndRetriedPlain_TheBonusGoes()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_shield);
+            _rig.Retry(4, withBonusCard: true);
+
+            _rig.Retry(4, withBonusCard: false);
+
+            Assert.IsNull(Upgrades.BonusCard);
+            Assert.AreEqual(BaseShields, Upgrades.StartingShields);
+        }
+
+        [Test]
+        public void BonusRetry_AnAbortedLevelUp_KeepsTheBonus()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_shield);
+            _rig.Retry(4, withBonusCard: true);
+
+            _rig.Present(5);
+            _rig.Abort();
+
+            Assert.AreSame(_shield, Upgrades.BonusCard, "the attempt goes on after an abort");
+        }
+
+        [Test]
+        public void BonusRetry_TheLevelUpCanDealTheSameCard_AndItStacksNormally()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_shield);
+            _rig.Settings.CardEveryLevels.Returns(1);
+            _rig.Retry(4, withBonusCard: true);
+
+            _rig.Present(5);
+            Assert.IsTrue(Upgrades.Pick(0));
+            _rig.Advance();
+
+            Assert.AreEqual(1, Upgrades.StacksOf(_shield));
+            Assert.AreEqual(BaseShields + 1, Upgrades.StartingShields, "the pick stays, the bonus goes");
+        }
+
+        [Test]
+        public void CanDealBonus_OnlyZeroWeightAndEmptyEntriesLeft_IsFalse()
+        {
+            var unweighted = UpgradeRig.Card(UpgradeKind.Shield, 1f);
+            unweighted.Weight.Returns(0f);
+            _rig.Cards.Clear();
+            _rig.Cards.AddRange(new[] { unweighted, null });
+
+            Assert.IsFalse(Upgrades.CanDealBonus, "a zero-weight card is out of every deal");
+        }
+
+        [Test]
+        public void BonusRetry_NothingDealable_DealsNoBonusAndSaysNothing()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_ballCap);
+
+            _rig.Retry(4, withBonusCard: true);
+
+            Assert.IsNull(Upgrades.BonusCard);
+            Assert.AreEqual(BaseCap, Upgrades.MaxBallsInFlight);
+            _rig.BonusDealt.DidNotReceiveWithAnyArgs().Publish(default);
+        }
+
+        [Test]
+        public void BonusRetry_ZeroWeightCardsAreSkipped()
+        {
+            var unweighted = UpgradeRig.Card(UpgradeKind.Shield, 1f);
+            unweighted.Weight.Returns(0f);
+            _rig.Cards.Clear();
+            _rig.Cards.AddRange(new[] { unweighted, _reload });
+
+            for (var level = 2; level < 20; level++)
+            {
+                _rig.Retry(level, withBonusCard: true);
+
+                Assert.AreSame(_reload, Upgrades.BonusCard);
+            }
+        }
+
+        [Test]
+        public void BonusRetry_SameLevelAndRetryCount_DealsTheSameCard()
+        {
+            _rig.RetryState.RetriesUsed.Returns(1);
+            _rig.Retry(4, withBonusCard: true);
+            var first = Upgrades.BonusCard;
+
+            _rig.Retry(4, withBonusCard: true);
+
+            Assert.AreSame(first, Upgrades.BonusCard, "the deal is seeded, not rolled fresh");
+        }
+
+        [Test]
+        public void BonusRetry_EachBoughtRetryOfTheSameLevel_CanDealADifferentCard()
+        {
+            var dealt = new HashSet<IUpgradeCardSettings>();
+
+            for (var used = 0; used < 20; used++)
+            {
+                _rig.RetryState.RetriesUsed.Returns(used);
+                _rig.Retry(4, withBonusCard: true);
+                dealt.Add(Upgrades.BonusCard);
+            }
+
+            Assert.Greater(dealt.Count, 1, "RetriesUsed is part of the seed so a repeat retry isn't a repeat deal");
+        }
+
+        [Test]
+        public void BonusRetry_AHeldCardOfTheSameKind_StacksWithTheBonusButNotTheCount()
+        {
+            _rig.Hold(_shield);
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_shield);
+
+            _rig.Retry(4, withBonusCard: true);
+
+            Assert.AreSame(_shield, Upgrades.BonusCard);
+            Assert.AreEqual(1, Upgrades.StacksOf(_shield), "the bonus isn't a held stack");
+            Assert.AreEqual(BaseShields + 2, Upgrades.StartingShields);
+        }
+
+        [Test]
+        public void BonusRetry_FasterReload_ScalesTheReload()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_reload);
+
+            _rig.Retry(4, withBonusCard: true);
+
+            Assert.AreEqual(BaseCooldown * 0.85f, Upgrades.ReloadSeconds, 1e-5f);
+        }
+
+        [Test]
+        public void BonusRetry_ItemOdds_RaisesTheExtraItemChance()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_itemOdds);
+
+            _rig.Retry(4, withBonusCard: true);
+
+            Assert.AreEqual(0.5f, Upgrades.ExtraItemChance, 1e-5f);
+        }
+
+        [Test]
+        public void BonusRetry_AFreshRunDropsTheBonus()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_shield);
+            _rig.Retry(4, withBonusCard: true);
+
+            _rig.Retry(0, withBonusCard: false);
+
+            Assert.IsNull(Upgrades.BonusCard);
+            Assert.AreEqual(BaseShields, Upgrades.StartingShields);
+        }
+
+        [Test]
+        public void PlainRetry_DealsNoBonusAndSaysNothing()
+        {
+            _rig.Retry(4, withBonusCard: false);
+
+            Assert.IsNull(Upgrades.BonusCard);
+            _rig.BonusDealt.DidNotReceiveWithAnyArgs().Publish(default);
+        }
+
+        [Test]
+        public void BonusRetry_ALevelUpPickedWhileHoldingTheBonus_KeepsThePickAfterTheBonusGoes()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.AddRange(new[] { _shield, _reload });
+            _rig.Settings.CardEveryLevels.Returns(1);
+            _rig.Retry(4, withBonusCard: true);
+            var hand = _rig.Present(5);
+            var picked = hand[0];
+            Upgrades.Pick(0);
+            _rig.Advance();
+
+            Assert.IsNull(Upgrades.BonusCard);
+            Assert.AreEqual(1, Upgrades.StacksOf(picked));
+        }
+
+        [Test]
+        public void FreshRun_StagedBonusFlagWithoutARetry_DealsNoBonus()
+        {
+            _rig.RetryState.RetryWithBonusCard.Returns(true);
+
+            Upgrades.ResetRun(1);
+
+            Assert.IsNull(Upgrades.BonusCard);
+            _rig.BonusDealt.DidNotReceiveWithAnyArgs().Publish(default);
         }
 
         [Test]

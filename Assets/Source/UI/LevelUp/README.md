@@ -68,8 +68,9 @@ on a ceremony that isn't pending. Pauses are counted per source, so a stale show
 newer one's.
 
 An empty hand (every level-up but each `CardEveryLevels`th, see `Game/Upgrades/README.md`) means no
-screen: it publishes `LevelUpDismissedMessage(passedInPlay: true)` and releases its pause, with no
-freeze, no animator and no fill trails, and the Ascent follows as usual. The colour bars reset on
+screen: it shows `Level N` in the on-screen tooltip (`TooltipMessage`, formatted by
+`_inPlayTooltipFormat`; see `UI/Tooltip/README.md`), publishes `LevelUpDismissedMessage(passedInPlay: true)`
+and releases its pause, with no freeze, no animator and no fill trails, and the Ascent follows as usual. The colour bars reset on
 that dismissal without the drain, and `ProgressionSoundRouter` skips the confirm sound, which is the
 popup's button.
 

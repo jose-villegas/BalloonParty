@@ -20,5 +20,11 @@ namespace BalloonParty.Game.Run
         ///     Set transiently before the dismiss; consumed during the reset cascade.
         /// </summary>
         int RetryLevel { get; }
+
+        /// <summary>
+        ///     The staged retry was bought with a rewarded ad and deals a bonus card. Read with
+        ///     <see cref="RetryLevel" /> during the reset cascade, and cleared with it.
+        /// </summary>
+        bool RetryWithBonusCard { get; }
     }
 }
