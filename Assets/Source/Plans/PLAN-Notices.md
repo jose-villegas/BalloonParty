@@ -5,8 +5,11 @@
 > Working plan for short, handwritten heads-up notices that tell the player what just happened on
 > the board, written on as if by a pencil, plus pencil lines drawn over the board.
 
-**Status:** draft, not started. Reviewed against the code by the architect. The open questions in
-§10 need the owner's answers before Phase 1.
+**Status:** Phase 1 in progress. Built: the Patrick Hand font file (`Assets/Fonts/`, with its OFL
+licence), `UI/Notices/WriteOnText` (the slanted soft wipe on the stock shader, EditMode-tested reveal
+maths) and `TooltipBanner` writing through it. Left for Phase 1: the TMP font asset (made in the
+editor), the pencil tip sprite, and the pencil text shader (grain and ragged edge). The other open
+questions in §10 matter from Phase 2.
 
 ---
 
@@ -98,8 +101,14 @@ way `ProgressNoticePresenter` dismisses its notices (animated when there's time,
 
 ### 4.1 Write-on text
 
-Real stroke order would need stroke data for every glyph; not worth it. A left-to-right wipe at game
-speed (about 0.25-0.35 s a word) reads as writing:
+**DECISION (owner): a ragged pencil wipe.** Of four styles demoed (a plain letter wipe, a ragged
+wipe, tracing the outline then filling, true stroke order with a single-line font), the owner picked
+the ragged wipe: a left-to-right wipe whose edge is soft, grainy and slightly slanted, with a pencil
+grain through the letters. Real stroke order would need stroke data for every glyph (or a thin,
+plotter-like single-line font) and isn't worth it: at game speed (about 0.25-0.35 s a word) a good
+wipe reads as writing.
+
+How it's built:
 
 - TMP lays the text out once. Each reveal frame sets the vertex alpha of the glyph being written,
   from its left edge to its right (a 4-vertex gradient), with every earlier glyph opaque and every
@@ -111,10 +120,12 @@ speed (about 0.25-0.35 s a word) reads as writing:
 - The tick follows `UI/Score/ProgressNotice`: hand-ticked appear, hold and exit on unscaled time,
   writing nothing once settled.
 - The pencil tip (a small sprite) follows the write head on the baseline, with a little wobble.
-- The pencil look comes from the font material: a grain texture on the SDF face, a slightly ragged
-  edge. No custom shader at first.
-- The top banner is UGUI, so it may use a cheaper wipe instead: a `RectMask2D` whose right padding
-  animates, with softness. No mesh pushes, and joined-up script stays continuous.
+- The ragged edge and the grain need a small custom text shader: a copy of TMP's SDF shader with a
+  noise texture that roughens the wipe's edge and multiplies a grain into the face. The plain wipe
+  above is its first step and can ship on the stock shader if the custom one takes longer.
+- The top banner is UGUI. A `RectMask2D` whose right padding animates, with softness, is a cheaper
+  wipe there (no mesh pushes, joined-up script stays continuous), but its edge is straight. Use it only
+  if the banner can't take the custom shader.
 - Handwriting fonts overlap their joining strokes, so a per-glyph step can show seams. Check in the
   playtest; the font choice (§10) matters here.
 
@@ -162,7 +173,7 @@ moment it grew. They don't say the same thing.
 
 | Phase | Builds | Done when |
 |---|---|---|
-| 1. Handwritten text | The font asset and material, `WriteOnText`, `TooltipBanner` drawing through it | The top tooltip writes on in pencil |
+| 1. Handwritten text | The Patrick Hand TMP font asset, the pencil text shader and material, `WriteOnText`, `TooltipBanner` drawing through it | The top tooltip writes on with the ragged pencil wipe |
 | 2. New signals | `StreakGrewMessage`, `PierceArmed`, `ThrowerReadyMessage.AfterCapWait`, the cannon endpoint key, with tests | Each fires exactly when §5 says, under test |
 | 3. Notices | `NoticeQueue`, `NoticeRouter`, `INoticePresenter`, `NoticeLayer`, `HandwrittenNotice`, `INoticeSettings` | Each event in §6 shows its notice by the rules, a burst never shows more than `MaxConcurrent`, and notices clear on reset, game over and level-up |
 | 4. Pencil lines | The pencil reskin of the strikethrough trail, then the `HighlightTrail` underline | A blocked row is scribbled through in pencil, and a big streak is underlined |
@@ -189,12 +200,14 @@ can't judge readability. New folders (`Game/Notices/`, `UI/Notices/`) get a READ
 | Cost on the pop hot path | The router allocates nothing per pop (an `int` argument, no strings); mesh pushes only during the reveal; pooled views. The optimizer reviews each phase |
 | A canvas notice re-batches the whole canvas | Board notices are world space; the banner sits on its own nested canvas, with no layout groups and raycasts off |
 | The font lacks a glyph | TMP fallback font; keep notice wording plain ASCII |
-| Seams in joined-up script during the wipe | Pick the font with the wipe in mind; the banner can use the mask wipe |
+| Seams in joined-up script during the wipe | Pick the font with the wipe in mind (the soft edge of the ragged wipe also hides small seams) |
+| The custom shader is fiddly (TMP's SDF shader is large) | Phase 1 ships the plain wipe on the stock shader first; the shader is a drop-in material swap after |
 
 ## 10. Open questions
 
-1. **Font.** It must be free to ship. Candidates under the SIL Open Font License: Caveat, Patrick Hand,
-   Gochi Hand, Kalam. Pick by look; it must read at small sizes on a phone.
+1. ~~**Font.**~~ **DECISION (owner): Patrick Hand** (SIL Open Font License, Google Fonts). Picked over
+   Caveat, Gochi Hand and Kalam: it reads best at phone sizes, and its letters don't join, so the
+   wipe shows no seams. Ships with its OFL licence text beside the `.ttf`.
 2. **Pierce from a Snipe.** Does a Snipe arming a ball get the `pierce!` notice too, or only a tap
    arming?
 3. **Under the pause menu.** Do notices already writing keep going, or freeze with the game?

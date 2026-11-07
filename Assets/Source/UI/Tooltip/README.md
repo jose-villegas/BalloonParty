@@ -8,7 +8,7 @@ the wording.
 
 | File | What it does |
 |---|---|
-| `TooltipBanner` | `MonoBehaviour` view on the `Tooltip` prefab (in `GameCanvas`). Subscribes to `TooltipMessage` and shows its text: fades its `CanvasGroup` to `_visibleAlpha`, holds for `_holdDuration`, fades out. A new line replaces the one showing and restarts the timing; an empty one shows nothing. The tween runs on unscaled time, since lines land during slow-motion beats and frozen screens. It also words `BonusCardDealtMessage` with `_bonusCardFormat` and holds it until navigation is back in `Game`: the card is dealt during the retry's reset, while the game-over screen is still up. Injected via `RegisterComponentInHierarchy<TooltipBanner>` in `GameLifetimeScope` |
+| `TooltipBanner` | `MonoBehaviour` view on the `Tooltip` prefab (in `GameCanvas`). Subscribes to `TooltipMessage` and shows its text: fades its `CanvasGroup` to `_visibleAlpha`, holds for `_holdDuration`, fades out. A new line replaces the one showing and restarts the timing; an empty one shows nothing. With `_writeOn` assigned (a `UI/Notices/WriteOnText` on the label, as on the prefab) each line is written on in pencil instead of appearing whole, and the hold is lengthened by the write's `Duration`. The tween runs on unscaled time, since lines land during slow-motion beats and frozen screens. It also words `BonusCardDealtMessage` with `_bonusCardFormat` and holds it until navigation is back in `Game`: the card is dealt during the retry's reset, while the game-over screen is still up. Injected via `RegisterComponentInHierarchy<TooltipBanner>` in `GameLifetimeScope` |
 | `Shared/Messages/TooltipMessage` | The line to show. Registered as a MessagePipe broker in `GameLifetimeScope` |
 | `Shared/Extensions/StringFormatExtensions` | `FormatOrRaw`: formats an editor-authored string, returning it as written when it's malformed, so a typo in a format never throws mid-flow |
 
@@ -22,5 +22,5 @@ the wording.
 ## Wiring requirements
 
 - `_group` and `_label` must be assigned; the prefab assigns the `Banner` child's `CanvasGroup` and
-  its `Text (TMP)`.
+  its `Text (TMP)`. `_writeOn` is optional; the prefab assigns the `WriteOnText` on that label.
 - The `CanvasGroup` should not block raycasts: the tooltip sits over play and must never eat a tap.

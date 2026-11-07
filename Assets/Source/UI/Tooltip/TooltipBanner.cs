@@ -1,6 +1,7 @@
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
+using BalloonParty.UI.Notices;
 using DG.Tweening;
 using MessagePipe;
 using TMPro;
@@ -19,6 +20,9 @@ namespace BalloonParty.UI.Tooltip
     {
         [SerializeField] private CanvasGroup _group;
         [SerializeField] private TMP_Text _label;
+
+        [Tooltip("Optional: writes each line on in pencil, on _label. Unassigned, a line appears whole.")]
+        [SerializeField] private WriteOnText _writeOn;
         [SerializeField] [Min(0f)] private float _fadeDuration = 0.3f;
         [SerializeField] [Min(0f)] private float _holdDuration = 1.6f;
         [SerializeField] [Range(0f, 1f)] private float _visibleAlpha = 0.7f;
@@ -81,12 +85,23 @@ namespace BalloonParty.UI.Tooltip
             }
 
             _sequence?.Kill();
-            _label.text = text;
+
+            // Lengthened by the write, so a line still gets its full hold once it is written.
+            var hold = _holdDuration;
+            if (_writeOn != null)
+            {
+                _writeOn.Write(text);
+                hold += _writeOn.Duration;
+            }
+            else
+            {
+                _label.text = text;
+            }
 
             // Unscaled: the lines land in slow-motion beats and frozen screens.
             _sequence = DOTween.Sequence()
                 .Append(_group.DOFade(_visibleAlpha, _fadeDuration))
-                .AppendInterval(_holdDuration)
+                .AppendInterval(hold)
                 .Append(_group.DOFade(0f, _fadeDuration))
                 .SetUpdate(true);
         }

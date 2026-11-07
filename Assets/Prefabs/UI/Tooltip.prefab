@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 699999095658122449}
   - component: {fileID: 7782064853698442861}
   - component: {fileID: 7610147346401824726}
+  - component: {fileID: 6497251754600260950}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -137,6 +138,26 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &6497251754600260950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2384293361735814439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a08fa185cdbd4071b3ba97d30a1daff6, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.Notices.WriteOnText
+  _text: {fileID: 7610147346401824726}
+  _tip: {fileID: 0}
+  _secondsPerCharacter: 0.07
+  _edgeSoftness: 0.8
+  _slant: 0.35
+  _tipHeight: 0.35
+  _tipWobble: 0.06
+  _tipWobbleSpeed: 40
 --- !u!1 &5970238015647049437
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,6 +262,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.Tooltip.TooltipBanner
   _group: {fileID: 6892919829937505524}
   _label: {fileID: 7610147346401824726}
+  _writeOn: {fileID: 6497251754600260950}
   _fadeDuration: 0.3
   _holdDuration: 1.6
   _visibleAlpha: 0.7
