@@ -12,6 +12,18 @@ namespace BalloonParty.Tests.Shared
             Assert.AreEqual("Level 4", "Level {0}".FormatOrRaw(4));
         }
 
+        [Test]
+        public void FormatOrRaw_SeveralArguments_SubstitutesEach()
+        {
+            Assert.AreEqual("Level 3: Quick Hands", "Level {0}: {1}".FormatOrRaw(3, "Quick Hands"));
+        }
+
+        [Test]
+        public void FormatOrRaw_AFormatThatSkipsAnArgument_Substitutes()
+        {
+            Assert.AreEqual("Level 3", "Level {0}".FormatOrRaw(3, "Quick Hands"));
+        }
+
         [TestCase("Level {")]
         [TestCase("Level {1}")]
         public void FormatOrRaw_AMalformedFormat_ComesBackAsWritten(string format)

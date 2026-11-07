@@ -16,7 +16,7 @@ the wording.
 
 | Publisher | When | Text |
 |---|---|---|
-| `LevelUpPopUp` | A level-up that deals no cards passes in play (see `UI/LevelUp/README.md`) | `_inPlayTooltipFormat` on the popup, `Level {0}` |
+| `LevelUpPopUp` | A level-up passes in play (see `UI/LevelUp/README.md`) | `_inPlayTooltipFormat` on the popup, `Level {0}`; on a card level-up `_inPlayCardTooltipFormat`, `Level {0}: {1}` with the card taken |
 | `TooltipBanner` itself | A retry bought with a rewarded ad resumes play with its bonus card (`BonusCardDealtMessage` from `Game/Upgrades/RunUpgrades`) | `_bonusCardFormat` on the banner, `Bonus card: {0}` |
 
 ## Wiring requirements

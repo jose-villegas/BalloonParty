@@ -1,15 +1,16 @@
 # UI/LevelUp
 
 The full-screen level-up ceremony that plays when all color bars complete, and where upgrade cards
-are picked. Only a level-up that deals cards shows it; every other level-up passes in play (see
-*Card level-ups and in-play level-ups* below).
+are picked. It's switched off for now (`_pickScreen`, off on the prefab): it stopped play, so every
+level-up passes in play and a card level-up takes its first card dealt (see *Card level-ups and
+in-play level-ups* below). The pick screen is banked for later.
 
 ## Contents
 
 | File | What it does |
 |---|---|
 | `LevelUpLifetimeScope` | VContainer child scope on the LevelUp popup root; registers `LevelUpPopUp` and a `CinematicEndGate(LevelCompleteHit)` by concrete type (not `.As<IReadyGate>()`) so the popup names the exact gate it waits on, plus `RegisterMetricLabels(this)` (see `UI/Telemetry/`), which binds any `MetricLabel` under the popup to `ILevelMetricsView` and no-ops when there are none |
-| `LevelUpPopUp` | Holds a `PauseService` pause while it waits for the level-complete hit cinematic to end (via an injected `CinematicEndGate`). On a level-up that deals no cards it then dismisses at once. Otherwise it freezes time via `TimeScaleService`, shows the popup with the new and previous level numbers, spawns fill trails from each `ColorProgressBar` to the level fill, shows `IUpgradeDraft.Offer` in its `UpgradeCardView` slots, and publishes `LevelUpDismissedMessage` once a card is picked |
+| `LevelUpPopUp` | Holds a `PauseService` pause while it waits for the level-complete hit cinematic to end (via an injected `CinematicEndGate`). With `_pickScreen` off, or on a level-up that deals no cards, it then dismisses at once, taking the first card dealt if there is one. Otherwise it freezes time via `TimeScaleService`, shows the popup with the new and previous level numbers, spawns fill trails from each `ColorProgressBar` to the level fill, shows `IUpgradeDraft.Offer` in its `UpgradeCardView` slots, and publishes `LevelUpDismissedMessage` once a card is picked |
 | `UpgradeCardView` | One card slot: a `Button` with title and description labels and an optional held-count label (`1/3`). Shows a dealt card and reports its slot index when tapped; the popup forwards the slot to `IUpgradeDraft.Pick`. `IsWired` is false while a required reference is unassigned, and the popup skips such a slot |
 
 ## How it works
@@ -67,14 +68,18 @@ that starts a newer show. A show that is stale (a newer one started, or the phas
 on a ceremony that isn't pending. Pauses are counted per source, so a stale show never releases a
 newer one's.
 
-An empty hand (every level-up but each `CardEveryLevels`th, see `Game/Upgrades/README.md`) means no
-screen: it shows `Level N` in the on-screen tooltip (`TooltipMessage`, formatted by
-`_inPlayTooltipFormat`; see `UI/Tooltip/README.md`), publishes `LevelUpDismissedMessage(passedInPlay: true)`
-and releases its pause, with no freeze, no animator and no fill trails, and the Ascent follows as usual. The colour bars reset on
+With `_pickScreen` off (the prefab's setting), or on an empty hand (every level-up but each
+`CardEveryLevels`th, see `Game/Upgrades/README.md`), there is no screen. `PassInPlay` takes the hand's
+first card through `IUpgradeDraft.Pick(0)` when one was dealt (the deal is already a draw by weight),
+shows the on-screen tooltip (`TooltipMessage`; see `UI/Tooltip/README.md`), `Level N` by
+`_inPlayTooltipFormat` or `Level N: Card` by `_inPlayCardTooltipFormat`, publishes
+`LevelUpDismissedMessage(passedInPlay: true)` and releases its pause, with no freeze, no animator and
+no fill trails, and the Ascent follows as usual. The pick comes before the dismissal: the dismissal
+is what holds it, and it closes the hand. The colour bars reset on
 that dismissal without the drain, and `ProgressionSoundRouter` skips the confirm sound, which is the
 popup's button.
 
-A non-empty hand shows the popup as described above. When the fill completes, the cards are shown in
+With `_pickScreen` on, a non-empty hand shows the popup as described above. When the fill completes, the cards are shown in
 `_cardViews` in order (a slot beyond the hand, or one not `IsWired`, is hidden) and Continue stays
 locked: only a pick closes the popup, through `IUpgradeDraft.Pick(slot)` and then the same hide and
 `Resume()` as Continue. With no wired card slot, Continue stays the way out and picks the first card

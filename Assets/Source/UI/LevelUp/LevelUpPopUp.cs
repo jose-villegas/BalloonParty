@@ -96,6 +96,11 @@ namespace BalloonParty.UI.LevelUp
         [SerializeField] private float _fillTargetMaxAngle = 360f;
 
         [Header("Upgrade Cards")]
+        [Tooltip("Stop play on a level-up that deals cards and show this popup with the cards to pick from. " +
+            "Off, every level-up passes in play: the first card dealt (a draw by weight) is taken and named " +
+            "in the tooltip.")]
+        [SerializeField] private bool _pickScreen;
+
         [Tooltip("The card slots a pick deals into, in order. Shown once the fill completes on a level-up " +
             "that deals cards; a pick closes the popup in place of Continue. Unassigned, Continue takes the " +
             "first card dealt.")]
@@ -105,6 +110,10 @@ namespace BalloonParty.UI.LevelUp
         [Tooltip("The tooltip a level-up that deals no cards shows as it passes in play; {0} is the level " +
             "entered.")]
         [SerializeField] private string _inPlayTooltipFormat = "Level {0}";
+
+        [Tooltip("The tooltip a card level-up shows as it passes in play; {0} is the level entered, {1} the " +
+            "card taken.")]
+        [SerializeField] private string _inPlayCardTooltipFormat = "Level {0}: {1}";
 
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         [Inject] private IPublisher<LevelUpDismissedMessage> _dismissedPublisher;
@@ -201,12 +210,11 @@ namespace BalloonParty.UI.LevelUp
                 return;
             }
 
-            // A level-up that deals no cards passes in play: the hit beat has played, and the Ascent
-            // follows with no screen and no freeze.
-            if (_draft.Offer.Count == 0)
+            // Without the pick screen every level-up passes in play: the hit beat has played, and the
+            // Ascent follows with no screen and no freeze.
+            if (_draft.Offer.Count == 0 || !_pickScreen)
             {
-                Resume(passedInPlay: true);
-                ShowTooltip(_inPlayTooltipFormat.FormatOrRaw(msg.NewLevel));
+                PassInPlay(msg.NewLevel);
                 return;
             }
 
@@ -562,6 +570,20 @@ namespace BalloonParty.UI.LevelUp
 
             _warnedUnwired = true;
             Log.Warn("LevelUp", "No wired card slots on the level-up popup; Continue takes the first card dealt");
+        }
+
+        // A card level-up takes the hand's first card, already a draw by weight. Picked before the
+        // dismissal: that's what holds the pick, and it closes the hand.
+        private void PassInPlay(int newLevel)
+        {
+            var tooltip = _inPlayTooltipFormat.FormatOrRaw(newLevel);
+            if (_draft.Offer.Count > 0 && _draft.Pick(0))
+            {
+                tooltip = _inPlayCardTooltipFormat.FormatOrRaw(newLevel, _draft.Offer[0].Title);
+            }
+
+            Resume(passedInPlay: true);
+            ShowTooltip(tooltip);
         }
 
         private void ShowTooltip(string text)

@@ -1,7 +1,9 @@
 # Game/Upgrades
 
-Upgrade cards: the run's source of power. Every few level-ups the level-up popup deals a hand of
-cards, the player picks one, and it stays for the rest of the run. Pressure grows with level (the
+Upgrade cards: the run's source of power. Every few level-ups a hand of cards is dealt and one card
+is taken, which stays for the rest of the run. For now the level-up takes the hand's first card in play and
+names it in the tooltip; the pick screen that lets the player choose is switched off because it
+stopped play (see `UI/LevelUp/README.md`). Pressure grows with level (the
 spawn clock, the level budget); power grows only with the player's picks. The ball cap in
 particular never rises with level, only through a card.
 
@@ -58,7 +60,8 @@ So a card is held only once the level that dealt it is completed. That is what l
 ones held when the lost level began.
 
 A level-up deals cards when `(newLevel − 1)` is a multiple of `CardEveryLevels`: with 2, entering
-levels 3, 5, 7 and so on. Every other level-up passes with no screen (see `UI/LevelUp/README.md`).
+levels 3, 5, 7 and so on. For now every level-up passes in play, and a card level-up takes the hand's first card, already the
+first draw by weight (see `UI/LevelUp/README.md`).
 0 turns cards off.
 
 The hand is drawn by weight (`WeightedPickExtensions.PickWeightedIndex`), without repeats, from the
