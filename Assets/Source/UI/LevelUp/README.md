@@ -85,6 +85,8 @@ dealt, with one warning per session, so an unwired popup still levels up and sti
 - Registered in `LevelUpLifetimeScope` via `RegisterComponentInHierarchy<LevelUpPopUp>()`.
 - `_cardViews`: one `UpgradeCardView` per card dealt (3 by default), each above the full-screen
   Continue button so its taps reach it. A card may start inactive: it binds its button on first show.
+  **Tools > BalloonParty > Level Up > Build Upgrade Card Slots** builds a row of three under the
+  panel, copied from the Continue button, and assigns them; restyle the row by hand from there.
 - `_levelFill` and `_fillTargetArea` must be **different** objects (see below). `_continueButton`,
   `_previousLevelLabel`, `_statsRevealCover` and `_statContainers` are all optional — unassigned, each
   simply drops its part of the ceremony rather than breaking it.

@@ -7,6 +7,7 @@
         "NaughtyAttributes.Editor",
         "Unity.2D.Sprite.Editor",
         "Unity.RenderPipelines.Universal.Runtime",
+        "Unity.TextMeshPro",
         "VContainer",
         "UniRx",
         "com.balloonparty.editorui.Editor"

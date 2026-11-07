@@ -584,6 +584,32 @@ namespace BalloonParty.X
 }
 """, [])
 
+expect_lines("asset-cache: config SO lookup flagged", "config-asset-cache", """\
+internal static class C
+{
+    private static void F()
+    {
+        foreach (var guid in AssetDatabase.FindAssets("t:RunConfig"))
+        {
+            var asset = AssetDatabase.LoadAssetAtPath<RunConfig>(AssetDatabase.GUIDToAssetPath(guid));
+        }
+    }
+}
+""", [5], path="Editor/C.cs")
+
+expect_lines("asset-cache: prefab lookup exempt (the cache holds only SOs)", "config-asset-cache", """\
+internal static class C
+{
+    private static void F()
+    {
+        foreach (var guid in AssetDatabase.FindAssets("LevelUp t:Prefab"))
+        {
+            var asset = AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(guid));
+        }
+    }
+}
+""", [], path="Editor/C.cs")
+
 expect_lines("timescale: TimeScaleService itself exempt", "timescale-writes", """\
 namespace BalloonParty.Shared.Pause
 {

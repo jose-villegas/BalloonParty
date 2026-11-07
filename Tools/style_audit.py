@@ -1438,7 +1438,8 @@ def check_config_asset_cache(path: Path, lines: list[str], result: AuditResult):
     Flags FindAssets("t:TypeName") followed by LoadAssetAtPath within a short
     window — the telltale sign of a manual config-SO lookup that should use
     EditorAssetCache<T>.  Standalone FindAssets calls iterating many assets
-    (e.g. t:Texture2D) are intentionally excluded.
+    (e.g. t:Texture2D) are intentionally excluded, and so are t:Prefab lookups:
+    EditorAssetCache<T> only holds ScriptableObjects, so a prefab has no cache to use.
     """
     if path.name == "EditorAssetCache.cs":
         return
@@ -1446,7 +1447,7 @@ def check_config_asset_cache(path: Path, lines: list[str], result: AuditResult):
     if not is_in_editor(path):
         return
 
-    find_re = re.compile(r'AssetDatabase\.FindAssets\s*\(\s*["\$].*t:')
+    find_re = re.compile(r'AssetDatabase\.FindAssets\s*\(\s*["\$].*t:(?!Prefab\b)')
     load_re = re.compile(r'AssetDatabase\.LoadAssetAtPath\s*<')
 
     WINDOW = 15
