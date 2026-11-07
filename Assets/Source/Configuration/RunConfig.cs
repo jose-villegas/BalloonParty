@@ -8,7 +8,12 @@ namespace BalloonParty.Configuration
     {
         [Header("Run")]
         [SerializeField] private int _startingHitPoints = 3;
-        [SerializeField] private int _maxRetries = 1;
+        [Tooltip("Retries at the level reached, per run. 0 (or less) = unlimited.")]
+        [SerializeField] private int _maxRetries;
+
+        [Tooltip("Free retries per run; each retry after them needs a rewarded ad. 0 = retries never " +
+                 "need an ad. No ad SDK yet: the stand-in counts every ad as watched.")]
+        [SerializeField] [Min(0)] private int _retriesBeforeAd;
 
         [Tooltip("Off makes items the only source of shields — the streak stops granting them. " +
             "A balance experiment: leave it on for current behaviour.")]
@@ -34,6 +39,7 @@ namespace BalloonParty.Configuration
 
         public int StartingHitPoints => _startingHitPoints;
         public int MaxRetries => _maxRetries;
+        public int RetriesBeforeAd => Mathf.Max(0, _retriesBeforeAd);
         public bool StreakGrantsShields => _streakGrantsShields;
         public bool PlanShieldChains => _planShieldChains;
         public IShieldChainSettings ShieldChain => _shieldChain;

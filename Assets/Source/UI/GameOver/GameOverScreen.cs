@@ -1,3 +1,4 @@
+using System.Threading;
 using BalloonParty.Game.Run;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
@@ -26,8 +27,7 @@ namespace BalloonParty.UI.GameOver
 
         [Inject] private ISubscriber<GameOverMessage> _gameOverSubscriber;
         [Inject] private IRunMeta _runMeta;
-        [Inject] private IRetryState _retryState;
-        [Inject] private RetryTracker _retryTracker;
+        [Inject] private IFailureOffers _failureOffers;
         [Inject] private IPublisher<GameOverDismissedMessage> _dismissedPublisher;
         [Inject] private GameOverPresentationGate _presentationGate;
 
@@ -37,6 +37,11 @@ namespace BalloonParty.UI.GameOver
         private FormattedLabel _bestLevel;
         private FormattedLabel _bestScore;
         private int _deathLevel;
+        private bool _claimingRetry;
+
+        // One per shown offer: cancelled when the screen dismisses or navigation leaves GameOver, so an ad
+        // still playing can't stage a retry for a screen that's gone.
+        private CancellationTokenSource _offerCts;
 
         private void Awake()
         {
@@ -58,36 +63,105 @@ namespace BalloonParty.UI.GameOver
             // Hide whenever we leave GameOver.
             Navigation.Current
                 .Where(state => state != NavigationState.GameOver)
-                .Subscribe(_ => SetVisible(false))
+                .Subscribe(_ =>
+                {
+                    CancelOffer();
+                    SetVisible(false);
+                })
                 .AddTo(this);
+        }
+
+        private void OnDestroy()
+        {
+            CancelOffer();
         }
 
         // Wired to the Restart button's onClick. Hides now; the restore cinematic then plays and
         // GameOverLossCinematic restarts the run once it ends — so the restart is deferred, not immediate.
         public void OnRestartPressed()
         {
-            SetVisible(false);
-            _dismissedPublisher.Publish(new GameOverDismissedMessage());
+            // A retry being claimed owns the screen: a second dismiss would restart mid-cinematic.
+            if (_claimingRetry)
+            {
+                return;
+            }
+
+            Dismiss();
         }
 
-        // Wired to the Try Again button's onClick. Prepares a retry at the death level then dismisses.
+        // Wired to the Try Again button's onClick. IFailureOffers settles the retry's cost (an ad once the
+        // free retries are used) and stages it; the screen then dismisses like Restart.
         public void OnRetryPressed()
         {
-            _retryTracker.PrepareRetry(_deathLevel);
-            SetVisible(false);
-            _dismissedPublisher.Publish(new GameOverDismissedMessage());
+            if (_claimingRetry || _offerCts == null)
+            {
+                return;
+            }
+
+            RetryAsync(_offerCts.Token).Forget();
         }
 
         // Labels are filled now; the reveal waits for the loss cinematic to open the gate.
         private void OnGameOver(GameOverMessage msg)
         {
+            CancelOffer();
+            _offerCts = CancellationTokenSource.CreateLinkedTokenSource(destroyCancellationToken);
             _deathLevel = msg.FinalLevel;
             _finalLevel.Set(msg.FinalLevel);
             _finalScore.Set(msg.FinalScore);
             _bestLevel.Set(_runMeta.BestLevel.Value);
             _bestScore.Set(_runMeta.BestScore.Value);
-            SetRetryButtonVisible(_retryState.RetriesRemaining > 0);
+            ShowRetryOffer(_failureOffers.Current);
             RevealAfterGateAsync().Forget();
+        }
+
+        private async UniTaskVoid RetryAsync(CancellationToken ct)
+        {
+            _claimingRetry = true;
+            _canvasGroup.interactable = false;
+            bool staged;
+            try
+            {
+                staged = await _failureOffers.TryRetryAsync(_deathLevel, ct);
+            }
+            finally
+            {
+                _claimingRetry = false;
+            }
+
+            if (ct.IsCancellationRequested)
+            {
+                return;
+            }
+
+            if (!staged)
+            {
+                // A skipped ad leaves the screen up with the same offer.
+                _canvasGroup.interactable = true;
+                ShowRetryOffer(_failureOffers.Current);
+                return;
+            }
+
+            Dismiss();
+        }
+
+        private void Dismiss()
+        {
+            CancelOffer();
+            SetVisible(false);
+            _dismissedPublisher.Publish(new GameOverDismissedMessage());
+        }
+
+        private void CancelOffer()
+        {
+            if (_offerCts == null)
+            {
+                return;
+            }
+
+            _offerCts.Cancel();
+            _offerCts.Dispose();
+            _offerCts = null;
         }
 
         private async UniTaskVoid RevealAfterGateAsync()
@@ -103,18 +177,33 @@ namespace BalloonParty.UI.GameOver
             _canvasGroup.blocksRaycasts = visible;
         }
 
-        private void SetRetryButtonVisible(bool visible)
+        private void ShowRetryOffer(FailureOffer offer)
         {
-            if (_retryButton == null)
+            SetRetryInteractable(offer.CanRetry);
+            if (_retryLabel == null)
             {
                 return;
             }
 
-            _retryButton.interactable = visible;
-
-            if (_retryLabel != null)
+            if (offer.RetryNeedsAd)
             {
-                _retryLabel.text = $"Retry ({_retryState.RetriesRemaining})";
+                _retryLabel.text = "Retry (ad)";
+            }
+            else if (offer.RetriesLeft < 0)
+            {
+                _retryLabel.text = "Retry";
+            }
+            else
+            {
+                _retryLabel.text = $"Retry ({offer.RetriesLeft})";
+            }
+        }
+
+        private void SetRetryInteractable(bool interactable)
+        {
+            if (_retryButton != null)
+            {
+                _retryButton.interactable = interactable;
             }
         }
     }

@@ -5,8 +5,13 @@ namespace BalloonParty.Shared
     {
         int StartingHitPoints { get; }
 
-        /// <summary>How many times the player may retry at the same level per run (0 = disabled).</summary>
+        /// <summary>How many times the player may retry at the level reached, per run (0 or less = unlimited).</summary>
         int MaxRetries { get; }
+
+        /// <summary>
+        ///     Free retries per run; every retry after them needs a rewarded ad (0 = retries never need one).
+        /// </summary>
+        int RetriesBeforeAd { get; }
 
         /// <summary>
         ///     Whether continuing a colour streak grants a projectile shield. Off makes items the only

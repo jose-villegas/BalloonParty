@@ -181,7 +181,10 @@ namespace BalloonParty.Game
             builder.Register<INavigation, NavigationService>(Lifetime.Singleton);
             builder.Register<ICinematicState, CinematicStateService>(Lifetime.Singleton);
             builder.Register<RunMeta>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
-            builder.Register<RetryTracker>(Lifetime.Singleton).AsSelf().As<IRetryState>().As<IRunResettable>();
+            builder.Register<RetryTracker>(Lifetime.Singleton)
+                .As<IRetryState>().As<IRetryStaging>().As<IRunResettable>();
+            builder.Register<IAdService, NoAdService>(Lifetime.Singleton);
+            builder.Register<IFailureOffers, FailureOffers>(Lifetime.Singleton);
 
 #if UNITY_ANDROID && !UNITY_EDITOR
             builder.Register<IThermalSource, AndroidThermalSource>(Lifetime.Singleton);

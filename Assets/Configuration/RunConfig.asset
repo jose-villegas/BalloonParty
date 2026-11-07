@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: RunConfig
   m_EditorClassIdentifier: 
   _startingHitPoints: 3
-  _maxRetries: 3
+  _maxRetries: 0
+  _retriesBeforeAd: 0
   _streakGrantsShields: 0
   _planShieldChains: 1
   _shieldChain:
