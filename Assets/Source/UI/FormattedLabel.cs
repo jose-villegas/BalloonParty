@@ -24,5 +24,13 @@ namespace BalloonParty.UI
                 _label.text = string.Format(_format, value);
             }
         }
+
+        public void Set(object first, object second)
+        {
+            if (_label != null)
+            {
+                _label.text = string.Format(_format, first, second);
+            }
+        }
     }
 }

@@ -366,6 +366,11 @@ namespace BalloonParty.Game
                     resolver.Inject(tint);
                 }
 
+                foreach (var specular in UnityEngine.Object.FindObjectsByType<TimeOfDaySpecular>())
+                {
+                    resolver.Inject(specular);
+                }
+
                 foreach (var reload in UnityEngine.Object.FindObjectsByType<ReloadHeadsUp>())
                 {
                     resolver.Inject(reload);
