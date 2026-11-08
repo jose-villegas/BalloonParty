@@ -7,7 +7,7 @@
 
 **Status:** Phase 1 built (the wallet, the drop and telemetry, see `Game/Coins/README.md`); phase 2
 (tuning) next. Decided with the owner: a card bought with coins applies to the
-retry at the level reached; coins are a saved wallet; they drop from pops from level 15 on; the
+retry at the level reached; coins are a saved wallet; they drop from pops from level 10 on; the
 counter sits bottom left and appears only once coins exist. Claude draws the art in the existing UI
 style (§7); the coin is drawn.
 
@@ -25,7 +25,7 @@ It is a second way to buy what the rewarded ad already buys (a bonus card for on
 
 ## 2. The loop
 
-1. From `CoinsFromLevel` (15) on, each balloon popped has a `CoinDropChance` of dropping a coin.
+1. From `CoinsFromLevel` (10) on, each balloon popped has a `CoinDropChance` of dropping a coin.
 2. The coin flies to the coin counter, like a score trail, and is added to the wallet when it lands.
 3. The wallet is saved, so coins carry over between runs and app restarts.
 4. On a loss, the game-over screen offers **Buy a card** next to Retry, priced at `CardPrice`
@@ -39,7 +39,7 @@ It is a second way to buy what the rewarded ad already buys (a bonus card for on
 
 | Rule | Why |
 |---|---|
-| Coins drop only from level `CoinsFromLevel` (15) on | They reward reaching the stretch where hearts go; earlier levels stay about learning the board |
+| Coins drop only from level `CoinsFromLevel` (10) on | They reward getting past the opening, where average skill starts losing hearts, so most players earn some; earlier levels stay about learning the board. 15 was the first pick, but too far: average skill barely reaches it |
 | Any pop can drop one, an item's blast included | "Per pop", as decided; big combos should feel rich |
 | A coin counts only once it lands in the counter | Same as score, so a loss mid-flight can't credit coins that never arrived on screen. Lands even through the game-over pan-in |
 | The wallet is saved on game over, on app pause and on quit, not on every coin | `PlayerPrefs.Save` is slow on mobile; `RunMeta` already saves this way |
@@ -56,7 +56,7 @@ Follows the codebase's MVC split: models and controllers are plain C#, only view
 
 | Piece | Where | Responsibility |
 |---|---|---|
-| `ICoinSettings` | `Shared/`, authored in `RunConfig` as `Coins` | `CoinsFromLevel` (15), `DropChance` (0.05); phase 4 adds `CardPrice` (25) and `CardsOffered` (3) |
+| `ICoinSettings` | `Shared/`, authored in `RunConfig` as `Coins` | `CoinsFromLevel` (10), `DropChance` (0.05); phase 4 adds `CardPrice` (25) and `CardsOffered` (3) |
 | `ICoinBalance` / `ICoinWallet` / `CoinWallet` | `Game/Coins/` | `ICoinBalance` is the read-only `Balance` views read; `ICoinWallet` adds `Add(int)` and `TrySpend(int)`. Loads from and saves to `PlayerPrefs` through `ICoinStore` (key beside `RunMeta`'s); `CoinWalletSaver` saves at the save points, and a spend saves at once |
 | `CoinDropController` | `Game/Coins/` | Subscribes `ActorHitMessage`; on a `Pop` at level ≥ `CoinsFromLevel`, rolls the drop (seeded from the level seed, so a retry of the same level drops the same way for the same pops) and publishes `CoinDroppedMessage(amount, worldPosition)`. `CoinCreditor` adds dropped coins to the wallet; phase 3 switches it to `CoinLandedMessage` |
 | `CoinTrailService` + view | `Game/Coins/`, `UI/` | Flies each dropped coin to the counter (reusing the score-trail flight), publishes `CoinLandedMessage`, on which `CoinCreditor` adds 1. Pooled like score trails. When the run ends or resets, coins still flying are credited at once, never dropped: the score trails' cancel-on-reset would destroy them |
@@ -84,6 +84,7 @@ run and per level, so the drop chance and the price can be tuned from runs (§8)
 | 3 | The coin flight, crediting on landing, and the bottom-left counter with its show rule | Drawn: the coin |
 | 4 | The shop on the game-over screen: `TryCardRetryAsync`, the shop hand, `CardShopView` | Yes: card frame, card icons, price chip |
 | 5 | Sounds for a coin landing and a purchase (`PLAN-Audio.md`) | Audio |
+| 6 | Luck levels (§10): the 4th colour, and later bubbles, rolled per level, with more coins on the harder rolls | A level-start banner |
 
 Each phase gets the reviewer pass before the next one starts.
 
@@ -131,6 +132,35 @@ next loss. Phase 2 checks this with runs and sets the shipped values.
 - Can a player buy more than one card for the same retry?
 - Should the price rise with each purchase in a run, to stop a large wallet from buying every
   retry?
-- Is level 15 right for average skill, which reached 14 in ten minutes in the last runs? Earning
-  from 12 would let average skill take part, and keep it a reward for depth.
 - Should coins also show in the main menu, so the wallet is visible between runs?
+
+## 10. Luck levels (proposal, after phase 2)
+
+> Raised by the owner 2026-11-08. Not designed in detail yet: this records the idea and what to
+> check before building it.
+
+Today every level from a depth on has everything that has unlocked. The idea: some of the biggest
+difficulty jumps become a matter of luck, rolled per level, so levels at the same depth differ, and
+the harder rolls pay more coins.
+
+| Piece | The roll | Why it's harder |
+|---|---|---|
+| The 4th colour | Some levels get it, some don't. The chance grows with depth, so rare early and usual late. Today it's a fixed step, in every level from 13 | More colours on the board means fewer matches per shot, and a level needs every colour's bar filled, so the goal grows too |
+| Bubble clusters | Some levels have them, some don't; now and then a bad-luck level has more bubbles than balloons | Bubbles take several hits, wash the ball's colour and break the streak. Waits for the merge (`PLAN-FutureIdeas.md` §5.1), since bubbles are withheld until then |
+| The scenario (sky or ground) | Each level-up ascent can move the scenario between sky and ground, either way; bushes appear only on ground levels. Designed in `PLAN-TerrainBiomes.md` | Bushes block shots and cap columns, so a ground level is a harder roll |
+
+Rules to keep:
+
+- **Rolled from the level's seed**, like the rest of the level, so a retry plays the same roll. Luck
+  decides the level, not the attempt, and a retry can't reroll an easier board.
+- **Paid in coins, never in score.** A harder roll raises the coin drop chance for that level
+  (×1.5 to ×2 to start), so the danger is the price of a better payout.
+- **Said at the level's start**, e.g. "4 colours: double coins". Without it a hard roll just
+  feels like bad luck; with it, it reads as a gamble the player was dealt.
+- **Bad luck stays rare and bounded.** A swarm level is the exception, and two in a row should be
+  rarer still, so a run isn't ended by the dice alone.
+
+Before building: measure the cost with the bot (hearts lost and level length on rolled-hard
+against normal levels at the same depth) and set each bonus so the risk pays. The general form is
+"not every level has everything": once the colour and bubbles work, the same roll can carry other
+pieces.

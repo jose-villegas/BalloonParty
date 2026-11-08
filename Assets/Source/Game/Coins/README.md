@@ -1,6 +1,6 @@
 # Coins
 
-A saved currency the player earns deep in a run: from level `CoinsFromLevel` (15) on, each pop
+A saved currency the player earns deep in a run: from level `CoinsFromLevel` (10) on, each pop
 has a `DropChance` (5 %) of dropping a coin. Coins carry over between runs and app restarts.
 They will be spent on the game-over screen for a card that helps the retry (not built yet; see
 `Plans/PLAN-Coins.md`).

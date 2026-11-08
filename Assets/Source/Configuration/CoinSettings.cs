@@ -9,7 +9,7 @@ namespace BalloonParty.Configuration
     internal class CoinSettings : ICoinSettings
     {
         [Tooltip("The first level whose pops can drop a coin.")]
-        [SerializeField] [Min(1)] private int _coinsFromLevel = 15;
+        [SerializeField] [Min(1)] private int _coinsFromLevel = 10;
 
         [Tooltip("The chance that one pop drops a coin. Any pop counts, an item's blast included.")]
         [SerializeField] [Range(0f, 1f)] private float _dropChance = 0.05f;
