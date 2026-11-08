@@ -214,7 +214,8 @@ namespace BalloonParty.Projectile.Controller
             {
                 projectile.ShieldsRemaining.Value++;
                 _shieldGainedPublisher.Publish(
-                    new ShieldGainedMessage(projectile, projectile.LastHitBalloon.SlotIndex.Value));
+                    new ShieldGainedMessage(projectile, projectile.LastHitBalloon.SlotIndex.Value,
+                        ShieldGainSource.Streak));
             }
 
             // The pop has already left the grid (dispatch routed it synchronously), but its slot index

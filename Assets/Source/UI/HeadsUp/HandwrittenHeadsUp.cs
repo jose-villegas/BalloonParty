@@ -37,6 +37,12 @@ namespace BalloonParty.UI.HeadsUp
         private float _baseFontSize;
         private FontStyles _baseFontStyle;
 
+        /// <summary>The line is written or still fading.</summary>
+        internal bool IsShowing => _group.alpha > 0f;
+
+        /// <summary>The box the last written ink covers, in the parent's space.</summary>
+        internal Rect InkRect { get; private set; }
+
         private void Awake()
         {
             _rect = (RectTransform)transform;
@@ -79,6 +85,14 @@ namespace BalloonParty.UI.HeadsUp
             }
 
             Write(text, localPosition);
+        }
+
+        /// <summary>Moves the written line, ink and all, to <paramref name="localPosition" /> in the parent's space.</summary>
+        internal void MoveTo(Vector2 localPosition)
+        {
+            var shift = localPosition - (Vector2)_rect.localPosition;
+            _rect.localPosition = localPosition;
+            InkRect = new Rect(InkRect.position + shift, InkRect.size);
         }
 
         /// <summary>Fades the line out now, if one is showing.</summary>
@@ -126,6 +140,11 @@ namespace BalloonParty.UI.HeadsUp
             _rect.localPosition = localPosition;
             _group.alpha = _visibleAlpha;
             _writeOn.Write(text);
+
+            // The write has built the mesh, so the bounds hold every character, faded-in or not.
+            var bounds = _label.textBounds;
+            var scale = (Vector2)_rect.localScale;
+            InkRect = new Rect(localPosition + Vector2.Scale(bounds.min, scale), Vector2.Scale(bounds.size, scale));
 
             // Unscaled, like the write itself: a heads-up must finish in slow-motion beats too.
             _sequence = DOTween.Sequence()

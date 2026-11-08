@@ -74,12 +74,14 @@ namespace BalloonParty.Projectile.Controller
                 return;
             }
 
-            _chainPublisher.Publish(new DeflectChainMessage(ball, chain, msg.WorldPosition));
-            if (DeflectChainRule.GrantsShield(chain, _runConfig.DeflectChainShieldEvery)
-                && ball is IWriteableProjectileModel writeable)
+            var writeable = ball as IWriteableProjectileModel;
+            var pays = writeable != null && DeflectChainRule.GrantsShield(chain, _runConfig.DeflectChainShieldEvery);
+            _chainPublisher.Publish(new DeflectChainMessage(ball, chain, msg.WorldPosition, pays));
+            if (pays)
             {
                 writeable.ShieldsRemaining.Value++;
-                _shieldGainedPublisher.Publish(new ShieldGainedMessage(ball, msg.Actor.SlotIndex));
+                _shieldGainedPublisher.Publish(
+                    new ShieldGainedMessage(ball, msg.Actor.SlotIndex, ShieldGainSource.Ricochet));
             }
         }
     }

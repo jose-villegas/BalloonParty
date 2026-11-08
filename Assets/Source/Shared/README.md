@@ -61,8 +61,8 @@ the exhaustive subscriber list when it matters.
 | `ItemCheckMessage` | `BalloonSpawner` (once per wave of lines, or once for the initial fill) | `ItemAssigner` — carries `Wave`, the count of waves this level, which the item cadence reads |
 | `ItemActivatedMessage` | `ItemActivator` | `BalloonController` — also carries the triggering projectile |
 | `ItemRotationCapturedMessage` | `BalloonController` | `LaserItemHandler` |
-| `ShieldGainedMessage` | `ShieldItemHandler`, `DeflectChainController` (a ricochet reward) | `ShieldTrailController`, `BounceHeadsUp` |
-| `DeflectChainMessage` | `DeflectChainController` (from the second deflect in a row) | `BounceHeadsUp` |
+| `ShieldGainedMessage` | `ShieldItemHandler`, `ProjectileHitResolver` (a streak reward), `DeflectChainController` (a ricochet reward); `Source` (`ShieldGainSource`) says which | `ShieldTrailController`, `BounceHeadsUp` |
+| `DeflectChainMessage` | `DeflectChainController` (from the second deflect in a row; `PaidShield` when this deflect earned a shield) | `BounceHeadsUp` |
 | `LevelUpAbandonedMessage` | `LevelController` | `ThrowerController` |
 | `ForceDestroyProjectileMessage` | `LevelController` | `ThrowerController` |
 

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Globalization;
 using BalloonParty.Projectile;
 using BalloonParty.Shared;
@@ -14,8 +15,11 @@ namespace BalloonParty.UI.HeadsUp
     /// <summary>
     ///     Writes how a ball's bounces go, where it happens: "+n bounce" where it picks up a shield (n counting
     ///     its pickups this flight), "-1 bounce" where a wall spends one, and "xn ricochet" where it deflects
-    ///     off balloons n times in a row without touching a wall. Each kind has its own
-    ///     <see cref="HeadsUpStyle" />, and the escalating ones grow with their count.
+    ///     off balloons n times in a row without touching a wall. A ricochet that earns the ball a shield
+    ///     writes the "+1 bounce" small under itself, in the pickup's colour, so the reward reads as coming
+    ///     from the ricochet rather than from a pickup nobody saw. Each kind has its own
+    ///     <see cref="HeadsUpStyle" />, and the escalating ones grow with their count. Lines still showing
+    ///     push a new one aside (<see cref="HeadsUpPacking" />), so a burst doesn't stack into one smudge.
     /// </summary>
     /// <remarks>
     ///     The colours follow the heads-up research in <c>UI/HeadsUp/README.md</c>: blue for a gain and plum
@@ -42,8 +46,17 @@ namespace BalloonParty.UI.HeadsUp
         [SerializeField] private string _ricochetFormat = "x{0} <i>ricochet</i>";
         [SerializeField] private HeadsUpStyle _ricochetStyle = new(Ink(0x8E3B8E), 1.1f, 0.25f, 1.6f, FontStyles.Bold);
 
+        [Tooltip("Written under a ricochet that earned the ball a shield, in the pickup style's colour.")]
+        [SerializeField] private string _ricochetRewardText = "+1 <i>bounce</i>";
+
+        [Tooltip("The reward's size against the ricochet line above it.")]
+        [SerializeField] [Range(0.3f, 1f)] private float _ricochetRewardScale = 0.65f;
+
         [Tooltip("World units from where it happened to the line's centre.")]
         [SerializeField] private Vector2 _worldOffset = new(0f, 0.25f);
+
+        [Tooltip("Clear space kept around each line when packing, as a share of the line's height.")]
+        [SerializeField] [Min(0f)] private float _packingGap = 0.15f;
 
         [Inject] private ISubscriber<ShieldGainedMessage> _shieldGainedSubscriber;
         [Inject] private ISubscriber<WallHitMessage> _wallHitSubscriber;
@@ -52,6 +65,7 @@ namespace BalloonParty.UI.HeadsUp
         [Inject] private SlotGrid _grid;
 
         private readonly ProjectileTally _pickups = new();
+        private readonly List<Rect> _occupied = new();
         private Canvas _canvas;
         private int _nextLine;
 
@@ -77,7 +91,14 @@ namespace BalloonParty.UI.HeadsUp
                 return;
             }
 
+            // Still counted, so the next pickup's "+n" counts every shield this flight; the ricochet's own
+            // line already says where this one came from.
             var count = _pickups.Record(msg.Projectile);
+            if (msg.Source == ShieldGainSource.Ricochet)
+            {
+                return;
+            }
+
             var text = string.Format(CultureInfo.InvariantCulture, _pickupFormat, count);
             Write(text, _grid.IndexToWorldPosition(msg.SlotIndex), _pickupStyle, count);
         }
@@ -91,6 +112,13 @@ namespace BalloonParty.UI.HeadsUp
         {
             // Sized from the first announced chain, so "x2" starts at the style's base size.
             var text = string.Format(CultureInfo.InvariantCulture, _ricochetFormat, msg.Count);
+            if (msg.PaidShield)
+            {
+                text += string.Format(CultureInfo.InvariantCulture, "\n<size={0:0}%><color=#{1}>{2}</color></size>",
+                    _ricochetRewardScale * 100f, ColorUtility.ToHtmlStringRGBA(_pickupStyle.Color),
+                    _ricochetRewardText);
+            }
+
             Write(text, msg.Position, _ricochetStyle, msg.Count - DeflectChainRule.MinChain + 1);
         }
 
@@ -110,12 +138,31 @@ namespace BalloonParty.UI.HeadsUp
             var line = _lines[_nextLine];
             _nextLine = (_nextLine + 1) % _lines.Length;
 
-            // Walls sit at the screen's edge: keep the whole line on screen rather than half off it.
             var parent = (RectTransform)line.transform.parent;
             var local = RectAnchorMath.GameWorldToLocalPoint(parent, _canvas, gameCamera,
                 worldPosition + (Vector3)_worldOffset);
-            var halfSize = ((RectTransform)line.transform).rect.size * 0.5f;
-            line.Show(text, RectAnchorMath.ClampInside(parent.rect, local, halfSize), style, count);
+            line.Show(text, local, style, count);
+            Pack(line, parent.rect);
+        }
+
+        // Written first so the ink's size is known, then moved: clear of the lines still showing where it can
+        // be, and wholly on screen (walls sit at the screen's edge).
+        private void Pack(HandwrittenHeadsUp line, Rect bounds)
+        {
+            _occupied.Clear();
+            foreach (var other in _lines)
+            {
+                if (other != line && other.IsShowing)
+                {
+                    _occupied.Add(other.InkRect);
+                }
+            }
+
+            var ink = line.InkRect;
+            var position = (Vector2)line.transform.localPosition;
+            var size = ink.size + Vector2.one * (ink.height * _packingGap);
+            var center = HeadsUpPacking.Place(bounds, ink.center, size, _occupied);
+            line.MoveTo(position + center - ink.center);
         }
     }
 }

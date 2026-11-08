@@ -93,6 +93,20 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
+        public void TheChainThatPays_SaysSo_AndItsShieldIsMarkedARicochet()
+        {
+            var ball = NewBall();
+
+            Deflect(ball);
+            Deflect(ball);
+            Deflect(ball);
+
+            Assert.IsFalse(_chains[0].PaidShield);
+            Assert.IsTrue(_chains[1].PaidShield);
+            Assert.AreEqual(ShieldGainSource.Ricochet, _shieldsGained[0].Source);
+        }
+
+        [Test]
         public void AWallBetweenDeflects_BreaksTheChain()
         {
             var ball = NewBall();
