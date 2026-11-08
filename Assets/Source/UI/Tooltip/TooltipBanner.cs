@@ -86,12 +86,13 @@ namespace BalloonParty.UI.Tooltip
 
             _sequence?.Kill();
 
-            // Lengthened by the write, so a line still gets its full hold once it is written.
+            // Written once the fade-in is done (a short line would otherwise be written while still
+            // nearly invisible), and the hold lengthened by the write so the line still gets its full hold.
             var hold = _holdDuration;
             if (_writeOn != null)
             {
-                _writeOn.Write(text);
-                hold += _writeOn.Duration;
+                _writeOn.Write(text, _fadeDuration);
+                hold += _writeOn.Duration - _fadeDuration;
             }
             else
             {

@@ -33,6 +33,15 @@ namespace BalloonParty.UI.Notices
             return Mathf.Clamp01((head - position) / softness);
         }
 
+        /// <summary>
+        ///     Where the head starts so that it reaches the first character after <paramref name="delaySeconds" />:
+        ///     behind 0 by the delay, in characters.
+        /// </summary>
+        internal static float StartHead(float delaySeconds, float secondsPerCharacter)
+        {
+            return secondsPerCharacter > 0f ? -Mathf.Max(0f, delaySeconds) / secondsPerCharacter : 0f;
+        }
+
         /// <summary>The head position at which every corner of <paramref name="characterCount" /> characters is fully revealed.</summary>
         internal static float EndHead(int characterCount, float softness)
         {

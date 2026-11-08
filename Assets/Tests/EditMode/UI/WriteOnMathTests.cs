@@ -57,6 +57,31 @@ namespace BalloonParty.Tests.UI
         }
 
         [Test]
+        public void StartHead_ADelay_ReachesTheFirstCharacterAfterIt()
+        {
+            const float secondsPerCharacter = 0.07f;
+            var head = WriteOnMath.StartHead(0.3f, secondsPerCharacter);
+
+            Assert.AreEqual(0f, head + 0.3f / secondsPerCharacter, 1e-4f);
+        }
+
+        [Test]
+        public void StartHead_DuringTheDelay_EveryCornerIsHidden()
+        {
+            var head = WriteOnMath.StartHead(0.3f, 0.07f);
+            var firstTop = WriteOnMath.CornerPosition(0, right: false, top: true, slant: 0.35f);
+
+            Assert.AreEqual(0f, WriteOnMath.RevealAlpha(head, firstTop, 0.8f), "a slanted top corner must not show early");
+        }
+
+        [Test]
+        public void StartHead_NoDelay_IsZero()
+        {
+            Assert.AreEqual(0f, WriteOnMath.StartHead(0f, 0.07f));
+            Assert.AreEqual(0f, WriteOnMath.StartHead(-1f, 0.07f));
+        }
+
+        [Test]
         public void EndHead_AtTheStart_EveryCornerIsHidden()
         {
             var firstBottom = WriteOnMath.CornerPosition(0, right: false, top: false, slant: 0.3f);

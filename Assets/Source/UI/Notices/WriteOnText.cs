@@ -39,11 +39,12 @@ namespace BalloonParty.UI.Notices
         private readonly List<Color32[]> _sourceColors = new();
 
         private float _head;
+        private float _startHead;
         private float _endHead;
         private bool _writing;
 
-        /// <summary>Seconds the last <see cref="Write" /> takes to finish.</summary>
-        public float Duration => _endHead * _secondsPerCharacter;
+        /// <summary>Seconds the last <see cref="Write" /> takes to finish, its delay included.</summary>
+        public float Duration => (_endHead - _startHead) * _secondsPerCharacter;
 
         private void Awake()
         {
@@ -79,8 +80,11 @@ namespace BalloonParty.UI.Notices
             TMPro_EventManager.TEXT_CHANGED_EVENT.Remove(OnTextChanged);
         }
 
-        /// <summary>Sets the text and starts writing it from nothing.</summary>
-        public void Write(string text)
+        /// <summary>
+        ///     Sets the text, hidden, and writes it on after <paramref name="delaySeconds" />: a label that
+        ///     fades in first waits for its fade, or a short line is written before it can be seen.
+        /// </summary>
+        public void Write(string text, float delaySeconds = 0f)
         {
             _text.SetText(text);
 
@@ -88,7 +92,8 @@ namespace BalloonParty.UI.Notices
             // written for a frame before the first tick.
             _text.ForceMeshUpdate();
             CaptureSourceColors();
-            _head = 0f;
+            _startHead = WriteOnMath.StartHead(delaySeconds, _secondsPerCharacter);
+            _head = _startHead;
             _endHead = WriteOnMath.EndHead(_text.textInfo.characterCount, _edgeSoftness);
             _writing = true;
             enabled = true;
