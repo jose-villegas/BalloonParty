@@ -114,7 +114,7 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Shared_1_1ICoinSettings.html'
 </div><!--header-->
 <div class="contents">
 
-<p>When coins drop. Coins reward reaching the deep levels, where hearts start to go.  
+<p>When coins drop, and how they fly to the counter. Coins reward reaching the deep levels.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Shared.ICoinSettings:</div>
@@ -132,9 +132,15 @@ Properties</h2></td></tr>
 <tr class="memitem:aebba0f2843a1daf3f075e411ef76913b" id="r_aebba0f2843a1daf3f075e411ef76913b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aebba0f2843a1daf3f075e411ef76913b">DropChance</a><code> [get]</code></td></tr>
 <tr class="memdesc:aebba0f2843a1daf3f075e411ef76913b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The chance, 0 to 1, that one pop drops a coin.  <br /></td></tr>
 <tr class="separator:aebba0f2843a1daf3f075e411ef76913b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a211d3f4c086d366aad2007c68dcb8f33" id="r_a211d3f4c086d366aad2007c68dcb8f33"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a211d3f4c086d366aad2007c68dcb8f33">TrailDuration</a><code> [get]</code></td></tr>
+<tr class="memdesc:a211d3f4c086d366aad2007c68dcb8f33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds a dropped coin takes to fly from the pop to the counter.  <br /></td></tr>
+<tr class="separator:a211d3f4c086d366aad2007c68dcb8f33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e9e71a28edf5db138cf3ab30079f31c" id="r_a0e9e71a28edf5db138cf3ab30079f31c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e9e71a28edf5db138cf3ab30079f31c">TrailPrewarm</a><code> [get]</code></td></tr>
+<tr class="memdesc:a0e9e71a28edf5db138cf3ab30079f31c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Coin trails pooled ahead of the first drop, so the first coins never instantiate mid-play.  <br /></td></tr>
+<tr class="separator:a0e9e71a28edf5db138cf3ab30079f31c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>When coins drop. Coins reward reaching the deep levels, where hearts start to go. </p>
+<div class="textblock"><p>When coins drop, and how they fly to the counter. Coins reward reaching the deep levels. </p>
 </div><h2 class="groupheader">Property Documentation</h2>
 <a id="ad8f1349573606210532aa2b440ded984" name="ad8f1349573606210532aa2b440ded984"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad8f1349573606210532aa2b440ded984">&#9670;&#160;</a></span>CoinsFromLevel</h2>
@@ -185,6 +191,58 @@ Properties</h2></td></tr>
 <p>The chance, 0 to 1, that one pop drops a coin. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CoinSettings.html#ad351dbc89137532b0b707746ffcf3327">BalloonParty.Configuration.CoinSettings</a>.</p>
+
+</div>
+</div>
+<a id="a211d3f4c086d366aad2007c68dcb8f33" name="a211d3f4c086d366aad2007c68dcb8f33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a211d3f4c086d366aad2007c68dcb8f33">&#9670;&#160;</a></span>TrailDuration</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Shared.ICoinSettings.TrailDuration</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds a dropped coin takes to fly from the pop to the counter. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CoinSettings.html#adb8b4fe6753437e180b1f259048696fd">BalloonParty.Configuration.CoinSettings</a>.</p>
+
+</div>
+</div>
+<a id="a0e9e71a28edf5db138cf3ab30079f31c" name="a0e9e71a28edf5db138cf3ab30079f31c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e9e71a28edf5db138cf3ab30079f31c">&#9670;&#160;</a></span>TrailPrewarm</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Shared.ICoinSettings.TrailPrewarm</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Coin trails pooled ahead of the first drop, so the first coins never instantiate mid-play. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CoinSettings.html#a1551f4d5f5000a019ff87699a91e1083">BalloonParty.Configuration.CoinSettings</a>.</p>
 
 </div>
 </div>

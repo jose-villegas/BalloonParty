@@ -128,6 +128,7 @@ What this diagram shows</h2>
 <li><code>LevelUpLifetimeScope</code> — level-up popup; registers <code>LevelUpPopUp</code> and the <code>CinematicEndGate</code> ready-gate (the cinematic producers and <code>CinematicDirector</code> live in <code>GameLifetimeScope</code>)</li>
 <li><code>ShieldUILifetimeScope</code> — shield HUD; registers the shield counter labels and <code>ShieldCounterAnimation</code></li>
 <li><code>HealthUILifetimeScope</code> — health HUD; binds <code>HealthCounterLabel</code> views, registers <code>HeartTrailController</code> and the heart trail endpoint</li>
+<li><code>CoinUILifetimeScope</code> — coin counter; binds <code>CoinCounterLabel</code> to the balance and registers <code>CoinCounterView</code></li>
 <li><code>DangerUILifetimeScope</code> — danger overlay; binds <code>DangerGradientView</code> to the danger level</li>
 <li><code>GameOverLifetimeScope</code> — game-over panel; a scope shell with no local registrations (hierarchy injection only)</li>
 </ul>

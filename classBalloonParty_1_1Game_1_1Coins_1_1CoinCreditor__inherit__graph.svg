@@ -22,7 +22,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Adds coins to the wallet.">
+<g id="a_Node000001"><a xlink:title="Adds coins to the wallet when they land in the counter (CoinLandedMessage), not when the pop drops th...">
 <polygon fill="#999999" stroke="#666666" points="146,-30 4,-30 4,0 146,0 146,-30"/>
 <text text-anchor="start" x="12" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.Coins.</text>
 <text text-anchor="middle" x="75" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">CoinCreditor</text>

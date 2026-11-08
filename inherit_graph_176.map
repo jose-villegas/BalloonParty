@@ -1,5 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Game_1_1Coins_1_1ICoinStore.html" title="Where the wallet&#39;s balance is kept between sessions." alt="" coords="5,5,195,45"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html" title="Keeps the balance in PlayerPrefs, beside the best run (see RunMeta)." alt="" coords="243,5,432,45"/>
-<area shape="poly" id="edge96_Node000000_Node000001" title=" " alt="" coords="208,23,243,23,243,28,208,28"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Game_1_1Coins_1_1ICoinBalance.html" title="The player&#39;s coin balance, read&#45;only: what views and tools inject." alt="" coords="5,5,195,45"/>
+<area shape="rect" id="Node000001" href="$interfaceBalloonParty_1_1Game_1_1Coins_1_1ICoinWallet.html" title="The player&#39;s coins, kept across runs and app restarts." alt="" coords="243,5,432,45"/>
+<area shape="poly" id="edge93_Node000000_Node000001" title=" " alt="" coords="208,23,243,23,243,28,208,28"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Coins_1_1CoinWallet.html" title=" " alt="" coords="480,37,669,77"/>
+<area shape="poly" id="edge94_Node000001_Node000002" title=" " alt="" coords="446,37,480,42,479,47,445,43"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Coins_1_1ICoinWalletPersistence.html" title="Writes the wallet to storage. Only CoinWalletSaver uses it." alt="" coords="243,69,432,109"/>
+<area shape="poly" id="edge95_Node000003_Node000002" title=" " alt="" coords="445,72,479,67,480,73,446,77"/>
 </map>

@@ -79,7 +79,9 @@ var hierarchy =
     [ "BalloonParty.Shared.CircleContact", "classBalloonParty_1_1Shared_1_1CircleContact.html", null ],
     [ "BalloonParty.Editor.CloudNoiseTextureGenerator", "classBalloonParty_1_1Editor_1_1CloudNoiseTextureGenerator.html", null ],
     [ "BalloonParty.Slots.Actor.ClusterSlotSelectionStrategy.ClusterFill", "classBalloonParty_1_1Slots_1_1Actor_1_1ClusterSlotSelectionStrategy_1_1ClusterFill.html", null ],
+    [ "BalloonParty.Editor.CoinCounterBuilder", "classBalloonParty_1_1Editor_1_1CoinCounterBuilder.html", null ],
     [ "BalloonParty.Shared.Messages.CoinDroppedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1CoinDroppedMessage.html", null ],
+    [ "BalloonParty.Shared.Messages.CoinLandedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1CoinLandedMessage.html", null ],
     [ "BalloonParty.Shared.Extensions.ColorableRendererExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1ColorableRendererExtensions.html", null ],
     [ "BalloonParty.Game.Telemetry.ColorCount", "structBalloonParty_1_1Game_1_1Telemetry_1_1ColorCount.html", null ],
     [ "BalloonParty.Shared.Rendering.ColorCycle", "classBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycle.html", null ],
@@ -281,6 +283,9 @@ var hierarchy =
         [ "BalloonParty.Game.Coins.CoinWallet", "classBalloonParty_1_1Game_1_1Coins_1_1CoinWallet.html", null ]
       ] ]
     ] ],
+    [ "BalloonParty.Game.Coins.ICoinCounterVisibility", "interfaceBalloonParty_1_1Game_1_1Coins_1_1ICoinCounterVisibility.html", [
+      [ "BalloonParty.Game.Coins.CoinCounterVisibility", "classBalloonParty_1_1Game_1_1Coins_1_1CoinCounterVisibility.html", null ]
+    ] ],
     [ "BalloonParty.Shared.ICoinSettings", "interfaceBalloonParty_1_1Shared_1_1ICoinSettings.html", [
       [ "BalloonParty.Configuration.CoinSettings", "classBalloonParty_1_1Configuration_1_1CoinSettings.html", null ]
     ] ],
@@ -354,8 +359,10 @@ var hierarchy =
       ] ],
       [ "BalloonParty.Game.Cinematics.CinematicCameraRig", "classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicCameraRig.html", null ],
       [ "BalloonParty.Game.Coins.AppSuspendSignal", "classBalloonParty_1_1Game_1_1Coins_1_1AppSuspendSignal.html", null ],
+      [ "BalloonParty.Game.Coins.CoinCounterVisibility", "classBalloonParty_1_1Game_1_1Coins_1_1CoinCounterVisibility.html", null ],
       [ "BalloonParty.Game.Coins.CoinCreditor", "classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html", null ],
       [ "BalloonParty.Game.Coins.CoinDropController", "classBalloonParty_1_1Game_1_1Coins_1_1CoinDropController.html", null ],
+      [ "BalloonParty.Game.Coins.CoinTrailService", "classBalloonParty_1_1Game_1_1Coins_1_1CoinTrailService.html", null ],
       [ "BalloonParty.Game.Coins.CoinWalletSaver", "classBalloonParty_1_1Game_1_1Coins_1_1CoinWalletSaver.html", null ],
       [ "BalloonParty.Game.Danger.SpaceDanger", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html", null ],
       [ "BalloonParty.Game.Flight.FlightStatsService", "classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html", null ],
@@ -520,6 +527,9 @@ var hierarchy =
     [ "BalloonParty.Item.IHostsSpinningItem", "interfaceBalloonParty_1_1Item_1_1IHostsSpinningItem.html", [
       [ "BalloonParty.Balloon.View.BalloonView", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html", null ]
     ] ],
+    [ "IInitializable", null, [
+      [ "BalloonParty.Game.Coins.CoinCounterVisibility", "classBalloonParty_1_1Game_1_1Coins_1_1CoinCounterVisibility.html", null ]
+    ] ],
     [ "BalloonParty.Item.IItem", "interfaceBalloonParty_1_1Item_1_1IItem.html", [
       [ "BalloonParty.Item.IBalloonItem", "interfaceBalloonParty_1_1Item_1_1IBalloonItem.html", [
         [ "BalloonParty.Item.Bomb.BombItemHandler", "classBalloonParty_1_1Item_1_1Bomb_1_1BombItemHandler.html", null ],
@@ -677,6 +687,7 @@ var hierarchy =
     [ "BalloonParty.UI.Binding.IReactiveBindable< T >", "interfaceBalloonParty_1_1UI_1_1Binding_1_1IReactiveBindable-1-g.html", [
       [ "BalloonParty.UI.Danger.DangerGradientView", "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html", null ],
       [ "BalloonParty.UI.ReactiveCounterLabel", "classBalloonParty_1_1UI_1_1ReactiveCounterLabel.html", [
+        [ "BalloonParty.UI.Coins.CoinCounterLabel", "classBalloonParty_1_1UI_1_1Coins_1_1CoinCounterLabel.html", null ],
         [ "BalloonParty.UI.Health.HealthCounterLabel", "classBalloonParty_1_1UI_1_1Health_1_1HealthCounterLabel.html", null ],
         [ "BalloonParty.UI.Score.ScoreCounterLabel", "classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html", null ],
         [ "BalloonParty.UI.Shields.ShieldCounterLabel", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterLabel.html", null ]
@@ -721,6 +732,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Spawner.SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html", null ],
       [ "BalloonParty.Game.Cinematics.HeartDrainCinematic", "classBalloonParty_1_1Game_1_1Cinematics_1_1HeartDrainCinematic.html", null ],
       [ "BalloonParty.Game.Coins.CoinDropController", "classBalloonParty_1_1Game_1_1Coins_1_1CoinDropController.html", null ],
+      [ "BalloonParty.Game.Coins.CoinTrailService", "classBalloonParty_1_1Game_1_1Coins_1_1CoinTrailService.html", null ],
       [ "BalloonParty.Game.Health.HeartTrailTracker", "classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html", null ],
       [ "BalloonParty.Game.Health.PlayerHealthController", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html", null ],
       [ "BalloonParty.Game.Level.LevelController", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html", null ],
@@ -882,6 +894,7 @@ var hierarchy =
       [ "BalloonParty.Game.Cinematics.CameraRigCinematicProducer", "classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematicProducer.html", null ],
       [ "BalloonParty.Game.Coins.CoinCreditor", "classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html", null ],
       [ "BalloonParty.Game.Coins.CoinDropController", "classBalloonParty_1_1Game_1_1Coins_1_1CoinDropController.html", null ],
+      [ "BalloonParty.Game.Coins.CoinTrailService", "classBalloonParty_1_1Game_1_1Coins_1_1CoinTrailService.html", null ],
       [ "BalloonParty.Game.Coins.CoinWalletSaver", "classBalloonParty_1_1Game_1_1Coins_1_1CoinWalletSaver.html", null ],
       [ "BalloonParty.Game.Danger.SpaceDanger", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html", null ],
       [ "BalloonParty.Game.Flight.FlightStatsService", "classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html", null ],
@@ -991,6 +1004,7 @@ var hierarchy =
       [ "BalloonParty.Item.LaserItemRotation", "classBalloonParty_1_1Item_1_1LaserItemRotation.html", null ]
     ] ],
     [ "BalloonParty.Slots.Actor.ITransitionOutgoingContent", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1ITransitionOutgoingContent.html", [
+      [ "BalloonParty.Game.Coins.CoinTrailService", "classBalloonParty_1_1Game_1_1Coins_1_1CoinTrailService.html", null ],
       [ "BalloonParty.Game.Score.ScoreTrailService", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html", null ],
       [ "BalloonParty.Slots.Actor.Cluster.ClusterViewController< TModel, TView, TSettings >", "classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterViewController-3-g.html", null ]
     ] ],
@@ -1051,6 +1065,7 @@ var hierarchy =
       [ "BalloonParty.Game.GameLifetimeScope", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html", null ],
       [ "BalloonParty.Game.LaunchLifetimeScope", "classBalloonParty_1_1Game_1_1LaunchLifetimeScope.html", null ],
       [ "BalloonParty.Thrower.ThrowerLifetimeScope", "classBalloonParty_1_1Thrower_1_1ThrowerLifetimeScope.html", null ],
+      [ "BalloonParty.UI.Coins.CoinUILifetimeScope", "classBalloonParty_1_1UI_1_1Coins_1_1CoinUILifetimeScope.html", null ],
       [ "BalloonParty.UI.Danger.DangerUILifetimeScope", "classBalloonParty_1_1UI_1_1Danger_1_1DangerUILifetimeScope.html", null ],
       [ "BalloonParty.UI.GameOver.GameOverLifetimeScope", "classBalloonParty_1_1UI_1_1GameOver_1_1GameOverLifetimeScope.html", null ],
       [ "BalloonParty.UI.Health.HealthUILifetimeScope", "classBalloonParty_1_1UI_1_1Health_1_1HealthUILifetimeScope.html", null ],
@@ -1148,6 +1163,7 @@ var hierarchy =
       [ "BalloonParty.Thrower.ThrowerView", "classBalloonParty_1_1Thrower_1_1ThrowerView.html", null ],
       [ "BalloonParty.UI.AnimatorGameEntryGate", "classBalloonParty_1_1UI_1_1AnimatorGameEntryGate.html", null ],
       [ "BalloonParty.UI.CanvasCameraBinder", "classBalloonParty_1_1UI_1_1CanvasCameraBinder.html", null ],
+      [ "BalloonParty.UI.Coins.CoinCounterView", "classBalloonParty_1_1UI_1_1Coins_1_1CoinCounterView.html", null ],
       [ "BalloonParty.UI.Danger.DangerGradientView", "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html", null ],
       [ "BalloonParty.UI.Danger.DangerHeartLossView", "classBalloonParty_1_1UI_1_1Danger_1_1DangerHeartLossView.html", null ],
       [ "BalloonParty.UI.FadeImage", "classBalloonParty_1_1UI_1_1FadeImage.html", null ],

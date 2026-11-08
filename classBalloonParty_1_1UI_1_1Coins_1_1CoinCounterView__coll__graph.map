@@ -1,0 +1,38 @@
+<map id="BalloonParty.UI.Coins.CoinCounterView" name="BalloonParty.UI.Coins.CoinCounterView">
+<area shape="rect" id="Node000001" title="The coin counter, bottom left: the coin icon and the balance." alt="" coords="991,238,1184,278"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="379,5,503,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="517,16,591,20,679,31,773,49,864,78,929,113,987,156,1036,200,1070,236,1066,239,1032,204,984,160,926,117,862,83,772,54,679,36,591,26,517,21"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html" title=" " alt="" coords="659,93,863,133"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="510,31,545,41,702,90,700,95,543,46,508,37"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="820,136,1042,235,1040,240,818,141"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="347,55,534,95"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="548,85,659,98,658,103,547,90"/>
+<area shape="rect" id="Node000005" href="$structBalloonParty_1_1UI_1_1Score_1_1FlyingTrail_1_1MotionStyle.html" title=" " alt="" coords="339,119,543,159"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="556,127,658,119,658,124,557,132"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1Coins_1_1ICoinCounterVisibility.html" title="Whether the coin counter shows: once it does, it stays for the session." alt="" coords="666,238,855,278"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="869,255,990,255,990,261,869,261"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Game_1_1Coins_1_1CoinTrailService.html" title="Flies each dropped coin from its pop to the coin counter and publishes CoinLandedMessage when it land..." alt="" coords="666,379,855,419"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="819,371,1039,276,1041,280,822,376"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="398,184,483,209"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="498,203,545,218,608,253,665,297,711,341,744,377,740,381,707,345,661,301,605,258,543,223,496,208"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="391,233,490,259"/>
+<area shape="poly" id="edge9_Node000007_Node000009" title=" " alt="" coords="504,256,545,269,599,294,651,323,733,377,730,381,648,328,597,299,543,274,503,261"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="337,283,544,323"/>
+<area shape="poly" id="edge10_Node000007_Node000010" title=" " alt="" coords="522,325,694,377,692,382,520,330"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ITransitionOutgoingContent.html" title="Keeps outgoing visuals on screen during a level transition so the Ascent&#39;s board clear doesn&#39;t blink ..." alt="" coords="341,347,540,387"/>
+<area shape="poly" id="edge11_Node000007_Node000011" title=" " alt="" coords="554,376,666,387,666,393,553,381"/>
+<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Shared_1_1ICoinSettings.html" title="When coins drop, and how they fly to the counter. Coins reward reaching the deep levels." alt="" coords="347,411,535,451"/>
+<area shape="poly" id="edge12_Node000007_Node000012" title=" " alt="" coords="549,418,665,406,666,411,549,423"/>
+<area shape="rect" id="Node000013" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="5,503,192,543"/>
+<area shape="poly" id="edge13_Node000007_Node000013" title=" " alt="" coords="205,513,393,496,480,486,543,475,635,448,714,417,716,422,637,453,545,481,481,491,393,502,206,518"/>
+<area shape="rect" id="Node000016" href="$classBalloonParty_1_1Shared_1_1Pool_1_1TrailSpawner.html" title="Handles the pool lifecycle for trail orbs: get, position, setup, return on arrival." alt="" coords="347,538,534,578"/>
+<area shape="poly" id="edge17_Node000016_Node000013" title=" " alt="" coords="206,532,347,546,347,551,206,537"/>
+<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Shared_1_1Pool_1_1TrailFlightRegistry-1-g.html" title="Central registry for all in&#45;flight trails: per&#45;ID lookup plus bulk operations." alt="" coords="345,602,536,642"/>
+<area shape="poly" id="edge14_Node000007_Node000014" title=" " alt="" coords="548,603,593,588,633,564,642,555,646,546,656,525,700,466,740,418,744,421,705,469,661,527,651,549,646,558,636,568,595,592,550,608"/>
+<area shape="rect" id="Node000015" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1ITrailEndpoint.html" title="A named anchor a trail flies to or from, resolved by key through TrailEndpointRegistry." alt="" coords="347,666,534,706"/>
+<area shape="poly" id="edge15_Node000007_Node000015" title=" " alt="" coords="546,667,593,647,614,633,633,616,645,595,647,574,648,551,656,525,675,493,696,464,737,418,741,421,700,467,679,496,661,527,654,552,653,575,650,596,637,620,618,637,596,652,549,672"/>
+<area shape="rect" id="Node000017" href="$classBalloonParty_1_1Shared_1_1Pool_1_1TransformTrailEndpoint.html" title="Wraps a fixed anchor Transform as an ITrailEndpoint." alt="" coords="667,538,854,578"/>
+<area shape="poly" id="edge19_Node000017_Node000015" title=" " alt="" coords="547,685,591,678,634,665,667,646,696,623,741,576,745,580,700,627,669,651,636,670,593,683,548,690"/>
+<area shape="poly" id="edge16_Node000007_Node000016" title=" " alt="" coords="547,548,591,538,633,521,668,498,699,471,743,418,747,421,702,474,671,503,636,526,593,543,548,553"/>
+<area shape="poly" id="edge18_Node000001_Node000017" title=" " alt="" coords="792,526,1063,276,1066,280,796,530"/>
+</map>

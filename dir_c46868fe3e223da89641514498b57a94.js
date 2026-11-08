@@ -7,6 +7,7 @@ var dir_c46868fe3e223da89641514498b57a94 =
     [ "BoardDepletedMessage.cs", "BoardDepletedMessage_8cs.html", "BoardDepletedMessage_8cs" ],
     [ "BonusCardDealtMessage.cs", "BonusCardDealtMessage_8cs.html", "BonusCardDealtMessage_8cs" ],
     [ "CoinDroppedMessage.cs", "CoinDroppedMessage_8cs.html", "CoinDroppedMessage_8cs" ],
+    [ "CoinLandedMessage.cs", "CoinLandedMessage_8cs.html", "CoinLandedMessage_8cs" ],
     [ "DeflectChainMessage.cs", "DeflectChainMessage_8cs.html", "DeflectChainMessage_8cs" ],
     [ "EndRunRequestedMessage.cs", "EndRunRequestedMessage_8cs.html", "EndRunRequestedMessage_8cs" ],
     [ "ForceDestroyProjectileMessage.cs", "ForceDestroyProjectileMessage_8cs.html", "ForceDestroyProjectileMessage_8cs" ],

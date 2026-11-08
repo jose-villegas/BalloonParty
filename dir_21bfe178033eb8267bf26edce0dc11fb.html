@@ -122,9 +122,13 @@ $(function(){initNavTree('dir_21bfe178033eb8267bf26edce0dc11fb.html',''); initRe
 Files</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AppSuspendSignal_8cs.html">AppSuspendSignal.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CoinCounterVisibility_8cs.html">CoinCounterVisibility.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CoinCreditor_8cs.html">CoinCreditor.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CoinDropController_8cs.html">CoinDropController.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CoinTrailService_8cs.html">CoinTrailService.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="CoinWallet_8cs.html">CoinWallet.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -133,6 +137,8 @@ Files</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IAppSuspendSignal_8cs.html">IAppSuspendSignal.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ICoinBalance_8cs.html">ICoinBalance.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ICoinCounterVisibility_8cs.html">ICoinCounterVisibility.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ICoinStore_8cs.html">ICoinStore.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -145,7 +151,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>A saved currency the player earns deep in a run: from level <code>CoinsFromLevel</code> (10) on, each pop has a <code>DropChance</code> (5 %) of dropping a coin. Coins carry over between runs and app restarts. They will be spent on the game-over screen for a card that helps the retry (not built yet; see <code><a class="el" href="PLAN-Coins_8md.html">Plans/PLAN-Coins.md</a></code>).</p>
-<p>For now a dropped coin goes straight into the wallet. The coin's flight to an on-screen counter, and crediting it only when it lands, come in a later phase of the plan.</p>
+<p>A dropped coin flies from its pop to the coin counter (bottom left, <code>UI/Coins/</code>) and counts when it lands, as score does: the balance never runs ahead of what the player saw arrive.</p>
 <h1><a class="anchor" id="autotoc_md179"></a>
 Contents</h1>
 <table class="markdownTable">
@@ -154,7 +160,11 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>CoinDropController</code>   </td><td class="markdownTableBodyNone">Subscribes <code>ActorHitMessage</code>. On a hit whose outcome includes <code>Pop</code>, at level ≥ <code>CoinsFromLevel</code>, rolls against <code>DropChance</code>; on a drop it publishes <code>CoinDroppedMessage(1, worldPosition)</code>. It never touches the wallet    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>CoinCreditor</code>   </td><td class="markdownTableBodyNone">Adds dropped coins to the wallet, on <code>CoinDroppedMessage</code>. When coins fly, it will listen for their landing instead; nothing else changes    </td></tr>
+<td class="markdownTableBodyNone"><code>CoinTrailService</code>   </td><td class="markdownTableBodyNone">Subscribes <code>CoinDroppedMessage</code> and flies a pooled coin trail (<code>Prefabs/Coins/CoinTrail.prefab</code>) from the pop to the counter; on arrival it publishes <code>CoinLandedMessage</code>. The counter's view registers itself as the target (<code>RegisterTarget</code>); until one has, a coin lands at once, so a scene without the HUD (and the tests) still credits every coin. Coins fly on real time, so they keep moving through the level-up popup's pause and the loss's slow motion. Coins still flying when the run resets or the board changes (a level-up, or the loss's camera-down) land at once. Only closing the game mid-flight loses a coin    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>CoinCreditor</code>   </td><td class="markdownTableBodyNone">Adds coins to the wallet when they land, on <code>CoinLandedMessage</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>ICoinCounterVisibility</code> / <code>CoinCounterVisibility</code>   </td><td class="markdownTableBodyNone">Whether the counter shows. It turns on the first time the run reaches <code>CoinsFromLevel</code> or the wallet holds coins (a returning player sees it from level 1, since they can spend at any loss), and then stays for the session. Evaluated at initialization, before the views start, so a returning player's counter doesn't fade in    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ICoinBalance</code>   </td><td class="markdownTableBodyNone">The balance alone, <code>IReadOnlyReactiveProperty&lt;int&gt; Balance</code>: what views and the playtest bot read    </td></tr>
 <tr class="markdownTableRowEven">
@@ -168,7 +178,7 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>IAppSuspendSignal</code> / <code>AppSuspendSignal</code>   </td><td class="markdownTableBodyNone">Fires when the app loses focus (on mobile, sent to the background, where the OS can kill it without warning) or quits   </td></tr>
 </table>
-<p>Settings live in <code>RunConfig</code> as the <code>Coins</code> block (<code>CoinSettings</code>, read through <code>ICoinSettings</code> in <code>Shared/</code>). The message is <code>Shared/Messages/CoinDroppedMessage</code>. One <code>CoinWallet</code> singleton is registered as all three wallet interfaces.</p>
+<p>Settings live in <code>RunConfig</code> as the <code>Coins</code> block (<code>CoinSettings</code>, read through <code>ICoinSettings</code> in <code>Shared/</code>): when coins drop, and the trail's flight time and pool size. The messages are <code>Shared/Messages/CoinDroppedMessage</code> (a pop dropped a coin) and <code>CoinLandedMessage</code> (it reached the counter). One <code>CoinWallet</code> singleton is registered as all three wallet interfaces.</p>
 <p>A crash or a hard kill with no focus change first loses the coins earned since the last save point. That is the price of not writing on every coin.</p>
 <p><b>One wallet only.</b> The wallet lives in the Game scope, which is loaded once and reset in place for every run, so there is one wallet for the session. If the balance is ever needed outside the Game scope (on the launch screen, say), move the wallet, its store and the suspend signal to <code>AppLifetimeScope</code>: two wallets would each hold their own unsaved balance, and the last one to save would wipe the other's coins.</p>
 <h1><a class="anchor" id="autotoc_md180"></a>
@@ -181,12 +191,14 @@ How a drop is decided</h1>
 <div class="line">    Lvl -- yes --&gt; Roll{&quot;next roll below DropChance?&quot;}</div>
 <div class="line">    Roll -- no --&gt; Skip</div>
 <div class="line">    Roll -- yes --&gt; Drop[&quot;publish CoinDroppedMessage&quot;]</div>
-<div class="line">    Drop --&gt; Credit[&quot;CoinCreditor: wallet.Add&quot;]</div>
+<div class="line">    Drop --&gt; Fly[&quot;CoinTrailService: fly to the counter&quot;]</div>
+<div class="line">    Fly --&gt; Land[&quot;publish CoinLandedMessage&quot;]</div>
+<div class="line">    Land --&gt; Credit[&quot;CoinCreditor: wallet.Add&quot;]</div>
 </div><!-- fragment --><p>Every hit dispatched through the hit pipeline counts: a balloon or a gatekeeper popping, and an item's blast rolls once per balloon it pops. The board clear at a level-up does not dispatch hits, so it can't farm coins. Dev cheats that pop balloons do dispatch hits and can earn coins.</p>
 <p><b>Every attempt at a level drops the same way for the same pops.</b> The rolls come from a random stream seeded with the level's seed (<code>ILevelPacingConfiguration.SeedForLevel</code>, mixed with a salt so it doesn't repeat the level generator's stream). The stream restarts whenever the level changes and on every run reset. The level's seed doesn't change between runs either, just as the level's board doesn't. Only pops consume a roll; a deflect or an absorb doesn't, so bouncing more on a retry doesn't shift which pops drop. The reset runs at <code>RunResetOrder.Score + 15</code>, after the level is set back.</p>
 <h1><a class="anchor" id="autotoc_md181"></a>
 Telemetry</h1>
-<p><code>CoinDroppedMessage</code> feeds the <code>coins_earned</code> metric (summed per level; see <code><a class="el" href="Game_2Telemetry_2README_8md.html">Game/Telemetry/README.md</a></code>). The metric is a copy for analysis, not the wallet: the wallet is progression and stays on the device. A coin that drops after the game over (a straggler pop) still goes into the wallet but is not counted, because the level's record is already closed.</p>
+<p><code>CoinDroppedMessage</code> feeds the <code>coins_earned</code> metric (summed per level; see <code><a class="el" href="Game_2Telemetry_2README_8md.html">Game/Telemetry/README.md</a></code>). The metric is a copy for analysis, not the wallet: the wallet is progression and stays on the device. A coin that drops after the game over (a straggler pop) still goes into the wallet but is not counted, because the level's record is already closed. The metric counts drops, not landings: every drop lands, at once if it must, so the two only differ for coins in the air when the app is closed.</p>
 <p>The playtest bot (<code>Tools/playtest/</code>) prints the balance on every tick and reports coins earned per run and per level. </p>
 </div><!-- contents -->
 </div><!-- doc-content -->

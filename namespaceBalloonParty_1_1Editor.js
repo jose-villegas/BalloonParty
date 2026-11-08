@@ -14,6 +14,7 @@ var namespaceBalloonParty_1_1Editor =
     [ "ChainLightningViewEditor", "classBalloonParty_1_1Editor_1_1ChainLightningViewEditor.html", "classBalloonParty_1_1Editor_1_1ChainLightningViewEditor" ],
     [ "CheatsInReleaseToggle", "classBalloonParty_1_1Editor_1_1CheatsInReleaseToggle.html", "classBalloonParty_1_1Editor_1_1CheatsInReleaseToggle" ],
     [ "CloudNoiseTextureGenerator", "classBalloonParty_1_1Editor_1_1CloudNoiseTextureGenerator.html", "classBalloonParty_1_1Editor_1_1CloudNoiseTextureGenerator" ],
+    [ "CoinCounterBuilder", "classBalloonParty_1_1Editor_1_1CoinCounterBuilder.html", "classBalloonParty_1_1Editor_1_1CoinCounterBuilder" ],
     [ "ColorableBalloonVariantEditor", "classBalloonParty_1_1Editor_1_1ColorableBalloonVariantEditor.html", "classBalloonParty_1_1Editor_1_1ColorableBalloonVariantEditor" ],
     [ "EnumIndexedDrawer", "classBalloonParty_1_1Editor_1_1EnumIndexedDrawer.html", "classBalloonParty_1_1Editor_1_1EnumIndexedDrawer" ],
     [ "GameOverLayoutBuilder", "classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder.html", "classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder" ],

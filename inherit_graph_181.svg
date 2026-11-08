@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator.html" target="_top" xlink:title="Pure, stateless calculator for the line&#45;based damage formula.">
+<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Game_1_1Health_1_1WaveDeficit.html" target="_top" xlink:title="Result of the per&#45;wave deficit calculation: how many hearts the wave costs and how many slots go unsp...">
 <polygon fill="white" stroke="#666666" points="147,-30 0,-30 0,0 147,0 147,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.Health.</text>
-<text text-anchor="middle" x="73.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">WaveDeficitCalculator</text>
+<text text-anchor="middle" x="73.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">WaveDeficit</text>
 </a>
 </g>
 </g>

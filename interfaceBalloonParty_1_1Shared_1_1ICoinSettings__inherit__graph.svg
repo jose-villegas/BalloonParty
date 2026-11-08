@@ -22,7 +22,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="When coins drop. Coins reward reaching the deep levels, where hearts start to go.">
+<g id="a_Node000001"><a xlink:title="When coins drop, and how they fly to the counter. Coins reward reaching the deep levels.">
 <polygon fill="#999999" stroke="#666666" points="144.5,-96 3.5,-96 3.5,-66 144.5,-66 144.5,-96"/>
 <text text-anchor="start" x="11.5" y="-84" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.ICoin</text>
 <text text-anchor="middle" x="74" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">Settings</text>

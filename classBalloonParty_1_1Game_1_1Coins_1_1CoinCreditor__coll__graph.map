@@ -1,5 +1,5 @@
 <map id="BalloonParty.Game.Coins.CoinCreditor" name="BalloonParty.Game.Coins.CoinCreditor">
-<area shape="rect" id="Node000001" title="Adds coins to the wallet." alt="" coords="69,197,259,237"/>
+<area shape="rect" id="Node000001" title="Adds coins to the wallet when they land in the counter (CoinLandedMessage), not when the pop drops th..." alt="" coords="69,197,259,237"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,102,91,127"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,134,144,195,140,199,70,138"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="115,102,213,127"/>

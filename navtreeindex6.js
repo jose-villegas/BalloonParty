@@ -1,5 +1,13 @@
 var NAVTREEINDEX6 =
 {
+"classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#af1442ee0d9d920823c2c4ec789548310":[6,0,0,0,2,0,49],
+"classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#af5dd0038b4e023887ff9885ff89ab02d":[5,0,0,0,2,0,20],
+"classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#af5dd0038b4e023887ff9885ff89ab02d":[6,0,0,0,2,0,20],
+"classBalloonParty_1_1Audio_1_1Routing_1_1DangerSoundRouter.html":[5,0,0,0,2,1],
+"classBalloonParty_1_1Audio_1_1Routing_1_1DangerSoundRouter.html":[6,0,0,0,2,1],
+"classBalloonParty_1_1Audio_1_1Routing_1_1DangerSoundRouter.html#a0e0f3c6d52dd6f29706734283cd072f6":[5,0,0,0,2,1,4],
+"classBalloonParty_1_1Audio_1_1Routing_1_1DangerSoundRouter.html#a0e0f3c6d52dd6f29706734283cd072f6":[6,0,0,0,2,1,4],
+"classBalloonParty_1_1Audio_1_1Routing_1_1DangerSoundRouter.html#a2f96da312ecdfc8b44cf4c98a3234984":[5,0,0,0,2,1,1],
 "classBalloonParty_1_1Audio_1_1Routing_1_1DangerSoundRouter.html#a2f96da312ecdfc8b44cf4c98a3234984":[6,0,0,0,2,1,1],
 "classBalloonParty_1_1Audio_1_1Routing_1_1DangerSoundRouter.html#a371b4cd8aa6ce1a32849bebf5c49b258":[5,0,0,0,2,1,3],
 "classBalloonParty_1_1Audio_1_1Routing_1_1DangerSoundRouter.html#a371b4cd8aa6ce1a32849bebf5c49b258":[6,0,0,0,2,1,3],
@@ -241,13 +249,5 @@ var NAVTREEINDEX6 =
 "classBalloonParty_1_1Audio_1_1SfxService.html#a1b302673737e90a6fb7fdda33fbe54fe":[6,0,0,0,12,17],
 "classBalloonParty_1_1Audio_1_1SfxService.html#a1c23ace5b8342de8f8fd61e1290da82e":[5,0,0,0,12,20],
 "classBalloonParty_1_1Audio_1_1SfxService.html#a1c23ace5b8342de8f8fd61e1290da82e":[6,0,0,0,12,20],
-"classBalloonParty_1_1Audio_1_1SfxService.html#a3244d065a3f86cee05fa1ddf8a449cf6":[5,0,0,0,12,12],
-"classBalloonParty_1_1Audio_1_1SfxService.html#a3244d065a3f86cee05fa1ddf8a449cf6":[6,0,0,0,12,12],
-"classBalloonParty_1_1Audio_1_1SfxService.html#a32ee1963f42bc8c2d67ae80d64733d3d":[5,0,0,0,12,38],
-"classBalloonParty_1_1Audio_1_1SfxService.html#a32ee1963f42bc8c2d67ae80d64733d3d":[6,0,0,0,12,38],
-"classBalloonParty_1_1Audio_1_1SfxService.html#a36be3c1f4bd0da5f6524b072e8e47aa4":[5,0,0,0,12,8],
-"classBalloonParty_1_1Audio_1_1SfxService.html#a36be3c1f4bd0da5f6524b072e8e47aa4":[6,0,0,0,12,8],
-"classBalloonParty_1_1Audio_1_1SfxService.html#a387c14d4272fa7ce01b729abf55937c4":[5,0,0,0,12,7],
-"classBalloonParty_1_1Audio_1_1SfxService.html#a387c14d4272fa7ce01b729abf55937c4":[6,0,0,0,12,7],
-"classBalloonParty_1_1Audio_1_1SfxService.html#a3f10b0954aeee5008a66ac89f80b24b0":[5,0,0,0,12,23]
+"classBalloonParty_1_1Audio_1_1SfxService.html#a3244d065a3f86cee05fa1ddf8a449cf6":[5,0,0,0,12,12]
 };

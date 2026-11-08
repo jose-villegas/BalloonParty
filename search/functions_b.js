@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['label_0',['Label',['../classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder.html#a4efc704ff5c05eb0f832b0f17036d6be',1,'BalloonParty::Editor::GameOverLayoutBuilder']]],
+  ['label_0',['Label',['../classBalloonParty_1_1Editor_1_1CoinCounterBuilder.html#a8c68bc93c57b01ce6beedd79e2a9cdfb',1,'BalloonParty.Editor.CoinCounterBuilder.Label()'],['../classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder.html#a4efc704ff5c05eb0f832b0f17036d6be',1,'BalloonParty.Editor.GameOverLayoutBuilder.Label()']]],
   ['labelfor_1',['LabelFor',['../classBalloonParty_1_1Editor_1_1MusicalNoteDrawer.html#a1cd61bf221c288384032ee2883a17b68',1,'BalloonParty::Editor::MusicalNoteDrawer']]],
   ['land_2',['Land',['../interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistryWriter.html#a2995eb3c00ca94214f661fc9f9d08f4f',1,'BalloonParty.Projectile.IProjectileRegistryWriter.Land()'],['../classBalloonParty_1_1Projectile_1_1ProjectileRegistry.html#adfb48d724d66dab0318797ced953dbb7',1,'BalloonParty.Projectile.ProjectileRegistry.Land()']]],
   ['lasercrossparams_3',['LaserCrossParams',['../structBalloonParty_1_1Item_1_1Laser_1_1LaserCrossParams.html#a07053e545ffa37745ac0aaa60df30623',1,'BalloonParty::Item::Laser::LaserCrossParams']]],

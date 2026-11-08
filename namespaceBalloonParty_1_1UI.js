@@ -1,6 +1,7 @@
 var namespaceBalloonParty_1_1UI =
 [
     [ "Binding", "namespaceBalloonParty_1_1UI_1_1Binding.html", "namespaceBalloonParty_1_1UI_1_1Binding" ],
+    [ "Coins", "namespaceBalloonParty_1_1UI_1_1Coins.html", "namespaceBalloonParty_1_1UI_1_1Coins" ],
     [ "Danger", "namespaceBalloonParty_1_1UI_1_1Danger.html", "namespaceBalloonParty_1_1UI_1_1Danger" ],
     [ "GameOver", "namespaceBalloonParty_1_1UI_1_1GameOver.html", "namespaceBalloonParty_1_1UI_1_1GameOver" ],
     [ "HeadsUp", "namespaceBalloonParty_1_1UI_1_1HeadsUp.html", "namespaceBalloonParty_1_1UI_1_1HeadsUp" ],

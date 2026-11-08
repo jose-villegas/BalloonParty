@@ -92,13 +92,14 @@ var searchData=
   ['balloonparty_3a_3athrower_89',['Thrower',['../namespaceBalloonParty_1_1Thrower.html',1,'BalloonParty']]],
   ['balloonparty_3a_3aui_90',['UI',['../namespaceBalloonParty_1_1UI.html',1,'BalloonParty']]],
   ['balloonparty_3a_3aui_3a_3abinding_91',['Binding',['../namespaceBalloonParty_1_1UI_1_1Binding.html',1,'BalloonParty::UI']]],
-  ['balloonparty_3a_3aui_3a_3adanger_92',['Danger',['../namespaceBalloonParty_1_1UI_1_1Danger.html',1,'BalloonParty::UI']]],
-  ['balloonparty_3a_3aui_3a_3agameover_93',['GameOver',['../namespaceBalloonParty_1_1UI_1_1GameOver.html',1,'BalloonParty::UI']]],
-  ['balloonparty_3a_3aui_3a_3aheadsup_94',['HeadsUp',['../namespaceBalloonParty_1_1UI_1_1HeadsUp.html',1,'BalloonParty::UI']]],
-  ['balloonparty_3a_3aui_3a_3ahealth_95',['Health',['../namespaceBalloonParty_1_1UI_1_1Health.html',1,'BalloonParty::UI']]],
-  ['balloonparty_3a_3aui_3a_3alevelup_96',['LevelUp',['../namespaceBalloonParty_1_1UI_1_1LevelUp.html',1,'BalloonParty::UI']]],
-  ['balloonparty_3a_3aui_3a_3ascore_97',['Score',['../namespaceBalloonParty_1_1UI_1_1Score.html',1,'BalloonParty::UI']]],
-  ['balloonparty_3a_3aui_3a_3ashields_98',['Shields',['../namespaceBalloonParty_1_1UI_1_1Shields.html',1,'BalloonParty::UI']]],
-  ['balloonparty_3a_3aui_3a_3atelemetry_99',['Telemetry',['../namespaceBalloonParty_1_1UI_1_1Telemetry.html',1,'BalloonParty::UI']]],
-  ['balloonparty_3a_3aui_3a_3atooltip_100',['Tooltip',['../namespaceBalloonParty_1_1UI_1_1Tooltip.html',1,'BalloonParty::UI']]]
+  ['balloonparty_3a_3aui_3a_3acoins_92',['Coins',['../namespaceBalloonParty_1_1UI_1_1Coins.html',1,'BalloonParty::UI']]],
+  ['balloonparty_3a_3aui_3a_3adanger_93',['Danger',['../namespaceBalloonParty_1_1UI_1_1Danger.html',1,'BalloonParty::UI']]],
+  ['balloonparty_3a_3aui_3a_3agameover_94',['GameOver',['../namespaceBalloonParty_1_1UI_1_1GameOver.html',1,'BalloonParty::UI']]],
+  ['balloonparty_3a_3aui_3a_3aheadsup_95',['HeadsUp',['../namespaceBalloonParty_1_1UI_1_1HeadsUp.html',1,'BalloonParty::UI']]],
+  ['balloonparty_3a_3aui_3a_3ahealth_96',['Health',['../namespaceBalloonParty_1_1UI_1_1Health.html',1,'BalloonParty::UI']]],
+  ['balloonparty_3a_3aui_3a_3alevelup_97',['LevelUp',['../namespaceBalloonParty_1_1UI_1_1LevelUp.html',1,'BalloonParty::UI']]],
+  ['balloonparty_3a_3aui_3a_3ascore_98',['Score',['../namespaceBalloonParty_1_1UI_1_1Score.html',1,'BalloonParty::UI']]],
+  ['balloonparty_3a_3aui_3a_3ashields_99',['Shields',['../namespaceBalloonParty_1_1UI_1_1Shields.html',1,'BalloonParty::UI']]],
+  ['balloonparty_3a_3aui_3a_3atelemetry_100',['Telemetry',['../namespaceBalloonParty_1_1UI_1_1Telemetry.html',1,'BalloonParty::UI']]],
+  ['balloonparty_3a_3aui_3a_3atooltip_101',['Tooltip',['../namespaceBalloonParty_1_1UI_1_1Tooltip.html',1,'BalloonParty::UI']]]
 ];

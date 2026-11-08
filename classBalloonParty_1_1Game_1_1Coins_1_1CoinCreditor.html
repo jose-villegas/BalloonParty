@@ -115,7 +115,7 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.htm
 </div><!--header-->
 <div class="contents">
 
-<p>Adds coins to the wallet.  
+<p>Adds coins to the wallet when they land in the counter (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1CoinLandedMessage.html" title="A dropped coin reached the counter (or was credited at once, with no counter to fly to).">CoinLandedMessage</a>), not when the pop drops them, so the balance never runs ahead of what the player has seen arrive.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Game.Coins.CoinCreditor:</div>
@@ -134,8 +134,8 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.htm
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1cc00c074632f56b5994b42dfae84feb" id="r_a1cc00c074632f56b5994b42dfae84feb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1cc00c074632f56b5994b42dfae84feb">CoinCreditor</a> (<a class="el" href="interfaceBalloonParty_1_1Game_1_1Coins_1_1ICoinWallet.html">ICoinWallet</a> wallet, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1CoinDroppedMessage.html">CoinDroppedMessage</a> &gt; droppedSubscriber)</td></tr>
-<tr class="separator:a1cc00c074632f56b5994b42dfae84feb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a245b3bd3dc447bac060d70633d8f6819" id="r_a245b3bd3dc447bac060d70633d8f6819"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a245b3bd3dc447bac060d70633d8f6819">CoinCreditor</a> (<a class="el" href="interfaceBalloonParty_1_1Game_1_1Coins_1_1ICoinWallet.html">ICoinWallet</a> wallet, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1CoinLandedMessage.html">CoinLandedMessage</a> &gt; landedSubscriber)</td></tr>
+<tr class="separator:a245b3bd3dc447bac060d70633d8f6819"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0107f517a9ed89afe1cba1f3803a211f" id="r_a0107f517a9ed89afe1cba1f3803a211f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0107f517a9ed89afe1cba1f3803a211f">Dispose</a> ()</td></tr>
 <tr class="separator:a0107f517a9ed89afe1cba1f3803a211f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a121b80a513874d26f181a37b7310a64d" id="r_a121b80a513874d26f181a37b7310a64d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a121b80a513874d26f181a37b7310a64d">Start</a> ()</td></tr>
@@ -143,19 +143,18 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:ae53c05d078e1485ee8e3e2579223c5ca" id="r_ae53c05d078e1485ee8e3e2579223c5ca"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1CoinDroppedMessage.html">CoinDroppedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae53c05d078e1485ee8e3e2579223c5ca">_droppedSubscriber</a></td></tr>
-<tr class="separator:ae53c05d078e1485ee8e3e2579223c5ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afce3349bea00c6d733933a6fd4990075" id="r_afce3349bea00c6d733933a6fd4990075"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1CoinLandedMessage.html">CoinLandedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afce3349bea00c6d733933a6fd4990075">_landedSubscriber</a></td></tr>
+<tr class="separator:afce3349bea00c6d733933a6fd4990075"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6525b75eb9fc8f0d3c3286135efd304d" id="r_a6525b75eb9fc8f0d3c3286135efd304d"><td class="memItemLeft" align="right" valign="top">IDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6525b75eb9fc8f0d3c3286135efd304d">_subscription</a></td></tr>
 <tr class="separator:a6525b75eb9fc8f0d3c3286135efd304d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16e6b09d217537d5f4d911aa5b4ee165" id="r_a16e6b09d217537d5f4d911aa5b4ee165"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Coins_1_1ICoinWallet.html">ICoinWallet</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a16e6b09d217537d5f4d911aa5b4ee165">_wallet</a></td></tr>
 <tr class="separator:a16e6b09d217537d5f4d911aa5b4ee165"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Adds coins to the wallet. </p>
-<p>For now on <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1CoinDroppedMessage.html" title="A pop dropped Amount coins at WorldPosition, on the board.">CoinDroppedMessage</a>, the moment a pop drops one; once coins fly to the counter, on their landing instead, so the drop itself never changes. </p>
+<div class="textblock"><p>Adds coins to the wallet when they land in the counter (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1CoinLandedMessage.html" title="A dropped coin reached the counter (or was credited at once, with no counter to fly to).">CoinLandedMessage</a>), not when the pop drops them, so the balance never runs ahead of what the player has seen arrive. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a1cc00c074632f56b5994b42dfae84feb" name="a1cc00c074632f56b5994b42dfae84feb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1cc00c074632f56b5994b42dfae84feb">&#9670;&#160;</a></span>CoinCreditor()</h2>
+<a id="a245b3bd3dc447bac060d70633d8f6819" name="a245b3bd3dc447bac060d70633d8f6819"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a245b3bd3dc447bac060d70633d8f6819">&#9670;&#160;</a></span>CoinCreditor()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -168,7 +167,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1CoinDroppedMessage.html">CoinDroppedMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>droppedSubscriber</em></span>&#160;)</td>
+          <td class="paramtype">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1CoinLandedMessage.html">CoinLandedMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>landedSubscriber</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -211,8 +210,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="ae53c05d078e1485ee8e3e2579223c5ca" name="ae53c05d078e1485ee8e3e2579223c5ca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae53c05d078e1485ee8e3e2579223c5ca">&#9670;&#160;</a></span>_droppedSubscriber</h2>
+<a id="afce3349bea00c6d733933a6fd4990075" name="afce3349bea00c6d733933a6fd4990075"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afce3349bea00c6d733933a6fd4990075">&#9670;&#160;</a></span>_landedSubscriber</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -221,7 +220,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">readonly ISubscriber&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1CoinDroppedMessage.html">CoinDroppedMessage</a>&gt; BalloonParty.Game.Coins.CoinCreditor._droppedSubscriber</td>
+          <td class="memname">readonly ISubscriber&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1CoinLandedMessage.html">CoinLandedMessage</a>&gt; BalloonParty.Game.Coins.CoinCreditor._landedSubscriber</td>
         </tr>
       </table>
   </td>

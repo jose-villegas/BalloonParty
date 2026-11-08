@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html" target="_top" xlink:title=" ">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder.html" target="_top" xlink:title="Rebuilds the game&#45;over screen in the UI theme (&quot;glossy balloon&quot;: layered buttons and panels that carr...">
 <polygon fill="white" stroke="#666666" points="140,-30 0,-30 0,0 140,0 140,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Editor.Game</text>
-<text text-anchor="middle" x="70" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">OverLayoutBuilder.Kit</text>
+<text text-anchor="middle" x="70" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">OverLayoutBuilder</text>
 </a>
 </g>
 </g>

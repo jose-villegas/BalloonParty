@@ -11,11 +11,11 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html" target="_top" xlink:title=" ">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="185,-41 0,-41 0,0 185,0 185,-41"/>
 <text text-anchor="start" x="8" y="-29" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.Score.</text>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">Behaviours.ShapeFormationTicker.</text>
-<text text-anchor="middle" x="92.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">FormationState</text>
+<text text-anchor="middle" x="92.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">FormationGroup</text>
 </a>
 </g>
 </g>
