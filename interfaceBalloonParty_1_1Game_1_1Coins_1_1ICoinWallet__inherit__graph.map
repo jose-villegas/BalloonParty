@@ -1,0 +1,7 @@
+<map id="BalloonParty.Game.Coins.ICoinWallet" name="BalloonParty.Game.Coins.ICoinWallet">
+<area shape="rect" id="Node000001" title="The player&#39;s coins, kept across runs and app restarts." alt="" coords="5,93,195,133"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Game_1_1Coins_1_1CoinWallet.html" title=" " alt="" coords="5,181,195,221"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="103,147,103,181,97,181,97,147"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Coins_1_1ICoinBalance.html" title="The player&#39;s coin balance, read&#45;only: what views and tools inject." alt="" coords="5,5,195,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,59,103,93,97,93,97,59"/>
+</map>

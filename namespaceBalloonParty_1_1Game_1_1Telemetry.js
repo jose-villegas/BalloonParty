@@ -66,7 +66,8 @@ var namespaceBalloonParty_1_1Game_1_1Telemetry =
       [ "BoardCleared", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebab65bda0bf7248cc77c87f2bb0119074e", null ],
       [ "LevelsCompleted", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebad0a549eeaa08ef5c939c6bbbd75ed111", null ],
       [ "RetriesUsed", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba9ef01b10a4b468f5aff8fceddf9a25dc", null ],
-      [ "TotalScore", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebaea2b3b1b3474d39e4dde52681d9ecaf8", null ]
+      [ "TotalScore", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebaea2b3b1b3474d39e4dde52681d9ecaf8", null ],
+      [ "CoinsEarned", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebad70c928e2e00a990ace4f7b48ea77886", null ]
     ] ],
     [ "MetricScopeKind", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a3d10738649138d0d994cf40a2bc2cbed", [
       [ "Flight", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a3d10738649138d0d994cf40a2bc2cbeda98415a6f570af1d10bebd54f054ce4b4", null ],

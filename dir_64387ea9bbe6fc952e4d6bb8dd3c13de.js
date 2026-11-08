@@ -10,6 +10,7 @@ var dir_64387ea9bbe6fc952e4d6bb8dd3c13de =
     [ "Level", "dir_b27bc693c6b7f05286ab1d00a653a044.html", "dir_b27bc693c6b7f05286ab1d00a653a044" ],
     [ "Palette", "dir_d014d0f9e557ca3363771f7fe3c8483d.html", "dir_d014d0f9e557ca3363771f7fe3c8483d" ],
     [ "Ranges", "dir_0d1e8c025b25afa30d23dcc99320afa6.html", "dir_0d1e8c025b25afa30d23dcc99320afa6" ],
+    [ "CoinSettings.cs", "CoinSettings_8cs.html", "CoinSettings_8cs" ],
     [ "GameDisplayConfiguration.cs", "GameDisplayConfiguration_8cs.html", "GameDisplayConfiguration_8cs" ],
     [ "IGameDisplayConfiguration.cs", "IGameDisplayConfiguration_8cs.html", "IGameDisplayConfiguration_8cs" ],
     [ "IItemPreviewConfig.cs", "IItemPreviewConfig_8cs.html", "IItemPreviewConfig_8cs" ],

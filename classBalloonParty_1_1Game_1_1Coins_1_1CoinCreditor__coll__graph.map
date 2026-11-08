@@ -1,0 +1,11 @@
+<map id="BalloonParty.Game.Coins.CoinCreditor" name="BalloonParty.Game.Coins.CoinCreditor">
+<area shape="rect" id="Node000001" title="Adds coins to the wallet." alt="" coords="69,197,259,237"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,102,91,127"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,134,144,195,140,199,70,138"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="115,102,213,127"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="167,141,167,197,161,197,161,141"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Coins_1_1ICoinWallet.html" title="The player&#39;s coins, kept across runs and app restarts." alt="" coords="237,95,427,135"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="290,144,197,200,194,195,288,139"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Coins_1_1ICoinBalance.html" title="The player&#39;s coin balance, read&#45;only: what views and tools inject." alt="" coords="237,5,427,45"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="335,59,335,95,329,95,329,59"/>
+</map>

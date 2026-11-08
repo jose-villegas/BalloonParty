@@ -19,6 +19,7 @@ var namespaceBalloonParty_1_1Shared =
     [ "DeflectChainRule", "classBalloonParty_1_1Shared_1_1DeflectChainRule.html", "classBalloonParty_1_1Shared_1_1DeflectChainRule" ],
     [ "DeflectorCircle", "structBalloonParty_1_1Shared_1_1DeflectorCircle.html", "structBalloonParty_1_1Shared_1_1DeflectorCircle" ],
     [ "EnumIndexedAttribute", "classBalloonParty_1_1Shared_1_1EnumIndexedAttribute.html", "classBalloonParty_1_1Shared_1_1EnumIndexedAttribute" ],
+    [ "ICoinSettings", "interfaceBalloonParty_1_1Shared_1_1ICoinSettings.html", "interfaceBalloonParty_1_1Shared_1_1ICoinSettings" ],
     [ "IDeflectorField", "interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html", "interfaceBalloonParty_1_1Shared_1_1IDeflectorField" ],
     [ "IEffect", "interfaceBalloonParty_1_1Shared_1_1IEffect.html", "interfaceBalloonParty_1_1Shared_1_1IEffect" ],
     [ "ImpactEventBus", "classBalloonParty_1_1Shared_1_1ImpactEventBus.html", "classBalloonParty_1_1Shared_1_1ImpactEventBus" ],

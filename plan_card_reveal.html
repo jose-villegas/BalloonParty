@@ -110,18 +110,18 @@ $(function(){initNavTree('plan_card_reveal.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">The Card Reveal</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md347"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md352"></a>
 The Card Reveal</h1>
 <blockquote class="doxtable">
 <p>Working plan for showing a won upgrade card: during the level-to-level transition a realistic balloon pops and leaves behind a slip of paper, like the one inside a fortune cookie, with the card handwritten on it. </p>
 </blockquote>
 <p><b>Status:</b> Planned, not started. The pops are 16 separate physics simulations, baked in Blender by a script in this repo (§5), so the reveal never pops the same way twice in a row.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md349"></a>
+<h2><a class="anchor" id="autotoc_md354"></a>
 1. Why</h2>
 <p>Winning a card is the run's only source of power (<code><a class="el" href="Game_2Upgrades_2README_8md.html">Game/Upgrades/README.md</a></code>), yet today it shows as one line of the tooltip, <code>Level N: Card</code>, which is easy to miss in a busy board. The pick screen that showed cards was switched off because it stopped play (<code><a class="el" href="UI_2LevelUp_2README_8md.html">UI/LevelUp/README.md</a></code>). The reveal has to be loud enough to notice, and still never stop play.</p>
 <p>A popping balloon is the game's own verb. Here it pays out a prize instead of points: the pop uncovers a fortune-cookie slip with what the player won. Hand-drawn frames can't make rubber tear and snap back convincingly; a cloth simulation can, so the pops are simulated and baked.</p>
-<h2><a class="anchor" id="autotoc_md350"></a>
+<h2><a class="anchor" id="autotoc_md355"></a>
 2. What the player sees</h2>
 <ol type="1">
 <li>On a level-up that deals a card, as the transition to the next level starts, a balloon drifts up into the top third of the screen, the slip already inside it as a faint shadow.</li>
@@ -131,7 +131,7 @@ The Card Reveal</h1>
 <li>The slip holds for a moment, then flutters out toward the weapon it changed: the cannon for Extra Ball, Faster Reload and Shield, the board for More Items.</li>
 </ol>
 <p>About 2.5 s in all, on unscaled time like the heads-ups, so slow-motion beats don't stretch it.</p>
-<h2><a class="anchor" id="autotoc_md351"></a>
+<h2><a class="anchor" id="autotoc_md356"></a>
 3. Rules</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -153,7 +153,7 @@ The Card Reveal</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">A second card won while a slip is showing waits its turn   </td><td class="markdownTableBodyNone">Rare (cards come every 2 levels), but a retry's bonus card can meet a level-up's   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md352"></a>
+<h2><a class="anchor" id="autotoc_md357"></a>
 4. Architecture</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -172,7 +172,7 @@ The Card Reveal</h1>
 <td class="markdownTableBodyNone"><code>LevelUpPopUp</code> (changed)   </td><td class="markdownTableBodyNone"><code>UI/LevelUp/</code>   </td><td class="markdownTableBodyNone">Skips its card tooltip when a reveal is wired, so the reveal is the one announcement   </td></tr>
 </table>
 <p>The flipbook is a sprite swap rather than a shader so each frame can be checked in the Editor. If the profiler flags it, one material with a UV offset is the fallback.</p>
-<h2><a class="anchor" id="autotoc_md353"></a>
+<h2><a class="anchor" id="autotoc_md358"></a>
 5. How the pops are made</h2>
 <p>A script under <code>Tools/art/balloon_pop/</code> drives Blender headless (<code>blender -b -P bake_pops.py</code>) and writes the 16 sheets and a contact sheet to review them. Everything is seeded, so a run redraws the same set, and a seed can be swapped to replace one pop.</p>
 <table class="markdownTable">
@@ -195,7 +195,7 @@ The Card Reveal</h1>
 </table>
 <p>If Blender's cloth can't make the tear read as rubber (flaps that sag instead of snapping), the fallback is a small membrane solver in the script itself (masses, springs that break past a strain, the stored stretch released at the cut), with Blender only rendering its baked frames.</p>
 <p><b>Budget.</b> 16 sheets of 1536×1024, compressed (ASTC 6×6 on phones) at about 0.7 MB each: about 11 MB in the build, and only one in memory at a time (<code>PopSheetLoader</code>). The sheets stay out of the sprite atlases, like the other baked art (<code>Sprites/README.md</code>), under <code>Assets/Sprites/UI/CardReveal/</code>.</p>
-<h2><a class="anchor" id="autotoc_md354"></a>
+<h2><a class="anchor" id="autotoc_md359"></a>
 6. Assets</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -207,7 +207,7 @@ The Card Reveal</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Card icons   </td><td class="markdownTableBodyNone">4 × 192×192   </td><td class="markdownTableBodyNone">Drawn in the UI style, shared with the coin shop (<code><a class="el" href="PLAN-Coins_8md.html">PLAN-Coins.md</a></code> §7)   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md355"></a>
+<h2><a class="anchor" id="autotoc_md360"></a>
 7. Phases</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -223,7 +223,7 @@ The Card Reveal</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">5   </td><td class="markdownTableBodyNone">A playtest pass on a phone: timing, how well the slip reads over a busy board, and whether 256 px frames are sharp enough   </td><td class="markdownTableBodyNone">—   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md356"></a>
+<h2><a class="anchor" id="autotoc_md361"></a>
 8. Open questions</h2>
 <ul>
 <li>Does the slip fly to the weapon it changed, or just fade? Flying ties the card to its effect, but it crosses the board.</li>

@@ -11,6 +11,7 @@ var namespaceBalloonParty_1_1Configuration =
     [ "Palette", "namespaceBalloonParty_1_1Configuration_1_1Palette.html", "namespaceBalloonParty_1_1Configuration_1_1Palette" ],
     [ "Ranges", "namespaceBalloonParty_1_1Configuration_1_1Ranges.html", "namespaceBalloonParty_1_1Configuration_1_1Ranges" ],
     [ "BigScoreFormationSettings", "structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html", "structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings" ],
+    [ "CoinSettings", "classBalloonParty_1_1Configuration_1_1CoinSettings.html", "classBalloonParty_1_1Configuration_1_1CoinSettings" ],
     [ "GameDisplayConfiguration", "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html", "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration" ],
     [ "IBombPreviewSettings", "interfaceBalloonParty_1_1Configuration_1_1IBombPreviewSettings.html", "interfaceBalloonParty_1_1Configuration_1_1IBombPreviewSettings" ],
     [ "IGameDisplayConfiguration", "interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html", "interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration" ],

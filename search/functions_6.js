@@ -3,7 +3,7 @@ var searchData=
   ['gameoverlosscinematic_0',['GameOverLossCinematic',['../classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a5ade189db9e26128b653c7dd0e67da1d',1,'BalloonParty::Game::Cinematics::GameOverLossCinematic']]],
   ['gameovermessage_1',['GameOverMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1GameOverMessage.html#a5ba7867532d4a3d61b082b9fb1ad7418',1,'BalloonParty::Shared::Messages::GameOverMessage']]],
   ['gamepaletteadapter_2',['GamePaletteAdapter',['../classBalloonParty_1_1Editor_1_1GamePaletteAdapter.html#a6d8c7515b4ef777ea489085f016fd163',1,'BalloonParty::Editor::GamePaletteAdapter']]],
-  ['gameplaymetricsservice_3',['GameplayMetricsService',['../classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a439d68667da4a25ce426f3cbeab8726f',1,'BalloonParty::Game::Telemetry::GameplayMetricsService']]],
+  ['gameplaymetricsservice_3',['GameplayMetricsService',['../classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a6df3e7df13d8badf373cf262fcb21dfc',1,'BalloonParty::Game::Telemetry::GameplayMetricsService']]],
   ['gameworldtolocalpoint_4',['GameWorldToLocalPoint',['../classBalloonParty_1_1UI_1_1RectAnchorMath.html#ae040cae7862f7e85cca126de45b9d366',1,'BalloonParty::UI::RectAnchorMath']]],
   ['gatekeeperactormodel_5',['GatekeeperActorModel',['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GatekeeperActorModel.html#a2286cdb85a69a58ac0a7337d3e3e6ce5',1,'BalloonParty::Slots::Actor::Archetype::GatekeeperActorModel']]],
   ['gatestampsteps_6',['GateStampSteps',['../classBalloonParty_1_1Shared_1_1Extensions_1_1DisturbanceTweenExtensions.html#a2a5cc9ce9ed039fb48ed87eb43a69f93',1,'BalloonParty::Shared::Extensions::DisturbanceTweenExtensions']]],

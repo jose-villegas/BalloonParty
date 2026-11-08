@@ -254,6 +254,7 @@ var annotated_dup =
           [ "RangedInt", "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html", "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt" ]
         ] ],
         [ "BigScoreFormationSettings", "structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html", "structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings" ],
+        [ "CoinSettings", "classBalloonParty_1_1Configuration_1_1CoinSettings.html", "classBalloonParty_1_1Configuration_1_1CoinSettings" ],
         [ "GameDisplayConfiguration", "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html", "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration" ],
         [ "IBombPreviewSettings", "interfaceBalloonParty_1_1Configuration_1_1IBombPreviewSettings.html", "interfaceBalloonParty_1_1Configuration_1_1IBombPreviewSettings" ],
         [ "IGameDisplayConfiguration", "interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html", "interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration" ],
@@ -397,6 +398,19 @@ var annotated_dup =
           [ "LevelAscendCinematic", "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelAscendCinematic.html", "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelAscendCinematic" ],
           [ "LevelUpCinematic", "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html", "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic" ],
           [ "PointFocus", "classBalloonParty_1_1Game_1_1Cinematics_1_1PointFocus.html", "classBalloonParty_1_1Game_1_1Cinematics_1_1PointFocus" ]
+        ] ],
+        [ "Coins", "namespaceBalloonParty_1_1Game_1_1Coins.html", [
+          [ "AppSuspendSignal", "classBalloonParty_1_1Game_1_1Coins_1_1AppSuspendSignal.html", "classBalloonParty_1_1Game_1_1Coins_1_1AppSuspendSignal" ],
+          [ "CoinCreditor", "classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html", "classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor" ],
+          [ "CoinDropController", "classBalloonParty_1_1Game_1_1Coins_1_1CoinDropController.html", "classBalloonParty_1_1Game_1_1Coins_1_1CoinDropController" ],
+          [ "CoinWallet", "classBalloonParty_1_1Game_1_1Coins_1_1CoinWallet.html", "classBalloonParty_1_1Game_1_1Coins_1_1CoinWallet" ],
+          [ "CoinWalletSaver", "classBalloonParty_1_1Game_1_1Coins_1_1CoinWalletSaver.html", "classBalloonParty_1_1Game_1_1Coins_1_1CoinWalletSaver" ],
+          [ "IAppSuspendSignal", "interfaceBalloonParty_1_1Game_1_1Coins_1_1IAppSuspendSignal.html", "interfaceBalloonParty_1_1Game_1_1Coins_1_1IAppSuspendSignal" ],
+          [ "ICoinBalance", "interfaceBalloonParty_1_1Game_1_1Coins_1_1ICoinBalance.html", "interfaceBalloonParty_1_1Game_1_1Coins_1_1ICoinBalance" ],
+          [ "ICoinStore", "interfaceBalloonParty_1_1Game_1_1Coins_1_1ICoinStore.html", "interfaceBalloonParty_1_1Game_1_1Coins_1_1ICoinStore" ],
+          [ "ICoinWallet", "interfaceBalloonParty_1_1Game_1_1Coins_1_1ICoinWallet.html", "interfaceBalloonParty_1_1Game_1_1Coins_1_1ICoinWallet" ],
+          [ "ICoinWalletPersistence", "interfaceBalloonParty_1_1Game_1_1Coins_1_1ICoinWalletPersistence.html", "interfaceBalloonParty_1_1Game_1_1Coins_1_1ICoinWalletPersistence" ],
+          [ "PlayerPrefsCoinStore", "classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html", "classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore" ]
         ] ],
         [ "Danger", "namespaceBalloonParty_1_1Game_1_1Danger.html", [
           [ "IDangerLevel", "interfaceBalloonParty_1_1Game_1_1Danger_1_1IDangerLevel.html", "interfaceBalloonParty_1_1Game_1_1Danger_1_1IDangerLevel" ],
@@ -762,6 +776,7 @@ var annotated_dup =
           [ "BoardClearMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage" ],
           [ "BoardDepletedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BoardDepletedMessage.html", null ],
           [ "BonusCardDealtMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage" ],
+          [ "CoinDroppedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1CoinDroppedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1CoinDroppedMessage" ],
           [ "DeflectChainMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1DeflectChainMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1DeflectChainMessage" ],
           [ "EndRunRequestedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1EndRunRequestedMessage.html", null ],
           [ "ForceDestroyProjectileMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ForceDestroyProjectileMessage.html", null ],
@@ -868,6 +883,7 @@ var annotated_dup =
         [ "DeflectChainRule", "classBalloonParty_1_1Shared_1_1DeflectChainRule.html", "classBalloonParty_1_1Shared_1_1DeflectChainRule" ],
         [ "DeflectorCircle", "structBalloonParty_1_1Shared_1_1DeflectorCircle.html", "structBalloonParty_1_1Shared_1_1DeflectorCircle" ],
         [ "EnumIndexedAttribute", "classBalloonParty_1_1Shared_1_1EnumIndexedAttribute.html", "classBalloonParty_1_1Shared_1_1EnumIndexedAttribute" ],
+        [ "ICoinSettings", "interfaceBalloonParty_1_1Shared_1_1ICoinSettings.html", "interfaceBalloonParty_1_1Shared_1_1ICoinSettings" ],
         [ "IDeflectorField", "interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html", "interfaceBalloonParty_1_1Shared_1_1IDeflectorField" ],
         [ "IEffect", "interfaceBalloonParty_1_1Shared_1_1IEffect.html", "interfaceBalloonParty_1_1Shared_1_1IEffect" ],
         [ "ImpactEventBus", "classBalloonParty_1_1Shared_1_1ImpactEventBus.html", "classBalloonParty_1_1Shared_1_1ImpactEventBus" ],
