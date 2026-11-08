@@ -24,14 +24,16 @@ namespace BalloonParty.Scenario.View
     /// </summary>
     internal sealed class GroundView : MonoBehaviour
     {
-        // Default, not Scenario: SceneCaptureService captures the Scenario layer for the GI, and an opaque
-        // full-screen ground there would read as coverage everywhere.
+        // Default, not Scenario: SceneCaptureService captures the Scenario layer for the GI. A full-screen ground
+        // there would read as coverage everywhere, and its colour, blended into the balloons' rims in the capture's
+        // low mips, made them bloom in their own hue by day (tried and taken out, 2026-11-09).
         private const int GroundLayer = 0;
 
         private static readonly int GroundCoverageId = Shader.PropertyToID("_GroundCoverage");
         private static readonly int GroundScrollId = Shader.PropertyToID("_GroundScroll");
         private static readonly int BladeTileId = Shader.PropertyToID("_BladeTile");
         private static readonly int PatchSizeId = Shader.PropertyToID("_GroundPatchSize");
+        private static readonly int DirtId = Shader.PropertyToID("_GroundDirt");
 
         private readonly CompositeDisposable _subscriptions = new();
 
@@ -43,6 +45,7 @@ namespace BalloonParty.Scenario.View
         private GameObject _quad;
         private GameObject _blades;
         private Mesh _bladeMesh;
+        private GrassWakeBuffer _wake;
         private Vector2 _pushedScroll = new(float.NaN, float.NaN);
 
         private void Start()
@@ -64,12 +67,14 @@ namespace BalloonParty.Scenario.View
                 _display.ReferenceWorldHeight * overscan,
                 1f);
 
-            // Floor and blades read the same patch noise; one size keeps the drier tips over the floor's lighter patches.
+            // Floor and blades read the same patch noise, so the patch and dirt settings are globals: the drier tips sit
+            // over the floor's lighter patches, and the blades thin out exactly where the floor shows dirt.
             Shader.SetGlobalFloat(PatchSizeId, Mathf.Max(0.01f, _settings.PatchSize));
+            Shader.SetGlobalVector(DirtId, new Vector4(
+                Mathf.Max(0.01f, _settings.DirtPatchSize), _settings.DirtThreshold, _settings.DirtSoftness, 0f));
             BuildBlades();
 
-            // The Launch begin-screen is always sky: its camera mask leaves out the Default layer this quad is on,
-            // so showing ground there would hide the sky behind nothing. A ground start level lands on entering Game.
+            // The Launch begin-screen is always sky; a ground start level lands on entering Game.
             _scenario.Kind
                 .CombineLatest(Navigation.Current, ShowsGround)
                 .DistinctUntilChanged()
@@ -77,13 +82,16 @@ namespace BalloonParty.Scenario.View
                 .AddTo(_subscriptions);
         }
 
-        // Late, so the Ascent tween has already moved the root this frame and the meadow keeps pace with the bushes.
+        // Late, so the Ascent tween has already moved the root this frame and the meadow keeps pace with the bushes,
+        // and the disturbance field has taken this frame's stamps before the wake reads them.
         private void LateUpdate()
         {
             if (_quad == null || !_quad.activeSelf)
             {
                 return;
             }
+
+            _wake?.Tick(Time.deltaTime, _settings.BladeRecoverySeconds);
 
             var scroll = (Vector2)_scenarioRoot.Transform.position;
             if (scroll == _pushedScroll)
@@ -107,6 +115,7 @@ namespace BalloonParty.Scenario.View
             // The sky and the clouds outlive this scope (App-owned), so hand them back their sky look.
             _sky?.SetVisible(true);
             Shader.SetGlobalFloat(GroundCoverageId, 0f);
+            _wake?.Dispose();
 
             // Only the blade mesh is ours: the floor's quad is MeshHelper's shared cached quad, which the App-owned
             // sky and the GI overlay draw with too.
@@ -166,6 +175,8 @@ namespace BalloonParty.Scenario.View
             block.SetVector(BladeTileId, new Vector4(-tile.x * 0.5f, -tile.y * 0.5f, tile.x, tile.y));
             renderer.SetPropertyBlock(block);
             _blades.SetActive(false);
+
+            _wake = new GrassWakeBuffer(_settings.WakeMaterial);
         }
 
         private void Show(bool ground)
@@ -174,6 +185,11 @@ namespace BalloonParty.Scenario.View
             if (_blades != null)
             {
                 _blades.SetActive(ground);
+            }
+
+            if (ground)
+            {
+                _wake?.Restart();
             }
 
             _sky?.SetVisible(!ground);

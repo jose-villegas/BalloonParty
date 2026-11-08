@@ -34,7 +34,9 @@ Material:
     - _PatchContrast: 0.5
     - _SrcBlend: 1
     m_Colors:
-    - _GrassColor: {r: 0.1, g: 0.15, b: 0.1, a: 1}
-    - _SoilColor: {r: 0.05, g: 0.08, b: 0.06, a: 1}
+    - _DirtColor: {r: 0.46, g: 0.38, b: 0.26, a: 1}
+    - _DirtDarkColor: {r: 0.36, g: 0.29, b: 0.2, a: 1}
+    - _GrassColor: {r: 0.3, g: 0.36, b: 0.21, a: 1}
+    - _SoilColor: {r: 0.2, g: 0.25, b: 0.16, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

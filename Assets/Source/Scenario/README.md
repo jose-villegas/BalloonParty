@@ -54,13 +54,14 @@ the same scenario. Plan: `Plans/PLAN-TerrainBiomes.md`.
   Game scene is preloaded additively, so an unparented object would land in the Launcher and die with it.
   It builds one stationary floor quad with `QuadRendererBuilder` from `IGroundSettings` (material,
   overscan, sorting order −15: above the sky at −20, below the clouds at −10) on the **Default** layer. Not
-  Scenario: `SceneCaptureService` captures that layer for the GI, where a full-screen opaque quad would read
-  as coverage everywhere. Over the quad it builds one mesh of grass blades (`GrassBladeMesh`, drawn through
+  Scenario: `SceneCaptureService` captures that layer for the GI, where a full-screen quad would read as
+  coverage everywhere. Feeding the meadow's colour in was tried and taken out: blended into the balloons'
+  rims in the capture's low mips, it made them bloom in their own hue by day. Over the quad it builds one mesh of grass blades (`GrassBladeMesh`, drawn through
   `MeshRendererBuilder` at sorting order −14) with its own material. On ground it shows both, hides the sky
   (`ISkyBackdrop`, an optional lookup because the sky only registers when its settings are wired) and sets
   the global `_GroundCoverage` to 1; on sky it reverses all of it. The Launch begin-screen always shows sky,
-  since its camera mask leaves out the Default layer. It also pushes `_GroundPatchSize`, so the floor and
-  the blades read the same patches. The quad stays put, but the meadow scrolls with `ScenarioContentRoot`
+  since its camera mask leaves out the Default layer. It also pushes `_GroundPatchSize` and `_GroundDirt`,
+  so the floor and the blades read the same patches and dirt. The quad stays put, but the meadow scrolls with `ScenarioContentRoot`
   (the global `_GroundScroll`, pushed in `LateUpdate` after the tween moves the root): the bushes stand on
   this ground, so on the Ascent and the restart rise the whole meadow travels in with them. A still ground
   would show them sliding over it. The clouds scroll with the root too, but at a parallax, because they are
@@ -75,20 +76,39 @@ the same scenario. Plan: `Plans/PLAN-TerrainBiomes.md`.
   9:16 phone at the default spacing.
 - `Shaders/BalloonParty/Scenario/GrassBlades.shader`: places, bends and wraps every blade in the vertex
   stage; the fragment stage only writes the interpolated colour. Seen from above, a standing blade shows a
-  short stroke leaning one way, swaying in gust waves that roll across the meadow. Each blade reads the shared
-  disturbance field once at its root (`_DisturbanceTex`, see `Shared/Disturbance/README.md`): where a ball,
-  a pop, a bomb or a laser stamped it, the blade turns toward the push and lies down, so it shows its full
-  length, curving from its root, and its tip catches the sun. The field's own reform springs it back. One
-  patch-noise tap per blade turns the tips drier on the floor's lighter patches. Lit by the scene light's
-  colour, so it dims at dusk and night.
-- `Shaders/BalloonParty/Scenario/Ground.shader`: the floor under the blades, one tap per pixel: soft darker
-  and lighter patches from the shared tileable cloud noise. Kept dark and muted on purpose, so the saturated
-  balloons stand off the ground. Opaque by default; its blend factors are exposed for a future sky/ground
-  edge.
-- `Shaders/BalloonParty/Include/Ground.cginc`: `GroundCoverageAt(worldPos)` over `_GroundCoverage`.
+  short stroke leaning one way, swaying in gust waves that roll across the meadow. Each blade reads the grass
+  wake once at its root (`_GrassWakeTex`, below): where a ball, a pop, a bomb or a laser stamped the
+  disturbance field, the blade turns toward the push and lies down, so it shows its full length, curving from
+  its root, and its tip catches the sun. The response saturates (`_WakeBend`, "Wake Response"), so a blade
+  answers the first light touch of the wake instead of waiting for the push to build. One
+  patch-noise tap per blade turns the tips drier on the floor's lighter patches; a second, the dirt mask,
+  dries, shortens and drops out blades across a dirt patch's fade (each at its own point, so the grass frays
+  into the dirt). Lit by the scene-light field at its root (`SceneLightTintAtLOD`), like the sprites' VTF
+  light: the time of day, plus the local light of pops and items.
+- `View/GrassWakeBuffer.cs` + `Shaders/BalloonParty/Scenario/GrassWake.shader`: the grass's own short memory
+  of the disturbance field (`Shared/Disturbance/README.md`), owned by `GroundView` and stepped in its
+  `LateUpdate` while the ground shows. The shared field holds a push for seconds and spreads it, which suits
+  the clouds' slow drift but made the grass feel sluggish. The wake keeps only what the field gained since
+  last frame and lets it go on its own recovery (`IGroundSettings.BladeRecoverySeconds`, 0.35 s), so the
+  blades snap down as the ball passes and stand back up quickly behind it. Field-sized, in the field's UV
+  space, half-float (the push is signed): one small blit and one copy a frame. Restarted each time the ground
+  appears, so a push the field still holds doesn't land on the blades at once.
+- `Shaders/BalloonParty/Scenario/Ground.shader`: the floor under the blades, three taps per pixel: soft
+  darker and lighter patches from the shared tileable cloud noise, and a few large bare-dirt clusters (a
+  coarse tap for the cluster, a finer one to fray its outline) that fade into the grass. Muted mid-tones, so
+  the saturated balloons stand off the ground and the scene light carries the time of day across it; lit
+  per pixel by the scene-light field (`SceneLightTintAt`), so pops and items light it locally too. Opaque by
+  default; its blend factors are exposed for a future sky/ground edge.
+- `Shaders/BalloonParty/Include/Ground.cginc`: the ground's shared globals, all pushed by `GroundView`:
+  coverage, scroll, patch size and the dirt settings (`_GroundDirt`), with `GroundPatchUV`, `GroundDirtUV`
+  and `GroundDirtMask` so the floor and the blades read the same patches. `GroundCoverageAt(worldPos)` over
+  `_GroundCoverage`.
   `BackgroundCloud` multiplies its cloud bodies by `1 − coverage × _GroundBodyFade` and keeps the drop
   shadows, so on the ground the clouds read as overhead and out of frame, their shadows drifting over the
   grass. With the bodies fully faded it takes a shadow-only branch that skips the body's lighting.
+  `SpriteLightDriven` and `PaintBlob` also read it: their drop shadows normally fade where there is no cloud
+  or smoke to land on (`_CLOUD_FADE_ON`), and on the ground they land on the grass instead, so the balloon,
+  projectile and paint shadows stay. The GI smear (`ScreenSpaceLightSmear`) gates its shadow the same way.
 
 Shader changes are checked in the editor only; `dotnet build` doesn't compile them.
 

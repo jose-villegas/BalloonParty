@@ -17,8 +17,13 @@ MonoBehaviour:
   _sortingLayerName: Default
   _sortingOrder: -15
   _patchSize: 3.5
+  _dirtPatchSize: 6
+  _dirtThreshold: 0.7
+  _dirtSoftness: 0.2
   _bladeMaterial: {fileID: 2100000, guid: 52e1b9d086084b5d8e860b8caabd88b0, type: 2}
   _bladeSpacing: 0.085
   _bladeTileMargin: 0.4
   _bladeSortingOrder: -14
   _bladeSeed: 1337
+  _wakeMaterial: {fileID: 2100000, guid: 2dd36923cea4471daae2dba453996d6d, type: 2}
+  _bladeRecoverySeconds: 0.35

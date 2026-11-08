@@ -22,6 +22,15 @@ namespace BalloonParty.Configuration.Effects
         /// floor's lighter patches.</summary>
         float PatchSize { get; }
 
+        /// <summary>World size of the bare-dirt patches the floor shows and the blades thin out over.</summary>
+        float DirtPatchSize { get; }
+
+        /// <summary>Noise threshold for dirt: higher means less dirt.</summary>
+        float DirtThreshold { get; }
+
+        /// <summary>Width of the soft grass-to-dirt edge, in noise units.</summary>
+        float DirtSoftness { get; }
+
         /// <summary>Blade material using BalloonParty/Scenario/GrassBlades — blade shape, colours and the reaction
         /// to the disturbance field. Without one the ground draws its floor only.</summary>
         Material BladeMaterial { get; }
@@ -38,5 +47,12 @@ namespace BalloonParty.Configuration.Effects
 
         /// <summary>Seed for the blade scatter.</summary>
         int BladeSeed { get; }
+
+        /// <summary>Material using Hidden/BalloonParty/Scenario/GrassWake: the grass's own short memory of the
+        /// disturbance field, which the blades bend to. Without one the blades stay at rest.</summary>
+        Material WakeMaterial { get; }
+
+        /// <summary>Time constant, in seconds, for a pushed blade to stand back up.</summary>
+        float BladeRecoverySeconds { get; }
     }
 }

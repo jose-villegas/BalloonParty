@@ -85,6 +85,7 @@ Shader "BalloonParty/Paint/PaintBlob"
             #include "../Include/RainbowBand.cginc"
             #include "../Include/BackgroundField.cginc"
             #include "../Include/SmokeField.cginc"
+            #include "../Include/Ground.cginc"
 
             struct appdata_t
             {
@@ -253,6 +254,8 @@ Shader "BalloonParty/Paint/PaintBlob"
                 // shadow's own footprint instead of the whole shadow flipping as one unit.
                 float receive = BackgroundFieldDensity(IN.worldPos);
                 receive = max(receive, SmokeFieldSample(IN.worldPos).a * _SmokeReceiveWeight);
+                // On ground levels the ground catches every shadow, whatever the (faded) clouds are doing.
+                receive = max(receive, GroundCoverageAt(IN.worldPos));
                 shadowAlpha *= lerp(_CloudShadowFloor, 1.0, receive);
                 #endif
                 #endif

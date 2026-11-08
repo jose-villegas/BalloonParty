@@ -126,6 +126,7 @@ Shader "BalloonParty/Sprite/LightDriven"
             #include "../Include/SceneLight.cginc"
             #include "../Include/BackgroundField.cginc"
             #include "../Include/SmokeField.cginc"
+            #include "../Include/Ground.cginc"
 
             struct appdata_t
             {
@@ -345,6 +346,9 @@ Shader "BalloonParty/Sprite/LightDriven"
                 // weighted smoke opacity (max avoids double-darkening where they overlap).
                 float receive = BackgroundFieldDensity(IN.cloudWorld);
                 receive = max(receive, SmokeFieldSample(IN.cloudWorld).a * _SmokeReceiveWeight);
+                // On ground levels the ground catches every shadow; the cloud bodies are faded out there, so
+                // their density must not make shadows come and go over the grass.
+                receive = max(receive, GroundCoverageAt(IN.cloudWorld));
                 c.a *= lerp(_CloudShadowFloor, 1.0, receive);
                 #endif
 

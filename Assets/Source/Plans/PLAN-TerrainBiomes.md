@@ -60,10 +60,16 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
   `Tools > BalloonParty > Generate Cloud Noise Texture`), sampled through
   `CloudNoise.cginc`. The ground reads it for its large patches; the blades are geometry
   (see How it looks). No per-pixel procedural noise.
-- **Lighting**: `SceneLight.cginc` (`SceneLightTint`/`SceneLightDirection`) gives the
-  time-of-day colour and the sun direction; the clouds already use both.
+- **Lighting**: `SceneLight.cginc` gives the time-of-day colour and the sun direction; the
+  clouds already use both. The floor and the blades read its field-aware forms
+  (`SceneLightTintAt`, per pixel on the floor and per blade root on the blades), so the
+  local light of pops and items lands on the grass as it does on the sprites.
 - **GI capture** picks GameObject layers (`SceneCaptureService._capturedLayers`), not
-  sorting layers. The ground stays off the captured layers in this scope.
+  sorting layers. The ground stays off the captured layers: feeding the meadow into the
+  capture was tried and made the balloons bloom by day (their rims, blended with the
+  meadow in the low mips, bled their own hue back), so the owner took it out
+  (2026-11-09). The GI shadows do land on the grass everywhere on ground levels, not
+  just under cloud.
 - **Level content**: levels are generated (`LevelGenerator` from `LevelGenerationSettings`),
   not authored per range; ranges are debug presets only. The `Withheld` catalogue flag is
   being added in separate work; it and the luck levels touch the same settings file, so
@@ -106,15 +112,19 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
     gust waves that roll across the meadow, and tips turn drier on the floor's lighter
     patches.
 - **The grass reacts to the ball** through the existing disturbance field, with no new
-  field or stamp:
-  - Each blade reads `_DisturbanceTex` once, at its root, in the vertex stage.
+  stamp:
+  - Each blade reads the grass wake (`GrassWakeBuffer`) once, at its root, in the vertex
+    stage. The wake is a small field-sized buffer that keeps only what the disturbance
+    field gained each frame and lets it go in about a third of a second: the shared field
+    holds and spreads a push for seconds, which felt sluggish on grass (owner,
+    2026-11-09).
   - The displacement (GB) turns the blade toward the push and lays it down: from above it
     shows more of its length, curving from its root, so where the ball passed the blades
     part and fan out.
   - The density change (R) lays them flatter still, and laid blades catch the sun toward
     their tips, so the path reads as a combed stripe.
-  - Recovery is free: the field's own decay and reform let the blades spring back.
-    Pops, bombs and lasers stamp the same field, so the grass answers them too.
+  - Recovery is the wake's own (`BladeRecoverySeconds`), not the field's. Pops, bombs
+    and lasers stamp the same field, so the grass answers them too.
   - The field covers the camera's rect, and the blade tile reaches past it: blades outside
     the field rest.
   - The field is 8 texels per unit, so the wake is soft, about a ball-width wide. A
@@ -139,6 +149,15 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
   together; the edge needs no timing of its own. The switch is armed when the
   transition starts and takes effect when the root first moves, so nothing pops while
   the root waits at 0.
+- **Dirt and colour**: the floor is muted mid-tone greens, light enough for the time of
+  day to read across it and dark enough for the balloons to stand off it. A few large
+  bare-dirt clusters (`IGroundSettings` dirt size, threshold and softness) fade into the
+  grass: the floor blends to soil over a wide noise band with a frayed outline, and the
+  blades dry, shorten and drop out across the same band (owner, 2026-11-08: patches
+  blend; fewer, bigger clusters).
+- **Shadows on the ground**: the sprite and paint drop shadows that fade where there is
+  no cloud or smoke under them (`_CLOUD_FADE_ON`) stay on ground levels, since they land
+  on the grass (`GroundCoverageAt` in `SpriteLightDriven` and `PaintBlob`).
 - **Bush shadow**: the bush's drop-shadow distance is checked against the ground in the
   editor; a long offset shadow reads as height.
 
@@ -147,15 +166,16 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
 - **Bake once**: no new RT, no per-level bake, no new field. The only baked input is the
   existing noise texture; the disturbance field already runs every frame for the clouds
   and bushes.
-- **Ground cost**: the floor is 1 tap per pixel. The blades add about 45k vertices
-  (12 bytes each, 16-bit indices) in one draw, each with 2 vertex taps (disturbance,
-  patch noise), and a flat-colour fragment over about a third of the screen. No alpha test or blending anywhere (a tile-GPU
+- **Ground cost**: the floor is 3 taps per pixel (patches, dirt, dirt fray). The grass
+  wake is one blit and one copy a frame on a field-sized target (about 45×80). The blades
+  add about 45k vertices (12 bytes each, 16-bit indices) in one draw, each with 3 vertex
+  taps (disturbance, patch noise, dirt) plus the light field, and a flat-colour fragment over about a third of the screen. No alpha test or blending anywhere (a tile-GPU
   cost). Measure the vertex cost on a low-end phone at the review gate; `BladeSpacing`
   trades density for vertices with the inverse square.
 - **Sky levels**: the ground renderer is disabled. Cost: zero.
 - **Ground levels**: the ground covers every pixel, so the sky-scatter quad is disabled
   (`SkyScatterService` gains a visibility toggle). That swaps the 10-ring sky loop for
-  the 1-tap floor plus the blades; measure it at the review gate.
+  the 3-tap floor plus the blades; measure it at the review gate.
 - **During a transition** (about 4 s, gameplay paused): sky and ground both draw.
 - **CPU**: no per-frame work at rest and no allocations; while a transition runs, one
   transform read and one material float per frame. `ScenarioSchedule.ForLevel` runs once
@@ -231,8 +251,8 @@ changes to the Ascent or restart code.
 - Frame Debugger: the ground draws before the clouds and the smoke, and the sky quad is
   gone on ground levels.
 - The GI: on ground levels the capture sees neither sky nor ground (the ground is on
-  Default, the sky is hidden), so check the GI smear and sprite lighting don't shift
-  between sky and ground levels.
+  Default, the sky is hidden), so check the GI shadows on the grass read right and the
+  balloons don't shift between sky and ground levels.
 - Launcher → Game in play mode: the `Ground` object lives under the Game scope.
 - The blades on a phone: their width and density at game zoom, and the vertex cost on a
   low-end device (`BladeSpacing` 0.085, about 45k vertices on 9:16), and a 4:3 tablet and a
@@ -277,7 +297,7 @@ the one above. In short:
 - **Anti-repetition**, cheapest first: per-cell hash flips, a macro variation tap, a
   channel-packed detail atlas, scatter stamps; hex-tiling only where those fail.
 - **Composition rules**: one sun (`SceneLight` direction), one wind (shared with the bush
-  wind), no second lighting model; GI bounce from the ground is a layer-mask change.
+  wind), no second lighting model; no GI bounce from the ground (tried; it bloomed the balloons).
 
 The meadow above is the first biome of that system. When it grows, `ScenarioKind` gains
 more grounds (the schedule rolls which one a ground stretch uses), the meadow shader and
