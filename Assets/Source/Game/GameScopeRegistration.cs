@@ -276,6 +276,8 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<ScoreController>().AsSelf().As<IRunScore>().As<IRunResettable>();
             builder.RegisterEntryPoint<LevelController>().AsSelf().As<ILevelProgress>().As<IRunResettable>();
             builder.RegisterEntryPoint<TimeOfDayCycle>().As<IRunResettable>();
+            builder.Register<ActiveScenario>(Lifetime.Singleton).AsSelf().As<IActiveScenario>();
+            builder.RegisterEntryPoint<ScenarioController>().As<IRunResettable>();
             builder.Register<HitPipeline>(Lifetime.Singleton).As<IHitDispatcher>();
             builder.RegisterEntryPoint<RunController>().AsSelf();
             builder.Register<BoardClearController>(Lifetime.Singleton).As<IRunResettable>();

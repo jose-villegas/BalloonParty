@@ -306,6 +306,31 @@ namespace BalloonParty.Tests.Configuration
             Assert.That(issues, Has.Some.Matches<string>(m => m.Contains("Puff") && m.Contains("twice")));
         }
 
+        [Test]
+        public void Validate_ScenarioMinStretchAboveMax_ReportsIssue()
+        {
+            var settings = Settings();
+            SetScenario(settings, new ScenarioScheduleSettings(16, 5, 2, 7919));
+
+            Assert.That(settings.Validate("Test"), Has.Some.Contains("scenario's shortest stretch"));
+        }
+
+        [Test]
+        public void Validate_ScenarioMinStretchAtOrBelowMax_IsClean([Values(2, 4)] int max)
+        {
+            var settings = Settings();
+            SetScenario(settings, new ScenarioScheduleSettings(16, 2, max, 7919));
+
+            Assert.That(settings.Validate("Test"), Has.None.Contains("scenario"));
+        }
+
+        private static void SetScenario(LevelGenerationSettings settings, ScenarioScheduleSettings scenario)
+        {
+            typeof(LevelGenerationSettings)
+                .GetField("_scenario", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!
+                .SetValue(settings, scenario);
+        }
+
         private static BalloonContentEntry Balloon(BalloonType type, int unlock, int cost, ContentWeightRamp? weight = null)
         {
             return new BalloonContentEntry(type, ContentRole.Threat, unlock, cost, weight ?? ContentWeightRamp.Flat(1f, 1f));

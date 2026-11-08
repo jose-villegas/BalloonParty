@@ -18,6 +18,7 @@ using BalloonParty.Configuration.GridActors;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Scenario.View;
 using BalloonParty.Audio.Configuration;
 using BalloonParty.Audio.View;
 
@@ -38,6 +39,7 @@ namespace BalloonParty.Game
         [SerializeField] private GridActorConfiguration _gridActorConfiguration;
         [SerializeField] private PuffCloudSettings _puffCloudSettings;
         [SerializeField] private BushSettings _bushSettings;
+        [SerializeField] private GroundSettings _groundSettings;
         [SerializeField] private SceneLightFieldSettings _sceneLightFieldSettings;
         [FormerlySerializedAs("_paintingFieldSettings")]
         [SerializeField] private SmokeFieldSettings _smokeFieldSettings;
@@ -74,6 +76,7 @@ namespace BalloonParty.Game
             var options = builder.RegisterMessagePipe();
             builder.RegisterMessages(options);
             RegisterConfiguration(builder);
+            RegisterScopeOwnedViews(builder);
 
             // Call order is load-bearing — entry points start in registration order.
             builder.RegisterCoreServices();
@@ -86,6 +89,15 @@ namespace BalloonParty.Game
 #if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
             builder.RegisterCheats();
 #endif
+        }
+
+        // Kept here because it needs this component's transform: the Game scene is preloaded additively, so
+        // this scope builds while the Launcher is still the active scene, and a bare new GameObject would land
+        // in the Launcher and be destroyed with it when play starts.
+        private void RegisterScopeOwnedViews(IContainerBuilder builder)
+        {
+            builder.RegisterComponentOnNewGameObject<GroundView>(Lifetime.Singleton, "Ground").UnderTransform(transform);
+            builder.RegisterBuildCallback(resolver => resolver.Resolve<GroundView>());
         }
 
         // Kept here (not GameScopeRegistration) because it needs this component's serialized fields.
@@ -103,6 +115,8 @@ namespace BalloonParty.Game
             builder.RegisterInstance<IGridActorConfiguration>(_gridActorConfiguration);
             builder.RegisterInstance<IPuffCloudSettings>(_puffCloudSettings);
             builder.RegisterInstance<IBushSettings>(_bushSettings);
+
+            builder.RegisterInstance<IGroundSettings>(_groundSettings);
 
             // Display config, the ambient (scene-light / time-of-day), screen-space light, disturbance, and
             // background-field settings are owned by AppLifetimeScope now; this scope resolves them from the

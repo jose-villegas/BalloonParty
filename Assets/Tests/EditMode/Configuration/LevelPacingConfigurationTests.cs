@@ -124,6 +124,27 @@ namespace BalloonParty.Tests.Configuration
         }
 
         [Test]
+        public void ScenarioForLevel_DebugPresetsAndLevelZero_AreAlwaysSky()
+        {
+            SetField(_config, "_ranges", new[] { MakePreset(-100) });
+            SetField(_config, "_generation", GenerationWithScenario(firstGroundLevel: 1));
+            ILevelPacingConfiguration pacing = _config;
+
+            Assert.AreEqual(ScenarioKind.Sky, pacing.ScenarioForLevel(-100));
+            Assert.AreEqual(ScenarioKind.Sky, pacing.ScenarioForLevel(0));
+        }
+
+        [Test]
+        public void ScenarioForLevel_PositiveLevels_FollowTheGenerationSchedule()
+        {
+            SetField(_config, "_generation", GenerationWithScenario(firstGroundLevel: 3));
+            ILevelPacingConfiguration pacing = _config;
+
+            Assert.AreEqual(ScenarioKind.Sky, pacing.ScenarioForLevel(2));
+            Assert.AreEqual(ScenarioKind.Ground, pacing.ScenarioForLevel(3));
+        }
+
+        [Test]
         public void ColorsForLevel_PositiveLevel_FollowsTheGenerationSteps()
         {
             SetGeneration(ShippedLevelCatalogue.Build());
@@ -187,6 +208,13 @@ namespace BalloonParty.Tests.Configuration
         public void OnValidate_DoesNotThrow_WithDefaultData()
         {
             Assert.DoesNotThrow(InvokeOnValidate);
+        }
+
+        private static LevelGenerationSettings GenerationWithScenario(int firstGroundLevel)
+        {
+            var generation = new LevelGenerationSettings();
+            SetField(generation, "_scenario", new ScenarioScheduleSettings(firstGroundLevel, 2, 4, 7919));
+            return generation;
         }
 
         private static LevelRangeEntry MakePreset(int id)

@@ -52,11 +52,14 @@ namespace BalloonParty.Configuration.Level
 
         [SerializeField] private GridActorContentEntry[] _gridActors = Array.Empty<GridActorContentEntry>();
 
+        [SerializeField] private ScenarioScheduleSettings _scenario = new();
+
         public int ItemCadence => _itemCadence;
         public int FeaturedLevels => Mathf.Max(1, _featuredLevels);
         public IReadOnlyList<BalloonContentEntry> Balloons => _balloons;
         public IReadOnlyList<ItemContentEntry> Items => _items;
         public IReadOnlyList<GridActorContentEntry> GridActors => _gridActors;
+        public ScenarioScheduleSettings Scenario => _scenario;
 
         /// <summary>The most lines any level's initial board fill can hold.</summary>
         public int MaxBoardLines
@@ -119,17 +122,13 @@ namespace BalloonParty.Configuration.Level
         /// <summary>The level's seed: a hash of the level and the salt, so a retry replays the same mix.</summary>
         public int SeedForLevel(int level)
         {
-            unchecked
-            {
-                // Murmur3's finaliser: neighbouring levels get unrelated seeds.
-                var h = (uint)level * 0x9E3779B1u ^ (uint)_seedSalt;
-                h ^= h >> 16;
-                h *= 0x85EBCA6Bu;
-                h ^= h >> 13;
-                h *= 0xC2B2AE35u;
-                h ^= h >> 16;
-                return (int)(h & 0x7FFFFFFF);
-            }
+            return LevelSeedHash.Hash(level, _seedSalt);
+        }
+
+        /// <summary>Whether <paramref name="level" /> is set in the sky or on the ground; see <see cref="ScenarioSchedule" />.</summary>
+        public ScenarioKind ScenarioForLevel(int level)
+        {
+            return ScenarioSchedule.ForLevel(_scenario, level);
         }
 
         /// <summary>One message per authoring problem; empty when the catalogue is sound.</summary>
@@ -164,6 +163,12 @@ namespace BalloonParty.Configuration.Level
             CheckDuplicates(_balloons, e => e.Type.ToString(), configName, issues);
             CheckDuplicates(_items, e => e.Type.ToString(), configName, issues);
             CheckDuplicates(_gridActors, e => e.Type.ToString(), configName, issues);
+            if (!_scenario.IsStretchRangeValid)
+            {
+                issues.Add($"LevelPacingConfiguration ({configName}): the scenario's shortest stretch is longer than its " +
+                           "longest; the longest is raised to match.");
+            }
+
             return issues;
         }
 

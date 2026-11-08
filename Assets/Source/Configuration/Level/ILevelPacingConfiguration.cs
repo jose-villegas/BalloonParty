@@ -24,6 +24,9 @@ namespace BalloonParty.Configuration.Level
         /// <summary>The seed that rolls <paramref name="level" />'s mix; the same level always gets the same seed.</summary>
         int SeedForLevel(int level);
 
+        /// <summary>Whether <paramref name="level" /> is set in the sky or on the ground. Debug presets (level &lt; 1) are sky.</summary>
+        ScenarioKind ScenarioForLevel(int level);
+
         /// <summary>Points required per colour to complete <paramref name="level" /> — derived from the scoring curve's cumulative milestones, divided by colour count, and snapped to a clean multiple.</summary>
         int ThresholdForLevel(int level);
 

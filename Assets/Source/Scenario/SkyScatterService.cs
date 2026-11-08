@@ -30,7 +30,7 @@ namespace BalloonParty.Scenario
     ///     per-frame behaviour (tracking the camera, reacting to a new input), split the renderer-owning
     ///     half into a View at that point.
     /// </summary>
-    internal sealed class SkyScatterService : IStartable, IDisposable
+    internal sealed class SkyScatterService : IStartable, IDisposable, ISkyBackdrop
     {
         // "new GameObject" defaults to layer 0 (Default), which NavigationCameraReveal's Launch
         // culling mask excludes — Scenario is the layer BackgroundCloud/WallNet/SmokeField already
@@ -79,6 +79,14 @@ namespace BalloonParty.Scenario
             {
                 UnityEngine.Object.Destroy(_quad);
                 _quad = null;
+            }
+        }
+
+        void ISkyBackdrop.SetVisible(bool visible)
+        {
+            if (_quad != null)
+            {
+                _quad.SetActive(visible);
             }
         }
     }

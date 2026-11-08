@@ -88,6 +88,12 @@ namespace BalloonParty.Configuration.Level
             return _generation.SeedForLevel(level);
         }
 
+        public ScenarioKind ScenarioForLevel(int level)
+        {
+            // Debug presets (level < 1) come out sky: the first ground level is at least 1.
+            return _generation.ScenarioForLevel(level);
+        }
+
         public int ThresholdForLevel(int level)
         {
             var cumThis = _scoringCurve.CumulativeMilestone(level);

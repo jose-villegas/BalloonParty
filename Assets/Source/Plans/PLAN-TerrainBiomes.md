@@ -1,387 +1,276 @@
 @page plan_terrain_biomes Terrain & Biomes
 
-# Terrain & Biomes — scenario ground generator
+# Terrain & Biomes: sky and ground scenarios
 
-> Replace the flat blue canvas with a seeded, biome-blended terrain seen from above —
-> grass, water, sand, dirt, stone, lava — bound to the hex grid (each slot has a biome
-> type that gameplay can query), reacting to the disturbance field (grass parts, water
-> ripples), feeding the GI bounce, and gating what static actors may grow where.
-> Planned 2026-07-12 from a verified inventory. **Execution not started.**
->
-> **Needed before bushes ship.** Over the sky backdrop a bush looks like it floats in the air, so
-> the `Bush` entry in the level catalogue is `Withheld` (2026-11-08) until the levels it unlocks at
-> can move to a ground biome it belongs on.
+> Each level is set either in the **sky** (today's backdrop) or on the **ground** (a
+> meadow the board rests on), chosen per level from the level's seed. A level-up Ascent
+> can switch either way, so the run sometimes lands and sometimes climbs back up to the
+> clouds. Actors that need ground under them (bushes first) appear only on ground levels,
+> and the grass reacts to the ball as it flies through.
+> First planned 2026-07-12 as a full seeded biome system; never started. Re-scoped
+> 2026-11-08 to the **smallest version that lets bushes ship**: one ground, the
+> per-level scenario, the grass reaction. The full biome system is kept below as *Later*,
+> unscheduled. **Status: phase 1 built, awaiting in-editor review.**
 
 ---
 
-## Vision & constraints
+## Why now
 
-- **Top-down ground plane**: the game is airborne; the terrain is the distant ground
-  seen from high above. It scrolls with the scenario travel (ascend/descent) with a
-  parallax factor \f$< 1\f$ — depth for free, and **biome transitions happen across levels**:
-  the noise field is continuous along the ascent axis, so climbing reveals new biome
-  bands naturally.
-- **Seeded & reproducible**: one integer seed + level index → identical terrain.
-  Deterministic generation only (no `UnityEngine.Random` state leakage).
-- **Style match**: soft, painterly, blurry-edged (see the bushes/clouds) — biome
-  boundaries are noise-warped and blended, never hard hex edges. Hexes are the *logic*
-  granularity, not the *visual* one.
-- **Performance doctrine (the clever optimization)**: all noise is baked, never
-  evaluated per-pixel at runtime (the PuffCloud 5c lesson — tileable baked noise,
-  `Tools > BalloonParty > Generate Cloud Noise Texture` pipeline exists). The biome
-  composite is **baked once per level into an RT**; the per-frame cost is one quad
-  sampling that RT + a detail texture + `_DisturbanceTex` for reactions. Budget frame:
-  8.33 ms at 120 Hz on a fill-rate-sensitive game — the terrain replaces background
-  pixels we already pay for, so the net new cost must stay near shader-sampling only.
+Bushes (`GridActorType.Bush`, unlock level 16 in `LevelPacingConfiguration`) are withheld
+from level generation: over the sky backdrop a bush reads as floating. Owner direction
+(2026-11-08): the scenario moves between sky and ground in both directions ("once bushes
+appear that doesn't mean we should stay there, sometimes we go up away to clouds"), and
+the ground reacts to the bullet, as blades of grass deforming while it moves through.
 
-## Verified inventory (2026-07-12)
+## Verified inventory (2026-11-08)
 
-- **Grid**: hex coordinates in `Slots/Grid/HexCoordinates.cs`; slot→world via the grid
-  service's `IndexToWorldPosition(Vector2Int)` (used by balloons, trails, pressure).
-  Slots are the biome granularity; board footprint + margin defines the bake area.
-- **Sorting layers** (TagManager): `Default < Balloons < Projectile < PowerUps <
-  GridActors < ScoreTrail < Sky`. Terrain renders on **Default** — under everything,
-  above the camera clear.
-- **Background today**: main camera solid clear color + UI frame — nothing to retire;
-  the terrain quad simply covers it.
-- **Disturbance field**: global `_DisturbanceTex` (R = density, 1 = calm, stamps dig
-  toward 0; G/B = displacement, 0.5-biased), world-bounds mapped
-  (`DisturbanceFieldCoordinates`), already consumed by PuffCloud and SpeckField — the
-  terrain reaction shader samples the same global. Recovery comes free from the field's
-  own diffusion/reform; the terrain never simulates anything.
-- **GI**: `SceneCaptureService` captures configured layers into `_SceneCaptureTex`
-  (alpha = coverage); the GI smear derives bounce color from captured RGB. Putting the
-  terrain on a captured layer feeds biome-colored bounce (green over grass, orange over
-  lava) with **zero new code** — tuning only. Chrome reflections likewise.
-- **Static actor placement**: `PLAN-GridActorExpansion.md` 8.3 (procedural placement,
-  blocked on content) is the future consumer of biome gating; today bushes/clusters
-  place via configuration. The biome query must be a service that placement can consult
-  *when 8.3 lands* — design the seam now, don't build placement logic here.
-- **Pacing**: `LevelParameters`/`LevelPacingConfiguration` already model per-level-range
-  parameters — the natural carrier for "which biome profile applies at this altitude".
-  (File is under active edit for the balance feature — coordinate before touching.)
-- **Scenario travel**: `ScenarioContentRoot` motion is already the reference for
-  travel-reactive systems (SpeckField matches it, incl. teleport rejection) — the
-  terrain parallax binds the same way.
-- **In-flight synergy (not scope)**: SpeckField is gaining palette/heat tinting —
-  biome-tinted ambient specks (pollen over grass, embers over lava) become a natural
-  follow-up once terrain exposes "biome under this world position".
-- **HDR coupling**: lava/emissive biomes are first-class HDR emitter candidates when
-  `PLAN-HDRColorPipeline.md` Wave B lands — author biome emissive params HDR-ready
-  (float intensity, not baked-into-LDR-color).
+What the backdrop is today, back to front (all on sorting layer `Default`):
 
-## Architecture
+| Order | Layer | Owner | Notes |
+|---|---|---|---|
+| — | camera clear colour | `CameraBackgroundTint` | tinted to the live time-of-day light colour |
+| −20 | sky scatter quad | `SkyScatterService` (App scope) | stationary, 1.6× overscan; 10-ring loop per pixel — the priciest backdrop pixel |
+| −10 | cloud backdrop | `BackgroundCloud` shader over `_BackgroundDensityTex` | cloud bodies + an offset drop-shadow tap; clouds scroll with the root via `TransitionParallax` |
+| −1 | smoke | `SmokeFieldView` | projectile trails |
+| — | wall net, GI overlay, actors | | above the backdrop |
 
-Three layers, MVC-conformant (model/service plain C#, view MonoBehaviour):
+- **Disturbance field** (`Shared/Disturbance/`, App scope, always running): a
+  camera-sized `ARGBHalf` ping-pong RT at 8 texels per world unit, published as the global
+  `_DisturbanceTex` with `_FieldBoundsMin`/`_FieldBoundsSize`. R = signed density (0.5 at
+  rest), GB = displacement XY (0.5-biased), A = palette colour tag. The projectile stamps
+  its wake along its path (`StampSource.Projectile`: radius 0.3, strength 0.8); the
+  diffusion tick (every 0.05 s) decays the displacement and reforms the density, so a
+  wake recovers on its own. Bush leaves (`BushLeaf.shader`, vertex stage) and puff clouds
+  already read it with one tap.
+- **Scenario travel**: `ScenarioContentRoot` moves, the camera never does. Level-up Ascent
+  (`LevelAscendCinematic`): root goes from `+Height` to 0 (`Height` = 15 world units,
+  about 4 s at the authored curve and speed); old content is held at local `−Height` and
+  slides out the bottom, new content slides in from the top. Game-over restart
+  (`GameOverLossCinematic.RiseScenarioAsync`): root goes from `−Height` to 0, old content
+  held at local `+Height` leaves through the top. `LevelAscendStartedMessage` fires right
+  before the Ascent.
+- **Per-level backdrop state already exists**: `TimeOfDayCycle` (`Game/Level/`) snaps the
+  light to the level on run start/reset (so the start-level cheat works) and sweeps on
+  `LevelUpPhase.Transitioning`. The ground controller copies that shape.
+- **Seeded levels**: `LevelGenerationSettings.SeedForLevel(level)` hashes the level with a
+  salt, so a retry replays the same mix. `PLAN-Coins.md` §10 ("luck levels", being written
+  in parallel) rolls parts of a level from the same seed; the scenario is rolled the same
+  way.
+- **Baked noise**: `Assets/Textures/Grid/CloudNoiseTileable.png` (made by
+  `Tools > BalloonParty > Generate Cloud Noise Texture`), sampled through
+  `CloudNoise.cginc`. The ground reads it for its large patches. Its blade strokes need finer
+  grain, so they come from a small baked tile of their own (see How it looks). Neither uses
+  per-pixel procedural noise.
+- **Lighting**: `SceneLight.cginc` (`SceneLightTint`/`SceneLightDirection`) gives the
+  time-of-day colour and the sun direction; the clouds already use both.
+- **GI capture** picks GameObject layers (`SceneCaptureService._capturedLayers`), not
+  sorting layers. The ground stays off the captured layers in this scope.
+- **Level content**: levels are generated (`LevelGenerator` from `LevelGenerationSettings`),
+  not authored per range; ranges are debug presets only. The `Withheld` catalogue flag is
+  being added in separate work; it and the luck levels touch the same settings file, so
+  edits there are coordinated.
+- **Stale in the 2026-07 plan, now corrected**: "background is just the camera clear"
+  (there are now four backdrop layers); "`LevelParameters` ranges carry per-altitude
+  data" (levels are generated now).
 
-### 1. Data — `TerrainMapService` (plain C#, VContainer)
-- Input: seed + level index + `BiomeProfile` (new config SO + read-only interface,
-  registered like the other `I*Settings`).
-- **Classification**: two independent baked-noise fields (elevation + moisture) sampled
-  at hex centers → biome via profile thresholds (classic 2-axis biome matrix — gives
-  natural adjacency for free: water→sand→grass→dirt→stone; lava only where the profile
-  allows). Evaluated on CPU at level build over the slot array — the grid is tiny
-  (~hundreds of slots), cost is nothing; determinism trivial.
-- Output A: `ITerrainQuery` — `BiomeType GetBiome(Vector2Int slot)` +
-  `BiomeType GetBiomeAtWorld(Vector2 world)` (for non-slot consumers like specks).
-- Output B: a hex-resolution **index map** `Texture2D` (point-filtered, R8: biome index;
-  board + 1-hex margin) uploaded for the bake.
+## The smallest version
 
-### 2. Bake — one blit per level (GPU, amortizable)
-A bake shader expands the index map into the **terrain composite RT** (moderate res,
-~512–1024 wide, screen-aspect):
-- Per pixel: find containing hex + neighbors from the index map, compute noise-warped
-  hex distances (warp sampled from the baked tileable noise — no procedural noise),
-  blend the 2–3 nearest biomes' albedo/params.
-- Output channels: RGB = blended albedo (palette-driven per biome), A = packed biome
-  params for the runtime shader (reaction type/strength — e.g. quantized biome id, so
-  the runtime shader knows "this pixel is watery" without re-deriving).
-- RT needs a depth-stencil if ever rendered by a camera — it is a **blit target**, so
-  depthless is fine (the RenderGraph rule applies to camera outputs only; documented in
-  Display/README.md).
-- Re-bake on level start / seed change only. If the one-time bake ever spikes a frame,
-  amortize into strips (the prewarm idiom) — measure first.
+### Which levels are ground
 
-### 3. View — `TerrainView` (MonoBehaviour) + runtime shader
-- One quad, sorting layer **Default**, sized to camera frustum + travel margin,
-  parented/bound to `ScenarioContentRoot` with a `_parallaxFactor` (serialized).
-- Runtime shader samples: composite RT + detail noise (tileable, world-space UVs like
-  PuffCloud, so detail never swims during travel) + `_DisturbanceTex`. The per-biome
-  reaction and material techniques are a design space, not a single answer — see
-  **Shader design — options per stage** below; final picks are made by eye via the
-  spike protocol at A3/B2.
-- Reaction params come from the bake's packed data channels — one shader, no per-biome
-  materials, no branching beyond a biome-id selector on cheap math.
-- **Opaque queue**: the terrain fully covers its pixels — render opaque (no blending)
-  to save bandwidth under the fully-transparent 2D stack above it. Verify batching/
-  sorting interaction in Frame Debugger (2D Renderer + opaque geometry — the URP
-  migration taught us to verify, not assume).
+- **A seeded per-level scenario**, `Sky` or `Ground`, computed by a pure
+  `ScenarioSchedule.ForLevel(level)` from a small block on `LevelGenerationSettings`:
+  - `FirstGroundLevel` (proposed **16**, the bush unlock): levels before it are always
+    sky; this level is always ground, so the bushes' first appearance is reliable.
+  - After that the run moves in **stretches**: a stretch lasts between `MinStretch` and
+    `MaxStretch` levels (say 2–4), then flips. Each stretch length is rolled from a hash
+    of the level and the scenario's own salt, so retuning other content doesn't reshuffle
+    the scenarios, and a retry keeps the same one.
+  - Pure and cheap: `ForLevel` walks the stretches from `FirstGroundLevel` up to the
+    level (a few dozen steps at most), no state, no allocation.
+- **Bushes only on ground**: a `RequiresGround` flag on `GridActorContentEntry`;
+  `LevelGenerator` leaves flagged actors out of sky levels. One source of truth: the
+  generator and the ground view both ask `ScenarioSchedule`.
+- **Triggers** (the `TimeOfDayCycle` shape): snap to the level's scenario on run start and
+  run reset (start-level cheat, restart); animate on the level-up Ascent and on the
+  restart rise when the two levels' scenarios differ. Same scenario on both sides changes
+  nothing.
 
-## Shader design — options per stage
+### How it looks
 
-The visual calls below can't be settled on paper — each stage lists its candidate
-techniques with tradeoffs, a recommendation, and what the in-editor **spike** must
-prove. Spike protocol: shader variants behind `#pragma multi_compile`-style keywords
-(or just material swaps), toggled live in play mode with visual QA as judge; losers
-deleted, never shipped dormant.
+- **The meadow**: an opaque, soft, painterly field of 2–3 authored greens. A large-scale
+  noise tap makes the patches; a small-scale tap stretched along one axis makes the blade
+  strokes. Tinted by the scene light, so it dims through dusk and night.
+- **The grass reacts to the ball** through the existing disturbance field, with no new
+  field or stamp:
+  - Each pixel reads `_DisturbanceTex` once. The blades are drawn as two layers: a darker
+    base at the pixel, and brighter tips read a short distance along a **lean** vector.
+  - The lean is a gentle idle sway plus the field's displacement (GB), so where the ball
+    passed, the tips are pushed out from its path and the blades part.
+  - The density change (R) flattens the grass in the wake: tips shorten, and the lit side
+    turns toward the sun direction, so the path reads as a brushed stripe.
+  - Recovery is free: the field's own decay and reform let the blades spring back.
+    Pops, bombs and lasers stamp the same field, so the grass answers them too.
+  - The field covers the camera's rect, and the quad overscans past it: the reaction
+    fades to rest outside the field's bounds.
+  - The field is 8 texels per unit, so the wake is soft, about a ball-width wide. That
+    suits the painterly look; a crisper wake would mean raising `TexelsPerUnit` for every
+    consumer, which is a tuning decision, not planned.
+  - The strokes come from `Textures/Scenario/GrassStrokes.png`: 128² of blurred white
+    noise, equalised so the tip threshold maps straight to coverage, imported as R8 with
+    mips (16 KB). Stretched along the blades, the cloud noise read as camouflage, not
+    grass, and it has no mips. Same tap count.
+- **The meadow travels with the board**: the bushes are planted on it, so the pattern
+  scrolls with `ScenarioContentRoot` one-to-one (`_GroundScroll`). On the Ascent and the
+  restart rise the ground and its bushes move in together; a still ground made the
+  bushes look like they slid in. The disturbance field stays camera-fixed, where the
+  shots stamp it.
+- **Clouds on ground levels**: the cloud bodies fade out and their drop shadows stay, so
+  cloud shadows drift over the grass, as if the clouds were overhead and out of frame.
+  If the bodies stayed, the ground would read as far below and the bushes would float
+  again. Climbing back to the sky brings the bodies back.
+- **The transition** rides the scenario root, in either direction. The edge between the
+  two scenarios is a noise-warped line with a white mist fringe (the cloud colour),
+  placed in the root's space halfway between old and new content: local y = −Height/2
+  on the Ascent, +Height/2 on the restart rise. The old scenario is drawn on the old
+  content's side, the new one on the new side, so one rule covers sky→ground,
+  ground→sky, and both restart directions. The ground and the bushes slide in or out
+  together; the edge needs no timing of its own. The switch is armed when the
+  transition starts and takes effect when the root first moves, so nothing pops while
+  the root waits at 0.
+- **Bush shadow**: the bush's drop-shadow distance is checked against the ground in the
+  editor; a long offset shadow reads as height.
 
-### S1 — Zone blending (bake-time)
+### Performance (mobile, 120 Hz = 8.33 ms frame)
 
-How two biomes meet is the single biggest style lever.
+- **Bake once**: no new RT, no per-level bake, no new field. The only baked input is the
+  existing noise texture; the disturbance field already runs every frame for the clouds
+  and bushes.
+- **Ground pixel**: 4 taps (patch noise, blade base, blade tip, disturbance) plus light
+  ALU, all `half`. That is the 2026-07 plan's budget of at most 4 extra taps on the
+  common path. One more tap inside the edge band, only while a transition runs. No alpha
+  test anywhere (a tile-GPU cost).
+- **Sky levels**: the ground renderer is disabled. Cost: zero.
+- **Ground levels**: the ground covers every pixel, so the sky-scatter quad is disabled
+  (`SkyScatterService` gains a visibility toggle). That swaps the 10-ring sky loop for
+  the 4-tap ground pixel; expect flat or lower cost, and measure it at the review gate.
+- **During a transition** (about 4 s, gameplay paused): sky and ground both draw.
+- **CPU**: no per-frame work at rest and no allocations; while a transition runs, one
+  transform read and one material float per frame. `ScenarioSchedule.ForLevel` runs once
+  per level.
+- Not checkable by `dotnet build`: the shader needs an in-editor look and a Frame
+  Debugger check of the draw order.
 
-| Option | How | Tradeoffs |
-|---|---|---|
-| **(a) Cross-fade** | smoothstep over noise-warped hex distance | Simplest; risks "airbrushed mush" between contrasting biomes (grass→lava) |
-| **(b) Height blending** | each biome's detail texture carries a "height" channel; blend weight is modulated by height so high features (grass tufts, stones) interleave INTO the neighbor instead of fading | The classic splat-map trick; organic interlocking edges; costs one extra channel per detail texture, still bake-time-only |
-| **(c) Dithered/stochastic** | blue-noise threshold between biomes | Cheapest; reads as pixel grit — likely fights the soft painterly style, keep only as a fallback |
-| **(d) Boundary SDF** | bake **signed distance to the biome boundary** into a data channel | Not a blend by itself — an *enabler*: shoreline foam bands, wet-sand darkening, lava crust edges, edge AO all become one-tap lookups at runtime. Strongly recommended **in addition to** (a) or (b) |
+### What it reuses
 
-**Recommendation**: (b) + (d). Domain-warp the hex distance with the baked tileable
-noise *before* blending (warp amplitude per biome pair — water wants smooth coasts,
-grass→dirt wants ragged). **Spike SP-1 (at A3)**: (a) vs (b) on a grass/sand/water
-test seed, judged at game zoom.
+`DisturbanceFieldService`'s `_DisturbanceTex` and the projectile's existing wake stamps
+for the grass reaction; `QuadRendererBuilder` for the quad; `CloudNoiseTileable.png` +
+`CloudNoise.cginc` for the pattern; `SceneLight.cginc` for the tint and sun direction;
+`BackgroundCloud`'s existing shadow tap (only a global ground-coverage fade on the bodies
+is new); `SeedForLevel`'s hash for the scenario roll; the `TimeOfDayCycle`
+snap/transition shape; `ScenarioContentRoot` and the two existing transition beats. No
+changes to the Ascent or restart code.
 
-### S2 — Grass (the flagship reaction)
+### Shape (MVC)
 
-Top-down 2D "grass" is a material illusion — no geometry, no shells.
+- `ScenarioKind` (`Sky`, `Ground`), `ScenarioSchedule` and `ScenarioScheduleSettings` (pure,
+  `Configuration/Level/`), the settings block on `LevelGenerationSettings`, read through
+  `ILevelPacingConfiguration.ScenarioForLevel`; EditMode-tested. `LevelSeedHash` is the
+  hash shared with `SeedForLevel`.
+- `GroundSettings` / `IGroundSettings` (`Configuration/Effects/`): ground material,
+  sorting order (−15, between sky −20 and clouds −10), overscan.
+- `ActiveScenario` / `IActiveScenario` (`Scenario/`): the model, the scenario shown now.
+- `ScenarioController` (plain C#, `Game/Level/`, `IStartable`/`IRunResettable`): asks the
+  schedule for the current level and writes the model.
+- `GroundView` (thin MonoBehaviour, `Scenario/View/`, parented under the Game scope so the
+  additive Launcher→Game load doesn't destroy it): owns the quad, pushes the
+  `_GroundCoverage` global the cloud shader reads (`Include/Ground.cginc`), and hides the
+  sky through `ISkyBackdrop`. The Launch begin-screen always shows sky.
+- `Ground.shader` (`Shaders/BalloonParty/Scenario/`).
 
-| Option | How | Tradeoffs |
-|---|---|---|
-| **(a) Tinted noise** | detail noise × palette green | Baseline/fallback; flat, no identity |
-| **(b) Stroke-clump texture** | hand-authored (or tool-baked) tileable texture of top-down blade clumps, palette-tinted | The painterly look lives here; one texture; matches the bush foliage art language |
-| **(c) Two-layer offset depth** | dark under-layer + bright top-layer sampled with a small UV offset; offset vector = wind + disturbance displacement | Fake parallax depth for one extra tap; the *offset* is what makes blades "lean" convincingly |
-| **(d) Flow-map anisotropy** | per-pixel stroke direction from a baked flow field | Prettiest wind, most authoring; overkill unless (b)+(c) reads flat |
+### Phases
 
-**Recommendation**: (b) + (c). The disturbance reaction is then *shear*: displace the
-top layer's UVs along the field's displacement vector (G/B channels) scaled by density
-deficit — blades part around a wake and recover as the field reforms (recovery is free,
-it IS the field's reform). Idle wind: scroll a large-scale gust band (low-frequency
-noise) through the offset vector — **coordinate direction/speed with the bush wind so
-the world shares one wind**. **Spike SP-2 (at B2)**: (b)+(c) against (a), plus gust
-sync with bushes on screen.
+1. **Ground at rest, with the grass reaction**: `ScenarioSchedule` + tests (determinism,
+   level 16 always ground, stretch bounds, no flips before 16), `GroundSettings`,
+   controller snap on run start/reset, `GroundView`, the meadow shader reading the
+   disturbance field, the sky toggle, the cloud-body fade. Seen in the editor with the
+   start-level cheat at 16, firing balls through the grass. *Review: architect,
+   test-everything, reviewer, optimizer.*
+2. **Transitions both ways**: the edge in root space on the Ascent and the restart rise,
+   the mist fringe, arm-then-commit. Seen by playing across a scenario flip and by
+   losing on a ground level. Seams to change (architect, phase 1 review):
+   - The restart goes through `IRunResettable.ResetRun`, which runs before the root drops
+     to −Height and can't tell a cinematic restart (rise) from a skip-path one (cut).
+     Move the reset onto `RunResetMessage`: `BoardReset == false` arms a rise edge at
+     +Height/2, `BoardReset == true` and run start snap.
+   - `ActiveScenario` keeps `Kind` as the committed scenario and gains the pending
+     transition (target, edge side); `GroundView` commits when the root first moves. It
+     already feeds the root offset to the meadow (phase 1), so the grass travels with the
+     board.
+   - Phase 1 visible gap until then: the switch is a cut, so on the Ascent the old board
+     floats out over the new backdrop, and on a cinematic restart a ground board sits on
+     the sky for the spawn wait and the rise.
+3. **Bushes on ground only**: `RequiresGround` on the catalogue and in `LevelGenerator`
+   (with a test that no sky level contains a ground-only actor), un-withhold bushes once
+   the `Withheld` flag lands, tune the bush shadow on grass, run a playtest-bot
+   comparison, update the Configuration README. Debug presets (level < 1) skip
+   `LevelGenerator` and are always sky, so a preset that lists bushes would float them;
+   the preset validator should warn.
 
-**Interaction fidelity ladder** (industry consensus for mobile is exactly our
-architecture — a world-space "trample/bend" RT that the grass shader samples; the
-disturbance field already is that, globally bound and stamped by gameplay):
-1. **Bend** (base, free): the shear above. Monotonic recovery from field reform.
-2. **Overshoot wiggle** (cheap, in-shader): real grass springs *past* rest and damps.
-   The field only reforms monotonically — fake the overshoot by sampling the
-   displacement at two temporal lags (current + shader-clock-delayed strength) and
-   taking a damped difference. Two ALU-cheap ops, no new resources; judge in SP-2.
-3. **N-layer shells, top-down variant** (medium): generalize the two-layer offset to
-   3–4 layers, each offset progressively further along the lean vector with
-   per-layer darkening — under an ortho top-down camera this reads as dense blade
-   depth precisely when grass leans (wind/wake), which is when eyes are on it.
-   +1 tap per layer over a *limited* reaction radius (branch on displacement
-   magnitude); cap at 4 layers total.
-4. **Persistent trample RT** (opt-in, shares the sand footprint decision): a tiny
-   ping-pong RT accumulating bend with slow decay — paths stay flattened for seconds.
-   Same infrastructure as the field/footprints; only if the game reads better with
-   memory of where things flew.
+## Decisions (signed off 2026-11-08)
 
-**Mobile rule (from the field's consensus, encode as a hard constraint): no
-alpha-tested grass anywhere** — alpha clip is a tile-GPU killer (reported ~2× frame
-cost vs non-clipped); everything above is opaque/blended sampling, which is why this
-design stays cheap.
+1. First ground level **16**, with the first bushes.
+2. Stretches of **2–4 levels** per scenario.
+3. Cloud bodies **fade out on ground**; their shadows stay.
 
-### S3 — Water
+## In-editor checks for phase 1
 
-| Option | How | Tradeoffs |
-|---|---|---|
-| **(a) Dual scrolling noise** | two detail-noise layers scrolled at different speeds/scales, combined into a pseudo-normal; \f$\text{glint} = \text{pseudo-normal} \cdot \text{light dir}\f$ | Two taps; the standard cheap water; light dir MUST be the GI/PuffCloud `_lightDirection` convention so the world shares one sun |
-| **(b) Baked Voronoi sparkle** | scrolled pre-baked Voronoi ridge texture as caustic glints | One tap, very stylized; can layer on (a) |
-| **(c) Ripples from density gradient** | band-pass the disturbance density deficit → expanding rings as the field diffuses; 2 extra taps for the gradient | Free propagation (the field already diffuses outward); rings are soft and painterly — likely enough |
-| **(d) True wave sim** | a second small ping-pong RT running the wave equation, stamped by the same disturbance events | **The infrastructure already exists** — `DisturbanceFieldResources`' ping-pong blit is structurally a wave-solver scaffold; a wave kernel + dedicated stamp hook gives real interference/reflection ripples. Cost: one more low-res RT + blit per tick. Gorgeous, but build only if (c) reads flat |
-| Shoreline | boundary-SDF band (S1-d): foam stripe + wet-sand darkening on the sand side | One tap; sells water more than ripples do — prioritize it |
+- The meadow and the grass reaction at game zoom, by day and night (start-level cheat 16).
+- Frame Debugger: the ground draws before the clouds and the smoke, and the sky quad is
+  gone on ground levels.
+- The GI: on ground levels the capture sees neither sky nor ground (the ground is on
+  Default, the sky is hidden), so check the GI smear and sprite lighting don't shift
+  between sky and ground levels.
+- Launcher → Game in play mode: the `Ground` object lives under the Game scope.
+- Blade grain on a phone: the strokes come from their own R8 tile with mips, at
+  `_BladeTiling` 1. Check their width at game zoom on a device.
+- A level-up within a ground stretch (16 → 17 with the default salt): the meadow and the
+  bushes travel in together, with nothing sliding over still grass.
 
-**Recommendation**: (a) + (c) + shoreline first; (d) as a flagged stretch task.
-**Spike SP-3 (at B2)**: (c) vs (d-prototype) on a water-heavy seed — decide if the
-wave sim earns its RT.
+## Follow-ups from the phase 1 optimizer review
 
-### S4 — Sand / dirt / stone / lava
+- Shader prewarm: the ground's first draw lands on the first ground level's Ascent;
+  add `BalloonParty/Scenario/Ground` to the shader-variant capture (`PLAN-PerformanceRecovery`
+  F4), with both blend states once phase 2 switches them.
+- Optional, once the phase 2 edge allows it: draw the cloud shadow inside the ground shader
+  and turn the cloud pass off on ground levels (one fewer full-screen pass, five taps).
 
-- **Sand**: granular high-frequency detail; reaction options: *(a)* instantaneous
-  darkening by density deficit (cheap, recovers with the field) vs *(b)* a persistent
-  **footprint RT** (tiny ping-pong accumulating disturbance with very slow decay —
-  projectile tracks that linger in sand). (b) is charming and cheap (same pattern as
-  the field itself) but is a new resource — build behind the same decision gate as the
-  wave sim: only if (a) feels dead. Dirt = (a) with lower strength.
-- **Stone**: static detail + baked edge-AO from the boundary SDF. No reaction — the
-  contrast makes grass/water read as alive.
-- **Moss (derived overlay, NOT a biome)**: moss is where the design gets procedural
-  depth for free — compute a bake-time moss mask from data we already have:
-  `moisture high` AND (`boundary SDF small` — growth creeps along transitions — OR
-  near static actors, approximated by stamping bush/cluster slot positions into the
-  mask). Render as a tinted stroke-clump layer (same texture family as grass) over
-  whatever biome it lands on: mossy stone, mossy dirt, moss-edged water — one mask,
-  many looks. Costs one bake channel + one runtime tap *only where the mask is hot*.
-  Optional flourish: moss darkens/saturates with moisture (macro-noise modulated), so
-  no two patches read identical.
-- **Lava**: crust = thresholded detail noise (dark crust plates over bright gaps);
-  slow domain-scroll for flow; boundary SDF → cooled-crust rim. Reaction: agitation
-  boosts emissive intensity (authored as a float, HDR-ready for
-  `PLAN-HDRColorPipeline.md` B3 — under LDR it clamps, under HDR it blooms). Idle
-  pulse via the self-derived shader clock idiom (no MPB churn).
+---
 
-### S5 — Data layout (bake outputs)
+## Later: the full biome system (unscheduled)
 
-| Option | Layout | Tradeoffs |
-|---|---|---|
-| (a) Single RGBA8 | RGB albedo + A packs biome id (high bits) & reaction strength (low bits) | One tap; packing/unpacking is fiddly and id quantization caps biome count & param resolution |
-| **(b) Two RTs** | RGBA8 composite (RGB albedo, A = blend/AO) + RG8 data map (R = dominant biome id, G = boundary SDF) | Two taps (identical bandwidth class at these resolutions); every technique above that wants the SDF or clean ids gets them without bit tricks |
+The 2026-07-12 design, kept for when more biomes earn it. Its inventory is superseded by
+the one above. In short:
 
-**Recommendation**: (b). Resolution spike at A-gate: 512 vs 1024 wide — the soft
-style may make 512 free money.
+- **Seeded terrain**: seed + level → identical map. Two baked-noise fields (elevation,
+  moisture) sampled at hex centres classify each slot into a biome (water, sand, grass,
+  dirt, stone, lava) through a `BiomeProfile`; `ITerrainQuery.GetBiome(slot)` /
+  `GetBiomeAtWorld(pos)` is the seam for placement gating (bushes only on grass) and
+  biome-tinted specks.
+- **Bake once per level** into a ~512-wide RT: noise-warped hex distances blend the
+  nearest biomes (height blending recommended over a plain cross-fade), plus a data map
+  with biome id and a signed distance to the boundary (shorelines, wet sand, lava crust,
+  edge AO as one-tap lookups).
+- **Runtime**: one quad sampling the composite, a world-space detail texture and
+  `_DisturbanceTex` for reactions: grass shears along the field's displacement, water
+  gets dual scrolling noise plus rings from the density gradient, sand darkens, lava
+  pulses emissive (HDR-ready per `PLAN-HDRColorPipeline.md`), stone stays inert. Budget
+  ≤ 4 extra taps in the common path; no alpha-tested grass (a tile-GPU cost).
+- **Anti-repetition**, cheapest first: per-cell hash flips, a macro variation tap, a
+  channel-packed detail atlas, scatter stamps; hex-tiling only where those fail.
+- **Composition rules**: one sun (`SceneLight` direction), one wind (shared with the bush
+  wind), no second lighting model; GI bounce from the ground is a layer-mask change.
 
-### S6 — Cheap density & anti-repetition (mobile)
-
-Fixed ortho zoom means tiling repetition is *the* density-killer — the eye finds the
-pattern in seconds. The ladder, cheapest first (stack until the repetition dies, stop
-there):
-
-| Technique | Cost | What it buys |
-|---|---|---|
-| **Per-cell hash bombing** | ~free (one hash, conditional UV flip/rotate per virtual cell) | Kills the grid-aligned repeat of any tileable detail — the GPU Gems "texture bombing" trick reduced to flips/rotations; do this unconditionally |
-| **Macro variation map** | 1 low-frequency tap (reuse the baked tileable noise at a big world scale) | Modulates tint/brightness/detail-scale across meters — breaks the "same green everywhere" flatness; also drives moss saturation and grass gust response variation |
-| **Channel-packed detail atlas** | 1 tap serves 4 biomes (grass/sand/dirt/stone grayscale details in RGBA of ONE texture, palette-tinted per biome) | Bandwidth win AND a texture-slot win; ASTC-compress; blend regions read two channels of the same tap |
-| **Blue-noise scatter stamps** | 1 tap into a scatter atlas, hash-gated per cell | Flowers on grass, pebbles on dirt, shells on sand — sparse sprinkles that read as authored density; gate by biome id + moisture so meadows cluster naturally |
-| **Hex-tiling (Mikkelsen)** | 3 taps per texture in blend regions | The heavyweight anti-repetition — analytically-weighted 3-sample blend with per-tile hash transforms; reserve for the ONE surface where cheaper rungs fail (water sparkle is the likely candidate) |
-| **Histogram-preserving stochastic (Heitz/Deliot)** | 3 taps + LUT + gaussian-domain transform | The full-fat version (Unity Labs ships a reference implementation); almost certainly overkill for a soft painterly style at fixed zoom — listed so the option is known, not planned |
-| **Bicubic composite upsample** | 4-tap B-spline read of the composite RT | Makes a 512-wide composite look smooth at screen res — likely lets us halve the bake resolution; pairs with the S5 resolution spike |
-
-Precision hygiene throughout: `half` for all color/detail math (the URP shaders here
-are unlit and LDR), world-space UVs so nothing swims during travel.
-
-References: Heitz/Deliot procedural stochastic texturing
-([Unity blog](https://unity.com/blog/engine-platform/procedural-stochastic-texturing-in-unity),
-[Unity Labs implementation](https://github.com/UnityLabs/procedural-stochastic-texturing)),
-Mikkelsen hex-tiling ([demo/paper](https://github.com/mmikk/hextile-demo)),
-texture bombing (GPU Gems ch. 20).
-
-### S7 — Runtime composition rules
-
-- **One sun**: light direction is the existing `_lightDirection` convention (GI +
-  PuffCloud) — terrain glints/shading must read from the same serialized value or a
-  shared global, never a second authored direction.
-- **One wind**: gust phase/direction shared with the bush wind parameters.
-- The GI overlay already composites over the terrain (it's below the overlay in
-  sorting) — terrain needs no lighting of its own beyond flavor; do NOT add a second
-  lighting model.
-- Opaque queue for the terrain quad (it fully covers its pixels; saves blend
-  bandwidth under a fully-transparent stack) — verify 2D Renderer opaque-pass ordering
-  in the Frame Debugger before relying on it (URP migration rule: verify, don't
-  assume).
-- Reaction budget: \f$\le 4\f$ extra taps in the common path (disturbance + gradient pair +
-  detail); wave-sim/footprint RTs are opt-in extras with their own device measurement.
-
-## Task plan
-
-Sizes: S ≤ half a day · M ≈ 1–2 days · L ≈ 3+ days. Every wave ends with a visual QA
-in-editor gate. Agent assignments follow the established split: opus for
-quality-critical/subtle work, sonnet for well-specified implementation, haiku for
-mechanical tasks; Fable investigates handoffs, reviews, commits.
-
-### Dependency graph
-
-```
-A1 data service (opus) ─▶ A2 index-map upload (sonnet) ─▶ A3 bake blit (opus, shader) ─▶ A-gate (visual QA: bake looks right in Render Maps)
-                                                                 │
-                              B1 view + runtime shader v1 (sonnet) ─▶ B2 reactions (opus, shader) ─▶ B3 GI feed (sonnet) ─▶ B-gate (visual QA: style + device perf)
-                                                                 │
-        C1 placement gating seam (sonnet) ◀──────────────────────┤   (needs only A1)
-        C2 seed plumbing + debug (haiku) ◀───────────────────────┤   (needs only A1)
-        C3 Render Maps registry entry (sonnet) ◀─────────────────┘   (any time after A3)
-```
-
-### Wave A — data + bake
-
-#### A1 — `TerrainMapService` + `BiomeProfile` config + `ITerrainQuery` · **P0 · M · opus**
-Pure C#: seeded two-noise classification over slots, profile SO (+ read-only interface,
-registered in scope), both query methods, and **EditMode tests** (determinism: same
-seed → same map; adjacency sanity: no lava-touching-water unless profile allows;
-threshold coverage). Opus — the classification quality and the profile's expressiveness
-shape everything downstream. Noise source: sample the existing baked tileable noise
-texture data on CPU (import readable copy or bake a float array via the generator
-tool) — do NOT hand-roll simplex; determinism and visual continuity with the bake
-depend on both stages reading the same fields. Fable pre-investigates the noise-data
-access path before dispatch.
-
-#### A2 — Index-map build/upload · **P0 · S · sonnet**
-`Texture2D` R8 point-filtered from the service's slot array (+ margin ring extrapolated
-from nearest slot), rebuilt on level start; lifecycle owned by the service's disposal.
-
-#### A3 — Bake blit shader + `TerrainBaker` · **P0 · M · opus**
-The composite bake per shader-design S1 + S5: noise-warped hex-distance blending into
-the two-RT layout (composite RGBA8 + id/SDF data map). Ships **spike SP-1**
-(cross-fade vs height-blend, keyword-switched) for the A-gate decision. Shader work is
-in-editor-verified only — A-gate visual QA: inspect both RTs in the Game Render Maps
-window (add via C3 or the custom slot), pick the blend style, delete the loser. Blend
-width, warp amplitude per biome pair, and per-biome albedo exposed on `BiomeProfile`
-for live tuning; include the 512-vs-1024 resolution check here.
-
-**A-gate (visual QA)**: composite for a handful of seeds reads as natural, blended,
-style-matched ground. Iterate A3 knobs before any view work.
-
-### Wave B — view + reactions + GI
-
-#### B1 — `TerrainView` + runtime shader v1 · **P0 · M · sonnet**
-Quad on Default layer, frustum+margin sizing, parallax binding to `ScenarioContentRoot`
-(mirror SpeckField's motion sampling incl. teleport rejection), opaque queue, composite
-+ world-space detail sampling. No reactions yet. Visual QA gate: in-game look vs the
-screenshots' soft style; travel/parallax feel during ascend + restart descent.
-
-#### B2 — Disturbance reactions · **P1 · M–L · opus**
-The per-biome reaction block per shader-design S2–S4 recommendations: grass
-stroke+offset shear, water dual-noise + gradient rings + SDF shoreline, sand
-darkening, lava emissive pulse, stone inert. Ships **spikes SP-2** (grass technique
-A/B + bush wind sync) and **SP-3** (gradient rings vs wave-sim prototype — the wave
-sim reuses the disturbance ping-pong pattern; build the prototype minimal and be
-ready to delete it). This is the showpiece and the most tuning-heavy task — every
-constant a material property so the author live-tunes in play mode. Device measurement
-closes it: \f$\le 4\f$ extra taps in the common path; wave-sim/footprint RTs only survive
-with their own pacing numbers.
-
-#### B3 — GI integration · **P1 · S · sonnet**
-Put the terrain on a captured layer (config change + docs), re-tune `_BounceStrength`/
-shadow tint so biome bounce reads without overpowering (lava orange on balloon
-undersides = the money shot). Verify in Game Render Maps (capture alpha semantics
-unchanged — terrain is opaque, so coverage = 1 under the board; check the GI ground
-shadow still behaves).
-
-**B-gate (visual QA)**: full style pass + device build — pacing sample via the adb loop,
-overdraw check in Frame Debugger dump vs a pre-terrain baseline capture (take one at
-A-gate time).
-
-### Wave C — gameplay + tooling (parallel after A1)
-
-#### C1 — Placement gating seam · **P1 · S–M · sonnet**
-`BiomeProfile` gains per-biome allowed-content flags (bush, cluster, future actor
-archetypes); expose a query helper on `ITerrainQuery`. Wire into today's placement
-path only where it exists (bush/cluster spawn points); leave 8.3's procedural
-placement to `PLAN-GridActorExpansion.md` — this task builds the seam it will consume.
-Coordinate with the in-flight balance work before touching shared files.
-
-#### C2 — Seed plumbing + reproduction affordance · **P2 · S · haiku**
-Seed source (level config or run-random), logged at level start
-(`[TerrainMap] seed=… level=…`), settable via a cheat/debug entry for reproduction.
-Mechanical once A1 defines the seam.
-
-#### C3 — Game Render Maps entries · **P2 · S · sonnet**
-Register the index map + composite RT in the Render Maps window with channel tooltips
-(R = biome index / packed params). Tooling continuity — this is how A-gate and B-gate
-inspect the pipeline.
-
-## Open questions (answer at execution time)
-
-1. **Biome set + matrix**: final list and the elevation/moisture matrix — the author defines
-   in `BiomeProfile` during A-gate iteration; the plan assumes
-   grass/water/sand/dirt/stone/lava.
-2. **Coverage**: full-frustum ground vs board-footprint-with-sky-margin — decide at B1
-   against the frame/vignette styling in the current UI.
-3. **Biome-per-altitude**: whether `LevelParameters` ranges carry a biome-profile
-   reference (biomes change as you climb) or one profile spans the run with noise-only
-   variation — decide with the pacing file's owner (it's under active edit).
-4. **Water spec**: settled by spike SP-3 (gradient rings vs wave-sim), not on paper —
-   the shoreline SDF band ships regardless (it sells water more than ripples do).
-5. **Speck/biome tinting**: follow-up once both this and the speck palette work land —
-   `GetBiomeAtWorld` feeds the speck compute's palette selection.
+The meadow above is the first biome of that system. When it grows, `ScenarioKind` gains
+more grounds (the schedule rolls which one a ground stretch uses), the meadow shader and
+its grass reaction become the grass biome's runtime look, and the sky/ground edge becomes
+the first boundary.

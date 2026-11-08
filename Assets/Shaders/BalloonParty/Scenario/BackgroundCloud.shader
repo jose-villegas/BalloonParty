@@ -32,6 +32,11 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
         _ShadowColor        ("Shadow Color",       Color)              = (0.06, 0.06, 0.14, 0.35)
         _ShadowDistance     ("Shadow Distance",    Range(0, 3.0))      = 0.6
         _ShadowSoftness     ("Shadow Softness",    Range(0, 0.10))     = 0.03
+
+        [Header(Ground)]
+        // On ground levels the cloud bodies fade by this much while their shadows stay on the grass: the
+        // clouds read as overhead and out of frame rather than between the camera and a distant ground.
+        _GroundBodyFade     ("Ground Body Fade",   Range(0, 1))        = 1
     }
 
     SubShader
@@ -60,6 +65,7 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
             #include "../Include/BackgroundField.cginc"
+            #include "../Include/Ground.cginc"
 
             struct appdata_t
             {
@@ -93,6 +99,7 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
             float  _ColorNoiseBias;
             float  _NormalStrength;
             float  _NormalEpsilon;
+            float  _GroundBodyFade;
 
             #ifdef _SHADOW_ON
             fixed4 _ShadowColor;
@@ -153,6 +160,30 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
             fixed4 frag(v2f IN) : SV_Target
             {
                 float2 wp = IN.worldPos;
+                float bodyFade = 1.0 - GroundCoverageAt(wp) * _GroundBodyFade;
+
+                // On the ground with the bodies fully faded only the drop shadow is left, so skip the body's
+                // density, gradient and lighting. Coverage is a global today, so every pixel takes the same
+                // side; the LOD taps keep gradients out of the branch (the density RT has no mips anyway).
+                [branch] if (bodyFade < 0.001)
+                {
+                    #ifdef _SHADOW_ON
+                    float shadowOnlyCloud = BackgroundFieldDensityLOD(wp + SceneLightDirectionAtLOD(wp) * _ShadowDistance);
+                    float shadowOnlyAlpha = shadowOnlyCloud * _ShadowColor.a * IN.color.a * ShadowLightFadeAtLOD(wp);
+                    #ifndef _LOW_QUALITY_CLOUD
+                    shadowOnlyAlpha *= smoothstep(0.0, _ShadowSoftness + 0.01, shadowOnlyCloud);
+                    #endif
+                    if (shadowOnlyAlpha < 0.001)
+                    {
+                        discard;
+                    }
+
+                    return fixed4(_ShadowColor.rgb * shadowOnlyAlpha, shadowOnlyAlpha);
+                    #else
+                    discard;
+                    return fixed4(0.0, 0.0, 0.0, 0.0);
+                    #endif
+                }
 
                 // Cloud shape = the shared, baked density map. Computed before any discard so the
                 // screen-space derivatives below stay defined.
@@ -163,7 +194,7 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
                 float2 pixelWorld = max(float2(abs(ddx(wp.x)), abs(ddy(wp.y))), 1e-5);
                 float2 lightGradient = float2(ddx(cloud), ddy(cloud)) / pixelWorld;
 
-                float mainAlpha = cloud * _CloudColor.a * IN.color.a;
+                float mainAlpha = cloud * _CloudColor.a * IN.color.a * bodyFade;
                 fixed3 mainRgb = _CloudColor.rgb * IN.color.rgb * CloudLighting(lightGradient, wp, cloud);
 
                 #ifdef _SHADOW_ON

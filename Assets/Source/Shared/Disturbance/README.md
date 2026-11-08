@@ -2,7 +2,7 @@
 
 # Disturbance Field Service
 
-Shared screen-space disturbance field that any game system can stamp into. Puff cloud shaders and future effects sample from it.
+Shared screen-space disturbance field that any game system can stamp into. Puff clouds, bush leaves, the wall net, the speck field and the ground's grass (`Scenario/README.md`) sample it.
 
 ## Contents
 
