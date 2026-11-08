@@ -19,8 +19,10 @@ namespace BalloonParty.Tests.UI
         [Test]
         public void SizeAt_EachDoubling_AddsTheSameStep()
         {
-            var two = HeadsUpSizing.SizeAt(Size, Growth, MaxSize, 2) - HeadsUpSizing.SizeAt(Size, Growth, MaxSize, 1);
-            var four = HeadsUpSizing.SizeAt(Size, Growth, MaxSize, 4) - HeadsUpSizing.SizeAt(Size, Growth, MaxSize, 2);
+            // A cap out of reach, so only the growth shows.
+            const float noCap = 10f;
+            var two = HeadsUpSizing.SizeAt(Size, Growth, noCap, 2) - HeadsUpSizing.SizeAt(Size, Growth, noCap, 1);
+            var four = HeadsUpSizing.SizeAt(Size, Growth, noCap, 4) - HeadsUpSizing.SizeAt(Size, Growth, noCap, 2);
 
             Assert.AreEqual(Size * Growth, two, 1e-5f);
             Assert.AreEqual(two, four, 1e-5f);
