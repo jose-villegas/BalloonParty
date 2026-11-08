@@ -81,8 +81,8 @@ global `_DisturbanceTex` without any C# wiring. Toggle via `_RATTLE_ON` keyword.
 `BushSettings` (ScriptableObject in `Configuration/`) — `IBushSettings`. Holds:
 - **Prefab** — `BushView` prefab reference
 - **Branch Map** — `BushVariantData[]` variants, branch shader, gradient, `BranchColor` (tint × gradient), leaf material, world size
-- **Branch Shadow / AO** — ground shadow colour/offset/spread/softness; central occlusion blob (`BranchAOColor`, `BranchAORadius`, `BranchAOSoftness`, `BranchAOIntensity`)
-- **Leaf** — atlas sprites, `LeafTint` (global foliage tint, applied as `_LeafColor` over the per-instance tint), shadow colour/offset/softness, sprite scale
+- **Branch Shadow / AO** — ground shadow colour/offset/spread/softness; central occlusion blob (`BranchAOColor`, `BranchAORadius`, `BranchAOSoftness`, `BranchAOIntensity`). Both colours are lit by the scene light like the ground they land on, so they darken and tint with the time of day
+- **Leaf** — atlas sprites, `LeafTint` (global foliage tint, applied as `_LeafColor` over the per-instance tint), shadow colour/offset/softness (lit by the scene light, like the branch shadow), sprite scale
 - **Wind** — amplitude, period, noise amplitude, scale pulse, pivot offset
 - **Rattle** — enabled toggle, amplitude, frequency, damping
 - **Editor Preview** (`#if UNITY_EDITOR`) — `LiveTuning` toggle + a `Revision` counter bumped by the SO's `OnValidate`. When on, `BushView` polls `Revision` and **rebuilds** the bush (materials + render data) whenever any field changes, so **all** fields preview live — colours, AO, wind, and structural ones (atlas, gradient, world size, depth split). Editor-only (stripped from builds), but works **in Play mode**: bushes are configured only by the DI controller (an entry point), which runs in play mode, so tune with the editor playing.

@@ -267,8 +267,11 @@ Shader "BalloonParty/Grid/BushLeaf"
                     shadowAlpha = SampleShadowAlpha(shadowRaw, i.uvRect);
                 }
 
-                // No light, no shadow — opacity follows intensity (clamped at authored).
-                fixed4 shadow = fixed4(_ShadowColor.rgb, _ShadowColor.a * shadowAlpha * i.shadowFade);
+                // No light, no shadow — opacity follows intensity (clamped at authored). The colour is lit like
+                // the ground it lands on, so a dusk or night light darkens and tints it with the leaves instead
+                // of leaving an unlit (bright) patch on a dark meadow.
+                fixed3 shadowRgb = _ShadowColor.rgb * lerp(float3(1.0, 1.0, 1.0), i.lightTint, _LightInfluence);
+                fixed4 shadow = fixed4(shadowRgb, _ShadowColor.a * shadowAlpha * i.shadowFade);
 
                 fixed4 col = tex2D(_MainTex, i.uv);
                 float4 tint = UNITY_ACCESS_INSTANCED_PROP(Props, _LeafTint);

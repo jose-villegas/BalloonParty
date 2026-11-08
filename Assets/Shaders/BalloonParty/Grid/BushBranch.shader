@@ -155,14 +155,19 @@ Shader "BalloonParty/Grid/BushBranch"
                     shadowHit = SampleShadow(i.uv, float2(0, 0), i.worldPos);
                 }
 
-                // No light, no shadow — opacity follows intensity (clamped at authored).
-                fixed4 shadow = fixed4(_ShadowColor.rgb, _ShadowColor.a * shadowHit * ShadowLightFadeAt(i.worldPos));
+                // The scene light at this pixel, for the shadow, the AO blob and the branch body below.
+                float3 light = lerp(float3(1.0, 1.0, 1.0), SceneLightTintAt(i.worldPos), _LightInfluence);
+
+                // No light, no shadow — opacity follows intensity (clamped at authored). The colour is lit like
+                // the ground it lands on, so a dusk or night light darkens and tints it instead of leaving an
+                // unlit (bright) patch on a dark meadow.
+                fixed4 shadow = fixed4(_ShadowColor.rgb * light, _ShadowColor.a * shadowHit * ShadowLightFadeAt(i.worldPos));
 
                 // AO blob — radial gradient centred at trunk, darkens ground
                 float dist = length(i.uv - 0.5) * 2.0;
                 fixed aoAlpha = _AOColor.a * _AOIntensity * (1.0 - smoothstep(
                     _AORadius - _AOSoftness, _AORadius, dist));
-                fixed4 ao = fixed4(_AOColor.rgb, aoAlpha);
+                fixed4 ao = fixed4(_AOColor.rgb * light, aoAlpha);
 
                 // Branch content — gradient mapped across width (B channel)
                 fixed4 map = tex2D(_MainTex, i.uv);
@@ -171,8 +176,9 @@ Shader "BalloonParty/Grid/BushBranch"
                 fixed3 col = gradCol * _BranchColor.rgb * (0.6 + 0.4 * map.a) * _RendererColor.rgb;
 
                 // Diffuse term: the branch body is lit by the scene light — same response as
-                // Sprite/Diffuse. The AO blob stays authored (ambient occlusion, not light-cast).
-                col *= lerp(float3(1.0, 1.0, 1.0), SceneLightTintAt(i.worldPos), _LightInfluence);
+                // Sprite/Diffuse. The AO blob above is lit too, like the shadow, so it darkens the ground at night
+                // rather than lightening it.
+                col *= light;
 
                 // Composite: AO (bottom) ← shadow ← branch (top)
                 fixed4 base = PorterDuffOver(shadow, ao);
