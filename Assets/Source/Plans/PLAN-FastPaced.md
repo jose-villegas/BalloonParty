@@ -129,7 +129,7 @@ wording; the built behaviour lives in `Thrower/README.md` (Rapid fire), `Game/Le
 | Item | State |
 |---|---|
 | Pool prewarm | `2 * MaxBallsInFlight + 1`, not cap + 1: a dead ball stays out of the pool until its disappear animation finishes. |
-| Reload | The held ball slides pivot to muzzle, advancing only while a slot is free (`ThrowerReload`). Since playtest its pace depends on what's in the air: near-instant with nothing flying (`ProjectileLoadDuration`, 0.12 s), and `max(ProjectileLoadDuration, ReloadCooldownSeconds)` while a ball flies (2 s, a little under the median flight the playtest bot measured), which Quick Hands shortens: each shot can be followed up only at a price, and the cards make that price cheaper. `ThrowerReadyMessage` marks "a release now fires" and drives the reload sound and the handwritten `+1` ready notice (`UI/Notices/ReloadNotice`). The shipped cooldown went 0.5 s, then 0.9 s, before the idle/under-fire split. |
+| Reload | The held ball slides pivot to muzzle, advancing only while a slot is free (`ThrowerReload`). Since playtest its pace depends on what's in the air: near-instant with nothing flying (`ProjectileLoadDuration`, 0.12 s), and `max(ProjectileLoadDuration, ReloadCooldownSeconds)` while a ball flies (2 s, a little under the median flight the playtest bot measured), which Quick Hands shortens: each shot can be followed up only at a price, and the cards make that price cheaper. `ThrowerReadyMessage` marks "a release now fires" and drives the reload sound and the handwritten `+1` ready notice (`UI/HeadsUp/ReloadHeadsUp`). The shipped cooldown went 0.5 s, then 0.9 s, before the idle/under-fire split. |
 | Level-up with balls in flight | After the beat plus `LevelCompleteFlightGrace`, remaining balls are force-destroyed once. Pierce toughs already plowed through still discharge and score; progress past the cap is banked. So "no score" in the row below is not literal. |
 | Spawning | Was per ball death with an interim queued wave; Phase 3's spawn clock replaced it (§6). |
 | Shorter flights (open) | No lever left: starting shields are already 1, so a ball cannot be made shorter. |
@@ -223,7 +223,7 @@ one leaves every consumer untouched.
 | Spawn interval | **DECISION: not part of this phase.** It already lives in Phase 3's spawn clock (`_spawnClock`). |
 | `LevelGenerator` (pure C#) | `Generate(settings, level, seed) -> RangedLevelParameters`. Pure and seeded, so it's EditMode-testable. |
 | `LevelDifficultyResolver` | **DECISION: no authored levels.** Every positive level comes from the generator. Only the negative debug presets (`-100`, `-101`, `-102`, reached through the start-level cheat with a negative level) stay authored; the `-1` fallback and the level 1-15 entries are deleted. `ILevelPacingConfiguration.Ranges` became `DebugPresets`; `ParametersForLevel` and `SeedForLevel` were added. `LevelRangeEntry` lost `Contains`, `PositionOf` and `IsOpenEnded`, and `IsFallback` became `IsPreset`. |
-| The opening | Level 1 is not "no items": today's level 1 gives 12 guaranteed Shield items and Tough balloons, and the generator keeps that through the unlock-level intro guarantees. A test pins levels 1-3 of the real asset to that shape. |
+| The opening | Level 1 is not "no items": today's level 1 gives 2 guaranteed Shield items and Tough balloons, and the generator keeps that through the unlock-level intro guarantees. A test pins levels 1-3 of the real asset to that shape. |
 | What else read the ranges | `ThresholdForLevel` divides by `ColorsForLevel`, and `MaxConcurrentBalloons` (pool prewarm) scanned every range; both now read the generation settings (colour count from the steps; prewarm from the catalogue's caps and the tallest board), plus the presets. `LevelPacingValidator` now checks presets only; the catalogue validates itself (`LevelGenerationSettings.Validate`). |
 | Seed | `SeedForLevel(level)`: a hash of the level and a salt, so a retry replays the same mix. The resolver rolls counts from a separately salted, level-seeded rng instead of a per-run one. |
 | Score targets | No change: `LevelScoringCurve` already extrapolates forever. |
@@ -239,14 +239,14 @@ Open items for the playtest. All tuning numbers are first guesses read off the a
 
 | Item | State |
 |---|---|
-| Shield caps (open) | Flat 8; the authored levels ran 11 down to 5. |
+| Shield caps (open) | 1 on the board at a time since the second pass; the authored levels ran 11 down to 5. |
 | Helper items (open) | They no longer fade as hard at L8-11 as the authored ones did. |
 | Puff counts (open) | Ramp 7-9 up to 10-13 instead of the authored breathers. |
 | L16+ board and rare balloons (open) | The board is 4 lines (the old fallback was 3), and Gold/Silver weights are far lower than the old fallback's. |
 | Same mix every run (open) | Every run's level N is now the same mix (seeded by level). That is by design, but a feel change. |
 | Depth after L7 (open) | From L7 all threats are in, so depth after that comes from weight ramps, colours and the spawn clock. |
 | Telemetry (open) | It doesn't yet record the level seed or the included pieces. |
-| Tuning (open) | Budgets, costs, unlock levels, weights and ramps are first guesses; tune in the playtest with the Generated Levels table. First pass after playtest (items everywhere): a wave's item roll can now be zero and stops at 3 (weights 0.3/0.45/0.3/0.1, about 1.2 items a wave, down from about 3-4), the shield cap drops 8 → 4 and its regular guarantee 2 → 1, and Lucky Find gives +0.25 a stack, down from +0.5. Item rolls still ride the waves, so a faster clock still means more items; if that snowballs, roll items on time instead. |
+| Tuning (open) | Budgets, costs, unlock levels, weights and ramps are first guesses; tune in the playtest with the Generated Levels table. First pass after playtest (items everywhere): a wave's item roll can now be zero and stops at 3 (weights 0.3/0.45/0.3/0.1, about 1.2 items a wave, down from about 3-4), the shield cap drops 8 → 4 and its regular guarantee 2 → 1, and Lucky Find gives +0.25 a stack, down from +0.5. Item rolls still ride the waves, so a faster clock still means more items; if that snowballs, roll items on time instead. Second pass (no sense of danger, every bot run lost no hearts): items are made much rarer rather than scores smaller (a streak payout cap was tried and reverted). A wave rolls none about 88% of the time (weights 1/0.12/0.02, about 0.14 items a wave), the starting board none 2 times in 3, else one, the shield's draw weight drops to 0.5-0.75 (late 0.35-0.5), its cap to 1, its level-1 guarantee 12 → 2 and its later guarantee 1 → 0. Other items keep their unlock-level introductions. |
 
 ---
 
