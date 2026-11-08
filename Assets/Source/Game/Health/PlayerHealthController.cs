@@ -44,7 +44,7 @@ namespace BalloonParty.Game.Health
         {
             _current.Value = ClampedStartingHitPoints();
             _subscription = _waveDamageSubscriber.Subscribe(msg => Damage(msg.HeartsLost));
-            _levelUpSubscription = _levelUpSubscriber.Subscribe(_ => _current.Value = ClampedStartingHitPoints());
+            _levelUpSubscription = _levelUpSubscriber.Subscribe(_ => Heal(_config.LevelUpHeartRefill));
         }
 
         public void ResetRun(int generation)
@@ -82,6 +82,13 @@ namespace BalloonParty.Game.Health
                 // GameOver state gate stops a later blocked spawn from ending the run twice.
                 _endRunPublisher.Publish(default);
             }
+        }
+
+        // A partial refill lets hearts lost in one level carry into the next, so a level-up stops wiping
+        // the slate and a player who keeps losing hearts runs out over several levels.
+        private void Heal(int amount)
+        {
+            _current.Value = Mathf.Min(ClampedStartingHitPoints(), _current.Value + Mathf.Max(0, amount));
         }
 
         private int ClampedStartingHitPoints()

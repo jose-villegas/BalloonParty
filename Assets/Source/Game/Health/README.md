@@ -9,7 +9,7 @@ forgiven. Reaching zero hearts ends the run.
 
 | File | What it does |
 |---|---|
-| `PlayerHealthController` | Plain C# entry point (`IStartable`, `IRunResettable`, `IDisposable`). Holds `ReactiveProperty<int> Current`, initialised and reset to `IRunConfig.StartingHitPoints` (clamped to a hard internal cap of 999). Subscribes to `WaveDamageMessage`; each message spends `HeartsLost` points in one shot. Also refills to full on every `ScoreLevelUpMessage`. When `Current` crosses to zero it publishes `EndRunRequestedMessage` exactly once. |
+| `PlayerHealthController` | Plain C# entry point (`IStartable`, `IRunResettable`, `IDisposable`). Holds `ReactiveProperty<int> Current`, initialised and reset to `IRunConfig.StartingHitPoints` (clamped to a hard internal cap of 999). Subscribes to `WaveDamageMessage`; each message spends `HeartsLost` points in one shot. Gives back `IRunConfig.LevelUpHeartRefill` points on every `ScoreLevelUpMessage`, never past the starting points (1 in the shipped config, so hearts lost in one level carry into the next; set it to the starting points to refill to full). When `Current` crosses to zero it publishes `EndRunRequestedMessage` exactly once. |
 | `IPlayerHealth` | Read-only seam (`Current`) — what UI binders and `SpaceDanger` inject instead of the concrete controller |
 | `WaveDeficitCalculator` | Pure static function: `Calculate(availableSpace, neededSlots, rowLength) → WaveDeficit`. The core formula: `heartsLost = floor(max(0, needed - available) / rowLength)` |
 | `WaveDeficit` | Readonly struct result: `HeartsLost` (full lines of deficit) and `UnspawnedSlots` (total shortfall) |

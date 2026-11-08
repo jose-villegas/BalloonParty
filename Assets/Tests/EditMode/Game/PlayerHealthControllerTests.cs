@@ -117,13 +117,46 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void LevelUp_RestoresStartingHitPoints()
+        public void LevelUp_GivesBackTheRefill()
         {
+            _config.LevelUpHeartRefill.Returns(1);
+            DamageWave(2);
+
+            _levelUpHandler.Handle(new ScoreLevelUpMessage(1));
+
+            Assert.AreEqual(StartingHitPoints - 1, _controller.Current.Value);
+        }
+
+        [Test]
+        public void LevelUp_NeverPassesStartingHitPoints()
+        {
+            _config.LevelUpHeartRefill.Returns(1);
+
+            _levelUpHandler.Handle(new ScoreLevelUpMessage(1));
+
+            Assert.AreEqual(StartingHitPoints, _controller.Current.Value);
+        }
+
+        [Test]
+        public void LevelUp_ARefillOfStartingHitPoints_RestoresFull()
+        {
+            _config.LevelUpHeartRefill.Returns(StartingHitPoints);
             DamageWave(2);
 
             _levelUpHandler.Handle(new ScoreLevelUpMessage(1));
 
             Assert.AreEqual(StartingHitPoints, _controller.Current.Value);
+        }
+
+        [Test]
+        public void LevelUp_NoRefill_KeepsTheHeartsLost()
+        {
+            _config.LevelUpHeartRefill.Returns(0);
+            DamageWave(2);
+
+            _levelUpHandler.Handle(new ScoreLevelUpMessage(1));
+
+            Assert.AreEqual(StartingHitPoints - 2, _controller.Current.Value);
         }
 
         private void DamageWave(int heartsLost)

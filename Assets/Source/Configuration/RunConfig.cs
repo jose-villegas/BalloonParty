@@ -8,6 +8,12 @@ namespace BalloonParty.Configuration
     {
         [Header("Run")]
         [SerializeField] private int _startingHitPoints = 3;
+
+        [Tooltip("Hearts given back at each level-up, never past the starting hit points. Set it to the " +
+                 "starting hit points to refill to full, 0 for none: a smaller refill lets hearts lost in " +
+                 "one level carry into the next.")]
+        [SerializeField] [Min(0)] private int _levelUpHeartRefill = 1;
+
         [Tooltip("Retries at the level reached, per run. 0 (or less) = unlimited.")]
         [SerializeField] private int _maxRetries;
 
@@ -45,6 +51,7 @@ namespace BalloonParty.Configuration
         [SerializeField] private UpgradeSettings _upgrades = new();
 
         public int StartingHitPoints => _startingHitPoints;
+        public int LevelUpHeartRefill => _levelUpHeartRefill;
         public int MaxRetries => _maxRetries;
         public int RetriesBeforeAd => Mathf.Max(0, _retriesBeforeAd);
         public bool StreakGrantsShields => _streakGrantsShields;

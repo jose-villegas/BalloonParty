@@ -48,8 +48,12 @@ SKILLS = {
 
 # How far back a heart loss looks for what led to it.
 LEAD_UP_SECONDS = 10.0
-FLIGHT_CONFIG = "Assets/Configuration/ProjectileFlightConfig.asset"
-TUNING_KEYS = ("_projectileLoadDuration", "_reloadCooldownSeconds", "_maxBallsInFlight")
+# Config asset -> the keys the report's tuning line shows from it.
+TUNING = {
+    "Assets/Configuration/ProjectileFlightConfig.asset":
+        ("_projectileLoadDuration", "_reloadCooldownSeconds", "_maxBallsInFlight"),
+    "Assets/Configuration/RunConfig.asset": ("_startingHitPoints", "_levelUpHeartRefill"),
+}
 
 
 def find_unity():
@@ -90,11 +94,13 @@ class Editor:
 
 
 def read_tuning(project):
-    path = os.path.join(project, FLIGHT_CONFIG)
     tuning = {}
-    if os.path.exists(path):
+    for asset, keys in TUNING.items():
+        path = os.path.join(project, asset)
+        if not os.path.exists(path):
+            continue
         text = open(path, encoding="utf-8").read()
-        for key in TUNING_KEYS:
+        for key in keys:
             match = re.search(rf"^\s*{key}: (.+)$", text, re.MULTILINE)
             if match:
                 tuning[key.lstrip("_")] = match.group(1).strip()

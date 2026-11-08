@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: RunConfig
   m_EditorClassIdentifier: 
   _startingHitPoints: 3
+  _levelUpHeartRefill: 1
   _maxRetries: 0
   _retriesBeforeAd: 0
   _streakGrantsShields: 0

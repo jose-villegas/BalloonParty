@@ -5,6 +5,12 @@ namespace BalloonParty.Shared
     {
         int StartingHitPoints { get; }
 
+        /// <summary>
+        ///     Hearts given back at each level-up, never past <see cref="StartingHitPoints" />; set it to
+        ///     <see cref="StartingHitPoints" /> to refill to full, 0 for none.
+        /// </summary>
+        int LevelUpHeartRefill { get; }
+
         /// <summary>How many times the player may retry at the level reached, per run (0 or less = unlimited).</summary>
         int MaxRetries { get; }
 
