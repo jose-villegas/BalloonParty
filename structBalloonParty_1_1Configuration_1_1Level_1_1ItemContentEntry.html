@@ -135,8 +135,8 @@ $(function(){initNavTree('structBalloonParty_1_1Configuration_1_1Level_1_1ItemCo
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:ad465e4c2d66da400a64408bd647788a0" id="r_ad465e4c2d66da400a64408bd647788a0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad465e4c2d66da400a64408bd647788a0">ItemContentEntry</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Items.html#a099921060840def79dc9111a19107f2b">ItemType</a> type, int unlockLevel, int cost, <a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html">ContentWeightRamp</a> weight, int maximumAllowedOverride=0, int introGuaranteedCount=0, int guaranteedInitialCount=0)</td></tr>
-<tr class="separator:ad465e4c2d66da400a64408bd647788a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab88efb88f0ed39b8ac1d62616a1fce71" id="r_ab88efb88f0ed39b8ac1d62616a1fce71"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab88efb88f0ed39b8ac1d62616a1fce71">ItemContentEntry</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Items.html#a099921060840def79dc9111a19107f2b">ItemType</a> type, int unlockLevel, int cost, <a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html">ContentWeightRamp</a> weight, int maximumAllowedOverride=0, int introGuaranteedCount=0, int guaranteedInitialCount=0, bool withheld=false)</td></tr>
+<tr class="separator:ab88efb88f0ed39b8ac1d62616a1fce71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a395caa5bb739261f596828e23e67f783" id="r_a395caa5bb739261f596828e23e67f783"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html">ItemTypeWeight</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a395caa5bb739261f596828e23e67f783">ToWeight</a> (int level, System.Random rng)</td></tr>
 <tr class="separator:a395caa5bb739261f596828e23e67f783"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -155,6 +155,9 @@ Properties</h2></td></tr>
 <tr class="separator:ae876747f1caadb48ad2b97a1b30731d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6a881774d098c101315074150de9107" id="r_aa6a881774d098c101315074150de9107"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html">ContentWeightRamp</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa6a881774d098c101315074150de9107">Weight</a><code> [get]</code></td></tr>
 <tr class="separator:aa6a881774d098c101315074150de9107"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b0807475522b566d5932930311601a8" id="r_a2b0807475522b566d5932930311601a8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b0807475522b566d5932930311601a8">Withheld</a><code> [get]</code></td></tr>
+<tr class="memdesc:a2b0807475522b566d5932930311601a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Authored but kept out of generation, e.g. until its art or terrain exists.  <br /></td></tr>
+<tr class="separator:a2b0807475522b566d5932930311601a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -172,12 +175,14 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a975fde8ed2ad0ecf0f8caa4afc8d93ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1698ffcc55ffca619bf34a6ac32b4345" id="r_a1698ffcc55ffca619bf34a6ac32b4345"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html">ContentWeightRamp</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1698ffcc55ffca619bf34a6ac32b4345">_weight</a></td></tr>
 <tr class="separator:a1698ffcc55ffca619bf34a6ac32b4345"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d060b9dd9147971df1cef1715d18b02" id="r_a2d060b9dd9147971df1cef1715d18b02"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2d060b9dd9147971df1cef1715d18b02">_withheld</a></td></tr>
+<tr class="separator:a2d060b9dd9147971df1cef1715d18b02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An item in the catalogue. <a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Items.html">Items</a> help the player, so they're always paid from the aid budget. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ad465e4c2d66da400a64408bd647788a0" name="ad465e4c2d66da400a64408bd647788a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad465e4c2d66da400a64408bd647788a0">&#9670;&#160;</a></span>ItemContentEntry()</h2>
+<a id="ab88efb88f0ed39b8ac1d62616a1fce71" name="ab88efb88f0ed39b8ac1d62616a1fce71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab88efb88f0ed39b8ac1d62616a1fce71">&#9670;&#160;</a></span>ItemContentEntry()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -218,7 +223,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>guaranteedInitialCount</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>guaranteedInitialCount</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>withheld</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -415,6 +425,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a2d060b9dd9147971df1cef1715d18b02" name="a2d060b9dd9147971df1cef1715d18b02"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d060b9dd9147971df1cef1715d18b02">&#9670;&#160;</a></span>_withheld</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Configuration.Level.ItemContentEntry._withheld</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Property Documentation</h2>
 <a id="a48a9781a01e2562660884be09aad9508" name="a48a9781a01e2562660884be09aad9508"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a48a9781a01e2562660884be09aad9508">&#9670;&#160;</a></span>Cost</h2>
@@ -535,6 +567,32 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2b0807475522b566d5932930311601a8" name="a2b0807475522b566d5932930311601a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b0807475522b566d5932930311601a8">&#9670;&#160;</a></span>Withheld</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Configuration.Level.ItemContentEntry.Withheld</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Authored but kept out of generation, e.g. until its art or terrain exists. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece.html#a59920731495fe017a6acf09c9d7c775a">BalloonParty.Configuration.Level.IContentPiece</a>.</p>
 
 </div>
 </div>

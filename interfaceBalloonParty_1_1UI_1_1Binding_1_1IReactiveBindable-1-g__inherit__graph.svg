@@ -144,7 +144,7 @@ var sectionId = 'dynsection-0';
 <!-- Node6 -->
 <g id="Node000006" class="node">
 <title>Node6</title>
-<g id="a_Node000006"><a xlink:href="classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterLabel.html" target="_top" xlink:title="The loaded projectile&#39;s remaining&#45;shields counter; behaviour lives in ReactiveCounterLabel.">
+<g id="a_Node000006"><a xlink:href="classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterLabel.html" target="_top" xlink:title="The shields every new ball starts with (Game.Upgrades.IShieldsPerBall); behaviour lives in ReactiveCo...">
 <polygon fill="white" stroke="#666666" points="518,-30 387,-30 387,0 518,0 518,-30"/>
 <text text-anchor="start" x="395" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.UI.Shields.</text>
 <text text-anchor="middle" x="452.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">ShieldCounterLabel</text>

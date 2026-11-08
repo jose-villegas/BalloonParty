@@ -1,9 +1,5 @@
 var NAVTREEINDEX42 =
 {
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a3151ac661b3555936df5c7259894cf9f":[6,0,0,6,7,0,13,24],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a36e0a4b3582de28cc27a56132d2afcfc":[5,0,0,6,7,0,13,6],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a36e0a4b3582de28cc27a56132d2afcfc":[6,0,0,6,7,0,13,6],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a3dcfd45e7478326161ae327d7bbe1bb2":[5,0,0,6,7,0,13,15],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a3dcfd45e7478326161ae327d7bbe1bb2":[6,0,0,6,7,0,13,15],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a40dae36f11c985be48705aaa29d0701c":[5,0,0,6,7,0,13,21],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a40dae36f11c985be48705aaa29d0701c":[6,0,0,6,7,0,13,21],
@@ -249,5 +245,9 @@ var NAVTREEINDEX42 =
 "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a0664edb053efd934394fad1f9cf78bd1":[6,0,0,6,7,4,26],
 "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a0bd168269c2be12416273571bc95ed70":[5,0,0,6,7,4,14],
 "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a0bd168269c2be12416273571bc95ed70":[6,0,0,6,7,4,14],
-"classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a0d377c0af8fb7219b5c140a3a44446bc":[5,0,0,6,7,4,15]
+"classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a0d377c0af8fb7219b5c140a3a44446bc":[5,0,0,6,7,4,15],
+"classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a0d377c0af8fb7219b5c140a3a44446bc":[6,0,0,6,7,4,15],
+"classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a15b48a850de1c26a498b783d71ab4b2d":[5,0,0,6,7,4,18],
+"classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a15b48a850de1c26a498b783d71ab4b2d":[6,0,0,6,7,4,18],
+"classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a17ca817baffba507d7d9acdaeb7f2825":[5,0,0,6,7,4,1]
 };

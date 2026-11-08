@@ -195,7 +195,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Types and utilities used across multiple features.</p>
-<h1><a class="anchor" id="autotoc_md944"></a>
+<h1><a class="anchor" id="autotoc_md945"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -252,7 +252,7 @@ Contents</h1>
 <td class="markdownTableBodyNone"><code>StreakShieldRule</code>   </td><td class="markdownTableBodyNone">The one place a continued colour streak's shield refund is decided, called by both the live <code>ProjectileHitResolver</code> and the shot solver's <code>ShotSimulator</code> so the two can't drift apart   </td></tr>
 </table>
 <p>This table covers the folders and the types other features reach for most; a few small editor-only attributes living alongside these files aren't broken out separately.</p>
-<h1><a class="anchor" id="autotoc_md945"></a>
+<h1><a class="anchor" id="autotoc_md946"></a>
 Messages</h1>
 <p>Messages are the signals that decouple systems from one another. A publisher fires a message; any number of subscribers react independently.</p>
 <p><b>This table is a curated subset, not an index.</b> It lists the gameplay-visible consumers of each message — the ones whose absence would break a mechanic — not every subscriber. <code>Game/Telemetry</code>'s <code>GameplayMetricsService</code> and <code>Game/Flight</code>'s <code>FlightStatsService</code> between them subscribe to roughly 21 of these messages without being named in a single row below; they read the game, they don't drive it, so listing them on every row would bury the consumers that do. Check the publisher's own file for the exhaustive subscriber list when it matters.</p>
@@ -276,9 +276,9 @@ Messages</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>LevelUpDismissedMessage</code>   </td><td class="markdownTableBodyNone"><code>LevelUpPopUp</code>   </td><td class="markdownTableBodyNone"><code>LevelUpCinematic</code>    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>ProjectileDestroyedMessage</code>   </td><td class="markdownTableBodyNone"><code>ProjectileView</code>   </td><td class="markdownTableBodyNone"><code>ThrowerController</code>, <code>ProjectileFacingSource</code>, <code>ShieldCounterAnimation</code>, <code>LevelController</code>, <code>CombatSoundRouter</code>    </td></tr>
+<td class="markdownTableBodyNone"><code>ProjectileDestroyedMessage</code>   </td><td class="markdownTableBodyNone"><code>ProjectileView</code>   </td><td class="markdownTableBodyNone"><code>ThrowerController</code>, <code>ProjectileFacingSource</code>, <code>LevelController</code>, <code>CombatSoundRouter</code>    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>ProjectileLoadedMessage</code>   </td><td class="markdownTableBodyNone"><code>ThrowerController</code>   </td><td class="markdownTableBodyNone"><code>ShieldCounterLabel</code>, <code>ShieldCounterAnimation</code>    </td></tr>
+<td class="markdownTableBodyNone"><code>ProjectileLoadedMessage</code>   </td><td class="markdownTableBodyNone"><code>ThrowerController</code>   </td><td class="markdownTableBodyNone"><code>FlightStatsService</code>, <code>ColorStreakTracker</code>, <code>ActiveProjectilePierce</code>, <code>CombatSoundRouter</code>, <code>ItemSoundRouter</code>, <code>FireBestShotCheat</code>    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ThrowerReadyMessage</code>   </td><td class="markdownTableBodyNone"><code>ThrowerController</code>   </td><td class="markdownTableBodyNone"><code>CombatSoundRouter</code> — once per ball, when it reaches the muzzle with a slot free (a release now fires)    </td></tr>
 <tr class="markdownTableRowEven">
@@ -288,7 +288,7 @@ Messages</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ItemRotationCapturedMessage</code>   </td><td class="markdownTableBodyNone"><code>BalloonController</code>   </td><td class="markdownTableBodyNone"><code>LaserItemHandler</code>    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>ShieldGainedMessage</code>   </td><td class="markdownTableBodyNone"><code>ShieldItemHandler</code>, <code>ProjectileHitResolver</code> (a streak reward), <code>DeflectChainController</code> (a ricochet reward); <code>Source</code> (<code>ShieldGainSource</code>) says which   </td><td class="markdownTableBodyNone"><code>ShieldTrailController</code>, <code>BounceHeadsUp</code>    </td></tr>
+<td class="markdownTableBodyNone"><code>ShieldGainedMessage</code>   </td><td class="markdownTableBodyNone"><code>ShieldItemHandler</code>, <code>ProjectileHitResolver</code> (a streak reward), <code>DeflectChainController</code> (a ricochet reward); <code>Source</code> (<code>ShieldGainSource</code>) says which   </td><td class="markdownTableBodyNone"><code>BounceHeadsUp</code>, <code>CombatSoundRouter</code>, <code>GameplayMetricsService</code>    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>DeflectChainMessage</code>   </td><td class="markdownTableBodyNone"><code>DeflectChainController</code> (from the second deflect in a row; <code>PaidShield</code> when this deflect earned a shield)   </td><td class="markdownTableBodyNone"><code>BounceHeadsUp</code>    </td></tr>
 <tr class="markdownTableRowOdd">

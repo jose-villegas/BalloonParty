@@ -1,7 +1,5 @@
 var NAVTREEINDEX74 =
 {
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#ab11b159bd5fc60e843222c3b8a980b1b":[6,0,0,15,1,25],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#ab4556eddb1977a5a50bc4c56621ded51":[5,0,0,15,1,29],
 "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ab4556eddb1977a5a50bc4c56621ded51":[6,0,0,15,1,29],
 "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ab9e46d1c17b03ca6792472d9b2e85eda":[5,0,0,15,1,0],
 "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ab9e46d1c17b03ca6792472d9b2e85eda":[6,0,0,15,1,0],
@@ -249,5 +247,7 @@ var NAVTREEINDEX74 =
 "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a95974b0102cffc82442ce2ee8b5f177f":[6,0,0,16,1,0,21],
 "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a9dc7c8c0621874cd57660dc90122c8e0":[5,0,0,16,1,0,11],
 "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a9dc7c8c0621874cd57660dc90122c8e0":[6,0,0,16,1,0,11],
-"classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#ab2595ce2a617c3597ab124fb52dea0c3":[5,0,0,16,1,0,1]
+"classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#ab2595ce2a617c3597ab124fb52dea0c3":[5,0,0,16,1,0,1],
+"classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#ab2595ce2a617c3597ab124fb52dea0c3":[6,0,0,16,1,0,1],
+"classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#ac410d901f586c0de542ccbccdab68427":[5,0,0,16,1,0,23]
 };

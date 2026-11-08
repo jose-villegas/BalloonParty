@@ -1,5 +1,5 @@
 <map id="BalloonParty.UI.Shields.ShieldCounterLabel" name="BalloonParty.UI.Shields.ShieldCounterLabel">
-<area shape="rect" id="Node000001" title="The loaded projectile&#39;s remaining&#45;shields counter; behaviour lives in ReactiveCounterLabel." alt="" coords="521,55,696,95"/>
+<area shape="rect" id="Node000001" title="The shields every new ball starts with (Game.Upgrades.IShieldsPerBall); behaviour lives in ReactiveCo..." alt="" coords="521,55,696,95"/>
 <area shape="rect" id="Node000002" href="$classBalloonParty_1_1UI_1_1ReactiveCounterLabel.html" title="Subscribes to a reactive int and delegates rendering to an ICounterDisplay on the same GameObject." alt="" coords="291,55,472,95"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="485,73,521,73,521,78,485,78"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="33,5,157,31"/>

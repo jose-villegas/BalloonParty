@@ -24,7 +24,6 @@ var classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig =
     [ "_projectileStartingShields", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a3d57ced19f6638fee2d709770963b8fb", null ],
     [ "_reloadCooldownSeconds", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ab219d80b2ddff842949baa6a9113147b", null ],
     [ "_shieldToneThreshold", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a80833c2ed7278d64261d9cf4c9579645", null ],
-    [ "_shieldTrailDuration", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a060023b23298d3e8cda0ec73e5f0d9d1", null ],
     [ "_speedGainPerTap", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a5e2a7cc7c81ce1065c7ae39acb3a9a2b", null ],
     [ "_sweepEnabled", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a7fc0065c4a18fae0a49f8fa7b7d0e1a7", null ],
     [ "_sweepTapThreshold", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a6f533407b3ba1e4ec9ae7edb5417a2b4", null ],
@@ -51,7 +50,6 @@ var classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig =
     [ "ProjectileStartingShields", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a5602426fc3e392b3858336f00f05188c", null ],
     [ "ReloadCooldownSeconds", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#aa649da7b28f6a6689b2396ec50233b62", null ],
     [ "ShieldToneThreshold", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a0e5c7b7b0c8d8f3fa63601e600198781", null ],
-    [ "ShieldTrailDuration", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ab42f889a7d84ee67fe11541ba8b09ab4", null ],
     [ "SpeedGainPerTap", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#af3802a27f5dd5c63043bccd20abec192", null ],
     [ "SweepEnabled", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#aab6c01c7bd50db2c3a71d6066d27f2c4", null ],
     [ "SweepTapThreshold", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a31ab9fbf32d452315314042560651f90", null ]

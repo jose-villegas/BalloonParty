@@ -1,9 +1,5 @@
 var NAVTREEINDEX41 =
 {
-"classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html#a167cea44b44788d2f07cb407f1adf110":[6,0,0,6,6,17,0],
-"classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html#a22725862afb2d48c5f902d16bd739087":[5,0,0,6,6,17,2],
-"classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html#a22725862afb2d48c5f902d16bd739087":[6,0,0,6,6,17,2],
-"classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html#a2393c380d52180b02dcd4aa93b623704":[5,0,0,6,6,17,4],
 "classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html#a2393c380d52180b02dcd4aa93b623704":[6,0,0,6,6,17,4],
 "classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html#a2642e704750e459bb8e344a1ff936279":[5,0,0,6,6,17,3],
 "classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html#a2642e704750e459bb8e344a1ff936279":[6,0,0,6,6,17,3],
@@ -249,5 +245,9 @@ var NAVTREEINDEX41 =
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a2c1e08f601866d55f17bfbc4dec0af63":[6,0,0,6,7,0,13,7],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a302edcb8c857d78dac122165a2636fbd":[5,0,0,6,7,0,13,17],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a302edcb8c857d78dac122165a2636fbd":[6,0,0,6,7,0,13,17],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a3151ac661b3555936df5c7259894cf9f":[5,0,0,6,7,0,13,24]
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a3151ac661b3555936df5c7259894cf9f":[5,0,0,6,7,0,13,24],
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a3151ac661b3555936df5c7259894cf9f":[6,0,0,6,7,0,13,24],
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a36e0a4b3582de28cc27a56132d2afcfc":[5,0,0,6,7,0,13,6],
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a36e0a4b3582de28cc27a56132d2afcfc":[6,0,0,6,7,0,13,6],
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a3dcfd45e7478326161ae327d7bbe1bb2":[5,0,0,6,7,0,13,15]
 };

@@ -126,7 +126,7 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.h
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades__inherit__graph.svg" width="496" height="343"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades__inherit__graph.svg" width="496" height="407"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Game.Upgrades.RunUpgrades:</div>
@@ -189,6 +189,8 @@ Properties</h2></td></tr>
 <tr class="separator:a299396207a9721966916c29991bc3219"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a039c8a7d612ba419c5c782dad780545b" id="r_a039c8a7d612ba419c5c782dad780545b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a039c8a7d612ba419c5c782dad780545b">ResetOrder</a><code> [get]</code></td></tr>
 <tr class="separator:a039c8a7d612ba419c5c782dad780545b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ba90e7ea13f34da1c6355006d8b6dd2" id="r_a6ba90e7ea13f34da1c6355006d8b6dd2"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6ba90e7ea13f34da1c6355006d8b6dd2">ShieldsPerBall</a><code> [get]</code></td></tr>
+<tr class="separator:a6ba90e7ea13f34da1c6355006d8b6dd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa409b3da5aa1d315ed8413f7a60771a1" id="r_aa409b3da5aa1d315ed8413f7a60771a1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa409b3da5aa1d315ed8413f7a60771a1">StartingShields</a><code> [get]</code></td></tr>
 <tr class="memdesc:aa409b3da5aa1d315ed8413f7a60771a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shields each new ball starts with: the configured count plus cards.  <br /></td></tr>
 <tr class="separator:aa409b3da5aa1d315ed8413f7a60771a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -244,6 +246,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a5817776b752764eae460e33e18d2227f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afeccbbab6ff40026d0da42ea41b9c3c1" id="r_afeccbbab6ff40026d0da42ea41b9c3c1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afeccbbab6ff40026d0da42ea41b9c3c1">_shieldBonus</a></td></tr>
 <tr class="separator:afeccbbab6ff40026d0da42ea41b9c3c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15e08be7b60f7a587288f66143a93133" id="r_a15e08be7b60f7a587288f66143a93133"><td class="memItemLeft" align="right" valign="top">readonly ReactiveProperty&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a15e08be7b60f7a587288f66143a93133">_shieldsPerBall</a></td></tr>
+<tr class="separator:a15e08be7b60f7a587288f66143a93133"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99f788b3b9013e30c736f2b750c71a19" id="r_a99f788b3b9013e30c736f2b750c71a19"><td class="memItemLeft" align="right" valign="top">readonly Dictionary&lt; <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a>, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a99f788b3b9013e30c736f2b750c71a19">_stacks</a> = new()</td></tr>
 <tr class="separator:a99f788b3b9013e30c736f2b750c71a19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1eb99c9fdb743026c3ecdddc9cf3782" id="r_af1eb99c9fdb743026c3ecdddc9cf3782"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af1eb99c9fdb743026c3ecdddc9cf3782">_staged</a></td></tr>
@@ -973,6 +977,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a15e08be7b60f7a587288f66143a93133" name="a15e08be7b60f7a587288f66143a93133"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15e08be7b60f7a587288f66143a93133">&#9670;&#160;</a></span>_shieldsPerBall</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly ReactiveProperty&lt;int&gt; BalloonParty.Game.Upgrades.RunUpgrades._shieldsPerBall</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a99f788b3b9013e30c736f2b750c71a19" name="a99f788b3b9013e30c736f2b750c71a19"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a99f788b3b9013e30c736f2b750c71a19">&#9670;&#160;</a></span>_stacks</h2>
 
@@ -1309,6 +1335,30 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html#a347699f041bd2f73a8326aa24a351d81">BalloonParty.Game.Run.IRunResettable</a>.</p>
+
+</div>
+</div>
+<a id="a6ba90e7ea13f34da1c6355006d8b6dd2" name="a6ba90e7ea13f34da1c6355006d8b6dd2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ba90e7ea13f34da1c6355006d8b6dd2">&#9670;&#160;</a></span>ShieldsPerBall</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyReactiveProperty&lt;int&gt; BalloonParty.Game.Upgrades.RunUpgrades.ShieldsPerBall</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IShieldsPerBall.html#a8fbbc14a1a201d8fa403b1756c4a0d6a">BalloonParty.Game.Upgrades.IShieldsPerBall</a>.</p>
 
 </div>
 </div>

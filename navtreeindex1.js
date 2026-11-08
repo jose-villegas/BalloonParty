@@ -146,6 +146,7 @@ var NAVTREEINDEX1 =
 "IShieldChainSettings_8cs.html":[7,0,14,28],
 "IShieldFieldSettings_8cs.html":[7,0,3,4,12],
 "IShieldSlotPreference_8cs.html":[7,0,15,2,3],
+"IShieldsPerBall_8cs.html":[7,0,7,9,0],
 "ISkyScatterSettings_8cs.html":[7,0,3,4,13],
 "ISlotActorView_8cs.html":[7,0,15,0,11],
 "ISlotActor_8cs.html":[7,0,15,0,10],
@@ -169,10 +170,10 @@ var NAVTREEINDEX1 =
 "ITrailEndpoint_8cs.html":[7,0,14,9,5],
 "ITransformCapture_8cs.html":[7,0,8,26],
 "ITransitionOutgoingContent_8cs.html":[7,0,15,0,13],
-"IUpgradeDraft_8cs.html":[7,0,7,9,0],
+"IUpgradeDraft_8cs.html":[7,0,7,9,1],
 "IUpgradeSettings_8cs.html":[7,0,14,30],
 "IWashesProjectileColor_8cs.html":[7,0,15,1,16],
-"IWeaponStats_8cs.html":[7,0,7,9,1],
+"IWeaponStats_8cs.html":[7,0,7,9,2],
 "IWeightedEntry_8cs.html":[7,0,3,9,0],
 "IWriteableBalloonModel_8cs.html":[7,0,1,1,8],
 "IWriteableDynamicSlotActor_8cs.html":[7,0,15,0,14],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "LevelPacingCurvePanel_8cs.html":[7,0,6,23],
 "LevelPacingMigrationTool_8cs.html":[7,0,6,24],
 "LevelPacingValidator_8cs.html":[7,0,3,7,16],
-"LevelPacingWindow_8cs.html":[7,0,6,25],
-"LevelParameters_8cs.html":[7,0,3,7,17]
+"LevelPacingWindow_8cs.html":[7,0,6,25]
 };

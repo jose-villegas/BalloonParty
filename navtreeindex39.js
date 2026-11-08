@@ -1,9 +1,5 @@
 var NAVTREEINDEX39 =
 {
-"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#aab0a3fcc4229f6ac990fd84ee8ebb9c9":[6,0,0,6,4,4,1],
-"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#ab47687f74ed650a00a2fe658f4612c4c":[5,0,0,6,4,4,16],
-"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#ab47687f74ed650a00a2fe658f4612c4c":[6,0,0,6,4,4,16],
-"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#ac43097cff606cd94f2f456b8759b7841":[5,0,0,6,4,4,8],
 "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#ac43097cff606cd94f2f456b8759b7841":[6,0,0,6,4,4,8],
 "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#acd6413e81a8a6f58eb84772f6db5c367":[5,0,0,6,4,4,0],
 "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#acd6413e81a8a6f58eb84772f6db5c367":[6,0,0,6,4,4,0],
@@ -249,5 +245,9 @@ var NAVTREEINDEX39 =
 "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#aa3043977978509fa7b0f02ab9f7cfb77":[6,0,0,6,5,4,18],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#ab9e4cdbabcaffea678d09171e49a7e0c":[5,0,0,6,5,4,19],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#ab9e4cdbabcaffea678d09171e49a7e0c":[6,0,0,6,5,4,19],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#aca4badf18bb15d4649218c06347bf9d0":[5,0,0,6,5,4,5]
+"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#aca4badf18bb15d4649218c06347bf9d0":[5,0,0,6,5,4,5],
+"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#aca4badf18bb15d4649218c06347bf9d0":[6,0,0,6,5,4,5],
+"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#acd6a4cb24f44e277b67e76d03d6f8d33":[5,0,0,6,5,4,27],
+"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#acd6a4cb24f44e277b67e76d03d6f8d33":[6,0,0,6,5,4,27],
+"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#ad11e576ed106384c6db08329b4e27e4e":[5,0,0,6,5,4,6]
 };

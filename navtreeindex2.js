@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"LevelParameters_8cs.html":[7,0,3,7,17],
 "LevelRangeEntryDrawer_8cs.html":[7,0,6,26],
 "LevelRangeEntry_8cs.html":[7,0,3,7,18],
 "LevelScoringCurve_8cs.html":[7,0,3,7,19],
@@ -187,7 +188,7 @@ var NAVTREEINDEX2 =
 "RunResetMessage_8cs.html":[7,0,14,7,32],
 "RunResetOrder_8cs.html":[7,0,7,6,16],
 "RunRestartCompletedMessage_8cs.html":[7,0,14,7,33],
-"RunUpgrades_8cs.html":[7,0,7,9,2],
+"RunUpgrades_8cs.html":[7,0,7,9,3],
 "ScaleDownButton_8cs.html":[7,0,18,18],
 "ScenarioContentRoot_8cs.html":[7,0,15,0,17],
 "SceneCaptureServiceEditor_8cs.html":[7,0,6,35],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "ShieldLostMessage_8cs.html":[7,0,14,7,39],
 "ShieldRangePreview_8cs.html":[7,0,8,5,14],
 "ShieldReachabilityField_8cs.html":[7,0,8,6,2],
-"ShieldSlotPreference_8cs.html":[7,0,8,6,3],
-"ShieldTrailController_8cs.html":[7,0,18,7,2]
+"ShieldSlotPreference_8cs.html":[7,0,8,6,3]
 };

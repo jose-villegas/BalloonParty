@@ -413,8 +413,7 @@ var hierarchy =
       [ "BalloonParty.Slots.Actor.StaticActorSpawner", "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html", null ],
       [ "BalloonParty.Slots.Spawner.GridSpawnerCoordinator", "classBalloonParty_1_1Slots_1_1Spawner_1_1GridSpawnerCoordinator.html", null ],
       [ "BalloonParty.Thrower.ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html", null ],
-      [ "BalloonParty.UI.Health.HeartTrailController", "classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html", null ],
-      [ "BalloonParty.UI.Shields.ShieldTrailController", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldTrailController.html", null ]
+      [ "BalloonParty.UI.Health.HeartTrailController", "classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html", null ]
     ] ],
     [ "BalloonParty.Configuration.Effects.IDisturbanceFieldSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IDisturbanceFieldSettings.html", [
       [ "BalloonParty.Configuration.Effects.DisturbanceFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html", null ]
@@ -786,6 +785,9 @@ var hierarchy =
     [ "BalloonParty.Slots.Grid.IShieldSlotPreference", "interfaceBalloonParty_1_1Slots_1_1Grid_1_1IShieldSlotPreference.html", [
       [ "BalloonParty.Item.Shield.ShieldSlotPreference", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldSlotPreference.html", null ]
     ] ],
+    [ "BalloonParty.Game.Upgrades.IShieldsPerBall", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IShieldsPerBall.html", [
+      [ "BalloonParty.Game.Upgrades.RunUpgrades", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html", null ]
+    ] ],
     [ "BalloonParty.Configuration.Effects.ISkyScatterSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISkyScatterSettings.html", [
       [ "BalloonParty.Configuration.Effects.SkyScatterSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1SkyScatterSettings.html", null ]
     ] ],
@@ -925,7 +927,6 @@ var hierarchy =
       [ "BalloonParty.Thrower.ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html", null ],
       [ "BalloonParty.UI.Binding.ReactivePropertyBinder< TView, TValue >", "classBalloonParty_1_1UI_1_1Binding_1_1ReactivePropertyBinder-2-g.html", null ],
       [ "BalloonParty.UI.Health.HeartTrailController", "classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html", null ],
-      [ "BalloonParty.UI.Shields.ShieldTrailController", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldTrailController.html", null ],
       [ "BalloonParty.UI.Telemetry.MetricLabelBinder", "classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabelBinder.html", null ]
     ] ],
     [ "BalloonParty.Shared.Messages.ItemActivatedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ItemActivatedMessage.html", null ],

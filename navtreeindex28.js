@@ -1,9 +1,5 @@
 var NAVTREEINDEX28 =
 {
-"classBalloonParty_1_1Editor_1_1EffectPreview_1_1EffectPreviewContext.html#a5b56147cedc5256558e50f5ff729abf2":[6,0,0,5,1,2,0],
-"classBalloonParty_1_1Editor_1_1EffectPreview_1_1EffectPreviewContext.html#a6b0039f40b674cf43686bee936896758":[5,0,0,5,1,2,1],
-"classBalloonParty_1_1Editor_1_1EffectPreview_1_1EffectPreviewContext.html#a6b0039f40b674cf43686bee936896758":[6,0,0,5,1,2,1],
-"classBalloonParty_1_1Editor_1_1EffectPreview_1_1EffectPreviewContext.html#aa7411e3b87dabba13897bbba5861b19b":[5,0,0,5,1,2,2],
 "classBalloonParty_1_1Editor_1_1EffectPreview_1_1EffectPreviewContext.html#aa7411e3b87dabba13897bbba5861b19b":[6,0,0,5,1,2,2],
 "classBalloonParty_1_1Editor_1_1EffectPreview_1_1EffectViewPreviewPlayer.html":[5,0,0,5,1,3],
 "classBalloonParty_1_1Editor_1_1EffectPreview_1_1EffectViewPreviewPlayer.html":[6,0,0,5,1,3],
@@ -249,5 +245,9 @@ var NAVTREEINDEX28 =
 "classBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerEventReader.html#ae639e421bf0d126f52dc0794cd54de50":[6,0,0,5,2,1,6],
 "classBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerEventReader.html#aecde5ab302e457d574b2d994f035c53c":[5,0,0,5,2,1,13],
 "classBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerEventReader.html#aecde5ab302e457d574b2d994f035c53c":[6,0,0,5,2,1,13],
-"classBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerEventReader.html#aed8fbb4f35ec0438d2e1d50084bc72e6":[5,0,0,5,2,1,15]
+"classBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerEventReader.html#aed8fbb4f35ec0438d2e1d50084bc72e6":[5,0,0,5,2,1,15],
+"classBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerEventReader.html#aed8fbb4f35ec0438d2e1d50084bc72e6":[6,0,0,5,2,1,15],
+"classBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerReflection.html":[5,0,0,5,2,3],
+"classBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerReflection.html":[6,0,0,5,2,3],
+"classBalloonParty_1_1Editor_1_1FrameDump_1_1FrameDebuggerReflection.html#a065591e00122d781508c6e55a89fb5a9":[5,0,0,5,2,3,6]
 };

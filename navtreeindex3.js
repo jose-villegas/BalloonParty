@@ -1,6 +1,6 @@
 var NAVTREEINDEX3 =
 {
-"ShieldUILifetimeScope_8cs.html":[7,0,18,7,3],
+"ShieldUILifetimeScope_8cs.html":[7,0,18,7,2],
 "ShotBoardDynamics_8cs.html":[7,0,16,0],
 "ShotBoardGather_8cs.html":[7,0,16,1],
 "ShotBoardSnapshot_8cs.html":[7,0,16,2],

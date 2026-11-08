@@ -115,7 +115,7 @@ Coins and the Card Shop</h1>
 <blockquote class="doxtable">
 <p>Working plan for a coin currency earned deep in a run and spent on the game-over screen for a card that helps the retry. </p>
 </blockquote>
-<p><b>Status:</b> Phase 1 built (the wallet, the drop and telemetry, see <code><a class="el" href="Game_2Coins_2README_8md.html">Game/Coins/README.md</a></code>); phase 2 (tuning) next. Decided with the owner: a card bought with coins applies to the retry at the level reached; coins are a saved wallet; they drop from pops from level 15 on; the counter sits bottom left and appears only once coins exist. Claude draws the art in the existing UI style (§7); the coin is drawn.</p>
+<p><b>Status:</b> Phase 1 built (the wallet, the drop and telemetry, see <code><a class="el" href="Game_2Coins_2README_8md.html">Game/Coins/README.md</a></code>); phase 2 (tuning) next. Decided with the owner: a card bought with coins applies to the retry at the level reached; coins are a saved wallet; they drop from pops from level 10 on; the counter sits bottom left and appears only once coins exist. Claude draws the art in the existing UI style (§7); the coin is drawn.</p>
 <hr  />
 <h2><a class="anchor" id="autotoc_md364"></a>
 1. Why</h2>
@@ -124,7 +124,7 @@ Coins and the Card Shop</h1>
 <h2><a class="anchor" id="autotoc_md365"></a>
 2. The loop</h2>
 <ol type="1">
-<li>From <code>CoinsFromLevel</code> (15) on, each balloon popped has a <code>CoinDropChance</code> of dropping a coin.</li>
+<li>From <code>CoinsFromLevel</code> (10) on, each balloon popped has a <code>CoinDropChance</code> of dropping a coin.</li>
 <li>The coin flies to the coin counter, like a score trail, and is added to the wallet when it lands.</li>
 <li>The wallet is saved, so coins carry over between runs and app restarts.</li>
 <li>On a loss, the game-over screen offers <b>Buy a card</b> next to Retry, priced at <code>CardPrice</code> coins.</li>
@@ -137,7 +137,7 @@ Coins and the Card Shop</h1>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Rule   </th><th class="markdownTableHeadNone">Why    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Coins drop only from level <code>CoinsFromLevel</code> (15) on   </td><td class="markdownTableBodyNone">They reward reaching the stretch where hearts go; earlier levels stay about learning the board    </td></tr>
+<td class="markdownTableBodyNone">Coins drop only from level <code>CoinsFromLevel</code> (10) on   </td><td class="markdownTableBodyNone">They reward getting past the opening, where average skill starts losing hearts, so most players earn some; earlier levels stay about learning the board. 15 was the first pick, but too far: average skill barely reaches it    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Any pop can drop one, an item's blast included   </td><td class="markdownTableBodyNone">"Per pop", as decided; big combos should feel rich    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -164,7 +164,7 @@ Coins and the Card Shop</h1>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Piece   </th><th class="markdownTableHeadNone">Where   </th><th class="markdownTableHeadNone">Responsibility    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>ICoinSettings</code>   </td><td class="markdownTableBodyNone"><code>Shared/</code>, authored in <code>RunConfig</code> as <code>Coins</code>   </td><td class="markdownTableBodyNone"><code>CoinsFromLevel</code> (15), <code>DropChance</code> (0.05); phase 4 adds <code>CardPrice</code> (25) and <code>CardsOffered</code> (3)    </td></tr>
+<td class="markdownTableBodyNone"><code>ICoinSettings</code>   </td><td class="markdownTableBodyNone"><code>Shared/</code>, authored in <code>RunConfig</code> as <code>Coins</code>   </td><td class="markdownTableBodyNone"><code>CoinsFromLevel</code> (10), <code>DropChance</code> (0.05); phase 4 adds <code>CardPrice</code> (25) and <code>CardsOffered</code> (3)    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ICoinBalance</code> / <code>ICoinWallet</code> / <code>CoinWallet</code>   </td><td class="markdownTableBodyNone"><code>Game/Coins/</code>   </td><td class="markdownTableBodyNone"><code>ICoinBalance</code> is the read-only <code>Balance</code> views read; <code>ICoinWallet</code> adds <code>Add(int)</code> and <code>TrySpend(int)</code>. Loads from and saves to <code>PlayerPrefs</code> through <code>ICoinStore</code> (key beside <code>RunMeta</code>'s); <code>CoinWalletSaver</code> saves at the save points, and a spend saves at once    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -196,7 +196,9 @@ Coins and the Card Shop</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">4   </td><td class="markdownTableBodyNone">The shop on the game-over screen: <code>TryCardRetryAsync</code>, the shop hand, <code>CardShopView</code>   </td><td class="markdownTableBodyNone">Yes: card frame, card icons, price chip    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">5   </td><td class="markdownTableBodyNone">Sounds for a coin landing and a purchase (<code><a class="el" href="PLAN-Audio_8md.html">PLAN-Audio.md</a></code>)   </td><td class="markdownTableBodyNone">Audio   </td></tr>
+<td class="markdownTableBodyNone">5   </td><td class="markdownTableBodyNone">Sounds for a coin landing and a purchase (<code><a class="el" href="PLAN-Audio_8md.html">PLAN-Audio.md</a></code>)   </td><td class="markdownTableBodyNone">Audio    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">6   </td><td class="markdownTableBodyNone">Luck levels (§10): the 4th colour, and later bubbles, rolled per level, with more coins on the harder rolls   </td><td class="markdownTableBodyNone">A level-start banner   </td></tr>
 </table>
 <p>Each phase gets the reviewer pass before the next one starts.</p>
 <h2><a class="anchor" id="autotoc_md369"></a>
@@ -235,9 +237,32 @@ Coins and the Card Shop</h1>
 <ul>
 <li>Can a player buy more than one card for the same retry?</li>
 <li>Should the price rise with each purchase in a run, to stop a large wallet from buying every retry?</li>
-<li>Is level 15 right for average skill, which reached 14 in ten minutes in the last runs? Earning from 12 would let average skill take part, and keep it a reward for depth.</li>
-<li>Should coins also show in the main menu, so the wallet is visible between runs? </li>
+<li>Should coins also show in the main menu, so the wallet is visible between runs?</li>
 </ul>
+<h2><a class="anchor" id="autotoc_md373"></a>
+10. Luck levels (proposal, after phase 2)</h2>
+<blockquote class="doxtable">
+<p>Raised by the owner 2026-11-08. Not designed in detail yet: this records the idea and what to check before building it. </p>
+</blockquote>
+<p>Today every level from a depth on has everything that has unlocked. The idea: some of the biggest difficulty jumps become a matter of luck, rolled per level, so levels at the same depth differ, and the harder rolls pay more coins.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Piece   </th><th class="markdownTableHeadNone">The roll   </th><th class="markdownTableHeadNone">Why it's harder    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">The 4th colour   </td><td class="markdownTableBodyNone">Some levels get it, some don't. The chance grows with depth, so rare early and usual late. Today it's a fixed step, in every level from 13   </td><td class="markdownTableBodyNone">More colours on the board means fewer matches per shot, and a level needs every colour's bar filled, so the goal grows too    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Bubble clusters   </td><td class="markdownTableBodyNone">Some levels have them, some don't; now and then a bad-luck level has more bubbles than balloons   </td><td class="markdownTableBodyNone">Bubbles take several hits, wash the ball's colour and break the streak. Waits for the merge (<code><a class="el" href="PLAN-FutureIdeas_8md.html">PLAN-FutureIdeas.md</a></code> §5.1), since bubbles are withheld until then    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">The scenario (sky or ground)   </td><td class="markdownTableBodyNone">Each level-up ascent can move the scenario between sky and ground, either way; bushes appear only on ground levels. Designed in <code><a class="el" href="PLAN-TerrainBiomes_8md.html">PLAN-TerrainBiomes.md</a></code>   </td><td class="markdownTableBodyNone">Bushes block shots and cap columns, so a ground level is a harder roll   </td></tr>
+</table>
+<p>Rules to keep:</p>
+<ul>
+<li><b>Rolled from the level's seed</b>, like the rest of the level, so a retry plays the same roll. Luck decides the level, not the attempt, and a retry can't reroll an easier board.</li>
+<li><b>Paid in coins, never in score.</b> A harder roll raises the coin drop chance for that level (×1.5 to ×2 to start), so the danger is the price of a better payout.</li>
+<li><b>Said at the level's start</b>, e.g. "4 colours: double coins". Without it a hard roll just feels like bad luck; with it, it reads as a gamble the player was dealt.</li>
+<li><b>Bad luck stays rare and bounded.</b> A swarm level is the exception, and two in a row should be rarer still, so a run isn't ended by the dice alone.</li>
+</ul>
+<p>Before building: measure the cost with the bot (hearts lost and level length on rolled-hard against normal levels at the same depth) and set each bonus so the risk pays. The general form is "not every level has everything": once the colour and bubbles work, the same roll can carry other pieces. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->

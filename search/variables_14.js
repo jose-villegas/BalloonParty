@@ -55,7 +55,7 @@ var searchData=
   ['trailhittrigger_52',['TrailHitTrigger',['../classBalloonParty_1_1UI_1_1Score_1_1ColorProgressBar.html#ab92ebef55299c7978389e4b0622e275a',1,'BalloonParty::UI::Score::ColorProgressBar']]],
   ['traillengthid_53',['TrailLengthId',['../classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#abe77aafbde083fee4a7969591a8a0be3',1,'BalloonParty::Slots::Actor::SpeckField']]],
   ['trailmaxid_54',['TrailMaxId',['../classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a5a11afbc92da929ecac7bf4341d38422',1,'BalloonParty::Slots::Actor::SpeckField']]],
-  ['trailpoolkey_55',['TrailPoolKey',['../classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#a23c8819a19d2d234e78f8b605e29168b',1,'BalloonParty.UI.Health.HeartTrailController.TrailPoolKey'],['../classBalloonParty_1_1UI_1_1Shields_1_1ShieldTrailController.html#ad243441a2290cc044e0c553853619f87',1,'BalloonParty.UI.Shields.ShieldTrailController.TrailPoolKey']]],
+  ['trailpoolkey_55',['TrailPoolKey',['../classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#a23c8819a19d2d234e78f8b605e29168b',1,'BalloonParty::UI::Health::HeartTrailController']]],
   ['trailsperbar_56',['TrailsPerBar',['../structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpFillTrailsMessage.html#a15318f099fd09bf5c122fffe1b8f7e19',1,'BalloonParty::Shared::Messages::LevelUpFillTrailsMessage']]],
   ['transform_57',['Transform',['../structBalloonParty_1_1Projectile_1_1ProjectileRegistry_1_1Entry.html#ae30850915299f7b602da48bbf47801dc',1,'BalloonParty::Projectile::ProjectileRegistry::Entry']]],
   ['transitionfadeid_58',['TransitionFadeId',['../classBalloonParty_1_1Scenario_1_1View_1_1WallNetView.html#a833d55f494e670e865743bff6b3f2054',1,'BalloonParty::Scenario::View::WallNetView']]],

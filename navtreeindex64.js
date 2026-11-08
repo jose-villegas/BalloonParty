@@ -95,8 +95,6 @@ var NAVTREEINDEX64 =
 "classBalloonParty_1_1Shared_1_1Pool_1_1SimplePoolChannel-1-g.html#af9947fb47bbcf9ff54006a64d90c2131":[6,0,0,12,9,11,2],
 "classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointKeys.html":[5,0,0,12,9,12],
 "classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointKeys.html":[6,0,0,12,9,12],
-"classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointKeys.html#ab30928604f74a77948150ea912e5b04a":[5,0,0,12,9,12,1],
-"classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointKeys.html#ab30928604f74a77948150ea912e5b04a":[6,0,0,12,9,12,1],
 "classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointKeys.html#ada010d3c66753cb25bc8293dbcd19a03":[5,0,0,12,9,12,0],
 "classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointKeys.html#ada010d3c66753cb25bc8293dbcd19a03":[6,0,0,12,9,12,0],
 "classBalloonParty_1_1Shared_1_1Pool_1_1TrailEndpointRegistry.html":[5,0,0,12,9,13],
@@ -249,5 +247,7 @@ var NAVTREEINDEX64 =
 "classBalloonParty_1_1Shared_1_1Rendering_1_1ImageShadowBaker.html#acfe0baf7862d754ff7a123492013046a":[6,0,0,12,10,7,1],
 "classBalloonParty_1_1Shared_1_1Rendering_1_1ImageShadowBaker.html#adaa3e0be4d3f9747f7ac95327dfd4e99":[5,0,0,12,10,7,7],
 "classBalloonParty_1_1Shared_1_1Rendering_1_1ImageShadowBaker.html#adaa3e0be4d3f9747f7ac95327dfd4e99":[6,0,0,12,10,7,7],
-"classBalloonParty_1_1Shared_1_1Rendering_1_1MeshHelper.html":[5,0,0,12,10,8]
+"classBalloonParty_1_1Shared_1_1Rendering_1_1MeshHelper.html":[5,0,0,12,10,8],
+"classBalloonParty_1_1Shared_1_1Rendering_1_1MeshHelper.html":[6,0,0,12,10,8],
+"classBalloonParty_1_1Shared_1_1Rendering_1_1MeshHelper.html#a31438a6a8ee57536556ec658fb5d5143":[5,0,0,12,10,8,0]
 };

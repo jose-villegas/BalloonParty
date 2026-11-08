@@ -514,6 +514,7 @@ var annotated_dup =
           [ "TimerCatalog", "classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog.html", "classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog" ]
         ] ],
         [ "Upgrades", "namespaceBalloonParty_1_1Game_1_1Upgrades.html", [
+          [ "IShieldsPerBall", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IShieldsPerBall.html", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IShieldsPerBall" ],
           [ "IUpgradeDraft", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IUpgradeDraft.html", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IUpgradeDraft" ],
           [ "IWeaponStats", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats" ],
           [ "RunUpgrades", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades" ]
@@ -1085,7 +1086,6 @@ var annotated_dup =
         [ "Shields", "namespaceBalloonParty_1_1UI_1_1Shields.html", [
           [ "ShieldCounterAnimation", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterAnimation.html", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterAnimation" ],
           [ "ShieldCounterLabel", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterLabel.html", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterLabel" ],
-          [ "ShieldTrailController", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldTrailController.html", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldTrailController" ],
           [ "ShieldUILifetimeScope", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldUILifetimeScope.html", "classBalloonParty_1_1UI_1_1Shields_1_1ShieldUILifetimeScope" ]
         ] ],
         [ "Telemetry", "namespaceBalloonParty_1_1UI_1_1Telemetry.html", [

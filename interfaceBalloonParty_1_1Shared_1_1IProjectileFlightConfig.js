@@ -23,7 +23,6 @@ var interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig =
     [ "ProjectileStartingShields", "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a5d12d1764514cda9e2c7785cd6fee32f", null ],
     [ "ReloadCooldownSeconds", "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a0fbd17f7c86bfa8af391f89de970a5e1", null ],
     [ "ShieldToneThreshold", "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a0cc8529b928b467fac388df4da48dd50", null ],
-    [ "ShieldTrailDuration", "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#afb5bc2e2aa6007aaca5f7cb1bc38244e", null ],
     [ "SpeedGainPerTap", "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a8e6995f389c883c1011fa51addbfa8be", null ],
     [ "SweepEnabled", "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a014cc37a8d0d2f86833c0f22aa7edeb8", null ],
     [ "SweepTapThreshold", "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#aad7f3fc6241c5e22518fd6bbbe1f7542", null ]
