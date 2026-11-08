@@ -116,29 +116,64 @@ $(function(){initNavTree('namespaceBalloonParty_1_1Configuration_1_1Level.html',
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1BalloonContentEntry.html">BalloonContentEntry</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1BudgetFormula.html">BudgetFormula</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A level's budget: a base, plus a step per level after the first, never past a cap.  <a href="structBalloonParty_1_1Configuration_1_1Level_1_1BudgetFormula.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html">ContentWeightRamp</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A catalogue piece's weight by level: rolled within an early range at its unlock, moving to a late range over <a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html#a627761b25c0bc6342598f475398d6260">_rampLevels</a>.  <a href="structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html">GridActorContentEntry</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A grid actor in the catalogue. Actors block the board, so they're paid from the threat budget.  <a href="structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece.html">IContentPiece</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A catalogue entry the level generator can include in a level.  <a href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html">ILevelPacingConfiguration</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Level-range difficulty authoring; read by <code>LevelDifficultyResolver</code> (and by the balloon spawner's pool prewarm, via <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#af8180a7c80ff7448293ca03438f90c67" title="Upper bound on how many of a balloon type can share the board across every range — the pool prewarm s...">MaxConcurrentBalloons</a>).  <a href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html">Level</a> pacing; read by <code>LevelDifficultyResolver</code> (and by the balloon spawner's pool prewarm, via <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#af8180a7c80ff7448293ca03438f90c67" title="Upper bound on how many of a balloon type can share the board at any level — the pool prewarm size.">MaxConcurrentBalloons</a>).  <a href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html">ILevelParameters</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The read surface of a fully-resolved level; cross-level queries stay on the resolver instead.  <a href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelStep.html">ILevelStep</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">One step of a level-stepped value: it holds from <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelStep.html#a76ac4920677a0b8e3515a9022ae5db04">FromLevel</a> until the next step.  <a href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelStep.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1IntLevelStep.html">IntLevelStep</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html">ISpawnClockSettings</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1ItemContentEntry.html">ItemContentEntry</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An item in the catalogue. <a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Items.html">Items</a> help the player, so they're always paid from the aid budget.  <a href="structBalloonParty_1_1Configuration_1_1Level_1_1ItemContentEntry.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1ItemCountStep.html">ItemCountStep</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The item-count distributions in force from <a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1ItemCountStep.html#a3de39dfdafe41d9e61f1b19e44954ec7">FromLevel</a> on.  <a href="structBalloonParty_1_1Configuration_1_1Level_1_1ItemCountStep.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html">LevelGenerationSettings</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">What <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html" title="Builds a level&#39;s mix from LevelGenerationSettings.">LevelGenerator</a> builds every positive level from: formulas for the level's shape and its two budgets, and a catalogue of content pieces that unlock by level.  <a href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html">LevelGenerator</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds a level's mix from <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html" title="What LevelGenerator builds every positive level from: formulas for the level&#39;s shape and its two budg...">LevelGenerationSettings</a>.  <a href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html">LevelPacingConfiguration</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Per-colour points-required per level.  <a href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">How levels pace: every positive level's mix is generated from <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a7aeb56bc6ae9acacda76b647b60a2df6">_generation</a>; the scoring curve sets each level's cumulative score milestone, split across that level's colours and rounded to a clean multiple; the spawn clock sets when lines arrive.  <a href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingValidator.html">LevelPacingValidator</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Plain-C# level-pacing invariant checks — shared by <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html" title="Per-colour points-required per level.">LevelPacingConfiguration</a>'s editor-only <code>OnValidate</code> warnings and EditMode test coverage, so authoring checks and test checks can't drift by verifying the same invariants two different ways.  <a href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingValidator.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Plain-C# level-pacing invariant checks — shared by <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html" title="How levels pace: every positive level&#39;s mix is generated from _generation; the scoring curve sets eac...">LevelPacingConfiguration</a>'s editor-only <code>OnValidate</code> warnings and EditMode test coverage, so authoring checks and test checks can't drift by verifying the same invariants two different ways.  <a href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingValidator.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html">LevelParameters</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Field defaults are the parameterless fallback (Simple-only) used when no authored range contains a level.  <a href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html">LevelRangeEntry</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">One contiguous span of levels sharing a <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html" title="The range-authored form of a level&#39;s difficulty mix; Resolve is a pure function, so it&#39;s EditMode-tes...">RangedLevelParameters</a> mix.  <a href="structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An authored debug preset: a <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html" title="A level&#39;s difficulty mix before its ranges are rolled: what LevelGenerator outputs for every positive...">RangedLevelParameters</a> mix keyed by a negative <a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html#ac4fadb87f3d5e62edbccde51de38da46">FromLevel</a> the start-level cheat selects.  <a href="structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html">LevelScoringCurve</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Monotone piecewise-cubic scoring curve.  <a href="structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelSteps.html">LevelSteps</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html">RangedLevelParameters</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The range-authored form of a level's difficulty mix; <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ad0a8f4680319a2fb2e41bc07edae1384">Resolve</a> is a pure function, so it's EditMode-testable with a seeded rng.  <a href="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A level's difficulty mix before its ranges are rolled: what <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html" title="Builds a level&#39;s mix from LevelGenerationSettings.">LevelGenerator</a> outputs for every positive level, and what the authored debug presets hold.  <a href="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html">ResolvedBalloonEntry</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,12 +182,20 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1ScoringControlPoint.html">ScoringControlPoint</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">One authored milestone on the scoring curve.  <a href="structBalloonParty_1_1Configuration_1_1Level_1_1ScoringControlPoint.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html">SpawnClockSettings</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">When balloon lines arrive: one line per interval of scaled game time, the interval shrinking each level towards a floor.  <a href="classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1TailGrowthConfig.html">TailGrowthConfig</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tail extrapolation configuration for <a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html" title="Monotone piecewise-cubic scoring curve.">LevelScoringCurve</a>.  <a href="structBalloonParty_1_1Configuration_1_1Level_1_1TailGrowthConfig.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
+<tr class="memitem:a866818b2757667473c47a5f54ecd7c61" id="r_a866818b2757667473c47a5f54ecd7c61"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a866818b2757667473c47a5f54ecd7c61">ContentRole</a> { <a class="el" href="#a866818b2757667473c47a5f54ecd7c61a4d369630702981cadf5008bb04dec976">Threat</a>
+, <a class="el" href="#a866818b2757667473c47a5f54ecd7c61a919638328565eb200ce01522c60b3439">Aid</a>
+ }</td></tr>
+<tr class="memdesc:a866818b2757667473c47a5f54ecd7c61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Which budget a catalogue piece is paid from: threats grow with depth, aids stay scarce.  <a href="#a866818b2757667473c47a5f54ecd7c61">More...</a><br /></td></tr>
+<tr class="separator:a866818b2757667473c47a5f54ecd7c61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f10485b2af91bced864457369fdcd4b" id="r_a6f10485b2af91bced864457369fdcd4b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f10485b2af91bced864457369fdcd4b">SegmentMode</a> { <a class="el" href="#a6f10485b2af91bced864457369fdcd4bae510cdf33cd497134b47b9316314d4b4">Smooth</a>
 , <a class="el" href="#a6f10485b2af91bced864457369fdcd4ba32a843da6ea40ab3b17a3421ccdf671b">Linear</a>
 , <a class="el" href="#a6f10485b2af91bced864457369fdcd4ba766cae017fab4bcc1d1e83fbb9af87c3">Convex</a>
@@ -167,6 +210,34 @@ Enumerations</h2></td></tr>
 <tr class="separator:a0724b6aad57e87a18201dbc9ad074527"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="a866818b2757667473c47a5f54ecd7c61" name="a866818b2757667473c47a5f54ecd7c61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a866818b2757667473c47a5f54ecd7c61">&#9670;&#160;</a></span>ContentRole</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#a866818b2757667473c47a5f54ecd7c61">BalloonParty.Configuration.Level.ContentRole</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Which budget a catalogue piece is paid from: threats grow with depth, aids stay scarce. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a866818b2757667473c47a5f54ecd7c61a4d369630702981cadf5008bb04dec976" name="a866818b2757667473c47a5f54ecd7c61a4d369630702981cadf5008bb04dec976"></a>Threat&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a866818b2757667473c47a5f54ecd7c61a919638328565eb200ce01522c60b3439" name="a866818b2757667473c47a5f54ecd7c61a919638328565eb200ce01522c60b3439"></a>Aid&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
 <a id="a6f10485b2af91bced864457369fdcd4b" name="a6f10485b2af91bced864457369fdcd4b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6f10485b2af91bced864457369fdcd4b">&#9670;&#160;</a></span>SegmentMode</h2>
 

@@ -9,5 +9,7 @@ var searchData=
   ['wavedeficitcalculator_2ecs_6',['WaveDeficitCalculator.cs',['../WaveDeficitCalculator_8cs.html',1,'']]],
   ['weightedpickextensions_2ecs_7',['WeightedPickExtensions.cs',['../WeightedPickExtensions_8cs.html',1,'']]],
   ['windsoundrouter_2ecs_8',['WindSoundRouter.cs',['../WindSoundRouter_8cs.html',1,'']]],
-  ['worldpolylinegizmo_2ecs_9',['WorldPolylineGizmo.cs',['../WorldPolylineGizmo_8cs.html',1,'']]]
+  ['worldpolylinegizmo_2ecs_9',['WorldPolylineGizmo.cs',['../WorldPolylineGizmo_8cs.html',1,'']]],
+  ['writeonmath_2ecs_10',['WriteOnMath.cs',['../WriteOnMath_8cs.html',1,'']]],
+  ['writeontext_2ecs_11',['WriteOnText.cs',['../WriteOnText_8cs.html',1,'']]]
 ];

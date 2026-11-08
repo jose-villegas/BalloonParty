@@ -2,7 +2,7 @@ var classBalloonParty_1_1Item_1_1Laser_1_1LaserItemHandler =
 [
     [ "LaserItemHandler", "classBalloonParty_1_1Item_1_1Laser_1_1LaserItemHandler.html#a2007df3c37467154dc08d7dceb074932", null ],
     [ "Activate", "classBalloonParty_1_1Item_1_1Laser_1_1LaserItemHandler.html#aa0ea19703ae06acd138b828b16f1e129", null ],
-    [ "CastCross", "classBalloonParty_1_1Item_1_1Laser_1_1LaserItemHandler.html#a91744838e50e19956e5a174dbd62888f", null ],
+    [ "CastCross", "classBalloonParty_1_1Item_1_1Laser_1_1LaserItemHandler.html#a5cd910b0e1c21c3e7e3ba5df027629bb", null ],
     [ "CastDirection", "classBalloonParty_1_1Item_1_1Laser_1_1LaserItemHandler.html#a3b41d2784419dd4df5b737c6f2a7afd6", null ],
     [ "ConvertBorderingNeighbors", "classBalloonParty_1_1Item_1_1Laser_1_1LaserItemHandler.html#a16b07f66c3f056133c59f648406d700e", null ],
     [ "Dispose", "classBalloonParty_1_1Item_1_1Laser_1_1LaserItemHandler.html#af9b8e311682aaa9f7e69fb170813bee8", null ],

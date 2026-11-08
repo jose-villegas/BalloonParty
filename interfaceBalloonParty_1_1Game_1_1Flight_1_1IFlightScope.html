@@ -114,7 +114,7 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightScop
 </div><!--header-->
 <div class="contents">
 
-<p>The per-shot boundary, owned in one place instead of re-derived by every consumer.  
+<p>The shot boundary, owned in one place instead of re-derived by every consumer.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Game.Flight.IFlightScope:</div>
@@ -126,46 +126,14 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightScop
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
-<tr class="memitem:a46086b7e2bc81fb90f13d01851d5f259" id="r_a46086b7e2bc81fb90f13d01851d5f259"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a46086b7e2bc81fb90f13d01851d5f259">FlightIndex</a><code> [get]</code></td></tr>
-<tr class="memdesc:a46086b7e2bc81fb90f13d01851d5f259"><td class="mdescLeft">&#160;</td><td class="mdescRight">Increments once per loaded projectile — a stable id for the shot in progress.  <br /></td></tr>
-<tr class="separator:a46086b7e2bc81fb90f13d01851d5f259"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af8b4fb0d2ff0b222b166e169030cdc21" id="r_af8b4fb0d2ff0b222b166e169030cdc21"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af8b4fb0d2ff0b222b166e169030cdc21">IsAirborne</a><code> [get]</code></td></tr>
-<tr class="memdesc:af8b4fb0d2ff0b222b166e169030cdc21"><td class="mdescLeft">&#160;</td><td class="mdescRight">[Fired, Destroyed).  <br /></td></tr>
+<tr class="memdesc:af8b4fb0d2ff0b222b166e169030cdc21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Some shot is in [Fired, Destroyed).  <br /></td></tr>
 <tr class="separator:af8b4fb0d2ff0b222b166e169030cdc21"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b37ae17a5a5d6a163313cfd61ecca9c" id="r_a2b37ae17a5a5d6a163313cfd61ecca9c"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b37ae17a5a5d6a163313cfd61ecca9c">IsLoaded</a><code> [get]</code></td></tr>
-<tr class="memdesc:a2b37ae17a5a5d6a163313cfd61ecca9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">[Loaded, Destroyed). What per-flight counters are scoped to.  <br /></td></tr>
-<tr class="separator:a2b37ae17a5a5d6a163313cfd61ecca9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The per-shot boundary, owned in one place instead of re-derived by every consumer. </p>
-<p>Two windows, because the systems that care want different ones: <a class="el" href="#a2b37ae17a5a5d6a163313cfd61ecca9c" title="[Loaded, Destroyed). What per-flight counters are scoped to.">IsLoaded</a> spans the whole shot including aiming, <a class="el" href="#af8b4fb0d2ff0b222b166e169030cdc21" title="[Fired, Destroyed).">IsAirborne</a> only the part where the projectile is actually travelling. </p>
+<div class="textblock"><p>The shot boundary, owned in one place instead of re-derived by every consumer. </p>
+<p>Per-ball questions go to <code>IProjectileRegistry</code>; this answers the world-wide one. </p>
 </div><h2 class="groupheader">Property Documentation</h2>
-<a id="a46086b7e2bc81fb90f13d01851d5f259" name="a46086b7e2bc81fb90f13d01851d5f259"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a46086b7e2bc81fb90f13d01851d5f259">&#9670;&#160;</a></span>FlightIndex</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int BalloonParty.Game.Flight.IFlightScope.FlightIndex</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Increments once per loaded projectile — a stable id for the shot in progress. </p>
-
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#aef685d94086497a1d8d4825a52a44f12">BalloonParty.Game.Flight.FlightStatsService</a>.</p>
-
-</div>
-</div>
 <a id="af8b4fb0d2ff0b222b166e169030cdc21" name="af8b4fb0d2ff0b222b166e169030cdc21"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af8b4fb0d2ff0b222b166e169030cdc21">&#9670;&#160;</a></span>IsAirborne</h2>
 
@@ -186,36 +154,10 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>[Fired, Destroyed). </p>
-<p>What ducking and time-scale effects gate on — using <a class="el" href="#a2b37ae17a5a5d6a163313cfd61ecca9c" title="[Loaded, Destroyed). What per-flight counters are scoped to.">IsLoaded</a> for those would hold the effect through aiming, i.e. permanently between shots. </p>
+<p>Some shot is in [Fired, Destroyed). </p>
+<p>What ducking and time-scale effects gate on. There is no "some shot is loaded" window: the thrower holds a ball through all of play, so it would always be true. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#a4296c7479b1a6599a0d07d9cecb1e943">BalloonParty.Game.Flight.FlightStatsService</a>.</p>
-
-</div>
-</div>
-<a id="a2b37ae17a5a5d6a163313cfd61ecca9c" name="a2b37ae17a5a5d6a163313cfd61ecca9c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2b37ae17a5a5d6a163313cfd61ecca9c">&#9670;&#160;</a></span>IsLoaded</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">IReadOnlyReactiveProperty&lt;bool&gt; BalloonParty.Game.Flight.IFlightScope.IsLoaded</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>[Loaded, Destroyed). What per-flight counters are scoped to. </p>
-
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#ae5680bc41bcd5b781fd4d0cb180f4bda">BalloonParty.Game.Flight.FlightStatsService</a>.</p>
 
 </div>
 </div>

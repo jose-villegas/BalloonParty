@@ -1,22 +1,24 @@
 <map id="BalloonParty.Audio.Routing.CombatSoundRouter" name="BalloonParty.Audio.Routing.CombatSoundRouter">
-<area shape="rect" id="Node000001" title=" " alt="" coords="655,205,856,245"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="659,241,860,281"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="329,5,414,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="428,22,474,31,527,45,581,65,632,92,666,118,697,148,742,203,738,206,693,152,663,122,629,96,579,70,525,50,473,36,427,27"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="428,20,476,28,530,42,585,62,636,92,675,127,708,168,751,239,746,242,703,171,671,131,633,96,583,67,528,47,474,33,427,26"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="322,55,421,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="435,73,530,93,582,110,632,130,689,166,734,203,731,207,686,170,629,135,580,115,528,99,434,78"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="435,71,533,91,586,109,636,133,670,157,701,186,746,239,742,242,697,190,667,162,633,138,584,114,531,96,434,76"/>
 <area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html" title=" " alt="" coords="276,105,467,145"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="481,143,631,179,701,202,700,207,630,185,480,148"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="481,145,558,166,636,193,684,215,726,238,724,243,681,220,634,198,556,171,480,151"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html" title="Read&#45;only projectile flight configuration: physics, cruise, sweep, pierce, and doom tuning." alt="" coords="261,169,481,209"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="495,198,654,213,654,218,495,203"/>
-<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce.html" title="Whether the active shot is currently piercing." alt="" coords="274,233,469,288"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="482,248,654,231,655,237,483,253"/>
-<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStats.html" title="What happened during the flight in progress." alt="" coords="276,313,467,353"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="475,307,630,266,701,242,702,247,631,271,477,312"/>
-<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="273,377,470,417"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="483,372,557,350,629,320,687,282,732,243,735,247,690,286,632,324,558,355,484,377"/>
-<area shape="rect" id="Node000009" href="$structBalloonParty_1_1Audio_1_1SoundHandle.html" title="Identifies one play of a voice slot — the only way to ISoundPlayer.Stop a loop." alt="" coords="278,479,465,519"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="477,473,555,445,594,425,629,401,668,363,701,320,743,244,748,246,705,323,672,367,632,405,596,429,557,449,479,478"/>
-<area shape="poly" id="edge10_Node000009_Node000009" title=" " alt="" coords="346,463,355,456,371,453,385,455,395,461,399,470,397,479,392,479,394,470,391,464,384,460,371,458,357,460,350,467"/>
-<area shape="rect" id="Node000010" title=" " alt="" coords="5,487,212,512"/>
-<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="226,497,278,497,278,502,226,502"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="494,209,659,239,658,245,493,214"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce.html" title="Whether any live shot is currently piercing." alt="" coords="274,233,469,288"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="482,258,659,258,659,263,482,263"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsSource.html" title="Per&#45;shot IFlightStats." alt="" coords="276,313,467,353"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="480,310,658,277,659,282,481,315"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="286,377,457,417"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="469,374,550,353,634,325,682,302,725,278,727,283,685,307,636,330,552,358,471,379"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="273,441,470,481"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="483,441,559,420,598,405,633,386,667,362,698,333,742,279,746,282,701,337,671,366,636,391,600,410,561,425,485,446"/>
+<area shape="rect" id="Node000010" href="$structBalloonParty_1_1Audio_1_1SoundHandle.html" title="Identifies one play of a voice slot — the only way to ISoundPlayer.Stop a loop." alt="" coords="278,543,465,583"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="472,537,555,505,596,483,633,456,674,413,707,364,732,317,748,280,753,282,736,319,711,367,678,416,636,460,598,487,557,510,474,542"/>
+<area shape="poly" id="edge11_Node000010_Node000010" title=" " alt="" coords="346,527,355,520,371,517,385,519,395,525,399,534,397,543,392,543,394,534,391,528,384,524,371,522,357,524,350,531"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="5,551,212,576"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="226,561,278,561,278,566,226,566"/>
 </map>

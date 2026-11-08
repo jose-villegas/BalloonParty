@@ -262,7 +262,7 @@ var sectionId = 'dynsection-1';
 <!-- Node12 -->
 <g id="Node000012" class="node">
 <title>Node12</title>
-<g id="a_Node000012"><a xlink:href="classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html" target="_top" xlink:title="Shared reference to the current aim&#45;prediction trace, decoupled from direct access — mirrors BalloonP...">
+<g id="a_Node000012"><a xlink:href="classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html" target="_top" xlink:title="Shared reference to the current aim&#45;prediction trace, decoupled from direct access.">
 <polygon fill="white" stroke="#666666" points="620.5,-78 489.5,-78 489.5,-48 620.5,-48 620.5,-78"/>
 <text text-anchor="start" x="497.5" y="-66" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Prediction.</text>
 <text text-anchor="middle" x="555" y="-55" font-family="Helvetica,sans-Serif" font-size="10.00">PredictionTraceProvider</text>

@@ -1,6 +1,7 @@
 var namespaceBalloonParty_1_1Game_1_1Score =
 [
     [ "Behaviours", "namespaceBalloonParty_1_1Game_1_1Score_1_1Behaviours.html", "namespaceBalloonParty_1_1Game_1_1Score_1_1Behaviours" ],
+    [ "ColorStreak", "classBalloonParty_1_1Game_1_1Score_1_1ColorStreak.html", "classBalloonParty_1_1Game_1_1Score_1_1ColorStreak" ],
     [ "ColorStreakTracker", "classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html", "classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker" ],
     [ "IColorStreak", "interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html", "interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak" ],
     [ "ScoreController", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController" ],

@@ -109,7 +109,8 @@ $(function(){initNavTree('namespaceBalloonParty_1_1Shared.html',''); initResizab
 <div class="header">
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Shared Namespace Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -154,6 +155,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Shared_1_1ContactRadius.html">ContactRadius</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">World-space contact-radius derivation shared by every projectile-facing collider read in the shot solver (<a class="el" href="plan_shot_solver_accuracy.html">Shot Solver Accuracy</a> §3 "Shared radius helper") — a circle's radius or a capsule's cross-section half-extent, scaled by the transform's world scale (any other collider shape, or none at all, is collision-inert).  <a href="classBalloonParty_1_1Shared_1_1ContactRadius.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Shared_1_1DeflectChainRule.html">DeflectChainRule</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">When a run of deflects pays the ball a shield: a ball that banks off tough balloons again and again without touching a wall earns a bounce every <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#a5cb302725103f7d1c9e98a639f148994" title="A ball deflecting off balloons this many times in a row without touching a wall earns a shield,...">IRunConfig.DeflectChainShieldEvery</a> deflects in a row.  <a href="classBalloonParty_1_1Shared_1_1DeflectChainRule.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1DeflectorCircle.html">DeflectorCircle</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">One board actor that would bounce the next shot instead of letting it through.  <a href="structBalloonParty_1_1Shared_1_1DeflectorCircle.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -182,7 +186,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blocks a caller until some external condition allows it to proceed; "ready" is implementation-defined.  <a href="interfaceBalloonParty_1_1Shared_1_1IReadyGate.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html">IRunConfig</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run-level rules — starting hit points, retry allowance, and (future) loss thresholds.  <a href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run-level rules: starting hit points, retry allowance, the level-complete beat and upgrade cards.  <a href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig.html">IScoreTrailConfig</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Score trail presentation: timing, scatter, burst, and pool prewarm sizes.  <a href="interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig.html#details">More...</a><br /></td></tr>
@@ -192,6 +196,12 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html">ISlotGridConfig</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Slot grid layout: size, spacing, and origin offset.  <a href="interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">One card the level-up can offer.  <a href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html">IUpgradeSettings</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">When the level-up deals cards, how many, and from which deck.  <a href="interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Shared_1_1MusicalNoteAttribute.html">MusicalNoteAttribute</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders an <code>int</code> semitone field as a musical-note dropdown (C, C#, D, …) instead of a raw number.  <a href="classBalloonParty_1_1Shared_1_1MusicalNoteAttribute.html#details">More...</a><br /></td></tr>
@@ -217,7 +227,44 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1WallLimits.html">WallLimits</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The four play-area walls unpacked from <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a1a90655ab365960c9ecc27329d948aee">IProjectileFlightConfig.LimitsClockwise</a> (x = top, y = right, z = bottom, w = left).  <a href="structBalloonParty_1_1Shared_1_1WallLimits.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a54f7c8f51fc5a46c93f1ad9577243523" id="r_a54f7c8f51fc5a46c93f1ad9577243523"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a54f7c8f51fc5a46c93f1ad9577243523">UpgradeKind</a> { <a class="el" href="#a54f7c8f51fc5a46c93f1ad9577243523a816190aef027b1d71a17ab86998a40a5">BallCap</a>
+, <a class="el" href="#a54f7c8f51fc5a46c93f1ad9577243523a13306407a9fcc8bf32cafa63c19d150a">FasterReload</a>
+, <a class="el" href="#a54f7c8f51fc5a46c93f1ad9577243523a970da5f1f2e32aeb9e488dd017160ab4">Shield</a>
+, <a class="el" href="#a54f7c8f51fc5a46c93f1ad9577243523acf271677f22958bc28853c01ef5e5079">ItemOdds</a>
+ }</td></tr>
+<tr class="memdesc:a54f7c8f51fc5a46c93f1ad9577243523"><td class="mdescLeft">&#160;</td><td class="mdescRight">What an upgrade card changes. Each kind is read at one decision point.  <a href="#a54f7c8f51fc5a46c93f1ad9577243523">More...</a><br /></td></tr>
+<tr class="separator:a54f7c8f51fc5a46c93f1ad9577243523"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="a54f7c8f51fc5a46c93f1ad9577243523" name="a54f7c8f51fc5a46c93f1ad9577243523"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54f7c8f51fc5a46c93f1ad9577243523">&#9670;&#160;</a></span>UpgradeKind</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#a54f7c8f51fc5a46c93f1ad9577243523">BalloonParty.Shared.UpgradeKind</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>What an upgrade card changes. Each kind is read at one decision point. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a54f7c8f51fc5a46c93f1ad9577243523a816190aef027b1d71a17ab86998a40a5" name="a54f7c8f51fc5a46c93f1ad9577243523a816190aef027b1d71a17ab86998a40a5"></a>BallCap&#160;</td><td class="fielddoc"><p>+<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#a19c3bc16482462914e62886e6d32f15f" title="The per-stack value; what it means depends on Kind.">IUpgradeCardSettings.Amount</a> balls in flight at once (rounded). </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a54f7c8f51fc5a46c93f1ad9577243523a13306407a9fcc8bf32cafa63c19d150a" name="a54f7c8f51fc5a46c93f1ad9577243523a13306407a9fcc8bf32cafa63c19d150a"></a>FasterReload&#160;</td><td class="fielddoc"><p>Reload time multiplied by (1 − <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#a19c3bc16482462914e62886e6d32f15f" title="The per-stack value; what it means depends on Kind.">IUpgradeCardSettings.Amount</a>) per stack. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a54f7c8f51fc5a46c93f1ad9577243523a970da5f1f2e32aeb9e488dd017160ab4" name="a54f7c8f51fc5a46c93f1ad9577243523a970da5f1f2e32aeb9e488dd017160ab4"></a>Shield&#160;</td><td class="fielddoc"><p>+<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#a19c3bc16482462914e62886e6d32f15f" title="The per-stack value; what it means depends on Kind.">IUpgradeCardSettings.Amount</a> starting shields per ball (rounded). </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a54f7c8f51fc5a46c93f1ad9577243523acf271677f22958bc28853c01ef5e5079" name="a54f7c8f51fc5a46c93f1ad9577243523acf271677f22958bc28853c01ef5e5079"></a>ItemOdds&#160;</td><td class="fielddoc"><p>+<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#a19c3bc16482462914e62886e6d32f15f" title="The per-stack value; what it means depends on Kind.">IUpgradeCardSettings.Amount</a> chance of one more item per item roll. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

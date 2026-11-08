@@ -1,7 +1,9 @@
 <map id="BalloonParty.Shared.Messages.ActorHitMessage" name="BalloonParty.Shared.Messages.ActorHitMessage">
-<area shape="rect" id="Node000001" title=" " alt="" coords="95,108,319,148"/>
-<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="5,5,184,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="128,52,187,106,184,110,124,56"/>
-<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html" title=" " alt="" coords="209,5,431,45"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="290,56,230,110,226,106,287,52"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="17,211,241,251"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="5,108,184,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,160,125,210,120,211,103,162"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html" title=" " alt="" coords="209,108,431,148"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="273,157,166,213,164,208,271,152"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html" title=" " alt="" coords="235,5,405,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="323,59,323,108,317,108,317,59"/>
 </map>

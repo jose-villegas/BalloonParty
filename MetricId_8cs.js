@@ -14,7 +14,6 @@ var MetricId_8cs =
       [ "BalloonParty.Game.Telemetry.MetricId.SpeedTapsMinted", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba747efc07e00c79414f876f3509a3d5d1", null ],
       [ "BalloonParty.Game.Telemetry.MetricId.MaxWallBouncesInFlight", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebac3a2b3ba13734eedd5feae650037bc2e", null ],
       [ "BalloonParty.Game.Telemetry.MetricId.MaxSpeedTapsInFlight", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba93cf8f3684028469c46fd52d3fab8219", null ],
-      [ "BalloonParty.Game.Telemetry.MetricId.HoldSpeedUpFlights", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba25e2f12438c333021f484e52470477a8", null ],
       [ "BalloonParty.Game.Telemetry.MetricId.PointsBanked", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebadb939a84eed3787caeceafca957811e6", null ],
       [ "BalloonParty.Game.Telemetry.MetricId.PointsProjected", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba59ac3dea6774f993fb65accfd60ef965", null ],
       [ "BalloonParty.Game.Telemetry.MetricId.MaxMultiplier", "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebae08bd89404a997e8f92985b815755035", null ],

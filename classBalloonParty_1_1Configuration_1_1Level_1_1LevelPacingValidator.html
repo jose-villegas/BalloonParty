@@ -115,7 +115,7 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1Level_1_1LevelPa
 </div><!--header-->
 <div class="contents">
 
-<p>Plain-C# level-pacing invariant checks — shared by <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html" title="Per-colour points-required per level.">LevelPacingConfiguration</a>'s editor-only <code>OnValidate</code> warnings and EditMode test coverage, so authoring checks and test checks can't drift by verifying the same invariants two different ways.  
+<p>Plain-C# level-pacing invariant checks — shared by <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html" title="How levels pace: every positive level&#39;s mix is generated from _generation; the scoring curve sets eac...">LevelPacingConfiguration</a>'s editor-only <code>OnValidate</code> warnings and EditMode test coverage, so authoring checks and test checks can't drift by verifying the same invariants two different ways.  
  <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
@@ -128,15 +128,14 @@ Static Package Functions</h2></td></tr>
 Static Private Member Functions</h2></td></tr>
 <tr class="memitem:a9a28fc82b71b979fb08944a264420390" id="r_a9a28fc82b71b979fb08944a264420390"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9a28fc82b71b979fb08944a264420390">WarnOnEmptyWeightedSets</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html">ILevelPacingConfiguration</a> config, string configName, List&lt; string &gt; issues)</td></tr>
 <tr class="separator:a9a28fc82b71b979fb08944a264420390"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac51f5c3f69ded70d4dd61da5ec1c2ca6" id="r_ac51f5c3f69ded70d4dd61da5ec1c2ca6"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac51f5c3f69ded70d4dd61da5ec1c2ca6">WarnOnFallbackIssues</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html">ILevelPacingConfiguration</a> config, string configName, List&lt; string &gt; issues)</td></tr>
-<tr class="separator:ac51f5c3f69ded70d4dd61da5ec1c2ca6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a874835a9acc8298a76d72088025dc41b" id="r_a874835a9acc8298a76d72088025dc41b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a874835a9acc8298a76d72088025dc41b">WarnOnGapsAndOverlaps</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html">ILevelPacingConfiguration</a> config, string configName, List&lt; string &gt; issues)</td></tr>
-<tr class="separator:a874835a9acc8298a76d72088025dc41b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56f1579a9c06e2dc347e41222dba3ec3" id="r_a56f1579a9c06e2dc347e41222dba3ec3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a56f1579a9c06e2dc347e41222dba3ec3">WarnOnNonMonotonicThreshold</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html">ILevelPacingConfiguration</a> config, int levelsToCheck, string configName, List&lt; string &gt; issues)</td></tr>
 <tr class="separator:a56f1579a9c06e2dc347e41222dba3ec3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24a3e658a2d6f9bd6ef9ec96393d9ff6" id="r_a24a3e658a2d6f9bd6ef9ec96393d9ff6"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24a3e658a2d6f9bd6ef9ec96393d9ff6">WarnOnPresetIssues</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html">ILevelPacingConfiguration</a> config, string configName, List&lt; string &gt; issues)</td></tr>
+<tr class="separator:a24a3e658a2d6f9bd6ef9ec96393d9ff6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Plain-C# level-pacing invariant checks — shared by <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html" title="Per-colour points-required per level.">LevelPacingConfiguration</a>'s editor-only <code>OnValidate</code> warnings and EditMode test coverage, so authoring checks and test checks can't drift by verifying the same invariants two different ways. </p>
+<div class="textblock"><p>Plain-C# level-pacing invariant checks — shared by <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html" title="How levels pace: every positive level&#39;s mix is generated from _generation; the scoring curve sets eac...">LevelPacingConfiguration</a>'s editor-only <code>OnValidate</code> warnings and EditMode test coverage, so authoring checks and test checks can't drift by verifying the same invariants two different ways. </p>
+<p>The generation catalogue checks its own entries (<a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#aae47f9d0ade6895417c050399744583a" title="One message per authoring problem; empty when the catalogue is sound.">LevelGenerationSettings.Validate</a>). </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="addac679d2ee0c3f2c8c0a48e23262a07" name="addac679d2ee0c3f2c8c0a48e23262a07"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#addac679d2ee0c3f2c8c0a48e23262a07">&#9670;&#160;</a></span>Validate()</h2>
@@ -209,74 +208,6 @@ Static Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ac51f5c3f69ded70d4dd61da5ec1c2ca6" name="ac51f5c3f69ded70d4dd61da5ec1c2ca6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac51f5c3f69ded70d4dd61da5ec1c2ca6">&#9670;&#160;</a></span>WarnOnFallbackIssues()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void BalloonParty.Configuration.Level.LevelPacingValidator.WarnOnFallbackIssues </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html">ILevelPacingConfiguration</a></td>          <td class="paramname"><span class="paramname"><em>config</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>configName</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">List&lt; string &gt;</td>          <td class="paramname"><span class="paramname"><em>issues</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a874835a9acc8298a76d72088025dc41b" name="a874835a9acc8298a76d72088025dc41b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a874835a9acc8298a76d72088025dc41b">&#9670;&#160;</a></span>WarnOnGapsAndOverlaps()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void BalloonParty.Configuration.Level.LevelPacingValidator.WarnOnGapsAndOverlaps </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html">ILevelPacingConfiguration</a></td>          <td class="paramname"><span class="paramname"><em>config</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>configName</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">List&lt; string &gt;</td>          <td class="paramname"><span class="paramname"><em>issues</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a56f1579a9c06e2dc347e41222dba3ec3" name="a56f1579a9c06e2dc347e41222dba3ec3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a56f1579a9c06e2dc347e41222dba3ec3">&#9670;&#160;</a></span>WarnOnNonMonotonicThreshold()</h2>
 
@@ -295,6 +226,40 @@ Static Private Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>levelsToCheck</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>configName</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">List&lt; string &gt;</td>          <td class="paramname"><span class="paramname"><em>issues</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a24a3e658a2d6f9bd6ef9ec96393d9ff6" name="a24a3e658a2d6f9bd6ef9ec96393d9ff6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24a3e658a2d6f9bd6ef9ec96393d9ff6">&#9670;&#160;</a></span>WarnOnPresetIssues()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void BalloonParty.Configuration.Level.LevelPacingValidator.WarnOnPresetIssues </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html">ILevelPacingConfiguration</a></td>          <td class="paramname"><span class="paramname"><em>config</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

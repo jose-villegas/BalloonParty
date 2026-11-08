@@ -45,9 +45,12 @@ var searchData=
   ['colorextensions_2ecs_42',['ColorExtensions.cs',['../ColorExtensions_8cs.html',1,'']]],
   ['colorprogressbar_2ecs_43',['ColorProgressBar.cs',['../ColorProgressBar_8cs.html',1,'']]],
   ['colorsource_2ecs_44',['ColorSource.cs',['../ColorSource_8cs.html',1,'']]],
-  ['colorstreaktracker_2ecs_45',['ColorStreakTracker.cs',['../ColorStreakTracker_8cs.html',1,'']]],
-  ['combatsoundrouter_2ecs_46',['CombatSoundRouter.cs',['../CombatSoundRouter_8cs.html',1,'']]],
-  ['compositecolorablerenderer_2ecs_47',['CompositeColorableRenderer.cs',['../CompositeColorableRenderer_8cs.html',1,'']]],
-  ['compositetelemetrysink_2ecs_48',['CompositeTelemetrySink.cs',['../CompositeTelemetrySink_8cs.html',1,'']]],
-  ['contactradius_2ecs_49',['ContactRadius.cs',['../ContactRadius_8cs.html',1,'']]]
+  ['colorstreak_2ecs_45',['ColorStreak.cs',['../ColorStreak_8cs.html',1,'']]],
+  ['colorstreaktracker_2ecs_46',['ColorStreakTracker.cs',['../ColorStreakTracker_8cs.html',1,'']]],
+  ['combatsoundrouter_2ecs_47',['CombatSoundRouter.cs',['../CombatSoundRouter_8cs.html',1,'']]],
+  ['compositecolorablerenderer_2ecs_48',['CompositeColorableRenderer.cs',['../CompositeColorableRenderer_8cs.html',1,'']]],
+  ['compositetelemetrysink_2ecs_49',['CompositeTelemetrySink.cs',['../CompositeTelemetrySink_8cs.html',1,'']]],
+  ['contactradius_2ecs_50',['ContactRadius.cs',['../ContactRadius_8cs.html',1,'']]],
+  ['contentrole_2ecs_51',['ContentRole.cs',['../ContentRole_8cs.html',1,'']]],
+  ['contentweightramp_2ecs_52',['ContentWeightRamp.cs',['../ContentWeightRamp_8cs.html',1,'']]]
 ];

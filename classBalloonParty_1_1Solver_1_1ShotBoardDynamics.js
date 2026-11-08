@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Solver_1_1ShotBoardDynamics =
 [
-    [ "ShotBoardDynamics", "classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#a1abaffd27e3e86079ecb84b2584d1aab", null ],
+    [ "ShotBoardDynamics", "classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#ac4fb6a44a1b6b0d78f329fc111e0a488", null ],
     [ "AddImpulse", "classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#aa851ed9a4a244a53ca7724ecbfd98665", null ],
     [ "ApplyMoves", "classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#a8db23b902a6d092730e96b0d51ba53bc", null ],
     [ "ClearGrid", "classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#adcdb2da3d37c34d374c06e176bd178e7", null ],
@@ -16,6 +16,7 @@ var classBalloonParty_1_1Solver_1_1ShotBoardDynamics =
     [ "RunPulse", "classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#a5beac463ac3351f493b1ce51d5167104", null ],
     [ "TryRunPulseIfDue", "classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#ae9e6bf63d3fd3d4276732ddee8191705", null ],
     [ "_balanceQuery", "classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#a835e4cf0f91545b6c26a79ba67ba7d62", null ],
+    [ "_firstPulseIn", "classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#a645e2085888acca13c1b9c3da4683b73", null ],
     [ "_flightRebalanceInterval", "classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#aa952b1bdacdc1f01a0e688038cad8158", null ],
     [ "_grid", "classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#a612d5f2118593b8aa37261fe4098c62d", null ],
     [ "_moves", "classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#aa213d2f33287f12a1f1a65ed808e2414", null ],

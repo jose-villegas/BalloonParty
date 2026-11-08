@@ -3,6 +3,7 @@ var namespaceBalloonParty_1_1UI =
     [ "Binding", "namespaceBalloonParty_1_1UI_1_1Binding.html", "namespaceBalloonParty_1_1UI_1_1Binding" ],
     [ "Danger", "namespaceBalloonParty_1_1UI_1_1Danger.html", "namespaceBalloonParty_1_1UI_1_1Danger" ],
     [ "GameOver", "namespaceBalloonParty_1_1UI_1_1GameOver.html", "namespaceBalloonParty_1_1UI_1_1GameOver" ],
+    [ "HeadsUp", "namespaceBalloonParty_1_1UI_1_1HeadsUp.html", "namespaceBalloonParty_1_1UI_1_1HeadsUp" ],
     [ "Health", "namespaceBalloonParty_1_1UI_1_1Health.html", "namespaceBalloonParty_1_1UI_1_1Health" ],
     [ "LevelUp", "namespaceBalloonParty_1_1UI_1_1LevelUp.html", "namespaceBalloonParty_1_1UI_1_1LevelUp" ],
     [ "Score", "namespaceBalloonParty_1_1UI_1_1Score.html", "namespaceBalloonParty_1_1UI_1_1Score" ],
@@ -19,6 +20,7 @@ var namespaceBalloonParty_1_1UI =
     [ "RollingCounterDisplay", "classBalloonParty_1_1UI_1_1RollingCounterDisplay.html", "classBalloonParty_1_1UI_1_1RollingCounterDisplay" ],
     [ "ScaleDownButton", "classBalloonParty_1_1UI_1_1ScaleDownButton.html", "classBalloonParty_1_1UI_1_1ScaleDownButton" ],
     [ "TimeOfDayOrbit", "classBalloonParty_1_1UI_1_1TimeOfDayOrbit.html", "classBalloonParty_1_1UI_1_1TimeOfDayOrbit" ],
+    [ "TimeOfDaySpecular", "classBalloonParty_1_1UI_1_1TimeOfDaySpecular.html", "classBalloonParty_1_1UI_1_1TimeOfDaySpecular" ],
     [ "TimeOfDaySwap", "classBalloonParty_1_1UI_1_1TimeOfDaySwap.html", "classBalloonParty_1_1UI_1_1TimeOfDaySwap" ],
     [ "TimeOfDayTint", "classBalloonParty_1_1UI_1_1TimeOfDayTint.html", "classBalloonParty_1_1UI_1_1TimeOfDayTint" ],
     [ "TimeOfDayVisibility", "classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html", "classBalloonParty_1_1UI_1_1TimeOfDayVisibility" ]

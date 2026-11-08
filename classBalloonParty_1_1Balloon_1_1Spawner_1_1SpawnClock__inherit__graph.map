@@ -1,0 +1,13 @@
+<map id="BalloonParty.Balloon.Spawner.SpawnClock" name="BalloonParty.Balloon.Spawner.SpawnClock">
+<area shape="rect" id="Node000001" title="Brings balloon lines in on a timer, whatever the player does: one line per ISpawnClockSettings...." alt="" coords="272,105,491,145"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="72,5,157,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="172,25,225,39,293,70,350,102,347,107,290,75,223,45,170,30"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="75,55,155,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="169,76,288,102,287,107,168,81"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="11,105,218,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="232,122,272,122,272,127,232,127"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="65,169,164,195"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="177,166,287,142,288,147,178,171"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html" title=" " alt="" coords="5,219,224,259"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="199,212,223,204,288,173,344,143,347,147,291,178,225,208,201,217"/>
+</map>

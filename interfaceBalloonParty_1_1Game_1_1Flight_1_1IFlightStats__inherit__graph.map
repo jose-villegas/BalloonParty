@@ -1,5 +1,7 @@
 <map id="BalloonParty.Game.Flight.IFlightStats" name="BalloonParty.Game.Flight.IFlightStats">
-<area shape="rect" id="Node000001" title="What happened during the flight in progress." alt="" coords="5,5,196,45"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html" title="Owns the per&#45;shot boundary and the counts scoped to it." alt="" coords="5,93,196,133"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,59,103,93,98,93,98,59"/>
+<area shape="rect" id="Node000001" title="What happened during one shot&#39;s flight, from its load until its death." alt="" coords="5,37,196,77"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService_1_1FlightRecord.html" title=" " alt="" coords="244,5,471,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="209,41,244,37,244,42,210,46"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService_1_1NoFlight.html" title=" " alt="" coords="258,69,457,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="210,68,258,74,257,80,209,74"/>
 </map>

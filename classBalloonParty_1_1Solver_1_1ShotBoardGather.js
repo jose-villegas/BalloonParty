@@ -4,7 +4,7 @@ var classBalloonParty_1_1Solver_1_1ShotBoardGather =
     [ "ClassifyContactKind", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a97550b80ad5be8c8786f0f3b371b466e", null ],
     [ "CollectBoard", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#aa2fc676075e4f95609479ab424369f81", null ],
     [ "DirectionFromDegrees", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a49c261705b2a8db210d42c99ed8223af", null ],
-    [ "Gather", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a061dfcc6de2cdcc4a7edf07b370ebc1f", null ],
+    [ "Gather", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#ad32f65fa6ff8d893b7e840d0c987cb28", null ],
     [ "OriginForAngle", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#ac6bfe4d3bc6d6a602b663559c4fbf20a", null ],
     [ "ResolveProjectileColliderOffset", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a5cae8f3bb69413e02681dfe4ce3bb53b", null ],
     [ "ResolveProjectileContactRadius", "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#aa5c44a749d9d3b44d39fdda24a3a654f", null ],

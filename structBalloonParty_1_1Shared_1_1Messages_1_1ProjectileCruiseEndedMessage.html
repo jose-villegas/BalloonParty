@@ -117,23 +117,32 @@ $(function(){initNavTree('structBalloonParty_1_1Shared_1_1Messages_1_1Projectile
 
 <p>Published when a cruising shot's run ends — it touched a balloon, or died on a wall.  
  <a href="#details">More...</a></p>
+<div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Shared.Messages.ProjectileCruiseEndedMessage:</div>
+<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-0-content" class="dyncontent" style="display:none;">
+<div class="center"><iframe scrolling="no" frameborder="0" src="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseEndedMessage__coll__graph.svg" width="235" height="154"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a1bd153dcd35437e99e33e3f5624df8d0" id="r_a1bd153dcd35437e99e33e3f5624df8d0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1bd153dcd35437e99e33e3f5624df8d0">ProjectileCruiseEndedMessage</a> (Vector3 worldPosition)</td></tr>
-<tr class="separator:a1bd153dcd35437e99e33e3f5624df8d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0357d364cb05e168dbd8292493bc1b0e" id="r_a0357d364cb05e168dbd8292493bc1b0e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0357d364cb05e168dbd8292493bc1b0e">ProjectileCruiseEndedMessage</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> projectile, Vector3 worldPosition)</td></tr>
+<tr class="separator:a0357d364cb05e168dbd8292493bc1b0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:a6a818758be68f53eb3e1f91879dcdadd" id="r_a6a818758be68f53eb3e1f91879dcdadd"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a818758be68f53eb3e1f91879dcdadd">Projectile</a></td></tr>
+<tr class="separator:a6a818758be68f53eb3e1f91879dcdadd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6bdf77b18fbe40b0a8f46d37e0ad0f0" id="r_ae6bdf77b18fbe40b0a8f46d37e0ad0f0"><td class="memItemLeft" align="right" valign="top">readonly Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae6bdf77b18fbe40b0a8f46d37e0ad0f0">WorldPosition</a></td></tr>
 <tr class="separator:ae6bdf77b18fbe40b0a8f46d37e0ad0f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Published when a cruising shot's run ends — it touched a balloon, or died on a wall. </p>
-<p>Pairs one-to-one with <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage.html" title="Published when a shot enters CRUISE — enough consecutive wall bounces with no balloon contact that it...">ProjectileCruiseStartedMessage</a> so feedback can tear down. </p>
+<p>Pairs one-to-one, per shot, with <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage.html" title="Published when a shot enters CRUISE — enough consecutive wall bounces with no balloon contact that it...">ProjectileCruiseStartedMessage</a> so feedback can tear down. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a1bd153dcd35437e99e33e3f5624df8d0" name="a1bd153dcd35437e99e33e3f5624df8d0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1bd153dcd35437e99e33e3f5624df8d0">&#9670;&#160;</a></span>ProjectileCruiseEndedMessage()</h2>
+<a id="a0357d364cb05e168dbd8292493bc1b0e" name="a0357d364cb05e168dbd8292493bc1b0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0357d364cb05e168dbd8292493bc1b0e">&#9670;&#160;</a></span>ProjectileCruiseEndedMessage()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -141,8 +150,12 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">BalloonParty.Shared.Messages.ProjectileCruiseEndedMessage.ProjectileCruiseEndedMessage </td>
           <td>(</td>
-          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>worldPosition</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a></td>          <td class="paramname"><span class="paramname"><em>projectile</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>worldPosition</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -150,6 +163,20 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a6a818758be68f53eb3e1f91879dcdadd" name="a6a818758be68f53eb3e1f91879dcdadd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a818758be68f53eb3e1f91879dcdadd">&#9670;&#160;</a></span>Projectile</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> BalloonParty.Shared.Messages.ProjectileCruiseEndedMessage.Projectile</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ae6bdf77b18fbe40b0a8f46d37e0ad0f0" name="ae6bdf77b18fbe40b0a8f46d37e0ad0f0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae6bdf77b18fbe40b0a8f46d37e0ad0f0">&#9670;&#160;</a></span>WorldPosition</h2>
 

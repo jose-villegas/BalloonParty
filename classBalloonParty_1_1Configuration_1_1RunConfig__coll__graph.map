@@ -1,11 +1,19 @@
 <map id="BalloonParty.Configuration.RunConfig" name="BalloonParty.Configuration.RunConfig">
-<area shape="rect" id="Node000001" title=" " alt="" coords="587,55,784,95"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="287,5,417,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="431,29,587,56,586,61,430,34"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1IRunConfig.html" title="Run&#45;level rules — starting hit points, retry allowance, and (future) loss thresholds." alt="" coords="260,55,444,95"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="458,73,586,73,586,78,458,78"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html" title="Inspector&#45;authored IShieldChainSettings, serialized inside RunConfig beside the toggle that turns cha..." alt="" coords="253,119,451,159"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="463,115,586,92,587,97,464,121"/>
-<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html" title="Tuning for how shield chains are planned: the fan of openings tried, and how selective the planner is..." alt="" coords="5,119,204,159"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="218,137,253,137,253,142,218,142"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="912,73,1109,113"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="613,5,742,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="749,31,921,70,920,75,748,36"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1IRunConfig.html" title="Run&#45;level rules: starting hit points, retry allowance, the level&#45;complete beat and upgrade cards." alt="" coords="585,55,769,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="783,78,912,85,912,90,783,83"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html" title="Inspector&#45;authored IShieldChainSettings, serialized inside RunConfig beside the toggle that turns cha..." alt="" coords="579,119,776,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="789,121,911,104,912,109,790,126"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html" title="Tuning for how shield chains are planned: the fan of openings tried, and how selective the planner is..." alt="" coords="277,119,476,159"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="490,137,578,137,578,142,490,142"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Configuration_1_1UpgradeSettings.html" title="Inspector&#45;authored IUpgradeSettings, serialized inside RunConfig: cards are run&#45;scoped,..." alt="" coords="579,183,776,223"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="766,177,887,139,962,110,964,115,889,145,768,182"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html" title="When the level&#45;up deals cards, how many, and from which deck." alt="" coords="269,183,484,223"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="498,201,579,201,579,206,498,206"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html" title="Inspector&#45;authored IUpgradeCardSettings." alt="" coords="278,247,475,287"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="484,242,582,221,583,226,485,247"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html" title="One card the level&#45;up can offer." alt="" coords="5,247,220,287"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="234,265,278,265,278,270,234,270"/>
 </map>

@@ -1,6 +1,7 @@
 var structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight =
 [
     [ "BalloonTypeWeight", "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html#a5f746dccbc15ae3c07d28f6c28c5a99a", null ],
+    [ "BalloonTypeWeight", "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html#af7f3bf25e7a39f59f01b8e05b41a5ed9", null ],
     [ "_guaranteedInitialCount", "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html#a2d33804fb858444b48c1e5876e8a89fb", null ],
     [ "_initialCountWeights", "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html#afdeb4f456ec6f407c7beed98d594d390", null ],
     [ "_type", "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html#a3710befb2e5b6fb06818a3f2435b021b", null ],

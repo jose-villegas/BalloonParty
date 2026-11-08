@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Mirrors the currently&#45;loaded projectile&#39;s piercing state as one shared signal, so systems that must h...">
+<g id="a_Node000001"><a xlink:title="Folds every live shot&#39;s piercing state into one shared signal, so systems that must hold off while a ...">
 <polygon fill="#999999" stroke="#666666" points="282.5,-30 109.5,-30 109.5,0 282.5,0 282.5,-30"/>
 <text text-anchor="start" x="117.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Projectile.</text>
 <text text-anchor="middle" x="196" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Controller.ActiveProjectilePierce</text>
@@ -21,7 +21,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce.html" target="_top" xlink:title="Whether the active shot is currently piercing.">
+<g id="a_Node000002"><a xlink:href="interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce.html" target="_top" xlink:title="Whether any live shot is currently piercing.">
 <polygon fill="white" stroke="#666666" points="146,-107 0,-107 0,-66 146,-66 146,-107"/>
 <text text-anchor="start" x="8" y="-95" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Projectile.</text>
 <text text-anchor="start" x="8" y="-84" font-family="Helvetica,sans-Serif" font-size="10.00">Controller.IActiveProjectile</text>

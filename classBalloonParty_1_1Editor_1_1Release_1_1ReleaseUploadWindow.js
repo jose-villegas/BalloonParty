@@ -17,6 +17,7 @@ var classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow =
     [ "Redact", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#aafb7f566c67f0d7cb7d5485d36aba304", null ],
     [ "RunGit", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#a39ac38069614d2546d1139b35ef926e9", null ],
     [ "SetCheatsDefine", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#ab98aa89ce2706531d1ac55110cc49375", null ],
+    [ "SetCodeVariant", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#aa11981ebdf598d2e7c4d2d23f594722d", null ],
     [ "WriteBuildInfo", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#aa3d036578490ef0a2dc74b54eeb299e5", null ],
     [ "_outputStyle", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#a82c686f8b74bb60e3667cfca87585962", null ],
     [ "BuildFolder", "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html#a9c31baf5f0395daf6e475f8e17c563b0", null ],

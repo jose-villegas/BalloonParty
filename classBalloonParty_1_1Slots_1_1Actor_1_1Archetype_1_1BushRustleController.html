@@ -116,7 +116,7 @@ $(function(){initNavTree('classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1Bu
 </div><!--header-->
 <div class="contents">
 
-<p>Spawns rustle VFX when the projectile passes near a bush slot, or an impact lands within one.  
+<p>Spawns rustle VFX when any shot in flight passes near a bush slot, or an impact lands within one.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Slots.Actor.Archetype.BushRustleController:</div>
@@ -128,8 +128,8 @@ $(function(){initNavTree('classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1Bu
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:af91ac333b415238a98ce767e986ed745" id="r_af91ac333b415238a98ce767e986ed745"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af91ac333b415238a98ce767e986ed745">BushRustleController</a> (<a class="el" href="classBalloonParty_1_1Projectile_1_1ProjectilePositionProvider.html">ProjectilePositionProvider</a> projectileProvider, <a class="el" href="classBalloonParty_1_1Shared_1_1ImpactEventBus.html">ImpactEventBus</a> impactBus, <a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html">PoolManager</a> poolManager, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html">IBushSettings</a> settings)</td></tr>
-<tr class="separator:af91ac333b415238a98ce767e986ed745"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0115f18f1522a75372e908143c887c6" id="r_ae0115f18f1522a75372e908143c887c6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae0115f18f1522a75372e908143c887c6">BushRustleController</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html">IProjectileRegistry</a> projectiles, <a class="el" href="classBalloonParty_1_1Shared_1_1ImpactEventBus.html">ImpactEventBus</a> impactBus, <a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html">PoolManager</a> poolManager, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html">IBushSettings</a> settings)</td></tr>
+<tr class="separator:ae0115f18f1522a75372e908143c887c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a031cdfb3254cef956a6d9aa146593acf" id="r_a031cdfb3254cef956a6d9aa146593acf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a031cdfb3254cef956a6d9aa146593acf">SetSlots</a> (IReadOnlyList&lt; Vector2 &gt; slotPositions)</td></tr>
 <tr class="separator:a031cdfb3254cef956a6d9aa146593acf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5cb098d4bd625133aedbcb6c5181e7d1" id="r_a5cb098d4bd625133aedbcb6c5181e7d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5cb098d4bd625133aedbcb6c5181e7d1">Tick</a> ()</td></tr>
@@ -137,12 +137,14 @@ Package Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a74549468b0cd988b06e00050a4e126a7" id="r_a74549468b0cd988b06e00050a4e126a7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a74549468b0cd988b06e00050a4e126a7">AnyShotWithin</a> (Vector2 slotPos)</td></tr>
+<tr class="separator:a74549468b0cd988b06e00050a4e126a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6745e0b2747c3a4a8b91484f0822b35f" id="r_a6745e0b2747c3a4a8b91484f0822b35f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6745e0b2747c3a4a8b91484f0822b35f">ProcessImpacts</a> (ParticleSystem vfxPrefab)</td></tr>
 <tr class="separator:a6745e0b2747c3a4a8b91484f0822b35f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57748e75d7b082051c124d71fe17b7c6" id="r_a57748e75d7b082051c124d71fe17b7c6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a57748e75d7b082051c124d71fe17b7c6">SpawnRustleVfx</a> (ParticleSystem vfxPrefab, Vector2 slotPos)</td></tr>
 <tr class="separator:a57748e75d7b082051c124d71fe17b7c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a583f40d4423dc09c39bc849e754945c0" id="r_a583f40d4423dc09c39bc849e754945c0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a583f40d4423dc09c39bc849e754945c0">UpdateRustleProximity</a> (Vector3 projectilePos, ParticleSystem vfxPrefab)</td></tr>
-<tr class="separator:a583f40d4423dc09c39bc849e754945c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54d5f170a0345816c438f9a8c7d6c537" id="r_a54d5f170a0345816c438f9a8c7d6c537"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a54d5f170a0345816c438f9a8c7d6c537">UpdateRustleProximity</a> (ParticleSystem vfxPrefab)</td></tr>
+<tr class="separator:a54d5f170a0345816c438f9a8c7d6c537"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -150,8 +152,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a2d9d18d00f2d83a6c0a738273d2dd098"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af92b32d3a6c4aaf7a15ad31140a96ebc" id="r_af92b32d3a6c4aaf7a15ad31140a96ebc"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html">PoolManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af92b32d3a6c4aaf7a15ad31140a96ebc">_poolManager</a></td></tr>
 <tr class="separator:af92b32d3a6c4aaf7a15ad31140a96ebc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5847bf2b695eb710033fd7552085d0c8" id="r_a5847bf2b695eb710033fd7552085d0c8"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Projectile_1_1ProjectilePositionProvider.html">ProjectilePositionProvider</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5847bf2b695eb710033fd7552085d0c8">_projectileProvider</a></td></tr>
-<tr class="separator:a5847bf2b695eb710033fd7552085d0c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab877f8a29c370a6bf21853bbafe7ff18" id="r_ab877f8a29c370a6bf21853bbafe7ff18"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html">IProjectileRegistry</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab877f8a29c370a6bf21853bbafe7ff18">_projectiles</a></td></tr>
+<tr class="separator:ab877f8a29c370a6bf21853bbafe7ff18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a73f5c19177b9614cdf536b69c19bda56" id="r_a73f5c19177b9614cdf536b69c19bda56"><td class="memItemLeft" align="right" valign="top">readonly HashSet&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a73f5c19177b9614cdf536b69c19bda56">_rustledSlots</a> = new()</td></tr>
 <tr class="separator:a73f5c19177b9614cdf536b69c19bda56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:accb00b203e10e744985cf0e8546560c9" id="r_accb00b203e10e744985cf0e8546560c9"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html">IBushSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#accb00b203e10e744985cf0e8546560c9">_settings</a></td></tr>
@@ -160,10 +162,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a9bf5ad4752935ac979a168ed706fa654"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Spawns rustle VFX when the projectile passes near a bush slot, or an impact lands within one. </p>
+<div class="textblock"><p>Spawns rustle VFX when any shot in flight passes near a bush slot, or an impact lands within one. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="af91ac333b415238a98ce767e986ed745" name="af91ac333b415238a98ce767e986ed745"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af91ac333b415238a98ce767e986ed745">&#9670;&#160;</a></span>BushRustleController()</h2>
+<a id="ae0115f18f1522a75372e908143c887c6" name="ae0115f18f1522a75372e908143c887c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0115f18f1522a75372e908143c887c6">&#9670;&#160;</a></span>BushRustleController()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -174,7 +176,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">BalloonParty.Slots.Actor.Archetype.BushRustleController.BushRustleController </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Projectile_1_1ProjectilePositionProvider.html">ProjectilePositionProvider</a></td>          <td class="paramname"><span class="paramname"><em>projectileProvider</em></span>, </td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html">IProjectileRegistry</a></td>          <td class="paramname"><span class="paramname"><em>projectiles</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -202,6 +204,31 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a74549468b0cd988b06e00050a4e126a7" name="a74549468b0cd988b06e00050a4e126a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74549468b0cd988b06e00050a4e126a7">&#9670;&#160;</a></span>AnyShotWithin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Slots.Actor.Archetype.BushRustleController.AnyShotWithin </td>
+          <td>(</td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>slotPos</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a6745e0b2747c3a4a8b91484f0822b35f" name="a6745e0b2747c3a4a8b91484f0822b35f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6745e0b2747c3a4a8b91484f0822b35f">&#9670;&#160;</a></span>ProcessImpacts()</h2>
 
@@ -306,8 +333,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a583f40d4423dc09c39bc849e754945c0" name="a583f40d4423dc09c39bc849e754945c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a583f40d4423dc09c39bc849e754945c0">&#9670;&#160;</a></span>UpdateRustleProximity()</h2>
+<a id="a54d5f170a0345816c438f9a8c7d6c537" name="a54d5f170a0345816c438f9a8c7d6c537"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54d5f170a0345816c438f9a8c7d6c537">&#9670;&#160;</a></span>UpdateRustleProximity()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -318,12 +345,8 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void BalloonParty.Slots.Actor.Archetype.BushRustleController.UpdateRustleProximity </td>
           <td>(</td>
-          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>projectilePos</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">ParticleSystem</td>          <td class="paramname"><span class="paramname"><em>vfxPrefab</em></span></td><td>)</td>
           <td></td>
-          <td class="paramtype">ParticleSystem</td>          <td class="paramname"><span class="paramname"><em>vfxPrefab</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -380,8 +403,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a5847bf2b695eb710033fd7552085d0c8" name="a5847bf2b695eb710033fd7552085d0c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5847bf2b695eb710033fd7552085d0c8">&#9670;&#160;</a></span>_projectileProvider</h2>
+<a id="ab877f8a29c370a6bf21853bbafe7ff18" name="ab877f8a29c370a6bf21853bbafe7ff18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab877f8a29c370a6bf21853bbafe7ff18">&#9670;&#160;</a></span>_projectiles</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -390,7 +413,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">readonly <a class="el" href="classBalloonParty_1_1Projectile_1_1ProjectilePositionProvider.html">ProjectilePositionProvider</a> BalloonParty.Slots.Actor.Archetype.BushRustleController._projectileProvider</td>
+          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html">IProjectileRegistry</a> BalloonParty.Slots.Actor.Archetype.BushRustleController._projectiles</td>
         </tr>
       </table>
   </td>

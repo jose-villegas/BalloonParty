@@ -5,7 +5,6 @@ var interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration
     [ "Entries", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#aff26d2f5807e3d5ac48c9ba4d3023ef7", null ],
     [ "FlightRebalanceInterval", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a3bba664bd622094f3112fa2a546fbfa8", null ],
     [ "MoveSpeedVariation", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a5cab970fcf1b7bfb1101f43207fb2890", null ],
-    [ "NewBalloonLinesTimeInterval", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a780f07865762da41e3a4440e6f828dd3", null ],
     [ "NudgeDistance", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a6d93e879a47729d5da259a6e0168ba01", null ],
     [ "NudgeDuration", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#aae2cfa34e601eb74e48c9805f86d8a9b", null ],
     [ "NudgeFalloff", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#ab940edcd3c3a210bcca337a56798d1ef", null ],

@@ -1,0 +1,5 @@
+<map id="BalloonParty.Shared.Messages.ProjectileFiredMessage" name="BalloonParty.Shared.Messages.ProjectileFiredMessage">
+<area shape="rect" id="Node000001" title="Published the instant a fired shot leaves the muzzle (its first free physics frame,..." alt="" coords="5,108,229,148"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html" title=" " alt="" coords="32,5,203,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,59,120,108,115,108,115,59"/>
+</map>

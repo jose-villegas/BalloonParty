@@ -115,14 +115,14 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStat
 </div><!--header-->
 <div class="contents">
 
-<p>What happened during the flight in progress.  
+<p>What happened during one shot's flight, from its load until its death.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Game.Flight.IFlightStats:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStats__inherit__graph.svg" width="202" height="139"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStats__inherit__graph.svg" width="476" height="115"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -140,8 +140,8 @@ Properties</h2></td></tr>
 <tr class="separator:a8d29de4e0776b62a1907a113b61aa5dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>What happened during the flight in progress. </p>
-<p>Zeroed when the next projectile loads. Read by audio (as pitch steps) and by metrics (as gameplay facts) — one owner, so the two can never disagree about how many Toughs died this shot. </p>
+<div class="textblock"><p>What happened during one shot's flight, from its load until its death. </p>
+<p>Read by audio (as pitch steps) and by metrics (as gameplay facts) — one owner, so the two can never disagree about how many Toughs died this shot. Get one through <a class="el" href="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsSource.html" title="Per-shot IFlightStats.">IFlightStatsSource</a>. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="abd65d381a337ea636ceaaa7566d2286d" name="abd65d381a337ea636ceaaa7566d2286d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abd65d381a337ea636ceaaa7566d2286d">&#9670;&#160;</a></span>DeflectsOf()</h2>
@@ -158,7 +158,7 @@ Properties</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#a5989f6b52827350e2dbee1740d97a0c7">BalloonParty.Game.Flight.FlightStatsService</a>.</p>
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService_1_1FlightRecord.html#a9db0c119a8e89fdc8ca85ca4087c6146">BalloonParty.Game.Flight.FlightStatsService.FlightRecord</a>, and <a class="el" href="classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService_1_1NoFlight.html#a291ef380040e09da411d5f6535f55616">BalloonParty.Game.Flight.FlightStatsService.NoFlight</a>.</p>
 
 </div>
 </div>
@@ -177,7 +177,7 @@ Properties</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#ada9ffaff639f52d104b4a54dc54ce655">BalloonParty.Game.Flight.FlightStatsService</a>.</p>
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService_1_1FlightRecord.html#a075f896bb3b69ab49c8d78ab94ac4350">BalloonParty.Game.Flight.FlightStatsService.FlightRecord</a>, and <a class="el" href="classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService_1_1NoFlight.html#a61e09b1f838a1248766ac242c2a8fb74">BalloonParty.Game.Flight.FlightStatsService.NoFlight</a>.</p>
 
 </div>
 </div>
@@ -202,7 +202,7 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#ab952ea4172a184b82021d07d6843891a">BalloonParty.Game.Flight.FlightStatsService</a>.</p>
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService_1_1FlightRecord.html#abd65170e13cc6b5bd760b0e8d9114c2b">BalloonParty.Game.Flight.FlightStatsService.FlightRecord</a>, and <a class="el" href="classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService_1_1NoFlight.html#a667d5cfa4fbbd628a35db7541be7b2e7">BalloonParty.Game.Flight.FlightStatsService.NoFlight</a>.</p>
 
 </div>
 </div>
@@ -226,7 +226,7 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#afd21fab4ff98b24a7df6bc0465400d94">BalloonParty.Game.Flight.FlightStatsService</a>.</p>
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService_1_1FlightRecord.html#aa72a830794b5409281d06ecd4ca16957">BalloonParty.Game.Flight.FlightStatsService.FlightRecord</a>, and <a class="el" href="classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService_1_1NoFlight.html#ab95486670a6d70c6d80818e6b65ebd4d">BalloonParty.Game.Flight.FlightStatsService.NoFlight</a>.</p>
 
 </div>
 </div>

@@ -87,7 +87,7 @@ var sectionId = 'dynsection-0';
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="classBalloonParty_1_1Projectile_1_1Buffs_1_1WallBounceEndCondition.html" target="_top" xlink:title="Ends the buff when the projectile loses a shield to a wall (a ShieldLostMessage).">
+<g id="a_Node000004"><a xlink:href="classBalloonParty_1_1Projectile_1_1Buffs_1_1WallBounceEndCondition.html" target="_top" xlink:title="Ends the buff when its shot loses a shield to a wall (a ShieldLostMessage).">
 <polygon fill="white" stroke="#666666" points="495.5,-30 329.5,-30 329.5,0 495.5,0 495.5,-30"/>
 <text text-anchor="start" x="337.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Projectile.</text>
 <text text-anchor="middle" x="412.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Buffs.WallBounceEndCondition</text>

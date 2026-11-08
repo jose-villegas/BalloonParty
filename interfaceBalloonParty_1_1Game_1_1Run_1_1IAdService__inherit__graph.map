@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.Run.IAdService" name="BalloonParty.Game.Run.IAdService">
+<area shape="rect" id="Node000001" title="The seam an ad SDK plugs into." alt="" coords="5,5,204,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Run_1_1NoAdService.html" title="No ad SDK yet: every ad counts as watched, so a gated retry goes straight through." alt="" coords="7,93,203,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,59,107,93,102,93,102,59"/>
+</map>

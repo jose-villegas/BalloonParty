@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.Run.IFailureOffers" name="BalloonParty.Game.Run.IFailureOffers">
+<area shape="rect" id="Node000001" title="Decides what a loss offers the player: a plain retry, one gated behind an ad, and a retry with a bonu..." alt="" coords="5,5,231,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Run_1_1FailureOffers.html" title="Reads the run&#39;s retry state against IRunConfig.RetriesBeforeAd: the first retries are free,..." alt="" coords="7,93,229,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,59,121,93,115,93,115,59"/>
+</map>

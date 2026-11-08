@@ -116,7 +116,7 @@ $(function(){initNavTree('structBalloonParty_1_1Configuration_1_1Level_1_1LevelR
 </div><!--header-->
 <div class="contents">
 
-<p>One contiguous span of levels sharing a <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html" title="The range-authored form of a level&#39;s difficulty mix; Resolve is a pure function, so it&#39;s EditMode-tes...">RangedLevelParameters</a> mix.  
+<p>An authored debug preset: a <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html" title="A level&#39;s difficulty mix before its ranges are rolled: what LevelGenerator outputs for every positive...">RangedLevelParameters</a> mix keyed by a negative <a class="el" href="#ac4fadb87f3d5e62edbccde51de38da46">FromLevel</a> the start-level cheat selects.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Configuration.Level.LevelRangeEntry:</div>
@@ -131,20 +131,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a23d9a0d3c4f39722a68f0c6b4e10d6b8" id="r_a23d9a0d3c4f39722a68f0c6b4e10d6b8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a23d9a0d3c4f39722a68f0c6b4e10d6b8">LevelRangeEntry</a> (int fromLevel, int toLevel, <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html">RangedLevelParameters</a> parameters)</td></tr>
 <tr class="memdesc:a23d9a0d3c4f39722a68f0c6b4e10d6b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use this outside the Inspector — the default struct ctor leaves <a class="el" href="#af77e1d10c9d1595d833aba9c5735f95f">Parameters</a> null.  <br /></td></tr>
 <tr class="separator:a23d9a0d3c4f39722a68f0c6b4e10d6b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d5a374b0a24b8ef84f538f44932ff06" id="r_a9d5a374b0a24b8ef84f538f44932ff06"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9d5a374b0a24b8ef84f538f44932ff06">Contains</a> (int level)</td></tr>
-<tr class="separator:a9d5a374b0a24b8ef84f538f44932ff06"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acbbe0d01d73e80b24d11e5c374305e56" id="r_acbbe0d01d73e80b24d11e5c374305e56"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acbbe0d01d73e80b24d11e5c374305e56">PositionOf</a> (int level)</td></tr>
-<tr class="memdesc:acbbe0d01d73e80b24d11e5c374305e56"><td class="mdescLeft">&#160;</td><td class="mdescRight">0..1 position of <em>level</em>  within the range; 0 for fallbacks and open-ended tails.  <br /></td></tr>
-<tr class="separator:acbbe0d01d73e80b24d11e5c374305e56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
 <tr class="memitem:ac4fadb87f3d5e62edbccde51de38da46" id="r_ac4fadb87f3d5e62edbccde51de38da46"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac4fadb87f3d5e62edbccde51de38da46">FromLevel</a><code> [get]</code></td></tr>
 <tr class="separator:ac4fadb87f3d5e62edbccde51de38da46"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4a5257bbc334a4e944914e2ac8cc36b" id="r_ac4a5257bbc334a4e944914e2ac8cc36b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac4a5257bbc334a4e944914e2ac8cc36b">IsFallback</a><code> [get]</code></td></tr>
-<tr class="separator:ac4a5257bbc334a4e944914e2ac8cc36b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a657ca5e100449e74ab7d3de13fa1b023" id="r_a657ca5e100449e74ab7d3de13fa1b023"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a657ca5e100449e74ab7d3de13fa1b023">IsOpenEnded</a><code> [get]</code></td></tr>
-<tr class="separator:a657ca5e100449e74ab7d3de13fa1b023"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad113fc7d19547bbf401c96449855be0a" id="r_ad113fc7d19547bbf401c96449855be0a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad113fc7d19547bbf401c96449855be0a">IsPreset</a><code> [get]</code></td></tr>
+<tr class="separator:ad113fc7d19547bbf401c96449855be0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af77e1d10c9d1595d833aba9c5735f95f" id="r_af77e1d10c9d1595d833aba9c5735f95f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html">RangedLevelParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af77e1d10c9d1595d833aba9c5735f95f">Parameters</a><code> [get]</code></td></tr>
 <tr class="separator:af77e1d10c9d1595d833aba9c5735f95f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0c5b687913afb73b9b9ca6d99ed4273" id="r_ae0c5b687913afb73b9b9ca6d99ed4273"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae0c5b687913afb73b9b9ca6d99ed4273">ToLevel</a><code> [get]</code></td></tr>
@@ -160,7 +153,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a1c4770df9342876e6082f82319850041"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>One contiguous span of levels sharing a <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html" title="The range-authored form of a level&#39;s difficulty mix; Resolve is a pure function, so it&#39;s EditMode-tes...">RangedLevelParameters</a> mix. </p>
+<div class="textblock"><p>An authored debug preset: a <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html" title="A level&#39;s difficulty mix before its ranges are rolled: what LevelGenerator outputs for every positive...">RangedLevelParameters</a> mix keyed by a negative <a class="el" href="#ac4fadb87f3d5e62edbccde51de38da46">FromLevel</a> the start-level cheat selects. </p>
+<p>Positive levels are generated instead. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a23d9a0d3c4f39722a68f0c6b4e10d6b8" name="a23d9a0d3c4f39722a68f0c6b4e10d6b8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a23d9a0d3c4f39722a68f0c6b4e10d6b8">&#9670;&#160;</a></span>LevelRangeEntry()</h2>
@@ -187,43 +181,6 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Use this outside the Inspector — the default struct ctor leaves <a class="el" href="#af77e1d10c9d1595d833aba9c5735f95f">Parameters</a> null. </p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a9d5a374b0a24b8ef84f538f44932ff06" name="a9d5a374b0a24b8ef84f538f44932ff06"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9d5a374b0a24b8ef84f538f44932ff06">&#9670;&#160;</a></span>Contains()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool BalloonParty.Configuration.Level.LevelRangeEntry.Contains </td>
-          <td>(</td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>level</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="acbbe0d01d73e80b24d11e5c374305e56" name="acbbe0d01d73e80b24d11e5c374305e56"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acbbe0d01d73e80b24d11e5c374305e56">&#9670;&#160;</a></span>PositionOf()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">float BalloonParty.Configuration.Level.LevelRangeEntry.PositionOf </td>
-          <td>(</td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>level</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>0..1 position of <em>level</em>  within the range; 0 for fallbacks and open-ended tails. </p>
 
 </div>
 </div>
@@ -317,8 +274,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ac4a5257bbc334a4e944914e2ac8cc36b" name="ac4a5257bbc334a4e944914e2ac8cc36b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac4a5257bbc334a4e944914e2ac8cc36b">&#9670;&#160;</a></span>IsFallback</h2>
+<a id="ad113fc7d19547bbf401c96449855be0a" name="ad113fc7d19547bbf401c96449855be0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad113fc7d19547bbf401c96449855be0a">&#9670;&#160;</a></span>IsPreset</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -327,29 +284,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool BalloonParty.Configuration.Level.LevelRangeEntry.IsFallback</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a657ca5e100449e74ab7d3de13fa1b023" name="a657ca5e100449e74ab7d3de13fa1b023"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a657ca5e100449e74ab7d3de13fa1b023">&#9670;&#160;</a></span>IsOpenEnded</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool BalloonParty.Configuration.Level.LevelRangeEntry.IsOpenEnded</td>
+          <td class="memname">bool BalloonParty.Configuration.Level.LevelRangeEntry.IsPreset</td>
         </tr>
       </table>
   </td>

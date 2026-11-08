@@ -107,9 +107,70 @@ $(function(){initNavTree('structBalloonParty_1_1Shared_1_1Messages_1_1Projectile
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Shared.Messages.ProjectileDestroyedMessage Struct Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>A shot's flight ended.  
+ <a href="#details">More...</a></p>
+<div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Shared.Messages.ProjectileDestroyedMessage:</div>
+<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-0-content" class="dyncontent" style="display:none;">
+<div class="center"><iframe scrolling="no" frameborder="0" src="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage__coll__graph.svg" width="235" height="154"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:aa1dca79f0266e61dd015bc0f989255cd" id="r_aa1dca79f0266e61dd015bc0f989255cd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa1dca79f0266e61dd015bc0f989255cd">ProjectileDestroyedMessage</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> projectile)</td></tr>
+<tr class="separator:aa1dca79f0266e61dd015bc0f989255cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:aed04f95b0f6efcf8c0038076fda3014f" id="r_aed04f95b0f6efcf8c0038076fda3014f"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aed04f95b0f6efcf8c0038076fda3014f">Projectile</a></td></tr>
+<tr class="separator:aed04f95b0f6efcf8c0038076fda3014f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A shot's flight ended. </p>
+<p><a class="el" href="namespaceBalloonParty_1_1Projectile.html">Projectile</a> is the shot that died; it has already left <code>IProjectileRegistry.InFlight</code> by the time this is published, so a subscriber asking whether anything is still flying gets the post-death answer. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aa1dca79f0266e61dd015bc0f989255cd" name="aa1dca79f0266e61dd015bc0f989255cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1dca79f0266e61dd015bc0f989255cd">&#9670;&#160;</a></span>ProjectileDestroyedMessage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">BalloonParty.Shared.Messages.ProjectileDestroyedMessage.ProjectileDestroyedMessage </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a></td>          <td class="paramname"><span class="paramname"><em>projectile</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="aed04f95b0f6efcf8c0038076fda3014f" name="aed04f95b0f6efcf8c0038076fda3014f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed04f95b0f6efcf8c0038076fda3014f">&#9670;&#160;</a></span>Projectile</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> BalloonParty.Shared.Messages.ProjectileDestroyedMessage.Projectile</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>Shared/Messages/<a class="el" href="ProjectileDestroyedMessage_8cs.html">ProjectileDestroyedMessage.cs</a></li>
 </ul>

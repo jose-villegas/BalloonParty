@@ -9,7 +9,6 @@ var classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver =
     [ "RainbowColorAt", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#ad11e576ed106384c6db08329b4e27e4e", null ],
     [ "ResetRun", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a09ffa62fccad1402503c09b2c2092d26", null ],
     [ "ResolveFor", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a374a0fe9b4769c3303b297c2ac001755", null ],
-    [ "ResolveRange", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#aa8b52875e9a1669d9539834ee1bbe8f3", null ],
     [ "Start", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a89c507cf0999c56ec120492ee467e93d", null ],
     [ "StartLevel", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a7e490dd6a1383f974e851bd9f5cc0191", null ],
     [ "TryFindActiveItemWeight", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a0ba69a4bb3bf54cc62b967ecb39f10d9", null ],
@@ -21,13 +20,13 @@ var classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver =
     [ "_pacing", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#ad85647863b09f26da7628d3433398bba", null ],
     [ "_palette", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#aa3043977978509fa7b0f02ab9f7cfb77", null ],
     [ "_retryState", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#ab9e4cdbabcaffea678d09171e49a7e0c", null ],
-    [ "_rng", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a3118f862f10a4ef72cfb629d7fce61aa", null ],
     [ "_subscription", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a9b82965df9b92fc243cddd2566fc2d48", null ],
     [ "RainbowBandColor0Id", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#adf96e9780cbf11c80265a9ff9a04cfe6", null ],
     [ "RainbowBandColor1Id", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a79ec3b83c05f2106b62081dba13d0e9b", null ],
     [ "RainbowBandColor2Id", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#ad8fafbd0bb761d40c14521a3318cc7b9", null ],
     [ "RainbowBandColor3Id", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#afd1723a7bf9e100985cb683781a73231", null ],
     [ "RainbowBandCountId", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#afe881b18f90cd3831e49e626a97c2123", null ],
+    [ "ResolveSeedSalt", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#aee16bfa97a5e15201844cad2d4b530bf", null ],
     [ "Current", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#acd6a4cb24f44e277b67e76d03d6f8d33", null ],
     [ "ResetOrder", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a7aedd59f89d3c03ca453d72e916116fb", null ]
 ];

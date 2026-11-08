@@ -17,9 +17,12 @@ var dir_14eca4e58e6d71e3a9859288c1bd2735 =
     [ "CloudNoiseTextureGenerator.cs", "CloudNoiseTextureGenerator_8cs.html", "CloudNoiseTextureGenerator_8cs" ],
     [ "ColorableBalloonVariantEditor.cs", "ColorableBalloonVariantEditor_8cs.html", "ColorableBalloonVariantEditor_8cs" ],
     [ "EnumIndexedDrawer.cs", "EnumIndexedDrawer_8cs.html", "EnumIndexedDrawer_8cs" ],
+    [ "GameOverLayoutBuilder.cs", "GameOverLayoutBuilder_8cs.html", "GameOverLayoutBuilder_8cs" ],
     [ "GamePaletteAdapter.cs", "GamePaletteAdapter_8cs.html", "GamePaletteAdapter_8cs" ],
     [ "GradientTextureDrawer.cs", "GradientTextureDrawer_8cs.html", "GradientTextureDrawer_8cs" ],
+    [ "HeadsUpBuilder.cs", "HeadsUpBuilder_8cs.html", "HeadsUpBuilder_8cs" ],
     [ "LaserViewEditor.cs", "LaserViewEditor_8cs.html", "LaserViewEditor_8cs" ],
+    [ "LevelGenerationPreview.cs", "LevelGenerationPreview_8cs.html", "LevelGenerationPreview_8cs" ],
     [ "LevelPacingCurvePanel.cs", "LevelPacingCurvePanel_8cs.html", "LevelPacingCurvePanel_8cs" ],
     [ "LevelPacingMigrationTool.cs", "LevelPacingMigrationTool_8cs.html", "LevelPacingMigrationTool_8cs" ],
     [ "LevelPacingWindow.cs", "LevelPacingWindow_8cs.html", "LevelPacingWindow_8cs" ],
@@ -28,6 +31,8 @@ var dir_14eca4e58e6d71e3a9859288c1bd2735 =
     [ "MusicalNoteDrawer.cs", "MusicalNoteDrawer_8cs.html", "MusicalNoteDrawer_8cs" ],
     [ "PaintDripOverlayEditor.cs", "PaintDripOverlayEditor_8cs.html", "PaintDripOverlayEditor_8cs" ],
     [ "PaintSplashViewEditor.cs", "PaintSplashViewEditor_8cs.html", "PaintSplashViewEditor_8cs" ],
+    [ "PencilFontBuilder.cs", "PencilFontBuilder_8cs.html", "PencilFontBuilder_8cs" ],
+    [ "PrefabRebuild.cs", "PrefabRebuild_8cs.html", "PrefabRebuild_8cs" ],
     [ "PropertyDrawerHelper.cs", "PropertyDrawerHelper_8cs.html", "PropertyDrawerHelper_8cs" ],
     [ "RainbowBalloonVariantEditor.cs", "RainbowBalloonVariantEditor_8cs.html", "RainbowBalloonVariantEditor_8cs" ],
     [ "SceneCaptureServiceEditor.cs", "SceneCaptureServiceEditor_8cs.html", "SceneCaptureServiceEditor_8cs" ],
@@ -42,5 +47,6 @@ var dir_14eca4e58e6d71e3a9859288c1bd2735 =
     [ "TextureAuditWindow.cs", "TextureAuditWindow_8cs.html", "TextureAuditWindow_8cs" ],
     [ "TexturePreviewBox.cs", "TexturePreviewBox_8cs.html", "TexturePreviewBox_8cs" ],
     [ "UnitCircleDrawer.cs", "UnitCircleDrawer_8cs.html", "UnitCircleDrawer_8cs" ],
-    [ "UnusedAssetsWindow.cs", "UnusedAssetsWindow_8cs.html", "UnusedAssetsWindow_8cs" ]
+    [ "UnusedAssetsWindow.cs", "UnusedAssetsWindow_8cs.html", "UnusedAssetsWindow_8cs" ],
+    [ "UpgradeCardSlotBuilder.cs", "UpgradeCardSlotBuilder_8cs.html", "UpgradeCardSlotBuilder_8cs" ]
 ];

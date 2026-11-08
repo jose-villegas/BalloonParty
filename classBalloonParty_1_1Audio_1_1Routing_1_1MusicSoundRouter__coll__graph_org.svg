@@ -155,7 +155,7 @@
 <!-- Node9 -->
 <g id="Node000009" class="node">
 <title>Node9</title>
-<g id="a_Node000009"><a xlink:href="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightScope.html" target="_top" xlink:title="The per&#45;shot boundary, owned in one place instead of re&#45;derived by every consumer.">
+<g id="a_Node000009"><a xlink:href="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightScope.html" target="_top" xlink:title="The shot boundary, owned in one place instead of re&#45;derived by every consumer.">
 <polygon fill="white" stroke="#666666" points="338,-107 195,-107 195,-77 338,-77 338,-107"/>
 <text text-anchor="start" x="203" y="-95" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.Flight.</text>
 <text text-anchor="middle" x="266.5" y="-84" font-family="Helvetica,sans-Serif" font-size="10.00">IFlightScope</text>

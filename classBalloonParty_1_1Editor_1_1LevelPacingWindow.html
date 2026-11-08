@@ -118,7 +118,7 @@ $(function(){initNavTree('classBalloonParty_1_1Editor_1_1LevelPacingWindow.html'
 </div><!--header-->
 <div class="contents">
 
-<p>Spreadsheet-style view of <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html" title="Per-colour points-required per level.">LevelPacingConfiguration</a>: each range is a row, parameters are columns.  
+<p>The <a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html">Level</a> Pacing editor: the scoring curve, the level generator's settings with a preview of what it generates, and a spreadsheet of the authored debug presets (one row each, parameters as columns).  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Editor.LevelPacingWindow:</div>
@@ -132,7 +132,7 @@ $(function(){initNavTree('classBalloonParty_1_1Editor_1_1LevelPacingWindow.html'
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Editor_1_1LevelPacingWindow__coll__graph.svg" width="100%" height="529"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Editor_1_1LevelPacingWindow__coll__graph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
@@ -146,6 +146,8 @@ Properties</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a67c351602c66429f1d078a6a9e736469" id="r_a67c351602c66429f1d078a6a9e736469"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67c351602c66429f1d078a6a9e736469">AddPreset</a> ()</td></tr>
+<tr class="separator:a67c351602c66429f1d078a6a9e736469"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0193dd6048483693185395a1e12ba25e" id="r_a0193dd6048483693185395a1e12ba25e"><td class="memItemLeft" align="right" valign="top">Rect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0193dd6048483693185395a1e12ba25e">CellRect</a> (Rect rowRect, int col)</td></tr>
 <tr class="separator:a0193dd6048483693185395a1e12ba25e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab877d404d78754d0106a990d3c40a187" id="r_ab877d404d78754d0106a990d3c40a187"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab877d404d78754d0106a990d3c40a187">ColX</a> (int col)</td></tr>
@@ -172,10 +174,10 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:acf2feab5b1f40847f44468c85734b735"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d0714f403946c48b401327519b4ca2b" id="r_a2d0714f403946c48b401327519b4ca2b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2d0714f403946c48b401327519b4ca2b">DrawRow</a> (int index)</td></tr>
 <tr class="separator:a2d0714f403946c48b401327519b4ca2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31eba627aaf88dfebaca3c2f1dc48c93" id="r_a31eba627aaf88dfebaca3c2f1dc48c93"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31eba627aaf88dfebaca3c2f1dc48c93">DrawRowActionIcons</a> (Rect rowRect, int index, bool isFallback, int from)</td></tr>
-<tr class="separator:a31eba627aaf88dfebaca3c2f1dc48c93"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a69099a037d29588e1890cb348a40fa76" id="r_a69099a037d29588e1890cb348a40fa76"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a69099a037d29588e1890cb348a40fa76">DrawRowBackground</a> (Rect rowRect, int index, int from, int to, bool isFallback)</td></tr>
-<tr class="separator:a69099a037d29588e1890cb348a40fa76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a065e2ae861593d265cd21b8f538d3346" id="r_a065e2ae861593d265cd21b8f538d3346"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a065e2ae861593d265cd21b8f538d3346">DrawRowActionIcons</a> (Rect rowRect, int index, bool isPreset, int from)</td></tr>
+<tr class="separator:a065e2ae861593d265cd21b8f538d3346"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d7766018b4f8c4afbf03e8f5c93345a" id="r_a8d7766018b4f8c4afbf03e8f5c93345a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8d7766018b4f8c4afbf03e8f5c93345a">DrawRowBackground</a> (Rect rowRect, int index, int from, int to, bool isPreset)</td></tr>
+<tr class="separator:a8d7766018b4f8c4afbf03e8f5c93345a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ab738f3ec967142e9b923dfb59ca2fd" id="r_a2ab738f3ec967142e9b923dfb59ca2fd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2ab738f3ec967142e9b923dfb59ca2fd">DrawTable</a> ()</td></tr>
 <tr class="separator:a2ab738f3ec967142e9b923dfb59ca2fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53137f86ad919660d085fddb68f957ae" id="r_a53137f86ad919660d085fddb68f957ae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a53137f86ad919660d085fddb68f957ae">DrawToolbar</a> ()</td></tr>
@@ -217,8 +219,8 @@ Static Private Member Functions</h2></td></tr>
 <tr class="separator:ae06b1a5e33233e122aa82d1bd2544022"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a929f6c9fa37dca4436b2b0aac0de1415" id="r_a929f6c9fa37dca4436b2b0aac0de1415"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a929f6c9fa37dca4436b2b0aac0de1415">DrawExpandedDetails</a> (SerializedProperty paramsProp)</td></tr>
 <tr class="separator:a929f6c9fa37dca4436b2b0aac0de1415"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe760c34c7c1c0983692620db42b1bd7" id="r_afe760c34c7c1c0983692620db42b1bd7"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe760c34c7c1c0983692620db42b1bd7">DrawRangeCell</a> (Rect cell, SerializedProperty fromProp, SerializedProperty toProp, bool isFallback)</td></tr>
-<tr class="separator:afe760c34c7c1c0983692620db42b1bd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5b07559b2adabe75ffe971d8f5af0ba" id="r_ab5b07559b2adabe75ffe971d8f5af0ba"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab5b07559b2adabe75ffe971d8f5af0ba">DrawRangeCell</a> (Rect cell, SerializedProperty fromProp, SerializedProperty toProp, bool isPreset)</td></tr>
+<tr class="separator:ab5b07559b2adabe75ffe971d8f5af0ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba7a7c2c17d9833e7a7360fc9086f0f0" id="r_aba7a7c2c17d9833e7a7360fc9086f0f0"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba7a7c2c17d9833e7a7360fc9086f0f0">DrawRangedIntCell</a> (Rect cell, SerializedProperty paramsProp, string fieldName)</td></tr>
 <tr class="separator:aba7a7c2c17d9833e7a7360fc9086f0f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1be511163dc272e1e3217bad774d6bb7" id="r_a1be511163dc272e1e3217bad774d6bb7"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1be511163dc272e1e3217bad774d6bb7">DrawTypedCell</a> (Rect cell, bool expanded, SerializedProperty arrayProp, int rowIndex, Action&lt; Rect, SerializedProperty, int &gt; drawExpanded, Action&lt; Rect, SerializedProperty &gt; drawCollapsed)</td></tr>
@@ -291,13 +293,13 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:a8e653c13d5803683766ec2d5a35cc43b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55abe66bd3bb42c2733514aea970916d" id="r_a55abe66bd3bb42c2733514aea970916d"><td class="memItemLeft" align="right" valign="top">static readonly Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a55abe66bd3bb42c2733514aea970916d">ActiveRowColor</a> = new(0.22f, 0.30f, 0.22f, 1f)</td></tr>
 <tr class="separator:a55abe66bd3bb42c2733514aea970916d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a53942d2e43613fc9d1e96efbdd0ff7a8" id="r_a53942d2e43613fc9d1e96efbdd0ff7a8"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a53942d2e43613fc9d1e96efbdd0ff7a8">ActorColIndex</a> = 10</td></tr>
+<tr class="memitem:a53942d2e43613fc9d1e96efbdd0ff7a8" id="r_a53942d2e43613fc9d1e96efbdd0ff7a8"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a53942d2e43613fc9d1e96efbdd0ff7a8">ActorColIndex</a> = 8</td></tr>
 <tr class="separator:a53942d2e43613fc9d1e96efbdd0ff7a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a753aaff7006d3684901477fb6855cc73" id="r_a753aaff7006d3684901477fb6855cc73"><td class="memItemLeft" align="right" valign="top">static readonly string[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a753aaff7006d3684901477fb6855cc73">ActorDropdownNames</a> = BuildFocusDropdownNames&lt;<a class="el" href="namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473">GridActorType</a>&gt;(&quot;Focus All…&quot;)</td></tr>
 <tr class="separator:a753aaff7006d3684901477fb6855cc73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1778decd0944b6b808ed4384d892cdd8" id="r_a1778decd0944b6b808ed4384d892cdd8"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1778decd0944b6b808ed4384d892cdd8">ActorExpandedWidth</a> = 260f</td></tr>
 <tr class="separator:a1778decd0944b6b808ed4384d892cdd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9321fa508c5b012407385661a14993dd" id="r_a9321fa508c5b012407385661a14993dd"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9321fa508c5b012407385661a14993dd">BalloonColIndex</a> = 5</td></tr>
+<tr class="memitem:a9321fa508c5b012407385661a14993dd" id="r_a9321fa508c5b012407385661a14993dd"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9321fa508c5b012407385661a14993dd">BalloonColIndex</a> = 3</td></tr>
 <tr class="separator:a9321fa508c5b012407385661a14993dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1f2b67ff1838963f018c94668606402" id="r_ae1f2b67ff1838963f018c94668606402"><td class="memItemLeft" align="right" valign="top">static readonly string[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae1f2b67ff1838963f018c94668606402">BalloonDropdownNames</a> = BuildFocusDropdownNames&lt;<a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60e">BalloonType</a>&gt;(&quot;Focus All…&quot;)</td></tr>
 <tr class="separator:ae1f2b67ff1838963f018c94668606402"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -315,13 +317,13 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:a4002c2612ae4f6869d641ee103c89658"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6db81c2e94bb0ff79fc2d38cfb80ddca" id="r_a6db81c2e94bb0ff79fc2d38cfb80ddca"><td class="memItemLeft" align="right" valign="top">static readonly Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6db81c2e94bb0ff79fc2d38cfb80ddca">EvenRowColor</a> = new(0.19f, 0.19f, 0.19f, 1f)</td></tr>
 <tr class="separator:a6db81c2e94bb0ff79fc2d38cfb80ddca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81c8281ade19b9e6b68c07d2556bec42" id="r_a81c8281ade19b9e6b68c07d2556bec42"><td class="memItemLeft" align="right" valign="top">static readonly Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a81c8281ade19b9e6b68c07d2556bec42">FallbackRowColor</a> = new(0.25f, 0.32f, 0.38f, 1f)</td></tr>
-<tr class="separator:a81c8281ade19b9e6b68c07d2556bec42"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a294c7cfaf8603bf2707d4f23fc3fd5e0" id="r_a294c7cfaf8603bf2707d4f23fc3fd5e0"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a294c7cfaf8603bf2707d4f23fc3fd5e0">FirstButtonColIndex</a> = 9</td></tr>
+<tr class="separator:a294c7cfaf8603bf2707d4f23fc3fd5e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe47af00770edbb47aed9b9b80c5583a" id="r_abe47af00770edbb47aed9b9b80c5583a"><td class="memItemLeft" align="right" valign="top">static readonly Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abe47af00770edbb47aed9b9b80c5583a">FocusAccentColor</a> = new(0.9f, 0.7f, 0.2f, 0.9f)</td></tr>
 <tr class="separator:abe47af00770edbb47aed9b9b80c5583a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61d9d891bf797a1fffff3c8cb3db47de" id="r_a61d9d891bf797a1fffff3c8cb3db47de"><td class="memItemLeft" align="right" valign="top">static readonly Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a61d9d891bf797a1fffff3c8cb3db47de">FocusedRowColor</a> = new(0.28f, 0.26f, 0.18f, 1f)</td></tr>
 <tr class="separator:a61d9d891bf797a1fffff3c8cb3db47de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9381c5291893bd0c15b67386379fed72" id="r_a9381c5291893bd0c15b67386379fed72"><td class="memItemLeft" align="right" valign="top">static readonly int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9381c5291893bd0c15b67386379fed72">GapBeforeCols</a> = { 1, 4, 6, 10 }</td></tr>
+<tr class="memitem:a9381c5291893bd0c15b67386379fed72" id="r_a9381c5291893bd0c15b67386379fed72"><td class="memItemLeft" align="right" valign="top">static readonly int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9381c5291893bd0c15b67386379fed72">GapBeforeCols</a> = { 1, 2, 4, 8 }</td></tr>
 <tr class="separator:a9381c5291893bd0c15b67386379fed72"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a852cbe059e0953c0ec78e5c73f09db6b" id="r_a852cbe059e0953c0ec78e5c73f09db6b"><td class="memItemLeft" align="right" valign="top">static readonly Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a852cbe059e0953c0ec78e5c73f09db6b">GapBgColor</a> = new(0.15f, 0.15f, 0.15f, 1f)</td></tr>
 <tr class="separator:a852cbe059e0953c0ec78e5c73f09db6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -329,7 +331,7 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:a3bfce5063286a93e583f3de3d0b52aea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeddd91a7e130cb2d59d5eafb8c635c54" id="r_aeddd91a7e130cb2d59d5eafb8c635c54"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeddd91a7e130cb2d59d5eafb8c635c54">GroupGap</a> = 20f</td></tr>
 <tr class="separator:aeddd91a7e130cb2d59d5eafb8c635c54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d1a7f1e87a66d4769b84d082bacde94" id="r_a6d1a7f1e87a66d4769b84d082bacde94"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6d1a7f1e87a66d4769b84d082bacde94">ItemColIndex</a> = 9</td></tr>
+<tr class="memitem:a6d1a7f1e87a66d4769b84d082bacde94" id="r_a6d1a7f1e87a66d4769b84d082bacde94"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6d1a7f1e87a66d4769b84d082bacde94">ItemColIndex</a> = 7</td></tr>
 <tr class="separator:a6d1a7f1e87a66d4769b84d082bacde94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c0d61114e9384df53b3ca7d8978b172" id="r_a9c0d61114e9384df53b3ca7d8978b172"><td class="memItemLeft" align="right" valign="top">static readonly string[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9c0d61114e9384df53b3ca7d8978b172">ItemDropdownNames</a> = BuildFocusDropdownNames&lt;<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Items.html#a099921060840def79dc9111a19107f2b">ItemType</a>&gt;(&quot;Focus All…&quot;)</td></tr>
 <tr class="separator:a9c0d61114e9384df53b3ca7d8978b172"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -337,6 +339,8 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:a022cced43d1c84bdcba1ba66d9faf53c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5207ac8d55d396379348a7093451e62a" id="r_a5207ac8d55d396379348a7093451e62a"><td class="memItemLeft" align="right" valign="top">static readonly Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5207ac8d55d396379348a7093451e62a">OddRowColor</a> = new(0.24f, 0.24f, 0.24f, 1f)</td></tr>
 <tr class="separator:a5207ac8d55d396379348a7093451e62a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa77de87aff4e212eceb41f89946055e2" id="r_aa77de87aff4e212eceb41f89946055e2"><td class="memItemLeft" align="right" valign="top">static readonly Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa77de87aff4e212eceb41f89946055e2">PresetRowColor</a> = new(0.25f, 0.32f, 0.38f, 1f)</td></tr>
+<tr class="separator:aa77de87aff4e212eceb41f89946055e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54a9362de10a395a49b5144e4c5c3cfa" id="r_a54a9362de10a395a49b5144e4c5c3cfa"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a54a9362de10a395a49b5144e4c5c3cfa">RowHeight</a> = 22f</td></tr>
 <tr class="separator:a54a9362de10a395a49b5144e4c5c3cfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf875b4949fddb8ad43cb72b6fd5b4e7" id="r_aaf875b4949fddb8ad43cb72b6fd5b4e7"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaf875b4949fddb8ad43cb72b6fd5b4e7">SeparatorWidth</a> = 1f</td></tr>
@@ -347,9 +351,33 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:aed7323c2027b5c1547df8f5563ebfb6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Spreadsheet-style view of <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html" title="Per-colour points-required per level.">LevelPacingConfiguration</a>: each range is a row, parameters are columns. </p>
-<p>Easier to compare across levels than the default vertical Inspector. </p>
+<div class="textblock"><p>The <a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html">Level</a> Pacing editor: the scoring curve, the level generator's settings with a preview of what it generates, and a spreadsheet of the authored debug presets (one row each, parameters as columns). </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a67c351602c66429f1d078a6a9e736469" name="a67c351602c66429f1d078a6a9e736469"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67c351602c66429f1d078a6a9e736469">&#9670;&#160;</a></span>AddPreset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Editor.LevelPacingWindow.AddPreset </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="addde2315133390bf44cb2b0c1e506434" name="addde2315133390bf44cb2b0c1e506434"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#addde2315133390bf44cb2b0c1e506434">&#9670;&#160;</a></span>BuildFocusDropdownNames&lt; TEnum &gt;()</h2>
 
@@ -786,8 +814,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="afe760c34c7c1c0983692620db42b1bd7" name="afe760c34c7c1c0983692620db42b1bd7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afe760c34c7c1c0983692620db42b1bd7">&#9670;&#160;</a></span>DrawRangeCell()</h2>
+<a id="ab5b07559b2adabe75ffe971d8f5af0ba" name="ab5b07559b2adabe75ffe971d8f5af0ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5b07559b2adabe75ffe971d8f5af0ba">&#9670;&#160;</a></span>DrawRangeCell()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -813,7 +841,7 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isFallback</em></span>&#160;)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isPreset</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -884,8 +912,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a31eba627aaf88dfebaca3c2f1dc48c93" name="a31eba627aaf88dfebaca3c2f1dc48c93"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a31eba627aaf88dfebaca3c2f1dc48c93">&#9670;&#160;</a></span>DrawRowActionIcons()</h2>
+<a id="a065e2ae861593d265cd21b8f538d3346" name="a065e2ae861593d265cd21b8f538d3346"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a065e2ae861593d265cd21b8f538d3346">&#9670;&#160;</a></span>DrawRowActionIcons()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -906,7 +934,7 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isFallback</em></span>, </td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isPreset</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -923,8 +951,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a69099a037d29588e1890cb348a40fa76" name="a69099a037d29588e1890cb348a40fa76"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a69099a037d29588e1890cb348a40fa76">&#9670;&#160;</a></span>DrawRowBackground()</h2>
+<a id="a8d7766018b4f8c4afbf03e8f5c93345a" name="a8d7766018b4f8c4afbf03e8f5c93345a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d7766018b4f8c4afbf03e8f5c93345a">&#9670;&#160;</a></span>DrawRowBackground()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -955,7 +983,7 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isFallback</em></span>&#160;)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isPreset</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -2136,7 +2164,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const int BalloonParty.Editor.LevelPacingWindow.ActorColIndex = 10</td>
+          <td class="memname">const int BalloonParty.Editor.LevelPacingWindow.ActorColIndex = 8</td>
         </tr>
       </table>
   </td>
@@ -2202,7 +2230,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const int BalloonParty.Editor.LevelPacingWindow.BalloonColIndex = 5</td>
+          <td class="memname">const int BalloonParty.Editor.LevelPacingWindow.BalloonColIndex = 3</td>
         </tr>
       </table>
   </td>
@@ -2279,7 +2307,7 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">=</div>
 <div class="line">        {</div>
-<div class="line">            <span class="stringliteral">&quot;Range&quot;</span>, <span class="stringliteral">&quot;Spawn&quot;</span>, <span class="stringliteral">&quot;Board&quot;</span>, <span class="stringliteral">&quot;1st Turn&quot;</span>, <span class="stringliteral">&quot;Colors&quot;</span>, <span class="stringliteral">&quot;Balloons&quot;</span>, <span class="stringliteral">&quot;Cadence&quot;</span>, <span class="stringliteral">&quot;Init Count&quot;</span>, <span class="stringliteral">&quot;Wave Count&quot;</span>, <span class="stringliteral">&quot;Items&quot;</span>, <span class="stringliteral">&quot;Actors&quot;</span>, <span class="stringliteral">&quot;Expand&quot;</span>, <span class="stringliteral">&quot;Dupe&quot;</span>, <span class="stringliteral">&quot;Delete&quot;</span>, <span class="stringliteral">&quot;Play&quot;</span></div>
+<div class="line">            <span class="stringliteral">&quot;ID&quot;</span>, <span class="stringliteral">&quot;Board&quot;</span>, <span class="stringliteral">&quot;Colors&quot;</span>, <span class="stringliteral">&quot;Balloons&quot;</span>, <span class="stringliteral">&quot;Cadence&quot;</span>, <span class="stringliteral">&quot;Init Count&quot;</span>, <span class="stringliteral">&quot;Wave Count&quot;</span>, <span class="stringliteral">&quot;Items&quot;</span>, <span class="stringliteral">&quot;Actors&quot;</span>, <span class="stringliteral">&quot;Expand&quot;</span>, <span class="stringliteral">&quot;Dupe&quot;</span>, <span class="stringliteral">&quot;Delete&quot;</span>, <span class="stringliteral">&quot;Play&quot;</span></div>
 <div class="line">        }</div>
 </div><!-- fragment -->
 </div>
@@ -2351,8 +2379,6 @@ Static Private Attributes</h2></td></tr>
 <div class="line">        {</div>
 <div class="line">            90f,   </div>
 <div class="line">            40f,   </div>
-<div class="line">            40f,   </div>
-<div class="line">            40f,   </div>
 <div class="line">            130f,  </div>
 <div class="line">            100f,  </div>
 <div class="line">            130f,  </div>
@@ -2412,8 +2438,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a81c8281ade19b9e6b68c07d2556bec42" name="a81c8281ade19b9e6b68c07d2556bec42"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a81c8281ade19b9e6b68c07d2556bec42">&#9670;&#160;</a></span>FallbackRowColor</h2>
+<a id="a294c7cfaf8603bf2707d4f23fc3fd5e0" name="a294c7cfaf8603bf2707d4f23fc3fd5e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a294c7cfaf8603bf2707d4f23fc3fd5e0">&#9670;&#160;</a></span>FirstButtonColIndex</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2422,7 +2448,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">readonly Color BalloonParty.Editor.LevelPacingWindow.FallbackRowColor = new(0.25f, 0.32f, 0.38f, 1f)</td>
+          <td class="memname">const int BalloonParty.Editor.LevelPacingWindow.FirstButtonColIndex = 9</td>
         </tr>
       </table>
   </td>
@@ -2488,7 +2514,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">readonly int [] BalloonParty.Editor.LevelPacingWindow.GapBeforeCols = { 1, 4, 6, 10 }</td>
+          <td class="memname">readonly int [] BalloonParty.Editor.LevelPacingWindow.GapBeforeCols = { 1, 2, 4, 8 }</td>
         </tr>
       </table>
   </td>
@@ -2576,7 +2602,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const int BalloonParty.Editor.LevelPacingWindow.ItemColIndex = 9</td>
+          <td class="memname">const int BalloonParty.Editor.LevelPacingWindow.ItemColIndex = 7</td>
         </tr>
       </table>
   </td>
@@ -2643,6 +2669,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly Color BalloonParty.Editor.LevelPacingWindow.OddRowColor = new(0.24f, 0.24f, 0.24f, 1f)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa77de87aff4e212eceb41f89946055e2" name="aa77de87aff4e212eceb41f89946055e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa77de87aff4e212eceb41f89946055e2">&#9670;&#160;</a></span>PresetRowColor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly Color BalloonParty.Editor.LevelPacingWindow.PresetRowColor = new(0.25f, 0.32f, 0.38f, 1f)</td>
         </tr>
       </table>
   </td>

@@ -19,6 +19,7 @@ var namespaceBalloonParty_1_1Shared_1_1Extensions =
     [ "SceneRenderingHandle", "classBalloonParty_1_1Shared_1_1Extensions_1_1SceneRenderingHandle.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1SceneRenderingHandle" ],
     [ "SlotActorExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1SlotActorExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1SlotActorExtensions" ],
     [ "SpriteRendererExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1SpriteRendererExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1SpriteRendererExtensions" ],
+    [ "StringFormatExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1StringFormatExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1StringFormatExtensions" ],
     [ "TmpTextExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1TmpTextExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1TmpTextExtensions" ],
     [ "TransformExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1TransformExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1TransformExtensions" ],
     [ "VectorExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1VectorExtensions.html", "classBalloonParty_1_1Shared_1_1Extensions_1_1VectorExtensions" ],

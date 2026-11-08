@@ -1,24 +1,28 @@
 <map id="BalloonParty.Game.Score.ScoreController" name="BalloonParty.Game.Score.ScoreController">
-<area shape="rect" id="Node000001" title="Score keeping only — level progression lives in LevelController." alt="" coords="627,234,816,274"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="310,5,395,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="409,9,454,8,505,13,557,25,604,48,628,67,649,90,682,141,704,192,717,233,712,234,699,194,677,144,645,93,624,71,601,52,555,30,504,18,454,14,409,14"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="51,61,149,87"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="163,65,255,63,369,70,429,80,490,95,549,116,604,144,662,188,705,232,701,236,658,192,601,148,547,120,489,100,428,85,368,75,254,68,163,71"/>
-<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html" title=" " alt="" coords="258,106,447,146"/>
-<area shape="poly" id="edge10_Node000009_Node000003" title=" " alt="" coords="163,84,258,104,257,109,162,89"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="249,170,456,210"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="470,208,627,235,626,240,469,213"/>
-<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html" title="Read&#45;only view of the live run score, snapshotted by RunController when a run ends." alt="" coords="249,234,456,274"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="470,251,626,251,626,257,470,257"/>
-<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html" title="Read surface of the player&#39;s progression through levels." alt="" coords="259,298,447,338"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="460,297,626,268,627,273,460,302"/>
-<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="254,362,451,402"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="457,356,529,336,602,312,684,272,687,276,604,316,531,341,458,361"/>
-<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html" title="Read&#45;only retry state — how many retries remain this run and the level to retry at (zero when the nex..." alt="" coords="244,426,461,466"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="474,420,539,399,601,369,632,347,661,321,703,272,707,276,664,325,636,351,604,374,541,404,475,425"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="437,148,462,155,604,203,674,231,672,236,602,209,461,161,435,153"/>
-<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html" title="Read&#45;only access to the current same&#45;colour pop streak, for HUD feedback." alt="" coords="5,115,195,155"/>
-<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="208,129,257,127,258,132,208,134"/>
-<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ITimeOfDayNight.html" title="Whether the current time of day counts as night (5 PM–4 AM), for gameplay rules that key off it." alt="" coords="255,490,450,530"/>
-<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="463,495,535,474,569,458,601,439,641,400,672,354,696,309,710,273,715,275,700,311,677,357,645,403,604,443,572,463,537,479,465,500"/>
+<area shape="rect" id="Node000001" title="Score keeping only — level progression lives in LevelController." alt="" coords="717,238,907,278"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="401,5,486,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="500,9,545,8,596,12,647,25,695,48,719,68,740,91,773,144,795,196,808,237,803,239,790,198,768,146,736,94,715,71,692,52,646,30,595,18,545,13,500,14"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="51,59,149,84"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="163,61,270,56,337,57,408,62,482,72,556,89,628,114,695,148,752,192,795,236,792,240,749,196,692,152,626,119,554,94,481,77,407,67,336,62,270,61,163,67"/>
+<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html" title="Owns a ColorStreak per ball." alt="" coords="349,110,538,150"/>
+<area shape="poly" id="edge10_Node000009_Node000003" title=" " alt="" coords="163,79,349,111,348,117,162,85"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="340,174,547,214"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="561,212,717,239,717,244,560,217"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html" title="Read&#45;only view of the live run score, snapshotted by RunController when a run ends." alt="" coords="340,238,547,278"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="561,255,717,255,717,261,561,261"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html" title="Read surface of the player&#39;s progression through levels." alt="" coords="349,302,537,342"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="550,301,717,272,718,277,551,306"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="345,366,542,406"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="548,360,620,340,692,316,775,276,777,280,694,320,621,345,549,365"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html" title="Read&#45;only retry state — how many retries remain this run and the level to retry at (zero when the nex..." alt="" coords="335,430,552,470"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="564,424,630,403,692,373,723,351,751,325,794,276,798,280,755,329,726,355,695,378,632,408,566,429"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="528,152,553,159,694,207,765,235,763,240,692,213,551,165,526,157"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html" title="Read&#45;only access to the current same&#45;colour pop streak, for HUD feedback." alt="" coords="5,113,195,153"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="209,129,348,128,348,133,209,134"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="15,177,185,217"/>
+<area shape="poly" id="edge11_Node000009_Node000011" title=" " alt="" coords="199,175,348,146,349,151,200,180"/>
+<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Game_1_1Score_1_1ColorStreak.html" title="One ball&#39;s same&#45;colour pop streak." alt="" coords="5,241,195,281"/>
+<area shape="poly" id="edge12_Node000009_Node000012" title=" " alt="" coords="207,238,260,219,309,192,316,185,320,177,325,168,333,160,355,148,357,152,336,164,329,171,325,179,321,188,312,196,262,224,209,243"/>
+<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ITimeOfDayNight.html" title="Whether the current time of day counts as night (5 PM–4 AM), for gameplay rules that key off it." alt="" coords="346,494,541,534"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="554,499,625,478,660,462,692,443,731,404,763,358,786,313,801,277,806,279,791,315,768,361,736,407,695,447,663,467,627,483,555,504"/>
 </map>

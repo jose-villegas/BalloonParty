@@ -8,6 +8,7 @@ var dir_c33286056d2acf479cd8641ef845fec1 =
     [ "Run", "dir_a922d0da53072a69a8c84216d9a53ba4.html", "dir_a922d0da53072a69a8c84216d9a53ba4" ],
     [ "Score", "dir_204ee19a44ce2b73fabb9e8ca0de6c50.html", "dir_204ee19a44ce2b73fabb9e8ca0de6c50" ],
     [ "Telemetry", "dir_62d04610ab7eeb16116e00faf518798d.html", "dir_62d04610ab7eeb16116e00faf518798d" ],
+    [ "Upgrades", "dir_6c0b5e166ba3b9275cf269c98f1fc961.html", "dir_6c0b5e166ba3b9275cf269c98f1fc961" ],
     [ "AppLifetimeScope.cs", "AppLifetimeScope_8cs.html", "AppLifetimeScope_8cs" ],
     [ "GameLifetimeScope.cs", "GameLifetimeScope_8cs.html", "GameLifetimeScope_8cs" ],
     [ "GameScopeRegistration.cs", "GameScopeRegistration_8cs.html", "GameScopeRegistration_8cs" ],

@@ -8,6 +8,7 @@ var namespaceBalloonParty_1_1Game =
     [ "Run", "namespaceBalloonParty_1_1Game_1_1Run.html", "namespaceBalloonParty_1_1Game_1_1Run" ],
     [ "Score", "namespaceBalloonParty_1_1Game_1_1Score.html", "namespaceBalloonParty_1_1Game_1_1Score" ],
     [ "Telemetry", "namespaceBalloonParty_1_1Game_1_1Telemetry.html", "namespaceBalloonParty_1_1Game_1_1Telemetry" ],
+    [ "Upgrades", "namespaceBalloonParty_1_1Game_1_1Upgrades.html", "namespaceBalloonParty_1_1Game_1_1Upgrades" ],
     [ "AppLifetimeScope", "classBalloonParty_1_1Game_1_1AppLifetimeScope.html", "classBalloonParty_1_1Game_1_1AppLifetimeScope" ],
     [ "GameLifetimeScope", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html", "classBalloonParty_1_1Game_1_1GameLifetimeScope" ],
     [ "GameScopeRegistration", "classBalloonParty_1_1Game_1_1GameScopeRegistration.html", "classBalloonParty_1_1Game_1_1GameScopeRegistration" ],

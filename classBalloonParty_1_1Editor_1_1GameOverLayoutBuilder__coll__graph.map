@@ -1,0 +1,5 @@
+<map id="BalloonParty.Editor.GameOverLayoutBuilder" name="BalloonParty.Editor.GameOverLayoutBuilder">
+<area shape="rect" id="Node000001" title="Rebuilds the game&#45;over screen in the UI theme (&quot;glossy balloon&quot;: layered buttons and panels that carr..." alt="" coords="7,152,194,192"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Palette.html" title=" " alt="" coords="5,5,196,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,59,103,152,98,152,98,59"/>
+</map>

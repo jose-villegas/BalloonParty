@@ -115,7 +115,7 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILe
 </div><!--header-->
 <div class="contents">
 
-<p>Level-range difficulty authoring; read by <code>LevelDifficultyResolver</code> (and by the balloon spawner's pool prewarm, via <a class="el" href="#af8180a7c80ff7448293ca03438f90c67" title="Upper bound on how many of a balloon type can share the board across every range — the pool prewarm s...">MaxConcurrentBalloons</a>).  
+<p><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html">Level</a> pacing; read by <code>LevelDifficultyResolver</code> (and by the balloon spawner's pool prewarm, via <a class="el" href="#af8180a7c80ff7448293ca03438f90c67" title="Upper bound on how many of a balloon type can share the board at any level — the pool prewarm size.">MaxConcurrentBalloons</a>).  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Configuration.Level.ILevelPacingConfiguration:</div>
@@ -128,22 +128,32 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILe
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a512ea1172a87069162a443a978f8e7e1" id="r_a512ea1172a87069162a443a978f8e7e1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a512ea1172a87069162a443a978f8e7e1">ColorsForLevel</a> (int level)</td></tr>
-<tr class="memdesc:a512ea1172a87069162a443a978f8e7e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Count of colours allowed at <em>level</em>  — the popcount of that level's allowed-colours mask.  <br /></td></tr>
+<tr class="memdesc:a512ea1172a87069162a443a978f8e7e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Count of colours allowed at <em>level</em> .  <br /></td></tr>
 <tr class="separator:a512ea1172a87069162a443a978f8e7e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af8180a7c80ff7448293ca03438f90c67" id="r_af8180a7c80ff7448293ca03438f90c67"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af8180a7c80ff7448293ca03438f90c67">MaxConcurrentBalloons</a> (<a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60e">BalloonType</a> type, int columns)</td></tr>
-<tr class="memdesc:af8180a7c80ff7448293ca03438f90c67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Upper bound on how many of a balloon type can share the board across every range — the pool prewarm size.  <br /></td></tr>
+<tr class="memdesc:af8180a7c80ff7448293ca03438f90c67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Upper bound on how many of a balloon type can share the board at any level — the pool prewarm size.  <br /></td></tr>
 <tr class="separator:af8180a7c80ff7448293ca03438f90c67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d849ad10eb0aa2a12282b60daed2689" id="r_a7d849ad10eb0aa2a12282b60daed2689"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html">RangedLevelParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d849ad10eb0aa2a12282b60daed2689">ParametersForLevel</a> (int level)</td></tr>
+<tr class="memdesc:a7d849ad10eb0aa2a12282b60daed2689"><td class="mdescLeft">&#160;</td><td class="mdescRight">The mix for <em>level</em> : generated for a positive level, the matching debug preset for a negative one.  <br /></td></tr>
+<tr class="separator:a7d849ad10eb0aa2a12282b60daed2689"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f4b5d69a3c1c7965cd0e3f3a3e79d04" id="r_a2f4b5d69a3c1c7965cd0e3f3a3e79d04"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f4b5d69a3c1c7965cd0e3f3a3e79d04">SeedForLevel</a> (int level)</td></tr>
+<tr class="memdesc:a2f4b5d69a3c1c7965cd0e3f3a3e79d04"><td class="mdescLeft">&#160;</td><td class="mdescRight">The seed that rolls <em>level</em> 's mix; the same level always gets the same seed.  <br /></td></tr>
+<tr class="separator:a2f4b5d69a3c1c7965cd0e3f3a3e79d04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0a402590276276532114beaa43098433" id="r_a0a402590276276532114beaa43098433"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0a402590276276532114beaa43098433">ThresholdForLevel</a> (int level)</td></tr>
 <tr class="memdesc:a0a402590276276532114beaa43098433"><td class="mdescLeft">&#160;</td><td class="mdescRight">Points required per colour to complete <em>level</em>  — derived from the scoring curve's cumulative milestones, divided by colour count, and snapped to a clean multiple.  <br /></td></tr>
 <tr class="separator:a0a402590276276532114beaa43098433"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
-<tr class="memitem:a2808ee7e998adf1826c4f055757d558e" id="r_a2808ee7e998adf1826c4f055757d558e"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html">LevelRangeEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2808ee7e998adf1826c4f055757d558e">Ranges</a><code> [get]</code></td></tr>
-<tr class="separator:a2808ee7e998adf1826c4f055757d558e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9194824970276fefd009ced094c08603" id="r_a9194824970276fefd009ced094c08603"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html">LevelRangeEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9194824970276fefd009ced094c08603">DebugPresets</a><code> [get]</code></td></tr>
+<tr class="memdesc:a9194824970276fefd009ced094c08603"><td class="mdescLeft">&#160;</td><td class="mdescRight">Authored debug presets, keyed by a negative <code>FromLevel</code> the start-level cheat selects.  <br /></td></tr>
+<tr class="separator:a9194824970276fefd009ced094c08603"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad862b1390b2758345251f0a76a6768d2" id="r_ad862b1390b2758345251f0a76a6768d2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html">ISpawnClockSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad862b1390b2758345251f0a76a6768d2">SpawnClock</a><code> [get]</code></td></tr>
+<tr class="memdesc:ad862b1390b2758345251f0a76a6768d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">When balloon lines arrive; read by the spawn clock.  <br /></td></tr>
+<tr class="separator:ad862b1390b2758345251f0a76a6768d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Level-range difficulty authoring; read by <code>LevelDifficultyResolver</code> (and by the balloon spawner's pool prewarm, via <a class="el" href="#af8180a7c80ff7448293ca03438f90c67" title="Upper bound on how many of a balloon type can share the board across every range — the pool prewarm s...">MaxConcurrentBalloons</a>). </p>
+<div class="textblock"><p><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html">Level</a> pacing; read by <code>LevelDifficultyResolver</code> (and by the balloon spawner's pool prewarm, via <a class="el" href="#af8180a7c80ff7448293ca03438f90c67" title="Upper bound on how many of a balloon type can share the board at any level — the pool prewarm size.">MaxConcurrentBalloons</a>). </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a512ea1172a87069162a443a978f8e7e1" name="a512ea1172a87069162a443a978f8e7e1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a512ea1172a87069162a443a978f8e7e1">&#9670;&#160;</a></span>ColorsForLevel()</h2>
@@ -160,7 +170,7 @@ Properties</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Count of colours allowed at <em>level</em>  — the popcount of that level's allowed-colours mask. </p>
+<p>Count of colours allowed at <em>level</em> . </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a8e5a36830884f82b21a7a176ffd7ab71">BalloonParty.Configuration.Level.LevelPacingConfiguration</a>.</p>
 
@@ -185,10 +195,52 @@ Properties</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Upper bound on how many of a balloon type can share the board across every range — the pool prewarm size. </p>
-<p>Uncapped ranges (0 cap) scale to their board size (<em>columns</em>  × the range's max board lines). Returns 0 for a type no range gates in. </p>
+<p>Upper bound on how many of a balloon type can share the board at any level — the pool prewarm size. </p>
+<p>An uncapped type (0 cap) scales to the largest board (<em>columns</em>  × the most board lines). Returns 0 for a type no level can include. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#ad422afeebfcfac10afce06a61283fe44">BalloonParty.Configuration.Level.LevelPacingConfiguration</a>.</p>
+
+</div>
+</div>
+<a id="a7d849ad10eb0aa2a12282b60daed2689" name="a7d849ad10eb0aa2a12282b60daed2689"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d849ad10eb0aa2a12282b60daed2689">&#9670;&#160;</a></span>ParametersForLevel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html">RangedLevelParameters</a> BalloonParty.Configuration.Level.ILevelPacingConfiguration.ParametersForLevel </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>level</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The mix for <em>level</em> : generated for a positive level, the matching debug preset for a negative one. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#ad2d5a4bf800e79465b25890add3a8940">BalloonParty.Configuration.Level.LevelPacingConfiguration</a>.</p>
+
+</div>
+</div>
+<a id="a2f4b5d69a3c1c7965cd0e3f3a3e79d04" name="a2f4b5d69a3c1c7965cd0e3f3a3e79d04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f4b5d69a3c1c7965cd0e3f3a3e79d04">&#9670;&#160;</a></span>SeedForLevel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Level.ILevelPacingConfiguration.SeedForLevel </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>level</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The seed that rolls <em>level</em> 's mix; the same level always gets the same seed. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a112381fe57eea4555cd8a20ec67f8e1d">BalloonParty.Configuration.Level.LevelPacingConfiguration</a>.</p>
 
 </div>
 </div>
@@ -214,8 +266,8 @@ Properties</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
-<a id="a2808ee7e998adf1826c4f055757d558e" name="a2808ee7e998adf1826c4f055757d558e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2808ee7e998adf1826c4f055757d558e">&#9670;&#160;</a></span>Ranges</h2>
+<a id="a9194824970276fefd009ced094c08603" name="a9194824970276fefd009ced094c08603"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9194824970276fefd009ced094c08603">&#9670;&#160;</a></span>DebugPresets</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -224,7 +276,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">IReadOnlyList&lt;<a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html">LevelRangeEntry</a>&gt; BalloonParty.Configuration.Level.ILevelPacingConfiguration.Ranges</td>
+          <td class="memname">IReadOnlyList&lt;<a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html">LevelRangeEntry</a>&gt; BalloonParty.Configuration.Level.ILevelPacingConfiguration.DebugPresets</td>
         </tr>
       </table>
   </td>
@@ -234,7 +286,35 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a576eaa8d45acc610a5314a770f105251">BalloonParty.Configuration.Level.LevelPacingConfiguration</a>.</p>
+<p>Authored debug presets, keyed by a negative <code>FromLevel</code> the start-level cheat selects. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a652b65b2ea24a4009930ad130baa69e1">BalloonParty.Configuration.Level.LevelPacingConfiguration</a>.</p>
+
+</div>
+</div>
+<a id="ad862b1390b2758345251f0a76a6768d2" name="ad862b1390b2758345251f0a76a6768d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad862b1390b2758345251f0a76a6768d2">&#9670;&#160;</a></span>SpawnClock</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html">ISpawnClockSettings</a> BalloonParty.Configuration.Level.ILevelPacingConfiguration.SpawnClock</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>When balloon lines arrive; read by the spawn clock. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a676accc007bace0b31d928d489f23f03">BalloonParty.Configuration.Level.LevelPacingConfiguration</a>.</p>
 
 </div>
 </div>

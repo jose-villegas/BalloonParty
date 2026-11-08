@@ -1,6 +1,6 @@
 <map id="BalloonParty.Configuration.Level.LevelRangeEntry" name="BalloonParty.Configuration.Level.LevelRangeEntry">
-<area shape="rect" id="Node000001" title="One contiguous span of levels sharing a RangedLevelParameters mix." alt="" coords="1028,132,1225,172"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html" title="The range&#45;authored form of a level&#39;s difficulty mix; Resolve is a pure function, so it&#39;s EditMode&#45;tes..." alt="" coords="675,132,893,172"/>
+<area shape="rect" id="Node000001" title="An authored debug preset: a RangedLevelParameters mix keyed by a negative FromLevel the start&#45;level c..." alt="" coords="1028,132,1225,172"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html" title="A level&#39;s difficulty mix before its ranges are rolled: what LevelGenerator outputs for every positive..." alt="" coords="675,132,893,172"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="907,149,1028,149,1028,155,907,155"/>
 <area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IPaletteColorMasked.html" title="Base contract for a config entry keyed to a set of palette colours by a PaletteColorMaskAttribute bit..." alt="" coords="305,5,509,45"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="523,32,588,43,652,63,712,95,760,130,757,134,709,99,650,68,586,49,522,37"/>

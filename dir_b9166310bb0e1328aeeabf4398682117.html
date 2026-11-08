@@ -127,26 +127,47 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>The loss screen shown when a run ends. It sits <em>inside</em> the loss cinematic (<code>Game/Cinematics/GameOverLossCinematic</code>), split like the level-up popup: a slow-mo push-in plays, the screen shows over the held (pushed-in) frame, and on dismiss the camera pulls back — the run only restarts once that pull-back ends.</p>
-<h1><a class="anchor" id="autotoc_md931"></a>
+<h1><a class="anchor" id="autotoc_md993"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">File   </th><th class="markdownTableHeadNone">What it does    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>GameOverScreen</code>   </td><td class="markdownTableBodyNone"><code>MonoBehaviour</code> view. Subscribes to <code>GameOverMessage</code> — on receipt, fills the final level/score (from the message) and the persisted best level/score (from <code>IRunMeta</code>), then <b>awaits <code>GameOverPresentationGate</code></b> before revealing itself via its <code>CanvasGroup</code> (the loss cinematic opens the gate once its push-in finishes). Hides again when navigation leaves <code>NavigationState.GameOver</code>. <code>OnRestartPressed</code> (wired to the Restart button) hides the screen and publishes <code>GameOverDismissedMessage</code> — it does <b>not</b> restart directly; the cinematic plays the pull-back and restarts at its end    </td></tr>
+<td class="markdownTableBodyNone"><code>GameOverScreen</code>   </td><td class="markdownTableBodyNone"><code>MonoBehaviour</code> view. Subscribes to <code>GameOverMessage</code> — on receipt, fills the level reached and its points (from the message) and the best run on one line, <code>_bestLabel</code>, whose template takes the best level as <code>{0}</code> and the best score as <code>{1}</code> (from <code>IRunMeta</code>), then <b>awaits <code>GameOverPresentationGate</code></b> before revealing itself via its <code>CanvasGroup</code> (the loss cinematic opens the gate once its push-in finishes). Hides again when navigation leaves <code>NavigationState.GameOver</code>. <code>OnRestartPressed</code> (wired to the Restart button) hides the screen and publishes <code>GameOverDismissedMessage</code> — it does <b>not</b> restart directly; the cinematic plays the pull-back and restarts at its end. The Retry button follows <code>IFailureOffers.Current</code>, the screen's only view of retry state: interactable while the run can retry, labelled with the level it retries: <code>_retryFormat</code> (<code>Retry level {0}</code>), <code>_retryCountFormat</code> when retries are capped, or <code>_retryAdFormat</code> once the free retries are used. <code>OnRetryPressed</code> locks the whole screen and awaits <code>TryRetryAsync(deathLevel)</code>, which shows the ad when gated and stages the retry; then it dismisses the same way. A skipped ad unlocks the screen with the same offer. The optional bonus retry button, a tile in the <code>_offers</code> row with a "Boost" ribbon across its corner, is shown only while <code>FailureOffer.CanBonusRetry</code>, and the row with it; <code>OnBonusRetryPressed</code> claims the retry the same way through <code>TryBonusRetryAsync(deathLevel)</code>, which plays the rewarded ad and stages the retry with a bonus card for that attempt. Restart is ignored while a retry is being claimed, and each shown offer has its own cancellation, cancelled on dismiss, on leaving <code>GameOver</code> and on a new loss, so a late ad never stages a retry for a screen that's gone. On showing, <code>_panel</code> pops in (scale and fade, unscaled time, as the loss cinematic is slowed) and taps are ignored for <code>_inputGuardSeconds</code>, so a tap meant for the board can't dismiss it; <code>_primaryButton</code> (Retry) then pulses now and then. Hiding kills both tweens    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>GameOverLifetimeScope</code>   </td><td class="markdownTableBodyNone">Child <code>LifetimeScope</code> on the screen root. Its one registration is <code>RegisterMetricLabels(this)</code> (see <code>UI/Telemetry/</code>), which binds any <code>MetricLabel</code> under the screen to <code>ILevelMetricsView</code> and no-ops when there are none. <code>GameOverScreen</code> itself is injected via <code>RegisterComponentInHierarchy&lt;GameOverScreen&gt;</code> in <code>GameLifetimeScope</code>    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>Game/Run/GameOverPresentationGate</code>   </td><td class="markdownTableBodyNone">DI singleton the screen awaits before showing; armed and opened by <code>GameOverLossCinematic</code>. Registered in <code>GameLifetimeScope</code> (<code>RegisterPresentation</code>) so the producer and screen share one instance. Implements <code>IReadyGate</code> for consistency, but injected by concrete type — the producer needs <code>Arm</code>/<code>Open</code>, and binding it as the interface would collide with the scope's <code>NavigationReadyGate(Game)</code>   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md932"></a>
+<h1><a class="anchor" id="autotoc_md994"></a>
 Wiring requirements</h1>
 <ul>
 <li>The screen root GameObject must stay <b>active</b> in the scene — visibility is driven by the <code>CanvasGroup</code> (alpha / interactable / blocksRaycasts), not <code>SetActive</code>. If it were disabled, <code>Start</code> would never run and <code>GameOverMessage</code> would never be subscribed.</li>
-<li>Assign the four <code>TMP_Text</code> label fields and wire the Restart button's onClick to <code>GameOverScreen.OnRestartPressed</code>. Each label's authored text is a <code>FormattedLabel</code> template (e.g. <code>"Level: {0}"</code>) captured in <code>Awake</code>, so repeated losses substitute cleanly.</li>
+<li>The three result labels' authored text is a <code>FormattedLabel</code> template (e.g. <code>"Level {0}"</code>) captured in <code>Awake</code>, so repeated losses substitute cleanly. The builder assigns them and wires the Restart link to <code>GameOverScreen.OnRestartPressed</code>.</li>
 <li>The Restart button dismisses (hides the screen + plays the restore) rather than restarting on the spot — expect a beat between the press and the fresh board while the camera pulls back.</li>
+<li>The panel's layout is built by <b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Game Over &gt; Rebuild Layout</b> (<code>Editor/GameOverLayoutBuilder</code>): a rounded card sized to its content by layout groups, so a longer label or a new tile grows the card instead of spilling out of it. Restyle through the builder, not by hand: running it again replaces hand edits. The prefab is a variant of <code>Prefabs/UI/Popup/Popup.prefab</code>; the builder removes the base popup's panel, re-creates its Restart button (which a variant can't move), turns the popup's glow into a dark dim and hides its rays.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md933"></a>
+<h1><a class="anchor" id="autotoc_md995"></a>
+Theme</h1>
+<p>The screen uses the UI theme, "glossy balloon": every panel and button is a stack of soft layers, back to front a drop shadow, a glow outline, a darker lip under the face, the gradient face, a sheen over its top and the balloons' specular along its rim. The shapes come from <code>Tools/art/make_ui_shapes.py</code> (see <code>Sprites/README.md</code>), drawn from distance fields so every edge softens evenly.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Part   </th><th class="markdownTableHeadNone">Look    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Card   </td><td class="markdownTableBodyNone">Blue gradient body inside a white rim; the "Game Over" title on a vermilion plaque across its top edge    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Result   </td><td class="markdownTableBodyNone">A cream well: the level in white outlined in blue, the points in blue, the best in pencil (white on the bare blue is too faint)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Retry   </td><td class="markdownTableBodyNone">Green, the largest button, pulsing now and then: the one to press    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Offers   </td><td class="markdownTableBodyNone">Plum tiles sharing the row's width, told by pictures (the ad tile: a "?" card and a play-AD pill) with a ribbon across the corner saying what they give    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Start Over   </td><td class="markdownTableBodyNone">Red, shorter than Retry: it throws the run away   </td></tr>
+</table>
+<p>The light follows the time of day, as on the balloons. Each shape's specular is a <code>UI/TimeOfDaySpecular</code>, which runs along the rim where it faces the scene light and takes a little of its colour; the faces take a quarter of the light's tint through a <code>TimeOfDayTint</code> on the card. Text uses one TMP material per role (title, number, button), kept in <code>Assets/Fonts/Materials/</code>.</p><ul>
+<li><code>_bonusRetryButton</code> and <code>_offers</code> are optional.</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md996"></a>
 Interactions</h1>
 <ul>
 <li><b><code>GameOverMessage</code></b> — published by <code>RunController.EndRun</code> (see <code>Game/Run/</code>); carries the final level/score. Populates the labels and starts the loss cinematic; the screen reveals once the cinematic opens <code>GameOverPresentationGate</code>.</li>

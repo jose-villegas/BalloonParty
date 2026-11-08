@@ -116,16 +116,19 @@ $(function(){initNavTree('namespaceBalloonParty_1_1Game_1_1Flight.html',''); ini
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html">FlightStatsService</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Owns the per-shot boundary and the counts scoped to it.  <a href="classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Owns the per-shot boundary and the counts scoped to each shot.  <a href="classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightScope.html">IFlightScope</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The per-shot boundary, owned in one place instead of re-derived by every consumer.  <a href="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightScope.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The shot boundary, owned in one place instead of re-derived by every consumer.  <a href="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightScope.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStats.html">IFlightStats</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">What happened during the flight in progress.  <a href="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStats.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">What happened during one shot's flight, from its load until its death.  <a href="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStats.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsSource.html">IFlightStatsSource</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Per-shot <a class="el" href="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStats.html" title="What happened during one shot&#39;s flight, from its load until its death.">IFlightStats</a>.  <a href="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsSource.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsWriter.html">IFlightStatsWriter</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The write half of <a class="el" href="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStats.html" title="What happened during the flight in progress.">IFlightStats</a>, segregated so no reader can mutate what it reads.  <a href="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsWriter.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The write half of <a class="el" href="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsSource.html" title="Per-shot IFlightStats.">IFlightStatsSource</a>, segregated so no reader can mutate what it reads.  <a href="interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsWriter.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->

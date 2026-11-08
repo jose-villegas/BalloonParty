@@ -108,6 +108,7 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1Level_1_1RangedL
 
 <div class="header">
   <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pac-methods">Package Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
@@ -117,7 +118,7 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1Level_1_1RangedL
 </div><!--header-->
 <div class="contents">
 
-<p>The range-authored form of a level's difficulty mix; <a class="el" href="#ad0a8f4680319a2fb2e41bc07edae1384">Resolve</a> is a pure function, so it's EditMode-testable with a seeded rng.  
+<p>A level's difficulty mix before its ranges are rolled: what <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html" title="Builds a level&#39;s mix from LevelGenerationSettings.">LevelGenerator</a> outputs for every positive level, and what the authored debug presets hold.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Configuration.Level.RangedLevelParameters:</div>
@@ -134,8 +135,15 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1Level_1_1RangedL
 <div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters__coll__graph.svg" width="100%" height="529"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a1fba35edd281ed5b3f03eacf70a1c977" id="r_a1fba35edd281ed5b3f03eacf70a1c977"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1fba35edd281ed5b3f03eacf70a1c977">RangedLevelParameters</a> ()</td></tr>
+<tr class="separator:a1fba35edd281ed5b3f03eacf70a1c977"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
+<tr class="memitem:a89b0bca5553ccdecbee891638a71ca5a" id="r_a89b0bca5553ccdecbee891638a71ca5a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89b0bca5553ccdecbee891638a71ca5a">RangedLevelParameters</a> (int boardLines, <a class="el" href="structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html">RangedInt</a> itemCadence, AnimationCurve initialItemCountWeights, AnimationCurve itemCountWeights, <a class="el" href="structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html">BalloonTypeWeight</a>[] balloonWeights, <a class="el" href="structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html">ItemTypeWeight</a>[] itemWeights, <a class="el" href="structBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorTypeGate.html">GridActorTypeGate</a>[] gridActorGates, int allowedColorsMask)</td></tr>
+<tr class="separator:a89b0bca5553ccdecbee891638a71ca5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0a8f4680319a2fb2e41bc07edae1384" id="r_ad0a8f4680319a2fb2e41bc07edae1384"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html">LevelParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad0a8f4680319a2fb2e41bc07edae1384">Resolve</a> (float positionInRange, System.Random rng)</td></tr>
 <tr class="separator:ad0a8f4680319a2fb2e41bc07edae1384"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -149,8 +157,6 @@ Properties</h2></td></tr>
 <tr class="separator:abfcfd6a493daead126858ce7431c3ed2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a558c23c668583fd558e545c25b6b7e67" id="r_a558c23c668583fd558e545c25b6b7e67"><td class="memItemLeft" align="right" valign="top">int IPaletteColorMasked.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a558c23c668583fd558e545c25b6b7e67">ColorMask</a><code> [get]</code></td></tr>
 <tr class="separator:a558c23c668583fd558e545c25b6b7e67"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae246c76a9d6d5f1adb0db6223ecc9369" id="r_ae246c76a9d6d5f1adb0db6223ecc9369"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae246c76a9d6d5f1adb0db6223ecc9369">FirstSpawnTurn</a><code> [get]</code></td></tr>
-<tr class="separator:ae246c76a9d6d5f1adb0db6223ecc9369"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad37aad743d6d4f7f601b9013bfc9dea7" id="r_ad37aad743d6d4f7f601b9013bfc9dea7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorTypeGate.html">GridActorTypeGate</a>[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad37aad743d6d4f7f601b9013bfc9dea7">GridActorGates</a><code> [get]</code></td></tr>
 <tr class="separator:ad37aad743d6d4f7f601b9013bfc9dea7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a246bc83e13d83c58552d897b09aa7a9d" id="r_a246bc83e13d83c58552d897b09aa7a9d"><td class="memItemLeft" align="right" valign="top">AnimationCurve&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a246bc83e13d83c58552d897b09aa7a9d">InitialItemCountWeights</a><code> [get]</code></td></tr>
@@ -161,8 +167,6 @@ Properties</h2></td></tr>
 <tr class="separator:a9ff3eb2fd26f52a1c3107e080a7ae824"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b34d481161624bd8212bbc6d953dd4e" id="r_a4b34d481161624bd8212bbc6d953dd4e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html">ItemTypeWeight</a>[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4b34d481161624bd8212bbc6d953dd4e">ItemWeights</a><code> [get]</code></td></tr>
 <tr class="separator:a4b34d481161624bd8212bbc6d953dd4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afccb6ccda543996913f09a0865b0aebf" id="r_afccb6ccda543996913f09a0865b0aebf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afccb6ccda543996913f09a0865b0aebf">SpawnLines</a><code> [get]</code></td></tr>
-<tr class="separator:afccb6ccda543996913f09a0865b0aebf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -177,8 +181,6 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a0661c4feda0ba8d1f51e5ce915e00501"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39bbfaa4d0d600e33df38eb92a949daa" id="r_a39bbfaa4d0d600e33df38eb92a949daa"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a39bbfaa4d0d600e33df38eb92a949daa">_boardLines</a> = 5</td></tr>
 <tr class="separator:a39bbfaa4d0d600e33df38eb92a949daa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4eb30dfdfe463e8955217fd3823164b2" id="r_a4eb30dfdfe463e8955217fd3823164b2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4eb30dfdfe463e8955217fd3823164b2">_firstSpawnTurn</a> = 2</td></tr>
-<tr class="separator:a4eb30dfdfe463e8955217fd3823164b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1cedc1b23b3e1478dadf86459eaf83be" id="r_a1cedc1b23b3e1478dadf86459eaf83be"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorTypeGate.html">GridActorTypeGate</a>[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1cedc1b23b3e1478dadf86459eaf83be">_gridActorGates</a></td></tr>
 <tr class="separator:a1cedc1b23b3e1478dadf86459eaf83be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7cff732bdd8b626c26f3b7c71211ad4" id="r_af7cff732bdd8b626c26f3b7c71211ad4"><td class="memItemLeft" align="right" valign="top">AnimationCurve&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af7cff732bdd8b626c26f3b7c71211ad4">_initialItemCountWeights</a> = new()</td></tr>
@@ -189,12 +191,88 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a1ec161848fd56e11278cab175450881f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a73332adc4bcbf8d14130de5ef6767dd1" id="r_a73332adc4bcbf8d14130de5ef6767dd1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html">ItemTypeWeight</a>[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a73332adc4bcbf8d14130de5ef6767dd1">_itemWeights</a> = Array.Empty&lt;<a class="el" href="structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html">ItemTypeWeight</a>&gt;()</td></tr>
 <tr class="separator:a73332adc4bcbf8d14130de5ef6767dd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c0450282e4885e40b43d7d02b70a62b" id="r_a8c0450282e4885e40b43d7d02b70a62b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8c0450282e4885e40b43d7d02b70a62b">_spawnLines</a> = 1</td></tr>
-<tr class="separator:a8c0450282e4885e40b43d7d02b70a62b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The range-authored form of a level's difficulty mix; <a class="el" href="#ad0a8f4680319a2fb2e41bc07edae1384">Resolve</a> is a pure function, so it's EditMode-testable with a seeded rng. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+<div class="textblock"><p>A level's difficulty mix before its ranges are rolled: what <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html" title="Builds a level&#39;s mix from LevelGenerationSettings.">LevelGenerator</a> outputs for every positive level, and what the authored debug presets hold. </p>
+<p><a class="el" href="#ad0a8f4680319a2fb2e41bc07edae1384">Resolve</a> is pure, so it's EditMode-testable with a seeded rng. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a1fba35edd281ed5b3f03eacf70a1c977" name="a1fba35edd281ed5b3f03eacf70a1c977"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fba35edd281ed5b3f03eacf70a1c977">&#9670;&#160;</a></span>RangedLevelParameters() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">BalloonParty.Configuration.Level.RangedLevelParameters.RangedLevelParameters </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a89b0bca5553ccdecbee891638a71ca5a" name="a89b0bca5553ccdecbee891638a71ca5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89b0bca5553ccdecbee891638a71ca5a">&#9670;&#160;</a></span>RangedLevelParameters() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">BalloonParty.Configuration.Level.RangedLevelParameters.RangedLevelParameters </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>boardLines</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html">RangedInt</a></td>          <td class="paramname"><span class="paramname"><em>itemCadence</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">AnimationCurve</td>          <td class="paramname"><span class="paramname"><em>initialItemCountWeights</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">AnimationCurve</td>          <td class="paramname"><span class="paramname"><em>itemCountWeights</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html">BalloonTypeWeight</a>[]</td>          <td class="paramname"><span class="paramname"><em>balloonWeights</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html">ItemTypeWeight</a>[]</td>          <td class="paramname"><span class="paramname"><em>itemWeights</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorTypeGate.html">GridActorTypeGate</a>[]</td>          <td class="paramname"><span class="paramname"><em>gridActorGates</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>allowedColorsMask</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a id="ad0a8f4680319a2fb2e41bc07edae1384" name="ad0a8f4680319a2fb2e41bc07edae1384"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad0a8f4680319a2fb2e41bc07edae1384">&#9670;&#160;</a></span>Resolve()</h2>
 
@@ -324,28 +402,6 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a4eb30dfdfe463e8955217fd3823164b2" name="a4eb30dfdfe463e8955217fd3823164b2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4eb30dfdfe463e8955217fd3823164b2">&#9670;&#160;</a></span>_firstSpawnTurn</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int BalloonParty.Configuration.Level.RangedLevelParameters._firstSpawnTurn = 2</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a1cedc1b23b3e1478dadf86459eaf83be" name="a1cedc1b23b3e1478dadf86459eaf83be"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1cedc1b23b3e1478dadf86459eaf83be">&#9670;&#160;</a></span>_gridActorGates</h2>
 
@@ -462,28 +518,6 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a8c0450282e4885e40b43d7d02b70a62b" name="a8c0450282e4885e40b43d7d02b70a62b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8c0450282e4885e40b43d7d02b70a62b">&#9670;&#160;</a></span>_spawnLines</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int BalloonParty.Configuration.Level.RangedLevelParameters._spawnLines = 1</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <h2 class="groupheader">Property Documentation</h2>
 <a id="adbea8c1eb12cf7454e7075ecbfbebbe3" name="adbea8c1eb12cf7454e7075ecbfbebbe3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adbea8c1eb12cf7454e7075ecbfbebbe3">&#9670;&#160;</a></span>AllowedColorsMask</h2>
@@ -572,28 +606,6 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IPaletteColorMasked.html#ac1c174fb9eeda55c0684df79315d5b58">BalloonParty.Configuration.Palette.IPaletteColorMasked</a>.</p>
-
-</div>
-</div>
-<a id="ae246c76a9d6d5f1adb0db6223ecc9369" name="ae246c76a9d6d5f1adb0db6223ecc9369"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae246c76a9d6d5f1adb0db6223ecc9369">&#9670;&#160;</a></span>FirstSpawnTurn</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int BalloonParty.Configuration.Level.RangedLevelParameters.FirstSpawnTurn</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>
@@ -696,28 +708,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html">ItemTypeWeight</a> [] BalloonParty.Configuration.Level.RangedLevelParameters.ItemWeights</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="afccb6ccda543996913f09a0865b0aebf" name="afccb6ccda543996913f09a0865b0aebf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afccb6ccda543996913f09a0865b0aebf">&#9670;&#160;</a></span>SpawnLines</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int BalloonParty.Configuration.Level.RangedLevelParameters.SpawnLines</td>
         </tr>
       </table>
   </td>

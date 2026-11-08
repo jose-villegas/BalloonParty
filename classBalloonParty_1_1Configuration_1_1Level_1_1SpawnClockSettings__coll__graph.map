@@ -1,0 +1,5 @@
+<map id="BalloonParty.Configuration.Level.SpawnClockSettings" name="BalloonParty.Configuration.Level.SpawnClockSettings">
+<area shape="rect" id="Node000001" title="When balloon lines arrive: one line per interval of scaled game time, the interval shrinking each lev..." alt="" coords="5,93,203,133"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html" title=" " alt="" coords="5,5,203,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,59,107,93,101,93,101,59"/>
+</map>

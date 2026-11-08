@@ -1,9 +1,11 @@
 <map id="BalloonParty.Game.Cinematics.HeartDrainCinematic" name="BalloonParty.Game.Cinematics.HeartDrainCinematic">
-<area shape="rect" id="Node000001" title="Begins on the first wave&#45;damage event, follows the heart trail in slow&#45;mo, and ends when the pile dra..." alt="" coords="5,167,232,207"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematicProducer.html" title="Shared shape for the producers that drive a CameraRigCinematic: builds the runner from BuildConfig on..." alt="" coords="5,79,232,119"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,133,121,166,116,166,116,133"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="19,5,104,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="80,40,107,77,103,80,76,43"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="128,5,227,31"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="163,43,135,80,131,77,158,40"/>
+<area shape="rect" id="Node000001" title="Begins on a wave&#45;damage event, follows the heart trail in slow&#45;mo, and ends when the pile drains or t..." alt="" coords="427,54,653,94"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematicProducer.html" title="Shared shape for the producers that drive a CameraRigCinematic: builds the runner from BuildConfig on..." alt="" coords="152,22,379,62"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="392,54,427,58,426,63,392,59"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="12,5,97,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="111,22,152,26,151,32,111,27"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,55,104,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="117,57,151,53,152,58,118,62"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="162,86,369,126"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="382,90,426,85,427,90,382,95"/>
 </map>

@@ -416,7 +416,7 @@
 <!-- Node45 -->
 <g id="Node000045" class="node">
 <title>Node45</title>
-<g id="a_Node000045"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html" target="_top" xlink:title="Level&#45;range difficulty authoring; read by LevelDifficultyResolver (and by the balloon spawner&#39;s pool ...">
+<g id="a_Node000045"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html" target="_top" xlink:title="Level pacing; read by LevelDifficultyResolver (and by the balloon spawner&#39;s pool prewarm,...">
 <polygon fill="white" stroke="#666666" points="369.5,-942 197.5,-942 197.5,-912 369.5,-912 369.5,-942"/>
 <text text-anchor="start" x="205.5" y="-930" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text text-anchor="middle" x="283.5" y="-919" font-family="Helvetica,sans-Serif" font-size="10.00">Level.ILevelPacingConfiguration</text>
@@ -426,7 +426,7 @@
 <!-- Node44 -->
 <g id="Node000044" class="node">
 <title>Node44</title>
-<g id="a_Node000044"><a xlink:href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html" target="_top" xlink:title="Per&#45;colour points&#45;required per level.">
+<g id="a_Node000044"><a xlink:href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html" target="_top" xlink:title="How levels pace: every positive level&#39;s mix is generated from _generation; the scoring curve sets eac...">
 <polygon fill="white" stroke="#666666" points="587.5,-942 418.5,-942 418.5,-912 587.5,-912 587.5,-942"/>
 <text text-anchor="start" x="426.5" y="-930" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text text-anchor="middle" x="503" y="-919" font-family="Helvetica,sans-Serif" font-size="10.00">Level.LevelPacingConfiguration</text>
@@ -561,7 +561,7 @@
 <!-- Node55 -->
 <g id="Node000055" class="node">
 <title>Node55</title>
-<g id="a_Node000055"><a xlink:href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html" target="_top" xlink:title="Run&#45;level rules — starting hit points, retry allowance, and (future) loss thresholds.">
+<g id="a_Node000055"><a xlink:href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html" target="_top" xlink:title="Run&#45;level rules: starting hit points, retry allowance, the level&#45;complete beat and upgrade cards.">
 <polygon fill="white" stroke="#666666" points="352.5,-654 214.5,-654 214.5,-624 352.5,-624 352.5,-654"/>
 <text text-anchor="start" x="222.5" y="-642" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.IRun</text>
 <text text-anchor="middle" x="283.5" y="-631" font-family="Helvetica,sans-Serif" font-size="10.00">Config</text>

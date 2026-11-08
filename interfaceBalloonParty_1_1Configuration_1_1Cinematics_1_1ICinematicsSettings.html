@@ -136,6 +136,12 @@ Properties</h2></td></tr>
 <tr class="memitem:afbdb7b19084c845cef69889075d90598" id="r_afbdb7b19084c845cef69889075d90598"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html">BoardFloatAwaySettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afbdb7b19084c845cef69889075d90598">BoardFloatAway</a><code> [get]</code></td></tr>
 <tr class="memdesc:afbdb7b19084c845cef69889075d90598"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tuning for the float-away board effect (level-clear balloons rise + zigzag + shrink).  <br /></td></tr>
 <tr class="separator:afbdb7b19084c845cef69889075d90598"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d8913f659928a6b5bd3f62015471888" id="r_a1d8913f659928a6b5bd3f62015471888"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1d8913f659928a6b5bd3f62015471888">HeartDrainMaxSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:a1d8913f659928a6b5bd3f62015471888"><td class="mdescLeft">&#160;</td><td class="mdescRight">Longest real time a heart-drain cinematic holds the camera.  <br /></td></tr>
+<tr class="separator:a1d8913f659928a6b5bd3f62015471888"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3098f6fef4c88e6170dcbdb90698edb0" id="r_a3098f6fef4c88e6170dcbdb90698edb0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3098f6fef4c88e6170dcbdb90698edb0">HeartDrainMinGapSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:a3098f6fef4c88e6170dcbdb90698edb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Least real time between two heart-drain cinematics.  <br /></td></tr>
+<tr class="separator:a3098f6fef4c88e6170dcbdb90698edb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0a36a352c0a1c9efd0833635d3c6a394" id="r_a0a36a352c0a1c9efd0833635d3c6a394"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html">LevelAscendSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0a36a352c0a1c9efd0833635d3c6a394">LevelAscend</a><code> [get]</code></td></tr>
 <tr class="memdesc:a0a36a352c0a1c9efd0833635d3c6a394"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Ascent's tuning — a transform-descent, so it lives outside the per-state camera-rig entries.  <br /></td></tr>
 <tr class="separator:a0a36a352c0a1c9efd0833635d3c6a394"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -188,6 +194,60 @@ Properties</h2></td></tr>
 <p>Tuning for the float-away board effect (level-clear balloons rise + zigzag + shrink). </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a0841ed0dc9fb97c24b0d0d7b2c38f8f1">BalloonParty.Configuration.Cinematics.CinematicsSettings</a>.</p>
+
+</div>
+</div>
+<a id="a1d8913f659928a6b5bd3f62015471888" name="a1d8913f659928a6b5bd3f62015471888"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d8913f659928a6b5bd3f62015471888">&#9670;&#160;</a></span>HeartDrainMaxSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Cinematics.ICinematicsSettings.HeartDrainMaxSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Longest real time a heart-drain cinematic holds the camera. </p>
+<p>Lines keep arriving during it, so the overflow pile may never empty on its own. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#ae7070d64f8e3eb1c0720654da99f9796">BalloonParty.Configuration.Cinematics.CinematicsSettings</a>.</p>
+
+</div>
+</div>
+<a id="a3098f6fef4c88e6170dcbdb90698edb0" name="a3098f6fef4c88e6170dcbdb90698edb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3098f6fef4c88e6170dcbdb90698edb0">&#9670;&#160;</a></span>HeartDrainMinGapSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Cinematics.ICinematicsSettings.HeartDrainMinGapSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Least real time between two heart-drain cinematics. </p>
+<p>Hearts still drain in between, with no camera move. 0 = every wave-damage event may play one. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a95942406ff2c8320cf6b5e3b0516acb8">BalloonParty.Configuration.Cinematics.CinematicsSettings</a>.</p>
 
 </div>
 </div>

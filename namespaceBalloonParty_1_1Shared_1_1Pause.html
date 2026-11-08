@@ -132,14 +132,10 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:ab006bd98ba69f3aaa2ba396e176136b5" id="r_ab006bd98ba69f3aaa2ba396e176136b5"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab006bd98ba69f3aaa2ba396e176136b5">PauseSource</a> { <br />
-&#160;&#160;<a class="el" href="#ab006bd98ba69f3aaa2ba396e176136b5a8fce77fd86da3af309c0ad415d8d7952">Cinematic</a>
+<tr class="memitem:ab006bd98ba69f3aaa2ba396e176136b5" id="r_ab006bd98ba69f3aaa2ba396e176136b5"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab006bd98ba69f3aaa2ba396e176136b5">PauseSource</a> { <a class="el" href="#ab006bd98ba69f3aaa2ba396e176136b5a8fce77fd86da3af309c0ad415d8d7952">Cinematic</a>
 , <a class="el" href="#ab006bd98ba69f3aaa2ba396e176136b5ae7c8e9e1f90eadea8b03762d9e9215c7">LevelUp</a>
-, <a class="el" href="#ab006bd98ba69f3aaa2ba396e176136b5a129e8109f319870e328cc7a1d5b5cae3">Overflow</a>
-, <a class="el" href="#ab006bd98ba69f3aaa2ba396e176136b5a46a7156acae700b350b6b84f4f2fe4a1">LevelTransition</a>
-, <br />
-&#160;&#160;<a class="el" href="#ab006bd98ba69f3aaa2ba396e176136b5a527f7a9fd5f7e086d6f7dab86a247564">Cheat</a>
-<br />
+, <a class="el" href="#ab006bd98ba69f3aaa2ba396e176136b5a46a7156acae700b350b6b84f4f2fe4a1">LevelTransition</a> = 3
+, <a class="el" href="#ab006bd98ba69f3aaa2ba396e176136b5a527f7a9fd5f7e086d6f7dab86a247564">Cheat</a> = 4
  }</td></tr>
 <tr class="separator:ab006bd98ba69f3aaa2ba396e176136b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc1e7c1eb619c5c323a6c18c9a586b9a" id="r_acc1e7c1eb619c5c323a6c18c9a586b9a"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acc1e7c1eb619c5c323a6c18c9a586b9a">TimeScaleSource</a> { <br />
@@ -150,7 +146,6 @@ Enumerations</h2></td></tr>
 , <br />
 &#160;&#160;<a class="el" href="#acc1e7c1eb619c5c323a6c18c9a586b9aae1eb86b5a3508b638909eaf2544ca4ab">PierceDischarge</a>
 , <a class="el" href="#acc1e7c1eb619c5c323a6c18c9a586b9aad82f57e7543a13b966c9f1b3997a833e">LevelUpCeremony</a>
-, <a class="el" href="#acc1e7c1eb619c5c323a6c18c9a586b9aa4138a129f28e81e015639ed4e8ae2433">HoldSpeedUp</a>
 <br />
  }</td></tr>
 <tr class="separator:acc1e7c1eb619c5c323a6c18c9a586b9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,8 +166,6 @@ Enumerations</h2></td></tr>
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ab006bd98ba69f3aaa2ba396e176136b5a8fce77fd86da3af309c0ad415d8d7952" name="ab006bd98ba69f3aaa2ba396e176136b5a8fce77fd86da3af309c0ad415d8d7952"></a>Cinematic&#160;</td><td class="fielddoc"><p>Cinematic sequence is playing (e.g. level-up trail pan-in). </p>
 </td></tr>
 <tr><td class="fieldname"><a id="ab006bd98ba69f3aaa2ba396e176136b5ae7c8e9e1f90eadea8b03762d9e9215c7" name="ab006bd98ba69f3aaa2ba396e176136b5ae7c8e9e1f90eadea8b03762d9e9215c7"></a>LevelUp&#160;</td><td class="fielddoc"><p>A modal overlay has taken control of the screen (e.g. level-up popup). </p>
-</td></tr>
-<tr><td class="fieldname"><a id="ab006bd98ba69f3aaa2ba396e176136b5a129e8109f319870e328cc7a1d5b5cae3" name="ab006bd98ba69f3aaa2ba396e176136b5a129e8109f319870e328cc7a1d5b5cae3"></a>Overflow&#160;</td><td class="fielddoc"><p>Holds the thrower during overflow pops so the player can't fire into an unresolved board. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="ab006bd98ba69f3aaa2ba396e176136b5a46a7156acae700b350b6b84f4f2fe4a1" name="ab006bd98ba69f3aaa2ba396e176136b5a46a7156acae700b350b6b84f4f2fe4a1"></a>LevelTransition&#160;</td><td class="fielddoc"><p>The board is being cleared and re-populated for the new level (the Ascent). </p>
 </td></tr>
@@ -206,8 +199,6 @@ Enumerations</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="acc1e7c1eb619c5c323a6c18c9a586b9aad82f57e7543a13b966c9f1b3997a833e" name="acc1e7c1eb619c5c323a6c18c9a586b9aad82f57e7543a13b966c9f1b3997a833e"></a>LevelUpCeremony&#160;</td><td class="fielddoc"><p>The level-up ceremony's tipping beat and its hand-off to the popup. </p>
 <p>Claimed EXCLUSIVELY for the beat so a doomed shot's LastShield curve can't drag it slower than the ceremony asked for. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="acc1e7c1eb619c5c323a6c18c9a586b9aa4138a129f28e81e015639ed4e8ae2433" name="acc1e7c1eb619c5c323a6c18c9a586b9aa4138a129f28e81e015639ed4e8ae2433"></a>HoldSpeedUp&#160;</td><td class="fielddoc"><p>Player holding during projectile flight — speeds the game up to allow fast-forwarding. </p>
 </td></tr>
 </table>
 

@@ -1,0 +1,28 @@
+var classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp =
+[
+    [ "ApplyHalo", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a0d39fe17e6ebd2c6570830036790c6b8", null ],
+    [ "ApplyLook", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#abe5e6e3c3e365d167e22b51b6f9f2f86", null ],
+    [ "Awake", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a5180f6fa5b1fa5bf8f147a38209a5109", null ],
+    [ "Clear", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#ade3117f564bc89d95966e12fc9d6f103", null ],
+    [ "MoveTo", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a4f6197e5941e0af5796fb6db42bfd1da", null ],
+    [ "OnDestroy", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a93a58b00a37f678c0df101bd6bf1a8f3", null ],
+    [ "Show", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a5857142dde152b797e9d1195e0e9342a", null ],
+    [ "Show", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a28825c339c973bb38a8bd372df0a1086", null ],
+    [ "Write", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a38da864b47b22e13bf86a3af020021a7", null ],
+    [ "_baseColor", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a18a462950fbf6175ec9485eab209c544", null ],
+    [ "_baseFontSize", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#ae5aa465d5ba86f46f19a2d5f0763afb9", null ],
+    [ "_baseFontStyle", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#ae33987dadd6478a271bbcdd38da484bc", null ],
+    [ "_clearDuration", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#ac30c2ea947e0eb086a0f306b02674440", null ],
+    [ "_fadeOutDuration", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a22cd52b55817db0254dedc678f117aef", null ],
+    [ "_group", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a6cdfb10c0f70c8923ae78d3a7ff5e86d", null ],
+    [ "_haloColor", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a24e49f96a5388ea00f3aa66c5459eefd", null ],
+    [ "_haloWidth", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a388a9aa65bd3be56ccc2d676f508a8b0", null ],
+    [ "_holdDuration", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#ab3f757cc5e2899b2c01ac00455b79aa8", null ],
+    [ "_label", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a26adedb3e29072f0592af0aa29e1571b", null ],
+    [ "_rect", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#afd13c551ad3b8b4c4db4b27441df5b00", null ],
+    [ "_sequence", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a409548fa07d08c9406eb579337918d75", null ],
+    [ "_visibleAlpha", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#adcc3074076159db6af74fabeea7912e3", null ],
+    [ "_writeOn", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a0c57f7c741b12573938080add4c0c2c9", null ],
+    [ "InkRect", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a2464ff2047bf2f9ed6646f5a9e3533b8", null ],
+    [ "IsShowing", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#afe97ee468afb530e2a5e122c30c3dfff", null ]
+];

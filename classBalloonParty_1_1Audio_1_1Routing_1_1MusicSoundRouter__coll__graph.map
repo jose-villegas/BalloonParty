@@ -14,7 +14,7 @@
 <area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="473,280,625,253,626,258,474,285"/>
 <area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ITimeOfDayNight.html" title="Whether the current time of day counts as night (5 PM–4 AM), for gameplay rules that key off it." alt="" coords="263,346,458,386"/>
 <area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="465,340,532,321,600,298,689,256,691,260,602,303,534,326,466,345"/>
-<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightScope.html" title="The per&#45;shot boundary, owned in one place instead of re&#45;derived by every consumer." alt="" coords="265,410,456,450"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightScope.html" title="The shot boundary, owned in one place instead of re&#45;derived by every consumer." alt="" coords="265,410,456,450"/>
 <area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="468,407,535,386,600,356,633,333,662,306,707,256,711,260,666,310,636,337,603,360,537,391,470,412"/>
 <area shape="rect" id="Node000010" href="$structBalloonParty_1_1Audio_1_1SoundHandle.html" title="Identifies one play of a voice slot — the only way to ISoundPlayer.Stop a loop." alt="" coords="267,513,454,553"/>
 <area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="467,513,536,490,569,473,600,452,623,430,643,405,677,351,701,299,716,258,721,259,706,301,682,353,648,408,627,434,603,456,572,477,538,495,468,518"/>

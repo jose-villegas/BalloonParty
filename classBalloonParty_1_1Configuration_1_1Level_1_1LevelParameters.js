@@ -1,7 +1,7 @@
 var classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters =
 [
     [ "LevelParameters", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a5e8b79d0962e3ea8001a88acfc9588ec", null ],
-    [ "LevelParameters", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a0b13594fbb9459dab4eded51643ae471", null ],
+    [ "LevelParameters", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#aa9552c672202558a82cb10ba641d5d4e", null ],
     [ "BindResolved", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a9d1ee4491163e2a385c93a96d477eaab", null ],
     [ "FillGuaranteedBalloons", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a986faa6e911d6afd8bf6aeabeeb7218d", null ],
     [ "FillGuaranteedItems", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#ad6681de28bb56abed0dde80dba99c1eb", null ],
@@ -15,7 +15,6 @@ var classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters =
     [ "_balloonPickList", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a81f230fd98caf43e49b51d367756a6ea", null ],
     [ "_balloonWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a3ed30f80cdbe93ab9092eb8062068aa4", null ],
     [ "_boardLines", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a5c20579427e7cbb656783d28894b38b2", null ],
-    [ "_firstSpawnTurn", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#ae885e7db0d2c5018cc352888278d5f08", null ],
     [ "_gridActorGates", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#ade461ba8b946d76c2b7c894f23f598ca", null ],
     [ "_initialItemCountWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a201448b90c9dc69d05238b0a26cab278", null ],
     [ "_itemCadence", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#ae696a65f0bc275b73d752783070ba7be", null ],
@@ -24,16 +23,13 @@ var classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters =
     [ "_items", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a34ad02ea733b8166d132bb26218646f0", null ],
     [ "_itemWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a630634ca2853fdd53870999fa78601c7", null ],
     [ "_simpleBalloonPickList", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a9588c2ad958d52e9fd3846faeee38e20", null ],
-    [ "_spawnLines", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#aab9c53c89f0551b594af09c059d3d823", null ],
     [ "AllowedColors", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a38284c731da835e650da19a1f855e716", null ],
     [ "AllowedColorsMask", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a4e97b2969509440bc4f20570d6a5d1ba", null ],
     [ "BalloonWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a72c28855613282e30d9d53baf4f1f498", null ],
     [ "BoardLines", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a31f04c2c8c976166a57a155774a3e054", null ],
-    [ "FirstSpawnTurn", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a8d62cc6ac1a035bc378c9307143fbfe3", null ],
     [ "InitialItemCountWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a4e6388a5e4a651adde617b6fc8797a9a", null ],
     [ "ItemCadence", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a9d2532fc3f6bbef0ab46480bbaf26c63", null ],
     [ "ItemCountWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a25bfe463a1256dc13ab58d3102add119", null ],
     [ "Items", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#af467183c001d9001c9e6468dad5daa84", null ],
-    [ "ItemWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a68d74a11bacbe7df83cccba710d97ca5", null ],
-    [ "SpawnLines", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a31e91eb44852f2bc358c254d7484e403", null ]
+    [ "ItemWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a68d74a11bacbe7df83cccba710d97ca5", null ]
 ];

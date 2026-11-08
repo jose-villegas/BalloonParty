@@ -126,15 +126,51 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.ht
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:ad19f22b35fb57a25b02b9322ba5d93f1" id="r_ad19f22b35fb57a25b02b9322ba5d93f1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad19f22b35fb57a25b02b9322ba5d93f1">IsUnlimited</a><code> [get]</code></td></tr>
+<tr class="memdesc:ad19f22b35fb57a25b02b9322ba5d93f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">No retry cap (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#aff5e95c5f910f536e2097bb24245f350" title="How many times the player may retry at the level reached, per run (0 or less = unlimited).">Shared.IRunConfig.MaxRetries</a> of 0 or less).  <br /></td></tr>
+<tr class="separator:ad19f22b35fb57a25b02b9322ba5d93f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37b95f79a4daecef6d9a226741037df8" id="r_a37b95f79a4daecef6d9a226741037df8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a37b95f79a4daecef6d9a226741037df8">RetriesRemaining</a><code> [get]</code></td></tr>
+<tr class="memdesc:a37b95f79a4daecef6d9a226741037df8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retries left this run; int.MaxValue while <a class="el" href="#ad19f22b35fb57a25b02b9322ba5d93f1" title="No retry cap (Shared.IRunConfig.MaxRetries of 0 or less).">IsUnlimited</a>.  <br /></td></tr>
 <tr class="separator:a37b95f79a4daecef6d9a226741037df8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09e9ddc95324d691652cc541e9c4aa36" id="r_a09e9ddc95324d691652cc541e9c4aa36"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a09e9ddc95324d691652cc541e9c4aa36">RetriesUsed</a><code> [get]</code></td></tr>
+<tr class="memdesc:a09e9ddc95324d691652cc541e9c4aa36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retries this run has used. Counted even when unlimited: the ad gate reads it.  <br /></td></tr>
+<tr class="separator:a09e9ddc95324d691652cc541e9c4aa36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a32f733325d45b99ff00a98e0e14e9e" id="r_a5a32f733325d45b99ff00a98e0e14e9e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5a32f733325d45b99ff00a98e0e14e9e">RetryLevel</a><code> [get]</code></td></tr>
 <tr class="memdesc:a5a32f733325d45b99ff00a98e0e14e9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The level the next restart should begin at.  <br /></td></tr>
 <tr class="separator:a5a32f733325d45b99ff00a98e0e14e9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98a614b0caad9d543c406a9245201e32" id="r_a98a614b0caad9d543c406a9245201e32"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a98a614b0caad9d543c406a9245201e32">RetryWithBonusCard</a><code> [get]</code></td></tr>
+<tr class="memdesc:a98a614b0caad9d543c406a9245201e32"><td class="mdescLeft">&#160;</td><td class="mdescRight">The staged retry was bought with a rewarded ad and deals a bonus card.  <br /></td></tr>
+<tr class="separator:a98a614b0caad9d543c406a9245201e32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Read-only retry state — how many retries remain this run and the level to retry at (zero when the next restart is a fresh run). </p>
 </div><h2 class="groupheader">Property Documentation</h2>
+<a id="ad19f22b35fb57a25b02b9322ba5d93f1" name="ad19f22b35fb57a25b02b9322ba5d93f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad19f22b35fb57a25b02b9322ba5d93f1">&#9670;&#160;</a></span>IsUnlimited</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Game.Run.IRetryState.IsUnlimited</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>No retry cap (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#aff5e95c5f910f536e2097bb24245f350" title="How many times the player may retry at the level reached, per run (0 or less = unlimited).">Shared.IRunConfig.MaxRetries</a> of 0 or less). </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html#a1febebc18b6bfea598de81114ef0056c">BalloonParty.Game.Run.RetryTracker</a>.</p>
+
+</div>
+</div>
 <a id="a37b95f79a4daecef6d9a226741037df8" name="a37b95f79a4daecef6d9a226741037df8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a37b95f79a4daecef6d9a226741037df8">&#9670;&#160;</a></span>RetriesRemaining</h2>
 
@@ -155,7 +191,35 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Retries left this run; int.MaxValue while <a class="el" href="#ad19f22b35fb57a25b02b9322ba5d93f1" title="No retry cap (Shared.IRunConfig.MaxRetries of 0 or less).">IsUnlimited</a>. </p>
+
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html#a6d67a4e0e3ff6a0cf7497ecc118dfd7e">BalloonParty.Game.Run.RetryTracker</a>.</p>
+
+</div>
+</div>
+<a id="a09e9ddc95324d691652cc541e9c4aa36" name="a09e9ddc95324d691652cc541e9c4aa36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09e9ddc95324d691652cc541e9c4aa36">&#9670;&#160;</a></span>RetriesUsed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Game.Run.IRetryState.RetriesUsed</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retries this run has used. Counted even when unlimited: the ad gate reads it. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html#aa32ecb3d45193513a0126be8ddf84fc6">BalloonParty.Game.Run.RetryTracker</a>.</p>
 
 </div>
 </div>
@@ -183,6 +247,33 @@ Properties</h2></td></tr>
 <p>Zero means a fresh run (level 1). Set transiently before the dismiss; consumed during the reset cascade. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html#a4018073f3c2633e27511b39d536a8c83">BalloonParty.Game.Run.RetryTracker</a>.</p>
+
+</div>
+</div>
+<a id="a98a614b0caad9d543c406a9245201e32" name="a98a614b0caad9d543c406a9245201e32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98a614b0caad9d543c406a9245201e32">&#9670;&#160;</a></span>RetryWithBonusCard</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Game.Run.IRetryState.RetryWithBonusCard</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The staged retry was bought with a rewarded ad and deals a bonus card. </p>
+<p>Read with <a class="el" href="#a5a32f733325d45b99ff00a98e0e14e9e" title="The level the next restart should begin at.">RetryLevel</a> during the reset cascade, and cleared with it. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html#ae388e9ab216d9b4fc0b4c73b898853ba">BalloonParty.Game.Run.RetryTracker</a>.</p>
 
 </div>
 </div>

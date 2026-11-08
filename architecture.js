@@ -16,8 +16,8 @@ var architecture =
         [ "Guidance", "arch_scope_hierarchy.html#autotoc_md83", null ]
       ] ]
     ] ],
-    [ "Turn Pipeline", "arch_turn_pipeline.html", [
-      [ "Turn Pipeline", "arch_turn_pipeline.html#autotoc_md108", [
+    [ "Hit, Spawn and Balance Pipeline", "arch_turn_pipeline.html", [
+      [ "Hit, Spawn and Balance Pipeline", "arch_turn_pipeline.html#autotoc_md108", [
         [ "What this diagram shows", "arch_turn_pipeline.html#autotoc_md109", null ],
         [ "Guidance", "arch_turn_pipeline.html#autotoc_md110", null ]
       ] ]
@@ -83,21 +83,21 @@ var architecture =
       ] ]
     ] ],
     [ "Disturbance Field Service", "disturbance_field.html", [
-      [ "Disturbance Field Service", "disturbance_field.html#autotoc_md836", [
-        [ "Contents", "disturbance_field.html#autotoc_md837", null ],
-        [ "Architecture", "disturbance_field.html#autotoc_md838", null ],
-        [ "How it works", "disturbance_field.html#autotoc_md839", [
-          [ "RT layout", "disturbance_field.html#autotoc_md840", null ],
-          [ "Stamp API", "disturbance_field.html#autotoc_md841", null ],
-          [ "Diffusion tick", "disturbance_field.html#autotoc_md842", null ],
-          [ "Lerp stamp lifecycle", "disturbance_field.html#autotoc_md843", null ],
-          [ "Combined pass", "disturbance_field.html#autotoc_md844", null ],
-          [ "Batched flush (stamp-only path)", "disturbance_field.html#autotoc_md845", null ],
-          [ "World → UV conversion", "disturbance_field.html#autotoc_md846", null ]
+      [ "Disturbance Field Service", "disturbance_field.html#autotoc_md897", [
+        [ "Contents", "disturbance_field.html#autotoc_md898", null ],
+        [ "Architecture", "disturbance_field.html#autotoc_md899", null ],
+        [ "How it works", "disturbance_field.html#autotoc_md900", [
+          [ "RT layout", "disturbance_field.html#autotoc_md901", null ],
+          [ "Stamp API", "disturbance_field.html#autotoc_md902", null ],
+          [ "Diffusion tick", "disturbance_field.html#autotoc_md903", null ],
+          [ "Lerp stamp lifecycle", "disturbance_field.html#autotoc_md904", null ],
+          [ "Combined pass", "disturbance_field.html#autotoc_md905", null ],
+          [ "Batched flush (stamp-only path)", "disturbance_field.html#autotoc_md906", null ],
+          [ "World → UV conversion", "disturbance_field.html#autotoc_md907", null ]
         ] ],
-        [ "Consumers", "disturbance_field.html#autotoc_md847", null ],
-        [ "Configuration", "disturbance_field.html#autotoc_md848", null ],
-        [ "Interactions", "disturbance_field.html#autotoc_md849", null ]
+        [ "Consumers", "disturbance_field.html#autotoc_md908", null ],
+        [ "Configuration", "disturbance_field.html#autotoc_md909", null ],
+        [ "Interactions", "disturbance_field.html#autotoc_md910", null ]
       ] ]
     ] ],
     [ "Bush System", "arch_bush_system.html", [

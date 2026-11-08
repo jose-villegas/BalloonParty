@@ -22,7 +22,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Per&#45;colour points&#45;required per level.">
+<g id="a_Node000001"><a xlink:title="How levels pace: every positive level&#39;s mix is generated from _generation; the scoring curve sets eac...">
 <polygon fill="#999999" stroke="#666666" points="209,-30 40,-30 40,0 209,0 209,-30"/>
 <text text-anchor="start" x="48" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text text-anchor="middle" x="124.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Level.LevelPacingConfiguration</text>
@@ -50,7 +50,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html" target="_top" xlink:title="Level&#45;range difficulty authoring; read by LevelDifficultyResolver (and by the balloon spawner&#39;s pool ...">
+<g id="a_Node000003"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html" target="_top" xlink:title="Level pacing; read by LevelDifficultyResolver (and by the balloon spawner&#39;s pool prewarm,...">
 <polygon fill="white" stroke="#666666" points="287.5,-96 115.5,-96 115.5,-66 287.5,-66 287.5,-96"/>
 <text text-anchor="start" x="123.5" y="-84" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text text-anchor="middle" x="201.5" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">Level.ILevelPacingConfiguration</text>

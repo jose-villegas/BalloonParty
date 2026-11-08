@@ -32,7 +32,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html" target="_top" xlink:title="Resolves and caches the live per&#45;level difficulty mix, bridging range weights onto the balloon/item c...">
+<g id="a_Node000002"><a xlink:href="classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html" target="_top" xlink:title="Resolves and caches the live per&#45;level difficulty mix (generated, or a debug preset),...">
 <polygon fill="white" stroke="#666666" points="141,-30 0,-30 0,0 141,0 141,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.Level.</text>
 <text text-anchor="middle" x="70.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">LevelDifficultyResolver</text>

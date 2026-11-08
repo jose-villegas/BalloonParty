@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.13.2"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>BalloonParty: Turn Pipeline</title>
+<title>BalloonParty: Hit, Spawn and Balance Pipeline</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -107,28 +107,34 @@ $(function(){initNavTree('arch_turn_pipeline.html',''); initResizable(true); });
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title">Turn Pipeline</div></div>
+  <div class="headertitle"><div class="title">Hit, Spawn and Balance Pipeline</div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><h1><a class="anchor" id="autotoc_md108"></a>
-Turn Pipeline</h1>
+Hit, Spawn and Balance Pipeline</h1>
 <div class="image">
 <object type="image/svg+xml" data="turn_pipeline.svg" style="pointer-events: none;"></object>
 <div class="caption">
-Turn Pipeline — Hit → Balance → Spawn → Post-Balance</div></div>
+Hit, Spawn and Balance Pipeline</div></div>
 <h2><a class="anchor" id="autotoc_md109"></a>
 What this diagram shows</h2>
-<p>The four sequential phases that make up one game turn — from the moment the projectile contacts a balloon to the moment the grid is settled and ready for the next shot.</p>
-<p><b>Phase 1 — Hit</b> The projectile flies freely, bouncing off walls. On each balloon contact <code>ProjectileView</code> hands the collision to the plain-C# <code>ProjectileHitResolver</code>, which calls <code>EvaluateHit</code> (state-mutating), embeds the outcome in <code>ActorHitMessage</code>, and routes it through <code>IHitDispatcher</code> (<code>Game/HitPipeline</code>). The pipeline runs the order-dependent stages synchronously and explicitly — <code>ScoreController</code> records streak/score first, then the owning <code>BalloonController</code> (resolved via <code>BalloonControllerRegistry</code>) pops/deflects — and only then broadcasts the message for order-independent observers (<code>NudgeService</code>, <code>ItemActivator</code>, <code>GridActorHitController</code>, <code>BalloonSpawner</code>, <code>SpeckField</code>, VFX). A direct (<code>DamageFlags.DirectHit</code>) pop also gives <code>BalloonSpawner</code> a chance to roll an extra "pop-spawn" balloon into the board, independent of the turn's own spawn wave. The board itself keeps settling during flight too — see "In-flight rebalancing" below.</p>
-<p><b>Phase 2 — Balance (pre-spawn)</b> When the projectile dies it publishes <code>ProjectileDestroyedMessage</code>. <code>BalloonSpawner</code> receives it and, once past the level's <code>FirstSpawnTurn</code> grace period (a few turns with no spawns at the start of each level), kicks off its spawn sequence — which opens with a <code>Balance(relocateRoamers: true)</code> pass consolidating existing balloons upward before any new lines arrive. Transit slots for in-progress balance animations are reserved in <code>BalancePathHolder</code>.</p>
-<p><b>Phase 3 — Spawn</b> New balloon lines are placed with a stagger delay between each. Spawn animations use <code>ComputePath</code> waypoints; the <code>BalancePathHolder</code> is consulted to detect conflicts with still-animating balance moves from Phase 2.</p>
-<p><b>Phase 4 — Post-spawn Balance</b> After all lines are spawned, <code>BalloonSpawner</code> publishes <code>BalanceBalloonsMessage</code>. <code>BalloonBalancer</code> runs again on the next frame to settle any gaps created by the fresh spawn (e.g. a balloon placed in a column that needed support from below).</p>
+<p>Two independent flows that share the grid: balls hitting balloons, and a timer bringing new balloon lines in. There is no "turn" any more: a line never waits for a shot to end, and several balls can be in flight at once.</p>
+<p><b>Hit</b> Any ball in flight bounces off walls. On each balloon contact <code>ProjectileView</code> hands the collision to the plain-C# <code>ProjectileHitResolver</code>, which calls <code>EvaluateHit</code> (state-mutating), embeds the outcome in <code>ActorHitMessage</code>, and routes it through <code>IHitDispatcher</code> (<code>Game/HitPipeline</code>). The pipeline runs the order-dependent stages synchronously and explicitly: <code>ScoreController</code> records streak/score first, then the owning <code>BalloonController</code> (resolved via <code>BalloonControllerRegistry</code>) pops/deflects, and only then broadcasts the message for order-independent observers (<code>NudgeService</code>, <code>ItemActivator</code>, <code>GridActorHitController</code>, <code>BalloonSpawner</code>, <code>SpeckField</code>, VFX). A direct (<code>DamageFlags.DirectHit</code>) pop also gives <code>BalloonSpawner</code> a chance to roll an extra "pop-spawn" balloon into the board, independent of the clock's lines. A ball's death (<code>ProjectileDestroyedMessage</code>) spawns nothing.</p>
+<p><b>Spawn clock</b> <code>SpawnClock</code> counts down scaled game time (2 s at level 1, shrinking per level to a floor, after a grace at each level start) and publishes <code>SpawnBalloonLineMessage(1)</code>. It holds while paused, off the <code>Game</code> screen, during a level-up, and while a lone doomed ball glides its last breath. One line per tick, however long the frame. <code>BalloonSpawner</code> handles each message with the synchronous <code>SpawnLine()</code>:</p>
+<ol type="1">
+<li><b>Pre-line balance</b> — <code>Balance()</code> consolidates existing balloons upward. On a wave's first line it is <code>Balance(atWaveStart: true)</code>, which also relocates roamers and refreshes the heavy-step budget. Transit slots for in-progress balance animations are reserved in <code>BalancePathHolder</code>.</li>
+<li><b>Spawn</b> — one line is placed. Spawn animations use <code>ComputePath</code> waypoints; the <code>BalancePathHolder</code> is consulted to detect conflicts with still-animating balance moves.</li>
+<li><b>Post-line balance</b> — <code>BalloonSpawner</code> publishes <code>BalanceBalloonsMessage</code>; <code>BalloonBalancer</code> runs again on the next frame to settle gaps the fresh line created.</li>
+</ol>
+<p>A <b>wave</b> is <code>LinesPerWave</code> (3) consecutive lines. The wave's last line publishes <code>ItemCheckMessage</code>, which is what the item cadence counts.</p>
+<p><b>Rebalance pulse</b> Independently of lines, <code>BalloonBalancer.Tick</code> pulses a <code>Balance()</code> every <code>FlightRebalanceInterval</code> all through play, so hits that open gaps get settled without waiting for the next line.</p>
 <h2><a class="anchor" id="autotoc_md110"></a>
 Guidance</h2>
-<p><b>Where to add behavior triggered by a balloon pop:</b> Subscribe to <code>ActorHitMessage</code> filtered by <code>Outcome == Pop</code>. Your subscriber runs in Phase 1 — synchronously, before the projectile dies, and <em>after</em> the pipeline's ordered stages (score recording and the owning balloon's reaction) have completed. If your behavior must run <em>before</em> the pop or interleave with scoring, it belongs in <code>HitPipeline</code> as an explicit stage, not on the bus. Never publish <code>ActorHitMessage</code> directly — route hits through <code>IHitDispatcher</code>.</p>
-<p><b>Where to add behavior triggered by turn end (projectile death):</b> Subscribe to <code>ProjectileDestroyedMessage</code>. This runs between Phase 1 and Phase 2.</p>
-<p><b>In-flight rebalancing:</b> Balance isn't confined to the turn boundary. <code>BalloonBalancer.Tick</code> pulses a full <code>Balance()</code> pass at <code>IBalloonsConfiguration.FlightRebalanceInterval</code> while a shot is airborne — gated on the projectile still being free, not on its last-shield glide, not paused, and only when <code>HasPossibleMove()</code> finds an actual gap to close. This keeps a long flight from leaving the board visibly unsettled for its whole duration, on top of the pre-spawn and post-spawn passes below.</p>
-<p><b>Ordering note:</b> <code>BalanceBalloonsMessage</code> is published by both <code>ProjectileView</code> (fallback — in case <code>BalloonSpawner</code> never gets to publish it) and <code>BalloonSpawner</code> (authoritative — after all lines are placed). <code>BalloonBalancer</code> debounces redundant publishes via a one-frame <code>UniTask.Yield</code> delay. </p>
+<p><b>Where to add behavior triggered by a balloon pop:</b> Subscribe to <code>ActorHitMessage</code> filtered by <code>Outcome == Pop</code>. Your subscriber runs synchronously, before the projectile dies, and <em>after</em> the pipeline's ordered stages (score recording and the owning balloon's reaction) have completed. If your behavior must run <em>before</em> the pop or interleave with scoring, it belongs in <code>HitPipeline</code> as an explicit stage, not on the bus. Never publish <code>ActorHitMessage</code> directly — route hits through <code>IHitDispatcher</code>.</p>
+<p><b>Where to add behavior triggered by a ball's death:</b> Subscribe to <code>ProjectileDestroyedMessage</code>. It says nothing about the board: lines come from the clock, so do not hang spawning or board-settling work on it.</p>
+<p><b>Where to add behavior triggered by a new line:</b> Subscribe to <code>BalanceBalloonsMessage</code> for "the grid just got a line and needs settling", or to <code>ItemCheckMessage</code> for once-per-wave work over the new balloons.</p>
+<p><b>Rebalancing:</b> Balance isn't tied to a line. <code>BalloonBalancer.Tick</code> pulses a full <code>Balance()</code> pass at <code>IBalloonsConfiguration.FlightRebalanceInterval</code> all through play — not paused, not while a lone doomed ball glides, and only when <code>HasPossibleMove()</code> finds an actual gap to close — on top of the pre-line and post-line passes above. <code>SecondsUntilNextPulse</code> exposes the pulse timer to the shot solver.</p>
+<p><b>Ordering note:</b> <code>BalanceBalloonsMessage</code> is published by both <code>ProjectileView</code> (fallback — in case <code>BalloonSpawner</code> never gets to publish it) and <code>BalloonSpawner</code> (authoritative — after each line is placed). <code>BalloonBalancer</code> debounces redundant publishes via a one-frame <code>UniTask.Yield</code> delay. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->

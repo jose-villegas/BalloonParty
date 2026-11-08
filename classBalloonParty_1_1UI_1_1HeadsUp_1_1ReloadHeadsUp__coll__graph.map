@@ -1,0 +1,15 @@
+<map id="BalloonParty.UI.HeadsUp.ReloadHeadsUp" name="BalloonParty.UI.HeadsUp.ReloadHeadsUp">
+<area shape="rect" id="Node000001" title="Writes a small &quot;+1&quot; by the cannon each time its next ball is ready (ThrowerReadyMessage),..." alt="" coords="808,69,995,109"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,38,129,63"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="137,33,153,31,304,13,422,4,540,6,691,23,777,42,851,67,849,72,775,47,690,28,540,11,422,9,304,19,154,36,137,38"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html" title="One short handwritten line on the canvas: written on in pencil where it&#39;s asked for,..." alt="" coords="490,37,677,77"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="143,49,490,53,490,59,143,54"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html" title="Writes a TMP_Text on left to right as if by a pencil: a soft reveal edge, slanted forward,..." alt="" coords="179,88,365,128"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="127,64,201,85,199,90,126,70"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="690,65,808,77,808,83,690,71"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="379,92,452,81,489,74,490,80,452,87,380,98"/>
+<area shape="rect" id="Node000005" href="$structBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpStyle.html" title="How one kind of heads&#45;up looks, so each kind reads at a glance: its colour, its size against the line..." alt="" coords="490,101,677,141"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="690,108,808,96,808,101,690,113"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html" title="Where a shot leaves from, readable outside the thrower&#39;s own scope." alt="" coords="476,165,691,205"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="667,159,783,124,838,107,839,112,785,129,668,164"/>
+</map>

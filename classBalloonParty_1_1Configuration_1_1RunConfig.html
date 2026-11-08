@@ -126,23 +126,35 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1RunConfig.html',
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Configuration_1_1RunConfig__coll__graph.svg" width="100%" height="424"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Configuration_1_1RunConfig__coll__graph.svg" width="100%" height="520"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a7239d9778a56909153ecea410725e7e5" id="r_a7239d9778a56909153ecea410725e7e5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7239d9778a56909153ecea410725e7e5">DeflectChainShieldEvery</a><code> [get]</code></td></tr>
+<tr class="memdesc:a7239d9778a56909153ecea410725e7e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">A ball deflecting off balloons this many times in a row without touching a wall earns a shield, and again at each multiple; 0 = never.  <br /></td></tr>
+<tr class="separator:a7239d9778a56909153ecea410725e7e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4df57b1ea374fd488694d091c521576" id="r_ac4df57b1ea374fd488694d091c521576"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac4df57b1ea374fd488694d091c521576">LevelCompleteFlightGrace</a><code> [get]</code></td></tr>
+<tr class="memdesc:ac4df57b1ea374fd488694d091c521576"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unscaled seconds after the level-complete beat before balls still in flight are popped (force-destroyed; no new hits) so the level-up can present.  <br /></td></tr>
+<tr class="separator:ac4df57b1ea374fd488694d091c521576"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9790d7253d70d56dcb22239ce843acd8" id="r_a9790d7253d70d56dcb22239ce843acd8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9790d7253d70d56dcb22239ce843acd8">LevelCompleteRampUpDuration</a><code> [get]</code></td></tr>
 <tr class="memdesc:a9790d7253d70d56dcb22239ce843acd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds over which timeScale ramps from 1 to <a class="el" href="#a2514e84597164e4525c997eafbfec087" title="Peak timeScale during the post-flight ramp-up (e.g. 2 = double speed).">LevelCompleteRampUpScale</a> after the completing flight ends.  <br /></td></tr>
 <tr class="separator:a9790d7253d70d56dcb22239ce843acd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2514e84597164e4525c997eafbfec087" id="r_a2514e84597164e4525c997eafbfec087"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2514e84597164e4525c997eafbfec087">LevelCompleteRampUpScale</a><code> [get]</code></td></tr>
 <tr class="memdesc:a2514e84597164e4525c997eafbfec087"><td class="mdescLeft">&#160;</td><td class="mdescRight">Peak timeScale during the post-flight ramp-up (e.g. 2 = double speed).  <br /></td></tr>
 <tr class="separator:a2514e84597164e4525c997eafbfec087"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23ee9f729e6b3af69f748b071de23f0b" id="r_a23ee9f729e6b3af69f748b071de23f0b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a23ee9f729e6b3af69f748b071de23f0b">LevelUpHeartRefill</a><code> [get]</code></td></tr>
+<tr class="memdesc:a23ee9f729e6b3af69f748b071de23f0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hearts given back at each level-up, never past <a class="el" href="#addac5244db6c7a4bf4b1db1a0f74b9d3">StartingHitPoints</a>; set it to <a class="el" href="#addac5244db6c7a4bf4b1db1a0f74b9d3">StartingHitPoints</a> to refill to full, 0 for none.  <br /></td></tr>
+<tr class="separator:a23ee9f729e6b3af69f748b071de23f0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a978c69652a6c2acc182bcc1a91e63c5b" id="r_a978c69652a6c2acc182bcc1a91e63c5b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a978c69652a6c2acc182bcc1a91e63c5b">MaxRetries</a><code> [get]</code></td></tr>
-<tr class="memdesc:a978c69652a6c2acc182bcc1a91e63c5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many times the player may retry at the same level per run (0 = disabled).  <br /></td></tr>
+<tr class="memdesc:a978c69652a6c2acc182bcc1a91e63c5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many times the player may retry at the level reached, per run (0 or less = unlimited).  <br /></td></tr>
 <tr class="separator:a978c69652a6c2acc182bcc1a91e63c5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75b18b28468f1525e7992c521a12a095" id="r_a75b18b28468f1525e7992c521a12a095"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a75b18b28468f1525e7992c521a12a095">PlanShieldChains</a><code> [get]</code></td></tr>
 <tr class="memdesc:a75b18b28468f1525e7992c521a12a095"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether shields are placed along a flight the thrower can fly, rather than by the plain weighted draw.  <br /></td></tr>
 <tr class="separator:a75b18b28468f1525e7992c521a12a095"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00b23f79bdf559143f4d79ed1bd7015d" id="r_a00b23f79bdf559143f4d79ed1bd7015d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00b23f79bdf559143f4d79ed1bd7015d">RetriesBeforeAd</a><code> [get]</code></td></tr>
+<tr class="memdesc:a00b23f79bdf559143f4d79ed1bd7015d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free retries per run; every retry after them needs a rewarded ad (0 = retries never need one).  <br /></td></tr>
+<tr class="separator:a00b23f79bdf559143f4d79ed1bd7015d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b1be499fa794c0593c9832cb7c123da" id="r_a5b1be499fa794c0593c9832cb7c123da"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html">IShieldChainSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5b1be499fa794c0593c9832cb7c123da">ShieldChain</a><code> [get]</code></td></tr>
 <tr class="memdesc:a5b1be499fa794c0593c9832cb7c123da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tuning for that placement; unread while <a class="el" href="#a75b18b28468f1525e7992c521a12a095" title="Whether shields are placed along a flight the thrower can fly, rather than by the plain weighted draw...">PlanShieldChains</a> is off.  <br /></td></tr>
 <tr class="separator:a5b1be499fa794c0593c9832cb7c123da"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -151,25 +163,82 @@ Properties</h2></td></tr>
 <tr class="memitem:a20619052d65e82bbe6393341d202a7f4" id="r_a20619052d65e82bbe6393341d202a7f4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a20619052d65e82bbe6393341d202a7f4">StreakGrantsShields</a><code> [get]</code></td></tr>
 <tr class="memdesc:a20619052d65e82bbe6393341d202a7f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether continuing a colour streak grants a projectile shield.  <br /></td></tr>
 <tr class="separator:a20619052d65e82bbe6393341d202a7f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a158d1a410c7eebfb0011a1d177b79e99" id="r_a158d1a410c7eebfb0011a1d177b79e99"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html">IUpgradeSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a158d1a410c7eebfb0011a1d177b79e99">Upgrades</a><code> [get]</code></td></tr>
+<tr class="memdesc:a158d1a410c7eebfb0011a1d177b79e99"><td class="mdescLeft">&#160;</td><td class="mdescRight">The upgrade cards a level-up deals, and how often.  <br /></td></tr>
+<tr class="separator:a158d1a410c7eebfb0011a1d177b79e99"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:ade885c1cf15ff4287166f1daedc2bc75" id="r_ade885c1cf15ff4287166f1daedc2bc75"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade885c1cf15ff4287166f1daedc2bc75">_deflectChainShieldEvery</a> = 3</td></tr>
+<tr class="separator:ade885c1cf15ff4287166f1daedc2bc75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81c0733284f770883adfb7301a989498" id="r_a81c0733284f770883adfb7301a989498"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a81c0733284f770883adfb7301a989498">_levelCompleteFlightGrace</a> = 1f</td></tr>
+<tr class="separator:a81c0733284f770883adfb7301a989498"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a74406e2dd93188032564acde7c7bac79" id="r_a74406e2dd93188032564acde7c7bac79"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a74406e2dd93188032564acde7c7bac79">_levelCompleteRampUpDuration</a> = 1.5f</td></tr>
 <tr class="separator:a74406e2dd93188032564acde7c7bac79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4393bf941524d9903dfb7f689c9e94e" id="r_ae4393bf941524d9903dfb7f689c9e94e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae4393bf941524d9903dfb7f689c9e94e">_levelCompleteRampUpScale</a> = 2f</td></tr>
 <tr class="separator:ae4393bf941524d9903dfb7f689c9e94e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6775e28253dde78cdc98eb824d93df26" id="r_a6775e28253dde78cdc98eb824d93df26"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6775e28253dde78cdc98eb824d93df26">_maxRetries</a> = 1</td></tr>
+<tr class="memitem:a2b8cb534bf794522e209d36bfee9c8dc" id="r_a2b8cb534bf794522e209d36bfee9c8dc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b8cb534bf794522e209d36bfee9c8dc">_levelUpHeartRefill</a> = 1</td></tr>
+<tr class="separator:a2b8cb534bf794522e209d36bfee9c8dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6775e28253dde78cdc98eb824d93df26" id="r_a6775e28253dde78cdc98eb824d93df26"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6775e28253dde78cdc98eb824d93df26">_maxRetries</a></td></tr>
 <tr class="separator:a6775e28253dde78cdc98eb824d93df26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21f5cd21d0f79df92aac2335fa3c6c4b" id="r_a21f5cd21d0f79df92aac2335fa3c6c4b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a21f5cd21d0f79df92aac2335fa3c6c4b">_planShieldChains</a> = true</td></tr>
 <tr class="separator:a21f5cd21d0f79df92aac2335fa3c6c4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4015844e08520a0689b0b7d61edbba2" id="r_aa4015844e08520a0689b0b7d61edbba2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa4015844e08520a0689b0b7d61edbba2">_retriesBeforeAd</a></td></tr>
+<tr class="separator:aa4015844e08520a0689b0b7d61edbba2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af08f6b81da67e57dc0492f77ae4e7f07" id="r_af08f6b81da67e57dc0492f77ae4e7f07"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html">ShieldChainSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af08f6b81da67e57dc0492f77ae4e7f07">_shieldChain</a> = new()</td></tr>
 <tr class="separator:af08f6b81da67e57dc0492f77ae4e7f07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7543729b240eb6945c720ed60d3c7f9" id="r_af7543729b240eb6945c720ed60d3c7f9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af7543729b240eb6945c720ed60d3c7f9">_startingHitPoints</a> = 3</td></tr>
 <tr class="separator:af7543729b240eb6945c720ed60d3c7f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e3fc3f305c7909e51035a8305a48b37" id="r_a4e3fc3f305c7909e51035a8305a48b37"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e3fc3f305c7909e51035a8305a48b37">_streakGrantsShields</a> = true</td></tr>
 <tr class="separator:a4e3fc3f305c7909e51035a8305a48b37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8186322911107e64ce022bbc20b48dce" id="r_a8186322911107e64ce022bbc20b48dce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1UpgradeSettings.html">UpgradeSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8186322911107e64ce022bbc20b48dce">_upgrades</a> = new()</td></tr>
+<tr class="separator:a8186322911107e64ce022bbc20b48dce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="ade885c1cf15ff4287166f1daedc2bc75" name="ade885c1cf15ff4287166f1daedc2bc75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade885c1cf15ff4287166f1daedc2bc75">&#9670;&#160;</a></span>_deflectChainShieldEvery</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.RunConfig._deflectChainShieldEvery = 3</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a81c0733284f770883adfb7301a989498" name="a81c0733284f770883adfb7301a989498"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81c0733284f770883adfb7301a989498">&#9670;&#160;</a></span>_levelCompleteFlightGrace</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.RunConfig._levelCompleteFlightGrace = 1f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a74406e2dd93188032564acde7c7bac79" name="a74406e2dd93188032564acde7c7bac79"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a74406e2dd93188032564acde7c7bac79">&#9670;&#160;</a></span>_levelCompleteRampUpDuration</h2>
 
@@ -214,6 +283,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a2b8cb534bf794522e209d36bfee9c8dc" name="a2b8cb534bf794522e209d36bfee9c8dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b8cb534bf794522e209d36bfee9c8dc">&#9670;&#160;</a></span>_levelUpHeartRefill</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.RunConfig._levelUpHeartRefill = 1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a6775e28253dde78cdc98eb824d93df26" name="a6775e28253dde78cdc98eb824d93df26"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6775e28253dde78cdc98eb824d93df26">&#9670;&#160;</a></span>_maxRetries</h2>
 
@@ -224,7 +315,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int BalloonParty.Configuration.RunConfig._maxRetries = 1</td>
+          <td class="memname">int BalloonParty.Configuration.RunConfig._maxRetries</td>
         </tr>
       </table>
   </td>
@@ -247,6 +338,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool BalloonParty.Configuration.RunConfig._planShieldChains = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa4015844e08520a0689b0b7d61edbba2" name="aa4015844e08520a0689b0b7d61edbba2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4015844e08520a0689b0b7d61edbba2">&#9670;&#160;</a></span>_retriesBeforeAd</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.RunConfig._retriesBeforeAd</td>
         </tr>
       </table>
   </td>
@@ -324,7 +437,83 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a8186322911107e64ce022bbc20b48dce" name="a8186322911107e64ce022bbc20b48dce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8186322911107e64ce022bbc20b48dce">&#9670;&#160;</a></span>_upgrades</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classBalloonParty_1_1Configuration_1_1UpgradeSettings.html">UpgradeSettings</a> BalloonParty.Configuration.RunConfig._upgrades = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="a7239d9778a56909153ecea410725e7e5" name="a7239d9778a56909153ecea410725e7e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7239d9778a56909153ecea410725e7e5">&#9670;&#160;</a></span>DeflectChainShieldEvery</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.RunConfig.DeflectChainShieldEvery</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A ball deflecting off balloons this many times in a row without touching a wall earns a shield, and again at each multiple; 0 = never. </p>
+<p>See DeflectChainRule. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#a5cb302725103f7d1c9e98a639f148994">BalloonParty.Shared.IRunConfig</a>.</p>
+
+</div>
+</div>
+<a id="ac4df57b1ea374fd488694d091c521576" name="ac4df57b1ea374fd488694d091c521576"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4df57b1ea374fd488694d091c521576">&#9670;&#160;</a></span>LevelCompleteFlightGrace</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.RunConfig.LevelCompleteFlightGrace</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Unscaled seconds after the level-complete beat before balls still in flight are popped (force-destroyed; no new hits) so the level-up can present. </p>
+<p>0 = wait for them to die. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#adb5b752e5b7a35c90daeb6dd3fabaefd">BalloonParty.Shared.IRunConfig</a>.</p>
+
+</div>
+</div>
 <a id="a9790d7253d70d56dcb22239ce843acd8" name="a9790d7253d70d56dcb22239ce843acd8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9790d7253d70d56dcb22239ce843acd8">&#9670;&#160;</a></span>LevelCompleteRampUpDuration</h2>
 
@@ -377,6 +566,32 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a23ee9f729e6b3af69f748b071de23f0b" name="a23ee9f729e6b3af69f748b071de23f0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23ee9f729e6b3af69f748b071de23f0b">&#9670;&#160;</a></span>LevelUpHeartRefill</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.RunConfig.LevelUpHeartRefill</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Hearts given back at each level-up, never past <a class="el" href="#addac5244db6c7a4bf4b1db1a0f74b9d3">StartingHitPoints</a>; set it to <a class="el" href="#addac5244db6c7a4bf4b1db1a0f74b9d3">StartingHitPoints</a> to refill to full, 0 for none. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#a78d39b94c7f2f378628a8930b4088d10">BalloonParty.Shared.IRunConfig</a>.</p>
+
+</div>
+</div>
 <a id="a978c69652a6c2acc182bcc1a91e63c5b" name="a978c69652a6c2acc182bcc1a91e63c5b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a978c69652a6c2acc182bcc1a91e63c5b">&#9670;&#160;</a></span>MaxRetries</h2>
 
@@ -397,7 +612,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>How many times the player may retry at the same level per run (0 = disabled). </p>
+<p>How many times the player may retry at the level reached, per run (0 or less = unlimited). </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#aff5e95c5f910f536e2097bb24245f350">BalloonParty.Shared.IRunConfig</a>.</p>
 
@@ -427,6 +642,32 @@ Private Attributes</h2></td></tr>
 <p>Off restores the previous random placement. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#a6f7b40d3bec0cb6a540c782bd7c3f421">BalloonParty.Shared.IRunConfig</a>.</p>
+
+</div>
+</div>
+<a id="a00b23f79bdf559143f4d79ed1bd7015d" name="a00b23f79bdf559143f4d79ed1bd7015d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00b23f79bdf559143f4d79ed1bd7015d">&#9670;&#160;</a></span>RetriesBeforeAd</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.RunConfig.RetriesBeforeAd</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Free retries per run; every retry after them needs a rewarded ad (0 = retries never need one). </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#a4a8bda1ef35cbd1e9f6a5fd1da5dfc6d">BalloonParty.Shared.IRunConfig</a>.</p>
 
 </div>
 </div>
@@ -504,6 +745,32 @@ Private Attributes</h2></td></tr>
 <p>Off makes items the only source of shields — a balance experiment; see <code><a class="el" href="Projectile_2README_8md.html">Projectile/README.md</a></code>. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#aacdc46db15c884ea8a3528f6d94ffb3c">BalloonParty.Shared.IRunConfig</a>.</p>
+
+</div>
+</div>
+<a id="a158d1a410c7eebfb0011a1d177b79e99" name="a158d1a410c7eebfb0011a1d177b79e99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a158d1a410c7eebfb0011a1d177b79e99">&#9670;&#160;</a></span>Upgrades</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html">IUpgradeSettings</a> BalloonParty.Configuration.RunConfig.Upgrades</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The upgrade cards a level-up deals, and how often. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#a68bce5c396bc43a97fbd4f20713b0826">BalloonParty.Shared.IRunConfig</a>.</p>
 
 </div>
 </div>

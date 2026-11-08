@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Item_1_1ItemAssigner =
 [
-    [ "ItemAssigner", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a04d8c1943c88155afd88d416bb9923da", null ],
+    [ "ItemAssigner", "classBalloonParty_1_1Item_1_1ItemAssigner.html#ad36c8068bae9311c138af793558443b3", null ],
     [ "AssignItems", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a467f9a5721e231e1cc089b5cd27173d8", null ],
     [ "BuildFan", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a8be026ce9d4a1d7bb776e18fe8dd3d11", null ],
     [ "CollectEligibleSlots", "classBalloonParty_1_1Item_1_1ItemAssigner.html#ab98b666d9d5d35c94a7e39dd8d83def0", null ],
@@ -8,7 +8,8 @@ var classBalloonParty_1_1Item_1_1ItemAssigner =
     [ "CountBalloonsWithItem", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a6e5066c1a2ab6a0e6bbaf4ccfd9bdff4", null ],
     [ "Dispose", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a39d8592e3b3e2e8187e658c22b042bbc", null ],
     [ "DropChainHostsAfterRemoval", "classBalloonParty_1_1Item_1_1ItemAssigner.html#acb6a55ee635c933f8d3b6638346be74f", null ],
-    [ "IsCadenceTurn", "classBalloonParty_1_1Item_1_1ItemAssigner.html#ac8ec4cdd994c8b0f2add2e443206d919", null ],
+    [ "ExtraItems", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a97376cf1cc705938d941a440e0edc695", null ],
+    [ "IsCadenceWave", "classBalloonParty_1_1Item_1_1ItemAssigner.html#aa44d5be45270094545a45f844a8940de", null ],
     [ "OnItemCheck", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a6b5d33d813e92ed1ec822c6cfc13af1f", null ],
     [ "PickWeightedIndex", "classBalloonParty_1_1Item_1_1ItemAssigner.html#ae0b94ffb5fb71ffd4599fe885d5f45d4", null ],
     [ "PlaceGuaranteedItems", "classBalloonParty_1_1Item_1_1ItemAssigner.html#aa99f70ee8f6049d2c94c09eea6329348", null ],
@@ -35,5 +36,6 @@ var classBalloonParty_1_1Item_1_1ItemAssigner =
     [ "_origin", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a382a07363d360f2c2f3cb879dab87964", null ],
     [ "_radii", "classBalloonParty_1_1Item_1_1ItemAssigner.html#ac9251be363dcf016b9e2a907a6d9e3fa", null ],
     [ "_runConfig", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a403a3a02a50546534428a031d5288e86", null ],
-    [ "_subscription", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a7dfae65abbb49fb0ed25a3f945a86976", null ]
+    [ "_subscription", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a7dfae65abbb49fb0ed25a3f945a86976", null ],
+    [ "_weapon", "classBalloonParty_1_1Item_1_1ItemAssigner.html#aaa975a5e40fc14869bf2687c73d1c7cc", null ]
 ];

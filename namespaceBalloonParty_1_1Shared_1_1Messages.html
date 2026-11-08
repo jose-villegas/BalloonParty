@@ -108,7 +108,8 @@ $(function(){initNavTree('namespaceBalloonParty_1_1Shared_1_1Messages.html','');
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Shared.Messages Namespace Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -127,11 +128,17 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BoardDepletedMessage.html">BoardDepletedMessage</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Broadcast when the last active balloon is organically destroyed during gameplay (not an administrative board-clear).  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1BoardDepletedMessage.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html">BonusCardDealtMessage</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A retry bought with a rewarded ad was dealt its bonus card, for that attempt only.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1DeflectChainMessage.html">DeflectChainMessage</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespaceBalloonParty_1_1Projectile.html">Projectile</a> deflected off a balloon for the <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1DeflectChainMessage.html#a30d8b146104fe0a30f0cb5110bd9058e">Count</a>th time in a row without touching a wall (from <a class="el" href="classBalloonParty_1_1Shared_1_1DeflectChainRule.html#ae92f1c49f53186cd38eef25d4f04548f" title="The deflect count from which a chain is worth announcing.">DeflectChainRule.MinChain</a> on).  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1DeflectChainMessage.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1EndRunRequestedMessage.html">EndRunRequestedMessage</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Requests ending the current run; keeps loss triggers out of <code>RunController</code>'s <code>IRunResettable</code> dependency graph.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1EndRunRequestedMessage.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ForceDestroyProjectileMessage.html">ForceDestroyProjectileMessage</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Commands the thrower to force-destroy the active projectile through its canonical death path (pierce discharge, state cleanup, <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage.html">ProjectileDestroyedMessage</a>).  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1ForceDestroyProjectileMessage.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Commands the thrower to force-destroy every shot in flight through its canonical death path (pierce discharge, state cleanup, <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage.html" title="A shot&#39;s flight ended.">ProjectileDestroyedMessage</a>).  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1ForceDestroyProjectileMessage.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1GameOverDismissedMessage.html">GameOverDismissedMessage</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The player dismissed the GameOver screen — the loss restore cinematic plays, then the run restarts.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1GameOverDismissedMessage.html#details">More...</a><br /></td></tr>
@@ -178,6 +185,7 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Published when a shot enters CRUISE — enough consecutive wall bounces with no balloon contact that it's clearly ping-ponging an empty corridor.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage.html">ProjectileDestroyedMessage</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A shot's flight ended.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedEndedMessage.html">ProjectileDoomedEndedMessage</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Published when the doomed moment ends — the shot died, or was reprieved (a moving balloon reopened a shield source in its path).  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedEndedMessage.html#details">More...</a><br /></td></tr>
@@ -203,9 +211,10 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html">ScoreTrailArrivedMessage</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html">ShieldGainedMessage</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespaceBalloonParty_1_1Projectile.html">Projectile</a> gained a shield from the actor at <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#a928aaee892766c709a9e8580c56a8c64">SlotIndex</a>, for the reason in <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#abf14e538aa64959354cd5c867ed400ff">Source</a>.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html">ShieldLostMessage</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html#ae26032fb2fbc2dffa6cd69b53987cdde">Position</a> is the bounce point (projectile's clamped wall position).  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespaceBalloonParty_1_1Projectile.html">Projectile</a> spent a shield; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html#ae26032fb2fbc2dffa6cd69b53987cdde">Position</a> is the bounce point (the projectile's clamped wall position).  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBalloonLineMessage.html">SpawnBalloonLineMessage</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -213,23 +222,63 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Asks the speck field to enable a burst of specks at a world position, using the profile that matches <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage.html#a79a6e4550b2123cbfcd6d836e471f78b">Source</a> — the request analogue of DisturbanceFieldService.Stamp.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html">SpeedTapMintedMessage</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A wall hit minted a speed tap.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A wall hit minted a speed tap for <a class="el" href="namespaceBalloonParty_1_1Projectile.html">Projectile</a>.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html">StreakChangedMessage</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Published whenever the colour pop-streak state changes — grew, switched colour, broke, or reset.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Published whenever a colour pop-streak changes — grew, switched colour, broke, or reset.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1StrikethroughArrivedMessage.html">StrikethroughArrivedMessage</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Published when a strikethrough heart trail finishes its path over a blocked spawn line.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1StrikethroughArrivedMessage.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ThrowerReadyMessage.html">ThrowerReadyMessage</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The held ball has reached the muzzle with a slot free: the next release fires it.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1ThrowerReadyMessage.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1TooltipMessage.html">TooltipMessage</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A short line for the on-screen tooltip, e.g. a level passed in play or a retry's bonus card.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1TooltipMessage.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1TransformCapturedMessage.html">TransformCapturedMessage</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage.html">WallHitMessage</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The projectile struck a wall.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespaceBalloonParty_1_1Projectile.html">Projectile</a> struck a wall.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html">WaveDamageMessage</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Published once per spawn wave when the line-based deficit causes heart loss.  <a href="structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a1a885ac3fd6e8e290b39752bfe7e21c5" id="r_a1a885ac3fd6e8e290b39752bfe7e21c5"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a885ac3fd6e8e290b39752bfe7e21c5">ShieldGainSource</a> { <a class="el" href="#a1a885ac3fd6e8e290b39752bfe7e21c5a7d74f3b92b19da5e606d737d339a9679">Item</a>
+, <a class="el" href="#a1a885ac3fd6e8e290b39752bfe7e21c5af4bb7b4d64f470dc5e5aca7aa1cfe624">Streak</a>
+, <a class="el" href="#a1a885ac3fd6e8e290b39752bfe7e21c5ae38f161f104780d651e487674b3130ac">Ricochet</a>
+ }</td></tr>
+<tr class="memdesc:a1a885ac3fd6e8e290b39752bfe7e21c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">What gave a ball a shield, so a reward can be told apart from a pickup where it's shown.  <a href="#a1a885ac3fd6e8e290b39752bfe7e21c5">More...</a><br /></td></tr>
+<tr class="separator:a1a885ac3fd6e8e290b39752bfe7e21c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="a1a885ac3fd6e8e290b39752bfe7e21c5" name="a1a885ac3fd6e8e290b39752bfe7e21c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a885ac3fd6e8e290b39752bfe7e21c5">&#9670;&#160;</a></span>ShieldGainSource</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#a1a885ac3fd6e8e290b39752bfe7e21c5">BalloonParty.Shared.Messages.ShieldGainSource</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>What gave a ball a shield, so a reward can be told apart from a pickup where it's shown. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a1a885ac3fd6e8e290b39752bfe7e21c5a7d74f3b92b19da5e606d737d339a9679" name="a1a885ac3fd6e8e290b39752bfe7e21c5a7d74f3b92b19da5e606d737d339a9679"></a>Item&#160;</td><td class="fielddoc"><p>A shield item on a popped balloon. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a1a885ac3fd6e8e290b39752bfe7e21c5af4bb7b4d64f470dc5e5aca7aa1cfe624" name="a1a885ac3fd6e8e290b39752bfe7e21c5af4bb7b4d64f470dc5e5aca7aa1cfe624"></a>Streak&#160;</td><td class="fielddoc"><p>A continued colour streak (<a class="el" href="classBalloonParty_1_1Shared_1_1StreakShieldRule.html" title="The one place that says when a continued colour streak pays a projectile shield.">StreakShieldRule</a>). </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a1a885ac3fd6e8e290b39752bfe7e21c5ae38f161f104780d651e487674b3130ac" name="a1a885ac3fd6e8e290b39752bfe7e21c5ae38f161f104780d651e487674b3130ac"></a>Ricochet&#160;</td><td class="fielddoc"><p>Deflects in a row without a wall (<a class="el" href="classBalloonParty_1_1Shared_1_1DeflectChainRule.html" title="When a run of deflects pays the ball a shield: a ball that banks off tough balloons again and again w...">DeflectChainRule</a>). </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

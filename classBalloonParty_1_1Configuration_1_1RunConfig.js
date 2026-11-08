@@ -1,17 +1,27 @@
 var classBalloonParty_1_1Configuration_1_1RunConfig =
 [
+    [ "_deflectChainShieldEvery", "classBalloonParty_1_1Configuration_1_1RunConfig.html#ade885c1cf15ff4287166f1daedc2bc75", null ],
+    [ "_levelCompleteFlightGrace", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a81c0733284f770883adfb7301a989498", null ],
     [ "_levelCompleteRampUpDuration", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a74406e2dd93188032564acde7c7bac79", null ],
     [ "_levelCompleteRampUpScale", "classBalloonParty_1_1Configuration_1_1RunConfig.html#ae4393bf941524d9903dfb7f689c9e94e", null ],
+    [ "_levelUpHeartRefill", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a2b8cb534bf794522e209d36bfee9c8dc", null ],
     [ "_maxRetries", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a6775e28253dde78cdc98eb824d93df26", null ],
     [ "_planShieldChains", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a21f5cd21d0f79df92aac2335fa3c6c4b", null ],
+    [ "_retriesBeforeAd", "classBalloonParty_1_1Configuration_1_1RunConfig.html#aa4015844e08520a0689b0b7d61edbba2", null ],
     [ "_shieldChain", "classBalloonParty_1_1Configuration_1_1RunConfig.html#af08f6b81da67e57dc0492f77ae4e7f07", null ],
     [ "_startingHitPoints", "classBalloonParty_1_1Configuration_1_1RunConfig.html#af7543729b240eb6945c720ed60d3c7f9", null ],
     [ "_streakGrantsShields", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a4e3fc3f305c7909e51035a8305a48b37", null ],
+    [ "_upgrades", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a8186322911107e64ce022bbc20b48dce", null ],
+    [ "DeflectChainShieldEvery", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a7239d9778a56909153ecea410725e7e5", null ],
+    [ "LevelCompleteFlightGrace", "classBalloonParty_1_1Configuration_1_1RunConfig.html#ac4df57b1ea374fd488694d091c521576", null ],
     [ "LevelCompleteRampUpDuration", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a9790d7253d70d56dcb22239ce843acd8", null ],
     [ "LevelCompleteRampUpScale", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a2514e84597164e4525c997eafbfec087", null ],
+    [ "LevelUpHeartRefill", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a23ee9f729e6b3af69f748b071de23f0b", null ],
     [ "MaxRetries", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a978c69652a6c2acc182bcc1a91e63c5b", null ],
     [ "PlanShieldChains", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a75b18b28468f1525e7992c521a12a095", null ],
+    [ "RetriesBeforeAd", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a00b23f79bdf559143f4d79ed1bd7015d", null ],
     [ "ShieldChain", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a5b1be499fa794c0593c9832cb7c123da", null ],
     [ "StartingHitPoints", "classBalloonParty_1_1Configuration_1_1RunConfig.html#addac5244db6c7a4bf4b1db1a0f74b9d3", null ],
-    [ "StreakGrantsShields", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a20619052d65e82bbe6393341d202a7f4", null ]
+    [ "StreakGrantsShields", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a20619052d65e82bbe6393341d202a7f4", null ],
+    [ "Upgrades", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a158d1a410c7eebfb0011a1d177b79e99", null ]
 ];

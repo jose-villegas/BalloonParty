@@ -1,0 +1,5 @@
+<map id="BalloonParty.Configuration.Level.GridActorContentEntry" name="BalloonParty.Configuration.Level.GridActorContentEntry">
+<area shape="rect" id="Node000001" title="A grid actor in the catalogue. Actors block the board, so they&#39;re paid from the threat budget." alt="" coords="5,93,212,133"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece.html" title="A catalogue entry the level generator can include in a level." alt="" coords="10,5,207,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,59,111,93,106,93,106,59"/>
+</map>

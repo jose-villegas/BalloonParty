@@ -1,17 +1,16 @@
 var classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer =
 [
     [ "RoamCandidate", "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html", "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate" ],
-    [ "BalloonBalancer", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#afcb4d79ee1d4bb887e4cc4369f3d32e1", null ],
+    [ "BalloonBalancer", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a257c92af8bf4ccc3e6a976c2dd55aae2", null ],
     [ "AnimatePaths", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a9beadd5ebf1d19dc39d7fa4866cdc59e", null ],
     [ "ApplyBalanceMoves", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a0740c78aa316d6f37f7b8585c8db7600", null ],
-    [ "Balance", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#ae51d5882fba66fdabb9cf51758df026d", null ],
+    [ "Balance", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a555a54f5d6618b767e98fd1f235fcafb", null ],
     [ "BalanceNextFrameAsync", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a7d6c38f58490e0bbde06bb26885d595b", null ],
     [ "CollectRestingSlots", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a3b6e0dafc21d5add44944754ddd12dd6", null ],
     [ "Dispose", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a58292c87979b78a1d819628be6b6db4a", null ],
     [ "FinalizeBalanceMove", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a476238f07fc7785aedd5dcf7d65aae63", null ],
     [ "FinalWaypointBuffer", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#ab5d708098897a4a77a6b630b08b7e593", null ],
     [ "HasPossibleMove", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#aceccef8949deaa7ec3c7f02e7f5ef447", null ],
-    [ "OnProjectileDestroyed", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#aa395bca81450c72924794f6ddb1c5f39", null ],
     [ "PolylineSqrLength", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#aa741bdd232c05b3082979e2f4dbc89f7", null ],
     [ "RecordPath", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#ad33e052b37f7847538c00c4ed2079143", null ],
     [ "ReleasePaths", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a48af30113fbf4ccd811f9c48fb358f4d", null ],
@@ -25,7 +24,6 @@ var classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer =
     [ "TickFlightRebalance", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a6acfb43e130dc7c212ce5926e50ead7b", null ],
     [ "TryRelievePressure", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#aaa1ba61e118579e39cdb5ac191ae3be4", null ],
     [ "WaypointBuffer", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a4b84d6c31bc0e2c3434c1aac7ebaa3a6", null ],
-    [ "_activeProjectile", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#ab824b61f73428b398da7f21f05e2d9e1", null ],
     [ "_balanceMoves", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a568826b33b92698efb377d981183d632", null ],
     [ "_balancePathHolder", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a80f79fe245a3f70664bdccc630d10f5d", null ],
     [ "_balancePlanner", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a436f925009cc84758eed56a7879f308e", null ],
@@ -42,8 +40,7 @@ var classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer =
     [ "_pauseService", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#affd772b43163ba728e96fe632085b9f9", null ],
     [ "_pressureMoves", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a950ba220625d939d585cac3bd98d9941", null ],
     [ "_pressurePropagation", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a1d226b478ba6b3980107c9f4d30d0af3", null ],
-    [ "_projectileDestroyedSubscriber", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#ac35741d7825de6606edbe9ad7cf501cb", null ],
-    [ "_projectileLoadedSubscriber", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a2d620b05fe51ca9078bffc248281e92b", null ],
+    [ "_projectiles", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a0405283c3ca289df39114c1ce6eef0cb", null ],
     [ "_restingSlots", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#afb37f7292de459b0b9bee842fdccdace", null ],
     [ "_roamers", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#adaef9f46d953a3f09e871c9e80b28760", null ],
     [ "_subscriber", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#ac4b1e3aa3edf6e31a4bfaa4955f3a67a", null ],
@@ -53,5 +50,6 @@ var classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer =
     [ "ByRoamOrder", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a4ac9b3fa306a76420b7796e2df71a948", null ],
     [ "DegenerateMoveSqrEpsilon", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a5a4070eaed08b0256a50e82c3dd99f29", null ],
     [ "Generation", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#aaf60042bdce13d2911f4b5851ae83d2a", null ],
-    [ "ResetOrder", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#aa8167aed53952e9703def461bb001018", null ]
+    [ "ResetOrder", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#aa8167aed53952e9703def461bb001018", null ],
+    [ "SecondsUntilNextPulse", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a0baf34e32201ad77440d44ccb6e10f78", null ]
 ];

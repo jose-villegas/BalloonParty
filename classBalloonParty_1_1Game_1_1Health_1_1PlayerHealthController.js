@@ -4,6 +4,7 @@ var classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController =
     [ "ClampedStartingHitPoints", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#aab0a3fcc4229f6ac990fd84ee8ebb9c9", null ],
     [ "Damage", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a53f16f08a5726486f628853c3e1a6444", null ],
     [ "Dispose", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a13ca9962bfa3604103112910ae089b75", null ],
+    [ "Heal", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a0e0ac40e95366b8e51bde5c185817b60", null ],
     [ "ResetRun", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a31d41353205ba9fabcbc12f476f0d9cd", null ],
     [ "Start", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a96da60ecd4fede678346dd944948256e", null ],
     [ "_config", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#aa75c6a842194986d6c754bb730c52e3b", null ],

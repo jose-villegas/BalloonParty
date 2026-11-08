@@ -1,5 +1,5 @@
 <map id="BalloonParty.Game.Level.LevelDifficultyResolver" name="BalloonParty.Game.Level.LevelDifficultyResolver">
-<area shape="rect" id="Node000001" title="Resolves and caches the live per&#45;level difficulty mix, bridging range weights onto the balloon/item c..." alt="" coords="797,297,985,337"/>
+<area shape="rect" id="Node000001" title="Resolves and caches the live per&#45;level difficulty mix (generated, or a debug preset),..." alt="" coords="797,297,985,337"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="484,5,569,31"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="583,23,642,39,715,72,743,93,775,123,812,167,843,215,884,295,879,298,839,218,808,170,771,126,740,97,712,77,640,45,582,28"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="477,55,576,80"/>
@@ -10,7 +10,7 @@
 <area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="616,210,642,218,751,257,844,294,842,299,749,262,640,223,614,215"/>
 <area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelThresholds.html" title="The per&#45;level score goal each colour must reach while playing that level — answers for any level,..." alt="" coords="433,233,621,273"/>
 <area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="635,269,797,298,796,303,634,274"/>
-<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html" title="Level&#45;range difficulty authoring; read by LevelDifficultyResolver (and by the balloon spawner&#39;s pool ..." alt="" coords="412,297,641,337"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html" title="Level pacing; read by LevelDifficultyResolver (and by the balloon spawner&#39;s pool prewarm,..." alt="" coords="412,297,641,337"/>
 <area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="655,314,797,314,797,319,655,319"/>
 <area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html" title=" " alt="" coords="412,361,641,401"/>
 <area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="655,356,796,331,797,336,656,361"/>

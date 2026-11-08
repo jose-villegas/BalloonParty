@@ -1,0 +1,21 @@
+<map id="BalloonParty.Balloon.Spawner.BoardFill" name="BalloonParty.Balloon.Spawner.BoardFill">
+<area shape="rect" id="Node000001" title="How full the board is, in balloons: against the level&#39;s starting fill (its board lines across every c..." alt="" coords="985,97,1204,137"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1IBoardFill.html" title=" " alt="" coords="627,33,845,73"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="859,73,985,95,985,100,858,78"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="649,97,823,137"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="836,115,985,115,985,120,836,120"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="267,5,440,45"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="454,42,603,76,668,95,666,100,602,81,453,48"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,5,212,45"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="226,23,267,23,267,28,226,28"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="261,69,445,109"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="460,94,649,108,649,114,459,100"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="264,133,443,173"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="456,141,649,123,649,128,456,146"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,133,198,173"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="212,151,264,151,264,156,212,156"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="264,197,443,237"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="456,199,528,183,602,160,626,147,658,135,660,140,628,152,604,165,530,188,457,204"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html" title="Single read surface for the live per&#45;level difficulty mix; never read ILevelPacingConfiguration direc..." alt="" coords="642,161,830,201"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="844,160,985,134,986,139,844,165"/>
+</map>

@@ -120,8 +120,8 @@ $(function(){initNavTree('structBalloonParty_1_1Shared_1_1Messages_1_1PierceDisc
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a262871388d510c54a82eed12d92bf09a" id="r_a262871388d510c54a82eed12d92bf09a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a262871388d510c54a82eed12d92bf09a">PierceDischargedMessage</a> (Vector3 center, int toughCount, bool isRainbow, Vector3 direction, Vector3 position)</td></tr>
-<tr class="separator:a262871388d510c54a82eed12d92bf09a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a921563a8d38f079afdb45510b994b95a" id="r_a921563a8d38f079afdb45510b994b95a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a921563a8d38f079afdb45510b994b95a">PierceDischargedMessage</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> projectile, Vector3 center, int toughCount, bool isRainbow, Vector3 direction, Vector3 position)</td></tr>
+<tr class="separator:a921563a8d38f079afdb45510b994b95a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -133,15 +133,17 @@ Properties</h2></td></tr>
 <tr class="separator:a1a842ed960c853255e2c0964c3b30311"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c41f0b587b4ced50911dec14818319f" id="r_a1c41f0b587b4ced50911dec14818319f"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1c41f0b587b4ced50911dec14818319f">Position</a><code> [get]</code></td></tr>
 <tr class="separator:a1c41f0b587b4ced50911dec14818319f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbcbfefc237f61153d7b20a01f77d345" id="r_acbcbfefc237f61153d7b20a01f77d345"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acbcbfefc237f61153d7b20a01f77d345">Projectile</a><code> [get]</code></td></tr>
+<tr class="separator:acbcbfefc237f61153d7b20a01f77d345"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08631a9a3e2f2eb27daecc251470deaf" id="r_a08631a9a3e2f2eb27daecc251470deaf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a08631a9a3e2f2eb27daecc251470deaf">ToughCount</a><code> [get]</code></td></tr>
 <tr class="separator:a08631a9a3e2f2eb27daecc251470deaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Published when a piercing shot discharges — shattering the toughs it plowed through. </p>
-<p>Carries the centre of the plowed line (<a class="el" href="#a645e1f948ea02ea2afb32bb85ee89844">Center</a>, used to shape the rainbow bloom's radius), how many toughs it ate (the charge), whether the shot was rainbow, the direction the shot is travelling as of that moment (already reflected off the wall it just discharged at — see <code>ProjectileHitResolver.DischargePending</code>, called after the bounce), and where the shot actually is right now (<a class="el" href="#a1c41f0b587b4ced50911dec14818319f">Position</a> — the wall-contact point, NOT <a class="el" href="#a645e1f948ea02ea2afb32bb85ee89844">Center</a>, which sits back along the plowed line the shot has already left behind). A rainbow bloom must anchor its "don't paint what I'm about to re-enter" test on <a class="el" href="#a1c41f0b587b4ced50911dec14818319f">Position</a>: the shot resumes travel from there, not from the plowed line's centre. <a class="el" href="#a01c3c80e94b9e8ab105cebbcfe371766">Direction</a> and <a class="el" href="#a1c41f0b587b4ced50911dec14818319f">Position</a> are both required (no defaulting) — an anti-exploit guard that silently falls back to "exclude nothing" on a forgotten argument is worse than a compile error. The discharge feel subscribes: the rainbow bloom, and (later) lights/shockwave. </p>
+<p>Carries the centre of the plowed line (<a class="el" href="#a645e1f948ea02ea2afb32bb85ee89844">Center</a>, used to shape the rainbow bloom's radius), how many toughs it ate (the charge), whether the shot was rainbow, the direction the shot is travelling as of that moment (already reflected off the wall it just discharged at — see <code>ProjectileHitResolver.DischargePending</code>, called after the bounce), and where the shot actually is right now (<a class="el" href="#a1c41f0b587b4ced50911dec14818319f">Position</a> — the wall-contact point, NOT <a class="el" href="#a645e1f948ea02ea2afb32bb85ee89844">Center</a>, which sits back along the plowed line the shot has already left behind). A rainbow bloom must anchor its "don't paint what I'm about to re-enter" test on <a class="el" href="#a1c41f0b587b4ced50911dec14818319f">Position</a>: the shot resumes travel from there, not from the plowed line's centre. <a class="el" href="#a01c3c80e94b9e8ab105cebbcfe371766">Direction</a> and <a class="el" href="#a1c41f0b587b4ced50911dec14818319f">Position</a> are both required (no defaulting) — an anti-exploit guard that silently falls back to "exclude nothing" on a forgotten argument is worse than a compile error. The discharge feel subscribes: the rainbow bloom, and (later) lights/shockwave. <a class="el" href="namespaceBalloonParty_1_1Projectile.html">Projectile</a> is the shot that discharged. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a262871388d510c54a82eed12d92bf09a" name="a262871388d510c54a82eed12d92bf09a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a262871388d510c54a82eed12d92bf09a">&#9670;&#160;</a></span>PierceDischargedMessage()</h2>
+<a id="a921563a8d38f079afdb45510b994b95a" name="a921563a8d38f079afdb45510b994b95a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a921563a8d38f079afdb45510b994b95a">&#9670;&#160;</a></span>PierceDischargedMessage()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -149,6 +151,11 @@ Properties</h2></td></tr>
         <tr>
           <td class="memname">BalloonParty.Shared.Messages.PierceDischargedMessage.PierceDischargedMessage </td>
           <td>(</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a></td>          <td class="paramname"><span class="paramname"><em>projectile</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>center</em></span>, </td>
         </tr>
         <tr>
@@ -254,6 +261,28 @@ Properties</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">Vector3 BalloonParty.Shared.Messages.PierceDischargedMessage.Position</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acbcbfefc237f61153d7b20a01f77d345" name="acbcbfefc237f61153d7b20a01f77d345"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbcbfefc237f61153d7b20a01f77d345">&#9670;&#160;</a></span>Projectile</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> BalloonParty.Shared.Messages.PierceDischargedMessage.Projectile</td>
         </tr>
       </table>
   </td>

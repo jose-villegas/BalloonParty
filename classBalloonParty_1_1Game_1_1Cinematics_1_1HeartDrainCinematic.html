@@ -120,14 +120,14 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1Cinematics_1_1HeartDrainC
 </div><!--header-->
 <div class="contents">
 
-<p>Begins on the first wave-damage event, follows the heart trail in slow-mo, and ends when the pile drains or the run ends.  
+<p>Begins on a wave-damage event, follows the heart trail in slow-mo, and ends when the pile drains or the run ends.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Game.Cinematics.HeartDrainCinematic:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Game_1_1Cinematics_1_1HeartDrainCinematic__inherit__graph.svg" width="238" height="212"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Game_1_1Cinematics_1_1HeartDrainCinematic__inherit__graph.svg" width="659" height="132"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Game.Cinematics.HeartDrainCinematic:</div>
@@ -141,6 +141,15 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1Cinematics_1_1HeartDrainC
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a21911b313d1683912c4c9131151398da" id="r_a21911b313d1683912c4c9131151398da"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematicProducer.html#a21911b313d1683912c4c9131151398da">Dispose</a> ()</td></tr>
 <tr class="separator:a21911b313d1683912c4c9131151398da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a703fc8f6533b96d7c677b02fa450b42f" id="r_a703fc8f6533b96d7c677b02fa450b42f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a703fc8f6533b96d7c677b02fa450b42f">ResetRun</a> (int generation)</td></tr>
+<tr class="memdesc:a703fc8f6533b96d7c677b02fa450b42f"><td class="mdescLeft">&#160;</td><td class="mdescRight"><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">generation</td><td>Monotonically increasing run number; frame-deferred async can compare it to drop stale work.</td></tr>
+  </table>
+  </dd>
+</dl>
+ <br /></td></tr>
+<tr class="separator:a703fc8f6533b96d7c677b02fa450b42f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89d22b2f61182cc6cbdc3245c27b5978" id="r_a89d22b2f61182cc6cbdc3245c27b5978"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematicProducer.html#a89d22b2f61182cc6cbdc3245c27b5978">Start</a> ()</td></tr>
 <tr class="separator:a89d22b2f61182cc6cbdc3245c27b5978"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -171,6 +180,8 @@ Package Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:abb0a71d82fd5ac1aacd1d09721b75d87" id="r_abb0a71d82fd5ac1aacd1d09721b75d87"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abb0a71d82fd5ac1aacd1d09721b75d87">ResetOrder</a><code> [get]</code></td></tr>
+<tr class="separator:abb0a71d82fd5ac1aacd1d09721b75d87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac69a65a8ed901482ed9923c94b993186" id="r_ac69a65a8ed901482ed9923c94b993186"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html">CameraRigCinematic</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematicProducer.html#ac69a65a8ed901482ed9923c94b993186">Runner</a><code> [get]</code></td></tr>
 <tr class="separator:ac69a65a8ed901482ed9923c94b993186"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -183,6 +194,12 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a09bef8278c774b5d971c2ccaab29df88" id="r_a09bef8278c774b5d971c2ccaab29df88"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a09bef8278c774b5d971c2ccaab29df88">_lastBeganAt</a> = float.NegativeInfinity</td></tr>
+<tr class="separator:a09bef8278c774b5d971c2ccaab29df88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af08c0af0f0a9be11d07b0a9742d118c2" id="r_af08c0af0f0a9be11d07b0a9742d118c2"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af08c0af0f0a9be11d07b0a9742d118c2">_maxSeconds</a></td></tr>
+<tr class="separator:af08c0af0f0a9be11d07b0a9742d118c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5e4637b298956c4f4cfb645fb54270d" id="r_ae5e4637b298956c4f4cfb645fb54270d"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae5e4637b298956c4f4cfb645fb54270d">_minGapSeconds</a></td></tr>
+<tr class="separator:ae5e4637b298956c4f4cfb645fb54270d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a050162049382e6d81f0a35308c81382a" id="r_a050162049382e6d81f0a35308c81382a"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html">RejectedBalloonEffect</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a050162049382e6d81f0a35308c81382a">_overflow</a></td></tr>
 <tr class="separator:a050162049382e6d81f0a35308c81382a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd4bf8f3b0997fb44a6da1b1430daf35" id="r_afd4bf8f3b0997fb44a6da1b1430daf35"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html">CameraRigCinematic</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematicProducer.html#afd4bf8f3b0997fb44a6da1b1430daf35">_runner</a></td></tr>
@@ -195,7 +212,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a5e5b0c72ebe92a871dbdf262752889fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Begins on the first wave-damage event, follows the heart trail in slow-mo, and ends when the pile drains or the run ends. </p>
+<div class="textblock"><p>Begins on a wave-damage event, follows the heart trail in slow-mo, and ends when the pile drains or the run ends. </p>
+<p>At most one per <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Cinematics_1_1ICinematicsSettings.html#a3098f6fef4c88e6170dcbdb90698edb0" title="Least real time between two heart-drain cinematics.">ICinematicsSettings.HeartDrainMinGapSeconds</a>: with lines on a clock a full board loses hearts every few seconds, and a camera move each time would take the game away from the player. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="adf72ef7b4539c5169ecc16d20af8e804" name="adf72ef7b4539c5169ecc16d20af8e804"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adf72ef7b4539c5169ecc16d20af8e804">&#9670;&#160;</a></span>HeartDrainCinematic()</h2>
@@ -379,6 +397,33 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a703fc8f6533b96d7c677b02fa450b42f" name="a703fc8f6533b96d7c677b02fa450b42f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a703fc8f6533b96d7c677b02fa450b42f">&#9670;&#160;</a></span>ResetRun()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Game.Cinematics.HeartDrainCinematic.ResetRun </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>generation</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">generation</td><td>Monotonically increasing run number; frame-deferred async can compare it to drop stale work.</td></tr>
+  </table>
+  </dd>
+</dl>
+</p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html#aec1cf0f6798b207b14f85f1fce54e2dd">BalloonParty.Game.Run.IRunResettable</a>.</p>
+
+</div>
+</div>
 <a id="af5afd098480c0bf5566faac3202a25f0" name="af5afd098480c0bf5566faac3202a25f0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af5afd098480c0bf5566faac3202a25f0">&#9670;&#160;</a></span>ShouldEnd()</h2>
 
@@ -430,6 +475,72 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a09bef8278c774b5d971c2ccaab29df88" name="a09bef8278c774b5d971c2ccaab29df88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09bef8278c774b5d971c2ccaab29df88">&#9670;&#160;</a></span>_lastBeganAt</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Game.Cinematics.HeartDrainCinematic._lastBeganAt = float.NegativeInfinity</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af08c0af0f0a9be11d07b0a9742d118c2" name="af08c0af0f0a9be11d07b0a9742d118c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af08c0af0f0a9be11d07b0a9742d118c2">&#9670;&#160;</a></span>_maxSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly float BalloonParty.Game.Cinematics.HeartDrainCinematic._maxSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae5e4637b298956c4f4cfb645fb54270d" name="ae5e4637b298956c4f4cfb645fb54270d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5e4637b298956c4f4cfb645fb54270d">&#9670;&#160;</a></span>_minGapSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly float BalloonParty.Game.Cinematics.HeartDrainCinematic._minGapSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a050162049382e6d81f0a35308c81382a" name="a050162049382e6d81f0a35308c81382a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a050162049382e6d81f0a35308c81382a">&#9670;&#160;</a></span>_overflow</h2>
 
@@ -629,6 +740,30 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="abb0a71d82fd5ac1aacd1d09721b75d87" name="abb0a71d82fd5ac1aacd1d09721b75d87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb0a71d82fd5ac1aacd1d09721b75d87">&#9670;&#160;</a></span>ResetOrder</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Game.Cinematics.HeartDrainCinematic.ResetOrder</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html#a347699f041bd2f73a8326aa24a351d81">BalloonParty.Game.Run.IRunResettable</a>.</p>
+
+</div>
+</div>
 <a id="ac69a65a8ed901482ed9923c94b993186" name="ac69a65a8ed901482ed9923c94b993186"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac69a65a8ed901482ed9923c94b993186">&#9670;&#160;</a></span>Runner</h2>
 

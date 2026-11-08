@@ -23,7 +23,7 @@
 <area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="212,201,271,201,271,206,212,206"/>
 <area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="271,247,450,287"/>
 <area shape="poly" id="edge12_Node000006_Node000012" title=" " alt="" coords="464,254,541,235,580,219,616,200,623,193,627,185,640,169,661,157,664,162,643,173,632,188,627,196,619,204,582,224,543,240,465,259"/>
-<area shape="rect" id="Node000013" href="$classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html" title="Shared reference to the current aim&#45;prediction trace, decoupled from direct access — mirrors BalloonP..." alt="" coords="658,183,833,223"/>
+<area shape="rect" id="Node000013" href="$classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html" title="Shared reference to the current aim&#45;prediction trace, decoupled from direct access." alt="" coords="658,183,833,223"/>
 <area shape="poly" id="edge13_Node000003_Node000013" title=" " alt="" coords="845,187,914,169,980,140,992,128,1004,116,1028,104,1031,108,1007,120,995,132,983,144,915,174,847,192"/>
 <area shape="rect" id="Node000014" href="$interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html" title=" " alt="" coords="1011,130,1202,170"/>
 <area shape="poly" id="edge14_Node000001_Node000014" title=" " alt="" coords="1215,136,1313,126,1313,131,1216,141"/>

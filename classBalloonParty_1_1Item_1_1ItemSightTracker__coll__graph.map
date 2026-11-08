@@ -20,6 +20,6 @@
 <area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="212,201,271,201,271,206,212,206"/>
 <area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="271,247,450,287"/>
 <area shape="poly" id="edge10_Node000005_Node000011" title=" " alt="" coords="463,255,541,236,580,221,616,201,623,194,627,186,631,178,640,169,661,157,663,162,643,173,636,181,632,189,627,197,619,205,582,226,543,241,464,260"/>
-<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html" title="Shared reference to the current aim&#45;prediction trace, decoupled from direct access — mirrors BalloonP..." alt="" coords="658,183,833,223"/>
+<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html" title="Shared reference to the current aim&#45;prediction trace, decoupled from direct access." alt="" coords="658,183,833,223"/>
 <area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="846,179,981,143,1049,121,1051,126,982,149,847,184"/>
 </map>

@@ -1,0 +1,28 @@
+var classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText =
+[
+    [ "ApplyReveal", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#aa9c5ba8859410e803168f0f28213ea25", null ],
+    [ "Awake", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a9c81c8543f2399da85b5197a4a3186b3", null ],
+    [ "CaptureSourceColors", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a20ea67138d2b4554131357e32b311038", null ],
+    [ "Complete", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#aa4fb850bd397a6f5598572fbad9fa174", null ],
+    [ "MoveTip", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a6595184a14759059d35def85d1ddce13", null ],
+    [ "OnDisable", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a5c964364eca3a95a38cffacb10406f5f", null ],
+    [ "OnEnable", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#af13849fa81bc6769d080569ee4955ec8", null ],
+    [ "OnTextChanged", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a7af21e9235efad93369576f4aa6f6b33", null ],
+    [ "SetTipVisible", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a2d0342c9e070d668c8b1b9e01ca71b87", null ],
+    [ "Update", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#aaa19b49e337e796724425155314f9f43", null ],
+    [ "Write", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a8c0a06f59f3eea5c14835f4bf7f9fe8c", null ],
+    [ "_edgeSoftness", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a5199f5608a008620d44fbb71cb8bf3cb", null ],
+    [ "_endHead", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#aee8b4b563bb0b0e7453656e6713c0775", null ],
+    [ "_head", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a412fab49af448228d0644c893ebd81a3", null ],
+    [ "_secondsPerCharacter", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a5f8cccf0b6fed8184566835ec7f42ac9", null ],
+    [ "_slant", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a52770f10b9b492381a81bf746dbb3ee7", null ],
+    [ "_sourceColors", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a6392cde9ad88154977e956fe9d8b87e6", null ],
+    [ "_startHead", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a06c830132f6abc4a5fe83eee7c6e9888", null ],
+    [ "_text", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a6e9dd7dca1b6815e21c1c441f3b2e391", null ],
+    [ "_tip", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#ac5e72e492fd54e90e3f37e3b8be14e04", null ],
+    [ "_tipHeight", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a2eab4f58ffb76f77dc233ae2731bda46", null ],
+    [ "_tipWobble", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a28d9acd2e95b987142e6fde15742a566", null ],
+    [ "_tipWobbleSpeed", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#adb7a9f16b5d71bafd396464a02315984", null ],
+    [ "_writing", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a82c54d5468a419a95d4dbd77e516d9f0", null ],
+    [ "Duration", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a521a9dca64ce36c48e02b09e8cacbee8", null ]
+];

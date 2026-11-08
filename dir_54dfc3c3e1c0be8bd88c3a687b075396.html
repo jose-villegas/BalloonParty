@@ -126,28 +126,33 @@ Files</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IFlightStats_8cs.html">IFlightStats.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IFlightStatsSource_8cs.html">IFlightStatsSource.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IFlightStatsWriter_8cs.html">IFlightStatsWriter.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<p>Owns the per-shot boundary and the counts scoped to it. A <b>gameplay</b> service, not part of the telemetry subsystem — audio depends on it, so making it telemetry's would put a shipping feature downstream of metrics.</p>
+<p>Owns the per-ball boundary and the counts scoped to each ball. A <b>gameplay</b> service, not part of the telemetry subsystem — audio depends on it, so making it telemetry's would put a shipping feature downstream of metrics.</p>
 <h1><a class="anchor" id="autotoc_md183"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">File   </th><th class="markdownTableHeadNone">What it does    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>IFlightScope</code>   </td><td class="markdownTableBodyNone">The shot's boundary as two reactive windows plus <code>FlightIndex</code>. <code>IsLoaded</code> spans <code>[Loaded, Destroyed)</code> — the whole shot including aiming; <code>IsAirborne</code> spans <code>[Fired, Destroyed)</code>    </td></tr>
+<td class="markdownTableBodyNone"><code>IFlightScope</code>   </td><td class="markdownTableBodyNone">The boundary as one reactive window: <code>IsAirborne</code> is true while any ball is in <code>[Fired, Destroyed)</code>. It is an "any ball" flag, not one ball's state. (There is no "loaded" flag: the thrower always holds a ball, so it would never be false)    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>IFlightStats</code>   </td><td class="markdownTableBodyNone">What happened this flight: pops and deflects per <code>BalloonType</code>, pierce discharges, wall bounces. Zeroed when the next projectile loads    </td></tr>
+<td class="markdownTableBodyNone"><code>IFlightStats</code>   </td><td class="markdownTableBodyNone">What happened to one ball: pops and deflects per <code>BalloonType</code>, pierce discharges, wall bounces    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>IFlightStatsWriter</code>   </td><td class="markdownTableBodyNone">The write half, segregated so no reader can mutate. <code>HitPipeline</code> is the only caller    </td></tr>
+<td class="markdownTableBodyNone"><code>IFlightStatsSource</code>   </td><td class="markdownTableBodyNone"><code>Of(ball)</code> returns that ball's <code>IFlightStats</code>. A ball's stats stay readable through its own <code>ProjectileDestroyedMessage</code>; an unknown or null ball reads as all zeroes    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>FlightStatsService</code>   </td><td class="markdownTableBodyNone">Implements all three. Plain C#, <code>IStartable</code>/<code>IDisposable</code>   </td></tr>
+<td class="markdownTableBodyNone"><code>IFlightStatsWriter</code>   </td><td class="markdownTableBodyNone">The write half, segregated so no reader can mutate. Each write names the ball it counts for. <code>HitPipeline</code> is the only caller of the hit counts    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>FlightStatsService</code>   </td><td class="markdownTableBodyNone">Implements all four. Plain C#, <code>IStartable</code>/<code>IDisposable</code>   </td></tr>
 </table>
+<p>Several balls can exist at once (up to <code>MaxBallsInFlight</code> fly at once), so a reader never asks "the flight's" stats. It takes the ball its message carries (<code>message.Projectile</code>, or <code>DamageContext</code>'s ball) and calls <code>Of(ball)</code>. Stats are created when the ball loads and dropped when <code>IProjectileRegistry.Retired</code> fires for it, which is <em>after</em> its Destroyed dispatch (see the Land/Retire rule in <code><a class="el" href="Projectile_2README_8md.html">Projectile/README.md</a></code>).</p>
 <h1><a class="anchor" id="autotoc_md184"></a>
 Which window to gate on</h1>
-<p><code>IsAirborne</code> is almost always the one you want for effects — ducking, time-scale, anything that should stop when the shot dies. <code>IsLoaded</code> stays true while the player is <em>aiming</em>, so gating a duck on it holds the effect permanently between shots. <code>IsLoaded</code> exists because per-flight counts are scoped to it: they reset on load, not on fire.</p>
+<p><code>IsAirborne</code> is the one to use for effects — ducking, time-scale, anything that should stop when the last shot dies. A ball's counts start at its load, not at its fire, but the scope exposes no flag for that: the thrower always holds a ball, so such a flag would be constant.</p>
 <h1><a class="anchor" id="autotoc_md185"></a>
 The publisher counts, then publishes</h1>
 <p>Every count is written by whoever publishes the corresponding message, immediately before that publish:</p>
@@ -161,8 +166,8 @@ The publisher counts, then publishes</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">pierce discharges   </td><td class="markdownTableBodyNone"><code>ProjectileHitResolver.DischargePending</code>   </td></tr>
 </table>
-<p>That is what makes the counts safe to share: every subscriber reads a total that already includes the event it is reacting to, so <b>no reader depends on MessagePipe's subscription order</b>, which is enforced nowhere. <code>CombatSoundRouter</code> relies on this directly, reading the post-increment count and subtracting one so the flight's first pop of a type lands on the root.</p>
-<p>Only the flight <em>boundary</em> (<code>ProjectileLoadedMessage</code>, <code>Fired</code>, <code>Destroyed</code>) is a subscription here, because nothing reads a boundary flag mid-dispatch and expects it to already have flipped.</p>
+<p>That is what makes the counts safe to share: every subscriber reads a total that already includes the event it is reacting to, so <b>no reader depends on MessagePipe's subscription order</b>, which is enforced nowhere. <code>CombatSoundRouter</code> relies on this directly, reading the post-increment count and subtracting one so the ball's first pop of a type lands on the root.</p>
+<p>Only the flight <em>boundary</em> (<code>ProjectileLoadedMessage</code>, <code>Fired</code>, <code>Destroyed</code>, and the registry's <code>Retired</code>) is a subscription here, because nothing reads a boundary flag mid-dispatch and expects it to already have flipped.</p>
 <p>If a subscriber ever counts one of these instead, the value each reader sees becomes order-dependent and the pitch ramps drift by a step — silently, and only audible to someone listening for it. Don't.</p>
 <h1><a class="anchor" id="autotoc_md186"></a>
 Cheats feed it too</h1>

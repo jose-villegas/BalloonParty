@@ -1,16 +1,19 @@
 var searchData=
 [
-  ['healthcounterlabel_0',['HealthCounterLabel',['../classBalloonParty_1_1UI_1_1Health_1_1HealthCounterLabel.html',1,'BalloonParty::UI::Health']]],
-  ['healthuilifetimescope_1',['HealthUILifetimeScope',['../classBalloonParty_1_1UI_1_1Health_1_1HealthUILifetimeScope.html',1,'BalloonParty::UI::Health']]],
-  ['heartdraincinematic_2',['HeartDrainCinematic',['../classBalloonParty_1_1Game_1_1Cinematics_1_1HeartDrainCinematic.html',1,'BalloonParty::Game::Cinematics']]],
-  ['hearttrailcontroller_3',['HeartTrailController',['../classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html',1,'BalloonParty::UI::Health']]],
-  ['hearttrailfocus_4',['HeartTrailFocus',['../classBalloonParty_1_1Game_1_1Cinematics_1_1HeartTrailFocus.html',1,'BalloonParty::Game::Cinematics']]],
-  ['hearttrailtracker_5',['HeartTrailTracker',['../classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html',1,'BalloonParty::Game::Health']]],
-  ['hexcoordinates_6',['HexCoordinates',['../classBalloonParty_1_1Slots_1_1Grid_1_1HexCoordinates.html',1,'BalloonParty::Slots::Grid']]],
-  ['highlighttrail_7',['HighlightTrail',['../classBalloonParty_1_1Item_1_1Preview_1_1HighlightTrail.html',1,'BalloonParty::Item::Preview']]],
-  ['hitpipeline_8',['HitPipeline',['../classBalloonParty_1_1Game_1_1HitPipeline.html',1,'BalloonParty::Game']]],
-  ['hitvfxoverride_9',['HitVfxOverride',['../classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html',1,'BalloonParty::Configuration::Balloons']]],
-  ['hitvfxoverridedrawer_10',['HitVfxOverrideDrawer',['../classBalloonParty_1_1Configuration_1_1Editor_1_1HitVfxOverrideDrawer.html',1,'BalloonParty::Configuration::Editor']]],
-  ['holdspeedupcontroller_11',['HoldSpeedUpController',['../classBalloonParty_1_1Projectile_1_1Controller_1_1HoldSpeedUpController.html',1,'BalloonParty::Projectile::Controller']]],
-  ['holdspeeduptooltip_12',['HoldSpeedUpTooltip',['../classBalloonParty_1_1UI_1_1Tooltip_1_1HoldSpeedUpTooltip.html',1,'BalloonParty::UI::Tooltip']]]
+  ['handwrittenheadsup_0',['HandwrittenHeadsUp',['../classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html',1,'BalloonParty::UI::HeadsUp']]],
+  ['headsupbuilder_1',['HeadsUpBuilder',['../classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html',1,'BalloonParty::Editor']]],
+  ['headsuppacking_2',['HeadsUpPacking',['../classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html',1,'BalloonParty::UI::HeadsUp']]],
+  ['headsupsizing_3',['HeadsUpSizing',['../classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpSizing.html',1,'BalloonParty::UI::HeadsUp']]],
+  ['headsupstyle_4',['HeadsUpStyle',['../structBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpStyle.html',1,'BalloonParty::UI::HeadsUp']]],
+  ['healthcounterlabel_5',['HealthCounterLabel',['../classBalloonParty_1_1UI_1_1Health_1_1HealthCounterLabel.html',1,'BalloonParty::UI::Health']]],
+  ['healthuilifetimescope_6',['HealthUILifetimeScope',['../classBalloonParty_1_1UI_1_1Health_1_1HealthUILifetimeScope.html',1,'BalloonParty::UI::Health']]],
+  ['heartdraincinematic_7',['HeartDrainCinematic',['../classBalloonParty_1_1Game_1_1Cinematics_1_1HeartDrainCinematic.html',1,'BalloonParty::Game::Cinematics']]],
+  ['hearttrailcontroller_8',['HeartTrailController',['../classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html',1,'BalloonParty::UI::Health']]],
+  ['hearttrailfocus_9',['HeartTrailFocus',['../classBalloonParty_1_1Game_1_1Cinematics_1_1HeartTrailFocus.html',1,'BalloonParty::Game::Cinematics']]],
+  ['hearttrailtracker_10',['HeartTrailTracker',['../classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html',1,'BalloonParty::Game::Health']]],
+  ['hexcoordinates_11',['HexCoordinates',['../classBalloonParty_1_1Slots_1_1Grid_1_1HexCoordinates.html',1,'BalloonParty::Slots::Grid']]],
+  ['highlighttrail_12',['HighlightTrail',['../classBalloonParty_1_1Item_1_1Preview_1_1HighlightTrail.html',1,'BalloonParty::Item::Preview']]],
+  ['hitpipeline_13',['HitPipeline',['../classBalloonParty_1_1Game_1_1HitPipeline.html',1,'BalloonParty::Game']]],
+  ['hitvfxoverride_14',['HitVfxOverride',['../classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html',1,'BalloonParty::Configuration::Balloons']]],
+  ['hitvfxoverridedrawer_15',['HitVfxOverrideDrawer',['../classBalloonParty_1_1Configuration_1_1Editor_1_1HitVfxOverrideDrawer.html',1,'BalloonParty::Configuration::Editor']]]
 ];

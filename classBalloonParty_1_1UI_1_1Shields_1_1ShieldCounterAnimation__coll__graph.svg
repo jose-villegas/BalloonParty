@@ -47,7 +47,7 @@
   </g>
 </defs>
 <script type="application/ecmascript">
-var viewWidth = 735;
+var viewWidth = 736;
 var viewHeight = 128;
 var sectionId = 'dynsection-1';
 </script>
@@ -59,9 +59,9 @@ var sectionId = 'dynsection-1';
 <g id="Node000001" class="node">
 <title>Node1</title>
 <g id="a_Node000001"><a xlink:title=" ">
-<polygon fill="#999999" stroke="#666666" points="727,-107 592,-107 592,-77 727,-77 727,-107"/>
-<text text-anchor="start" x="600" y="-95" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.UI.Shields.</text>
-<text text-anchor="middle" x="659.5" y="-84" font-family="Helvetica,sans-Serif" font-size="10.00">ShieldCounterAnimation</text>
+<polygon fill="#999999" stroke="#666666" points="728,-83 593,-83 593,-53 728,-53 728,-83"/>
+<text text-anchor="start" x="601" y="-71" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.UI.Shields.</text>
+<text text-anchor="middle" x="660.5" y="-60" font-family="Helvetica,sans-Serif" font-size="10.00">ShieldCounterAnimation</text>
 </a>
 </g>
 </g>
@@ -78,8 +78,8 @@ var sectionId = 'dynsection-1';
 <g id="edge1_Node000001_Node000002" class="edge">
 <title>Node2&#45;&gt;Node1</title>
 <g id="a_edge1_Node000001_Node000002"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M123.78,-109.18C217.02,-107.66 410.46,-103.94 574,-97 579.73,-96.76 585.67,-96.47 591.63,-96.16"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="123.66,-105.68 113.72,-109.34 123.77,-112.68 123.66,-105.68"/>
+<path fill="none" stroke="#63b8ff" d="M124.03,-109.85C209.29,-109.16 376.64,-105.94 518,-92 542.55,-89.58 569.27,-85.44 592.82,-81.28"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="123.77,-106.36 113.79,-109.93 123.82,-113.36 123.77,-106.36"/>
 </a>
 </g>
 </g>
@@ -106,9 +106,9 @@ var sectionId = 'dynsection-1';
 <g id="Node000003" class="node">
 <title>Node3</title>
 <g id="a_Node000003"><a xlink:href="classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterLabel.html" target="_top" xlink:title="The loaded projectile&#39;s remaining&#45;shields counter; behaviour lives in ReactiveCounterLabel.">
-<polygon fill="white" stroke="#666666" points="518,-85 387,-85 387,-55 518,-55 518,-85"/>
-<text text-anchor="start" x="395" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.UI.Shields.</text>
-<text text-anchor="middle" x="452.5" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">ShieldCounterLabel</text>
+<polygon fill="white" stroke="#666666" points="518,-83 387,-83 387,-53 518,-53 518,-83"/>
+<text text-anchor="start" x="395" y="-71" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.UI.Shields.</text>
+<text text-anchor="middle" x="452.5" y="-60" font-family="Helvetica,sans-Serif" font-size="10.00">ShieldCounterLabel</text>
 </a>
 </g>
 </g>
@@ -116,18 +116,18 @@ var sectionId = 'dynsection-1';
 <g id="edge2_Node000001_Node000003" class="edge">
 <title>Node3&#45;&gt;Node1</title>
 <g id="a_edge2_Node000001_Node000003"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M528.15,-78.01C548.97,-80.25 571.44,-82.66 591.77,-84.84"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="528.4,-74.52 518.08,-76.93 527.65,-81.48 528.4,-74.52"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M528.34,-68C549.49,-68 572.36,-68 592.98,-68"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="528.11,-64.5 518.11,-68 528.11,-71.5 528.11,-64.5"/>
 </a>
 </g>
-<text text-anchor="middle" x="555" y="-85" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _labels</text>
+<text text-anchor="middle" x="555.5" y="-71" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _labels</text>
 </g>
 <!-- Node4&#45;&gt;Node3 -->
 <g id="edge3_Node000003_Node000004" class="edge">
 <title>Node4&#45;&gt;Node3</title>
 <g id="a_edge3_Node000003_Node000004"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M360.11,-68.37C369.05,-68.53 378.1,-68.69 386.85,-68.85"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="360.14,-64.87 350.08,-68.19 360.02,-71.87 360.14,-64.87"/>
+<path fill="none" stroke="#63b8ff" d="M360.11,-67.46C369.05,-67.51 378.1,-67.56 386.85,-67.62"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="360.1,-63.96 350.08,-67.4 360.06,-70.96 360.1,-63.96"/>
 </a>
 </g>
 </g>
@@ -168,7 +168,27 @@ var sectionId = 'dynsection-1';
 <polygon fill="#9a32cd" stroke="#9a32cd" points="140.15,-29.01 129.61,-30.04 138.49,-35.81 140.15,-29.01"/>
 </a>
 </g>
-<text text-anchor="middle" x="174" y="-48" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _display</text>
+<text text-anchor="middle" x="174" y="-49" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _display</text>
+</g>
+<!-- Node7 -->
+<g id="Node000007" class="node">
+<title>Node7</title>
+<g id="a_Node000007"><a xlink:href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="#666666" points="516.5,-35 388.5,-35 388.5,-5 516.5,-5 516.5,-35"/>
+<text text-anchor="start" x="396.5" y="-23" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Projectile.</text>
+<text text-anchor="middle" x="452.5" y="-12" font-family="Helvetica,sans-Serif" font-size="10.00">Model.IProjectileModel</text>
+</a>
+</g>
+</g>
+<!-- Node7&#45;&gt;Node1 -->
+<g id="edge7_Node000001_Node000007" class="edge">
+<title>Node7&#45;&gt;Node1</title>
+<g id="a_edge7_Node000001_Node000007"><a xlink:title=" ">
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M526.48,-37C548.83,-42.21 573.25,-47.9 594.99,-52.97"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="527.24,-33.59 516.71,-34.73 525.65,-40.41 527.24,-33.59"/>
+</a>
+</g>
+<text text-anchor="middle" x="555.5" y="-52" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _bound</text>
 </g>
 </g>
 </svg>

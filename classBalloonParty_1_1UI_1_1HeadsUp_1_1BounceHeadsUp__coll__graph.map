@@ -1,0 +1,29 @@
+<map id="BalloonParty.UI.HeadsUp.BounceHeadsUp" name="BalloonParty.UI.HeadsUp.BounceHeadsUp">
+<area shape="rect" id="Node000001" title="Writes how a ball&#39;s bounces go, where it happens: &quot;+n bounce&quot; where it picks up a shield (n counting ..." alt="" coords="973,122,1160,162"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="47,8,171,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,6,237,3,816,18,885,20,915,25,950,38,981,55,1009,77,1051,120,1047,123,1005,81,978,60,948,43,913,30,884,25,816,23,237,8,184,11"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html" title="One short handwritten line on the canvas: written on in pencil where it&#39;s asked for,..." alt="" coords="629,32,816,72"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="184,20,375,27,606,39,629,41,629,46,605,44,375,32,184,25"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html" title="Writes a TMP_Text on left to right as if by a pencil: a soft reveal edge, slanted forward,..." alt="" coords="261,58,448,98"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="178,33,269,55,268,60,176,39"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="830,56,890,64,950,79,995,98,1035,119,1032,124,993,102,949,84,889,70,829,61"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="462,68,629,56,629,61,462,73"/>
+<area shape="rect" id="Node000005" href="$structBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpStyle.html" title="How one kind of heads&#45;up looks, so each kind reads at a glance: its colour, its size against the line..." alt="" coords="629,122,816,162"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="830,139,973,139,973,144,830,144"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="636,186,809,226"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="823,184,973,156,974,161,824,190"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="268,122,441,162"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="455,156,636,188,635,193,454,162"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,122,212,162"/>
+<area shape="poly" id="edge9_Node000007_Node000008" title=" " alt="" coords="226,139,268,139,268,144,226,144"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="263,186,447,226"/>
+<area shape="poly" id="edge10_Node000006_Node000009" title=" " alt="" coords="460,203,635,203,635,208,460,208"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="265,250,444,290"/>
+<area shape="poly" id="edge11_Node000006_Node000010" title=" " alt="" coords="457,249,635,218,636,223,458,254"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,250,198,290"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="212,267,265,267,265,272,212,272"/>
+<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="265,314,444,354"/>
+<area shape="poly" id="edge13_Node000006_Node000012" title=" " alt="" coords="457,321,532,302,569,287,604,267,611,260,615,253,619,244,628,235,649,223,651,228,631,240,624,247,620,255,615,263,607,272,572,291,534,307,458,326"/>
+<area shape="rect" id="Node000013" href="$classBalloonParty_1_1Projectile_1_1ProjectileTally.html" title="A running count per ball in the air: shields picked up this flight, deflects since the last wall." alt="" coords="637,250,808,290"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="821,244,884,225,948,202,1032,159,1034,164,950,207,886,230,823,249"/>
+</map>

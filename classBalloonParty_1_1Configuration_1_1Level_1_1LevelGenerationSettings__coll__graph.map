@@ -1,0 +1,27 @@
+<map id="BalloonParty.Configuration.Level.LevelGenerationSettings" name="BalloonParty.Configuration.Level.LevelGenerationSettings">
+<area shape="rect" id="Node000001" title="What LevelGenerator builds every positive level from: formulas for the level&#39;s shape and its two budg..." alt="" coords="669,167,891,207"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Configuration_1_1Level_1_1BudgetFormula.html" title="A level&#39;s budget: a base, plus a step per level after the first, never past a cap." alt="" coords="326,5,523,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="538,46,593,63,647,86,709,125,758,164,755,169,706,129,644,90,591,68,536,51"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Configuration_1_1Level_1_1IntLevelStep.html" title=" " alt="" coords="326,69,523,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="519,110,646,144,714,164,713,169,645,149,518,115"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelStep.html" title="One step of a level&#45;stepped value: it holds from FromLevel until the next step." alt="" coords="5,95,203,135"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="216,103,326,94,326,100,217,108"/>
+<area shape="rect" id="Node000005" href="$structBalloonParty_1_1Configuration_1_1Level_1_1ItemCountStep.html" title="The item&#45;count distributions in force from FromLevel on." alt="" coords="326,133,523,173"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="217,126,326,139,326,144,216,131"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="537,161,669,174,669,179,537,166"/>
+<area shape="rect" id="Node000006" href="$structBalloonParty_1_1Configuration_1_1Level_1_1BalloonContentEntry.html" title=" " alt="" coords="326,261,523,301"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="536,256,645,229,723,204,725,209,646,235,538,261"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece.html" title="A catalogue entry the level generator can include in a level." alt="" coords="5,276,203,316"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="216,288,326,283,326,288,217,294"/>
+<area shape="rect" id="Node000009" href="$structBalloonParty_1_1Configuration_1_1Level_1_1ItemContentEntry.html" title="An item in the catalogue. Items help the player, so they&#39;re always paid from the aid budget." alt="" coords="326,197,523,237"/>
+<area shape="poly" id="edge10_Node000009_Node000007" title=" " alt="" coords="199,270,342,235,343,240,200,275"/>
+<area shape="rect" id="Node000010" href="$structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html" title="A grid actor in the catalogue. Actors block the board, so they&#39;re paid from the threat budget." alt="" coords="321,325,528,365"/>
+<area shape="poly" id="edge13_Node000010_Node000007" title=" " alt="" coords="217,311,321,327,321,332,216,316"/>
+<area shape="rect" id="Node000008" href="$structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html" title="A catalogue piece&#39;s weight by level: rolled within an early range at its unlock, moving to a late ran..." alt="" coords="5,167,203,207"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="187,208,357,259,355,264,185,213"/>
+<area shape="poly" id="edge11_Node000009_Node000008" title=" " alt="" coords="217,193,298,200,326,203,325,208,297,205,216,198"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="537,209,645,201,669,199,670,204,646,207,538,215"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="502,319,527,311,587,294,644,272,703,239,751,205,754,209,706,243,646,277,589,299,529,316,504,324"/>
+<area shape="rect" id="Node000011" href="$structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html" title="Pure — resolved once when a level begins, never re&#45;rolled per turn." alt="" coords="5,359,203,399"/>
+<area shape="poly" id="edge14_Node000010_Node000011" title=" " alt="" coords="216,380,297,375,356,363,357,368,298,380,216,385"/>
+</map>

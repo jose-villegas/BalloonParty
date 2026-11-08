@@ -110,6 +110,7 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html'
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Game.Run.RetryTracker Class Reference<span class="mlabels"><span class="mlabel sealed">sealed</span></span></div></div>
@@ -123,23 +124,23 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html'
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker__inherit__graph.svg" width="459" height="139"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker__inherit__graph.svg" width="490" height="179"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Game.Run.RetryTracker:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker__coll__graph.svg" width="459" height="139"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker__coll__graph.svg" width="490" height="179"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a7347b0db98ec3a87b7d2e9a6f0deb308" id="r_a7347b0db98ec3a87b7d2e9a6f0deb308"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7347b0db98ec3a87b7d2e9a6f0deb308">RetryTracker</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html">IRunConfig</a> config)</td></tr>
 <tr class="separator:a7347b0db98ec3a87b7d2e9a6f0deb308"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a283a87cee739f37efd51a464c86bc43e" id="r_a283a87cee739f37efd51a464c86bc43e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a283a87cee739f37efd51a464c86bc43e">PrepareRetry</a> (int level)</td></tr>
-<tr class="memdesc:a283a87cee739f37efd51a464c86bc43e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepare a retry at the given level. Call before publishing the dismiss message.  <br /></td></tr>
-<tr class="separator:a283a87cee739f37efd51a464c86bc43e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca4a1ea37438892f1f400cb5d522a4e1" id="r_aca4a1ea37438892f1f400cb5d522a4e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aca4a1ea37438892f1f400cb5d522a4e1">PrepareRetry</a> (int level, bool withBonusCard)</td></tr>
+<tr class="memdesc:aca4a1ea37438892f1f400cb5d522a4e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The next reset restarts at <em>level</em>  instead of a fresh run, dealing a bonus card for that attempt when <em>withBonusCard</em> .  <br /></td></tr>
+<tr class="separator:aca4a1ea37438892f1f400cb5d522a4e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5661281fe8fbb0a6f93e8929b9bd20b" id="r_ac5661281fe8fbb0a6f93e8929b9bd20b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac5661281fe8fbb0a6f93e8929b9bd20b">ResetRun</a> (int generation)</td></tr>
 <tr class="memdesc:ac5661281fe8fbb0a6f93e8929b9bd20b"><td class="mdescLeft">&#160;</td><td class="mdescRight"><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -152,13 +153,28 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a1febebc18b6bfea598de81114ef0056c" id="r_a1febebc18b6bfea598de81114ef0056c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1febebc18b6bfea598de81114ef0056c">IsUnlimited</a><code> [get]</code></td></tr>
+<tr class="memdesc:a1febebc18b6bfea598de81114ef0056c"><td class="mdescLeft">&#160;</td><td class="mdescRight">No retry cap (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#aff5e95c5f910f536e2097bb24245f350" title="How many times the player may retry at the level reached, per run (0 or less = unlimited).">Shared.IRunConfig.MaxRetries</a> of 0 or less).  <br /></td></tr>
+<tr class="separator:a1febebc18b6bfea598de81114ef0056c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32da477d65fcf6f0c2dceb5c145f8585" id="r_a32da477d65fcf6f0c2dceb5c145f8585"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a32da477d65fcf6f0c2dceb5c145f8585">ResetOrder</a><code> [get]</code></td></tr>
 <tr class="separator:a32da477d65fcf6f0c2dceb5c145f8585"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d67a4e0e3ff6a0cf7497ecc118dfd7e" id="r_a6d67a4e0e3ff6a0cf7497ecc118dfd7e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6d67a4e0e3ff6a0cf7497ecc118dfd7e">RetriesRemaining</a><code> [get]</code></td></tr>
+<tr class="memdesc:a6d67a4e0e3ff6a0cf7497ecc118dfd7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retries left this run; int.MaxValue while <a class="el" href="#a1febebc18b6bfea598de81114ef0056c" title="No retry cap (Shared.IRunConfig.MaxRetries of 0 or less).">IsUnlimited</a>.  <br /></td></tr>
 <tr class="separator:a6d67a4e0e3ff6a0cf7497ecc118dfd7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa32ecb3d45193513a0126be8ddf84fc6" id="r_aa32ecb3d45193513a0126be8ddf84fc6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa32ecb3d45193513a0126be8ddf84fc6">RetriesUsed</a><code> [get]</code></td></tr>
+<tr class="memdesc:aa32ecb3d45193513a0126be8ddf84fc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retries this run has used. Counted even when unlimited: the ad gate reads it.  <br /></td></tr>
+<tr class="separator:aa32ecb3d45193513a0126be8ddf84fc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4018073f3c2633e27511b39d536a8c83" id="r_a4018073f3c2633e27511b39d536a8c83"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4018073f3c2633e27511b39d536a8c83">RetryLevel</a><code> [get]</code></td></tr>
 <tr class="memdesc:a4018073f3c2633e27511b39d536a8c83"><td class="mdescLeft">&#160;</td><td class="mdescRight">The level the next restart should begin at.  <br /></td></tr>
 <tr class="separator:a4018073f3c2633e27511b39d536a8c83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae388e9ab216d9b4fc0b4c73b898853ba" id="r_ae388e9ab216d9b4fc0b4c73b898853ba"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae388e9ab216d9b4fc0b4c73b898853ba">RetryWithBonusCard</a><code> [get]</code></td></tr>
+<tr class="memdesc:ae388e9ab216d9b4fc0b4c73b898853ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">The staged retry was bought with a rewarded ad and deals a bonus card.  <br /></td></tr>
+<tr class="separator:ae388e9ab216d9b4fc0b4c73b898853ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a8c5fd77a16b11a60a3cc2853c1ea704a" id="r_a8c5fd77a16b11a60a3cc2853c1ea704a"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8c5fd77a16b11a60a3cc2853c1ea704a">CapLabel</a> ()</td></tr>
+<tr class="separator:a8c5fd77a16b11a60a3cc2853c1ea704a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -168,10 +184,12 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aa61efb131191e71593fa7cf2f36553f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f65fd709b82e6f4c01f54f6995b5b3d" id="r_a4f65fd709b82e6f4c01f54f6995b5b3d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4f65fd709b82e6f4c01f54f6995b5b3d">_retryLevel</a></td></tr>
 <tr class="separator:a4f65fd709b82e6f4c01f54f6995b5b3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aecba7d82ff6cb5a6b95271f46eca2494" id="r_aecba7d82ff6cb5a6b95271f46eca2494"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aecba7d82ff6cb5a6b95271f46eca2494">_retryWithBonusCard</a></td></tr>
+<tr class="separator:aecba7d82ff6cb5a6b95271f46eca2494"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Tracks per-run retry state. </p>
-<p>Call <a class="el" href="#a283a87cee739f37efd51a464c86bc43e" title="Prepare a retry at the given level. Call before publishing the dismiss message.">PrepareRetry</a> before dismissing the game-over screen to restart at the same level; otherwise the next restart is a fresh run. </p>
+<p><a class="el" href="#aca4a1ea37438892f1f400cb5d522a4e1" title="The next reset restarts at level  instead of a fresh run, dealing a bonus card for that attempt when ...">PrepareRetry</a> (staged by <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IFailureOffers.html" title="Decides what a loss offers the player: a plain retry, one gated behind an ad, and a retry with a bonu...">IFailureOffers</a>) makes the next restart a retry at that level; otherwise it's a fresh run. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a7347b0db98ec3a87b7d2e9a6f0deb308" name="a7347b0db98ec3a87b7d2e9a6f0deb308"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7347b0db98ec3a87b7d2e9a6f0deb308">&#9670;&#160;</a></span>RetryTracker()</h2>
@@ -191,8 +209,33 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a283a87cee739f37efd51a464c86bc43e" name="a283a87cee739f37efd51a464c86bc43e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a283a87cee739f37efd51a464c86bc43e">&#9670;&#160;</a></span>PrepareRetry()</h2>
+<a id="a8c5fd77a16b11a60a3cc2853c1ea704a" name="a8c5fd77a16b11a60a3cc2853c1ea704a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c5fd77a16b11a60a3cc2853c1ea704a">&#9670;&#160;</a></span>CapLabel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string BalloonParty.Game.Run.RetryTracker.CapLabel </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aca4a1ea37438892f1f400cb5d522a4e1" name="aca4a1ea37438892f1f400cb5d522a4e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca4a1ea37438892f1f400cb5d522a4e1">&#9670;&#160;</a></span>PrepareRetry()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -200,13 +243,19 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void BalloonParty.Game.Run.RetryTracker.PrepareRetry </td>
           <td>(</td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>level</em></span></td><td>)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>level</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>withBonusCard</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Prepare a retry at the given level. Call before publishing the dismiss message. </p>
+<p>The next reset restarts at <em>level</em>  instead of a fresh run, dealing a bonus card for that attempt when <em>withBonusCard</em> . </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryStaging.html#aa0738897d398356c9fc0baa46ec2cddd">BalloonParty.Game.Run.IRetryStaging</a>.</p>
 
 </div>
 </div>
@@ -304,7 +353,55 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aecba7d82ff6cb5a6b95271f46eca2494" name="aecba7d82ff6cb5a6b95271f46eca2494"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aecba7d82ff6cb5a6b95271f46eca2494">&#9670;&#160;</a></span>_retryWithBonusCard</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Game.Run.RetryTracker._retryWithBonusCard</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="a1febebc18b6bfea598de81114ef0056c" name="a1febebc18b6bfea598de81114ef0056c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1febebc18b6bfea598de81114ef0056c">&#9670;&#160;</a></span>IsUnlimited</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Game.Run.RetryTracker.IsUnlimited</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>No retry cap (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#aff5e95c5f910f536e2097bb24245f350" title="How many times the player may retry at the level reached, per run (0 or less = unlimited).">Shared.IRunConfig.MaxRetries</a> of 0 or less). </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html#ad19f22b35fb57a25b02b9322ba5d93f1">BalloonParty.Game.Run.IRetryState</a>.</p>
+
+</div>
+</div>
 <a id="a32da477d65fcf6f0c2dceb5c145f8585" name="a32da477d65fcf6f0c2dceb5c145f8585"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a32da477d65fcf6f0c2dceb5c145f8585">&#9670;&#160;</a></span>ResetOrder</h2>
 
@@ -349,7 +446,35 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Retries left this run; int.MaxValue while <a class="el" href="#a1febebc18b6bfea598de81114ef0056c" title="No retry cap (Shared.IRunConfig.MaxRetries of 0 or less).">IsUnlimited</a>. </p>
+
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html#a37b95f79a4daecef6d9a226741037df8">BalloonParty.Game.Run.IRetryState</a>.</p>
+
+</div>
+</div>
+<a id="aa32ecb3d45193513a0126be8ddf84fc6" name="aa32ecb3d45193513a0126be8ddf84fc6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa32ecb3d45193513a0126be8ddf84fc6">&#9670;&#160;</a></span>RetriesUsed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Game.Run.RetryTracker.RetriesUsed</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retries this run has used. Counted even when unlimited: the ad gate reads it. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html#a09e9ddc95324d691652cc541e9c4aa36">BalloonParty.Game.Run.IRetryState</a>.</p>
 
 </div>
 </div>
@@ -377,6 +502,33 @@ Private Attributes</h2></td></tr>
 <p>Zero means a fresh run (level 1). Set transiently before the dismiss; consumed during the reset cascade. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html#a5a32f733325d45b99ff00a98e0e14e9e">BalloonParty.Game.Run.IRetryState</a>.</p>
+
+</div>
+</div>
+<a id="ae388e9ab216d9b4fc0b4c73b898853ba" name="ae388e9ab216d9b4fc0b4c73b898853ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae388e9ab216d9b4fc0b4c73b898853ba">&#9670;&#160;</a></span>RetryWithBonusCard</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Game.Run.RetryTracker.RetryWithBonusCard</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The staged retry was bought with a rewarded ad and deals a bonus card. </p>
+<p>Read with <a class="el" href="#a4018073f3c2633e27511b39d536a8c83" title="The level the next restart should begin at.">RetryLevel</a> during the reset cascade, and cleared with it. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html#a98a614b0caad9d543c406a9245201e32">BalloonParty.Game.Run.IRetryState</a>.</p>
 
 </div>
 </div>

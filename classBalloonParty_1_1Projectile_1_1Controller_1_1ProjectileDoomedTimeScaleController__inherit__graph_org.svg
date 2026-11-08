@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Claims a global slow&#45;motion time scale for the duration of a shot&#39;s doomed &#39;last breath&#39; (see Project...">
+<g id="a_Node000001"><a xlink:title="Claims a global slow&#45;motion time scale for a shot&#39;s doomed &#39;last breath&#39; (see ProjectileDoomedStarted...">
 <polygon fill="#999999" stroke="#666666" points="201.5,-41 22.5,-41 22.5,0 201.5,0 201.5,-41"/>
 <text text-anchor="start" x="30.5" y="-29" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Projectile.</text>
 <text text-anchor="start" x="30.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">Controller.ProjectileDoomedTime</text>

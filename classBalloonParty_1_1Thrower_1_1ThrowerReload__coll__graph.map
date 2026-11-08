@@ -1,0 +1,5 @@
+<map id="BalloonParty.Thrower.ThrowerReload" name="BalloonParty.Thrower.ThrowerReload">
+<area shape="rect" id="Node000001" title="The thrower&#39;s reload rules: how far the held ball has slid from the pivot to the muzzle,..." alt="" coords="5,108,220,148"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html" title="The run&#39;s weapon after its upgrade cards: the configured base plus every card held." alt="" coords="5,5,220,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,59,115,108,110,108,110,59"/>
+</map>

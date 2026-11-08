@@ -120,6 +120,9 @@ Static Package Functions</h2></td></tr>
 <tr class="memitem:a29c7c5b6d6f653ae66dfb85cf9bc2909" id="r_a29c7c5b6d6f653ae66dfb85cf9bc2909"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29c7c5b6d6f653ae66dfb85cf9bc2909">PickRandom&lt; T &gt;</a> (this IReadOnlyList&lt; T &gt; entries, IReadOnlyDictionary&lt; string, int &gt; activeCounts, IReadOnlyDictionary&lt; string, int &gt; waveQuotas=null)</td></tr>
 <tr class="memdesc:a29c7c5b6d6f653ae66dfb85cf9bc2909"><td class="mdescLeft">&#160;</td><td class="mdescRight">Weighted-random pick, excluding entries at their <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html#a21f9c08b80c0d07d98db6fa77320d50b">IWeightedEntry.MaxCount</a> limit or with an exhausted <em>waveQuotas</em>  allowance (absent key = unlimited); returns <code>default</code> if none remain.  <br /></td></tr>
 <tr class="separator:a29c7c5b6d6f653ae66dfb85cf9bc2909"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3d13e2ffed3103fce38b9b3bf81856c" id="r_ab3d13e2ffed3103fce38b9b3bf81856c"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab3d13e2ffed3103fce38b9b3bf81856c">PickWeightedIndex&lt; T &gt;</a> (this IReadOnlyList&lt; T &gt; items, Func&lt; T, float &gt; weightOf, float roll01)</td></tr>
+<tr class="memdesc:ab3d13e2ffed3103fce38b9b3bf81856c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Weighted index into <em>items</em>  for a caller-supplied <em>roll01</em>  in [0, 1), so a seeded draw stays reproducible; -1 when the list is empty or every weight is 0.  <br /></td></tr>
+<tr class="separator:ab3d13e2ffed3103fce38b9b3bf81856c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -169,6 +172,43 @@ Static Private Attributes</h2></td></tr>
 </dd>
 </dl>
 </div>
+
+</div>
+</div>
+<a id="ab3d13e2ffed3103fce38b9b3bf81856c" name="ab3d13e2ffed3103fce38b9b3bf81856c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3d13e2ffed3103fce38b9b3bf81856c">&#9670;&#160;</a></span>PickWeightedIndex&lt; T &gt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int BalloonParty.Shared.Extensions.WeightedPickExtensions.PickWeightedIndex&lt; T &gt; </td>
+          <td>(</td>
+          <td class="paramtype">this IReadOnlyList&lt; T &gt;</td>          <td class="paramname"><span class="paramname"><em>items</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Func&lt; T, float &gt;</td>          <td class="paramname"><span class="paramname"><em>weightOf</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>roll01</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Weighted index into <em>items</em>  for a caller-supplied <em>roll01</em>  in [0, 1), so a seeded draw stays reproducible; -1 when the list is empty or every weight is 0. </p>
+<p>Pass a non-capturing lambda for <em>weightOf</em>  so the delegate is cached. </p>
 
 </div>
 </div>

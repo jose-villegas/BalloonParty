@@ -79,6 +79,7 @@ var classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView =
     [ "_projectileTrail", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#ad5e7de5e18609cf14622e5325bf10438", null ],
     [ "_rainbowGlowActive", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a474b3e40c5ff658f130374acab708def", null ],
     [ "_rainbowGlowTimer", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a07eec0e443fe30e158a5038c3aae83ee", null ],
+    [ "_registry", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#aafdb543b7f43812fadad294a6e097ebe", null ],
     [ "_sceneLightSettings", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a528ff29d2c78c510f8e59b7de6e5c2d4", null ],
     [ "_segmentBlocked", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a7dc5b15f943a331923c8fe659b46f2a6", null ],
     [ "_shieldFlashLight", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a9004170300530fbeac2e448b3ce28bc6", null ],
@@ -102,5 +103,6 @@ var classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView =
     [ "BalloonsLayer", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a380f930191e7eade1b6441d6b1d9fa48", null ],
     [ "ContactCenter", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a079853dd445a375c421440130f8e1aac", null ],
     [ "ContactRadius", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#ac2e949b34e60026be49e3f57fb8ded44", null ],
-    [ "HasFlown", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#aa2a67112f40c7a9ec77f82628b436e9c", null ]
+    [ "HasFlown", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#aa2a67112f40c7a9ec77f82628b436e9c", null ],
+    [ "Model", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a118533bc1dd121e1a7186a4dba39098c", null ]
 ];

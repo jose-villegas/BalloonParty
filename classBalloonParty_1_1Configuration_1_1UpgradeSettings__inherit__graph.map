@@ -1,0 +1,5 @@
+<map id="BalloonParty.Configuration.UpgradeSettings" name="BalloonParty.Configuration.UpgradeSettings">
+<area shape="rect" id="Node000001" title="Inspector&#45;authored IUpgradeSettings, serialized inside RunConfig: cards are run&#45;scoped,..." alt="" coords="14,93,211,133"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html" title="When the level&#45;up deals cards, how many, and from which deck." alt="" coords="5,5,220,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,59,115,93,110,93,110,59"/>
+</map>

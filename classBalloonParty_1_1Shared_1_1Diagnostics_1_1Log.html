@@ -130,13 +130,13 @@ Static Package Functions</h2></td></tr>
 <tr class="separator:abce2131a0828ab88e3e1040fa7978c02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a922dae34777a3a5894bd1d6f5e359332" id="r_a922dae34777a3a5894bd1d6f5e359332"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a922dae34777a3a5894bd1d6f5e359332">Error</a> (string tag, string message)</td></tr>
 <tr class="separator:a922dae34777a3a5894bd1d6f5e359332"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc3bd713f526b9210098897e41380fca" id="r_abc3bd713f526b9210098897e41380fca"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc3bd713f526b9210098897e41380fca">Error</a> (string tag, string message, <a class="el" href="SpriteLayerCombinerEditor_8cs.html#aef19bab18b9814edeef255c43e4f6bbc">Object</a> context)</td></tr>
+<tr class="memitem:abc3bd713f526b9210098897e41380fca" id="r_abc3bd713f526b9210098897e41380fca"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc3bd713f526b9210098897e41380fca">Error</a> (string tag, string message, <a class="el" href="PrefabRebuild_8cs.html#aef19bab18b9814edeef255c43e4f6bbc">Object</a> context)</td></tr>
 <tr class="separator:abc3bd713f526b9210098897e41380fca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7d05ac058ad8befb9e5234f99502804" id="r_aa7d05ac058ad8befb9e5234f99502804"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa7d05ac058ad8befb9e5234f99502804">Info</a> (string tag, string message)</td></tr>
 <tr class="separator:aa7d05ac058ad8befb9e5234f99502804"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5971dbd94413bb9bf96fd446e2cd6626" id="r_a5971dbd94413bb9bf96fd446e2cd6626"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5971dbd94413bb9bf96fd446e2cd6626">Warn</a> (string tag, string message)</td></tr>
 <tr class="separator:a5971dbd94413bb9bf96fd446e2cd6626"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac873f5851ea92ba72f0c88fc764a2dfe" id="r_ac873f5851ea92ba72f0c88fc764a2dfe"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac873f5851ea92ba72f0c88fc764a2dfe">Warn</a> (string tag, string message, <a class="el" href="SpriteLayerCombinerEditor_8cs.html#aef19bab18b9814edeef255c43e4f6bbc">Object</a> context)</td></tr>
+<tr class="memitem:ac873f5851ea92ba72f0c88fc764a2dfe" id="r_ac873f5851ea92ba72f0c88fc764a2dfe"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac873f5851ea92ba72f0c88fc764a2dfe">Warn</a> (string tag, string message, <a class="el" href="PrefabRebuild_8cs.html#aef19bab18b9814edeef255c43e4f6bbc">Object</a> context)</td></tr>
 <tr class="separator:ac873f5851ea92ba72f0c88fc764a2dfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
@@ -146,7 +146,7 @@ Static Private Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Static logging facade with per-tag coloring in the Unity Console. </p>
-<p><a class="el" href="#aa7d05ac058ad8befb9e5234f99502804">Info</a> and <a class="el" href="#abce2131a0828ab88e3e1040fa7978c02">Assert</a> are decorated with <code>[Conditional("UNITY_EDITOR"), Conditional("DEVELOPMENT_BUILD")]</code>, so they compile out of release builds automatically — no <code>#if</code> guards needed. </p>
+<p><a class="el" href="#aa7d05ac058ad8befb9e5234f99502804">Info</a> and <a class="el" href="#abce2131a0828ab88e3e1040fa7978c02">Assert</a> are decorated with <code>[Conditional("UNITY_ENABLE_CHECKS")]</code>, so they compile out of any player whose Managed Code Variant is Release or Instrumented — no <code>#if</code> guards needed. The editor always defines the symbol; a development build gets it only when built Checked or <a class="el" href="ReleaseUploadWindow_8cs.html#a0100be52d45f14348918ea69ec09f959">Debug</a>. </p>
 <p><b>Important:</b> pass interpolated strings directly as arguments (<code><a class="el" href="#aa7d05ac058ad8befb9e5234f99502804">Log.Info</a>("Tag", $"value {x}")</code>). Do not hoist them into a local variable first — the compiler strips the entire call including argument evaluation, but a pre-assigned variable would still allocate. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="abce2131a0828ab88e3e1040fa7978c02" name="abce2131a0828ab88e3e1040fa7978c02"></a>
@@ -234,7 +234,7 @@ Static Private Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="SpriteLayerCombinerEditor_8cs.html#aef19bab18b9814edeef255c43e4f6bbc">Object</a></td>          <td class="paramname"><span class="paramname"><em>context</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="PrefabRebuild_8cs.html#aef19bab18b9814edeef255c43e4f6bbc">Object</a></td>          <td class="paramname"><span class="paramname"><em>context</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -355,7 +355,7 @@ Static Private Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="SpriteLayerCombinerEditor_8cs.html#aef19bab18b9814edeef255c43e4f6bbc">Object</a></td>          <td class="paramname"><span class="paramname"><em>context</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="PrefabRebuild_8cs.html#aef19bab18b9814edeef255c43e4f6bbc">Object</a></td>          <td class="paramname"><span class="paramname"><em>context</em></span>&#160;)</td>
         </tr>
       </table>
   </td>

@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic =
 [
-    [ "LevelUpCinematic", "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#a31e71384b0206df95bf12ce52c1f31fc", null ],
+    [ "LevelUpCinematic", "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#af1e6877cae263a3581b9c12e98917807", null ],
     [ "AbortSession", "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#a29d67fd38c43a02a7fff9d2b0d8b0d5a", null ],
     [ "BeginCinematic", "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#af3ab11b62290ff37eabf3d6374eeccf4", null ],
     [ "BuildConfig", "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#a75d94c5c0c77f0c9881f545d6463085f", null ],
@@ -25,7 +25,7 @@ var classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic =
     [ "_outerBounds", "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#a334ec9d1808bd561d3f3e8b62c43dc6d", null ],
     [ "_panInElapsed", "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#a6614826c899880b4b6fd0fcf9b4de2dd", null ],
     [ "_pauseService", "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#a3e71a7f99b0d18a2ba3460e746da02bb", null ],
-    [ "_positionProvider", "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#ae2e4f2c1df24df5059dde26a630fbdb2", null ],
+    [ "_projectiles", "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#ae7dabc699eb5b434cca4ebf24219e9ac", null ],
     [ "_runner", "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#afd4bf8f3b0997fb44a6da1b1430daf35", null ],
     [ "_scoredSubscriber", "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#abfd36596b9b38b7206007c133c303e6f", null ],
     [ "_scoreSubscription", "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#aabfdea02b0ba2afe99d0e67c86085191", null ],

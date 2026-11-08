@@ -16,9 +16,12 @@ var namespaceBalloonParty_1_1Editor =
     [ "CloudNoiseTextureGenerator", "classBalloonParty_1_1Editor_1_1CloudNoiseTextureGenerator.html", "classBalloonParty_1_1Editor_1_1CloudNoiseTextureGenerator" ],
     [ "ColorableBalloonVariantEditor", "classBalloonParty_1_1Editor_1_1ColorableBalloonVariantEditor.html", "classBalloonParty_1_1Editor_1_1ColorableBalloonVariantEditor" ],
     [ "EnumIndexedDrawer", "classBalloonParty_1_1Editor_1_1EnumIndexedDrawer.html", "classBalloonParty_1_1Editor_1_1EnumIndexedDrawer" ],
+    [ "GameOverLayoutBuilder", "classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder.html", "classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder" ],
     [ "GamePaletteAdapter", "classBalloonParty_1_1Editor_1_1GamePaletteAdapter.html", "classBalloonParty_1_1Editor_1_1GamePaletteAdapter" ],
     [ "GradientTextureDrawer", "classBalloonParty_1_1Editor_1_1GradientTextureDrawer.html", "classBalloonParty_1_1Editor_1_1GradientTextureDrawer" ],
+    [ "HeadsUpBuilder", "classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html", "classBalloonParty_1_1Editor_1_1HeadsUpBuilder" ],
     [ "LaserViewEditor", "classBalloonParty_1_1Editor_1_1LaserViewEditor.html", "classBalloonParty_1_1Editor_1_1LaserViewEditor" ],
+    [ "LevelGenerationPreview", "classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html", "classBalloonParty_1_1Editor_1_1LevelGenerationPreview" ],
     [ "LevelPacingCurvePanel", "classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html", "classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel" ],
     [ "LevelPacingMigrationTool", "classBalloonParty_1_1Editor_1_1LevelPacingMigrationTool.html", "classBalloonParty_1_1Editor_1_1LevelPacingMigrationTool" ],
     [ "LevelPacingWindow", "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html", "classBalloonParty_1_1Editor_1_1LevelPacingWindow" ],
@@ -27,6 +30,8 @@ var namespaceBalloonParty_1_1Editor =
     [ "MusicalNoteDrawer", "classBalloonParty_1_1Editor_1_1MusicalNoteDrawer.html", "classBalloonParty_1_1Editor_1_1MusicalNoteDrawer" ],
     [ "PaintDripOverlayEditor", "classBalloonParty_1_1Editor_1_1PaintDripOverlayEditor.html", "classBalloonParty_1_1Editor_1_1PaintDripOverlayEditor" ],
     [ "PaintSplashViewEditor", "classBalloonParty_1_1Editor_1_1PaintSplashViewEditor.html", "classBalloonParty_1_1Editor_1_1PaintSplashViewEditor" ],
+    [ "PencilFontBuilder", "classBalloonParty_1_1Editor_1_1PencilFontBuilder.html", "classBalloonParty_1_1Editor_1_1PencilFontBuilder" ],
+    [ "PrefabRebuild", "classBalloonParty_1_1Editor_1_1PrefabRebuild.html", "classBalloonParty_1_1Editor_1_1PrefabRebuild" ],
     [ "PropertyDrawerHelper", "classBalloonParty_1_1Editor_1_1PropertyDrawerHelper.html", "classBalloonParty_1_1Editor_1_1PropertyDrawerHelper" ],
     [ "RainbowBalloonVariantEditor", "classBalloonParty_1_1Editor_1_1RainbowBalloonVariantEditor.html", "classBalloonParty_1_1Editor_1_1RainbowBalloonVariantEditor" ],
     [ "SceneCaptureServiceEditor", "classBalloonParty_1_1Editor_1_1SceneCaptureServiceEditor.html", "classBalloonParty_1_1Editor_1_1SceneCaptureServiceEditor" ],
@@ -41,5 +46,6 @@ var namespaceBalloonParty_1_1Editor =
     [ "TextureAuditWindow", "classBalloonParty_1_1Editor_1_1TextureAuditWindow.html", "classBalloonParty_1_1Editor_1_1TextureAuditWindow" ],
     [ "TexturePreviewBox", "classBalloonParty_1_1Editor_1_1TexturePreviewBox.html", "classBalloonParty_1_1Editor_1_1TexturePreviewBox" ],
     [ "UnitCircleDrawer", "classBalloonParty_1_1Editor_1_1UnitCircleDrawer.html", "classBalloonParty_1_1Editor_1_1UnitCircleDrawer" ],
-    [ "UnusedAssetsWindow", "classBalloonParty_1_1Editor_1_1UnusedAssetsWindow.html", "classBalloonParty_1_1Editor_1_1UnusedAssetsWindow" ]
+    [ "UnusedAssetsWindow", "classBalloonParty_1_1Editor_1_1UnusedAssetsWindow.html", "classBalloonParty_1_1Editor_1_1UnusedAssetsWindow" ],
+    [ "UpgradeCardSlotBuilder", "classBalloonParty_1_1Editor_1_1UpgradeCardSlotBuilder.html", "classBalloonParty_1_1Editor_1_1UpgradeCardSlotBuilder" ]
 ];

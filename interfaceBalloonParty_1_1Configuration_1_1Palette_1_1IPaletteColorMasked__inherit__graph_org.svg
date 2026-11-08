@@ -59,7 +59,7 @@
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html" target="_top" xlink:title="The range&#45;authored form of a level&#39;s difficulty mix; Resolve is a pure function, so it&#39;s EditMode&#45;tes...">
+<g id="a_Node000004"><a xlink:href="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html" target="_top" xlink:title="A level&#39;s difficulty mix before its ranges are rolled: what LevelGenerator outputs for every positive...">
 <polygon fill="white" stroke="#666666" points="353,-30 189,-30 189,0 353,0 353,-30"/>
 <text text-anchor="start" x="197" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text text-anchor="middle" x="271" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Level.RangedLevelParameters</text>

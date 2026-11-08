@@ -1,0 +1,8 @@
+<map id="BalloonParty.UI.Tooltip.TooltipBanner" name="BalloonParty.UI.Tooltip.TooltipBanner">
+<area shape="rect" id="Node000001" title="The on&#45;screen tooltip: shows each TooltipMessage briefly, then fades it out." alt="" coords="5,183,176,223"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="23,5,147,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,44,93,183,87,183,83,45"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html" title="Writes a TMP_Text on left to right as if by a pencil: a soft reveal edge, slanted forward,..." alt="" coords="107,80,293,120"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="114,36,174,78,171,82,111,41"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="171,132,113,185,109,181,167,128"/>
+</map>

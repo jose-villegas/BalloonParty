@@ -5,6 +5,8 @@ var namespaceBalloonParty_1_1Shared_1_1Messages =
     [ "BalloonDeflectedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage" ],
     [ "BoardClearMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage" ],
     [ "BoardDepletedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BoardDepletedMessage.html", null ],
+    [ "BonusCardDealtMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage" ],
+    [ "DeflectChainMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1DeflectChainMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1DeflectChainMessage" ],
     [ "EndRunRequestedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1EndRunRequestedMessage.html", null ],
     [ "ForceDestroyProjectileMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ForceDestroyProjectileMessage.html", null ],
     [ "GameOverDismissedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1GameOverDismissedMessage.html", null ],
@@ -17,15 +19,15 @@ var namespaceBalloonParty_1_1Shared_1_1Messages =
     [ "LevelTransitionCompletedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelTransitionCompletedMessage.html", null ],
     [ "LevelUpAbandonedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpAbandonedMessage.html", null ],
     [ "LevelUpAbortedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpAbortedMessage.html", null ],
-    [ "LevelUpDismissedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpDismissedMessage.html", null ],
+    [ "LevelUpDismissedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpDismissedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpDismissedMessage" ],
     [ "LevelUpFillTrailsMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpFillTrailsMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpFillTrailsMessage" ],
     [ "OverflowHeartRequestedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage" ],
     [ "PierceDischargedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage" ],
     [ "ProgressBarCompletedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProgressBarCompletedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProgressBarCompletedMessage" ],
     [ "ProjectileCruiseEndedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseEndedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseEndedMessage" ],
     [ "ProjectileCruiseStartedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage" ],
-    [ "ProjectileDestroyedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage.html", null ],
-    [ "ProjectileDoomedEndedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedEndedMessage.html", null ],
+    [ "ProjectileDestroyedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage" ],
+    [ "ProjectileDoomedEndedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedEndedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedEndedMessage" ],
     [ "ProjectileDoomedStartedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedStartedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedStartedMessage" ],
     [ "ProjectileFiredMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileFiredMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileFiredMessage" ],
     [ "ProjectileLoadedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage" ],
@@ -41,7 +43,14 @@ var namespaceBalloonParty_1_1Shared_1_1Messages =
     [ "SpeedTapMintedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage" ],
     [ "StreakChangedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage" ],
     [ "StrikethroughArrivedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1StrikethroughArrivedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1StrikethroughArrivedMessage" ],
+    [ "ThrowerReadyMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ThrowerReadyMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ThrowerReadyMessage" ],
+    [ "TooltipMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1TooltipMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1TooltipMessage" ],
     [ "TransformCapturedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1TransformCapturedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1TransformCapturedMessage" ],
     [ "WallHitMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage" ],
-    [ "WaveDamageMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage" ]
+    [ "WaveDamageMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage" ],
+    [ "ShieldGainSource", "namespaceBalloonParty_1_1Shared_1_1Messages.html#a1a885ac3fd6e8e290b39752bfe7e21c5", [
+      [ "Item", "namespaceBalloonParty_1_1Shared_1_1Messages.html#a1a885ac3fd6e8e290b39752bfe7e21c5a7d74f3b92b19da5e606d737d339a9679", null ],
+      [ "Streak", "namespaceBalloonParty_1_1Shared_1_1Messages.html#a1a885ac3fd6e8e290b39752bfe7e21c5af4bb7b4d64f470dc5e5aca7aa1cfe624", null ],
+      [ "Ricochet", "namespaceBalloonParty_1_1Shared_1_1Messages.html#a1a885ac3fd6e8e290b39752bfe7e21c5ae38f161f104780d651e487674b3130ac", null ]
+    ] ]
 ];

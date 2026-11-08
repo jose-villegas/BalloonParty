@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter =
 [
-    [ "ProgressionSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a8332ffcaaa649a4ab82b8811dc959f22", null ],
+    [ "ProgressionSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a056162cc05e2015af62108e5069ef435", null ],
     [ "Dispose", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#ad3266168fdc405081b7b453293a284cd", null ],
     [ "OnAscendStarted", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#adae276bee5b87c9ea73c5b3942112b51", null ],
     [ "OnBoardClear", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a76bed499d0c459f98a3de71691fbb273", null ],
@@ -16,9 +16,9 @@ var classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter =
     [ "OnStreakChanged", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a399edf17d93427f892616ecb3ef2dd10", null ],
     [ "PlayLevelCompletePop", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a533e0a0fe2afd7937b6c599e9108e02c", null ],
     [ "Start", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a3119cd36bf2a134f2b947f003b7c115f", null ],
-    [ "_activeProjectile", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a6f5b39a16405a627a3658a76cdf25594", null ],
     [ "_ascendStartedSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a875d508b11dc7b19fa89a6343a180a69", null ],
     [ "_boardClearSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a4bbf89d8ef055757aa2d2802dbf4335b", null ],
+    [ "_colorStreak", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a400df6c55296a41082040cbad06e4b25", null ],
     [ "_descendStartedSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#ac5afd4f98513f851ca9835118135a69f", null ],
     [ "_gameOverDismissedSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a8301ba53cedafa789df90b7f2cb6b947", null ],
     [ "_gameOverSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#aa98e109aa7f23bf65c50bc4818e42b71", null ],
@@ -31,8 +31,7 @@ var classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter =
     [ "_palette", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a340538ec6100b7d577e94c930390c818", null ],
     [ "_player", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a5dac8a9ffc3ccb05bc1b5a23abd55e9d", null ],
     [ "_progressBarCompletedSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#abc71c8b2dfba7698d10cc6b1370e0a9d", null ],
-    [ "_projectileDestroyedSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a12349e616575ad2e89eff47ac9bbc799", null ],
-    [ "_projectileLoadedSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a882e20ecfd71ec3468f76e17a8e4c4ac", null ],
+    [ "_projectiles", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a7420fd6cdd721bef6df39e326bb13ae2", null ],
     [ "_scoreTrailSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a7efdda6259311628099e1c5c97da801a", null ],
     [ "_streakSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a1b86e664920a322b34e264bd76e238c1", null ],
     [ "_subscriptions", "classBalloonParty_1_1Audio_1_1Routing_1_1ProgressionSoundRouter.html#a05979cfbd41ab9bc07550024647dda70", null ]

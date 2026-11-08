@@ -12,6 +12,6 @@
 <area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="460,197,521,204,520,210,459,202"/>
 <area shape="rect" id="Node000007" href="$classBalloonParty_1_1Item_1_1Shield_1_1ShieldItemHandler.html" title=" " alt="" coords="517,261,701,301"/>
 <area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="383,201,500,247,537,259,535,264,498,252,381,206"/>
-<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html" title="Handles the Snipe item: arms the active projectile as a piercing lance — it plows through balloons li..." alt="" coords="519,325,699,365"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html" title="Handles the Snipe item: arms the shot that popped the holder as a piercing lance — it plows through b..." alt="" coords="519,325,699,365"/>
 <area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="364,206,423,258,460,287,500,311,527,323,525,328,497,316,457,291,419,263,361,210"/>
 </map>

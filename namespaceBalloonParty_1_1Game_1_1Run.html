@@ -108,7 +108,8 @@ $(function(){initNavTree('namespaceBalloonParty_1_1Game_1_1Run.html',''); initRe
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Game.Run Namespace Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -118,11 +119,29 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1BoardClearController.html">BoardClearController</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">MessagePipe publishes synchronously, so the board is empty by the time <a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1BoardClearController.html#ac765bbdf0736fe446613fd12522375eb">ResetRun</a> returns.  <a href="classBalloonParty_1_1Game_1_1Run_1_1BoardClearController.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Game_1_1Run_1_1FailureOffer.html">FailureOffer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">What the game-over screen may offer right now.  <a href="structBalloonParty_1_1Game_1_1Run_1_1FailureOffer.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1FailureOffers.html">FailureOffers</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the run's retry state against <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#a4a8bda1ef35cbd1e9f6a5fd1da5dfc6d" title="Free retries per run; every retry after them needs a rewarded ad (0 = retries never need one).">IRunConfig.RetriesBeforeAd</a>: the first retries are free, every one after needs a rewarded ad.  <a href="classBalloonParty_1_1Game_1_1Run_1_1FailureOffers.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html">GameOverPresentationGate</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Holds the GameOver screen shut until the loss cinematic finishes.  <a href="classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IAdService.html">IAdService</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The seam an ad SDK plugs into.  <a href="interfaceBalloonParty_1_1Game_1_1Run_1_1IAdService.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IBoardResettable.html">IBoardResettable</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marks a resettable whose work is board population/teardown (clearing or respawning actors), as opposed to run state (score, level, health).  <a href="interfaceBalloonParty_1_1Game_1_1Run_1_1IBoardResettable.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IBonusCardSource.html">IBonusCardSource</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether a retry could be dealt a bonus card right now.  <a href="interfaceBalloonParty_1_1Game_1_1Run_1_1IBonusCardSource.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IFailureOffers.html">IFailureOffers</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decides what a loss offers the player: a plain retry, one gated behind an ad, and a retry with a bonus card bought with a rewarded ad.  <a href="interfaceBalloonParty_1_1Game_1_1Run_1_1IFailureOffers.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryStaging.html">IRetryStaging</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stages a retry for the next run reset.  <a href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryStaging.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html">IRetryState</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read-only retry state — how many retries remain this run and the level to retry at (zero when the next restart is a fresh run).  <a href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html#details">More...</a><br /></td></tr>
@@ -136,6 +155,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html">IRunScore</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read-only view of the live run score, snapshotted by <a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RunController.html" title="Owns the run lifecycle — a loss is suppressed unless in NavigationState.Game with no loss-blocking ci...">RunController</a> when a run ends.  <a href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1NoAdService.html">NoAdService</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">No ad SDK yet: every ad counts as watched, so a gated retry goes straight through.  <a href="classBalloonParty_1_1Game_1_1Run_1_1NoAdService.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html">RetryTracker</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tracks per-run retry state.  <a href="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,7 +169,84 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html">RunResetOrder</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ordering for <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html#a347699f041bd2f73a8326aa24a351d81">IRunResettable.ResetOrder</a> — ascending, lower runs first.  <a href="classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:ae32b042f074527467706d741395e3a74" id="r_ae32b042f074527467706d741395e3a74"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae32b042f074527467706d741395e3a74">AdPlacement</a> { <a class="el" href="#ae32b042f074527467706d741395e3a74ab68aa5cb0ed52573b6fcf3453b68d489">RetryGate</a>
+, <a class="el" href="#ae32b042f074527467706d741395e3a74a7b69c80559d67f1b49a821c83dbdba7d">BonusRetry</a>
+ }</td></tr>
+<tr class="memdesc:ae32b042f074527467706d741395e3a74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where in the game an ad is asked for, so an SDK can report and cap them per placement.  <a href="#ae32b042f074527467706d741395e3a74">More...</a><br /></td></tr>
+<tr class="separator:ae32b042f074527467706d741395e3a74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a860ea73c21c91390602565c41dbd77f1" id="r_a860ea73c21c91390602565c41dbd77f1"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a860ea73c21c91390602565c41dbd77f1">AdResult</a> { <a class="el" href="#a860ea73c21c91390602565c41dbd77f1a8a10e06466b3311c50c21b05b44206aa">Watched</a>
+, <a class="el" href="#a860ea73c21c91390602565c41dbd77f1ad9c8f187972e6320a34e9c40b4cba605">Skipped</a>
+, <a class="el" href="#a860ea73c21c91390602565c41dbd77f1a453e6aa38d87b28ccae545967c53004f">Unavailable</a>
+ }</td></tr>
+<tr class="memdesc:a860ea73c21c91390602565c41dbd77f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">How a rewarded ad ended.  <a href="#a860ea73c21c91390602565c41dbd77f1">More...</a><br /></td></tr>
+<tr class="separator:a860ea73c21c91390602565c41dbd77f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="ae32b042f074527467706d741395e3a74" name="ae32b042f074527467706d741395e3a74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae32b042f074527467706d741395e3a74">&#9670;&#160;</a></span>AdPlacement</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#ae32b042f074527467706d741395e3a74">BalloonParty.Game.Run.AdPlacement</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Where in the game an ad is asked for, so an SDK can report and cap them per placement. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ae32b042f074527467706d741395e3a74ab68aa5cb0ed52573b6fcf3453b68d489" name="ae32b042f074527467706d741395e3a74ab68aa5cb0ed52573b6fcf3453b68d489"></a>RetryGate&#160;</td><td class="fielddoc"><p>A retry past the run's free ones (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#a4a8bda1ef35cbd1e9f6a5fd1da5dfc6d" title="Free retries per run; every retry after them needs a rewarded ad (0 = retries never need one).">Shared.IRunConfig.RetriesBeforeAd</a>). </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ae32b042f074527467706d741395e3a74a7b69c80559d67f1b49a821c83dbdba7d" name="ae32b042f074527467706d741395e3a74a7b69c80559d67f1b49a821c83dbdba7d"></a>BonusRetry&#160;</td><td class="fielddoc"><p>A retry with a bonus card for that attempt, chosen from the game-over screen. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="a860ea73c21c91390602565c41dbd77f1" name="a860ea73c21c91390602565c41dbd77f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a860ea73c21c91390602565c41dbd77f1">&#9670;&#160;</a></span>AdResult</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#a860ea73c21c91390602565c41dbd77f1">BalloonParty.Game.Run.AdResult</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How a rewarded ad ended. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a860ea73c21c91390602565c41dbd77f1a8a10e06466b3311c50c21b05b44206aa" name="a860ea73c21c91390602565c41dbd77f1a8a10e06466b3311c50c21b05b44206aa"></a>Watched&#160;</td><td class="fielddoc"><p>The player watched it through: the reward is earned. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a860ea73c21c91390602565c41dbd77f1ad9c8f187972e6320a34e9c40b4cba605" name="a860ea73c21c91390602565c41dbd77f1ad9c8f187972e6320a34e9c40b4cba605"></a>Skipped&#160;</td><td class="fielddoc"><p>The player closed it early: no reward. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a860ea73c21c91390602565c41dbd77f1a453e6aa38d87b28ccae545967c53004f" name="a860ea73c21c91390602565c41dbd77f1a453e6aa38d87b28ccae545967c53004f"></a>Unavailable&#160;</td><td class="fielddoc"><p>No ad could be shown (no fill, not loaded, SDK error). Not the player's doing. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

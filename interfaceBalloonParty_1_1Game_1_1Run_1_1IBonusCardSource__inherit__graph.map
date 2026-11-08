@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.Run.IBonusCardSource" name="BalloonParty.Game.Run.IBonusCardSource">
+<area shape="rect" id="Node000001" title="Whether a retry could be dealt a bonus card right now." alt="" coords="5,5,228,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html" title="The cards a run holds, the hand a level&#45;up deals, and the weapon the cards add up to." alt="" coords="9,93,224,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,59,119,93,114,93,114,59"/>
+</map>

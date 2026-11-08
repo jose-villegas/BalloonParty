@@ -116,7 +116,7 @@ $(function(){initNavTree('classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.
 </div><!--header-->
 <div class="contents">
 
-<p>Placeholder loss screen; visibility is driven by a CanvasGroup so the GameObject can stay active and keep its subscriptions alive (never toggle with SetActive).  
+<p>The loss screen: the level reached and its points, the best run, and the ways on: retry the level (the primary action), retry with a bonus card, or start over.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.UI.GameOver.GameOverScreen:</div>
@@ -130,11 +130,13 @@ $(function(){initNavTree('classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen__coll__graph.svg" width="100%" height="556"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen__coll__graph.svg" width="100%" height="509"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a895178233bd13bbf840876139b9b21bd" id="r_a895178233bd13bbf840876139b9b21bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a895178233bd13bbf840876139b9b21bd">OnBonusRetryPressed</a> ()</td></tr>
+<tr class="separator:a895178233bd13bbf840876139b9b21bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab5fa6cbbf1096a996496ea7e53981d8" id="r_aab5fa6cbbf1096a996496ea7e53981d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab5fa6cbbf1096a996496ea7e53981d8">OnRestartPressed</a> ()</td></tr>
 <tr class="separator:aab5fa6cbbf1096a996496ea7e53981d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5808d6943ef4f02e198b964df58f7e5" id="r_ab5808d6943ef4f02e198b964df58f7e5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab5808d6943ef4f02e198b964df58f7e5">OnRetryPressed</a> ()</td></tr>
@@ -144,33 +146,59 @@ Public Member Functions</h2></td></tr>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:ae4f8f557ec74e3f298373b9033ccc8c1" id="r_ae4f8f557ec74e3f298373b9033ccc8c1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae4f8f557ec74e3f298373b9033ccc8c1">Awake</a> ()</td></tr>
 <tr class="separator:ae4f8f557ec74e3f298373b9033ccc8c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38fcf372872d334fee93dcb53638a20f" id="r_a38fcf372872d334fee93dcb53638a20f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a38fcf372872d334fee93dcb53638a20f">CancelOffer</a> ()</td></tr>
+<tr class="separator:a38fcf372872d334fee93dcb53638a20f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef0f097cb2a4fb7e7464e5861f7ff002" id="r_aef0f097cb2a4fb7e7464e5861f7ff002"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aef0f097cb2a4fb7e7464e5861f7ff002">Dismiss</a> ()</td></tr>
+<tr class="separator:aef0f097cb2a4fb7e7464e5861f7ff002"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32fea13cccf437a9a5ab6d3992bab0d5" id="r_a32fea13cccf437a9a5ab6d3992bab0d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a32fea13cccf437a9a5ab6d3992bab0d5">KillMotion</a> ()</td></tr>
+<tr class="separator:a32fea13cccf437a9a5ab6d3992bab0d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac002d19399787761755993ae94ad68e7" id="r_ac002d19399787761755993ae94ad68e7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac002d19399787761755993ae94ad68e7">OnDestroy</a> ()</td></tr>
+<tr class="separator:ac002d19399787761755993ae94ad68e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58d1dcf709e9c4387095481864d348bf" id="r_a58d1dcf709e9c4387095481864d348bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a58d1dcf709e9c4387095481864d348bf">OnGameOver</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1GameOverMessage.html">GameOverMessage</a> msg)</td></tr>
 <tr class="separator:a58d1dcf709e9c4387095481864d348bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34bedf4ce1f8e6b1806e920fbd78a522" id="r_a34bedf4ce1f8e6b1806e920fbd78a522"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a34bedf4ce1f8e6b1806e920fbd78a522">PlayEntrance</a> ()</td></tr>
+<tr class="separator:a34bedf4ce1f8e6b1806e920fbd78a522"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3794ffdc0b3a9c57c69bb0c175b6bb5b" id="r_a3794ffdc0b3a9c57c69bb0c175b6bb5b"><td class="memItemLeft" align="right" valign="top">async UniTaskVoid&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3794ffdc0b3a9c57c69bb0c175b6bb5b">RetryAsync</a> (bool withBonusCard, CancellationToken ct)</td></tr>
+<tr class="separator:a3794ffdc0b3a9c57c69bb0c175b6bb5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e8aac686eeb34c940c42450fae3aa24" id="r_a5e8aac686eeb34c940c42450fae3aa24"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e8aac686eeb34c940c42450fae3aa24">RetryText</a> (<a class="el" href="structBalloonParty_1_1Game_1_1Run_1_1FailureOffer.html">FailureOffer</a> offer)</td></tr>
+<tr class="separator:a5e8aac686eeb34c940c42450fae3aa24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1e4f397cd0addd960252656942af4ca" id="r_ae1e4f397cd0addd960252656942af4ca"><td class="memItemLeft" align="right" valign="top">async UniTaskVoid&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae1e4f397cd0addd960252656942af4ca">RevealAfterGateAsync</a> ()</td></tr>
 <tr class="separator:ae1e4f397cd0addd960252656942af4ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d057da52e56e0d0e9e7ed9b6ef57c6b" id="r_a6d057da52e56e0d0e9e7ed9b6ef57c6b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6d057da52e56e0d0e9e7ed9b6ef57c6b">SetRetryButtonVisible</a> (bool visible)</td></tr>
-<tr class="separator:a6d057da52e56e0d0e9e7ed9b6ef57c6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad7554296731139208cda5fea2bbd9ca" id="r_aad7554296731139208cda5fea2bbd9ca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aad7554296731139208cda5fea2bbd9ca">SetRetryInteractable</a> (bool interactable)</td></tr>
+<tr class="separator:aad7554296731139208cda5fea2bbd9ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52f9043e3214e9c83a304b3fc49de2e8" id="r_a52f9043e3214e9c83a304b3fc49de2e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a52f9043e3214e9c83a304b3fc49de2e8">SetVisible</a> (bool visible)</td></tr>
 <tr class="separator:a52f9043e3214e9c83a304b3fc49de2e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2e5b8891498403fd31c802b06447fa7" id="r_ad2e5b8891498403fd31c802b06447fa7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad2e5b8891498403fd31c802b06447fa7">ShowRetryOffer</a> (<a class="el" href="structBalloonParty_1_1Game_1_1Run_1_1FailureOffer.html">FailureOffer</a> offer)</td></tr>
+<tr class="separator:ad2e5b8891498403fd31c802b06447fa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae65b29869f8d062de5ae87a06bbf71d9" id="r_ae65b29869f8d062de5ae87a06bbf71d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae65b29869f8d062de5ae87a06bbf71d9">Start</a> ()</td></tr>
 <tr class="separator:ae65b29869f8d062de5ae87a06bbf71d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:aa18697604a76891740a5d21d8938af7f" id="r_aa18697604a76891740a5d21d8938af7f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1UI_1_1FormattedLabel.html">FormattedLabel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa18697604a76891740a5d21d8938af7f">_bestLevel</a></td></tr>
-<tr class="separator:aa18697604a76891740a5d21d8938af7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adbc3cfc6d49d84a7881b98e9c9030f37" id="r_adbc3cfc6d49d84a7881b98e9c9030f37"><td class="memItemLeft" align="right" valign="top">TMP_Text&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adbc3cfc6d49d84a7881b98e9c9030f37">_bestLevelLabel</a></td></tr>
-<tr class="separator:adbc3cfc6d49d84a7881b98e9c9030f37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4f11e22d35d6a44b4fff67037e542bf" id="r_ac4f11e22d35d6a44b4fff67037e542bf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1UI_1_1FormattedLabel.html">FormattedLabel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac4f11e22d35d6a44b4fff67037e542bf">_bestScore</a></td></tr>
-<tr class="separator:ac4f11e22d35d6a44b4fff67037e542bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe976ff2454df2a3327ddf634fb85175" id="r_afe976ff2454df2a3327ddf634fb85175"><td class="memItemLeft" align="right" valign="top">TMP_Text&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe976ff2454df2a3327ddf634fb85175">_bestScoreLabel</a></td></tr>
-<tr class="separator:afe976ff2454df2a3327ddf634fb85175"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8be265b855c3bc3a802eb8ae986c2b65" id="r_a8be265b855c3bc3a802eb8ae986c2b65"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1UI_1_1FormattedLabel.html">FormattedLabel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8be265b855c3bc3a802eb8ae986c2b65">_best</a></td></tr>
+<tr class="separator:a8be265b855c3bc3a802eb8ae986c2b65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68ae55d31b29fbb8b96bf0791996a5ed" id="r_a68ae55d31b29fbb8b96bf0791996a5ed"><td class="memItemLeft" align="right" valign="top">TMP_Text&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a68ae55d31b29fbb8b96bf0791996a5ed">_bestLabel</a></td></tr>
+<tr class="separator:a68ae55d31b29fbb8b96bf0791996a5ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a514fc688aa4f1d691fbc11ddc7e1970f" id="r_a514fc688aa4f1d691fbc11ddc7e1970f"><td class="memItemLeft" align="right" valign="top">UnityEngine.UI.Button&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a514fc688aa4f1d691fbc11ddc7e1970f">_bonusRetryButton</a></td></tr>
+<tr class="separator:a514fc688aa4f1d691fbc11ddc7e1970f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a825728e1fd2a2ca323140962bb008d2a" id="r_a825728e1fd2a2ca323140962bb008d2a"><td class="memItemLeft" align="right" valign="top">CanvasGroup&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a825728e1fd2a2ca323140962bb008d2a">_canvasGroup</a></td></tr>
 <tr class="separator:a825728e1fd2a2ca323140962bb008d2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f4b4537d348f727f2e8346004f49292" id="r_a0f4b4537d348f727f2e8346004f49292"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0f4b4537d348f727f2e8346004f49292">_claimingRetry</a></td></tr>
+<tr class="separator:a0f4b4537d348f727f2e8346004f49292"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a06962719f729264af8c05020135e197f" id="r_a06962719f729264af8c05020135e197f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a06962719f729264af8c05020135e197f">_deathLevel</a></td></tr>
 <tr class="separator:a06962719f729264af8c05020135e197f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26090df50c2b9d6c705e7f97bdee89df" id="r_a26090df50c2b9d6c705e7f97bdee89df"><td class="memItemLeft" align="right" valign="top">IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1GameOverDismissedMessage.html">GameOverDismissedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a26090df50c2b9d6c705e7f97bdee89df">_dismissedPublisher</a></td></tr>
 <tr class="separator:a26090df50c2b9d6c705e7f97bdee89df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73a1e08d6743de35ceef5ac64da25103" id="r_a73a1e08d6743de35ceef5ac64da25103"><td class="memItemLeft" align="right" valign="top">Sequence&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a73a1e08d6743de35ceef5ac64da25103">_entrance</a></td></tr>
+<tr class="separator:a73a1e08d6743de35ceef5ac64da25103"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2f7060937b7e7424f68b269a3d5ccc6" id="r_af2f7060937b7e7424f68b269a3d5ccc6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af2f7060937b7e7424f68b269a3d5ccc6">_entranceOvershoot</a> = 1.3f</td></tr>
+<tr class="separator:af2f7060937b7e7424f68b269a3d5ccc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac925f420e1f914de04170e559ba04645" id="r_ac925f420e1f914de04170e559ba04645"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac925f420e1f914de04170e559ba04645">_entranceScale</a> = 0.85f</td></tr>
+<tr class="separator:ac925f420e1f914de04170e559ba04645"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbbd01d627d9d75bd32f67a3c3fc94e9" id="r_abbbd01d627d9d75bd32f67a3c3fc94e9"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abbbd01d627d9d75bd32f67a3c3fc94e9">_entranceSeconds</a> = 0.35f</td></tr>
+<tr class="separator:abbbd01d627d9d75bd32f67a3c3fc94e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a118ab26e49d7f7cf84c0fcef1cf9f3be" id="r_a118ab26e49d7f7cf84c0fcef1cf9f3be"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IFailureOffers.html">IFailureOffers</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a118ab26e49d7f7cf84c0fcef1cf9f3be">_failureOffers</a></td></tr>
+<tr class="separator:a118ab26e49d7f7cf84c0fcef1cf9f3be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a836ea030eb797bf2e0e34cf1faa62d92" id="r_a836ea030eb797bf2e0e34cf1faa62d92"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1UI_1_1FormattedLabel.html">FormattedLabel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a836ea030eb797bf2e0e34cf1faa62d92">_finalLevel</a></td></tr>
 <tr class="separator:a836ea030eb797bf2e0e34cf1faa62d92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a417e4fb09b79b3f2e62602110462a70e" id="r_a417e4fb09b79b3f2e62602110462a70e"><td class="memItemLeft" align="right" valign="top">TMP_Text&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a417e4fb09b79b3f2e62602110462a70e">_finalLevelLabel</a></td></tr>
@@ -181,21 +209,42 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a3b9d7d97264ce49e95bd851081b6cf9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a186a1ba83c2f061fc12f9a9ace384ef4" id="r_a186a1ba83c2f061fc12f9a9ace384ef4"><td class="memItemLeft" align="right" valign="top">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1GameOverMessage.html">GameOverMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a186a1ba83c2f061fc12f9a9ace384ef4">_gameOverSubscriber</a></td></tr>
 <tr class="separator:a186a1ba83c2f061fc12f9a9ace384ef4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9323fb38fefda0978c44c71d95181342" id="r_a9323fb38fefda0978c44c71d95181342"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9323fb38fefda0978c44c71d95181342">_inputGuardSeconds</a> = 0.3f</td></tr>
+<tr class="separator:a9323fb38fefda0978c44c71d95181342"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe1ff347bd580a5c0733a7ed51a3659b" id="r_abe1ff347bd580a5c0733a7ed51a3659b"><td class="memItemLeft" align="right" valign="top">CancellationTokenSource&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abe1ff347bd580a5c0733a7ed51a3659b">_offerCts</a></td></tr>
+<tr class="separator:abe1ff347bd580a5c0733a7ed51a3659b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb8d409e81b752a786408fc4a426f758" id="r_afb8d409e81b752a786408fc4a426f758"><td class="memItemLeft" align="right" valign="top">GameObject&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afb8d409e81b752a786408fc4a426f758">_offers</a></td></tr>
+<tr class="separator:afb8d409e81b752a786408fc4a426f758"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38ca6c10e35fa5fc265586275cd60cca" id="r_a38ca6c10e35fa5fc265586275cd60cca"><td class="memItemLeft" align="right" valign="top">Transform&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a38ca6c10e35fa5fc265586275cd60cca">_panel</a></td></tr>
+<tr class="separator:a38ca6c10e35fa5fc265586275cd60cca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69b813007435a5b0b12070a97e02fb47" id="r_a69b813007435a5b0b12070a97e02fb47"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html">GameOverPresentationGate</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a69b813007435a5b0b12070a97e02fb47">_presentationGate</a></td></tr>
 <tr class="separator:a69b813007435a5b0b12070a97e02fb47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04b577fd502ba7c5c842cb6593b435d6" id="r_a04b577fd502ba7c5c842cb6593b435d6"><td class="memItemLeft" align="right" valign="top">Transform&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a04b577fd502ba7c5c842cb6593b435d6">_primaryButton</a></td></tr>
+<tr class="separator:a04b577fd502ba7c5c842cb6593b435d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45de6b52660ffae943f36ffae5d4ab97" id="r_a45de6b52660ffae943f36ffae5d4ab97"><td class="memItemLeft" align="right" valign="top">Sequence&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a45de6b52660ffae943f36ffae5d4ab97">_pulse</a></td></tr>
+<tr class="separator:a45de6b52660ffae943f36ffae5d4ab97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7aa91b697cbd059cdce2351dddcc307" id="r_af7aa91b697cbd059cdce2351dddcc307"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af7aa91b697cbd059cdce2351dddcc307">_pulseDelaySeconds</a> = 1.2f</td></tr>
+<tr class="separator:af7aa91b697cbd059cdce2351dddcc307"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcbd06b5fc6b24eb7da96ff7eb696352" id="r_abcbd06b5fc6b24eb7da96ff7eb696352"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abcbd06b5fc6b24eb7da96ff7eb696352">_pulsePeriodSeconds</a> = 2.5f</td></tr>
+<tr class="separator:abcbd06b5fc6b24eb7da96ff7eb696352"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a367c9ca6de8a56219d8349225ced1894" id="r_a367c9ca6de8a56219d8349225ced1894"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a367c9ca6de8a56219d8349225ced1894">_pulseScale</a> = 1.05f</td></tr>
+<tr class="separator:a367c9ca6de8a56219d8349225ced1894"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada20144e8ac434456e2685777bdccc30" id="r_ada20144e8ac434456e2685777bdccc30"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada20144e8ac434456e2685777bdccc30">_retryAdFormat</a> = &quot;Retry level {0} (ad)&quot;</td></tr>
+<tr class="separator:ada20144e8ac434456e2685777bdccc30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf0ebfda434bf133f93cd7455acbb0d1" id="r_abf0ebfda434bf133f93cd7455acbb0d1"><td class="memItemLeft" align="right" valign="top">UnityEngine.UI.Button&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abf0ebfda434bf133f93cd7455acbb0d1">_retryButton</a></td></tr>
 <tr class="separator:abf0ebfda434bf133f93cd7455acbb0d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a731bb340c74576183af140a012af3e53" id="r_a731bb340c74576183af140a012af3e53"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a731bb340c74576183af140a012af3e53">_retryCountFormat</a> = &quot;Retry level {0} ({1} left)&quot;</td></tr>
+<tr class="separator:a731bb340c74576183af140a012af3e53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a287daa220035f4236a46fde9334c7fdc" id="r_a287daa220035f4236a46fde9334c7fdc"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a287daa220035f4236a46fde9334c7fdc">_retryFormat</a> = &quot;Retry level {0}&quot;</td></tr>
+<tr class="separator:a287daa220035f4236a46fde9334c7fdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b2ed413a7b22c54affdf78bbdd72922" id="r_a7b2ed413a7b22c54affdf78bbdd72922"><td class="memItemLeft" align="right" valign="top">TMP_Text&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7b2ed413a7b22c54affdf78bbdd72922">_retryLabel</a></td></tr>
 <tr class="separator:a7b2ed413a7b22c54affdf78bbdd72922"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0acfd6888139e176d1d9339845a177b5" id="r_a0acfd6888139e176d1d9339845a177b5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html">IRetryState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0acfd6888139e176d1d9339845a177b5">_retryState</a></td></tr>
-<tr class="separator:a0acfd6888139e176d1d9339845a177b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae351acef5c29bbc049488a6a5e8f24b3" id="r_ae351acef5c29bbc049488a6a5e8f24b3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html">RetryTracker</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae351acef5c29bbc049488a6a5e8f24b3">_retryTracker</a></td></tr>
-<tr class="separator:ae351acef5c29bbc049488a6a5e8f24b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87af3404b9ff57d845d141770147254a" id="r_a87af3404b9ff57d845d141770147254a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunMeta.html">IRunMeta</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a87af3404b9ff57d845d141770147254a">_runMeta</a></td></tr>
 <tr class="separator:a87af3404b9ff57d845d141770147254a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Placeholder loss screen; visibility is driven by a CanvasGroup so the GameObject can stay active and keep its subscriptions alive (never toggle with SetActive). </p>
+<div class="textblock"><p>The loss screen: the level reached and its points, the best run, and the ways on: retry the level (the primary action), retry with a bonus card, or start over. </p>
+<p>Visibility is driven by a CanvasGroup so the GameObject can stay active and keep its subscriptions alive (never toggle with SetActive). The layout is built by <code>Editor/GameOverLayoutBuilder</code>. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ae4f8f557ec74e3f298373b9033ccc8c1" name="ae4f8f557ec74e3f298373b9033ccc8c1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae4f8f557ec74e3f298373b9033ccc8c1">&#9670;&#160;</a></span>Awake()</h2>
@@ -208,6 +257,123 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">void BalloonParty.UI.GameOver.GameOverScreen.Awake </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a38fcf372872d334fee93dcb53638a20f" name="a38fcf372872d334fee93dcb53638a20f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38fcf372872d334fee93dcb53638a20f">&#9670;&#160;</a></span>CancelOffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.GameOver.GameOverScreen.CancelOffer </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aef0f097cb2a4fb7e7464e5861f7ff002" name="aef0f097cb2a4fb7e7464e5861f7ff002"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef0f097cb2a4fb7e7464e5861f7ff002">&#9670;&#160;</a></span>Dismiss()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.GameOver.GameOverScreen.Dismiss </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a32fea13cccf437a9a5ab6d3992bab0d5" name="a32fea13cccf437a9a5ab6d3992bab0d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32fea13cccf437a9a5ab6d3992bab0d5">&#9670;&#160;</a></span>KillMotion()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.GameOver.GameOverScreen.KillMotion </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a895178233bd13bbf840876139b9b21bd" name="a895178233bd13bbf840876139b9b21bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a895178233bd13bbf840876139b9b21bd">&#9670;&#160;</a></span>OnBonusRetryPressed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.GameOver.GameOverScreen.OnBonusRetryPressed </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac002d19399787761755993ae94ad68e7" name="ac002d19399787761755993ae94ad68e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac002d19399787761755993ae94ad68e7">&#9670;&#160;</a></span>OnDestroy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.GameOver.GameOverScreen.OnDestroy </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -281,6 +447,85 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a34bedf4ce1f8e6b1806e920fbd78a522" name="a34bedf4ce1f8e6b1806e920fbd78a522"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34bedf4ce1f8e6b1806e920fbd78a522">&#9670;&#160;</a></span>PlayEntrance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.GameOver.GameOverScreen.PlayEntrance </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3794ffdc0b3a9c57c69bb0c175b6bb5b" name="a3794ffdc0b3a9c57c69bb0c175b6bb5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3794ffdc0b3a9c57c69bb0c175b6bb5b">&#9670;&#160;</a></span>RetryAsync()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">async UniTaskVoid BalloonParty.UI.GameOver.GameOverScreen.RetryAsync </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>withBonusCard</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">CancellationToken</td>          <td class="paramname"><span class="paramname"><em>ct</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5e8aac686eeb34c940c42450fae3aa24" name="a5e8aac686eeb34c940c42450fae3aa24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e8aac686eeb34c940c42450fae3aa24">&#9670;&#160;</a></span>RetryText()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string BalloonParty.UI.GameOver.GameOverScreen.RetryText </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Game_1_1Run_1_1FailureOffer.html">FailureOffer</a></td>          <td class="paramname"><span class="paramname"><em>offer</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ae1e4f397cd0addd960252656942af4ca" name="ae1e4f397cd0addd960252656942af4ca"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae1e4f397cd0addd960252656942af4ca">&#9670;&#160;</a></span>RevealAfterGateAsync()</h2>
 
@@ -306,8 +551,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a6d057da52e56e0d0e9e7ed9b6ef57c6b" name="a6d057da52e56e0d0e9e7ed9b6ef57c6b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6d057da52e56e0d0e9e7ed9b6ef57c6b">&#9670;&#160;</a></span>SetRetryButtonVisible()</h2>
+<a id="aad7554296731139208cda5fea2bbd9ca" name="aad7554296731139208cda5fea2bbd9ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad7554296731139208cda5fea2bbd9ca">&#9670;&#160;</a></span>SetRetryInteractable()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -316,9 +561,9 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void BalloonParty.UI.GameOver.GameOverScreen.SetRetryButtonVisible </td>
+          <td class="memname">void BalloonParty.UI.GameOver.GameOverScreen.SetRetryInteractable </td>
           <td>(</td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>visible</em></span></td><td>)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>interactable</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -344,6 +589,31 @@ Private Attributes</h2></td></tr>
           <td class="memname">void BalloonParty.UI.GameOver.GameOverScreen.SetVisible </td>
           <td>(</td>
           <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>visible</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad2e5b8891498403fd31c802b06447fa7" name="ad2e5b8891498403fd31c802b06447fa7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2e5b8891498403fd31c802b06447fa7">&#9670;&#160;</a></span>ShowRetryOffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.GameOver.GameOverScreen.ShowRetryOffer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Game_1_1Run_1_1FailureOffer.html">FailureOffer</a></td>          <td class="paramname"><span class="paramname"><em>offer</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -382,8 +652,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="aa18697604a76891740a5d21d8938af7f" name="aa18697604a76891740a5d21d8938af7f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa18697604a76891740a5d21d8938af7f">&#9670;&#160;</a></span>_bestLevel</h2>
+<a id="a8be265b855c3bc3a802eb8ae986c2b65" name="a8be265b855c3bc3a802eb8ae986c2b65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8be265b855c3bc3a802eb8ae986c2b65">&#9670;&#160;</a></span>_best</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -392,7 +662,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structBalloonParty_1_1UI_1_1FormattedLabel.html">FormattedLabel</a> BalloonParty.UI.GameOver.GameOverScreen._bestLevel</td>
+          <td class="memname"><a class="el" href="structBalloonParty_1_1UI_1_1FormattedLabel.html">FormattedLabel</a> BalloonParty.UI.GameOver.GameOverScreen._best</td>
         </tr>
       </table>
   </td>
@@ -404,8 +674,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="adbc3cfc6d49d84a7881b98e9c9030f37" name="adbc3cfc6d49d84a7881b98e9c9030f37"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adbc3cfc6d49d84a7881b98e9c9030f37">&#9670;&#160;</a></span>_bestLevelLabel</h2>
+<a id="a68ae55d31b29fbb8b96bf0791996a5ed" name="a68ae55d31b29fbb8b96bf0791996a5ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68ae55d31b29fbb8b96bf0791996a5ed">&#9670;&#160;</a></span>_bestLabel</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -414,7 +684,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">TMP_Text BalloonParty.UI.GameOver.GameOverScreen._bestLevelLabel</td>
+          <td class="memname">TMP_Text BalloonParty.UI.GameOver.GameOverScreen._bestLabel</td>
         </tr>
       </table>
   </td>
@@ -426,8 +696,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ac4f11e22d35d6a44b4fff67037e542bf" name="ac4f11e22d35d6a44b4fff67037e542bf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac4f11e22d35d6a44b4fff67037e542bf">&#9670;&#160;</a></span>_bestScore</h2>
+<a id="a514fc688aa4f1d691fbc11ddc7e1970f" name="a514fc688aa4f1d691fbc11ddc7e1970f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a514fc688aa4f1d691fbc11ddc7e1970f">&#9670;&#160;</a></span>_bonusRetryButton</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -436,29 +706,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structBalloonParty_1_1UI_1_1FormattedLabel.html">FormattedLabel</a> BalloonParty.UI.GameOver.GameOverScreen._bestScore</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="afe976ff2454df2a3327ddf634fb85175" name="afe976ff2454df2a3327ddf634fb85175"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afe976ff2454df2a3327ddf634fb85175">&#9670;&#160;</a></span>_bestScoreLabel</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">TMP_Text BalloonParty.UI.GameOver.GameOverScreen._bestScoreLabel</td>
+          <td class="memname">UnityEngine.UI.Button BalloonParty.UI.GameOver.GameOverScreen._bonusRetryButton</td>
         </tr>
       </table>
   </td>
@@ -481,6 +729,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">CanvasGroup BalloonParty.UI.GameOver.GameOverScreen._canvasGroup</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0f4b4537d348f727f2e8346004f49292" name="a0f4b4537d348f727f2e8346004f49292"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f4b4537d348f727f2e8346004f49292">&#9670;&#160;</a></span>_claimingRetry</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.UI.GameOver.GameOverScreen._claimingRetry</td>
         </tr>
       </table>
   </td>
@@ -525,6 +795,116 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">IPublisher&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1GameOverDismissedMessage.html">GameOverDismissedMessage</a>&gt; BalloonParty.UI.GameOver.GameOverScreen._dismissedPublisher</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a73a1e08d6743de35ceef5ac64da25103" name="a73a1e08d6743de35ceef5ac64da25103"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73a1e08d6743de35ceef5ac64da25103">&#9670;&#160;</a></span>_entrance</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Sequence BalloonParty.UI.GameOver.GameOverScreen._entrance</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af2f7060937b7e7424f68b269a3d5ccc6" name="af2f7060937b7e7424f68b269a3d5ccc6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2f7060937b7e7424f68b269a3d5ccc6">&#9670;&#160;</a></span>_entranceOvershoot</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.UI.GameOver.GameOverScreen._entranceOvershoot = 1.3f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac925f420e1f914de04170e559ba04645" name="ac925f420e1f914de04170e559ba04645"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac925f420e1f914de04170e559ba04645">&#9670;&#160;</a></span>_entranceScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.UI.GameOver.GameOverScreen._entranceScale = 0.85f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abbbd01d627d9d75bd32f67a3c3fc94e9" name="abbbd01d627d9d75bd32f67a3c3fc94e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abbbd01d627d9d75bd32f67a3c3fc94e9">&#9670;&#160;</a></span>_entranceSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.UI.GameOver.GameOverScreen._entranceSeconds = 0.35f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a118ab26e49d7f7cf84c0fcef1cf9f3be" name="a118ab26e49d7f7cf84c0fcef1cf9f3be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a118ab26e49d7f7cf84c0fcef1cf9f3be">&#9670;&#160;</a></span>_failureOffers</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IFailureOffers.html">IFailureOffers</a> BalloonParty.UI.GameOver.GameOverScreen._failureOffers</td>
         </tr>
       </table>
   </td>
@@ -646,6 +1026,94 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a9323fb38fefda0978c44c71d95181342" name="a9323fb38fefda0978c44c71d95181342"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9323fb38fefda0978c44c71d95181342">&#9670;&#160;</a></span>_inputGuardSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.UI.GameOver.GameOverScreen._inputGuardSeconds = 0.3f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abe1ff347bd580a5c0733a7ed51a3659b" name="abe1ff347bd580a5c0733a7ed51a3659b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe1ff347bd580a5c0733a7ed51a3659b">&#9670;&#160;</a></span>_offerCts</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">CancellationTokenSource BalloonParty.UI.GameOver.GameOverScreen._offerCts</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afb8d409e81b752a786408fc4a426f758" name="afb8d409e81b752a786408fc4a426f758"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb8d409e81b752a786408fc4a426f758">&#9670;&#160;</a></span>_offers</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">GameObject BalloonParty.UI.GameOver.GameOverScreen._offers</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a38ca6c10e35fa5fc265586275cd60cca" name="a38ca6c10e35fa5fc265586275cd60cca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38ca6c10e35fa5fc265586275cd60cca">&#9670;&#160;</a></span>_panel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Transform BalloonParty.UI.GameOver.GameOverScreen._panel</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a69b813007435a5b0b12070a97e02fb47" name="a69b813007435a5b0b12070a97e02fb47"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a69b813007435a5b0b12070a97e02fb47">&#9670;&#160;</a></span>_presentationGate</h2>
 
@@ -657,6 +1125,138 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html">GameOverPresentationGate</a> BalloonParty.UI.GameOver.GameOverScreen._presentationGate</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a04b577fd502ba7c5c842cb6593b435d6" name="a04b577fd502ba7c5c842cb6593b435d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04b577fd502ba7c5c842cb6593b435d6">&#9670;&#160;</a></span>_primaryButton</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Transform BalloonParty.UI.GameOver.GameOverScreen._primaryButton</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a45de6b52660ffae943f36ffae5d4ab97" name="a45de6b52660ffae943f36ffae5d4ab97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45de6b52660ffae943f36ffae5d4ab97">&#9670;&#160;</a></span>_pulse</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Sequence BalloonParty.UI.GameOver.GameOverScreen._pulse</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af7aa91b697cbd059cdce2351dddcc307" name="af7aa91b697cbd059cdce2351dddcc307"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7aa91b697cbd059cdce2351dddcc307">&#9670;&#160;</a></span>_pulseDelaySeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.UI.GameOver.GameOverScreen._pulseDelaySeconds = 1.2f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abcbd06b5fc6b24eb7da96ff7eb696352" name="abcbd06b5fc6b24eb7da96ff7eb696352"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abcbd06b5fc6b24eb7da96ff7eb696352">&#9670;&#160;</a></span>_pulsePeriodSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.UI.GameOver.GameOverScreen._pulsePeriodSeconds = 2.5f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a367c9ca6de8a56219d8349225ced1894" name="a367c9ca6de8a56219d8349225ced1894"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a367c9ca6de8a56219d8349225ced1894">&#9670;&#160;</a></span>_pulseScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.UI.GameOver.GameOverScreen._pulseScale = 1.05f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ada20144e8ac434456e2685777bdccc30" name="ada20144e8ac434456e2685777bdccc30"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada20144e8ac434456e2685777bdccc30">&#9670;&#160;</a></span>_retryAdFormat</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string BalloonParty.UI.GameOver.GameOverScreen._retryAdFormat = &quot;Retry level {0} (ad)&quot;</td>
         </tr>
       </table>
   </td>
@@ -690,6 +1290,50 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a731bb340c74576183af140a012af3e53" name="a731bb340c74576183af140a012af3e53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a731bb340c74576183af140a012af3e53">&#9670;&#160;</a></span>_retryCountFormat</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string BalloonParty.UI.GameOver.GameOverScreen._retryCountFormat = &quot;Retry level {0} ({1} left)&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a287daa220035f4236a46fde9334c7fdc" name="a287daa220035f4236a46fde9334c7fdc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a287daa220035f4236a46fde9334c7fdc">&#9670;&#160;</a></span>_retryFormat</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string BalloonParty.UI.GameOver.GameOverScreen._retryFormat = &quot;Retry level {0}&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a7b2ed413a7b22c54affdf78bbdd72922" name="a7b2ed413a7b22c54affdf78bbdd72922"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7b2ed413a7b22c54affdf78bbdd72922">&#9670;&#160;</a></span>_retryLabel</h2>
 
@@ -701,50 +1345,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">TMP_Text BalloonParty.UI.GameOver.GameOverScreen._retryLabel</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a0acfd6888139e176d1d9339845a177b5" name="a0acfd6888139e176d1d9339845a177b5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0acfd6888139e176d1d9339845a177b5">&#9670;&#160;</a></span>_retryState</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html">IRetryState</a> BalloonParty.UI.GameOver.GameOverScreen._retryState</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae351acef5c29bbc049488a6a5e8f24b3" name="ae351acef5c29bbc049488a6a5e8f24b3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae351acef5c29bbc049488a6a5e8f24b3">&#9670;&#160;</a></span>_retryTracker</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html">RetryTracker</a> BalloonParty.UI.GameOver.GameOverScreen._retryTracker</td>
         </tr>
       </table>
   </td>

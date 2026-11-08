@@ -1,5 +1,5 @@
 <map id="BalloonParty.Game.Level.LevelDifficultyResolver" name="BalloonParty.Game.Level.LevelDifficultyResolver">
-<area shape="rect" id="Node000001" title="Resolves and caches the live per&#45;level difficulty mix, bridging range weights onto the balloon/item c..." alt="" coords="260,105,448,145"/>
+<area shape="rect" id="Node000001" title="Resolves and caches the live per&#45;level difficulty mix (generated, or a debug preset),..." alt="" coords="260,105,448,145"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="66,5,151,31"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,25,213,40,275,70,326,102,323,107,272,75,211,44,164,30"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="59,55,158,80"/>

@@ -58,7 +58,7 @@ var sectionId = 'dynsection-1';
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="The range&#45;authored form of a level&#39;s difficulty mix; Resolve is a pure function, so it&#39;s EditMode&#45;tes...">
+<g id="a_Node000001"><a xlink:title="A level&#39;s difficulty mix before its ranges are rolled: what LevelGenerator outputs for every positive...">
 <polygon fill="#999999" stroke="#666666" points="666,-126 502,-126 502,-96 666,-96 666,-126"/>
 <text text-anchor="start" x="510" y="-114" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text text-anchor="middle" x="584" y="-103" font-family="Helvetica,sans-Serif" font-size="10.00">Level.RangedLevelParameters</text>

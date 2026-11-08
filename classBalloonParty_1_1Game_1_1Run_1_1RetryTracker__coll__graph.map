@@ -1,7 +1,9 @@
 <map id="BalloonParty.Game.Run.RetryTracker" name="BalloonParty.Game.Run.RetryTracker">
-<area shape="rect" id="Node000001" title="Tracks per&#45;run retry state." alt="" coords="125,93,338,133"/>
+<area shape="rect" id="Node000001" title="Tracks per&#45;run retry state." alt="" coords="271,69,484,109"/>
 <area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html" title="Read&#45;only retry state — how many retries remain this run and the level to retry at (zero when the nex..." alt="" coords="5,5,223,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="153,52,207,91,204,95,150,56"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="247,5,453,45"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="314,56,259,95,256,91,311,51"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="211,46,295,67,294,72,209,51"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryStaging.html" title="Stages a retry for the next run reset." alt="" coords="5,69,223,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="236,87,270,87,270,92,236,92"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="11,133,217,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="209,127,294,107,295,112,211,133"/>
 </map>

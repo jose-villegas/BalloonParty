@@ -140,8 +140,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:ac02aca13e4917d5acb459c2dedb2366d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6a2ee34bfd41e2864c8cb8072d574ce" id="r_ae6a2ee34bfd41e2864c8cb8072d574ce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae6a2ee34bfd41e2864c8cb8072d574ce">OnDestroy</a> ()</td></tr>
 <tr class="separator:ae6a2ee34bfd41e2864c8cb8072d574ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a084bb8922f089590a36f7713ca37be9c" id="r_a084bb8922f089590a36f7713ca37be9c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a084bb8922f089590a36f7713ca37be9c">OnProjectileDestroyed</a> ()</td></tr>
-<tr class="separator:a084bb8922f089590a36f7713ca37be9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0847fcbbb4001f7beee6d519210abcf0" id="r_a0847fcbbb4001f7beee6d519210abcf0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0847fcbbb4001f7beee6d519210abcf0">OnProjectileDestroyed</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage.html">ProjectileDestroyedMessage</a> msg)</td></tr>
+<tr class="separator:a0847fcbbb4001f7beee6d519210abcf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acdd9581f388b4dc822994f4d259b996e" id="r_acdd9581f388b4dc822994f4d259b996e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acdd9581f388b4dc822994f4d259b996e">OnProjectileLoaded</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html">ProjectileLoadedMessage</a> msg)</td></tr>
 <tr class="separator:acdd9581f388b4dc822994f4d259b996e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -149,6 +149,8 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a7508e6300e104a342a2418b329196321" id="r_a7508e6300e104a342a2418b329196321"><td class="memItemLeft" align="right" valign="top">Animator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7508e6300e104a342a2418b329196321">_animator</a></td></tr>
 <tr class="separator:a7508e6300e104a342a2418b329196321"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5333d945a41052d59a8a19047398c1ca" id="r_a5333d945a41052d59a8a19047398c1ca"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5333d945a41052d59a8a19047398c1ca">_bound</a></td></tr>
+<tr class="separator:a5333d945a41052d59a8a19047398c1ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6d534fe36b7b1b2e36b04f36c1aca30" id="r_af6d534fe36b7b1b2e36b04f36c1aca30"><td class="memItemLeft" align="right" valign="top">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage.html">ProjectileDestroyedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af6d534fe36b7b1b2e36b04f36c1aca30">_destroyedSubscriber</a></td></tr>
 <tr class="separator:af6d534fe36b7b1b2e36b04f36c1aca30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab678fd0da28465a54eb1d7472cb3f586" id="r_ab678fd0da28465a54eb1d7472cb3f586"><td class="memItemLeft" align="right" valign="top">readonly CompositeDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab678fd0da28465a54eb1d7472cb3f586">_disposable</a> = new()</td></tr>
@@ -274,8 +276,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a084bb8922f089590a36f7713ca37be9c" name="a084bb8922f089590a36f7713ca37be9c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a084bb8922f089590a36f7713ca37be9c">&#9670;&#160;</a></span>OnProjectileDestroyed()</h2>
+<a id="a0847fcbbb4001f7beee6d519210abcf0" name="a0847fcbbb4001f7beee6d519210abcf0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0847fcbbb4001f7beee6d519210abcf0">&#9670;&#160;</a></span>OnProjectileDestroyed()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -286,7 +288,7 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void BalloonParty.UI.Shields.ShieldCounterAnimation.OnProjectileDestroyed </td>
           <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage.html">ProjectileDestroyedMessage</a></td>          <td class="paramname"><span class="paramname"><em>msg</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -336,6 +338,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">Animator BalloonParty.UI.Shields.ShieldCounterAnimation._animator</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5333d945a41052d59a8a19047398c1ca" name="a5333d945a41052d59a8a19047398c1ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5333d945a41052d59a8a19047398c1ca">&#9670;&#160;</a></span>_bound</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> BalloonParty.UI.Shields.ShieldCounterAnimation._bound</td>
         </tr>
       </table>
   </td>

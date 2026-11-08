@@ -1,9 +1,11 @@
 <map id="BalloonParty.Audio.Routing.ItemSoundRouter" name="BalloonParty.Audio.Routing.ItemSoundRouter">
-<area shape="rect" id="Node000001" title=" " alt="" coords="63,108,265,148"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,91,38"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="73,45,144,106,140,110,70,49"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="115,13,213,38"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="167,52,167,108,161,108,161,52"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html" title=" " alt="" coords="238,5,429,45"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="291,55,197,110,194,106,289,50"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="324,77,525,117"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="58,5,143,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="157,27,301,61,352,74,350,79,299,66,156,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="51,55,150,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="164,70,324,85,323,90,163,76"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html" title=" " alt="" coords="5,105,196,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="209,113,323,103,324,108,210,118"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="15,169,186,209"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="189,162,299,131,357,114,359,119,301,137,190,168"/>
 </map>

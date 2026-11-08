@@ -1,0 +1,5 @@
+<map id="BalloonParty.Shared.Messages.ProjectileCruiseStartedMessage" name="BalloonParty.Shared.Messages.ProjectileCruiseStartedMessage">
+<area shape="rect" id="Node000001" title="Published when a shot enters CRUISE — enough consecutive wall bounces with no balloon contact that it..." alt="" coords="5,108,235,148"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html" title=" " alt="" coords="35,5,205,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,59,123,108,117,108,117,59"/>
+</map>

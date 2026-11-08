@@ -2,28 +2,32 @@
 <area shape="rect" id="Node000001" title="Plain C# so hit rules are testable without a collider." alt="" coords="1003,133,1229,173"/>
 <area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Shared_1_1Messages_1_1IHitDispatcher.html" title="Publish ActorHitMessage only through this — publishing to the broker directly skips scoring and the o..." alt="" coords="632,5,856,45"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="830,47,857,55,919,72,980,92,1073,131,1071,136,978,97,917,77,855,60,828,52"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsWriter.html" title="The write half of IFlightStats, segregated so no reader can mutate what it reads." alt="" coords="649,69,839,109"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsWriter.html" title="The write half of IFlightStatsSource, segregated so no reader can mutate what it reads." alt="" coords="649,69,839,109"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="854,105,1003,131,1002,137,853,111"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html" title=" " alt="" coords="649,133,839,173"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html" title="Owns a ColorStreak per ball." alt="" coords="649,133,839,173"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="853,151,1002,151,1002,156,853,156"/>
-<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html" title="Read&#45;only access to the current same&#45;colour pop streak, for HUD feedback." alt="" coords="261,77,451,117"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="465,110,650,137,649,142,464,116"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="307,142,405,167"/>
-<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="419,152,649,151,649,156,419,157"/>
-<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Shared_1_1IRunConfig.html" title="Run&#45;level rules — starting hit points, retry allowance, and (future) loss thresholds." alt="" coords="652,197,836,237"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="849,197,1002,170,1003,175,850,202"/>
-<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="657,261,831,301"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="827,255,855,247,917,230,978,211,1072,171,1074,176,980,216,919,235,857,252,829,260"/>
-<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="269,195,443,235"/>
-<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="457,229,658,264,657,269,456,234"/>
-<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,195,212,235"/>
-<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="226,212,269,212,269,217,226,217"/>
-<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="264,259,448,299"/>
-<area shape="poly" id="edge10_Node000008_Node000011" title=" " alt="" coords="462,277,657,278,657,283,462,282"/>
-<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="267,323,445,363"/>
-<area shape="poly" id="edge11_Node000008_Node000012" title=" " alt="" coords="459,324,657,292,658,298,459,329"/>
-<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,323,198,363"/>
-<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="212,340,266,340,266,345,212,345"/>
-<area shape="rect" id="Node000014" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="267,387,445,427"/>
-<area shape="poly" id="edge13_Node000008_Node000014" title=" " alt="" coords="458,383,532,365,607,342,704,299,706,304,609,346,533,370,460,388"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html" title="Read&#45;only access to the current same&#45;colour pop streak, for HUD feedback." alt="" coords="261,19,451,59"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="465,56,537,76,609,103,633,119,663,131,661,136,631,124,607,108,535,81,463,62"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="307,83,405,109"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="419,103,649,137,649,142,418,108"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="271,133,441,173"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="455,151,649,151,649,156,455,156"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Game_1_1Score_1_1ColorStreak.html" title="One ball&#39;s same&#45;colour pop streak." alt="" coords="261,197,451,237"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="464,197,649,166,650,171,465,202"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Shared_1_1IRunConfig.html" title="Run&#45;level rules: starting hit points, retry allowance, the level&#45;complete beat and upgrade cards." alt="" coords="652,197,836,237"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="849,197,1002,170,1003,175,850,202"/>
+<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="657,325,831,365"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="794,317,1074,171,1077,176,797,322"/>
+<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="269,261,443,301"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="457,295,657,328,657,334,456,300"/>
+<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,261,212,301"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="226,279,269,279,269,284,226,284"/>
+<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="264,325,448,365"/>
+<area shape="poly" id="edge12_Node000010_Node000013" title=" " alt="" coords="462,343,657,343,657,348,462,348"/>
+<area shape="rect" id="Node000014" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="267,389,445,429"/>
+<area shape="poly" id="edge13_Node000010_Node000014" title=" " alt="" coords="459,390,657,357,658,362,459,395"/>
+<area shape="rect" id="Node000015" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,389,198,429"/>
+<area shape="poly" id="edge14_Node000014_Node000015" title=" " alt="" coords="212,407,266,407,266,412,212,412"/>
+<area shape="rect" id="Node000016" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="267,453,445,493"/>
+<area shape="poly" id="edge15_Node000010_Node000016" title=" " alt="" coords="458,450,532,431,607,407,658,386,704,363,706,368,660,390,609,412,533,436,460,455"/>
 </map>

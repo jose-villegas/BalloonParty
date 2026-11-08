@@ -31,7 +31,7 @@ var classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView =
     [ "_materials", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html#ad46e90bff50b7a7c7b0fbefe795e6980", null ],
     [ "_offsetMatrices", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html#a806fc9b7e353feaef6ad1a3aa2d95628", null ],
     [ "_poolManager", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html#ab05e6efd2558de789c60d7ea17a6ec11", null ],
-    [ "_projectileProvider", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html#a0226498bac0b416baa81ec07df863b7b", null ],
+    [ "_projectiles", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html#a2fc87e3d8d19b7c2513ff96de31935bf", null ],
     [ "_renderData", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html#aaf489f2402f2f50742b8913e61f1e577", null ],
     [ "_renderer", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html#a79af6e139e63598ed4ed7c52a8672838", null ],
     [ "_restPosition", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html#a3b96a90d1a11e2f82509fb33e1c54bdf", null ],

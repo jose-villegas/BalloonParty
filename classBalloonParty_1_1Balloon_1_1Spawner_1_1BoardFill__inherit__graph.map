@@ -1,0 +1,5 @@
+<map id="BalloonParty.Balloon.Spawner.BoardFill" name="BalloonParty.Balloon.Spawner.BoardFill">
+<area shape="rect" id="Node000001" title="How full the board is, in balloons: against the level&#39;s starting fill (its board lines across every c..." alt="" coords="5,93,224,133"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1IBoardFill.html" title=" " alt="" coords="5,5,224,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,59,117,93,112,93,112,59"/>
+</map>

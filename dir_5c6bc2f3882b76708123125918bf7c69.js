@@ -18,6 +18,7 @@ var dir_5c6bc2f3882b76708123125918bf7c69 =
     [ "SceneExtensions.cs", "SceneExtensions_8cs.html", "SceneExtensions_8cs" ],
     [ "SlotActorExtensions.cs", "SlotActorExtensions_8cs.html", "SlotActorExtensions_8cs" ],
     [ "SpriteRendererExtensions.cs", "SpriteRendererExtensions_8cs.html", "SpriteRendererExtensions_8cs" ],
+    [ "StringFormatExtensions.cs", "StringFormatExtensions_8cs.html", "StringFormatExtensions_8cs" ],
     [ "TmpTextExtensions.cs", "TmpTextExtensions_8cs.html", "TmpTextExtensions_8cs" ],
     [ "TransformExtensions.cs", "TransformExtensions_8cs.html", "TransformExtensions_8cs" ],
     [ "VectorExtensions.cs", "VectorExtensions_8cs.html", "VectorExtensions_8cs" ],

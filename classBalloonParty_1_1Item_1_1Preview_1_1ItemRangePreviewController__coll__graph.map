@@ -23,7 +23,7 @@
 <area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="212,151,325,151,325,156,212,156"/>
 <area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="325,197,504,237"/>
 <area shape="poly" id="edge10_Node000005_Node000011" title=" " alt="" coords="518,213,676,204,710,200,711,205,676,209,518,219"/>
-<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html" title="Shared reference to the current aim&#45;prediction trace, decoupled from direct access — mirrors BalloonP..." alt="" coords="710,355,885,395"/>
+<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html" title="Shared reference to the current aim&#45;prediction trace, decoupled from direct access." alt="" coords="710,355,885,395"/>
 <area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="898,364,1041,352,1041,358,899,369"/>
 <area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="870,437,1084,364,1086,369,871,442"/>
 <area shape="rect" id="Node000014" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="321,489,508,529"/>

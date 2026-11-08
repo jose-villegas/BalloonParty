@@ -16,6 +16,7 @@ var namespaceBalloonParty_1_1Shared =
     [ "AimAngleGrid", "classBalloonParty_1_1Shared_1_1AimAngleGrid.html", "classBalloonParty_1_1Shared_1_1AimAngleGrid" ],
     [ "CircleContact", "classBalloonParty_1_1Shared_1_1CircleContact.html", "classBalloonParty_1_1Shared_1_1CircleContact" ],
     [ "ContactRadius", "classBalloonParty_1_1Shared_1_1ContactRadius.html", "classBalloonParty_1_1Shared_1_1ContactRadius" ],
+    [ "DeflectChainRule", "classBalloonParty_1_1Shared_1_1DeflectChainRule.html", "classBalloonParty_1_1Shared_1_1DeflectChainRule" ],
     [ "DeflectorCircle", "structBalloonParty_1_1Shared_1_1DeflectorCircle.html", "structBalloonParty_1_1Shared_1_1DeflectorCircle" ],
     [ "EnumIndexedAttribute", "classBalloonParty_1_1Shared_1_1EnumIndexedAttribute.html", "classBalloonParty_1_1Shared_1_1EnumIndexedAttribute" ],
     [ "IDeflectorField", "interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html", "interfaceBalloonParty_1_1Shared_1_1IDeflectorField" ],
@@ -29,6 +30,8 @@ var namespaceBalloonParty_1_1Shared =
     [ "IScoreTrailConfig", "interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig.html", "interfaceBalloonParty_1_1Shared_1_1IScoreTrailConfig" ],
     [ "IShieldChainSettings", "interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html", "interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings" ],
     [ "ISlotGridConfig", "interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html", "interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig" ],
+    [ "IUpgradeCardSettings", "interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html", "interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings" ],
+    [ "IUpgradeSettings", "interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html", "interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings" ],
     [ "MusicalNoteAttribute", "classBalloonParty_1_1Shared_1_1MusicalNoteAttribute.html", "classBalloonParty_1_1Shared_1_1MusicalNoteAttribute" ],
     [ "PathTrace", "classBalloonParty_1_1Shared_1_1PathTrace.html", "classBalloonParty_1_1Shared_1_1PathTrace" ],
     [ "PierceItemCircle", "structBalloonParty_1_1Shared_1_1PierceItemCircle.html", "structBalloonParty_1_1Shared_1_1PierceItemCircle" ],
@@ -36,5 +39,11 @@ var namespaceBalloonParty_1_1Shared =
     [ "SortingLayerNameAttribute", "classBalloonParty_1_1Shared_1_1SortingLayerNameAttribute.html", null ],
     [ "StreakShieldRule", "classBalloonParty_1_1Shared_1_1StreakShieldRule.html", "classBalloonParty_1_1Shared_1_1StreakShieldRule" ],
     [ "UnitCircleAttribute", "classBalloonParty_1_1Shared_1_1UnitCircleAttribute.html", null ],
-    [ "WallLimits", "structBalloonParty_1_1Shared_1_1WallLimits.html", "structBalloonParty_1_1Shared_1_1WallLimits" ]
+    [ "WallLimits", "structBalloonParty_1_1Shared_1_1WallLimits.html", "structBalloonParty_1_1Shared_1_1WallLimits" ],
+    [ "UpgradeKind", "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523", [
+      [ "BallCap", "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523a816190aef027b1d71a17ab86998a40a5", null ],
+      [ "FasterReload", "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523a13306407a9fcc8bf32cafa63c19d150a", null ],
+      [ "Shield", "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523a970da5f1f2e32aeb9e488dd017160ab4", null ],
+      [ "ItemOdds", "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523acf271677f22958bc28853c01ef5e5079", null ]
+    ] ]
 ];

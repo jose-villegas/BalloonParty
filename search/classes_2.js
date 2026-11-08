@@ -42,9 +42,11 @@ var searchData=
   ['colorprofile_39',['ColorProfile',['../structBalloonParty_1_1Solver_1_1ColorProfile.html',1,'BalloonParty::Solver']]],
   ['colorprogressbar_40',['ColorProgressBar',['../classBalloonParty_1_1UI_1_1Score_1_1ColorProgressBar.html',1,'BalloonParty::UI::Score']]],
   ['colorsource_41',['ColorSource',['../structBalloonParty_1_1Balloon_1_1Model_1_1ColorSource.html',1,'BalloonParty::Balloon::Model']]],
-  ['colorstreaktracker_42',['ColorStreakTracker',['../classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html',1,'BalloonParty::Game::Score']]],
-  ['combatsoundrouter_43',['CombatSoundRouter',['../classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html',1,'BalloonParty::Audio::Routing']]],
-  ['compositecolorablerenderer_44',['CompositeColorableRenderer',['../classBalloonParty_1_1Shared_1_1Rendering_1_1CompositeColorableRenderer.html',1,'BalloonParty::Shared::Rendering']]],
-  ['compositetelemetrysink_45',['CompositeTelemetrySink',['../classBalloonParty_1_1Game_1_1Telemetry_1_1CompositeTelemetrySink.html',1,'BalloonParty::Game::Telemetry']]],
-  ['contactradius_46',['ContactRadius',['../classBalloonParty_1_1Shared_1_1ContactRadius.html',1,'BalloonParty::Shared']]]
+  ['colorstreak_42',['ColorStreak',['../classBalloonParty_1_1Game_1_1Score_1_1ColorStreak.html',1,'BalloonParty::Game::Score']]],
+  ['colorstreaktracker_43',['ColorStreakTracker',['../classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html',1,'BalloonParty::Game::Score']]],
+  ['combatsoundrouter_44',['CombatSoundRouter',['../classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html',1,'BalloonParty::Audio::Routing']]],
+  ['compositecolorablerenderer_45',['CompositeColorableRenderer',['../classBalloonParty_1_1Shared_1_1Rendering_1_1CompositeColorableRenderer.html',1,'BalloonParty::Shared::Rendering']]],
+  ['compositetelemetrysink_46',['CompositeTelemetrySink',['../classBalloonParty_1_1Game_1_1Telemetry_1_1CompositeTelemetrySink.html',1,'BalloonParty::Game::Telemetry']]],
+  ['contactradius_47',['ContactRadius',['../classBalloonParty_1_1Shared_1_1ContactRadius.html',1,'BalloonParty::Shared']]],
+  ['contentweightramp_48',['ContentWeightRamp',['../structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html',1,'BalloonParty::Configuration::Level']]]
 ];
