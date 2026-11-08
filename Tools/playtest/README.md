@@ -41,7 +41,9 @@ open, not yours.
    loop: it checks the cannon every 50 ms and fires as the chosen player, so a shot's timing isn't
    rounded to the tick. The shooter aims with the game's best-shot solver (the **Fire Best Shot**
    cheat) and removes itself when Play mode ends, a newer session replaces it, or ticks stop coming
-   for 10 s. Every tick presses Restart on the game-over screen, so it plays run after run.
+   for 10 s. The session ends at the first game over, so each one is a single run: how long it lasted
+   and what lost it. `--restart` presses Restart on the game-over screen instead and plays run after
+   run until the time is up.
 3. Leaves Play mode, which flushes the telemetry still buffered (`--keep-playing` skips this).
 4. Reads the telemetry records written since it started (`JsonLinesTelemetrySink`, under
    `Application.persistentDataPath/telemetry/`) and writes the report.

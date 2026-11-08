@@ -3,7 +3,7 @@
 
 Drives the Editor through the Unity CLI and its Pipeline package (com.unity.pipeline): enters Play
 mode, sends bot_tick.cs once per tick (the first installs the shooter in the Editor; every tick
-restarts a run on game over and reports state), then stops Play mode and builds a report from the
+reports state, and with --restart starts a new run on game over), then stops Play mode and builds a report from the
 game's own telemetry (JsonLinesTelemetrySink, under Application.persistentDataPath/telemetry).
 
 Two players:
@@ -101,7 +101,12 @@ def read_tuning(project):
     return tuning
 
 
+def ends_run(sample):
+    return sample.get("restart") or sample.get("game_over")
+
+
 def play(editor, seconds, tick_code, ticks_path):
+    """Ticks until the time is up, or until the first game over when the tick doesn't restart."""
     deadline = time.time() + seconds
     samples = []
     with open(ticks_path, "w", encoding="utf-8") as out:
@@ -117,9 +122,13 @@ def play(editor, seconds, tick_code, ticks_path):
                                for k, v in match.groupdict().items() if v is not None})
             elif line and line.endswith("RESTART"):
                 sample["restart"] = True
+            elif line and line.endswith("GAMEOVER"):
+                sample["game_over"] = True
             samples.append(sample)
             out.write(json.dumps(sample) + "\n")
             out.flush()
+            if sample.get("game_over"):
+                break
     return samples
 
 
@@ -146,12 +155,12 @@ def telemetry_since(directory, started_utc):
 def summarize_runs(samples):
     runs, current = [], None
     for sample in samples:
-        if sample.get("restart") or current is None:
+        if ends_run(sample) or current is None:
             if current and current["ticks"]:
                 runs.append(current)
             current = {"ticks": 0, "level": 0, "score": 0, "hearts": None, "shots": 0, "first": None, "last": None,
                        "shots_at_start": None}
-            if sample.get("restart"):
+            if ends_run(sample):
                 continue
         if "level" not in sample:
             continue
@@ -170,10 +179,10 @@ def summarize_runs(samples):
 
 
 def split_runs(samples):
-    """The ticks of each run, in order; a run ends at a game-over restart."""
+    """The ticks of each run, in order; a run ends at a game over."""
     runs, current = [], []
     for sample in samples:
-        if sample.get("restart"):
+        if ends_run(sample):
             if current:
                 runs.append((current, True))
             current = []
@@ -216,8 +225,10 @@ def heart_losses(samples):
 
 def build_report(label, seconds, player, tuning, samples, records):
     lines = [f"# Playtest bot report{f' — {label}' if label else ''}", ""]
-    lines.append(f"- Played {seconds} s of wall time, {len(samples)} ticks "
+    lines.append(f"- Played {seconds:.0f} s of wall time, {len(samples)} ticks "
                  f"({seconds / max(1, len(samples)):.2f} s per tick).")
+    if samples and samples[-1].get("game_over"):
+        lines.append("- Stopped at the first game over (--restart plays run after run instead).")
     if tuning:
         lines.append("- Tuning: " + ", ".join(f"{k} {v}" for k, v in tuning.items()) + ".")
     lines.append(f"- Player: {player}.")
@@ -313,6 +324,8 @@ def main():
     parser.add_argument("--label", default="", help="a name for this session, used in the folder and report")
     parser.add_argument("--project", default=REPO_ROOT,
                         help="the Unity project the Editor has open (default: this checkout)")
+    parser.add_argument("--restart", action="store_true",
+                        help="start a new run on game over instead of ending the session there")
     parser.add_argument("--keep-playing", action="store_true", help="leave Play mode running afterwards")
     parser.add_argument("--player", choices=("best", "human"), default="human",
                         help="best: the solver, at once. human (default): reaction time and aim error")
@@ -339,7 +352,8 @@ def main():
                  .replace("__REACT_MEAN__", repr(args.react_mean))
                  .replace("__AIM_SD__", repr(args.aim_sd))
                  .replace("__WILD__", repr(args.wild))
-                 .replace("__BOT_ID__", stamp))
+                 .replace("__BOT_ID__", stamp)
+                 .replace("__RESTART__", "true" if args.restart else "false"))
     if args.player == "best":
         player = "best (the solver, fired the moment the cannon is ready)"
     else:
@@ -360,13 +374,14 @@ def main():
     started = datetime.datetime.now(datetime.timezone.utc)
     print(f"Playing for {args.seconds} s; ticks go to {out_dir}", flush=True)
     samples = play(editor, args.seconds, tick_code, os.path.join(out_dir, "ticks.jsonl"))
+    played = (datetime.datetime.now(datetime.timezone.utc) - started).total_seconds()
 
     if not args.keep_playing:
         # Leaving Play mode ends the session, which flushes the telemetry still buffered.
         editor.command("editor.playmode", "stop")
         editor.wait_ready()
 
-    report = build_report(args.label, args.seconds, player, read_tuning(editor.project), samples,
+    report = build_report(args.label, played, player, read_tuning(editor.project), samples,
                           telemetry_since(telemetry_dir, started))
     with open(os.path.join(out_dir, "report.md"), "w", encoding="utf-8") as out:
         out.write(report + "\n")

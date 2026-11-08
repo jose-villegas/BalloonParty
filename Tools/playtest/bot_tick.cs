@@ -11,16 +11,18 @@
 //          process), at the solver's angle plus a normal aim error, or now and then (wildChance) at
 //          any angle, unaimed.
 // The handler removes itself when Play mode ends, when a newer bot replaces it, or when ticks stop
-// coming (the heartbeat). Each tick restarts the run on the game-over screen and returns one line:
+// coming (the heartbeat). On the game-over screen a tick presses Restart (restart on) or just reports it.
+// Each tick returns one line:
 //   <time> L<level> score <score> hearts <hearts> <navigation>/<phase> shots <shots fired so far> fill <board fill> inflight <balls in the air>
 // (board fill: the share of open slots balloons fill, IBoardFill.Occupancy; a full board is where hearts are lost)
-// or "<time> RESTART", or "nogame <navigation>" while the game scope isn't up.
+// or "<time> RESTART" / "<time> GAMEOVER", or "nogame <navigation>" while the game scope isn't up.
 var mode = "__MODE__";
 var reactFloor = __REACT_FLOOR__f;
 var reactMean = __REACT_MEAN__f;
 var aimSd = __AIM_SD__f;
 var wildChance = __WILD__f;
 var botId = "__BOT_ID__";
+var restart = __RESTART__;
 const string IdKey = "BalloonPartyBot.Id";
 const string HeartbeatKey = "BalloonPartyBot.Heartbeat";
 const string ShotsKey = "BalloonPartyBot.Shots";
@@ -190,6 +192,11 @@ if (game == null)
 
 if (nav == "GameOver")
 {
+    if (!restart)
+    {
+        return time + " GAMEOVER";
+    }
+
     var screen = UnityEngine.Object.FindAnyObjectByType<BalloonParty.UI.GameOver.GameOverScreen>();
     if (screen != null && screen.isActiveAndEnabled)
     {
