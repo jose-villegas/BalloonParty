@@ -164,7 +164,8 @@ The cannon gets a `TrailEndpointRegistry` key, so the ready heads-up anchors the
 | Pierce | `PierceArmed` | `pierce!` at the ball | Once per arming. Snipe arming included or not: §10 |
 | Cannon ready | `ThrowerReadyMessage` | a small `+1` by the cannon | **Built early, on every ready** (`ReloadHeadsUp`), cleared when the ball fires, and the reload is now near-instant with nothing flying but 2 s while a ball flies, so a ready cannon under fire is a beat worth marking. If it reads as noise, narrow it to `AfterCapWait` |
 | Shield picked up | `ShieldGainedMessage` | `+{n} bounce` at the shield's balloon, n counting the ball's pickups this flight | **Built early** (`BounceHeadsUp`), on every pickup |
-| Wall spends a shield | `WallHitMessage` | `-1 bounce` at the wall contact, kept on screen | **Built early** (`BounceHeadsUp`), on every bounce |
+| Wall spends a shield | `WallHitMessage` | `-1 bounce` at the wall contact, kept on screen | **Built early** (`BounceHeadsUp`), on every bounce; quiet graphite, vermilion when it leaves the last shield |
+| Ricochet | `DeflectChainMessage` | `x{n} ricochet` at the deflecting balloon | **Built early** (`BounceHeadsUp`), from the second deflect in a row without a wall; every third pays `+1 bounce` (`DeflectChainController`) |
 | Heart lost to a strikethrough | `StrikethroughArrivedMessage` | `-1` at the heart (`TrailEndpointKeys.Heart`) | Every time |
 | Level-up, bonus card | `TooltipMessage`, `BonusCardDealtMessage` | Top banner, as today | Unchanged, outside the queue |
 

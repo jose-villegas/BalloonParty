@@ -116,6 +116,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ShieldGainedMessage>(options);
             builder.RegisterMessageBroker<ShieldLostMessage>(options);
             builder.RegisterMessageBroker<WallHitMessage>(options);
+            builder.RegisterMessageBroker<DeflectChainMessage>(options);
             builder.RegisterMessageBroker<SpeedTapMintedMessage>(options);
             builder.RegisterMessageBroker<PierceDischargedMessage>(options);
             builder.RegisterMessageBroker<ScoreTrailArrivedMessage>(options);
@@ -182,6 +183,7 @@ namespace BalloonParty.Game
             builder.Register<ColorStreakTracker>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.Register<ProjectileHitResolver>(Lifetime.Singleton);
             builder.Register<ProjectileTapResolver>(Lifetime.Singleton);
+            builder.RegisterEntryPoint<DeflectChainController>();
             builder.Register<ProjectileMotionResolver>(Lifetime.Singleton);
             builder.Register<INavigation, NavigationService>(Lifetime.Singleton);
             builder.Register<ICinematicState, CinematicStateService>(Lifetime.Singleton);

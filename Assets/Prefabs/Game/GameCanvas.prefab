@@ -1338,8 +1338,6 @@ MonoBehaviour:
   - {fileID: 6051318582243065636}
   - {fileID: 4213805178512360512}
   - {fileID: 2305758555203528690}
-  _pickupFormat: +{0} bounce
-  _wallText: -1 bounce
   _worldOffset: {x: 0, y: 0.25}
 --- !u!1 &8941847436346573646
 GameObject:

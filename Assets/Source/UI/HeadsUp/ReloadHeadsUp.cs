@@ -1,6 +1,7 @@
 using BalloonParty.Shared.Messages;
 using BalloonParty.Thrower;
 using MessagePipe;
+using TMPro;
 using UniRx;
 using UnityEngine;
 using VContainer;
@@ -16,6 +17,10 @@ namespace BalloonParty.UI.HeadsUp
     {
         [SerializeField] private HandwrittenHeadsUp _headsUp;
         [SerializeField] private string _text = "+1";
+
+        [Tooltip("The lowest emphasis of the heads-ups: it shows before nearly every shot.")]
+        [SerializeField] private HeadsUpStyle _style =
+            new(new Color(0.29f, 0.29f, 0.32f), 0.85f, 0f, 0.85f, FontStyles.Normal);
 
         [Tooltip("World units from the muzzle to the heads-up's centre.")]
         [SerializeField] private Vector2 _worldOffset = new(0.3f, -0.2f);
@@ -48,7 +53,7 @@ namespace BalloonParty.UI.HeadsUp
 
             var parent = (RectTransform)_headsUp.transform.parent;
             var world = _origin.Origin + _worldOffset;
-            _headsUp.Show(_text, RectAnchorMath.GameWorldToLocalPoint(parent, _canvas, gameCamera, world));
+            _headsUp.Show(_text, RectAnchorMath.GameWorldToLocalPoint(parent, _canvas, gameCamera, world), _style);
         }
     }
 }

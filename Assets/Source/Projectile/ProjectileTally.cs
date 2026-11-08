@@ -1,17 +1,17 @@
 using System.Collections.Generic;
 using BalloonParty.Projectile.Model;
 
-namespace BalloonParty.UI.HeadsUp
+namespace BalloonParty.Projectile
 {
     /// <summary>
-    ///     How many shields each ball in the air has picked up since it was fired, so the bounce heads-up can
-    ///     count up ("+1 bounce", "+2 bounce") over one flight and start again on the next.
+    ///     A running count per ball in the air: shields picked up this flight, deflects since the last wall.
+    ///     The owner decides what counts and what breaks a count, and drops each ball once its flight ends.
     /// </summary>
-    internal class FlightPickupCount
+    internal class ProjectileTally
     {
         private readonly Dictionary<IProjectileModel, int> _counts = new();
 
-        /// <summary>Counts one more pickup for <paramref name="projectile" /> and returns its total this flight.</summary>
+        /// <summary>Counts one more for <paramref name="projectile" /> and returns its running total.</summary>
         internal int Record(IProjectileModel projectile)
         {
             _counts.TryGetValue(projectile, out var count);
@@ -19,7 +19,7 @@ namespace BalloonParty.UI.HeadsUp
             return count;
         }
 
-        /// <summary>Drops <paramref name="projectile" />'s count once its flight ends.</summary>
+        /// <summary>Starts <paramref name="projectile" />'s count over, or drops it once its flight ends.</summary>
         internal void Forget(IProjectileModel projectile)
         {
             _counts.Remove(projectile);

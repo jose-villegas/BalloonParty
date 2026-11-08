@@ -20,6 +20,12 @@ namespace BalloonParty.Shared
         bool StreakGrantsShields { get; }
 
         /// <summary>
+        ///     A ball deflecting off balloons this many times in a row without touching a wall earns a shield,
+        ///     and again at each multiple; 0 = never. See <see cref="DeflectChainRule" />.
+        /// </summary>
+        int DeflectChainShieldEvery { get; }
+
+        /// <summary>
         ///     Whether shields are placed along a flight the thrower can fly, rather than by the
         ///     plain weighted draw. Off restores the previous random placement.
         /// </summary>

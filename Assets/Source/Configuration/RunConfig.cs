@@ -19,6 +19,10 @@ namespace BalloonParty.Configuration
             "A balance experiment: leave it on for current behaviour.")]
         [SerializeField] private bool _streakGrantsShields = true;
 
+        [Tooltip("A ball that deflects off balloons this many times in a row without touching a wall earns a " +
+            "shield, and again at each multiple. 0 = never.")]
+        [SerializeField] [Min(0)] private int _deflectChainShieldEvery = 3;
+
         [Tooltip("Place shields along a flight the thrower can actually fly, so a chain is " +
             "collectable in sequence. Off falls back to the weighted random draw.")]
         [SerializeField] private bool _planShieldChains = true;
@@ -44,6 +48,7 @@ namespace BalloonParty.Configuration
         public int MaxRetries => _maxRetries;
         public int RetriesBeforeAd => Mathf.Max(0, _retriesBeforeAd);
         public bool StreakGrantsShields => _streakGrantsShields;
+        public int DeflectChainShieldEvery => _deflectChainShieldEvery;
         public bool PlanShieldChains => _planShieldChains;
         public IShieldChainSettings ShieldChain => _shieldChain;
         public float LevelCompleteRampUpDuration => _levelCompleteRampUpDuration;

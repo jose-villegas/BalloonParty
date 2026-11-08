@@ -29,6 +29,7 @@ Types and utilities used across multiple features.
 | `ContactRadius` | `FromCollider(Collider2D, lossyScaleX)` — the one place a circle/capsule collider becomes a world-space contact radius, shared by live gather and the shot solver's static archetypes |
 | `IDeflectorField` / `DeflectorCircle` | The deflectors the aim telegraph (and the shield planner) must bounce off, as circles in the geometry the projectile will actually meet. Implemented by `SlotGridDeflectorField` (`Slots/Grid/`) |
 | `IPierceItemField` / `PierceItemCircle` | The pierce-arming item hosts the aim telegraph must know about, so it can stop drawing a deflection off every tough beyond the first one crossed. Implemented by `SlotGridPierceItemField` (`Slots/Grid/`) |
+| `DeflectChainRule` | When a run of deflects pays a shield: every `IRunConfig.DeflectChainShieldEvery` deflects in a row (`GrantsShield`), announced from `MinChain` (2) on. Used by `Projectile/Controller/DeflectChainController` |
 | `StreakShieldRule` | The one place a continued colour streak's shield refund is decided, called by both the live `ProjectileHitResolver` and the shot solver's `ShotSimulator` so the two can't drift apart |
 
 This table covers the folders and the types other features reach for most; a few small editor-only attributes living alongside these files aren't broken out separately.
@@ -60,7 +61,8 @@ the exhaustive subscriber list when it matters.
 | `ItemCheckMessage` | `BalloonSpawner` (once per wave of lines, or once for the initial fill) | `ItemAssigner` — carries `Wave`, the count of waves this level, which the item cadence reads |
 | `ItemActivatedMessage` | `ItemActivator` | `BalloonController` — also carries the triggering projectile |
 | `ItemRotationCapturedMessage` | `BalloonController` | `LaserItemHandler` |
-| `ShieldGainedMessage` | `ShieldItemHandler` | `ShieldTrailController` |
+| `ShieldGainedMessage` | `ShieldItemHandler`, `DeflectChainController` (a ricochet reward) | `ShieldTrailController`, `BounceHeadsUp` |
+| `DeflectChainMessage` | `DeflectChainController` (from the second deflect in a row) | `BounceHeadsUp` |
 | `LevelUpAbandonedMessage` | `LevelController` | `ThrowerController` |
 | `ForceDestroyProjectileMessage` | `LevelController` | `ThrowerController` |
 

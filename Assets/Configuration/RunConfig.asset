@@ -16,6 +16,7 @@ MonoBehaviour:
   _maxRetries: 0
   _retriesBeforeAd: 0
   _streakGrantsShields: 0
+  _deflectChainShieldEvery: 3
   _planShieldChains: 1
   _shieldChain:
     _fanSamples: 25
