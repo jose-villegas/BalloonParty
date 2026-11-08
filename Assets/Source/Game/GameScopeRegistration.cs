@@ -195,7 +195,8 @@ namespace BalloonParty.Game
             builder.Register<IAdService, NoAdService>(Lifetime.Singleton);
             builder.Register<IFailureOffers, FailureOffers>(Lifetime.Singleton);
             builder.RegisterEntryPoint<RunUpgrades>()
-                .As<IWeaponStats>().As<IUpgradeDraft>().As<IBonusCardSource>().As<IRunResettable>();
+                .As<IWeaponStats>().As<IShieldsPerBall>().As<IUpgradeDraft>().As<IBonusCardSource>()
+                .As<IRunResettable>();
             builder.Register<ICoinStore, PlayerPrefsCoinStore>(Lifetime.Singleton);
             builder.Register<CoinWallet>(Lifetime.Singleton)
                 .As<ICoinBalance>().As<ICoinWallet>().As<ICoinWalletPersistence>();

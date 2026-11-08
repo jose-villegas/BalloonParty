@@ -1,35 +1,34 @@
 # UI/Shields
 
-Displays the remaining shields of the ball held in the thrower, animates state changes, and spawns visual trails when shields are gained.
+The shield HUD: a ball-with-a-shield icon and the number of shields **every new ball starts with**.
+
+Shields belong to each ball, and several balls can be in the air at once, so no single HUD number can
+say how many shields "the ball" has. The HUD shows the one shield number that is the same for every
+ball, its starting count; each ball shows its own shields itself, as layers around it
+(`Projectile/View/ProjectileShieldView`). A shield gained in flight fades in a new layer and plays an
+effect at the balloon that gave it; a shield spent on a wall bounce dissolves a layer and plays a shard
+effect at the ball. Nothing flies to or from the HUD.
 
 ## Contents
 
 | File | What it does |
 |---|---|
-| `ShieldUILifetimeScope` | VContainer child scope on the shield HUD root; registers `ShieldCounterLabel[]`, `ShieldCounterAnimation`, trail prefab, the HUD anchor as the `Shield` trail endpoint, and `ShieldTrailController` entry point |
-| `ShieldCounterLabel` | Marker subclass of `ReactiveCounterLabel` — rendering delegated to a `RollingCounterDisplay` sibling component. Shows "--" until bound and between turns; bound to the held ball's `ShieldsRemaining` by `ShieldCounterAnimation` on each load |
-| `ShieldCounterAnimation` | Drives Animator triggers (`Ready`, `Lost`, `Gain`, `Waiting`) based on `ShieldsRemaining` changes (gain from shield item activation); binds/unbinds the labels on projectile load/destroy |
-| `ShieldTrailController` | Plain C# `IStartable` — subscribes to `ShieldGainedMessage` (balloon → HUD) and `ShieldLostMessage` (HUD → wall bounce); composes a `TrailSpawner` (pool key `ShieldTrail`, which builds its own `SimplePoolChannel<FlyingTrail>` internally) to fly `FlyingTrail` orbs between the balloon/bounce point and the shield HUD endpoint |
+| `ShieldUILifetimeScope` | VContainer child scope on the shield HUD root; registers the `ShieldCounterLabel[]` and `ShieldCounterAnimation` |
+| `ShieldCounterLabel` | Marker subclass of `ReactiveCounterLabel`; rendering is delegated to a `RollingCounterDisplay` sibling. Bound once, at start, to `IShieldsPerBall.ShieldsPerBall` |
+| `ShieldCounterAnimation` | Binds the labels and drives the Animator: `Ready` once at start, then `Gain` when the shields per ball go up (a shield card) and `Lost` when they go down (a fresh run drops the cards) |
 
 ## How it works
 
-`ShieldCounterAnimation` subscribes to `ProjectileLoadedMessage` / `ProjectileDestroyedMessage` and owns the labels' binding: on load it binds every `ShieldCounterLabel` to the new projectile's `ShieldsRemaining` (the labels show "--" until then); on destroy it unbinds them, but only when the destroyed ball is the one it is bound to: other balls dying leave the held ball's display alone. Unbinding returns the display to "--".
+`IShieldsPerBall` (`Game/Upgrades/`) is implemented by `RunUpgrades`: the configured
+`ProjectileStartingShields` plus every shield card held, including a retry's bonus card. It is a
+reactive value recomputed whenever the cards change, so the HUD moves exactly when the next ball's
+starting shields do. It never changes during a flight.
 
-It also drives an Animator: `"Ready"` on load, `"Lost"` when `ShieldsRemaining` decrements, `"Gain"` when it increments (from shield item activation), and `"Waiting"` from projectile death until the next load. It binds directly to the `ShieldsRemaining` reactive property of the ball carried in `ProjectileLoadedMessage` (the held ball). It only tracks the held ball, not balls already in flight. Whether the HUD should stay a held-ball readout or become a ball-count/cooldown meter is an open question for the rapid-fire playtest (@ref plan_fast_paced).
-
-`ShieldTrailController` is a plain C# `IStartable` + `IDisposable` registered as an entry point in `ShieldUILifetimeScope`. It flies shield orbs in both directions between a world point and the `Shield` trail endpoint (the HUD anchor, resolved from the shared `TrailEndpointRegistry` — see `Shared/Pool`), reusing one composed `TrailSpawner`:
-
-- **`ShieldGainedMessage`** (published by `ShieldItemHandler` when a shield item is activated; see `IRunConfig.StreakGrantsShields` to gate whether streaks grant shields as an optional rule): resolves the granting balloon's world position from its slot index via `SlotGrid.IndexToWorldPosition` and flies an orb *up to* the HUD.
-- **`ShieldLostMessage`** (published by `ProjectileView` when a wall bounce spends a shield — i.e. `ShieldsRemaining` stays `>= 0` after the decrement; below that the projectile is destroyed instead): flies an orb *from* the HUD down to the bounce point carried in the message.
-
-Both use `IProjectileFlightConfig.ShieldTrailDuration`; the spawner handles pool return on completion.
+The counter's Animator still has a `Waiting` state from when it followed the ball in the thrower; the
+script no longer triggers it.
 
 ## Interactions
 
-- **ProjectileModel.ShieldsRemaining** — `ReactiveProperty<int>` subscribed by `ShieldCounterAnimation` and the labels
-- **ProjectileLoadedMessage** — triggers "Ready" state and binds the labels to the new projectile
-- **ProjectileDestroyedMessage** — triggers "Waiting" state and unbinds the labels
-- **ShieldGainedMessage** — published by `ShieldItemHandler` (item activation); when `IRunConfig.StreakGrantsShields` is true, also by `ProjectileHitResolver` (same-color streak grant); triggers trail spawn from balloon slot to shield HUD
-- **IProjectileFlightConfig** — `ShieldTrailDuration` used by trail controller
-- **SlotGrid** — resolves slot index to world position for trail origin
-- **PoolManager** — `ShieldTrail` pool for `FlyingTrail`; consumer handles return
+- **IShieldsPerBall** (`RunUpgrades`): the value the labels show and the animation watches
+- **ProjectileShieldView**: shows each ball's own shields, and their gains and losses, on the ball
+- **ShieldGainedMessage / ShieldLostMessage**: still published per ball (heads-up text, audio, telemetry use them); the HUD does not

@@ -24,8 +24,8 @@ namespace BalloonParty.Game.Upgrades
     ///     <see cref="BonusCardDealtMessage" />), applied on top of the held cards, and dropped when that attempt
     ///     ends, won or lost.
     /// </summary>
-    internal sealed class RunUpgrades : IWeaponStats, IUpgradeDraft, IBonusCardSource, IRunResettable, IStartable,
-        IDisposable
+    internal sealed class RunUpgrades : IWeaponStats, IShieldsPerBall, IUpgradeDraft, IBonusCardSource,
+        IRunResettable, IStartable, IDisposable
     {
         // Keep the deals off the generator's and the resolver's streams, which share the level's seed.
         private const int DealSeedSalt = 0x2C1B3C6D;
@@ -47,6 +47,7 @@ namespace BalloonParty.Game.Upgrades
         private readonly Dictionary<IUpgradeCardSettings, int> _stacks = new();
         private readonly List<IUpgradeCardSettings> _offer = new();
         private readonly List<IUpgradeCardSettings> _deck = new();
+        private readonly ReactiveProperty<int> _shieldsPerBall;
 
         private IDisposable _phaseSubscription;
         private IUpgradeCardSettings _staged;
@@ -64,6 +65,7 @@ namespace BalloonParty.Game.Upgrades
         public float IdleReloadSeconds => _flight.ProjectileLoadDuration;
 
         public int StartingShields => _flight.ProjectileStartingShields + _shieldBonus;
+        public IReadOnlyReactiveProperty<int> ShieldsPerBall => _shieldsPerBall;
         public float ExtraItemChance => _extraItemChance;
         public IReadOnlyList<IUpgradeCardSettings> Offer => _offer;
         public IUpgradeCardSettings BonusCard => _bonus;
@@ -98,6 +100,7 @@ namespace BalloonParty.Game.Upgrades
             _retryState = retryState;
             _levelProgress = levelProgress;
             _bonusDealtPublisher = bonusDealtPublisher;
+            _shieldsPerBall = new ReactiveProperty<int>(StartingShields);
         }
 
         public void Start()
@@ -108,6 +111,7 @@ namespace BalloonParty.Game.Upgrades
         public void Dispose()
         {
             _phaseSubscription?.Dispose();
+            _shieldsPerBall.Dispose();
         }
 
         public int StacksOf(IUpgradeCardSettings card)
@@ -275,6 +279,7 @@ namespace BalloonParty.Game.Upgrades
             }
 
             _reloadScale = Mathf.Max(MinReloadScale, _reloadScale);
+            _shieldsPerBall.Value = StartingShields;
         }
 
         private void Apply(IUpgradeCardSettings card)

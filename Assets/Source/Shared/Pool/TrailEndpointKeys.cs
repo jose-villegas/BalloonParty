@@ -5,7 +5,6 @@ namespace BalloonParty.Shared.Pool
     /// </summary>
     internal static class TrailEndpointKeys
     {
-        public const string Shield = "Shield";
         public const string Heart = "Heart";
     }
 }

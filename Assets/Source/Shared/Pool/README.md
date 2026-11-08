@@ -144,7 +144,7 @@ spawner.SpawnFollow(from, () => balloon.position, duration, onArrived);  // curv
 
 `SpawnFollow` (backed by `FlyingTrail.SetupFollow`) eases from its launch point to a **live-updating** target over `duration` along the move curve, instead of tweening to a fixed point — used by `HeartTrailController` so an overflow heart lands on its balloon even while the pile compacts up under it. It honours `TrailMotion` like the fixed-point flights.
 
-Used by `ScoreTrailService` for score trail spawning, `ShieldTrailController` for shield trails, `HeartTrailController` for overflow heart trails, and `LevelUpPopUp` for fill trails.
+Used by `ScoreTrailService` for score trail spawning, `HeartTrailController` for overflow heart trails, and `LevelUpPopUp` for fill trails.
 
 ### `TrailEndpointRegistry` + `ITrailEndpoint`
 
@@ -155,7 +155,7 @@ registry.Register(TrailEndpointKeys.Heart, new TransformTrailEndpoint(anchor)); 
 if (registry.TryGet(TrailEndpointKeys.Heart, out var e)) { spawner.Spawn(e.Center, popPos, dur); }
 ```
 
-`ITrailEndpoint` exposes `Center` and `RandomPosition()` — point anchors return `Center` for both; an area (a progress bar) spreads arrivals. Implementations: `TransformTrailEndpoint` (wraps a fixed anchor `Transform`; used for shield target / heart source) and `ColorProgressBar` (registers per palette-colour name via `ScoreTrailService.RegisterTarget`). The registry is a `GameLifetimeScope` singleton so child UI scopes resolve the same instance; registrations are long-lived (not reset per run). Well-known single-anchor keys live in `TrailEndpointKeys`; score endpoints key on colour name.
+`ITrailEndpoint` exposes `Center` and `RandomPosition()` — point anchors return `Center` for both; an area (a progress bar) spreads arrivals. Implementations: `TransformTrailEndpoint` (wraps a fixed anchor `Transform`; used for the heart source) and `ColorProgressBar` (registers per palette-colour name via `ScoreTrailService.RegisterTarget`). The registry is a `GameLifetimeScope` singleton so child UI scopes resolve the same instance; registrations are long-lived (not reset per run). Well-known single-anchor keys live in `TrailEndpointKeys`; score endpoints key on colour name.
 
 ### `TrailFlightRegistry<TId>`
 

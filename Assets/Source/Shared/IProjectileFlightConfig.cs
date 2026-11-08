@@ -33,7 +33,6 @@ namespace BalloonParty.Shared
         AnimationCurve LastShieldApproachCurve { get; }
         float LastShieldApproachDuration { get; }
         AnimationCurve LastShieldTimeScaleCurve { get; }
-        float ShieldTrailDuration { get; }
 
         /// <summary>Most balls in flight at once; at the cap a release fires nothing.</summary>
         int MaxBallsInFlight { get; }

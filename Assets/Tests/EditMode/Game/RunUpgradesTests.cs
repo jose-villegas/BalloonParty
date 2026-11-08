@@ -7,6 +7,7 @@ using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using NSubstitute;
 using NUnit.Framework;
+using UniRx;
 
 namespace BalloonParty.Tests.Game
 {
@@ -107,6 +108,26 @@ namespace BalloonParty.Tests.Game
             _rig.Hold(_shield);
 
             Assert.AreEqual(BaseShields + 1, Upgrades.StartingShields);
+        }
+
+        [Test]
+        public void ShieldsPerBall_StartsAtTheConfiguredBase()
+        {
+            Assert.AreEqual(BaseShields, ((IShieldsPerBall)Upgrades).ShieldsPerBall.Value);
+        }
+
+        [Test]
+        public void ShieldsPerBall_FollowsAShieldCard_AndAFreshRun()
+        {
+            // The HUD watches this value, so it has to move when the cards do, not only when read.
+            var seen = new List<int>();
+            using var subscription = ((IShieldsPerBall)Upgrades).ShieldsPerBall.Subscribe(seen.Add);
+
+            _rig.Hold(_shield);
+            _rig.RetryState.RetryLevel.Returns(0);
+            Upgrades.ResetRun(1);
+
+            CollectionAssert.AreEqual(new[] { BaseShields, BaseShields + 1, BaseShields }, seen);
         }
 
         [Test]
@@ -438,6 +459,22 @@ namespace BalloonParty.Tests.Game
 
             Assert.IsNull(Upgrades.BonusCard);
             Assert.AreEqual(BaseShields, Upgrades.StartingShields, "the bonus lasted one attempt");
+        }
+
+        [Test]
+        public void ShieldsPerBall_ABonusShieldCard_RisesForTheAttemptThenDrops()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_shield);
+            var seen = new List<int>();
+            using var subscription = ((IShieldsPerBall)Upgrades).ShieldsPerBall.Subscribe(seen.Add);
+
+            _rig.Retry(4, withBonusCard: true);
+            _rig.Present(5);
+            _rig.Advance();
+
+            CollectionAssert.AreEqual(new[] { BaseShields, BaseShields + 1, BaseShields }, seen);
+            Assert.AreEqual(Upgrades.StartingShields, ((IShieldsPerBall)Upgrades).ShieldsPerBall.Value);
         }
 
         [Test]

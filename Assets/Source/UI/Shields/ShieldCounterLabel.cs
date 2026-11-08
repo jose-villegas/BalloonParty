@@ -1,7 +1,8 @@
 namespace BalloonParty.UI.Shields
 {
     /// <summary>
-    ///     The loaded projectile's remaining-shields counter; behaviour lives in <see cref="ReactiveCounterLabel" />.
+    ///     The shields every new ball starts with (<see cref="Game.Upgrades.IShieldsPerBall" />); behaviour lives
+    ///     in <see cref="ReactiveCounterLabel" />.
     /// </summary>
     internal sealed class ShieldCounterLabel : ReactiveCounterLabel
     {

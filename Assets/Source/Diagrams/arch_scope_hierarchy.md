@@ -22,7 +22,7 @@ persistent, `DontDestroyOnLoad` scope built once for the whole session — and p
     - `ThrowerLifetimeScope` — thrower prefab; registers `ThrowerController` and wires the view
     - `ScoreUILifetimeScope` — score HUD canvas; injects the `ColorProgressBar` array and binds the score/level labels (`ScoreTrailService` itself lives in `GameLifetimeScope`)
     - `LevelUpLifetimeScope` — level-up popup; registers `LevelUpPopUp` and the `CinematicEndGate` ready-gate (the cinematic producers and `CinematicDirector` live in `GameLifetimeScope`)
-    - `ShieldUILifetimeScope` — shield HUD; registers the shield counter labels, `ShieldCounterAnimation`, `ShieldTrailController`, and the shield trail endpoint
+    - `ShieldUILifetimeScope` — shield HUD; registers the shield counter labels and `ShieldCounterAnimation`
     - `HealthUILifetimeScope` — health HUD; binds `HealthCounterLabel` views, registers `HeartTrailController` and the heart trail endpoint
     - `DangerUILifetimeScope` — danger overlay; binds `DangerGradientView` to the danger level
     - `GameOverLifetimeScope` — game-over panel; a scope shell with no local registrations (hierarchy injection only)

@@ -1,96 +1,58 @@
 using System;
-using BalloonParty.Projectile.Model;
-using BalloonParty.Shared.Messages;
-using MessagePipe;
+using BalloonParty.Game.Upgrades;
 using UniRx;
 using UnityEngine;
 using VContainer;
 
 namespace BalloonParty.UI.Shields
 {
+    /// <summary>
+    ///     Shows how many shields every new ball starts with, and plays <c>Gain</c> or <c>Lost</c> when a card
+    ///     changes it. Shields gained and spent in flight belong to that ball and play on it
+    ///     (<c>ProjectileShieldView</c>), so with several balls in the air no single HUD number is wrong.
+    /// </summary>
     [RequireComponent(typeof(Animator))]
     public class ShieldCounterAnimation : MonoBehaviour
     {
         private static readonly int GainTrigger = Animator.StringToHash("Gain");
         private static readonly int LostTrigger = Animator.StringToHash("Lost");
         private static readonly int ReadyTrigger = Animator.StringToHash("Ready");
-        private static readonly int WaitingTrigger = Animator.StringToHash("Waiting");
 
-        [Inject] private ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
-        [Inject] private ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
+        [Inject] private IShieldsPerBall _shieldsPerBall;
         [Inject] private ShieldCounterLabel[] _labels;
 
-        private readonly CompositeDisposable _disposable = new();
-
         private Animator _animator;
-        private int _lastShieldValue;
-        private IDisposable _shieldSubscription;
-
-        // The ball the counter shows: the one held in the thrower. Other balls dying around it leave
-        // the counter alone, since the next ball loads the moment a shot leaves.
-        private IProjectileModel _bound;
+        private int _lastValue;
+        private IDisposable _subscription;
 
         private void Awake()
         {
             _animator = GetComponent<Animator>();
-            _animator.SetTrigger(WaitingTrigger);
+        }
+
+        // Not at injection: the scope injects from its own Awake, which can run before this Awake and the
+        // labels' (where each finds its display), and binding pushes the value into the labels at once.
+        private void Start()
+        {
+            foreach (var label in _labels)
+            {
+                label.Bind(_shieldsPerBall.ShieldsPerBall);
+            }
+
+            _lastValue = _shieldsPerBall.ShieldsPerBall.Value;
+            _subscription = _shieldsPerBall.ShieldsPerBall.Skip(1).Subscribe(OnShieldsPerBallChanged);
+            _animator.SetTrigger(ReadyTrigger);
         }
 
         private void OnDestroy()
         {
-            _disposable.Dispose();
-            _shieldSubscription?.Dispose();
+            _subscription?.Dispose();
         }
 
-        [Inject]
-        private void Initialize()
+        private void OnShieldsPerBallChanged(int value)
         {
-            _loadedSubscriber.Subscribe(OnProjectileLoaded).AddTo(_disposable);
-            _destroyedSubscriber.Subscribe(OnProjectileDestroyed).AddTo(_disposable);
-        }
-
-        private void BindProjectile(IProjectileModel model)
-        {
-            _shieldSubscription?.Dispose();
-            _bound = model;
-            _lastShieldValue = model.ShieldsRemaining.Value;
-
-            _shieldSubscription = model.ShieldsRemaining
-                .Skip(1)
-                .Subscribe(value =>
-                {
-                    _animator.SetTrigger(value > _lastShieldValue ? GainTrigger : LostTrigger);
-                    _lastShieldValue = value;
-                });
-        }
-
-        private void OnProjectileLoaded(ProjectileLoadedMessage msg)
-        {
-            BindProjectile(msg.Model);
-            foreach (var label in _labels)
-            {
-                label.Bind(msg.Model.ShieldsRemaining);
-            }
-
-            _animator.ResetTrigger(WaitingTrigger);
-            _animator.ResetTrigger(LostTrigger);
-            _animator.SetTrigger(ReadyTrigger);
-        }
-
-        private void OnProjectileDestroyed(ProjectileDestroyedMessage msg)
-        {
-            if (msg.Projectile != _bound)
-            {
-                return;
-            }
-
-            _bound = null;
-            _animator.SetTrigger(WaitingTrigger);
-            _shieldSubscription?.Dispose();
-            foreach (var label in _labels)
-            {
-                label.Unbind();
-            }
+            _animator.SetTrigger(value > _lastValue ? GainTrigger : LostTrigger);
+            _lastValue = value;
         }
     }
 }

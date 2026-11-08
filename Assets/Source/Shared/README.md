@@ -55,13 +55,13 @@ the exhaustive subscriber list when it matters.
 | `ScoreLevelUpMessage` | `LevelController` | `ColorProgressBar`, `LevelUpPopUp`, `ColorStreakTracker` (auto-resets the streak), `ScoreController`, `ThrowerController`, `BalloonSpawner`, `PlayerHealthController`, `LevelDifficultyResolver`, `WallNetView`, `ProgressionSoundRouter` |
 | `ScoreTrailArrivedMessage` | `ScoreTrailService` | `ScoreController`, `ColorProgressBar`, `LevelUpCinematic` — carries `ColorName`, `Score` (the level progress value this trail represents), `Level` (the level the trail was spawned during), and `WorldPosition` |
 | `LevelUpDismissedMessage` | `LevelUpPopUp` | `LevelUpCinematic` |
-| `ProjectileDestroyedMessage` | `ProjectileView` | `ThrowerController`, `ProjectileFacingSource`, `ShieldCounterAnimation`, `LevelController`, `CombatSoundRouter` |
-| `ProjectileLoadedMessage` | `ThrowerController` | `ShieldCounterLabel`, `ShieldCounterAnimation` |
+| `ProjectileDestroyedMessage` | `ProjectileView` | `ThrowerController`, `ProjectileFacingSource`, `LevelController`, `CombatSoundRouter` |
+| `ProjectileLoadedMessage` | `ThrowerController` | `FlightStatsService`, `ColorStreakTracker`, `ActiveProjectilePierce`, `CombatSoundRouter`, `ItemSoundRouter`, `FireBestShotCheat` |
 | `ThrowerReadyMessage` | `ThrowerController` | `CombatSoundRouter` — once per ball, when it reaches the muzzle with a slot free (a release now fires) |
 | `ItemCheckMessage` | `BalloonSpawner` (once per wave of lines, or once for the initial fill) | `ItemAssigner` — carries `Wave`, the count of waves this level, which the item cadence reads |
 | `ItemActivatedMessage` | `ItemActivator` | `BalloonController` — also carries the triggering projectile |
 | `ItemRotationCapturedMessage` | `BalloonController` | `LaserItemHandler` |
-| `ShieldGainedMessage` | `ShieldItemHandler`, `ProjectileHitResolver` (a streak reward), `DeflectChainController` (a ricochet reward); `Source` (`ShieldGainSource`) says which | `ShieldTrailController`, `BounceHeadsUp` |
+| `ShieldGainedMessage` | `ShieldItemHandler`, `ProjectileHitResolver` (a streak reward), `DeflectChainController` (a ricochet reward); `Source` (`ShieldGainSource`) says which | `BounceHeadsUp`, `CombatSoundRouter`, `GameplayMetricsService` |
 | `DeflectChainMessage` | `DeflectChainController` (from the second deflect in a row; `PaidShield` when this deflect earned a shield) | `BounceHeadsUp` |
 | `LevelUpAbandonedMessage` | `LevelController` | `ThrowerController` |
 | `ForceDestroyProjectileMessage` | `LevelController` | `ThrowerController` |

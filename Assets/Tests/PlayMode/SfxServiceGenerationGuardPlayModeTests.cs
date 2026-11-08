@@ -152,7 +152,6 @@ namespace BalloonParty.Tests.PlayMode
             public AnimationCurve LastShieldApproachCurve => null;
             public float LastShieldApproachDuration => 0f;
             public AnimationCurve LastShieldTimeScaleCurve => null;
-            public float ShieldTrailDuration => 0f;
             public int MaxBallsInFlight => 1;
             public float ReloadCooldownSeconds => 0.5f;
             public float AimAngleStepDegrees => 0f;

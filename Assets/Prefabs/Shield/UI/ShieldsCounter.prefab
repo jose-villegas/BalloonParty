@@ -665,9 +665,6 @@ MonoBehaviour:
     TypeName: BalloonParty.Game.GameLifetimeScope
   autoRun: 1
   autoInjectGameObjects: []
-  _trailPrefab: {fileID: 1429749022553535108, guid: e92696c6c390e4d7f86cad7337b550de,
-    type: 3}
-  _trailTarget: {fileID: 8410142850891076899}
 --- !u!1 &4604229308440299303
 GameObject:
   m_ObjectHideFlags: 0

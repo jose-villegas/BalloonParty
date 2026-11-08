@@ -84,7 +84,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   _pierceDischargeTimeScale: 0.4
   _pierceDischargeTimeScaleDuration: 0.5
-  _shieldTrailDuration: 0.5
   _lastShieldApproachCurve:
     serializedVersion: 2
     m_Curve:

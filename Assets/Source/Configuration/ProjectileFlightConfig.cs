@@ -88,10 +88,6 @@ namespace BalloonParty.Configuration
         [Tooltip("How long the pierce-discharge slow-mo dip holds, in UNSCALED seconds.")]
         [SerializeField] [Min(0f)] private float _pierceDischargeTimeScaleDuration = 0.15f;
 
-        [Header("Shield Trail")]
-        [Tooltip("Seconds the shield-loss trail lingers behind the shot.")]
-        [SerializeField] private float _shieldTrailDuration;
-
         [Header("Last Breath")]
 
         [Tooltip("Position easing across a doomed 0-shield segment, sampled on NORMALIZED TIME over " +
@@ -163,7 +159,6 @@ namespace BalloonParty.Configuration
         public AnimationCurve LastShieldApproachCurve => _lastShieldApproachCurve;
         public float LastShieldApproachDuration => _lastShieldApproachDuration;
         public AnimationCurve LastShieldTimeScaleCurve => _lastShieldTimeScaleCurve;
-        public float ShieldTrailDuration => _shieldTrailDuration;
         public int MaxBallsInFlight => _maxBallsInFlight;
         public float ReloadCooldownSeconds => _reloadCooldownSeconds;
         public float AimAngleStepDegrees => _aimAngleStepDegrees;

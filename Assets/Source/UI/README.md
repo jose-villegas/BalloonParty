@@ -10,7 +10,7 @@ Each self-contained UI section has its own VContainer child scope, inheriting al
 |---|---|---|
 | `ScoreUILifetimeScope` | Score UI Canvas root | Injects scene-placed `ColorProgressBar` instances via `RegisterBuildCallback`; binds `ScoreCounterLabel` and `LevelLabel` |
 | `LevelUpLifetimeScope` | LevelUp popup root | `LevelUpPopUp`, `CinematicEndGate(LevelCompleteHit)` (by concrete type — the popup injects it directly, not `IReadyGate`) |
-| `ShieldUILifetimeScope` | Shield HUD root | `ShieldCounterLabel[]`, `ShieldCounterAnimation`, `ShieldTrailController`, the `Shield` trail endpoint |
+| `ShieldUILifetimeScope` | Shield HUD root | `ShieldCounterLabel[]`, `ShieldCounterAnimation` |
 | `HealthUILifetimeScope` | Hearts HUD root | Binds `HealthCounterLabel`s to `IPlayerHealth.Current`; `HeartTrailController`, the `Heart` trail endpoint |
 | `DangerUILifetimeScope` | Danger overlay root | Binds `DangerGradientView`s to `IDangerLevel.Level` |
 | `GameOverLifetimeScope` | Game-over screen root | Empty child scope on the screen root (`GameOverScreen` itself is injected by `GameLifetimeScope`) |
@@ -21,7 +21,7 @@ Each self-contained UI section has its own VContainer child scope, inheriting al
 |---|---|---|
 | `Score/` | Progress bars, score trail orbs, floating notices, score/level labels, `ScoreUILifetimeScope` | `ScoreUILifetimeScope` (child of `GameLifetimeScope`) |
 | `LevelUp/` | Full-screen level-up ceremony popup (`LevelUpPopUp`) | `LevelUpLifetimeScope` (child of `GameLifetimeScope`) |
-| `Shields/` | Shield counter label, bounce animation, and shield trails | `ShieldUILifetimeScope` (child of `GameLifetimeScope`) |
+| `Shields/` | The shields-per-ball counter and its animation | `ShieldUILifetimeScope` (child of `GameLifetimeScope`) |
 | `Health/` | Hit-point counter label and heart trails to overflow pops | `HealthUILifetimeScope` (child of `GameLifetimeScope`) |
 | `Danger/` | Space-danger gradient overlay (`DangerGradientView`) | `DangerUILifetimeScope` (child of `GameLifetimeScope`) |
 | `GameOver/` | Loss screen (`GameOverScreen`) — see `GameOver/README.md` | `GameOverLifetimeScope` (child of `GameLifetimeScope`) |
@@ -41,5 +41,5 @@ Scene loading is handled by `SceneTransition` (in `Shared/`) — a MonoBehaviour
 - **ScoreController / LevelController** — all score UI subscribes to `TotalScore` / `Level` reactive properties and `ScorePointsGroupMessage` (from `ScoreController`) / `ScoreLevelUpMessage` (from `LevelController`) events; `ColorProgressBar` reads the current streak via `ScoreController.GetStreak` for displaying streak notices
 - **ScoreTrailService** — `ColorProgressBar` registers trail target providers and subscribes to `ScoreTrailArrivedMessage`; `LevelUpPopUp` reads target positions for fill trail origins
 - **LevelUpPopUp ↔ ColorProgressBar** — popup publishes `LevelUpFillTrailsMessage` to drain bars in sync with fill trails, and `LevelUpDismissedMessage` to apply the new max and reset
-- **ThrowerController** — publishes `ProjectileLoadedMessage` on each reload; `ShieldCounterAnimation` subscribes and binds the shield labels to the newly loaded (held) `ProjectileModel`. It unbinds only when *that* ball dies; other balls dying leave it alone. It does not follow balls already in flight
+- **RunUpgrades** — `IShieldsPerBall`: the shields every new ball starts with. `ShieldCounterAnimation` binds the shield labels to it once; each ball shows its own shields in flight (`ProjectileShieldView`)
 - **ILevelThresholds / IScoreTrailConfig** — read for point thresholds and trail animation timing
