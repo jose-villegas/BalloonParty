@@ -24,11 +24,6 @@ namespace BalloonParty.Scenario.View
     /// </summary>
     internal sealed class GroundView : MonoBehaviour
     {
-        // Default, not Scenario: SceneCaptureService captures the Scenario layer for the GI. A full-screen ground
-        // there would read as coverage everywhere, and its colour, blended into the balloons' rims in the capture's
-        // low mips, made them bloom in their own hue by day (tried and taken out, 2026-11-09).
-        private const int GroundLayer = 0;
-
         private static readonly int GroundCoverageId = Shader.PropertyToID("_GroundCoverage");
         private static readonly int GroundScrollId = Shader.PropertyToID("_GroundScroll");
         private static readonly int BladeTileId = Shader.PropertyToID("_BladeTile");
@@ -42,6 +37,11 @@ namespace BalloonParty.Scenario.View
         private IActiveScenario _scenario;
         private ISkyBackdrop _sky;
         private ScenarioContentRoot _scenarioRoot;
+        // Scenario, like the sky it replaces, so SceneCaptureService captures the meadow for the GI. Its shaders
+        // write colour only, never the capture's coverage alpha, so the full-screen ground doesn't read as one
+        // big occluder. NameToLayer cannot be called from a static field initializer on a MonoBehaviour.
+        private static int GroundLayer = -1;
+
         private GameObject _quad;
         private GameObject _blades;
         private Mesh _bladeMesh;
@@ -55,6 +55,11 @@ namespace BalloonParty.Scenario.View
                 Log.Warn("Ground", "disabled: assign a material on the GroundSettings asset.", this);
                 enabled = false;
                 return;
+            }
+
+            if (GroundLayer == -1)
+            {
+                GroundLayer = LayerMask.NameToLayer("Scenario");
             }
 
             _quad = QuadRendererBuilder.Build(

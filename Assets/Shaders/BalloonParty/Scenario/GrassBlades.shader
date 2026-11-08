@@ -65,6 +65,9 @@ Shader "BalloonParty/Scenario/GrassBlades"
         Lighting Off
         ZWrite Off
         Blend One Zero
+        // Colour only: SceneCaptureService captures the ground for the GI bounce, and its alpha is the
+        // capture's sprite-coverage mask; a full-screen ground writing it would read as one big occluder.
+        ColorMask RGB
 
         Pass
         {

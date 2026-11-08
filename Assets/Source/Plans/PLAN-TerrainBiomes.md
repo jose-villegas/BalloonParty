@@ -65,11 +65,11 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
   (`SceneLightTintAt`, per pixel on the floor and per blade root on the blades), so the
   local light of pops and items lands on the grass as it does on the sprites.
 - **GI capture** picks GameObject layers (`SceneCaptureService._capturedLayers`), not
-  sorting layers. The ground stays off the captured layers: feeding the meadow into the
-  capture was tried and made the balloons bloom by day (their rims, blended with the
-  meadow in the low mips, bled their own hue back), so the owner took it out
-  (2026-11-09). The GI shadows do land on the grass everywhere on ground levels, not
-  just under cloud.
+  sorting layers. The ground is on the captured Scenario layer, writing colour but not
+  the capture's coverage alpha. On ground levels the smear lets a ground tap bleed only
+  its hue, and only onto sprites, so the meadow tints the balloons without darkening
+  them or re-lighting itself; GI shadows land on the grass everywhere, not just under
+  cloud (owner, 2026-11-09: keep the ground in the GI capture).
 - **Level content**: levels are generated (`LevelGenerator` from `LevelGenerationSettings`),
   not authored per range; ranges are debug presets only. The `Withheld` catalogue flag is
   being added in separate work; it and the luck levels touch the same settings file, so
@@ -250,9 +250,9 @@ changes to the Ascent or restart code.
 - The meadow and the grass reaction at game zoom, by day and night (start-level cheat 16).
 - Frame Debugger: the ground draws before the clouds and the smoke, and the sky quad is
   gone on ground levels.
-- The GI: on ground levels the capture sees neither sky nor ground (the ground is on
-  Default, the sky is hidden), so check the GI shadows on the grass read right and the
-  balloons don't shift between sky and ground levels.
+- The GI: on ground levels the capture sees the meadow in place of the sky, so check
+  the balloons' glow by day, the GI shadows on the grass, and that sky levels are
+  unchanged.
 - Launcher → Game in play mode: the `Ground` object lives under the Game scope.
 - The blades on a phone: their width and density at game zoom, and the vertex cost on a
   low-end device (`BladeSpacing` 0.085, about 45k vertices on 9:16), and a 4:3 tablet and a
@@ -297,7 +297,7 @@ the one above. In short:
 - **Anti-repetition**, cheapest first: per-cell hash flips, a macro variation tap, a
   channel-packed detail atlas, scatter stamps; hex-tiling only where those fail.
 - **Composition rules**: one sun (`SceneLight` direction), one wind (shared with the bush
-  wind), no second lighting model; no GI bounce from the ground (tried; it bloomed the balloons).
+  wind), no second lighting model; the ground feeds the GI through the same capture as the sky.
 
 The meadow above is the first biome of that system. When it grows, `ScenarioKind` gains
 more grounds (the schedule rolls which one a ground stretch uses), the meadow shader and

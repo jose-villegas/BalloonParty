@@ -61,6 +61,8 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
             float  _ShadowMipSpread;
             half   _SecondaryWeight;
             half   _CloudGateStrength;
+            // The overlay's bounce reference (the capture's clear colour), pushed to both materials.
+            half4  _AmbientColor;
 
             fixed4 frag(v2f_img IN) : SV_Target
             {
@@ -128,6 +130,12 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                 half3 bounceAcc = 0;
                 half  bounceWeightSum = 0;
 
+                // On a ground level the capture's background is the meadow (colour, no coverage) instead of
+                // the clear colour the overlay measures bounce against. A ground tap bleeds only its hue, and
+                // only onto sprites: the meadow tints the balloons over it without darkening them, and never
+                // re-lights itself. 0 on sky levels, leaving them unchanged.
+                half groundBackdrop = (half)GroundCoverageAt(worldPos);
+
                 [unroll]
                 for (int d = 0; d < BOUNCE_DIR_COUNT; d++)
                 {
@@ -142,6 +150,8 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                         half w = pow(_TapDecay, t) * dw;
                         float mip = min(_MipSpread * log2(1.0 + (float)t), maxMip);
                         half4 lit = tex2Dlod(_MainTex, float4(IN.uv + (float2)dirs[d] * offset, 0, mip));
+                        half3 groundHue = _AmbientColor.rgb + (lit.rgb - (half)Luminance(lit.rgb)) * ownCoverage;
+                        lit.rgb = lerp(lit.rgb, groundHue, (1.0h - lit.a) * groundBackdrop);
                         bounceAcc += lit.rgb * w;
                         bounceWeightSum += w;
                     }

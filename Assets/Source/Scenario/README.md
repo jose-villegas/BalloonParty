@@ -53,14 +53,14 @@ the same scenario. Plan: `Plans/PLAN-TerrainBiomes.md`.
   (`RegisterComponentOnNewGameObject`, so no prefab edit), parented under the Game scope's transform: the
   Game scene is preloaded additively, so an unparented object would land in the Launcher and die with it.
   It builds one stationary floor quad with `QuadRendererBuilder` from `IGroundSettings` (material,
-  overscan, sorting order −15: above the sky at −20, below the clouds at −10) on the **Default** layer. Not
-  Scenario: `SceneCaptureService` captures that layer for the GI, where a full-screen quad would read as
-  coverage everywhere. Feeding the meadow's colour in was tried and taken out: blended into the balloons'
-  rims in the capture's low mips, it made them bloom in their own hue by day. Over the quad it builds one mesh of grass blades (`GrassBladeMesh`, drawn through
+  overscan, sorting order −15: above the sky at −20, below the clouds at −10) on the **Scenario** layer, like
+  the sky it replaces, so `SceneCaptureService` captures the meadow for the GI. Both ground shaders write
+  colour only (`ColorMask RGB`): the capture's alpha is its sprite-coverage mask, and a full-screen ground
+  writing it would read as one big occluder. Over the quad it builds one mesh of grass blades (`GrassBladeMesh`, drawn through
   `MeshRendererBuilder` at sorting order −14) with its own material. On ground it shows both, hides the sky
   (`ISkyBackdrop`, an optional lookup because the sky only registers when its settings are wired) and sets
-  the global `_GroundCoverage` to 1; on sky it reverses all of it. The Launch begin-screen always shows sky,
-  since its camera mask leaves out the Default layer. It also pushes `_GroundPatchSize` and `_GroundDirt`,
+  the global `_GroundCoverage` to 1; on sky it reverses all of it. The Launch begin-screen always shows sky
+  (`ShowsGround` is false there). It also pushes `_GroundPatchSize` and `_GroundDirt`,
   so the floor and the blades read the same patches and dirt. The quad stays put, but the meadow scrolls with `ScenarioContentRoot`
   (the global `_GroundScroll`, pushed in `LateUpdate` after the tween moves the root): the bushes stand on
   this ground, so on the Ascent and the restart rise the whole meadow travels in with them. A still ground
