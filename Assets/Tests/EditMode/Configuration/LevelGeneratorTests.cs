@@ -650,6 +650,81 @@ namespace BalloonParty.Tests.Configuration
         }
 
         [Test]
+        public void Generate_TheFirstMeadow_GrowsItsBushesAsTheCloudsGo([Values(0, 1, 7)] int seed)
+        {
+            var settings = Settings(gridActors: new[]
+            {
+                new GridActorContentEntry(GridActorType.Puff, 1, 0, new RangedInt(8, 8), new RangedInt(8, 8), 0),
+                new GridActorContentEntry(GridActorType.Bush, 1, 0, new RangedInt(4, 8), new RangedInt(4, 8), 0, 3),
+            });
+
+            var bushes = new (int, int)[6];
+            for (var i = 0; i < bushes.Length; i++)
+            {
+                var gate = LevelGenerator.Generate(settings, 15 + i, seed).GridActorGates
+                    .Single(g => g.Type == GridActorType.Bush);
+                bushes[i] = (gate.Count.Min, gate.Count.Max);
+            }
+
+            // Sky 15, then the meadow 16-19 at half, three quarters, full, full; sky again at 20.
+            CollectionAssert.AreEqual(new[] { (4, 8), (2, 4), (3, 6), (4, 8), (4, 8), (4, 8) }, bushes);
+        }
+
+        [Test]
+        public void Generate_AClearingMeadow_BuysItsBushesWithTheCloudsBudget([Values(0, 1, 7)] int seed)
+        {
+            // Bushes too dear for a zero threat budget and past their featured levels: only the trade puts them in.
+            var settings = Settings(gridActors: new[]
+            {
+                new GridActorContentEntry(GridActorType.Puff, 1, 0, new RangedInt(8, 8), new RangedInt(8, 8), 0),
+                new GridActorContentEntry(GridActorType.Bush, 2, 5, new RangedInt(4, 8), new RangedInt(4, 8), 0, 3),
+            });
+
+            bool HasBush(int level)
+            {
+                return LevelGenerator.Generate(settings, level, seed).GridActorGates.Any(g => g.Type == GridActorType.Bush);
+            }
+
+            Assert.IsFalse(HasBush(15), "sky");
+            Assert.IsFalse(HasBush(16), "the meadow's first level is still under full clouds");
+            Assert.IsTrue(HasBush(17), "half clouds");
+            Assert.IsTrue(HasBush(18), "clear");
+            Assert.IsTrue(HasBush(19), "clear");
+            Assert.IsFalse(HasBush(20), "sky");
+        }
+
+        [Test]
+        public void Generate_TheBushTrade_LeavesTheRestOfTheMixAlone()
+        {
+            var settings = Settings(
+                threat: new BudgetFormula(3f, 0f, 3f),
+                balloons: new[]
+                {
+                    Balloon(BalloonType.Simple, ContentRole.Threat, 1, 0),
+                    Balloon(BalloonType.Tough, ContentRole.Threat, 1, 1),
+                    Balloon(BalloonType.Rainbow, ContentRole.Threat, 1, 2),
+                },
+                gridActors: new[]
+                {
+                    new GridActorContentEntry(GridActorType.Puff, 1, 1, new RangedInt(8, 8), new RangedInt(8, 8), 0),
+                    new GridActorContentEntry(GridActorType.Bush, 2, 5, new RangedInt(4, 8), new RangedInt(4, 8), 0),
+                });
+            var sky = Settings(
+                threat: new BudgetFormula(3f, 0f, 3f),
+                balloons: settings.Balloons.ToArray(),
+                gridActors: settings.GridActors.ToArray());
+            SetScenario(sky, new ScenarioScheduleSettings(500, 4, 3, 5, 2, 4, 7919));
+
+            for (var seed = 0; seed < 20; seed++)
+            {
+                var meadow = LevelGenerator.Generate(settings, 18, seed);
+                var open = LevelGenerator.Generate(sky, 18, seed);
+                CollectionAssert.AreEqual(open.BalloonWeights.Select(w => (w.Type, w.Weight)),
+                    meadow.BalloonWeights.Select(w => (w.Type, w.Weight)), $"seed {seed}");
+            }
+        }
+
+        [Test]
         public void Generate_HalvedPuffClouds_KeepAtLeastOneSlot()
         {
             var settings = Settings(gridActors: new[]
@@ -677,6 +752,13 @@ namespace BalloonParty.Tests.Configuration
                     .Where(g => g.Type == GridActorType.Puff).Select(g => g.Count.Max).DefaultIfEmpty(0).Single();
                 Assert.AreEqual((int)(8 * share), puff, $"level {level}");
             }
+        }
+
+        private static void SetScenario(LevelGenerationSettings settings, ScenarioScheduleSettings scenario)
+        {
+            typeof(LevelGenerationSettings)
+                .GetField("_scenario", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!
+                .SetValue(settings, scenario);
         }
 
         private static bool Has(RangedLevelParameters parameters, BalloonType type)

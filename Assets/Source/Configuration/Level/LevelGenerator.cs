@@ -53,9 +53,15 @@ namespace BalloonParty.Configuration.Level
                 }
             }
 
-            // A meadow clears its puff clouds halfway through (ScenarioStretch.PuffCloudShare). Scaled after the
-            // pick, so the rest of the level's mix and its rng stream are the same as they'd be under full clouds.
-            var puffShare = ScenarioSchedule.StretchAt(settings.Scenario, level).PuffCloudShare;
+            // A meadow trades its puff clouds for bushes as it goes (ScenarioStretch.PuffCloudShare / BushShare).
+            // Applied after the pick, so the rest of the level's mix and its rng stream are the same as they'd be
+            // under full clouds.
+            var stretch = ScenarioSchedule.StretchAt(settings.Scenario, level);
+            if (stretch.IsClearingMeadow)
+            {
+                IncludeUnlockedBushes(settings, level, included);
+            }
+
             for (var i = 0; i < settings.GridActors.Count; i++)
             {
                 if (!included.Contains(Key(GridActorKind, i)))
@@ -64,17 +70,16 @@ namespace BalloonParty.Configuration.Level
                 }
 
                 var gate = settings.GridActors[i].ToGate(level);
-                if (gate.Type == GridActorType.Puff)
+                var share = gate.Type switch
                 {
-                    if (puffShare <= 0f)
-                    {
-                        continue;
-                    }
-
-                    gate = Scaled(gate, puffShare);
+                    GridActorType.Puff => stretch.PuffCloudShare,
+                    GridActorType.Bush => stretch.BushShare,
+                    _ => 1f,
+                };
+                if (share > 0f)
+                {
+                    gates.Add(Scaled(gate, share));
                 }
-
-                gates.Add(gate);
             }
 
             // The validator warns when no balloon is a staple; this keeps a misauthored catalogue playable.
@@ -176,6 +181,20 @@ namespace BalloonParty.Configuration.Level
                 else
                 {
                     optional.Add((Key(kind, i), piece.Cost));
+                }
+            }
+        }
+
+        // The budget the clearing clouds free buys the bushes, so a meadow that has started clearing always has
+        // them once they're unlocked, whatever the threat budget picked.
+        private static void IncludeUnlockedBushes(LevelGenerationSettings settings, int level, HashSet<int> included)
+        {
+            for (var i = 0; i < settings.GridActors.Count; i++)
+            {
+                var actor = settings.GridActors[i];
+                if (actor.Type == GridActorType.Bush && actor.UnlockLevel <= level)
+                {
+                    included.Add(Key(GridActorKind, i));
                 }
             }
         }

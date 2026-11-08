@@ -210,12 +210,28 @@ namespace BalloonParty.Tests.Configuration
             }
         }
 
-        [Test]
-        public void PuffCloudShare_IsFullInTheSky([Values(1, 2, 4, 15)] int length)
+        [TestCase(3, new[] { 0.75f, 1f, 1f })]
+        [TestCase(4, new[] { 0.5f, 0.75f, 1f, 1f })]
+        [TestCase(5, new[] { 0.5f, 0.75f, 1f, 1f, 1f })]
+        public void BushShare_GrowsAsTheCloudsGo(int length, float[] shares)
         {
             for (var position = 0; position < length; position++)
             {
-                Assert.AreEqual(1f, new ScenarioStretch(ScenarioKind.Sky, position, length).PuffCloudShare);
+                var stretch = new ScenarioStretch(ScenarioKind.Ground, position, length);
+                Assert.AreEqual(shares[position], stretch.BushShare, $"level {position + 1} of {length}");
+                Assert.AreEqual(stretch.PuffCloudShare < 1f, stretch.IsClearingMeadow, $"level {position + 1} of {length}");
+            }
+        }
+
+        [Test]
+        public void PuffCloudAndBushShares_AreFullInTheSky([Values(1, 2, 4, 15)] int length)
+        {
+            for (var position = 0; position < length; position++)
+            {
+                var stretch = new ScenarioStretch(ScenarioKind.Sky, position, length);
+                Assert.AreEqual(1f, stretch.PuffCloudShare);
+                Assert.AreEqual(1f, stretch.BushShare);
+                Assert.IsFalse(stretch.IsClearingMeadow);
             }
         }
 

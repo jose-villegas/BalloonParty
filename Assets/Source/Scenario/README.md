@@ -44,8 +44,9 @@ on, so actors that need ground under them (bushes) don't look like they float. W
 seeded choice: `ILevelPacingConfiguration.ScenarioForLevel` (see `Configuration/README.md`) is sky before an
 authored first ground level, stays on the ground for a fixed first meadow, then alternates sky and ground
 stretches of a rolled length, so a retry keeps the same scenario. A meadow arrives under puff clouds and
-clears them halfway through: the level generator thins and then drops the board's puff-cloud actors by the
-level's place in its stretch. Plan: `Plans/PLAN-TerrainBiomes.md`.
+trades them for bushes as it goes: by the level's place in its stretch, the level generator thins and then
+drops the board's puff-cloud actors and grows the bushes, so the meadow's clear second half is its bushiest.
+Plan: `Plans/PLAN-TerrainBiomes.md`.
 
 - `IActiveScenario` / `ActiveScenario`: the model, the scenario the backdrop shows now, as a
   `ReactiveProperty<ScenarioKind>`. Written only by `Game/Level/ScenarioController`, which snaps it to the

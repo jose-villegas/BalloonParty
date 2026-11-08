@@ -34,6 +34,16 @@ namespace BalloonParty.Configuration.Level
             }
         }
 
+        /// <summary>
+        ///     The share of its bush count a level keeps: the meadow trades its puff clouds for bushes, so bushes
+        ///     start at half under full clouds and reach their full count once the clouds are gone. Sky levels keep
+        ///     the full count.
+        /// </summary>
+        public float BushShare => Kind == ScenarioKind.Ground ? 1f - PuffCloudShare * 0.5f : 1f;
+
+        /// <summary>Whether this is a meadow level that has started trading its puff clouds for bushes.</summary>
+        public bool IsClearingMeadow => Kind == ScenarioKind.Ground && PuffCloudShare < 1f;
+
         public ScenarioStretch(ScenarioKind kind, int position, int length)
         {
             Kind = kind;

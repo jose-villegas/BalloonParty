@@ -102,22 +102,29 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
     the same one.
   - Pure and cheap: `StretchAt` walks the stretches from `FirstGroundLevel` up to the
     level (a few dozen steps at most), no state, no allocation.
-- **A meadow clears its puff clouds halfway through** (owner: "initially it will have
-  cluster clouds, but they should quickly disappear half way n levels"). A meadow of n
-  levels has puff clouds on its first ⌊n/2⌋ levels (at least one), the last of those at
-  half the count, and the rest clear:
+- **A meadow trades its puff clouds for bushes** (owner: "initially it will have
+  cluster clouds, but they should quickly disappear half way n levels", then "it gets
+  less clouds and more bushes basically"). A meadow of n levels has puff clouds on its
+  first ⌊n/2⌋ levels (at least one), the last of those at half the count, and the rest
+  clear. Bushes start at half their count under full clouds and grow as the clouds go,
+  so the meadow's clear second half is its bushiest:
 
-  | Meadow length | Puff-cloud count per level |
-  |---|---|
-  | 3 | half, clear, clear |
-  | 4 | full, half, clear, clear |
-  | 5 | full, half, clear, clear, clear |
+  | Meadow length | Puff-cloud count per level | Bush count per level |
+  |---|---|---|
+  | 3 | half, clear, clear | ¾, full, full |
+  | 4 | full, half, clear, clear | half, ¾, full, full |
+  | 5 | full, half, clear, clear, clear | half, ¾, full, full, full |
 
-  `ScenarioStretch.PuffCloudShare` holds the rule, and `LevelGenerator` scales the Puff
-  gate's count by it after the pieces are picked, so the rest of the level's mix (and its
-  rng stream) is what it would be under full clouds; a clear level drops the gate. Sky
-  levels keep the full count. This is the board's puff-cloud actors, not the cloud
-  backdrop's fade.
+  - `ScenarioStretch.PuffCloudShare` and `BushShare` (= 1 − half the cloud share) hold
+    the rule. `LevelGenerator` scales the Puff and Bush gates' counts by them after the
+    pieces are picked, so the rest of the level's mix (and its rng stream) is what it
+    would be under full clouds; a clear level drops the Puff gate.
+  - The budget the clouds free buys the bushes: once a meadow starts clearing
+    (`IsClearingMeadow`, cloud share below full), unlocked bushes are always in, even
+    when the threat budget didn't pick them. A puff cloud costs 1 and a bush 2, so the
+    level's total stays about the same while the mix shifts.
+  - Sky levels keep both full counts. This is the board's puff-cloud actors, not the
+    cloud backdrop's fade.
 - **Bushes only on ground**: a `RequiresGround` flag on `GridActorContentEntry`;
   `LevelGenerator` leaves flagged actors out of sky levels. One source of truth: the
   generator and the ground view both ask `ScenarioSchedule`.
