@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BalloonParty.UI.Notices
+namespace BalloonParty.UI.HeadsUp
 {
     /// <summary>
     ///     The reveal of <see cref="WriteOnText" />, in characters: the write head moves from 0 to

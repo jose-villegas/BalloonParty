@@ -6,13 +6,13 @@ using UnityEngine;
 namespace BalloonParty.Editor
 {
     /// <summary>
-    ///     Makes the notices' pencil font in one step: the Patrick Hand TMP font asset (created by TMP's own
+    ///     Makes the heads-ups' pencil font in one step: the Patrick Hand TMP font asset (created by TMP's own
     ///     "Font Asset > SDF" command, so it matches one made by hand), then sets it on the tooltip's label.
     ///     Running it again reuses the existing font asset and only re-assigns it.
     /// </summary>
     internal static class PencilFontBuilder
     {
-        private const string MenuPath = "Tools/BalloonParty/Notices/Build Pencil Font";
+        private const string MenuPath = "Tools/BalloonParty/HeadsUp/Build Pencil Font";
         private const string DialogTitle = "Pencil font";
         private const string SourceFontPath = "Assets/Fonts/PatrickHand-Regular.ttf";
 

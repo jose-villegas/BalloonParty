@@ -1,13 +1,13 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace BalloonParty.UI.Notices
+namespace BalloonParty.UI.HeadsUp
 {
     /// <summary>
     ///     One short handwritten line on the canvas: written on in pencil where it's asked for, held, then
     ///     faded out. A new <see cref="Show" /> replaces the line showing.
     /// </summary>
-    public class HandwrittenNotice : MonoBehaviour
+    public class HandwrittenHeadsUp : MonoBehaviour
     {
         [SerializeField] private CanvasGroup _group;
         [SerializeField] private WriteOnText _writeOn;
@@ -47,7 +47,7 @@ namespace BalloonParty.UI.Notices
             _group.alpha = _visibleAlpha;
             _writeOn.Write(text);
 
-            // Unscaled, like the write itself: a notice must finish in slow-motion beats too.
+            // Unscaled, like the write itself: a heads-up must finish in slow-motion beats too.
             _sequence = DOTween.Sequence()
                 .AppendInterval(_writeOn.Duration + _holdDuration)
                 .Append(_group.DOFade(0f, _fadeOutDuration))

@@ -1,4 +1,4 @@
-using BalloonParty.UI.Notices;
+using BalloonParty.UI.HeadsUp;
 using NUnit.Framework;
 
 namespace BalloonParty.Tests.UI

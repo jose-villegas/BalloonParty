@@ -22,4 +22,4 @@ Working design plans and roadmaps for upcoming features.
 - @subpage plan_level_up_timing
 - @subpage plan_item_range_preview
 - @subpage plan_fast_paced
-- @subpage plan_notices
+- @subpage plan_headsup

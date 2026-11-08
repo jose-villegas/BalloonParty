@@ -54,7 +54,7 @@ using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Spawner;
 using BalloonParty.UI.GameOver;
-using BalloonParty.UI.Notices;
+using BalloonParty.UI.HeadsUp;
 using BalloonParty.UI.Tooltip;
 using BalloonParty.Slots.Grid;
 using BalloonParty.Thrower;
@@ -355,8 +355,8 @@ namespace BalloonParty.Game
             builder.RegisterBuildCallback(InjectSceneViews);
             return;
 
-            // Found rather than registered: none of these is required in the scene (the reload notice is
-            // added by a builder menu item), and RegisterComponentInHierarchy throws on a missing one.
+            // Found rather than registered: none of these is required in the scene (the heads-ups are added by
+            // builder menu items), and RegisterComponentInHierarchy throws on a missing one.
             void InjectSceneViews(IObjectResolver resolver)
             {
                 foreach (var tint in UnityEngine.Object.FindObjectsByType<TimeOfDayTint>())
@@ -364,9 +364,14 @@ namespace BalloonParty.Game
                     resolver.Inject(tint);
                 }
 
-                foreach (var notice in UnityEngine.Object.FindObjectsByType<ReloadNotice>())
+                foreach (var reload in UnityEngine.Object.FindObjectsByType<ReloadHeadsUp>())
                 {
-                    resolver.Inject(notice);
+                    resolver.Inject(reload);
+                }
+
+                foreach (var bounce in UnityEngine.Object.FindObjectsByType<BounceHeadsUp>())
+                {
+                    resolver.Inject(bounce);
                 }
             }
         }

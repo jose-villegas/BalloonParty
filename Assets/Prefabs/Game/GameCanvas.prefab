@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3861993509019988680}
   - component: {fileID: 2329973277735279265}
   m_Layer: 5
-  m_Name: ReloadNotice
+  m_Name: ReloadHeadsUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,7 +152,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a08fa185cdbd4071b3ba97d30a1daff6, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.Notices.WriteOnText
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.HeadsUp.WriteOnText
   _text: {fileID: 5456199315945847442}
   _tip: {fileID: 0}
   _secondsPerCharacter: 0.07
@@ -184,7 +184,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 65e0f020594744d0b8a852b1ebd939cc, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.Notices.HandwrittenNotice
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.HeadsUp.HandwrittenHeadsUp
   _group: {fileID: 3831829762146759168}
   _writeOn: {fileID: 5472796714985253296}
   _visibleAlpha: 0.85
@@ -202,8 +202,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 965156dd15ce4831b3e86dadb9520d42, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.Notices.ReloadNotice
-  _notice: {fileID: 3861993509019988680}
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.HeadsUp.ReloadHeadsUp
+  _headsUp: {fileID: 3861993509019988680}
   _text: +1
   _worldOffset: {x: 0.3, y: -0.2}
 --- !u!1 &4432430876179120212

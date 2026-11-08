@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace BalloonParty.UI.Notices
+namespace BalloonParty.UI.HeadsUp
 {
     /// <summary>
     ///     Writes a <see cref="TMP_Text" /> on left to right as if by a pencil: a soft reveal edge, slanted

@@ -1,7 +1,7 @@
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
-using BalloonParty.UI.Notices;
+using BalloonParty.UI.HeadsUp;
 using DG.Tweening;
 using MessagePipe;
 using TMPro;
