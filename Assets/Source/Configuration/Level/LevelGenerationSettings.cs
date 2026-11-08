@@ -140,7 +140,8 @@ namespace BalloonParty.Configuration.Level
             var hasStapleBalloon = false;
             foreach (var entry in _balloons)
             {
-                hasStapleBalloon |= entry.UnlockLevel <= 1 && entry.Cost == 0 && entry.Weight.PeakWeight > 0f;
+                hasStapleBalloon |= !entry.Withheld && entry.UnlockLevel <= 1 && entry.Cost == 0 &&
+                                    entry.Weight.PeakWeight > 0f;
                 CheckEntry(entry.Type.ToString(), entry.UnlockLevel, entry.Weight, configName, issues);
             }
 

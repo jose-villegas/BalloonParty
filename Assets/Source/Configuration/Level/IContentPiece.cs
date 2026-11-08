@@ -11,5 +11,8 @@ namespace BalloonParty.Configuration.Level
 
         /// <summary>Which budget pays for the piece.</summary>
         ContentRole Role { get; }
+
+        /// <summary>Authored but kept out of generation, e.g. until its art or terrain exists.</summary>
+        bool Withheld { get; }
     }
 }

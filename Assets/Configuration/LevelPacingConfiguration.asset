@@ -1961,6 +1961,7 @@ MonoBehaviour:
       _introGuaranteedCount: 0
       _guaranteedInitialCount: 0
     - _type: 3
+      _withheld: 1
       _role: 0
       _unlockLevel: 16
       _cost: 2
@@ -2160,6 +2161,7 @@ MonoBehaviour:
       _rampLevels: 6
       _maxPerCluster: 5
     - _type: 1
+      _withheld: 1
       _unlockLevel: 16
       _cost: 2
       _count:

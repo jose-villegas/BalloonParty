@@ -343,6 +343,10 @@ Ideas previously embedded in other plan files, moved here for consolidation.
 
 ### 5.1 Soap Cluster Merge *(from PLAN-ContentProduction + PLAN-GridActorExpansion)*
 
+**Needed before bubbles ship.** The `BubbleCluster` entry in the level catalogue is `Withheld` until
+this exists. The owner's direction (2026-11-08): two clusters that end up next to each other turn
+into one bigger cluster (a cluster+).
+
 Adjacent Soap Cluster balloons merge when nudged together or when proximity drops
 below a threshold. The merged cluster's `HitsRemaining` = sum of both (capped at 5);
 `_BubbleCount` transitions to the new count via a merge animation (two soap-film

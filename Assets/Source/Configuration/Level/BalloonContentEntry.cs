@@ -10,6 +10,10 @@ namespace BalloonParty.Configuration.Level
     {
         [SerializeField] private BalloonType _type;
 
+        [Tooltip("Kept out of every generated level, its tuning kept, until it is ready to ship (art, " +
+                 "a terrain it belongs on). Untick to bring it back at its unlock level.")]
+        [SerializeField] private bool _withheld;
+
         [Tooltip("Threat: a harder balloon, paid from the threat budget. Aid: one that helps or pays out " +
                  "(rainbow, silver, gold), paid from the aid budget.")]
         [SerializeField] private ContentRole _role;
@@ -38,6 +42,7 @@ namespace BalloonParty.Configuration.Level
         public BalloonType Type => _type;
         public ContentRole Role => _role;
         public int UnlockLevel => _unlockLevel;
+        public bool Withheld => _withheld;
         public int Cost => _cost;
         public ContentWeightRamp Weight => _weight;
 
@@ -46,8 +51,10 @@ namespace BalloonParty.Configuration.Level
 
         internal BalloonContentEntry(BalloonType type, ContentRole role, int unlockLevel, int cost,
             ContentWeightRamp weight, AnimationCurve initialCountWeights = null,
-            AnimationCurve waveCountWeights = null, int introGuaranteedCount = 0, int guaranteedInitialCount = 0)
+            AnimationCurve waveCountWeights = null, int introGuaranteedCount = 0, int guaranteedInitialCount = 0,
+            bool withheld = false)
         {
+            _withheld = withheld;
             _type = type;
             _role = role;
             _unlockLevel = unlockLevel;

@@ -150,7 +150,7 @@ namespace BalloonParty.Editor
         {
             foreach (var entry in catalogue)
             {
-                if (isSameType(entry) && entry.UnlockLevel == level)
+                if (isSameType(entry) && !entry.Withheld && entry.UnlockLevel == level)
                 {
                     return true;
                 }

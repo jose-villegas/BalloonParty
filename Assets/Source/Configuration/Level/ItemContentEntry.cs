@@ -10,6 +10,10 @@ namespace BalloonParty.Configuration.Level
     {
         [SerializeField] private ItemType _type;
 
+        [Tooltip("Kept out of every generated level, its tuning kept, until it is ready to ship (art, " +
+                 "a terrain it belongs on). Untick to bring it back at its unlock level.")]
+        [SerializeField] private bool _withheld;
+
         [Tooltip("First level this item can appear at. It's always in for the featured levels from there.")]
         [SerializeField] [Min(1)] private int _unlockLevel;
 
@@ -31,12 +35,15 @@ namespace BalloonParty.Configuration.Level
         public ItemType Type => _type;
         public ContentRole Role => ContentRole.Aid;
         public int UnlockLevel => _unlockLevel;
+        public bool Withheld => _withheld;
         public int Cost => _cost;
         public ContentWeightRamp Weight => _weight;
 
         internal ItemContentEntry(ItemType type, int unlockLevel, int cost, ContentWeightRamp weight,
-            int maximumAllowedOverride = 0, int introGuaranteedCount = 0, int guaranteedInitialCount = 0)
+            int maximumAllowedOverride = 0, int introGuaranteedCount = 0, int guaranteedInitialCount = 0,
+            bool withheld = false)
         {
+            _withheld = withheld;
             _type = type;
             _unlockLevel = unlockLevel;
             _cost = cost;

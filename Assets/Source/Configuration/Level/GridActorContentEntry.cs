@@ -12,6 +12,10 @@ namespace BalloonParty.Configuration.Level
     {
         [SerializeField] private GridActorType _type;
 
+        [Tooltip("Kept out of every generated level, its tuning kept, until it is ready to ship (art, " +
+                 "a terrain it belongs on). Untick to bring it back at its unlock level.")]
+        [SerializeField] private bool _withheld;
+
         [Tooltip("First level this actor can appear at. It's always in for the featured levels from there.")]
         [SerializeField] [Min(1)] private int _unlockLevel;
 
@@ -33,11 +37,13 @@ namespace BalloonParty.Configuration.Level
         public GridActorType Type => _type;
         public ContentRole Role => ContentRole.Threat;
         public int UnlockLevel => _unlockLevel;
+        public bool Withheld => _withheld;
         public int Cost => _cost;
 
         internal GridActorContentEntry(GridActorType type, int unlockLevel, int cost, RangedInt count,
-            RangedInt lateCount, int rampLevels, int maxPerCluster = 0)
+            RangedInt lateCount, int rampLevels, int maxPerCluster = 0, bool withheld = false)
         {
+            _withheld = withheld;
             _type = type;
             _unlockLevel = unlockLevel;
             _cost = cost;

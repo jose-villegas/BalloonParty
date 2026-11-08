@@ -219,6 +219,18 @@ namespace BalloonParty.Tests.Configuration
         }
 
         [Test]
+        public void Validate_WithheldStaple_DoesNotCountAsStaple()
+        {
+            var settings = Settings(balloons: new[]
+            {
+                new BalloonContentEntry(BalloonType.Simple, ContentRole.Threat, 1, 0, ContentWeightRamp.Flat(1f, 1f),
+                    withheld: true),
+            });
+
+            Assert.That(settings.Validate("Test"), Has.Some.Contains("level-1 staple"));
+        }
+
+        [Test]
         public void Validate_RampWithMinAboveMax_ReportsIssue()
         {
             var settings = Settings(balloons: new[]

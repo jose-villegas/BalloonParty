@@ -145,7 +145,7 @@ namespace BalloonParty.Configuration.Level
             for (var i = 0; i < pieces.Count; i++)
             {
                 var piece = pieces[i];
-                if (piece.Role != role || piece.UnlockLevel > level)
+                if (piece.Withheld || piece.Role != role || piece.UnlockLevel > level)
                 {
                     continue;
                 }

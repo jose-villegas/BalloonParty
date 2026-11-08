@@ -592,6 +592,35 @@ namespace BalloonParty.Tests.Configuration
             Assert.AreEqual(5, gate.MaxPerCluster);
         }
 
+        [Test]
+        public void Generate_WithheldPieces_NeverAppear_EvenAsStaplesOrFeatured()
+        {
+            // Staples (cost 0) and featured pieces skip the budget, so a missed check there would leak them in.
+            var settings = Settings(featuredLevels: 3, balloons: new[]
+            {
+                Balloon(BalloonType.Simple, ContentRole.Threat, 1, 0),
+                new BalloonContentEntry(BalloonType.BubbleCluster, ContentRole.Threat, 1, 0,
+                    ContentWeightRamp.Flat(1f, 1f), withheld: true),
+            }, items: new[]
+            {
+                new ItemContentEntry(ItemType.Shield, 1, 0, ContentWeightRamp.Flat(1f, 1f), withheld: true),
+            }, gridActors: new[]
+            {
+                new GridActorContentEntry(GridActorType.Bush, 1, 0, new RangedInt(1, 1), new RangedInt(1, 1), 0,
+                    withheld: true),
+            });
+
+            for (var level = 1; level <= 10; level++)
+            {
+                var result = LevelGenerator.Generate(settings, level, level);
+
+                Assert.IsTrue(Has(result, BalloonType.Simple), $"level {level}");
+                Assert.IsFalse(Has(result, BalloonType.BubbleCluster), $"level {level}");
+                Assert.IsEmpty(result.ItemWeights, $"level {level}");
+                Assert.IsEmpty(result.GridActorGates, $"level {level}");
+            }
+        }
+
         private static bool Has(RangedLevelParameters parameters, BalloonType type)
         {
             return parameters.BalloonWeights.Any(w => w.Type == type);

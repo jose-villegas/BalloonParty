@@ -7,6 +7,10 @@
 > type that gameplay can query), reacting to the disturbance field (grass parts, water
 > ripples), feeding the GI bounce, and gating what static actors may grow where.
 > Planned 2026-07-12 from a verified inventory. **Execution not started.**
+>
+> **Needed before bushes ship.** Over the sky backdrop a bush looks like it floats in the air, so
+> the `Bush` entry in the level catalogue is `Withheld` (2026-11-08) until the levels it unlocks at
+> can move to a ground biome it belongs on.
 
 ---
 
