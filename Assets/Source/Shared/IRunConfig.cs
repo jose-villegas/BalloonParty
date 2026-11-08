@@ -54,5 +54,8 @@ namespace BalloonParty.Shared
 
         /// <summary>The upgrade cards a level-up deals, and how often.</summary>
         IUpgradeSettings Upgrades { get; }
+
+        /// <summary>When pops drop coins, the currency spent after a loss.</summary>
+        ICoinSettings Coins { get; }
     }
 }

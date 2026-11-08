@@ -14,6 +14,7 @@ using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Display;
 using BalloonParty.Game.Cinematics;
+using BalloonParty.Game.Coins;
 using BalloonParty.Game.Danger;
 using BalloonParty.Game.Flight;
 using BalloonParty.Game.Health;
@@ -114,6 +115,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ItemActivatedMessage>(options);
             builder.RegisterMessageBroker<TransformCapturedMessage>(options);
             builder.RegisterMessageBroker<ShieldGainedMessage>(options);
+            builder.RegisterMessageBroker<CoinDroppedMessage>(options);
             builder.RegisterMessageBroker<ShieldLostMessage>(options);
             builder.RegisterMessageBroker<WallHitMessage>(options);
             builder.RegisterMessageBroker<DeflectChainMessage>(options);
@@ -194,6 +196,13 @@ namespace BalloonParty.Game
             builder.Register<IFailureOffers, FailureOffers>(Lifetime.Singleton);
             builder.RegisterEntryPoint<RunUpgrades>()
                 .As<IWeaponStats>().As<IUpgradeDraft>().As<IBonusCardSource>().As<IRunResettable>();
+            builder.Register<ICoinStore, PlayerPrefsCoinStore>(Lifetime.Singleton);
+            builder.Register<CoinWallet>(Lifetime.Singleton)
+                .As<ICoinBalance>().As<ICoinWallet>().As<ICoinWalletPersistence>();
+            builder.Register<AppSuspendSignal>(Lifetime.Singleton).As<IAppSuspendSignal>();
+            builder.RegisterEntryPoint<CoinWalletSaver>();
+            builder.RegisterEntryPoint<CoinCreditor>();
+            builder.RegisterEntryPoint<CoinDropController>().As<IRunResettable>();
 
 #if UNITY_ANDROID && !UNITY_EDITOR
             builder.Register<IThermalSource, AndroidThermalSource>(Lifetime.Singleton);

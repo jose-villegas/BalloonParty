@@ -57,6 +57,7 @@ namespace BalloonParty.Game.Telemetry
         private readonly ISubscriber<LevelUpAbandonedMessage> _levelUpAbandonedSubscriber;
         private readonly ISubscriber<LevelTransitionCompletedMessage> _transitionCompletedSubscriber;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
+        private readonly ISubscriber<CoinDroppedMessage> _coinDroppedSubscriber;
 
         private readonly ITelemetrySink _sink;
         private readonly SessionTelemetryContext _sessionContext;
@@ -154,6 +155,7 @@ namespace BalloonParty.Game.Telemetry
             ISubscriber<LevelUpAbandonedMessage> levelUpAbandonedSubscriber,
             ISubscriber<LevelTransitionCompletedMessage> transitionCompletedSubscriber,
             ISubscriber<GameOverMessage> gameOverSubscriber,
+            ISubscriber<CoinDroppedMessage> coinDroppedSubscriber,
             ITelemetrySink sink,
             SessionTelemetryContext sessionContext,
             IProjectileRegistry projectiles,
@@ -186,6 +188,7 @@ namespace BalloonParty.Game.Telemetry
             _levelUpAbandonedSubscriber = levelUpAbandonedSubscriber;
             _transitionCompletedSubscriber = transitionCompletedSubscriber;
             _gameOverSubscriber = gameOverSubscriber;
+            _coinDroppedSubscriber = coinDroppedSubscriber;
             _sink = sink;
             _sessionContext = sessionContext;
             _projectiles = projectiles;
@@ -241,6 +244,7 @@ namespace BalloonParty.Game.Telemetry
             _strikethroughSubscriber.Subscribe(OnStrikethroughArrived).AddTo(_subscriptions);
             _shieldGainedSubscriber.Subscribe(OnShieldGained).AddTo(_subscriptions);
             _shieldLostSubscriber.Subscribe(OnShieldLost).AddTo(_subscriptions);
+            _coinDroppedSubscriber.Subscribe(OnCoinDropped).AddTo(_subscriptions);
             _itemActivatedSubscriber.Subscribe(OnItemActivated).AddTo(_subscriptions);
             _boardDepletedSubscriber.Subscribe(OnBoardDepleted).AddTo(_subscriptions);
             _scoreLevelUpSubscriber.Subscribe(OnScoreLevelUp).AddTo(_subscriptions);
@@ -612,6 +616,18 @@ namespace BalloonParty.Game.Telemetry
             _levelDirty = true;
 
             _levelMetrics.Increment(MetricId.ShieldsGained);
+        }
+
+        private void OnCoinDropped(CoinDroppedMessage message)
+        {
+            if (_state == LevelState.Ended)
+            {
+                return;
+            }
+
+            _levelDirty = true;
+
+            _levelMetrics.Add(MetricId.CoinsEarned, message.Amount);
         }
 
         private void OnShieldLost(ShieldLostMessage message)

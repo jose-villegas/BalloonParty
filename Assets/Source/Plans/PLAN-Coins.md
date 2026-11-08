@@ -5,7 +5,8 @@
 > Working plan for a coin currency earned deep in a run and spent on the game-over screen for a card
 > that helps the retry.
 
-**Status:** Planned, not started. Decided with the owner: a card bought with coins applies to the
+**Status:** Phase 1 built (the wallet, the drop and telemetry, see `Game/Coins/README.md`); phase 2
+(tuning) next. Decided with the owner: a card bought with coins applies to the
 retry at the level reached; coins are a saved wallet; they drop from pops from level 15 on; the
 counter sits bottom left and appears only once coins exist. Claude draws the art in the existing UI
 style (§7); the coin is drawn.
@@ -55,10 +56,10 @@ Follows the codebase's MVC split: models and controllers are plain C#, only view
 
 | Piece | Where | Responsibility |
 |---|---|---|
-| `ICoinSettings` | `Shared/`, authored in `RunConfig` as `Coins` | `CoinsFromLevel` (15), `CoinDropChance` (0.05), `CardPrice` (25), `CardsOffered` (3) |
-| `ICoinWallet` / `CoinWallet` | `Game/Coins/` | `IReadOnlyReactiveProperty<int> Balance`, `Add(int)`, `TrySpend(int)`. Loads from and saves to `PlayerPrefs` (key beside `RunMeta`'s) |
-| `CoinDropController` | `Game/Coins/` | Subscribes `ActorHitMessage`; on a `Pop` at level ≥ `CoinsFromLevel`, rolls the drop (seeded from the level seed, so a retry of the same level drops the same way for the same pops) and publishes `CoinDroppedMessage(worldPosition)` |
-| `CoinTrailService` + view | `Game/Coins/`, `UI/` | Flies each dropped coin to the counter (reusing the score-trail flight), publishes `CoinLandedMessage`, on which the wallet adds 1. Pooled like score trails |
+| `ICoinSettings` | `Shared/`, authored in `RunConfig` as `Coins` | `CoinsFromLevel` (15), `DropChance` (0.05); phase 4 adds `CardPrice` (25) and `CardsOffered` (3) |
+| `ICoinBalance` / `ICoinWallet` / `CoinWallet` | `Game/Coins/` | `ICoinBalance` is the read-only `Balance` views read; `ICoinWallet` adds `Add(int)` and `TrySpend(int)`. Loads from and saves to `PlayerPrefs` through `ICoinStore` (key beside `RunMeta`'s); `CoinWalletSaver` saves at the save points, and a spend saves at once |
+| `CoinDropController` | `Game/Coins/` | Subscribes `ActorHitMessage`; on a `Pop` at level ≥ `CoinsFromLevel`, rolls the drop (seeded from the level seed, so a retry of the same level drops the same way for the same pops) and publishes `CoinDroppedMessage(amount, worldPosition)`. `CoinCreditor` adds dropped coins to the wallet; phase 3 switches it to `CoinLandedMessage` |
+| `CoinTrailService` + view | `Game/Coins/`, `UI/` | Flies each dropped coin to the counter (reusing the score-trail flight), publishes `CoinLandedMessage`, on which `CoinCreditor` adds 1. Pooled like score trails. When the run ends or resets, coins still flying are credited at once, never dropped: the score trails' cancel-on-reset would destroy them |
 | `CoinCounterView` | `UI/HUD/` | Bottom left of the screen: the coin icon and `Balance`. Hidden until coins exist (see below); punches on each landing |
 | `FailureOffers` | `Game/Run/` (extended) | `FailureOffer` gains `CanBuyCard` and `CardPrice`; new `TryCardRetryAsync(level, card, ct)` spends the coins and stages the retry with that card |
 | `IUpgradeDraft` / `RunUpgrades` | `Game/Upgrades/` (extended) | A shop hand (`DealShopHand`, same draw rules as the bonus card, seeded by level and retries used) and staging a chosen bonus card instead of a random one |

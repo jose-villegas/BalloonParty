@@ -13,8 +13,9 @@
 // The handler removes itself when Play mode ends, when a newer bot replaces it, or when ticks stop
 // coming (the heartbeat). On the game-over screen a tick presses Restart (restart on) or just reports it.
 // Each tick returns one line:
-//   <time> L<level> score <score> hearts <hearts> <navigation>/<phase> shots <shots fired so far> fill <board fill> inflight <balls in the air>
-// (board fill: the share of open slots balloons fill, IBoardFill.Occupancy; a full board is where hearts are lost)
+//   <time> L<level> score <score> hearts <hearts> <navigation>/<phase> shots <shots fired so far> fill <board fill> inflight <balls in the air> coins <wallet>
+// (board fill: the share of open slots balloons fill, IBoardFill.Occupancy; a full board is where hearts are lost;
+// wallet: the coins the player holds, ICoinBalance.Balance, which carries over between runs)
 // or "<time> RESTART" / "<time> GAMEOVER", or "nogame <navigation>" while the game scope isn't up.
 var mode = "__MODE__";
 var reactFloor = __REACT_FLOOR__f;
@@ -216,5 +217,7 @@ var occupancy = (float)Prop(game.Resolve(fillType), fillType, "Occupancy");
 var fill = occupancy.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
 var registryType = asm.GetType("BalloonParty.Projectile.IProjectileRegistry");
 var inFlight = (int)Prop(game.Resolve(registryType), registryType, "InFlightCount");
+var walletType = asm.GetType("BalloonParty.Game.Coins.ICoinBalance");
+var coins = (int)Value(Prop(game.Resolve(walletType), walletType, "Balance"));
 return time + " L" + level + " score " + score + " hearts " + hearts + " " + nav + "/" + phase + " shots " + shots
-       + " fill " + fill + " inflight " + inFlight;
+       + " fill " + fill + " inflight " + inFlight + " coins " + coins;

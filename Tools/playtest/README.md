@@ -51,14 +51,14 @@ open, not yours.
 ## The report
 
 `Logs/playtest/<stamp>[-label]/` (git-ignored) gets `ticks.jsonl` (one line per tick: level, score,
-hearts, shots so far, board fill, balls in flight) and `report.md`:
+hearts, shots so far, board fill, balls in flight, coins in the wallet) and `report.md`:
 
 | Section | From | Says |
 |---|---|---|
 | Header | `ProjectileFlightConfig.asset`, the arguments | The reload and ball-cap values, and the player, the session ran with |
-| Runs | The ticks | Each run's outcome (game over or still playing), highest level, score, hearts left, shots and length, and how many runs ended in a game over |
+| Runs | The ticks | Each run's outcome (game over or still playing), highest level, score, hearts left, shots and length, coins earned and the wallet at the end, and how many runs ended in a game over. The wallet is saved, so it carries over between runs and sessions (in the Editor's `PlayerPrefs`) |
 | Hearts lost | The ticks | Every heart lost: run, level, seconds into the level, hearts left, and the lead-up (the 10 s before it): board fill just before and on average, shots per 10 s, balls in flight |
-| Levels | Telemetry `level` records | Seconds, shots, pops, pops per shot, hearts lost and max streak, per level |
+| Levels | Telemetry `level` records | Seconds, shots, pops, pops per shot, hearts lost, max streak and coins earned, per level |
 | Board fill | The ticks | Per level, the share of open slots holding a balloon while playing (`IBoardFill.Occupancy`): mean, median, 90th percentile, max, and how often it ran at 0.9 or more. A heart is lost only when a new line finds no room, so this is how close each level came to costing one |
 | Flights | Telemetry `flight` records | How long a ball stays in the air: mean, median, middle half, 90th percentile |
 
