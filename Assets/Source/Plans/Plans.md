@@ -23,3 +23,5 @@ Working design plans and roadmaps for upcoming features.
 - @subpage plan_item_range_preview
 - @subpage plan_fast_paced
 - @subpage plan_headsup
+- @subpage plan_coins
+- @subpage plan_card_reveal
