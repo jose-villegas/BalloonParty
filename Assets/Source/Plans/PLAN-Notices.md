@@ -7,9 +7,10 @@
 
 **Status:** Phase 1 in progress. Built: the Patrick Hand font file (`Assets/Fonts/`, with its OFL
 licence), `UI/Notices/WriteOnText` (the slanted soft wipe on the stock shader, EditMode-tested reveal
-maths) and `TooltipBanner` writing through it. Left for Phase 1: the TMP font asset (made in the
-editor), the pencil tip sprite, and the pencil text shader (grain and ragged edge). The other open
-questions in §10 matter from Phase 2.
+maths), `TooltipBanner` writing through it, the TMP font asset, and an early cannon notice:
+`ReloadNotice` writes `ready` by the cannon through a plain `HandwrittenNotice`, ahead of the router
+and queue of Phase 3. Left for Phase 1: the pencil tip sprite and the pencil text shader (grain and
+ragged edge). The other open questions in §10 matter from Phase 2.
 
 ---
 
@@ -160,7 +161,7 @@ The cannon gets a `TrailEndpointRegistry` key, so the ready notice anchors there
 | Streak grows | `StreakGrewMessage` | `x{0}!` at the pop | From a configured streak up (say 3). Merge key (ball, colour), so a growing streak rewrites itself and two balls don't overwrite each other. An underline from a higher streak (say 6) |
 | Speed tap | `SpeedTapMintedMessage` | `tap!` at the wall contact | `TotalTaps <= N` only, so a long cruise doesn't spam |
 | Pierce | `PierceArmed` | `pierce!` at the ball | Once per arming. Snipe arming included or not: §10 |
-| Cannon ready | `ThrowerReadyMessage` with `AfterCapWait` | `ready` by the cannon | Only after the player waited on the cap. Every reload would be noise: the default is 3 balls with a 0.5 s reload |
+| Cannon ready | `ThrowerReadyMessage` | `ready` by the cannon | **Built early, on every ready** (`ReloadNotice`), cleared when the ball fires, with the reload slowed to 0.9 s so each reload is a beat worth marking. If it reads as noise, narrow it to `AfterCapWait` |
 | Heart lost to a strikethrough | `StrikethroughArrivedMessage` | `-1` at the heart (`TrailEndpointKeys.Heart`) | Every time |
 | Level-up, bonus card | `TooltipMessage`, `BonusCardDealtMessage` | Top banner, as today | Unchanged, outside the queue |
 

@@ -162,7 +162,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _maxBallsInFlight: 3
-  _reloadCooldownSeconds: 0.5
+  _reloadCooldownSeconds: 0.9
   _aimAngleStepDegrees: 0.33333334
   _aimAngleMinDegrees: 5
   _aimAngleMaxDegrees: 175

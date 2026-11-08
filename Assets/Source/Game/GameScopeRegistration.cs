@@ -54,6 +54,7 @@ using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Spawner;
 using BalloonParty.UI.GameOver;
+using BalloonParty.UI.Notices;
 using BalloonParty.UI.Tooltip;
 using BalloonParty.Slots.Grid;
 using BalloonParty.Thrower;
@@ -351,14 +352,21 @@ namespace BalloonParty.Game
             builder.RegisterComponentInHierarchy<GameOverScreen>();
             builder.RegisterComponentInHierarchy<TooltipBanner>();
 
-            builder.RegisterBuildCallback(InjectTints);
+            builder.RegisterBuildCallback(InjectSceneViews);
             return;
 
-            void InjectTints(IObjectResolver resolver)
+            // Found rather than registered: none of these is required in the scene (the reload notice is
+            // added by a builder menu item), and RegisterComponentInHierarchy throws on a missing one.
+            void InjectSceneViews(IObjectResolver resolver)
             {
                 foreach (var tint in UnityEngine.Object.FindObjectsByType<TimeOfDayTint>())
                 {
                     resolver.Inject(tint);
+                }
+
+                foreach (var notice in UnityEngine.Object.FindObjectsByType<ReloadNotice>())
+                {
+                    resolver.Inject(notice);
                 }
             }
         }

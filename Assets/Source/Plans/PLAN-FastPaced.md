@@ -129,7 +129,7 @@ wording; the built behaviour lives in `Thrower/README.md` (Rapid fire), `Game/Le
 | Item | State |
 |---|---|
 | Pool prewarm | `2 * MaxBallsInFlight + 1`, not cap + 1: a dead ball stays out of the pool until its disappear animation finishes. |
-| Reload | The held ball slides pivot to muzzle over `max(ProjectileLoadDuration, ReloadCooldownSeconds)`, advancing only while a slot is free (`ThrowerReload`). `ThrowerReadyMessage` marks "a release now fires" and drives the reload sound. |
+| Reload | The held ball slides pivot to muzzle over `max(ProjectileLoadDuration, ReloadCooldownSeconds)`, advancing only while a slot is free (`ThrowerReload`). `ThrowerReadyMessage` marks "a release now fires" and drives the reload sound and the handwritten `ready` notice (`UI/Notices/ReloadNotice`). Since playtest the shipped cooldown is 0.9 s (was 0.5 s): a slower reload makes each shot count. |
 | Level-up with balls in flight | After the beat plus `LevelCompleteFlightGrace`, remaining balls are force-destroyed once. Pierce toughs already plowed through still discharge and score; progress past the cap is banked. So "no score" in the row below is not literal. |
 | Spawning | Was per ball death with an interim queued wave; Phase 3's spawn clock replaced it (§6). |
 | Shorter flights (open) | No lever left: starting shields are already 1, so a ball cannot be made shorter. |
