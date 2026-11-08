@@ -68,8 +68,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Level 2
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 30803236da9104a3e9e1345227e4b512, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 25e31d7330acf4bff9041ebfa20ec863, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b9b297d5e0101614a82e380bae924410, type: 2}
+  m_sharedMaterial: {fileID: -325253286764126549, guid: b9b297d5e0101614a82e380bae924410, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -116,7 +116,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
+  m_ActiveFontFeatures: 6e72656bu
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a08fa185cdbd4071b3ba97d30a1daff6, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.Notices.WriteOnText
   _text: {fileID: 7610147346401824726}
   _tip: {fileID: 0}
@@ -258,7 +258,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2b5fbde6b6c84078a08f6f9b4e25e397, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.Tooltip.TooltipBanner
   _group: {fileID: 6892919829937505524}
   _label: {fileID: 7610147346401824726}
