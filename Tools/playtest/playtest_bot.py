@@ -2,12 +2,18 @@
 """Plays BalloonParty in a running Unity Editor and reports how the runs went.
 
 Drives the Editor through the Unity CLI and its Pipeline package (com.unity.pipeline): enters Play
-mode, sends bot_tick.cs once per tick (fire the best shot when the cannon is ready, restart on game
-over), then stops Play mode and builds a report from the game's own telemetry
-(JsonLinesTelemetrySink, under Application.persistentDataPath/telemetry).
+mode, sends bot_tick.cs once per tick (the first installs the shooter in the Editor; every tick
+restarts a run on game over and reports state), then stops Play mode and builds a report from the
+game's own telemetry (JsonLinesTelemetrySink, under Application.persistentDataPath/telemetry).
+
+Two players:
+    --player best    the best-shot solver, fired the moment the cannon is ready
+    --player human   an average player: waits a reaction time after the cannon is ready (a floor
+                     plus an exponential wait, so shots come as a Poisson process) and aims the
+                     solver's angle with a normal error
 
 Usage:
-    python3 Tools/playtest/playtest_bot.py --seconds 240 --label reload-2s
+    python3 Tools/playtest/playtest_bot.py --seconds 240 --player human --label reload-2s
 
 Writes Logs/playtest/<stamp>[-label]/ticks.jsonl and report.md, and prints the report.
 See Tools/playtest/README.md.
@@ -29,7 +35,7 @@ TOOL_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.dirname(os.path.dirname(TOOL_DIR))
 TICK_RE = re.compile(
     r"^(?P<t>[\d.]+) L(?P<level>\d+) score (?P<score>-?\d+) hearts (?P<hearts>-?\d+) "
-    r"(?P<nav>\w+)/(?P<phase>\w+) fired (?P<fired>[01])$")
+    r"(?P<nav>\w+)/(?P<phase>\w+) shots (?P<shots>\d+)$")
 FLIGHT_CONFIG = "Assets/Configuration/ProjectileFlightConfig.asset"
 TUNING_KEYS = ("_projectileLoadDuration", "_reloadCooldownSeconds", "_maxBallsInFlight")
 
@@ -131,7 +137,8 @@ def summarize_runs(samples):
         if sample.get("restart") or current is None:
             if current and current["ticks"]:
                 runs.append(current)
-            current = {"ticks": 0, "level": 0, "score": 0, "hearts": None, "shots": 0, "first": None, "last": None}
+            current = {"ticks": 0, "level": 0, "score": 0, "hearts": None, "shots": 0, "first": None, "last": None,
+                       "shots_at_start": None}
             if sample.get("restart"):
                 continue
         if "level" not in sample:
@@ -140,7 +147,9 @@ def summarize_runs(samples):
         current["level"] = max(current["level"], sample["level"])
         current["score"] = max(current["score"], sample["score"])
         current["hearts"] = sample["hearts"]
-        current["shots"] += sample["fired"]
+        if current["shots_at_start"] is None:
+            current["shots_at_start"] = sample["shots"]
+        current["shots"] = sample["shots"] - current["shots_at_start"]
         current["first"] = sample["t"] if current["first"] is None else current["first"]
         current["last"] = sample["t"]
     if current and current["ticks"]:
@@ -148,14 +157,13 @@ def summarize_runs(samples):
     return runs
 
 
-def build_report(label, seconds, tuning, samples, records):
+def build_report(label, seconds, player, tuning, samples, records):
     lines = [f"# Playtest bot report{f' — {label}' if label else ''}", ""]
     lines.append(f"- Played {seconds} s of wall time, {len(samples)} ticks "
                  f"({seconds / max(1, len(samples)):.2f} s per tick).")
     if tuning:
         lines.append("- Tuning: " + ", ".join(f"{k} {v}" for k, v in tuning.items()) + ".")
-    lines.append("- The bot fires the best-shot solver whenever the cannon is ready, so it plays well but "
-                 "reacts only once per tick: it waits on a ready cannon up to a tick longer than a person would.")
+    lines.append(f"- Player: {player}.")
     lines.append("")
 
     runs = summarize_runs(samples)
@@ -204,13 +212,31 @@ def main():
     parser.add_argument("--project", default=REPO_ROOT,
                         help="the Unity project the Editor has open (default: this checkout)")
     parser.add_argument("--keep-playing", action="store_true", help="leave Play mode running afterwards")
+    parser.add_argument("--player", choices=("best", "human"), default="human",
+                        help="best: the solver, at once. human (default): reaction time and aim error")
+    parser.add_argument("--react-floor", type=float, default=0.25,
+                        help="human: seconds before any reaction to a ready cannon (default 0.25)")
+    parser.add_argument("--react-mean", type=float, default=0.6,
+                        help="human: mean of the exponential wait on top of the floor, seconds (default 0.6)")
+    parser.add_argument("--aim-sd", type=float, default=4.0,
+                        help="human: standard deviation of the aim error, degrees (default 4)")
     args = parser.parse_args()
     # The Windows console defaults to a legacy code page; the report has dashes and en dashes.
     sys.stdout.reconfigure(encoding="utf-8")
 
     editor = Editor(find_unity(), os.path.abspath(args.project))
-    tick_code = open(os.path.join(TOOL_DIR, "bot_tick.cs"), encoding="utf-8").read()
     stamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    tick_code = (open(os.path.join(TOOL_DIR, "bot_tick.cs"), encoding="utf-8").read()
+                 .replace("__MODE__", args.player)
+                 .replace("__REACT_FLOOR__", repr(args.react_floor))
+                 .replace("__REACT_MEAN__", repr(args.react_mean))
+                 .replace("__AIM_SD__", repr(args.aim_sd))
+                 .replace("__BOT_ID__", stamp))
+    if args.player == "best":
+        player = "best (the solver, fired the moment the cannon is ready)"
+    else:
+        player = (f"human (reaction {args.react_floor:g} s + exponential wait, mean {args.react_mean:g} s; "
+                  f"aim error sd {args.aim_sd:g} degrees)")
     out_dir = os.path.join(REPO_ROOT, "Logs", "playtest", stamp + (f"-{args.label}" if args.label else ""))
     os.makedirs(out_dir, exist_ok=True)
 
@@ -232,7 +258,7 @@ def main():
         editor.command("editor.playmode", "stop")
         editor.wait_ready()
 
-    report = build_report(args.label, args.seconds, read_tuning(editor.project), samples,
+    report = build_report(args.label, args.seconds, player, read_tuning(editor.project), samples,
                           telemetry_since(telemetry_dir, started))
     with open(os.path.join(out_dir, "report.md"), "w", encoding="utf-8") as out:
         out.write(report + "\n")
