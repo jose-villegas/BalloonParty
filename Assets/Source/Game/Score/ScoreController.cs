@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
-using BalloonParty.Shared;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.SceneLight;
@@ -24,7 +23,6 @@ namespace BalloonParty.Game.Score
         private readonly ILevelProgress _levelProgress;
         private readonly IGamePalette _palette;
         private readonly IRetryState _retryState;
-        private readonly IRunConfig _runConfig;
         private readonly Dictionary<string, int> _persistentScore = new();
         private readonly IPublisher<ScorePointsGroupMessage> _scoredPublisher;
         private readonly ColorStreakTracker _streakTracker;
@@ -58,8 +56,7 @@ namespace BalloonParty.Game.Score
             IGamePalette palette,
             IRetryState retryState,
             ColorStreakTracker streakTracker,
-            ITimeOfDayNight timeOfDayNight,
-            IRunConfig runConfig)
+            ITimeOfDayNight timeOfDayNight)
         {
             _trailArrivedSubscriber = trailArrivedSubscriber;
             _levelUpSubscriber = levelUpSubscriber;
@@ -69,7 +66,6 @@ namespace BalloonParty.Game.Score
             _retryState = retryState;
             _streakTracker = streakTracker;
             _timeOfDayNight = timeOfDayNight;
-            _runConfig = runConfig;
         }
 
         public void Dispose()
@@ -163,8 +159,7 @@ namespace BalloonParty.Game.Score
             using var resolvedPool =
                 UnityEngine.Pool.ListPool<(string Color, int Points, int BaseProgress)>.Get(out var resolved);
 
-            var multiplier = StreakPayoutRule.Multiplier(
-                RecordStreakMultiplier(attributions, flags, streak), _runConfig.MaxStreakMultiplier);
+            var multiplier = RecordStreakMultiplier(attributions, flags, streak);
             if (_timeOfDayNight.IsNight)
             {
                 multiplier *= NightScoreMultiplier;

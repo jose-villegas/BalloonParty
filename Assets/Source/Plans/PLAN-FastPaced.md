@@ -176,7 +176,7 @@ relocates roamers, its last publishes the item check. Differences and open items
 
 | Item | State |
 |---|---|
-| Tuning (open) | Interval, decay, floor, grace and heart-drain gap/cap are first guesses; tune in the playtest. First pass after playtest (too easy, no pressure): interval 2 → 1.7 s, decay x0.96 → x0.95, floor 1.25 → 0.9 s, grace 4 → 2.5 s, `OverlapShotPull` 0.35 → 0.5, and `TargetOccupancy` 0.5 → 0.7 so the clock keeps refilling until the board is fuller. Second pass (still too easy to progress): the streak payout is capped at ×5 (`IRunConfig.MaxStreakMultiplier`); uncapped, one 46-pop chain paid about 1,080 points against a 700-point first level. |
+| Tuning (open) | Interval, decay, floor, grace and heart-drain gap/cap are first guesses; tune in the playtest. First pass after playtest (too easy, no pressure): interval 2 → 1.7 s, decay x0.96 → x0.95, floor 1.25 → 0.9 s, grace 4 → 2.5 s, `OverlapShotPull` 0.35 → 0.5, and `TargetOccupancy` 0.5 → 0.7 so the clock keeps refilling until the board is fuller. |
 | `LinesPerWave` = 3 (open) | Keeps the per-turn tuning (wave-quota curves, item cadence, roamer jumps) meaningful instead of re-tuning it now. Drop it to 1 and re-tune per line once the clock feels right. |
 | Strikethrough on leftover rejects (open, P2) | The heart strikethrough can cross a row of rejects left from an earlier line. Visual only. |
 | Danger signal fires late (open, P2) | `SpaceDanger` only goes non-zero when the board is 100% full (one line overflows only then), so it warns one interval ahead, not earlier. |

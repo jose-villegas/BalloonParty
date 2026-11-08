@@ -74,9 +74,6 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   `ShotBoardGather.Gather` so the window and the Fire Best Shot cheat agree with the live game):
   when true, a same-color streak of 2+ yields one shield per pop; when false (current), no streak-based shields.
   The condition itself is `Shared/StreakShieldRule.GrantsShield`, called by both the live resolver and this simulator.
-- **Streak payout** — a pop scores `ScoreValue` times the streak, capped by `IRunConfig.MaxStreakMultiplier`
-  (`ShotScoreRules.MaxStreakMultiplier`, read by `ShotBoardGather.Gather`) through `Shared/StreakPayoutRule`, the
-  same call `ScoreController` makes, so the solver ranks shots by the points the game would really pay.
 - **Walls** — analytic per-axis crossing time, then `Vector2.Reflect` off the (possibly summed, for
   an exact corner hit) wall normal — same rectangle and reflect convention as `WallLimits`. Each
   bounce costs a shield; shields dropping below zero ends the flight (`Died`).

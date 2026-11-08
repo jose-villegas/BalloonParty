@@ -99,18 +99,14 @@ namespace BalloonParty.Solver
         /// </summary>
         public readonly bool StreakGrantsShields;
 
-        /// <summary>Mirrors <c>IRunConfig.MaxStreakMultiplier</c>; 0 = no cap. See <see cref="StreakPayoutRule" />.</summary>
-        public readonly int MaxStreakMultiplier;
-
         public ShotScoreRules(
             string targetColorId, IReadOnlyList<string> allowedColors, string rainbowColorId,
-            bool streakGrantsShields = true, int maxStreakMultiplier = 0)
+            bool streakGrantsShields = true)
         {
             TargetColorId = targetColorId;
             AllowedColors = allowedColors;
             RainbowColorId = rainbowColorId;
             StreakGrantsShields = streakGrantsShields;
-            MaxStreakMultiplier = maxStreakMultiplier;
         }
     }
 
@@ -219,8 +215,7 @@ namespace BalloonParty.Solver
             string rainbowColorId = null,
             in ShotFlightSeed seed = default,
             ShotItemLayer items = null,
-            bool streakGrantsShields = true,
-            int maxStreakMultiplier = 0)
+            bool streakGrantsShields = true)
         {
             var walls = new WallLimits(wallLimitsClockwise);
             dynamics?.ResetForNewFlight();
@@ -235,7 +230,7 @@ namespace BalloonParty.Solver
             // headless scenario, without a full item layer in place.
             var state = new ShotFlightState(origin, direction, startingShields, in seed);
             var scoreRules = new ShotScoreRules(
-                targetColorId, allowedColors, rainbowColorId, streakGrantsShields, maxStreakMultiplier);
+                targetColorId, allowedColors, rainbowColorId, streakGrantsShields);
 
             if (pathOut != null)
             {
@@ -1215,8 +1210,7 @@ namespace BalloonParty.Solver
             var counts = balloon.IsRainbow
                 || string.IsNullOrEmpty(targetColorId)
                 || string.Equals(attributedColorId, targetColorId, StringComparison.Ordinal);
-            state.RawScore += (counts ? balloon.ScoreValue * payColors : 0)
-                * StreakPayoutRule.Multiplier(multiplier, scoreRules.MaxStreakMultiplier);
+            state.RawScore += (counts ? balloon.ScoreValue * payColors : 0) * multiplier;
 
             if (StreakShieldRule.GrantsShield(
                     scoreRules.StreakGrantsShields, cause.IsProjectileContact,

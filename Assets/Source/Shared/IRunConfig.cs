@@ -20,12 +20,6 @@ namespace BalloonParty.Shared
         bool StreakGrantsShields { get; }
 
         /// <summary>
-        ///     The most a colour streak multiplies a pop's points by; 0 or less is no cap. See
-        ///     <see cref="StreakPayoutRule" />.
-        /// </summary>
-        int MaxStreakMultiplier { get; }
-
-        /// <summary>
         ///     Whether shields are placed along a flight the thrower can fly, rather than by the
         ///     plain weighted draw. Off restores the previous random placement.
         /// </summary>

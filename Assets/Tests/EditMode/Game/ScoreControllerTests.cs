@@ -8,7 +8,6 @@ using BalloonParty.Game.Run;
 using BalloonParty.Game.Score;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
-using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.SceneLight;
 using BalloonParty.Slots.Capabilities;
@@ -31,7 +30,6 @@ namespace BalloonParty.Tests.Game
         private IGamePalette _palette;
         private IPublisher<ScorePointsGroupMessage> _scoredPublisher;
         private ITimeOfDayNight _timeOfDayNight;
-        private IRunConfig _runConfig;
         private ScoreController _controller;
         private ColorStreakTracker _streakTracker;
         private ProjectileRegistry _registry;
@@ -52,8 +50,6 @@ namespace BalloonParty.Tests.Game
             _palette = Substitute.For<IGamePalette>();
             _palette.ColorNames.Returns(new[] { Red, Blue });
             _palette.ProgressColorNames.Returns(new[] { Red, Blue });
-
-            _runConfig = Substitute.For<IRunConfig>();
 
             _controller = BuildController();
             _controller.Start();
@@ -108,8 +104,7 @@ namespace BalloonParty.Tests.Game
                 _palette,
                 Substitute.For<IRetryState>(),
                 _streakTracker,
-                _timeOfDayNight,
-                _runConfig);
+                _timeOfDayNight);
         }
 
         [Test]
@@ -122,45 +117,6 @@ namespace BalloonParty.Tests.Game
 
             _scoredPublisher.Received(1).Publish(
                 Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 6));
-        }
-
-        [Test]
-        public void Streak_PastTheCap_PaysTheCap()
-        {
-            _runConfig.MaxStreakMultiplier.Returns(2);
-
-            FirePop(Red);
-            FirePop(Red);
-            FirePop(Red);
-
-            _scoredPublisher.Received(2).Publish(Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 2));
-            Assert.AreEqual(3, _streakTracker.GetStreak(Red), "the streak keeps counting past the cap; only its payout stops");
-        }
-
-        [Test]
-        public void Streak_NoCap_PaysTheWholeStreak()
-        {
-            _runConfig.MaxStreakMultiplier.Returns(0);
-
-            FirePop(Red);
-            FirePop(Red);
-            FirePop(Red);
-
-            _scoredPublisher.Received(1).Publish(Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 3));
-        }
-
-        [Test]
-        public void Streak_PastTheCapAtNight_DoublesTheCap()
-        {
-            _runConfig.MaxStreakMultiplier.Returns(2);
-            _timeOfDayNight.IsNight.Returns(true);
-
-            FirePop(Red);
-            FirePop(Red);
-            FirePop(Red);
-
-            _scoredPublisher.Received(1).Publish(Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 2));
-            _scoredPublisher.Received(2).Publish(Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 4));
         }
 
         [Test]
