@@ -8,17 +8,17 @@ using VContainer;
 namespace BalloonParty.UI.Notices
 {
     /// <summary>
-    ///     Writes a word by the cannon each time its next ball is ready (<see cref="ThrowerReadyMessage" />),
+    ///     Writes a small "+1" by the cannon each time its next ball is ready (<see cref="ThrowerReadyMessage" />),
     ///     and clears it once that ball is fired. Kept upright beside the muzzle rather than parented to the
     ///     cannon, which turns with the aim.
     /// </summary>
     public class ReloadNotice : MonoBehaviour
     {
         [SerializeField] private HandwrittenNotice _notice;
-        [SerializeField] private string _text = "ready";
+        [SerializeField] private string _text = "+1";
 
         [Tooltip("World units from the muzzle to the notice's centre.")]
-        [SerializeField] private Vector2 _worldOffset = new(0.9f, 0.35f);
+        [SerializeField] private Vector2 _worldOffset = new(0.3f, -0.2f);
 
         [Inject] private ISubscriber<ThrowerReadyMessage> _readySubscriber;
         [Inject] private ISubscriber<ProjectileFiredMessage> _firedSubscriber;

@@ -7,7 +7,7 @@ using UnityEngine;
 namespace BalloonParty.Editor
 {
     /// <summary>
-    ///     Builds the cannon's "ready" notice on the game canvas: a copy of the tooltip's pencil label (its font
+    ///     Builds the cannon's "+1" ready notice on the game canvas: a copy of the tooltip's pencil label (its font
     ///     and <see cref="WriteOnText" /> included), made small, with a <see cref="HandwrittenNotice" /> and a
     ///     <see cref="ReloadNotice" /> wired to it. A starting look to restyle by hand; running it again
     ///     rebuilds the notice.
@@ -19,8 +19,8 @@ namespace BalloonParty.Editor
         private const string NoticeName = "ReloadNotice";
 
         // Canvas units at the 225x400 reference resolution.
-        private const float FontSize = 16f;
-        private static readonly Vector2 Size = new(90f, 24f);
+        private const float FontSize = 8f;
+        private static readonly Vector2 Size = new(40f, 14f);
 
         [MenuItem(MenuPath)]
         private static void Build()
