@@ -14,17 +14,13 @@ namespace BalloonParty.Editor
         /// <summary>The first prefab matching <paramref name="search" /> whose root has a <typeparamref name="T" />.</summary>
         internal static string FindPrefabWithRoot<T>(string search) where T : Component
         {
-            foreach (var guid in AssetDatabase.FindAssets($"{search} t:Prefab"))
-            {
-                var path = AssetDatabase.GUIDToAssetPath(guid);
-                var asset = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-                if (asset != null && asset.GetComponent<T>() != null)
-                {
-                    return path;
-                }
-            }
+            return FindPrefab(search, asset => asset.GetComponent<T>() != null);
+        }
 
-            return null;
+        /// <summary>The first prefab matching <paramref name="search" /> with a <typeparamref name="T" /> anywhere in it.</summary>
+        internal static string FindPrefabWithChild<T>(string search) where T : Component
+        {
+            return FindPrefab(search, asset => asset.GetComponentInChildren<T>(true) != null);
         }
 
         /// <summary>
@@ -70,6 +66,21 @@ namespace BalloonParty.Editor
             {
                 PrefabUtility.UnloadPrefabContents(root);
             }
+        }
+
+        private static string FindPrefab(string search, Func<GameObject, bool> matches)
+        {
+            foreach (var guid in AssetDatabase.FindAssets($"{search} t:Prefab"))
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                var asset = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                if (asset != null && matches(asset))
+                {
+                    return path;
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -30,6 +30,7 @@ write nothing listens, and a rebuild shows the text whole, which is the written 
 ## Wiring requirements
 
 - `_text` must be assigned. On the `Tooltip` prefab it's the `Text (TMP)` label, on the same object.
-- The pencil look needs the Patrick Hand TMP font asset (`Assets/Fonts/PatrickHand-Regular.ttf`,
-  made with Window > TextMeshPro > Font Asset Creator) on the label. The grain through the letters
+- The pencil look needs the Patrick Hand TMP font asset on the label. **Tools > BalloonParty >
+  Notices > Build Pencil Font** makes it from `Assets/Fonts/PatrickHand-Regular.ttf` and sets it on the
+  tooltip's label. The grain through the letters
   and the ragged edge are the pencil text shader, still to come (`PLAN-Notices.md` §4.1).
