@@ -29,6 +29,7 @@ namespace BalloonParty.Scenario.View
         private static readonly int BladeTileId = Shader.PropertyToID("_BladeTile");
         private static readonly int PatchSizeId = Shader.PropertyToID("_GroundPatchSize");
         private static readonly int DirtId = Shader.PropertyToID("_GroundDirt");
+        private static readonly int BounceReferenceId = Shader.PropertyToID("_GroundBounceReference");
 
         private readonly CompositeDisposable _subscriptions = new();
 
@@ -77,6 +78,7 @@ namespace BalloonParty.Scenario.View
             Shader.SetGlobalFloat(PatchSizeId, Mathf.Max(0.01f, _settings.PatchSize));
             Shader.SetGlobalVector(DirtId, new Vector4(
                 Mathf.Max(0.01f, _settings.DirtPatchSize), _settings.DirtThreshold, _settings.DirtSoftness, 0f));
+            Shader.SetGlobalColor(BounceReferenceId, _settings.BounceReference);
             BuildBlades();
 
             // The Launch begin-screen is always sky; a ground start level lands on entering Game.

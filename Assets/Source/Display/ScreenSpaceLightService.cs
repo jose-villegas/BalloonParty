@@ -261,9 +261,8 @@ namespace BalloonParty.Display
             // the editor this (and MagnitudeRefId above) now update in lockstep with capture
             // refreshes rather than every display frame — which is when the capture itself last
             // re-matched its clear colour, so it's more correct as well as cheaper.
-            // The smear needs it too: on a ground level it measures the meadow's hue against it.
+            // On a ground level the overlay measures against the meadow instead (_GroundBounceReference).
             _overlayMaterial.SetColor(AmbientColorId, _camera.backgroundColor);
-            _smearMaterial.SetColor(AmbientColorId, _camera.backgroundColor);
         }
 
         private void FitOverlayToFrustum()

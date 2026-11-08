@@ -39,6 +39,7 @@ Shader "BalloonParty/Display/ScreenSpaceLightOverlay"
             #pragma fragment frag
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
+            #include "../Include/Ground.cginc"
 
             sampler2D _LightTex;
             fixed4 _ShadowTint;
@@ -91,7 +92,12 @@ Shader "BalloonParty/Display/ScreenSpaceLightOverlay"
                 // negative (absorbs — darkens neighbours). 0.5 * tint is blend-neutral.
                 // Scaled by the ABSOLUTE local magnitude: field-off that equals the global
                 // intensity, reproducing the old CPU-side "_bounceStrength * intensity".
-                fixed3 bounce = (gathered.rgb - _AmbientColor.rgb) * _BounceStrength * magnitude;
+                // On a ground level the backdrop the capture sees is the meadow, not the sky, so the bounce is
+                // measured against the meadow's own lit colour: open grass nets to neutral and a balloon bleeds
+                // onto the grass by how it differs from the grass, as one does onto open sky.
+                fixed3 ambient = lerp(_AmbientColor.rgb, _GroundBounceReference.rgb * SceneLightTint(),
+                    GroundCoverageAt(worldPos));
+                fixed3 bounce = (gathered.rgb - ambient) * _BounceStrength * magnitude;
                 fixed3 color = shadowTint * 0.5 + bounce;
 
                 return fixed4(color, 1.0);

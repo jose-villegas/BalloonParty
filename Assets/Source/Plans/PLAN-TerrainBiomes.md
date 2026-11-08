@@ -66,10 +66,13 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
   local light of pops and items lands on the grass as it does on the sprites.
 - **GI capture** picks GameObject layers (`SceneCaptureService._capturedLayers`), not
   sorting layers. The ground is on the captured Scenario layer, writing colour but not
-  the capture's coverage alpha. On ground levels the smear lets a ground tap bleed only
-  its hue, and only onto sprites, so the meadow tints the balloons without darkening
-  them or re-lighting itself; GI shadows land on the grass everywhere, not just under
-  cloud (owner, 2026-11-09: keep the ground in the GI capture).
+  the capture's coverage alpha, so the light buffer gathers the meadow as it gathers the
+  sky. The overlay measures bounce against the meadow's lit average
+  (`IGroundSettings.BounceReference` × the scene light) on ground levels, as it measures
+  against the sky's clear colour on sky levels: open grass nets to neutral, and a balloon
+  bleeds onto the grass by how it differs from the grass. Measured against the sky blue,
+  every balloon left a dark tinted ring on the grass (owner, 2026-11-09). GI shadows land
+  on the grass everywhere, not just under cloud.
 - **Level content**: levels are generated (`LevelGenerator` from `LevelGenerationSettings`),
   not authored per range; ranges are debug presets only. The `Withheld` catalogue flag is
   being added in separate work; it and the luck levels touch the same settings file, so

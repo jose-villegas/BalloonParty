@@ -56,6 +56,10 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Seed for the blade scatter. Any value works; change it to reshuffle the meadow.")]
         [SerializeField] private int _bladeSeed = 1337;
 
+        [Header("GI")]
+        [Tooltip("The meadow's average unlit colour, which the GI measures bounce against on ground levels, so open grass nets to no change and balloons bleed onto it by how they differ from it. Measured from the GI capture; retune it if the floor or blade colours change much.")]
+        [SerializeField] private Color _bounceReference = new(0.30f, 0.34f, 0.21f, 1f);
+
         [Header("Blade Wake")]
         [Tooltip("Material using Hidden/BalloonParty/Scenario/GrassWake — the grass's own short memory of the disturbance field. Without one the blades stay at rest.")]
         [SerializeField] private Material _wakeMaterial;
@@ -77,6 +81,7 @@ namespace BalloonParty.Configuration.Effects
         public float BladeTileMargin => _bladeTileMargin;
         public int BladeSortingOrder => _bladeSortingOrder;
         public int BladeSeed => _bladeSeed;
+        public Color BounceReference => _bounceReference;
         public Material WakeMaterial => _wakeMaterial;
         public float BladeRecoverySeconds => _bladeRecoverySeconds;
     }

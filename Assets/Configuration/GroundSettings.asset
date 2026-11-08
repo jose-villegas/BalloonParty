@@ -25,5 +25,6 @@ MonoBehaviour:
   _bladeTileMargin: 0.4
   _bladeSortingOrder: -14
   _bladeSeed: 1337
+  _bounceReference: {r: 0.3, g: 0.34, b: 0.21, a: 1}
   _wakeMaterial: {fileID: 2100000, guid: 2dd36923cea4471daae2dba453996d6d, type: 2}
   _bladeRecoverySeconds: 0.35

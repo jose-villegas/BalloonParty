@@ -48,6 +48,9 @@ namespace BalloonParty.Configuration.Effects
         /// <summary>Seed for the blade scatter.</summary>
         int BladeSeed { get; }
 
+        /// <summary>The meadow's average unlit colour, which the GI measures bounce against on ground levels.</summary>
+        Color BounceReference { get; }
+
         /// <summary>Material using Hidden/BalloonParty/Scenario/GrassWake: the grass's own short memory of the
         /// disturbance field, which the blades bend to. Without one the blades stay at rest.</summary>
         Material WakeMaterial { get; }

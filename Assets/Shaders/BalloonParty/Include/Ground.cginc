@@ -20,6 +20,10 @@ float _GroundPatchSize;
 // softness. The floor shows dirt there and the blades thin out and shorten toward it.
 float4 _GroundDirt;
 
+// The meadow's average unlit colour: the GI overlay measures bounce against it (times the scene light) on
+// ground levels, the way it measures against the sky's clear colour on sky levels.
+float4 _GroundBounceReference;
+
 float GroundCoverageAt(float2 worldPos)
 {
     return saturate(_GroundCoverage);
