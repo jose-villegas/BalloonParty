@@ -5,15 +5,17 @@ has a `DropChance` (5 %) of dropping a coin. Coins carry over between runs and a
 They will be spent on the game-over screen for a card that helps the retry (not built yet; see
 `Plans/PLAN-Coins.md`).
 
-For now a dropped coin goes straight into the wallet. The coin's flight to an on-screen counter,
-and crediting it only when it lands, come in a later phase of the plan.
+A dropped coin flies from its pop to the coin counter (bottom left, `UI/Coins/`) and counts
+when it lands, as score does: the balance never runs ahead of what the player saw arrive.
 
 ## Contents
 
 | File | What it does |
 |---|---|
 | `CoinDropController` | Subscribes `ActorHitMessage`. On a hit whose outcome includes `Pop`, at level ≥ `CoinsFromLevel`, rolls against `DropChance`; on a drop it publishes `CoinDroppedMessage(1, worldPosition)`. It never touches the wallet |
-| `CoinCreditor` | Adds dropped coins to the wallet, on `CoinDroppedMessage`. When coins fly, it will listen for their landing instead; nothing else changes |
+| `CoinTrailService` | Subscribes `CoinDroppedMessage` and flies a pooled coin trail (`Prefabs/Coins/CoinTrail.prefab`) from the pop to the counter; on arrival it publishes `CoinLandedMessage`. The counter's view registers itself as the target (`RegisterTarget`); until one has, a coin lands at once, so a scene without the HUD (and the tests) still credits every coin. Coins fly on real time, so they keep moving through the level-up popup's pause and the loss's slow motion. Coins still flying when the run resets or the board changes (a level-up, or the loss's camera-down) land at once. Only closing the game mid-flight loses a coin |
+| `CoinCreditor` | Adds coins to the wallet when they land, on `CoinLandedMessage` |
+| `ICoinCounterVisibility` / `CoinCounterVisibility` | Whether the counter shows. It turns on the first time the run reaches `CoinsFromLevel` or the wallet holds coins (a returning player sees it from level 1, since they can spend at any loss), and then stays for the session. Evaluated at initialization, before the views start, so a returning player's counter doesn't fade in |
 | `ICoinBalance` | The balance alone, `IReadOnlyReactiveProperty<int> Balance`: what views and the playtest bot read |
 | `ICoinWallet` / `CoinWallet` | `ICoinBalance` plus `Add(int)` and `TrySpend(int)`. Loads from `ICoinStore` once, at construction, and clamps a negative saved value to 0. `Add` ignores amounts of 0 or less; `TrySpend` refuses a negative amount or more than the balance, so neither can mint coins. Earned coins wait for a save point; a successful spend is saved at once, because a spend lost to a crash would refund the purchase |
 | `ICoinWalletPersistence` | `Save()`: writes the balance if it changed since the last write. Only `CoinWalletSaver` uses it |
@@ -22,8 +24,9 @@ and crediting it only when it lands, come in a later phase of the plan.
 | `IAppSuspendSignal` / `AppSuspendSignal` | Fires when the app loses focus (on mobile, sent to the background, where the OS can kill it without warning) or quits |
 
 Settings live in `RunConfig` as the `Coins` block (`CoinSettings`, read through `ICoinSettings`
-in `Shared/`). The message is `Shared/Messages/CoinDroppedMessage`. One `CoinWallet` singleton
-is registered as all three wallet interfaces.
+in `Shared/`): when coins drop, and the trail's flight time and pool size. The messages are
+`Shared/Messages/CoinDroppedMessage` (a pop dropped a coin) and `CoinLandedMessage` (it reached the
+counter). One `CoinWallet` singleton is registered as all three wallet interfaces.
 
 A crash or a hard kill with no focus change first loses the coins earned since the last save
 point. That is the price of not writing on every coin.
@@ -45,7 +48,9 @@ flowchart LR
     Lvl -- yes --> Roll{"next roll below DropChance?"}
     Roll -- no --> Skip
     Roll -- yes --> Drop["publish CoinDroppedMessage"]
-    Drop --> Credit["CoinCreditor: wallet.Add"]
+    Drop --> Fly["CoinTrailService: fly to the counter"]
+    Fly --> Land["publish CoinLandedMessage"]
+    Land --> Credit["CoinCreditor: wallet.Add"]
 ```
 
 Every hit dispatched through the hit pipeline counts: a balloon or a gatekeeper popping, and an
@@ -66,6 +71,8 @@ level is set back.
 `Game/Telemetry/README.md`). The metric is a copy for analysis, not the wallet: the wallet is
 progression and stays on the device. A coin that drops after the game over (a straggler pop)
 still goes into the wallet but is not counted, because the level's record is already closed.
+The metric counts drops, not landings: every drop lands, at once if it must, so the two only
+differ for coins in the air when the app is closed.
 
 The playtest bot (`Tools/playtest/`) prints the balance on every tick and reports coins earned
 per run and per level.

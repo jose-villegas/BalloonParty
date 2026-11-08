@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1827487983935383960}
   - component: {fileID: 1429749022553535108}
   m_Layer: 7
-  m_Name: ShieldScoreTrail
+  m_Name: CoinTrail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -83,12 +83,12 @@ SpriteRenderer:
   m_SortingLayer: 5
   m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 26340fbef9df0470cb841fcd08c3b984, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a72c137239e1489094ef4e222898c28b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
-  m_Size: {x: 1.5, y: 1.5}
+  m_Size: {x: 0.6, y: 0.6}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -174,8 +174,8 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
-      key1: {r: 0.95, g: 0.95, b: 0.9098039, a: 1}
+      key0: {r: 1, g: 0.80784315, b: 0.29803923, a: 1}
+      key1: {r: 1, g: 0.9529412, b: 0.7019608, a: 1}
       key2: {r: 0.06158147, g: 0.6692205, b: 0.9356472, a: 0}
       key3: {r: 1, g: 0.7912, b: 0.536, a: 0}
       key4: {r: 1, g: 0.7912, b: 0.536, a: 0}

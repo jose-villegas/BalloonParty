@@ -11,6 +11,7 @@ Each self-contained UI section has its own VContainer child scope, inheriting al
 | `ScoreUILifetimeScope` | Score UI Canvas root | Injects scene-placed `ColorProgressBar` instances via `RegisterBuildCallback`; binds `ScoreCounterLabel` and `LevelLabel` |
 | `LevelUpLifetimeScope` | LevelUp popup root | `LevelUpPopUp`, `CinematicEndGate(LevelCompleteHit)` (by concrete type — the popup injects it directly, not `IReadyGate`) |
 | `ShieldUILifetimeScope` | Shield HUD root | `ShieldCounterLabel[]`, `ShieldCounterAnimation` |
+| `CoinUILifetimeScope` | Coin counter root | `CoinCounterLabel` bound to the balance, `CoinCounterView` |
 | `HealthUILifetimeScope` | Hearts HUD root | Binds `HealthCounterLabel`s to `IPlayerHealth.Current`; `HeartTrailController`, the `Heart` trail endpoint |
 | `DangerUILifetimeScope` | Danger overlay root | Binds `DangerGradientView`s to `IDangerLevel.Level` |
 | `GameOverLifetimeScope` | Game-over screen root | Empty child scope on the screen root (`GameOverScreen` itself is injected by `GameLifetimeScope`) |
@@ -23,6 +24,7 @@ Each self-contained UI section has its own VContainer child scope, inheriting al
 | `LevelUp/` | Full-screen level-up ceremony popup (`LevelUpPopUp`) | `LevelUpLifetimeScope` (child of `GameLifetimeScope`) |
 | `Shields/` | The shields-per-ball counter and its animation | `ShieldUILifetimeScope` (child of `GameLifetimeScope`) |
 | `Health/` | Hit-point counter label and heart trails to overflow pops | `HealthUILifetimeScope` (child of `GameLifetimeScope`) |
+| `Coins/` | The coin counter, bottom left: the balance, where coins fly to | `CoinUILifetimeScope` (child of `GameLifetimeScope`) |
 | `Danger/` | Space-danger gradient overlay (`DangerGradientView`) | `DangerUILifetimeScope` (child of `GameLifetimeScope`) |
 | `GameOver/` | Loss screen (`GameOverScreen`) — see `GameOver/README.md` | `GameOverLifetimeScope` (child of `GameLifetimeScope`) |
 | `Tooltip/` | The on-screen tooltip (`TooltipBanner`): shows each `TooltipMessage` briefly — see `Tooltip/README.md` | `GameLifetimeScope` (`RegisterComponentInHierarchy`) |

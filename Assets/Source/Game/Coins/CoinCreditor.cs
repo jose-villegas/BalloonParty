@@ -6,25 +6,25 @@ using VContainer.Unity;
 namespace BalloonParty.Game.Coins
 {
     /// <summary>
-    ///     Adds coins to the wallet. For now on <see cref="CoinDroppedMessage" />, the moment a pop drops one;
-    ///     once coins fly to the counter, on their landing instead, so the drop itself never changes.
+    ///     Adds coins to the wallet when they land in the counter (<see cref="CoinLandedMessage" />), not when
+    ///     the pop drops them, so the balance never runs ahead of what the player has seen arrive.
     /// </summary>
     internal sealed class CoinCreditor : IStartable, IDisposable
     {
         private readonly ICoinWallet _wallet;
-        private readonly ISubscriber<CoinDroppedMessage> _droppedSubscriber;
+        private readonly ISubscriber<CoinLandedMessage> _landedSubscriber;
 
         private IDisposable _subscription;
 
-        public CoinCreditor(ICoinWallet wallet, ISubscriber<CoinDroppedMessage> droppedSubscriber)
+        public CoinCreditor(ICoinWallet wallet, ISubscriber<CoinLandedMessage> landedSubscriber)
         {
             _wallet = wallet;
-            _droppedSubscriber = droppedSubscriber;
+            _landedSubscriber = landedSubscriber;
         }
 
         public void Start()
         {
-            _subscription = _droppedSubscriber.Subscribe(message => _wallet.Add(message.Amount));
+            _subscription = _landedSubscriber.Subscribe(message => _wallet.Add(message.Amount));
         }
 
         public void Dispose()

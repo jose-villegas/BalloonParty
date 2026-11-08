@@ -116,6 +116,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<TransformCapturedMessage>(options);
             builder.RegisterMessageBroker<ShieldGainedMessage>(options);
             builder.RegisterMessageBroker<CoinDroppedMessage>(options);
+            builder.RegisterMessageBroker<CoinLandedMessage>(options);
             builder.RegisterMessageBroker<ShieldLostMessage>(options);
             builder.RegisterMessageBroker<WallHitMessage>(options);
             builder.RegisterMessageBroker<DeflectChainMessage>(options);
@@ -204,6 +205,8 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<CoinWalletSaver>();
             builder.RegisterEntryPoint<CoinCreditor>();
             builder.RegisterEntryPoint<CoinDropController>().As<IRunResettable>();
+            builder.RegisterEntryPoint<CoinTrailService>().AsSelf().As<IRunResettable>().As<ITransitionOutgoingContent>();
+            builder.RegisterEntryPoint<CoinCounterVisibility>().As<ICoinCounterVisibility>();
 
 #if UNITY_ANDROID && !UNITY_EDITOR
             builder.Register<IThermalSource, AndroidThermalSource>(Lifetime.Singleton);

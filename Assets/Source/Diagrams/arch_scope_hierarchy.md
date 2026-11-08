@@ -24,6 +24,7 @@ persistent, `DontDestroyOnLoad` scope built once for the whole session — and p
     - `LevelUpLifetimeScope` — level-up popup; registers `LevelUpPopUp` and the `CinematicEndGate` ready-gate (the cinematic producers and `CinematicDirector` live in `GameLifetimeScope`)
     - `ShieldUILifetimeScope` — shield HUD; registers the shield counter labels and `ShieldCounterAnimation`
     - `HealthUILifetimeScope` — health HUD; binds `HealthCounterLabel` views, registers `HeartTrailController` and the heart trail endpoint
+    - `CoinUILifetimeScope` — coin counter; binds `CoinCounterLabel` to the balance and registers `CoinCounterView`
     - `DangerUILifetimeScope` — danger overlay; binds `DangerGradientView` to the danger level
     - `GameOverLifetimeScope` — game-over panel; a scope shell with no local registrations (hierarchy injection only)
 

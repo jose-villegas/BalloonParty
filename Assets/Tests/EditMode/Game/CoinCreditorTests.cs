@@ -12,18 +12,18 @@ namespace BalloonParty.Tests.Game
     public class CoinCreditorTests
     {
         private ICoinWallet _wallet;
-        private IMessageHandler<CoinDroppedMessage> _droppedHandler;
+        private IMessageHandler<CoinLandedMessage> _landedHandler;
         private CoinCreditor _creditor;
 
         [SetUp]
         public void SetUp()
         {
             _wallet = Substitute.For<ICoinWallet>();
-            var subscriber = Substitute.For<ISubscriber<CoinDroppedMessage>>();
+            var subscriber = Substitute.For<ISubscriber<CoinLandedMessage>>();
             subscriber
                 .Subscribe(
-                    Arg.Do<IMessageHandler<CoinDroppedMessage>>(h => _droppedHandler = h),
-                    Arg.Any<MessageHandlerFilter<CoinDroppedMessage>[]>())
+                    Arg.Do<IMessageHandler<CoinLandedMessage>>(h => _landedHandler = h),
+                    Arg.Any<MessageHandlerFilter<CoinLandedMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
             _creditor = new CoinCreditor(_wallet, subscriber);
@@ -37,9 +37,9 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void CoinDropped_AddsItsAmountToTheWallet()
+        public void CoinLanded_AddsItsAmountToTheWallet()
         {
-            _droppedHandler.Handle(new CoinDroppedMessage(2, Vector3.zero));
+            _landedHandler.Handle(new CoinLandedMessage(2, Vector3.zero));
 
             _wallet.Received(1).Add(2);
         }

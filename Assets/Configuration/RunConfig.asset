@@ -63,3 +63,5 @@ MonoBehaviour:
   _coins:
     _coinsFromLevel: 10
     _dropChance: 0.05
+    _trailDuration: 0.7
+    _trailPrewarm: 8

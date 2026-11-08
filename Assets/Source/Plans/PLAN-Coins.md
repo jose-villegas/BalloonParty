@@ -5,8 +5,9 @@
 > Working plan for a coin currency earned deep in a run and spent on the game-over screen for a card
 > that helps the retry.
 
-**Status:** Phase 1 built (the wallet, the drop and telemetry, see `Game/Coins/README.md`); phase 2
-(tuning) next. Decided with the owner: a card bought with coins applies to the
+**Status:** Phases 1 to 3 built: the wallet, the drop and telemetry, the tuning runs, and the coin's
+flight to the bottom-left counter (see `Game/Coins/README.md` and `UI/Coins/README.md`). Phase 4,
+the shop, is next. Decided with the owner: a card bought with coins applies to the
 retry at the level reached; coins are a saved wallet; they drop from pops from level 10 on; the
 counter sits bottom left and appears only once coins exist. Claude draws the art in the existing UI
 style (§7); the coin is drawn.
@@ -58,12 +59,12 @@ Follows the codebase's MVC split: models and controllers are plain C#, only view
 |---|---|---|
 | `ICoinSettings` | `Shared/`, authored in `RunConfig` as `Coins` | `CoinsFromLevel` (10), `DropChance` (0.05); phase 4 adds `CardPrice` (25) and `CardsOffered` (3) |
 | `ICoinBalance` / `ICoinWallet` / `CoinWallet` | `Game/Coins/` | `ICoinBalance` is the read-only `Balance` views read; `ICoinWallet` adds `Add(int)` and `TrySpend(int)`. Loads from and saves to `PlayerPrefs` through `ICoinStore` (key beside `RunMeta`'s); `CoinWalletSaver` saves at the save points, and a spend saves at once |
-| `CoinDropController` | `Game/Coins/` | Subscribes `ActorHitMessage`; on a `Pop` at level ≥ `CoinsFromLevel`, rolls the drop (seeded from the level seed, so a retry of the same level drops the same way for the same pops) and publishes `CoinDroppedMessage(amount, worldPosition)`. `CoinCreditor` adds dropped coins to the wallet; phase 3 switches it to `CoinLandedMessage` |
-| `CoinTrailService` + view | `Game/Coins/`, `UI/` | Flies each dropped coin to the counter (reusing the score-trail flight), publishes `CoinLandedMessage`, on which `CoinCreditor` adds 1. Pooled like score trails. When the run ends or resets, coins still flying are credited at once, never dropped: the score trails' cancel-on-reset would destroy them |
-| `CoinCounterView` | `UI/HUD/` | Bottom left of the screen: the coin icon and `Balance`. Hidden until coins exist (see below); punches on each landing |
-| `FailureOffers` | `Game/Run/` (extended) | `FailureOffer` gains `CanBuyCard` and `CardPrice`; new `TryCardRetryAsync(level, card, ct)` spends the coins and stages the retry with that card |
+| `CoinDropController` | `Game/Coins/` | Subscribes `ActorHitMessage`; on a `Pop` at level ≥ `CoinsFromLevel`, rolls the drop (seeded from the level seed, so a retry of the same level drops the same way for the same pops) and publishes `CoinDroppedMessage(amount, worldPosition)`. The drop never touches the wallet |
+| `CoinTrailService` | `Game/Coins/` | Flies each dropped coin to the counter on real time (a pooled `FlyingTrail`, as score trails), publishes `CoinLandedMessage`, on which `CoinCreditor` adds it. Coins still flying when the run resets or the board changes land at once, never dropped. With no counter registered, a coin lands at once |
+| `CoinCounterView` | `UI/Coins/` | Bottom left of the screen: the coin icon and `Balance`. Hidden until coins exist (see below); punches on each landing. Built by `Editor/CoinCounterBuilder` into `GameCanvas.prefab`. Behind the game-over screen it is blurred with the rest of the HUD |
+| `FailureOffers` | `Game/Run/` (extended) | `FailureOffer` gains `CanBuyCard` (eligibility only: a card can be dealt and the ad bonus wasn't taken, never "can afford", since the offer is a snapshot taken at the game over and coins still land after it) and `CardPrice`; new `TryCardRetryAsync(level, card, ct)` spends the coins and stages the retry with that card |
 | `IUpgradeDraft` / `RunUpgrades` | `Game/Upgrades/` (extended) | A shop hand (`DealShopHand`, same draw rules as the bonus card, seeded by level and retries used) and staging a chosen bonus card instead of a random one |
-| `CardShopView` | `UI/GameOver/` | The hand on the game-over screen, reusing `UpgradeCardView` slots, with the price, the balance and a disabled state when the wallet is short |
+| `CardShopView` | `UI/GameOver/` | The hand on the game-over screen, reusing `UpgradeCardView` slots, with the price and a disabled state when the wallet is short, worked out live from `ICoinBalance.Balance`. The HUD counter is blurred behind the game-over screen, so the shop shows the balance itself, beside the price |
 
 **When the counter shows.** Not before coins exist for this player, so a new player never sees an
 empty wallet before the game has said what coins are. It appears the first time either holds: the
@@ -96,8 +97,9 @@ Each phase gets the reviewer pass before the next one starts.
 - **Coins from the rainbow self-feed.** A shot that rainbow-converts balloons and pops them again
   (see the memory note on the rainbow multiplier) would also roll more coin drops. It is capped by
   the board, unlike the multiplier, but check the bot's high-skill coins per level for outliers.
-- **Losing mid-flight.** Coins still in the air when the run ends land during the game-over pan-in,
-  so the screen's balance is complete when it shows.
+- **Losing mid-flight.** Coins fly on real time, so those still in the air when the run ends land
+  during the game-over pan-in and the balance is complete when the screen shows. Any left when the
+  player leaves the screen land at once.
 - **No card can be dealt.** When only Extra Ball and maxed cards are left, the shop hides, as the ad's
   bonus button does.
 
