@@ -15,7 +15,9 @@ namespace BalloonParty.Configuration
                  "e.g. 5 = the descent begins once you drop below 5 shields.")]
         [SerializeField] [Min(0)] private int _shieldToneThreshold = 5;
         [SerializeField] private float _projectileSpeed;
-        [SerializeField] private float _projectileLoadDuration;
+        [Tooltip("Seconds the held ball takes to reach the muzzle while no ball is flying: the near-instant " +
+                 "reload, so a player with nothing in the air never waits. Not shortened by reload cards.")]
+        [SerializeField] [Min(0f)] private float _projectileLoadDuration;
 
         [Header("Play Area")]
         [Tooltip("Wall limits in clockwise order (top, right, bottom, left) — the billiard box the shot " +
@@ -113,9 +115,11 @@ namespace BalloonParty.Configuration
                  "the next ball waits inside the thrower until one dies.")]
         [SerializeField] [Min(1)] private int _maxBallsInFlight = 3;
 
-        [Tooltip("Seconds of game time (scaled: slow-mo stretches it) from a shot until the next ball " +
-                 "reaches the muzzle and can fire. The ball slides out over this time, so its position " +
-                 "is the reload cue. Never shorter than the load animation.")]
+        [Tooltip("Seconds of game time (scaled: slow-mo stretches it) the held ball takes to reach the " +
+                 "muzzle while another ball is flying: the price of firing again before a shot lands. Set " +
+                 "a little under the average flight, so a quick follow-up is possible but costly; reload " +
+                 "cards shorten it. The ball slides out over this time, so its position is the reload cue. " +
+                 "Never shorter than _projectileLoadDuration.")]
         [SerializeField] [Min(0f)] private float _reloadCooldownSeconds = 0.5f;
 
         [Header("Aiming")]

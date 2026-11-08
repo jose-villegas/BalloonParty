@@ -11,7 +11,7 @@ particular never rises with level, only through a card.
 
 | File | Responsibility |
 |---|---|
-| `IWeaponStats` | The run's weapon after its cards: `MaxBallsInFlight`, `ReloadSeconds`, `StartingShields`, `ExtraItemChance`. Each value is the configured base (`IProjectileFlightConfig`) plus every card held. Read these, not the flight config, wherever a card can change the value |
+| `IWeaponStats` | The run's weapon after its cards: `MaxBallsInFlight`, `ReloadSeconds` (the reload while another ball flies), `IdleReloadSeconds` (the near-instant one with nothing flying, which no card changes), `StartingShields`, `ExtraItemChance`. Each value is the configured base (`IProjectileFlightConfig`) plus every card held. Read these, not the flight config, wherever a card can change the value |
 | `IUpgradeDraft` | The cards side: `Offer` (the hand of the level-up being presented, empty when none is pending or it deals none), `BonusCard` (the current attempt's bonus card, or null), `StacksOf(card)`, and `Pick(slot)`, which stages a card of the hand as the level-up's pick |
 | `RunUpgrades` | Implements both, plus `Game/Run`'s `IBonusCardSource`, `IRunResettable` and `IStartable` (it follows `ILevelProgress.Phase`). Holds the stack count per card and the bonus card, and recomputes the weapon when either changes |
 
@@ -25,7 +25,7 @@ and `Cards`, each with a kind, title, description, a per-stack `Amount`, `MaxSta
 | Kind | What one stack does | Read by |
 |---|---|---|
 | `BallCap` | +`Amount` balls in flight at once (rounded) | `ThrowerReload.HasFreeSlot`, and the projectile pool, which `ThrowerController` tops up on the next load |
-| `FasterReload` | Reload time × (1 − `Amount`); stacks multiply, and the total never drops below 10% of the base | `ThrowerReload.Restart` |
+| `FasterReload` | The reload while another ball flies × (1 − `Amount`); stacks multiply, and the total never drops below 10% of the base. The idle reload, with nothing flying, is already near-instant and stays as it is | `ThrowerReload.Restart` |
 | `Shield` | +`Amount` starting shields on every ball (rounded) | `ThrowerController.LoadProjectile`, the shield-chain planner in `ItemAssigner`, and the shot solver (`ShotBoardGather.Gather`'s `startingShields`, passed by the Fire Best Shot cheat and the Shot Solver window) |
 | `ItemOdds` | +`Amount` extra items per item roll, the initial board fill included. The whole part always lands; the fraction is a chance | `ItemAssigner.ExtraItems` |
 

@@ -39,9 +39,16 @@ Because firing now reads a moment in the past, the very last frame's prediction 
 
 Up to `IWeaponStats.MaxBallsInFlight` balls fly at the same time: `IProjectileFlightConfig.MaxBallsInFlight` (3 in the shipped asset) plus any Extra Ball cards (see `Game/Upgrades/README.md`). The thrower always holds a ball: `ThrowerController.EnsureLoaded` loads a fresh one right after a shot leaves, and only into an empty thrower, so a ball being aimed is never thrown away.
 
-A freshly loaded ball does not fire straight away. It slides from the thrower's pivot out to the muzzle over `IWeaponStats.ReloadSeconds`, which is `max(ProjectileLoadDuration, ReloadCooldownSeconds)` shortened by reload cards, in scaled time (so a freeze or slow-mo stretches it too). `ThrowerReload` owns that slide:
+A freshly loaded ball does not fire straight away. It slides from the thrower's pivot out to the muzzle, in scaled time (so a freeze or slow-mo stretches it too), and how fast depends on what's in the air:
+
+- **No ball flying:** the slide takes `IWeaponStats.IdleReloadSeconds` (`ProjectileLoadDuration`, 0.12 s in the shipped asset), so a player with nothing in the air never waits.
+- **A ball flying:** it takes `IWeaponStats.ReloadSeconds`, which is `max(ProjectileLoadDuration, ReloadCooldownSeconds)` shortened by reload cards (2 s in the shipped asset, a little under the median flight of about 2.3 s). Firing again before a shot lands is possible but costs time; reload cards are what make it quick.
+- A ball that dies mid-slide hands the rest of the slide to the idle pace: the slide keeps its progress, and only its speed changes.
+
+`ThrowerReload` owns that slide:
 
 - It advances only while a slot under the cap is free. With the cap full the ball waits short of the muzzle, which is the player's "not yet" cue.
+- Both reload times are taken at each `Restart` (one per loaded ball), so a card picked mid-slide applies from the next ball.
 - The ease is `OutCubic`, which never overshoots: the ball cannot reach the muzzle before the reload has ended, so "ball at the muzzle" reliably means "a release fires".
 - A release fires only when a ball is held, the slide is finished, a slot is free and the level is in the `Playing` phase. A release with nothing ready fires nothing and is not queued for later.
 - `ThrowerReadyMessage` is published once per ball, on the tick it becomes ready (`CombatSoundRouter` plays the reload "cock" on it).

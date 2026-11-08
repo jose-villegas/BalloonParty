@@ -12,10 +12,16 @@ namespace BalloonParty.Game.Upgrades
         int MaxBallsInFlight { get; }
 
         /// <summary>
-        ///     Seconds from a shot until the next ball is loaded: the longer of the load slide and the
-        ///     cooldown, shortened by reload cards.
+        ///     Seconds the next ball takes to load while another ball is flying: the longer of the load
+        ///     slide and the cooldown, shortened by reload cards.
         /// </summary>
         float ReloadSeconds { get; }
+
+        /// <summary>
+        ///     Seconds the next ball takes to load while no ball is flying:
+        ///     <see cref="IProjectileFlightConfig.ProjectileLoadDuration" />, which cards don't change.
+        /// </summary>
+        float IdleReloadSeconds { get; }
 
         /// <summary>Shields each new ball starts with: the configured count plus cards.</summary>
         int StartingShields { get; }

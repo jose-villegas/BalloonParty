@@ -61,6 +61,8 @@ namespace BalloonParty.Game.Upgrades
         public float ReloadSeconds =>
             Mathf.Max(_flight.ProjectileLoadDuration, _flight.ReloadCooldownSeconds) * _reloadScale;
 
+        public float IdleReloadSeconds => _flight.ProjectileLoadDuration;
+
         public int StartingShields => _flight.ProjectileStartingShields + _shieldBonus;
         public float ExtraItemChance => _extraItemChance;
         public IReadOnlyList<IUpgradeCardSettings> Offer => _offer;

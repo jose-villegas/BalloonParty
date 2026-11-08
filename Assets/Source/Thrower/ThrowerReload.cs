@@ -9,8 +9,10 @@ namespace BalloonParty.Thrower
     ///     The thrower's reload rules: how far the held ball has slid from the pivot to the muzzle, and
     ///     whether a release fires it. The slide advances only while a slot under the ball cap is free,
     ///     so a ball held short of the muzzle is the player's "not yet" cue, and one at the muzzle fires.
-    ///     The cap and the reload time are the run's, cards included, read each time so a pick applies
-    ///     from the next shot.
+    ///     Its speed depends on what's in the air: near-instant with no ball flying, slow while one is,
+    ///     so firing again before a shot lands costs time. A ball that dies mid-slide speeds up the rest
+    ///     of it. The cap is read live; the two reload times are the run's, cards included, taken at each
+    ///     <see cref="Restart" /> so a pick applies from the next shot.
     /// </summary>
     internal sealed class ThrowerReload
     {
@@ -20,15 +22,16 @@ namespace BalloonParty.Thrower
 
         private readonly IWeaponStats _weapon;
 
-        private float _elapsed;
-        private float _duration;
+        private float _progress;
+        private float _busyDuration;
+        private float _idleDuration;
 
-        internal float Progress => _duration > 0f ? Mathf.Clamp01(_elapsed / _duration) : 1f;
+        internal float Progress => _progress;
 
         /// <summary>The eased 0 (pivot) to 1 (muzzle) position of the held ball; 1 only once loaded.</summary>
         internal float SlidePosition => IsLoaded ? 1f : DOVirtual.EasedValue(0f, 1f, Progress, SlideEase);
 
-        internal bool IsLoaded => _elapsed >= _duration;
+        internal bool IsLoaded => _progress >= 1f;
 
         internal ThrowerReload(IWeaponStats weapon)
         {
@@ -37,16 +40,20 @@ namespace BalloonParty.Thrower
 
         internal void Restart()
         {
-            _elapsed = 0f;
-            _duration = _weapon.ReloadSeconds;
+            _progress = 0f;
+            _busyDuration = _weapon.ReloadSeconds;
+            _idleDuration = _weapon.IdleReloadSeconds;
         }
 
         internal void Advance(float deltaTime, int inFlight)
         {
-            if (!IsLoaded && HasFreeSlot(inFlight))
+            if (IsLoaded || !HasFreeSlot(inFlight))
             {
-                _elapsed += deltaTime;
+                return;
             }
+
+            var duration = inFlight == 0 ? _idleDuration : _busyDuration;
+            _progress = duration > 0f ? Mathf.Min(1f, _progress + deltaTime / duration) : 1f;
         }
 
         internal bool HasFreeSlot(int inFlight)

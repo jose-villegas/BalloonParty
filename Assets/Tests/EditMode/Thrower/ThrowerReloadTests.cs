@@ -11,13 +11,18 @@ namespace BalloonParty.Tests.Thrower
     /// <summary>
     ///     The thrower's reload rules: a release fires only once the held ball has slid out, with a slot
     ///     free under the cap, during play; and the slide itself is the cue, so it must not read "ready"
-    ///     before a release would actually fire.
+    ///     before a release would actually fire. The slide takes the cooldown while a ball is flying and
+    ///     the near-instant idle reload while none is.
     /// </summary>
     [TestFixture]
     public class ThrowerReloadTests
     {
         private const int Cap = 3;
         private const float Cooldown = 0.5f;
+        private const float IdleReload = 0.2f;
+
+        // One ball in the air: the slow reload, the one most rules here are about.
+        private const int Busy = 1;
 
         private IProjectileFlightConfig _config;
         private ThrowerReload _reload;
@@ -28,7 +33,7 @@ namespace BalloonParty.Tests.Thrower
             _config = Substitute.For<IProjectileFlightConfig>();
             _config.MaxBallsInFlight.Returns(Cap);
             _config.ReloadCooldownSeconds.Returns(Cooldown);
-            _config.ProjectileLoadDuration.Returns(0.2f);
+            _config.ProjectileLoadDuration.Returns(IdleReload);
 
             _reload = new ThrowerReload(WeaponOf(_config));
             _reload.Restart();
@@ -43,9 +48,9 @@ namespace BalloonParty.Tests.Thrower
         [Test]
         public void IsReady_SlidOutFreeSlotPlaying_True()
         {
-            _reload.Advance(Cooldown, 0);
+            _reload.Advance(Cooldown, Busy);
 
-            Assert.IsTrue(_reload.IsReady(0, LevelUpPhase.Playing));
+            Assert.IsTrue(_reload.IsReady(Busy, LevelUpPhase.Playing));
         }
 
         [Test]
@@ -69,7 +74,7 @@ namespace BalloonParty.Tests.Thrower
             rig.Hold(UpgradeRig.Card(UpgradeKind.FasterReload, 0.5f));
             reload.Restart();
 
-            reload.Advance(Cooldown * 0.5f, 0);
+            reload.Advance(Cooldown * 0.5f, Busy);
 
             Assert.IsTrue(reload.IsLoaded);
         }
@@ -82,7 +87,7 @@ namespace BalloonParty.Tests.Thrower
             reload.Restart();
             rig.Hold(UpgradeRig.Card(UpgradeKind.FasterReload, 0.5f));
 
-            reload.Advance(Cooldown * 0.5f, 0);
+            reload.Advance(Cooldown * 0.5f, Busy);
 
             Assert.IsFalse(reload.IsLoaded, "the slide in progress keeps the duration it started with");
         }
@@ -90,16 +95,16 @@ namespace BalloonParty.Tests.Thrower
         [Test]
         public void IsReady_BallStillSlidingOut_False()
         {
-            _reload.Advance(Cooldown * 0.4f, 0);
+            _reload.Advance(Cooldown * 0.4f, Busy);
 
-            Assert.IsFalse(_reload.IsReady(0, LevelUpPhase.Playing),
+            Assert.IsFalse(_reload.IsReady(Busy, LevelUpPhase.Playing),
                 "a release before the ball reaches the muzzle must not fire");
         }
 
         [Test]
         public void IsReady_CapReached_False()
         {
-            _reload.Advance(Cooldown, 0);
+            _reload.Advance(Cooldown, Busy);
 
             Assert.IsFalse(_reload.IsReady(Cap, LevelUpPhase.Playing));
         }
@@ -115,15 +120,15 @@ namespace BalloonParty.Tests.Thrower
         [Test]
         public void IsReady_NotPlaying_False()
         {
-            _reload.Advance(Cooldown, 0);
+            _reload.Advance(Cooldown, Busy);
 
-            Assert.IsFalse(_reload.IsReady(0, LevelUpPhase.Completing), "no shot may leave during the level-up ceremony");
+            Assert.IsFalse(_reload.IsReady(Busy, LevelUpPhase.Completing), "no shot may leave during the level-up ceremony");
         }
 
         [Test]
         public void Restart_TheCooldownFloorsAShorterSlide()
         {
-            _reload.Advance(0.3f, 0);
+            _reload.Advance(0.3f, Busy);
 
             Assert.IsFalse(_reload.IsLoaded, "the 0.2 s slide must still wait out the 0.5 s cooldown");
         }
@@ -134,7 +139,7 @@ namespace BalloonParty.Tests.Thrower
             _config.ProjectileLoadDuration.Returns(0.8f);
             _reload.Restart();
 
-            _reload.Advance(Cooldown, 0);
+            _reload.Advance(Cooldown, Busy);
 
             Assert.IsFalse(_reload.IsLoaded);
         }
@@ -150,7 +155,7 @@ namespace BalloonParty.Tests.Thrower
         [Test]
         public void Advance_ASlotFrees_TheSlideResumesWhereItStopped()
         {
-            _reload.Advance(Cooldown * 0.5f, 0);
+            _reload.Advance(Cooldown * 0.5f, Busy);
             _reload.Advance(Cooldown, Cap);
             _reload.Advance(Cooldown * 0.5f, Cap - 1);
 
@@ -165,14 +170,46 @@ namespace BalloonParty.Tests.Thrower
             const int steps = 50;
             for (var i = 0; i < steps - 1; i++)
             {
-                _reload.Advance(Cooldown / steps, 0);
+                _reload.Advance(Cooldown / steps, Busy);
 
                 Assert.IsFalse(_reload.IsLoaded);
                 Assert.Less(_reload.SlidePosition, 1f, $"at step {i + 1} of {steps}");
             }
 
-            _reload.Advance(Cooldown, 0);
+            _reload.Advance(Cooldown, Busy);
             Assert.AreEqual(1f, _reload.SlidePosition);
+        }
+
+        [Test]
+        public void Advance_NothingFlying_LoadsInTheIdleReload()
+        {
+            _reload.Advance(IdleReload * 0.5f, 0);
+            Assert.IsFalse(_reload.IsLoaded);
+
+            _reload.Advance(IdleReload * 0.5f, 0);
+            Assert.IsTrue(_reload.IsLoaded, "with nothing in the air the next ball is ready almost at once");
+        }
+
+        [Test]
+        public void Advance_TheLastBallLandsMidSlide_TheRestGoesAtTheIdlePace()
+        {
+            _reload.Advance(Cooldown * 0.5f, Busy);
+            _reload.Advance(IdleReload * 0.5f, 0);
+
+            Assert.IsTrue(_reload.IsLoaded, "half the slide was left, and half the idle reload covers it");
+        }
+
+        [Test]
+        public void Restart_AFasterReloadPick_LeavesTheIdleReloadAlone()
+        {
+            var rig = new UpgradeRig(_config);
+            var reload = new ThrowerReload(rig.Upgrades);
+            rig.Hold(UpgradeRig.Card(UpgradeKind.FasterReload, 0.5f));
+            reload.Restart();
+
+            reload.Advance(IdleReload * 0.9f, 0);
+
+            Assert.IsFalse(reload.IsLoaded, "reload cards shorten the reload under fire, not the idle one");
         }
 
         [Test]

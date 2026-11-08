@@ -11,7 +11,12 @@ namespace BalloonParty.Shared
         int ProjectileStartingShields { get; }
         int ShieldToneThreshold { get; }
         float ProjectileSpeed { get; }
+        /// <summary>
+        ///     Seconds the held ball takes to reach the muzzle while no ball is flying: the near-instant
+        ///     reload. Also the floor of <see cref="ReloadCooldownSeconds" />.
+        /// </summary>
         float ProjectileLoadDuration { get; }
+
         Vector4 LimitsClockwise { get; }
         int CruiseWallBounceThreshold { get; }
         float SpeedGainPerTap { get; }
@@ -34,7 +39,8 @@ namespace BalloonParty.Shared
         int MaxBallsInFlight { get; }
 
         /// <summary>
-        ///     Seconds from a shot until the next ball can fire (at least <see cref="ProjectileLoadDuration" />).
+        ///     Seconds the held ball takes to reach the muzzle while another ball is flying (at least
+        ///     <see cref="ProjectileLoadDuration" />), before reload cards.
         /// </summary>
         float ReloadCooldownSeconds { get; }
 
