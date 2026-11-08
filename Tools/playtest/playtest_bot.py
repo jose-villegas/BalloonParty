@@ -35,7 +35,19 @@ TOOL_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.dirname(os.path.dirname(TOOL_DIR))
 TICK_RE = re.compile(
     r"^(?P<t>[\d.]+) L(?P<level>\d+) score (?P<score>-?\d+) hearts (?P<hearts>-?\d+) "
-    r"(?P<nav>\w+)/(?P<phase>\w+) shots (?P<shots>\d+)$")
+    r"(?P<nav>\w+)/(?P<phase>\w+) shots (?P<shots>\d+)(?: fill (?P<fill>[\d.]+))?(?: inflight (?P<inflight>\d+))?$")
+FLOAT_FIELDS = ("t", "fill")
+
+# The human player's knobs per skill: reaction floor and mean (s), aim error sd (degrees), and the share of
+# shots fired unaimed. First guesses, not fitted to real players; compare skills with each other.
+SKILLS = {
+    "low": {"react_floor": 0.4, "react_mean": 1.2, "aim_sd": 10.0, "wild": 0.2},
+    "average": {"react_floor": 0.25, "react_mean": 0.6, "aim_sd": 4.0, "wild": 0.05},
+    "high": {"react_floor": 0.15, "react_mean": 0.25, "aim_sd": 1.5, "wild": 0.0},
+}
+
+# How far back a heart loss looks for what led to it.
+LEAD_UP_SECONDS = 10.0
 FLIGHT_CONFIG = "Assets/Configuration/ProjectileFlightConfig.asset"
 TUNING_KEYS = ("_projectileLoadDuration", "_reloadCooldownSeconds", "_maxBallsInFlight")
 
@@ -101,8 +113,8 @@ def play(editor, seconds, tick_code, ticks_path):
             sample = {"wall": round(time.time(), 2), "line": line}
             match = TICK_RE.match(line or "")
             if match:
-                sample.update({k: (v if k in ("nav", "phase") else float(v) if k == "t" else int(v))
-                               for k, v in match.groupdict().items()})
+                sample.update({k: (v if k in ("nav", "phase") else float(v) if k in FLOAT_FIELDS else int(v))
+                               for k, v in match.groupdict().items() if v is not None})
             elif line and line.endswith("RESTART"):
                 sample["restart"] = True
             samples.append(sample)
@@ -157,6 +169,51 @@ def summarize_runs(samples):
     return runs
 
 
+def split_runs(samples):
+    """The ticks of each run, in order; a run ends at a game-over restart."""
+    runs, current = [], []
+    for sample in samples:
+        if sample.get("restart"):
+            if current:
+                runs.append((current, True))
+            current = []
+        elif "level" in sample:
+            current.append(sample)
+    if current:
+        runs.append((current, False))
+    return runs
+
+
+def heart_losses(samples):
+    """Each heart lost, with what the ticks show of the seconds before it."""
+    losses = []
+    for run_index, (ticks, _) in enumerate(split_runs(samples), 1):
+        level_start = ticks[0]["t"]
+        for previous, tick in zip(ticks, ticks[1:]):
+            if tick["level"] != previous["level"]:
+                level_start = tick["t"]
+                continue
+            lost = previous["hearts"] - tick["hearts"]
+            if lost <= 0:
+                continue
+            window = [s for s in ticks if tick["t"] - LEAD_UP_SECONDS <= s["t"] <= tick["t"]]
+            span = max(0.1, window[-1]["t"] - window[0]["t"])
+            fills = [s["fill"] for s in window if "fill" in s]
+            flying = [s["inflight"] for s in window if "inflight" in s]
+            losses.append({
+                "run": run_index,
+                "level": tick["level"],
+                "into_level": tick["t"] - level_start,
+                "lost": lost,
+                "hearts_left": tick["hearts"],
+                "fill_before": previous.get("fill"),
+                "fill_mean": statistics.mean(fills) if fills else None,
+                "shots_per_10s": (window[-1]["shots"] - window[0]["shots"]) / span * 10.0,
+                "inflight_mean": statistics.mean(flying) if flying else None,
+            })
+    return losses
+
+
 def build_report(label, seconds, player, tuning, samples, records):
     lines = [f"# Playtest bot report{f' — {label}' if label else ''}", ""]
     lines.append(f"- Played {seconds} s of wall time, {len(samples)} ticks "
@@ -168,12 +225,38 @@ def build_report(label, seconds, player, tuning, samples, records):
 
     runs = summarize_runs(samples)
     if runs:
-        lines += ["## Runs", "", "| Run | Reached level | Score | Hearts at end | Shots | Seconds |",
-                  "|---|---|---|---|---|---|"]
+        ended = [ended for _, ended in split_runs(samples)]
+        lines += ["## Runs", "", "| Run | Ended | Reached level | Score | Hearts at end | Shots | Seconds |",
+                  "|---|---|---|---|---|---|---|"]
         for index, run in enumerate(runs, 1):
             span = (run["last"] or 0) - (run["first"] or 0)
-            lines.append(f"| {index} | {run['level']} | {run['score']} | {run['hearts']} | {run['shots']} | {span:.0f} |")
+            outcome = "game over" if index <= len(ended) and ended[index - 1] else "still playing"
+            lines.append(f"| {index} | {outcome} | {run['level']} | {run['score']} | {run['hearts']} | "
+                         f"{run['shots']} | {span:.0f} |")
+        failures = sum(ended)
+        lines += ["", f"{failures} of {len(runs)} runs ended in a game over."]
         lines.append("")
+
+    losses = heart_losses(samples)
+    lines += ["## Hearts lost (ticks)", ""]
+    if losses:
+        lines += ["Every heart lost, with the ticks of the "
+                  f"{LEAD_UP_SECONDS:g} s before it. A heart goes when a new line finds no room on the board.", "",
+                  "| Run | Level | Seconds into level | Lost | Hearts left | Fill just before | "
+                  f"Mean fill, last {LEAD_UP_SECONDS:g} s | Shots per 10 s | Mean balls in flight |",
+                  "|---|---|---|---|---|---|---|---|---|"]
+
+        def number(value, digits=2):
+            return "-" if value is None else f"{value:.{digits}f}"
+
+        for loss in losses:
+            lines.append(
+                f"| {loss['run']} | {loss['level']} | {loss['into_level']:.0f} | {loss['lost']} | "
+                f"{loss['hearts_left']} | {number(loss['fill_before'])} | {number(loss['fill_mean'])} | "
+                f"{loss['shots_per_10s']:.1f} | {number(loss['inflight_mean'], 1)} |")
+    else:
+        lines.append("No hearts were lost.")
+    lines.append("")
 
     levels = [r for r in records if r.get("record_kind") == "level"]
     if levels:
@@ -189,6 +272,25 @@ def build_report(label, seconds, player, tuning, samples, records):
                 f"| {record.get('level_index')} | {'yes' if record.get('completed') else 'no'} | "
                 f"{record.get('timers', {}).get('gameplay_seconds', 0):.1f} | {shots} | {pops} | {per_shot} | "
                 f"{metrics.get('hearts_lost', 0)} | {metrics.get('max_streak', 0)} |")
+        lines.append("")
+
+    # Hearts are lost only when a spawning line finds the board full, so how full it runs is the danger.
+    fills = {}
+    for sample in samples:
+        if "fill" in sample and sample.get("phase") == "Playing":
+            fills.setdefault(sample["level"], []).append(sample["fill"])
+    if fills:
+        lines += ["## Board fill (ticks)", "",
+                  "Share of open slots holding a balloon while playing. Hearts are lost only when a new line "
+                  "finds no room, so the closer to 1, the closer to danger.", "",
+                  "| Level | Ticks | Mean | Median | 90th percentile | Max | Ticks at 0.9 or more |",
+                  "|---|---|---|---|---|---|---|"]
+        for level in sorted(fills):
+            values = fills[level]
+            high = sum(1 for v in values if v >= 0.9)
+            lines.append(
+                f"| {level} | {len(values)} | {statistics.mean(values):.2f} | {statistics.median(values):.2f} | "
+                f"{percentile(values, 0.9):.2f} | {max(values):.2f} | {high} ({high / len(values):.0%}) |")
         lines.append("")
 
     flights = [r["timers"]["gameplay_seconds"] for r in records
@@ -214,13 +316,18 @@ def main():
     parser.add_argument("--keep-playing", action="store_true", help="leave Play mode running afterwards")
     parser.add_argument("--player", choices=("best", "human"), default="human",
                         help="best: the solver, at once. human (default): reaction time and aim error")
-    parser.add_argument("--react-floor", type=float, default=0.25,
-                        help="human: seconds before any reaction to a ready cannon (default 0.25)")
-    parser.add_argument("--react-mean", type=float, default=0.6,
-                        help="human: mean of the exponential wait on top of the floor, seconds (default 0.6)")
-    parser.add_argument("--aim-sd", type=float, default=4.0,
-                        help="human: standard deviation of the aim error, degrees (default 4)")
+    parser.add_argument("--skill", choices=tuple(SKILLS), default="average",
+                        help="human: the preset for the knobs below (default average); a knob given wins")
+    parser.add_argument("--react-floor", type=float,
+                        help="human: seconds before any reaction to a ready cannon")
+    parser.add_argument("--react-mean", type=float,
+                        help="human: mean of the exponential wait on top of the floor, seconds")
+    parser.add_argument("--aim-sd", type=float, help="human: standard deviation of the aim error, degrees")
+    parser.add_argument("--wild", type=float, help="human: share of shots fired unaimed, at any angle (0-1)")
     args = parser.parse_args()
+    for knob, value in SKILLS[args.skill].items():
+        if getattr(args, knob) is None:
+            setattr(args, knob, value)
     # The Windows console defaults to a legacy code page; the report has dashes and en dashes.
     sys.stdout.reconfigure(encoding="utf-8")
 
@@ -231,12 +338,13 @@ def main():
                  .replace("__REACT_FLOOR__", repr(args.react_floor))
                  .replace("__REACT_MEAN__", repr(args.react_mean))
                  .replace("__AIM_SD__", repr(args.aim_sd))
+                 .replace("__WILD__", repr(args.wild))
                  .replace("__BOT_ID__", stamp))
     if args.player == "best":
         player = "best (the solver, fired the moment the cannon is ready)"
     else:
-        player = (f"human (reaction {args.react_floor:g} s + exponential wait, mean {args.react_mean:g} s; "
-                  f"aim error sd {args.aim_sd:g} degrees)")
+        player = (f"human, {args.skill} skill (reaction {args.react_floor:g} s + exponential wait, mean "
+                  f"{args.react_mean:g} s; aim error sd {args.aim_sd:g} degrees; {args.wild:.0%} of shots unaimed)")
     out_dir = os.path.join(REPO_ROOT, "Logs", "playtest", stamp + (f"-{args.label}" if args.label else ""))
     os.makedirs(out_dir, exist_ok=True)
 

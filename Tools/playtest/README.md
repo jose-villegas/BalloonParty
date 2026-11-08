@@ -6,17 +6,26 @@ Pipeline package (`com.unity.pipeline`), and reads the game's own telemetry for 
 
 ```bash
 python3 Tools/playtest/playtest_bot.py --seconds 240 --label reload-2s
+python3 Tools/playtest/playtest_bot.py --seconds 480 --skill low --label skill-low
 ```
 
 ## Two players
 
 | `--player` | How it plays | Knobs |
 |---|---|---|
-| `human` (default) | An average player. Once the cannon is ready it waits a reaction time, a floor plus an exponential wait, so its shots arrive as a Poisson process, then fires the solver's best angle plus a normal aim error | `--react-floor` (0.25 s), `--react-mean` (0.6 s, the exponential's mean), `--aim-sd` (4 degrees) |
+| `human` (default) | A person, at a skill level. Once the cannon is ready it waits a reaction time, a floor plus an exponential wait, so its shots arrive as a Poisson process, then fires the solver's best angle plus a normal aim error, or now and then a wild shot at any angle, unaimed | `--skill` picks the preset; `--react-floor`, `--react-mean` (the exponential's mean), `--aim-sd` and `--wild` override one knob of it |
 | `best` | The best-shot solver, fired the moment the cannon is ready: an upper bound on how well the game can be played | none |
 
-The `human` defaults are a starting guess, not fitted to real players. Change one knob at a time and
-compare against a `best` session to see how much of a level's difficulty is aim and how much is pace.
+| `--skill` | Reaction floor | Reaction mean | Aim error sd | Unaimed shots |
+|---|---|---|---|---|
+| `low` | 0.4 s | 1.2 s | 10 degrees | 20% |
+| `average` (default) | 0.25 s | 0.6 s | 4 degrees | 5% |
+| `high` | 0.15 s | 0.25 s | 1.5 degrees | none |
+
+The presets are a starting guess, not fitted to real players. Every skill should lose sometimes; what
+a tuning changes is how often each one loses and what leads to it, so run the skills against the same
+build and compare. Change one knob at a time, and compare against a `best` session to see how much of
+a level's difficulty is aim and how much is pace.
 
 It needs the Unity CLI (`unity`, on `PATH` or in `~/AppData/Local/Unity/bin`) and the Editor open
 on the project with the Pipeline package installed (`unity pipeline install`). `--project` picks
@@ -40,13 +49,15 @@ open, not yours.
 ## The report
 
 `Logs/playtest/<stamp>[-label]/` (git-ignored) gets `ticks.jsonl` (one line per tick: level, score,
-hearts, shots so far) and `report.md`:
+hearts, shots so far, board fill, balls in flight) and `report.md`:
 
 | Section | From | Says |
 |---|---|---|
 | Header | `ProjectileFlightConfig.asset`, the arguments | The reload and ball-cap values, and the player, the session ran with |
-| Runs | The ticks | Each run's highest level, score, hearts left, shots and length |
+| Runs | The ticks | Each run's outcome (game over or still playing), highest level, score, hearts left, shots and length, and how many runs ended in a game over |
+| Hearts lost | The ticks | Every heart lost: run, level, seconds into the level, hearts left, and the lead-up (the 10 s before it): board fill just before and on average, shots per 10 s, balls in flight |
 | Levels | Telemetry `level` records | Seconds, shots, pops, pops per shot, hearts lost and max streak, per level |
+| Board fill | The ticks | Per level, the share of open slots holding a balloon while playing (`IBoardFill.Occupancy`): mean, median, 90th percentile, max, and how often it ran at 0.9 or more. A heart is lost only when a new line finds no room, so this is how close each level came to costing one |
 | Flights | Telemetry `flight` records | How long a ball stays in the air: mean, median, middle half, 90th percentile |
 
 ## Reading it

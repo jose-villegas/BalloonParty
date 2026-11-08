@@ -8,15 +8,18 @@
 // Once the held ball is ready the handler fires:
 // - best:  the game's best-shot solver (the "Fire Best Shot" cheat), at once.
 // - human: after a reaction time (a floor plus an exponential wait, so shots come as a Poisson
-//          process), at the solver's angle plus a normal aim error.
+//          process), at the solver's angle plus a normal aim error, or now and then (wildChance) at
+//          any angle, unaimed.
 // The handler removes itself when Play mode ends, when a newer bot replaces it, or when ticks stop
 // coming (the heartbeat). Each tick restarts the run on the game-over screen and returns one line:
-//   <time> L<level> score <score> hearts <hearts> <navigation>/<phase> shots <shots fired so far>
+//   <time> L<level> score <score> hearts <hearts> <navigation>/<phase> shots <shots fired so far> fill <board fill> inflight <balls in the air>
+// (board fill: the share of open slots balloons fill, IBoardFill.Occupancy; a full board is where hearts are lost)
 // or "<time> RESTART", or "nogame <navigation>" while the game scope isn't up.
 var mode = "__MODE__";
 var reactFloor = __REACT_FLOOR__f;
 var reactMean = __REACT_MEAN__f;
 var aimSd = __AIM_SD__f;
+var wildChance = __WILD__f;
 var botId = "__BOT_ID__";
 const string IdKey = "BalloonPartyBot.Id";
 const string HeartbeatKey = "BalloonPartyBot.Heartbeat";
@@ -81,21 +84,32 @@ bool InPlay(VContainer.IObjectResolver resolver)
     return Nav() == "Game" && Value(Prop(resolver.Resolve(progressType), progressType, "Phase")).ToString() == "Playing";
 }
 
-// The solver's angle, read back from the aim override it sets, with a normal aim error added.
+// The solver's angle, read back from the aim override it sets, with a normal aim error added. A wild
+// shot (wildChance) ignores the board and goes anywhere in the aim range: a player who fires without
+// reading where the balloons are.
 void FireLikeAPerson(VContainer.IObjectResolver resolver, object controller)
 {
-    var solver = FindSolver(resolver);
-    var overrideProperty = controllerType.GetProperty("DirectionOverride", flags);
-    solver.GetType().GetMethod("SetDirectionOverride", flags).Invoke(solver, null);
-    var best = (UnityEngine.Vector3?)overrideProperty.GetValue(controller);
-    overrideProperty.SetValue(controller, null);
-
     var flight = (BalloonParty.Shared.IProjectileFlightConfig)resolver.Resolve(typeof(BalloonParty.Shared.IProjectileFlightConfig));
-    var angle = best.HasValue ? UnityEngine.Mathf.Atan2(best.Value.y, best.Value.x) * UnityEngine.Mathf.Rad2Deg : 90f;
-    var u1 = 1f - UnityEngine.Random.value;
-    var u2 = UnityEngine.Random.value;
-    var normal = UnityEngine.Mathf.Sqrt(-2f * UnityEngine.Mathf.Log(u1)) * UnityEngine.Mathf.Cos(2f * UnityEngine.Mathf.PI * u2);
-    angle = UnityEngine.Mathf.Clamp(angle + normal * aimSd, flight.AimAngleMinDegrees, flight.AimAngleMaxDegrees);
+    float angle;
+    if (UnityEngine.Random.value < wildChance)
+    {
+        angle = UnityEngine.Random.Range(flight.AimAngleMinDegrees, flight.AimAngleMaxDegrees);
+    }
+    else
+    {
+        var solver = FindSolver(resolver);
+        var overrideProperty = controllerType.GetProperty("DirectionOverride", flags);
+        solver.GetType().GetMethod("SetDirectionOverride", flags).Invoke(solver, null);
+        var best = (UnityEngine.Vector3?)overrideProperty.GetValue(controller);
+        overrideProperty.SetValue(controller, null);
+
+        angle = best.HasValue ? UnityEngine.Mathf.Atan2(best.Value.y, best.Value.x) * UnityEngine.Mathf.Rad2Deg : 90f;
+        var u1 = 1f - UnityEngine.Random.value;
+        var u2 = UnityEngine.Random.value;
+        var normal = UnityEngine.Mathf.Sqrt(-2f * UnityEngine.Mathf.Log(u1)) * UnityEngine.Mathf.Cos(2f * UnityEngine.Mathf.PI * u2);
+        angle = UnityEngine.Mathf.Clamp(angle + normal * aimSd, flight.AimAngleMinDegrees, flight.AimAngleMaxDegrees);
+    }
+
     var radians = angle * UnityEngine.Mathf.Deg2Rad;
     var direction = new UnityEngine.Vector3(UnityEngine.Mathf.Cos(radians), UnityEngine.Mathf.Sin(radians), 0f);
     controllerType.GetMethod("FireAt", flags).Invoke(controller, new object[] { direction });
@@ -190,4 +204,10 @@ var phase = Value(Prop(progress, progressType, "Phase")).ToString();
 var hearts = (int)Value(Prop(game.Resolve(healthType), healthType, "Current"));
 var score = (int)Value(Prop(game.Resolve(scoreType), scoreType, "TotalScore"));
 var shots = UnityEditor.SessionState.GetInt(ShotsKey, 0);
-return time + " L" + level + " score " + score + " hearts " + hearts + " " + nav + "/" + phase + " shots " + shots;
+var fillType = asm.GetType("BalloonParty.Balloon.Spawner.IBoardFill");
+var occupancy = (float)Prop(game.Resolve(fillType), fillType, "Occupancy");
+var fill = occupancy.ToString("F2", System.Globalization.CultureInfo.InvariantCulture);
+var registryType = asm.GetType("BalloonParty.Projectile.IProjectileRegistry");
+var inFlight = (int)Prop(game.Resolve(registryType), registryType, "InFlightCount");
+return time + " L" + level + " score " + score + " hearts " + hearts + " " + nav + "/" + phase + " shots " + shots
+       + " fill " + fill + " inflight " + inFlight;
