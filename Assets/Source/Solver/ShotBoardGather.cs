@@ -30,6 +30,9 @@ namespace BalloonParty.Solver
 
         /// <summary>Mirrors <c>IRunConfig.StreakGrantsShields</c> — see ShotScoreRules.</summary>
         public readonly bool StreakGrantsShields;
+
+        /// <summary>Mirrors <c>IRunConfig.MaxStreakMultiplier</c> — see ShotScoreRules.</summary>
+        public readonly int MaxStreakMultiplier;
         public readonly float ProjectileContactRadius;
         public readonly float ProjectileSpeed;
         public readonly ShotCruiseConfig CruiseConfig;
@@ -55,7 +58,8 @@ namespace BalloonParty.Solver
             Vector3 spawnLocalOffset, int startingShields, bool streakGrantsShields,
             float projectileContactRadius,
             float projectileSpeed, ShotCruiseConfig cruiseConfig, ShotBoardDynamics dynamics,
-            float nudgeAmplitude, IReadOnlyList<string> allowedColors, string rainbowColorId, ShotItemLayer items)
+            float nudgeAmplitude, IReadOnlyList<string> allowedColors, string rainbowColorId, ShotItemLayer items,
+            int maxStreakMultiplier = 0)
         {
             Board = board;
             WallLimitsClockwise = wallLimitsClockwise;
@@ -71,6 +75,7 @@ namespace BalloonParty.Solver
             AllowedColors = allowedColors;
             RainbowColorId = rainbowColorId;
             Items = items;
+            MaxStreakMultiplier = maxStreakMultiplier;
         }
     }
 
@@ -126,7 +131,8 @@ namespace BalloonParty.Solver
                 balloonsConfig.NudgeDistance,
                 levelParams.Current.AllowedColors,
                 GamePalette.RainbowColorId,
-                items);
+                items,
+                runConfig?.MaxStreakMultiplier ?? 0);
         }
 
         internal static ShotSimulationResult SimulateAt(
@@ -141,7 +147,8 @@ namespace BalloonParty.Solver
                 cruiseConfig: context.CruiseConfig, dynamics: context.Dynamics, timestampsOut: timesOut,
                 targetColorId: targetColorId, radiusBias: radiusBias, allowedColors: context.AllowedColors,
                 rainbowColorId: context.RainbowColorId, seed: seed, items: context.Items,
-                streakGrantsShields: context.StreakGrantsShields);
+                streakGrantsShields: context.StreakGrantsShields,
+                maxStreakMultiplier: context.MaxStreakMultiplier);
         }
 
         // The thrower rotates around its pivot to aim (ThrowerView.RotateTo: fire-direction angle − 90°),
