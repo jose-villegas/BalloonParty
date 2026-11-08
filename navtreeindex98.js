@@ -1,5 +1,11 @@
 var NAVTREEINDEX98 =
 {
+"structBalloonParty_1_1Game_1_1Telemetry_1_1ColorCount.html":[5,0,0,6,8,4],
+"structBalloonParty_1_1Game_1_1Telemetry_1_1ColorCount.html":[6,0,0,6,8,4],
+"structBalloonParty_1_1Game_1_1Telemetry_1_1ColorCount.html#ab9b65f04631b1c079788cc71ec1b14af":[5,0,0,6,8,4,0],
+"structBalloonParty_1_1Game_1_1Telemetry_1_1ColorCount.html#ab9b65f04631b1c079788cc71ec1b14af":[6,0,0,6,8,4,0],
+"structBalloonParty_1_1Game_1_1Telemetry_1_1ColorCount.html#ae31b87f5e263b8e00af8a15e30bde44d":[5,0,0,6,8,4,2],
+"structBalloonParty_1_1Game_1_1Telemetry_1_1ColorCount.html#ae31b87f5e263b8e00af8a15e30bde44d":[6,0,0,6,8,4,2],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1ColorCount.html#affdb96bcd753db52465d10fb6ec31dfc":[5,0,0,6,8,4,1],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1ColorCount.html#affdb96bcd753db52465d10fb6ec31dfc":[6,0,0,6,8,4,1],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1ItemActivationCount.html":[5,0,0,6,8,12],
@@ -243,11 +249,5 @@ var NAVTREEINDEX98 =
 "structBalloonParty_1_1Item_1_1ItemSightTracker_1_1SightedItem.html#a12ad9086a181f7ec8ce96dae9b47345e":[5,0,0,7,21,0,4],
 "structBalloonParty_1_1Item_1_1ItemSightTracker_1_1SightedItem.html#a12ad9086a181f7ec8ce96dae9b47345e":[6,0,0,7,21,0,4],
 "structBalloonParty_1_1Item_1_1ItemSightTracker_1_1SightedItem.html#a277339c80f2c31c8402ab34423b61cee":[5,0,0,7,21,0,1],
-"structBalloonParty_1_1Item_1_1ItemSightTracker_1_1SightedItem.html#a277339c80f2c31c8402ab34423b61cee":[6,0,0,7,21,0,1],
-"structBalloonParty_1_1Item_1_1ItemSightTracker_1_1SightedItem.html#ac5295827cf80c207853fa80082bd7fd6":[5,0,0,7,21,0,3],
-"structBalloonParty_1_1Item_1_1ItemSightTracker_1_1SightedItem.html#ac5295827cf80c207853fa80082bd7fd6":[6,0,0,7,21,0,3],
-"structBalloonParty_1_1Item_1_1ItemSightTracker_1_1SightedItem.html#af85f8eedc2d09b0730f7fb0efaf571f3":[5,0,0,7,21,0,2],
-"structBalloonParty_1_1Item_1_1ItemSightTracker_1_1SightedItem.html#af85f8eedc2d09b0730f7fb0efaf571f3":[6,0,0,7,21,0,2],
-"structBalloonParty_1_1Item_1_1Laser_1_1LaserCrossParams.html":[5,0,0,7,2,1],
-"structBalloonParty_1_1Item_1_1Laser_1_1LaserCrossParams.html":[6,0,0,7,2,1]
+"structBalloonParty_1_1Item_1_1ItemSightTracker_1_1SightedItem.html#a277339c80f2c31c8402ab34423b61cee":[6,0,0,7,21,0,1]
 };

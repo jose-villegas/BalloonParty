@@ -1,5 +1,11 @@
 var NAVTREEINDEX76 =
 {
+"classBalloonParty_1_1UI_1_1Danger_1_1DangerHeartLossView.html#afdd2b7d672a586ebf218f09ea87b24cb":[6,0,0,16,2,1,0],
+"classBalloonParty_1_1UI_1_1Danger_1_1DangerHeartLossView.html#aff1c36a0917343917c25a6bf0b0f685a":[5,0,0,16,2,1,5],
+"classBalloonParty_1_1UI_1_1Danger_1_1DangerHeartLossView.html#aff1c36a0917343917c25a6bf0b0f685a":[6,0,0,16,2,1,5],
+"classBalloonParty_1_1UI_1_1Danger_1_1DangerUILifetimeScope.html":[5,0,0,16,2,2],
+"classBalloonParty_1_1UI_1_1Danger_1_1DangerUILifetimeScope.html":[6,0,0,16,2,2],
+"classBalloonParty_1_1UI_1_1Danger_1_1DangerUILifetimeScope.html#ad16f983126ab7e546c548f87aacdc9b1":[5,0,0,16,2,2,0],
 "classBalloonParty_1_1UI_1_1Danger_1_1DangerUILifetimeScope.html#ad16f983126ab7e546c548f87aacdc9b1":[6,0,0,16,2,2,0],
 "classBalloonParty_1_1UI_1_1FadeImage.html":[5,0,0,16,13],
 "classBalloonParty_1_1UI_1_1FadeImage.html":[6,0,0,16,13],
@@ -243,11 +249,5 @@ var NAVTREEINDEX76 =
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#ae5aa465d5ba86f46f19a2d5f0763afb9":[6,0,0,16,4,1,10],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#afd13c551ad3b8b4c4db4b27441df5b00":[5,0,0,16,4,1,19],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#afd13c551ad3b8b4c4db4b27441df5b00":[6,0,0,16,4,1,19],
-"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#afe97ee468afb530e2a5e122c30c3dfff":[5,0,0,16,4,1,24],
-"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#afe97ee468afb530e2a5e122c30c3dfff":[6,0,0,16,4,1,24],
-"classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html":[5,0,0,16,4,2],
-"classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html":[6,0,0,16,4,2],
-"classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html#a58597fbf5f270ffa4b9224450bd17faa":[5,0,0,16,4,2,4],
-"classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html#a58597fbf5f270ffa4b9224450bd17faa":[6,0,0,16,4,2,4],
-"classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html#a7eee062feb793cd53a7f38ebb916d455":[5,0,0,16,4,2,3]
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#afe97ee468afb530e2a5e122c30c3dfff":[5,0,0,16,4,1,24]
 };

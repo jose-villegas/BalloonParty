@@ -1,5 +1,11 @@
 var NAVTREEINDEX38 =
 {
+"classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html#a121b80a513874d26f181a37b7310a64d":[6,0,0,6,1,2,2],
+"classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html#a16e6b09d217537d5f4d911aa5b4ee165":[5,0,0,6,1,2,5],
+"classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html#a16e6b09d217537d5f4d911aa5b4ee165":[6,0,0,6,1,2,5],
+"classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html#a245b3bd3dc447bac060d70633d8f6819":[5,0,0,6,1,2,0],
+"classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html#a245b3bd3dc447bac060d70633d8f6819":[6,0,0,6,1,2,0],
+"classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html#a6525b75eb9fc8f0d3c3286135efd304d":[5,0,0,6,1,2,4],
 "classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html#a6525b75eb9fc8f0d3c3286135efd304d":[6,0,0,6,1,2,4],
 "classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html#afce3349bea00c6d733933a6fd4990075":[5,0,0,6,1,2,3],
 "classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html#afce3349bea00c6d733933a6fd4990075":[6,0,0,6,1,2,3],
@@ -243,11 +249,5 @@ var NAVTREEINDEX38 =
 "classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService_1_1NoFlight.html#a667d5cfa4fbbd628a35db7541be7b2e7":[6,0,0,6,3,0,1,2],
 "classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService_1_1NoFlight.html#ab95486670a6d70c6d80818e6b65ebd4d":[5,0,0,6,3,0,1,3],
 "classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService_1_1NoFlight.html#ab95486670a6d70c6d80818e6b65ebd4d":[6,0,0,6,3,0,1,3],
-"classBalloonParty_1_1Game_1_1GameLifetimeScope.html":[5,0,0,6,11],
-"classBalloonParty_1_1Game_1_1GameLifetimeScope.html":[6,0,0,6,11],
-"classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a17d0a5b59b3972089b23ebff7dd8caa9":[5,0,0,6,11,6],
-"classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a17d0a5b59b3972089b23ebff7dd8caa9":[6,0,0,6,11,6],
-"classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a1bc69c566af3d1e902cdeff458d4572b":[5,0,0,6,11,10],
-"classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a1bc69c566af3d1e902cdeff458d4572b":[6,0,0,6,11,10],
-"classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a20a05d63dc59846add5dbd242d268c06":[5,0,0,6,11,18]
+"classBalloonParty_1_1Game_1_1GameLifetimeScope.html":[5,0,0,6,11]
 };

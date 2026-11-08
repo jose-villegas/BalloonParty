@@ -1,5 +1,11 @@
 var NAVTREEINDEX74 =
 {
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#ad4aea7d3e1b4fc1a0958f3d28c43ce82":[6,0,0,14,22,32],
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#adaa62f76a5abe6f2ce2b9bbc5b21ecbf":[5,0,0,14,22,0],
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#adaa62f76a5abe6f2ce2b9bbc5b21ecbf":[6,0,0,14,22,0],
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#adbcab1422f5654df4fca61e07fbae07b":[5,0,0,14,22,25],
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#adbcab1422f5654df4fca61e07fbae07b":[6,0,0,14,22,25],
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#adcf6896580a0e737339d05a1bd19a710":[5,0,0,14,22,38],
 "classBalloonParty_1_1Solver_1_1ShotSimulator.html#adcf6896580a0e737339d05a1bd19a710":[6,0,0,14,22,38],
 "classBalloonParty_1_1Solver_1_1ShotSimulator.html#adefa979d895458a7fa064a0d2b309852":[5,0,0,14,22,19],
 "classBalloonParty_1_1Solver_1_1ShotSimulator.html#adefa979d895458a7fa064a0d2b309852":[6,0,0,14,22,19],
@@ -243,11 +249,5 @@ var NAVTREEINDEX74 =
 "classBalloonParty_1_1Thrower_1_1ThrowerSettings.html#accabaa2388448c7976e08a8be9c249c3":[6,0,0,15,5,0],
 "classBalloonParty_1_1Thrower_1_1ThrowerView.html":[5,0,0,15,6],
 "classBalloonParty_1_1Thrower_1_1ThrowerView.html":[6,0,0,15,6],
-"classBalloonParty_1_1Thrower_1_1ThrowerView.html#a091aba8c60cc0e6ee5ae8ba47c54c82b":[5,0,0,15,6,9],
-"classBalloonParty_1_1Thrower_1_1ThrowerView.html#a091aba8c60cc0e6ee5ae8ba47c54c82b":[6,0,0,15,6,9],
-"classBalloonParty_1_1Thrower_1_1ThrowerView.html#a2ce4bfdb0c09160e4ed29fe41287c3e5":[5,0,0,15,6,3],
-"classBalloonParty_1_1Thrower_1_1ThrowerView.html#a2ce4bfdb0c09160e4ed29fe41287c3e5":[6,0,0,15,6,3],
-"classBalloonParty_1_1Thrower_1_1ThrowerView.html#a358fce6f8d33d7cce1aa2f8eac7603b8":[5,0,0,15,6,1],
-"classBalloonParty_1_1Thrower_1_1ThrowerView.html#a358fce6f8d33d7cce1aa2f8eac7603b8":[6,0,0,15,6,1],
-"classBalloonParty_1_1Thrower_1_1ThrowerView.html#a4074e0974fdb1ecf40217144fed4296e":[5,0,0,15,6,4]
+"classBalloonParty_1_1Thrower_1_1ThrowerView.html#a091aba8c60cc0e6ee5ae8ba47c54c82b":[5,0,0,15,6,9]
 };

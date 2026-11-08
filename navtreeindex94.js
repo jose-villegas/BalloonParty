@@ -1,5 +1,11 @@
 var NAVTREEINDEX94 =
 {
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a5f2c277f41fb18ff29406b17b5366b75":[5,0,0,1,0,1,1],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a5f2c277f41fb18ff29406b17b5366b75":[6,0,0,1,0,1,1],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#ac91efd65201a510ee5eb4d1168155d87":[5,0,0,1,0,1,2],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#ac91efd65201a510ee5eb4d1168155d87":[6,0,0,1,0,1,2],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner_1_1PassCandidate.html":[5,0,0,1,0,2,0],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner_1_1PassCandidate.html":[6,0,0,1,0,2,0],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner_1_1PassCandidate.html#a957f695296400c59df19664b5a2cce0a":[5,0,0,1,0,2,0,1],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner_1_1PassCandidate.html#a957f695296400c59df19664b5a2cce0a":[6,0,0,1,0,2,0,1],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner_1_1PassCandidate.html#aa6772cbcd7c5cd19352f7ee206d7e42a":[5,0,0,1,0,2,0,0],
@@ -243,11 +249,5 @@ var NAVTREEINDEX94 =
 "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html":[5,0,0,3,4,31],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html":[6,0,0,3,4,31],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html#a0471718b596f220e6b2eb752e0c1dc03":[5,0,0,3,4,31,15],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html#a0471718b596f220e6b2eb752e0c1dc03":[6,0,0,3,4,31,15],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html#a09250bb3e2cfe5b44809f819ab0a2b8a":[5,0,0,3,4,31,8],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html#a09250bb3e2cfe5b44809f819ab0a2b8a":[6,0,0,3,4,31,8],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html#a416e10f0b4c29c6d09631687eabc5725":[5,0,0,3,4,31,14],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html#a416e10f0b4c29c6d09631687eabc5725":[6,0,0,3,4,31,14],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html#a54af68c00e5a80e10b5134a0f29bce64":[5,0,0,3,4,31,13],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html#a54af68c00e5a80e10b5134a0f29bce64":[6,0,0,3,4,31,13]
+"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html#a0471718b596f220e6b2eb752e0c1dc03":[6,0,0,3,4,31,15]
 };

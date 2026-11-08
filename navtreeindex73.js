@@ -1,5 +1,11 @@
 var NAVTREEINDEX73 =
 {
+"classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#afbdeec7fefa0bd388c491a1170dc6fa2":[6,0,0,14,5,5],
+"classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#affbf109d94dabded5da27a8f946219e2":[5,0,0,14,5,10],
+"classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#affbf109d94dabded5da27a8f946219e2":[6,0,0,14,5,10],
+"classBalloonParty_1_1Solver_1_1ShotBoardGather.html":[5,0,0,14,6],
+"classBalloonParty_1_1Solver_1_1ShotBoardGather.html":[6,0,0,14,6],
+"classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a124a77f42d4528948f5390f02e606718":[5,0,0,14,6,0],
 "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a124a77f42d4528948f5390f02e606718":[6,0,0,14,6,0],
 "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a41fa381f338d8cea0c2046b5878371a8":[5,0,0,14,6,10],
 "classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a41fa381f338d8cea0c2046b5878371a8":[6,0,0,14,6,10],
@@ -243,11 +249,5 @@ var NAVTREEINDEX73 =
 "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ad01282a5b3e309bfeacb551526b3e3b5":[6,0,0,14,22,34],
 "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ad0fcb585d4da51a43e3f0fb55d479b78":[5,0,0,14,22,4],
 "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ad0fcb585d4da51a43e3f0fb55d479b78":[6,0,0,14,22,4],
-"classBalloonParty_1_1Solver_1_1ShotSimulator.html#ad4aea7d3e1b4fc1a0958f3d28c43ce82":[5,0,0,14,22,32],
-"classBalloonParty_1_1Solver_1_1ShotSimulator.html#ad4aea7d3e1b4fc1a0958f3d28c43ce82":[6,0,0,14,22,32],
-"classBalloonParty_1_1Solver_1_1ShotSimulator.html#adaa62f76a5abe6f2ce2b9bbc5b21ecbf":[5,0,0,14,22,0],
-"classBalloonParty_1_1Solver_1_1ShotSimulator.html#adaa62f76a5abe6f2ce2b9bbc5b21ecbf":[6,0,0,14,22,0],
-"classBalloonParty_1_1Solver_1_1ShotSimulator.html#adbcab1422f5654df4fca61e07fbae07b":[5,0,0,14,22,25],
-"classBalloonParty_1_1Solver_1_1ShotSimulator.html#adbcab1422f5654df4fca61e07fbae07b":[6,0,0,14,22,25],
-"classBalloonParty_1_1Solver_1_1ShotSimulator.html#adcf6896580a0e737339d05a1bd19a710":[5,0,0,14,22,38]
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#ad4aea7d3e1b4fc1a0958f3d28c43ce82":[5,0,0,14,22,32]
 };

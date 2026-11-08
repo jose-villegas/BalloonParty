@@ -1,5 +1,11 @@
 var NAVTREEINDEX72 =
 {
+"classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html#aa841a43ea7c1e4c23a9096b47ed21716":[6,0,0,13,1,16,1],
+"classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html#afae108b7f4312411960d7fd9c99df086":[5,0,0,13,1,16,2],
+"classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html#afae108b7f4312411960d7fd9c99df086":[6,0,0,13,1,16,2],
+"classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html":[5,0,0,13,2,0],
+"classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html":[6,0,0,13,2,0],
+"classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html#a4343866fa890d606cabbf4436503254f":[5,0,0,13,2,0,3],
 "classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html#a4343866fa890d606cabbf4436503254f":[6,0,0,13,2,0,3],
 "classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html#a48e6cf72ce94660a92c03a2a9201e3f8":[5,0,0,13,2,0,1],
 "classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html#a48e6cf72ce94660a92c03a2a9201e3f8":[6,0,0,13,2,0,1],
@@ -243,11 +249,5 @@ var NAVTREEINDEX72 =
 "classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#af08ab58a91bda30db104d3cab50fc5e5":[6,0,0,14,5,27],
 "classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#af47fef5acb12480e740a98db10d89388":[5,0,0,14,5,32],
 "classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#af47fef5acb12480e740a98db10d89388":[6,0,0,14,5,32],
-"classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#afbdeec7fefa0bd388c491a1170dc6fa2":[5,0,0,14,5,5],
-"classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#afbdeec7fefa0bd388c491a1170dc6fa2":[6,0,0,14,5,5],
-"classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#affbf109d94dabded5da27a8f946219e2":[5,0,0,14,5,10],
-"classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#affbf109d94dabded5da27a8f946219e2":[6,0,0,14,5,10],
-"classBalloonParty_1_1Solver_1_1ShotBoardGather.html":[5,0,0,14,6],
-"classBalloonParty_1_1Solver_1_1ShotBoardGather.html":[6,0,0,14,6],
-"classBalloonParty_1_1Solver_1_1ShotBoardGather.html#a124a77f42d4528948f5390f02e606718":[5,0,0,14,6,0]
+"classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html#afbdeec7fefa0bd388c491a1170dc6fa2":[5,0,0,14,5,5]
 };

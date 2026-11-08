@@ -1,5 +1,11 @@
 var NAVTREEINDEX77 =
 {
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#afe97ee468afb530e2a5e122c30c3dfff":[6,0,0,16,4,1,24],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html":[5,0,0,16,4,2],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html":[6,0,0,16,4,2],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html#a58597fbf5f270ffa4b9224450bd17faa":[5,0,0,16,4,2,4],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html#a58597fbf5f270ffa4b9224450bd17faa":[6,0,0,16,4,2,4],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html#a7eee062feb793cd53a7f38ebb916d455":[5,0,0,16,4,2,3],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html#a7eee062feb793cd53a7f38ebb916d455":[6,0,0,16,4,2,3],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html#ab5876d50e82acde465ff770fa2aa4ca4":[5,0,0,16,4,2,6],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html#ab5876d50e82acde465ff770fa2aa4ca4":[6,0,0,16,4,2,6],
@@ -243,11 +249,5 @@ var NAVTREEINDEX77 =
 "classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a714bfc8ee6e92d905fa95336e0e74b87":[6,0,0,16,6,1,25],
 "classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a7bbe5e5214c64467d27557a56852dc39":[5,0,0,16,6,1,55],
 "classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a7bbe5e5214c64467d27557a56852dc39":[6,0,0,16,6,1,55],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a7d20a0b9fba46b695ddeb0367d01d5dc":[5,0,0,16,6,1,22],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a7d20a0b9fba46b695ddeb0367d01d5dc":[6,0,0,16,6,1,22],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a80832657f64abda9a4a3183be5634693":[5,0,0,16,6,1,13],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a80832657f64abda9a4a3183be5634693":[6,0,0,16,6,1,13],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a82fe74a3357f64d35f3b34cb05fb717b":[5,0,0,16,6,1,65],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a82fe74a3357f64d35f3b34cb05fb717b":[6,0,0,16,6,1,65],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a8322f3465341f198bbbece1fbef725af":[5,0,0,16,6,1,7]
+"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a7d20a0b9fba46b695ddeb0367d01d5dc":[5,0,0,16,6,1,22]
 };

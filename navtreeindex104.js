@@ -1,5 +1,11 @@
 var NAVTREEINDEX104 =
 {
+"structBalloonParty_1_1Solver_1_1ShotPopCause.html#a773ddf77ebba32851df4670ab0bd60ea":[5,0,0,14,16,1],
+"structBalloonParty_1_1Solver_1_1ShotPopCause.html#a773ddf77ebba32851df4670ab0bd60ea":[6,0,0,14,16,1],
+"structBalloonParty_1_1Solver_1_1ShotScoreRules.html":[5,0,0,14,17],
+"structBalloonParty_1_1Solver_1_1ShotScoreRules.html":[6,0,0,14,17],
+"structBalloonParty_1_1Solver_1_1ShotScoreRules.html#a02814ad7c50320ffdb7e0eb89cdfecb7":[5,0,0,14,17,2],
+"structBalloonParty_1_1Solver_1_1ShotScoreRules.html#a02814ad7c50320ffdb7e0eb89cdfecb7":[6,0,0,14,17,2],
 "structBalloonParty_1_1Solver_1_1ShotScoreRules.html#a1104452934b6ac299c219844d8120d39":[5,0,0,14,17,4],
 "structBalloonParty_1_1Solver_1_1ShotScoreRules.html#a1104452934b6ac299c219844d8120d39":[6,0,0,14,17,4],
 "structBalloonParty_1_1Solver_1_1ShotScoreRules.html#a3c486cb11415589d529c9289e8fdaec3":[5,0,0,14,17,0],

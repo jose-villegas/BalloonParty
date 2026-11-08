@@ -1,5 +1,11 @@
 var NAVTREEINDEX33 =
 {
+"classBalloonParty_1_1Editor_1_1Release_1_1ReleasePublisher_1_1ReleasePayload.html#acf1dcb5f7a95c9ad194c957fd0bf3fd8":[6,0,0,5,4,0,1,5],
+"classBalloonParty_1_1Editor_1_1Release_1_1ReleasePublisher_1_1ReleasePayload.html#add4bcccd17f5f984ead8b414e2b2cf65":[5,0,0,5,4,0,1,1],
+"classBalloonParty_1_1Editor_1_1Release_1_1ReleasePublisher_1_1ReleasePayload.html#add4bcccd17f5f984ead8b414e2b2cf65":[6,0,0,5,4,0,1,1],
+"classBalloonParty_1_1Editor_1_1Release_1_1ReleasePublisher_1_1ReleaseResponse.html":[5,0,0,5,4,0,2],
+"classBalloonParty_1_1Editor_1_1Release_1_1ReleasePublisher_1_1ReleaseResponse.html":[6,0,0,5,4,0,2],
+"classBalloonParty_1_1Editor_1_1Release_1_1ReleasePublisher_1_1ReleaseResponse.html#a4d43135e9d58d4215d216bd22ffbae14":[5,0,0,5,4,0,2,0],
 "classBalloonParty_1_1Editor_1_1Release_1_1ReleasePublisher_1_1ReleaseResponse.html#a4d43135e9d58d4215d216bd22ffbae14":[6,0,0,5,4,0,2,0],
 "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html":[5,0,0,5,4,2],
 "classBalloonParty_1_1Editor_1_1Release_1_1ReleaseUploadWindow.html":[6,0,0,5,4,2],
@@ -243,11 +249,5 @@ var NAVTREEINDEX33 =
 "classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor.html#aeecb062ce606328aa9765dbc4ba4abf5":[6,0,0,5,5,2,14],
 "classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor.html#afc7ddadae169e4c401a2e57e5e234554":[5,0,0,5,5,2,8],
 "classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor.html#afc7ddadae169e4c401a2e57e5e234554":[6,0,0,5,5,2,8],
-"classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor_1_1ScaleCompensation.html":[5,0,0,5,5,2,0],
-"classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor_1_1ScaleCompensation.html":[6,0,0,5,5,2,0],
-"classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor_1_1ScaleCompensation.html#a4718555ae7b469eae14fbe868708cee4":[5,0,0,5,5,2,0,0],
-"classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor_1_1ScaleCompensation.html#a4718555ae7b469eae14fbe868708cee4":[6,0,0,5,5,2,0,0],
-"classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor_1_1ScaleCompensation.html#a99ed1d1fc4bdb4229574432dc486267d":[5,0,0,5,5,2,0,2],
-"classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor_1_1ScaleCompensation.html#a99ed1d1fc4bdb4229574432dc486267d":[6,0,0,5,5,2,0,2],
-"classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor_1_1ScaleCompensation.html#aae833b457d81eecd1e1d46741ed755f4":[5,0,0,5,5,2,0,1]
+"classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor_1_1ScaleCompensation.html":[5,0,0,5,5,2,0]
 };

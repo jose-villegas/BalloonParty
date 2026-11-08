@@ -1,5 +1,11 @@
 var NAVTREEINDEX34 =
 {
+"classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor_1_1ScaleCompensation.html":[6,0,0,5,5,2,0],
+"classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor_1_1ScaleCompensation.html#a4718555ae7b469eae14fbe868708cee4":[5,0,0,5,5,2,0,0],
+"classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor_1_1ScaleCompensation.html#a4718555ae7b469eae14fbe868708cee4":[6,0,0,5,5,2,0,0],
+"classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor_1_1ScaleCompensation.html#a99ed1d1fc4bdb4229574432dc486267d":[5,0,0,5,5,2,0,2],
+"classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor_1_1ScaleCompensation.html#a99ed1d1fc4bdb4229574432dc486267d":[6,0,0,5,5,2,0,2],
+"classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor_1_1ScaleCompensation.html#aae833b457d81eecd1e1d46741ed755f4":[5,0,0,5,5,2,0,1],
 "classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor_1_1ScaleCompensation.html#aae833b457d81eecd1e1d46741ed755f4":[6,0,0,5,5,2,0,1],
 "classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor_1_1ScaleCompensation.html#acd1788e1727696e00bac725ce4bb6137":[5,0,0,5,5,2,0,3],
 "classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor_1_1ScaleCompensation.html#acd1788e1727696e00bac725ce4bb6137":[6,0,0,5,5,2,0,3],
@@ -243,11 +249,5 @@ var NAVTREEINDEX34 =
 "classBalloonParty_1_1Editor_1_1TelemetryLogMenu.html#a7c7c4b6c9c0b152fb76127ee2bbff8c8":[6,0,0,5,43,2],
 "classBalloonParty_1_1Editor_1_1TelemetryLogMenu.html#a8f87cbb48d7bf6be479c9eaace2f07c2":[5,0,0,5,43,1],
 "classBalloonParty_1_1Editor_1_1TelemetryLogMenu.html#a8f87cbb48d7bf6be479c9eaace2f07c2":[6,0,0,5,43,1],
-"classBalloonParty_1_1Editor_1_1TelemetryLogMenu.html#ab830db495ab172a91b44fcf62f60ce06":[5,0,0,5,43,4],
-"classBalloonParty_1_1Editor_1_1TelemetryLogMenu.html#ab830db495ab172a91b44fcf62f60ce06":[6,0,0,5,43,4],
-"classBalloonParty_1_1Editor_1_1TelemetryLogMenu.html#aeaf317a9b379323de1e54020e919a7a8":[5,0,0,5,43,0],
-"classBalloonParty_1_1Editor_1_1TelemetryLogMenu.html#aeaf317a9b379323de1e54020e919a7a8":[6,0,0,5,43,0],
-"classBalloonParty_1_1Editor_1_1TestRunner_1_1EditModeTestRunner.html":[5,0,0,5,9,0],
-"classBalloonParty_1_1Editor_1_1TestRunner_1_1EditModeTestRunner.html":[6,0,0,5,9,0],
-"classBalloonParty_1_1Editor_1_1TestRunner_1_1EditModeTestRunner.html#a109641e5c4223d8c467cc831e9c1e9ae":[5,0,0,5,9,0,3]
+"classBalloonParty_1_1Editor_1_1TelemetryLogMenu.html#ab830db495ab172a91b44fcf62f60ce06":[5,0,0,5,43,4]
 };

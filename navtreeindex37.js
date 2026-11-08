@@ -1,5 +1,11 @@
 var NAVTREEINDEX37 =
 {
+"classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a65d80f59fbc49ea03cec235912265307":[6,0,0,6,0,9,15],
+"classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a6715e4e0c2b198d2a24e66235958495c":[5,0,0,6,0,9,12],
+"classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a6715e4e0c2b198d2a24e66235958495c":[6,0,0,6,0,9,12],
+"classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a6bb874c8a0ab7d96a07123153217997b":[5,0,0,6,0,9,34],
+"classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a6bb874c8a0ab7d96a07123153217997b":[6,0,0,6,0,9,34],
+"classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a6d88f6e3017129f7d165b49dd0629e2e":[5,0,0,6,0,9,8],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a6d88f6e3017129f7d165b49dd0629e2e":[6,0,0,6,0,9,8],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a6fa62649bdb83ca76619733134938a40":[5,0,0,6,0,9,22],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a6fa62649bdb83ca76619733134938a40":[6,0,0,6,0,9,22],
@@ -243,11 +249,5 @@ var NAVTREEINDEX37 =
 "classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html":[6,0,0,6,1,2],
 "classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html#a0107f517a9ed89afe1cba1f3803a211f":[5,0,0,6,1,2,1],
 "classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html#a0107f517a9ed89afe1cba1f3803a211f":[6,0,0,6,1,2,1],
-"classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html#a121b80a513874d26f181a37b7310a64d":[5,0,0,6,1,2,2],
-"classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html#a121b80a513874d26f181a37b7310a64d":[6,0,0,6,1,2,2],
-"classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html#a16e6b09d217537d5f4d911aa5b4ee165":[5,0,0,6,1,2,5],
-"classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html#a16e6b09d217537d5f4d911aa5b4ee165":[6,0,0,6,1,2,5],
-"classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html#a245b3bd3dc447bac060d70633d8f6819":[5,0,0,6,1,2,0],
-"classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html#a245b3bd3dc447bac060d70633d8f6819":[6,0,0,6,1,2,0],
-"classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html#a6525b75eb9fc8f0d3c3286135efd304d":[5,0,0,6,1,2,4]
+"classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html#a121b80a513874d26f181a37b7310a64d":[5,0,0,6,1,2,2]
 };

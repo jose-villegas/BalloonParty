@@ -1,5 +1,11 @@
 var NAVTREEINDEX103 =
 {
+"structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#ab7e0c199e855e1d5d1da073d4dbae491":[5,0,0,14,3,13],
+"structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#ab7e0c199e855e1d5d1da073d4dbae491":[6,0,0,14,3,13],
+"structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#abede3ca7e487c0107ff5aec9e0342f5a":[5,0,0,14,3,9],
+"structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#abede3ca7e487c0107ff5aec9e0342f5a":[6,0,0,14,3,9],
+"structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#abf5fc63a971d17396a5dfb9f1b8275dd":[5,0,0,14,3,6],
+"structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#abf5fc63a971d17396a5dfb9f1b8275dd":[6,0,0,14,3,6],
 "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#ac0a61d12c30167f287dd79b24044094d":[5,0,0,14,3,2],
 "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#ac0a61d12c30167f287dd79b24044094d":[6,0,0,14,3,2],
 "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#ac17d2677c674928759ad59ff0110bb2d":[5,0,0,14,3,3],
@@ -243,11 +249,5 @@ var NAVTREEINDEX103 =
 "structBalloonParty_1_1Solver_1_1ShotPopCause.html#a67c8540847b41e215d3ffac9c607f73a":[5,0,0,14,16,2],
 "structBalloonParty_1_1Solver_1_1ShotPopCause.html#a67c8540847b41e215d3ffac9c607f73a":[6,0,0,14,16,2],
 "structBalloonParty_1_1Solver_1_1ShotPopCause.html#a6be68b6a41232e021e3fdfb32ca56e68":[5,0,0,14,16,5],
-"structBalloonParty_1_1Solver_1_1ShotPopCause.html#a6be68b6a41232e021e3fdfb32ca56e68":[6,0,0,14,16,5],
-"structBalloonParty_1_1Solver_1_1ShotPopCause.html#a773ddf77ebba32851df4670ab0bd60ea":[5,0,0,14,16,1],
-"structBalloonParty_1_1Solver_1_1ShotPopCause.html#a773ddf77ebba32851df4670ab0bd60ea":[6,0,0,14,16,1],
-"structBalloonParty_1_1Solver_1_1ShotScoreRules.html":[5,0,0,14,17],
-"structBalloonParty_1_1Solver_1_1ShotScoreRules.html":[6,0,0,14,17],
-"structBalloonParty_1_1Solver_1_1ShotScoreRules.html#a02814ad7c50320ffdb7e0eb89cdfecb7":[5,0,0,14,17,2],
-"structBalloonParty_1_1Solver_1_1ShotScoreRules.html#a02814ad7c50320ffdb7e0eb89cdfecb7":[6,0,0,14,17,2]
+"structBalloonParty_1_1Solver_1_1ShotPopCause.html#a6be68b6a41232e021e3fdfb32ca56e68":[6,0,0,14,16,5]
 };

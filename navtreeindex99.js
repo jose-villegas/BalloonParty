@@ -1,5 +1,11 @@
 var NAVTREEINDEX99 =
 {
+"structBalloonParty_1_1Item_1_1ItemSightTracker_1_1SightedItem.html#ac5295827cf80c207853fa80082bd7fd6":[5,0,0,7,21,0,3],
+"structBalloonParty_1_1Item_1_1ItemSightTracker_1_1SightedItem.html#ac5295827cf80c207853fa80082bd7fd6":[6,0,0,7,21,0,3],
+"structBalloonParty_1_1Item_1_1ItemSightTracker_1_1SightedItem.html#af85f8eedc2d09b0730f7fb0efaf571f3":[5,0,0,7,21,0,2],
+"structBalloonParty_1_1Item_1_1ItemSightTracker_1_1SightedItem.html#af85f8eedc2d09b0730f7fb0efaf571f3":[6,0,0,7,21,0,2],
+"structBalloonParty_1_1Item_1_1Laser_1_1LaserCrossParams.html":[5,0,0,7,2,1],
+"structBalloonParty_1_1Item_1_1Laser_1_1LaserCrossParams.html":[6,0,0,7,2,1],
 "structBalloonParty_1_1Item_1_1Laser_1_1LaserCrossParams.html#a07053e545ffa37745ac0aaa60df30623":[5,0,0,7,2,1,0],
 "structBalloonParty_1_1Item_1_1Laser_1_1LaserCrossParams.html#a07053e545ffa37745ac0aaa60df30623":[6,0,0,7,2,1,0],
 "structBalloonParty_1_1Item_1_1Laser_1_1LaserCrossParams.html#a25afe9dbf3eabc7c63460bbcf1ec9f0e":[5,0,0,7,2,1,2],
@@ -243,11 +249,5 @@ var NAVTREEINDEX99 =
 "structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html#a88a79256a270172e32b091eedd6fb29e":[5,0,0,10,1,7,4],
 "structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html#a88a79256a270172e32b091eedd6fb29e":[6,0,0,10,1,7,4],
 "structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html#a9e36fe327cb513c44bb1e58a04900ef0":[5,0,0,10,1,7,3],
-"structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html#a9e36fe327cb513c44bb1e58a04900ef0":[6,0,0,10,1,7,3],
-"structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html#aeca2fdb70aa081248de41add4ecc9860":[5,0,0,10,1,7,1],
-"structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html#aeca2fdb70aa081248de41add4ecc9860":[6,0,0,10,1,7,1],
-"structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html#afd20da21d9f39f08481ba137f46053ff":[5,0,0,10,1,7,2],
-"structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html#afd20da21d9f39f08481ba137f46053ff":[6,0,0,10,1,7,2],
-"structBalloonParty_1_1Projectile_1_1Model_1_1PendingPierceHit.html":[5,0,0,10,2,4],
-"structBalloonParty_1_1Projectile_1_1Model_1_1PendingPierceHit.html":[6,0,0,10,2,4]
+"structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html#a9e36fe327cb513c44bb1e58a04900ef0":[6,0,0,10,1,7,3]
 };

@@ -1,5 +1,11 @@
 var NAVTREEINDEX80 =
 {
+"classBalloonParty_1_1UI_1_1Score_1_1LevelLabel.html#ad99cbaaf12f305e7697537dde3c49502":[6,0,0,16,7,3,24],
+"classBalloonParty_1_1UI_1_1Score_1_1LevelLabel.html#af4d0eeca4945769b84684573e7c75e65":[5,0,0,16,7,3,16],
+"classBalloonParty_1_1UI_1_1Score_1_1LevelLabel.html#af4d0eeca4945769b84684573e7c75e65":[6,0,0,16,7,3,16],
+"classBalloonParty_1_1UI_1_1Score_1_1LevelLabel.html#af5781ea970169949f56cb48d64afc97a":[5,0,0,16,7,3,7],
+"classBalloonParty_1_1UI_1_1Score_1_1LevelLabel.html#af5781ea970169949f56cb48d64afc97a":[6,0,0,16,7,3,7],
+"classBalloonParty_1_1UI_1_1Score_1_1LevelLabel.html#af90597365e9143296f9e5e31e0b83f45":[5,0,0,16,7,3,3],
 "classBalloonParty_1_1UI_1_1Score_1_1LevelLabel.html#af90597365e9143296f9e5e31e0b83f45":[6,0,0,16,7,3,3],
 "classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html":[5,0,0,16,7,4],
 "classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html":[6,0,0,16,7,4],
@@ -243,11 +249,5 @@ var NAVTREEINDEX80 =
 "classBalloonParty_1_1UI_1_1Telemetry_1_1MetricValueResolver.html#a8927423a08dae81b37df6b0ca3195941":[6,0,0,16,9,4,6],
 "classBalloonParty_1_1UI_1_1Telemetry_1_1MetricValueResolver.html#a89750c1e71decb625af3712a5068494b":[5,0,0,16,9,4,4],
 "classBalloonParty_1_1UI_1_1Telemetry_1_1MetricValueResolver.html#a89750c1e71decb625af3712a5068494b":[6,0,0,16,9,4,4],
-"classBalloonParty_1_1UI_1_1Telemetry_1_1MetricValueResolver.html#ab0fd708a44b281500e57ec2b3d927bc9":[5,0,0,16,9,4,8],
-"classBalloonParty_1_1UI_1_1Telemetry_1_1MetricValueResolver.html#ab0fd708a44b281500e57ec2b3d927bc9":[6,0,0,16,9,4,8],
-"classBalloonParty_1_1UI_1_1Telemetry_1_1MetricValueResolver.html#ac753f26105eba03207e887e14ce6dff4":[5,0,0,16,9,4,10],
-"classBalloonParty_1_1UI_1_1Telemetry_1_1MetricValueResolver.html#ac753f26105eba03207e887e14ce6dff4":[6,0,0,16,9,4,10],
-"classBalloonParty_1_1UI_1_1Telemetry_1_1MetricValueResolver.html#ad0ab8c65874f44e5fe1073624ed966fa":[5,0,0,16,9,4,5],
-"classBalloonParty_1_1UI_1_1Telemetry_1_1MetricValueResolver.html#ad0ab8c65874f44e5fe1073624ed966fa":[6,0,0,16,9,4,5],
-"classBalloonParty_1_1UI_1_1Telemetry_1_1MetricValueResolver.html#adb2d07383a49a461fb08cbe6bba535db":[5,0,0,16,9,4,9]
+"classBalloonParty_1_1UI_1_1Telemetry_1_1MetricValueResolver.html#ab0fd708a44b281500e57ec2b3d927bc9":[5,0,0,16,9,4,8]
 };
