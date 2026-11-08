@@ -1169,31 +1169,31 @@ MonoBehaviour:
   _scoringCurve:
     _controlPoints:
     - _level: 1
-      _cumulativeScore: 700
+      _cumulativeScore: 250
       _segmentMode: 0
     - _level: 2
-      _cumulativeScore: 1200
+      _cumulativeScore: 400
       _segmentMode: 0
     - _level: 3
-      _cumulativeScore: 2100
+      _cumulativeScore: 600
       _segmentMode: 0
     - _level: 4
-      _cumulativeScore: 3200
+      _cumulativeScore: 900
       _segmentMode: 0
     - _level: 5
-      _cumulativeScore: 4200
+      _cumulativeScore: 1300
       _segmentMode: 0
     - _level: 6
-      _cumulativeScore: 5300
+      _cumulativeScore: 1800
       _segmentMode: 0
     - _level: 7
-      _cumulativeScore: 6500
+      _cumulativeScore: 2450
       _segmentMode: 0
     - _level: 8
-      _cumulativeScore: 7900
+      _cumulativeScore: 3250
       _segmentMode: 0
     - _level: 9
-      _cumulativeScore: 9500
+      _cumulativeScore: 4250
       _segmentMode: 0
     _tailGrowth:
       _mode: 0
