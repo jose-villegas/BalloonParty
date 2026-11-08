@@ -40,7 +40,6 @@ namespace BalloonParty.Editor
         // Multiplier on the sprites' shared 64 px corner: 4 gives a 16-unit radius.
         private const float PanelWidth = 186f;
         private const float PanelCorner = 4f;
-        private const float PanelRim = 3f;
         private const float WellCorner = 6f;
         private const float ButtonCorner = 5.5f;
         private const float TileCorner = 7f;
@@ -53,9 +52,9 @@ namespace BalloonParty.Editor
         private const float GlowPad = 16f;
         private const float FaceTint = 0.25f;
 
-        // The card's body lets a little of the board through, so the loss reads over the board it happened
+        // The card's body is mostly see-through, so the loss reads over the board it happened
         // on; what's information or an action (plaque, result, buttons) stays solid.
-        private const float BodyAlpha = 0.8f;
+        private const float BodyAlpha = 0.4f;
 
         private static readonly Color ShadowColor = Hex(0x0B2A4A, 0.4f);
         private static readonly Color PanelStroke = Hex(0x0B4F8A);
@@ -70,7 +69,7 @@ namespace BalloonParty.Editor
         private static readonly Palette Danger = new(Hex(0xE5484D), Hex(0xA3262A), Hex(0x6B1215));
 
         // The layers that take the time-of-day tint: the coloured faces, not the shadows, glows or text.
-        private static readonly HashSet<string> LitLayers = new() { "Face", "Body", "Rim", "Lip", "Sheen" };
+        private static readonly HashSet<string> LitLayers = new() { "Face", "Body", "Lip", "Sheen" };
 
         [MenuItem(MenuPath)]
         private static void BuildFromMenu()
@@ -283,9 +282,10 @@ namespace BalloonParty.Editor
             }
         }
 
-        // The card: a soft shadow, a dark stroke, the white rim, the blue gradient body, its sheen and the
-        // specular. It sizes to its content, so nothing it holds can spill out. The body is see-through, so
-        // the layers behind it are hollow: their sprites are drawn for this corner, rim, stroke and drop.
+        // The card: a soft shadow, a dark blurred edge that smears into the board, the blue gradient body,
+        // its sheen and the specular. It sizes to its content, so nothing it holds can spill out. The body is
+        // see-through, so the layers behind it are hollow; the shadow's sprite is drawn for this corner and
+        // drop.
         private static Transform BuildPanel(Transform root, Kit kit)
         {
             var panel = Node(PanelName, root);
@@ -295,15 +295,13 @@ namespace BalloonParty.Editor
             rect.anchoredPosition = new Vector2(0f, 4f);
             rect.sizeDelta = new Vector2(PanelWidth, 0f);
 
-            Layer(panel, "Body", kit.Gradient, PanelBody, PanelCorner, PanelRim);
-            Layer(panel, "Rim", kit.Rim, Color.white, PanelCorner, 0f).fillCenter = false;
-            Layer(panel, "Stroke", kit.GlowRing, PanelStroke, PanelCorner, GlowInset(PanelCorner, 1.5f))
-                .fillCenter = false;
+            Layer(panel, "Body", kit.Gradient, PanelBody, PanelCorner, 0f);
+            Layer(panel, "Smear", kit.Smear, PanelStroke, PanelCorner, -ShadowPad).fillCenter = false;
             var shadow = Layer(panel, "Shadow", kit.DropShadow, ShadowColor, PanelCorner, -ShadowPad);
             shadow.fillCenter = false;
             ((RectTransform)shadow.transform).offsetMin -= new Vector2(0f, ShadowDrop);
-            Sheen(panel, kit, PanelRim, 0.8f, 0.2f, PanelCorner);
-            Specular(panel, PanelCorner, PanelRim, 70f, 3.5f, 0.6f);
+            Sheen(panel, kit, 1.5f, 0.8f, 0.2f, PanelCorner);
+            Specular(panel, PanelCorner, 0f, 70f, 3.5f, 0.6f);
 
             var layout = panel.gameObject.AddComponent<VerticalLayoutGroup>();
             layout.padding = new RectOffset(14, 14, 25, 16);
@@ -714,8 +712,7 @@ namespace BalloonParty.Editor
             public Sprite Gradient;
             public Sprite Shadow;
             public Sprite Glow;
-            public Sprite Rim;
-            public Sprite GlowRing;
+            public Sprite Smear;
             public Sprite DropShadow;
             public Sprite Gloss;
             public Sprite CardPlus;
@@ -736,8 +733,7 @@ namespace BalloonParty.Editor
                     Gradient = SpriteAt("rounded_gradient"),
                     Shadow = SpriteAt("rounded_shadow"),
                     Glow = SpriteAt("rounded_glow"),
-                    Rim = SpriteAt("rounded_rim"),
-                    GlowRing = SpriteAt("rounded_glow_ring"),
+                    Smear = SpriteAt("rounded_smear"),
                     DropShadow = SpriteAt("rounded_drop_shadow"),
                     Gloss = SpriteAt("gloss"),
                     CardPlus = SpriteAt("card_plus"),
@@ -746,7 +742,8 @@ namespace BalloonParty.Editor
                     HandFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(HandFontPath),
                 };
                 if (kit.Flat == null || kit.Gradient == null || kit.Shadow == null || kit.Glow == null
-                    || kit.Rim == null || kit.GlowRing == null || kit.DropShadow == null || kit.Gloss == null || kit.CardPlus == null || kit.Play == null
+                    || kit.Smear == null || kit.DropShadow == null || kit.Gloss == null || kit.CardPlus == null
+                    || kit.Play == null
                     || kit.TitleFont == null || kit.HandFont == null)
                 {
                     return null;

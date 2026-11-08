@@ -12,15 +12,14 @@ Per Unit Multiplier to size the corners (4 gives a 16-unit radius on the 225x400
 - rounded_gradient.png  the same, white at the top to light grey at the bottom (faces)
 - rounded_glow.png      the shape with a soft glow round it, 16 px of room (border 96; outlines)
 - rounded_shadow.png    the shape with a wide soft falloff, 32 px of room (border 112; drop shadows)
-- rounded_rim.png       a ring 12 px wide, the hollow cards' rim (border 80)
-- rounded_glow_ring.png rounded_glow, hollow under the rim (border 96)
+- rounded_smear.png     a blurred edge, hollow, 32 px of room (border 112; a see-through card's outline)
 - rounded_drop_shadow.png  rounded_shadow dropped 20 px, hollow under the shape (borders 112, 132 top/bottom)
 - gloss.png             the face's upper sheen: white, fading out downward, soft sides (border 80 l/r/top)
 - card_plus.png         an upgrade card with a plus: "a card for your retry"
 - play.png              a rounded play triangle: "watch an ad"
 
 The hollow ones are for a see-through card, whose body must not show its back layers through it. They
-are drawn for a corner multiplier of 4: a 3-unit rim, a glow 1.5 units past it, a shadow dropped 5 units.
+are drawn for a corner multiplier of 4: a shadow dropped 5 units.
 
 Usage: python3 Tools/art/make_ui_shapes.py Assets/Sprites/UI
 """
@@ -90,29 +89,22 @@ def rounded_shadow(pad=32, reach=30, inner=10):
     return _image(_smoothstep(reach, -inner, _rounded_sdf(SIZE, SIZE, pad)))
 
 
-def rounded_rim(width=12, overlap=4):
-    """The shape less the same shape inset by `width` with the same corner (as a face drawn at that inset
-    is), its inner edge running `overlap` px under the face's soft edge so no seam opens there."""
-    outer = _soft(_rounded_sdf(SIZE, SIZE, 0, shrink=FEATHER / 2))
-    inner = _rounded_sdf(SIZE, SIZE, 0, radius=RADIUS + width, shrink=width)
-    return _image(outer * _soft(-(inner + overlap)))
-
-
-def rounded_glow_ring(pad=16, reach=13, cut=13):
-    """rounded_glow cut away from `cut` px inside the shape: the part a rim on top would hide."""
+def rounded_smear(pad=32, reach=28, inner=8):
+    """A blurred edge with no solid band: strongest on the shape's edge, fading out across `reach` px
+    outside it and `inner` px inside it, and nothing further in, so it smears into whatever is around."""
     d = _rounded_sdf(SIZE, SIZE, pad)
-    return _image(_smoothstep(reach, 0, d) * _soft(-(d + cut)))
+    return _image(np.where(d > 0, _smoothstep(reach, 0, d) ** 1.5, _smoothstep(-inner, 0, d)))
 
 
-def rounded_drop_shadow(pad=32, reach=30, inner=10, drop=20, cut=6):
-    """rounded_shadow dropped `drop` px, with the unmoved shape cut away from `cut` px inside it, so
+def rounded_drop_shadow(pad=32, reach=30, inner=10, drop=20, feather=8):
+    """rounded_shadow dropped `drop` px, fading out across the unmoved shape's edge over `feather` px so
     nothing of it shows through what casts it. The drop is extra room at the bottom (border 132 top and
     bottom, 112 the sides)."""
     xs, ys = _grid(SIZE + 2 * pad, SIZE + 2 * pad + drop)
     centre = SIZE / 2 + pad
     shadow = _rect_sdf(xs, ys, centre, centre + drop, SIZE, SIZE, RADIUS)
     shape = _rect_sdf(xs, ys, centre, centre, SIZE, SIZE, RADIUS)
-    return _image(_smoothstep(reach, -inner, shadow) * _soft(-(shape + cut)))
+    return _image(_smoothstep(reach, -inner, shadow) * _soft(-shape, feather))
 
 
 def gloss(feather=10):
@@ -164,8 +156,7 @@ rounded_panel().save(out / "rounded_panel.png")
 rounded_gradient().save(out / "rounded_gradient.png")
 rounded_glow().save(out / "rounded_glow.png")
 rounded_shadow().save(out / "rounded_shadow.png")
-rounded_rim().save(out / "rounded_rim.png")
-rounded_glow_ring().save(out / "rounded_glow_ring.png")
+rounded_smear().save(out / "rounded_smear.png")
 rounded_drop_shadow().save(out / "rounded_drop_shadow.png")
 gloss().save(out / "gloss.png")
 card_plus().save(out / "card_plus.png")
