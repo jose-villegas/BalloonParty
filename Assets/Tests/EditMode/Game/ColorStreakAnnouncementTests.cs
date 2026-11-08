@@ -29,6 +29,8 @@ namespace BalloonParty.Tests.Game
         [SetUp]
         public void SetUp()
         {
+            // NUnit reuses one fixture instance for every test, so the readonly list outlives each test.
+            _published.Clear();
             _registry = new ProjectileRegistry();
 
             var publisher = Substitute.For<IPublisher<StreakChangedMessage>>();

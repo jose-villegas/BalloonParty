@@ -335,6 +335,7 @@ namespace BalloonParty.Tests.Game
         public void FlightEnded_TwoBallsInFlight_PresentsOnlyWhenTheLastOneLands()
         {
             _thresholds.PointsRequiredForLevel(1).Returns(2);
+            LandTheSetUpShot();
             var first = new ProjectileModel();
             var second = new ProjectileModel();
             Launch(first);
@@ -357,6 +358,7 @@ namespace BalloonParty.Tests.Game
         public void FlightEnded_TwoBallsLandInEitherOrder_PresentsOnce()
         {
             _thresholds.PointsRequiredForLevel(1).Returns(2);
+            LandTheSetUpShot();
             var first = new ProjectileModel();
             var second = new ProjectileModel();
             Launch(first);
@@ -374,6 +376,7 @@ namespace BalloonParty.Tests.Game
         public void FlightEnded_BallThatLandedBeforeTheClaim_DoesNotHoldTheCeremony()
         {
             _thresholds.PointsRequiredForLevel(1).Returns(2);
+            LandTheSetUpShot();
             var early = new ProjectileModel();
             var late = new ProjectileModel();
             Launch(early);
@@ -1016,6 +1019,13 @@ namespace BalloonParty.Tests.Game
         private void FireFlightEnded()
         {
             Land(_registry.InFlightCount > 0 ? _registry.InFlightAt(0) : null);
+        }
+
+        // SetUp leaves one ball flying; a test that names its own balls lands it first, or the ceremony
+        // would rightly keep waiting on it after the named balls land.
+        private void LandTheSetUpShot()
+        {
+            FireFlightEnded();
         }
 
         private void FireProjectileFired()
