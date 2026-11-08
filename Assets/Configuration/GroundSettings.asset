@@ -16,3 +16,9 @@ MonoBehaviour:
   _overscanMultiplier: 1.6
   _sortingLayerName: Default
   _sortingOrder: -15
+  _patchSize: 3.5
+  _bladeMaterial: {fileID: 2100000, guid: 52e1b9d086084b5d8e860b8caabd88b0, type: 2}
+  _bladeSpacing: 0.085
+  _bladeTileMargin: 0.4
+  _bladeSortingOrder: -14
+  _bladeSeed: 1337

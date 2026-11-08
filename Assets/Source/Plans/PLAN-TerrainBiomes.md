@@ -58,9 +58,8 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
   way.
 - **Baked noise**: `Assets/Textures/Grid/CloudNoiseTileable.png` (made by
   `Tools > BalloonParty > Generate Cloud Noise Texture`), sampled through
-  `CloudNoise.cginc`. The ground reads it for its large patches. Its blade strokes need finer
-  grain, so they come from a small baked tile of their own (see How it looks). Neither uses
-  per-pixel procedural noise.
+  `CloudNoise.cginc`. The ground reads it for its large patches; the blades are geometry
+  (see How it looks). No per-pixel procedural noise.
 - **Lighting**: `SceneLight.cginc` (`SceneLightTint`/`SceneLightDirection`) gives the
   time-of-day colour and the sun direction; the clouds already use both.
 - **GI capture** picks GameObject layers (`SceneCaptureService._capturedLayers`), not
@@ -97,30 +96,33 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
 
 ### How it looks
 
-- **The meadow**: an opaque, soft, painterly field of 2–3 authored greens. A large-scale
-  noise tap makes the patches; a small-scale tap stretched along one axis makes the blade
-  strokes. Tinted by the scene light, so it dims through dusk and night.
+- **The floor**: an opaque quad of soft darker and lighter patches (one cloud-noise tap),
+  dark and muted so the saturated balloons stand off it. Tinted by the scene light, so it
+  dims through dusk and night.
+- **The blades are geometry**: one mesh of about 9,000 tapered blades over the floor, one
+  draw call. The first version drew blades as stretched noise in the floor shader; it read
+  as a texture, not grass, so the owner chose real blades (2026-11-08).
+  - Seen from above, a standing blade is a short stroke leaning one way. Blades sway in
+    gust waves that roll across the meadow, and tips turn drier on the floor's lighter
+    patches.
 - **The grass reacts to the ball** through the existing disturbance field, with no new
   field or stamp:
-  - Each pixel reads `_DisturbanceTex` once. The blades are drawn as two layers: a darker
-    base at the pixel, and brighter tips read a short distance along a **lean** vector.
-  - The lean is a gentle idle sway plus the field's displacement (GB), so where the ball
-    passed, the tips are pushed out from its path and the blades part.
-  - The density change (R) flattens the grass in the wake: tips shorten, and the lit side
-    turns toward the sun direction, so the path reads as a brushed stripe.
+  - Each blade reads `_DisturbanceTex` once, at its root, in the vertex stage.
+  - The displacement (GB) turns the blade toward the push and lays it down: from above it
+    shows more of its length, curving from its root, so where the ball passed the blades
+    part and fan out.
+  - The density change (R) lays them flatter still, and laid blades catch the sun toward
+    their tips, so the path reads as a combed stripe.
   - Recovery is free: the field's own decay and reform let the blades spring back.
     Pops, bombs and lasers stamp the same field, so the grass answers them too.
-  - The field covers the camera's rect, and the quad overscans past it: the reaction
-    fades to rest outside the field's bounds.
-  - The field is 8 texels per unit, so the wake is soft, about a ball-width wide. That
-    suits the painterly look; a crisper wake would mean raising `TexelsPerUnit` for every
-    consumer, which is a tuning decision, not planned.
-  - The strokes come from `Textures/Scenario/GrassStrokes.png`: 128² of blurred white
-    noise, equalised so the tip threshold maps straight to coverage, imported as R8 with
-    mips (16 KB). Stretched along the blades, the cloud noise read as camouflage, not
-    grass, and it has no mips. Same tap count.
-- **The meadow travels with the board**: the bushes are planted on it, so the pattern
-  scrolls with `ScenarioContentRoot` one-to-one (`_GroundScroll`). On the Ascent and the
+  - The field covers the camera's rect, and the blade tile reaches past it: blades outside
+    the field rest.
+  - The field is 8 texels per unit, so the wake is soft, about a ball-width wide. A
+    crisper wake would mean raising `TexelsPerUnit` for every consumer, which is a tuning
+    decision, not planned.
+- **The meadow travels with the board**: the bushes are planted on it, so the floor and
+  the blades scroll with `ScenarioContentRoot` one-to-one (`_GroundScroll`; the blades wrap
+  across their tile). On the Ascent and the
   restart rise the ground and its bushes move in together; a still ground made the
   bushes look like they slid in. The disturbance field stays camera-fixed, where the
   shots stamp it.
@@ -145,14 +147,15 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
 - **Bake once**: no new RT, no per-level bake, no new field. The only baked input is the
   existing noise texture; the disturbance field already runs every frame for the clouds
   and bushes.
-- **Ground pixel**: 4 taps (patch noise, blade base, blade tip, disturbance) plus light
-  ALU, all `half`. That is the 2026-07 plan's budget of at most 4 extra taps on the
-  common path. One more tap inside the edge band, only while a transition runs. No alpha
-  test anywhere (a tile-GPU cost).
+- **Ground cost**: the floor is 1 tap per pixel. The blades add about 45k vertices
+  (12 bytes each, 16-bit indices) in one draw, each with 2 vertex taps (disturbance,
+  patch noise), and a flat-colour fragment over about a third of the screen. No alpha test or blending anywhere (a tile-GPU
+  cost). Measure the vertex cost on a low-end phone at the review gate; `BladeSpacing`
+  trades density for vertices with the inverse square.
 - **Sky levels**: the ground renderer is disabled. Cost: zero.
 - **Ground levels**: the ground covers every pixel, so the sky-scatter quad is disabled
   (`SkyScatterService` gains a visibility toggle). That swaps the 10-ring sky loop for
-  the 4-tap ground pixel; expect flat or lower cost, and measure it at the review gate.
+  the 1-tap floor plus the blades; measure it at the review gate.
 - **During a transition** (about 4 s, gameplay paused): sky and ground both draw.
 - **CPU**: no per-frame work at rest and no allocations; while a transition runs, one
   transform read and one material float per frame. `ScenarioSchedule.ForLevel` runs once
@@ -164,7 +167,7 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
 
 `DisturbanceFieldService`'s `_DisturbanceTex` and the projectile's existing wake stamps
 for the grass reaction; `QuadRendererBuilder` for the quad; `CloudNoiseTileable.png` +
-`CloudNoise.cginc` for the pattern; `SceneLight.cginc` for the tint and sun direction;
+`CloudNoise.cginc` for the patches; `SceneLight.cginc` for the tint and sun direction;
 `BackgroundCloud`'s existing shadow tap (only a global ground-coverage fade on the bodies
 is new); `SeedForLevel`'s hash for the scenario roll; the `TimeOfDayCycle`
 snap/transition shape; `ScenarioContentRoot` and the two existing transition beats. No
@@ -231,16 +234,22 @@ changes to the Ascent or restart code.
   Default, the sky is hidden), so check the GI smear and sprite lighting don't shift
   between sky and ground levels.
 - Launcher → Game in play mode: the `Ground` object lives under the Game scope.
-- Blade grain on a phone: the strokes come from their own R8 tile with mips, at
-  `_BladeTiling` 1. Check their width at game zoom on a device.
+- The blades on a phone: their width and density at game zoom, and the vertex cost on a
+  low-end device (`BladeSpacing` 0.085, about 45k vertices on 9:16), and a 4:3 tablet and a
+  21:9 phone show blades to every edge with no wrap pops.
 - A level-up within a ground stretch (16 → 17 with the default salt): the meadow and the
   bushes travel in together, with nothing sliding over still grass.
 
 ## Follow-ups from the phase 1 optimizer review
 
 - Shader prewarm: the ground's first draw lands on the first ground level's Ascent;
-  add `BalloonParty/Scenario/Ground` to the shader-variant capture (`PLAN-PerformanceRecovery`
+  add `BalloonParty/Scenario/Ground` and `GrassBlades` to the shader-variant capture (`PLAN-PerformanceRecovery`
   F4), with both blend states once phase 2 switches them.
+- Only if an on-device profile shows ground levels vertex-bound: a per-blade pre-pass. Each
+  of a blade's five vertices repeats the same per-blade work (the wrap, both taps, the bend);
+  a small blit into one texel per blade cell would do it once, and the vertex stage would
+  only evaluate the curve. Estimated 0.15–0.3 ms on a Mali-G52-class GPU. A blit, not a
+  compute buffer: many Mali GLES drivers can't read storage buffers in the vertex stage.
 - Optional, once the phase 2 edge allows it: draw the cloud shadow inside the ground shader
   and turn the cloud pass off on ground levels (one fewer full-screen pass, five taps).
 

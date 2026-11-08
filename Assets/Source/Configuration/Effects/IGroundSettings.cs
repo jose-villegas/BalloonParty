@@ -5,8 +5,7 @@ namespace BalloonParty.Configuration.Effects
     /// <summary>Read-only tuning for the ground backdrop (see <c>GroundView</c>).</summary>
     internal interface IGroundSettings
     {
-        /// <summary>Display material using BalloonParty/Scenario/Ground — the meadow's colours, blade shape and
-        /// the grass reaction to the disturbance field all live on it.</summary>
+        /// <summary>Floor material using BalloonParty/Scenario/Ground — the dark ground under the blades.</summary>
         Material Material { get; }
 
         /// <summary>Quad size over the reference world size — &gt;1 so a camera shake or cinematic pan never
@@ -18,5 +17,26 @@ namespace BalloonParty.Configuration.Effects
 
         /// <summary>Sorting order — above the sky scatter (-20), below the cloud backdrop (-10).</summary>
         int SortingOrder { get; }
+
+        /// <summary>World size of the floor's patches, shared with the blades so their drier tips sit over the
+        /// floor's lighter patches.</summary>
+        float PatchSize { get; }
+
+        /// <summary>Blade material using BalloonParty/Scenario/GrassBlades — blade shape, colours and the reaction
+        /// to the disturbance field. Without one the ground draws its floor only.</summary>
+        Material BladeMaterial { get; }
+
+        /// <summary>World units between neighbouring blade roots.</summary>
+        float BladeSpacing { get; }
+
+        /// <summary>World units the blade tile reaches past each edge of the camera view; the tile wraps as the
+        /// meadow scrolls, so this must be more than a laid-flat blade.</summary>
+        float BladeTileMargin { get; }
+
+        /// <summary>Sorting order for the blades — above the floor, below the smoke and the clouds.</summary>
+        int BladeSortingOrder { get; }
+
+        /// <summary>Seed for the blade scatter.</summary>
+        int BladeSeed { get; }
     }
 }

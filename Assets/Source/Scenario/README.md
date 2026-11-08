@@ -51,28 +51,40 @@ the same scenario. Plan: `Plans/PLAN-TerrainBiomes.md`.
   old board floats out over the new backdrop).
 - `View/GroundView.cs`: a `MonoBehaviour` the Game scope creates on a new GameObject
   (`RegisterComponentOnNewGameObject`, so no prefab edit), parented under the Game scope's transform: the
-  Game scene is preloaded additively, so an unparented object would land in the Launcher and die with it. It builds one stationary quad with
-  `QuadRendererBuilder` from `IGroundSettings` (material, overscan, sorting order −15: above the sky at −20,
-  below the clouds at −10) on the **Default** layer. Not Scenario: `SceneCaptureService` captures that layer
-  for the GI, where a full-screen opaque quad would read as coverage everywhere. On ground it shows the quad,
-  hides the sky (`ISkyBackdrop`, an optional lookup because the sky only registers when its settings are
-  wired) and sets the global `_GroundCoverage` to 1; on sky it reverses all three. The Launch begin-screen
-  always shows sky, since its camera mask leaves out the Default layer. The quad stays put, but the meadow
-  pattern scrolls with `ScenarioContentRoot` (the global `_GroundScroll`, pushed in `LateUpdate` after the
-  tween moves the root): the bushes stand on this ground, so on the Ascent and the restart rise the whole
-  meadow travels in with them. A still ground would show them sliding over it. The clouds scroll with the
-  root too, but at a parallax, because they are far away. On destroy it hands the App-owned sky and clouds
-  their sky look back.
-- `Shaders/BalloonParty/Scenario/Ground.shader`: the meadow, opaque, four taps per pixel and no procedural
-  noise. The large patches come from the shared tileable cloud noise. The blade strokes come from
-  `Textures/Scenario/GrassStrokes.png`, a 128² R8 tile of fine noise with mips, stretched along the blades;
-  the cloud noise is too soft for strokes and stretches into camouflage. One tap
-  reads the shared disturbance field (`_DisturbanceTex`, see `Shared/Disturbance/README.md`). The blades are
-  two layers of one stroke pattern, with the tips read a short way back along a lean vector: an idle sway plus
-  the field's displacement. Where a ball, a pop, a bomb or a laser stamped the field, the tips swing along the
-  push, the standing tips thin out and the laid blades catch the sun; the field's own reform springs them
-  back. Lit by the scene light's colour, so it dims at dusk and night. Opaque by default; its blend factors
-  are exposed for a future sky/ground edge.
+  Game scene is preloaded additively, so an unparented object would land in the Launcher and die with it.
+  It builds one stationary floor quad with `QuadRendererBuilder` from `IGroundSettings` (material,
+  overscan, sorting order −15: above the sky at −20, below the clouds at −10) on the **Default** layer. Not
+  Scenario: `SceneCaptureService` captures that layer for the GI, where a full-screen opaque quad would read
+  as coverage everywhere. Over the quad it builds one mesh of grass blades (`GrassBladeMesh`, drawn through
+  `MeshRendererBuilder` at sorting order −14) with its own material. On ground it shows both, hides the sky
+  (`ISkyBackdrop`, an optional lookup because the sky only registers when its settings are wired) and sets
+  the global `_GroundCoverage` to 1; on sky it reverses all of it. The Launch begin-screen always shows sky,
+  since its camera mask leaves out the Default layer. It also pushes `_GroundPatchSize`, so the floor and
+  the blades read the same patches. The quad stays put, but the meadow scrolls with `ScenarioContentRoot`
+  (the global `_GroundScroll`, pushed in `LateUpdate` after the tween moves the root): the bushes stand on
+  this ground, so on the Ascent and the restart rise the whole meadow travels in with them. A still ground
+  would show them sliding over it. The clouds scroll with the root too, but at a parallax, because they are
+  far away. On destroy it hands the App-owned sky and clouds their sky look back and frees the blade mesh
+  (the floor's quad mesh is shared, so it stays).
+- `View/GrassBladeMesh.cs`: builds the blade mesh once, from a `GrassBladeLayout` (tile size, spacing,
+  seed). A jittered grid over the camera's view plus a margin (`BladeTileMargin`); each blade is a tapered
+  five-vertex strip whose vertices all sit on its root, with per-blade randoms for lean, length, shade and sway
+  phase. A jittered grid repeats without a seam, so the shader can wrap the roots across the tile as the
+  meadow scrolls. Vertices are packed to 12 bytes (root UNorm16, corner SNorm8, randoms UNorm8) and the
+  blade count is capped so 16-bit indices always fit: about 9,000 blades (45k vertices) in one draw on a
+  9:16 phone at the default spacing.
+- `Shaders/BalloonParty/Scenario/GrassBlades.shader`: places, bends and wraps every blade in the vertex
+  stage; the fragment stage only writes the interpolated colour. Seen from above, a standing blade shows a
+  short stroke leaning one way, swaying in gust waves that roll across the meadow. Each blade reads the shared
+  disturbance field once at its root (`_DisturbanceTex`, see `Shared/Disturbance/README.md`): where a ball,
+  a pop, a bomb or a laser stamped it, the blade turns toward the push and lies down, so it shows its full
+  length, curving from its root, and its tip catches the sun. The field's own reform springs it back. One
+  patch-noise tap per blade turns the tips drier on the floor's lighter patches. Lit by the scene light's
+  colour, so it dims at dusk and night.
+- `Shaders/BalloonParty/Scenario/Ground.shader`: the floor under the blades, one tap per pixel: soft darker
+  and lighter patches from the shared tileable cloud noise. Kept dark and muted on purpose, so the saturated
+  balloons stand off the ground. Opaque by default; its blend factors are exposed for a future sky/ground
+  edge.
 - `Shaders/BalloonParty/Include/Ground.cginc`: `GroundCoverageAt(worldPos)` over `_GroundCoverage`.
   `BackgroundCloud` multiplies its cloud bodies by `1 − coverage × _GroundBodyFade` and keeps the drop
   shadows, so on the ground the clouds read as overhead and out of frame, their shadows drifting over the
