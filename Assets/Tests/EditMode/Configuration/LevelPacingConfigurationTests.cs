@@ -213,7 +213,7 @@ namespace BalloonParty.Tests.Configuration
         private static LevelGenerationSettings GenerationWithScenario(int firstGroundLevel)
         {
             var generation = new LevelGenerationSettings();
-            SetField(generation, "_scenario", new ScenarioScheduleSettings(firstGroundLevel, 2, 4, 7919));
+            SetField(generation, "_scenario", new ScenarioScheduleSettings(firstGroundLevel, 4, 3, 5, 2, 4, 7919));
             return generation;
         }
 

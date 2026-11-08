@@ -165,8 +165,8 @@ namespace BalloonParty.Configuration.Level
             CheckDuplicates(_gridActors, e => e.Type.ToString(), configName, issues);
             if (!_scenario.IsStretchRangeValid)
             {
-                issues.Add($"LevelPacingConfiguration ({configName}): the scenario's shortest stretch is longer than its " +
-                           "longest; the longest is raised to match.");
+                issues.Add($"LevelPacingConfiguration ({configName}): a scenario stretch range has its " +
+                           "shortest above its longest; the longest is raised to match.");
             }
 
             return issues;

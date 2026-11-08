@@ -85,16 +85,39 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
 
 ### Which levels are ground
 
-- **A seeded per-level scenario**, `Sky` or `Ground`, computed by a pure
-  `ScenarioSchedule.ForLevel(level)` from a small block on `LevelGenerationSettings`:
-  - `FirstGroundLevel` (proposed **16**, the bush unlock): levels before it are always
-    sky; this level is always ground, so the bushes' first appearance is reliable.
-  - After that the run moves in **stretches**: a stretch lasts between `MinStretch` and
-    `MaxStretch` levels (say 2–4), then flips. Each stretch length is rolled from a hash
-    of the level and the scenario's own salt, so retuning other content doesn't reshuffle
-    the scenarios, and a retry keeps the same one.
-  - Pure and cheap: `ForLevel` walks the stretches from `FirstGroundLevel` up to the
+- **A seeded per-level scenario**, computed by a pure `ScenarioSchedule.StretchAt(level)`
+  from a small block on `LevelGenerationSettings`. It answers `Sky` or `Ground`, the
+  level's place in its stretch and the stretch's length (a `ScenarioStretch`);
+  `ForLevel` is the kind alone.
+  - `FirstGroundLevel` (**16**, the bush unlock): levels before it are always sky; this
+    level is always ground, so the bushes' first appearance is reliable.
+  - **The first meadow is fixed at 4 levels** (16–19), not rolled: once the run reaches
+    the ground it stays there (owner: "if we enter one we stay there at least n levels").
+  - After that the run alternates **sky stretches of 2–4 levels** and **ground stretches
+    of 3–5 levels**, each with its own min and max. Bot runs put deep levels at about
+    30–70 s each, so a meadow is about 2–4 minutes. Two levels flickers once the ~4 s
+    transition each way counts; more than five feels stuck on the harder ground.
+  - Each rolled length hashes the level its stretch starts on with the scenario's own
+    salt, so retuning other content doesn't reshuffle the scenarios, and a retry keeps
+    the same one.
+  - Pure and cheap: `StretchAt` walks the stretches from `FirstGroundLevel` up to the
     level (a few dozen steps at most), no state, no allocation.
+- **A meadow clears its puff clouds halfway through** (owner: "initially it will have
+  cluster clouds, but they should quickly disappear half way n levels"). A meadow of n
+  levels has puff clouds on its first ⌊n/2⌋ levels (at least one), the last of those at
+  half the count, and the rest clear:
+
+  | Meadow length | Puff-cloud count per level |
+  |---|---|
+  | 3 | half, clear, clear |
+  | 4 | full, half, clear, clear |
+  | 5 | full, half, clear, clear, clear |
+
+  `ScenarioStretch.PuffCloudShare` holds the rule, and `LevelGenerator` scales the Puff
+  gate's count by it after the pieces are picked, so the rest of the level's mix (and its
+  rng stream) is what it would be under full clouds; a clear level drops the gate. Sky
+  levels keep the full count. This is the board's puff-cloud actors, not the cloud
+  backdrop's fade.
 - **Bushes only on ground**: a `RequiresGround` flag on `GridActorContentEntry`;
   `LevelGenerator` leaves flagged actors out of sky levels. One source of truth: the
   generator and the ground view both ask `ScenarioSchedule`.
@@ -245,7 +268,9 @@ changes to the Ascent or restart code.
 ## Decisions (signed off 2026-11-08)
 
 1. First ground level **16**, with the first bushes.
-2. Stretches of **2–4 levels** per scenario.
+2. Stretches of **2–4 levels** per scenario. Revised 2026-11-09: ground stretches of
+   3–5 levels with the first fixed at 4, sky stretches of 2–4, and a meadow clears its
+   puff clouds halfway (see "Which levels are ground").
 3. Cloud bodies **fade out on ground**; their shadows stay.
 
 ## In-editor checks for phase 1
@@ -260,7 +285,7 @@ changes to the Ascent or restart code.
 - The blades on a phone: their width and density at game zoom, and the vertex cost on a
   low-end device (`BladeSpacing` 0.085, about 45k vertices on 9:16), and a 4:3 tablet and a
   21:9 phone show blades to every edge with no wrap pops.
-- A level-up within a ground stretch (16 → 17 with the default salt): the meadow and the
+- A level-up within a ground stretch (16 → 17, inside the fixed first meadow): the meadow and the
   bushes travel in together, with nothing sliding over still grass.
 
 ## Follow-ups from the phase 1 optimizer review

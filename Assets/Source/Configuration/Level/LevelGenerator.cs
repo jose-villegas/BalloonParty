@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.GridActors;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Ranges;
+using BalloonParty.Slots.Actor.Archetype;
 
 namespace BalloonParty.Configuration.Level
 {
@@ -51,12 +53,28 @@ namespace BalloonParty.Configuration.Level
                 }
             }
 
+            // A meadow clears its puff clouds halfway through (ScenarioStretch.PuffCloudShare). Scaled after the
+            // pick, so the rest of the level's mix and its rng stream are the same as they'd be under full clouds.
+            var puffShare = ScenarioSchedule.StretchAt(settings.Scenario, level).PuffCloudShare;
             for (var i = 0; i < settings.GridActors.Count; i++)
             {
-                if (included.Contains(Key(GridActorKind, i)))
+                if (!included.Contains(Key(GridActorKind, i)))
                 {
-                    gates.Add(settings.GridActors[i].ToGate(level));
+                    continue;
                 }
+
+                var gate = settings.GridActors[i].ToGate(level);
+                if (gate.Type == GridActorType.Puff)
+                {
+                    if (puffShare <= 0f)
+                    {
+                        continue;
+                    }
+
+                    gate = Scaled(gate, puffShare);
+                }
+
+                gates.Add(gate);
             }
 
             // The validator warns when no balloon is a staple; this keeps a misauthored catalogue playable.
@@ -160,6 +178,19 @@ namespace BalloonParty.Configuration.Level
                     optional.Add((Key(kind, i), piece.Cost));
                 }
             }
+        }
+
+        // At least one slot at the top of the range, so a scaled-down gate still places something.
+        private static GridActorTypeGate Scaled(GridActorTypeGate gate, float share)
+        {
+            if (share >= 1f)
+            {
+                return gate;
+            }
+
+            var max = Math.Max(1, (int)Math.Round(gate.Count.Max * share, MidpointRounding.AwayFromZero));
+            var min = Math.Min(max, (int)Math.Round(gate.Count.Min * share, MidpointRounding.AwayFromZero));
+            return new GridActorTypeGate(gate.Type, new RangedInt(min, max, gate.Count.Mode), gate.MaxPerCluster);
         }
 
         private static int Key(int kind, int index)

@@ -307,19 +307,21 @@ namespace BalloonParty.Tests.Configuration
         }
 
         [Test]
-        public void Validate_ScenarioMinStretchAboveMax_ReportsIssue()
+        public void Validate_ScenarioMinStretchAboveMax_ReportsIssue([Values(true, false)] bool ground)
         {
             var settings = Settings();
-            SetScenario(settings, new ScenarioScheduleSettings(16, 5, 2, 7919));
+            SetScenario(settings, ground
+                ? new ScenarioScheduleSettings(16, 4, 5, 3, 2, 4, 7919)
+                : new ScenarioScheduleSettings(16, 4, 3, 5, 4, 2, 7919));
 
-            Assert.That(settings.Validate("Test"), Has.Some.Contains("scenario's shortest stretch"));
+            Assert.That(settings.Validate("Test"), Has.Some.Contains("scenario stretch range"));
         }
 
         [Test]
-        public void Validate_ScenarioMinStretchAtOrBelowMax_IsClean([Values(2, 4)] int max)
+        public void Validate_ScenarioMinStretchAtOrBelowMax_IsClean([Values(3, 5)] int max)
         {
             var settings = Settings();
-            SetScenario(settings, new ScenarioScheduleSettings(16, 2, max, 7919));
+            SetScenario(settings, new ScenarioScheduleSettings(16, 4, 3, max, 2, max, 7919));
 
             Assert.That(settings.Validate("Test"), Has.None.Contains("scenario"));
         }

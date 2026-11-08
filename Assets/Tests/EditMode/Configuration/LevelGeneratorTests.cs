@@ -141,7 +141,9 @@ namespace BalloonParty.Tests.Configuration
                     Assert.IsTrue(result.BalloonWeights.Any(w => w.Type == BalloonType.Simple));
                     Assert.AreEqual(level >= 3, result.BalloonWeights.Any(w => w.Type == BalloonType.Rainbow));
                     Assert.IsTrue(result.ItemWeights.Any(w => w.Type == ItemType.Shield));
-                    Assert.AreEqual(level >= 4, result.GridActorGates.Any(g => g.Type == GridActorType.Puff));
+                    // A meadow's clear levels drop the puff clouds even when they're a staple.
+                    var clouded = ScenarioSchedule.StretchAt(settings.Scenario, level).PuffCloudShare > 0f;
+                    Assert.AreEqual(level >= 4 && clouded, result.GridActorGates.Any(g => g.Type == GridActorType.Puff));
                 }
             }
         }
@@ -618,6 +620,62 @@ namespace BalloonParty.Tests.Configuration
                 Assert.IsFalse(Has(result, BalloonType.BubbleCluster), $"level {level}");
                 Assert.IsEmpty(result.ItemWeights, $"level {level}");
                 Assert.IsEmpty(result.GridActorGates, $"level {level}");
+            }
+        }
+
+        [Test]
+        public void Generate_TheFirstMeadow_ThinsItsPuffCloudsThenClears([Values(0, 1, 7)] int seed)
+        {
+            // The default schedule: levels 16-19 are the first ground stretch, fixed at 4 levels.
+            var settings = Settings(gridActors: new[]
+            {
+                new GridActorContentEntry(GridActorType.Puff, 1, 0, new RangedInt(6, 12), new RangedInt(6, 12), 0, 5),
+                new GridActorContentEntry(GridActorType.Bush, 1, 0, new RangedInt(3, 6), new RangedInt(3, 6), 0, 3),
+            });
+
+            var sky = LevelGenerator.Generate(settings, 15, seed).GridActorGates.Single(g => g.Type == GridActorType.Puff);
+            var full = LevelGenerator.Generate(settings, 16, seed).GridActorGates.Single(g => g.Type == GridActorType.Puff);
+            var half = LevelGenerator.Generate(settings, 17, seed).GridActorGates.Single(g => g.Type == GridActorType.Puff);
+
+            Assert.AreEqual((6, 12), (sky.Count.Min, sky.Count.Max));
+            Assert.AreEqual((6, 12), (full.Count.Min, full.Count.Max));
+            Assert.AreEqual((3, 6), (half.Count.Min, half.Count.Max));
+            Assert.AreEqual(5, half.MaxPerCluster);
+            for (var level = 18; level <= 19; level++)
+            {
+                var gates = LevelGenerator.Generate(settings, level, seed).GridActorGates;
+                Assert.IsFalse(gates.Any(g => g.Type == GridActorType.Puff), $"level {level} is clear");
+                Assert.IsTrue(gates.Any(g => g.Type == GridActorType.Bush), $"level {level} keeps its other actors");
+            }
+        }
+
+        [Test]
+        public void Generate_HalvedPuffClouds_KeepAtLeastOneSlot()
+        {
+            var settings = Settings(gridActors: new[]
+            {
+                new GridActorContentEntry(GridActorType.Puff, 1, 0, new RangedInt(1, 1), new RangedInt(1, 1), 0),
+            });
+
+            var gate = LevelGenerator.Generate(settings, 17, 0).GridActorGates.Single();
+
+            Assert.AreEqual((1, 1), (gate.Count.Min, gate.Count.Max));
+        }
+
+        [Test]
+        public void Generate_EveryMeadowLevel_MatchesItsStretchsCloudShare()
+        {
+            var settings = Settings(gridActors: new[]
+            {
+                new GridActorContentEntry(GridActorType.Puff, 1, 0, new RangedInt(8, 8), new RangedInt(8, 8), 0),
+            });
+
+            for (var level = 16; level < 200; level++)
+            {
+                var share = ScenarioSchedule.StretchAt(settings.Scenario, level).PuffCloudShare;
+                var puff = LevelGenerator.Generate(settings, level, level).GridActorGates
+                    .Where(g => g.Type == GridActorType.Puff).Select(g => g.Count.Max).DefaultIfEmpty(0).Single();
+                Assert.AreEqual((int)(8 * share), puff, $"level {level}");
             }
         }
 

@@ -42,8 +42,10 @@ covers it (see the next section).
 Each level is set either in the **sky** (the backdrop above) or on the **ground**, a meadow the board rests
 on, so actors that need ground under them (bushes) don't look like they float. Which one is a per-level,
 seeded choice: `ILevelPacingConfiguration.ScenarioForLevel` (see `Configuration/README.md`) is sky before an
-authored first ground level, then alternates stretches of ground and sky of a rolled length, so a retry keeps
-the same scenario. Plan: `Plans/PLAN-TerrainBiomes.md`.
+authored first ground level, stays on the ground for a fixed first meadow, then alternates sky and ground
+stretches of a rolled length, so a retry keeps the same scenario. A meadow arrives under puff clouds and
+clears them halfway through: the level generator thins and then drops the board's puff-cloud actors by the
+level's place in its stretch. Plan: `Plans/PLAN-TerrainBiomes.md`.
 
 - `IActiveScenario` / `ActiveScenario`: the model, the scenario the backdrop shows now, as a
   `ReactiveProperty<ScenarioKind>`. Written only by `Game/Level/ScenarioController`, which snaps it to the
