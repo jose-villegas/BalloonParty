@@ -39,7 +39,7 @@ and the balloons' specular along its rim. The shapes come from `Tools/art/make_u
 
 | Part | Look |
 |---|---|
-| Card | Blue gradient body inside a white rim; the "Game Over" title on a vermilion plaque across its top edge |
+| Card | Blue gradient body inside a white rim, a little see-through so the board shows behind the loss (the layers behind it are hollow); the "Game Over" title on a vermilion plaque across its top edge. What's information or an action stays solid |
 | Result | A cream well: the level in white outlined in blue, the points in blue, the best in pencil (white on the bare blue is too faint) |
 | Retry | Green, the largest button, pulsing now and then: the one to press |
 | Offers | Plum tiles sharing the row's width, told by pictures (the ad tile: a "?" card and a play-AD pill) with a ribbon across the corner saying what they give |

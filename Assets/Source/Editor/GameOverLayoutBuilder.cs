@@ -45,6 +45,7 @@ namespace BalloonParty.Editor
         private const float ButtonCorner = 5.5f;
         private const float TileCorner = 7f;
         private const float ShadowPad = 8f;
+        private const float ShadowDrop = 5f;
         private const float MinTouchHeight = 27f;
         private const float SpriteCornerPixels = 64f;
 
@@ -52,9 +53,13 @@ namespace BalloonParty.Editor
         private const float GlowPad = 16f;
         private const float FaceTint = 0.25f;
 
+        // The card's body lets a little of the board through, so the loss reads over the board it happened
+        // on; what's information or an action (plaque, result, buttons) stays solid.
+        private const float BodyAlpha = 0.8f;
+
         private static readonly Color ShadowColor = Hex(0x0B2A4A, 0.4f);
         private static readonly Color PanelStroke = Hex(0x0B4F8A);
-        private static readonly Color PanelBody = Hex(0x3BB6F4);
+        private static readonly Color PanelBody = Hex(0x3BB6F4, BodyAlpha);
         private static readonly Color Cream = Hex(0xFFF7E8);
         private static readonly Color Graphite = Hex(0x4A4A52);
         private static readonly Color Blue = Hex(0x1A86DA);
@@ -279,7 +284,8 @@ namespace BalloonParty.Editor
         }
 
         // The card: a soft shadow, a dark stroke, the white rim, the blue gradient body, its sheen and the
-        // specular. It sizes to its content, so nothing it holds can spill out.
+        // specular. It sizes to its content, so nothing it holds can spill out. The body is see-through, so
+        // the layers behind it are hollow: their sprites are drawn for this corner, rim, stroke and drop.
         private static Transform BuildPanel(Transform root, Kit kit)
         {
             var panel = Node(PanelName, root);
@@ -290,9 +296,12 @@ namespace BalloonParty.Editor
             rect.sizeDelta = new Vector2(PanelWidth, 0f);
 
             Layer(panel, "Body", kit.Gradient, PanelBody, PanelCorner, PanelRim);
-            Layer(panel, "Rim", kit.Flat, Color.white, PanelCorner, 0f);
-            Layer(panel, "Stroke", kit.Glow, PanelStroke, PanelCorner, GlowInset(PanelCorner, 1.5f));
-            Layer(panel, "Shadow", kit.Shadow, ShadowColor, PanelCorner, -ShadowPad, new Vector2(0f, -5f));
+            Layer(panel, "Rim", kit.Rim, Color.white, PanelCorner, 0f).fillCenter = false;
+            Layer(panel, "Stroke", kit.GlowRing, PanelStroke, PanelCorner, GlowInset(PanelCorner, 1.5f))
+                .fillCenter = false;
+            var shadow = Layer(panel, "Shadow", kit.DropShadow, ShadowColor, PanelCorner, -ShadowPad);
+            shadow.fillCenter = false;
+            ((RectTransform)shadow.transform).offsetMin -= new Vector2(0f, ShadowDrop);
             Sheen(panel, kit, PanelRim, 0.8f, 0.2f, PanelCorner);
             Specular(panel, PanelCorner, PanelRim, 70f, 3.5f, 0.6f);
 
@@ -705,6 +714,9 @@ namespace BalloonParty.Editor
             public Sprite Gradient;
             public Sprite Shadow;
             public Sprite Glow;
+            public Sprite Rim;
+            public Sprite GlowRing;
+            public Sprite DropShadow;
             public Sprite Gloss;
             public Sprite CardPlus;
             public Sprite Play;
@@ -724,6 +736,9 @@ namespace BalloonParty.Editor
                     Gradient = SpriteAt("rounded_gradient"),
                     Shadow = SpriteAt("rounded_shadow"),
                     Glow = SpriteAt("rounded_glow"),
+                    Rim = SpriteAt("rounded_rim"),
+                    GlowRing = SpriteAt("rounded_glow_ring"),
+                    DropShadow = SpriteAt("rounded_drop_shadow"),
                     Gloss = SpriteAt("gloss"),
                     CardPlus = SpriteAt("card_plus"),
                     Play = SpriteAt("play"),
@@ -731,7 +746,7 @@ namespace BalloonParty.Editor
                     HandFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(HandFontPath),
                 };
                 if (kit.Flat == null || kit.Gradient == null || kit.Shadow == null || kit.Glow == null
-                    || kit.Gloss == null || kit.CardPlus == null || kit.Play == null
+                    || kit.Rim == null || kit.GlowRing == null || kit.DropShadow == null || kit.Gloss == null || kit.CardPlus == null || kit.Play == null
                     || kit.TitleFont == null || kit.HandFont == null)
                 {
                     return null;

@@ -12,9 +12,15 @@ Per Unit Multiplier to size the corners (4 gives a 16-unit radius on the 225x400
 - rounded_gradient.png  the same, white at the top to light grey at the bottom (faces)
 - rounded_glow.png      the shape with a soft glow round it, 16 px of room (border 96; outlines)
 - rounded_shadow.png    the shape with a wide soft falloff, 32 px of room (border 112; drop shadows)
+- rounded_rim.png       a ring 12 px wide, the hollow cards' rim (border 80)
+- rounded_glow_ring.png rounded_glow, hollow under the rim (border 96)
+- rounded_drop_shadow.png  rounded_shadow dropped 20 px, hollow under the shape (borders 112, 132 top/bottom)
 - gloss.png             the face's upper sheen: white, fading out downward, soft sides (border 80 l/r/top)
 - card_plus.png         an upgrade card with a plus: "a card for your retry"
 - play.png              a rounded play triangle: "watch an ad"
+
+The hollow ones are for a see-through card, whose body must not show its back layers through it. They
+are drawn for a corner multiplier of 4: a 3-unit rim, a glow 1.5 units past it, a shadow dropped 5 units.
 
 Usage: python3 Tools/art/make_ui_shapes.py Assets/Sprites/UI
 """
@@ -35,17 +41,19 @@ def _grid(w, h):
     return xs + 0.5, ys + 0.5
 
 
-def _rounded_sdf(w, h, pad, radius=RADIUS, shrink=0.0):
-    """Signed distance (px, negative inside) to a rounded rectangle filling the canvas inside its pad."""
-    xs, ys = _grid(w + 2 * pad, h + 2 * pad)
-    px = np.abs(xs - (w / 2 + pad))
-    py = np.abs(ys - (h / 2 + pad))
-    r = radius - shrink
-    qx = px - (w / 2 - shrink) + r
-    qy = py - (h / 2 - shrink) + r
+def _rect_sdf(xs, ys, cx, cy, w, h, r):
+    """Signed distance (px, negative inside) to a w x h rounded rectangle of corner r centred on (cx, cy)."""
+    qx = np.abs(xs - cx) - w / 2 + r
+    qy = np.abs(ys - cy) - h / 2 + r
     outside = np.hypot(np.maximum(qx, 0), np.maximum(qy, 0))
     inside = np.minimum(np.maximum(qx, qy), 0)
     return outside + inside - r
+
+
+def _rounded_sdf(w, h, pad, radius=RADIUS, shrink=0.0):
+    """Signed distance to a rounded rectangle filling the canvas inside its pad, `shrink` px smaller."""
+    xs, ys = _grid(w + 2 * pad, h + 2 * pad)
+    return _rect_sdf(xs, ys, w / 2 + pad, h / 2 + pad, w - 2 * shrink, h - 2 * shrink, radius - shrink)
 
 
 def _smoothstep(edge0, edge1, x):
@@ -80,6 +88,31 @@ def rounded_glow(pad=16, reach=13):
 
 def rounded_shadow(pad=32, reach=30, inner=10):
     return _image(_smoothstep(reach, -inner, _rounded_sdf(SIZE, SIZE, pad)))
+
+
+def rounded_rim(width=12, overlap=4):
+    """The shape less the same shape inset by `width` with the same corner (as a face drawn at that inset
+    is), its inner edge running `overlap` px under the face's soft edge so no seam opens there."""
+    outer = _soft(_rounded_sdf(SIZE, SIZE, 0, shrink=FEATHER / 2))
+    inner = _rounded_sdf(SIZE, SIZE, 0, radius=RADIUS + width, shrink=width)
+    return _image(outer * _soft(-(inner + overlap)))
+
+
+def rounded_glow_ring(pad=16, reach=13, cut=13):
+    """rounded_glow cut away from `cut` px inside the shape: the part a rim on top would hide."""
+    d = _rounded_sdf(SIZE, SIZE, pad)
+    return _image(_smoothstep(reach, 0, d) * _soft(-(d + cut)))
+
+
+def rounded_drop_shadow(pad=32, reach=30, inner=10, drop=20, cut=6):
+    """rounded_shadow dropped `drop` px, with the unmoved shape cut away from `cut` px inside it, so
+    nothing of it shows through what casts it. The drop is extra room at the bottom (border 132 top and
+    bottom, 112 the sides)."""
+    xs, ys = _grid(SIZE + 2 * pad, SIZE + 2 * pad + drop)
+    centre = SIZE / 2 + pad
+    shadow = _rect_sdf(xs, ys, centre, centre + drop, SIZE, SIZE, RADIUS)
+    shape = _rect_sdf(xs, ys, centre, centre, SIZE, SIZE, RADIUS)
+    return _image(_smoothstep(reach, -inner, shadow) * _soft(-(shape + cut)))
 
 
 def gloss(feather=10):
@@ -131,6 +164,9 @@ rounded_panel().save(out / "rounded_panel.png")
 rounded_gradient().save(out / "rounded_gradient.png")
 rounded_glow().save(out / "rounded_glow.png")
 rounded_shadow().save(out / "rounded_shadow.png")
+rounded_rim().save(out / "rounded_rim.png")
+rounded_glow_ring().save(out / "rounded_glow_ring.png")
+rounded_drop_shadow().save(out / "rounded_drop_shadow.png")
 gloss().save(out / "gloss.png")
 card_plus().save(out / "card_plus.png")
 play().save(out / "play.png")
