@@ -2,6 +2,7 @@ var NAVTREEINDEX0 =
 {
 "AbsorberActorModel_8cs.html":[7,0,15,0,0,0],
 "ActiveProjectilePierce_8cs.html":[7,0,12,1,0],
+"ActiveScenario_8cs.html":[7,0,13,1],
 "ActorHitMessage_8cs.html":[7,0,14,7,0],
 "AddShieldCheat_8cs.html":[7,0,2,0],
 "AimAngleGrid_8cs.html":[7,0,14,13],
@@ -27,7 +28,7 @@ var NAVTREEINDEX0 =
 "AxisBucketNaming_8cs.html":[7,0,7,8,0],
 "AxisSlotInfo_8cs.html":[7,0,7,8,2],
 "AxisSlot_8cs.html":[7,0,7,8,1],
-"BackgroundFieldService_8cs.html":[7,0,13,1],
+"BackgroundFieldService_8cs.html":[7,0,13,2],
 "BackgroundFieldSettings_8cs.html":[7,0,3,4,0],
 "BalanceBalloonsMessage_8cs.html":[7,0,14,7,1],
 "BalanceBiasExtensions_8cs.html":[7,0,14,4,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "GatekeeperActorModel_8cs.html":[7,0,15,0,0,11],
 "GizmoDrawingHelper_8cs.html":[7,0,14,10,4],
 "GradientTextureDrawer_8cs.html":[7,0,6,20],
-"GradientTextureHelper_8cs.html":[7,0,14,10,5],
-"GraphicColorableRenderer_8cs.html":[7,0,18,7,2]
+"GradientTextureHelper_8cs.html":[7,0,14,10,5]
 };

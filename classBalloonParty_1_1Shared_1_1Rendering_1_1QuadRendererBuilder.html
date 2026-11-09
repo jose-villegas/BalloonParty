@@ -114,7 +114,7 @@ $(function(){initNavTree('classBalloonParty_1_1Shared_1_1Rendering_1_1QuadRender
 </div><!--header-->
 <div class="contents">
 
-<p>Builds a runtime quad GameObject wired to a material, Unity layer, and sorting layer/order — the shared recipe behind every runtime-built backdrop quad (the GI overlay, the sky-scatter backdrop).  
+<p>Builds a runtime quad GameObject wired to a material, Unity layer, and sorting layer/order — the backdrop quads (the GI overlay, the sky-scatter backdrop, the ground floor).  
  <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
@@ -123,8 +123,8 @@ Static Package Functions</h2></td></tr>
 <tr class="separator:a09ab9f3545f8757a24864a358b2bc92c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Builds a runtime quad GameObject wired to a material, Unity layer, and sorting layer/order — the shared recipe behind every runtime-built backdrop quad (the GI overlay, the sky-scatter backdrop). </p>
-<p>Requires the Unity layer as an explicit argument rather than leaving it at the <code>new GameObject</code> default of 0 (Default) — that default sits outside <code>NavigationCameraReveal</code>'s Launch culling mask, so an omitted layer makes the quad silently disappear on the Launch begin-screen instead of failing loudly. </p>
+<div class="textblock"><p>Builds a runtime quad GameObject wired to a material, Unity layer, and sorting layer/order — the backdrop quads (the GI overlay, the sky-scatter backdrop, the ground floor). </p>
+<p><a class="el" href="classBalloonParty_1_1Shared_1_1Rendering_1_1MeshRendererBuilder.html" title="Builds a runtime GameObject that draws one mesh with one material on an explicit Unity layer and sort...">MeshRendererBuilder</a> does the wiring; see it for why the layer is required. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a09ab9f3545f8757a24864a358b2bc92c" name="a09ab9f3545f8757a24864a358b2bc92c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a09ab9f3545f8757a24864a358b2bc92c">&#9670;&#160;</a></span>Build()</h2>

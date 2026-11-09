@@ -2,6 +2,7 @@ var classBalloonParty_1_1Scenario_1_1SkyScatterService =
 [
     [ "SkyScatterService", "classBalloonParty_1_1Scenario_1_1SkyScatterService.html#ae99caa2402213d2e0007b004964d703b", null ],
     [ "Dispose", "classBalloonParty_1_1Scenario_1_1SkyScatterService.html#a03d64c6ae38700e59e6a9d2a5bd8d3fe", null ],
+    [ "SetVisible", "classBalloonParty_1_1Scenario_1_1SkyScatterService.html#a0ff8500532a3122790ad4ce67d3844c8", null ],
     [ "Start", "classBalloonParty_1_1Scenario_1_1SkyScatterService.html#a0cead9c51c2f51f6d0f2abc1d14b22b3", null ],
     [ "_display", "classBalloonParty_1_1Scenario_1_1SkyScatterService.html#a2ac4842b207d81123b5da33e0ad5f1e7", null ],
     [ "_quad", "classBalloonParty_1_1Scenario_1_1SkyScatterService.html#a914ca231ff7bbaa0588c06dbd38c0b90", null ],

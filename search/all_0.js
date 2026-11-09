@@ -7,7 +7,7 @@ var searchData=
   ['0_20gpu_20evidence_4',['A1 — Render Graph prototype · &lt;strong&gt;opus&lt;/strong&gt; — go/no-go, only on Step-0 GPU evidence',['../plan_performance_recovery.html#autotoc_md716',1,'']]],
   ['0_20preconditions_20—_20record_20backend_20and_20build_20type_5',['0. Preconditions — record backend and build type',['../plan_performance_recovery.html#autotoc_md685',1,'']]],
   ['07_2011_6',['Verified inventory (2026-07-11)',['../plan_hdr_color_pipeline.html#autotoc_md612',1,'']]],
-  ['07_2012_7',['07 12',['../plan_future_ideas.html#autotoc_md453',1,'5.2 Unbreakable Roam &lt;em&gt;(from PLAN-ContentProduction)&lt;/em&gt; — ✅ SHIPPED 2026-07-12'],['../plan_terrain_biomes.html#autotoc_md754',1,'Verified inventory (2026-07-12)']]],
+  ['07_2012_7',['5.2 Unbreakable Roam &lt;em&gt;(from PLAN-ContentProduction)&lt;/em&gt; — ✅ SHIPPED 2026-07-12',['../plan_future_ideas.html#autotoc_md453',1,'']]],
   ['07_2018_8',['15 — Level-Up Point Carry-Over (2026-07-18)',['../plan_future_ideas.html#autotoc_md517',1,'']]],
   ['07_2019_9',['16 — Grand Antiprism: the 100 denomination (2026-07-19)',['../plan_future_ideas.html#autotoc_md518',1,'']]],
   ['07_2023_10',['Performance Recovery Plan — BalloonParty (Phase 2, revised 2026-07-23)',['../plan_performance_recovery.html#autotoc_md678',1,'']]],
@@ -22,10 +22,11 @@ var searchData=
   ['07_2023_3a_20u1_20reverted_20u2_20kept_20strong_19',['Tier 1: UI arrival storm — &lt;strong&gt;RESOLVED 2026-07-23: U1 reverted, U2 kept&lt;/strong&gt;',['../plan_performance_recovery.html#autotoc_md703',1,'']]],
   ['07_2025_20',['Phase G — Headless level diagnostics (follow-up tier; scoped 2026-07-25)',['../plan_shot_solver_accuracy.html#autotoc_md739',1,'']]],
   ['07_2026_21',['8. Remaining work — detailed status (2026-07-26)',['../plan_shot_solver_accuracy.html#autotoc_md743',1,'']]],
-  ['0_3a_20diagnose_20before_20optimizing_20mandatory_20do_20first_22',['Step 0: Diagnose before optimizing (mandatory, do first)',['../plan_performance_recovery.html#autotoc_md684',1,'']]],
-  ['0_3a_20free_20near_20free_20wins_23',['Tier 0: Free / Near-Free Wins',['../plan_performance_recovery.html#autotoc_md697',1,'']]],
-  ['0a_24',['Phase D-core — Rainbow scoring + in-sim buff state (G4-scoring, G8) — depends on 0a',['../plan_shot_solver_accuracy.html#autotoc_md735',1,'']]],
-  ['0a_20e2_20folds_20c6_25',['Phase E — Flight residuals (G5, G6, G7 + E4) — depends on 0a; E2 folds C6',['../plan_shot_solver_accuracy.html#autotoc_md737',1,'']]],
-  ['0b_26',['Phase A — Interactive static geometry (G1) — depends on 0b',['../plan_shot_solver_accuracy.html#autotoc_md733',1,'']]],
-  ['0b_20parallel_20to_20a_27',['Phase B — Weight-system fidelity (G2) — depends on 0b; parallel to A',['../plan_shot_solver_accuracy.html#autotoc_md734',1,'']]]
+  ['08_22',['08',['../plan_terrain_biomes.html#autotoc_md762',1,'Decisions (signed off 2026-11-08)'],['../plan_terrain_biomes.html#autotoc_md754',1,'Verified inventory (2026-11-08)']]],
+  ['0_3a_20diagnose_20before_20optimizing_20mandatory_20do_20first_23',['Step 0: Diagnose before optimizing (mandatory, do first)',['../plan_performance_recovery.html#autotoc_md684',1,'']]],
+  ['0_3a_20free_20near_20free_20wins_24',['Tier 0: Free / Near-Free Wins',['../plan_performance_recovery.html#autotoc_md697',1,'']]],
+  ['0a_25',['Phase D-core — Rainbow scoring + in-sim buff state (G4-scoring, G8) — depends on 0a',['../plan_shot_solver_accuracy.html#autotoc_md735',1,'']]],
+  ['0a_20e2_20folds_20c6_26',['Phase E — Flight residuals (G5, G6, G7 + E4) — depends on 0a; E2 folds C6',['../plan_shot_solver_accuracy.html#autotoc_md737',1,'']]],
+  ['0b_27',['Phase A — Interactive static geometry (G1) — depends on 0b',['../plan_shot_solver_accuracy.html#autotoc_md733',1,'']]],
+  ['0b_20parallel_20to_20a_28',['Phase B — Weight-system fidelity (G2) — depends on 0b; parallel to A',['../plan_shot_solver_accuracy.html#autotoc_md734',1,'']]]
 ];

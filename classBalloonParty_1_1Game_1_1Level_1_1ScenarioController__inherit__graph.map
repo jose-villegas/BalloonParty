@@ -1,0 +1,9 @@
+<map id="BalloonParty.Game.Level.ScenarioController" name="BalloonParty.Game.Level.ScenarioController">
+<area shape="rect" id="Node000001" title="Keeps ActiveScenario on the current level&#39;s scenario (sky or ground, per ILevelPacingConfiguration...." alt="" coords="125,93,313,133"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,91,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,42,182,91,180,96,82,47"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="115,5,322,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="221,59,221,93,216,93,216,59"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="347,13,445,38"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="361,46,259,96,257,91,359,42"/>
+</map>

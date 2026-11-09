@@ -1,6 +1,6 @@
 var plans =
 [
-    [ "Plans", "plans.html#autotoc_md791", null ],
+    [ "Plans", "plans.html#autotoc_md776", null ],
     [ "Bubble Cluster Hit Feedback", "plan_bubble_cluster_hit_feedback.html", [
       [ "Bubble Cluster Hit Feedback", "plan_bubble_cluster_hit_feedback.html#autotoc_md321", [
         [ "Goals", "plan_bubble_cluster_hit_feedback.html#autotoc_md323", null ],
@@ -228,42 +228,21 @@ var plans =
       ] ]
     ] ],
     [ "Terrain & Biomes", "plan_terrain_biomes.html", [
-      [ "Terrain & Biomes — scenario ground generator", "plan_terrain_biomes.html#autotoc_md751", [
-        [ "Vision & constraints", "plan_terrain_biomes.html#autotoc_md753", null ],
-        [ "Verified inventory (2026-07-12)", "plan_terrain_biomes.html#autotoc_md754", null ],
-        [ "Architecture", "plan_terrain_biomes.html#autotoc_md755", [
-          [ "Data — TerrainMapService (plain C#, VContainer)", "plan_terrain_biomes.html#autotoc_md756", null ],
-          [ "Bake — one blit per level (GPU, amortizable)", "plan_terrain_biomes.html#autotoc_md757", null ],
-          [ "View — TerrainView (MonoBehaviour) + runtime shader", "plan_terrain_biomes.html#autotoc_md758", null ]
+      [ "Terrain & Biomes: sky and ground scenarios", "plan_terrain_biomes.html#autotoc_md751", [
+        [ "Why now", "plan_terrain_biomes.html#autotoc_md753", null ],
+        [ "Verified inventory (2026-11-08)", "plan_terrain_biomes.html#autotoc_md754", null ],
+        [ "The smallest version", "plan_terrain_biomes.html#autotoc_md755", [
+          [ "Which levels are ground", "plan_terrain_biomes.html#autotoc_md756", null ],
+          [ "How it looks", "plan_terrain_biomes.html#autotoc_md757", null ],
+          [ "Performance (mobile, 120 Hz = 8.33 ms frame)", "plan_terrain_biomes.html#autotoc_md758", null ],
+          [ "What it reuses", "plan_terrain_biomes.html#autotoc_md759", null ],
+          [ "Shape (MVC)", "plan_terrain_biomes.html#autotoc_md760", null ],
+          [ "Phases", "plan_terrain_biomes.html#autotoc_md761", null ]
         ] ],
-        [ "Shader design — options per stage", "plan_terrain_biomes.html#autotoc_md759", [
-          [ "S1 — Zone blending (bake-time)", "plan_terrain_biomes.html#autotoc_md760", null ],
-          [ "S2 — Grass (the flagship reaction)", "plan_terrain_biomes.html#autotoc_md761", null ],
-          [ "S3 — Water", "plan_terrain_biomes.html#autotoc_md762", null ],
-          [ "S4 — Sand / dirt / stone / lava", "plan_terrain_biomes.html#autotoc_md763", null ],
-          [ "S5 — Data layout (bake outputs)", "plan_terrain_biomes.html#autotoc_md764", null ],
-          [ "S6 — Cheap density & anti-repetition (mobile)", "plan_terrain_biomes.html#autotoc_md765", null ],
-          [ "S7 — Runtime composition rules", "plan_terrain_biomes.html#autotoc_md766", null ]
-        ] ],
-        [ "Task plan", "plan_terrain_biomes.html#autotoc_md767", [
-          [ "Dependency graph", "plan_terrain_biomes.html#autotoc_md768", null ],
-          [ "Wave A — data + bake", "plan_terrain_biomes.html#autotoc_md769", [
-            [ "A1 — TerrainMapService + BiomeProfile config + ITerrainQuery · P0 · M · opus", "plan_terrain_biomes.html#autotoc_md770", null ],
-            [ "A2 — Index-map build/upload · P0 · S · sonnet", "plan_terrain_biomes.html#autotoc_md771", null ],
-            [ "A3 — Bake blit shader + TerrainBaker · P0 · M · opus", "plan_terrain_biomes.html#autotoc_md772", null ]
-          ] ],
-          [ "Wave B — view + reactions + GI", "plan_terrain_biomes.html#autotoc_md773", [
-            [ "B1 — TerrainView + runtime shader v1 · P0 · M · sonnet", "plan_terrain_biomes.html#autotoc_md774", null ],
-            [ "B2 — Disturbance reactions · P1 · M–L · opus", "plan_terrain_biomes.html#autotoc_md775", null ],
-            [ "B3 — GI integration · P1 · S · sonnet", "plan_terrain_biomes.html#autotoc_md776", null ]
-          ] ],
-          [ "Wave C — gameplay + tooling (parallel after A1)", "plan_terrain_biomes.html#autotoc_md777", [
-            [ "C1 — Placement gating seam · P1 · S–M · sonnet", "plan_terrain_biomes.html#autotoc_md778", null ],
-            [ "C2 — Seed plumbing + reproduction affordance · P2 · S · haiku", "plan_terrain_biomes.html#autotoc_md779", null ],
-            [ "C3 — Game Render Maps entries · P2 · S · sonnet", "plan_terrain_biomes.html#autotoc_md780", null ]
-          ] ]
-        ] ],
-        [ "Open questions (answer at execution time)", "plan_terrain_biomes.html#autotoc_md781", null ]
+        [ "Decisions (signed off 2026-11-08)", "plan_terrain_biomes.html#autotoc_md762", null ],
+        [ "In-editor checks for phase 1", "plan_terrain_biomes.html#autotoc_md763", null ],
+        [ "Follow-ups from the phase 1 optimizer review", "plan_terrain_biomes.html#autotoc_md764", null ],
+        [ "Later: the full biome system (unscheduled)", "plan_terrain_biomes.html#autotoc_md766", null ]
       ] ]
     ] ],
     [ "Gameplay Telemetry", "plan_gameplay_telemetry.html", [
@@ -404,14 +383,14 @@ var plans =
       ] ]
     ] ],
     [ "Web Demo Hosting", "plan_web_demo_hosting.html", [
-      [ "Web Demo Hosting", "plan_web_demo_hosting.html#autotoc_md782", [
-        [ "Why keep it", "plan_web_demo_hosting.html#autotoc_md784", null ],
-        [ "What survived", "plan_web_demo_hosting.html#autotoc_md785", null ],
-        [ "The recipe, if resumed", "plan_web_demo_hosting.html#autotoc_md786", null ],
-        [ "The blocker", "plan_web_demo_hosting.html#autotoc_md787", null ],
-        [ "Residue from the attempt", "plan_web_demo_hosting.html#autotoc_md788", null ],
-        [ "If web stays dead", "plan_web_demo_hosting.html#autotoc_md789", null ],
-        [ "Decision log", "plan_web_demo_hosting.html#autotoc_md790", null ]
+      [ "Web Demo Hosting", "plan_web_demo_hosting.html#autotoc_md767", [
+        [ "Why keep it", "plan_web_demo_hosting.html#autotoc_md769", null ],
+        [ "What survived", "plan_web_demo_hosting.html#autotoc_md770", null ],
+        [ "The recipe, if resumed", "plan_web_demo_hosting.html#autotoc_md771", null ],
+        [ "The blocker", "plan_web_demo_hosting.html#autotoc_md772", null ],
+        [ "Residue from the attempt", "plan_web_demo_hosting.html#autotoc_md773", null ],
+        [ "If web stays dead", "plan_web_demo_hosting.html#autotoc_md774", null ],
+        [ "Decision log", "plan_web_demo_hosting.html#autotoc_md775", null ]
       ] ]
     ] ],
     [ "Level-Up Timing", "plan_level_up_timing.html", [

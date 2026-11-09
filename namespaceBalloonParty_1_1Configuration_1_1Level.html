@@ -170,6 +170,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html">LevelScoringCurve</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Monotone piecewise-cubic scoring curve.  <a href="structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelSeedHash.html">LevelSeedHash</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The one hash every per-level roll uses, so a retry replays the same level.  <a href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelSeedHash.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelSteps.html">LevelSteps</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html">RangedLevelParameters</a></td></tr>
@@ -178,6 +181,15 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html">ResolvedBalloonEntry</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedItemEntry.html">ResolvedItemEntry</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioSchedule.html">ScenarioSchedule</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pure, seeded answer to "is this level in the sky or on the ground, and how far into that stretch?".  <a href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioSchedule.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html">ScenarioScheduleSettings</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Which levels are set on the ground and which in the sky; read through <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioSchedule.html" title="Pure, seeded answer to &quot;is this level in the sky or on the ground, and how far into that stretch?...">ScenarioSchedule</a>.  <a href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1ScenarioStretch.html">ScenarioStretch</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where a level sits in the run's scenario schedule: the stretch's scenario, the level's place in it (0 = the stretch's first level) and how many levels the stretch lasts.  <a href="structBalloonParty_1_1Configuration_1_1Level_1_1ScenarioStretch.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1ScoringControlPoint.html">ScoringControlPoint</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">One authored milestone on the scoring curve.  <a href="structBalloonParty_1_1Configuration_1_1Level_1_1ScoringControlPoint.html#details">More...</a><br /></td></tr>
@@ -196,6 +208,11 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a866818b2757667473c47a5f54ecd7c61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Which budget a catalogue piece is paid from: threats grow with depth, aids stay scarce.  <a href="#a866818b2757667473c47a5f54ecd7c61">More...</a><br /></td></tr>
 <tr class="separator:a866818b2757667473c47a5f54ecd7c61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01e4593a9e3e5db9a1d18043a7098c08" id="r_a01e4593a9e3e5db9a1d18043a7098c08"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> { <a class="el" href="#a01e4593a9e3e5db9a1d18043a7098c08a03462a41aec357b74c89eb8d272532f7">Sky</a> = 0
+, <a class="el" href="#a01e4593a9e3e5db9a1d18043a7098c08a3519d51443d41746a097cd54cd5c11cf">Ground</a> = 1
+ }</td></tr>
+<tr class="memdesc:a01e4593a9e3e5db9a1d18043a7098c08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where a level is set: open sky, or the ground the board rests on.  <a href="#a01e4593a9e3e5db9a1d18043a7098c08">More...</a><br /></td></tr>
+<tr class="separator:a01e4593a9e3e5db9a1d18043a7098c08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f10485b2af91bced864457369fdcd4b" id="r_a6f10485b2af91bced864457369fdcd4b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f10485b2af91bced864457369fdcd4b">SegmentMode</a> { <a class="el" href="#a6f10485b2af91bced864457369fdcd4bae510cdf33cd497134b47b9316314d4b4">Smooth</a>
 , <a class="el" href="#a6f10485b2af91bced864457369fdcd4ba32a843da6ea40ab3b17a3421ccdf671b">Linear</a>
 , <a class="el" href="#a6f10485b2af91bced864457369fdcd4ba766cae017fab4bcc1d1e83fbb9af87c3">Convex</a>
@@ -234,6 +251,34 @@ Enumerations</h2></td></tr>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a866818b2757667473c47a5f54ecd7c61a4d369630702981cadf5008bb04dec976" name="a866818b2757667473c47a5f54ecd7c61a4d369630702981cadf5008bb04dec976"></a>Threat&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a866818b2757667473c47a5f54ecd7c61a919638328565eb200ce01522c60b3439" name="a866818b2757667473c47a5f54ecd7c61a919638328565eb200ce01522c60b3439"></a>Aid&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a id="a01e4593a9e3e5db9a1d18043a7098c08" name="a01e4593a9e3e5db9a1d18043a7098c08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01e4593a9e3e5db9a1d18043a7098c08">&#9670;&#160;</a></span>ScenarioKind</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#a01e4593a9e3e5db9a1d18043a7098c08">BalloonParty.Configuration.Level.ScenarioKind</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Where a level is set: open sky, or the ground the board rests on. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a01e4593a9e3e5db9a1d18043a7098c08a03462a41aec357b74c89eb8d272532f7" name="a01e4593a9e3e5db9a1d18043a7098c08a03462a41aec357b74c89eb8d272532f7"></a>Sky&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a01e4593a9e3e5db9a1d18043a7098c08a3519d51443d41746a097cd54cd5c11cf" name="a01e4593a9e3e5db9a1d18043a7098c08a3519d51443d41746a097cd54cd5c11cf"></a>Ground&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>

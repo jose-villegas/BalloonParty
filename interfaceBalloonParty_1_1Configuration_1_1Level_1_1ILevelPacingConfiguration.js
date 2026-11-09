@@ -3,6 +3,7 @@ var interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration
     [ "ColorsForLevel", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#a512ea1172a87069162a443a978f8e7e1", null ],
     [ "MaxConcurrentBalloons", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#af8180a7c80ff7448293ca03438f90c67", null ],
     [ "ParametersForLevel", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#a7d849ad10eb0aa2a12282b60daed2689", null ],
+    [ "ScenarioForLevel", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#ae456249c6a9e63956daca07f1a3f07a0", null ],
     [ "SeedForLevel", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#a2f4b5d69a3c1c7965cd0e3f3a3e79d04", null ],
     [ "ThresholdForLevel", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#a0a402590276276532114beaa43098433", null ],
     [ "DebugPresets", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#a9194824970276fefd009ced094c08603", null ],

@@ -19,16 +19,24 @@ var namespaceBalloonParty_1_1Configuration_1_1Level =
     [ "LevelParameters", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters" ],
     [ "LevelRangeEntry", "structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html", "structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry" ],
     [ "LevelScoringCurve", "structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html", "structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve" ],
+    [ "LevelSeedHash", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelSeedHash.html", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelSeedHash" ],
     [ "LevelSteps", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelSteps.html", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelSteps" ],
     [ "RangedLevelParameters", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters" ],
     [ "ResolvedBalloonEntry", "classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html", "classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry" ],
     [ "ResolvedItemEntry", "classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedItemEntry.html", "classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedItemEntry" ],
+    [ "ScenarioSchedule", "classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioSchedule.html", "classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioSchedule" ],
+    [ "ScenarioScheduleSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html", "classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings" ],
+    [ "ScenarioStretch", "structBalloonParty_1_1Configuration_1_1Level_1_1ScenarioStretch.html", "structBalloonParty_1_1Configuration_1_1Level_1_1ScenarioStretch" ],
     [ "ScoringControlPoint", "structBalloonParty_1_1Configuration_1_1Level_1_1ScoringControlPoint.html", "structBalloonParty_1_1Configuration_1_1Level_1_1ScoringControlPoint" ],
     [ "SpawnClockSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings" ],
     [ "TailGrowthConfig", "structBalloonParty_1_1Configuration_1_1Level_1_1TailGrowthConfig.html", "structBalloonParty_1_1Configuration_1_1Level_1_1TailGrowthConfig" ],
     [ "ContentRole", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a866818b2757667473c47a5f54ecd7c61", [
       [ "Threat", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a866818b2757667473c47a5f54ecd7c61a4d369630702981cadf5008bb04dec976", null ],
       [ "Aid", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a866818b2757667473c47a5f54ecd7c61a919638328565eb200ce01522c60b3439", null ]
+    ] ],
+    [ "ScenarioKind", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08", [
+      [ "Sky", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08a03462a41aec357b74c89eb8d272532f7", null ],
+      [ "Ground", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08a3519d51443d41746a097cd54cd5c11cf", null ]
     ] ],
     [ "SegmentMode", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a6f10485b2af91bced864457369fdcd4b", [
       [ "Smooth", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a6f10485b2af91bced864457369fdcd4bae510cdf33cd497134b47b9316314d4b4", null ],

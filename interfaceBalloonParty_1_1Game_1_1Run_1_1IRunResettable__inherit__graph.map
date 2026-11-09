@@ -1,51 +1,53 @@
 <map id="BalloonParty.Game.Run.IRunResettable" name="BalloonParty.Game.Run.IRunResettable">
-<area shape="rect" id="Node000001" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,663,212,703"/>
+<area shape="rect" id="Node000001" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,695,212,735"/>
 <area shape="rect" id="Node000002" href="$classBalloonParty_1_1Audio_1_1SfxService.html" title=" " alt="" coords="265,5,481,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,649,126,516,156,334,176,241,199,157,227,88,242,62,258,41,276,29,279,33,262,45,246,65,231,91,204,159,181,242,161,335,132,517,116,650"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,681,125,543,153,350,173,253,197,164,225,91,241,63,258,41,276,29,279,33,262,45,246,66,230,93,202,166,178,254,159,351,130,543,115,682"/>
 <area shape="rect" id="Node000003" href="$classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html" title=" " alt="" coords="260,55,487,95"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="112,649,130,529,161,366,181,284,204,209,230,148,258,106,273,94,276,98,262,109,234,150,209,211,186,285,166,367,135,530,117,650"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="111,681,128,555,159,383,179,295,202,216,228,150,243,125,258,105,273,94,276,98,262,109,247,128,233,153,207,217,184,297,164,384,134,556,117,682"/>
 <area shape="rect" id="Node000004" href="$classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html" title=" " alt="" coords="264,119,483,159"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="107,650,111,555,119,494,131,427,150,357,177,289,212,226,258,169,274,157,277,162,262,173,217,229,181,292,155,359,136,428,124,495,117,556,112,650"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="112,681,132,566,163,413,184,336,206,266,231,209,258,170,274,157,277,162,262,173,236,211,211,268,189,338,169,415,137,567,118,682"/>
 <area shape="rect" id="Node000005" href="$classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html" title="Visible pile for balloons that couldn&#39;t spawn; purely visual — HP drain is handled by WaveDamageMessa..." alt="" coords="264,183,483,223"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="108,649,117,566,126,512,139,454,159,394,184,336,217,281,258,233,274,221,278,226,262,237,221,284,189,338,164,396,145,455,131,513,122,566,114,650"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="108,681,114,592,122,535,135,472,154,408,180,344,215,285,258,233,274,221,277,226,262,237,219,288,185,347,159,409,140,473,127,536,119,593,113,682"/>
 <area shape="rect" id="Node000006" href="$classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html" title="Brings balloon lines in on a timer, whatever the player does: one line per ISpawnClockSettings...." alt="" coords="264,247,483,287"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="111,649,122,577,148,482,167,432,191,383,222,337,258,297,275,285,278,290,262,301,226,341,196,386,172,434,153,484,128,578,116,650"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="109,681,120,603,144,499,163,445,188,391,219,341,258,297,275,285,278,290,262,301,224,344,193,394,168,447,149,501,125,603,115,682"/>
 <area shape="rect" id="Node000007" href="$classBalloonParty_1_1Game_1_1Cinematics_1_1HeartDrainCinematic.html" title="Begins on a wave&#45;damage event, follows the heart trail in slow&#45;mo, and ends when the pile drains or t..." alt="" coords="260,311,487,351"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="114,649,129,587,157,510,176,469,199,430,226,393,258,361,276,349,279,354,262,365,230,397,203,433,181,472,162,512,134,589,119,650"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="112,681,126,614,152,528,171,483,195,438,224,397,258,361,276,349,279,354,262,365,228,401,200,441,176,485,157,530,131,615,117,682"/>
 <area shape="rect" id="Node000008" href="$classBalloonParty_1_1Game_1_1Coins_1_1CoinDropController.html" title="Rolls a coin for each pop from ICoinSettings.CoinsFromLevel on and publishes CoinDroppedMessage for e..." alt="" coords="279,375,468,415"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="118,649,137,600,166,539,207,478,231,450,258,425,278,413,281,418,262,429,235,453,211,481,171,542,142,602,123,651"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="115,681,133,625,161,556,203,486,229,454,258,425,277,413,280,418,262,429,233,457,207,489,166,559,138,627,121,683"/>
 <area shape="rect" id="Node000009" href="$classBalloonParty_1_1Game_1_1Coins_1_1CoinTrailService.html" title="Flies each dropped coin from its pop to the coin counter and publishes CoinLandedMessage when it land..." alt="" coords="279,439,468,479"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="124,649,147,612,177,569,215,526,259,489,280,477,283,482,261,494,218,530,181,572,151,615,129,652"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="121,681,141,638,172,586,211,534,258,489,279,477,282,482,262,493,215,537,176,589,146,640,126,684"/>
 <area shape="rect" id="Node000010" href="$classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html" title="Heart trails currently in flight; launch order preserved so [0] is the next to land." alt="" coords="275,503,471,543"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="136,651,190,601,223,575,259,553,286,541,288,546,261,558,226,580,193,605,140,655"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="129,682,183,617,219,582,259,553,283,541,285,546,261,558,222,586,187,620,133,686"/>
 <area shape="rect" id="Node000011" href="$classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html" title="The player&#39;s hit&#45;point pool — the only loss trigger under the spawn&#45;saturation model." alt="" coords="275,567,471,607"/>
-<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="165,655,259,617,296,605,298,610,261,622,167,660"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="146,685,198,650,259,617,290,605,292,610,261,622,201,655,149,689"/>
 <area shape="rect" id="Node000012" href="$classBalloonParty_1_1Game_1_1Level_1_1LevelController.html" title="Owns the player&#39;s progression through levels — current level, per&#45;colour progress,..." alt="" coords="279,631,467,671"/>
-<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="225,667,279,660,280,665,226,672"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="205,689,289,669,291,674,206,695"/>
 <area shape="rect" id="Node000013" href="$classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html" title="Resolves and caches the live per&#45;level difficulty mix (generated, or a debug preset),..." alt="" coords="279,695,467,735"/>
-<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="226,695,280,701,279,707,225,700"/>
-<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle.html" title="Night&#45;mode time&#45;of&#45;day driver: walks the ambient light direction around the circle as the player clim..." alt="" coords="279,759,467,799"/>
-<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="167,707,261,745,298,757,296,762,259,750,165,712"/>
-<area shape="rect" id="Node000015" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IBoardResettable.html" title="Marks a resettable whose work is board population/teardown (clearing or respawning actors),..." alt="" coords="263,823,483,863"/>
-<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="140,712,193,762,226,787,261,809,288,821,286,826,259,814,223,792,190,766,136,716"/>
-<area shape="rect" id="Node000018" href="$classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html" title="Tracks per&#45;run retry state." alt="" coords="267,887,480,927"/>
-<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="129,714,151,752,181,794,218,837,261,873,283,885,280,889,259,878,215,841,177,798,147,754,124,717"/>
-<area shape="rect" id="Node000019" href="$classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html" title="Score keeping only — level progression lives in LevelController." alt="" coords="279,951,468,991"/>
-<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="123,716,142,765,171,825,211,886,235,913,262,937,281,949,278,953,258,941,231,917,207,889,166,828,137,767,118,717"/>
-<area shape="rect" id="Node000020" href="$classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html" title=" " alt="" coords="279,1015,468,1055"/>
-<area shape="poly" id="edge19_Node000001_Node000020" title=" " alt="" coords="119,716,134,778,162,855,181,895,203,934,230,970,262,1001,280,1013,277,1018,258,1005,226,973,199,937,176,897,157,857,129,779,114,718"/>
-<area shape="rect" id="Node000021" href="$classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html" title="Counts what happens during play and hands immutable snapshots to the popups and the sink." alt="" coords="265,1079,481,1119"/>
-<area shape="poly" id="edge20_Node000001_Node000021" title=" " alt="" coords="116,717,128,789,153,883,172,933,196,981,226,1026,262,1065,278,1077,275,1081,258,1069,222,1029,191,984,167,935,148,885,122,790,111,717"/>
-<area shape="rect" id="Node000022" href="$classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html" title="The cards a run holds, the hand a level&#45;up deals, and the weapon the cards add up to." alt="" coords="266,1143,481,1183"/>
-<area shape="poly" id="edge21_Node000001_Node000022" title=" " alt="" coords="114,717,122,800,131,854,145,911,164,971,189,1028,221,1082,262,1129,278,1141,274,1145,258,1133,217,1085,184,1031,159,972,139,913,126,855,117,801,108,718"/>
-<area shape="rect" id="Node000023" href="$classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html" title="Reference&#45;counted per source so nested pause calls don&#39;t prematurely resume." alt="" coords="275,1207,472,1247"/>
-<area shape="poly" id="edge22_Node000001_Node000023" title=" " alt="" coords="112,717,117,811,124,872,136,939,155,1008,181,1075,217,1138,262,1193,277,1205,274,1209,258,1197,212,1141,177,1077,150,1009,131,940,119,873,111,811,107,717"/>
-<area shape="rect" id="Node000024" href="$classBalloonParty_1_1Shared_1_1Pause_1_1TimeScaleService.html" title="The only legal writer of Time.timeScale (style&#45;audit rule bans writes elsewhere); lowest active claim..." alt="" coords="275,1271,472,1311"/>
-<area shape="poly" id="edge23_Node000001_Node000024" title=" " alt="" coords="117,717,135,837,166,999,186,1081,209,1156,234,1217,262,1258,276,1269,273,1273,258,1261,230,1219,204,1158,181,1083,161,1001,130,838,112,717"/>
-<area shape="rect" id="Node000025" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="287,1335,460,1375"/>
-<area shape="poly" id="edge24_Node000001_Node000025" title=" " alt="" coords="116,717,132,849,162,1031,182,1123,205,1207,232,1275,247,1302,262,1321,288,1339,285,1344,258,1325,242,1305,227,1278,200,1208,177,1124,157,1032,127,850,111,718"/>
-<area shape="rect" id="Node000016" href="$classBalloonParty_1_1Game_1_1Run_1_1BoardClearController.html" title="MessagePipe publishes synchronously, so the board is empty by the time ResetRun returns." alt="" coords="535,791,751,831"/>
-<area shape="poly" id="edge15_Node000015_Node000016" title=" " alt="" coords="497,826,534,821,535,827,497,831"/>
-<area shape="rect" id="Node000017" href="$classBalloonParty_1_1Slots_1_1Spawner_1_1GridSpawnerCoordinator.html" title=" " alt="" coords="542,855,743,895"/>
-<area shape="poly" id="edge16_Node000015_Node000017" title=" " alt="" coords="497,855,542,861,542,866,497,861"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="226,713,279,713,279,718,226,718"/>
+<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Game_1_1Level_1_1ScenarioController.html" title="Keeps ActiveScenario on the current level&#39;s scenario (sky or ground, per ILevelPacingConfiguration...." alt="" coords="279,759,467,799"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="206,736,291,757,289,762,205,741"/>
+<area shape="rect" id="Node000015" href="$classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle.html" title="Night&#45;mode time&#45;of&#45;day driver: walks the ambient light direction around the circle as the player clim..." alt="" coords="279,823,467,863"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="149,741,201,776,261,809,292,821,290,826,259,814,198,781,146,746"/>
+<area shape="rect" id="Node000016" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IBoardResettable.html" title="Marks a resettable whose work is board population/teardown (clearing or respawning actors),..." alt="" coords="263,887,483,927"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="133,745,187,810,222,844,261,873,285,885,283,890,259,878,219,848,183,814,129,748"/>
+<area shape="rect" id="Node000019" href="$classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html" title="Tracks per&#45;run retry state." alt="" coords="267,951,480,991"/>
+<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="126,747,146,790,176,842,215,893,262,937,282,949,279,953,258,941,211,897,172,845,141,793,121,749"/>
+<area shape="rect" id="Node000020" href="$classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html" title="Score keeping only — level progression lives in LevelController." alt="" coords="279,1015,468,1055"/>
+<area shape="poly" id="edge19_Node000001_Node000020" title=" " alt="" coords="121,748,138,803,166,872,207,942,233,974,262,1001,280,1013,277,1017,258,1005,229,977,203,945,161,874,133,805,115,750"/>
+<area shape="rect" id="Node000021" href="$classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html" title=" " alt="" coords="279,1079,468,1119"/>
+<area shape="poly" id="edge20_Node000001_Node000021" title=" " alt="" coords="117,748,131,815,157,901,176,946,200,990,228,1030,262,1065,280,1078,277,1082,258,1069,224,1033,195,992,171,948,152,903,126,817,112,750"/>
+<area shape="rect" id="Node000022" href="$classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html" title="Counts what happens during play and hands immutable snapshots to the popups and the sink." alt="" coords="265,1143,481,1183"/>
+<area shape="poly" id="edge21_Node000001_Node000022" title=" " alt="" coords="115,749,125,827,149,930,168,984,193,1037,224,1086,262,1129,278,1141,275,1145,258,1133,219,1089,188,1040,163,986,144,931,120,828,109,750"/>
+<area shape="rect" id="Node000023" href="$classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html" title="The cards a run holds, the hand a level&#45;up deals, and the weapon the cards add up to." alt="" coords="266,1207,481,1247"/>
+<area shape="poly" id="edge22_Node000001_Node000023" title=" " alt="" coords="113,749,119,838,127,895,140,957,159,1021,185,1084,219,1142,262,1193,277,1205,274,1209,258,1197,215,1145,180,1086,154,1023,135,959,122,896,114,838,108,749"/>
+<area shape="rect" id="Node000024" href="$classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html" title="Reference&#45;counted per source so nested pause calls don&#39;t prematurely resume." alt="" coords="275,1271,472,1311"/>
+<area shape="poly" id="edge23_Node000001_Node000024" title=" " alt="" coords="118,749,137,863,169,1016,189,1093,211,1162,236,1219,262,1258,277,1269,274,1273,258,1261,231,1222,206,1164,184,1094,163,1017,132,864,112,750"/>
+<area shape="rect" id="Node000025" href="$classBalloonParty_1_1Shared_1_1Pause_1_1TimeScaleService.html" title="The only legal writer of Time.timeScale (style&#45;audit rule bans writes elsewhere); lowest active claim..." alt="" coords="275,1335,472,1375"/>
+<area shape="poly" id="edge24_Node000001_Node000025" title=" " alt="" coords="117,749,134,875,164,1047,184,1134,207,1213,233,1278,247,1303,262,1321,276,1333,273,1337,258,1325,243,1306,228,1280,202,1215,179,1135,159,1048,128,876,111,749"/>
+<area shape="rect" id="Node000026" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="287,1399,460,1439"/>
+<area shape="poly" id="edge25_Node000001_Node000026" title=" " alt="" coords="116,749,131,887,160,1078,180,1175,203,1264,231,1337,246,1364,262,1385,288,1403,285,1408,258,1389,241,1367,226,1339,198,1266,175,1177,155,1079,126,887,110,749"/>
+<area shape="rect" id="Node000017" href="$classBalloonParty_1_1Game_1_1Run_1_1BoardClearController.html" title="MessagePipe publishes synchronously, so the board is empty by the time ResetRun returns." alt="" coords="535,855,751,895"/>
+<area shape="poly" id="edge16_Node000016_Node000017" title=" " alt="" coords="497,890,534,885,535,891,497,895"/>
+<area shape="rect" id="Node000018" href="$classBalloonParty_1_1Slots_1_1Spawner_1_1GridSpawnerCoordinator.html" title=" " alt="" coords="542,919,743,959"/>
+<area shape="poly" id="edge17_Node000016_Node000018" title=" " alt="" coords="497,919,542,925,542,930,497,925"/>
 </map>

@@ -7,5 +7,6 @@ var dir_8de3dc161ea18e5e682bc57466d2b700 =
     [ "LevelDifficultyResolver.cs", "LevelDifficultyResolver_8cs.html", "LevelDifficultyResolver_8cs" ],
     [ "LevelTransitionController.cs", "LevelTransitionController_8cs.html", "LevelTransitionController_8cs" ],
     [ "LevelUpPhase.cs", "LevelUpPhase_8cs.html", "LevelUpPhase_8cs" ],
+    [ "ScenarioController.cs", "ScenarioController_8cs.html", "ScenarioController_8cs" ],
     [ "TimeOfDayCycle.cs", "TimeOfDayCycle_8cs.html", "TimeOfDayCycle_8cs" ]
 ];

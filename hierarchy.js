@@ -40,6 +40,7 @@ var hierarchy =
     [ "BalloonParty.Game.Score.Behaviours.BigScoreFormationRequest", "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreFormationRequest.html", null ],
     [ "BalloonParty.Configuration.BigScoreFormationSettings", "structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html", null ],
     [ "BalloonParty.Game.Score.Behaviours.BigScoreGroupRequest", "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreGroupRequest.html", null ],
+    [ "BalloonParty.Scenario.View.GrassBladeMesh.BladeVertex", "structBalloonParty_1_1Scenario_1_1View_1_1GrassBladeMesh_1_1BladeVertex.html", null ],
     [ "BalloonParty.Item.Paint.PaintSplashView.BlobFlight", "classBalloonParty_1_1Item_1_1Paint_1_1PaintSplashView_1_1BlobFlight.html", null ],
     [ "BalloonParty.Item.Paint.BlobFlightSnapshot", "structBalloonParty_1_1Item_1_1Paint_1_1BlobFlightSnapshot.html", null ],
     [ "BalloonParty.Shared.Messages.BoardClearMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage.html", null ],
@@ -166,6 +167,8 @@ var hierarchy =
     [ "BalloonParty.Game.GameScopeRegistration", "classBalloonParty_1_1Game_1_1GameScopeRegistration.html", null ],
     [ "BalloonParty.Editor.GradientTextureDrawer.GradientStorage", "classBalloonParty_1_1Editor_1_1GradientTextureDrawer_1_1GradientStorage.html", null ],
     [ "BalloonParty.Shared.Rendering.GradientTextureHelper", "classBalloonParty_1_1Shared_1_1Rendering_1_1GradientTextureHelper.html", null ],
+    [ "BalloonParty.Scenario.View.GrassBladeLayout", "structBalloonParty_1_1Scenario_1_1View_1_1GrassBladeLayout.html", null ],
+    [ "BalloonParty.Scenario.View.GrassBladeMesh", "classBalloonParty_1_1Scenario_1_1View_1_1GrassBladeMesh.html", null ],
     [ "BalloonParty.Configuration.GridActors.GridActorPrefabEntry", "classBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorPrefabEntry.html", null ],
     [ "BalloonParty.Configuration.GridActors.GridActorTypeGate", "structBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorTypeGate.html", null ],
     [ "BalloonParty.Slots.Grid.GridBalanceQuery", "classBalloonParty_1_1Slots_1_1Grid_1_1GridBalanceQuery.html", null ],
@@ -180,6 +183,9 @@ var hierarchy =
     ] ],
     [ "BalloonParty.Projectile.Controller.IActiveProjectilePierce", "interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce.html", [
       [ "BalloonParty.Projectile.Controller.ActiveProjectilePierce", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html", null ]
+    ] ],
+    [ "BalloonParty.Scenario.IActiveScenario", "interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html", [
+      [ "BalloonParty.Scenario.ActiveScenario", "classBalloonParty_1_1Scenario_1_1ActiveScenario.html", null ]
     ] ],
     [ "BalloonParty.Game.Run.IAdService", "interfaceBalloonParty_1_1Game_1_1Run_1_1IAdService.html", [
       [ "BalloonParty.Game.Run.NoAdService", "classBalloonParty_1_1Game_1_1Run_1_1NoAdService.html", null ]
@@ -370,6 +376,7 @@ var hierarchy =
       [ "BalloonParty.Game.Level.LevelController", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html", null ],
       [ "BalloonParty.Game.Level.LevelDifficultyResolver", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html", null ],
       [ "BalloonParty.Game.Level.LevelTransitionController", "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html", null ],
+      [ "BalloonParty.Game.Level.ScenarioController", "classBalloonParty_1_1Game_1_1Level_1_1ScenarioController.html", null ],
       [ "BalloonParty.Game.Level.TimeOfDayCycle", "classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle.html", null ],
       [ "BalloonParty.Game.Run.RunController", "classBalloonParty_1_1Game_1_1Run_1_1RunController.html", null ],
       [ "BalloonParty.Game.Score.ColorStreakTracker", "classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html", null ],
@@ -403,6 +410,7 @@ var hierarchy =
       [ "BalloonParty.Scenario.BackgroundFieldService", "classBalloonParty_1_1Scenario_1_1BackgroundFieldService.html", null ],
       [ "BalloonParty.Scenario.SkyScatterService", "classBalloonParty_1_1Scenario_1_1SkyScatterService.html", null ],
       [ "BalloonParty.Scenario.SmokeFieldService", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html", null ],
+      [ "BalloonParty.Scenario.View.GrassWakeBuffer", "classBalloonParty_1_1Scenario_1_1View_1_1GrassWakeBuffer.html", null ],
       [ "BalloonParty.Shared.Disturbance.DisturbanceFieldService", "classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html", null ],
       [ "BalloonParty.Shared.SceneLight.SceneLightFieldService", "classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html", null ],
       [ "BalloonParty.Shared.SceneLight.SceneLightFieldService.LightRegistrationHandle", "classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService_1_1LightRegistrationHandle.html", null ],
@@ -477,6 +485,9 @@ var hierarchy =
     [ "BalloonParty.Slots.Spawner.IGridSpawner", "interfaceBalloonParty_1_1Slots_1_1Spawner_1_1IGridSpawner.html", [
       [ "BalloonParty.Balloon.Spawner.BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html", null ],
       [ "BalloonParty.Slots.Actor.StaticActorSpawner", "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html", null ]
+    ] ],
+    [ "BalloonParty.Configuration.Effects.IGroundSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html", [
+      [ "BalloonParty.Configuration.Effects.GroundSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html", null ]
     ] ],
     [ "BalloonParty.Slots.Capabilities.IHasColor", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasColor.html", [
       [ "BalloonParty.Slots.Capabilities.IHasItemSlot", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasItemSlot.html", [
@@ -737,6 +748,7 @@ var hierarchy =
       [ "BalloonParty.Game.Health.PlayerHealthController", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html", null ],
       [ "BalloonParty.Game.Level.LevelController", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html", null ],
       [ "BalloonParty.Game.Level.LevelDifficultyResolver", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html", null ],
+      [ "BalloonParty.Game.Level.ScenarioController", "classBalloonParty_1_1Game_1_1Level_1_1ScenarioController.html", null ],
       [ "BalloonParty.Game.Level.TimeOfDayCycle", "classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle.html", null ],
       [ "BalloonParty.Game.Run.IBoardResettable", "interfaceBalloonParty_1_1Game_1_1Run_1_1IBoardResettable.html", [
         [ "BalloonParty.Game.Run.BoardClearController", "classBalloonParty_1_1Game_1_1Run_1_1BoardClearController.html", null ],
@@ -799,6 +811,9 @@ var hierarchy =
     ] ],
     [ "BalloonParty.Game.Upgrades.IShieldsPerBall", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IShieldsPerBall.html", [
       [ "BalloonParty.Game.Upgrades.RunUpgrades", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html", null ]
+    ] ],
+    [ "BalloonParty.Scenario.ISkyBackdrop", "interfaceBalloonParty_1_1Scenario_1_1ISkyBackdrop.html", [
+      [ "BalloonParty.Scenario.SkyScatterService", "classBalloonParty_1_1Scenario_1_1SkyScatterService.html", null ]
     ] ],
     [ "BalloonParty.Configuration.Effects.ISkyScatterSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISkyScatterSettings.html", [
       [ "BalloonParty.Configuration.Effects.SkyScatterSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1SkyScatterSettings.html", null ]
@@ -902,6 +917,7 @@ var hierarchy =
       [ "BalloonParty.Game.Level.LevelController", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html", null ],
       [ "BalloonParty.Game.Level.LevelDifficultyResolver", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html", null ],
       [ "BalloonParty.Game.Level.LevelTransitionController", "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html", null ],
+      [ "BalloonParty.Game.Level.ScenarioController", "classBalloonParty_1_1Game_1_1Level_1_1ScenarioController.html", null ],
       [ "BalloonParty.Game.Level.TimeOfDayCycle", "classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle.html", null ],
       [ "BalloonParty.Game.Run.RunController", "classBalloonParty_1_1Game_1_1Run_1_1RunController.html", null ],
       [ "BalloonParty.Game.Score.ScoreController", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html", null ],
@@ -1053,6 +1069,7 @@ var hierarchy =
     [ "BalloonParty.Configuration.Level.LevelPacingValidator", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingValidator.html", null ],
     [ "BalloonParty.Configuration.Level.LevelRangeEntry", "structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html", null ],
     [ "BalloonParty.Configuration.Level.LevelScoringCurve", "structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html", null ],
+    [ "BalloonParty.Configuration.Level.LevelSeedHash", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelSeedHash.html", null ],
     [ "BalloonParty.Configuration.Level.LevelSteps", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelSteps.html", null ],
     [ "BalloonParty.Shared.Messages.LevelTransitionCompletedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelTransitionCompletedMessage.html", null ],
     [ "BalloonParty.Shared.Messages.LevelUpAbandonedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpAbandonedMessage.html", null ],
@@ -1089,6 +1106,7 @@ var hierarchy =
       [ "BalloonParty.Editor.GradientTextureDrawer", "classBalloonParty_1_1Editor_1_1GradientTextureDrawer.html", null ]
     ] ],
     [ "BalloonParty.Shared.Rendering.MeshHelper", "classBalloonParty_1_1Shared_1_1Rendering_1_1MeshHelper.html", null ],
+    [ "BalloonParty.Shared.Rendering.MeshRendererBuilder", "classBalloonParty_1_1Shared_1_1Rendering_1_1MeshRendererBuilder.html", null ],
     [ "BalloonParty.UI.Telemetry.MetricBinding", "structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html", null ],
     [ "BalloonParty.Game.Telemetry.MetricCatalog", "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricCatalog.html", null ],
     [ "BalloonParty.UI.Telemetry.MetricLabelRegistration", "classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabelRegistration.html", null ],
@@ -1137,6 +1155,7 @@ var hierarchy =
       [ "BalloonParty.Projectile.View.ProjectileShieldView", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileShieldView.html", null ],
       [ "BalloonParty.Projectile.View.ProjectileTrail", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileTrail.html", null ],
       [ "BalloonParty.Projectile.View.ProjectileView", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html", null ],
+      [ "BalloonParty.Scenario.View.GroundView", "classBalloonParty_1_1Scenario_1_1View_1_1GroundView.html", null ],
       [ "BalloonParty.Scenario.View.SmokeFieldView", "classBalloonParty_1_1Scenario_1_1View_1_1SmokeFieldView.html", null ],
       [ "BalloonParty.Scenario.View.WallNetView", "classBalloonParty_1_1Scenario_1_1View_1_1WallNetView.html", null ],
       [ "BalloonParty.Shared.Animation.RollingTextAnimator", "classBalloonParty_1_1Shared_1_1Animation_1_1RollingTextAnimator.html", null ],
@@ -1234,6 +1253,7 @@ var hierarchy =
     [ "BalloonParty.Scenario.SmokeFieldService.PendingStamp", "structBalloonParty_1_1Scenario_1_1SmokeFieldService_1_1PendingStamp.html", null ],
     [ "BalloonParty.Shared.Disturbance.DisturbanceFieldService.PendingStamp", "structBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService_1_1PendingStamp.html", null ],
     [ "BalloonParty.Audio.PickContext", "structBalloonParty_1_1Audio_1_1PickContext.html", null ],
+    [ "BalloonParty.Configuration.Level.LevelGenerator.PieceSlot", "structBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator_1_1PieceSlot.html", null ],
     [ "BalloonParty.Shared.Messages.PierceDischargedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html", null ],
     [ "BalloonParty.Shared.PierceItemCircle", "structBalloonParty_1_1Shared_1_1PierceItemCircle.html", null ],
     [ "BalloonParty.Shared.Pool.PoolManager", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html", null ],
@@ -1309,6 +1329,9 @@ var hierarchy =
     [ "BalloonParty.Game.Run.RunResetOrder", "classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html", null ],
     [ "BalloonParty.Shared.Messages.RunRestartCompletedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1RunRestartCompletedMessage.html", null ],
     [ "BalloonParty.Editor.ShadowBake.SpriteShadowBakerEditor.ScaleCompensation", "classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor_1_1ScaleCompensation.html", null ],
+    [ "BalloonParty.Configuration.Level.ScenarioSchedule", "classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioSchedule.html", null ],
+    [ "BalloonParty.Configuration.Level.ScenarioScheduleSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html", null ],
+    [ "BalloonParty.Configuration.Level.ScenarioStretch", "structBalloonParty_1_1Configuration_1_1Level_1_1ScenarioStretch.html", null ],
     [ "BalloonParty.Editor.SceneDrawingHelper", "classBalloonParty_1_1Editor_1_1SceneDrawingHelper.html", null ],
     [ "BalloonParty.Shared.Extensions.SceneExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1SceneExtensions.html", null ],
     [ "BalloonParty.Shared.SceneLight.SceneLightFieldResources", "classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldResources.html", null ],
@@ -1332,6 +1355,7 @@ var hierarchy =
       [ "BalloonParty.Configuration.Effects.BushSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html", null ],
       [ "BalloonParty.Configuration.Effects.BushVariantData", "classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData.html", null ],
       [ "BalloonParty.Configuration.Effects.DisturbanceFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html", null ],
+      [ "BalloonParty.Configuration.Effects.GroundSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html", null ],
       [ "BalloonParty.Configuration.Effects.ProjectileVisualConfig", "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html", null ],
       [ "BalloonParty.Configuration.Effects.PuffCloudSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings.html", null ],
       [ "BalloonParty.Configuration.Effects.SceneLightFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html", null ],

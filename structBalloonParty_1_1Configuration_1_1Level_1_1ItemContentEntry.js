@@ -11,6 +11,7 @@ var structBalloonParty_1_1Configuration_1_1Level_1_1ItemContentEntry =
     [ "_weight", "structBalloonParty_1_1Configuration_1_1Level_1_1ItemContentEntry.html#a1698ffcc55ffca619bf34a6ac32b4345", null ],
     [ "_withheld", "structBalloonParty_1_1Configuration_1_1Level_1_1ItemContentEntry.html#a2d060b9dd9147971df1cef1715d18b02", null ],
     [ "Cost", "structBalloonParty_1_1Configuration_1_1Level_1_1ItemContentEntry.html#a48a9781a01e2562660884be09aad9508", null ],
+    [ "RequiresGround", "structBalloonParty_1_1Configuration_1_1Level_1_1ItemContentEntry.html#ad89c1df0ca76eac44f0125b8f5502165", null ],
     [ "Role", "structBalloonParty_1_1Configuration_1_1Level_1_1ItemContentEntry.html#a0c79dcec5cbe160a2ed0d79d5c365e05", null ],
     [ "Type", "structBalloonParty_1_1Configuration_1_1Level_1_1ItemContentEntry.html#a77cf867f6f40142fe6db96a80c058ec7", null ],
     [ "UnlockLevel", "structBalloonParty_1_1Configuration_1_1Level_1_1ItemContentEntry.html#ae876747f1caadb48ad2b97a1b30731d2", null ],

@@ -1,7 +1,9 @@
 <map id="BalloonParty.Scenario.SkyScatterService" name="BalloonParty.Scenario.SkyScatterService">
-<area shape="rect" id="Node000001" title="Owns the sky&#45;scatter backdrop: a single stationary quad rendered immediately after the camera&#39;s flat ..." alt="" coords="11,79,200,119"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,91,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="67,40,94,77,89,80,62,43"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="115,5,213,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="149,43,122,80,117,77,145,40"/>
+<area shape="rect" id="Node000001" title="Owns the sky&#45;scatter backdrop: a single stationary quad rendered immediately after the camera&#39;s flat ..." alt="" coords="69,93,259,133"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,91,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="76,44,140,91,137,95,73,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="115,13,213,38"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="167,52,167,93,161,93,161,52"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Scenario_1_1ISkyBackdrop.html" title="The sky&#45;scatter backdrop, as an opaque backdrop drawn over it (the ground) sees it." alt="" coords="238,5,431,45"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="286,54,203,96,200,91,284,49"/>
 </map>

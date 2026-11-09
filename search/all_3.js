@@ -25,8 +25,8 @@ var searchData=
   ['3_20phases_22',['3. Phases',['../plan_fast_paced.html#autotoc_md409',1,'']]],
   ['3_20rules_23',['3 Rules',['../plan_card_reveal.html#autotoc_md356',1,'3. Rules'],['../plan_coins.html#autotoc_md366',1,'3. Rules']]],
   ['3_20suggested_20tier_20thresholds_24',['9.3 Suggested Tier Thresholds',['../plan_future_ideas.html#autotoc_md488',1,'']]],
-  ['3_20view_20—_20tt_20terrainview_20tt_20monobehaviour_20runtime_20shader_25',['3. View — &lt;tt&gt;TerrainView&lt;/tt&gt; (MonoBehaviour) + runtime shader',['../plan_terrain_biomes.html#autotoc_md758',1,'']]],
-  ['3_20what_20this_20deletes_26',['3. What this deletes',['../plan_level_up_timing.html#autotoc_md662',1,'']]],
+  ['3_20what_20this_20deletes_25',['3. What this deletes',['../plan_level_up_timing.html#autotoc_md662',1,'']]],
+  ['33_20ms_20frame_26',['Performance (mobile, 120 Hz = 8.33 ms frame)',['../plan_terrain_biomes.html#autotoc_md758',1,'']]],
   ['3_3a_20architectural_20gated_20on_20step_200_20evidence_27',['Tier 3: Architectural (gated on Step 0 evidence)',['../plan_performance_recovery.html#autotoc_md714',1,'']]],
   ['3_3a_20spawn_20clock_28',['6. Phase 3: spawn clock',['../plan_fast_paced.html#autotoc_md415',1,'']]]
 ];

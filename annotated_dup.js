@@ -159,9 +159,11 @@ var annotated_dup =
           [ "BushSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings" ],
           [ "BushVariantData", "classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData" ],
           [ "DisturbanceFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings" ],
+          [ "GroundSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings" ],
           [ "IBackgroundFieldSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBackgroundFieldSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBackgroundFieldSettings" ],
           [ "IBushSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings" ],
           [ "IDisturbanceFieldSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IDisturbanceFieldSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IDisturbanceFieldSettings" ],
+          [ "IGroundSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings" ],
           [ "IProjectileVisualConfig", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig" ],
           [ "IPuffCloudSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings" ],
           [ "ISceneLightFieldSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightFieldSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightFieldSettings" ],
@@ -229,10 +231,14 @@ var annotated_dup =
           [ "LevelParameters", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters" ],
           [ "LevelRangeEntry", "structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html", "structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry" ],
           [ "LevelScoringCurve", "structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html", "structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve" ],
+          [ "LevelSeedHash", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelSeedHash.html", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelSeedHash" ],
           [ "LevelSteps", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelSteps.html", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelSteps" ],
           [ "RangedLevelParameters", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters" ],
           [ "ResolvedBalloonEntry", "classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html", "classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry" ],
           [ "ResolvedItemEntry", "classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedItemEntry.html", "classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedItemEntry" ],
+          [ "ScenarioSchedule", "classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioSchedule.html", "classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioSchedule" ],
+          [ "ScenarioScheduleSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html", "classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings" ],
+          [ "ScenarioStretch", "structBalloonParty_1_1Configuration_1_1Level_1_1ScenarioStretch.html", "structBalloonParty_1_1Configuration_1_1Level_1_1ScenarioStretch" ],
           [ "ScoringControlPoint", "structBalloonParty_1_1Configuration_1_1Level_1_1ScoringControlPoint.html", "structBalloonParty_1_1Configuration_1_1Level_1_1ScoringControlPoint" ],
           [ "SpawnClockSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings" ],
           [ "TailGrowthConfig", "structBalloonParty_1_1Configuration_1_1Level_1_1TailGrowthConfig.html", "structBalloonParty_1_1Configuration_1_1Level_1_1TailGrowthConfig" ]
@@ -443,6 +449,7 @@ var annotated_dup =
           [ "LevelController", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html", "classBalloonParty_1_1Game_1_1Level_1_1LevelController" ],
           [ "LevelDifficultyResolver", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver" ],
           [ "LevelTransitionController", "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html", "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController" ],
+          [ "ScenarioController", "classBalloonParty_1_1Game_1_1Level_1_1ScenarioController.html", "classBalloonParty_1_1Game_1_1Level_1_1ScenarioController" ],
           [ "TimeOfDayCycle", "classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle.html", "classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle" ]
         ] ],
         [ "Run", "namespaceBalloonParty_1_1Game_1_1Run.html", [
@@ -697,10 +704,17 @@ var annotated_dup =
       ] ],
       [ "Scenario", "namespaceBalloonParty_1_1Scenario.html", [
         [ "View", "namespaceBalloonParty_1_1Scenario_1_1View.html", [
+          [ "GrassBladeLayout", "structBalloonParty_1_1Scenario_1_1View_1_1GrassBladeLayout.html", "structBalloonParty_1_1Scenario_1_1View_1_1GrassBladeLayout" ],
+          [ "GrassBladeMesh", "classBalloonParty_1_1Scenario_1_1View_1_1GrassBladeMesh.html", "classBalloonParty_1_1Scenario_1_1View_1_1GrassBladeMesh" ],
+          [ "GrassWakeBuffer", "classBalloonParty_1_1Scenario_1_1View_1_1GrassWakeBuffer.html", "classBalloonParty_1_1Scenario_1_1View_1_1GrassWakeBuffer" ],
+          [ "GroundView", "classBalloonParty_1_1Scenario_1_1View_1_1GroundView.html", "classBalloonParty_1_1Scenario_1_1View_1_1GroundView" ],
           [ "SmokeFieldView", "classBalloonParty_1_1Scenario_1_1View_1_1SmokeFieldView.html", "classBalloonParty_1_1Scenario_1_1View_1_1SmokeFieldView" ],
           [ "WallNetView", "classBalloonParty_1_1Scenario_1_1View_1_1WallNetView.html", "classBalloonParty_1_1Scenario_1_1View_1_1WallNetView" ]
         ] ],
+        [ "ActiveScenario", "classBalloonParty_1_1Scenario_1_1ActiveScenario.html", "classBalloonParty_1_1Scenario_1_1ActiveScenario" ],
         [ "BackgroundFieldService", "classBalloonParty_1_1Scenario_1_1BackgroundFieldService.html", "classBalloonParty_1_1Scenario_1_1BackgroundFieldService" ],
+        [ "IActiveScenario", "interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html", "interfaceBalloonParty_1_1Scenario_1_1IActiveScenario" ],
+        [ "ISkyBackdrop", "interfaceBalloonParty_1_1Scenario_1_1ISkyBackdrop.html", "interfaceBalloonParty_1_1Scenario_1_1ISkyBackdrop" ],
         [ "SkyScatterService", "classBalloonParty_1_1Scenario_1_1SkyScatterService.html", "classBalloonParty_1_1Scenario_1_1SkyScatterService" ],
         [ "SmokeFieldResources", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources" ],
         [ "SmokeFieldService", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html", "classBalloonParty_1_1Scenario_1_1SmokeFieldService" ]
@@ -863,6 +877,7 @@ var annotated_dup =
           [ "IColorableRenderer", "interfaceBalloonParty_1_1Shared_1_1Rendering_1_1IColorableRenderer.html", "interfaceBalloonParty_1_1Shared_1_1Rendering_1_1IColorableRenderer" ],
           [ "ImageShadowBaker", "classBalloonParty_1_1Shared_1_1Rendering_1_1ImageShadowBaker.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1ImageShadowBaker" ],
           [ "MeshHelper", "classBalloonParty_1_1Shared_1_1Rendering_1_1MeshHelper.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1MeshHelper" ],
+          [ "MeshRendererBuilder", "classBalloonParty_1_1Shared_1_1Rendering_1_1MeshRendererBuilder.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1MeshRendererBuilder" ],
           [ "QuadRendererBuilder", "classBalloonParty_1_1Shared_1_1Rendering_1_1QuadRendererBuilder.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1QuadRendererBuilder" ],
           [ "ShaderTimeService", "classBalloonParty_1_1Shared_1_1Rendering_1_1ShaderTimeService.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1ShaderTimeService" ],
           [ "SortingHelper", "classBalloonParty_1_1Shared_1_1Rendering_1_1SortingHelper.html", "classBalloonParty_1_1Shared_1_1Rendering_1_1SortingHelper" ],

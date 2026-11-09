@@ -135,8 +135,8 @@ $(function(){initNavTree('structBalloonParty_1_1Configuration_1_1Level_1_1GridAc
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a02a276c1e50741987ca620279236793c" id="r_a02a276c1e50741987ca620279236793c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02a276c1e50741987ca620279236793c">GridActorContentEntry</a> (<a class="el" href="namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473">GridActorType</a> type, int unlockLevel, int cost, <a class="el" href="structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html">RangedInt</a> count, <a class="el" href="structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html">RangedInt</a> lateCount, int rampLevels, int maxPerCluster=0, bool withheld=false)</td></tr>
-<tr class="separator:a02a276c1e50741987ca620279236793c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a180ab57e02894c9f13b310b91db9f1df" id="r_a180ab57e02894c9f13b310b91db9f1df"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a180ab57e02894c9f13b310b91db9f1df">GridActorContentEntry</a> (<a class="el" href="namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473">GridActorType</a> type, int unlockLevel, int cost, <a class="el" href="structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html">RangedInt</a> count, <a class="el" href="structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html">RangedInt</a> lateCount, int rampLevels, int maxPerCluster=0, bool withheld=false, bool requiresGround=false)</td></tr>
+<tr class="separator:a180ab57e02894c9f13b310b91db9f1df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a89e04c9b15dcfe3ed5a87a2affd1b86d" id="r_a89e04c9b15dcfe3ed5a87a2affd1b86d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorTypeGate.html">GridActorTypeGate</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89e04c9b15dcfe3ed5a87a2affd1b86d">ToGate</a> (int level)</td></tr>
 <tr class="separator:a89e04c9b15dcfe3ed5a87a2affd1b86d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -145,6 +145,9 @@ Properties</h2></td></tr>
 <tr class="memitem:af3c252c221e228a9db1e9b13daee0cf5" id="r_af3c252c221e228a9db1e9b13daee0cf5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3c252c221e228a9db1e9b13daee0cf5">Cost</a><code> [get]</code></td></tr>
 <tr class="memdesc:af3c252c221e228a9db1e9b13daee0cf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Budget a level spends to include the piece. 0 = a staple, in every level from its unlock on.  <br /></td></tr>
 <tr class="separator:af3c252c221e228a9db1e9b13daee0cf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af85b11462da8489c03d82baf22cf7297" id="r_af85b11462da8489c03d82baf22cf7297"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af85b11462da8489c03d82baf22cf7297">RequiresGround</a><code> [get]</code></td></tr>
+<tr class="memdesc:af85b11462da8489c03d82baf22cf7297"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the piece needs ground under it; sky levels leave it out.  <br /></td></tr>
+<tr class="separator:af85b11462da8489c03d82baf22cf7297"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5189381bfcce7eb808f4dd4272d516f" id="r_ac5189381bfcce7eb808f4dd4272d516f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a866818b2757667473c47a5f54ecd7c61">ContentRole</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac5189381bfcce7eb808f4dd4272d516f">Role</a><code> [get]</code></td></tr>
 <tr class="memdesc:ac5189381bfcce7eb808f4dd4272d516f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Which budget pays for the piece.  <br /></td></tr>
 <tr class="separator:ac5189381bfcce7eb808f4dd4272d516f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -169,6 +172,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a5355c35f39f4b871e80bfa7866f94849"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae62832a316dce78c24dcd20fca31ab53" id="r_ae62832a316dce78c24dcd20fca31ab53"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae62832a316dce78c24dcd20fca31ab53">_rampLevels</a></td></tr>
 <tr class="separator:ae62832a316dce78c24dcd20fca31ab53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a288fdd54333cd3c9d5cd365e3996c06d" id="r_a288fdd54333cd3c9d5cd365e3996c06d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a288fdd54333cd3c9d5cd365e3996c06d">_requiresGround</a></td></tr>
+<tr class="separator:a288fdd54333cd3c9d5cd365e3996c06d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a471764b354af613e8ded1e53cfbe7380" id="r_a471764b354af613e8ded1e53cfbe7380"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473">GridActorType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a471764b354af613e8ded1e53cfbe7380">_type</a></td></tr>
 <tr class="separator:a471764b354af613e8ded1e53cfbe7380"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68beadc3ae869b74d9e4609a9fe4cb84" id="r_a68beadc3ae869b74d9e4609a9fe4cb84"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a68beadc3ae869b74d9e4609a9fe4cb84">_unlockLevel</a></td></tr>
@@ -179,8 +184,8 @@ Private Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A grid actor in the catalogue. Actors block the board, so they're paid from the threat budget. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a02a276c1e50741987ca620279236793c" name="a02a276c1e50741987ca620279236793c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a02a276c1e50741987ca620279236793c">&#9670;&#160;</a></span>GridActorContentEntry()</h2>
+<a id="a180ab57e02894c9f13b310b91db9f1df" name="a180ab57e02894c9f13b310b91db9f1df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a180ab57e02894c9f13b310b91db9f1df">&#9670;&#160;</a></span>GridActorContentEntry()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -226,7 +231,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>withheld</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>withheld</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>requiresGround</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -375,6 +385,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a288fdd54333cd3c9d5cd365e3996c06d" name="a288fdd54333cd3c9d5cd365e3996c06d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a288fdd54333cd3c9d5cd365e3996c06d">&#9670;&#160;</a></span>_requiresGround</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Configuration.Level.GridActorContentEntry._requiresGround</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a471764b354af613e8ded1e53cfbe7380" name="a471764b354af613e8ded1e53cfbe7380"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a471764b354af613e8ded1e53cfbe7380">&#9670;&#160;</a></span>_type</h2>
 
@@ -465,6 +497,32 @@ Private Attributes</h2></td></tr>
 <p>Budget a level spends to include the piece. 0 = a staple, in every level from its unlock on. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece.html#a4c62a1063013fa05a54a6e328e41590e">BalloonParty.Configuration.Level.IContentPiece</a>.</p>
+
+</div>
+</div>
+<a id="af85b11462da8489c03d82baf22cf7297" name="af85b11462da8489c03d82baf22cf7297"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af85b11462da8489c03d82baf22cf7297">&#9670;&#160;</a></span>RequiresGround</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Configuration.Level.GridActorContentEntry.RequiresGround</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Whether the piece needs ground under it; sky levels leave it out. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece.html#a019e688c26fd45e909bfffdaa3c5fe9e">BalloonParty.Configuration.Level.IContentPiece</a>.</p>
 
 </div>
 </div>

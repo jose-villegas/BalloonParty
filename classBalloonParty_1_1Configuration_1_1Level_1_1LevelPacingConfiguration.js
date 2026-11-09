@@ -5,6 +5,7 @@ var classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration =
     [ "OnValidate", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a073e74f7ca7420ed9cbc753e500ffc1b", null ],
     [ "ParametersForLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#ad2d5a4bf800e79465b25890add3a8940", null ],
     [ "RoundThreshold", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#abd2e1448346df5889b839d8cbbedcf46", null ],
+    [ "ScenarioForLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#aef33a6f5c4e0b440a5c7c0545e82ae5a", null ],
     [ "SeedForLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a112381fe57eea4555cd8a20ec67f8e1d", null ],
     [ "ThresholdForLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a910ae2e8368e2801282b58afd27ef15a", null ],
     [ "TryFindPreset", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a609a80a05178eda5fab48e0c7a86abaf", null ],

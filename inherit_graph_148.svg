@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1Entry.html" target="_top" xlink:title=" ">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html" target="_top" xlink:title="Builds the heads&#45;ups on the game canvas, each line a copy of the tooltip&#39;s pencil label (its font and...">
 <polygon fill="white" stroke="#666666" points="141,-30 0,-30 0,0 141,0 141,-30"/>
-<text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Editor.Metric</text>
-<text text-anchor="middle" x="70.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">BindingDrawer.Entry</text>
+<text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Editor.Heads</text>
+<text text-anchor="middle" x="70.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">UpBuilder</text>
 </a>
 </g>
 </g>

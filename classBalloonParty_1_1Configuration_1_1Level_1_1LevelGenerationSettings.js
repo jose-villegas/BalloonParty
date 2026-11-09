@@ -9,6 +9,7 @@ var classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings =
     [ "CheckUnlock", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a2c67363f8cc955af522577a230ed1d2c", null ],
     [ "ColorsForLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#aa25b9d0fc623c4b61966f1e1fe20190e", null ],
     [ "ItemCountsForLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a64e9440a282d494f2a82ee0b9d1a8d39", null ],
+    [ "ScenarioForLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#af3dba66891a94f4da8d1726bd7cafc15", null ],
     [ "SeedForLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#ac111b10ba74cee939b823e26b656dadf", null ],
     [ "StepValue", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#affd1cf07455aa9127b9e5a55d07fddf9", null ],
     [ "Validate", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#aae47f9d0ade6895417c050399744583a", null ],
@@ -21,6 +22,7 @@ var classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings =
     [ "_itemCadence", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#acba9af6805647d30f6636a50f8f1873a", null ],
     [ "_itemCounts", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a6b9bf420484dcee83f7a0e1f0240ed12", null ],
     [ "_items", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a7556956ed8f6623eaeb046ef939b7130", null ],
+    [ "_scenario", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a81579d4539419bc4a1fe36f0f25b684d", null ],
     [ "_seedSalt", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a761c887de6091765bef689e0789e5da7", null ],
     [ "_threatBudget", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#ab246befc78b26b2cd8c9a685bad750fe", null ],
     [ "Balloons", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a3f8702c9a5aba77b04cb739f8fbabe7c", null ],
@@ -28,5 +30,6 @@ var classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings =
     [ "GridActors", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a249999ec19dd2a684003354c4590d841", null ],
     [ "ItemCadence", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a5408a21f485645f1586d266b599429d9", null ],
     [ "Items", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a6c289a87303d3fe19949b7a84351351f", null ],
-    [ "MaxBoardLines", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a23a517a3f17ffacf0eef78c7d7e1c221", null ]
+    [ "MaxBoardLines", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a23a517a3f17ffacf0eef78c7d7e1c221", null ],
+    [ "Scenario", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a58050b6595d7dcf601382ac65f923a9b", null ]
 ];
