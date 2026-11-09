@@ -27,6 +27,9 @@ namespace BalloonParty.UI
         private Tween _tween;
         private bool _playing;
 
+        // Read by autoplay to find the button that does a thing, so it can tap that button as a player would.
+        internal UnityEventBase OnScaleComplete => _onScaleComplete;
+
         private void Awake()
         {
             if (_target == null)

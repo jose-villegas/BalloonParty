@@ -38,6 +38,12 @@ emulators or phones while the Editor does something else. It compiles only under
   cannon is ready (the best angle from `FireBestShotCheat.TryFindBestAngle`, plus `AutoplayDice`'s reaction
   time and aim error for a human), presses Restart on game over or ends there, and quits the app when the
   time is up.
+- `AutoplayTap` presses those two buttons as a finger does. It finds the button that calls
+  `LaunchPlayTrigger.Play` (or `GameOverScreen.OnRestartPressed`), from a Button's On Click or a
+  `ScaleDownButton`'s On Scale Complete, raycasts the event system at its centre, and sends pointer down, up
+  and click to what that hits. So every listener runs (the press animation, the scene load, the title
+  animation), a covered button isn't tapped through, and the bot goes through the same screens a player does
+  instead of calling into the game behind them.
 - `AutoplayTickWriter` writes `persistentDataPath/autoplay/ticks.jsonl` (the Editor bot's tick fields, twice a
   second) and a `done` file at the end, which is what the runner waits for.
 

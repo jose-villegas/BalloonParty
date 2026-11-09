@@ -31,6 +31,7 @@ namespace BalloonParty.Cheats.Autoplay
         private const float CheckInterval = 0.05f;
         private const float SampleInterval = 0.5f;
         private const float LaunchPressDelay = 1f;
+        private const float PlayRetapDelay = 10f;
 
         private readonly AutoplaySettings _settings;
         private readonly ILevelProgress _progress;
@@ -49,8 +50,10 @@ namespace BalloonParty.Cheats.Autoplay
         private float _nextCheck;
         private float _nextSample;
         private float _fireAt = -1f;
+        private float _nextPlayTap;
         private int _shots;
         private bool _restartPressed;
+        private bool _warnedNoPlay;
         private bool _finished;
 
         internal AutoplayController(
@@ -133,16 +136,26 @@ namespace BalloonParty.Cheats.Autoplay
 
         private void PressPlay(float clock)
         {
-            if (clock - _startedAt < LaunchPressDelay)
+            if (clock - _startedAt < LaunchPressDelay || clock < _nextPlayTap)
             {
                 return;
             }
 
-            // Play() ignores a second press, so asking every tick until the game shows is safe.
-            var trigger = UnityEngine.Object.FindAnyObjectByType<LaunchPlayTrigger>();
-            if (trigger != null)
+            if (AutoplayTap.ButtonThatCalls<LaunchPlayTrigger>(nameof(LaunchPlayTrigger.Play)))
             {
-                trigger.Play();
+                if (_nextPlayTap > 0f)
+                {
+                    Log.Warn("Autoplay", "still on the launch screen after tapping Play; tapped it again.");
+                }
+
+                // The game shows a couple of seconds after the tap (press animation, then the ascend), so tap
+                // again only if that one plainly didn't take.
+                _nextPlayTap = clock + PlayRetapDelay;
+            }
+            else if (!_warnedNoPlay && clock - _startedAt > PlayRetapDelay)
+            {
+                Log.Warn("Autoplay", "no Play button a finger could tap on the launch screen; still looking.");
+                _warnedNoPlay = true;
             }
         }
 
@@ -162,10 +175,9 @@ namespace BalloonParty.Cheats.Autoplay
                 return true;
             }
 
-            var screen = UnityEngine.Object.FindAnyObjectByType<GameOverScreen>();
-            if (screen != null && screen.isActiveAndEnabled)
+            // No tap until the screen has brought its Restart button in, as for a player.
+            if (AutoplayTap.ButtonThatCalls<GameOverScreen>(nameof(GameOverScreen.OnRestartPressed)))
             {
-                screen.OnRestartPressed();
                 _restartPressed = true;
                 _writer.WriteMarker("restart");
             }
