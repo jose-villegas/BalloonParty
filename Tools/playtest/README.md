@@ -80,10 +80,15 @@ its ticks and telemetry with adb and writes the same report, one folder per sess
 python3 Tools/playtest/device_bot.py --boot 3 --apk Builds/local/BalloonParty-autoplay.apk --seconds 420 --label meadow average high best
 ```
 
-- It needs a checked APK (Managed Code Variant Checked or Debug) with an x86_64 slice for the emulator.
-- The emulator and its Android 15 image live in `%LOCALAPPDATA%\Android\Sdk` (installed with `sdkmanager`
-  from Unity's bundled command-line tools), with the AVD `bp-autoplay` (1080x2400, 4 cores, 4 GB). `--boot N`
-  starts read-only instances of it until N run; they need hardware acceleration (WHPX, on with Hyper-V).
+- It needs a checked APK (Managed Code Variant Checked or Debug). Unity 6.6 builds arm64 only, so the
+  emulator runs it through the Google APIs image's ARM translation.
+- The emulator and its Android 15 Google APIs x86_64 image live in `%LOCALAPPDATA%\Android\Sdk` (installed
+  with `sdkmanager` from Unity's bundled command-line tools), with the AVD `bp-autoplay` (1080x2400, 4 cores,
+  3 GB). `--boot N` starts emulators until N run, each on its own AVD: `bp-autoplay` on port 5554, then
+  `bp-autoplay-2`, `-3`, ... on 5556, 5558, ..., made on first use as copies of the first's config over the
+  same system image. (Two read-only instances of one AVD would share its disk, but the second crashes as it
+  boots on emulator 37.2.) They need hardware acceleration (WHPX, on with Hyper-V), and about 3 GB of free
+  memory each. Each instance's output goes to `Logs/playtest/emulator-<port>.log`.
 - With no `--serial`, it plays on every running emulator and never on a connected phone.
 - An emulator renders on the host GPU, but slower than a phone: a slow frame stretches game time against
   wall time. Compare emulator sessions with each other, not with the Editor's.

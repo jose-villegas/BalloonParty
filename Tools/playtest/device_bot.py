@@ -51,22 +51,60 @@ def devices():
     return [line.split()[0] for line in out.splitlines()[1:] if line.strip().endswith("device")]
 
 
+def avd_for_slot(avd, slot):
+    """The AVD the emulator in `slot` (0 for emulator-5554, 1 for 5556, ...) runs: `avd`, then `avd`-2, -3, ...
+
+    One AVD per instance, made on first use as a copy of `avd`'s config over the same system image. Two
+    read-only instances of one AVD would save the disk space, but the second crashes as it boots (emulator
+    37.2), so each instance has its own AVD and its own data partition instead.
+    """
+    if slot == 0:
+        return avd
+    name = f"{avd}-{slot + 1}"
+    home = os.environ.get("ANDROID_AVD_HOME") or os.path.join(os.path.expanduser("~"), ".android", "avd")
+    if os.path.exists(os.path.join(home, f"{name}.ini")):
+        return name
+    folder = os.path.join(home, f"{name}.avd")
+    os.makedirs(folder, exist_ok=True)
+    with open(os.path.join(home, f"{avd}.avd", "config.ini")) as source:
+        skip = ("AvdId=", "avd.ini.displayname=")
+        config = [line for line in source.read().splitlines() if not line.startswith(skip)]
+    with open(os.path.join(folder, "config.ini"), "w") as target:
+        target.write("\n".join([f"AvdId={name}", f"avd.ini.displayname={name}", *config]) + "\n")
+    with open(os.path.join(home, f"{avd}.ini")) as source:
+        pointer = [line for line in source.read().splitlines() if not line.startswith(("path=", "path.rel="))]
+    with open(os.path.join(home, f"{name}.ini"), "w") as target:
+        target.write("\n".join([f"path={folder}", f"path.rel=avd/{name}.avd", *pointer]) + "\n")
+    print(f"made AVD {name}", flush=True)
+    return name
+
+
 def boot_emulators(avd, count):
-    """Starts `count` read-only instances of the AVD (read-only lets several share one) and waits for each."""
+    """Starts emulators until `count` run, one AVD each (`avd_for_slot`), and waits for each to boot."""
     running = [d for d in devices() if d.startswith("emulator-")]
-    serials = []
-    port = 5554
-    while len(serials) + len(running) < count:
+    started = []
+    slot = 0
+    while len(started) + len(running) < count:
+        port = 5554 + 2 * slot
         serial = f"emulator-{port}"
         if serial not in running:
-            subprocess.Popen([EMULATOR, "-avd", avd, "-port", str(port), "-read-only", "-no-audio",
-                              "-no-boot-anim", "-no-snapshot-save", "-gpu", "host"],
-                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            serials.append(serial)
-        port += 2
+            log_path = os.path.join(REPO_ROOT, "Logs", "playtest", f"{serial}.log")
+            os.makedirs(os.path.dirname(log_path), exist_ok=True)
+            with open(log_path, "w") as log:
+                process = subprocess.Popen([EMULATOR, "-avd", avd_for_slot(avd, slot), "-port", str(port),
+                                            "-no-audio", "-no-boot-anim", "-no-snapshot-save", "-gpu", "host"],
+                                           stdout=log, stderr=subprocess.STDOUT)
+            started.append((serial, process, log_path))
+        slot += 1
     deadline = time.time() + 300
-    for serial in serials:
+    for serial, process, log_path in started:
         while time.time() < deadline:
+            # An emulator that can't start (its AVD already running elsewhere, say) exits at once: say why
+            # rather than wait out the deadline.
+            if process.poll() is not None:
+                with open(log_path, errors="replace") as log:
+                    errors = [line.strip() for line in log if "ERROR" in line or "FATAL" in line]
+                raise RuntimeError(f"{serial} quit while booting: {errors[-1] if errors else 'see ' + log_path}")
             done = subprocess.run([ADB, "-s", serial, "shell", "getprop", "sys.boot_completed"],
                                   capture_output=True, text=True).stdout.strip()
             if done == "1":
@@ -173,7 +211,9 @@ def main():
                         help="start a new run on game over instead of ending the session there")
     parser.add_argument("--apk", help="install this APK on each device first (a checked build)")
     parser.add_argument("--boot", type=int, default=0, help="start emulators until this many are running")
-    parser.add_argument("--avd", default="bp-autoplay", help="the AVD --boot starts (default bp-autoplay)")
+    parser.add_argument("--avd", default="bp-autoplay",
+                        help="the AVD --boot starts first; more instances get copies of it, <avd>-2, -3, ... "
+                             "(default bp-autoplay)")
     parser.add_argument("--serial", action="append",
                         help="play on this device (repeatable); default: every running emulator, never a phone")
     args = parser.parse_args()
