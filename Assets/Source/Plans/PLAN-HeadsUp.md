@@ -9,8 +9,9 @@
 licence), `UI/HeadsUp/WriteOnText` (the slanted soft wipe on the stock shader, EditMode-tested reveal
 maths), `TooltipBanner` writing through it, the TMP font asset, and two early heads-ups written
 through plain `HandwrittenHeadsUp` lines, ahead of the router and queue of Phase 3: `ReloadHeadsUp`
-writes a small `+1` by the cannon, and `BounceHeadsUp` writes `+n bounce` where a ball picks up a
-shield and `-1 bounce` where a wall spends one. Left for Phase 1: the pencil tip sprite and the pencil text shader (grain and
+writes `ready` beside the cannon for as long as it's ready, and `BounceHeadsUp` writes `+n bounce` where a
+ball picks up a shield and `-1 bounce` where a wall spends one. Those lines moved off the canvas into world
+space on 2026-11-09 (the `HeadsUps` prefab), as §3 always had it. Left for Phase 1: the pencil tip sprite and the pencil text shader (grain and
 ragged edge). The other open questions in §10 matter from Phase 2.
 
 ---
@@ -162,7 +163,7 @@ The cannon gets a `TrailEndpointRegistry` key, so the ready heads-up anchors the
 | Streak grows | `StreakGrewMessage` | `x{0}!` at the pop | From a configured streak up (say 3). Merge key (ball, colour), so a growing streak rewrites itself and two balls don't overwrite each other. An underline from a higher streak (say 6) |
 | Speed tap | `SpeedTapMintedMessage` | `tap!` at the wall contact | `TotalTaps <= N` only, so a long cruise doesn't spam |
 | Pierce | `PierceArmed` | `pierce!` at the ball | Once per arming. Snipe arming included or not: §10 |
-| Cannon ready | `ThrowerReadyMessage` | a small `+1` by the cannon | **Built early, on every ready** (`ReloadHeadsUp`), cleared when the ball fires, and the reload is now near-instant with nothing flying but 2 s while a ball flies, so a ready cannon under fire is a beat worth marking. If it reads as noise, narrow it to `AfterCapWait` |
+| Cannon ready | `ThrowerReadyMessage` | `ready`, beside the cannon, held while it's ready | **Built early, on every ready** (`ReloadHeadsUp`), cleared when the ball fires or play stops, and the reload is now near-instant with nothing flying but 2 s while a ball flies, so a ready cannon under fire is a beat worth marking. If it reads as noise, narrow it to `AfterCapWait` |
 | Shield picked up | `ShieldGainedMessage` | `+{n} bounce` at the shield's balloon, n counting the ball's pickups this flight | **Built early** (`BounceHeadsUp`), on every pickup |
 | Wall spends a shield | `WallHitMessage` | `-1 bounce` at the wall contact, kept on screen | **Built early** (`BounceHeadsUp`), on every bounce; quiet graphite, vermilion when it leaves the last shield |
 | Ricochet | `DeflectChainMessage` | `x{n} ricochet` at the deflecting balloon | **Built early** (`BounceHeadsUp`), from the second deflect in a row without a wall; every third pays `+1 bounce` (`DeflectChainController`) |

@@ -13,6 +13,7 @@ namespace BalloonParty.Thrower
     internal sealed class ThrowerOriginProvider
     {
         private Transform _spawnPoint;
+        private Transform _pivot;
         private float _projectileContactRadius;
 
         /// <summary>False until the thrower has started; callers must plan without an origin.</summary>
@@ -25,21 +26,26 @@ namespace BalloonParty.Thrower
         /// </summary>
         internal Vector2 Origin => _spawnPoint != null ? (Vector2)_spawnPoint.position : Vector2.zero;
 
+        /// <summary>Where the cannon turns about: unlike <see cref="Origin" />, it stays put whatever the aim.</summary>
+        internal Vector2 Pivot => _pivot != null ? (Vector2)_pivot.position : Origin;
+
         /// <summary>
         ///     The shot's own contact circle, so a planner can inflate its targets the way the real
         ///     deflection does. Zero until the thrower starts.
         /// </summary>
         internal float ProjectileContactRadius => _projectileContactRadius;
 
-        internal void Set(Transform spawnPoint, float projectileContactRadius)
+        internal void Set(Transform spawnPoint, Transform pivot, float projectileContactRadius)
         {
             _spawnPoint = spawnPoint;
+            _pivot = pivot;
             _projectileContactRadius = projectileContactRadius;
         }
 
         internal void Clear()
         {
             _spawnPoint = null;
+            _pivot = null;
             _projectileContactRadius = 0f;
         }
     }

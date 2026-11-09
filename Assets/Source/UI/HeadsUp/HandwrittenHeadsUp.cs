@@ -92,6 +92,20 @@ namespace BalloonParty.UI.HeadsUp
             Write(text, worldPosition);
         }
 
+        /// <summary>
+        ///     Writes <paramref name="text" /> in <paramref name="style" /> and keeps it up until
+        ///     <see cref="Clear" />, for a state that lasts (the cannon's ready) rather than a moment.
+        /// </summary>
+        public void ShowUntilCleared(string text, Vector2 worldPosition, HeadsUpStyle style)
+        {
+            if (_label != null)
+            {
+                ApplyLook(style.Color, _baseFontSize * style.SizeAt(1), style.FontStyle);
+            }
+
+            Write(text, worldPosition, holdUntilCleared: true);
+        }
+
         /// <summary>Moves the written line, ink and all, to <paramref name="worldPosition" />.</summary>
         internal void MoveTo(Vector2 worldPosition)
         {
@@ -131,7 +145,7 @@ namespace BalloonParty.UI.HeadsUp
             _label.fontStyle = fontStyle;
         }
 
-        private void Write(string text, Vector2 worldPosition)
+        private void Write(string text, Vector2 worldPosition, bool holdUntilCleared = false)
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -148,7 +162,10 @@ namespace BalloonParty.UI.HeadsUp
             var scale = (Vector2)transform.lossyScale;
             InkRect = new Rect(worldPosition + Vector2.Scale(bounds.min, scale), Vector2.Scale(bounds.size, scale));
 
-            FadeOut(_writeOn.Duration + _holdDuration, _fadeOutDuration);
+            if (!holdUntilCleared)
+            {
+                FadeOut(_writeOn.Duration + _holdDuration, _fadeOutDuration);
+            }
         }
 
         // Unscaled, like the write itself: a heads-up must finish in slow-motion beats too.

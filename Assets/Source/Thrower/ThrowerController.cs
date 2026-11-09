@@ -176,6 +176,7 @@ namespace BalloonParty.Thrower
             var projectilePrefab = _settings.ProjectilePrefab;
             _originProvider.Set(
                 _view.SpawnPoint,
+                _view.transform,
                 ContactRadius.FromCollider(
                     projectilePrefab != null ? projectilePrefab.GetComponent<Collider2D>() : null,
                     projectilePrefab != null ? projectilePrefab.transform.lossyScale.x : 1f));
