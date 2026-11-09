@@ -277,8 +277,8 @@ changes to the Ascent or restart code.
      the sky for the spawn wait and the rise.
 3. **Bushes on ground only**: `RequiresGround` on the catalogue and in `LevelGenerator`
    (with a test that no sky level contains a ground-only actor; built 2026-11-09, with the
-   Configuration README). Bushes un-withheld 2026-11-09. Still to do: tune the bush shadow
-   on grass, run a playtest-bot comparison. Debug presets (level < 1) skip
+   Configuration README). Bushes un-withheld 2026-11-09. The bush shadow on grass looked right in the editor
+   (2026-11-09). Still to do: a playtest-bot comparison. Debug presets (level < 1) skip
    `LevelGenerator` and are always sky, so a preset that lists bushes would float them;
    the preset validator should warn.
 

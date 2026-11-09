@@ -12,7 +12,7 @@ namespace BalloonParty.Configuration
         [SerializeField] [Min(1)] private int _coinsFromLevel = 10;
 
         [Tooltip("The chance that one pop drops a coin. Any pop counts, an item's blast included.")]
-        [SerializeField] [Range(0f, 1f)] private float _dropChance = 0.05f;
+        [SerializeField] [Range(0f, 1f)] private float _dropChance = 0.01f;
 
         [Tooltip("Seconds a dropped coin takes to fly from the pop to the counter. It counts when it lands.")]
         [SerializeField] [Min(0.05f)] private float _trailDuration = 0.7f;

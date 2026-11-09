@@ -57,7 +57,7 @@ Follows the codebase's MVC split: models and controllers are plain C#, only view
 
 | Piece | Where | Responsibility |
 |---|---|---|
-| `ICoinSettings` | `Shared/`, authored in `RunConfig` as `Coins` | `CoinsFromLevel` (10), `DropChance` (0.05); phase 4 adds `CardPrice` (25) and `CardsOffered` (3) |
+| `ICoinSettings` | `Shared/`, authored in `RunConfig` as `Coins` | `CoinsFromLevel` (10), `DropChance` (0.01, lowered from 0.05 on 2026-11-09); phase 4 adds `CardPrice` (25) and `CardsOffered` (3) |
 | `ICoinBalance` / `ICoinWallet` / `CoinWallet` | `Game/Coins/` | `ICoinBalance` is the read-only `Balance` views read; `ICoinWallet` adds `Add(int)` and `TrySpend(int)`. Loads from and saves to `PlayerPrefs` through `ICoinStore` (key beside `RunMeta`'s); `CoinWalletSaver` saves at the save points, and a spend saves at once |
 | `CoinDropController` | `Game/Coins/` | Subscribes `ActorHitMessage`; on a `Pop` at level ≥ `CoinsFromLevel`, rolls the drop (seeded from the level seed, so a retry of the same level drops the same way for the same pops) and publishes `CoinDroppedMessage(amount, worldPosition)`. The drop never touches the wallet |
 | `CoinTrailService` | `Game/Coins/` | Flies each dropped coin to the counter on real time (a pooled `FlyingTrail`, as score trails), publishes `CoinLandedMessage`, on which `CoinCreditor` adds it. Coins still flying when the run resets or the board changes land at once, never dropped. With no counter registered, a coin lands at once |
@@ -127,7 +127,8 @@ The heads-up for a coin (`+1 coin`) needs no art: it is handwritten like the oth
 From the bot's runs: at levels 13 to 15, high skill pops about 180 to 330 balloons a level, and
 average skill about 150 to 250. With `CoinDropChance` 0.05 that's about 8 to 16 coins a level, so
 `CardPrice` 25 is two or three levels past 15. A player who reaches 17 can afford one card on their
-next loss. Phase 2 checks this with runs and sets the shipped values.
+next loss. Phase 2 checks this with runs and sets the shipped values. The chance was lowered to 0.01
+on 2026-11-09, about 2 to 3 coins a level, so `CardPrice` needs re-tuning before phase 4 ships.
 
 ## 9. Open questions
 
