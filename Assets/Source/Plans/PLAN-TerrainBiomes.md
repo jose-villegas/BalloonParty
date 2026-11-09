@@ -303,7 +303,7 @@ changes to the Ascent or restart code.
    Configuration README). Bushes un-withheld 2026-11-09. The bush shadow on grass looked right in the editor
    (2026-11-09). Still to do: a playtest-bot comparison. Debug presets (level < 1) skip
    `LevelGenerator` and are always sky, so a preset that lists bushes would float them;
-   the preset validator should warn.
+   `LevelPacingValidator.ValidateGroundOnlyInPresets` warns (2026-11-09).
 
 ## Decisions (signed off 2026-11-08)
 
@@ -350,7 +350,8 @@ changes to the Ascent or restart code.
 
 - Shader prewarm: the ground's first draw lands on the first ground level's Ascent;
   add `BalloonParty/Scenario/Ground` and `GrassBlades` to the shader-variant capture (`PLAN-PerformanceRecovery`
-  F4), with both blend states once phase 2 switches them.
+  F4), with both blend states once phase 2 switches them, and `GroundMist`. Waits on F4: the
+  project has no variant collection yet, and its capture is taken on a device.
 - Only if an on-device profile shows ground levels vertex-bound: a per-blade pre-pass. Each
   of a blade's five vertices repeats the same per-blade work (the wrap, both taps, the bend);
   a small blit into one texel per blade cell would do it once, and the vertex stage would

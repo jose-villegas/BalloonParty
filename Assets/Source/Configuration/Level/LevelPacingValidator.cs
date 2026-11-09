@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using BalloonParty.Slots.Actor.Archetype;
+using UnityEngine;
 
 namespace BalloonParty.Configuration.Level
 {
@@ -18,6 +20,39 @@ namespace BalloonParty.Configuration.Level
             WarnOnPresetIssues(config, configName, issues);
             WarnOnEmptyWeightedSets(config, configName, issues);
             WarnOnNonMonotonicThreshold(config, levelsToCheck, configName, issues);
+            return issues;
+        }
+
+        /// <summary>
+        ///     Debug presets skip <see cref="LevelGenerator" /> and always play on the sky, so a preset that lists a
+        ///     ground-only actor (<paramref name="gridActorCatalogue" />'s <c>RequiresGround</c>) would float it
+        ///     over the sky backdrop. One issue per such preset and actor; a gate whose count is 0 is fine.
+        /// </summary>
+        internal static IReadOnlyList<string> ValidateGroundOnlyInPresets(
+            IReadOnlyList<LevelRangeEntry> presets, IReadOnlyList<GridActorContentEntry> gridActorCatalogue,
+            string configName)
+        {
+            var issues = new List<string>();
+            for (var i = 0; i < presets.Count; i++)
+            {
+                var gates = presets[i].Parameters?.GridActorGates;
+                if (gates == null)
+                {
+                    continue;
+                }
+
+                foreach (var gate in gates)
+                {
+                    if (Mathf.Max(gate.Count.Min, gate.Count.Max) > 0 && RequiresGround(gate.Type, gridActorCatalogue))
+                    {
+                        issues.Add(
+                            $"LevelPacingConfiguration ({configName}): preset {presets[i].FromLevel} lists {gate.Type}, " +
+                            "which only belongs on the ground, but presets always play on the sky — it would float. " +
+                            "Set its count to 0.");
+                    }
+                }
+            }
+
             return issues;
         }
 
@@ -71,6 +106,20 @@ namespace BalloonParty.Configuration.Level
                         "balloon type with a positive weight — nothing could spawn.");
                 }
             }
+        }
+
+        private static bool RequiresGround(
+            GridActorType type, IReadOnlyList<GridActorContentEntry> gridActorCatalogue)
+        {
+            for (var i = 0; i < gridActorCatalogue.Count; i++)
+            {
+                if (gridActorCatalogue[i].Type == type && gridActorCatalogue[i].RequiresGround)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static void WarnOnNonMonotonicThreshold(

@@ -59,6 +59,11 @@ namespace BalloonParty.Configuration.Level
                 Debug.LogWarning(issue);
             }
 
+            foreach (var issue in LevelPacingValidator.ValidateGroundOnlyInPresets(_ranges, _generation.GridActors, name))
+            {
+                Debug.LogWarning(issue);
+            }
+
             foreach (var issue in _generation.Validate(name))
             {
                 Debug.LogWarning(issue);
