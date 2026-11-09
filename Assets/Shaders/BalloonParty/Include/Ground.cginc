@@ -13,13 +13,15 @@ float _GroundCoverage;
 // w = how thick the mist is outside the hole (0..1).
 float4 _GroundReveal;
 
-// x = how far the hole's edge wanders from a circle, y = the edge's drift phase (unscaled seconds), zw unused.
+// x = how far the hole's edge wanders from a circle, y = the edge's drift phase (unscaled seconds),
+// z = the meadow's scale, w = the cloud backdrop's scale (the drop between the layers; read through
+// GroundRevealGroundScale and GroundRevealSkyScale, which give 1 at rest).
 // The hole is centred on the world origin, where the camera sits (the disturbance field and the blade tile
-// assume the same).
+// assume the same), and so is the scale.
 float4 _GroundRevealShape;
 
-// The scenario root's displacement: the ground travels with the board, so a world position shows the
-// ground point (worldPos - _GroundScroll).
+// Where the ground's origin shows, in world units: the ground travels with the board, so a world position
+// shows the ground point (worldPos - _GroundScroll) / GroundRevealGroundScale().
 float2 _GroundScroll;
 
 // World size of the floor's lighter and darker patches, shared so the blades' drier tips sit over the
@@ -54,6 +56,24 @@ float GroundCoverageAt(float2 worldPos)
     }
 
     return saturate(_GroundCoverage);
+}
+
+// How large the meadow looks: below 1 while a reveal shows it deeper than the sky, 1 at rest.
+float GroundRevealGroundScale()
+{
+    return _GroundReveal.x > 0.5 ? max(_GroundRevealShape.z, 1e-3) : 1.0;
+}
+
+// How large the cloud backdrop looks: above 1 while a reveal passes the camera through it, 1 at rest.
+float GroundRevealSkyScale()
+{
+    return _GroundReveal.x > 0.5 ? max(_GroundRevealShape.w, 1e-3) : 1.0;
+}
+
+// The ground point a world position shows.
+float2 GroundPointAt(float2 worldPos)
+{
+    return (worldPos - _GroundScroll) / GroundRevealGroundScale();
 }
 
 float2 GroundPatchUV(float2 groundPos)

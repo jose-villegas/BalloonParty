@@ -41,6 +41,7 @@ namespace BalloonParty.Game.Cinematics
         private readonly ISubscriber<GameOverDismissedMessage> _dismissedSubscriber;
         private readonly IPublisher<RunRestartCompletedMessage> _restartCompletedPublisher;
         private readonly IPublisher<LevelDescendStartedMessage> _descendStartedPublisher;
+        private readonly IPublisher<RestartRiseStartedMessage> _riseStartedPublisher;
         private readonly CancellationTokenSource _cts = new();
 
         private IDisposable _gameOverSubscription;
@@ -68,7 +69,8 @@ namespace BalloonParty.Game.Cinematics
             ISubscriber<GameOverMessage> gameOverSubscriber,
             ISubscriber<GameOverDismissedMessage> dismissedSubscriber,
             IPublisher<RunRestartCompletedMessage> restartCompletedPublisher,
-            IPublisher<LevelDescendStartedMessage> descendStartedPublisher)
+            IPublisher<LevelDescendStartedMessage> descendStartedPublisher,
+            IPublisher<RestartRiseStartedMessage> riseStartedPublisher)
             : base(director, rig, timeScale, settings)
         {
             _pauseService = pauseService;
@@ -83,6 +85,7 @@ namespace BalloonParty.Game.Cinematics
             _dismissedSubscriber = dismissedSubscriber;
             _restartCompletedPublisher = restartCompletedPublisher;
             _descendStartedPublisher = descendStartedPublisher;
+            _riseStartedPublisher = riseStartedPublisher;
         }
 
         protected override CameraRigCinematicConfig BuildConfig()
@@ -200,8 +203,8 @@ namespace BalloonParty.Game.Cinematics
             }
 
             // Graduate the lost level to outgoing: the pop wave's collect detaches the balloons off the grid
-            // (offset to exit the top), and the scenery is snapshotted the same way. Both ride the root out.
-            _scenarioRoot.Transform.position = Vector3.zero;
+            // (offset to exit the top), and the scenery is snapshotted the same way. Both ride the root's Outgoing holder out.
+            _scenarioRoot.SetTravel(0f);
             _popWave.Collect(-height);
             HoldOutgoingContent(-height);
 
@@ -215,7 +218,11 @@ namespace BalloonParty.Game.Cinematics
             // Spawn the scenery with the root at origin (its views set their WORLD transform, so spawning
             // while the root is displaced would bake in that offset), THEN drop the root below view to rise.
             await _spawnerCoordinator.RunStagesAsync(s => s < SpawnStage.BalloonActors, _cts.Token);
-            _scenarioRoot.Transform.position = new Vector3(0f, -height, 0f);
+            _scenarioRoot.SetTravel(-height);
+
+            // Only now, with the new scenery placed: the mist reveal this starts scales the root, and a view placed
+            // under a scaled root would keep the wrong offset.
+            _riseStartedPublisher.Publish(default);
 
             // One travel: outgoing rides up and out (balloons popping in a wave), new scenery rises in
             // beneath, and the new balloons spawn from the rise's cue so they arrive as it settles.
@@ -256,9 +263,7 @@ namespace BalloonParty.Game.Cinematics
                     onCue?.Invoke();
                 }
 
-                var position = _scenarioRoot.Transform.position;
-                position.y = Mathf.Lerp(-height, 0f, curve.Evaluate(elapsed));
-                _scenarioRoot.Transform.position = position;
+                _scenarioRoot.SetTravel(Mathf.Lerp(-height, 0f, curve.Evaluate(elapsed)));
 
                 await UniTask.Yield(PlayerLoopTiming.Update, ct);
                 elapsed += Time.unscaledDeltaTime;
@@ -269,14 +274,14 @@ namespace BalloonParty.Game.Cinematics
                 onCue?.Invoke();
             }
 
-            _scenarioRoot.Transform.position = Vector3.zero;
+            _scenarioRoot.SetTravel(0f);
         }
 
         private void HoldOutgoingContent(float exitDrop)
         {
             for (var i = 0; i < _outgoingContent.Count; i++)
             {
-                _outgoingContent[i].HoldOutgoing(_scenarioRoot.Transform, exitDrop);
+                _outgoingContent[i].HoldOutgoing(_scenarioRoot.Outgoing, exitDrop);
             }
         }
 

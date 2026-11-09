@@ -76,5 +76,11 @@ namespace BalloonParty.Configuration.Effects
 
         /// <summary>World units the hole's edge wanders from a circle.</summary>
         float RevealEdgeWander { get; }
+
+        /// <summary>How opaque the mist is at its thickest (0..1).</summary>
+        float MistOpacity { get; }
+
+        /// <summary>How many times larger the sky looks than the ground in a reveal (1 = no depth).</summary>
+        float RevealDepthZoom { get; }
     }
 }

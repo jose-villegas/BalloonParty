@@ -34,3 +34,5 @@ MonoBehaviour:
   _revealEdgeSoftness: 0.35
   _mistReach: 1.6
   _revealEdgeWander: 0.7
+  _mistOpacity: 0.6
+  _revealDepthZoom: 1.5

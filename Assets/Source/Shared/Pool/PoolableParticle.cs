@@ -11,11 +11,13 @@ namespace BalloonParty.Shared.Pool
         private PoolManager _pool;
         private string _poolKey;
         private Action _selfReturn;
+        private Vector3 _authoredScale = Vector3.one;
 
         internal Action ReturnToPool => _selfReturn;
 
         private void Awake()
         {
+            _authoredScale = transform.localScale;
             _particle = GetComponent<ParticleSystem>();
             if (_particle != null)
             {
@@ -56,6 +58,11 @@ namespace BalloonParty.Shared.Pool
         public void OnSpawned()
         {
             _awaitingChildren = false;
+
+            // A caller may have parented the last play under a scaled transform keeping its world size (a pop under
+            // the content root's Outgoing holder in a mist reveal), and the pool reparents keeping the local scale:
+            // restore the prefab's own, or the burst stays mis-sized for good.
+            transform.localScale = _authoredScale;
 
             // Stop+clear so "Play on Awake" doesn't fire with a stale colour from last use.
             _particle?.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);

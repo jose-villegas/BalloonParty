@@ -22,8 +22,14 @@ namespace BalloonParty.Scenario.View
     ///     (<see cref="GroundRevealCurve" />, <c>BalloonParty/Scenario/GroundMist</c>): sky and ground both draw, the
     ///     ground inside a hole the mist opens or closes, and every <c>GroundCoverageAt</c> reader follows the hole.
     ///     The Launch begin-screen always shows sky. The meadow scrolls with <see cref="ScenarioContentRoot" />, so
-    ///     on the Ascent the bushes ride in planted on their ground rather than sliding over a still one.
+    ///     on the Ascent the bushes ride in planted on their ground rather than sliding over a still one. A reveal
+    ///     also plays the drop between the layers (<see cref="GroundRevealDepth" />): it scales the meadow, the
+    ///     cloud backdrop and the content root about the camera, so going down the ground grows into place and
+    ///     going up it falls away.
     /// </summary>
+    // Early, so its LateUpdate sets this frame's reveal depth on the content root before the bushes draw from it
+    // in theirs.
+    [DefaultExecutionOrder(-100)]
     internal sealed class GroundView : MonoBehaviour, ITransitionOutgoingContent
     {
         private const float OpaqueSrcBlend = 1f;
@@ -41,6 +47,7 @@ namespace BalloonParty.Scenario.View
         private static readonly int SrcBlendId = Shader.PropertyToID("_SrcBlend");
         private static readonly int DstBlendId = Shader.PropertyToID("_DstBlend");
         private static readonly int MistReachId = Shader.PropertyToID("_MistReach");
+        private static readonly int MistOpacityId = Shader.PropertyToID("_MistOpacity");
 
         private readonly CompositeDisposable _subscriptions = new();
 
@@ -69,6 +76,8 @@ namespace BalloonParty.Scenario.View
         private float _revealSeconds;
         private float _closedRadius;
         private float _openRadius;
+        // The meadow's scale this frame: 1 at rest, below 1 while a reveal shows it deeper than the sky.
+        private float _groundScale = 1f;
         // The transition's hold on the outgoing content (ITransitionOutgoingContent): the root lifts by this on
         // the beat's first frame while the old bushes keep their place, so an outgoing meadow subtracts it too.
         private float _outgoingDrop;
@@ -132,12 +141,15 @@ namespace BalloonParty.Scenario.View
             _wake?.Tick(Time.deltaTime, _settings.BladeRecoverySeconds);
 
             // Heading for the sky, the meadow on screen is the outgoing one: it leaves with the old bushes. Into a
-            // meadow, or within one, it is the incoming one and rides in with the new bushes.
-            var scroll = (Vector2)_scenarioRoot.Transform.position;
+            // meadow, or within one, it is the incoming one and rides in with the new bushes. Scaled like them, about
+            // the camera, so they stay planted on it while it grows or shrinks.
+            var travel = _scenarioRoot.Travel;
             if (_revealing && _revealTarget == ScenarioKind.Sky)
             {
-                scroll.y -= _outgoingDrop;
+                travel -= _outgoingDrop;
             }
+
+            var scroll = new Vector2(0f, travel * _groundScale);
 
             if (scroll == _pushedScroll)
             {
@@ -161,6 +173,7 @@ namespace BalloonParty.Scenario.View
             _sky?.SetVisible(true);
             Shader.SetGlobalFloat(GroundCoverageId, 0f);
             Shader.SetGlobalVector(GroundRevealId, Vector4.zero);
+            _scenarioRoot.SetDepth(1f, 1f);
             _wake?.Dispose();
 
             // The blade mesh and the floor's material instance are ours: the floor's quad is MeshHelper's shared
@@ -253,6 +266,7 @@ namespace BalloonParty.Scenario.View
             var reach = Mathf.Max(0.01f, _settings.MistReach);
             var block = new MaterialPropertyBlock();
             block.SetFloat(MistReachId, reach);
+            block.SetFloat(MistOpacityId, Mathf.Clamp01(_settings.MistOpacity));
             _mist.GetComponent<Renderer>().SetPropertyBlock(block);
             _mist.SetActive(false);
 
@@ -333,8 +347,11 @@ namespace BalloonParty.Scenario.View
         {
             var progress = _revealSeconds > 0f ? _revealElapsed / _revealSeconds : 1f;
 
-            var frame = GroundRevealCurve.Evaluate(
-                GroundRevealCurve.Opening(_revealTarget, progress), _settings.MistInShare, _closedRadius, _openRadius);
+            var opening = GroundRevealCurve.Opening(_revealTarget, progress);
+            var frame = GroundRevealCurve.Evaluate(opening, _settings.MistInShare, _closedRadius, _openRadius);
+            var depth = GroundRevealCurve.Depth(_revealTarget, opening, _settings.RevealDepthZoom);
+            _groundScale = depth.Ground;
+            _scenarioRoot.SetDepth(depth.Incoming, depth.Outgoing);
 
             // While the hole is closed the ground covers nothing: skip its full-screen blended pass and the blade
             // mesh's vertices rather than draw them at zero coverage.
@@ -348,7 +365,7 @@ namespace BalloonParty.Scenario.View
             Shader.SetGlobalVector(GroundRevealId, new Vector4(
                 1f, frame.Radius, Mathf.Max(0.01f, _settings.RevealEdgeSoftness), frame.MistDensity));
             Shader.SetGlobalVector(GroundRevealShapeId, new Vector4(
-                Mathf.Max(0f, _settings.RevealEdgeWander), _revealElapsed, 0f, 0f));
+                Mathf.Max(0f, _settings.RevealEdgeWander), _revealElapsed, depth.Ground, depth.Sky));
         }
 
         private void Cut(ScenarioKind kind)
@@ -363,6 +380,8 @@ namespace BalloonParty.Scenario.View
             }
 
             Shader.SetGlobalVector(GroundRevealId, Vector4.zero);
+            _groundScale = 1f;
+            _scenarioRoot.SetDepth(1f, 1f);
             _floorMaterial.SetFloat(SrcBlendId, OpaqueSrcBlend);
             _floorMaterial.SetFloat(DstBlendId, OpaqueDstBlend);
 

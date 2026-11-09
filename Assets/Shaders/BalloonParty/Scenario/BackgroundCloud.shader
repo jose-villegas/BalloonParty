@@ -162,6 +162,12 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
                 float2 wp = IN.worldPos;
                 float bodyFade = 1.0 - GroundCoverageAt(wp) * _GroundBodyFade;
 
+                // The cloud's own position: the world one, unless a mist reveal is carrying the camera through the
+                // clouds, which then grow (or settle) about the camera. That scale is never below 1, so the taps stay
+                // inside the field, which covers only the view. Their shadows keep their distance in it, so they
+                // scale with the cloud. Light and coverage stay on the world position.
+                float2 cloudPos = wp / GroundRevealSkyScale();
+
                 // On the ground with the bodies fully faded only the drop shadow is left, so skip the body's
                 // density, gradient and lighting. At rest coverage is uniform, so every pixel takes the same
                 // side; during a mist reveal the hole's edge splits a quad between the sides, which leaves the
@@ -170,6 +176,8 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
                 [branch] if (bodyFade < 0.001)
                 {
                     #ifdef _SHADOW_ON
+                    // Unscaled on the meadow, so the shadows rest where they will be when the reveal cuts and the
+                    // sky's scale returns to 1; the main path below eases into this tap across the soft edge.
                     float shadowOnlyCloud = BackgroundFieldDensityLOD(wp + SceneLightDirectionAtLOD(wp) * _ShadowDistance);
                     float shadowOnlyAlpha = shadowOnlyCloud * _ShadowColor.a * IN.color.a * ShadowLightFadeAtLOD(wp);
                     #ifndef _LOW_QUALITY_CLOUD
@@ -189,7 +197,7 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
 
                 // Cloud shape = the shared, baked density map. Computed before any discard so the
                 // screen-space derivatives below stay defined.
-                float cloud = BackgroundFieldDensity(wp);
+                float cloud = BackgroundFieldDensity(cloudPos);
 
                 // Shading normal from the density's own gradient. Pixel world size assumes the camera
                 // never rotates (it doesn't).
@@ -201,11 +209,14 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
 
                 #ifdef _SHADOW_ON
                 // Soft drop shadow composited BEHIND the cloud — an offset tap of the same density map,
-                // down-light of the fragment (rotates with the scene light).
+                // down-light of the fragment (rotates with the scene light). Over the meadow the shadow lands
+                // on the ground, so it eases to the shadow-only branch's unscaled tap as coverage rises: no seam
+                // where a reveal's soft edge meets the fully covered ground.
+                float2 shadowPos = lerp(cloudPos, wp, GroundCoverageAt(wp));
                 #ifdef _LOW_QUALITY_CLOUD
-                float2 shadowWp = wp + SceneLightDirectionAtLOD(wp) * _ShadowDistance;
+                float2 shadowWp = shadowPos + SceneLightDirectionAtLOD(wp) * _ShadowDistance;
                 #else
-                float2 shadowWp = wp + SceneLightDirectionAt(wp) * _ShadowDistance;
+                float2 shadowWp = shadowPos + SceneLightDirectionAt(wp) * _ShadowDistance;
                 #endif
                 float shadowAlpha = 0.0;
                 if (mainAlpha < 0.999)

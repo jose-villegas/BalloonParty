@@ -147,12 +147,13 @@ namespace BalloonParty.Scenario
             _ascendOffset = LaunchAscend.Scroll * eased;
         }
 
-        // Scrolls the cloud noise by the scenario root's transition displacement (the Ascent / restart
-        // descent move that transform) plus the launch ascend, so the clouds react to those beats.
+        // Scrolls the cloud noise by the scenario root's transition travel (the Ascent / restart descent)
+        // plus the launch ascend, so the clouds react to those beats. The travel, not the root's position:
+        // a mist reveal also scales the root, and the cloud backdrop takes its own scale in the shader.
         private void PushTransitionOffset()
         {
             var scenario = _scenarioRoot?.Transform != null
-                ? (Vector2)_scenarioRoot.Transform.position * _settings.TransitionParallax
+                ? new Vector2(0f, _scenarioRoot.Travel * _settings.TransitionParallax)
                 : Vector2.zero;
             Shader.SetGlobalVector(WorldOffsetId, scenario + _ascendOffset);
         }

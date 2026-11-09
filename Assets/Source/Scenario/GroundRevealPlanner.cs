@@ -28,7 +28,7 @@ namespace BalloonParty.Scenario
     /// <summary>
     ///     Decides how <c>GroundView</c> answers the active scenario and the navigation state. The Launch
     ///     begin-screen is always sky, and entering or leaving it cuts. Other navigation leaves a running reveal
-    ///     alone: a restart publishes its reset, and with it the reveal, just before it navigates back to Game.
+    ///     alone, since the reveal rides a beat of its own that navigation doesn't end.
     /// </summary>
     internal static class GroundRevealPlanner
     {

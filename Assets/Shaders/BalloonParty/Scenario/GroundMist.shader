@@ -22,8 +22,10 @@ Shader "BalloonParty/Scenario/GroundMist"
         [Header(Lighting)]
         _LightInfluence ("Light Influence",              Range(0, 1))     = 1
 
-        // Set per renderer by GroundView: how far inside the hole's edge the mist reaches, in world units.
+        // Set per renderer by GroundView: how far inside the hole's edge the mist reaches, in world units, and how
+        // opaque it is away from the edge.
         [HideInInspector] _MistReach ("Mist Reach", Float) = 1.5
+        [HideInInspector] _MistOpacity ("Mist Opacity", Float) = 1
     }
 
     SubShader
@@ -59,6 +61,7 @@ Shader "BalloonParty/Scenario/GroundMist"
             half   _MinThickness;
             half   _LightInfluence;
             float  _MistReach;
+            half   _MistOpacity;
 
             struct appdata_t
             {
@@ -92,9 +95,14 @@ Shader "BalloonParty/Scenario/GroundMist"
                 // 0 deep inside the hole, 1 at its edge and beyond, the falloff frayed by the wisps so the mist
                 // pulls back in tatters, not as a ring.
                 float reach = max(_MistReach, 1e-3);
-                float inward = GroundRevealDistance(IN.worldPos) / reach + 1.0 + (wisps - 0.5h) * _Fray;
+                float distance = GroundRevealDistance(IN.worldPos);
+                float inward = distance / reach + 1.0 + (wisps - 0.5h) * _Fray;
                 // Never thinner than the sky showing through, so the ground's soft edge never reveals a seam.
                 half edge = (half)max(smoothstep(0.0, 1.0, inward), 1.0 - GroundCoverageAt(IN.worldPos));
+                // See-through away from the hole, but whole at its edge and across the ground's soft band inside
+                // it, so the thinner mist still hides where the ground fades into the sky; it thins out to
+                // _MistOpacity over one reach outward, like a cloud bank thickest where it parts.
+                edge *= (half)lerp(1.0, _MistOpacity, smoothstep(0.0, reach, distance));
 
                 half thickness = lerp(_MinThickness, 1.0h, saturate(wisps * 1.6h - 0.2h));
                 half alpha = (half)_GroundReveal.w * edge * thickness;

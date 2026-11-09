@@ -182,6 +182,10 @@ Shader "BalloonParty/Grid/PuffCloud"
             // where the field is valid even while the cloud is lifted mid-slide. Equals the live
             // object origin at rest, so it's a no-op then.
             float2 _RestOrigin;
+            // The quad's world scale when it was configured. A mist reveal scales the scenario root about the
+            // camera; the live scale over this one is how much, and dividing it back out keeps the occupancy
+            // mask in rest units, so the cloud's shape scales with its quad. 0 (unset) reads as unscaled.
+            float2 _RestScale;
             int    _SlotCount;
 
             #ifdef _SHADOW_ON
@@ -330,7 +334,8 @@ Shader "BalloonParty/Grid/PuffCloud"
                 // so wpLocal/_SlotCentersLocal reproduce the old world math byte-for-byte; only a
                 // displaced quad (the Ascent slide) moves the silhouette.
                 float2 objOrigin = float2(unity_ObjectToWorld._m03, unity_ObjectToWorld._m13);
-                float2 wpLocal = wpOrig - objOrigin;
+                float contentScale = _RestScale.x > 0.0 ? length(unity_ObjectToWorld._m00_m10) / _RestScale.x : 1.0;
+                float2 wpLocal = (wpOrig - objOrigin) / max(contentScale, 1e-3);
                 // Rest-frame world position: fragment re-anchored at the rest origin, so noise and the
                 // disturbance field are sampled as if the cloud were unlifted — the whole cloud reads as
                 // one rigid object during the slide, and the field UV never leaves its valid bounds

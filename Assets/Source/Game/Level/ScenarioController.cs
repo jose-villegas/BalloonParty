@@ -14,7 +14,9 @@ namespace BalloonParty.Game.Level
     ///     Keeps <see cref="ActiveScenario" /> on the current level's scenario (sky or ground, per
     ///     <see cref="ILevelPacingConfiguration.ScenarioForLevel" />). Cuts on run start and on a plain restart, so
     ///     the start-level cheat and a restart land on the right backdrop. Reveals through the mist over the
-    ///     length of the beat on a level-up Ascent and on the restart rise after a loss.
+    ///     length of the beat on a level-up Ascent and on the restart rise after a loss. A loss's restart leaves the
+    ///     scenario alone until its rise starts, since the reveal scales the content root and the new scenery is
+    ///     placed under it first.
     /// </summary>
     internal sealed class ScenarioController : IStartable, IDisposable
     {
@@ -25,6 +27,7 @@ namespace BalloonParty.Game.Level
         private readonly ICinematicsSettings _cinematics;
         private readonly ISubscriber<LevelAscendStartedMessage> _ascendStarted;
         private readonly ISubscriber<RunResetMessage> _runReset;
+        private readonly ISubscriber<RestartRiseStartedMessage> _riseStarted;
         private readonly ISubscriber<LevelTransitionCompletedMessage> _transitionCompleted;
         private readonly ISubscriber<RunRestartCompletedMessage> _restartCompleted;
         private readonly CompositeDisposable _subscriptions = new();
@@ -33,6 +36,7 @@ namespace BalloonParty.Game.Level
             ILevelPacingConfiguration pacing, IRunSeed runSeed, ILevelProgress levelProgress,
             ActiveScenario scenario, ICinematicsSettings cinematics,
             ISubscriber<LevelAscendStartedMessage> ascendStarted, ISubscriber<RunResetMessage> runReset,
+            ISubscriber<RestartRiseStartedMessage> riseStarted,
             ISubscriber<LevelTransitionCompletedMessage> transitionCompleted,
             ISubscriber<RunRestartCompletedMessage> restartCompleted)
         {
@@ -43,6 +47,7 @@ namespace BalloonParty.Game.Level
             _cinematics = cinematics;
             _ascendStarted = ascendStarted;
             _runReset = runReset;
+            _riseStarted = riseStarted;
             _transitionCompleted = transitionCompleted;
             _restartCompleted = restartCompleted;
         }
@@ -56,8 +61,12 @@ namespace BalloonParty.Game.Level
                 .AddTo(_subscriptions);
 
             // After every IRunResettable, so the restart level and a fresh run's seed are already in place. With
-            // the board deferred, the loss cinematic is about to rise the new level in, and the mist rides that.
+            // the board deferred, the loss cinematic rises the new level in once its scenery is placed, and the
+            // mist rides that rise.
             _runReset.Subscribe(OnRunReset).AddTo(_subscriptions);
+            _riseStarted
+                .Subscribe(_ => _scenario.Reveal(LevelScenario(), _cinematics.LevelAscend.RestartRiseSeconds))
+                .AddTo(_subscriptions);
 
             // The reveal runs on its own clock, so the end of its beat settles it: a skipped or cancelled Ascent
             // (the completion fires from a finally) leaves no mist over the board. A reveal already done sees no
@@ -77,10 +86,7 @@ namespace BalloonParty.Game.Level
             if (message.BoardReset)
             {
                 _scenario.Cut(LevelScenario());
-                return;
             }
-
-            _scenario.Reveal(LevelScenario(), _cinematics.LevelAscend.RestartRiseSeconds);
         }
 
         private ScenarioKind LevelScenario()

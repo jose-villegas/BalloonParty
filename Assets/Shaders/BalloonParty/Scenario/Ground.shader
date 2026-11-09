@@ -82,7 +82,7 @@ Shader "BalloonParty/Scenario/Ground"
                 v2f OUT;
                 OUT.vertex = UnityObjectToClipPos(IN.vertex);
                 float2 wp = mul(unity_ObjectToWorld, IN.vertex).xy;
-                float2 ground = wp - _GroundScroll;
+                float2 ground = GroundPointAt(wp);
                 OUT.patchUV = float4(GroundPatchUV(ground), GroundDirtUV(ground));
                 OUT.worldPos = wp;
                 return OUT;

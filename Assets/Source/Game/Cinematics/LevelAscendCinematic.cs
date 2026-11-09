@@ -3,6 +3,7 @@ using System.Threading;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
+using BalloonParty.Slots.Actor;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using BalloonParty.Configuration.Cinematics;
@@ -10,8 +11,8 @@ using BalloonParty.Configuration.Cinematics;
 namespace BalloonParty.Game.Cinematics
 {
     /// <summary>
-    ///     Descends the staging root to <see cref="Vector3.zero" /> so the incoming scenario slides into
-    ///     place, rather than moving the camera.
+    ///     Brings the staging root's travel down to rest (<see cref="ScenarioContentRoot.SetTravel" />) so the
+    ///     incoming scenario slides into place, rather than moving the camera.
     /// </summary>
     internal sealed class LevelAscendCinematic
     {
@@ -27,7 +28,7 @@ namespace BalloonParty.Game.Cinematics
         /// <summary>
         ///     No-ops (firing <paramref name="onBalloonSpawnCue" /> immediately) if another cinematic already owns the director.
         /// </summary>
-        internal async UniTask PlayAsync(Transform stagingRoot, Action onBalloonSpawnCue, CancellationToken ct)
+        internal async UniTask PlayAsync(ScenarioContentRoot stagingRoot, Action onBalloonSpawnCue, CancellationToken ct)
         {
             if (!_director.TryBeginCinematic(CinematicState.LevelAscend))
             {
@@ -56,9 +57,7 @@ namespace BalloonParty.Game.Cinematics
                         onBalloonSpawnCue?.Invoke();
                     }
 
-                    var position = stagingRoot.position;
-                    position.y = curve.Evaluate(elapsed) * height;
-                    stagingRoot.position = position;
+                    stagingRoot.SetTravel(curve.Evaluate(elapsed) * height);
 
                     await UniTask.Yield(PlayerLoopTiming.Update, ct);
                     elapsed += Time.unscaledDeltaTime * followSpeed;
@@ -69,7 +68,7 @@ namespace BalloonParty.Game.Cinematics
                     onBalloonSpawnCue?.Invoke();
                 }
 
-                stagingRoot.position = Vector3.zero;
+                stagingRoot.SetTravel(0f);
             }
             finally
             {

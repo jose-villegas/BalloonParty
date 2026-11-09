@@ -16,6 +16,7 @@ namespace BalloonParty.Slots.Actor.Cluster
         private static readonly int SlotCentersWorldId = Shader.PropertyToID("_SlotCentersWorld");
         private static readonly int SlotCentersLocalId = Shader.PropertyToID("_SlotCentersLocal");
         private static readonly int RestOriginId = Shader.PropertyToID("_RestOrigin");
+        private static readonly int RestScaleId = Shader.PropertyToID("_RestScale");
         private static readonly int SlotCountId = Shader.PropertyToID("_SlotCount");
         private static readonly int AnimationSpeedId = Shader.PropertyToID("_AnimationSpeed");
 
@@ -178,6 +179,7 @@ namespace BalloonParty.Slots.Actor.Cluster
             _block.SetVectorArray(SlotCentersWorldId, _slotCenters);
             _block.SetVectorArray(SlotCentersLocalId, _slotCentersLocal);
             _block.SetVector(RestOriginId, new Vector4(pos.x, pos.y, 0f, 0f));
+            _block.SetVector(RestScaleId, transform.lossyScale);
             _block.SetInt(SlotCountId, 1);
             _renderer.SetPropertyBlock(_block);
         }
@@ -203,6 +205,8 @@ namespace BalloonParty.Slots.Actor.Cluster
             _block.SetVectorArray(SlotCentersLocalId, _slotCentersLocal);
             // Rest-frame origin, so the field still samples correctly while the Ascent lifts the cloud.
             _block.SetVector(RestOriginId, new Vector4(_configuredCenter.x, _configuredCenter.y, 0f, 0f));
+            // Rest-frame scale too, so a mist reveal scaling the root scales the cloud's shape with its quad.
+            _block.SetVector(RestScaleId, transform.lossyScale);
             _block.SetInt(SlotCountId, _slotCount);
             _block.SetFloat(AnimationSpeedId, _animationSpeed);
             // Cleared so a reused edit-mode preview doesn't carry a stale offset into runtime.

@@ -12,9 +12,10 @@ namespace BalloonParty.Game.Cinematics
 {
     /// <summary>
     ///     Substitutes the pop wave: detaches the old balloons into the transition's outgoing group (off the
-    ///     grid, out of logic, reparented under <see cref="ScenarioContentRoot.OutgoingBalloons" /> so they
-    ///     travel with the fake-camera descent), then floats each up on a phase-randomized sine with a sway
-    ///     tilt, and hands them back to the pool. The level-up alternative to <see cref="BoardPopWave" />.
+    ///     grid, out of logic, reparented under <see cref="ScenarioContentRoot.Outgoing" /> so they
+    ///     travel with the fake-camera descent and scale with a mist reveal), then floats each up on a
+    ///     phase-randomized sine with a sway tilt, and hands them back to the pool. The level-up alternative to
+    ///     <see cref="BoardPopWave" />.
     /// </summary>
     internal sealed class BoardFloatAwayEffect : IBoardEffect
     {
@@ -38,7 +39,7 @@ namespace BalloonParty.Game.Cinematics
         public void Collect(float exitDrop)
         {
             _views.Clear();
-            _balloonRegistry.DetachOutgoing(_scenarioRoot.OutgoingBalloons, exitDrop, _views);
+            _balloonRegistry.DetachOutgoing(_scenarioRoot.Outgoing, exitDrop, _views);
         }
 
         public async UniTask PlayAsync(CancellationToken ct)

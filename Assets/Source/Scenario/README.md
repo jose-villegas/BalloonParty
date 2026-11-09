@@ -54,14 +54,20 @@ Plan: `Plans/PLAN-TerrainBiomes.md`.
   `ReactiveProperty<ScenarioShift>`: the kind, and the seconds a mist reveal into it takes (0 for a cut).
   Written only by `Game/Level/ScenarioController`, which cuts to the current level's scenario on run start and
   on an immediate restart, and reveals it over the beat's own length on a level-up Ascent
-  (`LevelAscendSettings.AscentSeconds`) and on the restart rise after a loss (`RestartRiseSeconds`). A reveal
-  into the scenario already showing changes nothing.
+  (`LevelAscendSettings.AscentSeconds`) and on the restart rise after a loss (`RestartRiseSeconds`, from
+  `RestartRiseStartedMessage`, once the new scenery is placed). A reveal into the scenario already showing
+  changes nothing.
 - The mist reveal (`GroundRevealCurve`, pure): sky to ground, a mist rolls in over the sky
   (`IGroundSettings.MistInShare`, the first third), then a hole opens from the middle of the view and grows
   until the meadow fills it. Ground to sky plays the same curve backwards: the meadow closes into the mist,
   which then clears to the sky. The edge wanders from a circle (`RevealEdgeWander`), so it opens like parting
-  cloud rather than an iris. `GroundRevealPlanner` (pure) decides whether a change cuts, reveals or
-  does nothing, from the shift, the navigation and what is showing.
+  cloud rather than an iris. The same reveal plays the drop between the layers
+  (`GroundRevealCurve.Depth`): the ground sits `RevealDepthZoom` (1.5) times deeper than the sky, and both
+  scale about the camera over the beat, so going down the meadow grows into place while the clouds grow
+  past, and going up the meadow shrinks away while the clouds settle. Whichever layer the beat ends on
+  reaches 1 as it ends, and the one on screen at the start starts at 1, so nothing jumps.
+  `GroundRevealPlanner` (pure) decides whether a change cuts, reveals or does nothing, from the shift, the
+  navigation and what is showing.
 - `View/GroundView.cs`: a `MonoBehaviour` the Game scope creates on a new GameObject
   (`RegisterComponentOnNewGameObject`, so no prefab edit), parented under the Game scope's transform: the
   Game scene is preloaded additively, so an unparented object would land in the Launcher and die with it.
@@ -75,12 +81,16 @@ Plan: `Plans/PLAN-TerrainBiomes.md`.
   At rest on ground it shows both, hides the sky (`ISkyBackdrop`, an optional lookup because the sky only
   registers when its settings are wired) and sets the global `_GroundCoverage` to 1; on sky it reverses all
   of it. During a reveal it shows the sky and the ground together, turns on the mist quad, switches the floor
-  to premultiplied blending and pushes the hole each frame (`_GroundReveal`, `_GroundRevealShape`) on unscaled
-  time, like the beats it rides on; at the end it cuts to the target. Entering or leaving the Launch
-  begin-screen cuts (it is always sky); other navigation leaves a running reveal alone, since a restart
-  navigates back to Game just after it starts the reveal. It also pushes `_GroundPatchSize` and `_GroundDirt`,
+  to premultiplied blending and pushes the hole and the two layers' scales each frame (`_GroundReveal`,
+  `_GroundRevealShape`) on unscaled time, like the beats it rides on, and scales the board's content with
+  them (`ScenarioContentRoot.SetDepth`: the incoming scenery with the incoming layer, the `Outgoing` holder
+  with the outgoing one, so the bushes stay planted on their meadow); at the end it cuts to the target and
+  every scale returns to 1. Entering or leaving the Launch
+  begin-screen cuts (it is always sky); other navigation leaves a running reveal alone, since the reveal rides
+  a beat of its own that navigation doesn't end. It also pushes `_GroundPatchSize` and `_GroundDirt`,
   so the floor and the blades read the same patches and dirt. The quad stays put, but the meadow scrolls with `ScenarioContentRoot`
-  (the global `_GroundScroll`, pushed in `LateUpdate` after the tween moves the root): the bushes stand on
+  (the global `_GroundScroll`, the root's travel times the meadow's scale, pushed in `LateUpdate` after the
+  beat moves the root): the bushes stand on
   this ground, so on the Ascent and the restart rise the whole meadow travels in with them. A still ground
   would show them sliding over it. The clouds scroll with the root too, but at a parallax, because they are
   far away. On destroy it hands the App-owned sky and clouds their sky look back and frees the blade mesh and
@@ -90,7 +100,8 @@ Plan: `Plans/PLAN-TerrainBiomes.md`.
   paint and the board) on the **Default** layer, which `SceneCaptureService` leaves out, so the GI never reads
   it as a bright bounce. Thick outside the hole, it thins inward over `MistReach` (1.6 world units), frayed by
   two drifting taps of the shared cloud noise, and it is never thinner than the sky showing through the
-  ground's soft edge, so no seam shows. Lit by the scene light, so it dims at night.
+  ground's soft edge, so no seam shows. At its thickest it is still see-through (`MistOpacity`, 0.6), so the
+  sky shows faintly behind it. Lit by the scene light, so it dims at night.
 - `View/GrassBladeMesh.cs`: builds the blade mesh once, from a `GrassBladeLayout` (tile size, spacing,
   seed). A jittered grid over the camera's view plus a margin (`BladeTileMargin`); each blade is a tapered
   five-vertex strip whose vertices all sit on its root, with per-blade randoms for lean, length, shade and sway
@@ -132,6 +143,13 @@ Plan: `Plans/PLAN-TerrainBiomes.md`.
   hole: 1 inside, 0 outside, soft over `RevealEdgeSoftness`, from `GroundRevealDistance`, a signed distance
   from the hole's wandering edge built from two sine waves, with no texture so every reader can afford it.
   Every reader follows the hole during a reveal with no change of its own.
+  `GroundRevealGroundScale` and `GroundRevealSkyScale` give the two layers' scales (1 at rest), and
+  `GroundPointAt` the ground point a world position shows through the meadow's scroll and scale. The floor
+  and the blades read their patches, dirt and gusts through it; the blades keep their world spacing so the
+  tile still covers the view and only shorten with the scale. `BackgroundCloud` samples its cloud bodies at
+  the sky's scale, which is never below 1, so the taps stay inside the view-sized cloud field; the shadows
+  it casts on the meadow stay unscaled for the same reason. The puff clouds (`_RestScale`) and the bushes
+  (their offset matrix) follow the content root's scale.
   `BackgroundCloud` multiplies its cloud bodies by `1 − coverage × _GroundBodyFade` and keeps the drop
   shadows, so on the ground the clouds read as overhead and out of frame, their shadows drifting over the
   grass. With the bodies fully faded it takes a shadow-only branch that skips the body's lighting.

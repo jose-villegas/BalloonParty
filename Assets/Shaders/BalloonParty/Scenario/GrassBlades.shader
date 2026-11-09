@@ -131,11 +131,15 @@ Shader "BalloonParty/Scenario/GrassBlades"
                 v2f OUT;
 
                 // Wrap the root across the tile as the meadow scrolls: the blade planted at ground point g draws at
-                // g + scroll, folded back into the tile, which reaches past every edge the camera shows.
+                // g + scroll, folded back into the tile, which reaches past every edge the camera shows. While a
+                // reveal scales the meadow the roots keep their world spacing, so the tile still covers the view,
+                // and each reads its ground point through the scale: the patches, the dirt and the gusts grow or
+                // shrink with the floor under them, and the blades with them.
                 float2 tileMin = _BladeTile.xy;
                 float2 tileSize = max(_BladeTile.zw, 1e-3);
                 float2 root = tileMin + frac(IN.vertex.xy + (_GroundScroll - tileMin) / tileSize) * tileSize;
-                float2 ground = root - _GroundScroll;
+                float2 ground = GroundPointAt(root);
+                float scale = GroundRevealGroundScale();
 
                 // The wake covers the camera's rect, like the field; blades outside it rest.
                 float2 fieldUV = (root - _FieldBoundsMin) / max(_FieldBoundsSize, 1e-4);
@@ -172,7 +176,7 @@ Shader "BalloonParty/Scenario/GrassBlades"
                 float2 tipDir = bend * rsqrt(max(dot(bend, bend), 1e-6));
                 float flat = saturate(response + stir * _WakeFlatten);
                 float tilt = lerp(_RestTilt, 1.0, flat);
-                float bladeLength = _BladeLength * (1.0 - _LengthJitter * IN.random.y) * grows;
+                float bladeLength = _BladeLength * (1.0 - _LengthJitter * IN.random.y) * grows * scale;
 
                 // A quadratic curve: the stem leaves the root along its rest lean, the tip ends where it is pushed.
                 float t = IN.corner.y;
@@ -180,7 +184,7 @@ Shader "BalloonParty/Scenario/GrassBlades"
                 float2 tip = tipDir * (bladeLength * tilt);
                 float2 along = 2.0 * (1.0 - t) * t * control + t * t * tip;
                 float2 tangent = normalize(2.0 * (1.0 - t) * control + 2.0 * t * (tip - control) + restDir * 1e-4);
-                float2 across = float2(-tangent.y, tangent.x) * (IN.corner.x * _BladeWidth * 0.5 * (1.0 - t) * grows);
+                float2 across = float2(-tangent.y, tangent.x) * (IN.corner.x * _BladeWidth * 0.5 * (1.0 - t) * grows * scale);
 
                 float2 world = root + along + across;
                 OUT.vertex = mul(UNITY_MATRIX_VP, float4(world, 0.0, 1.0));

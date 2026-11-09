@@ -17,6 +17,28 @@ namespace BalloonParty.Scenario
     }
 
     /// <summary>
+    ///     How large each layer looks at one frame of a reveal, scaled about the camera. The ground sits deeper than
+    ///     the sky, so going down it grows into place while the sky grows past the camera, and going up the ground
+    ///     shrinks away while the sky settles. <see cref="Incoming" /> and <see cref="Outgoing" /> are the same two
+    ///     scales sorted by which level the board's content belongs to.
+    /// </summary>
+    internal readonly struct GroundRevealDepth
+    {
+        public readonly float Ground;
+        public readonly float Sky;
+        public readonly float Incoming;
+        public readonly float Outgoing;
+
+        public GroundRevealDepth(float ground, float sky, float incoming, float outgoing)
+        {
+            Ground = ground;
+            Sky = sky;
+            Incoming = incoming;
+            Outgoing = outgoing;
+        }
+    }
+
+    /// <summary>
     ///     The timing of the mist reveal, as one curve over how open the ground is. Sky to ground plays it forward:
     ///     the mist rolls in over the sky, then a hole opens from the middle and grows until the meadow fills the
     ///     screen. Ground to sky plays the same curve backwards: the meadow closes into the mist, which then clears
@@ -47,6 +69,23 @@ namespace BalloonParty.Scenario
 
             var open = Mathf.SmoothStep(0f, 1f, (t - share) / (1f - share));
             return new GroundRevealFrame(Mathf.Lerp(closedRadius, openRadius, open), 1f);
+        }
+
+        /// <summary>
+        ///     The layers' scales over the whole reveal, eased so the travel starts and lands gently. The sky is always
+        ///     <paramref name="zoom" /> times the ground, and whichever layer the reveal ends on reaches 1, so the
+        ///     scales are continuous at both ends and the level that stays on screen never jumps.
+        /// </summary>
+        /// <param name="opening">0 = sky with no mist, 1 = all ground (see <see cref="Opening" />).</param>
+        /// <param name="zoom">How many times larger the sky looks than the ground; 1 or less = no depth.</param>
+        public static GroundRevealDepth Depth(ScenarioKind target, float opening, float zoom)
+        {
+            var z = Mathf.Max(1f, zoom);
+            var ground = Mathf.Lerp(1f / z, 1f, Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(opening)));
+            var sky = ground * z;
+            return target == ScenarioKind.Ground
+                ? new GroundRevealDepth(ground, sky, ground, sky)
+                : new GroundRevealDepth(ground, sky, sky, ground);
         }
     }
 }

@@ -96,6 +96,91 @@ namespace BalloonParty.Tests.Scenario
         }
 
         [Test]
+        public void Depth_IntoTheGround_StartsWithTheGroundShrunkAndEndsAtOne([Values(1.5f, 2f, 4f)] float zoom)
+        {
+            var start = GroundRevealCurve.Depth(ScenarioKind.Ground, 0f, zoom);
+            var end = GroundRevealCurve.Depth(ScenarioKind.Ground, 1f, zoom);
+
+            Assert.AreEqual(1f / zoom, start.Ground, 1e-5f);
+            Assert.AreEqual(1f, start.Sky, 1e-5f);
+            Assert.AreEqual(1f, end.Ground, 1e-5f);
+            Assert.AreEqual(zoom, end.Sky, 1e-5f);
+        }
+
+        [Test]
+        public void Depth_SkyIsAlwaysZoomTimesGround([Values(0f, 0.3f, 0.7f, 1f)] float opening, [Values(1.5f, 3f)] float zoom)
+        {
+            var depth = GroundRevealCurve.Depth(ScenarioKind.Ground, opening, zoom);
+
+            Assert.AreEqual(depth.Ground * zoom, depth.Sky, 1e-5f);
+        }
+
+        [Test]
+        public void Depth_IntoTheGround_IncomingIsTheGroundAndOutgoingTheSky()
+        {
+            var depth = GroundRevealCurve.Depth(ScenarioKind.Ground, 0.4f, 2f);
+
+            Assert.AreEqual(depth.Ground, depth.Incoming);
+            Assert.AreEqual(depth.Sky, depth.Outgoing);
+        }
+
+        [Test]
+        public void Depth_IntoTheSky_IncomingIsTheSkyAndOutgoingTheGround()
+        {
+            var depth = GroundRevealCurve.Depth(ScenarioKind.Sky, 0.4f, 2f);
+
+            Assert.AreEqual(depth.Sky, depth.Incoming);
+            Assert.AreEqual(depth.Ground, depth.Outgoing);
+        }
+
+        [Test]
+        public void Depth_AcrossAnyReveal_TheIncomingLayerLandsAtOneAndTheOutgoingStartsAtOne()
+        {
+            foreach (var target in new[] { ScenarioKind.Ground, ScenarioKind.Sky })
+            {
+                var first = GroundRevealCurve.Depth(target, GroundRevealCurve.Opening(target, 0f), 2.5f);
+                var last = GroundRevealCurve.Depth(target, GroundRevealCurve.Opening(target, 1f), 2.5f);
+
+                Assert.AreEqual(1f, first.Outgoing, 1e-5f, $"{target} start");
+                Assert.AreEqual(1f, last.Incoming, 1e-5f, $"{target} end");
+            }
+        }
+
+        [Test]
+        public void Depth_GroundGrowsMonotonicallyAsTheGroundOpens()
+        {
+            var previous = 0f;
+            for (var i = 0; i <= 10; i++)
+            {
+                var depth = GroundRevealCurve.Depth(ScenarioKind.Ground, i / 10f, 2f);
+
+                Assert.That(depth.Ground, Is.GreaterThanOrEqualTo(previous), $"step {i}");
+                previous = depth.Ground;
+            }
+        }
+
+        [Test]
+        public void Depth_ZoomOfOneOrLess_HasNoDepth([Values(1f, 0.5f, 0f, -3f)] float zoom)
+        {
+            var depth = GroundRevealCurve.Depth(ScenarioKind.Ground, 0.5f, zoom);
+
+            Assert.AreEqual(1f, depth.Ground);
+            Assert.AreEqual(1f, depth.Sky);
+            Assert.AreEqual(1f, depth.Incoming);
+            Assert.AreEqual(1f, depth.Outgoing);
+        }
+
+        [Test]
+        public void Depth_OutOfRangeOpening_IsClamped()
+        {
+            var before = GroundRevealCurve.Depth(ScenarioKind.Ground, -5f, 2f);
+            var after = GroundRevealCurve.Depth(ScenarioKind.Ground, 5f, 2f);
+
+            Assert.AreEqual(0.5f, before.Ground, 1e-5f);
+            Assert.AreEqual(1f, after.Ground, 1e-5f);
+        }
+
+        [Test]
         public void OutOfRangeInputs_StayOnTheCurve()
         {
             var before = GroundRevealCurve.Evaluate(-2f, Share, Closed, Open);

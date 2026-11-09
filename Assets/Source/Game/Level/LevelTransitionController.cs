@@ -111,7 +111,7 @@ namespace BalloonParty.Game.Level
 
                 // Reset the staging root to origin before anything reparents onto it (balloons + statics),
                 // so their reparent lands at the right offset.
-                _scenarioRoot.Transform.position = Vector3.zero;
+                _scenarioRoot.SetTravel(0f);
 
                 // Both the outgoing balloons and the statics reparent under the root, which the descent
                 // lifts by this height on its first frame; they subtract it to hold their original spot.
@@ -137,7 +137,7 @@ namespace BalloonParty.Game.Level
                 // so they reveal near the end of the Ascent. The run reopens the moment this lands, whether
                 // or not the detached board effect is still playing out.
                 _ascendStartedPublisher.Publish(default);
-                await _ascendCinematic.PlayAsync(_scenarioRoot.Transform, SpawnNewLevelBalloons, ct);
+                await _ascendCinematic.PlayAsync(_scenarioRoot, SpawnNewLevelBalloons, ct);
             }
             finally
             {
@@ -164,7 +164,7 @@ namespace BalloonParty.Game.Level
         {
             for (var i = 0; i < _outgoingContent.Count; i++)
             {
-                _outgoingContent[i].HoldOutgoing(_scenarioRoot.Transform, exitDrop);
+                _outgoingContent[i].HoldOutgoing(_scenarioRoot.Outgoing, exitDrop);
             }
         }
 

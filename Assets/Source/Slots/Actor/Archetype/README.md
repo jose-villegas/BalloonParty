@@ -50,10 +50,14 @@ materials; one branch material per variant).
 so the level-transition Ascent (`Game/Level/LevelTransitionController.cs`) can slide the whole
 scenario in by moving that one root. For that to move the visuals — which otherwise render in
 absolute world space — the renderers follow their transform: `ClusterView` pushes `_SlotCentersLocal`
-(centers relative to the quad origin) and `PuffCloud.shader` masks against `worldPos - objectOrigin`
-(byte-identical to the old world math at rest, since origin == bounds center then); `BushView` offsets
-its baked world matrices by how far its transform has moved from where it was configured (a no-op at
-rest). See the plan's Phase 3b notes for the full rationale.
+(centers relative to the quad origin) and `PuffCloud.shader` masks against `worldPos - objectOrigin`,
+divided by how much the quad has been scaled since it was configured (`_RestScale`; byte-identical to the
+old world math at rest, since origin == bounds center and the scale is unchanged then); `BushView` offsets
+its baked world matrices by how far its transform has moved or scaled from where it was configured (its
+live matrix times its rest inverse, a no-op at rest). The sky/ground mist reveal scales the root about the
+camera (`ScenarioContentRoot.SetDepth`), so both follow it too. Both capture their rest state when they are
+configured, which must happen with the root at rest: unmoved and unscaled. See the plan's Phase 3b notes
+for the full rationale.
 
 ### GPU Animation (BushLeaf.shader)
 

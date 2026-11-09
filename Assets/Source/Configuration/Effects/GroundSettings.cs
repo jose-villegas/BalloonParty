@@ -91,6 +91,14 @@ namespace BalloonParty.Configuration.Effects
         [Min(0f)]
         [SerializeField] private float _revealEdgeWander = 0.7f;
 
+        [Tooltip("How opaque the mist is at its thickest: 1 hides the sky behind it, lower lets the sky show through.")]
+        [Range(0.05f, 1f)]
+        [SerializeField] private float _mistOpacity = 0.6f;
+
+        [Tooltip("How far apart the sky and the ground look in a reveal. The ground starts this many times smaller on the way down and the sky this many times larger, and the board's content scales with whichever it belongs to; the way up plays it backwards. 1 = no depth.")]
+        [Min(1f)]
+        [SerializeField] private float _revealDepthZoom = 1.5f;
+
         public Material Material => _material;
         public float OverscanMultiplier => _overscanMultiplier;
         public string SortingLayerName => _sortingLayerName;
@@ -113,5 +121,7 @@ namespace BalloonParty.Configuration.Effects
         public float RevealEdgeSoftness => _revealEdgeSoftness;
         public float MistReach => _mistReach;
         public float RevealEdgeWander => _revealEdgeWander;
+        public float MistOpacity => _mistOpacity;
+        public float RevealDepthZoom => _revealDepthZoom;
     }
 }

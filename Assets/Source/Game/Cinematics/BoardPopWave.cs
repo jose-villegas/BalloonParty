@@ -76,7 +76,7 @@ namespace BalloonParty.Game.Cinematics
 
                     if (_balloonRegistry.TryResolve(balloon, out var controller))
                     {
-                        controller.DetachForOutgoing(_scenarioRoot.OutgoingBalloons, exitDrop);
+                        controller.DetachForOutgoing(_scenarioRoot.Outgoing, exitDrop);
                     }
                 }
             }

@@ -27,6 +27,7 @@ namespace BalloonParty.Tests.Game
         private ILevelPacingConfiguration _pacing;
         private IMessageHandler<LevelAscendStartedMessage> _ascendHandler;
         private IMessageHandler<RunResetMessage> _resetHandler;
+        private IMessageHandler<RestartRiseStartedMessage> _riseHandler;
         private IMessageHandler<LevelTransitionCompletedMessage> _transitionCompletedHandler;
         private IMessageHandler<RunRestartCompletedMessage> _restartCompletedHandler;
         private IDisposable _subscription;
@@ -63,6 +64,13 @@ namespace BalloonParty.Tests.Game
                     Arg.Any<MessageHandlerFilter<RunResetMessage>[]>())
                 .Returns(_resetSubscription);
 
+            var riseSubscriber = Substitute.For<ISubscriber<RestartRiseStartedMessage>>();
+            riseSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<RestartRiseStartedMessage>>(h => _riseHandler = h),
+                    Arg.Any<MessageHandlerFilter<RestartRiseStartedMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
             _runSeed = Substitute.For<IRunSeed>();
             _runSeed.Value.Returns(RunSeedValue);
 
@@ -84,7 +92,7 @@ namespace BalloonParty.Tests.Game
                 .Returns(Substitute.For<IDisposable>());
 
             _controller = new ScenarioController(
-                _pacing, _runSeed, levelProgress, _scenario, cinematics, subscriber, resetSubscriber,
+                _pacing, _runSeed, levelProgress, _scenario, cinematics, subscriber, resetSubscriber, riseSubscriber,
                 transitionCompleted, restartCompleted);
         }
 
@@ -162,8 +170,24 @@ namespace BalloonParty.Tests.Game
 
             _level.Value = 1;
             _resetHandler.Handle(new RunResetMessage(boardReset: false));
+            _riseHandler.Handle(default);
 
             Assert.AreEqual(new ScenarioShift(ScenarioKind.Sky, RiseSeconds), _scenario.Current.Value);
+        }
+
+        [Test]
+        public void RestartWithTheRise_WaitsForTheRise_SoTheNewSceneryIsPlacedUnscaled()
+        {
+            // The reveal scales the content root; the loss cinematic places the new scenery under it between
+            // the reset and the rise, and a view placed under a scaled root keeps the wrong offset.
+            _level.Value = 30;
+            ((IStartable)_controller).Start();
+            var before = _scenario.Current.Value;
+
+            _level.Value = 1;
+            _resetHandler.Handle(new RunResetMessage(boardReset: false));
+
+            Assert.AreEqual(before, _scenario.Current.Value);
         }
 
         [Test]
@@ -206,6 +230,21 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void TheRestartsEnd_SettlesItsReveal()
         {
+            _level.Value = 30;
+            ((IStartable)_controller).Start();
+            _level.Value = 1;
+            _resetHandler.Handle(new RunResetMessage(boardReset: false));
+            _riseHandler.Handle(default);
+
+            _restartCompletedHandler.Handle(default);
+
+            Assert.AreEqual(new ScenarioShift(ScenarioKind.Sky, 0f), _scenario.Current.Value);
+        }
+
+        [Test]
+        public void ARestartThatNeverRises_StillLandsOnTheRestartLevel()
+        {
+            // The loss cinematic can bail before its rise; the restart's end still settles the backdrop.
             _level.Value = 30;
             ((IStartable)_controller).Start();
             _level.Value = 1;

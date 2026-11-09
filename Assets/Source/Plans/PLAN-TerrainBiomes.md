@@ -31,7 +31,7 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
 |---|---|---|---|
 | — | camera clear colour | `CameraBackgroundTint` | tinted to the live time-of-day light colour |
 | −20 | sky scatter quad | `SkyScatterService` (App scope) | stationary, 1.6× overscan; 10-ring loop per pixel — the priciest backdrop pixel |
-| −10 | cloud backdrop | `BackgroundCloud` shader over `_BackgroundDensityTex` | cloud bodies + an offset drop-shadow tap; clouds scroll with the root via `TransitionParallax` |
+| −10 | cloud backdrop | `BackgroundCloud` shader over `_BackgroundDensityTex` | cloud bodies + an offset drop-shadow tap; clouds scroll with the root's travel via `TransitionParallax` (and scale with the sky in a reveal) |
 | −1 | smoke | `SmokeFieldView` | projectile trails |
 | — | wall net, GI overlay, actors | | above the backdrop |
 
@@ -174,7 +174,8 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
     crisper wake would mean raising `TexelsPerUnit` for every consumer, which is a tuning
     decision, not planned.
 - **The meadow travels with the board**: the bushes are planted on it, so the floor and
-  the blades scroll with `ScenarioContentRoot` one-to-one (`_GroundScroll`; the blades wrap
+  the blades scroll with `ScenarioContentRoot` one-to-one (`_GroundScroll`, which a reveal scales
+  with the meadow; the blades wrap
   across their tile). On the Ascent and the
   restart rise the ground and its bushes move in together; a still ground made the
   bushes look like they slid in. The disturbance field stays camera-fixed, where the
@@ -192,9 +193,27 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
     clears to the sky.
   - The hole's edge wanders from a circle, so it opens like parting cloud, and the mist
     thins inward across it in frayed wisps.
+  - The mist is see-through (`MistOpacity`, 0.6): the sky stays faintly visible behind it
+    (owner, 2026-11-09: "maybe just needs more transparency").
   - The reveal runs on unscaled time for the length of the beat it rides on (the Ascent,
-    about 4 s; the restart rise, 5 s), and covers the backdrop only: the boards, the
-    bushes and the balloons travel over it as before.
+    about 4 s; the restart rise, 5 s). The boards and the balloons travel over it as
+    before.
+- **The reveal reads as a drop** (owner, 2026-11-09: "there is no feeling of going up or
+  down, for that we might require to scale up/down the background and it's content").
+  The ground sits deeper than the sky by `RevealDepthZoom` (1.5), and a reveal scales both
+  layers about the camera, eased over the whole beat (`GroundRevealCurve.Depth`):
+  - Going down, the meadow starts two thirds of its size and grows into place, while the
+    cloud backdrop grows past the camera.
+  - Going up plays it backwards: the meadow shrinks away into the mist and the clouds
+    settle from close by.
+  - The board's content scales with the layer it belongs to: `ScenarioContentRoot` scales
+    the incoming scenery with the incoming layer and its `Outgoing` holder (the old
+    balloons and the snapshots of the old scenery) with the outgoing one, so the bushes
+    stay planted on their meadow. The layer the beat ends on reaches 1 exactly as it
+    ends, and the one on screen at the start starts at 1, so nothing jumps.
+  - Scenery must never be placed under the root while it is scaled (a view that sets its
+    world transform there keeps the wrong local offset), so the loss restart's reveal waits
+    for `RestartRiseStartedMessage`, after the new scenery is placed.
 - **Dirt and colour**: the floor is muted mid-tone greens, light enough for the time of
   day to read across it and dark enough for the balloons to stand off it. A few large
   bare-dirt clusters (`IGroundSettings` dirt size, threshold and softness) fade into the
@@ -225,9 +244,10 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
 - **During a reveal** (4–5 s, gameplay paused): sky and ground both draw, the floor
   blends, and a full-screen mist quad (two noise taps) draws over the clouds. Every
   `GroundCoverageAt` reader pays a uniform branch at rest and two sines and a length while
-  a reveal runs.
+  a reveal runs. The depth adds one divide to the floor, the blades and the cloud
+  backdrop, and a scale ratio to the puff clouds.
 - **CPU**: no per-frame work at rest and no allocations; while a reveal runs, two global
-  vectors per frame. `ScenarioSchedule.ForLevel` runs once
+  vectors and the content root's transform per frame. `ScenarioSchedule.ForLevel` runs once
   per level.
 - Not checkable by `dotnet build`: the shader needs an in-editor look and a Frame
   Debugger check of the draw order.
@@ -269,13 +289,14 @@ changes to the Ascent or restart code.
    start-level cheat at 16, firing balls through the grass. *Review: architect,
    test-everything, reviewer, optimizer.*
 2. **Transitions both ways, as a mist reveal** (built 2026-11-09): `ScenarioController`
-   moved its restart onto `RunResetMessage`, which tells the loss cinematic's rise
-   (`BoardReset == false`, reveal) from an immediate restart (cut). `ActiveScenario` holds a
+   cuts on `RunResetMessage` with the board reset (an immediate restart) and reveals on
+   the loss cinematic's `RestartRiseStartedMessage`. `ActiveScenario` holds a
    `ScenarioShift` (the kind and the reveal's length), `GroundRevealCurve` is the pure
    timing, `GroundView` drives it, and `GroundCoverageAt` follows the hole per pixel, so
    the floor, the blades, the cloud bodies, the drop shadows and the GI follow with no
    change of their own. Seen by playing across a scenario flip and by losing on a ground
-   level.
+   level. The owner's first look asked for a thinner mist and a sense of going up or
+   down: the depth scale (2026-11-09).
 3. **Bushes on ground only**: `RequiresGround` on the catalogue and in `LevelGenerator`
    (with a test that no sky level contains a ground-only actor; built 2026-11-09, with the
    Configuration README). Bushes un-withheld 2026-11-09. The bush shadow on grass looked right in the editor
@@ -317,6 +338,11 @@ changes to the Ascent or restart code.
   against the meadow, over the mist against the sky.
 - Frame Debugger during a reveal: the mist draws after the clouds and before the paint, and
   the floor blends.
+- The depth: going down the meadow grows in with the bushes planted on it and the clouds
+  grow past; going up the old bushes and balloons shrink away with their meadow. No pop at
+  either end, and a level-up within a meadow has no scaling at all.
+- The puff clouds and bushes of a sky level leaving into a meadow (they grow past with the
+  sky), and the blades at the meadow's smallest: shorter, with no gap at the screen's edges.
 
 ## Follow-ups from the phase 1 optimizer review
 

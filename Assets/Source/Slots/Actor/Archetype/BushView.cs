@@ -32,8 +32,11 @@ namespace BalloonParty.Slots.Actor.Archetype
         private BushRenderData _renderData;
         private MaterialPropertyBlock _fallbackMpb;
 
-        // Baked WORLD matrices ignore this transform, so the Ascent slide is applied as a manual offset.
+        // Baked WORLD matrices ignore this transform, so how far it has moved since it was baked (the Ascent
+        // slide, and the mist reveal's scale about the camera) is applied as a manual offset matrix.
         private Vector3 _restPosition;
+        private Vector3 _restScale;
+        private Matrix4x4 _restWorldToLocal = Matrix4x4.identity;
         private Matrix4x4[] _offsetMatrices;
 #if UNITY_EDITOR
         private int _lastRevision;
@@ -70,9 +73,8 @@ namespace BalloonParty.Slots.Actor.Archetype
             var branchMesh = GetBranchQuadMesh();
             var layer = gameObject.layer;
 
-            var offset = transform.position - _restPosition;
-            var displaced = offset.sqrMagnitude > 1e-8f;
-            var offsetMatrix = displaced ? Matrix4x4.Translate(offset) : Matrix4x4.identity;
+            var displaced = transform.position != _restPosition || transform.lossyScale != _restScale;
+            var offsetMatrix = displaced ? transform.localToWorldMatrix * _restWorldToLocal : Matrix4x4.identity;
 
             // Render queue (inner 2999 < branch 3000 < outer 3001) drives layering.
             DrawLeafBatches(leafMesh, _renderData.InnerBatches, _materials.InnerLeaf, layer, displaced, offsetMatrix);
@@ -122,8 +124,11 @@ namespace BalloonParty.Slots.Actor.Archetype
 
             RebuildRenderResources();
 
-            // Statics spawn before the Ascent lifts the scenario root, so this is the settled position.
+            // Statics spawn before the Ascent lifts the scenario root and before a mist reveal scales it, so this
+            // is the settled transform.
             _restPosition = transform.position;
+            _restScale = transform.lossyScale;
+            _restWorldToLocal = transform.worldToLocalMatrix;
 #if UNITY_EDITOR
             _lastRevision = _settings.Revision;
 #endif
