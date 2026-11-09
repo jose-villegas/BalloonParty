@@ -40,6 +40,7 @@ namespace BalloonParty.Game.Level
         private readonly IItemConfiguration _itemConfig;
         private readonly IGamePalette _palette;
         private readonly IRetryState _retryState;
+        private readonly IRunSeed _runSeed;
         private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
 
         private LevelParameters _current = new();
@@ -51,6 +52,7 @@ namespace BalloonParty.Game.Level
             IItemConfiguration itemConfig,
             IGamePalette palette,
             IRetryState retryState,
+            IRunSeed runSeed,
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber)
         {
             _pacing = pacing;
@@ -58,6 +60,7 @@ namespace BalloonParty.Game.Level
             _itemConfig = itemConfig;
             _palette = palette;
             _retryState = retryState;
+            _runSeed = runSeed;
             _levelUpSubscriber = levelUpSubscriber;
         }
 
@@ -108,7 +111,7 @@ namespace BalloonParty.Game.Level
         {
             // Seeded by the level, so a retry rolls the same counts as the first attempt did.
             var rng = new System.Random(_pacing.SeedForLevel(level) ^ ResolveSeedSalt);
-            _current = _pacing.ParametersForLevel(level).Resolve(0f, rng);
+            _current = _pacing.ParametersForLevel(level, _runSeed.Value).Resolve(0f, rng);
 
             var itemPickList = new List<ResolvedItemEntry>();
             var activeItems = new List<ItemSettings>();

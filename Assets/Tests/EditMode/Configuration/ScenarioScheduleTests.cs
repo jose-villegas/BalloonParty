@@ -129,8 +129,9 @@ namespace BalloonParty.Tests.Configuration
 
             for (var start = -50; start < 500; start++)
             {
-                Assert.That(ScenarioSchedule.StretchLength(settings, ScenarioKind.Ground, start), Is.InRange(min, max));
-                Assert.That(ScenarioSchedule.StretchLength(settings, ScenarioKind.Sky, start),
+                Assert.That(ScenarioSchedule.StretchLength(settings, ScenarioKind.Ground, start, settings.Salt),
+                    Is.InRange(min, max));
+                Assert.That(ScenarioSchedule.StretchLength(settings, ScenarioKind.Sky, start, settings.Salt),
                     Is.InRange(min + 1, max + 1));
             }
         }
@@ -184,6 +185,54 @@ namespace BalloonParty.Tests.Configuration
             }
 
             Assert.AreEqual(6, seen.Count, "every level in the window can open the first meadow");
+        }
+
+        [Test]
+        public void EachRun_RollsItsOwnFirstMeadow_WithinTheWindow()
+        {
+            var settings = Schedule(from: 11);
+            var seen = new System.Collections.Generic.HashSet<int>();
+
+            for (var runSeed = 1; runSeed <= 200; runSeed++)
+            {
+                var first = ScenarioSchedule.FirstGroundLevel(settings, runSeed);
+
+                Assert.That(first, Is.InRange(11, 16), $"run seed {runSeed}");
+                Assert.AreEqual(ScenarioKind.Sky, ScenarioSchedule.ForLevel(settings, first - 1, runSeed));
+                Assert.AreEqual(ScenarioKind.Ground, ScenarioSchedule.ForLevel(settings, first, runSeed));
+                seen.Add(first);
+            }
+
+            Assert.AreEqual(6, seen.Count, "runs spread over the whole window");
+        }
+
+        [Test]
+        public void WithinARun_TheSameLevel_AlwaysGetsTheSameScenario([Values(3, 98765, -42)] int runSeed)
+        {
+            var settings = Schedule(from: 11);
+
+            for (var level = 1; level < LevelsChecked; level++)
+            {
+                Assert.AreEqual(ScenarioSchedule.StretchAt(settings, level, runSeed),
+                    ScenarioSchedule.StretchAt(settings, level, runSeed), $"level {level}");
+            }
+        }
+
+        [Test]
+        public void ARunSeed_ReshufflesTheLaterStretchesToo()
+        {
+            var settings = Schedule();
+            var differ = 0;
+
+            for (var level = 20; level < LevelsChecked; level++)
+            {
+                if (ScenarioSchedule.ForLevel(settings, level, 0) != ScenarioSchedule.ForLevel(settings, level, 12345))
+                {
+                    differ++;
+                }
+            }
+
+            Assert.That(differ, Is.GreaterThan(30));
         }
 
         [Test]

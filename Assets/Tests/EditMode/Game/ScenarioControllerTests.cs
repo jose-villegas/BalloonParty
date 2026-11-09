@@ -15,12 +15,15 @@ namespace BalloonParty.Tests.Game
     [TestFixture]
     public class ScenarioControllerTests
     {
+        private const int RunSeedValue = 4242;
+
         private ReactiveProperty<int> _level;
         private ActiveScenario _scenario;
         private ILevelPacingConfiguration _pacing;
         private IMessageHandler<LevelAscendStartedMessage> _ascendHandler;
         private IDisposable _subscription;
         private ScenarioController _controller;
+        private IRunSeed _runSeed;
 
         [SetUp]
         public void SetUp()
@@ -30,7 +33,7 @@ namespace BalloonParty.Tests.Game
             levelProgress.Level.Returns(_level);
 
             _pacing = Substitute.For<ILevelPacingConfiguration>();
-            _pacing.ScenarioForLevel(Arg.Any<int>())
+            _pacing.ScenarioForLevel(Arg.Any<int>(), Arg.Any<int>())
                 .Returns(call => (int)call[0] >= 16 ? ScenarioKind.Ground : ScenarioKind.Sky);
 
             _scenario = new ActiveScenario();
@@ -43,7 +46,10 @@ namespace BalloonParty.Tests.Game
                     Arg.Any<MessageHandlerFilter<LevelAscendStartedMessage>[]>())
                 .Returns(_subscription);
 
-            _controller = new ScenarioController(_pacing, levelProgress, _scenario, subscriber);
+            _runSeed = Substitute.For<IRunSeed>();
+            _runSeed.Value.Returns(RunSeedValue);
+
+            _controller = new ScenarioController(_pacing, _runSeed, levelProgress, _scenario, subscriber);
         }
 
         [TearDown]
@@ -60,6 +66,28 @@ namespace BalloonParty.Tests.Game
             ((IStartable)_controller).Start();
 
             Assert.AreEqual(ScenarioKind.Ground, _scenario.Kind.Value);
+        }
+
+        [Test]
+        public void Snap_AsksForTheLevelInThisRun()
+        {
+            _level.Value = 12;
+
+            ((IStartable)_controller).Start();
+
+            _pacing.Received().ScenarioForLevel(12, RunSeedValue);
+        }
+
+        [Test]
+        public void ResetRun_ReadsTheRunSeedAgain_SoAFreshRunGetsItsOwnScenarios()
+        {
+            ((IStartable)_controller).Start();
+            _runSeed.Value.Returns(777);
+            _level.Value = 1;
+
+            _controller.ResetRun(1);
+
+            _pacing.Received().ScenarioForLevel(1, 777);
         }
 
         [Test]
@@ -86,7 +114,7 @@ namespace BalloonParty.Tests.Game
 
             Assert.AreEqual(ScenarioKind.Ground, _scenario.Kind.Value);
 
-            _pacing.ScenarioForLevel(19).Returns(ScenarioKind.Sky);
+            _pacing.ScenarioForLevel(19, Arg.Any<int>()).Returns(ScenarioKind.Sky);
             _level.Value = 19;
             _ascendHandler.Handle(default);
 

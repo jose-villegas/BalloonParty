@@ -73,7 +73,8 @@ namespace BalloonParty.Editor
         private static void DrawLevelRow(LevelPacingConfiguration asset, int level, Action<int> play)
         {
             var settings = asset.Generation;
-            var parameters = asset.ParametersForLevel(level);
+            // With no run mixed in: a real run moves the ground levels, and with them the bushes and clouds.
+            var parameters = asset.ParametersForLevel(level, 0);
             var style = EditorStyles.miniLabel;
 
             var rowRect = EditorGUILayout.BeginHorizontal();

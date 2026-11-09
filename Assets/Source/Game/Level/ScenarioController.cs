@@ -18,6 +18,7 @@ namespace BalloonParty.Game.Level
     internal sealed class ScenarioController : IStartable, IRunResettable, IDisposable
     {
         private readonly ILevelPacingConfiguration _pacing;
+        private readonly IRunSeed _runSeed;
         private readonly ILevelProgress _levelProgress;
         private readonly ActiveScenario _scenario;
         private readonly ISubscriber<LevelAscendStartedMessage> _ascendStarted;
@@ -28,10 +29,11 @@ namespace BalloonParty.Game.Level
         public int ResetOrder => RunResetOrder.Respawn;
 
         internal ScenarioController(
-            ILevelPacingConfiguration pacing, ILevelProgress levelProgress, ActiveScenario scenario,
-            ISubscriber<LevelAscendStartedMessage> ascendStarted)
+            ILevelPacingConfiguration pacing, IRunSeed runSeed, ILevelProgress levelProgress,
+            ActiveScenario scenario, ISubscriber<LevelAscendStartedMessage> ascendStarted)
         {
             _pacing = pacing;
+            _runSeed = runSeed;
             _levelProgress = levelProgress;
             _scenario = scenario;
             _ascendStarted = ascendStarted;
@@ -58,7 +60,7 @@ namespace BalloonParty.Game.Level
 
         private void SnapToLevel()
         {
-            _scenario.Set(_pacing.ScenarioForLevel(_levelProgress.Level.Value));
+            _scenario.Set(_pacing.ScenarioForLevel(_levelProgress.Level.Value, _runSeed.Value));
         }
     }
 }

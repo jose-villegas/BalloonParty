@@ -17,15 +17,19 @@ namespace BalloonParty.Configuration.Level
 
         /// <summary>
         ///     The mix for <paramref name="level" />: generated for a positive level, the matching debug preset
-        ///     for a negative one.
+        ///     for a negative one. <paramref name="runSeed" /> (<c>IRunSeed</c>) picks the run's ground and sky
+        ///     levels, which decide the ground-only actors and the meadow's clouds.
         /// </summary>
-        RangedLevelParameters ParametersForLevel(int level);
+        RangedLevelParameters ParametersForLevel(int level, int runSeed);
 
         /// <summary>The seed that rolls <paramref name="level" />'s mix; the same level always gets the same seed.</summary>
         int SeedForLevel(int level);
 
-        /// <summary>Whether <paramref name="level" /> is set in the sky or on the ground. Debug presets (level &lt; 1) are sky.</summary>
-        ScenarioKind ScenarioForLevel(int level);
+        /// <summary>
+        ///     Whether <paramref name="level" /> is set in the sky or on the ground in the run rolled by
+        ///     <paramref name="runSeed" />. Debug presets (level &lt; 1) are sky.
+        /// </summary>
+        ScenarioKind ScenarioForLevel(int level, int runSeed);
 
         /// <summary>Points required per colour to complete <paramref name="level" /> — derived from the scoring curve's cumulative milestones, divided by colour count, and snapped to a clean multiple.</summary>
         int ThresholdForLevel(int level);

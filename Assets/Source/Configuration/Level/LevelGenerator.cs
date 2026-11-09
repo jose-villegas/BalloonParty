@@ -25,11 +25,13 @@ namespace BalloonParty.Configuration.Level
         private const int ItemKind = 1;
         private const int GridActorKind = 2;
 
-        internal static RangedLevelParameters Generate(LevelGenerationSettings settings, int level, int seed)
+        // runSeed only moves which levels are on the ground (ScenarioSchedule); seed rolls everything else.
+        internal static RangedLevelParameters Generate(LevelGenerationSettings settings, int level, int seed,
+            int runSeed = 0)
         {
             var rng = new System.Random(seed);
             var included = new HashSet<int>();
-            var stretch = ScenarioSchedule.StretchAt(settings.Scenario, level);
+            var stretch = ScenarioSchedule.StretchAt(settings.Scenario, level, runSeed);
             SelectPieces(settings, ContentRole.Threat, level, stretch.Kind, rng, included);
             SelectPieces(settings, ContentRole.Aid, level, stretch.Kind, rng, included);
 

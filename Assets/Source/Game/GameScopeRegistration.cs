@@ -193,6 +193,7 @@ namespace BalloonParty.Game
             builder.Register<RunMeta>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.Register<RetryTracker>(Lifetime.Singleton)
                 .As<IRetryState>().As<IRetryStaging>().As<IRunResettable>();
+            builder.Register<RunSeed>(Lifetime.Singleton).As<IRunSeed>().As<IRunResettable>();
             builder.Register<IAdService, NoAdService>(Lifetime.Singleton);
             builder.Register<IFailureOffers, FailureOffers>(Lifetime.Singleton);
             builder.RegisterEntryPoint<RunUpgrades>()

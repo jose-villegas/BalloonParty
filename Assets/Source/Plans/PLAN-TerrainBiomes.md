@@ -91,8 +91,9 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
   `ForLevel` is the kind alone.
   - **The first ground level is rolled between 11 and 16** (`GroundFromLevel`,
     `GroundByLevel`; revised 2026-11-09, owner: "start to have a chance for it after
-    level 10"). Levels before it are always sky. The roll hashes the scenario's salt, so
-    every run meets the first meadow on the same level: 11 with the shipped salt. Bushes
+    level 10"). Levels before it are always sky. The roll mixes in the run's seed
+    (`IRunSeed`, rolled per run and kept through a retry), so each run meets its first
+    meadow on its own level, and the later stretches move with it ("Vary", 2026-11-09). Bushes
     unlock at 11, the window's start, so whichever level it is, they're there.
   - **The first meadow is fixed at 4 levels**, not rolled: once the run reaches
     the ground it stays there (owner: "if we enter one we stay there at least n levels").
@@ -238,7 +239,8 @@ changes to the Ascent or restart code.
 
 - `ScenarioKind` (`Sky`, `Ground`), `ScenarioSchedule` and `ScenarioScheduleSettings` (pure,
   `Configuration/Level/`), the settings block on `LevelGenerationSettings`, read through
-  `ILevelPacingConfiguration.ScenarioForLevel`; EditMode-tested. `LevelSeedHash` is the
+  `ILevelPacingConfiguration.ScenarioForLevel` with the run's `IRunSeed`; EditMode-tested.
+  `LevelSeedHash` is the
   hash shared with `SeedForLevel`.
 - `GroundSettings` / `IGroundSettings` (`Configuration/Effects/`): ground material,
   sorting order (−15, between sky −20 and clouds −10), overscan.

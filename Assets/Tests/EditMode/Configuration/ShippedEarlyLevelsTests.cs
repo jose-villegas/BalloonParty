@@ -40,7 +40,7 @@ namespace BalloonParty.Tests.Configuration
         {
             for (var level = 1; level <= 50; level++)
             {
-                var parameters = _pacing.ParametersForLevel(level);
+                var parameters = _pacing.ParametersForLevel(level, 0);
                 Assert.IsTrue(parameters.BalloonWeights.Any(w => w.Weight > 0f), $"level {level} has a balloon");
             }
         }
@@ -48,7 +48,7 @@ namespace BalloonParty.Tests.Configuration
         [Test]
         public void LevelOne_IsOneColourOnAnEightLineBoard()
         {
-            var level = _pacing.ParametersForLevel(1);
+            var level = _pacing.ParametersForLevel(1, 0);
 
             Assert.AreEqual(1, _pacing.ColorsForLevel(1));
             Assert.AreEqual(0b1, level.AllowedColorsMask);
@@ -58,7 +58,7 @@ namespace BalloonParty.Tests.Configuration
         [Test]
         public void LevelOne_HasSimpleAndToughBalloons_AndNothingElse()
         {
-            var level = _pacing.ParametersForLevel(1);
+            var level = _pacing.ParametersForLevel(1, 0);
 
             CollectionAssert.AreEquivalent(
                 new[] { BalloonType.Simple, BalloonType.Tough },
@@ -68,7 +68,7 @@ namespace BalloonParty.Tests.Configuration
         [Test]
         public void LevelOne_ShieldIsTheOnlyItem_WithTwoGuaranteed()
         {
-            var level = _pacing.ParametersForLevel(1);
+            var level = _pacing.ParametersForLevel(1, 0);
 
             var shield = level.ItemWeights.Single();
             Assert.AreEqual(ItemType.Shield, shield.Type);
@@ -79,14 +79,14 @@ namespace BalloonParty.Tests.Configuration
         [Test]
         public void LevelOne_HasNoGridActors()
         {
-            Assert.IsEmpty(_pacing.ParametersForLevel(1).GridActorGates);
+            Assert.IsEmpty(_pacing.ParametersForLevel(1, 0).GridActorGates);
         }
 
         [Test]
         public void LevelOne_IsTheSameEveryTime()
         {
-            var a = _pacing.ParametersForLevel(1);
-            var b = _pacing.ParametersForLevel(1);
+            var a = _pacing.ParametersForLevel(1, 0);
+            var b = _pacing.ParametersForLevel(1, 0);
 
             CollectionAssert.AreEqual(a.BalloonWeights.Select(w => (w.Type, w.Weight)), b.BalloonWeights.Select(w => (w.Type, w.Weight)));
         }
@@ -94,7 +94,7 @@ namespace BalloonParty.Tests.Configuration
         [Test]
         public void LevelTwo_IntroducesRainbowBalloonsAndPaint_OnTwoColours()
         {
-            var level = _pacing.ParametersForLevel(2);
+            var level = _pacing.ParametersForLevel(2, 0);
 
             Assert.AreEqual(0b11, level.AllowedColorsMask);
             Assert.AreEqual(5, level.BoardLines);
@@ -107,7 +107,7 @@ namespace BalloonParty.Tests.Configuration
         [Test]
         public void LevelTwo_GuaranteesOnePaint()
         {
-            var paint = _pacing.ParametersForLevel(2).ItemWeights.Single(w => w.Type == ItemType.Paint);
+            var paint = _pacing.ParametersForLevel(2, 0).ItemWeights.Single(w => w.Type == ItemType.Paint);
 
             Assert.AreEqual(1, paint.GuaranteedInitialCount);
         }
@@ -115,7 +115,7 @@ namespace BalloonParty.Tests.Configuration
         [Test]
         public void LevelThree_IntroducesBombWithOneGuaranteed_AndPuffs()
         {
-            var level = _pacing.ParametersForLevel(3);
+            var level = _pacing.ParametersForLevel(3, 0);
 
             Assert.AreEqual(1, level.ItemWeights.Single(w => w.Type == ItemType.Bomb).GuaranteedInitialCount);
             Assert.IsTrue(level.GridActorGates.Any(g => g.Type == GridActorType.Puff));
@@ -127,8 +127,8 @@ namespace BalloonParty.Tests.Configuration
             var meadows = 0;
             for (var level = 1; level <= 120; level++)
             {
-                var hasBushes = _pacing.ParametersForLevel(level).GridActorGates.Any(g => g.Type == GridActorType.Bush);
-                if (_pacing.ScenarioForLevel(level) == ScenarioKind.Sky)
+                var hasBushes = _pacing.ParametersForLevel(level, 0).GridActorGates.Any(g => g.Type == GridActorType.Bush);
+                if (_pacing.ScenarioForLevel(level, 0) == ScenarioKind.Sky)
                 {
                     Assert.IsFalse(hasBushes, $"sky level {level} has bushes");
                 }

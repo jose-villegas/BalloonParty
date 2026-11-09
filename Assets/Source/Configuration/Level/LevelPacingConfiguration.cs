@@ -66,11 +66,11 @@ namespace BalloonParty.Configuration.Level
 #endif
         }
 
-        public RangedLevelParameters ParametersForLevel(int level)
+        public RangedLevelParameters ParametersForLevel(int level, int runSeed)
         {
             if (level > 0)
             {
-                return LevelGenerator.Generate(_generation, level, SeedForLevel(level));
+                return LevelGenerator.Generate(_generation, level, SeedForLevel(level), runSeed);
             }
 
             if (TryFindPreset(level, out var preset))
@@ -80,7 +80,7 @@ namespace BalloonParty.Configuration.Level
             }
 
             Log.Warn("LevelPacing", $"No debug preset with FromLevel={level}; generating level 1 instead.");
-            return LevelGenerator.Generate(_generation, 1, SeedForLevel(1));
+            return LevelGenerator.Generate(_generation, 1, SeedForLevel(1), runSeed);
         }
 
         public int SeedForLevel(int level)
@@ -88,10 +88,10 @@ namespace BalloonParty.Configuration.Level
             return _generation.SeedForLevel(level);
         }
 
-        public ScenarioKind ScenarioForLevel(int level)
+        public ScenarioKind ScenarioForLevel(int level, int runSeed)
         {
             // Debug presets (level < 1) come out sky: the first ground level is at least 1.
-            return _generation.ScenarioForLevel(level);
+            return _generation.ScenarioForLevel(level, runSeed);
         }
 
         public int ThresholdForLevel(int level)

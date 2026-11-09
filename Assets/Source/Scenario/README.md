@@ -42,8 +42,9 @@ covers it (see the next section).
 Each level is set either in the **sky** (the backdrop above) or on the **ground**, a meadow the board rests
 on, so actors that need ground under them (bushes) don't look like they float. Which one is a per-level,
 seeded choice: `ILevelPacingConfiguration.ScenarioForLevel` (see `Configuration/README.md`) is sky until the
-first ground level, rolled between levels 11 and 16, stays on the ground for a fixed first meadow, then alternates sky and ground
-stretches of a rolled length, so a retry keeps the same scenario. A meadow arrives under puff clouds and
+first ground level, rolled between levels 11 and 16, stays on the ground for a fixed first meadow, then
+alternates sky and ground stretches of a rolled length. The rolls mix in the run's seed, so each run lays
+out its own, and a retry keeps the same scenario. A meadow arrives under puff clouds and
 trades them for bushes as it goes: by the level's place in its stretch, the level generator thins and then
 drops the board's puff-cloud actors and grows the bushes, so the meadow's clear second half is its bushiest.
 Sky levels never have bushes: the catalogue flags them `RequiresGround`, and the generator leaves them out.

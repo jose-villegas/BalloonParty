@@ -126,9 +126,9 @@ namespace BalloonParty.Configuration.Level
         }
 
         /// <summary>Whether <paramref name="level" /> is set in the sky or on the ground; see <see cref="ScenarioSchedule" />.</summary>
-        public ScenarioKind ScenarioForLevel(int level)
+        public ScenarioKind ScenarioForLevel(int level, int runSeed)
         {
-            return ScenarioSchedule.ForLevel(_scenario, level);
+            return ScenarioSchedule.ForLevel(_scenario, level, runSeed);
         }
 
         /// <summary>One message per authoring problem; empty when the catalogue is sound.</summary>

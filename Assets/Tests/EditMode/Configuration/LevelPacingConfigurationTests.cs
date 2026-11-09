@@ -33,7 +33,7 @@ namespace BalloonParty.Tests.Configuration
             ILevelPacingConfiguration pacing = _config;
 
             Assert.AreEqual(0, pacing.DebugPresets.Count);
-            Assert.Greater(pacing.ParametersForLevel(1).BalloonWeights[0].Weight, 0f);
+            Assert.Greater(pacing.ParametersForLevel(1, 0).BalloonWeights[0].Weight, 0f);
         }
 
         [Test]
@@ -69,7 +69,7 @@ namespace BalloonParty.Tests.Configuration
             SetGeneration(ShippedLevelCatalogue.Build());
             ILevelPacingConfiguration pacing = _config;
 
-            var viaConfig = pacing.ParametersForLevel(7);
+            var viaConfig = pacing.ParametersForLevel(7, 0);
             var direct = LevelGenerator.Generate(_generation, 7, pacing.SeedForLevel(7));
 
             Assert.AreEqual(Describe(direct), Describe(viaConfig));
@@ -82,7 +82,7 @@ namespace BalloonParty.Tests.Configuration
             SetField(_config, "_ranges", new[] { new LevelRangeEntry(3, 3, MakeParameters(boardLines: 99)) });
             ILevelPacingConfiguration pacing = _config;
 
-            Assert.AreNotEqual(99, pacing.ParametersForLevel(3).BoardLines);
+            Assert.AreNotEqual(99, pacing.ParametersForLevel(3, 0).BoardLines);
         }
 
         [Test]
@@ -92,7 +92,7 @@ namespace BalloonParty.Tests.Configuration
             SetField(_config, "_ranges", new[] { MakePreset(-200), new LevelRangeEntry(-100, -1, preset) });
             ILevelPacingConfiguration pacing = _config;
 
-            Assert.AreSame(preset, pacing.ParametersForLevel(-100));
+            Assert.AreSame(preset, pacing.ParametersForLevel(-100, 0));
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace BalloonParty.Tests.Configuration
             SetField(_config, "_ranges", new[] { new LevelRangeEntry(-100, -1, null) });
             ILevelPacingConfiguration pacing = _config;
 
-            Assert.IsNotNull(pacing.ParametersForLevel(-100));
+            Assert.IsNotNull(pacing.ParametersForLevel(-100, 0));
         }
 
         [Test]
@@ -113,9 +113,9 @@ namespace BalloonParty.Tests.Configuration
 
             try
             {
-                var fallback = pacing.ParametersForLevel(-999);
+                var fallback = pacing.ParametersForLevel(-999, 0);
 
-                Assert.AreEqual(Describe(pacing.ParametersForLevel(1)), Describe(fallback));
+                Assert.AreEqual(Describe(pacing.ParametersForLevel(1, 0)), Describe(fallback));
             }
             finally
             {
@@ -130,8 +130,8 @@ namespace BalloonParty.Tests.Configuration
             SetField(_config, "_generation", GenerationWithScenario(firstGroundLevel: 1));
             ILevelPacingConfiguration pacing = _config;
 
-            Assert.AreEqual(ScenarioKind.Sky, pacing.ScenarioForLevel(-100));
-            Assert.AreEqual(ScenarioKind.Sky, pacing.ScenarioForLevel(0));
+            Assert.AreEqual(ScenarioKind.Sky, pacing.ScenarioForLevel(-100, 0));
+            Assert.AreEqual(ScenarioKind.Sky, pacing.ScenarioForLevel(0, 0));
         }
 
         [Test]
@@ -140,8 +140,8 @@ namespace BalloonParty.Tests.Configuration
             SetField(_config, "_generation", GenerationWithScenario(firstGroundLevel: 3));
             ILevelPacingConfiguration pacing = _config;
 
-            Assert.AreEqual(ScenarioKind.Sky, pacing.ScenarioForLevel(2));
-            Assert.AreEqual(ScenarioKind.Ground, pacing.ScenarioForLevel(3));
+            Assert.AreEqual(ScenarioKind.Sky, pacing.ScenarioForLevel(2, 0));
+            Assert.AreEqual(ScenarioKind.Ground, pacing.ScenarioForLevel(3, 0));
         }
 
         [Test]
