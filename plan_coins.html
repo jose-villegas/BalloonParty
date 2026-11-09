@@ -164,7 +164,7 @@ Coins and the Card Shop</h1>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Piece   </th><th class="markdownTableHeadNone">Where   </th><th class="markdownTableHeadNone">Responsibility    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>ICoinSettings</code>   </td><td class="markdownTableBodyNone"><code>Shared/</code>, authored in <code>RunConfig</code> as <code>Coins</code>   </td><td class="markdownTableBodyNone"><code>CoinsFromLevel</code> (10), <code>DropChance</code> (0.05); phase 4 adds <code>CardPrice</code> (25) and <code>CardsOffered</code> (3)    </td></tr>
+<td class="markdownTableBodyNone"><code>ICoinSettings</code>   </td><td class="markdownTableBodyNone"><code>Shared/</code>, authored in <code>RunConfig</code> as <code>Coins</code>   </td><td class="markdownTableBodyNone"><code>CoinsFromLevel</code> (10), <code>DropChance</code> (0.01, lowered from 0.05 on 2026-11-09); phase 4 adds <code>CardPrice</code> (25) and <code>CardsOffered</code> (3)    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ICoinBalance</code> / <code>ICoinWallet</code> / <code>CoinWallet</code>   </td><td class="markdownTableBodyNone"><code>Game/Coins/</code>   </td><td class="markdownTableBodyNone"><code>ICoinBalance</code> is the read-only <code>Balance</code> views read; <code>ICoinWallet</code> adds <code>Add(int)</code> and <code>TrySpend(int)</code>. Loads from and saves to <code>PlayerPrefs</code> through <code>ICoinStore</code> (key beside <code>RunMeta</code>'s); <code>CoinWalletSaver</code> saves at the save points, and a spend saves at once    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -231,7 +231,7 @@ Coins and the Card Shop</h1>
 <p>The heads-up for a coin (<code>+1 coin</code>) needs no art: it is handwritten like the others (<code>UI/HeadsUp/</code>).</p>
 <h2><a class="anchor" id="autotoc_md371"></a>
 8. Tuning targets</h2>
-<p>From the bot's runs: at levels 13 to 15, high skill pops about 180 to 330 balloons a level, and average skill about 150 to 250. With <code>CoinDropChance</code> 0.05 that's about 8 to 16 coins a level, so <code>CardPrice</code> 25 is two or three levels past 15. A player who reaches 17 can afford one card on their next loss. Phase 2 checks this with runs and sets the shipped values.</p>
+<p>From the bot's runs: at levels 13 to 15, high skill pops about 180 to 330 balloons a level, and average skill about 150 to 250. With <code>CoinDropChance</code> 0.05 that's about 8 to 16 coins a level, so <code>CardPrice</code> 25 is two or three levels past 15. A player who reaches 17 can afford one card on their next loss. Phase 2 checks this with runs and sets the shipped values. The chance was lowered to 0.01 on 2026-11-09, about 2 to 3 coins a level, so <code>CardPrice</code> needs re-tuning before phase 4 ships.</p>
 <h2><a class="anchor" id="autotoc_md372"></a>
 9. Open questions</h2>
 <ul>
