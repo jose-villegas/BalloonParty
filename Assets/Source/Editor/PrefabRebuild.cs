@@ -26,14 +26,15 @@ namespace BalloonParty.Editor
         /// <summary>
         ///     Opens the prefab at <paramref name="path" />, replaces its root's <paramref name="childName" />
         ///     child with what <paramref name="build" /> makes, and saves. <paramref name="build" /> returns an
-        ///     error to show, or null on success; nothing is saved on an error or a declined rebuild.
+        ///     error to show, or null on success; nothing is saved on an error or a declined rebuild. Returns
+        ///     whether it saved.
         /// </summary>
-        internal static void Run(string dialogTitle, string path, string childName, Func<GameObject, string> build)
+        internal static bool Run(string dialogTitle, string path, string childName, Func<GameObject, string> build)
         {
             if (path == null)
             {
                 EditorUtility.DisplayDialog(dialogTitle, $"The prefab to build {childName} on wasn't found.", "OK");
-                return;
+                return false;
             }
 
             var root = PrefabUtility.LoadPrefabContents(path);
@@ -46,7 +47,7 @@ namespace BalloonParty.Editor
                             $"{path} already has {childName}. Rebuild it? Hand edits to it are lost.", "Rebuild",
                             "Cancel"))
                     {
-                        return;
+                        return false;
                     }
 
                     Object.DestroyImmediate(existing.gameObject);
@@ -56,11 +57,12 @@ namespace BalloonParty.Editor
                 if (error != null)
                 {
                     EditorUtility.DisplayDialog(dialogTitle, error, "OK");
-                    return;
+                    return false;
                 }
 
                 PrefabUtility.SaveAsPrefabAsset(root, path);
                 Debug.Log($"[{dialogTitle}] Built {childName} on {path}.");
+                return true;
             }
             finally
             {

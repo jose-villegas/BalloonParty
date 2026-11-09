@@ -29,11 +29,8 @@ namespace BalloonParty.UI.HeadsUp
         [Inject] private ISubscriber<ProjectileFiredMessage> _firedSubscriber;
         [Inject] private ThrowerOriginProvider _origin;
 
-        private Canvas _canvas;
-
         private void Start()
         {
-            _canvas = _headsUp.GetComponentInParent<Canvas>();
             _readySubscriber.Subscribe(_ => OnReady()).AddTo(this);
             _firedSubscriber.Subscribe(_ => _headsUp.Clear()).AddTo(this);
         }
@@ -45,15 +42,7 @@ namespace BalloonParty.UI.HeadsUp
                 return;
             }
 
-            var gameCamera = Camera.main;
-            if (gameCamera == null || _canvas == null)
-            {
-                return;
-            }
-
-            var parent = (RectTransform)_headsUp.transform.parent;
-            var world = _origin.Origin + _worldOffset;
-            _headsUp.Show(_text, RectAnchorMath.GameWorldToLocalPoint(parent, _canvas, gameCamera, world), _style);
+            _headsUp.Show(_text, _origin.Origin + _worldOffset, _style);
         }
     }
 }

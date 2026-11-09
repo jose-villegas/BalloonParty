@@ -23,19 +23,6 @@ namespace BalloonParty.UI
         }
 
         /// <summary>
-        ///     Where a point of the game world, seen through <paramref name="gameCamera" />, falls in
-        ///     <paramref name="rect" />'s local space on <paramref name="canvas" />, whatever its render mode.
-        /// </summary>
-        internal static Vector2 GameWorldToLocalPoint(RectTransform rect, Canvas canvas, Camera gameCamera,
-            Vector3 worldPosition)
-        {
-            var canvasCamera = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
-            var screenPoint = RectTransformUtility.WorldToScreenPoint(gameCamera, worldPosition);
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(rect, screenPoint, canvasCamera, out var localPoint);
-            return localPoint;
-        }
-
-        /// <summary>
         ///     <paramref name="point" />, moved just far enough that a box of <paramref name="halfSize" /> around it
         ///     stays inside <paramref name="bounds" />; centred on an axis where the box is wider than the bounds.
         /// </summary>

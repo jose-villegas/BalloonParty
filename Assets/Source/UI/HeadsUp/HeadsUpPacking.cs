@@ -6,7 +6,7 @@ namespace BalloonParty.UI.HeadsUp
     /// <summary>
     ///     Where a new heads-up line goes so it doesn't sit on the lines still showing: the nearest spot to
     ///     where it happened, stepping out in rings of one line height up and down and half a line width
-    ///     sideways, kept inside the canvas. When the board is too crowded for a clean spot it takes the one
+    ///     sideways, kept inside the camera's view. When the board is too crowded for a clean spot it takes the one
     ///     that overlaps least, so a burst still reads instead of stacking into one smudge.
     /// </summary>
     internal static class HeadsUpPacking
@@ -18,6 +18,14 @@ namespace BalloonParty.UI.HeadsUp
 
         // Ring by ring, each ring's edge in steps of (half a line width, one line height), nearest rings first.
         private static readonly Vector2Int[] RingSteps = BuildRingSteps();
+
+        /// <summary>What an orthographic <paramref name="camera" /> shows, in world space.</summary>
+        internal static Rect ViewRect(Camera camera)
+        {
+            var halfHeight = camera.orthographicSize;
+            var halfSize = new Vector2(halfHeight * camera.aspect, halfHeight);
+            return new Rect((Vector2)camera.transform.position - halfSize, halfSize * 2f);
+        }
 
         /// <summary>
         ///     The centre for a line of <paramref name="size" /> wanted at <paramref name="wanted" />, inside

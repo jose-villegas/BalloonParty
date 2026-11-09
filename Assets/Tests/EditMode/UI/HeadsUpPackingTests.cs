@@ -12,6 +12,31 @@ namespace BalloonParty.Tests.UI
         private static readonly Vector2 LineSize = new(100f, 20f);
 
         [Test]
+        public void ViewRect_IsWhatTheOrthographicCameraShows_AroundIt()
+        {
+            var go = new GameObject("ViewRectCamera");
+            try
+            {
+                var camera = go.AddComponent<Camera>();
+                camera.orthographic = true;
+                camera.orthographicSize = 4.8f;
+                camera.aspect = 0.5f;
+                go.transform.position = new Vector3(0.3f, -0.2f, -10f);
+
+                var view = HeadsUpPacking.ViewRect(camera);
+
+                Assert.That(view.center.x, Is.EqualTo(0.3f).Within(1e-5f));
+                Assert.That(view.center.y, Is.EqualTo(-0.2f).Within(1e-5f));
+                Assert.That(view.height, Is.EqualTo(9.6f).Within(1e-5f));
+                Assert.That(view.width, Is.EqualTo(4.8f).Within(1e-5f));
+            }
+            finally
+            {
+                Object.DestroyImmediate(go);
+            }
+        }
+
+        [Test]
         public void Place_NothingShowing_KeepsTheWantedSpot()
         {
             var placed = HeadsUpPacking.Place(Bounds, new Vector2(30f, 40f), LineSize, new List<Rect>());

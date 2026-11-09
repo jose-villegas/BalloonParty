@@ -66,12 +66,10 @@ namespace BalloonParty.UI.HeadsUp
 
         private readonly ProjectileTally _pickups = new();
         private readonly List<Rect> _occupied = new();
-        private Canvas _canvas;
         private int _nextLine;
 
         private void Start()
         {
-            _canvas = GetComponentInParent<Canvas>();
             _shieldGainedSubscriber.Subscribe(OnShieldGained).AddTo(this);
             _wallHitSubscriber.Subscribe(OnWallHit).AddTo(this);
             _chainSubscriber.Subscribe(OnDeflectChain).AddTo(this);
@@ -130,7 +128,7 @@ namespace BalloonParty.UI.HeadsUp
         private void Write(string text, Vector3 worldPosition, HeadsUpStyle style, int count)
         {
             var gameCamera = Camera.main;
-            if (_lines == null || _lines.Length == 0 || gameCamera == null || _canvas == null)
+            if (_lines == null || _lines.Length == 0 || gameCamera == null)
             {
                 return;
             }
@@ -138,11 +136,8 @@ namespace BalloonParty.UI.HeadsUp
             var line = _lines[_nextLine];
             _nextLine = (_nextLine + 1) % _lines.Length;
 
-            var parent = (RectTransform)line.transform.parent;
-            var local = RectAnchorMath.GameWorldToLocalPoint(parent, _canvas, gameCamera,
-                worldPosition + (Vector3)_worldOffset);
-            line.Show(text, local, style, count);
-            Pack(line, parent.rect);
+            line.Show(text, (Vector2)worldPosition + _worldOffset, style, count);
+            Pack(line, HeadsUpPacking.ViewRect(gameCamera));
         }
 
         // Written first so the ink's size is known, then moved: clear of the lines still showing where it can
@@ -159,7 +154,7 @@ namespace BalloonParty.UI.HeadsUp
             }
 
             var ink = line.InkRect;
-            var position = (Vector2)line.transform.localPosition;
+            var position = (Vector2)line.transform.position;
             var size = ink.size + Vector2.one * (ink.height * _packingGap);
             var center = HeadsUpPacking.Place(bounds, ink.center, size, _occupied);
             line.MoveTo(position + center - ink.center);
