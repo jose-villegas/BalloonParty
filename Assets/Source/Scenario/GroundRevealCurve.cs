@@ -50,7 +50,7 @@ namespace BalloonParty.Scenario
         public static float Opening(ScenarioKind target, float progress)
         {
             var clamped = Mathf.Clamp01(progress);
-            return target == ScenarioKind.Ground ? clamped : 1f - clamped;
+            return target != ScenarioKind.Sky ? clamped : 1f - clamped;
         }
 
         /// <param name="opening">0 = sky with no mist, 1 = all ground.</param>
@@ -83,7 +83,7 @@ namespace BalloonParty.Scenario
             var z = Mathf.Max(1f, zoom);
             var ground = Mathf.Lerp(1f / z, 1f, Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(opening)));
             var sky = ground * z;
-            return target == ScenarioKind.Ground
+            return target != ScenarioKind.Sky
                 ? new GroundRevealDepth(ground, sky, ground, sky)
                 : new GroundRevealDepth(ground, sky, sky, ground);
         }

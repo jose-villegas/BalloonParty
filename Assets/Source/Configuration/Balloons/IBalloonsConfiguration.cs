@@ -47,5 +47,8 @@ namespace BalloonParty.Configuration.Balloons
         float NudgeDistance { get; }
         float NudgeDuration { get; }
         float NudgeFalloff { get; }
+
+        /// <summary>Seconds a bubble cluster takes to flow into the neighbour a nudge pushed it toward.</summary>
+        float BubbleMergeSeconds { get; }
     }
 }

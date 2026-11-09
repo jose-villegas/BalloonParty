@@ -28,6 +28,10 @@ MonoBehaviour:
   _bounceReference: {r: 0.3, g: 0.34, b: 0.21, a: 1}
   _wakeMaterial: {fileID: 2100000, guid: 2dd36923cea4471daae2dba453996d6d, type: 2}
   _bladeRecoverySeconds: 0.35
+  _waterMaterial: {fileID: 2100000, guid: b4d8f2a15c9e4f3a8b7d6c5e9f0a1b35, type: 2}
+  _waterCausticMaterial: {fileID: 2100000, guid: e7abc5d48f2b4c3d0e9a8f7b6c5d4e68, type: 2}
+  _waterCausticTexelsPerUnit: 4
+  _waterBounceReference: {r: 0.1, g: 0.28, b: 0.37, a: 1}
   _mistMaterial: {fileID: 2100000, guid: 6b1f3c2e9d4a4f7e8c5a2b1d0e9f8a71, type: 2}
   _mistSortingOrder: -9
   _mistInShare: 0.35

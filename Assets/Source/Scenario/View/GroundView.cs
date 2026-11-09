@@ -25,7 +25,11 @@ namespace BalloonParty.Scenario.View
     ///     on the Ascent the bushes ride in planted on their ground rather than sliding over a still one. A reveal
     ///     also plays the drop between the layers (<see cref="GroundRevealDepth" />): it scales the meadow, the
     ///     cloud backdrop and the content root about the camera, so going down the ground grows into place and
-    ///     going up it falls away.
+    ///     going up it falls away. On water levels the same floor quad draws the water surface
+    ///     (<c>BalloonParty/Scenario/Water</c>) instead of the meadow, with no blades: its ripples and caustics read
+    ///     the disturbance field themselves (<see cref="WaterCausticBuffer" />), and the reveal, the depth and the
+    ///     coverage play the same way. Sky always sits between two surfaces in the schedule, so a reveal never
+    ///     swaps one surface for the other; a cut between them just swaps the floor's material.
     /// </summary>
     // Early, so its LateUpdate sets this frame's reveal depth on the content root before the bushes draw from it
     // in theirs.
@@ -62,7 +66,13 @@ namespace BalloonParty.Scenario.View
         private static int GroundLayer = -1;
 
         private GameObject _quad;
+        private Renderer _quadRenderer;
         private Material _floorMaterial;
+        private Material _waterMaterial;
+        private WaterCausticBuffer _caustics;
+        // The surface the floor quad draws: the meadow, or water. Stays on the last one while the sky shows, so
+        // a reveal up to the sky closes over the surface that was there.
+        private ScenarioKind _surface = ScenarioKind.Ground;
         private GameObject _blades;
         private Mesh _bladeMesh;
         private GrassWakeBuffer _wake;
@@ -101,6 +111,7 @@ namespace BalloonParty.Scenario.View
             _quad = QuadRendererBuilder.Build(
                 "Ground", _floorMaterial, GroundLayer, _settings.SortingLayerName, _settings.SortingOrder);
             _quad.transform.SetParent(transform, worldPositionStays: false);
+            _quadRenderer = _quad.GetComponent<Renderer>();
 
             var overscan = Mathf.Max(1f, _settings.OverscanMultiplier);
             _quad.transform.localScale = new Vector3(
@@ -114,8 +125,8 @@ namespace BalloonParty.Scenario.View
             Shader.SetGlobalFloat(PatchSizeId, Mathf.Max(0.01f, _settings.PatchSize));
             Shader.SetGlobalVector(DirtId, new Vector4(
                 Mathf.Max(0.01f, _settings.DirtPatchSize), _settings.DirtThreshold, _settings.DirtSoftness, 0f));
-            Shader.SetGlobalColor(BounceReferenceId, _settings.BounceReference);
             BuildBlades();
+            BuildWater();
             BuildMist(overscan);
 
             _scenario.Current
@@ -138,7 +149,14 @@ namespace BalloonParty.Scenario.View
                 return;
             }
 
-            _wake?.Tick(Time.deltaTime, _settings.BladeRecoverySeconds);
+            if (_surface == ScenarioKind.Water)
+            {
+                _caustics?.Tick();
+            }
+            else
+            {
+                _wake?.Tick(Time.deltaTime, _settings.BladeRecoverySeconds);
+            }
 
             // Heading for the sky, the meadow on screen is the outgoing one: it leaves with the old bushes. Into a
             // meadow, or within one, it is the incoming one and rides in with the new bushes. Scaled like them, about
@@ -175,8 +193,9 @@ namespace BalloonParty.Scenario.View
             Shader.SetGlobalVector(GroundRevealId, Vector4.zero);
             _scenarioRoot.SetDepth(1f, 1f);
             _wake?.Dispose();
+            _caustics?.Dispose();
 
-            // The blade mesh and the floor's material instance are ours: the floor's quad is MeshHelper's shared
+            // The blade mesh and the floor's material instances are ours: the floor's quad is MeshHelper's shared
             // cached quad, which the App-owned sky and the GI overlay draw with too.
             if (_bladeMesh != null)
             {
@@ -184,6 +203,10 @@ namespace BalloonParty.Scenario.View
             }
 
             Destroy(_floorMaterial);
+            if (_waterMaterial != null)
+            {
+                Destroy(_waterMaterial);
+            }
         }
 
         [Inject]
@@ -283,8 +306,29 @@ namespace BalloonParty.Scenario.View
             _openRadius = 0.5f * overscan * view.magnitude + wander + softness + reach * 1.5f;
         }
 
+        // The water's own material instance (a reveal switches its blend like the meadow's) and the caustics drawn
+        // from its surface. Without a water material, water levels show the sky (see OnScenario).
+        private void BuildWater()
+        {
+            if (_settings.WaterMaterial == null)
+            {
+                Log.Warn("Ground", "no water: assign a water material on the GroundSettings asset.", this);
+                return;
+            }
+
+            _waterMaterial = new Material(_settings.WaterMaterial);
+            var view = new DisturbanceFieldCoordinates(_display, 1f).Bounds.size;
+            _caustics = new WaterCausticBuffer(
+                _settings.WaterCausticMaterial, _settings.WaterMaterial, view, _settings.WaterCausticTexelsPerUnit);
+        }
+
         private void OnScenario(ScenarioShift shift, NavigationState navigation)
         {
+            if (shift.Kind == ScenarioKind.Water && _waterMaterial == null)
+            {
+                shift = new ScenarioShift(ScenarioKind.Sky, shift.Seconds);
+            }
+
             var decision = GroundRevealPlanner.Decide(
                 shift, navigation, _navigation, _revealing ? _revealTarget : _shown, _mist != null);
             _navigation = navigation;
@@ -312,12 +356,13 @@ namespace BalloonParty.Scenario.View
             _revealElapsed = 0f;
             _revealSeconds = seconds;
 
-            _quad.SetActive(true);
-            if (_blades != null)
+            // Down to a surface, that one opens; up to the sky, the surface showing closes.
+            if (target != ScenarioKind.Sky)
             {
-                _blades.SetActive(true);
+                ShowSurface(target);
             }
 
+            SetSurfaceDrawn(true);
             if (target == ScenarioKind.Ground)
             {
                 _wake?.Restart();
@@ -325,8 +370,7 @@ namespace BalloonParty.Scenario.View
 
             _mist.SetActive(true);
             _sky?.SetVisible(true);
-            _floorMaterial.SetFloat(SrcBlendId, OpaqueSrcBlend);
-            _floorMaterial.SetFloat(DstBlendId, PremultipliedDstBlend);
+            SetFloorBlend(PremultipliedDstBlend);
             ApplyReveal();
         }
 
@@ -355,12 +399,7 @@ namespace BalloonParty.Scenario.View
 
             // While the hole is closed the ground covers nothing: skip its full-screen blended pass and the blade
             // mesh's vertices rather than draw them at zero coverage.
-            var open = frame.Radius > _closedRadius;
-            _quad.SetActive(open);
-            if (_blades != null)
-            {
-                _blades.SetActive(open);
-            }
+            SetSurfaceDrawn(frame.Radius > _closedRadius);
 
             Shader.SetGlobalVector(GroundRevealId, new Vector4(
                 1f, frame.Radius, Mathf.Max(0.01f, _settings.RevealEdgeSoftness), frame.MistDensity));
@@ -372,7 +411,7 @@ namespace BalloonParty.Scenario.View
         {
             _revealing = false;
             _shown = kind;
-            var ground = kind == ScenarioKind.Ground;
+            var surface = kind != ScenarioKind.Sky;
 
             if (_mist != null)
             {
@@ -382,23 +421,57 @@ namespace BalloonParty.Scenario.View
             Shader.SetGlobalVector(GroundRevealId, Vector4.zero);
             _groundScale = 1f;
             _scenarioRoot.SetDepth(1f, 1f);
-            _floorMaterial.SetFloat(SrcBlendId, OpaqueSrcBlend);
-            _floorMaterial.SetFloat(DstBlendId, OpaqueDstBlend);
+            SetFloorBlend(OpaqueDstBlend);
 
-            var wasShowing = _quad.activeSelf;
-            _quad.SetActive(ground);
-            if (_blades != null)
+            var grassWasShowing = _quad.activeSelf && _surface == ScenarioKind.Ground;
+            if (surface)
             {
-                _blades.SetActive(ground);
+                ShowSurface(kind);
             }
 
-            if (ground && !wasShowing)
+            SetSurfaceDrawn(surface);
+            if (kind == ScenarioKind.Ground && !grassWasShowing)
             {
                 _wake?.Restart();
             }
 
-            _sky?.SetVisible(!ground);
-            Shader.SetGlobalFloat(GroundCoverageId, ground ? 1f : 0f);
+            _sky?.SetVisible(!surface);
+            Shader.SetGlobalFloat(GroundCoverageId, surface ? 1f : 0f);
+        }
+
+        // Puts the floor quad on the meadow or the water, with the GI's bounce reference to match.
+        private void ShowSurface(ScenarioKind kind)
+        {
+            var water = kind == ScenarioKind.Water;
+            _surface = water ? ScenarioKind.Water : ScenarioKind.Ground;
+            _quadRenderer.sharedMaterial = water ? _waterMaterial : _floorMaterial;
+            Shader.SetGlobalColor(BounceReferenceId, water ? _settings.WaterBounceReference : _settings.BounceReference);
+            if (!water)
+            {
+                _caustics?.Rest();
+            }
+        }
+
+        // The floor quad, and the blades over it on the meadow only.
+        private void SetSurfaceDrawn(bool drawn)
+        {
+            _quad.SetActive(drawn);
+            if (_blades != null)
+            {
+                _blades.SetActive(drawn && _surface == ScenarioKind.Ground);
+            }
+        }
+
+        // Both surfaces, so a cut between them never draws one in the other's blend state.
+        private void SetFloorBlend(float dstBlend)
+        {
+            _floorMaterial.SetFloat(SrcBlendId, OpaqueSrcBlend);
+            _floorMaterial.SetFloat(DstBlendId, dstBlend);
+            if (_waterMaterial != null)
+            {
+                _waterMaterial.SetFloat(SrcBlendId, OpaqueSrcBlend);
+                _waterMaterial.SetFloat(DstBlendId, dstBlend);
+            }
         }
     }
 }

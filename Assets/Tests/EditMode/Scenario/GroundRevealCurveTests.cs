@@ -190,5 +190,17 @@ namespace BalloonParty.Tests.Scenario
             Assert.AreEqual(Open, after.Radius, 1e-4f);
             Assert.AreEqual(1f, GroundRevealCurve.Opening(ScenarioKind.Ground, 7f));
         }
+
+        [Test]
+        public void Water_OpensAndDropsLikeTheMeadow([Values(0f, 0.3f, 0.7f, 1f)] float progress)
+        {
+            // Both surfaces lie below the sky: going down to water plays the same reveal as going down to grass.
+            var water = GroundRevealCurve.Opening(ScenarioKind.Water, progress);
+            Assert.AreEqual(GroundRevealCurve.Opening(ScenarioKind.Ground, progress), water);
+
+            var wet = GroundRevealCurve.Depth(ScenarioKind.Water, water, 1.5f);
+            var dry = GroundRevealCurve.Depth(ScenarioKind.Ground, water, 1.5f);
+            Assert.AreEqual((dry.Ground, dry.Sky, dry.Incoming, dry.Outgoing), (wet.Ground, wet.Sky, wet.Incoming, wet.Outgoing));
+        }
     }
 }

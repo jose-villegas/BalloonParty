@@ -46,9 +46,11 @@ namespace BalloonParty.Balloon.Spawner
         // The current wait (a grace or an interval) and how much of it is left.
         private float _window;
         private float _remaining;
+        private float _secondsOnLevel;
 
         public int ResetOrder => RunResetOrder.Counters;
         public float NextLineProgress => _window > 0f ? 1f - _remaining / _window : 0f;
+        public float SecondsOnLevel => _secondsOnLevel;
 
         [Inject]
         internal SpawnClock(
@@ -73,7 +75,7 @@ namespace BalloonParty.Balloon.Spawner
         public void Start()
         {
             // Skip the current value: construction already started level 1's grace.
-            _levelProgress.Level.Skip(1).Subscribe(_ => StartWindow(_settings.GraceSeconds)).AddTo(_subscriptions);
+            _levelProgress.Level.Skip(1).Subscribe(_ => StartLevel()).AddTo(_subscriptions);
             _firedSubscriber.Subscribe(OnFired).AddTo(_subscriptions);
             _projectiles.Retired.Subscribe(ball => _flightAges.Remove(ball)).AddTo(_subscriptions);
         }
@@ -86,7 +88,7 @@ namespace BalloonParty.Balloon.Spawner
         public void ResetRun(int generation)
         {
             _flightAges.Clear();
-            StartWindow(_settings.GraceSeconds);
+            StartLevel();
         }
 
         public void Dispose()
@@ -102,6 +104,7 @@ namespace BalloonParty.Balloon.Spawner
                 return;
             }
 
+            _secondsOnLevel += deltaTime;
             _remaining -= deltaTime * Pace(AgeFlights(deltaTime));
             if (_remaining > 0f)
             {
@@ -170,6 +173,12 @@ namespace BalloonParty.Balloon.Spawner
                    && _levelProgress.Phase.Value == LevelUpPhase.Playing
                    && !_pauseService.IsAnyPaused.Value
                    && !_projectiles.DoomedShotFliesAlone();
+        }
+
+        private void StartLevel()
+        {
+            _secondsOnLevel = 0f;
+            StartWindow(_settings.GraceSeconds);
         }
 
         private void StartWindow(float seconds)

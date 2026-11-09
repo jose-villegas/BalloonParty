@@ -336,11 +336,148 @@ namespace BalloonParty.Tests.Configuration
             Assert.AreEqual(736111262, settings.SeedForLevel(250));
         }
 
+        [Test]
+        public void ShippedDefaults_MakeHalfTheLaterSurfacesWater()
+        {
+            Assert.AreEqual(0.5f, new ScenarioScheduleSettings().WaterShare);
+        }
+
+        [Test]
+        public void Water_ChangesWhichSurfaceAStretchShows_NeverWhereItFalls([Values(0.25f, 0.5f, 1f)] float water,
+            [Values(0, 3, 98765)] int runSeed)
+        {
+            var meadows = Schedule();
+            var withWater = Schedule(water: water);
+
+            for (var level = 1; level < LevelsChecked; level++)
+            {
+                var plain = ScenarioSchedule.StretchAt(meadows, level, runSeed);
+                var wet = ScenarioSchedule.StretchAt(withWater, level, runSeed);
+                var expected = wet.Kind == ScenarioKind.Water ? ScenarioKind.Ground : wet.Kind;
+                AssertStretch(plain, expected, wet.Position, wet.Length);
+            }
+        }
+
+        [Test]
+        public void TheFirstMeadow_IsNeverWater_EvenAtFullShare([Values(1, 7919, 123456)] int salt)
+        {
+            var settings = Schedule(water: 1f, salt: salt);
+
+            for (var i = 0; i < 4; i++)
+            {
+                Assert.AreEqual(ScenarioKind.Ground, ScenarioSchedule.ForLevel(settings, 16 + i), $"level {16 + i}");
+            }
+        }
+
+        [Test]
+        public void AtFullShare_EveryLaterSurfaceIsWater_AndAtNoneEveryOneIsAMeadow()
+        {
+            var allWater = Schedule(water: 1f);
+            var noWater = Schedule(water: 0f);
+
+            for (var level = 20; level < LevelsChecked; level++)
+            {
+                Assert.AreNotEqual(ScenarioKind.Ground, ScenarioSchedule.ForLevel(allWater, level), $"level {level}");
+                Assert.AreNotEqual(ScenarioKind.Water, ScenarioSchedule.ForLevel(noWater, level), $"level {level}");
+            }
+        }
+
+        [Test]
+        public void TwoSurfaces_AreAlwaysSeparatedBySky([Values(1, 7919, 123456)] int salt, [Values(0, 42)] int runSeed)
+        {
+            // The mist reveal only plays sky to surface and back: a meadow never turns straight into water.
+            var settings = Schedule(water: 0.5f, salt: salt);
+
+            for (var level = 2; level < LevelsChecked; level++)
+            {
+                var before = ScenarioSchedule.ForLevel(settings, level - 1, runSeed);
+                var now = ScenarioSchedule.ForLevel(settings, level, runSeed);
+                if (before != now)
+                {
+                    Assert.IsTrue(before == ScenarioKind.Sky || now == ScenarioKind.Sky, $"{before} to {now} at {level}");
+                }
+            }
+        }
+
+        [Test]
+        public void AtHalfShare_AllThreeScenariosRecur()
+        {
+            var settings = Schedule(water: 0.5f);
+
+            int sky = 0, ground = 0, water = 0;
+            for (var level = 20; level < LevelsChecked; level++)
+            {
+                switch (ScenarioSchedule.ForLevel(settings, level))
+                {
+                    case ScenarioKind.Sky:
+                        sky++;
+                        break;
+                    case ScenarioKind.Ground:
+                        ground++;
+                        break;
+                    default:
+                        water++;
+                        break;
+                }
+            }
+
+            Assert.That(sky, Is.GreaterThan(60), "sky");
+            Assert.That(ground, Is.GreaterThan(40), "meadows");
+            Assert.That(water, Is.GreaterThan(40), "water");
+        }
+
+        [Test]
+        public void WithThreeScenarios_TheSameLevelOfARun_AlwaysGetsTheSameStretch([Values(0, 3, -42)] int runSeed)
+        {
+            var settings = Schedule(water: 0.5f);
+            var fresh = new ScenarioStretch[LevelsChecked];
+            for (var level = 1; level < LevelsChecked; level++)
+            {
+                fresh[level] = ScenarioSchedule.StretchAt(settings, level, runSeed);
+            }
+
+            var other = Schedule(water: 0.5f);
+            for (var level = LevelsChecked - 1; level >= 1; level--)
+            {
+                AssertStretch(ScenarioSchedule.StretchAt(other, level, runSeed), fresh[level].Kind,
+                    fresh[level].Position, fresh[level].Length);
+            }
+        }
+
+        [Test]
+        public void EachRun_RollsItsOwnWater()
+        {
+            var settings = Schedule(water: 0.5f);
+
+            var differs = false;
+            for (var level = 20; level < LevelsChecked && !differs; level++)
+            {
+                var a = ScenarioSchedule.ForLevel(settings, level, 11) == ScenarioKind.Water;
+                var b = ScenarioSchedule.ForLevel(settings, level, 12) == ScenarioKind.Water;
+                differs = a != b;
+            }
+
+            Assert.IsTrue(differs, "two runs lay out the same water");
+        }
+
+        [Test]
+        public void PuffCloudAndBushShares_AreFullOverWater([Values(1, 3, 5)] int length)
+        {
+            for (var position = 0; position < length; position++)
+            {
+                var stretch = new ScenarioStretch(ScenarioKind.Water, position, length);
+                Assert.AreEqual(1f, stretch.PuffCloudShare);
+                Assert.AreEqual(1f, stretch.BushShare);
+                Assert.IsFalse(stretch.IsClearingMeadow);
+            }
+        }
+
         // first is the latest level the first meadow can start on; without from, it starts there exactly.
         private static ScenarioScheduleSettings Schedule(int first = 16, int firstStretch = 4, int minGround = 3,
-            int maxGround = 5, int minSky = 2, int maxSky = 4, int salt = 7919, int from = 0)
+            int maxGround = 5, int minSky = 2, int maxSky = 4, int salt = 7919, int from = 0, float water = 0f)
         {
-            return new ScenarioScheduleSettings(first, firstStretch, minGround, maxGround, minSky, maxSky, salt, from);
+            return new ScenarioScheduleSettings(first, firstStretch, minGround, maxGround, minSky, maxSky, salt, from,
+                water);
         }
 
         private static void AssertStretch(ScenarioStretch stretch, ScenarioKind kind, int position, int length)

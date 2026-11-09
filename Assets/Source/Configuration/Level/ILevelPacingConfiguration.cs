@@ -15,6 +15,9 @@ namespace BalloonParty.Configuration.Level
         /// <summary>When balloon lines arrive; read by the spawn clock.</summary>
         ISpawnClockSettings SpawnClock { get; }
 
+        /// <summary>The bubbles that come in with the lines on water levels; read by the balloon spawner.</summary>
+        IBubbleRiseSettings BubbleRise { get; }
+
         /// <summary>
         ///     The mix for <paramref name="level" />: generated for a positive level, the matching debug preset
         ///     for a negative one. <paramref name="runSeed" /> (<c>IRunSeed</c>) picks the run's ground and sky
@@ -26,7 +29,7 @@ namespace BalloonParty.Configuration.Level
         int SeedForLevel(int level);
 
         /// <summary>
-        ///     Whether <paramref name="level" /> is set in the sky or on the ground in the run rolled by
+        ///     Whether <paramref name="level" /> is set in the sky, on the ground or over water in the run rolled by
         ///     <paramref name="runSeed" />. Debug presets (level &lt; 1) are sky.
         /// </summary>
         ScenarioKind ScenarioForLevel(int level, int runSeed);

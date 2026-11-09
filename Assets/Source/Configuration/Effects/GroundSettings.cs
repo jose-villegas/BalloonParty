@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace BalloonParty.Configuration.Effects
 {
-    /// <summary>Authored tuning for the ground backdrop shown on ground levels: the floor quad and the grass blades
-    /// over it. Assign both materials here and wire the asset into GameLifetimeScope.</summary>
+    /// <summary>Authored tuning for the surface backdrops: the floor quad and the grass blades over it on ground
+    /// levels, the water surface on water levels, and the mist reveal between either and the sky. Assign both materials here and wire the asset into GameLifetimeScope.</summary>
     [CreateAssetMenu(menuName = "Configuration/Ground Settings", fileName = "GroundSettings")]
     internal sealed class GroundSettings : ScriptableObject, IGroundSettings
     {
@@ -68,6 +68,20 @@ namespace BalloonParty.Configuration.Effects
         [Min(0.02f)]
         [SerializeField] private float _bladeRecoverySeconds = 0.35f;
 
+        [Header("Water")]
+        [Tooltip("Surface material using BalloonParty/Scenario/Water, drawn on the floor quad in place of the meadow on water levels: the bottom, its caustics and the rippling surface. Without one water levels show the sky.")]
+        [SerializeField] private Material _waterMaterial;
+
+        [Tooltip("Material using Hidden/BalloonParty/Scenario/WaterCaustics, the light the surface focuses on the bottom. The surface values (waves, rings) are copied from the water material, so only the focus is tuned here. Without one the bottom shows no caustics.")]
+        [SerializeField] private Material _waterCausticMaterial;
+
+        [Tooltip("Texels per world unit of the caustic target. Low on purpose: reading a small target back enlarged is what softens the caustics.")]
+        [Min(0.5f)]
+        [SerializeField] private float _waterCausticTexelsPerUnit = 4f;
+
+        [Tooltip("The water's average unlit colour, which the GI measures bounce against on water levels, as it does the meadow's on ground levels.")]
+        [SerializeField] private Color _waterBounceReference = new(0.10f, 0.28f, 0.37f, 1f);
+
         [Header("Mist Reveal")]
         [Tooltip("Material using BalloonParty/Scenario/GroundMist — the mist the meadow opens out of on the way down and closes back into on the way up. Without one the scenario switches with a cut.")]
         [SerializeField] private Material _mistMaterial;
@@ -115,6 +129,10 @@ namespace BalloonParty.Configuration.Effects
         public Color BounceReference => _bounceReference;
         public Material WakeMaterial => _wakeMaterial;
         public float BladeRecoverySeconds => _bladeRecoverySeconds;
+        public Material WaterMaterial => _waterMaterial;
+        public Material WaterCausticMaterial => _waterCausticMaterial;
+        public float WaterCausticTexelsPerUnit => _waterCausticTexelsPerUnit;
+        public Color WaterBounceReference => _waterBounceReference;
         public Material MistMaterial => _mistMaterial;
         public int MistSortingOrder => _mistSortingOrder;
         public float MistInShare => _mistInShare;

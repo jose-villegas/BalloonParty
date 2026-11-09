@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Game.Health;
@@ -52,6 +53,8 @@ namespace BalloonParty.Balloon.Spawner
         private readonly RejectedBalloonEffect _rejectedBalloon;
         private readonly BalloonPlacementResolver _placement;
         private readonly ILevelProgress _levelProgress;
+        private readonly ISpawnClock _spawnClock;
+        private readonly IRunSeed _runSeed;
         private readonly List<Vector3> _spawnPathBuffer = new();
         private readonly List<BalloonPrefabEntry> _spawnBatch = new();
         private readonly List<int> _lineColumns = new();
@@ -60,12 +63,16 @@ namespace BalloonParty.Balloon.Spawner
         private readonly List<BalloonPrefabEntry> _layerHeavies = new();
         private readonly List<BalloonPrefabEntry> _layerLights = new();
         private readonly Comparison<int> _byColumnKey;
+        // The catalogue's bubble, which water lines bring whatever the level generator withholds; null without one.
+        private readonly BalloonPrefabEntry _bubbleEntry;
 
         private int[] _columnSortKeys;
         // Lines spawned this level; waves (ISpawnClockSettings.LinesPerWave) are counted from it.
         private int _linesThisLevel;
         private int _batchCursor;
         private bool _prewarmed;
+        // Whether the batch being dealt is a water level's clock line, whose bubbles start small.
+        private bool _waterBatch;
 
         public SpawnStage SpawnPriority => SpawnStage.BalloonActors;
         public int ResetOrder => RunResetOrder.Counters;
@@ -88,7 +95,9 @@ namespace BalloonParty.Balloon.Spawner
             IPublisher<WaveDamageMessage> waveDamagePublisher,
             RejectedBalloonEffect rejectedBalloon,
             BalloonPlacementResolver placement,
-            ILevelProgress levelProgress)
+            ILevelProgress levelProgress,
+            ISpawnClock spawnClock,
+            IRunSeed runSeed)
         {
             _grid = grid;
             _balloonsConfig = balloonsConfig;
@@ -107,6 +116,9 @@ namespace BalloonParty.Balloon.Spawner
             _rejectedBalloon = rejectedBalloon;
             _placement = placement;
             _levelProgress = levelProgress;
+            _spawnClock = spawnClock;
+            _runSeed = runSeed;
+            _bubbleEntry = FindEntry(balloonsConfig, BalloonType.BubbleCluster);
 
             // Cached to avoid a per-sort delegate allocation.
             _byColumnKey = CompareColumnKeys;
@@ -166,6 +178,13 @@ namespace BalloonParty.Balloon.Spawner
             {
                 // Prewarm to the most this type can reach across all ranges; 0 = no range spawns it.
                 var count = _pacing.MaxConcurrentBalloons(entry.BalloonType, _grid.Columns);
+                if (entry == _bubbleEntry)
+                {
+                    // Water lines bring bubbles even when no level's mix includes them.
+                    var waterCap = _pacing.BubbleRise.MaxBubbles;
+                    count = Math.Max(count, waterCap > 0 ? waterCap : _grid.Columns);
+                }
+
                 if (count <= 0)
                 {
                     continue;
@@ -310,6 +329,11 @@ namespace BalloonParty.Balloon.Spawner
             var poolKey = entry.PoolKey;
 
             var model = _factory.Create(entry, slot, _spawnPathBuffer, () => ReleaseActiveCount(poolKey));
+            if (_waterBatch && model is BubbleClusterModel bubble)
+            {
+                bubble.SetBubbles(_pacing.BubbleRise.StartBubbles);
+            }
+
             _newlySpawnedBalloons.Add(model);
         }
 
@@ -417,6 +441,8 @@ namespace BalloonParty.Balloon.Spawner
             }
 
             var target = lineCount * _grid.Columns;
+            var bubbleShare = isInitial ? 0f : WaterBubbleShare();
+            _waterBatch = bubbleShare > 0f;
 
             // Guaranteed entries go first — they bypass the weighted pick and wave quotas.
             if (isInitial)
@@ -426,7 +452,8 @@ namespace BalloonParty.Balloon.Spawner
 
             for (var i = _spawnBatch.Count; i < target; i++)
             {
-                var entry = _levelParams.Current.PickBalloonEntry(_activeCounts, _waveQuotas);
+                var entry = RollWaterBubble(bubbleShare)
+                            ?? _levelParams.Current.PickBalloonEntry(_activeCounts, _waveQuotas);
                 if (entry == null)
                 {
                     break;
@@ -585,6 +612,50 @@ namespace BalloonParty.Balloon.Spawner
             }
 
             _newlySpawnedBalloons.RemoveRange(itemCheckStart, _newlySpawnedBalloons.Count - itemCheckStart);
+        }
+
+        private static BalloonPrefabEntry FindEntry(IBalloonsConfiguration config, BalloonType type)
+        {
+            foreach (var entry in config.Entries)
+            {
+                if (entry.BalloonType == type)
+                {
+                    return entry;
+                }
+            }
+
+            return null;
+        }
+
+        // The share of this line's places that are bubbles: 0 off water, else BubbleRiseCurve at the level's
+        // playing time so far.
+        private float WaterBubbleShare()
+        {
+            if (_bubbleEntry == null
+                || _pacing.ScenarioForLevel(_levelProgress.Level.Value, _runSeed.Value) != ScenarioKind.Water)
+            {
+                return 0f;
+            }
+
+            return BubbleRiseCurve.ShareAt(_pacing.BubbleRise, _spawnClock.SecondsOnLevel);
+        }
+
+        // A bubble for this place, or null for the level's usual pick: rolled against the share, held back once
+        // the board has its most bubbles (the count already includes this batch's).
+        private BalloonPrefabEntry RollWaterBubble(float share)
+        {
+            if (share <= 0f)
+            {
+                return null;
+            }
+
+            var cap = _pacing.BubbleRise.MaxBubbles;
+            if (cap > 0 && _activeCounts.GetValueOrDefault(_bubbleEntry.PoolKey) >= cap)
+            {
+                return null;
+            }
+
+            return UnityEngine.Random.value < share ? _bubbleEntry : null;
         }
     }
 }

@@ -30,12 +30,17 @@ namespace BalloonParty.Configuration.Level
         [Tooltip("When balloon lines arrive: one line per interval, shorter each level.")]
         [SerializeField] private SpawnClockSettings _spawnClock = new();
 
+        [Tooltip("On water levels, bubbles come in with the lines: a growing share of every line the longer " +
+                 "the level runs.")]
+        [SerializeField] private BubbleRiseSettings _bubbleRise = new();
+
         [Tooltip("What every positive level is generated from: a budget formula and a catalogue of " +
                  "content pieces that unlock by level.")]
         [SerializeField] private LevelGenerationSettings _generation = new();
 
         public IReadOnlyList<LevelRangeEntry> DebugPresets => _ranges;
         public ISpawnClockSettings SpawnClock => _spawnClock;
+        public IBubbleRiseSettings BubbleRise => _bubbleRise;
         internal LevelScoringCurve ScoringCurve => _scoringCurve;
         internal LevelGenerationSettings Generation => _generation;
 

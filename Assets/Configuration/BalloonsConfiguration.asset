@@ -194,3 +194,4 @@ MonoBehaviour:
   _nudgeDistance: 0.15
   _nudgeDuration: 0.7
   _nudgeFalloff: 1.5
+  _bubbleMergeSeconds: 0.18

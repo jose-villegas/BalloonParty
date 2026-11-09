@@ -33,6 +33,17 @@ namespace BalloonParty.Tests.Scenario
         }
 
         [Test]
+        public void DuringPlay_TheSkyToWater_RevealsOverItsLength()
+        {
+            var decision = GroundRevealPlanner.Decide(
+                new ScenarioShift(ScenarioKind.Water, 4f), NavigationState.Game, NavigationState.Game, ScenarioKind.Sky,
+                canReveal: true);
+
+            Assert.AreEqual(GroundRevealAction.Reveal, decision.Action);
+            Assert.AreEqual(ScenarioKind.Water, decision.Target);
+        }
+
+        [Test]
         public void ACutShift_Cuts()
         {
             var decision = GroundRevealPlanner.Decide(

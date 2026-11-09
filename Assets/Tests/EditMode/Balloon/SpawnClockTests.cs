@@ -246,6 +246,43 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void SecondsOnLevel_CountsPlayingTime_NotTheBoardPace()
+        {
+            _boardFill.StartingFill.Returns(0f);
+            _boardFill.Occupancy.Returns(0f);
+
+            _clock.Advance(2f);
+            _clock.Advance(1.5f);
+
+            Assert.AreEqual(3.5f, _clock.SecondsOnLevel, 1e-4f);
+        }
+
+        [Test]
+        public void SecondsOnLevel_HoldsWhilePausedOrNotPlaying()
+        {
+            _clock.Advance(1f);
+            _pauseService.Pause(PauseSource.Cinematic);
+            _clock.Advance(10f);
+            _pauseService.Resume(PauseSource.Cinematic);
+            _phase.Value = LevelUpPhase.Pending;
+            _clock.Advance(10f);
+
+            Assert.AreEqual(1f, _clock.SecondsOnLevel, 1e-4f);
+        }
+
+        [Test]
+        public void SecondsOnLevel_StartsOverOnLevelUpAndRunReset()
+        {
+            _clock.Advance(5f);
+            _level.Value = 2;
+            Assert.AreEqual(0f, _clock.SecondsOnLevel);
+
+            _clock.Advance(2f);
+            _clock.ResetRun(1);
+            Assert.AreEqual(0f, _clock.SecondsOnLevel);
+        }
+
+        [Test]
         public void NextLineProgress_AcrossAWindow_RunsZeroToOne()
         {
             Assert.AreEqual(0f, _clock.NextLineProgress, 0.0001f);

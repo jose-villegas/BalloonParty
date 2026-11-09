@@ -4,7 +4,7 @@ using UnityEngine;
 namespace BalloonParty.Configuration.Level
 {
     /// <summary>
-    ///     Which levels are set on the ground and which in the sky; read through
+    ///     Which levels are set in the sky, on the ground or over water; read through
     ///     <see cref="ScenarioSchedule" />.
     /// </summary>
     [Serializable]
@@ -33,6 +33,10 @@ namespace BalloonParty.Configuration.Level
         [Tooltip("Most levels a sky stretch between two ground stretches lasts.")]
         [SerializeField] [Min(1)] private int _maxSkyStretch = 4;
 
+        [Tooltip("Chance that a surface stretch after the first meadow is water rather than a meadow. Rolled " +
+                 "after the stretch's length, so it changes which surface a stretch shows, never where it falls.")]
+        [SerializeField] [Range(0f, 1f)] private float _waterShare = 0.5f;
+
         [Tooltip("Mixed into the stretch rolls. Kept apart from the level seed salt, so retuning level " +
                  "content doesn't reshuffle which levels are ground.")]
         [SerializeField] private int _salt = 7919;
@@ -44,6 +48,7 @@ namespace BalloonParty.Configuration.Level
         public int MaxGroundStretch => Mathf.Max(MinGroundStretch, _maxGroundStretch);
         public int MinSkyStretch => Mathf.Max(1, _minSkyStretch);
         public int MaxSkyStretch => Mathf.Max(MinSkyStretch, _maxSkyStretch);
+        public float WaterShare => Mathf.Clamp01(_waterShare);
         public int Salt => _salt;
         internal bool IsStretchRangeValid => _minGroundStretch <= _maxGroundStretch && _minSkyStretch <= _maxSkyStretch;
 
@@ -53,7 +58,8 @@ namespace BalloonParty.Configuration.Level
 
         // Without groundFromLevel the first ground level is groundByLevel, fixed.
         internal ScenarioScheduleSettings(int groundByLevel, int firstGroundStretch, int minGroundStretch,
-            int maxGroundStretch, int minSkyStretch, int maxSkyStretch, int salt, int groundFromLevel = 0)
+            int maxGroundStretch, int minSkyStretch, int maxSkyStretch, int salt, int groundFromLevel = 0,
+            float waterShare = 0f)
         {
             _groundByLevel = groundByLevel;
             _groundFromLevel = groundFromLevel > 0 ? groundFromLevel : groundByLevel;
@@ -63,6 +69,7 @@ namespace BalloonParty.Configuration.Level
             _minSkyStretch = minSkyStretch;
             _maxSkyStretch = maxSkyStretch;
             _salt = salt;
+            _waterShare = waterShare;
         }
     }
 }

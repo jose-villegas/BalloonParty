@@ -49,5 +49,12 @@ namespace BalloonParty.Balloon.Model
             ScoreAttributions.AddRandomPerColor(
                 results, _colorSource.Resolve(), incompleteColors, HitsRemaining.Value + 1, breaksStreak: true);
         }
+
+        /// <summary>Sets how many bubbles the cluster holds, kept within 1 and its <c>MaxHitPoints</c>: a water
+        /// line's small cluster, or the sum after a merge.</summary>
+        internal void SetBubbles(int count)
+        {
+            HitsRemaining.Value = System.Math.Clamp(count, 1, MaxHitPoints);
+        }
     }
 }

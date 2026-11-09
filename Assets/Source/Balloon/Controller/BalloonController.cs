@@ -164,6 +164,35 @@ namespace BalloonParty.Balloon.Controller
             return _view;
         }
 
+        // Leaves the board into a neighbouring bubble cluster: out of play at once (no score, no pop, its slot and
+        // its type count free), while the view flows into the survivor and then goes back to the pool.
+        internal void AbsorbInto(Vector3 target, float seconds)
+        {
+            _popped = true;
+            LifecycleHelper.DisposeAndClear(ref _itemActivatedSubscription);
+            _registry.Unregister(_model);
+
+            var slot = _model.SlotIndex.Value;
+            if (ReferenceEquals(_grid.At(slot), _model))
+            {
+                _grid.Remove(slot);
+            }
+
+            _onReturned?.Invoke();
+            _onReturned = null;
+
+            var view = _view.transform;
+            var restScale = view.localScale;
+            _view.TweenTracker.Kill();
+            view.DOKill();
+            view.DOScale(restScale * 0.5f, seconds).SetEase(Ease.InQuad);
+            view.DOMove(target, seconds).SetEase(Ease.InQuad).OnComplete(() =>
+            {
+                view.localScale = restScale;
+                _poolManager.Return(_poolKey, _view);
+            });
+        }
+
         internal void ReturnToPool()
         {
             _onReturned?.Invoke();

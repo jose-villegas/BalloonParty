@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BalloonParty.Configuration.Effects
 {
-    /// <summary>Read-only tuning for the ground backdrop (see <c>GroundView</c>).</summary>
+    /// <summary>Read-only tuning for the surface backdrops (ground and water) (see <c>GroundView</c>).</summary>
     internal interface IGroundSettings
     {
         /// <summary>Floor material using BalloonParty/Scenario/Ground — the dark ground under the blades.</summary>
@@ -57,6 +57,20 @@ namespace BalloonParty.Configuration.Effects
 
         /// <summary>Time constant, in seconds, for a pushed blade to stand back up.</summary>
         float BladeRecoverySeconds { get; }
+
+        /// <summary>Surface material using BalloonParty/Scenario/Water, drawn on the floor quad on water levels.
+        /// Without one water levels show the sky.</summary>
+        Material WaterMaterial { get; }
+
+        /// <summary>Material using Hidden/BalloonParty/Scenario/WaterCaustics: the light the surface focuses on the
+        /// bottom. Without one the bottom shows no caustics.</summary>
+        Material WaterCausticMaterial { get; }
+
+        /// <summary>Texels per world unit of the caustic target; low, so reading it back enlarged softens it.</summary>
+        float WaterCausticTexelsPerUnit { get; }
+
+        /// <summary>The water's average unlit colour, which the GI measures bounce against on water levels.</summary>
+        Color WaterBounceReference { get; }
 
         /// <summary>Material using BalloonParty/Scenario/GroundMist — the mist of the sky/ground reveal. Without one
         /// the scenario switches with a cut.</summary>

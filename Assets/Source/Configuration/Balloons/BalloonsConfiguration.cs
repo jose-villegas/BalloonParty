@@ -66,6 +66,11 @@ namespace BalloonParty.Configuration.Balloons
         [SerializeField] private float _nudgeDuration = 0.15f;
         [SerializeField] private float _nudgeFalloff = 1.5f;
 
+        [Header("Bubble Merge")]
+        [Tooltip("Seconds a bubble cluster takes to flow into the neighbour a nudge pushed it toward.")]
+        [Min(0.01f)]
+        [SerializeField] private float _bubbleMergeSeconds = 0.18f;
+
         public IReadOnlyList<BalloonPrefabEntry> Entries => _entries;
         public ParticleSystem DefaultPopVfxPrefab => _defaultPopVfxPrefab;
         public Material RainbowMaterial => _rainbowMaterial;
@@ -83,5 +88,6 @@ namespace BalloonParty.Configuration.Balloons
         public float NudgeDistance => _nudgeDistance;
         public float NudgeDuration => _nudgeDuration;
         public float NudgeFalloff => _nudgeFalloff;
+        public float BubbleMergeSeconds => _bubbleMergeSeconds;
     }
 }

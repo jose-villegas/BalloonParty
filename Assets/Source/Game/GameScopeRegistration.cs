@@ -93,6 +93,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ActorHitMessage>(options);
             builder.RegisterMessageBroker<BalloonDeflectedMessage>(options);
             builder.RegisterMessageBroker<NudgeMessage>(options);
+            builder.RegisterMessageBroker<NudgeAppliedMessage>(options);
             builder.RegisterMessageBroker<ScorePointsGroupMessage>(options);
             builder.RegisterMessageBroker<StreakChangedMessage>(options);
             builder.RegisterMessageBroker<ScoreLevelUpMessage>(options);
@@ -251,6 +252,7 @@ namespace BalloonParty.Game
         {
             builder.RegisterEntryPoint<BalloonBalancer>().AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<NudgeService>();
+            builder.RegisterEntryPoint<BubbleMergeService>();
             builder.RegisterEntryPoint<GridActorHitController>();
             builder.Register<NavigationReadyGate>(Lifetime.Singleton).WithParameter(NavigationState.Game);
             builder.RegisterEntryPoint<GridSpawnerCoordinator>().AsSelf().As<IRunResettable>();

@@ -4,5 +4,9 @@ namespace BalloonParty.Balloon.Spawner
     {
         /// <summary>0 just after a line lands (or as a level's grace starts), rising to 1 as the next line arrives.</summary>
         float NextLineProgress { get; }
+
+        /// <summary>Seconds of play on the current level, counted under the clock's holds (Game screen, Playing, not
+        /// paused); 0 again at each level start and run reset.</summary>
+        float SecondsOnLevel { get; }
     }
 }
