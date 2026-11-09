@@ -134,42 +134,46 @@ namespace BalloonParty.Cheats
 
         private void SetDirectionOverride()
         {
-            if (_cachedScope == null || _cachedView == null)
-            {
-                RefreshCachedRefs();
-            }
-
-            if (_cachedScope == null || _cachedView == null)
+            if (!TrySolve(out var bestAngle, out var bestScore))
             {
                 return;
             }
-
-            var pulseDelay = Mathf.Clamp(1.5f * Time.smoothDeltaTime, 0f, 0.1f);
-            var context = ShotBoardGather.Gather(
-                _grid, _config, _weapon.StartingShields, _gridConfig, _balloonsConfig, _itemConfig, _cachedView, _throwerSettings, _palette,
-                _levelParams, _runConfig, pulseDelay,
-                _cachedScope.Container.Resolve<BalloonBalancer>().SecondsUntilNextPulse);
-            if (context.Board.Count == 0)
-            {
-                return;
-            }
-
-            var workingSet = new ShotBalloonState[context.Board.Count];
-            FindBestAngle(context, workingSet, out var bestAngle, out var bestScore);
 
             _cachedScope.Container.Resolve<ThrowerController>().DirectionOverride =
                 ShotBoardGather.DirectionFromDegrees(bestAngle);
             Log.Info("FireBestShotCheat", $"override set: {bestAngle:F2}° (predicted score {bestScore}).");
         }
 
+        /// <summary>
+        ///     The angle "Fire Once" would fire, without firing: false with no thrower in the scene or nothing on
+        ///     the board. The autoplay aims with it.
+        /// </summary>
+        internal bool TryFindBestAngle(out float bestAngle)
+        {
+            return TrySolve(out bestAngle, out _);
+        }
+
         private void FireBest()
         {
-            RefreshCachedRefs();
+            if (!TrySolve(out var bestAngle, out var bestScore))
+            {
+                Log.Warn("FireBestShotCheat", "no thrower in the scene, or no targets on the board.");
+                return;
+            }
 
+            _cachedScope.Container.Resolve<ThrowerController>()
+                .FireAt(ShotBoardGather.DirectionFromDegrees(bestAngle));
+            Log.Info("FireBestShotCheat", $"fired {bestAngle:F2}° (predicted score {bestScore}).");
+        }
+
+        private bool TrySolve(out float bestAngle, out int bestScore)
+        {
+            bestAngle = 0f;
+            bestScore = int.MinValue;
+            RefreshCachedRefs();
             if (_cachedScope == null || _cachedView == null)
             {
-                Log.Warn("FireBestShotCheat", "no thrower in the scene.");
-                return;
+                return false;
             }
 
             var pulseDelay = Mathf.Clamp(1.5f * Time.smoothDeltaTime, 0f, 0.1f);
@@ -179,16 +183,12 @@ namespace BalloonParty.Cheats
                 _cachedScope.Container.Resolve<BalloonBalancer>().SecondsUntilNextPulse);
             if (context.Board.Count == 0)
             {
-                Log.Warn("FireBestShotCheat", "no targets on the board.");
-                return;
+                return false;
             }
 
             var workingSet = new ShotBalloonState[context.Board.Count];
-            FindBestAngle(context, workingSet, out var bestAngle, out var bestScore);
-
-            _cachedScope.Container.Resolve<ThrowerController>()
-                .FireAt(ShotBoardGather.DirectionFromDegrees(bestAngle));
-            Log.Info("FireBestShotCheat", $"fired {bestAngle:F2}° (predicted score {bestScore}).");
+            FindBestAngle(context, workingSet, out bestAngle, out bestScore);
+            return true;
         }
 
         // Shared by the auto-fire override and the one-shot fire — both must pick the exact same

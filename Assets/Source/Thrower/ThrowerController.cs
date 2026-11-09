@@ -584,7 +584,7 @@ namespace BalloonParty.Thrower
             EnsureLoaded();
         }
 
-        private bool IsReadyToFire()
+        internal bool IsReadyToFire()
         {
             return _loadedProjectile != null
                    && _loadedView != null

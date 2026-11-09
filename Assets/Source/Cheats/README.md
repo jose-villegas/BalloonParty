@@ -22,6 +22,25 @@ Registration in `GameLifetimeScope` and the `CheatState` checks sprinkled throug
 
 **Tools → BalloonParty → Cheats In Release Builds** toggles the `CHEATS_IN_RELEASE` scripting define on the active build target (checkmark shows current state). While on, a normal release build includes the full cheat system — without paying the other development-build costs (`Log.Info`/`Log.Assert` stay stripped, no dev-build profiler/overlay overhead), so the build stays performance-representative. The define lives in ProjectSettings and **persists until toggled off** — turn it off before building anything meant to ship (the enable path logs a warning as a reminder).
 
+## Autoplay (device playtests)
+
+`Autoplay/` lets a checked build play itself, so `Tools/playtest/device_bot.py` can run playtest-bot sessions on
+emulators or phones while the Editor does something else. It compiles only under `UNITY_ENABLE_CHECKS` (not
+`CHEATS_IN_RELEASE`): its report reads the telemetry log, which only checked builds write.
+
+- `AutoplayLaunchArgument` reads the spec the app was launched with: the intent's `autoplay` extra on
+  Android (`adb shell am start -n <package>/<activity> -e autoplay 'player=human seconds=420'`), the argument
+  after `-autoplay` elsewhere. With none, nothing is registered and the build plays as usual.
+- `AutoplaySettings.TryParse` reads it: `player=human|best`, `seconds`, `restart=0|1`, and the human's knobs
+  `floor`, `mean`, `aim`, `wild` (the playtest bot's, see `Tools/playtest/README.md`), plus an optional
+  `seed`. A malformed spec is refused with a warning rather than played wrong.
+- `AutoplayController` (Game scope) presses Play on the launch screen, fires as the chosen player once the
+  cannon is ready (the best angle from `FireBestShotCheat.TryFindBestAngle`, plus `AutoplayDice`'s reaction
+  time and aim error for a human), presses Restart on game over or ends there, and quits the app when the
+  time is up.
+- `AutoplayTickWriter` writes `persistentDataPath/autoplay/ticks.jsonl` (the Editor bot's tick fields, twice a
+  second) and a `done` file at the end, which is what the runner waits for.
+
 ## VContainer registration
 
 `CheatConsoleView`, `BalloonRemoverCheat`, `DisturbanceStampCheat`, and `LightStampCheat` are MonoBehaviours created via `RegisterComponentOnNewGameObject`. VContainer singletons are **lazy** — the GameObject is only created when resolved. Each requires `RegisterBuildCallback(resolver => resolver.Resolve<T>())` to force eager creation at scope build time.

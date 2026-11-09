@@ -1,6 +1,9 @@
 #if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
 using BalloonParty.Cheats;
 #endif
+#if UNITY_ENABLE_CHECKS
+using BalloonParty.Cheats.Autoplay;
+#endif
 
 using System;
 using System.Collections.Generic;
@@ -462,7 +465,7 @@ namespace BalloonParty.Game
             builder.Register<BlockLevelUpCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ForceGameOverCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ForceRestartCheat>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<FireBestShotCheat>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<FireBestShotCheat>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.Register<StartFromLevelCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<AddShieldCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<TimeOfDayCheat>(Lifetime.Singleton).AsImplementedInterfaces();
@@ -483,6 +486,32 @@ namespace BalloonParty.Game
 
             builder.RegisterComponentOnNewGameObject<CheatConsoleView>(Lifetime.Singleton, "CheatConsole");
             builder.RegisterBuildCallback(resolver => resolver.Resolve<CheatConsoleView>());
+
+#if UNITY_ENABLE_CHECKS
+            RegisterAutoplay(builder);
+#endif
+        }
+#endif
+
+#if UNITY_ENABLE_CHECKS
+        // Only for a launch that asks for it (Tools/playtest/device_bot.py); a normal launch registers nothing.
+        // Checked builds only, not release-with-cheats: the report reads the telemetry log, which they don't write.
+        private static void RegisterAutoplay(IContainerBuilder builder)
+        {
+            var spec = AutoplayLaunchArgument.Read();
+            if (string.IsNullOrWhiteSpace(spec))
+            {
+                return;
+            }
+
+            if (!AutoplaySettings.TryParse(spec, out var settings))
+            {
+                Log.Warn("Autoplay", $"ignoring a malformed autoplay spec: '{spec}'.");
+                return;
+            }
+
+            builder.RegisterInstance(settings);
+            builder.RegisterEntryPoint<AutoplayController>();
         }
 #endif
     }

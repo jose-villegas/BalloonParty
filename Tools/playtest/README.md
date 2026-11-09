@@ -69,9 +69,29 @@ Compare sessions with each other, not with a person's feel: if a change makes th
 longer or cost hearts, it made the game harder. A level only writes its record when it ends, so
 the level in play when the session stops is missing from the table.
 
+## On emulators and phones
+
+`device_bot.py` runs the same players on Android devices instead, several sessions at once, one per device. A
+checked build plays itself when launched with an autoplay spec (`Assets/Source/Cheats/README.md`, Autoplay):
+the runner installs the APK, launches it with the player's knobs, waits for the session's `done` file, pulls
+its ticks and telemetry with adb and writes the same report, one folder per session.
+
+```bash
+python3 Tools/playtest/device_bot.py --boot 3 --apk Builds/local/BalloonParty-autoplay.apk --seconds 420 --label meadow average high best
+```
+
+- It needs a checked APK (Managed Code Variant Checked or Debug) with an x86_64 slice for the emulator.
+- The emulator and its Android 15 image live in `%LOCALAPPDATA%\Android\Sdk` (installed with `sdkmanager`
+  from Unity's bundled command-line tools), with the AVD `bp-autoplay` (1080x2400, 4 cores, 4 GB). `--boot N`
+  starts read-only instances of it until N run; they need hardware acceleration (WHPX, on with Hyper-V).
+- With no `--serial`, it plays on every running emulator and never on a connected phone.
+- An emulator renders on the host GPU, but slower than a phone: a slow frame stretches game time against
+  wall time. Compare emulator sessions with each other, not with the Editor's.
+
 ## Files
 
 | File | What it is |
 |---|---|
 | `playtest_bot.py` | The runner: Editor setup, the tick loop, the report |
+| `device_bot.py` | The device runner: emulators, adb, one session per device in parallel, the same report |
 | `bot_tick.cs` | One tick, compiled by the Pipeline package on each call, with the `__PLACEHOLDERS__` filled in by the runner. Outside `Assets/`, so not part of the Unity project; it reaches the game's internal types by reflection. The shooter's state between ticks lives in `SessionState` (`BalloonPartyBot.*`) |
