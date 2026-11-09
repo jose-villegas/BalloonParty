@@ -172,6 +172,11 @@ var hierarchy =
     [ "BalloonParty.Configuration.GridActors.GridActorPrefabEntry", "classBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorPrefabEntry.html", null ],
     [ "BalloonParty.Configuration.GridActors.GridActorTypeGate", "structBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorTypeGate.html", null ],
     [ "BalloonParty.Slots.Grid.GridBalanceQuery", "classBalloonParty_1_1Slots_1_1Grid_1_1GridBalanceQuery.html", null ],
+    [ "BalloonParty.Scenario.GroundRevealCurve", "classBalloonParty_1_1Scenario_1_1GroundRevealCurve.html", null ],
+    [ "BalloonParty.Scenario.GroundRevealDecision", "structBalloonParty_1_1Scenario_1_1GroundRevealDecision.html", null ],
+    [ "BalloonParty.Scenario.GroundRevealDepth", "structBalloonParty_1_1Scenario_1_1GroundRevealDepth.html", null ],
+    [ "BalloonParty.Scenario.GroundRevealFrame", "structBalloonParty_1_1Scenario_1_1GroundRevealFrame.html", null ],
+    [ "BalloonParty.Scenario.GroundRevealPlanner", "classBalloonParty_1_1Scenario_1_1GroundRevealPlanner.html", null ],
     [ "BalloonParty.Editor.HeadsUpBuilder", "classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html", null ],
     [ "BalloonParty.UI.HeadsUp.HeadsUpPacking", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html", null ],
     [ "BalloonParty.UI.HeadsUp.HeadsUpSizing", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpSizing.html", null ],
@@ -455,7 +460,8 @@ var hierarchy =
     ] ],
     [ "IEquatable", null, [
       [ "BalloonParty.Audio.SoundHandle", "structBalloonParty_1_1Audio_1_1SoundHandle.html", null ],
-      [ "BalloonParty.Game.Score.TrailId", "structBalloonParty_1_1Game_1_1Score_1_1TrailId.html", null ]
+      [ "BalloonParty.Game.Score.TrailId", "structBalloonParty_1_1Game_1_1Score_1_1TrailId.html", null ],
+      [ "BalloonParty.Scenario.ScenarioShift", "structBalloonParty_1_1Scenario_1_1ScenarioShift.html", null ]
     ] ],
     [ "BalloonParty.Game.Run.IFailureOffers", "interfaceBalloonParty_1_1Game_1_1Run_1_1IFailureOffers.html", [
       [ "BalloonParty.Game.Run.FailureOffers", "classBalloonParty_1_1Game_1_1Run_1_1FailureOffers.html", null ]
@@ -748,7 +754,6 @@ var hierarchy =
       [ "BalloonParty.Game.Health.PlayerHealthController", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html", null ],
       [ "BalloonParty.Game.Level.LevelController", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html", null ],
       [ "BalloonParty.Game.Level.LevelDifficultyResolver", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html", null ],
-      [ "BalloonParty.Game.Level.ScenarioController", "classBalloonParty_1_1Game_1_1Level_1_1ScenarioController.html", null ],
       [ "BalloonParty.Game.Level.TimeOfDayCycle", "classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle.html", null ],
       [ "BalloonParty.Game.Run.IBoardResettable", "interfaceBalloonParty_1_1Game_1_1Run_1_1IBoardResettable.html", [
         [ "BalloonParty.Game.Run.BoardClearController", "classBalloonParty_1_1Game_1_1Run_1_1BoardClearController.html", null ],
@@ -1026,6 +1031,7 @@ var hierarchy =
     [ "BalloonParty.Slots.Actor.ITransitionOutgoingContent", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1ITransitionOutgoingContent.html", [
       [ "BalloonParty.Game.Coins.CoinTrailService", "classBalloonParty_1_1Game_1_1Coins_1_1CoinTrailService.html", null ],
       [ "BalloonParty.Game.Score.ScoreTrailService", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html", null ],
+      [ "BalloonParty.Scenario.View.GroundView", "classBalloonParty_1_1Scenario_1_1View_1_1GroundView.html", null ],
       [ "BalloonParty.Slots.Actor.Cluster.ClusterViewController< TModel, TView, TSettings >", "classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterViewController-3-g.html", null ]
     ] ],
     [ "BalloonParty.Shared.IUpgradeCardSettings", "interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html", [
@@ -1326,6 +1332,7 @@ var hierarchy =
     [ "BalloonParty.Shared.Extensions.RendererExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1RendererExtensions.html", null ],
     [ "BalloonParty.Balloon.Controller.BalanceDebugRecorder.Resolution", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1Resolution.html", null ],
     [ "BalloonParty.Configuration.GridActors.ResolvedGridActorGate", "structBalloonParty_1_1Configuration_1_1GridActors_1_1ResolvedGridActorGate.html", null ],
+    [ "BalloonParty.Shared.Messages.RestartRiseStartedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1RestartRiseStartedMessage.html", null ],
     [ "BalloonParty.Audio.Editor.FreesoundResponseParser.Result", "classBalloonParty_1_1Audio_1_1Editor_1_1FreesoundResponseParser_1_1Result.html", null ],
     [ "BalloonParty.Shared.Pause.ResumedMessage", "structBalloonParty_1_1Shared_1_1Pause_1_1ResumedMessage.html", null ],
     [ "BalloonParty.Balloon.Controller.BalloonBalancer.RoamCandidate", "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html", null ],

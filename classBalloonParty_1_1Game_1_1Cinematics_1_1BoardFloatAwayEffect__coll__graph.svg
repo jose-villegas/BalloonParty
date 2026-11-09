@@ -247,7 +247,7 @@ var sectionId = 'dynsection-1';
 <!-- Node62 -->
 <g id="Node000062" class="node">
 <title>Node62</title>
-<g id="a_Node000062"><a xlink:href="classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html" target="_top" xlink:title="Parent transform for scenario static content; the Ascent transition moves this root,...">
+<g id="a_Node000062"><a xlink:href="classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html" target="_top" xlink:title="Parent transform for scenario static content; a level transition moves this root, not each child.">
 <polygon fill="white" stroke="#666666" points="1355,-1502.77 1221,-1502.77 1221,-1472.77 1355,-1472.77 1355,-1502.77"/>
 <text text-anchor="start" x="1229" y="-1490.77" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Actor.</text>
 <text text-anchor="middle" x="1288" y="-1479.77" font-family="Helvetica,sans-Serif" font-size="10.00">ScenarioContentRoot</text>

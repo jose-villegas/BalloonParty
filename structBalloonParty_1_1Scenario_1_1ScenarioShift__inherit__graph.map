@@ -1,0 +1,5 @@
+<map id="BalloonParty.Scenario.ScenarioShift" name="BalloonParty.Scenario.ScenarioShift">
+<area shape="rect" id="Node000001" title="A switch of the backdrop to Kind: a cut when Seconds is 0, otherwise the mist reveal played over that..." alt="" coords="5,79,228,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="71,5,162,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,44,119,79,114,79,114,44"/>
+</map>

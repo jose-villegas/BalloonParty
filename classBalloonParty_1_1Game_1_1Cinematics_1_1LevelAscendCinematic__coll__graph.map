@@ -1,5 +1,5 @@
 <map id="BalloonParty.Game.Cinematics.LevelAscendCinematic" name="BalloonParty.Game.Cinematics.LevelAscendCinematic">
-<area shape="rect" id="Node000001" title="Descends the staging root to Vector3.zero so the incoming scenario slides into place,..." alt="" coords="719,89,945,129"/>
+<area shape="rect" id="Node000001" title="Brings the staging root&#39;s travel down to rest (ScenarioContentRoot.SetTravel) so the incoming scenari..." alt="" coords="719,89,945,129"/>
 <area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicDirector.html" title=" " alt="" coords="379,47,605,87"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="619,80,719,92,718,98,619,85"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="79,5,159,31"/>

@@ -1,5 +1,5 @@
 <map id="BalloonParty.Scenario.ActiveScenario" name="BalloonParty.Scenario.ActiveScenario">
 <area shape="rect" id="Node000001" title="Model behind IActiveScenario; written only by ScenarioController." alt="" coords="7,93,214,133"/>
-<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html" title="The scenario the backdrop is showing now: sky or ground." alt="" coords="5,5,216,45"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html" title="The scenario the backdrop is on (sky or ground), and whether it got there by a cut or a mist reveal." alt="" coords="5,5,216,45"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,59,113,93,108,93,108,59"/>
 </map>

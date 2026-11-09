@@ -9,7 +9,7 @@
 <area shape="rect" id="Node000004" title=" " alt="" coords="673,126,771,151"/>
 <area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="785,141,984,158,1231,184,1255,187,1254,192,1230,189,983,164,785,146"/>
 <area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="765,155,947,241,945,246,762,160"/>
-<area shape="rect" id="Node000015" href="$classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html" title="Parent transform for scenario static content; the Ascent transition moves this root,..." alt="" coords="917,69,1095,109"/>
+<area shape="rect" id="Node000015" href="$classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html" title="Parent transform for scenario static content; a level transition moves this root, not each child." alt="" coords="917,69,1095,109"/>
 <area shape="poly" id="edge18_Node000015_Node000004" title=" " alt="" coords="785,125,916,102,917,107,786,130"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ITransitionOutgoingContent.html" title="Keeps outgoing visuals on screen during a level transition so the Ascent&#39;s board clear doesn&#39;t blink ..." alt="" coords="907,5,1105,45"/>
 <area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="1120,41,1177,58,1232,82,1264,103,1294,127,1341,176,1337,179,1291,131,1261,107,1229,86,1175,63,1118,46"/>

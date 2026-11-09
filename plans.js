@@ -1,6 +1,6 @@
 var plans =
 [
-    [ "Plans", "plans.html#autotoc_md776", null ],
+    [ "Plans", "plans.html#autotoc_md777", null ],
     [ "Bubble Cluster Hit Feedback", "plan_bubble_cluster_hit_feedback.html", [
       [ "Bubble Cluster Hit Feedback", "plan_bubble_cluster_hit_feedback.html#autotoc_md321", [
         [ "Goals", "plan_bubble_cluster_hit_feedback.html#autotoc_md323", null ],
@@ -241,8 +241,9 @@ var plans =
         ] ],
         [ "Decisions (signed off 2026-11-08)", "plan_terrain_biomes.html#autotoc_md762", null ],
         [ "In-editor checks for phase 1", "plan_terrain_biomes.html#autotoc_md763", null ],
-        [ "Follow-ups from the phase 1 optimizer review", "plan_terrain_biomes.html#autotoc_md764", null ],
-        [ "Later: the full biome system (unscheduled)", "plan_terrain_biomes.html#autotoc_md766", null ]
+        [ "In-editor checks for phase 2", "plan_terrain_biomes.html#autotoc_md764", null ],
+        [ "Follow-ups from the phase 1 optimizer review", "plan_terrain_biomes.html#autotoc_md765", null ],
+        [ "Later: the full biome system (unscheduled)", "plan_terrain_biomes.html#autotoc_md767", null ]
       ] ]
     ] ],
     [ "Gameplay Telemetry", "plan_gameplay_telemetry.html", [
@@ -383,14 +384,14 @@ var plans =
       ] ]
     ] ],
     [ "Web Demo Hosting", "plan_web_demo_hosting.html", [
-      [ "Web Demo Hosting", "plan_web_demo_hosting.html#autotoc_md767", [
-        [ "Why keep it", "plan_web_demo_hosting.html#autotoc_md769", null ],
-        [ "What survived", "plan_web_demo_hosting.html#autotoc_md770", null ],
-        [ "The recipe, if resumed", "plan_web_demo_hosting.html#autotoc_md771", null ],
-        [ "The blocker", "plan_web_demo_hosting.html#autotoc_md772", null ],
-        [ "Residue from the attempt", "plan_web_demo_hosting.html#autotoc_md773", null ],
-        [ "If web stays dead", "plan_web_demo_hosting.html#autotoc_md774", null ],
-        [ "Decision log", "plan_web_demo_hosting.html#autotoc_md775", null ]
+      [ "Web Demo Hosting", "plan_web_demo_hosting.html#autotoc_md768", [
+        [ "Why keep it", "plan_web_demo_hosting.html#autotoc_md770", null ],
+        [ "What survived", "plan_web_demo_hosting.html#autotoc_md771", null ],
+        [ "The recipe, if resumed", "plan_web_demo_hosting.html#autotoc_md772", null ],
+        [ "The blocker", "plan_web_demo_hosting.html#autotoc_md773", null ],
+        [ "Residue from the attempt", "plan_web_demo_hosting.html#autotoc_md774", null ],
+        [ "If web stays dead", "plan_web_demo_hosting.html#autotoc_md775", null ],
+        [ "Decision log", "plan_web_demo_hosting.html#autotoc_md776", null ]
       ] ]
     ] ],
     [ "Level-Up Timing", "plan_level_up_timing.html", [

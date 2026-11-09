@@ -1,5 +1,9 @@
 var NAVTREEINDEX4 =
 {
+"arch_slot_actor.html#autotoc_md97":[2,13,0,0],
+"arch_slot_actor.html#autotoc_md98":[2,13,0,1],
+"arch_spawner_coordination.html":[2,5],
+"arch_spawner_coordination.html#autotoc_md100":[2,5,0,0],
 "arch_spawner_coordination.html#autotoc_md101":[2,5,0,1],
 "arch_spawner_coordination.html#autotoc_md99":[2,5,0],
 "arch_static_state.html":[2,12],
@@ -245,9 +249,5 @@ var NAVTREEINDEX4 =
 "classBalloonParty_1_1Audio_1_1Editor_1_1AttributionLedger.html#ae467cdb4641991abf13b619b19f9a825":[5,0,0,0,1,0,0],
 "classBalloonParty_1_1Audio_1_1Editor_1_1AttributionLedger.html#ae467cdb4641991abf13b619b19f9a825":[6,0,0,0,1,0,0],
 "classBalloonParty_1_1Audio_1_1Editor_1_1AttributionLedger.html#af4fe48f60dbff98ca062e9f0f8765a2f":[5,0,0,0,1,0,6],
-"classBalloonParty_1_1Audio_1_1Editor_1_1AttributionLedger.html#af4fe48f60dbff98ca062e9f0f8765a2f":[6,0,0,0,1,0,6],
-"classBalloonParty_1_1Audio_1_1Editor_1_1AttributionRecord.html":[5,0,0,0,1,1],
-"classBalloonParty_1_1Audio_1_1Editor_1_1AttributionRecord.html":[6,0,0,0,1,1],
-"classBalloonParty_1_1Audio_1_1Editor_1_1AttributionRecord.html#a523d154c7e7abb793e737649fd167d0a":[5,0,0,0,1,1,5],
-"classBalloonParty_1_1Audio_1_1Editor_1_1AttributionRecord.html#a523d154c7e7abb793e737649fd167d0a":[6,0,0,0,1,1,5]
+"classBalloonParty_1_1Audio_1_1Editor_1_1AttributionLedger.html#af4fe48f60dbff98ca062e9f0f8765a2f":[6,0,0,0,1,0,6]
 };

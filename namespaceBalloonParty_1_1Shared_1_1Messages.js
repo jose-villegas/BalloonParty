@@ -33,6 +33,7 @@ var namespaceBalloonParty_1_1Shared_1_1Messages =
     [ "ProjectileDoomedStartedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedStartedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedStartedMessage" ],
     [ "ProjectileFiredMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileFiredMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileFiredMessage" ],
     [ "ProjectileLoadedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage" ],
+    [ "RestartRiseStartedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1RestartRiseStartedMessage.html", null ],
     [ "RunResetMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage" ],
     [ "RunRestartCompletedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1RunRestartCompletedMessage.html", null ],
     [ "ScoreLevelUpMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ScoreLevelUpMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ScoreLevelUpMessage" ],

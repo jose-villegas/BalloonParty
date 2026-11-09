@@ -108,9 +108,9 @@ $(function(){initNavTree('classBalloonParty_1_1Scenario_1_1View_1_1GroundView.ht
 
 <div class="header">
   <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pac-methods">Package Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
-<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Scenario_1_1View_1_1GroundView-members.html">List of all members</a>  </div>
@@ -125,7 +125,7 @@ $(function(){initNavTree('classBalloonParty_1_1Scenario_1_1View_1_1GroundView.ht
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Scenario_1_1View_1_1GroundView__inherit__graph.svg" width="212" height="124"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Scenario_1_1View_1_1GroundView__inherit__graph.svg" width="358" height="139"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Scenario.View.GroundView:</div>
@@ -135,6 +135,15 @@ $(function(){initNavTree('classBalloonParty_1_1Scenario_1_1View_1_1GroundView.ht
 <div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Scenario_1_1View_1_1GroundView__coll__graph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a0ec2fe9c35f576893de4c5bc2b37b517" id="r_a0ec2fe9c35f576893de4c5bc2b37b517"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0ec2fe9c35f576893de4c5bc2b37b517">HoldOutgoing</a> (Transform outgoingRoot, float exitDrop)</td></tr>
+<tr class="memdesc:a0ec2fe9c35f576893de4c5bc2b37b517"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parents current content under <em>outgoingRoot</em>  (ScenarioContentRoot.Outgoing), offset by <em>exitDrop</em>  so it slides out in lockstep with the incoming content. A mist reveal scales that holder about the camera, so held content must draw relative to its transform, not from world positions baked at hold time.  <br /></td></tr>
+<tr class="separator:a0ec2fe9c35f576893de4c5bc2b37b517"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0790258d659412e94ca3f46a2654e47" id="r_ae0790258d659412e94ca3f46a2654e47"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae0790258d659412e94ca3f46a2654e47">ReleaseOutgoing</a> ()</td></tr>
+<tr class="memdesc:ae0790258d659412e94ca3f46a2654e47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once the transition has settled — discard whatever was held.  <br /></td></tr>
+<tr class="separator:ae0790258d659412e94ca3f46a2654e47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
 <tr class="memitem:a0bc293547af7b398e27776a4bd899988" id="r_a0bc293547af7b398e27776a4bd899988"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0bc293547af7b398e27776a4bd899988">Construct</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html">IGroundSettings</a> settings, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html">IGameDisplayConfiguration</a> display, <a class="el" href="interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html">IActiveScenario</a> scenario, <a class="el" href="classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html">ScenarioContentRoot</a> scenarioRoot, IObjectResolver resolver)</td></tr>
@@ -142,21 +151,26 @@ Package Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a26ecc73e98ffbafbe00cc715f0aa747b" id="r_a26ecc73e98ffbafbe00cc715f0aa747b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a26ecc73e98ffbafbe00cc715f0aa747b">ApplyReveal</a> ()</td></tr>
+<tr class="separator:a26ecc73e98ffbafbe00cc715f0aa747b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52c42260150e6b836c4cb0121dc9ba05" id="r_a52c42260150e6b836c4cb0121dc9ba05"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a52c42260150e6b836c4cb0121dc9ba05">BeginReveal</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> target, float seconds)</td></tr>
+<tr class="separator:a52c42260150e6b836c4cb0121dc9ba05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa762cfb632e0c2f694249aa3526cdefa" id="r_aa762cfb632e0c2f694249aa3526cdefa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa762cfb632e0c2f694249aa3526cdefa">BuildBlades</a> ()</td></tr>
 <tr class="separator:aa762cfb632e0c2f694249aa3526cdefa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af82de8ddc4e73e464f5788129638a634" id="r_af82de8ddc4e73e464f5788129638a634"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af82de8ddc4e73e464f5788129638a634">BuildMist</a> (float overscan)</td></tr>
+<tr class="separator:af82de8ddc4e73e464f5788129638a634"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af597e3aa241ec92cff80f9a8c676e014" id="r_af597e3aa241ec92cff80f9a8c676e014"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af597e3aa241ec92cff80f9a8c676e014">Cut</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> kind)</td></tr>
+<tr class="separator:af597e3aa241ec92cff80f9a8c676e014"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd46fd07e348cef9c1a19feec238dc9e" id="r_afd46fd07e348cef9c1a19feec238dc9e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afd46fd07e348cef9c1a19feec238dc9e">LateUpdate</a> ()</td></tr>
 <tr class="separator:afd46fd07e348cef9c1a19feec238dc9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1786f1a70fed00330c00b064126405af" id="r_a1786f1a70fed00330c00b064126405af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1786f1a70fed00330c00b064126405af">OnDestroy</a> ()</td></tr>
 <tr class="separator:a1786f1a70fed00330c00b064126405af"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a93f691fa62cbf6954a6e4e36b713e7c3" id="r_a93f691fa62cbf6954a6e4e36b713e7c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a93f691fa62cbf6954a6e4e36b713e7c3">Show</a> (bool ground)</td></tr>
-<tr class="separator:a93f691fa62cbf6954a6e4e36b713e7c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28781587771fe34251a71554834815a1" id="r_a28781587771fe34251a71554834815a1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a28781587771fe34251a71554834815a1">OnScenario</a> (<a class="el" href="structBalloonParty_1_1Scenario_1_1ScenarioShift.html">ScenarioShift</a> shift, <a class="el" href="namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6">NavigationState</a> navigation)</td></tr>
+<tr class="separator:a28781587771fe34251a71554834815a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe8dbfeb6ea57da819cf6873ba6c031f" id="r_abe8dbfeb6ea57da819cf6873ba6c031f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abe8dbfeb6ea57da819cf6873ba6c031f">Start</a> ()</td></tr>
 <tr class="separator:abe8dbfeb6ea57da819cf6873ba6c031f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
-Static Private Member Functions</h2></td></tr>
-<tr class="memitem:a2ffebcfe026631a6b128792ad5e72216" id="r_a2ffebcfe026631a6b128792ad5e72216"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2ffebcfe026631a6b128792ad5e72216">ShowsGround</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> kind, <a class="el" href="namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6">NavigationState</a> navigation)</td></tr>
-<tr class="separator:a2ffebcfe026631a6b128792ad5e72216"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec6a36f3bf4afdc88ae4de7ebb42b54f" id="r_aec6a36f3bf4afdc88ae4de7ebb42b54f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aec6a36f3bf4afdc88ae4de7ebb42b54f">StepReveal</a> ()</td></tr>
+<tr class="separator:aec6a36f3bf4afdc88ae4de7ebb42b54f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -164,18 +178,42 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a27a6922d8e4c1a4d5e54e2f9efb452c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d3ee3f404213507461a8ec5fb0f9e71" id="r_a5d3ee3f404213507461a8ec5fb0f9e71"><td class="memItemLeft" align="right" valign="top">GameObject&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d3ee3f404213507461a8ec5fb0f9e71">_blades</a></td></tr>
 <tr class="separator:a5d3ee3f404213507461a8ec5fb0f9e71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ed6dfaaa2f8f00a7ac77309461b24f4" id="r_a4ed6dfaaa2f8f00a7ac77309461b24f4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ed6dfaaa2f8f00a7ac77309461b24f4">_closedRadius</a></td></tr>
+<tr class="separator:a4ed6dfaaa2f8f00a7ac77309461b24f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2fc133e785247005693e222e713f8b98" id="r_a2fc133e785247005693e222e713f8b98"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html">IGameDisplayConfiguration</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2fc133e785247005693e222e713f8b98">_display</a></td></tr>
 <tr class="separator:a2fc133e785247005693e222e713f8b98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88f21fd6dfdff75ffcc2af8331edda5d" id="r_a88f21fd6dfdff75ffcc2af8331edda5d"><td class="memItemLeft" align="right" valign="top">Material&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a88f21fd6dfdff75ffcc2af8331edda5d">_floorMaterial</a></td></tr>
+<tr class="separator:a88f21fd6dfdff75ffcc2af8331edda5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeba082ffd58140205f5e06c32a9bfdcc" id="r_aeba082ffd58140205f5e06c32a9bfdcc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeba082ffd58140205f5e06c32a9bfdcc">_groundScale</a> = 1f</td></tr>
+<tr class="separator:aeba082ffd58140205f5e06c32a9bfdcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe56efb69baa440398fa5926134b9609" id="r_abe56efb69baa440398fa5926134b9609"><td class="memItemLeft" align="right" valign="top">GameObject&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abe56efb69baa440398fa5926134b9609">_mist</a></td></tr>
+<tr class="separator:abe56efb69baa440398fa5926134b9609"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60ea1876c5a541acca62e78b85eee15c" id="r_a60ea1876c5a541acca62e78b85eee15c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6">NavigationState</a>?&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a60ea1876c5a541acca62e78b85eee15c">_navigation</a></td></tr>
+<tr class="separator:a60ea1876c5a541acca62e78b85eee15c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a064d3a4c9c4b3e9ae936e31dab7048c6" id="r_a064d3a4c9c4b3e9ae936e31dab7048c6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a064d3a4c9c4b3e9ae936e31dab7048c6">_openRadius</a></td></tr>
+<tr class="separator:a064d3a4c9c4b3e9ae936e31dab7048c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a643c911ec8b2e18339fe9d381bef3594" id="r_a643c911ec8b2e18339fe9d381bef3594"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a643c911ec8b2e18339fe9d381bef3594">_outgoingDrop</a></td></tr>
+<tr class="separator:a643c911ec8b2e18339fe9d381bef3594"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1af01b2dddd93dabd643ce879bbff72" id="r_aa1af01b2dddd93dabd643ce879bbff72"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa1af01b2dddd93dabd643ce879bbff72">_pushedScroll</a> = new(float.NaN, float.NaN)</td></tr>
 <tr class="separator:aa1af01b2dddd93dabd643ce879bbff72"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a943bd0b394bebdeaabb120c2be634d6b" id="r_a943bd0b394bebdeaabb120c2be634d6b"><td class="memItemLeft" align="right" valign="top">GameObject&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a943bd0b394bebdeaabb120c2be634d6b">_quad</a></td></tr>
 <tr class="separator:a943bd0b394bebdeaabb120c2be634d6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6f1ca47b20452a1402dbe66376525f4" id="r_ae6f1ca47b20452a1402dbe66376525f4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae6f1ca47b20452a1402dbe66376525f4">_revealElapsed</a></td></tr>
+<tr class="separator:ae6f1ca47b20452a1402dbe66376525f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2be4289004f356f8f3054c00209e359d" id="r_a2be4289004f356f8f3054c00209e359d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2be4289004f356f8f3054c00209e359d">_revealing</a></td></tr>
+<tr class="separator:a2be4289004f356f8f3054c00209e359d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a277536132305446c228575e126e7110a" id="r_a277536132305446c228575e126e7110a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a277536132305446c228575e126e7110a">_revealSeconds</a></td></tr>
+<tr class="separator:a277536132305446c228575e126e7110a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3df0029dc2d77ebea80a9da0b28d6057" id="r_a3df0029dc2d77ebea80a9da0b28d6057"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3df0029dc2d77ebea80a9da0b28d6057">_revealTarget</a></td></tr>
+<tr class="separator:a3df0029dc2d77ebea80a9da0b28d6057"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab047b00fdfbccbffc7cd8fa8d6eac23c" id="r_ab047b00fdfbccbffc7cd8fa8d6eac23c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html">IActiveScenario</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab047b00fdfbccbffc7cd8fa8d6eac23c">_scenario</a></td></tr>
 <tr class="separator:ab047b00fdfbccbffc7cd8fa8d6eac23c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6bd7117f25f296fa2998952e1d6c953" id="r_ae6bd7117f25f296fa2998952e1d6c953"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html">ScenarioContentRoot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae6bd7117f25f296fa2998952e1d6c953">_scenarioRoot</a></td></tr>
 <tr class="separator:ae6bd7117f25f296fa2998952e1d6c953"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1a241292a40c33cd604037034491191" id="r_ad1a241292a40c33cd604037034491191"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html">IGroundSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1a241292a40c33cd604037034491191">_settings</a></td></tr>
 <tr class="separator:ad1a241292a40c33cd604037034491191"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0f95af456e461768b623b757dee448f" id="r_af0f95af456e461768b623b757dee448f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af0f95af456e461768b623b757dee448f">_shown</a> = ScenarioKind.Sky</td></tr>
+<tr class="separator:af0f95af456e461768b623b757dee448f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a04e9150694d08be6c4e5612f811b03" id="r_a4a04e9150694d08be6c4e5612f811b03"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Scenario_1_1ISkyBackdrop.html">ISkyBackdrop</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4a04e9150694d08be6c4e5612f811b03">_sky</a></td></tr>
 <tr class="separator:a4a04e9150694d08be6c4e5612f811b03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29071199681866eaafe34afdc01f9081" id="r_a29071199681866eaafe34afdc01f9081"><td class="memItemLeft" align="right" valign="top">readonly CompositeDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29071199681866eaafe34afdc01f9081">_subscriptions</a> = new()</td></tr>
@@ -191,19 +229,91 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:a9346f92883894c4e16c34c55d642aaad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47499a65264a763ce0fd35964738808c" id="r_a47499a65264a763ce0fd35964738808c"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a47499a65264a763ce0fd35964738808c">DirtId</a> = Shader.PropertyToID(&quot;_GroundDirt&quot;)</td></tr>
 <tr class="separator:a47499a65264a763ce0fd35964738808c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa142cc52751933082540e83007edc9f7" id="r_aa142cc52751933082540e83007edc9f7"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa142cc52751933082540e83007edc9f7">DstBlendId</a> = Shader.PropertyToID(&quot;_DstBlend&quot;)</td></tr>
+<tr class="separator:aa142cc52751933082540e83007edc9f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9a4a9287e9881b19fefae12f97cfe94" id="r_af9a4a9287e9881b19fefae12f97cfe94"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af9a4a9287e9881b19fefae12f97cfe94">GroundCoverageId</a> = Shader.PropertyToID(&quot;_GroundCoverage&quot;)</td></tr>
 <tr class="separator:af9a4a9287e9881b19fefae12f97cfe94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bd06d3d92d79491b3b6015b9e898af9" id="r_a5bd06d3d92d79491b3b6015b9e898af9"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5bd06d3d92d79491b3b6015b9e898af9">GroundLayer</a> = -1</td></tr>
 <tr class="separator:a5bd06d3d92d79491b3b6015b9e898af9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f4b6550d161ebea8b38401a590c36b7" id="r_a2f4b6550d161ebea8b38401a590c36b7"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f4b6550d161ebea8b38401a590c36b7">GroundRevealId</a> = Shader.PropertyToID(&quot;_GroundReveal&quot;)</td></tr>
+<tr class="separator:a2f4b6550d161ebea8b38401a590c36b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a9b7da8083ac2ea5296a8ca1ec71221" id="r_a2a9b7da8083ac2ea5296a8ca1ec71221"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a9b7da8083ac2ea5296a8ca1ec71221">GroundRevealShapeId</a> = Shader.PropertyToID(&quot;_GroundRevealShape&quot;)</td></tr>
+<tr class="separator:a2a9b7da8083ac2ea5296a8ca1ec71221"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9cdd71d08791f1c3cb7cdef81528ed75" id="r_a9cdd71d08791f1c3cb7cdef81528ed75"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9cdd71d08791f1c3cb7cdef81528ed75">GroundScrollId</a> = Shader.PropertyToID(&quot;_GroundScroll&quot;)</td></tr>
 <tr class="separator:a9cdd71d08791f1c3cb7cdef81528ed75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45d881b9b099c4065b8dd32b639fe91f" id="r_a45d881b9b099c4065b8dd32b639fe91f"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a45d881b9b099c4065b8dd32b639fe91f">MistOpacityId</a> = Shader.PropertyToID(&quot;_MistOpacity&quot;)</td></tr>
+<tr class="separator:a45d881b9b099c4065b8dd32b639fe91f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99da2aec07e5814b4b92bfdefdc0f305" id="r_a99da2aec07e5814b4b92bfdefdc0f305"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a99da2aec07e5814b4b92bfdefdc0f305">MistReachId</a> = Shader.PropertyToID(&quot;_MistReach&quot;)</td></tr>
+<tr class="separator:a99da2aec07e5814b4b92bfdefdc0f305"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae28ac103f27c572031f6170a847efcf4" id="r_ae28ac103f27c572031f6170a847efcf4"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae28ac103f27c572031f6170a847efcf4">OpaqueDstBlend</a> = 0f</td></tr>
+<tr class="separator:ae28ac103f27c572031f6170a847efcf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81f7f2a7a0a2eb14b7db2769de912b7c" id="r_a81f7f2a7a0a2eb14b7db2769de912b7c"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a81f7f2a7a0a2eb14b7db2769de912b7c">OpaqueSrcBlend</a> = 1f</td></tr>
+<tr class="separator:a81f7f2a7a0a2eb14b7db2769de912b7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a76f619c161c52f5138d0b3a7b019f054" id="r_a76f619c161c52f5138d0b3a7b019f054"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a76f619c161c52f5138d0b3a7b019f054">PatchSizeId</a> = Shader.PropertyToID(&quot;_GroundPatchSize&quot;)</td></tr>
 <tr class="separator:a76f619c161c52f5138d0b3a7b019f054"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c423475ecf1e8df8aee1da49320e157" id="r_a5c423475ecf1e8df8aee1da49320e157"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5c423475ecf1e8df8aee1da49320e157">PremultipliedDstBlend</a> = 10f</td></tr>
+<tr class="separator:a5c423475ecf1e8df8aee1da49320e157"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9c624f21200413aa616d992a26e7c52" id="r_ab9c624f21200413aa616d992a26e7c52"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab9c624f21200413aa616d992a26e7c52">SrcBlendId</a> = Shader.PropertyToID(&quot;_SrcBlend&quot;)</td></tr>
+<tr class="separator:ab9c624f21200413aa616d992a26e7c52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The ground backdrop shown on ground levels, between the sky scatter and the cloud backdrop: a stationary, overscanned floor quad (<code>BalloonParty/Scenario/Ground</code>) and over it one mesh of grass blades (<a class="el" href="classBalloonParty_1_1Scenario_1_1View_1_1GrassBladeMesh.html" title="Builds the one mesh that holds every grass blade of the ground: a jittered grid over a tile,...">GrassBladeMesh</a>, <code>BalloonParty/Scenario/GrassBlades</code>) that bend away from anything stamping the shared disturbance field. </p>
-<p>Follows <a class="el" href="interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html" title="The scenario the backdrop is showing now: sky or ground.">IActiveScenario</a>: on ground it shows both, hides the sky they fully cover, and raises the global <code>_GroundCoverage</code> the cloud backdrop reads to fade its bodies (their shadows stay on the grass). The Launch begin-screen always shows sky. The meadow scrolls with <a class="el" href="classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html" title="Parent transform for scenario static content; the Ascent transition moves this root,...">ScenarioContentRoot</a>, so on the Ascent the bushes ride in planted on their ground rather than sliding over a still one. </p>
+<p>Follows <a class="el" href="interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html" title="The scenario the backdrop is on (sky or ground), and whether it got there by a cut or a mist reveal.">IActiveScenario</a>: at rest on ground it shows both, hides the sky they fully cover, and raises the global <code>_GroundCoverage</code> the cloud backdrop reads to fade its bodies (their shadows stay on the grass). A switch that isn't a cut plays the mist reveal (<a class="el" href="classBalloonParty_1_1Scenario_1_1GroundRevealCurve.html" title="The timing of the mist reveal, as one curve over how open the ground is.">GroundRevealCurve</a>, <code>BalloonParty/Scenario/GroundMist</code>): sky and ground both draw, the ground inside a hole the mist opens or closes, and every <code>GroundCoverageAt</code> reader follows the hole. The Launch begin-screen always shows sky. The meadow scrolls with <a class="el" href="classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html" title="Parent transform for scenario static content; a level transition moves this root, not each child.">ScenarioContentRoot</a>, so on the Ascent the bushes ride in planted on their ground rather than sliding over a still one. A reveal also plays the drop between the layers (<a class="el" href="structBalloonParty_1_1Scenario_1_1GroundRevealDepth.html" title="How large each layer looks at one frame of a reveal, scaled about the camera.">GroundRevealDepth</a>): it scales the meadow, the cloud backdrop and the content root about the camera, so going down the ground grows into place and going up it falls away. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a26ecc73e98ffbafbe00cc715f0aa747b" name="a26ecc73e98ffbafbe00cc715f0aa747b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26ecc73e98ffbafbe00cc715f0aa747b">&#9670;&#160;</a></span>ApplyReveal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Scenario.View.GroundView.ApplyReveal </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a52c42260150e6b836c4cb0121dc9ba05" name="a52c42260150e6b836c4cb0121dc9ba05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52c42260150e6b836c4cb0121dc9ba05">&#9670;&#160;</a></span>BeginReveal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Scenario.View.GroundView.BeginReveal </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a></td>          <td class="paramname"><span class="paramname"><em>target</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>seconds</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aa762cfb632e0c2f694249aa3526cdefa" name="aa762cfb632e0c2f694249aa3526cdefa"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa762cfb632e0c2f694249aa3526cdefa">&#9670;&#160;</a></span>BuildBlades()</h2>
 
@@ -217,6 +327,31 @@ Static Private Attributes</h2></td></tr>
           <td class="memname">void BalloonParty.Scenario.View.GroundView.BuildBlades </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af82de8ddc4e73e464f5788129638a634" name="af82de8ddc4e73e464f5788129638a634"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af82de8ddc4e73e464f5788129638a634">&#9670;&#160;</a></span>BuildMist()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Scenario.View.GroundView.BuildMist </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>overscan</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -273,6 +408,56 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="af597e3aa241ec92cff80f9a8c676e014" name="af597e3aa241ec92cff80f9a8c676e014"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af597e3aa241ec92cff80f9a8c676e014">&#9670;&#160;</a></span>Cut()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Scenario.View.GroundView.Cut </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a></td>          <td class="paramname"><span class="paramname"><em>kind</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0ec2fe9c35f576893de4c5bc2b37b517" name="a0ec2fe9c35f576893de4c5bc2b37b517"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ec2fe9c35f576893de4c5bc2b37b517">&#9670;&#160;</a></span>HoldOutgoing()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Scenario.View.GroundView.HoldOutgoing </td>
+          <td>(</td>
+          <td class="paramtype">Transform</td>          <td class="paramname"><span class="paramname"><em>outgoingRoot</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>exitDrop</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Parents current content under <em>outgoingRoot</em>  (ScenarioContentRoot.Outgoing), offset by <em>exitDrop</em>  so it slides out in lockstep with the incoming content. A mist reveal scales that holder about the camera, so held content must draw relative to its transform, not from world positions baked at hold time. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1ITransitionOutgoingContent.html#ac8d74b1c626bae90f6fe75a6a01b1e7c">BalloonParty.Slots.Actor.ITransitionOutgoingContent</a>.</p>
+
+</div>
+</div>
 <a id="afd46fd07e348cef9c1a19feec238dc9e" name="afd46fd07e348cef9c1a19feec238dc9e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afd46fd07e348cef9c1a19feec238dc9e">&#9670;&#160;</a></span>LateUpdate()</h2>
 
@@ -323,8 +508,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a93f691fa62cbf6954a6e4e36b713e7c3" name="a93f691fa62cbf6954a6e4e36b713e7c3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a93f691fa62cbf6954a6e4e36b713e7c3">&#9670;&#160;</a></span>Show()</h2>
+<a id="a28781587771fe34251a71554834815a1" name="a28781587771fe34251a71554834815a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28781587771fe34251a71554834815a1">&#9670;&#160;</a></span>OnScenario()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -333,10 +518,14 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void BalloonParty.Scenario.View.GroundView.Show </td>
+          <td class="memname">void BalloonParty.Scenario.View.GroundView.OnScenario </td>
           <td>(</td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>ground</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Scenario_1_1ScenarioShift.html">ScenarioShift</a></td>          <td class="paramname"><span class="paramname"><em>shift</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6">NavigationState</a></td>          <td class="paramname"><span class="paramname"><em>navigation</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -348,32 +537,24 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a2ffebcfe026631a6b128792ad5e72216" name="a2ffebcfe026631a6b128792ad5e72216"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2ffebcfe026631a6b128792ad5e72216">&#9670;&#160;</a></span>ShowsGround()</h2>
+<a id="ae0790258d659412e94ca3f46a2654e47" name="ae0790258d659412e94ca3f46a2654e47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0790258d659412e94ca3f46a2654e47">&#9670;&#160;</a></span>ReleaseOutgoing()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static bool BalloonParty.Scenario.View.GroundView.ShowsGround </td>
+          <td class="memname">void BalloonParty.Scenario.View.GroundView.ReleaseOutgoing </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a></td>          <td class="paramname"><span class="paramname"><em>kind</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6">NavigationState</a></td>          <td class="paramname"><span class="paramname"><em>navigation</em></span>&#160;)</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
+
+<p>Called once the transition has settled — discard whatever was held. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1ITransitionOutgoingContent.html#a47a319f138491aba9d320527e1b80cc0">BalloonParty.Slots.Actor.ITransitionOutgoingContent</a>.</p>
 
 </div>
 </div>
@@ -388,6 +569,31 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">void BalloonParty.Scenario.View.GroundView.Start </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aec6a36f3bf4afdc88ae4de7ebb42b54f" name="aec6a36f3bf4afdc88ae4de7ebb42b54f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec6a36f3bf4afdc88ae4de7ebb42b54f">&#9670;&#160;</a></span>StepReveal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Scenario.View.GroundView.StepReveal </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -447,6 +653,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a4ed6dfaaa2f8f00a7ac77309461b24f4" name="a4ed6dfaaa2f8f00a7ac77309461b24f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ed6dfaaa2f8f00a7ac77309461b24f4">&#9670;&#160;</a></span>_closedRadius</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Scenario.View.GroundView._closedRadius</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a2fc133e785247005693e222e713f8b98" name="a2fc133e785247005693e222e713f8b98"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2fc133e785247005693e222e713f8b98">&#9670;&#160;</a></span>_display</h2>
 
@@ -458,6 +686,138 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html">IGameDisplayConfiguration</a> BalloonParty.Scenario.View.GroundView._display</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a88f21fd6dfdff75ffcc2af8331edda5d" name="a88f21fd6dfdff75ffcc2af8331edda5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88f21fd6dfdff75ffcc2af8331edda5d">&#9670;&#160;</a></span>_floorMaterial</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Material BalloonParty.Scenario.View.GroundView._floorMaterial</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aeba082ffd58140205f5e06c32a9bfdcc" name="aeba082ffd58140205f5e06c32a9bfdcc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeba082ffd58140205f5e06c32a9bfdcc">&#9670;&#160;</a></span>_groundScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Scenario.View.GroundView._groundScale = 1f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abe56efb69baa440398fa5926134b9609" name="abe56efb69baa440398fa5926134b9609"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe56efb69baa440398fa5926134b9609">&#9670;&#160;</a></span>_mist</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">GameObject BalloonParty.Scenario.View.GroundView._mist</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a60ea1876c5a541acca62e78b85eee15c" name="a60ea1876c5a541acca62e78b85eee15c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60ea1876c5a541acca62e78b85eee15c">&#9670;&#160;</a></span>_navigation</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6">NavigationState</a>? BalloonParty.Scenario.View.GroundView._navigation</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a064d3a4c9c4b3e9ae936e31dab7048c6" name="a064d3a4c9c4b3e9ae936e31dab7048c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a064d3a4c9c4b3e9ae936e31dab7048c6">&#9670;&#160;</a></span>_openRadius</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Scenario.View.GroundView._openRadius</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a643c911ec8b2e18339fe9d381bef3594" name="a643c911ec8b2e18339fe9d381bef3594"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a643c911ec8b2e18339fe9d381bef3594">&#9670;&#160;</a></span>_outgoingDrop</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Scenario.View.GroundView._outgoingDrop</td>
         </tr>
       </table>
   </td>
@@ -502,6 +862,94 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">GameObject BalloonParty.Scenario.View.GroundView._quad</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae6f1ca47b20452a1402dbe66376525f4" name="ae6f1ca47b20452a1402dbe66376525f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6f1ca47b20452a1402dbe66376525f4">&#9670;&#160;</a></span>_revealElapsed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Scenario.View.GroundView._revealElapsed</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2be4289004f356f8f3054c00209e359d" name="a2be4289004f356f8f3054c00209e359d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2be4289004f356f8f3054c00209e359d">&#9670;&#160;</a></span>_revealing</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Scenario.View.GroundView._revealing</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a277536132305446c228575e126e7110a" name="a277536132305446c228575e126e7110a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a277536132305446c228575e126e7110a">&#9670;&#160;</a></span>_revealSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Scenario.View.GroundView._revealSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3df0029dc2d77ebea80a9da0b28d6057" name="a3df0029dc2d77ebea80a9da0b28d6057"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3df0029dc2d77ebea80a9da0b28d6057">&#9670;&#160;</a></span>_revealTarget</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> BalloonParty.Scenario.View.GroundView._revealTarget</td>
         </tr>
       </table>
   </td>
@@ -568,6 +1016,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html">IGroundSettings</a> BalloonParty.Scenario.View.GroundView._settings</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af0f95af456e461768b623b757dee448f" name="af0f95af456e461768b623b757dee448f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0f95af456e461768b623b757dee448f">&#9670;&#160;</a></span>_shown</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> BalloonParty.Scenario.View.GroundView._shown = ScenarioKind.Sky</td>
         </tr>
       </table>
   </td>
@@ -711,6 +1181,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aa142cc52751933082540e83007edc9f7" name="aa142cc52751933082540e83007edc9f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa142cc52751933082540e83007edc9f7">&#9670;&#160;</a></span>DstBlendId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Scenario.View.GroundView.DstBlendId = Shader.PropertyToID(&quot;_DstBlend&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="af9a4a9287e9881b19fefae12f97cfe94" name="af9a4a9287e9881b19fefae12f97cfe94"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af9a4a9287e9881b19fefae12f97cfe94">&#9670;&#160;</a></span>GroundCoverageId</h2>
 
@@ -755,6 +1247,50 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a2f4b6550d161ebea8b38401a590c36b7" name="a2f4b6550d161ebea8b38401a590c36b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f4b6550d161ebea8b38401a590c36b7">&#9670;&#160;</a></span>GroundRevealId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Scenario.View.GroundView.GroundRevealId = Shader.PropertyToID(&quot;_GroundReveal&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2a9b7da8083ac2ea5296a8ca1ec71221" name="a2a9b7da8083ac2ea5296a8ca1ec71221"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a9b7da8083ac2ea5296a8ca1ec71221">&#9670;&#160;</a></span>GroundRevealShapeId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Scenario.View.GroundView.GroundRevealShapeId = Shader.PropertyToID(&quot;_GroundRevealShape&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a9cdd71d08791f1c3cb7cdef81528ed75" name="a9cdd71d08791f1c3cb7cdef81528ed75"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9cdd71d08791f1c3cb7cdef81528ed75">&#9670;&#160;</a></span>GroundScrollId</h2>
 
@@ -777,6 +1313,94 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a45d881b9b099c4065b8dd32b639fe91f" name="a45d881b9b099c4065b8dd32b639fe91f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45d881b9b099c4065b8dd32b639fe91f">&#9670;&#160;</a></span>MistOpacityId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Scenario.View.GroundView.MistOpacityId = Shader.PropertyToID(&quot;_MistOpacity&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a99da2aec07e5814b4b92bfdefdc0f305" name="a99da2aec07e5814b4b92bfdefdc0f305"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a99da2aec07e5814b4b92bfdefdc0f305">&#9670;&#160;</a></span>MistReachId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Scenario.View.GroundView.MistReachId = Shader.PropertyToID(&quot;_MistReach&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae28ac103f27c572031f6170a847efcf4" name="ae28ac103f27c572031f6170a847efcf4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae28ac103f27c572031f6170a847efcf4">&#9670;&#160;</a></span>OpaqueDstBlend</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float BalloonParty.Scenario.View.GroundView.OpaqueDstBlend = 0f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a81f7f2a7a0a2eb14b7db2769de912b7c" name="a81f7f2a7a0a2eb14b7db2769de912b7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81f7f2a7a0a2eb14b7db2769de912b7c">&#9670;&#160;</a></span>OpaqueSrcBlend</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float BalloonParty.Scenario.View.GroundView.OpaqueSrcBlend = 1f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a76f619c161c52f5138d0b3a7b019f054" name="a76f619c161c52f5138d0b3a7b019f054"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a76f619c161c52f5138d0b3a7b019f054">&#9670;&#160;</a></span>PatchSizeId</h2>
 
@@ -788,6 +1412,50 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly int BalloonParty.Scenario.View.GroundView.PatchSizeId = Shader.PropertyToID(&quot;_GroundPatchSize&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5c423475ecf1e8df8aee1da49320e157" name="a5c423475ecf1e8df8aee1da49320e157"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c423475ecf1e8df8aee1da49320e157">&#9670;&#160;</a></span>PremultipliedDstBlend</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float BalloonParty.Scenario.View.GroundView.PremultipliedDstBlend = 10f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab9c624f21200413aa616d992a26e7c52" name="ab9c624f21200413aa616d992a26e7c52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9c624f21200413aa616d992a26e7c52">&#9670;&#160;</a></span>SrcBlendId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Scenario.View.GroundView.SrcBlendId = Shader.PropertyToID(&quot;_SrcBlend&quot;)</td>
         </tr>
       </table>
   </td>

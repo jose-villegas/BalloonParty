@@ -111,12 +111,14 @@ $(function(){initNavTree('classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContent
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pac-methods">Package Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Slots.Actor.ScenarioContentRoot Class Reference<span class="mlabels"><span class="mlabel sealed">sealed</span></span></div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Parent transform for scenario static content; the Ascent transition moves this root, not each child.  
+<p>Parent transform for scenario static content; a level transition moves this root, not each child.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Slots.Actor.ScenarioContentRoot:</div>
@@ -142,17 +144,39 @@ Public Member Functions</h2></td></tr>
 Package Functions</h2></td></tr>
 <tr class="memitem:a669ccc69f1bcf5152e3aff7f1006f7f8" id="r_a669ccc69f1bcf5152e3aff7f1006f7f8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a669ccc69f1bcf5152e3aff7f1006f7f8">ScenarioContentRoot</a> ()</td></tr>
 <tr class="separator:a669ccc69f1bcf5152e3aff7f1006f7f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad40db6904feba75acb314d8b59a16d61" id="r_ad40db6904feba75acb314d8b59a16d61"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad40db6904feba75acb314d8b59a16d61">SetDepth</a> (float incoming, float outgoing)</td></tr>
+<tr class="memdesc:ad40db6904feba75acb314d8b59a16d61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scales the incoming and the outgoing content about the camera (the world origin), each by its own factor.  <br /></td></tr>
+<tr class="separator:ad40db6904feba75acb314d8b59a16d61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a336c3527de442390deaa97809f88f6b2" id="r_a336c3527de442390deaa97809f88f6b2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a336c3527de442390deaa97809f88f6b2">SetTravel</a> (float travel)</td></tr>
+<tr class="separator:a336c3527de442390deaa97809f88f6b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
-<tr class="memitem:ac710de946f0510adf37158736a5616bc" id="r_ac710de946f0510adf37158736a5616bc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#afef7b2e9731999fca8fb0261217e8203">Transform</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac710de946f0510adf37158736a5616bc">OutgoingBalloons</a><code> [get]</code></td></tr>
-<tr class="separator:ac710de946f0510adf37158736a5616bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61e2f62571d01341eb8c296c7c365b6f" id="r_a61e2f62571d01341eb8c296c7c365b6f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#afef7b2e9731999fca8fb0261217e8203">Transform</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a61e2f62571d01341eb8c296c7c365b6f">Outgoing</a><code> [get]</code></td></tr>
+<tr class="separator:a61e2f62571d01341eb8c296c7c365b6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afef7b2e9731999fca8fb0261217e8203" id="r_afef7b2e9731999fca8fb0261217e8203"><td class="memItemLeft" align="right" valign="top">Transform&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afef7b2e9731999fca8fb0261217e8203">Transform</a><code> [get]</code></td></tr>
 <tr class="separator:afef7b2e9731999fca8fb0261217e8203"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abeccc06aeb9907f8e178cf7db55247a8" id="r_abeccc06aeb9907f8e178cf7db55247a8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abeccc06aeb9907f8e178cf7db55247a8">Travel</a><code> [get]</code></td></tr>
+<tr class="memdesc:abeccc06aeb9907f8e178cf7db55247a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far the transition has carried the root up (negative = down), before any depth scale.  <br /></td></tr>
+<tr class="separator:abeccc06aeb9907f8e178cf7db55247a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a1ec21029adc06b083e8f89c7d710ce7d" id="r_a1ec21029adc06b083e8f89c7d710ce7d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ec21029adc06b083e8f89c7d710ce7d">Compose</a> ()</td></tr>
+<tr class="separator:a1ec21029adc06b083e8f89c7d710ce7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:aac23a196ebedf557be3713bd7e195c00" id="r_aac23a196ebedf557be3713bd7e195c00"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aac23a196ebedf557be3713bd7e195c00">_incomingScale</a> = 1f</td></tr>
+<tr class="separator:aac23a196ebedf557be3713bd7e195c00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26a27a409156dc3ca74e9f70c8afab1e" id="r_a26a27a409156dc3ca74e9f70c8afab1e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a26a27a409156dc3ca74e9f70c8afab1e">_outgoingScale</a> = 1f</td></tr>
+<tr class="separator:a26a27a409156dc3ca74e9f70c8afab1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8bf9ea0d972409cb19b8b0ec76ca4acf" id="r_a8bf9ea0d972409cb19b8b0ec76ca4acf"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8bf9ea0d972409cb19b8b0ec76ca4acf">_travel</a></td></tr>
+<tr class="separator:a8bf9ea0d972409cb19b8b0ec76ca4acf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Parent transform for scenario static content; the Ascent transition moves this root, not each child. </p>
-<p><a class="el" href="#ac710de946f0510adf37158736a5616bc">OutgoingBalloons</a> is a named child holder for the transient old-level balloons a level transition floats out — kept apart from the statics but still riding the root. </p>
+<div class="textblock"><p>Parent transform for scenario static content; a level transition moves this root, not each child. </p>
+<p><a class="el" href="#a61e2f62571d01341eb8c296c7c365b6f">Outgoing</a> is a child holder for the old level's content a transition carries out (its balloons, and snapshots of its scenery), kept apart from the incoming statics but still riding the root. The root's transform is composed here from the transition's travel and the mist reveal's depth, so the two never fight over it: write <a class="el" href="#a336c3527de442390deaa97809f88f6b2">SetTravel</a> and <a class="el" href="#ad40db6904feba75acb314d8b59a16d61" title="Scales the incoming and the outgoing content about the camera (the world origin), each by its own fac...">SetDepth</a>, never the transform. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a669ccc69f1bcf5152e3aff7f1006f7f8" name="a669ccc69f1bcf5152e3aff7f1006f7f8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a669ccc69f1bcf5152e3aff7f1006f7f8">&#9670;&#160;</a></span>ScenarioContentRoot()</h2>
@@ -180,6 +204,31 @@ Properties</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a1ec21029adc06b083e8f89c7d710ce7d" name="a1ec21029adc06b083e8f89c7d710ce7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ec21029adc06b083e8f89c7d710ce7d">&#9670;&#160;</a></span>Compose()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Slots.Actor.ScenarioContentRoot.Compose </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a9697cdf2a05a04f7d27b95273ad6a9b3" name="a9697cdf2a05a04f7d27b95273ad6a9b3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9697cdf2a05a04f7d27b95273ad6a9b3">&#9670;&#160;</a></span>Dispose()</h2>
 
@@ -197,9 +246,8 @@ Properties</h2></td></tr>
 
 </div>
 </div>
-<h2 class="groupheader">Property Documentation</h2>
-<a id="ac710de946f0510adf37158736a5616bc" name="ac710de946f0510adf37158736a5616bc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac710de946f0510adf37158736a5616bc">&#9670;&#160;</a></span>OutgoingBalloons</h2>
+<a id="ad40db6904feba75acb314d8b59a16d61" name="ad40db6904feba75acb314d8b59a16d61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad40db6904feba75acb314d8b59a16d61">&#9670;&#160;</a></span>SetDepth()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -208,7 +256,132 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#afef7b2e9731999fca8fb0261217e8203">Transform</a> BalloonParty.Slots.Actor.ScenarioContentRoot.OutgoingBalloons</td>
+          <td class="memname">void BalloonParty.Slots.Actor.ScenarioContentRoot.SetDepth </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>incoming</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>outgoing</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Scales the incoming and the outgoing content about the camera (the world origin), each by its own factor. </p>
+<p>Spawn nothing under the root while either is off 1: a view that places itself in world space under a scaled root keeps the wrong local offset once the scale returns. </p>
+
+</div>
+</div>
+<a id="a336c3527de442390deaa97809f88f6b2" name="a336c3527de442390deaa97809f88f6b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a336c3527de442390deaa97809f88f6b2">&#9670;&#160;</a></span>SetTravel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Slots.Actor.ScenarioContentRoot.SetTravel </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>travel</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="aac23a196ebedf557be3713bd7e195c00" name="aac23a196ebedf557be3713bd7e195c00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac23a196ebedf557be3713bd7e195c00">&#9670;&#160;</a></span>_incomingScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Slots.Actor.ScenarioContentRoot._incomingScale = 1f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a26a27a409156dc3ca74e9f70c8afab1e" name="a26a27a409156dc3ca74e9f70c8afab1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26a27a409156dc3ca74e9f70c8afab1e">&#9670;&#160;</a></span>_outgoingScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Slots.Actor.ScenarioContentRoot._outgoingScale = 1f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8bf9ea0d972409cb19b8b0ec76ca4acf" name="a8bf9ea0d972409cb19b8b0ec76ca4acf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8bf9ea0d972409cb19b8b0ec76ca4acf">&#9670;&#160;</a></span>_travel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Slots.Actor.ScenarioContentRoot._travel</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Property Documentation</h2>
+<a id="a61e2f62571d01341eb8c296c7c365b6f" name="a61e2f62571d01341eb8c296c7c365b6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61e2f62571d01341eb8c296c7c365b6f">&#9670;&#160;</a></span>Outgoing</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#afef7b2e9731999fca8fb0261217e8203">Transform</a> BalloonParty.Slots.Actor.ScenarioContentRoot.Outgoing</td>
         </tr>
       </table>
   </td>
@@ -239,6 +412,30 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="abeccc06aeb9907f8e178cf7db55247a8" name="abeccc06aeb9907f8e178cf7db55247a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abeccc06aeb9907f8e178cf7db55247a8">&#9670;&#160;</a></span>Travel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Slots.Actor.ScenarioContentRoot.Travel</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How far the transition has carried the root up (negative = down), before any depth scale. </p>
 
 </div>
 </div>

@@ -14,6 +14,8 @@ var NAVTREEINDEX1 =
 "GridBalanceQuery_8cs.html":[7,0,15,2,1],
 "GridEffectBoard_8cs.html":[7,0,8,1,0],
 "GridSpawnerCoordinator_8cs.html":[7,0,15,3,0],
+"GroundRevealCurve_8cs.html":[7,0,13,3],
+"GroundRevealPlanner_8cs.html":[7,0,13,4],
 "GroundSettings_8cs.html":[7,0,3,4,4],
 "GroundView_8cs.html":[7,0,13,0,2],
 "HandwrittenHeadsUp_8cs.html":[7,0,18,4,1],
@@ -33,7 +35,7 @@ var NAVTREEINDEX1 =
 "HitVfxOverrideDrawer_8cs.html":[7,0,3,3,2],
 "HitVfxOverride_8cs.html":[7,0,3,0,4],
 "IActiveLevelParameters_8cs.html":[7,0,7,5,0],
-"IActiveScenario_8cs.html":[7,0,13,3],
+"IActiveScenario_8cs.html":[7,0,13,5],
 "IAdService_8cs.html":[7,0,7,6,3],
 "IAppSuspendSignal_8cs.html":[7,0,7,1,7],
 "IAudioMixerRouter_8cs.html":[7,0,0,8],
@@ -163,7 +165,7 @@ var NAVTREEINDEX1 =
 "IShieldFieldSettings_8cs.html":[7,0,3,4,14],
 "IShieldSlotPreference_8cs.html":[7,0,15,2,3],
 "IShieldsPerBall_8cs.html":[7,0,7,9,0],
-"ISkyBackdrop_8cs.html":[7,0,13,4],
+"ISkyBackdrop_8cs.html":[7,0,13,6],
 "ISkyScatterSettings_8cs.html":[7,0,3,4,15],
 "ISlotActorView_8cs.html":[7,0,15,0,11],
 "ISlotActor_8cs.html":[7,0,15,0,10],
@@ -247,7 +249,5 @@ var NAVTREEINDEX1 =
 "LaunchAscend_8cs.html":[7,0,14,5,8],
 "LaunchDisturbanceStamp_8cs.html":[7,0,7,14],
 "LaunchLifetimeScope_8cs.html":[7,0,7,15],
-"LaunchPlayTrigger_8cs.html":[7,0,7,16],
-"LeafAtlasPacker_8cs.html":[7,0,6,0,9],
-"LeafVenationSimulator_8cs.html":[7,0,6,0,10]
+"LaunchPlayTrigger_8cs.html":[7,0,7,16]
 };

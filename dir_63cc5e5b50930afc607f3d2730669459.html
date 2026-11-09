@@ -130,7 +130,7 @@ Files</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>The shield HUD: a ball-with-a-shield icon and the number of shields <b>every new ball starts with</b>.</p>
 <p>Shields belong to each ball, and several balls can be in the air at once, so no single HUD number can say how many shields "the ball" has. The HUD shows the one shield number that is the same for every ball, its starting count; each ball shows its own shields itself, as layers around it (<code>Projectile/View/ProjectileShieldView</code>). A shield gained in flight fades in a new layer and plays an effect at the balloon that gave it; a shield spent on a wall bounce dissolves a layer and plays a shard effect at the ball. Nothing flies to or from the HUD.</p>
-<h1><a class="anchor" id="autotoc_md1022"></a>
+<h1><a class="anchor" id="autotoc_md1023"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -142,11 +142,11 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ShieldCounterAnimation</code>   </td><td class="markdownTableBodyNone">Binds the labels and drives the Animator: <code>Ready</code> once at start, then <code>Gain</code> when the shields per ball go up (a shield card) and <code>Lost</code> when they go down (a fresh run drops the cards)   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md1023"></a>
+<h1><a class="anchor" id="autotoc_md1024"></a>
 How it works</h1>
 <p><code>IShieldsPerBall</code> (<code>Game/Upgrades/</code>) is implemented by <code>RunUpgrades</code>: the configured <code>ProjectileStartingShields</code> plus every shield card held, including a retry's bonus card. It is a reactive value recomputed whenever the cards change, so the HUD moves exactly when the next ball's starting shields do. It never changes during a flight.</p>
 <p>The counter's Animator still has a <code>Waiting</code> state from when it followed the ball in the thrower; the script no longer triggers it.</p>
-<h1><a class="anchor" id="autotoc_md1024"></a>
+<h1><a class="anchor" id="autotoc_md1025"></a>
 Interactions</h1>
 <ul>
 <li><b>IShieldsPerBall</b> (<code>RunUpgrades</code>): the value the labels show and the animation watches</li>

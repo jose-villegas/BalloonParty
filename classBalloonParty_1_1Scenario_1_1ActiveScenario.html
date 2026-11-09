@@ -116,7 +116,7 @@ $(function(){initNavTree('classBalloonParty_1_1Scenario_1_1ActiveScenario.html',
 </div><!--header-->
 <div class="contents">
 
-<p>Model behind <a class="el" href="interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html" title="The scenario the backdrop is showing now: sky or ground.">IActiveScenario</a>; written only by <code>ScenarioController</code>.  
+<p>Model behind <a class="el" href="interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html" title="The scenario the backdrop is on (sky or ground), and whether it got there by a cut or a mist reveal.">IActiveScenario</a>; written only by <code>ScenarioController</code>.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Scenario.ActiveScenario:</div>
@@ -135,30 +135,32 @@ $(function(){initNavTree('classBalloonParty_1_1Scenario_1_1ActiveScenario.html',
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a80567d3bb0866edfc526962ad4163493" id="r_a80567d3bb0866edfc526962ad4163493"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80567d3bb0866edfc526962ad4163493">Set</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> kind)</td></tr>
-<tr class="separator:a80567d3bb0866edfc526962ad4163493"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4f75b45d5370e1cd6cc98d8544ce56d" id="r_ab4f75b45d5370e1cd6cc98d8544ce56d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab4f75b45d5370e1cd6cc98d8544ce56d">Cut</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> kind)</td></tr>
+<tr class="separator:ab4f75b45d5370e1cd6cc98d8544ce56d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca16104cd68f91e1b18af3bb7045480e" id="r_aca16104cd68f91e1b18af3bb7045480e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aca16104cd68f91e1b18af3bb7045480e">Reveal</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> kind, float seconds)</td></tr>
+<tr class="separator:aca16104cd68f91e1b18af3bb7045480e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
-<tr class="memitem:a2682e4001a19d23971a01c53465baab4" id="r_a2682e4001a19d23971a01c53465baab4"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; <a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2682e4001a19d23971a01c53465baab4">Kind</a><code> [get]</code></td></tr>
-<tr class="separator:a2682e4001a19d23971a01c53465baab4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80e98035d4f0611877c4d49379bb73c3" id="r_a80e98035d4f0611877c4d49379bb73c3"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; <a class="el" href="structBalloonParty_1_1Scenario_1_1ScenarioShift.html">ScenarioShift</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80e98035d4f0611877c4d49379bb73c3">Current</a><code> [get]</code></td></tr>
+<tr class="separator:a80e98035d4f0611877c4d49379bb73c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:af8aab2a805687c864668d2e1c74d8a0c" id="r_af8aab2a805687c864668d2e1c74d8a0c"><td class="memItemLeft" align="right" valign="top">readonly ReactiveProperty&lt; <a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af8aab2a805687c864668d2e1c74d8a0c">_kind</a> = new(ScenarioKind.Sky)</td></tr>
-<tr class="separator:af8aab2a805687c864668d2e1c74d8a0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a2d6ddf6bd8fde11604cc3e6380fe91" id="r_a3a2d6ddf6bd8fde11604cc3e6380fe91"><td class="memItemLeft" align="right" valign="top">readonly ReactiveProperty&lt; <a class="el" href="structBalloonParty_1_1Scenario_1_1ScenarioShift.html">ScenarioShift</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3a2d6ddf6bd8fde11604cc3e6380fe91">_current</a> = new(new <a class="el" href="structBalloonParty_1_1Scenario_1_1ScenarioShift.html">ScenarioShift</a>(ScenarioKind.Sky, 0f))</td></tr>
+<tr class="separator:a3a2d6ddf6bd8fde11604cc3e6380fe91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Model behind <a class="el" href="interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html" title="The scenario the backdrop is showing now: sky or ground.">IActiveScenario</a>; written only by <code>ScenarioController</code>. </p>
+<div class="textblock"><p>Model behind <a class="el" href="interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html" title="The scenario the backdrop is on (sky or ground), and whether it got there by a cut or a mist reveal.">IActiveScenario</a>; written only by <code>ScenarioController</code>. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a80567d3bb0866edfc526962ad4163493" name="a80567d3bb0866edfc526962ad4163493"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a80567d3bb0866edfc526962ad4163493">&#9670;&#160;</a></span>Set()</h2>
+<a id="ab4f75b45d5370e1cd6cc98d8544ce56d" name="ab4f75b45d5370e1cd6cc98d8544ce56d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4f75b45d5370e1cd6cc98d8544ce56d">&#9670;&#160;</a></span>Cut()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void BalloonParty.Scenario.ActiveScenario.Set </td>
+          <td class="memname">void BalloonParty.Scenario.ActiveScenario.Cut </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a></td>          <td class="paramname"><span class="paramname"><em>kind</em></span></td><td>)</td>
           <td></td>
@@ -168,9 +170,30 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aca16104cd68f91e1b18af3bb7045480e" name="aca16104cd68f91e1b18af3bb7045480e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca16104cd68f91e1b18af3bb7045480e">&#9670;&#160;</a></span>Reveal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Scenario.ActiveScenario.Reveal </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a></td>          <td class="paramname"><span class="paramname"><em>kind</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>seconds</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="af8aab2a805687c864668d2e1c74d8a0c" name="af8aab2a805687c864668d2e1c74d8a0c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af8aab2a805687c864668d2e1c74d8a0c">&#9670;&#160;</a></span>_kind</h2>
+<a id="a3a2d6ddf6bd8fde11604cc3e6380fe91" name="a3a2d6ddf6bd8fde11604cc3e6380fe91"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a2d6ddf6bd8fde11604cc3e6380fe91">&#9670;&#160;</a></span>_current</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -179,7 +202,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">readonly ReactiveProperty&lt;<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a>&gt; BalloonParty.Scenario.ActiveScenario._kind = new(ScenarioKind.Sky)</td>
+          <td class="memname">readonly ReactiveProperty&lt;<a class="el" href="structBalloonParty_1_1Scenario_1_1ScenarioShift.html">ScenarioShift</a>&gt; BalloonParty.Scenario.ActiveScenario._current = new(new <a class="el" href="structBalloonParty_1_1Scenario_1_1ScenarioShift.html">ScenarioShift</a>(ScenarioKind.Sky, 0f))</td>
         </tr>
       </table>
   </td>
@@ -192,8 +215,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
-<a id="a2682e4001a19d23971a01c53465baab4" name="a2682e4001a19d23971a01c53465baab4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2682e4001a19d23971a01c53465baab4">&#9670;&#160;</a></span>Kind</h2>
+<a id="a80e98035d4f0611877c4d49379bb73c3" name="a80e98035d4f0611877c4d49379bb73c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80e98035d4f0611877c4d49379bb73c3">&#9670;&#160;</a></span>Current</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -202,7 +225,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">IReadOnlyReactiveProperty&lt;<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a>&gt; BalloonParty.Scenario.ActiveScenario.Kind</td>
+          <td class="memname">IReadOnlyReactiveProperty&lt;<a class="el" href="structBalloonParty_1_1Scenario_1_1ScenarioShift.html">ScenarioShift</a>&gt; BalloonParty.Scenario.ActiveScenario.Current</td>
         </tr>
       </table>
   </td>
@@ -212,7 +235,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implements <a class="el" href="interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html#a3059cb37c951b45bf0acebb00f900e9f">BalloonParty.Scenario.IActiveScenario</a>.</p>
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html#a5f5fdfa7f675b1055e74c0aea911bb17">BalloonParty.Scenario.IActiveScenario</a>.</p>
 
 </div>
 </div>

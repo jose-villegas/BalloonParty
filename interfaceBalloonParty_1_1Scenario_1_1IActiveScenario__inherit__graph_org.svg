@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="The scenario the backdrop is showing now: sky or ground.">
+<g id="a_Node000001"><a xlink:title="The scenario the backdrop is on (sky or ground), and whether it got there by a cut or a mist reveal.">
 <polygon fill="#999999" stroke="#666666" points="158,-96 0,-96 0,-66 158,-66 158,-96"/>
 <text text-anchor="start" x="8" y="-84" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Scenario.IActive</text>
 <text text-anchor="middle" x="79" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">Scenario</text>

@@ -1,20 +1,22 @@
 <map id="BalloonParty.Scenario.View.GroundView" name="BalloonParty.Scenario.View.GroundView">
-<area shape="rect" id="Node000001" title="The ground backdrop shown on ground levels, between the sky scatter and the cloud backdrop: a station..." alt="" coords="509,183,711,223"/>
+<area shape="rect" id="Node000001" title="The ground backdrop shown on ground levels, between the sky scatter and the cloud backdrop: a station..." alt="" coords="509,215,711,255"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="197,5,321,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="333,31,365,41,428,61,487,92,546,137,592,181,588,185,543,141,484,96,426,66,363,46,332,37"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html" title="Read&#45;only tuning for the ground backdrop (see GroundView)." alt="" coords="160,55,357,95"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="349,97,486,142,571,181,569,186,484,147,347,102"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html" title=" " alt="" coords="158,119,359,159"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="373,157,510,182,509,188,372,163"/>
-<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html" title="The scenario the backdrop is showing now: sky or ground." alt="" coords="153,183,364,223"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="378,201,509,201,509,206,378,206"/>
-<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Scenario_1_1ISkyBackdrop.html" title="The sky&#45;scatter backdrop, as an opaque backdrop drawn over it (the ground) sees it." alt="" coords="162,247,355,287"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="369,245,508,219,509,224,370,250"/>
-<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html" title="Parent transform for scenario static content; the Ascent transition moves this root,..." alt="" coords="169,311,348,351"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="350,305,484,261,570,221,572,226,486,266,352,310"/>
-<area shape="rect" id="Node000008" title=" " alt="" coords="5,352,104,377"/>
-<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="117,352,169,343,170,349,118,357"/>
-<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Scenario_1_1View_1_1GrassWakeBuffer.html" title="The grass&#39;s own short memory of the disturbance field, published as the global _GrassWakeTex the blad..." alt="" coords="158,375,359,415"/>
-<area shape="poly" id="edge9_Node000009_Node000008" title=" " alt="" coords="118,371,158,378,157,383,117,377"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="340,369,363,361,426,341,452,331,484,313,544,267,589,222,593,225,547,271,487,318,454,335,428,346,365,366,342,374"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="335,31,365,41,429,72,487,115,546,166,592,213,588,217,542,170,484,119,426,77,363,46,333,36"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ITransitionOutgoingContent.html" title="Keeps outgoing visuals on screen during a level transition so the Ascent&#39;s board clear doesn&#39;t blink ..." alt="" coords="159,55,358,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="341,97,365,105,427,125,487,150,539,182,584,213,581,217,537,186,484,155,425,130,363,110,339,102"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html" title="Read&#45;only tuning for the ground backdrop (see GroundView)." alt="" coords="160,119,357,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="357,160,486,194,548,213,546,218,485,199,356,165"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html" title=" " alt="" coords="158,183,359,223"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="373,211,509,224,509,229,373,216"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html" title="The scenario the backdrop is on (sky or ground), and whether it got there by a cut or a mist reveal." alt="" coords="153,247,364,287"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="378,254,509,242,509,247,378,259"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Scenario_1_1ISkyBackdrop.html" title="The sky&#45;scatter backdrop, as an opaque backdrop drawn over it (the ground) sees it." alt="" coords="162,311,355,351"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="359,305,485,273,549,253,550,258,486,278,361,311"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html" title="Parent transform for scenario static content; a level transition moves this root, not each child." alt="" coords="169,375,348,415"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="339,369,363,361,425,343,484,318,538,286,582,253,586,258,541,290,487,323,427,348,365,366,340,374"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="5,416,104,441"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="117,416,169,407,170,413,118,421"/>
+<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Scenario_1_1View_1_1GrassWakeBuffer.html" title="The grass&#39;s own short memory of the disturbance field, published as the global _GrassWakeTex the blad..." alt="" coords="158,439,359,479"/>
+<area shape="poly" id="edge10_Node000010_Node000009" title=" " alt="" coords="118,435,158,442,157,447,117,441"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="358,433,422,408,484,373,518,344,548,312,593,254,597,257,552,315,522,348,487,378,425,413,360,438"/>
 </map>

@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic =
 [
-    [ "GameOverLossCinematic", "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a5ade189db9e26128b653c7dd0e67da1d", null ],
+    [ "GameOverLossCinematic", "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a60a0fe066d5e4fc814b22ab49e021545", null ],
     [ "BuildConfig", "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#ad173e7b6652eaadb0046cd307b421a8e", null ],
     [ "Dispose", "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a21911b313d1683912c4c9131151398da", null ],
     [ "HoldOutgoingContent", "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a5b41f025adfe44a475567914e81fdcdc", null ],
@@ -34,6 +34,7 @@ var classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic =
     [ "_restartCompletedPublisher", "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#ac7b135e63f7daf48da1b33e32e672c55", null ],
     [ "_restoreDone", "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a00aba3bb752127ca471fe77ba1486732", null ],
     [ "_restoreFloorSeconds", "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#aeb759165f36b5e816beba3501fb63c11", null ],
+    [ "_riseStartedPublisher", "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a34e3f59426eeb757aea93a8409675280", null ],
     [ "_runController", "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a6bb874c8a0ab7d96a07123153217997b", null ],
     [ "_runner", "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#afd4bf8f3b0997fb44a6da1b1430daf35", null ],
     [ "_scenarioRoot", "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#ac9a2d912b9d5203028c6f4e570883f23", null ],

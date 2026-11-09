@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['2_0',['10. Luck levels (proposal, after phase 2)',['../plan_coins.html#autotoc_md373',1,'']]],
+  ['2_0',['2',['../plan_coins.html#autotoc_md373',1,'10. Luck levels (proposal, after phase 2)'],['../plan_terrain_biomes.html#autotoc_md764',1,'In-editor checks for phase 2']]],
   ['2_20—_20fill_20out_20optional_20signals_1',['Phase 2 — Fill-out + optional signals',['../plan_audio.html#autotoc_md314',1,'']]],
   ['2_20—_20spawn_20weights_20pity_20system_20streak_20balancing_2',['2 — Spawn Weights, Pity System &amp; Streak Balancing',['../plan_future_ideas.html#autotoc_md432',1,'']]],
   ['2_201_20per_20level_20balloon_20item_20weights_3',['2.1 Per-Level Balloon &amp; Item Weights',['../plan_future_ideas.html#autotoc_md433',1,'']]],

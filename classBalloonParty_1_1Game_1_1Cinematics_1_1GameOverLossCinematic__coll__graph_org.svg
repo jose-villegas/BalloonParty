@@ -292,7 +292,7 @@
 <!-- Node84 -->
 <g id="Node000084" class="node">
 <title>Node84</title>
-<g id="a_Node000084"><a xlink:href="classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html" target="_top" xlink:title="Parent transform for scenario static content; the Ascent transition moves this root,...">
+<g id="a_Node000084"><a xlink:href="classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html" target="_top" xlink:title="Parent transform for scenario static content; a level transition moves this root, not each child.">
 <polygon fill="white" stroke="#666666" points="1257.5,-1961.97 1123.5,-1961.97 1123.5,-1931.97 1257.5,-1931.97 1257.5,-1961.97"/>
 <text text-anchor="start" x="1131.5" y="-1949.97" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Actor.</text>
 <text text-anchor="middle" x="1190.5" y="-1938.97" font-family="Helvetica,sans-Serif" font-size="10.00">ScenarioContentRoot</text>

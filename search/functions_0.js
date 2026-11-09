@@ -137,7 +137,7 @@ var searchData=
   ['applypose_134',['ApplyPose',['../classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html#ab94be0aaead40512d640a2554a403c0b',1,'BalloonParty::UI::Score::ProgressNotice']]],
   ['applyrecolor_135',['ApplyRecolor',['../classBalloonParty_1_1Solver_1_1ShotSimulator.html#ac5df1a415170ebd9bbce1b898777d8c6',1,'BalloonParty::Solver::ShotSimulator']]],
   ['applyrenderers_136',['ApplyRenderers',['../classBalloonParty_1_1Editor_1_1EffectPreview_1_1ChainLightningPreviewModule.html#a7d55c992f57b1b57233312746f37d036',1,'BalloonParty::Editor::EffectPreview::ChainLightningPreviewModule']]],
-  ['applyreveal_137',['ApplyReveal',['../classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#aa9c5ba8859410e803168f0f28213ea25',1,'BalloonParty::UI::HeadsUp::WriteOnText']]],
+  ['applyreveal_137',['ApplyReveal',['../classBalloonParty_1_1Scenario_1_1View_1_1GroundView.html#a26ecc73e98ffbafbe00cc715f0aa747b',1,'BalloonParty.Scenario.View.GroundView.ApplyReveal()'],['../classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#aa9c5ba8859410e803168f0f28213ea25',1,'BalloonParty.UI.HeadsUp.WriteOnText.ApplyReveal()']]],
   ['applysegmentrender_138',['ApplySegmentRender',['../classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a5d5b0b4cdaad4c5fb94adcb11a55e5e0',1,'BalloonParty::Prediction::PredictionTraceView']]],
   ['applyshieldscale_139',['ApplyShieldScale',['../classBalloonParty_1_1Projectile_1_1View_1_1ProjectileShieldView.html#afd1d3567fbcf49a29aff2ce5c5182ded',1,'BalloonParty::Projectile::View::ProjectileShieldView']]],
   ['applyshinespeed_140',['ApplyShineSpeed',['../classBalloonParty_1_1UI_1_1Danger_1_1DangerHeartLossView.html#afdd2b7d672a586ebf218f09ea87b24cb',1,'BalloonParty::UI::Danger::DangerHeartLossView']]],

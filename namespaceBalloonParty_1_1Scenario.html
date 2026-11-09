@@ -109,7 +109,8 @@ $(function(){initNavTree('namespaceBalloonParty_1_1Scenario.html',''); initResiz
 <div class="header">
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Scenario Namespace Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -122,16 +123,34 @@ Namespaces</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Scenario_1_1ActiveScenario.html">ActiveScenario</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Model behind <a class="el" href="interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html" title="The scenario the backdrop is showing now: sky or ground.">IActiveScenario</a>; written only by <code>ScenarioController</code>.  <a href="classBalloonParty_1_1Scenario_1_1ActiveScenario.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Model behind <a class="el" href="interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html" title="The scenario the backdrop is on (sky or ground), and whether it got there by a cut or a mist reveal.">IActiveScenario</a>; written only by <code>ScenarioController</code>.  <a href="classBalloonParty_1_1Scenario_1_1ActiveScenario.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Scenario_1_1BackgroundFieldService.html">BackgroundFieldService</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Owns the shared cloud field: bakes one scrolling cloud-density map into a camera-sized RT on a cadence timer (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html" title="Implemented by field services that perform periodic RT blits on a cadence timer.">ICadencedEffect</a>, bypassed during camera transitions) and publishes it — plus its world bounds — as global shader properties, so every consumer reads the SAME map with a single tap (the BackgroundCloud backdrop, sprite drop-shadows, the GI/light smear, the wall net).  <a href="classBalloonParty_1_1Scenario_1_1BackgroundFieldService.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Scenario_1_1GroundRevealCurve.html">GroundRevealCurve</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The timing of the mist reveal, as one curve over how open the ground is.  <a href="classBalloonParty_1_1Scenario_1_1GroundRevealCurve.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Scenario_1_1GroundRevealDecision.html">GroundRevealDecision</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">What the backdrop does with a scenario change: nothing, a cut, or a mist reveal into <a class="el" href="structBalloonParty_1_1Scenario_1_1GroundRevealDecision.html#adca5ba63eceebfa08df3f83061d90576">Target</a>.  <a href="structBalloonParty_1_1Scenario_1_1GroundRevealDecision.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Scenario_1_1GroundRevealDepth.html">GroundRevealDepth</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">How large each layer looks at one frame of a reveal, scaled about the camera.  <a href="structBalloonParty_1_1Scenario_1_1GroundRevealDepth.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Scenario_1_1GroundRevealFrame.html">GroundRevealFrame</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">One frame of the mist reveal: the hole's radius and how thick the mist is outside it.  <a href="structBalloonParty_1_1Scenario_1_1GroundRevealFrame.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Scenario_1_1GroundRevealPlanner.html">GroundRevealPlanner</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decides how <code>GroundView</code> answers the active scenario and the navigation state.  <a href="classBalloonParty_1_1Scenario_1_1GroundRevealPlanner.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html">IActiveScenario</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The scenario the backdrop is showing now: sky or ground.  <a href="interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The scenario the backdrop is on (sky or ground), and whether it got there by a cut or a mist reveal.  <a href="interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Scenario_1_1ISkyBackdrop.html">ISkyBackdrop</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The sky-scatter backdrop, as an opaque backdrop drawn over it (the ground) sees it.  <a href="interfaceBalloonParty_1_1Scenario_1_1ISkyBackdrop.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Scenario_1_1ScenarioShift.html">ScenarioShift</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A switch of the backdrop to <a class="el" href="structBalloonParty_1_1Scenario_1_1ScenarioShift.html#a9b856bba8094941b91dd7c0876b926d3">Kind</a>: a cut when <a class="el" href="structBalloonParty_1_1Scenario_1_1ScenarioShift.html#a7966e01f6c25d5d5580e5902dd043280">Seconds</a> is 0, otherwise the mist reveal played over that many (unscaled) seconds, the length of the beat it rides on.  <a href="structBalloonParty_1_1Scenario_1_1ScenarioShift.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Scenario_1_1SkyScatterService.html">SkyScatterService</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Owns the sky-scatter backdrop: a single stationary quad rendered immediately after the camera's flat clear colour and behind every other backdrop layer (BackgroundCloud, WallNet, SmokeField) — a naive 2D stand-in for atmospheric scattering (<code>Shaders/BalloonParty/Display/SkyScatter.shader</code>).  <a href="classBalloonParty_1_1Scenario_1_1SkyScatterService.html#details">More...</a><br /></td></tr>
@@ -142,7 +161,43 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Scenario_1_1SmokeFieldService.html">SmokeFieldService</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Owns the smoke field: a persistent screen-space RT that accumulates palette-colored stamps and decays them over time.  <a href="classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:aa25d25fb5dff53352af120270a2820a8" id="r_aa25d25fb5dff53352af120270a2820a8"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa25d25fb5dff53352af120270a2820a8">GroundRevealAction</a> { <a class="el" href="#aa25d25fb5dff53352af120270a2820a8a6adf97f83acf6453d4a6a4b1070f3754">None</a>
+, <a class="el" href="#aa25d25fb5dff53352af120270a2820a8aeb334dca00e390e0d3ebf52d205807d7">Cut</a>
+, <a class="el" href="#aa25d25fb5dff53352af120270a2820a8a393c3f5ea8ad35c02691d507bdbb31b0">Reveal</a>
+ }</td></tr>
+<tr class="separator:aa25d25fb5dff53352af120270a2820a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="aa25d25fb5dff53352af120270a2820a8" name="aa25d25fb5dff53352af120270a2820a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa25d25fb5dff53352af120270a2820a8">&#9670;&#160;</a></span>GroundRevealAction</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#aa25d25fb5dff53352af120270a2820a8">BalloonParty.Scenario.GroundRevealAction</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aa25d25fb5dff53352af120270a2820a8a6adf97f83acf6453d4a6a4b1070f3754" name="aa25d25fb5dff53352af120270a2820a8a6adf97f83acf6453d4a6a4b1070f3754"></a>None&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa25d25fb5dff53352af120270a2820a8aeb334dca00e390e0d3ebf52d205807d7" name="aa25d25fb5dff53352af120270a2820a8aeb334dca00e390e0d3ebf52d205807d7"></a>Cut&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aa25d25fb5dff53352af120270a2820a8a393c3f5ea8ad35c02691d507bdbb31b0" name="aa25d25fb5dff53352af120270a2820a8a393c3f5ea8ad35c02691d507bdbb31b0"></a>Reveal&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

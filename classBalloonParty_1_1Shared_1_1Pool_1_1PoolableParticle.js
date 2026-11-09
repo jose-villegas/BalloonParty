@@ -11,6 +11,7 @@ var classBalloonParty_1_1Shared_1_1Pool_1_1PoolableParticle =
     [ "Play", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolableParticle.html#a0e93f368e8e3570d1c914a2fa288467f", null ],
     [ "Stop", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolableParticle.html#af5b3908ee84b44e87fe77edbcd97326d", null ],
     [ "Update", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolableParticle.html#a86369920e98ac94121a022d616d28dc0", null ],
+    [ "_authoredScale", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolableParticle.html#a4bef3036e04fd70cc981a2b6ff03a1e5", null ],
     [ "_awaitingChildren", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolableParticle.html#a803953aea2a41611b49b8055bef42d82", null ],
     [ "_onComplete", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolableParticle.html#a96989e4afa116e378d83eef387b396d7", null ],
     [ "_particle", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolableParticle.html#a56a464468f51490a4912cf27b18fa1e1", null ],

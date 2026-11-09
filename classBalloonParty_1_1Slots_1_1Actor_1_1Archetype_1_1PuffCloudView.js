@@ -21,6 +21,7 @@ var classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudView =
     [ "_slotCount", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudView.html#aa083f7e53db75331d74e5580c112f814", null ],
     [ "AnimationSpeedId", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudView.html#ac0c75ea6aa4457b5a406de20340b8274", null ],
     [ "RestOriginId", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudView.html#ac4701cac3a5fc574b73b96da3a86e2b8", null ],
+    [ "RestScaleId", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudView.html#a380fdf094b8e8ffe4677a4377da738c8", null ],
     [ "SlotCentersLocalId", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudView.html#add6389044ac2cc4181cc2f721838c55a", null ],
     [ "SlotCentersWorldId", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudView.html#a57962836e55097122f3984c3dfbae203", null ],
     [ "SlotCountId", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudView.html#ab5cf365e579a385067fbd411a7de425b", null ],

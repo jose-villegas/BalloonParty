@@ -19,7 +19,7 @@ var searchData=
   ['1_20grid_20encroachment_20—_20the_20natural_20fit_20puzzle_20bobble_20lineage_16',['12.1 Grid encroachment — the natural fit (Puzzle Bobble lineage)',['../plan_future_ideas.html#autotoc_md497',1,'']]],
   ['1_20jump_20to_20level_20cheat_20—_20✅_20shipped_17',['14.1 Jump-to-level cheat — ✅ SHIPPED',['../plan_future_ideas.html#autotoc_md514',1,'']]],
   ['1_20level_20sequence_20model_18',['3.1 Level Sequence Model',['../plan_future_ideas.html#autotoc_md439',1,'']]],
-  ['1_20optimizer_20review_19',['Follow-ups from the phase 1 optimizer review',['../plan_terrain_biomes.html#autotoc_md764',1,'']]],
+  ['1_20optimizer_20review_19',['Follow-ups from the phase 1 optimizer review',['../plan_terrain_biomes.html#autotoc_md765',1,'']]],
   ['1_20pacing_20arr_20check_20',['1. Pacing / ARR check',['../plan_performance_recovery.html#autotoc_md686',1,'']]],
   ['1_20per_20level_20balloon_20item_20weights_21',['2.1 Per-Level Balloon &amp; Item Weights',['../plan_future_ideas.html#autotoc_md433',1,'']]],
   ['1_20soap_20cluster_20merge_20em_20from_20plan_20contentproduction_20plan_20gridactorexpansion_20em_22',['5.1 Soap Cluster Merge &lt;em&gt;(from PLAN-ContentProduction + PLAN-GridActorExpansion)&lt;/em&gt;',['../plan_future_ideas.html#autotoc_md452',1,'']]],

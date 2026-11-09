@@ -6,7 +6,7 @@
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="865,75,938,87,975,97,1011,112,1040,130,1068,152,1108,196,1104,200,1064,156,1037,134,1008,116,974,102,937,92,864,80"/>
 <area shape="rect" id="Node000004" title=" " alt="" coords="304,120,403,145"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="416,128,529,127,677,133,844,149,928,162,1010,179,1065,195,1063,201,1009,185,927,167,843,154,677,138,529,133,416,133"/>
-<area shape="rect" id="Node000015" href="$classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html" title="Parent transform for scenario static content; the Ascent transition moves this root,..." alt="" coords="661,170,839,210"/>
+<area shape="rect" id="Node000015" href="$classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html" title="Parent transform for scenario static content; a level transition moves this root, not each child." alt="" coords="661,170,839,210"/>
 <area shape="poly" id="edge15_Node000015_Node000004" title=" " alt="" coords="417,139,470,147,661,175,660,180,469,153,416,145"/>
 <area shape="rect" id="Node000005" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="663,234,837,274"/>
 <area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="850,242,1009,227,1033,225,1034,230,1010,233,851,248"/>

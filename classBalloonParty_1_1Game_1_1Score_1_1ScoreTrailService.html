@@ -144,7 +144,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3af356ff4269f342a1fe87f90e4f35ce" id="r_a3af356ff4269f342a1fe87f90e4f35ce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3af356ff4269f342a1fe87f90e4f35ce">Dispose</a> ()</td></tr>
 <tr class="separator:a3af356ff4269f342a1fe87f90e4f35ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a327b6a37033c788bca9674d0c983dfb7" id="r_a327b6a37033c788bca9674d0c983dfb7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a327b6a37033c788bca9674d0c983dfb7">HoldOutgoing</a> (Transform outgoingRoot, float exitDrop)</td></tr>
-<tr class="memdesc:a327b6a37033c788bca9674d0c983dfb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parents current content under <em>outgoingRoot</em> , offset by <em>exitDrop</em>  so it slides out in lockstep with the incoming content.  <br /></td></tr>
+<tr class="memdesc:a327b6a37033c788bca9674d0c983dfb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parents current content under <em>outgoingRoot</em>  (ScenarioContentRoot.Outgoing), offset by <em>exitDrop</em>  so it slides out in lockstep with the incoming content. A mist reveal scales that holder about the camera, so held content must draw relative to its transform, not from world positions baked at hold time.  <br /></td></tr>
 <tr class="separator:a327b6a37033c788bca9674d0c983dfb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a76045ed0993ad7f8d202d746977a9c90" id="r_a76045ed0993ad7f8d202d746977a9c90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a76045ed0993ad7f8d202d746977a9c90">ReleaseOutgoing</a> ()</td></tr>
 <tr class="memdesc:a76045ed0993ad7f8d202d746977a9c90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once the transition has settled — discard whatever was held.  <br /></td></tr>
@@ -349,7 +349,7 @@ Static Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Parents current content under <em>outgoingRoot</em> , offset by <em>exitDrop</em>  so it slides out in lockstep with the incoming content. </p>
+<p>Parents current content under <em>outgoingRoot</em>  (ScenarioContentRoot.Outgoing), offset by <em>exitDrop</em>  so it slides out in lockstep with the incoming content. A mist reveal scales that holder about the camera, so held content must draw relative to its transform, not from world positions baked at hold time. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1ITransitionOutgoingContent.html#ac8d74b1c626bae90f6fe75a6a01b1e7c">BalloonParty.Slots.Actor.ITransitionOutgoingContent</a>.</p>
 

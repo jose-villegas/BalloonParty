@@ -1,5 +1,7 @@
 var classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings =
 [
+    [ "LevelAscendSettings", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#adfb3e273f549ee453eef82d3f44cdc64", null ],
+    [ "LevelAscendSettings", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#ae9c5ec59720c532d942cfcea74177b5e", null ],
     [ "_balloonSpawnCue", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#ab60561269f1782afe82743faec00b6b0", null ],
     [ "_descentCurve", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#ae3f5d7a214d80b9f284efc3b55f6e8d1", null ],
     [ "_height", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a202123ee351a392240890434fd25e697", null ],
@@ -8,6 +10,7 @@ var classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings =
     [ "_restartBalloonCue", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#aefc3899a263a24d5fbe7d033c761d6d6", null ],
     [ "_restartRiseCurve", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#ae4ec0ea97b931d14e2f3c1097d9af061", null ],
     [ "_speed", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a051c872da61ab210649bea35c993e247", null ],
+    [ "AscentSeconds", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#ac29ed6cf2dcb3c2ee19b95dd1a7cea24", null ],
     [ "BalloonSpawnCue", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#ad9ec515afbd28468a555907d749280c3", null ],
     [ "DescentCurve", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#aad3469cfd85697f34794aca104a0c764", null ],
     [ "Height", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#afecd85de1e5ecb99fb3e94da8f518ce4", null ],
@@ -15,5 +18,6 @@ var classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings =
     [ "PopWaveBandSeconds", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#ae3fdafa3e9e5dc4fa507d998240501f3", null ],
     [ "RestartBalloonCue", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a8f1f88d085962940ef07345dce6c0647", null ],
     [ "RestartRiseCurve", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a58cba6faab1a39b50edf2fc058684809", null ],
+    [ "RestartRiseSeconds", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a5f9f1612fd4582a07f92bfc5dd2a9c3c", null ],
     [ "Speed", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a65b65af58f7af1509a95c9fa9e383299", null ]
 ];

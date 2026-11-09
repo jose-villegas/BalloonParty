@@ -33,6 +33,7 @@ var dir_c46868fe3e223da89641514498b57a94 =
     [ "ProjectileDoomedStartedMessage.cs", "ProjectileDoomedStartedMessage_8cs.html", "ProjectileDoomedStartedMessage_8cs" ],
     [ "ProjectileFiredMessage.cs", "ProjectileFiredMessage_8cs.html", "ProjectileFiredMessage_8cs" ],
     [ "ProjectileLoadedMessage.cs", "ProjectileLoadedMessage_8cs.html", "ProjectileLoadedMessage_8cs" ],
+    [ "RestartRiseStartedMessage.cs", "RestartRiseStartedMessage_8cs.html", "RestartRiseStartedMessage_8cs" ],
     [ "RunResetMessage.cs", "RunResetMessage_8cs.html", "RunResetMessage_8cs" ],
     [ "RunRestartCompletedMessage.cs", "RunRestartCompletedMessage_8cs.html", "RunRestartCompletedMessage_8cs" ],
     [ "ScoreLevelUpMessage.cs", "ScoreLevelUpMessage_8cs.html", "ScoreLevelUpMessage_8cs" ],

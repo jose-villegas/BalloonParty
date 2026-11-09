@@ -21,7 +21,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html" target="_top" xlink:title="The scenario the backdrop is showing now: sky or ground.">
+<g id="a_Node000002"><a xlink:href="interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html" target="_top" xlink:title="The scenario the backdrop is on (sky or ground), and whether it got there by a cut or a mist reveal.">
 <polygon fill="white" stroke="#666666" points="158,-96 0,-96 0,-66 158,-66 158,-96"/>
 <text text-anchor="start" x="8" y="-84" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Scenario.IActive</text>
 <text text-anchor="middle" x="79" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">Scenario</text>

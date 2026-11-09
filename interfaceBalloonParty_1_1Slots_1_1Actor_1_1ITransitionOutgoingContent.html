@@ -121,13 +121,13 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Slots_1_1Actor_1_1ITransition
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="interfaceBalloonParty_1_1Slots_1_1Actor_1_1ITransitionOutgoingContent__inherit__graph.svg" width="100%" height="464"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="interfaceBalloonParty_1_1Slots_1_1Actor_1_1ITransitionOutgoingContent__inherit__graph.svg" width="100%" height="512"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac8d74b1c626bae90f6fe75a6a01b1e7c" id="r_ac8d74b1c626bae90f6fe75a6a01b1e7c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac8d74b1c626bae90f6fe75a6a01b1e7c">HoldOutgoing</a> (Transform outgoingRoot, float exitDrop)</td></tr>
-<tr class="memdesc:ac8d74b1c626bae90f6fe75a6a01b1e7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parents current content under <em>outgoingRoot</em> , offset by <em>exitDrop</em>  so it slides out in lockstep with the incoming content.  <br /></td></tr>
+<tr class="memdesc:ac8d74b1c626bae90f6fe75a6a01b1e7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parents current content under <em>outgoingRoot</em>  (<a class="el" href="classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a61e2f62571d01341eb8c296c7c365b6f">ScenarioContentRoot.Outgoing</a>), offset by <em>exitDrop</em>  so it slides out in lockstep with the incoming content. A mist reveal scales that holder about the camera, so held content must draw relative to its transform, not from world positions baked at hold time.  <br /></td></tr>
 <tr class="separator:ac8d74b1c626bae90f6fe75a6a01b1e7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47a319f138491aba9d320527e1b80cc0" id="r_a47a319f138491aba9d320527e1b80cc0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a47a319f138491aba9d320527e1b80cc0">ReleaseOutgoing</a> ()</td></tr>
 <tr class="memdesc:a47a319f138491aba9d320527e1b80cc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called once the transition has settled — discard whatever was held.  <br /></td></tr>
@@ -155,9 +155,9 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Parents current content under <em>outgoingRoot</em> , offset by <em>exitDrop</em>  so it slides out in lockstep with the incoming content. </p>
+<p>Parents current content under <em>outgoingRoot</em>  (<a class="el" href="classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a61e2f62571d01341eb8c296c7c365b6f">ScenarioContentRoot.Outgoing</a>), offset by <em>exitDrop</em>  so it slides out in lockstep with the incoming content. A mist reveal scales that holder about the camera, so held content must draw relative to its transform, not from world positions baked at hold time. </p>
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Coins_1_1CoinTrailService.html#a6b549d78210dd8180ba1046a7a6e9883">BalloonParty.Game.Coins.CoinTrailService</a>, <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html#a327b6a37033c788bca9674d0c983dfb7">BalloonParty.Game.Score.ScoreTrailService</a>, and <a class="el" href="classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterViewController-3-g.html#af7857983a0070418ae0f8d8f2b3d9570">BalloonParty.Slots.Actor.Cluster.ClusterViewController&lt; TModel, TView, TSettings &gt;</a>.</p>
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Coins_1_1CoinTrailService.html#a6b549d78210dd8180ba1046a7a6e9883">BalloonParty.Game.Coins.CoinTrailService</a>, <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html#a327b6a37033c788bca9674d0c983dfb7">BalloonParty.Game.Score.ScoreTrailService</a>, <a class="el" href="classBalloonParty_1_1Scenario_1_1View_1_1GroundView.html#a0ec2fe9c35f576893de4c5bc2b37b517">BalloonParty.Scenario.View.GroundView</a>, and <a class="el" href="classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterViewController-3-g.html#af7857983a0070418ae0f8d8f2b3d9570">BalloonParty.Slots.Actor.Cluster.ClusterViewController&lt; TModel, TView, TSettings &gt;</a>.</p>
 
 </div>
 </div>
@@ -178,7 +178,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Called once the transition has settled — discard whatever was held. </p>
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Coins_1_1CoinTrailService.html#a8c54e048f34f7c97d9ad558b5e1d7e37">BalloonParty.Game.Coins.CoinTrailService</a>, <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html#a76045ed0993ad7f8d202d746977a9c90">BalloonParty.Game.Score.ScoreTrailService</a>, and <a class="el" href="classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterViewController-3-g.html#aefbd4c531142d302d1bbedf1f5198f05">BalloonParty.Slots.Actor.Cluster.ClusterViewController&lt; TModel, TView, TSettings &gt;</a>.</p>
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Coins_1_1CoinTrailService.html#a8c54e048f34f7c97d9ad558b5e1d7e37">BalloonParty.Game.Coins.CoinTrailService</a>, <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html#a76045ed0993ad7f8d202d746977a9c90">BalloonParty.Game.Score.ScoreTrailService</a>, <a class="el" href="classBalloonParty_1_1Scenario_1_1View_1_1GroundView.html#ae0790258d659412e94ca3f46a2654e47">BalloonParty.Scenario.View.GroundView</a>, and <a class="el" href="classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterViewController-3-g.html#aefbd4c531142d302d1bbedf1f5198f05">BalloonParty.Slots.Actor.Cluster.ClusterViewController&lt; TModel, TView, TSettings &gt;</a>.</p>
 
 </div>
 </div>
