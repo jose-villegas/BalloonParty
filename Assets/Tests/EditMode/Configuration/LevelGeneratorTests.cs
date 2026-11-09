@@ -754,6 +754,52 @@ namespace BalloonParty.Tests.Configuration
             }
         }
 
+        [Test]
+        public void Generate_AGroundOnlyActor_AppearsOnGroundLevelsAndNeverInTheSky()
+        {
+            var settings = Settings(gridActors: new[]
+            {
+                new GridActorContentEntry(GridActorType.Puff, 1, 0, new RangedInt(8, 8), new RangedInt(8, 8), 0),
+                new GridActorContentEntry(GridActorType.Bush, 1, 0, new RangedInt(4, 8), new RangedInt(4, 8), 0, 3,
+                    requiresGround: true),
+            });
+
+            for (var level = 1; level < 200; level++)
+            {
+                var gates = LevelGenerator.Generate(settings, level, level).GridActorGates;
+                var onGround = ScenarioSchedule.ForLevel(settings.Scenario, level) == ScenarioKind.Ground;
+                Assert.AreEqual(onGround, gates.Any(g => g.Type == GridActorType.Bush), $"level {level}");
+                if (!onGround)
+                {
+                    Assert.IsTrue(gates.Any(g => g.Type == GridActorType.Puff), $"sky level {level} keeps its clouds");
+                }
+            }
+        }
+
+        [Test]
+        public void Generate_AGroundOnlyActor_LeavesASkyLevelsBudgetToTheRest([Values(0, 1, 7, 42)] int seed)
+        {
+            // Bush and Tough each cost the whole budget: on a sky level the bush mustn't be a pick that comes out
+            // empty, so the budget always goes to Tough.
+            var settings = Settings(
+                threat: new BudgetFormula(2f, 0f, 2f),
+                balloons: new[]
+                {
+                    Balloon(BalloonType.Simple, ContentRole.Threat, 1, 0),
+                    Balloon(BalloonType.Tough, ContentRole.Threat, 1, 2),
+                },
+                gridActors: new[]
+                {
+                    new GridActorContentEntry(GridActorType.Bush, 1, 2, new RangedInt(4, 8), new RangedInt(4, 8), 0,
+                        requiresGround: true),
+                });
+
+            var sky = LevelGenerator.Generate(settings, 15, seed);
+
+            Assert.IsTrue(Has(sky, BalloonType.Tough));
+            Assert.IsEmpty(sky.GridActorGates);
+        }
+
         private static void SetScenario(LevelGenerationSettings settings, ScenarioScheduleSettings scenario)
         {
             typeof(LevelGenerationSettings)

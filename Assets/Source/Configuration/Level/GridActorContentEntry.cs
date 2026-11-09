@@ -34,14 +34,19 @@ namespace BalloonParty.Configuration.Level
         [Tooltip("Maximum slots per individual cluster. 0 = no limit. Only used with Cluster placement.")]
         [SerializeField] [Min(0)] private int _maxPerCluster;
 
+        [Tooltip("Only on ground levels: an actor that reads as floating over the sky backdrop (bushes).")]
+        [SerializeField] private bool _requiresGround;
+
         public GridActorType Type => _type;
         public ContentRole Role => ContentRole.Threat;
         public int UnlockLevel => _unlockLevel;
         public bool Withheld => _withheld;
         public int Cost => _cost;
+        public bool RequiresGround => _requiresGround;
 
         internal GridActorContentEntry(GridActorType type, int unlockLevel, int cost, RangedInt count,
-            RangedInt lateCount, int rampLevels, int maxPerCluster = 0, bool withheld = false)
+            RangedInt lateCount, int rampLevels, int maxPerCluster = 0, bool withheld = false,
+            bool requiresGround = false)
         {
             _withheld = withheld;
             _type = type;
@@ -51,6 +56,7 @@ namespace BalloonParty.Configuration.Level
             _lateCount = lateCount;
             _rampLevels = rampLevels;
             _maxPerCluster = maxPerCluster;
+            _requiresGround = requiresGround;
         }
 
         // The level's count range, rolled when the level resolves.

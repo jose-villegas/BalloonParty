@@ -14,5 +14,8 @@ namespace BalloonParty.Configuration.Level
 
         /// <summary>Authored but kept out of generation, e.g. until its art or terrain exists.</summary>
         bool Withheld { get; }
+
+        /// <summary>Whether the piece needs ground under it; sky levels leave it out.</summary>
+        bool RequiresGround { get; }
     }
 }

@@ -37,6 +37,7 @@ namespace BalloonParty.Configuration.Level
         public int UnlockLevel => _unlockLevel;
         public bool Withheld => _withheld;
         public int Cost => _cost;
+        public bool RequiresGround => false;
         public ContentWeightRamp Weight => _weight;
 
         internal ItemContentEntry(ItemType type, int unlockLevel, int cost, ContentWeightRamp weight,

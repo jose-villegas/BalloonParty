@@ -29,8 +29,9 @@ namespace BalloonParty.Configuration.Level
         {
             var rng = new System.Random(seed);
             var included = new HashSet<int>();
-            SelectPieces(settings, ContentRole.Threat, level, rng, included);
-            SelectPieces(settings, ContentRole.Aid, level, rng, included);
+            var stretch = ScenarioSchedule.StretchAt(settings.Scenario, level);
+            SelectPieces(settings, ContentRole.Threat, level, stretch.Kind, rng, included);
+            SelectPieces(settings, ContentRole.Aid, level, stretch.Kind, rng, included);
 
             var balloons = new List<BalloonTypeWeight>();
             var items = new List<ItemTypeWeight>();
@@ -56,7 +57,6 @@ namespace BalloonParty.Configuration.Level
             // A meadow trades its puff clouds for bushes as it goes (ScenarioStretch.PuffCloudShare / BushShare).
             // Applied after the pick, so the rest of the level's mix and its rng stream are the same as they'd be
             // under full clouds.
-            var stretch = ScenarioSchedule.StretchAt(settings.Scenario, level);
             if (stretch.IsClearingMeadow)
             {
                 IncludeUnlockedBushes(settings, level, included);
@@ -103,15 +103,15 @@ namespace BalloonParty.Configuration.Level
         }
 
         private static void SelectPieces(LevelGenerationSettings settings, ContentRole role, int level,
-            System.Random rng, HashSet<int> included)
+            ScenarioKind scenario, System.Random rng, HashSet<int> included)
         {
             var optional = new List<(int Key, int Cost)>();
             var budget = settings.BudgetForLevel(role, level);
-            var featured = settings.FeaturedLevels;
+            var slot = new PieceSlot(role, level, settings.FeaturedLevels, scenario);
 
-            Partition(settings.Balloons, BalloonKind, role, level, featured, included, optional, ref budget);
-            Partition(settings.Items, ItemKind, role, level, featured, included, optional, ref budget);
-            Partition(settings.GridActors, GridActorKind, role, level, featured, included, optional, ref budget);
+            Partition(settings.Balloons, BalloonKind, slot, included, optional, ref budget);
+            Partition(settings.Items, ItemKind, slot, included, optional, ref budget);
+            Partition(settings.GridActors, GridActorKind, slot, included, optional, ref budget);
 
             while (TryPickAffordable(optional, budget, rng, out var picked))
             {
@@ -160,20 +160,26 @@ namespace BalloonParty.Configuration.Level
         }
 
         // Puts each unlocked piece of the role straight in (a staple, or still featured) or among the optional
-        // ones. Featured pieces are paid for first, so they can leave nothing for the optional picks.
-        private static void Partition<T>(IReadOnlyList<T> pieces, int kind, ContentRole role, int level,
-            int featuredLevels, HashSet<int> included, List<(int Key, int Cost)> optional, ref float budget)
+        // ones. Featured pieces are paid for first, so they can leave nothing for the optional picks. A sky level
+        // leaves ground-only pieces out before any budget is spent, so a bush can't eat a sky level's budget.
+        private static void Partition<T>(IReadOnlyList<T> pieces, int kind, PieceSlot slot, HashSet<int> included,
+            List<(int Key, int Cost)> optional, ref float budget)
             where T : IContentPiece
         {
             for (var i = 0; i < pieces.Count; i++)
             {
                 var piece = pieces[i];
-                if (piece.Withheld || piece.Role != role || piece.UnlockLevel > level)
+                if (piece.Withheld || piece.Role != slot.Role || piece.UnlockLevel > slot.Level)
                 {
                     continue;
                 }
 
-                if (piece.Cost == 0 || level < piece.UnlockLevel + featuredLevels)
+                if (piece.RequiresGround && slot.Scenario != ScenarioKind.Ground)
+                {
+                    continue;
+                }
+
+                if (piece.Cost == 0 || slot.Level < piece.UnlockLevel + slot.FeaturedLevels)
                 {
                     included.Add(Key(kind, i));
                     budget -= piece.Cost;
@@ -215,6 +221,23 @@ namespace BalloonParty.Configuration.Level
         private static int Key(int kind, int index)
         {
             return kind << 16 | index;
+        }
+
+        // What decides whether a catalogue piece is in play for one role's pick.
+        private readonly struct PieceSlot
+        {
+            public readonly ContentRole Role;
+            public readonly int Level;
+            public readonly int FeaturedLevels;
+            public readonly ScenarioKind Scenario;
+
+            public PieceSlot(ContentRole role, int level, int featuredLevels, ScenarioKind scenario)
+            {
+                Role = role;
+                Level = level;
+                FeaturedLevels = featuredLevels;
+                Scenario = scenario;
+            }
         }
     }
 }

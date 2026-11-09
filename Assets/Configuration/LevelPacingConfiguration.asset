@@ -2160,6 +2160,7 @@ MonoBehaviour:
         _mode: 2
       _rampLevels: 6
       _maxPerCluster: 5
+      _requiresGround: 0
     - _type: 1
       _withheld: 1
       _unlockLevel: 16
@@ -2174,3 +2175,4 @@ MonoBehaviour:
         _mode: 2
       _rampLevels: 8
       _maxPerCluster: 3
+      _requiresGround: 1

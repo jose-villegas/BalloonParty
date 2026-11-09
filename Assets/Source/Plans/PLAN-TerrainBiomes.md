@@ -125,9 +125,14 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
     level's total stays about the same while the mix shifts.
   - Sky levels keep both full counts. This is the board's puff-cloud actors, not the
     cloud backdrop's fade.
-- **Bushes only on ground**: a `RequiresGround` flag on `GridActorContentEntry`;
-  `LevelGenerator` leaves flagged actors out of sky levels. One source of truth: the
-  generator and the ground view both ask `ScenarioSchedule`.
+- **Bushes only on ground** (built 2026-11-09): a `RequiresGround` flag on
+  `GridActorContentEntry` (on `IContentPiece`, always false for balloons and items), set
+  on the shipped bush. `LevelGenerator` leaves flagged pieces out of a sky level before any
+  budget is spent, so a bush is never a sky level's pick that comes out empty and the
+  budget goes to the rest. One source of truth: the generator and the ground view both ask
+  `ScenarioSchedule`. A ground-only piece's featured levels still count from its unlock
+  level, so one unlocked on a sky level first shows at the next meadow, unfeatured; the
+  shipped bush unlocks at 16, the first ground level.
 - **Triggers** (the `TimeOfDayCycle` shape): snap to the level's scenario on run start and
   run reset (start-level cheat, restart); animate on the level-up Ascent and on the
   restart rise when the two levels' scenarios differ. Same scenario on both sides changes
@@ -266,9 +271,10 @@ changes to the Ascent or restart code.
      floats out over the new backdrop, and on a cinematic restart a ground board sits on
      the sky for the spawn wait and the rise.
 3. **Bushes on ground only**: `RequiresGround` on the catalogue and in `LevelGenerator`
-   (with a test that no sky level contains a ground-only actor), un-withhold bushes once
+   (with a test that no sky level contains a ground-only actor; built 2026-11-09, with the
+   Configuration README). Still to do: un-withhold bushes once
    the `Withheld` flag lands, tune the bush shadow on grass, run a playtest-bot
-   comparison, update the Configuration README. Debug presets (level < 1) skip
+   comparison. Debug presets (level < 1) skip
    `LevelGenerator` and are always sky, so a preset that lists bushes would float them;
    the preset validator should warn.
 

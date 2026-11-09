@@ -120,5 +120,25 @@ namespace BalloonParty.Tests.Configuration
             Assert.AreEqual(1, level.ItemWeights.Single(w => w.Type == ItemType.Bomb).GuaranteedInitialCount);
             Assert.IsTrue(level.GridActorGates.Any(g => g.Type == GridActorType.Puff));
         }
+
+        [Test]
+        public void ShippedBushes_GrowOnlyOnGroundLevels()
+        {
+            var meadows = 0;
+            for (var level = 1; level <= 120; level++)
+            {
+                var hasBushes = _pacing.ParametersForLevel(level).GridActorGates.Any(g => g.Type == GridActorType.Bush);
+                if (_pacing.ScenarioForLevel(level) == ScenarioKind.Sky)
+                {
+                    Assert.IsFalse(hasBushes, $"sky level {level} has bushes");
+                }
+                else if (hasBushes)
+                {
+                    meadows++;
+                }
+            }
+
+            Assert.That(meadows, Is.GreaterThan(0), "some meadow has bushes");
+        }
     }
 }

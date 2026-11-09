@@ -44,6 +44,7 @@ namespace BalloonParty.Configuration.Level
         public int UnlockLevel => _unlockLevel;
         public bool Withheld => _withheld;
         public int Cost => _cost;
+        public bool RequiresGround => false;
         public ContentWeightRamp Weight => _weight;
 
         /// <summary>The type's board cap, read the way the level's own weight entry reads it. 0 = uncapped.</summary>
