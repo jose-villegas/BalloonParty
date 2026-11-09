@@ -5897,7 +5897,7 @@
 <!-- Node142 -->
 <g id="Node000142" class="node">
 <title>Node142</title>
-<g id="a_Node000142"><a xlink:href="classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html" target="_top" xlink:title="One short handwritten line on the canvas: written on in pencil where it&#39;s asked for,...">
+<g id="a_Node000142"><a xlink:href="classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html" target="_top" xlink:title="One short handwritten line in world space (a TextMeshPro, not on a canvas), so it sits where it happe...">
 <polygon fill="white" stroke="#666666" points="547.5,-6206.5 407.5,-6206.5 407.5,-6176.5 547.5,-6176.5 547.5,-6206.5"/>
 <text text-anchor="start" x="415.5" y="-6194.5" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.UI.HeadsUp.</text>
 <text text-anchor="middle" x="477.5" y="-6183.5" font-family="Helvetica,sans-Serif" font-size="10.00">HandwrittenHeadsUp</text>
@@ -5916,7 +5916,7 @@
 <!-- Node143 -->
 <g id="Node000143" class="node">
 <title>Node143</title>
-<g id="a_Node000143"><a xlink:href="classBalloonParty_1_1UI_1_1HeadsUp_1_1ReloadHeadsUp.html" target="_top" xlink:title="Writes a small &quot;+1&quot; by the cannon each time its next ball is ready (ThrowerReadyMessage),...">
+<g id="a_Node000143"><a xlink:href="classBalloonParty_1_1UI_1_1HeadsUp_1_1ReloadHeadsUp.html" target="_top" xlink:title="Writes &quot;ready&quot; beside the cannon each time its next ball is ready (ThrowerReadyMessage) and keeps it ...">
 <polygon fill="white" stroke="#666666" points="547.5,-6158.5 407.5,-6158.5 407.5,-6128.5 547.5,-6128.5 547.5,-6158.5"/>
 <text text-anchor="start" x="415.5" y="-6146.5" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.UI.HeadsUp.</text>
 <text text-anchor="middle" x="477.5" y="-6135.5" font-family="Helvetica,sans-Serif" font-size="10.00">ReloadHeadsUp</text>

@@ -117,7 +117,7 @@ $(function(){initNavTree('classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.h
 </div><!--header-->
 <div class="contents">
 
-<p>Where a new heads-up line goes so it doesn't sit on the lines still showing: the nearest spot to where it happened, stepping out in rings of one line height up and down and half a line width sideways, kept inside the canvas.  
+<p>Where a new heads-up line goes so it doesn't sit on the lines still showing: the nearest spot to where it happened, stepping out in rings of one line height up and down and half a line width sideways, kept inside the camera's view.  
  <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
@@ -125,6 +125,9 @@ Static Package Functions</h2></td></tr>
 <tr class="memitem:af323a3347bf156f55e9f4e55f847fddc" id="r_af323a3347bf156f55e9f4e55f847fddc"><td class="memItemLeft" align="right" valign="top">static Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af323a3347bf156f55e9f4e55f847fddc">Place</a> (Rect bounds, Vector2 wanted, Vector2 size, IReadOnlyList&lt; Rect &gt; occupied)</td></tr>
 <tr class="memdesc:af323a3347bf156f55e9f4e55f847fddc"><td class="mdescLeft">&#160;</td><td class="mdescRight">The centre for a line of <em>size</em>  wanted at <em>wanted</em> , inside <em>bounds</em> , clear of <em>occupied</em>  where it can be.  <br /></td></tr>
 <tr class="separator:af323a3347bf156f55e9f4e55f847fddc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca077434b1d702637407aa139995bffc" id="r_aca077434b1d702637407aa139995bffc"><td class="memItemLeft" align="right" valign="top">static Rect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aca077434b1d702637407aa139995bffc">ViewRect</a> (Camera camera)</td></tr>
+<tr class="memdesc:aca077434b1d702637407aa139995bffc"><td class="mdescLeft">&#160;</td><td class="mdescRight">What an orthographic <em>camera</em>  shows, in world space.  <br /></td></tr>
+<tr class="separator:aca077434b1d702637407aa139995bffc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7eee062feb793cd53a7f38ebb916d455" id="r_a7eee062feb793cd53a7f38ebb916d455"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7eee062feb793cd53a7f38ebb916d455">WorstOverlap</a> (Vector2 center, Vector2 size, IReadOnlyList&lt; Rect &gt; occupied)</td></tr>
 <tr class="memdesc:a7eee062feb793cd53a7f38ebb916d455"><td class="mdescLeft">&#160;</td><td class="mdescRight">The largest share of a line at <em>center</em>  that any occupied rect covers.  <br /></td></tr>
 <tr class="separator:a7eee062feb793cd53a7f38ebb916d455"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,7 +153,7 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:ab5876d50e82acde465ff770fa2aa4ca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Where a new heads-up line goes so it doesn't sit on the lines still showing: the nearest spot to where it happened, stepping out in rings of one line height up and down and half a line width sideways, kept inside the canvas. </p>
+<div class="textblock"><p>Where a new heads-up line goes so it doesn't sit on the lines still showing: the nearest spot to where it happened, stepping out in rings of one line height up and down and half a line width sideways, kept inside the camera's view. </p>
 <p>When the board is too crowded for a clean spot it takes the one that overlaps least, so a burst still reads instead of stacking into one smudge. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ae14a260d66a79992452a9fe43b3574c1" name="ae14a260d66a79992452a9fe43b3574c1"></a>
@@ -255,6 +258,33 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The centre for a line of <em>size</em>  wanted at <em>wanted</em> , inside <em>bounds</em> , clear of <em>occupied</em>  where it can be. </p>
+
+</div>
+</div>
+<a id="aca077434b1d702637407aa139995bffc" name="aca077434b1d702637407aa139995bffc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca077434b1d702637407aa139995bffc">&#9670;&#160;</a></span>ViewRect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static Rect BalloonParty.UI.HeadsUp.HeadsUpPacking.ViewRect </td>
+          <td>(</td>
+          <td class="paramtype">Camera</td>          <td class="paramname"><span class="paramname"><em>camera</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>What an orthographic <em>camera</em>  shows, in world space. </p>
 
 </div>
 </div>

@@ -110,18 +110,18 @@ $(function(){initNavTree('plan_coins.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">Coins and the Card Shop</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md362"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md363"></a>
 Coins and the Card Shop</h1>
 <blockquote class="doxtable">
 <p>Working plan for a coin currency earned deep in a run and spent on the game-over screen for a card that helps the retry. </p>
 </blockquote>
 <p><b>Status:</b> Phases 1 to 3 built: the wallet, the drop and telemetry, the tuning runs, and the coin's flight to the bottom-left counter (see <code><a class="el" href="Game_2Coins_2README_8md.html">Game/Coins/README.md</a></code> and <code><a class="el" href="UI_2Coins_2README_8md.html">UI/Coins/README.md</a></code>). Phase 4, the shop, is next. Decided with the owner: a card bought with coins applies to the retry at the level reached; coins are a saved wallet; they drop from pops from level 10 on; the counter sits bottom left and appears only once coins exist. Claude draws the art in the existing UI style (§7); the coin is drawn.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md364"></a>
+<h2><a class="anchor" id="autotoc_md365"></a>
 1. Why</h2>
 <p>The playtest bot (<code>Tools/playtest/</code>) shows where each skill starts losing hearts: low skill from about level 4, average from 9, high from 12. Most runs that reach level 15 are in the stretch where hearts go. Coins there reward getting that deep, and the shop turns a loss into a choice: spend what the good runs earned to make the retry easier.</p>
 <p>It is a second way to buy what the rewarded ad already buys (a bonus card for one attempt, see <code><a class="el" href="Game_2Upgrades_2README_8md.html">Game/Upgrades/README.md</a></code>), paid with play instead of an ad. It never buys score.</p>
-<h2><a class="anchor" id="autotoc_md365"></a>
+<h2><a class="anchor" id="autotoc_md366"></a>
 2. The loop</h2>
 <ol type="1">
 <li>From <code>CoinsFromLevel</code> (10) on, each balloon popped has a <code>CoinDropChance</code> of dropping a coin.</li>
@@ -131,7 +131,7 @@ Coins and the Card Shop</h1>
 <li>Buying one shows a hand of three cards (as at a level-up), the player picks one, the coins are spent, and the retry starts with that card for this attempt only.</li>
 <li>The retry opens with the card reveal (<code><a class="el" href="PLAN-CardReveal_8md.html">PLAN-CardReveal.md</a></code>): a balloon pops and leaves a slip with the card written on it.</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md366"></a>
+<h2><a class="anchor" id="autotoc_md367"></a>
 3. Rules</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -157,7 +157,7 @@ Coins and the Card Shop</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Coins are progression, not telemetry   </td><td class="markdownTableBodyNone">Kept on the device on purpose. Coins earned and spent per level are <em>also</em> reported as metrics, which leave the device (see <code><a class="el" href="Game_2Telemetry_2README_8md.html">Game/Telemetry/README.md</a></code>)   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md367"></a>
+<h2><a class="anchor" id="autotoc_md368"></a>
 4. Architecture</h2>
 <p>Follows the codebase's MVC split: models and controllers are plain C#, only views touch Unity.</p>
 <table class="markdownTable">
@@ -182,7 +182,7 @@ Coins and the Card Shop</h1>
 </table>
 <p><b>When the counter shows.</b> Not before coins exist for this player, so a new player never sees an empty wallet before the game has said what coins are. It appears the first time either holds: the run reaches <code>CoinsFromLevel</code> (fading in with the level's start), or the wallet already holds coins (a returning player sees it from level 1, since they can spend at any loss). After that it stays for the session. It sits bottom left, clear of the cannon and of the heads-up lines, which keep to the board.</p>
 <p>Telemetry gains <code>coins_earned</code> and <code>coins_spent</code> per level. The playtest bot reports coins earned per run and per level, so the drop chance and the price can be tuned from runs (§8).</p>
-<h2><a class="anchor" id="autotoc_md368"></a>
+<h2><a class="anchor" id="autotoc_md369"></a>
 5. Phases</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -201,7 +201,7 @@ Coins and the Card Shop</h1>
 <td class="markdownTableBodyNone">6   </td><td class="markdownTableBodyNone">Luck levels (§10): the 4th colour, and later bubbles, rolled per level, with more coins on the harder rolls   </td><td class="markdownTableBodyNone">A level-start banner   </td></tr>
 </table>
 <p>Each phase gets the reviewer pass before the next one starts.</p>
-<h2><a class="anchor" id="autotoc_md369"></a>
+<h2><a class="anchor" id="autotoc_md370"></a>
 6. Edge cases</h2>
 <ul>
 <li><b>Retry farming.</b> A retry replays the level reached, so a player can earn coins at level 16, lose, and earn them again on the retry. That is the loop working as meant: it costs play, and the coins buy only one attempt's card. Watch it in the bot's numbers.</li>
@@ -209,7 +209,7 @@ Coins and the Card Shop</h1>
 <li><b>Losing mid-flight.</b> Coins fly on real time, so those still in the air when the run ends land during the game-over pan-in and the balance is complete when the screen shows. Any left when the player leaves the screen land at once.</li>
 <li><b>No card can be dealt.</b> When only Extra Ball and maxed cards are left, the shop hides, as the ad's bonus button does.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md370"></a>
+<h2><a class="anchor" id="autotoc_md371"></a>
 7. Assets</h2>
 <p>Claude draws them in the existing UI style: flat shapes, a white rim with a thin grey stroke (as <code>Sprites/UI/shield.png</code>), soft gradients in the sun's palette, and a white silhouette beside each for tinting and flashes (as <code>shield-fill.png</code>). Each is drawn by a script in <code>Tools/art/</code>, so it can be redrawn at another size or colour. They live in <code>Assets/Sprites/UI/Coins/</code>, which the UI atlas packs with the rest of <code>UI/</code>.</p>
 <table class="markdownTable">
@@ -229,17 +229,17 @@ Coins and the Card Shop</h1>
 <td class="markdownTableBodyNone">Buy button, short of coins   </td><td class="markdownTableBodyNone">The Retry button   </td><td class="markdownTableBodyNone">A greyed state   </td><td class="markdownTableBodyNone">A tint of the existing button, no new art   </td></tr>
 </table>
 <p>The heads-up for a coin (<code>+1 coin</code>) needs no art: it is handwritten like the others (<code>UI/HeadsUp/</code>).</p>
-<h2><a class="anchor" id="autotoc_md371"></a>
+<h2><a class="anchor" id="autotoc_md372"></a>
 8. Tuning targets</h2>
 <p>From the bot's runs: at levels 13 to 15, high skill pops about 180 to 330 balloons a level, and average skill about 150 to 250. With <code>CoinDropChance</code> 0.05 that's about 8 to 16 coins a level, so <code>CardPrice</code> 25 is two or three levels past 15. A player who reaches 17 can afford one card on their next loss. Phase 2 checks this with runs and sets the shipped values. The chance was lowered to 0.01 on 2026-11-09, about 2 to 3 coins a level, so <code>CardPrice</code> needs re-tuning before phase 4 ships.</p>
-<h2><a class="anchor" id="autotoc_md372"></a>
+<h2><a class="anchor" id="autotoc_md373"></a>
 9. Open questions</h2>
 <ul>
 <li>Can a player buy more than one card for the same retry?</li>
 <li>Should the price rise with each purchase in a run, to stop a large wallet from buying every retry?</li>
 <li>Should coins also show in the main menu, so the wallet is visible between runs?</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md373"></a>
+<h2><a class="anchor" id="autotoc_md374"></a>
 10. Luck levels (proposal, after phase 2)</h2>
 <blockquote class="doxtable">
 <p>Raised by the owner 2026-11-08. Not designed in detail yet: this records the idea and what to check before building it. </p>

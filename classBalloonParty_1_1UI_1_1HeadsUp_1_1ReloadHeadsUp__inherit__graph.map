@@ -1,5 +1,5 @@
 <map id="BalloonParty.UI.HeadsUp.ReloadHeadsUp" name="BalloonParty.UI.HeadsUp.ReloadHeadsUp">
-<area shape="rect" id="Node000001" title="Writes a small &quot;+1&quot; by the cannon each time its next ball is ready (ThrowerReadyMessage),..." alt="" coords="5,79,192,119"/>
+<area shape="rect" id="Node000001" title="Writes &quot;ready&quot; beside the cannon each time its next ball is ready (ThrowerReadyMessage) and keeps it ..." alt="" coords="5,79,192,119"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="37,5,161,31"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,44,101,79,96,79,96,44"/>
 </map>

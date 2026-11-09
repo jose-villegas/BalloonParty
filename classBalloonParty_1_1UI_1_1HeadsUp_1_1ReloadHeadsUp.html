@@ -115,7 +115,7 @@ $(function(){initNavTree('classBalloonParty_1_1UI_1_1HeadsUp_1_1ReloadHeadsUp.ht
 </div><!--header-->
 <div class="contents">
 
-<p>Writes a small "+1" by the cannon each time its next ball is ready (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ThrowerReadyMessage.html" title="The held ball has reached the muzzle with a slot free: the next release fires it.">ThrowerReadyMessage</a>), and clears it once that ball is fired.  
+<p>Writes "ready" beside the cannon each time its next ball is ready (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ThrowerReadyMessage.html" title="The held ball has reached the muzzle with a slot free: the next release fires it.">ThrowerReadyMessage</a>) and keeps it there until that ball is fired, or play stops (a level-up, the game-over screen), which stops the cannon being ready without a shot.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.UI.HeadsUp.ReloadHeadsUp:</div>
@@ -129,7 +129,7 @@ $(function(){initNavTree('classBalloonParty_1_1UI_1_1HeadsUp_1_1ReloadHeadsUp.ht
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1UI_1_1HeadsUp_1_1ReloadHeadsUp__coll__graph.svg" width="100%" height="458"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1UI_1_1HeadsUp_1_1ReloadHeadsUp__coll__graph.svg" width="100%" height="511"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
@@ -141,26 +141,26 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a818fb90673cb3252314ad2ce361a647c" id="r_a818fb90673cb3252314ad2ce361a647c"><td class="memItemLeft" align="right" valign="top">Canvas&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a818fb90673cb3252314ad2ce361a647c">_canvas</a></td></tr>
-<tr class="separator:a818fb90673cb3252314ad2ce361a647c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af957c04ac81310d0c0e0c7c46c315534" id="r_af957c04ac81310d0c0e0c7c46c315534"><td class="memItemLeft" align="right" valign="top">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileFiredMessage.html">ProjectileFiredMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af957c04ac81310d0c0e0c7c46c315534">_firedSubscriber</a></td></tr>
 <tr class="separator:af957c04ac81310d0c0e0c7c46c315534"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a06b263842f18891292f1f00bb383e692" id="r_a06b263842f18891292f1f00bb383e692"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html">HandwrittenHeadsUp</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a06b263842f18891292f1f00bb383e692">_headsUp</a></td></tr>
 <tr class="separator:a06b263842f18891292f1f00bb383e692"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab06aeabe244184c07a1a625709e66b35" id="r_ab06aeabe244184c07a1a625709e66b35"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html">ThrowerOriginProvider</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab06aeabe244184c07a1a625709e66b35">_origin</a></td></tr>
 <tr class="separator:ab06aeabe244184c07a1a625709e66b35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a705cb76e210c45c0bd548d284d85c7fd" id="r_a705cb76e210c45c0bd548d284d85c7fd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a705cb76e210c45c0bd548d284d85c7fd">_progress</a></td></tr>
+<tr class="separator:a705cb76e210c45c0bd548d284d85c7fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d773f2a83c2b013e47b24546330d8b1" id="r_a0d773f2a83c2b013e47b24546330d8b1"><td class="memItemLeft" align="right" valign="top">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ThrowerReadyMessage.html">ThrowerReadyMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0d773f2a83c2b013e47b24546330d8b1">_readySubscriber</a></td></tr>
 <tr class="separator:a0d773f2a83c2b013e47b24546330d8b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39247406d4ec10b81eb67687d932e9fb" id="r_a39247406d4ec10b81eb67687d932e9fb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpStyle.html">HeadsUpStyle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a39247406d4ec10b81eb67687d932e9fb">_style</a></td></tr>
 <tr class="separator:a39247406d4ec10b81eb67687d932e9fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05b46e3d6f40526aef30f841f0924567" id="r_a05b46e3d6f40526aef30f841f0924567"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a05b46e3d6f40526aef30f841f0924567">_text</a> = &quot;+1&quot;</td></tr>
+<tr class="memitem:a05b46e3d6f40526aef30f841f0924567" id="r_a05b46e3d6f40526aef30f841f0924567"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a05b46e3d6f40526aef30f841f0924567">_text</a> = &quot;ready&quot;</td></tr>
 <tr class="separator:a05b46e3d6f40526aef30f841f0924567"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae41b807f3f359aa3e4d2cddfa0a6a746" id="r_ae41b807f3f359aa3e4d2cddfa0a6a746"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae41b807f3f359aa3e4d2cddfa0a6a746">_worldOffset</a> = new(0.3f, -0.2f)</td></tr>
+<tr class="memitem:ae41b807f3f359aa3e4d2cddfa0a6a746" id="r_ae41b807f3f359aa3e4d2cddfa0a6a746"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae41b807f3f359aa3e4d2cddfa0a6a746">_worldOffset</a> = new(0.75f, 0f)</td></tr>
 <tr class="separator:ae41b807f3f359aa3e4d2cddfa0a6a746"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Writes a small "+1" by the cannon each time its next ball is ready (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ThrowerReadyMessage.html" title="The held ball has reached the muzzle with a slot free: the next release fires it.">ThrowerReadyMessage</a>), and clears it once that ball is fired. </p>
-<p>Kept upright beside the muzzle rather than parented to the cannon, which turns with the aim. </p>
+<div class="textblock"><p>Writes "ready" beside the cannon each time its next ball is ready (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ThrowerReadyMessage.html" title="The held ball has reached the muzzle with a slot free: the next release fires it.">ThrowerReadyMessage</a>) and keeps it there until that ball is fired, or play stops (a level-up, the game-over screen), which stops the cannon being ready without a shot. </p>
+<p>Placed off the cannon's pivot, which stays put, rather than its muzzle or a child of it, which turn with the aim: the word is always in the same spot, upright. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ab6e564de177d1fe12d856d869e42b21f" name="ab6e564de177d1fe12d856d869e42b21f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab6e564de177d1fe12d856d869e42b21f">&#9670;&#160;</a></span>OnReady()</h2>
@@ -213,28 +213,6 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a818fb90673cb3252314ad2ce361a647c" name="a818fb90673cb3252314ad2ce361a647c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a818fb90673cb3252314ad2ce361a647c">&#9670;&#160;</a></span>_canvas</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Canvas BalloonParty.UI.HeadsUp.ReloadHeadsUp._canvas</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="af957c04ac81310d0c0e0c7c46c315534" name="af957c04ac81310d0c0e0c7c46c315534"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af957c04ac81310d0c0e0c7c46c315534">&#9670;&#160;</a></span>_firedSubscriber</h2>
 
@@ -290,6 +268,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html">ThrowerOriginProvider</a> BalloonParty.UI.HeadsUp.ReloadHeadsUp._origin</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a705cb76e210c45c0bd548d284d85c7fd" name="a705cb76e210c45c0bd548d284d85c7fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a705cb76e210c45c0bd548d284d85c7fd">&#9670;&#160;</a></span>_progress</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a> BalloonParty.UI.HeadsUp.ReloadHeadsUp._progress</td>
         </tr>
       </table>
   </td>
@@ -357,7 +357,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">string BalloonParty.UI.HeadsUp.ReloadHeadsUp._text = &quot;+1&quot;</td>
+          <td class="memname">string BalloonParty.UI.HeadsUp.ReloadHeadsUp._text = &quot;ready&quot;</td>
         </tr>
       </table>
   </td>
@@ -379,7 +379,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Vector2 BalloonParty.UI.HeadsUp.ReloadHeadsUp._worldOffset = new(0.3f, -0.2f)</td>
+          <td class="memname">Vector2 BalloonParty.UI.HeadsUp.ReloadHeadsUp._worldOffset = new(0.75f, 0f)</td>
         </tr>
       </table>
   </td>

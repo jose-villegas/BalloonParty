@@ -8,7 +8,6 @@ var classBalloonParty_1_1UI_1_1HeadsUp_1_1BounceHeadsUp =
     [ "Pack", "classBalloonParty_1_1UI_1_1HeadsUp_1_1BounceHeadsUp.html#a9d2a99aa61b7998158c6e10627f1b440", null ],
     [ "Start", "classBalloonParty_1_1UI_1_1HeadsUp_1_1BounceHeadsUp.html#a93b1b7a60f78753acbd6bb927e42b8c4", null ],
     [ "Write", "classBalloonParty_1_1UI_1_1HeadsUp_1_1BounceHeadsUp.html#ad3b2a32c7561a08921060cca75f2bbf0", null ],
-    [ "_canvas", "classBalloonParty_1_1UI_1_1HeadsUp_1_1BounceHeadsUp.html#a7e8349cfbfcfed90394bbabb172668b3", null ],
     [ "_chainSubscriber", "classBalloonParty_1_1UI_1_1HeadsUp_1_1BounceHeadsUp.html#a4d6b7457bffec938f2f09fba95de34d5", null ],
     [ "_destroyedSubscriber", "classBalloonParty_1_1UI_1_1HeadsUp_1_1BounceHeadsUp.html#ac214e82f7858332d29d0b83db872f847", null ],
     [ "_grid", "classBalloonParty_1_1UI_1_1HeadsUp_1_1BounceHeadsUp.html#a037d2042183ab478a61fbecbd0a2e50c", null ],

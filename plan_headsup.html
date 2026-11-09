@@ -110,14 +110,14 @@ $(function(){initNavTree('plan_headsup.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">Handwritten Heads-Ups</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md630"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md631"></a>
 Handwritten Heads-Ups</h1>
 <blockquote class="doxtable">
 <p>Working plan for short, handwritten heads-ups that tell the player what just happened on the board, written on as if by a pencil, plus pencil lines drawn over the board. </p>
 </blockquote>
-<p><b>Status:</b> Phase 1 in progress. Built: the Patrick Hand font file (<code>Assets/Fonts/</code>, with its OFL licence), <code>UI/HeadsUp/WriteOnText</code> (the slanted soft wipe on the stock shader, EditMode-tested reveal maths), <code>TooltipBanner</code> writing through it, the TMP font asset, and two early heads-ups written through plain <code>HandwrittenHeadsUp</code> lines, ahead of the router and queue of Phase 3: <code>ReloadHeadsUp</code> writes a small <code>+1</code> by the cannon, and <code>BounceHeadsUp</code> writes <code>+n bounce</code> where a ball picks up a shield and <code>-1 bounce</code> where a wall spends one. Left for Phase 1: the pencil tip sprite and the pencil text shader (grain and ragged edge). The other open questions in §10 matter from Phase 2.</p>
+<p><b>Status:</b> Phase 1 in progress. Built: the Patrick Hand font file (<code>Assets/Fonts/</code>, with its OFL licence), <code>UI/HeadsUp/WriteOnText</code> (the slanted soft wipe on the stock shader, EditMode-tested reveal maths), <code>TooltipBanner</code> writing through it, the TMP font asset, and two early heads-ups written through plain <code>HandwrittenHeadsUp</code> lines, ahead of the router and queue of Phase 3: <code>ReloadHeadsUp</code> writes <code>ready</code> beside the cannon for as long as it's ready, and <code>BounceHeadsUp</code> writes <code>+n bounce</code> where a ball picks up a shield and <code>-1 bounce</code> where a wall spends one. Those lines moved off the canvas into world space on 2026-11-09 (the <code>HeadsUps</code> prefab), as §3 always had it. Left for Phase 1: the pencil tip sprite and the pencil text shader (grain and ragged edge). The other open questions in §10 matter from Phase 2.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md632"></a>
+<h2><a class="anchor" id="autotoc_md633"></a>
 1. Why</h2>
 <p>The fast-paced mode (<code><a class="el" href="PLAN-FastPaced_8md.html">PLAN-FastPaced.md</a></code>) made the board busy: several balls in flight, lines landing on a clock, items going off. Playtests found the player can't read what is happening:</p>
 <table class="markdownTable">
@@ -135,14 +135,14 @@ Handwritten Heads-Ups</h1>
 <td class="markdownTableBodyNone">A level-up passes in play   </td><td class="markdownTableBodyNone">A <code>Level N</code> line in the top tooltip (<code>UI/Tooltip</code>)   </td><td class="markdownTableBodyNone">Fine, but a different look from everything else   </td></tr>
 </table>
 <p>A single <b>heads-up</b> language fixes all of them: one or two handwritten words, written on where the thing happened, gone a second later. It fits the game's paper look, and a pencil writing on reads as "the game is telling you something", not as one more effect.</p>
-<h2><a class="anchor" id="autotoc_md633"></a>
+<h2><a class="anchor" id="autotoc_md634"></a>
 2. What the player sees</h2>
 <ul>
 <li><b>Heads-Ups.</b> A word or two in a handwriting font, written on left to right, with a small pencil tip moving along the line and a soft scratch sound. It holds briefly, then fades. Examples: <code>x4!</code> at the pop, <code>tap!</code> at the wall, <code>pierce!</code> when a shot starts piercing, <code>ready</code> by the cannon, <code>Level 5: Quick Hands</code> at the top.</li>
 <li><b>Pencil lines.</b> The strikethrough's scribble across a blocked row becomes a pencil stroke, and a heads-up that matters (a big streak) gets a pencil underline.</li>
 </ul>
 <p>Heads-Ups are short, never cover the aim line for long, and run on unscaled time so they keep writing through slow-motion beats.</p>
-<h2><a class="anchor" id="autotoc_md634"></a>
+<h2><a class="anchor" id="autotoc_md635"></a>
 3. Architecture</h2>
 <p>Same shape as the audio routers (<code>Audio/Routing/*SoundRouter</code>): a plain C# router listens to gameplay messages and calls one injected presenter interface, the way the sound routers call <code>ISoundPlayer</code>. No presentation message bus.</p>
 <div class="fragment"><div class="line">flowchart LR</div>
@@ -190,9 +190,9 @@ Handwritten Heads-Ups</h1>
 <p><b>The top banner stays outside the queue.</b> <code>TooltipBanner</code> keeps its own replace-on-new behaviour and its own handling of <code>BonusCardDealtMessage</code> (held until play resumes, since the card is dealt behind the game-over screen). Under the queue a level-up line could be dropped in a burst. Phase 1 only gives its label the write-on reveal and the handwriting font. Its one <code>TooltipMessage</code> publisher stays <code>LevelUpPopUp</code>.</p>
 <p><b>Board heads-ups live in world space.</b> A canvas position converted once (<code>RectAnchorMath</code>) wouldn't follow the camera rig's zoom and shake, and the pencil strokes are world-space trails anyway. Only the top banner stays on the UI canvas.</p>
 <p><b>Clearing.</b> All heads-ups clear on <code>RunResetMessage</code>, game over and the level-up transition, the way <code>ProgressNoticePresenter</code> dismisses its notices (animated when there's time, instant otherwise).</p>
-<h2><a class="anchor" id="autotoc_md635"></a>
+<h2><a class="anchor" id="autotoc_md636"></a>
 4. Rendering</h2>
-<h3><a class="anchor" id="autotoc_md636"></a>
+<h3><a class="anchor" id="autotoc_md637"></a>
 4.1 Write-on text</h3>
 <p><b>DECISION (owner): a ragged pencil wipe.</b> Of four styles demoed (a plain letter wipe, a ragged wipe, tracing the outline then filling, true stroke order with a single-line font), the owner picked the ragged wipe: a left-to-right wipe whose edge is soft, grainy and slightly slanted, with a pencil grain through the letters. Real stroke order would need stroke data for every glyph (or a thin, plotter-like single-line font) and isn't worth it: at game speed (about 0.25-0.35 s a word) a good wipe reads as writing.</p>
 <p>How it's built:</p>
@@ -205,14 +205,14 @@ Handwritten Heads-Ups</h1>
 <li>The top banner is UGUI. A <code>RectMask2D</code> whose right padding animates, with softness, is a cheaper wipe there (no mesh pushes, joined-up script stays continuous), but its edge is straight. Use it only if the banner can't take the custom shader.</li>
 <li>Handwriting fonts overlap their joining strokes, so a per-glyph step can show seams. Check in the playtest; the font choice (§10) matters here.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md637"></a>
+<h3><a class="anchor" id="autotoc_md638"></a>
 4.2 Pencil lines</h3>
 <p>No new stroke system. Two existing pens already leave a line behind them:</p>
 <ul>
 <li><b>The strikethrough</b> is already a pooled <code>FlyingTrail</code> ribbon that flies to the blocked row and scribbles across it in jittered passes (<code>HeartTrailController</code>, <code>StrikethroughPasses</code>, <code>StrikethroughJitter</code>), then pops the row. It gets a pencil material and a pencil-tip head. It owns the row geometry and the timing, so nothing else needs to know where the row is.</li>
 <li><b>The underline</b> reuses the item preview's pen (<code>Item/Preview/HighlightTrail</code>): a pooled head sprite pulling a <code>TrailRenderer</code>, driven by a ticker, with a pencil material.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md638"></a>
+<h2><a class="anchor" id="autotoc_md639"></a>
 5. New signals</h2>
 <p>The heads-ups need three facts the game doesn't publish yet. Each has one owner that already holds the data, and each gets EditMode tests.</p>
 <table class="markdownTable">
@@ -226,7 +226,7 @@ Handwritten Heads-Ups</h1>
 <td class="markdownTableBodyNone"><code>ThrowerReadyMessage.AfterCapWait</code>   </td><td class="markdownTableBodyNone"><code>ThrowerController</code>, set when the thrower had no free slot at any tick since the last ready   </td><td class="markdownTableBodyNone">Working it out in the router would copy the thrower's slot rule and its resets (level-up, un-fire, a cap card)   </td></tr>
 </table>
 <p>The cannon gets a <code>TrailEndpointRegistry</code> key, so the ready heads-up anchors there.</p>
-<h2><a class="anchor" id="autotoc_md639"></a>
+<h2><a class="anchor" id="autotoc_md640"></a>
 6. What gets a heads-up</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -238,7 +238,7 @@ Handwritten Heads-Ups</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Pierce   </td><td class="markdownTableBodyNone"><code>PierceArmed</code>   </td><td class="markdownTableBodyNone"><code>pierce!</code> at the ball   </td><td class="markdownTableBodyNone">Once per arming. Snipe arming included or not: §10    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Cannon ready   </td><td class="markdownTableBodyNone"><code>ThrowerReadyMessage</code>   </td><td class="markdownTableBodyNone">a small <code>+1</code> by the cannon   </td><td class="markdownTableBodyNone"><b>Built early, on every ready</b> (<code>ReloadHeadsUp</code>), cleared when the ball fires, and the reload is now near-instant with nothing flying but 2 s while a ball flies, so a ready cannon under fire is a beat worth marking. If it reads as noise, narrow it to <code>AfterCapWait</code>    </td></tr>
+<td class="markdownTableBodyNone">Cannon ready   </td><td class="markdownTableBodyNone"><code>ThrowerReadyMessage</code>   </td><td class="markdownTableBodyNone"><code>ready</code>, beside the cannon, held while it's ready   </td><td class="markdownTableBodyNone"><b>Built early, on every ready</b> (<code>ReloadHeadsUp</code>), cleared when the ball fires or play stops, and the reload is now near-instant with nothing flying but 2 s while a ball flies, so a ready cannon under fire is a beat worth marking. If it reads as noise, narrow it to <code>AfterCapWait</code>    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Shield picked up   </td><td class="markdownTableBodyNone"><code>ShieldGainedMessage</code>   </td><td class="markdownTableBodyNone"><code>+{n} bounce</code> at the shield's balloon, n counting the ball's pickups this flight   </td><td class="markdownTableBodyNone"><b>Built early</b> (<code>BounceHeadsUp</code>), on every pickup    </td></tr>
 <tr class="markdownTableRowEven">
@@ -252,7 +252,7 @@ Handwritten Heads-Ups</h1>
 </table>
 <p>Each row is a style in <code>IHeadsUpSettings</code>, so thresholds and wording are tuned without code.</p>
 <p>The bar's <code>x3</code> stays. It shows the current streak, held until it changes; the pop heads-up marks the moment it grew. They don't say the same thing.</p>
-<h2><a class="anchor" id="autotoc_md640"></a>
+<h2><a class="anchor" id="autotoc_md641"></a>
 7. Phases</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -269,7 +269,7 @@ Handwritten Heads-Ups</h1>
 <td class="markdownTableBodyNone">5. Cleanup   </td><td class="markdownTableBodyNone">Retire anything the heads-ups made redundant, update the READMEs   </td><td class="markdownTableBodyNone">No two systems say the same thing   </td></tr>
 </table>
 <p>Each phase follows the per-phase review protocol and needs an in-editor playtest; <code>dotnet build</code> can't judge readability. New folders (<code>Game/HeadsUp/</code>, <code>UI/HeadsUp/</code>) get a README and <code>.meta</code> files.</p>
-<h2><a class="anchor" id="autotoc_md641"></a>
+<h2><a class="anchor" id="autotoc_md642"></a>
 8. Tests</h2>
 <ul>
 <li>The new signals (§5): <code>StreakGrewMessage</code> only on growth, not on night doubling or item pops; <code>PierceArmed</code> once per arming, including a second ball arming while the first pierces; <code>AfterCapWait</code> only after a capped wait (<code>ThrowerControllerRapidFireTests</code>).</li>
@@ -277,7 +277,7 @@ Handwritten Heads-Ups</h1>
 <li><code>HeadsUpQueue</code>: the cap, the drop order, merge rewrites, cooldowns, freeing a slot on finish.</li>
 <li>The views (reveal, tip, pencil trails) are playtest-only.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md642"></a>
+<h2><a class="anchor" id="autotoc_md643"></a>
 9. Risks</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -297,7 +297,7 @@ Handwritten Heads-Ups</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">The custom shader is fiddly (TMP's SDF shader is large)   </td><td class="markdownTableBodyNone">Phase 1 ships the plain wipe on the stock shader first; the shader is a drop-in material swap after   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md643"></a>
+<h2><a class="anchor" id="autotoc_md644"></a>
 10. Open questions</h2>
 <ol type="1">
 <li><strike><b>Font.</b></strike> <b>DECISION (owner): Patrick Hand</b> (SIL Open Font License, Google Fonts). Picked over Caveat, Gochi Hand and Kalam: it reads best at phone sizes, and its letters don't join, so the wipe shows no seams. Ships with its OFL licence text beside the <code>.ttf</code>.</li>

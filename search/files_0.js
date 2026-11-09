@@ -41,8 +41,14 @@ var searchData=
   ['audiopoolkeys_2ecs_38',['AudioPoolKeys.cs',['../AudioPoolKeys_8cs.html',1,'']]],
   ['audiosourcevoice_2ecs_39',['AudioSourceVoice.cs',['../AudioSourceVoice_8cs.html',1,'']]],
   ['autofieldpropertydrawer_2ecs_40',['AutoFieldPropertyDrawer.cs',['../AutoFieldPropertyDrawer_8cs.html',1,'']]],
-  ['awardscorepopcheat_2ecs_41',['AwardScorePopCheat.cs',['../AwardScorePopCheat_8cs.html',1,'']]],
-  ['axisbucketnaming_2ecs_42',['AxisBucketNaming.cs',['../AxisBucketNaming_8cs.html',1,'']]],
-  ['axisslot_2ecs_43',['AxisSlot.cs',['../AxisSlot_8cs.html',1,'']]],
-  ['axisslotinfo_2ecs_44',['AxisSlotInfo.cs',['../AxisSlotInfo_8cs.html',1,'']]]
+  ['autoplaycontroller_2ecs_41',['AutoplayController.cs',['../AutoplayController_8cs.html',1,'']]],
+  ['autoplaydice_2ecs_42',['AutoplayDice.cs',['../AutoplayDice_8cs.html',1,'']]],
+  ['autoplaylaunchargument_2ecs_43',['AutoplayLaunchArgument.cs',['../AutoplayLaunchArgument_8cs.html',1,'']]],
+  ['autoplaysettings_2ecs_44',['AutoplaySettings.cs',['../AutoplaySettings_8cs.html',1,'']]],
+  ['autoplaytap_2ecs_45',['AutoplayTap.cs',['../AutoplayTap_8cs.html',1,'']]],
+  ['autoplaytickwriter_2ecs_46',['AutoplayTickWriter.cs',['../AutoplayTickWriter_8cs.html',1,'']]],
+  ['awardscorepopcheat_2ecs_47',['AwardScorePopCheat.cs',['../AwardScorePopCheat_8cs.html',1,'']]],
+  ['axisbucketnaming_2ecs_48',['AxisBucketNaming.cs',['../AxisBucketNaming_8cs.html',1,'']]],
+  ['axisslot_2ecs_49',['AxisSlot.cs',['../AxisSlot_8cs.html',1,'']]],
+  ['axisslotinfo_2ecs_50',['AxisSlotInfo.cs',['../AxisSlotInfo_8cs.html',1,'']]]
 ];

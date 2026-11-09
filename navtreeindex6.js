@@ -1,5 +1,11 @@
 var NAVTREEINDEX6 =
 {
+"classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a8ee17326454b8a8dd1152123aa13bc8c":[5,0,0,0,2,0,47],
+"classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a8ee17326454b8a8dd1152123aa13bc8c":[6,0,0,0,2,0,47],
+"classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a90c4e9f0fdb85b424f04928317df6ef8":[5,0,0,0,2,0,43],
+"classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a90c4e9f0fdb85b424f04928317df6ef8":[6,0,0,0,2,0,43],
+"classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a9a022e403fe86451f0ccb2d4b8547bfa":[5,0,0,0,2,0,7],
+"classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a9a022e403fe86451f0ccb2d4b8547bfa":[6,0,0,0,2,0,7],
 "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#ab34eb0423950a08c9f25dd01b94af966":[5,0,0,0,2,0,9],
 "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#ab34eb0423950a08c9f25dd01b94af966":[6,0,0,0,2,0,9],
 "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#ab4fb3cf05afc12a5ec80493d1363328c":[5,0,0,0,2,0,42],
@@ -243,11 +249,5 @@ var NAVTREEINDEX6 =
 "classBalloonParty_1_1Audio_1_1Routing_1_1WindSoundRouter.html#a099e57bc22ecb5d78249b8617c995197":[5,0,0,0,2,6,6],
 "classBalloonParty_1_1Audio_1_1Routing_1_1WindSoundRouter.html#a099e57bc22ecb5d78249b8617c995197":[6,0,0,0,2,6,6],
 "classBalloonParty_1_1Audio_1_1Routing_1_1WindSoundRouter.html#a6cd33673835ec9e6e28f60107cb49f2d":[5,0,0,0,2,6,1],
-"classBalloonParty_1_1Audio_1_1Routing_1_1WindSoundRouter.html#a6cd33673835ec9e6e28f60107cb49f2d":[6,0,0,0,2,6,1],
-"classBalloonParty_1_1Audio_1_1Routing_1_1WindSoundRouter.html#a6ffeb5f53fd0cbba7256647db8cbdc57":[5,0,0,0,2,6,3],
-"classBalloonParty_1_1Audio_1_1Routing_1_1WindSoundRouter.html#a6ffeb5f53fd0cbba7256647db8cbdc57":[6,0,0,0,2,6,3],
-"classBalloonParty_1_1Audio_1_1Routing_1_1WindSoundRouter.html#a832905e4ab91e07bd3b8df9a2c7812df":[5,0,0,0,2,6,0],
-"classBalloonParty_1_1Audio_1_1Routing_1_1WindSoundRouter.html#a832905e4ab91e07bd3b8df9a2c7812df":[6,0,0,0,2,6,0],
-"classBalloonParty_1_1Audio_1_1Routing_1_1WindSoundRouter.html#a9184928817624b2ea615049b263043fe":[5,0,0,0,2,6,4],
-"classBalloonParty_1_1Audio_1_1Routing_1_1WindSoundRouter.html#a9184928817624b2ea615049b263043fe":[6,0,0,0,2,6,4]
+"classBalloonParty_1_1Audio_1_1Routing_1_1WindSoundRouter.html#a6cd33673835ec9e6e28f60107cb49f2d":[6,0,0,0,2,6,1]
 };

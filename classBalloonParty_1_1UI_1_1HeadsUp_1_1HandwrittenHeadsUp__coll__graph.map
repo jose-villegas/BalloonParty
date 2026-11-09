@@ -1,5 +1,5 @@
 <map id="BalloonParty.UI.HeadsUp.HandwrittenHeadsUp" name="BalloonParty.UI.HeadsUp.HandwrittenHeadsUp">
-<area shape="rect" id="Node000001" title="One short handwritten line on the canvas: written on in pencil where it&#39;s asked for,..." alt="" coords="5,183,192,223"/>
+<area shape="rect" id="Node000001" title="One short handwritten line in world space (a TextMeshPro, not on a canvas), so it sits where it happe..." alt="" coords="5,183,192,223"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="31,5,155,31"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,44,101,183,95,183,91,45"/>
 <area shape="rect" id="Node000003" href="$classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html" title="Writes a TMP_Text on left to right as if by a pencil: a soft reveal edge, slanted forward,..." alt="" coords="115,80,301,120"/>

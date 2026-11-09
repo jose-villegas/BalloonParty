@@ -123,8 +123,8 @@ $(function(){initNavTree('classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.
 Package Functions</h2></td></tr>
 <tr class="memitem:ae7c29927ac9bbbdba245f19509434090" id="r_ae7c29927ac9bbbdba245f19509434090"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae7c29927ac9bbbdba245f19509434090">Clear</a> ()</td></tr>
 <tr class="separator:ae7c29927ac9bbbdba245f19509434090"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac054ee4f17fe7c7b822437197787edfd" id="r_ac054ee4f17fe7c7b822437197787edfd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac054ee4f17fe7c7b822437197787edfd">Set</a> (Transform spawnPoint, float projectileContactRadius)</td></tr>
-<tr class="separator:ac054ee4f17fe7c7b822437197787edfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87d634a681c5f1a764c5ba0cfd76f96d" id="r_a87d634a681c5f1a764c5ba0cfd76f96d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a87d634a681c5f1a764c5ba0cfd76f96d">Set</a> (Transform spawnPoint, Transform pivot, float projectileContactRadius)</td></tr>
+<tr class="separator:a87d634a681c5f1a764c5ba0cfd76f96d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -134,12 +134,17 @@ Properties</h2></td></tr>
 <tr class="memitem:abeba85fd72065041a3c58550d6c75341" id="r_abeba85fd72065041a3c58550d6c75341"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abeba85fd72065041a3c58550d6c75341">Origin</a><code> [get]</code></td></tr>
 <tr class="memdesc:abeba85fd72065041a3c58550d6c75341"><td class="mdescLeft">&#160;</td><td class="mdescRight">The spawn point, not the pivot.  <br /></td></tr>
 <tr class="separator:abeba85fd72065041a3c58550d6c75341"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0cdffe39bcca66f6caceaa69c688281" id="r_ad0cdffe39bcca66f6caceaa69c688281"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad0cdffe39bcca66f6caceaa69c688281">Pivot</a><code> [get]</code></td></tr>
+<tr class="memdesc:ad0cdffe39bcca66f6caceaa69c688281"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where the cannon turns about: unlike <a class="el" href="#abeba85fd72065041a3c58550d6c75341" title="The spawn point, not the pivot.">Origin</a>, it stays put whatever the aim.  <br /></td></tr>
+<tr class="separator:ad0cdffe39bcca66f6caceaa69c688281"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a805dfc6d4d264fad2fb6f70ad461c1ac" id="r_a805dfc6d4d264fad2fb6f70ad461c1ac"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a805dfc6d4d264fad2fb6f70ad461c1ac">ProjectileContactRadius</a><code> [get]</code></td></tr>
 <tr class="memdesc:a805dfc6d4d264fad2fb6f70ad461c1ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">The shot's own contact circle, so a planner can inflate its targets the way the real deflection does.  <br /></td></tr>
 <tr class="separator:a805dfc6d4d264fad2fb6f70ad461c1ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a8f91f1f1e8cb4baa7ef9eb520996858b" id="r_a8f91f1f1e8cb4baa7ef9eb520996858b"><td class="memItemLeft" align="right" valign="top">Transform&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8f91f1f1e8cb4baa7ef9eb520996858b">_pivot</a></td></tr>
+<tr class="separator:a8f91f1f1e8cb4baa7ef9eb520996858b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae86bb322aacf8f4764370452a864a83a" id="r_ae86bb322aacf8f4764370452a864a83a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae86bb322aacf8f4764370452a864a83a">_projectileContactRadius</a></td></tr>
 <tr class="separator:ae86bb322aacf8f4764370452a864a83a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3af18678159abea1f51c1c8ff16c4fa1" id="r_a3af18678159abea1f51c1c8ff16c4fa1"><td class="memItemLeft" align="right" valign="top">Transform&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3af18678159abea1f51c1c8ff16c4fa1">_spawnPoint</a></td></tr>
@@ -174,8 +179,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ac054ee4f17fe7c7b822437197787edfd" name="ac054ee4f17fe7c7b822437197787edfd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac054ee4f17fe7c7b822437197787edfd">&#9670;&#160;</a></span>Set()</h2>
+<a id="a87d634a681c5f1a764c5ba0cfd76f96d" name="a87d634a681c5f1a764c5ba0cfd76f96d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87d634a681c5f1a764c5ba0cfd76f96d">&#9670;&#160;</a></span>Set()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -187,6 +192,11 @@ Private Attributes</h2></td></tr>
           <td class="memname">void BalloonParty.Thrower.ThrowerOriginProvider.Set </td>
           <td>(</td>
           <td class="paramtype">Transform</td>          <td class="paramname"><span class="paramname"><em>spawnPoint</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Transform</td>          <td class="paramname"><span class="paramname"><em>pivot</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -204,6 +214,28 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a8f91f1f1e8cb4baa7ef9eb520996858b" name="a8f91f1f1e8cb4baa7ef9eb520996858b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f91f1f1e8cb4baa7ef9eb520996858b">&#9670;&#160;</a></span>_pivot</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Transform BalloonParty.Thrower.ThrowerOriginProvider._pivot</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ae86bb322aacf8f4764370452a864a83a" name="ae86bb322aacf8f4764370452a864a83a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae86bb322aacf8f4764370452a864a83a">&#9670;&#160;</a></span>_projectileContactRadius</h2>
 
@@ -295,6 +327,30 @@ Private Attributes</h2></td></tr>
 
 <p>The spawn point, not the pivot. </p>
 <p>It orbits the pivot with the aim, so this is a snapshot of one aim state rather than a fixed launch point — close enough for planning, which samples a fan of angles anyway and cannot know which the player will pick. </p>
+
+</div>
+</div>
+<a id="ad0cdffe39bcca66f6caceaa69c688281" name="ad0cdffe39bcca66f6caceaa69c688281"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0cdffe39bcca66f6caceaa69c688281">&#9670;&#160;</a></span>Pivot</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector2 BalloonParty.Thrower.ThrowerOriginProvider.Pivot</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Where the cannon turns about: unlike <a class="el" href="#abeba85fd72065041a3c58550d6c75341" title="The spawn point, not the pivot.">Origin</a>, it stays put whatever the aim. </p>
 
 </div>
 </div>

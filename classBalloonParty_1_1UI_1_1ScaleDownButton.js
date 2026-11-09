@@ -11,5 +11,6 @@ var classBalloonParty_1_1UI_1_1ScaleDownButton =
     [ "_target", "classBalloonParty_1_1UI_1_1ScaleDownButton.html#ac5f0b6787d554a680c210541a034bfd3", null ],
     [ "_targetScale", "classBalloonParty_1_1UI_1_1ScaleDownButton.html#abb66658b33c6c6bb29e5c13fcc7025fb", null ],
     [ "_tween", "classBalloonParty_1_1UI_1_1ScaleDownButton.html#abd3040b62c7e4123444bbd19c1803c0a", null ],
-    [ "_useUnscaledTime", "classBalloonParty_1_1UI_1_1ScaleDownButton.html#a4a3840c68ef119d72e8f9189d21894e2", null ]
+    [ "_useUnscaledTime", "classBalloonParty_1_1UI_1_1ScaleDownButton.html#a4a3840c68ef119d72e8f9189d21894e2", null ],
+    [ "OnScaleComplete", "classBalloonParty_1_1UI_1_1ScaleDownButton.html#add1672834a1bbfc3a4b8860931eb18db", null ]
 ];

@@ -22,7 +22,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Writes a small &quot;+1&quot; by the cannon each time its next ball is ready (ThrowerReadyMessage),...">
+<g id="a_Node000001"><a xlink:title="Writes &quot;ready&quot; beside the cannon each time its next ball is ready (ThrowerReadyMessage) and keeps it ...">
 <polygon fill="#999999" stroke="#666666" points="140,-30 0,-30 0,0 140,0 140,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.UI.HeadsUp.</text>
 <text text-anchor="middle" x="70" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">ReloadHeadsUp</text>

@@ -2,7 +2,7 @@
 <area shape="rect" id="Node000001" title="Writes how a ball&#39;s bounces go, where it happens: &quot;+n bounce&quot; where it picks up a shield (n counting ..." alt="" coords="973,122,1160,162"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="47,8,171,33"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,6,237,3,816,18,885,20,915,25,950,38,981,55,1009,77,1051,120,1047,123,1005,81,978,60,948,43,913,30,884,25,816,23,237,8,184,11"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html" title="One short handwritten line on the canvas: written on in pencil where it&#39;s asked for,..." alt="" coords="629,32,816,72"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html" title="One short handwritten line in world space (a TextMeshPro, not on a canvas), so it sits where it happe..." alt="" coords="629,32,816,72"/>
 <area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="184,20,375,27,606,39,629,41,629,46,605,44,375,32,184,25"/>
 <area shape="rect" id="Node000004" href="$classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html" title="Writes a TMP_Text on left to right as if by a pencil: a soft reveal edge, slanted forward,..." alt="" coords="261,58,448,98"/>
 <area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="178,33,269,55,268,60,176,39"/>

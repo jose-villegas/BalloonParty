@@ -110,17 +110,17 @@ $(function(){initNavTree('plan_terrain_biomes.html',''); initResizable(true); })
   <div class="headertitle"><div class="title">Terrain &amp; Biomes</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md751"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md752"></a>
 Terrain &amp; Biomes: sky and ground scenarios</h1>
 <blockquote class="doxtable">
 <p>Each level is set either in the <b>sky</b> (today's backdrop) or on the <b>ground</b> (a meadow the board rests on), chosen per level from the level's seed. A level-up Ascent can switch either way, so the run sometimes lands and sometimes climbs back up to the clouds. Actors that need ground under them (bushes first) appear only on ground levels, and the grass reacts to the ball as it flies through. First planned 2026-07-12 as a full seeded biome system; never started. Re-scoped 2026-11-08 to the <b>smallest version that lets bushes ship</b>: one ground, the per-level scenario, the grass reaction. The full biome system is kept below as <em>Later</em>, unscheduled. <b>Status: phases 1 and 3 built; phase 2 (the mist reveal) built 2026-11-09, awaiting in-editor review.</b> </p>
 </blockquote>
 <hr  />
-<h2><a class="anchor" id="autotoc_md753"></a>
+<h2><a class="anchor" id="autotoc_md754"></a>
 Why now</h2>
 <p>Bushes (<code>GridActorType.Bush</code> in <code>LevelPacingConfiguration</code>) were withheld from level generation: over the sky backdrop a bush reads as floating. Owner direction (2026-11-08): the scenario moves between sky and ground in both directions ("once bushes
 appear that doesn't mean we should stay there, sometimes we go up away to clouds"), and the ground reacts to the bullet, as blades of grass deforming while it moves through.</p>
-<h2><a class="anchor" id="autotoc_md754"></a>
+<h2><a class="anchor" id="autotoc_md755"></a>
 Verified inventory (2026-11-08)</h2>
 <p>What the backdrop is today, back to front (all on sorting layer <code>Default</code>):</p>
 <table class="markdownTable">
@@ -149,9 +149,9 @@ Verified inventory (2026-11-08)</h2>
 <li><b>Stale in the 2026-07 plan, now corrected</b>: "background is just the camera clear" (there are now four backdrop layers); "`LevelParameters` ranges carry per-altitude
   data" (levels are generated now).</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md755"></a>
+<h2><a class="anchor" id="autotoc_md756"></a>
 The smallest version</h2>
-<h3><a class="anchor" id="autotoc_md756"></a>
+<h3><a class="anchor" id="autotoc_md757"></a>
 Which levels are ground</h3>
 <ul>
 <li><b>A seeded per-level scenario</b>, computed by a pure <code>ScenarioSchedule.StretchAt(level)</code> from a small block on <code>LevelGenerationSettings</code>. It answers <code>Sky</code> or <code>Ground</code>, the level's place in its stretch and the stretch's length (a <code>ScenarioStretch</code>); <code>ForLevel</code> is the kind alone.<ul>
@@ -185,7 +185,7 @@ Which levels are ground</h3>
 <p><b>Bushes only on ground</b> (built 2026-11-09): a <code>RequiresGround</code> flag on <code>GridActorContentEntry</code> (on <code>IContentPiece</code>, always false for balloons and items), set on the shipped bush. <code>LevelGenerator</code> leaves flagged pieces out of a sky level before any budget is spent, so a bush is never a sky level's pick that comes out empty and the budget goes to the rest. One source of truth: the generator and the ground view both ask <code>ScenarioSchedule</code>. A ground-only piece's featured levels still count from its unlock level, so one unlocked on a sky level first shows at the next meadow, unfeatured; the shipped bush unlocks at 6, the start of the first ground level's window.</p><ul>
 <li><b>Triggers</b>: cut to the level's scenario on run start and on an immediate restart (start-level cheat, the skip path); reveal through the mist on the level-up Ascent and on the restart rise after a loss when the two levels' scenarios differ, over the beat's own length. Same scenario on both sides changes nothing.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md757"></a>
+<h3><a class="anchor" id="autotoc_md758"></a>
 How it looks</h3>
 <ul>
 <li><b>The floor</b>: an opaque quad of soft darker and lighter patches (one cloud-noise tap), dark and muted so the saturated balloons stand off it. Tinted by the scene light, so it dims through dusk and night.</li>
@@ -226,7 +226,7 @@ How it looks</h3>
 <li><b>Shadows on the ground</b>: the sprite and paint drop shadows that fade where there is no cloud or smoke under them (<code>_CLOUD_FADE_ON</code>) stay on ground levels, since they land on the grass (<code>GroundCoverageAt</code> in <code>SpriteLightDriven</code> and <code>PaintBlob</code>).</li>
 <li><b>Bush shadow</b>: the bush's drop-shadow distance is checked against the ground in the editor; a long offset shadow reads as height.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md758"></a>
+<h3><a class="anchor" id="autotoc_md759"></a>
 Performance (mobile, 120 Hz = 8.33 ms frame)</h3>
 <ul>
 <li><b>Bake once</b>: no new RT, no per-level bake, no new field. The only baked input is the existing noise texture; the disturbance field already runs every frame for the clouds and bushes.</li>
@@ -237,10 +237,10 @@ Performance (mobile, 120 Hz = 8.33 ms frame)</h3>
 <li><b>CPU</b>: no per-frame work at rest and no allocations; while a reveal runs, two global vectors and the content root's transform per frame. <code>ScenarioSchedule.ForLevel</code> runs once per level.</li>
 <li>Not checkable by <code>dotnet build</code>: the shader needs an in-editor look and a Frame Debugger check of the draw order.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md759"></a>
+<h3><a class="anchor" id="autotoc_md760"></a>
 What it reuses</h3>
 <p><code>DisturbanceFieldService</code>'s <code>_DisturbanceTex</code> and the projectile's existing wake stamps for the grass reaction; <code>QuadRendererBuilder</code> for the quad; <code>CloudNoiseTileable.png</code> + <code>CloudNoise.cginc</code> for the patches; <code>SceneLight.cginc</code> for the tint and sun direction; <code>BackgroundCloud</code>'s existing shadow tap (only a global ground-coverage fade on the bodies is new); <code>SeedForLevel</code>'s hash for the scenario roll; the <code>TimeOfDayCycle</code> snap/transition shape; <code>ScenarioContentRoot</code> and the two existing transition beats. No changes to the Ascent or restart code.</p>
-<h3><a class="anchor" id="autotoc_md760"></a>
+<h3><a class="anchor" id="autotoc_md761"></a>
 Shape (MVC)</h3>
 <ul>
 <li><code>ScenarioKind</code> (<code>Sky</code>, <code>Ground</code>), <code>ScenarioSchedule</code> and <code>ScenarioScheduleSettings</code> (pure, <code>Configuration/Level/</code>), the settings block on <code>LevelGenerationSettings</code>, read through <code>ILevelPacingConfiguration.ScenarioForLevel</code> with the run's <code>IRunSeed</code>; EditMode-tested. <code>LevelSeedHash</code> is the hash shared with <code>SeedForLevel</code>.</li>
@@ -250,21 +250,21 @@ Shape (MVC)</h3>
 <li><code>GroundView</code> (thin MonoBehaviour, <code>Scenario/View/</code>, parented under the Game scope so the additive Launcher→Game load doesn't destroy it): owns the quad, pushes the <code>_GroundCoverage</code> global the cloud shader reads (<code>Include/Ground.cginc</code>), and hides the sky through <code>ISkyBackdrop</code>. The Launch begin-screen always shows sky.</li>
 <li><code>Ground.shader</code> (<code>Shaders/BalloonParty/Scenario/</code>).</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md761"></a>
+<h3><a class="anchor" id="autotoc_md762"></a>
 Phases</h3>
 <ol type="1">
 <li><b>Ground at rest, with the grass reaction</b>: <code>ScenarioSchedule</code> + tests (determinism, the first ground level always ground, stretch bounds, no flips before it), <code>GroundSettings</code>, controller snap on run start/reset, <code>GroundView</code>, the meadow shader reading the disturbance field, the sky toggle, the cloud-body fade. Seen in the editor with the start-level cheat at 16, firing balls through the grass. <em>Review: architect, test-everything, reviewer, optimizer.</em></li>
 <li><b>Transitions both ways, as a mist reveal</b> (built 2026-11-09): <code>ScenarioController</code> cuts on <code>RunResetMessage</code> with the board reset (an immediate restart) and reveals on the loss cinematic's <code>RestartRiseStartedMessage</code>. <code>ActiveScenario</code> holds a <code>ScenarioShift</code> (the kind and the reveal's length), <code>GroundRevealCurve</code> is the pure timing, <code>GroundView</code> drives it, and <code>GroundCoverageAt</code> follows the hole per pixel, so the floor, the blades, the cloud bodies, the drop shadows and the GI follow with no change of their own. Seen by playing across a scenario flip and by losing on a ground level. The owner's first look asked for a thinner mist and a sense of going up or down: the depth scale (2026-11-09).</li>
-<li><b>Bushes on ground only</b>: <code>RequiresGround</code> on the catalogue and in <code>LevelGenerator</code> (with a test that no sky level contains a ground-only actor; built 2026-11-09, with the Configuration README). Bushes un-withheld 2026-11-09. The bush shadow on grass looked right in the editor (2026-11-09). Still to do: a playtest-bot comparison. <a class="el" href="ReleaseUploadWindow_8cs.html#a0100be52d45f14348918ea69ec09f959">Debug</a> presets (level &lt; 1) skip <code>LevelGenerator</code> and are always sky, so a preset that lists bushes would float them; the preset validator should warn.</li>
+<li><b>Bushes on ground only</b>: <code>RequiresGround</code> on the catalogue and in <code>LevelGenerator</code> (with a test that no sky level contains a ground-only actor; built 2026-11-09, with the Configuration README). Bushes un-withheld 2026-11-09. The bush shadow on grass looked right in the editor (2026-11-09). Still to do: a playtest-bot comparison. <a class="el" href="ReleaseUploadWindow_8cs.html#a0100be52d45f14348918ea69ec09f959">Debug</a> presets (level &lt; 1) skip <code>LevelGenerator</code> and are always sky, so a preset that lists bushes would float them; <code>LevelPacingValidator.ValidateGroundOnlyInPresets</code> warns (2026-11-09).</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md762"></a>
+<h2><a class="anchor" id="autotoc_md763"></a>
 Decisions (signed off 2026-11-08)</h2>
 <ol type="1">
 <li>First ground level <b>16</b>, with the first bushes. Revised 2026-11-09: rolled between 11 and 16, bushes unlocking at 11 and no longer withheld. Revised again the same day: rolled between 6 and 8, bushes unlocking at 6.</li>
 <li>Stretches of <b>2–4 levels</b> per scenario. Revised 2026-11-09: ground stretches of 3–5 levels with the first fixed at 4, sky stretches of 2–4, and a meadow clears its puff clouds halfway (see "Which levels are ground").</li>
 <li>Cloud bodies <b>fade out on ground</b>; their shadows stay.</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md763"></a>
+<h2><a class="anchor" id="autotoc_md764"></a>
 In-editor checks for phase 1</h2>
 <ul>
 <li>The meadow and the grass reaction at game zoom, by day and night (start-level cheat 11).</li>
@@ -274,7 +274,7 @@ In-editor checks for phase 1</h2>
 <li>The blades on a phone: their width and density at game zoom, and the vertex cost on a low-end device (<code>BladeSpacing</code> 0.085, about 45k vertices on 9:16), and a 4:3 tablet and a 21:9 phone show blades to every edge with no wrap pops.</li>
 <li>A level-up within a ground stretch (16 → 17, inside the fixed first meadow): the meadow and the bushes travel in together, with nothing sliding over still grass.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md764"></a>
+<h2><a class="anchor" id="autotoc_md765"></a>
 In-editor checks for phase 2</h2>
 <ul>
 <li>The reveal into a meadow and back out, by day and at night: no seam at the hole's edge, no blade standing outside it, the cloud bodies gone inside it, and the mist dim at night.</li>
@@ -284,15 +284,15 @@ In-editor checks for phase 2</h2>
 <li>The depth: going down the meadow grows in with the bushes planted on it and the clouds grow past; going up the old bushes and balloons shrink away with their meadow. No pop at either end, and a level-up within a meadow has no scaling at all.</li>
 <li>The puff clouds and bushes of a sky level leaving into a meadow (they grow past with the sky), and the blades at the meadow's smallest: shorter, with no gap at the screen's edges.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md765"></a>
+<h2><a class="anchor" id="autotoc_md766"></a>
 Follow-ups from the phase 1 optimizer review</h2>
 <ul>
-<li>Shader prewarm: the ground's first draw lands on the first ground level's Ascent; add <code>BalloonParty/Scenario/Ground</code> and <code>GrassBlades</code> to the shader-variant capture (<code>PLAN-PerformanceRecovery</code> F4), with both blend states once phase 2 switches them.</li>
+<li>Shader prewarm: the ground's first draw lands on the first ground level's Ascent; add <code>BalloonParty/Scenario/Ground</code> and <code>GrassBlades</code> to the shader-variant capture (<code>PLAN-PerformanceRecovery</code> F4), with both blend states once phase 2 switches them, and <code>GroundMist</code>. Waits on F4: the project has no variant collection yet, and its capture is taken on a device.</li>
 <li>Only if an on-device profile shows ground levels vertex-bound: a per-blade pre-pass. Each of a blade's five vertices repeats the same per-blade work (the wrap, both taps, the bend); a small blit into one texel per blade cell would do it once, and the vertex stage would only evaluate the curve. Estimated 0.15–0.3 ms on a Mali-G52-class GPU. A blit, not a compute buffer: many Mali GLES drivers can't read storage buffers in the vertex stage.</li>
 <li>Optional, now that phase 2 blends the floor during a reveal: draw the cloud shadow inside the ground shader and turn the cloud pass off on ground levels (one fewer full-screen pass, five taps).</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md767"></a>
+<h2><a class="anchor" id="autotoc_md768"></a>
 Later: the full biome system (unscheduled)</h2>
 <p>The 2026-07-12 design, kept for when more biomes earn it. Its inventory is superseded by the one above. In short:</p>
 <ul>

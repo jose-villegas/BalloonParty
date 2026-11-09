@@ -126,9 +126,9 @@ Static Package Functions</h2></td></tr>
 <tr class="memitem:a802cb9b2c8893c0880bfdfc5e991493f" id="r_a802cb9b2c8893c0880bfdfc5e991493f"><td class="memItemLeft" align="right" valign="top">static string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a802cb9b2c8893c0880bfdfc5e991493f">FindPrefabWithRoot&lt; T &gt;</a> (string search)</td></tr>
 <tr class="memdesc:a802cb9b2c8893c0880bfdfc5e991493f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The first prefab matching <em>search</em>  whose root has a <em>T</em> .  <br /></td></tr>
 <tr class="separator:a802cb9b2c8893c0880bfdfc5e991493f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8dfccf359d0d878167f1a377dc8f5dfe" id="r_a8dfccf359d0d878167f1a377dc8f5dfe"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8dfccf359d0d878167f1a377dc8f5dfe">Run</a> (string dialogTitle, string path, string childName, Func&lt; GameObject, string &gt; build)</td></tr>
-<tr class="memdesc:a8dfccf359d0d878167f1a377dc8f5dfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens the prefab at <em>path</em> , replaces its root's <em>childName</em>  child with what <em>build</em>  makes, and saves.  <br /></td></tr>
-<tr class="separator:a8dfccf359d0d878167f1a377dc8f5dfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93c64493d05fed7287a21ff0cf26c1b1" id="r_a93c64493d05fed7287a21ff0cf26c1b1"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a93c64493d05fed7287a21ff0cf26c1b1">Run</a> (string dialogTitle, string path, string childName, Func&lt; GameObject, string &gt; build)</td></tr>
+<tr class="memdesc:a93c64493d05fed7287a21ff0cf26c1b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Opens the prefab at <em>path</em> , replaces its root's <em>childName</em>  child with what <em>build</em>  makes, and saves.  <br /></td></tr>
+<tr class="separator:a93c64493d05fed7287a21ff0cf26c1b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -237,8 +237,8 @@ Static Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a8dfccf359d0d878167f1a377dc8f5dfe" name="a8dfccf359d0d878167f1a377dc8f5dfe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8dfccf359d0d878167f1a377dc8f5dfe">&#9670;&#160;</a></span>Run()</h2>
+<a id="a93c64493d05fed7287a21ff0cf26c1b1" name="a93c64493d05fed7287a21ff0cf26c1b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93c64493d05fed7287a21ff0cf26c1b1">&#9670;&#160;</a></span>Run()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -247,7 +247,7 @@ Static Private Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static void BalloonParty.Editor.PrefabRebuild.Run </td>
+          <td class="memname">static bool BalloonParty.Editor.PrefabRebuild.Run </td>
           <td>(</td>
           <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>dialogTitle</em></span>, </td>
         </tr>
@@ -275,7 +275,7 @@ Static Private Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Opens the prefab at <em>path</em> , replaces its root's <em>childName</em>  child with what <em>build</em>  makes, and saves. </p>
-<p><em>build</em>  returns an error to show, or null on success; nothing is saved on an error or a declined rebuild. </p>
+<p><em>build</em>  returns an error to show, or null on success; nothing is saved on an error or a declined rebuild. Returns whether it saved. </p>
 
 </div>
 </div>

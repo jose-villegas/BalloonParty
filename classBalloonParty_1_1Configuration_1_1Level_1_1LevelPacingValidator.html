@@ -123,9 +123,14 @@ Static Package Functions</h2></td></tr>
 <tr class="memitem:addac679d2ee0c3f2c8c0a48e23262a07" id="r_addac679d2ee0c3f2c8c0a48e23262a07"><td class="memItemLeft" align="right" valign="top">static IReadOnlyList&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#addac679d2ee0c3f2c8c0a48e23262a07">Validate</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html">ILevelPacingConfiguration</a> config, int levelsToCheck, string configName)</td></tr>
 <tr class="memdesc:addac679d2ee0c3f2c8c0a48e23262a07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns one issue message per problem found; an empty list means the config is clean.  <br /></td></tr>
 <tr class="separator:addac679d2ee0c3f2c8c0a48e23262a07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96981ccb1dbdd330675caa360349be8c" id="r_a96981ccb1dbdd330675caa360349be8c"><td class="memItemLeft" align="right" valign="top">static IReadOnlyList&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a96981ccb1dbdd330675caa360349be8c">ValidateGroundOnlyInPresets</a> (IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html">LevelRangeEntry</a> &gt; presets, IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html">GridActorContentEntry</a> &gt; gridActorCatalogue, string configName)</td></tr>
+<tr class="memdesc:a96981ccb1dbdd330675caa360349be8c"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="ReleaseUploadWindow_8cs.html#a0100be52d45f14348918ea69ec09f959">Debug</a> presets skip <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html" title="Builds a level&#39;s mix from LevelGenerationSettings.">LevelGenerator</a> and always play on the sky, so a preset that lists a ground-only actor (<em>gridActorCatalogue</em> 's <code>RequiresGround</code>) would float it over the sky backdrop.  <br /></td></tr>
+<tr class="separator:a96981ccb1dbdd330675caa360349be8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a48b20a23d1cfbf8f2bc48ecdb38fc6c6" id="r_a48b20a23d1cfbf8f2bc48ecdb38fc6c6"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a48b20a23d1cfbf8f2bc48ecdb38fc6c6">RequiresGround</a> (<a class="el" href="namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473">GridActorType</a> type, IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html">GridActorContentEntry</a> &gt; gridActorCatalogue)</td></tr>
+<tr class="separator:a48b20a23d1cfbf8f2bc48ecdb38fc6c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a28fc82b71b979fb08944a264420390" id="r_a9a28fc82b71b979fb08944a264420390"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9a28fc82b71b979fb08944a264420390">WarnOnEmptyWeightedSets</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html">ILevelPacingConfiguration</a> config, string configName, List&lt; string &gt; issues)</td></tr>
 <tr class="separator:a9a28fc82b71b979fb08944a264420390"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56f1579a9c06e2dc347e41222dba3ec3" id="r_a56f1579a9c06e2dc347e41222dba3ec3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a56f1579a9c06e2dc347e41222dba3ec3">WarnOnNonMonotonicThreshold</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html">ILevelPacingConfiguration</a> config, int levelsToCheck, string configName, List&lt; string &gt; issues)</td></tr>
@@ -137,6 +142,35 @@ Static Private Member Functions</h2></td></tr>
 <div class="textblock"><p>Plain-C# level-pacing invariant checks — shared by <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html" title="How levels pace: every positive level&#39;s mix is generated from _generation; the scoring curve sets eac...">LevelPacingConfiguration</a>'s editor-only <code>OnValidate</code> warnings and EditMode test coverage, so authoring checks and test checks can't drift by verifying the same invariants two different ways. </p>
 <p>The generation catalogue checks its own entries (<a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#aae47f9d0ade6895417c050399744583a" title="One message per authoring problem; empty when the catalogue is sound.">LevelGenerationSettings.Validate</a>). </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a48b20a23d1cfbf8f2bc48ecdb38fc6c6" name="a48b20a23d1cfbf8f2bc48ecdb38fc6c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48b20a23d1cfbf8f2bc48ecdb38fc6c6">&#9670;&#160;</a></span>RequiresGround()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Configuration.Level.LevelPacingValidator.RequiresGround </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473">GridActorType</a></td>          <td class="paramname"><span class="paramname"><em>type</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html">GridActorContentEntry</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>gridActorCatalogue</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="addac679d2ee0c3f2c8c0a48e23262a07" name="addac679d2ee0c3f2c8c0a48e23262a07"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#addac679d2ee0c3f2c8c0a48e23262a07">&#9670;&#160;</a></span>Validate()</h2>
 
@@ -171,6 +205,43 @@ Static Private Member Functions</h2></td></tr>
 
 <p>Returns one issue message per problem found; an empty list means the config is clean. </p>
 <p><em>levelsToCheck</em>  bounds the non-monotonic-threshold scan (0 skips it) — the caller derives this from its own scoring curve, since that data isn't on the interface. </p>
+
+</div>
+</div>
+<a id="a96981ccb1dbdd330675caa360349be8c" name="a96981ccb1dbdd330675caa360349be8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96981ccb1dbdd330675caa360349be8c">&#9670;&#160;</a></span>ValidateGroundOnlyInPresets()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static IReadOnlyList&lt; string &gt; BalloonParty.Configuration.Level.LevelPacingValidator.ValidateGroundOnlyInPresets </td>
+          <td>(</td>
+          <td class="paramtype">IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html">LevelRangeEntry</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>presets</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html">GridActorContentEntry</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>gridActorCatalogue</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>configName</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="ReleaseUploadWindow_8cs.html#a0100be52d45f14348918ea69ec09f959">Debug</a> presets skip <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html" title="Builds a level&#39;s mix from LevelGenerationSettings.">LevelGenerator</a> and always play on the sky, so a preset that lists a ground-only actor (<em>gridActorCatalogue</em> 's <code>RequiresGround</code>) would float it over the sky backdrop. </p>
+<p>One issue per such preset and actor; a gate whose count is 0 is fine. </p>
 
 </div>
 </div>
