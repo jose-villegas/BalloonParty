@@ -52,7 +52,7 @@ namespace BalloonParty.Tests.Configuration
                 gridActors: new[]
                 {
                     new GridActorContentEntry(GridActorType.Puff, 3, 1, new RangedInt(7, 9), new RangedInt(10, 13), 6, 5),
-                    new GridActorContentEntry(GridActorType.Bush, 11, 2, new RangedInt(3, 9), new RangedInt(3, 9), 0, 3,
+                    new GridActorContentEntry(GridActorType.Bush, 6, 2, new RangedInt(3, 9), new RangedInt(3, 9), 0, 3,
                         requiresGround: true),
                 });
         }

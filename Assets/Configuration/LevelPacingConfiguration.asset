@@ -2163,7 +2163,7 @@ MonoBehaviour:
       _requiresGround: 0
     - _type: 1
       _withheld: 0
-      _unlockLevel: 11
+      _unlockLevel: 6
       _cost: 2
       _count:
         _min: 3

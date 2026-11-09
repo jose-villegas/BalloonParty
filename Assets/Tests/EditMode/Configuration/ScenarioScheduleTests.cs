@@ -58,7 +58,7 @@ namespace BalloonParty.Tests.Configuration
         {
             var settings = new ScenarioScheduleSettings();
 
-            Assert.AreEqual((11, 16), (settings.GroundFromLevel, settings.GroundByLevel));
+            Assert.AreEqual((6, 8), (settings.GroundFromLevel, settings.GroundByLevel));
             Assert.AreEqual(4, settings.FirstGroundStretch);
             Assert.AreEqual((3, 5), (settings.MinGroundStretch, settings.MaxGroundStretch));
             Assert.AreEqual((2, 4), (settings.MinSkyStretch, settings.MaxSkyStretch));

@@ -12,10 +12,10 @@ namespace BalloonParty.Configuration.Level
     {
         [Tooltip("Every level before this one is sky. From here the first ground stretch can start: its first " +
                  "level is rolled between this and Ground By Level, so whatever needs ground (bushes) can appear.")]
-        [SerializeField] [Min(1)] private int _groundFromLevel = 11;
+        [SerializeField] [Min(1)] private int _groundFromLevel = 6;
 
         [Tooltip("The first ground stretch has started by this level at the latest.")]
-        [SerializeField] [Min(1)] private int _groundByLevel = 16;
+        [SerializeField] [Min(1)] private int _groundByLevel = 8;
 
         [Tooltip("Length of the first ground stretch, fixed rather than rolled: once the run reaches the ground " +
                  "it stays there at least this many levels.")]

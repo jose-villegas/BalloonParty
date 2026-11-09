@@ -90,12 +90,13 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
   from a small block on `LevelGenerationSettings`. It answers `Sky` or `Ground`, the
   level's place in its stretch and the stretch's length (a `ScenarioStretch`);
   `ForLevel` is the kind alone.
-  - **The first ground level is rolled between 11 and 16** (`GroundFromLevel`,
-    `GroundByLevel`; revised 2026-11-09, owner: "start to have a chance for it after
-    level 10"). Levels before it are always sky. The roll mixes in the run's seed
+  - **The first ground level is rolled between 6 and 8** (`GroundFromLevel`,
+    `GroundByLevel`; revised 2026-11-09, owner: first "start to have a chance for it after
+    level 10", then "meadow scene could be introduced early", with the bushes moving
+    with it). Levels before it are always sky. The roll mixes in the run's seed
     (`IRunSeed`, rolled per run and kept through a retry), so each run meets its first
     meadow on its own level, and the later stretches move with it ("Vary", 2026-11-09). Bushes
-    unlock at 11, the window's start, so whichever level it is, they're there.
+    unlock at 6, the window's start, so whichever level it is, they're there.
   - **The first meadow is fixed at 4 levels**, not rolled: once the run reaches
     the ground it stays there (owner: "if we enter one we stay there at least n levels").
   - After that the run alternates **sky stretches of 2–4 levels** and **ground stretches
@@ -137,7 +138,7 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
   budget goes to the rest. One source of truth: the generator and the ground view both ask
   `ScenarioSchedule`. A ground-only piece's featured levels still count from its unlock
   level, so one unlocked on a sky level first shows at the next meadow, unfeatured; the
-  shipped bush unlocks at 11, the start of the first ground level's window.
+  shipped bush unlocks at 6, the start of the first ground level's window.
 - **Triggers**: cut to the level's scenario on run start and on an immediate restart
   (start-level cheat, the skip path); reveal through the mist on the level-up Ascent and on
   the restart rise after a loss when the two levels' scenarios differ, over the beat's own
@@ -307,7 +308,8 @@ changes to the Ascent or restart code.
 ## Decisions (signed off 2026-11-08)
 
 1. First ground level **16**, with the first bushes. Revised 2026-11-09: rolled between
-   11 and 16, bushes unlocking at 11 and no longer withheld.
+   11 and 16, bushes unlocking at 11 and no longer withheld. Revised again the same day:
+   rolled between 6 and 8, bushes unlocking at 6.
 2. Stretches of **2–4 levels** per scenario. Revised 2026-11-09: ground stretches of
    3–5 levels with the first fixed at 4, sky stretches of 2–4, and a meadow clears its
    puff clouds halfway (see "Which levels are ground").

@@ -15,7 +15,7 @@ MonoBehaviour:
   _startingHitPoints: 3
   _levelUpHeartRefill: 1
   _maxRetries: 0
-  _retriesBeforeAd: 0
+  _retriesBeforeAd: 3
   _streakGrantsShields: 0
   _deflectChainShieldEvery: 3
   _planShieldChains: 1
