@@ -127,8 +127,8 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
-<tr class="memitem:ab1724840148cd796dbcf2b2916eeb40f" id="r_ab1724840148cd796dbcf2b2916eeb40f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html">RangedLevelParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab1724840148cd796dbcf2b2916eeb40f">Generate</a> (<a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html">LevelGenerationSettings</a> settings, int level, int seed)</td></tr>
-<tr class="separator:ab1724840148cd796dbcf2b2916eeb40f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef6c44258a93a03abeb93636ce5c2ec5" id="r_aef6c44258a93a03abeb93636ce5c2ec5"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html">RangedLevelParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aef6c44258a93a03abeb93636ce5c2ec5">Generate</a> (<a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html">LevelGenerationSettings</a> settings, int level, int seed, int runSeed=0)</td></tr>
+<tr class="separator:aef6c44258a93a03abeb93636ce5c2ec5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -159,8 +159,8 @@ Static Private Attributes</h2></td></tr>
 <p>Pure and seeded: the same level and seed always give the same mix.</p>
 <p>Staples (cost 0) and pieces still in their featured levels are always in. Each role's budget then buys a pick of its other unlocked pieces. Threats and aids have separate budgets so that depth reliably means more threats, not a random mix of threats and help. Picks are weighted by cost, so the dearer threats aren't the ones a tight budget always leaves out. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ab1724840148cd796dbcf2b2916eeb40f" name="ab1724840148cd796dbcf2b2916eeb40f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab1724840148cd796dbcf2b2916eeb40f">&#9670;&#160;</a></span>Generate()</h2>
+<a id="aef6c44258a93a03abeb93636ce5c2ec5" name="aef6c44258a93a03abeb93636ce5c2ec5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef6c44258a93a03abeb93636ce5c2ec5">&#9670;&#160;</a></span>Generate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -181,7 +181,12 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>seed</em></span>&#160;)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>seed</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>runSeed</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
         </tr>
       </table>
   </td>

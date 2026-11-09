@@ -156,7 +156,7 @@ Which levels are ground</h3>
 <ul>
 <li><b>A seeded per-level scenario</b>, computed by a pure <code>ScenarioSchedule.StretchAt(level)</code> from a small block on <code>LevelGenerationSettings</code>. It answers <code>Sky</code> or <code>Ground</code>, the level's place in its stretch and the stretch's length (a <code>ScenarioStretch</code>); <code>ForLevel</code> is the kind alone.<ul>
 <li><b>The first ground level is rolled between 11 and 16</b> (<code>GroundFromLevel</code>, <code>GroundByLevel</code>; revised 2026-11-09, owner: "start to have a chance for it after
-    level 10"). Levels before it are always sky. The roll hashes the scenario's salt, so every run meets the first meadow on the same level: 11 with the shipped salt. Bushes unlock at 11, the window's start, so whichever level it is, they're there.</li>
+    level 10"). Levels before it are always sky. The roll mixes in the run's seed (<code>IRunSeed</code>, rolled per run and kept through a retry), so each run meets its first meadow on its own level, and the later stretches move with it ("Vary", 2026-11-09). Bushes unlock at 11, the window's start, so whichever level it is, they're there.</li>
 <li><b>The first meadow is fixed at 4 levels</b>, not rolled: once the run reaches the ground it stays there (owner: "if we enter one we stay there at least n levels").</li>
 <li>After that the run alternates <b>sky stretches of 2–4 levels</b> and <b>ground stretches of 3–5 levels</b>, each with its own min and max. Bot runs put deep levels at about 30–70 s each, so a meadow is about 2–4 minutes. Two levels flickers once the ~4 s transition each way counts; more than five feels stuck on the harder ground.</li>
 <li>Each rolled length hashes the level its stretch starts on with the scenario's own salt, so retuning other content doesn't reshuffle the scenarios, and a retry keeps the same one.</li>
@@ -226,7 +226,7 @@ What it reuses</h3>
 <h3><a class="anchor" id="autotoc_md760"></a>
 Shape (MVC)</h3>
 <ul>
-<li><code>ScenarioKind</code> (<code>Sky</code>, <code>Ground</code>), <code>ScenarioSchedule</code> and <code>ScenarioScheduleSettings</code> (pure, <code>Configuration/Level/</code>), the settings block on <code>LevelGenerationSettings</code>, read through <code>ILevelPacingConfiguration.ScenarioForLevel</code>; EditMode-tested. <code>LevelSeedHash</code> is the hash shared with <code>SeedForLevel</code>.</li>
+<li><code>ScenarioKind</code> (<code>Sky</code>, <code>Ground</code>), <code>ScenarioSchedule</code> and <code>ScenarioScheduleSettings</code> (pure, <code>Configuration/Level/</code>), the settings block on <code>LevelGenerationSettings</code>, read through <code>ILevelPacingConfiguration.ScenarioForLevel</code> with the run's <code>IRunSeed</code>; EditMode-tested. <code>LevelSeedHash</code> is the hash shared with <code>SeedForLevel</code>.</li>
 <li><code>GroundSettings</code> / <code>IGroundSettings</code> (<code>Configuration/Effects/</code>): ground material, sorting order (−15, between sky −20 and clouds −10), overscan.</li>
 <li><code>ActiveScenario</code> / <code>IActiveScenario</code> (<code>Scenario/</code>): the model, the scenario shown now.</li>
 <li><code>ScenarioController</code> (plain C#, <code>Game/Level/</code>, <code>IStartable</code>/<code>IRunResettable</code>): asks the schedule for the current level and writes the model.</li>

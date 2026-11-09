@@ -466,11 +466,13 @@ var annotated_dup =
           [ "IRunMeta", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunMeta.html", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunMeta" ],
           [ "IRunResettable", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable" ],
           [ "IRunScore", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore" ],
+          [ "IRunSeed", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed.html", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed" ],
           [ "NoAdService", "classBalloonParty_1_1Game_1_1Run_1_1NoAdService.html", "classBalloonParty_1_1Game_1_1Run_1_1NoAdService" ],
           [ "RetryTracker", "classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html", "classBalloonParty_1_1Game_1_1Run_1_1RetryTracker" ],
           [ "RunController", "classBalloonParty_1_1Game_1_1Run_1_1RunController.html", "classBalloonParty_1_1Game_1_1Run_1_1RunController" ],
           [ "RunMeta", "classBalloonParty_1_1Game_1_1Run_1_1RunMeta.html", "classBalloonParty_1_1Game_1_1Run_1_1RunMeta" ],
-          [ "RunResetOrder", "classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html", "classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder" ]
+          [ "RunResetOrder", "classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html", "classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder" ],
+          [ "RunSeed", "classBalloonParty_1_1Game_1_1Run_1_1RunSeed.html", "classBalloonParty_1_1Game_1_1Run_1_1RunSeed" ]
         ] ],
         [ "Score", "namespaceBalloonParty_1_1Game_1_1Score.html", [
           [ "Behaviours", "namespaceBalloonParty_1_1Game_1_1Score_1_1Behaviours.html", [

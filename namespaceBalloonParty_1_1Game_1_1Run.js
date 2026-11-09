@@ -13,11 +13,13 @@ var namespaceBalloonParty_1_1Game_1_1Run =
     [ "IRunMeta", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunMeta.html", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunMeta" ],
     [ "IRunResettable", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable" ],
     [ "IRunScore", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore" ],
+    [ "IRunSeed", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed.html", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed" ],
     [ "NoAdService", "classBalloonParty_1_1Game_1_1Run_1_1NoAdService.html", "classBalloonParty_1_1Game_1_1Run_1_1NoAdService" ],
     [ "RetryTracker", "classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html", "classBalloonParty_1_1Game_1_1Run_1_1RetryTracker" ],
     [ "RunController", "classBalloonParty_1_1Game_1_1Run_1_1RunController.html", "classBalloonParty_1_1Game_1_1Run_1_1RunController" ],
     [ "RunMeta", "classBalloonParty_1_1Game_1_1Run_1_1RunMeta.html", "classBalloonParty_1_1Game_1_1Run_1_1RunMeta" ],
     [ "RunResetOrder", "classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html", "classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder" ],
+    [ "RunSeed", "classBalloonParty_1_1Game_1_1Run_1_1RunSeed.html", "classBalloonParty_1_1Game_1_1Run_1_1RunSeed" ],
     [ "AdPlacement", "namespaceBalloonParty_1_1Game_1_1Run.html#ae32b042f074527467706d741395e3a74", [
       [ "RetryGate", "namespaceBalloonParty_1_1Game_1_1Run.html#ae32b042f074527467706d741395e3a74ab68aa5cb0ed52573b6fcf3453b68d489", null ],
       [ "BonusRetry", "namespaceBalloonParty_1_1Game_1_1Run.html#ae32b042f074527467706d741395e3a74a7b69c80559d67f1b49a821c83dbdba7d", null ]

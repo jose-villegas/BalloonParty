@@ -1,5 +1,7 @@
 var NAVTREEINDEX32 =
 {
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a852cbe059e0953c0ec78e5c73f09db6b":[5,0,0,5,25,85],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a852cbe059e0953c0ec78e5c73f09db6b":[6,0,0,5,25,85],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a866414d51eb6498f91415dd14fb2e211":[5,0,0,5,25,75],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a866414d51eb6498f91415dd14fb2e211":[6,0,0,5,25,75],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a8a8aae78a32e4f953961e990bbcf7252":[5,0,0,5,25,40],
@@ -247,7 +249,5 @@ var NAVTREEINDEX32 =
 "classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#aefb5c606198b67451c3f5cf0fbb66bd9":[5,0,0,5,27,9],
 "classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#aefb5c606198b67451c3f5cf0fbb66bd9":[6,0,0,5,27,9],
 "classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#afe79c53a22211cd3556701e8ffdc5090":[5,0,0,5,27,7],
-"classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#afe79c53a22211cd3556701e8ffdc5090":[6,0,0,5,27,7],
-"classBalloonParty_1_1Editor_1_1MusicalNoteDrawer.html":[5,0,0,5,28],
-"classBalloonParty_1_1Editor_1_1MusicalNoteDrawer.html":[6,0,0,5,28]
+"classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#afe79c53a22211cd3556701e8ffdc5090":[6,0,0,5,27,7]
 };

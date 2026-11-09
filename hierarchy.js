@@ -755,6 +755,7 @@ var hierarchy =
         [ "BalloonParty.Slots.Spawner.GridSpawnerCoordinator", "classBalloonParty_1_1Slots_1_1Spawner_1_1GridSpawnerCoordinator.html", null ]
       ] ],
       [ "BalloonParty.Game.Run.RetryTracker", "classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html", null ],
+      [ "BalloonParty.Game.Run.RunSeed", "classBalloonParty_1_1Game_1_1Run_1_1RunSeed.html", null ],
       [ "BalloonParty.Game.Score.ScoreController", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html", null ],
       [ "BalloonParty.Game.Score.ScoreTrailService", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html", null ],
       [ "BalloonParty.Game.Telemetry.GameplayMetricsService", "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html", null ],
@@ -765,6 +766,9 @@ var hierarchy =
     ] ],
     [ "BalloonParty.Game.Run.IRunScore", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html", [
       [ "BalloonParty.Game.Score.ScoreController", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html", null ]
+    ] ],
+    [ "BalloonParty.Game.Run.IRunSeed", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed.html", [
+      [ "BalloonParty.Game.Run.RunSeed", "classBalloonParty_1_1Game_1_1Run_1_1RunSeed.html", null ]
     ] ],
     [ "BalloonParty.Configuration.Effects.ISceneLightFieldSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightFieldSettings.html", [
       [ "BalloonParty.Configuration.Effects.SceneLightFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html", null ]

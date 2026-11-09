@@ -1,5 +1,7 @@
 var NAVTREEINDEX18 =
 {
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a283ff3d820f8a962bec6b4ff2b2d4ee0":[5,0,0,3,4,24,13],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a283ff3d820f8a962bec6b4ff2b2d4ee0":[6,0,0,3,4,24,13],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a2a918c57b7a5c0f3fe9a6ddbaddc451f":[5,0,0,3,4,24,31],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a2a918c57b7a5c0f3fe9a6ddbaddc451f":[6,0,0,3,4,24,31],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a313c2c5a6406403505ce8ddc6d70fd44":[5,0,0,3,4,24,36],
@@ -247,7 +249,5 @@ var NAVTREEINDEX18 =
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#af79840a89b0d5c81110f86d5e75ceddf":[5,0,0,3,4,26,7],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#af79840a89b0d5c81110f86d5e75ceddf":[6,0,0,3,4,26,7],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#afae6f1e77c558cef1cfedda0e56929b7":[5,0,0,3,4,26,68],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#afae6f1e77c558cef1cfedda0e56929b7":[6,0,0,3,4,26,68],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html":[5,0,0,3,4,27],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html":[6,0,0,3,4,27]
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html#afae6f1e77c558cef1cfedda0e56929b7":[6,0,0,3,4,26,68]
 };

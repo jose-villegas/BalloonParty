@@ -9,7 +9,7 @@ var classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings =
     [ "CheckUnlock", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a2c67363f8cc955af522577a230ed1d2c", null ],
     [ "ColorsForLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#aa25b9d0fc623c4b61966f1e1fe20190e", null ],
     [ "ItemCountsForLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a64e9440a282d494f2a82ee0b9d1a8d39", null ],
-    [ "ScenarioForLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#af3dba66891a94f4da8d1726bd7cafc15", null ],
+    [ "ScenarioForLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#abce9357a5e8e1fe8e1d5c7dd0548ba01", null ],
     [ "SeedForLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#ac111b10ba74cee939b823e26b656dadf", null ],
     [ "StepValue", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#affd1cf07455aa9127b9e5a55d07fddf9", null ],
     [ "Validate", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#aae47f9d0ade6895417c050399744583a", null ],

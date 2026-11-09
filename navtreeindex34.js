@@ -1,5 +1,7 @@
 var NAVTREEINDEX34 =
 {
+"classBalloonParty_1_1Editor_1_1SceneDrawingHelper.html#a6118475ee995a1db0f087e17809cd642":[5,0,0,5,36,2],
+"classBalloonParty_1_1Editor_1_1SceneDrawingHelper.html#a6118475ee995a1db0f087e17809cd642":[6,0,0,5,36,2],
 "classBalloonParty_1_1Editor_1_1SceneDrawingHelper.html#a851404487fcda4d4af3a3f3436412131":[5,0,0,5,36,4],
 "classBalloonParty_1_1Editor_1_1SceneDrawingHelper.html#a851404487fcda4d4af3a3f3436412131":[6,0,0,5,36,4],
 "classBalloonParty_1_1Editor_1_1SceneDrawingHelper.html#ad3a34074e68d0b1e8a4443cf2842cc27":[5,0,0,5,36,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX34 =
 "classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a506bc75a37ff5d5b0dfe1115c3675350":[5,0,0,5,7,0,22],
 "classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a506bc75a37ff5d5b0dfe1115c3675350":[6,0,0,5,7,0,22],
 "classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a56f32af55f94148830d73bd6a32ff679":[5,0,0,5,7,0,35],
-"classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a56f32af55f94148830d73bd6a32ff679":[6,0,0,5,7,0,35],
-"classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a59b06bdc99af0703b5570a317288310d":[5,0,0,5,7,0,51],
-"classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a59b06bdc99af0703b5570a317288310d":[6,0,0,5,7,0,51]
+"classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a56f32af55f94148830d73bd6a32ff679":[6,0,0,5,7,0,35]
 };

@@ -1,17 +1,19 @@
 <map id="BalloonParty.Game.Level.ScenarioController" name="BalloonParty.Game.Level.ScenarioController">
-<area shape="rect" id="Node000001" title="Keeps ActiveScenario on the current level&#39;s scenario (sky or ground, per ILevelPacingConfiguration...." alt="" coords="643,142,831,182"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="337,5,423,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="437,25,495,41,554,64,611,90,703,140,701,144,609,95,552,69,494,46,435,30"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="277,55,483,95"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="486,96,619,127,665,139,663,144,618,133,485,101"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="331,120,429,145"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="443,135,643,152,642,157,443,140"/>
-<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html" title="Level pacing; read by LevelDifficultyResolver (and by the balloon spawner&#39;s pool prewarm,..." alt="" coords="265,170,495,210"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="508,177,642,167,643,172,509,183"/>
-<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html" title="Read surface of the player&#39;s progression through levels." alt="" coords="286,234,474,274"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="487,229,618,197,675,180,676,185,619,202,488,234"/>
-<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Scenario_1_1ActiveScenario.html" title="Model behind IActiveScenario; written only by ScenarioController." alt="" coords="277,298,483,338"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="484,292,551,271,617,242,668,212,710,180,713,184,671,216,620,247,553,276,485,297"/>
-<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html" title="The scenario the backdrop is showing now: sky or ground." alt="" coords="5,298,216,338"/>
-<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="230,315,276,315,276,321,230,321"/>
+<area shape="rect" id="Node000001" title="Keeps ActiveScenario on the current level&#39;s scenario (sky or ground, per ILevelPacingConfiguration...." alt="" coords="652,170,840,210"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="342,5,427,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="442,24,505,41,569,70,629,104,721,168,718,172,626,109,566,74,503,46,441,29"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="281,55,488,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="475,96,505,105,629,142,697,167,695,172,627,147,503,110,473,102"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="335,120,434,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="448,139,628,167,652,171,651,177,628,173,447,144"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html" title="Level pacing; read by LevelDifficultyResolver (and by the balloon spawner&#39;s pool prewarm,..." alt="" coords="270,170,499,210"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="513,187,652,187,652,193,513,193"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed.html" title="The run&#39;s own roll, mixed into what may differ from one run to the next (which levels are on the grou..." alt="" coords="265,235,504,260"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="484,230,628,207,651,203,652,209,628,213,484,235"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html" title="Read surface of the player&#39;s progression through levels." alt="" coords="291,285,479,325"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="491,281,559,265,627,244,707,208,709,213,629,248,560,270,492,287"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Scenario_1_1ActiveScenario.html" title="Model behind IActiveScenario; written only by ScenarioController." alt="" coords="281,349,488,389"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="501,343,565,322,627,293,656,273,683,251,725,208,729,212,686,255,659,278,629,298,567,327,502,348"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html" title="The scenario the backdrop is showing now: sky or ground." alt="" coords="5,349,216,389"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="230,366,281,366,281,371,230,371"/>
 </map>

@@ -1,0 +1,9 @@
+<map id="BalloonParty.Game.Run.RunSeed" name="BalloonParty.Game.Run.RunSeed">
+<area shape="rect" id="Node000001" title=" " alt="" coords="369,63,604,88"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed.html" title="The run&#39;s own roll, mixed into what may differ from one run to the next (which levels are on the grou..." alt="" coords="5,5,244,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="219,30,406,60,405,65,219,35"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="21,55,228,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="242,73,369,73,369,78,242,78"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html" title="Read&#45;only retry state — how many retries remain this run and the level to retry at (zero when the nex..." alt="" coords="16,119,233,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="247,115,413,85,414,91,247,120"/>
+</map>

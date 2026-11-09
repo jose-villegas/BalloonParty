@@ -1,5 +1,7 @@
 var NAVTREEINDEX3 =
 {
+"SfxEntry_8cs.html":[7,0,0,0,6],
+"SfxFetchRequest_8cs.html":[7,0,0,1,9],
 "SfxLayerEntry_8cs.html":[7,0,0,0,7],
 "SfxLicense_8cs.html":[7,0,0,1,10],
 "SfxPreviewAuditioner_8cs.html":[7,0,0,1,11],
@@ -247,7 +249,5 @@ var NAVTREEINDEX3 =
 "arch_slot_actor.html#autotoc_md97":[2,13,0,0],
 "arch_slot_actor.html#autotoc_md98":[2,13,0,1],
 "arch_spawner_coordination.html":[2,5],
-"arch_spawner_coordination.html#autotoc_md100":[2,5,0,0],
-"arch_spawner_coordination.html#autotoc_md101":[2,5,0,1],
-"arch_spawner_coordination.html#autotoc_md99":[2,5,0]
+"arch_spawner_coordination.html#autotoc_md100":[2,5,0,0]
 };

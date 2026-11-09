@@ -133,12 +133,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af8180a7c80ff7448293ca03438f90c67" id="r_af8180a7c80ff7448293ca03438f90c67"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af8180a7c80ff7448293ca03438f90c67">MaxConcurrentBalloons</a> (<a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60e">BalloonType</a> type, int columns)</td></tr>
 <tr class="memdesc:af8180a7c80ff7448293ca03438f90c67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Upper bound on how many of a balloon type can share the board at any level — the pool prewarm size.  <br /></td></tr>
 <tr class="separator:af8180a7c80ff7448293ca03438f90c67"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d849ad10eb0aa2a12282b60daed2689" id="r_a7d849ad10eb0aa2a12282b60daed2689"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html">RangedLevelParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d849ad10eb0aa2a12282b60daed2689">ParametersForLevel</a> (int level)</td></tr>
-<tr class="memdesc:a7d849ad10eb0aa2a12282b60daed2689"><td class="mdescLeft">&#160;</td><td class="mdescRight">The mix for <em>level</em> : generated for a positive level, the matching debug preset for a negative one.  <br /></td></tr>
-<tr class="separator:a7d849ad10eb0aa2a12282b60daed2689"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae456249c6a9e63956daca07f1a3f07a0" id="r_ae456249c6a9e63956daca07f1a3f07a0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae456249c6a9e63956daca07f1a3f07a0">ScenarioForLevel</a> (int level)</td></tr>
-<tr class="memdesc:ae456249c6a9e63956daca07f1a3f07a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether <em>level</em>  is set in the sky or on the ground. <a class="el" href="ReleaseUploadWindow_8cs.html#a0100be52d45f14348918ea69ec09f959">Debug</a> presets (level &lt; 1) are sky.  <br /></td></tr>
-<tr class="separator:ae456249c6a9e63956daca07f1a3f07a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98cb7c0e99d13e683ba04563bb09cc9d" id="r_a98cb7c0e99d13e683ba04563bb09cc9d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html">RangedLevelParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a98cb7c0e99d13e683ba04563bb09cc9d">ParametersForLevel</a> (int level, int runSeed)</td></tr>
+<tr class="memdesc:a98cb7c0e99d13e683ba04563bb09cc9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The mix for <em>level</em> : generated for a positive level, the matching debug preset for a negative one.  <br /></td></tr>
+<tr class="separator:a98cb7c0e99d13e683ba04563bb09cc9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb9d4e6cb5b4c8093a33ff6ea5be0956" id="r_acb9d4e6cb5b4c8093a33ff6ea5be0956"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acb9d4e6cb5b4c8093a33ff6ea5be0956">ScenarioForLevel</a> (int level, int runSeed)</td></tr>
+<tr class="memdesc:acb9d4e6cb5b4c8093a33ff6ea5be0956"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether <em>level</em>  is set in the sky or on the ground in the run rolled by <em>runSeed</em> .  <br /></td></tr>
+<tr class="separator:acb9d4e6cb5b4c8093a33ff6ea5be0956"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f4b5d69a3c1c7965cd0e3f3a3e79d04" id="r_a2f4b5d69a3c1c7965cd0e3f3a3e79d04"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f4b5d69a3c1c7965cd0e3f3a3e79d04">SeedForLevel</a> (int level)</td></tr>
 <tr class="memdesc:a2f4b5d69a3c1c7965cd0e3f3a3e79d04"><td class="mdescLeft">&#160;</td><td class="mdescRight">The seed that rolls <em>level</em> 's mix; the same level always gets the same seed.  <br /></td></tr>
 <tr class="separator:a2f4b5d69a3c1c7965cd0e3f3a3e79d04"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -205,8 +205,8 @@ Properties</h2></td></tr>
 
 </div>
 </div>
-<a id="a7d849ad10eb0aa2a12282b60daed2689" name="a7d849ad10eb0aa2a12282b60daed2689"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7d849ad10eb0aa2a12282b60daed2689">&#9670;&#160;</a></span>ParametersForLevel()</h2>
+<a id="a98cb7c0e99d13e683ba04563bb09cc9d" name="a98cb7c0e99d13e683ba04563bb09cc9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98cb7c0e99d13e683ba04563bb09cc9d">&#9670;&#160;</a></span>ParametersForLevel()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -214,20 +214,25 @@ Properties</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html">RangedLevelParameters</a> BalloonParty.Configuration.Level.ILevelPacingConfiguration.ParametersForLevel </td>
           <td>(</td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>level</em></span></td><td>)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>level</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>runSeed</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>The mix for <em>level</em> : generated for a positive level, the matching debug preset for a negative one. </p>
+<p><em>runSeed</em>  (<code>IRunSeed</code>) picks the run's ground and sky levels, which decide the ground-only actors and the meadow's clouds. </p>
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#ad2d5a4bf800e79465b25890add3a8940">BalloonParty.Configuration.Level.LevelPacingConfiguration</a>.</p>
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a1ee60989e368310719986cfb440b3f82">BalloonParty.Configuration.Level.LevelPacingConfiguration</a>.</p>
 
 </div>
 </div>
-<a id="ae456249c6a9e63956daca07f1a3f07a0" name="ae456249c6a9e63956daca07f1a3f07a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae456249c6a9e63956daca07f1a3f07a0">&#9670;&#160;</a></span>ScenarioForLevel()</h2>
+<a id="acb9d4e6cb5b4c8093a33ff6ea5be0956" name="acb9d4e6cb5b4c8093a33ff6ea5be0956"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb9d4e6cb5b4c8093a33ff6ea5be0956">&#9670;&#160;</a></span>ScenarioForLevel()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -235,15 +240,20 @@ Properties</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> BalloonParty.Configuration.Level.ILevelPacingConfiguration.ScenarioForLevel </td>
           <td>(</td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>level</em></span></td><td>)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>level</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>runSeed</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Whether <em>level</em>  is set in the sky or on the ground. <a class="el" href="ReleaseUploadWindow_8cs.html#a0100be52d45f14348918ea69ec09f959">Debug</a> presets (level &lt; 1) are sky. </p>
+<p>Whether <em>level</em>  is set in the sky or on the ground in the run rolled by <em>runSeed</em> . </p>
+<p><a class="el" href="ReleaseUploadWindow_8cs.html#a0100be52d45f14348918ea69ec09f959">Debug</a> presets (level &lt; 1) are sky. </p>
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#aef33a6f5c4e0b440a5c7c0545e82ae5a">BalloonParty.Configuration.Level.LevelPacingConfiguration</a>.</p>
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a8d290d62171d080d25071f52f8ae93b1">BalloonParty.Configuration.Level.LevelPacingConfiguration</a>.</p>
 
 </div>
 </div>

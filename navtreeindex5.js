@@ -1,5 +1,7 @@
 var NAVTREEINDEX5 =
 {
+"classBalloonParty_1_1Audio_1_1Editor_1_1AttributionRecord.html#a75ad310e79d93b14a4aa887d88bdf4f5":[5,0,0,0,1,1,7],
+"classBalloonParty_1_1Audio_1_1Editor_1_1AttributionRecord.html#a75ad310e79d93b14a4aa887d88bdf4f5":[6,0,0,0,1,1,7],
 "classBalloonParty_1_1Audio_1_1Editor_1_1AttributionRecord.html#a7a656f0e4fc118159ec27a0581a0e2e0":[5,0,0,0,1,1,4],
 "classBalloonParty_1_1Audio_1_1Editor_1_1AttributionRecord.html#a7a656f0e4fc118159ec27a0581a0e2e0":[6,0,0,0,1,1,4],
 "classBalloonParty_1_1Audio_1_1Editor_1_1AttributionRecord.html#a7f9e81dc2ce12a5b81d4fb47bfddbf4c":[5,0,0,0,1,1,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX5 =
 "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#ab34eb0423950a08c9f25dd01b94af966":[5,0,0,0,2,0,9],
 "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#ab34eb0423950a08c9f25dd01b94af966":[6,0,0,0,2,0,9],
 "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#ab4fb3cf05afc12a5ec80493d1363328c":[5,0,0,0,2,0,42],
-"classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#ab4fb3cf05afc12a5ec80493d1363328c":[6,0,0,0,2,0,42],
-"classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#ab6d94dfe374e45a09f29f6971c01ac00":[5,0,0,0,2,0,17],
-"classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#ab6d94dfe374e45a09f29f6971c01ac00":[6,0,0,0,2,0,17]
+"classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#ab4fb3cf05afc12a5ec80493d1363328c":[6,0,0,0,2,0,42]
 };

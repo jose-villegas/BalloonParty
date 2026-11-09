@@ -1,5 +1,7 @@
 var NAVTREEINDEX39 =
 {
+"classBalloonParty_1_1Game_1_1Coins_1_1CoinWallet.html#a95137ee5c2ccbbca01ced25a6aa9c1a6":[5,0,0,6,1,5,7],
+"classBalloonParty_1_1Game_1_1Coins_1_1CoinWallet.html#a95137ee5c2ccbbca01ced25a6aa9c1a6":[6,0,0,6,1,5,7],
 "classBalloonParty_1_1Game_1_1Coins_1_1CoinWallet.html#a9a0174b220669fad6841ada9b6b2e1cb":[5,0,0,6,1,5,4],
 "classBalloonParty_1_1Game_1_1Coins_1_1CoinWallet.html#a9a0174b220669fad6841ada9b6b2e1cb":[6,0,0,6,1,5,4],
 "classBalloonParty_1_1Game_1_1Coins_1_1CoinWallet.html#ac99e848a0671d92e02f7e01831105fb0":[5,0,0,6,1,5,5],
@@ -247,7 +249,5 @@ var NAVTREEINDEX39 =
 "classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html":[5,0,0,6,4,0],
 "classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html":[6,0,0,6,4,0],
 "classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html#a51771533121d50ffda6a40277086093e":[5,0,0,6,4,0,5],
-"classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html#a51771533121d50ffda6a40277086093e":[6,0,0,6,4,0,5],
-"classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html#a75e9de12fa0d6e027d5d74e48ae44aea":[5,0,0,6,4,0,1],
-"classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html#a75e9de12fa0d6e027d5d74e48ae44aea":[6,0,0,6,4,0,1]
+"classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html#a51771533121d50ffda6a40277086093e":[6,0,0,6,4,0,5]
 };
