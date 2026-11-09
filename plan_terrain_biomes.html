@@ -155,8 +155,8 @@ The smallest version</h2>
 Which levels are ground</h3>
 <ul>
 <li><b>A seeded per-level scenario</b>, computed by a pure <code>ScenarioSchedule.StretchAt(level)</code> from a small block on <code>LevelGenerationSettings</code>. It answers <code>Sky</code> or <code>Ground</code>, the level's place in its stretch and the stretch's length (a <code>ScenarioStretch</code>); <code>ForLevel</code> is the kind alone.<ul>
-<li><b>The first ground level is rolled between 11 and 16</b> (<code>GroundFromLevel</code>, <code>GroundByLevel</code>; revised 2026-11-09, owner: "start to have a chance for it after
-    level 10"). Levels before it are always sky. The roll mixes in the run's seed (<code>IRunSeed</code>, rolled per run and kept through a retry), so each run meets its first meadow on its own level, and the later stretches move with it ("Vary", 2026-11-09). Bushes unlock at 11, the window's start, so whichever level it is, they're there.</li>
+<li><b>The first ground level is rolled between 6 and 8</b> (<code>GroundFromLevel</code>, <code>GroundByLevel</code>; revised 2026-11-09, owner: first "start to have a chance for it after
+    level 10", then "meadow scene could be introduced early", with the bushes moving with it). Levels before it are always sky. The roll mixes in the run's seed (<code>IRunSeed</code>, rolled per run and kept through a retry), so each run meets its first meadow on its own level, and the later stretches move with it ("Vary", 2026-11-09). Bushes unlock at 6, the window's start, so whichever level it is, they're there.</li>
 <li><b>The first meadow is fixed at 4 levels</b>, not rolled: once the run reaches the ground it stays there (owner: "if we enter one we stay there at least n levels").</li>
 <li>After that the run alternates <b>sky stretches of 2–4 levels</b> and <b>ground stretches of 3–5 levels</b>, each with its own min and max. Bot runs put deep levels at about 30–70 s each, so a meadow is about 2–4 minutes. Two levels flickers once the ~4 s transition each way counts; more than five feels stuck on the harder ground.</li>
 <li>Each rolled length hashes the level its stretch starts on with the scenario's own salt, so retuning other content doesn't reshuffle the scenarios, and a retry keeps the same one.</li>
@@ -182,7 +182,7 @@ Which levels are ground</h3>
 <li>The budget the clouds free buys the bushes: once a meadow starts clearing (<code>IsClearingMeadow</code>, cloud share below full), unlocked bushes are always in, even when the threat budget didn't pick them. A puff cloud costs 1 and a bush 2, so the level's total stays about the same while the mix shifts.</li>
 <li>Sky levels keep both full counts. This is the board's puff-cloud actors, not the cloud backdrop's fade.</li>
 </ul>
-<p><b>Bushes only on ground</b> (built 2026-11-09): a <code>RequiresGround</code> flag on <code>GridActorContentEntry</code> (on <code>IContentPiece</code>, always false for balloons and items), set on the shipped bush. <code>LevelGenerator</code> leaves flagged pieces out of a sky level before any budget is spent, so a bush is never a sky level's pick that comes out empty and the budget goes to the rest. One source of truth: the generator and the ground view both ask <code>ScenarioSchedule</code>. A ground-only piece's featured levels still count from its unlock level, so one unlocked on a sky level first shows at the next meadow, unfeatured; the shipped bush unlocks at 11, the start of the first ground level's window.</p><ul>
+<p><b>Bushes only on ground</b> (built 2026-11-09): a <code>RequiresGround</code> flag on <code>GridActorContentEntry</code> (on <code>IContentPiece</code>, always false for balloons and items), set on the shipped bush. <code>LevelGenerator</code> leaves flagged pieces out of a sky level before any budget is spent, so a bush is never a sky level's pick that comes out empty and the budget goes to the rest. One source of truth: the generator and the ground view both ask <code>ScenarioSchedule</code>. A ground-only piece's featured levels still count from its unlock level, so one unlocked on a sky level first shows at the next meadow, unfeatured; the shipped bush unlocks at 6, the start of the first ground level's window.</p><ul>
 <li><b>Triggers</b>: cut to the level's scenario on run start and on an immediate restart (start-level cheat, the skip path); reveal through the mist on the level-up Ascent and on the restart rise after a loss when the two levels' scenarios differ, over the beat's own length. Same scenario on both sides changes nothing.</li>
 </ul>
 <h3><a class="anchor" id="autotoc_md757"></a>
@@ -260,7 +260,7 @@ Phases</h3>
 <h2><a class="anchor" id="autotoc_md762"></a>
 Decisions (signed off 2026-11-08)</h2>
 <ol type="1">
-<li>First ground level <b>16</b>, with the first bushes. Revised 2026-11-09: rolled between 11 and 16, bushes unlocking at 11 and no longer withheld.</li>
+<li>First ground level <b>16</b>, with the first bushes. Revised 2026-11-09: rolled between 11 and 16, bushes unlocking at 11 and no longer withheld. Revised again the same day: rolled between 6 and 8, bushes unlocking at 6.</li>
 <li>Stretches of <b>2–4 levels</b> per scenario. Revised 2026-11-09: ground stretches of 3–5 levels with the first fixed at 4, sky stretches of 2–4, and a meadow clears its puff clouds halfway (see "Which levels are ground").</li>
 <li>Cloud bodies <b>fade out on ground</b>; their shadows stay.</li>
 </ol>
