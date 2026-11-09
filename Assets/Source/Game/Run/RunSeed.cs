@@ -12,8 +12,9 @@ namespace BalloonParty.Game.Run
 
         public int Value => _value;
 
-        // Before LevelDifficultyResolver (Derived) and ScenarioController read it, and while RetryTracker
-        // (Score + 10) still holds the retry level that says whether this reset is a retry.
+        // Before LevelDifficultyResolver (Derived) reads it, and while RetryTracker (Score + 10) still holds the
+        // retry level that says whether this reset is a retry. ScenarioController reads it on RunResetMessage,
+        // after every reset.
         public int ResetOrder => RunResetOrder.Board + 10;
 
         [Inject]

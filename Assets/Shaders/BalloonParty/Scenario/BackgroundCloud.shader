@@ -163,8 +163,10 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
                 float bodyFade = 1.0 - GroundCoverageAt(wp) * _GroundBodyFade;
 
                 // On the ground with the bodies fully faded only the drop shadow is left, so skip the body's
-                // density, gradient and lighting. Coverage is a global today, so every pixel takes the same
-                // side; the LOD taps keep gradients out of the branch (the density RT has no mips anyway).
+                // density, gradient and lighting. At rest coverage is uniform, so every pixel takes the same
+                // side; during a mist reveal the hole's edge splits a quad between the sides, which leaves the
+                // gradient below undefined along a one-pixel ring, harmless there since the body fades to 0
+                // across it. The LOD taps keep gradients out of the branch (the density RT has no mips anyway).
                 [branch] if (bodyFade < 0.001)
                 {
                     #ifdef _SHADOW_ON

@@ -57,5 +57,24 @@ namespace BalloonParty.Configuration.Effects
 
         /// <summary>Time constant, in seconds, for a pushed blade to stand back up.</summary>
         float BladeRecoverySeconds { get; }
+
+        /// <summary>Material using BalloonParty/Scenario/GroundMist — the mist of the sky/ground reveal. Without one
+        /// the scenario switches with a cut.</summary>
+        Material MistMaterial { get; }
+
+        /// <summary>Sorting order for the mist — over the cloud backdrop, under the paint and the board.</summary>
+        int MistSortingOrder { get; }
+
+        /// <summary>Share of a reveal the mist takes to roll in before the hole opens.</summary>
+        float MistInShare { get; }
+
+        /// <summary>World width of the ground's soft edge inside the hole.</summary>
+        float RevealEdgeSoftness { get; }
+
+        /// <summary>World units the mist reaches inside the hole's edge.</summary>
+        float MistReach { get; }
+
+        /// <summary>World units the hole's edge wanders from a circle.</summary>
+        float RevealEdgeWander { get; }
     }
 }

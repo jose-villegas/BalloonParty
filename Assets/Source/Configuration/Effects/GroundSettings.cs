@@ -68,6 +68,29 @@ namespace BalloonParty.Configuration.Effects
         [Min(0.02f)]
         [SerializeField] private float _bladeRecoverySeconds = 0.35f;
 
+        [Header("Mist Reveal")]
+        [Tooltip("Material using BalloonParty/Scenario/GroundMist — the mist the meadow opens out of on the way down and closes back into on the way up. Without one the scenario switches with a cut.")]
+        [SerializeField] private Material _mistMaterial;
+
+        [Tooltip("Sorting order for the mist — over the cloud backdrop (-10), under the paint (0) and the board.")]
+        [SerializeField] private int _mistSortingOrder = -9;
+
+        [Tooltip("Share of a reveal the mist takes to roll in over the sky before the hole opens; the rest is the opening.")]
+        [Range(0.05f, 0.9f)]
+        [SerializeField] private float _mistInShare = 0.35f;
+
+        [Tooltip("World width of the ground's soft edge inside the hole, hidden under the mist.")]
+        [Min(0.01f)]
+        [SerializeField] private float _revealEdgeSoftness = 0.35f;
+
+        [Tooltip("World units the mist reaches inside the hole's edge, thinning as it goes.")]
+        [Min(0.01f)]
+        [SerializeField] private float _mistReach = 1.6f;
+
+        [Tooltip("World units the hole's edge wanders from a circle, so it opens like parting cloud.")]
+        [Min(0f)]
+        [SerializeField] private float _revealEdgeWander = 0.7f;
+
         public Material Material => _material;
         public float OverscanMultiplier => _overscanMultiplier;
         public string SortingLayerName => _sortingLayerName;
@@ -84,5 +107,11 @@ namespace BalloonParty.Configuration.Effects
         public Color BounceReference => _bounceReference;
         public Material WakeMaterial => _wakeMaterial;
         public float BladeRecoverySeconds => _bladeRecoverySeconds;
+        public Material MistMaterial => _mistMaterial;
+        public int MistSortingOrder => _mistSortingOrder;
+        public float MistInShare => _mistInShare;
+        public float RevealEdgeSoftness => _revealEdgeSoftness;
+        public float MistReach => _mistReach;
+        public float RevealEdgeWander => _revealEdgeWander;
     }
 }

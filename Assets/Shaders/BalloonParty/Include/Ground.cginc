@@ -2,11 +2,21 @@
 #define BALLOONPARTY_GROUND_INCLUDED
 
 // The ground's shared globals, all pushed by GroundView. Unset (Launch, edit time) they read 0, so every
-// consumer keeps its sky look.
+// consumer keeps its sky look and no reveal runs.
 
-// How much of the backdrop the ground covers at a world position: 1 = on the ground, 0 = in the sky.
-// Takes the position so a sky/ground edge can vary it per pixel later without touching the consumers.
+// How much of the backdrop the ground covers at rest: 1 = on the ground, 0 = in the sky.
 float _GroundCoverage;
+
+// The mist reveal between sky and ground: the ground shows inside a hole that opens from the middle (sky to
+// ground) or closes back into it (ground to sky), behind a mist that hides the sky around it.
+// x = 1 while a reveal runs (0 = use _GroundCoverage), y = hole radius in world units, z = the edge's soft width,
+// w = how thick the mist is outside the hole (0..1).
+float4 _GroundReveal;
+
+// x = how far the hole's edge wanders from a circle, y = the edge's drift phase (unscaled seconds), zw unused.
+// The hole is centred on the world origin, where the camera sits (the disturbance field and the blade tile
+// assume the same).
+float4 _GroundRevealShape;
 
 // The scenario root's displacement: the ground travels with the board, so a world position shows the
 // ground point (worldPos - _GroundScroll).
@@ -24,8 +34,25 @@ float4 _GroundDirt;
 // ground levels, the way it measures against the sky's clear colour on sky levels.
 float4 _GroundBounceReference;
 
+// Signed world distance from the hole's edge: negative inside, where the ground shows. Two crossing sine waves
+// bend the circle so the mist opens like parting cloud rather than an iris; no texture, so every consumer can
+// afford it.
+float GroundRevealDistance(float2 worldPos)
+{
+    float phase = _GroundRevealShape.y;
+    float wander = sin(worldPos.x * 1.7 + worldPos.y * 0.6 + phase) * 0.55
+                 + sin(worldPos.y * 2.3 - worldPos.x * 0.9 - phase * 1.3) * 0.45;
+    return length(worldPos) + wander * _GroundRevealShape.x - _GroundReveal.y;
+}
+
+// How much of the backdrop the ground covers at a world position: 1 = on the ground, 0 = in the sky.
 float GroundCoverageAt(float2 worldPos)
 {
+    [branch] if (_GroundReveal.x > 0.5)
+    {
+        return 1.0 - smoothstep(-max(_GroundReveal.z, 1e-3), 0.0, GroundRevealDistance(worldPos));
+    }
+
     return saturate(_GroundCoverage);
 }
 

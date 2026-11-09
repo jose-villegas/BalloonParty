@@ -10,7 +10,8 @@
 > First planned 2026-07-12 as a full seeded biome system; never started. Re-scoped
 > 2026-11-08 to the **smallest version that lets bushes ship**: one ground, the
 > per-level scenario, the grass reaction. The full biome system is kept below as *Later*,
-> unscheduled. **Status: phase 1 built, awaiting in-editor review.**
+> unscheduled. **Status: phases 1 and 3 built; phase 2 (the mist reveal) built 2026-11-09,
+> awaiting in-editor review.**
 
 ---
 
@@ -137,10 +138,10 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
   `ScenarioSchedule`. A ground-only piece's featured levels still count from its unlock
   level, so one unlocked on a sky level first shows at the next meadow, unfeatured; the
   shipped bush unlocks at 11, the start of the first ground level's window.
-- **Triggers** (the `TimeOfDayCycle` shape): snap to the level's scenario on run start and
-  run reset (start-level cheat, restart); animate on the level-up Ascent and on the
-  restart rise when the two levels' scenarios differ. Same scenario on both sides changes
-  nothing.
+- **Triggers**: cut to the level's scenario on run start and on an immediate restart
+  (start-level cheat, the skip path); reveal through the mist on the level-up Ascent and on
+  the restart rise after a loss when the two levels' scenarios differ, over the beat's own
+  length. Same scenario on both sides changes nothing.
 
 ### How it looks
 
@@ -182,15 +183,18 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
   cloud shadows drift over the grass, as if the clouds were overhead and out of frame.
   If the bodies stayed, the ground would read as far below and the bushes would float
   again. Climbing back to the sky brings the bodies back.
-- **The transition** rides the scenario root, in either direction. The edge between the
-  two scenarios is a noise-warped line with a white mist fringe (the cloud colour),
-  placed in the root's space halfway between old and new content: local y = −Height/2
-  on the Ascent, +Height/2 on the restart rise. The old scenario is drawn on the old
-  content's side, the new one on the new side, so one rule covers sky→ground,
-  ground→sky, and both restart directions. The ground and the bushes slide in or out
-  together; the edge needs no timing of its own. The switch is armed when the
-  transition starts and takes effect when the root first moves, so nothing pops while
-  the root waits at 0.
+- **The transition is a mist reveal** (owner, 2026-11-09: "the floor levels can just be
+  revealed as a mist that opens up the scenario, and for going back to the sky is the
+  inverse basically"). It replaced an edge that rode the scenario root.
+  - Sky to ground: a mist rolls in over the sky for the first third of the beat, then a
+    hole opens from the middle of the view and grows until the meadow fills it.
+  - Ground to sky plays the same curve backwards: the meadow closes into the mist, which
+    clears to the sky.
+  - The hole's edge wanders from a circle, so it opens like parting cloud, and the mist
+    thins inward across it in frayed wisps.
+  - The reveal runs on unscaled time for the length of the beat it rides on (the Ascent,
+    about 4 s; the restart rise, 5 s), and covers the backdrop only: the boards, the
+    bushes and the balloons travel over it as before.
 - **Dirt and colour**: the floor is muted mid-tone greens, light enough for the time of
   day to read across it and dark enough for the balloons to stand off it. A few large
   bare-dirt clusters (`IGroundSettings` dirt size, threshold and softness) fade into the
@@ -218,9 +222,12 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
 - **Ground levels**: the ground covers every pixel, so the sky-scatter quad is disabled
   (`SkyScatterService` gains a visibility toggle). That swaps the 10-ring sky loop for
   the 3-tap floor plus the blades; measure it at the review gate.
-- **During a transition** (about 4 s, gameplay paused): sky and ground both draw.
-- **CPU**: no per-frame work at rest and no allocations; while a transition runs, one
-  transform read and one material float per frame. `ScenarioSchedule.ForLevel` runs once
+- **During a reveal** (4–5 s, gameplay paused): sky and ground both draw, the floor
+  blends, and a full-screen mist quad (two noise taps) draws over the clouds. Every
+  `GroundCoverageAt` reader pays a uniform branch at rest and two sines and a length while
+  a reveal runs.
+- **CPU**: no per-frame work at rest and no allocations; while a reveal runs, two global
+  vectors per frame. `ScenarioSchedule.ForLevel` runs once
   per level.
 - Not checkable by `dotnet build`: the shader needs an in-editor look and a Frame
   Debugger check of the draw order.
@@ -261,20 +268,14 @@ changes to the Ascent or restart code.
    disturbance field, the sky toggle, the cloud-body fade. Seen in the editor with the
    start-level cheat at 16, firing balls through the grass. *Review: architect,
    test-everything, reviewer, optimizer.*
-2. **Transitions both ways**: the edge in root space on the Ascent and the restart rise,
-   the mist fringe, arm-then-commit. Seen by playing across a scenario flip and by
-   losing on a ground level. Seams to change (architect, phase 1 review):
-   - The restart goes through `IRunResettable.ResetRun`, which runs before the root drops
-     to −Height and can't tell a cinematic restart (rise) from a skip-path one (cut).
-     Move the reset onto `RunResetMessage`: `BoardReset == false` arms a rise edge at
-     +Height/2, `BoardReset == true` and run start snap.
-   - `ActiveScenario` keeps `Kind` as the committed scenario and gains the pending
-     transition (target, edge side); `GroundView` commits when the root first moves. It
-     already feeds the root offset to the meadow (phase 1), so the grass travels with the
-     board.
-   - Phase 1 visible gap until then: the switch is a cut, so on the Ascent the old board
-     floats out over the new backdrop, and on a cinematic restart a ground board sits on
-     the sky for the spawn wait and the rise.
+2. **Transitions both ways, as a mist reveal** (built 2026-11-09): `ScenarioController`
+   moved its restart onto `RunResetMessage`, which tells the loss cinematic's rise
+   (`BoardReset == false`, reveal) from an immediate restart (cut). `ActiveScenario` holds a
+   `ScenarioShift` (the kind and the reveal's length), `GroundRevealCurve` is the pure
+   timing, `GroundView` drives it, and `GroundCoverageAt` follows the hole per pixel, so
+   the floor, the blades, the cloud bodies, the drop shadows and the GI follow with no
+   change of their own. Seen by playing across a scenario flip and by losing on a ground
+   level.
 3. **Bushes on ground only**: `RequiresGround` on the catalogue and in `LevelGenerator`
    (with a test that no sky level contains a ground-only actor; built 2026-11-09, with the
    Configuration README). Bushes un-withheld 2026-11-09. The bush shadow on grass looked right in the editor
@@ -306,6 +307,17 @@ changes to the Ascent or restart code.
 - A level-up within a ground stretch (16 → 17, inside the fixed first meadow): the meadow and the
   bushes travel in together, with nothing sliding over still grass.
 
+## In-editor checks for phase 2
+
+- The reveal into a meadow and back out, by day and at night: no seam at the hole's edge, no
+  blade standing outside it, the cloud bodies gone inside it, and the mist dim at night.
+- Losing on a ground level: the meadow closes into the mist over the restart rise and the
+  run restarts on the sky.
+- The GI during a reveal: no bright bounce from the mist, and balloons over the hole lit
+  against the meadow, over the mist against the sky.
+- Frame Debugger during a reveal: the mist draws after the clouds and before the paint, and
+  the floor blends.
+
 ## Follow-ups from the phase 1 optimizer review
 
 - Shader prewarm: the ground's first draw lands on the first ground level's Ascent;
@@ -316,7 +328,7 @@ changes to the Ascent or restart code.
   a small blit into one texel per blade cell would do it once, and the vertex stage would
   only evaluate the curve. Estimated 0.15–0.3 ms on a Mali-G52-class GPU. A blit, not a
   compute buffer: many Mali GLES drivers can't read storage buffers in the vertex stage.
-- Optional, once the phase 2 edge allows it: draw the cloud shadow inside the ground shader
+- Optional, now that phase 2 blends the floor during a reveal: draw the cloud shadow inside the ground shader
   and turn the cloud pass off on ground levels (one fewer full-screen pass, five taps).
 
 ---
@@ -347,5 +359,5 @@ the one above. In short:
 
 The meadow above is the first biome of that system. When it grows, `ScenarioKind` gains
 more grounds (the schedule rolls which one a ground stretch uses), the meadow shader and
-its grass reaction become the grass biome's runtime look, and the sky/ground edge becomes
-the first boundary.
+its grass reaction become the grass biome's runtime look, and the mist reveal becomes how
+one biome gives way to the next.

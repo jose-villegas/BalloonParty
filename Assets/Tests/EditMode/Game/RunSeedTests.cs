@@ -41,14 +41,13 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void ResetOrder_RunsBeforeTheSeedsReadersAndBeforeTheRetryLevelIsCleared()
+        public void ResetOrder_RunsBeforeTheResolverReadsItAndBeforeTheRetryLevelIsCleared()
         {
+            // ScenarioController reads it on RunResetMessage, after every reset, so it needs no slot here.
             var resolver = RunResetOrder.Derived;
-            var scenario = RunResetOrder.Respawn;
             var retryTracker = new RetryTracker(Substitute.For<BalloonParty.Shared.IRunConfig>()).ResetOrder;
 
             Assert.That(_seed.ResetOrder, Is.LessThan(resolver));
-            Assert.That(_seed.ResetOrder, Is.LessThan(scenario));
             Assert.That(_seed.ResetOrder, Is.LessThan(retryTracker));
         }
     }

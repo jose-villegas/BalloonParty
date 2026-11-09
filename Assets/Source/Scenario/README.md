@@ -50,10 +50,18 @@ drops the board's puff-cloud actors and grows the bushes, so the meadow's clear 
 Sky levels never have bushes: the catalogue flags them `RequiresGround`, and the generator leaves them out.
 Plan: `Plans/PLAN-TerrainBiomes.md`.
 
-- `IActiveScenario` / `ActiveScenario`: the model, the scenario the backdrop shows now, as a
-  `ReactiveProperty<ScenarioKind>`. Written only by `Game/Level/ScenarioController`, which snaps it to the
-  current level on run start and run reset and switches it as a level-up Ascent starts (a cut for now: the
-  old board floats out over the new backdrop).
+- `IActiveScenario` / `ActiveScenario`: the model, the scenario the backdrop is on, as a
+  `ReactiveProperty<ScenarioShift>`: the kind, and the seconds a mist reveal into it takes (0 for a cut).
+  Written only by `Game/Level/ScenarioController`, which cuts to the current level's scenario on run start and
+  on an immediate restart, and reveals it over the beat's own length on a level-up Ascent
+  (`LevelAscendSettings.AscentSeconds`) and on the restart rise after a loss (`RestartRiseSeconds`). A reveal
+  into the scenario already showing changes nothing.
+- The mist reveal (`GroundRevealCurve`, pure): sky to ground, a mist rolls in over the sky
+  (`IGroundSettings.MistInShare`, the first third), then a hole opens from the middle of the view and grows
+  until the meadow fills it. Ground to sky plays the same curve backwards: the meadow closes into the mist,
+  which then clears to the sky. The edge wanders from a circle (`RevealEdgeWander`), so it opens like parting
+  cloud rather than an iris. `GroundRevealPlanner` (pure) decides whether a change cuts, reveals or
+  does nothing, from the shift, the navigation and what is showing.
 - `View/GroundView.cs`: a `MonoBehaviour` the Game scope creates on a new GameObject
   (`RegisterComponentOnNewGameObject`, so no prefab edit), parented under the Game scope's transform: the
   Game scene is preloaded additively, so an unparented object would land in the Launcher and die with it.
@@ -61,17 +69,28 @@ Plan: `Plans/PLAN-TerrainBiomes.md`.
   overscan, sorting order −15: above the sky at −20, below the clouds at −10) on the **Scenario** layer, like
   the sky it replaces, so `SceneCaptureService` captures the meadow for the GI. Both ground shaders write
   colour only (`ColorMask RGB`): the capture's alpha is its sprite-coverage mask, and a full-screen ground
-  writing it would read as one big occluder. Over the quad it builds one mesh of grass blades (`GrassBladeMesh`, drawn through
-  `MeshRendererBuilder` at sorting order −14) with its own material. On ground it shows both, hides the sky
-  (`ISkyBackdrop`, an optional lookup because the sky only registers when its settings are wired) and sets
-  the global `_GroundCoverage` to 1; on sky it reverses all of it. The Launch begin-screen always shows sky
-  (`ShowsGround` is false there). It also pushes `_GroundPatchSize` and `_GroundDirt`,
+  writing it would read as one big occluder. The floor draws through its own instance of the material, so a
+  reveal can switch its blend state without touching the asset. Over the quad it builds one mesh of grass
+  blades (`GrassBladeMesh`, drawn through `MeshRendererBuilder` at sorting order −14) with its own material.
+  At rest on ground it shows both, hides the sky (`ISkyBackdrop`, an optional lookup because the sky only
+  registers when its settings are wired) and sets the global `_GroundCoverage` to 1; on sky it reverses all
+  of it. During a reveal it shows the sky and the ground together, turns on the mist quad, switches the floor
+  to premultiplied blending and pushes the hole each frame (`_GroundReveal`, `_GroundRevealShape`) on unscaled
+  time, like the beats it rides on; at the end it cuts to the target. Entering or leaving the Launch
+  begin-screen cuts (it is always sky); other navigation leaves a running reveal alone, since a restart
+  navigates back to Game just after it starts the reveal. It also pushes `_GroundPatchSize` and `_GroundDirt`,
   so the floor and the blades read the same patches and dirt. The quad stays put, but the meadow scrolls with `ScenarioContentRoot`
   (the global `_GroundScroll`, pushed in `LateUpdate` after the tween moves the root): the bushes stand on
   this ground, so on the Ascent and the restart rise the whole meadow travels in with them. A still ground
   would show them sliding over it. The clouds scroll with the root too, but at a parallax, because they are
-  far away. On destroy it hands the App-owned sky and clouds their sky look back and frees the blade mesh
-  (the floor's quad mesh is shared, so it stays).
+  far away. On destroy it hands the App-owned sky and clouds their sky look back and frees the blade mesh and
+  the floor's material instance (the floor's quad mesh is shared, so it stays).
+- `Shaders/BalloonParty/Scenario/GroundMist.shader`: the reveal's mist, on a second overscanned quad that
+  `GroundView` turns on only while a reveal runs, at sorting order −9 (over the cloud backdrop, under the
+  paint and the board) on the **Default** layer, which `SceneCaptureService` leaves out, so the GI never reads
+  it as a bright bounce. Thick outside the hole, it thins inward over `MistReach` (1.6 world units), frayed by
+  two drifting taps of the shared cloud noise, and it is never thinner than the sky showing through the
+  ground's soft edge, so no seam shows. Lit by the scene light, so it dims at night.
 - `View/GrassBladeMesh.cs`: builds the blade mesh once, from a `GrassBladeLayout` (tile size, spacing,
   seed). A jittered grid over the camera's view plus a margin (`BladeTileMargin`); each blade is a tapered
   five-vertex strip whose vertices all sit on its root, with per-blade randoms for lean, length, shade and sway
@@ -102,12 +121,17 @@ Plan: `Plans/PLAN-TerrainBiomes.md`.
   darker and lighter patches from the shared tileable cloud noise, and a few large bare-dirt clusters (a
   coarse tap for the cluster, a finer one to fray its outline) that fade into the grass. Muted mid-tones, so
   the saturated balloons stand off the ground and the scene light carries the time of day across it; lit
-  per pixel by the scene-light field (`SceneLightTintAt`), so pops and items light it locally too. Opaque by
-  default; its blend factors are exposed for a future sky/ground edge.
+  per pixel by the scene-light field (`SceneLightTintAt`), so pops and items light it locally too. It writes
+  premultiplied colour times the coverage at the pixel: opaque at rest (coverage 1), blended over the sky
+  during a reveal. The blades shorten by the same coverage at their root, so outside the hole they collapse and
+  draw nothing, and the opaque blades need no blending.
 - `Shaders/BalloonParty/Include/Ground.cginc`: the ground's shared globals, all pushed by `GroundView`:
   coverage, scroll, patch size and the dirt settings (`_GroundDirt`), with `GroundPatchUV`, `GroundDirtUV`
-  and `GroundDirtMask` so the floor and the blades read the same patches. `GroundCoverageAt(worldPos)` over
-  `_GroundCoverage`.
+  and `GroundDirtMask` so the floor and the blades read the same patches. `GroundCoverageAt(worldPos)` is
+  `_GroundCoverage` at rest; while a reveal runs (a uniform branch, so rest pays almost nothing) it is the
+  hole: 1 inside, 0 outside, soft over `RevealEdgeSoftness`, from `GroundRevealDistance`, a signed distance
+  from the hole's wandering edge built from two sine waves, with no texture so every reader can afford it.
+  Every reader follows the hole during a reveal with no change of its own.
   `BackgroundCloud` multiplies its cloud bodies by `1 − coverage × _GroundBodyFade` and keeps the drop
   shadows, so on the ground the clouds read as overhead and out of frame, their shadows drifting over the
   grass. With the bodies fully faded it takes a shadow-only branch that skips the body's lighting.

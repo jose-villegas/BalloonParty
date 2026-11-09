@@ -1,11 +1,10 @@
-using BalloonParty.Configuration.Level;
 using UniRx;
 
 namespace BalloonParty.Scenario
 {
-    /// <summary>The scenario the backdrop is showing now: sky or ground.</summary>
+    /// <summary>The scenario the backdrop is on (sky or ground), and whether it got there by a cut or a mist reveal.</summary>
     internal interface IActiveScenario
     {
-        IReadOnlyReactiveProperty<ScenarioKind> Kind { get; }
+        IReadOnlyReactiveProperty<ScenarioShift> Current { get; }
     }
 }

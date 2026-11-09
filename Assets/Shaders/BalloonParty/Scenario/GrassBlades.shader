@@ -152,6 +152,10 @@ Shader "BalloonParty/Scenario/GrassBlades"
                 float dirt = GroundDirtMask(tex2Dlod(_NoiseTex, float4(GroundDirtUV(ground), 0.0, 0.0)).r);
                 float grows = step(dirt, IN.random.w * 0.9 + 0.05) * (1.0 - dirt * 0.6);
 
+                // In a mist reveal, blades outside the hole collapse onto their roots and draw nothing, and those at
+                // its edge shorten into the mist, so the opaque blades need no blending of their own.
+                grows *= GroundCoverageAt(root);
+
                 // Rest lean plus gust waves rolling across the ground, so neighbours sway together.
                 float wave = dot(ground, float2(0.6, 0.8)) / max(_SwayWave, 1e-3) * 6.2832;
                 float sway = sin(_Time.y * _SwaySpeed - wave + IN.random.w * 1.5) * _SwayAmount;

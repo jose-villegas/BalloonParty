@@ -22,8 +22,8 @@ Shader "BalloonParty/Scenario/Ground"
         // Scene-light colour x intensity multiplies the floor: 0 = authored colours always, 1 = fully lit.
         _LightInfluence ("Light Influence",              Range(0, 1))     = 1
 
-        // Opaque by default (One/Zero: no framebuffer read). Exposed so a sky/ground edge can switch the
-        // quad to premultiplied blending while it is partly covered.
+        // Opaque at rest (One/Zero: no framebuffer read). GroundView switches its own instance to premultiplied
+        // (One/OneMinusSrcAlpha) while the mist reveal leaves part of the screen to the sky.
         [HideInInspector] _SrcBlend ("Src Blend", Float) = 1
         [HideInInspector] _DstBlend ("Dst Blend", Float) = 0
     }
@@ -105,7 +105,10 @@ Shader "BalloonParty/Scenario/Ground"
                 // Per pixel and field-aware, like the sprites over it: the time of day, plus the local light of
                 // pops and items where the light field carries it.
                 half3 light = lerp(half3(1.0h, 1.0h, 1.0h), (half3)SceneLightTintAt(IN.worldPos), _LightInfluence);
-                return half4(color * light, 1.0h);
+
+                // Premultiplied, so the same output is right opaque at rest (coverage 1) and blended in a reveal.
+                half coverage = (half)GroundCoverageAt(IN.worldPos);
+                return half4(color * light * coverage, coverage);
             }
             ENDCG
         }

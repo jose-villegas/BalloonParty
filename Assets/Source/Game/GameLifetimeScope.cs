@@ -19,6 +19,7 @@ using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Scenario.View;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Audio.Configuration;
 using BalloonParty.Audio.View;
 
@@ -96,7 +97,8 @@ namespace BalloonParty.Game
         // in the Launcher and be destroyed with it when play starts.
         private void RegisterScopeOwnedViews(IContainerBuilder builder)
         {
-            builder.RegisterComponentOnNewGameObject<GroundView>(Lifetime.Singleton, "Ground").UnderTransform(transform);
+            builder.RegisterComponentOnNewGameObject<GroundView>(Lifetime.Singleton, "Ground")
+                .UnderTransform(transform).AsSelf().As<ITransitionOutgoingContent>();
             builder.RegisterBuildCallback(resolver => resolver.Resolve<GroundView>());
         }
 

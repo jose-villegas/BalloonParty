@@ -1,4 +1,5 @@
 using System;
+using BalloonParty.Shared.Extensions;
 using UnityEngine;
 
 namespace BalloonParty.Configuration.Cinematics
@@ -45,5 +46,24 @@ namespace BalloonParty.Configuration.Cinematics
         public float PopWaveBandSeconds => _popWaveBandSeconds;
         public AnimationCurve RestartRiseCurve => _restartRiseCurve;
         public float RestartBalloonCue => _restartBalloonCue;
+
+        // Wall-clock seconds, for beats that ride along (the scenario's mist reveal). LevelAscendCinematic plays the
+        // descent curve at Speed, so a slower speed stretches it.
+        public float AscentSeconds =>
+            _descentCurve == null ? 0f : _descentCurve.Duration() / (_speed > 0f ? _speed : 1f);
+
+        public float RestartRiseSeconds => _restartRiseCurve == null ? 0f : _restartRiseCurve.Duration();
+
+        // Unity builds the serialized one through the parameterless constructor.
+        internal LevelAscendSettings()
+        {
+        }
+
+        internal LevelAscendSettings(AnimationCurve descentCurve, float speed, AnimationCurve restartRiseCurve)
+        {
+            _descentCurve = descentCurve;
+            _speed = speed;
+            _restartRiseCurve = restartRiseCurve;
+        }
     }
 }
