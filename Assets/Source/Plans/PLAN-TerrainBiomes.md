@@ -16,7 +16,7 @@
 
 ## Why now
 
-Bushes (`GridActorType.Bush`, unlock level 16 in `LevelPacingConfiguration`) are withheld
+Bushes (`GridActorType.Bush` in `LevelPacingConfiguration`) were withheld
 from level generation: over the sky backdrop a bush reads as floating. Owner direction
 (2026-11-08): the scenario moves between sky and ground in both directions ("once bushes
 appear that doesn't mean we should stay there, sometimes we go up away to clouds"), and
@@ -89,9 +89,12 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
   from a small block on `LevelGenerationSettings`. It answers `Sky` or `Ground`, the
   level's place in its stretch and the stretch's length (a `ScenarioStretch`);
   `ForLevel` is the kind alone.
-  - `FirstGroundLevel` (**16**, the bush unlock): levels before it are always sky; this
-    level is always ground, so the bushes' first appearance is reliable.
-  - **The first meadow is fixed at 4 levels** (16–19), not rolled: once the run reaches
+  - **The first ground level is rolled between 11 and 16** (`GroundFromLevel`,
+    `GroundByLevel`; revised 2026-11-09, owner: "start to have a chance for it after
+    level 10"). Levels before it are always sky. The roll hashes the scenario's salt, so
+    every run meets the first meadow on the same level: 11 with the shipped salt. Bushes
+    unlock at 11, the window's start, so whichever level it is, they're there.
+  - **The first meadow is fixed at 4 levels**, not rolled: once the run reaches
     the ground it stays there (owner: "if we enter one we stay there at least n levels").
   - After that the run alternates **sky stretches of 2–4 levels** and **ground stretches
     of 3–5 levels**, each with its own min and max. Bot runs put deep levels at about
@@ -132,7 +135,7 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
   budget goes to the rest. One source of truth: the generator and the ground view both ask
   `ScenarioSchedule`. A ground-only piece's featured levels still count from its unlock
   level, so one unlocked on a sky level first shows at the next meadow, unfeatured; the
-  shipped bush unlocks at 16, the first ground level.
+  shipped bush unlocks at 11, the start of the first ground level's window.
 - **Triggers** (the `TimeOfDayCycle` shape): snap to the level's scenario on run start and
   run reset (start-level cheat, restart); animate on the level-up Ascent and on the
   restart rise when the two levels' scenarios differ. Same scenario on both sides changes
@@ -251,7 +254,7 @@ changes to the Ascent or restart code.
 ### Phases
 
 1. **Ground at rest, with the grass reaction**: `ScenarioSchedule` + tests (determinism,
-   level 16 always ground, stretch bounds, no flips before 16), `GroundSettings`,
+   the first ground level always ground, stretch bounds, no flips before it), `GroundSettings`,
    controller snap on run start/reset, `GroundView`, the meadow shader reading the
    disturbance field, the sky toggle, the cloud-body fade. Seen in the editor with the
    start-level cheat at 16, firing balls through the grass. *Review: architect,
@@ -272,15 +275,15 @@ changes to the Ascent or restart code.
      the sky for the spawn wait and the rise.
 3. **Bushes on ground only**: `RequiresGround` on the catalogue and in `LevelGenerator`
    (with a test that no sky level contains a ground-only actor; built 2026-11-09, with the
-   Configuration README). Still to do: un-withhold bushes once
-   the `Withheld` flag lands, tune the bush shadow on grass, run a playtest-bot
-   comparison. Debug presets (level < 1) skip
+   Configuration README). Bushes un-withheld 2026-11-09. Still to do: tune the bush shadow
+   on grass, run a playtest-bot comparison. Debug presets (level < 1) skip
    `LevelGenerator` and are always sky, so a preset that lists bushes would float them;
    the preset validator should warn.
 
 ## Decisions (signed off 2026-11-08)
 
-1. First ground level **16**, with the first bushes.
+1. First ground level **16**, with the first bushes. Revised 2026-11-09: rolled between
+   11 and 16, bushes unlocking at 11 and no longer withheld.
 2. Stretches of **2–4 levels** per scenario. Revised 2026-11-09: ground stretches of
    3–5 levels with the first fixed at 4, sky stretches of 2–4, and a meadow clears its
    puff clouds halfway (see "Which levels are ground").
@@ -288,7 +291,7 @@ changes to the Ascent or restart code.
 
 ## In-editor checks for phase 1
 
-- The meadow and the grass reaction at game zoom, by day and night (start-level cheat 16).
+- The meadow and the grass reaction at game zoom, by day and night (start-level cheat 11).
 - Frame Debugger: the ground draws before the clouds and the smoke, and the sky quad is
   gone on ground levels.
 - The GI: on ground levels the capture sees the meadow in place of the sky, so check

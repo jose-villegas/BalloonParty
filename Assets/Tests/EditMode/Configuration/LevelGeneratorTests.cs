@@ -626,7 +626,7 @@ namespace BalloonParty.Tests.Configuration
         [Test]
         public void Generate_TheFirstMeadow_ThinsItsPuffCloudsThenClears([Values(0, 1, 7)] int seed)
         {
-            // The default schedule: levels 16-19 are the first ground stretch, fixed at 4 levels.
+            // The pinned schedule (see Settings): levels 16-19 are the first ground stretch, fixed at 4 levels.
             var settings = Settings(gridActors: new[]
             {
                 new GridActorContentEntry(GridActorType.Puff, 1, 0, new RangedInt(6, 12), new RangedInt(6, 12), 0, 5),
@@ -843,14 +843,15 @@ namespace BalloonParty.Tests.Configuration
             return new GridActorContentEntry(type, unlock, cost, new RangedInt(1, 1), new RangedInt(1, 1), 0);
         }
 
-        // Featured defaults to 1 (the unlock level only) and both budgets to 0 unless a test sets them.
+        // Featured defaults to 1 (the unlock level only) and both budgets to 0 unless a test sets them. The first
+        // meadow is pinned to levels 16-19, so the scenario tests don't follow the shipped roll.
         private static LevelGenerationSettings Settings(
             BudgetFormula? threat = null, BudgetFormula? aid = null,
             IntLevelStep[] colors = null, IntLevelStep[] boardLines = null, ItemCountStep[] itemCounts = null,
             BalloonContentEntry[] balloons = null, ItemContentEntry[] items = null,
             GridActorContentEntry[] gridActors = null, int itemCadence = 1, int featuredLevels = 1)
         {
-            return new LevelGenerationSettings(
+            var settings = new LevelGenerationSettings(
                 threat ?? new BudgetFormula(0f, 0f, 0f),
                 aid ?? new BudgetFormula(0f, 0f, 0f),
                 colors ?? new[] { new IntLevelStep(1, 1) },
@@ -861,6 +862,8 @@ namespace BalloonParty.Tests.Configuration
                 gridActors ?? Array.Empty<GridActorContentEntry>(),
                 itemCadence,
                 featuredLevels: featuredLevels);
+            SetScenario(settings, new ScenarioScheduleSettings(16, 4, 3, 5, 2, 4, 7919));
+            return settings;
         }
     }
 }

@@ -10,9 +10,12 @@ namespace BalloonParty.Configuration.Level
     [Serializable]
     internal class ScenarioScheduleSettings
     {
-        [Tooltip("Every level before this one is sky; this level is always ground, so whatever needs ground " +
-                 "(bushes) first appears here.")]
-        [SerializeField] [Min(1)] private int _firstGroundLevel = 16;
+        [Tooltip("Every level before this one is sky. From here the first ground stretch can start: its first " +
+                 "level is rolled between this and Ground By Level, so whatever needs ground (bushes) can appear.")]
+        [SerializeField] [Min(1)] private int _groundFromLevel = 11;
+
+        [Tooltip("The first ground stretch has started by this level at the latest.")]
+        [SerializeField] [Min(1)] private int _groundByLevel = 16;
 
         [Tooltip("Length of the first ground stretch, fixed rather than rolled: once the run reaches the ground " +
                  "it stays there at least this many levels.")]
@@ -34,7 +37,8 @@ namespace BalloonParty.Configuration.Level
                  "content doesn't reshuffle which levels are ground.")]
         [SerializeField] private int _salt = 7919;
 
-        public int FirstGroundLevel => Mathf.Max(1, _firstGroundLevel);
+        public int GroundByLevel => Mathf.Max(1, _groundByLevel);
+        public int GroundFromLevel => Mathf.Clamp(_groundFromLevel, 1, GroundByLevel);
         public int FirstGroundStretch => Mathf.Max(1, _firstGroundStretch);
         public int MinGroundStretch => Mathf.Max(1, _minGroundStretch);
         public int MaxGroundStretch => Mathf.Max(MinGroundStretch, _maxGroundStretch);
@@ -47,10 +51,12 @@ namespace BalloonParty.Configuration.Level
         {
         }
 
-        internal ScenarioScheduleSettings(int firstGroundLevel, int firstGroundStretch, int minGroundStretch,
-            int maxGroundStretch, int minSkyStretch, int maxSkyStretch, int salt)
+        // Without groundFromLevel the first ground level is groundByLevel, fixed.
+        internal ScenarioScheduleSettings(int groundByLevel, int firstGroundStretch, int minGroundStretch,
+            int maxGroundStretch, int minSkyStretch, int maxSkyStretch, int salt, int groundFromLevel = 0)
         {
-            _firstGroundLevel = firstGroundLevel;
+            _groundByLevel = groundByLevel;
+            _groundFromLevel = groundFromLevel > 0 ? groundFromLevel : groundByLevel;
             _firstGroundStretch = firstGroundStretch;
             _minGroundStretch = minGroundStretch;
             _maxGroundStretch = maxGroundStretch;

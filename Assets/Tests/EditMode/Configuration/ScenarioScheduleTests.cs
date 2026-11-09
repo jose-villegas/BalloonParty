@@ -58,7 +58,7 @@ namespace BalloonParty.Tests.Configuration
         {
             var settings = new ScenarioScheduleSettings();
 
-            Assert.AreEqual(16, settings.FirstGroundLevel);
+            Assert.AreEqual((11, 16), (settings.GroundFromLevel, settings.GroundByLevel));
             Assert.AreEqual(4, settings.FirstGroundStretch);
             Assert.AreEqual((3, 5), (settings.MinGroundStretch, settings.MaxGroundStretch));
             Assert.AreEqual((2, 4), (settings.MinSkyStretch, settings.MaxSkyStretch));
@@ -162,10 +162,36 @@ namespace BalloonParty.Tests.Configuration
         {
             var settings = Schedule(first: 0, firstStretch: 0, minGround: 0, maxGround: 0, minSky: -1, maxSky: -1);
 
-            Assert.AreEqual(1, settings.FirstGroundLevel);
+            Assert.AreEqual(1, ScenarioSchedule.FirstGroundLevel(settings));
             Assert.AreEqual(ScenarioKind.Ground, ScenarioSchedule.ForLevel(settings, 1));
             Assert.AreEqual(ScenarioKind.Sky, ScenarioSchedule.ForLevel(settings, 2));
             Assert.AreEqual(ScenarioKind.Ground, ScenarioSchedule.ForLevel(settings, 3));
+        }
+
+        [Test]
+        public void TheFirstGroundLevel_IsRolledWithinItsWindow_AndTheSkyHoldsUntilThen()
+        {
+            var seen = new System.Collections.Generic.HashSet<int>();
+            for (var salt = 0; salt < 200; salt++)
+            {
+                var settings = Schedule(salt: salt, from: 11);
+                var first = ScenarioSchedule.FirstGroundLevel(settings);
+
+                Assert.That(first, Is.InRange(11, 16), $"salt {salt}");
+                Assert.AreEqual(ScenarioKind.Sky, ScenarioSchedule.ForLevel(settings, first - 1), $"salt {salt}");
+                AssertStretch(ScenarioSchedule.StretchAt(settings, first), ScenarioKind.Ground, 0, 4);
+                seen.Add(first);
+            }
+
+            Assert.AreEqual(6, seen.Count, "every level in the window can open the first meadow");
+        }
+
+        [Test]
+        public void AWindowAfterItsLatestLevel_IsTheLatestLevel()
+        {
+            var settings = Schedule(first: 12, from: 20);
+
+            Assert.AreEqual(12, ScenarioSchedule.FirstGroundLevel(settings));
         }
 
         [Test]
@@ -261,10 +287,11 @@ namespace BalloonParty.Tests.Configuration
             Assert.AreEqual(736111262, settings.SeedForLevel(250));
         }
 
+        // first is the latest level the first meadow can start on; without from, it starts there exactly.
         private static ScenarioScheduleSettings Schedule(int first = 16, int firstStretch = 4, int minGround = 3,
-            int maxGround = 5, int minSky = 2, int maxSky = 4, int salt = 7919)
+            int maxGround = 5, int minSky = 2, int maxSky = 4, int salt = 7919, int from = 0)
         {
-            return new ScenarioScheduleSettings(first, firstStretch, minGround, maxGround, minSky, maxSky, salt);
+            return new ScenarioScheduleSettings(first, firstStretch, minGround, maxGround, minSky, maxSky, salt, from);
         }
 
         private static void AssertStretch(ScenarioStretch stretch, ScenarioKind kind, int position, int length)
