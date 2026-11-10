@@ -6,7 +6,7 @@ var classBalloonParty_1_1Scenario_1_1View_1_1ScenarioGradeView =
     [ "LateUpdate", "classBalloonParty_1_1Scenario_1_1View_1_1ScenarioGradeView.html#a4dd54390c2ef4749ed73225919fa8bca", null ],
     [ "OnDestroy", "classBalloonParty_1_1Scenario_1_1View_1_1ScenarioGradeView.html#a214a8a73bc9cc4a3ed7475be2e65cc1d", null ],
     [ "Start", "classBalloonParty_1_1Scenario_1_1View_1_1ScenarioGradeView.html#a5683439d01550c993d6a985651707cbd", null ],
-    [ "Trackball", "classBalloonParty_1_1Scenario_1_1View_1_1ScenarioGradeView.html#a37ad0d83267e0b1bafdc67e5783aeca7", null ],
+    [ "Trackball", "classBalloonParty_1_1Scenario_1_1View_1_1ScenarioGradeView.html#a5ba80be3fc7cce11eaeafa100cfe9892", null ],
     [ "_adjustments", "classBalloonParty_1_1Scenario_1_1View_1_1ScenarioGradeView.html#a1829a4ca29de6612ef47d73b99660983", null ],
     [ "_applied", "classBalloonParty_1_1Scenario_1_1View_1_1ScenarioGradeView.html#a6d5073b35ed9c737240742ad75a62635", null ],
     [ "_cameraData", "classBalloonParty_1_1Scenario_1_1View_1_1ScenarioGradeView.html#ab1134dcff2c03e6dd08d5a8203189e86", null ],

@@ -382,7 +382,7 @@ var searchData=
   ['traceto_379',['TraceTo',['../classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#ac84cb03f2b24fcd93f51f31c1c05373a',1,'BalloonParty::UI::Score::FlyingTrail']]],
   ['track_380',['Track',['../classBalloonParty_1_1Projectile_1_1ProjectileRegistry.html#aaa1cf7dff25cace576d764513132f25c',1,'BalloonParty::Projectile::ProjectileRegistry']]],
   ['track_20any_20time_20separable_20commits_381',['Live repoint track (any time; separable commits)',['../plan_shot_solver_accuracy.html#autotoc_md757',1,'']]],
-  ['trackball_382',['Trackball',['../classBalloonParty_1_1Scenario_1_1View_1_1ScenarioGradeView.html#a37ad0d83267e0b1bafdc67e5783aeca7',1,'BalloonParty::Scenario::View::ScenarioGradeView']]],
+  ['trackball_382',['Trackball',['../classBalloonParty_1_1Scenario_1_1View_1_1ScenarioGradeView.html#a5ba80be3fc7cce11eaeafa100cfe9892',1,'BalloonParty::Scenario::View::ScenarioGradeView']]],
   ['tracked_383',['Tracked',['../structBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce_1_1Tracked.html',1,'BalloonParty.Projectile.Controller.ActiveProjectilePierce.Tracked'],['../structBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce_1_1Tracked.html#a90b6106f9b5061b3da539902f18a05c8',1,'BalloonParty.Projectile.Controller.ActiveProjectilePierce.Tracked.Tracked()']]],
   ['trackedtrail_384',['TrackedTrail',['../classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicStateEntry.html#a381118f5ee6ae2913f4fe91379b3f609',1,'BalloonParty::Configuration::Cinematics::CinematicStateEntry']]],
   ['trackedtrailsettings_385',['TrackedTrailSettings',['../classBalloonParty_1_1Configuration_1_1Cinematics_1_1TrackedTrailSettings.html',1,'BalloonParty::Configuration::Cinematics']]],

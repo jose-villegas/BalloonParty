@@ -1,5 +1,9 @@
 var NAVTREEINDEX106 =
 {
+"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#aeb3ea57f8fd829e3c5e93e65df9f0a1d":[5,0,0,6,9,2,1],
+"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#aeb3ea57f8fd829e3c5e93e65df9f0a1d":[6,0,0,6,9,2,1],
+"structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html":[5,0,0,6,9,3],
+"structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html":[6,0,0,6,9,3],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html#a36d537a6da2484b955601e4153ff7049":[5,0,0,6,9,3,2],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html#a36d537a6da2484b955601e4153ff7049":[6,0,0,6,9,3,2],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html#a6d3ab8625506e5ae6ab79881c8d8e1c9":[5,0,0,6,9,3,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX106 =
 "structBalloonParty_1_1Item_1_1ItemSightHit.html#ab0e7ad2fae66eb0ea3b098adced72ac1":[5,0,0,7,19,1],
 "structBalloonParty_1_1Item_1_1ItemSightHit.html#ab0e7ad2fae66eb0ea3b098adced72ac1":[6,0,0,7,19,1],
 "structBalloonParty_1_1Item_1_1ItemSightHit.html#ab64897c8db3b480737f91f9cee32f3cd":[5,0,0,7,19,0],
-"structBalloonParty_1_1Item_1_1ItemSightHit.html#ab64897c8db3b480737f91f9cee32f3cd":[6,0,0,7,19,0],
-"structBalloonParty_1_1Item_1_1ItemSightHit.html#ae69b39b63c16f2c252e77f67775bcdbe":[5,0,0,7,19,2],
-"structBalloonParty_1_1Item_1_1ItemSightHit.html#ae69b39b63c16f2c252e77f67775bcdbe":[6,0,0,7,19,2],
-"structBalloonParty_1_1Item_1_1ItemSightTracker_1_1SightedItem.html":[5,0,0,7,21,0],
-"structBalloonParty_1_1Item_1_1ItemSightTracker_1_1SightedItem.html":[6,0,0,7,21,0]
+"structBalloonParty_1_1Item_1_1ItemSightHit.html#ab64897c8db3b480737f91f9cee32f3cd":[6,0,0,7,19,0]
 };
