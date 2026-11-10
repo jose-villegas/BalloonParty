@@ -29,6 +29,15 @@ Shader "BalloonParty/Scenario/Water"
         // World units between the sand's ripple bands, and how much they shade it.
         _SandRippleSize   ("Sand Ripple Size (world)",    Float)          = 0.7
         _SandRippleStrength("Sand Ripple Strength",       Range(0, 0.5))  = 0.12
+        // The sand's grains, lit by the scene light (FloorDetail.cginc): their bump shades toward the light, and a
+        // share of them glints when it faces it.
+        [NoScaleOffset] _DetailTex ("Detail (R height, GB slope, A speckle)", 2D) = "gray" {}
+        _DetailSize       ("Grain Tile Size (world)",     Float)          = 2
+        _DetailRelief     ("Grain Relief",                Range(0, 1))    = 0.3
+        _DetailSpeckle    ("Grain Speckle",               Range(0, 0.5))  = 0.15
+        // The share of grains that glint, flagged from the speckle's flattened histogram.
+        _DetailSparkleShare("Grain Sparkle Share",        Range(0, 0.3))  = 0.06
+        _DetailSparkle    ("Grain Sparkle Strength",      Range(0, 1))    = 0.5
 
         [Header(Water Body)]
         // The colour the water scatters back: what deep water turns to.
@@ -137,6 +146,7 @@ Shader "BalloonParty/Scenario/Water"
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
             #include "../Include/WaterSurface.cginc"
+            #include "../Include/FloorDetail.cginc"
 
             #define TAU 6.2831853
 
@@ -148,6 +158,12 @@ Shader "BalloonParty/Scenario/Water"
             float  _DeepDepth;
             float  _SandRippleSize;
             half   _SandRippleStrength;
+            sampler2D _DetailTex;
+            float  _DetailSize;
+            half   _DetailRelief;
+            half   _DetailSpeckle;
+            half   _DetailSparkleShare;
+            half   _DetailSparkle;
             half4  _WaterColor;
             float4 _Absorption;
             float  _Perspective;
@@ -250,13 +266,19 @@ Shader "BalloonParty/Scenario/Water"
                 return smoothstep(0.0h, 1.0h, 0.5h + (noise - 0.5h) * (1.0h + 3.0h * _DepthContrast));
             }
 
-            // The sand: ripple bands bent by the noise, as the current leaves them, over a mottle.
-            half3 SandAt(float2 bottomPos)
+            // The sand: ripple bands bent by the noise, as the current leaves them, over a mottle, and its grains
+            // (at grainPos) lit from the light's direction at worldPos.
+            half3 SandAt(float2 bottomPos, float2 grainPos, float2 worldPos)
             {
                 float size = max(_SandRippleSize, 1e-3);
                 half mottle = tex2D(_NoiseTex, bottomPos / (size * 5.0) + float2(0.53, 0.29)).r;
                 half bands = (half)sin(dot(bottomPos, float2(0.83, 0.55)) / size * TAU + mottle * 9.0);
-                return _SandColor.rgb * (lerp(0.86h, 1.06h, mottle) + bands * _SandRippleStrength);
+                FloorDetailLook look;
+                look.size = _DetailSize;
+                look.amounts = half4(_DetailRelief, _DetailSpeckle, _DetailSparkleShare, _DetailSparkle);
+                half2 grains = FloorDetailAt(_DetailTex, look, grainPos, worldPos);
+                return _SandColor.rgb * (lerp(0.86h, 1.06h, mottle) + bands * _SandRippleStrength) * grains.x
+                     + grains.y;
             }
 
             half4 frag(v2f IN) : SV_Target
@@ -271,12 +293,16 @@ Shader "BalloonParty/Scenario/Water"
                 // Seen from a camera above the middle of the screen (the world origin): a deeper bottom shows a wider
                 // patch of itself, so it shrinks toward the middle and slides slower than the surface when the board
                 // scrolls. Through the surface: its slope bends the view, more over deeper water.
-                float2 bottomPos = GroundPointAt(wp * (1.0 + depth * _Perspective)) + slope * (depth * _Refraction);
+                float2 seenPos = GroundPointAt(wp * (1.0 + depth * _Perspective));
+                float2 bottomPos = seenPos + slope * (depth * _Refraction);
+                // The grains are too fine to bend with the rest: the surface's slope changes faster than they
+                // repeat, and smears them into contour lines. A little of the bend keeps them on the moving sand.
+                float2 grainPos = seenPos + slope * (depth * _Refraction * 0.15);
 
                 // The sand and the light the surface focuses on it, which reaches the deep bottom weaker and softer.
                 // Shaded around the sand's own colour, so nothing blooms.
                 half3 caustic = CausticAt(bottomPos, deep) * (_CausticStrength * lerp(1.0h, 0.45h, deep));
-                half3 bottom = SandAt(bottomPos) * (1.0h - 0.3h * _CausticStrength)
+                half3 bottom = SandAt(bottomPos, grainPos, wp) * (1.0h - 0.3h * _CausticStrength)
                              * lerp(half3(1.0h, 1.0h, 1.0h), _CausticColor.rgb * 1.6h, saturate(caustic));
                 bottom *= 1.0h + clamp((half)ripple.z * _RippleFocus, -0.25h, 0.7h);
 

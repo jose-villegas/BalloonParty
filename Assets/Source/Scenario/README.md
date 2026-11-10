@@ -128,13 +128,14 @@ Plan: `Plans/PLAN-TerrainBiomes.md`.
   blades snap down as the ball passes and stand back up quickly behind it. Field-sized, in the field's UV
   space, half-float (the push is signed): one small blit and one copy a frame. Restarted each time the ground
   appears, so a push the field still holds doesn't land on the blades at once.
-- `Shaders/BalloonParty/Scenario/Ground.shader`: the floor under the blades, three taps per pixel: soft
+- `Shaders/BalloonParty/Scenario/Ground.shader`: the floor under the blades, five taps per pixel: soft
   darker and lighter patches from the shared tileable cloud noise, and a few large bare-dirt clusters (a
-  coarse tap for the cluster, a finer one to fray its outline) that fade into the grass. Muted mid-tones, so
-  the saturated balloons stand off the ground and the scene light carries the time of day across it; lit
-  per pixel by the scene-light field (`SceneLightTintAt`), so pops and items light it locally too. It writes
-  premultiplied colour times the coverage at the pixel: opaque at rest (coverage 1), blended over the sky
-  during a reveal. The blades shorten by the same coverage at their root, so outside the hole they collapse and
+  coarse tap for the cluster, a finer one to fray its outline) that fade into the grass, all over granular
+  microdetail (`Include/FloorDetail.cginc`, two taps) that the scene light rakes and a few grains glint in.
+  Muted mid-tones, so the saturated balloons stand off the ground and the scene light carries the time of
+  day across it; lit per pixel by the scene-light field (`SceneLightTintAt`), so pops and items light it
+  locally too. It writes premultiplied colour times the coverage at the pixel: opaque at rest (coverage 1),
+  blended over the sky during a reveal. The blades shorten by the same coverage at their root, so outside the hole they collapse and
   draw nothing, and the opaque blades need no blending.
 - `Shaders/BalloonParty/Include/Ground.cginc`: the ground's shared globals, all pushed by `GroundView`:
   coverage, scroll, patch size and the dirt settings (`_GroundDirt`), with `GroundPatchUV`, `GroundDirtUV`
@@ -176,8 +177,9 @@ bounce reference to `WaterBounceReference`.
   between them. It is seen as from a camera above the middle of the screen: a deeper bottom shrinks
   toward the middle and slides slower when the board scrolls, and the surface's slope bends the view of
   it more over deep water.
-  The sand carries ripple bands and the caustic net (below), shaded around the sand's own colour, never
-  added past it. The water over it absorbs each colour by its own rate per world unit (red first, blue
+  The sand carries ripple bands, lit grains (`Include/FloorDetail.cginc`, read nearly unbent by the surface:
+  bent fully, grains this fine smear into contour lines) and the caustic net (below), shaded around the
+  sand's own colour, never added past it. The water over it absorbs each colour by its own rate per world unit (red first, blue
   last) and scatters its own colour back, so shallows read as sand and deep water as teal. Each simulated
   wave throws a bright band and a dark band on the sand (light focused under its trough, spread under its
   crest) and sheens the surface, whatever the sun's angle; crests read a little lighter and troughs darker.

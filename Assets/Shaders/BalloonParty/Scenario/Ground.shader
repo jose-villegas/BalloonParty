@@ -18,6 +18,17 @@ Shader "BalloonParty/Scenario/Ground"
         _DirtColor      ("Dirt Colour",                  Color)           = (0.46, 0.38, 0.26, 1)
         _DirtDarkColor  ("Dirt Shade Colour",            Color)           = (0.36, 0.29, 0.20, 1)
 
+        [Header(Microdetail)]
+        // Grains lit by the scene light (FloorDetail.cginc): their bump shades toward the light, and a share of
+        // them glints when it faces it.
+        [NoScaleOffset] _DetailTex ("Detail (R height, GB slope, A speckle)", 2D) = "gray" {}
+        _DetailSize     ("Detail Tile Size (world)",     Float)           = 2.5
+        _DetailRelief   ("Relief",                       Range(0, 1))     = 0.35
+        _DetailSpeckle  ("Speckle",                      Range(0, 0.5))   = 0.12
+        // The share of grains that glint, flagged from the speckle's flattened histogram.
+        _DetailSparkleShare ("Sparkle Share",            Range(0, 0.3))   = 0.04
+        _DetailSparkle  ("Sparkle Strength",             Range(0, 1))     = 0.3
+
         [Header(Lighting)]
         // Scene-light colour x intensity multiplies the floor: 0 = authored colours always, 1 = fully lit.
         _LightInfluence ("Light Influence",              Range(0, 1))     = 1
@@ -55,6 +66,7 @@ Shader "BalloonParty/Scenario/Ground"
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
             #include "../Include/Ground.cginc"
+            #include "../Include/FloorDetail.cginc"
 
             sampler2D _NoiseTex;
             half4  _SoilColor;
@@ -63,6 +75,12 @@ Shader "BalloonParty/Scenario/Ground"
             half4  _DirtColor;
             half4  _DirtDarkColor;
             half   _LightInfluence;
+            sampler2D _DetailTex;
+            float  _DetailSize;
+            half   _DetailRelief;
+            half   _DetailSpeckle;
+            half   _DetailSparkleShare;
+            half   _DetailSparkle;
 
             struct appdata_t
             {
@@ -75,6 +93,7 @@ Shader "BalloonParty/Scenario/Ground"
                 // xy = colour-patch UV, zw = dirt-patch UV, both in ground space (they travel with the board).
                 float4 patchUV  : TEXCOORD0;
                 float2 worldPos : TEXCOORD1;
+                float2 ground   : TEXCOORD2;
             };
 
             v2f vert(appdata_t IN)
@@ -85,6 +104,7 @@ Shader "BalloonParty/Scenario/Ground"
                 float2 ground = GroundPointAt(wp);
                 OUT.patchUV = float4(GroundPatchUV(ground), GroundDirtUV(ground));
                 OUT.worldPos = wp;
+                OUT.ground = ground;
                 return OUT;
             }
 
@@ -101,6 +121,12 @@ Shader "BalloonParty/Scenario/Ground"
                 half dirt = (half)GroundDirtMask(dirtNoise);
                 half3 soil = lerp(_DirtDarkColor.rgb, _DirtColor.rgb, patchMix);
                 half3 color = lerp(grass, soil, dirt);
+
+                FloorDetailLook look;
+                look.size = _DetailSize;
+                look.amounts = half4(_DetailRelief, _DetailSpeckle, _DetailSparkleShare, _DetailSparkle);
+                half2 detail = FloorDetailAt(_DetailTex, look, IN.ground, IN.worldPos);
+                color = color * detail.x + detail.y;
 
                 // Per pixel and field-aware, like the sprites over it: the time of day, plus the local light of
                 // pops and items where the light field carries it.

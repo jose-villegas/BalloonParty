@@ -23,12 +23,21 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _DetailTex:
+        m_Texture: {fileID: 2800000, guid: 59714f7282df40f18cc27ba035608618, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _NoiseTex:
         m_Texture: {fileID: 2800000, guid: 7b72793e0d38043d3aeba7c3a42b4ac0, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _DetailRelief: 0.35
+    - _DetailSize: 2.5
+    - _DetailSparkle: 0.3
+    - _DetailSparkleShare: 0.04
+    - _DetailSpeckle: 0.12
     - _DstBlend: 0
     - _LightInfluence: 1
     - _PatchContrast: 0.5
