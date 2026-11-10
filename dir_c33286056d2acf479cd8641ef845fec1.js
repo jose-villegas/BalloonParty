@@ -4,6 +4,7 @@ var dir_c33286056d2acf479cd8641ef845fec1 =
     [ "Coins", "dir_21bfe178033eb8267bf26edce0dc11fb.html", "dir_21bfe178033eb8267bf26edce0dc11fb" ],
     [ "Danger", "dir_ea8901c9b65b82ddfefe553bb5e6f778.html", "dir_ea8901c9b65b82ddfefe553bb5e6f778" ],
     [ "Flight", "dir_54dfc3c3e1c0be8bd88c3a687b075396.html", "dir_54dfc3c3e1c0be8bd88c3a687b075396" ],
+    [ "HeadsUp", "dir_d955aeccaf1e6692fb7321b08413529a.html", "dir_d955aeccaf1e6692fb7321b08413529a" ],
     [ "Health", "dir_42b345f2f3a58052820f618a9de5aac3.html", "dir_42b345f2f3a58052820f618a9de5aac3" ],
     [ "Level", "dir_8de3dc161ea18e5e682bc57466d2b700.html", "dir_8de3dc161ea18e5e682bc57466d2b700" ],
     [ "Run", "dir_a922d0da53072a69a8c84216d9a53ba4.html", "dir_a922d0da53072a69a8c84216d9a53ba4" ],

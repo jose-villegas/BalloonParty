@@ -10,5 +10,6 @@ var searchData=
   ['white_7',['White',['../classBalloonParty_1_1Editor_1_1TexturePreviewBox.html#a662dd72e21599cd7f7c2fa03b554be41a25a81701fbfa4a1efdf660a950c1d006',1,'BalloonParty::Editor::TexturePreviewBox']]],
   ['wildcardstreak_8',['WildcardStreak',['../namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762ab3fb6cd550a52ce3f69b60a4261937fa',1,'BalloonParty::Slots::Capabilities']]],
   ['windloop_9',['WindLoop',['../namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a1132018798d67c0560eab02d41351bc5',1,'BalloonParty::Audio']]],
-  ['withoverride_10',['WithOverride',['../classBalloonParty_1_1Editor_1_1TextureAuditWindow.html#afea50b1b4489df1732b43dacd5e498b5ab4950f5aff1ad58d2905ee02a0ab03c8',1,'BalloonParty::Editor::TextureAuditWindow']]]
+  ['withoverride_10',['WithOverride',['../classBalloonParty_1_1Editor_1_1TextureAuditWindow.html#afea50b1b4489df1732b43dacd5e498b5ab4950f5aff1ad58d2905ee02a0ab03c8',1,'BalloonParty::Editor::TextureAuditWindow']]],
+  ['writing_11',['Writing',['../classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a331fe9b3c5a1628e11d7fc47df206b69aaf96ab416602c6852b1ba5201feaacf6',1,'BalloonParty::UI::HeadsUp::HandwrittenHeadsUp']]]
 ];

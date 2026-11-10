@@ -111,114 +111,181 @@ $(function(){initNavTree('classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeads
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pac-methods">Package Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
+<a href="#pri-types">Private Types</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">BalloonParty.UI.HeadsUp.HandwrittenHeadsUp Class Reference</div></div>
+  <div class="headertitle"><div class="title">BalloonParty.UI.HeadsUp.HandwrittenHeadsUp Class Reference<span class="mlabels"><span class="mlabel sealed">sealed</span></span></div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>One short handwritten line in world space (a <code>TextMeshPro</code>, not on a canvas), so it sits where it happened through the camera rig's zoom and shake: written on in pencil, held, then faded out.  
+<p>One short handwritten line in world space (a <code>TextMeshPro</code>, not on a canvas), so it sits where it happened through the camera rig's zoom and shake: written on in pencil, held, then faded out, or held until released.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.UI.HeadsUp.HandwrittenHeadsUp:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp__inherit__graph.svg" width="198" height="124"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp__inherit__graph.svg" width="347" height="139"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.UI.HeadsUp.HandwrittenHeadsUp:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp__coll__graph.svg" width="307" height="228"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp__coll__graph.svg" width="100%" height="459"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ade3117f564bc89d95966e12fc9d6f103" id="r_ade3117f564bc89d95966e12fc9d6f103"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade3117f564bc89d95966e12fc9d6f103">Clear</a> ()</td></tr>
-<tr class="memdesc:ade3117f564bc89d95966e12fc9d6f103"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fades the line out now, if one is showing.  <br /></td></tr>
-<tr class="separator:ade3117f564bc89d95966e12fc9d6f103"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6fe15a76448e5c02705e33475098fcbd" id="r_a6fe15a76448e5c02705e33475098fcbd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6fe15a76448e5c02705e33475098fcbd">Show</a> (string text, Vector2 worldPosition)</td></tr>
-<tr class="memdesc:a6fe15a76448e5c02705e33475098fcbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes <em>text</em>  at <em>worldPosition</em> .  <br /></td></tr>
-<tr class="separator:a6fe15a76448e5c02705e33475098fcbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3987c31286948467aa49afefb871af86" id="r_a3987c31286948467aa49afefb871af86"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3987c31286948467aa49afefb871af86">Show</a> (string text, Vector2 worldPosition, <a class="el" href="structBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpStyle.html">HeadsUpStyle</a> style, int count=1)</td></tr>
-<tr class="memdesc:a3987c31286948467aa49afefb871af86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes <em>text</em>  in <em>style</em> , sized for an escalating <em>count</em>  (1 = the first).  <br /></td></tr>
-<tr class="separator:a3987c31286948467aa49afefb871af86"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a918f91ed5d8981dd5cc8d049a16fdb89" id="r_a918f91ed5d8981dd5cc8d049a16fdb89"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a918f91ed5d8981dd5cc8d049a16fdb89">ShowUntilCleared</a> (string text, Vector2 worldPosition, <a class="el" href="structBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpStyle.html">HeadsUpStyle</a> style)</td></tr>
-<tr class="memdesc:a918f91ed5d8981dd5cc8d049a16fdb89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes <em>text</em>  in <em>style</em>  and keeps it up until <a class="el" href="#ade3117f564bc89d95966e12fc9d6f103" title="Fades the line out now, if one is showing.">Clear</a>, for a state that lasts (the cannon's ready) rather than a moment.  <br /></td></tr>
-<tr class="separator:a918f91ed5d8981dd5cc8d049a16fdb89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b28450c9124eaf6e0a63893206bcdb9" id="r_a7b28450c9124eaf6e0a63893206bcdb9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7b28450c9124eaf6e0a63893206bcdb9">OnDespawned</a> ()</td></tr>
+<tr class="separator:a7b28450c9124eaf6e0a63893206bcdb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add5efebe062fd044f87e5a38a6781069" id="r_add5efebe062fd044f87e5a38a6781069"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#add5efebe062fd044f87e5a38a6781069">OnSpawned</a> ()</td></tr>
+<tr class="separator:add5efebe062fd044f87e5a38a6781069"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
 <tr class="memitem:ae7c4e3a8843c1ea3a2100013e90b6372" id="r_ae7c4e3a8843c1ea3a2100013e90b6372"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae7c4e3a8843c1ea3a2100013e90b6372">MoveTo</a> (Vector2 worldPosition)</td></tr>
 <tr class="memdesc:ae7c4e3a8843c1ea3a2100013e90b6372"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the written line, ink and all, to <em>worldPosition</em> .  <br /></td></tr>
 <tr class="separator:ae7c4e3a8843c1ea3a2100013e90b6372"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb8458f95bfc626347917c420af686d2" id="r_abb8458f95bfc626347917c420af686d2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abb8458f95bfc626347917c420af686d2">Release</a> ()</td></tr>
+<tr class="memdesc:abb8458f95bfc626347917c420af686d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fades the line out on unscaled time, the pencil lifted mid-write if it was still writing.  <br /></td></tr>
+<tr class="separator:abb8458f95bfc626347917c420af686d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b6a7911f4c30cb05cc523e6cc414662" id="r_a0b6a7911f4c30cb05cc523e6cc414662"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b6a7911f4c30cb05cc523e6cc414662">Rewrite</a> (string text, <a class="el" href="classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html">HeadsUpStyleSettings</a> style, int arg)</td></tr>
+<tr class="memdesc:a0b6a7911f4c30cb05cc523e6cc414662"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes <em>text</em>  over the line, where it is, at the next <a class="el" href="#a016a2f7f358f220e1fd0b3056887632f" title="Moves the line on; true once it has faded out and can go back to the pool.">Tick</a>: several in one frame cost one write.  <br /></td></tr>
+<tr class="separator:a0b6a7911f4c30cb05cc523e6cc414662"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab937c1674029c0844a531acb79320a70" id="r_ab937c1674029c0844a531acb79320a70"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab937c1674029c0844a531acb79320a70">Show</a> (<a class="el" href="structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html">HeadsUpHandle</a> handle, string text, Vector2 worldPosition, <a class="el" href="classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html">HeadsUpStyleSettings</a> style, int arg, string endpointKey)</td></tr>
+<tr class="memdesc:ab937c1674029c0844a531acb79320a70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes <em>text</em>  in <em>style</em> , sized for <em>arg</em> .  <br /></td></tr>
+<tr class="separator:ab937c1674029c0844a531acb79320a70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a016a2f7f358f220e1fd0b3056887632f" id="r_a016a2f7f358f220e1fd0b3056887632f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a016a2f7f358f220e1fd0b3056887632f">Tick</a> (float liveDelta, float unscaledDelta)</td></tr>
+<tr class="memdesc:a016a2f7f358f220e1fd0b3056887632f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the line on; true once it has faded out and can go back to the pool.  <br /></td></tr>
+<tr class="separator:a016a2f7f358f220e1fd0b3056887632f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a146574c65b6ac972080a0130b31ff50d" id="r_a146574c65b6ac972080a0130b31ff50d"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a146574c65b6ac972080a0130b31ff50d">EndpointKey</a><code> [get, private set]</code></td></tr>
+<tr class="memdesc:a146574c65b6ac972080a0130b31ff50d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The HUD endpoint it follows, or null for a line that stays where it was written.  <br /></td></tr>
+<tr class="separator:a146574c65b6ac972080a0130b31ff50d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a176659e33f4e5edf97a43c0c1e561778" id="r_a176659e33f4e5edf97a43c0c1e561778"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html">HeadsUpHandle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a176659e33f4e5edf97a43c0c1e561778">Handle</a> = HeadsUpHandle.None<code> [get, private set]</code></td></tr>
+<tr class="separator:a176659e33f4e5edf97a43c0c1e561778"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2464ff2047bf2f9ed6646f5a9e3533b8" id="r_a2464ff2047bf2f9ed6646f5a9e3533b8"><td class="memItemLeft" align="right" valign="top">Rect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2464ff2047bf2f9ed6646f5a9e3533b8">InkRect</a><code> [get, private set]</code></td></tr>
 <tr class="memdesc:a2464ff2047bf2f9ed6646f5a9e3533b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">The box the last written ink covers, in world space.  <br /></td></tr>
 <tr class="separator:a2464ff2047bf2f9ed6646f5a9e3533b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe97ee468afb530e2a5e122c30c3dfff" id="r_afe97ee468afb530e2a5e122c30c3dfff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe97ee468afb530e2a5e122c30c3dfff">IsShowing</a><code> [get]</code></td></tr>
-<tr class="memdesc:afe97ee468afb530e2a5e122c30c3dfff"><td class="mdescLeft">&#160;</td><td class="mdescRight">The line is written or still fading.  <br /></td></tr>
-<tr class="separator:afe97ee468afb530e2a5e122c30c3dfff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af87ca688713287f1787ae25ffc673075" id="r_af87ca688713287f1787ae25ffc673075"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af87ca688713287f1787ae25ffc673075">Offset</a><code> [get, private set]</code></td></tr>
+<tr class="separator:af87ca688713287f1787ae25ffc673075"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20a84112ea65e0dfe1152d7fb61bfec1" id="r_a20a84112ea65e0dfe1152d7fb61bfec1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a20a84112ea65e0dfe1152d7fb61bfec1">Released</a><code> [get, private set]</code></td></tr>
+<tr class="memdesc:a20a84112ea65e0dfe1152d7fb61bfec1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Released, evicted or cleared: it fades out without reporting itself finished.  <br /></td></tr>
+<tr class="separator:a20a84112ea65e0dfe1152d7fb61bfec1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-types" name="pri-types"></a>
+Private Types</h2></td></tr>
+<tr class="memitem:a331fe9b3c5a1628e11d7fc47df206b69" id="r_a331fe9b3c5a1628e11d7fc47df206b69"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a331fe9b3c5a1628e11d7fc47df206b69">LineState</a> { <br />
+&#160;&#160;<a class="el" href="#a331fe9b3c5a1628e11d7fc47df206b69a7acdf85c69cc3c5305456a293524386e">Hidden</a>
+, <a class="el" href="#a331fe9b3c5a1628e11d7fc47df206b69aaf96ab416602c6852b1ba5201feaacf6">Writing</a>
+, <a class="el" href="#a331fe9b3c5a1628e11d7fc47df206b69a09462a0d784f710178c34eaba146810d">Holding</a>
+, <a class="el" href="#a331fe9b3c5a1628e11d7fc47df206b69aeffe06cc3bbfdd18fa0d95a403cd2d3f">Held</a>
+, <br />
+&#160;&#160;<a class="el" href="#a331fe9b3c5a1628e11d7fc47df206b69a09b43b300d21b48ec64a94a9dab2f407">Fading</a>
+, <a class="el" href="#a331fe9b3c5a1628e11d7fc47df206b69a6a721e41ff5405c89da7927ffbc15351">Releasing</a>
+<br />
+ }</td></tr>
+<tr class="separator:a331fe9b3c5a1628e11d7fc47df206b69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a0d39fe17e6ebd2c6570830036790c6b8" id="r_a0d39fe17e6ebd2c6570830036790c6b8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0d39fe17e6ebd2c6570830036790c6b8">ApplyHalo</a> ()</td></tr>
 <tr class="separator:a0d39fe17e6ebd2c6570830036790c6b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe5e6e3c3e365d167e22b51b6f9f2f86" id="r_abe5e6e3c3e365d167e22b51b6f9f2f86"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abe5e6e3c3e365d167e22b51b6f9f2f86">ApplyLook</a> (Color color, float fontSize, FontStyles fontStyle)</td></tr>
-<tr class="separator:abe5e6e3c3e365d167e22b51b6f9f2f86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a474983b4d0d30f57b730c4b692a73d" id="r_a7a474983b4d0d30f57b730c4b692a73d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7a474983b4d0d30f57b730c4b692a73d">ApplyPendingRewrite</a> ()</td></tr>
+<tr class="separator:a7a474983b4d0d30f57b730c4b692a73d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5180f6fa5b1fa5bf8f147a38209a5109" id="r_a5180f6fa5b1fa5bf8f147a38209a5109"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5180f6fa5b1fa5bf8f147a38209a5109">Awake</a> ()</td></tr>
 <tr class="separator:a5180f6fa5b1fa5bf8f147a38209a5109"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a34bcbd27c4e850e578110a73725c640a" id="r_a34bcbd27c4e850e578110a73725c640a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a34bcbd27c4e850e578110a73725c640a">FadeOut</a> (float delay, float duration)</td></tr>
-<tr class="separator:a34bcbd27c4e850e578110a73725c640a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5cd0946d43ec3ff5b3ba6c9aff3e957a" id="r_a5cd0946d43ec3ff5b3ba6c9aff3e957a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5cd0946d43ec3ff5b3ba6c9aff3e957a">Fade</a> (float from, float duration, float delta)</td></tr>
+<tr class="separator:a5cd0946d43ec3ff5b3ba6c9aff3e957a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93a58b00a37f678c0df101bd6bf1a8f3" id="r_a93a58b00a37f678c0df101bd6bf1a8f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a93a58b00a37f678c0df101bd6bf1a8f3">OnDestroy</a> ()</td></tr>
 <tr class="separator:a93a58b00a37f678c0df101bd6bf1a8f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2fe86ad99a1d486982a38ea8096d7739" id="r_a2fe86ad99a1d486982a38ea8096d7739"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2fe86ad99a1d486982a38ea8096d7739">SetAlpha</a> (float alpha)</td></tr>
 <tr class="separator:a2fe86ad99a1d486982a38ea8096d7739"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7401eb67744fc4d072659dc1f3d7e0ea" id="r_a7401eb67744fc4d072659dc1f3d7e0ea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7401eb67744fc4d072659dc1f3d7e0ea">Write</a> (string text, Vector2 worldPosition, bool holdUntilCleared=false)</td></tr>
-<tr class="separator:a7401eb67744fc4d072659dc1f3d7e0ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d076c5250f9e07282b588207e45f01a" id="r_a2d076c5250f9e07282b588207e45f01a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2d076c5250f9e07282b588207e45f01a">Write</a> (string text, <a class="el" href="classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html">HeadsUpStyleSettings</a> style, int arg)</td></tr>
+<tr class="separator:a2d076c5250f9e07282b588207e45f01a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:ac9739bf3023249add8fc19bf5e28cd17" id="r_ac9739bf3023249add8fc19bf5e28cd17"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac9739bf3023249add8fc19bf5e28cd17">_alpha</a></td></tr>
 <tr class="separator:ac9739bf3023249add8fc19bf5e28cd17"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18a462950fbf6175ec9485eab209c544" id="r_a18a462950fbf6175ec9485eab209c544"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18a462950fbf6175ec9485eab209c544">_baseColor</a></td></tr>
-<tr class="separator:a18a462950fbf6175ec9485eab209c544"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae5aa465d5ba86f46f19a2d5f0763afb9" id="r_ae5aa465d5ba86f46f19a2d5f0763afb9"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae5aa465d5ba86f46f19a2d5f0763afb9">_baseFontSize</a></td></tr>
 <tr class="separator:ae5aa465d5ba86f46f19a2d5f0763afb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae33987dadd6478a271bbcdd38da484bc" id="r_ae33987dadd6478a271bbcdd38da484bc"><td class="memItemLeft" align="right" valign="top">FontStyles&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae33987dadd6478a271bbcdd38da484bc">_baseFontStyle</a></td></tr>
-<tr class="separator:ae33987dadd6478a271bbcdd38da484bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac30c2ea947e0eb086a0f306b02674440" id="r_ac30c2ea947e0eb086a0f306b02674440"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac30c2ea947e0eb086a0f306b02674440">_clearDuration</a> = 0.1f</td></tr>
 <tr class="separator:ac30c2ea947e0eb086a0f306b02674440"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6891cc9e44683a290a2c0e03331eabf8" id="r_a6891cc9e44683a290a2c0e03331eabf8"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6891cc9e44683a290a2c0e03331eabf8">_faceColor</a> = Color.white</td></tr>
 <tr class="separator:a6891cc9e44683a290a2c0e03331eabf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba979bffd541afa47c6ffbc791e62084" id="r_aba979bffd541afa47c6ffbc791e62084"><td class="memItemLeft" align="right" valign="top">Tween&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba979bffd541afa47c6ffbc791e62084">_fade</a></td></tr>
-<tr class="separator:aba979bffd541afa47c6ffbc791e62084"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a733510da400d110a7c2104de066972c8" id="r_a733510da400d110a7c2104de066972c8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a733510da400d110a7c2104de066972c8">_fadeFrom</a></td></tr>
+<tr class="separator:a733510da400d110a7c2104de066972c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22cd52b55817db0254dedc678f117aef" id="r_a22cd52b55817db0254dedc678f117aef"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a22cd52b55817db0254dedc678f117aef">_fadeOutDuration</a> = 0.25f</td></tr>
 <tr class="separator:a22cd52b55817db0254dedc678f117aef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24e49f96a5388ea00f3aa66c5459eefd" id="r_a24e49f96a5388ea00f3aa66c5459eefd"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24e49f96a5388ea00f3aa66c5459eefd">_haloColor</a> = new(1f, 0.973f, 0.906f)</td></tr>
 <tr class="separator:a24e49f96a5388ea00f3aa66c5459eefd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a388a9aa65bd3be56ccc2d676f508a8b0" id="r_a388a9aa65bd3be56ccc2d676f508a8b0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a388a9aa65bd3be56ccc2d676f508a8b0">_haloWidth</a> = 0.25f</td></tr>
 <tr class="separator:a388a9aa65bd3be56ccc2d676f508a8b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3f757cc5e2899b2c01ac00455b79aa8" id="r_ab3f757cc5e2899b2c01ac00455b79aa8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab3f757cc5e2899b2c01ac00455b79aa8">_holdDuration</a> = 0.35f</td></tr>
-<tr class="separator:ab3f757cc5e2899b2c01ac00455b79aa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad04b4a702b97073c909353900b9a4e66" id="r_ad04b4a702b97073c909353900b9a4e66"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad04b4a702b97073c909353900b9a4e66">_held</a></td></tr>
+<tr class="separator:ad04b4a702b97073c909353900b9a4e66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1329112073adb1cfabc3bdb34db74744" id="r_a1329112073adb1cfabc3bdb34db74744"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1329112073adb1cfabc3bdb34db74744">_holdSeconds</a></td></tr>
+<tr class="separator:a1329112073adb1cfabc3bdb34db74744"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26adedb3e29072f0592af0aa29e1571b" id="r_a26adedb3e29072f0592af0aa29e1571b"><td class="memItemLeft" align="right" valign="top">TMP_Text&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a26adedb3e29072f0592af0aa29e1571b">_label</a></td></tr>
 <tr class="separator:a26adedb3e29072f0592af0aa29e1571b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af05c6dde2cd032f2994c9a08e60908c8" id="r_af05c6dde2cd032f2994c9a08e60908c8"><td class="memItemLeft" align="right" valign="top">Material&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af05c6dde2cd032f2994c9a08e60908c8">_material</a></td></tr>
 <tr class="separator:af05c6dde2cd032f2994c9a08e60908c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bd55460b318b4fc3c9ad88655f0a093" id="r_a2bd55460b318b4fc3c9ad88655f0a093"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2bd55460b318b4fc3c9ad88655f0a093">_pendingArg</a></td></tr>
+<tr class="separator:a2bd55460b318b4fc3c9ad88655f0a093"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a178b1e3ec208d2da34dd6457b974433f" id="r_a178b1e3ec208d2da34dd6457b974433f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html">HeadsUpStyleSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a178b1e3ec208d2da34dd6457b974433f">_pendingStyle</a></td></tr>
+<tr class="separator:a178b1e3ec208d2da34dd6457b974433f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a933cb79cc791bb1640857629189c5380" id="r_a933cb79cc791bb1640857629189c5380"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a933cb79cc791bb1640857629189c5380">_pendingText</a></td></tr>
+<tr class="separator:a933cb79cc791bb1640857629189c5380"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad65d61ea26ff84d9591f2234adf5e99b" id="r_ad65d61ea26ff84d9591f2234adf5e99b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a331fe9b3c5a1628e11d7fc47df206b69">LineState</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad65d61ea26ff84d9591f2234adf5e99b">_state</a></td></tr>
+<tr class="separator:ad65d61ea26ff84d9591f2234adf5e99b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24c209b4199e0d3e4c3064cc83259407" id="r_a24c209b4199e0d3e4c3064cc83259407"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24c209b4199e0d3e4c3064cc83259407">_text</a></td></tr>
+<tr class="separator:a24c209b4199e0d3e4c3064cc83259407"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbd7c2799fe2baaebd6fb29ea0867513" id="r_abbd7c2799fe2baaebd6fb29ea0867513"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abbd7c2799fe2baaebd6fb29ea0867513">_timer</a></td></tr>
+<tr class="separator:abbd7c2799fe2baaebd6fb29ea0867513"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adcc3074076159db6af74fabeea7912e3" id="r_adcc3074076159db6af74fabeea7912e3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adcc3074076159db6af74fabeea7912e3">_visibleAlpha</a> = 0.85f</td></tr>
 <tr class="separator:adcc3074076159db6af74fabeea7912e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c57f7c741b12573938080add4c0c2c9" id="r_a0c57f7c741b12573938080add4c0c2c9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html">WriteOnText</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0c57f7c741b12573938080add4c0c2c9">_writeOn</a></td></tr>
 <tr class="separator:a0c57f7c741b12573938080add4c0c2c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>One short handwritten line in world space (a <code>TextMeshPro</code>, not on a canvas), so it sits where it happened through the camera rig's zoom and shake: written on in pencil, held, then faded out. </p>
-<p>A new <a class="el" href="#a6fe15a76448e5c02705e33475098fcbd" title="Writes text  at worldPosition .">Show(string, Vector2)</a> replaces the line showing. Written plain it keeps the label's own look; written with a <a class="el" href="structBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpStyle.html" title="How one kind of heads-up looks, so each kind reads at a glance: its colour, its size against the line...">HeadsUpStyle</a> it takes that colour, size and weight for this line only. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+<div class="textblock"><p>One short handwritten line in world space (a <code>TextMeshPro</code>, not on a canvas), so it sits where it happened through the camera rig's zoom and shake: written on in pencil, held, then faded out, or held until released. </p>
+<p>Pooled by <a class="el" href="classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpLayer.html" title="Draws the heads-ups HeadsUpService lets through, as pooled HandwrittenHeadsUp lines cloned from _line...">HeadsUpLayer</a>, which moves it on with two clocks: the write, the hold and its own fade on live time, which stops under a pause; a release fades on unscaled time, so a line pushed out during a pause doesn't stay frozen beside the one that replaced it. </p>
+</div><h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a331fe9b3c5a1628e11d7fc47df206b69" name="a331fe9b3c5a1628e11d7fc47df206b69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a331fe9b3c5a1628e11d7fc47df206b69">&#9670;&#160;</a></span>LineState</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#a331fe9b3c5a1628e11d7fc47df206b69">BalloonParty.UI.HeadsUp.HandwrittenHeadsUp.LineState</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a331fe9b3c5a1628e11d7fc47df206b69a7acdf85c69cc3c5305456a293524386e" name="a331fe9b3c5a1628e11d7fc47df206b69a7acdf85c69cc3c5305456a293524386e"></a>Hidden&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a331fe9b3c5a1628e11d7fc47df206b69aaf96ab416602c6852b1ba5201feaacf6" name="a331fe9b3c5a1628e11d7fc47df206b69aaf96ab416602c6852b1ba5201feaacf6"></a>Writing&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a331fe9b3c5a1628e11d7fc47df206b69a09462a0d784f710178c34eaba146810d" name="a331fe9b3c5a1628e11d7fc47df206b69a09462a0d784f710178c34eaba146810d"></a>Holding&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a331fe9b3c5a1628e11d7fc47df206b69aeffe06cc3bbfdd18fa0d95a403cd2d3f" name="a331fe9b3c5a1628e11d7fc47df206b69aeffe06cc3bbfdd18fa0d95a403cd2d3f"></a>Held&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a331fe9b3c5a1628e11d7fc47df206b69a09b43b300d21b48ec64a94a9dab2f407" name="a331fe9b3c5a1628e11d7fc47df206b69a09b43b300d21b48ec64a94a9dab2f407"></a>Fading&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a331fe9b3c5a1628e11d7fc47df206b69a6a721e41ff5405c89da7927ffbc15351" name="a331fe9b3c5a1628e11d7fc47df206b69a6a721e41ff5405c89da7927ffbc15351"></a>Releasing&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a id="a0d39fe17e6ebd2c6570830036790c6b8" name="a0d39fe17e6ebd2c6570830036790c6b8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0d39fe17e6ebd2c6570830036790c6b8">&#9670;&#160;</a></span>ApplyHalo()</h2>
 
@@ -244,8 +311,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="abe5e6e3c3e365d167e22b51b6f9f2f86" name="abe5e6e3c3e365d167e22b51b6f9f2f86"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abe5e6e3c3e365d167e22b51b6f9f2f86">&#9670;&#160;</a></span>ApplyLook()</h2>
+<a id="a7a474983b4d0d30f57b730c4b692a73d" name="a7a474983b4d0d30f57b730c4b692a73d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a474983b4d0d30f57b730c4b692a73d">&#9670;&#160;</a></span>ApplyPendingRewrite()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -254,19 +321,10 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void BalloonParty.UI.HeadsUp.HandwrittenHeadsUp.ApplyLook </td>
+          <td class="memname">void BalloonParty.UI.HeadsUp.HandwrittenHeadsUp.ApplyPendingRewrite </td>
           <td>(</td>
-          <td class="paramtype">Color</td>          <td class="paramname"><span class="paramname"><em>color</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>fontSize</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">FontStyles</td>          <td class="paramname"><span class="paramname"><em>fontStyle</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -303,27 +361,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ade3117f564bc89d95966e12fc9d6f103" name="ade3117f564bc89d95966e12fc9d6f103"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade3117f564bc89d95966e12fc9d6f103">&#9670;&#160;</a></span>Clear()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void BalloonParty.UI.HeadsUp.HandwrittenHeadsUp.Clear </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Fades the line out now, if one is showing. </p>
-
-</div>
-</div>
-<a id="a34bcbd27c4e850e578110a73725c640a" name="a34bcbd27c4e850e578110a73725c640a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a34bcbd27c4e850e578110a73725c640a">&#9670;&#160;</a></span>FadeOut()</h2>
+<a id="a5cd0946d43ec3ff5b3ba6c9aff3e957a" name="a5cd0946d43ec3ff5b3ba6c9aff3e957a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5cd0946d43ec3ff5b3ba6c9aff3e957a">&#9670;&#160;</a></span>Fade()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -332,14 +371,19 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void BalloonParty.UI.HeadsUp.HandwrittenHeadsUp.FadeOut </td>
+          <td class="memname">bool BalloonParty.UI.HeadsUp.HandwrittenHeadsUp.Fade </td>
           <td>(</td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>delay</em></span>, </td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>from</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>duration</em></span>&#160;)</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>duration</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>delta</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -378,6 +422,25 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a7b28450c9124eaf6e0a63893206bcdb9" name="a7b28450c9124eaf6e0a63893206bcdb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b28450c9124eaf6e0a63893206bcdb9">&#9670;&#160;</a></span>OnDespawned()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.HeadsUp.HandwrittenHeadsUp.OnDespawned </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html#a7cd18666c14765b5bd6ccf7dd390cff3">BalloonParty.Shared.Pool.IPoolable</a>.</p>
+
+</div>
+</div>
 <a id="a93a58b00a37f678c0df101bd6bf1a8f3" name="a93a58b00a37f678c0df101bd6bf1a8f3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a93a58b00a37f678c0df101bd6bf1a8f3">&#9670;&#160;</a></span>OnDestroy()</h2>
 
@@ -400,6 +463,89 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="add5efebe062fd044f87e5a38a6781069" name="add5efebe062fd044f87e5a38a6781069"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add5efebe062fd044f87e5a38a6781069">&#9670;&#160;</a></span>OnSpawned()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.HeadsUp.HandwrittenHeadsUp.OnSpawned </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html#aaff387d23c235b99ac2db6e8830ec344">BalloonParty.Shared.Pool.IPoolable</a>.</p>
+
+</div>
+</div>
+<a id="abb8458f95bfc626347917c420af686d2" name="abb8458f95bfc626347917c420af686d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb8458f95bfc626347917c420af686d2">&#9670;&#160;</a></span>Release()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.HeadsUp.HandwrittenHeadsUp.Release </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Fades the line out on unscaled time, the pencil lifted mid-write if it was still writing. </p>
+
+</div>
+</div>
+<a id="a0b6a7911f4c30cb05cc523e6cc414662" name="a0b6a7911f4c30cb05cc523e6cc414662"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b6a7911f4c30cb05cc523e6cc414662">&#9670;&#160;</a></span>Rewrite()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.HeadsUp.HandwrittenHeadsUp.Rewrite </td>
+          <td>(</td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>text</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html">HeadsUpStyleSettings</a></td>          <td class="paramname"><span class="paramname"><em>style</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>arg</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Writes <em>text</em>  over the line, where it is, at the next <a class="el" href="#a016a2f7f358f220e1fd0b3056887632f" title="Moves the line on; true once it has faded out and can go back to the pool.">Tick</a>: several in one frame cost one write. </p>
+<p>The same text again does nothing. </p>
 
 </div>
 </div>
@@ -428,38 +574,23 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a6fe15a76448e5c02705e33475098fcbd" name="a6fe15a76448e5c02705e33475098fcbd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6fe15a76448e5c02705e33475098fcbd">&#9670;&#160;</a></span>Show() <span class="overload">[1/2]</span></h2>
+<a id="ab937c1674029c0844a531acb79320a70" name="ab937c1674029c0844a531acb79320a70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab937c1674029c0844a531acb79320a70">&#9670;&#160;</a></span>Show()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void BalloonParty.UI.HeadsUp.HandwrittenHeadsUp.Show </td>
           <td>(</td>
-          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>text</em></span>, </td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html">HeadsUpHandle</a></td>          <td class="paramname"><span class="paramname"><em>handle</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>worldPosition</em></span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Writes <em>text</em>  at <em>worldPosition</em> . </p>
-
-</div>
-</div>
-<a id="a3987c31286948467aa49afefb871af86" name="a3987c31286948467aa49afefb871af86"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3987c31286948467aa49afefb871af86">&#9670;&#160;</a></span>Show() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void BalloonParty.UI.HeadsUp.HandwrittenHeadsUp.Show </td>
-          <td>(</td>
           <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>text</em></span>, </td>
         </tr>
         <tr>
@@ -470,50 +601,63 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpStyle.html">HeadsUpStyle</a></td>          <td class="paramname"><span class="paramname"><em>style</em></span>, </td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html">HeadsUpStyleSettings</a></td>          <td class="paramname"><span class="paramname"><em>style</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>count</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1</span>&#160;)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>arg</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>endpointKey</em></span>&#160;)</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Writes <em>text</em>  in <em>style</em> , sized for an escalating <em>count</em>  (1 = the first). </p>
+<p>Writes <em>text</em>  in <em>style</em> , sized for <em>arg</em> . </p>
 
 </div>
 </div>
-<a id="a918f91ed5d8981dd5cc8d049a16fdb89" name="a918f91ed5d8981dd5cc8d049a16fdb89"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a918f91ed5d8981dd5cc8d049a16fdb89">&#9670;&#160;</a></span>ShowUntilCleared()</h2>
+<a id="a016a2f7f358f220e1fd0b3056887632f" name="a016a2f7f358f220e1fd0b3056887632f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a016a2f7f358f220e1fd0b3056887632f">&#9670;&#160;</a></span>Tick()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void BalloonParty.UI.HeadsUp.HandwrittenHeadsUp.ShowUntilCleared </td>
+          <td class="memname">bool BalloonParty.UI.HeadsUp.HandwrittenHeadsUp.Tick </td>
           <td>(</td>
-          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>text</em></span>, </td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>liveDelta</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>worldPosition</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpStyle.html">HeadsUpStyle</a></td>          <td class="paramname"><span class="paramname"><em>style</em></span>&#160;)</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>unscaledDelta</em></span>&#160;)</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Writes <em>text</em>  in <em>style</em>  and keeps it up until <a class="el" href="#ade3117f564bc89d95966e12fc9d6f103" title="Fades the line out now, if one is showing.">Clear</a>, for a state that lasts (the cannon's ready) rather than a moment. </p>
+<p>Moves the line on; true once it has faded out and can go back to the pool. </p>
 
 </div>
 </div>
-<a id="a7401eb67744fc4d072659dc1f3d7e0ea" name="a7401eb67744fc4d072659dc1f3d7e0ea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7401eb67744fc4d072659dc1f3d7e0ea">&#9670;&#160;</a></span>Write()</h2>
+<a id="a2d076c5250f9e07282b588207e45f01a" name="a2d076c5250f9e07282b588207e45f01a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d076c5250f9e07282b588207e45f01a">&#9670;&#160;</a></span>Write()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -529,12 +673,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>worldPosition</em></span>, </td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html">HeadsUpStyleSettings</a></td>          <td class="paramname"><span class="paramname"><em>style</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>holdUntilCleared</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>arg</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -569,28 +713,6 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a18a462950fbf6175ec9485eab209c544" name="a18a462950fbf6175ec9485eab209c544"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a18a462950fbf6175ec9485eab209c544">&#9670;&#160;</a></span>_baseColor</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Color BalloonParty.UI.HeadsUp.HandwrittenHeadsUp._baseColor</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="ae5aa465d5ba86f46f19a2d5f0763afb9" name="ae5aa465d5ba86f46f19a2d5f0763afb9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae5aa465d5ba86f46f19a2d5f0763afb9">&#9670;&#160;</a></span>_baseFontSize</h2>
 
@@ -602,28 +724,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.UI.HeadsUp.HandwrittenHeadsUp._baseFontSize</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae33987dadd6478a271bbcdd38da484bc" name="ae33987dadd6478a271bbcdd38da484bc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae33987dadd6478a271bbcdd38da484bc">&#9670;&#160;</a></span>_baseFontStyle</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">FontStyles BalloonParty.UI.HeadsUp.HandwrittenHeadsUp._baseFontStyle</td>
         </tr>
       </table>
   </td>
@@ -679,8 +779,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aba979bffd541afa47c6ffbc791e62084" name="aba979bffd541afa47c6ffbc791e62084"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba979bffd541afa47c6ffbc791e62084">&#9670;&#160;</a></span>_fade</h2>
+<a id="a733510da400d110a7c2104de066972c8" name="a733510da400d110a7c2104de066972c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a733510da400d110a7c2104de066972c8">&#9670;&#160;</a></span>_fadeFrom</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -689,7 +789,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Tween BalloonParty.UI.HeadsUp.HandwrittenHeadsUp._fade</td>
+          <td class="memname">float BalloonParty.UI.HeadsUp.HandwrittenHeadsUp._fadeFrom</td>
         </tr>
       </table>
   </td>
@@ -767,8 +867,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ab3f757cc5e2899b2c01ac00455b79aa8" name="ab3f757cc5e2899b2c01ac00455b79aa8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab3f757cc5e2899b2c01ac00455b79aa8">&#9670;&#160;</a></span>_holdDuration</h2>
+<a id="ad04b4a702b97073c909353900b9a4e66" name="ad04b4a702b97073c909353900b9a4e66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad04b4a702b97073c909353900b9a4e66">&#9670;&#160;</a></span>_held</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -777,7 +877,29 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.UI.HeadsUp.HandwrittenHeadsUp._holdDuration = 0.35f</td>
+          <td class="memname">bool BalloonParty.UI.HeadsUp.HandwrittenHeadsUp._held</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1329112073adb1cfabc3bdb34db74744" name="a1329112073adb1cfabc3bdb34db74744"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1329112073adb1cfabc3bdb34db74744">&#9670;&#160;</a></span>_holdSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.UI.HeadsUp.HandwrittenHeadsUp._holdSeconds</td>
         </tr>
       </table>
   </td>
@@ -822,6 +944,138 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">Material BalloonParty.UI.HeadsUp.HandwrittenHeadsUp._material</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2bd55460b318b4fc3c9ad88655f0a093" name="a2bd55460b318b4fc3c9ad88655f0a093"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2bd55460b318b4fc3c9ad88655f0a093">&#9670;&#160;</a></span>_pendingArg</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.UI.HeadsUp.HandwrittenHeadsUp._pendingArg</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a178b1e3ec208d2da34dd6457b974433f" name="a178b1e3ec208d2da34dd6457b974433f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a178b1e3ec208d2da34dd6457b974433f">&#9670;&#160;</a></span>_pendingStyle</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html">HeadsUpStyleSettings</a> BalloonParty.UI.HeadsUp.HandwrittenHeadsUp._pendingStyle</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a933cb79cc791bb1640857629189c5380" name="a933cb79cc791bb1640857629189c5380"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a933cb79cc791bb1640857629189c5380">&#9670;&#160;</a></span>_pendingText</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string BalloonParty.UI.HeadsUp.HandwrittenHeadsUp._pendingText</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad65d61ea26ff84d9591f2234adf5e99b" name="ad65d61ea26ff84d9591f2234adf5e99b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad65d61ea26ff84d9591f2234adf5e99b">&#9670;&#160;</a></span>_state</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a331fe9b3c5a1628e11d7fc47df206b69">LineState</a> BalloonParty.UI.HeadsUp.HandwrittenHeadsUp._state</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a24c209b4199e0d3e4c3064cc83259407" name="a24c209b4199e0d3e4c3064cc83259407"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24c209b4199e0d3e4c3064cc83259407">&#9670;&#160;</a></span>_text</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string BalloonParty.UI.HeadsUp.HandwrittenHeadsUp._text</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abbd7c2799fe2baaebd6fb29ea0867513" name="abbd7c2799fe2baaebd6fb29ea0867513"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abbd7c2799fe2baaebd6fb29ea0867513">&#9670;&#160;</a></span>_timer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.UI.HeadsUp.HandwrittenHeadsUp._timer</td>
         </tr>
       </table>
   </td>
@@ -878,6 +1132,52 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="a146574c65b6ac972080a0130b31ff50d" name="a146574c65b6ac972080a0130b31ff50d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a146574c65b6ac972080a0130b31ff50d">&#9670;&#160;</a></span>EndpointKey</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string BalloonParty.UI.HeadsUp.HandwrittenHeadsUp.EndpointKey</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel private-set">private set</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The HUD endpoint it follows, or null for a line that stays where it was written. </p>
+
+</div>
+</div>
+<a id="a176659e33f4e5edf97a43c0c1e561778" name="a176659e33f4e5edf97a43c0c1e561778"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a176659e33f4e5edf97a43c0c1e561778">&#9670;&#160;</a></span>Handle</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html">HeadsUpHandle</a> BalloonParty.UI.HeadsUp.HandwrittenHeadsUp.Handle = HeadsUpHandle.None</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel private-set">private set</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a2464ff2047bf2f9ed6646f5a9e3533b8" name="a2464ff2047bf2f9ed6646f5a9e3533b8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2464ff2047bf2f9ed6646f5a9e3533b8">&#9670;&#160;</a></span>InkRect</h2>
 
@@ -902,8 +1202,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="afe97ee468afb530e2a5e122c30c3dfff" name="afe97ee468afb530e2a5e122c30c3dfff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afe97ee468afb530e2a5e122c30c3dfff">&#9670;&#160;</a></span>IsShowing</h2>
+<a id="af87ca688713287f1787ae25ffc673075" name="af87ca688713287f1787ae25ffc673075"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af87ca688713287f1787ae25ffc673075">&#9670;&#160;</a></span>Offset</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -912,17 +1212,39 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool BalloonParty.UI.HeadsUp.HandwrittenHeadsUp.IsShowing</td>
+          <td class="memname">Vector2 BalloonParty.UI.HeadsUp.HandwrittenHeadsUp.Offset</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel package">package</span></span>  </td>
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel private-set">private set</span><span class="mlabel package">package</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>The line is written or still fading. </p>
+</div>
+</div>
+<a id="a20a84112ea65e0dfe1152d7fb61bfec1" name="a20a84112ea65e0dfe1152d7fb61bfec1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20a84112ea65e0dfe1152d7fb61bfec1">&#9670;&#160;</a></span>Released</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.UI.HeadsUp.HandwrittenHeadsUp.Released</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel private-set">private set</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Released, evicted or cleared: it fades out without reporting itself finished. </p>
 
 </div>
 </div>

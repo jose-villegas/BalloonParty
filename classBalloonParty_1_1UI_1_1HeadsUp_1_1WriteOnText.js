@@ -10,6 +10,7 @@ var classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText =
     [ "OnTextChanged", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a7af21e9235efad93369576f4aa6f6b33", null ],
     [ "SetTipVisible", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a2d0342c9e070d668c8b1b9e01ca71b87", null ],
     [ "Stop", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a0f44f2ded2b446b137bbf1b9e33f52a5", null ],
+    [ "Tick", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a89c6cccdb6c29c063aae45515371aae8", null ],
     [ "Update", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#aaa19b49e337e796724425155314f9f43", null ],
     [ "Write", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a8c0a06f59f3eea5c14835f4bf7f9fe8c", null ],
     [ "_edgeSoftness", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a5199f5608a008620d44fbb71cb8bf3cb", null ],
@@ -27,5 +28,7 @@ var classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText =
     [ "_tipWobbleSpeed", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#adb7a9f16b5d71bafd396464a02315984", null ],
     [ "_writing", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a82c54d5468a419a95d4dbd77e516d9f0", null ],
     [ "RevealInUvProperty", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#aa5b2f978631a62bebc40784b1e547eed", null ],
-    [ "Duration", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a521a9dca64ce36c48e02b09e8cacbee8", null ]
+    [ "Duration", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a521a9dca64ce36c48e02b09e8cacbee8", null ],
+    [ "ExternallyTicked", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#abd941a4e6fc0f870faffaebc40525ff5", null ],
+    [ "IsWriting", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a792c6b5996fab2e101b62bd6a676216c", null ]
 ];

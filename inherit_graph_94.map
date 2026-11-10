@@ -1,5 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html" title=" " alt="" coords="5,5,203,45"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html" title="When balloon lines arrive: one line per interval of scaled game time, the interval shrinking each lev..." alt="" coords="251,5,448,45"/>
-<area shape="poly" id="edge83_Node000000_Node000001" title=" " alt="" coords="217,23,251,23,251,28,217,28"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html" title="Read&#45;only tuning for the bubbles that come in with the lines on water levels; see BubbleRiseCurve." alt="" coords="5,5,203,45"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html" title="The bubbles that come in with the clock&#39;s lines on water levels, a growing share of every line the lo..." alt="" coords="251,5,448,45"/>
+<area shape="poly" id="edge78_Node000000_Node000001" title=" " alt="" coords="217,23,251,23,251,28,217,28"/>
 </map>

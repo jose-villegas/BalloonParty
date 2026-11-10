@@ -1,7 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html" title="Common contract for weighted prefab entries that support max&#45;count limits." alt="" coords="5,37,203,77"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html" title=" " alt="" coords="251,5,455,45"/>
-<area shape="poly" id="edge87_Node000000_Node000001" title=" " alt="" coords="216,40,250,36,251,41,217,46"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedItemEntry.html" title=" " alt="" coords="254,69,451,109"/>
-<area shape="poly" id="edge88_Node000000_Node000002" title=" " alt="" coords="217,69,254,74,254,79,216,74"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IPaletteColorMasked.html" title="Base contract for a config entry keyed to a set of palette colours by a PaletteColorMaskAttribute bit..." alt="" coords="5,69,209,109"/>
+<area shape="rect" id="Node000001" href="$structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html" title="A render&#45;look override for a set of palette colours." alt="" coords="268,5,465,45"/>
+<area shape="poly" id="edge86_Node000000_Node000001" title=" " alt="" coords="202,63,284,43,286,48,203,69"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckMotionProfile.html" title="A motion override for a set of palette colours." alt="" coords="268,69,465,109"/>
+<area shape="poly" id="edge87_Node000000_Node000002" title=" " alt="" coords="223,87,268,87,268,92,223,92"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html" title="A level&#39;s difficulty mix before its ranges are rolled: what LevelGenerator outputs for every positive..." alt="" coords="257,133,476,173"/>
+<area shape="poly" id="edge88_Node000000_Node000003" title=" " alt="" coords="203,110,286,131,284,136,202,115"/>
 </map>

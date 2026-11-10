@@ -1,0 +1,14 @@
+<map id="BalloonParty.Game.HeadsUp.Routing.CannonHeadsUpRouter" name="BalloonParty.Game.HeadsUp.Routing.CannonHeadsUpRouter">
+<area shape="rect" id="Node000001" title="ready beside the cannon for as long as it&#39;s ready: held from ThrowerReadyMessage until the ball fires..." alt="" coords="481,77,708,117"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="209,5,294,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="308,27,458,61,513,74,512,79,457,66,307,32"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="202,55,301,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="315,70,481,84,481,90,314,75"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1HeadsUp_1_1IHeadsUps.html" title="Where routers send heads&#45;ups. Whether one shows is the queue&#39;s call, by the style&#39;s rules." alt="" coords="145,105,357,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="371,112,481,103,481,109,371,118"/>
+<area shape="rect" id="Node000005" href="$structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html" title="One showing heads&#45;up: its slot in the queue and that slot&#39;s generation, so a handle kept past its lin..." alt="" coords="145,207,357,247"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="317,200,540,114,542,119,319,205"/>
+<area shape="poly" id="edge6_Node000005_Node000005" title=" " alt="" coords="227,191,235,184,251,181,265,183,274,189,278,198,277,207,272,207,273,198,270,192,263,188,251,186,238,188,230,195"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="5,215,96,240"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="110,225,145,225,145,230,110,230"/>
+</map>

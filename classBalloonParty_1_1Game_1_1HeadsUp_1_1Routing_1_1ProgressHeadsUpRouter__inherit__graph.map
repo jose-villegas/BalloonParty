@@ -1,0 +1,7 @@
+<map id="BalloonParty.Game.HeadsUp.Routing.ProgressHeadsUpRouter" name="BalloonParty.Game.HeadsUp.Routing.ProgressHeadsUpRouter">
+<area shape="rect" id="Node000001" title="The run&#39;s heads&#45;ups: &#45;1 at the heart when a blocked line&#39;s strikethrough costs one,..." alt="" coords="5,79,240,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="23,5,108,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,40,111,77,107,80,80,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="132,5,231,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="167,43,139,80,135,77,162,40"/>
+</map>

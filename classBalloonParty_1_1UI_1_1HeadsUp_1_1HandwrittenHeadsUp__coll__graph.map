@@ -1,8 +1,14 @@
 <map id="BalloonParty.UI.HeadsUp.HandwrittenHeadsUp" name="BalloonParty.UI.HeadsUp.HandwrittenHeadsUp">
-<area shape="rect" id="Node000001" title="One short handwritten line in world space (a TextMeshPro, not on a canvas), so it sits where it happe..." alt="" coords="5,183,192,223"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="31,5,155,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,44,101,183,95,183,91,45"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html" title="Writes a TMP_Text on left to right as if by a pencil: a soft reveal edge, slanted forward,..." alt="" coords="115,80,301,120"/>
-<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="122,36,182,78,179,82,119,41"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="179,132,121,185,117,181,175,128"/>
+<area shape="rect" id="Node000001" title="One short handwritten line in world space (a TextMeshPro, not on a canvas), so it sits where it happe..." alt="" coords="667,70,853,110"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="42,5,166,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="180,16,267,17,457,17,540,26,643,49,704,67,702,73,642,54,539,31,457,23,267,22,180,21"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html" title="Writes a TMP_Text on left to right as if by a pencil: a soft reveal edge, slanted forward,..." alt="" coords="313,38,499,78"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="180,25,313,43,312,48,179,31"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="313,102,499,142"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="513,110,666,96,667,101,513,115"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="513,65,667,79,666,84,513,70"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html" title="How one kind of heads&#45;up reads and when it shows: its wording, its look, how it competes for a place ..." alt="" coords="291,166,521,206"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="514,160,642,127,703,108,705,113,643,133,515,165"/>
+<area shape="rect" id="Node000006" href="$structBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyle.html" title="How one kind of heads&#45;up looks, so each kind reads at a glance: its colour, its size against the line..." alt="" coords="5,166,203,206"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="217,183,291,183,291,189,217,189"/>
 </map>

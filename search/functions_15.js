@@ -5,8 +5,9 @@ var searchData=
   ['validateopenfromcontextmenu_2',['ValidateOpenFromContextMenu',['../classBalloonParty_1_1Editor_1_1TextureAuditWindow.html#a8c4b4468fe029ec826ff05c5ef30d5bd',1,'BalloonParty::Editor::TextureAuditWindow']]],
   ['variationpicker_3',['VariationPicker',['../classBalloonParty_1_1Audio_1_1VariationPicker.html#a936861279e0b55428c950497a9f61ff8',1,'BalloonParty::Audio::VariationPicker']]],
   ['vertexdisplacer_4',['VertexDisplacer',['../namespaceBalloonParty_1_1Game_1_1Score_1_1Behaviours.html#a33bff20e5951e5e2eee9701fe3db921a',1,'BalloonParty::Game::Score::Behaviours']]],
-  ['viewat_5',['ViewAt',['../classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a076fe38496de37cd9c047710149a1e36',1,'BalloonParty::Slots::Grid::SlotGrid']]],
-  ['viewrect_6',['ViewRect',['../classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html#aca077434b1d702637407aa139995bffc',1,'BalloonParty::UI::HeadsUp::HeadsUpPacking']]],
-  ['voicelimiter_7',['VoiceLimiter',['../classBalloonParty_1_1Audio_1_1VoiceLimiter.html#af5af0ef1951b7d299b431f75d9a9589f',1,'BalloonParty::Audio::VoiceLimiter']]],
-  ['voiceplayback_8',['VoicePlayback',['../structBalloonParty_1_1Audio_1_1VoicePlayback.html#ae6db35d64462ca2faaa20b87913099ad',1,'BalloonParty::Audio::VoicePlayback']]]
+  ['victim_5',['Victim',['../classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#a158503cbb47e29c7c200c37f40a5e3d8',1,'BalloonParty::Game::HeadsUp::HeadsUpQueue']]],
+  ['viewat_6',['ViewAt',['../classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a076fe38496de37cd9c047710149a1e36',1,'BalloonParty::Slots::Grid::SlotGrid']]],
+  ['viewrect_7',['ViewRect',['../classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html#aca077434b1d702637407aa139995bffc',1,'BalloonParty::UI::HeadsUp::HeadsUpPacking']]],
+  ['voicelimiter_8',['VoiceLimiter',['../classBalloonParty_1_1Audio_1_1VoiceLimiter.html#af5af0ef1951b7d299b431f75d9a9589f',1,'BalloonParty::Audio::VoiceLimiter']]],
+  ['voiceplayback_9',['VoicePlayback',['../structBalloonParty_1_1Audio_1_1VoicePlayback.html#ae6db35d64462ca2faaa20b87913099ad',1,'BalloonParty::Audio::VoicePlayback']]]
 ];

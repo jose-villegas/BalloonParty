@@ -115,21 +115,15 @@ $(function(){initNavTree('classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html',''
 </div><!--header-->
 <div class="contents">
 
-<p>Builds the heads-ups in world space, on the <code>HeadsUps</code> prefab the <a class="el" href="namespaceBalloonParty_1_1Game.html">Game</a> scene holds, each line a <code>TextMeshPro</code> in the tooltip's pencil font with its <a class="el" href="classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html" title="Writes a TMP_Text on left to right as if by a pencil: a soft reveal edge, slanted forward,...">WriteOnText</a> settings and a <a class="el" href="classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html" title="One short handwritten line in world space (a TextMeshPro, not on a canvas), so it sits where it happe...">HandwrittenHeadsUp</a>: the cannon's "+1" (<a class="el" href="classBalloonParty_1_1UI_1_1HeadsUp_1_1ReloadHeadsUp.html" title="Writes &quot;ready&quot; beside the cannon each time its next ball is ready (ThrowerReadyMessage) and keeps it ...">ReloadHeadsUp</a>) and the ball's "+n bounce" / "-1 bounce" (<a class="el" href="classBalloonParty_1_1UI_1_1HeadsUp_1_1BounceHeadsUp.html" title="Writes how a ball&#39;s bounces go, where it happens: &quot;+n bounce&quot; where it picks up a shield (n counting ...">BounceHeadsUp</a>).  
+<p>Builds the <a class="el" href="classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpLayer.html" title="Draws the heads-ups HeadsUpService lets through, as pooled HandwrittenHeadsUp lines cloned from _line...">HeadsUpLayer</a> in world space, on the <code>HeadsUps</code> prefab the <a class="el" href="namespaceBalloonParty_1_1Game.html">Game</a> scene holds, with the one line it clones every heads-up from: a <code>TextMeshPro</code> in the tooltip's pencil font with its <a class="el" href="classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html" title="Writes a TMP_Text on left to right as if by a pencil: a soft reveal edge, slanted forward,...">WriteOnText</a> settings and a <a class="el" href="classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html" title="One short handwritten line in world space (a TextMeshPro, not on a canvas), so it sits where it happe...">HandwrittenHeadsUp</a>.  
  <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
-<tr class="memitem:a8a8304600d961e036103055773174e0a" id="r_a8a8304600d961e036103055773174e0a"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a8304600d961e036103055773174e0a">Build</a> (string title, string childName, Func&lt; GameObject, string &gt; build)</td></tr>
-<tr class="separator:a8a8304600d961e036103055773174e0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace7dac55f35a3a323bd54fd1f17f483b" id="r_ace7dac55f35a3a323bd54fd1f17f483b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace7dac55f35a3a323bd54fd1f17f483b">BuildBounce</a> ()</td></tr>
-<tr class="separator:ace7dac55f35a3a323bd54fd1f17f483b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:addb5d2b5d6e963cd9fc4e9cab7467aa0" id="r_addb5d2b5d6e963cd9fc4e9cab7467aa0"><td class="memItemLeft" align="right" valign="top">static string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#addb5d2b5d6e963cd9fc4e9cab7467aa0">BuildBounceHeadsUp</a> (GameObject root)</td></tr>
-<tr class="separator:addb5d2b5d6e963cd9fc4e9cab7467aa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb8ac9fffba66994885820decc4bf51e" id="r_aeb8ac9fffba66994885820decc4bf51e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeb8ac9fffba66994885820decc4bf51e">BuildReload</a> ()</td></tr>
-<tr class="separator:aeb8ac9fffba66994885820decc4bf51e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad97d9ce84b53eb9d32b75b13783745c" id="r_aad97d9ce84b53eb9d32b75b13783745c"><td class="memItemLeft" align="right" valign="top">static string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aad97d9ce84b53eb9d32b75b13783745c">BuildReloadHeadsUp</a> (GameObject root)</td></tr>
-<tr class="separator:aad97d9ce84b53eb9d32b75b13783745c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88a6b4c2e730468fb5dac49623cf47cf" id="r_a88a6b4c2e730468fb5dac49623cf47cf"><td class="memItemLeft" align="right" valign="top">static string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a88a6b4c2e730468fb5dac49623cf47cf">BuildHeadsUpLayer</a> (GameObject root)</td></tr>
+<tr class="separator:a88a6b4c2e730468fb5dac49623cf47cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3ceed48964e87bd36e36346f4ea5b4b" id="r_ad3ceed48964e87bd36e36346f4ea5b4b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3ceed48964e87bd36e36346f4ea5b4b">BuildLayer</a> ()</td></tr>
+<tr class="separator:ad3ceed48964e87bd36e36346f4ea5b4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a293cd3ed42b6266aa3143a26252c39b0" id="r_a293cd3ed42b6266aa3143a26252c39b0"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html">HandwrittenHeadsUp</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a293cd3ed42b6266aa3143a26252c39b0">CreateLine</a> (TMP_Text label, Transform parent, string name, Vector2 size)</td></tr>
 <tr class="separator:a293cd3ed42b6266aa3143a26252c39b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa02c95f0f1277ef063767cdc8903f0c9" id="r_aa02c95f0f1277ef063767cdc8903f0c9"><td class="memItemLeft" align="right" valign="top">static Transform&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa02c95f0f1277ef063767cdc8903f0c9">CreateTip</a> (Transform line)</td></tr>
@@ -149,24 +143,22 @@ Static Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
-<tr class="memitem:a0b6ce3213012041c8bb3d1c03f5e8d26" id="r_a0b6ce3213012041c8bb3d1c03f5e8d26"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b6ce3213012041c8bb3d1c03f5e8d26">BounceLineCount</a> = 6</td></tr>
-<tr class="separator:a0b6ce3213012041c8bb3d1c03f5e8d26"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f5494a3a5268feb59efdd8540c99cb0" id="r_a5f5494a3a5268feb59efdd8540c99cb0"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5f5494a3a5268feb59efdd8540c99cb0">BounceName</a> = &quot;BounceHeadsUp&quot;</td></tr>
-<tr class="separator:a5f5494a3a5268feb59efdd8540c99cb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09c584ced29c76a467d743ec2967bfdb" id="r_a09c584ced29c76a467d743ec2967bfdb"><td class="memItemLeft" align="right" valign="top">static readonly Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a09c584ced29c76a467d743ec2967bfdb">BounceSize</a> = new Vector2(60f, 14f) * <a class="el" href="#ae85853df9b6f1dff3214a62a54755ec7">WorldPerCanvasUnit</a></td></tr>
-<tr class="separator:a09c584ced29c76a467d743ec2967bfdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd161d680ccaa523ab0109d6515ecab6" id="r_acd161d680ccaa523ab0109d6515ecab6"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acd161d680ccaa523ab0109d6515ecab6">FontSize</a> = 8f * <a class="el" href="#ae85853df9b6f1dff3214a62a54755ec7">WorldPerCanvasUnit</a> * 10f</td></tr>
 <tr class="separator:acd161d680ccaa523ab0109d6515ecab6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abac8fde882c41de0ec072a57de52350e" id="r_abac8fde882c41de0ec072a57de52350e"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abac8fde882c41de0ec072a57de52350e">GameScenePath</a> = &quot;Assets/Scenes/Game.unity&quot;</td></tr>
 <tr class="separator:abac8fde882c41de0ec072a57de52350e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13b47390ec04a25ec7c99a23a15d18bd" id="r_a13b47390ec04a25ec7c99a23a15d18bd"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a13b47390ec04a25ec7c99a23a15d18bd">LayerName</a> = &quot;HeadsUpLayer&quot;</td></tr>
+<tr class="separator:a13b47390ec04a25ec7c99a23a15d18bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0930815a082b13a9fbee0f35934d4935" id="r_a0930815a082b13a9fbee0f35934d4935"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0930815a082b13a9fbee0f35934d4935">LineName</a> = &quot;Line&quot;</td></tr>
+<tr class="separator:a0930815a082b13a9fbee0f35934d4935"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf5c017cb4c6a44064f3d2250cc44c7b" id="r_acf5c017cb4c6a44064f3d2250cc44c7b"><td class="memItemLeft" align="right" valign="top">static readonly Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf5c017cb4c6a44064f3d2250cc44c7b">LineSize</a> = new Vector2(60f, 14f) * <a class="el" href="#ae85853df9b6f1dff3214a62a54755ec7">WorldPerCanvasUnit</a></td></tr>
+<tr class="separator:acf5c017cb4c6a44064f3d2250cc44c7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa30754a25bd036aeb1ff7dacf585007e" id="r_aa30754a25bd036aeb1ff7dacf585007e"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa30754a25bd036aeb1ff7dacf585007e">MenuRoot</a> = &quot;Tools/BalloonParty/HeadsUp/&quot;</td></tr>
 <tr class="separator:aa30754a25bd036aeb1ff7dacf585007e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a571f88c35714ebfb5a90e0044e2fda3e" id="r_a571f88c35714ebfb5a90e0044e2fda3e"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a571f88c35714ebfb5a90e0044e2fda3e">PrefabPath</a> = &quot;Assets/Prefabs/Game/HeadsUps.prefab&quot;</td></tr>
 <tr class="separator:a571f88c35714ebfb5a90e0044e2fda3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3728a31b8e7bea1957acf1ebcccb560" id="r_ab3728a31b8e7bea1957acf1ebcccb560"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab3728a31b8e7bea1957acf1ebcccb560">ReloadName</a> = &quot;ReloadHeadsUp&quot;</td></tr>
-<tr class="separator:ab3728a31b8e7bea1957acf1ebcccb560"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a78b7ed018c3e4d1d42c7aa7a5f65b622" id="r_a78b7ed018c3e4d1d42c7aa7a5f65b622"><td class="memItemLeft" align="right" valign="top">static readonly Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a78b7ed018c3e4d1d42c7aa7a5f65b622">ReloadSize</a> = new Vector2(40f, 14f) * <a class="el" href="#ae85853df9b6f1dff3214a62a54755ec7">WorldPerCanvasUnit</a></td></tr>
-<tr class="separator:a78b7ed018c3e4d1d42c7aa7a5f65b622"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac44a6b6884d34f20fed320ed3d841432" id="r_ac44a6b6884d34f20fed320ed3d841432"><td class="memItemLeft" align="right" valign="top">static readonly string[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac44a6b6884d34f20fed320ed3d841432">Retired</a> = { &quot;ReloadHeadsUp&quot;, &quot;BounceHeadsUp&quot; }</td></tr>
+<tr class="separator:ac44a6b6884d34f20fed320ed3d841432"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12bb836c4ee1ea6543fcbc239a9c2a34" id="r_a12bb836c4ee1ea6543fcbc239a9c2a34"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a12bb836c4ee1ea6543fcbc239a9c2a34">RootName</a> = &quot;HeadsUps&quot;</td></tr>
 <tr class="separator:a12bb836c4ee1ea6543fcbc239a9c2a34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42322983f93818bb86e20f83b20cde38" id="r_a42322983f93818bb86e20f83b20cde38"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a42322983f93818bb86e20f83b20cde38">SortingLayer</a> = &quot;UI&quot;</td></tr>
@@ -181,11 +173,11 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:ae85853df9b6f1dff3214a62a54755ec7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Builds the heads-ups in world space, on the <code>HeadsUps</code> prefab the <a class="el" href="namespaceBalloonParty_1_1Game.html">Game</a> scene holds, each line a <code>TextMeshPro</code> in the tooltip's pencil font with its <a class="el" href="classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html" title="Writes a TMP_Text on left to right as if by a pencil: a soft reveal edge, slanted forward,...">WriteOnText</a> settings and a <a class="el" href="classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html" title="One short handwritten line in world space (a TextMeshPro, not on a canvas), so it sits where it happe...">HandwrittenHeadsUp</a>: the cannon's "+1" (<a class="el" href="classBalloonParty_1_1UI_1_1HeadsUp_1_1ReloadHeadsUp.html" title="Writes &quot;ready&quot; beside the cannon each time its next ball is ready (ThrowerReadyMessage) and keeps it ...">ReloadHeadsUp</a>) and the ball's "+n bounce" / "-1 bounce" (<a class="el" href="classBalloonParty_1_1UI_1_1HeadsUp_1_1BounceHeadsUp.html" title="Writes how a ball&#39;s bounces go, where it happens: &quot;+n bounce&quot; where it picks up a shield (n counting ...">BounceHeadsUp</a>). </p>
-<p>Not on the game canvas, which is bound to the camera: in world space a line stays where it happened through the camera rig's zoom and shake. A starting look to restyle by hand; running one again rebuilds it, and removes the canvas lines an earlier build left on <code>GameCanvas</code>. </p>
+<div class="textblock"><p>Builds the <a class="el" href="classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpLayer.html" title="Draws the heads-ups HeadsUpService lets through, as pooled HandwrittenHeadsUp lines cloned from _line...">HeadsUpLayer</a> in world space, on the <code>HeadsUps</code> prefab the <a class="el" href="namespaceBalloonParty_1_1Game.html">Game</a> scene holds, with the one line it clones every heads-up from: a <code>TextMeshPro</code> in the tooltip's pencil font with its <a class="el" href="classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html" title="Writes a TMP_Text on left to right as if by a pencil: a soft reveal edge, slanted forward,...">WriteOnText</a> settings and a <a class="el" href="classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html" title="One short handwritten line in world space (a TextMeshPro, not on a canvas), so it sits where it happe...">HandwrittenHeadsUp</a>. </p>
+<p>Not on the game canvas, which is bound to the camera: in world space a line stays where it happened through the camera rig's zoom and shake. A starting look to restyle by hand; running it again rebuilds it, and removes the single-purpose heads-ups (the reload and the bounce ones) that earlier builds left, here or on <code>GameCanvas</code>. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a8a8304600d961e036103055773174e0a" name="a8a8304600d961e036103055773174e0a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8a8304600d961e036103055773174e0a">&#9670;&#160;</a></span>Build()</h2>
+<a id="a88a6b4c2e730468fb5dac49623cf47cf" name="a88a6b4c2e730468fb5dac49623cf47cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88a6b4c2e730468fb5dac49623cf47cf">&#9670;&#160;</a></span>BuildHeadsUpLayer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -194,66 +186,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static void BalloonParty.Editor.HeadsUpBuilder.Build </td>
-          <td>(</td>
-          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>title</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>childName</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Func&lt; GameObject, string &gt;</td>          <td class="paramname"><span class="paramname"><em>build</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ace7dac55f35a3a323bd54fd1f17f483b" name="ace7dac55f35a3a323bd54fd1f17f483b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ace7dac55f35a3a323bd54fd1f17f483b">&#9670;&#160;</a></span>BuildBounce()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void BalloonParty.Editor.HeadsUpBuilder.BuildBounce </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="addb5d2b5d6e963cd9fc4e9cab7467aa0" name="addb5d2b5d6e963cd9fc4e9cab7467aa0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#addb5d2b5d6e963cd9fc4e9cab7467aa0">&#9670;&#160;</a></span>BuildBounceHeadsUp()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static string BalloonParty.Editor.HeadsUpBuilder.BuildBounceHeadsUp </td>
+          <td class="memname">static string BalloonParty.Editor.HeadsUpBuilder.BuildHeadsUpLayer </td>
           <td>(</td>
           <td class="paramtype">GameObject</td>          <td class="paramname"><span class="paramname"><em>root</em></span></td><td>)</td>
           <td></td>
@@ -268,8 +201,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aeb8ac9fffba66994885820decc4bf51e" name="aeb8ac9fffba66994885820decc4bf51e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb8ac9fffba66994885820decc4bf51e">&#9670;&#160;</a></span>BuildReload()</h2>
+<a id="ad3ceed48964e87bd36e36346f4ea5b4b" name="ad3ceed48964e87bd36e36346f4ea5b4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3ceed48964e87bd36e36346f4ea5b4b">&#9670;&#160;</a></span>BuildLayer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -278,34 +211,9 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static void BalloonParty.Editor.HeadsUpBuilder.BuildReload </td>
+          <td class="memname">static void BalloonParty.Editor.HeadsUpBuilder.BuildLayer </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aad97d9ce84b53eb9d32b75b13783745c" name="aad97d9ce84b53eb9d32b75b13783745c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aad97d9ce84b53eb9d32b75b13783745c">&#9670;&#160;</a></span>BuildReloadHeadsUp()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static string BalloonParty.Editor.HeadsUpBuilder.BuildReloadHeadsUp </td>
-          <td>(</td>
-          <td class="paramtype">GameObject</td>          <td class="paramname"><span class="paramname"><em>root</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -533,72 +441,6 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a0b6ce3213012041c8bb3d1c03f5e8d26" name="a0b6ce3213012041c8bb3d1c03f5e8d26"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0b6ce3213012041c8bb3d1c03f5e8d26">&#9670;&#160;</a></span>BounceLineCount</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const int BalloonParty.Editor.HeadsUpBuilder.BounceLineCount = 6</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a5f5494a3a5268feb59efdd8540c99cb0" name="a5f5494a3a5268feb59efdd8540c99cb0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5f5494a3a5268feb59efdd8540c99cb0">&#9670;&#160;</a></span>BounceName</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">const string BalloonParty.Editor.HeadsUpBuilder.BounceName = &quot;BounceHeadsUp&quot;</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a09c584ced29c76a467d743ec2967bfdb" name="a09c584ced29c76a467d743ec2967bfdb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a09c584ced29c76a467d743ec2967bfdb">&#9670;&#160;</a></span>BounceSize</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">readonly Vector2 BalloonParty.Editor.HeadsUpBuilder.BounceSize = new Vector2(60f, 14f) * <a class="el" href="#ae85853df9b6f1dff3214a62a54755ec7">WorldPerCanvasUnit</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="acd161d680ccaa523ab0109d6515ecab6" name="acd161d680ccaa523ab0109d6515ecab6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acd161d680ccaa523ab0109d6515ecab6">&#9670;&#160;</a></span>FontSize</h2>
 
@@ -632,6 +474,72 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">const string BalloonParty.Editor.HeadsUpBuilder.GameScenePath = &quot;Assets/Scenes/Game.unity&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a13b47390ec04a25ec7c99a23a15d18bd" name="a13b47390ec04a25ec7c99a23a15d18bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13b47390ec04a25ec7c99a23a15d18bd">&#9670;&#160;</a></span>LayerName</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const string BalloonParty.Editor.HeadsUpBuilder.LayerName = &quot;HeadsUpLayer&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0930815a082b13a9fbee0f35934d4935" name="a0930815a082b13a9fbee0f35934d4935"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0930815a082b13a9fbee0f35934d4935">&#9670;&#160;</a></span>LineName</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const string BalloonParty.Editor.HeadsUpBuilder.LineName = &quot;Line&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acf5c017cb4c6a44064f3d2250cc44c7b" name="acf5c017cb4c6a44064f3d2250cc44c7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf5c017cb4c6a44064f3d2250cc44c7b">&#9670;&#160;</a></span>LineSize</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly Vector2 BalloonParty.Editor.HeadsUpBuilder.LineSize = new Vector2(60f, 14f) * <a class="el" href="#ae85853df9b6f1dff3214a62a54755ec7">WorldPerCanvasUnit</a></td>
         </tr>
       </table>
   </td>
@@ -687,8 +595,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ab3728a31b8e7bea1957acf1ebcccb560" name="ab3728a31b8e7bea1957acf1ebcccb560"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab3728a31b8e7bea1957acf1ebcccb560">&#9670;&#160;</a></span>ReloadName</h2>
+<a id="ac44a6b6884d34f20fed320ed3d841432" name="ac44a6b6884d34f20fed320ed3d841432"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac44a6b6884d34f20fed320ed3d841432">&#9670;&#160;</a></span>Retired</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -697,29 +605,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">const string BalloonParty.Editor.HeadsUpBuilder.ReloadName = &quot;ReloadHeadsUp&quot;</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a78b7ed018c3e4d1d42c7aa7a5f65b622" name="a78b7ed018c3e4d1d42c7aa7a5f65b622"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a78b7ed018c3e4d1d42c7aa7a5f65b622">&#9670;&#160;</a></span>ReloadSize</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">readonly Vector2 BalloonParty.Editor.HeadsUpBuilder.ReloadSize = new Vector2(40f, 14f) * <a class="el" href="#ae85853df9b6f1dff3214a62a54755ec7">WorldPerCanvasUnit</a></td>
+          <td class="memname">readonly string [] BalloonParty.Editor.HeadsUpBuilder.Retired = { &quot;ReloadHeadsUp&quot;, &quot;BounceHeadsUp&quot; }</td>
         </tr>
       </table>
   </td>

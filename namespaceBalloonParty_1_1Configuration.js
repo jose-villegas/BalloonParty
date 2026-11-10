@@ -6,6 +6,7 @@ var namespaceBalloonParty_1_1Configuration =
     [ "Editor", "namespaceBalloonParty_1_1Configuration_1_1Editor.html", "namespaceBalloonParty_1_1Configuration_1_1Editor" ],
     [ "Effects", "namespaceBalloonParty_1_1Configuration_1_1Effects.html", "namespaceBalloonParty_1_1Configuration_1_1Effects" ],
     [ "GridActors", "namespaceBalloonParty_1_1Configuration_1_1GridActors.html", "namespaceBalloonParty_1_1Configuration_1_1GridActors" ],
+    [ "HeadsUp", "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html", "namespaceBalloonParty_1_1Configuration_1_1HeadsUp" ],
     [ "Items", "namespaceBalloonParty_1_1Configuration_1_1Items.html", "namespaceBalloonParty_1_1Configuration_1_1Items" ],
     [ "Level", "namespaceBalloonParty_1_1Configuration_1_1Level.html", "namespaceBalloonParty_1_1Configuration_1_1Level" ],
     [ "Palette", "namespaceBalloonParty_1_1Configuration_1_1Palette.html", "namespaceBalloonParty_1_1Configuration_1_1Palette" ],

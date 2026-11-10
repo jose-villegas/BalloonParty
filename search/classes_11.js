@@ -110,7 +110,7 @@ var searchData=
   ['simulationsettings_107',['SimulationSettings',['../structBalloonParty_1_1Editor_1_1Bush_1_1LeafVenationSimulator_1_1SimulationSettings.html',1,'BalloonParty::Editor::Bush::LeafVenationSimulator']]],
   ['skyscatterservice_108',['SkyScatterService',['../classBalloonParty_1_1Scenario_1_1SkyScatterService.html',1,'BalloonParty::Scenario']]],
   ['skyscattersettings_109',['SkyScatterSettings',['../classBalloonParty_1_1Configuration_1_1Effects_1_1SkyScatterSettings.html',1,'BalloonParty::Configuration::Effects']]],
-  ['slot_110',['Slot',['../structBalloonParty_1_1Audio_1_1VoiceLimiter_1_1Slot.html',1,'BalloonParty::Audio::VoiceLimiter']]],
+  ['slot_110',['Slot',['../structBalloonParty_1_1Audio_1_1VoiceLimiter_1_1Slot.html',1,'BalloonParty.Audio.VoiceLimiter.Slot'],['../structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue_1_1Slot.html',1,'BalloonParty.Game.HeadsUp.HeadsUpQueue.Slot']]],
   ['slotactorextensions_111',['SlotActorExtensions',['../classBalloonParty_1_1Shared_1_1Extensions_1_1SlotActorExtensions.html',1,'BalloonParty::Shared::Extensions']]],
   ['slotcluster_112',['SlotCluster',['../classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotCluster.html',1,'BalloonParty::Slots::Actor::Cluster']]],
   ['slotclusterchangedevent_113',['SlotClusterChangedEvent',['../structBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterChangedEvent.html',1,'BalloonParty::Slots::Actor::Cluster']]],

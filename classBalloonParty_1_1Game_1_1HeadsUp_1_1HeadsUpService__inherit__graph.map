@@ -1,0 +1,11 @@
+<map id="BalloonParty.Game.HeadsUp.HeadsUpService" name="BalloonParty.Game.HeadsUp.HeadsUpService">
+<area shape="rect" id="Node000001" title="Takes the routers&#39; heads&#45;up requests, lets HeadsUpQueue decide which show, and drives IHeadsUpPresent..." alt="" coords="232,93,444,133"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1HeadsUp_1_1IHeadsUps.html" title="Where routers send heads&#45;ups. Whether one shows is the queue&#39;s call, by the style&#39;s rules." alt="" coords="5,5,217,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="175,48,289,91,287,96,173,53"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="242,13,327,38"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="301,48,328,91,324,94,297,51"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="351,13,431,38"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="379,51,352,94,348,91,375,48"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="455,13,554,38"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="471,47,376,96,374,91,469,42"/>
+</map>

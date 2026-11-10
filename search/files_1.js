@@ -52,7 +52,7 @@ var searchData=
   ['bombitemhandler_2ecs_49',['BombItemHandler.cs',['../BombItemHandler_8cs.html',1,'']]],
   ['bombrangepreview_2ecs_50',['BombRangePreview.cs',['../BombRangePreview_8cs.html',1,'']]],
   ['bonuscarddealtmessage_2ecs_51',['BonusCardDealtMessage.cs',['../BonusCardDealtMessage_8cs.html',1,'']]],
-  ['bounceheadsup_2ecs_52',['BounceHeadsUp.cs',['../BounceHeadsUp_8cs.html',1,'']]],
+  ['bounceheadsuprouter_2ecs_52',['BounceHeadsUpRouter.cs',['../BounceHeadsUpRouter_8cs.html',1,'']]],
   ['bubbleclustermodel_2ecs_53',['BubbleClusterModel.cs',['../BubbleClusterModel_8cs.html',1,'']]],
   ['bubblemergerule_2ecs_54',['BubbleMergeRule.cs',['../BubbleMergeRule_8cs.html',1,'']]],
   ['bubblemergeservice_2ecs_55',['BubbleMergeService.cs',['../BubbleMergeService_8cs.html',1,'']]],

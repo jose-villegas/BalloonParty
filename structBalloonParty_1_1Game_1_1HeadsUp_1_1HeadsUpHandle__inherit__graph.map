@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.HeadsUp.HeadsUpHandle" name="BalloonParty.Game.HeadsUp.HeadsUpHandle">
+<area shape="rect" id="Node000001" title="One showing heads&#45;up: its slot in the queue and that slot&#39;s generation, so a handle kept past its lin..." alt="" coords="5,79,217,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="66,5,157,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,44,114,79,109,79,109,44"/>
+</map>

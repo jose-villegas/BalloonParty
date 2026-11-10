@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['fading_0',['Fading',['../classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html#ad57a256d74f5a9e46a26b14cc5fd8f7ea09b43b300d21b48ec64a94a9dab2f407',1,'BalloonParty::Item::Preview::ItemPreviewTicker']]],
+  ['fading_0',['Fading',['../classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html#ad57a256d74f5a9e46a26b14cc5fd8f7ea09b43b300d21b48ec64a94a9dab2f407',1,'BalloonParty.Item.Preview.ItemPreviewTicker.Fading'],['../classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a331fe9b3c5a1628e11d7fc47df206b69a09b43b300d21b48ec64a94a9dab2f407',1,'BalloonParty.UI.HeadsUp.HandwrittenHeadsUp.Fading']]],
   ['fall_1',['Fall',['../namespaceBalloonParty_1_1UI_1_1Score.html#a86f03547512dfa6ce827879a999ee3dba58fa788345ab5ac21c2cef38907d4580',1,'BalloonParty::UI::Score']]],
   ['fasterreload_2',['FasterReload',['../namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523a13306407a9fcc8bf32cafa63c19d150a',1,'BalloonParty::Shared']]],
   ['fixed_3',['Fixed',['../namespaceBalloonParty_1_1Configuration_1_1Ranges.html#a1eab69ce6d844600af9e15366672f94ba4457d440870ad6d42bab9082d9bf9b61',1,'BalloonParty::Configuration::Ranges']]],

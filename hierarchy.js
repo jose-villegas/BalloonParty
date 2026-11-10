@@ -180,10 +180,16 @@ var hierarchy =
     [ "BalloonParty.Scenario.GroundRevealDepth", "structBalloonParty_1_1Scenario_1_1GroundRevealDepth.html", null ],
     [ "BalloonParty.Scenario.GroundRevealFrame", "structBalloonParty_1_1Scenario_1_1GroundRevealFrame.html", null ],
     [ "BalloonParty.Scenario.GroundRevealPlanner", "classBalloonParty_1_1Scenario_1_1GroundRevealPlanner.html", null ],
+    [ "BalloonParty.Game.HeadsUp.HeadsUpAnchor", "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html", null ],
     [ "BalloonParty.Editor.HeadsUpBuilder", "classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html", null ],
+    [ "BalloonParty.Game.HeadsUp.HeadsUpOffer", "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpOffer.html", null ],
     [ "BalloonParty.UI.HeadsUp.HeadsUpPacking", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html", null ],
-    [ "BalloonParty.UI.HeadsUp.HeadsUpSizing", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpSizing.html", null ],
-    [ "BalloonParty.UI.HeadsUp.HeadsUpStyle", "structBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpStyle.html", null ],
+    [ "BalloonParty.Game.HeadsUp.HeadsUpQueue", "classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html", null ],
+    [ "BalloonParty.Game.HeadsUp.HeadsUpRequest", "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html", null ],
+    [ "BalloonParty.Configuration.HeadsUp.HeadsUpSizing", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSizing.html", null ],
+    [ "BalloonParty.Configuration.HeadsUp.HeadsUpStyle", "structBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyle.html", null ],
+    [ "BalloonParty.Configuration.HeadsUp.HeadsUpStyleIds", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleIds.html", null ],
+    [ "BalloonParty.Configuration.HeadsUp.HeadsUpStyleSettings", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html", null ],
     [ "BalloonParty.Slots.Grid.HexCoordinates", "classBalloonParty_1_1Slots_1_1Grid_1_1HexCoordinates.html", null ],
     [ "BalloonParty.Configuration.Balloons.HitVfxOverride", "classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html", null ],
     [ "BalloonParty.Game.Level.IActiveLevelParameters", "interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html", [
@@ -384,6 +390,11 @@ var hierarchy =
       [ "BalloonParty.Game.Coins.CoinWalletSaver", "classBalloonParty_1_1Game_1_1Coins_1_1CoinWalletSaver.html", null ],
       [ "BalloonParty.Game.Danger.SpaceDanger", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html", null ],
       [ "BalloonParty.Game.Flight.FlightStatsService", "classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html", null ],
+      [ "BalloonParty.Game.HeadsUp.HeadsUpService", "classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpService.html", null ],
+      [ "BalloonParty.Game.HeadsUp.Routing.BounceHeadsUpRouter", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html", null ],
+      [ "BalloonParty.Game.HeadsUp.Routing.CannonHeadsUpRouter", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CannonHeadsUpRouter.html", null ],
+      [ "BalloonParty.Game.HeadsUp.Routing.CombatHeadsUpRouter", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html", null ],
+      [ "BalloonParty.Game.HeadsUp.Routing.ProgressHeadsUpRouter", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1ProgressHeadsUpRouter.html", null ],
       [ "BalloonParty.Game.Health.PlayerHealthController", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html", null ],
       [ "BalloonParty.Game.Level.LevelController", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html", null ],
       [ "BalloonParty.Game.Level.LevelDifficultyResolver", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html", null ],
@@ -469,6 +480,8 @@ var hierarchy =
     ] ],
     [ "IEquatable", null, [
       [ "BalloonParty.Audio.SoundHandle", "structBalloonParty_1_1Audio_1_1SoundHandle.html", null ],
+      [ "BalloonParty.Game.HeadsUp.HeadsUpHandle", "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html", null ],
+      [ "BalloonParty.Game.HeadsUp.HeadsUpMergeKey", "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpMergeKey.html", null ],
       [ "BalloonParty.Game.Score.TrailId", "structBalloonParty_1_1Game_1_1Score_1_1TrailId.html", null ],
       [ "BalloonParty.Scenario.ScenarioShift", "structBalloonParty_1_1Scenario_1_1ScenarioShift.html", null ]
     ] ],
@@ -535,6 +548,15 @@ var hierarchy =
       [ "BalloonParty.Balloon.Model.BubbleClusterModel", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html", null ],
       [ "BalloonParty.Balloon.Model.ToughBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html", null ],
       [ "BalloonParty.Balloon.Model.UnbreakableBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html", null ]
+    ] ],
+    [ "BalloonParty.Game.HeadsUp.IHeadsUpPresenter", "interfaceBalloonParty_1_1Game_1_1HeadsUp_1_1IHeadsUpPresenter.html", [
+      [ "BalloonParty.UI.HeadsUp.HeadsUpLayer", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpLayer.html", null ]
+    ] ],
+    [ "BalloonParty.Game.HeadsUp.IHeadsUps", "interfaceBalloonParty_1_1Game_1_1HeadsUp_1_1IHeadsUps.html", [
+      [ "BalloonParty.Game.HeadsUp.HeadsUpService", "classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpService.html", null ]
+    ] ],
+    [ "BalloonParty.Configuration.HeadsUp.IHeadsUpSettings", "interfaceBalloonParty_1_1Configuration_1_1HeadsUp_1_1IHeadsUpSettings.html", [
+      [ "BalloonParty.Configuration.HeadsUp.HeadsUpSettings", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSettings.html", null ]
     ] ],
     [ "BalloonParty.Slots.Capabilities.IHitable", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHitable.html", [
       [ "BalloonParty.Balloon.Model.IBalloonModel", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html", null ],
@@ -662,6 +684,7 @@ var hierarchy =
       [ "BalloonParty.Shared.Pool.EffectView", "classBalloonParty_1_1Shared_1_1Pool_1_1EffectView.html", null ],
       [ "BalloonParty.Shared.Pool.PoolableParticle", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolableParticle.html", null ],
       [ "BalloonParty.Slots.Actor.Archetype.GridActorView", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GridActorView.html", null ],
+      [ "BalloonParty.UI.HeadsUp.HandwrittenHeadsUp", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html", null ],
       [ "BalloonParty.UI.Score.FlyingTrail", "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html", null ],
       [ "BalloonParty.UI.Score.ProgressNotice", "classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html", null ]
     ] ],
@@ -934,6 +957,11 @@ var hierarchy =
       [ "BalloonParty.Game.Coins.CoinWalletSaver", "classBalloonParty_1_1Game_1_1Coins_1_1CoinWalletSaver.html", null ],
       [ "BalloonParty.Game.Danger.SpaceDanger", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html", null ],
       [ "BalloonParty.Game.Flight.FlightStatsService", "classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html", null ],
+      [ "BalloonParty.Game.HeadsUp.HeadsUpService", "classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpService.html", null ],
+      [ "BalloonParty.Game.HeadsUp.Routing.BounceHeadsUpRouter", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html", null ],
+      [ "BalloonParty.Game.HeadsUp.Routing.CannonHeadsUpRouter", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CannonHeadsUpRouter.html", null ],
+      [ "BalloonParty.Game.HeadsUp.Routing.CombatHeadsUpRouter", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html", null ],
+      [ "BalloonParty.Game.HeadsUp.Routing.ProgressHeadsUpRouter", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1ProgressHeadsUpRouter.html", null ],
       [ "BalloonParty.Game.Health.PlayerHealthController", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html", null ],
       [ "BalloonParty.Game.Level.LevelController", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html", null ],
       [ "BalloonParty.Game.Level.LevelDifficultyResolver", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html", null ],
@@ -1011,6 +1039,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Spawner.RejectedBalloonEffect", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html", null ],
       [ "BalloonParty.Balloon.Spawner.SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html", null ],
       [ "BalloonParty.Game.Cinematics.CinematicDirector", "classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicDirector.html", null ],
+      [ "BalloonParty.Game.HeadsUp.HeadsUpService", "classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpService.html", null ],
       [ "BalloonParty.Game.LaunchDisturbanceStamp", "classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html", null ],
       [ "BalloonParty.Game.Level.LevelController", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html", null ],
       [ "BalloonParty.Game.Level.TimeOfDayCycle", "classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle.html", null ],
@@ -1210,9 +1239,8 @@ var hierarchy =
       [ "BalloonParty.UI.Danger.DangerHeartLossView", "classBalloonParty_1_1UI_1_1Danger_1_1DangerHeartLossView.html", null ],
       [ "BalloonParty.UI.FadeImage", "classBalloonParty_1_1UI_1_1FadeImage.html", null ],
       [ "BalloonParty.UI.GameOver.GameOverScreen", "classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html", null ],
-      [ "BalloonParty.UI.HeadsUp.BounceHeadsUp", "classBalloonParty_1_1UI_1_1HeadsUp_1_1BounceHeadsUp.html", null ],
       [ "BalloonParty.UI.HeadsUp.HandwrittenHeadsUp", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html", null ],
-      [ "BalloonParty.UI.HeadsUp.ReloadHeadsUp", "classBalloonParty_1_1UI_1_1HeadsUp_1_1ReloadHeadsUp.html", null ],
+      [ "BalloonParty.UI.HeadsUp.HeadsUpLayer", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpLayer.html", null ],
       [ "BalloonParty.UI.HeadsUp.WriteOnText", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html", null ],
       [ "BalloonParty.UI.LevelUp.LevelUpPopUp", "classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html", null ],
       [ "BalloonParty.UI.LevelUp.UpgradeCardView", "classBalloonParty_1_1UI_1_1LevelUp_1_1UpgradeCardView.html", null ],
@@ -1391,6 +1419,7 @@ var hierarchy =
       [ "BalloonParty.Configuration.Effects.SpeckFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckFieldSettings.html", null ],
       [ "BalloonParty.Configuration.GameDisplayConfiguration", "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html", null ],
       [ "BalloonParty.Configuration.GridActors.GridActorConfiguration", "classBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorConfiguration.html", null ],
+      [ "BalloonParty.Configuration.HeadsUp.HeadsUpSettings", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSettings.html", null ],
       [ "BalloonParty.Configuration.ItemPreviewConfig", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html", null ],
       [ "BalloonParty.Configuration.Items.ItemConfiguration", "classBalloonParty_1_1Configuration_1_1Items_1_1ItemConfiguration.html", null ],
       [ "BalloonParty.Configuration.Level.LevelPacingConfiguration", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html", null ],
@@ -1451,6 +1480,7 @@ var hierarchy =
     [ "BalloonParty.Item.ItemSightTracker.SightedItem", "structBalloonParty_1_1Item_1_1ItemSightTracker_1_1SightedItem.html", null ],
     [ "BalloonParty.Editor.Bush.LeafVenationSimulator.SimulationSettings", "structBalloonParty_1_1Editor_1_1Bush_1_1LeafVenationSimulator_1_1SimulationSettings.html", null ],
     [ "BalloonParty.Audio.VoiceLimiter.Slot", "structBalloonParty_1_1Audio_1_1VoiceLimiter_1_1Slot.html", null ],
+    [ "BalloonParty.Game.HeadsUp.HeadsUpQueue.Slot", "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue_1_1Slot.html", null ],
     [ "BalloonParty.Shared.Extensions.SlotActorExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1SlotActorExtensions.html", null ],
     [ "BalloonParty.Slots.Actor.Cluster.SlotCluster", "classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotCluster.html", null ],
     [ "BalloonParty.Slots.Actor.Cluster.SlotClusterChangedEvent", "structBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterChangedEvent.html", null ],

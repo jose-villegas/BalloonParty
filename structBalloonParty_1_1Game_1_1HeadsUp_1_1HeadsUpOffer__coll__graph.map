@@ -1,0 +1,12 @@
+<map id="BalloonParty.Game.HeadsUp.HeadsUpOffer" name="BalloonParty.Game.HeadsUp.HeadsUpOffer">
+<area shape="rect" id="Node000001" title="The queue&#39;s answer: drop it, show it in a slot (evicting a line first, if any), or rewrite a line." alt="" coords="5,300,217,340"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpOffer.html" title="The queue&#39;s answer: drop it, show it in a slot (evicting a line first, if any), or rewrite a line." alt="" coords="168,197,380,237"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="233,247,143,302,140,298,230,242"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="395,209,407,217,399,225,381,228,380,223,396,220,401,218,392,213"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html" title="One showing heads&#45;up: its slot in the queue and that slot&#39;s generation, so a handle kept past its lin..." alt="" coords="5,80,217,120"/>
+<area shape="poly" id="edge6_Node000001_Node000003" title=" " alt="" coords="110,134,106,183,106,237,112,300,106,300,101,237,101,182,105,134"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="150,126,249,195,246,200,147,130"/>
+<area shape="poly" id="edge5_Node000003_Node000003" title=" " alt="" coords="232,92,244,100,236,107,218,110,217,104,234,102,239,100,230,97"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="66,5,157,31"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="114,44,114,80,109,80,109,44"/>
+</map>

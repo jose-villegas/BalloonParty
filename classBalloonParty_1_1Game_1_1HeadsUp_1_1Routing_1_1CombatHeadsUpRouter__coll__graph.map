@@ -1,0 +1,13 @@
+<map id="BalloonParty.Game.HeadsUp.Routing.CombatHeadsUpRouter" name="BalloonParty.Game.HeadsUp.Routing.CombatHeadsUpRouter">
+<area shape="rect" id="Node000001" title="The shot&#39;s heads&#45;ups: a streak growing (x3! at the pop, rewriting itself per ball and colour),..." alt="" coords="345,105,575,145"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="69,5,154,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,27,218,39,319,71,406,102,405,107,317,76,217,45,167,32"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="62,55,161,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="175,75,345,103,345,108,174,80"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1HeadsUp_1_1IHeadsUps.html" title="Where routers send heads&#45;ups. Whether one shows is the queue&#39;s call, by the style&#39;s rules." alt="" coords="5,105,217,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="231,122,345,122,345,127,231,127"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="26,169,197,209"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="210,168,350,142,351,147,211,173"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce.html" title="Whether any live shot is currently piercing, and which shot just started to." alt="" coords="14,233,209,288"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="203,226,320,182,413,142,415,147,322,187,205,231"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="BalloonParty.Game.HeadsUp.HeadsUpQueue" name="BalloonParty.Game.HeadsUp.HeadsUpQueue">
+<area shape="rect" id="Node000001" title="Which heads&#45;ups get a place on screen." alt="" coords="799,37,1011,77"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1HeadsUp_1_1IHeadsUpSettings.html" title="The heads&#45;ups&#39; rules and looks (see Plans/PLAN&#45;HeadsUp.md §6): how many may show at once,..." alt="" coords="480,5,681,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="695,34,798,44,798,50,695,39"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue_1_1Slot.html" title=" " alt="" coords="475,69,687,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="700,75,798,65,798,70,701,80"/>
+<area shape="rect" id="Node000004" href="$structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpMergeKey.html" title="What makes two heads&#45;ups of one style the same line: a showing line with the same style and key is re..." alt="" coords="145,69,357,109"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="371,87,475,87,475,92,371,92"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,77,96,102"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="110,87,145,87,145,92,110,92"/>
+</map>

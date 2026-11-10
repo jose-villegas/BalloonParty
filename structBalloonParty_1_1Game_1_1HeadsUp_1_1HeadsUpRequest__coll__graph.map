@@ -1,0 +1,9 @@
+<map id="BalloonParty.Game.HeadsUp.HeadsUpRequest" name="BalloonParty.Game.HeadsUp.HeadsUpRequest">
+<area shape="rect" id="Node000001" title="What a router asks to be written: a style, its number, where, and optionally the line it rewrites (Me..." alt="" coords="45,183,257,223"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html" title="Where a heads&#45;up is written: a fixed world point (where something happened), or a TrailEndpointRegist..." alt="" coords="5,80,217,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,132,146,182,141,184,122,134"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpMergeKey.html" title="What makes two heads&#45;ups of one style the same line: a showing line with the same style and key is re..." alt="" coords="241,80,453,120"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="300,129,189,185,187,180,297,124"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="302,5,393,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="350,44,350,80,345,80,345,44"/>
+</map>

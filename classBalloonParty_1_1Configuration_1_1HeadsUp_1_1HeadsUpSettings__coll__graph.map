@@ -1,0 +1,11 @@
+<map id="BalloonParty.Configuration.HeadsUp.HeadsUpSettings" name="BalloonParty.Configuration.HeadsUp.HeadsUpSettings">
+<area shape="rect" id="Node000001" title="The heads&#45;ups&#39; rules and looks." alt="" coords="616,55,813,95"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="341,5,471,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="484,30,616,54,615,60,483,35"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1HeadsUp_1_1IHeadsUpSettings.html" title="The heads&#45;ups&#39; rules and looks (see Plans/PLAN&#45;HeadsUp.md §6): how many may show at once,..." alt="" coords="305,55,507,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="520,73,616,73,616,78,520,78"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html" title="How one kind of heads&#45;up reads and when it shows: its wording, its look, how it competes for a place ..." alt="" coords="291,119,521,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="534,119,591,107,648,93,649,98,593,113,535,124"/>
+<area shape="rect" id="Node000005" href="$structBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyle.html" title="How one kind of heads&#45;up looks, so each kind reads at a glance: its colour, its size against the line..." alt="" coords="5,119,203,159"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="217,137,291,137,291,142,217,142"/>
+</map>

@@ -1,0 +1,32 @@
+<map id="BalloonParty.Game.HeadsUp.HeadsUpService" name="BalloonParty.Game.HeadsUp.HeadsUpService">
+<area shape="rect" id="Node000001" title="Takes the routers&#39; heads&#45;up requests, lets HeadsUpQueue decide which show, and drives IHeadsUpPresent..." alt="" coords="1159,232,1371,272"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1HeadsUp_1_1IHeadsUps.html" title="Where routers send heads&#45;ups. Whether one shows is the queue&#39;s call, by the style&#39;s rules." alt="" coords="799,5,1011,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="991,47,1012,55,1077,80,1104,94,1136,115,1171,143,1202,175,1250,230,1246,233,1198,178,1167,147,1133,119,1101,98,1074,85,1010,60,989,52"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="862,70,947,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="962,91,1011,104,1075,125,1136,155,1194,193,1242,230,1238,234,1191,197,1133,160,1073,130,1010,109,960,96"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="865,119,945,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="958,141,1011,153,1074,167,1136,185,1185,207,1229,229,1226,234,1183,212,1134,191,1073,172,1010,159,957,146"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="855,169,954,194"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="968,185,1048,196,1135,212,1201,229,1200,234,1134,217,1047,202,967,191"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Configuration_1_1HeadsUp_1_1IHeadsUpSettings.html" title="The heads&#45;ups&#39; rules and looks (see Plans/PLAN&#45;HeadsUp.md §6): how many may show at once,..." alt="" coords="480,221,681,261"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="695,240,1158,248,1158,253,695,246"/>
+<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html" title="Which heads&#45;ups get a place on screen." alt="" coords="799,281,1011,321"/>
+<area shape="poly" id="edge12_Node000012_Node000006" title=" " alt="" coords="695,261,711,264,799,280,798,285,710,269,694,266"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1HeadsUp_1_1IHeadsUpPresenter.html" title="Draws the heads&#45;ups the service lets through." alt="" coords="799,345,1011,385"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1000,339,1134,300,1215,270,1217,274,1136,305,1002,344"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html" title="Reference&#45;counted per source so nested pause calls don&#39;t prematurely resume." alt="" coords="806,409,1003,449"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="985,403,1010,395,1073,377,1100,367,1133,351,1193,311,1240,270,1244,274,1196,315,1136,356,1103,372,1075,382,1011,400,987,408"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="477,409,684,449"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="698,427,806,427,806,432,698,432"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html" title="Read surface of the player&#39;s progression through levels." alt="" coords="811,473,999,513"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1011,467,1074,443,1133,409,1171,375,1203,338,1249,271,1254,274,1208,341,1174,379,1136,413,1076,448,1012,472"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Shared_1_1GameState_1_1INavigation.html" title="Injectable seam over the static Navigation, testable without global state." alt="" coords="807,537,1002,577"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="1015,537,1077,515,1106,500,1133,481,1158,457,1179,430,1215,371,1240,315,1255,271,1260,273,1245,317,1220,373,1184,433,1161,460,1136,485,1109,504,1079,520,1016,542"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="1024,282,1158,264,1159,269,1024,288"/>
+<area shape="rect" id="Node000013" href="$structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue_1_1Slot.html" title=" " alt="" coords="475,293,687,333"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="700,311,775,309,798,308,799,313,775,315,701,317"/>
+<area shape="rect" id="Node000014" href="$structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpMergeKey.html" title="What makes two heads&#45;ups of one style the same line: a showing line with the same style and key is re..." alt="" coords="145,293,357,333"/>
+<area shape="poly" id="edge14_Node000013_Node000014" title=" " alt="" coords="371,311,475,311,475,316,371,316"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="5,301,96,326"/>
+<area shape="poly" id="edge15_Node000014_Node000015" title=" " alt="" coords="110,311,145,311,145,316,110,316"/>
+</map>

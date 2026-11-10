@@ -28,7 +28,10 @@ var searchData=
   ['bonusretry_25',['BonusRetry',['../namespaceBalloonParty_1_1Game_1_1Run.html#ae32b042f074527467706d741395e3a74a7b69c80559d67f1b49a821c83dbdba7d',1,'BalloonParty::Game::Run']]],
   ['bottom_26',['Bottom',['../namespaceBalloonParty_1_1Shared_1_1Rendering.html#a63cfabf5179e57786c7237e9ce726787a2ad9d63b69c4a10a5cc9cad923133bc4',1,'BalloonParty::Shared::Rendering']]],
   ['bounced_27',['Bounced',['../namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649a6592f349ddfe64e333b3c4f1d17161af',1,'BalloonParty::Projectile::Controller']]],
-  ['bracing_28',['Bracing',['../classBalloonParty_1_1Projectile_1_1View_1_1ProjectileShieldView.html#a8cbb3f09d52df56431e51199cad285caa8b4b0412c01a1855349602f9cbe33768',1,'BalloonParty::Projectile::View::ProjectileShieldView']]],
-  ['bubblecluster_29',['BubbleCluster',['../namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60ea2d92127d6af9dd8fbbe7b1fa1a72dc5e',1,'BalloonParty::Balloon::Type']]],
-  ['bush_30',['Bush',['../namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473ac7174dc75237a0361780548a1af6872b',1,'BalloonParty::Slots::Actor::Archetype']]]
+  ['bouncepickup_28',['BouncePickup',['../namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da2e332c4ba8afe0ecff50eb58cc6b2fb6',1,'BalloonParty::Configuration::HeadsUp']]],
+  ['bouncewall_29',['BounceWall',['../namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da10ed866882d075a693cfe6d80ce7b07b',1,'BalloonParty::Configuration::HeadsUp']]],
+  ['bouncewalllast_30',['BounceWallLast',['../namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56dad7ae23504c10caf6fdcacff88a864cfe',1,'BalloonParty::Configuration::HeadsUp']]],
+  ['bracing_31',['Bracing',['../classBalloonParty_1_1Projectile_1_1View_1_1ProjectileShieldView.html#a8cbb3f09d52df56431e51199cad285caa8b4b0412c01a1855349602f9cbe33768',1,'BalloonParty::Projectile::View::ProjectileShieldView']]],
+  ['bubblecluster_32',['BubbleCluster',['../namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60ea2d92127d6af9dd8fbbe7b1fa1a72dc5e',1,'BalloonParty::Balloon::Type']]],
+  ['bush_33',['Bush',['../namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473ac7174dc75237a0361780548a1af6872b',1,'BalloonParty::Slots::Actor::Archetype']]]
 ];

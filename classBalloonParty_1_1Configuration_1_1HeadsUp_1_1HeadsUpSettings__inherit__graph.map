@@ -1,0 +1,7 @@
+<map id="BalloonParty.Configuration.HeadsUp.HeadsUpSettings" name="BalloonParty.Configuration.HeadsUp.HeadsUpSettings">
+<area shape="rect" id="Node000001" title="The heads&#45;ups&#39; rules and looks." alt="" coords="66,93,263,133"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,135,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,45,146,91,142,95,91,49"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1HeadsUp_1_1IHeadsUpSettings.html" title="The heads&#45;ups&#39; rules and looks (see Plans/PLAN&#45;HeadsUp.md §6): how many may show at once,..." alt="" coords="159,5,360,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="230,57,187,95,184,91,226,53"/>
+</map>

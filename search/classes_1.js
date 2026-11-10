@@ -62,7 +62,7 @@ var searchData=
   ['bombrangepreview_59',['BombRangePreview',['../classBalloonParty_1_1Item_1_1Preview_1_1BombRangePreview.html',1,'BalloonParty::Item::Preview']]],
   ['bombsettings_60',['BombSettings',['../classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html',1,'BalloonParty::Configuration::Items']]],
   ['bonuscarddealtmessage_61',['BonusCardDealtMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html',1,'BalloonParty::Shared::Messages']]],
-  ['bounceheadsup_62',['BounceHeadsUp',['../classBalloonParty_1_1UI_1_1HeadsUp_1_1BounceHeadsUp.html',1,'BalloonParty::UI::HeadsUp']]],
+  ['bounceheadsuprouter_62',['BounceHeadsUpRouter',['../classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html',1,'BalloonParty::Game::HeadsUp::Routing']]],
   ['bubbleclustermodel_63',['BubbleClusterModel',['../classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html',1,'BalloonParty::Balloon::Model']]],
   ['bubblemergecandidate_64',['BubbleMergeCandidate',['../structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html',1,'BalloonParty::Balloon::Controller']]],
   ['bubblemergerule_65',['BubbleMergeRule',['../classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule.html',1,'BalloonParty::Balloon::Controller']]],

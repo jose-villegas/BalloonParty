@@ -5,6 +5,7 @@ var classBalloonParty_1_1Game_1_1GameScopeRegistration =
     [ "RegisterAudioRouters", "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a1cd7bf4a47cc2d87f0555d9ba8e70880", null ],
     [ "RegisterCoreServices", "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a8615beecef807f85525d41aa4ed1b228", null ],
     [ "RegisterGameplaySystems", "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#ac9cc573bae12930ccb06f867ea7a55f9", null ],
+    [ "RegisterHeadsUps", "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a584ce2eaa3e56c403b4c3679b02de247", null ],
     [ "RegisterItemRangePreviews", "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a9981d029cb6a2f9615f50578f0fa6d6a", null ],
     [ "RegisterItems", "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a7dc104d36e38add62120e58c52849b08", null ],
     [ "RegisterMessages", "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a685d92880a6a1c1699651eca2a33c697", null ],

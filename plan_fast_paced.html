@@ -110,12 +110,12 @@ $(function(){initNavTree('plan_fast_paced.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">Fast-Paced Endless Mode</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md406"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md409"></a>
 Fast-Paced Endless Mode</h1>
 <p>Turn <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> from a turn-based puzzle shooter into a fast, endless arcade game, while keeping the balloon grid, the items, the grid actors and the visual language it already has.</p>
 <p><b>Status:</b> all decisions settled. Phase 1 (projectile identity) is built. Phase 2 (rapid fire) is implemented, pending the owner's playtest at cap 3. Phase 3 (spawn clock) is implemented, pending the owner's playtest. Phase 4 (generated levels) is implemented, pending the owner's playtest. Phase 5 is split: 5a (unlimited retries and the ad seam) is built, pending playtest; 5b (upgrade cards and the level-up change) is built, pending playtest; 5c (the rewarded bonus card and the tooltip) is implemented, pending review and playtest. Items marked <b>DECISION</b> are settled: don't re-derive them. §10 records the owner's answers.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md408"></a>
+<h2><a class="anchor" id="autotoc_md411"></a>
 1. Why</h2>
 <p>Two problems block shipping the game as it is:</p>
 <table class="markdownTable">
@@ -127,7 +127,7 @@ Fast-Paced Endless Mode</h1>
 <td class="markdownTableBodyNone"><b>The game waits for the player.</b> One shot is one turn. Lines spawn, items roll and level-ups resolve only when the shot dies (<code>ProjectileDestroyedMessage</code>).   </td><td class="markdownTableBodyNone"><code>BalloonSpawner.OnProjectileDestroyed</code>, <code>ThrowerController</code> reloads on death only.   </td></tr>
 </table>
 <p>The model to copy is NewMoonShooter (<em>Lunar Deploy</em>): nothing there is authored per round. Every round is a formula over the previous one: +2 enemies, 12% faster, a growing share of flank entries, targets that grow per win, kills that pay more per round. A win is a checkpoint you continue from; a loss replays the same target.</p>
-<h2><a class="anchor" id="autotoc_md409"></a>
+<h2><a class="anchor" id="autotoc_md412"></a>
 2. The game after this plan</h2>
 <ul>
 <li><b>Rapid fire.</b> The thrower reloads on a cooldown. Several balls fly at once, up to a cap.</li>
@@ -136,7 +136,7 @@ Fast-Paced Endless Mode</h1>
 <li><b>Checkpoint retry.</b> Losing replays the level you reached, with the same seeded mix.</li>
 <li><b>Incremental power.</b> The ball cap, the reload, the shields per ball and the item odds are the "weapon level"; they grow only through upgrade cards picked at level-ups (§13 run modifiers in <a class="el" href="plan_future_ideas.html">Future Ideas &amp; Improvements</a>).</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md410"></a>
+<h2><a class="anchor" id="autotoc_md413"></a>
 3. Phases</h2>
 <div class="fragment"><div class="line">flowchart LR</div>
 <div class="line">    P1[&quot;Phase 1: projectile identity&quot;] --&gt; P2[&quot;Phase 2: rapid fire&quot;]</div>
@@ -161,7 +161,7 @@ Fast-Paced Endless Mode</h1>
 </table>
 <p>Phases 3 and 4 touch different files from 1 and 2 and can run in parallel with them. Each phase follows the per-phase review protocol (implement → architect + test-everything + reviewer → curate and fix → owner signs off) and needs an in-editor playtest; <code>dotnet build</code> can't judge feel.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md412"></a>
+<h2><a class="anchor" id="autotoc_md415"></a>
 4. Phase 1: projectile identity (no behaviour change)</h2>
 <p><b>Root cause.</b> No projectile message says <em>which</em> projectile it is about. <code>ProjectileDestroyedMessage</code> has no fields at all; <code>Fired</code>, <code>Doomed*</code>, <code>Cruise*</code>, <code>ShieldLost</code>, <code>PierceDischarged</code>, <code>ActorHit</code>, <code>BalloonDeflected</code> and <code>ForceDestroy</code> don't either. About 15 systems also treat <code>ProjectileLoadedMessage</code> as "the flight starts" and cache the last-loaded ball as <em>the</em> ball. With a cooldown reload, the next Load lands while earlier balls still fly, and every one of those systems switches to the held ball and resets its state.</p>
 <p><b>DECISION: a flight is one ball.</b> Per-flight state (stats, streak, buffs, pierce, telemetry flight scope, audio pitch ramps) is keyed by the ball, not by a volley. A volley has no mechanical meaning and would need its own start/end rules.</p>
@@ -194,7 +194,7 @@ Fast-Paced Endless Mode</h1>
 <p><b>Done when:</b> the game plays exactly as today with the cap at 1, and an EditMode test drives two concurrent balls through the registry, stats and streak without cross-talk.</p>
 <p><b>Check the rainbow self-feeding pattern</b> (a shot that rainbow-converts balloons then re-pops them farms uncapped streak multiplier). Per-ball streaks must not let ball B re-pop what ball A converted for A's multiplier.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md414"></a>
+<h2><a class="anchor" id="autotoc_md417"></a>
 5. Phase 2: rapid fire</h2>
 <p><b>Implemented, pending the owner's playtest at cap 3.</b> The rows below keep the original design wording; the built behaviour lives in <code><a class="el" href="Thrower_2README_8md.html">Thrower/README.md</a></code> (Rapid fire), <code><a class="el" href="Game_2Level_2README_8md.html">Game/Level/README.md</a></code>, <code><a class="el" href="Balloon_2Spawner_2README_8md.html">Balloon/Spawner/README.md</a></code> and <code><a class="el" href="Shared_2Pause_2README_8md.html">Shared/Pause/README.md</a></code>. Differences and open items:</p>
 <table class="markdownTable">
@@ -203,7 +203,7 @@ Fast-Paced Endless Mode</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Pool prewarm   </td><td class="markdownTableBodyNone"><code>2 * MaxBallsInFlight + 1</code>, not cap + 1: a dead ball stays out of the pool until its disappear animation finishes.    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Reload   </td><td class="markdownTableBodyNone">The held ball slides pivot to muzzle, advancing only while a slot is free (<code>ThrowerReload</code>). Since playtest its pace depends on what's in the air: near-instant with nothing flying (<code>ProjectileLoadDuration</code>, 0.12 s), and <code>max(ProjectileLoadDuration, ReloadCooldownSeconds)</code> while a ball flies (2 s, a little under the median flight the playtest bot measured), which Quick Hands shortens: each shot can be followed up only at a price, and the cards make that price cheaper. <code>ThrowerReadyMessage</code> marks "a release now fires" and drives the reload sound and the handwritten <code>+1</code> ready notice (<code>UI/HeadsUp/ReloadHeadsUp</code>). The shipped cooldown went 0.5 s, then 0.9 s, before the idle/under-fire split.    </td></tr>
+<td class="markdownTableBodyNone">Reload   </td><td class="markdownTableBodyNone">The held ball slides pivot to muzzle, advancing only while a slot is free (<code>ThrowerReload</code>). Since playtest its pace depends on what's in the air: near-instant with nothing flying (<code>ProjectileLoadDuration</code>, 0.12 s), and <code>max(ProjectileLoadDuration, ReloadCooldownSeconds)</code> while a ball flies (2 s, a little under the median flight the playtest bot measured), which Quick Hands shortens: each shot can be followed up only at a price, and the cards make that price cheaper. <code>ThrowerReadyMessage</code> marks "a release now fires" and drives the reload sound and the handwritten <code>ready</code> heads-up (now <code>Game/HeadsUp/Routing/CannonHeadsUpRouter</code>). The shipped cooldown went 0.5 s, then 0.9 s, before the idle/under-fire split.    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Level-up with balls in flight   </td><td class="markdownTableBodyNone">After the beat plus <code>LevelCompleteFlightGrace</code>, remaining balls are force-destroyed once. Pierce toughs already plowed through still discharge and score; progress past the cap is banked. So "no score" in the row below is not literal.    </td></tr>
 <tr class="markdownTableRowEven">
@@ -249,7 +249,7 @@ Fast-Paced Endless Mode</h1>
 </table>
 <p><b>Done when:</b> a playtest at cap 3 feels fast and readable, level-up and game over clean up every ball, and nothing waits on a single flight.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md416"></a>
+<h2><a class="anchor" id="autotoc_md419"></a>
 6. Phase 3: spawn clock</h2>
 <p><b>Implemented, pending the owner's playtest.</b> The rows below keep the original design wording; the built behaviour lives in <code><a class="el" href="Balloon_2Spawner_2README_8md.html">Balloon/Spawner/README.md</a></code>, <code><a class="el" href="Game_2Danger_2README_8md.html">Game/Danger/README.md</a></code>, <code><a class="el" href="Game_2Cinematics_2README_8md.html">Game/Cinematics/README.md</a></code>, <code><a class="el" href="Shared_2Pause_2README_8md.html">Shared/Pause/README.md</a></code> and <code><a class="el" href="arch__turn__pipeline_8md.html">Diagrams/arch_turn_pipeline.md</a></code>. In short: <code>SpawnClock</code> publishes one <code>SpawnBalloonLineMessage(1)</code> per interval of scaled time (2 s at level 1, x0.96 per level, floor 1.25 s, after a 4 s grace; all in <code>LevelPacingConfiguration</code>'s <code>_spawnClock</code> block), holding through pauses, the level-up, off the <code>Game</code> screen and while a lone doomed ball glides. <b>DECISION (owner):</b> firing feeds the clock. A ball fired while another is still flying pulls the next line 35% of an interval sooner (<code>OverlapShotPull</code>); one ball at a time is free, so rapid fire trades board room for firepower. <b>DECISION (owner):</b> board tension feeds it too. The clock runs up to 8x faster on an empty board (<code>SparseBoardSpeedup</code>), easing to normal pace as the board reaches both the level's starting fill and half occupancy (<code>TargetOccupancy</code>, blended by <code>OccupancyWeight</code>), so a cleared board never lingers. Balls in the air add pace on top, by their summed flight time (<code>FlightSpeedup</code>, <code>FlightPressureSeconds</code>), so long flights and rapid fire refill the board while they clear it. <code>BalloonSpawner</code> no longer spawns on ball death; every line is the synchronous <code>SpawnLine()</code>. Lines group into waves of <code>LinesPerWave</code> (3): a wave's first line rolls quotas and relocates roamers, its last publishes the item check. Differences and open items:</p>
 <table class="markdownTable">
@@ -302,7 +302,7 @@ Fast-Paced Endless Mode</h1>
 </table>
 <p><b>Done when:</b> lines arrive on the timer whatever the player does, overflow costs hearts in real time without freezing the thrower, and the danger UI warns ahead of the next line.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md418"></a>
+<h2><a class="anchor" id="autotoc_md421"></a>
 7. Phase 4: generated levels</h2>
 <p><b>Implemented, pending the owner's playtest.</b> The rows below record what was decided and built; the built behaviour lives in <code><a class="el" href="Configuration_2README_8md.html">Configuration/README.md</a></code>, <code><a class="el" href="Game_2Level_2README_8md.html">Game/Level/README.md</a></code> and <code><a class="el" href="Editor_2README_8md.html">Editor/README.md</a></code>.</p>
 <p><b>DECISION: generate a <code>RangedLevelParameters</code>, don't replace it.</b> Spawning, items and balancing already consume <code>RangedLevelParameters.Resolve(...)</code>. A generator that <em>outputs</em> one leaves every consumer untouched.</p>
@@ -358,7 +358,7 @@ Fast-Paced Endless Mode</h1>
 <td class="markdownTableBodyNone">Tuning (open)   </td><td class="markdownTableBodyNone">Budgets, costs, unlock levels, weights and ramps are first guesses; tune in the playtest with the Generated Levels table. First pass after playtest (items everywhere): a wave's item roll can now be zero and stops at 3 (weights 0.3/0.45/0.3/0.1, about 1.2 items a wave, down from about 3-4), the shield cap drops 8 → 4 and its regular guarantee 2 → 1, and Lucky Find gives +0.25 a stack, down from +0.5. Item rolls still ride the waves, so a faster clock still means more items; if that snowballs, roll items on time instead. Second pass (no sense of danger, every bot run lost no hearts): items are made much rarer rather than scores smaller (a streak payout cap was tried and reverted). A wave rolls none about 88% of the time (weights 1/0.12/0.02, about 0.14 items a wave), the starting board none 2 times in 3, else one, the shield's draw weight drops to 0.5-0.75 (late 0.35-0.5), its cap to 1, its level-1 guarantee 12 → 2 and its later guarantee 1 → 0. Other items keep their unlock-level introductions. Third pass: the early levels go by quickly so the bots can measure where difficulty should start biting. The scoring curve's cumulative points drop from 700/1200/2100/3200/4200/5300/6500/7900/9500 to 250/400/600/900/1300/1800/2450/3250/4250 (gaps 250, 150, 200, 300, 400, 500, 650, 800, 1000), aiming at about 10-25 s for levels 1-4 and about a minute by level 9 for an average player; the tail still grows ×1.15.   </td></tr>
 </table>
 <hr  />
-<h2><a class="anchor" id="autotoc_md420"></a>
+<h2><a class="anchor" id="autotoc_md423"></a>
 8. Phase 5: checkpoint and upgrades</h2>
 <p>Built in three parts, each reviewed and playtested on its own. <b>5a:</b> unlimited retries and the ad seam. <b>5b:</b> upgrade cards and the level-up change (§10 question 5). <b>5c:</b> the rewarded bonus card and the tooltip.</p>
 <table class="markdownTable">
@@ -381,7 +381,7 @@ Fast-Paced Endless Mode</h1>
 </table>
 <p>Telemetry stays telemetry: nothing here persists metrics client-side as progression.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md422"></a>
+<h2><a class="anchor" id="autotoc_md425"></a>
 9. Risks</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -397,7 +397,7 @@ Fast-Paced Endless Mode</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Generated levels feel samey   </td><td class="markdownTableBodyNone">New pieces keep arriving only until every one is unlocked (all threats are in by L7); after that depth comes from weight ramps, colours, board lines and the spawn clock, and the per-level seed means every run's level N is identical. Watch this in the playtest; the catalogue is where future variety lands.   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md423"></a>
+<h2><a class="anchor" id="autotoc_md426"></a>
 10. Open questions</h2>
 <ol type="1">
 <li><strike><b>Firing input.</b></strike> Answered: release to fire (Phase 2).</li>

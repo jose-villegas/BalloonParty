@@ -1,5 +1,7 @@
 <map id="BalloonParty.UI.HeadsUp.HandwrittenHeadsUp" name="BalloonParty.UI.HeadsUp.HandwrittenHeadsUp">
-<area shape="rect" id="Node000001" title="One short handwritten line in world space (a TextMeshPro, not on a canvas), so it sits where it happe..." alt="" coords="5,79,192,119"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="37,5,161,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,44,101,79,96,79,96,44"/>
+<area shape="rect" id="Node000001" title="One short handwritten line in world space (a TextMeshPro, not on a canvas), so it sits where it happe..." alt="" coords="63,93,250,133"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,129,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,46,139,91,135,95,87,49"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="154,5,341,45"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="219,57,179,95,175,91,216,53"/>
 </map>

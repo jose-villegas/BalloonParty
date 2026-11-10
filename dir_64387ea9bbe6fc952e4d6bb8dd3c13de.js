@@ -6,6 +6,7 @@ var dir_64387ea9bbe6fc952e4d6bb8dd3c13de =
     [ "Editor", "dir_eb0398146ff26b85588986ae0cab5e96.html", "dir_eb0398146ff26b85588986ae0cab5e96" ],
     [ "Effects", "dir_b89b2870f070a91cc39b9fec20dfba05.html", "dir_b89b2870f070a91cc39b9fec20dfba05" ],
     [ "GridActors", "dir_75a708da37d383ca1c714ad5e6b68f4a.html", "dir_75a708da37d383ca1c714ad5e6b68f4a" ],
+    [ "HeadsUp", "dir_9d48202930d973f07bb3a99f89ef4dc8.html", "dir_9d48202930d973f07bb3a99f89ef4dc8" ],
     [ "Items", "dir_3c1a0e4ecd197fbfa18646cb16eabfe2.html", "dir_3c1a0e4ecd197fbfa18646cb16eabfe2" ],
     [ "Level", "dir_b27bc693c6b7f05286ab1d00a653a044.html", "dir_b27bc693c6b7f05286ab1d00a653a044" ],
     [ "Palette", "dir_d014d0f9e557ca3363771f7fe3c8483d.html", "dir_d014d0f9e557ca3363771f7fe3c8483d" ],

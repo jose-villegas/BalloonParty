@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.HeadsUp.IHeadsUpPresenter" name="BalloonParty.Game.HeadsUp.IHeadsUpPresenter">
+<area shape="rect" id="Node000001" title="Draws the heads&#45;ups the service lets through." alt="" coords="5,5,217,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpLayer.html" title="Draws the heads&#45;ups HeadsUpService lets through, as pooled HandwrittenHeadsUp lines cloned from _line..." alt="" coords="18,93,205,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,59,114,93,109,93,109,59"/>
+</map>

@@ -4,6 +4,7 @@ var namespaceBalloonParty_1_1Game =
     [ "Coins", "namespaceBalloonParty_1_1Game_1_1Coins.html", "namespaceBalloonParty_1_1Game_1_1Coins" ],
     [ "Danger", "namespaceBalloonParty_1_1Game_1_1Danger.html", "namespaceBalloonParty_1_1Game_1_1Danger" ],
     [ "Flight", "namespaceBalloonParty_1_1Game_1_1Flight.html", "namespaceBalloonParty_1_1Game_1_1Flight" ],
+    [ "HeadsUp", "namespaceBalloonParty_1_1Game_1_1HeadsUp.html", "namespaceBalloonParty_1_1Game_1_1HeadsUp" ],
     [ "Health", "namespaceBalloonParty_1_1Game_1_1Health.html", "namespaceBalloonParty_1_1Game_1_1Health" ],
     [ "Level", "namespaceBalloonParty_1_1Game_1_1Level.html", "namespaceBalloonParty_1_1Game_1_1Level" ],
     [ "Run", "namespaceBalloonParty_1_1Game_1_1Run.html", "namespaceBalloonParty_1_1Game_1_1Run" ],

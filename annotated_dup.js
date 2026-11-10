@@ -203,6 +203,14 @@ var annotated_dup =
           [ "IGridActorConfiguration", "interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IGridActorConfiguration.html", "interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IGridActorConfiguration" ],
           [ "ResolvedGridActorGate", "structBalloonParty_1_1Configuration_1_1GridActors_1_1ResolvedGridActorGate.html", "structBalloonParty_1_1Configuration_1_1GridActors_1_1ResolvedGridActorGate" ]
         ] ],
+        [ "HeadsUp", "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html", [
+          [ "HeadsUpSettings", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSettings.html", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSettings" ],
+          [ "HeadsUpSizing", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSizing.html", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSizing" ],
+          [ "HeadsUpStyle", "structBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyle.html", "structBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyle" ],
+          [ "HeadsUpStyleIds", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleIds.html", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleIds" ],
+          [ "HeadsUpStyleSettings", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings" ],
+          [ "IHeadsUpSettings", "interfaceBalloonParty_1_1Configuration_1_1HeadsUp_1_1IHeadsUpSettings.html", "interfaceBalloonParty_1_1Configuration_1_1HeadsUp_1_1IHeadsUpSettings" ]
+        ] ],
         [ "Items", "namespaceBalloonParty_1_1Configuration_1_1Items.html", [
           [ "BombSettings", "classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html", "classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings" ],
           [ "IItemConfiguration", "interfaceBalloonParty_1_1Configuration_1_1Items_1_1IItemConfiguration.html", "interfaceBalloonParty_1_1Configuration_1_1Items_1_1IItemConfiguration" ],
@@ -439,6 +447,23 @@ var annotated_dup =
           [ "IFlightStats", "interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStats.html", "interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStats" ],
           [ "IFlightStatsSource", "interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsSource.html", "interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsSource" ],
           [ "IFlightStatsWriter", "interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsWriter.html", "interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsWriter" ]
+        ] ],
+        [ "HeadsUp", "namespaceBalloonParty_1_1Game_1_1HeadsUp.html", [
+          [ "Routing", "namespaceBalloonParty_1_1Game_1_1HeadsUp_1_1Routing.html", [
+            [ "BounceHeadsUpRouter", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter" ],
+            [ "CannonHeadsUpRouter", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CannonHeadsUpRouter.html", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CannonHeadsUpRouter" ],
+            [ "CombatHeadsUpRouter", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter" ],
+            [ "ProgressHeadsUpRouter", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1ProgressHeadsUpRouter.html", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1ProgressHeadsUpRouter" ]
+          ] ],
+          [ "HeadsUpAnchor", "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html", "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor" ],
+          [ "HeadsUpHandle", "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html", "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle" ],
+          [ "HeadsUpMergeKey", "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpMergeKey.html", "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpMergeKey" ],
+          [ "HeadsUpOffer", "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpOffer.html", "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpOffer" ],
+          [ "HeadsUpQueue", "classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html", "classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue" ],
+          [ "HeadsUpRequest", "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html", "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest" ],
+          [ "HeadsUpService", "classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpService.html", "classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpService" ],
+          [ "IHeadsUpPresenter", "interfaceBalloonParty_1_1Game_1_1HeadsUp_1_1IHeadsUpPresenter.html", "interfaceBalloonParty_1_1Game_1_1HeadsUp_1_1IHeadsUpPresenter" ],
+          [ "IHeadsUps", "interfaceBalloonParty_1_1Game_1_1HeadsUp_1_1IHeadsUps.html", "interfaceBalloonParty_1_1Game_1_1HeadsUp_1_1IHeadsUps" ]
         ] ],
         [ "Health", "namespaceBalloonParty_1_1Game_1_1Health.html", [
           [ "HeartTrailTracker", "classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html", "classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker" ],
@@ -1100,12 +1125,9 @@ var annotated_dup =
           [ "GameOverScreen", "classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html", "classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen" ]
         ] ],
         [ "HeadsUp", "namespaceBalloonParty_1_1UI_1_1HeadsUp.html", [
-          [ "BounceHeadsUp", "classBalloonParty_1_1UI_1_1HeadsUp_1_1BounceHeadsUp.html", "classBalloonParty_1_1UI_1_1HeadsUp_1_1BounceHeadsUp" ],
           [ "HandwrittenHeadsUp", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp" ],
+          [ "HeadsUpLayer", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpLayer.html", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpLayer" ],
           [ "HeadsUpPacking", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking" ],
-          [ "HeadsUpSizing", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpSizing.html", "classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpSizing" ],
-          [ "HeadsUpStyle", "structBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpStyle.html", "structBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpStyle" ],
-          [ "ReloadHeadsUp", "classBalloonParty_1_1UI_1_1HeadsUp_1_1ReloadHeadsUp.html", "classBalloonParty_1_1UI_1_1HeadsUp_1_1ReloadHeadsUp" ],
           [ "WriteOnMath", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnMath.html", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnMath" ],
           [ "WriteOnText", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText" ]
         ] ],

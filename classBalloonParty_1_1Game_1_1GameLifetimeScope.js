@@ -12,6 +12,7 @@ var classBalloonParty_1_1Game_1_1GameLifetimeScope =
     [ "_gamePalette", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a72efe046b7f1177d63e38ba49d646c75", null ],
     [ "_gridActorConfiguration", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a62100ba9c2b9b6a6442bf23b9c069cb2", null ],
     [ "_groundSettings", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#ac1a420d86256a5e1064678d7c5698850", null ],
+    [ "_headsUpSettings", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a431ee2108bdae6c062366fee70813f33", null ],
     [ "_itemConfiguration", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a1bc69c566af3d1e902cdeff458d4572b", null ],
     [ "_itemPreviewConfig", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#adab843a0bc7ec987e63d671431c6329d", null ],
     [ "_itemPreviewPenPrefab", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a3c6ea11c56efc8d697704e520a9bd31f", null ],

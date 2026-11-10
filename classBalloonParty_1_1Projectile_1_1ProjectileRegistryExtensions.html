@@ -123,10 +123,13 @@ Static Package Functions</h2></td></tr>
 <tr class="separator:af78c896d163c95da1101879875c23c71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa537496bbeb1f3fe2f28ba55e06cb60f" id="r_aa537496bbeb1f3fe2f28ba55e06cb60f"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa537496bbeb1f3fe2f28ba55e06cb60f">FliesAlone</a> (this <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html">IProjectileRegistry</a> registry, <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> projectile)</td></tr>
 <tr class="separator:aa537496bbeb1f3fe2f28ba55e06cb60f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed2591042e29af3129a5a70d949fcec9" id="r_aed2591042e29af3129a5a70d949fcec9"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aed2591042e29af3129a5a70d949fcec9">TryGetInFlightPosition</a> (this <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html">IProjectileRegistry</a> registry, <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> projectile, out Vector3 position)</td></tr>
+<tr class="memdesc:aed2591042e29af3129a5a70d949fcec9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where <em>projectile</em>  is, if it is in flight; false for a held or gone ball.  <br /></td></tr>
+<tr class="separator:aed2591042e29af3129a5a70d949fcec9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The "lone ball" rule for effects that reach beyond one ball: the doomed slow-mo, the board freeze and the held spawn act only while the doomed ball is the only ball in flight. </p>
-<p>With others flying, one ball's last breath must not slow or freeze the game under them. </p>
+<p>With others flying, one ball's last breath must not slow or freeze the game under them. Also where a given ball is while it flies, for what is written at the ball. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="af78c896d163c95da1101879875c23c71" name="af78c896d163c95da1101879875c23c71"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af78c896d163c95da1101879875c23c71">&#9670;&#160;</a></span>DoomedShotFliesAlone()</h2>
@@ -179,6 +182,42 @@ Static Package Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="aed2591042e29af3129a5a70d949fcec9" name="aed2591042e29af3129a5a70d949fcec9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed2591042e29af3129a5a70d949fcec9">&#9670;&#160;</a></span>TryGetInFlightPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Projectile.ProjectileRegistryExtensions.TryGetInFlightPosition </td>
+          <td>(</td>
+          <td class="paramtype">this <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html">IProjectileRegistry</a></td>          <td class="paramname"><span class="paramname"><em>registry</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a></td>          <td class="paramname"><span class="paramname"><em>projectile</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out Vector3</td>          <td class="paramname"><span class="paramname"><em>position</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Where <em>projectile</em>  is, if it is in flight; false for a held or gone ball. </p>
 
 </div>
 </div>
