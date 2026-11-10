@@ -110,7 +110,13 @@ the floor's, through `IGroundSettings`.
   first foam came from every steep slope and every big splash and covered half the screen after a
   board clear (owner: "it should be bound to where the normals suddenly change, so around peaks"),
   and its waves barely showed through the swell and the caustics until they stood taller, shaded
-  their crests and bent the bottom more.
+  their crests and bent the bottom more. Tuning that against one shot on calm water misled twice:
+  a crest that breaks too early kept a normal hit's peaks under the foam threshold and its waves
+  faint (owner: "barely visible", "is the foam even present?"), while letting it break later,
+  with the waves lasting 2.5 s and the walls reflecting them, built up so much energy in real play
+  that the water saturated and foamed everywhere. The sim is tuned while the game plays: waves fade
+  over a second, crests break past 0.15 a cell, and foam sits above the background's slosh and
+  below a fresh hit's peaks.
   The tile's cell wrap uses `id - n·floor((id + 0.5)/n)`, not `fmod`: GPU division is
   approximate, `fmod(10, 5)` can return 5, and the tile then shows a seam.
 

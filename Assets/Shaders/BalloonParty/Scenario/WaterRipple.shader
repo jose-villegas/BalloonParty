@@ -33,28 +33,28 @@ Shader "Hidden/BalloonParty/Scenario/WaterRipple"
         _Tension      ("Surface Tension (world²)",      Float) = 0.003
         // How fast the flow loses its strength (the time constant): low fades waves before they cross the screen,
         // high lets them ring between the walls.
-        _Fade         ("Fade (seconds)",                Float) = 2.5
+        _Fade         ("Fade (seconds)",                Float) = 1
         // Smooths the flow over a neighbourhood, more at shorter wavelengths, so the grid's own jaggies die first.
         _Viscosity    ("Viscosity (world²/s)",          Float) = 0.004
         [Header(Impacts)]
         // How deep an impact of full strength presses, in rest depths.
-        _Push         ("Push",                          Float) = 0.9
+        _Push         ("Push",                          Float) = 1.2
         // How hard an impact drags the water along its heading (a ball's wake).
         _Drag         ("Drag (world/s²)",               Float) = 6
         // An impact's press radius per world unit of its disturbance radius (read by WaterRippleBuffer).
         _PressRadius  ("Press Radius (× impact)",       Float) = 0.5
         [Header(Breakup)]
         // Height change across a texel past which a crest breaks and loses flow.
-        _BreakSlope   ("Break Slope (per texel)",       Float) = 0.06
+        _BreakSlope   ("Break Slope (per texel)",       Float) = 0.15
         // How much of a breaking crest's flow it loses each second per unit past the break slope.
-        _BreakLoss    ("Break Loss",                    Float) = 400
+        _BreakLoss    ("Break Loss",                    Float) = 150
         // How sharp a peak must be to foam: its curvature (the middle above its four neighbours' mean, times four,
         // in rest depths).
-        _FoamCurvature("Foam Curvature",                Float) = 0.12
+        _FoamCurvature("Foam Curvature",                Float) = 0.15
         // Foam a peak makes each second per unit of curvature past the foam curvature.
-        _FoamGain     ("Foam Gain",                     Float) = 40
+        _FoamGain     ("Foam Gain",                     Float) = 50
         // How fast foam fades (the time constant): short, so it stays on the peak that made it.
-        _FoamFade     ("Foam Fade (seconds)",           Float) = 0.35
+        _FoamFade     ("Foam Fade (seconds)",           Float) = 0.3
     }
 
     SubShader

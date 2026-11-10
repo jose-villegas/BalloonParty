@@ -59,15 +59,15 @@ Shader "BalloonParty/Scenario/Water"
         _WaveHeight       ("Swell Height",                Float)          = 0.04
         // How tall the simulated waves stand, in world units per rest depth of the simulation (their speed, tension
         // and fade are on the ripple material).
-        _RippleHeight     ("Wave Height",                 Float)          = 0.14
+        _RippleHeight     ("Wave Height",                 Float)          = 0.4
         // How much a wave focuses light on the bottom under its trough and spreads it under its crest: the bright
         // and dark bands a ripple throws on the sand, whatever the sun's angle.
-        _RippleFocus      ("Wave Focus",                  Float)          = 2
+        _RippleFocus      ("Wave Focus",                  Float)          = 4
         // How much a wave's slope sheens the surface, whatever the sun's angle.
-        _RippleSheen      ("Wave Sheen",                  Float)          = 1.3
+        _RippleSheen      ("Wave Sheen",                  Float)          = 3
         // How much lighter a crest and darker a trough reads, per rest depth of height: the water's bulk rising
         // and sinking.
-        _CrestShade       ("Crest Shade",                 Float)          = 0.9
+        _CrestShade       ("Crest Shade",                 Float)          = 1.4
         // World units the surface slope shifts the view of the bottom by, per world unit of depth: the deeper the
         // bottom, the more the waves bend it.
         _Refraction       ("Refraction (per depth)",      Range(0, 0.5))  = 0.2
@@ -89,7 +89,7 @@ Shader "BalloonParty/Scenario/Water"
         // The foam the simulation carries (breaking crests, big splashes), drawn as a lace that thins into islands
         // and specks as it fades.
         _FoamColor        ("Foam Colour",                 Color)          = (0.95, 0.98, 1.0, 1)
-        _FoamStrength     ("Foam Strength",               Range(0, 1))    = 0.7
+        _FoamStrength     ("Foam Strength",               Range(0, 1))    = 0.9
         // World units across one of the lace's holes.
         _FoamSize         ("Foam Lace Size (world)",      Float)          = 0.8
         // How soft the lace's edges are.
@@ -259,7 +259,7 @@ Shader "BalloonParty/Scenario/Water"
                 half3 color = bottom * transmit + _WaterColor.rgb * (1.0h - transmit);
 
                 color = lerp(color, _SurfaceColor.rgb, _SurfaceOpacity);
-                color *= 1.0h + clamp((half)ripple.w * _CrestShade, -0.3h, 0.3h);
+                color *= 1.0h + clamp((half)ripple.w * _CrestShade, -0.35h, 0.35h);
                 color = lerp(color, _HighlightColor.rgb, saturate((half)length(ripple.xy) * _RippleSheen - 0.05h));
 
                 // The swell's and the rings' slopes facing the sun catch a soft highlight; those facing away darken.
@@ -283,7 +283,7 @@ Shader "BalloonParty/Scenario/Water"
                 half lace = tex2D(_NoiseTex, lacePos * 0.5 + float2(0.19, 0.83)).r * 0.7h
                           + tex2D(_NoiseTex, lacePos * 1.3 + float2(0.71, 0.07)).r * 0.3h;
                 half cover = smoothstep(1.0h - foam - _FoamSoftness, 1.0h - foam + _FoamSoftness, lace);
-                color = lerp(color, _FoamColor.rgb, cover * smoothstep(0.05h, 0.35h, foam) * _FoamStrength);
+                color = lerp(color, _FoamColor.rgb, cover * smoothstep(0.02h, 0.25h, foam) * _FoamStrength);
 
                 // Per pixel and field-aware, like the meadow floor: the time of day plus the local light of pops.
                 // Light above full is eased in, because the pale water would clip a pop's glow to flat white.

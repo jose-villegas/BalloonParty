@@ -25,15 +25,15 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _BreakLoss: 400
-    - _BreakSlope: 0.06
+    - _BreakLoss: 150
+    - _BreakSlope: 0.15
     - _Drag: 6
-    - _Fade: 2.5
-    - _FoamCurvature: 0.12
-    - _FoamFade: 0.35
-    - _FoamGain: 40
+    - _Fade: 1
+    - _FoamCurvature: 0.15
+    - _FoamFade: 0.3
+    - _FoamGain: 50
     - _PressRadius: 0.5
-    - _Push: 0.9
+    - _Push: 1.2
     - _Tension: 0.003
     - _Viscosity: 0.004
     - _WaveSpeed: 1.5
