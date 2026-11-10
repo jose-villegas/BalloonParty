@@ -1,5 +1,6 @@
 var NAVTREEINDEX95 =
 {
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html#adaf9d7fc481f54c2fcee73214ac42857":[5,0,0,13,1,7,0],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html#adaf9d7fc481f54c2fcee73214ac42857":[6,0,0,13,1,7,0],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScoreColor.html":[5,0,0,13,1,8],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScoreColor.html":[6,0,0,13,1,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX95 =
 "namespaceBalloonParty_1_1Game_1_1HeadsUp.html#a1a709e3252ec1c2f9caf67fa7f935995a74339e8d9916761b9b69183a081076c6":[5,0,0,6,4,10,0],
 "namespaceBalloonParty_1_1Game_1_1HeadsUp_1_1Routing.html":[5,0,0,6,4,0],
 "namespaceBalloonParty_1_1Game_1_1Health.html":[5,0,0,6,5],
-"namespaceBalloonParty_1_1Game_1_1Level.html":[5,0,0,6,6],
-"namespaceBalloonParty_1_1Game_1_1Level.html#a57ec4a7422d3ec908dda0a536e08a712":[5,0,0,6,6,8]
+"namespaceBalloonParty_1_1Game_1_1Level.html":[5,0,0,6,6]
 };

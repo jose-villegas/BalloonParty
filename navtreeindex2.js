@@ -17,6 +17,7 @@ var NAVTREEINDEX2 =
 "ItemType_8cs.html":[7,0,3,7,3],
 "ItemVisualView_8cs.html":[7,0,8,25],
 "JsonLinesTelemetrySink_8cs.html":[7,0,7,9,14],
+"JumpToScenarioCheat_8cs.html":[7,0,2,16],
 "LaserCross_8cs.html":[7,0,8,2,0],
 "LaserItemHandler_8cs.html":[7,0,8,2,1],
 "LaserItemRotation_8cs.html":[7,0,8,27],
@@ -64,7 +65,7 @@ var NAVTREEINDEX2 =
 "LevelUpPhase_8cs.html":[7,0,7,6,6],
 "LevelUpPopUp_8cs.html":[7,0,18,6,1],
 "LifecycleHelper_8cs.html":[7,0,14,4,10],
-"LightStampCheat_8cs.html":[7,0,2,16],
+"LightStampCheat_8cs.html":[7,0,2,17],
 "Light_8cs.html":[7,0,14,11,2],
 "LightningChain_8cs.html":[7,0,8,3,3],
 "LightningItemHandler_8cs.html":[7,0,8,3,4],
@@ -102,7 +103,7 @@ var NAVTREEINDEX2 =
 "NavigationState_8cs.html":[7,0,14,5,12],
 "NavigationTrigger_8cs.html":[7,0,14,5,13],
 "Navigation_8cs.html":[7,0,14,5,9],
-"NearLevelUpCheat_8cs.html":[7,0,2,17],
+"NearLevelUpCheat_8cs.html":[7,0,2,18],
 "NoAdService_8cs.html":[7,0,7,7,13],
 "NudgeMessage_8cs.html":[7,0,9,2],
 "NudgeOverrideDrawer_8cs.html":[7,0,9,0,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "ScenarioScheduleSettings_8cs.html":[7,0,3,8,28],
 "ScenarioSchedule_8cs.html":[7,0,3,8,27],
 "ScenarioShift_8cs.html":[7,0,13,7],
-"ScenarioStretch_8cs.html":[7,0,3,8,29],
-"SceneCaptureServiceEditor_8cs.html":[7,0,6,37]
+"ScenarioStretch_8cs.html":[7,0,3,8,29]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX96 =
 {
+"namespaceBalloonParty_1_1Game_1_1Level.html#a57ec4a7422d3ec908dda0a536e08a712":[5,0,0,6,6,8],
 "namespaceBalloonParty_1_1Game_1_1Level.html#a57ec4a7422d3ec908dda0a536e08a712a2d13df6f8b5e4c5af9f87e0dc39df69d":[5,0,0,6,6,8,1],
 "namespaceBalloonParty_1_1Game_1_1Level.html#a57ec4a7422d3ec908dda0a536e08a712a3e589a999568bf6d0c72b491f20f758b":[5,0,0,6,6,8,3],
 "namespaceBalloonParty_1_1Game_1_1Level.html#a57ec4a7422d3ec908dda0a536e08a712a69a4b7185e3fbc9bfc0878876d7416cf":[5,0,0,6,6,8,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX96 =
 "namespaceBalloonParty_1_1Slots_1_1Actor.html#adbab49aebf9c1f422de5a17b7033167ea971fd8cc345d8bd9f92e9f7d88fdf20c":[5,0,0,13,0,22,0],
 "namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html":[5,0,0,13,0,0],
 "namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473":[5,0,0,13,0,0,22],
-"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473a59988751eea31359e0983b22e1531b70":[5,0,0,13,0,0,22,3],
-"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473a68e6202e50e4806f18d28cab574e0d82":[5,0,0,13,0,0,22,2]
+"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473a59988751eea31359e0983b22e1531b70":[5,0,0,13,0,0,22,3]
 };

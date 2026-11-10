@@ -148,6 +148,8 @@ Files</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ICheatControls_8cs.html">ICheatControls.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="JumpToScenarioCheat_8cs.html">JumpToScenarioCheat.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="LightStampCheat_8cs.html">LightStampCheat.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NearLevelUpCheat_8cs.html">NearLevelUpCheat.cs</a></td></tr>
@@ -240,10 +242,12 @@ Current cheats</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Start From Level   </td><td class="markdownTableBodyNone">Run   </td><td class="markdownTableBodyNone">Sets the dev start-level override then restarts the run so it begins at the chosen level — the in-play equivalent of the Level Pacing window's "play from here"    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Stamp Disturbance   </td><td class="markdownTableBodyNone">Grid   </td><td class="markdownTableBodyNone">Toggle on, then mouse-drag to stamp disturbances into the shared disturbance field. Uses <code>DisturbanceFieldService.Stamp()</code> at the mouse world position with drag direction    </td></tr>
+<td class="markdownTableBodyNone">Jump To Scenario   </td><td class="markdownTableBodyNone">Run   </td><td class="markdownTableBodyNone">Sky, Meadow or Water: restarts the run at the first level of the next stretch of that scenario after the current level, found in this run's own schedule. Keeps the run's seed through that restart (<code>CheatState.KeepRunSeed</code>, read by <code>RunSeed</code>), since a new seed lays out a different schedule. It jumps forward, so each jump lands on a harder level; pair it with Block Level Up to look around without losing hearts    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Place <a class="el" href="UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d">Light</a>   </td><td class="markdownTableBodyNone">Lighting   </td><td class="markdownTableBodyNone">Toggle on, pick a palette colour from the dropdown, then tap the board to drop a light into the shared light field there; "Clear" removes every light placed so far    </td></tr>
+<td class="markdownTableBodyNone">Stamp Disturbance   </td><td class="markdownTableBodyNone">Grid   </td><td class="markdownTableBodyNone">Toggle on, then mouse-drag to stamp disturbances into the shared disturbance field. Uses <code>DisturbanceFieldService.Stamp()</code> at the mouse world position with drag direction    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Place <a class="el" href="UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d">Light</a>   </td><td class="markdownTableBodyNone">Lighting   </td><td class="markdownTableBodyNone">Toggle on, pick a palette colour from the dropdown, then tap the board to drop a light into the shared light field there; "Clear" removes every light placed so far    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Time of Day   </td><td class="markdownTableBodyNone">Lighting   </td><td class="markdownTableBodyNone">Scrub the day/night angle directly (drives whichever source is active) — the slider tints the arc that counts as night — and set how fast the Realtime source advances it (Freeze/1x/8x/30x presets)   </td></tr>
 </table>
 </div><!-- contents -->

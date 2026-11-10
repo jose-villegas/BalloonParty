@@ -1,5 +1,6 @@
 var NAVTREEINDEX26 =
 {
+"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a9eeecd7f887bc3f61974ef2efe4d36a2":[5,0,0,3,27,9],
 "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a9eeecd7f887bc3f61974ef2efe4d36a2":[6,0,0,3,27,9],
 "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a9f44ca50448e4ab3a9440b42f52057a0":[5,0,0,3,27,7],
 "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a9f44ca50448e4ab3a9440b42f52057a0":[6,0,0,3,27,7],
@@ -248,6 +249,5 @@ var NAVTREEINDEX26 =
 "classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a77918dda4cfdca86c50c1fea1b6f8bc6":[5,0,0,4,4,3],
 "classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a77918dda4cfdca86c50c1fea1b6f8bc6":[6,0,0,4,4,3],
 "classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a95dcee80e305f23614874f12e2f0a54a":[5,0,0,4,4,2],
-"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a95dcee80e305f23614874f12e2f0a54a":[6,0,0,4,4,2],
-"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#ae9e7b70c142d1a926c6e8fece816693f":[5,0,0,4,4,0]
+"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a95dcee80e305f23614874f12e2f0a54a":[6,0,0,4,4,2]
 };

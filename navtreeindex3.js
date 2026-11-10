@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"SceneCaptureServiceEditor_8cs.html":[7,0,6,37],
 "SceneCaptureService_8cs.html":[7,0,5,5],
 "SceneDrawingHelper_8cs.html":[7,0,6,38],
 "SceneExtensions_8cs.html":[7,0,14,4,15],
@@ -10,7 +11,7 @@ var NAVTREEINDEX3 =
 "SceneTransition_8cs.html":[7,0,14,5,14],
 "ScoreAttribution_8cs.html":[7,0,15,1,18],
 "ScoreAttributions_8cs.html":[7,0,15,1,19],
-"ScoreCheatHelper_8cs.html":[7,0,2,18],
+"ScoreCheatHelper_8cs.html":[7,0,2,19],
 "ScoreController_8cs.html":[7,0,7,8,4],
 "ScoreCounterLabel_8cs.html":[7,0,18,7,6],
 "ScoreLevelUpMessage_8cs.html":[7,0,14,7,37],
@@ -112,8 +113,8 @@ var NAVTREEINDEX3 =
 "SoundHandle_8cs.html":[7,0,0,16],
 "SoundIds_8cs.html":[7,0,0,17],
 "SpaceDanger_8cs.html":[7,0,7,2,1],
-"SpawnBalloonCheat_8cs.html":[7,0,2,19],
-"SpawnBalloonLineCheat_8cs.html":[7,0,2,20],
+"SpawnBalloonCheat_8cs.html":[7,0,2,20],
+"SpawnBalloonLineCheat_8cs.html":[7,0,2,21],
 "SpawnBalloonLineMessage_8cs.html":[7,0,14,7,43],
 "SpawnClockSettings_8cs.html":[7,0,3,8,32],
 "SpawnClock_8cs.html":[7,0,1,2,9],
@@ -136,7 +137,7 @@ var NAVTREEINDEX3 =
 "SpriteShadowBakerEditor_8cs.html":[7,0,6,5,2],
 "SpriteShadowBaker_8cs.html":[7,0,14,10,13],
 "StampProfileDrawer_8cs.html":[7,0,3,3,10],
-"StartFromLevelCheat_8cs.html":[7,0,2,21],
+"StartFromLevelCheat_8cs.html":[7,0,2,22],
 "StaticActorModel_8cs.html":[7,0,15,0,22],
 "StaticActorSpawner_8cs.html":[7,0,15,0,23],
 "StreakChangedMessage_8cs.html":[7,0,14,7,46],
@@ -163,7 +164,7 @@ var NAVTREEINDEX3 =
 "ThrowerReload_8cs.html":[7,0,17,4],
 "ThrowerSettings_8cs.html":[7,0,17,5],
 "ThrowerView_8cs.html":[7,0,17,6],
-"TimeOfDayCheat_8cs.html":[7,0,2,22],
+"TimeOfDayCheat_8cs.html":[7,0,2,23],
 "TimeOfDayClock_8cs.html":[7,0,14,11,6],
 "TimeOfDayCycle_8cs.html":[7,0,7,6,8],
 "TimeOfDayOrbit_8cs.html":[7,0,18,20],
@@ -195,7 +196,7 @@ var NAVTREEINDEX3 =
 "TransformCapturedMessage_8cs.html":[7,0,14,7,51],
 "TransformExtensions_8cs.html":[7,0,14,4,20],
 "TransformTrailEndpoint_8cs.html":[7,0,14,9,17],
-"TriggerLevelUpCheat_8cs.html":[7,0,2,23],
+"TriggerLevelUpCheat_8cs.html":[7,0,2,24],
 "TweenOscillator_8cs.html":[7,0,14,0,2],
 "TweenTracker_8cs.html":[7,0,14,0,3],
 "UiSfxEmitter_8cs.html":[7,0,0,3,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "arch_item_activation.html#autotoc_md68":[2,11,0,1],
 "arch_light_field.html":[2,17],
 "arch_light_field.html#autotoc_md69":[2,17,0],
-"arch_light_field.html#autotoc_md70":[2,17,0,0],
-"arch_light_field.html#autotoc_md71":[2,17,0,1]
+"arch_light_field.html#autotoc_md70":[2,17,0,0]
 };

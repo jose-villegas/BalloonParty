@@ -7,5 +7,6 @@ var searchData=
   ['json_20stays_20hand_20rolled_4',['Why the JSON stays hand-rolled',['../plan_gameplay_telemetry.html#autotoc_md547',1,'']]],
   ['jsonlinestelemetrysink_2ecs_5',['JsonLinesTelemetrySink.cs',['../JsonLinesTelemetrySink_8cs.html',1,'']]],
   ['jump_20to_20level_20cheat_20—_20✅_20shipped_6',['14.1 Jump-to-level cheat — ✅ SHIPPED',['../plan_future_ideas.html#autotoc_md518',1,'']]],
-  ['jumptime_7',['JumpTime',['../classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings.html#a8659b386c961ce5a929a1b28771f36a4',1,'BalloonParty.Configuration.Items.LightningSettings.JumpTime'],['../structBalloonParty_1_1Item_1_1Effects_1_1LightningEffectParams.html#ac438092660fc4e326e878608a5182042',1,'BalloonParty.Item.Effects.LightningEffectParams.JumpTime']]]
+  ['jumptime_7',['JumpTime',['../classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings.html#a8659b386c961ce5a929a1b28771f36a4',1,'BalloonParty.Configuration.Items.LightningSettings.JumpTime'],['../structBalloonParty_1_1Item_1_1Effects_1_1LightningEffectParams.html#ac438092660fc4e326e878608a5182042',1,'BalloonParty.Item.Effects.LightningEffectParams.JumpTime']]],
+  ['jumptoscenariocheat_2ecs_8',['JumpToScenarioCheat.cs',['../JumpToScenarioCheat_8cs.html',1,'']]]
 ];

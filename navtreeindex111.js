@@ -1,5 +1,6 @@
 var NAVTREEINDEX111 =
 {
+"structBalloonParty_1_1Solver_1_1ShotSolveContext.html#ac9544259dea3752f60667e2cebe94450":[5,0,0,14,24,5],
 "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#ac9544259dea3752f60667e2cebe94450":[6,0,0,14,24,5],
 "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#aca25262b8b191fbe88baa60a87fe83f5":[5,0,0,14,24,0],
 "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#aca25262b8b191fbe88baa60a87fe83f5":[6,0,0,14,24,0],

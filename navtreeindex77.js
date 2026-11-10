@@ -1,5 +1,6 @@
 var NAVTREEINDEX77 =
 {
+"classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a076fe38496de37cd9c047710149a1e36":[5,0,0,13,2,6,22],
 "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a076fe38496de37cd9c047710149a1e36":[6,0,0,13,2,6,22],
 "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a0799e8069476ccfa60f604e2d3837e8e":[5,0,0,13,2,6,6],
 "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a0799e8069476ccfa60f604e2d3837e8e":[6,0,0,13,2,6,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX77 =
 "classBalloonParty_1_1Solver_1_1ShotMotionMath.html":[5,0,0,14,14],
 "classBalloonParty_1_1Solver_1_1ShotMotionMath.html":[6,0,0,14,14],
 "classBalloonParty_1_1Solver_1_1ShotMotionMath.html#a8e6edd3d27ea0118bce4ac5a0aa22054":[5,0,0,14,14,4],
-"classBalloonParty_1_1Solver_1_1ShotMotionMath.html#a8e6edd3d27ea0118bce4ac5a0aa22054":[6,0,0,14,14,4],
-"classBalloonParty_1_1Solver_1_1ShotMotionMath.html#ac018f1c22686e3065ee0722a43293108":[5,0,0,14,14,0]
+"classBalloonParty_1_1Solver_1_1ShotMotionMath.html#a8e6edd3d27ea0118bce4ac5a0aa22054":[6,0,0,14,14,4]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX33 =
 {
+"classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a67dfd9afaebda39b93393fc920d09db1":[5,0,0,5,23,23],
 "classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a67dfd9afaebda39b93393fc920d09db1":[6,0,0,5,23,23],
 "classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a75b3eb06f8f1355dc13b49bd98f6d38c":[5,0,0,5,23,6],
 "classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a75b3eb06f8f1355dc13b49bd98f6d38c":[6,0,0,5,23,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX33 =
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#af853b1a31a95da10758b1525c0f02f5c":[5,0,0,5,25,38],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#af853b1a31a95da10758b1525c0f02f5c":[6,0,0,5,25,38],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#afd9ed2ef35564f90c9387346b6838d68":[5,0,0,5,25,36],
-"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#afd9ed2ef35564f90c9387346b6838d68":[6,0,0,5,25,36],
-"classBalloonParty_1_1Editor_1_1LevelRangeEntryDrawer.html":[5,0,0,5,26]
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#afd9ed2ef35564f90c9387346b6838d68":[6,0,0,5,25,36]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX108 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1RunRestartCompletedMessage.html":[5,0,0,12,7,36],
 "structBalloonParty_1_1Shared_1_1Messages_1_1RunRestartCompletedMessage.html":[6,0,0,12,7,36],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ScoreLevelUpMessage.html":[5,0,0,12,7,37],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ScoreLevelUpMessage.html":[6,0,0,12,7,37],
@@ -248,6 +249,5 @@ var NAVTREEINDEX108 =
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html":[5,0,0,13,0,0,21],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html":[6,0,0,13,0,0,21],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a1420491048c0fc50ecc4f81f74040e99":[5,0,0,13,0,0,21,1],
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a1420491048c0fc50ecc4f81f74040e99":[6,0,0,13,0,0,21,1],
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a147fb17455c7484e4fe41236ef8a8263":[5,0,0,13,0,0,21,7]
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a1420491048c0fc50ecc4f81f74040e99":[6,0,0,13,0,0,21,1]
 };

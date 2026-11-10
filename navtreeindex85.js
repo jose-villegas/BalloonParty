@@ -1,5 +1,6 @@
 var NAVTREEINDEX85 =
 {
+"classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html#a324c244af08cf6f907bef0ad3f03e2df":[5,0,0,16,7,4,19],
 "classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html#a324c244af08cf6f907bef0ad3f03e2df":[6,0,0,16,7,4,19],
 "classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html#a3af6d4dc935985bc889240a219f30a3f":[5,0,0,16,7,4,2],
 "classBalloonParty_1_1UI_1_1Score_1_1ProgressNotice.html#a3af6d4dc935985bc889240a219f30a3f":[6,0,0,16,7,4,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX85 =
 "classBalloonParty_1_1UI_1_1TimeOfDayOrbit.html":[5,0,0,16,20],
 "classBalloonParty_1_1UI_1_1TimeOfDayOrbit.html":[6,0,0,16,20],
 "classBalloonParty_1_1UI_1_1TimeOfDayOrbit.html#a46a1474e2e7986898353652cbca7dcd9":[5,0,0,16,20,1],
-"classBalloonParty_1_1UI_1_1TimeOfDayOrbit.html#a46a1474e2e7986898353652cbca7dcd9":[6,0,0,16,20,1],
-"classBalloonParty_1_1UI_1_1TimeOfDayOrbit.html#a72de565b921ce2f235ef272c3beab5a2":[5,0,0,16,20,0]
+"classBalloonParty_1_1UI_1_1TimeOfDayOrbit.html#a46a1474e2e7986898353652cbca7dcd9":[6,0,0,16,20,1]
 };

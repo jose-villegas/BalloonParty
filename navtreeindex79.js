@@ -1,5 +1,6 @@
 var NAVTREEINDEX79 =
 {
+"classBalloonParty_1_1Thrower_1_1ThrowerController.html#a387cedf1e978337f89042444a11cae1b":[5,0,0,15,1,59],
 "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a387cedf1e978337f89042444a11cae1b":[6,0,0,15,1,59],
 "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a3ec1ea0642fab0abb943df4f31687d4c":[5,0,0,15,1,70],
 "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a3ec1ea0642fab0abb943df4f31687d4c":[6,0,0,15,1,70],
@@ -248,6 +249,5 @@ var NAVTREEINDEX79 =
 "classBalloonParty_1_1UI_1_1Binding_1_1ReactiveBinderRegistration.html#a56febe7a393fe4cda5fc2504cfc60375":[5,0,0,16,0,2,0],
 "classBalloonParty_1_1UI_1_1Binding_1_1ReactiveBinderRegistration.html#a56febe7a393fe4cda5fc2504cfc60375":[6,0,0,16,0,2,0],
 "classBalloonParty_1_1UI_1_1Binding_1_1ReactivePropertyBinder-2-g.html":[5,0,0,16,0,3],
-"classBalloonParty_1_1UI_1_1Binding_1_1ReactivePropertyBinder-2-g.html":[6,0,0,16,0,3],
-"classBalloonParty_1_1UI_1_1Binding_1_1ReactivePropertyBinder-2-g.html#a566735e8b2993788f34c8d261314d932":[5,0,0,16,0,3,3]
+"classBalloonParty_1_1UI_1_1Binding_1_1ReactivePropertyBinder-2-g.html":[6,0,0,16,0,3]
 };

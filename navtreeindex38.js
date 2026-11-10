@@ -1,5 +1,6 @@
 var NAVTREEINDEX38 =
 {
+"classBalloonParty_1_1Editor_1_1UnusedAssetsWindow.html#af97edcbafbce1fd4f63bdb300d20aa00":[5,0,0,5,48,12],
 "classBalloonParty_1_1Editor_1_1UnusedAssetsWindow.html#af97edcbafbce1fd4f63bdb300d20aa00":[6,0,0,5,48,12],
 "classBalloonParty_1_1Editor_1_1UpgradeCardSlotBuilder.html":[5,0,0,5,49],
 "classBalloonParty_1_1Editor_1_1UpgradeCardSlotBuilder.html":[6,0,0,5,49],
@@ -248,6 +249,5 @@ var NAVTREEINDEX38 =
 "classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicDirector.html#a2bcb4dc9083ed3ab5279d3d2f92c465b":[5,0,0,6,0,7,6],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicDirector.html#a2bcb4dc9083ed3ab5279d3d2f92c465b":[6,0,0,6,0,7,6],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicDirector.html#a3aff4b681d28408808057123d97c3262":[5,0,0,6,0,7,1],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicDirector.html#a3aff4b681d28408808057123d97c3262":[6,0,0,6,0,7,1],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicDirector.html#a46fffafaaa4df77c5092e02783660b0b":[5,0,0,6,0,7,3]
+"classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicDirector.html#a3aff4b681d28408808057123d97c3262":[6,0,0,6,0,7,1]
 };

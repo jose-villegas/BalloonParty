@@ -1,5 +1,6 @@
 var NAVTREEINDEX99 =
 {
+"structBalloonParty_1_1Audio_1_1Editor_1_1SfxCandidate.html#a8adc8e3111f5c4b1d27fa0d9780e0109":[5,0,0,0,1,7,7],
 "structBalloonParty_1_1Audio_1_1Editor_1_1SfxCandidate.html#a8adc8e3111f5c4b1d27fa0d9780e0109":[6,0,0,0,1,7,7],
 "structBalloonParty_1_1Audio_1_1Editor_1_1SfxCandidate.html#aa39e68ffe029af7595fbaa61d4bb3294":[5,0,0,0,1,7,3],
 "structBalloonParty_1_1Audio_1_1Editor_1_1SfxCandidate.html#aa39e68ffe029af7595fbaa61d4bb3294":[6,0,0,0,1,7,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX99 =
 "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html#a3710befb2e5b6fb06818a3f2435b021b":[5,0,0,3,0,3,4],
 "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html#a3710befb2e5b6fb06818a3f2435b021b":[6,0,0,3,0,3,4],
 "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html#a48506778eac2c7a40203957b3a2397c3":[5,0,0,3,0,3,5],
-"structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html#a48506778eac2c7a40203957b3a2397c3":[6,0,0,3,0,3,5],
-"structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html#a5f746dccbc15ae3c07d28f6c28c5a99a":[5,0,0,3,0,3,0]
+"structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html#a48506778eac2c7a40203957b3a2397c3":[6,0,0,3,0,3,5]
 };
