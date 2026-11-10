@@ -10,7 +10,7 @@ namespace BalloonParty.Tests.Scenario
     [TestFixture]
     public class ScenarioGradeTests
     {
-        private static readonly ScenarioGrade Warm = new(1f, 20f, -40f, 30f, 10f, Color.red, Color.blue, Color.green);
+        private static readonly ScenarioGrade Warm = new(1f, 20f, -40f, 30f, 10f, Color.red, Color.blue, 0.4f, Color.green);
 
         [Test]
         public void Lerp_AtTheEnds_IsEachGrade()
@@ -29,6 +29,7 @@ namespace BalloonParty.Tests.Scenario
             Assert.AreEqual(15f, half.Temperature, 1e-5f);
             Assert.AreEqual(new Color(1f, 0.5f, 0.5f, 1f), half.Filter);
             Assert.AreEqual(new Color(0.5f, 0.5f, 1f, 1f), half.Shadows);
+            Assert.AreEqual(0.2f, half.ShadowLift, 1e-5f);
         }
 
         [Test]

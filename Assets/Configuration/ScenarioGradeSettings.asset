@@ -21,22 +21,25 @@ MonoBehaviour:
     _tint: 0
     _filter: {r: 1, g: 1, b: 1, a: 1}
     _shadows: {r: 1, g: 1, b: 1, a: 1}
+    _shadowLift: 0
     _highlights: {r: 1, g: 1, b: 1, a: 1}
   _meadow:
-    _exposure: 0.1
+    _exposure: 0
     _contrast: 0
-    _saturation: -10
-    _temperature: -4
+    _saturation: -12
+    _temperature: 0
     _tint: 0
     _filter: {r: 1, g: 1, b: 1, a: 1}
-    _shadows: {r: 0.97, g: 0.98, b: 1, a: 1}
+    _shadows: {r: 1, g: 1, b: 1, a: 1}
+    _shadowLift: 0.35
     _highlights: {r: 1, g: 1, b: 1, a: 1}
   _water:
-    _exposure: 0.2
+    _exposure: 0
     _contrast: 0
-    _saturation: -6
-    _temperature: 6
-    _tint: 2
+    _saturation: -10
+    _temperature: 0
+    _tint: 0
     _filter: {r: 1, g: 1, b: 1, a: 1}
     _shadows: {r: 1, g: 1, b: 1, a: 1}
+    _shadowLift: 0
     _highlights: {r: 1, g: 1, b: 1, a: 1}

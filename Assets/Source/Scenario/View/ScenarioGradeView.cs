@@ -64,8 +64,8 @@ namespace BalloonParty.Scenario.View
             _adjustments.colorFilter.value = grade.Filter;
             _whiteBalance.temperature.value = grade.Temperature;
             _whiteBalance.tint.value = grade.Tint;
-            _tones.shadows.value = Trackball(grade.Shadows);
-            _tones.highlights.value = Trackball(grade.Highlights);
+            _tones.shadows.value = Trackball(grade.Shadows, grade.ShadowLift);
+            _tones.highlights.value = Trackball(grade.Highlights, 0f);
         }
 
         private void OnDestroy()
@@ -84,10 +84,10 @@ namespace BalloonParty.Scenario.View
             _mix = mix;
         }
 
-        // URP's trackball value: the tint in xyz, the brightness offset in w (left at 0).
-        private static Vector4 Trackball(Color color)
+        // URP's trackball value: the tint in xyz, the brightness offset in w.
+        private static Vector4 Trackball(Color color, float offset)
         {
-            return new Vector4(color.r, color.g, color.b, 0f);
+            return new Vector4(color.r, color.g, color.b, offset);
         }
 
         private bool IsOn()

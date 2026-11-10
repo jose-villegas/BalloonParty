@@ -5,13 +5,13 @@ namespace BalloonParty.Configuration.Effects
 {
     /// <summary>
     ///     One scenario's colour grade over the whole frame (see <c>ScenarioGradeView</c>): URP's Color Adjustments,
-    ///     White Balance and the shadow and highlight tints of Shadows Midtones Highlights. <see cref="Neutral" />
-    ///     leaves the frame as it is.
+    ///     White Balance, and from Shadows Midtones Highlights the shadow and highlight tints and the shadows' lift.
+    ///     <see cref="Neutral" /> leaves the frame as it is.
     /// </summary>
     [Serializable]
     internal struct ScenarioGrade
     {
-        public static readonly ScenarioGrade Neutral = new(0f, 0f, 0f, 0f, 0f, Color.white, Color.white, Color.white);
+        public static readonly ScenarioGrade Neutral = new(0f, 0f, 0f, 0f, 0f, Color.white, Color.white, 0f, Color.white);
 
         [Tooltip("Brightness in stops, before the rest of the grade.")]
         [Range(-2f, 2f)]
@@ -39,6 +39,10 @@ namespace BalloonParty.Configuration.Effects
         [ColorUsage(false)]
         [SerializeField] private Color _shadows;
 
+        [Tooltip("Brightens the dark tones (above zero) or deepens them, leaving the bright ones: lifts a dark floor without washing out the balloons over it, as exposure would.")]
+        [Range(-1f, 1f)]
+        [SerializeField] private float _shadowLift;
+
         [Tooltip("Tints the bright tones toward this colour. White leaves them alone.")]
         [ColorUsage(false)]
         [SerializeField] private Color _highlights;
@@ -50,10 +54,11 @@ namespace BalloonParty.Configuration.Effects
         public float Tint => _tint;
         public Color Filter => _filter;
         public Color Shadows => _shadows;
+        public float ShadowLift => _shadowLift;
         public Color Highlights => _highlights;
 
         public ScenarioGrade(float exposure, float contrast, float saturation, float temperature, float tint,
-            Color filter, Color shadows, Color highlights)
+            Color filter, Color shadows, float shadowLift, Color highlights)
         {
             _exposure = exposure;
             _contrast = contrast;
@@ -62,6 +67,7 @@ namespace BalloonParty.Configuration.Effects
             _tint = tint;
             _filter = filter;
             _shadows = shadows;
+            _shadowLift = shadowLift;
             _highlights = highlights;
         }
 
@@ -77,6 +83,7 @@ namespace BalloonParty.Configuration.Effects
                 Mathf.Lerp(a._tint, b._tint, t),
                 Color.Lerp(a._filter, b._filter, t),
                 Color.Lerp(a._shadows, b._shadows, t),
+                Mathf.Lerp(a._shadowLift, b._shadowLift, t),
                 Color.Lerp(a._highlights, b._highlights, t));
         }
     }

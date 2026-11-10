@@ -191,7 +191,8 @@ bounce reference to `WaterBounceReference`.
   On top, slopes facing the sun catch a soft highlight and crests turned just so between the sun and the eye
   glint, and the simulation's foam is drawn as a lace of noise that it fills more of the thicker it is, so
   fading foam breaks into islands and specks. Lit by
-  the scene-light field at 0.7 influence (a warm evening tints the water rather than turning it olive), with
+  the scene-light field: its brightness in full, so night darkens the pale water as much as the balloons
+  over it, and its hue at 0.7 (a warm evening tints the water rather than turning it olive), with
   light above full eased in so a pop's glow doesn't clip to white; premultiplied by `GroundCoverageAt`,
   like the floor.
 - `Shaders/BalloonParty/Include/WaterSurface.cginc`: the surface's slope: a slow swell of two noise layers
@@ -236,9 +237,16 @@ Shader changes are checked in the editor only; `dotnet build` doesn't compile th
 The sky, the meadow and the water each light the board differently, so the same balloon can look a
 different colour on each. `ScenarioGradeView` grades the whole frame per scenario to bring them closer.
 Each scenario has a grade in `ScenarioGradeSettings` (`IScenarioGradeSettings`): exposure, contrast,
-saturation, white balance (temperature and tint), a colour filter, and tints for the shadows and the
-highlights. The view builds one global URP Volume with a runtime profile and writes the grade into it
-every frame, so edits to the asset show live in Play mode.
+saturation, white balance (temperature and tint), a colour filter, tints for the shadows and the
+highlights, and a lift for the shadows. A dark floor is brightened with the lift, not the exposure,
+which would wash out the balloons over it. The view builds one global URP Volume with a runtime profile
+and writes the grade into it every frame, so edits to the asset show live in Play mode.
+
+The sky is the reference and stays ungraded. The meadow and the water were tuned by the frame's mean
+brightness and saturation against the sky's, at noon and at night (time-of-day angles 135 and 315): the
+meadow takes a 0.35 lift and 12 less saturation, which brings its dark floor near the sky at noon
+without turning it milky at night, where a lift weighs more; the water already matches the sky's
+brightness and takes 10 less saturation.
 
 The grade follows the backdrop, not the schedule. `GroundView` writes `BackdropMix` as it cuts or
 reveals: the surface it is on and how much of the screen that surface covers (0 is all sky, 1 all

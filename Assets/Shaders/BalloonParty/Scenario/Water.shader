@@ -108,9 +108,10 @@ Shader "BalloonParty/Scenario/Water"
         _FoamSoftness     ("Foam Softness",               Range(0.01, 0.5)) = 0.2
 
         [Header(Lighting)]
-        // Scene-light colour x intensity multiplies the water: 0 = authored colours always, 1 = fully lit. Below 1,
-        // so a warm evening tints the water rather than turning it olive.
-        _LightInfluence   ("Light Influence",             Range(0, 1))    = 0.7
+        // How much of the scene light's hue tints the water: 0 = authored colours, 1 = the full hue. Below 1, so a
+        // warm evening tints the water rather than turning it olive. Its brightness always applies in full, so
+        // night darkens the water as much as everything over it.
+        _LightInfluence   ("Light Hue Influence",         Range(0, 1))    = 0.7
 
         // Opaque at rest (One/Zero: no framebuffer read). GroundView switches its own instance to premultiplied
         // (One/OneMinusSrcAlpha) while the mist reveal leaves part of the screen to the sky.
@@ -339,8 +340,12 @@ Shader "BalloonParty/Scenario/Water"
                 color = lerp(color, _FoamColor.rgb, cover * smoothstep(0.02h, 0.25h, foam) * _FoamStrength);
 
                 // Per pixel and field-aware, like the meadow floor: the time of day plus the local light of pops.
+                // The light's brightness in full, so night darkens the pale water as much as the balloons over it
+                // (holding part of it back left the water bright under dark balloons); only its hue is held back.
                 // Light above full is eased in, because the pale water would clip a pop's glow to flat white.
-                half3 light = lerp(half3(1.0h, 1.0h, 1.0h), (half3)SceneLightTintAt(wp), _LightInfluence);
+                half3 tint = (half3)SceneLightTintAt(wp);
+                half brightness = dot(tint, half3(0.299h, 0.587h, 0.114h));
+                half3 light = brightness * lerp(half3(1.0h, 1.0h, 1.0h), tint / max(brightness, 0.001h), _LightInfluence);
                 light /= 1.0h + max(light - 1.0h, 0.0h) * 0.7h;
 
                 // Premultiplied, so the same output is right opaque at rest (coverage 1) and blended in a reveal.
