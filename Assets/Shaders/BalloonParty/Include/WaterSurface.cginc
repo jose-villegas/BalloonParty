@@ -1,9 +1,9 @@
 #ifndef BALLOONPARTY_WATER_SURFACE_INCLUDED
 #define BALLOONPARTY_WATER_SURFACE_INCLUDED
 
-// The water surface's slope (Water.shader): a slow swell plus the rings WaterRippleBuffer draws travelling out from
-// every impact. The slope bends the view of the bottom, catches the highlight and makes the glints. Needs
-// Ground.cginc for GroundPointAt (the swell travels with the board).
+// The water surface (Water.shader): a slow swell plus the waves WaterRippleBuffer simulates, set off by every
+// impact, and their foam. The slope bends the view of the bottom, catches the highlight and makes the glints.
+// Needs Ground.cginc for GroundPointAt (the swell travels with the board).
 
 #include "Ground.cginc"
 
@@ -13,11 +13,11 @@ float _WaveSize;
 float _WaveSpeed;
 float _WaveHeight;
 
-// How tall the simulated rings stand per unit of the simulation's height.
+// How tall the simulated waves stand, in world units per unit of the simulation's height.
 float _RippleHeight;
 
-// WaterRippleBuffer's height field (r), over the disturbance field's bounds, and its texel size in UV. Black (flat)
-// while no water shows.
+// WaterRippleBuffer's state (r = height, a = foam), over the disturbance field's bounds, and its texel size in
+// UV. Black (flat, no foam) while no water shows.
 sampler2D _WaterRippleTex;
 float4    _WaterRippleTexel;
 float2    _FieldBoundsMin;
@@ -46,11 +46,11 @@ float2 WaterSwellSlope(float2 worldPos)
     return float2(hx - h, hy - h) / WATER_SWELL_STEP;
 }
 
-// The rings at a world position, in the simulation's own units: xy = height change across one texel each way
-// (half the difference of the two neighbours), z = curvature (the four neighbours minus four times the middle:
-// positive in a trough, where a ring focuses light on the bottom). Outside the field (the overscan past the
-// camera) the water is flat.
-float3 WaterRippleAt(float2 worldPos)
+// The simulated surface at a world position, in the simulation's own units (rest depth = 1): xy = height change
+// across one texel each way (half the difference of the two neighbours), z = curvature (the four neighbours minus
+// four times the middle: positive in a trough, where a wave focuses light on the bottom), w = height above rest.
+// Outside the field (the overscan past the camera) the water is flat.
+float4 WaterRippleAt(float2 worldPos)
 {
     float2 uv = (worldPos - _FieldBoundsMin) / max(_FieldBoundsSize, 1e-4);
     float2 texel = _WaterRippleTexel.xy;
@@ -60,11 +60,19 @@ float3 WaterRippleAt(float2 worldPos)
     float up = tex2Dlod(_WaterRippleTex, float4(uv + float2(0.0, texel.y), 0.0, 0.0)).r;
     float down = tex2Dlod(_WaterRippleTex, float4(uv - float2(0.0, texel.y), 0.0, 0.0)).r;
     float inField = all(uv == saturate(uv)) ? 1.0 : 0.0;
-    return float3(0.5 * (right - left), 0.5 * (up - down), right + left + up + down - 4.0 * middle) * inField;
+    return float4(0.5 * (right - left), 0.5 * (up - down), right + left + up + down - 4.0 * middle, middle) * inField;
 }
 
-// The surface's slope (height change per world unit): the swell plus the rings (WaterRippleAt).
-float2 WaterSlope(float2 worldPos, float3 ripple)
+// The foam the simulation carries at a world position (0..1): where crests broke and big impacts splashed.
+float WaterFoamAt(float2 worldPos)
+{
+    float2 uv = (worldPos - _FieldBoundsMin) / max(_FieldBoundsSize, 1e-4);
+    float inField = all(uv == saturate(uv)) ? 1.0 : 0.0;
+    return tex2Dlod(_WaterRippleTex, float4(uv, 0.0, 0.0)).a * inField;
+}
+
+// The surface's slope (height change per world unit): the swell plus the simulated waves (WaterRippleAt).
+float2 WaterSlope(float2 worldPos, float4 ripple)
 {
     float2 texelWorld = _WaterRippleTexel.xy * max(_FieldBoundsSize, 1e-4);
     return WaterSwellSlope(worldPos) + ripple.xy / texelWorld * _RippleHeight;

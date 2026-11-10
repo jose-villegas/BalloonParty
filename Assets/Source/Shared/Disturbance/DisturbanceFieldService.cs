@@ -167,7 +167,7 @@ namespace BalloonParty.Shared.Disturbance
 
             if (repels && reportImpact)
             {
-                _impactBus.Report(worldPosition, radius);
+                _impactBus.Report(worldPosition, radius, direction);
             }
 
             if (duration > 0f)

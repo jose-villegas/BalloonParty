@@ -63,16 +63,19 @@ sky hiding all apply to water unchanged (the planner and the curve read "not sky
 "ground"). The water settings (material, colours, ripple tuning) live on `GroundSettings` next to
 the floor's, through `IGroundSettings`.
 
-- Every impact the game reports (`ImpactEventBus`: each step of a ball's flight, pops, bombs,
-  balloons gliding in) starts a ring (`WaterRippleBuffer`, `WaterRipple.shader`). Impacts close in
-  place and time join one ring, so a ball leaves a trail of rings. Each frame, the rings in flight
-  (up to 48) are drawn into a height field over the disturbance field's bounds, 16 texels per
-  world unit. A ring is a short packet of crests walking outward at 1.8 world units a second,
-  0.4 apart, flattening as it spreads and fading over 0.9 s. The surface's slope
-  (`Include/WaterSurface.cginc`) is that field's plus a slow swell of two noise layers on
-  different headings, the smaller slower, travelling with the content root. Each ring also throws
-  a bright and a dark band on the sand and sheens the surface whatever the sun's angle, so it
-  reads at any time of day.
+- The surface moves by a cheap shallow-water simulation on the GPU (`WaterRippleBuffer`,
+  `WaterRipple.shader`), 16 cells per world unit over the disturbance field's bounds, stepped 120
+  times a second of game time. It has flow (water runs from high to low, so waves travel and a
+  ball drags a wake), surface tension (short ripples outrun long ones, so a splash spreads into a
+  train of wavelets), resonance (the screen's edges are walls the waves reflect off), height (crests
+  read lighter, troughs darker) and breakup (a crest past the break slope loses flow, and foam
+  forms only on sharp peaks, where the normal turns suddenly, and fades fast). Every impact the
+  game reports (`ImpactEventBus`: each step of a ball's flight, pops, bombs, balloons gliding in)
+  presses the water for 0.12 s and drags it along the impact's heading. The surface's slope
+  (`Include/WaterSurface.cginc`) is the simulation's plus a slow swell of two noise layers on
+  different headings, the smaller slower, travelling with the content root. Each wave also throws a
+  bright and a dark band on the sand and sheens the surface whatever the sun's angle, so it reads at
+  any time of day.
 - The water has depth. A noise map lays sandbanks and deep channels (0.6 to 4.5 world units). The
   bottom is seen as from a camera above the middle of the screen, so a deeper bottom shrinks toward
   the middle and slides slower when the board scrolls; the surface's slope bends the view of it in
@@ -101,7 +104,13 @@ the floor's, through `IGroundSettings`.
   like a gel, ripples don't travel. Also lacks depth"). A wave-equation simulation came next.
   Driven by the soft, board-wide field it only sloshed in big blobs; driven by the impacts, its
   dozens of rings a second interfered into a chop in which no ring read (owner: "I don't see
-  ripples"). Drawing each ring on its own fixed that.
+  ripples"). Rings drawn one by one from each impact read, but never met anything (owner: "there
+  is no flow, tension or resonance, no height or breakup"): the shallow-water simulation replaced
+  them, pressed smoothly by each impact rather than re-driven by the whole field every frame. Its
+  first foam came from every steep slope and every big splash and covered half the screen after a
+  board clear (owner: "it should be bound to where the normals suddenly change, so around peaks"),
+  and its waves barely showed through the swell and the caustics until they stood taller, shaded
+  their crests and bent the bottom more.
   The tile's cell wrap uses `id - n·floor((id + 0.5)/n)`, not `fmod`: GPU division is
   approximate, `fmod(10, 5)` can return 5, and the tile then shows a seam.
 

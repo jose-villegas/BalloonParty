@@ -27,7 +27,7 @@ namespace BalloonParty.Scenario.View
     ///     cloud backdrop and the content root about the camera, so going down the ground grows into place and
     ///     going up it falls away. On water levels the same floor quad draws the water surface
     ///     (<c>BalloonParty/Scenario/Water</c>) instead of the meadow, with no blades: every impact the game reports
-    ///     starts a ring that travels outward (<see cref="WaterRippleBuffer" />), and the rings bend the caustic net
+    ///     moves a simulated surface (<see cref="WaterRippleBuffer" />), and its waves bend the caustic net
     ///     under it (<see cref="WaterCausticBuffer" />), and
     ///     the reveal, the depth and the coverage play the same way. Sky always sits between two surfaces in the
     ///     schedule, so a reveal never swaps one surface for the other; a cut between them just swaps the floor's

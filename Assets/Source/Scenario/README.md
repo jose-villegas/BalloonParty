@@ -176,31 +176,42 @@ bounce reference to `WaterBounceReference`.
   slides slower when the board scrolls, and the surface's slope bends the view of it more over deep water.
   The sand carries ripple bands and the caustic net (below), shaded around the sand's own colour, never
   added past it. The water over it absorbs each colour by its own rate per world unit (red first, blue
-  last) and scatters its own colour back, so shallows read as sand and deep water as teal. Each ripple ring
-  throws a bright band and a dark band on the sand (light focused under its trough, spread under its crest)
-  and sheens the surface, whatever the sun's angle. On top, slopes facing the sun catch a soft highlight and
-  crests turned just so between the sun and the eye glint. Lit by
+  last) and scatters its own colour back, so shallows read as sand and deep water as teal. Each simulated
+  wave throws a bright band and a dark band on the sand (light focused under its trough, spread under its
+  crest) and sheens the surface, whatever the sun's angle; crests read a little lighter and troughs darker.
+  On top, slopes facing the sun catch a soft highlight and crests turned just so between the sun and the eye
+  glint, and the simulation's foam is drawn as a lace of noise that it fills more of the thicker it is, so
+  fading foam breaks into islands and specks. Lit by
   the scene-light field at 0.7 influence (a warm evening tints the water rather than turning it olive), with
   light above full eased in so a pop's glow doesn't clip to white; premultiplied by `GroundCoverageAt`,
   like the floor.
 - `Shaders/BalloonParty/Include/WaterSurface.cginc`: the surface's slope: a slow swell of two noise layers
   on different headings (the smaller slower, as shorter waves are), travelling with the board, plus the
-  ripple rings (below). The slope is what bends the bottom and catches the light.
-- `View/WaterRippleBuffer.cs` + `Shaders/BalloonParty/Scenario/WaterRipple.shader`: the ripples. Every
+  simulated waves (below). The slope is what bends the bottom and catches the light.
+- `View/WaterRippleBuffer.cs` + `Shaders/BalloonParty/Scenario/WaterRipple.shader`: the water's motion, a
+  shallow-water simulation on the GPU over the disturbance field's bounds (`IGroundSettings.
+  WaterRippleTexelsPerUnit`, 16; about 86×154 cells on a phone), published as `_WaterRippleTex` (r = height
+  above rest, g/b = the flow across each cell's right and top edges, a = foam). Each fixed step (120 a
+  second of game time, at most 4 a frame, so a pause holds it) flow runs from high water to low and the
+  heights follow, so a dip travels out as a wave. The screen's edges are walls: waves reflect and the water
+  sloshes between them. Surface tension pulls on curvature, so short ripples outrun long ones and a splash
+  spreads into a train of wavelets; viscosity smooths the flow at the grid's own scale. A crest steeper than
+  the break slope loses some of its flow. Foam forms only on sharp peaks, where the normal turns suddenly
+  (a crest whose curvature passes the foam curvature), and fades in about a third of a second, so it stays
+  on the peaks that make it rather than spreading. Every
   impact the game reports to `Shared/ImpactEventBus` (each step of a ball's flight, pops, bombs, balloons
-  gliding in) starts a ring; an impact within 0.45 world units and 0.15 s of a ring just started joins it,
-  so a ball leaves a trail of rings rather than a smear. Up to 48 rings are in flight; each frame one blit
-  draws them all into a height field over the disturbance field's bounds (`IGroundSettings.
-  WaterRippleTexelsPerUnit`, 16), published as `_WaterRippleTex`. A ring is a short packet of crests whose
-  front walks outward at the ripple material's speed (1.8 world units a second, 0.4 between crests),
-  flattening as it spreads and fading over 0.9 s. Ages run on game time, so a pause holds the rings. It
-  restarts calm whenever water appears. `WaterImpactCollector` (Game scope, `IPostTickable`) copies the
-  bus after Update, because the bus clears in VContainer's LateTick, which runs before `GroundView`'s
-  LateUpdate.
-  Two earlier versions failed. Rings drawn straight from the field's push (`sin(k·push + ωt)`) stayed in
-  the push's shape and wobbled in place like gel. A wave-equation simulation driven by the field only
-  sloshed in board-wide blobs, and driven by the impacts its rings interfered into a chop in which no
-  single ring read.
+  gliding in) presses the water for 0.12 s, eased in and out, and drags it along the impact's heading
+  (`Impact.Direction`), so a ball leaves a V-shaped wake. The presses
+  are splatted as soft quads into a force target once a frame (pass 0), then the steps run (pass 1). Both
+  cells on an edge compute its flow from the same texels, so no water appears or leaves. It restarts calm
+  whenever water appears. `WaterImpactCollector` (Game scope, `IPostTickable`) copies the bus after Update,
+  because the bus clears in VContainer's LateTick, which runs before `GroundView`'s LateUpdate. The tuning
+  (wave speed, tension, fade, push, drag, break slope, foam) is on the ripple material.
+  Three earlier versions failed. Rings drawn straight from the field's push (`sin(k·push + ωt)`) stayed in
+  the push's shape and wobbled in place like gel. A wave equation over the height alone, driven by the
+  field, sloshed in board-wide blobs, and driven by the impacts its rings interfered into a chop. Rings
+  drawn one by one from each impact travelled but never met anything: no flow, tension or resonance, no
+  height or breakup (owner).
 - `View/WaterCausticBuffer.cs` + `Shaders/BalloonParty/Scenario/WaterCaustics.shader`: the caustics. Each
   frame on water, one blit draws a tile of the moving caustic net into a 256² R8 target that wraps, with
   mips, published as `_WaterCausticTex`. The net is the borders between drifting cells, warped so they

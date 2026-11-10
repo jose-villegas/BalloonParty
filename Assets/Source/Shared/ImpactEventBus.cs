@@ -11,9 +11,9 @@ namespace BalloonParty.Shared
 
         internal IReadOnlyList<Impact> Pending => _pending;
 
-        internal void Report(Vector3 position, float radius)
+        internal void Report(Vector3 position, float radius, Vector2 direction = default)
         {
-            _pending.Add(new Impact(position, radius));
+            _pending.Add(new Impact(position, radius, direction));
         }
 
         public void LateTick()
@@ -28,11 +28,14 @@ namespace BalloonParty.Shared
         {
             internal readonly Vector3 Position;
             internal readonly float Radius;
+            // The stamp's heading (a ball's travel), zero for a burst that pushes every way.
+            internal readonly Vector2 Direction;
 
-            internal Impact(Vector3 position, float radius)
+            internal Impact(Vector3 position, float radius, Vector2 direction)
             {
                 Position = position;
                 Radius = radius;
+                Direction = direction;
             }
         }
     }

@@ -69,11 +69,11 @@ namespace BalloonParty.Configuration.Effects
         /// <summary>Texels across the square caustic tile (a power of two).</summary>
         int WaterCausticResolution { get; }
 
-        /// <summary>Material using Hidden/BalloonParty/Scenario/WaterRipple: draws the rings each impact starts on the
-        /// surface. Without one the surface only swells.</summary>
+        /// <summary>Material using Hidden/BalloonParty/Scenario/WaterRipple: simulates the surface's waves, flow and
+        /// foam, set off by every impact. Without one the surface only swells.</summary>
         Material WaterRippleMaterial { get; }
 
-        /// <summary>Texels per world unit of the ripple height field.</summary>
+        /// <summary>Cells per world unit of the water simulation.</summary>
         float WaterRippleTexelsPerUnit { get; }
 
         /// <summary>The water's average unlit colour, which the GI measures bounce against on water levels.</summary>
