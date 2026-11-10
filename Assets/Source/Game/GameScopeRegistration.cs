@@ -287,6 +287,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<LevelController>().AsSelf().As<ILevelProgress>().As<IRunResettable>();
             builder.RegisterEntryPoint<TimeOfDayCycle>().As<IRunResettable>();
             builder.Register<ActiveScenario>(Lifetime.Singleton).AsSelf().As<IActiveScenario>();
+            builder.Register<BackdropMix>(Lifetime.Singleton);
             builder.RegisterEntryPoint<ScenarioController>();
             builder.Register<HitPipeline>(Lifetime.Singleton).As<IHitDispatcher>();
             builder.RegisterEntryPoint<RunController>().AsSelf();
@@ -477,6 +478,7 @@ namespace BalloonParty.Game
             builder.Register<JumpToScenarioCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<AddShieldCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<TimeOfDayCheat>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<ScenarioGradeCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.RegisterComponentOnNewGameObject<BalloonRemoverCheat>(Lifetime.Singleton, "BalloonRemoverCheat")
                 .AsImplementedInterfaces()
                 .AsSelf();

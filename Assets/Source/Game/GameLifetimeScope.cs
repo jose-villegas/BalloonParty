@@ -43,6 +43,7 @@ namespace BalloonParty.Game
         [SerializeField] private PuffCloudSettings _puffCloudSettings;
         [SerializeField] private BushSettings _bushSettings;
         [SerializeField] private GroundSettings _groundSettings;
+        [SerializeField] private ScenarioGradeSettings _scenarioGradeSettings;
         [SerializeField] private SceneLightFieldSettings _sceneLightFieldSettings;
         [FormerlySerializedAs("_paintingFieldSettings")]
         [SerializeField] private SmokeFieldSettings _smokeFieldSettings;
@@ -105,6 +106,9 @@ namespace BalloonParty.Game
             builder.RegisterComponentOnNewGameObject<GroundView>(Lifetime.Singleton, "Ground")
                 .UnderTransform(transform).AsSelf().As<ITransitionOutgoingContent>();
             builder.RegisterBuildCallback(resolver => resolver.Resolve<GroundView>());
+            builder.RegisterComponentOnNewGameObject<ScenarioGradeView>(Lifetime.Singleton, "ScenarioGrade")
+                .UnderTransform(transform);
+            builder.RegisterBuildCallback(resolver => resolver.Resolve<ScenarioGradeView>());
         }
 
         // Kept here (not GameScopeRegistration) because it needs this component's serialized fields.
@@ -124,6 +128,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance<IBushSettings>(_bushSettings);
 
             builder.RegisterInstance<IGroundSettings>(_groundSettings);
+            builder.RegisterInstance<IScenarioGradeSettings>(_scenarioGradeSettings);
 
             // Display config, the ambient (scene-light / time-of-day), screen-space light, disturbance, and
             // background-field settings are owned by AppLifetimeScope now; this scope resolves them from the

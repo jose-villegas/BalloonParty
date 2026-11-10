@@ -67,6 +67,7 @@ MonoBehaviour:
   _puffCloudSettings: {fileID: 11400000, guid: ad969212547fb4aa28442e6f190431fc, type: 2}
   _bushSettings: {fileID: 11400000, guid: 13458cde8e4a74aec9240bbfad8e8f2f, type: 2}
   _groundSettings: {fileID: 11400000, guid: 8b0eeb571e594d63bf1c4432f276b076, type: 2}
+  _scenarioGradeSettings: {fileID: 11400000, guid: fdd70358c5e149c4a32b645acc8b919e, type: 2}
   _sceneLightFieldSettings: {fileID: 11400000, guid: 6f1c8ceaec67e46bba09250d145ce93e,
     type: 2}
   _smokeFieldSettings: {fileID: 11400000, guid: f4ebc4f997264403480e15e52ac20534,

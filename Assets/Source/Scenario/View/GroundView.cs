@@ -63,6 +63,7 @@ namespace BalloonParty.Scenario.View
         private ISkyBackdrop _sky;
         private ScenarioContentRoot _scenarioRoot;
         private WaterImpactCollector _impacts;
+        private BackdropMix _mix;
         // Scenario, like the sky it replaces, so SceneCaptureService captures the meadow for the GI. Its shaders
         // write colour only, never the capture's coverage alpha, so the full-screen ground doesn't read as one
         // big occluder. NameToLayer cannot be called from a static field initializer on a MonoBehaviour.
@@ -221,13 +222,15 @@ namespace BalloonParty.Scenario.View
         [Inject]
         internal void Construct(
             IGroundSettings settings, IGameDisplayConfiguration display, IActiveScenario scenario,
-            ScenarioContentRoot scenarioRoot, WaterImpactCollector impacts, IObjectResolver resolver)
+            ScenarioContentRoot scenarioRoot, WaterImpactCollector impacts, BackdropMix mix,
+            IObjectResolver resolver)
         {
             _settings = settings;
             _display = display;
             _scenario = scenario;
             _scenarioRoot = scenarioRoot;
             _impacts = impacts;
+            _mix = mix;
 
             // AppLifetimeScope registers the sky only when its settings asset is wired; without it there is
             // nothing to hide, so this is an optional lookup rather than a constructor dependency.
@@ -409,6 +412,7 @@ namespace BalloonParty.Scenario.View
             var depth = GroundRevealCurve.Depth(_revealTarget, opening, _settings.RevealDepthZoom);
             _groundScale = depth.Ground;
             _scenarioRoot.SetDepth(depth.Incoming, depth.Outgoing);
+            _mix.Set(_surface, opening);
 
             // While the hole is closed the ground covers nothing: skip its full-screen blended pass and the blade
             // mesh's vertices rather than draw them at zero coverage.
@@ -455,6 +459,7 @@ namespace BalloonParty.Scenario.View
 
             _sky?.SetVisible(!surface);
             Shader.SetGlobalFloat(GroundCoverageId, surface ? 1f : 0f);
+            _mix.Set(_surface, surface ? 1f : 0f);
         }
 
         // Puts the floor quad on the meadow or the water, with the GI's bounce reference to match.

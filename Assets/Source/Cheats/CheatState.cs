@@ -40,6 +40,11 @@ namespace BalloonParty.Cheats
         /// <see cref="TimeOfDayCheat" />; read (under this guard) by the clock each tick.</summary>
         public static float TimeOfDaySpeedScale = 1f;
 
+        /// <summary>While true, <c>ScenarioGradeView</c> drops the scenario colour grade (and the camera's
+        /// post-processing with it), to compare the scenes with and without it. Set by
+        /// <see cref="ScenarioGradeCheat" />.</summary>
+        public static bool ScenarioGradeOff;
+
         /// <summary>Sticky "this session touched the cheat console" flag, read by
         /// <c>GameplayMetricsService</c> at every flush so the records it writes are filterable. The other
         /// flags cannot answer that question on their own: <see cref="StartLevel" /> and
@@ -61,6 +66,7 @@ namespace BalloonParty.Cheats
             TimeOfDaySpeedScale = 1f;
             AnyCheatUsed = false;
             KeepRunSeed = false;
+            ScenarioGradeOff = false;
 #if UNITY_EDITOR
             // Pick up (and consume) the "play from here" level the pacing window stashed before entering play.
             StartLevel = UnityEditor.EditorPrefs.GetInt(StartLevelPrefKey, 1);

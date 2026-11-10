@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80f7e633d2b34ce6aba35f79952f551d, type: 3}
+  m_Name: ScenarioGradeSettings
+  m_EditorClassIdentifier: 
+  _enabled: 1
+  _sky:
+    _exposure: 0
+    _contrast: 0
+    _saturation: 0
+    _temperature: 0
+    _tint: 0
+    _filter: {r: 1, g: 1, b: 1, a: 1}
+    _shadows: {r: 1, g: 1, b: 1, a: 1}
+    _highlights: {r: 1, g: 1, b: 1, a: 1}
+  _meadow:
+    _exposure: 0.1
+    _contrast: 0
+    _saturation: -10
+    _temperature: -4
+    _tint: 0
+    _filter: {r: 1, g: 1, b: 1, a: 1}
+    _shadows: {r: 0.97, g: 0.98, b: 1, a: 1}
+    _highlights: {r: 1, g: 1, b: 1, a: 1}
+  _water:
+    _exposure: 0.2
+    _contrast: 0
+    _saturation: -6
+    _temperature: 6
+    _tint: 2
+    _filter: {r: 1, g: 1, b: 1, a: 1}
+    _shadows: {r: 1, g: 1, b: 1, a: 1}
+    _highlights: {r: 1, g: 1, b: 1, a: 1}

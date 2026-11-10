@@ -231,6 +231,26 @@ bounce reference to `WaterBounceReference`.
 
 Shader changes are checked in the editor only; `dotnet build` doesn't compile them.
 
+### Colour grade
+
+The sky, the meadow and the water each light the board differently, so the same balloon can look a
+different colour on each. `ScenarioGradeView` grades the whole frame per scenario to bring them closer.
+Each scenario has a grade in `ScenarioGradeSettings` (`IScenarioGradeSettings`): exposure, contrast,
+saturation, white balance (temperature and tint), a colour filter, and tints for the shadows and the
+highlights. The view builds one global URP Volume with a runtime profile and writes the grade into it
+every frame, so edits to the asset show live in Play mode.
+
+The grade follows the backdrop, not the schedule. `GroundView` writes `BackdropMix` as it cuts or
+reveals: the surface it is on and how much of the screen that surface covers (0 is all sky, 1 all
+surface). The view blends from the sky's grade to that surface's by that amount, so during a mist reveal
+the grade turns with the hole. The Launch screen, which always shows sky, gets the sky's grade.
+
+The grade needs the main camera's post-processing. The view turns it on while the grade is enabled and
+gives it back otherwise; with `Enabled` off, or the Scenario Grade cheat off, the frame costs what it
+did before. The HUD canvases render through the same camera, so they take the grade too: keep the
+grades gentle. The GI's scene capture has its own camera with post-processing off, so the grade never
+feeds back into the lighting it is correcting.
+
 ## BackgroundFieldService
 
 `BackgroundFieldService.cs` — owns the shared cloud field: an RT (`_BackgroundDensityTex`) blitted from
