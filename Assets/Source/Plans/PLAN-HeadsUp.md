@@ -52,7 +52,7 @@ thing happened, gone a second later. It fits the game's paper look, and a pencil
   heads-up that matters (a big streak) gets a pencil underline.
 
 Heads-Ups are short, never cover the aim line for long, and run on unscaled time so they keep writing
-through slow-motion beats.
+through slow-motion beats; under the pause menu they freeze with the game (§10).
 
 ## 3. Architecture
 
@@ -171,7 +171,7 @@ The cannon gets a `TrailEndpointRegistry` key, so the ready heads-up anchors the
 |---|---|---|---|
 | Streak grows | `StreakGrewMessage` | `x{0}!` at the pop | From a configured streak up (say 3). Merge key (ball, colour), so a growing streak rewrites itself and two balls don't overwrite each other. An underline from a higher streak (say 6) |
 | Speed tap | `SpeedTapMintedMessage` | `tap!` at the wall contact | `TotalTaps <= N` only, so a long cruise doesn't spam |
-| Pierce | `PierceArmed` | `pierce!` at the ball | Once per arming. Snipe arming included or not: §10 |
+| Pierce | `PierceArmed` | `pierce!` at the ball | Once per arming, a Snipe arming included (§10) |
 | Cannon ready | `ThrowerReadyMessage` | `ready`, beside the cannon, held while it's ready | **Built early, on every ready** (`ReloadHeadsUp`), cleared when the ball fires or play stops, and the reload is now near-instant with nothing flying but 2 s while a ball flies, so a ready cannon under fire is a beat worth marking. If it reads as noise, narrow it to `AfterCapWait` |
 | Shield picked up | `ShieldGainedMessage` | `+{n} bounce` at the shield's balloon, n counting the ball's pickups this flight | **Built early** (`BounceHeadsUp`), on every pickup |
 | Wall spends a shield | `WallHitMessage` | `-1 bounce` at the wall contact, kept on screen | **Built early** (`BounceHeadsUp`), on every bounce; quiet graphite, vermilion when it leaves the last shield |
@@ -223,8 +223,11 @@ can't judge readability. New folders (`Game/HeadsUp/`, `UI/HeadsUp/`) get a READ
 1. ~~**Font.**~~ **DECISION (owner): Patrick Hand** (SIL Open Font License, Google Fonts). Picked over
    Caveat, Gochi Hand and Kalam: it reads best at phone sizes, and its letters don't join, so the
    wipe shows no seams. Ships with its OFL licence text beside the `.ttf`.
-2. **Pierce from a Snipe.** Does a Snipe arming a ball get the `pierce!` heads-up too, or only a tap
-   arming?
-3. **Under the pause menu.** Do heads-ups already writing keep going, or freeze with the game?
+2. ~~**Pierce from a Snipe.**~~ **DECISION (owner): yes.** A Snipe arming a ball writes `pierce!` like a
+   tap arming does. A banked charge keeping a ball armed through its discharge is not a new arming, so it
+   writes nothing (`PierceArmed` doesn't fire for it).
+3. ~~**Under the pause menu.**~~ **DECISION (owner): they freeze with the game.** A heads-up mid-write,
+   holding or fading stops while any pause source is held (`PauseService.IsAnyPaused`) and carries on
+   where it was. Unscaled time still applies to slow-motion beats, which aren't a pause.
 4. **More events.** Anything else worth a heads-up: an item going off (`Bomb!`), the board running low,
    the next line about to land?
