@@ -86,14 +86,14 @@ Shader "BalloonParty/Scenario/Water"
         _GlintStrength    ("Glint Strength",              Range(0, 2))    = 0.55
 
         [Header(Foam)]
-        // The foam the simulation carries (breaking crests, big splashes), drawn as a lace that thins into islands
+        // The foam the simulation carries (on and behind the tall crests), drawn as a lace that thins into islands
         // and specks as it fades.
-        _FoamColor        ("Foam Colour",                 Color)          = (0.95, 0.98, 1.0, 1)
-        _FoamStrength     ("Foam Strength",               Range(0, 1))    = 0.9
+        _FoamColor        ("Foam Colour",                 Color)          = (1, 1, 1, 1)
+        _FoamStrength     ("Foam Strength",               Range(0, 1))    = 1
         // World units across one of the lace's holes.
-        _FoamSize         ("Foam Lace Size (world)",      Float)          = 0.8
+        _FoamSize         ("Foam Lace Size (world)",      Float)          = 0.4
         // How soft the lace's edges are.
-        _FoamSoftness     ("Foam Softness",               Range(0.01, 0.5)) = 0.25
+        _FoamSoftness     ("Foam Softness",               Range(0.01, 0.5)) = 0.12
 
         [Header(Lighting)]
         // Scene-light colour x intensity multiplies the water: 0 = authored colours always, 1 = fully lit. Below 1,

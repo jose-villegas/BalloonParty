@@ -63,7 +63,7 @@ float4 WaterRippleAt(float2 worldPos)
     return float4(0.5 * (right - left), 0.5 * (up - down), right + left + up + down - 4.0 * middle, middle) * inField;
 }
 
-// The foam the simulation carries at a world position (0..1): where crests broke and big impacts splashed.
+// The foam the simulation carries at a world position (0..1): on and behind the tall crests.
 float WaterFoamAt(float2 worldPos)
 {
     float2 uv = (worldPos - _FieldBoundsMin) / max(_FieldBoundsSize, 1e-4);

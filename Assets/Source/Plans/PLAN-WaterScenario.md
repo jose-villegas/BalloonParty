@@ -69,7 +69,7 @@ the floor's, through `IGroundSettings`.
   ball drags a wake), surface tension (short ripples outrun long ones, so a splash spreads into a
   train of wavelets), resonance (the screen's edges are walls the waves reflect off), height (crests
   read lighter, troughs darker) and breakup (a crest past the break slope loses flow, and foam
-  forms only on sharp peaks, where the normal turns suddenly, and fades fast). Every impact the
+  forms on the peaks of tall crests and trails behind them as they run on). Every impact the
   game reports (`ImpactEventBus`: each step of a ball's flight, pops, bombs, balloons gliding in)
   presses the water for 0.12 s and drags it along the impact's heading. The surface's slope
   (`Include/WaterSurface.cginc`) is the simulation's plus a slow swell of two noise layers on
@@ -115,8 +115,11 @@ the floor's, through `IGroundSettings`.
   faint (owner: "barely visible", "is the foam even present?"), while letting it break later,
   with the waves lasting 2.5 s and the walls reflecting them, built up so much energy in real play
   that the water saturated and foamed everywhere. The sim is tuned while the game plays: waves fade
-  over a second, crests break past 0.15 a cell, and foam sits above the background's slosh and
-  below a fresh hit's peaks.
+  over a second, crests break past 0.15 a cell. Foam from per-cell curvature still barely showed
+  (owner: "foam should basically trail behind the peaks"): the waves are several cells wide, so
+  only the crests right at an impact bent sharply enough. Foam now comes from a crest's height
+  (past 0.3, above the slosh play leaves everywhere), lasts most of a second so a moving crest
+  leaves a trail, and is drawn white in a finer, crisper lace that reads over the pale sand.
   The tile's cell wrap uses `id - n·floor((id + 0.5)/n)`, not `fmod`: GPU division is
   approximate, `fmod(10, 5)` can return 5, and the tile then shows a seam.
 

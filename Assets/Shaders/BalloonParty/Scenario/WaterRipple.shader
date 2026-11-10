@@ -6,9 +6,8 @@ Shader "Hidden/BalloonParty/Scenario/WaterRipple"
     // a wave reflects where the screen ends: the edges are walls, and the water rings and sloshes between them.
     // Surface tension pulls on curvature, so short ripples run ahead of long ones and a splash spreads into a train
     // of wavelets instead of one ring. Viscosity smooths the flow at the grid's own scale, where waves would go
-    // jagged. A crest steeper than the break slope loses some of its flow. Foam forms only on sharp peaks, where the
-    // surface's normal turns suddenly (a crest whose curvature passes the foam curvature), rides the flow a little
-    // and fades fast, so it stays on the peaks that make it.
+    // jagged. A crest steeper than the break slope loses some of its flow. Foam forms only on the peaks of the tall
+    // crests and fades over most of a second; a crest outruns the water under it, so its foam trails behind it.
     //
     // Pass 0 (Splat) draws each impact WaterRippleBuffer is pressing into the force target, additively: a soft
     // pressure that pushes the water away and a drag along the impact's heading. Pass 1 (Step) advances the water
@@ -48,13 +47,13 @@ Shader "Hidden/BalloonParty/Scenario/WaterRipple"
         _BreakSlope   ("Break Slope (per texel)",       Float) = 0.15
         // How much of a breaking crest's flow it loses each second per unit past the break slope.
         _BreakLoss    ("Break Loss",                    Float) = 150
-        // How sharp a peak must be to foam: its curvature (the middle above its four neighbours' mean, times four,
-        // in rest depths).
-        _FoamCurvature("Foam Curvature",                Float) = 0.15
-        // Foam a peak makes each second per unit of curvature past the foam curvature.
+        // How tall a crest must stand to foam, in rest depths: above the slosh the game leaves everywhere, below
+        // the crests a fresh hit sends out.
+        _FoamHeight   ("Foam Height",                   Float) = 0.3
+        // Foam a crest makes each second per rest depth it stands past the foam height.
         _FoamGain     ("Foam Gain",                     Float) = 50
-        // How fast foam fades (the time constant): short, so it stays on the peak that made it.
-        _FoamFade     ("Foam Fade (seconds)",           Float) = 0.3
+        // How fast foam fades (the time constant): long enough that a crest leaves a trail of it behind.
+        _FoamFade     ("Foam Fade (seconds)",           Float) = 0.8
     }
 
     SubShader
@@ -126,7 +125,7 @@ Shader "Hidden/BalloonParty/Scenario/WaterRipple"
             float _Drag;
             float _BreakSlope;
             float _BreakLoss;
-            float _FoamCurvature;
+            float _FoamHeight;
             float _FoamGain;
             float _FoamFade;
 
@@ -214,12 +213,14 @@ Shader "Hidden/BalloonParty/Scenario/WaterRipple"
 
                 float height = c.r - _StepSeconds * (right - left + top - bottom);
 
-                // Foam rides the flow (traced back along it), fades, and grows on sharp peaks: a crest (above rest) whose
-                // curvature, where the normal turns, passes the foam curvature.
+                // Foam rides the flow (traced back along it), fades, and grows on the tall crests: a peak (the middle
+                // above its neighbours) standing past the foam height. A crest outruns the water under it, so the foam
+                // it makes stays behind as a trail. Per-cell curvature was tried as the trigger: the waves are
+                // several cells wide, so it missed every crest but the ones right at an impact.
                 float2 velocity = float2(right + left, top + bottom) * 0.5;
                 float foam = tex2Dlod(_MainTex, float4(uv - velocity * _StepSeconds * _MainTex_TexelSize.xy, 0, 0)).a;
                 foam *= exp(-_StepSeconds / max(_FoamFade, 0.05));
-                float peak = c.r > 0.0 ? max(0.0, -curveC - _FoamCurvature) : 0.0;
+                float peak = curveC < 0.0 ? max(0.0, c.r - _FoamHeight) : 0.0;
                 foam += _StepSeconds * _FoamGain * peak;
 
                 return float4(clamp(height, -2.0, 2.0), right, top, saturate(foam));

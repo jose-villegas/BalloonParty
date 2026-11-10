@@ -29,9 +29,9 @@ Material:
     - _BreakSlope: 0.15
     - _Drag: 6
     - _Fade: 1
-    - _FoamCurvature: 0.15
-    - _FoamFade: 0.3
+    - _FoamFade: 0.8
     - _FoamGain: 50
+    - _FoamHeight: 0.3
     - _PressRadius: 0.5
     - _Push: 1.2
     - _Tension: 0.003
