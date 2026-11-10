@@ -50,5 +50,8 @@ namespace BalloonParty.Configuration.Balloons
 
         /// <summary>Seconds a bubble cluster takes to flow into the neighbour a nudge pushed it toward.</summary>
         float BubbleMergeSeconds { get; }
+
+        /// <summary>Most bubbles a merge fills a cluster to; above the HitsToPop clusters spawn with.</summary>
+        int BubbleMergeMax { get; }
     }
 }

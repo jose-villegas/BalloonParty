@@ -28,7 +28,7 @@ namespace BalloonParty.Configuration.Level
         [SerializeField] [Min(0)] private int _maxBubbles = 12;
 
         [Tooltip("Bubbles in each cluster a line brings. Low, so nudges can merge them into bigger clusters " +
-                 "(a cluster holds at most its HitsToPop).")]
+                 "(up to the balloons config's Bubble Merge Max).")]
         [SerializeField] [Min(1)] private int _startBubbles = 1;
 
         public float GraceSeconds => Mathf.Max(0f, _graceSeconds);

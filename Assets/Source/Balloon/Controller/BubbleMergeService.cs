@@ -117,7 +117,9 @@ namespace BalloonParty.Balloon.Controller
                 var otherSlot = other.SlotIndex.Value;
                 var bubbles = bubble.HitsRemaining.Value;
                 var otherBubbles = other.HitsRemaining.Value;
-                var given = BubbleMergeRule.Given(bubbles, otherBubbles, other.MaxHitPoints);
+                // The configured cap, not the receiver's MaxHitPoints: clusters spawn with fewer hits than a merge
+                // fills them to, and that limit would leave a spawned cluster full from the start.
+                var given = BubbleMergeRule.Given(bubbles, otherBubbles, _balloonsConfig.BubbleMergeMax);
                 if (given > 0 && BubbleMergeRule.IsGiver(slot, bubbles, otherSlot, otherBubbles))
                 {
                     _candidates.Add(new BubbleMergeCandidate(slot, otherSlot, otherBubbles + given));

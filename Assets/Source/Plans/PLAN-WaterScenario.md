@@ -155,8 +155,10 @@ merged something, and merges every neighbouring pair where the larger still has 
 `BubbleMergeRule` is the pure rule, tested on its own.
 
 - The smaller cluster gives its bubbles to the larger (between equals, the slot order decides),
-  as many as fill the larger to 5. A giver left with none leaves the grid silently and slides into
-  the receiver; one with bubbles left stays where it is, smaller: a 3 beside a 3 makes a 5 and a 1.
+  as many as fill the larger to 5 (`BubbleMergeMax` in the balloons configuration). That cap, not the
+  `HitsToPop` a cluster spawns with (3), is the limit, so a spawned cluster still has room. A giver
+  left with none leaves the grid silently and slides into the receiver; one with bubbles left stays
+  where it is, smaller: a 3 beside a 3 makes a 5 and a 1.
 - A cluster between two neighbours gives to the one it makes the bigger cluster.
 - Each cluster merges at most once a frame, and a pass that merged looks again on the next frame,
   so a group gathers a step a frame. A hit on a cluster also wakes it: knocking a full cluster

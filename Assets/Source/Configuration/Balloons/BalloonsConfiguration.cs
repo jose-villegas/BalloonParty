@@ -71,6 +71,11 @@ namespace BalloonParty.Configuration.Balloons
         [Min(0.01f)]
         [SerializeField] private float _bubbleMergeSeconds = 0.18f;
 
+        [Tooltip("Most bubbles a merge fills a cluster to, whatever HitsToPop it spawned with. The cluster " +
+                 "shader draws at most 5.")]
+        [Range(1, 5)]
+        [SerializeField] private int _bubbleMergeMax = 5;
+
         public IReadOnlyList<BalloonPrefabEntry> Entries => _entries;
         public ParticleSystem DefaultPopVfxPrefab => _defaultPopVfxPrefab;
         public Material RainbowMaterial => _rainbowMaterial;
@@ -89,5 +94,6 @@ namespace BalloonParty.Configuration.Balloons
         public float NudgeDuration => _nudgeDuration;
         public float NudgeFalloff => _nudgeFalloff;
         public float BubbleMergeSeconds => _bubbleMergeSeconds;
+        public int BubbleMergeMax => _bubbleMergeMax;
     }
 }

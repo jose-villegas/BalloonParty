@@ -50,11 +50,12 @@ namespace BalloonParty.Balloon.Model
                 results, _colorSource.Resolve(), incompleteColors, HitsRemaining.Value + 1, breaksStreak: true);
         }
 
-        /// <summary>Sets how many bubbles the cluster holds, kept within 1 and its <c>MaxHitPoints</c>: a water
-        /// line's small cluster, or its count after a merge gave or took bubbles.</summary>
+        /// <summary>Sets how many bubbles the cluster holds, at least 1: a water line's small cluster, or its count
+        /// after a merge gave or took bubbles. Not capped by <c>MaxHitPoints</c>, the count it spawns with: a merge
+        /// fills a cluster past that, up to its own cap.</summary>
         internal void SetBubbles(int count)
         {
-            HitsRemaining.Value = System.Math.Clamp(count, 1, MaxHitPoints);
+            HitsRemaining.Value = System.Math.Max(1, count);
         }
     }
 }

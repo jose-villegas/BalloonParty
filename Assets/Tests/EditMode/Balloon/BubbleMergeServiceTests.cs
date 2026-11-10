@@ -17,11 +17,15 @@ namespace BalloonParty.Tests.Balloon
 {
     /// <summary>
     ///     The service over a real grid: merges where the giver keeps bubbles, which need no controller (only an
-    ///     absorb slides one away), and when the service looks again.
+    ///     absorb slides one away), and when the service looks again. Clusters spawn with the shipped HitsToPop, below
+    ///     the merge cap, as they do in play.
     /// </summary>
     [TestFixture]
     public class BubbleMergeServiceTests
     {
+        private const int SpawnHits = 3;
+        private const int MergeMax = 5;
+
         private static readonly Vector2Int Left = new(1, 1);
         private static readonly Vector2Int Right = new(2, 1);
 
@@ -40,9 +44,10 @@ namespace BalloonParty.Tests.Balloon
             _palette = Substitute.For<IGamePalette>();
             _palette.Colors.Returns(new List<PaletteEntry>());
 
+            var balloonsConfig = Substitute.For<IBalloonsConfiguration>();
+            balloonsConfig.BubbleMergeMax.Returns(MergeMax);
             var registry = new BalloonControllerRegistry(null, Substitute.For<IPublisher<BoardDepletedMessage>>());
-            _service = new BubbleMergeService(
-                _grid, registry, Substitute.For<IBalloonsConfiguration>(), CaptureHits());
+            _service = new BubbleMergeService(_grid, registry, balloonsConfig, CaptureHits());
             _service.Start();
         }
 
@@ -55,13 +60,15 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void TwoClustersThatDoNotFit_FillTheReceiverAndTheGiverKeepsTheRest()
         {
-            var left = Place(Left, 3);
-            var right = Place(Right, 3);
+            // Both at their spawn hits: with the receiver's own HitsToPop as the limit, it counted as full and two
+            // 3s sat side by side unmerged.
+            var left = Place(Left, SpawnHits);
+            var right = Place(Right, SpawnHits);
 
             _service.Tick();
 
             // Between equals the higher column gives.
-            Assert.AreEqual(5, left.HitsRemaining.Value);
+            Assert.AreEqual(MergeMax, left.HitsRemaining.Value);
             Assert.AreEqual(1, right.HitsRemaining.Value);
             Assert.AreSame(right, _grid.At(Right));
         }
@@ -110,7 +117,7 @@ namespace BalloonParty.Tests.Balloon
 
         private BubbleClusterModel Place(Vector2Int slot, int bubbles)
         {
-            var model = new BubbleClusterModel(new BalloonModelConfig(hitsToPop: 5, scoreValue: 1), _palette);
+            var model = new BubbleClusterModel(new BalloonModelConfig(hitsToPop: SpawnHits, scoreValue: 1), _palette);
             model.SetBubbles(bubbles);
             _grid.Place(model, null, slot);
             return model;
