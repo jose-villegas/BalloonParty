@@ -1,5 +1,6 @@
 var NAVTREEINDEX107 =
 {
+"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#ae64ac2dfcc6b840746f5ba603c98d619":[6,0,0,7,1,9,3],
 "structBalloonParty_1_1Item_1_1ItemActivationContext.html":[5,0,0,7,14],
 "structBalloonParty_1_1Item_1_1ItemActivationContext.html":[6,0,0,7,14],
 "structBalloonParty_1_1Item_1_1ItemActivationContext.html#a13fd0314f544b91348cd99ed1a0d8bfd":[5,0,0,7,14,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX107 =
 "structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html#a8738dd5b705c12f08b9bcf9d68695d48":[6,0,0,9,2,3],
 "structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html#a9a0c5d7e992bf3df6e5b876d9b46c1ac":[5,0,0,9,2,1],
 "structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html#a9a0c5d7e992bf3df6e5b876d9b46c1ac":[6,0,0,9,2,1],
-"structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html#aa901d9e561389b613b5571dc829fcbd0":[5,0,0,9,2,0],
-"structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html#aa901d9e561389b613b5571dc829fcbd0":[6,0,0,9,2,0]
+"structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html#aa901d9e561389b613b5571dc829fcbd0":[5,0,0,9,2,0]
 };

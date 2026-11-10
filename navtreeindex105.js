@@ -1,5 +1,6 @@
 var NAVTREEINDEX105 =
 {
+"structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html":[6,0,0,5,7,0,0],
 "structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a043242362c07c8e6528780a99092d9ce":[5,0,0,5,7,0,0,8],
 "structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a043242362c07c8e6528780a99092d9ce":[6,0,0,5,7,0,0,8],
 "structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a0591f70c1476eeac343de2463726f5ec":[5,0,0,5,7,0,0,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX105 =
 "structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#a58b1eb1c0b5ddf126680e1a75b9773a9":[6,0,0,6,8,6,4],
 "structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#a90cff4bc8a67c23d90f92bcb08dae060":[5,0,0,6,8,6,3],
 "structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#a90cff4bc8a67c23d90f92bcb08dae060":[6,0,0,6,8,6,3],
-"structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#ab6b0af531c868fa74a245ded71d260eb":[5,0,0,6,8,6,1],
-"structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#ab6b0af531c868fa74a245ded71d260eb":[6,0,0,6,8,6,1]
+"structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#ab6b0af531c868fa74a245ded71d260eb":[5,0,0,6,8,6,1]
 };

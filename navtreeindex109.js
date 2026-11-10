@@ -1,5 +1,6 @@
 var NAVTREEINDEX109 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html#a44831a44e0397c4e36e06fab1f8c9632":[6,0,0,12,7,0,5],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html#a70282ddb8f511323fb54c6d716f72b31":[5,0,0,12,7,0,3],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html#a70282ddb8f511323fb54c6d716f72b31":[6,0,0,12,7,0,3],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html#a9fa849f2071ad466902eb53d19f80df4":[5,0,0,12,7,0,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX109 =
 "structBalloonParty_1_1Shared_1_1Messages_1_1ScorePointsGroupMessage.html#aaad701b93ec9be888f867223dead799d":[6,0,0,12,7,38,0],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ScorePointsGroupMessage.html#ab2a48861c4d99d5a6b7bea567a3eb63a":[5,0,0,12,7,38,2],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ScorePointsGroupMessage.html#ab2a48861c4d99d5a6b7bea567a3eb63a":[6,0,0,12,7,38,2],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ScorePointsGroupMessage.html#ac7c771a9b9c4f54cc1b2b04706101f83":[5,0,0,12,7,38,4],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ScorePointsGroupMessage.html#ac7c771a9b9c4f54cc1b2b04706101f83":[6,0,0,12,7,38,4]
+"structBalloonParty_1_1Shared_1_1Messages_1_1ScorePointsGroupMessage.html#ac7c771a9b9c4f54cc1b2b04706101f83":[5,0,0,12,7,38,4]
 };

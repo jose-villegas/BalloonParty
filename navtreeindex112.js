@@ -1,5 +1,6 @@
 var NAVTREEINDEX112 =
 {
+"structBalloonParty_1_1Solver_1_1ShotFlightSeed.html":[6,0,0,14,9],
 "structBalloonParty_1_1Solver_1_1ShotFlightSeed.html#a01189182fa7b2c4723038e6baa788bf3":[5,0,0,14,9,6],
 "structBalloonParty_1_1Solver_1_1ShotFlightSeed.html#a01189182fa7b2c4723038e6baa788bf3":[6,0,0,14,9,6],
 "structBalloonParty_1_1Solver_1_1ShotFlightSeed.html#a01c4282bfdee99d09b03abfd8cde7f91":[5,0,0,14,9,9],
@@ -248,6 +249,5 @@ var NAVTREEINDEX112 =
 "structBalloonParty_1_1UI_1_1FormattedLabel.html#a2d9069e9064f0b75560e69844b3c117e":[6,0,0,16,14,4],
 "structBalloonParty_1_1UI_1_1FormattedLabel.html#a3908c450879d8ed3de837540cab7e995":[5,0,0,16,14,0],
 "structBalloonParty_1_1UI_1_1FormattedLabel.html#a3908c450879d8ed3de837540cab7e995":[6,0,0,16,14,0],
-"structBalloonParty_1_1UI_1_1FormattedLabel.html#a631b98551d2614c5deed0058e51689d7":[5,0,0,16,14,2],
-"structBalloonParty_1_1UI_1_1FormattedLabel.html#a631b98551d2614c5deed0058e51689d7":[6,0,0,16,14,2]
+"structBalloonParty_1_1UI_1_1FormattedLabel.html#a631b98551d2614c5deed0058e51689d7":[5,0,0,16,14,2]
 };

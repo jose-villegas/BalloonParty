@@ -1,5 +1,6 @@
 var NAVTREEINDEX106 =
 {
+"structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#ab6b0af531c868fa74a245ded71d260eb":[6,0,0,6,8,6,1],
 "structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#ab9514056abf336bb22cb7f27cec088e5":[5,0,0,6,8,6,2],
 "structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#ab9514056abf336bb22cb7f27cec088e5":[6,0,0,6,8,6,2],
 "structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#adc98009cb332c6a98d6d3684526b53c7":[5,0,0,6,8,6,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX106 =
 "structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#aab5b15186fdf96916bf4486b6758c92a":[6,0,0,7,1,9,1],
 "structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#adde66113d5e4dbcf436b88ebdaed1cd4":[5,0,0,7,1,9,5],
 "structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#adde66113d5e4dbcf436b88ebdaed1cd4":[6,0,0,7,1,9,5],
-"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#ae64ac2dfcc6b840746f5ba603c98d619":[5,0,0,7,1,9,3],
-"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#ae64ac2dfcc6b840746f5ba603c98d619":[6,0,0,7,1,9,3]
+"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#ae64ac2dfcc6b840746f5ba603c98d619":[5,0,0,7,1,9,3]
 };
