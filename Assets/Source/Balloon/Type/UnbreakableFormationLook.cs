@@ -14,6 +14,9 @@ namespace BalloonParty.Balloon.Type
     /// </summary>
     internal class UnbreakableFormationLook : MonoBehaviour, IBalloonViewBinding
     {
+        // How far toward white the blue trail's tail gets, matching the red trail's pale tip.
+        private const float TrailTailWhiten = 0.6f;
+
         private static readonly int RimColorId = Shader.PropertyToID("_RimColor");
 
         [Tooltip("The core glow sprites, tinted red at rest.")]
@@ -70,6 +73,13 @@ namespace BalloonParty.Balloon.Type
                 return;
             }
 
+            // Only a fade toward formation turns the glitter on: a fade back to red must not re-show it on a
+            // balloon BalloonView.Hide has just hidden for its pop.
+            if (target > _blend && _glitter != null && !_glitter.enabled)
+            {
+                _glitter.enabled = true;
+            }
+
             _blend = Mathf.MoveTowards(_blend, target, Time.deltaTime / _fadeDuration);
             Apply(_blend);
         }
@@ -122,7 +132,7 @@ namespace BalloonParty.Balloon.Type
             var colorKeys = _trailRest.colorKeys;
             for (var i = 0; i < colorKeys.Length; i++)
             {
-                colorKeys[i].color = Color.Lerp(_blue, Color.white, colorKeys[i].time * 0.6f);
+                colorKeys[i].color = Color.Lerp(_blue, Color.white, colorKeys[i].time * TrailTailWhiten);
             }
 
             var gradient = new Gradient { mode = _trailRest.mode };
@@ -164,7 +174,11 @@ namespace BalloonParty.Balloon.Type
 
             if (_glitter != null)
             {
-                _glitter.enabled = blend > 0f;
+                if (blend <= 0f)
+                {
+                    _glitter.enabled = false;
+                }
+
                 _glitter.color = new Color(_blue.r, _blue.g, _blue.b, blend * _glitterAlpha);
             }
         }

@@ -18,15 +18,6 @@ namespace BalloonParty.Balloon.Formation
     /// </summary>
     internal sealed class FormationPlanner
     {
-        // Nearest pairs first; ties keep candidate then slot order so a plan is deterministic.
-        private static readonly Comparison<Pair> ByDistance = (a, b) =>
-            a.Distance != b.Distance ? a.Distance - b.Distance
-            : a.Candidate != b.Candidate ? a.Candidate - b.Candidate
-            : a.Slot - b.Slot;
-
-        private static readonly Comparison<Spot> ByCost = (a, b) =>
-            a.Cost != b.Cost ? a.Cost - b.Cost : a.Order - b.Order;
-
         private readonly List<Vector2Int> _slots = new();
         private readonly List<Spot> _spots = new();
         private readonly List<Pair> _pairs = new();
@@ -59,7 +50,7 @@ namespace BalloonParty.Balloon.Formation
                 return false;
             }
 
-            _spots.Sort(ByCost);
+            _spots.Sort(SpotByCost.Instance);
             var choices = Mathf.Min(_spots.Count, Mathf.Max(1, settings.SpotChoices));
             var chosen = _spots[Mathf.Clamp(pickIndex(choices), 0, choices - 1)];
 
@@ -235,7 +226,7 @@ namespace BalloonParty.Balloon.Formation
                 _slotUsed.Add(false);
             }
 
-            _pairs.Sort(ByDistance);
+            _pairs.Sort(PairByDistance.Instance);
 
             var cost = 0;
             for (var i = 0; i < _pairs.Count && assignmentsOut.Count < count; i++)
@@ -267,6 +258,30 @@ namespace BalloonParty.Balloon.Formation
             public int Candidate;
             public int Slot;
             public int Distance;
+        }
+
+        // Cached comparers: List.Sort(Comparison) wraps the delegate in a new comparer on every call.
+        private sealed class SpotByCost : IComparer<Spot>
+        {
+            internal static readonly SpotByCost Instance = new();
+
+            public int Compare(Spot a, Spot b)
+            {
+                return a.Cost != b.Cost ? a.Cost - b.Cost : a.Order - b.Order;
+            }
+        }
+
+        // Nearest pairs first; ties keep candidate then slot order so a plan is deterministic.
+        private sealed class PairByDistance : IComparer<Pair>
+        {
+            internal static readonly PairByDistance Instance = new();
+
+            public int Compare(Pair a, Pair b)
+            {
+                return a.Distance != b.Distance ? a.Distance - b.Distance
+                    : a.Candidate != b.Candidate ? a.Candidate - b.Candidate
+                    : a.Slot - b.Slot;
+            }
         }
     }
 }

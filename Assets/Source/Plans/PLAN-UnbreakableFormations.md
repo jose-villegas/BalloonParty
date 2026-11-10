@@ -235,6 +235,29 @@ Answered by the user on 2026-11-10:
 
 ---
 
+## As built
+
+Changes from the design above, made during implementation and review:
+
+- **Fade duration.** `ColorFadeDuration` is a field on `UnbreakableFormationLook`, next to the other
+  visual tuning on the prefab. It is not in `IUnbreakableFormationSettings`, which keeps only the rules.
+- **The look component.** The blend lives in its own `IBalloonViewBinding`, `UnbreakableFormationLook`,
+  not inside `UnbreakableBalloonVariant`. The variant only switches its burst stamp's palette index.
+- **When it turns blue.** A member turns blue once it has arrived: when it is in formation *and*
+  `IsStable`. So the motion light, which only lights while it moves, stays red.
+- **No balance request on break-up.** The next line's balance or the timed pulse floats the released
+  members. A request from inside the grid's change event would also fire midway through level
+  transitions, as the board is cleared one balloon at a time.
+- **No flicker.** A shape change marks out only the members the new shape drops. Members that stay
+  never dip out of formation.
+- **Glitter sorting.** The glitter is in `BalloonView._spriteLayerRenderers` at index 1, right after the
+  baked shadow, so its per-slot sorting order always sits behind the sphere.
+  `UnbreakableFormationLook` turns it back off when `OnSpawned` re-enables it.
+- **Spawns already stop under a formation.** `BalloonPlacementResolver` treats every balloon as a
+  ceiling, members included.
+- **The covered item isn't anchored.** If it pops or rises away during the hold, the cover stays where
+  it is until the next change.
+
 ## Phases
 
 ### Phase 1: Formation logic

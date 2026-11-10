@@ -1,0 +1,79 @@
+# Balloon/Formation
+
+Unbreakable balloons normally roam: once per wave each one jumps toward the far side of the board. When
+three or more are on the board, they gather into a **formation** instead. They line up, stay in place for
+a few waves, then switch to a different line. While a formation stands, its members float in midair: the
+balloons below rise until they reach the formation, and spawn lines stop under it.
+
+## Contents
+
+| File | What it does |
+|---|---|
+| `FormationShape` | The four shapes: `Horizontal`, `DiagonalDownRight`, `DiagonalDownLeft`, and `ItemCover` (a row right under a balloon that carries an item, so shots from below can't reach the item directly) |
+| `FormationPlanner` | Pure planning. For one shape it lists every spot on the board where the shape fits, works out how far the members would travel to fill it, and picks at random among the few cheapest spots. It then says which member goes to which slot. It reads the grid but never changes it |
+| `FormationAssignment` | One member and the slot it goes to |
+| `UnbreakableFormationService` | The controller. It decides when to form, hold, change and break up, and it marks members as in formation |
+
+## How a formation runs
+
+1. **Wave start.** `BalloonBalancer.Balance(atWaveStart: true)` calls `ArrangeAtWaveStart` before the
+   usual roam pre-pass. Roamers therefore see the formation's slots as already taken.
+2. **Forming.** If at least `MinMembers` unbreakables are on the board, the service picks a shape. The
+   pick is weighted at random from the shape weights. It leaves out the shape just held, and leaves out
+   `ItemCover` unless an item is on the board. If the picked shape fits nowhere, the service tries the
+   next one. If nothing fits, nothing forms and the unbreakables roam as usual.
+3. **Moving in.** The service hands each member's move to the balancer's relocate routine. That is the
+   same routine roam jumps use, so the members glide in at their normal speed. Each member is marked
+   in formation (`IWriteableFormationMember.SetInFormation`).
+4. **Holding.** The formation lasts `HoldWaves` waves, counting the one it formed in. During that time
+   the next wave starts only count down: nothing moves.
+5. **Changing.** At the first wave start after the hold, a new shape is planned. Members that stay in the
+   formation are never marked out, even for a moment. Members the new shape doesn't need turn red and
+   roam again.
+6. **Breaking up.** The service watches `SlotGrid.OnChanged`. When a member leaves the grid (it was
+   pierced, or the board was cleared) it drops out of the formation. If fewer than `MinMembers` are left,
+   the rest are released at once. The next line's balance, or the timed pulse, floats them up.
+   `ResetRun` releases everything.
+
+## Rules a formation keeps
+
+- **No pushing.** A formation slot must be empty or already hold an unbreakable. A formation never
+  pushes another balloon aside.
+- **Spawn room.** It never uses the bottom `BottomClearance` rows, so spawn lines always have room to
+  enter.
+- **Members keep their slot.** A member already standing on a formation slot keeps it: assignment
+  takes the nearest pairs first, so its distance-0 pair always wins. As a result, no member ever has to
+  move into a slot another member still holds.
+- **The covered item isn't held.** `ItemCover` covers the item where it sits when the formation forms.
+  The item's balloon is not anchored, so if it pops or rises away the cover stays where it is until the
+  next change.
+
+## Anchoring
+
+A member in formation reports `IBalanceAnchor.IsAnchored` (from `Slots/Actor`). Everything that moves
+balloons leaves an anchored actor in its slot:
+- the balance race (`BalancePlanner`) and `BalloonBalancer.HasPossibleMove`,
+- the roam pre-pass, and the model's own `TryPickRelocation`,
+- `PressurePropagation`, where an anchored actor blocks the shove the way a static actor does,
+- the shot solver. `ShotBoardGather` copies the flag into `BalanceProfile.Anchored`, and
+  `ShotSimDynamicActor` reports it, so the solver's predicted pulses leave anchored balloons in place too.
+
+## Look
+
+`Balloon/Type/UnbreakableFormationLook` turns a member blue once it has arrived in its slot (in formation
+and `IsStable`). The core glow, the inner rim and the exhaust trail all change, and a `GlitterSwirl`
+halo fades in behind the sphere. The unbreakable's periodic burst is tagged blue too, so its specks
+match. All the blue comes from the palette's `UnbreakableFormation` entry. See `Balloon/Type/README.md`.
+
+## Settings
+
+The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfiguration` under
+"Unbreakable Formations":
+- `Enabled`
+- `MinMembers` (3) and `MaxMembers` (5)
+- `HoldWaves` (3)
+- `BottomClearance` (2)
+- `SpotChoices` (3)
+- the shape weights: horizontal 1, each diagonal 1, item cover 2
+
+The design and its open risks are in `Plans/PLAN-UnbreakableFormations.md`.
