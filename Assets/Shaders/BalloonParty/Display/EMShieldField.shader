@@ -121,7 +121,7 @@ Shader "BalloonParty/Display/EMShieldField"
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
-            fixed4 _Color;
+            half4 _Color;
             float _PreviewLayers;
 
             float _DomeCenter;
@@ -251,7 +251,7 @@ Shader "BalloonParty/Display/EMShieldField"
                 return lerp(dDome, comet, sl);
             }
 
-            fixed4 frag(v2f IN) : SV_Target
+            half4 frag(v2f IN) : SV_Target
             {
                 float2 uv = IN.texcoord;
                 int layers = (int)clamp(_ActiveLayers, 0, EM_MAX_LAYERS);
@@ -412,10 +412,10 @@ Shader "BalloonParty/Display/EMShieldField"
 
                 if (coreVal + glowVal < 0.001)
                 {
-                    return fixed4(0, 0, 0, 0);
+                    return half4(0, 0, 0, 0);
                 }
 
-                fixed4 c;
+                half4 c;
                 c.rgb = IN.color.rgb * (coreVal + glowVal * glowColor) * IN.color.a;
                 c.a = saturate(coreVal * IN.color.a);
                 return c;

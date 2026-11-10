@@ -227,12 +227,12 @@ flowchart TD
 
 ### Phase 0 — prep that changes nothing on screen
 
-| Task | Detail |
-|---|---|
-| 0.1 Pin the offscreen cameras to LDR | `allowHDR = false` on the capture camera (`SceneCaptureService.CreateCaptureCamera`) and the two bush bake cameras. No visual change; removes the reliance on URP inheriting the target's format. |
-| 0.2 `fixed` → `half` on the paths that carry range | The shader list in item 8. No change on Vulkan or Metal. |
-| 0.3 Baselines | Screenshots of each scenario (sky, meadow, water) at day and night, a busy pop frame, the level-up, a heads-up, plus a device profile. Reuse the `Baselines~` drill from @ref plan_hdr_color_pipeline. |
-| 0.4 An HDR view in the Render Maps window | An exposure slider and a "values above 1" highlight in `Editor/ChannelPreview`, so Phase 2 can see what it's doing. |
+| Task | Detail | Status |
+|---|---|---|
+| 0.1 Pin the offscreen cameras to LDR | `allowHDR = false` on the capture camera (`SceneCaptureService.CreateCaptureCamera`) and the two bush bake cameras. No visual change; removes the reliance on URP inheriting the target's format. | Done |
+| 0.2 `fixed` → `half` on the paths that carry range | The shader list in item 8. No change on Vulkan or Metal. | Done: 13 shaders and `Include/Composite.cginc`, compiled for Vulkan, GLES3, Metal and D3D |
+| 0.3 Baselines | Screenshots of each scenario (sky, meadow, water) at day and night, a busy pop frame, the level-up, a heads-up, plus a device profile. Reuse the `Baselines~` drill from @ref plan_hdr_color_pipeline. | Open: needs Play mode and a device |
+| 0.4 An HDR view in the Render Maps window | An exposure slider and a "values above 1" highlight in `Editor/ChannelPreview`, so Phase 2 can see what it's doing. | Done: "Exposure (stops)" and "Mark > 1" |
 
 ### Phase 1 — switch the pipeline (Editor, with the user)
 

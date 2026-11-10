@@ -79,7 +79,7 @@ Shader "BalloonParty/Sprite/Diffuse"
             #endif
 
             sampler2D _MainTex;
-            fixed4 _Color;
+            half4 _Color;
             float _LightInfluence;
             float _LightMode;
 
@@ -119,10 +119,10 @@ Shader "BalloonParty/Sprite/Diffuse"
                 return OUT;
             }
 
-            fixed4 frag(v2f IN) : SV_Target
+            half4 frag(v2f IN) : SV_Target
             {
                 UNITY_SETUP_INSTANCE_ID(IN);
-                fixed4 c = tex2D(_MainTex, IN.texcoord) * IN.color;
+                half4 c = tex2D(_MainTex, IN.texcoord) * IN.color;
 
                 // albedo × light, eased by influence so gameplay colours stay readable.
                 c.rgb *= lerp(float3(1.0, 1.0, 1.0), IN.lightTint, _LightInfluence);

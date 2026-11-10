@@ -165,6 +165,9 @@ namespace BalloonParty.Editor.Bush
             cam.cullingMask = 1 << BakeLayer;
             cam.enabled = false;
 
+            // The bake is an LDR texture with coverage in alpha, whatever the pipeline's HDR setting.
+            cam.allowHDR = false;
+
             // Runtime-created cameras carry no serialized URP data; GetUniversalAdditionalCameraData adds it.
             var cameraData = cam.GetUniversalAdditionalCameraData();
             cameraData.renderPostProcessing = false;

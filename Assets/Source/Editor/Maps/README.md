@@ -37,6 +37,17 @@ the meaning of each channel is discoverable without leaving the window. The `Cus
 map has no defined channel semantics, so its tooltips fall back to a generic "Raw {0}
 channel" format.
 
+## Exposure and values above 1
+
+Some maps hold values above 1: the Scene Light Field's R (the local boost of pops and items) goes up
+to `AccumulationCeiling`, 3 by default, and an HDR buffer can hold anything. Shown raw, everything above 1
+looks the same flat white. Two controls under the channel toggles, for every map:
+
+- **Exposure (stops)** scales the shown values by 2^stops (−4 to +4). At −2 a value of 4 shows as
+  full white. The palette decode ignores it, since it shows colours, not values.
+- **Mark > 1** paints magenta wherever a selected channel's raw value is above 1, measured before
+  exposure, so you can see where a buffer clips at the default exposure.
+
 ## Registry pattern
 
 Each built-in map is a `MapDescriptor`: a name, a `Func<Texture> Fetch`, an

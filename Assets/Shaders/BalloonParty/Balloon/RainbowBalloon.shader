@@ -214,7 +214,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             }
 
             // bulge is SphereBulge(uv), passed in so frag computes it once and shares it with the shine.
-            inline fixed3 RainbowBand(float2 uv, float bulge)
+            inline half3 RainbowBand(float2 uv, float bulge)
             {
                 // Opted-in: the bands scroll along the scene light's axis instead of the
                 // authored angle. The AXIS follows only the main (ambient) light — flat
@@ -247,7 +247,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
 
             // Additive white shine sweep (0..1) — same diagonal band shape as SpriteShineShadow, angle tunable.
             // bulge is SphereBulge(uv), shared with the colour bands so both wrap the sphere identically.
-            inline fixed ShineAmount(float2 uv, float bulge)
+            inline half ShineAmount(float2 uv, float bulge)
             {
                 float sweepDuration = 1.0 / max(_ShineSpeed, 0.001);
                 float cycleDuration = sweepDuration + _ShineInterval;
@@ -274,25 +274,25 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 return inside * (1.0 - abs(projection - shineLocation) / _ShineWidth);
             }
 
-            inline fixed GlitterAmount(float2 uv)
+            inline half GlitterAmount(float2 uv)
             {
                 return GlitterAmountBase(uv * _GlitterDensity, _GlitterSize, _GlitterSpeed,
                                          _GlitterSharpness, _GlitterChance);
             }
 
-            fixed4 frag(Varyings IN) : SV_Target
+            half4 frag(Varyings IN) : SV_Target
             {
-                fixed4 tex = tex2D(_MainTex, IN.uv);
+                half4 tex = tex2D(_MainTex, IN.uv);
 
                 // Spherical bulge depends only on uv — compute once and share with bands AND shine.
                 float bulge = SphereBulge(IN.uv);
 
                 // Masked region (e.g. the knot) keeps its plain sprite colour instead of the band tint.
-                fixed3 bandColor = lerp(RainbowBand(IN.uv, bulge), fixed3(1, 1, 1), MaskAmount(IN.uv));
+                half3 bandColor = lerp(RainbowBand(IN.uv, bulge), half3(1, 1, 1), MaskAmount(IN.uv));
 
                 // Sprite shading × band colour, then additive white shine on top. The glitter is bound to
                 // the shine amount (by _GlitterShineBind) so the specks only twinkle along the sweeping band.
-                fixed3 rgb = tex.rgb * bandColor * IN.color.rgb;
+                half3 rgb = tex.rgb * bandColor * IN.color.rgb;
 
                 // Diffuse term: the composed body is lit by the scene light. The bands keep their
                 // palette HUE (no per-band swap) — brightness and cast follow the light, eased by
@@ -303,14 +303,14 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 {
                     rgb *= lerp(float3(1.0, 1.0, 1.0), SceneLightTintAt(IN.worldPos), _LightInfluence);
                 }
-                fixed shine = ShineAmount(IN.uv, bulge);
+                half shine = ShineAmount(IN.uv, bulge);
                 // Opted-in shine is "lit by the scene light" — axis AND colour — so tint it;
                 // the classic default sweep stays pure white regardless of the scene light.
                 float3 shineTint = _ShineFromSceneLight > 0.5 ? SceneLightTintAt(IN.worldPos) : float3(1.0, 1.0, 1.0);
                 rgb += tex.a * shine * shineTint;
                 rgb += tex.a * GlitterAmount(IN.uv) * lerp(1.0, shine, _GlitterShineBind) * _GlitterBrightness;
 
-                fixed4 result;
+                half4 result;
                 result.rgb = rgb;
                 result.a   = tex.a * IN.color.a;
 

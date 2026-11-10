@@ -78,7 +78,7 @@
          fixed4 _RendererColor;
      #endif
 
-     fixed4 _Color;
+     half4 _Color;
 
      v2f vert(appdata_t IN)
      {
@@ -111,9 +111,9 @@
      float _ShineUnscaledTime;
      float _TimeOffset;
 
-     fixed4 SampleSpriteTexture(float2 uv, float2 lightDir, float3 lightTint)
+     half4 SampleSpriteTexture(float2 uv, float2 lightDir, float3 lightTint)
      {
-         fixed4 color = tex2D(_MainTex, uv);
+         half4 color = tex2D(_MainTex, uv);
 
  #if UNITY_TEXTURE_ALPHASPLIT_ALLOWED
          if (_AlphaSplitEnabled)
@@ -127,7 +127,7 @@
          }
 
          float projection = CalcShineProjection(uv, lightDir, _ShineFromSceneLight);
-         fixed shineFade = CalcShineFade(projection, location, _ShineWidth);
+         half shineFade = CalcShineFade(projection, location, _ShineWidth);
          if (shineFade > 0)
          {
              // Opted-in shine is "lit by the scene light" — axis AND colour — so tint it;
@@ -139,10 +139,10 @@
          return color;
      }
 
-     fixed4 frag(v2f IN) : SV_Target
+     half4 frag(v2f IN) : SV_Target
      {
          UNITY_SETUP_INSTANCE_ID(IN);
-         fixed4 c = SampleSpriteTexture(IN.texcoord, IN.lightDir, IN.lightTint) * IN.color;
+         half4 c = SampleSpriteTexture(IN.texcoord, IN.lightDir, IN.lightTint) * IN.color;
          c.rgb *= c.a;
 
      return c;

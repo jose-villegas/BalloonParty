@@ -72,7 +72,7 @@ Shader "BalloonParty/Sprite/Glitter"
                 fixed4 _RendererColor;
             #endif
 
-            fixed4 _Color;
+            half4 _Color;
 
             v2f vert(appdata_t IN)
             {
@@ -92,7 +92,7 @@ Shader "BalloonParty/Sprite/Glitter"
             sampler2D _MainTex;
             sampler2D _AlphaTex;
             float _AlphaSplitEnabled;
-            fixed4 _GlitterColor;
+            half4 _GlitterColor;
             float _GlitterDensity;
             float _GlitterSize;
             float _GlitterChance;
@@ -100,9 +100,9 @@ Shader "BalloonParty/Sprite/Glitter"
             float _GlitterSharpness;
             float _GlitterBrightness;
 
-            fixed4 SampleSpriteTexture(float2 uv)
+            half4 SampleSpriteTexture(float2 uv)
             {
-                fixed4 color = tex2D(_MainTex, uv);
+                half4 color = tex2D(_MainTex, uv);
 
                 #if UNITY_TEXTURE_ALPHASPLIT_ALLOWED
                 if (_AlphaSplitEnabled)
@@ -112,16 +112,16 @@ Shader "BalloonParty/Sprite/Glitter"
                 return color;
             }
 
-            inline fixed GlitterAmount(float2 uv)
+            inline half GlitterAmount(float2 uv)
             {
                 return GlitterAmountBase(uv * _GlitterDensity, _GlitterSize, _GlitterSpeed,
                                          _GlitterSharpness, _GlitterChance);
             }
 
-            fixed4 frag(v2f IN) : SV_Target
+            half4 frag(v2f IN) : SV_Target
             {
                 UNITY_SETUP_INSTANCE_ID(IN);
-                fixed4 c = SampleSpriteTexture(IN.texcoord) * IN.color;
+                half4 c = SampleSpriteTexture(IN.texcoord) * IN.color;
 
                 // Additive sparkle kept inside the sprite by its alpha.
                 c.rgb += c.a * GlitterAmount(IN.texcoord) * _GlitterBrightness * _GlitterColor.rgb;

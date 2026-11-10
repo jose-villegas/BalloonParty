@@ -108,8 +108,8 @@ Shader "BalloonParty/Scenario/WallNet"
             float2 _FieldBoundsMin;
             float2 _FieldBoundsSize;
 
-            fixed4 _Color;
-            fixed4 _DisturbedColor;
+            half4 _Color;
+            half4 _DisturbedColor;
             float _DisturbColorGain;
             float _DisturbVisibilityTarget;
             float _TransitionFade;
@@ -204,7 +204,7 @@ Shader "BalloonParty/Scenario/WallNet"
                 return 1.0 - smoothstep(_LineWidth, _LineWidth + soft, dist);
             }
 
-            fixed4 frag(v2f i) : SV_Target
+            half4 frag(v2f i) : SV_Target
             {
                 float net = max(GridLine(i.net.x), GridLine(i.net.y));
 
@@ -213,7 +213,7 @@ Shader "BalloonParty/Scenario/WallNet"
                 float feather_w = max(_EdgeFeather, 1e-4);
                 float feather = smoothstep(0.0, feather_w, u) * smoothstep(0.0, feather_w, 1.0 - u);
 
-                fixed4 col = _Color;
+                half4 col = _Color;
                 // Heat gradient: shift the net colour toward the disturbed colour by how strongly this
                 // spot is disturbed (before the scene-light tint, so a nearby light still overrides).
                 col.rgb = lerp(col.rgb, _DisturbedColor.rgb, saturate(i.disturb * _DisturbColorGain));

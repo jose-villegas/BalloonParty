@@ -167,7 +167,7 @@ Shader "BalloonParty/Sprite/LightDriven"
             #endif
 
             sampler2D _MainTex;
-            fixed4 _Color;
+            half4 _Color;
             float _RotateArt;
             float _RotateLightMode;
             float _BakedAngle;
@@ -302,10 +302,10 @@ Shader "BalloonParty/Sprite/LightDriven"
                 return OUT;
             }
 
-            fixed4 frag(v2f IN) : SV_Target
+            half4 frag(v2f IN) : SV_Target
             {
                 UNITY_SETUP_INSTANCE_ID(IN);
-                fixed4 c = tex2D(_MainTex, IN.texcoord) * IN.color;
+                half4 c = tex2D(_MainTex, IN.texcoord) * IN.color;
 
                 // Glint archetype: the sprite is reflected light — take the light's colour × intensity.
                 if (_TintBySceneLight > 0.5)

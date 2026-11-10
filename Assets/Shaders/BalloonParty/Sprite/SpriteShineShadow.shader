@@ -92,7 +92,7 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
 
             sampler2D _MainTex;
             float4    _MainTex_ST;
-            fixed4    _ShadowColor;
+            half4    _ShadowColor;
             float     _ShadowFromSceneLight;
             float     _ShineFromSceneLight;
             float2    _ShadowOffset;
@@ -112,7 +112,7 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
                 fixed4 _RendererColor;
             #endif
 
-            fixed4 _Color;
+            half4 _Color;
 
             Varyings vert(Attributes IN)
             {
@@ -136,23 +136,23 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
                 return OUT;
             }
 
-            inline fixed SampleAlpha(float2 uv)
+            inline half SampleAlpha(float2 uv)
             {
                 return SampleAlphaGuarded(_MainTex, uv);
             }
 
-            inline fixed SoftShadowAlpha(float2 shadowUV, float s)
+            inline half SoftShadowAlpha(float2 shadowUV, float s)
             {
                 return SoftShadowAlpha9Tap(_MainTex, shadowUV, s);
             }
 
-            inline fixed4 SampleSpriteWithShine(float2 uv, float2 lightDir, float3 lightTint)
+            inline half4 SampleSpriteWithShine(float2 uv, float2 lightDir, float3 lightTint)
             {
-                fixed4 color = tex2D(_MainTex, uv);
+                half4 color = tex2D(_MainTex, uv);
 
                 float shineLocation = CalcShineSweepLocation(_ShineSpeed, _ShineInterval, _ShineWidth);
                 float projection = CalcShineProjection(uv, lightDir, _ShineFromSceneLight);
-                fixed shineFade = CalcShineFade(projection, shineLocation, _ShineWidth);
+                half shineFade = CalcShineFade(projection, shineLocation, _ShineWidth);
 
                 if (shineFade > 0)
                 {
@@ -165,13 +165,13 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
                 return color;
             }
 
-            fixed4 frag(Varyings IN) : SV_Target
+            half4 frag(Varyings IN) : SV_Target
             {
                 float2 spriteUV = ScaleSpriteUV(IN.uv, _SpriteScale);
                 float  spriteMask = SpriteBoundsMask(spriteUV);
 
                 // Main sprite with shine
-                fixed4 sprite = SampleSpriteWithShine(spriteUV, IN.lightDir, IN.lightTint) * IN.color;
+                half4 sprite = SampleSpriteWithShine(spriteUV, IN.lightDir, IN.lightTint) * IN.color;
                 sprite.a *= spriteMask;
 
                 // Shadow — opted-in materials follow the scene light (direction away from it,
@@ -181,7 +181,7 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
                     : _ShadowOffset;
                 float2 shadowUV = spriteUV - shadowOffset;
 
-                fixed shadowAlpha = _ShadowSoftness < 0.0001
+                half shadowAlpha = _ShadowSoftness < 0.0001
                     ? SampleAlpha(shadowUV)
                     : SoftShadowAlpha(shadowUV, _ShadowSoftness);
 
@@ -190,7 +190,7 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
                 // expressive/UI shadows stay authored regardless of the scene light.
                 shadowAlpha *= _ShadowFromSceneLight > 0.5 ? IN.shadowFade : 1.0;
 
-                fixed4 shadow = fixed4(_ShadowColor.rgb * IN.color.rgb, shadowAlpha);
+                half4 shadow = half4(_ShadowColor.rgb * IN.color.rgb, shadowAlpha);
                 return PorterDuffOver(sprite, shadow);
             }
             ENDCG

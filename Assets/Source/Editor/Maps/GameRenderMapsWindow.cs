@@ -30,6 +30,8 @@ namespace BalloonParty.Editor.Maps
         private static readonly int DecodePaletteId = Shader.PropertyToID("_DecodePalette");
         private static readonly int PaletteChannelId = Shader.PropertyToID("_PaletteChannel");
         private static readonly int MipLevelId = Shader.PropertyToID("_MipLevel");
+        private static readonly int ExposureId = Shader.PropertyToID("_Exposure");
+        private static readonly int MarkOverRangeId = Shader.PropertyToID("_MarkOverRange");
         private static readonly string[] ChannelLabels = { "R", "G", "B", "A" };
         private static readonly MapDescriptor[] Descriptors = BuildDescriptors();
         private static readonly string[] MapNames = Descriptors.Select(d => d.Name).ToArray();
@@ -43,6 +45,8 @@ namespace BalloonParty.Editor.Maps
         private Texture _customTexture;
         private bool _decodePalette = true;
         private float _mipLevel;
+        private float _exposure;
+        private bool _markOverRange;
         private float _zoom = 1f;
         private Vector2 _scrollPos;
 
@@ -104,6 +108,7 @@ namespace BalloonParty.Editor.Maps
                     _mipLevel, 0f, descriptor.MaxMipLevel);
             }
 
+            DrawRangeControls();
             EditorGUILayout.Space();
 
             var texture = ResolveTexture(descriptor);
@@ -137,6 +142,21 @@ namespace BalloonParty.Editor.Maps
                 _channelEnabled[c] = GUILayout.Toggle(_channelEnabled[c], content, EditorStyles.toolbarButton);
             }
 
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private void DrawRangeControls()
+        {
+            EditorGUILayout.BeginHorizontal();
+            _exposure = EditorGUILayout.Slider(
+                new GUIContent("Exposure (stops)",
+                    "Scales the shown values by 2^stops, so a map holding values above 1 (the light field's " +
+                    "magnitude, an HDR buffer) can be pulled back into view. Doesn't apply to the palette decode."),
+                _exposure, -4f, 4f);
+            _markOverRange = GUILayout.Toggle(_markOverRange,
+                new GUIContent("Mark > 1",
+                    "Paints magenta where any selected channel's raw value is above 1, before exposure."),
+                EditorStyles.miniButton, GUILayout.Width(64));
             EditorGUILayout.EndHorizontal();
         }
 
@@ -226,6 +246,8 @@ namespace BalloonParty.Editor.Maps
                 material.SetFloat(DecodePaletteId, decodePalette ? 1f : 0f);
                 material.SetFloat(PaletteChannelId, paletteChannel);
                 material.SetFloat(MipLevelId, _mipLevel);
+                material.SetFloat(ExposureId, _exposure);
+                material.SetFloat(MarkOverRangeId, _markOverRange ? 1f : 0f);
                 if (decodePalette)
                 {
                     PushPalette(material);

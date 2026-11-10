@@ -156,7 +156,7 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                 fixed4 _RendererColor;
             #endif
 
-            fixed4 _Color;
+            half4 _Color;
 
             // Sphere (shared)
             float4 _SphereCenter;
@@ -169,8 +169,8 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
             float  _ReflectionFresnel;
 
             // Metallic shading
-            fixed4 _MetalCenterColor;
-            fixed4 _MetalEdgeColor;
+            half4 _MetalCenterColor;
+            half4 _MetalEdgeColor;
             float  _MetalFalloff;
             float  _MetalDetailStrength;
             float  _LightInfluence;
@@ -182,15 +182,15 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
             float  _SpecularSharpness;
             float  _SpecularStretch;
             float  _SpecularBend;
-            fixed4 _SpecularColor;
+            half4 _SpecularColor;
 
             // Chrome rim (static)
-            fixed4 _RimColor;
+            half4 _RimColor;
             float  _RimWidth;
             float  _RimIntensity;
 
             // Rim sweep (animated)
-            fixed4 _RimSweepColor;
+            half4 _RimSweepColor;
             float  _RimSweepIntensity;
             float  _RimSweepSpeed;
             float  _RimSweepWidth;
@@ -240,7 +240,7 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
             // ----------------------------------------------------------------
             // Alpha sampling helpers
             // ----------------------------------------------------------------
-            inline fixed SampleAlpha(float2 uv)
+            inline half SampleAlpha(float2 uv)
             {
                 float2 inB = step(0.0, uv) * step(uv, 1.0);
                 return tex2D(_MainTex, uv).a * inB.x * inB.y;
@@ -294,7 +294,7 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
             }
 
             // ----------------------------------------------------------------
-            fixed4 frag(Varyings IN) : SV_Target
+            half4 frag(Varyings IN) : SV_Target
             {
                 // Self-derived clock: C# pushes a per-instance phase once via _TimeOffset;
                 // edit mode zeroes _AnimationSpeed and feeds editor time through the offset.
@@ -306,7 +306,7 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                 float  spriteMask = inBounds.x * inBounds.y;
 
                 // ---- Main sprite ----
-                fixed4 sprite = tex2D(_MainTex, spriteUV) * IN.color;
+                half4 sprite = tex2D(_MainTex, spriteUV) * IN.color;
                 sprite.a *= spriteMask;
                 float alpha = sprite.a;
 
@@ -324,7 +324,7 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                 {
                     float detail = dot(sprite.rgb, float3(0.299, 0.587, 0.114));
                     float grad = pow(sphereDist, _MetalFalloff);
-                    fixed3 metallic = lerp(_MetalCenterColor.rgb, _MetalEdgeColor.rgb, grad);
+                    half3 metallic = lerp(_MetalCenterColor.rgb, _MetalEdgeColor.rgb, grad);
                     sprite.rgb = metallic * smoothstep(0.0, _MetalDetailStrength, detail);
 
                     // Diffuse term: the metallic body is lit by the scene light — same response
@@ -378,7 +378,7 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                     float screenFade = edgeFade.x * edgeFade.y;
                     reflUV = saturate(reflUV);
 
-                    fixed3 reflected = tex2D(_SceneCaptureTex, reflUV).rgb;
+                    half3 reflected = tex2D(_SceneCaptureTex, reflUV).rgb;
 
                     float fresnel = pow(sphereDist, _ReflectionFresnel);
                     float reflMask = lerp(0.15, 1.0, fresnel) * _ReflectionStrength * screenFade;

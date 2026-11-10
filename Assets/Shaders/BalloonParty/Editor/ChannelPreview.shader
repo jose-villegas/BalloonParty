@@ -10,6 +10,8 @@ Shader "Hidden/BalloonParty/Editor/ChannelPreview"
     {
         _MainTex     ("Texture", 2D)          = "white" {}
         _ChannelMask ("Channel Mask", Vector) = (1, 1, 1, 1)
+        _Exposure      ("Exposure (stops)", Float) = 0
+        _MarkOverRange ("Mark Values Above 1", Float) = 0
     }
 
     SubShader
@@ -33,6 +35,8 @@ Shader "Hidden/BalloonParty/Editor/ChannelPreview"
             float _DecodePalette;  // 1 = solo-channel view decodes the encoded palette index to its color
             float _PaletteChannel; // 0=R, 1=G, 2=B, 3=A — which channel holds the palette index
             float _MipLevel;       // 0 = full res; higher = coarser mip (cone march preview)
+            float _Exposure;       // stops: shown values scale by 2^_Exposure (not the palette decode)
+            float _MarkOverRange;  // 1 = paint magenta where a selected channel's raw value is above 1
 
             float SampleChannel(float4 tex, int ch)
             {
@@ -50,9 +54,19 @@ Shader "Hidden/BalloonParty/Editor/ChannelPreview"
                 return _ChannelMask.a;
             }
 
-            fixed4 frag(v2f_img i) : SV_Target
+            // Magenta reads apart from both the grayscale solo view and real scene colour.
+            float3 MarkOverRange(float4 raw, float3 shown)
             {
-                fixed4 tex = _MainTex.SampleLevel(sampler_MainTex, i.uv, _MipLevel);
+                float4 selected = raw * _ChannelMask;
+                float peak = max(max(selected.r, selected.g), max(selected.b, selected.a));
+                return _MarkOverRange > 0.5 && peak > 1.0 ? float3(1, 0, 1) : shown;
+            }
+
+            float4 frag(v2f_img i) : SV_Target
+            {
+                // Full float: an HDR map's values above 1 must reach the exposure and the over-range mark intact.
+                float4 tex = _MainTex.SampleLevel(sampler_MainTex, i.uv, _MipLevel);
+                float scale = exp2(_Exposure);
                 float selectedCount = _ChannelMask.r + _ChannelMask.g
                                      + _ChannelMask.b + _ChannelMask.a;
 
@@ -67,23 +81,23 @@ Shader "Hidden/BalloonParty/Editor/ChannelPreview"
                         float v = SampleChannel(pointSample, palCh) * 16.0;
                         if (v <= 0.05)
                         {
-                            return fixed4(0, 0, 0, 1);
+                            return float4(0, 0, 0, 1);
                         }
 
                         float idx = ceil(v) - 1.0;
                         float life = saturate(v - idx);
-                        return fixed4(_PaletteColors[(int)idx].rgb * life, 1);
+                        return float4(_PaletteColors[(int)idx].rgb * life, 1);
                     }
 
                     // Zero or one channel selected — replicate the single value (0 if
                     // none are on) as grayscale, whichever channel it came from.
                     float v = tex.r * _ChannelMask.r + tex.g * _ChannelMask.g
                             + tex.b * _ChannelMask.b + tex.a * _ChannelMask.a;
-                    return fixed4(v, v, v, 1);
+                    return float4(MarkOverRange(tex, v * scale), 1);
                 }
 
                 // Multiple channels selected — keep each in its own RGB slot, zero the rest.
-                return fixed4(tex.rgb * _ChannelMask.rgb, 1);
+                return float4(MarkOverRange(tex, tex.rgb * _ChannelMask.rgb * scale), 1);
             }
             ENDCG
         }

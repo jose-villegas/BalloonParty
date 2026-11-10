@@ -85,7 +85,7 @@ Shader "BalloonParty/Display/PierceConeSpiral"
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
-            fixed4 _Color;
+            half4 _Color;
             float _BaseV;
             float _ApexV;
             float _ConeWidth;
@@ -145,7 +145,7 @@ Shader "BalloonParty/Display/PierceConeSpiral"
                 glow += exp(-offset / max(_GlowWidth, 1e-4)) * brightness;
             }
 
-            fixed4 frag(v2f IN) : SV_Target
+            half4 frag(v2f IN) : SV_Target
             {
                 float span = max(_ApexV - _BaseV, 1e-3);
                 float2 coneUv;
@@ -171,7 +171,7 @@ Shader "BalloonParty/Display/PierceConeSpiral"
                 core *= apexFade;
                 glow *= apexFade;
 
-                fixed spriteAlpha = tex2D(_MainTex, IN.texcoord).a;
+                half spriteAlpha = tex2D(_MainTex, IN.texcoord).a;
                 float mask = lerp(1.0, spriteAlpha, _SpriteMask);
 
                 // Radial aperture centered on the quad: fade the strands out past _CircleRadius so the
@@ -180,7 +180,7 @@ Shader "BalloonParty/Display/PierceConeSpiral"
                 float circle = smoothstep(_CircleRadius, _CircleRadius - max(_CircleFeather, 1e-4), radial);
                 mask *= lerp(1.0, circle, _CircleMask);
 
-                fixed4 c;
+                half4 c;
                 c.rgb = IN.color.rgb * (core + glow * _Glow * 0.25) * IN.color.a * mask;
                 // Only the strand core eats the background; the glow stays purely additive.
                 c.a = saturate(core * IN.color.a) * mask;

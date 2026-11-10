@@ -86,15 +86,15 @@ Shader "BalloonParty/Balloon/UnbreakableBalloonRim"
                 fixed4 _RendererColor;
             #endif
 
-            fixed4 _Color;
+            half4 _Color;
 
             // Chrome rim
-            fixed4 _RimColor;
+            half4 _RimColor;
             float  _RimWidth;
             float  _RimIntensity;
 
             // Rim sweep
-            fixed4 _RimSweepColor;
+            half4 _RimSweepColor;
             float  _RimSweepIntensity;
             float  _RimSweepSpeed;
             float  _RimSweepWidth;
@@ -118,7 +118,7 @@ Shader "BalloonParty/Balloon/UnbreakableBalloonRim"
             // ----------------------------------------------------------------
             // Alpha sampling with bounds guard
             // ----------------------------------------------------------------
-            inline fixed SampleAlpha(float2 uv)
+            inline half SampleAlpha(float2 uv)
             {
                 float2 inB = step(0.0, uv) * step(uv, 1.0);
                 return tex2D(_MainTex, uv).a * inB.x * inB.y;
@@ -157,9 +157,9 @@ Shader "BalloonParty/Balloon/UnbreakableBalloonRim"
             }
 
             // ----------------------------------------------------------------
-            fixed4 frag(Varyings IN) : SV_Target
+            half4 frag(Varyings IN) : SV_Target
             {
-                fixed4 col = tex2D(_MainTex, IN.uv) * IN.color;
+                half4 col = tex2D(_MainTex, IN.uv) * IN.color;
                 float alpha = col.a;
 
                 if (alpha < 0.01 || _RimWidth <= 0.0)

@@ -137,6 +137,11 @@ namespace BalloonParty.Display
             _captureCamera.depth = _mainCamera.depth - 1f;
             _captureCamera.enabled = false;
 
+            // The capture's alpha is the coverage mask, so it must stay an 8-bit ARGB render whatever the
+            // pipeline's HDR setting. URP gives an offscreen camera its target's format today, but only "for
+            // backward compatibility" (its own comment), so this doesn't lean on it.
+            _captureCamera.allowHDR = false;
+
             // Runtime-created cameras carry no serialized URP data; GetUniversalAdditionalCameraData adds it.
             var cameraData = _captureCamera.GetUniversalAdditionalCameraData();
             cameraData.renderPostProcessing = false;

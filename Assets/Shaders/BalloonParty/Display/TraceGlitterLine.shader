@@ -91,14 +91,14 @@ Shader "BalloonParty/Display/TraceGlitterLine"
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
-            fixed4 _Color;
+            half4 _Color;
             sampler2D _NoiseTex;
             float _NoiseScale;
             float4 _ScrollSpeed;
             float _SmokeStrength;
             float _SmokeContrast;
             float _MinVisibility;
-            fixed4 _GlitterColor;
+            half4 _GlitterColor;
             float _GlitterDensity;
             float _GlitterAcross;
             float _GlitterSize;
@@ -122,7 +122,7 @@ Shader "BalloonParty/Display/TraceGlitterLine"
 
             // SightSmoke's mask verbatim: two offset noise samples drift past each other so patches
             // never simply repeat; contrast sharpens the wisps, the floor keeps the line readable.
-            fixed SmokeMask(float2 uv)
+            half SmokeMask(float2 uv)
             {
                 float2 scroll = _ScrollSpeed.xy * _Time.y;
                 float a = tex2D(_NoiseTex, uv * _NoiseScale + scroll).r;
@@ -137,7 +137,7 @@ Shader "BalloonParty/Display/TraceGlitterLine"
             // GlitterSwirl's speck field, minus the laser's mirror halves: drifting cells whose specks
             // each orbit a small circle at their own phase. Along/across densities are separate knobs
             // because uv.x tiles in world units while uv.y only spans the line's width.
-            inline fixed GlitterAmount(float2 uv)
+            inline half GlitterAmount(float2 uv)
             {
                 float2 cellUv = (uv + _Drift.xy * _Time.y) * float2(_GlitterDensity, _GlitterAcross);
                 float2 cellId = floor(cellUv);
@@ -167,16 +167,16 @@ Shader "BalloonParty/Display/TraceGlitterLine"
                 return speck * twinkle * active;
             }
 
-            fixed4 frag(v2f IN) : SV_Target
+            half4 frag(v2f IN) : SV_Target
             {
-                fixed4 base = tex2D(_MainTex, IN.texcoord) * IN.color;
+                half4 base = tex2D(_MainTex, IN.texcoord) * IN.color;
                 base.a *= SmokeMask(IN.texcoord);
 
                 // Specks confined to the visible (post-smoke) line, so sparkles ride the wisps
                 // instead of floating over the eaten-away gaps.
-                fixed amt = base.a * GlitterAmount(IN.texcoord);
+                half amt = base.a * GlitterAmount(IN.texcoord);
 
-                fixed4 c;
+                half4 c;
                 c.rgb = base.rgb * base.a + _GlitterColor.rgb * (amt * _GlitterBrightness);
                 c.a = saturate(base.a + _GlitterColor.a * amt);
                 return c;

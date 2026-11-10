@@ -83,7 +83,7 @@ Shader "BalloonParty/Sprite/GlitterSwirl"
                 fixed4 _RendererColor;
             #endif
 
-            fixed4 _Color;
+            half4 _Color;
 
             v2f vert(appdata_t IN)
             {
@@ -104,7 +104,7 @@ Shader "BalloonParty/Sprite/GlitterSwirl"
             sampler2D _MainTex;
             sampler2D _AlphaTex;
             float _AlphaSplitEnabled;
-            fixed4 _GlitterColor;
+            half4 _GlitterColor;
             float _GlitterDensity;
             float _GlitterSize;
             float _GlitterChance;
@@ -117,9 +117,9 @@ Shader "BalloonParty/Sprite/GlitterSwirl"
             float _MirrorX;
             float4 _MirrorAxis;
 
-            fixed4 SampleSpriteTexture(float2 uv)
+            half4 SampleSpriteTexture(float2 uv)
             {
-                fixed4 color = tex2D(_MainTex, uv);
+                half4 color = tex2D(_MainTex, uv);
 
                 #if UNITY_TEXTURE_ALPHASPLIT_ALLOWED
                 if (_AlphaSplitEnabled)
@@ -132,7 +132,7 @@ Shader "BalloonParty/Sprite/GlitterSwirl"
             // Scattered twinkling specks with drift and orbital swirl motion. Extends the base
             // glitter with per-speck orbit and whole-field drift, plus a mirror axis that
             // reverses motion on the far half.
-            inline fixed GlitterAmount(float2 uv, float2 localPos)
+            inline half GlitterAmount(float2 uv, float2 localPos)
             {
                 // Mirror at the sprite centre: the split runs along the LOCAL _MirrorAxis (so it follows
                 // the sprite's rotation), and on the far side the whole motion is REVERSED so the two
@@ -166,7 +166,7 @@ Shader "BalloonParty/Sprite/GlitterSwirl"
                 return speck * twinkle * active;
             }
 
-            fixed4 frag(v2f IN) : SV_Target
+            half4 frag(v2f IN) : SV_Target
             {
                 UNITY_SETUP_INSTANCE_ID(IN);
 
@@ -174,10 +174,10 @@ Shader "BalloonParty/Sprite/GlitterSwirl"
                 // RGB (IN.color already folds in the SpriteRenderer's own color, _Color, and _RendererColor)
                 // tints the specks, so a recolored icon carries its hue into the glitter instead of always
                 // sparkling _GlitterColor's fixed one. White (the default) leaves _GlitterColor unchanged.
-                fixed mask = SampleSpriteTexture(IN.texcoord).a * IN.color.a;
-                fixed amt = mask * GlitterAmount(IN.texcoord, IN.localPos);
+                half mask = SampleSpriteTexture(IN.texcoord).a * IN.color.a;
+                half amt = mask * GlitterAmount(IN.texcoord, IN.localPos);
 
-                fixed4 c;
+                half4 c;
                 c.rgb = _GlitterColor.rgb * IN.color.rgb * (amt * _GlitterBrightness);
                 c.a = _GlitterColor.a * amt;
                 return c;
