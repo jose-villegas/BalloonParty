@@ -58,6 +58,21 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void SetInFormation_AnchorsAndReportsIt()
+        {
+            Assert.IsFalse(_model.IsAnchored);
+
+            _model.SetInFormation(true);
+
+            Assert.IsTrue(_model.IsAnchored);
+            Assert.IsTrue(_model.InFormation.Value);
+
+            _model.SetInFormation(false);
+
+            Assert.IsFalse(_model.IsAnchored);
+        }
+
+        [Test]
         public void UnbreakableBalloonModel_EvaluateHit_PiercingFlag_DoesNotMutateState()
         {
             var initialHits = _model.HitsRemaining.Value;

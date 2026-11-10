@@ -4,20 +4,30 @@ using BalloonParty.Nudge;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
+using UniRx;
 using UnityEngine;
 
 namespace BalloonParty.Balloon.Model
 {
     internal class UnbreakableBalloonModel : BalloonModelBase, IHasDeflectStamp, IHasScore, IHasScoreColor,
-        IPreBalanceRelocatable, IResistsPaint, IDeflectsShots
+        IPreBalanceRelocatable, IResistsPaint, IDeflectsShots, IBalanceAnchor, IWriteableFormationMember
     {
         private readonly ColorSource _colorSource;
+        private readonly ReactiveProperty<bool> _inFormation = new(false);
 
         public float DeflectStampScale { get; }
         public int ScoreValue { get; }
         public override IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
 
         public override PressureResponse PushResponse => PressureResponse.RelocateFarthest;
+
+        // A formation member hovers where its formation put it until the formation changes or breaks.
+        public bool IsAnchored => _inFormation.Value;
+        public IReadOnlyReactiveProperty<bool> InFormation => _inFormation;
+
+        // Always: EvaluateHit returns Deflect for every non-piercing hit, and there is no durability to
+        // spend down.
+        public bool DeflectsOrdinaryHit => true;
 
         internal UnbreakableBalloonModel(
             BalloonModelConfig config, IGamePalette palette = null, IReadOnlyList<string> allowedColors = null)
@@ -29,16 +39,17 @@ namespace BalloonParty.Balloon.Model
             NudgeOverrides = config.NudgeOverrides;
         }
 
+        public void SetInFormation(bool inFormation)
+        {
+            _inFormation.Value = inFormation;
+        }
+
         public void ResolveScoreAttribution(
             in DamageContext context, IReadOnlyList<string> incompleteColors, IList<ScoreAttribution> results)
         {
             ScoreAttributions.AddRandomPerColor(
                 results, _colorSource.Resolve(), incompleteColors, ScoreValue, breaksStreak: true);
         }
-
-        // Always: EvaluateHit below returns Deflect for every non-piercing hit, and there is no
-        // durability to spend down.
-        public bool DeflectsOrdinaryHit => true;
 
         public override HitOutcome EvaluateHit(DamageContext context)
         {

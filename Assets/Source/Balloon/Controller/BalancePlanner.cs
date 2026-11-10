@@ -102,6 +102,10 @@ namespace BalloonParty.Balloon.Controller
                     }
 
                     var slot = new Vector2Int(col, row);
+                    if (_grid.At(slot) is IBalanceAnchor { IsAnchored: true })
+                    {
+                        continue;
+                    }
                     _passCandidates.Add(new PassCandidate
                     {
                         Slot = slot,
@@ -129,7 +133,8 @@ namespace BalloonParty.Balloon.Controller
             }
 
             var currentSlot = new Vector2Int(col, row);
-            if (_grid.At(currentSlot) is not IWriteableDynamicSlotActor dynamicActor)
+            if (_grid.At(currentSlot) is not IWriteableDynamicSlotActor dynamicActor
+                || dynamicActor is IBalanceAnchor { IsAnchored: true })
             {
                 return false;
             }

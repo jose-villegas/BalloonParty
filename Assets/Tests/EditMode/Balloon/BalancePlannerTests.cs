@@ -196,6 +196,53 @@ namespace BalloonParty.Tests.Balloon
             }
         }
 
+        [Test]
+        public void Plan_AnchoredActor_HoldsItsUnsupportedSlot()
+        {
+            BuildGrid(3, 2);
+            var anchored = new UnbreakableBalloonModel(new BalloonModelConfig());
+            anchored.SetInFormation(true);
+            _grid.Place(anchored, null, new Vector2Int(1, 1));
+
+            _planner.Plan(_turnSteps, _moves);
+
+            Assert.AreEqual(0, _moves.Count);
+            Assert.AreSame(anchored, _grid.At(new Vector2Int(1, 1)));
+        }
+
+        [Test]
+        public void Plan_UnanchoredUnbreakable_InTheSameSlot_FloatsUp()
+        {
+            BuildGrid(3, 2);
+            var free = new UnbreakableBalloonModel(new BalloonModelConfig());
+            _grid.Place(free, null, new Vector2Int(1, 1));
+
+            _planner.Plan(_turnSteps, _moves);
+
+            Assert.AreEqual(0, free.SlotIndex.Value.y, "the control case rises, so the anchor is what held it");
+        }
+
+        [Test]
+        public void Plan_BalloonBelowAnAnchoredActor_RestsAgainstIt()
+        {
+            BuildGrid(3, 4);
+            var anchored = new UnbreakableBalloonModel(new BalloonModelConfig());
+            anchored.SetInFormation(true);
+            _grid.Place(anchored, null, new Vector2Int(1, 1));
+
+            // (1,3) can rise to (1,2) or (2,2); blocking (2,2) leaves (1,2). There, the upper neighbours
+            // are the anchor and (0,1), so blocking (0,1) leaves the balloon resting on the anchor alone.
+            _grid.Place(new StaticActorModel(), null, new Vector2Int(2, 2));
+            _grid.Place(new StaticActorModel(), null, new Vector2Int(0, 1));
+            var balloon = new BalloonModel();
+            _grid.Place(balloon, null, new Vector2Int(1, 3));
+
+            _planner.Plan(_turnSteps, _moves);
+
+            Assert.AreSame(anchored, _grid.At(new Vector2Int(1, 1)));
+            Assert.AreEqual(new Vector2Int(1, 2), balloon.SlotIndex.Value);
+        }
+
         private void BuildGrid(int columns, int rows)
         {
             var gameConfig = Substitute.For<ISlotGridConfig>();

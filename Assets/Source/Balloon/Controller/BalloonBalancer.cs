@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Balloon.Formation;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Run;
 using BalloonParty.Projectile;
@@ -45,6 +46,8 @@ namespace BalloonParty.Balloon.Controller
         private readonly Action<object> _finalizeBalanceMove;
         private readonly PressurePropagation _pressurePropagation;
         private readonly BalancePlanner _balancePlanner;
+        private readonly UnbreakableFormationService _formations;
+        private readonly Action<IWriteableDynamicSlotActor, Vector2Int> _relocateActor;
         private readonly Dictionary<IWriteableDynamicSlotActor, List<Vector3>> _paths = new();
         private readonly List<PressurePropagation.Move> _pressureMoves = new();
         private readonly List<BalanceMove> _balanceMoves = new();
@@ -79,7 +82,8 @@ namespace BalloonParty.Balloon.Controller
             PauseService pauseService,
             DisturbanceFieldService disturbanceField,
             BalloonMotionTicker motionTicker,
-            BalanceDebugRecorder debugRecorder = null)
+            BalanceDebugRecorder debugRecorder = null,
+            UnbreakableFormationService formations = null)
         {
             _grid = grid;
             _balanceQuery = balanceQuery;
@@ -93,6 +97,8 @@ namespace BalloonParty.Balloon.Controller
             _finalizeBalanceMove = FinalizeBalanceMove;
             _pressurePropagation = new PressurePropagation(grid, balanceQuery.Evaluator, debugRecorder);
             _balancePlanner = new BalancePlanner(grid, balanceQuery);
+            _formations = formations;
+            _relocateActor = RelocateActor;
         }
 
         public void Start()
@@ -213,6 +219,9 @@ namespace BalloonParty.Balloon.Controller
             if (atWaveStart)
             {
                 _turnSteps.Clear();
+
+                // Formations go first, so the roamers see the formation's slots as taken.
+                _formations?.ArrangeAtWaveStart(_relocateActor);
                 RelocateRoamers();
             }
 
@@ -252,7 +261,8 @@ namespace BalloonParty.Balloon.Controller
                 for (var row = 0; row < _grid.Rows; row++)
                 {
                     var actor = _grid.At(new Vector2Int(col, row));
-                    if (actor is IPreBalanceRelocatable && actor is IWriteableDynamicSlotActor dynamicActor)
+                    if (actor is IPreBalanceRelocatable && actor is IWriteableDynamicSlotActor dynamicActor
+                        && actor is not IBalanceAnchor { IsAnchored: true })
                     {
                         _roamers.Add(new RoamCandidate
                         {
@@ -275,18 +285,25 @@ namespace BalloonParty.Balloon.Controller
                     continue;
                 }
 
-                var from = actor.SlotIndex.Value;
-                var view = _grid.ViewAt(from);
-
-                _balancePathHolder.Reserve(actor, from);
-                _balancePathHolder.Reserve(actor, target);
-
-                _grid.Remove(from);
-                _grid.Place(actor, view, target);
-                actor.IsStable.Value = false;
-
-                RecordPath(actor, _grid.IndexToWorldPosition(target));
+                RelocateActor(actor, target);
             }
+        }
+
+        // One wave-start jump (a roam or a formation move): the grid changes now, the glide is animated
+        // with the rest of this balance's paths.
+        private void RelocateActor(IWriteableDynamicSlotActor actor, Vector2Int target)
+        {
+            var from = actor.SlotIndex.Value;
+            var view = _grid.ViewAt(from);
+
+            _balancePathHolder.Reserve(actor, from);
+            _balancePathHolder.Reserve(actor, target);
+
+            _grid.Remove(from);
+            _grid.Place(actor, view, target);
+            actor.IsStable.Value = false;
+
+            RecordPath(actor, _grid.IndexToWorldPosition(target));
         }
 
         // Empty slots that need no further settling (row 0 or fully supported) — legal roam destinations.
@@ -479,7 +496,8 @@ namespace BalloonParty.Balloon.Controller
                         continue;
                     }
 
-                    if (_grid.At(new Vector2Int(col, row)) is IWriteableDynamicSlotActor
+                    var actor = _grid.At(new Vector2Int(col, row));
+                    if (actor is IWriteableDynamicSlotActor and not IBalanceAnchor { IsAnchored: true }
                         && _balanceQuery.OptimalNextEmptySlot(col, row).HasValue)
                     {
                         return true;

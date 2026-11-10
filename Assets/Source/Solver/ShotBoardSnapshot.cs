@@ -47,13 +47,16 @@ namespace BalloonParty.Solver
         public readonly BalanceBiasKind BiasKind;
         public readonly float BiasValue;
         public readonly int BiasTypeId;
+
+        // A formation member holds its slot: the sim's pulses must not move it either.
+        public readonly bool Anchored;
         public readonly IReadOnlyList<NudgeOverride> NudgeOverrides;
 
         public BalanceProfile(
             Vector2Int slotIndex, int balancePriority, int maxBalanceSteps, float moveSpeed,
             bool directBalanceMotion, IReadOnlyList<NudgeOverride> nudgeOverrides,
             bool omnidirectional = false, BalanceBiasKind biasKind = BalanceBiasKind.None, float biasValue = 0f,
-            int biasTypeId = 0)
+            int biasTypeId = 0, bool anchored = false)
         {
             SlotIndex = slotIndex;
             BalancePriority = balancePriority;
@@ -65,6 +68,7 @@ namespace BalloonParty.Solver
             BiasKind = biasKind;
             BiasValue = biasValue;
             BiasTypeId = biasTypeId;
+            Anchored = anchored;
         }
     }
 

@@ -267,7 +267,8 @@ namespace BalloonParty.Solver
                 omnidirectional: influence?.OmnidirectionalBalance ?? false,
                 biasKind: biasSource?.BiasKind ?? BalanceBiasKind.None,
                 biasValue: biasSource?.BiasValue ?? 0f,
-                biasTypeId: biasSource?.BiasTypeId ?? 0);
+                biasTypeId: biasSource?.BiasTypeId ?? 0,
+                anchored: actor is IBalanceAnchor { IsAnchored: true });
 
             var item = BuildItemProfile(actor, view);
 

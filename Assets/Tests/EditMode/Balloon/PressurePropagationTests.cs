@@ -90,6 +90,29 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void AnchoredUnbreakable_BlocksTheChainLikeAStatic()
+        {
+            PlaceSimple(0, 2); // seed
+            var anchored = new UnbreakableBalloonModel(new BalloonModelConfig());
+            anchored.SetInFormation(true);
+            Place(anchored, 0, 1);
+            PlaceBlock(1, 2);
+
+            Assert.IsFalse(_propagation.TryResolve(0, _moves));
+            Assert.AreSame(anchored, _grid.At(new Vector2Int(0, 1)));
+        }
+
+        [Test]
+        public void AnchoredUnbreakableAsTheSeed_CannotBeShoved()
+        {
+            var anchored = new UnbreakableBalloonModel(new BalloonModelConfig());
+            anchored.SetInFormation(true);
+            Place(anchored, 0, 2);
+
+            Assert.IsFalse(_propagation.TryResolve(0, _moves));
+        }
+
+        [Test]
         public void Heaviness_RoutesTheChainThroughLightMovers()
         {
             PlaceSimple(1, 2); // seed

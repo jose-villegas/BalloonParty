@@ -39,5 +39,26 @@ namespace BalloonParty.Slots.Grid
                 (-index.y * separation.y) + offset.y,
                 0f);
         }
+
+        /// <summary>Steps between two slots along hex neighbours (odd rows shifted right).</summary>
+        public static int Distance(Vector2Int a, Vector2Int b)
+        {
+            // Odd-row offset → axial: odd rows sit half a column right, so their axial q is col - (row - 1) / 2.
+            var aq = a.x - ((a.y - (a.y & 1)) / 2);
+            var bq = b.x - ((b.y - (b.y & 1)) / 2);
+            var dq = aq - bq;
+            var dr = a.y - b.y;
+            return (Mathf.Abs(dq) + Mathf.Abs(dr) + Mathf.Abs(dq + dr)) / 2;
+        }
+
+        /// <summary>The next slot one row down along a diagonal: down-right when <paramref name="right" />, else down-left.</summary>
+        public static Vector2Int DiagonalDown(Vector2Int slot, bool right)
+        {
+            var even = slot.y % 2 == 0;
+            var col = right
+                ? (even ? slot.x : slot.x + 1)
+                : (even ? slot.x - 1 : slot.x);
+            return new Vector2Int(col, slot.y + 1);
+        }
     }
 }

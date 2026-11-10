@@ -196,3 +196,13 @@ MonoBehaviour:
   _nudgeFalloff: 1.5
   _bubbleMergeSeconds: 0.18
   _bubbleMergeMax: 5
+  _unbreakableFormation:
+    _enabled: 1
+    _minMembers: 3
+    _maxMembers: 5
+    _holdWaves: 3
+    _bottomClearance: 2
+    _spotChoices: 3
+    _horizontalWeight: 1
+    _diagonalWeight: 1
+    _itemCoverWeight: 2

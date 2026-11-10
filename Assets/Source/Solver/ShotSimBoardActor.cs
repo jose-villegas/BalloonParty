@@ -72,7 +72,8 @@ namespace BalloonParty.Solver
     /// sharing" — <see cref="WeightBias" /> runs the identical shared formula a live model would).
     /// Also carries the balance-motion segment and nudge-impulse list the moving-circle contact
     /// solve reads (§7c).</summary>
-    internal sealed class ShotSimDynamicActor : IWriteableDynamicSlotActor, IBalanceInfluence, IBalanceBiasSource
+    internal sealed class ShotSimDynamicActor :
+        IWriteableDynamicSlotActor, IBalanceInfluence, IBalanceBiasSource, IBalanceAnchor
     {
         internal const int MaxImpulses = 8; // mirrors BalloonMotionTicker.MaxImpulsesPerView
 
@@ -97,6 +98,7 @@ namespace BalloonParty.Solver
         public int BalancePriority { get; internal set; }
         public bool DirectBalanceMotion { get; internal set; }
         public bool OmnidirectionalBalance { get; internal set; }
+        public bool IsAnchored { get; internal set; }
 
         // IBalanceBiasSource: gathered from the live actor at CollectBoard time (ShotBoardGather) and
         // plumbed through the actor's BalanceProfile (ShotBoardDynamics) — empty/None/0 for a stub with

@@ -53,5 +53,7 @@ namespace BalloonParty.Configuration.Balloons
 
         /// <summary>Most bubbles a merge fills a cluster to; above the HitsToPop clusters spawn with.</summary>
         int BubbleMergeMax { get; }
+
+        IUnbreakableFormationSettings UnbreakableFormation { get; }
     }
 }

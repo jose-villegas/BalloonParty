@@ -102,6 +102,7 @@ namespace BalloonParty.Solver
                     BiasKind = balance.BiasKind,
                     BiasValue = balance.BiasValue,
                     BiasTypeId = balance.BiasTypeId,
+                    IsAnchored = balance.Anchored,
                 };
             }
 

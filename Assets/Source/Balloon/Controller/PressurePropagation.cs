@@ -54,6 +54,7 @@ namespace BalloonParty.Balloon.Controller
 
             var seedOccupant = _grid.At(seed);
             if (seedOccupant is not IPressureMovable
+                || seedOccupant is IBalanceAnchor { IsAnchored: true }
                 || seedOccupant is not IWriteableDynamicSlotActor seedActor)
             {
                 return false;
@@ -183,6 +184,7 @@ namespace BalloonParty.Balloon.Controller
 
                 var occupant = _grid.At(neighbour);
                 if (occupant is not IPressureMovable
+                    || occupant is IBalanceAnchor { IsAnchored: true }
                     || occupant is not IWriteableDynamicSlotActor dynamicOccupant)
                 {
                     RecordEdge(node.Slot, neighbour, 0f, 0f, BalanceDebugRecorder.EdgeRejection.Static);
