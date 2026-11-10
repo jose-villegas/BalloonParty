@@ -1,5 +1,6 @@
 var NAVTREEINDEX32 =
 {
+"classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html#af84a1175cd196d80366867373f8eccb5":[6,0,0,5,20,10],
 "classBalloonParty_1_1Editor_1_1LaserViewEditor.html":[5,0,0,5,21],
 "classBalloonParty_1_1Editor_1_1LaserViewEditor.html":[6,0,0,5,21],
 "classBalloonParty_1_1Editor_1_1LaserViewEditor.html#a662d0676e75473ec28891f2d11e7f213":[5,0,0,5,21,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX32 =
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a8f72d9026b8e9f400aee202fc9595406":[6,0,0,5,25,63],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a90c52a525da27a2b145472e35b90b4de":[5,0,0,5,25,54],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a90c52a525da27a2b145472e35b90b4de":[6,0,0,5,25,54],
-"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a929f6c9fa37dca4436b2b0aac0de1415":[5,0,0,5,25,8],
-"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a929f6c9fa37dca4436b2b0aac0de1415":[6,0,0,5,25,8]
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a929f6c9fa37dca4436b2b0aac0de1415":[5,0,0,5,25,8]
 };

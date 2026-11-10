@@ -1,5 +1,8 @@
 var NAVTREEINDEX94 =
 {
+"namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac49e29688fd680d7d4b970212051ce95af82b70e009a9e33bfaa99ab4ddb9a426":[5,0,0,3,4,40,0],
+"namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bd":[5,0,0,3,4,38],
+"namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda238dd854590fed6a9209a36c2c22f5ed":[5,0,0,3,4,38,1],
 "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda4925b41d0df91ae83e84e0ca1fedecf6":[5,0,0,3,4,38,3],
 "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda81552e14e7348edf29e81ad2596d9133":[5,0,0,3,4,38,2],
 "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda87950d62eb5a4df533e10c0411199f3c":[5,0,0,3,4,38,0],
@@ -246,8 +249,5 @@ var NAVTREEINDEX94 =
 "namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6":[5,0,0,12,5,14],
 "namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6a63d72051e901c069f8aa1b32aa0c43bb":[5,0,0,12,5,14,1],
 "namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6a8f347bc7cebca9fa6d97e70c6bc29eb3":[5,0,0,12,5,14,3],
-"namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6a9506f0fd0f7f1b07960b15b4c9e68d1a":[5,0,0,12,5,14,0],
-"namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6ae7c8e9e1f90eadea8b03762d9e9215c7":[5,0,0,12,5,14,2],
-"namespaceBalloonParty_1_1Shared_1_1GameState.html#aadf066414424aff953d1b79f327952bb":[5,0,0,12,5,13],
-"namespaceBalloonParty_1_1Shared_1_1GameState.html#aadf066414424aff953d1b79f327952bba32f2360b90157759ead1be1a7ea2333a":[5,0,0,12,5,13,2]
+"namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6a9506f0fd0f7f1b07960b15b4c9e68d1a":[5,0,0,12,5,14,0]
 };

@@ -1290,6 +1290,7 @@ var hierarchy =
     [ "BalloonParty.Audio.Editor.FreesoundResponseParser.Previews", "classBalloonParty_1_1Audio_1_1Editor_1_1FreesoundResponseParser_1_1Previews.html", null ],
     [ "BalloonParty.Shared.Messages.ProgressBarCompletedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProgressBarCompletedMessage.html", null ],
     [ "BalloonParty.UI.Score.ProgressNoticePresenter", "classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html", null ],
+    [ "BalloonParty.Shared.Messages.ProjectileBuffGainedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileBuffGainedMessage.html", null ],
     [ "BalloonParty.Shared.Messages.ProjectileCruiseEndedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseEndedMessage.html", null ],
     [ "BalloonParty.Shared.Messages.ProjectileCruiseStartedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage.html", null ],
     [ "BalloonParty.Shared.Messages.ProjectileDestroyedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage.html", null ],

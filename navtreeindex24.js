@@ -1,5 +1,6 @@
 var NAVTREEINDEX24 =
 {
+"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#ace8cfc41cc7809c0e57d89d0922a981e":[6,0,0,3,7,31,12],
 "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#adc7a21c25e3338aedefe03ff6c239c72":[5,0,0,3,7,31,0],
 "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#adc7a21c25e3338aedefe03ff6c239c72":[6,0,0,3,7,31,0],
 "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#ade80ff796109e3a3916ad6a8fd6aa1dc":[5,0,0,3,7,31,10],
@@ -248,6 +249,5 @@ var NAVTREEINDEX24 =
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#aa52728e1d153c357e9b8611c675d7909":[6,0,0,3,24,39],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#aa649da7b28f6a6689b2396ec50233b62":[5,0,0,3,24,48],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#aa649da7b28f6a6689b2396ec50233b62":[6,0,0,3,24,48],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#aa6f07b34d0d55765835e36314b1828d2":[5,0,0,3,24,45],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#aa6f07b34d0d55765835e36314b1828d2":[6,0,0,3,24,45]
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#aa6f07b34d0d55765835e36314b1828d2":[5,0,0,3,24,45]
 };

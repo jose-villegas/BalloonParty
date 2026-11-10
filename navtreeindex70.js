@@ -1,5 +1,8 @@
 var NAVTREEINDEX70 =
 {
+"classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#a07425f8b14672fd15a95aa0077603f5e":[6,0,0,12,11,5,7],
+"classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#a13843c211d58157ce49ef1fdde36bd68":[5,0,0,12,11,5,15],
+"classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#a13843c211d58157ce49ef1fdde36bd68":[6,0,0,12,11,5,15],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#a1dc6b4ee9484fc4381634dcd095c9a7b":[5,0,0,12,11,5,3],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#a1dc6b4ee9484fc4381634dcd095c9a7b":[6,0,0,12,11,5,3],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#a1ece90bc588ae36fc524c55207d83500":[5,0,0,12,11,5,8],
@@ -246,8 +249,5 @@ var NAVTREEINDEX70 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushObstacleModel.html#ae51d2bc2d808e2e00582f130822dda4c":[6,0,0,13,0,0,3,4],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderData.html":[5,0,0,13,0,0,4],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderData.html":[6,0,0,13,0,0,4],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderData.html#a7ee49d17a92d6ea4bfbd0e68f625a4d2":[5,0,0,13,0,0,4,1],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderData.html#a7ee49d17a92d6ea4bfbd0e68f625a4d2":[6,0,0,13,0,0,4,1],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderData.html#aad49eff5a1ef5b91969a5e85a55e6d2c":[5,0,0,13,0,0,4,3],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderData.html#aad49eff5a1ef5b91969a5e85a55e6d2c":[6,0,0,13,0,0,4,3]
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderData.html#a7ee49d17a92d6ea4bfbd0e68f625a4d2":[5,0,0,13,0,0,4,1]
 };

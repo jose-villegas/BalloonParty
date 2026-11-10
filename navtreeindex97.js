@@ -1,5 +1,8 @@
 var NAVTREEINDEX97 =
 {
+"plan_shot_solver_accuracy.html#autotoc_md739":[3,11,0,3,6],
+"plan_shot_solver_accuracy.html#autotoc_md740":[3,11,0,3,7],
+"plan_shot_solver_accuracy.html#autotoc_md741":[3,11,0,4],
 "plan_shot_solver_accuracy.html#autotoc_md742":[3,11,0,5],
 "plan_shot_solver_accuracy.html#autotoc_md743":[3,11,0,6],
 "plan_shot_solver_accuracy.html#autotoc_md744":[3,11,0,7],
@@ -246,8 +249,5 @@ var NAVTREEINDEX97 =
 "structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Move.html#ad8b5bc76558564d7b04e7217fa2cb52a":[6,0,0,1,0,12,0,0],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Move.html#ae2a55f8b5b743027e5cd77650193f8cc":[5,0,0,1,0,12,0,3],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Move.html#ae2a55f8b5b743027e5cd77650193f8cc":[6,0,0,1,0,12,0,3],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Node.html":[5,0,0,1,0,12,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Node.html":[6,0,0,1,0,12,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Node.html#a0db987d64d7b7e6cb13468ee7b23de78":[5,0,0,1,0,12,1,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Node.html#a0db987d64d7b7e6cb13468ee7b23de78":[6,0,0,1,0,12,1,0]
+"structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Node.html":[5,0,0,1,0,12,1]
 };

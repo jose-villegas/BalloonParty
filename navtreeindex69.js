@@ -1,5 +1,8 @@
 var NAVTREEINDEX69 =
 {
+"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a7e65ec517b2421f33a81ed9ac337ea8d":[6,0,0,12,10,14,8],
+"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a7f248adfd313648f56ee881330d3dc30":[5,0,0,12,10,14,2],
+"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a7f248adfd313648f56ee881330d3dc30":[6,0,0,12,10,14,2],
 "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a810c86e5a086cc549856858f9e7b6d2e":[5,0,0,12,10,14,13],
 "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a810c86e5a086cc549856858f9e7b6d2e":[6,0,0,12,10,14,13],
 "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a9a273186f0017fabe4c854c7bb18ca6e":[5,0,0,12,10,14,9],
@@ -246,8 +249,5 @@ var NAVTREEINDEX69 =
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html":[6,0,0,12,11,5],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#a0335ede3e26e61884f213bb83fbcfc45":[5,0,0,12,11,5,6],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#a0335ede3e26e61884f213bb83fbcfc45":[6,0,0,12,11,5,6],
-"classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#a07425f8b14672fd15a95aa0077603f5e":[5,0,0,12,11,5,7],
-"classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#a07425f8b14672fd15a95aa0077603f5e":[6,0,0,12,11,5,7],
-"classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#a13843c211d58157ce49ef1fdde36bd68":[5,0,0,12,11,5,15],
-"classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#a13843c211d58157ce49ef1fdde36bd68":[6,0,0,12,11,5,15]
+"classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#a07425f8b14672fd15a95aa0077603f5e":[5,0,0,12,11,5,7]
 };

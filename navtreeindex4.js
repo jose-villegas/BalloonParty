@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"arch_score_cinematic.html":[2,8],
 "arch_score_cinematic.html#autotoc_md85":[2,8,0],
 "arch_score_cinematic.html#autotoc_md86":[2,8,0,0],
 "arch_score_cinematic.html#autotoc_md87":[2,8,0,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration.html#ac98ea5caa8e6bd4341dd7b8a0c244067":[6,0,0,0,0,5,6],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration.html#ad3b80613cafbff067121b3ebc77b0053":[5,0,0,0,0,5,0],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration.html#ad3b80613cafbff067121b3ebc77b0053":[6,0,0,0,0,5,0],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration.html#af1dc545c627872866c5835178beed61f":[5,0,0,0,0,5,5],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration.html#af1dc545c627872866c5835178beed61f":[6,0,0,0,0,5,5]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration.html#af1dc545c627872866c5835178beed61f":[5,0,0,0,0,5,5]
 };

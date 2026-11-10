@@ -270,40 +270,42 @@ Messages</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ScorePointsGroupMessage</code>   </td><td class="markdownTableBodyNone"><code>ScoreController</code>   </td><td class="markdownTableBodyNone"><code>ScoreTrailService</code>, <code>LevelUpCinematic</code> — one message per resolved attribution color; carries <code>ColorName</code>, <code>WorldPosition</code>, <code>Points</code> (group total, post-multiplier post-cap), <code>LastScore</code> (cumulative per-color number of the group's last point), <code>Multiplier</code> (the streak multiplier, data only), and a <code>FirstScore</code> convenience property    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>ProjectileBuffGainedMessage</code>   </td><td class="markdownTableBodyNone"><code>ProjectileBuffService</code>   </td><td class="markdownTableBodyNone">Nothing yet (the heads-up router of <code>PLAN-HeadsUp</code> Phase 3) — a ball took on a kind of buff it didn't hold (<code>RainbowShield</code> from a rainbow-hosted Shield or Snipe, or <code>Speed</code>); carries <code>Projectile</code> and <code>BuffId</code>    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>StreakGrewMessage</code>   </td><td class="markdownTableBodyNone"><code>ScoreController</code>   </td><td class="markdownTableBodyNone">Nothing yet (the heads-up router of <code>PLAN-HeadsUp</code> Phase 3) — a ball's own pop raised its streak to two or more; carries <code>Projectile</code>, <code>Color</code> (a rainbow climb keeps the last real colour, null if there was none), <code>Streak</code> and the pop's <code>WorldPosition</code>. Read off the streak, not <code>Multiplier</code>, so night, item pops and a full bar never send it    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ScoreLevelUpMessage</code>   </td><td class="markdownTableBodyNone"><code>LevelController</code>   </td><td class="markdownTableBodyNone"><code>ColorProgressBar</code>, <code>LevelUpPopUp</code>, <code>ColorStreakTracker</code> (auto-resets the streak), <code>ScoreController</code>, <code>ThrowerController</code>, <code>BalloonSpawner</code>, <code>PlayerHealthController</code>, <code>LevelDifficultyResolver</code>, <code>WallNetView</code>, <code>ProgressionSoundRouter</code>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ScoreTrailArrivedMessage</code>   </td><td class="markdownTableBodyNone"><code>ScoreTrailService</code>   </td><td class="markdownTableBodyNone"><code>ScoreController</code>, <code>ColorProgressBar</code>, <code>LevelUpCinematic</code> — carries <code>ColorName</code>, <code>Score</code> (the level progress value this trail represents), <code>Level</code> (the level the trail was spawned during), and <code>WorldPosition</code>    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>LevelUpDismissedMessage</code>   </td><td class="markdownTableBodyNone"><code>LevelUpPopUp</code>   </td><td class="markdownTableBodyNone"><code>LevelUpCinematic</code>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ProjectileDestroyedMessage</code>   </td><td class="markdownTableBodyNone"><code>ProjectileView</code>   </td><td class="markdownTableBodyNone"><code>ThrowerController</code>, <code>ProjectileFacingSource</code>, <code>LevelController</code>, <code>CombatSoundRouter</code>    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ProjectileLoadedMessage</code>   </td><td class="markdownTableBodyNone"><code>ThrowerController</code>   </td><td class="markdownTableBodyNone"><code>FlightStatsService</code>, <code>ColorStreakTracker</code>, <code>ActiveProjectilePierce</code>, <code>CombatSoundRouter</code>, <code>ItemSoundRouter</code>, <code>FireBestShotCheat</code>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ThrowerReadyMessage</code>   </td><td class="markdownTableBodyNone"><code>ThrowerController</code>   </td><td class="markdownTableBodyNone"><code>CombatSoundRouter</code>, <code>ReloadHeadsUp</code> — once per ball, when it reaches the muzzle with a slot free (a release now fires); <code>AfterCapWait</code> is true when the ball cap held it back first    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ItemCheckMessage</code>   </td><td class="markdownTableBodyNone"><code>BalloonSpawner</code> (once per wave of lines, or once for the initial fill)   </td><td class="markdownTableBodyNone"><code>ItemAssigner</code> — carries <code>Wave</code>, the count of waves this level, which the item cadence reads    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ItemActivatedMessage</code>   </td><td class="markdownTableBodyNone"><code>ItemActivator</code>   </td><td class="markdownTableBodyNone"><code>BalloonController</code> — also carries the triggering projectile    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ItemRotationCapturedMessage</code>   </td><td class="markdownTableBodyNone"><code>BalloonController</code>   </td><td class="markdownTableBodyNone"><code>LaserItemHandler</code>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>CoinDroppedMessage</code>   </td><td class="markdownTableBodyNone"><code>CoinDropController</code>   </td><td class="markdownTableBodyNone"><code>CoinTrailService</code>, <code>GameplayMetricsService</code>    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>CoinLandedMessage</code>   </td><td class="markdownTableBodyNone"><code>CoinTrailService</code>   </td><td class="markdownTableBodyNone"><code>CoinCreditor</code>, <code>CoinCounterView</code>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ShieldGainedMessage</code>   </td><td class="markdownTableBodyNone"><code>ShieldItemHandler</code>, <code>ProjectileHitResolver</code> (a streak reward), <code>DeflectChainController</code> (a ricochet reward); <code>Source</code> (<code>ShieldGainSource</code>) says which   </td><td class="markdownTableBodyNone"><code>BounceHeadsUp</code>, <code>CombatSoundRouter</code>, <code>GameplayMetricsService</code>    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>DeflectChainMessage</code>   </td><td class="markdownTableBodyNone"><code>DeflectChainController</code> (from the second deflect in a row; <code>PaidShield</code> when this deflect earned a shield)   </td><td class="markdownTableBodyNone"><code>BounceHeadsUp</code>    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>LevelUpAbandonedMessage</code>   </td><td class="markdownTableBodyNone"><code>LevelController</code>   </td><td class="markdownTableBodyNone"><code>ThrowerController</code>    </td></tr>
+<td class="markdownTableBodyNone"><code>DeflectChainMessage</code>   </td><td class="markdownTableBodyNone"><code>DeflectChainController</code> (from the second deflect in a row; <code>PaidShield</code> when this deflect earned a shield)   </td><td class="markdownTableBodyNone"><code>BounceHeadsUp</code>    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>LevelUpAbandonedMessage</code>   </td><td class="markdownTableBodyNone"><code>LevelController</code>   </td><td class="markdownTableBodyNone"><code>ThrowerController</code>    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>ForceDestroyProjectileMessage</code>   </td><td class="markdownTableBodyNone"><code>LevelController</code>   </td><td class="markdownTableBodyNone"><code>ThrowerController</code>   </td></tr>
 </table>
 <blockquote class="doxtable">
-<p>Every projectile message (<code>ProjectileLoaded/Fired/Destroyed</code>, <code>ThrowerReady</code>, <code>StreakChanged</code> (null for the shared streak), <code>StreakGrew</code>, <code>Doomed*</code>, <code>Cruise*</code>, <code>ShieldLost</code>, <code>PierceDischarged</code>, <code>BalloonDeflected</code>, <code>ForceDestroyProjectile</code>) names the ball it is about (<code>IProjectileModel</code>). A subscriber keys its per-ball state off that ball instead of caching "the last loaded one"; see <code>IProjectileRegistry</code> in <code><a class="el" href="Projectile_2README_8md.html">Projectile/README.md</a></code> for when a ball counts as gone. </p>
+<p>Every projectile message (<code>ProjectileLoaded/Fired/Destroyed</code>, <code>ThrowerReady</code>, <code>StreakChanged</code> (null for the shared streak), <code>StreakGrew</code>, <code>ProjectileBuffGained</code>, <code>Doomed*</code>, <code>Cruise*</code>, <code>ShieldLost</code>, <code>PierceDischarged</code>, <code>BalloonDeflected</code>, <code>ForceDestroyProjectile</code>) names the ball it is about (<code>IProjectileModel</code>). A subscriber keys its per-ball state off that ball instead of caching "the last loaded one"; see <code>IProjectileRegistry</code> in <code><a class="el" href="Projectile_2README_8md.html">Projectile/README.md</a></code> for when a ball counts as gone. </p>
 </blockquote>
 <blockquote class="doxtable">
 <p><code>NudgeMessage</code> lives in <code>Nudge/</code> (not <code>Messages/</code>) — it is specific to the nudge system and carries <code>NudgeType</code> and <code>NudgeOverride[]</code> types from that namespace. </p>

@@ -1,5 +1,6 @@
 var NAVTREEINDEX16 =
 {
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a94193e100c30af316c9f6dacbdd2e426":[6,0,0,3,2,5,5],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#aad3469cfd85697f34794aca104a0c764":[5,0,0,3,2,5,12],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#aad3469cfd85697f34794aca104a0c764":[6,0,0,3,2,5,12],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#ab60561269f1782afe82743faec00b6b0":[5,0,0,3,2,5,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX16 =
 "classBalloonParty_1_1Configuration_1_1Editor_1_1ProjectileFlightConfigEditor.html#ad43f80b8e44893415d0295b5ec0f0c4c":[6,0,0,3,3,11,0],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1StampProfileDrawer.html":[5,0,0,3,3,12],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1StampProfileDrawer.html":[6,0,0,3,3,12],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1StampProfileDrawer.html#a713c4122d4b7e91f8e04ec7e559fff6a":[5,0,0,3,3,12,0],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1StampProfileDrawer.html#a713c4122d4b7e91f8e04ec7e559fff6a":[6,0,0,3,3,12,0]
+"classBalloonParty_1_1Configuration_1_1Editor_1_1StampProfileDrawer.html#a713c4122d4b7e91f8e04ec7e559fff6a":[5,0,0,3,3,12,0]
 };

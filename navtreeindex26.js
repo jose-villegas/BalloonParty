@@ -1,5 +1,6 @@
 var NAVTREEINDEX26 =
 {
+"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#aee34641b7cc8bcd2c2c9216e9709fbf8":[6,0,0,3,32,1],
 "classBalloonParty_1_1Display_1_1CameraBackgroundTint.html":[5,0,0,4,0],
 "classBalloonParty_1_1Display_1_1CameraBackgroundTint.html":[6,0,0,4,0],
 "classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#a03e5163665f8ba4139a7bf1a51f1ab2f":[5,0,0,4,0,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX26 =
 "classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html":[6,0,0,5,10],
 "classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a0cdc91b75d5a79aa9e1cd5660aaafe8a":[5,0,0,5,10,0],
 "classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a0cdc91b75d5a79aa9e1cd5660aaafe8a":[6,0,0,5,10,0],
-"classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a136872cbc4c8efb2a57e8576ceb2aadf":[5,0,0,5,10,4],
-"classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a136872cbc4c8efb2a57e8576ceb2aadf":[6,0,0,5,10,4]
+"classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a136872cbc4c8efb2a57e8576ceb2aadf":[5,0,0,5,10,4]
 };

@@ -1,5 +1,8 @@
 var NAVTREEINDEX99 =
 {
+"structBalloonParty_1_1Configuration_1_1Effects_1_1StampProfile.html#a819259de47cf96ea3eb0342177b7fa94":[6,0,0,3,4,36,5],
+"structBalloonParty_1_1Configuration_1_1Effects_1_1StampProfile.html#aa2e1b1b08a4ea9171ef04f4bf51e23a7":[5,0,0,3,4,36,7],
+"structBalloonParty_1_1Configuration_1_1Effects_1_1StampProfile.html#aa2e1b1b08a4ea9171ef04f4bf51e23a7":[6,0,0,3,4,36,7],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1StampProfile.html#aaf59f49c0056a13ff87c4b6076c904c9":[5,0,0,3,4,36,1],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1StampProfile.html#aaf59f49c0056a13ff87c4b6076c904c9":[6,0,0,3,4,36,1],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1StampProfile.html#ab871f438c72bb30cec5e675703a9c48b":[5,0,0,3,4,36,6],
@@ -246,8 +249,5 @@ var NAVTREEINDEX99 =
 "structBalloonParty_1_1Configuration_1_1Level_1_1ItemCountStep.html#ac7564badeb6420b790a2d2435fb80249":[6,0,0,3,7,14,5],
 "structBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator_1_1PieceSlot.html":[5,0,0,3,7,16,0],
 "structBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator_1_1PieceSlot.html":[6,0,0,3,7,16,0],
-"structBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator_1_1PieceSlot.html#a136b7b4f61102532dc42d77f9e2cae5f":[5,0,0,3,7,16,0,1],
-"structBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator_1_1PieceSlot.html#a136b7b4f61102532dc42d77f9e2cae5f":[6,0,0,3,7,16,0,1],
-"structBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator_1_1PieceSlot.html#a685c1e5bc27714d211754c4c78cc1f72":[5,0,0,3,7,16,0,4],
-"structBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator_1_1PieceSlot.html#a685c1e5bc27714d211754c4c78cc1f72":[6,0,0,3,7,16,0,4]
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator_1_1PieceSlot.html#a136b7b4f61102532dc42d77f9e2cae5f":[5,0,0,3,7,16,0,1]
 };

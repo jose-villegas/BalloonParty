@@ -1,5 +1,8 @@
 var NAVTREEINDEX89 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1IThermalGovernorSettings.html#ad45fa8424467443301bc6f83294b4174":[5,0,0,3,21,5],
+"interfaceBalloonParty_1_1Configuration_1_1IThermalGovernorSettings.html#ad45fa8424467443301bc6f83294b4174":[6,0,0,3,21,5],
+"interfaceBalloonParty_1_1Configuration_1_1IThermalGovernorSettings.html#ad7b90d5337b4530d7be36e8a213db519":[5,0,0,3,21,1],
 "interfaceBalloonParty_1_1Configuration_1_1IThermalGovernorSettings.html#ad7b90d5337b4530d7be36e8a213db519":[6,0,0,3,21,1],
 "interfaceBalloonParty_1_1Configuration_1_1Items_1_1IItemConfiguration.html":[5,0,0,3,6,1],
 "interfaceBalloonParty_1_1Configuration_1_1Items_1_1IItemConfiguration.html":[6,0,0,3,6,1],
@@ -246,8 +249,5 @@ var NAVTREEINDEX89 =
 "interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html#a8637fccfa66c0d60547a4863616495c1":[5,0,0,6,5,1,2],
 "interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html#a8637fccfa66c0d60547a4863616495c1":[6,0,0,6,5,1,2],
 "interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html#a9315a12fbd823f856e4b7896d312f2d9":[5,0,0,6,5,1,0],
-"interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html#a9315a12fbd823f856e4b7896d312f2d9":[6,0,0,6,5,1,0],
-"interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html#a969d36cc6ab417024eeb9d970a3936ea":[5,0,0,6,5,1,7],
-"interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html#a969d36cc6ab417024eeb9d970a3936ea":[6,0,0,6,5,1,7],
-"interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html#ab43163d608920b2674da33dc12e6cda3":[5,0,0,6,5,1,1]
+"interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html#a9315a12fbd823f856e4b7896d312f2d9":[6,0,0,6,5,1,0]
 };

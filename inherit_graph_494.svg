@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpSizing.html" target="_top" xlink:title="The escalation maths behind HeadsUpStyle.SizeAt, kept free of TMP types.">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html" target="_top" xlink:title="Where a new heads&#45;up line goes so it doesn&#39;t sit on the lines still showing: the nearest spot to wher...">
 <polygon fill="white" stroke="#666666" points="140,-30 0,-30 0,0 140,0 140,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.UI.HeadsUp.</text>
-<text text-anchor="middle" x="70" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">HeadsUpSizing</text>
+<text text-anchor="middle" x="70" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">HeadsUpPacking</text>
 </a>
 </g>
 </g>

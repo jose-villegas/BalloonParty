@@ -1,5 +1,6 @@
 var NAVTREEINDEX42 =
 {
+"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#affe9ab92d226c993339367c57da2492d":[6,0,0,6,5,3,21],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html":[5,0,0,6,5,4],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html":[6,0,0,6,5,4],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#a09ffa62fccad1402503c09b2c2092d26":[5,0,0,6,5,4,7],
@@ -248,6 +249,5 @@ var NAVTREEINDEX42 =
 "classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html#a4f65fd709b82e6f4c01f54f6995b5b3d":[6,0,0,6,6,15,6],
 "classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html#a6d67a4e0e3ff6a0cf7497ecc118dfd7e":[5,0,0,6,6,15,10],
 "classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html#a6d67a4e0e3ff6a0cf7497ecc118dfd7e":[6,0,0,6,6,15,10],
-"classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html#a7347b0db98ec3a87b7d2e9a6f0deb308":[5,0,0,6,6,15,0],
-"classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html#a7347b0db98ec3a87b7d2e9a6f0deb308":[6,0,0,6,6,15,0]
+"classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html#a7347b0db98ec3a87b7d2e9a6f0deb308":[5,0,0,6,6,15,0]
 };

@@ -1,5 +1,8 @@
 var NAVTREEINDEX104 =
 {
+"structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html#a88a79256a270172e32b091eedd6fb29e":[6,0,0,10,1,7,4],
+"structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html#a9e36fe327cb513c44bb1e58a04900ef0":[5,0,0,10,1,7,3],
+"structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html#a9e36fe327cb513c44bb1e58a04900ef0":[6,0,0,10,1,7,3],
 "structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html#aeca2fdb70aa081248de41add4ecc9860":[5,0,0,10,1,7,1],
 "structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html#aeca2fdb70aa081248de41add4ecc9860":[6,0,0,10,1,7,1],
 "structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html#afd20da21d9f39f08481ba137f46053ff":[5,0,0,10,1,7,2],
@@ -246,8 +249,5 @@ var NAVTREEINDEX104 =
 "structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage.html#a20f590cf3830e3ab803a2e568cb63adf":[6,0,0,12,7,3,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage.html#a771b2dc6ace11503a10882168e469e3f":[5,0,0,12,7,3,0],
 "structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage.html#a771b2dc6ace11503a10882168e469e3f":[6,0,0,12,7,3,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1BoardDepletedMessage.html":[5,0,0,12,7,4],
-"structBalloonParty_1_1Shared_1_1Messages_1_1BoardDepletedMessage.html":[6,0,0,12,7,4],
-"structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html":[5,0,0,12,7,5],
-"structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html":[6,0,0,12,7,5]
+"structBalloonParty_1_1Shared_1_1Messages_1_1BoardDepletedMessage.html":[5,0,0,12,7,4]
 };
