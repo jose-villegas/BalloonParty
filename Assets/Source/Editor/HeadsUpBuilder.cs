@@ -1,4 +1,3 @@
-using System;
 using BalloonParty.UI.HeadsUp;
 using BalloonParty.UI.Tooltip;
 using TMPro;
@@ -11,13 +10,13 @@ using Object = UnityEngine.Object;
 namespace BalloonParty.Editor
 {
     /// <summary>
-    ///     Builds the heads-ups in world space, on the <c>HeadsUps</c> prefab the Game scene holds, each line a
-    ///     <c>TextMeshPro</c> in the tooltip's pencil font with its <see cref="WriteOnText" /> settings and a
-    ///     <see cref="HandwrittenHeadsUp" />: the cannon's "+1" (<see cref="ReloadHeadsUp" />) and the ball's
-    ///     "+n bounce" / "-1 bounce" (<see cref="BounceHeadsUp" />). Not on the game canvas, which is bound to the
-    ///     camera: in world space a line stays where it happened through the camera rig's zoom and shake. A
-    ///     starting look to restyle by hand; running one again rebuilds it, and removes the canvas lines an
-    ///     earlier build left on <c>GameCanvas</c>.
+    ///     Builds the <see cref="HeadsUpLayer" /> in world space, on the <c>HeadsUps</c> prefab the Game scene
+    ///     holds, with the one line it clones every heads-up from: a <c>TextMeshPro</c> in the tooltip's pencil
+    ///     font with its <see cref="WriteOnText" /> settings and a <see cref="HandwrittenHeadsUp" />. Not on the
+    ///     game canvas, which is bound to the camera: in world space a line stays where it happened through the
+    ///     camera rig's zoom and shake. A starting look to restyle by hand; running it again rebuilds it, and
+    ///     removes the single-purpose heads-ups (the reload and the bounce ones) that earlier builds left, here
+    ///     or on <c>GameCanvas</c>.
     /// </summary>
     internal static class HeadsUpBuilder
     {
@@ -25,8 +24,8 @@ namespace BalloonParty.Editor
         private const string PrefabPath = "Assets/Prefabs/Game/HeadsUps.prefab";
         private const string GameScenePath = "Assets/Scenes/Game.unity";
         private const string RootName = "HeadsUps";
-        private const string ReloadName = "ReloadHeadsUp";
-        private const string BounceName = "BounceHeadsUp";
+        private const string LayerName = "HeadsUpLayer";
+        private const string LineName = "Line";
         private const string TipName = "PencilTip";
         private const string TipSpritePath = "Assets/Sprites/UI/pencil-tip.png";
 
@@ -36,39 +35,30 @@ namespace BalloonParty.Editor
         // The pencil is held over the paper: above the line it's writing.
         private const int TipSortingOrder = 1;
 
-        // Enough for every ball in the air to bounce at once without one line replacing another.
-        private const int BounceLineCount = 6;
-
         // The canvas build's sizes, in world units: the camera shows the reference 9.6 world units over the
         // canvas's 400, so a canvas unit is 0.024. A TextMeshPro (3D) draws a tenth of its font size per world
         // unit where the canvas text drew one per canvas unit, hence the 10.
         private const float WorldPerCanvasUnit = 0.024f;
         private const float FontSize = 8f * WorldPerCanvasUnit * 10f;
-        private static readonly Vector2 ReloadSize = new Vector2(40f, 14f) * WorldPerCanvasUnit;
-        private static readonly Vector2 BounceSize = new Vector2(60f, 14f) * WorldPerCanvasUnit;
+        private static readonly Vector2 LineSize = new Vector2(60f, 14f) * WorldPerCanvasUnit;
 
-        [MenuItem(MenuRoot + "Build Reload Heads-Up")]
-        private static void BuildReload()
-        {
-            Build("Reload heads-up", ReloadName, BuildReloadHeadsUp);
-        }
+        // What the layer replaced: one view per kind of heads-up, each with its own lines.
+        private static readonly string[] Retired = { "ReloadHeadsUp", "BounceHeadsUp" };
 
-        [MenuItem(MenuRoot + "Build Bounce Heads-Up")]
-        private static void BuildBounce()
-        {
-            Build("Bounce heads-up", BounceName, BuildBounceHeadsUp);
-        }
-
-        private static void Build(string title, string childName, Func<GameObject, string> build)
+        [MenuItem(MenuRoot + "Build Heads-Up Layer")]
+        private static void BuildLayer()
         {
             EnsurePrefab();
-            // Only once the world line is saved: a cancelled or failed build keeps the canvas line it would replace.
-            if (!PrefabRebuild.Run(title, PrefabPath, childName, build))
+            if (!PrefabRebuild.Run("Heads-up layer", PrefabPath, LayerName, BuildHeadsUpLayer))
             {
                 return;
             }
 
-            RemoveFromGameCanvas(childName);
+            foreach (var retired in Retired)
+            {
+                RemoveFromGameCanvas(retired);
+            }
+
             EnsureSceneInstance();
         }
 
@@ -140,7 +130,7 @@ namespace BalloonParty.Editor
             return PrefabRebuild.FindPrefabWithChild<TooltipBanner>("GameCanvas");
         }
 
-        private static string BuildReloadHeadsUp(GameObject root)
+        private static string BuildHeadsUpLayer(GameObject root)
         {
             var label = FindTooltipLabel();
             if (label == null)
@@ -148,35 +138,25 @@ namespace BalloonParty.Editor
                 return MissingLabelError();
             }
 
-            var line = CreateLine(label, root.transform, ReloadName, ReloadSize);
-            var reload = line.gameObject.AddComponent<ReloadHeadsUp>();
-            var fields = new SerializedObject(reload);
-            fields.FindProperty("_headsUp").objectReferenceValue = line;
-            fields.ApplyModifiedPropertiesWithoutUndo();
-            return null;
-        }
-
-        private static string BuildBounceHeadsUp(GameObject root)
-        {
-            var label = FindTooltipLabel();
-            if (label == null)
+            foreach (var retired in Retired)
             {
-                return MissingLabelError();
+                var old = root.transform.Find(retired);
+                if (old != null)
+                {
+                    Object.DestroyImmediate(old.gameObject);
+                }
             }
 
-            var holder = new GameObject(BounceName) { layer = root.layer };
+            var holder = new GameObject(LayerName) { layer = root.layer };
             holder.transform.SetParent(root.transform, false);
+            var layer = holder.AddComponent<HeadsUpLayer>();
 
-            var bounce = holder.AddComponent<BounceHeadsUp>();
-            var fields = new SerializedObject(bounce);
-            var lines = fields.FindProperty("_lines");
-            lines.arraySize = BounceLineCount;
-            for (var i = 0; i < BounceLineCount; i++)
-            {
-                lines.GetArrayElementAtIndex(i).objectReferenceValue =
-                    CreateLine(label, holder.transform, $"Line {i}", BounceSize);
-            }
+            // The pool's original: cloned, never shown itself.
+            var line = CreateLine(label, holder.transform, LineName, LineSize);
+            line.gameObject.SetActive(false);
 
+            var fields = new SerializedObject(layer);
+            fields.FindProperty("_linePrefab").objectReferenceValue = line;
             fields.ApplyModifiedPropertiesWithoutUndo();
             return null;
         }

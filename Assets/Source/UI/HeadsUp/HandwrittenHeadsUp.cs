@@ -1,5 +1,6 @@
 using BalloonParty.Configuration.HeadsUp;
-using DG.Tweening;
+using BalloonParty.Game.HeadsUp;
+using BalloonParty.Shared.Pool;
 using TMPro;
 using UnityEngine;
 
@@ -7,22 +8,19 @@ namespace BalloonParty.UI.HeadsUp
 {
     /// <summary>
     ///     One short handwritten line in world space (a <c>TextMeshPro</c>, not on a canvas), so it sits where
-    ///     it happened through the camera rig's zoom and shake: written on in pencil, held, then faded out. A
-    ///     new <see cref="Show(string, Vector2)" /> replaces the line showing. Written plain it keeps the label's
-    ///     own look; written with a <see cref="HeadsUpStyle" /> it takes that colour, size and weight for this
-    ///     line only.
+    ///     it happened through the camera rig's zoom and shake: written on in pencil, held, then faded out, or
+    ///     held until released. Pooled by <see cref="HeadsUpLayer" />, which moves it on with two clocks: the
+    ///     write, the hold and its own fade on live time, which stops under a pause; a release fades on unscaled
+    ///     time, so a line pushed out during a pause doesn't stay frozen beside the one that replaced it.
     /// </summary>
-    public class HandwrittenHeadsUp : MonoBehaviour
+    internal sealed class HandwrittenHeadsUp : MonoBehaviour, IPoolable
     {
         [SerializeField] private WriteOnText _writeOn;
         [SerializeField] [Range(0f, 1f)] private float _visibleAlpha = 0.85f;
+        [SerializeField] [Min(0.01f)] private float _fadeOutDuration = 0.25f;
 
-        [Tooltip("Seconds the written line stays before it fades.")]
-        [SerializeField] [Min(0f)] private float _holdDuration = 0.35f;
-        [SerializeField] [Min(0f)] private float _fadeOutDuration = 0.25f;
-
-        [Tooltip("Fade length when the line is cleared early, e.g. once what it announced has happened.")]
-        [SerializeField] [Min(0f)] private float _clearDuration = 0.1f;
+        [Tooltip("Fade length when the line is released early: evicted, cleared, or what it announced happened.")]
+        [SerializeField] [Min(0.01f)] private float _clearDuration = 0.1f;
 
         [Tooltip("A soft outline behind the ink, so dark lines read over the day sky and the night sky alike: " +
                  "pencil on a scrap of paper. Width 0 = none.")]
@@ -32,16 +30,37 @@ namespace BalloonParty.UI.HeadsUp
         private TMP_Text _label;
         private Material _material;
         private Color _faceColor = Color.white;
-        private Tween _fade;
-        private float _alpha;
-
-        // The label's look as built: what a plain Show writes in, and what a style scales from.
-        private Color _baseColor;
         private float _baseFontSize;
-        private FontStyles _baseFontStyle;
+        private LineState _state;
+        private float _alpha;
+        private float _timer;
+        private float _fadeFrom;
+        private float _holdSeconds;
+        private bool _held;
+        private string _text;
+        private string _pendingText;
+        private HeadsUpStyleSettings _pendingStyle;
+        private int _pendingArg;
 
-        /// <summary>The line is written or still fading.</summary>
-        internal bool IsShowing => _alpha > 0f;
+        private enum LineState
+        {
+            Hidden,
+            Writing,
+            Holding,
+            Held,
+            Fading,
+            Releasing
+        }
+
+        internal HeadsUpHandle Handle { get; private set; } = HeadsUpHandle.None;
+
+        /// <summary>Released, evicted or cleared: it fades out without reporting itself finished.</summary>
+        internal bool Released { get; private set; }
+
+        /// <summary>The HUD endpoint it follows, or null for a line that stays where it was written.</summary>
+        internal string EndpointKey { get; private set; }
+
+        internal Vector2 Offset { get; private set; }
 
         /// <summary>The box the last written ink covers, in world space.</summary>
         internal Rect InkRect { get; private set; }
@@ -49,62 +68,76 @@ namespace BalloonParty.UI.HeadsUp
         private void Awake()
         {
             _label = GetComponent<TMP_Text>();
-            if (_label != null)
-            {
-                _baseColor = _label.color;
-                _baseFontSize = _label.fontSize;
-                _baseFontStyle = _label.fontStyle;
-                ApplyHalo();
-                // This line's own instance (the halo already made one): the fade writes to it.
-                _material = _label.fontMaterial;
-                _faceColor = _material.GetColor(ShaderUtilities.ID_FaceColor);
-            }
-
+            _baseFontSize = _label.fontSize;
+            _writeOn.ExternallyTicked = true;
+            ApplyHalo();
+            // This line's own instance (the halo already made one): the fades write to it.
+            _material = _label.fontMaterial;
+            _faceColor = _material.GetColor(ShaderUtilities.ID_FaceColor);
             SetAlpha(0f);
         }
 
         private void OnDestroy()
         {
-            _fade?.Kill();
+            if (_material != null)
+            {
+                Destroy(_material);
+            }
         }
 
-        /// <summary>Writes <paramref name="text" /> at <paramref name="worldPosition" />.</summary>
-        public void Show(string text, Vector2 worldPosition)
+        public void OnSpawned()
         {
-            if (_label != null)
-            {
-                ApplyLook(_baseColor, _baseFontSize, _baseFontStyle);
-            }
+        }
 
-            Write(text, worldPosition);
+        public void OnDespawned()
+        {
+            _writeOn.Stop();
+            SetAlpha(0f);
+            _state = LineState.Hidden;
+            _pendingText = null;
+            _text = null;
+            Released = false;
+            EndpointKey = null;
+            Handle = HeadsUpHandle.None;
+        }
+
+        /// <summary>Writes <paramref name="text" /> in <paramref name="style" />, sized for <paramref name="arg" />.</summary>
+        internal void Show(HeadsUpHandle handle, string text, Vector2 worldPosition, HeadsUpStyleSettings style,
+            int arg, string endpointKey)
+        {
+            Handle = handle;
+            Released = false;
+            EndpointKey = endpointKey;
+            Offset = style.WorldOffset;
+            transform.position = new Vector3(worldPosition.x, worldPosition.y, transform.position.z);
+            Write(text, style, arg);
         }
 
         /// <summary>
-        ///     Writes <paramref name="text" /> in <paramref name="style" />, sized for an escalating
-        ///     <paramref name="count" /> (1 = the first).
+        ///     Writes <paramref name="text" /> over the line, where it is, at the next <see cref="Tick" />: several in
+        ///     one frame cost one write. The same text again does nothing.
         /// </summary>
-        public void Show(string text, Vector2 worldPosition, HeadsUpStyle style, int count = 1)
+        internal void Rewrite(string text, HeadsUpStyleSettings style, int arg)
         {
-            if (_label != null)
-            {
-                ApplyLook(style.Color, _baseFontSize * style.SizeAt(count), style.FontStyle);
-            }
-
-            Write(text, worldPosition);
+            _pendingText = text;
+            _pendingStyle = style;
+            _pendingArg = arg;
         }
 
-        /// <summary>
-        ///     Writes <paramref name="text" /> in <paramref name="style" /> and keeps it up until
-        ///     <see cref="Clear" />, for a state that lasts (the cannon's ready) rather than a moment.
-        /// </summary>
-        public void ShowUntilCleared(string text, Vector2 worldPosition, HeadsUpStyle style)
+        /// <summary>Fades the line out on unscaled time, the pencil lifted mid-write if it was still writing.</summary>
+        internal void Release()
         {
-            if (_label != null)
+            Released = true;
+            _pendingText = null;
+            _writeOn.Stop();
+            if (_state == LineState.Hidden)
             {
-                ApplyLook(style.Color, _baseFontSize * style.SizeAt(1), style.FontStyle);
+                return;
             }
 
-            Write(text, worldPosition, holdUntilCleared: true);
+            _state = LineState.Releasing;
+            _fadeFrom = _alpha;
+            _timer = 0f;
         }
 
         /// <summary>Moves the written line, ink and all, to <paramref name="worldPosition" />.</summary>
@@ -115,18 +148,89 @@ namespace BalloonParty.UI.HeadsUp
             InkRect = new Rect(InkRect.position + shift, InkRect.size);
         }
 
-        /// <summary>Fades the line out now, if one is showing.</summary>
-        public void Clear()
+        /// <summary>Moves the line on; true once it has faded out and can go back to the pool.</summary>
+        internal bool Tick(float liveDelta, float unscaledDelta)
         {
-            // The fade is shorter than most writes: without this the pencil goes on scribbling over a line
-            // that's no longer there.
-            _writeOn.Stop();
-            if (_alpha <= 0f)
+            ApplyPendingRewrite();
+            switch (_state)
+            {
+                case LineState.Writing:
+                    _writeOn.Tick(liveDelta);
+                    if (!_writeOn.IsWriting)
+                    {
+                        _state = _held ? LineState.Held : LineState.Holding;
+                        _timer = 0f;
+                    }
+
+                    return false;
+                case LineState.Holding:
+                    _timer += liveDelta;
+                    if (_timer >= _holdSeconds)
+                    {
+                        _state = LineState.Fading;
+                        _timer = 0f;
+                    }
+
+                    return false;
+                case LineState.Fading:
+                    return Fade(_visibleAlpha, _fadeOutDuration, liveDelta);
+                case LineState.Releasing:
+                    return Fade(_fadeFrom, _clearDuration, unscaledDelta);
+                case LineState.Held:
+                    return false;
+                default:
+                    return true;
+            }
+        }
+
+        private void ApplyPendingRewrite()
+        {
+            if (_pendingText == null)
             {
                 return;
             }
 
-            FadeOut(0f, _clearDuration);
+            var text = _pendingText;
+            _pendingText = null;
+            if (text == _text && _state != LineState.Fading)
+            {
+                return;
+            }
+
+            Write(text, _pendingStyle, _pendingArg);
+        }
+
+        private void Write(string text, HeadsUpStyleSettings style, int arg)
+        {
+            _text = text;
+            _holdSeconds = style.HoldSeconds;
+            _held = style.Held;
+            _label.color = style.Look.Color;
+            _label.fontSize = _baseFontSize * style.SizeAt(arg);
+            _label.fontStyle = style.Look.FontStyle;
+            SetAlpha(_visibleAlpha);
+            _writeOn.Write(text);
+            _state = LineState.Writing;
+
+            // The write has built the mesh, so the bounds hold every character, faded-in or not.
+            var bounds = _label.textBounds;
+            var scale = (Vector2)transform.lossyScale;
+            var position = (Vector2)transform.position;
+            InkRect = new Rect(position + Vector2.Scale(bounds.min, scale), Vector2.Scale(bounds.size, scale));
+        }
+
+        private bool Fade(float from, float duration, float delta)
+        {
+            _timer += delta;
+            var t = Mathf.Clamp01(_timer / duration);
+            SetAlpha(from * (1f - t));
+            if (t < 1f)
+            {
+                return false;
+            }
+
+            _state = LineState.Hidden;
+            return true;
         }
 
         // Outline width and colour live on the font material: setting them gives this line its own instance,
@@ -140,45 +244,6 @@ namespace BalloonParty.UI.HeadsUp
 
             _label.outlineColor = _haloColor;
             _label.outlineWidth = _haloWidth;
-        }
-
-        private void ApplyLook(Color color, float fontSize, FontStyles fontStyle)
-        {
-            _label.color = color;
-            _label.fontSize = fontSize;
-            _label.fontStyle = fontStyle;
-        }
-
-        private void Write(string text, Vector2 worldPosition, bool holdUntilCleared = false)
-        {
-            if (string.IsNullOrEmpty(text))
-            {
-                return;
-            }
-
-            _fade?.Kill();
-            transform.position = new Vector3(worldPosition.x, worldPosition.y, transform.position.z);
-            SetAlpha(_visibleAlpha);
-            _writeOn.Write(text);
-
-            // The write has built the mesh, so the bounds hold every character, faded-in or not.
-            var bounds = _label.textBounds;
-            var scale = (Vector2)transform.lossyScale;
-            InkRect = new Rect(worldPosition + Vector2.Scale(bounds.min, scale), Vector2.Scale(bounds.size, scale));
-
-            if (!holdUntilCleared)
-            {
-                FadeOut(_writeOn.Duration + _holdDuration, _fadeOutDuration);
-            }
-        }
-
-        // Unscaled, like the write itself: a heads-up must finish in slow-motion beats too.
-        private void FadeOut(float delay, float duration)
-        {
-            _fade?.Kill();
-            _fade = DOTween.To(() => _alpha, SetAlpha, 0f, duration)
-                .SetDelay(delay)
-                .SetUpdate(true);
         }
 
         // Through the material's face and outline colours, not the text's colour: setting that rebuilds the

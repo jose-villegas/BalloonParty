@@ -1,0 +1,226 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 122af0731b50482da7df5056fe1957d1, type: 3}
+  m_Name: HeadsUpSettings
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Configuration.HeadsUp.HeadsUpSettings
+  _maxConcurrent: 6
+  _styles:
+  - _id: 0
+    _format: ready
+    _look:
+      _color: {r: 0.2901961, g: 0.2901961, b: 0.32156864, a: 1}
+      _size: 0.85
+      _growth: 0
+      _maxSize: 0.85
+      _fontStyle: 0
+    _priority: 0
+    _cooldownSeconds: 0
+    _holdSeconds: 0.35
+    _held: 1
+    _worldOffset: {x: 0.75, y: 0}
+    _minArg: 0
+    _maxArg: 0
+    _escalateFrom: 1
+  - _id: 1
+    _format: +{0} <i>bounce</i>
+    _look:
+      _color: {r: 0, g: 0.44705883, b: 0.69803923, a: 1}
+      _size: 1
+      _growth: 0.15
+      _maxSize: 1.35
+      _fontStyle: 1
+    _priority: 2
+    _cooldownSeconds: 0
+    _holdSeconds: 0.35
+    _held: 0
+    _worldOffset: {x: 0, y: 0.25}
+    _minArg: 0
+    _maxArg: 0
+    _escalateFrom: 1
+  - _id: 2
+    _format: -1 <i>bounce</i>
+    _look:
+      _color: {r: 0.2901961, g: 0.2901961, b: 0.32156864, a: 0.8}
+      _size: 0.9
+      _growth: 0
+      _maxSize: 0.9
+      _fontStyle: 0
+    _priority: 1
+    _cooldownSeconds: 0
+    _holdSeconds: 0.35
+    _held: 0
+    _worldOffset: {x: 0, y: 0.25}
+    _minArg: 0
+    _maxArg: 0
+    _escalateFrom: 1
+  - _id: 3
+    _format: -1 <i>bounce</i>
+    _look:
+      _color: {r: 0.7019608, g: 0.2784314, b: 0, a: 1}
+      _size: 0.9
+      _growth: 0
+      _maxSize: 0.9
+      _fontStyle: 1
+    _priority: 3
+    _cooldownSeconds: 0
+    _holdSeconds: 0.35
+    _held: 0
+    _worldOffset: {x: 0, y: 0.25}
+    _minArg: 0
+    _maxArg: 0
+    _escalateFrom: 1
+  - _id: 4
+    _format: x{0} <i>ricochet</i>
+    _look:
+      _color: {r: 0.5568628, g: 0.23137255, b: 0.5568628, a: 1}
+      _size: 1.1
+      _growth: 0.25
+      _maxSize: 1.6
+      _fontStyle: 1
+    _priority: 3
+    _cooldownSeconds: 0
+    _holdSeconds: 0.35
+    _held: 0
+    _worldOffset: {x: 0, y: 0.25}
+    _minArg: 0
+    _maxArg: 0
+    _escalateFrom: 2
+  - _id: 5
+    _format: 'x{0} <i>ricochet</i>
+
+      <size=65%><color=#0072B2>+1 <i>bounce</i></color></size>'
+    _look:
+      _color: {r: 0.5568628, g: 0.23137255, b: 0.5568628, a: 1}
+      _size: 1.1
+      _growth: 0.25
+      _maxSize: 1.6
+      _fontStyle: 1
+    _priority: 3
+    _cooldownSeconds: 0
+    _holdSeconds: 0.35
+    _held: 0
+    _worldOffset: {x: 0, y: 0.25}
+    _minArg: 0
+    _maxArg: 0
+    _escalateFrom: 2
+  - _id: 6
+    _format: x{0}!
+    _look:
+      _color: {r: 0.6039216, g: 0.40392157, b: 0, a: 1}
+      _size: 1.1
+      _growth: 0.25
+      _maxSize: 1.6
+      _fontStyle: 1
+    _priority: 3
+    _cooldownSeconds: 0
+    _holdSeconds: 0.35
+    _held: 0
+    _worldOffset: {x: 0, y: 0.3}
+    _minArg: 3
+    _maxArg: 0
+    _escalateFrom: 3
+  - _id: 7
+    _format: <i>tap!</i>
+    _look:
+      _color: {r: 0.2901961, g: 0.2901961, b: 0.32156864, a: 1}
+      _size: 0.9
+      _growth: 0
+      _maxSize: 0.9
+      _fontStyle: 0
+    _priority: 1
+    _cooldownSeconds: 0
+    _holdSeconds: 0.35
+    _held: 0
+    _worldOffset: {x: 0, y: 0.25}
+    _minArg: 0
+    _maxArg: 3
+    _escalateFrom: 1
+  - _id: 8
+    _format: <i>pierce!</i>
+    _look:
+      _color: {r: 0.2901961, g: 0.2901961, b: 0.32156864, a: 1}
+      _size: 1
+      _growth: 0
+      _maxSize: 1
+      _fontStyle: 1
+    _priority: 2
+    _cooldownSeconds: 0
+    _holdSeconds: 0.35
+    _held: 0
+    _worldOffset: {x: 0, y: 0.3}
+    _minArg: 0
+    _maxArg: 0
+    _escalateFrom: 1
+  - _id: 9
+    _format: x{0} <i>shattered</i>
+    _look:
+      _color: {r: 0.5568628, g: 0.23137255, b: 0.5568628, a: 1}
+      _size: 1.1
+      _growth: 0.2
+      _maxSize: 1.5
+      _fontStyle: 1
+    _priority: 3
+    _cooldownSeconds: 0
+    _holdSeconds: 0.35
+    _held: 0
+    _worldOffset: {x: 0, y: 0.25}
+    _minArg: 2
+    _maxArg: 0
+    _escalateFrom: 2
+  - _id: 10
+    _format: -1
+    _look:
+      _color: {r: 0.7019608, g: 0.2784314, b: 0, a: 1}
+      _size: 1.5
+      _growth: 0
+      _maxSize: 1.5
+      _fontStyle: 1
+    _priority: 5
+    _cooldownSeconds: 0
+    _holdSeconds: 0.35
+    _held: 0
+    _worldOffset: {x: 0, y: -0.4}
+    _minArg: 0
+    _maxArg: 0
+    _escalateFrom: 1
+  - _id: 11
+    _format: '{0} <i>done</i>'
+    _look:
+      _color: {r: 0.2901961, g: 0.2901961, b: 0.32156864, a: 1}
+      _size: 1
+      _growth: 0
+      _maxSize: 1
+      _fontStyle: 1
+    _priority: 2
+    _cooldownSeconds: 0
+    _holdSeconds: 0.35
+    _held: 0
+    _worldOffset: {x: 0, y: -0.35}
+    _minArg: 0
+    _maxArg: 0
+    _escalateFrom: 1
+  - _id: 12
+    _format: <i>any colour!</i>
+    _look:
+      _color: {r: 0, g: 0.44705883, b: 0.69803923, a: 1}
+      _size: 1
+      _growth: 0
+      _maxSize: 1
+      _fontStyle: 1
+    _priority: 2
+    _cooldownSeconds: 0
+    _holdSeconds: 0.35
+    _held: 0
+    _worldOffset: {x: 0, y: 0.3}
+    _minArg: 0
+    _maxArg: 0
+    _escalateFrom: 1

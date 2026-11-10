@@ -8,8 +8,10 @@ namespace BalloonParty.UI.HeadsUp
     /// <summary>
     ///     Writes a <see cref="TMP_Text" /> on left to right as if by a pencil: a soft reveal edge, slanted
     ///     forward, sweeps across the glyphs while an optional pencil tip rides it. Works on any TMP text,
-    ///     on a canvas or in the world. Ticks on unscaled time, so it keeps writing through slow-motion and
-    ///     frozen screens, and only while writing: a written text costs nothing.
+    ///     on a canvas or in the world. Ticks itself on unscaled time, so it keeps writing through slow-motion
+    ///     and frozen screens, and only while writing: a written text costs nothing. An owner with a clock of its
+    ///     own (the heads-ups, which freeze under a pause) sets <see cref="ExternallyTicked" /> and calls
+    ///     <see cref="Tick" />.
     /// </summary>
     public class WriteOnText : MonoBehaviour
     {
@@ -54,6 +56,11 @@ namespace BalloonParty.UI.HeadsUp
         /// <summary>Seconds the last <see cref="Write" /> takes to finish, its delay included.</summary>
         public float Duration => (_endHead - _startHead) * _secondsPerCharacter;
 
+        /// <summary>Moved on by its owner's <see cref="Tick" /> instead of its own <c>Update</c>.</summary>
+        internal bool ExternallyTicked { get; set; }
+
+        internal bool IsWriting => _writing;
+
         private void Awake()
         {
             enabled = _writing;
@@ -72,15 +79,10 @@ namespace BalloonParty.UI.HeadsUp
 
         private void Update()
         {
-            _head += Time.unscaledDeltaTime / _secondsPerCharacter;
-            if (_head >= _endHead)
+            if (!ExternallyTicked)
             {
-                Complete();
-                return;
+                Tick(Time.unscaledDeltaTime);
             }
-
-            ApplyReveal();
-            MoveTip();
         }
 
         private void OnDisable()
@@ -107,6 +109,25 @@ namespace BalloonParty.UI.HeadsUp
             enabled = true;
             ApplyReveal();
             SetTipVisible(true);
+            MoveTip();
+        }
+
+        /// <summary>Moves the write on by <paramref name="deltaSeconds" />.</summary>
+        internal void Tick(float deltaSeconds)
+        {
+            if (!_writing)
+            {
+                return;
+            }
+
+            _head += deltaSeconds / _secondsPerCharacter;
+            if (_head >= _endHead)
+            {
+                Complete();
+                return;
+            }
+
+            ApplyReveal();
             MoveTip();
         }
 

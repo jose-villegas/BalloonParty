@@ -411,28 +411,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2441784070665209045, guid: c6b02f10e5c1e5d47ba0d223b576f401, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 7712006423998618115, guid: c6b02f10e5c1e5d47ba0d223b576f401, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 1809407633234028313, guid: c6b02f10e5c1e5d47ba0d223b576f401, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 7282690578840986814, guid: c6b02f10e5c1e5d47ba0d223b576f401, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 9120669446012200943, guid: c6b02f10e5c1e5d47ba0d223b576f401, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 1336345626508357119, guid: c6b02f10e5c1e5d47ba0d223b576f401, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 4081798225911533685, guid: c6b02f10e5c1e5d47ba0d223b576f401, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6b02f10e5c1e5d47ba0d223b576f401, type: 3}
 --- !u!1 &1461159837
 GameObject:
@@ -544,6 +523,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7368155962941665963, guid: 5009292be55fb4a12afec084df651435, type: 3}
+      propertyPath: _headsUpSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 4a6b959e5df47034ea33bb01322e23c2, type: 2}
     - target: {fileID: 8121256251203489458, guid: 5009292be55fb4a12afec084df651435, type: 3}
       propertyPath: m_Name
       value: GameLifetimeScope

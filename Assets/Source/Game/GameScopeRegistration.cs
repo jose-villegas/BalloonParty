@@ -20,6 +20,8 @@ using BalloonParty.Game.Cinematics;
 using BalloonParty.Game.Coins;
 using BalloonParty.Game.Danger;
 using BalloonParty.Game.Flight;
+using BalloonParty.Game.HeadsUp;
+using BalloonParty.Game.HeadsUp.Routing;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
@@ -380,8 +382,8 @@ namespace BalloonParty.Game
             builder.RegisterBuildCallback(InjectSceneViews);
             return;
 
-            // Found rather than registered: none of these is required in the scene (the heads-ups are added by
-            // builder menu items), and RegisterComponentInHierarchy throws on a missing one.
+            // Found rather than registered: neither is required in the scene, and RegisterComponentInHierarchy
+            // throws on a missing one.
             void InjectSceneViews(IObjectResolver resolver)
             {
                 foreach (var tint in UnityEngine.Object.FindObjectsByType<TimeOfDayTint>())
@@ -393,17 +395,19 @@ namespace BalloonParty.Game
                 {
                     resolver.Inject(specular);
                 }
-
-                foreach (var reload in UnityEngine.Object.FindObjectsByType<ReloadHeadsUp>())
-                {
-                    resolver.Inject(reload);
-                }
-
-                foreach (var bounce in UnityEngine.Object.FindObjectsByType<BounceHeadsUp>())
-                {
-                    resolver.Inject(bounce);
-                }
             }
+        }
+
+        // The routers turn gameplay messages into requests; the service decides which show; the layer (built by
+        // Tools > BalloonParty > HeadsUp > Build Heads-Up Layer) draws them. See Game/HeadsUp/README.md.
+        internal static void RegisterHeadsUps(this IContainerBuilder builder)
+        {
+            builder.RegisterComponentInHierarchy<HeadsUpLayer>().As<IHeadsUpPresenter>();
+            builder.RegisterEntryPoint<HeadsUpService>().As<IHeadsUps>();
+            builder.RegisterEntryPoint<CombatHeadsUpRouter>();
+            builder.RegisterEntryPoint<BounceHeadsUpRouter>();
+            builder.RegisterEntryPoint<CannonHeadsUpRouter>();
+            builder.RegisterEntryPoint<ProgressHeadsUpRouter>();
         }
 
         internal static void RegisterAudioCore(this IContainerBuilder builder, SoundBankConfiguration soundBank,

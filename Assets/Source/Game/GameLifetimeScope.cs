@@ -15,6 +15,7 @@ using BalloonParty.Configuration.Buffs;
 using BalloonParty.Configuration.Cinematics;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.GridActors;
+using BalloonParty.Configuration.HeadsUp;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Configuration.Palette;
@@ -52,6 +53,7 @@ namespace BalloonParty.Game
         [SerializeField] private BuffConfiguration _buffConfiguration;
         [SerializeField] private ScoreTrailBehaviourConfiguration _scoreTrailBehaviourConfiguration;
         [SerializeField] private ThermalGovernorSettings _thermalGovernorSettings;
+        [SerializeField] private HeadsUpSettings _headsUpSettings;
         [SerializeField] private SoundBankConfiguration _soundBank;
         [SerializeField] private AudioMixerSettings _audioMixerSettings;
         [SerializeField] private ProjectileView _projectilePrefab;
@@ -86,6 +88,7 @@ namespace BalloonParty.Game
             builder.RegisterGameplaySystems();
             builder.RegisterItems();
             builder.RegisterPresentation();
+            builder.RegisterHeadsUps();
             builder.RegisterAudioRouters();
 
 #if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
@@ -156,6 +159,8 @@ namespace BalloonParty.Game
                 _itemPreviewConfig != null
                     ? _itemPreviewConfig
                     : ScriptableObject.CreateInstance<ItemPreviewConfig>());
+            builder.RegisterInstance<IHeadsUpSettings>(
+                _headsUpSettings != null ? _headsUpSettings : ScriptableObject.CreateInstance<HeadsUpSettings>());
 
             // An unassigned asset degrades to a default instance carrying the sensible defaults, so the
             // governor works out of the box; wire an authored asset in the scene only to tune it.
