@@ -1,6 +1,9 @@
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Model;
+using BalloonParty.Shared.Messages;
+using MessagePipe;
+using NSubstitute;
 using NUnit.Framework;
 using UniRx;
 
@@ -11,13 +14,15 @@ namespace BalloonParty.Tests.Projectile
     {
         private ProjectileRegistry _registry;
         private ProjectileBuffService _service;
+        private IPublisher<ProjectileBuffGainedMessage> _gainedPublisher;
 
         [SetUp]
         public void SetUp()
         {
             _registry = new ProjectileRegistry();
 
-            _service = new ProjectileBuffService(_registry);
+            _gainedPublisher = Substitute.For<IPublisher<ProjectileBuffGainedMessage>>();
+            _service = new ProjectileBuffService(_registry, _gainedPublisher);
             _service.Start();
         }
 
@@ -121,6 +126,64 @@ namespace BalloonParty.Tests.Projectile
             Assert.IsTrue(dyingCondition.IsDisposed);
             Assert.IsTrue(surviving.HasBuff(ProjectileBuffId.Speed));
             Assert.IsFalse(survivingCondition.IsDisposed);
+        }
+
+        [Test]
+        public void Apply_AKindOfBuffTheBallLacked_AnnouncesIt()
+        {
+            var ball = Fly();
+
+            _service.Apply(ball, NewBuff(new ManualEndCondition(), ProjectileBuffId.RainbowShield));
+
+            _gainedPublisher.Received(1).Publish(Arg.Is<ProjectileBuffGainedMessage>(m =>
+                m.Projectile == ball && m.BuffId == ProjectileBuffId.RainbowShield));
+        }
+
+        // A Snipe charge re-applies the rainbow to a ball that already has it: nothing new to announce.
+        [Test]
+        public void Apply_AKindTheBallAlreadyHolds_AnnouncesNothingMore()
+        {
+            var ball = Fly();
+            _service.Apply(ball, NewBuff(new ManualEndCondition(), ProjectileBuffId.RainbowShield));
+
+            _service.Apply(ball, NewBuff(new ManualEndCondition(), ProjectileBuffId.RainbowShield));
+
+            _gainedPublisher.Received(1).Publish(Arg.Any<ProjectileBuffGainedMessage>());
+        }
+
+        [Test]
+        public void Apply_TheSameKindAgainAfterTheFirstExpired_AnnouncesAgain()
+        {
+            var ball = Fly();
+            var first = new ManualEndCondition();
+            _service.Apply(ball, NewBuff(first, ProjectileBuffId.RainbowShield));
+            first.Expire();
+
+            _service.Apply(ball, NewBuff(new ManualEndCondition(), ProjectileBuffId.RainbowShield));
+
+            _gainedPublisher.Received(2).Publish(Arg.Any<ProjectileBuffGainedMessage>());
+        }
+
+        [Test]
+        public void Apply_ABuffAlreadyExpired_AnnouncesNothing()
+        {
+            var condition = new ManualEndCondition();
+            condition.Expire();
+
+            _service.Apply(Fly(), NewBuff(condition));
+
+            _gainedPublisher.DidNotReceive().Publish(Arg.Any<ProjectileBuffGainedMessage>());
+        }
+
+        [Test]
+        public void Apply_ToADeadBall_AnnouncesNothing()
+        {
+            var ball = Fly();
+            _registry.Land(ball);
+
+            _service.Apply(ball, NewBuff(new ManualEndCondition()));
+
+            _gainedPublisher.DidNotReceive().Publish(Arg.Any<ProjectileBuffGainedMessage>());
         }
 
         private ProjectileModel Fly()

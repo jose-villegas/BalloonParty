@@ -96,6 +96,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ScorePointsGroupMessage>(options);
             builder.RegisterMessageBroker<StreakChangedMessage>(options);
             builder.RegisterMessageBroker<StreakGrewMessage>(options);
+            builder.RegisterMessageBroker<ProjectileBuffGainedMessage>(options);
             builder.RegisterMessageBroker<ScoreLevelUpMessage>(options);
             builder.RegisterMessageBroker<GameOverMessage>(options);
             builder.RegisterMessageBroker<OverflowHeartRequestedMessage>(options);

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Projectile.Model;
+using BalloonParty.Shared.Messages;
+using MessagePipe;
 using UniRx;
 using VContainer.Unity;
 
@@ -9,18 +11,22 @@ namespace BalloonParty.Projectile.Buffs
     /// <summary>
     ///     Owns projectile-buff storage and lifecycle: applies buffs onto a shot and drops one the first
     ///     time its end-condition's <c>Expired</c> fires, or when the registry retires its shot. Knows nothing about any
-    ///     buff's effect or end-condition — it only observes the exposed signal.
+    ///     buff's effect or end-condition — it only observes the exposed signal. Announces a shot taking on a
+    ///     kind of buff it didn't hold (<see cref="ProjectileBuffGainedMessage" />).
     /// </summary>
     internal sealed class ProjectileBuffService : IProjectileBuffs, IStartable, IDisposable
     {
         private readonly IProjectileRegistry _projectiles;
+        private readonly IPublisher<ProjectileBuffGainedMessage> _gainedPublisher;
         private readonly Dictionary<ProjectileBuff, Entry> _entries = new();
         private readonly List<ProjectileBuff> _dropBuffer = new();
         private readonly CompositeDisposable _subscriptions = new();
 
-        internal ProjectileBuffService(IProjectileRegistry projectiles)
+        internal ProjectileBuffService(
+            IProjectileRegistry projectiles, IPublisher<ProjectileBuffGainedMessage> gainedPublisher)
         {
             _projectiles = projectiles;
+            _gainedPublisher = gainedPublisher;
         }
 
         public void Start()
@@ -36,6 +42,7 @@ namespace BalloonParty.Projectile.Buffs
                 return;
             }
 
+            var isNewKind = !target.HasBuff(buff.Id);
             target.AddBuff(buff);
 
             // Recorded before subscribing: an already-expired condition fires inside Subscribe, and
@@ -46,6 +53,12 @@ namespace BalloonParty.Projectile.Buffs
                 .Where(expired => expired)
                 .Take(1)
                 .Subscribe(_ => Remove(buff));
+
+            // After subscribing, so a buff whose condition had already expired is gone and isn't announced.
+            if (isNewKind && _entries.ContainsKey(buff))
+            {
+                _gainedPublisher.Publish(new ProjectileBuffGainedMessage(target, buff.Id));
+            }
         }
 
         public void Dispose()

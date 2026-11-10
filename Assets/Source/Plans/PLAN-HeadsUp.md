@@ -7,7 +7,8 @@
 
 **Status:** Phase 2 built on 2026-11-10: the four signals of §5 (`StreakGrewMessage` from `ScoreController`,
 `IActiveProjectilePierce.PierceArmed`, `ThrowerReadyMessage.AfterCapWait` recorded by `ThrowerReload.WaitedAtCap`,
-and `TrailEndpointKeys.Cannon` on the cannon's pivot), each EditMode-tested; nothing consumes them until the
+and `TrailEndpointKeys.Cannon` on the cannon's pivot), each EditMode-tested, plus `ProjectileBuffGainedMessage`
+for the rainbow heads-up the owner added in §10; nothing consumes them until the
 router of Phase 3. `StreakGrewMessage` announces streaks from two up, so the router's own threshold (§6) picks
 which ones to write. Two facts for the router: a pop no tracked ball caused (a late pop from a ball
 already retired) grows the shared streak, so its `StreakGrewMessage.Projectile` is null and its merge key must
@@ -154,7 +155,7 @@ No new stroke system. Two existing pens already leave a line behind them:
 
 ## 5. New signals
 
-The heads-ups need three facts the game doesn't publish yet. Each has one owner that already holds the
+The heads-ups need four facts the game doesn't publish yet. Each has one owner that already holds the
 data, and each gets EditMode tests.
 
 | Signal | Owner | Why the existing one isn't enough |
@@ -162,6 +163,7 @@ data, and each gets EditMode tests.
 | `StreakGrewMessage(Projectile, Color, Streak, WorldPosition)` | `ScoreController.PublishAttributionGroup`, when the ball's streak goes up | `ScorePointsGroupMessage.Multiplier` isn't the streak: night doubles it, item pops repeat it without growth, it goes quiet once a bar is full, and a multi-colour pop sends one per colour. `StreakChangedMessage` has no position |
 | `IActiveProjectilePierce.PierceArmed` (an `IObservable<IProjectileModel>`) | `ActiveProjectilePierce`, on each ball's `IsPiercing` going false to true | It only exposes "any ball piercing", which stays true when a second ball arms. Counting taps double-fires after a Snipe re-arm and misses a Snipe arm with no tap |
 | `ThrowerReadyMessage.AfterCapWait` | `ThrowerController`, set when the thrower had no free slot at any tick since the last ready | Working it out in the router would copy the thrower's slot rule and its resets (level-up, un-fire, a cap card) |
+| `ProjectileBuffGainedMessage(Projectile, BuffId)` | `ProjectileBuffService.Apply`, when a ball takes on a kind of buff it didn't hold | Nothing announces a buff. Asking `HasBuff` each frame would poll, and a Snipe re-applying the rainbow to a ball that has it must stay quiet |
 
 The cannon gets a `TrailEndpointRegistry` key, so the ready heads-up anchors there.
 
@@ -177,6 +179,9 @@ The cannon gets a `TrailEndpointRegistry` key, so the ready heads-up anchors the
 | Wall spends a shield | `WallHitMessage` | `-1 bounce` at the wall contact, kept on screen | **Built early** (`BounceHeadsUp`), on every bounce; quiet graphite, vermilion when it leaves the last shield |
 | Ricochet | `DeflectChainMessage` | `x{n} ricochet` at the deflecting balloon | **Built early** (`BounceHeadsUp`), from the second deflect in a row without a wall; every third pays `+1 bounce` (`DeflectChainController`) |
 | Heart lost to a strikethrough | `StrikethroughArrivedMessage` | `-1` at the heart (`TrailEndpointKeys.Heart`) | Every time |
+| Pierce discharge | `PierceDischargedMessage` | `x{n} shattered` at the wall contact (`Position`) | From 2 toughs (`ToughCount`): what the pierce paid, closing the loop `pierce!` opened |
+| A colour bar fills | `ProgressBarCompletedMessage` | `{colour} done` at that colour's bar (its `TrailEndpointRegistry` endpoint, keyed by colour name) | Every time: the colour scores nothing from here, which is why its streak goes quiet |
+| Rainbow picked up | `ProjectileBuffGainedMessage` with `RainbowShield` | `any colour!` at the ball | Once per pickup; a Snipe re-applying it is not a pickup |
 | Level-up, bonus card | `TooltipMessage`, `BonusCardDealtMessage` | Top banner, as today | Unchanged, outside the queue |
 
 Each row is a style in `IHeadsUpSettings`, so thresholds and wording are tuned without code.
@@ -229,5 +234,7 @@ can't judge readability. New folders (`Game/HeadsUp/`, `UI/HeadsUp/`) get a READ
 3. ~~**Under the pause menu.**~~ **DECISION (owner): they freeze with the game.** A heads-up mid-write,
    holding or fading stops while any pause source is held (`PauseService.IsAnyPaused`) and carries on
    where it was. Unscaled time still applies to slow-motion beats, which aren't a pause.
-4. **More events.** Anything else worth a heads-up: an item going off (`Bomb!`), the board running low,
-   the next line about to land?
+4. ~~**More events.**~~ **DECISION (owner): three more** (§6): `x{n} shattered` on a pierce discharge,
+   `{colour} done` when a colour bar fills, and `any colour!` when a ball picks up the rainbow. Left out: an
+   item going off (its effect is already the loudest thing on screen), the next line about to land (the
+   danger heart already counts it down as `-N`), and coins (they fly to their counter).
