@@ -5,6 +5,8 @@ var classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings =
     [ "EscalatingFrom", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#ac7d3eb7cf46c681e9da101f08a3d2425", null ],
     [ "HeldUntilReleased", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#ab13bf9912a62c72b7e8a704ce17caaa9", null ],
     [ "SizeAt", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#ac6bbcf8916acf003d69db896967cd5b8", null ],
+    [ "UnderlinedFrom", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a97648082d21be687b2d09a3155ef35bc", null ],
+    [ "UnderlinesAt", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a80f5db072e7ae73bb3b2530ec0107162", null ],
     [ "WithArgRange", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a6037e40fc617455279265574dc669ff1", null ],
     [ "WithCooldown", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a46d532122c88a417c3d5a16c30b9cd25", null ],
     [ "WithHold", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a3ed516d7e09e3ac0d8e5c7f1453744c2", null ],
@@ -19,6 +21,7 @@ var classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings =
     [ "_maxArg", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#ae0ce42087c622a8d204d76520bc74b39", null ],
     [ "_minArg", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#ad148ecc26bd9983a47edada22b3af3c6", null ],
     [ "_priority", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#accddc717a6e56836f75b11338e1f7f6d", null ],
+    [ "_underlineFrom", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a2d416bc88861e5b540560c1c03b8e1f1", null ],
     [ "_worldOffset", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a111d37613e1c0f3613b7a68863f75971", null ],
     [ "CooldownSeconds", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a31b8b871e590228add0dafbfa918b11e", null ],
     [ "EscalateFrom", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a114727327b803229d76357e79f04c7a1", null ],
@@ -30,5 +33,6 @@ var classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings =
     [ "MaxArg", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a0ea9658afb15c6d9225e864e21a16d99", null ],
     [ "MinArg", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a59005a543423f0103804980b6196fa62", null ],
     [ "Priority", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#af507073170c8ec66c7ebb684ba2fe165", null ],
+    [ "UnderlineFrom", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a7ada9246b29f86d0887cb0cfa40b5bca", null ],
     [ "WorldOffset", "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a6fa252dea3b8a634ebbfc6bb6ba6e54e", null ]
 ];
