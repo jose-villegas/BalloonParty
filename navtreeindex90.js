@@ -1,5 +1,17 @@
 var NAVTREEINDEX90 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings.html#aad02ec462e12592e4b78355cb8a6afaa":[6,0,0,3,4,19,8],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings.html#ab90e9870c3fb5cc3c42064545639a42e":[5,0,0,3,4,19,5],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings.html#ab90e9870c3fb5cc3c42064545639a42e":[6,0,0,3,4,19,5],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings.html#ae42d87ff471b6106eca3192208971f76":[5,0,0,3,4,19,2],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings.html#ae42d87ff471b6106eca3192208971f76":[6,0,0,3,4,19,2],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings.html#af82431e0f98a041e17243725f26cbbfa":[5,0,0,3,4,19,6],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings.html#af82431e0f98a041e17243725f26cbbfa":[6,0,0,3,4,19,6],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckSpawnSettings.html":[5,0,0,3,4,20],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckSpawnSettings.html":[6,0,0,3,4,20],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckSpawnSettings.html#a1d1f0671471b84b966791408a3a82321":[5,0,0,3,4,20,3],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckSpawnSettings.html#a1d1f0671471b84b966791408a3a82321":[6,0,0,3,4,20,3],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckSpawnSettings.html#a53d7e111291fa18353aa3077d9102f49":[5,0,0,3,4,20,1],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckSpawnSettings.html#a53d7e111291fa18353aa3077d9102f49":[6,0,0,3,4,20,1],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckSpawnSettings.html#a9adf6fc4252085a74ad680d7e0aff465":[5,0,0,3,4,20,2],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckSpawnSettings.html#a9adf6fc4252085a74ad680d7e0aff465":[6,0,0,3,4,20,2],
@@ -237,17 +249,5 @@ var NAVTREEINDEX90 =
 "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a2fb27416a2c93f3b00f21f5dc005f3fa":[6,0,0,3,8,12,4],
 "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a37c8f81313b27845d06db758f98f865a":[5,0,0,3,8,12,6],
 "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a37c8f81313b27845d06db758f98f865a":[6,0,0,3,8,12,6],
-"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a54219a76f4b1150caecaf1540b48f71c":[5,0,0,3,8,12,5],
-"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a54219a76f4b1150caecaf1540b48f71c":[6,0,0,3,8,12,5],
-"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#aa173f4601d26778f7f687554b608aa56":[5,0,0,3,8,12,7],
-"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#aa173f4601d26778f7f687554b608aa56":[6,0,0,3,8,12,7],
-"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#aad708cad47c8e4403af4951fce6c115f":[5,0,0,3,8,12,1],
-"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#aad708cad47c8e4403af4951fce6c115f":[6,0,0,3,8,12,1],
-"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#abe600f412b0b06d955d15040eb82f18f":[5,0,0,3,8,12,2],
-"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#abe600f412b0b06d955d15040eb82f18f":[6,0,0,3,8,12,2],
-"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#af59d50067fb118dc6702ca4e76be767a":[5,0,0,3,8,12,8],
-"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#af59d50067fb118dc6702ca4e76be767a":[6,0,0,3,8,12,8],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html":[5,0,0,3,9,2],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html":[6,0,0,3,9,2],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#a19b50c8c7aeee2c70ff42610550b606a":[5,0,0,3,9,2,1]
+"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a54219a76f4b1150caecaf1540b48f71c":[5,0,0,3,8,12,5]
 };

@@ -1,5 +1,17 @@
 var NAVTREEINDEX92 =
 {
+"interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html":[6,0,0,6,8,3],
+"interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html#a02b19179ba4fcc1911b3b94513571ff9":[5,0,0,6,8,3,0],
+"interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html#a02b19179ba4fcc1911b3b94513571ff9":[6,0,0,6,8,3,0],
+"interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html#a9748e71f60e046c26fd283ae992d053c":[5,0,0,6,8,3,1],
+"interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html#a9748e71f60e046c26fd283ae992d053c":[6,0,0,6,8,3,1],
+"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html":[5,0,0,6,9,8],
+"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html":[6,0,0,6,9,8],
+"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html#a0b39fa6b6e370b966a89e1a229f1b6a3":[5,0,0,6,9,8,0],
+"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html#a0b39fa6b6e370b966a89e1a229f1b6a3":[6,0,0,6,9,8,0],
+"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html#acc1d3b4443b50cbf2e89641587f76974":[5,0,0,6,9,8,2],
+"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html#acc1d3b4443b50cbf2e89641587f76974":[6,0,0,6,9,8,2],
+"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html#ae614ffdb19803919f4aa04f5b25d360d":[5,0,0,6,9,8,1],
 "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html#ae614ffdb19803919f4aa04f5b25d360d":[6,0,0,6,9,8,1],
 "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1IReadOnlyMetricSet.html":[5,0,0,6,9,9],
 "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1IReadOnlyMetricSet.html":[6,0,0,6,9,9],
@@ -237,17 +249,5 @@ var NAVTREEINDEX92 =
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#a139546d417b244da5c9a3f31143bfa78":[6,0,0,10,2,2,11],
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#a14c8d0f5cc427bf1c92af58c980de51d":[5,0,0,10,2,2,1],
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#a14c8d0f5cc427bf1c92af58c980de51d":[6,0,0,10,2,2,1],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#a35b445d55083d2ce778f6b8c5470f2e6":[5,0,0,10,2,2,10],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#a35b445d55083d2ce778f6b8c5470f2e6":[6,0,0,10,2,2,10],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#a48355d7c6d29a2e0e507920099d1b20b":[5,0,0,10,2,2,3],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#a48355d7c6d29a2e0e507920099d1b20b":[6,0,0,10,2,2,3],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#a62626e494b9b6d2a15a7406a4d298f2f":[5,0,0,10,2,2,7],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#a62626e494b9b6d2a15a7406a4d298f2f":[6,0,0,10,2,2,7],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#a83bc3916a7d772070b04c7e0a7bdfa68":[5,0,0,10,2,2,4],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#a83bc3916a7d772070b04c7e0a7bdfa68":[6,0,0,10,2,2,4],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#a84ca7e53c9899b1131799281fabcb532":[5,0,0,10,2,2,2],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#a84ca7e53c9899b1131799281fabcb532":[6,0,0,10,2,2,2],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#a8be8b97013c4b797b098bbbcf0937ca1":[5,0,0,10,2,2,6],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#a8be8b97013c4b797b098bbbcf0937ca1":[6,0,0,10,2,2,6],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#aaf4fdb3674a5ddfefe5d181d91dc014c":[5,0,0,10,2,2,5]
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#a35b445d55083d2ce778f6b8c5470f2e6":[5,0,0,10,2,2,10]
 };

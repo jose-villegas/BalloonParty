@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="When two bubble clusters merge: whenever they sit in neighbouring slots and their bubbles fit in one ...">
+<g id="a_Node000001"><a xlink:title="How two bubble clusters in neighbouring slots merge: the smaller gives its bubbles to the larger,...">
 <polygon fill="#999999" stroke="#666666" points="187,-30 17,-30 17,0 187,0 187,-30"/>
 <text text-anchor="start" x="25" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Controller.</text>
 <text text-anchor="middle" x="102" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">BubbleMergeRule</text>

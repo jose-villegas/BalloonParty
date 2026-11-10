@@ -177,11 +177,11 @@ seconds)</code>): none during <code>GraceSeconds</code> (6 s), then it climbs li
 <p>The bubble uses the balloon catalogue's <code>BubbleCluster</code> prefab entry, even while the level generator's entry is <code>Withheld</code>: the water rise is its own path.</p>
 <h3><a class="anchor" id="autotoc_md780"></a>
 4. The merge</h3>
-<p>Two bubble clusters in neighbouring slots merge, whatever brought them there: a spawn, the board settling, a pop opening the way. <code>BubbleMergeService</code> (<code>Balloon/Controller/</code>, a tick) looks again whenever the grid has changed (<code>SlotGrid.MutationVersion</code>) and merges every neighbouring pair whose bubbles fit in one cluster. <code>BubbleMergeRule</code> is the pure rule, tested on its own.</p>
+<p>Two bubble clusters in neighbouring slots merge, whatever brought them there: a spawn, the board settling, a pop opening the way. <code>BubbleMergeService</code> (<code>Balloon/Controller/</code>, a tick) looks again whenever the grid has changed (<code>SlotGrid.MutationVersion</code>), a cluster was hit, or its own last pass merged something, and merges every neighbouring pair where the larger still has room. <code>BubbleMergeRule</code> is the pure rule, tested on its own.</p>
 <ul>
-<li>The smaller cluster flows into the larger, which survives (between equals, the slot order decides). The survivor's <code>HitsRemaining</code> becomes the sum, and the absorbed one leaves the grid silently and slides into it.</li>
-<li>A cluster between two neighbours joins the one that makes the bigger cluster.</li>
-<li>Each cluster merges at most once a frame. The absorb changes the grid, so a cluster that grew merges again on the next frame if a neighbour still fits: chains collapse a step a frame.</li>
+<li>The smaller cluster gives its bubbles to the larger (between equals, the slot order decides), as many as fill the larger to 5. A giver left with none leaves the grid silently and slides into the receiver; one with bubbles left stays where it is, smaller: a 3 beside a 3 makes a 5 and a 1.</li>
+<li>A cluster between two neighbours gives to the one it makes the bigger cluster.</li>
+<li>Each cluster merges at most once a frame, and a pass that merged looks again on the next frame, so a group gathers a step a frame. A hit on a cluster also wakes it: knocking a full cluster down makes room for its smaller neighbour to give again.</li>
 <li>A first version merged only when a nudge pushed two bubbles closer; the owner dropped that: "Just merge them when next to each other, no nudge".</li>
 </ul>
 <h2><a class="anchor" id="autotoc_md781"></a>
@@ -190,7 +190,8 @@ Owner decisions (2026-11-10)</h2>
 <li><b>How often water comes up:</b> a coin flip for every surface stretch after the first meadow.</li>
 <li><b>"Over balloons":</b> "they spawn more than balloons increasingly": bubbles come in the lines, their share growing with time on the level.</li>
 <li><b>The curve:</b> the ramp from the proposed 6 s grace over 60 s (the proposal was a spawn wait shortening from 8 s to 2 s; carried over as a share rising from 15% to 65%).</li>
-<li><b>Clusters bigger than two:</b> a merge happens only when the sum fits in 5 bubbles; otherwise the two stay apart. A merged cluster merges again with any neighbour that still fits, up to 5.</li>
+<li><b>Clusters bigger than two:</b> first, a merge happened only when the sum fit in 5 bubbles. The owner changed it: "a cluster only gives as much it can to its higher neighbor until it hits the
+   limit (5)". The smaller gives what fits and keeps the rest.</li>
 <li><b>When they merge:</b> whenever two sit next to each other, no nudge needed (it first followed the direction above, "only on nudge"; the owner changed it after trying it).</li>
 </ol>
 <ol type="1">
@@ -209,7 +210,7 @@ Phases</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">3   </td><td class="markdownTableBodyNone"><code>BubbleRiseCurve</code>, <code>SpawnClock.SecondsOnLevel</code>, the roll in <code>BalloonSpawner</code>, settings   </td><td class="markdownTableBodyNone">the curve as a pure function of time on level; seconds on level under the clock's holds    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">4   </td><td class="markdownTableBodyNone"><code>BubbleMergeRule</code>, <code>BubbleMergeService</code>, the absorb in <code>BalloonController</code>   </td><td class="markdownTableBodyNone">neighbours merge, the smaller into the larger; the cap; one merge per cluster a pass   </td></tr>
+<td class="markdownTableBodyNone">4   </td><td class="markdownTableBodyNone"><code>BubbleMergeRule</code>, <code>BubbleMergeService</code>, the absorb in <code>BalloonController</code>   </td><td class="markdownTableBodyNone">the smaller gives the larger what fits, up to the cap; one merge per cluster a pass; a hit that makes room wakes the service   </td></tr>
 </table>
 <p>Each phase builds Runtime, Editor and Tests.EditMode, and passes <code>Tools/style_audit.py</code>. </p>
 </div></div><!-- contents -->

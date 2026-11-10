@@ -116,7 +116,7 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMe
 </div><!--header-->
 <div class="contents">
 
-<p>When two bubble clusters merge: whenever they sit in neighbouring slots and their bubbles fit in one cluster.  
+<p>How two bubble clusters in neighbouring slots merge: the smaller gives its bubbles to the larger, as many as the larger has room for.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Balloon.Controller.BubbleMergeRule:</div>
@@ -134,13 +134,14 @@ Classes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a9375cc045162286fe619dc7b7eda4a60" id="r_a9375cc045162286fe619dc7b7eda4a60"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9375cc045162286fe619dc7b7eda4a60">Choose</a> (List&lt; <a class="el" href="structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html">BubbleMergeCandidate</a> &gt; candidates, List&lt; <a class="el" href="structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html">BubbleMergeCandidate</a> &gt; chosen, HashSet&lt; Vector2Int &gt; used)</td></tr>
-<tr class="memdesc:a9375cc045162286fe619dc7b7eda4a60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Picks the merges one pass makes from its candidates, each cluster in at most one: the merges that make the biggest clusters go first, so a cluster between two neighbours joins the one it makes biggest.  <br /></td></tr>
+<tr class="memdesc:a9375cc045162286fe619dc7b7eda4a60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Picks the merges one pass makes from its candidates, each cluster in at most one: the merges that make the biggest clusters go first, so a cluster between two neighbours gives to the one it makes biggest.  <br /></td></tr>
 <tr class="separator:a9375cc045162286fe619dc7b7eda4a60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1f1f2e37c44ca1d4f7d196e1f00f452" id="r_ad1f1f2e37c44ca1d4f7d196e1f00f452"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1f1f2e37c44ca1d4f7d196e1f00f452">IsAbsorbed</a> (Vector2Int slotA, int bubblesA, Vector2Int slotB, int bubblesB)</td></tr>
-<tr class="memdesc:ad1f1f2e37c44ca1d4f7d196e1f00f452"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether a flows into b: the smaller cluster is absorbed.  <br /></td></tr>
-<tr class="separator:ad1f1f2e37c44ca1d4f7d196e1f00f452"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab10e908caf051a171f2ac018dcd9668e" id="r_ab10e908caf051a171f2ac018dcd9668e"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab10e908caf051a171f2ac018dcd9668e">Merges</a> (int bubblesA, int bubblesB, int maxBubbles)</td></tr>
-<tr class="separator:ab10e908caf051a171f2ac018dcd9668e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd2e0fa8d7575f17f13a8772ffcb6fea" id="r_afd2e0fa8d7575f17f13a8772ffcb6fea"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afd2e0fa8d7575f17f13a8772ffcb6fea">Given</a> (int giverBubbles, int receiverBubbles, int maxBubbles)</td></tr>
+<tr class="memdesc:afd2e0fa8d7575f17f13a8772ffcb6fea"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many bubbles a giver passes to its receiver: all of them, or as many as fill the receiver to <em>maxBubbles</em> .  <br /></td></tr>
+<tr class="separator:afd2e0fa8d7575f17f13a8772ffcb6fea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad72ee6fe7fc5c14294b73378caa5c030" id="r_ad72ee6fe7fc5c14294b73378caa5c030"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad72ee6fe7fc5c14294b73378caa5c030">IsGiver</a> (Vector2Int slotA, int bubblesA, Vector2Int slotB, int bubblesB)</td></tr>
+<tr class="memdesc:ad72ee6fe7fc5c14294b73378caa5c030"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether a gives to b: the smaller cluster gives.  <br /></td></tr>
+<tr class="separator:ad72ee6fe7fc5c14294b73378caa5c030"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -148,8 +149,8 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:af730819ba478ad33639a3474e1c96910"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>When two bubble clusters merge: whenever they sit in neighbouring slots and their bubbles fit in one cluster. </p>
-<p>The smaller flows into the larger. </p>
+<div class="textblock"><p>How two bubble clusters in neighbouring slots merge: the smaller gives its bubbles to the larger, as many as the larger has room for. </p>
+<p>A giver left with none is absorbed; one with bubbles left stays beside a full cluster. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a9375cc045162286fe619dc7b7eda4a60" name="a9375cc045162286fe619dc7b7eda4a60"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9375cc045162286fe619dc7b7eda4a60">&#9670;&#160;</a></span>Choose()</h2>
@@ -183,13 +184,13 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Picks the merges one pass makes from its candidates, each cluster in at most one: the merges that make the biggest clusters go first, so a cluster between two neighbours joins the one it makes biggest. </p>
-<p>A merged cluster can merge again on a later pass. Sorts <em>candidates</em> . </p>
+<p>Picks the merges one pass makes from its candidates, each cluster in at most one: the merges that make the biggest clusters go first, so a cluster between two neighbours gives to the one it makes biggest. </p>
+<p>A cluster can merge again on a later pass. Sorts <em>candidates</em> . </p>
 
 </div>
 </div>
-<a id="ad1f1f2e37c44ca1d4f7d196e1f00f452" name="ad1f1f2e37c44ca1d4f7d196e1f00f452"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad1f1f2e37c44ca1d4f7d196e1f00f452">&#9670;&#160;</a></span>IsAbsorbed()</h2>
+<a id="afd2e0fa8d7575f17f13a8772ffcb6fea" name="afd2e0fa8d7575f17f13a8772ffcb6fea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd2e0fa8d7575f17f13a8772ffcb6fea">&#9670;&#160;</a></span>Given()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -198,7 +199,44 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static bool BalloonParty.Balloon.Controller.BubbleMergeRule.IsAbsorbed </td>
+          <td class="memname">static int BalloonParty.Balloon.Controller.BubbleMergeRule.Given </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>giverBubbles</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>receiverBubbles</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>maxBubbles</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How many bubbles a giver passes to its receiver: all of them, or as many as fill the receiver to <em>maxBubbles</em> . </p>
+<p>None when either has already popped. </p>
+
+</div>
+</div>
+<a id="ad72ee6fe7fc5c14294b73378caa5c030" name="ad72ee6fe7fc5c14294b73378caa5c030"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad72ee6fe7fc5c14294b73378caa5c030">&#9670;&#160;</a></span>IsGiver()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Balloon.Controller.BubbleMergeRule.IsGiver </td>
           <td>(</td>
           <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>slotA</em></span>, </td>
         </tr>
@@ -225,42 +263,8 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Whether a flows into b: the smaller cluster is absorbed. </p>
-<p>Between equals, the one in the higher slot (column, then row) flows into the lower, so the pair is decided once. </p>
-
-</div>
-</div>
-<a id="ab10e908caf051a171f2ac018dcd9668e" name="ab10e908caf051a171f2ac018dcd9668e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab10e908caf051a171f2ac018dcd9668e">&#9670;&#160;</a></span>Merges()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static bool BalloonParty.Balloon.Controller.BubbleMergeRule.Merges </td>
-          <td>(</td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>bubblesA</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>bubblesB</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>maxBubbles</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
+<p>Whether a gives to b: the smaller cluster gives. </p>
+<p>Between equals, the one in the higher slot (column, then row) gives to the lower, so the pair is decided once. </p>
 
 </div>
 </div>

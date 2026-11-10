@@ -2,7 +2,7 @@ var classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule =
 [
     [ "CandidateComparer", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule_1_1CandidateComparer.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule_1_1CandidateComparer" ],
     [ "Choose", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule.html#a9375cc045162286fe619dc7b7eda4a60", null ],
-    [ "IsAbsorbed", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule.html#ad1f1f2e37c44ca1d4f7d196e1f00f452", null ],
-    [ "Merges", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule.html#ab10e908caf051a171f2ac018dcd9668e", null ],
+    [ "Given", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule.html#afd2e0fa8d7575f17f13a8772ffcb6fea", null ],
+    [ "IsGiver", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule.html#ad72ee6fe7fc5c14294b73378caa5c030", null ],
     [ "ByBubblesDescending", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule.html#af730819ba478ad33639a3474e1c96910", null ]
 ];

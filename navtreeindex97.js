@@ -1,5 +1,17 @@
 var NAVTREEINDEX97 =
 {
+"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473a79083698467c2e5753058afc20884569":[5,0,0,13,0,0,22,0],
+"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473ac7174dc75237a0361780548a1af6872b":[5,0,0,13,0,0,22,1],
+"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473aecb135155dc653bbc220d4448490d15e":[5,0,0,13,0,0,22,4],
+"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Cluster.html":[5,0,0,13,0,1],
+"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Cluster.html#afcdc13988dd8dbdd7b8ab7bd2bb92146":[5,0,0,13,0,1,8],
+"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Cluster.html#afcdc13988dd8dbdd7b8ab7bd2bb92146a0eceeb45861f9585dd7a97a3e36f85c6":[5,0,0,13,0,1,8,0],
+"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Cluster.html#afcdc13988dd8dbdd7b8ab7bd2bb92146a22995988de764d7a8cb4165fbff371cb":[5,0,0,13,0,1,8,1],
+"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Cluster.html#afcdc13988dd8dbdd7b8ab7bd2bb92146a93f07b720ebf7d1246512569761a5804":[5,0,0,13,0,1,8,2],
+"namespaceBalloonParty_1_1Slots_1_1Capabilities.html":[5,0,0,13,1],
+"namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675":[5,0,0,13,1,18],
+"namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675a0ae61bd0474e04c9f1195d4baa0213a0":[5,0,0,13,1,18,3],
+"namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675a46c85769d351aab8660c128825634828":[5,0,0,13,1,18,1],
 "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675a6428bf61b19c9f6c90d034777a20ca77":[5,0,0,13,1,18,4],
 "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675a6adf97f83acf6453d4a6a4b1070f3754":[5,0,0,13,1,18,0],
 "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675ab1c94ca2fbc3e78fc30069c8d0f01680":[5,0,0,13,1,18,5],
@@ -237,17 +249,5 @@ var NAVTREEINDEX97 =
 "plan_future_ideas.html#autotoc_md513":[3,4,0,13,5],
 "plan_future_ideas.html#autotoc_md514":[3,4,0,13,6],
 "plan_future_ideas.html#autotoc_md515":[3,4,0,13,7],
-"plan_future_ideas.html#autotoc_md517":[3,4,0,14],
-"plan_future_ideas.html#autotoc_md518":[3,4,0,14,0],
-"plan_future_ideas.html#autotoc_md519":[3,4,0,14,1],
-"plan_future_ideas.html#autotoc_md520":[3,4,0,14,2],
-"plan_future_ideas.html#autotoc_md521":[3,4,0,15],
-"plan_future_ideas.html#autotoc_md522":[3,4,0,16],
-"plan_future_ideas.html#autotoc_md524":[3,4,0,17],
-"plan_gameplay_telemetry.html":[3,8],
-"plan_gameplay_telemetry.html#autotoc_md525":[3,8,0],
-"plan_gameplay_telemetry.html#autotoc_md527":[3,8,0,0],
-"plan_gameplay_telemetry.html#autotoc_md528":[3,8,0,0,0],
-"plan_gameplay_telemetry.html#autotoc_md530":[3,8,0,1],
-"plan_gameplay_telemetry.html#autotoc_md532":[3,8,0,2]
+"plan_future_ideas.html#autotoc_md517":[3,4,0,14]
 };
