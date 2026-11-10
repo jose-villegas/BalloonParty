@@ -7,8 +7,8 @@ pencil. Built in phases from `Plans/PLAN-HeadsUp.md`; this folder holds what exi
 
 | File | What it does |
 |---|---|
-| `WriteOnText` | `MonoBehaviour` that writes any `TMP_Text` (canvas or world) on left to right. `Write(text, delaySeconds)` sets the text, lays it out and hides every glyph in the same call (so a reused label never flashes fully written), waits out the delay, then a soft reveal edge sweeps across the glyphs at `_secondsPerCharacter`. The edge spans `_edgeSoftness` characters and leans forward by `_slant` (a glyph's top corners are revealed before its bottom ones), which reads as a pencil stroke. An optional `_tip` transform rides the edge with a small wobble and hides once written. `Duration` is the last write's length, delay included; `Complete()` finishes it at once. Ticks on unscaled time and only while writing: the component disables itself once the text is written, so a written line costs nothing |
-| `HandwrittenHeadsUp` | One short line in world space, a `TextMeshPro` rather than a canvas label, so it stays where it happened through the camera rig's zoom and shake: `Show(text, worldPosition)` places it, writes it on through its `WriteOnText`, holds it `_holdDuration`, then fades it out; `Clear()` fades it out early. A new line replaces the one showing. Fades on unscaled time, like the write, through its material's face and outline alpha: setting the text's colour would rebuild the mesh and undo the write-on mid-stroke. `Show(text, worldPosition, style, count)` writes it in a `HeadsUpStyle` (colour, size against the label's own, weight), sized for an escalating count; the plain `Show` puts the label's own look back. Gives its label a cream halo (`_haloColor`, `_haloWidth`, the TMP outline), so dark ink reads over the day and night sky alike |
+| `WriteOnText` | `MonoBehaviour` that writes any `TMP_Text` (canvas or world) on left to right. `Write(text, delaySeconds)` sets the text, lays it out and hides every glyph in the same call (so a reused label never flashes fully written), waits out the delay, then a soft reveal edge sweeps across the glyphs at `_secondsPerCharacter`. The edge spans `_edgeSoftness` characters and leans forward by `_slant` (a glyph's top corners are revealed before its bottom ones), which reads as a pencil stroke. An optional `_tip` transform rides the edge with a small wobble and hides once written. `Duration` is the last write's length, delay included; `Complete()` finishes it at once; `Stop()` lifts the pencil where it is, for a line going away mid-write. Ticks on unscaled time and only while writing: the component disables itself once the text is written, so a written line costs nothing |
+| `HandwrittenHeadsUp` | One short line in world space, a `TextMeshPro` rather than a canvas label, so it stays where it happened through the camera rig's zoom and shake: `Show(text, worldPosition)` places it, writes it on through its `WriteOnText`, holds it `_holdDuration`, then fades it out; `Clear()` fades it out early and stops a write still going, so the pencil doesn't scribble over a fading line. A new line replaces the one showing. Fades on unscaled time, like the write, through its material's face and outline alpha: setting the text's colour would rebuild the mesh and undo the write-on mid-stroke. `Show(text, worldPosition, style, count)` writes it in a `HeadsUpStyle` (colour, size against the label's own, weight), sized for an escalating count; the plain `Show` puts the label's own look back. Gives its label a cream halo (`_haloColor`, `_haloWidth`, the TMP outline), so dark ink reads over the day and night sky alike |
 | `HeadsUpStyle` | Serializable look of one kind of heads-up: colour, size, growth and max size, `FontStyles`. `SizeAt(count)` grows logarithmically and caps (`HeadsUpSizing`, EditMode-tested) |
 | `ReloadHeadsUp` | Writes a small `_text` ("ready") beside the cannon on each `ThrowerReadyMessage`, `_worldOffset` from its pivot (`ThrowerOriginProvider.Pivot`, which stays put whatever the aim), and keeps it up (`HandwrittenHeadsUp.ShowUntilCleared`) until `ProjectileFiredMessage`, or until play stops (navigation leaves `Game`, or the level leaves `Playing` for a level-up), which ends the ready without a shot. Placed at that world point rather than parented to the cannon, which turns with the aim, so the word stays upright and in one spot |
 | `BounceHeadsUp` | Writes how a ball's bounces go, where it happens: `_pickupFormat` ("+{0} *bounce*") at the shield's balloon on each `ShieldGainedMessage`, the number counting that ball's pickups this flight (`Projectile/ProjectileTally`); `_wallText` ("-1 *bounce*") at the contact on each `WallHitMessage`, in `_lastShieldStyle` when the ball is down to its last shield; and `_ricochetFormat` ("x{0} *ricochet*") on each `DeflectChainMessage`. A ricochet that earned the ball a shield (`PaidShield`) writes `_ricochetRewardText` ("+1 *bounce*") on a second, smaller line under it (`_ricochetRewardScale`), in the pickup blue, and the shield's own `ShieldGainedMessage` (source `Ricochet`) writes nothing, so the bounce reads as coming from the ricochet. That shield still counts toward the next pickup's "+n". Each kind has its `HeadsUpStyle`. Writes through its `_lines` in turn, so bounces close together don't replace each other, then packs each new line clear of the ones still showing (`HeadsUpPacking`) and wholly inside the camera's view, since wall contacts sit at the screen's edge. Skips a shield granted with no ball to take it |
@@ -39,13 +39,21 @@ Planned kinds keep to the same scheme: a streak `x3!` in ochre `#9A6700`, a lost
 
 ## How the reveal works
 
-TMP lays the text out once. Each frame while writing, `WriteOnText` scales every visible glyph
-corner's vertex alpha by how far the write head has passed it, starting from the colours TMP
-generated (so rich-text colours and gradients keep their own alpha), and pushes colours only
-(`UpdateVertexData(Colors32)`). It never uses `maxVisibleCharacters`, which would re-lay out the text
-on every step. While writing it listens for TMP's `TEXT_CHANGED_EVENT`: a mesh TMP rebuilds mid-write
-(a canvas rebuild, a re-enable) comes back fully opaque, so the colours are re-captured and the reveal
-re-applied at once. A glyph the cache doesn't cover is skipped rather than read out of range. After the
+TMP lays the text out once. Each frame while writing, `WriteOnText` works out how far the write head has
+passed every visible glyph corner and hands that to the mesh in one of two ways, chosen per mesh by its
+material:
+
+- On the pencil shader (its shader declares `_PencilRevealInUv`), it writes how hidden the corner is into the
+  vertex's `uv0.z` and pushes only those (`UpdateVertexData(Uv0)`); the shader turns it into the ragged
+  edge. TMP never sets `uv0.z`, so text no write touches reads 0, whole, and vertex alpha stays the text's
+  own opacity: a banner fading through its `CanvasGroup`, or a translucent colour, stays smooth and whole.
+- On any other material (a fallback font on TMP's stock shader), it scales the corner's vertex alpha,
+  starting from the colours TMP generated so rich-text colours and gradients keep their own alpha, and
+  pushes only colours (`UpdateVertexData(Colors32)`).
+
+It never uses `maxVisibleCharacters`, which would re-lay out the text on every step. While writing it
+listens for TMP's `TEXT_CHANGED_EVENT`: a mesh TMP rebuilds mid-write (a canvas rebuild, a re-enable) comes
+back fully shown, so the colours and materials are re-captured and the reveal re-applied at once. A glyph the cache doesn't cover is skipped rather than read out of range. After the
 write nothing listens, and a rebuild shows the text whole, which is the written state anyway.
 
 ## Who uses it
@@ -64,7 +72,9 @@ write nothing listens, and a rebuild shows the text whole, which is the written 
   the `UI` sorting layer and GameObject layer (above the balloons, out of the GI capture), in the tooltip's
   font and material with its `WriteOnText` settings. Sizes carry over from the canvas build: a canvas unit
   is 0.024 world units at the reference 9.6-unit view, and a `TextMeshPro` draws a tenth of its font size
-  per world unit, so canvas size 8 is 1.92.
+  per world unit, so canvas size 8 is 1.92. Each line has a `PencilTip` child, its `WriteOnText`'s `_tip`: the
+  pencil sprite (`Assets/Sprites/UI/pencil-tip.png`, pivot on the graphite point, 0.33 world units across),
+  sorted just above the text and hidden until a write. The banner on the canvas has no tip.
 - The reload heads-up is built by **Tools > BalloonParty > HeadsUp > Build Reload Heads-Up**: one line with
   a `HandwrittenHeadsUp` and a `ReloadHeadsUp`. It is optional: the game scope injects a `ReloadHeadsUp` it
   finds rather than requiring one, so the game runs without it.
@@ -75,5 +85,14 @@ write nothing listens, and a rebuild shows the text whole, which is the written 
   open (save the scene afterwards), and removes the canvas lines an earlier build left on `GameCanvas`.
 - The pencil look needs the Patrick Hand TMP font asset on the label. **Tools > BalloonParty >
   HeadsUp > Build Pencil Font** makes it from `Assets/Fonts/PatrickHand-Regular.ttf` and sets it on the
-  tooltip's label. The grain through the letters
-  and the ragged edge are the pencil text shader, still to come (`PLAN-HeadsUp.md` §4.1).
+  tooltip's label.
+- The grain through the letters and the ragged edge are the font's own material, on the
+  `BalloonParty/Text/Pencil` shader (a copy of TMP's SDF shader), so every Patrick Hand text gets them, the
+  banner and the heads-ups alike. The shader takes `WriteOnText`'s reveal from `uv0.z` (see How the reveal
+  works) and jitters where it breaks through with an edge noise, so the edge goes down ragged; a written
+  glyph is whole. Paper specks thin the graphite of the face, not the halo. Both noises are packed in
+  `Assets/Textures/Text/pencil-noise.png` (edge in RGB, specks in alpha; mip-mapped, so a noise finer than a
+  pixel fades to its average rather than shimmering as the camera zooms) and sampled in atlas texels: Grain
+  Scale and Edge Noise Scale are how many atlas texels one noise texel covers, so a speck is the same size
+  against the letters at any text scale. Tune them in the font material's Pencil panel outside Play Mode:
+  each heads-up line copies the material when it starts, so a change made while playing doesn't reach them.

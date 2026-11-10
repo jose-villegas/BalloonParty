@@ -117,6 +117,9 @@ namespace BalloonParty.UI.HeadsUp
         /// <summary>Fades the line out now, if one is showing.</summary>
         public void Clear()
         {
+            // The fade is shorter than most writes: without this the pencil goes on scribbling over a line
+            // that's no longer there.
+            _writeOn.Stop();
             if (_alpha <= 0f)
             {
                 return;

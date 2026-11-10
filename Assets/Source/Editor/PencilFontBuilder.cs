@@ -7,8 +7,8 @@ namespace BalloonParty.Editor
 {
     /// <summary>
     ///     Makes the heads-ups' pencil font in one step: the Patrick Hand TMP font asset (created by TMP's own
-    ///     "Font Asset > SDF" command, so it matches one made by hand), then sets it on the tooltip's label.
-    ///     Running it again reuses the existing font asset and only re-assigns it.
+    ///     "Font Asset > SDF" command, so it matches one made by hand) on the pencil text shader, then sets it on
+    ///     the tooltip's label. Running it again reuses the existing font asset and only re-assigns it.
     /// </summary>
     internal static class PencilFontBuilder
     {
@@ -19,6 +19,8 @@ namespace BalloonParty.Editor
         // Where TMP's SDF command saves an asset made from SourceFontPath.
         private const string FontAssetPath = "Assets/Fonts/PatrickHand-Regular SDF.asset";
         private const string CreateSdfMenu = "Assets/Create/TextMeshPro/Font Asset/SDF";
+        private const string PencilShaderPath = "Assets/Shaders/BalloonParty/Text/PencilText.shader";
+        private const string NoiseTexturePath = "Assets/Textures/Text/pencil-noise.png";
 
         [MenuItem(MenuPath)]
         private static void Build()
@@ -29,6 +31,7 @@ namespace BalloonParty.Editor
                 return;
             }
 
+            ApplyPencilShader(fontAsset);
             var prefabPath = PrefabRebuild.FindPrefabWithChild<TooltipBanner>("Tooltip");
             if (prefabPath == null)
             {
@@ -89,6 +92,41 @@ namespace BalloonParty.Editor
 
             Debug.Log($"[{DialogTitle}] Created {FontAssetPath}.");
             return fontAsset;
+        }
+
+        // The font's own material is what every Patrick Hand text draws with, so the pencil goes there. Only
+        // the shader and missing textures are set: an existing material keeps its tuned values.
+        private static void ApplyPencilShader(TMP_FontAsset fontAsset)
+        {
+            var shader = AssetDatabase.LoadAssetAtPath<Shader>(PencilShaderPath);
+            if (shader == null)
+            {
+                Debug.LogError($"[{DialogTitle}] No pencil shader at {PencilShaderPath}; the font keeps {fontAsset.material.shader.name}.");
+                return;
+            }
+
+            var material = fontAsset.material;
+            material.shader = shader;
+            SetTextureIfMissing(material, "_PencilNoiseTex", NoiseTexturePath);
+            EditorUtility.SetDirty(fontAsset);
+            AssetDatabase.SaveAssetIfDirty(fontAsset);
+        }
+
+        private static void SetTextureIfMissing(Material material, string property, string path)
+        {
+            if (material.GetTexture(property) != null)
+            {
+                return;
+            }
+
+            var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+            if (texture == null)
+            {
+                Debug.LogWarning($"[{DialogTitle}] No texture at {path}; {property} is left empty.");
+                return;
+            }
+
+            material.SetTexture(property, texture);
         }
     }
 }

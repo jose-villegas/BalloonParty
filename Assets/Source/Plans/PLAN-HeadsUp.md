@@ -11,8 +11,10 @@ maths), `TooltipBanner` writing through it, the TMP font asset, and two early he
 through plain `HandwrittenHeadsUp` lines, ahead of the router and queue of Phase 3: `ReloadHeadsUp`
 writes `ready` beside the cannon for as long as it's ready, and `BounceHeadsUp` writes `+n bounce` where a
 ball picks up a shield and `-1 bounce` where a wall spends one. Those lines moved off the canvas into world
-space on 2026-11-09 (the `HeadsUps` prefab), as §3 always had it. Left for Phase 1: the pencil tip sprite and the pencil text shader (grain and
-ragged edge). The other open questions in §10 matter from Phase 2.
+space on 2026-11-09 (the `HeadsUps` prefab), as §3 always had it. The pencil text shader
+(`BalloonParty/Text/Pencil`: the grain and the ragged edge, on the font's own material) and the pencil tip
+sprite on every heads-up line were built on 2026-11-10, awaiting the owner's in-editor look; with that,
+Phase 1 is done. The other open questions in §10 matter from Phase 2.
 
 ---
 

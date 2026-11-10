@@ -27,9 +27,14 @@ namespace BalloonParty.Editor
         private const string RootName = "HeadsUps";
         private const string ReloadName = "ReloadHeadsUp";
         private const string BounceName = "BounceHeadsUp";
+        private const string TipName = "PencilTip";
+        private const string TipSpritePath = "Assets/Sprites/UI/pencil-tip.png";
 
         // Above the balloons, the ball and the score trails, like the canvas lines were.
         private const string SortingLayer = "UI";
+
+        // The pencil is held over the paper: above the line it's writing.
+        private const int TipSortingOrder = 1;
 
         // Enough for every ball in the air to bounce at once without one line replacing another.
         private const int BounceLineCount = 6;
@@ -216,12 +221,12 @@ namespace BalloonParty.Editor
             text.raycastTarget = false;
             go.GetComponent<MeshRenderer>().sortingLayerName = SortingLayer;
 
-            // The tooltip's reveal timing, pointed at this label. Its pencil tip is a canvas image, so not taken.
+            // The tooltip's reveal timing, pointed at this label and at its own pencil tip.
             var writeOn = go.AddComponent<WriteOnText>();
             EditorUtility.CopySerialized(label.GetComponent<WriteOnText>(), writeOn);
             var writeOnFields = new SerializedObject(writeOn);
             writeOnFields.FindProperty("_text").objectReferenceValue = text;
-            writeOnFields.FindProperty("_tip").objectReferenceValue = null;
+            writeOnFields.FindProperty("_tip").objectReferenceValue = CreateTip(go.transform);
             writeOnFields.ApplyModifiedPropertiesWithoutUndo();
 
             var line = go.AddComponent<HandwrittenHeadsUp>();
@@ -229,6 +234,25 @@ namespace BalloonParty.Editor
             fields.FindProperty("_writeOn").objectReferenceValue = writeOn;
             fields.ApplyModifiedPropertiesWithoutUndo();
             return line;
+        }
+
+        // Its pivot is the graphite point, which WriteOnText puts on the reveal edge. Hidden until a write.
+        private static Transform CreateTip(Transform line)
+        {
+            var go = new GameObject(TipName) { layer = line.gameObject.layer };
+            go.transform.SetParent(line, false);
+            var sprite = go.AddComponent<SpriteRenderer>();
+            sprite.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(TipSpritePath);
+            if (sprite.sprite == null)
+            {
+                Debug.LogError($"[HeadsUp] No pencil tip sprite at {TipSpritePath}; the heads-ups write without one.");
+            }
+
+            sprite.sharedMaterial = AssetDatabase.GetBuiltinExtraResource<Material>("Sprites-Default.mat");
+            sprite.sortingLayerName = SortingLayer;
+            sprite.sortingOrder = TipSortingOrder;
+            go.SetActive(false);
+            return go.transform;
         }
     }
 }

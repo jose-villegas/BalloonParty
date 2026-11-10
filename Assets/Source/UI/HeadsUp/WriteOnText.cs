@@ -13,6 +13,11 @@ namespace BalloonParty.UI.HeadsUp
     /// </summary>
     public class WriteOnText : MonoBehaviour
     {
+        // Declared by a shader that takes the reveal from uv0.z (BalloonParty/Text/Pencil, whose ragged edge
+        // needs it apart from opacity), so vertex alpha stays the text's own fades and colours. TMP leaves
+        // uv0.z at 0, which that shader reads as whole.
+        private static readonly int RevealInUvProperty = Shader.PropertyToID("_PencilRevealInUv");
+
         [SerializeField] private TMP_Text _text;
 
         [Tooltip("Optional pencil tip that rides the reveal edge while writing, hidden otherwise.")]
@@ -37,6 +42,9 @@ namespace BalloonParty.UI.HeadsUp
         // The colours TMP generated, so the reveal scales each vertex's own alpha (rich-text colours,
         // gradients) instead of overwriting it. One per mesh (font and fallback), grown, never shrunk.
         private readonly List<Color32[]> _sourceColors = new();
+
+        // Per mesh, as above: whether its material takes the reveal in uv0.z rather than in vertex alpha.
+        private readonly List<bool> _revealInUv = new();
 
         private float _head;
         private float _startHead;
@@ -112,6 +120,12 @@ namespace BalloonParty.UI.HeadsUp
 
             _head = _endHead;
             ApplyReveal();
+            Stop();
+        }
+
+        /// <summary>Stops the current write where it is, the pencil lifted: for a line going away mid-write.</summary>
+        public void Stop()
+        {
             _writing = false;
             enabled = false;
             SetTipVisible(false);
@@ -122,6 +136,17 @@ namespace BalloonParty.UI.HeadsUp
             var meshes = _text.textInfo.meshInfo;
             for (var m = 0; m < meshes.Length; m++)
             {
+                var material = meshes[m].material;
+                var revealInUv = material != null && material.HasProperty(RevealInUvProperty);
+                if (m == _revealInUv.Count)
+                {
+                    _revealInUv.Add(revealInUv);
+                }
+                else
+                {
+                    _revealInUv[m] = revealInUv;
+                }
+
                 var colors = meshes[m].colors32;
                 var length = colors?.Length ?? 0;
                 if (m == _sourceColors.Count)
@@ -143,6 +168,7 @@ namespace BalloonParty.UI.HeadsUp
         private void ApplyReveal()
         {
             var info = _text.textInfo;
+            var pushed = TMP_VertexDataUpdateFlags.None;
             for (var i = 0; i < info.characterCount; i++)
             {
                 var character = info.characterInfo[i];
@@ -157,8 +183,9 @@ namespace BalloonParty.UI.HeadsUp
                     continue;
                 }
 
-                var colors = info.meshInfo[mesh].colors32;
-                var source = _sourceColors[mesh];
+                var revealInUv = _revealInUv[mesh];
+                pushed |= revealInUv ? TMP_VertexDataUpdateFlags.Uv0 : TMP_VertexDataUpdateFlags.Colors32;
+                var meshInfo = info.meshInfo[mesh];
 
                 // TMP's quad order: bottom-left, top-left, top-right, bottom-right.
                 for (var corner = 0; corner < 4; corner++)
@@ -169,13 +196,25 @@ namespace BalloonParty.UI.HeadsUp
                     var alpha = WriteOnMath.RevealAlpha(_head, position, _edgeSoftness);
 
                     var vertex = character.vertexIndex + corner;
-                    var color = source[vertex];
-                    color.a = (byte)(color.a * alpha);
-                    colors[vertex] = color;
+                    if (revealInUv)
+                    {
+                        var uv = meshInfo.uvs0[vertex];
+                        uv.z = 1f - alpha;
+                        meshInfo.uvs0[vertex] = uv;
+                    }
+                    else
+                    {
+                        var color = _sourceColors[mesh][vertex];
+                        color.a = (byte)(color.a * alpha);
+                        meshInfo.colors32[vertex] = color;
+                    }
                 }
             }
 
-            _text.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
+            if (pushed != TMP_VertexDataUpdateFlags.None)
+            {
+                _text.UpdateVertexData(pushed);
+            }
         }
 
         // On the edge's midpoint, so the tip sits where the graphite is going down.
