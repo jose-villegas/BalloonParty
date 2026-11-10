@@ -29,11 +29,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _CausticFocus: 2.5
-    - _RippleHeight: 0.12
+    - _CausticFocus: 1.5
+    - _RippleHeight: 0.05
     - _RippleRings: 5
     - _RippleSpeed: 7
-    - _WaveHeight: 0.08
+    - _WaveHeight: 0.06
     - _WaveSize: 2.2
     - _WaveSpeed: 0.12
     m_Colors: []

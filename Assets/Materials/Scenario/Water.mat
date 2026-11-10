@@ -31,25 +31,28 @@ Material:
     m_Floats:
     - _CausticScale: 1.15
     - _CausticShift: 0.35
-    - _CausticStrength: 0.6
+    - _CausticStrength: 0.35
     - _CausticWobble: 0.12
     - _CausticWobbleSize: 3
-    - _DepthContrast: 0.6
+    - _DepthContrast: 0.4
     - _DepthPatchSize: 7
     - _DstBlend: 0
-    - _HighlightStrength: 0.6
+    - _HighlightStrength: 0.3
+    - _Refraction: 0.3
     - _LightInfluence: 1
-    - _RippleHeight: 0.12
+    - _RippleHeight: 0.05
     - _RippleRings: 5
     - _RippleSpeed: 7
     - _SrcBlend: 1
-    - _WaveHeight: 0.08
+    - _SurfaceOpacity: 0.3
+    - _WaveHeight: 0.06
     - _WaveSize: 2.2
     - _WaveSpeed: 0.12
     m_Colors:
-    - _CausticColor: {r: 0.55, g: 0.85, b: 0.9, a: 1}
-    - _DeepColor: {r: 0.07, g: 0.2, b: 0.3, a: 1}
-    - _HighlightColor: {r: 0.85, g: 0.95, b: 1, a: 1}
-    - _ShallowColor: {r: 0.13, g: 0.36, b: 0.44, a: 1}
+    - _CausticColor: {r: 0.85, g: 0.97, b: 0.95, a: 1}
+    - _DeepColor: {r: 0.2, g: 0.47, b: 0.56, a: 1}
+    - _HighlightColor: {r: 0.92, g: 0.98, b: 1, a: 1}
+    - _ShallowColor: {r: 0.36, g: 0.66, b: 0.7, a: 1}
+    - _SurfaceColor: {r: 0.48, g: 0.74, b: 0.79, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

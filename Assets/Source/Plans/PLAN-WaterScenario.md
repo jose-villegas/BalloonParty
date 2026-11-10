@@ -61,12 +61,23 @@ the floor's, through `IGroundSettings`.
 The water shader reads `_DisturbanceTex` directly (no wake buffer: ripples should linger as long
 as the field holds the push):
 
-- Base: a deep-to-shallow colour gradient with slow caustic bands from the shared cloud noise,
-  scrolling with the content root like the meadow.
-- Ripples: rings travel outward along the field's intensity, `sin(k·I + ωt)` scaled by `I`, so a
-  ball's wake spreads as concentric rings that fade as the field relaxes.
-- The rings' height gradient bends the caustics (a refraction offset) and adds a soft highlight.
+- The surface is one height function (`Include/WaterSurface.cginc`): two slow noise waves drifting
+  with the content root, plus rings that travel outward along the field's intensity,
+  `sin(k·I + ωt)` scaled by `I`, so a ball's wake spreads as concentric rings that fade as the
+  field relaxes.
+- Caustics are the surface turned into a second texture, as the owner proposed:
+  `WaterCausticBuffer` draws the surface's curvature (`WaterCaustics.shader`, where a bulge focuses
+  light into a line) into a small R8 target over the field's rect, 4 texels per world unit, so
+  reading it back is already soft. `Water.shader` samples it under the surface: enlarged a little
+  (the bottom is deeper than the waves), wobbled by the noise, and shifted away from the
+  time-of-day sun (`_SceneLightDir`).
+- Layers, bottom up: a deep-to-shallow bottom, the caustics blended toward a caustic colour (a
+  lerp, never added, so nothing blooms; deeper patches catch less), then a light veil of water
+  colour. The bottom and its caustics are seen through the surface slope (a refraction offset),
+  and the slopes facing the sun catch a soft highlight on top.
 - Lit by `SceneLightTintAt` and premultiplied by `GroundCoverageAt`, exactly like `Ground.shader`.
+- The first look read as neon and dark: bright additive caustics over saturated deep blues. The
+  bounded lerps, lighter colours, the veil and lower wave heights replaced it.
 
 ### 3. Bubbles that build up on water
 

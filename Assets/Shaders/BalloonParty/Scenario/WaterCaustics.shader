@@ -11,12 +11,12 @@ Shader "Hidden/BalloonParty/Scenario/WaterCaustics"
         [NoScaleOffset] _NoiseTex ("Noise (R, linear)", 2D) = "gray" {}
         _WaveSize     ("Wave Size (world)",      Float) = 2.2
         _WaveSpeed    ("Wave Drift (world/s)",   Float) = 0.12
-        _WaveHeight   ("Wave Height",            Float) = 0.08
+        _WaveHeight   ("Wave Height",            Float) = 0.06
         _RippleRings  ("Rings Per Push",         Float) = 5
         _RippleSpeed  ("Ring Speed (radians/s)", Float) = 7
-        _RippleHeight ("Ring Height",            Float) = 0.12
+        _RippleHeight ("Ring Height",            Float) = 0.05
         // How much light a curve focuses: more = brighter, thinner lines.
-        _CausticFocus ("Focus",                  Float) = 2.5
+        _CausticFocus ("Focus",                  Float) = 1.5
     }
 
     SubShader

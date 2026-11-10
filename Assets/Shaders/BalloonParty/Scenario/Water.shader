@@ -1,10 +1,11 @@
 Shader "BalloonParty/Scenario/Water"
 {
-    // The water surface shown on water levels (GroundView's floor quad, in place of the meadow floor). Two layers
+    // The water surface shown on water levels (GroundView's floor quad, in place of the meadow floor). Three layers
     // in one pass. Under the surface, the bottom: a deep to shallow colour drift from the shared noise, lit by
     // caustics, the light the surface focuses (WaterCausticBuffer draws it from this same surface into a small
     // soft target, read back slightly enlarged, wobbled and shifted away from the time-of-day sun, so it sits
-    // below the waves rather than on them). Over it, the surface: slow noise waves and rings wherever the shared
+    // below the waves rather than on them), seen through the surface's slope so the waves bend it. Over it, a
+    // light veil of water colour, then the surface: slow noise waves and rings wherever the shared
     // disturbance field holds a push (WaterSurface.cginc), whose slopes catch a highlight. The surface travels
     // with the board like the meadow; the rings stay where the push is.
     Properties
@@ -12,14 +13,14 @@ Shader "BalloonParty/Scenario/Water"
         [NoScaleOffset] _NoiseTex ("Noise (R, linear)", 2D) = "gray" {}
 
         [Header(Bottom)]
-        _DeepColor        ("Deep Colour",                 Color)          = (0.07, 0.20, 0.30, 1)
-        _ShallowColor     ("Shallow Colour",              Color)          = (0.13, 0.36, 0.44, 1)
+        _DeepColor        ("Deep Colour",                 Color)          = (0.20, 0.47, 0.56, 1)
+        _ShallowColor     ("Shallow Colour",              Color)          = (0.36, 0.66, 0.70, 1)
         _DepthPatchSize   ("Depth Patch Size (world)",    Float)          = 7
-        _DepthContrast    ("Depth Contrast",              Range(0, 1))    = 0.6
+        _DepthContrast    ("Depth Contrast",              Range(0, 1))    = 0.4
 
         [Header(Caustics)]
-        _CausticColor     ("Caustic Colour",              Color)          = (0.55, 0.85, 0.90, 1)
-        _CausticStrength  ("Caustic Strength",            Range(0, 2))    = 0.6
+        _CausticColor     ("Caustic Colour",              Color)          = (0.85, 0.97, 0.95, 1)
+        _CausticStrength  ("Caustic Strength",            Range(0, 1))    = 0.35
         // >1 draws the caustics larger than the waves that make them: the bottom is below the surface.
         _CausticScale     ("Caustic Enlargement",         Range(1, 2))    = 1.15
         // World units the caustics sit away from the sun: light reaches the bottom at a slant.
@@ -32,13 +33,18 @@ Shader "BalloonParty/Scenario/Water"
         // Copied onto the caustic pass's material by GroundView, so the caustics match these waves.
         _WaveSize         ("Wave Size (world)",           Float)          = 2.2
         _WaveSpeed        ("Wave Drift (world/s)",        Float)          = 0.12
-        _WaveHeight       ("Wave Height",                 Float)          = 0.08
+        _WaveHeight       ("Wave Height",                 Float)          = 0.06
         // Rings across a push's intensity (0 at rest, about 1 under a fresh stamp): more = tighter rings.
         _RippleRings      ("Rings Per Push",              Float)          = 5
         _RippleSpeed      ("Ring Speed (radians/s)",      Float)          = 7
-        _RippleHeight     ("Ring Height",                 Float)          = 0.12
-        _HighlightColor   ("Highlight Colour",            Color)          = (0.85, 0.95, 1.0, 1)
-        _HighlightStrength("Highlight Strength",          Range(0, 2))    = 0.6
+        _RippleHeight     ("Ring Height",                 Float)          = 0.05
+        // World units the surface slope shifts the view of the bottom by: the waves bend what lies under them.
+        _Refraction       ("Refraction (world)",          Range(0, 1))    = 0.3
+        // The water body over the bottom: a light veil that tints and softens the caustics under it.
+        _SurfaceColor     ("Surface Colour",              Color)          = (0.48, 0.74, 0.79, 1)
+        _SurfaceOpacity   ("Surface Opacity",             Range(0, 1))    = 0.3
+        _HighlightColor   ("Highlight Colour",            Color)          = (0.92, 0.98, 1.0, 1)
+        _HighlightStrength("Highlight Strength",          Range(0, 1))    = 0.3
 
         [Header(Lighting)]
         // Scene-light colour x intensity multiplies the water: 0 = authored colours always, 1 = fully lit.
@@ -90,6 +96,9 @@ Shader "BalloonParty/Scenario/Water"
             float  _CausticWobbleSize;
             half4  _HighlightColor;
             half   _HighlightStrength;
+            float  _Refraction;
+            half4  _SurfaceColor;
+            half   _SurfaceOpacity;
             half   _LightInfluence;
 
             // WaterCausticBuffer's target, over the disturbance field's rect: r = focused light. Black when unset.
@@ -132,16 +141,26 @@ Shader "BalloonParty/Scenario/Water"
                 float2 wp = IN.world;
                 float2 waterPos = GroundPointAt(wp);
 
-                half depthNoise = tex2D(_NoiseTex, waterPos / max(_DepthPatchSize, 1e-3)).r;
+                // The bottom is seen through the surface: its slope bends the view, so the waves and rings over it
+                // ripple the bottom and its caustics rather than drawing beside them.
+                float2 slope = WaterSlope(wp);
+                float2 bend = slope * _Refraction;
+
+                half depthNoise = tex2D(_NoiseTex, (waterPos + bend) / max(_DepthPatchSize, 1e-3)).r;
                 half depthMix = saturate(0.5h + (depthNoise - 0.5h) * (1.0h + 2.0h * _DepthContrast));
                 half3 color = lerp(_DeepColor.rgb, _ShallowColor.rgb, depthMix);
-                color += _CausticColor.rgb * CausticAt(wp, waterPos) * _CausticStrength;
 
-                // Slopes facing the sun catch its highlight, those facing away darken a little: the surface reads
-                // in relief over the bottom.
-                float2 slope = WaterSlope(wp);
+                // Blended toward, never added: the light stays inside the bottom's range, so nothing blooms. Deeper
+                // patches catch less of it.
+                half caustic = CausticAt(wp + bend, waterPos + bend) * _CausticStrength * lerp(0.5h, 1.0h, depthMix);
+                color = lerp(color, _CausticColor.rgb, saturate(caustic));
+
+                // The water body between the bottom and the surface veils both.
+                color = lerp(color, _SurfaceColor.rgb, _SurfaceOpacity);
+
+                // On the surface, slopes facing the sun catch its highlight and those facing away darken a little.
                 half facing = (half)dot(slope, _SceneLightDir.xy);
-                color += _HighlightColor.rgb * saturate(facing) * _HighlightStrength;
+                color = lerp(color, _HighlightColor.rgb, saturate(facing * _HighlightStrength));
                 color *= 1.0h - saturate(-facing) * 0.25h * _HighlightStrength;
 
                 // Per pixel and field-aware, like the meadow floor: the time of day plus the local light of pops.
