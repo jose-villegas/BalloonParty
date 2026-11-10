@@ -150,15 +150,17 @@ generator's entry is `Withheld`: the water rise is its own path.
 
 Two bubble clusters in neighbouring slots merge, whatever brought them there: a spawn, the board
 settling, a pop opening the way. `BubbleMergeService` (`Balloon/Controller/`, a tick) looks again
-whenever the grid has changed (`SlotGrid.MutationVersion`) and merges every neighbouring pair
-whose bubbles fit in one cluster. `BubbleMergeRule` is the pure rule, tested on its own.
+whenever the grid has changed (`SlotGrid.MutationVersion`), a cluster was hit, or its own last pass
+merged something, and merges every neighbouring pair where the larger still has room.
+`BubbleMergeRule` is the pure rule, tested on its own.
 
-- The smaller cluster flows into the larger, which survives (between equals, the slot order
-  decides). The survivor's `HitsRemaining` becomes the sum, and the absorbed one leaves the grid
-  silently and slides into it.
-- A cluster between two neighbours joins the one that makes the bigger cluster.
-- Each cluster merges at most once a frame. The absorb changes the grid, so a cluster that grew
-  merges again on the next frame if a neighbour still fits: chains collapse a step a frame.
+- The smaller cluster gives its bubbles to the larger (between equals, the slot order decides),
+  as many as fill the larger to 5. A giver left with none leaves the grid silently and slides into
+  the receiver; one with bubbles left stays where it is, smaller: a 3 beside a 3 makes a 5 and a 1.
+- A cluster between two neighbours gives to the one it makes the bigger cluster.
+- Each cluster merges at most once a frame, and a pass that merged looks again on the next frame,
+  so a group gathers a step a frame. A hit on a cluster also wakes it: knocking a full cluster
+  down makes room for its smaller neighbour to give again.
 - A first version merged only when a nudge pushed two bubbles closer; the owner dropped that:
   "Just merge them when next to each other, no nudge".
 
@@ -169,8 +171,9 @@ whose bubbles fit in one cluster. `BubbleMergeRule` is the pure rule, tested on 
    their share growing with time on the level.
 3. **The curve:** the ramp from the proposed 6 s grace over 60 s (the proposal was a spawn wait
    shortening from 8 s to 2 s; carried over as a share rising from 15% to 65%).
-4. **Clusters bigger than two:** a merge happens only when the sum fits in 5 bubbles; otherwise the
-   two stay apart. A merged cluster merges again with any neighbour that still fits, up to 5.
+4. **Clusters bigger than two:** first, a merge happened only when the sum fit in 5 bubbles. The
+   owner changed it: "a cluster only gives as much it can to its higher neighbor until it hits the
+   limit (5)". The smaller gives what fits and keeps the rest.
 6. **When they merge:** whenever two sit next to each other, no nudge needed (it first followed
    the direction above, "only on nudge"; the owner changed it after trying it).
 5. **What water leaves out:** "water surface has no clouds or bushes", and "no deflector balloons
@@ -183,6 +186,6 @@ whose bubbles fit in one cluster. `BubbleMergeRule` is the pure rule, tested on 
 | 1 | `ScenarioKind.Water`, the schedule rolls, `ScenarioStretch` shares | schedule determinism with three kinds, water only from `WaterFromLevel`, never two surfaces back to back |
 | 2 | `GroundView` as the surface view, `Water.shader`, settings + material | planner/curve with water; the shader needs an in-editor look |
 | 3 | `BubbleRiseCurve`, `SpawnClock.SecondsOnLevel`, the roll in `BalloonSpawner`, settings | the curve as a pure function of time on level; seconds on level under the clock's holds |
-| 4 | `BubbleMergeRule`, `BubbleMergeService`, the absorb in `BalloonController` | neighbours merge, the smaller into the larger; the cap; one merge per cluster a pass |
+| 4 | `BubbleMergeRule`, `BubbleMergeService`, the absorb in `BalloonController` | the smaller gives the larger what fits, up to the cap; one merge per cluster a pass; a hit that makes room wakes the service |
 
 Each phase builds Runtime, Editor and Tests.EditMode, and passes `Tools/style_audit.py`.

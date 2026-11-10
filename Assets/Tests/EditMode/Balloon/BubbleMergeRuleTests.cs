@@ -15,51 +15,48 @@ namespace BalloonParty.Tests.Balloon
         private static readonly Vector2Int C = new(4, 3);
 
         [Test]
-        public void TwoSingleBubbles_Merge()
+        public void AGiverThatFits_GivesAllItsBubbles()
         {
-            Assert.IsTrue(BubbleMergeRule.Merges(1, 1, Max));
+            Assert.AreEqual(1, BubbleMergeRule.Given(1, 1, Max));
+            Assert.AreEqual(2, BubbleMergeRule.Given(2, 3, Max));
         }
 
         [Test]
-        public void ASumThatFillsTheCluster_Merges()
+        public void AGiverThatDoesNotFit_GivesOnlyWhatFillsTheReceiver()
         {
-            Assert.IsTrue(BubbleMergeRule.Merges(2, 3, Max));
+            // 3 beside 3: two fill the receiver to 5, one stays behind.
+            Assert.AreEqual(2, BubbleMergeRule.Given(3, 3, Max));
+            Assert.AreEqual(1, BubbleMergeRule.Given(2, 4, Max));
         }
 
         [Test]
-        public void ASumPastTheCap_DoesNotMerge()
+        public void AFullReceiver_TakesNothing()
         {
-            Assert.IsFalse(BubbleMergeRule.Merges(3, 3, Max));
+            Assert.AreEqual(0, BubbleMergeRule.Given(1, Max, Max));
         }
 
         [Test]
-        public void AFullCluster_NeverMerges()
-        {
-            Assert.IsFalse(BubbleMergeRule.Merges(Max, 1, Max));
-        }
-
-        [Test]
-        public void AnEmptyCluster_NeverMerges()
+        public void APoppedCluster_NeitherGivesNorTakes()
         {
             // A popped cluster can still be on the grid the frame it pops.
-            Assert.IsFalse(BubbleMergeRule.Merges(0, 1, Max));
-            Assert.IsFalse(BubbleMergeRule.Merges(1, 0, Max));
+            Assert.AreEqual(0, BubbleMergeRule.Given(0, 1, Max));
+            Assert.AreEqual(0, BubbleMergeRule.Given(1, 0, Max));
         }
 
         [Test]
-        public void TheSmallerCluster_IsAbsorbed()
+        public void TheSmallerCluster_Gives()
         {
-            Assert.IsTrue(BubbleMergeRule.IsAbsorbed(B, 1, A, 3));
-            Assert.IsFalse(BubbleMergeRule.IsAbsorbed(A, 3, B, 1));
+            Assert.IsTrue(BubbleMergeRule.IsGiver(B, 1, A, 3));
+            Assert.IsFalse(BubbleMergeRule.IsGiver(A, 3, B, 1));
         }
 
         [Test]
-        public void BetweenEquals_ExactlyOneSideIsAbsorbed()
+        public void BetweenEquals_ExactlyOneSideGives()
         {
-            Assert.AreNotEqual(BubbleMergeRule.IsAbsorbed(A, 2, B, 2), BubbleMergeRule.IsAbsorbed(B, 2, A, 2));
+            Assert.AreNotEqual(BubbleMergeRule.IsGiver(A, 2, B, 2), BubbleMergeRule.IsGiver(B, 2, A, 2));
 
             var above = new Vector2Int(2, 4);
-            Assert.AreNotEqual(BubbleMergeRule.IsAbsorbed(A, 2, above, 2), BubbleMergeRule.IsAbsorbed(above, 2, A, 2));
+            Assert.AreNotEqual(BubbleMergeRule.IsGiver(A, 2, above, 2), BubbleMergeRule.IsGiver(above, 2, A, 2));
         }
 
         [Test]
@@ -77,7 +74,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void Choose_MergesEachClusterOnce()
         {
-            // B sits between A and C: it joins one of them this pass, never both.
+            // B sits between A and C: it gives to one of them this pass, never both.
             var chosen = ChooseFrom(
                 new BubbleMergeCandidate(B, A, 2),
                 new BubbleMergeCandidate(B, C, 2));
@@ -93,7 +90,7 @@ namespace BalloonParty.Tests.Balloon
                 new BubbleMergeCandidate(B, C, 4));
 
             Assert.AreEqual(1, chosen.Count);
-            Assert.AreEqual(C, chosen[0].Survivor);
+            Assert.AreEqual(C, chosen[0].Receiver);
         }
 
         [Test]
@@ -102,13 +99,13 @@ namespace BalloonParty.Tests.Balloon
             var first = ChooseFrom(new BubbleMergeCandidate(B, A, 2), new BubbleMergeCandidate(B, C, 2));
             var second = ChooseFrom(new BubbleMergeCandidate(B, C, 2), new BubbleMergeCandidate(B, A, 2));
 
-            Assert.AreEqual(first[0].Survivor, second[0].Survivor);
+            Assert.AreEqual(first[0].Receiver, second[0].Receiver);
         }
 
         [Test]
-        public void Choose_ASurvivorIsNotAbsorbedInTheSamePass()
+        public void Choose_AReceiverDoesNotGiveInTheSamePass()
         {
-            // B absorbs A while C absorbs B: one of the two waits for the next pass.
+            // B takes from A while C takes from B: one of the two waits for the next pass.
             var chosen = ChooseFrom(
                 new BubbleMergeCandidate(A, B, 2),
                 new BubbleMergeCandidate(B, C, 3));

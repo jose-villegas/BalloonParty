@@ -51,7 +51,7 @@ namespace BalloonParty.Balloon.Model
         }
 
         /// <summary>Sets how many bubbles the cluster holds, kept within 1 and its <c>MaxHitPoints</c>: a water
-        /// line's small cluster, or the sum after a merge.</summary>
+        /// line's small cluster, or its count after a merge gave or took bubbles.</summary>
         internal void SetBubbles(int count)
         {
             HitsRemaining.Value = System.Math.Clamp(count, 1, MaxHitPoints);

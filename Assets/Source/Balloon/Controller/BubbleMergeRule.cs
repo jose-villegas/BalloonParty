@@ -1,44 +1,55 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace BalloonParty.Balloon.Controller
 {
     /// <summary>
-    ///     A pair of neighbouring bubble clusters that can merge: <see cref="Absorbed" /> flows into
-    ///     <see cref="Survivor" />, which then holds <see cref="Bubbles" />.
+    ///     A pair of neighbouring bubble clusters where <see cref="Giver" /> passes bubbles to
+    ///     <see cref="Receiver" />, which then holds <see cref="Bubbles" />.
     /// </summary>
     internal readonly struct BubbleMergeCandidate
     {
-        public readonly Vector2Int Absorbed;
-        public readonly Vector2Int Survivor;
+        public readonly Vector2Int Giver;
+        public readonly Vector2Int Receiver;
         public readonly int Bubbles;
 
-        public BubbleMergeCandidate(Vector2Int absorbed, Vector2Int survivor, int bubbles)
+        public BubbleMergeCandidate(Vector2Int giver, Vector2Int receiver, int bubbles)
         {
-            Absorbed = absorbed;
-            Survivor = survivor;
+            Giver = giver;
+            Receiver = receiver;
             Bubbles = bubbles;
         }
     }
 
     /// <summary>
-    ///     When two bubble clusters merge: whenever they sit in neighbouring slots and their bubbles fit in one
-    ///     cluster. The smaller flows into the larger.
+    ///     How two bubble clusters in neighbouring slots merge: the smaller gives its bubbles to the larger, as many
+    ///     as the larger has room for. A giver left with none is absorbed; one with bubbles left stays beside a full
+    ///     cluster.
     /// </summary>
     internal static class BubbleMergeRule
     {
         private static readonly CandidateComparer ByBubblesDescending = new();
 
-        public static bool Merges(int bubblesA, int bubblesB, int maxBubbles)
+        /// <summary>
+        ///     How many bubbles a giver passes to its receiver: all of them, or as many as fill the receiver to
+        ///     <paramref name="maxBubbles" />. None when either has already popped.
+        /// </summary>
+        public static int Given(int giverBubbles, int receiverBubbles, int maxBubbles)
         {
-            return bubblesA > 0 && bubblesB > 0 && bubblesA + bubblesB <= maxBubbles;
+            if (giverBubbles <= 0 || receiverBubbles <= 0)
+            {
+                return 0;
+            }
+
+            return Math.Clamp(maxBubbles - receiverBubbles, 0, giverBubbles);
         }
 
         /// <summary>
-        ///     Whether a flows into b: the smaller cluster is absorbed. Between equals, the one in the higher slot
-        ///     (column, then row) flows into the lower, so the pair is decided once.
+        ///     Whether a gives to b: the smaller cluster gives. Between equals, the one in the higher slot (column,
+        ///     then row) gives to the lower, so the pair is decided once.
         /// </summary>
-        public static bool IsAbsorbed(Vector2Int slotA, int bubblesA, Vector2Int slotB, int bubblesB)
+        public static bool IsGiver(Vector2Int slotA, int bubblesA, Vector2Int slotB, int bubblesB)
         {
             if (bubblesA != bubblesB)
             {
@@ -50,8 +61,8 @@ namespace BalloonParty.Balloon.Controller
 
         /// <summary>
         ///     Picks the merges one pass makes from its candidates, each cluster in at most one: the merges that make
-        ///     the biggest clusters go first, so a cluster between two neighbours joins the one it makes biggest. A
-        ///     merged cluster can merge again on a later pass. Sorts <paramref name="candidates" />.
+        ///     the biggest clusters go first, so a cluster between two neighbours gives to the one it makes biggest.
+        ///     A cluster can merge again on a later pass. Sorts <paramref name="candidates" />.
         /// </summary>
         public static void Choose(List<BubbleMergeCandidate> candidates, List<BubbleMergeCandidate> chosen,
             HashSet<Vector2Int> used)
@@ -61,13 +72,13 @@ namespace BalloonParty.Balloon.Controller
             candidates.Sort(ByBubblesDescending);
             foreach (var candidate in candidates)
             {
-                if (used.Contains(candidate.Absorbed) || used.Contains(candidate.Survivor))
+                if (used.Contains(candidate.Giver) || used.Contains(candidate.Receiver))
                 {
                     continue;
                 }
 
-                used.Add(candidate.Absorbed);
-                used.Add(candidate.Survivor);
+                used.Add(candidate.Giver);
+                used.Add(candidate.Receiver);
                 chosen.Add(candidate);
             }
         }
@@ -84,8 +95,8 @@ namespace BalloonParty.Balloon.Controller
                     return byBubbles;
                 }
 
-                var bySurvivor = Order(x.Survivor).CompareTo(Order(y.Survivor));
-                return bySurvivor != 0 ? bySurvivor : Order(x.Absorbed).CompareTo(Order(y.Absorbed));
+                var byReceiver = Order(x.Receiver).CompareTo(Order(y.Receiver));
+                return byReceiver != 0 ? byReceiver : Order(x.Giver).CompareTo(Order(y.Giver));
             }
 
             private static long Order(Vector2Int slot)

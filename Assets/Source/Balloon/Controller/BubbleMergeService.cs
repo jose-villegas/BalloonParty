@@ -1,8 +1,12 @@
+using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration.Balloons;
+using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
+using MessagePipe;
+using UniRx;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -10,42 +14,53 @@ using VContainer.Unity;
 namespace BalloonParty.Balloon.Controller
 {
     /// <summary>
-    ///     Merges bubble clusters that sit in neighbouring slots (<see cref="BubbleMergeRule" />). Whenever the grid
-    ///     has changed (a spawn, a pop, the board settling), the next frame looks at every pair of neighbouring
-    ///     clusters whose bubbles fit in one: the smaller flows into the larger, which holds both counts. Each
-    ///     cluster merges at most once a pass; the absorb itself changes the grid, so a cluster that grew can merge
-    ///     again on the next frame.
+    ///     Merges bubble clusters that sit in neighbouring slots (<see cref="BubbleMergeRule" />): the smaller gives
+    ///     the larger as many bubbles as it has room for, up to a full cluster, and is absorbed once it has given
+    ///     them all. Looks again the frame after anything could open room: the grid changing (a spawn, a pop, the
+    ///     board settling), a cluster being hit, or a merge of its own. Each cluster merges at most once a pass, so
+    ///     a group gathers a step a frame.
     /// </summary>
-    internal sealed class BubbleMergeService : ITickable
+    internal sealed class BubbleMergeService : IStartable, ITickable, IDisposable
     {
         private readonly SlotGrid _grid;
         private readonly BalloonControllerRegistry _registry;
         private readonly IBalloonsConfiguration _balloonsConfig;
+        private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
+        private readonly CompositeDisposable _subscriptions = new();
         private readonly List<IWriteableSlotActor> _neighbors = new();
         private readonly List<BubbleMergeCandidate> _candidates = new();
         private readonly List<BubbleMergeCandidate> _chosen = new();
         private readonly HashSet<Vector2Int> _used = new();
 
-        // The grid's MutationVersion last looked at: an unchanged grid has nothing new to merge.
+        // The grid's MutationVersion last looked at: an unchanged grid has nothing new to merge, unless a hit or a
+        // merge that left its giver in place changed a count without moving anything.
         private int _seenVersion = -1;
+        private bool _countsChanged;
 
         [Inject]
-        internal BubbleMergeService(
-            SlotGrid grid, BalloonControllerRegistry registry, IBalloonsConfiguration balloonsConfig)
+        internal BubbleMergeService(SlotGrid grid, BalloonControllerRegistry registry,
+            IBalloonsConfiguration balloonsConfig, ISubscriber<ActorHitMessage> hitSubscriber)
         {
             _grid = grid;
             _registry = registry;
             _balloonsConfig = balloonsConfig;
+            _hitSubscriber = hitSubscriber;
+        }
+
+        public void Start()
+        {
+            _hitSubscriber.Subscribe(OnActorHit).AddTo(_subscriptions);
         }
 
         public void Tick()
         {
-            if (_grid.MutationVersion == _seenVersion)
+            if (_grid.MutationVersion == _seenVersion && !_countsChanged)
             {
                 return;
             }
 
             _seenVersion = _grid.MutationVersion;
+            _countsChanged = false;
             _candidates.Clear();
             for (var col = 0; col < _grid.Columns; col++)
             {
@@ -65,9 +80,25 @@ namespace BalloonParty.Balloon.Controller
             {
                 Merge(merge);
             }
+
+            // A merge can open room for another (a giver now beside a smaller neighbour): look again next frame.
+            _countsChanged = true;
         }
 
-        // Each pair is found from both sides; only the side that would be absorbed adds it.
+        public void Dispose()
+        {
+            _subscriptions.Dispose();
+        }
+
+        private void OnActorHit(ActorHitMessage message)
+        {
+            if (message.Actor is BubbleClusterModel)
+            {
+                _countsChanged = true;
+            }
+        }
+
+        // Each pair is found from both sides; only the side that would give adds it.
         private void CollectCandidates(Vector2Int slot)
         {
             if (_grid.At(slot) is not BubbleClusterModel bubble)
@@ -86,26 +117,36 @@ namespace BalloonParty.Balloon.Controller
                 var otherSlot = other.SlotIndex.Value;
                 var bubbles = bubble.HitsRemaining.Value;
                 var otherBubbles = other.HitsRemaining.Value;
-                var max = Mathf.Max(bubble.MaxHitPoints, other.MaxHitPoints);
-                if (BubbleMergeRule.Merges(bubbles, otherBubbles, max)
-                    && BubbleMergeRule.IsAbsorbed(slot, bubbles, otherSlot, otherBubbles))
+                var given = BubbleMergeRule.Given(bubbles, otherBubbles, other.MaxHitPoints);
+                if (given > 0 && BubbleMergeRule.IsGiver(slot, bubbles, otherSlot, otherBubbles))
                 {
-                    _candidates.Add(new BubbleMergeCandidate(slot, otherSlot, bubbles + otherBubbles));
+                    _candidates.Add(new BubbleMergeCandidate(slot, otherSlot, otherBubbles + given));
                 }
             }
         }
 
         private void Merge(BubbleMergeCandidate merge)
         {
-            if (_grid.At(merge.Absorbed) is not BubbleClusterModel absorbed
-                || _grid.At(merge.Survivor) is not BubbleClusterModel survivor
-                || !_registry.TryResolve(absorbed, out var controller))
+            if (_grid.At(merge.Giver) is not BubbleClusterModel giver
+                || _grid.At(merge.Receiver) is not BubbleClusterModel receiver)
             {
                 return;
             }
 
-            survivor.SetBubbles(survivor.HitsRemaining.Value + absorbed.HitsRemaining.Value);
-            controller.AbsorbInto(_grid.IndexToWorldPosition(merge.Survivor), _balloonsConfig.BubbleMergeSeconds);
+            var given = merge.Bubbles - receiver.HitsRemaining.Value;
+            var left = giver.HitsRemaining.Value - given;
+            if (left > 0)
+            {
+                giver.SetBubbles(left);
+                receiver.SetBubbles(merge.Bubbles);
+                return;
+            }
+
+            if (_registry.TryResolve(giver, out var controller))
+            {
+                receiver.SetBubbles(merge.Bubbles);
+                controller.AbsorbInto(_grid.IndexToWorldPosition(merge.Receiver), _balloonsConfig.BubbleMergeSeconds);
+            }
         }
     }
 }
