@@ -1,5 +1,11 @@
 var NAVTREEINDEX8 =
 {
+"classBalloonParty_1_1Audio_1_1VoiceLimiter.html#a15d7f0e5b183aa8a5c99796f399e0bbc":[5,0,0,0,18,10],
+"classBalloonParty_1_1Audio_1_1VoiceLimiter.html#a15d7f0e5b183aa8a5c99796f399e0bbc":[6,0,0,0,18,10],
+"classBalloonParty_1_1Audio_1_1VoiceLimiter.html#a49333009b5b03ac4f3ccb8e7f5834d2c":[5,0,0,0,18,2],
+"classBalloonParty_1_1Audio_1_1VoiceLimiter.html#a49333009b5b03ac4f3ccb8e7f5834d2c":[6,0,0,0,18,2],
+"classBalloonParty_1_1Audio_1_1VoiceLimiter.html#a5458fd37e78ddb8d7d73acf3c10fce1a":[5,0,0,0,18,7],
+"classBalloonParty_1_1Audio_1_1VoiceLimiter.html#a5458fd37e78ddb8d7d73acf3c10fce1a":[6,0,0,0,18,7],
 "classBalloonParty_1_1Audio_1_1VoiceLimiter.html#a5660242edb5d012647cb7a02c65d00cb":[5,0,0,0,18,14],
 "classBalloonParty_1_1Audio_1_1VoiceLimiter.html#a5660242edb5d012647cb7a02c65d00cb":[6,0,0,0,18,14],
 "classBalloonParty_1_1Audio_1_1VoiceLimiter.html#a60c3136f2d63bf382a51cd5c6f8e6f3f":[5,0,0,0,18,8],
@@ -243,11 +249,5 @@ var NAVTREEINDEX8 =
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#a53ff49b50c58cd91eaf99b5c051afca6":[5,0,0,1,0,4,11],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#a53ff49b50c58cd91eaf99b5c051afca6":[6,0,0,1,0,4,11],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#a6070ab650d13a3a74b5c12ede0717426":[5,0,0,1,0,4,5],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#a6070ab650d13a3a74b5c12ede0717426":[6,0,0,1,0,4,5],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#a65bec1d6e089467ee00af502dd76b7e2":[5,0,0,1,0,4,6],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#a65bec1d6e089467ee00af502dd76b7e2":[6,0,0,1,0,4,6],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#a6e1a7ed3f125e293d8eb4b562c3949c7":[5,0,0,1,0,4,16],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#a6e1a7ed3f125e293d8eb4b562c3949c7":[6,0,0,1,0,4,16],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#a91b50236532fcc6d6783f044f56e1566":[5,0,0,1,0,4,0],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#a91b50236532fcc6d6783f044f56e1566":[6,0,0,1,0,4,0]
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#a6070ab650d13a3a74b5c12ede0717426":[6,0,0,1,0,4,5]
 };

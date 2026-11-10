@@ -24,6 +24,7 @@ var classBalloonParty_1_1Game_1_1GameLifetimeScope =
     [ "_projectileVisualConfig", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a20a05d63dc59846add5dbd242d268c06", null ],
     [ "_puffCloudSettings", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a66ec29e3f1418860c7577f7314cf4dd0", null ],
     [ "_runConfig", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#abbb9769dcb0a35fd8ff37a9f7434e235", null ],
+    [ "_scenarioGradeSettings", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#aedacf2bf2f5681a606d0c0c7f7cf0e0d", null ],
     [ "_sceneLightFieldSettings", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#ad8afd1a927d5e438d9e45408730447d2", null ],
     [ "_scoreTrailBehaviourConfiguration", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a2ec3cf2db63f5994232a539bda3233e5", null ],
     [ "_scoreTrailPrefab", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#af0766435eeb184ac7a7f5ac648deb15e", null ],

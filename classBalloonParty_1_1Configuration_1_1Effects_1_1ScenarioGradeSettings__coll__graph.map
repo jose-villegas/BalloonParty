@@ -1,0 +1,10 @@
+<map id="BalloonParty.Configuration.Effects.ScenarioGradeSettings" name="BalloonParty.Configuration.Effects.ScenarioGradeSettings">
+<area shape="rect" id="Node000001" title="Authored colour grade for each scenario, so the sky, the meadow and the water read in the same light ..." alt="" coords="344,55,563,95"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="52,5,181,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,29,344,54,343,59,194,34"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IScenarioGradeSettings.html" title="Read&#45;only tuning for the whole&#45;frame colour grade per scenario (see ScenarioGradeView)." alt="" coords="5,55,228,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="242,73,344,73,344,78,242,78"/>
+<area shape="rect" id="Node000004" href="$structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html" title="One scenario&#39;s colour grade over the whole frame (see ScenarioGradeView): URP&#39;s Color Adjustments,..." alt="" coords="18,158,215,198"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="214,152,319,122,401,93,403,98,321,127,215,157"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="86,142,97,134,117,131,134,133,146,139,151,148,149,158,144,157,145,149,142,143,133,139,117,137,99,139,89,146"/>
+</map>

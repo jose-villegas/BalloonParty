@@ -1,5 +1,7 @@
 var NAVTREEINDEX2 =
 {
+"ItemPreviewConfig_8cs.html":[7,0,3,17],
+"ItemPreviewContext_8cs.html":[7,0,8,5,3],
 "ItemPreviewEntry_8cs.html":[7,0,8,5,4],
 "ItemPreviewPoolBootstrap_8cs.html":[7,0,8,5,5],
 "ItemPreviewShape_8cs.html":[7,0,8,5,6],
@@ -201,9 +203,9 @@ var NAVTREEINDEX2 =
 "ProjectileTapResolver_8cs.html":[7,0,12,1,8],
 "ProjectileTrail_8cs.html":[7,0,12,3,1],
 "ProjectileView_8cs.html":[7,0,12,3,2],
-"ProjectileVisualConfig_8cs.html":[7,0,3,4,19],
+"ProjectileVisualConfig_8cs.html":[7,0,3,4,20],
 "PropertyDrawerHelper_8cs.html":[7,0,6,35],
-"PuffCloudSettings_8cs.html":[7,0,3,4,20],
+"PuffCloudSettings_8cs.html":[7,0,3,4,21],
 "PuffCloudViewController_8cs.html":[7,0,15,0,0,17],
 "PuffCloudView_8cs.html":[7,0,15,0,0,16],
 "PuffClusterRegistry_8cs.html":[7,0,15,0,0,18],
@@ -245,9 +247,7 @@ var NAVTREEINDEX2 =
 "ScaleDownButton_8cs.html":[7,0,18,19],
 "ScenarioContentRoot_8cs.html":[7,0,15,0,17],
 "ScenarioController_8cs.html":[7,0,7,6,7],
-"ScenarioKind_8cs.html":[7,0,3,8,26],
-"ScenarioScheduleSettings_8cs.html":[7,0,3,8,28],
-"ScenarioSchedule_8cs.html":[7,0,3,8,27],
-"ScenarioShift_8cs.html":[7,0,13,7],
-"ScenarioStretch_8cs.html":[7,0,3,8,29]
+"ScenarioGradeCheat_8cs.html":[7,0,2,19],
+"ScenarioGradeSettings_8cs.html":[7,0,3,4,23],
+"ScenarioGradeView_8cs.html":[7,0,13,0,3]
 };

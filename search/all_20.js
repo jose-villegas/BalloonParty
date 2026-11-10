@@ -50,8 +50,8 @@ var searchData=
   ['victim_47',['Victim',['../classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#a158503cbb47e29c7c200c37f40a5e3d8',1,'BalloonParty::Game::HeadsUp::HeadsUpQueue']]],
   ['view_48',['View',['../classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1MotionState.html#a890b7517c525f8490278f928d7764f96',1,'BalloonParty.Balloon.Controller.BalloonMotionTicker.MotionState.View'],['../classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect_1_1OverflowBalloon.html#a94823976f4d5667926cae9265c710d28',1,'BalloonParty.Balloon.Spawner.RejectedBalloonEffect.OverflowBalloon.View']]],
   ['view_20·_20strong_20p2_20·_20s_20parallel_20after_20b1_20strong_49',['B5 — Tooling: Render Maps HDR view · &lt;strong&gt;P2 · S (parallel after B1)&lt;/strong&gt;',['../plan_hdr_color_pipeline.html#autotoc_md629',1,'']]],
-  ['view_20layer_50',['View Layer',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Slots/Actor/Archetype/README.md#autotoc_md993',1,'View Layer'],['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Slots/Actor/Archetype/README.md#autotoc_md1001',1,'View Layer']]],
-  ['view_20pool_51',['Grid Actor View &amp; Pool',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Slots/Actor/Archetype/README.md#autotoc_md991',1,'']]],
+  ['view_20layer_50',['View Layer',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Slots/Actor/Archetype/README.md#autotoc_md994',1,'View Layer'],['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Slots/Actor/Archetype/README.md#autotoc_md1002',1,'View Layer']]],
+  ['view_20pool_51',['Grid Actor View &amp; Pool',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Slots/Actor/Archetype/README.md#autotoc_md992',1,'']]],
   ['viewat_52',['ViewAt',['../classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a076fe38496de37cd9c047710149a1e36',1,'BalloonParty::Slots::Grid::SlotGrid']]],
   ['viewport_53',['Viewport',['../structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewContext.html#a72d5601e2f2c06e0e59d3071e73d3d84',1,'BalloonParty::Item::Preview::ItemPreviewContext']]],
   ['viewrect_54',['ViewRect',['../classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html#aca077434b1d702637407aa139995bffc',1,'BalloonParty::UI::HeadsUp::HeadsUpPacking']]],
@@ -61,7 +61,7 @@ var searchData=
   ['visited_58',['Visited',['../classBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder.html#a3cadaf45926095823fd72c09e769d6f3a97997416a98b6bc65d68ffebc9d75206',1,'BalloonParty::Balloon::Controller::BalanceDebugRecorder']]],
   ['visual_20components_20—_20register_20via_20tt_20itemdisplayservice_20tt_59',['Item visual components — register via &lt;tt&gt;ItemDisplayService&lt;/tt&gt;',['../plan_bubble_cluster_hit_feedback.html#autotoc_md335',1,'']]],
   ['visual_20feedback_60',['8.5 Visual Feedback',['../plan_future_ideas.html#autotoc_md475',1,'']]],
-  ['visual_20language_61',['Visual language',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/UI/HeadsUp/README.md#autotoc_md1036',1,'']]],
+  ['visual_20language_61',['Visual language',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/UI/HeadsUp/README.md#autotoc_md1037',1,'']]],
   ['visual_20polish_62',['Visual Polish',['../plan_future_ideas.html#autotoc_md464',1,'6.1 Visual Polish'],['../plan_future_ideas.html#autotoc_md524',1,'Bush Visual Polish']]],
   ['visual_20question_63',['13.7 Card presentation (the open visual question)',['../plan_future_ideas.html#autotoc_md514',1,'']]],
   ['visualprefab_64',['VisualPrefab',['../classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#ae7340b8c676b75d5b85fbd9991a06994',1,'BalloonParty::Configuration::Items::ItemSettings']]],
@@ -81,8 +81,9 @@ var searchData=
   ['voiceslot_78',['VoiceSlot',['../structBalloonParty_1_1Audio_1_1SfxService_1_1VoiceSlot.html',1,'BalloonParty::Audio::SfxService']]],
   ['volume_79',['Volume',['../structBalloonParty_1_1Audio_1_1VoicePlayback.html#a50ca1a96aadcd857d431c2f319ae9c44',1,'BalloonParty::Audio::VoicePlayback']]],
   ['volume_20envelope_20stop_20routing_80',['Volume envelope &amp; stop routing',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Audio/README.md#autotoc_md11',1,'']]],
-  ['volumerange_81',['VolumeRange',['../classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3687bbf9b9c25e40dfe23768ad0fbbce',1,'BalloonParty.Audio.Configuration.SfxEntry.VolumeRange'],['../classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a03cecc02b282be5535a164c6881d47ad',1,'BalloonParty.Audio.Configuration.SfxLayerEntry.VolumeRange']]],
-  ['voronoiseedid_82',['VoronoiSeedId',['../classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant.html#a364515ecc55af24da827938ab4871fec',1,'BalloonParty::Balloon::Type::ToughBalloonVariant']]],
-  ['vs_20bandwidth_83',['4. AGI — Mali fragment vs bandwidth',['../plan_performance_recovery.html#autotoc_md693',1,'']]],
-  ['vs_20gpu_20classification_84',['2. CPU vs GPU classification',['../plan_performance_recovery.html#autotoc_md691',1,'']]]
+  ['volumepriority_81',['VolumePriority',['../classBalloonParty_1_1Scenario_1_1View_1_1ScenarioGradeView.html#a6cc4b73b69d966ae8b3094c8fd3852e9',1,'BalloonParty::Scenario::View::ScenarioGradeView']]],
+  ['volumerange_82',['VolumeRange',['../classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3687bbf9b9c25e40dfe23768ad0fbbce',1,'BalloonParty.Audio.Configuration.SfxEntry.VolumeRange'],['../classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a03cecc02b282be5535a164c6881d47ad',1,'BalloonParty.Audio.Configuration.SfxLayerEntry.VolumeRange']]],
+  ['voronoiseedid_83',['VoronoiSeedId',['../classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant.html#a364515ecc55af24da827938ab4871fec',1,'BalloonParty::Balloon::Type::ToughBalloonVariant']]],
+  ['vs_20bandwidth_84',['4. AGI — Mali fragment vs bandwidth',['../plan_performance_recovery.html#autotoc_md693',1,'']]],
+  ['vs_20gpu_20classification_85',['2. CPU vs GPU classification',['../plan_performance_recovery.html#autotoc_md691',1,'']]]
 ];

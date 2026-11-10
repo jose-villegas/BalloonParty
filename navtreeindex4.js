@@ -1,5 +1,11 @@
 var NAVTREEINDEX4 =
 {
+"arch_item_activation.html#autotoc_md66":[2,11,0],
+"arch_item_activation.html#autotoc_md67":[2,11,0,0],
+"arch_item_activation.html#autotoc_md68":[2,11,0,1],
+"arch_light_field.html":[2,17],
+"arch_light_field.html#autotoc_md69":[2,17,0],
+"arch_light_field.html#autotoc_md70":[2,17,0,0],
 "arch_light_field.html#autotoc_md71":[2,17,0,1],
 "arch_light_field.html#autotoc_md72":[2,17,0,2],
 "arch_light_field.html#autotoc_md73":[2,17,0,3],
@@ -243,11 +249,5 @@ var NAVTREEINDEX4 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#ad5299bbf9ef515a4d71f42fee7449e16":[5,0,0,0,0,4,2],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#ad5299bbf9ef515a4d71f42fee7449e16":[6,0,0,0,0,4,2],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#aed662bf1c6d9d5c38c87e053cfeca4c7":[5,0,0,0,0,4,17],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#aed662bf1c6d9d5c38c87e053cfeca4c7":[6,0,0,0,0,4,17],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration.html":[5,0,0,0,0,5],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration.html":[6,0,0,0,0,5],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration.html#a03b8f0973d2e6703120f8f3bd0af1177":[5,0,0,0,0,5,1],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration.html#a03b8f0973d2e6703120f8f3bd0af1177":[6,0,0,0,0,5,1],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration.html#a3177c7380a35ed45f61c402c26abd663":[5,0,0,0,0,5,4],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration.html#a3177c7380a35ed45f61c402c26abd663":[6,0,0,0,0,5,4]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#aed662bf1c6d9d5c38c87e053cfeca4c7":[6,0,0,0,0,4,17]
 };

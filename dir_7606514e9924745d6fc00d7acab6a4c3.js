@@ -19,6 +19,7 @@ var dir_7606514e9924745d6fc00d7acab6a4c3 =
     [ "JumpToScenarioCheat.cs", "JumpToScenarioCheat_8cs.html", null ],
     [ "LightStampCheat.cs", "LightStampCheat_8cs.html", null ],
     [ "NearLevelUpCheat.cs", "NearLevelUpCheat_8cs.html", null ],
+    [ "ScenarioGradeCheat.cs", "ScenarioGradeCheat_8cs.html", null ],
     [ "ScoreCheatHelper.cs", "ScoreCheatHelper_8cs.html", null ],
     [ "SpawnBalloonCheat.cs", "SpawnBalloonCheat_8cs.html", null ],
     [ "SpawnBalloonLineCheat.cs", "SpawnBalloonLineCheat_8cs.html", null ],

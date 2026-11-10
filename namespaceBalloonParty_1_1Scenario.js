@@ -2,6 +2,7 @@ var namespaceBalloonParty_1_1Scenario =
 [
     [ "View", "namespaceBalloonParty_1_1Scenario_1_1View.html", "namespaceBalloonParty_1_1Scenario_1_1View" ],
     [ "ActiveScenario", "classBalloonParty_1_1Scenario_1_1ActiveScenario.html", "classBalloonParty_1_1Scenario_1_1ActiveScenario" ],
+    [ "BackdropMix", "classBalloonParty_1_1Scenario_1_1BackdropMix.html", "classBalloonParty_1_1Scenario_1_1BackdropMix" ],
     [ "BackgroundFieldService", "classBalloonParty_1_1Scenario_1_1BackgroundFieldService.html", "classBalloonParty_1_1Scenario_1_1BackgroundFieldService" ],
     [ "GroundRevealCurve", "classBalloonParty_1_1Scenario_1_1GroundRevealCurve.html", "classBalloonParty_1_1Scenario_1_1GroundRevealCurve" ],
     [ "GroundRevealDecision", "structBalloonParty_1_1Scenario_1_1GroundRevealDecision.html", "structBalloonParty_1_1Scenario_1_1GroundRevealDecision" ],

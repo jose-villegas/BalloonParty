@@ -4,6 +4,7 @@ var namespaceBalloonParty_1_1Scenario_1_1View =
     [ "GrassBladeMesh", "classBalloonParty_1_1Scenario_1_1View_1_1GrassBladeMesh.html", "classBalloonParty_1_1Scenario_1_1View_1_1GrassBladeMesh" ],
     [ "GrassWakeBuffer", "classBalloonParty_1_1Scenario_1_1View_1_1GrassWakeBuffer.html", "classBalloonParty_1_1Scenario_1_1View_1_1GrassWakeBuffer" ],
     [ "GroundView", "classBalloonParty_1_1Scenario_1_1View_1_1GroundView.html", "classBalloonParty_1_1Scenario_1_1View_1_1GroundView" ],
+    [ "ScenarioGradeView", "classBalloonParty_1_1Scenario_1_1View_1_1ScenarioGradeView.html", "classBalloonParty_1_1Scenario_1_1View_1_1ScenarioGradeView" ],
     [ "SmokeFieldView", "classBalloonParty_1_1Scenario_1_1View_1_1SmokeFieldView.html", "classBalloonParty_1_1Scenario_1_1View_1_1SmokeFieldView" ],
     [ "WallNetView", "classBalloonParty_1_1Scenario_1_1View_1_1WallNetView.html", "classBalloonParty_1_1Scenario_1_1View_1_1WallNetView" ],
     [ "WaterCausticBuffer", "classBalloonParty_1_1Scenario_1_1View_1_1WaterCausticBuffer.html", "classBalloonParty_1_1Scenario_1_1View_1_1WaterCausticBuffer" ],

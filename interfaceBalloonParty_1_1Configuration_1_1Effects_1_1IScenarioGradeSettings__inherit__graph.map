@@ -1,0 +1,5 @@
+<map id="BalloonParty.Configuration.Effects.IScenarioGradeSettings" name="BalloonParty.Configuration.Effects.IScenarioGradeSettings">
+<area shape="rect" id="Node000001" title="Read&#45;only tuning for the whole&#45;frame colour grade per scenario (see ScenarioGradeView)." alt="" coords="5,5,228,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGradeSettings.html" title="Authored colour grade for each scenario, so the sky, the meadow and the water read in the same light ..." alt="" coords="7,93,226,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,59,119,93,114,93,114,59"/>
+</map>

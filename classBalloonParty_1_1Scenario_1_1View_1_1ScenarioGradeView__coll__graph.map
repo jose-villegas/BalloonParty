@@ -1,0 +1,9 @@
+<map id="BalloonParty.Scenario.View.ScenarioGradeView" name="BalloonParty.Scenario.View.ScenarioGradeView">
+<area shape="rect" id="Node000001" title="Grades the whole frame per scenario (IScenarioGradeSettings), so the sky, the meadow and the water re..." alt="" coords="368,55,569,95"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="69,5,193,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="207,28,368,56,367,61,206,33"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IScenarioGradeSettings.html" title="Read&#45;only tuning for the whole&#45;frame colour grade per scenario (see ScenarioGradeView)." alt="" coords="19,55,242,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="256,73,368,73,368,78,256,78"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Scenario_1_1BackdropMix.html" title="How much of the screen the surface backdrop covers this frame, written by GroundView as its reveal ru..." alt="" coords="5,120,256,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="220,115,367,90,368,95,221,120"/>
+</map>

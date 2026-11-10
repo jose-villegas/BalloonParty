@@ -34,7 +34,8 @@ var NAVTREEINDEX0 =
 "AxisBucketNaming_8cs.html":[7,0,7,9,0],
 "AxisSlotInfo_8cs.html":[7,0,7,9,2],
 "AxisSlot_8cs.html":[7,0,7,9,1],
-"BackgroundFieldService_8cs.html":[7,0,13,2],
+"BackdropMix_8cs.html":[7,0,13,2],
+"BackgroundFieldService_8cs.html":[7,0,13,3],
 "BackgroundFieldSettings_8cs.html":[7,0,3,4,0],
 "BalanceBalloonsMessage_8cs.html":[7,0,14,7,1],
 "BalanceBiasExtensions_8cs.html":[7,0,14,4,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "GameOverLayoutBuilder_8cs.html":[7,0,6,18],
 "GameOverLifetimeScope_8cs.html":[7,0,18,3,0],
 "GameOverLossCinematic_8cs.html":[7,0,7,0,9],
-"GameOverMessage_8cs.html":[7,0,14,7,12],
-"GameOverPresentationGate_8cs.html":[7,0,7,7,2]
+"GameOverMessage_8cs.html":[7,0,14,7,12]
 };

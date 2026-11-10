@@ -83,21 +83,21 @@ var architecture =
       ] ]
     ] ],
     [ "Disturbance Field Service", "disturbance_field.html", [
-      [ "Disturbance Field Service", "disturbance_field.html#autotoc_md931", [
-        [ "Contents", "disturbance_field.html#autotoc_md932", null ],
-        [ "Architecture", "disturbance_field.html#autotoc_md933", null ],
-        [ "How it works", "disturbance_field.html#autotoc_md934", [
-          [ "RT layout", "disturbance_field.html#autotoc_md935", null ],
-          [ "Stamp API", "disturbance_field.html#autotoc_md936", null ],
-          [ "Diffusion tick", "disturbance_field.html#autotoc_md937", null ],
-          [ "Lerp stamp lifecycle", "disturbance_field.html#autotoc_md938", null ],
-          [ "Combined pass", "disturbance_field.html#autotoc_md939", null ],
-          [ "Batched flush (stamp-only path)", "disturbance_field.html#autotoc_md940", null ],
-          [ "World → UV conversion", "disturbance_field.html#autotoc_md941", null ]
+      [ "Disturbance Field Service", "disturbance_field.html#autotoc_md932", [
+        [ "Contents", "disturbance_field.html#autotoc_md933", null ],
+        [ "Architecture", "disturbance_field.html#autotoc_md934", null ],
+        [ "How it works", "disturbance_field.html#autotoc_md935", [
+          [ "RT layout", "disturbance_field.html#autotoc_md936", null ],
+          [ "Stamp API", "disturbance_field.html#autotoc_md937", null ],
+          [ "Diffusion tick", "disturbance_field.html#autotoc_md938", null ],
+          [ "Lerp stamp lifecycle", "disturbance_field.html#autotoc_md939", null ],
+          [ "Combined pass", "disturbance_field.html#autotoc_md940", null ],
+          [ "Batched flush (stamp-only path)", "disturbance_field.html#autotoc_md941", null ],
+          [ "World → UV conversion", "disturbance_field.html#autotoc_md942", null ]
         ] ],
-        [ "Consumers", "disturbance_field.html#autotoc_md942", null ],
-        [ "Configuration", "disturbance_field.html#autotoc_md943", null ],
-        [ "Interactions", "disturbance_field.html#autotoc_md944", null ]
+        [ "Consumers", "disturbance_field.html#autotoc_md943", null ],
+        [ "Configuration", "disturbance_field.html#autotoc_md944", null ],
+        [ "Interactions", "disturbance_field.html#autotoc_md945", null ]
       ] ]
     ] ],
     [ "Bush System", "arch_bush_system.html", [
