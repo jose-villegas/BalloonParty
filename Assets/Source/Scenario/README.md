@@ -196,9 +196,9 @@ bounce reference to `WaterBounceReference`.
   heights follow, so a dip travels out as a wave. The screen's edges are walls: waves reflect and the water
   sloshes between them. Surface tension pulls on curvature, so short ripples outrun long ones and a splash
   spreads into a train of wavelets; viscosity smooths the flow at the grid's own scale. A crest steeper than
-  the break slope loses some of its flow. Foam forms only on the peaks of tall crests (past the foam
-  height) and fades over most of a second; a crest outruns the water under it, so its foam trails behind
-  it. Every
+  the break slope loses some of its flow. Foam shows only where a crest (past the foam height) folds
+  over sharply in its sharpest direction (past the foam fold), where the normal turns suddenly, and lasts
+  a tenth of a second, so it sits on the fold and moves with the crest. Every
   impact the game reports to `Shared/ImpactEventBus` (each step of a ball's flight, pops, bombs, balloons
   gliding in) presses the water for 0.12 s, eased in and out, and drags it along the impact's heading
   (`Impact.Direction`), so a ball leaves a V-shaped wake. The presses

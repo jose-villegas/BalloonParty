@@ -13,7 +13,7 @@ namespace BalloonParty.Scenario.View
     ///     <c>_WaterRippleTexel</c>, which <c>BalloonParty/Scenario/Water</c> reads. A shallow-water solver over the
     ///     disturbance field's bounds (<c>Hidden/BalloonParty/Scenario/WaterRipple</c>): height and flow trade back and
     ///     forth so waves travel, surface tension sends short ripples ahead of long ones, the screen's edges reflect,
-    ///     tall crests foam, and the foam trails behind them as they run on. Each impact the game reports
+    ///     crests foam where they fold over sharply, and the foam rides along with them. Each impact the game reports
     ///     presses the water for a moment and drags it along the impact's heading, so a ball leaves a wake. Fixed
     ///     steps on game time: the same at any frame rate, held by a pause, slowed by the pop slow-mo. Only while
     ///     water shows.

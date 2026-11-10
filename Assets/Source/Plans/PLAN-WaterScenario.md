@@ -69,7 +69,7 @@ the floor's, through `IGroundSettings`.
   ball drags a wake), surface tension (short ripples outrun long ones, so a splash spreads into a
   train of wavelets), resonance (the screen's edges are walls the waves reflect off), height (crests
   read lighter, troughs darker) and breakup (a crest past the break slope loses flow, and foam
-  forms on the peaks of tall crests and trails behind them as they run on). Every impact the
+  shows on the fold of a sharp crest and moves with it). Every impact the
   game reports (`ImpactEventBus`: each step of a ball's flight, pops, bombs, balloons gliding in)
   presses the water for 0.12 s and drags it along the impact's heading. The surface's slope
   (`Include/WaterSurface.cginc`) is the simulation's plus a slow swell of two noise layers on
@@ -117,9 +117,13 @@ the floor's, through `IGroundSettings`.
   that the water saturated and foamed everywhere. The sim is tuned while the game plays: waves fade
   over a second, crests break past 0.15 a cell. Foam from per-cell curvature still barely showed
   (owner: "foam should basically trail behind the peaks"): the waves are several cells wide, so
-  only the crests right at an impact bent sharply enough. Foam now comes from a crest's height
-  (past 0.3, above the slosh play leaves everywhere), lasts most of a second so a moving crest
-  leaves a trail, and is drawn white in a finer, crisper lace that reads over the pale sand.
+  only the crests right at an impact bent sharply enough. Foam from a crest's height, lasting
+  most of a second as a trail, foamed the whole top of every big swell in a coarse lace (owner:
+  "too strong now, and doesn't feel local to the peaks, almost like it's own thing"; "maybe
+  instead of trailing just appear at the inflexion, this will carry it"). Foam now comes from
+  the fold: how sharply a crest standing past 0.15 folds over in its sharpest direction (axes and
+  diagonals), which a crest line does across itself and a broad swell never does. It lasts a
+  tenth of a second, so it sits on the fold and moves with the crest, in a fine, light lace.
   The tile's cell wrap uses `id - n·floor((id + 0.5)/n)`, not `fmod`: GPU division is
   approximate, `fmod(10, 5)` can return 5, and the tile then shows a seam.
 
