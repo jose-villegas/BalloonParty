@@ -28,8 +28,8 @@ of events can't flood the screen: there is a cap, and each kind of heads-up has 
 The settings live in `Configuration/HeadsUp/`. `IHeadsUpSettings` gives the cap (`MaxConcurrent`)
 and one `HeadsUpStyleSettings` per `HeadsUpStyleId`. Each style sets the format, the look, the
 priority, the cooldown, how long the line stays, whether it is held, an offset from its anchor, the
-range of numbers worth writing, and the count its size starts growing from. Which numbers a style
-writes (no `x2!`, taps only up to the third) is set there, not in the routers.
+range of numbers worth writing, the count its size starts growing from, and the count it's underlined
+from. Which numbers a style writes (no `x2!`, taps only up to the third) is set there, not in the routers.
 
 ## Adding a heads-up
 

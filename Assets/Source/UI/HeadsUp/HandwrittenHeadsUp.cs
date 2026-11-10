@@ -27,6 +27,20 @@ namespace BalloonParty.UI.HeadsUp
         [SerializeField] private Color _haloColor = new(1f, 0.973f, 0.906f);
         [SerializeField] [Range(0f, 1f)] private float _haloWidth = 0.25f;
 
+        [Tooltip("Drawn under a line whose style underlines it (a big streak) once the line is written. " +
+                 "None = never underlined.")]
+        [SerializeField] private LineRenderer _underline;
+        [SerializeField] [Min(0.01f)] private float _underlineSeconds = 0.18f;
+
+        [Tooltip("Space between the ink and the underline, as a share of the ink's height.")]
+        [SerializeField] [Range(0f, 1f)] private float _underlineGap = 0.05f;
+
+        [Tooltip("How far the underline runs past each end of the ink, as a share of the ink's width.")]
+        [SerializeField] [Range(0f, 0.5f)] private float _underlineOverhang = 0.08f;
+
+        [Tooltip("Degrees the underline climbs from left to right: drawn by hand, not with a ruler.")]
+        [SerializeField] [Range(-10f, 10f)] private float _underlineTilt = 2.5f;
+
         private TMP_Text _label;
         private Material _material;
         private Color _faceColor = Color.white;
@@ -41,6 +55,11 @@ namespace BalloonParty.UI.HeadsUp
         private string _pendingText;
         private HeadsUpStyleSettings _pendingStyle;
         private int _pendingArg;
+        private bool _underlined;
+        private float _underlineDrawn;
+        private Color _underlineColor;
+        private Vector3 _underlineFrom;
+        private Vector3 _underlineTo;
 
         private enum LineState
         {
@@ -92,6 +111,7 @@ namespace BalloonParty.UI.HeadsUp
         public void OnDespawned()
         {
             _writeOn.Stop();
+            HideUnderline();
             SetAlpha(0f);
             _state = LineState.Hidden;
             _pendingText = null;
@@ -164,6 +184,7 @@ namespace BalloonParty.UI.HeadsUp
 
                     return false;
                 case LineState.Holding:
+                    DrawUnderline(liveDelta);
                     _timer += liveDelta;
                     if (_timer >= _holdSeconds)
                     {
@@ -173,10 +194,13 @@ namespace BalloonParty.UI.HeadsUp
 
                     return false;
                 case LineState.Fading:
+                    DrawUnderline(liveDelta);
                     return Fade(_visibleAlpha, _fadeOutDuration, liveDelta);
                 case LineState.Releasing:
+                    DrawUnderline(unscaledDelta);
                     return Fade(_fadeFrom, _clearDuration, unscaledDelta);
                 case LineState.Held:
+                    DrawUnderline(liveDelta);
                     return false;
                 default:
                     return true;
@@ -208,6 +232,10 @@ namespace BalloonParty.UI.HeadsUp
             _label.color = style.Look.Color;
             _label.fontSize = _baseFontSize * style.SizeAt(arg);
             _label.fontStyle = style.Look.FontStyle;
+            // A rewrite takes the underline off with the old ink; it's drawn again under the new once written.
+            HideUnderline();
+            _underlined = _underline != null && style.UnderlinesAt(arg);
+            _underlineColor = style.Look.Color;
             SetAlpha(_visibleAlpha);
             _writeOn.Write(text);
             _state = LineState.Writing;
@@ -217,6 +245,45 @@ namespace BalloonParty.UI.HeadsUp
             var scale = (Vector2)transform.lossyScale;
             var position = (Vector2)transform.position;
             InkRect = new Rect(position + Vector2.Scale(bounds.min, scale), Vector2.Scale(bounds.size, scale));
+            if (_underlined)
+            {
+                PlaceUnderline(bounds);
+            }
+        }
+
+        // In the line's own space, so the underline moves with the line.
+        private void PlaceUnderline(Bounds bounds)
+        {
+            var overhang = bounds.size.x * _underlineOverhang;
+            var y = bounds.min.y - bounds.size.y * _underlineGap;
+            var halfRise = Mathf.Tan(_underlineTilt * Mathf.Deg2Rad) * (bounds.size.x * 0.5f + overhang);
+            _underlineFrom = new Vector3(bounds.min.x - overhang, y - halfRise, 0f);
+            _underlineTo = new Vector3(bounds.max.x + overhang, y + halfRise, 0f);
+        }
+
+        // Drawn left to right once the line is written, quick at first and easing into its end.
+        private void DrawUnderline(float delta)
+        {
+            if (!_underlined || _underlineDrawn >= 1f)
+            {
+                return;
+            }
+
+            _underlineDrawn = Mathf.Min(1f, _underlineDrawn + delta / _underlineSeconds);
+            var reach = 1f - (1f - _underlineDrawn) * (1f - _underlineDrawn);
+            _underline.SetPosition(0, _underlineFrom);
+            _underline.SetPosition(1, Vector3.LerpUnclamped(_underlineFrom, _underlineTo, reach));
+            _underline.enabled = true;
+        }
+
+        private void HideUnderline()
+        {
+            _underlined = false;
+            _underlineDrawn = 0f;
+            if (_underline != null)
+            {
+                _underline.enabled = false;
+            }
         }
 
         private bool Fade(float from, float duration, float delta)
@@ -263,6 +330,13 @@ namespace BalloonParty.UI.HeadsUp
             var outline = _haloWidth > 0f ? _haloColor : Color.clear;
             outline.a *= alpha;
             _material.SetColor(ShaderUtilities.ID_OutlineColor, outline);
+            if (_underlined)
+            {
+                var ink = _underlineColor;
+                ink.a *= alpha;
+                _underline.startColor = ink;
+                _underline.endColor = ink;
+            }
         }
     }
 }

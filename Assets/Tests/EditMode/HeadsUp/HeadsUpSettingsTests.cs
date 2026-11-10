@@ -113,5 +113,29 @@ namespace BalloonParty.Tests.HeadsUp
 
             Assert.AreEqual(accepted, style.Accepts(arg));
         }
+
+        [Test]
+        public void OnlyABigStreak_IsUnderlined()
+        {
+            var streak = _settings.Style(HeadsUpStyleId.Streak);
+
+            Assert.IsFalse(streak.UnderlinesAt(5));
+            Assert.IsTrue(streak.UnderlinesAt(6));
+            foreach (HeadsUpStyleId id in Enum.GetValues(typeof(HeadsUpStyleId)))
+            {
+                Assert.AreEqual(id == HeadsUpStyleId.Streak, _settings.Style(id).UnderlinesAt(100), id.ToString());
+            }
+        }
+
+        [TestCase(0, 0, false)]
+        [TestCase(0, 1000, false)]
+        [TestCase(4, 3, false)]
+        [TestCase(4, 4, true)]
+        public void UnderlinesAt_ZeroMeansNever(int from, int arg, bool underlined)
+        {
+            var style = new HeadsUpStyleSettings(HeadsUpStyleId.Streak, "{0}", default, 1).UnderlinedFrom(from);
+
+            Assert.AreEqual(underlined, style.UnderlinesAt(arg));
+        }
     }
 }

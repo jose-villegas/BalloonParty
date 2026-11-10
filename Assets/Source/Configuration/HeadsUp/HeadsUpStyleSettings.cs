@@ -42,6 +42,9 @@ namespace BalloonParty.Configuration.HeadsUp
         [Tooltip("The argument written at the look's base size; it grows from there.")]
         [SerializeField] [Min(1)] private int _escalateFrom = 1;
 
+        [Tooltip("From this argument up the line is underlined in pencil once it's written; 0 = never.")]
+        [SerializeField] [Min(0)] private int _underlineFrom;
+
         public HeadsUpStyleId Id => _id;
         public string Format => _format;
         public HeadsUpStyle Look => _look;
@@ -53,6 +56,7 @@ namespace BalloonParty.Configuration.HeadsUp
         public int MinArg => _minArg;
         public int MaxArg => _maxArg;
         public int EscalateFrom => _escalateFrom;
+        public int UnderlineFrom => _underlineFrom;
 
         internal HeadsUpStyleSettings(HeadsUpStyleId id, string format, HeadsUpStyle look, int priority)
         {
@@ -72,6 +76,12 @@ namespace BalloonParty.Configuration.HeadsUp
         public float SizeAt(int arg)
         {
             return _look.SizeAt(arg - _escalateFrom + 1);
+        }
+
+        /// <summary>Whether a line written for <paramref name="arg" /> gets an underline.</summary>
+        public bool UnderlinesAt(int arg)
+        {
+            return _underlineFrom > 0 && arg >= _underlineFrom;
         }
 
         internal HeadsUpStyleSettings WithCooldown(float seconds)
@@ -108,6 +118,12 @@ namespace BalloonParty.Configuration.HeadsUp
         internal HeadsUpStyleSettings EscalatingFrom(int arg)
         {
             _escalateFrom = arg;
+            return this;
+        }
+
+        internal HeadsUpStyleSettings UnderlinedFrom(int arg)
+        {
+            _underlineFrom = arg;
             return this;
         }
     }

@@ -5,7 +5,15 @@
 > Working plan for short, handwritten heads-ups that tell the player what just happened on
 > the board, written on as if by a pencil, plus pencil lines drawn over the board.
 
-**Status:** Phase 2 built on 2026-11-10: the four signals of §5 (`StreakGrewMessage` from `ScoreController`,
+**Status:** Phase 4 built on 2026-11-10, awaiting the owner's in-editor look: the `BalloonParty/Sprite/PencilLine`
+shader (ragged edge, paper grain, wavering pressure, from the heads-ups' pencil noise in world space), the heart
+trail redrawn as a vermilion pencil that flies to the row lifted and keeps every pass of its scribble until the
+row pops, and a pencil underline under a streak from `x6!` (`HeadsUpStyleSettings.UnderlinesAt`), drawn once the
+line is written. Phase 3 is done (2026-11-10): `HeadsUpQueue`, `HeadsUpService`, the four routers, and
+`UI/HeadsUp/HeadsUpLayer` drawing pooled `HandwrittenHeadsUp` lines, with `ReloadHeadsUp` and `BounceHeadsUp`
+retired into the routers; playtested by the bot, with the lines seen on screen.
+
+Phase 2 built on 2026-11-10: the four signals of §5 (`StreakGrewMessage` from `ScoreController`,
 `IActiveProjectilePierce.PierceArmed`, `ThrowerReadyMessage.AfterCapWait` recorded by `ThrowerReload.WaitedAtCap`,
 and `TrailEndpointKeys.Cannon` on the cannon's pivot), each EditMode-tested, plus `ProjectileBuffGainedMessage`
 for the rainbow heads-up the owner added in §10; nothing consumes them until the
@@ -179,8 +187,13 @@ No new stroke system. Two existing pens already leave a line behind them:
   scribbles across it in jittered passes (`HeartTrailController`, `StrikethroughPasses`,
   `StrikethroughJitter`), then pops the row. It gets a pencil material and a pencil-tip head. It
   owns the row geometry and the timing, so nothing else needs to know where the row is.
-- **The underline** reuses the item preview's pen (`Item/Preview/HighlightTrail`): a pooled head
-  sprite pulling a `TrailRenderer`, driven by a ticker, with a pencil material.
+- **The underline** is the heads-up line's own: an `Underline` child (a `LineRenderer` in the line's space)
+  that the line draws under its ink once it's written, and fades with it. Planned as the item preview's pen
+  (`Item/Preview/HighlightTrail`), but a pen records its ribbon in world space, so an underline would slide
+  off a line that follows its endpoint, and it would need a pool and a ticker of its own for a two-point line.
+
+Both draw through one shader, `BalloonParty/Sprite/PencilLine`, which takes the heads-ups'
+pencil noise in world space.
 
 ## 5. New signals
 

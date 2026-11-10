@@ -85,7 +85,7 @@ namespace BalloonParty.Configuration.HeadsUp
                     .WithOffset(0f, 0.25f).EscalatingFrom(2),
                 new HeadsUpStyleSettings(HeadsUpStyleId.Streak, "x{0}!",
                         Look(Ochre, 1f, 1.1f, 0.25f, 1.6f, FontStyles.Bold), 3)
-                    .WithOffset(0f, 0.3f).WithArgRange(3, 0).EscalatingFrom(3),
+                    .WithOffset(0f, 0.3f).WithArgRange(3, 0).EscalatingFrom(3).UnderlinedFrom(6),
                 new HeadsUpStyleSettings(HeadsUpStyleId.SpeedTap, "<i>tap!</i>",
                         Look(Graphite, 1f, 0.9f, 0f, 0.9f, FontStyles.Normal), 1)
                     .WithOffset(0f, 0.25f).WithArgRange(0, 3),

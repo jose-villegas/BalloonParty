@@ -28,12 +28,28 @@ namespace BalloonParty.Editor
         private const string LineName = "Line";
         private const string TipName = "PencilTip";
         private const string TipSpritePath = "Assets/Sprites/UI/pencil-tip.png";
+        private const string UnderlineName = "Underline";
+        private const string PencilShader = "BalloonParty/Sprite/PencilLine";
+        private const string PencilNoisePath = "Assets/Textures/Text/pencil-noise.png";
+        private const string UnderlineMaterialPath = "Assets/Materials/UI/PencilUnderline.mat";
+        private const string StrikethroughMaterialPath = "Assets/Materials/UI/PencilStrikethrough.mat";
+        private const string StrikethroughPrefabPath = "Assets/Prefabs/Trails/HeartTrail.prefab";
+
+        // A pencil line a little heavier than the letters' strokes, and a scribble heavier still.
+        private const float UnderlineWidth = 0.045f;
+        private const float StrikethroughWidth = 0.11f;
+
+        // Close enough points that a scribble's turns stay round.
+        private const float StrikethroughVertexDistance = 0.03f;
 
         // Above the balloons, the ball and the score trails, like the canvas lines were.
         private const string SortingLayer = "UI";
 
         // The pencil is held over the paper: above the line it's writing.
         private const int TipSortingOrder = 1;
+
+        // Level with the ink it underlines, which it never overlaps; the tip stays above both.
+        private const int UnderlineSortingOrder = 0;
 
         // The canvas build's sizes, in world units: the camera shows the reference 9.6 world units over the
         // canvas's 400, so a canvas unit is 0.024. A TextMeshPro (3D) draws a tenth of its font size per world
@@ -44,6 +60,9 @@ namespace BalloonParty.Editor
 
         // What the layer replaced: one view per kind of heads-up, each with its own lines.
         private static readonly string[] Retired = { "ReloadHeadsUp", "BounceHeadsUp" };
+
+        // The loud heads-ups' vermilion: losing a heart is the loudest thing a pencil writes.
+        private static readonly Color StrikethroughInk = new(0.70f, 0.28f, 0f);
 
         [MenuItem(MenuRoot + "Build Heads-Up Layer")]
         private static void BuildLayer()
@@ -60,6 +79,79 @@ namespace BalloonParty.Editor
             }
 
             EnsureSceneInstance();
+        }
+
+        // The heart trail that scribbles out a blocked row, redrawn as a pencil: the tip for its head and
+        // pencil graphite for its ribbon. HeartTrailController lifts the pencil on the way to the row.
+        [MenuItem(MenuRoot + "Pencil the Strikethrough")]
+        private static void PencilStrikethrough()
+        {
+            var tip = AssetDatabase.LoadAssetAtPath<Sprite>(TipSpritePath);
+            var material = EnsurePencilMaterial(StrikethroughMaterialPath, StrikethroughInk);
+            if (tip == null || material == null)
+            {
+                Debug.LogError($"[HeadsUpBuilder] Needs the pencil tip ({TipSpritePath}) and the {PencilShader} shader.");
+                return;
+            }
+
+            var root = PrefabUtility.LoadPrefabContents(StrikethroughPrefabPath);
+            try
+            {
+                var head = root.GetComponent<SpriteRenderer>();
+                var ribbon = root.GetComponent<TrailRenderer>();
+                if (head == null || ribbon == null)
+                {
+                    Debug.LogError($"[HeadsUpBuilder] {StrikethroughPrefabPath} has no head sprite or ribbon on its root.");
+                    return;
+                }
+
+                head.sprite = tip;
+                head.color = Color.white;
+                head.sharedMaterial = AssetDatabase.GetBuiltinExtraResource<Material>("Sprites-Default.mat");
+                ribbon.sharedMaterial = material;
+                ribbon.widthMultiplier = StrikethroughWidth;
+                ribbon.widthCurve = AnimationCurve.Constant(0f, 1f, 1f);
+                ribbon.colorGradient = SolidWhite();
+                ribbon.minVertexDistance = StrikethroughVertexDistance;
+                ribbon.numCapVertices = 2;
+                PrefabUtility.SaveAsPrefabAsset(root, StrikethroughPrefabPath);
+                Debug.Log($"[HeadsUpBuilder] Pencilled the strikethrough in {StrikethroughPrefabPath}.");
+            }
+            finally
+            {
+                PrefabUtility.UnloadPrefabContents(root);
+            }
+        }
+
+        // An existing material keeps its tuned values; only a missing one is made.
+        private static Material EnsurePencilMaterial(string path, Color tint)
+        {
+            var existing = AssetDatabase.LoadAssetAtPath<Material>(path);
+            if (existing != null)
+            {
+                return existing;
+            }
+
+            var shader = Shader.Find(PencilShader);
+            if (shader == null)
+            {
+                return null;
+            }
+
+            var material = new Material(shader) { color = tint };
+            material.SetTexture("_PencilNoiseTex", AssetDatabase.LoadAssetAtPath<Texture2D>(PencilNoisePath));
+            AssetDatabase.CreateAsset(material, path);
+            return material;
+        }
+
+        // The ink's colour is the material's tint (or the line's own, for the underline), the same all along.
+        private static Gradient SolidWhite()
+        {
+            var gradient = new Gradient();
+            gradient.SetKeys(
+                new[] { new GradientColorKey(Color.white, 0f), new GradientColorKey(Color.white, 1f) },
+                new[] { new GradientAlphaKey(1f, 0f), new GradientAlphaKey(1f, 1f) });
+            return gradient;
         }
 
         private static void EnsurePrefab()
@@ -212,8 +304,34 @@ namespace BalloonParty.Editor
             var line = go.AddComponent<HandwrittenHeadsUp>();
             var fields = new SerializedObject(line);
             fields.FindProperty("_writeOn").objectReferenceValue = writeOn;
+            fields.FindProperty("_underline").objectReferenceValue = CreateUnderline(go.transform);
             fields.ApplyModifiedPropertiesWithoutUndo();
             return line;
+        }
+
+        // In the line's own space, so it moves with the line; HandwrittenHeadsUp places and draws it.
+        private static LineRenderer CreateUnderline(Transform line)
+        {
+            var go = new GameObject(UnderlineName) { layer = line.gameObject.layer };
+            go.transform.SetParent(line, false);
+            var underline = go.AddComponent<LineRenderer>();
+            underline.sharedMaterial = EnsurePencilMaterial(UnderlineMaterialPath, Color.white);
+            if (underline.sharedMaterial == null)
+            {
+                Debug.LogError($"[HeadsUp] No {PencilShader} shader; the heads-ups underline without a pencil.");
+            }
+
+            underline.useWorldSpace = false;
+            underline.positionCount = 2;
+            underline.widthMultiplier = UnderlineWidth;
+            underline.numCapVertices = 2;
+            underline.colorGradient = SolidWhite();
+            underline.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            underline.receiveShadows = false;
+            underline.sortingLayerName = SortingLayer;
+            underline.sortingOrder = UnderlineSortingOrder;
+            underline.enabled = false;
+            return underline;
         }
 
         // Its pivot is the graphite point, which WriteOnText puts on the reveal edge. Hidden until a write.

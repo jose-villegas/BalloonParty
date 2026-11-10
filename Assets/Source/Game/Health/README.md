@@ -137,3 +137,8 @@ stateDiagram-v2
     Striking --> Popping: N passes complete
     Popping --> Idle: PopDoomedLine + release trail
 ```
+
+The trail is a pencil (`HeartTrail` prefab, from **Tools > BalloonParty > HeadsUp > Pencil the
+Strikethrough**): a pencil tip for its head and vermilion graphite (`BalloonParty/Sprite/PencilLine`) for its
+ribbon. It flies to the row lifted off the paper and only draws while striking, and its ribbon lasts the
+whole scribble, so every pass stays drawn until the row pops.

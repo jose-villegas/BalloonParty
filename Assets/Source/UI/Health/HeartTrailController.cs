@@ -18,8 +18,9 @@ namespace BalloonParty.UI.Health
 {
     /// <summary>
     ///     Spawns one heart trail per heart lost when a <see cref="WaveDamageMessage"/> arrives.
-    ///     Each trail flies from the health UI to the doomed line, slides back and forth (strikethrough),
-    ///     then pops all overflow balloons in that line simultaneously.
+    ///     Each trail is a pencil (the prefab's look, from <c>HeadsUpBuilder</c>): it flies from the health UI
+    ///     to the doomed line lifted off the paper, scribbles back and forth across it (the strikethrough),
+    ///     whose ink stays until it pops all overflow balloons in that line at once.
     /// </summary>
     internal sealed class HeartTrailController : IStartable, IDisposable
     {
@@ -113,6 +114,10 @@ namespace BalloonParty.UI.Health
             var jitter = _settings.StrikethroughJitter;
             var passDuration = _settings.StrikethroughPassDuration;
 
+            // A pencil scribbling out the row: every pass stays drawn until the row pops, so the ink must
+            // outlive the whole scribble (the authored ribbon length comes back when the trail is pooled).
+            trail.SetRibbonTime(_settings.StrikethroughPasses * passDuration + _settings.HeartTrailDuration);
+
             var seq = DOTween.Sequence();
 
             // Stagger: wait for previous strikethroughs to finish.
@@ -121,17 +126,16 @@ namespace BalloonParty.UI.Health
                 seq.AppendInterval(delay);
             }
 
-            // Enable ribbon and play sound just before the flight begins.
             var capturedLineIndex = lineIndex;
             seq.AppendCallback(() =>
             {
-                trail.SetRibbonEmitting(true);
                 _soundPlayer.Play(GameSoundId.Strikethrough, leftPos,
                     semitoneOffset: -capturedLineIndex * 3);
             });
 
-            // Phase 1: fly from hearts UI to left edge of the doomed line.
+            // Phase 1: fly from hearts UI to left edge of the doomed line, the pencil lifted off the paper.
             seq.Append(trail.transform.DOMove(leftPos, _settings.HeartTrailDuration).SetEase(Ease.OutCubic));
+            seq.AppendCallback(() => trail.SetRibbonEmitting(true));
 
             // Phase 2: back-and-forth passes across the line with jitter.
             for (var pass = 0; pass < _settings.StrikethroughPasses; pass++)
