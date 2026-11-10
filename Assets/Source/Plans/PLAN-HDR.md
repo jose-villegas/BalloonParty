@@ -6,7 +6,7 @@
 > pops of light on lit surfaces, glitter, shine and specular sweeps, item glows, the level-up.
 > Written 2026-11-10 from an audit of the pipeline assets, the runtime render targets, every
 > shader under `Assets/Shaders/BalloonParty/` and every material under `Assets/Materials/`.
-> **Nothing is switched yet.** The open decisions at the end come before any implementation.
+> **Nothing is switched yet.** The decisions taken after the audit are at the end.
 >
 > This plan replaces the HDR part (Wave B) of @ref plan_hdr_color_pipeline. That plan made the
 > switch to Linear colour space a prerequisite, because it read URP as refusing HDR colour
@@ -238,9 +238,9 @@ flowchart TD
 
 Project settings are Editor-only edits, done together with the user.
 
-1. `GameURP.asset`: Supports HDR on; precision per the decision; Color Grading Mode **HDR**; LUT 32.
+1. `GameURP.asset`: Supports HDR on; precision 32-bit; Color Grading Mode **HDR**; LUT 32.
 2. Main camera: post-processing on, dithering on.
-3. The global Volume gets Tonemapping per the decision. `ScenarioGradeView` stops toggling
+3. The global Volume gets Tonemapping: ACES, with an exposure lift. `ScenarioGradeView` stops toggling
    post-processing.
 4. Measure the empty-post cost on device. **Gate:** if it doesn't fit, park HDR (Phase 0 stays).
 5. Compare against the baselines. Expect the Tier 2 item 4 effects (already authored above 1)
@@ -272,24 +272,31 @@ overdriven material. Tune per effect, then measure on device. Fallback ladder: f
 
 ---
 
-## Open decisions (for the user, before implementing)
+## Decisions (2026-11-10)
 
-1. **Bloom, or not.** Without bloom, range above 1 shows only as smoother roll-off (with a
-   tonemapper) or not at all (without one). Bloom is what makes glitter and pops *glow*, and it
-   is the largest new GPU cost after the post pass. Recommendation: yes, as Phase 3, gated on
-   the device measurement, with Dual or Kawase at quarter resolution.
-2. **Which tonemapper.** The UI goes through the same post pass, so the tonemapper reaches it.
-   - **None**: everything at 0–1 looks as now, UI included; values above 1 still clip at the
-     screen and only show through bloom. Cheapest look risk.
-   - **Neutral**: smooth roll-off for pops and highlights, but it also darkens the whole 0–1
-     range (white lands well below white), so it needs an exposure lift and a look re-tune of
-     the scene and the UI. Close to the re-tune cost the Linear plan feared.
-   - **ACES**: like Neutral with more contrast and a hue shift in saturated colours; this game
-     is saturated colours.
-   Recommendation: start with **None** to switch with no look change, then audition Neutral
-   with an exposure lift side by side against the baselines.
-3. **The format.** Recommendation: **32-bit `B10G11R11` with dithering**, the same bandwidth as
-   today; move to 64-bit only if the sky, mist or water band visibly on device.
-4. **Which effects go first.** Recommendation: **pops on lit surfaces and glitter** (items 1 and
-   2): both already produce values above 1 and need no new authoring path. The level-up
-   (item 6) is the showcase once those read well.
+Taken by the user after this audit.
+
+| Decision | Choice | Notes |
+|---|---|---|
+| Bloom | **Yes, gated** | Phase 3, after the switch. Dual or Kawase at quarter resolution, threshold above 1. Ships only if the device measurement fits the frame budget; otherwise follow the fallback ladder. |
+| Tonemapper | **ACES** | See below: the switch is no longer look-neutral. |
+| Format | **32-bit `B10G11R11` + dithering** | Move to 64-bit only if the sky, mist or water band visibly on device. |
+| First effects | **Pops on lit surfaces, then glitter** (items 1 and 2) | The level-up (item 6) is the showcase once those read well. |
+
+### What ACES means for this plan
+
+- **Phase 1 is a look change, not a silent switch.** ACES darkens the whole 0–1 range and adds
+  contrast, and it shifts the hue of saturated colours. Expect an exposure lift on the global
+  Volume, and check the balloon palette for identity: gameplay colours must stay easy to tell
+  apart. The Phase 0 baselines are what this is judged against.
+- **Grading runs in ACES colour spaces.** With ACES selected, URP does every grading operation in
+  ACES spaces, so the scenario grades are re-tuned under ACES, in the same pass as the exposure
+  lift.
+- **No extra per-pixel cost against Neutral.** In HDR grading mode the tonemapper is baked into
+  the grading LUT, so ACES and Neutral cost the same lookup per pixel.
+- **The UI is tonemapped too.** The game and launcher canvases are Screen Space – Camera, and
+  score, hearts and heads-ups are World Space, so all of them go through the post pass. In a URP
+  camera stack post-processing runs once at the end of the stack, so a separate UI camera does
+  not escape it. To settle in Phase 1, by eye: either re-tune the UI colours under ACES, or move
+  the screen-space canvases to Screen Space – Overlay (drawn after post), which changes how world
+  sprites such as score trails layer with the UI.
