@@ -4,78 +4,61 @@ using UnityEngine;
 namespace BalloonParty.Balloon.Controller
 {
     /// <summary>
-    ///     A pair of neighbouring bubble clusters one nudge brought closer: <see cref="Absorbed" /> flows into
-    ///     <see cref="Survivor" />, and <see cref="Approach" /> is how much closer the nudge took them (world units).
+    ///     A pair of neighbouring bubble clusters that can merge: <see cref="Absorbed" /> flows into
+    ///     <see cref="Survivor" />, which then holds <see cref="Bubbles" />.
     /// </summary>
     internal readonly struct BubbleMergeCandidate
     {
         public readonly Vector2Int Absorbed;
         public readonly Vector2Int Survivor;
-        public readonly float Approach;
+        public readonly int Bubbles;
 
-        public BubbleMergeCandidate(Vector2Int absorbed, Vector2Int survivor, float approach)
+        public BubbleMergeCandidate(Vector2Int absorbed, Vector2Int survivor, int bubbles)
         {
             Absorbed = absorbed;
             Survivor = survivor;
-            Approach = approach;
+            Bubbles = bubbles;
         }
     }
 
     /// <summary>
-    ///     When two neighbouring bubble clusters merge: only when a nudge moves them closer together, measured at
-    ///     the nudge's peak (each cluster's rest position plus its push; a cluster the nudge didn't touch has no
-    ///     push), and only when their bubbles fit in one cluster. Sitting side by side, a spawn, a push apart or a
-    ///     push that slides them past each other at the same distance never merges.
+    ///     When two bubble clusters merge: whenever they sit in neighbouring slots and their bubbles fit in one
+    ///     cluster. The smaller flows into the larger.
     /// </summary>
     internal static class BubbleMergeRule
     {
-        // World units the nudge must close the gap by: float noise on a sideways push is not "closer".
-        internal const float MinApproach = 1e-3f;
+        private static readonly CandidateComparer ByBubblesDescending = new();
 
-        private static readonly ApproachComparer ByApproachDescending = new();
-
-        /// <summary>How much closer the nudge brings the two at its peak: above 0 closer, 0 or below apart or level.</summary>
-        public static float Approach(Vector2 a, Vector2 pushA, Vector2 b, Vector2 pushB)
+        public static bool Merges(int bubblesA, int bubblesB, int maxBubbles)
         {
-            return Vector2.Distance(a, b) - Vector2.Distance(a + pushA, b + pushB);
-        }
-
-        public static bool Merges(Vector2 a, Vector2 pushA, Vector2 b, Vector2 pushB, int bubblesA, int bubblesB,
-            int maxBubbles)
-        {
-            return bubblesA + bubblesB <= maxBubbles && Approach(a, pushA, b, pushB) > MinApproach;
+            return bubblesA > 0 && bubblesB > 0 && bubblesA + bubblesB <= maxBubbles;
         }
 
         /// <summary>
-        ///     Whether <paramref name="pushA" /> carries a toward b more than <paramref name="pushB" /> carries b toward
-        ///     a: the one pushed toward the other is the one that flows into it. A tie goes to the lower slot, so the
-        ///     pair is decided once.
+        ///     Whether a flows into b: the smaller cluster is absorbed. Between equals, the one in the higher slot
+        ///     (column, then row) flows into the lower, so the pair is decided once.
         /// </summary>
-        public static bool IsAbsorbed(Vector2Int slotA, Vector2 a, Vector2 pushA, Vector2Int slotB, Vector2 b,
-            Vector2 pushB)
+        public static bool IsAbsorbed(Vector2Int slotA, int bubblesA, Vector2Int slotB, int bubblesB)
         {
-            var toward = (b - a).normalized;
-            var aIn = Vector2.Dot(pushA, toward);
-            var bIn = Vector2.Dot(pushB, -toward);
-            if (!Mathf.Approximately(aIn, bIn))
+            if (bubblesA != bubblesB)
             {
-                return aIn > bIn;
+                return bubblesA < bubblesB;
             }
 
-            return slotA.x != slotB.x ? slotA.x < slotB.x : slotA.y < slotB.y;
+            return slotA.x != slotB.x ? slotA.x > slotB.x : slotA.y > slotB.y;
         }
 
         /// <summary>
-        ///     Picks the merges one nudge makes from its candidates, each cluster in at most one: the pairs the nudge
-        ///     closed most go first, so a cluster pushed toward two neighbours flows into the one it approached most,
-        ///     and a merged cluster waits for a later nudge to merge again. Sorts <paramref name="candidates" />.
+        ///     Picks the merges one pass makes from its candidates, each cluster in at most one: the merges that make
+        ///     the biggest clusters go first, so a cluster between two neighbours joins the one it makes biggest. A
+        ///     merged cluster can merge again on a later pass. Sorts <paramref name="candidates" />.
         /// </summary>
         public static void Choose(List<BubbleMergeCandidate> candidates, List<BubbleMergeCandidate> chosen,
             HashSet<Vector2Int> used)
         {
             chosen.Clear();
             used.Clear();
-            candidates.Sort(ByApproachDescending);
+            candidates.Sort(ByBubblesDescending);
             foreach (var candidate in candidates)
             {
                 if (used.Contains(candidate.Absorbed) || used.Contains(candidate.Survivor))
@@ -89,12 +72,25 @@ namespace BalloonParty.Balloon.Controller
             }
         }
 
-        // A class comparer, so List.Sort takes no per-call delegate.
-        private sealed class ApproachComparer : IComparer<BubbleMergeCandidate>
+        // A class comparer, so List.Sort takes no per-call delegate. Ties break on the slots, so the order (and with
+        // it the merges) never depends on the unstable sort.
+        private sealed class CandidateComparer : IComparer<BubbleMergeCandidate>
         {
             public int Compare(BubbleMergeCandidate x, BubbleMergeCandidate y)
             {
-                return y.Approach.CompareTo(x.Approach);
+                var byBubbles = y.Bubbles.CompareTo(x.Bubbles);
+                if (byBubbles != 0)
+                {
+                    return byBubbles;
+                }
+
+                var bySurvivor = Order(x.Survivor).CompareTo(Order(y.Survivor));
+                return bySurvivor != 0 ? bySurvivor : Order(x.Absorbed).CompareTo(Order(y.Absorbed));
+            }
+
+            private static long Order(Vector2Int slot)
+            {
+                return ((long)slot.x << 32) | (uint)slot.y;
             }
         }
     }

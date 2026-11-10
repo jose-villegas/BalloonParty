@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration.Balloons;
-using BalloonParty.Nudge;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
-using MessagePipe;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -13,66 +10,54 @@ using VContainer.Unity;
 namespace BalloonParty.Balloon.Controller
 {
     /// <summary>
-    ///     Merges neighbouring bubble clusters a nudge pushes together (<see cref="BubbleMergeRule" />). After every
-    ///     nudge (<see cref="NudgeAppliedMessage" />), each pushed cluster is measured against its neighbouring
-    ///     clusters at the push's peak; a pair that ends up closer, whose bubbles fit in one cluster, merges: the one
-    ///     pushed toward the other flows into it, and the survivor holds both counts. Each cluster merges at most
-    ///     once per nudge.
+    ///     Merges bubble clusters that sit in neighbouring slots (<see cref="BubbleMergeRule" />). Whenever the grid
+    ///     has changed (a spawn, a pop, the board settling), the next frame looks at every pair of neighbouring
+    ///     clusters whose bubbles fit in one: the smaller flows into the larger, which holds both counts. Each
+    ///     cluster merges at most once a pass; the absorb itself changes the grid, so a cluster that grew can merge
+    ///     again on the next frame.
     /// </summary>
-    internal sealed class BubbleMergeService : IStartable, IDisposable
+    internal sealed class BubbleMergeService : ITickable
     {
         private readonly SlotGrid _grid;
         private readonly BalloonControllerRegistry _registry;
         private readonly IBalloonsConfiguration _balloonsConfig;
-        private readonly ISubscriber<NudgeAppliedMessage> _appliedSubscriber;
-        private readonly Dictionary<Vector2Int, Vector2> _pushes = new();
         private readonly List<IWriteableSlotActor> _neighbors = new();
         private readonly List<BubbleMergeCandidate> _candidates = new();
         private readonly List<BubbleMergeCandidate> _chosen = new();
         private readonly HashSet<Vector2Int> _used = new();
 
-        private IDisposable _subscription;
+        // The grid's MutationVersion last looked at: an unchanged grid has nothing new to merge.
+        private int _seenVersion = -1;
 
         [Inject]
         internal BubbleMergeService(
-            SlotGrid grid, BalloonControllerRegistry registry, IBalloonsConfiguration balloonsConfig,
-            ISubscriber<NudgeAppliedMessage> appliedSubscriber)
+            SlotGrid grid, BalloonControllerRegistry registry, IBalloonsConfiguration balloonsConfig)
         {
             _grid = grid;
             _registry = registry;
             _balloonsConfig = balloonsConfig;
-            _appliedSubscriber = appliedSubscriber;
         }
 
-        public void Start()
+        public void Tick()
         {
-            _subscription = _appliedSubscriber.Subscribe(OnNudgeApplied);
-        }
-
-        public void Dispose()
-        {
-            _subscription?.Dispose();
-        }
-
-        private void OnNudgeApplied(NudgeAppliedMessage msg)
-        {
-            _pushes.Clear();
-            var anyBubble = false;
-            foreach (var nudged in msg.Actors)
-            {
-                _pushes[nudged.Slot] = nudged.Displacement;
-                anyBubble |= _grid.At(nudged.Slot) is BubbleClusterModel;
-            }
-
-            if (!anyBubble)
+            if (_grid.MutationVersion == _seenVersion)
             {
                 return;
             }
 
+            _seenVersion = _grid.MutationVersion;
             _candidates.Clear();
-            foreach (var nudged in msg.Actors)
+            for (var col = 0; col < _grid.Columns; col++)
             {
-                CollectCandidates(nudged.Slot, nudged.Displacement);
+                for (var row = 0; row < _grid.Rows; row++)
+                {
+                    CollectCandidates(new Vector2Int(col, row));
+                }
+            }
+
+            if (_candidates.Count == 0)
+            {
+                return;
             }
 
             BubbleMergeRule.Choose(_candidates, _chosen, _used);
@@ -82,14 +67,14 @@ namespace BalloonParty.Balloon.Controller
             }
         }
 
-        private void CollectCandidates(Vector2Int slot, Vector2 push)
+        // Each pair is found from both sides; only the side that would be absorbed adds it.
+        private void CollectCandidates(Vector2Int slot)
         {
             if (_grid.At(slot) is not BubbleClusterModel bubble)
             {
                 return;
             }
 
-            Vector2 here = _grid.IndexToWorldPosition(slot);
             _grid.GetNeighbors(slot.x, slot.y, _neighbors);
             foreach (var neighbor in _neighbors)
             {
@@ -99,18 +84,14 @@ namespace BalloonParty.Balloon.Controller
                 }
 
                 var otherSlot = other.SlotIndex.Value;
-                Vector2 there = _grid.IndexToWorldPosition(otherSlot);
-                _pushes.TryGetValue(otherSlot, out var otherPush);
+                var bubbles = bubble.HitsRemaining.Value;
+                var otherBubbles = other.HitsRemaining.Value;
                 var max = Mathf.Max(bubble.MaxHitPoints, other.MaxHitPoints);
-                if (!BubbleMergeRule.Merges(here, push, there, otherPush, bubble.HitsRemaining.Value,
-                        other.HitsRemaining.Value, max)
-                    || !BubbleMergeRule.IsAbsorbed(slot, here, push, otherSlot, there, otherPush))
+                if (BubbleMergeRule.Merges(bubbles, otherBubbles, max)
+                    && BubbleMergeRule.IsAbsorbed(slot, bubbles, otherSlot, otherBubbles))
                 {
-                    continue;
+                    _candidates.Add(new BubbleMergeCandidate(slot, otherSlot, bubbles + otherBubbles));
                 }
-
-                _candidates.Add(new BubbleMergeCandidate(
-                    slot, otherSlot, BubbleMergeRule.Approach(here, push, there, otherPush)));
             }
         }
 

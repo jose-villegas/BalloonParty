@@ -5,7 +5,7 @@
 > A third backdrop beside the sky and the meadow: a **water surface** that ripples where the
 > ball and the balloons pass, read from the same disturbance field the grass bends to. On a
 > water level soap bubbles keep landing on the board, more often the longer the level runs, and
-> two bubbles **merge** when a nudge pushes one toward the other.
+> two bubbles **merge** whenever they sit next to each other.
 > Planned 2026-11-10; the owner settled the open decisions the same day. **Status: building.**
 
 ---
@@ -126,17 +126,19 @@ generator's entry is `Withheld`: the water rise is its own path.
 
 ### 4. The merge
 
-On every nudge, `BubbleMergeService` (`Balloon/Controller/`) looks at each nudged bubble and its
-neighbouring bubbles. A pair merges when the nudge **moves them closer**: with the rest positions
-`a`, `b` and the nudge displacements `da`, `db` (zero for one that isn't nudged by this event),
-they merge when `|(a + da) − (b + db)| < |a − b| − ε`. Sitting adjacent never merges; a spawn never
-merges; a nudge that pushes them apart or slides them past each other at the same distance doesn't.
-`BubbleMergeRule` is the pure rule, tested on its own.
+Two bubble clusters in neighbouring slots merge, whatever brought them there: a spawn, the board
+settling, a pop opening the way. `BubbleMergeService` (`Balloon/Controller/`, a tick) looks again
+whenever the grid has changed (`SlotGrid.MutationVersion`) and merges every neighbouring pair
+whose bubbles fit in one cluster. `BubbleMergeRule` is the pure rule, tested on its own.
 
-- The bubble that was pushed flows into the one it was pushed toward, which survives. Its
-  `HitsRemaining` becomes the sum, and the absorbed one leaves the grid silently and slides into it.
-- If a bubble moves closer to more than one neighbour, it merges with the one it approaches most.
-- One merge per bubble per nudge event: no cascades in the same nudge.
+- The smaller cluster flows into the larger, which survives (between equals, the slot order
+  decides). The survivor's `HitsRemaining` becomes the sum, and the absorbed one leaves the grid
+  silently and slides into it.
+- A cluster between two neighbours joins the one that makes the bigger cluster.
+- Each cluster merges at most once a frame. The absorb changes the grid, so a cluster that grew
+  merges again on the next frame if a neighbour still fits: chains collapse a step a frame.
+- A first version merged only when a nudge pushed two bubbles closer; the owner dropped that:
+  "Just merge them when next to each other, no nudge".
 
 ## Owner decisions (2026-11-10)
 
@@ -146,7 +148,9 @@ merges; a nudge that pushes them apart or slides them past each other at the sam
 3. **The curve:** the ramp from the proposed 6 s grace over 60 s (the proposal was a spawn wait
    shortening from 8 s to 2 s; carried over as a share rising from 15% to 65%).
 4. **Clusters bigger than two:** a merge happens only when the sum fits in 5 bubbles; otherwise the
-   two stay apart. Merged clusters merge again on a later nudge, up to 5.
+   two stay apart. A merged cluster merges again with any neighbour that still fits, up to 5.
+6. **When they merge:** whenever two sit next to each other, no nudge needed (it first followed
+   the direction above, "only on nudge"; the owner changed it after trying it).
 5. **What water leaves out:** "water surface has no clouds or bushes", and "no deflector balloons
    except for unbreakable": no Tough, Tougher, Deflector or Gatekeeper on water either.
 
@@ -157,6 +161,6 @@ merges; a nudge that pushes them apart or slides them past each other at the sam
 | 1 | `ScenarioKind.Water`, the schedule rolls, `ScenarioStretch` shares | schedule determinism with three kinds, water only from `WaterFromLevel`, never two surfaces back to back |
 | 2 | `GroundView` as the surface view, `Water.shader`, settings + material | planner/curve with water; the shader needs an in-editor look |
 | 3 | `BubbleRiseCurve`, `SpawnClock.SecondsOnLevel`, the roll in `BalloonSpawner`, settings | the curve as a pure function of time on level; seconds on level under the clock's holds |
-| 4 | `BubbleMergeRule`, `BubbleMergeService`, the absorb in `BalloonController` | closer merges; farther or unchanged doesn't; the cap |
+| 4 | `BubbleMergeRule`, `BubbleMergeService`, the absorb in `BalloonController` | neighbours merge, the smaller into the larger; the cap; one merge per cluster a pass |
 
 Each phase builds Runtime, Editor and Tests.EditMode, and passes `Tools/style_audit.py`.

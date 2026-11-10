@@ -14,25 +14,21 @@ namespace BalloonParty.Nudge
     {
         private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
         private readonly ISubscriber<NudgeMessage> _nudgeSubscriber;
-        private readonly IPublisher<NudgeAppliedMessage> _appliedPublisher;
         private readonly NudgeOverrideResolver _resolver;
         private readonly SlotGrid _grid;
         private readonly List<IWriteableSlotActor> _neighborBuffer = new();
-        private readonly List<NudgedActor> _nudged = new();
 
         [Inject]
         internal NudgeService(
             SlotGrid grid,
             NudgeOverrideResolver resolver,
             ISubscriber<ActorHitMessage> hitSubscriber,
-            ISubscriber<NudgeMessage> nudgeSubscriber,
-            IPublisher<NudgeAppliedMessage> appliedPublisher)
+            ISubscriber<NudgeMessage> nudgeSubscriber)
         {
             _grid = grid;
             _resolver = resolver;
             _hitSubscriber = hitSubscriber;
             _nudgeSubscriber = nudgeSubscriber;
-            _appliedPublisher = appliedPublisher;
         }
 
         public void Start()
@@ -48,12 +44,8 @@ namespace BalloonParty.Nudge
                 return;
             }
 
-            var direction = _grid.IndexToWorldPosition(slot) - origin;
-            nudgeableView.Nudge(direction, distance, duration);
-            if (direction.sqrMagnitude >= 1e-8f)
-            {
-                _nudged.Add(new NudgedActor(slot, (Vector2)direction.normalized * distance));
-            }
+            var slotPos = _grid.IndexToWorldPosition(slot);
+            nudgeableView.Nudge(slotPos - origin, distance, duration);
         }
 
         private void OnActorHit(ActorHitMessage msg)
@@ -63,7 +55,6 @@ namespace BalloonParty.Nudge
                 return;
             }
 
-            _nudged.Clear();
             var hitSlot = msg.Actor.SlotIndex;
             var hitSlotPos = _grid.IndexToWorldPosition(hitSlot);
             _grid.GetNeighbors(hitSlot.x, hitSlot.y, _neighborBuffer);
@@ -79,13 +70,10 @@ namespace BalloonParty.Nudge
                 _resolver.Resolve(nudgeable.NudgeOverrides, null, NudgeType.Neighbor, out var distance, out var duration);
                 NudgeActor(slot, hitSlotPos, distance, duration);
             }
-
-            PublishApplied();
         }
 
         private void OnNudge(NudgeMessage msg)
         {
-            _nudged.Clear();
             if (msg.Source == NudgeType.Shockwave)
             {
                 HandleShockwave(msg);
@@ -94,8 +82,6 @@ namespace BalloonParty.Nudge
             {
                 HandleSingleActor(msg);
             }
-
-            PublishApplied();
         }
 
         private void HandleSingleActor(NudgeMessage msg)
@@ -175,15 +161,6 @@ namespace BalloonParty.Nudge
             }
 
             NudgeActor(slot, msg.Origin, distance, duration);
-        }
-
-        // After the views have their impulses: whoever reads the pushes (BubbleMergeService) sees this nudge whole.
-        private void PublishApplied()
-        {
-            if (_nudged.Count > 0)
-            {
-                _appliedPublisher.Publish(new NudgeAppliedMessage(_nudged));
-            }
         }
     }
 }
