@@ -171,9 +171,11 @@ through its own instance of `IGroundSettings.WaterMaterial` (no blades, no grass
 bounce reference to `WaterBounceReference`.
 
 - `Shaders/BalloonParty/Scenario/Water.shader`: one pass, drawn as a body of water over a sandy bottom.
-  The bottom's depth drifts across the level from the shared noise, from sandbanks to deep channels. It is
-  seen as from a camera above the middle of the screen: a deeper bottom shrinks toward the middle and
-  slides slower when the board scrolls, and the surface's slope bends the view of it more over deep water.
+  The bottom's depth drifts across the level from the shared noise, from sandbanks to deep channels,
+  blurred over a few world units (`_DepthBlur`) so the banks fade into the channels with no edge
+  between them. It is seen as from a camera above the middle of the screen: a deeper bottom shrinks
+  toward the middle and slides slower when the board scrolls, and the surface's slope bends the view of
+  it more over deep water.
   The sand carries ripple bands and the caustic net (below), shaded around the sand's own colour, never
   added past it. The water over it absorbs each colour by its own rate per world unit (red first, blue
   last) and scatters its own colour back, so shallows read as sand and deep water as teal. Each simulated

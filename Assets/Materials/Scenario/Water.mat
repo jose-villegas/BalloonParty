@@ -38,7 +38,8 @@ Material:
     - _CausticWobble: 0.1
     - _CausticWobbleSize: 3
     - _DeepDepth: 4.5
-    - _DepthContrast: 0.4
+    - _DepthBlur: 3
+    - _DepthContrast: 0.25
     - _DepthPatchSize: 9
     - _DstBlend: 0
     - _GlintPower: 90

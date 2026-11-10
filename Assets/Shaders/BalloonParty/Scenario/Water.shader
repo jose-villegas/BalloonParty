@@ -20,7 +20,10 @@ Shader "BalloonParty/Scenario/Water"
         // World size of the sandbanks and channels.
         _DepthPatchSize   ("Depth Patch Size (world)",    Float)          = 9
         // How sharply the bottom drops from the banks into the channels: 0 = a gentle drift, 1 = shelves.
-        _DepthContrast    ("Depth Contrast",              Range(0, 1))    = 0.4
+        _DepthContrast    ("Depth Contrast",              Range(0, 1))    = 0.25
+        // World units the depth is blurred over, so the banks and channels blend into each other over a wide band
+        // instead of meeting along an edge. 0 = the raw noise.
+        _DepthBlur        ("Depth Blur (world)",          Range(0, 5))    = 3
         _ShallowDepth     ("Shallowest (world)",          Float)          = 0.6
         _DeepDepth        ("Deepest (world)",             Float)          = 4.5
         // World units between the sand's ripple bands, and how much they shade it.
@@ -140,6 +143,7 @@ Shader "BalloonParty/Scenario/Water"
             half4  _SandColor;
             float  _DepthPatchSize;
             half   _DepthContrast;
+            float  _DepthBlur;
             float  _ShallowDepth;
             float  _DeepDepth;
             float  _SandRippleSize;
@@ -221,6 +225,31 @@ Shader "BalloonParty/Scenario/Water"
                 return lines * (0.7h + 0.7h * second);
             }
 
+            // How deep the bottom lies at a point of the ground: 0 = the shallowest bank, 1 = the deepest channel. The
+            // noise is blurred over _DepthBlur (a centre and two rings of six, the outer turned half a step), since
+            // the contrast below steepens every ridge in it: unblurred, the banks meet the channels along edges, with
+            // the corners of the noise texture's bilinear filtering in them. Eased in and out of the extremes rather
+            // than clamped, so a shelf has no crease either; a crease would also show as a seam in the sand, which
+            // the depth shifts by perspective.
+            half DeepAt(float2 groundPos)
+            {
+                float patchSize = max(_DepthPatchSize, 1e-3);
+                float2 uv = groundPos / patchSize;
+                float radius = _DepthBlur / patchSize;
+                half noise = tex2D(_NoiseTex, uv).r * 0.2h;
+
+                [unroll]
+                for (int i = 0; i < 6; i++)
+                {
+                    float inner = i * (TAU / 6.0);
+                    float outer = inner + TAU / 12.0;
+                    noise += tex2D(_NoiseTex, uv + float2(cos(inner), sin(inner)) * (radius * 0.5)).r * 0.0733h;
+                    noise += tex2D(_NoiseTex, uv + float2(cos(outer), sin(outer)) * radius).r * 0.06h;
+                }
+
+                return smoothstep(0.0h, 1.0h, 0.5h + (noise - 0.5h) * (1.0h + 3.0h * _DepthContrast));
+            }
+
             // The sand: ripple bands bent by the noise, as the current leaves them, over a mottle.
             half3 SandAt(float2 bottomPos)
             {
@@ -236,9 +265,7 @@ Shader "BalloonParty/Scenario/Water"
                 float4 ripple = WaterRippleAt(wp);
                 float2 slope = WaterSlope(wp, ripple);
 
-                // How deep the bottom lies under this pixel: 0 = the shallowest bank, 1 = the deepest channel.
-                half depthNoise = tex2D(_NoiseTex, GroundPointAt(wp) / max(_DepthPatchSize, 1e-3)).r;
-                half deep = saturate(0.5h + (depthNoise - 0.5h) * (1.0h + 3.0h * _DepthContrast));
+                half deep = DeepAt(GroundPointAt(wp));
                 float depth = lerp(_ShallowDepth, _DeepDepth, deep);
 
                 // Seen from a camera above the middle of the screen (the world origin): a deeper bottom shows a wider
