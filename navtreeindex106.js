@@ -1,5 +1,15 @@
 var NAVTREEINDEX106 =
 {
+"structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#a11f969402a23f7f13c173d0c4871d787":[6,0,0,6,8,6,7],
+"structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#a3a8c1d6799e6dfe40ff7038eaf09806d":[5,0,0,6,8,6,8],
+"structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#a3a8c1d6799e6dfe40ff7038eaf09806d":[6,0,0,6,8,6,8],
+"structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#a4f1b3a89a7018d115cdeb44e77114dcc":[5,0,0,6,8,6,0],
+"structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#a4f1b3a89a7018d115cdeb44e77114dcc":[6,0,0,6,8,6,0],
+"structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#a58b1eb1c0b5ddf126680e1a75b9773a9":[5,0,0,6,8,6,4],
+"structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#a58b1eb1c0b5ddf126680e1a75b9773a9":[6,0,0,6,8,6,4],
+"structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#a90cff4bc8a67c23d90f92bcb08dae060":[5,0,0,6,8,6,3],
+"structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#a90cff4bc8a67c23d90f92bcb08dae060":[6,0,0,6,8,6,3],
+"structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#ab6b0af531c868fa74a245ded71d260eb":[5,0,0,6,8,6,1],
 "structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#ab6b0af531c868fa74a245ded71d260eb":[6,0,0,6,8,6,1],
 "structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#ab9514056abf336bb22cb7f27cec088e5":[5,0,0,6,8,6,2],
 "structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#ab9514056abf336bb22cb7f27cec088e5":[6,0,0,6,8,6,2],
@@ -239,15 +249,5 @@ var NAVTREEINDEX106 =
 "structBalloonParty_1_1Item_1_1Effects_1_1PaintEffectParams.html#ad4bdd9b368c1ed2c686d44e436e3a579":[6,0,0,7,1,8,2],
 "structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html":[5,0,0,7,1,9],
 "structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html":[6,0,0,7,1,9],
-"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#a62985e1c0ae79b671c6fd6dc9e4bf287":[5,0,0,7,1,9,0],
-"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#a62985e1c0ae79b671c6fd6dc9e4bf287":[6,0,0,7,1,9,0],
-"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#a7f48bc8f5f93ef679e89d3f92f008915":[5,0,0,7,1,9,2],
-"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#a7f48bc8f5f93ef679e89d3f92f008915":[6,0,0,7,1,9,2],
-"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#a9e89f45b98f821d10c0964a7973f730a":[5,0,0,7,1,9,4],
-"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#a9e89f45b98f821d10c0964a7973f730a":[6,0,0,7,1,9,4],
-"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#aab5b15186fdf96916bf4486b6758c92a":[5,0,0,7,1,9,1],
-"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#aab5b15186fdf96916bf4486b6758c92a":[6,0,0,7,1,9,1],
-"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#adde66113d5e4dbcf436b88ebdaed1cd4":[5,0,0,7,1,9,5],
-"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#adde66113d5e4dbcf436b88ebdaed1cd4":[6,0,0,7,1,9,5],
-"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#ae64ac2dfcc6b840746f5ba603c98d619":[5,0,0,7,1,9,3]
+"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#a62985e1c0ae79b671c6fd6dc9e4bf287":[5,0,0,7,1,9,0]
 };

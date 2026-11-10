@@ -150,16 +150,23 @@ Channel toggles &amp; tooltips</h1>
 <p>The four R/G/B/A toggle buttons mask the preview to the channels you care about. Each button's tooltip is per-map and per-channel — e.g. the Disturbance Field's <code>G</code> toggle reads "Displacement X — 0.5-biased…" rather than a generic "green channel" label — so the meaning of each channel is discoverable without leaving the window. The <code>Custom…</code> map has no defined channel semantics, so its tooltips fall back to a generic "Raw {0}
 channel" format.</p>
 <h1><a class="anchor" id="autotoc_md146"></a>
+Exposure and values above 1</h1>
+<p>Some maps hold values above 1: the Scene <a class="el" href="UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d">Light</a> Field's R (the local boost of pops and items) goes up to <code>AccumulationCeiling</code>, 3 by default, and an HDR buffer can hold anything. Shown raw, everything above 1 looks the same flat white. Two controls under the channel toggles, for every map:</p>
+<ul>
+<li><b>Exposure (stops)</b> scales the shown values by 2^stops (−4 to +4). At −2 a value of 4 shows as full white. The palette decode ignores it, since it shows colours, not values.</li>
+<li><b>Mark &gt; 1</b> paints magenta wherever a selected channel's raw value is above 1, measured before exposure, so you can see where a buffer clips at the default exposure.</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md147"></a>
 Registry pattern</h1>
 <p>Each built-in map is a <code>MapDescriptor</code>: a name, a <code>Func&lt;Texture&gt; Fetch</code>, an unavailable-hint string, and four channel-tooltip strings. Descriptors are built once into a static <code>Descriptors</code> array (<code>BuildDescriptors</code>) — this is a plain lookup registry, not a service dependency: the window doesn't inject or reference <code>SceneCaptureService</code>/<code>ScreenSpaceLightService</code> directly, it only knows the global shader-texture IDs (<code>_SceneCaptureTex</code>, <code>_DisturbanceTex</code>) and, for the GI buffer, looks the service up by type at fetch time. This keeps the window decoupled from those systems' lifetimes.</p>
 <p>The GI light buffer is the one exception to "just a global texture fetch": it's ping-ponged (see <code>ScreenSpaceLightService.LightTexture</code>), so <code>FetchLightBuffer</code> calls <code>FindAnyObjectByType</code> and re-resolves <code>LightTexture</code> fresh on every repaint rather than caching the service or the texture reference — caching either would risk showing a buffer that's already been swapped out from under it.</p>
-<h1><a class="anchor" id="autotoc_md147"></a>
+<h1><a class="anchor" id="autotoc_md148"></a>
 ChannelPreview shader</h1>
 <p><code>Assets/Shaders/BalloonParty/Editor/ChannelPreview.shader</code> (<code>Hidden/BalloonParty/Editor/ChannelPreview</code>) is the editor-only blit that masks <code>_MainTex</code> down to the toggled channels via <code>_ChannelMask</code>. <code>GameRenderMapsWindow</code> resolves it with <code>Shader.Find</code> rather than a serialized reference — safe here because this window is editor-only tooling that's never shipped, so the build-stripping concern that makes <code>ScreenSpaceLightService</code> serialize its shaders doesn't apply. If the shader fails to load (<code>Shader.Find</code> returns null — <code>dotnet build</code> can't validate shader compilation, so a typo here only surfaces in the editor), the window falls back to <code>EditorGUI.DrawPreviewTexture</code> with no material instead of breaking the preview.</p>
-<h2><a class="anchor" id="autotoc_md148"></a>
+<h2><a class="anchor" id="autotoc_md149"></a>
 Alpha-only-when-isolated display rule</h2>
 <p>Exactly one channel toggled on replicates that channel as grayscale, so a lone R/G/B/A toggle reads clearly on its own. Multiple channels toggled on keep each in its own RGB slot and zero the rest — alpha has no RGB slot of its own, so <b>alpha only visibly contributes to the preview when it's the sole channel selected</b>; with other channels also on, alpha is masked but not shown. The shader always forces output alpha to 1 so <code>EditorGUI.DrawPreviewTexture</code> never blends the preview against the window background.</p>
-<h1><a class="anchor" id="autotoc_md149"></a>
+<h1><a class="anchor" id="autotoc_md150"></a>
 Dependencies</h1>
 <ul>
 <li><code><a class="el" href="namespaceBalloonParty_1_1Editor.html">BalloonParty.Editor</a></code> assembly (editor-only platform).</li>

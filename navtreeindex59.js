@@ -1,5 +1,15 @@
 var NAVTREEINDEX59 =
 {
+"classBalloonParty_1_1Nudge_1_1NudgeService.html#a038ae46f2c88c8fe067ef3a5a7a3ba5e":[5,0,0,8,5,10],
+"classBalloonParty_1_1Nudge_1_1NudgeService.html#a038ae46f2c88c8fe067ef3a5a7a3ba5e":[6,0,0,8,5,10],
+"classBalloonParty_1_1Nudge_1_1NudgeService.html#a08c5e9e1d96cdc6b6a58d08e56db3112":[5,0,0,8,5,4],
+"classBalloonParty_1_1Nudge_1_1NudgeService.html#a08c5e9e1d96cdc6b6a58d08e56db3112":[6,0,0,8,5,4],
+"classBalloonParty_1_1Nudge_1_1NudgeService.html#a27d801437bcf380392d5013976bdc009":[5,0,0,8,5,7],
+"classBalloonParty_1_1Nudge_1_1NudgeService.html#a27d801437bcf380392d5013976bdc009":[6,0,0,8,5,7],
+"classBalloonParty_1_1Nudge_1_1NudgeService.html#a2f325a8817308896e3ca9c713a154575":[5,0,0,8,5,12],
+"classBalloonParty_1_1Nudge_1_1NudgeService.html#a2f325a8817308896e3ca9c713a154575":[6,0,0,8,5,12],
+"classBalloonParty_1_1Nudge_1_1NudgeService.html#a32b201e612ee6c3d8685ce510b0c96ab":[5,0,0,8,5,9],
+"classBalloonParty_1_1Nudge_1_1NudgeService.html#a32b201e612ee6c3d8685ce510b0c96ab":[6,0,0,8,5,9],
 "classBalloonParty_1_1Nudge_1_1NudgeService.html#a77962ae188fba6914baac89c5f733b60":[5,0,0,8,5,3],
 "classBalloonParty_1_1Nudge_1_1NudgeService.html#a77962ae188fba6914baac89c5f733b60":[6,0,0,8,5,3],
 "classBalloonParty_1_1Nudge_1_1NudgeService.html#a99ee0461a5c51db1c75247dfd91c3fbb":[5,0,0,8,5,8],
@@ -239,15 +249,5 @@ var NAVTREEINDEX59 =
 "classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#afaea73053fd99bf0102725dd8e00fa24":[5,0,0,9,7,5],
 "classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#afaea73053fd99bf0102725dd8e00fa24":[6,0,0,9,7,5],
 "classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#afafce404e080f9cc990516fa34dc7b85":[5,0,0,9,7,4],
-"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#afafce404e080f9cc990516fa34dc7b85":[6,0,0,9,7,4],
-"classBalloonParty_1_1Projectile_1_1Buffs_1_1PierceEndedEndCondition.html":[5,0,0,10,0,1],
-"classBalloonParty_1_1Projectile_1_1Buffs_1_1PierceEndedEndCondition.html":[6,0,0,10,0,1],
-"classBalloonParty_1_1Projectile_1_1Buffs_1_1PierceEndedEndCondition.html#a0b33895fdbcc501bbf8238654a8885ac":[5,0,0,10,0,1,4],
-"classBalloonParty_1_1Projectile_1_1Buffs_1_1PierceEndedEndCondition.html#a0b33895fdbcc501bbf8238654a8885ac":[6,0,0,10,0,1,4],
-"classBalloonParty_1_1Projectile_1_1Buffs_1_1PierceEndedEndCondition.html#a42255d22223aee7583cdde6a71a7ba38":[5,0,0,10,0,1,5],
-"classBalloonParty_1_1Projectile_1_1Buffs_1_1PierceEndedEndCondition.html#a42255d22223aee7583cdde6a71a7ba38":[6,0,0,10,0,1,5],
-"classBalloonParty_1_1Projectile_1_1Buffs_1_1PierceEndedEndCondition.html#a47f7f0a64da37779aa1ebc954250d203":[5,0,0,10,0,1,2],
-"classBalloonParty_1_1Projectile_1_1Buffs_1_1PierceEndedEndCondition.html#a47f7f0a64da37779aa1ebc954250d203":[6,0,0,10,0,1,2],
-"classBalloonParty_1_1Projectile_1_1Buffs_1_1PierceEndedEndCondition.html#a50c9cafaad67a2c0dfdf1e48c107c467":[5,0,0,10,0,1,3],
-"classBalloonParty_1_1Projectile_1_1Buffs_1_1PierceEndedEndCondition.html#a50c9cafaad67a2c0dfdf1e48c107c467":[6,0,0,10,0,1,3]
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#afafce404e080f9cc990516fa34dc7b85":[6,0,0,9,7,4]
 };

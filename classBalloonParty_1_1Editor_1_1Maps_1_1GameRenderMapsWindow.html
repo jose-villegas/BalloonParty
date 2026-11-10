@@ -150,6 +150,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a50508760bf4f28fad36a0657976b22b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57fe45805bdb82357dbbf77a1c69b17d" id="r_a57fe45805bdb82357dbbf77a1c69b17d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a57fe45805bdb82357dbbf77a1c69b17d">DrawPreview</a> (Texture texture, bool decodePalette, int paletteChannel=3)</td></tr>
 <tr class="separator:a57fe45805bdb82357dbbf77a1c69b17d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af27d2767a932dd2ee2228040a1ef2425" id="r_af27d2767a932dd2ee2228040a1ef2425"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af27d2767a932dd2ee2228040a1ef2425">DrawRangeControls</a> ()</td></tr>
+<tr class="separator:af27d2767a932dd2ee2228040a1ef2425"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adec57467b1c71264202a692d75d98507" id="r_adec57467b1c71264202a692d75d98507"><td class="memItemLeft" align="right" valign="top">Material&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adec57467b1c71264202a692d75d98507">EnsureMaterial</a> ()</td></tr>
 <tr class="separator:adec57467b1c71264202a692d75d98507"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e71b7518b62ed53c6ac143ab0471cdf" id="r_a2e71b7518b62ed53c6ac143ab0471cdf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2e71b7518b62ed53c6ac143ab0471cdf">HandlePan</a> (Rect availableRect)</td></tr>
@@ -194,6 +196,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a41b5d185fd047deb5fd8a65fe4b0e1b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac376a5ceb7c11ad7d7f4b09e465f47c" id="r_aac376a5ceb7c11ad7d7f4b09e465f47c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aac376a5ceb7c11ad7d7f4b09e465f47c">_decodePalette</a> = true</td></tr>
 <tr class="separator:aac376a5ceb7c11ad7d7f4b09e465f47c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af66363757dcada3e2a81a848fbffe32e" id="r_af66363757dcada3e2a81a848fbffe32e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af66363757dcada3e2a81a848fbffe32e">_exposure</a></td></tr>
+<tr class="separator:af66363757dcada3e2a81a848fbffe32e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6826013655ef050cd84073753fe4e3ff" id="r_a6826013655ef050cd84073753fe4e3ff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6826013655ef050cd84073753fe4e3ff">_markOverRange</a></td></tr>
+<tr class="separator:a6826013655ef050cd84073753fe4e3ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab929f387941722ef12e4799e0b446936" id="r_ab929f387941722ef12e4799e0b446936"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab929f387941722ef12e4799e0b446936">_mipLevel</a></td></tr>
 <tr class="separator:ab929f387941722ef12e4799e0b446936"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e4c5dce4fa27069ca1d1820e3a70142" id="r_a1e4c5dce4fa27069ca1d1820e3a70142"><td class="memItemLeft" align="right" valign="top">readonly Vector4[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e4c5dce4fa27069ca1d1820e3a70142">_paletteBuffer</a> = new Vector4[16]</td></tr>
@@ -221,10 +227,14 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:acbd729c83bf2d9876f8f3d93b01dfde6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a618a1a615a259bb39cfdd70f8eee998d" id="r_a618a1a615a259bb39cfdd70f8eee998d"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a618a1a615a259bb39cfdd70f8eee998d">DisturbanceTexId</a> = Shader.PropertyToID(&quot;_DisturbanceTex&quot;)</td></tr>
 <tr class="separator:a618a1a615a259bb39cfdd70f8eee998d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae42ea92c77a1db3de00d3ebe911524c2" id="r_ae42ea92c77a1db3de00d3ebe911524c2"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae42ea92c77a1db3de00d3ebe911524c2">ExposureId</a> = Shader.PropertyToID(&quot;_Exposure&quot;)</td></tr>
+<tr class="separator:ae42ea92c77a1db3de00d3ebe911524c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a598ddf75c1a1a098d09c91ad1021998a" id="r_a598ddf75c1a1a098d09c91ad1021998a"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a598ddf75c1a1a098d09c91ad1021998a">GenericChannelTooltipFormat</a></td></tr>
 <tr class="separator:a598ddf75c1a1a098d09c91ad1021998a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c81db41e47757b084f64d71583b8220" id="r_a5c81db41e47757b084f64d71583b8220"><td class="memItemLeft" align="right" valign="top">static readonly string[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5c81db41e47757b084f64d71583b8220">MapNames</a> = Descriptors.Select(d =&gt; d.Name).ToArray()</td></tr>
 <tr class="separator:a5c81db41e47757b084f64d71583b8220"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95c0a740acc187849b456dc93df751f8" id="r_a95c0a740acc187849b456dc93df751f8"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a95c0a740acc187849b456dc93df751f8">MarkOverRangeId</a> = Shader.PropertyToID(&quot;_MarkOverRange&quot;)</td></tr>
+<tr class="separator:a95c0a740acc187849b456dc93df751f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c1f3cebc44b75d89002431202cbc791" id="r_a8c1f3cebc44b75d89002431202cbc791"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8c1f3cebc44b75d89002431202cbc791">MipLevelId</a> = Shader.PropertyToID(&quot;_MipLevel&quot;)</td></tr>
 <tr class="separator:a8c1f3cebc44b75d89002431202cbc791"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1756501c9b26af457e5f8d4e4ef5eae6" id="r_a1756501c9b26af457e5f8d4e4ef5eae6"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1756501c9b26af457e5f8d4e4ef5eae6">PaletteChannelId</a> = Shader.PropertyToID(&quot;_PaletteChannel&quot;)</td></tr>
@@ -394,6 +404,31 @@ Static Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>paletteChannel</em></span><span class="paramdefsep"> = </span><span class="paramdefval">3</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af27d2767a932dd2ee2228040a1ef2425" name="af27d2767a932dd2ee2228040a1ef2425"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af27d2767a932dd2ee2228040a1ef2425">&#9670;&#160;</a></span>DrawRangeControls()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Editor.Maps.GameRenderMapsWindow.DrawRangeControls </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -838,6 +873,50 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="af66363757dcada3e2a81a848fbffe32e" name="af66363757dcada3e2a81a848fbffe32e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af66363757dcada3e2a81a848fbffe32e">&#9670;&#160;</a></span>_exposure</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Editor.Maps.GameRenderMapsWindow._exposure</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6826013655ef050cd84073753fe4e3ff" name="a6826013655ef050cd84073753fe4e3ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6826013655ef050cd84073753fe4e3ff">&#9670;&#160;</a></span>_markOverRange</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Editor.Maps.GameRenderMapsWindow._markOverRange</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ab929f387941722ef12e4799e0b446936" name="ab929f387941722ef12e4799e0b446936"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab929f387941722ef12e4799e0b446936">&#9670;&#160;</a></span>_mipLevel</h2>
 
@@ -1102,6 +1181,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ae42ea92c77a1db3de00d3ebe911524c2" name="ae42ea92c77a1db3de00d3ebe911524c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae42ea92c77a1db3de00d3ebe911524c2">&#9670;&#160;</a></span>ExposureId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Editor.Maps.GameRenderMapsWindow.ExposureId = Shader.PropertyToID(&quot;_Exposure&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a598ddf75c1a1a098d09c91ad1021998a" name="a598ddf75c1a1a098d09c91ad1021998a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a598ddf75c1a1a098d09c91ad1021998a">&#9670;&#160;</a></span>GenericChannelTooltipFormat</h2>
 
@@ -1137,6 +1238,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly string [] BalloonParty.Editor.Maps.GameRenderMapsWindow.MapNames = Descriptors.Select(d =&gt; d.Name).ToArray()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a95c0a740acc187849b456dc93df751f8" name="a95c0a740acc187849b456dc93df751f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95c0a740acc187849b456dc93df751f8">&#9670;&#160;</a></span>MarkOverRangeId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Editor.Maps.GameRenderMapsWindow.MarkOverRangeId = Shader.PropertyToID(&quot;_MarkOverRange&quot;)</td>
         </tr>
       </table>
   </td>
