@@ -29,36 +29,40 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _CausticDepthBlur: 1.5
+    - _CausticDepthBlur: 1.8
     - _CausticSecondScale: 1.73
     - _CausticShift: 0.35
     - _CausticSplit: 0.025
-    - _CausticStrength: 0.7
+    - _CausticStrength: 0.6
     - _CausticTileSize: 4.5
     - _CausticWobble: 0.1
     - _CausticWobbleSize: 3
-    - _DepthContrast: 0.25
-    - _DepthPatchSize: 12
+    - _DeepDepth: 4.5
+    - _DepthContrast: 0.4
+    - _DepthPatchSize: 9
     - _DstBlend: 0
     - _GlintPower: 90
     - _GlintSteepness: 3
     - _GlintStrength: 0.55
-    - _HighlightStrength: 0.2
+    - _HighlightStrength: 0.25
     - _LightInfluence: 0.7
-    - _Refraction: 0.22
-    - _RippleHeight: 0.05
-    - _RippleRings: 5
-    - _RippleSpeed: 7
+    - _Perspective: 0.035
+    - _Refraction: 0.1
+    - _RippleHeight: 0.025
+    - _SandRippleSize: 0.7
+    - _SandRippleStrength: 0.12
+    - _ShallowDepth: 0.6
     - _SrcBlend: 1
-    - _SurfaceOpacity: 0.15
+    - _SurfaceOpacity: 0.08
     - _WaveHeight: 0.06
     - _WaveSize: 2.2
-    - _WaveSpeed: 0.12
+    - _WaveSpeed: 0.25
     m_Colors:
-    - _CausticColor: {r: 0.93, g: 1, b: 0.97, a: 1}
-    - _DeepColor: {r: 0.16, g: 0.5, b: 0.6, a: 1}
+    - _Absorption: {r: 0.45, g: 0.14, b: 0.09, a: 0}
+    - _CausticColor: {r: 1, g: 1, b: 0.94, a: 1}
     - _HighlightColor: {r: 0.92, g: 0.98, b: 1, a: 1}
-    - _ShallowColor: {r: 0.4, g: 0.76, b: 0.78, a: 1}
+    - _SandColor: {r: 0.8, g: 0.78, b: 0.67, a: 1}
     - _SurfaceColor: {r: 0.5, g: 0.78, b: 0.82, a: 1}
+    - _WaterColor: {r: 0.1, g: 0.4, b: 0.6, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

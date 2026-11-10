@@ -79,8 +79,15 @@ namespace BalloonParty.Configuration.Effects
         [Range(64, 512)]
         [SerializeField] private int _waterCausticResolution = 256;
 
+        [Tooltip("Material using Hidden/BalloonParty/Scenario/WaterRipple: the wave simulation the surface's rings travel on (their speed, fade and drive are tuned there; their height on the water material). Without one the surface only swells.")]
+        [SerializeField] private Material _waterRippleMaterial;
+
+        [Tooltip("Texels per world unit of the ripple simulation, which covers the camera's view. More = finer rings, and more pixels stepped every frame.")]
+        [Range(4f, 24f)]
+        [SerializeField] private float _waterRippleTexelsPerUnit = 12f;
+
         [Tooltip("The water's average unlit colour, which the GI measures bounce against on water levels, as it does the meadow's on ground levels.")]
-        [SerializeField] private Color _waterBounceReference = new(0.10f, 0.28f, 0.37f, 1f);
+        [SerializeField] private Color _waterBounceReference = new(0.125f, 0.30f, 0.33f, 1f);
 
         [Header("Mist Reveal")]
         [Tooltip("Material using BalloonParty/Scenario/GroundMist — the mist the meadow opens out of on the way down and closes back into on the way up. Without one the scenario switches with a cut.")]
@@ -132,6 +139,8 @@ namespace BalloonParty.Configuration.Effects
         public Material WaterMaterial => _waterMaterial;
         public Material WaterCausticMaterial => _waterCausticMaterial;
         public int WaterCausticResolution => _waterCausticResolution;
+        public Material WaterRippleMaterial => _waterRippleMaterial;
+        public float WaterRippleTexelsPerUnit => _waterRippleTexelsPerUnit;
         public Color WaterBounceReference => _waterBounceReference;
         public Material MistMaterial => _mistMaterial;
         public int MistSortingOrder => _mistSortingOrder;

@@ -170,17 +170,29 @@ between two surfaces, so a reveal never goes from meadow to water. `GroundView` 
 through its own instance of `IGroundSettings.WaterMaterial` (no blades, no grass wake), and swaps the GI's
 bounce reference to `WaterBounceReference`.
 
-- `Shaders/BalloonParty/Scenario/Water.shader`: one pass, bottom up. A shallow-to-deep bottom colour from
-  the shared noise; the caustic net laid over it (below), blended toward a pale caustic colour, never
-  added; a light veil of water colour. The bottom is seen through the surface's slope, so the swell and the
-  ripple rings bend the net under them. On top, slopes facing the sun catch a soft highlight and crests
-  turned just so between the sun and the eye glint. Lit by the scene-light field at 0.7 influence (a warm
-  evening tints the water rather than turning it olive), with light above full eased in so a pop's glow
-  doesn't clip to white; premultiplied by `GroundCoverageAt`, like the floor.
-- `Shaders/BalloonParty/Include/WaterSurface.cginc`: the surface's height: two slow noise waves travelling
-  with the board, plus rings wherever the disturbance field holds a push (`sin(k·push + ωt)·push`, so a
-  ball's wake spreads as rings that fade as the field relaxes). Its slope is what bends the bottom and
-  catches the light.
+- `Shaders/BalloonParty/Scenario/Water.shader`: one pass, drawn as a body of water over a sandy bottom.
+  The bottom's depth drifts across the level from the shared noise, from sandbanks to deep channels. It is
+  seen as from a camera above the middle of the screen: a deeper bottom shrinks toward the middle and
+  slides slower when the board scrolls, and the surface's slope bends the view of it more over deep water.
+  The sand carries ripple bands and the caustic net (below), shaded around the sand's own colour, never
+  added past it. The water over it absorbs each colour by its own rate per world unit (red first, blue
+  last) and scatters its own colour back, so shallows read as sand and deep water as teal. On top, slopes
+  facing the sun catch a soft highlight and crests turned just so between the sun and the eye glint. Lit by
+  the scene-light field at 0.7 influence (a warm evening tints the water rather than turning it olive), with
+  light above full eased in so a pop's glow doesn't clip to white; premultiplied by `GroundCoverageAt`,
+  like the floor.
+- `Shaders/BalloonParty/Include/WaterSurface.cginc`: the surface's slope: a slow swell of two noise layers
+  on different headings (the smaller slower, as shorter waves are), travelling with the board, plus the
+  rings of the ripple simulation (below). The slope is what bends the bottom and catches the light.
+- `View/WaterRippleBuffer.cs` + `Shaders/BalloonParty/Scenario/WaterRipple.shader`: the ripples. A wave
+  equation over a height field covering the disturbance field, in its UV space (`IGroundSettings.
+  WaterRippleTexelsPerUnit`, 12), published as `_WaterRippleTex`. Wherever the field gained a push since the
+  last step the water is pressed down (a big gain only a little deeper than a small one, so pops don't
+  drown a passing ball's wake), and the dip travels outward as rings at the ripple material's speed and
+  fades over its fade time; the field's edges soak rings up rather than bounce them back. Fixed 1/60 s
+  steps (at most four a frame), in game time, so the rings walk at the same speed at any frame rate and a
+  pause holds them. It restarts calm whenever water appears. An earlier version drew rings straight from
+  the field's push (`sin(k·push + ωt)`): they stayed in the push's shape and wobbled in place like gel.
 - `View/WaterCausticBuffer.cs` + `Shaders/BalloonParty/Scenario/WaterCaustics.shader`: the caustics. Each
   frame on water, one blit draws a tile of the moving caustic net into a 256² R8 target that wraps, with
   mips, published as `_WaterCausticTex`. The net is the borders between drifting cells, warped so they

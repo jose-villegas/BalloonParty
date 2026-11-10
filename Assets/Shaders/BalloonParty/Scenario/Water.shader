@@ -1,27 +1,43 @@
 Shader "BalloonParty/Scenario/Water"
 {
-    // The water surface shown on water levels (GroundView's floor quad, in place of the meadow floor). Three layers
-    // in one pass. At the bottom, a shallow-to-deep colour drift lit by the caustic net: WaterCausticBuffer's
-    // moving tile, laid twice at two scales and angles (one draws the lines, the softer other varies their
-    // brightness, so the net never looks tiled), a little enlarged and shifted away from the time-of-day sun,
-    // split into colour fringes along it, and blurred where the water is deep. The bottom is seen through the
-    // surface's slope, so the waves and rings over it bend the net. Over it, a light veil of water colour, then the
-    // surface: slow noise waves and rings wherever the shared disturbance field holds a push (WaterSurface.cginc),
-    // whose slopes catch a soft highlight, and whose crests turned to the sun glint. The surface travels
-    // with the board like the meadow; the rings stay where the push is.
+    // The water surface shown on water levels (GroundView's floor quad, in place of the meadow floor), drawn as a
+    // body of water over a sandy bottom, in one pass. The bottom's depth drifts across the level, from sandbanks to
+    // deep channels. It is seen as from a camera above the water: the deeper it lies, the more it shrinks toward
+    // the middle of the screen and the slower it slides when the board scrolls, and the more the surface's slope
+    // bends the view of it. Its sand carries ripple bands and the caustic net (WaterCausticBuffer's moving tile, laid
+    // twice at two scales and angles, shifted away from the time-of-day sun, split into colour fringes and blurred
+    // where it's deep). The water over it absorbs red first, then green, and scatters its own blue back, so shallows
+    // read as sand and deep water as teal. On top, the surface: a slow swell plus the rings the ripple simulation
+    // (WaterRippleBuffer) carries out from every push (WaterSurface.cginc), whose slopes catch a soft highlight and
+    // whose crests turned to the sun glint.
     Properties
     {
         [NoScaleOffset] _NoiseTex ("Noise (R, linear)", 2D) = "gray" {}
 
         [Header(Bottom)]
-        _DeepColor        ("Deep Colour",                 Color)          = (0.16, 0.50, 0.60, 1)
-        _ShallowColor     ("Shallow Colour",              Color)          = (0.40, 0.76, 0.78, 1)
-        _DepthPatchSize   ("Depth Patch Size (world)",    Float)          = 12
-        _DepthContrast    ("Depth Contrast",              Range(0, 1))    = 0.25
+        _SandColor        ("Sand Colour",                 Color)          = (0.80, 0.78, 0.67, 1)
+        // World size of the sandbanks and channels.
+        _DepthPatchSize   ("Depth Patch Size (world)",    Float)          = 9
+        // How sharply the bottom drops from the banks into the channels: 0 = a gentle drift, 1 = shelves.
+        _DepthContrast    ("Depth Contrast",              Range(0, 1))    = 0.4
+        _ShallowDepth     ("Shallowest (world)",          Float)          = 0.6
+        _DeepDepth        ("Deepest (world)",             Float)          = 4.5
+        // World units between the sand's ripple bands, and how much they shade it.
+        _SandRippleSize   ("Sand Ripple Size (world)",    Float)          = 0.7
+        _SandRippleStrength("Sand Ripple Strength",       Range(0, 0.5))  = 0.12
+
+        [Header(Water Body)]
+        // The colour the water scatters back: what deep water turns to.
+        _WaterColor       ("Water Colour",                Color)          = (0.10, 0.40, 0.60, 1)
+        // How much of each colour a world unit of water takes out of the bottom: red goes first, blue last.
+        _Absorption       ("Absorption RGB (per world)",  Vector)         = (0.45, 0.14, 0.09, 0)
+        // How much the bottom shrinks toward the middle of the screen per world unit of depth: the camera's
+        // perspective, 1 over its height above the water.
+        _Perspective      ("Perspective (per depth)",     Range(0, 0.1))  = 0.035
 
         [Header(Caustics)]
-        _CausticColor     ("Caustic Colour",              Color)          = (0.93, 1.0, 0.97, 1)
-        _CausticStrength  ("Caustic Strength",            Range(0, 1))    = 0.7
+        _CausticColor     ("Caustic Colour",              Color)          = (1.0, 1.0, 0.94, 1)
+        _CausticStrength  ("Caustic Strength",            Range(0, 1))    = 0.6
         // World units one caustic tile covers: its cells are this over the tile's cell count.
         _CausticTileSize  ("Tile Size (world)",           Float)          = 4.5
         // The second layer's size against the first: never a whole number, so the two never line up.
@@ -34,23 +50,22 @@ Shader "BalloonParty/Scenario/Water"
         _CausticWobble    ("Wobble (world)",              Range(0, 0.5))  = 0.1
         _CausticWobbleSize("Wobble Size (world)",         Float)          = 3
         // Mip levels the net blurs by over the deepest water.
-        _CausticDepthBlur ("Depth Blur (mips)",           Range(0, 4))    = 1.5
+        _CausticDepthBlur ("Depth Blur (mips)",           Range(0, 4))    = 1.8
 
         [Header(Surface)]
-        _WaveSize         ("Wave Size (world)",           Float)          = 2.2
-        _WaveSpeed        ("Wave Drift (world/s)",        Float)          = 0.12
-        _WaveHeight       ("Wave Height",                 Float)          = 0.06
-        // Rings across a push's intensity (0 at rest, about 1 under a fresh stamp): more = tighter rings.
-        _RippleRings      ("Rings Per Push",              Float)          = 5
-        _RippleSpeed      ("Ring Speed (radians/s)",      Float)          = 7
-        _RippleHeight     ("Ring Height",                 Float)          = 0.05
-        // World units the surface slope shifts the view of the bottom by: the waves bend what lies under them.
-        _Refraction       ("Refraction (world)",          Range(0, 1))    = 0.22
-        // The water body over the bottom: a light veil that tints and softens what lies under it.
+        _WaveSize         ("Swell Size (world)",          Float)          = 2.2
+        _WaveSpeed        ("Swell Speed (world/s)",       Float)          = 0.25
+        _WaveHeight       ("Swell Height",                Float)          = 0.06
+        // How tall the simulated rings stand (their speed and fade are on the ripple material).
+        _RippleHeight     ("Ring Height",                 Float)          = 0.025
+        // World units the surface slope shifts the view of the bottom by, per world unit of depth: the deeper the
+        // bottom, the more the waves bend it.
+        _Refraction       ("Refraction (per depth)",      Range(0, 0.5))  = 0.1
+        // A light veil of water colour over everything, so even the shallows read as wet.
         _SurfaceColor     ("Surface Colour",              Color)          = (0.50, 0.78, 0.82, 1)
-        _SurfaceOpacity   ("Surface Opacity",             Range(0, 1))    = 0.15
+        _SurfaceOpacity   ("Surface Opacity",             Range(0, 1))    = 0.08
         _HighlightColor   ("Highlight Colour",            Color)          = (0.92, 0.98, 1.0, 1)
-        _HighlightStrength("Highlight Strength",          Range(0, 1))    = 0.2
+        _HighlightStrength("Highlight Strength",          Range(0, 1))    = 0.25
 
         [Header(Glints)]
         // How much steeper the swell and the rings stand to the sun than to the eye: more = more of their crests
@@ -70,6 +85,7 @@ Shader "BalloonParty/Scenario/Water"
         [HideInInspector] _SrcBlend ("Src Blend", Float) = 1
         [HideInInspector] _DstBlend ("Dst Blend", Float) = 0
     }
+
 
     SubShader
     {
@@ -99,10 +115,18 @@ Shader "BalloonParty/Scenario/Water"
             #include "../Include/SceneLight.cginc"
             #include "../Include/WaterSurface.cginc"
 
-            half4  _DeepColor;
-            half4  _ShallowColor;
+            #define TAU 6.2831853
+
+            half4  _SandColor;
             float  _DepthPatchSize;
             half   _DepthContrast;
+            float  _ShallowDepth;
+            float  _DeepDepth;
+            float  _SandRippleSize;
+            half   _SandRippleStrength;
+            half4  _WaterColor;
+            float4 _Absorption;
+            float  _Perspective;
             half4  _CausticColor;
             half   _CausticStrength;
             float  _CausticTileSize;
@@ -167,30 +191,44 @@ Shader "BalloonParty/Scenario/Water"
                 float2 uvSecond = turned / (tile * _CausticSecondScale) + float2(0.37, 0.71);
                 half second = tex2Dbias(_WaterCausticTex, float4(uvSecond, 0.0, blur + 2.0)).r;
 
-                return lines * (0.45h + 1.4h * second);
+                return lines * (0.7h + 0.7h * second);
+            }
+
+            // The sand: ripple bands bent by the noise, as the current leaves them, over a mottle.
+            half3 SandAt(float2 bottomPos)
+            {
+                float size = max(_SandRippleSize, 1e-3);
+                half mottle = tex2D(_NoiseTex, bottomPos / (size * 5.0) + float2(0.53, 0.29)).r;
+                half bands = (half)sin(dot(bottomPos, float2(0.83, 0.55)) / size * TAU + mottle * 9.0);
+                return _SandColor.rgb * (lerp(0.86h, 1.06h, mottle) + bands * _SandRippleStrength);
             }
 
             half4 frag(v2f IN) : SV_Target
             {
                 float2 wp = IN.world;
-                float2 waterPos = GroundPointAt(wp);
-
-                // The bottom is seen through the surface: its slope bends the view, so the waves and rings over it
-                // ripple the bottom and its caustics rather than drawing beside them.
                 float2 slope = WaterSlope(wp);
-                float2 bottomPos = waterPos + slope * _Refraction;
 
-                half depthNoise = tex2D(_NoiseTex, bottomPos / max(_DepthPatchSize, 1e-3)).r;
-                half depthMix = saturate(0.5h + (depthNoise - 0.5h) * (1.0h + 2.0h * _DepthContrast));
-                half3 color = lerp(_DeepColor.rgb, _ShallowColor.rgb, depthMix);
+                // How deep the bottom lies under this pixel: 0 = the shallowest bank, 1 = the deepest channel.
+                half depthNoise = tex2D(_NoiseTex, GroundPointAt(wp) / max(_DepthPatchSize, 1e-3)).r;
+                half deep = saturate(0.5h + (depthNoise - 0.5h) * (1.0h + 3.0h * _DepthContrast));
+                float depth = lerp(_ShallowDepth, _DeepDepth, deep);
 
-                // Blended toward, never added: the light stays inside the bottom's range, so nothing blooms.
-                // Deeper patches catch less of it, and softer.
-                half3 caustic = CausticAt(bottomPos, 1.0h - depthMix)
-                              * (_CausticStrength * lerp(0.55h, 1.0h, depthMix));
-                color = lerp(color, _CausticColor.rgb, saturate(caustic));
+                // Seen from a camera above the middle of the screen (the world origin): a deeper bottom shows a wider
+                // patch of itself, so it shrinks toward the middle and slides slower than the surface when the board
+                // scrolls. Through the surface: its slope bends the view, more over deeper water.
+                float2 bottomPos = GroundPointAt(wp * (1.0 + depth * _Perspective)) + slope * (depth * _Refraction);
 
-                // The water body between the bottom and the surface veils both.
+                // The sand and the light the surface focuses on it, which reaches the deep bottom weaker and softer.
+                // Shaded around the sand's own colour, so nothing blooms.
+                half3 caustic = CausticAt(bottomPos, deep) * (_CausticStrength * lerp(1.0h, 0.45h, deep));
+                half3 bottom = SandAt(bottomPos) * (1.0h - 0.3h * _CausticStrength)
+                             * lerp(half3(1.0h, 1.0h, 1.0h), _CausticColor.rgb * 1.6h, saturate(caustic));
+
+                // The water between: each colour fades out of the bottom by its own absorption, and the water's
+                // own colour takes its place.
+                half3 transmit = (half3)exp(-_Absorption.rgb * depth);
+                half3 color = bottom * transmit + _WaterColor.rgb * (1.0h - transmit);
+
                 color = lerp(color, _SurfaceColor.rgb, _SurfaceOpacity);
 
                 // The swell's and the rings' slopes facing the sun catch a soft highlight; those facing away darken.

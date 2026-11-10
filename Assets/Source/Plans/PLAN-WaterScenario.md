@@ -63,13 +63,18 @@ sky hiding all apply to water unchanged (the planner and the curve read "not sky
 "ground"). The water settings (material, colours, ripple tuning) live on `GroundSettings` next to
 the floor's, through `IGroundSettings`.
 
-The water shader reads `_DisturbanceTex` directly (no wake buffer: ripples should linger as long
-as the field holds the push):
-
-- The surface is one height function (`Include/WaterSurface.cginc`): two slow noise waves drifting
-  with the content root, plus rings that travel outward along the field's intensity,
-  `sin(k·I + ωt)` scaled by `I`, so a ball's wake spreads as concentric rings that fade as the
-  field relaxes.
+- The ripples are a wave simulation (`WaterRippleBuffer`, `WaterRipple.shader`): a height field
+  over the disturbance field's bounds, 12 texels per world unit, stepped by the wave equation at a
+  fixed 1/60 s. Wherever the field gained a push since the last step the water is pressed down
+  (saturating, so a pop presses only a little deeper than a passing ball), and the dip travels
+  outward as rings at 2.4 world units a second, fading over 1.4 s; the edges soak rings up. The
+  surface's slope (`Include/WaterSurface.cginc`) is that field's plus a slow swell of two noise
+  layers on different headings, the smaller slower, travelling with the content root.
+- The water has depth. A noise map lays sandbanks and deep channels (0.6 to 4.5 world units). The
+  bottom is seen as from a camera above the middle of the screen, so a deeper bottom shrinks toward
+  the middle and slides slower when the board scrolls; the surface's slope bends the view of it in
+  proportion to depth. The water absorbs each colour by its own rate (red first) and scatters its
+  own colour back: shallows read as sand, deep water as teal. The sand carries ripple bands.
 - Caustics are a second texture rendered under the surface, as the owner proposed: each frame
   `WaterCausticBuffer` draws one tile of a moving caustic net (`WaterCaustics.shader`) into a
   256² R8 target that wraps, with mips. The net is the borders between drifting cells, warped so
@@ -78,17 +83,19 @@ as the field holds the push):
   varies their brightness along them, so the net never looks tiled. It's wobbled by the noise,
   shifted away from the time-of-day sun (`_SceneLightDir`), split into colour fringes along it,
   and blurred by up to 1.5 mips where the water is deep.
-- Layers, bottom up: a shallow-to-deep bottom, the caustics blended toward a caustic colour (a
-  lerp, never added, so nothing blooms), then a light veil of water colour. The bottom and its
-  caustics are seen through the surface slope (a refraction offset), so the swell and the rings
-  bend the net. On top, the slopes facing the sun catch a soft highlight, and the crests turned
-  just so between the sun and the eye glint.
+- Layers, bottom up: the sand lit by the caustics (shaded around its own colour, never added past
+  it, so nothing blooms), the water body's absorption and scatter, then a light veil of water
+  colour. On top, the slopes facing the sun catch a soft highlight, and the crests turned just so
+  between the sun and the eye glint.
 - Lit by `SceneLightTintAt` (at 0.7 influence, so a warm evening tints the water rather than
   turning it olive; light above full is eased in so a pop's glow doesn't clip to white) and
   premultiplied by `GroundCoverageAt`, like `Ground.shader`.
 - What didn't work: the first look read as neon and dark (bright additive caustics over saturated
   deep blues). Caustics drawn from the surface's own curvature into a low-resolution buffer came
   out as soft blobs that didn't read as caustics. Sparkles from fine noise waves read as static.
+  Rings drawn straight from the field (`sin(k·push + ωt)·push`) kept the push's shape and wobbled
+  in place like gel, and a flat two-colour bottom gave the water no volume (owner: "behaves more
+  like a gel, ripples don't travel. Also lacks depth").
   The tile's cell wrap uses `id - n·floor((id + 0.5)/n)`, not `fmod`: GPU division is
   approximate, `fmod(10, 5)` can return 5, and the tile then shows a seam.
 

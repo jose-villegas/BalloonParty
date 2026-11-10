@@ -26,8 +26,9 @@ namespace BalloonParty.Scenario.View
     ///     also plays the drop between the layers (<see cref="GroundRevealDepth" />): it scales the meadow, the
     ///     cloud backdrop and the content root about the camera, so going down the ground grows into place and
     ///     going up it falls away. On water levels the same floor quad draws the water surface
-    ///     (<c>BalloonParty/Scenario/Water</c>) instead of the meadow, with no blades: its ripples read the
-    ///     disturbance field themselves and bend the caustic net under it (<see cref="WaterCausticBuffer" />), and
+    ///     (<c>BalloonParty/Scenario/Water</c>) instead of the meadow, with no blades: its rings travel on a wave
+    ///     simulation the disturbance field presses (<see cref="WaterRippleBuffer" />) and bend the caustic net
+    ///     under it (<see cref="WaterCausticBuffer" />), and
     ///     the reveal, the depth and the coverage play the same way. Sky always sits between two surfaces in the
     ///     schedule, so a reveal never swaps one surface for the other; a cut between them just swaps the floor's
     ///     material.
@@ -71,6 +72,7 @@ namespace BalloonParty.Scenario.View
         private Material _floorMaterial;
         private Material _waterMaterial;
         private WaterCausticBuffer _caustics;
+        private WaterRippleBuffer _ripples;
         // The surface the floor quad draws: the meadow, or water. Stays on the last one while the sky shows, so
         // a reveal up to the sky closes over the surface that was there.
         private ScenarioKind _surface = ScenarioKind.Ground;
@@ -153,6 +155,7 @@ namespace BalloonParty.Scenario.View
             if (_surface == ScenarioKind.Water)
             {
                 _caustics?.Tick();
+                _ripples?.Tick(Time.deltaTime);
             }
             else
             {
@@ -195,6 +198,7 @@ namespace BalloonParty.Scenario.View
             _scenarioRoot.SetDepth(1f, 1f);
             _wake?.Dispose();
             _caustics?.Dispose();
+            _ripples?.Dispose();
 
             // The blade mesh and the floor's material instances are ours: the floor's quad is MeshHelper's shared
             // cached quad, which the App-owned sky and the GI overlay draw with too.
@@ -319,6 +323,7 @@ namespace BalloonParty.Scenario.View
 
             _waterMaterial = new Material(_settings.WaterMaterial);
             _caustics = new WaterCausticBuffer(_settings.WaterCausticMaterial, _settings.WaterCausticResolution);
+            _ripples = new WaterRippleBuffer(_settings.WaterRippleMaterial, _settings.WaterRippleTexelsPerUnit);
         }
 
         private void OnScenario(ScenarioShift shift, NavigationState navigation)
@@ -365,6 +370,10 @@ namespace BalloonParty.Scenario.View
             if (target == ScenarioKind.Ground)
             {
                 _wake?.Restart();
+            }
+            else if (target == ScenarioKind.Water)
+            {
+                _ripples?.Restart();
             }
 
             _mist.SetActive(true);
@@ -423,6 +432,7 @@ namespace BalloonParty.Scenario.View
             SetFloorBlend(OpaqueDstBlend);
 
             var grassWasShowing = _quad.activeSelf && _surface == ScenarioKind.Ground;
+            var waterWasShowing = _quad.activeSelf && _surface == ScenarioKind.Water;
             if (surface)
             {
                 ShowSurface(kind);
@@ -432,6 +442,10 @@ namespace BalloonParty.Scenario.View
             if (kind == ScenarioKind.Ground && !grassWasShowing)
             {
                 _wake?.Restart();
+            }
+            else if (kind == ScenarioKind.Water && !waterWasShowing)
+            {
+                _ripples?.Restart();
             }
 
             _sky?.SetVisible(!surface);
@@ -448,6 +462,7 @@ namespace BalloonParty.Scenario.View
             if (!water)
             {
                 _caustics?.Rest();
+                _ripples?.Restart();
             }
         }
 
