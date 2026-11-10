@@ -8,6 +8,10 @@
 > as the retired URP migration plan: facts first, tasks gated on in-editor/device
 > verification). **Execution not started** — Wave A's look re-tune is the cost gate; read
 > the decision section before pulling the trigger.
+>
+> **Update 2026-11-10:** Wave B (HDR rendering and bloom) is replaced by @ref plan_hdr. URP 17.6
+> does grade and tonemap HDR in Gamma space (`UberPost.shader` converts to linear first), so HDR
+> no longer waits on Wave A. This plan now covers the Linear switch only.
 
 ---
 
