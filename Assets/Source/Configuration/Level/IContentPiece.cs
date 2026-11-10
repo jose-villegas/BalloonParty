@@ -17,5 +17,11 @@ namespace BalloonParty.Configuration.Level
 
         /// <summary>Whether the piece needs ground under it; sky levels leave it out.</summary>
         bool RequiresGround { get; }
+
+        /// <summary>
+        ///     Whether water levels leave the piece out: the water surface has no clouds or bushes, and nothing on it
+        ///     bounces shots but the unbreakable balloon.
+        /// </summary>
+        bool KeptOffWater { get; }
     }
 }

@@ -43,6 +43,8 @@ namespace BalloonParty.Configuration.Level
         public bool Withheld => _withheld;
         public int Cost => _cost;
         public bool RequiresGround => _requiresGround;
+        public bool KeptOffWater =>
+            _requiresGround || _type is GridActorType.Puff or GridActorType.Deflector or GridActorType.Gatekeeper;
 
         internal GridActorContentEntry(GridActorType type, int unlockLevel, int cost, RangedInt count,
             RangedInt lateCount, int rampLevels, int maxPerCluster = 0, bool withheld = false,

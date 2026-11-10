@@ -45,9 +45,14 @@ with its own key, mixed with the schedule salt and the run seed like every other
 layout is stable across retries and each run gets its own. The first meadow stays fixed: bushes
 still arrive on time.
 
-`ScenarioStretch` treats water like sky for puff clouds and bushes (full puff clouds; bushes never,
-since they require ground). `RequiresGround` stays a ground-only flag: no water-only content exists
-yet, and generalising it to a "required scenario" is left until one does.
+**The water surface has no clouds or bushes, and nothing on it bounces shots but the
+unbreakable balloon** (owner rules). `IContentPiece.KeptOffWater` marks what a water level
+leaves out: puff clouds, bushes, the Tough and Tougher balloons (they deflect until their last
+hit), and the Deflector and Gatekeeper actors. `LevelGenerator` drops those pieces before any
+budget is spent, as a sky level drops ground-only ones, so their budget buys the level's other
+threats rather than a pick that comes out empty. Clouds aren't faded out as they are over a
+clearing meadow: on water they're simply absent, and `ScenarioStretch`'s puff-cloud and bush
+shares are 0 there. `RequiresGround` stays a ground-only flag beside it.
 
 ### 2. The water backdrop
 
@@ -121,6 +126,8 @@ merges; a nudge that pushes them apart or slides them past each other at the sam
    shortening from 8 s to 2 s; carried over as a share rising from 15% to 65%).
 4. **Clusters bigger than two:** a merge happens only when the sum fits in 5 bubbles; otherwise the
    two stay apart. Merged clusters merge again on a later nudge, up to 5.
+5. **What water leaves out:** "water surface has no clouds or bushes", and "no deflector balloons
+   except for unbreakable": no Tough, Tougher, Deflector or Gatekeeper on water either.
 
 ## Phases
 

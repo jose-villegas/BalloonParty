@@ -163,7 +163,9 @@ namespace BalloonParty.Configuration.Level
 
         // Puts each unlocked piece of the role straight in (a staple, or still featured) or among the optional
         // ones. Featured pieces are paid for first, so they can leave nothing for the optional picks. A sky level
-        // leaves ground-only pieces out before any budget is spent, so a bush can't eat a sky level's budget.
+        // leaves ground-only pieces out before any budget is spent, so a bush can't eat a sky level's budget, and a
+        // water level leaves out its clouds, bushes and shot-bouncing pieces the same way, so their budget buys other
+        // threats.
         private static void Partition<T>(IReadOnlyList<T> pieces, int kind, PieceSlot slot, HashSet<int> included,
             List<(int Key, int Cost)> optional, ref float budget)
             where T : IContentPiece
@@ -177,6 +179,11 @@ namespace BalloonParty.Configuration.Level
                 }
 
                 if (piece.RequiresGround && slot.Scenario != ScenarioKind.Ground)
+                {
+                    continue;
+                }
+
+                if (piece.KeptOffWater && slot.Scenario == ScenarioKind.Water)
                 {
                     continue;
                 }

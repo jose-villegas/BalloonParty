@@ -800,6 +800,108 @@ namespace BalloonParty.Tests.Configuration
             Assert.IsEmpty(sky.GridActorGates);
         }
 
+        [Test]
+        public void Generate_NoWaterLevel_HasCloudsBushesOrShotBouncersButTheUnbreakable(
+            [Values(0, 3, 98765)] int runSeed)
+        {
+            // All staples: everywhere else they'd be in, so only the water rule can keep them out.
+            var settings = Settings(
+                balloons: new[]
+                {
+                    Balloon(BalloonType.Simple, ContentRole.Threat, 1, 0),
+                    Balloon(BalloonType.Tough, ContentRole.Threat, 1, 0),
+                    Balloon(BalloonType.Tougher, ContentRole.Threat, 1, 0),
+                    Balloon(BalloonType.Unbreakable, ContentRole.Threat, 1, 0),
+                },
+                gridActors: new[]
+                {
+                    Actor(GridActorType.Puff, 1, 0),
+                    new GridActorContentEntry(GridActorType.Bush, 1, 0, new RangedInt(4, 8), new RangedInt(4, 8), 0, 3,
+                        requiresGround: true),
+                    Actor(GridActorType.Deflector, 1, 0),
+                    Actor(GridActorType.Gatekeeper, 1, 0),
+                    Actor(GridActorType.Absorber, 1, 0),
+                },
+                water: 0.5f);
+
+            var waterLevels = 0;
+            for (var level = 1; level < 300; level++)
+            {
+                if (ScenarioSchedule.ForLevel(settings.Scenario, level, runSeed) != ScenarioKind.Water)
+                {
+                    continue;
+                }
+
+                waterLevels++;
+                var result = LevelGenerator.Generate(settings, level, level, runSeed);
+                AssertNothingKeptOffWater(result, level);
+                Assert.IsTrue(Has(result, BalloonType.Unbreakable), $"water level {level} keeps the unbreakable");
+                Assert.IsTrue(result.GridActorGates.Any(g => g.Type == GridActorType.Absorber),
+                    $"water level {level} keeps the rest");
+            }
+
+            Assert.Greater(waterLevels, 20, "the schedule laid out too little water to check");
+        }
+
+        [Test]
+        public void Generate_TheShippedCatalogue_KeepsCloudsBushesAndBouncersOffWater([Values(0, 3, 98765)] int runSeed)
+        {
+            var settings = ShippedLevelCatalogue.Build();
+
+            var waterLevels = 0;
+            for (var level = 1; level <= 150; level++)
+            {
+                if (ScenarioSchedule.ForLevel(settings.Scenario, level, runSeed) != ScenarioKind.Water)
+                {
+                    continue;
+                }
+
+                waterLevels++;
+                AssertNothingKeptOffWater(
+                    LevelGenerator.Generate(settings, level, settings.SeedForLevel(level), runSeed), level);
+            }
+
+            Assert.Greater(waterLevels, 0, "the shipped schedule laid out no water to check");
+        }
+
+        [Test]
+        public void Generate_OnWater_WhatsKeptOffLeavesItsBudgetToTheRest([Values(0, 1, 7, 42)] int seed)
+        {
+            // Each optional piece costs the whole budget: on water none of the kept-off ones may be a pick that
+            // comes out empty, so the budget always goes to the unbreakable.
+            var settings = Settings(
+                threat: new BudgetFormula(2f, 0f, 2f),
+                balloons: new[]
+                {
+                    Balloon(BalloonType.Simple, ContentRole.Threat, 1, 0),
+                    Balloon(BalloonType.Tough, ContentRole.Threat, 1, 2),
+                    Balloon(BalloonType.Unbreakable, ContentRole.Threat, 1, 2),
+                },
+                gridActors: new[] { Actor(GridActorType.Puff, 1, 2), Actor(GridActorType.Deflector, 1, 2) },
+                water: 1f);
+            var level = 20;
+            while (ScenarioSchedule.ForLevel(settings.Scenario, level) != ScenarioKind.Water)
+            {
+                level++;
+            }
+
+            var water = LevelGenerator.Generate(settings, level, seed);
+
+            Assert.IsTrue(Has(water, BalloonType.Unbreakable));
+            Assert.IsFalse(Has(water, BalloonType.Tough));
+            Assert.IsEmpty(water.GridActorGates);
+        }
+
+        private static void AssertNothingKeptOffWater(RangedLevelParameters result, int level)
+        {
+            Assert.IsFalse(result.GridActorGates.Any(g => g.Type is GridActorType.Puff or GridActorType.Bush),
+                $"water level {level} has clouds or bushes");
+            Assert.IsFalse(result.GridActorGates.Any(g => g.Type is GridActorType.Deflector or GridActorType.Gatekeeper),
+                $"water level {level} has a deflecting actor");
+            Assert.IsFalse(result.BalloonWeights.Any(w => w.Type is BalloonType.Tough or BalloonType.Tougher),
+                $"water level {level} has a deflecting balloon other than the unbreakable");
+        }
+
         private static void SetScenario(LevelGenerationSettings settings, ScenarioScheduleSettings scenario)
         {
             typeof(LevelGenerationSettings)
@@ -849,7 +951,8 @@ namespace BalloonParty.Tests.Configuration
             BudgetFormula? threat = null, BudgetFormula? aid = null,
             IntLevelStep[] colors = null, IntLevelStep[] boardLines = null, ItemCountStep[] itemCounts = null,
             BalloonContentEntry[] balloons = null, ItemContentEntry[] items = null,
-            GridActorContentEntry[] gridActors = null, int itemCadence = 1, int featuredLevels = 1)
+            GridActorContentEntry[] gridActors = null, int itemCadence = 1, int featuredLevels = 1,
+            float water = 0f)
         {
             var settings = new LevelGenerationSettings(
                 threat ?? new BudgetFormula(0f, 0f, 0f),
@@ -862,7 +965,7 @@ namespace BalloonParty.Tests.Configuration
                 gridActors ?? Array.Empty<GridActorContentEntry>(),
                 itemCadence,
                 featuredLevels: featuredLevels);
-            SetScenario(settings, new ScenarioScheduleSettings(16, 4, 3, 5, 2, 4, 7919));
+            SetScenario(settings, new ScenarioScheduleSettings(16, 4, 3, 5, 2, 4, 7919, waterShare: water));
             return settings;
         }
     }

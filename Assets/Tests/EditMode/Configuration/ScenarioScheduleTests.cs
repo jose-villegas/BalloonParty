@@ -461,13 +461,14 @@ namespace BalloonParty.Tests.Configuration
         }
 
         [Test]
-        public void PuffCloudAndBushShares_AreFullOverWater([Values(1, 3, 5)] int length)
+        public void PuffCloudAndBushShares_AreZeroOverWater([Values(1, 3, 5)] int length)
         {
+            // The water surface has no clouds or bushes, at any point of its stretch.
             for (var position = 0; position < length; position++)
             {
                 var stretch = new ScenarioStretch(ScenarioKind.Water, position, length);
-                Assert.AreEqual(1f, stretch.PuffCloudShare);
-                Assert.AreEqual(1f, stretch.BushShare);
+                Assert.AreEqual(0f, stretch.PuffCloudShare);
+                Assert.AreEqual(0f, stretch.BushShare);
                 Assert.IsFalse(stretch.IsClearingMeadow);
             }
         }
