@@ -167,6 +167,9 @@ Properties</h2></td></tr>
 <tr class="separator:a920ae1b670b7dcf6ec08aa1da2990e8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafcaf78720cae9cf7e7591efce4d9394" id="r_aafcaf78720cae9cf7e7591efce4d9394"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aafcaf78720cae9cf7e7591efce4d9394">ResetOrder</a><code> [get]</code></td></tr>
 <tr class="separator:aafcaf78720cae9cf7e7591efce4d9394"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a737cff70bfdd7095adb9fd6f44537823" id="r_a737cff70bfdd7095adb9fd6f44537823"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a737cff70bfdd7095adb9fd6f44537823">SecondsOnLevel</a><code> [get]</code></td></tr>
+<tr class="memdesc:a737cff70bfdd7095adb9fd6f44537823"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds of play on the current level, counted under the clock's holds (<a class="el" href="namespaceBalloonParty_1_1Game.html">Game</a> screen, Playing, not paused); 0 again at each level start and run reset.  <br /></td></tr>
+<tr class="separator:a737cff70bfdd7095adb9fd6f44537823"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -180,6 +183,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a82df526b296e5819fd17efb963048355"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44126bacf9970a56a8a8478252b85b27" id="r_a44126bacf9970a56a8a8478252b85b27"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a44126bacf9970a56a8a8478252b85b27">Pace</a> (float flightSeconds)</td></tr>
 <tr class="separator:a44126bacf9970a56a8a8478252b85b27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7b21b42fcd83867f72d65b3b473b849" id="r_ac7b21b42fcd83867f72d65b3b473b849"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac7b21b42fcd83867f72d65b3b473b849">StartLevel</a> ()</td></tr>
+<tr class="separator:ac7b21b42fcd83867f72d65b3b473b849"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1766a2cbc776f4f625d6fb469ea2d6eb" id="r_a1766a2cbc776f4f625d6fb469ea2d6eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1766a2cbc776f4f625d6fb469ea2d6eb">StartWindow</a> (float seconds)</td></tr>
 <tr class="separator:a1766a2cbc776f4f625d6fb469ea2d6eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -201,6 +206,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aff6d549dc83d23fddf4841326e031005"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5befad74947dcf09afd9f6e4838570d0" id="r_a5befad74947dcf09afd9f6e4838570d0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5befad74947dcf09afd9f6e4838570d0">_remaining</a></td></tr>
 <tr class="separator:a5befad74947dcf09afd9f6e4838570d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bd5b9b2bcebf613699aed74e7a1784d" id="r_a9bd5b9b2bcebf613699aed74e7a1784d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9bd5b9b2bcebf613699aed74e7a1784d">_secondsOnLevel</a></td></tr>
+<tr class="separator:a9bd5b9b2bcebf613699aed74e7a1784d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a325ec228eaaec7f62b55a080445ddd8b" id="r_a325ec228eaaec7f62b55a080445ddd8b"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html">ISpawnClockSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a325ec228eaaec7f62b55a080445ddd8b">_settings</a></td></tr>
 <tr class="separator:a325ec228eaaec7f62b55a080445ddd8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a008f580b3e6c2640c78ea2c812f9fe7b" id="r_a008f580b3e6c2640c78ea2c812f9fe7b"><td class="memItemLeft" align="right" valign="top">readonly CompositeDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a008f580b3e6c2640c78ea2c812f9fe7b">_subscriptions</a> = new()</td></tr>
@@ -478,6 +485,31 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ac7b21b42fcd83867f72d65b3b473b849" name="ac7b21b42fcd83867f72d65b3b473b849"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7b21b42fcd83867f72d65b3b473b849">&#9670;&#160;</a></span>StartLevel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Spawner.SpawnClock.StartLevel </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a1766a2cbc776f4f625d6fb469ea2d6eb" name="a1766a2cbc776f4f625d6fb469ea2d6eb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1766a2cbc776f4f625d6fb469ea2d6eb">&#9670;&#160;</a></span>StartWindow()</h2>
 
@@ -697,6 +729,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a9bd5b9b2bcebf613699aed74e7a1784d" name="a9bd5b9b2bcebf613699aed74e7a1784d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9bd5b9b2bcebf613699aed74e7a1784d">&#9670;&#160;</a></span>_secondsOnLevel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Balloon.Spawner.SpawnClock._secondsOnLevel</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a325ec228eaaec7f62b55a080445ddd8b" name="a325ec228eaaec7f62b55a080445ddd8b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a325ec228eaaec7f62b55a080445ddd8b">&#9670;&#160;</a></span>_settings</h2>
 
@@ -811,6 +865,32 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html#a347699f041bd2f73a8326aa24a351d81">BalloonParty.Game.Run.IRunResettable</a>.</p>
+
+</div>
+</div>
+<a id="a737cff70bfdd7095adb9fd6f44537823" name="a737cff70bfdd7095adb9fd6f44537823"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a737cff70bfdd7095adb9fd6f44537823">&#9670;&#160;</a></span>SecondsOnLevel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Balloon.Spawner.SpawnClock.SecondsOnLevel</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds of play on the current level, counted under the clock's holds (<a class="el" href="namespaceBalloonParty_1_1Game.html">Game</a> screen, Playing, not paused); 0 again at each level start and run reset. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html#a21782b6473b41f977ecf3b7a3009d117">BalloonParty.Balloon.Spawner.ISpawnClock</a>.</p>
 
 </div>
 </div>

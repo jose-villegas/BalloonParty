@@ -66,6 +66,9 @@ var annotated_dup =
           [ "BalloonControllerRegistry", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry" ],
           [ "BalloonMotionTicker", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker" ],
           [ "BalloonPopPresenter", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonPopPresenter.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonPopPresenter" ],
+          [ "BubbleMergeCandidate", "structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html", "structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate" ],
+          [ "BubbleMergeRule", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule" ],
+          [ "BubbleMergeService", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService" ],
           [ "PressurePropagation", "classBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation" ]
         ] ],
         [ "Model", "namespaceBalloonParty_1_1Balloon_1_1Model.html", [
@@ -213,9 +216,12 @@ var annotated_dup =
         ] ],
         [ "Level", "namespaceBalloonParty_1_1Configuration_1_1Level.html", [
           [ "BalloonContentEntry", "structBalloonParty_1_1Configuration_1_1Level_1_1BalloonContentEntry.html", "structBalloonParty_1_1Configuration_1_1Level_1_1BalloonContentEntry" ],
+          [ "BubbleRiseCurve", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseCurve.html", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseCurve" ],
+          [ "BubbleRiseSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings" ],
           [ "BudgetFormula", "structBalloonParty_1_1Configuration_1_1Level_1_1BudgetFormula.html", "structBalloonParty_1_1Configuration_1_1Level_1_1BudgetFormula" ],
           [ "ContentWeightRamp", "structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html", "structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp" ],
           [ "GridActorContentEntry", "structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html", "structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry" ],
+          [ "IBubbleRiseSettings", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings" ],
           [ "IContentPiece", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece.html", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece" ],
           [ "ILevelPacingConfiguration", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration" ],
           [ "ILevelParameters", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters" ],
@@ -368,6 +374,7 @@ var annotated_dup =
         [ "PaintDripOverlayEditor", "classBalloonParty_1_1Editor_1_1PaintDripOverlayEditor.html", "classBalloonParty_1_1Editor_1_1PaintDripOverlayEditor" ],
         [ "PaintSplashViewEditor", "classBalloonParty_1_1Editor_1_1PaintSplashViewEditor.html", "classBalloonParty_1_1Editor_1_1PaintSplashViewEditor" ],
         [ "PencilFontBuilder", "classBalloonParty_1_1Editor_1_1PencilFontBuilder.html", "classBalloonParty_1_1Editor_1_1PencilFontBuilder" ],
+        [ "PencilTextShaderGUI", "classBalloonParty_1_1Editor_1_1PencilTextShaderGUI.html", "classBalloonParty_1_1Editor_1_1PencilTextShaderGUI" ],
         [ "PrefabRebuild", "classBalloonParty_1_1Editor_1_1PrefabRebuild.html", "classBalloonParty_1_1Editor_1_1PrefabRebuild" ],
         [ "PropertyDrawerHelper", "classBalloonParty_1_1Editor_1_1PropertyDrawerHelper.html", "classBalloonParty_1_1Editor_1_1PropertyDrawerHelper" ],
         [ "RainbowBalloonVariantEditor", "classBalloonParty_1_1Editor_1_1RainbowBalloonVariantEditor.html", "classBalloonParty_1_1Editor_1_1RainbowBalloonVariantEditor" ],
@@ -711,7 +718,9 @@ var annotated_dup =
           [ "GrassWakeBuffer", "classBalloonParty_1_1Scenario_1_1View_1_1GrassWakeBuffer.html", "classBalloonParty_1_1Scenario_1_1View_1_1GrassWakeBuffer" ],
           [ "GroundView", "classBalloonParty_1_1Scenario_1_1View_1_1GroundView.html", "classBalloonParty_1_1Scenario_1_1View_1_1GroundView" ],
           [ "SmokeFieldView", "classBalloonParty_1_1Scenario_1_1View_1_1SmokeFieldView.html", "classBalloonParty_1_1Scenario_1_1View_1_1SmokeFieldView" ],
-          [ "WallNetView", "classBalloonParty_1_1Scenario_1_1View_1_1WallNetView.html", "classBalloonParty_1_1Scenario_1_1View_1_1WallNetView" ]
+          [ "WallNetView", "classBalloonParty_1_1Scenario_1_1View_1_1WallNetView.html", "classBalloonParty_1_1Scenario_1_1View_1_1WallNetView" ],
+          [ "WaterCausticBuffer", "classBalloonParty_1_1Scenario_1_1View_1_1WaterCausticBuffer.html", "classBalloonParty_1_1Scenario_1_1View_1_1WaterCausticBuffer" ],
+          [ "WaterRippleBuffer", "classBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer.html", "classBalloonParty_1_1Scenario_1_1View_1_1WaterRippleBuffer" ]
         ] ],
         [ "ActiveScenario", "classBalloonParty_1_1Scenario_1_1ActiveScenario.html", "classBalloonParty_1_1Scenario_1_1ActiveScenario" ],
         [ "BackgroundFieldService", "classBalloonParty_1_1Scenario_1_1BackgroundFieldService.html", "classBalloonParty_1_1Scenario_1_1BackgroundFieldService" ],
@@ -725,7 +734,8 @@ var annotated_dup =
         [ "ScenarioShift", "structBalloonParty_1_1Scenario_1_1ScenarioShift.html", "structBalloonParty_1_1Scenario_1_1ScenarioShift" ],
         [ "SkyScatterService", "classBalloonParty_1_1Scenario_1_1SkyScatterService.html", "classBalloonParty_1_1Scenario_1_1SkyScatterService" ],
         [ "SmokeFieldResources", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources" ],
-        [ "SmokeFieldService", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html", "classBalloonParty_1_1Scenario_1_1SmokeFieldService" ]
+        [ "SmokeFieldService", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html", "classBalloonParty_1_1Scenario_1_1SmokeFieldService" ],
+        [ "WaterImpactCollector", "classBalloonParty_1_1Scenario_1_1WaterImpactCollector.html", "classBalloonParty_1_1Scenario_1_1WaterImpactCollector" ]
       ] ],
       [ "Shared", "namespaceBalloonParty_1_1Shared.html", [
         [ "Animation", "namespaceBalloonParty_1_1Shared_1_1Animation.html", [
@@ -842,6 +852,7 @@ var annotated_dup =
           [ "SpeckSpawnRequestMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage" ],
           [ "SpeedTapMintedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage" ],
           [ "StreakChangedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage" ],
+          [ "StreakGrewMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1StreakGrewMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1StreakGrewMessage" ],
           [ "StrikethroughArrivedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1StrikethroughArrivedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1StrikethroughArrivedMessage" ],
           [ "ThrowerReadyMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ThrowerReadyMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ThrowerReadyMessage" ],
           [ "TooltipMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1TooltipMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1TooltipMessage" ],

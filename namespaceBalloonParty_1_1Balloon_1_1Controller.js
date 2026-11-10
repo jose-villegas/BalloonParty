@@ -9,5 +9,8 @@ var namespaceBalloonParty_1_1Balloon_1_1Controller =
     [ "BalloonControllerRegistry", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry" ],
     [ "BalloonMotionTicker", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker" ],
     [ "BalloonPopPresenter", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonPopPresenter.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonPopPresenter" ],
+    [ "BubbleMergeCandidate", "structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html", "structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate" ],
+    [ "BubbleMergeRule", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule" ],
+    [ "BubbleMergeService", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService" ],
     [ "PressurePropagation", "classBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation" ]
 ];

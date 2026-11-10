@@ -114,7 +114,7 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Projectile_1_1Controller_1_1I
 </div><!--header-->
 <div class="contents">
 
-<p>Whether any live shot is currently piercing.  
+<p>Whether any live shot is currently piercing, and which shot just started to.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Projectile.Controller.IActiveProjectilePierce:</div>
@@ -128,9 +128,12 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Projectile_1_1Controller_1_1I
 Properties</h2></td></tr>
 <tr class="memitem:a1cf6f845902e47a97b1b6bba9925ec70" id="r_a1cf6f845902e47a97b1b6bba9925ec70"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1cf6f845902e47a97b1b6bba9925ec70">IsPiercing</a><code> [get]</code></td></tr>
 <tr class="separator:a1cf6f845902e47a97b1b6bba9925ec70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7174a1908a3d7feca82fee45a1692236" id="r_a7174a1908a3d7feca82fee45a1692236"><td class="memItemLeft" align="right" valign="top">IObservable&lt; <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7174a1908a3d7feca82fee45a1692236">PierceArmed</a><code> [get]</code></td></tr>
+<tr class="memdesc:a7174a1908a3d7feca82fee45a1692236"><td class="mdescLeft">&#160;</td><td class="mdescRight">A shot whose piercing went from off to on, once per arming.  <br /></td></tr>
+<tr class="separator:a7174a1908a3d7feca82fee45a1692236"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Whether any live shot is currently piercing. </p>
+<div class="textblock"><p>Whether any live shot is currently piercing, and which shot just started to. </p>
 </div><h2 class="groupheader">Property Documentation</h2>
 <a id="a1cf6f845902e47a97b1b6bba9925ec70" name="a1cf6f845902e47a97b1b6bba9925ec70"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1cf6f845902e47a97b1b6bba9925ec70">&#9670;&#160;</a></span>IsPiercing</h2>
@@ -153,6 +156,33 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html#af7a083b8d376d9a8afd522de9282c078">BalloonParty.Projectile.Controller.ActiveProjectilePierce</a>.</p>
+
+</div>
+</div>
+<a id="a7174a1908a3d7feca82fee45a1692236" name="a7174a1908a3d7feca82fee45a1692236"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7174a1908a3d7feca82fee45a1692236">&#9670;&#160;</a></span>PierceArmed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IObservable&lt;<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a>&gt; BalloonParty.Projectile.Controller.IActiveProjectilePierce.PierceArmed</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A shot whose piercing went from off to on, once per arming. </p>
+<p>Unlike <a class="el" href="#a1cf6f845902e47a97b1b6bba9925ec70">IsPiercing</a> it fires again when a second shot arms while the first still pierces, and not when a banked Snipe charge keeps a shot armed through its discharge. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html#a39c25ce11aa99ba47c4d471a9a55a7e8">BalloonParty.Projectile.Controller.ActiveProjectilePierce</a>.</p>
 
 </div>
 </div>

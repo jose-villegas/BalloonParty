@@ -112,6 +112,7 @@ $(function(){initNavTree('classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html
 <a href="#properties">Properties</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.UI.HeadsUp.WriteOnText Class Reference</div></div>
 </div><!--header-->
@@ -139,6 +140,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa4fb850bd397a6f5598572fbad9fa174" id="r_aa4fb850bd397a6f5598572fbad9fa174"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa4fb850bd397a6f5598572fbad9fa174">Complete</a> ()</td></tr>
 <tr class="memdesc:aa4fb850bd397a6f5598572fbad9fa174"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finishes the current write at once.  <br /></td></tr>
 <tr class="separator:aa4fb850bd397a6f5598572fbad9fa174"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f44f2ded2b446b137bbf1b9e33f52a5" id="r_a0f44f2ded2b446b137bbf1b9e33f52a5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0f44f2ded2b446b137bbf1b9e33f52a5">Stop</a> ()</td></tr>
+<tr class="memdesc:a0f44f2ded2b446b137bbf1b9e33f52a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops the current write where it is, the pencil lifted: for a line going away mid-write.  <br /></td></tr>
+<tr class="separator:a0f44f2ded2b446b137bbf1b9e33f52a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c0a06f59f3eea5c14835f4bf7f9fe8c" id="r_a8c0a06f59f3eea5c14835f4bf7f9fe8c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8c0a06f59f3eea5c14835f4bf7f9fe8c">Write</a> (string text, float delaySeconds=0f)</td></tr>
 <tr class="memdesc:a8c0a06f59f3eea5c14835f4bf7f9fe8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the text, hidden, and writes it on after <em>delaySeconds</em> : a label that fades in first waits for its fade, or a short line is written before it can be seen.  <br /></td></tr>
 <tr class="separator:a8c0a06f59f3eea5c14835f4bf7f9fe8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -178,6 +182,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aee8b4b563bb0b0e7453656e6713c0775"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a412fab49af448228d0644c893ebd81a3" id="r_a412fab49af448228d0644c893ebd81a3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a412fab49af448228d0644c893ebd81a3">_head</a></td></tr>
 <tr class="separator:a412fab49af448228d0644c893ebd81a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6de4125af827fec34a8b475f8c162782" id="r_a6de4125af827fec34a8b475f8c162782"><td class="memItemLeft" align="right" valign="top">readonly List&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6de4125af827fec34a8b475f8c162782">_revealInUv</a> = new()</td></tr>
+<tr class="separator:a6de4125af827fec34a8b475f8c162782"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f8cccf0b6fed8184566835ec7f42ac9" id="r_a5f8cccf0b6fed8184566835ec7f42ac9"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5f8cccf0b6fed8184566835ec7f42ac9">_secondsPerCharacter</a> = 0.07f</td></tr>
 <tr class="separator:a5f8cccf0b6fed8184566835ec7f42ac9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52770f10b9b492381a81bf746dbb3ee7" id="r_a52770f10b9b492381a81bf746dbb3ee7"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a52770f10b9b492381a81bf746dbb3ee7">_slant</a> = 0.35f</td></tr>
@@ -198,6 +204,11 @@ Private Attributes</h2></td></tr>
 <tr class="separator:adb7a9f16b5d71bafd396464a02315984"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82c54d5468a419a95d4dbd77e516d9f0" id="r_a82c54d5468a419a95d4dbd77e516d9f0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a82c54d5468a419a95d4dbd77e516d9f0">_writing</a></td></tr>
 <tr class="separator:a82c54d5468a419a95d4dbd77e516d9f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:aa5b2f978631a62bebc40784b1e547eed" id="r_aa5b2f978631a62bebc40784b1e547eed"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5b2f978631a62bebc40784b1e547eed">RevealInUvProperty</a> = Shader.PropertyToID(&quot;_PencilRevealInUv&quot;)</td></tr>
+<tr class="separator:aa5b2f978631a62bebc40784b1e547eed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Writes a TMP_Text on left to right as if by a pencil: a soft reveal edge, slanted forward, sweeps across the glyphs while an optional pencil tip rides it. </p>
@@ -422,6 +433,25 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a0f44f2ded2b446b137bbf1b9e33f52a5" name="a0f44f2ded2b446b137bbf1b9e33f52a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f44f2ded2b446b137bbf1b9e33f52a5">&#9670;&#160;</a></span>Stop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.HeadsUp.WriteOnText.Stop </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Stops the current write where it is, the pencil lifted: for a line going away mid-write. </p>
+
+</div>
+</div>
 <a id="aaa19b49e337e796724425155314f9f43" name="aaa19b49e337e796724425155314f9f43"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaa19b49e337e796724425155314f9f43">&#9670;&#160;</a></span>Update()</h2>
 
@@ -526,6 +556,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.UI.HeadsUp.WriteOnText._head</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6de4125af827fec34a8b475f8c162782" name="a6de4125af827fec34a8b475f8c162782"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6de4125af827fec34a8b475f8c162782">&#9670;&#160;</a></span>_revealInUv</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;bool&gt; BalloonParty.UI.HeadsUp.WriteOnText._revealInUv = new()</td>
         </tr>
       </table>
   </td>
@@ -751,6 +803,28 @@ Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa5b2f978631a62bebc40784b1e547eed" name="aa5b2f978631a62bebc40784b1e547eed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5b2f978631a62bebc40784b1e547eed">&#9670;&#160;</a></span>RevealInUvProperty</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.UI.HeadsUp.WriteOnText.RevealInUvProperty = Shader.PropertyToID(&quot;_PencilRevealInUv&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

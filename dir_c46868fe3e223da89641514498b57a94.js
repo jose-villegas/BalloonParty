@@ -46,6 +46,7 @@ var dir_c46868fe3e223da89641514498b57a94 =
     [ "SpeckSpawnRequestMessage.cs", "SpeckSpawnRequestMessage_8cs.html", "SpeckSpawnRequestMessage_8cs" ],
     [ "SpeedTapMintedMessage.cs", "SpeedTapMintedMessage_8cs.html", "SpeedTapMintedMessage_8cs" ],
     [ "StreakChangedMessage.cs", "StreakChangedMessage_8cs.html", "StreakChangedMessage_8cs" ],
+    [ "StreakGrewMessage.cs", "StreakGrewMessage_8cs.html", "StreakGrewMessage_8cs" ],
     [ "StrikethroughArrivedMessage.cs", "StrikethroughArrivedMessage_8cs.html", "StrikethroughArrivedMessage_8cs" ],
     [ "ThrowerReadyMessage.cs", "ThrowerReadyMessage_8cs.html", "ThrowerReadyMessage_8cs" ],
     [ "TooltipMessage.cs", "TooltipMessage_8cs.html", "TooltipMessage_8cs" ],

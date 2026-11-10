@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Balloon_1_1Spawner_1_1InitialLayerPlan.html" target="_top" xlink:title="Pure arithmetic behind the initial fill&#39;s vertical heavy&#45;type layering.">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPlacementResolver.html" target="_top" xlink:title="Picks the slot a column&#39;s new balloon should take, falling back to nearby columns under pressure.">
 <polygon fill="white" stroke="#666666" points="164,-30 0,-30 0,0 164,0 164,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Spawner.</text>
-<text text-anchor="middle" x="82" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">InitialLayerPlan</text>
+<text text-anchor="middle" x="82" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonPlacementResolver</text>
 </a>
 </g>
 </g>

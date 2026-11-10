@@ -115,7 +115,7 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1Effects_1_1Groun
 </div><!--header-->
 <div class="contents">
 
-<p>Authored tuning for the ground backdrop shown on ground levels: the floor quad and the grass blades over it.  
+<p>Authored tuning for the surface backdrops: the floor quad and the grass blades over it on ground levels, the water surface on water levels, and the mist reveal between either and the sky.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Configuration.Effects.GroundSettings:</div>
@@ -206,6 +206,24 @@ Properties</h2></td></tr>
 <tr class="memitem:a1c6699c3ad3175557a51213686c26886" id="r_a1c6699c3ad3175557a51213686c26886"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ac8d798dbe9f853e4e465315f979903a1">Material</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1c6699c3ad3175557a51213686c26886">WakeMaterial</a><code> [get]</code></td></tr>
 <tr class="memdesc:a1c6699c3ad3175557a51213686c26886"><td class="mdescLeft">&#160;</td><td class="mdescRight">Material using Hidden/BalloonParty/Scenario/GrassWake: the grass's own short memory of the disturbance field, which the blades bend to.  <br /></td></tr>
 <tr class="separator:a1c6699c3ad3175557a51213686c26886"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1f1bf8bbec7fd08df5d8d3637f3a4eb" id="r_ae1f1bf8bbec7fd08df5d8d3637f3a4eb"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae1f1bf8bbec7fd08df5d8d3637f3a4eb">WaterBounceReference</a><code> [get]</code></td></tr>
+<tr class="memdesc:ae1f1bf8bbec7fd08df5d8d3637f3a4eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The water's average unlit colour, which the GI measures bounce against on water levels.  <br /></td></tr>
+<tr class="separator:ae1f1bf8bbec7fd08df5d8d3637f3a4eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cccd162bb8d12049f15550854533be4" id="r_a9cccd162bb8d12049f15550854533be4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ac8d798dbe9f853e4e465315f979903a1">Material</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9cccd162bb8d12049f15550854533be4">WaterCausticMaterial</a><code> [get]</code></td></tr>
+<tr class="memdesc:a9cccd162bb8d12049f15550854533be4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Material using Hidden/BalloonParty/Scenario/WaterCaustics: one tile of the caustic net the water lays under its surface.  <br /></td></tr>
+<tr class="separator:a9cccd162bb8d12049f15550854533be4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdfa7e0142fce98da7b61ff41582034e" id="r_afdfa7e0142fce98da7b61ff41582034e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afdfa7e0142fce98da7b61ff41582034e">WaterCausticResolution</a><code> [get]</code></td></tr>
+<tr class="memdesc:afdfa7e0142fce98da7b61ff41582034e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Texels across the square caustic tile (a power of two).  <br /></td></tr>
+<tr class="separator:afdfa7e0142fce98da7b61ff41582034e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9460a8a9e9526fdb01709a4514c3378c" id="r_a9460a8a9e9526fdb01709a4514c3378c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ac8d798dbe9f853e4e465315f979903a1">Material</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9460a8a9e9526fdb01709a4514c3378c">WaterMaterial</a><code> [get]</code></td></tr>
+<tr class="memdesc:a9460a8a9e9526fdb01709a4514c3378c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Surface material using BalloonParty/Scenario/Water, drawn on the floor quad on water levels.  <br /></td></tr>
+<tr class="separator:a9460a8a9e9526fdb01709a4514c3378c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8034786837bebdc11ade0201a3e90cd3" id="r_a8034786837bebdc11ade0201a3e90cd3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ac8d798dbe9f853e4e465315f979903a1">Material</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8034786837bebdc11ade0201a3e90cd3">WaterRippleMaterial</a><code> [get]</code></td></tr>
+<tr class="memdesc:a8034786837bebdc11ade0201a3e90cd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Material using Hidden/BalloonParty/Scenario/WaterRipple: simulates the surface's waves, flow and foam, set off by every impact.  <br /></td></tr>
+<tr class="separator:a8034786837bebdc11ade0201a3e90cd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae263ffc920c4a82669aaa1d096e3a2ea" id="r_ae263ffc920c4a82669aaa1d096e3a2ea"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae263ffc920c4a82669aaa1d096e3a2ea">WaterRippleTexelsPerUnit</a><code> [get]</code></td></tr>
+<tr class="memdesc:ae263ffc920c4a82669aaa1d096e3a2ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cells per world unit of the water simulation.  <br /></td></tr>
+<tr class="separator:ae263ffc920c4a82669aaa1d096e3a2ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -257,9 +275,21 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a08d89ef28bcb260085c3976cf91df6fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a566179c0160e7c3e8065434e9dd6735b" id="r_a566179c0160e7c3e8065434e9dd6735b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ac8d798dbe9f853e4e465315f979903a1">Material</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a566179c0160e7c3e8065434e9dd6735b">_wakeMaterial</a></td></tr>
 <tr class="separator:a566179c0160e7c3e8065434e9dd6735b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ad9629c86cc946d12f431e211ceefdd" id="r_a1ad9629c86cc946d12f431e211ceefdd"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ad9629c86cc946d12f431e211ceefdd">_waterBounceReference</a> = new(0.125f, 0.30f, 0.33f, 1f)</td></tr>
+<tr class="separator:a1ad9629c86cc946d12f431e211ceefdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a714046786375a8af8f5268d8dbf2d019" id="r_a714046786375a8af8f5268d8dbf2d019"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ac8d798dbe9f853e4e465315f979903a1">Material</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a714046786375a8af8f5268d8dbf2d019">_waterCausticMaterial</a></td></tr>
+<tr class="separator:a714046786375a8af8f5268d8dbf2d019"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb73976e103b55d704bf75aebaa582d7" id="r_adb73976e103b55d704bf75aebaa582d7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adb73976e103b55d704bf75aebaa582d7">_waterCausticResolution</a> = 256</td></tr>
+<tr class="separator:adb73976e103b55d704bf75aebaa582d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fa075e0e146b79b16e6639410cd89e0" id="r_a2fa075e0e146b79b16e6639410cd89e0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ac8d798dbe9f853e4e465315f979903a1">Material</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2fa075e0e146b79b16e6639410cd89e0">_waterMaterial</a></td></tr>
+<tr class="separator:a2fa075e0e146b79b16e6639410cd89e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21264543bbc85627cdae2f674ce83d8f" id="r_a21264543bbc85627cdae2f674ce83d8f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ac8d798dbe9f853e4e465315f979903a1">Material</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a21264543bbc85627cdae2f674ce83d8f">_waterRippleMaterial</a></td></tr>
+<tr class="separator:a21264543bbc85627cdae2f674ce83d8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73c02baac676a7bff8b38e79c64acb7c" id="r_a73c02baac676a7bff8b38e79c64acb7c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a73c02baac676a7bff8b38e79c64acb7c">_waterRippleTexelsPerUnit</a> = 16f</td></tr>
+<tr class="separator:a73c02baac676a7bff8b38e79c64acb7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Authored tuning for the ground backdrop shown on ground levels: the floor quad and the grass blades over it. </p>
+<div class="textblock"><p>Authored tuning for the surface backdrops: the floor quad and the grass blades over it on ground levels, the water surface on water levels, and the mist reveal between either and the sky. </p>
 <p>Assign both materials here and wire the asset into GameLifetimeScope. </p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="ad6375b47c3055cd3cde77c28a59be78f" name="ad6375b47c3055cd3cde77c28a59be78f"></a>
@@ -779,6 +809,138 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="#ac8d798dbe9f853e4e465315f979903a1">Material</a> BalloonParty.Configuration.Effects.GroundSettings._wakeMaterial</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1ad9629c86cc946d12f431e211ceefdd" name="a1ad9629c86cc946d12f431e211ceefdd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ad9629c86cc946d12f431e211ceefdd">&#9670;&#160;</a></span>_waterBounceReference</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Color BalloonParty.Configuration.Effects.GroundSettings._waterBounceReference = new(0.125f, 0.30f, 0.33f, 1f)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a714046786375a8af8f5268d8dbf2d019" name="a714046786375a8af8f5268d8dbf2d019"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a714046786375a8af8f5268d8dbf2d019">&#9670;&#160;</a></span>_waterCausticMaterial</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#ac8d798dbe9f853e4e465315f979903a1">Material</a> BalloonParty.Configuration.Effects.GroundSettings._waterCausticMaterial</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adb73976e103b55d704bf75aebaa582d7" name="adb73976e103b55d704bf75aebaa582d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb73976e103b55d704bf75aebaa582d7">&#9670;&#160;</a></span>_waterCausticResolution</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Effects.GroundSettings._waterCausticResolution = 256</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2fa075e0e146b79b16e6639410cd89e0" name="a2fa075e0e146b79b16e6639410cd89e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2fa075e0e146b79b16e6639410cd89e0">&#9670;&#160;</a></span>_waterMaterial</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#ac8d798dbe9f853e4e465315f979903a1">Material</a> BalloonParty.Configuration.Effects.GroundSettings._waterMaterial</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a21264543bbc85627cdae2f674ce83d8f" name="a21264543bbc85627cdae2f674ce83d8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21264543bbc85627cdae2f674ce83d8f">&#9670;&#160;</a></span>_waterRippleMaterial</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#ac8d798dbe9f853e4e465315f979903a1">Material</a> BalloonParty.Configuration.Effects.GroundSettings._waterRippleMaterial</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a73c02baac676a7bff8b38e79c64acb7c" name="a73c02baac676a7bff8b38e79c64acb7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73c02baac676a7bff8b38e79c64acb7c">&#9670;&#160;</a></span>_waterRippleTexelsPerUnit</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.GroundSettings._waterRippleTexelsPerUnit = 16f</td>
         </tr>
       </table>
   </td>
@@ -1415,6 +1577,165 @@ Private Attributes</h2></td></tr>
 <p>Without one the blades stay at rest. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#a96dce93b7f438bb3de664ec7341aa712">BalloonParty.Configuration.Effects.IGroundSettings</a>.</p>
+
+</div>
+</div>
+<a id="ae1f1bf8bbec7fd08df5d8d3637f3a4eb" name="ae1f1bf8bbec7fd08df5d8d3637f3a4eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1f1bf8bbec7fd08df5d8d3637f3a4eb">&#9670;&#160;</a></span>WaterBounceReference</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Color BalloonParty.Configuration.Effects.GroundSettings.WaterBounceReference</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The water's average unlit colour, which the GI measures bounce against on water levels. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#a33312dbf735e86619a9c3217a302c018">BalloonParty.Configuration.Effects.IGroundSettings</a>.</p>
+
+</div>
+</div>
+<a id="a9cccd162bb8d12049f15550854533be4" name="a9cccd162bb8d12049f15550854533be4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9cccd162bb8d12049f15550854533be4">&#9670;&#160;</a></span>WaterCausticMaterial</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#ac8d798dbe9f853e4e465315f979903a1">Material</a> BalloonParty.Configuration.Effects.GroundSettings.WaterCausticMaterial</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Material using Hidden/BalloonParty/Scenario/WaterCaustics: one tile of the caustic net the water lays under its surface. </p>
+<p>Without one the bottom shows no caustics. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#a9b2c6f0f650cd881f2ef17fe79735ffb">BalloonParty.Configuration.Effects.IGroundSettings</a>.</p>
+
+</div>
+</div>
+<a id="afdfa7e0142fce98da7b61ff41582034e" name="afdfa7e0142fce98da7b61ff41582034e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afdfa7e0142fce98da7b61ff41582034e">&#9670;&#160;</a></span>WaterCausticResolution</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Effects.GroundSettings.WaterCausticResolution</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Texels across the square caustic tile (a power of two). </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#abc42915a38c2771ee9fdfcc9f3fe49e4">BalloonParty.Configuration.Effects.IGroundSettings</a>.</p>
+
+</div>
+</div>
+<a id="a9460a8a9e9526fdb01709a4514c3378c" name="a9460a8a9e9526fdb01709a4514c3378c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9460a8a9e9526fdb01709a4514c3378c">&#9670;&#160;</a></span>WaterMaterial</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#ac8d798dbe9f853e4e465315f979903a1">Material</a> BalloonParty.Configuration.Effects.GroundSettings.WaterMaterial</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Surface material using BalloonParty/Scenario/Water, drawn on the floor quad on water levels. </p>
+<p>Without one water levels show the sky. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#a5e1f29ff7b1050396e41f6ba7520a77e">BalloonParty.Configuration.Effects.IGroundSettings</a>.</p>
+
+</div>
+</div>
+<a id="a8034786837bebdc11ade0201a3e90cd3" name="a8034786837bebdc11ade0201a3e90cd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8034786837bebdc11ade0201a3e90cd3">&#9670;&#160;</a></span>WaterRippleMaterial</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#ac8d798dbe9f853e4e465315f979903a1">Material</a> BalloonParty.Configuration.Effects.GroundSettings.WaterRippleMaterial</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Material using Hidden/BalloonParty/Scenario/WaterRipple: simulates the surface's waves, flow and foam, set off by every impact. </p>
+<p>Without one the surface only swells. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#a6b81d726c35f7e887e783633b65fe2d9">BalloonParty.Configuration.Effects.IGroundSettings</a>.</p>
+
+</div>
+</div>
+<a id="ae263ffc920c4a82669aaa1d096e3a2ea" name="ae263ffc920c4a82669aaa1d096e3a2ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae263ffc920c4a82669aaa1d096e3a2ea">&#9670;&#160;</a></span>WaterRippleTexelsPerUnit</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.GroundSettings.WaterRippleTexelsPerUnit</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cells per world unit of the water simulation. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#a4eaf1515b7887b407da00ce4ef573105">BalloonParty.Configuration.Effects.IGroundSettings</a>.</p>
 
 </div>
 </div>

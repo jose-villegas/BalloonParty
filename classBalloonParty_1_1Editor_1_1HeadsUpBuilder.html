@@ -132,6 +132,8 @@ Static Private Member Functions</h2></td></tr>
 <tr class="separator:aad97d9ce84b53eb9d32b75b13783745c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a293cd3ed42b6266aa3143a26252c39b0" id="r_a293cd3ed42b6266aa3143a26252c39b0"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html">HandwrittenHeadsUp</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a293cd3ed42b6266aa3143a26252c39b0">CreateLine</a> (TMP_Text label, Transform parent, string name, Vector2 size)</td></tr>
 <tr class="separator:a293cd3ed42b6266aa3143a26252c39b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa02c95f0f1277ef063767cdc8903f0c9" id="r_aa02c95f0f1277ef063767cdc8903f0c9"><td class="memItemLeft" align="right" valign="top">static Transform&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa02c95f0f1277ef063767cdc8903f0c9">CreateTip</a> (Transform line)</td></tr>
+<tr class="separator:aa02c95f0f1277ef063767cdc8903f0c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a672fbe3c3f63893a55a477330ee425f8" id="r_a672fbe3c3f63893a55a477330ee425f8"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a672fbe3c3f63893a55a477330ee425f8">EnsurePrefab</a> ()</td></tr>
 <tr class="separator:a672fbe3c3f63893a55a477330ee425f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a71415e959afca952783897b8af713b1b" id="r_a71415e959afca952783897b8af713b1b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a71415e959afca952783897b8af713b1b">EnsureSceneInstance</a> ()</td></tr>
@@ -169,6 +171,12 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:a12bb836c4ee1ea6543fcbc239a9c2a34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42322983f93818bb86e20f83b20cde38" id="r_a42322983f93818bb86e20f83b20cde38"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a42322983f93818bb86e20f83b20cde38">SortingLayer</a> = &quot;UI&quot;</td></tr>
 <tr class="separator:a42322983f93818bb86e20f83b20cde38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4b2ad04ba7653bde91468699dd2ddda" id="r_aa4b2ad04ba7653bde91468699dd2ddda"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa4b2ad04ba7653bde91468699dd2ddda">TipName</a> = &quot;PencilTip&quot;</td></tr>
+<tr class="separator:aa4b2ad04ba7653bde91468699dd2ddda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae71977311589719c61210e087bece742" id="r_ae71977311589719c61210e087bece742"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae71977311589719c61210e087bece742">TipSortingOrder</a> = 1</td></tr>
+<tr class="separator:ae71977311589719c61210e087bece742"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ba416972f4235916b269d78b3f24fb6" id="r_a7ba416972f4235916b269d78b3f24fb6"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7ba416972f4235916b269d78b3f24fb6">TipSpritePath</a> = &quot;Assets/Sprites/UI/pencil-tip.png&quot;</td></tr>
+<tr class="separator:a7ba416972f4235916b269d78b3f24fb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae85853df9b6f1dff3214a62a54755ec7" id="r_ae85853df9b6f1dff3214a62a54755ec7"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae85853df9b6f1dff3214a62a54755ec7">WorldPerCanvasUnit</a> = 0.024f</td></tr>
 <tr class="separator:ae85853df9b6f1dff3214a62a54755ec7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -338,6 +346,31 @@ Static Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>size</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa02c95f0f1277ef063767cdc8903f0c9" name="aa02c95f0f1277ef063767cdc8903f0c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa02c95f0f1277ef063767cdc8903f0c9">&#9670;&#160;</a></span>CreateTip()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static Transform BalloonParty.Editor.HeadsUpBuilder.CreateTip </td>
+          <td>(</td>
+          <td class="paramtype">Transform</td>          <td class="paramname"><span class="paramname"><em>line</em></span></td><td>)</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -731,6 +764,72 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">const string BalloonParty.Editor.HeadsUpBuilder.SortingLayer = &quot;UI&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa4b2ad04ba7653bde91468699dd2ddda" name="aa4b2ad04ba7653bde91468699dd2ddda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4b2ad04ba7653bde91468699dd2ddda">&#9670;&#160;</a></span>TipName</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const string BalloonParty.Editor.HeadsUpBuilder.TipName = &quot;PencilTip&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae71977311589719c61210e087bece742" name="ae71977311589719c61210e087bece742"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae71977311589719c61210e087bece742">&#9670;&#160;</a></span>TipSortingOrder</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int BalloonParty.Editor.HeadsUpBuilder.TipSortingOrder = 1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7ba416972f4235916b269d78b3f24fb6" name="a7ba416972f4235916b269d78b3f24fb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ba416972f4235916b269d78b3f24fb6">&#9670;&#160;</a></span>TipSpritePath</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const string BalloonParty.Editor.HeadsUpBuilder.TipSpritePath = &quot;Assets/Sprites/UI/pencil-tip.png&quot;</td>
         </tr>
       </table>
   </td>

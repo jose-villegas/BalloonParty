@@ -47,7 +47,7 @@
   </g>
 </defs>
 <script type="application/ecmascript">
-var viewWidth = 1140;
+var viewWidth = 1129;
 var viewHeight = 220;
 var sectionId = 'dynsection-1';
 </script>
@@ -59,9 +59,9 @@ var sectionId = 'dynsection-1';
 <g id="Node000001" class="node">
 <title>Node1</title>
 <g id="a_Node000001"><a xlink:title="Plays a rising chime run once the aim&#39;s prediction line settles on a &quot;chain&quot; of item&#45;hosting balloons...">
-<polygon fill="#999999" stroke="#666666" points="1132,-142 981,-142 981,-112 1132,-112 1132,-142"/>
-<text text-anchor="start" x="989" y="-130" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Audio.Routing.</text>
-<text text-anchor="middle" x="1056.5" y="-119" font-family="Helvetica,sans-Serif" font-size="10.00">ItemSightSoundRouter</text>
+<polygon fill="#999999" stroke="#666666" points="1121,-142 970,-142 970,-112 1121,-112 1121,-142"/>
+<text text-anchor="start" x="978" y="-130" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Audio.Routing.</text>
+<text text-anchor="middle" x="1045.5" y="-119" font-family="Helvetica,sans-Serif" font-size="10.00">ItemSightSoundRouter</text>
 </a>
 </g>
 </g>
@@ -69,8 +69,8 @@ var sectionId = 'dynsection-1';
 <g id="Node000002" class="node">
 <title>Node2</title>
 <g id="a_Node000002"><a xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="595.5,-211.5 514.5,-211.5 514.5,-192.5 595.5,-192.5 595.5,-211.5"/>
-<text text-anchor="middle" x="555" y="-199.5" font-family="Helvetica,sans-Serif" font-size="10.00">ILateTickable</text>
+<polygon fill="white" stroke="#666666" points="584.5,-211.5 503.5,-211.5 503.5,-192.5 584.5,-192.5 584.5,-211.5"/>
+<text text-anchor="middle" x="544" y="-199.5" font-family="Helvetica,sans-Serif" font-size="10.00">ILateTickable</text>
 </a>
 </g>
 </g>
@@ -78,8 +78,8 @@ var sectionId = 'dynsection-1';
 <g id="edge1_Node000001_Node000002" class="edge">
 <title>Node2&#45;&gt;Node1</title>
 <g id="a_edge1_Node000001_Node000002"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M605.88,-201.37C673.51,-199.77 797.81,-194.22 902,-175 929.8,-169.87 936,-165.36 963,-157 978.32,-152.26 995.01,-146.9 1009.94,-142.04"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="605.45,-197.88 595.52,-201.59 605.6,-204.88 605.45,-197.88"/>
+<path fill="none" stroke="#63b8ff" d="M594.88,-201.37C662.51,-199.77 786.81,-194.22 891,-175 918.8,-169.87 925,-165.36 952,-157 967.32,-152.26 984.01,-146.9 998.94,-142.04"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="594.45,-197.88 584.52,-201.59 594.6,-204.88 594.45,-197.88"/>
 </a>
 </g>
 </g>
@@ -87,9 +87,9 @@ var sectionId = 'dynsection-1';
 <g id="Node000003" class="node">
 <title>Node3</title>
 <g id="a_Node000003"><a xlink:href="classBalloonParty_1_1Item_1_1ItemSightTracker.html" target="_top" xlink:title="Tracks which item&#45;hosting balloons the aim&#39;s prediction line currently crosses, ordered first&#45;to&#45;last...">
-<polygon fill="white" stroke="#666666" points="902,-166 750,-166 750,-136 902,-136 902,-166"/>
-<text text-anchor="start" x="758" y="-154" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.ItemSight</text>
-<text text-anchor="middle" x="826" y="-143" font-family="Helvetica,sans-Serif" font-size="10.00">Tracker</text>
+<polygon fill="white" stroke="#666666" points="891,-166 739,-166 739,-136 891,-136 891,-166"/>
+<text text-anchor="start" x="747" y="-154" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.ItemSight</text>
+<text text-anchor="middle" x="815" y="-143" font-family="Helvetica,sans-Serif" font-size="10.00">Tracker</text>
 </a>
 </g>
 </g>
@@ -97,8 +97,8 @@ var sectionId = 'dynsection-1';
 <g id="edge3_Node000003_Node000002" class="edge">
 <title>Node2&#45;&gt;Node3</title>
 <g id="a_edge3_Node000003_Node000002"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M605.57,-192.6C645.96,-184.94 703.65,-174.01 749.74,-165.27"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="604.86,-189.17 595.69,-194.47 606.17,-196.05 604.86,-189.17"/>
+<path fill="none" stroke="#63b8ff" d="M594.57,-192.6C634.96,-184.94 692.65,-174.01 738.74,-165.27"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="593.86,-189.17 584.69,-194.47 595.17,-196.05 593.86,-189.17"/>
 </a>
 </g>
 </g>
@@ -106,19 +106,19 @@ var sectionId = 'dynsection-1';
 <g id="edge2_Node000001_Node000003" class="edge">
 <title>Node3&#45;&gt;Node1</title>
 <g id="a_edge2_Node000001_Node000003"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M912.33,-142.04C934.79,-139.68 958.85,-137.15 980.71,-134.86"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="911.72,-138.58 902.14,-143.11 912.45,-145.54 911.72,-138.58"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M901.33,-142.04C923.79,-139.68 947.85,-137.15 969.71,-134.86"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="900.72,-138.58 891.14,-143.11 901.45,-145.54 900.72,-138.58"/>
 </a>
 </g>
-<text text-anchor="middle" x="941.5" y="-145" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _tracker</text>
+<text text-anchor="middle" x="930.5" y="-145" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _tracker</text>
 </g>
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
 <g id="a_Node000004"><a xlink:href="classBalloonParty_1_1Item_1_1ItemSightTracker_1_1TraceOffsetComparer.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="633,-174 477,-174 477,-144 633,-144 633,-174"/>
-<text text-anchor="start" x="485" y="-162" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.ItemSight</text>
-<text text-anchor="middle" x="555" y="-151" font-family="Helvetica,sans-Serif" font-size="10.00">Tracker.TraceOffsetComparer</text>
+<polygon fill="white" stroke="#666666" points="622,-174 466,-174 466,-144 622,-144 622,-174"/>
+<text text-anchor="start" x="474" y="-162" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.ItemSight</text>
+<text text-anchor="middle" x="544" y="-151" font-family="Helvetica,sans-Serif" font-size="10.00">Tracker.TraceOffsetComparer</text>
 </a>
 </g>
 </g>
@@ -126,18 +126,18 @@ var sectionId = 'dynsection-1';
 <g id="edge4_Node000003_Node000004" class="edge">
 <title>Node4&#45;&gt;Node3</title>
 <g id="a_edge4_Node000003_Node000004"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M643.31,-152.34C645.9,-152.21 648.47,-152.1 651,-152 683.3,-150.72 718.99,-150.33 749.61,-150.32"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="643.03,-148.85 633.23,-152.87 643.4,-155.84 643.03,-148.85"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M632.31,-152.34C634.9,-152.21 637.47,-152.1 640,-152 672.3,-150.72 707.99,-150.33 738.61,-150.32"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="632.03,-148.85 622.23,-152.87 632.4,-155.84 632.03,-148.85"/>
 </a>
 </g>
-<text text-anchor="middle" x="691.5" y="-155" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> OffsetComparer</text>
+<text text-anchor="middle" x="680.5" y="-155" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> OffsetComparer</text>
 </g>
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
 <g id="a_Node000005"><a xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="341,-211.5 192,-211.5 192,-192.5 341,-192.5 341,-211.5"/>
-<text text-anchor="middle" x="266.5" y="-199.5" font-family="Helvetica,sans-Serif" font-size="10.00">IComparer&lt; SightedItem &gt;</text>
+<polygon fill="white" stroke="#666666" points="295,-211.5 227,-211.5 227,-192.5 295,-192.5 295,-211.5"/>
+<text text-anchor="middle" x="261" y="-199.5" font-family="Helvetica,sans-Serif" font-size="10.00">IComparer</text>
 </a>
 </g>
 </g>
@@ -145,8 +145,8 @@ var sectionId = 'dynsection-1';
 <g id="edge5_Node000004_Node000005" class="edge">
 <title>Node5&#45;&gt;Node4</title>
 <g id="a_edge5_Node000004_Node000005"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M341.15,-190.95C382.74,-184.7 434.67,-176.91 476.83,-170.58"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="340.45,-187.51 331.08,-192.46 341.49,-194.43 340.45,-187.51"/>
+<path fill="none" stroke="#63b8ff" d="M305.12,-195.4C347.8,-188.87 414.08,-178.73 465.85,-170.81"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="304.42,-191.97 295.06,-196.94 305.47,-198.89 304.42,-191.97"/>
 </a>
 </g>
 </g>
@@ -154,9 +154,9 @@ var sectionId = 'dynsection-1';
 <g id="Node000006" class="node">
 <title>Node6</title>
 <g id="a_Node000006"><a xlink:href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="620,-126 490,-126 490,-96 620,-96 620,-126"/>
-<text text-anchor="start" x="498" y="-114" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Grid.</text>
-<text text-anchor="middle" x="555" y="-103" font-family="Helvetica,sans-Serif" font-size="10.00">SlotGrid</text>
+<polygon fill="white" stroke="#666666" points="609,-126 479,-126 479,-96 609,-96 609,-126"/>
+<text text-anchor="start" x="487" y="-114" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Grid.</text>
+<text text-anchor="middle" x="544" y="-103" font-family="Helvetica,sans-Serif" font-size="10.00">SlotGrid</text>
 </a>
 </g>
 </g>
@@ -164,19 +164,19 @@ var sectionId = 'dynsection-1';
 <g id="edge6_Node000003_Node000006" class="edge">
 <title>Node6&#45;&gt;Node3</title>
 <g id="a_edge6_Node000003_Node000006"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M630.04,-120.51C661.51,-124.71 698.59,-129.85 732,-135 737.83,-135.9 743.86,-136.86 749.91,-137.85"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="630.41,-117.03 620.03,-119.19 629.48,-123.97 630.41,-117.03"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M619.04,-120.51C650.51,-124.71 687.59,-129.85 721,-135 726.83,-135.9 732.86,-136.86 738.91,-137.85"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="619.41,-117.03 609.03,-119.19 618.48,-123.97 619.41,-117.03"/>
 </a>
 </g>
-<text text-anchor="middle" x="691.5" y="-138" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _grid</text>
+<text text-anchor="middle" x="680.5" y="-138" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _grid</text>
 </g>
 <!-- Node7 -->
 <g id="Node000007" class="node">
 <title>Node7</title>
 <g id="a_Node000007"><a xlink:href="classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" target="_top" xlink:title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them.">
-<polygon fill="white" stroke="#666666" points="331.5,-174 201.5,-174 201.5,-144 331.5,-144 331.5,-174"/>
-<text text-anchor="start" x="209.5" y="-162" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Grid.</text>
-<text text-anchor="middle" x="266.5" y="-151" font-family="Helvetica,sans-Serif" font-size="10.00">BalancePathHolder</text>
+<polygon fill="white" stroke="#666666" points="326,-174 196,-174 196,-144 326,-144 326,-174"/>
+<text text-anchor="start" x="204" y="-162" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Grid.</text>
+<text text-anchor="middle" x="261" y="-151" font-family="Helvetica,sans-Serif" font-size="10.00">BalancePathHolder</text>
 </a>
 </g>
 </g>
@@ -184,11 +184,11 @@ var sectionId = 'dynsection-1';
 <g id="edge7_Node000006_Node000007" class="edge">
 <title>Node7&#45;&gt;Node6</title>
 <g id="a_edge7_Node000006_Node000007"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M341.7,-146.57C387.63,-138.87 446.01,-129.09 489.92,-121.74"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="341.08,-143.12 331.8,-148.23 342.24,-150.03 341.08,-143.12"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M336.25,-146.32C380.55,-138.75 436.25,-129.23 478.67,-121.99"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="335.38,-142.91 326.11,-148.05 336.56,-149.81 335.38,-142.91"/>
 </a>
 </g>
-<text text-anchor="middle" x="409" y="-147" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _balancePathHolder</text>
+<text text-anchor="middle" x="398" y="-147" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _balancePathHolder</text>
 </g>
 <!-- Node8 -->
 <g id="Node000008" class="node">
@@ -204,8 +204,8 @@ var sectionId = 'dynsection-1';
 <g id="edge8_Node000007_Node000008" class="edge">
 <title>Node8&#45;&gt;Node7</title>
 <g id="a_edge8_Node000007_Node000008"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M165.23,-159C177.36,-159 189.64,-159 201.25,-159"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="165.1,-155.5 155.1,-159 165.1,-162.5 165.1,-155.5"/>
+<path fill="none" stroke="#63b8ff" d="M165.43,-159C175.69,-159 186.02,-159 195.88,-159"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="165.21,-155.5 155.21,-159 165.21,-162.5 165.21,-155.5"/>
 </a>
 </g>
 </g>
@@ -213,9 +213,9 @@ var sectionId = 'dynsection-1';
 <g id="Node000009" class="node">
 <title>Node9</title>
 <g id="a_Node000009"><a xlink:href="interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" target="_top" xlink:title="Slot grid layout: size, spacing, and origin offset.">
-<polygon fill="white" stroke="#666666" points="335.5,-126 197.5,-126 197.5,-96 335.5,-96 335.5,-126"/>
-<text text-anchor="start" x="205.5" y="-114" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.ISlot</text>
-<text text-anchor="middle" x="266.5" y="-103" font-family="Helvetica,sans-Serif" font-size="10.00">GridConfig</text>
+<polygon fill="white" stroke="#666666" points="330,-126 192,-126 192,-96 330,-96 330,-126"/>
+<text text-anchor="start" x="200" y="-114" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.ISlot</text>
+<text text-anchor="middle" x="261" y="-103" font-family="Helvetica,sans-Serif" font-size="10.00">GridConfig</text>
 </a>
 </g>
 </g>
@@ -223,19 +223,19 @@ var sectionId = 'dynsection-1';
 <g id="edge9_Node000006_Node000009" class="edge">
 <title>Node9&#45;&gt;Node6</title>
 <g id="a_edge9_Node000006_Node000009"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M345.81,-111C391,-111 447.12,-111 489.7,-111"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="345.76,-107.5 335.76,-111 345.76,-114.5 345.76,-107.5"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M340.05,-111C383.81,-111 437.72,-111 478.98,-111"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="340.02,-107.5 330.02,-111 340.02,-114.5 340.02,-107.5"/>
 </a>
 </g>
-<text text-anchor="middle" x="409" y="-114" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _config</text>
+<text text-anchor="middle" x="398" y="-114" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _config</text>
 </g>
 <!-- Node10 -->
 <g id="Node000010" class="node">
 <title>Node10</title>
 <g id="a_Node000010"><a xlink:href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="333.5,-78 199.5,-78 199.5,-48 333.5,-48 333.5,-78"/>
-<text text-anchor="start" x="207.5" y="-66" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Actor.</text>
-<text text-anchor="middle" x="266.5" y="-55" font-family="Helvetica,sans-Serif" font-size="10.00">IWriteableSlotActor</text>
+<polygon fill="white" stroke="#666666" points="328,-78 194,-78 194,-48 328,-48 328,-78"/>
+<text text-anchor="start" x="202" y="-66" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Actor.</text>
+<text text-anchor="middle" x="261" y="-55" font-family="Helvetica,sans-Serif" font-size="10.00">IWriteableSlotActor</text>
 </a>
 </g>
 </g>
@@ -243,11 +243,11 @@ var sectionId = 'dynsection-1';
 <g id="edge10_Node000006_Node000010" class="edge">
 <title>Node10&#45;&gt;Node6</title>
 <g id="a_edge10_Node000006_Node000010"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M343.71,-75.77C389.26,-83.4 446.47,-92.99 489.72,-100.23"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="344.03,-72.27 333.59,-74.07 342.87,-79.18 344.03,-72.27"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M338.3,-76.03C382.26,-83.54 436.89,-92.87 478.66,-100.01"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="338.68,-72.55 328.24,-74.31 337.51,-79.45 338.68,-72.55"/>
 </a>
 </g>
-<text text-anchor="middle" x="409" y="-98" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _slots</text>
+<text text-anchor="middle" x="398" y="-98" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _slots</text>
 </g>
 <!-- Node11 -->
 <g id="Node000011" class="node">
@@ -263,8 +263,8 @@ var sectionId = 'dynsection-1';
 <g id="edge11_Node000010_Node000011" class="edge">
 <title>Node11&#45;&gt;Node10</title>
 <g id="a_edge11_Node000010_Node000011"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M154.81,-63C169.6,-63 184.97,-63 199.4,-63"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="154.69,-59.5 144.69,-63 154.69,-66.5 154.69,-59.5"/>
+<path fill="none" stroke="#63b8ff" d="M154.8,-63C167.73,-63 181.06,-63 193.71,-63"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="154.54,-59.5 144.54,-63 154.54,-66.5 154.54,-59.5"/>
 </a>
 </g>
 </g>
@@ -272,9 +272,9 @@ var sectionId = 'dynsection-1';
 <g id="Node000012" class="node">
 <title>Node12</title>
 <g id="a_Node000012"><a xlink:href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="333.5,-30 199.5,-30 199.5,0 333.5,0 333.5,-30"/>
-<text text-anchor="start" x="207.5" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Actor.</text>
-<text text-anchor="middle" x="266.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">ISlotActorView</text>
+<polygon fill="white" stroke="#666666" points="328,-30 194,-30 194,0 328,0 328,-30"/>
+<text text-anchor="start" x="202" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Actor.</text>
+<text text-anchor="middle" x="261" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">ISlotActorView</text>
 </a>
 </g>
 </g>
@@ -282,19 +282,19 @@ var sectionId = 'dynsection-1';
 <g id="edge12_Node000006_Node000012" class="edge">
 <title>Node12&#45;&gt;Node6</title>
 <g id="a_edge12_Node000006_Node000012"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M344.12,-22.92C381.15,-29.54 424.86,-41.7 459,-64 469.87,-71.1 466.32,-79.62 477,-87 481.95,-90.42 487.42,-93.37 493.08,-95.91"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="344.3,-19.4 333.86,-21.19 343.14,-26.31 344.3,-19.4"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M338.1,-23.65C373.71,-30.44 415.37,-42.52 448,-64 458.84,-71.14 455.32,-79.62 466,-87 470.95,-90.42 476.42,-93.37 482.08,-95.91"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="338.69,-20.2 328.22,-21.87 337.44,-27.09 338.69,-20.2"/>
 </a>
 </g>
-<text text-anchor="middle" x="409" y="-67" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _views</text>
+<text text-anchor="middle" x="398" y="-67" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _views</text>
 </g>
 <!-- Node13 -->
 <g id="Node000013" class="node">
 <title>Node13</title>
 <g id="a_Node000013"><a xlink:href="classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html" target="_top" xlink:title="Shared reference to the current aim&#45;prediction trace, decoupled from direct access.">
-<polygon fill="white" stroke="#666666" points="620.5,-78 489.5,-78 489.5,-48 620.5,-48 620.5,-78"/>
-<text text-anchor="start" x="497.5" y="-66" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Prediction.</text>
-<text text-anchor="middle" x="555" y="-55" font-family="Helvetica,sans-Serif" font-size="10.00">PredictionTraceProvider</text>
+<polygon fill="white" stroke="#666666" points="609.5,-78 478.5,-78 478.5,-48 609.5,-48 609.5,-78"/>
+<text text-anchor="start" x="486.5" y="-66" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Prediction.</text>
+<text text-anchor="middle" x="544" y="-55" font-family="Helvetica,sans-Serif" font-size="10.00">PredictionTraceProvider</text>
 </a>
 </g>
 </g>
@@ -302,19 +302,19 @@ var sectionId = 'dynsection-1';
 <g id="edge13_Node000003_Node000013" class="edge">
 <title>Node13&#45;&gt;Node3</title>
 <g id="a_edge13_Node000003_Node000013"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M630.57,-73.44C663.23,-80.24 701.09,-91.28 732,-109 741.82,-114.63 740.34,-121.11 750,-127 755.6,-130.42 761.74,-133.4 768.02,-135.98"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="631.1,-69.98 620.61,-71.46 629.73,-76.84 631.1,-69.98"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M619.57,-73.44C652.23,-80.24 690.09,-91.28 721,-109 730.82,-114.63 729.34,-121.11 739,-127 744.6,-130.42 750.74,-133.4 757.02,-135.98"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="620.1,-69.98 609.61,-71.46 618.73,-76.84 620.1,-69.98"/>
 </a>
 </g>
-<text text-anchor="middle" x="691.5" y="-112" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _traceProvider</text>
+<text text-anchor="middle" x="680.5" y="-112" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _traceProvider</text>
 </g>
 <!-- Node14 -->
 <g id="Node000014" class="node">
 <title>Node14</title>
 <g id="a_Node000014"><a xlink:href="interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="897.5,-118 754.5,-118 754.5,-88 897.5,-88 897.5,-118"/>
-<text text-anchor="start" x="762.5" y="-106" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Audio.ISound</text>
-<text text-anchor="middle" x="826" y="-95" font-family="Helvetica,sans-Serif" font-size="10.00">Player</text>
+<polygon fill="white" stroke="#666666" points="886.5,-118 743.5,-118 743.5,-88 886.5,-88 886.5,-118"/>
+<text text-anchor="start" x="751.5" y="-106" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Audio.ISound</text>
+<text text-anchor="middle" x="815" y="-95" font-family="Helvetica,sans-Serif" font-size="10.00">Player</text>
 </a>
 </g>
 </g>
@@ -322,19 +322,19 @@ var sectionId = 'dynsection-1';
 <g id="edge14_Node000001_Node000014" class="edge">
 <title>Node14&#45;&gt;Node1</title>
 <g id="a_edge14_Node000001_Node000014"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M907.77,-111.48C931.52,-113.98 957.39,-116.7 980.75,-119.15"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="908.04,-107.99 897.73,-110.43 907.31,-114.95 908.04,-107.99"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M896.77,-111.48C920.52,-113.98 946.39,-116.7 969.75,-119.15"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="897.04,-107.99 886.73,-110.43 896.31,-114.95 897.04,-107.99"/>
 </a>
 </g>
-<text text-anchor="middle" x="941.5" y="-121" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _player</text>
+<text text-anchor="middle" x="930.5" y="-121" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _player</text>
 </g>
 <!-- Node15 -->
 <g id="Node000015" class="node">
 <title>Node15</title>
 <g id="a_Node000015"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html" target="_top" xlink:title="Tuning for the aim&#45;time item range telegraph (Item Range Preview).">
-<polygon fill="white" stroke="#666666" points="900,-70 752,-70 752,-40 900,-40 900,-70"/>
-<text text-anchor="start" x="760" y="-58" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
-<text text-anchor="middle" x="826" y="-47" font-family="Helvetica,sans-Serif" font-size="10.00">IItemPreviewConfig</text>
+<polygon fill="white" stroke="#666666" points="889,-70 741,-70 741,-40 889,-40 889,-70"/>
+<text text-anchor="start" x="749" y="-58" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
+<text text-anchor="middle" x="815" y="-47" font-family="Helvetica,sans-Serif" font-size="10.00">IItemPreviewConfig</text>
 </a>
 </g>
 </g>
@@ -342,11 +342,11 @@ var sectionId = 'dynsection-1';
 <g id="edge15_Node000001_Node000015" class="edge">
 <title>Node15&#45;&gt;Node1</title>
 <g id="a_edge15_Node000001_Node000015"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M884.52,-73.12C922.5,-85.09 971.68,-100.59 1007.55,-111.89"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="885.21,-69.67 874.62,-70.01 883.11,-76.35 885.21,-69.67"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M873.52,-73.12C911.5,-85.09 960.68,-100.59 996.55,-111.89"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="874.21,-69.67 863.62,-70.01 872.11,-76.35 874.21,-69.67"/>
 </a>
 </g>
-<text text-anchor="middle" x="941.5" y="-101" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _config</text>
+<text text-anchor="middle" x="930.5" y="-101" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _config</text>
 </g>
 </g>
 </svg>

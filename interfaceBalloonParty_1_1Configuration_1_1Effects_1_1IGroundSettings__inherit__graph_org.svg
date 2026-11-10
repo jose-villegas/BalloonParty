@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Read&#45;only tuning for the ground backdrop (see GroundView).">
+<g id="a_Node000001"><a xlink:title="Read&#45;only tuning for the surface backdrops (ground and water) (see GroundView).">
 <polygon fill="#999999" stroke="#666666" points="148,-96 0,-96 0,-66 148,-66 148,-96"/>
 <text text-anchor="start" x="8" y="-84" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text text-anchor="middle" x="74" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">Effects.IGroundSettings</text>
@@ -21,7 +21,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html" target="_top" xlink:title="Authored tuning for the ground backdrop shown on ground levels: the floor quad and the grass blades o...">
+<g id="a_Node000002"><a xlink:href="classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html" target="_top" xlink:title="Authored tuning for the surface backdrops: the floor quad and the grass blades over it on ground leve...">
 <polygon fill="white" stroke="#666666" points="148,-30 0,-30 0,0 148,0 148,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text text-anchor="middle" x="74" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Effects.GroundSettings</text>

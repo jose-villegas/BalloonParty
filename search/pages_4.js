@@ -6,6 +6,7 @@ var searchData=
   ['balloonparty_3',['BalloonParty',['../index.html',1,'']]],
   ['biomes_4',['Terrain &amp; Biomes',['../plan_terrain_biomes.html',1,'plans']]],
   ['bubble_20cluster_20hit_20feedback_5',['Bubble Cluster Hit Feedback',['../plan_bubble_cluster_hit_feedback.html',1,'plans']]],
-  ['bush_20baking_20tools_6',['Bush Baking Tools',['../editor_bush.html',1,'']]],
-  ['bush_20system_7',['Bush System',['../arch_bush_system.html',1,'architecture']]]
+  ['bubble_20merge_6',['Water Scenario &amp; Bubble Merge',['../plan_water_scenario.html',1,'plans']]],
+  ['bush_20baking_20tools_7',['Bush Baking Tools',['../editor_bush.html',1,'']]],
+  ['bush_20system_8',['Bush System',['../arch_bush_system.html',1,'architecture']]]
 ];

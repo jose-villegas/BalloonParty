@@ -10,5 +10,6 @@ var dir_58dad5960016a597657ddf521d12d11f =
     [ "ScenarioShift.cs", "ScenarioShift_8cs.html", "ScenarioShift_8cs" ],
     [ "SkyScatterService.cs", "SkyScatterService_8cs.html", "SkyScatterService_8cs" ],
     [ "SmokeFieldResources.cs", "SmokeFieldResources_8cs.html", "SmokeFieldResources_8cs" ],
-    [ "SmokeFieldService.cs", "SmokeFieldService_8cs.html", "SmokeFieldService_8cs" ]
+    [ "SmokeFieldService.cs", "SmokeFieldService_8cs.html", "SmokeFieldService_8cs" ],
+    [ "WaterImpactCollector.cs", "WaterImpactCollector_8cs.html", "WaterImpactCollector_8cs" ]
 ];

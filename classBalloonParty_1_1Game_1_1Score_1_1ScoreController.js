@@ -1,6 +1,7 @@
 var classBalloonParty_1_1Game_1_1Score_1_1ScoreController =
 [
-    [ "ScoreController", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a2ba268722270f08f0f2be10eb0e0995c", null ],
+    [ "ScoreController", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a5bec1827b5cbecc01a194c9f0063f5e1", null ],
+    [ "AnnounceStreakGrowth", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a967e6fb78dd1b129b539bc0d09f2e537", null ],
     [ "ClearRunState", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a17ca817baffba507d7d9acdaeb7f2825", null ],
     [ "CollectIncompleteColors", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a682712772e6a2e4987183bf675fb10d4", null ],
     [ "Dispose", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#aa50b979a3ff223e981643100723f7c85", null ],
@@ -24,11 +25,13 @@ var classBalloonParty_1_1Game_1_1Score_1_1ScoreController =
     [ "_retryState", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#adfcedc2fd9bdb33273c9850d5c8ada84", null ],
     [ "_scoredPublisher", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a9a1274a06d830e7f56041f2304099b23", null ],
     [ "_snapCredit", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#abff90c89430c564415a83ac83ecdcbf3", null ],
+    [ "_streakGrewPublisher", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#ac0da6c86d794618474bbaa5ef5e19b40", null ],
     [ "_streakTracker", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a29fc7e06c3688dad6d58a543beabe07b", null ],
     [ "_timeOfDayNight", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a4ca9d1079345f47e3bf2d9539f39a7fb", null ],
     [ "_totalScore", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a0664edb053efd934394fad1f9cf78bd1", null ],
     [ "_trailArrivedSubscriber", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#ab922475f8fff01c37bf5d66f7b1436a6", null ],
     [ "_trailSubscription", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a013ee02bf8feb164c1d6d0c1d90976a0", null ],
+    [ "MinAnnouncedStreak", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#ab8ab0bae461dff038d617bbba4f4c95b", null ],
     [ "NightScoreMultiplier", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#afa30002226082a5378488bf1779183a2", null ],
     [ "ResetOrder", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a710289b38fd636dea5837f53705e284a", null ],
     [ "TotalScore", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a2eb6c7ab6be715c738e55d63216bac33", null ]

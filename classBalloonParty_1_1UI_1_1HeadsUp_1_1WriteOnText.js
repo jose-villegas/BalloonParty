@@ -9,11 +9,13 @@ var classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText =
     [ "OnEnable", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#af13849fa81bc6769d080569ee4955ec8", null ],
     [ "OnTextChanged", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a7af21e9235efad93369576f4aa6f6b33", null ],
     [ "SetTipVisible", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a2d0342c9e070d668c8b1b9e01ca71b87", null ],
+    [ "Stop", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a0f44f2ded2b446b137bbf1b9e33f52a5", null ],
     [ "Update", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#aaa19b49e337e796724425155314f9f43", null ],
     [ "Write", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a8c0a06f59f3eea5c14835f4bf7f9fe8c", null ],
     [ "_edgeSoftness", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a5199f5608a008620d44fbb71cb8bf3cb", null ],
     [ "_endHead", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#aee8b4b563bb0b0e7453656e6713c0775", null ],
     [ "_head", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a412fab49af448228d0644c893ebd81a3", null ],
+    [ "_revealInUv", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a6de4125af827fec34a8b475f8c162782", null ],
     [ "_secondsPerCharacter", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a5f8cccf0b6fed8184566835ec7f42ac9", null ],
     [ "_slant", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a52770f10b9b492381a81bf746dbb3ee7", null ],
     [ "_sourceColors", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a6392cde9ad88154977e956fe9d8b87e6", null ],
@@ -24,5 +26,6 @@ var classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText =
     [ "_tipWobble", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a28d9acd2e95b987142e6fde15742a566", null ],
     [ "_tipWobbleSpeed", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#adb7a9f16b5d71bafd396464a02315984", null ],
     [ "_writing", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a82c54d5468a419a95d4dbd77e516d9f0", null ],
+    [ "RevealInUvProperty", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#aa5b2f978631a62bebc40784b1e547eed", null ],
     [ "Duration", "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a521a9dca64ce36c48e02b09e8cacbee8", null ]
 ];

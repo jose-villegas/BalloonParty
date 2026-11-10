@@ -137,7 +137,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a98cb7c0e99d13e683ba04563bb09cc9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The mix for <em>level</em> : generated for a positive level, the matching debug preset for a negative one.  <br /></td></tr>
 <tr class="separator:a98cb7c0e99d13e683ba04563bb09cc9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb9d4e6cb5b4c8093a33ff6ea5be0956" id="r_acb9d4e6cb5b4c8093a33ff6ea5be0956"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acb9d4e6cb5b4c8093a33ff6ea5be0956">ScenarioForLevel</a> (int level, int runSeed)</td></tr>
-<tr class="memdesc:acb9d4e6cb5b4c8093a33ff6ea5be0956"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether <em>level</em>  is set in the sky or on the ground in the run rolled by <em>runSeed</em> .  <br /></td></tr>
+<tr class="memdesc:acb9d4e6cb5b4c8093a33ff6ea5be0956"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether <em>level</em>  is set in the sky, on the ground or over water in the run rolled by <em>runSeed</em> .  <br /></td></tr>
 <tr class="separator:acb9d4e6cb5b4c8093a33ff6ea5be0956"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f4b5d69a3c1c7965cd0e3f3a3e79d04" id="r_a2f4b5d69a3c1c7965cd0e3f3a3e79d04"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f4b5d69a3c1c7965cd0e3f3a3e79d04">SeedForLevel</a> (int level)</td></tr>
 <tr class="memdesc:a2f4b5d69a3c1c7965cd0e3f3a3e79d04"><td class="mdescLeft">&#160;</td><td class="mdescRight">The seed that rolls <em>level</em> 's mix; the same level always gets the same seed.  <br /></td></tr>
@@ -148,6 +148,9 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:abb6cfe2651270ba34003a4dc45264127" id="r_abb6cfe2651270ba34003a4dc45264127"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html">IBubbleRiseSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abb6cfe2651270ba34003a4dc45264127">BubbleRise</a><code> [get]</code></td></tr>
+<tr class="memdesc:abb6cfe2651270ba34003a4dc45264127"><td class="mdescLeft">&#160;</td><td class="mdescRight">The bubbles that come in with the lines on water levels; read by the balloon spawner.  <br /></td></tr>
+<tr class="separator:abb6cfe2651270ba34003a4dc45264127"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9194824970276fefd009ced094c08603" id="r_a9194824970276fefd009ced094c08603"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html">LevelRangeEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9194824970276fefd009ced094c08603">DebugPresets</a><code> [get]</code></td></tr>
 <tr class="memdesc:a9194824970276fefd009ced094c08603"><td class="mdescLeft">&#160;</td><td class="mdescRight">Authored debug presets, keyed by a negative <code>FromLevel</code> the start-level cheat selects.  <br /></td></tr>
 <tr class="separator:a9194824970276fefd009ced094c08603"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -250,7 +253,7 @@ Properties</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Whether <em>level</em>  is set in the sky or on the ground in the run rolled by <em>runSeed</em> . </p>
+<p>Whether <em>level</em>  is set in the sky, on the ground or over water in the run rolled by <em>runSeed</em> . </p>
 <p><a class="el" href="ReleaseUploadWindow_8cs.html#a0100be52d45f14348918ea69ec09f959">Debug</a> presets (level &lt; 1) are sky. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#a8d290d62171d080d25071f52f8ae93b1">BalloonParty.Configuration.Level.LevelPacingConfiguration</a>.</p>
@@ -300,6 +303,32 @@ Properties</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="abb6cfe2651270ba34003a4dc45264127" name="abb6cfe2651270ba34003a4dc45264127"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb6cfe2651270ba34003a4dc45264127">&#9670;&#160;</a></span>BubbleRise</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html">IBubbleRiseSettings</a> BalloonParty.Configuration.Level.ILevelPacingConfiguration.BubbleRise</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The bubbles that come in with the lines on water levels; read by the balloon spawner. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html#ad289011958ae9a0c3f979828e319c097">BalloonParty.Configuration.Level.LevelPacingConfiguration</a>.</p>
+
+</div>
+</div>
 <a id="a9194824970276fefd009ced094c08603" name="a9194824970276fefd009ced094c08603"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9194824970276fefd009ced094c08603">&#9670;&#160;</a></span>DebugPresets</h2>
 

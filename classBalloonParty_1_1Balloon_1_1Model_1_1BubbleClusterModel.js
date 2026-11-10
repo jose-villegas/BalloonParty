@@ -4,6 +4,7 @@ var classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel =
     [ "EvaluateHit", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html#a6b2a2a013b955cd134440cbfcbd607b1", null ],
     [ "EvaluateNormalHit", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html#a38f649d61b0710f4730ca8060ec7d969", null ],
     [ "ResolveScoreAttribution", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html#a7663a699e08d3a2f842ea664f9b98408", null ],
+    [ "SetBubbles", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html#a09ef1059496fe54745388e851f788915", null ],
     [ "WeightBias", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html#aea56ecf61f3446e632329fee67d94ed8", null ],
     [ "_balanceBias", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html#a068329feee77d5d5ba1bdfdabe249d6c", null ],
     [ "_colorSource", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html#aacb85e45a47b00469628d81743787dcb", null ],

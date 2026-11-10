@@ -6,6 +6,7 @@ var classBalloonParty_1_1Editor_1_1HeadsUpBuilder =
     [ "BuildReload", "classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html#aeb8ac9fffba66994885820decc4bf51e", null ],
     [ "BuildReloadHeadsUp", "classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html#aad97d9ce84b53eb9d32b75b13783745c", null ],
     [ "CreateLine", "classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html#a293cd3ed42b6266aa3143a26252c39b0", null ],
+    [ "CreateTip", "classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html#aa02c95f0f1277ef063767cdc8903f0c9", null ],
     [ "EnsurePrefab", "classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html#a672fbe3c3f63893a55a477330ee425f8", null ],
     [ "EnsureSceneInstance", "classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html#a71415e959afca952783897b8af713b1b", null ],
     [ "FindGameCanvas", "classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html#aad427f53a903f3ea7c958f9bc6b47853", null ],
@@ -23,5 +24,8 @@ var classBalloonParty_1_1Editor_1_1HeadsUpBuilder =
     [ "ReloadSize", "classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html#a78b7ed018c3e4d1d42c7aa7a5f65b622", null ],
     [ "RootName", "classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html#a12bb836c4ee1ea6543fcbc239a9c2a34", null ],
     [ "SortingLayer", "classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html#a42322983f93818bb86e20f83b20cde38", null ],
+    [ "TipName", "classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html#aa4b2ad04ba7653bde91468699dd2ddda", null ],
+    [ "TipSortingOrder", "classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html#ae71977311589719c61210e087bece742", null ],
+    [ "TipSpritePath", "classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html#a7ba416972f4235916b269d78b3f24fb6", null ],
     [ "WorldPerCanvasUnit", "classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html#ae85853df9b6f1dff3214a62a54755ec7", null ]
 ];

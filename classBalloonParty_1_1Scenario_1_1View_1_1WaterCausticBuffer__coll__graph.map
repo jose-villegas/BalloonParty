@@ -1,0 +1,5 @@
+<map id="BalloonParty.Scenario.View.WaterCausticBuffer" name="BalloonParty.Scenario.View.WaterCausticBuffer">
+<area shape="rect" id="Node000001" title="The light the water&#39;s surface focuses on the bottom, published as the global _WaterCausticTex that Ba..." alt="" coords="5,79,207,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="57,5,155,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,44,109,79,103,79,103,44"/>
+</map>

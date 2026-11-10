@@ -12,6 +12,7 @@ var structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry =
     [ "_unlockLevel", "structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html#a68beadc3ae869b74d9e4609a9fe4cb84", null ],
     [ "_withheld", "structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html#a62f43b5da7065f3bc3b8055f53d45f9d", null ],
     [ "Cost", "structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html#af3c252c221e228a9db1e9b13daee0cf5", null ],
+    [ "KeptOffWater", "structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html#aee1c70f59043aa88dee97c52f4b4003c", null ],
     [ "RequiresGround", "structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html#af85b11462da8489c03d82baf22cf7297", null ],
     [ "Role", "structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html#ac5189381bfcce7eb808f4dd4272d516f", null ],
     [ "Type", "structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html#ab9775626de0d9a4c8223b69580db6606", null ],

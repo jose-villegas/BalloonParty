@@ -8,5 +8,7 @@ var dir_83bbb28316399931328a130d4e8f7c97 =
     [ "BalloonControllerRegistry.cs", "BalloonControllerRegistry_8cs.html", "BalloonControllerRegistry_8cs" ],
     [ "BalloonMotionTicker.cs", "BalloonMotionTicker_8cs.html", "BalloonMotionTicker_8cs" ],
     [ "BalloonPopPresenter.cs", "BalloonPopPresenter_8cs.html", "BalloonPopPresenter_8cs" ],
+    [ "BubbleMergeRule.cs", "BubbleMergeRule_8cs.html", "BubbleMergeRule_8cs" ],
+    [ "BubbleMergeService.cs", "BubbleMergeService_8cs.html", "BubbleMergeService_8cs" ],
     [ "PressurePropagation.cs", "PressurePropagation_8cs.html", "PressurePropagation_8cs" ]
 ];

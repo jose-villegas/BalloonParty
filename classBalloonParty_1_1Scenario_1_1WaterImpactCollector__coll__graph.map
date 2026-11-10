@@ -1,0 +1,9 @@
+<map id="BalloonParty.Scenario.WaterImpactCollector" name="BalloonParty.Scenario.WaterImpactCollector">
+<area shape="rect" id="Node000001" title="Holds this frame&#39;s impacts (every outward disturbance stamp: a ball&#39;s steps, pops,..." alt="" coords="5,183,209,223"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="32,87,140,113"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,125,106,182,101,183,89,126"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Shared_1_1ImpactEventBus.html" title="Frame&#45;scoped impact events, written via Report and cleared each end&#45;of&#45;frame." alt="" coords="165,80,365,120"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="225,130,138,185,135,180,222,125"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="211,5,319,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="267,44,267,80,262,80,262,44"/>
+</map>

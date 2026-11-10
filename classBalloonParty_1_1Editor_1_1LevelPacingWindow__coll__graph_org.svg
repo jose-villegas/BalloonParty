@@ -12,9 +12,9 @@
 <g id="Node000001" class="node">
 <title>Node1</title>
 <g id="a_Node000001"><a xlink:title="The Level Pacing editor: the scoring curve, the level generator&#39;s settings with a preview of what it ...">
-<polygon fill="#999999" stroke="#666666" points="1462,-341 1325,-341 1325,-311 1462,-311 1462,-341"/>
-<text text-anchor="start" x="1333" y="-329" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Editor.Level</text>
-<text text-anchor="middle" x="1393.5" y="-318" font-family="Helvetica,sans-Serif" font-size="10.00">PacingWindow</text>
+<polygon fill="#999999" stroke="#666666" points="1462,-343 1325,-343 1325,-313 1462,-313 1462,-343"/>
+<text text-anchor="start" x="1333" y="-331" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Editor.Level</text>
+<text text-anchor="middle" x="1393.5" y="-320" font-family="Helvetica,sans-Serif" font-size="10.00">PacingWindow</text>
 </a>
 </g>
 </g>
@@ -22,8 +22,8 @@
 <g id="Node000002" class="node">
 <title>Node2</title>
 <g id="a_Node000002"><a xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="1211.5,-356.5 1127.5,-356.5 1127.5,-337.5 1211.5,-337.5 1211.5,-356.5"/>
-<text text-anchor="middle" x="1169.5" y="-344.5" font-family="Helvetica,sans-Serif" font-size="10.00">EditorWindow</text>
+<polygon fill="white" stroke="#666666" points="1211.5,-358.5 1127.5,-358.5 1127.5,-339.5 1211.5,-339.5 1211.5,-358.5"/>
+<text text-anchor="middle" x="1169.5" y="-346.5" font-family="Helvetica,sans-Serif" font-size="10.00">EditorWindow</text>
 </a>
 </g>
 </g>
@@ -31,8 +31,8 @@
 <g id="edge1_Node000001_Node000002" class="edge">
 <title>Node2&#45;&gt;Node1</title>
 <g id="a_edge1_Node000001_Node000002"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M1221.78,-342.15C1252.42,-339.25 1291.72,-335.53 1324.88,-332.4"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="1221.36,-338.67 1211.74,-343.1 1222.02,-345.64 1221.36,-338.67"/>
+<path fill="none" stroke="#63b8ff" d="M1221.78,-344.15C1252.42,-341.25 1291.72,-337.53 1324.88,-334.4"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="1221.36,-340.67 1211.74,-345.1 1222.02,-347.64 1221.36,-340.67"/>
 </a>
 </g>
 </g>
@@ -40,9 +40,9 @@
 <g id="Node000003" class="node">
 <title>Node3</title>
 <g id="a_Node000003"><a xlink:href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html" target="_top" xlink:title="How levels pace: every positive level&#39;s mix is generated from _generation; the scoring curve sets eac...">
-<polygon fill="white" stroke="#666666" points="1254,-319 1085,-319 1085,-289 1254,-289 1254,-319"/>
-<text text-anchor="start" x="1093" y="-307" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
-<text text-anchor="middle" x="1169.5" y="-296" font-family="Helvetica,sans-Serif" font-size="10.00">Level.LevelPacingConfiguration</text>
+<polygon fill="white" stroke="#666666" points="1254,-321 1085,-321 1085,-291 1254,-291 1254,-321"/>
+<text text-anchor="start" x="1093" y="-309" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
+<text text-anchor="middle" x="1169.5" y="-298" font-family="Helvetica,sans-Serif" font-size="10.00">Level.LevelPacingConfiguration</text>
 </a>
 </g>
 </g>
@@ -50,18 +50,18 @@
 <g id="edge2_Node000001_Node000003" class="edge">
 <title>Node3&#45;&gt;Node1</title>
 <g id="a_edge2_Node000001_Node000003"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M1264.33,-313.3C1284.66,-315.31 1305.77,-317.4 1324.85,-319.3"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="1264.41,-309.79 1254.11,-312.29 1263.72,-316.76 1264.41,-309.79"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M1264.33,-315.3C1284.66,-317.31 1305.77,-319.4 1324.85,-321.3"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="1264.41,-311.79 1254.11,-314.29 1263.72,-318.76 1264.41,-311.79"/>
 </a>
 </g>
-<text text-anchor="middle" x="1289.5" y="-319" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _asset</text>
+<text text-anchor="middle" x="1289.5" y="-321" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _asset</text>
 </g>
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
 <g id="a_Node000004"><a xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="938.5,-429.5 841.5,-429.5 841.5,-410.5 938.5,-410.5 938.5,-429.5"/>
-<text text-anchor="middle" x="890" y="-417.5" font-family="Helvetica,sans-Serif" font-size="10.00">ScriptableObject</text>
+<polygon fill="white" stroke="#666666" points="938.5,-454.5 841.5,-454.5 841.5,-435.5 938.5,-435.5 938.5,-454.5"/>
+<text text-anchor="middle" x="890" y="-442.5" font-family="Helvetica,sans-Serif" font-size="10.00">ScriptableObject</text>
 </a>
 </g>
 </g>
@@ -69,8 +69,8 @@
 <g id="edge3_Node000003_Node000004" class="edge">
 <title>Node4&#45;&gt;Node3</title>
 <g id="a_edge3_Node000003_Node000004"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M948.68,-409C957.92,-406.7 967.3,-404.03 976,-401 1018.42,-386.22 1033.37,-386.79 1067,-357 1078.07,-347.19 1073.18,-337.9 1085,-329 1090.08,-325.18 1095.74,-321.94 1101.65,-319.19"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="947.67,-405.64 938.75,-411.35 949.29,-412.45 947.67,-405.64"/>
+<path fill="none" stroke="#63b8ff" d="M948.85,-434.45C958.06,-432.1 967.39,-429.29 976,-426 1019.3,-409.43 1036.28,-409.73 1067,-375 1081,-359.17 1069.35,-345.2 1085,-331 1089.26,-327.14 1094.09,-323.87 1099.24,-321.11"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="947.83,-431.1 938.93,-436.84 949.47,-437.9 947.83,-431.1"/>
 </a>
 </g>
 </g>
@@ -78,9 +78,9 @@
 <g id="Node000005" class="node">
 <title>Node5</title>
 <g id="a_Node000005"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html" target="_top" xlink:title="Level pacing; read by LevelDifficultyResolver (and by the balloon spawner&#39;s pool prewarm,...">
-<polygon fill="white" stroke="#666666" points="976,-392 804,-392 804,-362 976,-362 976,-392"/>
-<text text-anchor="start" x="812" y="-380" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
-<text text-anchor="middle" x="890" y="-369" font-family="Helvetica,sans-Serif" font-size="10.00">Level.ILevelPacingConfiguration</text>
+<polygon fill="white" stroke="#666666" points="976,-417 804,-417 804,-387 976,-387 976,-417"/>
+<text text-anchor="start" x="812" y="-405" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
+<text text-anchor="middle" x="890" y="-394" font-family="Helvetica,sans-Serif" font-size="10.00">Level.ILevelPacingConfiguration</text>
 </a>
 </g>
 </g>
@@ -88,8 +88,8 @@
 <g id="edge4_Node000003_Node000005" class="edge">
 <title>Node5&#45;&gt;Node3</title>
 <g id="a_edge4_Node000003_Node000005"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M965.94,-359.53C997.26,-352.01 1033.98,-342.91 1067,-334 1077.07,-331.28 1098.16,-325.08 1118.52,-319.01"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="964.88,-356.18 955.97,-361.91 966.51,-362.99 964.88,-356.18"/>
+<path fill="none" stroke="#63b8ff" d="M954.75,-384.17C961.93,-382.12 969.12,-380.03 976,-378 1016.59,-366.03 1031.05,-372.31 1067,-350 1076.88,-343.87 1075.09,-337.1 1085,-331 1091.19,-327.19 1097.99,-323.93 1104.96,-321.15"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="953.67,-380.84 945.01,-386.95 955.59,-387.57 953.67,-380.84"/>
 </a>
 </g>
 </g>
@@ -97,9 +97,9 @@
 <g id="Node000006" class="node">
 <title>Node6</title>
 <g id="a_Node000006"><a xlink:href="structBalloonParty_1_1Configuration_1_1Level_1_1LevelRangeEntry.html" target="_top" xlink:title="An authored debug preset: a RangedLevelParameters mix keyed by a negative FromLevel the start&#45;level c...">
-<polygon fill="white" stroke="#666666" points="964,-344 816,-344 816,-314 964,-314 964,-344"/>
-<text text-anchor="start" x="824" y="-332" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
-<text text-anchor="middle" x="890" y="-321" font-family="Helvetica,sans-Serif" font-size="10.00">Level.LevelRangeEntry</text>
+<polygon fill="white" stroke="#666666" points="964,-369 816,-369 816,-339 964,-339 964,-369"/>
+<text text-anchor="start" x="824" y="-357" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
+<text text-anchor="middle" x="890" y="-346" font-family="Helvetica,sans-Serif" font-size="10.00">Level.LevelRangeEntry</text>
 </a>
 </g>
 </g>
@@ -107,11 +107,11 @@
 <g id="edge5_Node000003_Node000006" class="edge">
 <title>Node6&#45;&gt;Node3</title>
 <g id="a_edge5_Node000003_Node000006"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M974.46,-321.48C1009.43,-318.33 1050.01,-314.67 1084.99,-311.52"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="973.92,-318.02 964.27,-322.4 974.55,-324.99 973.92,-318.02"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M974.46,-339.56C1009.43,-333.51 1050.01,-326.5 1084.99,-320.44"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="973.53,-336.17 964.27,-341.33 974.72,-343.07 973.53,-336.17"/>
 </a>
 </g>
-<text text-anchor="middle" x="1030.5" y="-322" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _ranges</text>
+<text text-anchor="middle" x="1030.5" y="-338" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _ranges</text>
 </g>
 <!-- Node7 -->
 <g id="Node000007" class="node">
@@ -127,11 +127,11 @@
 <g id="edge6_Node000006_Node000007" class="edge">
 <title>Node7&#45;&gt;Node6</title>
 <g id="a_edge6_Node000006_Node000007"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M660.11,-405.28C698.55,-390.3 754.4,-369.19 804,-353 813.33,-349.95 823.31,-346.93 833.02,-344.11"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="658.77,-402.04 650.73,-408.95 661.32,-408.56 658.77,-402.04"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M681.97,-406.51C727.32,-395 786.09,-380.1 829.41,-369.11"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="681.04,-403.13 672.21,-408.98 682.76,-409.92 681.04,-403.13"/>
 </a>
 </g>
-<text text-anchor="middle" x="749.5" y="-387" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _parameters</text>
+<text text-anchor="middle" x="749.5" y="-400" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _parameters</text>
 </g>
 <!-- Node8 -->
 <g id="Node000008" class="node">
@@ -192,20 +192,20 @@
 </g>
 <text text-anchor="middle" x="192.5" y="-464" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _count</text>
 </g>
-<!-- Node27 -->
-<g id="Node000027" class="node">
-<title>Node27</title>
-<g id="a_Node000027"><a xlink:href="structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html" target="_top" xlink:title="A grid actor in the catalogue. Actors block the board, so they&#39;re paid from the threat budget.">
+<!-- Node29 -->
+<g id="Node000029" class="node">
+<title>Node29</title>
+<g id="a_Node000029"><a xlink:href="structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html" target="_top" xlink:title="A grid actor in the catalogue. Actors block the board, so they&#39;re paid from the threat budget.">
 <polygon fill="white" stroke="#666666" points="400.5,-318 245.5,-318 245.5,-288 400.5,-288 400.5,-318"/>
 <text text-anchor="start" x="253.5" y="-306" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text text-anchor="middle" x="323" y="-295" font-family="Helvetica,sans-Serif" font-size="10.00">Level.GridActorContentEntry</text>
 </a>
 </g>
 </g>
-<!-- Node9&#45;&gt;Node27 -->
-<g id="edge32_Node000027_Node000009" class="edge">
-<title>Node9&#45;&gt;Node27</title>
-<g id="a_edge32_Node000027_Node000009"><a xlink:title=" ">
+<!-- Node9&#45;&gt;Node29 -->
+<g id="edge34_Node000029_Node000009" class="edge">
+<title>Node9&#45;&gt;Node29</title>
+<g id="a_edge34_Node000029_Node000009"><a xlink:title=" ">
 <path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M113.08,-382.28C145.45,-366.02 193.48,-343.1 237,-327 245.63,-323.81 254.88,-320.79 263.99,-318.05"/>
 <polygon fill="#9a32cd" stroke="#9a32cd" points="111.31,-379.25 103.97,-386.89 114.47,-385.5 111.31,-379.25"/>
 </a>
@@ -267,9 +267,9 @@
 <g id="Node000013" class="node">
 <title>Node13</title>
 <g id="a_Node000013"><a xlink:href="structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html" target="_top" xlink:title="Monotone piecewise&#45;cubic scoring curve.">
-<polygon fill="white" stroke="#666666" points="964,-296 816,-296 816,-266 964,-266 964,-296"/>
-<text text-anchor="start" x="824" y="-284" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
-<text text-anchor="middle" x="890" y="-273" font-family="Helvetica,sans-Serif" font-size="10.00">Level.LevelScoringCurve</text>
+<polygon fill="white" stroke="#666666" points="964,-321 816,-321 816,-291 964,-291 964,-321"/>
+<text text-anchor="start" x="824" y="-309" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
+<text text-anchor="middle" x="890" y="-298" font-family="Helvetica,sans-Serif" font-size="10.00">Level.LevelScoringCurve</text>
 </a>
 </g>
 </g>
@@ -277,19 +277,19 @@
 <g id="edge13_Node000003_Node000013" class="edge">
 <title>Node13&#45;&gt;Node3</title>
 <g id="a_edge13_Node000003_Node000013"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M974.52,-283.06C1003.81,-284.25 1036.91,-286.1 1067,-289 1072.85,-289.56 1078.88,-290.23 1084.94,-290.97"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="974.46,-279.56 964.33,-282.67 974.19,-286.55 974.46,-279.56"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M974.46,-306C1009.43,-306 1050.01,-306 1084.99,-306"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="974.27,-302.5 964.27,-306 974.27,-309.5 974.27,-302.5"/>
 </a>
 </g>
-<text text-anchor="middle" x="1030.5" y="-292" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _scoringCurve</text>
+<text text-anchor="middle" x="1030.5" y="-309" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _scoringCurve</text>
 </g>
 <!-- Node14 -->
 <g id="Node000014" class="node">
 <title>Node14</title>
 <g id="a_Node000014"><a xlink:href="structBalloonParty_1_1Configuration_1_1Level_1_1ScoringControlPoint.html" target="_top" xlink:title="One authored milestone on the scoring curve.">
-<polygon fill="white" stroke="#666666" points="686,-296 538,-296 538,-266 686,-266 686,-296"/>
-<text text-anchor="start" x="546" y="-284" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
-<text text-anchor="middle" x="612" y="-273" font-family="Helvetica,sans-Serif" font-size="10.00">Level.ScoringControlPoint</text>
+<polygon fill="white" stroke="#666666" points="686,-369 538,-369 538,-339 686,-339 686,-369"/>
+<text text-anchor="start" x="546" y="-357" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
+<text text-anchor="middle" x="612" y="-346" font-family="Helvetica,sans-Serif" font-size="10.00">Level.ScoringControlPoint</text>
 </a>
 </g>
 </g>
@@ -297,19 +297,19 @@
 <g id="edge14_Node000013_Node000014" class="edge">
 <title>Node14&#45;&gt;Node13</title>
 <g id="a_edge14_Node000013_Node000014"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M696.28,-281C734.38,-281 779.12,-281 815.9,-281"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="696.24,-277.5 686.24,-281 696.24,-284.5 696.24,-277.5"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M696.28,-339.52C734.38,-332.89 779.12,-325.11 815.9,-318.71"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="695.49,-336.1 686.24,-341.26 696.69,-343 695.49,-336.1"/>
 </a>
 </g>
-<text text-anchor="middle" x="749.5" y="-284" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _controlPoints</text>
+<text text-anchor="middle" x="749.5" y="-338" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _controlPoints</text>
 </g>
 <!-- Node15 -->
 <g id="Node000015" class="node">
 <title>Node15</title>
 <g id="a_Node000015"><a xlink:href="structBalloonParty_1_1Configuration_1_1Level_1_1TailGrowthConfig.html" target="_top" xlink:title="Tail extrapolation configuration for LevelScoringCurve.">
-<polygon fill="white" stroke="#666666" points="686,-344 538,-344 538,-314 686,-314 686,-344"/>
-<text text-anchor="start" x="546" y="-332" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
-<text text-anchor="middle" x="612" y="-321" font-family="Helvetica,sans-Serif" font-size="10.00">Level.TailGrowthConfig</text>
+<polygon fill="white" stroke="#666666" points="686,-321 538,-321 538,-291 686,-291 686,-321"/>
+<text text-anchor="start" x="546" y="-309" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
+<text text-anchor="middle" x="612" y="-298" font-family="Helvetica,sans-Serif" font-size="10.00">Level.TailGrowthConfig</text>
 </a>
 </g>
 </g>
@@ -317,19 +317,19 @@
 <g id="edge15_Node000013_Node000015" class="edge">
 <title>Node15&#45;&gt;Node13</title>
 <g id="a_edge15_Node000013_Node000015"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M696.28,-314.52C734.38,-307.89 779.12,-300.11 815.9,-293.71"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="695.49,-311.1 686.24,-316.26 696.69,-318 695.49,-311.1"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M696.28,-306C734.38,-306 779.12,-306 815.9,-306"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="696.24,-302.5 686.24,-306 696.24,-309.5 696.24,-302.5"/>
 </a>
 </g>
-<text text-anchor="middle" x="749.5" y="-313" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _tailGrowth</text>
+<text text-anchor="middle" x="749.5" y="-309" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _tailGrowth</text>
 </g>
 <!-- Node16 -->
 <g id="Node000016" class="node">
 <title>Node16</title>
 <g id="a_Node000016"><a xlink:href="classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html" target="_top" xlink:title="When balloon lines arrive: one line per interval of scaled game time, the interval shrinking each lev...">
-<polygon fill="white" stroke="#666666" points="964,-248 816,-248 816,-218 964,-218 964,-248"/>
-<text text-anchor="start" x="824" y="-236" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
-<text text-anchor="middle" x="890" y="-225" font-family="Helvetica,sans-Serif" font-size="10.00">Level.SpawnClockSettings</text>
+<polygon fill="white" stroke="#666666" points="964,-273 816,-273 816,-243 964,-243 964,-273"/>
+<text text-anchor="start" x="824" y="-261" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
+<text text-anchor="middle" x="890" y="-250" font-family="Helvetica,sans-Serif" font-size="10.00">Level.SpawnClockSettings</text>
 </a>
 </g>
 </g>
@@ -337,19 +337,19 @@
 <g id="edge16_Node000003_Node000016" class="edge">
 <title>Node16&#45;&gt;Node3</title>
 <g id="a_edge16_Node000003_Node000016"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M974.2,-246.99C1003.72,-252.62 1037.05,-259.76 1067,-268 1088.27,-273.85 1111.5,-281.96 1130.36,-289"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="974.81,-243.54 964.34,-245.13 973.52,-250.42 974.81,-243.54"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M974.46,-272.44C1009.43,-278.49 1050.01,-285.5 1084.99,-291.56"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="974.72,-268.93 964.27,-270.67 973.53,-275.83 974.72,-268.93"/>
 </a>
 </g>
-<text text-anchor="middle" x="1030.5" y="-271" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _spawnClock</text>
+<text text-anchor="middle" x="1030.5" y="-290" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _spawnClock</text>
 </g>
 <!-- Node17 -->
 <g id="Node000017" class="node">
 <title>Node17</title>
 <g id="a_Node000017"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="686,-248 538,-248 538,-218 686,-218 686,-248"/>
-<text text-anchor="start" x="546" y="-236" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
-<text text-anchor="middle" x="612" y="-225" font-family="Helvetica,sans-Serif" font-size="10.00">Level.ISpawnClockSettings</text>
+<polygon fill="white" stroke="#666666" points="686,-273 538,-273 538,-243 686,-243 686,-273"/>
+<text text-anchor="start" x="546" y="-261" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
+<text text-anchor="middle" x="612" y="-250" font-family="Helvetica,sans-Serif" font-size="10.00">Level.ISpawnClockSettings</text>
 </a>
 </g>
 </g>
@@ -357,18 +357,18 @@
 <g id="edge17_Node000016_Node000017" class="edge">
 <title>Node17&#45;&gt;Node16</title>
 <g id="a_edge17_Node000016_Node000017"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M696.28,-233C734.38,-233 779.12,-233 815.9,-233"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="696.24,-229.5 686.24,-233 696.24,-236.5 696.24,-229.5"/>
+<path fill="none" stroke="#63b8ff" d="M696.28,-258C734.38,-258 779.12,-258 815.9,-258"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="696.24,-254.5 686.24,-258 696.24,-261.5 696.24,-254.5"/>
 </a>
 </g>
 </g>
 <!-- Node18 -->
 <g id="Node000018" class="node">
 <title>Node18</title>
-<g id="a_Node000018"><a xlink:href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html" target="_top" xlink:title="What LevelGenerator builds every positive level from: formulas for the level&#39;s shape and its two budg...">
-<polygon fill="white" stroke="#666666" points="695,-198 529,-198 529,-168 695,-168 695,-198"/>
-<text text-anchor="start" x="537" y="-186" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
-<text text-anchor="middle" x="612" y="-175" font-family="Helvetica,sans-Serif" font-size="10.00">Level.LevelGenerationSettings</text>
+<g id="a_Node000018"><a xlink:href="classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html" target="_top" xlink:title="The bubbles that come in with the clock&#39;s lines on water levels, a growing share of every line the lo...">
+<polygon fill="white" stroke="#666666" points="964,-225 816,-225 816,-195 964,-195 964,-225"/>
+<text text-anchor="start" x="824" y="-213" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
+<text text-anchor="middle" x="890" y="-202" font-family="Helvetica,sans-Serif" font-size="10.00">Level.BubbleRiseSettings</text>
 </a>
 </g>
 </g>
@@ -376,19 +376,19 @@
 <g id="edge18_Node000003_Node000018" class="edge">
 <title>Node18&#45;&gt;Node3</title>
 <g id="a_edge18_Node000003_Node000018"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M705.63,-175.51C780.04,-172.17 886.53,-173.47 976,-198 1044.62,-216.82 1115.43,-264.47 1148.81,-288.96"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="705.16,-172.03 695.35,-176.01 705.5,-179.02 705.16,-172.03"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M954.73,-227.9C961.91,-229.94 969.11,-232.01 976,-234 1016.52,-245.73 1027.41,-246.42 1067,-261 1091.06,-269.86 1117.51,-281.66 1137.38,-290.95"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="955.57,-224.49 944.99,-225.13 953.65,-231.23 955.57,-224.49"/>
 </a>
 </g>
-<text text-anchor="middle" x="890" y="-201" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _generation</text>
+<text text-anchor="middle" x="1030.5" y="-264" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _bubbleRise</text>
 </g>
 <!-- Node19 -->
 <g id="Node000019" class="node">
 <title>Node19</title>
-<g id="a_Node000019"><a xlink:href="structBalloonParty_1_1Configuration_1_1Level_1_1BudgetFormula.html" target="_top" xlink:title="A level&#39;s budget: a base, plus a step per level after the first, never past a cap.">
-<polygon fill="white" stroke="#666666" points="397,-78 249,-78 249,-48 397,-48 397,-78"/>
-<text text-anchor="start" x="257" y="-66" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
-<text text-anchor="middle" x="323" y="-55" font-family="Helvetica,sans-Serif" font-size="10.00">Level.BudgetFormula</text>
+<g id="a_Node000019"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html" target="_top" xlink:title="Read&#45;only tuning for the bubbles that come in with the lines on water levels; see BubbleRiseCurve.">
+<polygon fill="white" stroke="#666666" points="686,-225 538,-225 538,-195 686,-195 686,-225"/>
+<text text-anchor="start" x="546" y="-213" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
+<text text-anchor="middle" x="612" y="-202" font-family="Helvetica,sans-Serif" font-size="10.00">Level.IBubbleRiseSettings</text>
 </a>
 </g>
 </g>
@@ -396,41 +396,38 @@
 <g id="edge19_Node000018_Node000019" class="edge">
 <title>Node19&#45;&gt;Node18</title>
 <g id="a_edge19_Node000018_Node000019"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M407.44,-70.49C440.83,-75.76 478.91,-84.73 511,-100 546.25,-116.77 579.52,-148.78 597.4,-167.77"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="407.65,-66.99 397.24,-68.97 406.62,-73.91 407.65,-66.99"/>
+<path fill="none" stroke="#63b8ff" d="M696.28,-210C734.38,-210 779.12,-210 815.9,-210"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="696.24,-206.5 686.24,-210 696.24,-213.5 696.24,-206.5"/>
 </a>
 </g>
-<text text-anchor="middle" x="469" y="-114" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _aidBudget</text>
-<text text-anchor="middle" x="469" y="-103" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey">_threatBudget</text>
 </g>
 <!-- Node20 -->
 <g id="Node000020" class="node">
 <title>Node20</title>
-<g id="a_Node000020"><a xlink:href="structBalloonParty_1_1Configuration_1_1Level_1_1IntLevelStep.html" target="_top" xlink:title=" ">
-<polygon fill="white" stroke="#666666" points="397,-174 249,-174 249,-144 397,-144 397,-174"/>
-<text text-anchor="start" x="257" y="-162" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
-<text text-anchor="middle" x="323" y="-151" font-family="Helvetica,sans-Serif" font-size="10.00">Level.IntLevelStep</text>
+<g id="a_Node000020"><a xlink:href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html" target="_top" xlink:title="What LevelGenerator builds every positive level from: formulas for the level&#39;s shape and its two budg...">
+<polygon fill="white" stroke="#666666" points="695,-176 529,-176 529,-146 695,-146 695,-176"/>
+<text text-anchor="start" x="537" y="-164" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
+<text text-anchor="middle" x="612" y="-153" font-family="Helvetica,sans-Serif" font-size="10.00">Level.LevelGenerationSettings</text>
 </a>
 </g>
 </g>
-<!-- Node20&#45;&gt;Node18 -->
-<g id="edge20_Node000018_Node000020" class="edge">
-<title>Node20&#45;&gt;Node18</title>
-<g id="a_edge20_Node000018_Node000020"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M407.37,-156.94C439.81,-157.03 477.22,-158.22 511,-162 523.25,-163.37 536.22,-165.55 548.62,-167.99"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="407.02,-153.44 397.03,-156.95 407.03,-160.44 407.02,-153.44"/>
+<!-- Node20&#45;&gt;Node3 -->
+<g id="edge20_Node000003_Node000020" class="edge">
+<title>Node20&#45;&gt;Node3</title>
+<g id="a_edge20_Node000003_Node000020"><a xlink:title=" ">
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M705.53,-151.09C780.33,-146.24 887.39,-146.55 976,-175 1050.67,-198.98 1122.72,-261.85 1153.23,-290.89"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="704.92,-147.62 695.19,-151.81 705.41,-154.61 704.92,-147.62"/>
 </a>
 </g>
-<text text-anchor="middle" x="469" y="-176" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _boardLines</text>
-<text text-anchor="middle" x="469" y="-165" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey">_colors</text>
+<text text-anchor="middle" x="890" y="-178" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _generation</text>
 </g>
 <!-- Node21 -->
 <g id="Node000021" class="node">
 <title>Node21</title>
-<g id="a_Node000021"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelStep.html" target="_top" xlink:title="One step of a level&#45;stepped value: it holds from FromLevel until the next step.">
-<polygon fill="white" stroke="#666666" points="148,-102 0,-102 0,-72 148,-72 148,-102"/>
-<text text-anchor="start" x="8" y="-90" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
-<text text-anchor="middle" x="74" y="-79" font-family="Helvetica,sans-Serif" font-size="10.00">Level.ILevelStep</text>
+<g id="a_Node000021"><a xlink:href="structBalloonParty_1_1Configuration_1_1Level_1_1BudgetFormula.html" target="_top" xlink:title="A level&#39;s budget: a base, plus a step per level after the first, never past a cap.">
+<polygon fill="white" stroke="#666666" points="397,-78 249,-78 249,-48 397,-48 397,-78"/>
+<text text-anchor="start" x="257" y="-66" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
+<text text-anchor="middle" x="323" y="-55" font-family="Helvetica,sans-Serif" font-size="10.00">Level.BudgetFormula</text>
 </a>
 </g>
 </g>
@@ -438,176 +435,218 @@
 <g id="edge21_Node000020_Node000021" class="edge">
 <title>Node21&#45;&gt;Node20</title>
 <g id="a_edge21_Node000020_Node000021"><a xlink:title=" ">
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M407.41,-76.36C440.32,-83.01 478.05,-92.38 511,-105 539.06,-115.74 568.81,-133.3 588.49,-145.89"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="407.86,-72.88 397.37,-74.39 406.5,-79.75 407.86,-72.88"/>
+</a>
+</g>
+<text text-anchor="middle" x="469" y="-119" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _aidBudget</text>
+<text text-anchor="middle" x="469" y="-108" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey">_threatBudget</text>
+</g>
+<!-- Node22 -->
+<g id="Node000022" class="node">
+<title>Node22</title>
+<g id="a_Node000022"><a xlink:href="structBalloonParty_1_1Configuration_1_1Level_1_1IntLevelStep.html" target="_top" xlink:title=" ">
+<polygon fill="white" stroke="#666666" points="397,-174 249,-174 249,-144 397,-144 397,-174"/>
+<text text-anchor="start" x="257" y="-162" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
+<text text-anchor="middle" x="323" y="-151" font-family="Helvetica,sans-Serif" font-size="10.00">Level.IntLevelStep</text>
+</a>
+</g>
+</g>
+<!-- Node22&#45;&gt;Node20 -->
+<g id="edge22_Node000020_Node000022" class="edge">
+<title>Node22&#45;&gt;Node20</title>
+<g id="a_edge22_Node000020_Node000022"><a xlink:title=" ">
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M407.24,-159.58C445.5,-159.85 490.73,-160.16 528.85,-160.43"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="407.19,-156.08 397.16,-159.51 407.14,-163.08 407.19,-156.08"/>
+</a>
+</g>
+<text text-anchor="middle" x="469" y="-175" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _boardLines</text>
+<text text-anchor="middle" x="469" y="-164" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey">_colors</text>
+</g>
+<!-- Node23 -->
+<g id="Node000023" class="node">
+<title>Node23</title>
+<g id="a_Node000023"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelStep.html" target="_top" xlink:title="One step of a level&#45;stepped value: it holds from FromLevel until the next step.">
+<polygon fill="white" stroke="#666666" points="148,-102 0,-102 0,-72 148,-72 148,-102"/>
+<text text-anchor="start" x="8" y="-90" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
+<text text-anchor="middle" x="74" y="-79" font-family="Helvetica,sans-Serif" font-size="10.00">Level.ILevelStep</text>
+</a>
+</g>
+</g>
+<!-- Node23&#45;&gt;Node22 -->
+<g id="edge23_Node000022_Node000023" class="edge">
+<title>Node23&#45;&gt;Node22</title>
+<g id="a_edge23_Node000022_Node000023"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M134.95,-104.96C165.47,-114.06 203.18,-125.22 237,-135 247.16,-137.94 258.02,-141.04 268.47,-144"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="135.88,-101.59 125.3,-102.09 133.88,-108.3 135.88,-101.59"/>
 </a>
 </g>
 </g>
-<!-- Node22 -->
-<g id="Node000022" class="node">
-<title>Node22</title>
-<g id="a_Node000022"><a xlink:href="structBalloonParty_1_1Configuration_1_1Level_1_1ItemCountStep.html" target="_top" xlink:title="The item&#45;count distributions in force from FromLevel on.">
+<!-- Node24 -->
+<g id="Node000024" class="node">
+<title>Node24</title>
+<g id="a_Node000024"><a xlink:href="structBalloonParty_1_1Configuration_1_1Level_1_1ItemCountStep.html" target="_top" xlink:title="The item&#45;count distributions in force from FromLevel on.">
 <polygon fill="white" stroke="#666666" points="397,-30 249,-30 249,0 397,0 397,-30"/>
 <text text-anchor="start" x="257" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text text-anchor="middle" x="323" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Level.ItemCountStep</text>
 </a>
 </g>
 </g>
-<!-- Node21&#45;&gt;Node22 -->
-<g id="edge23_Node000022_Node000021" class="edge">
-<title>Node21&#45;&gt;Node22</title>
-<g id="a_edge23_Node000022_Node000021"><a xlink:title=" ">
+<!-- Node23&#45;&gt;Node24 -->
+<g id="edge25_Node000024_Node000023" class="edge">
+<title>Node23&#45;&gt;Node24</title>
+<g id="a_edge25_Node000024_Node000023"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M134.95,-69.04C165.47,-59.94 203.18,-48.78 237,-39 247.16,-36.06 258.02,-32.96 268.47,-30"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="133.88,-65.7 125.3,-71.91 135.88,-72.41 133.88,-65.7"/>
 </a>
 </g>
 </g>
-<!-- Node22&#45;&gt;Node18 -->
-<g id="edge22_Node000018_Node000022" class="edge">
-<title>Node22&#45;&gt;Node18</title>
-<g id="a_edge22_Node000018_Node000022"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M407.07,-23.17C441.26,-29.43 480.01,-40.48 511,-60 555.01,-87.72 588.54,-141.55 603.08,-167.83"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="407.54,-19.7 397.09,-21.45 406.36,-26.59 407.54,-19.7"/>
+<!-- Node24&#45;&gt;Node20 -->
+<g id="edge24_Node000020_Node000024" class="edge">
+<title>Node24&#45;&gt;Node20</title>
+<g id="a_edge24_Node000020_Node000024"><a xlink:title=" ">
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M407.15,-29.07C440.83,-37.03 479.2,-49.09 511,-67 547.96,-87.81 581.87,-125.13 599.1,-145.93"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="407.85,-25.64 397.32,-26.83 406.3,-32.47 407.85,-25.64"/>
 </a>
 </g>
-<text text-anchor="middle" x="469" y="-63" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _itemCounts</text>
+<text text-anchor="middle" x="469" y="-70" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _itemCounts</text>
 </g>
-<!-- Node23 -->
-<g id="Node000023" class="node">
-<title>Node23</title>
-<g id="a_Node000023"><a xlink:href="structBalloonParty_1_1Configuration_1_1Level_1_1BalloonContentEntry.html" target="_top" xlink:title=" ">
+<!-- Node25 -->
+<g id="Node000025" class="node">
+<title>Node25</title>
+<g id="a_Node000025"><a xlink:href="structBalloonParty_1_1Configuration_1_1Level_1_1BalloonContentEntry.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="397,-270 249,-270 249,-240 397,-240 397,-270"/>
 <text text-anchor="start" x="257" y="-258" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text text-anchor="middle" x="323" y="-247" font-family="Helvetica,sans-Serif" font-size="10.00">Level.BalloonContentEntry</text>
 </a>
 </g>
 </g>
-<!-- Node23&#45;&gt;Node18 -->
-<g id="edge24_Node000018_Node000023" class="edge">
-<title>Node23&#45;&gt;Node18</title>
-<g id="a_edge24_Node000018_Node000023"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M406.62,-237.76C439.26,-230.6 477.02,-221.9 511,-213 528.18,-208.5 546.87,-203.05 563.38,-198.03"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="405.69,-234.38 396.66,-239.93 407.18,-241.22 405.69,-234.38"/>
+<!-- Node25&#45;&gt;Node20 -->
+<g id="edge26_Node000020_Node000025" class="edge">
+<title>Node25&#45;&gt;Node20</title>
+<g id="a_edge26_Node000020_Node000025"><a xlink:title=" ">
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M407.37,-249.07C441.78,-243.41 480.63,-232.58 511,-212 522.63,-204.11 517.65,-194.29 529,-186 534.29,-182.14 540.18,-178.87 546.32,-176.09"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="406.68,-245.64 397.33,-250.6 407.74,-252.56 406.68,-245.64"/>
 </a>
 </g>
-<text text-anchor="middle" x="469" y="-235" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _balloons</text>
+<text text-anchor="middle" x="469" y="-247" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _balloons</text>
 </g>
-<!-- Node24 -->
-<g id="Node000024" class="node">
-<title>Node24</title>
-<g id="a_Node000024"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece.html" target="_top" xlink:title="A catalogue entry the level generator can include in a level.">
+<!-- Node26 -->
+<g id="Node000026" class="node">
+<title>Node26</title>
+<g id="a_Node000026"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece.html" target="_top" xlink:title="A catalogue entry the level generator can include in a level.">
 <polygon fill="white" stroke="#666666" points="148,-293 0,-293 0,-263 148,-263 148,-293"/>
 <text text-anchor="start" x="8" y="-281" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text text-anchor="middle" x="74" y="-270" font-family="Helvetica,sans-Serif" font-size="10.00">Level.IContentPiece</text>
 </a>
 </g>
 </g>
-<!-- Node24&#45;&gt;Node23 -->
-<g id="edge25_Node000023_Node000024" class="edge">
-<title>Node24&#45;&gt;Node23</title>
-<g id="a_edge25_Node000023_Node000024"><a xlink:title=" ">
+<!-- Node26&#45;&gt;Node25 -->
+<g id="edge27_Node000025_Node000026" class="edge">
+<title>Node26&#45;&gt;Node25</title>
+<g id="a_edge27_Node000025_Node000026"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M158.31,-270.24C187.59,-267.52 220.25,-264.47 248.66,-261.83"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="157.74,-266.78 148.11,-271.19 158.39,-273.75 157.74,-266.78"/>
 </a>
 </g>
 </g>
-<!-- Node26 -->
-<g id="Node000026" class="node">
-<title>Node26</title>
-<g id="a_Node000026"><a xlink:href="structBalloonParty_1_1Configuration_1_1Level_1_1ItemContentEntry.html" target="_top" xlink:title="An item in the catalogue. Items help the player, so they&#39;re always paid from the aid budget.">
+<!-- Node28 -->
+<g id="Node000028" class="node">
+<title>Node28</title>
+<g id="a_Node000028"><a xlink:href="structBalloonParty_1_1Configuration_1_1Level_1_1ItemContentEntry.html" target="_top" xlink:title="An item in the catalogue. Items help the player, so they&#39;re always paid from the aid budget.">
 <polygon fill="white" stroke="#666666" points="397,-222 249,-222 249,-192 397,-192 397,-222"/>
 <text text-anchor="start" x="257" y="-210" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text text-anchor="middle" x="323" y="-199" font-family="Helvetica,sans-Serif" font-size="10.00">Level.ItemContentEntry</text>
 </a>
 </g>
 </g>
-<!-- Node24&#45;&gt;Node26 -->
-<g id="edge28_Node000026_Node000024" class="edge">
-<title>Node24&#45;&gt;Node26</title>
-<g id="a_edge28_Node000026_Node000024"><a xlink:title=" ">
+<!-- Node26&#45;&gt;Node28 -->
+<g id="edge30_Node000028_Node000026" class="edge">
+<title>Node26&#45;&gt;Node28</title>
+<g id="a_edge30_Node000028_Node000026"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M148.68,-260.38C171.45,-254.31 196.46,-247.01 219,-239 227.25,-236.07 228.77,-233.97 237,-231 245.8,-227.82 255.23,-224.8 264.49,-222.03"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="147.52,-257.06 138.73,-262.99 149.29,-263.84 147.52,-257.06"/>
 </a>
 </g>
 </g>
-<!-- Node24&#45;&gt;Node27 -->
-<g id="edge31_Node000027_Node000024" class="edge">
-<title>Node24&#45;&gt;Node27</title>
-<g id="a_edge31_Node000027_Node000024"><a xlink:title=" ">
+<!-- Node26&#45;&gt;Node29 -->
+<g id="edge33_Node000029_Node000026" class="edge">
+<title>Node26&#45;&gt;Node29</title>
+<g id="a_edge33_Node000029_Node000026"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M158.31,-286.43C186.41,-289.28 217.64,-292.44 245.22,-295.23"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="158.41,-282.92 148.11,-285.4 157.7,-289.89 158.41,-282.92"/>
 </a>
 </g>
 </g>
-<!-- Node25 -->
-<g id="Node000025" class="node">
-<title>Node25</title>
-<g id="a_Node000025"><a xlink:href="structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html" target="_top" xlink:title="A catalogue piece&#39;s weight by level: rolled within an early range at its unlock, moving to a late ran...">
+<!-- Node27 -->
+<g id="Node000027" class="node">
+<title>Node27</title>
+<g id="a_Node000027"><a xlink:href="structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html" target="_top" xlink:title="A catalogue piece&#39;s weight by level: rolled within an early range at its unlock, moving to a late ran...">
 <polygon fill="white" stroke="#666666" points="148,-232 0,-232 0,-202 148,-202 148,-232"/>
 <text text-anchor="start" x="8" y="-220" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text text-anchor="middle" x="74" y="-209" font-family="Helvetica,sans-Serif" font-size="10.00">Level.ContentWeightRamp</text>
 </a>
 </g>
 </g>
-<!-- Node25&#45;&gt;Node23 -->
-<g id="edge26_Node000023_Node000025" class="edge">
-<title>Node25&#45;&gt;Node23</title>
-<g id="a_edge26_Node000023_Node000025"><a xlink:title=" ">
+<!-- Node27&#45;&gt;Node25 -->
+<g id="edge28_Node000025_Node000027" class="edge">
+<title>Node27&#45;&gt;Node25</title>
+<g id="a_edge28_Node000025_Node000027"><a xlink:title=" ">
 <path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M158.31,-229.82C187.59,-234.32 220.25,-239.35 248.66,-243.72"/>
 <polygon fill="#9a32cd" stroke="#9a32cd" points="158.52,-226.31 148.11,-228.25 157.46,-233.23 158.52,-226.31"/>
 </a>
 </g>
 <text text-anchor="middle" x="192.5" y="-241" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _weight</text>
 </g>
-<!-- Node25&#45;&gt;Node26 -->
-<g id="edge29_Node000026_Node000025" class="edge">
-<title>Node25&#45;&gt;Node26</title>
-<g id="a_edge29_Node000026_Node000025"><a xlink:title=" ">
+<!-- Node27&#45;&gt;Node28 -->
+<g id="edge31_Node000028_Node000027" class="edge">
+<title>Node27&#45;&gt;Node28</title>
+<g id="a_edge31_Node000028_Node000027"><a xlink:title=" ">
 <path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M134.86,-199.64C145.16,-197.3 155.83,-195.27 166,-194 192.97,-190.64 222.67,-191.89 248.86,-194.66"/>
 <polygon fill="#9a32cd" stroke="#9a32cd" points="134.03,-196.24 125.12,-201.97 135.66,-203.05 134.03,-196.24"/>
 </a>
 </g>
 <text text-anchor="middle" x="192.5" y="-197" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _weight</text>
 </g>
-<!-- Node26&#45;&gt;Node18 -->
-<g id="edge27_Node000018_Node000026" class="edge">
-<title>Node26&#45;&gt;Node18</title>
-<g id="a_edge27_Node000018_Node000026"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M407.24,-200.04C445.5,-196.84 490.73,-193.06 528.85,-189.87"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="406.84,-196.56 397.16,-200.88 407.42,-203.54 406.84,-196.56"/>
+<!-- Node28&#45;&gt;Node20 -->
+<g id="edge29_Node000020_Node000028" class="edge">
+<title>Node28&#45;&gt;Node20</title>
+<g id="a_edge29_Node000020_Node000028"><a xlink:title=" ">
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M407.43,-198.61C439.87,-194.86 477.28,-189.93 511,-184 523.81,-181.75 537.44,-178.91 550.39,-176"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="406.62,-195.18 397.08,-199.79 407.41,-202.14 406.62,-195.18"/>
 </a>
 </g>
-<text text-anchor="middle" x="469" y="-201" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _items</text>
+<text text-anchor="middle" x="469" y="-200" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _items</text>
 </g>
-<!-- Node27&#45;&gt;Node18 -->
-<g id="edge30_Node000018_Node000027" class="edge">
-<title>Node27&#45;&gt;Node18</title>
-<g id="a_edge30_Node000018_Node000027"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M387.76,-285.21C394.93,-283.15 402.13,-281.05 409,-279 454.53,-265.43 475.16,-278.19 511,-247 525.1,-234.73 514.92,-221.29 529,-209 533.95,-204.68 539.62,-201.07 545.62,-198.07"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="386.68,-281.88 378.03,-288 388.6,-288.61 386.68,-281.88"/>
+<!-- Node29&#45;&gt;Node20 -->
+<g id="edge32_Node000020_Node000029" class="edge">
+<title>Node29&#45;&gt;Node20</title>
+<g id="a_edge32_Node000020_Node000029"><a xlink:title=" ">
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M411.09,-301.65C446.32,-296.68 484.78,-284.94 511,-259 534.75,-235.5 506.02,-210.26 529,-186 532.68,-182.11 536.95,-178.82 541.57,-176.04"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="410.25,-298.22 400.76,-302.93 411.12,-305.17 410.25,-298.22"/>
 </a>
 </g>
-<text text-anchor="middle" x="469" y="-277" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _gridActors</text>
+<text text-anchor="middle" x="469" y="-301" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _gridActors</text>
 </g>
-<!-- Node28 -->
-<g id="Node000028" class="node">
-<title>Node28</title>
-<g id="a_Node000028"><a xlink:href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html" target="_top" xlink:title="Which levels are set on the ground and which in the sky; read through ScenarioSchedule.">
+<!-- Node30 -->
+<g id="Node000030" class="node">
+<title>Node30</title>
+<g id="a_Node000030"><a xlink:href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html" target="_top" xlink:title="Which levels are set in the sky, on the ground or over water; read through ScenarioSchedule.">
 <polygon fill="white" stroke="#666666" points="409,-126 237,-126 237,-96 409,-96 409,-126"/>
 <text text-anchor="start" x="245" y="-114" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text text-anchor="middle" x="323" y="-103" font-family="Helvetica,sans-Serif" font-size="10.00">Level.ScenarioScheduleSettings</text>
 </a>
 </g>
 </g>
-<!-- Node28&#45;&gt;Node18 -->
-<g id="edge33_Node000018_Node000028" class="edge">
-<title>Node28&#45;&gt;Node18</title>
-<g id="a_edge33_Node000018_Node000028"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M419.05,-123.28C448.79,-128.19 481.52,-134.68 511,-143 534.03,-149.5 559.03,-159.5 578.28,-167.87"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="419.52,-119.81 409.09,-121.68 418.41,-126.73 419.52,-119.81"/>
+<!-- Node30&#45;&gt;Node20 -->
+<g id="edge35_Node000020_Node000030" class="edge">
+<title>Node30&#45;&gt;Node20</title>
+<g id="a_edge35_Node000020_Node000030"><a xlink:title=" ">
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M419.22,-127.59C454.74,-133.78 494.72,-140.74 528.95,-146.71"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="419.78,-124.13 409.33,-125.87 418.58,-131.03 419.78,-124.13"/>
 </a>
 </g>
-<text text-anchor="middle" x="469" y="-146" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _scenario</text>
+<text text-anchor="middle" x="469" y="-147" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _scenario</text>
 </g>
 </g>
 </svg>

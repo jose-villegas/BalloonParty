@@ -24,6 +24,12 @@ var classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings =
     [ "_sortingLayerName", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#abe63f7e02488ff7bb2d3ed1488b67404", null ],
     [ "_sortingOrder", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#a08d89ef28bcb260085c3976cf91df6fe", null ],
     [ "_wakeMaterial", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#a566179c0160e7c3e8065434e9dd6735b", null ],
+    [ "_waterBounceReference", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#a1ad9629c86cc946d12f431e211ceefdd", null ],
+    [ "_waterCausticMaterial", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#a714046786375a8af8f5268d8dbf2d019", null ],
+    [ "_waterCausticResolution", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#adb73976e103b55d704bf75aebaa582d7", null ],
+    [ "_waterMaterial", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#a2fa075e0e146b79b16e6639410cd89e0", null ],
+    [ "_waterRippleMaterial", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#a21264543bbc85627cdae2f674ce83d8f", null ],
+    [ "_waterRippleTexelsPerUnit", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#a73c02baac676a7bff8b38e79c64acb7c", null ],
     [ "BladeMaterial", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#a360caac0a2fe14a6aa1712d5eafa145c", null ],
     [ "BladeRecoverySeconds", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#af37f27bacadefd047f637faeae944473", null ],
     [ "BladeSeed", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#a4b3893517f02bebc37a6dda7d3b534f5", null ],
@@ -47,5 +53,11 @@ var classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings =
     [ "RevealEdgeWander", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#adcf8fe2be86fbb165a594802c24e97e1", null ],
     [ "SortingLayerName", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#adabcd1534d38bdc4aa924fa4bb35defa", null ],
     [ "SortingOrder", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#a5390dc1fb6746ec95761d0999def786a", null ],
-    [ "WakeMaterial", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#a1c6699c3ad3175557a51213686c26886", null ]
+    [ "WakeMaterial", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#a1c6699c3ad3175557a51213686c26886", null ],
+    [ "WaterBounceReference", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#ae1f1bf8bbec7fd08df5d8d3637f3a4eb", null ],
+    [ "WaterCausticMaterial", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#a9cccd162bb8d12049f15550854533be4", null ],
+    [ "WaterCausticResolution", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#afdfa7e0142fce98da7b61ff41582034e", null ],
+    [ "WaterMaterial", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#a9460a8a9e9526fdb01709a4514c3378c", null ],
+    [ "WaterRippleMaterial", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#a8034786837bebdc11ade0201a3e90cd3", null ],
+    [ "WaterRippleTexelsPerUnit", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html#ae263ffc920c4a82669aaa1d096e3a2ea", null ]
 ];

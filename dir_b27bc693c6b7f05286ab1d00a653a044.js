@@ -1,10 +1,13 @@
 var dir_b27bc693c6b7f05286ab1d00a653a044 =
 [
     [ "BalloonContentEntry.cs", "BalloonContentEntry_8cs.html", "BalloonContentEntry_8cs" ],
+    [ "BubbleRiseCurve.cs", "BubbleRiseCurve_8cs.html", "BubbleRiseCurve_8cs" ],
+    [ "BubbleRiseSettings.cs", "BubbleRiseSettings_8cs.html", "BubbleRiseSettings_8cs" ],
     [ "BudgetFormula.cs", "BudgetFormula_8cs.html", "BudgetFormula_8cs" ],
     [ "ContentRole.cs", "ContentRole_8cs.html", "ContentRole_8cs" ],
     [ "ContentWeightRamp.cs", "ContentWeightRamp_8cs.html", "ContentWeightRamp_8cs" ],
     [ "GridActorContentEntry.cs", "GridActorContentEntry_8cs.html", "GridActorContentEntry_8cs" ],
+    [ "IBubbleRiseSettings.cs", "IBubbleRiseSettings_8cs.html", "IBubbleRiseSettings_8cs" ],
     [ "IContentPiece.cs", "IContentPiece_8cs.html", "IContentPiece_8cs" ],
     [ "ILevelPacingConfiguration.cs", "ILevelPacingConfiguration_8cs.html", "ILevelPacingConfiguration_8cs" ],
     [ "ILevelParameters.cs", "ILevelParameters_8cs.html", "ILevelParameters_8cs" ],

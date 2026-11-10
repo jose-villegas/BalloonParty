@@ -1,6 +1,7 @@
 var classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController =
 [
     [ "BalloonController", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#a91b50236532fcc6d6783f044f56e1566", null ],
+    [ "AbsorbInto", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#a9a4fd11db7dc47ab91e25145921413c1", null ],
     [ "Deflect", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#a49bda901145612727cefb9fc8e552ab6", null ],
     [ "DetachForOutgoing", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#af0b284e49f5f7ed123f63f4a4e9cb3f8", null ],
     [ "HandleBoardClear", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#a2f22095843fdc22772b2ecf2fffd23b6", null ],

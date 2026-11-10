@@ -1,0 +1,5 @@
+<map id="BalloonParty.Scenario.WaterImpactCollector" name="BalloonParty.Scenario.WaterImpactCollector">
+<area shape="rect" id="Node000001" title="Holds this frame&#39;s impacts (every outward disturbance stamp: a ball&#39;s steps, pops,..." alt="" coords="5,79,209,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="53,5,161,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,44,110,79,105,79,105,44"/>
+</map>

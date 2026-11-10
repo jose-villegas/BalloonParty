@@ -14,6 +14,7 @@ var namespaceBalloonParty_1_1Scenario =
     [ "SkyScatterService", "classBalloonParty_1_1Scenario_1_1SkyScatterService.html", "classBalloonParty_1_1Scenario_1_1SkyScatterService" ],
     [ "SmokeFieldResources", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources" ],
     [ "SmokeFieldService", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html", "classBalloonParty_1_1Scenario_1_1SmokeFieldService" ],
+    [ "WaterImpactCollector", "classBalloonParty_1_1Scenario_1_1WaterImpactCollector.html", "classBalloonParty_1_1Scenario_1_1WaterImpactCollector" ],
     [ "GroundRevealAction", "namespaceBalloonParty_1_1Scenario.html#aa25d25fb5dff53352af120270a2820a8", [
       [ "None", "namespaceBalloonParty_1_1Scenario.html#aa25d25fb5dff53352af120270a2820a8a6adf97f83acf6453d4a6a4b1070f3754", null ],
       [ "Cut", "namespaceBalloonParty_1_1Scenario.html#aa25d25fb5dff53352af120270a2820a8aeb334dca00e390e0d3ebf52d205807d7", null ],

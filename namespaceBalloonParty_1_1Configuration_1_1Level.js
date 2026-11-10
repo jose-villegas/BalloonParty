@@ -1,9 +1,12 @@
 var namespaceBalloonParty_1_1Configuration_1_1Level =
 [
     [ "BalloonContentEntry", "structBalloonParty_1_1Configuration_1_1Level_1_1BalloonContentEntry.html", "structBalloonParty_1_1Configuration_1_1Level_1_1BalloonContentEntry" ],
+    [ "BubbleRiseCurve", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseCurve.html", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseCurve" ],
+    [ "BubbleRiseSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings" ],
     [ "BudgetFormula", "structBalloonParty_1_1Configuration_1_1Level_1_1BudgetFormula.html", "structBalloonParty_1_1Configuration_1_1Level_1_1BudgetFormula" ],
     [ "ContentWeightRamp", "structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html", "structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp" ],
     [ "GridActorContentEntry", "structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html", "structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry" ],
+    [ "IBubbleRiseSettings", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings" ],
     [ "IContentPiece", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece.html", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece" ],
     [ "ILevelPacingConfiguration", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration" ],
     [ "ILevelParameters", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters" ],
@@ -36,7 +39,8 @@ var namespaceBalloonParty_1_1Configuration_1_1Level =
     ] ],
     [ "ScenarioKind", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08", [
       [ "Sky", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08a03462a41aec357b74c89eb8d272532f7", null ],
-      [ "Ground", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08a3519d51443d41746a097cd54cd5c11cf", null ]
+      [ "Ground", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08a3519d51443d41746a097cd54cd5c11cf", null ],
+      [ "Water", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08a27634ff8002b12e75d98e07ccd005d18", null ]
     ] ],
     [ "SegmentMode", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a6f10485b2af91bced864457369fdcd4b", [
       [ "Smooth", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a6f10485b2af91bced864457369fdcd4bae510cdf33cd497134b47b9316314d4b4", null ],

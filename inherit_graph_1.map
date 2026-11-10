@@ -35,8 +35,8 @@
 <area shape="rect" id="Node000041" href="$interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IGridActorConfiguration.html" title=" " alt="" coords="260,645,507,685"/>
 <area shape="rect" id="Node000040" href="$classBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorConfiguration.html" title=" " alt="" coords="555,645,797,685"/>
 <area shape="poly" id="edge13_Node000041_Node000040" title=" " alt="" coords="520,663,555,663,555,668,520,668"/>
-<area shape="rect" id="Node000022" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html" title="Read&#45;only tuning for the ground backdrop (see GroundView)." alt="" coords="285,709,482,749"/>
-<area shape="rect" id="Node000021" href="$classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html" title="Authored tuning for the ground backdrop shown on ground levels: the floor quad and the grass blades o..." alt="" coords="577,709,775,749"/>
+<area shape="rect" id="Node000022" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html" title="Read&#45;only tuning for the surface backdrops (ground and water) (see GroundView)." alt="" coords="285,709,482,749"/>
+<area shape="rect" id="Node000021" href="$classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html" title="Authored tuning for the surface backdrops: the floor quad and the grass blades over it on ground leve..." alt="" coords="577,709,775,749"/>
 <area shape="poly" id="edge14_Node000022_Node000021" title=" " alt="" coords="495,727,577,727,577,732,495,732"/>
 <area shape="rect" id="Node000045" href="$interfaceBalloonParty_1_1Configuration_1_1Items_1_1IItemConfiguration.html" title=" " alt="" coords="285,773,482,813"/>
 <area shape="rect" id="Node000044" href="$classBalloonParty_1_1Configuration_1_1Items_1_1ItemConfiguration.html" title=" " alt="" coords="577,773,775,813"/>

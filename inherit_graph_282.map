@@ -1,5 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileFacingSource.html" title="Read&#45;only facing surface for the loaded/flying shot, exposed to a pooled (non&#45;injected) item visual —..." alt="" coords="5,5,177,45"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Projectile_1_1ProjectileFacingSource.html" title="Aggregates the DI&#45;only projectile providers (IProjectileRegistry, PredictionTraceProvider) with the f..." alt="" coords="225,5,396,45"/>
-<area shape="poly" id="edge514_Node000000_Node000001" title=" " alt="" coords="191,23,225,23,225,28,191,28"/>
+<area shape="rect" id="Node000000" href="$classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html" title="Plain C# so hit rules are testable without a collider." alt="" coords="5,5,232,45"/>
 </map>

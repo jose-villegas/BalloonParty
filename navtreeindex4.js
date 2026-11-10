@@ -1,5 +1,15 @@
 var NAVTREEINDEX4 =
 {
+"arch_score_cinematic.html#autotoc_md85":[2,8,0],
+"arch_score_cinematic.html#autotoc_md86":[2,8,0,0],
+"arch_score_cinematic.html#autotoc_md87":[2,8,0,1],
+"arch_screen_space_light.html":[2,16],
+"arch_screen_space_light.html#autotoc_md88":[2,16,0],
+"arch_screen_space_light.html#autotoc_md89":[2,16,0,0],
+"arch_screen_space_light.html#autotoc_md90":[2,16,0,1],
+"arch_screen_space_light.html#autotoc_md91":[2,16,0,2],
+"arch_screen_space_light.html#autotoc_md92":[2,16,0,3],
+"arch_screen_space_light.html#autotoc_md93":[2,16,0,4],
 "arch_shape_formations.html":[2,10],
 "arch_shape_formations.html#autotoc_md94":[2,10,0],
 "arch_shape_formations.html#autotoc_md95":[2,10,0,0],
@@ -239,15 +249,5 @@ var NAVTREEINDEX4 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration.html#ad3b80613cafbff067121b3ebc77b0053":[5,0,0,0,0,5,0],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration.html#ad3b80613cafbff067121b3ebc77b0053":[6,0,0,0,0,5,0],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration.html#af1dc545c627872866c5835178beed61f":[5,0,0,0,0,5,5],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration.html#af1dc545c627872866c5835178beed61f":[6,0,0,0,0,5,5],
-"classBalloonParty_1_1Audio_1_1Editor_1_1AttributionLedger.html":[5,0,0,0,1,0],
-"classBalloonParty_1_1Audio_1_1Editor_1_1AttributionLedger.html":[6,0,0,0,1,0],
-"classBalloonParty_1_1Audio_1_1Editor_1_1AttributionLedger.html#a489740d69df4881d8b4b36090eda7393":[5,0,0,0,1,0,5],
-"classBalloonParty_1_1Audio_1_1Editor_1_1AttributionLedger.html#a489740d69df4881d8b4b36090eda7393":[6,0,0,0,1,0,5],
-"classBalloonParty_1_1Audio_1_1Editor_1_1AttributionLedger.html#a6e78e274b92cce0e4b66002a9474129b":[5,0,0,0,1,0,4],
-"classBalloonParty_1_1Audio_1_1Editor_1_1AttributionLedger.html#a6e78e274b92cce0e4b66002a9474129b":[6,0,0,0,1,0,4],
-"classBalloonParty_1_1Audio_1_1Editor_1_1AttributionLedger.html#a85b72381f26a901a90ff9e43a1d3946a":[5,0,0,0,1,0,1],
-"classBalloonParty_1_1Audio_1_1Editor_1_1AttributionLedger.html#a85b72381f26a901a90ff9e43a1d3946a":[6,0,0,0,1,0,1],
-"classBalloonParty_1_1Audio_1_1Editor_1_1AttributionLedger.html#a9c594a2a73ee0e75cd8ae3ac6fc639d8":[5,0,0,0,1,0,3],
-"classBalloonParty_1_1Audio_1_1Editor_1_1AttributionLedger.html#a9c594a2a73ee0e75cd8ae3ac6fc639d8":[6,0,0,0,1,0,3]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration.html#af1dc545c627872866c5835178beed61f":[6,0,0,0,0,5,5]
 };

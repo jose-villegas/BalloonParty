@@ -115,15 +115,19 @@ $(function(){initNavTree('classBalloonParty_1_1Editor_1_1PencilFontBuilder.html'
 </div><!--header-->
 <div class="contents">
 
-<p>Makes the heads-ups' pencil font in one step: the Patrick Hand TMP font asset (created by TMP's own "Font Asset &gt; SDF" command, so it matches one made by hand), then sets it on the tooltip's label.  
+<p>Makes the heads-ups' pencil font in one step: the Patrick Hand TMP font asset (created by TMP's own "Font Asset &gt; SDF" command, so it matches one made by hand) on the pencil text shader, then sets it on the tooltip's label.  
  <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a94cdd84b1f633b10d41717e00dfed545" id="r_a94cdd84b1f633b10d41717e00dfed545"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a94cdd84b1f633b10d41717e00dfed545">ApplyPencilShader</a> (TMP_FontAsset fontAsset)</td></tr>
+<tr class="separator:a94cdd84b1f633b10d41717e00dfed545"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36402128798dc160e328e26525cae279" id="r_a36402128798dc160e328e26525cae279"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a36402128798dc160e328e26525cae279">Build</a> ()</td></tr>
 <tr class="separator:a36402128798dc160e328e26525cae279"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada0ace577d41b36f2027d3fbb7963c68" id="r_ada0ace577d41b36f2027d3fbb7963c68"><td class="memItemLeft" align="right" valign="top">static TMP_FontAsset&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada0ace577d41b36f2027d3fbb7963c68">CreateFontAsset</a> ()</td></tr>
 <tr class="separator:ada0ace577d41b36f2027d3fbb7963c68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a004195b20b8a1886ae4ebd6814726ece" id="r_a004195b20b8a1886ae4ebd6814726ece"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a004195b20b8a1886ae4ebd6814726ece">SetTextureIfMissing</a> (Material material, string property, string path)</td></tr>
+<tr class="separator:a004195b20b8a1886ae4ebd6814726ece"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -135,13 +139,42 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:acd1c7f9e7df6527c8fdc3b0eeb22a3a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a690e705abb30f20b254e53c6b49465d9" id="r_a690e705abb30f20b254e53c6b49465d9"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a690e705abb30f20b254e53c6b49465d9">MenuPath</a> = &quot;Tools/BalloonParty/HeadsUp/<a class="el" href="#a36402128798dc160e328e26525cae279">Build</a> Pencil Font&quot;</td></tr>
 <tr class="separator:a690e705abb30f20b254e53c6b49465d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cce0f79d9b88574a69cb9b6091667a2" id="r_a6cce0f79d9b88574a69cb9b6091667a2"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6cce0f79d9b88574a69cb9b6091667a2">NoiseTexturePath</a> = &quot;Assets/Textures/Text/pencil-noise.png&quot;</td></tr>
+<tr class="separator:a6cce0f79d9b88574a69cb9b6091667a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad26d7b13636ec15f11da60d2e4f09e5a" id="r_ad26d7b13636ec15f11da60d2e4f09e5a"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad26d7b13636ec15f11da60d2e4f09e5a">PencilShaderPath</a> = &quot;Assets/Shaders/BalloonParty/Text/PencilText.shader&quot;</td></tr>
+<tr class="separator:ad26d7b13636ec15f11da60d2e4f09e5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adef66381786938642909f4e5026c58e4" id="r_adef66381786938642909f4e5026c58e4"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adef66381786938642909f4e5026c58e4">SourceFontPath</a> = &quot;Assets/Fonts/PatrickHand-Regular.ttf&quot;</td></tr>
 <tr class="separator:adef66381786938642909f4e5026c58e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Makes the heads-ups' pencil font in one step: the Patrick Hand TMP font asset (created by TMP's own "Font Asset &gt; SDF" command, so it matches one made by hand), then sets it on the tooltip's label. </p>
+<div class="textblock"><p>Makes the heads-ups' pencil font in one step: the Patrick Hand TMP font asset (created by TMP's own "Font Asset &gt; SDF" command, so it matches one made by hand) on the pencil text shader, then sets it on the tooltip's label. </p>
 <p>Running it again reuses the existing font asset and only re-assigns it. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a94cdd84b1f633b10d41717e00dfed545" name="a94cdd84b1f633b10d41717e00dfed545"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94cdd84b1f633b10d41717e00dfed545">&#9670;&#160;</a></span>ApplyPencilShader()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void BalloonParty.Editor.PencilFontBuilder.ApplyPencilShader </td>
+          <td>(</td>
+          <td class="paramtype">TMP_FontAsset</td>          <td class="paramname"><span class="paramname"><em>fontAsset</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a36402128798dc160e328e26525cae279" name="a36402128798dc160e328e26525cae279"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a36402128798dc160e328e26525cae279">&#9670;&#160;</a></span>Build()</h2>
 
@@ -181,6 +214,40 @@ Static Private Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a004195b20b8a1886ae4ebd6814726ece" name="a004195b20b8a1886ae4ebd6814726ece"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a004195b20b8a1886ae4ebd6814726ece">&#9670;&#160;</a></span>SetTextureIfMissing()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void BalloonParty.Editor.PencilFontBuilder.SetTextureIfMissing </td>
+          <td>(</td>
+          <td class="paramtype">Material</td>          <td class="paramname"><span class="paramname"><em>material</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>property</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>path</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -270,6 +337,50 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">const string BalloonParty.Editor.PencilFontBuilder.MenuPath = &quot;Tools/BalloonParty/HeadsUp/<a class="el" href="#a36402128798dc160e328e26525cae279">Build</a> Pencil Font&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6cce0f79d9b88574a69cb9b6091667a2" name="a6cce0f79d9b88574a69cb9b6091667a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6cce0f79d9b88574a69cb9b6091667a2">&#9670;&#160;</a></span>NoiseTexturePath</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const string BalloonParty.Editor.PencilFontBuilder.NoiseTexturePath = &quot;Assets/Textures/Text/pencil-noise.png&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad26d7b13636ec15f11da60d2e4f09e5a" name="ad26d7b13636ec15f11da60d2e4f09e5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad26d7b13636ec15f11da60d2e4f09e5a">&#9670;&#160;</a></span>PencilShaderPath</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const string BalloonParty.Editor.PencilFontBuilder.PencilShaderPath = &quot;Assets/Shaders/BalloonParty/Text/PencilText.shader&quot;</td>
         </tr>
       </table>
   </td>

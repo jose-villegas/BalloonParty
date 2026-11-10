@@ -33,6 +33,7 @@ var dir_14eca4e58e6d71e3a9859288c1bd2735 =
     [ "PaintDripOverlayEditor.cs", "PaintDripOverlayEditor_8cs.html", "PaintDripOverlayEditor_8cs" ],
     [ "PaintSplashViewEditor.cs", "PaintSplashViewEditor_8cs.html", "PaintSplashViewEditor_8cs" ],
     [ "PencilFontBuilder.cs", "PencilFontBuilder_8cs.html", "PencilFontBuilder_8cs" ],
+    [ "PencilTextShaderGUI.cs", "PencilTextShaderGUI_8cs.html", "PencilTextShaderGUI_8cs" ],
     [ "PrefabRebuild.cs", "PrefabRebuild_8cs.html", "PrefabRebuild_8cs" ],
     [ "PropertyDrawerHelper.cs", "PropertyDrawerHelper_8cs.html", "PropertyDrawerHelper_8cs" ],
     [ "RainbowBalloonVariantEditor.cs", "RainbowBalloonVariantEditor_8cs.html", "RainbowBalloonVariantEditor_8cs" ],

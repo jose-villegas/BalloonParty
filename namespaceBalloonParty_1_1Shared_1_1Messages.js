@@ -45,6 +45,7 @@ var namespaceBalloonParty_1_1Shared_1_1Messages =
     [ "SpeckSpawnRequestMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeckSpawnRequestMessage" ],
     [ "SpeedTapMintedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage" ],
     [ "StreakChangedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage" ],
+    [ "StreakGrewMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1StreakGrewMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1StreakGrewMessage" ],
     [ "StrikethroughArrivedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1StrikethroughArrivedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1StrikethroughArrivedMessage" ],
     [ "ThrowerReadyMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ThrowerReadyMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ThrowerReadyMessage" ],
     [ "TooltipMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1TooltipMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1TooltipMessage" ],

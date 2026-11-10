@@ -139,8 +139,8 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1Score_1_1ScoreController.
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2ba268722270f08f0f2be10eb0e0995c" id="r_a2ba268722270f08f0f2be10eb0e0995c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2ba268722270f08f0f2be10eb0e0995c">ScoreController</a> (ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html">ScoreTrailArrivedMessage</a> &gt; trailArrivedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScoreLevelUpMessage.html">ScoreLevelUpMessage</a> &gt; levelUpSubscriber, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScorePointsGroupMessage.html">ScorePointsGroupMessage</a> &gt; scoredPublisher, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a> levelProgress, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> palette, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html">IRetryState</a> retryState, <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html">ColorStreakTracker</a> streakTracker, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ITimeOfDayNight.html">ITimeOfDayNight</a> timeOfDayNight)</td></tr>
-<tr class="separator:a2ba268722270f08f0f2be10eb0e0995c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bec1827b5cbecc01a194c9f0063f5e1" id="r_a5bec1827b5cbecc01a194c9f0063f5e1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5bec1827b5cbecc01a194c9f0063f5e1">ScoreController</a> (ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html">ScoreTrailArrivedMessage</a> &gt; trailArrivedSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScoreLevelUpMessage.html">ScoreLevelUpMessage</a> &gt; levelUpSubscriber, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScorePointsGroupMessage.html">ScorePointsGroupMessage</a> &gt; scoredPublisher, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1StreakGrewMessage.html">StreakGrewMessage</a> &gt; streakGrewPublisher, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a> levelProgress, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> palette, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html">IRetryState</a> retryState, <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html">ColorStreakTracker</a> streakTracker, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ITimeOfDayNight.html">ITimeOfDayNight</a> timeOfDayNight)</td></tr>
+<tr class="separator:a5bec1827b5cbecc01a194c9f0063f5e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa50b979a3ff223e981643100723f7c85" id="r_aa50b979a3ff223e981643100723f7c85"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa50b979a3ff223e981643100723f7c85">Dispose</a> ()</td></tr>
 <tr class="separator:aa50b979a3ff223e981643100723f7c85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adca9a5312c0407dec09d36d47db0c6a7" id="r_adca9a5312c0407dec09d36d47db0c6a7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adca9a5312c0407dec09d36d47db0c6a7">ResetRun</a> (int generation)</td></tr>
@@ -169,6 +169,8 @@ Properties</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a967e6fb78dd1b129b539bc0d09f2e537" id="r_a967e6fb78dd1b129b539bc0d09f2e537"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a967e6fb78dd1b129b539bc0d09f2e537">AnnounceStreakGrowth</a> (<a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1ColorStreak.html">ColorStreak</a> streak, int before, <a class="el" href="namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762">DamageFlags</a> flags, Vector3 worldPosition)</td></tr>
+<tr class="separator:a967e6fb78dd1b129b539bc0d09f2e537"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17ca817baffba507d7d9acdaeb7f2825" id="r_a17ca817baffba507d7d9acdaeb7f2825"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a17ca817baffba507d7d9acdaeb7f2825">ClearRunState</a> ()</td></tr>
 <tr class="separator:a17ca817baffba507d7d9acdaeb7f2825"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a682712772e6a2e4987183bf675fb10d4" id="r_a682712772e6a2e4987183bf675fb10d4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a682712772e6a2e4987183bf675fb10d4">CollectIncompleteColors</a> (List&lt; string &gt; incompleteColors)</td></tr>
@@ -213,6 +215,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a9a1274a06d830e7f56041f2304099b23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abff90c89430c564415a83ac83ecdcbf3" id="r_abff90c89430c564415a83ac83ecdcbf3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abff90c89430c564415a83ac83ecdcbf3">_snapCredit</a></td></tr>
 <tr class="separator:abff90c89430c564415a83ac83ecdcbf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0da6c86d794618474bbaa5ef5e19b40" id="r_ac0da6c86d794618474bbaa5ef5e19b40"><td class="memItemLeft" align="right" valign="top">readonly IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1StreakGrewMessage.html">StreakGrewMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac0da6c86d794618474bbaa5ef5e19b40">_streakGrewPublisher</a></td></tr>
+<tr class="separator:ac0da6c86d794618474bbaa5ef5e19b40"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29fc7e06c3688dad6d58a543beabe07b" id="r_a29fc7e06c3688dad6d58a543beabe07b"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1ColorStreakTracker.html">ColorStreakTracker</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29fc7e06c3688dad6d58a543beabe07b">_streakTracker</a></td></tr>
 <tr class="separator:a29fc7e06c3688dad6d58a543beabe07b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ca9d1079345f47e3bf2d9539f39a7fb" id="r_a4ca9d1079345f47e3bf2d9539f39a7fb"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ITimeOfDayNight.html">ITimeOfDayNight</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ca9d1079345f47e3bf2d9539f39a7fb">_timeOfDayNight</a></td></tr>
@@ -226,14 +230,16 @@ Private Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
+<tr class="memitem:ab8ab0bae461dff038d617bbba4f4c95b" id="r_ab8ab0bae461dff038d617bbba4f4c95b"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8ab0bae461dff038d617bbba4f4c95b">MinAnnouncedStreak</a> = 2</td></tr>
+<tr class="separator:ab8ab0bae461dff038d617bbba4f4c95b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa30002226082a5378488bf1779183a2" id="r_afa30002226082a5378488bf1779183a2"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa30002226082a5378488bf1779183a2">NightScoreMultiplier</a> = 2</td></tr>
 <tr class="separator:afa30002226082a5378488bf1779183a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="namespaceBalloonParty_1_1Game_1_1Score.html">Score</a> keeping only — level progression lives in <code><a class="el" href="classBalloonParty_1_1Game_1_1Level_1_1LevelController.html" title="Owns the player&#39;s progression through levels — current level, per-colour progress,...">LevelController</a></code>. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a2ba268722270f08f0f2be10eb0e0995c" name="a2ba268722270f08f0f2be10eb0e0995c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2ba268722270f08f0f2be10eb0e0995c">&#9670;&#160;</a></span>ScoreController()</h2>
+<a id="a5bec1827b5cbecc01a194c9f0063f5e1" name="a5bec1827b5cbecc01a194c9f0063f5e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5bec1827b5cbecc01a194c9f0063f5e1">&#9670;&#160;</a></span>ScoreController()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -252,6 +258,11 @@ Static Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScorePointsGroupMessage.html">ScorePointsGroupMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>scoredPublisher</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1StreakGrewMessage.html">StreakGrewMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>streakGrewPublisher</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -284,6 +295,45 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a967e6fb78dd1b129b539bc0d09f2e537" name="a967e6fb78dd1b129b539bc0d09f2e537"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a967e6fb78dd1b129b539bc0d09f2e537">&#9670;&#160;</a></span>AnnounceStreakGrowth()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Game.Score.ScoreController.AnnounceStreakGrowth </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1ColorStreak.html">ColorStreak</a></td>          <td class="paramname"><span class="paramname"><em>streak</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>before</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762">DamageFlags</a></td>          <td class="paramname"><span class="paramname"><em>flags</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>worldPosition</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a17ca817baffba507d7d9acdaeb7f2825" name="a17ca817baffba507d7d9acdaeb7f2825"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a17ca817baffba507d7d9acdaeb7f2825">&#9670;&#160;</a></span>ClearRunState()</h2>
 
@@ -864,6 +914,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ac0da6c86d794618474bbaa5ef5e19b40" name="ac0da6c86d794618474bbaa5ef5e19b40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0da6c86d794618474bbaa5ef5e19b40">&#9670;&#160;</a></span>_streakGrewPublisher</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly IPublisher&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1StreakGrewMessage.html">StreakGrewMessage</a>&gt; BalloonParty.Game.Score.ScoreController._streakGrewPublisher</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a29fc7e06c3688dad6d58a543beabe07b" name="a29fc7e06c3688dad6d58a543beabe07b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a29fc7e06c3688dad6d58a543beabe07b">&#9670;&#160;</a></span>_streakTracker</h2>
 
@@ -968,6 +1040,28 @@ Static Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab8ab0bae461dff038d617bbba4f4c95b" name="ab8ab0bae461dff038d617bbba4f4c95b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8ab0bae461dff038d617bbba4f4c95b">&#9670;&#160;</a></span>MinAnnouncedStreak</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int BalloonParty.Game.Score.ScoreController.MinAnnouncedStreak = 2</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

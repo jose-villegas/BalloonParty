@@ -116,7 +116,7 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1Level_1_1Scenari
 </div><!--header-->
 <div class="contents">
 
-<p>Pure, seeded answer to "is this level in the sky or on the ground, and how far into that stretch?".  
+<p>Pure, seeded answer to "is this level in the sky, on the ground or over water, and how far into that stretch?  
  <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
@@ -133,15 +133,26 @@ Static Public Member Functions</h2></td></tr>
 Static Package Functions</h2></td></tr>
 <tr class="memitem:a50c9ea342bda52c77759de9b281ede81" id="r_a50c9ea342bda52c77759de9b281ede81"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a50c9ea342bda52c77759de9b281ede81">StretchLength</a> (<a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html">ScenarioScheduleSettings</a> settings, <a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> kind, int stretchStart, int salt)</td></tr>
 <tr class="separator:a50c9ea342bda52c77759de9b281ede81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5eb0bdbdc9e99e16388d64c1e58994f0" id="r_a5eb0bdbdc9e99e16388d64c1e58994f0"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5eb0bdbdc9e99e16388d64c1e58994f0">SurfaceKind</a> (<a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html">ScenarioScheduleSettings</a> settings, int stretchStart, int salt)</td></tr>
+<tr class="separator:a5eb0bdbdc9e99e16388d64c1e58994f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
 <tr class="memitem:a156af539cc8c16b1e9b8f1d16bf41964" id="r_a156af539cc8c16b1e9b8f1d16bf41964"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a156af539cc8c16b1e9b8f1d16bf41964">FirstGroundRollKey</a> = 0</td></tr>
 <tr class="separator:a156af539cc8c16b1e9b8f1d16bf41964"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f56b9081a68a783ba94867e007ea2c0" id="r_a1f56b9081a68a783ba94867e007ea2c0"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1f56b9081a68a783ba94867e007ea2c0">WaterRollSalt</a> = 0x5A7E2</td></tr>
+<tr class="separator:a1f56b9081a68a783ba94867e007ea2c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8fca6c9d1211ef267b07a524e4acc7d" id="r_af8fca6c9d1211ef267b07a524e4acc7d"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af8fca6c9d1211ef267b07a524e4acc7d">WaterRollSteps</a> = 10000</td></tr>
+<tr class="separator:af8fca6c9d1211ef267b07a524e4acc7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Pure, seeded answer to "is this level in the sky or on the ground, and how far into that stretch?". </p>
-<p>Sky until <a class="el" href="#ae81e5608caa0719077926a62618225fb" title="The level the first ground stretch starts on: the opening sky&#39;s last level plus one.">FirstGroundLevel</a>, rolled between <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#a68ab32e90aced83183e70f667135fd8d">ScenarioScheduleSettings.GroundFromLevel</a> and <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#a4b2636f51bca61697513151e0636ab75">ScenarioScheduleSettings.GroundByLevel</a>, then a ground stretch of a fixed <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#a2c644691811c447a06a42c1e16fb5951">ScenarioScheduleSettings.FirstGroundStretch</a>, then alternating sky and ground stretches, each lasting a rolled number of levels in its own range. Every roll hashes with the schedule's salt mixed with the run's seed, so each run lays out its own ground and sky, and within a run the same level always gets the same answer, so a retry keeps it. A run seed of 0 is the schedule with no run mixed in, for the editor preview and tests. </p>
+<div class="textblock"><p>Pure, seeded answer to "is this level in the sky, on the ground or over water, and how far into that stretch? </p>
+<p>". Sky until &lt;see cref="FirstGroundLevel" /&gt;, rolled between
+    &lt;see cref="<a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#a68ab32e90aced83183e70f667135fd8d">ScenarioScheduleSettings.GroundFromLevel</a>" /&gt; and
+    &lt;see cref="<a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#a4b2636f51bca61697513151e0636ab75">ScenarioScheduleSettings.GroundByLevel</a>" /&gt;, then a ground stretch of a fixed
+    &lt;see cref="<a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#a2c644691811c447a06a42c1e16fb5951">ScenarioScheduleSettings.FirstGroundStretch</a>" /&gt;, then sky and surface stretches alternate,
+    each lasting a rolled number of levels in its own range. Every later surface stretch is water or a
+    meadow by its own roll (&lt;see cref="<a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#a990f9f77ccda7e93f4be62f3237196ed">ScenarioScheduleSettings.WaterShare</a>" /&gt;), made after its length, so water changes which surface a stretch shows but never where the stretches fall. Every roll hashes with the schedule's salt mixed with the run's seed, so each run lays out its own surfaces and sky, and within a run the same level always gets the same answer, so a retry keeps it. A run seed of 0 is the schedule with no run mixed in, for the editor preview and tests. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ae81e5608caa0719077926a62618225fb" name="ae81e5608caa0719077926a62618225fb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae81e5608caa0719077926a62618225fb">&#9670;&#160;</a></span>FirstGroundLevel()</h2>
@@ -281,6 +292,40 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a5eb0bdbdc9e99e16388d64c1e58994f0" name="a5eb0bdbdc9e99e16388d64c1e58994f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5eb0bdbdc9e99e16388d64c1e58994f0">&#9670;&#160;</a></span>SurfaceKind()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> BalloonParty.Configuration.Level.ScenarioSchedule.SurfaceKind </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html">ScenarioScheduleSettings</a></td>          <td class="paramname"><span class="paramname"><em>settings</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>stretchStart</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>salt</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a156af539cc8c16b1e9b8f1d16bf41964" name="a156af539cc8c16b1e9b8f1d16bf41964"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a156af539cc8c16b1e9b8f1d16bf41964">&#9670;&#160;</a></span>FirstGroundRollKey</h2>
@@ -293,6 +338,50 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">const int BalloonParty.Configuration.Level.ScenarioSchedule.FirstGroundRollKey = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1f56b9081a68a783ba94867e007ea2c0" name="a1f56b9081a68a783ba94867e007ea2c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f56b9081a68a783ba94867e007ea2c0">&#9670;&#160;</a></span>WaterRollSalt</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int BalloonParty.Configuration.Level.ScenarioSchedule.WaterRollSalt = 0x5A7E2</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af8fca6c9d1211ef267b07a524e4acc7d" name="af8fca6c9d1211ef267b07a524e4acc7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af8fca6c9d1211ef267b07a524e4acc7d">&#9670;&#160;</a></span>WaterRollSteps</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int BalloonParty.Configuration.Level.ScenarioSchedule.WaterRollSteps = 10000</td>
         </tr>
       </table>
   </td>

@@ -142,6 +142,9 @@ Package Functions</h2></td></tr>
 <tr class="separator:ac4c25e5dc69360d64ecf24512c3b1489"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41d5260b03f2978310fa53f3a17742f9" id="r_a41d5260b03f2978310fa53f3a17742f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a41d5260b03f2978310fa53f3a17742f9">Restart</a> ()</td></tr>
 <tr class="separator:a41d5260b03f2978310fa53f3a17742f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15e31ad2c9089dce7adc422f7469c049" id="r_a15e31ad2c9089dce7adc422f7469c049"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a15e31ad2c9089dce7adc422f7469c049">TakeWaitedAtCap</a> ()</td></tr>
+<tr class="memdesc:a15e31ad2c9089dce7adc422f7469c049"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads <a class="el" href="#a087f9e2deb92c74136cbe23ffcda3ba3" title="Whether every slot under the cap has been taken at some tick since this ball loaded or its last ready...">WaitedAtCap</a> for a ready being announced, and starts the next wait clear: a ball that goes unready (a level-up phase) and ready again didn't wait at the cap twice.  <br /></td></tr>
+<tr class="separator:a15e31ad2c9089dce7adc422f7469c049"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -152,6 +155,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a1b45c24712a9dcd2fb974bbb77d61cb3" id="r_a1b45c24712a9dcd2fb974bbb77d61cb3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1b45c24712a9dcd2fb974bbb77d61cb3">SlidePosition</a><code> [get]</code></td></tr>
 <tr class="memdesc:a1b45c24712a9dcd2fb974bbb77d61cb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The eased 0 (pivot) to 1 (muzzle) position of the held ball; 1 only once loaded.  <br /></td></tr>
 <tr class="separator:a1b45c24712a9dcd2fb974bbb77d61cb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a087f9e2deb92c74136cbe23ffcda3ba3" id="r_a087f9e2deb92c74136cbe23ffcda3ba3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a087f9e2deb92c74136cbe23ffcda3ba3">WaitedAtCap</a><code> [get, private set]</code></td></tr>
+<tr class="memdesc:a087f9e2deb92c74136cbe23ffcda3ba3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether every slot under the cap has been taken at some tick since this ball loaded or its last ready was announced (<a class="el" href="#a15e31ad2c9089dce7adc422f7469c049" title="Reads WaitedAtCap for a ready being announced, and starts the next wait clear: a ball that goes unrea...">TakeWaitedAtCap</a>).  <br /></td></tr>
+<tr class="separator:a087f9e2deb92c74136cbe23ffcda3ba3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -338,6 +344,33 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a15e31ad2c9089dce7adc422f7469c049" name="a15e31ad2c9089dce7adc422f7469c049"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15e31ad2c9089dce7adc422f7469c049">&#9670;&#160;</a></span>TakeWaitedAtCap()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Thrower.ThrowerReload.TakeWaitedAtCap </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reads <a class="el" href="#a087f9e2deb92c74136cbe23ffcda3ba3" title="Whether every slot under the cap has been taken at some tick since this ball loaded or its last ready...">WaitedAtCap</a> for a ready being announced, and starts the next wait clear: a ball that goes unready (a level-up phase) and ready again didn't wait at the cap twice. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a8a4df87be04037b423286b37078e6bf7" name="a8a4df87be04037b423286b37078e6bf7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8a4df87be04037b423286b37078e6bf7">&#9670;&#160;</a></span>_busyDuration</h2>
@@ -515,6 +548,30 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The eased 0 (pivot) to 1 (muzzle) position of the held ball; 1 only once loaded. </p>
+
+</div>
+</div>
+<a id="a087f9e2deb92c74136cbe23ffcda3ba3" name="a087f9e2deb92c74136cbe23ffcda3ba3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a087f9e2deb92c74136cbe23ffcda3ba3">&#9670;&#160;</a></span>WaitedAtCap</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Thrower.ThrowerReload.WaitedAtCap</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel private-set">private set</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Whether every slot under the cap has been taken at some tick since this ball loaded or its last ready was announced (<a class="el" href="#a15e31ad2c9089dce7adc422f7469c049" title="Reads WaitedAtCap for a ready being announced, and starts the next wait clear: a ball that goes unrea...">TakeWaitedAtCap</a>). </p>
 
 </div>
 </div>

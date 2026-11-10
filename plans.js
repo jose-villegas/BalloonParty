@@ -1,6 +1,6 @@
 var plans =
 [
-    [ "Plans", "plans.html#autotoc_md778", null ],
+    [ "Plans", "plans.html#autotoc_md789", null ],
     [ "Bubble Cluster Hit Feedback", "plan_bubble_cluster_hit_feedback.html", [
       [ "Bubble Cluster Hit Feedback", "plan_bubble_cluster_hit_feedback.html#autotoc_md322", [
         [ "Goals", "plan_bubble_cluster_hit_feedback.html#autotoc_md324", null ],
@@ -246,6 +246,20 @@ var plans =
         [ "Later: the full biome system (unscheduled)", "plan_terrain_biomes.html#autotoc_md768", null ]
       ] ]
     ] ],
+    [ "Water Scenario & Bubble Merge", "plan_water_scenario.html", [
+      [ "Water scenario, rising bubbles and the bubble merge", "plan_water_scenario.html#autotoc_md769", [
+        [ "Owner direction (2026-11-10)", "plan_water_scenario.html#autotoc_md771", null ],
+        [ "What exists (verified 2026-11-10)", "plan_water_scenario.html#autotoc_md772", null ],
+        [ "Design", "plan_water_scenario.html#autotoc_md773", [
+          [ "Water in the schedule", "plan_water_scenario.html#autotoc_md774", null ],
+          [ "The water backdrop", "plan_water_scenario.html#autotoc_md775", null ],
+          [ "Bubbles that build up on water", "plan_water_scenario.html#autotoc_md776", null ],
+          [ "The merge", "plan_water_scenario.html#autotoc_md777", null ]
+        ] ],
+        [ "Owner decisions (2026-11-10)", "plan_water_scenario.html#autotoc_md778", null ],
+        [ "Phases", "plan_water_scenario.html#autotoc_md779", null ]
+      ] ]
+    ] ],
     [ "Gameplay Telemetry", "plan_gameplay_telemetry.html", [
       [ "Gameplay Metrics & Telemetry", "plan_gameplay_telemetry.html#autotoc_md522", [
         [ "Status", "plan_gameplay_telemetry.html#autotoc_md524", [
@@ -384,14 +398,14 @@ var plans =
       ] ]
     ] ],
     [ "Web Demo Hosting", "plan_web_demo_hosting.html", [
-      [ "Web Demo Hosting", "plan_web_demo_hosting.html#autotoc_md769", [
-        [ "Why keep it", "plan_web_demo_hosting.html#autotoc_md771", null ],
-        [ "What survived", "plan_web_demo_hosting.html#autotoc_md772", null ],
-        [ "The recipe, if resumed", "plan_web_demo_hosting.html#autotoc_md773", null ],
-        [ "The blocker", "plan_web_demo_hosting.html#autotoc_md774", null ],
-        [ "Residue from the attempt", "plan_web_demo_hosting.html#autotoc_md775", null ],
-        [ "If web stays dead", "plan_web_demo_hosting.html#autotoc_md776", null ],
-        [ "Decision log", "plan_web_demo_hosting.html#autotoc_md777", null ]
+      [ "Web Demo Hosting", "plan_web_demo_hosting.html#autotoc_md780", [
+        [ "Why keep it", "plan_web_demo_hosting.html#autotoc_md782", null ],
+        [ "What survived", "plan_web_demo_hosting.html#autotoc_md783", null ],
+        [ "The recipe, if resumed", "plan_web_demo_hosting.html#autotoc_md784", null ],
+        [ "The blocker", "plan_web_demo_hosting.html#autotoc_md785", null ],
+        [ "Residue from the attempt", "plan_web_demo_hosting.html#autotoc_md786", null ],
+        [ "If web stays dead", "plan_web_demo_hosting.html#autotoc_md787", null ],
+        [ "Decision log", "plan_web_demo_hosting.html#autotoc_md788", null ]
       ] ]
     ] ],
     [ "Level-Up Timing", "plan_level_up_timing.html", [

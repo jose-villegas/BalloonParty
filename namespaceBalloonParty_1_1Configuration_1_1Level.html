@@ -118,6 +118,12 @@ $(function(){initNavTree('namespaceBalloonParty_1_1Configuration_1_1Level.html',
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1BalloonContentEntry.html">BalloonContentEntry</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseCurve.html">BubbleRiseCurve</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pure answer to "what share of a line's places are bubbles, this far into a water level?": none during the grace, then a straight climb from <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html#ae7d1b3cf4e16e5eadcc19856f0ccbc26" title="Share of a line&#39;s places that are bubbles as the grace ends (0..1).">IBubbleRiseSettings.StartShare</a> to <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html#a7c9940e26db07e1d8f4aeb848e7675b6" title="Share of a line&#39;s places that are bubbles once the ramp is done (0..1).">IBubbleRiseSettings.MaxShare</a> over <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html#af57a2e7d6f7c0f78d3bcdb4329b10f95" title="Seconds after the grace the share takes to climb from start to max.">IBubbleRiseSettings.RampSeconds</a>, then held.  <a href="classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseCurve.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html">BubbleRiseSettings</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The bubbles that come in with the clock's lines on water levels, a growing share of every line the longer the level runs (<a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseCurve.html" title="Pure answer to &quot;what share of a line&#39;s places are bubbles, this far into a water level?...">BubbleRiseCurve</a>).  <a href="classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1BudgetFormula.html">BudgetFormula</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A level's budget: a base, plus a step per level after the first, never past a cap.  <a href="structBalloonParty_1_1Configuration_1_1Level_1_1BudgetFormula.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -126,6 +132,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html">GridActorContentEntry</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A grid actor in the catalogue. Actors block the board, so they're paid from the threat budget.  <a href="structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html">IBubbleRiseSettings</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read-only tuning for the bubbles that come in with the lines on water levels; see <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseCurve.html" title="Pure answer to &quot;what share of a line&#39;s places are bubbles, this far into a water level?...">BubbleRiseCurve</a>.  <a href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece.html">IContentPiece</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A catalogue entry the level generator can include in a level.  <a href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece.html#details">More...</a><br /></td></tr>
@@ -183,10 +192,10 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedItemEntry.html">ResolvedItemEntry</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioSchedule.html">ScenarioSchedule</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pure, seeded answer to "is this level in the sky or on the ground, and how far into that stretch?".  <a href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioSchedule.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pure, seeded answer to "is this level in the sky, on the ground or over water, and how far into that stretch?  <a href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioSchedule.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html">ScenarioScheduleSettings</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Which levels are set on the ground and which in the sky; read through <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioSchedule.html" title="Pure, seeded answer to &quot;is this level in the sky or on the ground, and how far into that stretch?...">ScenarioSchedule</a>.  <a href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Which levels are set in the sky, on the ground or over water; read through <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioSchedule.html" title="Pure, seeded answer to &quot;is this level in the sky, on the ground or over water, and how far into that ...">ScenarioSchedule</a>.  <a href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1ScenarioStretch.html">ScenarioStretch</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where a level sits in the run's scenario schedule: the stretch's scenario, the level's place in it (0 = the stretch's first level) and how many levels the stretch lasts.  <a href="structBalloonParty_1_1Configuration_1_1Level_1_1ScenarioStretch.html#details">More...</a><br /></td></tr>
@@ -210,8 +219,9 @@ Enumerations</h2></td></tr>
 <tr class="separator:a866818b2757667473c47a5f54ecd7c61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01e4593a9e3e5db9a1d18043a7098c08" id="r_a01e4593a9e3e5db9a1d18043a7098c08"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> { <a class="el" href="#a01e4593a9e3e5db9a1d18043a7098c08a03462a41aec357b74c89eb8d272532f7">Sky</a> = 0
 , <a class="el" href="#a01e4593a9e3e5db9a1d18043a7098c08a3519d51443d41746a097cd54cd5c11cf">Ground</a> = 1
+, <a class="el" href="#a01e4593a9e3e5db9a1d18043a7098c08a27634ff8002b12e75d98e07ccd005d18">Water</a> = 2
  }</td></tr>
-<tr class="memdesc:a01e4593a9e3e5db9a1d18043a7098c08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where a level is set: open sky, or the ground the board rests on.  <a href="#a01e4593a9e3e5db9a1d18043a7098c08">More...</a><br /></td></tr>
+<tr class="memdesc:a01e4593a9e3e5db9a1d18043a7098c08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where a level is set: open sky, or one of the surfaces the board rests over (a meadow, or water).  <a href="#a01e4593a9e3e5db9a1d18043a7098c08">More...</a><br /></td></tr>
 <tr class="separator:a01e4593a9e3e5db9a1d18043a7098c08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f10485b2af91bced864457369fdcd4b" id="r_a6f10485b2af91bced864457369fdcd4b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f10485b2af91bced864457369fdcd4b">SegmentMode</a> { <a class="el" href="#a6f10485b2af91bced864457369fdcd4bae510cdf33cd497134b47b9316314d4b4">Smooth</a>
 , <a class="el" href="#a6f10485b2af91bced864457369fdcd4ba32a843da6ea40ab3b17a3421ccdf671b">Linear</a>
@@ -275,10 +285,11 @@ Enumerations</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Where a level is set: open sky, or the ground the board rests on. </p>
+<p>Where a level is set: open sky, or one of the surfaces the board rests over (a meadow, or water). </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a01e4593a9e3e5db9a1d18043a7098c08a03462a41aec357b74c89eb8d272532f7" name="a01e4593a9e3e5db9a1d18043a7098c08a03462a41aec357b74c89eb8d272532f7"></a>Sky&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a01e4593a9e3e5db9a1d18043a7098c08a3519d51443d41746a097cd54cd5c11cf" name="a01e4593a9e3e5db9a1d18043a7098c08a3519d51443d41746a097cd54cd5c11cf"></a>Ground&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a01e4593a9e3e5db9a1d18043a7098c08a27634ff8002b12e75d98e07ccd005d18" name="a01e4593a9e3e5db9a1d18043a7098c08a27634ff8002b12e75d98e07ccd005d18"></a>Water&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>

@@ -6,6 +6,7 @@ var interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration
     [ "ScenarioForLevel", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#acb9d4e6cb5b4c8093a33ff6ea5be0956", null ],
     [ "SeedForLevel", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#a2f4b5d69a3c1c7965cd0e3f3a3e79d04", null ],
     [ "ThresholdForLevel", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#a0a402590276276532114beaa43098433", null ],
+    [ "BubbleRise", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#abb6cfe2651270ba34003a4dc45264127", null ],
     [ "DebugPresets", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#a9194824970276fefd009ced094c08603", null ],
     [ "SpawnClock", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#ad862b1390b2758345251f0a76a6768d2", null ]
 ];

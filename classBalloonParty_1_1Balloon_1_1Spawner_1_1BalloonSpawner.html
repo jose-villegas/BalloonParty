@@ -112,6 +112,7 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpaw
 <a href="#pac-methods">Package Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner-members.html">List of all members</a>  </div>
@@ -153,8 +154,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a56e875c9dc477badd5ccb81ca7bafe10" id="r_a56e875c9dc477badd5ccb81ca7bafe10"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a56e875c9dc477badd5ccb81ca7bafe10">BalloonSpawner</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html">IBalloonsConfiguration</a> balloonsConfig, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html">IActiveLevelParameters</a> levelParams, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html">ILevelPacingConfiguration</a> pacing, IObjectResolver resolver, <a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html">PoolManager</a> poolManager, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBalloonLineMessage.html">SpawnBalloonLineMessage</a> &gt; lineSubscriber, <a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html">BalloonBalancer</a> balancer, <a class="el" href="classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonFactory.html">BalloonFactory</a> factory, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BalanceBalloonsMessage.html">BalanceBalloonsMessage</a> &gt; balancePublisher, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html">ActorHitMessage</a> &gt; hitSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScoreLevelUpMessage.html">ScoreLevelUpMessage</a> &gt; levelUpSubscriber, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ItemCheckMessage.html">ItemCheckMessage</a> &gt; itemCheckPublisher, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html">WaveDamageMessage</a> &gt; waveDamagePublisher, <a class="el" href="classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html">RejectedBalloonEffect</a> rejectedBalloon, <a class="el" href="classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPlacementResolver.html">BalloonPlacementResolver</a> placement, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a> levelProgress)</td></tr>
-<tr class="separator:a56e875c9dc477badd5ccb81ca7bafe10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab612866684784b8d6a3fd96e5948e78f" id="r_ab612866684784b8d6a3fd96e5948e78f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab612866684784b8d6a3fd96e5948e78f">BalloonSpawner</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html">IBalloonsConfiguration</a> balloonsConfig, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html">IActiveLevelParameters</a> levelParams, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html">ILevelPacingConfiguration</a> pacing, IObjectResolver resolver, <a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html">PoolManager</a> poolManager, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBalloonLineMessage.html">SpawnBalloonLineMessage</a> &gt; lineSubscriber, <a class="el" href="classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html">BalloonBalancer</a> balancer, <a class="el" href="classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonFactory.html">BalloonFactory</a> factory, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BalanceBalloonsMessage.html">BalanceBalloonsMessage</a> &gt; balancePublisher, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html">ActorHitMessage</a> &gt; hitSubscriber, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ScoreLevelUpMessage.html">ScoreLevelUpMessage</a> &gt; levelUpSubscriber, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ItemCheckMessage.html">ItemCheckMessage</a> &gt; itemCheckPublisher, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html">WaveDamageMessage</a> &gt; waveDamagePublisher, <a class="el" href="classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html">RejectedBalloonEffect</a> rejectedBalloon, <a class="el" href="classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPlacementResolver.html">BalloonPlacementResolver</a> placement, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a> levelProgress, <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html">ISpawnClock</a> spawnClock, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed.html">IRunSeed</a> runSeed)</td></tr>
+<tr class="separator:ab612866684784b8d6a3fd96e5948e78f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -197,6 +198,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a4c13958a41df7d8797fb4665fb1322f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6cc133e19e6a97897fbb81e8d8a51c62" id="r_a6cc133e19e6a97897fbb81e8d8a51c62"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6cc133e19e6a97897fbb81e8d8a51c62">ReleaseUnspawnedBatch</a> ()</td></tr>
 <tr class="separator:a6cc133e19e6a97897fbb81e8d8a51c62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cb005cfe24aa0111acb2daf0dfb374f" id="r_a6cb005cfe24aa0111acb2daf0dfb374f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html">BalloonPrefabEntry</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6cb005cfe24aa0111acb2daf0dfb374f">RollWaterBubble</a> (float share)</td></tr>
+<tr class="separator:a6cb005cfe24aa0111acb2daf0dfb374f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a35715d31d14d5d8db1f415e670f782a6" id="r_a35715d31d14d5d8db1f415e670f782a6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a35715d31d14d5d8db1f415e670f782a6">SpawnBalloon</a> (Vector2Int slot, <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html">BalloonPrefabEntry</a> entry)</td></tr>
 <tr class="separator:a35715d31d14d5d8db1f415e670f782a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a210661511ad9f58e506fa8b86a163e14" id="r_a210661511ad9f58e506fa8b86a163e14"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a210661511ad9f58e506fa8b86a163e14">SpawnLine</a> ()</td></tr>
@@ -205,6 +208,13 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:ad3632a8481288199d2b8c4f5b985fc7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad25c1e2781f31755dccefc69c0f8ddc" id="r_aad25c1e2781f31755dccefc69c0f8ddc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aad25c1e2781f31755dccefc69c0f8ddc">SpawnLooseBalloons</a> (int count)</td></tr>
 <tr class="separator:aad25c1e2781f31755dccefc69c0f8ddc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5a3c8d3df43074b84941d1e64209885" id="r_ae5a3c8d3df43074b84941d1e64209885"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae5a3c8d3df43074b84941d1e64209885">WaterBubbleShare</a> ()</td></tr>
+<tr class="separator:ae5a3c8d3df43074b84941d1e64209885"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a10ae6cd8a1d3ae0d31c22076be1e5c27" id="r_a10ae6cd8a1d3ae0d31c22076be1e5c27"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html">BalloonPrefabEntry</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a10ae6cd8a1d3ae0d31c22076be1e5c27">FindEntry</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html">IBalloonsConfiguration</a> config, <a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60e">BalloonType</a> type)</td></tr>
+<tr class="separator:a10ae6cd8a1d3ae0d31c22076be1e5c27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -218,6 +228,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a41eb85de68f7b2ddacefff3b018496f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d32237e3fd819c2e45928f4e8be0b81" id="r_a4d32237e3fd819c2e45928f4e8be0b81"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4d32237e3fd819c2e45928f4e8be0b81">_batchCursor</a></td></tr>
 <tr class="separator:a4d32237e3fd819c2e45928f4e8be0b81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b5bab94e077469d8ca70ba5474631ef" id="r_a6b5bab94e077469d8ca70ba5474631ef"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html">BalloonPrefabEntry</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6b5bab94e077469d8ca70ba5474631ef">_bubbleEntry</a></td></tr>
+<tr class="separator:a6b5bab94e077469d8ca70ba5474631ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aedfecc55e208276aa6cb6147c6b417cc" id="r_aedfecc55e208276aa6cb6147c6b417cc"><td class="memItemLeft" align="right" valign="top">readonly Comparison&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aedfecc55e208276aa6cb6147c6b417cc">_byColumnKey</a></td></tr>
 <tr class="separator:aedfecc55e208276aa6cb6147c6b417cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a934e774d9fb03c6a2ceb9e8354f3ed91" id="r_a934e774d9fb03c6a2ceb9e8354f3ed91"><td class="memItemLeft" align="right" valign="top">int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a934e774d9fb03c6a2ceb9e8354f3ed91">_columnSortKeys</a></td></tr>
@@ -266,12 +278,18 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a3a398fe114ce54f423794b74fd0104cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f7ad8e4ae3207b4d8a6ade54bccf7df" id="r_a5f7ad8e4ae3207b4d8a6ade54bccf7df"><td class="memItemLeft" align="right" valign="top">readonly IObjectResolver&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5f7ad8e4ae3207b4d8a6ade54bccf7df">_resolver</a></td></tr>
 <tr class="separator:a5f7ad8e4ae3207b4d8a6ade54bccf7df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f556c22cebff934c30824b7fc8d9be3" id="r_a2f556c22cebff934c30824b7fc8d9be3"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed.html">IRunSeed</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f556c22cebff934c30824b7fc8d9be3">_runSeed</a></td></tr>
+<tr class="separator:a2f556c22cebff934c30824b7fc8d9be3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6cc527c29b2d7bf16ea59b6c25af234a" id="r_a6cc527c29b2d7bf16ea59b6c25af234a"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html">BalloonPrefabEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6cc527c29b2d7bf16ea59b6c25af234a">_spawnBatch</a> = new()</td></tr>
 <tr class="separator:a6cc527c29b2d7bf16ea59b6c25af234a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0cf9a73647ab309d9a6fff5ebe2930a7" id="r_a0cf9a73647ab309d9a6fff5ebe2930a7"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html">ISpawnClock</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0cf9a73647ab309d9a6fff5ebe2930a7">_spawnClock</a></td></tr>
+<tr class="separator:a0cf9a73647ab309d9a6fff5ebe2930a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff08ff00311e470044ed10b8d9129c6e" id="r_aff08ff00311e470044ed10b8d9129c6e"><td class="memItemLeft" align="right" valign="top">readonly List&lt; Vector3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff08ff00311e470044ed10b8d9129c6e">_spawnPathBuffer</a> = new()</td></tr>
 <tr class="separator:aff08ff00311e470044ed10b8d9129c6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a587de79ef0b4f85c14024728a72cfae2" id="r_a587de79ef0b4f85c14024728a72cfae2"><td class="memItemLeft" align="right" valign="top">readonly CompositeDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a587de79ef0b4f85c14024728a72cfae2">_subscriptions</a> = new()</td></tr>
 <tr class="separator:a587de79ef0b4f85c14024728a72cfae2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fbf9e595d30981c9168394a74248662" id="r_a0fbf9e595d30981c9168394a74248662"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0fbf9e595d30981c9168394a74248662">_waterBatch</a></td></tr>
+<tr class="separator:a0fbf9e595d30981c9168394a74248662"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b662632e8d9d37208dabb1c1d085d4f" id="r_a0b662632e8d9d37208dabb1c1d085d4f"><td class="memItemLeft" align="right" valign="top">readonly IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html">WaveDamageMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b662632e8d9d37208dabb1c1d085d4f">_waveDamagePublisher</a></td></tr>
 <tr class="separator:a0b662632e8d9d37208dabb1c1d085d4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9593ea4e856d1a0b190bf38b88b295c5" id="r_a9593ea4e856d1a0b190bf38b88b295c5"><td class="memItemLeft" align="right" valign="top">readonly Dictionary&lt; string, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9593ea4e856d1a0b190bf38b88b295c5">_waveQuotas</a> = new()</td></tr>
@@ -283,8 +301,8 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:a247e490b50566756b301095e4329d25d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a56e875c9dc477badd5ccb81ca7bafe10" name="a56e875c9dc477badd5ccb81ca7bafe10"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a56e875c9dc477badd5ccb81ca7bafe10">&#9670;&#160;</a></span>BalloonSpawner()</h2>
+<a id="ab612866684784b8d6a3fd96e5948e78f" name="ab612866684784b8d6a3fd96e5948e78f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab612866684784b8d6a3fd96e5948e78f">&#9670;&#160;</a></span>BalloonSpawner()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -375,7 +393,17 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a></td>          <td class="paramname"><span class="paramname"><em>levelProgress</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a></td>          <td class="paramname"><span class="paramname"><em>levelProgress</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html">ISpawnClock</a></td>          <td class="paramname"><span class="paramname"><em>spawnClock</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed.html">IRunSeed</a></td>          <td class="paramname"><span class="paramname"><em>runSeed</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -484,6 +512,35 @@ Static Private Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a10ae6cd8a1d3ae0d31c22076be1e5c27" name="a10ae6cd8a1d3ae0d31c22076be1e5c27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10ae6cd8a1d3ae0d31c22076be1e5c27">&#9670;&#160;</a></span>FindEntry()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html">BalloonPrefabEntry</a> BalloonParty.Balloon.Spawner.BalloonSpawner.FindEntry </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html">IBalloonsConfiguration</a></td>          <td class="paramname"><span class="paramname"><em>config</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60e">BalloonType</a></td>          <td class="paramname"><span class="paramname"><em>type</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -853,6 +910,31 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a6cb005cfe24aa0111acb2daf0dfb374f" name="a6cb005cfe24aa0111acb2daf0dfb374f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6cb005cfe24aa0111acb2daf0dfb374f">&#9670;&#160;</a></span>RollWaterBubble()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html">BalloonPrefabEntry</a> BalloonParty.Balloon.Spawner.BalloonSpawner.RollWaterBubble </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>share</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ab7ee27b0bdba9f7c28a9188bf4d0f604" name="ab7ee27b0bdba9f7c28a9188bf4d0f604"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab7ee27b0bdba9f7c28a9188bf4d0f604">&#9670;&#160;</a></span>SpawnAsync()</h2>
 
@@ -993,6 +1075,31 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ae5a3c8d3df43074b84941d1e64209885" name="ae5a3c8d3df43074b84941d1e64209885"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5a3c8d3df43074b84941d1e64209885">&#9670;&#160;</a></span>WaterBubbleShare()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Balloon.Spawner.BalloonSpawner.WaterBubbleShare </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a464ead961ac707a8f540a672d312656b" name="a464ead961ac707a8f540a672d312656b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a464ead961ac707a8f540a672d312656b">&#9670;&#160;</a></span>_activeCounts</h2>
@@ -1093,6 +1200,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">int BalloonParty.Balloon.Spawner.BalloonSpawner._batchCursor</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6b5bab94e077469d8ca70ba5474631ef" name="a6b5bab94e077469d8ca70ba5474631ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b5bab94e077469d8ca70ba5474631ef">&#9670;&#160;</a></span>_bubbleEntry</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html">BalloonPrefabEntry</a> BalloonParty.Balloon.Spawner.BalloonSpawner._bubbleEntry</td>
         </tr>
       </table>
   </td>
@@ -1632,6 +1761,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a2f556c22cebff934c30824b7fc8d9be3" name="a2f556c22cebff934c30824b7fc8d9be3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f556c22cebff934c30824b7fc8d9be3">&#9670;&#160;</a></span>_runSeed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed.html">IRunSeed</a> BalloonParty.Balloon.Spawner.BalloonSpawner._runSeed</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a6cc527c29b2d7bf16ea59b6c25af234a" name="a6cc527c29b2d7bf16ea59b6c25af234a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6cc527c29b2d7bf16ea59b6c25af234a">&#9670;&#160;</a></span>_spawnBatch</h2>
 
@@ -1643,6 +1794,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly List&lt;<a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html">BalloonPrefabEntry</a>&gt; BalloonParty.Balloon.Spawner.BalloonSpawner._spawnBatch = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0cf9a73647ab309d9a6fff5ebe2930a7" name="a0cf9a73647ab309d9a6fff5ebe2930a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0cf9a73647ab309d9a6fff5ebe2930a7">&#9670;&#160;</a></span>_spawnClock</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html">ISpawnClock</a> BalloonParty.Balloon.Spawner.BalloonSpawner._spawnClock</td>
         </tr>
       </table>
   </td>
@@ -1687,6 +1860,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly CompositeDisposable BalloonParty.Balloon.Spawner.BalloonSpawner._subscriptions = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0fbf9e595d30981c9168394a74248662" name="a0fbf9e595d30981c9168394a74248662"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0fbf9e595d30981c9168394a74248662">&#9670;&#160;</a></span>_waterBatch</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Balloon.Spawner.BalloonSpawner._waterBatch</td>
         </tr>
       </table>
   </td>

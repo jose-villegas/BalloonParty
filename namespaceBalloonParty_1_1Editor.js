@@ -32,6 +32,7 @@ var namespaceBalloonParty_1_1Editor =
     [ "PaintDripOverlayEditor", "classBalloonParty_1_1Editor_1_1PaintDripOverlayEditor.html", "classBalloonParty_1_1Editor_1_1PaintDripOverlayEditor" ],
     [ "PaintSplashViewEditor", "classBalloonParty_1_1Editor_1_1PaintSplashViewEditor.html", "classBalloonParty_1_1Editor_1_1PaintSplashViewEditor" ],
     [ "PencilFontBuilder", "classBalloonParty_1_1Editor_1_1PencilFontBuilder.html", "classBalloonParty_1_1Editor_1_1PencilFontBuilder" ],
+    [ "PencilTextShaderGUI", "classBalloonParty_1_1Editor_1_1PencilTextShaderGUI.html", "classBalloonParty_1_1Editor_1_1PencilTextShaderGUI" ],
     [ "PrefabRebuild", "classBalloonParty_1_1Editor_1_1PrefabRebuild.html", "classBalloonParty_1_1Editor_1_1PrefabRebuild" ],
     [ "PropertyDrawerHelper", "classBalloonParty_1_1Editor_1_1PropertyDrawerHelper.html", "classBalloonParty_1_1Editor_1_1PropertyDrawerHelper" ],
     [ "RainbowBalloonVariantEditor", "classBalloonParty_1_1Editor_1_1RainbowBalloonVariantEditor.html", "classBalloonParty_1_1Editor_1_1RainbowBalloonVariantEditor" ],

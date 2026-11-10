@@ -24,6 +24,6 @@
 <area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="522,319,550,311,609,294,667,275,759,235,762,240,669,280,611,299,551,316,523,324"/>
 <area shape="rect" id="Node000011" href="$structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html" title="Pure — resolved once when a level begins, never re&#45;rolled per turn." alt="" coords="5,359,203,399"/>
 <area shape="poly" id="edge14_Node000010_Node000011" title=" " alt="" coords="216,379,297,375,362,363,363,368,298,380,216,385"/>
-<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html" title="Which levels are set on the ground and which in the sky; read through ScenarioSchedule." alt="" coords="321,389,551,429"/>
+<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html" title="Which levels are set in the sky, on the ground or over water; read through ScenarioSchedule." alt="" coords="321,389,551,429"/>
 <area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="526,383,550,375,610,354,667,324,729,279,779,236,782,240,733,283,669,329,612,358,552,380,528,388"/>
 </map>

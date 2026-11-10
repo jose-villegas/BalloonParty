@@ -25,6 +25,7 @@ var searchData=
   ['4_20phases_22',['4. Phases',['../plan_shot_solver_accuracy.html#autotoc_md732',1,'']]],
   ['4_20rendering_23',['4. Rendering',['../plan_headsup.html#autotoc_md636',1,'']]],
   ['4_20tap_20bilinear_20blur_20pass_201_20·_20with_20g6_24',['G3 — 4-tap bilinear blur (Pass 1) · with G6',['../plan_performance_recovery.html#autotoc_md710',1,'']]],
-  ['4_20tutorial_20ui_25',['4.4 Tutorial UI',['../plan_future_ideas.html#autotoc_md449',1,'']]],
-  ['4_3a_20generated_20levels_26',['7. Phase 4: generated levels',['../plan_fast_paced.html#autotoc_md418',1,'']]]
+  ['4_20the_20merge_25',['4. The merge',['../plan_water_scenario.html#autotoc_md777',1,'']]],
+  ['4_20tutorial_20ui_26',['4.4 Tutorial UI',['../plan_future_ideas.html#autotoc_md449',1,'']]],
+  ['4_3a_20generated_20levels_27',['7. Phase 4: generated levels',['../plan_fast_paced.html#autotoc_md418',1,'']]]
 ];

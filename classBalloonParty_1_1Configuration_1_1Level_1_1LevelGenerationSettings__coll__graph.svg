@@ -306,7 +306,7 @@ var sectionId = 'dynsection-0';
 <!-- Node12 -->
 <g id="Node000012" class="node">
 <title>Node12</title>
-<g id="a_Node000012"><a xlink:href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html" target="_top" xlink:title="Which levels are set on the ground and which in the sky; read through ScenarioSchedule.">
+<g id="a_Node000012"><a xlink:href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioScheduleSettings.html" target="_top" xlink:title="Which levels are set in the sky, on the ground or over water; read through ScenarioSchedule.">
 <polygon fill="white" stroke="#666666" points="409,-30 237,-30 237,0 409,0 409,-30"/>
 <text text-anchor="start" x="245" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text text-anchor="middle" x="323" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Level.ScenarioScheduleSettings</text>

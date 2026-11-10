@@ -157,9 +157,14 @@ Package Functions</h2></td></tr>
 Properties</h2></td></tr>
 <tr class="memitem:af7a083b8d376d9a8afd522de9282c078" id="r_af7a083b8d376d9a8afd522de9282c078"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af7a083b8d376d9a8afd522de9282c078">IsPiercing</a><code> [get]</code></td></tr>
 <tr class="separator:af7a083b8d376d9a8afd522de9282c078"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39c25ce11aa99ba47c4d471a9a55a7e8" id="r_a39c25ce11aa99ba47c4d471a9a55a7e8"><td class="memItemLeft" align="right" valign="top">IObservable&lt; <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a39c25ce11aa99ba47c4d471a9a55a7e8">PierceArmed</a><code> [get]</code></td></tr>
+<tr class="memdesc:a39c25ce11aa99ba47c4d471a9a55a7e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">A shot whose piercing went from off to on, once per arming.  <br /></td></tr>
+<tr class="separator:a39c25ce11aa99ba47c4d471a9a55a7e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a907bcfbb2d59bdc192cb76e8b607f66b" id="r_a907bcfbb2d59bdc192cb76e8b607f66b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a907bcfbb2d59bdc192cb76e8b607f66b">OnPiercingChanged</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> projectile, bool piercing)</td></tr>
+<tr class="separator:a907bcfbb2d59bdc192cb76e8b607f66b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43483086e0512c9253be336127af9390" id="r_a43483086e0512c9253be336127af9390"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a43483086e0512c9253be336127af9390">OnProjectileLoaded</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html">ProjectileLoadedMessage</a> msg)</td></tr>
 <tr class="separator:a43483086e0512c9253be336127af9390"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87ad92ba659f50203ff6156dbfabbe48" id="r_a87ad92ba659f50203ff6156dbfabbe48"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a87ad92ba659f50203ff6156dbfabbe48">OnRetired</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> projectile)</td></tr>
@@ -173,6 +178,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a9115b0bba45a794df1c1fe118aa2f7dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a489fe1fbd8466ba909de58ffa380c90b" id="r_a489fe1fbd8466ba909de58ffa380c90b"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html">ProjectileLoadedMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a489fe1fbd8466ba909de58ffa380c90b">_loadedSubscriber</a></td></tr>
 <tr class="separator:a489fe1fbd8466ba909de58ffa380c90b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39ed757f98dca84c5f6a45f56b8796df" id="r_a39ed757f98dca84c5f6a45f56b8796df"><td class="memItemLeft" align="right" valign="top">readonly Subject&lt; <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a39ed757f98dca84c5f6a45f56b8796df">_pierceArmed</a> = new()</td></tr>
+<tr class="separator:a39ed757f98dca84c5f6a45f56b8796df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39615871c8d6b5fa8c73c73a8a63b551" id="r_a39615871c8d6b5fa8c73c73a8a63b551"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html">IProjectileRegistry</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a39615871c8d6b5fa8c73c73a8a63b551">_projectiles</a></td></tr>
 <tr class="separator:a39615871c8d6b5fa8c73c73a8a63b551"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81e5c4504bd1653233ff7a4b67a07505" id="r_a81e5c4504bd1653233ff7a4b67a07505"><td class="memItemLeft" align="right" valign="top">readonly CompositeDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a81e5c4504bd1653233ff7a4b67a07505">_subscriptions</a> = new()</td></tr>
@@ -226,6 +233,35 @@ Private Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a907bcfbb2d59bdc192cb76e8b607f66b" name="a907bcfbb2d59bdc192cb76e8b607f66b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a907bcfbb2d59bdc192cb76e8b607f66b">&#9670;&#160;</a></span>OnPiercingChanged()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Projectile.Controller.ActiveProjectilePierce.OnPiercingChanged </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a></td>          <td class="paramname"><span class="paramname"><em>projectile</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>piercing</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -367,6 +403,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a39ed757f98dca84c5f6a45f56b8796df" name="a39ed757f98dca84c5f6a45f56b8796df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39ed757f98dca84c5f6a45f56b8796df">&#9670;&#160;</a></span>_pierceArmed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly Subject&lt;<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a>&gt; BalloonParty.Projectile.Controller.ActiveProjectilePierce._pierceArmed = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a39615871c8d6b5fa8c73c73a8a63b551" name="a39615871c8d6b5fa8c73c73a8a63b551"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a39615871c8d6b5fa8c73c73a8a63b551">&#9670;&#160;</a></span>_projectiles</h2>
 
@@ -455,6 +513,33 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce.html#a1cf6f845902e47a97b1b6bba9925ec70">BalloonParty.Projectile.Controller.IActiveProjectilePierce</a>.</p>
+
+</div>
+</div>
+<a id="a39c25ce11aa99ba47c4d471a9a55a7e8" name="a39c25ce11aa99ba47c4d471a9a55a7e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39c25ce11aa99ba47c4d471a9a55a7e8">&#9670;&#160;</a></span>PierceArmed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IObservable&lt;<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a>&gt; BalloonParty.Projectile.Controller.ActiveProjectilePierce.PierceArmed</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A shot whose piercing went from off to on, once per arming. </p>
+<p>Unlike <a class="el" href="#af7a083b8d376d9a8afd522de9282c078">IsPiercing</a> it fires again when a second shot arms while the first still pierces, and not when a banked Snipe charge keeps a shot armed through its discharge. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Controller_1_1IActiveProjectilePierce.html#a7174a1908a3d7feca82fee45a1692236">BalloonParty.Projectile.Controller.IActiveProjectilePierce</a>.</p>
 
 </div>
 </div>

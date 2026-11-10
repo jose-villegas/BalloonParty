@@ -1,0 +1,5 @@
+<map id="BalloonParty.Configuration.Level.BubbleRiseSettings" name="BalloonParty.Configuration.Level.BubbleRiseSettings">
+<area shape="rect" id="Node000001" title="The bubbles that come in with the clock&#39;s lines on water levels, a growing share of every line the lo..." alt="" coords="5,93,203,133"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html" title="Read&#45;only tuning for the bubbles that come in with the lines on water levels; see BubbleRiseCurve." alt="" coords="5,5,203,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,59,107,93,101,93,101,59"/>
+</map>

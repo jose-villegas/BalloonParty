@@ -23,5 +23,11 @@ var interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings =
     [ "RevealEdgeWander", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#ac9da2e1f0e7118210223d9d1b23790dc", null ],
     [ "SortingLayerName", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#a6fb9572e78235e74f339d5797cc013bd", null ],
     [ "SortingOrder", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#a32dc4308ea45cd714b5d50d27264a5b1", null ],
-    [ "WakeMaterial", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#a96dce93b7f438bb3de664ec7341aa712", null ]
+    [ "WakeMaterial", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#a96dce93b7f438bb3de664ec7341aa712", null ],
+    [ "WaterBounceReference", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#a33312dbf735e86619a9c3217a302c018", null ],
+    [ "WaterCausticMaterial", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#a9b2c6f0f650cd881f2ef17fe79735ffb", null ],
+    [ "WaterCausticResolution", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#abc42915a38c2771ee9fdfcc9f3fe49e4", null ],
+    [ "WaterMaterial", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#a5e1f29ff7b1050396e41f6ba7520a77e", null ],
+    [ "WaterRippleMaterial", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#a6b81d726c35f7e887e783633b65fe2d9", null ],
+    [ "WaterRippleTexelsPerUnit", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#a4eaf1515b7887b407da00ce4ef573105", null ]
 ];
