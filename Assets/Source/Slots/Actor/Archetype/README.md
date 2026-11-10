@@ -55,7 +55,9 @@ divided by how much the quad has been scaled since it was configured (`_RestScal
 old world math at rest, since origin == bounds center and the scale is unchanged then); `BushView` offsets
 its baked world matrices by how far its transform has moved or scaled from where it was configured (its
 live matrix times its rest inverse, a no-op at rest). The sky/ground mist reveal scales the root about the
-camera (`ScenarioContentRoot.SetDepth`), so both follow it too. Both capture their rest state when they are
+camera (`ScenarioContentRoot.SetDepth`), so both follow it too, and the bushes also fade with the meadow's
+hole through it (`GroundSceneryAt` in `Ground.cginc`, read by `BushLeaf` and `BushBranch`): the meadow and its
+bushes leave for the sky, or arrive from it, together. Both capture their rest state when they are
 configured, which must happen with the root at rest: unmoved and unscaled. See the plan's Phase 3b notes
 for the full rationale.
 

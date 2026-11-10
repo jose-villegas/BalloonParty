@@ -58,6 +58,14 @@ float GroundCoverageAt(float2 worldPos)
     return saturate(_GroundCoverage);
 }
 
+// How much of the meadow's own scenery (its bushes) shows at a world position. Through a reveal it shows only where
+// the ground does, so it closes into the mist with the meadow going up and opens out of it with the meadow coming
+// down. At rest it shows in full, so a bush a debug preset places on a sky level still draws.
+float GroundSceneryAt(float2 worldPos)
+{
+    return _GroundReveal.x > 0.5 ? GroundCoverageAt(worldPos) : 1.0;
+}
+
 // How large the meadow looks: below 1 while a reveal shows it deeper than the sky, 1 at rest.
 float GroundRevealGroundScale()
 {

@@ -62,6 +62,7 @@ Shader "BalloonParty/Grid/BushLeaf"
             #include "../Include/SceneLight.cginc"
             #include "../Include/SpriteScale.cginc"
             #include "../Include/Composite.cginc"
+            #include "../Include/Ground.cginc"
 
             sampler2D _MainTex;
             fixed4 _LeafColor;
@@ -114,6 +115,8 @@ Shader "BalloonParty/Grid/BushLeaf"
                 // coherent across the whole leaf — no bending across a single leaf.
                 float3 lightTint : TEXCOORD5;
                 float  shadowFade : TEXCOORD6;
+                // Per leaf too, so a leaf leaves with the ground under it whole, like a grass blade with its root.
+                float  groundFade : TEXCOORD7;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -218,6 +221,7 @@ Shader "BalloonParty/Grid/BushLeaf"
 
                 o.lightTint = SceneLightTintAtLOD(leafWorldPos);
                 o.shadowFade = ShadowLightFadeAtLOD(leafWorldPos);
+                o.groundFade = GroundSceneryAt(leafWorldPos);
 
                 return o;
             }
@@ -291,7 +295,9 @@ Shader "BalloonParty/Grid/BushLeaf"
                 // glint); softness/alpha math above is untouched.
                 col.rgb = lerp(col.rgb, _HighlightColor.rgb * i.lightTint, hlMask * _HighlightColor.a);
 
-                return PorterDuffOver(col, shadow);
+                fixed4 leaf = PorterDuffOver(col, shadow);
+                leaf.a *= i.groundFade;
+                return leaf;
             }
             ENDCG
         }

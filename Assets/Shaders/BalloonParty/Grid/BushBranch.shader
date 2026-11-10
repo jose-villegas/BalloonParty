@@ -47,6 +47,7 @@ Shader "BalloonParty/Grid/BushBranch"
             #include "../Include/SceneLight.cginc"
             #include "../Include/SpriteScale.cginc"
             #include "../Include/Composite.cginc"
+            #include "../Include/Ground.cginc"
 
             sampler2D _MainTex;
             sampler2D _BranchGradient;
@@ -183,7 +184,11 @@ Shader "BalloonParty/Grid/BushBranch"
                 // Composite: AO (bottom) ← shadow ← branch (top)
                 fixed4 base = PorterDuffOver(shadow, ao);
                 fixed4 branch = fixed4(col, branchAlpha);
-                return PorterDuffOver(branch, base);
+                fixed4 bush = PorterDuffOver(branch, base);
+
+                // Through a mist reveal the bush shows only where its meadow does, shadow and AO included.
+                bush.a *= GroundSceneryAt(i.worldPos);
+                return bush;
             }
             ENDCG
         }

@@ -144,6 +144,11 @@ Plan: `Plans/PLAN-TerrainBiomes.md`.
   hole: 1 inside, 0 outside, soft over `RevealEdgeSoftness`, from `GroundRevealDistance`, a signed distance
   from the hole's wandering edge built from two sine waves, with no texture so every reader can afford it.
   Every reader follows the hole during a reveal with no change of its own.
+  `GroundSceneryAt(worldPos)` is the same hole for the meadow's own scenery, the bushes (`BushLeaf` per leaf,
+  `BushBranch` per pixel): through a reveal a bush shows only where its ground does, so going up to the sky the
+  outgoing bushes close into the mist with the meadow instead of sliding out over the mist and the sky, and
+  coming down the incoming ones open out of it with the meadow. At rest it is 1 whatever the scenario, so a
+  bush a debug preset places on a sky level still draws.
   `GroundRevealGroundScale` and `GroundRevealSkyScale` give the two layers' scales (1 at rest), and
   `GroundPointAt` the ground point a world position shows through the meadow's scroll and scale. The floor
   and the blades read their patches, dirt and gusts through it; the blades keep their world spacing so the
