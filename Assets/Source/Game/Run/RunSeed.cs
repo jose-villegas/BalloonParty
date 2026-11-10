@@ -36,6 +36,14 @@ namespace BalloonParty.Game.Run
                 return;
             }
 
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
+            if (BalloonParty.Cheats.CheatState.KeepRunSeed)
+            {
+                BalloonParty.Cheats.CheatState.KeepRunSeed = false;
+                return;
+            }
+#endif
+
             Roll();
         }
 

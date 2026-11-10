@@ -40,6 +40,23 @@ namespace BalloonParty.Tests.Game
             Assert.AreEqual(first, _seed.Value);
         }
 
+#if UNITY_ENABLE_CHECKS
+        [Test]
+        public void KeepRunSeed_KeepsTheSeedForOneResetOnly()
+        {
+            var first = _seed.Value;
+            BalloonParty.Cheats.CheatState.KeepRunSeed = true;
+
+            _seed.ResetRun(1);
+            var kept = _seed.Value;
+            _seed.ResetRun(2);
+
+            Assert.AreEqual(first, kept);
+            Assert.AreNotEqual(first, _seed.Value);
+            Assert.IsFalse(BalloonParty.Cheats.CheatState.KeepRunSeed);
+        }
+#endif
+
         [Test]
         public void ResetOrder_RunsBeforeTheResolverReadsItAndBeforeTheRetryLevelIsCleared()
         {
