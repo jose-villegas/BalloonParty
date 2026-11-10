@@ -63,13 +63,16 @@ sky hiding all apply to water unchanged (the planner and the curve read "not sky
 "ground"). The water settings (material, colours, ripple tuning) live on `GroundSettings` next to
 the floor's, through `IGroundSettings`.
 
-- The ripples are a wave simulation (`WaterRippleBuffer`, `WaterRipple.shader`): a height field
-  over the disturbance field's bounds, 12 texels per world unit, stepped by the wave equation at a
-  fixed 1/60 s. Wherever the field gained a push since the last step the water is pressed down
-  (saturating, so a pop presses only a little deeper than a passing ball), and the dip travels
-  outward as rings at 2.4 world units a second, fading over 1.4 s; the edges soak rings up. The
-  surface's slope (`Include/WaterSurface.cginc`) is that field's plus a slow swell of two noise
-  layers on different headings, the smaller slower, travelling with the content root.
+- Every impact the game reports (`ImpactEventBus`: each step of a ball's flight, pops, bombs,
+  balloons gliding in) starts a ring (`WaterRippleBuffer`, `WaterRipple.shader`). Impacts close in
+  place and time join one ring, so a ball leaves a trail of rings. Each frame, the rings in flight
+  (up to 48) are drawn into a height field over the disturbance field's bounds, 16 texels per
+  world unit. A ring is a short packet of crests walking outward at 1.8 world units a second,
+  0.4 apart, flattening as it spreads and fading over 0.9 s. The surface's slope
+  (`Include/WaterSurface.cginc`) is that field's plus a slow swell of two noise layers on
+  different headings, the smaller slower, travelling with the content root. Each ring also throws
+  a bright and a dark band on the sand and sheens the surface whatever the sun's angle, so it
+  reads at any time of day.
 - The water has depth. A noise map lays sandbanks and deep channels (0.6 to 4.5 world units). The
   bottom is seen as from a camera above the middle of the screen, so a deeper bottom shrinks toward
   the middle and slides slower when the board scrolls; the surface's slope bends the view of it in
@@ -95,7 +98,10 @@ the floor's, through `IGroundSettings`.
   out as soft blobs that didn't read as caustics. Sparkles from fine noise waves read as static.
   Rings drawn straight from the field (`sin(k·push + ωt)·push`) kept the push's shape and wobbled
   in place like gel, and a flat two-colour bottom gave the water no volume (owner: "behaves more
-  like a gel, ripples don't travel. Also lacks depth").
+  like a gel, ripples don't travel. Also lacks depth"). A wave-equation simulation came next.
+  Driven by the soft, board-wide field it only sloshed in big blobs; driven by the impacts, its
+  dozens of rings a second interfered into a chop in which no ring read (owner: "I don't see
+  ripples"). Drawing each ring on its own fixed that.
   The tile's cell wrap uses `id - n·floor((id + 0.5)/n)`, not `fmod`: GPU division is
   approximate, `fmod(10, 5)` can return 5, and the tile then shows a seam.
 

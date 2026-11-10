@@ -26,8 +26,8 @@ namespace BalloonParty.Scenario.View
     ///     also plays the drop between the layers (<see cref="GroundRevealDepth" />): it scales the meadow, the
     ///     cloud backdrop and the content root about the camera, so going down the ground grows into place and
     ///     going up it falls away. On water levels the same floor quad draws the water surface
-    ///     (<c>BalloonParty/Scenario/Water</c>) instead of the meadow, with no blades: its rings travel on a wave
-    ///     simulation the disturbance field presses (<see cref="WaterRippleBuffer" />) and bend the caustic net
+    ///     (<c>BalloonParty/Scenario/Water</c>) instead of the meadow, with no blades: every impact the game reports
+    ///     starts a ring that travels outward (<see cref="WaterRippleBuffer" />), and the rings bend the caustic net
     ///     under it (<see cref="WaterCausticBuffer" />), and
     ///     the reveal, the depth and the coverage play the same way. Sky always sits between two surfaces in the
     ///     schedule, so a reveal never swaps one surface for the other; a cut between them just swaps the floor's
@@ -62,6 +62,7 @@ namespace BalloonParty.Scenario.View
         private IActiveScenario _scenario;
         private ISkyBackdrop _sky;
         private ScenarioContentRoot _scenarioRoot;
+        private WaterImpactCollector _impacts;
         // Scenario, like the sky it replaces, so SceneCaptureService captures the meadow for the GI. Its shaders
         // write colour only, never the capture's coverage alpha, so the full-screen ground doesn't read as one
         // big occluder. NameToLayer cannot be called from a static field initializer on a MonoBehaviour.
@@ -149,18 +150,21 @@ namespace BalloonParty.Scenario.View
 
             if (_quad == null || !_quad.activeSelf)
             {
+                _impacts.Clear();
                 return;
             }
 
             if (_surface == ScenarioKind.Water)
             {
                 _caustics?.Tick();
-                _ripples?.Tick(Time.deltaTime);
+                _ripples?.Tick(Time.deltaTime, _impacts.Impacts);
             }
             else
             {
                 _wake?.Tick(Time.deltaTime, _settings.BladeRecoverySeconds);
             }
+
+            _impacts.Clear();
 
             // Heading for the sky, the meadow on screen is the outgoing one: it leaves with the old bushes. Into a
             // meadow, or within one, it is the incoming one and rides in with the new bushes. Scaled like them, about
@@ -217,12 +221,13 @@ namespace BalloonParty.Scenario.View
         [Inject]
         internal void Construct(
             IGroundSettings settings, IGameDisplayConfiguration display, IActiveScenario scenario,
-            ScenarioContentRoot scenarioRoot, IObjectResolver resolver)
+            ScenarioContentRoot scenarioRoot, WaterImpactCollector impacts, IObjectResolver resolver)
         {
             _settings = settings;
             _display = display;
             _scenario = scenario;
             _scenarioRoot = scenarioRoot;
+            _impacts = impacts;
 
             // AppLifetimeScope registers the sky only when its settings asset is wired; without it there is
             // nothing to hide, so this is an optional lookup rather than a constructor dependency.

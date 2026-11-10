@@ -33,7 +33,7 @@ Material:
     - _CausticSecondScale: 1.73
     - _CausticShift: 0.35
     - _CausticSplit: 0.025
-    - _CausticStrength: 0.6
+    - _CausticStrength: 0.45
     - _CausticTileSize: 4.5
     - _CausticWobble: 0.1
     - _CausticWobbleSize: 3
@@ -48,7 +48,9 @@ Material:
     - _LightInfluence: 0.7
     - _Perspective: 0.035
     - _Refraction: 0.1
+    - _RippleFocus: 2
     - _RippleHeight: 0.025
+    - _RippleSheen: 1.3
     - _SandRippleSize: 0.7
     - _SandRippleStrength: 0.12
     - _ShallowDepth: 0.6

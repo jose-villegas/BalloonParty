@@ -79,12 +79,12 @@ namespace BalloonParty.Configuration.Effects
         [Range(64, 512)]
         [SerializeField] private int _waterCausticResolution = 256;
 
-        [Tooltip("Material using Hidden/BalloonParty/Scenario/WaterRipple: the wave simulation the surface's rings travel on (their speed, fade and drive are tuned there; their height on the water material). Without one the surface only swells.")]
+        [Tooltip("Material using Hidden/BalloonParty/Scenario/WaterRipple: draws the rings each impact starts (their speed, wavelength, fade and drive are tuned there; how they shade the water on the water material). Without one the surface only swells.")]
         [SerializeField] private Material _waterRippleMaterial;
 
-        [Tooltip("Texels per world unit of the ripple simulation, which covers the camera's view. More = finer rings, and more pixels stepped every frame.")]
+        [Tooltip("Texels per world unit of the ripple height field, which covers the camera's view and is redrawn every frame on water levels. More = smoother rings, and more pixels drawn.")]
         [Range(4f, 24f)]
-        [SerializeField] private float _waterRippleTexelsPerUnit = 12f;
+        [SerializeField] private float _waterRippleTexelsPerUnit = 16f;
 
         [Tooltip("The water's average unlit colour, which the GI measures bounce against on water levels, as it does the meadow's on ground levels.")]
         [SerializeField] private Color _waterBounceReference = new(0.125f, 0.30f, 0.33f, 1f);

@@ -176,23 +176,31 @@ bounce reference to `WaterBounceReference`.
   slides slower when the board scrolls, and the surface's slope bends the view of it more over deep water.
   The sand carries ripple bands and the caustic net (below), shaded around the sand's own colour, never
   added past it. The water over it absorbs each colour by its own rate per world unit (red first, blue
-  last) and scatters its own colour back, so shallows read as sand and deep water as teal. On top, slopes
-  facing the sun catch a soft highlight and crests turned just so between the sun and the eye glint. Lit by
+  last) and scatters its own colour back, so shallows read as sand and deep water as teal. Each ripple ring
+  throws a bright band and a dark band on the sand (light focused under its trough, spread under its crest)
+  and sheens the surface, whatever the sun's angle. On top, slopes facing the sun catch a soft highlight and
+  crests turned just so between the sun and the eye glint. Lit by
   the scene-light field at 0.7 influence (a warm evening tints the water rather than turning it olive), with
   light above full eased in so a pop's glow doesn't clip to white; premultiplied by `GroundCoverageAt`,
   like the floor.
 - `Shaders/BalloonParty/Include/WaterSurface.cginc`: the surface's slope: a slow swell of two noise layers
   on different headings (the smaller slower, as shorter waves are), travelling with the board, plus the
-  rings of the ripple simulation (below). The slope is what bends the bottom and catches the light.
-- `View/WaterRippleBuffer.cs` + `Shaders/BalloonParty/Scenario/WaterRipple.shader`: the ripples. A wave
-  equation over a height field covering the disturbance field, in its UV space (`IGroundSettings.
-  WaterRippleTexelsPerUnit`, 12), published as `_WaterRippleTex`. Wherever the field gained a push since the
-  last step the water is pressed down (a big gain only a little deeper than a small one, so pops don't
-  drown a passing ball's wake), and the dip travels outward as rings at the ripple material's speed and
-  fades over its fade time; the field's edges soak rings up rather than bounce them back. Fixed 1/60 s
-  steps (at most four a frame), in game time, so the rings walk at the same speed at any frame rate and a
-  pause holds them. It restarts calm whenever water appears. An earlier version drew rings straight from
-  the field's push (`sin(k·push + ωt)`): they stayed in the push's shape and wobbled in place like gel.
+  ripple rings (below). The slope is what bends the bottom and catches the light.
+- `View/WaterRippleBuffer.cs` + `Shaders/BalloonParty/Scenario/WaterRipple.shader`: the ripples. Every
+  impact the game reports to `Shared/ImpactEventBus` (each step of a ball's flight, pops, bombs, balloons
+  gliding in) starts a ring; an impact within 0.45 world units and 0.15 s of a ring just started joins it,
+  so a ball leaves a trail of rings rather than a smear. Up to 48 rings are in flight; each frame one blit
+  draws them all into a height field over the disturbance field's bounds (`IGroundSettings.
+  WaterRippleTexelsPerUnit`, 16), published as `_WaterRippleTex`. A ring is a short packet of crests whose
+  front walks outward at the ripple material's speed (1.8 world units a second, 0.4 between crests),
+  flattening as it spreads and fading over 0.9 s. Ages run on game time, so a pause holds the rings. It
+  restarts calm whenever water appears. `WaterImpactCollector` (Game scope, `IPostTickable`) copies the
+  bus after Update, because the bus clears in VContainer's LateTick, which runs before `GroundView`'s
+  LateUpdate.
+  Two earlier versions failed. Rings drawn straight from the field's push (`sin(k·push + ωt)`) stayed in
+  the push's shape and wobbled in place like gel. A wave-equation simulation driven by the field only
+  sloshed in board-wide blobs, and driven by the impacts its rings interfered into a chop in which no
+  single ring read.
 - `View/WaterCausticBuffer.cs` + `Shaders/BalloonParty/Scenario/WaterCaustics.shader`: the caustics. Each
   frame on water, one blit draws a tile of the moving caustic net into a 256² R8 target that wraps, with
   mips, published as `_WaterCausticTex`. The net is the borders between drifting cells, warped so they

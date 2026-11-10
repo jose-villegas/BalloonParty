@@ -8,8 +8,9 @@ Shader "BalloonParty/Scenario/Water"
     // twice at two scales and angles, shifted away from the time-of-day sun, split into colour fringes and blurred
     // where it's deep). The water over it absorbs red first, then green, and scatters its own blue back, so shallows
     // read as sand and deep water as teal. On top, the surface: a slow swell plus the rings the ripple simulation
-    // (WaterRippleBuffer) carries out from every push (WaterSurface.cginc), whose slopes catch a soft highlight and
-    // whose crests turned to the sun glint.
+    // (WaterRippleBuffer) carries out from every impact (WaterSurface.cginc). Each ring throws a bright and a dark band
+    // on the sand and sheens the surface whatever the sun's angle; the slopes also catch a soft highlight, and
+    // crests turned to the sun glint.
     Properties
     {
         [NoScaleOffset] _NoiseTex ("Noise (R, linear)", 2D) = "gray" {}
@@ -37,7 +38,7 @@ Shader "BalloonParty/Scenario/Water"
 
         [Header(Caustics)]
         _CausticColor     ("Caustic Colour",              Color)          = (1.0, 1.0, 0.94, 1)
-        _CausticStrength  ("Caustic Strength",            Range(0, 1))    = 0.6
+        _CausticStrength  ("Caustic Strength",            Range(0, 1))    = 0.45
         // World units one caustic tile covers: its cells are this over the tile's cell count.
         _CausticTileSize  ("Tile Size (world)",           Float)          = 4.5
         // The second layer's size against the first: never a whole number, so the two never line up.
@@ -56,8 +57,13 @@ Shader "BalloonParty/Scenario/Water"
         _WaveSize         ("Swell Size (world)",          Float)          = 2.2
         _WaveSpeed        ("Swell Speed (world/s)",       Float)          = 0.25
         _WaveHeight       ("Swell Height",                Float)          = 0.06
-        // How tall the simulated rings stand (their speed and fade are on the ripple material).
+        // How steep the rings stand, in slope per unit of the ripple field (their speed and fade are on the ripple material).
         _RippleHeight     ("Ring Height",                 Float)          = 0.025
+        // How much a ring focuses light on the bottom under its trough and spreads it under its crest: the bright
+        // and dark bands a ripple throws on the sand, whatever the sun's angle.
+        _RippleFocus      ("Ring Focus",                  Float)          = 2
+        // How much a ring's slope sheens the surface, whatever the sun's angle.
+        _RippleSheen      ("Ring Sheen",                  Float)          = 1.3
         // World units the surface slope shifts the view of the bottom by, per world unit of depth: the deeper the
         // bottom, the more the waves bend it.
         _Refraction       ("Refraction (per depth)",      Range(0, 0.5))  = 0.1
@@ -136,6 +142,8 @@ Shader "BalloonParty/Scenario/Water"
             float  _CausticWobble;
             float  _CausticWobbleSize;
             float  _CausticDepthBlur;
+            float  _RippleFocus;
+            float  _RippleSheen;
             float  _Refraction;
             half4  _SurfaceColor;
             half   _SurfaceOpacity;
@@ -206,7 +214,8 @@ Shader "BalloonParty/Scenario/Water"
             half4 frag(v2f IN) : SV_Target
             {
                 float2 wp = IN.world;
-                float2 slope = WaterSlope(wp);
+                float3 ripple = WaterRippleAt(wp);
+                float2 slope = WaterSlope(wp, ripple);
 
                 // How deep the bottom lies under this pixel: 0 = the shallowest bank, 1 = the deepest channel.
                 half depthNoise = tex2D(_NoiseTex, GroundPointAt(wp) / max(_DepthPatchSize, 1e-3)).r;
@@ -223,6 +232,7 @@ Shader "BalloonParty/Scenario/Water"
                 half3 caustic = CausticAt(bottomPos, deep) * (_CausticStrength * lerp(1.0h, 0.45h, deep));
                 half3 bottom = SandAt(bottomPos) * (1.0h - 0.3h * _CausticStrength)
                              * lerp(half3(1.0h, 1.0h, 1.0h), _CausticColor.rgb * 1.6h, saturate(caustic));
+                bottom *= 1.0h + clamp((half)ripple.z * _RippleFocus, -0.25h, 0.7h);
 
                 // The water between: each colour fades out of the bottom by its own absorption, and the water's
                 // own colour takes its place.
@@ -230,6 +240,7 @@ Shader "BalloonParty/Scenario/Water"
                 half3 color = bottom * transmit + _WaterColor.rgb * (1.0h - transmit);
 
                 color = lerp(color, _SurfaceColor.rgb, _SurfaceOpacity);
+                color = lerp(color, _HighlightColor.rgb, saturate((half)length(ripple.xy) * _RippleSheen - 0.05h));
 
                 // The swell's and the rings' slopes facing the sun catch a soft highlight; those facing away darken.
                 half facing = (half)dot(slope, _SceneLightDir.xy);

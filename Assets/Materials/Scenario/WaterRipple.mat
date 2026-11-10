@@ -25,10 +25,11 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _RippleDrive: 1.2
-    - _RippleFade: 1.4
-    - _RippleSpeed: 2.4
-    - _RippleSponge: 6
+    - _RippleDrive: 0.32
+    - _RippleFade: 0.9
+    - _RipplePacket: 1.2
+    - _RippleSpeed: 1.8
+    - _RippleWavelength: 0.4
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1

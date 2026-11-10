@@ -1,8 +1,8 @@
 #ifndef BALLOONPARTY_WATER_SURFACE_INCLUDED
 #define BALLOONPARTY_WATER_SURFACE_INCLUDED
 
-// The water surface's slope (Water.shader): a slow swell plus the rings WaterRippleBuffer's wave simulation carries
-// out from every push. The slope bends the view of the bottom, catches the highlight and makes the glints. Needs
+// The water surface's slope (Water.shader): a slow swell plus the rings WaterRippleBuffer draws travelling out from
+// every impact. The slope bends the view of the bottom, catches the highlight and makes the glints. Needs
 // Ground.cginc for GroundPointAt (the swell travels with the board).
 
 #include "Ground.cginc"
@@ -46,25 +46,28 @@ float2 WaterSwellSlope(float2 worldPos)
     return float2(hx - h, hy - h) / WATER_SWELL_STEP;
 }
 
-// The rings' slope, one simulation texel each way. Outside the field (the overscan past the camera) the water is
-// flat.
-float2 WaterRippleSlope(float2 worldPos)
+// The rings at a world position, in the simulation's own units: xy = height change across one texel each way
+// (half the difference of the two neighbours), z = curvature (the four neighbours minus four times the middle:
+// positive in a trough, where a ring focuses light on the bottom). Outside the field (the overscan past the
+// camera) the water is flat.
+float3 WaterRippleAt(float2 worldPos)
 {
     float2 uv = (worldPos - _FieldBoundsMin) / max(_FieldBoundsSize, 1e-4);
     float2 texel = _WaterRippleTexel.xy;
+    float middle = tex2Dlod(_WaterRippleTex, float4(uv, 0.0, 0.0)).r;
     float right = tex2Dlod(_WaterRippleTex, float4(uv + float2(texel.x, 0.0), 0.0, 0.0)).r;
     float left = tex2Dlod(_WaterRippleTex, float4(uv - float2(texel.x, 0.0), 0.0, 0.0)).r;
     float up = tex2Dlod(_WaterRippleTex, float4(uv + float2(0.0, texel.y), 0.0, 0.0)).r;
     float down = tex2Dlod(_WaterRippleTex, float4(uv - float2(0.0, texel.y), 0.0, 0.0)).r;
     float inField = all(uv == saturate(uv)) ? 1.0 : 0.0;
-    float2 span = 2.0 * texel * max(_FieldBoundsSize, 1e-4);
-    return float2(right - left, up - down) / span * _RippleHeight * inField;
+    return float3(0.5 * (right - left), 0.5 * (up - down), right + left + up + down - 4.0 * middle) * inField;
 }
 
-// The surface's slope (height change per world unit).
-float2 WaterSlope(float2 worldPos)
+// The surface's slope (height change per world unit): the swell plus the rings (WaterRippleAt).
+float2 WaterSlope(float2 worldPos, float3 ripple)
 {
-    return WaterSwellSlope(worldPos) + WaterRippleSlope(worldPos);
+    float2 texelWorld = _WaterRippleTexel.xy * max(_FieldBoundsSize, 1e-4);
+    return WaterSwellSlope(worldPos) + ripple.xy / texelWorld * _RippleHeight;
 }
 
 #endif
