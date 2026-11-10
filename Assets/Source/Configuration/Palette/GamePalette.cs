@@ -35,6 +35,12 @@ namespace BalloonParty.Configuration.Palette
         public const string UnbreakableColorId = "Unbreakable";
 
         /// <summary>
+        ///     Presentation-only palette entry an unbreakable's lights, pulse and glitter switch to while it
+        ///     holds a formation — authored in the palette asset but never a spawnable balloon color.
+        /// </summary>
+        public const string UnbreakableFormationColorId = "UnbreakableFormation";
+
+        /// <summary>
         ///     Presentation-only palette entry for the muzzle-exit force a shot stamps into the disturbance
         ///     field when fired — authored in the palette asset but never a spawnable balloon color.
         /// </summary>

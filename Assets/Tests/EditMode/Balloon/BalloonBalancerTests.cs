@@ -1,6 +1,7 @@
 using System;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
@@ -118,6 +119,32 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void HasPossibleMove_UnanchoredUnbreakable_True()
+        {
+            PlaceUnbreakable(new Vector2Int(1, 1), anchored: false);
+
+            Assert.IsTrue(_balancer.HasPossibleMove());
+        }
+
+        [Test]
+        public void HasPossibleMove_AnchoredUnbreakableOverAGap_False()
+        {
+            PlaceUnbreakable(new Vector2Int(1, 1), anchored: true);
+
+            Assert.IsFalse(_balancer.HasPossibleMove(), "a formation member holds its slot, so it is no move");
+            Assert.IsFalse(_balancer.TickFlightRebalance(5f), "and the flight pulse does not fire for it");
+        }
+
+        [Test]
+        public void HasPossibleMove_AnchoredUnbreakableAndAFreeBalloon_True()
+        {
+            PlaceUnbreakable(new Vector2Int(0, 1), anchored: true);
+            _grid.Place(new BalloonModel(), null, new Vector2Int(2, 1));
+
+            Assert.IsTrue(_balancer.HasPossibleMove(), "the anchor does not hide the roamer next to it");
+        }
+
+        [Test]
         public void FlightPulse_AirborneWithMoveAvailable_TriggersAtInterval()
         {
             PlaceUnbalancedBalloon();
@@ -188,6 +215,13 @@ namespace BalloonParty.Tests.Balloon
         private void PlaceUnbalancedBalloon()
         {
             _grid.Place(new BalloonModel(), null, new Vector2Int(1, 1));
+        }
+
+        private void PlaceUnbreakable(Vector2Int slot, bool anchored)
+        {
+            var model = new UnbreakableBalloonModel(new BalloonModelConfig(typeName: BalloonType.Unbreakable));
+            model.SetInFormation(anchored);
+            _grid.Place(model, null, slot);
         }
 
         private void RequestBalance()

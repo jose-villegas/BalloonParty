@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Game.Run;
-using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
-using MessagePipe;
 using UniRx;
 using UnityEngine;
 using VContainer;
@@ -33,7 +31,6 @@ namespace BalloonParty.Balloon.Formation
 
         private readonly SlotGrid _grid;
         private readonly IUnbreakableFormationSettings _settings;
-        private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
         private readonly FormationPlanner _planner = new();
         private readonly List<IWriteableFormationMember> _candidates = new();
         private readonly List<IWriteableFormationMember> _members = new();
@@ -54,13 +51,10 @@ namespace BalloonParty.Balloon.Formation
         internal Func<float> Random01 { get; set; } = () => Random.value;
 
         [Inject]
-        internal UnbreakableFormationService(
-            SlotGrid grid, IBalloonsConfiguration balloonsConfig,
-            IPublisher<BalanceBalloonsMessage> balancePublisher = null)
+        internal UnbreakableFormationService(SlotGrid grid, IBalloonsConfiguration balloonsConfig)
         {
             _grid = grid;
             _settings = balloonsConfig.UnbreakableFormation;
-            _balancePublisher = balancePublisher;
             _pickIndex = PickIndex;
         }
 
@@ -71,7 +65,7 @@ namespace BalloonParty.Balloon.Formation
 
         public void ResetRun(int generation)
         {
-            Release(requestBalance: false);
+            Release();
             _lastShape = null;
         }
 
@@ -89,7 +83,7 @@ namespace BalloonParty.Balloon.Formation
         {
             if (_settings == null || !_settings.Enabled)
             {
-                Release(requestBalance: false);
+                Release();
                 return;
             }
 
@@ -103,27 +97,33 @@ namespace BalloonParty.Balloon.Formation
             if (_candidates.Count < _settings.MinMembers || !TryPlanNextShape(out var shape))
             {
                 // The balancer runs the race right after this, so the released members settle there.
-                Release(requestBalance: false);
+                Release();
                 return;
             }
 
-            Release(requestBalance: false);
-
             // The members' own moves remove and place them; that is not a member being lost.
             _arranging = true;
-            for (var i = 0; i < _assignments.Count; i++)
+            try
             {
-                var assignment = _assignments[i];
-                var member = assignment.Member;
-                member.SetInFormation(true);
-                _members.Add(member);
-                if (member.SlotIndex.Value != assignment.Target)
+                ReleaseMembersLeaving();
+                _members.Clear();
+                for (var i = 0; i < _assignments.Count; i++)
                 {
-                    relocate(member, assignment.Target);
+                    var assignment = _assignments[i];
+                    var member = assignment.Member;
+                    member.SetInFormation(true);
+                    _members.Add(member);
+                    if (member.SlotIndex.Value != assignment.Target)
+                    {
+                        relocate(member, assignment.Target);
+                    }
                 }
             }
+            finally
+            {
+                _arranging = false;
+            }
 
-            _arranging = false;
             _lastShape = shape;
             _wavesLeft = _settings.HoldWaves - 1;
         }
@@ -217,7 +217,7 @@ namespace BalloonParty.Balloon.Formation
         }
 
         // A member popped (or otherwise taken off the board) leaves the formation; below the minimum the
-        // rest are released at once and a balance is asked for so they float up.
+        // rest are released at once. The next line's balance, or the timed pulse, floats them up.
         private void OnGridChanged(SlotGridChangedEvent change)
         {
             if (_arranging || change.ChangeType != SlotGridChangeType.Removed || _members.Count == 0)
@@ -238,11 +238,36 @@ namespace BalloonParty.Balloon.Formation
 
             if (_members.Count > 0 && _members.Count < _settings.MinMembers)
             {
-                Release(requestBalance: true);
+                Release();
             }
         }
 
-        private void Release(bool requestBalance)
+        // Only members the new formation drops go back to red; a member that stays never dips out of it.
+        private void ReleaseMembersLeaving()
+        {
+            for (var i = 0; i < _members.Count; i++)
+            {
+                if (!IsAssigned(_members[i]))
+                {
+                    _members[i].SetInFormation(false);
+                }
+            }
+        }
+
+        private bool IsAssigned(IWriteableFormationMember member)
+        {
+            for (var i = 0; i < _assignments.Count; i++)
+            {
+                if (_assignments[i].Member == member)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void Release()
         {
             if (_members.Count == 0)
             {
@@ -256,11 +281,6 @@ namespace BalloonParty.Balloon.Formation
 
             _members.Clear();
             _wavesLeft = 0;
-
-            if (requestBalance)
-            {
-                _balancePublisher?.Publish(new BalanceBalloonsMessage());
-            }
         }
     }
 }

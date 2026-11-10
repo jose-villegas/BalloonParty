@@ -67,7 +67,7 @@ namespace BalloonParty.Balloon.Model
         public bool TryPickRelocation(SlotGrid grid, IReadOnlyList<Vector2Int> restingSlots, out Vector2Int target)
         {
             target = default;
-            if (restingSlots.Count == 0)
+            if (IsAnchored || restingSlots.Count == 0)
             {
                 return false;
             }

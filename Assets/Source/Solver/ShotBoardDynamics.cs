@@ -368,7 +368,8 @@ namespace BalloonParty.Solver
                         continue;
                     }
 
-                    if (_grid.At(new Vector2Int(col, row)) is IWriteableDynamicSlotActor
+                    var actor = _grid.At(new Vector2Int(col, row));
+                    if (actor is IWriteableDynamicSlotActor and not IBalanceAnchor { IsAnchored: true }
                         && _balanceQuery.OptimalNextEmptySlot(col, row).HasValue)
                     {
                         return true;

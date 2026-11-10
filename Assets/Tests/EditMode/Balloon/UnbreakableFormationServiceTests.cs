@@ -5,10 +5,8 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Shared;
-using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
-using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
@@ -20,7 +18,6 @@ namespace BalloonParty.Tests.Balloon
     {
         private SlotGrid _grid;
         private IUnbreakableFormationSettings _settings;
-        private IPublisher<BalanceBalloonsMessage> _balancePublisher;
         private UnbreakableFormationService _service;
         private List<UnbreakableBalloonModel> _unbreakables;
         private int _relocations;
@@ -45,9 +42,8 @@ namespace BalloonParty.Tests.Balloon
 
             var balloonsConfig = Substitute.For<IBalloonsConfiguration>();
             balloonsConfig.UnbreakableFormation.Returns(_settings);
-            _balancePublisher = Substitute.For<IPublisher<BalanceBalloonsMessage>>();
 
-            _service = new UnbreakableFormationService(_grid, balloonsConfig, _balancePublisher)
+            _service = new UnbreakableFormationService(_grid, balloonsConfig)
             {
                 Random01 = () => 0f,
             };
@@ -122,7 +118,6 @@ namespace BalloonParty.Tests.Balloon
 
             Assert.AreEqual(0, _service.Members.Count);
             Assert.IsFalse(_unbreakables.Any(u => u.IsAnchored));
-            _balancePublisher.Received(1).Publish(Arg.Any<BalanceBalloonsMessage>());
         }
 
         [Test]

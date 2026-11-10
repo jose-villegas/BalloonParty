@@ -1,0 +1,172 @@
+using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.View;
+using BalloonParty.Configuration.Palette;
+using UniRx;
+using UnityEngine;
+using VContainer;
+
+namespace BalloonParty.Balloon.Type
+{
+    /// <summary>
+    ///     Turns an unbreakable's red lights blue while it holds a formation: the core glow sprites, the inner
+    ///     rim, and the exhaust trail. A glitter swirl fades in behind it at the same time. The change starts
+    ///     once the member has arrived in its slot, and eases back to red when the formation breaks.
+    /// </summary>
+    internal class UnbreakableFormationLook : MonoBehaviour, IBalloonViewBinding
+    {
+        private static readonly int RimColorId = Shader.PropertyToID("_RimColor");
+
+        [Tooltip("The core glow sprites, tinted red at rest.")]
+        [SerializeField] private SpriteRenderer[] _coreLights;
+
+        [Tooltip("Renderers whose material rim is red at rest (UnbreakableMatIN); overridden per instance.")]
+        [SerializeField] private SpriteRenderer[] _rimRenderers;
+
+        [SerializeField] private TrailRenderer _trail;
+
+        [Tooltip("The glitter swirl behind the sphere. Hidden, and costing no draw call, out of formation.")]
+        [SerializeField] private SpriteRenderer _glitter;
+
+        [Tooltip("Seconds to ease between red and blue.")]
+        [SerializeField] [Min(0.01f)] private float _fadeDuration = 0.4f;
+
+        [Tooltip("The glitter's alpha at full formation.")]
+        [SerializeField] [Range(0f, 1f)] private float _glitterAlpha = 1f;
+
+        [Inject] private IGamePalette _palette;
+
+        private MaterialPropertyBlock _block;
+        private Color[] _coreRest;
+        private Color[] _rimRest;
+        private Gradient _trailRest;
+        private Gradient _trailBlue;
+        private Color _blue;
+        private IBalloonModel _model;
+        private float _blend;
+        private bool _trailIsBlue;
+
+        private void Awake()
+        {
+            _block = new MaterialPropertyBlock();
+            CaptureRestLook();
+        }
+
+        private void Update()
+        {
+            if (_model == null)
+            {
+                return;
+            }
+
+            var target = ShowsFormation(_model) ? 1f : 0f;
+            if (Mathf.Approximately(_blend, target))
+            {
+                // BalloonView.OnSpawned re-enables every sorted renderer, the glitter included.
+                if (_blend <= 0f && _glitter != null && _glitter.enabled)
+                {
+                    _glitter.enabled = false;
+                }
+
+                return;
+            }
+
+            _blend = Mathf.MoveTowards(_blend, target, Time.deltaTime / _fadeDuration);
+            Apply(_blend);
+        }
+
+        // Binding a pooled instance to a new balloon starts it red, whatever its last balloon ended on.
+        public void Bind(IBalloonModel model, CompositeDisposable disposables)
+        {
+            _model = model;
+            _blue = _palette != null ? _palette.GetColor(GamePalette.UnbreakableFormationColorId) : Color.blue;
+            _trailBlue ??= BuildBlueTrail();
+            _blend = 0f;
+            Apply(0f);
+        }
+
+        /// <summary>Blue only once the member has arrived: while it still glides into its slot it stays red.</summary>
+        internal static bool ShowsFormation(IBalloonModel model)
+        {
+            return model is IFormationMember { InFormation: { Value: true } } && model.IsStable.Value;
+        }
+
+        private void CaptureRestLook()
+        {
+            _coreRest = new Color[_coreLights?.Length ?? 0];
+            for (var i = 0; i < _coreRest.Length; i++)
+            {
+                _coreRest[i] = _coreLights[i] != null ? _coreLights[i].color : Color.clear;
+            }
+
+            _rimRest = new Color[_rimRenderers?.Length ?? 0];
+            for (var i = 0; i < _rimRest.Length; i++)
+            {
+                var material = _rimRenderers[i] != null ? _rimRenderers[i].sharedMaterial : null;
+                _rimRest[i] = material != null && material.HasProperty(RimColorId)
+                    ? material.GetColor(RimColorId)
+                    : Color.clear;
+            }
+
+            _trailRest = _trail != null ? _trail.colorGradient : null;
+        }
+
+        // The rest gradient's shape and alpha, recoloured from the formation blue at the head toward white
+        // at the tail, the way the red one runs from crimson to a pale tip.
+        private Gradient BuildBlueTrail()
+        {
+            if (_trailRest == null)
+            {
+                return null;
+            }
+
+            var colorKeys = _trailRest.colorKeys;
+            for (var i = 0; i < colorKeys.Length; i++)
+            {
+                colorKeys[i].color = Color.Lerp(_blue, Color.white, colorKeys[i].time * 0.6f);
+            }
+
+            var gradient = new Gradient { mode = _trailRest.mode };
+            gradient.SetKeys(colorKeys, _trailRest.alphaKeys);
+            return gradient;
+        }
+
+        private void Apply(float blend)
+        {
+            for (var i = 0; i < _coreRest.Length; i++)
+            {
+                if (_coreLights[i] != null)
+                {
+                    var rest = _coreRest[i];
+                    _coreLights[i].color = Color.Lerp(rest, new Color(_blue.r, _blue.g, _blue.b, rest.a), blend);
+                }
+            }
+
+            for (var i = 0; i < _rimRest.Length; i++)
+            {
+                var r = _rimRenderers[i];
+                if (r == null)
+                {
+                    continue;
+                }
+
+                r.GetPropertyBlock(_block);
+                _block.SetColor(RimColorId, Color.Lerp(_rimRest[i], _blue, blend));
+                r.SetPropertyBlock(_block);
+            }
+
+            // A gradient can't be lerped without allocating, so the trail swaps at the fade's midpoint.
+            var trailBlue = blend >= 0.5f;
+            if (_trail != null && _trailBlue != null && trailBlue != _trailIsBlue)
+            {
+                _trail.colorGradient = trailBlue ? _trailBlue : _trailRest;
+                _trailIsBlue = trailBlue;
+            }
+
+            if (_glitter != null)
+            {
+                _glitter.enabled = blend > 0f;
+                _glitter.color = new Color(_blue.r, _blue.g, _blue.b, blend * _glitterAlpha);
+            }
+        }
+    }
+}

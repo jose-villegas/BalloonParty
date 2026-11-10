@@ -76,6 +76,7 @@ namespace BalloonParty.Balloon.Type
         private Vector3 _lastLightPos;
         private int _unbreakableColorIndex = -1;
         private int _sparksColorIndex = -1;
+        private int _formationColorIndex = -1;
 
         private void Awake()
         {
@@ -148,6 +149,7 @@ namespace BalloonParty.Balloon.Type
             _deflectedSubscriber = deflectedSubscriber;
             _unbreakableColorIndex = palette.PaletteIndexOf(GamePalette.UnbreakableColorId);
             _sparksColorIndex = palette.PaletteIndexOf(GamePalette.SparksColorId);
+            _formationColorIndex = palette.PaletteIndexOf(GamePalette.UnbreakableFormationColorId);
 
             // Settle the ref-count for an instance injected while already active.
             if (isActiveAndEnabled)
@@ -291,10 +293,14 @@ namespace BalloonParty.Balloon.Type
                 return;
             }
 
+            // A formation member's pulse is tagged blue, so the specks it puffs turn blue with its lights.
+            var colorIndex = _model != null && UnbreakableFormationLook.ShowsFormation(_model)
+                ? _formationColorIndex
+                : _unbreakableColorIndex;
             var profile = _disturbanceField.GetProfile(source);
             _disturbanceField.Stamp(
                 transform.position, profile.Radius, profile.Strength, Vector2.zero, profile.Duration,
-                _palette.PaletteIndexOf(GamePalette.UnbreakableColorId), reportImpact: false);
+                colorIndex, reportImpact: false);
 
             _speckPublisher?.Publish(new SpeckSpawnRequestMessage(SpeckSource.UnbreakableBurst, transform.position));
         }
