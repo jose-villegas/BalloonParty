@@ -1,5 +1,11 @@
 var NAVTREEINDEX95 =
 {
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html":[5,0,0,13,1,6],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html":[6,0,0,13,1,6],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html#a295c65ca54574bca653d348f8c0ed7cf":[5,0,0,13,1,6,0],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html#a295c65ca54574bca653d348f8c0ed7cf":[6,0,0,13,1,6,0],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html":[5,0,0,13,1,7],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html":[6,0,0,13,1,7],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html#adaf9d7fc481f54c2fcee73214ac42857":[5,0,0,13,1,7,0],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html#adaf9d7fc481f54c2fcee73214ac42857":[6,0,0,13,1,7,0],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScoreColor.html":[5,0,0,13,1,8],
@@ -243,11 +249,5 @@ var NAVTREEINDEX95 =
 "namespaceBalloonParty_1_1Game_1_1Danger.html":[5,0,0,6,2],
 "namespaceBalloonParty_1_1Game_1_1Flight.html":[5,0,0,6,3],
 "namespaceBalloonParty_1_1Game_1_1HeadsUp.html":[5,0,0,6,4],
-"namespaceBalloonParty_1_1Game_1_1HeadsUp.html#a1a709e3252ec1c2f9caf67fa7f935995":[5,0,0,6,4,10],
-"namespaceBalloonParty_1_1Game_1_1HeadsUp.html#a1a709e3252ec1c2f9caf67fa7f935995a2ceea82aab3ac5bc623e79186b389481":[5,0,0,6,4,10,2],
-"namespaceBalloonParty_1_1Game_1_1HeadsUp.html#a1a709e3252ec1c2f9caf67fa7f935995a498f79c4c5bbde77f1bceb6c86fd0f6d":[5,0,0,6,4,10,1],
-"namespaceBalloonParty_1_1Game_1_1HeadsUp.html#a1a709e3252ec1c2f9caf67fa7f935995a74339e8d9916761b9b69183a081076c6":[5,0,0,6,4,10,0],
-"namespaceBalloonParty_1_1Game_1_1HeadsUp_1_1Routing.html":[5,0,0,6,4,0],
-"namespaceBalloonParty_1_1Game_1_1Health.html":[5,0,0,6,5],
-"namespaceBalloonParty_1_1Game_1_1Level.html":[5,0,0,6,6]
+"namespaceBalloonParty_1_1Game_1_1HeadsUp.html#a1a709e3252ec1c2f9caf67fa7f935995":[5,0,0,6,4,10]
 };

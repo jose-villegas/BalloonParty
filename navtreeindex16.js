@@ -1,5 +1,9 @@
 var NAVTREEINDEX16 =
 {
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a37453723a27fb74c988dae1f3cd8cd5c":[5,0,0,3,2,2,6],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a37453723a27fb74c988dae1f3cd8cd5c":[6,0,0,3,2,2,6],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a95942406ff2c8320cf6b5e3b0516acb8":[5,0,0,3,2,2,9],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a95942406ff2c8320cf6b5e3b0516acb8":[6,0,0,3,2,2,9],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a95a070c501beeb1f8a777b57a6b61898":[5,0,0,3,2,2,5],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#a95a070c501beeb1f8a777b57a6b61898":[6,0,0,3,2,2,5],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#ad5207f6d9b7a0cc494cbfbe3a906b5e8":[5,0,0,3,2,2,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX16 =
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#a360aa6aa3f420f503efd6f1b6235c4eb":[5,0,0,3,3,9,7],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#a360aa6aa3f420f503efd6f1b6235c4eb":[6,0,0,3,3,9,7],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#a3a117831df3297a9b086cee2d82d3a28":[5,0,0,3,3,9,2],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#a3a117831df3297a9b086cee2d82d3a28":[6,0,0,3,3,9,2],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#a554b5aa79dbae9eef56b7b1d0e4b2e56":[5,0,0,3,3,9,1],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#a554b5aa79dbae9eef56b7b1d0e4b2e56":[6,0,0,3,3,9,1],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#a83e1bcfd8dbda13e935ae89d946decca":[5,0,0,3,3,9,4],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#a83e1bcfd8dbda13e935ae89d946decca":[6,0,0,3,3,9,4]
+"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#a3a117831df3297a9b086cee2d82d3a28":[6,0,0,3,3,9,2]
 };

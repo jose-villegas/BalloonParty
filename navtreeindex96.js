@@ -1,5 +1,11 @@
 var NAVTREEINDEX96 =
 {
+"namespaceBalloonParty_1_1Game_1_1HeadsUp.html#a1a709e3252ec1c2f9caf67fa7f935995a2ceea82aab3ac5bc623e79186b389481":[5,0,0,6,4,10,2],
+"namespaceBalloonParty_1_1Game_1_1HeadsUp.html#a1a709e3252ec1c2f9caf67fa7f935995a498f79c4c5bbde77f1bceb6c86fd0f6d":[5,0,0,6,4,10,1],
+"namespaceBalloonParty_1_1Game_1_1HeadsUp.html#a1a709e3252ec1c2f9caf67fa7f935995a74339e8d9916761b9b69183a081076c6":[5,0,0,6,4,10,0],
+"namespaceBalloonParty_1_1Game_1_1HeadsUp_1_1Routing.html":[5,0,0,6,4,0],
+"namespaceBalloonParty_1_1Game_1_1Health.html":[5,0,0,6,5],
+"namespaceBalloonParty_1_1Game_1_1Level.html":[5,0,0,6,6],
 "namespaceBalloonParty_1_1Game_1_1Level.html#a57ec4a7422d3ec908dda0a536e08a712":[5,0,0,6,6,8],
 "namespaceBalloonParty_1_1Game_1_1Level.html#a57ec4a7422d3ec908dda0a536e08a712a2d13df6f8b5e4c5af9f87e0dc39df69d":[5,0,0,6,6,8,1],
 "namespaceBalloonParty_1_1Game_1_1Level.html#a57ec4a7422d3ec908dda0a536e08a712a3e589a999568bf6d0c72b491f20f758b":[5,0,0,6,6,8,3],
@@ -243,11 +249,5 @@ var NAVTREEINDEX96 =
 "namespaceBalloonParty_1_1Slots_1_1Actor.html#abf97dbdfa7dd43a6769e73afa51a0f7fa91c2bd5787da3925c1d8bad8ff05587a":[5,0,0,13,0,21,1],
 "namespaceBalloonParty_1_1Slots_1_1Actor.html#ac84e9ada75983ac915188467e0a2efbf":[5,0,0,13,0,23],
 "namespaceBalloonParty_1_1Slots_1_1Actor.html#ac84e9ada75983ac915188467e0a2efbfa249694a485fc5d3289c38986b4f8e887":[5,0,0,13,0,23,1],
-"namespaceBalloonParty_1_1Slots_1_1Actor.html#ac84e9ada75983ac915188467e0a2efbfa64663f4646781c9c0110838b905daa23":[5,0,0,13,0,23,0],
-"namespaceBalloonParty_1_1Slots_1_1Actor.html#adbab49aebf9c1f422de5a17b7033167e":[5,0,0,13,0,22],
-"namespaceBalloonParty_1_1Slots_1_1Actor.html#adbab49aebf9c1f422de5a17b7033167ea84a8921b25f505d0d2077aeb5db4bc16":[5,0,0,13,0,22,1],
-"namespaceBalloonParty_1_1Slots_1_1Actor.html#adbab49aebf9c1f422de5a17b7033167ea971fd8cc345d8bd9f92e9f7d88fdf20c":[5,0,0,13,0,22,0],
-"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html":[5,0,0,13,0,0],
-"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473":[5,0,0,13,0,0,22],
-"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473a59988751eea31359e0983b22e1531b70":[5,0,0,13,0,0,22,3]
+"namespaceBalloonParty_1_1Slots_1_1Actor.html#ac84e9ada75983ac915188467e0a2efbfa64663f4646781c9c0110838b905daa23":[5,0,0,13,0,23,0]
 };

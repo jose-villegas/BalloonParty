@@ -1,5 +1,11 @@
 var NAVTREEINDEX108 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html":[5,0,0,12,7,35],
+"structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html":[6,0,0,12,7,35],
+"structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html#a2bdd6de2c39a24e3c0b233830f52f398":[5,0,0,12,7,35,1],
+"structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html#a2bdd6de2c39a24e3c0b233830f52f398":[6,0,0,12,7,35,1],
+"structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html#a39808537239ec677f159fc3bb27a252f":[5,0,0,12,7,35,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html#a39808537239ec677f159fc3bb27a252f":[6,0,0,12,7,35,0],
 "structBalloonParty_1_1Shared_1_1Messages_1_1RunRestartCompletedMessage.html":[5,0,0,12,7,36],
 "structBalloonParty_1_1Shared_1_1Messages_1_1RunRestartCompletedMessage.html":[6,0,0,12,7,36],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ScoreLevelUpMessage.html":[5,0,0,12,7,37],
@@ -243,11 +249,5 @@ var NAVTREEINDEX108 =
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafTier.html#a33f52b3c71827ef94ebd42483f78b7d8":[5,0,0,13,0,0,16,4],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafTier.html#a33f52b3c71827ef94ebd42483f78b7d8":[6,0,0,13,0,0,16,4],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafTier.html#a98e2256bde91935936dbcfcdffcaa328":[5,0,0,13,0,0,16,2],
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafTier.html#a98e2256bde91935936dbcfcdffcaa328":[6,0,0,13,0,0,16,2],
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafTier.html#abc8c933faf465494c3d02f3768c06cce":[5,0,0,13,0,0,16,3],
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafTier.html#abc8c933faf465494c3d02f3768c06cce":[6,0,0,13,0,0,16,3],
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html":[5,0,0,13,0,0,21],
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html":[6,0,0,13,0,0,21],
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a1420491048c0fc50ecc4f81f74040e99":[5,0,0,13,0,0,21,1],
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a1420491048c0fc50ecc4f81f74040e99":[6,0,0,13,0,0,21,1]
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafTier.html#a98e2256bde91935936dbcfcdffcaa328":[6,0,0,13,0,0,16,2]
 };

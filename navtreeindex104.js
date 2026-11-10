@@ -1,5 +1,11 @@
 var NAVTREEINDEX104 =
 {
+"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailContext.html#a70d1810af172c937b851d1285247a1fe":[5,0,0,6,8,0,11,6],
+"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailContext.html#a70d1810af172c937b851d1285247a1fe":[6,0,0,6,8,0,11,6],
+"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailContext.html#a7eb7d4194ec617e7db4bfacc61bc7ba3":[5,0,0,6,8,0,11,16],
+"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailContext.html#a7eb7d4194ec617e7db4bfacc61bc7ba3":[6,0,0,6,8,0,11,16],
+"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailContext.html#aa49e6685e13d1e227e1907a8722da38f":[5,0,0,6,8,0,11,5],
+"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailContext.html#aa49e6685e13d1e227e1907a8722da38f":[6,0,0,6,8,0,11,5],
 "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailContext.html#ab5035e6305c7ecbc7900fb3eb9327cd4":[5,0,0,6,8,0,11,4],
 "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailContext.html#ab5035e6305c7ecbc7900fb3eb9327cd4":[6,0,0,6,8,0,11,4],
 "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailContext.html#abd7ba41e88781f3d4373aa3b7b1513e3":[5,0,0,6,8,0,11,1],
@@ -243,11 +249,5 @@ var NAVTREEINDEX104 =
 "structBalloonParty_1_1Item_1_1Effects_1_1LightningEffectParams.html":[5,0,0,7,1,7],
 "structBalloonParty_1_1Item_1_1Effects_1_1LightningEffectParams.html":[6,0,0,7,1,7],
 "structBalloonParty_1_1Item_1_1Effects_1_1LightningEffectParams.html#a4f5c49626ec73d295a804bb8a3dde8fd":[5,0,0,7,1,7,0],
-"structBalloonParty_1_1Item_1_1Effects_1_1LightningEffectParams.html#a4f5c49626ec73d295a804bb8a3dde8fd":[6,0,0,7,1,7,0],
-"structBalloonParty_1_1Item_1_1Effects_1_1LightningEffectParams.html#a6b35abeeae0a751526579a766609556c":[5,0,0,7,1,7,2],
-"structBalloonParty_1_1Item_1_1Effects_1_1LightningEffectParams.html#a6b35abeeae0a751526579a766609556c":[6,0,0,7,1,7,2],
-"structBalloonParty_1_1Item_1_1Effects_1_1LightningEffectParams.html#ac0514e1f7b9fa43e67e22758249c764b":[5,0,0,7,1,7,3],
-"structBalloonParty_1_1Item_1_1Effects_1_1LightningEffectParams.html#ac0514e1f7b9fa43e67e22758249c764b":[6,0,0,7,1,7,3],
-"structBalloonParty_1_1Item_1_1Effects_1_1LightningEffectParams.html#ac438092660fc4e326e878608a5182042":[5,0,0,7,1,7,1],
-"structBalloonParty_1_1Item_1_1Effects_1_1LightningEffectParams.html#ac438092660fc4e326e878608a5182042":[6,0,0,7,1,7,1]
+"structBalloonParty_1_1Item_1_1Effects_1_1LightningEffectParams.html#a4f5c49626ec73d295a804bb8a3dde8fd":[6,0,0,7,1,7,0]
 };

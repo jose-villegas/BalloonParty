@@ -1,5 +1,9 @@
 var NAVTREEINDEX19 =
 {
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#aef1fe667994a59c0828b1c04385a0b9e":[5,0,0,3,4,24,12],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#aef1fe667994a59c0828b1c04385a0b9e":[6,0,0,3,4,24,12],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#af61a957027b4a8f973e680c19f65f1b8":[5,0,0,3,4,24,0],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#af61a957027b4a8f973e680c19f65f1b8":[6,0,0,3,4,24,0],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#af8b34960ffeb7db2410e1c57deae2bdd":[5,0,0,3,4,24,14],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#af8b34960ffeb7db2410e1c57deae2bdd":[6,0,0,3,4,24,14],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#afe36be33dfd9107afa3e5bf40fd1c459":[5,0,0,3,4,24,1],
@@ -245,9 +249,5 @@ var NAVTREEINDEX19 =
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html#ae91a15ed2d7ef9eb6a9a56234fa7e6fe":[5,0,0,3,4,27,13],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html#ae91a15ed2d7ef9eb6a9a56234fa7e6fe":[6,0,0,3,4,27,13],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html#aed0fd13faf6887be4c2c3c4717bb8b67":[5,0,0,3,4,27,14],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html#aed0fd13faf6887be4c2c3c4717bb8b67":[6,0,0,3,4,27,14],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html#aed21e3b5f3d574f76e07fe45f4c9bda4":[5,0,0,3,4,27,33],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html#aed21e3b5f3d574f76e07fe45f4c9bda4":[6,0,0,3,4,27,33],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html#aef622e9a789641cfe2e2410eabe61e56":[5,0,0,3,4,27,23],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html#aef622e9a789641cfe2e2410eabe61e56":[6,0,0,3,4,27,23]
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html#aed0fd13faf6887be4c2c3c4717bb8b67":[6,0,0,3,4,27,14]
 };

@@ -1,5 +1,11 @@
 var NAVTREEINDEX94 =
 {
+"interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html#a2138b6617d8e6da76a3c692bb1f38e67":[5,0,0,12,30,0],
+"interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html#a2138b6617d8e6da76a3c692bb1f38e67":[6,0,0,12,30,0],
+"interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html#af3b4eb5f921ccb6fa3202da23dd3c136":[5,0,0,12,30,1],
+"interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html#af3b4eb5f921ccb6fa3202da23dd3c136":[6,0,0,12,30,1],
+"interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html":[5,0,0,12,31],
+"interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html":[6,0,0,12,31],
 "interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#a19c3bc16482462914e62886e6d32f15f":[5,0,0,12,31,0],
 "interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#a19c3bc16482462914e62886e6d32f15f":[6,0,0,12,31,0],
 "interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#a7e4016602dc7738982b1bf87bc1e36c4":[5,0,0,12,31,1],
@@ -243,11 +249,5 @@ var NAVTREEINDEX94 =
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasItemSlot.html#aae22fdafdb5b1ed0de2e7e131b0fa82a":[5,0,0,13,1,5,0],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasItemSlot.html#aae22fdafdb5b1ed0de2e7e131b0fa82a":[6,0,0,13,1,5,0],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasItemSlot.html#ac8af66169265e10f0396d99f08f171e4":[5,0,0,13,1,5,2],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasItemSlot.html#ac8af66169265e10f0396d99f08f171e4":[6,0,0,13,1,5,2],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html":[5,0,0,13,1,6],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html":[6,0,0,13,1,6],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html#a295c65ca54574bca653d348f8c0ed7cf":[5,0,0,13,1,6,0],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html#a295c65ca54574bca653d348f8c0ed7cf":[6,0,0,13,1,6,0],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html":[5,0,0,13,1,7],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html":[6,0,0,13,1,7]
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasItemSlot.html#ac8af66169265e10f0396d99f08f171e4":[6,0,0,13,1,5,2]
 };

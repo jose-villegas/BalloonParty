@@ -1,5 +1,9 @@
 var NAVTREEINDEX25 =
 {
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePaletteExtensions.html#a6260b0875f9692883e96516722d118bf":[5,0,0,3,9,1,0],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePaletteExtensions.html#a6260b0875f9692883e96516722d118bf":[6,0,0,3,9,1,0],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html":[5,0,0,3,9,4],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html":[6,0,0,3,9,4],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html#a11a88d675b45dda25f39f93600bfada0":[5,0,0,3,9,4,0],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html#a11a88d675b45dda25f39f93600bfada0":[6,0,0,3,9,4,0],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html#af990fd3c49934d353e69b5a21c6636a1":[5,0,0,3,9,4,1],
@@ -245,9 +249,5 @@ var NAVTREEINDEX25 =
 "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a4874ecf6291970316d5696fbb0a3f2ea":[5,0,0,3,27,12],
 "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a4874ecf6291970316d5696fbb0a3f2ea":[6,0,0,3,27,12],
 "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a50492bee6cc02e47406f6b17b0f6f001":[5,0,0,3,27,6],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a50492bee6cc02e47406f6b17b0f6f001":[6,0,0,3,27,6],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a65178ee8531fea267bcf270f02d3b1e2":[5,0,0,3,27,14],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a65178ee8531fea267bcf270f02d3b1e2":[6,0,0,3,27,14],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a87d0794c3e1f3ce1faca3e6d04e26132":[5,0,0,3,27,4],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a87d0794c3e1f3ce1faca3e6d04e26132":[6,0,0,3,27,4]
+"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#a50492bee6cc02e47406f6b17b0f6f001":[6,0,0,3,27,6]
 };
