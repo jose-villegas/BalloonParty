@@ -1,17 +1,20 @@
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
 using NUnit.Framework;
+using UnityEngine;
 
 namespace BalloonParty.Tests.Projectile
 {
     /// <summary>
     ///     The lone-ball rule the doomed slow-mo, the board freeze and the held spawn share: one ball's last
-    ///     breath may only warp the world while nothing else is flying under it.
+    ///     breath may only warp the world while nothing else is flying under it. Also where a given ball is, for
+    ///     the heads-ups written at it.
     /// </summary>
     [TestFixture]
     public class ProjectileRegistryExtensionsTests
     {
         private ProjectileRegistry _registry;
+        private GameObject _ballObject;
 
         [SetUp]
         public void SetUp()
@@ -23,6 +26,10 @@ namespace BalloonParty.Tests.Projectile
         public void TearDown()
         {
             _registry.Dispose();
+            if (_ballObject != null)
+            {
+                Object.DestroyImmediate(_ballObject);
+            }
         }
 
         [Test]
@@ -102,6 +109,37 @@ namespace BalloonParty.Tests.Projectile
         public void DoomedShotFliesAlone_NothingInFlight_False()
         {
             Assert.IsFalse(_registry.DoomedShotFliesAlone());
+        }
+
+        [Test]
+        public void TryGetInFlightPosition_ABallInFlight_GivesItsPosition()
+        {
+            Fly();
+            _ballObject = new GameObject("Ball");
+            _ballObject.transform.position = new Vector3(1f, 2f, 0f);
+            var ball = new ProjectileModel();
+            _registry.Load(ball, _ballObject.transform);
+            _registry.Launch(ball);
+
+            Assert.IsTrue(_registry.TryGetInFlightPosition(ball, out var position));
+            Assert.AreEqual(new Vector3(1f, 2f, 0f), position);
+        }
+
+        [Test]
+        public void TryGetInFlightPosition_AHeldBall_False()
+        {
+            var ball = new ProjectileModel();
+            _registry.Load(ball, null);
+
+            Assert.IsFalse(_registry.TryGetInFlightPosition(ball, out _));
+        }
+
+        [Test]
+        public void TryGetInFlightPosition_NoBall_False()
+        {
+            Fly();
+
+            Assert.IsFalse(_registry.TryGetInFlightPosition(null, out _));
         }
 
         private ProjectileModel Fly()

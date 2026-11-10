@@ -1,3 +1,4 @@
+using BalloonParty.Configuration.HeadsUp;
 using BalloonParty.Game.Level;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;

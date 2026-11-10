@@ -2,7 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 
-namespace BalloonParty.UI.HeadsUp
+namespace BalloonParty.Configuration.HeadsUp
 {
     /// <summary>
     ///     How one kind of heads-up looks, so each kind reads at a glance: its colour, its size against the

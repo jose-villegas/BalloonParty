@@ -1,3 +1,4 @@
+using BalloonParty.Configuration.HeadsUp;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;

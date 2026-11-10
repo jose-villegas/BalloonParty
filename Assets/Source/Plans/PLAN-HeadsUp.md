@@ -9,7 +9,7 @@
 `IActiveProjectilePierce.PierceArmed`, `ThrowerReadyMessage.AfterCapWait` recorded by `ThrowerReload.WaitedAtCap`,
 and `TrailEndpointKeys.Cannon` on the cannon's pivot), each EditMode-tested, plus `ProjectileBuffGainedMessage`
 for the rainbow heads-up the owner added in §10; nothing consumes them until the
-router of Phase 3. `StreakGrewMessage` announces streaks from two up, so the router's own threshold (§6) picks
+routers of Phase 3. `StreakGrewMessage` announces streaks from two up, so the streak style's own threshold (§6) picks
 which ones to write. Two facts for the router: a pop no tracked ball caused (a late pop from a ball
 already retired) grows the shared streak, so its `StreakGrewMessage.Projectile` is null and its merge key must
 allow that; and at a ball cap of 1 the shot fills the only slot, so every ready has `AfterCapWait`. Phase 1, as
@@ -57,45 +57,73 @@ through slow-motion beats; under the pause menu they freeze with the game (§10)
 
 ## 3. Architecture
 
-Same shape as the audio routers (`Audio/Routing/*SoundRouter`): a plain C# router listens to gameplay
-messages and calls one injected presenter interface, the way the sound routers call `ISoundPlayer`.
-No presentation message bus.
+Same shape as the audio routers (`Audio/Routing/*SoundRouter`): small plain C# routers turn gameplay
+messages into heads-up requests, and one service does the rest, the way the sound routers all call one
+`ISoundPlayer`. No presentation message bus. One router for every event would subscribe to about 17
+sources, so the rules are split by what they're about.
 
 ```mermaid
 flowchart LR
     subgraph Signals["Gameplay signals"]
-        G1["StreakGrewMessage (new)"]
-        G2[SpeedTapMintedMessage]
-        G3["IActiveProjectilePierce.PierceArmed (new)"]
-        G4["ThrowerReadyMessage.AfterCapWait (new field)"]
+        S1["StreakGrew, SpeedTapMinted, PierceArmed, PierceDischarged, ProjectileBuffGained"]
+        S2["ShieldGained, WallHit, DeflectChain"]
+        S3["ThrowerReady, ProjectileFired"]
+        S4["StrikethroughArrived, ProgressBarCompleted"]
+        S5["RunReset, GameOver, level phase, navigation"]
     end
-    R["HeadsUpRouter (controller)"]
-    Q["HeadsUpQueue (model)"]
-    I[IHeadsUpPresenter]
-    L["HeadsUpLayer (view)"]
-    P["HandwrittenHeadsUp (pooled, world space)"]
-    G1 --> R
-    G2 --> R
-    G3 --> R
-    G4 --> R
-    R --> Q
-    Q --> R
-    R --> I
-    I --> L
-    L --> P
-    L -.finished.-> R
+    subgraph Rules["Routers, controllers"]
+        R1[CombatHeadsUpRouter]
+        R2[BounceHeadsUpRouter]
+        R3[CannonHeadsUpRouter]
+        R4[ProgressHeadsUpRouter]
+    end
+    Svc["HeadsUpService: IHeadsUps, ITickable"]
+    Q["HeadsUpQueue, model"]
+    Pause[PauseService]
+    Cfg[IHeadsUpSettings]
+    Pres[IHeadsUpPresenter]
+    Layer["HeadsUpLayer, view"]
+    Lines["HandwrittenHeadsUp, pooled"]
+    Reg[TrailEndpointRegistry]
+    S1 --> R1
+    S2 --> R2
+    S3 --> R3
+    S4 --> R4
+    S5 --> Svc
+    R1 -->|"Request"| Svc
+    R2 -->|"Request"| Svc
+    R3 -->|"Request, Release"| Svc
+    R4 -->|"Request"| Svc
+    Svc <-->|"Offer, Free, Clear"| Q
+    Pause -.->|"IsAnyPaused"| Svc
+    Cfg -.-> Q
+    Cfg -.-> Layer
+    Svc -->|"Show, Rewrite, Release, ClearAll, Advance"| Pres
+    Pres --> Layer
+    Layer --> Lines
+    Layer -->|"endpoint anchors"| Reg
+    Layer -.->|"Finished"| Svc
 ```
 
 | Piece | Layer | What it does |
 |---|---|---|
-| `HeadsUpRouter` | Controller, `Game/HeadsUp/` | Entry point (`RegisterEntryPoint`, like the sound routers). Turns gameplay signals into heads-up requests by the rules in §6, asks `HeadsUpQueue` whether to show each, and calls `IHeadsUpPresenter`. Pure C#, tested with NSubstitute like the sound routers |
-| `HeadsUpQueue` | Model, `Game/HeadsUp/` | Owned by the router. At most `MaxConcurrent` heads-ups, lowest priority dropped first, merge-key rewrites, per-style cooldowns. Takes the current unscaled time as an argument so it stays plain C#. Frees a slot when the presenter reports a heads-up finished |
-| `IHeadsUpPresenter` | `Game/HeadsUp/` | `Show(request, onFinished)`, `Rewrite(handle, arg)`, `ClearAll(animated)`. Implemented by `HeadsUpLayer` |
-| Heads-Up request | `Game/HeadsUp/` | A struct: style id, an `int` argument, an anchor (a world position, or a `TrailEndpointRegistry` key) and an optional merge key. No `string`: the view formats with `TMP_Text.SetText(format, arg)`, so a heads-up on every pop allocates nothing |
-| `HeadsUpLayer` | View, `UI/HeadsUp/` | Registered with `RegisterComponentInHierarchy<HeadsUpLayer>().As<IHeadsUpPresenter>()`. Resolves anchors, takes `HandwrittenHeadsUp` from `PoolManager` (prewarmed with `PrewarmAsync`) and returns it. Plays the scratch sound for heads-ups actually shown, rate-limited |
-| `HandwrittenHeadsUp` | View, `UI/HeadsUp/` | One heads-up: a world-space `TextMeshPro` on a sorting layer above the balloons, plus `WriteOnText` and the pencil tip |
-| `WriteOnText` | View, `UI/HeadsUp/` | The reveal (§4.1) as a standalone component on any `TMP_Text`, so `TooltipBanner` uses it too |
-| `IHeadsUpSettings` | `Configuration/` | Styles (format, size, colour, write speed, hold, fade, priority, cooldown), `MaxConcurrent`, thresholds, the tip sprite. Injected read-only; added to the CLAUDE.md list of config interfaces |
+| `CombatHeadsUpRouter`, `BounceHeadsUpRouter`, `CannonHeadsUpRouter`, `ProgressHeadsUpRouter` | Controllers, `Game/HeadsUp/Routing/` | Entry points. Each turns its signals into `HeadsUpRequest`s and hands them to `IHeadsUps`; they know no thresholds, looks or limits. Tested with `IHeadsUps` substituted |
+| `IHeadsUps` / `HeadsUpService` | Controller, `Game/HeadsUp/` | `Request(request)` returns a `HeadsUpHandle`; `Release(handle)` ends a held one. Owns the queue, calls the presenter, clears everything on `RunResetMessage` and navigation to the launch screen (at once; the level-up and game-over screens follow a fading clear of their own, which an instant one would cut short) and on game over and the level-up popup opening, `LevelUpPhase.Pending` (animated; not at `Completing`, the winning pop's slow-motion beat, when the last lines matter most). Takes no requests outside `NavigationState.Game`. Ticks the presenter on unscaled time, but hands it zero "live" time while `PauseService.IsAnyPaused`, so heads-ups freeze under a pause and keep going through slow-motion (§10) |
+| `HeadsUpQueue` | Model, `Game/HeadsUp/` | Owned by the service, plain C#. Applies each style's argument range, then a merge key (a showing line with the same style and key is rewritten), then the style's cooldown, then the cap: `MaxConcurrent` slots, a full queue evicting its lowest-priority, oldest line for an equal or higher request and dropping a lower one. Held styles (`ready`) sit in their own lane outside the cap. Every handle carries a generation, so a late "finished" from a reused line can't free its new occupant |
+| `HeadsUpRequest` | Data, `Game/HeadsUp/` | A struct: a `HeadsUpStyleId`, an `int` argument, a `HeadsUpAnchor` (a world point, or a `TrailEndpointRegistry` key), an optional merge key (an owner object and a channel string) and an optional word. No string is built per request: the view formats with `TMP_Text.SetText(format, arg)` |
+| `IHeadsUpPresenter` | `Game/HeadsUp/` | `Show`, `Rewrite`, `Release`, `ClearAll(animated)`, `Advance(liveDelta, unscaledDelta)` and a `Finished` stream. Implemented by `HeadsUpLayer` |
+| `HeadsUpLayer` | View, `UI/HeadsUp/` | Registered with `RegisterComponentInHierarchy<HeadsUpLayer>().As<IHeadsUpPresenter>()`. Takes pooled `HandwrittenHeadsUp` lines, resolves anchors (an endpoint line follows its anchor, re-read every frame, since the heart and the bars are on the camera-bound canvas), packs new lines clear of the ones showing (`HeadsUpPacking`, across every line) and reports each line that finished |
+| `HandwrittenHeadsUp` | View, `UI/HeadsUp/` | One pooled line: a world-space `TextMeshPro` with `WriteOnText` and the pencil tip, hand-ticked through write, hold and fade by the layer rather than by DOTween, so a pause freezes it |
+| `IHeadsUpSettings` | `Configuration/HeadsUp/` | `MaxConcurrent` and one entry per `HeadsUpStyleId`: format, look (`HeadsUpStyle`: colour, size, growth, weight), priority, cooldown, hold or held, offset from the anchor, argument range, and the argument the size starts growing from. The pencil itself (halo, write speed) stays on the line prefab. Added to the CLAUDE.md list of config interfaces |
+
+"At the ball" means where the ball was when it happened: a line moving at ball speed can't be read
+while it writes, or packed. A router that needs the ball's place reads it from `IProjectileRegistry` and
+skips the heads-up for a ball no longer in flight.
+
+**The early heads-ups fold in.** `BounceHeadsUp` and `ReloadHeadsUp` (Phase 1) become
+`BounceHeadsUpRouter` and `CannonHeadsUpRouter` behind tests of what they do today, and the two
+components go in the same change. Left apart, they would break the cap, the pause freeze and the one
+home for looks.
 
 **The top banner stays outside the queue.** `TooltipBanner` keeps its own replace-on-new behaviour
 and its own handling of `BonusCardDealtMessage` (held until play resumes, since the card is dealt
@@ -107,7 +135,8 @@ publisher stays `LevelUpPopUp`.
 follow the camera rig's zoom and shake, and the pencil strokes are world-space trails anyway. Only
 the top banner stays on the UI canvas.
 
-**Clearing.** All heads-ups clear on `RunResetMessage`, game over and the level-up transition, the
+**Clearing.** All heads-ups clear on `RunResetMessage`, game over and the level-up popup opening
+(not the winning pop's slow-motion beat before it), and none start off the game screen, the
 way `ProgressNoticePresenter` dismisses its notices (animated when there's time, instant otherwise).
 
 ## 4. Rendering
@@ -195,7 +224,7 @@ moment it grew. They don't say the same thing.
 |---|---|---|
 | 1. Handwritten text | The Patrick Hand TMP font asset, the pencil text shader and material, `WriteOnText`, `TooltipBanner` drawing through it | The top tooltip writes on with the ragged pencil wipe |
 | 2. New signals | `StreakGrewMessage`, `PierceArmed`, `ThrowerReadyMessage.AfterCapWait`, the cannon endpoint key, with tests | Each fires exactly when §5 says, under test |
-| 3. Heads-Ups | `HeadsUpQueue`, `HeadsUpRouter`, `IHeadsUpPresenter`, `HeadsUpLayer`, `HandwrittenHeadsUp`, `IHeadsUpSettings` | Each event in §6 shows its heads-up by the rules, a burst never shows more than `MaxConcurrent`, and heads-ups clear on reset, game over and level-up |
+| 3. Heads-Ups | In order: the request data and `IHeadsUpSettings`; `HeadsUpQueue`; `HeadsUpService`; the four routers (all testable with no scene change); then `HeadsUpLayer` and the pooled `HandwrittenHeadsUp`; then retiring `BounceHeadsUp` and `ReloadHeadsUp` | Each event in §6 shows its heads-up by the rules, a burst never shows more than `MaxConcurrent`, and heads-ups clear on reset, game over and level-up |
 | 4. Pencil lines | The pencil reskin of the strikethrough trail, then the `HighlightTrail` underline | A blocked row is scribbled through in pencil, and a big streak is underlined |
 | 5. Cleanup | Retire anything the heads-ups made redundant, update the READMEs | No two systems say the same thing |
 

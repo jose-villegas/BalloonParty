@@ -1,3 +1,4 @@
+using BalloonParty.Configuration.HeadsUp;
 using BalloonParty.UI.HeadsUp;
 using NUnit.Framework;
 
