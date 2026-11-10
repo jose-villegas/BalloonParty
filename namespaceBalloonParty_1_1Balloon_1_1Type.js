@@ -7,6 +7,7 @@ var namespaceBalloonParty_1_1Balloon_1_1Type =
     [ "SoapBubbleClusterVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant" ],
     [ "ToughBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant.html", "classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant" ],
     [ "UnbreakableBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant" ],
+    [ "UnbreakableFormationLook", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook" ],
     [ "BalloonType", "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60e", [
       [ "Simple", "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60ea1fbb1e3943c2c6c560247ac8f9289780", null ],
       [ "Tough", "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60ea7f14a4d8653b66c662a9cd9abb6a9004", null ],

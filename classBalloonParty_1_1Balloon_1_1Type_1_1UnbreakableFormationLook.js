@@ -1,0 +1,28 @@
+var classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook =
+[
+    [ "Apply", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#add21f61f4926cccbfda639eb9a511c81", null ],
+    [ "Awake", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a25cdb86363aca754a85a91bf6ad047f1", null ],
+    [ "Bind", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#abc9c22d1a6da542c15413a96b0167fdf", null ],
+    [ "BuildBlueTrail", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#ad08c217e92284561421a341e6528211d", null ],
+    [ "CaptureRestLook", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a34d19aa50309efe4dfff7080afded160", null ],
+    [ "ShowsFormation", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a3bfad6cf76aa99c9b26c4ec942ec198d", null ],
+    [ "Update", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#acde97612f4f01e6524ffb258a4d25ef8", null ],
+    [ "_blend", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a20ca4bb64388131e9647e183a72cae66", null ],
+    [ "_block", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a66bcf51be769124b0eac6beabd1b7c13", null ],
+    [ "_blue", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a801cb4209128bc9177e1a51ae93ad5b4", null ],
+    [ "_coreLights", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a6367067d24fc045459c883e3f92af515", null ],
+    [ "_coreRest", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#ad3fd57621474d4dce7042bfccbeb47f4", null ],
+    [ "_fadeDuration", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a44f865cb2d3208cf82a263ff85848564", null ],
+    [ "_glitter", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a56542739ea0c0632d377ab45210fe255", null ],
+    [ "_glitterAlpha", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a7fdbff8925ed7f85b2f63a65f2e3e013", null ],
+    [ "_model", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a1f29e335d08c5f27b14a462da16399d0", null ],
+    [ "_palette", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a3d0ff39555166250c671e980eb43a904", null ],
+    [ "_rimRenderers", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#aab176730376943801194d32477bf323c", null ],
+    [ "_rimRest", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a7a999f9d738ef31cc0fffe6f7b710433", null ],
+    [ "_trail", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a35d5773f08e1c79536a229187f6d205c", null ],
+    [ "_trailBlue", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a9e7ebfcdf76b68466a157712d7f46e36", null ],
+    [ "_trailIsBlue", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a40a19dd2ca860138eb7032210f4337a2", null ],
+    [ "_trailRest", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a71efd0e567187e5189f890b4dcc5deaf", null ],
+    [ "RimColorId", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#af452fcc8f4de879a6dcdef797f9b1d42", null ],
+    [ "TrailTailWhiten", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a83abcf7976828fa036d2cff32c14c95d", null ]
+];

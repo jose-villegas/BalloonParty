@@ -120,11 +120,13 @@ $(function(){initNavTree('structBalloonParty_1_1Solver_1_1BalanceProfile.html','
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a02f1b27a6317d3507a3dbb66fd3d082b" id="r_a02f1b27a6317d3507a3dbb66fd3d082b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02f1b27a6317d3507a3dbb66fd3d082b">BalanceProfile</a> (Vector2Int slotIndex, int balancePriority, int maxBalanceSteps, float moveSpeed, bool directBalanceMotion, IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Nudge_1_1NudgeOverride.html">NudgeOverride</a> &gt; nudgeOverrides, bool omnidirectional=false, <a class="el" href="namespaceBalloonParty_1_1Slots_1_1Actor.html#abf97dbdfa7dd43a6769e73afa51a0f7f">BalanceBiasKind</a> biasKind=BalanceBiasKind.None, float biasValue=0f, int biasTypeId=0)</td></tr>
-<tr class="separator:a02f1b27a6317d3507a3dbb66fd3d082b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d975419640dff5db7340fa4ebd9e8ec" id="r_a8d975419640dff5db7340fa4ebd9e8ec"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8d975419640dff5db7340fa4ebd9e8ec">BalanceProfile</a> (Vector2Int slotIndex, int balancePriority, int maxBalanceSteps, float moveSpeed, bool directBalanceMotion, IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Nudge_1_1NudgeOverride.html">NudgeOverride</a> &gt; nudgeOverrides, bool omnidirectional=false, <a class="el" href="namespaceBalloonParty_1_1Slots_1_1Actor.html#abf97dbdfa7dd43a6769e73afa51a0f7f">BalanceBiasKind</a> biasKind=BalanceBiasKind.None, float biasValue=0f, int biasTypeId=0, bool anchored=false)</td></tr>
+<tr class="separator:a8d975419640dff5db7340fa4ebd9e8ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:a06110aa3d7951e09a38645c0157d964d" id="r_a06110aa3d7951e09a38645c0157d964d"><td class="memItemLeft" align="right" valign="top">readonly bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a06110aa3d7951e09a38645c0157d964d">Anchored</a></td></tr>
+<tr class="separator:a06110aa3d7951e09a38645c0157d964d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab99682b1b548d47b97e69a52fb0295b6" id="r_ab99682b1b548d47b97e69a52fb0295b6"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab99682b1b548d47b97e69a52fb0295b6">BalancePriority</a></td></tr>
 <tr class="separator:ab99682b1b548d47b97e69a52fb0295b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8e3044aef305435147d945127ab0948" id="r_ad8e3044aef305435147d945127ab0948"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="namespaceBalloonParty_1_1Slots_1_1Actor.html#abf97dbdfa7dd43a6769e73afa51a0f7f">BalanceBiasKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad8e3044aef305435147d945127ab0948">BiasKind</a></td></tr>
@@ -150,8 +152,8 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p>Balance-grid identity/behaviour for a snapshot target — absent (null on the owning <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html" title="One board actor as the solver sees it — enough to reproduce pop/deflect/score rules without a live IB...">ShotBalloonSnapshot</a>) for a target with no live dynamic stub (e.g. </p>
 <p>a Phase A interactive static). <a class="el" href="#a90f37c50898ec7470c80e8d9274a5527">Omnidirectional</a>/<a class="el" href="#ad8e3044aef305435147d945127ab0948">BiasKind</a>/<a class="el" href="#a09b697dd2b9df3ce446113190ad85d2c">BiasValue</a>/ <a class="el" href="#a9ddecc5d1f2bfca0cd3e578116db6089">BiasTypeId</a> are gather-populated from the actor's <code><a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceInfluence.html" title="Lets a dynamic actor shape how the balancer moves it: a per-candidate weight offset added to the supp...">IBalanceInfluence</a></code>/ <code><a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceBiasSource.html" title="The read-set the balance-bias formulas (BalloonParty.Shared.Extensions.BalanceBiasExtensions) need fr...">IBalanceBiasSource</a></code> (Phase B) so the sim's stub actors reproduce the live weight system. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a02f1b27a6317d3507a3dbb66fd3d082b" name="a02f1b27a6317d3507a3dbb66fd3d082b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a02f1b27a6317d3507a3dbb66fd3d082b">&#9670;&#160;</a></span>BalanceProfile()</h2>
+<a id="a8d975419640dff5db7340fa4ebd9e8ec" name="a8d975419640dff5db7340fa4ebd9e8ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d975419640dff5db7340fa4ebd9e8ec">&#9670;&#160;</a></span>BalanceProfile()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -204,7 +206,12 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>biasTypeId</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>biasTypeId</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>anchored</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -212,6 +219,20 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a06110aa3d7951e09a38645c0157d964d" name="a06110aa3d7951e09a38645c0157d964d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06110aa3d7951e09a38645c0157d964d">&#9670;&#160;</a></span>Anchored</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly bool BalloonParty.Solver.BalanceProfile.Anchored</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ab99682b1b548d47b97e69a52fb0295b6" name="ab99682b1b548d47b97e69a52fb0295b6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab99682b1b548d47b97e69a52fb0295b6">&#9670;&#160;</a></span>BalancePriority</h2>
 

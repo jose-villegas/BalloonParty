@@ -1,0 +1,21 @@
+var classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings =
+[
+    [ "_bottomClearance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a88838cb7d01d1dbde6216d9758885fec", null ],
+    [ "_diagonalWeight", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a94334a00556d7fa9f4c1aed5df10598f", null ],
+    [ "_enabled", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a93acf9f2d01c02dcf4cf2628752908f3", null ],
+    [ "_holdWaves", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#ae82c18aa41ce769a6d875f3ecdb4ad3c", null ],
+    [ "_horizontalWeight", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#aba8e12675186f360248fc62a07eab64d", null ],
+    [ "_itemCoverWeight", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#ad9b2712aa818cc2681ef51558d78927b", null ],
+    [ "_maxMembers", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#aad829dea8fb7f2f599ae892c7d2f09cd", null ],
+    [ "_minMembers", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a3e63b8b181d9a24fc94648b63fe8400c", null ],
+    [ "_spotChoices", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#ac7344a28bdd942d3472fbeb79033e65e", null ],
+    [ "BottomClearance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#ab5c0ad5596ec2193680a896854ae5369", null ],
+    [ "DiagonalWeight", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a4dc4b4513ca9d8bd892c94934e9c4a2a", null ],
+    [ "Enabled", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a7909bcc38346b71d0414ae7d06ce131a", null ],
+    [ "HoldWaves", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a4341909c3eb246071fda4e4b37f976f7", null ],
+    [ "HorizontalWeight", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a6f3a845f32d75da37c96e1286a17a5a6", null ],
+    [ "ItemCoverWeight", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#ad1f360877b29faa467fd44b79fd21b78", null ],
+    [ "MaxMembers", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a8327aceebc4cc2d91f047ac53c595b11", null ],
+    [ "MinMembers", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a06177224e85e0e05d3922e61f7313cce", null ],
+    [ "SpotChoices", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a95e1c1f792b7403976313e50a1e782ff", null ]
+];

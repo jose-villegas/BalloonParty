@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Solver_1_1ShotSimulationResult.html" target="_top" xlink:title="Outcome of one deterministic flight — see ShotSimulator.Simulate.">
+<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Solver_1_1ShotItemOutcome.html" target="_top" xlink:title="The buff/state side&#45;effects one activation grants, applied by the caller (the item&#39;s EffectHits again...">
 <polygon fill="white" stroke="#666666" points="134,-30 0,-30 0,0 134,0 134,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Solver.Shot</text>
-<text text-anchor="middle" x="67" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">SimulationResult</text>
+<text text-anchor="middle" x="67" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">ItemOutcome</text>
 </a>
 </g>
 </g>

@@ -19,6 +19,7 @@ var classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette =
     [ "SparksColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ac2aeb10121b120e25a3001f97dc0e1d3", null ],
     [ "ToughColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a56633d10adabd807d96626b1d565ff82", null ],
     [ "UnbreakableColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#aa61b2d2440310f309a83750f92d8d401", null ],
+    [ "UnbreakableFormationColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a87dee0a16fca40e1ac3332242e69556c", null ],
     [ "ColorNames", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a9268b98c4b44f137a295c83d4925ed81", null ],
     [ "Colors", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ae107af9a44f594acec3593aff7b19a1b", null ],
     [ "ProgressColorNames", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ad7bd2b810534c1c29e2ea11dfa83bd6a", null ]

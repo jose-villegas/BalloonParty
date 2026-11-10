@@ -7,5 +7,6 @@ var dir_d57909491c41de786b31a87fb68068b4 =
     [ "SimpleBalloonVariant.cs", "SimpleBalloonVariant_8cs.html", "SimpleBalloonVariant_8cs" ],
     [ "SoapBubbleClusterVariant.cs", "SoapBubbleClusterVariant_8cs.html", "SoapBubbleClusterVariant_8cs" ],
     [ "ToughBalloonVariant.cs", "ToughBalloonVariant_8cs.html", "ToughBalloonVariant_8cs" ],
-    [ "UnbreakableBalloonVariant.cs", "UnbreakableBalloonVariant_8cs.html", "UnbreakableBalloonVariant_8cs" ]
+    [ "UnbreakableBalloonVariant.cs", "UnbreakableBalloonVariant_8cs.html", "UnbreakableBalloonVariant_8cs" ],
+    [ "UnbreakableFormationLook.cs", "UnbreakableFormationLook_8cs.html", "UnbreakableFormationLook_8cs" ]
 ];

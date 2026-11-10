@@ -1,0 +1,16 @@
+<map id="BalloonParty.Balloon.Formation.FormationAssignment" name="BalloonParty.Balloon.Formation.FormationAssignment">
+<area shape="rect" id="Node000001" title="One member and the formation slot it goes to." alt="" coords="1033,37,1263,77"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html" title="The side of a formation member that only UnbreakableFormationService drives." alt="" coords="717,37,927,77"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="941,55,1033,55,1033,60,941,60"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html" title="A balloon that can join an unbreakable formation; the view reads it to swap its lights." alt="" coords="463,5,666,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="680,37,717,42,717,47,679,42"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html" title=" " alt="" coords="461,69,668,109"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="681,72,717,68,718,73,682,77"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IDynamicSlotActor.html" title=" " alt="" coords="233,40,412,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="426,70,462,74,461,79,425,75"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="5,73,184,113"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="197,76,233,70,234,76,198,81"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="233,104,412,144"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="198,105,234,109,233,115,197,110"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="425,107,461,101,462,107,426,112"/>
+</map>

@@ -5,124 +5,124 @@ var architecture =
       [ "Folder → Namespace Mapping", "architecture.html#autotoc_md4", null ]
     ] ],
     [ "MVC Pattern", "arch_mvc.html", [
-      [ "MVC Pattern", "arch_mvc.html#autotoc_md79", [
-        [ "What this diagram shows", "arch_mvc.html#autotoc_md80", null ],
-        [ "Guidance", "arch_mvc.html#autotoc_md81", null ]
+      [ "MVC Pattern", "arch_mvc.html#autotoc_md86", [
+        [ "What this diagram shows", "arch_mvc.html#autotoc_md87", null ],
+        [ "Guidance", "arch_mvc.html#autotoc_md88", null ]
       ] ]
     ] ],
     [ "VContainer Scope Hierarchy", "arch_scope_hierarchy.html", [
-      [ "VContainer Scope Hierarchy", "arch_scope_hierarchy.html#autotoc_md82", [
-        [ "What this diagram shows", "arch_scope_hierarchy.html#autotoc_md83", null ],
-        [ "Guidance", "arch_scope_hierarchy.html#autotoc_md84", null ]
+      [ "VContainer Scope Hierarchy", "arch_scope_hierarchy.html#autotoc_md89", [
+        [ "What this diagram shows", "arch_scope_hierarchy.html#autotoc_md90", null ],
+        [ "Guidance", "arch_scope_hierarchy.html#autotoc_md91", null ]
       ] ]
     ] ],
     [ "Hit, Spawn and Balance Pipeline", "arch_turn_pipeline.html", [
-      [ "Hit, Spawn and Balance Pipeline", "arch_turn_pipeline.html#autotoc_md109", [
-        [ "What this diagram shows", "arch_turn_pipeline.html#autotoc_md110", null ],
-        [ "Guidance", "arch_turn_pipeline.html#autotoc_md111", null ]
+      [ "Hit, Spawn and Balance Pipeline", "arch_turn_pipeline.html#autotoc_md116", [
+        [ "What this diagram shows", "arch_turn_pipeline.html#autotoc_md117", null ],
+        [ "Guidance", "arch_turn_pipeline.html#autotoc_md118", null ]
       ] ]
     ] ],
     [ "Balance Flow", "arch_balance_flow.html", [
-      [ "Balance Flow", "arch_balance_flow.html#autotoc_md57", [
-        [ "What this diagram shows", "arch_balance_flow.html#autotoc_md58", null ],
-        [ "Guidance", "arch_balance_flow.html#autotoc_md59", null ]
+      [ "Balance Flow", "arch_balance_flow.html#autotoc_md64", [
+        [ "What this diagram shows", "arch_balance_flow.html#autotoc_md65", null ],
+        [ "Guidance", "arch_balance_flow.html#autotoc_md66", null ]
       ] ]
     ] ],
     [ "Spawner Coordination", "arch_spawner_coordination.html", [
-      [ "Spawner Coordination", "arch_spawner_coordination.html#autotoc_md100", [
-        [ "What this diagram shows", "arch_spawner_coordination.html#autotoc_md101", null ],
-        [ "Guidance", "arch_spawner_coordination.html#autotoc_md102", null ]
+      [ "Spawner Coordination", "arch_spawner_coordination.html#autotoc_md107", [
+        [ "What this diagram shows", "arch_spawner_coordination.html#autotoc_md108", null ],
+        [ "Guidance", "arch_spawner_coordination.html#autotoc_md109", null ]
       ] ]
     ] ],
     [ "Message Flow", "arch_message_flow.html", [
-      [ "Message Flow", "arch_message_flow.html#autotoc_md76", [
-        [ "What this diagram shows", "arch_message_flow.html#autotoc_md77", null ],
-        [ "Guidance", "arch_message_flow.html#autotoc_md78", null ]
+      [ "Message Flow", "arch_message_flow.html#autotoc_md83", [
+        [ "What this diagram shows", "arch_message_flow.html#autotoc_md84", null ],
+        [ "Guidance", "arch_message_flow.html#autotoc_md85", null ]
       ] ]
     ] ],
     [ "Cinematics Architecture", "arch_cinematics_architecture.html", [
-      [ "Cinematics Architecture", "arch_cinematics_architecture.html#autotoc_md63", [
-        [ "What this diagram shows", "arch_cinematics_architecture.html#autotoc_md64", null ],
-        [ "Guidance", "arch_cinematics_architecture.html#autotoc_md65", null ]
+      [ "Cinematics Architecture", "arch_cinematics_architecture.html#autotoc_md70", [
+        [ "What this diagram shows", "arch_cinematics_architecture.html#autotoc_md71", null ],
+        [ "Guidance", "arch_cinematics_architecture.html#autotoc_md72", null ]
       ] ]
     ] ],
     [ "Score & Cinematic Pipeline", "arch_score_cinematic.html", [
-      [ "Score & Cinematic Pipeline", "arch_score_cinematic.html#autotoc_md85", [
-        [ "What this diagram shows", "arch_score_cinematic.html#autotoc_md86", null ],
-        [ "Guidance", "arch_score_cinematic.html#autotoc_md87", null ]
+      [ "Score & Cinematic Pipeline", "arch_score_cinematic.html#autotoc_md92", [
+        [ "What this diagram shows", "arch_score_cinematic.html#autotoc_md93", null ],
+        [ "Guidance", "arch_score_cinematic.html#autotoc_md94", null ]
       ] ]
     ] ],
     [ "Trail Utility Composition", "arch_trail_composition.html", [
-      [ "Trail Utility Composition", "arch_trail_composition.html#autotoc_md106", [
-        [ "What this diagram shows", "arch_trail_composition.html#autotoc_md107", null ],
-        [ "Guidance", "arch_trail_composition.html#autotoc_md108", null ]
+      [ "Trail Utility Composition", "arch_trail_composition.html#autotoc_md113", [
+        [ "What this diagram shows", "arch_trail_composition.html#autotoc_md114", null ],
+        [ "Guidance", "arch_trail_composition.html#autotoc_md115", null ]
       ] ]
     ] ],
     [ "Score Shape Formations", "arch_shape_formations.html", [
-      [ "Score Shape Formations", "arch_shape_formations.html#autotoc_md94", [
-        [ "What this diagram shows", "arch_shape_formations.html#autotoc_md95", null ],
-        [ "Key contracts this enforces", "arch_shape_formations.html#autotoc_md96", null ]
+      [ "Score Shape Formations", "arch_shape_formations.html#autotoc_md101", [
+        [ "What this diagram shows", "arch_shape_formations.html#autotoc_md102", null ],
+        [ "Key contracts this enforces", "arch_shape_formations.html#autotoc_md103", null ]
       ] ]
     ] ],
     [ "Item Activation Pipeline", "arch_item_activation.html", [
-      [ "Item Activation Pipeline", "arch_item_activation.html#autotoc_md66", [
-        [ "What this diagram shows", "arch_item_activation.html#autotoc_md67", null ],
-        [ "Guidance", "arch_item_activation.html#autotoc_md68", null ]
+      [ "Item Activation Pipeline", "arch_item_activation.html#autotoc_md73", [
+        [ "What this diagram shows", "arch_item_activation.html#autotoc_md74", null ],
+        [ "Guidance", "arch_item_activation.html#autotoc_md75", null ]
       ] ]
     ] ],
     [ "Static State — Navigation & Cinematic", "arch_static_state.html", [
-      [ "Static State — Navigation & Cinematic", "arch_static_state.html#autotoc_md103", [
-        [ "What this diagram shows", "arch_static_state.html#autotoc_md104", null ],
-        [ "Guidance", "arch_static_state.html#autotoc_md105", null ]
+      [ "Static State — Navigation & Cinematic", "arch_static_state.html#autotoc_md110", [
+        [ "What this diagram shows", "arch_static_state.html#autotoc_md111", null ],
+        [ "Guidance", "arch_static_state.html#autotoc_md112", null ]
       ] ]
     ] ],
     [ "Slot Actor Abstraction", "arch_slot_actor.html", [
-      [ "Slot Actor Abstraction", "arch_slot_actor.html#autotoc_md97", [
-        [ "What this diagram shows", "arch_slot_actor.html#autotoc_md98", null ],
-        [ "Guidance", "arch_slot_actor.html#autotoc_md99", null ]
+      [ "Slot Actor Abstraction", "arch_slot_actor.html#autotoc_md104", [
+        [ "What this diagram shows", "arch_slot_actor.html#autotoc_md105", null ],
+        [ "Guidance", "arch_slot_actor.html#autotoc_md106", null ]
       ] ]
     ] ],
     [ "Disturbance Field Service", "disturbance_field.html", [
-      [ "Disturbance Field Service", "disturbance_field.html#autotoc_md932", [
-        [ "Contents", "disturbance_field.html#autotoc_md933", null ],
-        [ "Architecture", "disturbance_field.html#autotoc_md934", null ],
-        [ "How it works", "disturbance_field.html#autotoc_md935", [
-          [ "RT layout", "disturbance_field.html#autotoc_md936", null ],
-          [ "Stamp API", "disturbance_field.html#autotoc_md937", null ],
-          [ "Diffusion tick", "disturbance_field.html#autotoc_md938", null ],
-          [ "Lerp stamp lifecycle", "disturbance_field.html#autotoc_md939", null ],
-          [ "Combined pass", "disturbance_field.html#autotoc_md940", null ],
-          [ "Batched flush (stamp-only path)", "disturbance_field.html#autotoc_md941", null ],
-          [ "World → UV conversion", "disturbance_field.html#autotoc_md942", null ]
+      [ "Disturbance Field Service", "disturbance_field.html#autotoc_md940", [
+        [ "Contents", "disturbance_field.html#autotoc_md941", null ],
+        [ "Architecture", "disturbance_field.html#autotoc_md942", null ],
+        [ "How it works", "disturbance_field.html#autotoc_md943", [
+          [ "RT layout", "disturbance_field.html#autotoc_md944", null ],
+          [ "Stamp API", "disturbance_field.html#autotoc_md945", null ],
+          [ "Diffusion tick", "disturbance_field.html#autotoc_md946", null ],
+          [ "Lerp stamp lifecycle", "disturbance_field.html#autotoc_md947", null ],
+          [ "Combined pass", "disturbance_field.html#autotoc_md948", null ],
+          [ "Batched flush (stamp-only path)", "disturbance_field.html#autotoc_md949", null ],
+          [ "World → UV conversion", "disturbance_field.html#autotoc_md950", null ]
         ] ],
-        [ "Consumers", "disturbance_field.html#autotoc_md943", null ],
-        [ "Configuration", "disturbance_field.html#autotoc_md944", null ],
-        [ "Interactions", "disturbance_field.html#autotoc_md945", null ]
+        [ "Consumers", "disturbance_field.html#autotoc_md951", null ],
+        [ "Configuration", "disturbance_field.html#autotoc_md952", null ],
+        [ "Interactions", "disturbance_field.html#autotoc_md953", null ]
       ] ]
     ] ],
     [ "Bush System", "arch_bush_system.html", [
-      [ "Bush System", "arch_bush_system.html#autotoc_md60", [
-        [ "What this diagram shows", "arch_bush_system.html#autotoc_md61", null ],
-        [ "Key design decisions", "arch_bush_system.html#autotoc_md62", null ]
+      [ "Bush System", "arch_bush_system.html#autotoc_md67", [
+        [ "What this diagram shows", "arch_bush_system.html#autotoc_md68", null ],
+        [ "Key design decisions", "arch_bush_system.html#autotoc_md69", null ]
       ] ]
     ] ],
     [ "Screen-Space Light (2D GI)", "arch_screen_space_light.html", [
-      [ "Screen-Space Light (2D GI)", "arch_screen_space_light.html#autotoc_md88", [
-        [ "What this diagram shows", "arch_screen_space_light.html#autotoc_md89", null ],
-        [ "Key design decisions & contracts", "arch_screen_space_light.html#autotoc_md90", null ],
-        [ "Deliberately not built", "arch_screen_space_light.html#autotoc_md91", null ],
-        [ "In-editor setup", "arch_screen_space_light.html#autotoc_md92", null ],
-        [ "Cost", "arch_screen_space_light.html#autotoc_md93", null ]
+      [ "Screen-Space Light (2D GI)", "arch_screen_space_light.html#autotoc_md95", [
+        [ "What this diagram shows", "arch_screen_space_light.html#autotoc_md96", null ],
+        [ "Key design decisions & contracts", "arch_screen_space_light.html#autotoc_md97", null ],
+        [ "Deliberately not built", "arch_screen_space_light.html#autotoc_md98", null ],
+        [ "In-editor setup", "arch_screen_space_light.html#autotoc_md99", null ],
+        [ "Cost", "arch_screen_space_light.html#autotoc_md100", null ]
       ] ]
     ] ],
     [ "Scene Light Field (2D Multi-Light)", "arch_light_field.html", [
-      [ "Scene Light Field (2D Multi-Light)", "arch_light_field.html#autotoc_md69", [
-        [ "What this diagram shows", "arch_light_field.html#autotoc_md70", null ],
-        [ "Key design decisions", "arch_light_field.html#autotoc_md71", null ],
-        [ "Channel encoding (single RT)", "arch_light_field.html#autotoc_md72", null ],
-        [ "Current game sources", "arch_light_field.html#autotoc_md73", null ],
-        [ "Relationship to the GI", "arch_light_field.html#autotoc_md74", null ],
-        [ "See also", "arch_light_field.html#autotoc_md75", null ]
+      [ "Scene Light Field (2D Multi-Light)", "arch_light_field.html#autotoc_md76", [
+        [ "What this diagram shows", "arch_light_field.html#autotoc_md77", null ],
+        [ "Key design decisions", "arch_light_field.html#autotoc_md78", null ],
+        [ "Channel encoding (single RT)", "arch_light_field.html#autotoc_md79", null ],
+        [ "Current game sources", "arch_light_field.html#autotoc_md80", null ],
+        [ "Relationship to the GI", "arch_light_field.html#autotoc_md81", null ],
+        [ "See also", "arch_light_field.html#autotoc_md82", null ]
       ] ]
     ] ]
 ];

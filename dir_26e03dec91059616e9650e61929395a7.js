@@ -5,6 +5,7 @@ var dir_26e03dec91059616e9650e61929395a7 =
     [ "BalanceBiasKind.cs", "BalanceBiasKind_8cs.html", "BalanceBiasKind_8cs" ],
     [ "ClusterSlotSelectionStrategy.cs", "ClusterSlotSelectionStrategy_8cs.html", "ClusterSlotSelectionStrategy_8cs" ],
     [ "GridActorHitController.cs", "GridActorHitController_8cs.html", "GridActorHitController_8cs" ],
+    [ "IBalanceAnchor.cs", "IBalanceAnchor_8cs.html", "IBalanceAnchor_8cs" ],
     [ "IBalanceBiasSource.cs", "IBalanceBiasSource_8cs.html", "IBalanceBiasSource_8cs" ],
     [ "IBalanceInfluence.cs", "IBalanceInfluence_8cs.html", "IBalanceInfluence_8cs" ],
     [ "IDynamicSlotActor.cs", "IDynamicSlotActor_8cs.html", "IDynamicSlotActor_8cs" ],

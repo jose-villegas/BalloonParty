@@ -136,10 +136,12 @@ Files</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="UnbreakableBalloonVariant_8cs.html">UnbreakableBalloonVariant.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="UnbreakableFormationLook_8cs.html">UnbreakableFormationLook.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Balloon types define hit capacity, color selection, and per-type Inspector configuration.</p>
-<h1><a class="anchor" id="autotoc_md35"></a>
+<h1><a class="anchor" id="autotoc_md42"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -159,9 +161,11 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>SoapBubbleClusterVariant</code>   </td><td class="markdownTableBodyNone"><code>[ExecuteAlways]</code> <code>MonoBehaviour</code> implementing both <code>IBalloonVariant</code> and <code>IBalloonViewBinding</code> — not colorable. On <code>Bind()</code> randomises the shader's spin phase (<code>_Rotation</code>) and per-instance spin speed (<code>_RotationSpeed</code>, 5–12 °/s), pushes the animation clock once, subscribes to <code>HitsRemaining</code>, and pushes <code>_BubbleCount</code> (clamped to <code>_maxBubbles</code>) to the <code>BalloonParty/Balloon/SoapBubbleCluster</code> shader — the shader integrates <code>_Time.y</code> itself from then on in play mode. The child <code>_renderer</code>'s own <code>transform.localRotation</code> is reset to identity once, in <code>Awake()</code>, since nothing rotates it at runtime; the quad must stay axis-aligned so the shader-space spin renders correctly. In edit mode (<code>_Time</code> is frozen), <code>Update()</code> integrates editor time itself and re-pushes <code>_TimeOffset</code>/<code>_Rotation</code> every frame via <code>PushEditPreview</code>, calling <code>SceneView.RepaintAll()</code> to sustain animation. Inspector field <code>_previewBubbleCount</code> allows previewing each cluster state without Play mode    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>UnbreakableBalloonVariant</code>   </td><td class="markdownTableBodyNone"><code>[ExecuteAlways]</code> <code>MonoBehaviour</code> implementing both <code>IBalloonVariant</code> and <code>IBalloonViewBinding</code> — not colorable. Pushes <code>_SphereCenter</code> (world position of this transform), <code>_SphereRadius</code>, and <code>_TimeOffset</code> to all quadrant <code>SpriteRenderer</code>s via <code>MaterialPropertyBlock</code>, but only when the balloon has actually moved since the last frame. The sphere is composed of 4 quarter-circle sprites rotated by \(-90^\circ \times n\); this variant ensures all shader effects (metallic gradient, specular highlight, convex-mirror reflection, chrome rim) are coherent across the assembled sphere. <code>_SphereRadius</code> is auto-computed from the union of renderer bounds if left at zero. Ref-counts <code>SceneCaptureService</code> (<code>Display/</code>) via <code>Acquire()</code>/<code>Release()</code> on enable/disable so the scene capture only renders while an unbreakable balloon is on screen. Also registers an Unbreakable-colour scene light (<code>Shared/SceneLight</code>) at <code>Bind()</code> that lights up while the balloon moves and fades out over <code>_moveLightFadeDuration</code> once it settles (radius is fixed at construction, never rewritten), plus a brief Sparks-colour flash on <code>BalloonDeflectedMessage</code>; <code>TickLights()</code> skips its move-light writes once settled and fully faded (all of them would be same-value no-ops against the reactive light state) but still lets an in-progress fade tick to completion   </td></tr>
+<td class="markdownTableBodyNone"><code>UnbreakableBalloonVariant</code>   </td><td class="markdownTableBodyNone"><code>[ExecuteAlways]</code> <code>MonoBehaviour</code> implementing both <code>IBalloonVariant</code> and <code>IBalloonViewBinding</code> — not colorable. Pushes <code>_SphereCenter</code> (world position of this transform), <code>_SphereRadius</code>, and <code>_TimeOffset</code> to all quadrant <code>SpriteRenderer</code>s via <code>MaterialPropertyBlock</code>, but only when the balloon has actually moved since the last frame. The sphere is composed of 4 quarter-circle sprites rotated by \(-90^\circ \times n\); this variant ensures all shader effects (metallic gradient, specular highlight, convex-mirror reflection, chrome rim) are coherent across the assembled sphere. <code>_SphereRadius</code> is auto-computed from the union of renderer bounds if left at zero. Ref-counts <code>SceneCaptureService</code> (<code>Display/</code>) via <code>Acquire()</code>/<code>Release()</code> on enable/disable so the scene capture only renders while an unbreakable balloon is on screen. Also registers an Unbreakable-colour scene light (<code>Shared/SceneLight</code>) at <code>Bind()</code> that lights up while the balloon moves and fades out over <code>_moveLightFadeDuration</code> once it settles (radius is fixed at construction, never rewritten), plus a brief Sparks-colour flash on <code>BalloonDeflectedMessage</code>; <code>TickLights()</code> skips its move-light writes once settled and fully faded (all of them would be same-value no-ops against the reactive light state) but still lets an in-progress fade tick to completion    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>UnbreakableFormationLook</code>   </td><td class="markdownTableBodyNone"><code>IBalloonViewBinding</code> on the unbreakable prefab's <code>Shell</code>. While its balloon holds a formation and has settled, it eases the red lights to the palette's <code>UnbreakableFormation</code> blue: the core glow sprites (<code>Body (7)</code>, <code>Body (8)</code>), the inner rim (an MPB <code>_RimColor</code> over <code>UnbreakableMatIN</code>), and the exhaust trail, whose gradient swaps at the fade's midpoint because a lerped gradient would allocate. It also fades in <code>FormationGlitter</code>, a <code>BalloonParty/Sprite/GlitterSwirl</code> disc sorted right after the baked shadow in <code>BalloonView._spriteLayerRenderers</code>, so the swirl sits behind the sphere. The glitter is disabled out of formation. <code>UnbreakableBalloonVariant</code> tags its burst stamp blue under the same condition, so its specks match   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md36"></a>
+<h1><a class="anchor" id="autotoc_md43"></a>
 How it works</h1>
 <p>During spawning, <code>BalloonModelFactory</code> builds the model from <code>BalloonPrefabEntry</code> — a <code>BalloonModelConfig</code> struct carries <code>TypeName</code>, <code>ScoreValue</code>, <code>HitsToPop</code>, and <code>NudgeOverrides</code> into the model constructor — before <code>BalloonFactory</code> calls <code>IBalloonVariant.Initialize(model, levelAllowedColorsMask)</code>. <code>Initialize()</code> is then responsible only for type-specific data: <code>Color</code> for colored types (it is a no-op on the others). This keeps per-type balance values centralized in the configuration asset rather than scattered across MonoBehaviours. Item eligibility is not a flag — it is determined structurally: <code>BalloonModel</code> implements <code>IHasWriteableItemSlot</code>; <code>ToughBalloonModel</code>, <code>UnbreakableBalloonModel</code>, and <code>BubbleClusterModel</code> do not. A <code>BubbleClusterModel</code> gets its bubble count from the config entry's <code>HitsToPop</code> (the variant's <code>_maxBubbles</code> should match it) — each surviving hit maps to one fewer visible bubble rather than a damage-progress float.</p>
 <p>Then <code>BalloonView.Bind(model)</code> calls <code>Bind()</code> on all <code>IBalloonViewBinding</code> components found in its child hierarchy. <code>ToughBalloonVariant</code> uses this to subscribe to <code>HitsRemaining</code> and drive shader damage visuals.</p>
@@ -173,7 +177,7 @@ How it works</h1>
 <li><b><code>PassThrough</code></b> — balloon survived; projectile continues (Bubble Cluster pass-through). Plays the pass-through VFX.</li>
 <li><b><code>Absorb</code></b> — projectile destroyed by actor (handled upstream in <code>ProjectileHitResolver</code>)</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md37"></a>
+<h1><a class="anchor" id="autotoc_md44"></a>
 Tough balloon shader</h1>
 <p><code>ToughBalloonVariant</code> drives the <code>BalloonParty/Balloon/ToughBalloon</code> shader via <code>MaterialPropertyBlock</code> (no material instance allocation — safe for pooled objects):</p>
 <ul>
@@ -190,7 +194,7 @@ Tough balloon shader</h1>
 <li><b>Voronoi cracks</b> — spherically projected crack lines grow from invisible hairlines to full splits; both cell density (<code>_VoronoiScale + _VoronoiScaleDamageBoost</code>) and edge warp (<code>_SphereWarp + _SphereWarpDamageBoost</code>) accelerate quadratically with \(\text{dmgVis}^2\) for a dramatic late-stage surface collapse</li>
 </ul>
 <p>The shader properties are organised into labelled Inspector groups: <b>Damage</b>, <b>Surface</b>, <b>Rim</b>, <b>Cracks / Base</b>, <b>Cracks / Sphere Projection</b>, and <b>Cracks / Instance</b> (seed hidden at runtime).</p>
-<h1><a class="anchor" id="autotoc_md38"></a>
+<h1><a class="anchor" id="autotoc_md45"></a>
 Soap Cluster shader</h1>
 <p><code>SoapBubbleClusterVariant</code> drives the <code>BalloonParty/Balloon/SoapBubbleCluster</code> shader via <code>MaterialPropertyBlock</code>. The shader is fully procedural — no sprite or texture required.</p>
 <ul>
@@ -209,7 +213,7 @@ Soap Cluster shader</h1>
 <blockquote class="doxtable">
 <p><b>GPU instancing is disabled</b> on the Soap Cluster material — <code>_BubbleCount</code> and <code>_TimeOffset</code> are set per-instance via <code>MaterialPropertyBlock</code>. </p>
 </blockquote>
-<h1><a class="anchor" id="autotoc_md39"></a>
+<h1><a class="anchor" id="autotoc_md46"></a>
 Unbreakable balloon shader</h1>
 <p>The <code>BalloonParty/Balloon/UnbreakableBalloon</code> shader renders the chrome metallic sphere. The balloon is composed of 4 quarter-circle sprites rotated by \(-90^\circ \times n\); all four share <code>_SphereCenter</code> (world position via MPB) so every effect is coherent across the assembled sphere.</p>
 <ul>
@@ -223,7 +227,7 @@ Unbreakable balloon shader</h1>
 <blockquote class="doxtable">
 <p><b>GPU instancing is disabled</b> — <code>_SphereCenter</code> and <code>_TimeOffset</code> are set per-instance via <code>MaterialPropertyBlock</code>. </p>
 </blockquote>
-<h1><a class="anchor" id="autotoc_md40"></a>
+<h1><a class="anchor" id="autotoc_md47"></a>
 Interactions</h1>
 <ul>
 <li><b>BalloonFactory / BalloonModelFactory</b> — build the model from <code>BalloonPrefabEntry</code> before calling <code>Initialize()</code>; model class is chosen from <code>BalloonType</code>: <code>Simple</code> → <code>BalloonModel</code>, <code>BubbleCluster</code> → <code>BubbleClusterModel</code>, <code>Tough</code> → <code>ToughBalloonModel</code>, <code>Unbreakable</code> → <code>UnbreakableBalloonModel</code></li>

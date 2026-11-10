@@ -1,7 +1,7 @@
 var classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer =
 [
     [ "RoamCandidate", "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html", "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate" ],
-    [ "BalloonBalancer", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a257c92af8bf4ccc3e6a976c2dd55aae2", null ],
+    [ "BalloonBalancer", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a8e62417ceae4298faa30283224ca0d85", null ],
     [ "AnimatePaths", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a9beadd5ebf1d19dc39d7fa4866cdc59e", null ],
     [ "ApplyBalanceMoves", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a0740c78aa316d6f37f7b8585c8db7600", null ],
     [ "Balance", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a555a54f5d6618b767e98fd1f235fcafb", null ],
@@ -14,6 +14,7 @@ var classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer =
     [ "PolylineSqrLength", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#aa741bdd232c05b3082979e2f4dbc89f7", null ],
     [ "RecordPath", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#ad33e052b37f7847538c00c4ed2079143", null ],
     [ "ReleasePaths", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a48af30113fbf4ccd811f9c48fb358f4d", null ],
+    [ "RelocateActor", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a985381046e2c9e9959380e9232b54413", null ],
     [ "RelocateRoamers", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a08664ec4bf751fc5d494b358c96eb892", null ],
     [ "RequestBalance", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a6bb43d593342b493fe03b116aff3ca02", null ],
     [ "ResetRun", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a1a346054885258462660eb4cc8b3d862", null ],
@@ -33,6 +34,7 @@ var classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer =
     [ "_disturbanceField", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a6e43477f5bc622b9205591e879e3a07b", null ],
     [ "_finalizeBalanceMove", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#add3338e6b2649a7dfb4ddb46b43c3b4a", null ],
     [ "_flightRebalanceElapsed", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#ac885f15813dd6e4232210af6fa7ea94f", null ],
+    [ "_formations", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a5de1bb5c53addf7d23709088cb8d6625", null ],
     [ "_generation", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a8fb438be26459faebd371c41fc0c26b1", null ],
     [ "_grid", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a8c4d12a02ff18c8f206f4dd8f34b73c9", null ],
     [ "_motionTicker", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#ada084ef59a3566f2eaa39ef7675c1e86", null ],
@@ -41,6 +43,7 @@ var classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer =
     [ "_pressureMoves", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a950ba220625d939d585cac3bd98d9941", null ],
     [ "_pressurePropagation", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a1d226b478ba6b3980107c9f4d30d0af3", null ],
     [ "_projectiles", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a0405283c3ca289df39114c1ce6eef0cb", null ],
+    [ "_relocateActor", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#ace9c54cb1858f2ff85a214b8d82c9341", null ],
     [ "_restingSlots", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#afb37f7292de459b0b9bee842fdccdace", null ],
     [ "_roamers", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#adaef9f46d953a3f09e871c9e80b28760", null ],
     [ "_subscriber", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#ac4b1e3aa3edf6e31a4bfaa4955f3a67a", null ],

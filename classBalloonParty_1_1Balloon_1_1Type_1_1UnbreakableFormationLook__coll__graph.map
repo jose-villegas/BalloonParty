@@ -1,0 +1,19 @@
+<map id="BalloonParty.Balloon.Type.UnbreakableFormationLook" name="BalloonParty.Balloon.Type.UnbreakableFormationLook">
+<area shape="rect" id="Node000001" title="Turns an unbreakable&#39;s red lights blue while it holds a formation: the core glow sprites,..." alt="" coords="813,87,1015,127"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="545,5,669,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="674,32,709,41,852,85,851,90,707,46,673,37"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonViewBinding.html" title="Implemented by prefab MonoBehaviours that react to model binding; BalloonView discovers and calls the..." alt="" coords="509,55,704,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="718,84,814,94,813,100,718,90"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="508,119,705,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="719,125,813,115,813,120,719,130"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html" title=" " alt="" coords="505,183,708,223"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="686,177,789,145,850,125,852,130,790,150,688,182"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IDynamicSlotActor.html" title=" " alt="" coords="255,119,434,159"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="441,160,525,181,524,186,440,165"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="5,119,184,159"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="198,137,255,137,255,142,198,142"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHitable.html" title=" " alt="" coords="233,183,456,223"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="470,201,505,201,505,206,470,206"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html" title=" " alt="" coords="233,247,456,287"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="440,241,524,221,525,226,441,247"/>
+</map>

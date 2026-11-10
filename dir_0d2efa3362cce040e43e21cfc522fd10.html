@@ -130,7 +130,7 @@ Files</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>The coin counter, bottom left of the screen: a coin and the wallet's balance. Dropped coins fly here from their pops and count when they land (<code><a class="el" href="Game_2Coins_2README_8md.html">Game/Coins/README.md</a></code>).</p>
 <p>It stays hidden until coins mean something to this player: the first time the run reaches the level coins start dropping at, or from the start if the wallet already holds coins. Then it stays for the session, so a retry never hides it again. Coins fly on real time, so they land during the loss's slow pan-in and the balance is complete when the game-over screen settles. Behind that screen the counter is blurred and dimmed with the rest of the HUD; showing the balance crisply there is for the shop (<code><a class="el" href="PLAN-Coins_8md.html">PLAN-Coins.md</a></code> phase 4).</p>
-<h1><a class="anchor" id="autotoc_md1028"></a>
+<h1><a class="anchor" id="autotoc_md1036"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -142,7 +142,7 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>CoinCounterView</code>   </td><td class="markdownTableBodyNone">At start, gives <code>CoinTrailService</code> the coin icon as the trail target, along with the coin trail prefab. Shows or hides the counter (a <code>CanvasGroup</code>'s alpha) from <code>ICoinCounterVisibility</code>, fading in when it first turns on, and punches the icon on each <code>CoinLandedMessage</code>   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md1029"></a>
+<h1><a class="anchor" id="autotoc_md1037"></a>
 Building it</h1>
 <p><code>Tools/BalloonParty/Coins/Build Counter</code> (<code>Editor/CoinCounterBuilder</code>) builds <code>Prefabs/Coins/UI/CoinsCounter.prefab</code> and places it in <code>GameCanvas.prefab</code>, beside the other HUD. The backing and the number are copies of the shield counter's, so the HUD counters match; the number sits right of the coin and reads left to right, since a balance runs to several digits. The coin takes <code>Materials/UI/CoinUI.mat</code>, the HUD icons' shine sweep (as the shield's <code>ShieldUI.mat</code>, offset in time so the two don't flash together). Running it again rebuilds the counter and replaces the one in the canvas, so change the builder rather than the prefab.</p>
 <p>The flying coin is <code>Prefabs/Coins/CoinTrail.prefab</code>, a <code>FlyingTrail</code> with the coin sprite and a gold ribbon. </p>

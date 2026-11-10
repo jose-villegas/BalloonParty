@@ -24,6 +24,7 @@ var classBalloonParty_1_1Solver_1_1ShotSimDynamicActor =
     [ "BiasValue", "classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html#a775b769ae3c6c2344f417f8cb8ed0cd1", null ],
     [ "ColorId", "classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html#abd0e5fe8e2ce290bcd45ace10cbcefa5", null ],
     [ "DirectBalanceMotion", "classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html#a9f9cab2ae2812292e7747e0c86469e94", null ],
+    [ "IsAnchored", "classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html#a9e7c5bef8ab54f3211a4fca372dda286", null ],
     [ "IsShotTarget", "classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html#a10a0bcac184118cf18e70e6e90bc88a3", null ],
     [ "IsStable", "classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html#a391ffb6f011f8044c8026f8b32ab224b", null ],
     [ "IsStable", "classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html#afbbff528f418b4f9530684e8d381bc81", null ],

@@ -1,6 +1,7 @@
 var structBalloonParty_1_1Solver_1_1BalanceProfile =
 [
-    [ "BalanceProfile", "structBalloonParty_1_1Solver_1_1BalanceProfile.html#a02f1b27a6317d3507a3dbb66fd3d082b", null ],
+    [ "BalanceProfile", "structBalloonParty_1_1Solver_1_1BalanceProfile.html#a8d975419640dff5db7340fa4ebd9e8ec", null ],
+    [ "Anchored", "structBalloonParty_1_1Solver_1_1BalanceProfile.html#a06110aa3d7951e09a38645c0157d964d", null ],
     [ "BalancePriority", "structBalloonParty_1_1Solver_1_1BalanceProfile.html#ab99682b1b548d47b97e69a52fb0295b6", null ],
     [ "BiasKind", "structBalloonParty_1_1Solver_1_1BalanceProfile.html#ad8e3044aef305435147d945127ab0948", null ],
     [ "BiasTypeId", "structBalloonParty_1_1Solver_1_1BalanceProfile.html#a9ddecc5d1f2bfca0cd3e578116db6089", null ],

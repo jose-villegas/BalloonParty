@@ -5,5 +5,6 @@ var searchData=
   ['flightphase_2',['FlightPhase',['../namespaceBalloonParty_1_1Shared_1_1Pool.html#a85ad373a8cb2fda2f8c1c544019bff48',1,'BalloonParty::Shared::Pool']]],
   ['foldrule_3',['FoldRule',['../namespaceBalloonParty_1_1Game_1_1Telemetry.html#a7d92d3154f481b1e25541b132865a4f1',1,'BalloonParty::Game::Telemetry']]],
   ['formationphase_4',['FormationPhase',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a58402d3cd9ac1d9358b618890bc428a7',1,'BalloonParty::Game::Score::Behaviours::ShapeFormationTicker']]],
-  ['frameratemode_5',['FrameRateMode',['../namespaceBalloonParty_1_1Shared_1_1Diagnostics.html#a5f963220a502f8d8158c5bc0c226698e',1,'BalloonParty::Shared::Diagnostics']]]
+  ['formationshape_5',['FormationShape',['../namespaceBalloonParty_1_1Balloon_1_1Formation.html#a7d189f644fea0191bb4f5acaef4bf746',1,'BalloonParty::Balloon::Formation']]],
+  ['frameratemode_6',['FrameRateMode',['../namespaceBalloonParty_1_1Shared_1_1Diagnostics.html#a5f963220a502f8d8158c5bc0c226698e',1,'BalloonParty::Shared::Diagnostics']]]
 ];

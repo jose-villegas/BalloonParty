@@ -1,0 +1,16 @@
+<map id="BalloonParty.Balloon.Model.IWriteableFormationMember" name="BalloonParty.Balloon.Model.IWriteableFormationMember">
+<area shape="rect" id="Node000001" title="The side of a formation member that only UnbreakableFormationService drives." alt="" coords="713,37,923,77"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html" title=" " alt="" coords="971,37,1173,77"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="937,55,970,55,970,60,937,60"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html" title="A balloon that can join an unbreakable formation; the view reads it to swap its lights." alt="" coords="461,5,663,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="677,37,713,42,713,47,677,42"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html" title=" " alt="" coords="459,69,665,109"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="679,72,713,68,713,73,679,77"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IDynamicSlotActor.html" title=" " alt="" coords="232,37,411,77"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="425,68,459,73,458,78,424,74"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="5,69,184,109"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="197,72,231,67,232,73,198,77"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="232,101,411,141"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="198,101,232,106,231,111,197,107"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="424,105,458,100,459,106,425,110"/>
+</map>

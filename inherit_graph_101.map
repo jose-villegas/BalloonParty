@@ -1,3 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html" title="Builds a level&#39;s mix from LevelGenerationSettings." alt="" coords="5,5,203,45"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece.html" title="A catalogue entry the level generator can include in a level." alt="" coords="5,69,203,109"/>
+<area shape="rect" id="Node000001" href="$structBalloonParty_1_1Configuration_1_1Level_1_1BalloonContentEntry.html" title=" " alt="" coords="255,5,453,45"/>
+<area shape="poly" id="edge82_Node000000_Node000001" title=" " alt="" coords="195,63,275,43,276,48,197,68"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html" title="A grid actor in the catalogue. Actors block the board, so they&#39;re paid from the threat budget." alt="" coords="251,69,457,109"/>
+<area shape="poly" id="edge83_Node000000_Node000002" title=" " alt="" coords="216,87,250,87,250,92,216,92"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Configuration_1_1Level_1_1ItemContentEntry.html" title="An item in the catalogue. Items help the player, so they&#39;re always paid from the aid budget." alt="" coords="255,133,453,173"/>
+<area shape="poly" id="edge84_Node000000_Node000003" title=" " alt="" coords="197,110,276,131,275,136,195,115"/>
 </map>

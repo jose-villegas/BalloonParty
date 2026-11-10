@@ -1,0 +1,9 @@
+<map id="BalloonParty.Balloon.Formation.FormationPlanner.SpotByCost" name="BalloonParty.Balloon.Formation.FormationPlanner.SpotByCost">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,183,235,223"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="69,5,160,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,44,122,183,117,183,113,45"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1SpotByCost.html" title=" " alt="" coords="136,80,365,120"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="147,35,220,78,217,82,145,40"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="217,131,146,185,143,180,213,127"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="380,92,392,100,384,107,366,110,365,104,382,102,387,100,378,97"/>
+</map>

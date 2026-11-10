@@ -152,7 +152,7 @@ Files</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>A saved currency the player earns deep in a run: from level <code>CoinsFromLevel</code> (10) on, each pop has a <code>DropChance</code> (1 %) of dropping a coin. Coins carry over between runs and app restarts. They will be spent on the game-over screen for a card that helps the retry (not built yet; see <code><a class="el" href="PLAN-Coins_8md.html">Plans/PLAN-Coins.md</a></code>).</p>
 <p>A dropped coin flies from its pop to the coin counter (bottom left, <code>UI/Coins/</code>) and counts when it lands, as score does: the balance never runs ahead of what the player saw arrive.</p>
-<h1><a class="anchor" id="autotoc_md180"></a>
+<h1><a class="anchor" id="autotoc_md187"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -181,7 +181,7 @@ Contents</h1>
 <p>Settings live in <code>RunConfig</code> as the <code>Coins</code> block (<code>CoinSettings</code>, read through <code>ICoinSettings</code> in <code>Shared/</code>): when coins drop, and the trail's flight time and pool size. The messages are <code>Shared/Messages/CoinDroppedMessage</code> (a pop dropped a coin) and <code>CoinLandedMessage</code> (it reached the counter). One <code>CoinWallet</code> singleton is registered as all three wallet interfaces.</p>
 <p>A crash or a hard kill with no focus change first loses the coins earned since the last save point. That is the price of not writing on every coin.</p>
 <p><b>One wallet only.</b> The wallet lives in the Game scope, which is loaded once and reset in place for every run, so there is one wallet for the session. If the balance is ever needed outside the Game scope (on the launch screen, say), move the wallet, its store and the suspend signal to <code>AppLifetimeScope</code>: two wallets would each hold their own unsaved balance, and the last one to save would wipe the other's coins.</p>
-<h1><a class="anchor" id="autotoc_md181"></a>
+<h1><a class="anchor" id="autotoc_md188"></a>
 How a drop is decided</h1>
 <div class="fragment"><div class="line">flowchart LR</div>
 <div class="line">    Hit[&quot;ActorHitMessage&quot;] --&gt; Pop{&quot;Outcome has Pop?&quot;}</div>
@@ -196,7 +196,7 @@ How a drop is decided</h1>
 <div class="line">    Land --&gt; Credit[&quot;CoinCreditor: wallet.Add&quot;]</div>
 </div><!-- fragment --><p>Every hit dispatched through the hit pipeline counts: a balloon or a gatekeeper popping, and an item's blast rolls once per balloon it pops. The board clear at a level-up does not dispatch hits, so it can't farm coins. Dev cheats that pop balloons do dispatch hits and can earn coins.</p>
 <p><b>Every attempt at a level drops the same way for the same pops.</b> The rolls come from a random stream seeded with the level's seed (<code>ILevelPacingConfiguration.SeedForLevel</code>, mixed with a salt so it doesn't repeat the level generator's stream). The stream restarts whenever the level changes and on every run reset. The level's seed doesn't change between runs either, just as the level's board doesn't. Only pops consume a roll; a deflect or an absorb doesn't, so bouncing more on a retry doesn't shift which pops drop. The reset runs at <code>RunResetOrder.Score + 15</code>, after the level is set back.</p>
-<h1><a class="anchor" id="autotoc_md182"></a>
+<h1><a class="anchor" id="autotoc_md189"></a>
 Telemetry</h1>
 <p><code>CoinDroppedMessage</code> feeds the <code>coins_earned</code> metric (summed per level; see <code><a class="el" href="Game_2Telemetry_2README_8md.html">Game/Telemetry/README.md</a></code>). The metric is a copy for analysis, not the wallet: the wallet is progression and stays on the device. A coin that drops after the game over (a straggler pop) still goes into the wallet but is not counted, because the level's record is already closed. The metric counts drops, not landings: every drop lands, at once if it must, so the two only differ for coins in the air when the app is closed.</p>
 <p>The playtest bot (<code>Tools/playtest/</code>) prints the balance on every tick and reports coins earned per run and per level. </p>

@@ -5,5 +5,7 @@ var namespaceBalloonParty_1_1Configuration_1_1Balloons =
     [ "BalloonsConfiguration", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration" ],
     [ "BalloonTypeWeight", "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html", "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight" ],
     [ "HitVfxOverride", "classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride" ],
-    [ "IBalloonsConfiguration", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration" ]
+    [ "IBalloonsConfiguration", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration" ],
+    [ "IUnbreakableFormationSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings" ],
+    [ "UnbreakableFormationSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings" ]
 ];

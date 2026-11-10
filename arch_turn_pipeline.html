@@ -110,13 +110,13 @@ $(function(){initNavTree('arch_turn_pipeline.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">Hit, Spawn and Balance Pipeline</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md109"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md116"></a>
 Hit, Spawn and Balance Pipeline</h1>
 <div class="image">
 <object type="image/svg+xml" data="turn_pipeline.svg" style="pointer-events: none;"></object>
 <div class="caption">
 Hit, Spawn and Balance Pipeline</div></div>
-<h2><a class="anchor" id="autotoc_md110"></a>
+<h2><a class="anchor" id="autotoc_md117"></a>
 What this diagram shows</h2>
 <p>Two independent flows that share the grid: balls hitting balloons, and a timer bringing new balloon lines in. There is no "turn" any more: a line never waits for a shot to end, and several balls can be in flight at once.</p>
 <p><b>Hit</b> Any ball in flight bounces off walls. On each balloon contact <code>ProjectileView</code> hands the collision to the plain-C# <code>ProjectileHitResolver</code>, which calls <code>EvaluateHit</code> (state-mutating), embeds the outcome in <code>ActorHitMessage</code>, and routes it through <code>IHitDispatcher</code> (<code>Game/HitPipeline</code>). The pipeline runs the order-dependent stages synchronously and explicitly: <code>ScoreController</code> records streak/score first, then the owning <code>BalloonController</code> (resolved via <code>BalloonControllerRegistry</code>) pops/deflects, and only then broadcasts the message for order-independent observers (<code>NudgeService</code>, <code>ItemActivator</code>, <code>GridActorHitController</code>, <code>BalloonSpawner</code>, <code>SpeckField</code>, VFX). A direct (<code>DamageFlags.DirectHit</code>) pop also gives <code>BalloonSpawner</code> a chance to roll an extra "pop-spawn" balloon into the board, independent of the clock's lines. A ball's death (<code>ProjectileDestroyedMessage</code>) spawns nothing.</p>
@@ -128,7 +128,7 @@ What this diagram shows</h2>
 </ol>
 <p>A <b>wave</b> is <code>LinesPerWave</code> (3) consecutive lines. The wave's last line publishes <code>ItemCheckMessage</code>, which is what the item cadence counts.</p>
 <p><b>Rebalance pulse</b> Independently of lines, <code>BalloonBalancer.Tick</code> pulses a <code>Balance()</code> every <code>FlightRebalanceInterval</code> all through play, so hits that open gaps get settled without waiting for the next line.</p>
-<h2><a class="anchor" id="autotoc_md111"></a>
+<h2><a class="anchor" id="autotoc_md118"></a>
 Guidance</h2>
 <p><b>Where to add behavior triggered by a balloon pop:</b> Subscribe to <code>ActorHitMessage</code> filtered by <code>Outcome == Pop</code>. Your subscriber runs synchronously, before the projectile dies, and <em>after</em> the pipeline's ordered stages (score recording and the owning balloon's reaction) have completed. If your behavior must run <em>before</em> the pop or interleave with scoring, it belongs in <code>HitPipeline</code> as an explicit stage, not on the bus. Never publish <code>ActorHitMessage</code> directly — route hits through <code>IHitDispatcher</code>.</p>
 <p><b>Where to add behavior triggered by a ball's death:</b> Subscribe to <code>ProjectileDestroyedMessage</code>. It says nothing about the board: lines come from the clock, so do not hang spawning or board-settling work on it.</p>

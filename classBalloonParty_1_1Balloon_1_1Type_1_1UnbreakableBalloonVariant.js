@@ -24,6 +24,7 @@ var classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant =
     [ "_flashLight", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#abbbe7a02b11a2d5db05cc412f2cf51c2", null ],
     [ "_flashOffTime", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a637d94bc034ce7f355cd84787a5f1c58", null ],
     [ "_flashRegistration", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a81919f830cd1dc51bb6c268b506a9677", null ],
+    [ "_formationColorIndex", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a6c67b9cffca33e59480e31005e2e0519", null ],
     [ "_innerRenderers", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a7c54ec2e7c5968e23a4b00a6c998bbb4", null ],
     [ "_instancePhase", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a0b0d04427695f9ab91d0edb3820de74b", null ],
     [ "_lastLightPos", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a89a9a632d7b6f42127f71e2cae59d1d3", null ],

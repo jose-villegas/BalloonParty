@@ -71,6 +71,11 @@ var annotated_dup =
           [ "BubbleMergeService", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService" ],
           [ "PressurePropagation", "classBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation" ]
         ] ],
+        [ "Formation", "namespaceBalloonParty_1_1Balloon_1_1Formation.html", [
+          [ "FormationAssignment", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment" ],
+          [ "FormationPlanner", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner" ],
+          [ "UnbreakableFormationService", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService" ]
+        ] ],
         [ "Model", "namespaceBalloonParty_1_1Balloon_1_1Model.html", [
           [ "BalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel" ],
           [ "BalloonModelBase", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase" ],
@@ -79,8 +84,10 @@ var annotated_dup =
           [ "BubbleClusterModel", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel" ],
           [ "ColorSource", "structBalloonParty_1_1Balloon_1_1Model_1_1ColorSource.html", "structBalloonParty_1_1Balloon_1_1Model_1_1ColorSource" ],
           [ "IBalloonModel", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel" ],
+          [ "IFormationMember", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember" ],
           [ "IHasWriteableItemSlot", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IHasWriteableItemSlot.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IHasWriteableItemSlot" ],
           [ "IWriteableBalloonModel", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableBalloonModel.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableBalloonModel" ],
+          [ "IWriteableFormationMember", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember" ],
           [ "ToughBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel" ],
           [ "UnbreakableBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel" ]
         ] ],
@@ -103,7 +110,8 @@ var annotated_dup =
           [ "SimpleBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1SimpleBalloonVariant.html", "classBalloonParty_1_1Balloon_1_1Type_1_1SimpleBalloonVariant" ],
           [ "SoapBubbleClusterVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant" ],
           [ "ToughBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant.html", "classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant" ],
-          [ "UnbreakableBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant" ]
+          [ "UnbreakableBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant" ],
+          [ "UnbreakableFormationLook", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook" ]
         ] ],
         [ "View", "namespaceBalloonParty_1_1Balloon_1_1View.html", [
           [ "BalanceGizmos", "classBalloonParty_1_1Balloon_1_1View_1_1BalanceGizmos.html", null ],
@@ -126,7 +134,9 @@ var annotated_dup =
           [ "BalloonsConfiguration", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration" ],
           [ "BalloonTypeWeight", "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html", "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight" ],
           [ "HitVfxOverride", "classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride" ],
-          [ "IBalloonsConfiguration", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration" ]
+          [ "IBalloonsConfiguration", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration" ],
+          [ "IUnbreakableFormationSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings" ],
+          [ "UnbreakableFormationSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings" ]
         ] ],
         [ "Buffs", "namespaceBalloonParty_1_1Configuration_1_1Buffs.html", [
           [ "BuffConfiguration", "classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffConfiguration.html", "classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffConfiguration" ],
@@ -1016,6 +1026,7 @@ var annotated_dup =
           ] ],
           [ "ClusterSlotSelectionStrategy", "classBalloonParty_1_1Slots_1_1Actor_1_1ClusterSlotSelectionStrategy.html", "classBalloonParty_1_1Slots_1_1Actor_1_1ClusterSlotSelectionStrategy" ],
           [ "GridActorHitController", "classBalloonParty_1_1Slots_1_1Actor_1_1GridActorHitController.html", "classBalloonParty_1_1Slots_1_1Actor_1_1GridActorHitController" ],
+          [ "IBalanceAnchor", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceAnchor.html", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceAnchor" ],
           [ "IBalanceBiasSource", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceBiasSource.html", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceBiasSource" ],
           [ "IBalanceInfluence", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceInfluence.html", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceInfluence" ],
           [ "IDynamicSlotActor", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IDynamicSlotActor.html", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IDynamicSlotActor" ],

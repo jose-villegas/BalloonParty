@@ -18,5 +18,6 @@ var interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration
     [ "RainbowPopFlashSeconds", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#ae22a1474fe15f596b0a0e5f7082c5047", null ],
     [ "SpawnEntryRowOffset", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a30372316328d8c1654fe1d20a88a0876", null ],
     [ "TimeForBalloonsBalance", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a39bfc6e642acf7184f685a26662b6b8a", null ],
-    [ "ToughLayerSpacing", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#aa53372cce06c74981950c29d7cd79af9", null ]
+    [ "ToughLayerSpacing", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#aa53372cce06c74981950c29d7cd79af9", null ],
+    [ "UnbreakableFormation", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a40c21f0f71edf37f6e7062414194af95", null ]
 ];

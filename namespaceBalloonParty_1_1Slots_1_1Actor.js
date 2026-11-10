@@ -4,6 +4,7 @@ var namespaceBalloonParty_1_1Slots_1_1Actor =
     [ "Cluster", "namespaceBalloonParty_1_1Slots_1_1Actor_1_1Cluster.html", "namespaceBalloonParty_1_1Slots_1_1Actor_1_1Cluster" ],
     [ "ClusterSlotSelectionStrategy", "classBalloonParty_1_1Slots_1_1Actor_1_1ClusterSlotSelectionStrategy.html", "classBalloonParty_1_1Slots_1_1Actor_1_1ClusterSlotSelectionStrategy" ],
     [ "GridActorHitController", "classBalloonParty_1_1Slots_1_1Actor_1_1GridActorHitController.html", "classBalloonParty_1_1Slots_1_1Actor_1_1GridActorHitController" ],
+    [ "IBalanceAnchor", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceAnchor.html", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceAnchor" ],
     [ "IBalanceBiasSource", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceBiasSource.html", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceBiasSource" ],
     [ "IBalanceInfluence", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceInfluence.html", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceInfluence" ],
     [ "IDynamicSlotActor", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IDynamicSlotActor.html", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IDynamicSlotActor" ],
