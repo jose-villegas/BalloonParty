@@ -5,7 +5,9 @@ using BalloonParty.Game.Level;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Projectile.View;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Messages;
 using BalloonParty.Thrower;
+using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
 using UniRx;
@@ -34,6 +36,8 @@ namespace BalloonParty.Tests.Thrower
         private ReactiveProperty<LevelUpPhase> _phase;
         private List<ProjectileView> _inFlight;
         private ProjectileView _heldView;
+        private ProjectileModel _heldBall;
+        private IPublisher<ThrowerReadyMessage> _readyPublisher;
 
         [SetUp]
         public void SetUp()
@@ -56,12 +60,12 @@ namespace BalloonParty.Tests.Thrower
 
             _heldView = NewView();
             Set("_loadedView", _heldView);
-            Set("_loadedProjectile", new ProjectileModel());
+            _heldBall = new ProjectileModel();
+            Set("_loadedProjectile", _heldBall);
+            _readyPublisher = Substitute.For<IPublisher<ThrowerReadyMessage>>();
+            Set("_readyPublisher", _readyPublisher);
 
-            var reload = new ThrowerReload(ThrowerReloadTests.WeaponOf(config));
-            reload.Restart();
-            reload.Advance(Cooldown, 0);
-            Set("_reload", reload);
+            Set("_reload", ReloadedAfter(Cap - 1));
         }
 
         [TearDown]
@@ -171,6 +175,69 @@ namespace BalloonParty.Tests.Thrower
             Assert.DoesNotThrow(() => _thrower.FireAt(Vector3.up));
 
             Assert.AreEqual(0, _inFlight.Count);
+        }
+
+        [Test]
+        public void AnnounceReady_AfterAWaitAtTheCap_SaysSo()
+        {
+            Set("_reload", ReloadedAfter(Cap));
+
+            Invoke("AnnounceReady");
+
+            _readyPublisher.Received(1).Publish(
+                Arg.Is<ThrowerReadyMessage>(m => m.Projectile == _heldBall && m.AfterCapWait));
+        }
+
+        [Test]
+        public void AnnounceReady_WithASlotFreeThroughout_SaysNoCapWait()
+        {
+            Invoke("AnnounceReady");
+
+            _readyPublisher.Received(1).Publish(
+                Arg.Is<ThrowerReadyMessage>(m => m.Projectile == _heldBall && !m.AfterCapWait));
+        }
+
+        [Test]
+        public void AnnounceReady_StillReadyNextTick_AnnouncesOnce()
+        {
+            Invoke("AnnounceReady");
+            Invoke("AnnounceReady");
+
+            _readyPublisher.Received(1).Publish(Arg.Any<ThrowerReadyMessage>());
+        }
+
+        // A level-up phase makes the held ball unready without loading a new one; its next ready didn't
+        // wait at the cap again.
+        [Test]
+        public void AnnounceReady_ReadyAgainAfterALevelUpPhase_DoesNotRepeatTheCapWait()
+        {
+            Set("_reload", ReloadedAfter(Cap));
+            Invoke("AnnounceReady");
+            _phase.Value = LevelUpPhase.Completing;
+            Invoke("AnnounceReady");
+            _phase.Value = LevelUpPhase.Playing;
+
+            Invoke("AnnounceReady");
+
+            Received.InOrder(() =>
+            {
+                _readyPublisher.Publish(Arg.Is<ThrowerReadyMessage>(m => m.AfterCapWait));
+                _readyPublisher.Publish(Arg.Is<ThrowerReadyMessage>(m => !m.AfterCapWait));
+            });
+        }
+
+        // A held ball reloaded with nothing in flight, after one tick with `waitedInFlight` balls out:
+        // at the cap that tick is a wait at the cap, below it just part of the reload.
+        private ThrowerReload ReloadedAfter(int waitedInFlight)
+        {
+            var config = Substitute.For<IProjectileFlightConfig>();
+            config.MaxBallsInFlight.Returns(Cap);
+            config.ReloadCooldownSeconds.Returns(Cooldown);
+            var reload = new ThrowerReload(ThrowerReloadTests.WeaponOf(config));
+            reload.Restart();
+            reload.Advance(0f, waitedInFlight);
+            reload.Advance(Cooldown, 0);
+            return reload;
         }
 
         private bool IsReadyToFire()

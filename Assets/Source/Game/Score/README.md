@@ -32,6 +32,8 @@ The balloon's `ScoreValue` is multiplied by the current streak before publishing
 
 `GetStreak(string colorName)` on `ColorStreakTracker` exposes the highest current streak for a color among the balls still in play (a ball that has landed no longer counts), so views can display a streak notice.
 
+`ScoreController` also publishes `StreakGrewMessage` when a ball's own pop (`DamageFlags.DirectHit`) raises that ball's streak to two or more, with the pop's position: the moment a streak grew, where it grew. It compares the streak's count before and after the pop, never the multiplier, so night doubling, an item pop, a full colour bar and a colour change that restarts the streak lower never send it, and a multi-colour pop sends it once.
+
 ## Night Multiplier
 
 While it's night (`ITimeOfDayNight.IsNight`, see `Shared/SceneLight/README.md`), every pop is worth

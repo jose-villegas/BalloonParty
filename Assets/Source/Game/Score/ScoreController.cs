@@ -20,11 +20,15 @@ namespace BalloonParty.Game.Score
         // At night, all pops score double — a flat x2 on the awarded points.
         private const int NightScoreMultiplier = 2;
 
+        // A streak of one is a single pop, not a streak, so the first pop of a colour never announces.
+        private const int MinAnnouncedStreak = 2;
+
         private readonly ILevelProgress _levelProgress;
         private readonly IGamePalette _palette;
         private readonly IRetryState _retryState;
         private readonly Dictionary<string, int> _persistentScore = new();
         private readonly IPublisher<ScorePointsGroupMessage> _scoredPublisher;
+        private readonly IPublisher<StreakGrewMessage> _streakGrewPublisher;
         private readonly ColorStreakTracker _streakTracker;
         private readonly ReactiveProperty<int> _totalScore = new(0);
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
@@ -52,6 +56,7 @@ namespace BalloonParty.Game.Score
             ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber,
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
             IPublisher<ScorePointsGroupMessage> scoredPublisher,
+            IPublisher<StreakGrewMessage> streakGrewPublisher,
             ILevelProgress levelProgress,
             IGamePalette palette,
             IRetryState retryState,
@@ -61,6 +66,7 @@ namespace BalloonParty.Game.Score
             _trailArrivedSubscriber = trailArrivedSubscriber;
             _levelUpSubscriber = levelUpSubscriber;
             _scoredPublisher = scoredPublisher;
+            _streakGrewPublisher = streakGrewPublisher;
             _levelProgress = levelProgress;
             _palette = palette;
             _retryState = retryState;
@@ -159,7 +165,9 @@ namespace BalloonParty.Game.Score
             using var resolvedPool =
                 UnityEngine.Pool.ListPool<(string Color, int Points, int BaseProgress)>.Get(out var resolved);
 
+            var streakBefore = streak.CurrentStreak;
             var multiplier = RecordStreakMultiplier(attributions, flags, streak);
+            AnnounceStreakGrowth(streak, streakBefore, flags, worldPosition);
             if (_timeOfDayNight.IsNight)
             {
                 multiplier *= NightScoreMultiplier;
@@ -253,6 +261,20 @@ namespace BalloonParty.Game.Score
             // canIncrement, so this reads as the unconditional break it actually is.
             streak.Record(null, true, canIncrement: false);
             return 1;
+        }
+
+        // Read off the streak, not the multiplier: night doubles that, and a full colour bar grants no
+        // points while the streak still climbs. Only the shot's own pop can grow it; a colour change that
+        // restarts it lower is not growth.
+        private void AnnounceStreakGrowth(ColorStreak streak, int before, DamageFlags flags, Vector3 worldPosition)
+        {
+            var after = streak.CurrentStreak;
+            if (!flags.HasFlag(DamageFlags.DirectHit) || after <= before || after < MinAnnouncedStreak)
+            {
+                return;
+            }
+
+            _streakGrewPublisher.Publish(new StreakGrewMessage(streak.Owner, streak.LastColor, after, worldPosition));
         }
 
         // Keeps only what was granted (capped at the level threshold) plus its base for numbering.

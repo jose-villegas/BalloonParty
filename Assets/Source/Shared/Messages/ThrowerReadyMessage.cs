@@ -7,9 +7,16 @@ namespace BalloonParty.Shared.Messages
     {
         public IProjectileModel Projectile { get; }
 
-        public ThrowerReadyMessage(IProjectileModel projectile)
+        /// <summary>
+        ///     Whether this ball waited with every slot under the ball cap taken before it got ready: the
+        ///     cannon was held back by the cap, not only by its reload.
+        /// </summary>
+        public bool AfterCapWait { get; }
+
+        public ThrowerReadyMessage(IProjectileModel projectile, bool afterCapWait)
         {
             Projectile = projectile;
+            AfterCapWait = afterCapWait;
         }
     }
 }

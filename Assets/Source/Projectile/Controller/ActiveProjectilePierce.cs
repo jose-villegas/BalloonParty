@@ -8,10 +8,17 @@ using VContainer.Unity;
 
 namespace BalloonParty.Projectile.Controller
 {
-    /// <summary>Whether any live shot is currently piercing.</summary>
+    /// <summary>Whether any live shot is currently piercing, and which shot just started to.</summary>
     internal interface IActiveProjectilePierce
     {
         IReadOnlyReactiveProperty<bool> IsPiercing { get; }
+
+        /// <summary>
+        ///     A shot whose piercing went from off to on, once per arming. Unlike <see cref="IsPiercing" />
+        ///     it fires again when a second shot arms while the first still pierces, and not when a banked
+        ///     Snipe charge keeps a shot armed through its discharge.
+        /// </summary>
+        IObservable<IProjectileModel> PierceArmed { get; }
     }
 
     /// <summary>
@@ -24,10 +31,13 @@ namespace BalloonParty.Projectile.Controller
         private readonly IProjectileRegistry _projectiles;
         private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
         private readonly ReactiveProperty<bool> _isPiercing = new(false);
+        private readonly Subject<IProjectileModel> _pierceArmed = new();
         private readonly CompositeDisposable _subscriptions = new();
         private readonly List<Tracked> _tracked = new();
 
         public IReadOnlyReactiveProperty<bool> IsPiercing => _isPiercing;
+
+        public IObservable<IProjectileModel> PierceArmed => _pierceArmed;
 
         internal ActiveProjectilePierce(
             IProjectileRegistry projectiles, ISubscriber<ProjectileLoadedMessage> loadedSubscriber)
@@ -52,19 +62,22 @@ namespace BalloonParty.Projectile.Controller
             _tracked.Clear();
             _subscriptions.Dispose();
             _isPiercing.Dispose();
+            _pierceArmed.OnCompleted();
+            _pierceArmed.Dispose();
         }
 
         // ReactiveProperty dedupes, so a fresh (not-piercing) shot after a pierce that already ended
         // emits nothing.
         private void OnProjectileLoaded(ProjectileLoadedMessage msg)
         {
-            if (msg.Model != null)
+            var projectile = msg.Model;
+            if (projectile != null)
             {
                 // Added before subscribing: the subscription fires at once and Refresh must see it.
                 var index = _tracked.Count;
-                _tracked.Add(new Tracked(msg.Model, Disposable.Empty));
-                var subscription = msg.Model.IsPiercing.Subscribe(_ => Refresh());
-                _tracked[index] = new Tracked(msg.Model, subscription);
+                _tracked.Add(new Tracked(projectile, Disposable.Empty));
+                var subscription = projectile.IsPiercing.Subscribe(piercing => OnPiercingChanged(projectile, piercing));
+                _tracked[index] = new Tracked(projectile, subscription);
             }
 
             Refresh();
@@ -84,6 +97,17 @@ namespace BalloonParty.Projectile.Controller
             }
 
             Refresh();
+        }
+
+        // The property dedupes, so every true it sends is an arming. The fold is refreshed first, so a
+        // listener to the arming already reads the shot as piercing.
+        private void OnPiercingChanged(IProjectileModel projectile, bool piercing)
+        {
+            Refresh();
+            if (piercing)
+            {
+                _pierceArmed.OnNext(projectile);
+            }
         }
 
         private void Refresh()

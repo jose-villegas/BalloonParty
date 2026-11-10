@@ -5,7 +5,14 @@
 > Working plan for short, handwritten heads-ups that tell the player what just happened on
 > the board, written on as if by a pencil, plus pencil lines drawn over the board.
 
-**Status:** Phase 1 in progress. Built: the Patrick Hand font file (`Assets/Fonts/`, with its OFL
+**Status:** Phase 2 built on 2026-11-10: the four signals of §5 (`StreakGrewMessage` from `ScoreController`,
+`IActiveProjectilePierce.PierceArmed`, `ThrowerReadyMessage.AfterCapWait` recorded by `ThrowerReload.WaitedAtCap`,
+and `TrailEndpointKeys.Cannon` on the cannon's pivot), each EditMode-tested; nothing consumes them until the
+router of Phase 3. `StreakGrewMessage` announces streaks from two up, so the router's own threshold (§6) picks
+which ones to write. Two facts for the router: a pop no tracked ball caused (a late pop from a ball
+already retired) grows the shared streak, so its `StreakGrewMessage.Projectile` is null and its merge key must
+allow that; and at a ball cap of 1 the shot fills the only slot, so every ready has `AfterCapWait`. Phase 1, as
+built: the Patrick Hand font file (`Assets/Fonts/`, with its OFL
 licence), `UI/HeadsUp/WriteOnText` (the slanted soft wipe on the stock shader, EditMode-tested reveal
 maths), `TooltipBanner` writing through it, the TMP font asset, and two early heads-ups written
 through plain `HandwrittenHeadsUp` lines, ahead of the router and queue of Phase 3: `ReloadHeadsUp`
@@ -14,7 +21,7 @@ ball picks up a shield and `-1 bounce` where a wall spends one. Those lines move
 space on 2026-11-09 (the `HeadsUps` prefab), as §3 always had it. The pencil text shader
 (`BalloonParty/Text/Pencil`: the grain and the ragged edge, on the font's own material) and the pencil tip
 sprite on every heads-up line were built on 2026-11-10, awaiting the owner's in-editor look; with that,
-Phase 1 is done. The other open questions in §10 matter from Phase 2.
+Phase 1 is done. §10's open questions 2-4 matter from Phase 3.
 
 ---
 

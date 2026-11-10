@@ -6,5 +6,8 @@ namespace BalloonParty.Shared.Pool
     internal static class TrailEndpointKeys
     {
         public const string Heart = "Heart";
+
+        /// <summary>The cannon's pivot, which stays put whatever the aim.</summary>
+        public const string Cannon = "Cannon";
     }
 }

@@ -155,7 +155,7 @@ registry.Register(TrailEndpointKeys.Heart, new TransformTrailEndpoint(anchor)); 
 if (registry.TryGet(TrailEndpointKeys.Heart, out var e)) { spawner.Spawn(e.Center, popPos, dur); }
 ```
 
-`ITrailEndpoint` exposes `Center` and `RandomPosition()` — point anchors return `Center` for both; an area (a progress bar) spreads arrivals. Implementations: `TransformTrailEndpoint` (wraps a fixed anchor `Transform`; used for the heart source) and `ColorProgressBar` (registers per palette-colour name via `ScoreTrailService.RegisterTarget`). The registry is a `GameLifetimeScope` singleton so child UI scopes resolve the same instance; registrations are long-lived (not reset per run). Well-known single-anchor keys live in `TrailEndpointKeys`; score endpoints key on colour name.
+`ITrailEndpoint` exposes `Center` and `RandomPosition()` — point anchors return `Center` for both; an area (a progress bar) spreads arrivals. Implementations: `TransformTrailEndpoint` (wraps a fixed anchor `Transform`; used for the heart source and the cannon's pivot) and `ColorProgressBar` (registers per palette-colour name via `ScoreTrailService.RegisterTarget`). The registry is a `GameLifetimeScope` singleton so child UI scopes resolve the same instance; registrations are long-lived (not reset per run). Well-known single-anchor keys live in `TrailEndpointKeys`; score endpoints key on colour name.
 
 ### `TrailFlightRegistry<TId>`
 

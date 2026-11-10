@@ -51,7 +51,7 @@ A freshly loaded ball does not fire straight away. It slides from the thrower's 
 - Both reload times are taken at each `Restart` (one per loaded ball), so a card picked mid-slide applies from the next ball.
 - The ease is `OutCubic`, which never overshoots: the ball cannot reach the muzzle before the reload has ended, so "ball at the muzzle" reliably means "a release fires".
 - A release fires only when a ball is held, the slide is finished, a slot is free and the level is in the `Playing` phase. A release with nothing ready fires nothing and is not queued for later.
-- `ThrowerReadyMessage` is published once per ball, on the tick it becomes ready (`CombatSoundRouter` plays the reload "cock" on it).
+- `ThrowerReadyMessage` is published once per ball, on the tick it becomes ready (`CombatSoundRouter` plays the reload "cock" on it). Its `AfterCapWait` says whether the cap held that ball back: `ThrowerReload.WaitedAtCap` turns true on any tick since the ball loaded with every slot taken, and `Restart` clears it for the next ball.
 
 `FireAt` skips the slide but still honours the cap and the phase (`ThrowerReload.CanLaunch`). The pool is pre-warmed with `2 * MaxBallsInFlight + 1` balls of the configured cap, because a dead ball stays out of the pool until its disappear animation finishes. A cap raised by a card is topped up (two more balls per extra slot) on the next load, which comes after the level-up's Ascent or a reset, so nothing Instantiates mid-play. Each loaded ball starts with `IWeaponStats.StartingShields`.
 
@@ -82,7 +82,8 @@ When a `ProjectileDestroyedMessage` or a `LevelUpDismissedMessage` arrives, `Thr
 - **PauseService** — any paused source blocks `Tick` (aim/fire)
 - **IProjectileRegistryWriter** (`Projectile/`) — the thrower is the registry's main writer: `Load` on each load, `Launch` on fire, `Unlaunch` when a ball fired in the level-up frame goes back to the muzzle, and `Retire`/`Clear` for every exit that publishes no `ProjectileDestroyedMessage` (game over, reset, board clear, a held ball replaced). A ball that dies in flight lands and retires itself in `ProjectileView`; the thrower only scales it away. See the Land/Retire rule in `Projectile/README.md`
 - **ProjectileLoadedMessage** — published after each load so shield UI can self-bind
-- **ThrowerReadyMessage** (`Shared/Messages/`) — published once per ball when it reaches the muzzle with a slot free
+- **ThrowerReadyMessage** (`Shared/Messages/`) — published once per ball when it reaches the muzzle with a slot free, with `AfterCapWait` set when it had to wait at the ball cap first
+- **TrailEndpointRegistry** (`Shared/Pool/`) — `ThrowerLifetimeScope` registers the cannon's pivot under `TrailEndpointKeys.Cannon`, so a heads-up or trail can anchor beside the cannon without knowing the thrower
 - **IProjectileFlightConfig** — provides `LimitsClockwise`, `ProjectileSpeed`, `ProjectileStartingShields`, `ProjectileLoadDuration`, `ReloadCooldownSeconds`, `MaxBallsInFlight`, `AimAngleMinDegrees`/`AimAngleMaxDegrees` (5/175 by default, always in effect), `AimAngleStepDegrees` (0 = continuous aim, the default), `AimLatchSeconds` (0 = fire the live direction, the default); **IPredictionTraceConfig** — provides `LineColor` plus the optional capsule-light tuning (`LightingEnabled` and friends — see `Prediction/README.md`)
 - **PredictionTraceCalculator / ThrowerView** — calculates and renders the aim trajectory line while the player holds the mouse button
 - **PredictionTraceProvider** — written each `Tick` alongside the view (set on aim, cleared on fire/release/reload) so non-Thrower readers can find where the trace currently sits

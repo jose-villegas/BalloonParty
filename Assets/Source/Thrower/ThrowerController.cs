@@ -599,7 +599,7 @@ namespace BalloonParty.Thrower
             var isReady = IsReadyToFire();
             if (isReady && !_wasReady)
             {
-                _readyPublisher.Publish(new ThrowerReadyMessage(_loadedProjectile));
+                _readyPublisher.Publish(new ThrowerReadyMessage(_loadedProjectile, _reload.TakeWaitedAtCap()));
             }
 
             _wasReady = isReady;

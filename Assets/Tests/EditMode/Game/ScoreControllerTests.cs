@@ -29,6 +29,7 @@ namespace BalloonParty.Tests.Game
         private ILevelProgress _levelProgress;
         private IGamePalette _palette;
         private IPublisher<ScorePointsGroupMessage> _scoredPublisher;
+        private IPublisher<StreakGrewMessage> _streakGrewPublisher;
         private ITimeOfDayNight _timeOfDayNight;
         private ScoreController _controller;
         private ColorStreakTracker _streakTracker;
@@ -72,6 +73,7 @@ namespace BalloonParty.Tests.Game
                 .Returns(Substitute.For<IDisposable>());
 
             _scoredPublisher = Substitute.For<IPublisher<ScorePointsGroupMessage>>();
+            _streakGrewPublisher = Substitute.For<IPublisher<StreakGrewMessage>>();
             _timeOfDayNight = Substitute.For<ITimeOfDayNight>();
 
             var levelUpSubscriber = Substitute.For<ISubscriber<ScoreLevelUpMessage>>();
@@ -100,6 +102,7 @@ namespace BalloonParty.Tests.Game
                 trailArrivedSubscriber,
                 scoreLevelUpSubscriber,
                 _scoredPublisher,
+                _streakGrewPublisher,
                 _levelProgress,
                 _palette,
                 Substitute.For<IRetryState>(),
@@ -128,6 +131,195 @@ namespace BalloonParty.Tests.Game
 
             _scoredPublisher.Received(1).Publish(
                 Arg.Is<ScorePointsGroupMessage>(m => m.ColorName == Red && m.Points == 3));
+        }
+
+        [Test]
+        public void StreakGrew_ABallsSecondAndThirdSameColourPops_AnnounceEachAtThePop()
+        {
+            var ball = NewBall();
+            var at = new Vector3(1f, 2f, 0f);
+
+            FirePopFrom(ball, Red, at);
+            _streakGrewPublisher.DidNotReceive().Publish(Arg.Any<StreakGrewMessage>());
+
+            FirePopFrom(ball, Red, at);
+            FirePopFrom(ball, Red, at);
+
+            Received.InOrder(() =>
+            {
+                _streakGrewPublisher.Publish(Arg.Is<StreakGrewMessage>(m =>
+                    m.Projectile == ball && m.Color == Red && m.Streak == 2 && m.WorldPosition == at));
+                _streakGrewPublisher.Publish(Arg.Is<StreakGrewMessage>(m =>
+                    m.Projectile == ball && m.Color == Red && m.Streak == 3 && m.WorldPosition == at));
+            });
+        }
+
+        [Test]
+        public void StreakGrew_AtNight_CarriesTheStreak_NotTheDoubledMultiplier()
+        {
+            _timeOfDayNight.IsNight.Returns(true);
+            var ball = NewBall();
+
+            FirePopFrom(ball, Red);
+            FirePopFrom(ball, Red);
+
+            _scoredPublisher.Received(1).Publish(Arg.Is<ScorePointsGroupMessage>(m => m.Multiplier == 4));
+            _streakGrewPublisher.Received(1).Publish(Arg.Is<StreakGrewMessage>(m => m.Streak == 2));
+        }
+
+        [Test]
+        public void StreakGrew_AnItemPopOnTheStreaksColour_AnnouncesNothing()
+        {
+            var ball = NewBall();
+            FirePopFrom(ball, Red);
+            FirePopFrom(ball, Red);
+            _streakGrewPublisher.ClearReceivedCalls();
+            _scoredPublisher.ClearReceivedCalls();
+
+            FirePopFrom(ball, Red, Vector3.zero, DamageFlags.Normal);
+
+            _scoredPublisher.Received(1).Publish(Arg.Is<ScorePointsGroupMessage>(m => m.Multiplier == 2));
+            _streakGrewPublisher.DidNotReceive().Publish(Arg.Any<StreakGrewMessage>());
+        }
+
+        [Test]
+        public void StreakGrew_AColourChangeThatRestartsTheStreak_AnnouncesNothing()
+        {
+            var ball = NewBall();
+            FirePopFrom(ball, Red);
+            FirePopFrom(ball, Red);
+            _streakGrewPublisher.ClearReceivedCalls();
+
+            FirePopFrom(ball, Blue);
+
+            _streakGrewPublisher.DidNotReceive().Publish(Arg.Any<StreakGrewMessage>());
+        }
+
+        [Test]
+        public void StreakGrew_AMultiColourPop_AnnouncesOnce()
+        {
+            FireMultiColor((Red, 1, true));
+            _streakGrewPublisher.ClearReceivedCalls();
+            _scoredPublisher.ClearReceivedCalls();
+
+            FireMultiColor((Red, 1, true), (Blue, 1, false));
+
+            _scoredPublisher.Received(2).Publish(Arg.Any<ScorePointsGroupMessage>());
+            _streakGrewPublisher.Received(1).Publish(Arg.Is<StreakGrewMessage>(m => m.Color == Red && m.Streak == 2));
+        }
+
+        [Test]
+        public void StreakGrew_ColourBarAlreadyFull_StillAnnounces()
+        {
+            _levelProgress.ClaimProgress(Red, Arg.Any<int>()).Returns((10, 0));
+            var ball = NewBall();
+
+            FirePopFrom(ball, Red);
+            FirePopFrom(ball, Red);
+
+            _scoredPublisher.DidNotReceive().Publish(Arg.Any<ScorePointsGroupMessage>());
+            _streakGrewPublisher.Received(1).Publish(Arg.Is<StreakGrewMessage>(m => m.Streak == 2));
+        }
+
+        [Test]
+        public void StreakGrew_TwoBalls_EachAnnouncesItsOwnStreak()
+        {
+            var ballA = NewBall();
+            var ballB = NewBall();
+            FirePopFrom(ballA, Red);
+            FirePopFrom(ballA, Red);
+            FirePopFrom(ballA, Red);
+
+            FirePopFrom(ballB, Red);
+            FirePopFrom(ballB, Red);
+
+            _streakGrewPublisher.Received(1).Publish(Arg.Is<StreakGrewMessage>(m => m.Projectile == ballA && m.Streak == 3));
+            _streakGrewPublisher.Received(1).Publish(Arg.Is<StreakGrewMessage>(m => m.Projectile == ballB && m.Streak == 2));
+        }
+
+        // The rainbow buff climbs on any colour without changing it, so the message keeps the last real one.
+        [Test]
+        public void StreakGrew_AWildcardPop_AnnouncesTheClimbUnderTheLastRealColour()
+        {
+            var ball = NewBall();
+            FirePopFrom(ball, Red);
+            FirePopFrom(ball, Red);
+            _streakGrewPublisher.ClearReceivedCalls();
+
+            FireRainbowPopFrom(ball, DamageFlags.DirectHit | DamageFlags.WildcardStreak);
+
+            _streakGrewPublisher.Received(1).Publish(Arg.Is<StreakGrewMessage>(m =>
+                m.Projectile == ball && m.Color == Red && m.Streak == 3));
+        }
+
+        [Test]
+        public void StreakGrew_AWildcardFirstPop_IsNoStreakYet()
+        {
+            FireRainbowPopFrom(NewBall(), DamageFlags.DirectHit | DamageFlags.WildcardStreak);
+
+            _streakGrewPublisher.DidNotReceive().Publish(Arg.Any<StreakGrewMessage>());
+        }
+
+        [Test]
+        public void StreakGrew_ACarriedStreakCashedInOnANewColour_AnnouncesUnderTheNewColour()
+        {
+            var ball = NewBall();
+            FirePopFrom(ball, Red);
+            FirePopFrom(ball, Red);
+            FireRainbowPopFrom(ball, DamageFlags.DirectHit | DamageFlags.CarryStreak);
+            _streakGrewPublisher.ClearReceivedCalls();
+
+            FirePopFrom(ball, Blue);
+
+            _streakGrewPublisher.Received(1).Publish(Arg.Is<StreakGrewMessage>(m => m.Color == Blue && m.Streak == 4));
+        }
+
+        [Test]
+        public void StreakGrew_BankedRainbowPops_AnnounceOnceWhenTheyLandOnAColour()
+        {
+            var ball = NewBall();
+            FireRainbowPopFrom(ball, DamageFlags.DirectHit | DamageFlags.DeferredStreak);
+            FireRainbowPopFrom(ball, DamageFlags.DirectHit | DamageFlags.DeferredStreak);
+            _streakGrewPublisher.DidNotReceive().Publish(Arg.Any<StreakGrewMessage>());
+
+            FirePopFrom(ball, Red);
+
+            _streakGrewPublisher.Received(1).Publish(Arg.Is<StreakGrewMessage>(m => m.Color == Red && m.Streak == 3));
+        }
+
+        [Test]
+        public void StreakGrew_AfterAStreakBreaks_TheNextPopStartsOver()
+        {
+            FireMultiColor((Red, 1, true));
+            FireMultiColor((Red, 1, true));
+            _streakGrewPublisher.ClearReceivedCalls();
+
+            FireMultiColor((Red, 1, false), (Blue, 1, false));
+            FireMultiColor((Red, 1, true));
+
+            _streakGrewPublisher.DidNotReceive().Publish(Arg.Any<StreakGrewMessage>());
+        }
+
+        [Test]
+        public void StreakGrew_AnItemPopOnAnotherColour_AnnouncesNothing()
+        {
+            var ball = NewBall();
+            FirePopFrom(ball, Red);
+            FirePopFrom(ball, Red);
+            _streakGrewPublisher.ClearReceivedCalls();
+
+            FirePopFrom(ball, Blue, Vector3.zero, DamageFlags.Normal);
+
+            _streakGrewPublisher.DidNotReceive().Publish(Arg.Any<StreakGrewMessage>());
+        }
+
+        [Test]
+        public void StreakGrew_ADirectHitNoBallIsTrackedFor_AnnouncesTheSharedStreak()
+        {
+            FirePopFrom(null, Red);
+            FirePopFrom(null, Red);
+
+            _streakGrewPublisher.Received(1).Publish(Arg.Is<StreakGrewMessage>(m => m.Projectile == null && m.Streak == 2));
         }
 
         private static void ClearScorePrefs()
@@ -521,9 +713,15 @@ namespace BalloonParty.Tests.Game
 
         private void FirePopFrom(IProjectileModel ball, string color)
         {
+            FirePopFrom(ball, color, Vector3.zero);
+        }
+
+        private void FirePopFrom(
+            IProjectileModel ball, string color, Vector3 at, DamageFlags flags = DamageFlags.DirectHit)
+        {
             var model = CreateModel(color, 1);
-            var context = new DamageContext(1, DamageFlags.DirectHit, "", ball);
-            _controller.OnActorHit(new ActorHitMessage(model, Vector3.zero, Vector3.up, model.EvaluateHit(context), context));
+            var context = new DamageContext(1, flags, "", ball);
+            _controller.OnActorHit(new ActorHitMessage(model, at, Vector3.up, model.EvaluateHit(context), context));
         }
 
         private void FireRainbowPopFrom(IProjectileModel ball, DamageFlags flags)

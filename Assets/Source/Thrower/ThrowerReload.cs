@@ -33,6 +33,12 @@ namespace BalloonParty.Thrower
 
         internal bool IsLoaded => _progress >= 1f;
 
+        /// <summary>
+        ///     Whether every slot under the cap has been taken at some tick since this ball loaded or its
+        ///     last ready was announced (<see cref="TakeWaitedAtCap" />).
+        /// </summary>
+        internal bool WaitedAtCap { get; private set; }
+
         internal ThrowerReload(IWeaponStats weapon)
         {
             _weapon = weapon;
@@ -41,19 +47,35 @@ namespace BalloonParty.Thrower
         internal void Restart()
         {
             _progress = 0f;
+            WaitedAtCap = false;
             _busyDuration = _weapon.ReloadSeconds;
             _idleDuration = _weapon.IdleReloadSeconds;
         }
 
         internal void Advance(float deltaTime, int inFlight)
         {
-            if (IsLoaded || !HasFreeSlot(inFlight))
+            if (!HasFreeSlot(inFlight))
+            {
+                WaitedAtCap = true;
+                return;
+            }
+
+            if (IsLoaded)
             {
                 return;
             }
 
             var duration = inFlight == 0 ? _idleDuration : _busyDuration;
             _progress = duration > 0f ? Mathf.Min(1f, _progress + deltaTime / duration) : 1f;
+        }
+
+        /// <summary>Reads <see cref="WaitedAtCap" /> for a ready being announced, and starts the next wait clear:
+        /// a ball that goes unready (a level-up phase) and ready again didn't wait at the cap twice.</summary>
+        internal bool TakeWaitedAtCap()
+        {
+            var waited = WaitedAtCap;
+            WaitedAtCap = false;
+            return waited;
         }
 
         internal bool HasFreeSlot(int inFlight)

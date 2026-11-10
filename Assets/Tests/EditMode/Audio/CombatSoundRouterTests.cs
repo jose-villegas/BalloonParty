@@ -286,7 +286,7 @@ namespace BalloonParty.Tests.Audio
         [Test]
         public void ThrowerReady_ForwardsShotReloadWithNullPosition()
         {
-            _readyHandler.Handle(new ThrowerReadyMessage(new ProjectileModel()));
+            _readyHandler.Handle(new ThrowerReadyMessage(new ProjectileModel(), false));
 
             _player.Received(1).Play(GameSoundId.ShotReload, null);
         }

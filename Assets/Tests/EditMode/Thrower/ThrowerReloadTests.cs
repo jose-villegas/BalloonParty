@@ -219,5 +219,44 @@ namespace BalloonParty.Tests.Thrower
             Assert.IsFalse(_reload.CanLaunch(Cap, LevelUpPhase.Playing));
             Assert.IsFalse(_reload.CanLaunch(0, LevelUpPhase.Completing));
         }
+
+        [Test]
+        public void WaitedAtCap_ReloadedWithASlotFree_False()
+        {
+            _reload.Advance(Cooldown, Busy);
+
+            Assert.IsFalse(_reload.WaitedAtCap);
+        }
+
+        [Test]
+        public void WaitedAtCap_OneTickAtTheCap_HoldsThroughTheReloadThatFollows()
+        {
+            _reload.Advance(Cooldown, Cap);
+            Assert.IsTrue(_reload.WaitedAtCap);
+
+            _reload.Advance(Cooldown, Busy);
+
+            Assert.IsTrue(_reload.IsReady(Busy, LevelUpPhase.Playing));
+            Assert.IsTrue(_reload.WaitedAtCap, "the ready this wait ended must still say so");
+        }
+
+        [Test]
+        public void TakeWaitedAtCap_ReadsTheWait_ThenStartsTheNextOneClear()
+        {
+            _reload.Advance(Cooldown, Cap);
+
+            Assert.IsTrue(_reload.TakeWaitedAtCap());
+            Assert.IsFalse(_reload.WaitedAtCap);
+        }
+
+        [Test]
+        public void WaitedAtCap_NextBall_StartsClear()
+        {
+            _reload.Advance(Cooldown, Cap);
+
+            _reload.Restart();
+
+            Assert.IsFalse(_reload.WaitedAtCap);
+        }
     }
 }
