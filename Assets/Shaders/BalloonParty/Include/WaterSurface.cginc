@@ -1,14 +1,13 @@
 #ifndef BALLOONPARTY_WATER_SURFACE_INCLUDED
 #define BALLOONPARTY_WATER_SURFACE_INCLUDED
 
-// The water surface's height, shared by the surface (Water.shader) and the caustic pass that turns the same
-// surface into the light it focuses on the bottom (WaterCaustics.shader), so the caustics always match the
-// waves over them. Needs Ground.cginc for GroundPointAt (the surface travels with the board).
+// The water surface's height (Water.shader): slow noise waves plus the rings the disturbance field's pushes
+// raise. Its slope bends the view of the bottom and catches the highlight. Needs Ground.cginc for GroundPointAt
+// (the surface travels with the board).
 
 #include "Ground.cginc"
 
-// The surface's own small waves, from the shared tileable noise. Per material: the caustic pass's material
-// carries the same values as the water's (GroundView copies them across).
+// The surface's own slow waves, from the shared tileable noise.
 sampler2D _NoiseTex;
 float _WaveSize;
 float _WaveSpeed;

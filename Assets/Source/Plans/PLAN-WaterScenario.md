@@ -70,19 +70,27 @@ as the field holds the push):
   with the content root, plus rings that travel outward along the field's intensity,
   `sin(k·I + ωt)` scaled by `I`, so a ball's wake spreads as concentric rings that fade as the
   field relaxes.
-- Caustics are the surface turned into a second texture, as the owner proposed:
-  `WaterCausticBuffer` draws the surface's curvature (`WaterCaustics.shader`, where a bulge focuses
-  light into a line) into a small R8 target over the field's rect, 4 texels per world unit, so
-  reading it back is already soft. `Water.shader` samples it under the surface: enlarged a little
-  (the bottom is deeper than the waves), wobbled by the noise, and shifted away from the
-  time-of-day sun (`_SceneLightDir`).
-- Layers, bottom up: a deep-to-shallow bottom, the caustics blended toward a caustic colour (a
-  lerp, never added, so nothing blooms; deeper patches catch less), then a light veil of water
-  colour. The bottom and its caustics are seen through the surface slope (a refraction offset),
-  and the slopes facing the sun catch a soft highlight on top.
-- Lit by `SceneLightTintAt` and premultiplied by `GroundCoverageAt`, exactly like `Ground.shader`.
-- The first look read as neon and dark: bright additive caustics over saturated deep blues. The
-  bounded lerps, lighter colours, the veil and lower wave heights replaced it.
+- Caustics are a second texture rendered under the surface, as the owner proposed: each frame
+  `WaterCausticBuffer` draws one tile of a moving caustic net (`WaterCaustics.shader`) into a
+  256² R8 target that wraps, with mips. The net is the borders between drifting cells, warped so
+  they curve, bright on the border and fading into each cell. `Water.shader` lays it under the
+  surface twice, at two scales and angles: the first draws the lines, the second, read softer,
+  varies their brightness along them, so the net never looks tiled. It's wobbled by the noise,
+  shifted away from the time-of-day sun (`_SceneLightDir`), split into colour fringes along it,
+  and blurred by up to 1.5 mips where the water is deep.
+- Layers, bottom up: a shallow-to-deep bottom, the caustics blended toward a caustic colour (a
+  lerp, never added, so nothing blooms), then a light veil of water colour. The bottom and its
+  caustics are seen through the surface slope (a refraction offset), so the swell and the rings
+  bend the net. On top, the slopes facing the sun catch a soft highlight, and the crests turned
+  just so between the sun and the eye glint.
+- Lit by `SceneLightTintAt` (at 0.7 influence, so a warm evening tints the water rather than
+  turning it olive; light above full is eased in so a pop's glow doesn't clip to white) and
+  premultiplied by `GroundCoverageAt`, like `Ground.shader`.
+- What didn't work: the first look read as neon and dark (bright additive caustics over saturated
+  deep blues). Caustics drawn from the surface's own curvature into a low-resolution buffer came
+  out as soft blobs that didn't read as caustics. Sparkles from fine noise waves read as static.
+  The tile's cell wrap uses `id - n·floor((id + 0.5)/n)`, not `fmod`: GPU division is
+  approximate, `fmod(10, 5)` can return 5, and the tile then shows a seam.
 
 ### 3. Bubbles that build up on water
 

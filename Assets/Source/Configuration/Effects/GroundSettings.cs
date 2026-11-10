@@ -72,12 +72,12 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Surface material using BalloonParty/Scenario/Water, drawn on the floor quad in place of the meadow on water levels: the bottom, its caustics and the rippling surface. Without one water levels show the sky.")]
         [SerializeField] private Material _waterMaterial;
 
-        [Tooltip("Material using Hidden/BalloonParty/Scenario/WaterCaustics, the light the surface focuses on the bottom. The surface values (waves, rings) are copied from the water material, so only the focus is tuned here. Without one the bottom shows no caustics.")]
+        [Tooltip("Material using Hidden/BalloonParty/Scenario/WaterCaustics: one tile of the moving caustic net the water lays under its surface (its cells, drift and line sharpness are tuned there; its size in the world on the water material). Without one the bottom shows no caustics.")]
         [SerializeField] private Material _waterCausticMaterial;
 
-        [Tooltip("Texels per world unit of the caustic target. Low on purpose: reading a small target back enlarged is what softens the caustics.")]
-        [Min(0.5f)]
-        [SerializeField] private float _waterCausticTexelsPerUnit = 4f;
+        [Tooltip("Texels across the square caustic tile, rounded to a power of two. The tile is redrawn every frame on water levels.")]
+        [Range(64, 512)]
+        [SerializeField] private int _waterCausticResolution = 256;
 
         [Tooltip("The water's average unlit colour, which the GI measures bounce against on water levels, as it does the meadow's on ground levels.")]
         [SerializeField] private Color _waterBounceReference = new(0.10f, 0.28f, 0.37f, 1f);
@@ -131,7 +131,7 @@ namespace BalloonParty.Configuration.Effects
         public float BladeRecoverySeconds => _bladeRecoverySeconds;
         public Material WaterMaterial => _waterMaterial;
         public Material WaterCausticMaterial => _waterCausticMaterial;
-        public float WaterCausticTexelsPerUnit => _waterCausticTexelsPerUnit;
+        public int WaterCausticResolution => _waterCausticResolution;
         public Color WaterBounceReference => _waterBounceReference;
         public Material MistMaterial => _mistMaterial;
         public int MistSortingOrder => _mistSortingOrder;

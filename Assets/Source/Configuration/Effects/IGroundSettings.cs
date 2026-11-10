@@ -62,12 +62,12 @@ namespace BalloonParty.Configuration.Effects
         /// Without one water levels show the sky.</summary>
         Material WaterMaterial { get; }
 
-        /// <summary>Material using Hidden/BalloonParty/Scenario/WaterCaustics: the light the surface focuses on the
-        /// bottom. Without one the bottom shows no caustics.</summary>
+        /// <summary>Material using Hidden/BalloonParty/Scenario/WaterCaustics: one tile of the caustic net the water
+        /// lays under its surface. Without one the bottom shows no caustics.</summary>
         Material WaterCausticMaterial { get; }
 
-        /// <summary>Texels per world unit of the caustic target; low, so reading it back enlarged softens it.</summary>
-        float WaterCausticTexelsPerUnit { get; }
+        /// <summary>Texels across the square caustic tile (a power of two).</summary>
+        int WaterCausticResolution { get; }
 
         /// <summary>The water's average unlit colour, which the GI measures bounce against on water levels.</summary>
         Color WaterBounceReference { get; }

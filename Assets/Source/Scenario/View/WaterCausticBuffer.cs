@@ -6,37 +6,23 @@ using Object = UnityEngine.Object;
 namespace BalloonParty.Scenario.View
 {
     /// <summary>
-    ///     The light the water surface focuses on the bottom, published as the global <c>_WaterCausticTex</c> that
-    ///     <c>BalloonParty/Scenario/Water</c> reads under its surface. Each frame one blit of
-    ///     <c>Hidden/BalloonParty/Scenario/WaterCaustics</c> draws it from the same surface the water shows, into a
-    ///     small target over the camera's rect (the disturbance field's), so reading it back enlarged is already
-    ///     soft. Only while water shows.
+    ///     The light the water's surface focuses on the bottom, published as the global <c>_WaterCausticTex</c> that
+    ///     <c>BalloonParty/Scenario/Water</c> lays under its surface. Each frame one blit of
+    ///     <c>Hidden/BalloonParty/Scenario/WaterCaustics</c> draws one tile of the moving caustic net into a small
+    ///     square target that wraps, with mips, so the water can tile it at any scale and read it softer where the
+    ///     water is deep. Only while water shows.
     /// </summary>
     internal sealed class WaterCausticBuffer : IDisposable
     {
         private static readonly int WaterCausticTexId = Shader.PropertyToID("_WaterCausticTex");
-        private static readonly int NoiseTexId = Shader.PropertyToID("_NoiseTex");
-
-        // The surface's tuning, authored once on the water material and mirrored onto the caustic pass, so the
-        // light on the bottom always matches the waves drawn over it.
-        private static readonly int[] SurfaceFloatIds =
-        {
-            Shader.PropertyToID("_WaveSize"),
-            Shader.PropertyToID("_WaveSpeed"),
-            Shader.PropertyToID("_WaveHeight"),
-            Shader.PropertyToID("_RippleRings"),
-            Shader.PropertyToID("_RippleSpeed"),
-            Shader.PropertyToID("_RippleHeight"),
-        };
 
         private readonly Material _material;
         private readonly RenderTexture _target;
 
-        internal WaterCausticBuffer(Material causticMaterial, Material waterMaterial, Vector2 viewSize,
-            float texelsPerUnit)
+        internal WaterCausticBuffer(Material causticMaterial, int resolution)
         {
-            // A runtime copy, so play mode never writes the mirrored surface values into the material asset.
-            _material = causticMaterial != null && waterMaterial != null
+            // A runtime copy, so a tweak in play mode never writes into the material asset.
+            _material = causticMaterial != null
                 ? new Material(causticMaterial) { hideFlags = HideFlags.HideAndDontSave }
                 : null;
 
@@ -47,15 +33,13 @@ namespace BalloonParty.Scenario.View
                 return;
             }
 
-            MirrorSurface(waterMaterial);
-            var density = Mathf.Max(0.5f, texelsPerUnit);
-            _target = new RenderTexture(
-                Mathf.Max(4, Mathf.RoundToInt(viewSize.x * density)),
-                Mathf.Max(4, Mathf.RoundToInt(viewSize.y * density)),
-                0, RenderTextureFormat.R8)
+            var size = Mathf.ClosestPowerOfTwo(Mathf.Clamp(resolution, 32, 1024));
+            _target = new RenderTexture(size, size, 0, RenderTextureFormat.R8)
             {
-                filterMode = FilterMode.Bilinear,
-                wrapMode = TextureWrapMode.Clamp
+                filterMode = FilterMode.Trilinear,
+                wrapMode = TextureWrapMode.Repeat,
+                useMipMap = true,
+                autoGenerateMips = true
             };
             _target.Create();
             Rest();
@@ -91,22 +75,6 @@ namespace BalloonParty.Scenario.View
         internal void Rest()
         {
             Shader.SetGlobalTexture(WaterCausticTexId, Texture2D.blackTexture);
-        }
-
-        private void MirrorSurface(Material water)
-        {
-            if (water.HasProperty(NoiseTexId))
-            {
-                _material.SetTexture(NoiseTexId, water.GetTexture(NoiseTexId));
-            }
-
-            foreach (var id in SurfaceFloatIds)
-            {
-                if (water.HasProperty(id))
-                {
-                    _material.SetFloat(id, water.GetFloat(id));
-                }
-            }
         }
     }
 }

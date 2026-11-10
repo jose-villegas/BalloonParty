@@ -26,10 +26,11 @@ namespace BalloonParty.Scenario.View
     ///     also plays the drop between the layers (<see cref="GroundRevealDepth" />): it scales the meadow, the
     ///     cloud backdrop and the content root about the camera, so going down the ground grows into place and
     ///     going up it falls away. On water levels the same floor quad draws the water surface
-    ///     (<c>BalloonParty/Scenario/Water</c>) instead of the meadow, with no blades: its ripples and caustics read
-    ///     the disturbance field themselves (<see cref="WaterCausticBuffer" />), and the reveal, the depth and the
-    ///     coverage play the same way. Sky always sits between two surfaces in the schedule, so a reveal never
-    ///     swaps one surface for the other; a cut between them just swaps the floor's material.
+    ///     (<c>BalloonParty/Scenario/Water</c>) instead of the meadow, with no blades: its ripples read the
+    ///     disturbance field themselves and bend the caustic net under it (<see cref="WaterCausticBuffer" />), and
+    ///     the reveal, the depth and the coverage play the same way. Sky always sits between two surfaces in the
+    ///     schedule, so a reveal never swaps one surface for the other; a cut between them just swaps the floor's
+    ///     material.
     /// </summary>
     // Early, so its LateUpdate sets this frame's reveal depth on the content root before the bushes draw from it
     // in theirs.
@@ -306,8 +307,8 @@ namespace BalloonParty.Scenario.View
             _openRadius = 0.5f * overscan * view.magnitude + wander + softness + reach * 1.5f;
         }
 
-        // The water's own material instance (a reveal switches its blend like the meadow's) and the caustics drawn
-        // from its surface. Without a water material, water levels show the sky (see OnScenario).
+        // The water's own material instance (a reveal switches its blend like the meadow's) and the caustic net under
+        // its surface. Without a water material, water levels show the sky (see OnScenario).
         private void BuildWater()
         {
             if (_settings.WaterMaterial == null)
@@ -317,9 +318,7 @@ namespace BalloonParty.Scenario.View
             }
 
             _waterMaterial = new Material(_settings.WaterMaterial);
-            var view = new DisturbanceFieldCoordinates(_display, 1f).Bounds.size;
-            _caustics = new WaterCausticBuffer(
-                _settings.WaterCausticMaterial, _settings.WaterMaterial, view, _settings.WaterCausticTexelsPerUnit);
+            _caustics = new WaterCausticBuffer(_settings.WaterCausticMaterial, _settings.WaterCausticResolution);
         }
 
         private void OnScenario(ScenarioShift shift, NavigationState navigation)

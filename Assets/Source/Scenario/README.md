@@ -157,6 +157,38 @@ Plan: `Plans/PLAN-TerrainBiomes.md`.
   or smoke to land on (`_CLOUD_FADE_ON`), and on the ground they land on the grass instead, so the balloon,
   projectile and paint shadows stay. The GI smear (`ScreenSpaceLightSmear`) gates its shadow the same way.
 
+### Water
+
+The third scenario: after the first meadow, each surface stretch is a meadow or **water** by a coin flip
+(`ScenarioKind.Water`). Water levels have no puff clouds or bushes, and nothing on them bounces shots but the
+unbreakable balloon; the longer a water level runs, the more of each spawn line is bubble clusters
+(`Balloon/Spawner/BalloonSpawner`). Plan: `Plans/PLAN-WaterScenario.md`.
+
+Water is a surface like the meadow, so everything above about reveals, depth, coverage and scrolling
+applies to it unchanged; the planner and the curve treat any kind but sky as a surface. Sky always sits
+between two surfaces, so a reveal never goes from meadow to water. `GroundView` draws water on the same floor quad
+through its own instance of `IGroundSettings.WaterMaterial` (no blades, no grass wake), and swaps the GI's
+bounce reference to `WaterBounceReference`.
+
+- `Shaders/BalloonParty/Scenario/Water.shader`: one pass, bottom up. A shallow-to-deep bottom colour from
+  the shared noise; the caustic net laid over it (below), blended toward a pale caustic colour, never
+  added; a light veil of water colour. The bottom is seen through the surface's slope, so the swell and the
+  ripple rings bend the net under them. On top, slopes facing the sun catch a soft highlight and crests
+  turned just so between the sun and the eye glint. Lit by the scene-light field at 0.7 influence (a warm
+  evening tints the water rather than turning it olive), with light above full eased in so a pop's glow
+  doesn't clip to white; premultiplied by `GroundCoverageAt`, like the floor.
+- `Shaders/BalloonParty/Include/WaterSurface.cginc`: the surface's height: two slow noise waves travelling
+  with the board, plus rings wherever the disturbance field holds a push (`sin(k·push + ωt)·push`, so a
+  ball's wake spreads as rings that fade as the field relaxes). Its slope is what bends the bottom and
+  catches the light.
+- `View/WaterCausticBuffer.cs` + `Shaders/BalloonParty/Scenario/WaterCaustics.shader`: the caustics. Each
+  frame on water, one blit draws a tile of the moving caustic net into a 256² R8 target that wraps, with
+  mips, published as `_WaterCausticTex`. The net is the borders between drifting cells, warped so they
+  curve. The water shader lays the tile twice, at two scales and angles (the second varies the first's
+  brightness along its lines, so no tiling shows), shifts it away from the sun, splits it into colour
+  fringes along the sun and blurs it where the water is deep. The tile is not tied to the view, so it costs
+  the same on any screen.
+
 Shader changes are checked in the editor only; `dotnet build` doesn't compile them.
 
 ## BackgroundFieldService
