@@ -15,7 +15,7 @@ var searchData=
   ['8_203_20—_20procedural_20placement_20engine_12',['Phase 8.3 — Procedural Placement Engine',['../plan_grid_actor_expansion.html#autotoc_md608',1,'']]],
   ['8_203_20assets_13',['8 3 Assets',['../plan_content_production.html',1,'Content Production Plan — Pre-8.3 Assets'],['../plan_content_production.html#autotoc_md385',1,'Content Production Plan — Pre-8.3 Assets']]],
   ['8_203_20model_20sketch_14',['8.3 Model Sketch',['../plan_future_ideas.html#autotoc_md480',1,'']]],
-  ['8_2033_20ms_20frame_15',['Performance (mobile, 120 Hz = 8.33 ms frame)',['../plan_terrain_biomes.html#autotoc_md769',1,'']]],
+  ['8_2033_20ms_20frame_15',['Performance (mobile, 120 Hz = 8.33 ms frame)',['../plan_terrain_biomes.html#autotoc_md798',1,'']]],
   ['8_204_20—_20difficulty_20level_20coupling_16',['Phase 8.4 — Difficulty + Level Coupling',['../plan_grid_actor_expansion.html#autotoc_md613',1,'']]],
   ['8_204_20balancer_20changes_17',['8.4 Balancer Changes',['../plan_future_ideas.html#autotoc_md481',1,'']]],
   ['8_205_20visual_20feedback_18',['8.5 Visual Feedback',['../plan_future_ideas.html#autotoc_md482',1,'']]],
@@ -23,8 +23,8 @@ var searchData=
   ['8_207_20open_20questions_20',['8.7 Open Questions',['../plan_future_ideas.html#autotoc_md484',1,'']]],
   ['8_20open_20questions_21',['8 Open questions',['../plan_future_ideas.html#autotoc_md522',1,'13.8 Open questions'],['../plan_card_reveal.html#autotoc_md372',1,'8. Open questions']]],
   ['8_20phase_205_3a_20checkpoint_20and_20upgrades_22',['8. Phase 5: checkpoint and upgrades',['../plan_fast_paced.html#autotoc_md430',1,'']]],
-  ['8_20remaining_20work_20—_20detailed_20status_202026_2007_2026_23',['8. Remaining work — detailed status (2026-07-26)',['../plan_shot_solver_accuracy.html#autotoc_md754',1,'']]],
-  ['8_20sequencing_24',['8. Sequencing',['../plan_level_up_timing.html#autotoc_md685',1,'']]],
-  ['8_20tests_25',['8. Tests',['../plan_headsup.html#autotoc_md652',1,'']]],
+  ['8_20remaining_20work_20—_20detailed_20status_202026_2007_2026_23',['8. Remaining work — detailed status (2026-07-26)',['../plan_shot_solver_accuracy.html#autotoc_md783',1,'']]],
+  ['8_20sequencing_24',['8. Sequencing',['../plan_level_up_timing.html#autotoc_md714',1,'']]],
+  ['8_20tests_25',['8. Tests',['../plan_headsup.html#autotoc_md681',1,'']]],
   ['8_20tuning_20targets_26',['8. Tuning targets',['../plan_coins.html#autotoc_md382',1,'']]]
 ];
