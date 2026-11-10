@@ -10,7 +10,7 @@ var searchData=
   ['3_20architecture_7',['3. Architecture',['../plan_headsup.html#autotoc_md638',1,'']]],
   ['3_20architecture_20decisions_20settled_8',['3. Architecture decisions (settled)',['../plan_shot_solver_accuracy.html#autotoc_md734',1,'']]],
   ['3_20assets_9',['3 Assets',['../plan_content_production.html',1,'Content Production Plan — Pre-8.3 Assets'],['../plan_content_production.html#autotoc_md378',1,'Content Production Plan — Pre-8.3 Assets']]],
-  ['3_20bubbles_20that_20build_20up_20on_20water_10',['3. Bubbles that build up on water',['../plan_water_scenario.html#autotoc_md779',1,'']]],
+  ['3_20bubbles_20that_20build_20up_20on_20water_10',['3. Bubbles that build up on water',['../plan_water_scenario.html#autotoc_md804',1,'']]],
   ['3_20clock_20turn_20pressure_20—_20score_20attack_20flavor_11',['12.3 Clock / turn pressure — score-attack flavor',['../plan_future_ideas.html#autotoc_md503',1,'']]],
   ['3_20color_20streak_20balancing_12',['2.3 Color Streak Balancing',['../plan_future_ideas.html#autotoc_md439',1,'']]],
   ['3_20custom_20level_20editor_20window_20unity_20editor_13',['3.3 Custom Level Editor Window (Unity Editor)',['../plan_future_ideas.html#autotoc_md445',1,'']]],
@@ -29,5 +29,6 @@ var searchData=
   ['3_20what_20this_20deletes_26',['3. What this deletes',['../plan_level_up_timing.html#autotoc_md666',1,'']]],
   ['33_20ms_20frame_27',['Performance (mobile, 120 Hz = 8.33 ms frame)',['../plan_terrain_biomes.html#autotoc_md762',1,'']]],
   ['3_3a_20architectural_20gated_20on_20step_200_20evidence_28',['Tier 3: Architectural (gated on Step 0 evidence)',['../plan_performance_recovery.html#autotoc_md718',1,'']]],
-  ['3_3a_20spawn_20clock_29',['6. Phase 3: spawn clock',['../plan_fast_paced.html#autotoc_md419',1,'']]]
+  ['3_3a_20docs_20and_20playtest_29',['Phase 3: Docs and playtest',['../plan_unbreakable_formations.html#autotoc_md794',1,'']]],
+  ['3_3a_20spawn_20clock_30',['6. Phase 3: spawn clock',['../plan_fast_paced.html#autotoc_md419',1,'']]]
 ];

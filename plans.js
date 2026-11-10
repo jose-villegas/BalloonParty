@@ -1,6 +1,28 @@
 var plans =
 [
-    [ "Plans", "plans.html#autotoc_md792", null ],
+    [ "Plans", "plans.html#autotoc_md817", null ],
+    [ "Unbreakable Formations", "plan_unbreakable_formations.html", [
+      [ "Unbreakable Formations", "plan_unbreakable_formations.html#autotoc_md772", [
+        [ "Goals", "plan_unbreakable_formations.html#autotoc_md774", null ],
+        [ "How unbreakables move today", "plan_unbreakable_formations.html#autotoc_md776", null ],
+        [ "What makes an unbreakable red", "plan_unbreakable_formations.html#autotoc_md778", null ],
+        [ "The glitter effect", "plan_unbreakable_formations.html#autotoc_md780", null ],
+        [ "Design", "plan_unbreakable_formations.html#autotoc_md782", [
+          [ "Rules", "plan_unbreakable_formations.html#autotoc_md783", null ],
+          [ "Shapes on the hex grid", "plan_unbreakable_formations.html#autotoc_md784", null ],
+          [ "Architecture", "plan_unbreakable_formations.html#autotoc_md785", null ],
+          [ "Settings (IUnbreakableFormationSettings)", "plan_unbreakable_formations.html#autotoc_md786", null ]
+        ] ],
+        [ "Open questions", "plan_unbreakable_formations.html#autotoc_md788", null ],
+        [ "Decisions", "plan_unbreakable_formations.html#autotoc_md789", null ],
+        [ "Phases", "plan_unbreakable_formations.html#autotoc_md791", [
+          [ "Phase 1: Formation logic", "plan_unbreakable_formations.html#autotoc_md792", null ],
+          [ "Phase 2: Visuals", "plan_unbreakable_formations.html#autotoc_md793", null ],
+          [ "Phase 3: Docs and playtest", "plan_unbreakable_formations.html#autotoc_md794", null ]
+        ] ],
+        [ "Risks", "plan_unbreakable_formations.html#autotoc_md796", null ]
+      ] ]
+    ] ],
     [ "Bubble Cluster Hit Feedback", "plan_bubble_cluster_hit_feedback.html", [
       [ "Bubble Cluster Hit Feedback", "plan_bubble_cluster_hit_feedback.html#autotoc_md325", [
         [ "Goals", "plan_bubble_cluster_hit_feedback.html#autotoc_md327", null ],
@@ -247,17 +269,17 @@ var plans =
       ] ]
     ] ],
     [ "Water Scenario & Bubble Merge", "plan_water_scenario.html", [
-      [ "Water scenario, rising bubbles and the bubble merge", "plan_water_scenario.html#autotoc_md772", [
-        [ "Owner direction (2026-11-10)", "plan_water_scenario.html#autotoc_md774", null ],
-        [ "What exists (verified 2026-11-10)", "plan_water_scenario.html#autotoc_md775", null ],
-        [ "Design", "plan_water_scenario.html#autotoc_md776", [
-          [ "Water in the schedule", "plan_water_scenario.html#autotoc_md777", null ],
-          [ "The water backdrop", "plan_water_scenario.html#autotoc_md778", null ],
-          [ "Bubbles that build up on water", "plan_water_scenario.html#autotoc_md779", null ],
-          [ "The merge", "plan_water_scenario.html#autotoc_md780", null ]
+      [ "Water scenario, rising bubbles and the bubble merge", "plan_water_scenario.html#autotoc_md797", [
+        [ "Owner direction (2026-11-10)", "plan_water_scenario.html#autotoc_md799", null ],
+        [ "What exists (verified 2026-11-10)", "plan_water_scenario.html#autotoc_md800", null ],
+        [ "Design", "plan_water_scenario.html#autotoc_md801", [
+          [ "Water in the schedule", "plan_water_scenario.html#autotoc_md802", null ],
+          [ "The water backdrop", "plan_water_scenario.html#autotoc_md803", null ],
+          [ "Bubbles that build up on water", "plan_water_scenario.html#autotoc_md804", null ],
+          [ "The merge", "plan_water_scenario.html#autotoc_md805", null ]
         ] ],
-        [ "Owner decisions (2026-11-10)", "plan_water_scenario.html#autotoc_md781", null ],
-        [ "Phases", "plan_water_scenario.html#autotoc_md782", null ]
+        [ "Owner decisions (2026-11-10)", "plan_water_scenario.html#autotoc_md806", null ],
+        [ "Phases", "plan_water_scenario.html#autotoc_md807", null ]
       ] ]
     ] ],
     [ "Gameplay Telemetry", "plan_gameplay_telemetry.html", [
@@ -398,14 +420,14 @@ var plans =
       ] ]
     ] ],
     [ "Web Demo Hosting", "plan_web_demo_hosting.html", [
-      [ "Web Demo Hosting", "plan_web_demo_hosting.html#autotoc_md783", [
-        [ "Why keep it", "plan_web_demo_hosting.html#autotoc_md785", null ],
-        [ "What survived", "plan_web_demo_hosting.html#autotoc_md786", null ],
-        [ "The recipe, if resumed", "plan_web_demo_hosting.html#autotoc_md787", null ],
-        [ "The blocker", "plan_web_demo_hosting.html#autotoc_md788", null ],
-        [ "Residue from the attempt", "plan_web_demo_hosting.html#autotoc_md789", null ],
-        [ "If web stays dead", "plan_web_demo_hosting.html#autotoc_md790", null ],
-        [ "Decision log", "plan_web_demo_hosting.html#autotoc_md791", null ]
+      [ "Web Demo Hosting", "plan_web_demo_hosting.html#autotoc_md808", [
+        [ "Why keep it", "plan_web_demo_hosting.html#autotoc_md810", null ],
+        [ "What survived", "plan_web_demo_hosting.html#autotoc_md811", null ],
+        [ "The recipe, if resumed", "plan_web_demo_hosting.html#autotoc_md812", null ],
+        [ "The blocker", "plan_web_demo_hosting.html#autotoc_md813", null ],
+        [ "Residue from the attempt", "plan_web_demo_hosting.html#autotoc_md814", null ],
+        [ "If web stays dead", "plan_web_demo_hosting.html#autotoc_md815", null ],
+        [ "Decision log", "plan_web_demo_hosting.html#autotoc_md816", null ]
       ] ]
     ] ],
     [ "Level-Up Timing", "plan_level_up_timing.html", [
