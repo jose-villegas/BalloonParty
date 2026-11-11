@@ -254,9 +254,10 @@ surface). The view blends from the sky's grade to that surface's by that amount,
 the grade turns with the hole. The Launch screen, which always shows sky, gets the sky's grade.
 
 The pipeline renders in HDR with post-processing always on (see `Plans/PLAN-HDR.md`), and the base look
-lives in the URP default volume profile (`Assets/DefaultVolumeProfile.asset`): ACES tonemapping, plus
-Color Adjustments that make up for what ACES does to the frame (+0.5 stops of exposure for the
-darkening, +15 saturation for the washed-out balloons). It applies everywhere, the launcher included.
+lives in the URP default volume profile (`Assets/DefaultVolumeProfile.asset`): Neutral tonemapping,
+plus Color Adjustments that keep the frame as bright as it was in LDR (+0.35 stops, +15 contrast, +3
+saturation, matched by mean brightness and saturation at noon and at night on the sky and the water).
+It applies everywhere, the launcher included.
 The grade's volume sits on top and replaces the base's Color Adjustments, so the view adds the grade's
 exposure, contrast and saturation to the base's and multiplies the filters: a grade's numbers are
 relative to the base. With `Enabled` off, or the Scenario Grade cheat off, the view disables its volume
@@ -264,9 +265,9 @@ and the base look remains. The URP volume stack copies the default profile when 
 that profile in Play mode shows only after `VolumeManager.instance.OnVolumeProfileChanged(profile)`,
 except its Color Adjustments, which the grade view reads every frame.
 
-The HUD canvases render through the same camera, so they take the tonemapping and the grade too: keep
-the grades gentle. The GI's scene capture has its own camera with post-processing off, so the grade
-never feeds back into the lighting it is correcting.
+The HUD canvases render through the HUD overlay camera (`Display/HudCamera`), after post-processing,
+so neither the tonemapping nor the grade touches them. The GI's scene capture has its own camera with
+post-processing off, so the grade never feeds back into the lighting it is correcting.
 
 ## BackgroundFieldService
 

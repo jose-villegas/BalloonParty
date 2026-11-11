@@ -11,7 +11,7 @@ namespace BalloonParty.Configuration.Effects
     [CreateAssetMenu(menuName = "Configuration/Scenario Grade Settings", fileName = "ScenarioGradeSettings")]
     internal sealed class ScenarioGradeSettings : ScriptableObject, IScenarioGradeSettings
     {
-        [Tooltip("Off leaves the frame with only the base look of the default volume profile (ACES and its exposure).")]
+        [Tooltip("Off leaves the frame with only the base look of the default volume profile (the tonemapper and its Color Adjustments).")]
         [SerializeField] private bool _enabled = true;
 
         [SerializeField] private ScenarioGrade _sky = ScenarioGrade.Neutral;
