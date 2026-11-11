@@ -17,13 +17,13 @@ MonoBehaviour:
   _recentPopsAvoided: 2
   _sheetColumns: 6
   _sheetRows: 4
-  _framesPerSecond: 24
+  _framesPerSecond: 12
   _insideShowThrough: 0.12
   _riseSeconds: 0.45
   _holdBeforePopSeconds: 0.15
   _parallax: 0.02
   _rubberFallsFromFrame: 3
-  _rubberFallGravity: 380
+  _rubberFallGravity: 95
   _popFlashRadius: 2.4
   _popFlashIntensity: 2.5
   _popFlashSeconds: 0.3

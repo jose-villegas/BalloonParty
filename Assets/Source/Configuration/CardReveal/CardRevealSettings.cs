@@ -22,7 +22,7 @@ namespace BalloonParty.Configuration.CardReveal
         [Header("Sheet")]
         [SerializeField] [Min(1)] private int _sheetColumns = 6;
         [SerializeField] [Min(1)] private int _sheetRows = 4;
-        [SerializeField] [Min(1f)] private float _framesPerSecond = 24f;
+        [SerializeField] [Min(1f)] private float _framesPerSecond = 12f;
 
         [Header("Playing")]
         [Tooltip("How much of the ribbons inside shows through the whole front rubber: a shadow inside the balloon.")]
@@ -42,7 +42,7 @@ namespace BalloonParty.Configuration.CardReveal
 
         [Tooltip("How fast the torn rubber's fall speeds up, in canvas units per second squared (the canvas is " +
                  "225 wide).")]
-        [SerializeField] [Min(0f)] private float _rubberFallGravity = 380f;
+        [SerializeField] [Min(0f)] private float _rubberFallGravity = 95f;
 
         [Header("Light")]
         [Tooltip("When the rubber tears, it flashes a light of its colour into the scene light field, lighting the " +
