@@ -1,5 +1,11 @@
 var NAVTREEINDEX76 =
 {
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#ad242f9ff8f4570b3441e6f30a9f861db":[5,0,0,13,0,0,19,21],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#ad242f9ff8f4570b3441e6f30a9f861db":[6,0,0,13,0,0,19,21],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#add676f460bc40a09686be3dc727ba98f":[5,0,0,13,0,0,19,20],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#add676f460bc40a09686be3dc727ba98f":[6,0,0,13,0,0,19,20],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#ae9c7fb3cb8b6261fe3b7564951150945":[5,0,0,13,0,0,19,9],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#ae9c7fb3cb8b6261fe3b7564951150945":[6,0,0,13,0,0,19,9],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#af14922d6ea2fadc7e7cd27b33bbc4828":[5,0,0,13,0,0,19,2],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#af14922d6ea2fadc7e7cd27b33bbc4828":[6,0,0,13,0,0,19,2],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#af1cda09287cc4a50360580e858a2a950":[5,0,0,13,0,0,19,22],
@@ -243,11 +249,5 @@ var NAVTREEINDEX76 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1RandomSlotSelectionStrategy.html":[5,0,0,13,0,16],
 "classBalloonParty_1_1Slots_1_1Actor_1_1RandomSlotSelectionStrategy.html":[6,0,0,13,0,16],
 "classBalloonParty_1_1Slots_1_1Actor_1_1RandomSlotSelectionStrategy.html#aa42416b7433bb2fad13f2c43e5f5b3da":[5,0,0,13,0,16,0],
-"classBalloonParty_1_1Slots_1_1Actor_1_1RandomSlotSelectionStrategy.html#aa42416b7433bb2fad13f2c43e5f5b3da":[6,0,0,13,0,16,0],
-"classBalloonParty_1_1Slots_1_1Actor_1_1RandomSlotSelectionStrategy.html#ae9e1a8e4ba67084f257e565e64827871":[5,0,0,13,0,16,1],
-"classBalloonParty_1_1Slots_1_1Actor_1_1RandomSlotSelectionStrategy.html#ae9e1a8e4ba67084f257e565e64827871":[6,0,0,13,0,16,1],
-"classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html":[5,0,0,13,0,17],
-"classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html":[6,0,0,13,0,17],
-"classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a1ec21029adc06b083e8f89c7d710ce7d":[5,0,0,13,0,17,1],
-"classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a1ec21029adc06b083e8f89c7d710ce7d":[6,0,0,13,0,17,1]
+"classBalloonParty_1_1Slots_1_1Actor_1_1RandomSlotSelectionStrategy.html#aa42416b7433bb2fad13f2c43e5f5b3da":[6,0,0,13,0,16,0]
 };

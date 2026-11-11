@@ -11,8 +11,10 @@ var classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook =
     [ "_blend", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a20ca4bb64388131e9647e183a72cae66", null ],
     [ "_block", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a66bcf51be769124b0eac6beabd1b7c13", null ],
     [ "_blue", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a801cb4209128bc9177e1a51ae93ad5b4", null ],
+    [ "_coreFormationBoost", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a4cfa7309409d4295a7298f69ed2f6cee", null ],
     [ "_coreLights", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a6367067d24fc045459c883e3f92af515", null ],
     [ "_coreRest", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#ad3fd57621474d4dce7042bfccbeb47f4", null ],
+    [ "_coreRestBoost", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a033ab0a45a429a0ddd7c28edfb50c079", null ],
     [ "_fadeDuration", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a44f865cb2d3208cf82a263ff85848564", null ],
     [ "_glitter", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a56542739ea0c0632d377ab45210fe255", null ],
     [ "_glitterAlpha", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a7fdbff8925ed7f85b2f63a65f2e3e013", null ],
@@ -24,6 +26,7 @@ var classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook =
     [ "_trailBlue", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a9e7ebfcdf76b68466a157712d7f46e36", null ],
     [ "_trailIsBlue", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a40a19dd2ca860138eb7032210f4337a2", null ],
     [ "_trailRest", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a71efd0e567187e5189f890b4dcc5deaf", null ],
+    [ "HdrBoostId", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a94bdb69fc542e5836782c37b4c9e6eae", null ],
     [ "RimColorId", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#af452fcc8f4de879a6dcdef797f9b1d42", null ],
     [ "TrailTailWhiten", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a83abcf7976828fa036d2cff32c14c95d", null ]
 ];

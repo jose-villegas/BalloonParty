@@ -1,5 +1,11 @@
 var NAVTREEINDEX22 =
 {
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckSpawnSettings.html#ab3fb5c80ebcb932e7ebbf5d1c00f85a6":[5,0,0,3,4,38,5],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckSpawnSettings.html#ab3fb5c80ebcb932e7ebbf5d1c00f85a6":[6,0,0,3,4,38,5],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckSpawnSettings.html#addcb12469d4439581389a6fb10ec7912":[5,0,0,3,4,38,3],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckSpawnSettings.html#addcb12469d4439581389a6fb10ec7912":[6,0,0,3,4,38,3],
+"classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html":[5,0,0,3,13],
+"classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html":[6,0,0,3,13],
 "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html#a21aff57d70a38541694d633041f168dd":[5,0,0,3,13,2],
 "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html#a21aff57d70a38541694d633041f168dd":[6,0,0,3,13,2],
 "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html#a40db9e658001210800e1515a104dc3ea":[5,0,0,3,13,7],
@@ -243,11 +249,5 @@ var NAVTREEINDEX22 =
 "classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html#a57d202cc5c86f40c0e0f0ef830642168":[5,0,0,3,7,0,13],
 "classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html#a57d202cc5c86f40c0e0f0ef830642168":[6,0,0,3,7,0,13],
 "classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html#a71a59c689f2bf2f1d3beb614d31e3cbe":[5,0,0,3,7,0,11],
-"classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html#a71a59c689f2bf2f1d3beb614d31e3cbe":[6,0,0,3,7,0,11],
-"classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html#a77b9451f4d7b8b551aff01773f1b8af1":[5,0,0,3,7,0,1],
-"classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html#a77b9451f4d7b8b551aff01773f1b8af1":[6,0,0,3,7,0,1],
-"classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html#a7862dda581cb1d3acfdc46568b61b819":[5,0,0,3,7,0,8],
-"classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html#a7862dda581cb1d3acfdc46568b61b819":[6,0,0,3,7,0,8],
-"classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html#a7eb877e63600a435d39fe0ce48827170":[5,0,0,3,7,0,4],
-"classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html#a7eb877e63600a435d39fe0ce48827170":[6,0,0,3,7,0,4]
+"classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html#a71a59c689f2bf2f1d3beb614d31e3cbe":[6,0,0,3,7,0,11]
 };

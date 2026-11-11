@@ -1,5 +1,11 @@
 var NAVTREEINDEX88 =
 {
+"classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#a61dbb8ce8798ed69e8e838ed82268f74":[5,0,0,16,24,9],
+"classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#a61dbb8ce8798ed69e8e838ed82268f74":[6,0,0,16,24,9],
+"classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#a70947e2010ac3a6a3e03ea7928d2ba56":[5,0,0,16,24,7],
+"classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#a70947e2010ac3a6a3e03ea7928d2ba56":[6,0,0,16,24,7],
+"classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#a7669d636e680fd37a9569331cda58745":[5,0,0,16,24,8],
+"classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#a7669d636e680fd37a9569331cda58745":[6,0,0,16,24,8],
 "classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#ab144009cd067291e28cdfededd3e6818":[5,0,0,16,24,10],
 "classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#ab144009cd067291e28cdfededd3e6818":[6,0,0,16,24,10],
 "classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#ae71b411ec9c82aa8feadde77c5ed39cb":[5,0,0,16,24,2],
@@ -243,11 +249,5 @@ var NAVTREEINDEX88 =
 "functions_q.html":[6,3,0,17],
 "functions_r.html":[6,3,0,18],
 "functions_s.html":[6,3,0,19],
-"functions_t.html":[6,3,0,20],
-"functions_u.html":[6,3,0,21],
-"functions_v.html":[6,3,0,22],
-"functions_vars.html":[6,3,2],
-"functions_vars.html":[6,3,2,0],
-"functions_vars_a.html":[6,3,2,1],
-"functions_vars_b.html":[6,3,2,2]
+"functions_t.html":[6,3,0,20]
 };

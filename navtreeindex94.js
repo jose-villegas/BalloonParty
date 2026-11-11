@@ -1,5 +1,11 @@
 var NAVTREEINDEX94 =
 {
+"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#a1d93c9b730ca9fdaaac5f864255d10c1":[6,0,0,6,10,2,3],
+"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#ac406efc39fbfe089d18355f4a2681608":[5,0,0,6,10,2,1],
+"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#ac406efc39fbfe089d18355f4a2681608":[6,0,0,6,10,2,1],
+"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#acc102517c8faa27c4ec7b9678fd79966":[5,0,0,6,10,2,4],
+"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#acc102517c8faa27c4ec7b9678fd79966":[6,0,0,6,10,2,4],
+"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#ae35bc538be155c97bef4b582ead6cb66":[5,0,0,6,10,2,2],
 "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#ae35bc538be155c97bef4b582ead6cb66":[6,0,0,6,10,2,2],
 "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#af8cf36b0a33fc84ce2888dcb9d32d853":[5,0,0,6,10,2,0],
 "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#af8cf36b0a33fc84ce2888dcb9d32d853":[6,0,0,6,10,2,0],
@@ -243,11 +249,5 @@ var NAVTREEINDEX94 =
 "interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html#a5f5fdfa7f675b1055e74c0aea911bb17":[6,0,0,11,9,0],
 "interfaceBalloonParty_1_1Scenario_1_1ISkyBackdrop.html":[5,0,0,11,10],
 "interfaceBalloonParty_1_1Scenario_1_1ISkyBackdrop.html":[6,0,0,11,10],
-"interfaceBalloonParty_1_1Scenario_1_1ISkyBackdrop.html#a7a7d9ff28c2be6b80b121a1421a86154":[5,0,0,11,10,0],
-"interfaceBalloonParty_1_1Scenario_1_1ISkyBackdrop.html#a7a7d9ff28c2be6b80b121a1421a86154":[6,0,0,11,10,0],
-"interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html":[5,0,0,12,1,1],
-"interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html":[6,0,0,12,1,1],
-"interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html#a426c8543f7b9747f3f886f945dc46a65":[5,0,0,12,1,1,0],
-"interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html#a426c8543f7b9747f3f886f945dc46a65":[6,0,0,12,1,1,0],
-"interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html#ab155192561f8d6b30f86e5777c66dd27":[5,0,0,12,1,1,1]
+"interfaceBalloonParty_1_1Scenario_1_1ISkyBackdrop.html#a7a7d9ff28c2be6b80b121a1421a86154":[5,0,0,11,10,0]
 };

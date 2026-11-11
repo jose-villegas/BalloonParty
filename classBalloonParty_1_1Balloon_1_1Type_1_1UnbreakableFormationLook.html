@@ -169,10 +169,14 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a66bcf51be769124b0eac6beabd1b7c13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a801cb4209128bc9177e1a51ae93ad5b4" id="r_a801cb4209128bc9177e1a51ae93ad5b4"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a801cb4209128bc9177e1a51ae93ad5b4">_blue</a></td></tr>
 <tr class="separator:a801cb4209128bc9177e1a51ae93ad5b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cfa7309409d4295a7298f69ed2f6cee" id="r_a4cfa7309409d4295a7298f69ed2f6cee"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4cfa7309409d4295a7298f69ed2f6cee">_coreFormationBoost</a> = 4f</td></tr>
+<tr class="separator:a4cfa7309409d4295a7298f69ed2f6cee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6367067d24fc045459c883e3f92af515" id="r_a6367067d24fc045459c883e3f92af515"><td class="memItemLeft" align="right" valign="top">SpriteRenderer[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6367067d24fc045459c883e3f92af515">_coreLights</a></td></tr>
 <tr class="separator:a6367067d24fc045459c883e3f92af515"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3fd57621474d4dce7042bfccbeb47f4" id="r_ad3fd57621474d4dce7042bfccbeb47f4"><td class="memItemLeft" align="right" valign="top">Color[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3fd57621474d4dce7042bfccbeb47f4">_coreRest</a></td></tr>
 <tr class="separator:ad3fd57621474d4dce7042bfccbeb47f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a033ab0a45a429a0ddd7c28edfb50c079" id="r_a033ab0a45a429a0ddd7c28edfb50c079"><td class="memItemLeft" align="right" valign="top">float[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a033ab0a45a429a0ddd7c28edfb50c079">_coreRestBoost</a></td></tr>
+<tr class="separator:a033ab0a45a429a0ddd7c28edfb50c079"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44f865cb2d3208cf82a263ff85848564" id="r_a44f865cb2d3208cf82a263ff85848564"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a44f865cb2d3208cf82a263ff85848564">_fadeDuration</a> = 0.4f</td></tr>
 <tr class="separator:a44f865cb2d3208cf82a263ff85848564"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56542739ea0c0632d377ab45210fe255" id="r_a56542739ea0c0632d377ab45210fe255"><td class="memItemLeft" align="right" valign="top">SpriteRenderer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a56542739ea0c0632d377ab45210fe255">_glitter</a></td></tr>
@@ -198,6 +202,8 @@ Private Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
+<tr class="memitem:a94bdb69fc542e5836782c37b4c9e6eae" id="r_a94bdb69fc542e5836782c37b4c9e6eae"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a94bdb69fc542e5836782c37b4c9e6eae">HdrBoostId</a> = Shader.PropertyToID(&quot;_HdrBoost&quot;)</td></tr>
+<tr class="separator:a94bdb69fc542e5836782c37b4c9e6eae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af452fcc8f4de879a6dcdef797f9b1d42" id="r_af452fcc8f4de879a6dcdef797f9b1d42"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af452fcc8f4de879a6dcdef797f9b1d42">RimColorId</a> = Shader.PropertyToID(&quot;_RimColor&quot;)</td></tr>
 <tr class="separator:af452fcc8f4de879a6dcdef797f9b1d42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a83abcf7976828fa036d2cff32c14c95d" id="r_a83abcf7976828fa036d2cff32c14c95d"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a83abcf7976828fa036d2cff32c14c95d">TrailTailWhiten</a> = 0.6f</td></tr>
@@ -474,6 +480,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a4cfa7309409d4295a7298f69ed2f6cee" name="a4cfa7309409d4295a7298f69ed2f6cee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4cfa7309409d4295a7298f69ed2f6cee">&#9670;&#160;</a></span>_coreFormationBoost</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Balloon.Type.UnbreakableFormationLook._coreFormationBoost = 4f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a6367067d24fc045459c883e3f92af515" name="a6367067d24fc045459c883e3f92af515"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6367067d24fc045459c883e3f92af515">&#9670;&#160;</a></span>_coreLights</h2>
 
@@ -507,6 +535,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">Color [] BalloonParty.Balloon.Type.UnbreakableFormationLook._coreRest</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a033ab0a45a429a0ddd7c28edfb50c079" name="a033ab0a45a429a0ddd7c28edfb50c079"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a033ab0a45a429a0ddd7c28edfb50c079">&#9670;&#160;</a></span>_coreRestBoost</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float [] BalloonParty.Balloon.Type.UnbreakableFormationLook._coreRestBoost</td>
         </tr>
       </table>
   </td>
@@ -754,6 +804,28 @@ Static Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a94bdb69fc542e5836782c37b4c9e6eae" name="a94bdb69fc542e5836782c37b4c9e6eae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94bdb69fc542e5836782c37b4c9e6eae">&#9670;&#160;</a></span>HdrBoostId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Balloon.Type.UnbreakableFormationLook.HdrBoostId = Shader.PropertyToID(&quot;_HdrBoost&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

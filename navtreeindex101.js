@@ -1,5 +1,11 @@
 var NAVTREEINDEX101 =
 {
+"plans.html":[3],
+"plans.html#autotoc_md874":[3,0],
+"structBalloonParty_1_1Audio_1_1Editor_1_1SfxCandidate.html":[5,0,0,0,1,7],
+"structBalloonParty_1_1Audio_1_1Editor_1_1SfxCandidate.html":[6,0,0,0,1,7],
+"structBalloonParty_1_1Audio_1_1Editor_1_1SfxCandidate.html#a0543f9663258e0d3ac03dd66251fd19a":[5,0,0,0,1,7,9],
+"structBalloonParty_1_1Audio_1_1Editor_1_1SfxCandidate.html#a0543f9663258e0d3ac03dd66251fd19a":[6,0,0,0,1,7,9],
 "structBalloonParty_1_1Audio_1_1Editor_1_1SfxCandidate.html#a1c7fb72124fa360ecce7b95acd934f27":[5,0,0,0,1,7,6],
 "structBalloonParty_1_1Audio_1_1Editor_1_1SfxCandidate.html#a1c7fb72124fa360ecce7b95acd934f27":[6,0,0,0,1,7,6],
 "structBalloonParty_1_1Audio_1_1Editor_1_1SfxCandidate.html#a406b737633a6190f013c6b38619391c3":[5,0,0,0,1,7,4],
@@ -243,11 +249,5 @@ var NAVTREEINDEX101 =
 "structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a6577b3d5b2f3db7a28429ff63c0b8619":[5,0,0,1,2,2,0],
 "structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a6577b3d5b2f3db7a28429ff63c0b8619":[6,0,0,1,2,2,0],
 "structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a78cae6453ecf42fa44deb945a494e160":[5,0,0,1,2,2,10],
-"structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a78cae6453ecf42fa44deb945a494e160":[6,0,0,1,2,2,10],
-"structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a8322aefad844a920ae0c8b9d6f15932d":[5,0,0,1,2,2,8],
-"structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a8322aefad844a920ae0c8b9d6f15932d":[6,0,0,1,2,2,8],
-"structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a9a8052c99c833558d60ba0422ffa6496":[5,0,0,1,2,2,13],
-"structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a9a8052c99c833558d60ba0422ffa6496":[6,0,0,1,2,2,13],
-"structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#aa9d082426d9435252b4f77f9417815db":[5,0,0,1,2,2,4],
-"structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#aa9d082426d9435252b4f77f9417815db":[6,0,0,1,2,2,4]
+"structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a78cae6453ecf42fa44deb945a494e160":[6,0,0,1,2,2,10]
 };

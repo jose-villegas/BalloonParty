@@ -1,5 +1,11 @@
 var NAVTREEINDEX98 =
 {
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba839308aa1482ca4ed4328809fed2ae8e":[5,0,0,6,9,28,0],
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba93cf8f3684028469c46fd52d3fab8219":[5,0,0,6,9,28,12],
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7eba9ef01b10a4b468f5aff8fceddf9a25dc":[5,0,0,6,9,28,28],
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebaa5d6d8249f4c72bed97328b7a2b904d8":[5,0,0,6,9,28,25],
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebaadeaf9c0747cdb74f0454ab8b04f7d4e":[5,0,0,6,9,28,18],
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebaafc0eeb50b92e2e989a1d14e43c21eae":[5,0,0,6,9,28,4],
 "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebab39244a268bb6b4d8939fef525dd2cd5":[5,0,0,6,9,28,21],
 "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebab5190af1bcc87e359657b13ad793b0e4":[5,0,0,6,9,28,2],
 "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebab65bda0bf7248cc77c87f2bb0119074e":[5,0,0,6,9,28,26],
@@ -243,11 +249,5 @@ var NAVTREEINDEX98 =
 "namespaceBalloonParty_1_1Thrower.html":[5,0,0,15],
 "namespaceBalloonParty_1_1UI.html":[5,0,0,16],
 "namespaceBalloonParty_1_1UI_1_1Binding.html":[5,0,0,16,0],
-"namespaceBalloonParty_1_1UI_1_1Coins.html":[5,0,0,16,1],
-"namespaceBalloonParty_1_1UI_1_1Danger.html":[5,0,0,16,2],
-"namespaceBalloonParty_1_1UI_1_1GameOver.html":[5,0,0,16,3],
-"namespaceBalloonParty_1_1UI_1_1HeadsUp.html":[5,0,0,16,4],
-"namespaceBalloonParty_1_1UI_1_1Health.html":[5,0,0,16,5],
-"namespaceBalloonParty_1_1UI_1_1LevelUp.html":[5,0,0,16,6],
-"namespaceBalloonParty_1_1UI_1_1Score.html":[5,0,0,16,7]
+"namespaceBalloonParty_1_1UI_1_1Coins.html":[5,0,0,16,1]
 };

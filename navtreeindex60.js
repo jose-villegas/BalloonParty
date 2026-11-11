@@ -1,5 +1,11 @@
 var NAVTREEINDEX60 =
 {
+"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a9371ae2720a7fd0478b0524188bc4cce":[5,0,0,9,5,29],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a9371ae2720a7fd0478b0524188bc4cce":[6,0,0,9,5,29],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a971f98e500a904cc48c84968fd04872c":[5,0,0,9,5,21],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a971f98e500a904cc48c84968fd04872c":[6,0,0,9,5,21],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#aa1a23c1e80e4955494c3be4d5c93b76b":[5,0,0,9,5,11],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#aa1a23c1e80e4955494c3be4d5c93b76b":[6,0,0,9,5,11],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#ac2ba0dabba0f64c47e0b9f7616da3d01":[5,0,0,9,5,23],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#ac2ba0dabba0f64c47e0b9f7616da3d01":[6,0,0,9,5,23],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#ac612f6e036bfb86fe1a09dc40a9ec932":[5,0,0,9,5,4],
@@ -243,11 +249,5 @@ var NAVTREEINDEX60 =
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a50cfc8b49903a470d4cccf029323271a":[5,0,0,10,1,5,8],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a50cfc8b49903a470d4cccf029323271a":[6,0,0,10,1,5,8],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a747520ff37070e60f7649509048b5757":[5,0,0,10,1,5,9],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a747520ff37070e60f7649509048b5757":[6,0,0,10,1,5,9],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a80b738cbb4593f3a726e767b6110c544":[5,0,0,10,1,5,13],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a80b738cbb4593f3a726e767b6110c544":[6,0,0,10,1,5,13],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a85e65308080ad993d663501d9ec6849f":[5,0,0,10,1,5,7],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a85e65308080ad993d663501d9ec6849f":[6,0,0,10,1,5,7],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a975c6d6a957d54fe681d5f27dbfeab4a":[5,0,0,10,1,5,4],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a975c6d6a957d54fe681d5f27dbfeab4a":[6,0,0,10,1,5,4]
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a747520ff37070e60f7649509048b5757":[6,0,0,10,1,5,9]
 };

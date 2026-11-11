@@ -1,5 +1,11 @@
 var NAVTREEINDEX93 =
 {
+"interfaceBalloonParty_1_1Game_1_1Cinematics_1_1IBoardEffect.html#a7ac9498a4234e200958db33e0b98d09f":[6,0,0,6,0,12,1],
+"interfaceBalloonParty_1_1Game_1_1Cinematics_1_1IBoardEffect.html#ac2992905810e139f987d5309759cfd8c":[5,0,0,6,0,12,0],
+"interfaceBalloonParty_1_1Game_1_1Cinematics_1_1IBoardEffect.html#ac2992905810e139f987d5309759cfd8c":[6,0,0,6,0,12,0],
+"interfaceBalloonParty_1_1Game_1_1Cinematics_1_1ICinematicFocus.html":[5,0,0,6,0,13],
+"interfaceBalloonParty_1_1Game_1_1Cinematics_1_1ICinematicFocus.html":[6,0,0,6,0,13],
+"interfaceBalloonParty_1_1Game_1_1Cinematics_1_1ICinematicFocus.html#a5363a5e8b73bf6a8bf761ad3f29e46ae":[5,0,0,6,0,13,0],
 "interfaceBalloonParty_1_1Game_1_1Cinematics_1_1ICinematicFocus.html#a5363a5e8b73bf6a8bf761ad3f29e46ae":[6,0,0,6,0,13,0],
 "interfaceBalloonParty_1_1Game_1_1Coins_1_1IAppSuspendSignal.html":[5,0,0,6,1,7],
 "interfaceBalloonParty_1_1Game_1_1Coins_1_1IAppSuspendSignal.html":[6,0,0,6,1,7],
@@ -243,11 +249,5 @@ var NAVTREEINDEX93 =
 "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IUpgradeDraft.html#afbcc4be6945dd94ccb8849a7c55510ac":[6,0,0,6,10,1,2],
 "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html":[5,0,0,6,10,2],
 "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html":[6,0,0,6,10,2],
-"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#a1d93c9b730ca9fdaaac5f864255d10c1":[5,0,0,6,10,2,3],
-"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#a1d93c9b730ca9fdaaac5f864255d10c1":[6,0,0,6,10,2,3],
-"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#ac406efc39fbfe089d18355f4a2681608":[5,0,0,6,10,2,1],
-"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#ac406efc39fbfe089d18355f4a2681608":[6,0,0,6,10,2,1],
-"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#acc102517c8faa27c4ec7b9678fd79966":[5,0,0,6,10,2,4],
-"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#acc102517c8faa27c4ec7b9678fd79966":[6,0,0,6,10,2,4],
-"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#ae35bc538be155c97bef4b582ead6cb66":[5,0,0,6,10,2,2]
+"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#a1d93c9b730ca9fdaaac5f864255d10c1":[5,0,0,6,10,2,3]
 };

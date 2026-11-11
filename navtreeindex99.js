@@ -1,5 +1,11 @@
 var NAVTREEINDEX99 =
 {
+"namespaceBalloonParty_1_1UI_1_1Danger.html":[5,0,0,16,2],
+"namespaceBalloonParty_1_1UI_1_1GameOver.html":[5,0,0,16,3],
+"namespaceBalloonParty_1_1UI_1_1HeadsUp.html":[5,0,0,16,4],
+"namespaceBalloonParty_1_1UI_1_1Health.html":[5,0,0,16,5],
+"namespaceBalloonParty_1_1UI_1_1LevelUp.html":[5,0,0,16,6],
+"namespaceBalloonParty_1_1UI_1_1Score.html":[5,0,0,16,7],
 "namespaceBalloonParty_1_1UI_1_1Score.html#a86f03547512dfa6ce827879a999ee3db":[5,0,0,16,7,8],
 "namespaceBalloonParty_1_1UI_1_1Score.html#a86f03547512dfa6ce827879a999ee3dba58fa788345ab5ac21c2cef38907d4580":[5,0,0,16,7,8,2],
 "namespaceBalloonParty_1_1UI_1_1Score.html#a86f03547512dfa6ce827879a999ee3dba7a1920d61156abc05a60135aefe8bc67":[5,0,0,16,7,8,0],
@@ -243,11 +249,5 @@ var NAVTREEINDEX99 =
 "plan_gameplay_telemetry.html#autotoc_md579":[3,11,0,5,0,0],
 "plan_gameplay_telemetry.html#autotoc_md580":[3,11,0,5,0,1],
 "plan_gameplay_telemetry.html#autotoc_md581":[3,11,0,5,1],
-"plan_gameplay_telemetry.html#autotoc_md583":[3,11,0,6],
-"plan_grid_actor_expansion.html":[3,3],
-"plan_grid_actor_expansion.html#autotoc_md584":[3,3,0],
-"plan_grid_actor_expansion.html#autotoc_md586":[3,3,0,0],
-"plan_grid_actor_expansion.html#autotoc_md588":[3,3,0,1],
-"plan_grid_actor_expansion.html#autotoc_md589":[3,3,0,1,0],
-"plan_grid_actor_expansion.html#autotoc_md590":[3,3,0,1,1]
+"plan_gameplay_telemetry.html#autotoc_md583":[3,11,0,6]
 };

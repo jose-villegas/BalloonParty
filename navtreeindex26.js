@@ -1,5 +1,11 @@
 var NAVTREEINDEX26 =
 {
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a855a2e34e0fe446574122d182d3909f0":[5,0,0,3,9,0,14],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a855a2e34e0fe446574122d182d3909f0":[6,0,0,3,9,0,14],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a87dee0a16fca40e1ac3332242e69556c":[5,0,0,3,9,0,19],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a87dee0a16fca40e1ac3332242e69556c":[6,0,0,3,9,0,19],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a89a2564101d0084224508983faac7942":[5,0,0,3,9,0,7],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a89a2564101d0084224508983faac7942":[6,0,0,3,9,0,7],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a9268b98c4b44f137a295c83d4925ed81":[5,0,0,3,9,0,20],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a9268b98c4b44f137a295c83d4925ed81":[6,0,0,3,9,0,20],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a9d25ed70cd0747f4809a7887cd7f2f12":[5,0,0,3,9,0,13],
@@ -243,11 +249,5 @@ var NAVTREEINDEX26 =
 "classBalloonParty_1_1Configuration_1_1RunConfig.html#a8186322911107e64ce022bbc20b48dce":[5,0,0,3,26,12],
 "classBalloonParty_1_1Configuration_1_1RunConfig.html#a8186322911107e64ce022bbc20b48dce":[6,0,0,3,26,12],
 "classBalloonParty_1_1Configuration_1_1RunConfig.html#a81c0733284f770883adfb7301a989498":[5,0,0,3,26,2],
-"classBalloonParty_1_1Configuration_1_1RunConfig.html#a81c0733284f770883adfb7301a989498":[6,0,0,3,26,2],
-"classBalloonParty_1_1Configuration_1_1RunConfig.html#a978c69652a6c2acc182bcc1a91e63c5b":[5,0,0,3,26,19],
-"classBalloonParty_1_1Configuration_1_1RunConfig.html#a978c69652a6c2acc182bcc1a91e63c5b":[6,0,0,3,26,19],
-"classBalloonParty_1_1Configuration_1_1RunConfig.html#a9790d7253d70d56dcb22239ce843acd8":[5,0,0,3,26,16],
-"classBalloonParty_1_1Configuration_1_1RunConfig.html#a9790d7253d70d56dcb22239ce843acd8":[6,0,0,3,26,16],
-"classBalloonParty_1_1Configuration_1_1RunConfig.html#aa4015844e08520a0689b0b7d61edbba2":[5,0,0,3,26,8],
-"classBalloonParty_1_1Configuration_1_1RunConfig.html#aa4015844e08520a0689b0b7d61edbba2":[6,0,0,3,26,8]
+"classBalloonParty_1_1Configuration_1_1RunConfig.html#a81c0733284f770883adfb7301a989498":[6,0,0,3,26,2]
 };

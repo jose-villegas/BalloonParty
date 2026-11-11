@@ -1,5 +1,11 @@
 var NAVTREEINDEX41 =
 {
+"classBalloonParty_1_1Game_1_1Cinematics_1_1LevelAscendCinematic.html#a5e1617e4f6b3f2e0d6a144a0a0401a99":[5,0,0,6,0,14,0],
+"classBalloonParty_1_1Game_1_1Cinematics_1_1LevelAscendCinematic.html#a5e1617e4f6b3f2e0d6a144a0a0401a99":[6,0,0,6,0,14,0],
+"classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html":[5,0,0,6,0,15],
+"classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html":[6,0,0,6,0,15],
+"classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#a0dd0fec6e58c79770186e002aa9bbf74":[5,0,0,6,0,15,10],
+"classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#a0dd0fec6e58c79770186e002aa9bbf74":[6,0,0,6,0,15,10],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#a1240e6029dfd1985058f10d008eb07b1":[5,0,0,6,0,15,20],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#a1240e6029dfd1985058f10d008eb07b1":[6,0,0,6,0,15,20],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#a196d13a1f0bc7f403323b8707793efc6":[5,0,0,6,0,15,16],
@@ -243,11 +249,5 @@ var NAVTREEINDEX41 =
 "classBalloonParty_1_1Game_1_1Coins_1_1CoinWalletSaver.html#aeccd60b1d6ba551001843f696957f642":[5,0,0,6,1,6,3],
 "classBalloonParty_1_1Game_1_1Coins_1_1CoinWalletSaver.html#aeccd60b1d6ba551001843f696957f642":[6,0,0,6,1,6,3],
 "classBalloonParty_1_1Game_1_1Coins_1_1CoinWalletSaver.html#aee6d13412058f785f7729ccdf70f5e2d":[5,0,0,6,1,6,2],
-"classBalloonParty_1_1Game_1_1Coins_1_1CoinWalletSaver.html#aee6d13412058f785f7729ccdf70f5e2d":[6,0,0,6,1,6,2],
-"classBalloonParty_1_1Game_1_1Coins_1_1CoinWalletSaver.html#af0962982a4c700e46c7d3928805d4b7e":[5,0,0,6,1,6,0],
-"classBalloonParty_1_1Game_1_1Coins_1_1CoinWalletSaver.html#af0962982a4c700e46c7d3928805d4b7e":[6,0,0,6,1,6,0],
-"classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html":[5,0,0,6,1,13],
-"classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html":[6,0,0,6,1,13],
-"classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html#a7eb73e0d3c1abc435b79bfcff5255042":[5,0,0,6,1,13,2],
-"classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html#a7eb73e0d3c1abc435b79bfcff5255042":[6,0,0,6,1,13,2]
+"classBalloonParty_1_1Game_1_1Coins_1_1CoinWalletSaver.html#aee6d13412058f785f7729ccdf70f5e2d":[6,0,0,6,1,6,2]
 };

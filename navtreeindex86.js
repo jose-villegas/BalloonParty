@@ -1,5 +1,11 @@
 var NAVTREEINDEX86 =
 {
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a7d1bef2398f6cffa415f134a07e2d9d5":[5,0,0,16,7,1,13],
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a7d1bef2398f6cffa415f134a07e2d9d5":[6,0,0,16,7,1,13],
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a7f2e49ced2b745fc0bc283ab7fef3805":[5,0,0,16,7,1,22],
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a7f2e49ced2b745fc0bc283ab7fef3805":[6,0,0,16,7,1,22],
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a8393fd4d4b568afb3b6322bc813c7e93":[5,0,0,16,7,1,41],
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a8393fd4d4b568afb3b6322bc813c7e93":[6,0,0,16,7,1,41],
 "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a855f94fa2ebb3b74cd63d3f8a467e900":[5,0,0,16,7,1,18],
 "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a855f94fa2ebb3b74cd63d3f8a467e900":[6,0,0,16,7,1,18],
 "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a8c0ce01705fee2916c03ff1ea8f4fb48":[5,0,0,16,7,1,4],
@@ -243,11 +249,5 @@ var NAVTREEINDEX86 =
 "classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html#a2d075bd227612a1a5676285618f8f921":[5,0,0,16,7,6,6],
 "classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html#a2d075bd227612a1a5676285618f8f921":[6,0,0,16,7,6,6],
 "classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html#a56288ac071b175c68ac46f376fee791f":[5,0,0,16,7,6,7],
-"classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html#a56288ac071b175c68ac46f376fee791f":[6,0,0,16,7,6,7],
-"classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html#a7507b9255f8a6961066b6966ee6906a5":[5,0,0,16,7,6,1],
-"classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html#a7507b9255f8a6961066b6966ee6906a5":[6,0,0,16,7,6,1],
-"classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html#a8d5793b443106b64e922677277a8ab28":[5,0,0,16,7,6,0],
-"classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html#a8d5793b443106b64e922677277a8ab28":[6,0,0,16,7,6,0],
-"classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html#ad31f216a2f0295b8f5df01c07aa44152":[5,0,0,16,7,6,5],
-"classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html#ad31f216a2f0295b8f5df01c07aa44152":[6,0,0,16,7,6,5]
+"classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html#a56288ac071b175c68ac46f376fee791f":[6,0,0,16,7,6,7]
 };

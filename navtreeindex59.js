@@ -1,5 +1,11 @@
 var NAVTREEINDEX59 =
 {
+"classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html":[5,0,0,8,0,0],
+"classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html":[6,0,0,8,0,0],
+"classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html#a136872cbc4c8efb2a57e8576ceb2aadf":[5,0,0,8,0,0,4],
+"classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html#a136872cbc4c8efb2a57e8576ceb2aadf":[6,0,0,8,0,0,4],
+"classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html#a161fe4fb78f9740064f4636699035188":[5,0,0,8,0,0,7],
+"classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html#a161fe4fb78f9740064f4636699035188":[6,0,0,8,0,0,7],
 "classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html#a1f346580e110f8c6a4741669b8cfcffb":[5,0,0,8,0,0,5],
 "classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html#a1f346580e110f8c6a4741669b8cfcffb":[6,0,0,8,0,0,5],
 "classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html#a5cfd257fa95ff5a96cf873c28bec92ba":[5,0,0,8,0,0,6],
@@ -243,11 +249,5 @@ var NAVTREEINDEX59 =
 "classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a87543e34b1d0ce1fb3c82ac60e971f47":[5,0,0,9,5,25],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a87543e34b1d0ce1fb3c82ac60e971f47":[6,0,0,9,5,25],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a8f267d0656173f474c45e2b5c49ea985":[5,0,0,9,5,14],
-"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a8f267d0656173f474c45e2b5c49ea985":[6,0,0,9,5,14],
-"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a9371ae2720a7fd0478b0524188bc4cce":[5,0,0,9,5,29],
-"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a9371ae2720a7fd0478b0524188bc4cce":[6,0,0,9,5,29],
-"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a971f98e500a904cc48c84968fd04872c":[5,0,0,9,5,21],
-"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a971f98e500a904cc48c84968fd04872c":[6,0,0,9,5,21],
-"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#aa1a23c1e80e4955494c3be4d5c93b76b":[5,0,0,9,5,11],
-"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#aa1a23c1e80e4955494c3be4d5c93b76b":[6,0,0,9,5,11]
+"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a8f267d0656173f474c45e2b5c49ea985":[6,0,0,9,5,14]
 };

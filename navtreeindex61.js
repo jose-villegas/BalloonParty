@@ -1,5 +1,11 @@
 var NAVTREEINDEX61 =
 {
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a80b738cbb4593f3a726e767b6110c544":[5,0,0,10,1,5,13],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a80b738cbb4593f3a726e767b6110c544":[6,0,0,10,1,5,13],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a85e65308080ad993d663501d9ec6849f":[5,0,0,10,1,5,7],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a85e65308080ad993d663501d9ec6849f":[6,0,0,10,1,5,7],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a975c6d6a957d54fe681d5f27dbfeab4a":[5,0,0,10,1,5,4],
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a975c6d6a957d54fe681d5f27dbfeab4a":[6,0,0,10,1,5,4],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#abb3a7b6858c9cbd3eb20c8c5fb2104d4":[5,0,0,10,1,5,6],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#abb3a7b6858c9cbd3eb20c8c5fb2104d4":[6,0,0,10,1,5,6],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#aeb364cdbc61c7065f934faa2dd871c27":[5,0,0,10,1,5,2],
@@ -243,11 +249,5 @@ var NAVTREEINDEX61 =
 "classBalloonParty_1_1Projectile_1_1ProjectileRegistry.html#a319ec7821f1f62b563791eec3af547f7":[5,0,0,10,9,13],
 "classBalloonParty_1_1Projectile_1_1ProjectileRegistry.html#a319ec7821f1f62b563791eec3af547f7":[6,0,0,10,9,13],
 "classBalloonParty_1_1Projectile_1_1ProjectileRegistry.html#a38145a31a3371bf36bd28218f46be04e":[5,0,0,10,9,2],
-"classBalloonParty_1_1Projectile_1_1ProjectileRegistry.html#a38145a31a3371bf36bd28218f46be04e":[6,0,0,10,9,2],
-"classBalloonParty_1_1Projectile_1_1ProjectileRegistry.html#a5c7dfe7be686a404a0bafb8e9d17e528":[5,0,0,10,9,8],
-"classBalloonParty_1_1Projectile_1_1ProjectileRegistry.html#a5c7dfe7be686a404a0bafb8e9d17e528":[6,0,0,10,9,8],
-"classBalloonParty_1_1Projectile_1_1ProjectileRegistry.html#a63220be07c32c3d288c6c5e1465e588a":[5,0,0,10,9,11],
-"classBalloonParty_1_1Projectile_1_1ProjectileRegistry.html#a63220be07c32c3d288c6c5e1465e588a":[6,0,0,10,9,11],
-"classBalloonParty_1_1Projectile_1_1ProjectileRegistry.html#a65a2cc111c17e0b985bd1cb6427eeb1f":[5,0,0,10,9,22],
-"classBalloonParty_1_1Projectile_1_1ProjectileRegistry.html#a65a2cc111c17e0b985bd1cb6427eeb1f":[6,0,0,10,9,22]
+"classBalloonParty_1_1Projectile_1_1ProjectileRegistry.html#a38145a31a3371bf36bd28218f46be04e":[6,0,0,10,9,2]
 };

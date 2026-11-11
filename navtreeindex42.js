@@ -1,5 +1,11 @@
 var NAVTREEINDEX42 =
 {
+"classBalloonParty_1_1Game_1_1Coins_1_1CoinWalletSaver.html#af0962982a4c700e46c7d3928805d4b7e":[5,0,0,6,1,6,0],
+"classBalloonParty_1_1Game_1_1Coins_1_1CoinWalletSaver.html#af0962982a4c700e46c7d3928805d4b7e":[6,0,0,6,1,6,0],
+"classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html":[5,0,0,6,1,13],
+"classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html":[6,0,0,6,1,13],
+"classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html#a7eb73e0d3c1abc435b79bfcff5255042":[5,0,0,6,1,13,2],
+"classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html#a7eb73e0d3c1abc435b79bfcff5255042":[6,0,0,6,1,13,2],
 "classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html#acc895d250896064e3fef3850cc088284":[5,0,0,6,1,13,0],
 "classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html#acc895d250896064e3fef3850cc088284":[6,0,0,6,1,13,0],
 "classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html#aed5e9922fefa124138a613ee5d858cae":[5,0,0,6,1,13,1],
@@ -243,11 +249,5 @@ var NAVTREEINDEX42 =
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#a806424a3f3fd02ab04c9d6109fb7a9c6":[5,0,0,6,4,5,5],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#a806424a3f3fd02ab04c9d6109fb7a9c6":[6,0,0,6,4,5,5],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#a857de978f2484ac7a3eb188cf5a36f89":[5,0,0,6,4,5,11],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#a857de978f2484ac7a3eb188cf5a36f89":[6,0,0,6,4,5,11],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#aa3204d1266f605389c4e7dd35a151447":[5,0,0,6,4,5,3],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#aa3204d1266f605389c4e7dd35a151447":[6,0,0,6,4,5,3],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#aab5db709ead94eaffd015b48da783145":[5,0,0,6,4,5,14],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#aab5db709ead94eaffd015b48da783145":[6,0,0,6,4,5,14],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#ab3b9e3d866cd125e13bb26725a56d1a4":[5,0,0,6,4,5,16],
-"classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#ab3b9e3d866cd125e13bb26725a56d1a4":[6,0,0,6,4,5,16]
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#a857de978f2484ac7a3eb188cf5a36f89":[6,0,0,6,4,5,11]
 };

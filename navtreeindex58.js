@@ -1,5 +1,11 @@
 var NAVTREEINDEX58 =
 {
+"classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#a1656a62ab5437dfde1ddcf843971964b":[5,0,0,7,28,13],
+"classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#a1656a62ab5437dfde1ddcf843971964b":[6,0,0,7,28,13],
+"classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#a1ece65e64d1f823c9a4afeec2181175f":[5,0,0,7,28,4],
+"classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#a1ece65e64d1f823c9a4afeec2181175f":[6,0,0,7,28,4],
+"classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#a246703f4b5c412aa4b89134eb7c7227c":[5,0,0,7,28,12],
+"classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#a246703f4b5c412aa4b89134eb7c7227c":[6,0,0,7,28,12],
 "classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#a3e0c694ea83dd1a0cb69ff450ea5523c":[5,0,0,7,28,2],
 "classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#a3e0c694ea83dd1a0cb69ff450ea5523c":[6,0,0,7,28,2],
 "classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#a4c0a5f490cbf8739c3b3cd54e27ede9e":[5,0,0,7,28,1],
@@ -243,11 +249,5 @@ var NAVTREEINDEX58 =
 "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html#af279eff8110ab44734563c15112fcac4":[5,0,0,7,7,1,9],
 "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html#af279eff8110ab44734563c15112fcac4":[6,0,0,7,7,1,9],
 "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html#afeb4f57d57f0f9c54aa04e1acc9efd1a":[5,0,0,7,7,1,4],
-"classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html#afeb4f57d57f0f9c54aa04e1acc9efd1a":[6,0,0,7,7,1,4],
-"classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html":[5,0,0,8,0,0],
-"classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html":[6,0,0,8,0,0],
-"classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html#a136872cbc4c8efb2a57e8576ceb2aadf":[5,0,0,8,0,0,4],
-"classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html#a136872cbc4c8efb2a57e8576ceb2aadf":[6,0,0,8,0,0,4],
-"classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html#a161fe4fb78f9740064f4636699035188":[5,0,0,8,0,0,7],
-"classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html#a161fe4fb78f9740064f4636699035188":[6,0,0,8,0,0,7]
+"classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html#afeb4f57d57f0f9c54aa04e1acc9efd1a":[6,0,0,7,7,1,4]
 };

@@ -1,5 +1,11 @@
 var NAVTREEINDEX43 =
 {
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#aa3204d1266f605389c4e7dd35a151447":[5,0,0,6,4,5,3],
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#aa3204d1266f605389c4e7dd35a151447":[6,0,0,6,4,5,3],
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#aab5db709ead94eaffd015b48da783145":[5,0,0,6,4,5,14],
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#aab5db709ead94eaffd015b48da783145":[6,0,0,6,4,5,14],
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#ab3b9e3d866cd125e13bb26725a56d1a4":[5,0,0,6,4,5,16],
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#ab3b9e3d866cd125e13bb26725a56d1a4":[6,0,0,6,4,5,16],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#ace21385b85ca77da9e7534f82c172e56":[5,0,0,6,4,5,9],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#ace21385b85ca77da9e7534f82c172e56":[6,0,0,6,4,5,9],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#ad0fa39a94228b982dcc059670f088c31":[5,0,0,6,4,5,13],
@@ -243,11 +249,5 @@ var NAVTREEINDEX43 =
 "classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#a9f9d6fee67531dfab3d57edb28429e3d":[5,0,0,6,15,5],
 "classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#a9f9d6fee67531dfab3d57edb28429e3d":[6,0,0,6,15,5],
 "classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#aa465c5771cbd4a78a5d5b9dfd1697f08":[5,0,0,6,15,1],
-"classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#aa465c5771cbd4a78a5d5b9dfd1697f08":[6,0,0,6,15,1],
-"classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#ab8a6880585ecdb083cd88daf5070d807":[5,0,0,6,15,7],
-"classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#ab8a6880585ecdb083cd88daf5070d807":[6,0,0,6,15,7],
-"classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#ac2dc570a6b47f7591750d2546b8331fa":[5,0,0,6,15,3],
-"classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#ac2dc570a6b47f7591750d2546b8331fa":[6,0,0,6,15,3],
-"classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#ac7d4dfe9a44238d9d2f38c090a375150":[5,0,0,6,15,4],
-"classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#ac7d4dfe9a44238d9d2f38c090a375150":[6,0,0,6,15,4]
+"classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#aa465c5771cbd4a78a5d5b9dfd1697f08":[6,0,0,6,15,1]
 };
