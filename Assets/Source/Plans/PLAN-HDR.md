@@ -102,7 +102,7 @@ Shaders are under `Assets/Shaders/BalloonParty/`, materials under `Assets/Materi
 
 | Effect | Why |
 |---|---|
-| **UI and the heads-up text** (`Text/PencilText`, TMP SDF fonts, every canvas) | Must look exactly as now. They sit at 0–1, so bloom with a threshold above 1 leaves them alone, but a tonemapper does not (see the tonemapper decision). |
+| **UI and the heads-up text** (`Text/PencilText`, TMP SDF fonts, every canvas) | Must look exactly as now. They draw on the HUD overlay camera, after post-processing, so neither the tonemapper nor bloom touches them. |
 | **Soft gradients**: `Display/SkyScatter`, `Scenario/GroundMist`, `Scenario/BackgroundCloud`, `Grid/PuffCloud`, `Scenario/SmokeTrailDisplay`, the camera clear colour | Nothing above 1 to gain. These are where the 32-bit format bands first; see *Format* below. |
 | **Data shaders**: scene-light field passes, disturbance, smoke, water ripple and caustics, grass wake, background density | Not colour. |
 | **Editor bake shaders** (`Grid/Editor/*`) | Render to their own ARGB32 targets; unaffected. |
@@ -135,9 +135,12 @@ at 0.92, so the sky, the mist and the water are the first places to band. Camera
 - HDR forces an intermediate colour target and a final pass to the screen every frame.
 - Post-processing must be on all the time: without it the HDR buffer is copied out and clipped
   with no dithering. With it, URP runs its uber post pass (grading, tonemapping, dithering, and
-  bloom's composite if bloom is on): one full-screen read and write. Today that pass only runs
-  while `ScenarioGradeView` holds post-processing on.
-- Measure this "empty post" cost on device first (Phase 1). It is the go/no-go number for the
+  bloom's composite if bloom is on): one full-screen read and write. Since Phase 1 it runs every
+  frame (before it, only while `ScenarioGradeView` held post-processing on).
+- The HUD overlay camera (Phase 1 item 3b) stops post-processing from writing straight to the
+  screen: the base camera post-processes into an intermediate, the HUD draws over it, and a final
+  copy goes to the screen. One more full-screen copy per frame.
+- Measure this "empty post" cost, with the HUD camera, on device first (Phase 1). It is the go/no-go number for the
   whole plan, against the 8.33 ms frame budget at 120 Hz (see @ref plan_performance_recovery).
 
 ### Bloom
@@ -240,10 +243,11 @@ flowchart TD
 |---|---|
 | 1. `GameURP.asset`: Supports HDR on; precision 32-bit; Color Grading Mode **HDR**; LUT 32. | Done |
 | 2. Main camera: post-processing on, dithering on. | Done, on the `Main Camera` prefab (it lives in the app scope, so the launcher has it too) |
-| 3. Tonemapping: ACES, with an exposure lift. `ScenarioGradeView` stops toggling post-processing. | Done. The base look is in the URP default volume profile (`Assets/DefaultVolumeProfile.asset`), not in the grade's volume, because the grade only exists in the game scope: ACES, +0.5 stops, +15 saturation. The grade's Color Adjustments add to the base's. **Open: ACES against Neutral, below.** |
+| 3. Tonemapping, with an exposure lift. `ScenarioGradeView` stops toggling post-processing. | Done. The base look is in the URP default volume profile (`Assets/DefaultVolumeProfile.asset`), not in the grade's volume, because the grade only exists in the game scope: **Neutral**, +0.35 stops, +15 contrast, +3 saturation. The grade's Color Adjustments add to the base's. ACES was tried first and dropped (findings below) |
+| 3b. The HUD skips the tonemapper. | Done: a `HUD Camera` overlay in the main camera's stack, post-processing off, draws the UI, Launch and Trail layers (`Display/HudCamera`); `CanvasCameraBinder` binds the canvases to it. Costs one extra full-screen copy: measure it with item 4 |
 | 4. Measure the empty-post cost on device. **Gate:** if it doesn't fit, park HDR (Phase 0 stays). | Open: needs a device |
-| 5. Compare against the baselines. | Done in the Editor: `Baselines~/hdr-aces/` holds the same shots as `hdr-gamma-ldr/`, and `tuning/` holds the look sweeps |
-| 6. Re-tune the scenario grades in HDR grading mode. | Waits on the tonemapper |
+| 5. Compare against the baselines. | Done in the Editor: `Baselines~/hdr-neutral/` holds the shipped look (same shots as `hdr-gamma-ldr/`, plus the level-up), `hdr-aces/` the ACES attempt, and each `tuning/` the look sweeps |
+| 6. Re-tune the scenario grades in HDR grading mode. | Checked, no change: with the base above, every scenario's noon frame matches LDR within 0.004 mean luma and its night frame within 0.02. The meadow at night reads a little deeper and more saturated |
 
 #### Findings from the Editor (2026-11-11)
 
@@ -255,18 +259,23 @@ the share of clipped pixels, then by eye.
 | LDR, today | luma 0.405, sat 0.48, 12% clipped | luma 0.331, sat 0.57 | reference |
 | ACES +0.5 stops, +15 sat (committed) | 0.339, sat 0.67 | 0.271, sat 0.77 | red drifts to orange, green to yellow, blue pales |
 | ACES +0.6 stops, +5 sat, −20 contrast | 0.358, sat 0.50 | 0.292, sat 0.62 | as above, flatter |
-| **Neutral +0.3 stops, +10 sat** | **0.405, sat 0.50, 0% clipped** | **0.340, sat 0.60** | close to today |
+| Neutral +0.3 stops, +10 sat (HUD still tonemapped) | 0.405, sat 0.50, 0% clipped | 0.340, sat 0.60 | close to today |
+| **Neutral +0.35 stops, +15 contrast, +3 sat (shipped, HUD on its own camera)** | **sky 0.604 vs 0.593, water 0.619 vs 0.615** | **sky 0.268 vs 0.263, water 0.232 vs 0.232** | close to today |
 
 - **ACES can't match the night.** Its toe crushes the dark scenes. Lifting it far enough to match washes
   out the day, and every saturation boost that brings the balloons back overshoots at night. The day
   sky matches at +0.5 stops.
 - **ACES moves the gameplay colours.** Red balloons drift toward orange, green toward yellow, and the
   blues pale. The plan's palette-identity check fails on red against orange.
-- **Neutral matches today at noon and at night** with one setting, keeps the hues, and still removes
-  the clipping. It is the recommended switch.
-- **Every tonemapper greys the UI whites.** No curve maps 1.0 back to white, so the cream Game Over panel and
-  white text such as PLAY come out grey, with Neutral the least. Settle this in its own step: move the
-  screen-space canvases to Screen Space – Overlay, or re-tune the UI colours.
+- **Neutral matches today at noon and at night** with one setting, keeps the hues, and removes most of
+  the clipping. Contrast evens out the day and the night: without it the day sat 5% under LDR and the
+  night 9% over. Night saturation still runs a few points over LDR, the price of that contrast.
+- **Every tonemapper greys the UI whites.** No curve maps 1.0 back to white: under Neutral a white
+  button face came out 217 instead of 254. Fixed by drawing the HUD on its own overlay camera after
+  post-processing (Phase 1 item 3b). Screen Space – Overlay canvases were the other option, but they
+  would move the canvases' world positions that the score, heart and coin trails fly to.
+- **Pops still bloom to white** next to the burst. Those effects are authored to reach white; the
+  tonemapper only softens what goes above 1. That is Phase 2, item 1.
 - **Capturing HDR.** The pipeline package's `capture game_view` renders the camera into an 8-bit texture,
   and URP gives an offscreen camera its target's format, so it cannot show HDR. Use
   `ScreenCapture.CaptureScreenshot` (the real Game view). The volume stack copies the default profile when it
@@ -305,11 +314,11 @@ Taken by the user after this audit.
 | Decision | Choice | Notes |
 |---|---|---|
 | Bloom | **Yes, gated** | Phase 3, after the switch. Dual or Kawase at quarter resolution, threshold above 1. Ships only if the device measurement fits the frame budget; otherwise follow the fallback ladder. |
-| Tonemapper | **ACES** | See below: the switch is no longer look-neutral. |
+| Tonemapper | ~~ACES~~ → **Neutral** (2026-11-11) | ACES was chosen first; in the Editor it crushed the night and moved red balloons toward orange (Phase 1 findings), so the user switched to Neutral. The section below is kept for the record. |
 | Format | **32-bit `B10G11R11` + dithering** | Move to 64-bit only if the sky, mist or water band visibly on device. |
 | First effects | **Pops on lit surfaces, then glitter** (items 1 and 2) | The level-up (item 6) is the showcase once those read well. |
 
-### What ACES means for this plan
+### What ACES meant for this plan (superseded by Neutral)
 
 - **Phase 1 is a look change, not a silent switch.** ACES darkens the whole 0–1 range and adds
   contrast, and it shifts the hue of saturated colours. Expect an exposure lift on the global
@@ -321,8 +330,7 @@ Taken by the user after this audit.
 - **No extra per-pixel cost against Neutral.** In HDR grading mode the tonemapper is baked into
   the grading LUT, so ACES and Neutral cost the same lookup per pixel.
 - **The UI is tonemapped too.** The game and launcher canvases are Screen Space – Camera, and
-  score, hearts and heads-ups are World Space, so all of them go through the post pass. In a URP
-  camera stack post-processing runs once at the end of the stack, so a separate UI camera does
-  not escape it. To settle in Phase 1, by eye: either re-tune the UI colours under ACES, or move
-  the screen-space canvases to Screen Space – Overlay (drawn after post), which changes how world
-  sprites such as score trails layer with the UI.
+  score, hearts and heads-ups are World Space, so all of them went through the post pass. This
+  audit first said a separate UI camera could not escape it; that was wrong. URP 17 post-processes
+  per camera in a stack, so an overlay camera with post off draws after the base camera's
+  tonemapping. That is the fix that shipped (Phase 1 item 3b).
