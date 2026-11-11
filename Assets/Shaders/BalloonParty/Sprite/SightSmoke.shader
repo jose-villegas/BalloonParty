@@ -8,6 +8,9 @@ Shader "BalloonParty/Sprite/SightSmoke"
         [PerRendererData] _MainTex("Sprite Texture", 2D) = "white" {}
         _Color("Tint", Color) = (1,1,1,1)
         [HideInInspector] _RendererColor("Renderer Color", Color) = (1,1,1,1)
+        // Scales the colour past white (alpha untouched), so a sight meant to read as light, like the laser's aim
+        // lines, glows through bloom (PLAN-HDR). 1 = the authored colour.
+        _HdrBoost("HDR Boost", Range(1, 8)) = 1
 
         [Header(Smoke Mask)]
         [NoScaleOffset] _NoiseTex("Noise (tileable)", 2D) = "white" {}
@@ -71,6 +74,7 @@ Shader "BalloonParty/Sprite/SightSmoke"
             #endif
 
             fixed4 _Color;
+            half _HdrBoost;
 
             v2f vert(appdata_t IN)
             {
@@ -124,11 +128,13 @@ Shader "BalloonParty/Sprite/SightSmoke"
                 return max(mask, _MinVisibility);
             }
 
-            fixed4 frag(v2f IN) : SV_Target
+            half4 frag(v2f IN) : SV_Target
             {
                 UNITY_SETUP_INSTANCE_ID(IN);
 
-                fixed4 c = SampleSpriteTexture(IN.texcoord) * IN.color;
+                // half, not fixed: OpenGL ES may run fixed at lowp, which only reaches 2.
+                half4 c = SampleSpriteTexture(IN.texcoord) * IN.color;
+                c.rgb *= _HdrBoost;
                 c.a *= SmokeMask(IN.texcoord);
                 c.rgb *= c.a;
                 return c;

@@ -81,6 +81,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _HdrBoost: 3
     - _Metallic: 0
     - _MinVisibility: 0.01
     - _Mode: 0

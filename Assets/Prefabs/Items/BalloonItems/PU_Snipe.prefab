@@ -107,6 +107,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1532584057158195999, guid: ef986049aad6e40dcb0027158268936d,
         type: 3}
+      propertyPath: _coreGlow
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2741570484024547919, guid: ef986049aad6e40dcb0027158268936d,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 1532584057158195999, guid: ef986049aad6e40dcb0027158268936d,
+        type: 3}
       propertyPath: _sortingRenderers.Array.size
       value: 4
       objectReference: {fileID: 0}

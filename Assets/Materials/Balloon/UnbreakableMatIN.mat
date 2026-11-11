@@ -76,6 +76,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _HdrBoost: 3
     - _MetalBrighten: 0.25
     - _MetalDarken: 0.35
     - _MetalDetailStrength: 0.5

@@ -14,6 +14,9 @@ Shader "BalloonParty/Balloon/UnbreakableBalloonRim"
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
         _Color ("Tint", Color) = (1, 1, 1, 1)
         [HideInInspector] _RendererColor ("Renderer Color", Color) = (1, 1, 1, 1)
+        // Scales the fill (sprite × tint) past white, before the rim is added: the unbreakable's red core and
+        // glow are its lights, so they glow through bloom (PLAN-HDR). The rim's own colour already passes 1.
+        _HdrBoost ("HDR Boost (fill)", Range(1, 8)) = 1
 
         [Header(Chrome Rim)]
         _RimColor     ("Color",      Color)           = (0.7, 0.75, 0.85, 1.0)
@@ -87,6 +90,7 @@ Shader "BalloonParty/Balloon/UnbreakableBalloonRim"
             #endif
 
             half4 _Color;
+            half  _HdrBoost;
 
             // Chrome rim
             half4 _RimColor;
@@ -160,6 +164,7 @@ Shader "BalloonParty/Balloon/UnbreakableBalloonRim"
             half4 frag(Varyings IN) : SV_Target
             {
                 half4 col = tex2D(_MainTex, IN.uv) * IN.color;
+                col.rgb *= _HdrBoost;
                 float alpha = col.a;
 
                 if (alpha < 0.01 || _RimWidth <= 0.0)
