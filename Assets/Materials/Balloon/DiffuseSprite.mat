@@ -62,6 +62,8 @@ Material:
     m_Ints: []
     m_Floats:
     - PixelSnap: 0
+    - _AmbientDimming: 0.4
+    - _AmbientHue: 0.25
     - _AmbientOnly: 1
     - _BumpScale: 1
     - _ColorMask: 15

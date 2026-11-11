@@ -6,7 +6,8 @@ using UnityEngine;
 namespace BalloonParty.Cheats
 {
     /// <summary>Toggles <see cref="CheatState.ScenarioGradeOff" />: the scenario colour grade off and on, to compare
-    /// the scenes with and without it.</summary>
+    /// the scenes with and without it. A second toggle swaps the tonemapper back to URP's own Neutral curve
+    /// (<see cref="CheatState.UrpNeutralTonemap" />), to compare it with the PBR Neutral the game builds.</summary>
     internal class ScenarioGradeCheat : ICheat, ICheatControls
     {
         public string Name => "Scenario Grade";
@@ -24,6 +25,14 @@ namespace BalloonParty.Cheats
             CheatState.ScenarioGradeOff = !GUILayout.Toggle(
                 !CheatState.ScenarioGradeOff,
                 CheatState.ScenarioGradeOff ? " Scenario grade OFF" : " Scenario grade on");
+
+            var urpNeutral = GUILayout.Toggle(
+                CheatState.UrpNeutralTonemap,
+                CheatState.UrpNeutralTonemap ? " Tonemapper: URP Neutral (old)" : " Tonemapper: PBR Neutral");
+            if (urpNeutral != CheatState.UrpNeutralTonemap)
+            {
+                CheatState.SetUrpNeutralTonemap(urpNeutral);
+            }
         }
     }
 }

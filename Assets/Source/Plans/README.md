@@ -8,6 +8,7 @@ or a pending evaluation.
 
 | File | Description | Status |
 |------|-------------|--------|
+| `PLAN-ColorBalance.md` | Keeping the eight key colours crisp in every scene at every time of day — research-based targets (CIEDE2000, colour-blind pairs, contrast with the backdrop), measured on the rendered frame; PBR Neutral tonemapper, no lift, balloons keep their hue at night; palette changes pending sign-off | active |
 | `PLAN-BubbleClusterHitFeedback.md` | Soap Cluster hit VFX position, spin impulse, and `IBalloonHitHandler` cleanup — not yet actioned | active |
 | `PLAN-ContentProduction.md` | Asset and content work required before Phase 8.3 — Deflector, Absorber, Gatekeeper art/prefab/config remaining | active |
 | `PLAN-FutureIdeas.md` | Unscheduled backlog of deferred features, improvement concepts, and speculative designs — items graduate into dedicated plans | active |

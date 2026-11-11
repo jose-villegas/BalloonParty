@@ -243,7 +243,7 @@ flowchart TD
 |---|---|
 | 1. `GameURP.asset`: Supports HDR on; precision 32-bit; Color Grading Mode **HDR**; LUT 32. | Done |
 | 2. Main camera: post-processing on, dithering on. | Done, on the `Main Camera` prefab (it lives in the app scope, so the launcher has it too) |
-| 3. Tonemapping, with an exposure lift. `ScenarioGradeView` stops toggling post-processing. | Done. The base look is in the URP default volume profile (`Assets/DefaultVolumeProfile.asset`), not in the grade's volume, because the grade only exists in the game scope: **Neutral**, +0.35 stops, +15 contrast, +3 saturation. The grade's Color Adjustments add to the base's. ACES was tried first and dropped (findings below) |
+| 3. Tonemapping, with an exposure lift. `ScenarioGradeView` stops toggling post-processing. | Done. The base look is in the URP default volume profile (`Assets/DefaultVolumeProfile.asset`), not in the grade's volume, because the grade only exists in the game scope: **Neutral**, +0.35 stops, +15 contrast, +3 saturation. The grade's Color Adjustments add to the base's. ACES was tried first and dropped (findings below). **Since 2026-11-11** the Neutral curve is Khronos PBR Neutral, built into the grading LUT by the game's own shader, and the base is +15 contrast only (@ref plan_color_balance) |
 | 3b. The HUD skips the tonemapper. | Done: a `HUD Camera` overlay in the main camera's stack, post-processing off, draws the UI, Launch and Trail layers (`Display/HudCamera`); `CanvasCameraBinder` binds the canvases to it. Costs one extra full-screen copy: measure it with item 4 |
 | 4. Measure the empty-post cost on device. **Gate:** if it doesn't fit, park HDR (Phase 0 stays). | Open: needs a device |
 | 5. Compare against the baselines. | Done in the Editor: `Baselines~/hdr-neutral/` holds the shipped look (same shots as `hdr-gamma-ldr/`, plus the level-up), `hdr-aces/` the ACES attempt, and each `tuning/` the look sweeps |
@@ -366,7 +366,7 @@ Taken by the user after this audit.
 | Decision | Choice | Notes |
 |---|---|---|
 | Bloom | **Yes, gated** | Phase 3, after the switch. Dual or Kawase at quarter resolution, threshold above 1. Ships only if the device measurement fits the frame budget; otherwise follow the fallback ladder. |
-| Tonemapper | ~~ACES~~ → **Neutral** (2026-11-11) | ACES was chosen first; in the Editor it crushed the night and moved red balloons toward orange (Phase 1 findings), so the user switched to Neutral. The section below is kept for the record. |
+| Tonemapper | ~~ACES~~ → **Neutral** (2026-11-11), → **Khronos PBR Neutral** the same day (@ref plan_color_balance: URP's Neutral took 25–30 % of the balloons' chroma and turned blue toward cyan) | ACES was chosen first; in the Editor it crushed the night and moved red balloons toward orange (Phase 1 findings), so the user switched to Neutral. The section below is kept for the record. |
 | Format | **32-bit `B10G11R11` + dithering** | Move to 64-bit only if the sky, mist or water band visibly on device. |
 | First effects | **Pops on lit surfaces, then glitter** (items 1 and 2) | The level-up (item 6) is the showcase once those read well. |
 

@@ -20,6 +20,13 @@ Shader "BalloonParty/Sprite/Diffuse"
         // Local  — only local field lights, ABOVE the ambient rest: neutral until a light is near, then
         //          it brightens/tints toward that light. Never picks up the global ambient.
         [Enum(Full, 0, Ambient, 1, Local, 2)] _LightMode ("Light Mode", Float) = 0
+        // How much of the time-of-day light's COLOUR the sprite takes: 1 = all of it, 0 = only its
+        // brightness. Gameplay colours keep their hue at night this way (a red balloon under the
+        // blue midnight light would otherwise turn maroon). Local lights keep their colour.
+        _AmbientHue ("Ambient Hue", Range(0, 1)) = 1
+        // How much of the time-of-day light's DIMMING the sprite takes: 1 = all of it, 0 = none, as if
+        // a key light stayed on it. Leaves the backdrop to carry the night.
+        _AmbientDimming ("Ambient Dimming", Range(0, 1)) = 1
 
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
     }
@@ -82,6 +89,8 @@ Shader "BalloonParty/Sprite/Diffuse"
             half4 _Color;
             float _LightInfluence;
             float _LightMode;
+            float _AmbientHue;
+            float _AmbientDimming;
 
             v2f vert(appdata_t IN)
             {
@@ -110,6 +119,15 @@ Shader "BalloonParty/Sprite/Diffuse"
                 {
                     // Full: the field — ambient + any local lights.
                     OUT.lightTint = SceneLightTintAtLOD(spriteCenterWorld);
+                }
+
+                if (_LightMode < 1.5)
+                {
+                    // Re-grade only the time-of-day part of the light; whatever a local light adds stays.
+                    float3 ambient = SceneLightTint();
+                    float3 graded = lerp(dot(ambient, float3(0.2126, 0.7152, 0.0722)).xxx, ambient, _AmbientHue);
+                    graded = lerp(float3(1.0, 1.0, 1.0), graded, _AmbientDimming);
+                    OUT.lightTint += graded - ambient;
                 }
 
                 #ifdef PIXELSNAP_ON

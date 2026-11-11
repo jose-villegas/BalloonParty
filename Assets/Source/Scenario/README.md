@@ -238,15 +238,15 @@ The sky, the meadow and the water each light the board differently, so the same 
 different colour on each. `ScenarioGradeView` grades the whole frame per scenario to bring them closer.
 Each scenario has a grade in `ScenarioGradeSettings` (`IScenarioGradeSettings`): exposure, contrast,
 saturation, white balance (temperature and tint), a colour filter, tints for the shadows and the
-highlights, and a lift for the shadows. A dark floor is brightened with the lift, not the exposure,
-which would wash out the balloons over it. The view builds one global URP Volume with a runtime profile
+highlights, and a lift for the shadows. The view builds one global URP Volume with a runtime profile
 and writes the grade into it every frame, so edits to the asset show live in Play mode.
 
-The sky is the reference and stays ungraded. The meadow and the water were tuned by the frame's mean
-brightness and saturation against the sky's, at noon and at night (time-of-day angles 135 and 315): the
-meadow takes a 0.35 lift and 12 less saturation, which brings its dark floor near the sky at noon
-without turning it milky at night, where a lift weighs more; the water already matches the sky's
-brightness and takes 10 less saturation.
+All three grades are neutral today. An earlier tuning matched the meadow and the water to the sky's mean
+brightness with a shadow lift and less saturation, and it washed the meadow out: a lift adds the same
+amount to every channel, which is what haze does, so it costs contrast and colour together. The
+backdrops are meant to differ in brightness; what has to stay the same from scene to scene is the
+balloons. `Plans/PLAN-ColorBalance.md` has the targets and the measurements: tune a grade against those,
+on the balloons, not on the frame's mean.
 
 The grade follows the backdrop, not the schedule. `GroundView` writes `BackdropMix` as it cuts or
 reveals: the surface it is on and how much of the screen that surface covers (0 is all sky, 1 all
@@ -255,9 +255,9 @@ the grade turns with the hole. The Launch screen, which always shows sky, gets t
 
 The pipeline renders in HDR with post-processing always on (see `Plans/PLAN-HDR.md`), and the base look
 lives in the URP default volume profile (`Assets/DefaultVolumeProfile.asset`): Neutral tonemapping,
-plus Color Adjustments that keep the frame as bright as it was in LDR (+0.35 stops, +15 contrast, +3
-saturation, matched by mean brightness and saturation at noon and at night on the sky and the water).
-It applies everywhere, the launcher included. The same profile holds the bloom: its threshold sits
+which the game's own grading-LUT shader turns into Khronos PBR Neutral (it leaves colours below 0.76
+alone and keeps their hue above; see `Plans/PLAN-ColorBalance.md`), plus +15 contrast in Color
+Adjustments. It applies everywhere, the launcher included. The same profile holds the bloom: its threshold sits
 above anything a gameplay balloon reaches, so only the emitters that go past white glow (the lightning,
 the laser beam, a stacked shield; see `Plans/PLAN-HDR.md`, Phase 2).
 The grade's volume sits on top and replaces the base's Color Adjustments, so the view adds the grade's

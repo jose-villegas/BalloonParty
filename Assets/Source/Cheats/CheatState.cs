@@ -9,6 +9,10 @@ namespace BalloonParty.Cheats
     /// and we don't want a cheat concept in production DI.</summary>
     internal static class CheatState
     {
+        internal const string StartLevelPrefKey = "BalloonParty.Cheats.StartLevel";
+
+        private static readonly int UrpNeutralTonemapId = Shader.PropertyToID("_BalloonPartyUrpNeutral");
+
         /// <summary>While true, the current level is LOCKED: score trails still fly on a pop, but nothing sticks —
         /// <c>ClaimProgress</c> grants the visual points without advancing progress, and both
         /// <c>OnTrailArrived</c> handlers (score + level) skip their commit, so score and bars stay put. The
@@ -54,7 +58,16 @@ namespace BalloonParty.Cheats
         /// through the console, and that window already writes <see cref="StartLevel" />.</summary>
         public static bool AnyCheatUsed;
 
-        internal const string StartLevelPrefKey = "BalloonParty.Cheats.StartLevel";
+        /// <summary>While true, the colour-grading LUT tonemaps with URP's own Neutral curve instead of the PBR
+        /// Neutral the game builds (<c>Display/LutBuilderHdr.shader</c>), to compare the two. Set through
+        /// <see cref="SetUrpNeutralTonemap" />, which also sets the shader global the LUT builder reads.</summary>
+        public static bool UrpNeutralTonemap { get; private set; }
+
+        internal static void SetUrpNeutralTonemap(bool on)
+        {
+            UrpNeutralTonemap = on;
+            Shader.SetGlobalFloat(UrpNeutralTonemapId, on ? 1f : 0f);
+        }
 
         // With Enter Play Mode Options disabling domain reload, statics survive between play sessions — reset
         // the flags on each play start so they never silently carry over. Runs earliest, before scene load.
@@ -67,6 +80,7 @@ namespace BalloonParty.Cheats
             AnyCheatUsed = false;
             KeepRunSeed = false;
             ScenarioGradeOff = false;
+            SetUrpNeutralTonemap(false);
 #if UNITY_EDITOR
             // Pick up (and consume) the "play from here" level the pacing window stashed before entering play.
             StartLevel = UnityEditor.EditorPrefs.GetInt(StartLevelPrefKey, 1);
