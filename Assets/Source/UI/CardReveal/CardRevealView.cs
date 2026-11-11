@@ -1,13 +1,14 @@
 using System;
 using System.Threading;
 using BalloonParty.Configuration.CardReveal;
+using BalloonParty.Configuration.Cinematics;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.CardReveal;
 using BalloonParty.Game.Level;
-using BalloonParty.UI.HeadsUp;
+using BalloonParty.Shared.Messages;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
-using TMPro;
+using MessagePipe;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,38 +18,43 @@ namespace BalloonParty.UI.CardReveal
 {
     /// <summary>
     ///     The card reveal's stage (<see cref="ICardReveals" />): plays each reveal the controller hands it. A
-    ///     balloon in one of the level's colours rises to its place with the slip inside it, pops (one of the baked
-    ///     pops, its two rubber layers either side of the slip), the card's title is pencilled on the slip, and it
-    ///     fades. The rubber is surface data lit live by <c>BalloonParty/Sprite/LitFlipbook</c>, so it takes the
-    ///     scene's light. Attaches as the stage only when there are pops to play; until then the tooltip announces
-    ///     the cards. Built by <c>Tools/BalloonParty/CardReveal/Build Card Reveal</c>.
+    ///     balloon in one of the level's colours rises to its place with two pieces of ribbon rolled up inside it,
+    ///     pops (one of the baked pops, its two rubber layers either side of the ribbons), and the ribbons fly off
+    ///     it, one with the card's title on it and one with what the card does, readable as they drift. On a
+    ///     level-up they fly with the level's ascent and are gone just before the next level settles. The rubber
+    ///     is surface data lit live by <c>BalloonParty/Sprite/LitFlipbook</c>, so it takes the scene's light.
+    ///     Attaches as the stage only when there are pops to play; until then the tooltip announces the cards.
+    ///     Built by <c>Tools/BalloonParty/CardReveal/Build Card Reveal</c>.
     /// </summary>
     public class CardRevealView : MonoBehaviour
     {
-        [Tooltip("Holds the whole reveal; faded in and out.")]
+        [Tooltip("Holds the whole reveal; shown while one plays.")]
         [SerializeField] private CanvasGroup _group;
 
-        [Tooltip("Moves as the balloon: the two rubber layers and the slip between them.")]
+        [Tooltip("Moves as the balloon: the two rubber layers and the ribbons between them.")]
         [SerializeField] private RectTransform _balloon;
 
         [SerializeField] private RawImage _back;
         [SerializeField] private RawImage _front;
-        [SerializeField] private WriteOnText _writeOn;
-
-        [Tooltip("What the card does, written under the title once the title is written.")]
-        [SerializeField] private WriteOnText _description;
+        [SerializeField] private RibbonPiece _titleRibbon;
+        [SerializeField] private RibbonPiece _descriptionRibbon;
 
         [Tooltip("How far below its place the balloon starts its rise, in canvas units.")]
         [SerializeField] private float _riseDistance = 260f;
 
         [Inject] private ICardReveals _cardReveals;
         [Inject] private ICardRevealSettings _settings;
+        [Inject] private ICinematicsSettings _cinematics;
         [Inject] private IGamePalette _palette;
         [Inject] private IActiveLevelParameters _level;
+        [Inject] private ISubscriber<LevelAscendStartedMessage> _ascendStarted;
 
         private CancellationTokenSource _playing;
-        private IDisposable _subscription;
+        private IDisposable _subscriptions;
         private Vector2 _place;
+        private float _ascentStartedAt = float.NegativeInfinity;
+        private float _releasedAt;
+        private float _exitFrom;
         private bool _attached;
 
         private void Awake()
@@ -66,14 +72,16 @@ namespace BalloonParty.UI.CardReveal
 
             _cardReveals.AttachStage();
             _attached = true;
-            _subscription = _cardReveals.Current.Subscribe(OnReveal);
+            _subscriptions = new CompositeDisposable(
+                _ascendStarted.Subscribe(_ => _ascentStartedAt = Time.unscaledTime),
+                _cardReveals.Current.Subscribe(OnReveal));
         }
 
         private void OnDestroy()
         {
             // Unsubscribed first: detaching drops the queue, and the null that publishes must not reach a view
             // being torn down.
-            _subscription?.Dispose();
+            _subscriptions?.Dispose();
             Stop();
             if (_attached)
             {
@@ -92,6 +100,24 @@ namespace BalloonParty.UI.CardReveal
             var row = frame / columns;
             var top = front ? 1f : 0.5f;
             return new Rect(frame % columns * width, top - (row + 1) * height, width, height);
+        }
+
+        /// <summary>
+        ///     When the ribbons released at <paramref name="releasedAt" /> must be gone, on the unscaled clock. With
+        ///     an ascent begun since the reveal started (<paramref name="ascentStartedAt" />), at the settings' share
+        ///     of it, so they leave just before the next level settles, though never sooner than their shortest
+        ///     flight; with none, their flight without an ascent.
+        /// </summary>
+        internal static float RibbonsGoneAt(float releasedAt, float revealStartedAt, float ascentStartedAt,
+            float ascentSeconds, ICardRevealSettings settings)
+        {
+            if (ascentStartedAt < revealStartedAt)
+            {
+                return releasedAt + settings.RibbonSecondsWithoutAscent;
+            }
+
+            var withAscent = ascentStartedAt + ascentSeconds * Mathf.Clamp01(settings.RibbonsGoneAtAscent);
+            return Mathf.Max(withAscent, releasedAt + settings.RibbonMinimumSeconds);
         }
 
         private void OnReveal(RevealedCard reveal)
@@ -113,24 +139,18 @@ namespace BalloonParty.UI.CardReveal
             _playing?.Cancel();
             _playing?.Dispose();
             _playing = null;
-            _writeOn.Stop();
-            _description.Stop();
         }
 
         private async UniTaskVoid PlayAsync(RevealedCard reveal, CancellationToken token)
         {
             try
             {
+                var startedAt = Time.unscaledTime;
                 Dress(reveal);
                 await AnimateAsync(_settings.RiseSeconds, Rise, token);
                 await UniTask.Delay(Milliseconds(_settings.HoldBeforePopSeconds), true, cancellationToken: token);
-
-                await PlayPopAsync(reveal, token);
-
-                // The hold starts once the slip is written, so it is all there for as long as it is read.
-                await UniTask.WaitWhile(() => _writeOn.IsWriting || _description.IsWriting, cancellationToken: token);
-                await UniTask.Delay(Milliseconds(_settings.SlipHoldSeconds), true, cancellationToken: token);
-                await AnimateAsync(_settings.FadeOutSeconds, t => _group.alpha = 1f - t, token);
+                await PopAsync(startedAt, token);
+                _group.alpha = 0f;
                 _cardReveals.Finish(reveal);
             }
             catch (OperationCanceledException)
@@ -139,29 +159,51 @@ namespace BalloonParty.UI.CardReveal
             }
         }
 
-        // The frame follows the time played rather than one delay per frame, which would round up to whole
-        // screen refreshes and run slow (20 fps at 60 Hz). A frame the screen skips is skipped, not delayed.
-        private async UniTask PlayPopAsync(RevealedCard reveal, CancellationToken token)
+        // The pop's frames and the ribbons' flight on one clock. The frame follows the time played rather than one
+        // delay per frame, which would round up to whole screen refreshes and run slow; a frame the screen skips is
+        // skipped, not delayed. The ribbons' end is looked at again each frame until they start to leave, since the
+        // level's ascent can begin after they are out.
+        private async UniTask PopAsync(float revealStartedAt, CancellationToken token)
         {
             var frames = _settings.SheetColumns * _settings.SheetRows;
-            var writeFrom = Mathf.Min(_settings.WriteFromFrame, frames - 1);
-            var written = false;
+            var releaseAt = Mathf.Min(_settings.RibbonsFromFrame, frames - 1) / _settings.FramesPerSecond;
+            _releasedAt = float.NaN;
+            _exitFrom = float.NaN;
             var elapsed = 0f;
-            var frame = 0;
-            while (frame < frames)
+            while (true)
             {
-                ShowFrame(frame);
-                if (!written && frame >= writeFrom)
+                ShowFrame(Mathf.Min((int)(elapsed * _settings.FramesPerSecond), frames - 1));
+                var gone = elapsed >= releaseAt && FlyRibbons(revealStartedAt) >= 1f;
+                if (gone && elapsed * _settings.FramesPerSecond >= frames)
                 {
-                    _writeOn.Write(reveal.Card.Title);
-                    _description.Write(reveal.Card.Description, _writeOn.Duration);
-                    written = true;
+                    return;
                 }
 
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
                 elapsed += Time.unscaledDeltaTime;
-                frame = (int)(elapsed * _settings.FramesPerSecond);
             }
+        }
+
+        // Moves both ribbons on, and says how far through their exit they are (0 to 1).
+        private float FlyRibbons(float revealStartedAt)
+        {
+            var now = Time.unscaledTime;
+            var exitSeconds = Mathf.Max(0.01f, _settings.RibbonExitSeconds);
+            if (float.IsNaN(_releasedAt))
+            {
+                _releasedAt = now;
+            }
+
+            if (float.IsNaN(_exitFrom) && now >= RibbonsGoneAt(_releasedAt, revealStartedAt, _ascentStartedAt,
+                    _cinematics.LevelAscend.AscentSeconds, _settings) - exitSeconds)
+            {
+                _exitFrom = now;
+            }
+
+            var exit = float.IsNaN(_exitFrom) ? 0f : Mathf.Clamp01((now - _exitFrom) / exitSeconds);
+            _titleRibbon.Fly(now - _releasedAt, _settings.RibbonBurstSeconds, exit);
+            _descriptionRibbon.Fly(now - _releasedAt, _settings.RibbonBurstSeconds, exit);
+            return exit;
         }
 
         private void Dress(RevealedCard reveal)
@@ -172,12 +214,13 @@ namespace BalloonParty.UI.CardReveal
 
             var tint = TintForTheLevel();
             _back.color = tint;
-            tint.a = 1f - _settings.SlipShowThrough;
+            tint.a = 1f - _settings.InsideShowThrough;
             _front.color = tint;
 
-            // A blank slip until the rubber opens: the last reveal's writing mustn't show through.
-            _writeOn.Write(string.Empty);
-            _description.Write(string.Empty);
+            _titleRibbon.Show(reveal.Card.Title);
+            _descriptionRibbon.Show(reveal.Card.Description);
+            _titleRibbon.Rest();
+            _descriptionRibbon.Rest();
             ShowFrame(0);
             Rise(0f);
             _group.alpha = 1f;

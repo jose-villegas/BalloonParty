@@ -18,10 +18,13 @@ MonoBehaviour:
   _sheetColumns: 6
   _sheetRows: 4
   _framesPerSecond: 30
-  _slipShowThrough: 0.12
-  _riseSeconds: 0.55
-  _holdBeforePopSeconds: 0.25
-  _writeFromFrame: 4
-  _slipHoldSeconds: 1.4
-  _fadeOutSeconds: 0.35
+  _insideShowThrough: 0.12
+  _riseSeconds: 0.45
+  _holdBeforePopSeconds: 0.15
   _parallax: 0.02
+  _ribbonsFromFrame: 4
+  _ribbonBurstSeconds: 0.4
+  _ribbonExitSeconds: 0.5
+  _ribbonsGoneAtAscent: 0.7
+  _ribbonSecondsWithoutAscent: 2.6
+  _ribbonMinimumSeconds: 1.8

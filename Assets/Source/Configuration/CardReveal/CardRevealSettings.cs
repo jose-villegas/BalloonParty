@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace BalloonParty.Configuration.CardReveal
 {
@@ -24,21 +25,34 @@ namespace BalloonParty.Configuration.CardReveal
         [SerializeField] [Min(1f)] private float _framesPerSecond = 30f;
 
         [Header("Playing")]
-        [Tooltip("How much of the slip shows through the whole front rubber: a shadow inside the balloon.")]
-        [SerializeField] [Range(0f, 1f)] private float _slipShowThrough = 0.12f;
+        [Tooltip("How much of the ribbons inside shows through the whole front rubber: a shadow inside the balloon.")]
+        [FormerlySerializedAs("_slipShowThrough")]
+        [SerializeField] [Range(0f, 1f)] private float _insideShowThrough = 0.12f;
 
-        [SerializeField] [Min(0f)] private float _riseSeconds = 0.55f;
-        [SerializeField] [Min(0f)] private float _holdBeforePopSeconds = 0.25f;
-
-        [Tooltip("The pop's frame on which the slip starts being written: once the rubber has opened.")]
-        [SerializeField] [Min(0)] private int _writeFromFrame = 4;
-
-        [SerializeField] [Min(0f)] private float _slipHoldSeconds = 1.4f;
-        [SerializeField] [Min(0f)] private float _fadeOutSeconds = 0.35f;
+        [SerializeField] [Min(0f)] private float _riseSeconds = 0.45f;
+        [SerializeField] [Min(0f)] private float _holdBeforePopSeconds = 0.15f;
 
         [Tooltip("How far the rubber's two layers part while the balloon moves, as a share of its distance from " +
-                 "its place: the front leads and the back lags, so the slip reads as inside it.")]
+                 "its place: the front leads and the back lags, so what is inside reads as inside it.")]
         [SerializeField] [Range(0f, 0.5f)] private float _parallax = 0.02f;
+
+        [Header("Ribbons")]
+        [Tooltip("The pop's frame on which the ribbons fly out: once the rubber has opened.")]
+        [FormerlySerializedAs("_writeFromFrame")]
+        [SerializeField] [Min(0)] private int _ribbonsFromFrame = 4;
+
+        [SerializeField] [Min(0f)] private float _ribbonBurstSeconds = 0.4f;
+        [SerializeField] [Min(0f)] private float _ribbonExitSeconds = 0.5f;
+
+        [Tooltip("On a level-up, the share of the level's ascent by which the ribbons are gone: just before the " +
+                 "next level settles on screen. Its balloons come in at the ascent's spawn cue (0.6).")]
+        [SerializeField] [Range(0f, 1f)] private float _ribbonsGoneAtAscent = 0.7f;
+
+        [Tooltip("With no ascent (a retry's bonus card, the cheat): seconds from the pop until the ribbons are gone.")]
+        [SerializeField] [Min(0f)] private float _ribbonSecondsWithoutAscent = 2.6f;
+
+        [Tooltip("The ribbons' shortest flight, from the pop until gone, so they can always be read.")]
+        [SerializeField] [Min(0f)] private float _ribbonMinimumSeconds = 1.8f;
 
         public IReadOnlyList<Texture2D> PopSheets => _popSheets;
         public int PopCount => Mathf.Max(1, _popSheets.Length);
@@ -46,12 +60,15 @@ namespace BalloonParty.Configuration.CardReveal
         public int SheetColumns => _sheetColumns;
         public int SheetRows => _sheetRows;
         public float FramesPerSecond => _framesPerSecond;
-        public float SlipShowThrough => _slipShowThrough;
+        public float InsideShowThrough => _insideShowThrough;
         public float RiseSeconds => _riseSeconds;
         public float HoldBeforePopSeconds => _holdBeforePopSeconds;
-        public int WriteFromFrame => _writeFromFrame;
-        public float SlipHoldSeconds => _slipHoldSeconds;
-        public float FadeOutSeconds => _fadeOutSeconds;
+        public int RibbonsFromFrame => _ribbonsFromFrame;
+        public float RibbonBurstSeconds => _ribbonBurstSeconds;
+        public float RibbonExitSeconds => _ribbonExitSeconds;
+        public float RibbonsGoneAtAscent => _ribbonsGoneAtAscent;
+        public float RibbonSecondsWithoutAscent => _ribbonSecondsWithoutAscent;
+        public float RibbonMinimumSeconds => _ribbonMinimumSeconds;
         public float Parallax => _parallax;
     }
 }

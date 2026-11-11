@@ -30,25 +30,44 @@ namespace BalloonParty.Configuration.CardReveal
 
         float FramesPerSecond { get; }
 
-        /// <summary>How much of the slip shows through the whole front rubber, as a shadow inside the balloon: 0 to 1.</summary>
-        float SlipShowThrough { get; }
+        /// <summary>
+        ///     How much of the ribbons inside shows through the whole front rubber, as a shadow inside the
+        ///     balloon: 0 to 1.
+        /// </summary>
+        float InsideShowThrough { get; }
 
         float RiseSeconds { get; }
 
         /// <summary>The whole balloon's beat at its place before it pops.</summary>
         float HoldBeforePopSeconds { get; }
 
-        /// <summary>The frame of the pop on which the slip starts being written: once the rubber has opened.</summary>
-        int WriteFromFrame { get; }
+        /// <summary>The frame of the pop on which the ribbons fly out: once the rubber has opened.</summary>
+        int RibbonsFromFrame { get; }
 
-        /// <summary>How long the written slip stays once the pop is over.</summary>
-        float SlipHoldSeconds { get; }
+        /// <summary>How long the ribbons take to burst out of the balloon to their spots.</summary>
+        float RibbonBurstSeconds { get; }
 
-        float FadeOutSeconds { get; }
+        /// <summary>How long the ribbons take to fly off and fade at the end.</summary>
+        float RibbonExitSeconds { get; }
+
+        /// <summary>
+        ///     On a level-up, the share of the level's ascent by which the ribbons are gone: just before the next
+        ///     level settles on screen.
+        /// </summary>
+        float RibbonsGoneAtAscent { get; }
+
+        /// <summary>
+        ///     How long the ribbons fly when no ascent runs with the reveal (a retry's bonus card, the cheat), from
+        ///     the pop to gone.
+        /// </summary>
+        float RibbonSecondsWithoutAscent { get; }
+
+        /// <summary>The ribbons' shortest flight, from the pop to gone, so they can always be read.</summary>
+        float RibbonMinimumSeconds { get; }
 
         /// <summary>
         ///     How far the two rubber layers part while the balloon moves, as a share of its distance from its
-        ///     place: the front leads, the back lags, so the slip reads as inside it.
+        ///     place: the front leads, the back lags, so what is inside reads as inside it.
         /// </summary>
         float Parallax { get; }
     }

@@ -17,9 +17,9 @@ namespace BalloonParty.Editor
     ///     Builds the card reveal: imports the baked pop sheets under <c>Assets/Sprites/UI/CardReveal/</c> as linear
     ///     data, lists them on the <see cref="CardRevealSettings" /> asset (made if missing, and assigned to the
     ///     game scope), makes the rubber's material, and builds the <see cref="CardRevealView" /> on
-    ///     <c>GameCanvas</c>: the balloon's back layer, the slip, its front layer. The slip is a stand-in until the
-    ///     baked one (<c>Plans/PLAN-CardReveal.md</c> phase 3): a paper strip with the tooltip's pencil font. A
-    ///     starting look to restyle by hand; running it again rebuilds it.
+    ///     <c>GameCanvas</c>: the balloon's back layer, the two ribbons (the card's title and what it does), its
+    ///     front layer. The ribbons are cream satin written in the tooltip's pencil font. A starting look to
+    ///     restyle by hand; running it again rebuilds it.
     /// </summary>
     internal static class CardRevealBuilder
     {
@@ -29,30 +29,34 @@ namespace BalloonParty.Editor
         private const string ScopePrefabPath = "Assets/Prefabs/Game/GameLifetimeScope.prefab";
         private const string MaterialPath = "Assets/Materials/UI/CardRevealRubber.mat";
         private const string ShaderName = "BalloonParty/Sprite/LitFlipbook";
-        private const string SlipSpritePath = "Assets/Sprites/UI/rounded_panel.png";
         private const string RootName = "CardReveal";
 
         // In canvas units (the canvas is 225 wide): a frame shows the balloon about 80 across, a third of the
-        // screen, in the top third.
+        // screen.
         private const float FrameSize = 124f;
 
         // The bake's camera sits a little below the balloon's centre (bake_pops.py): its centre is this share
         // of a frame above the frame's.
         private const float CentreAboveFrame = 0.039f;
-        private const float SlipCornerMultiplier = 16f;
 
-        // The description's largest size, as a share of the title's.
-        private const float DescriptionScale = 0.7f;
+        // The description is written smaller than the title (the tooltip's size), on a narrower ribbon.
+        private const float DescriptionScale = 0.72f;
+        private const float TitleRibbonHeight = 16f;
+        private const float DescriptionRibbonHeight = 12.5f;
 
         // A little above the screen's middle, over the upper board.
         private static readonly Vector2 Place = new(0f, 35f);
 
-        // Paper, a little warmer than the board's white; a strip that fits inside the balloon, the title on its
-        // top line and what the card does under it in a smaller hand.
-        private static readonly Color SlipColor = new(0.98f, 0.965f, 0.925f, 1f);
-        private static readonly Vector2 SlipSize = new(72f, 30f);
-        private static readonly Vector4 TitleInsets = new(4f, 14f, 4f, 2f);
-        private static readonly Vector4 DescriptionInsets = new(4f, 3f, 4f, 16f);
+        // Cream, a little warmer than the board's white, so the pencil reads on it over any scenery.
+        private static readonly Color RibbonColor = new(0.98f, 0.965f, 0.925f, 1f);
+
+        // Rolled up inside the balloon, then out: the title above the balloon's place, to the left, and what the
+        // card does under it, to the right, each flying off its own way at the end.
+        private static readonly Flight TitleFlight = new(new Vector2(0f, 6f), -8f, new Vector2(-8f, 42f), -4f,
+            new Vector2(-1f, 5f), 0f, new Vector2(-60f, 130f), -14f);
+
+        private static readonly Flight DescriptionFlight = new(new Vector2(0f, -6f), 6f, new Vector2(10f, 18f), 3f,
+            new Vector2(1f, 4f), 2.1f, new Vector2(70f, 120f), 12f);
 
         [MenuItem(MenuRoot + "Build Card Reveal")]
         private static void BuildFromMenu()
@@ -259,10 +263,11 @@ namespace BalloonParty.Editor
             balloon.anchoredPosition = Place;
 
             var back = CreateLayer("Back", balloon, material);
-            var slip = CreateSlip(balloon);
-            var writeOn = CreateLine("Title", slip, label, TitleInsets, label.fontSize);
-            var description = CreateLine("Description", slip, label, DescriptionInsets,
-                label.fontSize * DescriptionScale);
+            var centre = new Vector2(0f, FrameSize * CentreAboveFrame);
+            var title = CreateRibbon("TitleRibbon", balloon, label, centre, TitleRibbonHeight, label.fontSize,
+                TitleFlight);
+            var description = CreateRibbon("DescriptionRibbon", balloon, label, centre, DescriptionRibbonHeight,
+                label.fontSize * DescriptionScale, DescriptionFlight);
             var front = CreateLayer("Front", balloon, material);
 
             var view = root.gameObject.AddComponent<CardRevealView>();
@@ -271,8 +276,8 @@ namespace BalloonParty.Editor
             fields.FindProperty("_balloon").objectReferenceValue = balloon;
             fields.FindProperty("_back").objectReferenceValue = back;
             fields.FindProperty("_front").objectReferenceValue = front;
-            fields.FindProperty("_writeOn").objectReferenceValue = writeOn;
-            fields.FindProperty("_description").objectReferenceValue = description;
+            fields.FindProperty("_titleRibbon").objectReferenceValue = title;
+            fields.FindProperty("_descriptionRibbon").objectReferenceValue = description;
             fields.ApplyModifiedPropertiesWithoutUndo();
         }
 
@@ -286,41 +291,48 @@ namespace BalloonParty.Editor
             return image;
         }
 
-        private static RectTransform CreateSlip(RectTransform balloon)
+        // Its flight is relative to the balloon's centre in the frame (centre). The text is the tooltip's label,
+        // cloned for its pencil font and colour, without its write-on: the line is on the ribbon from the start.
+        private static RibbonPiece CreateRibbon(string name, RectTransform balloon, TMP_Text label, Vector2 centre,
+            float height, float fontSize, Flight flight)
         {
-            var rect = CreateRect("Slip", balloon);
-            rect.sizeDelta = SlipSize;
-            rect.anchoredPosition = new Vector2(0f, FrameSize * CentreAboveFrame);
-            var image = rect.gameObject.AddComponent<Image>();
-            image.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(SlipSpritePath);
-            image.type = Image.Type.Sliced;
-            image.pixelsPerUnitMultiplier = SlipCornerMultiplier;
-            image.color = SlipColor;
-            image.raycastTarget = false;
-            return rect;
-        }
+            var rect = CreateRect(name, balloon);
+            rect.sizeDelta = new Vector2(60f, height);
+            var group = rect.gameObject.AddComponent<CanvasGroup>();
+            group.interactable = false;
+            group.blocksRaycasts = false;
+            var ribbon = rect.gameObject.AddComponent<RibbonGraphic>();
+            ribbon.color = RibbonColor;
+            ribbon.raycastTarget = false;
 
-        // The tooltip's label, cloned: its pencil font, colour and write-on, sized to its line of the slip.
-        // Insets are left, bottom, right, top.
-        private static WriteOnText CreateLine(string name, RectTransform slip, TMP_Text label, Vector4 insets,
-            float largestSize)
-        {
-            var clone = Object.Instantiate(label.gameObject, slip, false);
-            clone.name = name;
-            var rect = (RectTransform)clone.transform;
-            Stretch(rect);
-            rect.offsetMin = new Vector2(insets.x, insets.y);
-            rect.offsetMax = new Vector2(-insets.z, -insets.w);
-
+            var clone = Object.Instantiate(label.gameObject, rect, false);
+            clone.name = "Text";
+            Object.DestroyImmediate(clone.GetComponent<WriteOnText>());
+            Stretch((RectTransform)clone.transform);
             var text = clone.GetComponent<TMP_Text>();
             text.text = string.Empty;
             text.alignment = TextAlignmentOptions.Center;
             text.textWrappingMode = TextWrappingModes.NoWrap;
-            text.enableAutoSizing = true;
-            text.fontSizeMin = 4f;
-            text.fontSizeMax = largestSize;
+            text.enableAutoSizing = false;
+            text.fontSize = fontSize;
             text.raycastTarget = false;
-            return clone.GetComponent<WriteOnText>();
+
+            var piece = rect.gameObject.AddComponent<RibbonPiece>();
+            var fields = new SerializedObject(piece);
+            fields.FindProperty("_ribbon").objectReferenceValue = ribbon;
+            fields.FindProperty("_text").objectReferenceValue = text;
+            fields.FindProperty("_group").objectReferenceValue = group;
+            fields.FindProperty("_restPosition").vector2Value = centre + flight.Rest;
+            fields.FindProperty("_restTilt").floatValue = flight.RestTilt;
+            fields.FindProperty("_burstTo").vector2Value = centre + flight.BurstTo;
+            fields.FindProperty("_tilt").floatValue = flight.Tilt;
+            fields.FindProperty("_drift").vector2Value = flight.Drift;
+            fields.FindProperty("_swayPhase").floatValue = flight.SwayPhase;
+            fields.FindProperty("_exitBy").vector2Value = flight.ExitBy;
+            fields.FindProperty("_exitSpin").floatValue = flight.ExitSpin;
+            fields.ApplyModifiedPropertiesWithoutUndo();
+            rect.anchoredPosition = centre + flight.Rest;
+            return piece;
         }
 
         private static RectTransform CreateRect(string name, Transform parent)
@@ -337,6 +349,33 @@ namespace BalloonParty.Editor
             rect.anchorMax = Vector2.one;
             rect.offsetMin = Vector2.zero;
             rect.offsetMax = Vector2.zero;
+        }
+
+        // A ribbon's flight, in canvas units and degrees: rolled up inside, where the burst takes it, its drift and
+        // sway, and its way off.
+        private readonly struct Flight
+        {
+            internal readonly Vector2 Rest;
+            internal readonly float RestTilt;
+            internal readonly Vector2 BurstTo;
+            internal readonly float Tilt;
+            internal readonly Vector2 Drift;
+            internal readonly float SwayPhase;
+            internal readonly Vector2 ExitBy;
+            internal readonly float ExitSpin;
+
+            internal Flight(Vector2 rest, float restTilt, Vector2 burstTo, float tilt, Vector2 drift, float swayPhase,
+                Vector2 exitBy, float exitSpin)
+            {
+                Rest = rest;
+                RestTilt = restTilt;
+                BurstTo = burstTo;
+                Tilt = tilt;
+                Drift = drift;
+                SwayPhase = swayPhase;
+                ExitBy = exitBy;
+                ExitSpin = exitSpin;
+            }
         }
     }
 }
