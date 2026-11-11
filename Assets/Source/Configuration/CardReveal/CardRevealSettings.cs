@@ -36,6 +36,14 @@ namespace BalloonParty.Configuration.CardReveal
                  "its place: the front leads and the back lags, so what is inside reads as inside it.")]
         [SerializeField] [Range(0f, 0.5f)] private float _parallax = 0.02f;
 
+        [Tooltip("The pop's frame on which the torn rubber starts to fall: the bake keeps its neck where it was, " +
+                 "so without this the pop plays out in one place.")]
+        [SerializeField] [Min(0)] private int _rubberFallsFromFrame = 3;
+
+        [Tooltip("How fast the torn rubber's fall speeds up, in canvas units per second squared (the canvas is " +
+                 "225 wide).")]
+        [SerializeField] [Min(0f)] private float _rubberFallGravity = 520f;
+
         [Header("Ribbons")]
         [Tooltip("The pop's frame on which the ribbons fly out: once the rubber has opened.")]
         [FormerlySerializedAs("_writeFromFrame")]
@@ -70,5 +78,7 @@ namespace BalloonParty.Configuration.CardReveal
         public float RibbonSecondsWithoutAscent => _ribbonSecondsWithoutAscent;
         public float RibbonMinimumSeconds => _ribbonMinimumSeconds;
         public float Parallax => _parallax;
+        public int RubberFallsFromFrame => _rubberFallsFromFrame;
+        public float RubberFallGravity => _rubberFallGravity;
     }
 }

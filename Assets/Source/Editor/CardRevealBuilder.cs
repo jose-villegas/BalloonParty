@@ -28,6 +28,7 @@ namespace BalloonParty.Editor
         private const string SettingsPath = "Assets/Configuration/CardRevealSettings.asset";
         private const string ScopePrefabPath = "Assets/Prefabs/Game/GameLifetimeScope.prefab";
         private const string MaterialPath = "Assets/Materials/UI/CardRevealRubber.mat";
+        private const string ShadowMaterialPath = "Assets/Materials/UI/CardRevealRubberShadow.mat";
         private const string ShaderName = "BalloonParty/Sprite/LitFlipbook";
         private const string RibbonMaterialPath = "Assets/Materials/UI/CardRevealRibbon.mat";
         private const string RibbonShaderName = "BalloonParty/Sprite/CelRibbon";
@@ -78,15 +79,16 @@ namespace BalloonParty.Editor
 
             var settings = EnsureSettings(sheets);
             AssignToScope(settings);
-            var rubber = EnsureMaterial(MaterialPath, ShaderName);
-            var ribbon = EnsureMaterial(RibbonMaterialPath, RibbonShaderName);
-            if (rubber == null || ribbon == null)
+            var materials = new Materials(EnsureMaterial(MaterialPath, ShaderName),
+                EnsureMaterial(ShadowMaterialPath, ShaderName, "_DropShadow"),
+                EnsureMaterial(RibbonMaterialPath, RibbonShaderName));
+            if (materials.Rubber == null || materials.Shadow == null || materials.Ribbon == null)
             {
                 Debug.LogError($"[CardReveal] No {ShaderName} or {RibbonShaderName} shader.");
                 return;
             }
 
-            BuildOnCanvas(rubber, ribbon, askBeforeRebuild);
+            BuildOnCanvas(materials, askBeforeRebuild);
         }
 
         // Linear (the pixels are normals and occlusion, not colour), no mipmaps (the frames sit side by side,
@@ -178,8 +180,9 @@ namespace BalloonParty.Editor
             }
         }
 
-        // An existing material keeps its tuned values; only a missing one is made.
-        private static Material EnsureMaterial(string path, string shaderName)
+        // An existing material keeps its tuned values; only a missing one is made, with switchedOn (a toggle
+        // property) turned on.
+        private static Material EnsureMaterial(string path, string shaderName, string switchedOn = null)
         {
             var existing = AssetDatabase.LoadAssetAtPath<Material>(path);
             if (existing != null)
@@ -194,11 +197,16 @@ namespace BalloonParty.Editor
             }
 
             var material = new Material(shader);
+            if (switchedOn != null)
+            {
+                material.SetFloat(switchedOn, 1f);
+            }
+
             AssetDatabase.CreateAsset(material, path);
             return material;
         }
 
-        private static void BuildOnCanvas(Material rubber, Material ribbon, bool askBeforeRebuild)
+        private static void BuildOnCanvas(Materials materials, bool askBeforeRebuild)
         {
             var path = PrefabRebuild.FindPrefabWithChild<TooltipBanner>("GameCanvas");
             if (path == null)
@@ -230,7 +238,7 @@ namespace BalloonParty.Editor
                     return;
                 }
 
-                BuildReveal(root.transform, label, rubber, ribbon);
+                BuildReveal(root.transform, label, materials);
                 PrefabUtility.SaveAsPrefabAsset(root, path);
                 Debug.Log($"[CardReveal] Built {RootName} on {path}.");
             }
@@ -252,7 +260,7 @@ namespace BalloonParty.Editor
             return label != null && label.GetComponent<WriteOnText>() != null ? label : null;
         }
 
-        private static void BuildReveal(Transform canvas, TMP_Text label, Material rubber, Material ribbon)
+        private static void BuildReveal(Transform canvas, TMP_Text label, Materials materials)
         {
             var root = CreateRect(RootName, canvas);
             Stretch(root);
@@ -265,18 +273,20 @@ namespace BalloonParty.Editor
             balloon.sizeDelta = new Vector2(FrameSize, FrameSize);
             balloon.anchoredPosition = Place;
 
-            var back = CreateLayer("Back", balloon, rubber);
+            var shadow = CreateLayer("Shadow", balloon, materials.Shadow);
+            var back = CreateLayer("Back", balloon, materials.Rubber);
             var centre = new Vector2(0f, FrameSize * CentreAboveFrame);
-            var title = CreateRibbon("TitleRibbon", balloon, label, ribbon, centre, TitleRibbonHeight,
+            var title = CreateRibbon("TitleRibbon", balloon, label, materials.Ribbon, centre, TitleRibbonHeight,
                 label.fontSize, TitleFlight);
-            var description = CreateRibbon("DescriptionRibbon", balloon, label, ribbon, centre,
+            var description = CreateRibbon("DescriptionRibbon", balloon, label, materials.Ribbon, centre,
                 DescriptionRibbonHeight, label.fontSize * DescriptionScale, DescriptionFlight);
-            var front = CreateLayer("Front", balloon, rubber);
+            var front = CreateLayer("Front", balloon, materials.Rubber);
 
             var view = root.gameObject.AddComponent<CardRevealView>();
             var fields = new SerializedObject(view);
             fields.FindProperty("_group").objectReferenceValue = group;
             fields.FindProperty("_balloon").objectReferenceValue = balloon;
+            fields.FindProperty("_shadow").objectReferenceValue = shadow;
             fields.FindProperty("_back").objectReferenceValue = back;
             fields.FindProperty("_front").objectReferenceValue = front;
             fields.FindProperty("_titleRibbon").objectReferenceValue = title;
@@ -357,6 +367,21 @@ namespace BalloonParty.Editor
             rect.anchorMax = Vector2.one;
             rect.offsetMin = Vector2.zero;
             rect.offsetMax = Vector2.zero;
+        }
+
+        // The reveal's three materials: the rubber, its drop shadow (the same shader with Drop Shadow on), the ribbons.
+        private readonly struct Materials
+        {
+            public readonly Material Rubber;
+            public readonly Material Shadow;
+            public readonly Material Ribbon;
+
+            public Materials(Material rubber, Material shadow, Material ribbon)
+            {
+                Rubber = rubber;
+                Shadow = shadow;
+                Ribbon = ribbon;
+            }
         }
 
         // A ribbon's flight, in canvas units and degrees: rolled up inside, where the burst takes it, its drift and

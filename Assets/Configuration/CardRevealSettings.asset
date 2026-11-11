@@ -22,6 +22,8 @@ MonoBehaviour:
   _riseSeconds: 0.45
   _holdBeforePopSeconds: 0.15
   _parallax: 0.02
+  _rubberFallsFromFrame: 3
+  _rubberFallGravity: 520
   _ribbonsFromFrame: 4
   _ribbonBurstSeconds: 0.4
   _ribbonExitSeconds: 0.5

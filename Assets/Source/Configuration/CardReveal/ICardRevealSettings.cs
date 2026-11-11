@@ -70,5 +70,14 @@ namespace BalloonParty.Configuration.CardReveal
         ///     place: the front leads, the back lags, so what is inside reads as inside it.
         /// </summary>
         float Parallax { get; }
+
+        /// <summary>
+        ///     The pop's frame on which the torn rubber starts to fall. The bake keeps the balloon's neck where it was
+        ///     until its last frames, so the fall is the game's.
+        /// </summary>
+        int RubberFallsFromFrame { get; }
+
+        /// <summary>How fast the torn rubber's fall speeds up, in canvas units per second squared.</summary>
+        float RubberFallGravity { get; }
     }
 }

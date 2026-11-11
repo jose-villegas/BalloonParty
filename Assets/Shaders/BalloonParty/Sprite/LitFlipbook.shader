@@ -13,15 +13,17 @@ Shader "BalloonParty/Sprite/LitFlipbook"
     // - Subsurface: a few taps toward the light add up how much rubber the light crosses to get here. Where
     //   it crosses little (the rim facing the light, a lone flap with no rubber behind it) the latex glows in
     //   a brighter, richer tint, as light through a balloon does. Faces turned away from the light glow too.
-    // - A drop shadow, drawn by the back layer only: both layers' coverage, offset away from the light, tinted
-    //   the balloon's colour at the balloons' opacity (Balloon/BalloonShadow), so it falls like theirs.
+    // - A drop shadow, on a material of its own with Drop Shadow on, drawn on an image of the back layer's frame
+    //   behind the balloon: both layers' coverage, softened, moved away from the light in the vertex stage (so
+    //   it is never cut off at the frame's edge) and tinted a dark shade of the balloon's colour.
     //
-    // The light's colour and dimming are taken as the balloons' body takes them (Sprite/Diffuse in Ambient
-    // mode on Balloon/DiffuseSprite), so a reveal at dusk sits in the same light as the balloons. Works on a
-    // RawImage (pick the frame with its UV rect). Not mask-safe: it has no UI clip rect or stencil, so under a
-    // RectMask2D or Mask it draws unclipped (PencilText's block is the one to copy if it ever needs to).
-    // Tools/art/balloon_pop/pack_sheets.py previews the bake with a smooth version of this light, not the cel
-    // look; the game is the place to judge the shading.
+    // The steps between tones are anti-aliased to a screen pixel (fwidth), however far the sheet is scaled, so
+    // the fragment shader has no per-pixel branches. The light's colour and dimming are taken as the balloons'
+    // body takes them (Sprite/Diffuse in Ambient mode on Balloon/DiffuseSprite), so a reveal at dusk sits in the
+    // same light as the balloons. Works on a RawImage (pick the frame with its UV rect). Not mask-safe: it has no
+    // UI clip rect or stencil, so under a RectMask2D or Mask it draws unclipped (PencilText's block is the one
+    // to copy if it ever needs to). Tools/art/balloon_pop/pack_sheets.py previews the bake with a smooth
+    // version of this light, not the cel look; the game is the place to judge the shading.
     Properties
     {
         [PerRendererData] _MainTex ("Surface (normal xy, occlusion, coverage)", 2D) = "white" {}
@@ -39,15 +41,15 @@ Shader "BalloonParty/Sprite/LitFlipbook"
         _ShadowEdge ("Shadow Edge", Range(-1, 1)) = -0.1
         _MidTone ("Middle Tone", Range(0, 1)) = 0.86
         _ShadowTone ("Shadow Tone", Range(0, 1)) = 0.68
-        // How wide each step between tones is: 0 is a hard line.
-        _BandSoftness ("Band Softness", Range(0.001, 0.3)) = 0.03
+        // How wide each step between tones is at the least; never narrower than a screen pixel.
+        _BandSoftness ("Band Softness", Range(0, 0.3)) = 0.01
         // The baked occlusion below this reads as a crease, drawn in the crease tone.
         _CreaseEdge ("Crease Edge", Range(0, 1)) = 0.55
         _CreaseTone ("Crease Tone", Range(0, 1)) = 0.6
         // The highlight, a spot of the light's own colour as on the board's balloons: how much of the surface it
-        // covers (lower is bigger), how crisp its edge is, and how much of the light it shows.
+        // covers (lower is bigger), how soft its edge is at the least, and how much of the light it shows.
         _HighlightSize ("Highlight Size", Range(0.8, 1)) = 0.985
-        _HighlightSoftness ("Highlight Softness", Range(0.001, 0.05)) = 0.004
+        _HighlightSoftness ("Highlight Softness", Range(0, 0.05)) = 0.002
         _Specular ("Highlight Strength", Range(0, 1)) = 0.9
 
         [Header(Subsurface)]
@@ -66,10 +68,14 @@ Shader "BalloonParty/Sprite/LitFlipbook"
         _GlowLift ("Glow Lift", Range(0, 1)) = 0.45
 
         [Header(Drop Shadow)]
-        // Tinted by the balloon's colour, as Balloon/BalloonShadow is; alpha is its opacity.
-        _ShadowColor ("Color", Color) = (1, 1, 1, 0.25)
-        // How far the shadow falls from the rubber, away from the light, in frame widths.
-        _ShadowReach ("Distance (frames)", Range(0, 0.2)) = 0.12
+        // On for the shadow's own material: this image then draws the shadow instead of the rubber.
+        [Toggle] _DropShadow ("Draws The Drop Shadow", Float) = 0
+        // Multiplies the balloon's colour, so the shadow is a dark shade of it; alpha is its opacity.
+        _ShadowColor ("Color", Color) = (0.42, 0.42, 0.5, 0.42)
+        // How far the shadow falls from the rubber, away from the light, in canvas units, and how soft its edge
+        // is, in frame widths.
+        _ShadowOffset ("Distance", Range(0, 40)) = 9
+        _ShadowSoftness ("Softness (frames)", Range(0, 0.05)) = 0.012
 
         [Header(Scene Light)]
         // As on Sprite/Diffuse: how much of the time-of-day light's colour and dimming the surface takes,
@@ -144,16 +150,20 @@ Shader "BalloonParty/Sprite/LitFlipbook"
             float _Transmission;
             float _ScatterEdge;
             float _GlowLift;
+            float _DropShadow;
             fixed4 _ShadowColor;
-            float _ShadowReach;
+            float _ShadowOffset;
+            float _ShadowSoftness;
             float _AmbientHue;
             float _AmbientDimming;
             float _AmbientDesaturation;
 
-            // A step from 0 to 1 as x passes edge, as wide as the band softness.
-            float Band(float x, float edge)
+            // A step from 0 to 1 as x passes edge: at least softness wide, and never narrower than a screen pixel,
+            // so a hard cel edge doesn't stair-step when the sheet is drawn larger than it was baked.
+            float Step(float x, float edge, float softness)
             {
-                return smoothstep(edge - _BandSoftness, edge + _BandSoftness, x);
+                float width = max(softness, fwidth(x));
+                return smoothstep(edge - width, edge + width, x);
             }
 
             // Both layers' coverage at uv, 0 to 2, and none outside this fragment's frame (cellMin to cellMax): the
@@ -168,7 +178,11 @@ Shader "BalloonParty/Sprite/LitFlipbook"
             v2f vert(appdata_t IN)
             {
                 v2f OUT;
-                OUT.vertex = UnityObjectToClipPos(IN.vertex);
+                // The shadow's image is the back layer's, moved away from the light: on a canvas, object space is
+                // the canvas's, so the distance is in canvas units.
+                float4 position = IN.vertex;
+                position.xy -= SceneLightDirection() * _ShadowOffset * _DropShadow;
+                OUT.vertex = UnityObjectToClipPos(position);
                 OUT.texcoord = IN.texcoord;
                 OUT.color = IN.color * _Color * _RendererColor;
 
@@ -186,8 +200,7 @@ Shader "BalloonParty/Sprite/LitFlipbook"
             half4 frag(v2f IN) : SV_Target
             {
                 float2 uv = IN.texcoord;
-                bool back = uv.y < 0.5;
-                float2 toOther = float2(0.0, back ? 0.5 : -0.5);
+                float2 toOther = float2(0.0, uv.y < 0.5 ? 0.5 : -0.5);
                 // A frame's size in the sheet, and this fragment's frame, inset a little so a tap at its edge
                 // doesn't filter in the next one. Outside it, a tap finds no rubber.
                 float2 cell = float2(1.0 / _SheetGrid.x, 0.5 / _SheetGrid.y);
@@ -195,57 +208,52 @@ Shader "BalloonParty/Sprite/LitFlipbook"
                 float2 inset = cell * 0.004;
                 float2 cellMax = cellMin + cell - inset;
                 cellMin += inset;
-                // Frames are square, so a frame width each way is the same distance on screen.
-                float2 towardLight = normalize(IN.toLight.xy) * cell;
                 float3 albedo = IN.color.rgb;
 
+                if (_DropShadow > 0.5)
+                {
+                    // The whole balloon's outline, both layers, softened by four taps around it.
+                    float2 soft = cell * _ShadowSoftness;
+                    float cover = saturate(Rubber(uv, toOther, cellMin, cellMax)) * 2.0
+                        + saturate(Rubber(uv + float2(soft.x, 0.0), toOther, cellMin, cellMax))
+                        + saturate(Rubber(uv - float2(soft.x, 0.0), toOther, cellMin, cellMax))
+                        + saturate(Rubber(uv + float2(0.0, soft.y), toOther, cellMin, cellMax))
+                        + saturate(Rubber(uv - float2(0.0, soft.y), toOther, cellMin, cellMax));
+                    float shadow = cover / 6.0 * _ShadowColor.a * IN.shadowFade * IN.color.a;
+                    return half4(_ShadowColor.rgb * albedo * IN.lightTint * shadow, shadow);
+                }
+
+                // Frames are square, so a frame width each way is the same distance on screen.
+                float2 towardLight = normalize(IN.toLight.xy) * cell;
                 half4 surface = tex2D(_MainTex, uv);
-                float3 rgb = 0.0;
-                if (surface.a > 0.002)
-                {
-                    float2 nxy = surface.rg * 2.0 - 1.0;
-                    float3 normal = float3(nxy, sqrt(saturate(1.0 - dot(nxy, nxy))));
-                    float facing = dot(normal, IN.toLight);
+                float2 nxy = surface.rg * 2.0 - 1.0;
+                float3 normal = float3(nxy, sqrt(saturate(1.0 - dot(nxy, nxy))));
+                float facing = dot(normal, IN.toLight);
 
-                    float tone = lerp(_ShadowTone, lerp(_MidTone, 1.0, Band(facing, _LitEdge)), Band(facing, _ShadowEdge));
-                    float crease = 1.0 - Band(surface.b, _CreaseEdge);
-                    tone *= lerp(1.0, _CreaseTone, crease);
-                    float highlight = smoothstep(_HighlightSize - _HighlightSoftness, _HighlightSize + _HighlightSoftness,
-                        dot(normal, IN.halfway)) * _Specular * (1.0 - crease);
+                float tone = lerp(_ShadowTone, lerp(_MidTone, 1.0, Step(facing, _LitEdge, _BandSoftness)),
+                    Step(facing, _ShadowEdge, _BandSoftness));
+                float crease = 1.0 - Step(surface.b, _CreaseEdge, _BandSoftness);
+                tone *= lerp(1.0, _CreaseTone, crease);
+                float highlight = Step(dot(normal, IN.halfway), _HighlightSize, _HighlightSoftness)
+                    * _Specular * (1.0 - crease);
 
-                    // How much rubber lies toward the light (three taps through both layers, 0 to 1), and how
-                    // much is here: one layer on its own is a flap or a shred with nothing behind it.
-                    float2 tap = towardLight * (_ScatterReach / 3.0);
-                    float toward = (Rubber(uv + tap, toOther, cellMin, cellMax)
-                        + Rubber(uv + 2.0 * tap, toOther, cellMin, cellMax)
-                        + Rubber(uv + 3.0 * tap, toOther, cellMin, cellMax)) / 6.0;
-                    float lone = 1.0 - 0.5 * (surface.a + tex2Dlod(_MainTex, float4(uv + toOther, 0.0, 0.0)).a);
-                    float scatter = (1.0 - toward) * _ScatterRim + lone * _ScatterThin
-                        + saturate(-facing) * _Transmission;
-                    float glow = Band(scatter, _ScatterEdge) * _Scatter * (1.0 - crease);
-                    float3 glowColor = saturate(albedo * (albedo + _GlowLift) * (1.0 + _GlowLift));
+                // How much rubber lies toward the light (three taps through both layers, 0 to 1), and how much is
+                // here: one layer on its own is a flap or a shred with nothing behind it.
+                float2 tap = towardLight * (_ScatterReach / 3.0);
+                float toward = (Rubber(uv + tap, toOther, cellMin, cellMax)
+                    + Rubber(uv + 2.0 * tap, toOther, cellMin, cellMax)
+                    + Rubber(uv + 3.0 * tap, toOther, cellMin, cellMax)) / 6.0;
+                float lone = 1.0 - 0.5 * (surface.a + tex2Dlod(_MainTex, float4(uv + toOther, 0.0, 0.0)).a);
+                float scatter = (1.0 - toward) * _ScatterRim + lone * _ScatterThin + saturate(-facing) * _Transmission;
+                float glow = Step(scatter, _ScatterEdge, _BandSoftness) * _Scatter * (1.0 - crease);
+                float3 glowColor = saturate(albedo * (albedo + _GlowLift) * (1.0 + _GlowLift));
 
-                    // The highlight replaces the colour rather than adding to it, so it reads white, not a paler red.
-                    rgb = lerp(lerp(albedo * tone, glowColor, glow), 1.0, highlight) * IN.lightTint;
-                    // Like the balloons: however hot the light, the rubber keeps its colour and never blooms.
-                    rgb = SceneLightCapToWhite(rgb);
-                }
-
+                // The highlight replaces the colour rather than adding to it, so it reads white, not a paler red.
+                float3 rgb = lerp(lerp(albedo * tone, glowColor, glow), 1.0, highlight) * IN.lightTint;
+                // Like the balloons: however hot the light, the rubber keeps its colour and never blooms.
+                rgb = SceneLightCapToWhite(rgb);
                 float alpha = surface.a * IN.color.a;
-                half4 result = half4(rgb * alpha, alpha);
-
-                if (back)
-                {
-                    // The rubber that would be here if it moved away from the light: both layers, so the shadow
-                    // is the whole balloon's. Hard-edged, as cel shadows are.
-                    float2 shadowFrom = uv + towardLight * _ShadowReach;
-                    float cover = saturate(Rubber(shadowFrom, toOther, cellMin, cellMax));
-                    float shadow = cover * _ShadowColor.a * IN.shadowFade * IN.color.a * (1.0 - alpha);
-                    result.rgb += _ShadowColor.rgb * albedo * IN.lightTint * shadow;
-                    result.a += shadow;
-                }
-
-                return result;
+                return half4(rgb * alpha, alpha);
             }
             ENDCG
         }

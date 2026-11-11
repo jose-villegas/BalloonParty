@@ -36,6 +36,9 @@ namespace BalloonParty.UI.CardReveal
         [Tooltip("Moves as the balloon: the two rubber layers and the ribbons between them.")]
         [SerializeField] private RectTransform _balloon;
 
+        [Tooltip("The balloon's drop shadow, behind the back layer: the back layer's frame, on the shadow's material.")]
+        [SerializeField] private RawImage _shadow;
+
         [SerializeField] private RawImage _back;
         [SerializeField] private RawImage _front;
         [SerializeField] private RibbonPiece _titleRibbon;
@@ -54,6 +57,7 @@ namespace BalloonParty.UI.CardReveal
         private CancellationTokenSource _playing;
         private IDisposable _subscriptions;
         private Material _rubber;
+        private Material _rubberShadow;
         private Vector2 _place;
         private float _ascentStartedAt = float.NegativeInfinity;
         private float _releasedAt;
@@ -73,12 +77,13 @@ namespace BalloonParty.UI.CardReveal
                 return;
             }
 
-            // The shader keeps its taps inside the frame being shown, so it needs the sheet's grid. A copy of the
-            // material, so the asset isn't written in the editor.
-            _rubber = new Material(_back.material);
-            _rubber.SetVector(SheetGridId, new Vector4(_settings.SheetColumns, _settings.SheetRows));
+            // The shader keeps its taps inside the frame being shown, so it needs the sheet's grid. Copies of the
+            // materials, so the assets aren't written in the editor.
+            _rubber = WithSheetGrid(_back.material);
+            _rubberShadow = WithSheetGrid(_shadow.material);
             _back.material = _rubber;
             _front.material = _rubber;
+            _shadow.material = _rubberShadow;
 
             _cardReveals.AttachStage();
             _attached = true;
@@ -101,6 +106,7 @@ namespace BalloonParty.UI.CardReveal
             if (_rubber != null)
             {
                 Destroy(_rubber);
+                Destroy(_rubberShadow);
             }
         }
 
@@ -133,6 +139,16 @@ namespace BalloonParty.UI.CardReveal
 
             var withAscent = ascentStartedAt + ascentSeconds * Mathf.Clamp01(settings.RibbonsGoneAtAscent);
             return Mathf.Max(withAscent, releasedAt + settings.RibbonMinimumSeconds);
+        }
+
+        /// <summary>
+        ///     How far the torn rubber has fallen <paramref name="sincePop" /> seconds into the pop: nothing until its
+        ///     fall's frame, then speeding up under the settings' gravity.
+        /// </summary>
+        internal static float FallDistance(float sincePop, ICardRevealSettings settings)
+        {
+            var falling = sincePop - settings.RubberFallsFromFrame / settings.FramesPerSecond;
+            return falling > 0f ? 0.5f * settings.RubberFallGravity * falling * falling : 0f;
         }
 
         private void OnReveal(RevealedCard reveal)
@@ -192,6 +208,7 @@ namespace BalloonParty.UI.CardReveal
                 var frame = (int)(elapsed * _settings.FramesPerSecond);
                 SetRubberShown(frame < frames);
                 ShowFrame(Mathf.Min(frame, frames - 1));
+                Fall(FallDistance(elapsed, _settings));
                 var gone = elapsed >= releaseAt && FlyRibbons(revealStartedAt) >= 1f;
                 if (gone && elapsed * _settings.FramesPerSecond >= frames)
                 {
@@ -230,9 +247,11 @@ namespace BalloonParty.UI.CardReveal
             var sheet = _settings.PopSheets[reveal.Pop % _settings.PopSheets.Count];
             _back.texture = sheet;
             _front.texture = sheet;
+            _shadow.texture = sheet;
 
             var tint = TintForTheLevel();
             _back.color = tint;
+            _shadow.color = tint;
             tint.a = 1f - _settings.InsideShowThrough;
             _front.color = tint;
 
@@ -259,16 +278,25 @@ namespace BalloonParty.UI.CardReveal
             return entry != null ? entry.Color : Color.white;
         }
 
+        private Material WithSheetGrid(Material material)
+        {
+            var copy = new Material(material);
+            copy.SetVector(SheetGridId, new Vector4(_settings.SheetColumns, _settings.SheetRows));
+            return copy;
+        }
+
         private void SetRubberShown(bool shown)
         {
             _back.enabled = shown;
             _front.enabled = shown;
+            _shadow.enabled = shown;
         }
 
         private void ShowFrame(int frame)
         {
             _front.uvRect = FrameRect(frame, true, _settings.SheetColumns, _settings.SheetRows);
             _back.uvRect = FrameRect(frame, false, _settings.SheetColumns, _settings.SheetRows);
+            _shadow.uvRect = _back.uvRect;
         }
 
         // The layers part by how far the balloon still is from its place, the front leading, and meet there.
@@ -278,8 +306,21 @@ namespace BalloonParty.UI.CardReveal
             var offset = Vector2.down * (_riseDistance * (1f - eased));
             _balloon.anchoredPosition = _place + offset;
             var part = offset * _settings.Parallax;
-            _front.rectTransform.anchoredPosition = part;
-            _back.rectTransform.anchoredPosition = -part;
+            PlaceLayers(part, -part);
+        }
+
+        // Only the rubber falls: the ribbons are the balloon's too, and fly their own way.
+        private void Fall(float drop)
+        {
+            var down = Vector2.down * drop;
+            PlaceLayers(down, down);
+        }
+
+        private void PlaceLayers(Vector2 front, Vector2 back)
+        {
+            _front.rectTransform.anchoredPosition = front;
+            _back.rectTransform.anchoredPosition = back;
+            _shadow.rectTransform.anchoredPosition = back;
         }
 
         // On unscaled time, like the heads-ups: slow-motion beats don't stretch the reveal.

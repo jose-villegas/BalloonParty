@@ -56,7 +56,29 @@ DUSK = ((0.9, -0.1), (1.0, 0.62, 0.38))
 
 def scaled(frame, size):
     # Premultiplied while resampling, so the transparent edge doesn't pick up the background's values.
-    return frame.convert("RGBa").resize((size, size), Image.LANCZOS).convert("RGBA")
+    return bled(frame.convert("RGBa").resize((size, size), Image.LANCZOS).convert("RGBA"))
+
+
+def bled(frame, steps=8):
+    """The surface data spread outward into the empty texels around the rubber, coverage kept. The game
+    filters the sheet, so an edge texel blends with its empty neighbours: empty texels holding black would
+    bend the edge's normal hard toward the bottom left and ring the silhouette in the wrong tone."""
+    a = np.asarray(frame, dtype=np.float32).copy()
+    rgb, known = a[..., :3], a[..., 3] > 0
+    for _ in range(steps):
+        total = np.zeros_like(rgb)
+        count = np.zeros(known.shape, dtype=np.float32)
+        for dy, dx in ((-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)):
+            shifted = np.roll(known, (dy, dx), axis=(0, 1))
+            total += np.roll(rgb, (dy, dx), axis=(0, 1)) * shifted[..., None]
+            count += shifted
+        grow = ~known & (count > 0)
+        rgb[grow] = total[grow] / count[grow][:, None]
+        known = known | grow
+    # Anything still unreached reads as flat on to the camera, unoccluded.
+    rgb[~known] = (128.0, 128.0, 255.0)
+    a[..., :3] = rgb
+    return Image.fromarray((a + 0.5).astype(np.uint8), "RGBA")
 
 
 def lit(frame, light):

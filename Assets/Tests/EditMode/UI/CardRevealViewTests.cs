@@ -55,6 +55,26 @@ namespace BalloonParty.Tests.UI
         }
 
         [Test]
+        public void FallDistance_BeforeTheRubberTears_IsNothing()
+        {
+            _settings.RubberFallsFromFrame.Returns(3);
+            _settings.FramesPerSecond.Returns(30f);
+            _settings.RubberFallGravity.Returns(500f);
+            Assert.AreEqual(0f, CardRevealView.FallDistance(0.09f, _settings), Tolerance);
+        }
+
+        [Test]
+        public void FallDistance_AfterItTears_SpeedsUpUnderGravity()
+        {
+            // Torn at frame 3 of 30 a second (0.1 s): 0.4 s of falling at 500 is 40, and twice as long is four times.
+            _settings.RubberFallsFromFrame.Returns(3);
+            _settings.FramesPerSecond.Returns(30f);
+            _settings.RubberFallGravity.Returns(500f);
+            Assert.AreEqual(40f, CardRevealView.FallDistance(0.5f, _settings), 1e-3f);
+            Assert.AreEqual(160f, CardRevealView.FallDistance(0.9f, _settings), 1e-3f);
+        }
+
+        [Test]
         public void RibbonWave_IsFlatAtItsNodes_AndPeaksAQuarterWaveOn()
         {
             Assert.AreEqual(0f, RibbonGraphic.Wave(0f, 0f, 2f, 40f, 1f), Tolerance);
