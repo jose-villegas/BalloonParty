@@ -44,9 +44,11 @@ Shader "BalloonParty/Sprite/LitFlipbook"
         // The baked occlusion below this reads as a crease, drawn in the crease tone.
         _CreaseEdge ("Crease Edge", Range(0, 1)) = 0.55
         _CreaseTone ("Crease Tone", Range(0, 1)) = 0.6
-        // The highlight: how much of the surface it covers (lower is bigger) and how bright it is.
-        _HighlightSize ("Highlight Size", Range(0.8, 1)) = 0.965
-        _Specular ("Highlight Strength", Range(0, 2)) = 0.9
+        // The highlight, a spot of the light's own colour as on the board's balloons: how much of the surface it
+        // covers (lower is bigger), how crisp its edge is, and how much of the light it shows.
+        _HighlightSize ("Highlight Size", Range(0.8, 1)) = 0.985
+        _HighlightSoftness ("Highlight Softness", Range(0.001, 0.05)) = 0.004
+        _Specular ("Highlight Strength", Range(0, 1)) = 0.9
 
         [Header(Subsurface)]
         // How strongly the glow takes over where it shows.
@@ -133,6 +135,7 @@ Shader "BalloonParty/Sprite/LitFlipbook"
             float _CreaseEdge;
             float _CreaseTone;
             float _HighlightSize;
+            float _HighlightSoftness;
             float _Specular;
             float _Scatter;
             float _ScatterReach;
@@ -207,7 +210,8 @@ Shader "BalloonParty/Sprite/LitFlipbook"
                     float tone = lerp(_ShadowTone, lerp(_MidTone, 1.0, Band(facing, _LitEdge)), Band(facing, _ShadowEdge));
                     float crease = 1.0 - Band(surface.b, _CreaseEdge);
                     tone *= lerp(1.0, _CreaseTone, crease);
-                    float highlight = Band(dot(normal, IN.halfway), _HighlightSize) * _Specular * (1.0 - crease);
+                    float highlight = smoothstep(_HighlightSize - _HighlightSoftness, _HighlightSize + _HighlightSoftness,
+                        dot(normal, IN.halfway)) * _Specular * (1.0 - crease);
 
                     // How much rubber lies toward the light (three taps through both layers, 0 to 1), and how
                     // much is here: one layer on its own is a flap or a shred with nothing behind it.
@@ -221,7 +225,8 @@ Shader "BalloonParty/Sprite/LitFlipbook"
                     float glow = Band(scatter, _ScatterEdge) * _Scatter * (1.0 - crease);
                     float3 glowColor = saturate(albedo * (albedo + _GlowLift) * (1.0 + _GlowLift));
 
-                    rgb = lerp(albedo * tone, glowColor, glow) * IN.lightTint + IN.lightTint * highlight;
+                    // The highlight replaces the colour rather than adding to it, so it reads white, not a paler red.
+                    rgb = lerp(lerp(albedo * tone, glowColor, glow), 1.0, highlight) * IN.lightTint;
                     // Like the balloons: however hot the light, the rubber keeps its colour and never blooms.
                     rgb = SceneLightCapToWhite(rgb);
                 }
