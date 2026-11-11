@@ -532,6 +532,21 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void BreatherSecondsLeft_CountsDownThroughTheBreather_AndIsZeroOutsideIt()
+        {
+            UseBreather();
+            Run(1f);
+            Assert.AreEqual(0f, _clock.BreatherSecondsLeft);
+
+            _boardFill.Occupancy.Returns(0.4f);
+            Run(1f);
+            Assert.AreEqual(3.05f, _clock.BreatherSecondsLeft, 0.01f, "it started at 4s on the clear's first tick");
+
+            Run(3.5f);
+            Assert.AreEqual(0f, _clock.BreatherSecondsLeft);
+        }
+
+        [Test]
         public void Breather_ASlowClearOfTheSameSize_EarnsNone()
         {
             UseBreather();

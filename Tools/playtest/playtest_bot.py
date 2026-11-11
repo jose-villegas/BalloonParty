@@ -36,8 +36,10 @@ REPO_ROOT = os.path.dirname(os.path.dirname(TOOL_DIR))
 TICK_RE = re.compile(
     r"^(?P<t>[\d.]+) L(?P<level>\d+) score (?P<score>-?\d+) hearts (?P<hearts>-?\d+) "
     r"(?P<nav>\w+)/(?P<phase>\w+) shots (?P<shots>\d+)(?: fill (?P<fill>[\d.]+))?(?: inflight (?P<inflight>\d+))?"
-    r"(?: coins (?P<coins>\d+))?$")
-FLOAT_FIELDS = ("t", "fill")
+    r"(?: coins (?P<coins>\d+))?(?: breather (?P<breather>[\d.]+))?$")
+FLOAT_FIELDS = ("t", "fill", "breather")
+# A gap between two playing ticks longer than this (a level-up, a pause, a restart) ends a release or tension stretch.
+STRETCH_BREAK_SECONDS = 2.0
 
 # The human player's knobs per skill: reaction floor and mean (s), aim error sd (degrees), and the share of
 # shots fired unaimed. First guesses, not fitted to real players; compare skills with each other.
@@ -234,6 +236,96 @@ def heart_losses(samples):
     return losses
 
 
+def release_and_tension(samples):
+    """Stretches of play inside a breather (release) and between breathers (tension), from the ticks' breather
+    field. A level change or a break in play ends a stretch, so a tension stretch that runs into a level-up is
+    cut there. Returns None when the ticks carry no breather field (an older build or the device bot)."""
+    stretches = []
+    seen = False
+
+    def close(stretch, ended_by):
+        if stretch and stretch["seconds"] > 0:
+            stretch["ended_by"] = ended_by
+            stretches.append(stretch)
+
+    def start(tick):
+        return {"kind": "release" if tick["breather"] > 0 else "tension", "level": tick["level"],
+                "seconds": 0.0, "fills": [tick.get("fill", 0.0)], "ended_by": "end"}
+
+    for ticks, _ in split_runs(samples):
+        current = None
+        previous = None
+        for tick in ticks:
+            if not (tick.get("nav") == "Game" and tick.get("phase") == "Playing" and "breather" in tick):
+                close(current, "break")
+                current = previous = None
+                continue
+            seen = True
+            if (previous is None or tick["level"] != previous["level"]
+                    or tick["t"] - previous["t"] > STRETCH_BREAK_SECONDS):
+                close(current, "break")
+                current = start(tick)
+                previous = tick
+                continue
+            # The time since the last tick belongs to the state that tick was in.
+            current["seconds"] += tick["t"] - previous["t"]
+            current["fills"].append(tick.get("fill", 0.0))
+            kind = "release" if tick["breather"] > 0 else "tension"
+            if kind != current["kind"]:
+                close(current, kind)
+                current = start(tick)
+            previous = tick
+        close(current, "end")
+    return stretches if seen else None
+
+
+def release_and_tension_lines(stretches):
+    lines = ["## Release and tension (ticks)", "",
+             "Release is play inside a spawn-clock breather (a big clear slowed the lines); tension is play between "
+             "breathers. A tension stretch \"ended by a release\" was broken by a big clear; one cut by a level-up "
+             "or the end of the session ran out before the player earned one.", ""]
+    releases = [s for s in stretches if s["kind"] == "release"]
+    tensions = [s for s in stretches if s["kind"] == "tension"]
+    release_seconds = sum(s["seconds"] for s in releases)
+    tension_seconds = sum(s["seconds"] for s in tensions)
+    total = release_seconds + tension_seconds
+    if total <= 0:
+        return lines + ["No play was recorded.", ""]
+
+    def spread(values):
+        if not values:
+            return "-"
+        return (f"mean {statistics.mean(values):.1f} s, median {statistics.median(values):.1f} s, "
+                f"90th percentile {percentile(values, 0.9):.1f} s, longest {max(values):.1f} s")
+
+    def mean_fill(group):
+        fills = [f for s in group for f in s["fills"]]
+        return f"{statistics.mean(fills):.2f}" if fills else "-"
+
+    broken_by_release = [s["seconds"] for s in tensions if s["ended_by"] == "release"]
+    lines += [f"- {len(releases)} release{'' if len(releases) == 1 else 's'}, {release_seconds:.0f} s of {total:.0f} s played "
+              f"({release_seconds / total:.0%}); one every {total / max(1, len(releases)):.0f} s of play.",
+              f"- Release stretches: {spread([s['seconds'] for s in releases])}.",
+              f"- Tension stretches: {spread([s['seconds'] for s in tensions])}.",
+              f"- Tension stretches ended by a release ({len(broken_by_release)}): {spread(broken_by_release)}.",
+              f"- Mean board fill: {mean_fill(releases)} in release, {mean_fill(tensions)} in tension.", "",
+              "| Level | Seconds played | Releases | Share in release | Longest tension | Mean fill, release | "
+              "Mean fill, tension |",
+              "|---|---|---|---|---|---|---|"]
+    for level in sorted({s["level"] for s in stretches}):
+        here = [s for s in stretches if s["level"] == level]
+        rel = [s for s in here if s["kind"] == "release"]
+        ten = [s for s in here if s["kind"] == "tension"]
+        played = sum(s["seconds"] for s in here)
+        rel_seconds = sum(s["seconds"] for s in rel)
+        longest = f"{max(s['seconds'] for s in ten):.1f}" if ten else "-"
+        share = f"{rel_seconds / played:.0%}" if played > 0 else "-"
+        lines.append(f"| {level} | {played:.0f} | {len(rel)} | {share} | {longest} | {mean_fill(rel)} | "
+                     f"{mean_fill(ten)} |")
+    lines.append("")
+    return lines
+
+
 def build_report(label, seconds, player, tuning, samples, records):
     lines = [f"# Playtest bot report{f' — {label}' if label else ''}", ""]
     lines.append(f"- Played {seconds:.0f} s of wall time, {len(samples)} ticks "
@@ -318,6 +410,10 @@ def build_report(label, seconds, player, tuning, samples, records):
                 f"| {level} | {len(values)} | {statistics.mean(values):.2f} | {statistics.median(values):.2f} | "
                 f"{percentile(values, 0.9):.2f} | {max(values):.2f} | {high} ({high / len(values):.0%}) |")
         lines.append("")
+
+    stretches = release_and_tension(samples)
+    if stretches is not None:
+        lines += release_and_tension_lines(stretches)
 
     flights = [r["timers"]["gameplay_seconds"] for r in records
                if r.get("record_kind") == "flight" and r.get("timers")]

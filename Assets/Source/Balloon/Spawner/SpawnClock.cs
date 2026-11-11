@@ -59,6 +59,7 @@ namespace BalloonParty.Balloon.Spawner
         public int ResetOrder => RunResetOrder.Counters;
         public float NextLineProgress => _window > 0f ? 1f - _remaining / _window : 0f;
         public float SecondsOnLevel => _secondsOnLevel;
+        public float BreatherSecondsLeft => _breatherLeft;
 
         [Inject]
         internal SpawnClock(
