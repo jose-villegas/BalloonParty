@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Scenario_1_1GroundRevealPlanner.html" target="_top" xlink:title="Decides how GroundView answers the active scenario and the navigation state.">
+<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Scenario_1_1GroundRevealFrame.html" target="_top" xlink:title="One frame of the mist reveal: the hole&#39;s radius and how thick the mist is outside it.">
 <polygon fill="white" stroke="#666666" points="160,-30 0,-30 0,0 160,0 160,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Scenario.Ground</text>
-<text text-anchor="middle" x="80" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">RevealPlanner</text>
+<text text-anchor="middle" x="80" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">RevealFrame</text>
 </a>
 </g>
 </g>

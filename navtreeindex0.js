@@ -128,7 +128,7 @@ var NAVTREEINDEX0 =
 "CannonHeadsUpRouter_8cs.html":[7,0,7,5,0,1],
 "CanvasCameraBinder_8cs.html":[7,0,18,13],
 "CardRevealBuilder_8cs.html":[7,0,6,12],
-"CardRevealBuilder_8cs.html#aef19bab18b9814edeef255c43e4f6bbc":[7,0,6,12,2],
+"CardRevealBuilder_8cs.html#aef19bab18b9814edeef255c43e4f6bbc":[7,0,6,12,3],
 "CardRevealController_8cs.html":[7,0,7,0,0],
 "CardRevealController_8cs.html#a24953b19d956caa76c403684c71b4e5b":[7,0,7,0,0,1],
 "CardRevealSettings_8cs.html":[7,0,3,2,0],

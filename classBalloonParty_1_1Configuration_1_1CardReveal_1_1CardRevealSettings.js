@@ -13,6 +13,8 @@ var classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings =
     [ "_ribbonsFromFrame", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#adc28b07dabac3375dd4b06f011fd770f", null ],
     [ "_ribbonsGoneAtAscent", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ace46149a8bbe76e41402c49a87d2a20a", null ],
     [ "_riseSeconds", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a7fcf37c3a3a4f0a43fae6faee5a93c73", null ],
+    [ "_rubberFallGravity", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#af3bd0afd3ead250e1341f60fe8c96ff6", null ],
+    [ "_rubberFallsFromFrame", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a1bf9c33b99d756e2686a93da04953220", null ],
     [ "_sheetColumns", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a40fc56164c7c2704d1189808a9bc3cb0", null ],
     [ "_sheetRows", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a31aa3f0032f47d9c42bed0ab39a436e1", null ],
     [ "FramesPerSecond", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a15b83647d5a739a165e49ffa7845187e", null ],
@@ -29,6 +31,8 @@ var classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings =
     [ "RibbonsFromFrame", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a9ce108e13f6db51208415578f2a8b8af", null ],
     [ "RibbonsGoneAtAscent", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a34747a27fa73541e63c11058accd07bf", null ],
     [ "RiseSeconds", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a80b6151ca92f971135212ec49d962832", null ],
+    [ "RubberFallGravity", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aea4ae2609bf3378588fe2acd1835298b", null ],
+    [ "RubberFallsFromFrame", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ae3a0a26238dd3523ff3a15202598dc2b", null ],
     [ "SheetColumns", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a53df8769fb4bb08729164ebd5bae624c", null ],
     [ "SheetRows", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a83d012ff6fecff22d7fd54eb2f0f01ef", null ]
 ];

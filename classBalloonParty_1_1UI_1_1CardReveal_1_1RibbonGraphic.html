@@ -162,8 +162,10 @@ Properties</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a4a700cfd0184dd7a438a7e85a0705524" id="r_a4a700cfd0184dd7a438a7e85a0705524"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4a700cfd0184dd7a438a7e85a0705524">AddVertex</a> (VertexHelper vh, float x, float y, Rect rect, float sheen)</td></tr>
-<tr class="separator:a4a700cfd0184dd7a438a7e85a0705524"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e7c2f24b12cf87cdab55debb8d3c5aa" id="r_a2e7c2f24b12cf87cdab55debb8d3c5aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2e7c2f24b12cf87cdab55debb8d3c5aa">AddStrip</a> (VertexHelper vh, bool shadow)</td></tr>
+<tr class="separator:a2e7c2f24b12cf87cdab55debb8d3c5aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07c42645834b9faf0f800ea537225a71" id="r_a07c42645834b9faf0f800ea537225a71"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a07c42645834b9faf0f800ea537225a71">AddVertex</a> (VertexHelper vh, float x, float y, Rect rect, float row)</td></tr>
+<tr class="separator:a07c42645834b9faf0f800ea537225a71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -176,8 +178,6 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a05fe3a62c43905f13033751310c6324b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9967995633a2cea937c169788268a5b" id="r_ae9967995633a2cea937c169788268a5b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae9967995633a2cea937c169788268a5b">_segments</a> = 24</td></tr>
 <tr class="separator:ae9967995633a2cea937c169788268a5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4423724976a7a9499fd87ad86147936c" id="r_a4423724976a7a9499fd87ad86147936c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4423724976a7a9499fd87ad86147936c">_shading</a> = 0.28f</td></tr>
-<tr class="separator:a4423724976a7a9499fd87ad86147936c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13b76eed067a795e42d5e6635991609e" id="r_a13b76eed067a795e42d5e6635991609e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a13b76eed067a795e42d5e6635991609e">_waveHeight</a> = 1.6f</td></tr>
 <tr class="separator:a13b76eed067a795e42d5e6635991609e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff2efaa65446c7f9f6c8bd8d3eb47d33" id="r_aff2efaa65446c7f9f6c8bd8d3eb47d33"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff2efaa65446c7f9f6c8bd8d3eb47d33">_waveLength</a> = 46f</td></tr>
@@ -189,10 +189,39 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A strip of ribbon filling its rect: swallowtail-notched at both ends, with a wave running along it that the driver moves on by setting <a class="el" href="#a914ad9111648e595b373a5b4c7878e81" title="Seconds the wave has run: set each frame by whatever flies the ribbon.">WaveTime</a>. </p>
-<p>The strip shades by the wave's slope, a face tilted up catching the light, so the folds read as satin. <a class="el" href="#a0992df3a7a74a2ccb6808610e4b585f2" title="How far the wave lifts the ribbon at x  (from the rect&#39;s centre).">WaveAt</a> is the same wave, for text riding on the ribbon to bend with it. </p>
+<p>It is cel shaded in the scene's light by its material (<code>BalloonParty/Sprite/CelRibbon</code>), from what the mesh tells it: how each fold turns, and a copy of the strip for the drop shadow. <a class="el" href="#a0992df3a7a74a2ccb6808610e4b585f2" title="How far the wave lifts the ribbon at x  (from the rect&#39;s centre).">WaveAt</a> is the same wave, for text riding on the ribbon to bend with it. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a4a700cfd0184dd7a438a7e85a0705524" name="a4a700cfd0184dd7a438a7e85a0705524"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4a700cfd0184dd7a438a7e85a0705524">&#9670;&#160;</a></span>AddVertex()</h2>
+<a id="a2e7c2f24b12cf87cdab55debb8d3c5aa" name="a2e7c2f24b12cf87cdab55debb8d3c5aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e7c2f24b12cf87cdab55debb8d3c5aa">&#9670;&#160;</a></span>AddStrip()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.CardReveal.RibbonGraphic.AddStrip </td>
+          <td>(</td>
+          <td class="paramtype">VertexHelper</td>          <td class="paramname"><span class="paramname"><em>vh</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>shadow</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a07c42645834b9faf0f800ea537225a71" name="a07c42645834b9faf0f800ea537225a71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07c42645834b9faf0f800ea537225a71">&#9670;&#160;</a></span>AddVertex()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -223,7 +252,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>sheen</em></span>&#160;)</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>row</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -406,28 +435,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">int BalloonParty.UI.CardReveal.RibbonGraphic._segments = 24</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a4423724976a7a9499fd87ad86147936c" name="a4423724976a7a9499fd87ad86147936c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4423724976a7a9499fd87ad86147936c">&#9670;&#160;</a></span>_shading</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float BalloonParty.UI.CardReveal.RibbonGraphic._shading = 0.28f</td>
         </tr>
       </table>
   </td>

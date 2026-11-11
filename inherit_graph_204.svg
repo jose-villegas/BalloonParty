@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html" target="_top" xlink:title="Which heads&#45;ups get a place on screen.">
+<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpOffer.html" target="_top" xlink:title="The queue&#39;s answer: drop it, show it in a slot (evicting a line first, if any), or rewrite a line.">
 <polygon fill="white" stroke="#666666" points="159,-30 0,-30 0,0 159,0 159,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.HeadsUp.</text>
-<text text-anchor="middle" x="79.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">HeadsUpQueue</text>
+<text text-anchor="middle" x="79.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">HeadsUpOffer</text>
 </a>
 </g>
 </g>

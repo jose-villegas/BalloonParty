@@ -1196,6 +1196,7 @@ var hierarchy =
       [ "BalloonParty.Configuration.Editor.PaletteMaskDrawer", "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html", null ],
       [ "BalloonParty.Editor.GradientTextureDrawer", "classBalloonParty_1_1Editor_1_1GradientTextureDrawer.html", null ]
     ] ],
+    [ "BalloonParty.Editor.CardRevealBuilder.Materials", "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html", null ],
     [ "BalloonParty.Shared.Rendering.MeshHelper", "classBalloonParty_1_1Shared_1_1Rendering_1_1MeshHelper.html", null ],
     [ "BalloonParty.Shared.Rendering.MeshRendererBuilder", "classBalloonParty_1_1Shared_1_1Rendering_1_1MeshRendererBuilder.html", null ],
     [ "BalloonParty.UI.Telemetry.MetricBinding", "structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html", null ],

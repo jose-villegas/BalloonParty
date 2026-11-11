@@ -174,6 +174,12 @@ Properties</h2></td></tr>
 <tr class="separator:a34747a27fa73541e63c11058accd07bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80b6151ca92f971135212ec49d962832" id="r_a80b6151ca92f971135212ec49d962832"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80b6151ca92f971135212ec49d962832">RiseSeconds</a><code> [get]</code></td></tr>
 <tr class="separator:a80b6151ca92f971135212ec49d962832"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea4ae2609bf3378588fe2acd1835298b" id="r_aea4ae2609bf3378588fe2acd1835298b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aea4ae2609bf3378588fe2acd1835298b">RubberFallGravity</a><code> [get]</code></td></tr>
+<tr class="memdesc:aea4ae2609bf3378588fe2acd1835298b"><td class="mdescLeft">&#160;</td><td class="mdescRight">How fast the torn rubber's fall speeds up, in canvas units per second squared.  <br /></td></tr>
+<tr class="separator:aea4ae2609bf3378588fe2acd1835298b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3a0a26238dd3523ff3a15202598dc2b" id="r_ae3a0a26238dd3523ff3a15202598dc2b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae3a0a26238dd3523ff3a15202598dc2b">RubberFallsFromFrame</a><code> [get]</code></td></tr>
+<tr class="memdesc:ae3a0a26238dd3523ff3a15202598dc2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The pop's frame on which the torn rubber starts to fall.  <br /></td></tr>
+<tr class="separator:ae3a0a26238dd3523ff3a15202598dc2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53df8769fb4bb08729164ebd5bae624c" id="r_a53df8769fb4bb08729164ebd5bae624c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a53df8769fb4bb08729164ebd5bae624c">SheetColumns</a><code> [get]</code></td></tr>
 <tr class="memdesc:a53df8769fb4bb08729164ebd5bae624c"><td class="mdescLeft">&#160;</td><td class="mdescRight">A layer's frames across one half of a sheet.  <br /></td></tr>
 <tr class="separator:a53df8769fb4bb08729164ebd5bae624c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -209,6 +215,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ace46149a8bbe76e41402c49a87d2a20a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7fcf37c3a3a4f0a43fae6faee5a93c73" id="r_a7fcf37c3a3a4f0a43fae6faee5a93c73"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7fcf37c3a3a4f0a43fae6faee5a93c73">_riseSeconds</a> = 0.45f</td></tr>
 <tr class="separator:a7fcf37c3a3a4f0a43fae6faee5a93c73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3bd0afd3ead250e1341f60fe8c96ff6" id="r_af3bd0afd3ead250e1341f60fe8c96ff6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3bd0afd3ead250e1341f60fe8c96ff6">_rubberFallGravity</a> = 380f</td></tr>
+<tr class="separator:af3bd0afd3ead250e1341f60fe8c96ff6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bf9c33b99d756e2686a93da04953220" id="r_a1bf9c33b99d756e2686a93da04953220"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1bf9c33b99d756e2686a93da04953220">_rubberFallsFromFrame</a> = 3</td></tr>
+<tr class="separator:a1bf9c33b99d756e2686a93da04953220"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40fc56164c7c2704d1189808a9bc3cb0" id="r_a40fc56164c7c2704d1189808a9bc3cb0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40fc56164c7c2704d1189808a9bc3cb0">_sheetColumns</a> = 6</td></tr>
 <tr class="separator:a40fc56164c7c2704d1189808a9bc3cb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31aa3f0032f47d9c42bed0ab39a436e1" id="r_a31aa3f0032f47d9c42bed0ab39a436e1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31aa3f0032f47d9c42bed0ab39a436e1">_sheetRows</a> = 4</td></tr>
@@ -493,6 +503,50 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._riseSeconds = 0.45f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af3bd0afd3ead250e1341f60fe8c96ff6" name="af3bd0afd3ead250e1341f60fe8c96ff6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3bd0afd3ead250e1341f60fe8c96ff6">&#9670;&#160;</a></span>_rubberFallGravity</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._rubberFallGravity = 380f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1bf9c33b99d756e2686a93da04953220" name="a1bf9c33b99d756e2686a93da04953220"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1bf9c33b99d756e2686a93da04953220">&#9670;&#160;</a></span>_rubberFallsFromFrame</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.CardReveal.CardRevealSettings._rubberFallsFromFrame = 3</td>
         </tr>
       </table>
   </td>
@@ -907,6 +961,59 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a9fa912a9bdc244148ee0631efb0854d4">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="aea4ae2609bf3378588fe2acd1835298b" name="aea4ae2609bf3378588fe2acd1835298b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea4ae2609bf3378588fe2acd1835298b">&#9670;&#160;</a></span>RubberFallGravity</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings.RubberFallGravity</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How fast the torn rubber's fall speeds up, in canvas units per second squared. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a6fc529b9cac53a8d3735822e7379372d">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="ae3a0a26238dd3523ff3a15202598dc2b" name="ae3a0a26238dd3523ff3a15202598dc2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3a0a26238dd3523ff3a15202598dc2b">&#9670;&#160;</a></span>RubberFallsFromFrame</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.CardReveal.CardRevealSettings.RubberFallsFromFrame</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The pop's frame on which the torn rubber starts to fall. </p>
+<p>The bake keeps the balloon's neck where it was until its last frames, so the fall is the game's. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a630b905c75223418d42221b6a5347cff">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
 
 </div>
 </div>

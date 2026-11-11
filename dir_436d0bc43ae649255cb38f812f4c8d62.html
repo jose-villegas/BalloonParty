@@ -139,14 +139,14 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>RibbonPiece</code>   </td><td class="markdownTableBodyNone">One piece of ribbon with a line written on it. Sizes the ribbon to its text. Flies itself: rolled up inside the balloon before the pop, then bursting out to its spot, drifting and swaying there, and finally flying off and fading. Where it rests, where the burst takes it, its drift, sway and way off are set on it by the builder. The text bends with the ribbon's wave, glyph by glyph    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>RibbonGraphic</code>   </td><td class="markdownTableBodyNone">The ribbon itself, a UI graphic: a strip with a V notch cut in each end, and a wave running along it. It shades by the wave's slope, with a sheen along its middle, so the folds read as satin   </td></tr>
+<td class="markdownTableBodyNone"><code>RibbonGraphic</code>   </td><td class="markdownTableBodyNone">The ribbon itself, a UI graphic: a strip with a V notch cut in each end, and a wave running along it. Cel shaded by its material (<code>BalloonParty/Sprite/CelRibbon</code>, <code>Materials/UI/CardRevealRibbon</code>): folds turned toward the scene light in the ribbon's colour, those turned away in a shadow tone, a satin sheen along the lit folds' middle, all in the time-of-day light. The mesh carries a second copy of the strip, which the shader moves away from the light as the ribbon's drop shadow   </td></tr>
 </table>
 <h1><a class="anchor" id="autotoc_md1089"></a>
 A reveal, step by step</h1>
 <p>All on unscaled time, so slow-motion beats don't stretch it.</p>
 <ol type="1">
 <li>The balloon is tinted one of the level's colours, at random. It rises from below to its place (<code>RiseSeconds</code>) and holds a beat (<code>HoldBeforePopSeconds</code>). The ribbons show faintly inside it.</li>
-<li>The chosen pop's 24 frames play at 30 fps. The frame follows the time played, so a slow frame skips a frame rather than slowing the pop.</li>
+<li>The chosen pop's 24 frames play at 30 fps. The frame follows the time played, so a slow frame skips a frame rather than slowing the pop. From <code>RubberFallsFromFrame</code>, once it tears, the rubber falls, speeding up under <code>RubberFallGravity</code> (<code>FallDistance</code>, tested): the bake keeps the balloon's neck where it was until its last frames, so without it the pop plays out in one place. Only the rubber falls; the ribbons fly their own way.</li>
 <li>On <code>RibbonsFromFrame</code>, once the rubber has opened, the ribbons fly out (<code>RibbonBurstSeconds</code>). The title goes above the balloon's place, to the left; the description goes under it, to the right.</li>
 <li>They drift and sway, readable, until it is time to go. Then they fly off, up and outward, and fade (<code>RibbonExitSeconds</code>).</li>
 </ol>
@@ -159,16 +159,24 @@ A reveal, step by step</h1>
 <p><code>RibbonsGoneAt</code> works out that moment and is tested. It is checked again every frame until the ribbons leave, since the ascent can begin after they are out. Once they have started to leave they don't come back: an ascent held up for more than about 2 s after the pop (waiting on another cinematic, or a board overflow) finds them already gone.</p>
 <h1><a class="anchor" id="autotoc_md1090"></a>
 How the balloon is drawn</h1>
-<p>The pop is baked (<code>Tools/art/balloon_pop</code>), but not as pictures. Each frame holds the rubber's surface: its normal as the camera saw it, and its ambient occlusion. <code>BalloonParty/Sprite/LitFlipbook</code> lights it with the live scene light: its direction, colour and dimming, taken the way the balloons' bodies take them. So the reveal shades like the board around it at any time of day. The rubber's translucency is in the shader too: a face turned away from the light glows a deeper colour instead of going dark.</p>
+<p>The pop is baked (<code>Tools/art/balloon_pop</code>), but not as pictures. Each frame holds the rubber's surface: its normal as the camera saw it, and its ambient occlusion. <code>BalloonParty/Sprite/LitFlipbook</code> cel shades it with the live scene light: its direction, colour and dimming, taken the way the balloons' bodies take them. So the reveal sits in the board's light, and in its flat, toon style:</p>
+<ul>
+<li><b>Three tones</b>, lit, middle and shadow, with hard steps between them, and the baked deep folds drawn as creases in a darker tone. A crisp highlight in the light's own colour (white at noon), as on the board's balloons. The steps are anti-aliased to a screen pixel, however large the balloon is drawn.</li>
+<li><b>Subsurface scattering</b>, done cheaply on screen. A few samples toward the light add up how much rubber the light crosses to reach each point. Where it crosses little (the rim facing the light, a flap or shred with no rubber behind it) and on faces turned away from the light, the latex glows a richer, lighter tint, the way light shows through a balloon.</li>
+<li><b>A drop shadow</b>, a soft dark shade of the balloon's colour, away from the scene light. It is drawn on an image of its own (<code>Shadow</code>, on <code>CardRevealRubberShadow</code>) that the shader moves away from the light, so the frame's edge never cuts it off. It takes both layers' outline.</li>
+</ul>
+<p>The shader keeps its samples inside the frame shown, so it needs the sheet's grid: the view sets it, from the settings, on its own copies of the two rubber materials. Once the pop's last frame has shown, the layers stop drawing.</p>
 <p>Each frame is baked in two layers, the rubber in front of the balloon's centre and the rubber behind it. The ribbons sit between them, so they read as inside the balloon:</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Child of <code>Balloon</code>   </th><th class="markdownTableHeadNone">Draws    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>Back</code>   </td><td class="markdownTableBodyNone">A <code>RawImage</code> showing the back layer's frame. Its UV rect picks the frame from the sheet's bottom half    </td></tr>
+<td class="markdownTableBodyNone"><code>Shadow</code>   </td><td class="markdownTableBodyNone">A <code>RawImage</code> of the back layer's frame on the shadow's material: the balloon's drop shadow    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>TitleRibbon</code>, <code>DescriptionRibbon</code>   </td><td class="markdownTableBodyNone">The two ribbons (<code>RibbonPiece</code>), cream satin written in the tooltip's pencil font    </td></tr>
+<td class="markdownTableBodyNone"><code>Back</code>   </td><td class="markdownTableBodyNone">A <code>RawImage</code> showing the back layer's frame. Its UV rect picks the frame from the sheet's bottom half    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>TitleRibbon</code>, <code>DescriptionRibbon</code>   </td><td class="markdownTableBodyNone">The two ribbons (<code>RibbonPiece</code>), cream satin written in the tooltip's pencil font    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>Front</code>   </td><td class="markdownTableBodyNone">A <code>RawImage</code> showing the front layer's frame, from the sheet's top half. Slightly see-through (<code>InsideShowThrough</code>), so before the pop the ribbons show as a shadow through the latex   </td></tr>
 </table>
 <p>While the balloon rises the two layers part a little, the front leading and the back lagging (<code>Parallax</code>). They meet at its place, so the depth reads even before it pops.</p>
@@ -178,10 +186,10 @@ Building it</h1>
 <ul>
 <li>imports every <code>pop_*.png</code> under <code>Assets/Sprites/UI/CardReveal/</code> as linear data (no sRGB, no mipmaps, clamped), skipping sheets already imported that way;</li>
 <li>lists them on <code>Assets/Configuration/CardRevealSettings.asset</code> (made if missing, and assigned to the <code>GameLifetimeScope</code> prefab);</li>
-<li>makes <code>Materials/UI/CardRevealRubber.mat</code>;</li>
+<li>makes <code>Materials/UI/CardRevealRubber.mat</code>, <code>CardRevealRubberShadow.mat</code> (the same shader with Drop Shadow on) and <code>CardRevealRibbon.mat</code>;</li>
 <li>builds <code>CardReveal</code> on <code>GameCanvas</code>.</li>
 </ul>
-<p>Running it again rebuilds the canvas part and keeps the material's and settings' tuning.</p>
+<p>Running it again rebuilds the canvas part and keeps the materials' and settings' tuning.</p>
 <p>The cheat <code>Run &gt; Reveal A Card</code> plays a reveal for a random card without holding it. Use it to look at the reveal without playing to a card level-up. With no ascent, the ribbons fly their <code>RibbonSecondsWithoutAscent</code>. <code>Score &gt; Trigger Level Up</code> shows the real thing, with the ascent, on a level that deals a card. </p>
 </div><!-- contents -->
 </div><!-- doc-content -->

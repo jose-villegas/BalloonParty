@@ -14,6 +14,8 @@ var interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings 
     [ "RibbonsFromFrame", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ad02e1bfe8d09602b97e2f0b8016d4af6", null ],
     [ "RibbonsGoneAtAscent", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#afe039a31abd778ef5a17a9aac52e05d9", null ],
     [ "RiseSeconds", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a9fa912a9bdc244148ee0631efb0854d4", null ],
+    [ "RubberFallGravity", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a6fc529b9cac53a8d3735822e7379372d", null ],
+    [ "RubberFallsFromFrame", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a630b905c75223418d42221b6a5347cff", null ],
     [ "SheetColumns", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a5bd275eed8a7b0eb3a3b258b0a006ba9", null ],
     [ "SheetRows", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aadc7457259dd9b044121000695409996", null ]
 ];
