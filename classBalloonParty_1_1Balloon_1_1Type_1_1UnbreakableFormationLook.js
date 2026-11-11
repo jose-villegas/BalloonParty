@@ -5,6 +5,7 @@ var classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook =
     [ "Bind", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#abc9c22d1a6da542c15413a96b0167fdf", null ],
     [ "BuildBlueTrail", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#ad08c217e92284561421a341e6528211d", null ],
     [ "CaptureRestLook", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a34d19aa50309efe4dfff7080afded160", null ],
+    [ "LateUpdate", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#aef917c5661d485c6280efa38bed11022", null ],
     [ "ShowsFormation", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a3bfad6cf76aa99c9b26c4ec942ec198d", null ],
     [ "Update", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#acde97612f4f01e6524ffb258a4d25ef8", null ],
     [ "_blend", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html#a20ca4bb64388131e9647e183a72cae66", null ],

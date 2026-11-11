@@ -1,5 +1,15 @@
 var NAVTREEINDEX77 =
 {
+"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a25badc6eac9f434336592892dc9e6a86":[6,0,0,13,0,18,28],
+"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a267392ddc6db8d9e1d0147a1280a0ce8":[5,0,0,13,0,18,62],
+"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a267392ddc6db8d9e1d0147a1280a0ce8":[6,0,0,13,0,18,62],
+"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a28830072d97f21960a9caecec5a4ec2d":[5,0,0,13,0,18,84],
+"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a28830072d97f21960a9caecec5a4ec2d":[6,0,0,13,0,18,84],
+"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a30c474513a5e860dde87fc3c44897321":[5,0,0,13,0,18,75],
+"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a30c474513a5e860dde87fc3c44897321":[6,0,0,13,0,18,75],
+"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a3653f41c11c6b0ac9a60f6e66d9b1eac":[5,0,0,13,0,18,17],
+"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a3653f41c11c6b0ac9a60f6e66d9b1eac":[6,0,0,13,0,18,17],
+"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a36e38e93ca3dd98a30ba9def5392e014":[5,0,0,13,0,18,61],
 "classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a36e38e93ca3dd98a30ba9def5392e014":[6,0,0,13,0,18,61],
 "classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a3e1cca91b6c455d05f3438ff40af6db9":[5,0,0,13,0,18,10],
 "classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#a3e1cca91b6c455d05f3438ff40af6db9":[6,0,0,13,0,18,10],
@@ -239,15 +249,5 @@ var NAVTREEINDEX77 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#adb719e4bcec6108bd734a34b1f165047":[6,0,0,13,0,21,12],
 "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#ae2da260f02894814a6df206a4171fab5":[5,0,0,13,0,21,19],
 "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#ae2da260f02894814a6df206a4171fab5":[6,0,0,13,0,21,19],
-"classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#ae9109f45e103bdaa9b98ca8c78c90503":[5,0,0,13,0,21,22],
-"classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#ae9109f45e103bdaa9b98ca8c78c90503":[6,0,0,13,0,21,22],
-"classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html":[5,0,0,13,1,16],
-"classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html":[6,0,0,13,1,16],
-"classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html#a18c0d2fbfcec68c3013e50608a37697f":[5,0,0,13,1,16,3],
-"classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html#a18c0d2fbfcec68c3013e50608a37697f":[6,0,0,13,1,16,3],
-"classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html#a5bdbd33a83e11d0cd9c7f1739860aaec":[5,0,0,13,1,16,4],
-"classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html#a5bdbd33a83e11d0cd9c7f1739860aaec":[6,0,0,13,1,16,4],
-"classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html#a8c1f909557afaf06d5ec3ec8ca4922aa":[5,0,0,13,1,16,0],
-"classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html#a8c1f909557afaf06d5ec3ec8ca4922aa":[6,0,0,13,1,16,0],
-"classBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttributions.html#aa841a43ea7c1e4c23a9096b47ed21716":[5,0,0,13,1,16,1]
+"classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#ae9109f45e103bdaa9b98ca8c78c90503":[5,0,0,13,0,21,22]
 };

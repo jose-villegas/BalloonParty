@@ -140,6 +140,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aeafe6ebfb50a555858f2055d1e0b89f5" id="r_aeafe6ebfb50a555858f2055d1e0b89f5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeafe6ebfb50a555858f2055d1e0b89f5">ResolveScoreAttribution</a> (in <a class="el" href="structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html">DamageContext</a> context, IReadOnlyList&lt; string &gt; incompleteColors, IList&lt; <a class="el" href="structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html">ScoreAttribution</a> &gt; results)</td></tr>
 <tr class="memdesc:aeafe6ebfb50a555858f2055d1e0b89f5"><td class="mdescLeft">&#160;</td><td class="mdescRight"><em>incompleteColors</em>  lists the colours whose progress bar isn't full yet — scatter implementers (Tough/BubbleCluster/Unbreakable) confine their random split to these so completing a colour never wastes points on it.  <br /></td></tr>
 <tr class="separator:aeafe6ebfb50a555858f2055d1e0b89f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0191b6bc7584734dc821d2eafea3d7cb" id="r_a0191b6bc7584734dc821d2eafea3d7cb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0191b6bc7584734dc821d2eafea3d7cb">SetFormationHeading</a> (Vector2 heading)</td></tr>
+<tr class="separator:a0191b6bc7584734dc821d2eafea3d7cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2d15a8db16d1d7126a4903913c07c68" id="r_ab2d15a8db16d1d7126a4903913c07c68"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab2d15a8db16d1d7126a4903913c07c68">SetInFormation</a> (bool inFormation)</td></tr>
 <tr class="separator:ab2d15a8db16d1d7126a4903913c07c68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5ae46615f323c9acc4b7cc7c4328c88" id="r_ab5ae46615f323c9acc4b7cc7c4328c88"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab5ae46615f323c9acc4b7cc7c4328c88">TryPickRelocation</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, IReadOnlyList&lt; Vector2Int &gt; restingSlots, out Vector2Int target)</td></tr>
@@ -185,6 +187,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a23aad630e6dd316a26c31b21063ae9e0" id="r_a23aad630e6dd316a26c31b21063ae9e0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a23aad630e6dd316a26c31b21063ae9e0">DirectBalanceMotion</a><code> [get]</code></td></tr>
 <tr class="memdesc:a23aad630e6dd316a26c31b21063ae9e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Animate a resolve straight to the final slot instead of touring every waypoint.  <br /></td></tr>
 <tr class="separator:a23aad630e6dd316a26c31b21063ae9e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2170e3f08288efbce0e866a4a2bfeab6" id="r_a2170e3f08288efbce0e866a4a2bfeab6"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2170e3f08288efbce0e866a4a2bfeab6">FormationHeading</a><code> [get]</code></td></tr>
+<tr class="memdesc:a2170e3f08288efbce0e866a4a2bfeab6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The world direction the member's formation runs, shared by every member of it.  <br /></td></tr>
+<tr class="separator:a2170e3f08288efbce0e866a4a2bfeab6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37f033fca8c42c486e3755289d518315" id="r_a37f033fca8c42c486e3755289d518315"><td class="memItemLeft" align="right" valign="top">ReactiveProperty&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a37f033fca8c42c486e3755289d518315">HitsRemaining</a><code> [get]</code></td></tr>
 <tr class="separator:a37f033fca8c42c486e3755289d518315"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a74540fdb6a9dd6070434fa91f5212476" id="r_a74540fdb6a9dd6070434fa91f5212476"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a74540fdb6a9dd6070434fa91f5212476">InFormation</a><code> [get]</code></td></tr>
@@ -240,6 +245,8 @@ Static Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:aa3cc9846840d4a1f085e9e90f6ba5edc" id="r_aa3cc9846840d4a1f085e9e90f6ba5edc"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="structBalloonParty_1_1Balloon_1_1Model_1_1ColorSource.html">ColorSource</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa3cc9846840d4a1f085e9e90f6ba5edc">_colorSource</a></td></tr>
 <tr class="separator:aa3cc9846840d4a1f085e9e90f6ba5edc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c8e74af42ee0bdfa1bcba98b0095f8a" id="r_a4c8e74af42ee0bdfa1bcba98b0095f8a"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4c8e74af42ee0bdfa1bcba98b0095f8a">_formationHeading</a> = Vector2.right</td></tr>
+<tr class="separator:a4c8e74af42ee0bdfa1bcba98b0095f8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99b1a40cfc270705e7ffd5408642314d" id="r_a99b1a40cfc270705e7ffd5408642314d"><td class="memItemLeft" align="right" valign="top">readonly ReactiveProperty&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a99b1a40cfc270705e7ffd5408642314d">_inFormation</a> = new(false)</td></tr>
 <tr class="separator:a99b1a40cfc270705e7ffd5408642314d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -396,6 +403,25 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a0191b6bc7584734dc821d2eafea3d7cb" name="a0191b6bc7584734dc821d2eafea3d7cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0191b6bc7584734dc821d2eafea3d7cb">&#9670;&#160;</a></span>SetFormationHeading()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Model.UnbreakableBalloonModel.SetFormationHeading </td>
+          <td>(</td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>heading</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html#a1b65bd96eb2870c75f6bf2ddab416aa9">BalloonParty.Balloon.Model.IWriteableFormationMember</a>.</p>
+
+</div>
+</div>
 <a id="ab2d15a8db16d1d7126a4903913c07c68" name="ab2d15a8db16d1d7126a4903913c07c68"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab2d15a8db16d1d7126a4903913c07c68">&#9670;&#160;</a></span>SetInFormation()</h2>
 
@@ -490,6 +516,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly <a class="el" href="structBalloonParty_1_1Balloon_1_1Model_1_1ColorSource.html">ColorSource</a> BalloonParty.Balloon.Model.UnbreakableBalloonModel._colorSource</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4c8e74af42ee0bdfa1bcba98b0095f8a" name="a4c8e74af42ee0bdfa1bcba98b0095f8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c8e74af42ee0bdfa1bcba98b0095f8a">&#9670;&#160;</a></span>_formationHeading</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector2 BalloonParty.Balloon.Model.UnbreakableBalloonModel._formationHeading = Vector2.right</td>
         </tr>
       </table>
   </td>
@@ -729,6 +777,33 @@ Private Attributes</h2></td></tr>
 <p>Animate a resolve straight to the final slot instead of touring every waypoint. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceInfluence.html#adc10d56a4764b5768d0917e1cd404993">BalloonParty.Slots.Actor.IBalanceInfluence</a>.</p>
+
+</div>
+</div>
+<a id="a2170e3f08288efbce0e866a4a2bfeab6" name="a2170e3f08288efbce0e866a4a2bfeab6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2170e3f08288efbce0e866a4a2bfeab6">&#9670;&#160;</a></span>FormationHeading</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector2 BalloonParty.Balloon.Model.UnbreakableBalloonModel.FormationHeading</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The world direction the member's formation runs, shared by every member of it. </p>
+<p>It keeps its last value after the formation breaks, so the look fades out without turning. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html#a2dc2484cd85cc7fcc03cf22e757986bf">BalloonParty.Balloon.Model.IFormationMember</a>.</p>
 
 </div>
 </div>

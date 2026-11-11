@@ -173,7 +173,7 @@ Anchoring</h1>
 </ul>
 <h1><a class="anchor" id="autotoc_md24"></a>
 Look</h1>
-<p><code>Balloon/Type/UnbreakableFormationLook</code> turns a member blue once it has arrived in its slot (in formation and <code>IsStable</code>). The core glow, the inner rim and the exhaust trail all change, and a <code>GlitterSwirl</code> halo fades in behind the sphere. The unbreakable's periodic burst is tagged blue too, so its specks match. All the blue comes from the palette's <code>UnbreakableFormation</code> entry. See <code><a class="el" href="Balloon_2Type_2README_8md.html">Balloon/Type/README.md</a></code>.</p>
+<p><code>Balloon/Type/UnbreakableFormationLook</code> turns a member blue once it has arrived in its slot (in formation and <code>IsStable</code>). The core glow, the inner rim and the exhaust trail all change, and a <code>GlitterSwirl</code> halo fades in behind the sphere. The halo doesn't sway or spin with its balloon: the service gives every member its formation's heading (<code>IFormationMember.FormationHeading</code>, a world direction), and the look turns the halo so its swirl drifts that way. A line heads along its slots, and an item cover heads up at the item. The unbreakable's periodic burst is tagged blue too, so its specks match. All the blue comes from the palette's <code>UnbreakableFormation</code> entry. See <code><a class="el" href="Balloon_2Type_2README_8md.html">Balloon/Type/README.md</a></code>.</p>
 <h1><a class="anchor" id="autotoc_md25"></a>
 Settings</h1>
 <p>The settings are <code>IUnbreakableFormationSettings</code>, nested in <code>BalloonsConfiguration</code> under "Unbreakable Formations":</p><ul>

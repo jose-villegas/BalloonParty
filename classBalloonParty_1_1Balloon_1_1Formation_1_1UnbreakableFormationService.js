@@ -4,6 +4,7 @@ var classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService =
     [ "ArrangeAtWaveStart", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#af1a38e69f86794b616c1a9463dab17fe", null ],
     [ "CollectCandidates", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#ab89e62711e3778a8eae79e7d4f607b5b", null ],
     [ "Dispose", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a2199b22a590e51a7ee08e69a0b85fe21", null ],
+    [ "HeadingFor", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a80ad40557ff7bf99ae96ac1dcb874663", null ],
     [ "IsAssigned", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#af5db3a099f0d6e8223182284200227e5", null ],
     [ "OnGridChanged", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a056f72f1eeb18d8af73ab82e33db31f5", null ],
     [ "PickIndex", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#acb691d9ab40143252e1dc4c564e62e21", null ],

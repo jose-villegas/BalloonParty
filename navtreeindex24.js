@@ -1,5 +1,15 @@
 var NAVTREEINDEX24 =
 {
+"classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#a6cf59c356c687a9df60aac7ce9041462":[6,0,0,3,8,2,10],
+"classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#a8df0082d5839ba473887da28e5bc026f":[5,0,0,3,8,2,9],
+"classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#a8df0082d5839ba473887da28e5bc026f":[6,0,0,3,8,2,9],
+"classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#a9c668d09add77e4ed32603aba0fda29a":[5,0,0,3,8,2,0],
+"classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#a9c668d09add77e4ed32603aba0fda29a":[6,0,0,3,8,2,0],
+"classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#aaacc0a117178572d2a4ba79e88012bd2":[5,0,0,3,8,2,4],
+"classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#aaacc0a117178572d2a4ba79e88012bd2":[6,0,0,3,8,2,4],
+"classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#ac934fa5b1f59ee9d3b077b2cb9eadfbe":[5,0,0,3,8,2,11],
+"classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#ac934fa5b1f59ee9d3b077b2cb9eadfbe":[6,0,0,3,8,2,11],
+"classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#ad615de8fbb18a8c17620954e84a81bb1":[5,0,0,3,8,2,3],
 "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#ad615de8fbb18a8c17620954e84a81bb1":[6,0,0,3,8,2,3],
 "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#aec0efa58f1a5a7c85048bc2174fcca7f":[5,0,0,3,8,2,7],
 "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#aec0efa58f1a5a7c85048bc2174fcca7f":[6,0,0,3,8,2,7],
@@ -239,15 +249,5 @@ var NAVTREEINDEX24 =
 "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a246bc83e13d83c58552d897b09aa7a9d":[6,0,0,3,8,24,17],
 "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a39bbfaa4d0d600e33df38eb92a949daa":[5,0,0,3,8,24,6],
 "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a39bbfaa4d0d600e33df38eb92a949daa":[6,0,0,3,8,24,6],
-"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a4801dae5c84d5af8080444ce38355c10":[5,0,0,3,8,24,4],
-"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a4801dae5c84d5af8080444ce38355c10":[6,0,0,3,8,24,4],
-"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a4b34d481161624bd8212bbc6d953dd4e":[5,0,0,3,8,24,20],
-"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a4b34d481161624bd8212bbc6d953dd4e":[6,0,0,3,8,24,20],
-"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a558c23c668583fd558e545c25b6b7e67":[5,0,0,3,8,24,15],
-"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a558c23c668583fd558e545c25b6b7e67":[6,0,0,3,8,24,15],
-"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a73332adc4bcbf8d14130de5ef6767dd1":[5,0,0,3,8,24,11],
-"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a73332adc4bcbf8d14130de5ef6767dd1":[6,0,0,3,8,24,11],
-"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a89b0bca5553ccdecbee891638a71ca5a":[5,0,0,3,8,24,1],
-"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a89b0bca5553ccdecbee891638a71ca5a":[6,0,0,3,8,24,1],
-"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a9ff3eb2fd26f52a1c3107e080a7ae824":[5,0,0,3,8,24,19]
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a4801dae5c84d5af8080444ce38355c10":[5,0,0,3,8,24,4]
 };
