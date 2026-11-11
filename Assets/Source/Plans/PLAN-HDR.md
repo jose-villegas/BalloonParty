@@ -300,8 +300,9 @@ bloom.
 | 2.3 The laser: `Beam` (2.5) and `BeamShine` (2) on Glow. `LaserGlitter` (3.27, red only) rides with it unchanged. | Done, values to confirm |
 | 2.4 The shield: `EMShieldField` gets `_HdrBoost` on the **halo only**; `ProjectileShieldView` drives it from the shield count (`ShieldGlow.For`: 1 at one shield, `GlowPerShield` 0.35 more per shield, up to `MaxGlow` 2.5), ramped over the layer's reveal or dissolve. The field lines keep the palette colour: Neutral works per channel, so a scaled palette colour would drift (orange toward yellow, purple toward pink). | Done, values to confirm |
 | 2.5 Bloom, pulled forward from Phase 3: the Bloom override in the URP default volume profile (`Assets/DefaultVolumeProfile.asset`), so the launcher has it too: threshold 1.4, intensity 0.8, scatter 0.6, clamp 16, Kawase, Quarter, 4 iterations. | Done; **the device cost is open** (the Phase 1 gate plus bloom's chain) |
-| 2.6 Accidental bloomers: values above the threshold that aren't meant to glow (see below). | Checked in the Editor (below) |
-| 2.7 Pops on lit surfaces (item 1), shine and specular (item 3), the overlay (item 7). | Open |
+| 2.6 Lit balloons stay under the threshold. A pop's or the shield's local light took the regular balloons to 3.7 (measured below), so they bloomed at 1.4. `SceneLightCapToWhite` (`Include/SceneLight.cginc`) scales a lit colour down, hue kept, until no channel passes 1. It runs in `SpriteDiffuse` (the balloon body, and the grid background sprite that shares it) and on `SpriteLightDriven`'s scene-light tint (the `Shine*` glints and `TintLaunch`; the shadows that share the flag are dark, so it changes nothing there). A lit balloon still brightens to its full colour, and its glint to white; neither blows out past it. | Done; the look of night pops needs an in-Editor check |
+| 2.7 Accidental bloomers: values above the threshold that aren't meant to glow (see below). | Checked in the Editor (below) |
+| 2.8 Pops on lit surfaces (item 1), shine and specular (item 3), the overlay (item 7). | Open |
 
 **Where bloom lives.** In the default volume profile, beside the base look, so the launcher and the
 game share it (decided 2026-11-11). Not on the scenario grade's Volume: it switches itself off with
@@ -319,12 +320,28 @@ So bloom picks pixels up from about half the linear threshold:
 | about 1.37 | Nothing at or below 1 |
 | **1.4 (shipped)** | Starts at gamma 1.02, full from about 1.77 |
 
+**Measured peaks** (2026-11-11, night meadow, level 8). The brightest channel, in gamma, read from the
+camera's HDR target before post-processing, one layer at a time. The balloon numbers predate 2.6.
+
+| Moment | Balloons layer | Items layer (lightning, laser) | Shot layer |
+|---|---|---|---|
+| 0.15 s after a pop | 3.67 (lit bodies near the burst) | 2.30 | 1.03 |
+| The lightning | 2.48 | 2.97 | 0.97 |
+| The laser | 2.79 | 2.00 | 0.98 |
+| A shot with 5 shields | 3.31 (lit by the shield) | 2.12 | 1.80 (the halo) |
+
+No threshold separates the two: lit balloons ran hotter than the effects. Raising the threshold past
+them (about 5.2, so bloom starts near 3.8) and boosting the effects past that was the other option. It
+was dropped because stacked pops (a lightning popping six at once) can still pass any fixed line, and
+the ground already reached 4.4.
+
 **Watch list** (values above 1 that predate this phase): `Items/PickupInSightGlitter` (speck colour
 191.7, 74.4, 53.4: on screen while a pickup is in sight), `Items/AppearGlitter` (16 × 3, brief),
 `Balloon/UnbreakableFormationGlitter` (1.5, always on the board), `Items/Snipe` (`_Color` 2 × its
-`_Glow` 1.15, while aiming), `Scenario/WallNet`'s disturbed flash (2.1, 3.2, 3.7, a long shape), and
-the scene-light field's pops (up to about 4× on lit balloons and ground). Bloom's `clamp` of 16 bounds
-any of them per pixel.
+`_Glow` 1.15, while aiming), `Scenario/WallNet`'s disturbed flash (2.1, 3.2, 3.7, a long shape), the
+special balloons that 2.6 doesn't cap (the rainbow's glitter, the tough balloon, the unbreakable's
+markers pass 1 even at rest), and the scene-light field's pops on the ground, water and bushes (up to
+about 4.4). Bloom's `clamp` of 16 bounds any of them per pixel.
 
 ### Phase 3 — bloom on device
 

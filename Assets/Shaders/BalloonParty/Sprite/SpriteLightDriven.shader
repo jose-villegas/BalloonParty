@@ -310,7 +310,8 @@ Shader "BalloonParty/Sprite/LightDriven"
                 // Glint archetype: the sprite is reflected light — take the light's colour × intensity.
                 if (_TintBySceneLight > 0.5)
                 {
-                    c.rgb *= IN.lightTint;
+                    // Capped at white like the balloon under it, so a pop's light never makes a glint bloom.
+                    c.rgb = SceneLightCapToWhite(c.rgb * IN.lightTint);
                 }
 
                 // Shadow archetype: no light, no shadow — opacity follows intensity, clamped at the

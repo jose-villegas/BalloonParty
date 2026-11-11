@@ -126,6 +126,8 @@ Shader "BalloonParty/Sprite/Diffuse"
 
                 // albedo × light, eased by influence so gameplay colours stay readable.
                 c.rgb *= lerp(float3(1.0, 1.0, 1.0), IN.lightTint, _LightInfluence);
+                // A pop's light can take a balloon several times past white; it stays its colour and never blooms.
+                c.rgb = SceneLightCapToWhite(c.rgb);
 
                 c.rgb *= c.a;
                 return c;

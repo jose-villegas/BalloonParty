@@ -403,5 +403,14 @@ float2 SceneLightDirectionMaskedAtLOD(float2 worldPos, float excludeMask)
         : SceneLightDirectionAtLOD(worldPos);
 }
 
+// A lit colour scaled down, hue kept, until no channel passes 1. Bloom starts just above 1, so a surface run
+// through this never blooms however hot the light near it gets: the gameplay balloons, which must stay
+// readable colours while only the effects glow (PLAN-HDR).
+half3 SceneLightCapToWhite(half3 rgb)
+{
+    half peak = max(rgb.r, max(rgb.g, rgb.b));
+    return rgb * min(1.0, 1.0 / max(peak, 0.001));
+}
+
 
 #endif // BALLOONPARTY_SCENE_LIGHT_INCLUDED
