@@ -36,6 +36,11 @@ SIM_STEPS_PER_FRAME = 2
 TIME_SCALE = 0.03
 FALL_START = 26
 FALL_ACCELERATION = 0.008
+
+# The camera sits 10 units in front of the balloon's centre: the front layer is the rubber nearer than
+# that, the back layer the rubber beyond it.
+CAMERA_DISTANCE = 10.0
+LAYERS = {"front": (0.1, CAMERA_DISTANCE), "back": (CAMERA_DISTANCE, CAMERA_DISTANCE * 3.0)}
 FRONT_START = 1
 NECK_Z = -1.08
 CRACK_STOP_Z = -0.78
@@ -306,17 +311,55 @@ def add_fall(objects, sim_frames):
             obj.keyframe_insert("location", index=2, frame=frame)
 
 
-def rubber_material():
-    """Neutral grey rubber, tinted in game: a soft subsurface body and one sharp highlight (the coat)."""
-    mat = bpy.data.materials.new("Rubber")
+def surface_material():
+    """Writes the surface, not a picture, so the game lights it: red and green are the normal's x and y
+    as the camera sees it (0.5 is flat), blue is the ambient occlusion (the creases and the inside of
+    a curl), and alpha the coverage. The rubber is thin, so a face seen from behind turns its normal to
+    the camera."""
+    mat = bpy.data.materials.new("Surface")
     mat.use_nodes = True
-    bsdf = mat.node_tree.nodes["Principled BSDF"]
-    bsdf.inputs["Base Color"].default_value = (0.62, 0.62, 0.62, 1.0)
-    bsdf.inputs["Roughness"].default_value = 0.42
-    bsdf.inputs["Subsurface Weight"].default_value = 0.25
-    bsdf.inputs["Subsurface Radius"].default_value = (0.05, 0.05, 0.05)
-    bsdf.inputs["Coat Weight"].default_value = 0.7
-    bsdf.inputs["Coat Roughness"].default_value = 0.06
+    nodes = mat.node_tree.nodes
+    links = mat.node_tree.links
+    nodes.clear()
+
+    geometry = nodes.new("ShaderNodeNewGeometry")
+    flip = nodes.new("ShaderNodeVectorMath")
+    flip.operation = "SCALE"
+    sign = nodes.new("ShaderNodeMapRange")
+    sign.inputs["To Min"].default_value = 1.0
+    sign.inputs["To Max"].default_value = -1.0
+    links.new(geometry.outputs["Backfacing"], sign.inputs["Value"])
+    links.new(geometry.outputs["Normal"], flip.inputs[0])
+    links.new(sign.outputs["Result"], flip.inputs["Scale"])
+
+    to_camera = nodes.new("ShaderNodeVectorTransform")
+    to_camera.vector_type = "NORMAL"
+    to_camera.convert_from = "WORLD"
+    to_camera.convert_to = "CAMERA"
+    links.new(flip.outputs["Vector"], to_camera.inputs["Vector"])
+
+    encode = nodes.new("ShaderNodeVectorMath")
+    encode.operation = "MULTIPLY_ADD"
+    encode.inputs[1].default_value = (0.5, 0.5, 0.5)
+    encode.inputs[2].default_value = (0.5, 0.5, 0.5)
+    links.new(to_camera.outputs["Vector"], encode.inputs[0])
+    split = nodes.new("ShaderNodeSeparateXYZ")
+    links.new(encode.outputs["Vector"], split.inputs["Vector"])
+
+    occlusion = nodes.new("ShaderNodeAmbientOcclusion")
+    occlusion.samples = 16
+    occlusion.inputs["Distance"].default_value = 0.35
+    occlusion.only_local = True
+
+    pack = nodes.new("ShaderNodeCombineXYZ")
+    links.new(split.outputs["X"], pack.inputs["X"])
+    links.new(split.outputs["Y"], pack.inputs["Y"])
+    links.new(occlusion.outputs["AO"], pack.inputs["Z"])
+
+    emission = nodes.new("ShaderNodeEmission")
+    links.new(pack.outputs["Vector"], emission.inputs["Color"])
+    output = nodes.new("ShaderNodeOutputMaterial")
+    links.new(emission.outputs["Emission"], output.inputs["Surface"])
     return mat
 
 
@@ -325,35 +368,26 @@ def setup_scene(size, samples, frames):
     scene.render.engine = "CYCLES"
     scene.cycles.device = "CPU"
     scene.cycles.samples = samples
-    scene.cycles.use_denoising = True
+    # Denoising would smear the data across the normals' edges; the AO's noise is low at these samples.
+    scene.cycles.use_denoising = False
     scene.render.resolution_x = size
     scene.render.resolution_y = size
     scene.render.film_transparent = True
     scene.render.image_settings.file_format = "PNG"
     scene.render.image_settings.color_mode = "RGBA"
-    scene.view_settings.view_transform = "Standard"
+    scene.render.image_settings.color_depth = "8"
+    # The pixels are data: written as they come out of the shader, with no display transform.
+    scene.view_settings.view_transform = "Raw"
+    scene.view_settings.look = "None"
     scene.render.fps = 30
     scene.frame_start = 1
     scene.frame_end = frames * SIM_STEPS_PER_FRAME
-
-    world = bpy.data.worlds.new("World")
-    world.use_nodes = True
-    world.node_tree.nodes["Background"].inputs["Color"].default_value = (0.5, 0.5, 0.5, 1.0)
-    world.node_tree.nodes["Background"].inputs["Strength"].default_value = 0.6
-    scene.world = world
-
-    # Lit from the top left, like the UI's sun.
-    sun = bpy.data.objects.new("Sun", bpy.data.lights.new("Sun", "SUN"))
-    sun.data.energy = 3.5
-    sun.data.angle = math.radians(4.0)
-    sun.rotation_euler = (math.radians(50.0), 0.0, math.radians(-35.0))
-    bpy.context.collection.objects.link(sun)
 
     cam_data = bpy.data.cameras.new("Camera")
     cam_data.type = "ORTHO"
     cam_data.ortho_scale = 3.1
     cam = bpy.data.objects.new("Camera", cam_data)
-    cam.location = (0.0, -10.0, -0.12)
+    cam.location = (0.0, -CAMERA_DISTANCE, -0.12)
     cam.rotation_euler = (math.radians(90.0), 0.0, 0.0)
     bpy.context.collection.objects.link(cam)
     scene.camera = cam
@@ -365,7 +399,7 @@ def bake(seed, args):
     rng = random.Random(seed)
     params = pop_params(rng)
     scene = setup_scene(args.size, args.samples, args.frames)
-    material = rubber_material()
+    material = surface_material()
 
     obj, cut_edges = build_rubber(rng, args.detail, params)
     obj.data.materials.append(material)
@@ -387,11 +421,17 @@ def bake(seed, args):
     if args.blend:
         bpy.ops.wm.save_as_mainfile(filepath=str(out / f"pop_{seed:02d}.blend"))
 
+    # Two layers, split at the plane through the balloon's centre, so the game can put the slip between
+    # them: inside the balloon, not behind it.
+    camera = scene.camera.data
     started = time.time()
     for i in range(args.frames):
         scene.frame_set(1 + i * SIM_STEPS_PER_FRAME)
-        scene.render.filepath = str(out / f"{i:02d}.png")
-        bpy.ops.render.render(write_still=True)
+        for layer, (near, far) in LAYERS.items():
+            camera.clip_start = near
+            camera.clip_end = far
+            scene.render.filepath = str(out / f"{i:02d}_{layer}.png")
+            bpy.ops.render.render(write_still=True)
     print(f"pop {seed}: rendered {args.frames} frames in {time.time() - started:.0f}s", flush=True)
 
 

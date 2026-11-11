@@ -61,6 +61,7 @@ using BalloonParty.Shared.Thermal;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Spawner;
+using BalloonParty.UI.CardReveal;
 using BalloonParty.UI.GameOver;
 using BalloonParty.UI.HeadsUp;
 using BalloonParty.UI.Tooltip;
@@ -388,10 +389,15 @@ namespace BalloonParty.Game
             builder.RegisterBuildCallback(InjectSceneViews);
             return;
 
-            // Found rather than registered: neither is required in the scene, and RegisterComponentInHierarchy
-            // throws on a missing one.
+            // Found rather than registered: none is required in the scene, and RegisterComponentInHierarchy
+            // throws on a missing one. The card reveal is built onto the canvas by its editor tool.
             void InjectSceneViews(IObjectResolver resolver)
             {
+                foreach (var reveal in UnityEngine.Object.FindObjectsByType<CardRevealView>())
+                {
+                    resolver.Inject(reveal);
+                }
+
                 foreach (var tint in UnityEngine.Object.FindObjectsByType<TimeOfDayTint>())
                 {
                     resolver.Inject(tint);
@@ -473,6 +479,7 @@ namespace BalloonParty.Game
             builder.Register<SpawnBalloonLineCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<SpawnBalloonCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<TriggerLevelUpCheat>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<RevealCardCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<NearLevelUpCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<AwardScorePopCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<BlockLevelUpCheat>(Lifetime.Singleton).AsImplementedInterfaces();
