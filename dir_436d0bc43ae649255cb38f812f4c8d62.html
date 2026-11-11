@@ -146,13 +146,13 @@ A reveal, step by step</h1>
 <p>All on unscaled time, so slow-motion beats don't stretch it.</p>
 <ol type="1">
 <li>The balloon is tinted one of the level's colours, at random. It rises from below to its place (<code>RiseSeconds</code>) and holds a beat (<code>HoldBeforePopSeconds</code>). The ribbons show faintly inside it.</li>
-<li>The chosen pop's 24 frames play at 30 fps. The frame follows the time played, so a slow frame skips a frame rather than slowing the pop. From <code>RubberFallsFromFrame</code>, once it tears, the rubber falls, speeding up under <code>RubberFallGravity</code> (<code>FallDistance</code>, tested): the bake keeps the balloon's neck where it was until its last frames, so without it the pop plays out in one place. Only the rubber falls; the ribbons fly their own way.</li>
+<li>The chosen pop's 24 frames play at <code>FramesPerSecond</code> (24, a little slower than the bake's 30, so the tear reads). The frame follows the time played, so a slow frame skips a frame rather than slowing the pop. From <code>RubberFallsFromFrame</code>, once it tears, the rubber falls, speeding up under <code>RubberFallGravity</code> (<code>FallDistance</code>, tested): the bake keeps the balloon's neck where it was until its last frames, so without it the pop plays out in one place. Only the rubber falls; the ribbons fly their own way.</li>
 <li>On <code>RibbonsFromFrame</code>, once the rubber has opened, the ribbons fly out (<code>RibbonBurstSeconds</code>). The title goes above the balloon's place, to the left; the description goes under it, to the right.</li>
-<li>They drift and sway, readable, until it is time to go. Then they fly off, up and outward, and fade (<code>RibbonExitSeconds</code>).</li>
+<li>They swell to <code>RibbonGrowth</code> (1.3) over <code>RibbonGrowSeconds</code>, so the card grows into view, but never wider than the screen allows (<code>GrownScale</code>, tested). They drift and sway, readable, until it is time to go. Then they fly off, up and outward, and fade (<code>RibbonExitSeconds</code>).</li>
 </ol>
 <p>When the ribbons go depends on the ascent:</p>
 <ul>
-<li><b>On a level-up</b>, the ascent (<code>LevelAscendStartedMessage</code>, <code>ICinematicsSettings.LevelAscend.AscentSeconds</code>) starts just after the reveal. The ribbons are gone <code>RibbonsGoneAtAscent</code> of the way through it (0.7). That is just after the next level's balloons come in (the ascent's spawn cue, 0.6) and before it settles.</li>
+<li><b>On a level-up</b>, the ascent (<code>LevelAscendStartedMessage</code>, <code>ICinematicsSettings.LevelAscend.AscentSeconds</code>) starts just after the reveal. The ribbons are gone <code>RibbonsGoneAtAscent</code> of the way through it (0.82). That is after the next level's balloons come in (the ascent's spawn cue, 0.6) and before it settles.</li>
 <li><b>Without an ascent</b> (a retry's bonus card, the cheat), they fly <code>RibbonSecondsWithoutAscent</code> from the pop.</li>
 <li><b>Either way</b>, they fly at least <code>RibbonMinimumSeconds</code>, so they can always be read.</li>
 </ul>

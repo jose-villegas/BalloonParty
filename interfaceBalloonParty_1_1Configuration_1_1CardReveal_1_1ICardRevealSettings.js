@@ -9,6 +9,8 @@ var interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings 
     [ "RecentPopsAvoided", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a7df24f359dccf8f0b6754e0037055585", null ],
     [ "RibbonBurstSeconds", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a87bae69d5a8c6c65abda8f8069f45484", null ],
     [ "RibbonExitSeconds", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a248bf3337d766f1f696cc104003f7c52", null ],
+    [ "RibbonGrowSeconds", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#afa5c9f0e5cb4203400e6545cfafe4857", null ],
+    [ "RibbonGrowth", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ae707248fa7c6e9ac1696641ad36862b1", null ],
     [ "RibbonMinimumSeconds", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a7dbe0bdd5322b655042d1418e105507a", null ],
     [ "RibbonSecondsWithoutAscent", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ac6a8923d4282b072c3470ebae2ad349d", null ],
     [ "RibbonsFromFrame", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ad02e1bfe8d09602b97e2f0b8016d4af6", null ],

@@ -1,5 +1,13 @@
 var NAVTREEINDEX27 =
 {
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a31b78f2a98639644eb556e80a643e696":[5,0,0,3,26,7],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a31b78f2a98639644eb556e80a643e696":[6,0,0,3,26,7],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a390fb3a7dddd32ecd8abe9a8a5b0c42b":[5,0,0,3,26,2],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a390fb3a7dddd32ecd8abe9a8a5b0c42b":[6,0,0,3,26,2],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a3d57ced19f6638fee2d709770963b8fb":[5,0,0,3,26,21],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a3d57ced19f6638fee2d709770963b8fb":[6,0,0,3,26,21],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a459ff9a94d550c6e74868b52c7e2e819":[5,0,0,3,26,10],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a459ff9a94d550c6e74868b52c7e2e819":[6,0,0,3,26,10],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a49b02226b05836e4c6d2c957f32f4b19":[5,0,0,3,26,41],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a49b02226b05836e4c6d2c957f32f4b19":[6,0,0,3,26,41],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a4d6724d28a8b03be01d3908e3f24a470":[5,0,0,3,26,46],
@@ -241,13 +249,5 @@ var NAVTREEINDEX27 =
 "classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html#a58ad8ccbb476f453a524aa197c7ba7fb":[5,0,0,3,32,2],
 "classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html#a58ad8ccbb476f453a524aa197c7ba7fb":[6,0,0,3,32,2],
 "classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html#a777249ab83b3490bd27b649f85527da2":[5,0,0,3,32,11],
-"classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html#a777249ab83b3490bd27b649f85527da2":[6,0,0,3,32,11],
-"classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html#aa5ce0992651008d3f9cf5097c5001611":[5,0,0,3,32,1],
-"classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html#aa5ce0992651008d3f9cf5097c5001611":[6,0,0,3,32,1],
-"classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html#ab47332d3a43cc17bef7a0e0cbcd003c1":[5,0,0,3,32,5],
-"classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html#ab47332d3a43cc17bef7a0e0cbcd003c1":[6,0,0,3,32,5],
-"classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html#ac2541e1c7222a874e4c6b9ce18f40279":[5,0,0,3,32,15],
-"classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html#ac2541e1c7222a874e4c6b9ce18f40279":[6,0,0,3,32,15],
-"classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html#aea68d5501cf51baa001397c4d2c2234f":[5,0,0,3,32,10],
-"classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html#aea68d5501cf51baa001397c4d2c2234f":[6,0,0,3,32,10]
+"classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html#a777249ab83b3490bd27b649f85527da2":[6,0,0,3,32,11]
 };

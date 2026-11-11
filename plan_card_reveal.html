@@ -194,7 +194,7 @@ The Card Reveal</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">The fall   </td><td class="markdownTableBodyNone">Once the rubber has gathered at the knot, the knot drops out of the frame with the shreds trailing, so the last frames are empty and the ribbons have the stage    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Timing   </td><td class="markdownTableBodyNone">The sim runs 48 frames at a slow time scale and every second one is kept: 24 frames played at 30 fps, about 0.8 s. Roughly: 2 frames whole, 7 tearing, 8 gathering, 7 falling    </td></tr>
+<td class="markdownTableBodyNone">Timing   </td><td class="markdownTableBodyNone">The sim runs 48 frames at a slow time scale and every second one is kept: 24 frames, baked for 30 fps (about 0.8 s); the game plays them a little slower (<code>FramesPerSecond</code>, 24: 1 s). Roughly: 2 frames whole, 7 tearing, 8 gathering, 7 falling    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Rendering   </td><td class="markdownTableBodyNone">Cycles on the CPU (no GPU needed headless), orthographic camera, transparent background, no colour transform. Not a lit picture but the surface as data: red and green the normal's x and y as the camera sees it, blue the ambient occlusion, alpha the coverage, with the inside of the rubber turned to face the camera. Each frame is rendered twice, split at the balloon's centre by the camera's clip planes: the front layer and the back layer. A whole pop renders in about a minute    </td></tr>
 <tr class="markdownTableRowOdd">

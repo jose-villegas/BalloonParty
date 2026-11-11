@@ -160,6 +160,12 @@ Properties</h2></td></tr>
 <tr class="memitem:aaa28a05e84bad186c52cf88553b94767" id="r_aaa28a05e84bad186c52cf88553b94767"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaa28a05e84bad186c52cf88553b94767">RibbonExitSeconds</a><code> [get]</code></td></tr>
 <tr class="memdesc:aaa28a05e84bad186c52cf88553b94767"><td class="mdescLeft">&#160;</td><td class="mdescRight">How long the ribbons take to fly off and fade at the end.  <br /></td></tr>
 <tr class="separator:aaa28a05e84bad186c52cf88553b94767"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a6c2aa8ab2429d8de7a318c2058d69b" id="r_a7a6c2aa8ab2429d8de7a318c2058d69b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7a6c2aa8ab2429d8de7a318c2058d69b">RibbonGrowSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:a7a6c2aa8ab2429d8de7a318c2058d69b"><td class="mdescLeft">&#160;</td><td class="mdescRight">How long the ribbons take to swell to <a class="el" href="#ac4005e53c3fba89e8159ee82710ac21b" title="The scale the ribbons swell to after the burst, so the card grows into view (1 or more),...">RibbonGrowth</a> after the burst.  <br /></td></tr>
+<tr class="separator:a7a6c2aa8ab2429d8de7a318c2058d69b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4005e53c3fba89e8159ee82710ac21b" id="r_ac4005e53c3fba89e8159ee82710ac21b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac4005e53c3fba89e8159ee82710ac21b">RibbonGrowth</a><code> [get]</code></td></tr>
+<tr class="memdesc:ac4005e53c3fba89e8159ee82710ac21b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The scale the ribbons swell to after the burst, so the card grows into view (1 or more), never wider than the screen allows.  <br /></td></tr>
+<tr class="separator:ac4005e53c3fba89e8159ee82710ac21b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a706570291747637175b218ec39813791" id="r_a706570291747637175b218ec39813791"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a706570291747637175b218ec39813791">RibbonMinimumSeconds</a><code> [get]</code></td></tr>
 <tr class="memdesc:a706570291747637175b218ec39813791"><td class="mdescLeft">&#160;</td><td class="mdescRight">The ribbons' shortest flight, from the pop to gone, so they can always be read.  <br /></td></tr>
 <tr class="separator:a706570291747637175b218ec39813791"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -189,7 +195,7 @@ Properties</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:acf5dd5188770205802188261cc1217da" id="r_acf5dd5188770205802188261cc1217da"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf5dd5188770205802188261cc1217da">_framesPerSecond</a> = 30f</td></tr>
+<tr class="memitem:acf5dd5188770205802188261cc1217da" id="r_acf5dd5188770205802188261cc1217da"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf5dd5188770205802188261cc1217da">_framesPerSecond</a> = 24f</td></tr>
 <tr class="separator:acf5dd5188770205802188261cc1217da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bee6d863401d4999092ff7caf08b9f2" id="r_a4bee6d863401d4999092ff7caf08b9f2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4bee6d863401d4999092ff7caf08b9f2">_holdBeforePopSeconds</a> = 0.15f</td></tr>
 <tr class="separator:a4bee6d863401d4999092ff7caf08b9f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -205,13 +211,17 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a00317bce7802ac5c2e64d8793800f0ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb46234749bfdd111728b4ab9464e788" id="r_acb46234749bfdd111728b4ab9464e788"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acb46234749bfdd111728b4ab9464e788">_ribbonExitSeconds</a> = 0.5f</td></tr>
 <tr class="separator:acb46234749bfdd111728b4ab9464e788"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89bbea1b8bbda8bdd31c0a44fc63f2b8" id="r_a89bbea1b8bbda8bdd31c0a44fc63f2b8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89bbea1b8bbda8bdd31c0a44fc63f2b8">_ribbonMinimumSeconds</a> = 1.8f</td></tr>
+<tr class="memitem:a7f7d38f3b620cea8e42126b2b18f75a4" id="r_a7f7d38f3b620cea8e42126b2b18f75a4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f7d38f3b620cea8e42126b2b18f75a4">_ribbonGrowSeconds</a> = 1.2f</td></tr>
+<tr class="separator:a7f7d38f3b620cea8e42126b2b18f75a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa00710d8cf1395502d13048bb80903af" id="r_aa00710d8cf1395502d13048bb80903af"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa00710d8cf1395502d13048bb80903af">_ribbonGrowth</a> = 1.3f</td></tr>
+<tr class="separator:aa00710d8cf1395502d13048bb80903af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89bbea1b8bbda8bdd31c0a44fc63f2b8" id="r_a89bbea1b8bbda8bdd31c0a44fc63f2b8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89bbea1b8bbda8bdd31c0a44fc63f2b8">_ribbonMinimumSeconds</a> = 2.4f</td></tr>
 <tr class="separator:a89bbea1b8bbda8bdd31c0a44fc63f2b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af27479823407b5f1f57a14612dcea405" id="r_af27479823407b5f1f57a14612dcea405"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af27479823407b5f1f57a14612dcea405">_ribbonSecondsWithoutAscent</a> = 2.6f</td></tr>
+<tr class="memitem:af27479823407b5f1f57a14612dcea405" id="r_af27479823407b5f1f57a14612dcea405"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af27479823407b5f1f57a14612dcea405">_ribbonSecondsWithoutAscent</a> = 3.4f</td></tr>
 <tr class="separator:af27479823407b5f1f57a14612dcea405"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc28b07dabac3375dd4b06f011fd770f" id="r_adc28b07dabac3375dd4b06f011fd770f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc28b07dabac3375dd4b06f011fd770f">_ribbonsFromFrame</a> = 4</td></tr>
 <tr class="separator:adc28b07dabac3375dd4b06f011fd770f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace46149a8bbe76e41402c49a87d2a20a" id="r_ace46149a8bbe76e41402c49a87d2a20a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace46149a8bbe76e41402c49a87d2a20a">_ribbonsGoneAtAscent</a> = 0.7f</td></tr>
+<tr class="memitem:ace46149a8bbe76e41402c49a87d2a20a" id="r_ace46149a8bbe76e41402c49a87d2a20a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace46149a8bbe76e41402c49a87d2a20a">_ribbonsGoneAtAscent</a> = 0.82f</td></tr>
 <tr class="separator:ace46149a8bbe76e41402c49a87d2a20a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7fcf37c3a3a4f0a43fae6faee5a93c73" id="r_a7fcf37c3a3a4f0a43fae6faee5a93c73"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7fcf37c3a3a4f0a43fae6faee5a93c73">_riseSeconds</a> = 0.45f</td></tr>
 <tr class="separator:a7fcf37c3a3a4f0a43fae6faee5a93c73"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -238,7 +248,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._framesPerSecond = 30f</td>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._framesPerSecond = 24f</td>
         </tr>
       </table>
   </td>
@@ -404,6 +414,50 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a7f7d38f3b620cea8e42126b2b18f75a4" name="a7f7d38f3b620cea8e42126b2b18f75a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f7d38f3b620cea8e42126b2b18f75a4">&#9670;&#160;</a></span>_ribbonGrowSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._ribbonGrowSeconds = 1.2f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa00710d8cf1395502d13048bb80903af" name="aa00710d8cf1395502d13048bb80903af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa00710d8cf1395502d13048bb80903af">&#9670;&#160;</a></span>_ribbonGrowth</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._ribbonGrowth = 1.3f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a89bbea1b8bbda8bdd31c0a44fc63f2b8" name="a89bbea1b8bbda8bdd31c0a44fc63f2b8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a89bbea1b8bbda8bdd31c0a44fc63f2b8">&#9670;&#160;</a></span>_ribbonMinimumSeconds</h2>
 
@@ -414,7 +468,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._ribbonMinimumSeconds = 1.8f</td>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._ribbonMinimumSeconds = 2.4f</td>
         </tr>
       </table>
   </td>
@@ -436,7 +490,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._ribbonSecondsWithoutAscent = 2.6f</td>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._ribbonSecondsWithoutAscent = 3.4f</td>
         </tr>
       </table>
   </td>
@@ -480,7 +534,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._ribbonsGoneAtAscent = 0.7f</td>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._ribbonsGoneAtAscent = 0.82f</td>
         </tr>
       </table>
   </td>
@@ -833,6 +887,58 @@ Private Attributes</h2></td></tr>
 <p>How long the ribbons take to fly off and fade at the end. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a248bf3337d766f1f696cc104003f7c52">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="a7a6c2aa8ab2429d8de7a318c2058d69b" name="a7a6c2aa8ab2429d8de7a318c2058d69b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a6c2aa8ab2429d8de7a318c2058d69b">&#9670;&#160;</a></span>RibbonGrowSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings.RibbonGrowSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How long the ribbons take to swell to <a class="el" href="#ac4005e53c3fba89e8159ee82710ac21b" title="The scale the ribbons swell to after the burst, so the card grows into view (1 or more),...">RibbonGrowth</a> after the burst. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#afa5c9f0e5cb4203400e6545cfafe4857">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="ac4005e53c3fba89e8159ee82710ac21b" name="ac4005e53c3fba89e8159ee82710ac21b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4005e53c3fba89e8159ee82710ac21b">&#9670;&#160;</a></span>RibbonGrowth</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings.RibbonGrowth</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The scale the ribbons swell to after the burst, so the card grows into view (1 or more), never wider than the screen allows. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ae707248fa7c6e9ac1696641ad36862b1">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
 
 </div>
 </div>

@@ -1,5 +1,17 @@
 var NAVTREEINDEX85 =
 {
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#add5efebe062fd044f87e5a38a6781069":[5,0,0,16,5,0,10],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#add5efebe062fd044f87e5a38a6781069":[6,0,0,16,5,0,10],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#ae5aa465d5ba86f46f19a2d5f0763afb9":[5,0,0,16,5,0,19],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#ae5aa465d5ba86f46f19a2d5f0763afb9":[6,0,0,16,5,0,19],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#ae7c4e3a8843c1ea3a2100013e90b6372":[5,0,0,16,5,0,7],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#ae7c4e3a8843c1ea3a2100013e90b6372":[6,0,0,16,5,0,7],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#af05c6dde2cd032f2994c9a08e60908c8":[5,0,0,16,5,0,29],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#af05c6dde2cd032f2994c9a08e60908c8":[6,0,0,16,5,0,29],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#af87ca688713287f1787ae25ffc673075":[5,0,0,16,5,0,51],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#af87ca688713287f1787ae25ffc673075":[6,0,0,16,5,0,51],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpLayer.html":[5,0,0,16,5,1],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpLayer.html":[6,0,0,16,5,1],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpLayer.html#a088f202b1d1039f7a72da25a8df3ab47":[5,0,0,16,5,1,15],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpLayer.html#a088f202b1d1039f7a72da25a8df3ab47":[6,0,0,16,5,1,15],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpLayer.html#a16480c50248d2d4d9af159cd2045f4a6":[5,0,0,16,5,1,11],
@@ -237,17 +249,5 @@ var NAVTREEINDEX85 =
 "classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a3230e114ef68015a445ac27530bb8d34":[5,0,0,16,7,1,36],
 "classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a3230e114ef68015a445ac27530bb8d34":[6,0,0,16,7,1,36],
 "classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a3a183507971cd6ceb6b1e1752d20a466":[5,0,0,16,7,1,10],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a3a183507971cd6ceb6b1e1752d20a466":[6,0,0,16,7,1,10],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a404ffc9133c71163861eb1625f0886cc":[5,0,0,16,7,1,23],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a404ffc9133c71163861eb1625f0886cc":[6,0,0,16,7,1,23],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a4d3518cc293607a000a42eb4b726b3f2":[5,0,0,16,7,1,29],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a4d3518cc293607a000a42eb4b726b3f2":[6,0,0,16,7,1,29],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a506438332f6aa00708612134f0777c0f":[5,0,0,16,7,1,20],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a506438332f6aa00708612134f0777c0f":[6,0,0,16,7,1,20],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a50e829120ce23b86c6e327efcde86a12":[5,0,0,16,7,1,45],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a50e829120ce23b86c6e327efcde86a12":[6,0,0,16,7,1,45],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a535d2ca159459a2216ae289150434b97":[5,0,0,16,7,1,72],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a535d2ca159459a2216ae289150434b97":[6,0,0,16,7,1,72],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a54baa5dbf208ec9804590bcc066d74d7":[5,0,0,16,7,1,50],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a54baa5dbf208ec9804590bcc066d74d7":[6,0,0,16,7,1,50]
+"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a3a183507971cd6ceb6b1e1752d20a466":[6,0,0,16,7,1,10]
 };

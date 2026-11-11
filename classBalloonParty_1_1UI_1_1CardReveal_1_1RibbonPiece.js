@@ -2,7 +2,8 @@ var classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece =
 [
     [ "BendText", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html#a26b4203f27d4c1c2b5081a7db1dd17fe", null ],
     [ "CaptureVertices", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html#a33e784c8145e8d18c32edd5d8cf7f056", null ],
-    [ "Fly", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html#adebbe9bbe866588c1172a40de6c0fdba", null ],
+    [ "Fly", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html#aae229ce58eac4805376b9380d986d3c6", null ],
+    [ "GrownScale", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html#a85911ef4ddd91db0de77d22bca12825c", null ],
     [ "Pose", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html#ad3b496e06bdd7b1d72b3b28b564290a2", null ],
     [ "Rest", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html#a121b52eb29326a04fd449f5120bfcf6c", null ],
     [ "Show", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html#a4c011327ddc58c9da68bff3095930945", null ],
@@ -20,5 +21,6 @@ var classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece =
     [ "_sway", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html#a2e7db0c37bc5cf7a941baf6358cf47bc", null ],
     [ "_swayPhase", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html#a720a34cb3cfa98d1a264b5663aaac0ac", null ],
     [ "_text", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html#a5620585d634f0144a28f8e5679010576", null ],
-    [ "_tilt", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html#aab78093fe5bad5b81a7dcbe0a27573ba", null ]
+    [ "_tilt", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html#aab78093fe5bad5b81a7dcbe0a27573ba", null ],
+    [ "_widest", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html#a5fcef08b69066ff8289b8078f8c09727", null ]
 ];

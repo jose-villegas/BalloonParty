@@ -109,6 +109,7 @@ $(function(){initNavTree('classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.h
 <div class="header">
   <div class="summary">
 <a href="#pac-methods">Package Functions</a> &#124;
+<a href="#pac-static-methods">Static Package Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece-members.html">List of all members</a>  </div>
@@ -135,15 +136,21 @@ $(function(){initNavTree('classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.h
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:adebbe9bbe866588c1172a40de6c0fdba" id="r_adebbe9bbe866588c1172a40de6c0fdba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adebbe9bbe866588c1172a40de6c0fdba">Fly</a> (float sinceRelease, float burstSeconds, float exit)</td></tr>
-<tr class="memdesc:adebbe9bbe866588c1172a40de6c0fdba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Its pose <em>sinceRelease</em>  seconds after the pop let it go: the burst out over <em>burstSeconds</em> , then the drift and sway, and <em>exit</em>  (0 to 1) of the way through its flight off.  <br /></td></tr>
-<tr class="separator:adebbe9bbe866588c1172a40de6c0fdba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae229ce58eac4805376b9380d986d3c6" id="r_aae229ce58eac4805376b9380d986d3c6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aae229ce58eac4805376b9380d986d3c6">Fly</a> (float sinceRelease, float exit, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a> settings)</td></tr>
+<tr class="memdesc:aae229ce58eac4805376b9380d986d3c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Its pose <em>sinceRelease</em>  seconds after the pop let it go: the burst out, then the swell, drift and sway, and <em>exit</em>  (0 to 1) of the way through its flight off.  <br /></td></tr>
+<tr class="separator:aae229ce58eac4805376b9380d986d3c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a121b52eb29326a04fd449f5120bfcf6c" id="r_a121b52eb29326a04fd449f5120bfcf6c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a121b52eb29326a04fd449f5120bfcf6c">Rest</a> ()</td></tr>
 <tr class="memdesc:a121b52eb29326a04fd449f5120bfcf6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rolled up inside the balloon, before the pop.  <br /></td></tr>
 <tr class="separator:a121b52eb29326a04fd449f5120bfcf6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c011327ddc58c9da68bff3095930945" id="r_a4c011327ddc58c9da68bff3095930945"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4c011327ddc58c9da68bff3095930945">Show</a> (string line)</td></tr>
 <tr class="memdesc:a4c011327ddc58c9da68bff3095930945"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes <em>line</em>  on the ribbon and sizes the ribbon to it.  <br /></td></tr>
 <tr class="separator:a4c011327ddc58c9da68bff3095930945"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
+Static Package Functions</h2></td></tr>
+<tr class="memitem:a85911ef4ddd91db0de77d22bca12825c" id="r_a85911ef4ddd91db0de77d22bca12825c"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a85911ef4ddd91db0de77d22bca12825c">GrownScale</a> (float growth, float width, float widest)</td></tr>
+<tr class="memdesc:a85911ef4ddd91db0de77d22bca12825c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The scale a ribbon <em>width</em>  wide swells to: <em>growth</em> , unless that would take it past <em>widest</em> , and never below its own size.  <br /></td></tr>
+<tr class="separator:a85911ef4ddd91db0de77d22bca12825c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -186,6 +193,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a5620585d634f0144a28f8e5679010576"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab78093fe5bad5b81a7dcbe0a27573ba" id="r_aab78093fe5bad5b81a7dcbe0a27573ba"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab78093fe5bad5b81a7dcbe0a27573ba">_tilt</a></td></tr>
 <tr class="separator:aab78093fe5bad5b81a7dcbe0a27573ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fcef08b69066ff8289b8078f8c09727" id="r_a5fcef08b69066ff8289b8078f8c09727"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5fcef08b69066ff8289b8078f8c09727">_widest</a> = 205f</td></tr>
+<tr class="separator:a5fcef08b69066ff8289b8078f8c09727"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>One piece of ribbon with a line of the card written on it, flown off the popped balloon by <a class="el" href="classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html" title="The card reveal&#39;s stage (ICardReveals): plays each reveal the controller hands it.">CardRevealView</a>. </p>
@@ -241,8 +250,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="adebbe9bbe866588c1172a40de6c0fdba" name="adebbe9bbe866588c1172a40de6c0fdba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adebbe9bbe866588c1172a40de6c0fdba">&#9670;&#160;</a></span>Fly()</h2>
+<a id="aae229ce58eac4805376b9380d986d3c6" name="aae229ce58eac4805376b9380d986d3c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae229ce58eac4805376b9380d986d3c6">&#9670;&#160;</a></span>Fly()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -258,12 +267,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>burstSeconds</em></span>, </td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>exit</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>exit</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a></td>          <td class="paramname"><span class="paramname"><em>settings</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -273,7 +282,43 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Its pose <em>sinceRelease</em>  seconds after the pop let it go: the burst out over <em>burstSeconds</em> , then the drift and sway, and <em>exit</em>  (0 to 1) of the way through its flight off. </p>
+<p>Its pose <em>sinceRelease</em>  seconds after the pop let it go: the burst out, then the swell, drift and sway, and <em>exit</em>  (0 to 1) of the way through its flight off. </p>
+
+</div>
+</div>
+<a id="a85911ef4ddd91db0de77d22bca12825c" name="a85911ef4ddd91db0de77d22bca12825c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85911ef4ddd91db0de77d22bca12825c">&#9670;&#160;</a></span>GrownScale()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static float BalloonParty.UI.CardReveal.RibbonPiece.GrownScale </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>growth</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>width</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>widest</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The scale a ribbon <em>width</em>  wide swells to: <em>growth</em> , unless that would take it past <em>widest</em> , and never below its own size. </p>
 
 </div>
 </div>
@@ -695,6 +740,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.UI.CardReveal.RibbonPiece._tilt</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5fcef08b69066ff8289b8078f8c09727" name="a5fcef08b69066ff8289b8078f8c09727"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fcef08b69066ff8289b8078f8c09727">&#9670;&#160;</a></span>_widest</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.UI.CardReveal.RibbonPiece._widest = 205f</td>
         </tr>
       </table>
   </td>

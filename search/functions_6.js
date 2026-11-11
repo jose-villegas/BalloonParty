@@ -88,5 +88,6 @@ var searchData=
   ['grow_85',['Grow',['../classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#a8b5939cbb5a2c92393f4a652b17eb61e',1,'BalloonParty::Balloon::Controller::BalloonControllerRegistry']]],
   ['growbranches_86',['GrowBranches',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushBranchGenerator.html#a113499b5824eb0a376bc21f2337d21ed',1,'BalloonParty::Editor::Bush::BushBranchGenerator']]],
   ['growcluster_87',['GrowCluster',['../classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html#ae9c7fb3cb8b6261fe3b7564951150945',1,'BalloonParty.Slots.Actor.Cluster.SlotClusterRegistry-1-g.GrowCluster()'],['../classBalloonParty_1_1Slots_1_1Actor_1_1ClusterSlotSelectionStrategy.html#a8b942b9b0445f910e88085f97197e2a5',1,'BalloonParty.Slots.Actor.ClusterSlotSelectionStrategy.GrowCluster()']]],
-  ['grownewnodes_88',['GrowNewNodes',['../classBalloonParty_1_1Editor_1_1Bush_1_1LeafVenationSimulator.html#acdc20dbd7f76482820e23baea2796bfc',1,'BalloonParty::Editor::Bush::LeafVenationSimulator']]]
+  ['grownewnodes_88',['GrowNewNodes',['../classBalloonParty_1_1Editor_1_1Bush_1_1LeafVenationSimulator.html#acdc20dbd7f76482820e23baea2796bfc',1,'BalloonParty::Editor::Bush::LeafVenationSimulator']]],
+  ['grownscale_89',['GrownScale',['../classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html#a85911ef4ddd91db0de77d22bca12825c',1,'BalloonParty::UI::CardReveal::RibbonPiece']]]
 ];
