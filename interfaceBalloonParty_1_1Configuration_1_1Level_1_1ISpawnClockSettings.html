@@ -130,6 +130,18 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a5bec4bdbf2e2a88462e66a1dde3eceb6" id="r_a5bec4bdbf2e2a88462e66a1dde3eceb6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5bec4bdbf2e2a88462e66a1dde3eceb6">BreatherClear</a><code> [get]</code></td></tr>
+<tr class="memdesc:a5bec4bdbf2e2a88462e66a1dde3eceb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Share of the board's open slots that, cleared within <a class="el" href="#a8e4bec5182d84e273a6a9dbc30422e24" title="Seconds a clear must happen within to earn a breather.">BreatherClearWindow</a>, earns a breather: the clock slows to <a class="el" href="#ad33347e74e6f9aaace096faef807dd5c" title="The clock&#39;s pace as a breather starts, as a share of its full pace, 0–1.">BreatherPace</a> and eases back to its full pace over <a class="el" href="#a2fb00c751c93f250fa3631362b39b258" title="Seconds a breather lasts, easing from BreatherPace back to full pace.">BreatherSeconds</a>.  <br /></td></tr>
+<tr class="separator:a5bec4bdbf2e2a88462e66a1dde3eceb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e4bec5182d84e273a6a9dbc30422e24" id="r_a8e4bec5182d84e273a6a9dbc30422e24"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8e4bec5182d84e273a6a9dbc30422e24">BreatherClearWindow</a><code> [get]</code></td></tr>
+<tr class="memdesc:a8e4bec5182d84e273a6a9dbc30422e24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds a clear must happen within to earn a breather.  <br /></td></tr>
+<tr class="separator:a8e4bec5182d84e273a6a9dbc30422e24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad33347e74e6f9aaace096faef807dd5c" id="r_ad33347e74e6f9aaace096faef807dd5c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad33347e74e6f9aaace096faef807dd5c">BreatherPace</a><code> [get]</code></td></tr>
+<tr class="memdesc:ad33347e74e6f9aaace096faef807dd5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The clock's pace as a breather starts, as a share of its full pace, 0–1.  <br /></td></tr>
+<tr class="separator:ad33347e74e6f9aaace096faef807dd5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fb00c751c93f250fa3631362b39b258" id="r_a2fb00c751c93f250fa3631362b39b258"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2fb00c751c93f250fa3631362b39b258">BreatherSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:a2fb00c751c93f250fa3631362b39b258"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds a breather lasts, easing from <a class="el" href="#ad33347e74e6f9aaace096faef807dd5c" title="The clock&#39;s pace as a breather starts, as a share of its full pace, 0–1.">BreatherPace</a> back to full pace.  <br /></td></tr>
+<tr class="separator:a2fb00c751c93f250fa3631362b39b258"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad708cad47c8e4403af4951fce6c115f" id="r_aad708cad47c8e4403af4951fce6c115f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aad708cad47c8e4403af4951fce6c115f">FlightPressureSeconds</a><code> [get]</code></td></tr>
 <tr class="memdesc:aad708cad47c8e4403af4951fce6c115f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Summed flight seconds of every ball in the air that reach full flight pressure: 6 = one ball cruising 6 s, or three balls 2 s each.  <br /></td></tr>
 <tr class="separator:aad708cad47c8e4403af4951fce6c115f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -178,6 +190,111 @@ Properties</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="a5bec4bdbf2e2a88462e66a1dde3eceb6" name="a5bec4bdbf2e2a88462e66a1dde3eceb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5bec4bdbf2e2a88462e66a1dde3eceb6">&#9670;&#160;</a></span>BreatherClear</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.ISpawnClockSettings.BreatherClear</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Share of the board's open slots that, cleared within <a class="el" href="#a8e4bec5182d84e273a6a9dbc30422e24" title="Seconds a clear must happen within to earn a breather.">BreatherClearWindow</a>, earns a breather: the clock slows to <a class="el" href="#ad33347e74e6f9aaace096faef807dd5c" title="The clock&#39;s pace as a breather starts, as a share of its full pace, 0–1.">BreatherPace</a> and eases back to its full pace over <a class="el" href="#a2fb00c751c93f250fa3631362b39b258" title="Seconds a breather lasts, easing from BreatherPace back to full pace.">BreatherSeconds</a>. </p>
+<p>0 = never. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#adcd0363ff40fa39d00a2c872cdae13e5">BalloonParty.Configuration.Level.SpawnClockSettings</a>.</p>
+
+</div>
+</div>
+<a id="a8e4bec5182d84e273a6a9dbc30422e24" name="a8e4bec5182d84e273a6a9dbc30422e24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e4bec5182d84e273a6a9dbc30422e24">&#9670;&#160;</a></span>BreatherClearWindow</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.ISpawnClockSettings.BreatherClearWindow</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds a clear must happen within to earn a breather. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a012845f9396a0bf135f622392016015a">BalloonParty.Configuration.Level.SpawnClockSettings</a>.</p>
+
+</div>
+</div>
+<a id="ad33347e74e6f9aaace096faef807dd5c" name="ad33347e74e6f9aaace096faef807dd5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad33347e74e6f9aaace096faef807dd5c">&#9670;&#160;</a></span>BreatherPace</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.ISpawnClockSettings.BreatherPace</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The clock's pace as a breather starts, as a share of its full pace, 0–1. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a530ba79688c51a1b5571f5fa83de86c7">BalloonParty.Configuration.Level.SpawnClockSettings</a>.</p>
+
+</div>
+</div>
+<a id="a2fb00c751c93f250fa3631362b39b258" name="a2fb00c751c93f250fa3631362b39b258"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2fb00c751c93f250fa3631362b39b258">&#9670;&#160;</a></span>BreatherSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.ISpawnClockSettings.BreatherSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds a breather lasts, easing from <a class="el" href="#ad33347e74e6f9aaace096faef807dd5c" title="The clock&#39;s pace as a breather starts, as a share of its full pace, 0–1.">BreatherPace</a> back to full pace. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a3f3424ae27983320b8675236bfdabe73">BalloonParty.Configuration.Level.SpawnClockSettings</a>.</p>
+
+</div>
+</div>
 <a id="aad708cad47c8e4403af4951fce6c115f" name="aad708cad47c8e4403af4951fce6c115f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aad708cad47c8e4403af4951fce6c115f">&#9670;&#160;</a></span>FlightPressureSeconds</h2>
 

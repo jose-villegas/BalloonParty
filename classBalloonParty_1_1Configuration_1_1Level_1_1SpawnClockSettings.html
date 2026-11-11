@@ -145,11 +145,23 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a18c5c37b359263062208020bd071709f" id="r_a18c5c37b359263062208020bd071709f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18c5c37b359263062208020bd071709f">SpawnClockSettings</a> (float firstLevelInterval, float intervalDecayPerLevel, float minInterval, float graceSeconds, int linesPerWave=1, float overlapShotPull=0f, float sparseBoardSpeedup=1f, float targetOccupancy=0.5f, float occupancyWeight=0f, float flightSpeedup=1f, float flightPressureSeconds=6f, float lateIntervalDecayPerLevel=1f, float lateMinInterval=0.1f)</td></tr>
-<tr class="separator:a18c5c37b359263062208020bd071709f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fb34628af3c49d8892e82d5ae932f2f" id="r_a3fb34628af3c49d8892e82d5ae932f2f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3fb34628af3c49d8892e82d5ae932f2f">SpawnClockSettings</a> (float firstLevelInterval, float intervalDecayPerLevel, float minInterval, float graceSeconds, int linesPerWave=1, float overlapShotPull=0f, float sparseBoardSpeedup=1f, float targetOccupancy=0.5f, float occupancyWeight=0f, float flightSpeedup=1f, float flightPressureSeconds=6f, float lateIntervalDecayPerLevel=1f, float lateMinInterval=0.1f, float breatherClear=0f, float breatherClearWindow=2f, float breatherSeconds=6f, float breatherPace=0.2f)</td></tr>
+<tr class="separator:a3fb34628af3c49d8892e82d5ae932f2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:adcd0363ff40fa39d00a2c872cdae13e5" id="r_adcd0363ff40fa39d00a2c872cdae13e5"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adcd0363ff40fa39d00a2c872cdae13e5">BreatherClear</a><code> [get]</code></td></tr>
+<tr class="memdesc:adcd0363ff40fa39d00a2c872cdae13e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Share of the board's open slots that, cleared within <a class="el" href="#a012845f9396a0bf135f622392016015a" title="Seconds a clear must happen within to earn a breather.">BreatherClearWindow</a>, earns a breather: the clock slows to <a class="el" href="#a530ba79688c51a1b5571f5fa83de86c7" title="The clock&#39;s pace as a breather starts, as a share of its full pace, 0–1.">BreatherPace</a> and eases back to its full pace over <a class="el" href="#a3f3424ae27983320b8675236bfdabe73" title="Seconds a breather lasts, easing from BreatherPace back to full pace.">BreatherSeconds</a>.  <br /></td></tr>
+<tr class="separator:adcd0363ff40fa39d00a2c872cdae13e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a012845f9396a0bf135f622392016015a" id="r_a012845f9396a0bf135f622392016015a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a012845f9396a0bf135f622392016015a">BreatherClearWindow</a><code> [get]</code></td></tr>
+<tr class="memdesc:a012845f9396a0bf135f622392016015a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds a clear must happen within to earn a breather.  <br /></td></tr>
+<tr class="separator:a012845f9396a0bf135f622392016015a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a530ba79688c51a1b5571f5fa83de86c7" id="r_a530ba79688c51a1b5571f5fa83de86c7"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a530ba79688c51a1b5571f5fa83de86c7">BreatherPace</a><code> [get]</code></td></tr>
+<tr class="memdesc:a530ba79688c51a1b5571f5fa83de86c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The clock's pace as a breather starts, as a share of its full pace, 0–1.  <br /></td></tr>
+<tr class="separator:a530ba79688c51a1b5571f5fa83de86c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f3424ae27983320b8675236bfdabe73" id="r_a3f3424ae27983320b8675236bfdabe73"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f3424ae27983320b8675236bfdabe73">BreatherSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:a3f3424ae27983320b8675236bfdabe73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds a breather lasts, easing from <a class="el" href="#a530ba79688c51a1b5571f5fa83de86c7" title="The clock&#39;s pace as a breather starts, as a share of its full pace, 0–1.">BreatherPace</a> back to full pace.  <br /></td></tr>
+<tr class="separator:a3f3424ae27983320b8675236bfdabe73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f02bd219a69f4bbcc36796b065455e3" id="r_a5f02bd219a69f4bbcc36796b065455e3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5f02bd219a69f4bbcc36796b065455e3">FlightPressureSeconds</a><code> [get]</code></td></tr>
 <tr class="memdesc:a5f02bd219a69f4bbcc36796b065455e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Summed flight seconds of every ball in the air that reach full flight pressure: 6 = one ball cruising 6 s, or three balls 2 s each.  <br /></td></tr>
 <tr class="separator:a5f02bd219a69f4bbcc36796b065455e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -182,6 +194,14 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:aea34d028064dbab9441b708581825077" id="r_aea34d028064dbab9441b708581825077"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aea34d028064dbab9441b708581825077">_breatherClear</a> = 0.2f</td></tr>
+<tr class="separator:aea34d028064dbab9441b708581825077"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ce6c9a3d0a0dd706cdb04695532e475" id="r_a1ce6c9a3d0a0dd706cdb04695532e475"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ce6c9a3d0a0dd706cdb04695532e475">_breatherClearWindow</a> = 2f</td></tr>
+<tr class="separator:a1ce6c9a3d0a0dd706cdb04695532e475"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f0a6c4f44ff972540932b187959d032" id="r_a2f0a6c4f44ff972540932b187959d032"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f0a6c4f44ff972540932b187959d032">_breatherPace</a> = 0.2f</td></tr>
+<tr class="separator:a2f0a6c4f44ff972540932b187959d032"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a071c3b16997b37b538d180848318ae85" id="r_a071c3b16997b37b538d180848318ae85"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a071c3b16997b37b538d180848318ae85">_breatherSeconds</a> = 6f</td></tr>
+<tr class="separator:a071c3b16997b37b538d180848318ae85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6090a280db81c0d58ed40a5c11d0f8b1" id="r_a6090a280db81c0d58ed40a5c11d0f8b1"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6090a280db81c0d58ed40a5c11d0f8b1">_firstLevelInterval</a> = 2f</td></tr>
 <tr class="separator:a6090a280db81c0d58ed40a5c11d0f8b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a0f551b4779e6b4eb5004173976ff35" id="r_a6a0f551b4779e6b4eb5004173976ff35"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a0f551b4779e6b4eb5004173976ff35">_flightPressureSeconds</a> = 6f</td></tr>
@@ -230,8 +250,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a18c5c37b359263062208020bd071709f" name="a18c5c37b359263062208020bd071709f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a18c5c37b359263062208020bd071709f">&#9670;&#160;</a></span>SpawnClockSettings() <span class="overload">[2/2]</span></h2>
+<a id="a3fb34628af3c49d8892e82d5ae932f2f" name="a3fb34628af3c49d8892e82d5ae932f2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fb34628af3c49d8892e82d5ae932f2f">&#9670;&#160;</a></span>SpawnClockSettings() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -302,7 +322,27 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>lateMinInterval</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0::1f</span>&#160;)</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>lateMinInterval</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0::1f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>breatherClear</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>breatherClearWindow</em></span><span class="paramdefsep"> = </span><span class="paramdefval">2f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>breatherSeconds</em></span><span class="paramdefsep"> = </span><span class="paramdefval">6f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>breatherPace</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0::2f</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -362,6 +402,94 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="aea34d028064dbab9441b708581825077" name="aea34d028064dbab9441b708581825077"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea34d028064dbab9441b708581825077">&#9670;&#160;</a></span>_breatherClear</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.SpawnClockSettings._breatherClear = 0.2f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1ce6c9a3d0a0dd706cdb04695532e475" name="a1ce6c9a3d0a0dd706cdb04695532e475"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ce6c9a3d0a0dd706cdb04695532e475">&#9670;&#160;</a></span>_breatherClearWindow</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.SpawnClockSettings._breatherClearWindow = 2f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2f0a6c4f44ff972540932b187959d032" name="a2f0a6c4f44ff972540932b187959d032"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f0a6c4f44ff972540932b187959d032">&#9670;&#160;</a></span>_breatherPace</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.SpawnClockSettings._breatherPace = 0.2f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a071c3b16997b37b538d180848318ae85" name="a071c3b16997b37b538d180848318ae85"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a071c3b16997b37b538d180848318ae85">&#9670;&#160;</a></span>_breatherSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.SpawnClockSettings._breatherSeconds = 6f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a6090a280db81c0d58ed40a5c11d0f8b1" name="a6090a280db81c0d58ed40a5c11d0f8b1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6090a280db81c0d58ed40a5c11d0f8b1">&#9670;&#160;</a></span>_firstLevelInterval</h2>
 
@@ -649,6 +777,111 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="adcd0363ff40fa39d00a2c872cdae13e5" name="adcd0363ff40fa39d00a2c872cdae13e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adcd0363ff40fa39d00a2c872cdae13e5">&#9670;&#160;</a></span>BreatherClear</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.SpawnClockSettings.BreatherClear</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Share of the board's open slots that, cleared within <a class="el" href="#a012845f9396a0bf135f622392016015a" title="Seconds a clear must happen within to earn a breather.">BreatherClearWindow</a>, earns a breather: the clock slows to <a class="el" href="#a530ba79688c51a1b5571f5fa83de86c7" title="The clock&#39;s pace as a breather starts, as a share of its full pace, 0–1.">BreatherPace</a> and eases back to its full pace over <a class="el" href="#a3f3424ae27983320b8675236bfdabe73" title="Seconds a breather lasts, easing from BreatherPace back to full pace.">BreatherSeconds</a>. </p>
+<p>0 = never. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a5bec4bdbf2e2a88462e66a1dde3eceb6">BalloonParty.Configuration.Level.ISpawnClockSettings</a>.</p>
+
+</div>
+</div>
+<a id="a012845f9396a0bf135f622392016015a" name="a012845f9396a0bf135f622392016015a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a012845f9396a0bf135f622392016015a">&#9670;&#160;</a></span>BreatherClearWindow</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.SpawnClockSettings.BreatherClearWindow</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds a clear must happen within to earn a breather. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a8e4bec5182d84e273a6a9dbc30422e24">BalloonParty.Configuration.Level.ISpawnClockSettings</a>.</p>
+
+</div>
+</div>
+<a id="a530ba79688c51a1b5571f5fa83de86c7" name="a530ba79688c51a1b5571f5fa83de86c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a530ba79688c51a1b5571f5fa83de86c7">&#9670;&#160;</a></span>BreatherPace</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.SpawnClockSettings.BreatherPace</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The clock's pace as a breather starts, as a share of its full pace, 0–1. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#ad33347e74e6f9aaace096faef807dd5c">BalloonParty.Configuration.Level.ISpawnClockSettings</a>.</p>
+
+</div>
+</div>
+<a id="a3f3424ae27983320b8675236bfdabe73" name="a3f3424ae27983320b8675236bfdabe73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f3424ae27983320b8675236bfdabe73">&#9670;&#160;</a></span>BreatherSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.SpawnClockSettings.BreatherSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds a breather lasts, easing from <a class="el" href="#a530ba79688c51a1b5571f5fa83de86c7" title="The clock&#39;s pace as a breather starts, as a share of its full pace, 0–1.">BreatherPace</a> back to full pace. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a2fb00c751c93f250fa3631362b39b258">BalloonParty.Configuration.Level.ISpawnClockSettings</a>.</p>
+
+</div>
+</div>
 <a id="a5f02bd219a69f4bbcc36796b065455e3" name="a5f02bd219a69f4bbcc36796b065455e3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5f02bd219a69f4bbcc36796b065455e3">&#9670;&#160;</a></span>FlightPressureSeconds</h2>
 

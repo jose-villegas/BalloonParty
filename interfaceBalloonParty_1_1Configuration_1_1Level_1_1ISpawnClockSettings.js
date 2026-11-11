@@ -1,6 +1,10 @@
 var interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings =
 [
     [ "IntervalForLevel", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a2c396acfe977955ea5d26778f4333bd9", null ],
+    [ "BreatherClear", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a5bec4bdbf2e2a88462e66a1dde3eceb6", null ],
+    [ "BreatherClearWindow", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a8e4bec5182d84e273a6a9dbc30422e24", null ],
+    [ "BreatherPace", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#ad33347e74e6f9aaace096faef807dd5c", null ],
+    [ "BreatherSeconds", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a2fb00c751c93f250fa3631362b39b258", null ],
     [ "FlightPressureSeconds", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#aad708cad47c8e4403af4951fce6c115f", null ],
     [ "FlightSpeedup", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#abe600f412b0b06d955d15040eb82f18f", null ],
     [ "GraceSeconds", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a10248f2f3b3368901fa91bff8fbcd508", null ],

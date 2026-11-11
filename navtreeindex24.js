@@ -1,5 +1,13 @@
 var NAVTREEINDEX24 =
 {
+"classBalloonParty_1_1Configuration_1_1Items_1_1SnipeSettings.html#affa68e3a7dbd4a1187569456ce903edf":[5,0,0,3,7,8,3],
+"classBalloonParty_1_1Configuration_1_1Items_1_1SnipeSettings.html#affa68e3a7dbd4a1187569456ce903edf":[6,0,0,3,7,8,3],
+"classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseCurve.html":[5,0,0,3,8,1],
+"classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseCurve.html":[6,0,0,3,8,1],
+"classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseCurve.html#a0cfe58078993581b87d63077bf805ad5":[5,0,0,3,8,1,0],
+"classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseCurve.html#a0cfe58078993581b87d63077bf805ad5":[6,0,0,3,8,1,0],
+"classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html":[5,0,0,3,8,2],
+"classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html":[6,0,0,3,8,2],
 "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#a244f3666e437f39c4c337dc53df017ca":[5,0,0,3,8,2,3],
 "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#a244f3666e437f39c4c337dc53df017ca":[6,0,0,3,8,2,3],
 "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#a2b21fe23ce8d64f0311038eac1813b95":[5,0,0,3,8,2,8],
@@ -241,13 +249,5 @@ var NAVTREEINDEX24 =
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#af5b8f1896827e828f0cdf5cba2c5f20c":[5,0,0,3,8,19,6],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#af5b8f1896827e828f0cdf5cba2c5f20c":[6,0,0,3,8,19,6],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelSeedHash.html":[5,0,0,3,8,22],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelSeedHash.html":[6,0,0,3,8,22],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelSeedHash.html#a33ff41dec8272d3560dd1978da75485f":[5,0,0,3,8,22,0],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelSeedHash.html#a33ff41dec8272d3560dd1978da75485f":[6,0,0,3,8,22,0],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelSteps.html":[5,0,0,3,8,23],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelSteps.html":[6,0,0,3,8,23],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelSteps.html#a1c228b182fe9b18c3c1b3ac3843ede7f":[5,0,0,3,8,23,0],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelSteps.html#a1c228b182fe9b18c3c1b3ac3843ede7f":[6,0,0,3,8,23,0],
-"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html":[5,0,0,3,8,24],
-"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html":[6,0,0,3,8,24]
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelSeedHash.html":[6,0,0,3,8,22]
 };
