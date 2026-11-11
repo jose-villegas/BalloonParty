@@ -13,7 +13,7 @@ the review files (`out/` is ignored by git):
 
 | File | What it is |
 |---|---|
-| `out/sheets/pop_NN.png` | The game's sheet, 1536×2048: the front layer's 24 frames of 256×256 in the top half, 6 across by 4 down, read left to right and top to bottom, and the back layer's in the bottom half in the same order. The balloon's centre is the same pixel in every frame. Copy it to `Assets/Sprites/UI/CardReveal/` and run Tools ▸ BalloonParty ▸ CardReveal ▸ Build Card Reveal, which imports it as linear data and lists it in the settings |
+| `out/sheets/pop_NN.png` | The game's sheet, 1536×2048: the front layer's 24 frames of 256×256 in the top half, 6 across by 4 down, read left to right and top to bottom, and the back layer's in the bottom half in the same order. The balloon's centre is the same pixel in every frame. The empty texels around the rubber hold its surface data bled outward (coverage stays 0), so the game's filtering doesn't bend the edge's normals. Copy it to `Assets/Sprites/UI/CardReveal/` and run Tools ▸ BalloonParty ▸ CardReveal ▸ Build Card Reveal, which imports it as linear data and lists it in the settings |
 | `out/review/pop_NN.png` | The contact sheet: the frames at 512 px, numbered, lit from the top left and tinted a balloon red, with a stand-in slip between the layers, on paper |
 | `out/review/pop_NN.gif` | The pop playing at 30 fps, as the game plays it, under three lights side by side: the day's sun from the top left, a light from the right, and a low orange dusk |
 

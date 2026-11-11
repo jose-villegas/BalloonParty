@@ -19,7 +19,7 @@ when, is decided by `Game/CardReveal/`; this folder only plays it. The design is
 All on unscaled time, so slow-motion beats don't stretch it.
 
 1. The balloon is tinted one of the level's colours, at random. It rises from below to its place (`RiseSeconds`) and holds a beat (`HoldBeforePopSeconds`). The ribbons show faintly inside it.
-2. The chosen pop's 24 frames play at 30 fps. The frame follows the time played, so a slow frame skips a frame rather than slowing the pop.
+2. The chosen pop's 24 frames play at 30 fps. The frame follows the time played, so a slow frame skips a frame rather than slowing the pop. From `RubberFallsFromFrame`, once it tears, the rubber falls, speeding up under `RubberFallGravity` (`FallDistance`, tested): the bake keeps the balloon's neck where it was until its last frames, so without it the pop plays out in one place. Only the rubber falls; the ribbons fly their own way.
 3. On `RibbonsFromFrame`, once the rubber has opened, the ribbons fly out (`RibbonBurstSeconds`). The title goes above the balloon's place, to the left; the description goes under it, to the right.
 4. They drift and sway, readable, until it is time to go. Then they fly off, up and outward, and fade (`RibbonExitSeconds`).
 
@@ -38,22 +38,28 @@ surface: its normal as the camera saw it, and its ambient occlusion. `BalloonPar
 cel shades it with the live scene light: its direction, colour and dimming, taken the way the
 balloons' bodies take them. So the reveal sits in the board's light, and in its flat, toon style:
 
-- **Three tones**, lit, middle and shadow, with hard steps between them, and the baked creases drawn
-  in a darker tone. A crisp highlight where the surface faces the light.
+- **Three tones**, lit, middle and shadow, with hard steps between them, and the baked deep folds
+  drawn as creases in a darker tone. A crisp highlight in the light's own colour (white at noon), as
+  on the board's balloons. The steps are anti-aliased to a screen pixel, however large the balloon is
+  drawn.
 - **Subsurface scattering**, done cheaply on screen. A few samples toward the light add up how much
   rubber the light crosses to reach each point. Where it crosses little (the rim facing the light, a
   flap or shred with no rubber behind it) and on faces turned away from the light, the latex glows a
   richer, lighter tint, the way light shows through a balloon.
-- **A drop shadow**, away from the scene light, tinted the balloon's colour at the board balloons'
-  opacity, so it falls like theirs. Only the back layer draws it, from both layers' outline.
+- **A drop shadow**, a soft dark shade of the balloon's colour, away from the scene light. It is drawn
+  on an image of its own (`Shadow`, on `CardRevealRubberShadow`) that the shader moves away from the
+  light, so the frame's edge never cuts it off. It takes both layers' outline.
 
-Once the pop's last frame has shown, the two layers stop drawing.
+The shader keeps its samples inside the frame shown, so it needs the sheet's grid: the view sets it,
+from the settings, on its own copies of the two rubber materials. Once the pop's last frame has shown,
+the layers stop drawing.
 
 Each frame is baked in two layers, the rubber in front of the balloon's centre and the rubber behind
 it. The ribbons sit between them, so they read as inside the balloon:
 
 | Child of `Balloon` | Draws |
 |---|---|
+| `Shadow` | A `RawImage` of the back layer's frame on the shadow's material: the balloon's drop shadow |
 | `Back` | A `RawImage` showing the back layer's frame. Its UV rect picks the frame from the sheet's bottom half |
 | `TitleRibbon`, `DescriptionRibbon` | The two ribbons (`RibbonPiece`), cream satin written in the tooltip's pencil font |
 | `Front` | A `RawImage` showing the front layer's frame, from the sheet's top half. Slightly see-through (`InsideShowThrough`), so before the pop the ribbons show as a shadow through the latex |
@@ -67,7 +73,7 @@ While the balloon rises the two layers part a little, the front leading and the 
 
 - imports every `pop_*.png` under `Assets/Sprites/UI/CardReveal/` as linear data (no sRGB, no mipmaps, clamped), skipping sheets already imported that way;
 - lists them on `Assets/Configuration/CardRevealSettings.asset` (made if missing, and assigned to the `GameLifetimeScope` prefab);
-- makes `Materials/UI/CardRevealRubber.mat` and `Materials/UI/CardRevealRibbon.mat`;
+- makes `Materials/UI/CardRevealRubber.mat`, `CardRevealRubberShadow.mat` (the same shader with Drop Shadow on) and `CardRevealRibbon.mat`;
 - builds `CardReveal` on `GameCanvas`.
 
 Running it again rebuilds the canvas part and keeps the materials' and settings' tuning.
