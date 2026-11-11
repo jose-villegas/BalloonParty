@@ -390,7 +390,7 @@ namespace BalloonParty.Game
             return;
 
             // Found rather than registered: none is required in the scene, and RegisterComponentInHierarchy
-            // throws on a missing one. The card reveal is built onto the canvas by its editor tool.
+            // throws on a missing one. The card reveal's canvas is placed in the Game scene by its editor tool.
             void InjectSceneViews(IObjectResolver resolver)
             {
                 foreach (var reveal in UnityEngine.Object.FindObjectsByType<CardRevealView>())

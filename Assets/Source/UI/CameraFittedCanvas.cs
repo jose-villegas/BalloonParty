@@ -11,13 +11,14 @@ namespace BalloonParty.UI
     ///     that render its layer (the light's scene capture) see it. Follows the camera's zoom and pan every frame.
     /// </summary>
     [RequireComponent(typeof(Canvas))]
-    [DefaultExecutionOrder(1000)]
     internal sealed class CameraFittedCanvas : MonoBehaviour
     {
-        [Tooltip("The layout's reference resolution, as on the game canvas's scaler.")]
+        [Tooltip("The layout's reference resolution. Must match the game canvas's scaler; the card reveal's " +
+                 "builder copies it from there.")]
         [SerializeField] private Vector2 _referenceResolution = new(225f, 400f);
 
-        [Tooltip("As on the game canvas's scaler: 0 matches the width, 1 the height.")]
+        [Tooltip("0 matches the width, 1 the height. Must match the game canvas's scaler; the card reveal's " +
+                 "builder copies it from there.")]
         [SerializeField] [Range(0f, 1f)] private float _matchWidthOrHeight = 0.5f;
 
         [Tooltip("How far in front of the camera it sits, in world units.")]
@@ -31,7 +32,26 @@ namespace BalloonParty.UI
             _rect = (RectTransform)transform;
         }
 
-        private void LateUpdate()
+        private void OnEnable()
+        {
+            Canvas.preWillRenderCanvases += Fit;
+        }
+
+        private void OnDisable()
+        {
+            Canvas.preWillRenderCanvases -= Fit;
+        }
+
+        /// <summary>The scaler's settings this canvas fits by, set by the builder from the game canvas's.</summary>
+        internal void MatchScaler(Vector2 referenceResolution, float matchWidthOrHeight)
+        {
+            _referenceResolution = referenceResolution;
+            _matchWidthOrHeight = matchWidthOrHeight;
+        }
+
+        // Just before the canvases lay out for this frame's render, after every script (a cinematic's zoom, the
+        // camera shake) has moved the camera, as HudCamera mirrors it: never a frame behind the view.
+        private void Fit()
         {
             if (_camera == null)
             {

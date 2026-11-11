@@ -249,7 +249,14 @@ namespace BalloonParty.Editor
                     return;
                 }
 
-                BuildCanvasPrefab(label, materials);
+                var scaler = gameCanvas.GetComponent<CanvasScaler>();
+                if (scaler == null)
+                {
+                    Debug.LogError("[CardReveal] GameCanvas has no CanvasScaler; the reveal's canvas fits by its layout.");
+                    return;
+                }
+
+                BuildCanvasPrefab(label, scaler, materials);
 
                 // Built on the game canvas before it had a canvas of its own: drawn above the screen-space light.
                 var old = gameCanvas.transform.Find(RootName);
@@ -268,7 +275,8 @@ namespace BalloonParty.Editor
             Debug.Log($"[CardReveal] Built {CanvasPrefabPath}.");
         }
 
-        private static void BuildCanvasPrefab(TMP_Text label, Materials materials)
+        // The game canvas's scaler, copied onto the fit, so the reveal lays out on the same canvas size.
+        private static void BuildCanvasPrefab(TMP_Text label, CanvasScaler scaler, Materials materials)
         {
             var root = new GameObject(System.IO.Path.GetFileNameWithoutExtension(CanvasPrefabPath),
                 typeof(RectTransform)) { layer = LayerMask.NameToLayer(RevealLayer) };
@@ -278,7 +286,8 @@ namespace BalloonParty.Editor
                 canvas.renderMode = RenderMode.WorldSpace;
                 canvas.sortingLayerName = RevealSortingLayer;
                 canvas.sortingOrder = RevealSortingOrder;
-                root.AddComponent<CameraFittedCanvas>();
+                root.AddComponent<CameraFittedCanvas>()
+                    .MatchScaler(scaler.referenceResolution, scaler.matchWidthOrHeight);
                 BuildReveal(root.transform, label, materials);
 
                 // The ribbons' text is cloned from the game canvas, on the UI layer, which the main camera skips.
