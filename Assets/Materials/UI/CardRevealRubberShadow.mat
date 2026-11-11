@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: CardRevealRubberShadow
+  m_Shader: {fileID: 4800000, guid: 32384b85b5f040c8952c559a97665a97, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AmbientDesaturation: 0.5
+    - _AmbientDimming: 0.4
+    - _AmbientHue: 0.25
+    - _BandSoftness: 0.01
+    - _CreaseEdge: 0.55
+    - _CreaseTone: 0.6
+    - _DropShadow: 1
+    - _GlowLift: 0.45
+    - _HighlightSize: 0.985
+    - _HighlightSoftness: 0.002
+    - _LightHeight: 0.9
+    - _LitEdge: 0.45
+    - _MidTone: 0.86
+    - _Scatter: 0.85
+    - _ScatterEdge: 0.5
+    - _ScatterReach: 0.07
+    - _ScatterRim: 1.2
+    - _ScatterThin: 0.9
+    - _ShadowEdge: -0.1
+    - _ShadowOffset: 9
+    - _ShadowSoftness: 0.012
+    - _ShadowTone: 0.68
+    - _Specular: 0.9
+    - _Transmission: 0.7
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.42, g: 0.42, b: 0.5, a: 0.42}
+    - _SheetGrid: {r: 6, g: 4, b: 0, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

@@ -29,19 +29,34 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Ambient: 0.55
     - _AmbientDesaturation: 0.5
     - _AmbientDimming: 0.4
     - _AmbientHue: 0.25
-    - _LightHeight: 0.7
-    - _Occlusion: 0.8
-    - _Shininess: 48
-    - _Specular: 0.55
-    - _Transmission: 0.9
-    - _TransmissionFocus: 1.5
-    - _Wrap: 0.4
+    - _BandSoftness: 0.01
+    - _CreaseEdge: 0.3
+    - _CreaseTone: 0.8
+    - _DropShadow: 0
+    - _GlowLift: 0.45
+    - _HighlightSize: 0.985
+    - _HighlightSoftness: 0.002
+    - _LightHeight: 0.9
+    - _LitEdge: 0.45
+    - _MidTone: 0.86
+    - _Scatter: 0.85
+    - _ScatterEdge: 0.5
+    - _ScatterReach: 0.07
+    - _ScatterRim: 1.2
+    - _ScatterThin: 0.9
+    - _ShadowEdge: -0.1
+    - _ShadowOffset: 9
+    - _ShadowSoftness: 0.012
+    - _ShadowTone: 0.68
+    - _Specular: 0.9
+    - _Transmission: 0.7
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.42, g: 0.42, b: 0.5, a: 0.42}
+    - _SheetGrid: {r: 6, g: 4, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
