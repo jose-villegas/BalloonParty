@@ -141,15 +141,11 @@ Shader "BalloonParty/Sprite/Diffuse"
 
                 if (_LightMode < 1.5)
                 {
-                    // Re-grade only the time-of-day part of the light; whatever a local light adds stays.
-                    float3 ambient = SceneLightTint();
-                    float3 graded = lerp(dot(ambient, float3(0.2126, 0.7152, 0.0722)).xxx, ambient, _AmbientHue);
-                    graded = lerp(float3(1.0, 1.0, 1.0), graded, _AmbientDimming);
-                    OUT.lightTint += graded - ambient;
+                    OUT.lightTint += SceneLightAmbientRegrade(_AmbientHue, _AmbientDimming);
 
                     // The vertex colour carries the sprite's colour (a balloon's palette tint), so fading it
                     // here costs nothing per pixel. Full at noon, where the ambient's brightness is 1.
-                    float dark = 1.0 - saturate(dot(ambient, float3(0.2126, 0.7152, 0.0722)));
+                    float dark = 1.0 - saturate(dot(SceneLightTint(), float3(0.2126, 0.7152, 0.0722)));
                     OUT.color.rgb = lerp(OUT.color.rgb, SameLightnessGrey(OUT.color.rgb), _AmbientDesaturation * dark);
                 }
 

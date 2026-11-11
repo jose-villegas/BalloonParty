@@ -135,8 +135,14 @@ at midnight, by `balloons` (where each balloon is) and `palette_measure2.py` (th
   nothing at noon, about a quarter of the chroma at midnight. A luma grey was tried first and
   turned red and purple muddy and green pale, because saturated colours look lighter than their
   luma (Helmholtz–Kohlrausch [15]).
-- **Open:** the tough, unbreakable and rainbow balloons have their own shaders and still take the
-  full night light; give them the same two controls if they read too dark at night.
+- **Done:** the balloon glint (`Sprite/SpriteLightDriven.shader` on `ShineRotation.mat` and
+  `ShineRotationTough.mat`) takes the same hue 0.25 and dimming 0.4 as the body. It had kept the
+  full midnight light, so it went darker than the balloon under it: the balloons read as flat
+  discs in the night sky, and the tough balloon, a black body whose shape is mostly its glint,
+  nearly vanished on the night meadow. The tough body (`ToughBalloon.shader`) takes the same two
+  controls. The re-grade lives in `SceneLightAmbientRegrade` (`SceneLight.cginc`) for all three.
+- **Open:** the unbreakable and rainbow balloons have their own shaders and still take the full
+  night light; give them the same two controls if they read too dark at night.
 - **Open:** the backdrops keep their own night look. Cut their chroma at night only if the
   balloons still don't separate.
 

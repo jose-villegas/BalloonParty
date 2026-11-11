@@ -30,6 +30,10 @@ Shader "BalloonParty/Balloon/ToughBalloon"
         // Diffuse response to the scene light (albedo x colour x intensity, like Sprite/Diffuse):
         // 0 = unlit (authored look always), 1 = fully lit. Applies to the whole body.
         _LightInfluence ("Light Influence", Range(0, 1)) = 1
+        // How much of the time-of-day light's colour (hue) and darkening (dimming) the balloon takes,
+        // as on Sprite/Diffuse: 1 = all of it. Local lights are untouched.
+        _AmbientHue ("Ambient Hue", Range(0, 1)) = 1
+        _AmbientDimming ("Ambient Dimming", Range(0, 1)) = 1
 
         // ---- Voronoi cracks ------------------------------------------------
         [Header(Cracks  Base)]
@@ -142,6 +146,8 @@ Shader "BalloonParty/Balloon/ToughBalloon"
             float  _GrainScale;
             float  _GrainStrength;
             float  _LightInfluence;
+            float  _AmbientHue;
+            float  _AmbientDimming;
 
             float  _VoronoiScale;
             float  _VoronoiScaleDamageBoost;
@@ -393,7 +399,9 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                 // (VTF, target 3.5) — the PaintBlob precedent. Keeps the whole body lit
                 // from one coherent direction instead of bending across it per-fragment.
                 OUT.lightDir  = SceneLightDirectionAtLOD(worldCenter);
-                OUT.lightTint = SceneLightTintAtLOD(worldCenter);
+                // The same night response as the other balloons (Sprite/Diffuse): the black body leans on
+                // its pale rim to stand off a dark backdrop, and the full midnight light drowns that rim.
+                OUT.lightTint = SceneLightTintAtLOD(worldCenter) + SceneLightAmbientRegrade(_AmbientHue, _AmbientDimming);
 #ifndef _SHADOW_OFF
                 OUT.shadowFade = ShadowLightFadeAtLOD(worldCenter);
 #endif

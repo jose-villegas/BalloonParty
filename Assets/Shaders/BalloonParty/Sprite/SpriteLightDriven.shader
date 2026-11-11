@@ -61,6 +61,11 @@ Shader "BalloonParty/Sprite/LightDriven"
         // (neutral until a point/area light is near, then it brightens/tints toward it — the glint
         // ignores the global light entirely). Only matters when Tint By Scene Light is on.
         [Enum(Full, 0, Ambient, 1, Local, 2)] _LightMode ("Tint Light Mode", Float) = 0
+        // How much of the time-of-day light's colour (hue) and darkening (dimming) the tint takes, as on
+        // Sprite/Diffuse: 1 = all of it. A balloon's glint takes the same as its body, or at night the
+        // glint goes darker than the balloon under it and the balloon reads flat. Full/Ambient modes only.
+        _AmbientHue ("Ambient Hue", Range(0, 1)) = 1
+        _AmbientDimming ("Ambient Dimming", Range(0, 1)) = 1
         // The opacity floor at minimal light — used by both Local mode (opacity at rest, no nearby
         // light) and Alpha Follows Light below (opacity where the scene is darkest). 0 = invisible
         // until light arrives (a spark that flares in); 1 = always-visible. No effect in Full/Ambient
@@ -177,6 +182,8 @@ Shader "BalloonParty/Sprite/LightDriven"
             float _TintBySceneLight;
             float _FadeWithSceneLight;
             float _LightMode;
+            float _AmbientHue;
+            float _AmbientDimming;
             float _RestAlpha;
             float _AlphaFollowsLight;
             float _AlphaFullAt;
@@ -241,12 +248,12 @@ Shader "BalloonParty/Sprite/LightDriven"
                 }
                 else if (_LightMode > 0.5)
                 {
-                    OUT.lightTint = SceneLightTint();
+                    OUT.lightTint = SceneLightTint() + SceneLightAmbientRegrade(_AmbientHue, _AmbientDimming);
                     OUT.localAmount = 1.0;
                 }
                 else
                 {
-                    OUT.lightTint = SceneLightTintAtLOD(anchorWorld);
+                    OUT.lightTint = SceneLightTintAtLOD(anchorWorld) + SceneLightAmbientRegrade(_AmbientHue, _AmbientDimming);
                     OUT.localAmount = 1.0;
                 }
 

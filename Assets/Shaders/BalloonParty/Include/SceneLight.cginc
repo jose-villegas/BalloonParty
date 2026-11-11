@@ -58,6 +58,17 @@ float3 SceneLightTint()
         : float3(1.0, 1.0, 1.0);
 }
 
+// What to add to a tint so its time-of-day part is re-graded for a gameplay surface: `hue` keeps that
+// much of the light's colour (0 = only its brightness), `dimming` that much of its darkening (0 = none,
+// as if a key light stayed on it). Whatever a local light adds to the tint stays. (1, 1) adds nothing.
+float3 SceneLightAmbientRegrade(float hue, float dimming)
+{
+    float3 ambient = SceneLightTint();
+    float3 graded = lerp(dot(ambient, float3(0.2126, 0.7152, 0.0722)).xxx, ambient, hue);
+    graded = lerp(float3(1.0, 1.0, 1.0), graded, dimming);
+    return graded - ambient;
+}
+
 // No light, no shadow: the shadow's opacity follows the light's intensity (clamped at the
 // authored alpha). Neutral when the owner hasn't pushed yet (edit time).
 float ShadowLightFade()

@@ -66,6 +66,8 @@ Material:
     - _AlphaFollowsLight: 1
     - _AlphaFullAt: 1.73
     - _AlphaLightGain: 0.4
+    - _AmbientDimming: 0.4
+    - _AmbientHue: 0.25
     - _BakedAngle: -45
     - _BlurAmount: 16
     - _BumpScale: 1
