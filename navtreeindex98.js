@@ -1,7 +1,5 @@
 var NAVTREEINDEX98 =
 {
-"namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649a6592f349ddfe64e333b3c4f1d17161af":[5,0,0,10,1,10,1],
-"namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649a95bfdefaaf01553cbf21ccd942855c69":[5,0,0,10,1,10,0],
 "namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649aaefbd0597f1bc2493bbc18898243513b":[5,0,0,10,1,10,2],
 "namespaceBalloonParty_1_1Projectile_1_1Controller.html#adcae15a3eb95c064df9a6b8fc67069e5":[5,0,0,10,1,9],
 "namespaceBalloonParty_1_1Projectile_1_1Controller.html#adcae15a3eb95c064df9a6b8fc67069e5a6adf97f83acf6453d4a6a4b1070f3754":[5,0,0,10,1,9,0],
@@ -249,5 +247,7 @@ var NAVTREEINDEX98 =
 "plan_card_reveal.html#autotoc_md364":[3,20,0],
 "plan_card_reveal.html#autotoc_md366":[3,20,0,0],
 "plan_card_reveal.html#autotoc_md367":[3,20,0,1],
-"plan_card_reveal.html#autotoc_md368":[3,20,0,2]
+"plan_card_reveal.html#autotoc_md368":[3,20,0,2],
+"plan_card_reveal.html#autotoc_md369":[3,20,0,3],
+"plan_card_reveal.html#autotoc_md370":[3,20,0,4]
 };

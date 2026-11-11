@@ -7,7 +7,7 @@ var searchData=
   ['9_204_20implementation_20priorities_4',['9.4 Implementation Priorities',['../plan_future_ideas.html#autotoc_md501',1,'']]],
   ['9_205_20open_20questions_5',['9.5 Open Questions',['../plan_future_ideas.html#autotoc_md502',1,'']]],
   ['9_20open_20questions_6',['9. Open questions',['../plan_coins.html#autotoc_md384',1,'']]],
-  ['9_20risks_7',['9 Risks',['../plan_fast_paced.html#autotoc_md433',1,'9. Risks'],['../plan_headsup.html#autotoc_md684',1,'9. Risks']]],
-  ['9_20risks_20—_20playtest_20not_20compile_8',['9. Risks — playtest, not compile',['../plan_level_up_timing.html#autotoc_md717',1,'']]],
-  ['90s_20perfetto_20capture_20during_20live_20play_9',['Findings — second pass, 2026-07-23 evening (90s perfetto capture during live play)',['../plan_performance_recovery.html#autotoc_md734',1,'']]]
+  ['9_20risks_7',['9 Risks',['../plan_fast_paced.html#autotoc_md433',1,'9. Risks'],['../plan_headsup.html#autotoc_md685',1,'9. Risks']]],
+  ['9_20risks_20—_20playtest_20not_20compile_8',['9. Risks — playtest, not compile',['../plan_level_up_timing.html#autotoc_md718',1,'']]],
+  ['90s_20perfetto_20capture_20during_20live_20play_9',['Findings — second pass, 2026-07-23 evening (90s perfetto capture during live play)',['../plan_performance_recovery.html#autotoc_md735',1,'']]]
 ];

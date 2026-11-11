@@ -1,7 +1,5 @@
 var NAVTREEINDEX97 =
 {
-"namespaceBalloonParty_1_1Balloon_1_1Formation.html#a7d189f644fea0191bb4f5acaef4bf746ad762f03b0ac739c5834f7b68c2c7ddb7":[5,0,0,1,1,3,3],
-"namespaceBalloonParty_1_1Balloon_1_1Model.html":[5,0,0,1,2],
 "namespaceBalloonParty_1_1Balloon_1_1Spawner.html":[5,0,0,1,3],
 "namespaceBalloonParty_1_1Balloon_1_1Spawner.html#ae16f087915c8b12ffd2f6ea5168e6406":[5,0,0,1,3,10],
 "namespaceBalloonParty_1_1Balloon_1_1Spawner.html#ae16f087915c8b12ffd2f6ea5168e6406a7a959688f51cbe7704d6b05725d70e0a":[5,0,0,1,3,10,1],
@@ -249,5 +247,7 @@ var NAVTREEINDEX97 =
 "namespaceBalloonParty_1_1Projectile_1_1Controller.html#a269c35de6ac7d821e1a397646dd92704a43ec9846892f6095cd124df606a773eb":[5,0,0,10,1,11,0],
 "namespaceBalloonParty_1_1Projectile_1_1Controller.html#a269c35de6ac7d821e1a397646dd92704aac99ec9411052e84cbfc32ebfcf75c02":[5,0,0,10,1,11,1],
 "namespaceBalloonParty_1_1Projectile_1_1Controller.html#a269c35de6ac7d821e1a397646dd92704ae0010a0a1a3259ab5c06a19bad532851":[5,0,0,10,1,11,2],
-"namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649":[5,0,0,10,1,10]
+"namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649":[5,0,0,10,1,10],
+"namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649a6592f349ddfe64e333b3c4f1d17161af":[5,0,0,10,1,10,1],
+"namespaceBalloonParty_1_1Projectile_1_1Controller.html#ac2f91b5b592a9fafc9ba1d5f2a395649a95bfdefaaf01553cbf21ccd942855c69":[5,0,0,10,1,10,0]
 };

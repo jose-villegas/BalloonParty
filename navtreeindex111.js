@@ -1,6 +1,5 @@
 var NAVTREEINDEX111 =
 {
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#ae8ef53df13c876043051e4fd5a30ee0d":[6,0,0,13,0,0,21,8],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterChangedEvent.html":[5,0,0,13,0,1,6],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterChangedEvent.html":[6,0,0,13,0,1,6],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterChangedEvent.html#a0f4f48414043d98bdd4f19e815483ac7":[5,0,0,13,0,1,6,0],
@@ -249,5 +248,6 @@ var NAVTREEINDEX111 =
 "structBalloonParty_1_1Solver_1_1ShotDynamicActorSnapshot.html#a505d1e65d380503048ea593e1f0bf677":[6,0,0,14,8,0],
 "structBalloonParty_1_1Solver_1_1ShotDynamicActorSnapshot.html#a7f24e51a07f8218ae938e65016899ed0":[5,0,0,14,8,7],
 "structBalloonParty_1_1Solver_1_1ShotDynamicActorSnapshot.html#a7f24e51a07f8218ae938e65016899ed0":[6,0,0,14,8,7],
-"structBalloonParty_1_1Solver_1_1ShotDynamicActorSnapshot.html#a807d56a7b90098186d6c47f48764f211":[5,0,0,14,8,10]
+"structBalloonParty_1_1Solver_1_1ShotDynamicActorSnapshot.html#a807d56a7b90098186d6c47f48764f211":[5,0,0,14,8,10],
+"structBalloonParty_1_1Solver_1_1ShotDynamicActorSnapshot.html#a807d56a7b90098186d6c47f48764f211":[6,0,0,14,8,10]
 };

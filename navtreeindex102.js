@@ -1,6 +1,5 @@
 var NAVTREEINDEX102 =
 {
-"structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#ad854bd73a9fc60b105a44073854cf7a6":[6,0,0,3,11,22],
 "structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#ae0cbf455f68ce731ed79dec04b4b5219":[5,0,0,3,11,14],
 "structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#ae0cbf455f68ce731ed79dec04b4b5219":[6,0,0,3,11,14],
 "structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#ae146f3471fa5b183515c7f0f3cac78bb":[5,0,0,3,11,11],
@@ -249,5 +248,6 @@ var NAVTREEINDEX102 =
 "structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#a7713c26844fe2e6331484d244313b628":[6,0,0,3,7,4,3],
 "structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#a79aaed5d16d4041d8953324e5495661a":[5,0,0,3,7,4,1],
 "structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#a79aaed5d16d4041d8953324e5495661a":[6,0,0,3,7,4,1],
-"structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#a9c9f47d69b58f0006a9b147a899f3c9e":[5,0,0,3,7,4,0]
+"structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#a9c9f47d69b58f0006a9b147a899f3c9e":[5,0,0,3,7,4,0],
+"structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#a9c9f47d69b58f0006a9b147a899f3c9e":[6,0,0,3,7,4,0]
 };

@@ -1,7 +1,5 @@
 var NAVTREEINDEX89 =
 {
-"interfaceBalloonParty_1_1Audio_1_1IMelodicContext.html#ac6b1a4a6e8e17421157f143a47819bc0":[6,0,0,0,8,0],
-"interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html":[5,0,0,0,9],
 "interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html":[6,0,0,0,9],
 "interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html#a2b5fc6f4907bd258c8e529da787ba2bd":[5,0,0,0,9,0],
 "interfaceBalloonParty_1_1Audio_1_1ISoundPlayer.html#a2b5fc6f4907bd258c8e529da787ba2bd":[6,0,0,0,9,0],
@@ -249,5 +247,7 @@ var NAVTREEINDEX89 =
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#aca476663ab140c55798d804d34f6a427":[6,0,0,3,4,6,37],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#ad08eb925b5be4a2c93fa95a97ef3e700":[5,0,0,3,4,6,10],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#ad08eb925b5be4a2c93fa95a97ef3e700":[6,0,0,3,4,6,10],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#ad63ce38697b1028222cf3b5460c7550c":[5,0,0,3,4,6,7]
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#ad63ce38697b1028222cf3b5460c7550c":[5,0,0,3,4,6,7],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#ad63ce38697b1028222cf3b5460c7550c":[6,0,0,3,4,6,7],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html#ae1e57241a7cfc53d38f0466c3c00dc72":[5,0,0,3,4,6,11]
 };

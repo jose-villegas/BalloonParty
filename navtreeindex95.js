@@ -1,7 +1,5 @@
 var NAVTREEINDEX95 =
 {
-"interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a1913f23d49b7f49c76d51428fca74ac8":[6,0,0,12,25,2],
-"interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a1a90655ab365960c9ecc27329d948aee":[5,0,0,12,25,11],
 "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a1a90655ab365960c9ecc27329d948aee":[6,0,0,12,25,11],
 "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a1af03d81dde7f67b33fb9f3942831861":[5,0,0,12,25,9],
 "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a1af03d81dde7f67b33fb9f3942831861":[6,0,0,12,25,9],
@@ -249,5 +247,7 @@ var NAVTREEINDEX95 =
 "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceInfluence.html#a06e527a80c119b9d0263252adf5d0d9b":[6,0,0,13,0,6,3],
 "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceInfluence.html#a85a366448ceaec2f39640421510f9f68":[5,0,0,13,0,6,0],
 "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceInfluence.html#a85a366448ceaec2f39640421510f9f68":[6,0,0,13,0,6,0],
-"interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceInfluence.html#ab006915aa045e3d0cfff7d58776e56ab":[5,0,0,13,0,6,5]
+"interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceInfluence.html#ab006915aa045e3d0cfff7d58776e56ab":[5,0,0,13,0,6,5],
+"interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceInfluence.html#ab006915aa045e3d0cfff7d58776e56ab":[6,0,0,13,0,6,5],
+"interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceInfluence.html#abf9f5af9a8bb272d966209cf9e025cf6":[5,0,0,13,0,6,1]
 };

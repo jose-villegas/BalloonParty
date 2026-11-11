@@ -1,6 +1,5 @@
 var NAVTREEINDEX101 =
 {
-"structBalloonParty_1_1Audio_1_1VoiceLimiter_1_1Slot.html#a5d33f23702fa7b67f7297a1b1790ecb2":[6,0,0,0,18,0,0],
 "structBalloonParty_1_1Audio_1_1VoicePlayback.html":[5,0,0,0,19],
 "structBalloonParty_1_1Audio_1_1VoicePlayback.html":[6,0,0,0,19],
 "structBalloonParty_1_1Audio_1_1VoicePlayback.html#a23899738cc46ad2c007e44937820fcc6":[5,0,0,0,19,1],
@@ -249,5 +248,6 @@ var NAVTREEINDEX101 =
 "structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#a9c7a830ad588f33253d840f612b02a25":[6,0,0,3,11,19],
 "structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#ac05d0cd3fdc7e479bf2821ec22fa1664":[5,0,0,3,11,13],
 "structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#ac05d0cd3fdc7e479bf2821ec22fa1664":[6,0,0,3,11,13],
-"structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#ad854bd73a9fc60b105a44073854cf7a6":[5,0,0,3,11,22]
+"structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#ad854bd73a9fc60b105a44073854cf7a6":[5,0,0,3,11,22],
+"structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html#ad854bd73a9fc60b105a44073854cf7a6":[6,0,0,3,11,22]
 };

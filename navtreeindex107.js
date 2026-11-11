@@ -1,6 +1,5 @@
 var NAVTREEINDEX107 =
 {
-"structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#a62985e1c0ae79b671c6fd6dc9e4bf287":[6,0,0,7,1,9,0],
 "structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#a7f48bc8f5f93ef679e89d3f92f008915":[5,0,0,7,1,9,2],
 "structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#a7f48bc8f5f93ef679e89d3f92f008915":[6,0,0,7,1,9,2],
 "structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#a9e89f45b98f821d10c0964a7973f730a":[5,0,0,7,1,9,4],
@@ -249,5 +248,6 @@ var NAVTREEINDEX107 =
 "structBalloonParty_1_1Nudge_1_1NudgeMessage.html#a4bdd061edc379de70e8c3d523dce2487":[6,0,0,8,2,4],
 "structBalloonParty_1_1Nudge_1_1NudgeMessage.html#abe6ffdcd42bdaca78cacc65c1596b2ab":[5,0,0,8,2,1],
 "structBalloonParty_1_1Nudge_1_1NudgeMessage.html#abe6ffdcd42bdaca78cacc65c1596b2ab":[6,0,0,8,2,1],
-"structBalloonParty_1_1Nudge_1_1NudgeMessage.html#af796120c125f1dba250b16fd1e93d8a1":[5,0,0,8,2,3]
+"structBalloonParty_1_1Nudge_1_1NudgeMessage.html#af796120c125f1dba250b16fd1e93d8a1":[5,0,0,8,2,3],
+"structBalloonParty_1_1Nudge_1_1NudgeMessage.html#af796120c125f1dba250b16fd1e93d8a1":[6,0,0,8,2,3]
 };

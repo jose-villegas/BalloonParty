@@ -1,8 +1,8 @@
 var searchData=
 [
   ['joinextension_0',['JoinExtension',['../classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a58530c710179dbf857360b7b7f891ef4',1,'BalloonParty::Prediction::PredictionTraceView']]],
-  ['josé_1',['José',['../plan_shot_solver_accuracy.html#autotoc_md792',1,'Design questions parked for José'],['../plan_performance_recovery.html#autotoc_md742',1,'F4 — Shader variant warmup · &lt;strong&gt;sonnet&lt;/strong&gt; (capture = José)'],['../plan_performance_recovery.html#autotoc_md761',1,'Quality vetoes — 2026-07-23 device pass (José)']]],
-  ['josé_20s_20gates_20accumulated_2',['José&apos;s gates (accumulated)',['../plan_shot_solver_accuracy.html#autotoc_md789',1,'']]],
+  ['josé_1',['José',['../plan_shot_solver_accuracy.html#autotoc_md793',1,'Design questions parked for José'],['../plan_performance_recovery.html#autotoc_md743',1,'F4 — Shader variant warmup · &lt;strong&gt;sonnet&lt;/strong&gt; (capture = José)'],['../plan_performance_recovery.html#autotoc_md762',1,'Quality vetoes — 2026-07-23 device pass (José)']]],
+  ['josé_20s_20gates_20accumulated_2',['José&apos;s gates (accumulated)',['../plan_shot_solver_accuracy.html#autotoc_md790',1,'']]],
   ['json_20goes_3',['Where the JSON goes',['../plan_gameplay_telemetry.html#autotoc_md536',1,'']]],
   ['json_20stays_20hand_20rolled_4',['Why the JSON stays hand-rolled',['../plan_gameplay_telemetry.html#autotoc_md555',1,'']]],
   ['jsonlinestelemetrysink_2ecs_5',['JsonLinesTelemetrySink.cs',['../JsonLinesTelemetrySink_8cs.html',1,'']]],

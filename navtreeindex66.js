@@ -1,7 +1,5 @@
 var NAVTREEINDEX66 =
 {
-"classBalloonParty_1_1Scenario_1_1WaterImpactCollector.html#a166d49a7f409a0d46d28dc45c601c53a":[5,0,0,11,15,3],
-"classBalloonParty_1_1Scenario_1_1WaterImpactCollector.html#a166d49a7f409a0d46d28dc45c601c53a":[6,0,0,11,15,3],
 "classBalloonParty_1_1Scenario_1_1WaterImpactCollector.html#a2a746841fd209599f5aeed8d74ccad57":[5,0,0,11,15,4],
 "classBalloonParty_1_1Scenario_1_1WaterImpactCollector.html#a2a746841fd209599f5aeed8d74ccad57":[6,0,0,11,15,4],
 "classBalloonParty_1_1Scenario_1_1WaterImpactCollector.html#a31f78cfb105703d587f1b40e38016b33":[5,0,0,11,15,1],
@@ -249,5 +247,7 @@ var NAVTREEINDEX66 =
 "classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#ab6efe0ee1e01c31fe6ff5b0604889e9b":[5,0,0,12,2,2,5],
 "classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#ab6efe0ee1e01c31fe6ff5b0604889e9b":[6,0,0,12,2,2,5],
 "classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#ac1947c8c079864e71b5cf48b92adc5da":[5,0,0,12,2,2,1],
-"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#ac1947c8c079864e71b5cf48b92adc5da":[6,0,0,12,2,2,1]
+"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#ac1947c8c079864e71b5cf48b92adc5da":[6,0,0,12,2,2,1],
+"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#ac656043c57909851d968cf55389942cb":[5,0,0,12,2,2,9],
+"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#ac656043c57909851d968cf55389942cb":[6,0,0,12,2,2,9]
 };

@@ -1,6 +1,5 @@
 var NAVTREEINDEX108 =
 {
-"structBalloonParty_1_1Nudge_1_1NudgeMessage.html#af796120c125f1dba250b16fd1e93d8a1":[6,0,0,8,2,3],
 "structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html":[5,0,0,9,2],
 "structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html":[6,0,0,9,2],
 "structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html#a06f3dfb4584c59437428c7684037859b":[5,0,0,9,2,4],
@@ -249,5 +248,6 @@ var NAVTREEINDEX108 =
 "structBalloonParty_1_1Shared_1_1Math_1_1DampedSpring2D.html#a8b6f3568380cf0dc71e6177b62391e5b":[6,0,0,12,6,1,0],
 "structBalloonParty_1_1Shared_1_1Math_1_1DampedSpring2D.html#aa665c3cdc23de3f5ddfb5ff28c2c4ebe":[5,0,0,12,6,1,3],
 "structBalloonParty_1_1Shared_1_1Math_1_1DampedSpring2D.html#aa665c3cdc23de3f5ddfb5ff28c2c4ebe":[6,0,0,12,6,1,3],
-"structBalloonParty_1_1Shared_1_1Math_1_1DampedSpring2D.html#ad7d075e516a5b38885279dd78252d23b":[5,0,0,12,6,1,4]
+"structBalloonParty_1_1Shared_1_1Math_1_1DampedSpring2D.html#ad7d075e516a5b38885279dd78252d23b":[5,0,0,12,6,1,4],
+"structBalloonParty_1_1Shared_1_1Math_1_1DampedSpring2D.html#ad7d075e516a5b38885279dd78252d23b":[6,0,0,12,6,1,4]
 };

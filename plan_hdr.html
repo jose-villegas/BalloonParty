@@ -313,16 +313,45 @@ Phase 0 — prep that changes nothing on screen</h3>
 </table>
 <h3><a class="anchor" id="autotoc_md644"></a>
 Phase 1 — switch the pipeline (Editor, with the user)</h3>
-<p>Project settings are Editor-only edits, done together with the user.</p>
-<ol type="1">
-<li><code>GameURP.asset</code>: Supports HDR on; precision 32-bit; Color Grading Mode <b>HDR</b>; LUT 32.</li>
-<li>Main camera: post-processing on, dithering on.</li>
-<li>The global Volume gets Tonemapping: ACES, with an exposure lift. <code>ScenarioGradeView</code> stops toggling post-processing.</li>
-<li>Measure the empty-post cost on device. <b>Gate:</b> if it doesn't fit, park HDR (Phase 0 stays).</li>
-<li>Compare against the baselines. Expect the Tier 2 item 4 effects (already authored above 1) to change first.</li>
-<li>Re-tune the scenario grades in HDR grading mode.</li>
-</ol>
-<h3><a class="anchor" id="autotoc_md645"></a>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Task   </th><th class="markdownTableHeadNone">Status    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">1. <code>GameURP.asset</code>: Supports HDR on; precision 32-bit; Color Grading Mode <b>HDR</b>; LUT 32.   </td><td class="markdownTableBodyNone">Done    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">2. Main camera: post-processing on, dithering on.   </td><td class="markdownTableBodyNone">Done, on the <code>Main Camera</code> prefab (it lives in the app scope, so the launcher has it too)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">3. Tonemapping: ACES, with an exposure lift. <code>ScenarioGradeView</code> stops toggling post-processing.   </td><td class="markdownTableBodyNone">Done. The base look is in the URP default volume profile (<code>Assets/DefaultVolumeProfile.asset</code>), not in the grade's volume, because the grade only exists in the game scope: ACES, +0.5 stops, +15 saturation. The grade's Color Adjustments add to the base's. <b>Open: ACES against Neutral, below.</b>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">4. Measure the empty-post cost on device. <b>Gate:</b> if it doesn't fit, park HDR (Phase 0 stays).   </td><td class="markdownTableBodyNone">Open: needs a device    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">5. Compare against the baselines.   </td><td class="markdownTableBodyNone">Done in the Editor: <code>Baselines~/hdr-aces/</code> holds the same shots as <code>hdr-gamma-ldr/</code>, and <code>tuning/</code> holds the look sweeps    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">6. Re-tune the scenario grades in HDR grading mode.   </td><td class="markdownTableBodyNone">Waits on the tonemapper   </td></tr>
+</table>
+<h4><a class="anchor" id="autotoc_md645"></a>
+Findings from the Editor (2026-11-11)</h4>
+<p>Measured on identical frames (game frozen, only the look changed), by mean luma, mean saturation and the share of clipped pixels, then by eye.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Look   </th><th class="markdownTableHeadNone">Noon (water)   </th><th class="markdownTableHeadNone">Night (water)   </th><th class="markdownTableHeadNone">Hues    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">LDR, today   </td><td class="markdownTableBodyNone">luma 0.405, sat 0.48, 12% clipped   </td><td class="markdownTableBodyNone">luma 0.331, sat 0.57   </td><td class="markdownTableBodyNone">reference    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">ACES +0.5 stops, +15 sat (committed)   </td><td class="markdownTableBodyNone">0.339, sat 0.67   </td><td class="markdownTableBodyNone">0.271, sat 0.77   </td><td class="markdownTableBodyNone">red drifts to orange, green to yellow, blue pales    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">ACES +0.6 stops, +5 sat, −20 contrast   </td><td class="markdownTableBodyNone">0.358, sat 0.50   </td><td class="markdownTableBodyNone">0.292, sat 0.62   </td><td class="markdownTableBodyNone">as above, flatter    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>Neutral +0.3 stops, +10 sat</b>   </td><td class="markdownTableBodyNone"><b>0.405, sat 0.50, 0% clipped</b>   </td><td class="markdownTableBodyNone"><b>0.340, sat 0.60</b>   </td><td class="markdownTableBodyNone">close to today   </td></tr>
+</table>
+<ul>
+<li><b>ACES can't match the night.</b> Its toe crushes the dark scenes. Lifting it far enough to match washes out the day, and every saturation boost that brings the balloons back overshoots at night. The day sky matches at +0.5 stops.</li>
+<li><b>ACES moves the gameplay colours.</b> Red balloons drift toward orange, green toward yellow, and the blues pale. The plan's palette-identity check fails on red against orange.</li>
+<li><b>Neutral matches today at noon and at night</b> with one setting, keeps the hues, and still removes the clipping. It is the recommended switch.</li>
+<li><b>Every tonemapper greys the UI whites.</b> No curve maps 1.0 back to white, so the cream Game Over panel and white text such as PLAY come out grey, with Neutral the least. Settle this in its own step: move the screen-space canvases to Screen Space – Overlay, or re-tune the UI colours.</li>
+<li><b>Capturing HDR.</b> The pipeline package's <code>capture game_view</code> renders the camera into an 8-bit texture, and URP gives an offscreen camera its target's format, so it cannot show HDR. Use <code>ScreenCapture.CaptureScreenshot</code> (the real Game view). The volume stack copies the default profile when it starts, so a script that edits that profile in Play mode must call <code>VolumeManager.instance.OnVolumeProfileChanged</code>. The <code>capture/</code> scripts in each baseline folder do both.</li>
+</ul>
+<h3><a class="anchor" id="autotoc_md646"></a>
 Phase 2 — use the range, in sweep order</h3>
 <ol type="1">
 <li>Pops on lit surfaces (item 1): judge the meadow and the balloons in a pop, then remove the water's hand-made ease and match it.</li>
@@ -331,10 +360,10 @@ Phase 2 — use the range, in sweep order</h3>
 <li>Item glows, particle intensity, overlay re-check (items 4, 5, 7).</li>
 <li>The level-up showcase (item 6).</li>
 </ol>
-<h3><a class="anchor" id="autotoc_md646"></a>
+<h3><a class="anchor" id="autotoc_md647"></a>
 Phase 3 — bloom (if chosen)</h3>
 <p>A Bloom override on the same global Volume: threshold above 1 (tuned in gamma units), Dual or Kawase filter, Quarter downscale, about 4 iterations, a <code>clamp</code> as a backstop against an overdriven material. Tune per effect, then measure on device. Fallback ladder: fewer iterations → tonemap only → no bloom.</p>
-<h3><a class="anchor" id="autotoc_md647"></a>
+<h3><a class="anchor" id="autotoc_md648"></a>
 Phase 4 — optional follow-ups</h3>
 <ul>
 <li>An <code>ARGBHalf</code> scene capture so the chrome balloon reflects a pop's real brightness (alpha required, so not <code>B10G11R11</code>).</li>
@@ -342,7 +371,7 @@ Phase 4 — optional follow-ups</h3>
 <li>HDR display output on HDR10 panels.</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md649"></a>
+<h2><a class="anchor" id="autotoc_md650"></a>
 Decisions (2026-11-10)</h2>
 <p>Taken by the user after this audit.</p>
 <table class="markdownTable">
@@ -357,7 +386,7 @@ Decisions (2026-11-10)</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">First effects   </td><td class="markdownTableBodyNone"><b>Pops on lit surfaces, then glitter</b> (items 1 and 2)   </td><td class="markdownTableBodyNone">The level-up (item 6) is the showcase once those read well.   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md650"></a>
+<h3><a class="anchor" id="autotoc_md651"></a>
 What ACES means for this plan</h3>
 <ul>
 <li><b>Phase 1 is a look change, not a silent switch.</b> ACES darkens the whole 0–1 range and adds contrast, and it shifts the hue of saturated colours. Expect an exposure lift on the global Volume, and check the balloon palette for identity: gameplay colours must stay easy to tell apart. The Phase 0 baselines are what this is judged against.</li>

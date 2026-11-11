@@ -1,7 +1,5 @@
 var NAVTREEINDEX86 =
 {
-"classBalloonParty_1_1UI_1_1Score_1_1LevelLabel.html":[5,0,0,16,7,3],
-"classBalloonParty_1_1UI_1_1Score_1_1LevelLabel.html":[6,0,0,16,7,3],
 "classBalloonParty_1_1UI_1_1Score_1_1LevelLabel.html#a05a2a5ecd3ba4dd59c97c017970e0d77":[5,0,0,16,7,3,14],
 "classBalloonParty_1_1UI_1_1Score_1_1LevelLabel.html#a05a2a5ecd3ba4dd59c97c017970e0d77":[6,0,0,16,7,3,14],
 "classBalloonParty_1_1UI_1_1Score_1_1LevelLabel.html#a16e31263bc0eabd716e56b901fea0fe6":[5,0,0,16,7,3,19],
@@ -249,5 +247,7 @@ var NAVTREEINDEX86 =
 "classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabel.html#a06d63594b5dfebd85676ed20cd9314cd":[5,0,0,16,9,1,0],
 "classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabel.html#a06d63594b5dfebd85676ed20cd9314cd":[6,0,0,16,9,1,0],
 "classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabel.html#a243fe4fb52df607ffcb645cbf263a0db":[5,0,0,16,9,1,8],
-"classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabel.html#a243fe4fb52df607ffcb645cbf263a0db":[6,0,0,16,9,1,8]
+"classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabel.html#a243fe4fb52df607ffcb645cbf263a0db":[6,0,0,16,9,1,8],
+"classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabel.html#a2481eda31de09efef790ca9db5ef58e2":[5,0,0,16,9,1,3],
+"classBalloonParty_1_1UI_1_1Telemetry_1_1MetricLabel.html#a2481eda31de09efef790ca9db5ef58e2":[6,0,0,16,9,1,3]
 };
