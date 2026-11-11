@@ -8,14 +8,23 @@ is a cloth simulation in Blender, rendered frame by frame, then packed into one 
 python3 Tools/art/balloon_pop/pack_sheets.py
 ```
 
-The first renders `out/frames/pop_00/00.png … 23.png`. The second packs them and draws the review
-files (`out/` is ignored by git):
+The first renders `out/frames/pop_00/00_front.png … 23_back.png`. The second packs them and draws
+the review files (`out/` is ignored by git):
 
 | File | What it is |
 |---|---|
-| `out/sheets/pop_NN.png` | The game's sheet: 24 frames of 256×256, 6 across by 4 down, read left to right and top to bottom. Greyscale with alpha, so the game tints it. The balloon's centre is the same pixel in every frame |
-| `out/review/pop_NN.png` | The contact sheet: the frames at 512 px, numbered, tinted a balloon red on paper |
-| `out/review/pop_NN.gif` | The pop playing at 30 fps, as the game plays it |
+| `out/sheets/pop_NN.png` | The game's sheet, 1536×2048: the front layer's 24 frames of 256×256 in the top half, 6 across by 4 down, read left to right and top to bottom, and the back layer's in the bottom half in the same order. The balloon's centre is the same pixel in every frame. Copy it to `Assets/Sprites/UI/CardReveal/` and run Tools ▸ BalloonParty ▸ CardReveal ▸ Build Card Reveal, which imports it as linear data and lists it in the settings |
+| `out/review/pop_NN.png` | The contact sheet: the frames at 512 px, numbered, lit from the top left and tinted a balloon red, with a stand-in slip between the layers, on paper |
+| `out/review/pop_NN.gif` | The pop playing at 30 fps, as the game plays it, under three lights side by side: the day's sun from the top left, a light from the right, and a low orange dusk |
+
+The frames are not pictures but the rubber's surface, for the game to light with the scene's light
+(`BalloonParty/Sprite/LitFlipbook`): red and green are the normal's x and y as the camera sees it
+(0.5 is flat on to the camera), blue the ambient occlusion, alpha the coverage. The inside of the
+rubber is turned to face the camera, so a flap seen from behind lights like its outside. Each frame
+comes in two layers, the rubber in front of the balloon's centre and the rubber behind it (split by
+the camera's clip planes), so the game can draw the card's slip between them and it reads as inside
+the balloon. `pack_sheets.py` lights the review files with the shader's model and defaults (the
+constants at its top); change them together.
 
 A seed is one pop. `--seeds 0,4,9` bakes several; re-running a seed redraws the same pop. `--detail 5
 --size 256 --samples 8` gives a quick look in about 20 s; the defaults (`--detail 6 --size 512
@@ -37,8 +46,9 @@ Blender.
    before it tears.
 4. **The fall.** Once the rubber has gathered, the knot drops out of the frame and the shreds trail
    after it, leaving the stage to the slip.
-5. **Rendering** is Cycles, orthographic, on a transparent background, lit from the top left like the
-   UI's sun, in neutral greys (a soft subsurface body and a sharp clear-coat highlight).
+5. **Rendering** is Cycles, orthographic, on a transparent background, with no colour transform
+   (`Raw`), so the values written are the data: an emission shader outputs the normal and the
+   occlusion, and there are no lights.
 
 The simulation runs 48 frames at a slow time scale and every second one is kept: 24 frames played at
 30 fps, about 0.8 s. What varies per seed: the puncture, the number of cracks (2 to 4), their length,

@@ -9,7 +9,10 @@ Shader "BalloonParty/Sprite/LitFlipbook"
     //
     // The light's colour and dimming are taken as the balloons' body takes them (Sprite/Diffuse in Ambient
     // mode on Balloon/DiffuseSprite), so a reveal at dusk sits in the same light as the balloons.
-    // Works on a RawImage (pick the frame with its UV rect) or a SpriteRenderer.
+    // Works on a RawImage (pick the frame with its UV rect) or a SpriteRenderer. Not mask-safe: it has no
+    // UI clip rect or stencil, so under a RectMask2D or Mask it draws unclipped (PencilText's block is the
+    // one to copy if it ever needs to). Tools/art/balloon_pop/pack_sheets.py lights its previews with this
+    // model and these defaults; change them together.
     Properties
     {
         [PerRendererData] _MainTex ("Surface (normal xy, occlusion, coverage)", 2D) = "white" {}
@@ -20,9 +23,9 @@ Shader "BalloonParty/Sprite/LitFlipbook"
         // How far above the screen the light sits: low rakes across the surface, high lights it head on.
         _LightHeight ("Light Height", Range(0.1, 3)) = 0.7
         // The share of the colour a face turned away from the light keeps.
-        _Ambient ("Ambient", Range(0, 1)) = 0.38
+        _Ambient ("Ambient", Range(0, 1)) = 0.55
         // Lets the light wrap past the terminator, as through thin rubber.
-        _Wrap ("Wrap", Range(0, 1)) = 0.25
+        _Wrap ("Wrap", Range(0, 1)) = 0.4
         // How dark the creases and the inside of a curl go: 0 ignores the baked occlusion.
         _Occlusion ("Occlusion", Range(0, 1)) = 0.8
         // Subsurface, as thin latex shows it: light that passes through the rubber, so a face turned away

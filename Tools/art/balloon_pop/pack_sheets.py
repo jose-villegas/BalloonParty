@@ -35,10 +35,10 @@ SLIP = (250, 246, 236)
 HOLD_FRAMES = 15
 LAYERS = ("front", "back")
 
-# The lighting model, as BalloonParty/UI/LitFlipbook has it (its material's defaults).
+# The lighting model, as BalloonParty/Sprite/LitFlipbook has it (its material's defaults).
 LIGHT_HEIGHT = 0.7
-AMBIENT = 0.38
-WRAP = 0.25
+AMBIENT = 0.55
+WRAP = 0.4
 OCCLUSION = 0.8
 TRANSMISSION = 0.9
 TRANSMISSION_FOCUS = 1.5

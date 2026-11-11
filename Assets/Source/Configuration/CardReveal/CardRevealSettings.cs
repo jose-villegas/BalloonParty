@@ -38,7 +38,7 @@ namespace BalloonParty.Configuration.CardReveal
 
         [Tooltip("How far the rubber's two layers part while the balloon moves, as a share of its distance from " +
                  "its place: the front leads and the back lags, so the slip reads as inside it.")]
-        [SerializeField] [Range(0f, 0.5f)] private float _parallax = 0.08f;
+        [SerializeField] [Range(0f, 0.5f)] private float _parallax = 0.02f;
 
         public IReadOnlyList<Texture2D> PopSheets => _popSheets;
         public int PopCount => Mathf.Max(1, _popSheets.Length);

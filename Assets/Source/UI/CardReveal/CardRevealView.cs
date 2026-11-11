@@ -6,6 +6,7 @@ using BalloonParty.Game.CardReveal;
 using BalloonParty.Game.Level;
 using BalloonParty.UI.HeadsUp;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using TMPro;
 using UniRx;
 using UnityEngine;
@@ -43,6 +44,7 @@ namespace BalloonParty.UI.CardReveal
         [Inject] private IActiveLevelParameters _level;
 
         private CancellationTokenSource _playing;
+        private IDisposable _subscription;
         private Vector2 _place;
         private bool _attached;
 
@@ -61,11 +63,14 @@ namespace BalloonParty.UI.CardReveal
 
             _cardReveals.AttachStage();
             _attached = true;
-            _cardReveals.Current.Subscribe(OnReveal).AddTo(this);
+            _subscription = _cardReveals.Current.Subscribe(OnReveal);
         }
 
         private void OnDestroy()
         {
+            // Unsubscribed first: detaching drops the queue, and the null that publishes must not reach a view
+            // being torn down.
+            _subscription?.Dispose();
             Stop();
             if (_attached)
             {
@@ -116,19 +121,7 @@ namespace BalloonParty.UI.CardReveal
                 await AnimateAsync(_settings.RiseSeconds, Rise, token);
                 await UniTask.Delay(Milliseconds(_settings.HoldBeforePopSeconds), true, cancellationToken: token);
 
-                var frames = _settings.SheetColumns * _settings.SheetRows;
-                var frameMs = Milliseconds(1f / _settings.FramesPerSecond);
-                for (var frame = 0; frame < frames; frame++)
-                {
-                    ShowFrame(frame);
-                    if (frame == _settings.WriteFromFrame)
-                    {
-                        _writeOn.Write(reveal.Card.Title);
-                    }
-
-                    await UniTask.Delay(frameMs, true, cancellationToken: token);
-                }
-
+                await PlayPopAsync(reveal, token);
                 var hold = Mathf.Max(_settings.SlipHoldSeconds, _writeOn.Duration);
                 await UniTask.Delay(Milliseconds(hold), true, cancellationToken: token);
                 await AnimateAsync(_settings.FadeOutSeconds, t => _group.alpha = 1f - t, token);
@@ -137,6 +130,30 @@ namespace BalloonParty.UI.CardReveal
             catch (OperationCanceledException)
             {
                 // Stopped for a reset, a newer reveal or the scene closing; the controller already moved on.
+            }
+        }
+
+        // The frame follows the time played rather than one delay per frame, which would round up to whole
+        // screen refreshes and run slow (20 fps at 60 Hz). A frame the screen skips is skipped, not delayed.
+        private async UniTask PlayPopAsync(RevealedCard reveal, CancellationToken token)
+        {
+            var frames = _settings.SheetColumns * _settings.SheetRows;
+            var writeFrom = Mathf.Min(_settings.WriteFromFrame, frames - 1);
+            var written = false;
+            var elapsed = 0f;
+            var frame = 0;
+            while (frame < frames)
+            {
+                ShowFrame(frame);
+                if (!written && frame >= writeFrom)
+                {
+                    _writeOn.Write(reveal.Card.Title);
+                    written = true;
+                }
+
+                await UniTask.Yield(PlayerLoopTiming.Update, token);
+                elapsed += Time.unscaledDeltaTime;
+                frame = (int)(elapsed * _settings.FramesPerSecond);
             }
         }
 
@@ -180,7 +197,7 @@ namespace BalloonParty.UI.CardReveal
         // The layers part by how far the balloon still is from its place, the front leading, and meet there.
         private void Rise(float t)
         {
-            var eased = 1f - Mathf.Pow(1f - t, 3f);
+            var eased = DOVirtual.EasedValue(0f, 1f, t, Ease.OutCubic);
             var offset = Vector2.down * (_riseDistance * (1f - eased));
             _balloon.anchoredPosition = _place + offset;
             var part = offset * _settings.Parallax;

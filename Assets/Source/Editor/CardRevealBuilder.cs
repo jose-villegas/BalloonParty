@@ -80,25 +80,43 @@ namespace BalloonParty.Editor
         private static List<Texture2D> ImportSheets()
         {
             var sheets = new List<Texture2D>();
-            foreach (var guid in AssetDatabase.FindAssets("pop_ t:Texture2D", new[] { SheetFolder }).OrderBy(AssetDatabase.GUIDToAssetPath))
+            var paths = AssetDatabase.FindAssets("pop_ t:Texture2D", new[] { SheetFolder })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Where(path => System.IO.Path.GetFileName(path).StartsWith("pop_"))
+                .OrderBy(path => path);
+            foreach (var path in paths)
             {
-                var path = AssetDatabase.GUIDToAssetPath(guid);
                 var importer = (TextureImporter)AssetImporter.GetAtPath(path);
-                importer.textureType = TextureImporterType.Default;
-                importer.sRGBTexture = false;
-                importer.alphaSource = TextureImporterAlphaSource.FromInput;
-                importer.alphaIsTransparency = false;
-                importer.mipmapEnabled = false;
-                importer.wrapMode = TextureWrapMode.Clamp;
-                importer.filterMode = FilterMode.Bilinear;
-                importer.npotScale = TextureImporterNPOTScale.None;
-                importer.maxTextureSize = 2048;
-                importer.textureCompression = TextureImporterCompression.CompressedHQ;
-                importer.SaveAndReimport();
+                if (!ImportedAsData(importer))
+                {
+                    importer.textureType = TextureImporterType.Default;
+                    importer.sRGBTexture = false;
+                    importer.alphaSource = TextureImporterAlphaSource.FromInput;
+                    importer.alphaIsTransparency = false;
+                    importer.mipmapEnabled = false;
+                    importer.wrapMode = TextureWrapMode.Clamp;
+                    importer.filterMode = FilterMode.Bilinear;
+                    importer.npotScale = TextureImporterNPOTScale.None;
+                    importer.maxTextureSize = 2048;
+                    importer.textureCompression = TextureImporterCompression.CompressedHQ;
+                    importer.SaveAndReimport();
+                }
+
                 sheets.Add(AssetDatabase.LoadAssetAtPath<Texture2D>(path));
             }
 
             return sheets;
+        }
+
+        // Already imported as ImportSheets sets it up, so a rebuild doesn't reimport every sheet.
+        private static bool ImportedAsData(TextureImporter importer)
+        {
+            return importer.textureType == TextureImporterType.Default && !importer.sRGBTexture &&
+                   importer.alphaSource == TextureImporterAlphaSource.FromInput && !importer.alphaIsTransparency &&
+                   !importer.mipmapEnabled && importer.wrapMode == TextureWrapMode.Clamp &&
+                   importer.filterMode == FilterMode.Bilinear && importer.npotScale == TextureImporterNPOTScale.None &&
+                   importer.maxTextureSize == 2048 &&
+                   importer.textureCompression == TextureImporterCompression.CompressedHQ;
         }
 
         private static CardRevealSettings EnsureSettings(IReadOnlyList<Texture2D> sheets)
@@ -130,7 +148,13 @@ namespace BalloonParty.Editor
             {
                 var scope = root.GetComponent<GameLifetimeScope>();
                 var fields = new SerializedObject(scope);
-                fields.FindProperty("_cardRevealSettings").objectReferenceValue = settings;
+                var field = fields.FindProperty("_cardRevealSettings");
+                if (field.objectReferenceValue == settings)
+                {
+                    return;
+                }
+
+                field.objectReferenceValue = settings;
                 fields.ApplyModifiedPropertiesWithoutUndo();
                 PrefabUtility.SaveAsPrefabAsset(root, ScopePrefabPath);
             }
