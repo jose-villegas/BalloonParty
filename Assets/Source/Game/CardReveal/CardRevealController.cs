@@ -17,8 +17,9 @@ namespace BalloonParty.Game.CardReveal
     /// <summary>
     ///     Queues a reveal for each card the player wins: a level-up's card as it's held
     ///     (<see cref="UpgradeCardHeldMessage" />) and a retry's bonus card as it's dealt
-    ///     (<see cref="BonusCardDealtMessage" />). One plays at a time, and only on the Game screen, so a bonus
-    ///     dealt behind the game-over screen waits for play to resume. Each reveal gets a pop chosen at random,
+    ///     (<see cref="BonusCardDealtMessage" />). One plays at a time, and only over the board (in play, or a
+    ///     level-up's ascent, where a level-up's card plays), so a bonus dealt behind the game-over screen waits
+    ///     for play to resume. Each reveal gets a pop chosen at random,
     ///     never one of the last <see cref="ICardRevealSettings.RecentPopsAvoided" /> shown. Nothing is queued
     ///     while no stage is attached, so until the reveal's view exists the cards stay the tooltip's.
     /// </summary>
@@ -66,7 +67,7 @@ namespace BalloonParty.Game.CardReveal
                 .AddTo(_subscriptions);
             _bonusSubscriber.Subscribe(message => Enqueue(message.Card, message.Stacks, isBonus: true))
                 .AddTo(_subscriptions);
-            _navigation.Current.Where(state => state == NavigationState.Game)
+            _navigation.Current.Where(IsOnStage)
                 .Subscribe(_ => TryStartNext())
                 .AddTo(_subscriptions);
         }
@@ -123,9 +124,16 @@ namespace BalloonParty.Game.CardReveal
             TryStartNext();
         }
 
+        // Play, or a level-up's ceremony and ascent, which is where a level-up's card plays: over the board, with
+        // nothing in front of it. Not the launch or game-over screens.
+        private static bool IsOnStage(NavigationState state)
+        {
+            return state == NavigationState.Game || state == NavigationState.LevelUp;
+        }
+
         private void TryStartNext()
         {
-            if (_current.Value != null || _queue.Count == 0 || _navigation.Current.Value != NavigationState.Game)
+            if (_current.Value != null || _queue.Count == 0 || !IsOnStage(_navigation.Current.Value))
             {
                 return;
             }

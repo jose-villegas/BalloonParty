@@ -64,6 +64,17 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void HeldCard_DuringTheLevelUp_StartsAtOnce_SoItPlaysWithTheAscent()
+        {
+            _controller.AttachStage();
+            _navigation.Value = NavigationState.LevelUp;
+
+            Held(_shield);
+
+            Assert.AreSame(_shield, _controller.Current.Value.Card);
+        }
+
+        [Test]
         public void ASecondCard_WaitsItsTurn()
         {
             _controller.AttachStage();
