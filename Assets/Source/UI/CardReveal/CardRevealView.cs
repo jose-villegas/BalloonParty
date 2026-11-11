@@ -35,6 +35,9 @@ namespace BalloonParty.UI.CardReveal
         [SerializeField] private RawImage _front;
         [SerializeField] private WriteOnText _writeOn;
 
+        [Tooltip("What the card does, written under the title once the title is written.")]
+        [SerializeField] private WriteOnText _description;
+
         [Tooltip("How far below its place the balloon starts its rise, in canvas units.")]
         [SerializeField] private float _riseDistance = 260f;
 
@@ -111,6 +114,7 @@ namespace BalloonParty.UI.CardReveal
             _playing?.Dispose();
             _playing = null;
             _writeOn.Stop();
+            _description.Stop();
         }
 
         private async UniTaskVoid PlayAsync(RevealedCard reveal, CancellationToken token)
@@ -122,8 +126,10 @@ namespace BalloonParty.UI.CardReveal
                 await UniTask.Delay(Milliseconds(_settings.HoldBeforePopSeconds), true, cancellationToken: token);
 
                 await PlayPopAsync(reveal, token);
-                var hold = Mathf.Max(_settings.SlipHoldSeconds, _writeOn.Duration);
-                await UniTask.Delay(Milliseconds(hold), true, cancellationToken: token);
+
+                // The hold starts once the slip is written, so it is all there for as long as it is read.
+                await UniTask.WaitWhile(() => _writeOn.IsWriting || _description.IsWriting, cancellationToken: token);
+                await UniTask.Delay(Milliseconds(_settings.SlipHoldSeconds), true, cancellationToken: token);
                 await AnimateAsync(_settings.FadeOutSeconds, t => _group.alpha = 1f - t, token);
                 _cardReveals.Finish(reveal);
             }
@@ -148,6 +154,7 @@ namespace BalloonParty.UI.CardReveal
                 if (!written && frame >= writeFrom)
                 {
                     _writeOn.Write(reveal.Card.Title);
+                    _description.Write(reveal.Card.Description, _writeOn.Duration);
                     written = true;
                 }
 
@@ -168,8 +175,9 @@ namespace BalloonParty.UI.CardReveal
             tint.a = 1f - _settings.SlipShowThrough;
             _front.color = tint;
 
-            // A blank slip until the rubber opens: the last reveal's title mustn't show through.
+            // A blank slip until the rubber opens: the last reveal's writing mustn't show through.
             _writeOn.Write(string.Empty);
+            _description.Write(string.Empty);
             ShowFrame(0);
             Rise(0f);
             _group.alpha = 1f;

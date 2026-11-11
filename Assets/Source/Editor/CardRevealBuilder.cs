@@ -41,11 +41,18 @@ namespace BalloonParty.Editor
         private const float CentreAboveFrame = 0.039f;
         private const float SlipCornerMultiplier = 16f;
 
-        private static readonly Vector2 Place = new(0f, 70f);
+        // The description's largest size, as a share of the title's.
+        private const float DescriptionScale = 0.7f;
 
-        // Paper, a little warmer than the board's white; a narrow strip that fits inside the balloon.
+        // A little above the screen's middle, over the upper board.
+        private static readonly Vector2 Place = new(0f, 35f);
+
+        // Paper, a little warmer than the board's white; a strip that fits inside the balloon, the title on its
+        // top line and what the card does under it in a smaller hand.
         private static readonly Color SlipColor = new(0.98f, 0.965f, 0.925f, 1f);
-        private static readonly Vector2 SlipSize = new(66f, 17f);
+        private static readonly Vector2 SlipSize = new(72f, 30f);
+        private static readonly Vector4 TitleInsets = new(4f, 14f, 4f, 2f);
+        private static readonly Vector4 DescriptionInsets = new(4f, 3f, 4f, 16f);
 
         [MenuItem(MenuRoot + "Build Card Reveal")]
         private static void BuildFromMenu()
@@ -253,7 +260,9 @@ namespace BalloonParty.Editor
 
             var back = CreateLayer("Back", balloon, material);
             var slip = CreateSlip(balloon);
-            var writeOn = CreateTitle(slip, label);
+            var writeOn = CreateLine("Title", slip, label, TitleInsets, label.fontSize);
+            var description = CreateLine("Description", slip, label, DescriptionInsets,
+                label.fontSize * DescriptionScale);
             var front = CreateLayer("Front", balloon, material);
 
             var view = root.gameObject.AddComponent<CardRevealView>();
@@ -263,6 +272,7 @@ namespace BalloonParty.Editor
             fields.FindProperty("_back").objectReferenceValue = back;
             fields.FindProperty("_front").objectReferenceValue = front;
             fields.FindProperty("_writeOn").objectReferenceValue = writeOn;
+            fields.FindProperty("_description").objectReferenceValue = description;
             fields.ApplyModifiedPropertiesWithoutUndo();
         }
 
@@ -290,23 +300,25 @@ namespace BalloonParty.Editor
             return rect;
         }
 
-        // The tooltip's label, cloned: its pencil font, colour and write-on, sized to the slip.
-        private static WriteOnText CreateTitle(RectTransform slip, TMP_Text label)
+        // The tooltip's label, cloned: its pencil font, colour and write-on, sized to its line of the slip.
+        // Insets are left, bottom, right, top.
+        private static WriteOnText CreateLine(string name, RectTransform slip, TMP_Text label, Vector4 insets,
+            float largestSize)
         {
             var clone = Object.Instantiate(label.gameObject, slip, false);
-            clone.name = "Title";
+            clone.name = name;
             var rect = (RectTransform)clone.transform;
             Stretch(rect);
-            rect.offsetMin = new Vector2(4f, 1f);
-            rect.offsetMax = new Vector2(-4f, -1f);
+            rect.offsetMin = new Vector2(insets.x, insets.y);
+            rect.offsetMax = new Vector2(-insets.z, -insets.w);
 
             var text = clone.GetComponent<TMP_Text>();
             text.text = string.Empty;
             text.alignment = TextAlignmentOptions.Center;
             text.textWrappingMode = TextWrappingModes.NoWrap;
             text.enableAutoSizing = true;
-            text.fontSizeMin = 6f;
-            text.fontSizeMax = label.fontSize;
+            text.fontSizeMin = 4f;
+            text.fontSizeMax = largestSize;
             text.raycastTarget = false;
             return clone.GetComponent<WriteOnText>();
         }
