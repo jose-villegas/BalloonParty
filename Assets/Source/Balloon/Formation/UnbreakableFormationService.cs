@@ -101,6 +101,8 @@ namespace BalloonParty.Balloon.Formation
                 return;
             }
 
+            var heading = HeadingFor(shape);
+
             // The members' own moves remove and place them; that is not a member being lost.
             _arranging = true;
             try
@@ -111,6 +113,7 @@ namespace BalloonParty.Balloon.Formation
                 {
                     var assignment = _assignments[i];
                     var member = assignment.Member;
+                    member.SetFormationHeading(heading);
                     member.SetInFormation(true);
                     _members.Add(member);
                     if (member.SlotIndex.Value != assignment.Target)
@@ -209,6 +212,30 @@ namespace BalloonParty.Balloon.Formation
                 FormationShape.ItemCover => _settings.ItemCoverWeight,
                 _ => 0f,
             };
+        }
+
+        // A line runs along its step between neighbouring slots, measured in world space so the diagonals
+        // follow the board's real slot spacing. An item cover points up at the item it shields.
+        private Vector2 HeadingFor(FormationShape shape)
+        {
+            Vector2Int to;
+            switch (shape)
+            {
+                case FormationShape.Horizontal:
+                    to = new Vector2Int(1, 0);
+                    break;
+                case FormationShape.DiagonalDownRight:
+                    to = HexCoordinates.DiagonalDown(Vector2Int.zero, true);
+                    break;
+                case FormationShape.DiagonalDownLeft:
+                    to = HexCoordinates.DiagonalDown(Vector2Int.zero, false);
+                    break;
+                default:
+                    return Vector2.up;
+            }
+
+            Vector2 step = _grid.IndexToWorldPosition(to) - _grid.IndexToWorldPosition(Vector2Int.zero);
+            return step.sqrMagnitude > 0f ? step.normalized : Vector2.right;
         }
 
         private int PickIndex(int count)

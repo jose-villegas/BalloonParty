@@ -15,6 +15,8 @@ namespace BalloonParty.Balloon.Model
         private readonly ColorSource _colorSource;
         private readonly ReactiveProperty<bool> _inFormation = new(false);
 
+        private Vector2 _formationHeading = Vector2.right;
+
         public float DeflectStampScale { get; }
         public int ScoreValue { get; }
         public override IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
@@ -24,6 +26,7 @@ namespace BalloonParty.Balloon.Model
         // A formation member hovers where its formation put it until the formation changes or breaks.
         public bool IsAnchored => _inFormation.Value;
         public IReadOnlyReactiveProperty<bool> InFormation => _inFormation;
+        public Vector2 FormationHeading => _formationHeading;
 
         // Always: EvaluateHit returns Deflect for every non-piercing hit, and there is no durability to
         // spend down.
@@ -42,6 +45,11 @@ namespace BalloonParty.Balloon.Model
         public void SetInFormation(bool inFormation)
         {
             _inFormation.Value = inFormation;
+        }
+
+        public void SetFormationHeading(Vector2 heading)
+        {
+            _formationHeading = heading;
         }
 
         public void ResolveScoreAttribution(

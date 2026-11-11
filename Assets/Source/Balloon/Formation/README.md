@@ -62,7 +62,10 @@ balloons leaves an anchored actor in its slot:
 
 `Balloon/Type/UnbreakableFormationLook` turns a member blue once it has arrived in its slot (in formation
 and `IsStable`). The core glow, the inner rim and the exhaust trail all change, and a `GlitterSwirl`
-halo fades in behind the sphere. The unbreakable's periodic burst is tagged blue too, so its specks
+halo fades in behind the sphere. The halo doesn't sway or spin with its balloon: the service gives every
+member its formation's heading (`IFormationMember.FormationHeading`, a world direction), and the look turns
+the halo so its swirl drifts that way. A line heads along its slots, and an item cover heads up at the
+item. The unbreakable's periodic burst is tagged blue too, so its specks
 match. All the blue comes from the palette's `UnbreakableFormation` entry. See `Balloon/Type/README.md`.
 
 ## Settings

@@ -84,6 +84,21 @@ namespace BalloonParty.Balloon.Type
             Apply(_blend);
         }
 
+        // The glitter hangs off the Shell, which sways and turns with its balloon. Pinning its world rotation
+        // here, after those have run, points the swirl's drift (the sprite's local up) along the formation
+        // instead, the same way for every member.
+        private void LateUpdate()
+        {
+            if (_glitter == null || !_glitter.enabled || _model is not IFormationMember member)
+            {
+                return;
+            }
+
+            var heading = member.FormationHeading;
+            var angle = Mathf.Atan2(heading.y, heading.x) * Mathf.Rad2Deg - 90f;
+            _glitter.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        }
+
         // Binding a pooled instance to a new balloon starts it red, whatever its last balloon ended on.
         public void Bind(IBalloonModel model, CompositeDisposable disposables)
         {

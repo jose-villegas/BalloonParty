@@ -27,6 +27,7 @@ namespace BalloonParty.Tests.Balloon
         {
             var gridConfig = Substitute.For<ISlotGridConfig>();
             gridConfig.SlotsSize.Returns(new Vector2Int(7, 8));
+            gridConfig.SlotSeparation.Returns(new Vector2(0.5f, 0.85f));
             _grid = new SlotGrid(gridConfig, new BalancePathHolder());
 
             _settings = Substitute.For<IUnbreakableFormationSettings>();
@@ -105,6 +106,57 @@ namespace BalloonParty.Tests.Balloon
             Assert.IsNotNull(_service.CurrentShape);
             Assert.AreNotEqual(firstShape, _service.CurrentShape, "the next formation is a different shape");
             Assert.IsTrue(_unbreakables.All(u => u.IsAnchored));
+        }
+
+        [Test]
+        public void EveryMember_SharesTheFormationsHeading()
+        {
+            _settings.DiagonalWeight.Returns(0f);
+            AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
+
+            Arrange();
+
+            Assert.AreEqual(FormationShape.Horizontal, _service.CurrentShape);
+            var expected = (Vector2)(_grid.IndexToWorldPosition(new Vector2Int(1, 0))
+                - _grid.IndexToWorldPosition(Vector2Int.zero));
+            Assert.IsTrue(_unbreakables.All(u => Vector2.Angle(u.FormationHeading, expected) < 0.01f),
+                "a horizontal formation runs along its row");
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void ADiagonalFormation_HeadsDownTheDiagonal(bool right)
+        {
+            _settings.HorizontalWeight.Returns(0f);
+            AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
+            _service.Random01 = () => right ? 0f : 0.99f;
+
+            Arrange();
+
+            var shape = _service.CurrentShape;
+            Assert.AreEqual(right ? FormationShape.DiagonalDownRight : FormationShape.DiagonalDownLeft, shape);
+            var heading = _unbreakables[0].FormationHeading;
+            var downRight = shape == FormationShape.DiagonalDownRight;
+            Assert.AreEqual(downRight, heading.x > 0f, "the heading leans the diagonal's way");
+            var down = _grid.IndexToWorldPosition(new Vector2Int(0, 1)).y
+                < _grid.IndexToWorldPosition(Vector2Int.zero).y;
+            Assert.AreEqual(down, heading.y < 0f, "the heading follows the rows downward");
+            Assert.IsTrue(_unbreakables.All(u => u.FormationHeading == heading));
+        }
+
+        [Test]
+        public void AnItemCover_HeadsUpAtTheItem()
+        {
+            _settings.HorizontalWeight.Returns(0f);
+            _settings.DiagonalWeight.Returns(0f);
+            var host = new BalloonModel();
+            host.Item.Value = ItemType.Bomb;
+            _grid.Place(host, null, new Vector2Int(3, 1));
+            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(6, 5), new Vector2Int(5, 0));
+
+            Arrange();
+
+            Assert.IsTrue(_unbreakables.All(u => u.FormationHeading == Vector2.up));
         }
 
         [Test]
