@@ -8,8 +8,10 @@ keeping the balloon grid, the items, the grid actors and the visual language it 
 **Status:** all decisions settled. Phase 1 (projectile identity) is built. Phase 2 (rapid fire) is
 implemented, pending the owner's playtest at cap 3. Phase 3 (spawn clock) is implemented, pending the owner's playtest. Phase 4 (generated levels) is implemented, pending the owner's playtest. Phase 5 is split: 5a
 (unlimited retries and the ad seam) is built, pending playtest; 5b (upgrade cards and the level-up
-change) is built, pending playtest; 5c (the rewarded bonus card and the tooltip) is implemented,
-pending review and playtest. Items marked
+change) is built, pending playtest; 5c (the rewarded bonus card and the tooltip) is built and
+reviewed (2026-11-11: no blocking findings; the retry labels format safely, six tests pin the reward
+rules, and a watched ad whose screen is left mid-ad needs a policy before a real SDK), pending
+playtest. Items marked
 **DECISION** are settled: don't re-derive them. §10 records the owner's answers.
 
 ---
