@@ -670,6 +670,37 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void BonusRetry_RepeatedAds_NeverStackPower()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_shield);
+
+            for (var used = 0; used < 4; used++)
+            {
+                _rig.RetryState.RetriesUsed.Returns(used);
+                _rig.Retry(4, withBonusCard: true);
+            }
+
+            Assert.AreEqual(BaseShields + 1, Upgrades.StartingShields, "each bonus replaces the last, one card at a time");
+            Assert.AreEqual(0, Upgrades.StacksOf(_shield));
+        }
+
+        [Test]
+        public void BonusRetry_ThenWonThenLostPlain_StaysWithoutTheBonus()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_shield);
+            _rig.Retry(4, withBonusCard: true);
+            _rig.Present(5);
+            _rig.Advance();
+
+            _rig.Retry(5, withBonusCard: false);
+
+            Assert.IsNull(Upgrades.BonusCard);
+            Assert.AreEqual(BaseShields, Upgrades.StartingShields);
+        }
+
+        [Test]
         public void BonusRetry_FasterReload_ScalesTheReload()
         {
             _rig.Cards.Clear();

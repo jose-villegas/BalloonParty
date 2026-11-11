@@ -334,6 +334,27 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void TryBonusRetry_WithTheRealTracker_StagesTheBonusAndCountsTheRetry()
+        {
+            var config = Substitute.For<IRunConfig>();
+            config.MaxRetries.Returns(0);
+            config.RetriesBeforeAd.Returns(1);
+            var tracker = new RetryTracker(config);
+            var offers = new FailureOffers(tracker, tracker, config, _ads, _bonusCards);
+
+            Assert.IsTrue(offers.TryBonusRetryAsync(6, CancellationToken.None).GetAwaiter().GetResult());
+            Assert.AreEqual(6, tracker.RetryLevel);
+            Assert.IsTrue(tracker.RetryWithBonusCard);
+
+            tracker.ResetRun(0);
+
+            Assert.IsFalse(tracker.RetryWithBonusCard);
+            Assert.IsTrue(offers.Current.RetryNeedsAd, "the bonus retry used the free one");
+            Assert.IsTrue(offers.TryRetryAsync(6, CancellationToken.None).GetAwaiter().GetResult());
+            Assert.IsFalse(tracker.RetryWithBonusCard, "a plain retry after a bonus attempt carries no bonus");
+        }
+
+        [Test]
         public void NoAdService_CountsEveryAdAsWatched()
         {
             var result = new NoAdService().ShowRewardedAsync(AdPlacement.RetryGate, CancellationToken.None)

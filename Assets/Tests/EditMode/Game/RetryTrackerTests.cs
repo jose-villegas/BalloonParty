@@ -75,6 +75,42 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void BonusRetry_CountsAsAUsedRetry()
+        {
+            var tracker = Tracker(3);
+
+            tracker.PrepareRetry(5, withBonusCard: true);
+            tracker.ResetRun(0);
+
+            Assert.AreEqual(1, tracker.RetriesUsed, "an ad-bought retry still feeds the ad gate and the cap");
+            Assert.AreEqual(2, tracker.RetriesRemaining);
+        }
+
+        [Test]
+        public void PrepareRetry_StagedAgainWithoutABonus_DropsTheBonus()
+        {
+            var tracker = Tracker(0);
+            tracker.PrepareRetry(5, withBonusCard: true);
+
+            tracker.PrepareRetry(5, withBonusCard: false);
+
+            Assert.IsFalse(tracker.RetryWithBonusCard);
+        }
+
+        [Test]
+        public void FreshRunAfterABonusRetry_StartsWithoutTheBonus()
+        {
+            var tracker = Tracker(0);
+            tracker.PrepareRetry(5, withBonusCard: true);
+            tracker.ResetRun(0);
+
+            tracker.ResetRun(0);
+
+            Assert.IsFalse(tracker.RetryWithBonusCard);
+            Assert.AreEqual(0, tracker.RetriesUsed);
+        }
+
+        [Test]
         public void NegativeMaxRetries_IsUnlimited()
         {
             var tracker = Tracker(-1);

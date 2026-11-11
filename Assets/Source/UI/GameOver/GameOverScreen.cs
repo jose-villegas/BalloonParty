@@ -1,5 +1,6 @@
 using System.Threading;
 using BalloonParty.Game.Run;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using Cysharp.Threading.Tasks;
@@ -299,12 +300,12 @@ namespace BalloonParty.UI.GameOver
         {
             if (offer.RetryNeedsAd)
             {
-                return string.Format(_retryAdFormat, _deathLevel);
+                return _retryAdFormat.FormatOrRaw(_deathLevel);
             }
 
             return offer.RetriesLeft < 0
-                ? string.Format(_retryFormat, _deathLevel)
-                : string.Format(_retryCountFormat, _deathLevel, offer.RetriesLeft);
+                ? _retryFormat.FormatOrRaw(_deathLevel)
+                : _retryCountFormat.FormatOrRaw(_deathLevel, offer.RetriesLeft);
         }
 
         private void SetRetryInteractable(bool interactable)
