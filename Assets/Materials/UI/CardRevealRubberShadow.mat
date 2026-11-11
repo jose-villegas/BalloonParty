@@ -32,13 +32,13 @@ Material:
     - _AmbientDesaturation: 0.5
     - _AmbientDimming: 0.4
     - _AmbientHue: 0.25
-    - _BandSoftness: 0.01
-    - _CreaseEdge: 0.55
-    - _CreaseTone: 0.6
+    - _BandSoftness: 0.06
+    - _CreaseEdge: 0.3
+    - _CreaseTone: 0.8
     - _DropShadow: 1
     - _GlowLift: 0.45
     - _HighlightSize: 0.985
-    - _HighlightSoftness: 0.002
+    - _HighlightSoftness: 0.008
     - _LightHeight: 0.9
     - _LitEdge: 0.45
     - _MidTone: 0.86
@@ -48,7 +48,7 @@ Material:
     - _ScatterRim: 1.2
     - _ScatterThin: 0.9
     - _ShadowEdge: -0.1
-    - _ShadowOffset: 9
+    - _ShadowOffset: 10
     - _ShadowSoftness: 0.012
     - _ShadowTone: 0.68
     - _Specular: 0.9
