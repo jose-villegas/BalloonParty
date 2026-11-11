@@ -34,9 +34,9 @@ namespace BalloonParty.Editor
         private const string RibbonShaderName = "BalloonParty/Sprite/CelRibbon";
         private const string RootName = "CardReveal";
 
-        // In canvas units (the canvas is 225 wide): a frame shows the balloon about 80 across, a third of the
+        // In canvas units (the canvas is 225 wide): a frame shows the balloon about 93 across, two fifths of the
         // screen.
-        private const float FrameSize = 124f;
+        private const float FrameSize = 144f;
 
         // The bake's camera sits a little below the balloon's centre (bake_pops.py): its centre is this share
         // of a frame above the frame's.
@@ -47,8 +47,8 @@ namespace BalloonParty.Editor
         private const float TitleRibbonHeight = 16f;
         private const float DescriptionRibbonHeight = 12.5f;
 
-        // A little above the screen's middle, over the upper board.
-        private static readonly Vector2 Place = new(0f, 35f);
+        // A little above the screen's middle.
+        private static readonly Vector2 Place = new(0f, 12f);
 
         // Cream, a little warmer than the board's white, so the pencil reads on it over any scenery.
         private static readonly Color RibbonColor = new(0.98f, 0.965f, 0.925f, 1f);

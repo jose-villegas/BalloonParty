@@ -42,14 +42,14 @@ Shader "BalloonParty/Sprite/LitFlipbook"
         _MidTone ("Middle Tone", Range(0, 1)) = 0.86
         _ShadowTone ("Shadow Tone", Range(0, 1)) = 0.68
         // How wide each step between tones is at the least; never narrower than a screen pixel.
-        _BandSoftness ("Band Softness", Range(0, 0.3)) = 0.01
+        _BandSoftness ("Band Softness", Range(0, 0.3)) = 0.06
         // The baked occlusion below this reads as a crease, drawn in the crease tone.
         _CreaseEdge ("Crease Edge", Range(0, 1)) = 0.3
         _CreaseTone ("Crease Tone", Range(0, 1)) = 0.8
         // The highlight, a spot of the light's own colour as on the board's balloons: how much of the surface it
         // covers (lower is bigger), how soft its edge is at the least, and how much of the light it shows.
         _HighlightSize ("Highlight Size", Range(0.8, 1)) = 0.985
-        _HighlightSoftness ("Highlight Softness", Range(0, 0.05)) = 0.002
+        _HighlightSoftness ("Highlight Softness", Range(0, 0.05)) = 0.008
         _Specular ("Highlight Strength", Range(0, 1)) = 0.9
 
         [Header(Subsurface)]
@@ -74,7 +74,7 @@ Shader "BalloonParty/Sprite/LitFlipbook"
         _ShadowColor ("Color", Color) = (0.42, 0.42, 0.5, 0.42)
         // How far the shadow falls from the rubber, away from the light, in canvas units, and how soft its edge
         // is, in frame widths.
-        _ShadowOffset ("Distance", Range(0, 40)) = 9
+        _ShadowOffset ("Distance", Range(0, 40)) = 10
         _ShadowSoftness ("Softness (frames)", Range(0, 0.05)) = 0.012
 
         [Header(Scene Light)]

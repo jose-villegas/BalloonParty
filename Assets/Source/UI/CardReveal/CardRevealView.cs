@@ -237,8 +237,8 @@ namespace BalloonParty.UI.CardReveal
             }
 
             var exit = float.IsNaN(_exitFrom) ? 0f : Mathf.Clamp01((now - _exitFrom) / exitSeconds);
-            _titleRibbon.Fly(now - _releasedAt, _settings.RibbonBurstSeconds, exit);
-            _descriptionRibbon.Fly(now - _releasedAt, _settings.RibbonBurstSeconds, exit);
+            _titleRibbon.Fly(now - _releasedAt, exit, _settings);
+            _descriptionRibbon.Fly(now - _releasedAt, exit, _settings);
             return exit;
         }
 

@@ -51,6 +51,15 @@ namespace BalloonParty.Configuration.CardReveal
         float RibbonExitSeconds { get; }
 
         /// <summary>
+        ///     The scale the ribbons swell to after the burst, so the card grows into view (1 or more), never wider
+        ///     than the screen allows.
+        /// </summary>
+        float RibbonGrowth { get; }
+
+        /// <summary>How long the ribbons take to swell to <see cref="RibbonGrowth" /> after the burst.</summary>
+        float RibbonGrowSeconds { get; }
+
+        /// <summary>
         ///     On a level-up, the share of the level's ascent by which the ribbons are gone: just before the next
         ///     level settles on screen.
         /// </summary>

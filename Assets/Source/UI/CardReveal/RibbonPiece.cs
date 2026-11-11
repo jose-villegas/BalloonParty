@@ -1,4 +1,5 @@
 using System;
+using BalloonParty.Configuration.CardReveal;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -45,6 +46,9 @@ namespace BalloonParty.UI.CardReveal
 
         [SerializeField] private float _exitSpin = 12f;
 
+        [Tooltip("The widest it may swell to after the burst, in canvas units, so a long line stays on screen.")]
+        [SerializeField] [Min(1f)] private float _widest = 205f;
+
         private Vector3[][] _sourceVertices = Array.Empty<Vector3[]>();
 
         /// <summary>Writes <paramref name="line" /> on the ribbon and sizes the ribbon to it.</summary>
@@ -66,22 +70,35 @@ namespace BalloonParty.UI.CardReveal
         }
 
         /// <summary>
-        ///     Its pose <paramref name="sinceRelease" /> seconds after the pop let it go: the burst out over
-        ///     <paramref name="burstSeconds" />, then the drift and sway, and <paramref name="exit" /> (0 to 1) of
-        ///     the way through its flight off.
+        ///     Its pose <paramref name="sinceRelease" /> seconds after the pop let it go: the burst out, then the
+        ///     swell, drift and sway, and <paramref name="exit" /> (0 to 1) of the way through its flight off.
         /// </summary>
-        internal void Fly(float sinceRelease, float burstSeconds, float exit)
+        internal void Fly(float sinceRelease, float exit, ICardRevealSettings settings)
         {
+            var burstSeconds = settings.RibbonBurstSeconds;
             var burst = burstSeconds > 0f ? Mathf.Clamp01(sinceRelease / burstSeconds) : 1f;
             var burstOut = DOVirtual.EasedValue(0f, 1f, burst, Ease.OutCubic);
+            var growSeconds = settings.RibbonGrowSeconds;
+            var grow = growSeconds > 0f ? Mathf.Clamp01((sinceRelease - burstSeconds) / growSeconds) : 1f;
+            var grown = GrownScale(settings.RibbonGrowth, ((RectTransform)transform).sizeDelta.x, _widest);
             var sway = Mathf.Sin(sinceRelease * 1.4f + _swayPhase);
             var away = exit * exit;
 
             var position = Vector2.LerpUnclamped(_restPosition, _burstTo, burstOut) + _drift * sinceRelease +
                            new Vector2(_sway.x * sway, 0f) + _exitBy * away;
             var tilt = Mathf.LerpUnclamped(_restTilt, _tilt, burstOut) + _sway.y * sway + _exitSpin * away;
-            var scale = Mathf.Lerp(_restScale, 1f, burstOut);
+            var scale = Mathf.Lerp(_restScale, 1f, burstOut) *
+                        Mathf.Lerp(1f, grown, DOVirtual.EasedValue(0f, 1f, grow, Ease.InOutSine));
             Pose(position, tilt, scale, 1f - away, sinceRelease);
+        }
+
+        /// <summary>
+        ///     The scale a ribbon <paramref name="width" /> wide swells to: <paramref name="growth" />, unless that
+        ///     would take it past <paramref name="widest" />, and never below its own size.
+        /// </summary>
+        internal static float GrownScale(float growth, float width, float widest)
+        {
+            return width > 0f ? Mathf.Clamp(widest / width, 1f, growth) : growth;
         }
 
         private void Pose(Vector2 position, float tilt, float scale, float alpha, float waveTime)

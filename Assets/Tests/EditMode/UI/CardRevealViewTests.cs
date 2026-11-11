@@ -75,6 +75,25 @@ namespace BalloonParty.Tests.UI
         }
 
         [Test]
+        public void RibbonGrownScale_WithRoomToGrow_IsTheFullGrowth()
+        {
+            Assert.AreEqual(1.3f, RibbonPiece.GrownScale(1.3f, 100f, 205f), Tolerance);
+        }
+
+        [Test]
+        public void RibbonGrownScale_ForALongLine_StopsAtTheWidestItMayBe()
+        {
+            // 180 wide may only grow to 205: a long description stays on screen.
+            Assert.AreEqual(205f / 180f, RibbonPiece.GrownScale(1.3f, 180f, 205f), Tolerance);
+        }
+
+        [Test]
+        public void RibbonGrownScale_ForALineAlreadyTooWide_NeverShrinksIt()
+        {
+            Assert.AreEqual(1f, RibbonPiece.GrownScale(1.3f, 240f, 205f), Tolerance);
+        }
+
+        [Test]
         public void RibbonWave_IsFlatAtItsNodes_AndPeaksAQuarterWaveOn()
         {
             Assert.AreEqual(0f, RibbonGraphic.Wave(0f, 0f, 2f, 40f, 1f), Tolerance);

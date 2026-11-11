@@ -19,13 +19,13 @@ when, is decided by `Game/CardReveal/`; this folder only plays it. The design is
 All on unscaled time, so slow-motion beats don't stretch it.
 
 1. The balloon is tinted one of the level's colours, at random. It rises from below to its place (`RiseSeconds`) and holds a beat (`HoldBeforePopSeconds`). The ribbons show faintly inside it.
-2. The chosen pop's 24 frames play at 30 fps. The frame follows the time played, so a slow frame skips a frame rather than slowing the pop. From `RubberFallsFromFrame`, once it tears, the rubber falls, speeding up under `RubberFallGravity` (`FallDistance`, tested): the bake keeps the balloon's neck where it was until its last frames, so without it the pop plays out in one place. Only the rubber falls; the ribbons fly their own way.
+2. The chosen pop's 24 frames play at `FramesPerSecond` (24, a little slower than the bake's 30, so the tear reads). The frame follows the time played, so a slow frame skips a frame rather than slowing the pop. From `RubberFallsFromFrame`, once it tears, the rubber falls, speeding up under `RubberFallGravity` (`FallDistance`, tested): the bake keeps the balloon's neck where it was until its last frames, so without it the pop plays out in one place. Only the rubber falls; the ribbons fly their own way.
 3. On `RibbonsFromFrame`, once the rubber has opened, the ribbons fly out (`RibbonBurstSeconds`). The title goes above the balloon's place, to the left; the description goes under it, to the right.
-4. They drift and sway, readable, until it is time to go. Then they fly off, up and outward, and fade (`RibbonExitSeconds`).
+4. They swell to `RibbonGrowth` (1.3) over `RibbonGrowSeconds`, so the card grows into view, but never wider than the screen allows (`GrownScale`, tested). They drift and sway, readable, until it is time to go. Then they fly off, up and outward, and fade (`RibbonExitSeconds`).
 
 When the ribbons go depends on the ascent:
 
-- **On a level-up**, the ascent (`LevelAscendStartedMessage`, `ICinematicsSettings.LevelAscend.AscentSeconds`) starts just after the reveal. The ribbons are gone `RibbonsGoneAtAscent` of the way through it (0.7). That is just after the next level's balloons come in (the ascent's spawn cue, 0.6) and before it settles.
+- **On a level-up**, the ascent (`LevelAscendStartedMessage`, `ICinematicsSettings.LevelAscend.AscentSeconds`) starts just after the reveal. The ribbons are gone `RibbonsGoneAtAscent` of the way through it (0.82). That is after the next level's balloons come in (the ascent's spawn cue, 0.6) and before it settles.
 - **Without an ascent** (a retry's bonus card, the cheat), they fly `RibbonSecondsWithoutAscent` from the pop.
 - **Either way**, they fly at least `RibbonMinimumSeconds`, so they can always be read.
 

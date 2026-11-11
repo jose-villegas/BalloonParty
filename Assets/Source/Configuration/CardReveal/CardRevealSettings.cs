@@ -22,7 +22,7 @@ namespace BalloonParty.Configuration.CardReveal
         [Header("Sheet")]
         [SerializeField] [Min(1)] private int _sheetColumns = 6;
         [SerializeField] [Min(1)] private int _sheetRows = 4;
-        [SerializeField] [Min(1f)] private float _framesPerSecond = 30f;
+        [SerializeField] [Min(1f)] private float _framesPerSecond = 24f;
 
         [Header("Playing")]
         [Tooltip("How much of the ribbons inside shows through the whole front rubber: a shadow inside the balloon.")]
@@ -52,15 +52,21 @@ namespace BalloonParty.Configuration.CardReveal
         [SerializeField] [Min(0f)] private float _ribbonBurstSeconds = 0.4f;
         [SerializeField] [Min(0f)] private float _ribbonExitSeconds = 0.5f;
 
+        [Tooltip("After the burst the ribbons swell to this scale, easing in over Ribbon Grow Seconds, so the card " +
+                 "grows into view. Never wider than the screen allows.")]
+        [SerializeField] [Min(1f)] private float _ribbonGrowth = 1.3f;
+
+        [SerializeField] [Min(0f)] private float _ribbonGrowSeconds = 1.2f;
+
         [Tooltip("On a level-up, the share of the level's ascent by which the ribbons are gone: just before the " +
                  "next level settles on screen. Its balloons come in at the ascent's spawn cue (0.6).")]
-        [SerializeField] [Range(0f, 1f)] private float _ribbonsGoneAtAscent = 0.7f;
+        [SerializeField] [Range(0f, 1f)] private float _ribbonsGoneAtAscent = 0.82f;
 
         [Tooltip("With no ascent (a retry's bonus card, the cheat): seconds from the pop until the ribbons are gone.")]
-        [SerializeField] [Min(0f)] private float _ribbonSecondsWithoutAscent = 2.6f;
+        [SerializeField] [Min(0f)] private float _ribbonSecondsWithoutAscent = 3.4f;
 
         [Tooltip("The ribbons' shortest flight, from the pop until gone, so they can always be read.")]
-        [SerializeField] [Min(0f)] private float _ribbonMinimumSeconds = 1.8f;
+        [SerializeField] [Min(0f)] private float _ribbonMinimumSeconds = 2.4f;
 
         public IReadOnlyList<Texture2D> PopSheets => _popSheets;
         public int PopCount => Mathf.Max(1, _popSheets.Length);
@@ -74,6 +80,8 @@ namespace BalloonParty.Configuration.CardReveal
         public int RibbonsFromFrame => _ribbonsFromFrame;
         public float RibbonBurstSeconds => _ribbonBurstSeconds;
         public float RibbonExitSeconds => _ribbonExitSeconds;
+        public float RibbonGrowth => _ribbonGrowth;
+        public float RibbonGrowSeconds => _ribbonGrowSeconds;
         public float RibbonsGoneAtAscent => _ribbonsGoneAtAscent;
         public float RibbonSecondsWithoutAscent => _ribbonSecondsWithoutAscent;
         public float RibbonMinimumSeconds => _ribbonMinimumSeconds;
