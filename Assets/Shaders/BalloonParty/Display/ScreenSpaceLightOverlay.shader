@@ -15,6 +15,15 @@ Shader "BalloonParty/Display/ScreenSpaceLightOverlay"
         // The ambient sky color the bounce is measured against — pushed by the service
         // from the camera background, so flat sky nets to neutral (no global tint).
         _AmbientColor   ("Ambient Color",   Color)       = (0.6, 0.8, 0.95, 1)
+        // The most the overlay may brighten the brightest balloon (per channel). The blend can't see the frame,
+        // so the cap is on the multiplier, divided by how bright the light lets a balloon get at that spot: at
+        // noon a white balloon stays under the bloom start (1.02) and only emitters glow, while the dark night
+        // leaves the bounce room to colour its neighbours (PLAN-HDR). Shadows and the hue shift are untouched.
+        _MaxLift        ("Max Lift",        Range(1, 2)) = 1.02
+        // The balloon body's night re-grade (DiffuseSprite and the other balloon materials): the brightest
+        // surface under the overlay, so the cap above is measured against it.
+        _AmbientHue     ("Balloon Ambient Hue",     Range(0, 1)) = 0.25
+        _AmbientDimming ("Balloon Ambient Dimming", Range(0, 1)) = 0.4
     }
 
     SubShader
@@ -47,6 +56,9 @@ Shader "BalloonParty/Display/ScreenSpaceLightOverlay"
             float  _BounceStrength;
             float  _MagnitudeRef;
             fixed4 _AmbientColor;
+            half   _MaxLift;
+            float  _AmbientHue;
+            float  _AmbientDimming;
 
             struct appdata_t
             {
@@ -98,7 +110,12 @@ Shader "BalloonParty/Display/ScreenSpaceLightOverlay"
                 fixed3 ambient = lerp(_AmbientColor.rgb, _GroundBounceReference.rgb * SceneLightTint(),
                     GroundCoverageAt(worldPos));
                 fixed3 bounce = (gathered.rgb - ambient) * _BounceStrength * magnitude;
-                fixed3 color = shadowTint * 0.5 + bounce;
+                // The brightest a balloon is lit here: the key light re-graded as the balloons are, plus the local
+                // boost at full strength (a palette light's channels don't pass 1). Balloons cap at white, so 1 at most.
+                float3 balloonLight = SceneLightTint() + SceneLightAmbientRegrade(_AmbientHue, _AmbientDimming);
+                float local = magnitude - SceneLightAmbientMagnitude();
+                float brightest = min(1.0, max(balloonLight.r, max(balloonLight.g, balloonLight.b)) + local);
+                fixed3 color = min(shadowTint * 0.5 + bounce, 0.5 * _MaxLift / max(brightest, 0.5));
 
                 return fixed4(color, 1.0);
             }

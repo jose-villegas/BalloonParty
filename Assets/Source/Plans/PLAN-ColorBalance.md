@@ -160,6 +160,8 @@ at midnight, by `balloons` (where each balloon is) and `palette_measure2.py` (th
 
 - Sparks, the shield halo, lightning and the laser are the emitters (see @ref plan_hdr). Bloom's
   threshold is 1.4, above every surface; check no balloon surface crosses it after Phase 1–3.
+- The screen-space light overlay caps how far it brightens: at noon a white balloon stays under the bloom
+  start, at night the bounce keeps its room to colour neighbours (@ref plan_hdr, task 2.8).
 
 ---
 
