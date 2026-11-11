@@ -4,7 +4,7 @@ var searchData=
   ['gaintrigger_1',['GainTrigger',['../classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterAnimation.html#ab1c6b28cecfbf189ecd8de8d96554154',1,'BalloonParty::UI::Shields::ShieldCounterAnimation']]],
   ['gameconfig_2',['GameConfig',['../classBalloonParty_1_1Editor_1_1EffectPreview_1_1EffectPreviewContext.html#a5b56147cedc5256558e50f5ff729abf2',1,'BalloonParty::Editor::EffectPreview::EffectPreviewContext']]],
   ['gamepaththicknessworld_3',['GamePathThicknessWorld',['../classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a9683b2003028d4d60df8213ffd66bd56',1,'BalloonParty::Editor::ShotSolver::ShotSolverWindow']]],
-  ['gamescenepath_4',['GameScenePath',['../classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html#abac8fde882c41de0ec072a57de52350e',1,'BalloonParty::Editor::HeadsUpBuilder']]],
+  ['gamescenepath_4',['GameScenePath',['../classBalloonParty_1_1Editor_1_1CardRevealBuilder.html#a348da64556b949c3665ff26db1f58eb8',1,'BalloonParty.Editor.CardRevealBuilder.GameScenePath'],['../classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html#abac8fde882c41de0ec072a57de52350e',1,'BalloonParty.Editor.HeadsUpBuilder.GameScenePath']]],
   ['gapbeforecols_5',['GapBeforeCols',['../classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a9381c5291893bd0c15b67386379fed72',1,'BalloonParty::Editor::LevelPacingWindow']]],
   ['gapbgcolor_6',['GapBgColor',['../classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a852cbe059e0953c0ec78e5c73f09db6b',1,'BalloonParty::Editor::LevelPacingWindow']]],
   ['gapradiusscale_7',['GapRadiusScale',['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushViewController.html#a93a261d8554ea17b8817bb17330c7ff3',1,'BalloonParty::Slots::Actor::Archetype::BushViewController']]],

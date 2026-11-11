@@ -1201,6 +1201,7 @@ var annotated_dup =
           [ "TooltipBanner", "classBalloonParty_1_1UI_1_1Tooltip_1_1TooltipBanner.html", "classBalloonParty_1_1UI_1_1Tooltip_1_1TooltipBanner" ]
         ] ],
         [ "AnimatorGameEntryGate", "classBalloonParty_1_1UI_1_1AnimatorGameEntryGate.html", "classBalloonParty_1_1UI_1_1AnimatorGameEntryGate" ],
+        [ "CameraFittedCanvas", "classBalloonParty_1_1UI_1_1CameraFittedCanvas.html", "classBalloonParty_1_1UI_1_1CameraFittedCanvas" ],
         [ "CanvasCameraBinder", "classBalloonParty_1_1UI_1_1CanvasCameraBinder.html", "classBalloonParty_1_1UI_1_1CanvasCameraBinder" ],
         [ "FadeImage", "classBalloonParty_1_1UI_1_1FadeImage.html", "classBalloonParty_1_1UI_1_1FadeImage" ],
         [ "FormattedLabel", "structBalloonParty_1_1UI_1_1FormattedLabel.html", "structBalloonParty_1_1UI_1_1FormattedLabel" ],

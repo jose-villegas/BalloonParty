@@ -1,8 +1,9 @@
 var NAVTREEINDEX3 =
 {
+"RevealedCard_8cs.html":[7,0,7,0,2],
 "RibbonGraphic_8cs.html":[7,0,18,1,1],
 "RibbonPiece_8cs.html":[7,0,18,1,2],
-"RollingCounterDisplay_8cs.html":[7,0,18,19],
+"RollingCounterDisplay_8cs.html":[7,0,18,20],
 "RollingTextAnimator_8cs.html":[7,0,14,0,1],
 "RunConfig_8cs.html":[7,0,3,23],
 "RunController_8cs.html":[7,0,7,8,15],
@@ -13,7 +14,7 @@ var NAVTREEINDEX3 =
 "RunRestartCompletedMessage_8cs.html":[7,0,14,7,36],
 "RunSeed_8cs.html":[7,0,7,8,18],
 "RunUpgrades_8cs.html":[7,0,7,11,3],
-"ScaleDownButton_8cs.html":[7,0,18,20],
+"ScaleDownButton_8cs.html":[7,0,18,21],
 "ScenarioContentRoot_8cs.html":[7,0,15,0,18],
 "ScenarioController_8cs.html":[7,0,7,7,7],
 "ScenarioGradeCheat_8cs.html":[7,0,2,20],
@@ -193,13 +194,13 @@ var NAVTREEINDEX3 =
 "TimeOfDayCheat_8cs.html":[7,0,2,25],
 "TimeOfDayClock_8cs.html":[7,0,14,11,6],
 "TimeOfDayCycle_8cs.html":[7,0,7,7,8],
-"TimeOfDayOrbit_8cs.html":[7,0,18,21],
+"TimeOfDayOrbit_8cs.html":[7,0,18,22],
 "TimeOfDayService_8cs.html":[7,0,14,11,7],
 "TimeOfDaySource_8cs.html":[7,0,3,5,34],
-"TimeOfDaySpecular_8cs.html":[7,0,18,22],
-"TimeOfDaySwap_8cs.html":[7,0,18,23],
-"TimeOfDayTint_8cs.html":[7,0,18,24],
-"TimeOfDayVisibility_8cs.html":[7,0,18,25],
+"TimeOfDaySpecular_8cs.html":[7,0,18,23],
+"TimeOfDaySwap_8cs.html":[7,0,18,24],
+"TimeOfDayTint_8cs.html":[7,0,18,25],
+"TimeOfDayVisibility_8cs.html":[7,0,18,26],
 "TimeScaleService_8cs.html":[7,0,14,8,5],
 "TimeScaleSource_8cs.html":[7,0,14,8,6],
 "TimerCatalog_8cs.html":[7,0,7,10,31],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "WallBounceEndCondition_8cs.html":[7,0,12,0,3],
 "WallHitMessage_8cs.html":[7,0,14,7,53],
 "WallLimits_8cs.html":[7,0,14,37],
-"WallNetView_8cs.html":[7,0,13,0,5],
-"WaterCausticBuffer_8cs.html":[7,0,13,0,6]
+"WallNetView_8cs.html":[7,0,13,0,5]
 };

@@ -13,6 +13,7 @@ var dir_53ff6e473d46d4e442ba5a7ce9f895e3 =
     [ "Telemetry", "dir_05393b6d3f24a84216a0eef685fd00d7.html", "dir_05393b6d3f24a84216a0eef685fd00d7" ],
     [ "Tooltip", "dir_9ff89df292901c591cb7ff29cf1ff082.html", "dir_9ff89df292901c591cb7ff29cf1ff082" ],
     [ "AnimatorGameEntryGate.cs", "AnimatorGameEntryGate_8cs.html", "AnimatorGameEntryGate_8cs" ],
+    [ "CameraFittedCanvas.cs", "CameraFittedCanvas_8cs.html", "CameraFittedCanvas_8cs" ],
     [ "CanvasCameraBinder.cs", "CanvasCameraBinder_8cs.html", "CanvasCameraBinder_8cs" ],
     [ "FadeImage.cs", "FadeImage_8cs.html", "FadeImage_8cs" ],
     [ "FormattedLabel.cs", "FormattedLabel_8cs.html", "FormattedLabel_8cs" ],

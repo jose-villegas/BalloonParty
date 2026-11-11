@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"InjectingPoolChannel_8cs.html":[7,0,14,9,3],
 "InputHelper_8cs.html":[7,0,14,4,9],
 "IntLevelStep_8cs.html":[7,0,3,9,12],
 "ItemActivatedMessage_8cs.html":[7,0,14,7,14],
@@ -164,7 +165,7 @@ var NAVTREEINDEX2 =
 "PierceDischargeEffects_8cs.html":[7,0,12,1,2],
 "PierceDischargedMessage_8cs.html":[7,0,14,7,24],
 "PierceEndedEndCondition_8cs.html":[7,0,12,0,1],
-"PlainCounterDisplay_8cs.html":[7,0,18,16],
+"PlainCounterDisplay_8cs.html":[7,0,18,17],
 "PlayerHealthController_8cs.html":[7,0,7,6,4],
 "PlayerPrefsCoinStore_8cs.html":[7,0,7,2,13],
 "PointFocus_8cs.html":[7,0,7,1,16],
@@ -234,11 +235,11 @@ var NAVTREEINDEX2 =
 "RangedInt_8cs.html":[7,0,3,11,2],
 "RangedLevelParameters_8cs.html":[7,0,3,9,25],
 "ReactiveBinderRegistration_8cs.html":[7,0,18,0,2],
-"ReactiveCounterLabel_8cs.html":[7,0,18,17],
+"ReactiveCounterLabel_8cs.html":[7,0,18,18],
 "ReactivePropertyBinder_8cs.html":[7,0,18,0,3],
 "RecordField_8cs.html":[7,0,18,10,7],
 "RecordKind_8cs.html":[7,0,7,10,24],
-"RectAnchorMath_8cs.html":[7,0,18,18],
+"RectAnchorMath_8cs.html":[7,0,18,19],
 "RejectedBalloonEffect_8cs.html":[7,0,1,3,8],
 "ReleasePublisher_8cs.html":[7,0,6,4,0],
 "ReleaseUploadWindow_8cs.html":[7,0,6,4,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "RestartRiseStartedMessage_8cs.html":[7,0,14,7,34],
 "ResumedMessage_8cs.html":[7,0,14,8,4],
 "RetryTracker_8cs.html":[7,0,7,8,14],
-"RevealCardCheat_8cs.html":[7,0,2,19],
-"RevealedCard_8cs.html":[7,0,7,0,2]
+"RevealCardCheat_8cs.html":[7,0,2,19]
 };

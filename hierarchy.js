@@ -1276,6 +1276,7 @@ var hierarchy =
       [ "BalloonParty.Slots.Grid.SlotGridView", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGridView.html", null ],
       [ "BalloonParty.Thrower.ThrowerView", "classBalloonParty_1_1Thrower_1_1ThrowerView.html", null ],
       [ "BalloonParty.UI.AnimatorGameEntryGate", "classBalloonParty_1_1UI_1_1AnimatorGameEntryGate.html", null ],
+      [ "BalloonParty.UI.CameraFittedCanvas", "classBalloonParty_1_1UI_1_1CameraFittedCanvas.html", null ],
       [ "BalloonParty.UI.CanvasCameraBinder", "classBalloonParty_1_1UI_1_1CanvasCameraBinder.html", null ],
       [ "BalloonParty.UI.CardReveal.CardRevealView", "classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html", null ],
       [ "BalloonParty.UI.CardReveal.RibbonPiece", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html", null ],

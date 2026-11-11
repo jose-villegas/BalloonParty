@@ -117,7 +117,7 @@ $(function(){initNavTree('classBalloonParty_1_1Editor_1_1CardRevealBuilder.html'
 </div><!--header-->
 <div class="contents">
 
-<p>Builds the card reveal: imports the baked pop sheets under <code>Assets/Sprites/UI/CardReveal/</code> as linear data, lists them on the <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html" title="The card reveal&#39;s settings.">CardRevealSettings</a> asset (made if missing, and assigned to the game scope), makes the rubber's material, and builds the <a class="el" href="classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html" title="The card reveal&#39;s stage (ICardReveals): plays each reveal the controller hands it.">CardRevealView</a> on <code>GameCanvas</code>: the balloon's back layer, the two ribbons (the card's title and what it does), its front layer.  
+<p>Builds the card reveal: imports the baked pop sheets under <code>Assets/Sprites/UI/CardReveal/</code> as linear data, lists them on the <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html" title="The card reveal&#39;s settings.">CardRevealSettings</a> asset (made if missing, and assigned to the game scope), makes the materials, and builds the <a class="el" href="classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html" title="The card reveal&#39;s stage (ICardReveals): plays each reveal the controller hands it.">CardRevealView</a> on a canvas of its own, the <code>CardRevealCanvas</code> prefab, placed in the <a class="el" href="namespaceBalloonParty_1_1Game.html">Game</a> scene: the balloon's shadow and back layer, the two ribbons (the card's title and what it does), its front layer.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Editor.CardRevealBuilder:</div>
@@ -144,6 +144,8 @@ Static Package Functions</h2></td></tr>
 Static Private Member Functions</h2></td></tr>
 <tr class="memitem:ad37c4a92745535591de9f509a06f2049" id="r_ad37c4a92745535591de9f509a06f2049"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad37c4a92745535591de9f509a06f2049">AssignToScope</a> (<a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html">CardRevealSettings</a> settings)</td></tr>
 <tr class="separator:ad37c4a92745535591de9f509a06f2049"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67d7aae148ed4880c12e74f37de34b33" id="r_a67d7aae148ed4880c12e74f37de34b33"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67d7aae148ed4880c12e74f37de34b33">BuildCanvasPrefab</a> (TMP_Text label, CanvasScaler scaler, <a class="el" href="structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html">Materials</a> materials)</td></tr>
+<tr class="separator:a67d7aae148ed4880c12e74f37de34b33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c108f618a4392001dcdec9df61f8273" id="r_a7c108f618a4392001dcdec9df61f8273"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7c108f618a4392001dcdec9df61f8273">BuildFromMenu</a> ()</td></tr>
 <tr class="separator:a7c108f618a4392001dcdec9df61f8273"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca33e020202cbf9e01eddf030de5b84a" id="r_aca33e020202cbf9e01eddf030de5b84a"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aca33e020202cbf9e01eddf030de5b84a">BuildOnCanvas</a> (<a class="el" href="structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html">Materials</a> materials, bool askBeforeRebuild)</td></tr>
@@ -164,6 +166,10 @@ Static Private Member Functions</h2></td></tr>
 <tr class="separator:a87da91c22fbfa619b262ea5b15199187"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaad23d3cdc62958f11b2ffde2726e318" id="r_aaad23d3cdc62958f11b2ffde2726e318"><td class="memItemLeft" align="right" valign="top">static List&lt; Texture2D &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaad23d3cdc62958f11b2ffde2726e318">ImportSheets</a> ()</td></tr>
 <tr class="separator:aaad23d3cdc62958f11b2ffde2726e318"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a046fbfedb3586f368dccdeeefc08ed2c" id="r_a046fbfedb3586f368dccdeeefc08ed2c"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a046fbfedb3586f368dccdeeefc08ed2c">IsRevealCanvas</a> (GameObject go)</td></tr>
+<tr class="separator:a046fbfedb3586f368dccdeeefc08ed2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0446852d7c88af4a201e4afe6e182552" id="r_a0446852d7c88af4a201e4afe6e182552"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0446852d7c88af4a201e4afe6e182552">PlaceInGameScene</a> ()</td></tr>
+<tr class="separator:a0446852d7c88af4a201e4afe6e182552"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a031667145889670c74c938381d3ec619" id="r_a031667145889670c74c938381d3ec619"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a031667145889670c74c938381d3ec619">Stretch</a> (RectTransform rect)</td></tr>
 <tr class="separator:a031667145889670c74c938381d3ec619"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a10dafd45d28378be8790993c4112b0f9" id="r_a10dafd45d28378be8790993c4112b0f9"><td class="memItemLeft" align="right" valign="top">static TMP_Text&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a10dafd45d28378be8790993c4112b0f9">TooltipLabel</a> (GameObject canvas)</td></tr>
@@ -171,6 +177,8 @@ Static Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
+<tr class="memitem:a12001c6edc9097caedab2c076cf7b42a" id="r_a12001c6edc9097caedab2c076cf7b42a"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a12001c6edc9097caedab2c076cf7b42a">CanvasPrefabPath</a> = &quot;Assets/Prefabs/Game/CardRevealCanvas.prefab&quot;</td></tr>
+<tr class="separator:a12001c6edc9097caedab2c076cf7b42a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7284bffe96259d20ec7044c96a857702" id="r_a7284bffe96259d20ec7044c96a857702"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7284bffe96259d20ec7044c96a857702">CentreAboveFrame</a> = 0.039f</td></tr>
 <tr class="separator:a7284bffe96259d20ec7044c96a857702"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb7f3a7ba3dffbb7964b8da25c3e0432" id="r_aeb7f3a7ba3dffbb7964b8da25c3e0432"><td class="memItemLeft" align="right" valign="top">static readonly <a class="el" href="structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html">Flight</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeb7f3a7ba3dffbb7964b8da25c3e0432">DescriptionFlight</a></td></tr>
@@ -181,12 +189,20 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:a9c03163af2edde848257963034f39ca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a396834464514dd0f772bbef4ebfdf087" id="r_a396834464514dd0f772bbef4ebfdf087"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a396834464514dd0f772bbef4ebfdf087">FrameSize</a> = 144f</td></tr>
 <tr class="separator:a396834464514dd0f772bbef4ebfdf087"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a348da64556b949c3665ff26db1f58eb8" id="r_a348da64556b949c3665ff26db1f58eb8"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a348da64556b949c3665ff26db1f58eb8">GameScenePath</a> = &quot;Assets/Scenes/Game.unity&quot;</td></tr>
+<tr class="separator:a348da64556b949c3665ff26db1f58eb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abdaabf6de24478f396fea42202685e68" id="r_abdaabf6de24478f396fea42202685e68"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abdaabf6de24478f396fea42202685e68">MaterialPath</a> = &quot;Assets/<a class="el" href="structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html">Materials</a>/UI/CardRevealRubber.mat&quot;</td></tr>
 <tr class="separator:abdaabf6de24478f396fea42202685e68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a877d2cdb1b66a9f7d5ea938013c7e0d9" id="r_a877d2cdb1b66a9f7d5ea938013c7e0d9"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a877d2cdb1b66a9f7d5ea938013c7e0d9">MenuRoot</a> = &quot;Tools/BalloonParty/CardReveal/&quot;</td></tr>
 <tr class="separator:a877d2cdb1b66a9f7d5ea938013c7e0d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd4ed8e20bad05dfdb8d0e81728db965" id="r_afd4ed8e20bad05dfdb8d0e81728db965"><td class="memItemLeft" align="right" valign="top">static readonly Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afd4ed8e20bad05dfdb8d0e81728db965">Place</a> = new(0f, 12f)</td></tr>
 <tr class="separator:afd4ed8e20bad05dfdb8d0e81728db965"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a587edeb6cdba260ac75dcf744904d1c3" id="r_a587edeb6cdba260ac75dcf744904d1c3"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a587edeb6cdba260ac75dcf744904d1c3">RevealLayer</a> = &quot;Balloons&quot;</td></tr>
+<tr class="separator:a587edeb6cdba260ac75dcf744904d1c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac540856cbd8104ad951d1aef137560f3" id="r_ac540856cbd8104ad951d1aef137560f3"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac540856cbd8104ad951d1aef137560f3">RevealSortingLayer</a> = &quot;Sky&quot;</td></tr>
+<tr class="separator:ac540856cbd8104ad951d1aef137560f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad76cc20ad91922b62639dcfe825ed220" id="r_ad76cc20ad91922b62639dcfe825ed220"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad76cc20ad91922b62639dcfe825ed220">RevealSortingOrder</a> = 31999</td></tr>
+<tr class="separator:ad76cc20ad91922b62639dcfe825ed220"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8afe0ac35edc39c920a8735f7df0c82" id="r_ac8afe0ac35edc39c920a8735f7df0c82"><td class="memItemLeft" align="right" valign="top">static readonly Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac8afe0ac35edc39c920a8735f7df0c82">RibbonColor</a> = new(0.98f, 0.965f, 0.925f, 1f)</td></tr>
 <tr class="separator:ac8afe0ac35edc39c920a8735f7df0c82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45c5e68b6bf77faabbe37ea00c0a9f41" id="r_a45c5e68b6bf77faabbe37ea00c0a9f41"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a45c5e68b6bf77faabbe37ea00c0a9f41">RibbonMaterialPath</a> = &quot;Assets/<a class="el" href="structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html">Materials</a>/UI/CardRevealRibbon.mat&quot;</td></tr>
@@ -211,8 +227,8 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:acbaaeafabe4b416b843cfdb0d38699c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Builds the card reveal: imports the baked pop sheets under <code>Assets/Sprites/UI/CardReveal/</code> as linear data, lists them on the <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html" title="The card reveal&#39;s settings.">CardRevealSettings</a> asset (made if missing, and assigned to the game scope), makes the rubber's material, and builds the <a class="el" href="classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html" title="The card reveal&#39;s stage (ICardReveals): plays each reveal the controller hands it.">CardRevealView</a> on <code>GameCanvas</code>: the balloon's back layer, the two ribbons (the card's title and what it does), its front layer. </p>
-<p>The ribbons are cream satin written in the tooltip's pencil font. A starting look to restyle by hand; running it again rebuilds it. </p>
+<div class="textblock"><p>Builds the card reveal: imports the baked pop sheets under <code>Assets/Sprites/UI/CardReveal/</code> as linear data, lists them on the <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html" title="The card reveal&#39;s settings.">CardRevealSettings</a> asset (made if missing, and assigned to the game scope), makes the materials, and builds the <a class="el" href="classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html" title="The card reveal&#39;s stage (ICardReveals): plays each reveal the controller hands it.">CardRevealView</a> on a canvas of its own, the <code>CardRevealCanvas</code> prefab, placed in the <a class="el" href="namespaceBalloonParty_1_1Game.html">Game</a> scene: the balloon's shadow and back layer, the two ribbons (the card's title and what it does), its front layer. </p>
+<p>The canvas is World Space, fitted to the camera (<a class="el" href="classBalloonParty_1_1UI_1_1CameraFittedCanvas.html" title="Keeps a World Space canvas over the main camera&#39;s view, sized and scaled the way a Screen Space canva...">CameraFittedCanvas</a>), on the Balloons layer and sorted just under the screen-space light, so the reveal takes part in the game's lighting as the board's balloons do. The ribbons are cream satin written in the tooltip's pencil font. A starting look to restyle by hand; running it again rebuilds it. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ad37c4a92745535591de9f509a06f2049" name="ad37c4a92745535591de9f509a06f2049"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad37c4a92745535591de9f509a06f2049">&#9670;&#160;</a></span>AssignToScope()</h2>
@@ -263,6 +279,40 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Everything the menu item does; <em>askBeforeRebuild</em>  off for scripted runs. </p>
+
+</div>
+</div>
+<a id="a67d7aae148ed4880c12e74f37de34b33" name="a67d7aae148ed4880c12e74f37de34b33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67d7aae148ed4880c12e74f37de34b33">&#9670;&#160;</a></span>BuildCanvasPrefab()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void BalloonParty.Editor.CardRevealBuilder.BuildCanvasPrefab </td>
+          <td>(</td>
+          <td class="paramtype">TMP_Text</td>          <td class="paramname"><span class="paramname"><em>label</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">CanvasScaler</td>          <td class="paramname"><span class="paramname"><em>scaler</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html">Materials</a></td>          <td class="paramname"><span class="paramname"><em>materials</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -585,6 +635,56 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a046fbfedb3586f368dccdeeefc08ed2c" name="a046fbfedb3586f368dccdeeefc08ed2c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a046fbfedb3586f368dccdeeefc08ed2c">&#9670;&#160;</a></span>IsRevealCanvas()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Editor.CardRevealBuilder.IsRevealCanvas </td>
+          <td>(</td>
+          <td class="paramtype">GameObject</td>          <td class="paramname"><span class="paramname"><em>go</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0446852d7c88af4a201e4afe6e182552" name="a0446852d7c88af4a201e4afe6e182552"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0446852d7c88af4a201e4afe6e182552">&#9670;&#160;</a></span>PlaceInGameScene()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void BalloonParty.Editor.CardRevealBuilder.PlaceInGameScene </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a031667145889670c74c938381d3ec619" name="a031667145889670c74c938381d3ec619"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a031667145889670c74c938381d3ec619">&#9670;&#160;</a></span>Stretch()</h2>
 
@@ -636,6 +736,28 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a12001c6edc9097caedab2c076cf7b42a" name="a12001c6edc9097caedab2c076cf7b42a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12001c6edc9097caedab2c076cf7b42a">&#9670;&#160;</a></span>CanvasPrefabPath</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const string BalloonParty.Editor.CardRevealBuilder.CanvasPrefabPath = &quot;Assets/Prefabs/Game/CardRevealCanvas.prefab&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a7284bffe96259d20ec7044c96a857702" name="a7284bffe96259d20ec7044c96a857702"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7284bffe96259d20ec7044c96a857702">&#9670;&#160;</a></span>CentreAboveFrame</h2>
 
@@ -748,6 +870,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a348da64556b949c3665ff26db1f58eb8" name="a348da64556b949c3665ff26db1f58eb8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a348da64556b949c3665ff26db1f58eb8">&#9670;&#160;</a></span>GameScenePath</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const string BalloonParty.Editor.CardRevealBuilder.GameScenePath = &quot;Assets/Scenes/Game.unity&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="abdaabf6de24478f396fea42202685e68" name="abdaabf6de24478f396fea42202685e68"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abdaabf6de24478f396fea42202685e68">&#9670;&#160;</a></span>MaterialPath</h2>
 
@@ -803,6 +947,72 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly Vector2 BalloonParty.Editor.CardRevealBuilder.Place = new(0f, 12f)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a587edeb6cdba260ac75dcf744904d1c3" name="a587edeb6cdba260ac75dcf744904d1c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a587edeb6cdba260ac75dcf744904d1c3">&#9670;&#160;</a></span>RevealLayer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const string BalloonParty.Editor.CardRevealBuilder.RevealLayer = &quot;Balloons&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac540856cbd8104ad951d1aef137560f3" name="ac540856cbd8104ad951d1aef137560f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac540856cbd8104ad951d1aef137560f3">&#9670;&#160;</a></span>RevealSortingLayer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const string BalloonParty.Editor.CardRevealBuilder.RevealSortingLayer = &quot;Sky&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad76cc20ad91922b62639dcfe825ed220" name="ad76cc20ad91922b62639dcfe825ed220"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad76cc20ad91922b62639dcfe825ed220">&#9670;&#160;</a></span>RevealSortingOrder</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int BalloonParty.Editor.CardRevealBuilder.RevealSortingOrder = 31999</td>
         </tr>
       </table>
   </td>

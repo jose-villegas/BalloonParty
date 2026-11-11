@@ -148,6 +148,13 @@ Properties</h2></td></tr>
 <tr class="memitem:a046108486f642d33d98f2287fc7b4fc6" id="r_a046108486f642d33d98f2287fc7b4fc6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a046108486f642d33d98f2287fc7b4fc6">PopCount</a><code> [get]</code></td></tr>
 <tr class="memdesc:a046108486f642d33d98f2287fc7b4fc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many pops there are to choose from: one per sheet, 1 or more.  <br /></td></tr>
 <tr class="separator:a046108486f642d33d98f2287fc7b4fc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6d2e7017879e086ea433b3ee0fa8482" id="r_ad6d2e7017879e086ea433b3ee0fa8482"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad6d2e7017879e086ea433b3ee0fa8482">PopFlashIntensity</a><code> [get]</code></td></tr>
+<tr class="separator:ad6d2e7017879e086ea433b3ee0fa8482"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97116ce7176b9349d2175cadde1677e5" id="r_a97116ce7176b9349d2175cadde1677e5"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a97116ce7176b9349d2175cadde1677e5">PopFlashRadius</a><code> [get]</code></td></tr>
+<tr class="memdesc:a97116ce7176b9349d2175cadde1677e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The light of the balloon's colour its tear flashes into the scene light field, in world units: it lights the board around the reveal, and the reveal itself.  <br /></td></tr>
+<tr class="separator:a97116ce7176b9349d2175cadde1677e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bca2304af84661d15752cec81c55fc0" id="r_a1bca2304af84661d15752cec81c55fc0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1bca2304af84661d15752cec81c55fc0">PopFlashSeconds</a><code> [get]</code></td></tr>
+<tr class="separator:a1bca2304af84661d15752cec81c55fc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9173086ea2182c9c72df959d4979394" id="r_ac9173086ea2182c9c72df959d4979394"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; Texture2D &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac9173086ea2182c9c72df959d4979394">PopSheets</a><code> [get]</code></td></tr>
 <tr class="memdesc:ac9173086ea2182c9c72df959d4979394"><td class="mdescLeft">&#160;</td><td class="mdescRight">The baked pops' sheets (<code>Tools/art/balloon_pop</code>): each the front layer's frames over the back layer's, holding the rubber's surface for <code>BalloonParty/Sprite/LitFlipbook</code> to light.  <br /></td></tr>
 <tr class="separator:ac9173086ea2182c9c72df959d4979394"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -195,7 +202,7 @@ Properties</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:acf5dd5188770205802188261cc1217da" id="r_acf5dd5188770205802188261cc1217da"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf5dd5188770205802188261cc1217da">_framesPerSecond</a> = 24f</td></tr>
+<tr class="memitem:acf5dd5188770205802188261cc1217da" id="r_acf5dd5188770205802188261cc1217da"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf5dd5188770205802188261cc1217da">_framesPerSecond</a> = 12f</td></tr>
 <tr class="separator:acf5dd5188770205802188261cc1217da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bee6d863401d4999092ff7caf08b9f2" id="r_a4bee6d863401d4999092ff7caf08b9f2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4bee6d863401d4999092ff7caf08b9f2">_holdBeforePopSeconds</a> = 0.15f</td></tr>
 <tr class="separator:a4bee6d863401d4999092ff7caf08b9f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -203,6 +210,12 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a20402f649d342f147250dc8397b1d241"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac017a5451bf675ea5cce29e7b034a67e" id="r_ac017a5451bf675ea5cce29e7b034a67e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac017a5451bf675ea5cce29e7b034a67e">_parallax</a> = 0.02f</td></tr>
 <tr class="separator:ac017a5451bf675ea5cce29e7b034a67e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c917e7050e5756a00042ef8abebdebb" id="r_a1c917e7050e5756a00042ef8abebdebb"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1c917e7050e5756a00042ef8abebdebb">_popFlashIntensity</a> = 2.5f</td></tr>
+<tr class="separator:a1c917e7050e5756a00042ef8abebdebb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b8afe3cebb480b168d26aa4f60604f9" id="r_a3b8afe3cebb480b168d26aa4f60604f9"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3b8afe3cebb480b168d26aa4f60604f9">_popFlashRadius</a> = 2.4f</td></tr>
+<tr class="separator:a3b8afe3cebb480b168d26aa4f60604f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad83b73ea7821c9bc31994a9501180d5b" id="r_ad83b73ea7821c9bc31994a9501180d5b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad83b73ea7821c9bc31994a9501180d5b">_popFlashSeconds</a> = 0.3f</td></tr>
+<tr class="separator:ad83b73ea7821c9bc31994a9501180d5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a790d4d532140f1cbbb681788088d5178" id="r_a790d4d532140f1cbbb681788088d5178"><td class="memItemLeft" align="right" valign="top">Texture2D[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a790d4d532140f1cbbb681788088d5178">_popSheets</a> = new Texture2D[0]</td></tr>
 <tr class="separator:a790d4d532140f1cbbb681788088d5178"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac669641bfa6fcba93bcc07cdcf13eaec" id="r_ac669641bfa6fcba93bcc07cdcf13eaec"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac669641bfa6fcba93bcc07cdcf13eaec">_recentPopsAvoided</a> = 2</td></tr>
@@ -225,7 +238,7 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ace46149a8bbe76e41402c49a87d2a20a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7fcf37c3a3a4f0a43fae6faee5a93c73" id="r_a7fcf37c3a3a4f0a43fae6faee5a93c73"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7fcf37c3a3a4f0a43fae6faee5a93c73">_riseSeconds</a> = 0.45f</td></tr>
 <tr class="separator:a7fcf37c3a3a4f0a43fae6faee5a93c73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3bd0afd3ead250e1341f60fe8c96ff6" id="r_af3bd0afd3ead250e1341f60fe8c96ff6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3bd0afd3ead250e1341f60fe8c96ff6">_rubberFallGravity</a> = 380f</td></tr>
+<tr class="memitem:af3bd0afd3ead250e1341f60fe8c96ff6" id="r_af3bd0afd3ead250e1341f60fe8c96ff6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3bd0afd3ead250e1341f60fe8c96ff6">_rubberFallGravity</a> = 95f</td></tr>
 <tr class="separator:af3bd0afd3ead250e1341f60fe8c96ff6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bf9c33b99d756e2686a93da04953220" id="r_a1bf9c33b99d756e2686a93da04953220"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1bf9c33b99d756e2686a93da04953220">_rubberFallsFromFrame</a> = 3</td></tr>
 <tr class="separator:a1bf9c33b99d756e2686a93da04953220"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -248,7 +261,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._framesPerSecond = 24f</td>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._framesPerSecond = 12f</td>
         </tr>
       </table>
   </td>
@@ -315,6 +328,72 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._parallax = 0.02f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1c917e7050e5756a00042ef8abebdebb" name="a1c917e7050e5756a00042ef8abebdebb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c917e7050e5756a00042ef8abebdebb">&#9670;&#160;</a></span>_popFlashIntensity</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._popFlashIntensity = 2.5f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3b8afe3cebb480b168d26aa4f60604f9" name="a3b8afe3cebb480b168d26aa4f60604f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b8afe3cebb480b168d26aa4f60604f9">&#9670;&#160;</a></span>_popFlashRadius</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._popFlashRadius = 2.4f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad83b73ea7821c9bc31994a9501180d5b" name="ad83b73ea7821c9bc31994a9501180d5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad83b73ea7821c9bc31994a9501180d5b">&#9670;&#160;</a></span>_popFlashSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._popFlashSeconds = 0.3f</td>
         </tr>
       </table>
   </td>
@@ -578,7 +657,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._rubberFallGravity = 380f</td>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._rubberFallGravity = 95f</td>
         </tr>
       </table>
   </td>
@@ -782,6 +861,80 @@ Private Attributes</h2></td></tr>
 <p>How many pops there are to choose from: one per sheet, 1 or more. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ad25cf5e0a35671a2cc5f1c0d28bf4214">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="ad6d2e7017879e086ea433b3ee0fa8482" name="ad6d2e7017879e086ea433b3ee0fa8482"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6d2e7017879e086ea433b3ee0fa8482">&#9670;&#160;</a></span>PopFlashIntensity</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings.PopFlashIntensity</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ab7dd5fd8563229c761cd3c50ea878932">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="a97116ce7176b9349d2175cadde1677e5" name="a97116ce7176b9349d2175cadde1677e5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97116ce7176b9349d2175cadde1677e5">&#9670;&#160;</a></span>PopFlashRadius</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings.PopFlashRadius</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The light of the balloon's colour its tear flashes into the scene light field, in world units: it lights the board around the reveal, and the reveal itself. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#af82dc26655ae575e2f2aa1a25f796596">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="a1bca2304af84661d15752cec81c55fc0" name="a1bca2304af84661d15752cec81c55fc0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1bca2304af84661d15752cec81c55fc0">&#9670;&#160;</a></span>PopFlashSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings.PopFlashSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#af957ad79a860ac5f93e0490e990a0742">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
 
 </div>
 </div>

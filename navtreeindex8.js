@@ -1,5 +1,6 @@
 var NAVTREEINDEX8 =
 {
+"classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice.html#ab1d5cecbed7144cda17d6737ba9735d6":[6,0,0,0,3,0,3],
 "classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice.html#acfecebd7dfb13567189003f1896914a2":[5,0,0,0,3,0,9],
 "classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice.html#acfecebd7dfb13567189003f1896914a2":[6,0,0,0,3,0,9],
 "classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice.html#ae45a8f0d7e9fdfe76a817745aaec94dc":[5,0,0,0,3,0,13],
@@ -248,6 +249,5 @@ var NAVTREEINDEX8 =
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#adaef9f46d953a3f09e871c9e80b28760":[6,0,0,1,0,3,45],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#add3338e6b2649a7dfb4ddb46b43c3b4a":[5,0,0,1,0,3,32],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#add3338e6b2649a7dfb4ddb46b43c3b4a":[6,0,0,1,0,3,32],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#ae46d6363e746207ecc98620a7ddeb989":[5,0,0,1,0,3,20],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#ae46d6363e746207ecc98620a7ddeb989":[6,0,0,1,0,3,20]
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#ae46d6363e746207ecc98620a7ddeb989":[5,0,0,1,0,3,20]
 };

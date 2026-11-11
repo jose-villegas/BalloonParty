@@ -13,6 +13,7 @@ var namespaceBalloonParty_1_1UI =
     [ "Telemetry", "namespaceBalloonParty_1_1UI_1_1Telemetry.html", "namespaceBalloonParty_1_1UI_1_1Telemetry" ],
     [ "Tooltip", "namespaceBalloonParty_1_1UI_1_1Tooltip.html", "namespaceBalloonParty_1_1UI_1_1Tooltip" ],
     [ "AnimatorGameEntryGate", "classBalloonParty_1_1UI_1_1AnimatorGameEntryGate.html", "classBalloonParty_1_1UI_1_1AnimatorGameEntryGate" ],
+    [ "CameraFittedCanvas", "classBalloonParty_1_1UI_1_1CameraFittedCanvas.html", "classBalloonParty_1_1UI_1_1CameraFittedCanvas" ],
     [ "CanvasCameraBinder", "classBalloonParty_1_1UI_1_1CanvasCameraBinder.html", "classBalloonParty_1_1UI_1_1CanvasCameraBinder" ],
     [ "FadeImage", "classBalloonParty_1_1UI_1_1FadeImage.html", "classBalloonParty_1_1UI_1_1FadeImage" ],
     [ "FormattedLabel", "structBalloonParty_1_1UI_1_1FormattedLabel.html", "structBalloonParty_1_1UI_1_1FormattedLabel" ],

@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"FreesoundSfxProvider_8cs.html":[7,0,0,1,4],
 "FreesoundTokenSource_8cs.html":[7,0,0,1,5],
 "GameDisplayConfigurationDrawer_8cs.html":[7,0,3,4,1],
 "GameDisplayConfiguration_8cs.html":[7,0,3,13],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "ImageShadowBakerEditor_8cs.html":[7,0,6,5,0],
 "ImageShadowBaker_8cs.html":[7,0,14,10,6],
 "ImpactEventBus_8cs.html":[7,0,14,21],
-"InitialLayerPlan_8cs.html":[7,0,1,3,6],
-"InjectingPoolChannel_8cs.html":[7,0,14,9,3]
+"InitialLayerPlan_8cs.html":[7,0,1,3,6]
 };
