@@ -71,9 +71,9 @@ namespace BalloonParty.Configuration.Level
 
         [Tooltip("Share of the board's open slots that, cleared within Breather Clear Window, earns a breather: " +
                  "the clock drops to Breather Pace and eases back to full pace over Breather Seconds, so a big " +
-                 "clear buys a moment of calm before the pressure builds again. 0.2 = a fifth of the board. " +
+                 "clear buys a moment of calm before the pressure builds again. 0.25 = a quarter of the board. " +
                  "0 = never.")]
-        [SerializeField] [Range(0f, 1f)] private float _breatherClear = 0.2f;
+        [SerializeField] [Range(0f, 1f)] private float _breatherClear = 0.25f;
 
         [Tooltip("Seconds a clear must happen within to earn a breather. The same clear spread over longer " +
                  "earns nothing.")]
@@ -88,6 +88,11 @@ namespace BalloonParty.Configuration.Level
                  "fired over another ball pulls the next line by the same share.")]
         [SerializeField] [Range(0f, 1f)] private float _breatherPace = 0.2f;
 
+        [Tooltip("Seconds of play after a breather ends before a big clear can earn the next, so releases stay " +
+                 "rarer than the clears on a crowded board would make them. A new level starts with none. " +
+                 "0 = the next clear can earn one at once.")]
+        [SerializeField] [Min(0f)] private float _breatherCooldownSeconds = 20f;
+
         public float GraceSeconds => _graceSeconds;
         public float OverlapShotPull => _overlapShotPull;
         public float SparseBoardSpeedup => Mathf.Max(1f, _sparseBoardSpeedup);
@@ -100,6 +105,7 @@ namespace BalloonParty.Configuration.Level
         public float BreatherClearWindow => Mathf.Max(0.1f, _breatherClearWindow);
         public float BreatherSeconds => Mathf.Max(0.1f, _breatherSeconds);
         public float BreatherPace => Mathf.Clamp01(_breatherPace);
+        public float BreatherCooldownSeconds => Mathf.Max(0f, _breatherCooldownSeconds);
 
         public SpawnClockSettings()
         {
@@ -110,8 +116,9 @@ namespace BalloonParty.Configuration.Level
             float targetOccupancy = 0.5f, float occupancyWeight = 0f, float flightSpeedup = 1f,
             float flightPressureSeconds = 6f, float lateIntervalDecayPerLevel = 1f, float lateMinInterval = 0.1f,
             float breatherClear = 0f, float breatherClearWindow = 2f, float breatherSeconds = 6f,
-            float breatherPace = 0.2f)
+            float breatherPace = 0.2f, float breatherCooldownSeconds = 0f)
         {
+            _breatherCooldownSeconds = breatherCooldownSeconds;
             _breatherClear = breatherClear;
             _breatherClearWindow = breatherClearWindow;
             _breatherSeconds = breatherSeconds;

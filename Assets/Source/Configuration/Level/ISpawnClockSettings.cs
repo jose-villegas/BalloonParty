@@ -61,6 +61,9 @@ namespace BalloonParty.Configuration.Level
         /// <summary>The clock's pace as a breather starts, as a share of its full pace, 0–1.</summary>
         float BreatherPace { get; }
 
+        /// <summary>Seconds of play after a breather ends before a big clear can earn the next; 0 at a level's start.</summary>
+        float BreatherCooldownSeconds { get; }
+
         /// <summary>Seconds between lines at <paramref name="level" />; levels below 1 run at level 1's pace.</summary>
         float IntervalForLevel(int level);
     }

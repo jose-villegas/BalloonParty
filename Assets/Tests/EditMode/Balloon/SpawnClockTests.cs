@@ -547,6 +547,46 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void Breather_Cooldown_HoldsOffTheNextOne_ThenLetsABigClearEarnIt()
+        {
+            UseBreatherWithCooldown();
+            Run(1f);
+            _boardFill.Occupancy.Returns(0.4f);
+            Run(4.2f);
+            Assert.AreEqual(0f, _clock.BreatherSecondsLeft, "the 4s breather is over");
+
+            _boardFill.Occupancy.Returns(1f);
+            Run(0.5f);
+            _boardFill.Occupancy.Returns(0.4f);
+            Run(0.5f);
+            Assert.AreEqual(0f, _clock.BreatherSecondsLeft, "a clear 1s into the 5s cooldown earns nothing");
+
+            Run(5f);
+            _boardFill.Occupancy.Returns(1f);
+            Run(0.5f);
+            _boardFill.Occupancy.Returns(0.4f);
+            Run(0.1f);
+            Assert.Greater(_clock.BreatherSecondsLeft, 0f, "past the cooldown the same clear earns one");
+        }
+
+        [Test]
+        public void Breather_Cooldown_EndsWithTheLevel()
+        {
+            UseBreatherWithCooldown();
+            Run(1f);
+            _boardFill.Occupancy.Returns(0.4f);
+            Run(4.2f);
+
+            _level.Value = 2;
+            _boardFill.Occupancy.Returns(1f);
+            Run(0.5f);
+            _boardFill.Occupancy.Returns(0.4f);
+            Run(0.1f);
+
+            Assert.Greater(_clock.BreatherSecondsLeft, 0f, "a new level starts with no cooldown");
+        }
+
+        [Test]
         public void Breather_ASlowClearOfTheSameSize_EarnsNone()
         {
             UseBreather();
@@ -627,6 +667,13 @@ namespace BalloonParty.Tests.Balloon
         {
             BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, overlapShotPull: overlapShotPull,
                 breatherClear: 0.5f, breatherClearWindow: 1f, breatherSeconds: 4f, breatherPace: 0f));
+        }
+
+        // As UseBreather, with a 5s cooldown after each breather.
+        private void UseBreatherWithCooldown()
+        {
+            BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, breatherClear: 0.5f, breatherClearWindow: 1f,
+                breatherSeconds: 4f, breatherPace: 0f, breatherCooldownSeconds: 5f));
         }
 
         // Small steps, as frames would: the breather eases through its length.
