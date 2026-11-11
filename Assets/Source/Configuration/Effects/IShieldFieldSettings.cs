@@ -20,5 +20,7 @@ namespace BalloonParty.Configuration.Effects
         float ScalePerShield { get; }
         float MaxScaleMultiplier { get; }
         float ScaleTweenDuration { get; }
+        float GlowPerShield { get; }
+        float MaxGlow { get; }
     }
 }

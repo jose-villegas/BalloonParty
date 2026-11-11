@@ -26,3 +26,5 @@ MonoBehaviour:
   _squashFrequency: 15
   _squashDamping: 0.25
   _squashImpulseStrength: 35
+  _glowPerShield: 0.35
+  _maxGlow: 2.5

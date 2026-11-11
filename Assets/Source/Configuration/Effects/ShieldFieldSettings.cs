@@ -66,6 +66,16 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Duration of the scale tween when a new shield is collected.")]
         [SerializeField] [Range(0.05f, 1f)] private float _scaleTweenDuration = 0.3f;
 
+        [Header("Glow (HDR)")]
+        [Tooltip("How much brighter than its palette colour the field gets for each shield past the first. "
+                 + "Above 1 the field is brighter than white: the tonemapper rolls it toward white and bloom "
+                 + "spreads it into a halo.")]
+        [SerializeField] [Range(0f, 1f)] private float _glowPerShield = 0.35f;
+
+        [Tooltip("The most the field's colour is multiplied by, however many shields it holds. "
+                 + "1 keeps the field at its palette colour.")]
+        [SerializeField] [Range(1f, 4f)] private float _maxGlow = 2.5f;
+
         public float DissolveSeconds => _dissolveSeconds;
         public float FinalDissolveSeconds => _finalDissolveSeconds;
         public float AppearSeconds => _appearSeconds;
@@ -84,5 +94,7 @@ namespace BalloonParty.Configuration.Effects
         public float ScalePerShield => _scalePerShield;
         public float MaxScaleMultiplier => _maxScaleMultiplier;
         public float ScaleTweenDuration => _scaleTweenDuration;
+        public float GlowPerShield => _glowPerShield;
+        public float MaxGlow => _maxGlow;
     }
 }

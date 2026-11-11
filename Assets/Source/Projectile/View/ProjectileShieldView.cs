@@ -63,6 +63,8 @@ namespace BalloonParty.Projectile.View
         private float _morphTimer;
         private float _shapeLerp = 1f;
         private float _noiseIntensity;
+        private float _glow = 1f;
+        private float _targetGlow = 1f;
 
         private DampedSpring1D _squashSpring;
         private Vector2 _squashAxis;
@@ -146,6 +148,10 @@ namespace BalloonParty.Projectile.View
                              - Vector2.up;
             localNoise = Vector2.ClampMagnitude(localNoise, 1.5f);
             _noiseScrollDir = new Vector4(localNoise.x, localNoise.y, 0f, 0f);
+
+            // One shield's worth of glow over a layer's reveal, so the brightening rides the new shell in.
+            var glowRate = _settings.GlowPerShield / Mathf.Max(_settings.AppearSeconds, 0.01f);
+            _glow = Mathf.MoveTowards(_glow, _targetGlow, glowRate * dt);
 
             WriteAllProperties();
             _fieldRenderer.SetPropertyBlock(_block);
@@ -241,15 +247,12 @@ namespace BalloonParty.Projectile.View
         {
             _model = model;
             _previousShieldCount = model.ShieldsRemaining.Value;
+            _targetGlow = GlowFor(_previousShieldCount);
+            _glow = _targetGlow;
 
             model.ShieldsRemaining
                 .Skip(1)
-                .Subscribe(count =>
-                {
-                    AnimateShieldChange(count);
-                    PlayShieldChangeFx(count);
-                    _previousShieldCount = count;
-                })
+                .Subscribe(OnShieldCountChanged)
                 .AddTo(_disposable);
 
             model.ColorName
@@ -313,6 +316,8 @@ namespace BalloonParty.Projectile.View
             _morphTimer = 0f;
             _shapeLerp = 1f;
             _noiseIntensity = 0f;
+            _glow = 1f;
+            _targetGlow = 1f;
             _squashSpring = default;
             _squashAxis = Vector2.zero;
             _projectileRoot = null;
@@ -463,13 +468,34 @@ namespace BalloonParty.Projectile.View
             _block.SetFloatArray(DissolveProgressId, _layerDissolve);
             _block.SetFloatArray(RevealProgressId, _layerReveal);
             _block.SetFloat(ActiveLayersId, _settings.MaxVisualLayers);
-            _block.SetColor(ColorId, _currentColor);
+            // Past 1 on purpose: the field brightens into the HDR range as shields stack, so a big shield
+            // blooms. Only the colour is scaled; the alpha stays the field's coverage.
+            _block.SetColor(ColorId, new Color(
+                _currentColor.r * _glow, _currentColor.g * _glow, _currentColor.b * _glow, _currentColor.a));
             _block.SetFloat(VelocityFactorId, _velFactor);
             _block.SetVector(NoiseScrollDirId, _noiseScrollDir);
             _block.SetFloat(ShapeLerpId, _shapeLerp);
             _block.SetFloat(NoiseIntensityId, _noiseIntensity);
             _block.SetFloat(SquashAmountId, Mathf.Clamp01(Mathf.Abs(_squashSpring.Position)));
             _block.SetVector(SquashAxisId, new Vector4(_squashAxis.x, _squashAxis.y, 0f, 0f));
+        }
+
+        private void OnShieldCountChanged(int count)
+        {
+            _targetGlow = GlowFor(count);
+            AnimateShieldChange(count);
+            PlayShieldChangeFx(count);
+            _previousShieldCount = count;
+        }
+
+        private float GlowFor(int shieldCount)
+        {
+            if (_settings == null)
+            {
+                return 1f;
+            }
+
+            return ShieldGlow.For(shieldCount, _settings.GlowPerShield, _settings.MaxGlow);
         }
 
         private void PlayShieldChangeFx(int currentCount)

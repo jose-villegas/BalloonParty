@@ -115,7 +115,9 @@ Shader "BalloonParty/Display/EMShieldField"
             struct v2f
             {
                 float4 vertex   : SV_POSITION;
-                fixed4 color    : COLOR;
+                // half, not fixed: the tint goes past 1 as shields stack (ProjectileShieldView), and
+                // OpenGL ES may run fixed at lowp, which only reaches 2.
+                half4 color     : COLOR;
                 float2 texcoord : TEXCOORD0;
             };
 
