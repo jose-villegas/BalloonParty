@@ -58,7 +58,7 @@ namespace BalloonParty.Tests.Configuration
         {
             var settings = new ScenarioScheduleSettings();
 
-            Assert.AreEqual((6, 8), (settings.GroundFromLevel, settings.GroundByLevel));
+            Assert.AreEqual((6, 6), (settings.GroundFromLevel, settings.GroundByLevel));
             Assert.AreEqual(4, settings.FirstGroundStretch);
             Assert.AreEqual((3, 5), (settings.MinGroundStretch, settings.MaxGroundStretch));
             Assert.AreEqual((2, 4), (settings.MinSkyStretch, settings.MaxSkyStretch));
@@ -343,6 +343,52 @@ namespace BalloonParty.Tests.Configuration
         }
 
         [Test]
+        public void ShippedDefaults_PutTheFirstMeadowOnLevelSix_AndWaterRightAfterIt([Values(0, 3, 98765)] int runSeed)
+        {
+            var settings = new ScenarioScheduleSettings();
+
+            Assert.IsTrue(settings.WaterAfterFirstMeadow);
+            Assert.AreEqual(ScenarioKind.Sky, ScenarioSchedule.ForLevel(settings, 5, runSeed));
+            AssertStretch(ScenarioSchedule.StretchAt(settings, 6, runSeed), ScenarioKind.Ground, 0, 4);
+            Assert.AreEqual(ScenarioKind.Sky, ScenarioSchedule.ForLevel(settings, 10, runSeed));
+            Assert.AreEqual(ScenarioKind.Water, ScenarioSchedule.ForLevel(settings, NextSurface(settings, 10, runSeed),
+                runSeed));
+        }
+
+        [Test]
+        public void WaterAfterFirstMeadow_MakesTheNextSurfaceWater_ThenTheShareDecides([Values(1, 7919, 123456)] int salt,
+            [Values(0, 42)] int runSeed)
+        {
+            var settings = Schedule(salt: salt, water: 0f, waterAfterFirstMeadow: true);
+
+            var second = NextSurface(settings, 20, runSeed);
+            Assert.AreEqual(ScenarioKind.Water, ScenarioSchedule.ForLevel(settings, second, runSeed), "after the meadow");
+
+            var afterWater = second + ScenarioSchedule.StretchAt(settings, second, runSeed).Length;
+            for (var level = afterWater; level < LevelsChecked; level++)
+            {
+                Assert.AreNotEqual(ScenarioKind.Water, ScenarioSchedule.ForLevel(settings, level, runSeed),
+                    $"level {level} rolls a share of 0");
+            }
+        }
+
+        [Test]
+        public void WaterAfterFirstMeadow_NeverMovesWhereTheStretchesFall([Values(0, 0.5f)] float water,
+            [Values(0, 3, 98765)] int runSeed)
+        {
+            var rolled = Schedule(water: water);
+            var guaranteed = Schedule(water: water, waterAfterFirstMeadow: true);
+
+            for (var level = 1; level < LevelsChecked; level++)
+            {
+                var a = ScenarioSchedule.StretchAt(rolled, level, runSeed);
+                var b = ScenarioSchedule.StretchAt(guaranteed, level, runSeed);
+                Assert.AreEqual((a.Kind == ScenarioKind.Sky, a.Position, a.Length),
+                    (b.Kind == ScenarioKind.Sky, b.Position, b.Length), $"level {level}");
+            }
+        }
+
+        [Test]
         public void Water_ChangesWhichSurfaceAStretchShows_NeverWhereItFalls([Values(0.25f, 0.5f, 1f)] float water,
             [Values(0, 3, 98765)] int runSeed)
         {
@@ -475,10 +521,23 @@ namespace BalloonParty.Tests.Configuration
 
         // first is the latest level the first meadow can start on; without from, it starts there exactly.
         private static ScenarioScheduleSettings Schedule(int first = 16, int firstStretch = 4, int minGround = 3,
-            int maxGround = 5, int minSky = 2, int maxSky = 4, int salt = 7919, int from = 0, float water = 0f)
+            int maxGround = 5, int minSky = 2, int maxSky = 4, int salt = 7919, int from = 0, float water = 0f,
+            bool waterAfterFirstMeadow = false)
         {
             return new ScenarioScheduleSettings(first, firstStretch, minGround, maxGround, minSky, maxSky, salt, from,
-                water);
+                water, waterAfterFirstMeadow);
+        }
+
+        // The first level at or after from that isn't sky.
+        private static int NextSurface(ScenarioScheduleSettings settings, int from, int runSeed)
+        {
+            var level = from;
+            while (ScenarioSchedule.ForLevel(settings, level, runSeed) == ScenarioKind.Sky)
+            {
+                level++;
+            }
+
+            return level;
         }
 
         private static void AssertStretch(ScenarioStretch stretch, ScenarioKind kind, int position, int length)

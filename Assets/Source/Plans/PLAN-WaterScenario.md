@@ -37,8 +37,10 @@ nudge puts them closer to a neighbor bubble."
 ### 1. Water in the schedule
 
 `ScenarioKind.Water = 2`. Sky stretches still separate every two surface stretches, so the mist
-reveal is always sky ↔ surface and never ground ↔ water. Each surface stretch **after the first
-meadow** rolls whether it is a meadow or water (`WaterShare`, 50%). A surface stretch's length is
+reveal is always sky ↔ surface and never ground ↔ water. The surface stretch right after the
+first meadow is always water (`WaterAfterFirstMeadow`, owner 2026-11-11: "meadow first then water"), so
+every run meets it early, around levels 12–14. Each surface stretch after that rolls whether it is a
+meadow or water (`WaterShare`, 50%). A surface stretch's length is
 rolled as before, in the meadow's range, before its kind: turning water on leaves every stretch
 where it was, and only some meadows become water. The kind roll hashes the stretch's first level
 with its own key, mixed with the schedule salt and the run seed like every other roll, so a run's
@@ -173,6 +175,8 @@ merged something, and merges every neighbouring pair where the larger still has 
 ## Owner decisions (2026-11-10)
 
 1. **How often water comes up:** a coin flip for every surface stretch after the first meadow.
+   Revised 2026-11-11: the first surface after the first meadow is always water, then the coin flip;
+   on the flip alone, half of runs first met water around levels 12–16 and the rest later or never.
 2. **"Over balloons":** "they spawn more than balloons increasingly": bubbles come in the lines,
    their share growing with time on the level.
 3. **The curve:** the ramp from the proposed 6 s grace over 60 s (the proposal was a spawn wait

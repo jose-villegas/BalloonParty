@@ -90,8 +90,9 @@ What the backdrop is today, back to front (all on sorting layer `Default`):
   from a small block on `LevelGenerationSettings`. It answers `Sky` or `Ground`, the
   level's place in its stretch and the stretch's length (a `ScenarioStretch`);
   `ForLevel` is the kind alone.
-  - **The first ground level is rolled between 6 and 8** (`GroundFromLevel`,
-    `GroundByLevel`; revised 2026-11-09, owner: first "start to have a chance for it after
+  - **The first ground level is 6** (`GroundFromLevel` = `GroundByLevel` = 6; the window
+    can still roll; revised 2026-11-11, owner: "meadow after 5"; before that rolled between
+    6 and 8, revised 2026-11-09, owner: first "start to have a chance for it after
     level 10", then "meadow scene could be introduced early", with the bushes moving
     with it). Levels before it are always sky. The roll mixes in the run's seed
     (`IRunSeed`, rolled per run and kept through a retry), so each run meets its first
@@ -309,7 +310,8 @@ changes to the Ascent or restart code.
 
 1. First ground level **16**, with the first bushes. Revised 2026-11-09: rolled between
    11 and 16, bushes unlocking at 11 and no longer withheld. Revised again the same day:
-   rolled between 6 and 8, bushes unlocking at 6.
+   rolled between 6 and 8, bushes unlocking at 6. Revised 2026-11-11: always 6, and the
+   next surface is water (`PLAN-WaterScenario.md`).
 2. Stretches of **2–4 levels** per scenario. Revised 2026-11-09: ground stretches of
    3–5 levels with the first fixed at 4, sky stretches of 2–4, and a meadow clears its
    puff clouds halfway (see "Which levels are ground").

@@ -42,8 +42,8 @@ covers it (see the next section).
 Each level is set either in the **sky** (the backdrop above) or on the **ground**, a meadow the board rests
 on, so actors that need ground under them (bushes) don't look like they float. Which one is a per-level,
 seeded choice: `ILevelPacingConfiguration.ScenarioForLevel` (see `Configuration/README.md`) is sky until the
-first ground level, rolled between levels 6 and 8, stays on the ground for a fixed first meadow, then
-alternates sky and ground stretches of a rolled length. The rolls mix in the run's seed, so each run lays
+first ground level, level 6, stays on the ground for a fixed first meadow, then alternates sky and surface
+stretches of a rolled length; the first surface after that meadow is water. The rolls mix in the run's seed, so each run lays
 out its own, and a retry keeps the same scenario. A meadow arrives under puff clouds and
 trades them for bushes as it goes: by the level's place in its stretch, the level generator thins and then
 drops the board's puff-cloud actors and grows the bushes, so the meadow's clear second half is its bushiest.
@@ -165,8 +165,9 @@ Plan: `Plans/PLAN-TerrainBiomes.md`.
 
 ### Water
 
-The third scenario: after the first meadow, each surface stretch is a meadow or **water** by a coin flip
-(`ScenarioKind.Water`). Water levels have no puff clouds or bushes, and nothing on them bounces shots but the
+The third scenario: the surface stretch right after the first meadow is always **water**
+(`ScenarioKind.Water`), so every run meets it around levels 12–14; each surface stretch after that is a
+meadow or water by a coin flip. Water levels have no puff clouds or bushes, and nothing on them bounces shots but the
 unbreakable balloon; the longer a water level runs, the more of each spawn line is bubble clusters
 (`Balloon/Spawner/BalloonSpawner`). Plan: `Plans/PLAN-WaterScenario.md`.
 

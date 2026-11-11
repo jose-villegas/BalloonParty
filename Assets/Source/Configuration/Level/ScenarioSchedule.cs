@@ -6,9 +6,11 @@ namespace BalloonParty.Configuration.Level
     ///     <see cref="ScenarioScheduleSettings.GroundFromLevel" /> and
     ///     <see cref="ScenarioScheduleSettings.GroundByLevel" />, then a ground stretch of a fixed
     ///     <see cref="ScenarioScheduleSettings.FirstGroundStretch" />, then sky and surface stretches alternate,
-    ///     each lasting a rolled number of levels in its own range. Every later surface stretch is water or a
-    ///     meadow by its own roll (<see cref="ScenarioScheduleSettings.WaterShare" />), made after its length,
-    ///     so water changes which surface a stretch shows but never where the stretches fall. Every roll hashes
+    ///     each lasting a rolled number of levels in its own range. The surface stretch right after the first
+    ///     meadow is water when <see cref="ScenarioScheduleSettings.WaterAfterFirstMeadow" /> is on; every later
+    ///     one is water or a meadow by its own roll (<see cref="ScenarioScheduleSettings.WaterShare" />), made
+    ///     after its length, so water changes which surface a stretch shows but never where the stretches fall.
+    ///     Every roll hashes
     ///     with the schedule's salt mixed with the run's seed, so each run lays out its own surfaces and sky,
     ///     and within a run the same level always gets the same answer, so a retry keeps it. A run seed of 0 is
     ///     the schedule with no run mixed in, for the editor preview and tests.
@@ -43,13 +45,24 @@ namespace BalloonParty.Configuration.Level
 
             var kind = ScenarioKind.Ground;
             var length = settings.FirstGroundStretch;
+            var laterSurfaces = 0;
             while (level >= stretchStart + length)
             {
                 stretchStart += length;
                 var surfaceNext = kind == ScenarioKind.Sky;
                 length = StretchLength(settings, surfaceNext ? ScenarioKind.Ground : ScenarioKind.Sky,
                     stretchStart, salt);
-                kind = surfaceNext ? SurfaceKind(settings, stretchStart, salt) : ScenarioKind.Sky;
+                if (!surfaceNext)
+                {
+                    kind = ScenarioKind.Sky;
+                }
+                else
+                {
+                    var firstAfterMeadow = laterSurfaces++ == 0;
+                    kind = firstAfterMeadow && settings.WaterAfterFirstMeadow
+                        ? ScenarioKind.Water
+                        : SurfaceKind(settings, stretchStart, salt);
+                }
             }
 
             return new ScenarioStretch(kind, level - stretchStart, length);
