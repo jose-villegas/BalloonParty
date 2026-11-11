@@ -18,6 +18,7 @@ namespace BalloonParty.Balloon.Type
         private const float TrailTailWhiten = 0.6f;
 
         private static readonly int RimColorId = Shader.PropertyToID("_RimColor");
+        private static readonly int HdrBoostId = Shader.PropertyToID("_HdrBoost");
 
         [Tooltip("The core glow sprites, tinted red at rest.")]
         [SerializeField] private SpriteRenderer[] _coreLights;
@@ -36,10 +37,16 @@ namespace BalloonParty.Balloon.Type
         [Tooltip("The glitter's alpha at full formation.")]
         [SerializeField] [Range(0f, 1f)] private float _glitterAlpha = 1f;
 
+        // Blue carries far less light than the red at the same boost, so the core lights' _HdrBoost rises with
+        // the blue to glow as brightly, while staying blue rather than whitening (PLAN-HDR).
+        [Tooltip("The core lights' material _HdrBoost at full formation; at rest they keep their material's.")]
+        [SerializeField] [Min(1f)] private float _coreFormationBoost = 4f;
+
         [Inject] private IGamePalette _palette;
 
         private MaterialPropertyBlock _block;
         private Color[] _coreRest;
+        private float[] _coreRestBoost;
         private Color[] _rimRest;
         private Gradient _trailRest;
         private Gradient _trailBlue;
@@ -118,9 +125,12 @@ namespace BalloonParty.Balloon.Type
         private void CaptureRestLook()
         {
             _coreRest = new Color[_coreLights?.Length ?? 0];
+            _coreRestBoost = new float[_coreRest.Length];
             for (var i = 0; i < _coreRest.Length; i++)
             {
                 _coreRest[i] = _coreLights[i] != null ? _coreLights[i].color : Color.clear;
+                var material = _coreLights[i] != null ? _coreLights[i].sharedMaterial : null;
+                _coreRestBoost[i] = material != null && material.HasProperty(HdrBoostId) ? material.GetFloat(HdrBoostId) : 1f;
             }
 
             _rimRest = new Color[_rimRenderers?.Length ?? 0];
@@ -159,10 +169,16 @@ namespace BalloonParty.Balloon.Type
         {
             for (var i = 0; i < _coreRest.Length; i++)
             {
-                if (_coreLights[i] != null)
+                var core = _coreLights[i];
+                if (core != null)
                 {
                     var rest = _coreRest[i];
-                    _coreLights[i].color = Color.Lerp(rest, new Color(_blue.r, _blue.g, _blue.b, rest.a), blend);
+                    core.color = Color.Lerp(rest, new Color(_blue.r, _blue.g, _blue.b, rest.a), blend);
+
+                    // Same block the rim loop below reads back, so the two overrides sit side by side.
+                    core.GetPropertyBlock(_block);
+                    _block.SetFloat(HdrBoostId, Mathf.Lerp(_coreRestBoost[i], _coreFormationBoost, blend));
+                    core.SetPropertyBlock(_block);
                 }
             }
 
