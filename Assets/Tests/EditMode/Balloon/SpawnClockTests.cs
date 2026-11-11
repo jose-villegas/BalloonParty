@@ -505,6 +505,90 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(0, _lines, "1.5 counted seconds run the clock at 1.75x, not a capped 3x");
         }
 
+        [Test]
+        public void Breather_ABigFastClear_SlowsTheClockRightDown()
+        {
+            UseBreather();
+            Run(1f);
+
+            _boardFill.Occupancy.Returns(0.4f);
+            Run(3f);
+
+            Assert.AreEqual(0, _lines, "without the breather the 4s grace is over by now");
+        }
+
+        [Test]
+        public void Breather_EasesBackToFullPace_ByItsEnd()
+        {
+            UseBreather();
+            Run(1f);
+            _boardFill.Occupancy.Returns(0.4f);
+
+            Run(4.85f);
+            Assert.AreEqual(0, _lines, "the 4s breather averages half pace: 2s of clock, then 0.85s at full");
+
+            Run(0.25f);
+            Assert.AreEqual(1, _lines, "the clear that started the breather can't start another once it ends");
+        }
+
+        [Test]
+        public void Breather_ASlowClearOfTheSameSize_EarnsNone()
+        {
+            UseBreather();
+            var occupancy = 1f;
+            for (var t = 0f; t < 4.1f; t += 0.05f)
+            {
+                occupancy -= 0.0075f;
+                _boardFill.Occupancy.Returns(occupancy);
+                _clock.Advance(0.05f);
+            }
+
+            Assert.AreEqual(1, _lines, "0.6 of the board over 4s is far slower than 0.5 in 1s");
+        }
+
+        [Test]
+        public void Breather_ZeroClear_NeverStartsOne()
+        {
+            BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, breatherClear: 0f, breatherClearWindow: 1f,
+                breatherSeconds: 4f, breatherPace: 0f));
+            Run(1f);
+
+            _boardFill.Occupancy.Returns(0f);
+            Run(3.1f);
+
+            Assert.AreEqual(1, _lines);
+        }
+
+        [Test]
+        public void Breather_ScalesTheOverlapPullToo()
+        {
+            UseBreather(0.5f);
+            Run(1f);
+            _boardFill.Occupancy.Returns(0.4f);
+            Run(0.05f);
+
+            Fly();
+            Fire(Fly());
+            Fire(Fly());
+            Run(2.9f);
+
+            Assert.AreEqual(0, _lines, "two full pulls would take 4s off the wait and land the line at once");
+        }
+
+        [Test]
+        public void Breather_EndsWithTheLevel()
+        {
+            UseBreather();
+            Run(1f);
+            _boardFill.Occupancy.Returns(0.4f);
+            Run(0.05f);
+
+            _level.Value = 2;
+            Run(4.1f);
+
+            Assert.AreEqual(1, _lines, "the new level's 4s grace runs at full pace");
+        }
+
         private void BuildClock(SpawnClockSettings settings)
         {
             _clock?.Dispose();
@@ -520,6 +604,23 @@ namespace BalloonParty.Tests.Balloon
         {
             BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, sparseBoardSpeedup: 3f, targetOccupancy: 0.5f,
                 occupancyWeight: 0.5f, flightSpeedup: 3f, flightPressureSeconds: 4f));
+        }
+
+        // Board fill never moves the pace here; losing half the board within 1s starts a 4s breather that
+        // opens at a standstill.
+        private void UseBreather(float overlapShotPull = 0f)
+        {
+            BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, overlapShotPull: overlapShotPull,
+                breatherClear: 0.5f, breatherClearWindow: 1f, breatherSeconds: 4f, breatherPace: 0f));
+        }
+
+        // Small steps, as frames would: the breather eases through its length.
+        private void Run(float seconds)
+        {
+            for (var t = 0f; t < seconds - 0.001f; t += 0.05f)
+            {
+                _clock.Advance(0.05f);
+            }
         }
 
         private void Fire(ProjectileModel ball)

@@ -27,7 +27,10 @@ namespace BalloonParty.Balloon.Spawner
     ///     A sparse board runs the clock faster (<see cref="ISpawnClockSettings.SparseBoardSpeedup" />), so
     ///     clearing it never leaves the player waiting on an empty screen. Balls in the air push it too, by
     ///     how long each has flown (<see cref="ISpawnClockSettings.FlightSpeedup" />): the board refills
-    ///     while long ricochets and rapid fire clear it.
+    ///     while long ricochets and rapid fire clear it. A big clear in a short window
+    ///     (<see cref="ISpawnClockSettings.BreatherClear" />) earns a breather instead: the clock drops to
+    ///     <see cref="ISpawnClockSettings.BreatherPace" /> and eases back to its full pace, so the release
+    ///     after a great shot lasts a moment before the tension builds again.
     /// </summary>
     internal sealed class SpawnClock : IStartable, ITickable, IRunResettable, IDisposable, ISpawnClock
     {
@@ -47,6 +50,11 @@ namespace BalloonParty.Balloon.Spawner
         private float _window;
         private float _remaining;
         private float _secondsOnLevel;
+
+        // The highest recent occupancy, falling at the rate that drains BreatherClear in one window, so
+        // peak minus now reads how much the board lost within about that window.
+        private float _recentPeakOccupancy;
+        private float _breatherLeft;
 
         public int ResetOrder => RunResetOrder.Counters;
         public float NextLineProgress => _window > 0f ? 1f - _remaining / _window : 0f;
@@ -105,7 +113,9 @@ namespace BalloonParty.Balloon.Spawner
             }
 
             _secondsOnLevel += deltaTime;
-            _remaining -= deltaTime * Pace(AgeFlights(deltaTime));
+            var flightSeconds = AgeFlights(deltaTime);
+            TrackClears(deltaTime);
+            _remaining -= deltaTime * Mathf.Lerp(_settings.BreatherPace, 1f, BreatherBlend()) * Pace(flightSeconds);
             if (_remaining > 0f)
             {
                 return;
@@ -121,7 +131,8 @@ namespace BalloonParty.Balloon.Spawner
         {
             if (AnotherBallInFlight(msg.Projectile))
             {
-                _remaining -= _window * _settings.OverlapShotPull;
+                _remaining -= _window * _settings.OverlapShotPull
+                              * Mathf.Lerp(_settings.BreatherPace, 1f, BreatherBlend());
             }
         }
 
@@ -167,6 +178,42 @@ namespace BalloonParty.Balloon.Spawner
             return boardPace + (_settings.FlightSpeedup - 1f) * flightPressure;
         }
 
+        // Counts down a running breather, or starts one when the board has lost BreatherClear of its open
+        // slots within about the window. The peak follows the board through a breather, so the clear that
+        // started it can't start another the moment it ends.
+        private void TrackClears(float deltaTime)
+        {
+            var occupancy = _boardFill.Occupancy;
+            if (_breatherLeft > 0f)
+            {
+                _breatherLeft = Mathf.Max(0f, _breatherLeft - deltaTime);
+                _recentPeakOccupancy = occupancy;
+                return;
+            }
+
+            var clear = _settings.BreatherClear;
+            if (clear <= 0f)
+            {
+                return;
+            }
+
+            var fall = deltaTime * clear / _settings.BreatherClearWindow;
+            _recentPeakOccupancy = Mathf.Max(occupancy, _recentPeakOccupancy - fall);
+            if (_recentPeakOccupancy - occupancy >= clear)
+            {
+                _breatherLeft = _settings.BreatherSeconds;
+                _recentPeakOccupancy = occupancy;
+            }
+        }
+
+        // 0 as a breather starts, easing to 1 as it ends; 1 outside one.
+        private float BreatherBlend()
+        {
+            return _breatherLeft > 0f
+                ? Mathf.SmoothStep(0f, 1f, 1f - _breatherLeft / _settings.BreatherSeconds)
+                : 1f;
+        }
+
         private bool IsRunning()
         {
             return Navigation.Current.Value == NavigationState.Game
@@ -178,6 +225,8 @@ namespace BalloonParty.Balloon.Spawner
         private void StartLevel()
         {
             _secondsOnLevel = 0f;
+            _breatherLeft = 0f;
+            _recentPeakOccupancy = 0f;
             StartWindow(_settings.GraceSeconds);
         }
 

@@ -1168,6 +1168,10 @@ MonoBehaviour:
     _occupancyWeight: 0.5
     _flightSpeedup: 3
     _flightPressureSeconds: 6
+    _breatherClear: 0.2
+    _breatherClearWindow: 2
+    _breatherSeconds: 6
+    _breatherPace: 0.2
   _scoringCurve:
     _controlPoints:
     - _level: 1

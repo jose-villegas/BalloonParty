@@ -45,6 +45,22 @@ namespace BalloonParty.Configuration.Level
         /// </summary>
         float FlightPressureSeconds { get; }
 
+        /// <summary>
+        ///     Share of the board's open slots that, cleared within <see cref="BreatherClearWindow" />, earns a
+        ///     breather: the clock slows to <see cref="BreatherPace" /> and eases back to its full pace over
+        ///     <see cref="BreatherSeconds" />. 0 = never.
+        /// </summary>
+        float BreatherClear { get; }
+
+        /// <summary>Seconds a clear must happen within to earn a breather.</summary>
+        float BreatherClearWindow { get; }
+
+        /// <summary>Seconds a breather lasts, easing from <see cref="BreatherPace" /> back to full pace.</summary>
+        float BreatherSeconds { get; }
+
+        /// <summary>The clock's pace as a breather starts, as a share of its full pace, 0–1.</summary>
+        float BreatherPace { get; }
+
         /// <summary>Seconds between lines at <paramref name="level" />; levels below 1 run at level 1's pace.</summary>
         float IntervalForLevel(int level);
     }
