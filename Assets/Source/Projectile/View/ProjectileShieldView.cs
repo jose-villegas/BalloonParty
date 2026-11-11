@@ -65,6 +65,7 @@ namespace BalloonParty.Projectile.View
         private float _noiseIntensity;
         private float _glow = 1f;
         private float _targetGlow = 1f;
+        private float _glowRate;
 
         private DampedSpring1D _squashSpring;
         private Vector2 _squashAxis;
@@ -149,9 +150,7 @@ namespace BalloonParty.Projectile.View
             localNoise = Vector2.ClampMagnitude(localNoise, 1.5f);
             _noiseScrollDir = new Vector4(localNoise.x, localNoise.y, 0f, 0f);
 
-            // One shield's worth of glow over a layer's reveal, so the brightening rides the new shell in.
-            var glowRate = _settings.GlowPerShield / Mathf.Max(_settings.AppearSeconds, 0.01f);
-            _glow = Mathf.MoveTowards(_glow, _targetGlow, glowRate * dt);
+            _glow = Mathf.MoveTowards(_glow, _targetGlow, _glowRate * dt);
 
             WriteAllProperties();
             _fieldRenderer.SetPropertyBlock(_block);
@@ -318,6 +317,7 @@ namespace BalloonParty.Projectile.View
             _noiseIntensity = 0f;
             _glow = 1f;
             _targetGlow = 1f;
+            _glowRate = 0f;
             _squashSpring = default;
             _squashAxis = Vector2.zero;
             _projectileRoot = null;
@@ -482,7 +482,11 @@ namespace BalloonParty.Projectile.View
 
         private void OnShieldCountChanged(int count)
         {
+            // The whole change over the layer's own animation (the reveal on a gain, the dissolve on a loss),
+            // so the brightening rides the new shell in however many shields arrive at once.
             _targetGlow = GlowFor(count);
+            var seconds = count > _previousShieldCount ? _settings.AppearSeconds : _settings.DissolveSeconds;
+            _glowRate = Mathf.Abs(_targetGlow - _glow) / Mathf.Max(seconds, 0.01f);
             AnimateShieldChange(count);
             PlayShieldChangeFx(count);
             _previousShieldCount = count;

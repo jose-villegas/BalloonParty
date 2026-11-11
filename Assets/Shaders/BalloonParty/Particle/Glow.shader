@@ -34,7 +34,8 @@ Shader "BalloonParty/Particle/Glow"
         Cull     Off
         Lighting Off
         ZWrite   Off
-        Blend    [_SrcBlend] [_DstBlend]
+        // Alpha always blends as coverage, as a sprite's does: the scene capture reads it as an occluder.
+        Blend    [_SrcBlend] [_DstBlend], One OneMinusSrcAlpha
 
         Pass
         {
