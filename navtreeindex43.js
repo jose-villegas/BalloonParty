@@ -1,5 +1,7 @@
 var NAVTREEINDEX43 =
 {
+"classBalloonParty_1_1Game_1_1GameScopeRegistration.html#ad6d1de178ce3bbc0052c8d6f51613e4e":[5,0,0,6,13,11],
+"classBalloonParty_1_1Game_1_1GameScopeRegistration.html#ad6d1de178ce3bbc0052c8d6f51613e4e":[6,0,0,6,13,11],
 "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#ae90de8d6a000ad6b85bb21b5c9c0d492":[5,0,0,6,13,12],
 "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#ae90de8d6a000ad6b85bb21b5c9c0d492":[6,0,0,6,13,12],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html":[5,0,0,6,4,5],
@@ -247,7 +249,5 @@ var NAVTREEINDEX43 =
 "classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator.html":[5,0,0,6,5,6],
 "classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator.html":[6,0,0,6,5,6],
 "classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator.html#af2f922dd59a8926fbd5ce65ac3b16e20":[5,0,0,6,5,6,0],
-"classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator.html#af2f922dd59a8926fbd5ce65ac3b16e20":[6,0,0,6,5,6,0],
-"classBalloonParty_1_1Game_1_1HitPipeline.html":[5,0,0,6,14],
-"classBalloonParty_1_1Game_1_1HitPipeline.html":[6,0,0,6,14]
+"classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator.html#af2f922dd59a8926fbd5ce65ac3b16e20":[6,0,0,6,5,6,0]
 };

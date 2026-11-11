@@ -1,5 +1,7 @@
 var NAVTREEINDEX60 =
 {
+"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a2a398823ba0ae17759bd6846a18d02ac":[5,0,0,9,5,13],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a2a398823ba0ae17759bd6846a18d02ac":[6,0,0,9,5,13],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a3a5eb7adc287b56259da4a8975ac618a":[5,0,0,9,5,31],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a3a5eb7adc287b56259da4a8975ac618a":[6,0,0,9,5,31],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a43e78f4036e6ef6335d34a1eb313a35d":[5,0,0,9,5,6],
@@ -247,7 +249,5 @@ var NAVTREEINDEX60 =
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#ae7f098e20558c0cc66fde849add2b9b6":[5,0,0,10,1,4,12],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#ae7f098e20558c0cc66fde849add2b9b6":[6,0,0,10,1,4,12],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#aea9636eaaa8b4bbcc2415f75b59064c6":[5,0,0,10,1,4,3],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#aea9636eaaa8b4bbcc2415f75b59064c6":[6,0,0,10,1,4,3],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#afd1a71157770878b5b0a0f4ba2b553c7":[5,0,0,10,1,4,6],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#afd1a71157770878b5b0a0f4ba2b553c7":[6,0,0,10,1,4,6]
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#aea9636eaaa8b4bbcc2415f75b59064c6":[6,0,0,10,1,4,3]
 };

@@ -1,5 +1,9 @@
 var NAVTREEINDEX105 =
 {
+"structBalloonParty_1_1Editor_1_1Bush_1_1BushLeafExtractor_1_1TipCandidate.html#a743169b35daa0e928c95e2c65d9bb414":[5,0,0,5,0,7,1,3],
+"structBalloonParty_1_1Editor_1_1Bush_1_1BushLeafExtractor_1_1TipCandidate.html#a743169b35daa0e928c95e2c65d9bb414":[6,0,0,5,0,7,1,3],
+"structBalloonParty_1_1Editor_1_1Bush_1_1BushLeafExtractor_1_1TipCandidate.html#aaf17f8b89e720a766c16403339df9c9c":[5,0,0,5,0,7,1,0],
+"structBalloonParty_1_1Editor_1_1Bush_1_1BushLeafExtractor_1_1TipCandidate.html#aaf17f8b89e720a766c16403339df9c9c":[6,0,0,5,0,7,1,0],
 "structBalloonParty_1_1Editor_1_1Bush_1_1BushLeafExtractor_1_1TipCandidate.html#ab8e5da6a5c5090e547638055753ca0fc":[5,0,0,5,0,7,1,2],
 "structBalloonParty_1_1Editor_1_1Bush_1_1BushLeafExtractor_1_1TipCandidate.html#ab8e5da6a5c5090e547638055753ca0fc":[6,0,0,5,0,7,1,2],
 "structBalloonParty_1_1Editor_1_1Bush_1_1BushLeafExtractor_1_1TipCandidate.html#ac82a841d8e945425509e2f6fe63fdba4":[5,0,0,5,0,7,1,1],
@@ -245,9 +249,5 @@ var NAVTREEINDEX105 =
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a11a497f3ca3487e16a3f6478fa9977d1":[5,0,0,6,4,6,5],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a11a497f3ca3487e16a3f6478fa9977d1":[6,0,0,6,4,6,5],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a12588eeea995764d53317eeb797aa0d5":[5,0,0,6,4,6,4],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a12588eeea995764d53317eeb797aa0d5":[6,0,0,6,4,6,4],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a12bace1237cb0b4afffbdddeddc003a0":[5,0,0,6,4,6,3],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a12bace1237cb0b4afffbdddeddc003a0":[6,0,0,6,4,6,3],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a77905a88372d1e86c74e672fb0b140d9":[5,0,0,6,4,6,2],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a77905a88372d1e86c74e672fb0b140d9":[6,0,0,6,4,6,2]
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a12588eeea995764d53317eeb797aa0d5":[6,0,0,6,4,6,4]
 };

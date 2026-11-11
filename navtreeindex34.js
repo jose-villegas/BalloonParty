@@ -1,5 +1,7 @@
 var NAVTREEINDEX34 =
 {
+"classBalloonParty_1_1Editor_1_1LaserViewEditor.html#a96ead73ab7f5e0d5d3714882791f38c6":[5,0,0,5,21,0],
+"classBalloonParty_1_1Editor_1_1LaserViewEditor.html#a96ead73ab7f5e0d5d3714882791f38c6":[6,0,0,5,21,0],
 "classBalloonParty_1_1Editor_1_1LaserViewEditor.html#a9ffb3d55241ad7771ea4750b3df500af":[5,0,0,5,21,2],
 "classBalloonParty_1_1Editor_1_1LaserViewEditor.html#a9ffb3d55241ad7771ea4750b3df500af":[6,0,0,5,21,2],
 "classBalloonParty_1_1Editor_1_1LaserViewEditor.html#af1239fac47790276661bfeaaa52ffa05":[5,0,0,5,21,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX34 =
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a9381c5291893bd0c15b67386379fed72":[5,0,0,5,25,84],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a9381c5291893bd0c15b67386379fed72":[6,0,0,5,25,84],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a978851367c62891288298ebf3f930ff0":[5,0,0,5,25,58],
-"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a978851367c62891288298ebf3f930ff0":[6,0,0,5,25,58],
-"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a98836fcf70050ed7620aea9d661934e7":[5,0,0,5,25,28],
-"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a98836fcf70050ed7620aea9d661934e7":[6,0,0,5,25,28]
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a978851367c62891288298ebf3f930ff0":[6,0,0,5,25,58]
 };

@@ -1,5 +1,9 @@
 var NAVTREEINDEX96 =
 {
+"interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html#a778207b2fb53d5a3637ffaa2c7db3cae":[6,0,0,12,32,2],
+"interfaceBalloonParty_1_1Shared_1_1Messages_1_1IHitDispatcher.html":[5,0,0,12,7,13],
+"interfaceBalloonParty_1_1Shared_1_1Messages_1_1IHitDispatcher.html":[6,0,0,12,7,13],
+"interfaceBalloonParty_1_1Shared_1_1Messages_1_1IHitDispatcher.html#af5027752c753084be24be7496982b2d0":[5,0,0,12,7,13,0],
 "interfaceBalloonParty_1_1Shared_1_1Messages_1_1IHitDispatcher.html#af5027752c753084be24be7496982b2d0":[6,0,0,12,7,13,0],
 "interfaceBalloonParty_1_1Shared_1_1Pause_1_1ITimeScaleClaims.html":[5,0,0,12,8,0],
 "interfaceBalloonParty_1_1Shared_1_1Pause_1_1ITimeScaleClaims.html":[6,0,0,12,8,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX96 =
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IPaintable.html":[6,0,0,13,1,10],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IPaintable.html#ab99b665de3d0dcb77bc5115a616e60c7":[5,0,0,13,1,10,0],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IPaintable.html#ab99b665de3d0dcb77bc5115a616e60c7":[6,0,0,13,1,10,0],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IPassThrough.html":[5,0,0,13,1,11],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IPassThrough.html":[6,0,0,13,1,11],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IPressureMovable.html":[5,0,0,13,1,12],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IPressureMovable.html":[6,0,0,13,1,12],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IPressureMovable.html#ae1e4dedeee5e4047d6b7e4637b343a0c":[5,0,0,13,1,12,0]
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IPassThrough.html":[5,0,0,13,1,11]
 };

@@ -1,5 +1,9 @@
 var NAVTREEINDEX90 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a84106b8faf66b27add61798fa20625ef":[6,0,0,3,0,6,2],
+"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a8673f39cf5e400fa604513f81968d1b3":[5,0,0,3,0,6,5],
+"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a8673f39cf5e400fa604513f81968d1b3":[6,0,0,3,0,6,5],
+"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a8a7e96cbdf0a2c82cb071c964262be84":[5,0,0,3,0,6,7],
 "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a8a7e96cbdf0a2c82cb071c964262be84":[6,0,0,3,0,6,7],
 "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#abf9e9826d99af0a92744527a179189d9":[5,0,0,3,0,6,0],
 "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#abf9e9826d99af0a92744527a179189d9":[6,0,0,3,0,6,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX90 =
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#abe058832dbf7a9ebb635a3ce8ac4c2bb":[6,0,0,3,4,9,5],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#abec0b96ea729ffabc42ba63a604645ae":[5,0,0,3,4,9,3],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#abec0b96ea729ffabc42ba63a604645ae":[6,0,0,3,4,9,3],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#ad2f23ded4f34d5ab2a7068c8a790ba8d":[5,0,0,3,4,9,10],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#ad2f23ded4f34d5ab2a7068c8a790ba8d":[6,0,0,3,4,9,10],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#ad4db7b151c77e8961c9dfb67413b372e":[5,0,0,3,4,9,16],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#ad4db7b151c77e8961c9dfb67413b372e":[6,0,0,3,4,9,16],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#adc655400a4dcc44e2f1888dd9a700271":[5,0,0,3,4,9,12]
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#ad2f23ded4f34d5ab2a7068c8a790ba8d":[5,0,0,3,4,9,10]
 };

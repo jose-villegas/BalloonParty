@@ -1,5 +1,7 @@
 var NAVTREEINDEX89 =
 {
+"functions_prop_b.html":[6,3,4,1],
+"functions_prop_c.html":[6,3,4,2],
 "functions_prop_d.html":[6,3,4,3],
 "functions_prop_e.html":[6,3,4,4],
 "functions_prop_f.html":[6,3,4,5],
@@ -179,10 +181,12 @@ var NAVTREEINDEX89 =
 "interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1IBoardFill.html#a27d551f886f5c94cdb402c45be2424dd":[6,0,0,1,3,5,0],
 "interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html":[5,0,0,1,3,7],
 "interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html":[6,0,0,1,3,7],
-"interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html#a21782b6473b41f977ecf3b7a3009d117":[5,0,0,1,3,7,1],
-"interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html#a21782b6473b41f977ecf3b7a3009d117":[6,0,0,1,3,7,1],
-"interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html#ad0991e3e87e34c233618b03dd793fe2b":[5,0,0,1,3,7,0],
-"interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html#ad0991e3e87e34c233618b03dd793fe2b":[6,0,0,1,3,7,0],
+"interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html#a21782b6473b41f977ecf3b7a3009d117":[5,0,0,1,3,7,2],
+"interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html#a21782b6473b41f977ecf3b7a3009d117":[6,0,0,1,3,7,2],
+"interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html#ac977550323e7f64848e175858630e401":[5,0,0,1,3,7,0],
+"interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html#ac977550323e7f64848e175858630e401":[6,0,0,1,3,7,0],
+"interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html#ad0991e3e87e34c233618b03dd793fe2b":[5,0,0,1,3,7,1],
+"interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html#ad0991e3e87e34c233618b03dd793fe2b":[6,0,0,1,3,7,1],
 "interfaceBalloonParty_1_1Balloon_1_1Type_1_1IBalloonVariant.html":[5,0,0,1,4,1],
 "interfaceBalloonParty_1_1Balloon_1_1Type_1_1IBalloonVariant.html":[6,0,0,1,4,1],
 "interfaceBalloonParty_1_1Balloon_1_1Type_1_1IBalloonVariant.html#a86fbebbbec71bdf4a8abf04cf6a2a530":[5,0,0,1,4,1,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX89 =
 "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a1e2f9a7c649b859b07308f8b6d641764":[6,0,0,3,0,6,3],
 "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a5b37aa7112069dd23b5e36c1b1492f94":[5,0,0,3,0,6,4],
 "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a5b37aa7112069dd23b5e36c1b1492f94":[6,0,0,3,0,6,4],
-"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a84106b8faf66b27add61798fa20625ef":[5,0,0,3,0,6,2],
-"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a84106b8faf66b27add61798fa20625ef":[6,0,0,3,0,6,2],
-"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a8673f39cf5e400fa604513f81968d1b3":[5,0,0,3,0,6,5],
-"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a8673f39cf5e400fa604513f81968d1b3":[6,0,0,3,0,6,5],
-"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a8a7e96cbdf0a2c82cb071c964262be84":[5,0,0,3,0,6,7]
+"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a84106b8faf66b27add61798fa20625ef":[5,0,0,3,0,6,2]
 };

@@ -1,5 +1,9 @@
 var NAVTREEINDEX92 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#a83c3a96820980e064928b037249082f5":[6,0,0,3,4,22,7],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#a933db2d1c358fc8d88970501c4a9673d":[5,0,0,3,4,22,11],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#a933db2d1c358fc8d88970501c4a9673d":[6,0,0,3,4,22,11],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#a98441edf7af505aee1b04753f88a9c75":[5,0,0,3,4,22,0],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#a98441edf7af505aee1b04753f88a9c75":[6,0,0,3,4,22,0],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#ab1b4792cc3606e6f9f800519a1511f5a":[5,0,0,3,4,22,5],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#ab1b4792cc3606e6f9f800519a1511f5a":[6,0,0,3,4,22,5],
@@ -245,9 +249,5 @@ var NAVTREEINDEX92 =
 "interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#a29a9300265ef19bd0ca54ca7234d0358":[6,0,0,3,9,2,3],
 "interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#a3bc858fda6725edb210ac19ebafa98dc":[5,0,0,3,9,2,2],
 "interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#a3bc858fda6725edb210ac19ebafa98dc":[6,0,0,3,9,2,2],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#a7226ac114b3040766db46ac419d5607d":[5,0,0,3,9,2,4],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#a7226ac114b3040766db46ac419d5607d":[6,0,0,3,9,2,4],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#abb63ed32834590aaff82f62949b7906f":[5,0,0,3,9,2,5],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#abb63ed32834590aaff82f62949b7906f":[6,0,0,3,9,2,5],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#ac60a5e06ad3460836cccdf8585d33e54":[5,0,0,3,9,2,6]
+"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#a7226ac114b3040766db46ac419d5607d":[5,0,0,3,9,2,4]
 };

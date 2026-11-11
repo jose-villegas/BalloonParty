@@ -1,5 +1,7 @@
 var NAVTREEINDEX72 =
 {
+"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteLayerCombiner.html#af918600c1a3c6b8685e70c4708d981ac":[5,0,0,12,10,13,5],
+"classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteLayerCombiner.html#af918600c1a3c6b8685e70c4708d981ac":[6,0,0,12,10,13,5],
 "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html":[5,0,0,12,10,14],
 "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html":[6,0,0,12,10,14],
 "classBalloonParty_1_1Shared_1_1Rendering_1_1SpriteShadowBaker.html#a1d731d087f821dae7c0b7997d24ccc1d":[5,0,0,12,10,14,7],
@@ -247,7 +249,5 @@ var NAVTREEINDEX72 =
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html#afc65fd90933cdedc8f1a97389762f151":[5,0,0,12,11,4,47],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html#afc65fd90933cdedc8f1a97389762f151":[6,0,0,12,11,4,47],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService_1_1LightRegistrationHandle.html":[5,0,0,12,11,4,0],
-"classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService_1_1LightRegistrationHandle.html":[6,0,0,12,11,4,0],
-"classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService_1_1LightRegistrationHandle.html#a09b1bcaa583e594596a87e5ea1768fe3":[5,0,0,12,11,4,0,2],
-"classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService_1_1LightRegistrationHandle.html#a09b1bcaa583e594596a87e5ea1768fe3":[6,0,0,12,11,4,0,2]
+"classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService_1_1LightRegistrationHandle.html":[6,0,0,12,11,4,0]
 };

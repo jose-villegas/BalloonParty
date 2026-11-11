@@ -1,5 +1,9 @@
 var NAVTREEINDEX100 =
 {
+"plan_future_ideas.html#autotoc_md538":[3,5,0,13,5],
+"plan_future_ideas.html#autotoc_md539":[3,5,0,13,6],
+"plan_future_ideas.html#autotoc_md540":[3,5,0,13,7],
+"plan_future_ideas.html#autotoc_md542":[3,5,0,14],
 "plan_future_ideas.html#autotoc_md543":[3,5,0,14,0],
 "plan_future_ideas.html#autotoc_md544":[3,5,0,14,1],
 "plan_future_ideas.html#autotoc_md545":[3,5,0,14,2],
@@ -245,9 +249,5 @@ var NAVTREEINDEX100 =
 "plan_terrain_biomes.html#autotoc_md827":[3,9,0,7],
 "plan_unbreakable_formations.html":[3,1],
 "plan_unbreakable_formations.html#autotoc_md828":[3,1,0],
-"plan_unbreakable_formations.html#autotoc_md830":[3,1,0,0],
-"plan_unbreakable_formations.html#autotoc_md832":[3,1,0,1],
-"plan_unbreakable_formations.html#autotoc_md834":[3,1,0,2],
-"plan_unbreakable_formations.html#autotoc_md836":[3,1,0,3],
-"plan_unbreakable_formations.html#autotoc_md838":[3,1,0,4]
+"plan_unbreakable_formations.html#autotoc_md830":[3,1,0,0]
 };

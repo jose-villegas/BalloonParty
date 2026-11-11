@@ -29,6 +29,7 @@ var classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock =
     [ "_settings", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a325ec228eaaec7f62b55a080445ddd8b", null ],
     [ "_subscriptions", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a008f580b3e6c2640c78ea2c812f9fe7b", null ],
     [ "_window", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#ac14e660a6ee2582f2402550e8d9c477c", null ],
+    [ "BreatherSecondsLeft", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a0d8afe230fc085dc495fcf50cf241d7f", null ],
     [ "NextLineProgress", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a920ae1b670b7dcf6ec08aa1da2990e8f", null ],
     [ "ResetOrder", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#aafcaf78720cae9cf7e7591efce4d9394", null ],
     [ "SecondsOnLevel", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a737cff70bfdd7095adb9fd6f44537823", null ]

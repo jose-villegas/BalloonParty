@@ -1,5 +1,9 @@
 var NAVTREEINDEX101 =
 {
+"plan_unbreakable_formations.html#autotoc_md832":[3,1,0,1],
+"plan_unbreakable_formations.html#autotoc_md834":[3,1,0,2],
+"plan_unbreakable_formations.html#autotoc_md836":[3,1,0,3],
+"plan_unbreakable_formations.html#autotoc_md838":[3,1,0,4],
 "plan_unbreakable_formations.html#autotoc_md839":[3,1,0,4,0],
 "plan_unbreakable_formations.html#autotoc_md840":[3,1,0,4,1],
 "plan_unbreakable_formations.html#autotoc_md841":[3,1,0,4,2],
@@ -245,9 +249,5 @@ var NAVTREEINDEX101 =
 "structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Node.html#aea1da28d9436a78ec1eef8538e457a8d":[5,0,0,1,0,12,1,3],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Node.html#aea1da28d9436a78ec1eef8538e457a8d":[6,0,0,1,0,12,1,3],
 "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html":[5,0,0,1,1,0],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html":[6,0,0,1,1,0],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html#a6bd8cd92a3cb884da4c89e9703374837":[5,0,0,1,1,0,1],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html#a6bd8cd92a3cb884da4c89e9703374837":[6,0,0,1,1,0,1],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html#ac8010fa493e1a7322a6d0faafebfc36c":[5,0,0,1,1,0,2],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html#ac8010fa493e1a7322a6d0faafebfc36c":[6,0,0,1,1,0,2]
+"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html":[6,0,0,1,1,0]
 };

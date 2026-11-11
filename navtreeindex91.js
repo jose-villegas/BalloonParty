@@ -1,5 +1,9 @@
 var NAVTREEINDEX91 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#ad2f23ded4f34d5ab2a7068c8a790ba8d":[6,0,0,3,4,9,10],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#ad4db7b151c77e8961c9dfb67413b372e":[5,0,0,3,4,9,16],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#ad4db7b151c77e8961c9dfb67413b372e":[6,0,0,3,4,9,16],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#adc655400a4dcc44e2f1888dd9a700271":[5,0,0,3,4,9,12],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#adc655400a4dcc44e2f1888dd9a700271":[6,0,0,3,4,9,12],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#aeb57d5104c036ecf0e75bc82134308f7":[5,0,0,3,4,9,19],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#aeb57d5104c036ecf0e75bc82134308f7":[6,0,0,3,4,9,19],
@@ -245,9 +249,5 @@ var NAVTREEINDEX91 =
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#a4ba00387d1565cb4ddc77eb99ccc2a02":[6,0,0,3,4,22,4],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#a7195c01ed33fab3530b6c093985bf132":[5,0,0,3,4,22,10],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#a7195c01ed33fab3530b6c093985bf132":[6,0,0,3,4,22,10],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#a83c3a96820980e064928b037249082f5":[5,0,0,3,4,22,7],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#a83c3a96820980e064928b037249082f5":[6,0,0,3,4,22,7],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#a933db2d1c358fc8d88970501c4a9673d":[5,0,0,3,4,22,11],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#a933db2d1c358fc8d88970501c4a9673d":[6,0,0,3,4,22,11],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#a98441edf7af505aee1b04753f88a9c75":[5,0,0,3,4,22,0]
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#a83c3a96820980e064928b037249082f5":[5,0,0,3,4,22,7]
 };
