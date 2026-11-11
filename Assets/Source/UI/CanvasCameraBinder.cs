@@ -1,14 +1,16 @@
+using BalloonParty.Display;
 using UnityEngine;
 
 namespace BalloonParty.UI
 {
     /// <summary>
-    ///     Binds a Screen Space - Camera canvas to the single persistent camera at runtime. That camera lives
-    ///     in the app-root DontDestroyOnLoad prefab, so it can't be assigned to a canvas's Render Camera at
-    ///     edit time; this resolves it via <see cref="Camera.main" /> once it exists. Without it, a
-    ///     Screen Space - Camera canvas with an unset Render Camera falls back to overlay-scale world
-    ///     positions, which sends world-space trails that target this canvas's rects (score/shield/health)
-    ///     far off screen.
+    ///     Binds a Screen Space - Camera canvas to the persistent camera's HUD overlay (<see cref="HudCamera" />)
+    ///     at runtime, so the canvas draws after the main camera's tonemapping. That camera lives in the app-root
+    ///     DontDestroyOnLoad prefab, so it can't be assigned to a canvas's Render Camera at edit time; this
+    ///     resolves it under <see cref="Camera.main" /> once that exists (or the main camera itself, if the HUD
+    ///     camera is missing). Without it, a Screen Space - Camera canvas with an unset Render Camera falls
+    ///     back to overlay-scale world positions, which sends world-space trails that target this canvas's
+    ///     rects (score/shield/health) far off screen.
     /// </summary>
     [RequireComponent(typeof(Canvas))]
     internal sealed class CanvasCameraBinder : MonoBehaviour
@@ -49,7 +51,8 @@ namespace BalloonParty.UI
             var root = _canvas.rootCanvas;
             if (root.worldCamera == null)
             {
-                root.worldCamera = mainCamera;
+                var hud = mainCamera.GetComponentInChildren<HudCamera>();
+                root.worldCamera = hud != null ? hud.Camera : mainCamera;
             }
 
             enabled = false;
