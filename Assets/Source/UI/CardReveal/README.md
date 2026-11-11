@@ -12,7 +12,7 @@ when, is decided by `Game/CardReveal/`; this folder only plays it. The design is
 |---|---|
 | `CardRevealView` | `MonoBehaviour` on `GameCanvas`, the reveal's **stage**. It attaches itself (`ICardReveals.AttachStage`) only when `ICardRevealSettings.PopSheets` has a pop, so with none the tooltip keeps announcing cards. Plays each `ICardReveals.Current` (the steps are below), then calls `Finish` with it. A null `Current` (a run reset, or the stage detaching) stops it where it is. Injected by `GameScopeRegistration`'s scene-view pass, since it is optional on the canvas |
 | `RibbonPiece` | One piece of ribbon with a line written on it. Sizes the ribbon to its text. Flies itself: rolled up inside the balloon before the pop, then bursting out to its spot, drifting and swaying there, and finally flying off and fading. Where it rests, where the burst takes it, its drift, sway and way off are set on it by the builder. The text bends with the ribbon's wave, glyph by glyph |
-| `RibbonGraphic` | The ribbon itself, a UI graphic: a strip with a V notch cut in each end, and a wave running along it. It shades by the wave's slope, with a sheen along its middle, so the folds read as satin |
+| `RibbonGraphic` | The ribbon itself, a UI graphic: a strip with a V notch cut in each end, and a wave running along it. Cel shaded by its material (`BalloonParty/Sprite/CelRibbon`, `Materials/UI/CardRevealRibbon`): folds turned toward the scene light in the ribbon's colour, those turned away in a shadow tone, a satin sheen along the lit folds' middle, all in the time-of-day light. The mesh carries a second copy of the strip, which the shader moves away from the light as the ribbon's drop shadow |
 
 ## A reveal, step by step
 
@@ -35,10 +35,19 @@ When the ribbons go depends on the ascent:
 
 The pop is baked (`Tools/art/balloon_pop`), but not as pictures. Each frame holds the rubber's
 surface: its normal as the camera saw it, and its ambient occlusion. `BalloonParty/Sprite/LitFlipbook`
-lights it with the live scene light: its direction, colour and dimming, taken the way the balloons'
-bodies take them. So the reveal shades like the board around it at any time of day. The rubber's
-translucency is in the shader too: a face turned away from the light glows a deeper colour instead
-of going dark.
+cel shades it with the live scene light: its direction, colour and dimming, taken the way the
+balloons' bodies take them. So the reveal sits in the board's light, and in its flat, toon style:
+
+- **Three tones**, lit, middle and shadow, with hard steps between them, and the baked creases drawn
+  in a darker tone. A crisp highlight where the surface faces the light.
+- **Subsurface scattering**, done cheaply on screen. A few samples toward the light add up how much
+  rubber the light crosses to reach each point. Where it crosses little (the rim facing the light, a
+  flap or shred with no rubber behind it) and on faces turned away from the light, the latex glows a
+  richer, lighter tint, the way light shows through a balloon.
+- **A drop shadow**, away from the scene light, tinted the balloon's colour at the board balloons'
+  opacity, so it falls like theirs. Only the back layer draws it, from both layers' outline.
+
+Once the pop's last frame has shown, the two layers stop drawing.
 
 Each frame is baked in two layers, the rubber in front of the balloon's centre and the rubber behind
 it. The ribbons sit between them, so they read as inside the balloon:
@@ -58,10 +67,10 @@ While the balloon rises the two layers part a little, the front leading and the 
 
 - imports every `pop_*.png` under `Assets/Sprites/UI/CardReveal/` as linear data (no sRGB, no mipmaps, clamped), skipping sheets already imported that way;
 - lists them on `Assets/Configuration/CardRevealSettings.asset` (made if missing, and assigned to the `GameLifetimeScope` prefab);
-- makes `Materials/UI/CardRevealRubber.mat`;
+- makes `Materials/UI/CardRevealRubber.mat` and `Materials/UI/CardRevealRibbon.mat`;
 - builds `CardReveal` on `GameCanvas`.
 
-Running it again rebuilds the canvas part and keeps the material's and settings' tuning.
+Running it again rebuilds the canvas part and keeps the materials' and settings' tuning.
 
 The cheat `Run > Reveal A Card` plays a reveal for a random card without holding it. Use it to look
 at the reveal without playing to a card level-up. With no ascent, the ribbons fly their

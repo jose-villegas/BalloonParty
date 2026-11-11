@@ -8,7 +8,8 @@ Shader "BalloonParty/Sprite/CelRibbon"
     // A fold facing the light is drawn in the ribbon's colour, one facing away in the shadow tone, with a hard
     // step between, and a satin sheen runs along the middle of the lit folds. The colour takes the time-of-day
     // light as the balloons' bodies do (Sprite/Diffuse in Ambient mode). For a canvas: the batch's object space
-    // is the canvas's, so the shadow's distance is in canvas units.
+    // is the canvas's, so the shadow's distance is in canvas units. Not mask-safe: it has no UI clip rect or
+    // stencil, so under a RectMask2D or Mask it draws unclipped (PencilText's block is the one to copy).
     Properties
     {
         [PerRendererData] _MainTex ("Unused", 2D) = "white" {}
@@ -31,6 +32,7 @@ Shader "BalloonParty/Sprite/CelRibbon"
         [Header(Scene Light)]
         _AmbientHue ("Ambient Hue", Range(0, 1)) = 0.25
         _AmbientDimming ("Ambient Dimming", Range(0, 1)) = 0.4
+        _AmbientDesaturation ("Ambient Desaturation", Range(0, 1)) = 0.5
     }
 
     SubShader
@@ -85,6 +87,7 @@ Shader "BalloonParty/Sprite/CelRibbon"
             float _ShadowReach;
             float _AmbientHue;
             float _AmbientDimming;
+            float _AmbientDesaturation;
 
             v2f vert(appdata_t IN)
             {
@@ -95,6 +98,7 @@ Shader "BalloonParty/Sprite/CelRibbon"
                 position.xy -= toLight * _ShadowReach * OUT.isShadow;
                 OUT.vertex = UnityObjectToClipPos(position);
                 OUT.color = IN.color * _Color;
+                OUT.color.rgb = SceneLightDesaturate(OUT.color.rgb, _AmbientDesaturation);
                 OUT.shading = IN.texcoord;
                 OUT.lightTint = SceneLightTint() + SceneLightAmbientRegrade(_AmbientHue, _AmbientDimming);
 
@@ -113,10 +117,10 @@ Shader "BalloonParty/Sprite/CelRibbon"
                 }
 
                 float facing = IN.shading.x * IN.lightSide;
-                float lit = smoothstep(_LitEdge - _BandSoftness, _LitEdge + _BandSoftness, facing);
-                float tone = lerp(_ShadowTone, 1.0, lit);
+                float lightness = smoothstep(_LitEdge - _BandSoftness, _LitEdge + _BandSoftness, facing);
+                float tone = lerp(_ShadowTone, 1.0, lightness);
                 float sheen = smoothstep(1.0 - _SheenWidth - _BandSoftness, 1.0 - _SheenWidth + _BandSoftness,
-                    IN.shading.y) * lit * _Sheen;
+                    IN.shading.y) * lightness * _Sheen;
                 float3 rgb = saturate(IN.color.rgb * tone + sheen) * IN.lightTint;
                 rgb = SceneLightCapToWhite(rgb);
                 return half4(rgb * alpha, alpha);

@@ -69,6 +69,27 @@ float3 SceneLightAmbientRegrade(float hue, float dimming)
     return graded - ambient;
 }
 
+// The grey a colour fades to keeps its OKLab lightness. A luma grey would not: it turns saturated red and
+// purple muddy and green pale, since they look lighter than their luma.
+float3 SameLightnessGrey(float3 encoded)
+{
+    float3 lin = pow(max(encoded, 0.0), 2.2);
+    float3 lms = float3(
+        dot(lin, float3(0.4122214708, 0.5363325363, 0.0514459929)),
+        dot(lin, float3(0.2119034982, 0.6806995451, 0.1073969566)),
+        dot(lin, float3(0.0883024619, 0.2817188376, 0.6299787005)));
+    float okL = dot(pow(lms, 1.0 / 3.0), float3(0.2104542553, 0.7936177850, -0.0040720468));
+    return pow(okL * okL * okL, 1.0 / 2.2).xxx;
+}
+
+// A surface colour losing `amount` of its colour as the time-of-day light darkens: none at noon, where the
+// ambient's brightness is 1. Cheap enough per vertex, where a sprite's colour lives in its vertex colour.
+float3 SceneLightDesaturate(float3 rgb, float amount)
+{
+    float dark = 1.0 - saturate(dot(SceneLightTint(), float3(0.2126, 0.7152, 0.0722)));
+    return lerp(rgb, SameLightnessGrey(rgb), amount * dark);
+}
+
 // No light, no shadow: the shadow's opacity follows the light's intensity (clamped at the
 // authored alpha). Neutral when the owner hasn't pushed yet (edit time).
 float ShadowLightFade()

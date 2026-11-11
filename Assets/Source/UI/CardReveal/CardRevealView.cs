@@ -28,6 +28,8 @@ namespace BalloonParty.UI.CardReveal
     /// </summary>
     public class CardRevealView : MonoBehaviour
     {
+        private static readonly int SheetGridId = Shader.PropertyToID("_SheetGrid");
+
         [Tooltip("Holds the whole reveal; shown while one plays.")]
         [SerializeField] private CanvasGroup _group;
 
@@ -51,6 +53,7 @@ namespace BalloonParty.UI.CardReveal
 
         private CancellationTokenSource _playing;
         private IDisposable _subscriptions;
+        private Material _rubber;
         private Vector2 _place;
         private float _ascentStartedAt = float.NegativeInfinity;
         private float _releasedAt;
@@ -70,6 +73,13 @@ namespace BalloonParty.UI.CardReveal
                 return;
             }
 
+            // The shader keeps its taps inside the frame being shown, so it needs the sheet's grid. A copy of the
+            // material, so the asset isn't written in the editor.
+            _rubber = new Material(_back.material);
+            _rubber.SetVector(SheetGridId, new Vector4(_settings.SheetColumns, _settings.SheetRows));
+            _back.material = _rubber;
+            _front.material = _rubber;
+
             _cardReveals.AttachStage();
             _attached = true;
             _subscriptions = new CompositeDisposable(
@@ -86,6 +96,11 @@ namespace BalloonParty.UI.CardReveal
             if (_attached)
             {
                 _cardReveals.DetachStage();
+            }
+
+            if (_rubber != null)
+            {
+                Destroy(_rubber);
             }
         }
 

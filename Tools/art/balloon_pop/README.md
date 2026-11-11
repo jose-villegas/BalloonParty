@@ -22,9 +22,10 @@ The frames are not pictures but the rubber's surface, for the game to light with
 (0.5 is flat on to the camera), blue the ambient occlusion, alpha the coverage. The inside of the
 rubber is turned to face the camera, so a flap seen from behind lights like its outside. Each frame
 comes in two layers, the rubber in front of the balloon's centre and the rubber behind it (split by
-the camera's clip planes), so the game can draw the card's slip between them and it reads as inside
-the balloon. `pack_sheets.py` lights the review files with the shader's model and defaults (the
-constants at its top); change them together.
+the camera's clip planes), so the game can draw the card's ribbons between them and they read as
+inside the balloon. `pack_sheets.py` lights the review files with a smooth light (the constants at
+its top), enough to judge the tear and the timing; the game cel shades the rubber, so judge its look
+in game.
 
 A seed is one pop. `--seeds 0,4,9` bakes several; re-running a seed redraws the same pop. `--detail 5
 --size 256 --samples 8` gives a quick look in about 20 s; the defaults (`--detail 6 --size 512

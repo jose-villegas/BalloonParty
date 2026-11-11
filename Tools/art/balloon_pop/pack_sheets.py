@@ -4,8 +4,8 @@ an animated preview to review them by.
 The frames hold the rubber's surface, not a picture (see bake_pops.py): red and green the normal's x
 and y as the camera sees it, blue the ambient occlusion, alpha the coverage. Each frame comes in two
 layers, the rubber in front of the balloon's centre and the rubber behind it, so the game can put the
-card's slip between them. The game lights them with the scene's light (BalloonParty/Sprite/LitFlipbook);
-the review files light them here with the same model.
+card's ribbons between them. The game cel shades them in the scene's light (BalloonParty/Sprite/LitFlipbook);
+the review files light them here with a smooth light, enough to judge the tear and its timing.
 
 For each pop under OUT/frames/pop_NN/:
 - OUT/sheets/pop_NN.png      the game's sheet, 1536x2048: the front layer's 24 frames of 256x256 in the
@@ -35,7 +35,7 @@ SLIP = (250, 246, 236)
 HOLD_FRAMES = 15
 LAYERS = ("front", "back")
 
-# The lighting model, as BalloonParty/Sprite/LitFlipbook has it (its material's defaults).
+# A smooth light for the review files. The game cel shades the rubber (BalloonParty/Sprite/LitFlipbook).
 LIGHT_HEIGHT = 0.7
 AMBIENT = 0.55
 WRAP = 0.4
