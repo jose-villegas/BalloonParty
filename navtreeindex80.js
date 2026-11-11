@@ -1,5 +1,9 @@
 var NAVTREEINDEX80 =
 {
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#a1838fa96f7dc61d7719e89dcef0f365d":[5,0,0,14,22,21],
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#a1838fa96f7dc61d7719e89dcef0f365d":[6,0,0,14,22,21],
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#a187d418f7d6ad0a1afe4004d57e8f5eb":[5,0,0,14,22,30],
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#a187d418f7d6ad0a1afe4004d57e8f5eb":[6,0,0,14,22,30],
 "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a22acd5d1239f42282980c893aacd4a3c":[5,0,0,14,22,33],
 "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a22acd5d1239f42282980c893aacd4a3c":[6,0,0,14,22,33],
 "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a29a958ed54839de533a042058f38bb91":[5,0,0,14,22,15],
@@ -245,9 +249,5 @@ var NAVTREEINDEX80 =
 "classBalloonParty_1_1Thrower_1_1ThrowerController.html#afc22cc36dbd82218c29dc3ca91eca9e0":[5,0,0,15,1,14],
 "classBalloonParty_1_1Thrower_1_1ThrowerController.html#afc22cc36dbd82218c29dc3ca91eca9e0":[6,0,0,15,1,14],
 "classBalloonParty_1_1Thrower_1_1ThrowerController.html#afc5e2088b9863eabf1024cdf36c03ff3":[5,0,0,15,1,9],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#afc5e2088b9863eabf1024cdf36c03ff3":[6,0,0,15,1,9],
-"classBalloonParty_1_1Thrower_1_1ThrowerLifetimeScope.html":[5,0,0,15,2],
-"classBalloonParty_1_1Thrower_1_1ThrowerLifetimeScope.html":[6,0,0,15,2],
-"classBalloonParty_1_1Thrower_1_1ThrowerLifetimeScope.html#a35815ca644c851d783c27c010f9b42c1":[5,0,0,15,2,0],
-"classBalloonParty_1_1Thrower_1_1ThrowerLifetimeScope.html#a35815ca644c851d783c27c010f9b42c1":[6,0,0,15,2,0]
+"classBalloonParty_1_1Thrower_1_1ThrowerController.html#afc5e2088b9863eabf1024cdf36c03ff3":[6,0,0,15,1,9]
 };

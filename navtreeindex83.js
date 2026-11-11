@@ -1,5 +1,9 @@
 var NAVTREEINDEX83 =
 {
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a331fe9b3c5a1628e11d7fc47df206b69a09462a0d784f710178c34eaba146810d":[5,0,0,16,4,0,0,2],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a331fe9b3c5a1628e11d7fc47df206b69a09462a0d784f710178c34eaba146810d":[6,0,0,16,4,0,0,2],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a331fe9b3c5a1628e11d7fc47df206b69a09b43b300d21b48ec64a94a9dab2f407":[5,0,0,16,4,0,0,4],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a331fe9b3c5a1628e11d7fc47df206b69a09b43b300d21b48ec64a94a9dab2f407":[6,0,0,16,4,0,0,4],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a331fe9b3c5a1628e11d7fc47df206b69a6a721e41ff5405c89da7927ffbc15351":[5,0,0,16,4,0,0,5],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a331fe9b3c5a1628e11d7fc47df206b69a6a721e41ff5405c89da7927ffbc15351":[6,0,0,16,4,0,0,5],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a331fe9b3c5a1628e11d7fc47df206b69a7acdf85c69cc3c5305456a293524386e":[5,0,0,16,4,0,0,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX83 =
 "classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html":[5,0,0,16,5,2],
 "classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html":[6,0,0,16,5,2],
 "classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#a0cc59bab04561947f17b6b4304c42900":[5,0,0,16,5,2,5],
-"classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#a0cc59bab04561947f17b6b4304c42900":[6,0,0,16,5,2,5],
-"classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#a155405173e500033ed6649af81221df8":[5,0,0,16,5,2,4],
-"classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#a155405173e500033ed6649af81221df8":[6,0,0,16,5,2,4],
-"classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#a16ad6246fb8f0aa091daca7cb8873cbf":[5,0,0,16,5,2,8],
-"classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#a16ad6246fb8f0aa091daca7cb8873cbf":[6,0,0,16,5,2,8]
+"classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#a0cc59bab04561947f17b6b4304c42900":[6,0,0,16,5,2,5]
 };

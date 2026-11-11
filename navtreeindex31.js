@@ -1,5 +1,9 @@
 var NAVTREEINDEX31 =
 {
+"classBalloonParty_1_1Editor_1_1CoinCounterBuilder.html#acbb889479ee26f691a66eb84a496ea57":[5,0,0,5,14,20],
+"classBalloonParty_1_1Editor_1_1CoinCounterBuilder.html#acbb889479ee26f691a66eb84a496ea57":[6,0,0,5,14,20],
+"classBalloonParty_1_1Editor_1_1CoinCounterBuilder.html#adaae49154a195b70a43e75977960f0d6":[5,0,0,5,14,19],
+"classBalloonParty_1_1Editor_1_1CoinCounterBuilder.html#adaae49154a195b70a43e75977960f0d6":[6,0,0,5,14,19],
 "classBalloonParty_1_1Editor_1_1CoinCounterBuilder.html#adb3a6dbecfee9ea8c0bcc4e40ff9c3ba":[5,0,0,5,14,3],
 "classBalloonParty_1_1Editor_1_1CoinCounterBuilder.html#adb3a6dbecfee9ea8c0bcc4e40ff9c3ba":[6,0,0,5,14,3],
 "classBalloonParty_1_1Editor_1_1CoinCounterBuilder.html#add8bd5cb984ac14f2e1894e30fe43368":[5,0,0,5,14,10],
@@ -245,9 +249,5 @@ var NAVTREEINDEX31 =
 "classBalloonParty_1_1Editor_1_1EffectPreview_1_1PaintSplashPreviewModule.html#af2079c66b40de4d047f10c343d0d4ae9":[5,0,0,5,1,6,22],
 "classBalloonParty_1_1Editor_1_1EffectPreview_1_1PaintSplashPreviewModule.html#af2079c66b40de4d047f10c343d0d4ae9":[6,0,0,5,1,6,22],
 "classBalloonParty_1_1Editor_1_1EffectPreview_1_1PaintSplashPreviewModule.html#af827cf62333cd387bee6a527d830c9a2":[5,0,0,5,1,6,8],
-"classBalloonParty_1_1Editor_1_1EffectPreview_1_1PaintSplashPreviewModule.html#af827cf62333cd387bee6a527d830c9a2":[6,0,0,5,1,6,8],
-"classBalloonParty_1_1Editor_1_1EffectPreview_1_1PaintSplashPreviewModule_1_1FlightState.html":[5,0,0,5,1,6,0],
-"classBalloonParty_1_1Editor_1_1EffectPreview_1_1PaintSplashPreviewModule_1_1FlightState.html":[6,0,0,5,1,6,0],
-"classBalloonParty_1_1Editor_1_1EffectPreview_1_1PaintSplashPreviewModule_1_1FlightState.html#a227fec934f47cbabd172144c90763b3f":[5,0,0,5,1,6,0,6],
-"classBalloonParty_1_1Editor_1_1EffectPreview_1_1PaintSplashPreviewModule_1_1FlightState.html#a227fec934f47cbabd172144c90763b3f":[6,0,0,5,1,6,0,6]
+"classBalloonParty_1_1Editor_1_1EffectPreview_1_1PaintSplashPreviewModule.html#af827cf62333cd387bee6a527d830c9a2":[6,0,0,5,1,6,8]
 };

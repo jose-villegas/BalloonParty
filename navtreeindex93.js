@@ -1,5 +1,9 @@
 var NAVTREEINDEX93 =
 {
+"interfaceBalloonParty_1_1Game_1_1Cinematics_1_1ICinematicFocus.html#a5363a5e8b73bf6a8bf761ad3f29e46ae":[6,0,0,6,0,13,0],
+"interfaceBalloonParty_1_1Game_1_1Coins_1_1IAppSuspendSignal.html":[5,0,0,6,1,7],
+"interfaceBalloonParty_1_1Game_1_1Coins_1_1IAppSuspendSignal.html":[6,0,0,6,1,7],
+"interfaceBalloonParty_1_1Game_1_1Coins_1_1IAppSuspendSignal.html#a6ed62a67fec7e05c2679cb2133f9c872":[5,0,0,6,1,7,0],
 "interfaceBalloonParty_1_1Game_1_1Coins_1_1IAppSuspendSignal.html#a6ed62a67fec7e05c2679cb2133f9c872":[6,0,0,6,1,7,0],
 "interfaceBalloonParty_1_1Game_1_1Coins_1_1ICoinBalance.html":[5,0,0,6,1,8],
 "interfaceBalloonParty_1_1Game_1_1Coins_1_1ICoinBalance.html":[6,0,0,6,1,8],
@@ -245,9 +249,5 @@ var NAVTREEINDEX93 =
 "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#ac406efc39fbfe089d18355f4a2681608":[6,0,0,6,10,2,1],
 "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#acc102517c8faa27c4ec7b9678fd79966":[5,0,0,6,10,2,4],
 "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#acc102517c8faa27c4ec7b9678fd79966":[6,0,0,6,10,2,4],
-"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#ae35bc538be155c97bef4b582ead6cb66":[5,0,0,6,10,2,2],
-"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#ae35bc538be155c97bef4b582ead6cb66":[6,0,0,6,10,2,2],
-"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#af8cf36b0a33fc84ce2888dcb9d32d853":[5,0,0,6,10,2,0],
-"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#af8cf36b0a33fc84ce2888dcb9d32d853":[6,0,0,6,10,2,0],
-"interfaceBalloonParty_1_1Item_1_1Effects_1_1IEffectBoard.html":[5,0,0,7,1,4]
+"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#ae35bc538be155c97bef4b582ead6cb66":[5,0,0,6,10,2,2]
 };

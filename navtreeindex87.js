@@ -1,5 +1,9 @@
 var NAVTREEINDEX87 =
 {
+"classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html#adc9b5dd707cd81c86b1f0b0cedd59a1a":[5,0,0,16,7,6,3],
+"classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html#adc9b5dd707cd81c86b1f0b0cedd59a1a":[6,0,0,16,7,6,3],
+"classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html#ae30ce3bedc1c68b0f3dafd8c41d12a86":[5,0,0,16,7,6,2],
+"classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html#ae30ce3bedc1c68b0f3dafd8c41d12a86":[6,0,0,16,7,6,2],
 "classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html#af568f2e3c4d675c241a6a63e43190abd":[5,0,0,16,7,6,4],
 "classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html#af568f2e3c4d675c241a6a63e43190abd":[6,0,0,16,7,6,4],
 "classBalloonParty_1_1UI_1_1Score_1_1ScoreUILifetimeScope.html":[5,0,0,16,7,7],
@@ -245,9 +249,5 @@ var NAVTREEINDEX87 =
 "classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#a70947e2010ac3a6a3e03ea7928d2ba56":[5,0,0,16,24,7],
 "classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#a70947e2010ac3a6a3e03ea7928d2ba56":[6,0,0,16,24,7],
 "classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#a7669d636e680fd37a9569331cda58745":[5,0,0,16,24,8],
-"classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#a7669d636e680fd37a9569331cda58745":[6,0,0,16,24,8],
-"classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#ab144009cd067291e28cdfededd3e6818":[5,0,0,16,24,10],
-"classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#ab144009cd067291e28cdfededd3e6818":[6,0,0,16,24,10],
-"classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#ae71b411ec9c82aa8feadde77c5ed39cb":[5,0,0,16,24,2],
-"classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#ae71b411ec9c82aa8feadde77c5ed39cb":[6,0,0,16,24,2]
+"classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#a7669d636e680fd37a9569331cda58745":[6,0,0,16,24,8]
 };

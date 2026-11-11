@@ -1,5 +1,9 @@
 var NAVTREEINDEX76 =
 {
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#af14922d6ea2fadc7e7cd27b33bbc4828":[5,0,0,13,0,0,19,2],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#af14922d6ea2fadc7e7cd27b33bbc4828":[6,0,0,13,0,0,19,2],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#af1cda09287cc4a50360580e858a2a950":[5,0,0,13,0,0,19,22],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#af1cda09287cc4a50360580e858a2a950":[6,0,0,13,0,0,19,22],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html":[5,0,0,13,0,0,20],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html":[6,0,0,13,0,0,20],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html#a08da43df6360e982a7c181a099363f9d":[5,0,0,13,0,0,20,1],
@@ -245,9 +249,5 @@ var NAVTREEINDEX76 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html":[5,0,0,13,0,17],
 "classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html":[6,0,0,13,0,17],
 "classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a1ec21029adc06b083e8f89c7d710ce7d":[5,0,0,13,0,17,1],
-"classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a1ec21029adc06b083e8f89c7d710ce7d":[6,0,0,13,0,17,1],
-"classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a26a27a409156dc3ca74e9f70c8afab1e":[5,0,0,13,0,17,6],
-"classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a26a27a409156dc3ca74e9f70c8afab1e":[6,0,0,13,0,17,6],
-"classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a336c3527de442390deaa97809f88f6b2":[5,0,0,13,0,17,4],
-"classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a336c3527de442390deaa97809f88f6b2":[6,0,0,13,0,17,4]
+"classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a1ec21029adc06b083e8f89c7d710ce7d":[6,0,0,13,0,17,1]
 };

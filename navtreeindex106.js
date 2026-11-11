@@ -1,5 +1,9 @@
 var NAVTREEINDEX106 =
 {
+"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreFormationRequest.html#ac9a75eb0eaad3a2269fbbda1cfe66ed2":[5,0,0,6,8,0,1,8],
+"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreFormationRequest.html#ac9a75eb0eaad3a2269fbbda1cfe66ed2":[6,0,0,6,8,0,1,8],
+"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreFormationRequest.html#aed7772d32482b813e8bba4b0e2cb6005":[5,0,0,6,8,0,1,3],
+"structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreFormationRequest.html#aed7772d32482b813e8bba4b0e2cb6005":[6,0,0,6,8,0,1,3],
 "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreFormationRequest.html#af124247be8efa77ac5c69181902f4499":[5,0,0,6,8,0,1,0],
 "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreFormationRequest.html#af124247be8efa77ac5c69181902f4499":[6,0,0,6,8,0,1,0],
 "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreFormationRequest.html#af2c1317c74d4156afc85551025f8711c":[5,0,0,6,8,0,1,6],
@@ -245,9 +249,5 @@ var NAVTREEINDEX106 =
 "structBalloonParty_1_1Item_1_1Effects_1_1EffectHit.html":[5,0,0,7,1,1],
 "structBalloonParty_1_1Item_1_1Effects_1_1EffectHit.html":[6,0,0,7,1,1],
 "structBalloonParty_1_1Item_1_1Effects_1_1EffectHit.html#a4de7e73ffa0b1e09c98fe0550cfd4786":[5,0,0,7,1,1,0],
-"structBalloonParty_1_1Item_1_1Effects_1_1EffectHit.html#a4de7e73ffa0b1e09c98fe0550cfd4786":[6,0,0,7,1,1,0],
-"structBalloonParty_1_1Item_1_1Effects_1_1EffectHit.html#a63768aa1ea9177aba30f3ef78f0c93d5":[5,0,0,7,1,1,2],
-"structBalloonParty_1_1Item_1_1Effects_1_1EffectHit.html#a63768aa1ea9177aba30f3ef78f0c93d5":[6,0,0,7,1,1,2],
-"structBalloonParty_1_1Item_1_1Effects_1_1EffectHit.html#a795d8fe1328892d8764588e714269400":[5,0,0,7,1,1,5],
-"structBalloonParty_1_1Item_1_1Effects_1_1EffectHit.html#a795d8fe1328892d8764588e714269400":[6,0,0,7,1,1,5]
+"structBalloonParty_1_1Item_1_1Effects_1_1EffectHit.html#a4de7e73ffa0b1e09c98fe0550cfd4786":[6,0,0,7,1,1,0]
 };

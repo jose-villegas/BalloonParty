@@ -1,5 +1,9 @@
 var NAVTREEINDEX94 =
 {
+"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#ae35bc538be155c97bef4b582ead6cb66":[6,0,0,6,10,2,2],
+"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#af8cf36b0a33fc84ce2888dcb9d32d853":[5,0,0,6,10,2,0],
+"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#af8cf36b0a33fc84ce2888dcb9d32d853":[6,0,0,6,10,2,0],
+"interfaceBalloonParty_1_1Item_1_1Effects_1_1IEffectBoard.html":[5,0,0,7,1,4],
 "interfaceBalloonParty_1_1Item_1_1Effects_1_1IEffectBoard.html":[6,0,0,7,1,4],
 "interfaceBalloonParty_1_1Item_1_1Effects_1_1IEffectBoard.html#a7859c0d564bf0eb3d074b6aeed8c1b64":[5,0,0,7,1,4,0],
 "interfaceBalloonParty_1_1Item_1_1Effects_1_1IEffectBoard.html#a7859c0d564bf0eb3d074b6aeed8c1b64":[6,0,0,7,1,4,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX94 =
 "interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html":[6,0,0,12,1,1],
 "interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html#a426c8543f7b9747f3f886f945dc46a65":[5,0,0,12,1,1,0],
 "interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html#a426c8543f7b9747f3f886f945dc46a65":[6,0,0,12,1,1,0],
-"interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html#ab155192561f8d6b30f86e5777c66dd27":[5,0,0,12,1,1,1],
-"interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html#ab155192561f8d6b30f86e5777c66dd27":[6,0,0,12,1,1,1],
-"interfaceBalloonParty_1_1Shared_1_1GameState_1_1ICinematicState.html":[5,0,0,12,5,4],
-"interfaceBalloonParty_1_1Shared_1_1GameState_1_1ICinematicState.html":[6,0,0,12,5,4],
-"interfaceBalloonParty_1_1Shared_1_1GameState_1_1ICinematicState.html#a061961963402316537ba47b664c78ae6":[5,0,0,12,5,4,1]
+"interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html#ab155192561f8d6b30f86e5777c66dd27":[5,0,0,12,1,1,1]
 };

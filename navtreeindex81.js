@@ -1,5 +1,9 @@
 var NAVTREEINDEX81 =
 {
+"classBalloonParty_1_1Thrower_1_1ThrowerLifetimeScope.html":[5,0,0,15,2],
+"classBalloonParty_1_1Thrower_1_1ThrowerLifetimeScope.html":[6,0,0,15,2],
+"classBalloonParty_1_1Thrower_1_1ThrowerLifetimeScope.html#a35815ca644c851d783c27c010f9b42c1":[5,0,0,15,2,0],
+"classBalloonParty_1_1Thrower_1_1ThrowerLifetimeScope.html#a35815ca644c851d783c27c010f9b42c1":[6,0,0,15,2,0],
 "classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html":[5,0,0,15,3],
 "classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html":[6,0,0,15,3],
 "classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html#a3af18678159abea1f51c1c8ff16c4fa1":[5,0,0,15,3,4],
@@ -245,9 +249,5 @@ var NAVTREEINDEX81 =
 "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a776c2ec65a84dbd8a0b4d60f01ec5d92":[5,0,0,16,2,0,13],
 "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a776c2ec65a84dbd8a0b4d60f01ec5d92":[6,0,0,16,2,0,13],
 "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a83bb108d813d94e11f2c11fb9c0068cd":[5,0,0,16,2,0,12],
-"classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a83bb108d813d94e11f2c11fb9c0068cd":[6,0,0,16,2,0,12],
-"classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a84c54539f444dea08080f131f0792fd3":[5,0,0,16,2,0,31],
-"classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a84c54539f444dea08080f131f0792fd3":[6,0,0,16,2,0,31],
-"classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a85859aa45e25c08d2c0bcbef130529b9":[5,0,0,16,2,0,30],
-"classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a85859aa45e25c08d2c0bcbef130529b9":[6,0,0,16,2,0,30]
+"classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a83bb108d813d94e11f2c11fb9c0068cd":[6,0,0,16,2,0,12]
 };

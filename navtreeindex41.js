@@ -1,5 +1,9 @@
 var NAVTREEINDEX41 =
 {
+"classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#a1240e6029dfd1985058f10d008eb07b1":[5,0,0,6,0,15,20],
+"classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#a1240e6029dfd1985058f10d008eb07b1":[6,0,0,6,0,15,20],
+"classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#a196d13a1f0bc7f403323b8707793efc6":[5,0,0,6,0,15,16],
+"classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#a196d13a1f0bc7f403323b8707793efc6":[6,0,0,6,0,15,16],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#a21911b313d1683912c4c9131151398da":[5,0,0,6,0,15,4],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#a21911b313d1683912c4c9131151398da":[6,0,0,6,0,15,4],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1LevelUpCinematic.html#a29d67fd38c43a02a7fff9d2b0d8b0d5a":[5,0,0,6,0,15,1],
@@ -245,9 +249,5 @@ var NAVTREEINDEX41 =
 "classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html":[5,0,0,6,1,13],
 "classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html":[6,0,0,6,1,13],
 "classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html#a7eb73e0d3c1abc435b79bfcff5255042":[5,0,0,6,1,13,2],
-"classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html#a7eb73e0d3c1abc435b79bfcff5255042":[6,0,0,6,1,13,2],
-"classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html#acc895d250896064e3fef3850cc088284":[5,0,0,6,1,13,0],
-"classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html#acc895d250896064e3fef3850cc088284":[6,0,0,6,1,13,0],
-"classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html#aed5e9922fefa124138a613ee5d858cae":[5,0,0,6,1,13,1],
-"classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html#aed5e9922fefa124138a613ee5d858cae":[6,0,0,6,1,13,1]
+"classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html#a7eb73e0d3c1abc435b79bfcff5255042":[6,0,0,6,1,13,2]
 };

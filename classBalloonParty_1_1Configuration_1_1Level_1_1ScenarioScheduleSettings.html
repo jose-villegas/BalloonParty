@@ -127,8 +127,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a315c9a981f7c97115eeddc940296241e" id="r_a315c9a981f7c97115eeddc940296241e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a315c9a981f7c97115eeddc940296241e">ScenarioScheduleSettings</a> (int groundByLevel, int firstGroundStretch, int minGroundStretch, int maxGroundStretch, int minSkyStretch, int maxSkyStretch, int salt, int groundFromLevel=0, float waterShare=0f)</td></tr>
-<tr class="separator:a315c9a981f7c97115eeddc940296241e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd0d28088f40f2b45a8fba123661031f" id="r_abd0d28088f40f2b45a8fba123661031f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abd0d28088f40f2b45a8fba123661031f">ScenarioScheduleSettings</a> (int groundByLevel, int firstGroundStretch, int minGroundStretch, int maxGroundStretch, int minSkyStretch, int maxSkyStretch, int salt, int groundFromLevel=0, float waterShare=0f, bool waterAfterFirstMeadow=false)</td></tr>
+<tr class="separator:abd0d28088f40f2b45a8fba123661031f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -150,6 +150,8 @@ Properties</h2></td></tr>
 <tr class="separator:ae1c0b9004e1d872f139e8e56c3af692b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a35f838bc93dafb7343aa9861e30b0d99" id="r_a35f838bc93dafb7343aa9861e30b0d99"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a35f838bc93dafb7343aa9861e30b0d99">Salt</a><code> [get]</code></td></tr>
 <tr class="separator:a35f838bc93dafb7343aa9861e30b0d99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a427fef3d19cac6e7d32f53ecf1017751" id="r_a427fef3d19cac6e7d32f53ecf1017751"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a427fef3d19cac6e7d32f53ecf1017751">WaterAfterFirstMeadow</a><code> [get]</code></td></tr>
+<tr class="separator:a427fef3d19cac6e7d32f53ecf1017751"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a990f9f77ccda7e93f4be62f3237196ed" id="r_a990f9f77ccda7e93f4be62f3237196ed"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a990f9f77ccda7e93f4be62f3237196ed">WaterShare</a><code> [get]</code></td></tr>
 <tr class="separator:a990f9f77ccda7e93f4be62f3237196ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -157,7 +159,7 @@ Properties</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:aae96fc744c25e868e4a692d85f840b24" id="r_aae96fc744c25e868e4a692d85f840b24"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aae96fc744c25e868e4a692d85f840b24">_firstGroundStretch</a> = 4</td></tr>
 <tr class="separator:aae96fc744c25e868e4a692d85f840b24"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae76f5b3619eabc8694e67ebbea201c19" id="r_ae76f5b3619eabc8694e67ebbea201c19"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae76f5b3619eabc8694e67ebbea201c19">_groundByLevel</a> = 8</td></tr>
+<tr class="memitem:ae76f5b3619eabc8694e67ebbea201c19" id="r_ae76f5b3619eabc8694e67ebbea201c19"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae76f5b3619eabc8694e67ebbea201c19">_groundByLevel</a> = 6</td></tr>
 <tr class="separator:ae76f5b3619eabc8694e67ebbea201c19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba7a91ac8d695f343912a5b83027e10c" id="r_aba7a91ac8d695f343912a5b83027e10c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba7a91ac8d695f343912a5b83027e10c">_groundFromLevel</a> = 6</td></tr>
 <tr class="separator:aba7a91ac8d695f343912a5b83027e10c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,6 +173,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aede57093ac90d77d11b2c3de8bda97f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee6fc3b7217d89c3fe1a50dee0e44805" id="r_aee6fc3b7217d89c3fe1a50dee0e44805"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aee6fc3b7217d89c3fe1a50dee0e44805">_salt</a> = 7919</td></tr>
 <tr class="separator:aee6fc3b7217d89c3fe1a50dee0e44805"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82b2ae4cbc5ebcb29aef039c9920f871" id="r_a82b2ae4cbc5ebcb29aef039c9920f871"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a82b2ae4cbc5ebcb29aef039c9920f871">_waterAfterFirstMeadow</a> = true</td></tr>
+<tr class="separator:a82b2ae4cbc5ebcb29aef039c9920f871"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58c91c1e8e5326d57613b711a506a44d" id="r_a58c91c1e8e5326d57613b711a506a44d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a58c91c1e8e5326d57613b711a506a44d">_waterShare</a> = 0.5f</td></tr>
 <tr class="separator:a58c91c1e8e5326d57613b711a506a44d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -194,8 +198,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a315c9a981f7c97115eeddc940296241e" name="a315c9a981f7c97115eeddc940296241e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a315c9a981f7c97115eeddc940296241e">&#9670;&#160;</a></span>ScenarioScheduleSettings() <span class="overload">[2/2]</span></h2>
+<a id="abd0d28088f40f2b45a8fba123661031f" name="abd0d28088f40f2b45a8fba123661031f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd0d28088f40f2b45a8fba123661031f">&#9670;&#160;</a></span>ScenarioScheduleSettings() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -246,7 +250,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>waterShare</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0f</span>&#160;)</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>waterShare</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>waterAfterFirstMeadow</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -291,7 +300,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int BalloonParty.Configuration.Level.ScenarioScheduleSettings._groundByLevel = 8</td>
+          <td class="memname">int BalloonParty.Configuration.Level.ScenarioScheduleSettings._groundByLevel = 6</td>
         </tr>
       </table>
   </td>
@@ -424,6 +433,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">int BalloonParty.Configuration.Level.ScenarioScheduleSettings._salt = 7919</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a82b2ae4cbc5ebcb29aef039c9920f871" name="a82b2ae4cbc5ebcb29aef039c9920f871"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82b2ae4cbc5ebcb29aef039c9920f871">&#9670;&#160;</a></span>_waterAfterFirstMeadow</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Configuration.Level.ScenarioScheduleSettings._waterAfterFirstMeadow = true</td>
         </tr>
       </table>
   </td>
@@ -645,6 +676,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">int BalloonParty.Configuration.Level.ScenarioScheduleSettings.Salt</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a427fef3d19cac6e7d32f53ecf1017751" name="a427fef3d19cac6e7d32f53ecf1017751"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a427fef3d19cac6e7d32f53ecf1017751">&#9670;&#160;</a></span>WaterAfterFirstMeadow</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Configuration.Level.ScenarioScheduleSettings.WaterAfterFirstMeadow</td>
         </tr>
       </table>
   </td>

@@ -1,5 +1,9 @@
 var NAVTREEINDEX88 =
 {
+"classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#ab144009cd067291e28cdfededd3e6818":[5,0,0,16,24,10],
+"classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#ab144009cd067291e28cdfededd3e6818":[6,0,0,16,24,10],
+"classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#ae71b411ec9c82aa8feadde77c5ed39cb":[5,0,0,16,24,2],
+"classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#ae71b411ec9c82aa8feadde77c5ed39cb":[6,0,0,16,24,2],
 "classBalloonParty_1_1UI_1_1Tooltip_1_1TooltipBanner.html":[5,0,0,16,10,0],
 "classBalloonParty_1_1UI_1_1Tooltip_1_1TooltipBanner.html":[6,0,0,16,10,0],
 "classBalloonParty_1_1UI_1_1Tooltip_1_1TooltipBanner.html#a0b06295561eb57ff2fffc290555fa03e":[5,0,0,16,10,0,1],
@@ -245,9 +249,5 @@ var NAVTREEINDEX88 =
 "functions_vars.html":[6,3,2],
 "functions_vars.html":[6,3,2,0],
 "functions_vars_a.html":[6,3,2,1],
-"functions_vars_b.html":[6,3,2,2],
-"functions_vars_c.html":[6,3,2,3],
-"functions_vars_d.html":[6,3,2,4],
-"functions_vars_e.html":[6,3,2,5],
-"functions_vars_f.html":[6,3,2,6]
+"functions_vars_b.html":[6,3,2,2]
 };

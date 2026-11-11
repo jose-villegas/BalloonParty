@@ -1,5 +1,9 @@
 var NAVTREEINDEX99 =
 {
+"namespaceBalloonParty_1_1UI_1_1Score.html#a86f03547512dfa6ce827879a999ee3db":[5,0,0,16,7,8],
+"namespaceBalloonParty_1_1UI_1_1Score.html#a86f03547512dfa6ce827879a999ee3dba58fa788345ab5ac21c2cef38907d4580":[5,0,0,16,7,8,2],
+"namespaceBalloonParty_1_1UI_1_1Score.html#a86f03547512dfa6ce827879a999ee3dba7a1920d61156abc05a60135aefe8bc67":[5,0,0,16,7,8,0],
+"namespaceBalloonParty_1_1UI_1_1Score.html#a86f03547512dfa6ce827879a999ee3dba988fd738de9c6d177440c5dcf69e73ce":[5,0,0,16,7,8,1],
 "namespaceBalloonParty_1_1UI_1_1Shields.html":[5,0,0,16,8],
 "namespaceBalloonParty_1_1UI_1_1Telemetry.html":[5,0,0,16,9],
 "namespaceBalloonParty_1_1UI_1_1Telemetry.html#a20e80a757cebf98f741774a57e8c5311":[5,0,0,16,9,6],
@@ -245,9 +249,5 @@ var NAVTREEINDEX99 =
 "plan_grid_actor_expansion.html#autotoc_md586":[3,3,0,0],
 "plan_grid_actor_expansion.html#autotoc_md588":[3,3,0,1],
 "plan_grid_actor_expansion.html#autotoc_md589":[3,3,0,1,0],
-"plan_grid_actor_expansion.html#autotoc_md590":[3,3,0,1,1],
-"plan_grid_actor_expansion.html#autotoc_md591":[3,3,0,1,2],
-"plan_grid_actor_expansion.html#autotoc_md593":[3,3,0,2],
-"plan_grid_actor_expansion.html#autotoc_md595":[3,3,0,2,0],
-"plan_grid_actor_expansion.html#autotoc_md596":[3,3,0,2,0,0]
+"plan_grid_actor_expansion.html#autotoc_md590":[3,3,0,1,1]
 };

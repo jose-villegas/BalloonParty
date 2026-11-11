@@ -1,5 +1,9 @@
 var NAVTREEINDEX75 =
 {
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushViewController.html#af7857983a0070418ae0f8d8f2b3d9570":[5,0,0,13,0,0,9,6],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushViewController.html#af7857983a0070418ae0f8d8f2b3d9570":[6,0,0,13,0,0,9,6],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1DeflectorActorModel.html":[5,0,0,13,0,0,10],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1DeflectorActorModel.html":[6,0,0,13,0,0,10],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1DeflectorActorModel.html#a3cec6f142b68a6d308ae2993e788f888":[5,0,0,13,0,0,10,1],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1DeflectorActorModel.html#a3cec6f142b68a6d308ae2993e788f888":[6,0,0,13,0,0,10,1],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1DeflectorActorModel.html#a4df4d1ec045e26d0fbf7c2c3a2823557":[5,0,0,13,0,0,10,3],
@@ -245,9 +249,5 @@ var NAVTREEINDEX75 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#add676f460bc40a09686be3dc727ba98f":[5,0,0,13,0,0,19,20],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#add676f460bc40a09686be3dc727ba98f":[6,0,0,13,0,0,19,20],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#ae9c7fb3cb8b6261fe3b7564951150945":[5,0,0,13,0,0,19,9],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#ae9c7fb3cb8b6261fe3b7564951150945":[6,0,0,13,0,0,19,9],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#af14922d6ea2fadc7e7cd27b33bbc4828":[5,0,0,13,0,0,19,2],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#af14922d6ea2fadc7e7cd27b33bbc4828":[6,0,0,13,0,0,19,2],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#af1cda09287cc4a50360580e858a2a950":[5,0,0,13,0,0,19,22],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#af1cda09287cc4a50360580e858a2a950":[6,0,0,13,0,0,19,22]
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#ae9c7fb3cb8b6261fe3b7564951150945":[6,0,0,13,0,0,19,9]
 };

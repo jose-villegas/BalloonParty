@@ -1,5 +1,9 @@
 var NAVTREEINDEX98 =
 {
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebab39244a268bb6b4d8939fef525dd2cd5":[5,0,0,6,9,28,21],
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebab5190af1bcc87e359657b13ad793b0e4":[5,0,0,6,9,28,2],
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebab65bda0bf7248cc77c87f2bb0119074e":[5,0,0,6,9,28,26],
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebabc1993067f0854edbb08f9bb57b81883":[5,0,0,6,9,28,1],
 "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebac3a2b3ba13734eedd5feae650037bc2e":[5,0,0,6,9,28,11],
 "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebad0a549eeaa08ef5c939c6bbbd75ed111":[5,0,0,6,9,28,27],
 "namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebad70c928e2e00a990ace4f7b48ea77886":[5,0,0,6,9,28,30],
@@ -245,9 +249,5 @@ var NAVTREEINDEX98 =
 "namespaceBalloonParty_1_1UI_1_1HeadsUp.html":[5,0,0,16,4],
 "namespaceBalloonParty_1_1UI_1_1Health.html":[5,0,0,16,5],
 "namespaceBalloonParty_1_1UI_1_1LevelUp.html":[5,0,0,16,6],
-"namespaceBalloonParty_1_1UI_1_1Score.html":[5,0,0,16,7],
-"namespaceBalloonParty_1_1UI_1_1Score.html#a86f03547512dfa6ce827879a999ee3db":[5,0,0,16,7,8],
-"namespaceBalloonParty_1_1UI_1_1Score.html#a86f03547512dfa6ce827879a999ee3dba58fa788345ab5ac21c2cef38907d4580":[5,0,0,16,7,8,2],
-"namespaceBalloonParty_1_1UI_1_1Score.html#a86f03547512dfa6ce827879a999ee3dba7a1920d61156abc05a60135aefe8bc67":[5,0,0,16,7,8,0],
-"namespaceBalloonParty_1_1UI_1_1Score.html#a86f03547512dfa6ce827879a999ee3dba988fd738de9c6d177440c5dcf69e73ce":[5,0,0,16,7,8,1]
+"namespaceBalloonParty_1_1UI_1_1Score.html":[5,0,0,16,7]
 };
