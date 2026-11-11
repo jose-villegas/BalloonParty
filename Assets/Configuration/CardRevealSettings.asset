@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3d0a79e69914a028aa4354c4a106ed2, type: 3}
+  m_Name: CardRevealSettings
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Configuration.CardReveal.CardRevealSettings
+  _popSheets:
+  - {fileID: 2800000, guid: 83daae4bb7bdeda47ade7b8fa6b4b9cb, type: 3}
+  _recentPopsAvoided: 2
+  _sheetColumns: 6
+  _sheetRows: 4
+  _framesPerSecond: 30
+  _slipShowThrough: 0.12
+  _riseSeconds: 0.55
+  _holdBeforePopSeconds: 0.25
+  _writeFromFrame: 4
+  _slipHoldSeconds: 1.4
+  _fadeOutSeconds: 0.35
+  _parallax: 0.02
