@@ -8,13 +8,14 @@ card's ribbons between them. The game cel shades them in the scene's light (Ball
 the review files light them here with a smooth light, enough to judge the tear and its timing.
 
 For each pop under OUT/frames/pop_NN/:
-- OUT/sheets/pop_NN.png      the game's sheet, 1536x2048: the front layer's 24 frames of 256x256 in the
-                             top half (6 columns by 4 rows, read left to right, top to bottom), the back
+- OUT/sheets/pop_NN.png      the game's sheet, 2048x3072: the front layer's 48 frames of 256x256 in the
+                             top half (8 columns by 6 rows, read left to right, top to bottom), the back
                              layer's in the bottom half in the same order. Import it as linear data
 - OUT/review/pop_NN.png      the contact sheet: the frames large and numbered, lit from the top left,
                              tinted a balloon red, with a stand-in slip between the layers, on paper
-- OUT/review/pop_NN.gif      the pop playing at 30 fps under three lights side by side: the day's sun
-                             from the top left, a light from the right, and a low orange dusk
+- OUT/review/pop_NN.gif      the pop playing at 24 fps, in slow motion as the game plays it, under three
+                             lights side by side: the day's sun from the top left, a light from the right,
+                             and a low orange dusk
 
 Usage: python3 Tools/art/balloon_pop/pack_sheets.py [OUT]   (OUT defaults to out/ beside this script)
 """
@@ -24,11 +25,11 @@ from pathlib import Path
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
-COLUMNS = 6
-ROWS = 4
+COLUMNS = 8
+ROWS = 6
 FRAMES = COLUMNS * ROWS
 FRAME = 256
-FPS = 30
+FPS = 24
 TINT = (226, 72, 84)
 PAPER = (244, 238, 226)
 SLIP = (250, 246, 236)

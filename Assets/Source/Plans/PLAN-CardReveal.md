@@ -89,16 +89,16 @@ seeded, so a run redraws the same set, and a seed can be swapped to replace one 
 | The puncture | A random point on the body. Cracks grow from it across the mesh, branching, and the mesh is cut along them; a loop that would cut a piece loose is stitched back at one edge. Seeded per sim: where it starts (side, top, near the knot), how many cracks, how far they run and wander |
 | The tear | A release front sweeps out from the puncture, and behind it the rubber's stored stretch lets go (cloth shrinking to about 40%): each flap snaps back toward the pinned neck and buckles and curls, with self-collision so flaps don't pass through each other. A Weld keeps each crack shut until it opens, so the rest frame shows no seams. How far it shrinks and how stiff it bends vary per sim |
 | The fall | Once the rubber has gathered at the knot, the knot drops out of the frame with the shreds trailing, so the last frames are empty and the ribbons have the stage |
-| Timing | The sim runs 48 frames at a slow time scale and every second one is kept: 24 frames, baked for 30 fps (about 0.8 s); the game plays them in slow motion (`FramesPerSecond`, 12: 2 s). Roughly: 2 frames whole, 7 tearing, 8 gathering, 7 falling |
+| Timing | The sim runs 48 frames at a slow time scale and every one is rendered: 48 frames, 1.6 s at 30 fps; the game plays them in slow motion (`FramesPerSecond`, 24: 2 s). Roughly: 4 frames whole, 14 tearing, 16 gathering, 14 falling |
 | Rendering | Cycles on the CPU (no GPU needed headless), orthographic camera, transparent background, no colour transform. Not a lit picture but the surface as data: red and green the normal's x and y as the camera sees it, blue the ambient occlusion, alpha the coverage, with the inside of the rubber turned to face the camera. Each frame is rendered twice, split at the balloon's centre by the camera's clip planes: the front layer and the back layer. A whole pop renders in about a minute |
 | Lighting | In game, by `BalloonParty/Sprite/LitFlipbook` with the scene's light (§4). `pack_sheets.py` lights its review files with the same model, under three lights, to judge the bake without opening Unity |
-| Packing | Each sim's 24 frames, rendered at 512 px and scaled to 256×256: the front layer's in a 6×4 grid in the top half of the sheet, the back layer's in the bottom half (1536×2048). Imported as linear data. The balloon's centre is the same pixel in every frame |
+| Packing | Each sim's 48 frames, rendered at 512 px and scaled to 256×256: the front layer's in an 8×6 grid in the top half of the sheet, the back layer's in the bottom half (2048×3072). Imported as linear data. The balloon's centre is the same pixel in every frame |
 
 Blender's cloth made the tear read as rubber (the flaps snap back rather than sag), so the fallback
 of a membrane solver in the script itself wasn't needed.
 
-**Budget.** 16 sheets of 1536×2048 (two layers), compressed (ASTC 6×6 on phones) at about 1.4 MB
-each: about 22 MB in the build, twice the single-layer plan, and only one in memory at a time
+**Budget.** 16 sheets of 2048×3072 (48 frames, two layers), compressed (ASTC 6×6 on phones) at about
+2.8 MB each: about 45 MB in the build, four times the single-layer 24-frame plan, and only one in memory at a time
 (`PopSheetLoader`). Normals in ASTC may band; if they do on a phone, 4×4 for these sheets is the
 first fix to try. The sheets stay out of the
 sprite atlases, like the other baked art (`Sprites/README.md`), under `Assets/Sprites/UI/CardReveal/`.
@@ -107,7 +107,7 @@ sprite atlases, like the other baked art (`Sprites/README.md`), under `Assets/Sp
 
 | Asset | Size | Made by |
 |---|---|---|
-| 16 balloon pops | 16 sheets, 1536×2048 (24 frames of 256×256, two layers) | The bake script (§5) |
+| 16 balloon pops | 16 sheets, 2048×3072 (48 frames of 256×256, two layers) | The bake script (§5) |
 | The ribbons | None: drawn as a mesh (`RibbonGraphic`) | Code |
 | Card icons, if the ribbons get them | 4 × 192×192 | Drawn in the UI style, shared with the coin shop (`PLAN-Coins.md` §7) |
 

@@ -34,7 +34,7 @@ Shader "BalloonParty/Sprite/LitFlipbook"
         [HideInInspector] _RendererColor ("Renderer Color", Color) = (1, 1, 1, 1)
         // The sheet's frames per layer, across and down: set from ICardRevealSettings by UI/CardReveal's view, so
         // a fragment knows its frame and the taps below never read a neighbouring one.
-        [HideInInspector] _SheetGrid ("Sheet Grid", Vector) = (6, 4, 0, 0)
+        [HideInInspector] _SheetGrid ("Sheet Grid", Vector) = (8, 6, 0, 0)
 
         [Header(Cel Shading)]
         // How far above the screen the light sits: low rakes across the surface, high lights it head on.

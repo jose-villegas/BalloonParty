@@ -15,19 +15,19 @@ MonoBehaviour:
   _popSheets:
   - {fileID: 2800000, guid: 83daae4bb7bdeda47ade7b8fa6b4b9cb, type: 3}
   _recentPopsAvoided: 2
-  _sheetColumns: 6
-  _sheetRows: 4
-  _framesPerSecond: 12
+  _sheetColumns: 8
+  _sheetRows: 6
+  _framesPerSecond: 24
   _insideShowThrough: 0.12
   _riseSeconds: 0.45
   _holdBeforePopSeconds: 0.15
   _parallax: 0.02
-  _rubberFallsFromFrame: 3
+  _rubberFallsFromFrame: 6
   _rubberFallGravity: 95
   _popFlashRadius: 2.4
   _popFlashIntensity: 2.5
   _popFlashSeconds: 0.3
-  _ribbonsFromFrame: 4
+  _ribbonsFromFrame: 8
   _ribbonBurstSeconds: 0.4
   _ribbonExitSeconds: 0.5
   _ribbonGrowth: 1.3

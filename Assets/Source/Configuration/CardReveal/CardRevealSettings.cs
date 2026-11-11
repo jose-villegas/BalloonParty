@@ -20,9 +20,9 @@ namespace BalloonParty.Configuration.CardReveal
         [SerializeField] [Min(0)] private int _recentPopsAvoided = 2;
 
         [Header("Sheet")]
-        [SerializeField] [Min(1)] private int _sheetColumns = 6;
-        [SerializeField] [Min(1)] private int _sheetRows = 4;
-        [SerializeField] [Min(1f)] private float _framesPerSecond = 12f;
+        [SerializeField] [Min(1)] private int _sheetColumns = 8;
+        [SerializeField] [Min(1)] private int _sheetRows = 6;
+        [SerializeField] [Min(1f)] private float _framesPerSecond = 24f;
 
         [Header("Playing")]
         [Tooltip("How much of the ribbons inside shows through the whole front rubber: a shadow inside the balloon.")]
@@ -38,7 +38,7 @@ namespace BalloonParty.Configuration.CardReveal
 
         [Tooltip("The pop's frame on which the torn rubber starts to fall: the bake keeps its neck where it was, " +
                  "so without this the pop plays out in one place.")]
-        [SerializeField] [Min(0)] private int _rubberFallsFromFrame = 3;
+        [SerializeField] [Min(0)] private int _rubberFallsFromFrame = 6;
 
         [Tooltip("How fast the torn rubber's fall speeds up, in canvas units per second squared (the canvas is " +
                  "225 wide).")]
@@ -56,7 +56,7 @@ namespace BalloonParty.Configuration.CardReveal
         [Header("Ribbons")]
         [Tooltip("The pop's frame on which the ribbons fly out: once the rubber has opened.")]
         [FormerlySerializedAs("_writeFromFrame")]
-        [SerializeField] [Min(0)] private int _ribbonsFromFrame = 4;
+        [SerializeField] [Min(0)] private int _ribbonsFromFrame = 8;
 
         [SerializeField] [Min(0f)] private float _ribbonBurstSeconds = 0.4f;
         [SerializeField] [Min(0f)] private float _ribbonExitSeconds = 0.5f;

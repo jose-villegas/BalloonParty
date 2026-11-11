@@ -15,7 +15,8 @@ Usage (Blender 5.2, headless):
 Options after "--":
     --seeds 0,3,7     the pops to bake (each seed is one pop; default 0)
     --out DIR         where frames/pop_NN/ go (default: out/ beside this script)
-    --frames 24       frames per pop
+    --frames 48       frames rendered per pop, out of the simulation's 48 (48 renders every one, 24 every
+                      second one); a divisor of 48
     --size 512        rendered frame size in px (pack_sheets.py scales the sheets down)
     --samples 32      Cycles samples per frame
     --detail 6        icosphere subdivisions of the rubber (5 for quick looks)
@@ -32,7 +33,9 @@ import bmesh
 import bpy
 from mathutils import Matrix, Vector
 
-SIM_STEPS_PER_FRAME = 2
+# The simulation's length, at the scene's 30 fps: the timings below (FRONT_START, FALL_START, the release
+# front's frames) count its frames, so the pop is the same however many of them are rendered.
+SIM_FRAMES = 48
 TIME_SCALE = 0.03
 FALL_START = 26
 FALL_ACCELERATION = 0.008
@@ -51,12 +54,15 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--seeds", default="0")
     parser.add_argument("--out", default=str(Path(__file__).resolve().parent / "out"))
-    parser.add_argument("--frames", type=int, default=24)
+    parser.add_argument("--frames", type=int, default=48)
     parser.add_argument("--size", type=int, default=512)
     parser.add_argument("--samples", type=int, default=32)
     parser.add_argument("--detail", type=int, default=6)
     parser.add_argument("--blend", action="store_true")
-    return parser.parse_args(argv)
+    args = parser.parse_args(argv)
+    if args.frames <= 0 or SIM_FRAMES % args.frames:
+        parser.error(f"--frames must divide the simulation's {SIM_FRAMES} frames")
+    return args
 
 
 def smoothstep(a, b, x):
@@ -363,7 +369,7 @@ def surface_material():
     return mat
 
 
-def setup_scene(size, samples, frames):
+def setup_scene(size, samples):
     scene = bpy.context.scene
     scene.render.engine = "CYCLES"
     scene.cycles.device = "CPU"
@@ -381,7 +387,7 @@ def setup_scene(size, samples, frames):
     scene.view_settings.look = "None"
     scene.render.fps = 30
     scene.frame_start = 1
-    scene.frame_end = frames * SIM_STEPS_PER_FRAME
+    scene.frame_end = SIM_FRAMES
 
     cam_data = bpy.data.cameras.new("Camera")
     cam_data.type = "ORTHO"
@@ -398,13 +404,13 @@ def bake(seed, args):
     bpy.ops.wm.read_factory_settings(use_empty=True)
     rng = random.Random(seed)
     params = pop_params(rng)
-    scene = setup_scene(args.size, args.samples, args.frames)
+    scene = setup_scene(args.size, args.samples)
     material = surface_material()
 
     obj, cut_edges = build_rubber(rng, args.detail, params)
     obj.data.materials.append(material)
     knot = add_knot(material)
-    sim_frames = args.frames * SIM_STEPS_PER_FRAME
+    sim_frames = SIM_FRAMES
     add_release_front(obj, params, balloon_point(params["puncture"]), sim_frames)
     add_cloth(obj, params, sim_frames)
     add_fall([obj] + knot, sim_frames)
@@ -425,8 +431,9 @@ def bake(seed, args):
     # them: inside the balloon, not behind it.
     camera = scene.camera.data
     started = time.time()
+    step = SIM_FRAMES // args.frames
     for i in range(args.frames):
-        scene.frame_set(1 + i * SIM_STEPS_PER_FRAME)
+        scene.frame_set(1 + i * step)
         for layer, (near, far) in LAYERS.items():
             camera.clip_start = near
             camera.clip_end = far

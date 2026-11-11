@@ -13,9 +13,9 @@ the review files (`out/` is ignored by git):
 
 | File | What it is |
 |---|---|
-| `out/sheets/pop_NN.png` | The game's sheet, 1536×2048: the front layer's 24 frames of 256×256 in the top half, 6 across by 4 down, read left to right and top to bottom, and the back layer's in the bottom half in the same order. The balloon's centre is the same pixel in every frame. The empty texels around the rubber hold its surface data bled outward (coverage stays 0), so the game's filtering doesn't bend the edge's normals. Copy it to `Assets/Sprites/UI/CardReveal/` and run Tools ▸ BalloonParty ▸ CardReveal ▸ Build Card Reveal, which imports it as linear data and lists it in the settings |
+| `out/sheets/pop_NN.png` | The game's sheet, 2048×3072: the front layer's 48 frames of 256×256 in the top half, 8 across by 6 down, read left to right and top to bottom, and the back layer's in the bottom half in the same order. The balloon's centre is the same pixel in every frame. The empty texels around the rubber hold its surface data bled outward (coverage stays 0), so the game's filtering doesn't bend the edge's normals. Copy it to `Assets/Sprites/UI/CardReveal/` and run Tools ▸ BalloonParty ▸ CardReveal ▸ Build Card Reveal, which imports it as linear data and lists it in the settings |
 | `out/review/pop_NN.png` | The contact sheet: the frames at 512 px, numbered, lit from the top left and tinted a balloon red, with a stand-in slip between the layers, on paper |
-| `out/review/pop_NN.gif` | The pop playing at 30 fps, as the game plays it, under three lights side by side: the day's sun from the top left, a light from the right, and a low orange dusk |
+| `out/review/pop_NN.gif` | The pop playing at 24 fps, in slow motion as the game plays it, under three lights side by side: the day's sun from the top left, a light from the right, and a low orange dusk |
 
 The frames are not pictures but the rubber's surface, for the game to light with the scene's light
 (`BalloonParty/Sprite/LitFlipbook`): red and green are the normal's x and y as the camera sees it
@@ -51,8 +51,9 @@ Blender.
    (`Raw`), so the values written are the data: an emission shader outputs the normal and the
    occlusion, and there are no lights.
 
-The simulation runs 48 frames at a slow time scale and every second one is kept: 24 frames played at
-30 fps, about 0.8 s. What varies per seed: the puncture, the number of cracks (2 to 4), their length,
+The simulation runs 48 frames at a slow time scale and every one is rendered (`--frames 24` keeps every
+second one): 1.6 s at the scene's 30 fps, and the game plays them slower still, at 24 fps (2 s), as a
+slow-motion beat that stays smooth. What varies per seed: the puncture, the number of cracks (2 to 4), their length,
 wander and branching, how far the rubber shrinks, how stiff it is to bend, and how fast the front
 sweeps.
 

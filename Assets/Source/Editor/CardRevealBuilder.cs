@@ -42,6 +42,9 @@ namespace BalloonParty.Editor
         private const string CanvasPrefabPath = "Assets/Prefabs/Game/CardRevealCanvas.prefab";
         private const string GameScenePath = "Assets/Scenes/Game.unity";
 
+        // A sheet is 2048 x 3072 (48 frames of 256 a layer, two layers): imported whole, never scaled down.
+        private const int MaxSheetSize = 4096;
+
         // A layer the main camera draws and the screen-space light's scene capture records (SceneCaptureService's
         // captured layers), so the reveal casts and bounces light as the board's balloons do.
         private const string RevealLayer = "Balloons";
@@ -130,7 +133,7 @@ namespace BalloonParty.Editor
                     importer.wrapMode = TextureWrapMode.Clamp;
                     importer.filterMode = FilterMode.Bilinear;
                     importer.npotScale = TextureImporterNPOTScale.None;
-                    importer.maxTextureSize = 2048;
+                    importer.maxTextureSize = MaxSheetSize;
                     importer.textureCompression = TextureImporterCompression.CompressedHQ;
                     importer.SaveAndReimport();
                 }
@@ -148,7 +151,7 @@ namespace BalloonParty.Editor
                    importer.alphaSource == TextureImporterAlphaSource.FromInput && !importer.alphaIsTransparency &&
                    !importer.mipmapEnabled && importer.wrapMode == TextureWrapMode.Clamp &&
                    importer.filterMode == FilterMode.Bilinear && importer.npotScale == TextureImporterNPOTScale.None &&
-                   importer.maxTextureSize == 2048 &&
+                   importer.maxTextureSize == MaxSheetSize &&
                    importer.textureCompression == TextureImporterCompression.CompressedHQ;
         }
 
