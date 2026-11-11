@@ -29,6 +29,8 @@ namespace BalloonParty.Editor
         private const string ScopePrefabPath = "Assets/Prefabs/Game/GameLifetimeScope.prefab";
         private const string MaterialPath = "Assets/Materials/UI/CardRevealRubber.mat";
         private const string ShaderName = "BalloonParty/Sprite/LitFlipbook";
+        private const string RibbonMaterialPath = "Assets/Materials/UI/CardRevealRibbon.mat";
+        private const string RibbonShaderName = "BalloonParty/Sprite/CelRibbon";
         private const string RootName = "CardReveal";
 
         // In canvas units (the canvas is 225 wide): a frame shows the balloon about 80 across, a third of the
@@ -76,14 +78,15 @@ namespace BalloonParty.Editor
 
             var settings = EnsureSettings(sheets);
             AssignToScope(settings);
-            var material = EnsureMaterial();
-            if (material == null)
+            var rubber = EnsureMaterial(MaterialPath, ShaderName);
+            var ribbon = EnsureMaterial(RibbonMaterialPath, RibbonShaderName);
+            if (rubber == null || ribbon == null)
             {
-                Debug.LogError($"[CardReveal] No {ShaderName} shader.");
+                Debug.LogError($"[CardReveal] No {ShaderName} or {RibbonShaderName} shader.");
                 return;
             }
 
-            BuildOnCanvas(material, askBeforeRebuild);
+            BuildOnCanvas(rubber, ribbon, askBeforeRebuild);
         }
 
         // Linear (the pixels are normals and occlusion, not colour), no mipmaps (the frames sit side by side,
@@ -176,26 +179,26 @@ namespace BalloonParty.Editor
         }
 
         // An existing material keeps its tuned values; only a missing one is made.
-        private static Material EnsureMaterial()
+        private static Material EnsureMaterial(string path, string shaderName)
         {
-            var existing = AssetDatabase.LoadAssetAtPath<Material>(MaterialPath);
+            var existing = AssetDatabase.LoadAssetAtPath<Material>(path);
             if (existing != null)
             {
                 return existing;
             }
 
-            var shader = Shader.Find(ShaderName);
+            var shader = Shader.Find(shaderName);
             if (shader == null)
             {
                 return null;
             }
 
             var material = new Material(shader);
-            AssetDatabase.CreateAsset(material, MaterialPath);
+            AssetDatabase.CreateAsset(material, path);
             return material;
         }
 
-        private static void BuildOnCanvas(Material material, bool askBeforeRebuild)
+        private static void BuildOnCanvas(Material rubber, Material ribbon, bool askBeforeRebuild)
         {
             var path = PrefabRebuild.FindPrefabWithChild<TooltipBanner>("GameCanvas");
             if (path == null)
@@ -227,7 +230,7 @@ namespace BalloonParty.Editor
                     return;
                 }
 
-                BuildReveal(root.transform, label, material);
+                BuildReveal(root.transform, label, rubber, ribbon);
                 PrefabUtility.SaveAsPrefabAsset(root, path);
                 Debug.Log($"[CardReveal] Built {RootName} on {path}.");
             }
@@ -249,7 +252,7 @@ namespace BalloonParty.Editor
             return label != null && label.GetComponent<WriteOnText>() != null ? label : null;
         }
 
-        private static void BuildReveal(Transform canvas, TMP_Text label, Material material)
+        private static void BuildReveal(Transform canvas, TMP_Text label, Material rubber, Material ribbon)
         {
             var root = CreateRect(RootName, canvas);
             Stretch(root);
@@ -262,13 +265,13 @@ namespace BalloonParty.Editor
             balloon.sizeDelta = new Vector2(FrameSize, FrameSize);
             balloon.anchoredPosition = Place;
 
-            var back = CreateLayer("Back", balloon, material);
+            var back = CreateLayer("Back", balloon, rubber);
             var centre = new Vector2(0f, FrameSize * CentreAboveFrame);
-            var title = CreateRibbon("TitleRibbon", balloon, label, centre, TitleRibbonHeight, label.fontSize,
-                TitleFlight);
-            var description = CreateRibbon("DescriptionRibbon", balloon, label, centre, DescriptionRibbonHeight,
-                label.fontSize * DescriptionScale, DescriptionFlight);
-            var front = CreateLayer("Front", balloon, material);
+            var title = CreateRibbon("TitleRibbon", balloon, label, ribbon, centre, TitleRibbonHeight,
+                label.fontSize, TitleFlight);
+            var description = CreateRibbon("DescriptionRibbon", balloon, label, ribbon, centre,
+                DescriptionRibbonHeight, label.fontSize * DescriptionScale, DescriptionFlight);
+            var front = CreateLayer("Front", balloon, rubber);
 
             var view = root.gameObject.AddComponent<CardRevealView>();
             var fields = new SerializedObject(view);
@@ -293,8 +296,8 @@ namespace BalloonParty.Editor
 
         // Its flight is relative to the balloon's centre in the frame (centre). The text is the tooltip's label,
         // cloned for its pencil font and colour, without its write-on: the line is on the ribbon from the start.
-        private static RibbonPiece CreateRibbon(string name, RectTransform balloon, TMP_Text label, Vector2 centre,
-            float height, float fontSize, Flight flight)
+        private static RibbonPiece CreateRibbon(string name, RectTransform balloon, TMP_Text label, Material material,
+            Vector2 centre, float height, float fontSize, Flight flight)
         {
             var rect = CreateRect(name, balloon);
             rect.sizeDelta = new Vector2(60f, height);
@@ -303,6 +306,7 @@ namespace BalloonParty.Editor
             group.blocksRaycasts = false;
             var ribbon = rect.gameObject.AddComponent<RibbonGraphic>();
             ribbon.color = RibbonColor;
+            ribbon.material = material;
             ribbon.raycastTarget = false;
 
             var clone = Object.Instantiate(label.gameObject, rect, false);

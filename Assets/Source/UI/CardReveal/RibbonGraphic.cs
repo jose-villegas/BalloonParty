@@ -5,9 +5,10 @@ namespace BalloonParty.UI.CardReveal
 {
     /// <summary>
     ///     A strip of ribbon filling its rect: swallowtail-notched at both ends, with a wave running along it that
-    ///     the driver moves on by setting <see cref="WaveTime" />. The strip shades by the wave's slope, a face
-    ///     tilted up catching the light, so the folds read as satin. <see cref="WaveAt" /> is the same wave, for
-    ///     text riding on the ribbon to bend with it.
+    ///     the driver moves on by setting <see cref="WaveTime" />. It is cel shaded in the scene's light by its
+    ///     material (<c>BalloonParty/Sprite/CelRibbon</c>), from what the mesh tells it: how each fold turns, and
+    ///     a copy of the strip for the drop shadow. <see cref="WaveAt" /> is the same wave, for text riding on the
+    ///     ribbon to bend with it.
     /// </summary>
     [RequireComponent(typeof(CanvasRenderer))]
     public class RibbonGraphic : MaskableGraphic
@@ -26,9 +27,6 @@ namespace BalloonParty.UI.CardReveal
 
         [Tooltip("How fast the wave runs along the ribbon, in waves a second.")]
         [SerializeField] private float _waveSpeed = 0.9f;
-
-        [Tooltip("How much darker a fold turned down is than one turned up to the light.")]
-        [SerializeField] [Range(0f, 1f)] private float _shading = 0.28f;
 
         private float _waveTime;
 
@@ -58,26 +56,39 @@ namespace BalloonParty.UI.CardReveal
         protected override void OnPopulateMesh(VertexHelper vh)
         {
             vh.Clear();
+
+            // The shadow's copy first, so it draws under the ribbon; BalloonParty/Sprite/CelRibbon moves it.
+            AddStrip(vh, true);
+            AddStrip(vh, false);
+        }
+
+        private static float Phase(float x, float time, float length, float speed)
+        {
+            return (x / length - time * speed) * 2f * Mathf.PI;
+        }
+
+        // Three rows: the top and bottom edges run the full width, the middle starts and ends a notch in, so each
+        // end is cut in a V.
+        private void AddStrip(VertexHelper vh, bool shadow)
+        {
             var rect = GetPixelAdjustedRect();
             var halfHeight = rect.height * 0.5f;
             var centreY = rect.center.y;
             var notch = Mathf.Min(rect.height * _notch, rect.width * 0.25f);
-
-            // Three rows: the top and bottom edges run the full width, the middle starts and ends a notch in, so
-            // each end is cut in a V.
+            var first = vh.currentVertCount;
             for (var i = 0; i <= _segments; i++)
             {
                 var t = (float)i / _segments;
                 var edgeX = Mathf.Lerp(rect.xMin, rect.xMax, t);
                 var middleX = Mathf.Lerp(rect.xMin + notch, rect.xMax - notch, t);
-                AddVertex(vh, edgeX, centreY + halfHeight, rect, 1f);
-                AddVertex(vh, middleX, centreY, rect, 1.06f);
-                AddVertex(vh, edgeX, centreY - halfHeight, rect, 1f);
+                AddVertex(vh, edgeX, centreY + halfHeight, rect, shadow ? -1f : 0f);
+                AddVertex(vh, middleX, centreY, rect, shadow ? -1f : 1f);
+                AddVertex(vh, edgeX, centreY - halfHeight, rect, shadow ? -1f : 0f);
             }
 
             for (var i = 0; i < _segments; i++)
             {
-                var a = i * 3;
+                var a = first + i * 3;
                 var b = a + 3;
                 vh.AddTriangle(a, b, b + 1);
                 vh.AddTriangle(a, b + 1, a + 1);
@@ -86,22 +97,13 @@ namespace BalloonParty.UI.CardReveal
             }
         }
 
-        private static float Phase(float x, float time, float length, float speed)
+        // The UV carries the shading CelRibbon needs: x how far the fold here turns to the right (the wave's slope,
+        // read as the ribbon twisting toward and away from the screen), y the row (1 the middle, 0 an edge, -1 the
+        // shadow's copy).
+        private void AddVertex(VertexHelper vh, float x, float y, Rect rect, float row)
         {
-            return (x / length - time * speed) * 2f * Mathf.PI;
-        }
-
-        // The middle row is a touch brighter, the sheen along a satin ribbon's centre.
-        private void AddVertex(VertexHelper vh, float x, float y, Rect rect, float sheen)
-        {
-            var slope = Mathf.Cos(Phase(x - rect.center.x, _waveTime, _waveLength, _waveSpeed));
-            var light = (1f - _shading * (0.5f - 0.5f * slope)) * sheen;
-            var tinted = color;
-            tinted.r = Mathf.Min(1f, tinted.r * light);
-            tinted.g = Mathf.Min(1f, tinted.g * light);
-            tinted.b = Mathf.Min(1f, tinted.b * light);
-            var uv = new Vector2(Mathf.InverseLerp(rect.xMin, rect.xMax, x), Mathf.InverseLerp(rect.yMin, rect.yMax, y));
-            vh.AddVert(new Vector3(x, y + WaveAt(x - rect.center.x), 0f), tinted, uv);
+            var turn = -Mathf.Cos(Phase(x - rect.center.x, _waveTime, _waveLength, _waveSpeed));
+            vh.AddVert(new Vector3(x, y + WaveAt(x - rect.center.x), 0f), color, new Vector2(turn, row));
         }
     }
 }

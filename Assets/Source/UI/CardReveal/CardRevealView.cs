@@ -173,7 +173,10 @@ namespace BalloonParty.UI.CardReveal
             var elapsed = 0f;
             while (true)
             {
-                ShowFrame(Mathf.Min((int)(elapsed * _settings.FramesPerSecond), frames - 1));
+                // Past the last frame the rubber has fallen out of view: the layers stop drawing (and sampling).
+                var frame = (int)(elapsed * _settings.FramesPerSecond);
+                SetRubberShown(frame < frames);
+                ShowFrame(Mathf.Min(frame, frames - 1));
                 var gone = elapsed >= releaseAt && FlyRibbons(revealStartedAt) >= 1f;
                 if (gone && elapsed * _settings.FramesPerSecond >= frames)
                 {
@@ -222,6 +225,7 @@ namespace BalloonParty.UI.CardReveal
             _descriptionRibbon.Show(reveal.Card.Description);
             _titleRibbon.Rest();
             _descriptionRibbon.Rest();
+            SetRubberShown(true);
             ShowFrame(0);
             Rise(0f);
             _group.alpha = 1f;
@@ -238,6 +242,12 @@ namespace BalloonParty.UI.CardReveal
 
             var entry = _palette.GetEntry(colors[UnityEngine.Random.Range(0, colors.Count)]);
             return entry != null ? entry.Color : Color.white;
+        }
+
+        private void SetRubberShown(bool shown)
+        {
+            _back.enabled = shown;
+            _front.enabled = shown;
         }
 
         private void ShowFrame(int frame)
