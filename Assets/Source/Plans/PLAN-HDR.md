@@ -236,16 +236,42 @@ flowchart TD
 
 ### Phase 1 — switch the pipeline (Editor, with the user)
 
-Project settings are Editor-only edits, done together with the user.
+| Task | Status |
+|---|---|
+| 1. `GameURP.asset`: Supports HDR on; precision 32-bit; Color Grading Mode **HDR**; LUT 32. | Done |
+| 2. Main camera: post-processing on, dithering on. | Done, on the `Main Camera` prefab (it lives in the app scope, so the launcher has it too) |
+| 3. Tonemapping: ACES, with an exposure lift. `ScenarioGradeView` stops toggling post-processing. | Done. The base look is in the URP default volume profile (`Assets/DefaultVolumeProfile.asset`), not in the grade's volume, because the grade only exists in the game scope: ACES, +0.5 stops, +15 saturation. The grade's Color Adjustments add to the base's. **Open: ACES against Neutral, below.** |
+| 4. Measure the empty-post cost on device. **Gate:** if it doesn't fit, park HDR (Phase 0 stays). | Open: needs a device |
+| 5. Compare against the baselines. | Done in the Editor: `Baselines~/hdr-aces/` holds the same shots as `hdr-gamma-ldr/`, and `tuning/` holds the look sweeps |
+| 6. Re-tune the scenario grades in HDR grading mode. | Waits on the tonemapper |
 
-1. `GameURP.asset`: Supports HDR on; precision 32-bit; Color Grading Mode **HDR**; LUT 32.
-2. Main camera: post-processing on, dithering on.
-3. The global Volume gets Tonemapping: ACES, with an exposure lift. `ScenarioGradeView` stops toggling
-   post-processing.
-4. Measure the empty-post cost on device. **Gate:** if it doesn't fit, park HDR (Phase 0 stays).
-5. Compare against the baselines. Expect the Tier 2 item 4 effects (already authored above 1)
-   to change first.
-6. Re-tune the scenario grades in HDR grading mode.
+#### Findings from the Editor (2026-11-11)
+
+Measured on identical frames (game frozen, only the look changed), by mean luma, mean saturation and
+the share of clipped pixels, then by eye.
+
+| Look | Noon (water) | Night (water) | Hues |
+|---|---|---|---|
+| LDR, today | luma 0.405, sat 0.48, 12% clipped | luma 0.331, sat 0.57 | reference |
+| ACES +0.5 stops, +15 sat (committed) | 0.339, sat 0.67 | 0.271, sat 0.77 | red drifts to orange, green to yellow, blue pales |
+| ACES +0.6 stops, +5 sat, −20 contrast | 0.358, sat 0.50 | 0.292, sat 0.62 | as above, flatter |
+| **Neutral +0.3 stops, +10 sat** | **0.405, sat 0.50, 0% clipped** | **0.340, sat 0.60** | close to today |
+
+- **ACES can't match the night.** Its toe crushes the dark scenes. Lifting it far enough to match washes
+  out the day, and every saturation boost that brings the balloons back overshoots at night. The day
+  sky matches at +0.5 stops.
+- **ACES moves the gameplay colours.** Red balloons drift toward orange, green toward yellow, and the
+  blues pale. The plan's palette-identity check fails on red against orange.
+- **Neutral matches today at noon and at night** with one setting, keeps the hues, and still removes
+  the clipping. It is the recommended switch.
+- **Every tonemapper greys the UI whites.** No curve maps 1.0 back to white, so the cream Game Over panel and
+  white text such as PLAY come out grey, with Neutral the least. Settle this in its own step: move the
+  screen-space canvases to Screen Space – Overlay, or re-tune the UI colours.
+- **Capturing HDR.** The pipeline package's `capture game_view` renders the camera into an 8-bit texture,
+  and URP gives an offscreen camera its target's format, so it cannot show HDR. Use
+  `ScreenCapture.CaptureScreenshot` (the real Game view). The volume stack copies the default profile when it
+  starts, so a script that edits that profile in Play mode must call `VolumeManager.instance.OnVolumeProfileChanged`.
+  The `capture/` scripts in each baseline folder do both.
 
 ### Phase 2 — use the range, in sweep order
 
