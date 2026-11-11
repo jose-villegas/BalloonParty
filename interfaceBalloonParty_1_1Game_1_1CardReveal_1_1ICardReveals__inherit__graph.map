@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.CardReveal.ICardReveals" name="BalloonParty.Game.CardReveal.ICardReveals">
+<area shape="rect" id="Node000001" title="The reveals a stage plays, one at a time." alt="" coords="5,5,233,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html" title="Queues a reveal for each card the player wins: a level&#45;up&#39;s card as it&#39;s held (UpgradeCardHeldMessage..." alt="" coords="5,93,233,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="122,59,122,93,117,93,117,59"/>
+</map>

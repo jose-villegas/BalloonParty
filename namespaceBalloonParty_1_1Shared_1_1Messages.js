@@ -51,6 +51,7 @@ var namespaceBalloonParty_1_1Shared_1_1Messages =
     [ "ThrowerReadyMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ThrowerReadyMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ThrowerReadyMessage" ],
     [ "TooltipMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1TooltipMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1TooltipMessage" ],
     [ "TransformCapturedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1TransformCapturedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1TransformCapturedMessage" ],
+    [ "UpgradeCardHeldMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage" ],
     [ "WallHitMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage" ],
     [ "WaveDamageMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage" ],
     [ "ShieldGainSource", "namespaceBalloonParty_1_1Shared_1_1Messages.html#a1a885ac3fd6e8e290b39752bfe7e21c5", [

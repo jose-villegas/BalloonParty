@@ -125,19 +125,19 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>The on-screen tooltip: a short line of text that fades in over play, holds briefly, then fades out. Anything in the game can show one by publishing a <code>TooltipMessage</code>; the view that publishes it owns the wording.</p>
-<h1><a class="anchor" id="autotoc_md1133"></a>
+<h1><a class="anchor" id="autotoc_md1136"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">File   </th><th class="markdownTableHeadNone">What it does    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>TooltipBanner</code>   </td><td class="markdownTableBodyNone"><code>MonoBehaviour</code> view on the <code>Tooltip</code> prefab (in <code>GameCanvas</code>). Subscribes to <code>TooltipMessage</code> and shows its text: fades its <code>CanvasGroup</code> to <code>_visibleAlpha</code>, holds for <code>_holdDuration</code>, fades out. A new line replaces the one showing and restarts the timing; an empty one shows nothing. With <code>_writeOn</code> assigned (a <code>UI/HeadsUp/WriteOnText</code> on the label, as on the prefab) each line is written on in pencil instead of appearing whole, starting once the fade-in is done, and the hold is lengthened by the write. The tween runs on unscaled time, since lines land during slow-motion beats and frozen screens. It also words <code>BonusCardDealtMessage</code> with <code>_bonusCardFormat</code> and holds it until navigation is back in <code>Game</code>: the card is dealt during the retry's reset, while the game-over screen is still up. Injected via <code>RegisterComponentInHierarchy&lt;TooltipBanner&gt;</code> in <code>GameLifetimeScope</code>    </td></tr>
+<td class="markdownTableBodyNone"><code>TooltipBanner</code>   </td><td class="markdownTableBodyNone"><code>MonoBehaviour</code> view on the <code>Tooltip</code> prefab (in <code>GameCanvas</code>). Subscribes to <code>TooltipMessage</code> and shows its text: fades its <code>CanvasGroup</code> to <code>_visibleAlpha</code>, holds for <code>_holdDuration</code>, fades out. A new line replaces the one showing and restarts the timing; an empty one shows nothing. With <code>_writeOn</code> assigned (a <code>UI/HeadsUp/WriteOnText</code> on the label, as on the prefab) each line is written on in pencil instead of appearing whole, starting once the fade-in is done, and the hold is lengthened by the write. The tween runs on unscaled time, since lines land during slow-motion beats and frozen screens. It also words <code>BonusCardDealtMessage</code> with <code>_bonusCardFormat</code> and holds it until navigation is back in <code>Game</code>: the card is dealt during the retry's reset, while the game-over screen is still up. While a card reveal's view is attached (<code>ICardReveals.HasStage</code>, <code><a class="el" href="Game_2CardReveal_2README_8md.html">Game/CardReveal/README.md</a></code>) it leaves the bonus card to the reveal. Injected via <code>RegisterComponentInHierarchy&lt;TooltipBanner&gt;</code> in <code>GameLifetimeScope</code>    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>Shared/Messages/TooltipMessage</code>   </td><td class="markdownTableBodyNone">The line to show. Registered as a MessagePipe broker in <code>GameLifetimeScope</code>    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>Shared/Extensions/StringFormatExtensions</code>   </td><td class="markdownTableBodyNone"><code>FormatOrRaw</code>: formats an editor-authored string, returning it as written when it's malformed, so a typo in a format never throws mid-flow   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md1134"></a>
+<h1><a class="anchor" id="autotoc_md1137"></a>
 Who shows what</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -147,7 +147,7 @@ Who shows what</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>TooltipBanner</code> itself   </td><td class="markdownTableBodyNone">A retry bought with a rewarded ad resumes play with its bonus card (<code>BonusCardDealtMessage</code> from <code>Game/Upgrades/RunUpgrades</code>)   </td><td class="markdownTableBodyNone"><code>_bonusCardFormat</code> on the banner, <code>Bonus card: {0}</code>   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md1135"></a>
+<h1><a class="anchor" id="autotoc_md1138"></a>
 Wiring requirements</h1>
 <ul>
 <li><code>_group</code> and <code>_label</code> must be assigned; the prefab assigns the <code>Banner</code> child's <code>CanvasGroup</code> and its <code>Text (TMP)</code>. <code>_writeOn</code> is optional; the prefab assigns the <code>WriteOnText</code> on that label.</li>

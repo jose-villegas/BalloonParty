@@ -52,6 +52,7 @@ var dir_c46868fe3e223da89641514498b57a94 =
     [ "ThrowerReadyMessage.cs", "ThrowerReadyMessage_8cs.html", "ThrowerReadyMessage_8cs" ],
     [ "TooltipMessage.cs", "TooltipMessage_8cs.html", "TooltipMessage_8cs" ],
     [ "TransformCapturedMessage.cs", "TransformCapturedMessage_8cs.html", "TransformCapturedMessage_8cs" ],
+    [ "UpgradeCardHeldMessage.cs", "UpgradeCardHeldMessage_8cs.html", "UpgradeCardHeldMessage_8cs" ],
     [ "WallHitMessage.cs", "WallHitMessage_8cs.html", "WallHitMessage_8cs" ],
     [ "WaveDamageMessage.cs", "WaveDamageMessage_8cs.html", "WaveDamageMessage_8cs" ]
 ];

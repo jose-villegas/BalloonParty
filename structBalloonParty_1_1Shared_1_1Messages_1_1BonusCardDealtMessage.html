@@ -127,19 +127,22 @@ $(function(){initNavTree('structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardD
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae5c7433e7aaab5b67c7988786806cca0" id="r_ae5c7433e7aaab5b67c7988786806cca0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae5c7433e7aaab5b67c7988786806cca0">BonusCardDealtMessage</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> card)</td></tr>
-<tr class="separator:ae5c7433e7aaab5b67c7988786806cca0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a394b7b4c2aa6a764bc8b15a09886146a" id="r_a394b7b4c2aa6a764bc8b15a09886146a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a394b7b4c2aa6a764bc8b15a09886146a">BonusCardDealtMessage</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> card, int stacks)</td></tr>
+<tr class="separator:a394b7b4c2aa6a764bc8b15a09886146a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ab494a2079fbea98efb848505178ec22e" id="r_ab494a2079fbea98efb848505178ec22e"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab494a2079fbea98efb848505178ec22e">Card</a></td></tr>
 <tr class="separator:ab494a2079fbea98efb848505178ec22e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af667ba77744a0b7ad053ce9c9f5757ce" id="r_af667ba77744a0b7ad053ce9c9f5757ce"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af667ba77744a0b7ad053ce9c9f5757ce">Stacks</a></td></tr>
+<tr class="separator:af667ba77744a0b7ad053ce9c9f5757ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A retry bought with a rewarded ad was dealt its bonus card, for that attempt only. </p>
+<p>Stacks is how many of that card the attempt plays with: the ones held, plus the bonus. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ae5c7433e7aaab5b67c7988786806cca0" name="ae5c7433e7aaab5b67c7988786806cca0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae5c7433e7aaab5b67c7988786806cca0">&#9670;&#160;</a></span>BonusCardDealtMessage()</h2>
+<a id="a394b7b4c2aa6a764bc8b15a09886146a" name="a394b7b4c2aa6a764bc8b15a09886146a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a394b7b4c2aa6a764bc8b15a09886146a">&#9670;&#160;</a></span>BonusCardDealtMessage()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -147,8 +150,12 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">BalloonParty.Shared.Messages.BonusCardDealtMessage.BonusCardDealtMessage </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a></td>          <td class="paramname"><span class="paramname"><em>card</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a></td>          <td class="paramname"><span class="paramname"><em>card</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>stacks</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -164,6 +171,20 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> BalloonParty.Shared.Messages.BonusCardDealtMessage.Card</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af667ba77744a0b7ad053ce9c9f5757ce" name="af667ba77744a0b7ad053ce9c9f5757ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af667ba77744a0b7ad053ce9c9f5757ce">&#9670;&#160;</a></span>Stacks</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Shared.Messages.BonusCardDealtMessage.Stacks</td>
         </tr>
       </table>
 </div><div class="memdoc">

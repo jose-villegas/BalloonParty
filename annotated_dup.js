@@ -143,6 +143,10 @@ var annotated_dup =
           [ "BuffEntry", "classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffEntry.html", "classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffEntry" ],
           [ "IBuffConfiguration", "interfaceBalloonParty_1_1Configuration_1_1Buffs_1_1IBuffConfiguration.html", "interfaceBalloonParty_1_1Configuration_1_1Buffs_1_1IBuffConfiguration" ]
         ] ],
+        [ "CardReveal", "namespaceBalloonParty_1_1Configuration_1_1CardReveal.html", [
+          [ "CardRevealSettings", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings" ],
+          [ "ICardRevealSettings", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings" ]
+        ] ],
         [ "Cinematics", "namespaceBalloonParty_1_1Configuration_1_1Cinematics.html", [
           [ "BoardFloatAwaySettings", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings" ],
           [ "CameraRigCinematicSettings", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CameraRigCinematicSettings.html", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CameraRigCinematicSettings" ],
@@ -416,6 +420,11 @@ var annotated_dup =
         [ "UpgradeCardSlotBuilder", "classBalloonParty_1_1Editor_1_1UpgradeCardSlotBuilder.html", "classBalloonParty_1_1Editor_1_1UpgradeCardSlotBuilder" ]
       ] ],
       [ "Game", "namespaceBalloonParty_1_1Game.html", [
+        [ "CardReveal", "namespaceBalloonParty_1_1Game_1_1CardReveal.html", [
+          [ "CardRevealController", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController" ],
+          [ "ICardReveals", "interfaceBalloonParty_1_1Game_1_1CardReveal_1_1ICardReveals.html", "interfaceBalloonParty_1_1Game_1_1CardReveal_1_1ICardReveals" ],
+          [ "RevealedCard", "classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html", "classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard" ]
+        ] ],
         [ "Cinematics", "namespaceBalloonParty_1_1Game_1_1Cinematics.html", [
           [ "BoardFloatAwayEffect", "classBalloonParty_1_1Game_1_1Cinematics_1_1BoardFloatAwayEffect.html", "classBalloonParty_1_1Game_1_1Cinematics_1_1BoardFloatAwayEffect" ],
           [ "BoardPopWave", "classBalloonParty_1_1Game_1_1Cinematics_1_1BoardPopWave.html", "classBalloonParty_1_1Game_1_1Cinematics_1_1BoardPopWave" ],
@@ -900,6 +909,7 @@ var annotated_dup =
           [ "ThrowerReadyMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ThrowerReadyMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ThrowerReadyMessage" ],
           [ "TooltipMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1TooltipMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1TooltipMessage" ],
           [ "TransformCapturedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1TransformCapturedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1TransformCapturedMessage" ],
+          [ "UpgradeCardHeldMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage" ],
           [ "WallHitMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage" ],
           [ "WaveDamageMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1WaveDamageMessage" ]
         ] ],

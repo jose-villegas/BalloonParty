@@ -1,0 +1,5 @@
+<map id="BalloonParty.Shared.Messages.UpgradeCardHeldMessage" name="BalloonParty.Shared.Messages.UpgradeCardHeldMessage">
+<area shape="rect" id="Node000001" title="A level&#45;up&#39;s card is now held: published as the level advances, when its pick is kept." alt="" coords="5,108,229,148"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html" title="One card the level&#45;up can offer." alt="" coords="10,5,225,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,59,120,108,115,108,115,59"/>
+</map>

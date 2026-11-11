@@ -117,6 +117,8 @@ Directories</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="iconfclosed"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dir_225cb79e10b571371197608957e090fb.html">Buffs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="iconfclosed"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dir_14a94bd0740703cfe49faf7a3d7f831e.html">CardReveal</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="iconfclosed"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dir_4451540595be0e27c24ebe254b2fe396.html">Cinematics</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="iconfclosed"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dir_eb0398146ff26b85588986ae0cab5e96.html">Editor</a></td></tr>
@@ -236,6 +238,8 @@ ScriptableObjects</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>HeadsUpSettings</code>   </td><td class="markdownTableBodyNone"><code>IHeadsUpSettings</code> (<code>HeadsUp/</code>)   </td><td class="markdownTableBodyNone">The handwritten heads-ups: how many show at once (<code>MaxConcurrent</code>, 6, held ones aside) and one <code>HeadsUpStyleSettings</code> per <code>HeadsUpStyleId</code>: the format, the look (<code>HeadsUpStyle</code>: ink, size, growth, weight), the priority, cooldown, hold time, held-until-released, the offset from its anchor, the range of numbers worth writing, the count its size starts growing from, and the count it's underlined from (the streak from 6). The defaults follow the visual language in <code><a class="el" href="UI_2HeadsUp_2README_8md.html">UI/HeadsUp/README.md</a></code>. Read by <code>HeadsUpService</code> and its queue (<code><a class="el" href="Game_2HeadsUp_2README_8md.html">Game/HeadsUp/README.md</a></code>)    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>CardRevealSettings</code>   </td><td class="markdownTableBodyNone"><code>ICardRevealSettings</code> (<code>CardReveal/</code>)   </td><td class="markdownTableBodyNone">The card reveal (<code><a class="el" href="PLAN-CardReveal_8md.html">Plans/PLAN-CardReveal.md</a></code>): how many baked pops there are (<code>PopCount</code>, 16) and how many of the last shown a new reveal avoids (<code>RecentPopsAvoided</code>, 2). Optional on <code>GameLifetimeScope</code>: unassigned, the defaults apply. Read by <code>CardRevealController</code> (<code><a class="el" href="Game_2CardReveal_2README_8md.html">Game/CardReveal/README.md</a></code>)    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>BushVariantData</code>   </td><td class="markdownTableBodyNone">—   </td><td class="markdownTableBodyNone">Pre-baked bush variant asset (branch map texture + leaf attachment slots), created by the Bush Baker editor window, loaded at runtime by <code>BushView</code>   </td></tr>
 </table>
 <h2><a class="anchor" id="autotoc_md61"></a>

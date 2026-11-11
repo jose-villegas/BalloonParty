@@ -8,6 +8,7 @@ var classBalloonParty_1_1Game_1_1GameLifetimeScope =
     [ "_balloonsConfiguration", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a9d15f174843de2947b3814d1ada9eb88", null ],
     [ "_buffConfiguration", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#ae442dab37c076f9d692c3d90e6b5baff", null ],
     [ "_bushSettings", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a17d0a5b59b3972089b23ebff7dd8caa9", null ],
+    [ "_cardRevealSettings", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#acfd803ffbee1dc55376ab3bdb7c93925", null ],
     [ "_cinematicsSettings", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a2e2cd6788f1065f4067fe5edb3c2b133", null ],
     [ "_gamePalette", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a72efe046b7f1177d63e38ba49d646c75", null ],
     [ "_gridActorConfiguration", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a62100ba9c2b9b6a6442bf23b9c069cb2", null ],

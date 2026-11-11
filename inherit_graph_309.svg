@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Projectile_1_1View_1_1ShieldGlow.html" target="_top" xlink:title="How far past white the shield field&#39;s halo reaches for a shield count: 1 (as authored) for one shield...">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Projectile_1_1ProjectileTally.html" target="_top" xlink:title="A running count per ball in the air: shields picked up this flight, deflects since the last wall.">
 <polygon fill="white" stroke="#666666" points="128,-30 0,-30 0,0 128,0 128,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Projectile.</text>
-<text text-anchor="middle" x="64" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">View.ShieldGlow</text>
+<text text-anchor="middle" x="64" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">ProjectileTally</text>
 </a>
 </g>
 </g>

@@ -288,6 +288,12 @@ var hierarchy =
     [ "ICallbacks", null, [
       [ "BalloonParty.Editor.TestRunner.EditModeTestRunner.ResultWriter", "classBalloonParty_1_1Editor_1_1TestRunner_1_1EditModeTestRunner_1_1ResultWriter.html", null ]
     ] ],
+    [ "BalloonParty.Game.CardReveal.ICardReveals", "interfaceBalloonParty_1_1Game_1_1CardReveal_1_1ICardReveals.html", [
+      [ "BalloonParty.Game.CardReveal.CardRevealController", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html", null ]
+    ] ],
+    [ "BalloonParty.Configuration.CardReveal.ICardRevealSettings", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html", [
+      [ "BalloonParty.Configuration.CardReveal.CardRevealSettings", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html", null ]
+    ] ],
     [ "BalloonParty.Item.Lightning.IChainEffect", "interfaceBalloonParty_1_1Item_1_1Lightning_1_1IChainEffect.html", [
       [ "BalloonParty.Item.Lightning.ChainLightningView", "classBalloonParty_1_1Item_1_1Lightning_1_1ChainLightningView.html", null ]
     ] ],
@@ -388,6 +394,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Spawner.BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html", null ],
       [ "BalloonParty.Balloon.Spawner.SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html", null ],
       [ "BalloonParty.Display.CameraShakeController", "classBalloonParty_1_1Display_1_1CameraShakeController.html", null ],
+      [ "BalloonParty.Game.CardReveal.CardRevealController", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html", null ],
       [ "BalloonParty.Game.Cinematics.CameraRigCinematicProducer", "classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematicProducer.html", [
         [ "BalloonParty.Game.Cinematics.GameOverLossCinematic", "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html", null ],
         [ "BalloonParty.Game.Cinematics.HeartDrainCinematic", "classBalloonParty_1_1Game_1_1Cinematics_1_1HeartDrainCinematic.html", null ],
@@ -800,6 +807,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Spawner.BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html", null ],
       [ "BalloonParty.Balloon.Spawner.RejectedBalloonEffect", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html", null ],
       [ "BalloonParty.Balloon.Spawner.SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html", null ],
+      [ "BalloonParty.Game.CardReveal.CardRevealController", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html", null ],
       [ "BalloonParty.Game.Cinematics.HeartDrainCinematic", "classBalloonParty_1_1Game_1_1Cinematics_1_1HeartDrainCinematic.html", null ],
       [ "BalloonParty.Game.Coins.CoinDropController", "classBalloonParty_1_1Game_1_1Coins_1_1CoinDropController.html", null ],
       [ "BalloonParty.Game.Coins.CoinTrailService", "classBalloonParty_1_1Game_1_1Coins_1_1CoinTrailService.html", null ],
@@ -974,6 +982,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Spawner.BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html", null ],
       [ "BalloonParty.Balloon.Spawner.SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html", null ],
       [ "BalloonParty.Display.CameraShakeController", "classBalloonParty_1_1Display_1_1CameraShakeController.html", null ],
+      [ "BalloonParty.Game.CardReveal.CardRevealController", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html", null ],
       [ "BalloonParty.Game.Cinematics.CameraRigCinematicProducer", "classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematicProducer.html", null ],
       [ "BalloonParty.Game.Coins.CoinCreditor", "classBalloonParty_1_1Game_1_1Coins_1_1CoinCreditor.html", null ],
       [ "BalloonParty.Game.Coins.CoinDropController", "classBalloonParty_1_1Game_1_1Coins_1_1CoinDropController.html", null ],
@@ -1409,6 +1418,7 @@ var hierarchy =
     [ "BalloonParty.Shared.Messages.RestartRiseStartedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1RestartRiseStartedMessage.html", null ],
     [ "BalloonParty.Audio.Editor.FreesoundResponseParser.Result", "classBalloonParty_1_1Audio_1_1Editor_1_1FreesoundResponseParser_1_1Result.html", null ],
     [ "BalloonParty.Shared.Pause.ResumedMessage", "structBalloonParty_1_1Shared_1_1Pause_1_1ResumedMessage.html", null ],
+    [ "BalloonParty.Game.CardReveal.RevealedCard", "classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html", null ],
     [ "BalloonParty.Balloon.Controller.BalloonBalancer.RoamCandidate", "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html", null ],
     [ "BalloonParty.Shared.Messages.RunResetMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html", null ],
     [ "BalloonParty.Game.Run.RunResetOrder", "classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html", null ],
@@ -1436,6 +1446,7 @@ var hierarchy =
       [ "BalloonParty.Audio.Configuration.SoundBankConfiguration", "classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration.html", null ],
       [ "BalloonParty.Configuration.Balloons.BalloonsConfiguration", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html", null ],
       [ "BalloonParty.Configuration.Buffs.BuffConfiguration", "classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffConfiguration.html", null ],
+      [ "BalloonParty.Configuration.CardReveal.CardRevealSettings", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html", null ],
       [ "BalloonParty.Configuration.Cinematics.CinematicsSettings", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html", null ],
       [ "BalloonParty.Configuration.Effects.BackgroundFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html", null ],
       [ "BalloonParty.Configuration.Effects.BushSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html", null ],
@@ -1571,6 +1582,7 @@ var hierarchy =
     [ "BalloonParty.Shared.Messages.TransformCapturedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1TransformCapturedMessage.html", null ],
     [ "BalloonParty.Shared.Extensions.TransformExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1TransformExtensions.html", null ],
     [ "BalloonParty.Item.TransformSnapshot", "structBalloonParty_1_1Item_1_1TransformSnapshot.html", null ],
+    [ "BalloonParty.Shared.Messages.UpgradeCardHeldMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage.html", null ],
     [ "BalloonParty.Editor.UpgradeCardSlotBuilder", "classBalloonParty_1_1Editor_1_1UpgradeCardSlotBuilder.html", null ],
     [ "BalloonParty.Audio.VariationPicker", "classBalloonParty_1_1Audio_1_1VariationPicker.html", null ],
     [ "BalloonParty.Shared.Extensions.VectorExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1VectorExtensions.html", null ],

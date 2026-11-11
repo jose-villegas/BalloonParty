@@ -1,10 +1,10 @@
 var classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades =
 [
-    [ "RunUpgrades", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#acd84d8c3dd32110fe76426edee62805e", null ],
+    [ "RunUpgrades", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a11699648e5d47772eb9e3e91f0f2ca46", null ],
     [ "Apply", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#ac327c21a9033e68c542632d34aef9d07", null ],
     [ "BuildDeck", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a993b8498c346f0637fe609b67166ee94", null ],
     [ "CloseHand", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a919051b87f3e35bd6398c8931cc9419d", null ],
-    [ "CommitStaged", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a8d960bb5f7d44fdfaabfb856b99ed951", null ],
+    [ "CommitStaged", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#ab44fddd81fc8ab7bd9b53f04d85d8984", null ],
     [ "DealBonus", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#ae31a44e0986299f8265be34647478568", null ],
     [ "Dispose", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#ac5df6870bd948feb54bedaac72ae434e", null ],
     [ "IsCardLevel", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a293b77f7b1316bc594c57a2c36c5e107", null ],
@@ -21,6 +21,7 @@ var classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades =
     [ "_ballCapBonus", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a6ea340064d65bfb3e4a80835b0299486", null ],
     [ "_bonus", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#af9bdebc79b614933a6f1dc8f8e3507ee", null ],
     [ "_bonusDealtPublisher", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a7d4176655dd4ef70713ca32611075c7e", null ],
+    [ "_cardHeldPublisher", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a3250cb9232f23933e69520e2aa3951d9", null ],
     [ "_deck", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#ac47234ceb9740760ee026daeb4202de5", null ],
     [ "_extraItemChance", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#aeb56dfaa6ffc7e3321e0397bcd307e03", null ],
     [ "_flight", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#acd3299360d1580cf7e50f3c521198b55", null ],

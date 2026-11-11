@@ -1,0 +1,11 @@
+<map id="BalloonParty.Game.CardReveal.CardRevealController" name="BalloonParty.Game.CardReveal.CardRevealController">
+<area shape="rect" id="Node000001" title="Queues a reveal for each card the player wins: a level&#45;up&#39;s card as it&#39;s held (UpgradeCardHeldMessage..." alt="" coords="281,92,509,132"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1CardReveal_1_1ICardReveals.html" title="The reveals a stage plays, one at a time." alt="" coords="5,5,233,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="207,47,234,55,338,89,337,94,233,60,206,52"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="77,70,162,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="176,86,281,97,281,103,175,91"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="16,120,223,160"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="236,126,281,121,281,126,237,131"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="70,185,169,210"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="181,183,233,169,344,130,346,135,234,175,183,188"/>
+</map>

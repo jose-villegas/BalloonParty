@@ -2,6 +2,7 @@ var dir_64387ea9bbe6fc952e4d6bb8dd3c13de =
 [
     [ "Balloons", "dir_b802e883bf617d79d7ac9e8dff132809.html", "dir_b802e883bf617d79d7ac9e8dff132809" ],
     [ "Buffs", "dir_225cb79e10b571371197608957e090fb.html", "dir_225cb79e10b571371197608957e090fb" ],
+    [ "CardReveal", "dir_14a94bd0740703cfe49faf7a3d7f831e.html", "dir_14a94bd0740703cfe49faf7a3d7f831e" ],
     [ "Cinematics", "dir_4451540595be0e27c24ebe254b2fe396.html", "dir_4451540595be0e27c24ebe254b2fe396" ],
     [ "Editor", "dir_eb0398146ff26b85588986ae0cab5e96.html", "dir_eb0398146ff26b85588986ae0cab5e96" ],
     [ "Effects", "dir_b89b2870f070a91cc39b9fec20dfba05.html", "dir_b89b2870f070a91cc39b9fec20dfba05" ],

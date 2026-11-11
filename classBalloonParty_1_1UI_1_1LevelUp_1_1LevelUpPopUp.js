@@ -25,6 +25,7 @@ var classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp =
     [ "WaitForAnimatorStateAsync", "classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a7d20a0b9fba46b695ddeb0367d01d5dc", null ],
     [ "WarnUnwiredOnce", "classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a404ffc9133c71163861eb1625f0886cc", null ],
     [ "_animator", "classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#aeb430e081c8d211758ae4099f208b89c", null ],
+    [ "_cardReveals", "classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#aea0da30ad95b2dabdcf64cb960d97b2a", null ],
     [ "_cardViews", "classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a714bfc8ee6e92d905fa95336e0e74b87", null ],
     [ "_continueButton", "classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a61f2ef4725ccb1dca0a4b9bf3f172377", null ],
     [ "_dismissedPublisher", "classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a0bc107ad503b402d2a189bce50b1ccba", null ],

@@ -2,6 +2,7 @@ var namespaceBalloonParty_1_1Configuration =
 [
     [ "Balloons", "namespaceBalloonParty_1_1Configuration_1_1Balloons.html", "namespaceBalloonParty_1_1Configuration_1_1Balloons" ],
     [ "Buffs", "namespaceBalloonParty_1_1Configuration_1_1Buffs.html", "namespaceBalloonParty_1_1Configuration_1_1Buffs" ],
+    [ "CardReveal", "namespaceBalloonParty_1_1Configuration_1_1CardReveal.html", "namespaceBalloonParty_1_1Configuration_1_1CardReveal" ],
     [ "Cinematics", "namespaceBalloonParty_1_1Configuration_1_1Cinematics.html", "namespaceBalloonParty_1_1Configuration_1_1Cinematics" ],
     [ "Editor", "namespaceBalloonParty_1_1Configuration_1_1Editor.html", "namespaceBalloonParty_1_1Configuration_1_1Editor" ],
     [ "Effects", "namespaceBalloonParty_1_1Configuration_1_1Effects.html", "namespaceBalloonParty_1_1Configuration_1_1Effects" ],

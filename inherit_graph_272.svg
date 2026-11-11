@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Item_1_1Paint_1_1PaintTriangle.html" target="_top" xlink:title="The paint splash&#39;s target region: an isosceles triangle along the projectile&#39;s travel direction.">
+<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Item_1_1Paint_1_1PaintSpreadParams.html" target="_top" xlink:title="Config&#45;free scalars PaintTriangle.Build itself reads (Shot Solver Accuracy Phase C5) — mirrors PaintS...">
 <polygon fill="white" stroke="#666666" points="132,-30 0,-30 0,0 132,0 132,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Paint.</text>
-<text text-anchor="middle" x="66" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">PaintTriangle</text>
+<text text-anchor="middle" x="66" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">PaintSpreadParams</text>
 </a>
 </g>
 </g>

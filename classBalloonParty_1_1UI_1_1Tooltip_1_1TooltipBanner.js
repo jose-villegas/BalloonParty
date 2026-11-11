@@ -8,6 +8,7 @@ var classBalloonParty_1_1UI_1_1Tooltip_1_1TooltipBanner =
     [ "Start", "classBalloonParty_1_1UI_1_1Tooltip_1_1TooltipBanner.html#a1114d337d546aa9170e32be06e040688", null ],
     [ "_bonusCardFormat", "classBalloonParty_1_1UI_1_1Tooltip_1_1TooltipBanner.html#a3d106d316bf110339951c1fded46a375", null ],
     [ "_bonusDealtSubscriber", "classBalloonParty_1_1UI_1_1Tooltip_1_1TooltipBanner.html#a1f857696183001c295972467b240b762", null ],
+    [ "_cardReveals", "classBalloonParty_1_1UI_1_1Tooltip_1_1TooltipBanner.html#a4814bf990d34d271f950b6331a94838e", null ],
     [ "_fadeDuration", "classBalloonParty_1_1UI_1_1Tooltip_1_1TooltipBanner.html#a4b54539f4c230ff2f167c44b6ac22ba7", null ],
     [ "_group", "classBalloonParty_1_1UI_1_1Tooltip_1_1TooltipBanner.html#a5bd535e5a08d471577bd0d4fffefdbb1", null ],
     [ "_holdDuration", "classBalloonParty_1_1UI_1_1Tooltip_1_1TooltipBanner.html#ac652dfc8147bfb5a05cc64394de43f1f", null ],

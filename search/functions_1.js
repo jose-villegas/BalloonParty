@@ -78,7 +78,7 @@ var searchData=
   ['bombeffectparams_75',['BombEffectParams',['../structBalloonParty_1_1Item_1_1Effects_1_1BombEffectParams.html#a2e5ef72e111e07e6470f898472df2805',1,'BalloonParty::Item::Effects::BombEffectParams']]],
   ['bombitemhandler_76',['BombItemHandler',['../classBalloonParty_1_1Item_1_1Bomb_1_1BombItemHandler.html#aa3c88b3eb5be8a820c08869e5af45b52',1,'BalloonParty::Item::Bomb::BombItemHandler']]],
   ['bombrangepreview_77',['BombRangePreview',['../classBalloonParty_1_1Item_1_1Preview_1_1BombRangePreview.html#a9976bf085724fd88d963dc62ce8d3160',1,'BalloonParty::Item::Preview::BombRangePreview']]],
-  ['bonuscarddealtmessage_78',['BonusCardDealtMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html#ae5c7433e7aaab5b67c7988786806cca0',1,'BalloonParty::Shared::Messages::BonusCardDealtMessage']]],
+  ['bonuscarddealtmessage_78',['BonusCardDealtMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html#a394b7b4c2aa6a764bc8b15a09886146a',1,'BalloonParty::Shared::Messages::BonusCardDealtMessage']]],
   ['boost_79',['Boost',['../classBalloonParty_1_1Projectile_1_1View_1_1ProjectileTrail.html#a2c8adfa74e149a4af56a10cd24d5abbf',1,'BalloonParty::Projectile::View::ProjectileTrail']]],
   ['boostasync_80',['BoostAsync',['../classBalloonParty_1_1Projectile_1_1View_1_1ProjectileTrail.html#a366988ae8613727438aada27e4236efb',1,'BalloonParty::Projectile::View::ProjectileTrail']]],
   ['bottomemptyslotpercolumn_81',['BottomEmptySlotPerColumn',['../classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a0799e8069476ccfa60f604e2d3837e8e',1,'BalloonParty::Slots::Grid::SlotGrid']]],
