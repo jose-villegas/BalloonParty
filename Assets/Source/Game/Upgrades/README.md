@@ -75,6 +75,12 @@ re-detected level-up after an abort.
 `ResetRun` drops every card on a fresh run and keeps them on a retry (`IRetryState.RetryLevel > 0`).
 It runs at `RunResetOrder.Counters`, before `RetryTracker` consumes the staged retry level.
 
+A fresh run that a start-level cheat begins past level 1 (`CheatState.StartLevel`, in checked builds)
+then takes the cards a run that played up to it would hold (`TakeCardsOnTheWayTo`): every card
+level-up on the way deals its seeded hand and takes the first card, as the level-up does in play.
+`Start` does the same for a session that opens at a start level. Without this, a jumped run plays a
+deep level with the base weapon, which makes it both too slow to clear and unlike the real level.
+
 ## The bonus card
 
 The game-over screen can offer a retry with a bonus card, bought with a rewarded ad

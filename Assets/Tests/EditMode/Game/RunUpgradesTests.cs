@@ -368,6 +368,75 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void TakeCardsOnTheWayTo_HoldsWhatAPlayedRunTakes()
+        {
+            var played = new UpgradeRig(_flight);
+            played.Cards.AddRange(_rig.Cards);
+            for (var newLevel = 2; newLevel <= 11; newLevel++)
+            {
+                played.Present(newLevel);
+                played.Upgrades.Pick(0);
+                played.Advance();
+            }
+
+            Upgrades.TakeCardsOnTheWayTo(11);
+
+            foreach (var card in _rig.Cards)
+            {
+                Assert.AreEqual(played.Upgrades.StacksOf(card), Upgrades.StacksOf(card), card.Title);
+            }
+
+            Assert.AreEqual(5, _rig.Cards.Sum(Upgrades.StacksOf), "levels 3, 5, 7, 9 and 11 deal cards");
+            Assert.AreEqual(played.Upgrades.MaxBallsInFlight, Upgrades.MaxBallsInFlight, "the weapon is recomputed");
+            played.Upgrades.Dispose();
+        }
+
+        [Test]
+        public void ResetRun_FreshRunFromACheatStartLevel_HoldsTheCardsOnTheWay()
+        {
+            _rig.RetryState.RetryLevel.Returns(0);
+            BalloonParty.Cheats.CheatState.StartLevel = 7;
+            try
+            {
+                Upgrades.ResetRun(1);
+            }
+            finally
+            {
+                BalloonParty.Cheats.CheatState.StartLevel = 1;
+            }
+
+            Assert.AreEqual(3, _rig.Cards.Sum(Upgrades.StacksOf), "levels 3, 5 and 7 deal cards");
+        }
+
+        [Test]
+        public void TakeCardsOnTheWayTo_LevelOneOrBelow_HoldsNothing()
+        {
+            Upgrades.TakeCardsOnTheWayTo(1);
+            Upgrades.TakeCardsOnTheWayTo(0);
+            Upgrades.TakeCardsOnTheWayTo(-100);
+
+            Assert.AreEqual(0, _rig.Cards.Sum(Upgrades.StacksOf));
+            Assert.IsEmpty(Upgrades.Offer);
+        }
+
+        [Test]
+        public void ResetRun_RetryWithACheatStartLevel_KeepsOnlyTheHeldCards()
+        {
+            _rig.Hold(_shield);
+            BalloonParty.Cheats.CheatState.StartLevel = 7;
+            try
+            {
+                _rig.Retry(9, withBonusCard: false);
+            }
+            finally
+            {
+                BalloonParty.Cheats.CheatState.StartLevel = 1;
+            }
+
+            Assert.AreEqual(1, _rig.Cards.Sum(Upgrades.StacksOf), "a retry keeps its cards and takes none on the way");
+        }
+
+        [Test]
         public void ResetRun_DropsAnOpenHandAndItsPick()
         {
             _rig.Present(3);

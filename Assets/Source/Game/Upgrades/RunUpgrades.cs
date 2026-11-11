@@ -106,6 +106,9 @@ namespace BalloonParty.Game.Upgrades
         public void Start()
         {
             _phaseSubscription = _levelProgress.Phase.Subscribe(OnPhaseChanged);
+
+            // A scene's first run is never a retry, so only ResetRun has to check RetryLevel.
+            TakeCheatStartCards();
         }
 
         public void Dispose()
@@ -137,6 +140,7 @@ namespace BalloonParty.Game.Upgrades
             if (_retryState.RetryLevel <= 0)
             {
                 _stacks.Clear();
+                TakeCheatStartCards();
             }
             else if (_retryState.RetryWithBonusCard)
             {
@@ -152,6 +156,37 @@ namespace BalloonParty.Game.Upgrades
         {
             var every = _settings.CardEveryLevels;
             return every > 0 && newLevel > 1 && (newLevel - 1) % every == 0;
+        }
+
+        /// <summary>
+        ///     Holds the cards a run that played its way up to <paramref name="startLevel" /> would: every card
+        ///     level-up on the way takes its hand's first card, as the level-up does in play, from the same
+        ///     seeded deal.
+        /// </summary>
+        internal void TakeCardsOnTheWayTo(int startLevel)
+        {
+            for (var level = 2; level <= startLevel; level++)
+            {
+                OpenHand(level);
+                if (_offer.Count > 0)
+                {
+                    _staged = _offer[0];
+                    CommitStaged();
+                }
+            }
+
+            CloseHand();
+            Recompute();
+        }
+
+        // A run the start-level cheats begin deep (CheatState.StartLevel) would otherwise play that level with
+        // none of the cards a run reaching it holds, which makes it both too weak to clear it in good time and
+        // unrepresentative of the level's balance.
+        private void TakeCheatStartCards()
+        {
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
+            TakeCardsOnTheWayTo(BalloonParty.Cheats.CheatState.StartLevel);
+#endif
         }
 
         private void OnPhaseChanged(LevelUpPhase phase)

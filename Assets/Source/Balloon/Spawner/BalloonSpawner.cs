@@ -331,7 +331,8 @@ namespace BalloonParty.Balloon.Spawner
             var model = _factory.Create(entry, slot, _spawnPathBuffer, () => ReleaseActiveCount(poolKey));
             if (_waterBatch && model is BubbleClusterModel bubble)
             {
-                bubble.SetBubbles(_pacing.BubbleRise.StartBubbles);
+                var bubbles = _pacing.BubbleRise.StartBubblesForLevel(_levelProgress.Level.Value);
+                bubble.SetBubbles(Mathf.Min(bubbles, _balloonsConfig.BubbleMergeMax));
             }
 
             _newlySpawnedBalloons.Add(model);

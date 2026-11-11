@@ -1158,6 +1158,8 @@ MonoBehaviour:
     _firstLevelInterval: 1.7
     _intervalDecayPerLevel: 0.95
     _minInterval: 0.9
+    _lateIntervalDecayPerLevel: 0.98
+    _lateMinInterval: 0.55
     _graceSeconds: 2.5
     _linesPerWave: 3
     _overlapShotPull: 0.5

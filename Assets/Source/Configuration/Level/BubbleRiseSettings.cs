@@ -27,23 +27,27 @@ namespace BalloonParty.Configuration.Level
                  "room. 0 = no cap.")]
         [SerializeField] [Min(0)] private int _maxBubbles = 12;
 
-        [Tooltip("Bubbles in each cluster a line brings. Low, so nudges can merge them into bigger clusters " +
-                 "(up to the balloons config's Bubble Merge Max).")]
+        [Tooltip("Bubbles in each cluster a line brings at level 1. Low, so merges can grow them into bigger " +
+                 "clusters (up to the balloons config's Bubble Merge Max).")]
         [SerializeField] [Min(1)] private int _startBubbles = 1;
+
+        [Tooltip("Every this many levels, a line's clusters start with one more bubble, so deep water levels " +
+                 "bring clusters that take several hits, in place of the Tough and Tougher balloons water " +
+                 "leaves out. 0 = never.")]
+        [SerializeField] [Min(0)] private int _extraBubbleEveryLevels = 15;
 
         public float GraceSeconds => Mathf.Max(0f, _graceSeconds);
         public float StartShare => Mathf.Clamp01(_startShare);
         public float MaxShare => Mathf.Clamp01(_maxShare);
         public float RampSeconds => Mathf.Max(0f, _rampSeconds);
         public int MaxBubbles => Mathf.Max(0, _maxBubbles);
-        public int StartBubbles => Mathf.Max(1, _startBubbles);
 
         public BubbleRiseSettings()
         {
         }
 
         internal BubbleRiseSettings(float graceSeconds, float startShare, float maxShare, float rampSeconds,
-            int maxBubbles = 12, int startBubbles = 1)
+            int maxBubbles = 12, int startBubbles = 1, int extraBubbleEveryLevels = 0)
         {
             _graceSeconds = graceSeconds;
             _startShare = startShare;
@@ -51,6 +55,19 @@ namespace BalloonParty.Configuration.Level
             _rampSeconds = rampSeconds;
             _maxBubbles = maxBubbles;
             _startBubbles = startBubbles;
+            _extraBubbleEveryLevels = extraBubbleEveryLevels;
+        }
+
+        // Counted from level 1, like the spawn clock's decay; levels below 1 (debug presets) get level 1's.
+        public int StartBubblesForLevel(int level)
+        {
+            var start = Mathf.Max(1, _startBubbles);
+            if (_extraBubbleEveryLevels <= 0)
+            {
+                return start;
+            }
+
+            return start + Mathf.Max(0, level - 1) / _extraBubbleEveryLevels;
         }
     }
 }

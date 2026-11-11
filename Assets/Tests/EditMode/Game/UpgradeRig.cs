@@ -39,6 +39,10 @@ namespace BalloonParty.Tests.Game
             levelProgress.Phase.Returns(Phase);
             levelProgress.Level.Returns(Level);
 
+            // A fresh run from a cheat start level takes the cards on the way there. Play mode can leave that
+            // static set when domain reload is off; it is read again from EditorPrefs on the next play start.
+            BalloonParty.Cheats.CheatState.StartLevel = 1;
+
             Upgrades = new RunUpgrades(flight, Settings, pacing, RetryState, levelProgress, BonusDealt);
             Upgrades.Start();
         }

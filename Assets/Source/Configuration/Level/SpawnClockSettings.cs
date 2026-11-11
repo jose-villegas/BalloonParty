@@ -5,8 +5,10 @@ namespace BalloonParty.Configuration.Level
 {
     /// <summary>
     ///     When balloon lines arrive: one line per interval of scaled game time, the interval shrinking
-    ///     each level towards a floor. A formula rather than a per-range field, so it reaches every level
-    ///     and survives the move to generated levels (PLAN-FastPaced Phase 4).
+    ///     each level, quickly until it reaches <c>_minInterval</c>, then at a gentler late rate down to a
+    ///     floor. The late rate is what keeps deep levels getting harder once the level generator has bought
+    ///     every threat. A formula rather than a per-range field, so it reaches every level and survives the
+    ///     move to generated levels (PLAN-FastPaced Phase 4).
     /// </summary>
     [Serializable]
     internal class SpawnClockSettings : ISpawnClockSettings
@@ -18,8 +20,18 @@ namespace BalloonParty.Configuration.Level
                  "1 = the same pace at every level.")]
         [SerializeField] [Range(0.5f, 1f)] private float _intervalDecayPerLevel = 0.96f;
 
-        [Tooltip("The interval never drops below this, however deep the level.")]
+        [Tooltip("Where the early decay ends: from the level the interval reaches this, it shrinks at the late " +
+                 "rate instead.")]
         [SerializeField] [Min(0.1f)] private float _minInterval = 1.25f;
+
+        [Tooltip("Past Min Interval, each level's interval is the previous level's times this: 0.98 = 2% " +
+                 "faster per level. Keeps pressure growing on deep levels, where every threat is already in " +
+                 "the mix. 1 = the interval holds at Min Interval.")]
+        [SerializeField] [Range(0.5f, 1f)] private float _lateIntervalDecayPerLevel = 0.98f;
+
+        [Tooltip("The interval never drops below this, however deep the level. If set above Min Interval, the " +
+                 "interval just holds at Min Interval.")]
+        [SerializeField] [Min(0.1f)] private float _lateMinInterval = 0.55f;
 
         [Tooltip("Seconds of play after a level starts, or a run restarts, before its first line arrives.")]
         [SerializeField] [Min(0f)] private float _graceSeconds = 4f;
@@ -73,7 +85,7 @@ namespace BalloonParty.Configuration.Level
         internal SpawnClockSettings(float firstLevelInterval, float intervalDecayPerLevel, float minInterval,
             float graceSeconds, int linesPerWave = 1, float overlapShotPull = 0f, float sparseBoardSpeedup = 1f,
             float targetOccupancy = 0.5f, float occupancyWeight = 0f, float flightSpeedup = 1f,
-            float flightPressureSeconds = 6f)
+            float flightPressureSeconds = 6f, float lateIntervalDecayPerLevel = 1f, float lateMinInterval = 0.1f)
         {
             _firstLevelInterval = firstLevelInterval;
             _intervalDecayPerLevel = intervalDecayPerLevel;
@@ -86,14 +98,39 @@ namespace BalloonParty.Configuration.Level
             _occupancyWeight = occupancyWeight;
             _flightSpeedup = flightSpeedup;
             _flightPressureSeconds = flightPressureSeconds;
+            _lateIntervalDecayPerLevel = lateIntervalDecayPerLevel;
+            _lateMinInterval = lateMinInterval;
         }
 
         // Levels below 1 (the negative debug presets) run at level 1's pace.
         public float IntervalForLevel(int level)
         {
             var steps = Mathf.Max(0, level - 1);
-            var interval = _firstLevelInterval * Mathf.Pow(_intervalDecayPerLevel, steps);
-            return Mathf.Max(_minInterval, interval);
+            var kneeSteps = StepsToMinInterval();
+            if (steps <= kneeSteps)
+            {
+                return Mathf.Max(_minInterval, _firstLevelInterval * Mathf.Pow(_intervalDecayPerLevel, steps));
+            }
+
+            var late = _minInterval * Mathf.Pow(_lateIntervalDecayPerLevel, steps - kneeSteps);
+            return Mathf.Max(Mathf.Min(_lateMinInterval, _minInterval), late);
+        }
+
+        // Fractional, so the late decay picks up exactly where the early one crosses Min Interval and the
+        // interval never jumps between two levels.
+        private float StepsToMinInterval()
+        {
+            if (_firstLevelInterval <= _minInterval)
+            {
+                return 0f;
+            }
+
+            if (_intervalDecayPerLevel >= 1f)
+            {
+                return float.PositiveInfinity;
+            }
+
+            return Mathf.Log(_minInterval / _firstLevelInterval) / Mathf.Log(_intervalDecayPerLevel);
         }
     }
 }

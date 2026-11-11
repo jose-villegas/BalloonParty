@@ -140,7 +140,11 @@ The share is a pure function of seconds on the level (`BubbleRiseCurve.ShareAt(s
 seconds)`): none during `GraceSeconds` (6 s), then it climbs linearly from `StartShare` (15%) to
 `MaxShare` (65%) over `RampSeconds` (60 s) and holds. `MaxBubbles` (12) caps the bubbles on the
 board at once; past it the pick falls back to the usual balloon. A water bubble starts as
-`StartBubbles` (1) bubbles, so merges have room to grow it. Settings: `IBubbleRiseSettings`, a
+`StartBubbles` (1) bubbles, so merges have room to grow it, plus one more every
+`ExtraBubbleEveryLevels` (15) levels (`StartBubblesForLevel`: 2 from level 16, 3 from level 31),
+never past `BubbleMergeMax`. Water leaves out the Tough and Tougher balloons, and on deep levels
+the threat budget they free has nothing left to buy, so bigger bubbles are what bring
+balloons that take several hits back to deep water levels. Settings: `IBubbleRiseSettings`, a
 `[Serializable]` block on `LevelPacingConfiguration`.
 
 The bubble uses the balloon catalogue's `BubbleCluster` prefab entry, even while the level

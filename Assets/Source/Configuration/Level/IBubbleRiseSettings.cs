@@ -18,7 +18,10 @@ namespace BalloonParty.Configuration.Level
         /// <summary>Most bubbles on the board at once; past it a line brings the usual balloons. 0 = no cap.</summary>
         int MaxBubbles { get; }
 
-        /// <summary>Bubbles in a cluster a line brings, so merges have room to grow it.</summary>
-        int StartBubbles { get; }
+        /// <summary>
+        ///     Bubbles in a cluster a line brings at <paramref name="level" />: few early, so merges have room to
+        ///     grow it, and more at depth. Not capped here; the spawner caps it at the merge maximum.
+        /// </summary>
+        int StartBubblesForLevel(int level);
     }
 }

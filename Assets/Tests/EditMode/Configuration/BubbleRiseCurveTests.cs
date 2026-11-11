@@ -63,7 +63,49 @@ namespace BalloonParty.Tests.Configuration
 
             Assert.AreEqual((6f, 0.15f, 0.65f, 60f), (settings.GraceSeconds, settings.StartShare, settings.MaxShare,
                 settings.RampSeconds));
-            Assert.AreEqual((12, 1), (settings.MaxBubbles, settings.StartBubbles));
+            Assert.AreEqual((12, 1), (settings.MaxBubbles, settings.StartBubblesForLevel(1)));
+        }
+
+        [Test]
+        public void ShippedDefaults_LinesBringOneMoreBubbleEveryFifteenLevels()
+        {
+            var settings = new BubbleRiseSettings();
+
+            Assert.AreEqual(1, settings.StartBubblesForLevel(15));
+            Assert.AreEqual(2, settings.StartBubblesForLevel(16));
+            Assert.AreEqual(3, settings.StartBubblesForLevel(36));
+        }
+
+        [Test]
+        public void StartBubbles_NoExtraStep_HoldsAtEveryLevel()
+        {
+            var settings = new BubbleRiseSettings(6f, 0.15f, 0.65f, 60f, startBubbles: 2, extraBubbleEveryLevels: 0);
+
+            Assert.AreEqual(2, settings.StartBubblesForLevel(100));
+        }
+
+        [Test]
+        public void StartBubbles_LevelsZeroAndOne_AreTheStart()
+        {
+            var settings = new BubbleRiseSettings(6f, 0.15f, 0.65f, 60f, startBubbles: 2, extraBubbleEveryLevels: 15);
+
+            Assert.AreEqual((2, 2), (settings.StartBubblesForLevel(0), settings.StartBubblesForLevel(1)));
+        }
+
+        [Test]
+        public void StartBubbles_StartBelowOne_FloorsAtOne()
+        {
+            var settings = new BubbleRiseSettings(6f, 0.15f, 0.65f, 60f, startBubbles: 0, extraBubbleEveryLevels: 0);
+
+            Assert.AreEqual(1, settings.StartBubblesForLevel(1));
+        }
+
+        [Test]
+        public void StartBubbles_DebugPresetLevels_StartAsLevelOne()
+        {
+            var settings = new BubbleRiseSettings(6f, 0.15f, 0.65f, 60f, startBubbles: 1, extraBubbleEveryLevels: 5);
+
+            Assert.AreEqual(1, settings.StartBubblesForLevel(-100));
         }
     }
 }
