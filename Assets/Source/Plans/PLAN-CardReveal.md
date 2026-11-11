@@ -8,7 +8,7 @@
 
 **Status:** Phase 1 built (the controller, its queue and the pop pick). Phase 2 built: the bake
 script makes pop 0. Phase 4 built with pop 0 alone, to see it in game before the other 15 are baked:
-`CardRevealView` plays it on the game canvas during the level-up, lit live by the scene's light, and
+`CardRevealView` plays it on a World Space canvas of its own during the level-up, lit live by the scene's light field and the screen-space light like the board, and
 the ribbons fly with the ascent. The cheat Reveal A Card shows one on demand. Not built yet: a card
 icon, and loading one sheet at a time.
 
@@ -65,7 +65,7 @@ slow-motion beats don't stretch it.
 | Piece | Where | Responsibility |
 |---|---|---|
 | `CardRevealController` (built) | `Game/CardReveal/` | Plain C#, beside the other game-side services (`Game/HeadsUp/`, `Game/Coins/`). Subscribes `UpgradeCardHeldMessage` (published by `RunUpgrades` when it holds the pick, at `Transitioning`) and `BonusCardDealtMessage`; queues reveals, picks the pop, and exposes the one to play (`ICardReveals.Current`, a `RevealedCard`). Starts one in play or during a level-up, whose navigation stays on `LevelUp` through the ascent. The view attaches itself as the stage; with none attached nothing is queued and the tooltip keeps announcing cards |
-| `CardRevealView` (built) | `UI/CardReveal/` | `MonoBehaviour` on the game canvas, built there by `CardRevealBuilder`. Attaches the stage when the settings hold a pop. Plays the chosen pop on two `RawImage`s (the back and front layers, the ribbons between them), stepping the frame through each one's UV rect on unscaled time, and flies the ribbons from the pop. Times their exit to the ascent (`LevelAscendStartedMessage` and its length) |
+| `CardRevealView` (built) | `UI/CardReveal/` | `MonoBehaviour` on `CardRevealCanvas`, a World Space canvas fitted to the camera in the Game scene, built by `CardRevealBuilder`. Attaches the stage when the settings hold a pop. Plays the chosen pop on two `RawImage`s (the back and front layers, the ribbons between them), stepping the frame through each one's UV rect on unscaled time, and flies the ribbons from the pop. Times their exit to the ascent (`LevelAscendStartedMessage` and its length) |
 | `RibbonPiece`, `RibbonGraphic` (built) | `UI/CardReveal/` | A piece of ribbon with a line written on it: a UI strip notched at both ends with a wave running along it, shaded as satin, the TMP text bent glyph by glyph to ride the wave. The piece poses itself through its flight: rolled up inside, burst, drift and sway, exit |
 | `BalloonParty/Sprite/LitFlipbook` (built) | `Assets/Shaders/BalloonParty/Sprite/` | Lights a layer's surface data with the scene's light (`SceneLight.cginc`): a wrapped diffuse, the occlusion, a highlight, and thin-latex transmission, so a face turned from the light glows deeper instead of going dark. The tint is the `RawImage`'s colour, re-graded by the time of day like the balloons' bodies |
 | `PopSheetLoader` | `UI/CardReveal/` | Loads only the chosen pop's sheet when the level-up turns `Pending` (before the transition, so the pop starts on time) and releases it after. The 16 sheets never sit in memory together. Not needed while there is one pop: the settings reference the sheets directly, so all of them load with the game scene |

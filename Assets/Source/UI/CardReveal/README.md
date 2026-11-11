@@ -1,6 +1,6 @@
 # UI/CardReveal
 
-Plays the card reveal on the game canvas. A balloon rises and pops. Two pieces of ribbon fly off it:
+Plays the card reveal on a canvas of its own, drawn in the scene and lit with the board. A balloon rises and pops. Two pieces of ribbon fly off it:
 one carries the won card's title, the other says what the card does. On a level-up they drift while
 the level's ascent plays and are gone just before the next level settles. Which reveal plays, and
 when, is decided by `Game/CardReveal/`; this folder only plays it. The design is in
@@ -10,9 +10,9 @@ when, is decided by `Game/CardReveal/`; this folder only plays it. The design is
 
 | File | What it does |
 |---|---|
-| `CardRevealView` | `MonoBehaviour` on `GameCanvas`, the reveal's **stage**. It attaches itself (`ICardReveals.AttachStage`) only when `ICardRevealSettings.PopSheets` has a pop, so with none the tooltip keeps announcing cards. Plays each `ICardReveals.Current` (the steps are below), then calls `Finish` with it. A null `Current` (a run reset, or the stage detaching) stops it where it is. Injected by `GameScopeRegistration`'s scene-view pass, since it is optional on the canvas |
+| `CardRevealView` | `MonoBehaviour` on `CardRevealCanvas` (in the Game scene), the reveal's **stage**. It attaches itself (`ICardReveals.AttachStage`) only when `ICardRevealSettings.PopSheets` has a pop, so with none the tooltip keeps announcing cards. Plays each `ICardReveals.Current` (the steps are below), then calls `Finish` with it. A null `Current` (a run reset, or the stage detaching) stops it where it is. Injected by `GameScopeRegistration`'s scene-view pass, since the scene may not have one. When the rubber tears it flashes a light of the balloon's colour into the scene light field (`PopFlashRadius`, `PopFlashIntensity`, `PopFlashSeconds`) and stirs the disturbance field as a board pop does |
 | `RibbonPiece` | One piece of ribbon with a line written on it. Sizes the ribbon to its text. Flies itself: rolled up inside the balloon before the pop, then bursting out to its spot, drifting and swaying there, and finally flying off and fading. Where it rests, where the burst takes it, its drift, sway and way off are set on it by the builder. The text bends with the ribbon's wave, glyph by glyph |
-| `RibbonGraphic` | The ribbon itself, a UI graphic: a strip with a V notch cut in each end, and a wave running along it. Cel shaded by its material (`BalloonParty/Sprite/CelRibbon`, `Materials/UI/CardRevealRibbon`): folds turned toward the scene light in the ribbon's colour, those turned away in a shadow tone, a satin sheen along the lit folds' middle, all in the time-of-day light. The mesh carries a second copy of the strip, which the shader moves away from the light as the ribbon's drop shadow |
+| `RibbonGraphic` | The ribbon itself, a UI graphic: a strip with a V notch cut in each end, and a wave running along it. Cel shaded by its material (`BalloonParty/Sprite/CelRibbon`, `Materials/UI/CardRevealRibbon`): folds turned toward the scene light in the ribbon's colour, those turned away in a shadow tone, a satin sheen along the lit folds' middle, all in the scene light field's light where each vertex is (see below). The mesh carries a second copy of the strip, which the shader moves away from the light as the ribbon's drop shadow |
 
 ## A reveal, step by step
 
@@ -67,6 +67,28 @@ it. The ribbons sit between them, so they read as inside the balloon:
 While the balloon rises the two layers part a little, the front leading and the back lagging
 (`Parallax`). They meet at its place, so the depth reads even before it pops.
 
+## In the game's light
+
+The reveal is drawn in the scene, not over it, so it takes part in the game's lighting as the
+board's balloons do:
+
+- **Its own canvas.** `CardRevealCanvas` is a World Space canvas, kept over the main camera's view by
+  `CameraFittedCanvas` (sized as the game canvas's `CanvasScaler` sizes it, so the layout is the
+  same, and following the level-up's zoom). It is on the `Balloons` layer, which the main camera
+  draws and the screen-space light's scene capture records, so the reveal casts and bounces light.
+  It sorts at `Sky` 31999, above every gameplay sprite and just under the screen-space light's
+  overlay (`Sky` 32000), which then tints it like the board. A Screen Space canvas couldn't do
+  this: the HUD camera draws after the overlay and the capture.
+- **The scene light field.** The rubber and ribbon shaders read the field per vertex
+  (`SceneLight*AtLOD`): the time-of-day light, plus local lights, which add their colour and turn
+  the light toward them. A flash or a nearby lit item reaches the reveal.
+- **Its own pop.** When the rubber tears, `CardRevealView` flashes a light of the balloon's colour
+  into the field and stirs the disturbance field, as a board pop does: the board around it lights
+  up, and the ribbons bursting out catch it.
+
+The drop shadows still fall along the time-of-day light only, so they don't swing toward a local
+light.
+
 ## Building it
 
 `Tools > BalloonParty > CardReveal > Build Card Reveal` does all of this:
@@ -74,9 +96,11 @@ While the balloon rises the two layers part a little, the front leading and the 
 - imports every `pop_*.png` under `Assets/Sprites/UI/CardReveal/` as linear data (no sRGB, no mipmaps, clamped), skipping sheets already imported that way;
 - lists them on `Assets/Configuration/CardRevealSettings.asset` (made if missing, and assigned to the `GameLifetimeScope` prefab);
 - makes `Materials/UI/CardRevealRubber.mat`, `CardRevealRubberShadow.mat` (the same shader with Drop Shadow on) and `CardRevealRibbon.mat`;
-- builds `CardReveal` on `GameCanvas`.
+- builds the `Assets/Prefabs/Game/CardRevealCanvas` prefab, every object on the `Balloons` layer (the ribbons' text is cloned from the tooltip's, on `UI`, which the main camera skips);
+- removes a reveal built on `GameCanvas` by an older version of the tool;
+- places an instance in `Assets/Scenes/Game.unity` if it has none (a Game scene open with unsaved changes is left alone, with a warning).
 
-Running it again rebuilds the canvas part and keeps the materials' and settings' tuning.
+Running it again rebuilds the prefab and keeps the materials' and settings' tuning.
 
 The cheat `Run > Reveal A Card` plays a reveal for a random card without holding it. Use it to look
 at the reveal without playing to a card level-up. With no ascent, the ribbons fly their
