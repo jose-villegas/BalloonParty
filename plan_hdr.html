@@ -213,7 +213,7 @@ Tier 3 — leave alone, or watch for damage</h3>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Effect   </th><th class="markdownTableHeadNone">Why    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>UI and the heads-up text</b> (<code>Text/PencilText</code>, TMP SDF fonts, every canvas)   </td><td class="markdownTableBodyNone">Must look exactly as now. They sit at 0–1, so bloom with a threshold above 1 leaves them alone, but a tonemapper does not (see the tonemapper decision).    </td></tr>
+<td class="markdownTableBodyNone"><b>UI and the heads-up text</b> (<code>Text/PencilText</code>, TMP SDF fonts, every canvas)   </td><td class="markdownTableBodyNone">Must look exactly as now. They draw on the HUD overlay camera, after post-processing, so neither the tonemapper nor bloom touches them.    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><b>Soft gradients</b>: <code>Display/SkyScatter</code>, <code>Scenario/GroundMist</code>, <code>Scenario/BackgroundCloud</code>, <code>Grid/PuffCloud</code>, <code>Scenario/SmokeTrailDisplay</code>, the camera clear colour   </td><td class="markdownTableBodyNone">Nothing above 1 to gain. These are where the 32-bit format bands first; see <em>Format</em> below.    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -244,8 +244,9 @@ Format</h3>
 Fixed cost of HDR</h3>
 <ul>
 <li>HDR forces an intermediate colour target and a final pass to the screen every frame.</li>
-<li>Post-processing must be on all the time: without it the HDR buffer is copied out and clipped with no dithering. With it, URP runs its uber post pass (grading, tonemapping, dithering, and bloom's composite if bloom is on): one full-screen read and write. Today that pass only runs while <code>ScenarioGradeView</code> holds post-processing on.</li>
-<li>Measure this "empty post" cost on device first (Phase 1). It is the go/no-go number for the whole plan, against the 8.33 ms frame budget at 120 Hz (see <a class="el" href="plan_performance_recovery.html">Performance Recovery</a>).</li>
+<li>Post-processing must be on all the time: without it the HDR buffer is copied out and clipped with no dithering. With it, URP runs its uber post pass (grading, tonemapping, dithering, and bloom's composite if bloom is on): one full-screen read and write. Since Phase 1 it runs every frame (before it, only while <code>ScenarioGradeView</code> held post-processing on).</li>
+<li>The HUD overlay camera (Phase 1 item 3b) stops post-processing from writing straight to the screen: the base camera post-processes into an intermediate, the HUD draws over it, and a final copy goes to the screen. One more full-screen copy per frame.</li>
+<li>Measure this "empty post" cost, with the HUD camera, on device first (Phase 1). It is the go/no-go number for the whole plan, against the 8.33 ms frame budget at 120 Hz (see <a class="el" href="plan_performance_recovery.html">Performance Recovery</a>).</li>
 </ul>
 <h3><a class="anchor" id="autotoc_md636"></a>
 Bloom</h3>
@@ -321,13 +322,15 @@ Phase 1 — switch the pipeline (Editor, with the user)</h3>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">2. Main camera: post-processing on, dithering on.   </td><td class="markdownTableBodyNone">Done, on the <code>Main Camera</code> prefab (it lives in the app scope, so the launcher has it too)    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">3. Tonemapping: ACES, with an exposure lift. <code>ScenarioGradeView</code> stops toggling post-processing.   </td><td class="markdownTableBodyNone">Done. The base look is in the URP default volume profile (<code>Assets/DefaultVolumeProfile.asset</code>), not in the grade's volume, because the grade only exists in the game scope: ACES, +0.5 stops, +15 saturation. The grade's Color Adjustments add to the base's. <b>Open: ACES against Neutral, below.</b>    </td></tr>
+<td class="markdownTableBodyNone">3. Tonemapping, with an exposure lift. <code>ScenarioGradeView</code> stops toggling post-processing.   </td><td class="markdownTableBodyNone">Done. The base look is in the URP default volume profile (<code>Assets/DefaultVolumeProfile.asset</code>), not in the grade's volume, because the grade only exists in the game scope: <b>Neutral</b>, +0.35 stops, +15 contrast, +3 saturation. The grade's Color Adjustments add to the base's. ACES was tried first and dropped (findings below)    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">4. Measure the empty-post cost on device. <b>Gate:</b> if it doesn't fit, park HDR (Phase 0 stays).   </td><td class="markdownTableBodyNone">Open: needs a device    </td></tr>
+<td class="markdownTableBodyNone">3b. The HUD skips the tonemapper.   </td><td class="markdownTableBodyNone">Done: a <code>HUD Camera</code> overlay in the main camera's stack, post-processing off, draws the UI, Launch and Trail layers (<code>Display/HudCamera</code>); <code>CanvasCameraBinder</code> binds the canvases to it. Costs one extra full-screen copy: measure it with item 4    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">5. Compare against the baselines.   </td><td class="markdownTableBodyNone">Done in the Editor: <code>Baselines~/hdr-aces/</code> holds the same shots as <code>hdr-gamma-ldr/</code>, and <code>tuning/</code> holds the look sweeps    </td></tr>
+<td class="markdownTableBodyNone">4. Measure the empty-post cost on device. <b>Gate:</b> if it doesn't fit, park HDR (Phase 0 stays).   </td><td class="markdownTableBodyNone">Open: needs a device    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">6. Re-tune the scenario grades in HDR grading mode.   </td><td class="markdownTableBodyNone">Waits on the tonemapper   </td></tr>
+<td class="markdownTableBodyNone">5. Compare against the baselines.   </td><td class="markdownTableBodyNone">Done in the Editor: <code>Baselines~/hdr-neutral/</code> holds the shipped look (same shots as <code>hdr-gamma-ldr/</code>, plus the level-up), <code>hdr-aces/</code> the ACES attempt, and each <code>tuning/</code> the look sweeps    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">6. Re-tune the scenario grades in HDR grading mode.   </td><td class="markdownTableBodyNone">Checked, no change: with the base above, every scenario's noon frame matches LDR within 0.004 mean luma and its night frame within 0.02. The meadow at night reads a little deeper and more saturated   </td></tr>
 </table>
 <h4><a class="anchor" id="autotoc_md645"></a>
 Findings from the Editor (2026-11-11)</h4>
@@ -342,13 +345,16 @@ Findings from the Editor (2026-11-11)</h4>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">ACES +0.6 stops, +5 sat, −20 contrast   </td><td class="markdownTableBodyNone">0.358, sat 0.50   </td><td class="markdownTableBodyNone">0.292, sat 0.62   </td><td class="markdownTableBodyNone">as above, flatter    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b>Neutral +0.3 stops, +10 sat</b>   </td><td class="markdownTableBodyNone"><b>0.405, sat 0.50, 0% clipped</b>   </td><td class="markdownTableBodyNone"><b>0.340, sat 0.60</b>   </td><td class="markdownTableBodyNone">close to today   </td></tr>
+<td class="markdownTableBodyNone">Neutral +0.3 stops, +10 sat (HUD still tonemapped)   </td><td class="markdownTableBodyNone">0.405, sat 0.50, 0% clipped   </td><td class="markdownTableBodyNone">0.340, sat 0.60   </td><td class="markdownTableBodyNone">close to today    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>Neutral +0.35 stops, +15 contrast, +3 sat (shipped, HUD on its own camera)</b>   </td><td class="markdownTableBodyNone"><b>sky 0.604 vs 0.593, water 0.619 vs 0.615</b>   </td><td class="markdownTableBodyNone"><b>sky 0.268 vs 0.263, water 0.232 vs 0.232</b>   </td><td class="markdownTableBodyNone">close to today   </td></tr>
 </table>
 <ul>
 <li><b>ACES can't match the night.</b> Its toe crushes the dark scenes. Lifting it far enough to match washes out the day, and every saturation boost that brings the balloons back overshoots at night. The day sky matches at +0.5 stops.</li>
 <li><b>ACES moves the gameplay colours.</b> Red balloons drift toward orange, green toward yellow, and the blues pale. The plan's palette-identity check fails on red against orange.</li>
-<li><b>Neutral matches today at noon and at night</b> with one setting, keeps the hues, and still removes the clipping. It is the recommended switch.</li>
-<li><b>Every tonemapper greys the UI whites.</b> No curve maps 1.0 back to white, so the cream Game Over panel and white text such as PLAY come out grey, with Neutral the least. Settle this in its own step: move the screen-space canvases to Screen Space – Overlay, or re-tune the UI colours.</li>
+<li><b>Neutral matches today at noon and at night</b> with one setting, keeps the hues, and removes most of the clipping. Contrast evens out the day and the night: without it the day sat 5% under LDR and the night 9% over. Night saturation still runs a few points over LDR, the price of that contrast.</li>
+<li><b>Every tonemapper greys the UI whites.</b> No curve maps 1.0 back to white: under Neutral a white button face came out 217 instead of 254. Fixed by drawing the HUD on its own overlay camera after post-processing (Phase 1 item 3b). Screen Space – Overlay canvases were the other option, but they would move the canvases' world positions that the score, heart and coin trails fly to.</li>
+<li><b>Pops still bloom to white</b> next to the burst. Those effects are authored to reach white; the tonemapper only softens what goes above 1. That is Phase 2, item 1.</li>
 <li><b>Capturing HDR.</b> The pipeline package's <code>capture game_view</code> renders the camera into an 8-bit texture, and URP gives an offscreen camera its target's format, so it cannot show HDR. Use <code>ScreenCapture.CaptureScreenshot</code> (the real Game view). The volume stack copies the default profile when it starts, so a script that edits that profile in Play mode must call <code>VolumeManager.instance.OnVolumeProfileChanged</code>. The <code>capture/</code> scripts in each baseline folder do both.</li>
 </ul>
 <h3><a class="anchor" id="autotoc_md646"></a>
@@ -380,19 +386,19 @@ Decisions (2026-11-10)</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Bloom   </td><td class="markdownTableBodyNone"><b>Yes, gated</b>   </td><td class="markdownTableBodyNone">Phase 3, after the switch. Dual or Kawase at quarter resolution, threshold above 1. Ships only if the device measurement fits the frame budget; otherwise follow the fallback ladder.    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Tonemapper   </td><td class="markdownTableBodyNone"><b>ACES</b>   </td><td class="markdownTableBodyNone">See below: the switch is no longer look-neutral.    </td></tr>
+<td class="markdownTableBodyNone">Tonemapper   </td><td class="markdownTableBodyNone"><strike>ACES</strike> → <b>Neutral</b> (2026-11-11)   </td><td class="markdownTableBodyNone">ACES was chosen first; in the Editor it crushed the night and moved red balloons toward orange (Phase 1 findings), so the user switched to Neutral. The section below is kept for the record.    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Format   </td><td class="markdownTableBodyNone"><b>32-bit <code>B10G11R11</code> + dithering</b>   </td><td class="markdownTableBodyNone">Move to 64-bit only if the sky, mist or water band visibly on device.    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">First effects   </td><td class="markdownTableBodyNone"><b>Pops on lit surfaces, then glitter</b> (items 1 and 2)   </td><td class="markdownTableBodyNone">The level-up (item 6) is the showcase once those read well.   </td></tr>
 </table>
 <h3><a class="anchor" id="autotoc_md651"></a>
-What ACES means for this plan</h3>
+What ACES meant for this plan (superseded by Neutral)</h3>
 <ul>
 <li><b>Phase 1 is a look change, not a silent switch.</b> ACES darkens the whole 0–1 range and adds contrast, and it shifts the hue of saturated colours. Expect an exposure lift on the global Volume, and check the balloon palette for identity: gameplay colours must stay easy to tell apart. The Phase 0 baselines are what this is judged against.</li>
 <li><b>Grading runs in ACES colour spaces.</b> With ACES selected, URP does every grading operation in ACES spaces, so the scenario grades are re-tuned under ACES, in the same pass as the exposure lift.</li>
 <li><b>No extra per-pixel cost against Neutral.</b> In HDR grading mode the tonemapper is baked into the grading LUT, so ACES and Neutral cost the same lookup per pixel.</li>
-<li><b>The UI is tonemapped too.</b> The game and launcher canvases are Screen Space – Camera, and score, hearts and heads-ups are World Space, so all of them go through the post pass. In a URP camera stack post-processing runs once at the end of the stack, so a separate UI camera does not escape it. To settle in Phase 1, by eye: either re-tune the UI colours under ACES, or move the screen-space canvases to Screen Space – Overlay (drawn after post), which changes how world sprites such as score trails layer with the UI. </li>
+<li><b>The UI is tonemapped too.</b> The game and launcher canvases are Screen Space – Camera, and score, hearts and heads-ups are World Space, so all of them went through the post pass. This audit first said a separate UI camera could not escape it; that was wrong. URP 17 post-processes per camera in a stack, so an overlay camera with post off draws after the base camera's tonemapping. That is the fix that shipped (Phase 1 item 3b). </li>
 </ul>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

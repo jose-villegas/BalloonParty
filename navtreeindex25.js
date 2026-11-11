@@ -1,5 +1,6 @@
 var NAVTREEINDEX25 =
 {
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a9ff3eb2fd26f52a1c3107e080a7ae824":[6,0,0,3,8,24,19],
 "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#abfcfd6a493daead126858ce7431c3ed2":[5,0,0,3,8,24,14],
 "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#abfcfd6a493daead126858ce7431c3ed2":[6,0,0,3,8,24,14],
 "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ad0a8f4680319a2fb2e41bc07edae1384":[5,0,0,3,8,24,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX25 =
 "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePaletteExtensions.html":[6,0,0,3,9,1],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePaletteExtensions.html#a6260b0875f9692883e96516722d118bf":[5,0,0,3,9,1,0],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePaletteExtensions.html#a6260b0875f9692883e96516722d118bf":[6,0,0,3,9,1,0],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html":[5,0,0,3,9,4],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html":[6,0,0,3,9,4]
+"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteChannelEncoding.html":[5,0,0,3,9,4]
 };

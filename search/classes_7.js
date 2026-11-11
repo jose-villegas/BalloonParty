@@ -26,5 +26,6 @@ var searchData=
   ['highlighttrail_23',['HighlightTrail',['../classBalloonParty_1_1Item_1_1Preview_1_1HighlightTrail.html',1,'BalloonParty::Item::Preview']]],
   ['hitpipeline_24',['HitPipeline',['../classBalloonParty_1_1Game_1_1HitPipeline.html',1,'BalloonParty::Game']]],
   ['hitvfxoverride_25',['HitVfxOverride',['../classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html',1,'BalloonParty::Configuration::Balloons']]],
-  ['hitvfxoverridedrawer_26',['HitVfxOverrideDrawer',['../classBalloonParty_1_1Configuration_1_1Editor_1_1HitVfxOverrideDrawer.html',1,'BalloonParty::Configuration::Editor']]]
+  ['hitvfxoverridedrawer_26',['HitVfxOverrideDrawer',['../classBalloonParty_1_1Configuration_1_1Editor_1_1HitVfxOverrideDrawer.html',1,'BalloonParty::Configuration::Editor']]],
+  ['hudcamera_27',['HudCamera',['../classBalloonParty_1_1Display_1_1HudCamera.html',1,'BalloonParty::Display']]]
 ];

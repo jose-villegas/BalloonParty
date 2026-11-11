@@ -21,7 +21,7 @@ var searchData=
   ['calculateweight_18',['CalculateWeight',['../classBalloonParty_1_1Slots_1_1Grid_1_1MoveWeightEvaluator.html#af905d94c9a02f630cc7307cede6fd6fe',1,'BalloonParty::Slots::Grid::MoveWeightEvaluator']]],
   ['calculation_19',['2.4 Full Grid Clear-Out Calculation',['../plan_future_ideas.html#autotoc_md448',1,'']]],
   ['callstacks_20dev_20build_20',['Findings — fourth pass, 2026-07-23 night (simpleperf callstacks, dev build)',['../plan_performance_recovery.html#autotoc_md737',1,'']]],
-  ['camera_21',['Camera',['../classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicCameraView.html#ac6c42401ece5c3b5bff720de542137ca',1,'BalloonParty::Game::Cinematics::CinematicCameraView']]],
+  ['camera_21',['Camera',['../classBalloonParty_1_1Display_1_1HudCamera.html#aaeedc2e8162ab4809345f9041e3ded78',1,'BalloonParty.Display.HudCamera.Camera'],['../classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicCameraView.html#ac6c42401ece5c3b5bff720de542137ca',1,'BalloonParty.Game.Cinematics.CinematicCameraView.Camera']]],
   ['camera_20follows_20the_20shot_22',['6.7 The pan-in stops pausing; the camera follows the shot',['../plan_level_up_timing.html#autotoc_md715',1,'']]],
   ['camera_20reference_23',['Camera Reference',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Game/Cinematics/README.md#autotoc_md185',1,'']]],
   ['camerabackgroundtint_24',['CameraBackgroundTint',['../classBalloonParty_1_1Display_1_1CameraBackgroundTint.html',1,'BalloonParty::Display']]],

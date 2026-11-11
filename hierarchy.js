@@ -1206,6 +1206,7 @@ var hierarchy =
       [ "BalloonParty.Cheats.DevLogConsole", "classBalloonParty_1_1Cheats_1_1DevLogConsole.html", null ],
       [ "BalloonParty.Display.CameraBackgroundTint", "classBalloonParty_1_1Display_1_1CameraBackgroundTint.html", null ],
       [ "BalloonParty.Display.CameraShakeView", "classBalloonParty_1_1Display_1_1CameraShakeView.html", null ],
+      [ "BalloonParty.Display.HudCamera", "classBalloonParty_1_1Display_1_1HudCamera.html", null ],
       [ "BalloonParty.Display.NavigationCameraReveal", "classBalloonParty_1_1Display_1_1NavigationCameraReveal.html", null ],
       [ "BalloonParty.Display.OrthogonalSizeCameraController", "classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html", null ],
       [ "BalloonParty.Display.SceneCaptureService", "classBalloonParty_1_1Display_1_1SceneCaptureService.html", null ],

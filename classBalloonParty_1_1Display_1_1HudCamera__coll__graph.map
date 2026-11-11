@@ -1,0 +1,5 @@
+<map id="BalloonParty.Display.HudCamera" name="BalloonParty.Display.HudCamera">
+<area shape="rect" id="Node000001" title="The camera the HUD renders through: an overlay in the main camera&#39;s URP stack with post&#45;processing of..." alt="" coords="5,79,188,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="35,5,159,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,44,99,79,94,79,94,44"/>
+</map>

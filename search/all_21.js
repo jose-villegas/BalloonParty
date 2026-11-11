@@ -102,7 +102,7 @@ var searchData=
   ['well_99',['Well',['../classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder.html#a7937c9c6569b3556af018bbfeca04400',1,'BalloonParty::Editor::GameOverLayoutBuilder']]],
   ['wellcorner_100',['WellCorner',['../classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder.html#a83d726ef5e5b73783b79ef6260404c3b',1,'BalloonParty::Editor::GameOverLayoutBuilder']]],
   ['what_101',['Who shows what',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/UI/Tooltip/README.md#autotoc_md1117',1,'']]],
-  ['what_20aces_20means_20for_20this_20plan_102',['What ACES means for this plan',['../plan_hdr.html#autotoc_md651',1,'']]],
+  ['what_20aces_20meant_20for_20this_20plan_20superseded_20by_20neutral_102',['What ACES meant for this plan (superseded by Neutral)',['../plan_hdr.html#autotoc_md651',1,'']]],
   ['what_20each_20timer_20means_103',['What each timer means',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Game/Telemetry/README.md#autotoc_md245',1,'']]],
   ['what_20exists_20verified_202026_2011_2010_104',['What exists (verified 2026-11-10)',['../plan_water_scenario.html#autotoc_md840',1,'']]],
   ['what_20extraction_20actually_20costs_105',['What extraction actually costs',['../plan_gameplay_telemetry.html#autotoc_md554',1,'']]],

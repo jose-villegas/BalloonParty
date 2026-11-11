@@ -1,5 +1,6 @@
 var NAVTREEINDEX16 =
 {
+"classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#aa4eadc94fd376fd6b6431c11af2f7c6a":[6,0,0,3,0,1,7],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#aa5783f5182de7b229dd2ffa2ec9b265c":[5,0,0,3,0,1,10],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#aa5783f5182de7b229dd2ffa2ec9b265c":[6,0,0,3,0,1,10],
 "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#aae3dc0fc330b58dcd4f444576aabf321":[5,0,0,3,0,1,29],
@@ -248,6 +249,5 @@ var NAVTREEINDEX16 =
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#afa44df4f6f283d4f5fce70d211b7e1fd":[6,0,0,3,2,2,10],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html":[5,0,0,3,2,5],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html":[6,0,0,3,2,5],
-"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a051c872da61ab210649bea35c993e247":[5,0,0,3,2,5,9],
-"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a051c872da61ab210649bea35c993e247":[6,0,0,3,2,5,9]
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a051c872da61ab210649bea35c993e247":[5,0,0,3,2,5,9]
 };

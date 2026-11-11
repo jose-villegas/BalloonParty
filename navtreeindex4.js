@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"arch_balance_flow.html#autotoc_md65":[2,4,0,0],
 "arch_balance_flow.html#autotoc_md66":[2,4,0,1],
 "arch_bush_system.html":[2,15],
 "arch_bush_system.html#autotoc_md67":[2,15,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a7fe0ecd8a857a3c52a5342430653b6d2":[6,0,0,0,0,4,12],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#aa2a7b1b0d936331744243b2e9031884b":[5,0,0,0,0,4,16],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#aa2a7b1b0d936331744243b2e9031884b":[6,0,0,0,0,4,16],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#aadc9133319cd00401ec1c1ddcf26937e":[5,0,0,0,0,4,1],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#aadc9133319cd00401ec1c1ddcf26937e":[6,0,0,0,0,4,1]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#aadc9133319cd00401ec1c1ddcf26937e":[5,0,0,0,0,4,1]
 };

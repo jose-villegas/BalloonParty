@@ -254,7 +254,7 @@ var plans =
           [ "Phase 4 — optional follow-ups", "plan_hdr.html#autotoc_md648", null ]
         ] ],
         [ "Decisions (2026-11-10)", "plan_hdr.html#autotoc_md650", [
-          [ "What ACES means for this plan", "plan_hdr.html#autotoc_md651", null ]
+          [ "What ACES meant for this plan (superseded by Neutral)", "plan_hdr.html#autotoc_md651", null ]
         ] ]
       ] ]
     ] ],

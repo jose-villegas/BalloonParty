@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['camera_0',['Camera',['../classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicCameraView.html#ac6c42401ece5c3b5bff720de542137ca',1,'BalloonParty::Game::Cinematics::CinematicCameraView']]],
+  ['camera_0',['Camera',['../classBalloonParty_1_1Display_1_1HudCamera.html#aaeedc2e8162ab4809345f9041e3ded78',1,'BalloonParty.Display.HudCamera.Camera'],['../classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicCameraView.html#ac6c42401ece5c3b5bff720de542137ca',1,'BalloonParty.Game.Cinematics.CinematicCameraView.Camera']]],
   ['candealbonus_1',['CanDealBonus',['../interfaceBalloonParty_1_1Game_1_1Run_1_1IBonusCardSource.html#af4b96207890dca21e1305ba4e4ca0879',1,'BalloonParty.Game.Run.IBonusCardSource.CanDealBonus'],['../classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a18261076fc2b80ef2f935c17d8a56b54',1,'BalloonParty.Game.Upgrades.RunUpgrades.CanDealBonus']]],
   ['capturetexture_2',['CaptureTexture',['../classBalloonParty_1_1Display_1_1SceneCaptureService.html#aeb951443bfc153cc01a4eaabed94cf9b',1,'BalloonParty::Display::SceneCaptureService']]],
   ['cardeverylevels_3',['CardEveryLevels',['../classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a0e516ee54bad96bf0120ab7bcb669cd7',1,'BalloonParty.Configuration.UpgradeSettings.CardEveryLevels'],['../interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html#a575cc81c17115081739301ae5434a640',1,'BalloonParty.Shared.IUpgradeSettings.CardEveryLevels']]],

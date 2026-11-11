@@ -212,9 +212,11 @@ var searchData=
   ['how_20to_20switch_20it_20on_209',['HDR rendering — where the range goes, and how to switch it on',['../plan_hdr.html#autotoc_md621',1,'']]],
   ['how_20unbreakables_20move_20today_210',['How unbreakables move today',['../plan_unbreakable_formations.html#autotoc_md815',1,'']]],
   ['http_20analytics_20sink_211',['HTTP analytics sink',['../plan_gameplay_telemetry.html#autotoc_md564',1,'']]],
-  ['huejitter_212',['HueJitter',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafBakeSettings.html#a75b9751553a9a8c455527ed600d4be74',1,'BalloonParty::Editor::Bush::BushLeafBakeSettings']]],
-  ['hueshiftid_213',['HueShiftId',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafBaker.html#abca2837543a88b0ab7cf03591ef3cb72',1,'BalloonParty::Editor::Bush::BushLeafBaker']]],
-  ['humanize_214',['Humanize',['../classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#afe79c53a22211cd3556701e8ffdc5090',1,'BalloonParty::Editor::MetricBindingDrawer']]],
-  ['hundredthsunit_215',['HundredthsUnit',['../classBalloonParty_1_1UI_1_1Telemetry_1_1MetricValueResolver.html#a85f74470f5edcd35116d0b4204fe9807',1,'BalloonParty::UI::Telemetry::MetricValueResolver']]],
-  ['hz_208_2033_20ms_20frame_216',['Performance (mobile, 120 Hz = 8.33 ms frame)',['../plan_terrain_biomes.html#autotoc_md801',1,'']]]
+  ['hudcamera_212',['HudCamera',['../classBalloonParty_1_1Display_1_1HudCamera.html',1,'BalloonParty::Display']]],
+  ['hudcamera_2ecs_213',['HudCamera.cs',['../HudCamera_8cs.html',1,'']]],
+  ['huejitter_214',['HueJitter',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafBakeSettings.html#a75b9751553a9a8c455527ed600d4be74',1,'BalloonParty::Editor::Bush::BushLeafBakeSettings']]],
+  ['hueshiftid_215',['HueShiftId',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafBaker.html#abca2837543a88b0ab7cf03591ef3cb72',1,'BalloonParty::Editor::Bush::BushLeafBaker']]],
+  ['humanize_216',['Humanize',['../classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#afe79c53a22211cd3556701e8ffdc5090',1,'BalloonParty::Editor::MetricBindingDrawer']]],
+  ['hundredthsunit_217',['HundredthsUnit',['../classBalloonParty_1_1UI_1_1Telemetry_1_1MetricValueResolver.html#a85f74470f5edcd35116d0b4204fe9807',1,'BalloonParty::UI::Telemetry::MetricValueResolver']]],
+  ['hz_208_2033_20ms_20frame_218',['Performance (mobile, 120 Hz = 8.33 ms frame)',['../plan_terrain_biomes.html#autotoc_md801',1,'']]]
 ];

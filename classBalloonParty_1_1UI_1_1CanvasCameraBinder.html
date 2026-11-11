@@ -115,7 +115,7 @@ $(function(){initNavTree('classBalloonParty_1_1UI_1_1CanvasCameraBinder.html',''
 </div><!--header-->
 <div class="contents">
 
-<p>Binds a Screen Space - Camera canvas to the single persistent camera at runtime.  
+<p>Binds a Screen Space - Camera canvas to the persistent camera's HUD overlay (<a class="el" href="classBalloonParty_1_1Display_1_1HudCamera.html" title="The camera the HUD renders through: an overlay in the main camera&#39;s URP stack with post-processing of...">HudCamera</a>) at runtime, so the canvas draws after the main camera's tonemapping.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.UI.CanvasCameraBinder:</div>
@@ -149,8 +149,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a625b5369845cb2b1037aec33f6dc4673"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Binds a Screen Space - Camera canvas to the single persistent camera at runtime. </p>
-<p>That camera lives in the app-root DontDestroyOnLoad prefab, so it can't be assigned to a canvas's Render Camera at edit time; this resolves it via Camera.main once it exists. Without it, a Screen Space - Camera canvas with an unset Render Camera falls back to overlay-scale world positions, which sends world-space trails that target this canvas's rects (score/shield/health) far off screen. </p>
+<div class="textblock"><p>Binds a Screen Space - Camera canvas to the persistent camera's HUD overlay (<a class="el" href="classBalloonParty_1_1Display_1_1HudCamera.html" title="The camera the HUD renders through: an overlay in the main camera&#39;s URP stack with post-processing of...">HudCamera</a>) at runtime, so the canvas draws after the main camera's tonemapping. </p>
+<p>That camera lives in the app-root DontDestroyOnLoad prefab, so it can't be assigned to a canvas's Render Camera at edit time; this resolves it under Camera.main once that exists (or the main camera itself, if the HUD camera is missing). Without it, a Screen Space - Camera canvas with an unset Render Camera falls back to overlay-scale world positions, which sends world-space trails that target this canvas's rects (score/shield/health) far off screen. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a7c854d0316d9aa738651aa49c8ba411d" name="a7c854d0316d9aa738651aa49c8ba411d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7c854d0316d9aa738651aa49c8ba411d">&#9670;&#160;</a></span>Awake()</h2>
