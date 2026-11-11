@@ -1,5 +1,11 @@
 var NAVTREEINDEX85 =
 {
+"classBalloonParty_1_1UI_1_1LevelUp_1_1UpgradeCardView.html#adfaef315f1b6759dc9da99894f3ebc60":[5,0,0,16,6,2,8],
+"classBalloonParty_1_1UI_1_1LevelUp_1_1UpgradeCardView.html#adfaef315f1b6759dc9da99894f3ebc60":[6,0,0,16,6,2,8],
+"classBalloonParty_1_1UI_1_1LevelUp_1_1UpgradeCardView.html#ae8e7bc2c62a89971354408d3d05fb2d8":[5,0,0,16,6,2,7],
+"classBalloonParty_1_1UI_1_1LevelUp_1_1UpgradeCardView.html#ae8e7bc2c62a89971354408d3d05fb2d8":[6,0,0,16,6,2,7],
+"classBalloonParty_1_1UI_1_1PlainCounterDisplay.html":[5,0,0,16,15],
+"classBalloonParty_1_1UI_1_1PlainCounterDisplay.html":[6,0,0,16,15],
 "classBalloonParty_1_1UI_1_1PlainCounterDisplay.html#a02777a643c72ffc9140927822c7d44ef":[5,0,0,16,15,1],
 "classBalloonParty_1_1UI_1_1PlainCounterDisplay.html#a02777a643c72ffc9140927822c7d44ef":[6,0,0,16,15,1],
 "classBalloonParty_1_1UI_1_1PlainCounterDisplay.html#a46f8a2472a343d86f38525cc5ab2a0d2":[5,0,0,16,15,3],
@@ -243,11 +249,5 @@ var NAVTREEINDEX85 =
 "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a18d207222e2b122950d0e63994e6f0c3":[5,0,0,16,7,1,37],
 "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a18d207222e2b122950d0e63994e6f0c3":[6,0,0,16,7,1,37],
 "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a1a3d39a6ece9be8fc74e1c2f9f9619d4":[5,0,0,16,7,1,29],
-"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a1a3d39a6ece9be8fc74e1c2f9f9619d4":[6,0,0,16,7,1,29],
-"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a1d90c93542cbe0929065377f45f308ad":[5,0,0,16,7,1,26],
-"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a1d90c93542cbe0929065377f45f308ad":[6,0,0,16,7,1,26],
-"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a241e20ba0737ceba41a721fe524550d9":[5,0,0,16,7,1,15],
-"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a241e20ba0737ceba41a721fe524550d9":[6,0,0,16,7,1,15],
-"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a31ba7311df1b2a4637cd9a2f0a53cefe":[5,0,0,16,7,1,25],
-"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a31ba7311df1b2a4637cd9a2f0a53cefe":[6,0,0,16,7,1,25]
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a1a3d39a6ece9be8fc74e1c2f9f9619d4":[6,0,0,16,7,1,29]
 };

@@ -1,5 +1,11 @@
 var NAVTREEINDEX87 =
 {
+"classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#a4369817fb2aea8e7af97a043add45301":[5,0,0,16,7,5,7],
+"classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#a4369817fb2aea8e7af97a043add45301":[6,0,0,16,7,5,7],
+"classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#a5ce1711510010806a10e1f1d608a8207":[5,0,0,16,7,5,13],
+"classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#a5ce1711510010806a10e1f1d608a8207":[6,0,0,16,7,5,13],
+"classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#a6128c0a6180296e7b051a4883851cb53":[5,0,0,16,7,5,3],
+"classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#a6128c0a6180296e7b051a4883851cb53":[6,0,0,16,7,5,3],
 "classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#a6951e515a0dee0f1d4e4bdd84477bf08":[5,0,0,16,7,5,4],
 "classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#a6951e515a0dee0f1d4e4bdd84477bf08":[6,0,0,16,7,5,4],
 "classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#a6a9fc5df8727103069a0fca20d31764d":[5,0,0,16,7,5,6],
@@ -243,11 +249,5 @@ var NAVTREEINDEX87 =
 "classBalloonParty_1_1UI_1_1TimeOfDaySwap.html#ad3d71d5bbc73aa551142b605594d5a3c":[5,0,0,16,22,3],
 "classBalloonParty_1_1UI_1_1TimeOfDaySwap.html#ad3d71d5bbc73aa551142b605594d5a3c":[6,0,0,16,22,3],
 "classBalloonParty_1_1UI_1_1TimeOfDaySwap.html#af727eb6aeee98ebc85b9470b4ecfca5f":[5,0,0,16,22,5],
-"classBalloonParty_1_1UI_1_1TimeOfDaySwap.html#af727eb6aeee98ebc85b9470b4ecfca5f":[6,0,0,16,22,5],
-"classBalloonParty_1_1UI_1_1TimeOfDayTint.html":[5,0,0,16,23],
-"classBalloonParty_1_1UI_1_1TimeOfDayTint.html":[6,0,0,16,23],
-"classBalloonParty_1_1UI_1_1TimeOfDayTint.html#a0b12c605bec8e6a3641ca2c6224e6557":[5,0,0,16,23,2],
-"classBalloonParty_1_1UI_1_1TimeOfDayTint.html#a0b12c605bec8e6a3641ca2c6224e6557":[6,0,0,16,23,2],
-"classBalloonParty_1_1UI_1_1TimeOfDayTint.html#a180a977caf1e3b11a56c6d643c3b1c20":[5,0,0,16,23,6],
-"classBalloonParty_1_1UI_1_1TimeOfDayTint.html#a180a977caf1e3b11a56c6d643c3b1c20":[6,0,0,16,23,6]
+"classBalloonParty_1_1UI_1_1TimeOfDaySwap.html#af727eb6aeee98ebc85b9470b4ecfca5f":[6,0,0,16,22,5]
 };

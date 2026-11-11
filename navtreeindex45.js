@@ -1,5 +1,11 @@
 var NAVTREEINDEX45 =
 {
+"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#ad8fafbd0bb761d40c14521a3318cc7b9":[5,0,0,6,6,4,24],
+"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#ad8fafbd0bb761d40c14521a3318cc7b9":[6,0,0,6,6,4,24],
+"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#adf96e9780cbf11c80265a9ff9a04cfe6":[5,0,0,6,6,4,22],
+"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#adf96e9780cbf11c80265a9ff9a04cfe6":[6,0,0,6,6,4,22],
+"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#aee16bfa97a5e15201844cad2d4b530bf":[5,0,0,6,6,4,27],
+"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#aee16bfa97a5e15201844cad2d4b530bf":[6,0,0,6,6,4,27],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#af698c100085881e06c196d401c043cc5":[5,0,0,6,6,4,16],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#af698c100085881e06c196d401c043cc5":[6,0,0,6,6,4,16],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#afd1723a7bf9e100985cb683781a73231":[5,0,0,6,6,4,25],
@@ -243,11 +249,5 @@ var NAVTREEINDEX45 =
 "classBalloonParty_1_1Game_1_1Run_1_1RunController.html#ab9c7eb0becfae715430cf43d25b2b58c":[5,0,0,6,7,16,17],
 "classBalloonParty_1_1Game_1_1Run_1_1RunController.html#ab9c7eb0becfae715430cf43d25b2b58c":[6,0,0,6,7,16,17],
 "classBalloonParty_1_1Game_1_1Run_1_1RunController.html#ad27012b68b13a374f14369c2a392753c":[5,0,0,6,7,16,9],
-"classBalloonParty_1_1Game_1_1Run_1_1RunController.html#ad27012b68b13a374f14369c2a392753c":[6,0,0,6,7,16,9],
-"classBalloonParty_1_1Game_1_1Run_1_1RunController.html#ad5455629dd78e6fb30a255650c28616a":[5,0,0,6,7,16,1],
-"classBalloonParty_1_1Game_1_1Run_1_1RunController.html#ad5455629dd78e6fb30a255650c28616a":[6,0,0,6,7,16,1],
-"classBalloonParty_1_1Game_1_1Run_1_1RunController.html#ae487dece8a96772350e1918548ff3183":[5,0,0,6,7,16,16],
-"classBalloonParty_1_1Game_1_1Run_1_1RunController.html#ae487dece8a96772350e1918548ff3183":[6,0,0,6,7,16,16],
-"classBalloonParty_1_1Game_1_1Run_1_1RunController.html#af81820533f5a1cacab1e3a3d6407b352":[5,0,0,6,7,16,12],
-"classBalloonParty_1_1Game_1_1Run_1_1RunController.html#af81820533f5a1cacab1e3a3d6407b352":[6,0,0,6,7,16,12]
+"classBalloonParty_1_1Game_1_1Run_1_1RunController.html#ad27012b68b13a374f14369c2a392753c":[6,0,0,6,7,16,9]
 };

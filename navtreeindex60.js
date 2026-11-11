@@ -1,5 +1,11 @@
 var NAVTREEINDEX60 =
 {
+"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a1e5aa691bac0c9726fa97288993370cf":[5,0,0,9,5,12],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a1e5aa691bac0c9726fa97288993370cf":[6,0,0,9,5,12],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a22fbbc4edeee806e3e23c5deb4c5605d":[5,0,0,9,5,26],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a22fbbc4edeee806e3e23c5deb4c5605d":[6,0,0,9,5,26],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a254c90cc0b65cc8c12e592db928c37c3":[5,0,0,9,5,16],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a254c90cc0b65cc8c12e592db928c37c3":[6,0,0,9,5,16],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a2a398823ba0ae17759bd6846a18d02ac":[5,0,0,9,5,13],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a2a398823ba0ae17759bd6846a18d02ac":[6,0,0,9,5,13],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#a3a5eb7adc287b56259da4a8975ac618a":[5,0,0,9,5,31],
@@ -243,11 +249,5 @@ var NAVTREEINDEX60 =
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#acab932aa31ebd3af9723473d860c608b":[5,0,0,10,1,4,1],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#acab932aa31ebd3af9723473d860c608b":[6,0,0,10,1,4,1],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#ae054a86bb87f386f88a22353380ea133":[5,0,0,10,1,4,11],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#ae054a86bb87f386f88a22353380ea133":[6,0,0,10,1,4,11],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#ae0845f03174bc4c1f8aae728f6d4e81a":[5,0,0,10,1,4,2],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#ae0845f03174bc4c1f8aae728f6d4e81a":[6,0,0,10,1,4,2],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#ae7f098e20558c0cc66fde849add2b9b6":[5,0,0,10,1,4,12],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#ae7f098e20558c0cc66fde849add2b9b6":[6,0,0,10,1,4,12],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#aea9636eaaa8b4bbcc2415f75b59064c6":[5,0,0,10,1,4,3],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#aea9636eaaa8b4bbcc2415f75b59064c6":[6,0,0,10,1,4,3]
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#ae054a86bb87f386f88a22353380ea133":[6,0,0,10,1,4,11]
 };

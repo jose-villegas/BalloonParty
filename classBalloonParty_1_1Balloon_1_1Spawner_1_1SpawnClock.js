@@ -17,6 +17,7 @@ var classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock =
     [ "TrackClears", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a68d5630934ea27727bc84b85679823da", null ],
     [ "_boardFill", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a4e5780fec1b9945aed16640a36ce2a5a", null ],
     [ "_breatherLeft", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a6020fe38cca4586c5828d9ba83f204f1", null ],
+    [ "_cooldownLeft", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a95d0e3ab64c8f6c20aa535b87f8f4a26", null ],
     [ "_firedSubscriber", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#affc45ff5f400ee9fc885273e2ba24c34", null ],
     [ "_flightAges", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a08ec7e48aec5d2880ea6fa50e19076e3", null ],
     [ "_levelProgress", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a35c3bc06aee0c0b6343156e8a1fa80ad", null ],

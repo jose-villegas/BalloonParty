@@ -1,5 +1,11 @@
 var NAVTREEINDEX43 =
 {
+"classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a9981d029cb6a2f9615f50578f0fa6d6a":[5,0,0,6,13,6],
+"classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a9981d029cb6a2f9615f50578f0fa6d6a":[6,0,0,6,13,6],
+"classBalloonParty_1_1Game_1_1GameScopeRegistration.html#ac84be211dd198c29be04fbc860708884":[5,0,0,6,13,0],
+"classBalloonParty_1_1Game_1_1GameScopeRegistration.html#ac84be211dd198c29be04fbc860708884":[6,0,0,6,13,0],
+"classBalloonParty_1_1Game_1_1GameScopeRegistration.html#ac9cc573bae12930ccb06f867ea7a55f9":[5,0,0,6,13,4],
+"classBalloonParty_1_1Game_1_1GameScopeRegistration.html#ac9cc573bae12930ccb06f867ea7a55f9":[6,0,0,6,13,4],
 "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#ad6d1de178ce3bbc0052c8d6f51613e4e":[5,0,0,6,13,11],
 "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#ad6d1de178ce3bbc0052c8d6f51613e4e":[6,0,0,6,13,11],
 "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#ae90de8d6a000ad6b85bb21b5c9c0d492":[5,0,0,6,13,12],
@@ -243,11 +249,5 @@ var NAVTREEINDEX43 =
 "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#acd6413e81a8a6f58eb84772f6db5c367":[5,0,0,6,5,4,0],
 "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#acd6413e81a8a6f58eb84772f6db5c367":[6,0,0,6,5,4,0],
 "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#ae1c6b47e01a6e823cdd93714f45871cd":[5,0,0,6,5,4,9],
-"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#ae1c6b47e01a6e823cdd93714f45871cd":[6,0,0,6,5,4,9],
-"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#af12875533cc7726641d441788e4e3708":[5,0,0,6,5,4,15],
-"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#af12875533cc7726641d441788e4e3708":[6,0,0,6,5,4,15],
-"classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator.html":[5,0,0,6,5,6],
-"classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator.html":[6,0,0,6,5,6],
-"classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator.html#af2f922dd59a8926fbd5ce65ac3b16e20":[5,0,0,6,5,6,0],
-"classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator.html#af2f922dd59a8926fbd5ce65ac3b16e20":[6,0,0,6,5,6,0]
+"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#ae1c6b47e01a6e823cdd93714f45871cd":[6,0,0,6,5,4,9]
 };

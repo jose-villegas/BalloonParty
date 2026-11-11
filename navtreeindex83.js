@@ -1,5 +1,11 @@
 var NAVTREEINDEX83 =
 {
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a0b6a7911f4c30cb05cc523e6cc414662":[5,0,0,16,4,0,13],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a0b6a7911f4c30cb05cc523e6cc414662":[6,0,0,16,4,0,13],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a0bda1278888c2cc0408fd6bb34a751e7":[5,0,0,16,4,0,38],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a0bda1278888c2cc0408fd6bb34a751e7":[6,0,0,16,4,0,38],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a0c57f7c741b12573938080add4c0c2c9":[5,0,0,16,4,0,47],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a0c57f7c741b12573938080add4c0c2c9":[6,0,0,16,4,0,47],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a0d39fe17e6ebd2c6570830036790c6b8":[5,0,0,16,4,0,1],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a0d39fe17e6ebd2c6570830036790c6b8":[6,0,0,16,4,0,1],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a1329112073adb1cfabc3bdb34db74744":[5,0,0,16,4,0,27],
@@ -243,11 +249,5 @@ var NAVTREEINDEX83 =
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#aaa19b49e337e796724425155314f9f43":[5,0,0,16,4,4,11],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#aaa19b49e337e796724425155314f9f43":[6,0,0,16,4,4,11],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#abd941a4e6fc0f870faffaebc40525ff5":[5,0,0,16,4,4,29],
-"classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#abd941a4e6fc0f870faffaebc40525ff5":[6,0,0,16,4,4,29],
-"classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#ac5e72e492fd54e90e3f37e3b8be14e04":[5,0,0,16,4,4,22],
-"classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#ac5e72e492fd54e90e3f37e3b8be14e04":[6,0,0,16,4,4,22],
-"classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#adb7a9f16b5d71bafd396464a02315984":[5,0,0,16,4,4,25],
-"classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#adb7a9f16b5d71bafd396464a02315984":[6,0,0,16,4,4,25],
-"classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#aee8b4b563bb0b0e7453656e6713c0775":[5,0,0,16,4,4,14],
-"classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#aee8b4b563bb0b0e7453656e6713c0775":[6,0,0,16,4,4,14]
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#abd941a4e6fc0f870faffaebc40525ff5":[6,0,0,16,4,4,29]
 };

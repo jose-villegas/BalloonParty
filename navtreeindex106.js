@@ -1,5 +1,13 @@
 var NAVTREEINDEX106 =
 {
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue_1_1Slot.html#aa91f4c5a1e023c635ae205a20c2c7c8f":[5,0,0,6,4,5,0,5],
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue_1_1Slot.html#aa91f4c5a1e023c635ae205a20c2c7c8f":[6,0,0,6,4,5,0,5],
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html":[5,0,0,6,4,6],
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html":[6,0,0,6,4,6],
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a11a497f3ca3487e16a3f6478fa9977d1":[5,0,0,6,4,6,5],
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a11a497f3ca3487e16a3f6478fa9977d1":[6,0,0,6,4,6,5],
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a12588eeea995764d53317eeb797aa0d5":[5,0,0,6,4,6,4],
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a12588eeea995764d53317eeb797aa0d5":[6,0,0,6,4,6,4],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a12bace1237cb0b4afffbdddeddc003a0":[5,0,0,6,4,6,3],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a12bace1237cb0b4afffbdddeddc003a0":[6,0,0,6,4,6,3],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a77905a88372d1e86c74e672fb0b140d9":[5,0,0,6,4,6,2],
@@ -241,13 +249,5 @@ var NAVTREEINDEX106 =
 "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a252bb5cd31fd60b76221255663f844b5":[5,0,0,6,9,21,8],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a252bb5cd31fd60b76221255663f844b5":[6,0,0,6,9,21,8],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a2e1a66dbab361b32b98587150ecf80bf":[5,0,0,6,9,21,4],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a2e1a66dbab361b32b98587150ecf80bf":[6,0,0,6,9,21,4],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a431b38ab8a809d98adb6ef4390f5aa66":[5,0,0,6,9,21,13],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a431b38ab8a809d98adb6ef4390f5aa66":[6,0,0,6,9,21,13],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a5aa5b719432c842dc6934781208a0bb7":[5,0,0,6,9,21,3],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a5aa5b719432c842dc6934781208a0bb7":[6,0,0,6,9,21,3],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a94ed8e052936db5429e37145321d3fb2":[5,0,0,6,9,21,14],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a94ed8e052936db5429e37145321d3fb2":[6,0,0,6,9,21,14],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a9b0b2ba81bd44a622b146e452430bc76":[5,0,0,6,9,21,11],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a9b0b2ba81bd44a622b146e452430bc76":[6,0,0,6,9,21,11]
+"structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a2e1a66dbab361b32b98587150ecf80bf":[6,0,0,6,9,21,4]
 };

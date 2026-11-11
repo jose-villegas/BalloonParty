@@ -1,5 +1,11 @@
 var NAVTREEINDEX50 =
 {
+"classBalloonParty_1_1Game_1_1Telemetry_1_1LevelMetricsSnapshot.html#adc45fa812827ed5d26773d12060ceed3":[5,0,0,6,9,13,0],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1LevelMetricsSnapshot.html#adc45fa812827ed5d26773d12060ceed3":[6,0,0,6,9,13,0],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1LevelMetricsSnapshot.html#addc1d17aa5658f72aac4b1c0d68c704f":[5,0,0,6,9,13,7],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1LevelMetricsSnapshot.html#addc1d17aa5658f72aac4b1c0d68c704f":[6,0,0,6,9,13,7],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1MetricCatalog.html":[5,0,0,6,9,14],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1MetricCatalog.html":[6,0,0,6,9,14],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricCatalog.html#a0e6ed8da838ba561e69689dc370c5ea5":[5,0,0,6,9,14,7],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricCatalog.html#a0e6ed8da838ba561e69689dc370c5ea5":[6,0,0,6,9,14,7],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricCatalog.html#a12d5cbc70d8861122d99523ea4b60aea":[5,0,0,6,9,14,4],
@@ -243,11 +249,5 @@ var NAVTREEINDEX50 =
 "classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html#ac706e5e14991fa27f586e3a2dace7d2f":[5,0,0,6,9,22,18],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html#ac706e5e14991fa27f586e3a2dace7d2f":[6,0,0,6,9,22,18],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html#acc98513637bf60c8109e06629719bb25":[5,0,0,6,9,22,3],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html#acc98513637bf60c8109e06629719bb25":[6,0,0,6,9,22,3],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html#ad492eeb620bdb1ebdf085319544161cc":[5,0,0,6,9,22,8],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html#ad492eeb620bdb1ebdf085319544161cc":[6,0,0,6,9,22,8],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html#ae0390ebcd01256fe5f9cef6f6ff81e86":[5,0,0,6,9,22,16],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html#ae0390ebcd01256fe5f9cef6f6ff81e86":[6,0,0,6,9,22,16],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html#afada434974ad3160fe5d6f3188209aa7":[5,0,0,6,9,22,4],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html#afada434974ad3160fe5d6f3188209aa7":[6,0,0,6,9,22,4]
+"classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html#acc98513637bf60c8109e06629719bb25":[6,0,0,6,9,22,3]
 };

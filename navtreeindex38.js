@@ -1,5 +1,11 @@
 var NAVTREEINDEX38 =
 {
+"classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a5053ea51d3e62ed1bf9065c7ccdb7fcd":[5,0,0,5,7,0,28],
+"classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a5053ea51d3e62ed1bf9065c7ccdb7fcd":[6,0,0,5,7,0,28],
+"classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a506bc75a37ff5d5b0dfe1115c3675350":[5,0,0,5,7,0,22],
+"classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a506bc75a37ff5d5b0dfe1115c3675350":[6,0,0,5,7,0,22],
+"classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a56f32af55f94148830d73bd6a32ff679":[5,0,0,5,7,0,35],
+"classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a56f32af55f94148830d73bd6a32ff679":[6,0,0,5,7,0,35],
 "classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a59b06bdc99af0703b5570a317288310d":[5,0,0,5,7,0,51],
 "classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a59b06bdc99af0703b5570a317288310d":[6,0,0,5,7,0,51],
 "classBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow.html#a6127a2924d03bcda82af09137a5a1940":[5,0,0,5,7,0,17],
@@ -243,11 +249,5 @@ var NAVTREEINDEX38 =
 "classBalloonParty_1_1Editor_1_1TextureAuditWindow_1_1Entry.html#a27bfb97fac07c87bab4e04efca2b32dc":[5,0,0,5,45,0,2],
 "classBalloonParty_1_1Editor_1_1TextureAuditWindow_1_1Entry.html#a27bfb97fac07c87bab4e04efca2b32dc":[6,0,0,5,45,0,2],
 "classBalloonParty_1_1Editor_1_1TextureAuditWindow_1_1Entry.html#a5f02086ccefe1624a17113c44e82740c":[5,0,0,5,45,0,6],
-"classBalloonParty_1_1Editor_1_1TextureAuditWindow_1_1Entry.html#a5f02086ccefe1624a17113c44e82740c":[6,0,0,5,45,0,6],
-"classBalloonParty_1_1Editor_1_1TextureAuditWindow_1_1Entry.html#a948fa4fe1b66701aed557b48542359ee":[5,0,0,5,45,0,0],
-"classBalloonParty_1_1Editor_1_1TextureAuditWindow_1_1Entry.html#a948fa4fe1b66701aed557b48542359ee":[6,0,0,5,45,0,0],
-"classBalloonParty_1_1Editor_1_1TextureAuditWindow_1_1Entry.html#a975a284a94509be6e11fe18d0c8df374":[5,0,0,5,45,0,4],
-"classBalloonParty_1_1Editor_1_1TextureAuditWindow_1_1Entry.html#a975a284a94509be6e11fe18d0c8df374":[6,0,0,5,45,0,4],
-"classBalloonParty_1_1Editor_1_1TextureAuditWindow_1_1Entry.html#aa7bbde82737d254a839a05af564b4524":[5,0,0,5,45,0,3],
-"classBalloonParty_1_1Editor_1_1TextureAuditWindow_1_1Entry.html#aa7bbde82737d254a839a05af564b4524":[6,0,0,5,45,0,3]
+"classBalloonParty_1_1Editor_1_1TextureAuditWindow_1_1Entry.html#a5f02086ccefe1624a17113c44e82740c":[6,0,0,5,45,0,6]
 };

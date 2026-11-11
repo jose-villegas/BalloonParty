@@ -1,5 +1,11 @@
 var NAVTREEINDEX86 =
 {
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a1d90c93542cbe0929065377f45f308ad":[5,0,0,16,7,1,26],
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a1d90c93542cbe0929065377f45f308ad":[6,0,0,16,7,1,26],
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a241e20ba0737ceba41a721fe524550d9":[5,0,0,16,7,1,15],
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a241e20ba0737ceba41a721fe524550d9":[6,0,0,16,7,1,15],
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a31ba7311df1b2a4637cd9a2f0a53cefe":[5,0,0,16,7,1,25],
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a31ba7311df1b2a4637cd9a2f0a53cefe":[6,0,0,16,7,1,25],
 "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a47a2822aa89b5a33bd42702365ab6d22":[5,0,0,16,7,1,35],
 "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a47a2822aa89b5a33bd42702365ab6d22":[6,0,0,16,7,1,35],
 "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a5884cbb46a96f4844ad8122dffbf22dd":[5,0,0,16,7,1,8],
@@ -243,11 +249,5 @@ var NAVTREEINDEX86 =
 "classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#a1e2094c782d7c376c1c35a28b40e1c27":[5,0,0,16,7,5,8],
 "classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#a1e2094c782d7c376c1c35a28b40e1c27":[6,0,0,16,7,5,8],
 "classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#a25592a9f323257af9f2fe8a3e25e2c37":[5,0,0,16,7,5,9],
-"classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#a25592a9f323257af9f2fe8a3e25e2c37":[6,0,0,16,7,5,9],
-"classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#a4369817fb2aea8e7af97a043add45301":[5,0,0,16,7,5,7],
-"classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#a4369817fb2aea8e7af97a043add45301":[6,0,0,16,7,5,7],
-"classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#a5ce1711510010806a10e1f1d608a8207":[5,0,0,16,7,5,13],
-"classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#a5ce1711510010806a10e1f1d608a8207":[6,0,0,16,7,5,13],
-"classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#a6128c0a6180296e7b051a4883851cb53":[5,0,0,16,7,5,3],
-"classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#a6128c0a6180296e7b051a4883851cb53":[6,0,0,16,7,5,3]
+"classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#a25592a9f323257af9f2fe8a3e25e2c37":[6,0,0,16,7,5,9]
 };

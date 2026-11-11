@@ -1,5 +1,11 @@
 var NAVTREEINDEX42 =
 {
+"classBalloonParty_1_1Game_1_1Coins_1_1CoinWallet.html#a146fb82a16f6d2ab3147d1042942a551":[5,0,0,6,1,5,6],
+"classBalloonParty_1_1Game_1_1Coins_1_1CoinWallet.html#a146fb82a16f6d2ab3147d1042942a551":[6,0,0,6,1,5,6],
+"classBalloonParty_1_1Game_1_1Coins_1_1CoinWallet.html#a528828ca7511886417c7828cb049112c":[5,0,0,6,1,5,1],
+"classBalloonParty_1_1Game_1_1Coins_1_1CoinWallet.html#a528828ca7511886417c7828cb049112c":[6,0,0,6,1,5,1],
+"classBalloonParty_1_1Game_1_1Coins_1_1CoinWallet.html#a63d967df1700cc9df21d9cf72bc02e97":[5,0,0,6,1,5,2],
+"classBalloonParty_1_1Game_1_1Coins_1_1CoinWallet.html#a63d967df1700cc9df21d9cf72bc02e97":[6,0,0,6,1,5,2],
 "classBalloonParty_1_1Game_1_1Coins_1_1CoinWallet.html#a833683ede1f0a11bf64cb533fd0c7382":[5,0,0,6,1,5,0],
 "classBalloonParty_1_1Game_1_1Coins_1_1CoinWallet.html#a833683ede1f0a11bf64cb533fd0c7382":[6,0,0,6,1,5,0],
 "classBalloonParty_1_1Game_1_1Coins_1_1CoinWallet.html#a95137ee5c2ccbbca01ced25a6aa9c1a6":[5,0,0,6,1,5,7],
@@ -243,11 +249,5 @@ var NAVTREEINDEX42 =
 "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a8615beecef807f85525d41aa4ed1b228":[5,0,0,6,13,3],
 "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a8615beecef807f85525d41aa4ed1b228":[6,0,0,6,13,3],
 "classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a96ea7d3372e36728938f4ad85c6376e5":[5,0,0,6,13,10],
-"classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a96ea7d3372e36728938f4ad85c6376e5":[6,0,0,6,13,10],
-"classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a9981d029cb6a2f9615f50578f0fa6d6a":[5,0,0,6,13,6],
-"classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a9981d029cb6a2f9615f50578f0fa6d6a":[6,0,0,6,13,6],
-"classBalloonParty_1_1Game_1_1GameScopeRegistration.html#ac84be211dd198c29be04fbc860708884":[5,0,0,6,13,0],
-"classBalloonParty_1_1Game_1_1GameScopeRegistration.html#ac84be211dd198c29be04fbc860708884":[6,0,0,6,13,0],
-"classBalloonParty_1_1Game_1_1GameScopeRegistration.html#ac9cc573bae12930ccb06f867ea7a55f9":[5,0,0,6,13,4],
-"classBalloonParty_1_1Game_1_1GameScopeRegistration.html#ac9cc573bae12930ccb06f867ea7a55f9":[6,0,0,6,13,4]
+"classBalloonParty_1_1Game_1_1GameScopeRegistration.html#a96ea7d3372e36728938f4ad85c6376e5":[6,0,0,6,13,10]
 };

@@ -1,5 +1,11 @@
 var NAVTREEINDEX82 =
 {
+"classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a1e7af0a72059e77af1abadecb9a738fa":[5,0,0,16,2,0,10],
+"classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a1e7af0a72059e77af1abadecb9a738fa":[6,0,0,16,2,0,10],
+"classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a1fc0657a6878c2330e4a1a5439aede7c":[5,0,0,16,2,0,26],
+"classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a1fc0657a6878c2330e4a1a5439aede7c":[6,0,0,16,2,0,26],
+"classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a25f21b6a36ba1ae881c02df2b10a5de3":[5,0,0,16,2,0,24],
+"classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a25f21b6a36ba1ae881c02df2b10a5de3":[6,0,0,16,2,0,24],
 "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a2bd387f25c8338e8debfd1f1b717aed7":[5,0,0,16,2,0,5],
 "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a2bd387f25c8338e8debfd1f1b717aed7":[6,0,0,16,2,0,5],
 "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html#a310bc4303f9c8ec714d5ae06ada5df2a":[5,0,0,16,2,0,17],
@@ -243,11 +249,5 @@ var NAVTREEINDEX82 =
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a016a2f7f358f220e1fd0b3056887632f":[5,0,0,16,4,0,16],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a016a2f7f358f220e1fd0b3056887632f":[6,0,0,16,4,0,16],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a068afc0652bb171e1515ca3ce79df3f9":[5,0,0,16,4,0,45],
-"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a068afc0652bb171e1515ca3ce79df3f9":[6,0,0,16,4,0,45],
-"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a0b6a7911f4c30cb05cc523e6cc414662":[5,0,0,16,4,0,13],
-"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a0b6a7911f4c30cb05cc523e6cc414662":[6,0,0,16,4,0,13],
-"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a0bda1278888c2cc0408fd6bb34a751e7":[5,0,0,16,4,0,38],
-"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a0bda1278888c2cc0408fd6bb34a751e7":[6,0,0,16,4,0,38],
-"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a0c57f7c741b12573938080add4c0c2c9":[5,0,0,16,4,0,47],
-"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a0c57f7c741b12573938080add4c0c2c9":[6,0,0,16,4,0,47]
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a068afc0652bb171e1515ca3ce79df3f9":[6,0,0,16,4,0,45]
 };

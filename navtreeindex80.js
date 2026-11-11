@@ -1,5 +1,11 @@
 var NAVTREEINDEX80 =
 {
+"classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html#afe7fdbe3a4299174ab59b36e542b6b74":[5,0,0,14,18,4],
+"classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html#afe7fdbe3a4299174ab59b36e542b6b74":[6,0,0,14,18,4],
+"classBalloonParty_1_1Solver_1_1ShotSimEffectBoard.html":[5,0,0,14,19],
+"classBalloonParty_1_1Solver_1_1ShotSimEffectBoard.html":[6,0,0,14,19],
+"classBalloonParty_1_1Solver_1_1ShotSimEffectBoard.html#a11ce51559fb1e267da5fd092d5371cee":[5,0,0,14,19,0],
+"classBalloonParty_1_1Solver_1_1ShotSimEffectBoard.html#a11ce51559fb1e267da5fd092d5371cee":[6,0,0,14,19,0],
 "classBalloonParty_1_1Solver_1_1ShotSimEffectBoard.html#a2b3751734eb6248ff31e12440c040690":[5,0,0,14,19,6],
 "classBalloonParty_1_1Solver_1_1ShotSimEffectBoard.html#a2b3751734eb6248ff31e12440c040690":[6,0,0,14,19,6],
 "classBalloonParty_1_1Solver_1_1ShotSimEffectBoard.html#a37e39edeefe54d409502ed7cdf65d6b9":[5,0,0,14,19,3],
@@ -243,11 +249,5 @@ var NAVTREEINDEX80 =
 "classBalloonParty_1_1Thrower_1_1ThrowerController.html#acd8343d4fc283429803580edaef6cdfe":[5,0,0,15,1,60],
 "classBalloonParty_1_1Thrower_1_1ThrowerController.html#acd8343d4fc283429803580edaef6cdfe":[6,0,0,15,1,60],
 "classBalloonParty_1_1Thrower_1_1ThrowerController.html#acf7c3023e29ab76fd5380d26a3896b72":[5,0,0,15,1,7],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#acf7c3023e29ab76fd5380d26a3896b72":[6,0,0,15,1,7],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#acfc24424de127a8fecc2acf833a7bbfa":[5,0,0,15,1,2],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#acfc24424de127a8fecc2acf833a7bbfa":[6,0,0,15,1,2],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#ad0bde76211da1b11cfa35d3a0a17bc47":[5,0,0,15,1,44],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#ad0bde76211da1b11cfa35d3a0a17bc47":[6,0,0,15,1,44],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#ad0fceef92ce5710e0c0f49e49eb40ca3":[5,0,0,15,1,27],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#ad0fceef92ce5710e0c0f49e49eb40ca3":[6,0,0,15,1,27]
+"classBalloonParty_1_1Thrower_1_1ThrowerController.html#acf7c3023e29ab76fd5380d26a3896b72":[6,0,0,15,1,7]
 };

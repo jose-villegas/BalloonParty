@@ -1,5 +1,7 @@
 var NAVTREEINDEX22 =
 {
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckSpawnSettings.html#a076fa0ebe8d8ca84f1a029aa05d4e826":[5,0,0,3,4,38,4],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckSpawnSettings.html#a076fa0ebe8d8ca84f1a029aa05d4e826":[6,0,0,3,4,38,4],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckSpawnSettings.html#a2e38c485c8844d8089ba4c81eb1a78eb":[5,0,0,3,4,38,2],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckSpawnSettings.html#a2e38c485c8844d8089ba4c81eb1a78eb":[6,0,0,3,4,38,2],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckSpawnSettings.html#a3671cdca7817a13ecb41828c4d4d7e33":[5,0,0,3,4,38,7],
@@ -247,7 +249,5 @@ var NAVTREEINDEX22 =
 "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig_1_1ShieldPreviewSettings.html#a0f96ddb73b08fff9b724a83f93f81fe1":[5,0,0,3,21,2,0],
 "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig_1_1ShieldPreviewSettings.html#a0f96ddb73b08fff9b724a83f93f81fe1":[6,0,0,3,21,2,0],
 "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig_1_1ShieldPreviewSettings.html#ac4209ffd5c4c43ba2c355b9b5c008993":[5,0,0,3,21,2,1],
-"classBalloonParty_1_1Configuration_1_1ItemPreviewConfig_1_1ShieldPreviewSettings.html#ac4209ffd5c4c43ba2c355b9b5c008993":[6,0,0,3,21,2,1],
-"classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html":[5,0,0,3,7,0],
-"classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html":[6,0,0,3,7,0]
+"classBalloonParty_1_1Configuration_1_1ItemPreviewConfig_1_1ShieldPreviewSettings.html#ac4209ffd5c4c43ba2c355b9b5c008993":[6,0,0,3,21,2,1]
 };

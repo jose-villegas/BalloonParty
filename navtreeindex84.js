@@ -1,5 +1,11 @@
 var NAVTREEINDEX84 =
 {
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#ac5e72e492fd54e90e3f37e3b8be14e04":[5,0,0,16,4,4,22],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#ac5e72e492fd54e90e3f37e3b8be14e04":[6,0,0,16,4,4,22],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#adb7a9f16b5d71bafd396464a02315984":[5,0,0,16,4,4,25],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#adb7a9f16b5d71bafd396464a02315984":[6,0,0,16,4,4,25],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#aee8b4b563bb0b0e7453656e6713c0775":[5,0,0,16,4,4,14],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#aee8b4b563bb0b0e7453656e6713c0775":[6,0,0,16,4,4,14],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#af13849fa81bc6769d080569ee4955ec8":[5,0,0,16,4,4,6],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#af13849fa81bc6769d080569ee4955ec8":[6,0,0,16,4,4,6],
 "classBalloonParty_1_1UI_1_1Health_1_1HealthCounterLabel.html":[5,0,0,16,5,0],
@@ -243,11 +249,5 @@ var NAVTREEINDEX84 =
 "classBalloonParty_1_1UI_1_1LevelUp_1_1UpgradeCardView.html#aa9d3d7b54dbbbdee01ee9562445aa434":[5,0,0,16,6,2,1],
 "classBalloonParty_1_1UI_1_1LevelUp_1_1UpgradeCardView.html#aa9d3d7b54dbbbdee01ee9562445aa434":[6,0,0,16,6,2,1],
 "classBalloonParty_1_1UI_1_1LevelUp_1_1UpgradeCardView.html#abf10fc2a98fc9321c359ce83d748e13b":[5,0,0,16,6,2,10],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1UpgradeCardView.html#abf10fc2a98fc9321c359ce83d748e13b":[6,0,0,16,6,2,10],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1UpgradeCardView.html#adfaef315f1b6759dc9da99894f3ebc60":[5,0,0,16,6,2,8],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1UpgradeCardView.html#adfaef315f1b6759dc9da99894f3ebc60":[6,0,0,16,6,2,8],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1UpgradeCardView.html#ae8e7bc2c62a89971354408d3d05fb2d8":[5,0,0,16,6,2,7],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1UpgradeCardView.html#ae8e7bc2c62a89971354408d3d05fb2d8":[6,0,0,16,6,2,7],
-"classBalloonParty_1_1UI_1_1PlainCounterDisplay.html":[5,0,0,16,15],
-"classBalloonParty_1_1UI_1_1PlainCounterDisplay.html":[6,0,0,16,15]
+"classBalloonParty_1_1UI_1_1LevelUp_1_1UpgradeCardView.html#abf10fc2a98fc9321c359ce83d748e13b":[6,0,0,16,6,2,10]
 };

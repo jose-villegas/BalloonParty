@@ -1,5 +1,11 @@
 var NAVTREEINDEX44 =
 {
+"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#af12875533cc7726641d441788e4e3708":[5,0,0,6,5,4,15],
+"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#af12875533cc7726641d441788e4e3708":[6,0,0,6,5,4,15],
+"classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator.html":[5,0,0,6,5,6],
+"classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator.html":[6,0,0,6,5,6],
+"classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator.html#af2f922dd59a8926fbd5ce65ac3b16e20":[5,0,0,6,5,6,0],
+"classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator.html#af2f922dd59a8926fbd5ce65ac3b16e20":[6,0,0,6,5,6,0],
 "classBalloonParty_1_1Game_1_1HitPipeline.html":[5,0,0,6,14],
 "classBalloonParty_1_1Game_1_1HitPipeline.html":[6,0,0,6,14],
 "classBalloonParty_1_1Game_1_1HitPipeline.html#a19b27fbe89c6988af050e81baf798dc5":[5,0,0,6,14,3],
@@ -243,11 +249,5 @@ var NAVTREEINDEX44 =
 "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#ad11e576ed106384c6db08329b4e27e4e":[5,0,0,6,6,4,6],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#ad11e576ed106384c6db08329b4e27e4e":[6,0,0,6,6,4,6],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#ad85647863b09f26da7628d3433398bba":[5,0,0,6,6,4,17],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#ad85647863b09f26da7628d3433398bba":[6,0,0,6,6,4,17],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#ad8fafbd0bb761d40c14521a3318cc7b9":[5,0,0,6,6,4,24],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#ad8fafbd0bb761d40c14521a3318cc7b9":[6,0,0,6,6,4,24],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#adf96e9780cbf11c80265a9ff9a04cfe6":[5,0,0,6,6,4,22],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#adf96e9780cbf11c80265a9ff9a04cfe6":[6,0,0,6,6,4,22],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#aee16bfa97a5e15201844cad2d4b530bf":[5,0,0,6,6,4,27],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#aee16bfa97a5e15201844cad2d4b530bf":[6,0,0,6,6,4,27]
+"classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html#ad85647863b09f26da7628d3433398bba":[6,0,0,6,6,4,17]
 };
