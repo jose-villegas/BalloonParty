@@ -24,6 +24,9 @@ namespace BalloonParty.Tests.Game
         internal readonly IRetryState RetryState = Substitute.For<IRetryState>();
         internal readonly IPublisher<BonusCardDealtMessage> BonusDealt =
             Substitute.For<IPublisher<BonusCardDealtMessage>>();
+
+        internal readonly IPublisher<UpgradeCardHeldMessage> CardHeld =
+            Substitute.For<IPublisher<UpgradeCardHeldMessage>>();
         internal readonly RunUpgrades Upgrades;
 
         internal UpgradeRig(IProjectileFlightConfig flight)
@@ -43,7 +46,7 @@ namespace BalloonParty.Tests.Game
             // static set when domain reload is off; it is read again from EditorPrefs on the next play start.
             BalloonParty.Cheats.CheatState.StartLevel = 1;
 
-            Upgrades = new RunUpgrades(flight, Settings, pacing, RetryState, levelProgress, BonusDealt);
+            Upgrades = new RunUpgrades(flight, Settings, pacing, RetryState, levelProgress, BonusDealt, CardHeld);
             Upgrades.Start();
         }
 

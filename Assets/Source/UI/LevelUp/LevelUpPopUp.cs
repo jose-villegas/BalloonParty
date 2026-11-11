@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BalloonParty.Configuration;
+using BalloonParty.Game.CardReveal;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Score;
 using BalloonParty.Game.Upgrades;
@@ -126,6 +127,7 @@ namespace BalloonParty.UI.LevelUp
         [Inject] private PoolManager _poolManager;
         [Inject] private ScoreTrailService _scoreTrailService;
         [Inject] private IUpgradeDraft _draft;
+        [Inject] private ICardReveals _cardReveals;
         [Inject] private ILevelProgress _levelProgress;
 
         private readonly CompositeDisposable _disposable = new();
@@ -577,7 +579,10 @@ namespace BalloonParty.UI.LevelUp
         private void PassInPlay(int newLevel)
         {
             var tooltip = _inPlayTooltipFormat.FormatOrRaw(newLevel);
-            if (_draft.Offer.Count > 0 && _draft.Pick(0))
+
+            // With a reveal on stage the card is its to show, so the line names only the level.
+            var tookCard = _draft.Offer.Count > 0 && _draft.Pick(0);
+            if (tookCard && !_cardReveals.HasStage)
             {
                 tooltip = _inPlayCardTooltipFormat.FormatOrRaw(newLevel, _draft.Offer[0].Title);
             }

@@ -12,6 +12,7 @@ using VContainer;
 using VContainer.Unity;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Buffs;
+using BalloonParty.Configuration.CardReveal;
 using BalloonParty.Configuration.Cinematics;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.GridActors;
@@ -55,6 +56,7 @@ namespace BalloonParty.Game
         [SerializeField] private ScoreTrailBehaviourConfiguration _scoreTrailBehaviourConfiguration;
         [SerializeField] private ThermalGovernorSettings _thermalGovernorSettings;
         [SerializeField] private HeadsUpSettings _headsUpSettings;
+        [SerializeField] private CardRevealSettings _cardRevealSettings;
         [SerializeField] private SoundBankConfiguration _soundBank;
         [SerializeField] private AudioMixerSettings _audioMixerSettings;
         [SerializeField] private ProjectileView _projectilePrefab;
@@ -166,6 +168,10 @@ namespace BalloonParty.Game
                     : ScriptableObject.CreateInstance<ItemPreviewConfig>());
             builder.RegisterInstance<IHeadsUpSettings>(
                 _headsUpSettings != null ? _headsUpSettings : ScriptableObject.CreateInstance<HeadsUpSettings>());
+            builder.RegisterInstance<ICardRevealSettings>(
+                _cardRevealSettings != null
+                    ? _cardRevealSettings
+                    : ScriptableObject.CreateInstance<CardRevealSettings>());
 
             // An unassigned asset degrades to a default instance carrying the sensible defaults, so the
             // governor works out of the box; wire an authored asset in the scene only to tune it.

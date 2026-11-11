@@ -17,6 +17,7 @@ using BalloonParty.Balloon.Spawner;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Display;
+using BalloonParty.Game.CardReveal;
 using BalloonParty.Game.Cinematics;
 using BalloonParty.Game.Coins;
 using BalloonParty.Game.Danger;
@@ -136,6 +137,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<LevelUpDismissedMessage>(options);
             builder.RegisterMessageBroker<TooltipMessage>(options);
             builder.RegisterMessageBroker<BonusCardDealtMessage>(options);
+            builder.RegisterMessageBroker<UpgradeCardHeldMessage>(options);
             builder.RegisterMessageBroker<GameOverDismissedMessage>(options);
             builder.RegisterMessageBroker<LevelTransitionCompletedMessage>(options);
             builder.RegisterMessageBroker<LevelAscendStartedMessage>(options);
@@ -217,6 +219,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<CoinDropController>().As<IRunResettable>();
             builder.RegisterEntryPoint<CoinTrailService>().AsSelf().As<IRunResettable>().As<ITransitionOutgoingContent>();
             builder.RegisterEntryPoint<CoinCounterVisibility>().As<ICoinCounterVisibility>();
+            builder.RegisterEntryPoint<CardRevealController>().As<ICardReveals>().As<IRunResettable>();
 
 #if UNITY_ANDROID && !UNITY_EDITOR
             builder.Register<IThermalSource, AndroidThermalSource>(Lifetime.Singleton);

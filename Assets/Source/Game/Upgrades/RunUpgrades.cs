@@ -19,7 +19,8 @@ namespace BalloonParty.Game.Upgrades
     ///     follows the level-up phase: it opens on <see cref="LevelUpPhase.Pending" />, its pick is held on
     ///     <see cref="LevelUpPhase.Transitioning" /> (the level has advanced), and anything else voids it.
     ///     So a card is held only once the level that dealt it is completed, and the cards held at a loss
-    ///     are the ones held when that level began, which is what a retry keeps.
+    ///     are the ones held when that level began, which is what a retry keeps. Each card held at a level-up is
+    ///     announced with <see cref="UpgradeCardHeldMessage" /> (the card reveal's cue).
     ///     A retry bought with a rewarded ad also gets a bonus card: dealt at the retry's reset (announced with
     ///     <see cref="BonusCardDealtMessage" />), applied on top of the held cards, and dropped when that attempt
     ///     ends, won or lost.
@@ -44,6 +45,7 @@ namespace BalloonParty.Game.Upgrades
         private readonly IRetryState _retryState;
         private readonly ILevelProgress _levelProgress;
         private readonly IPublisher<BonusCardDealtMessage> _bonusDealtPublisher;
+        private readonly IPublisher<UpgradeCardHeldMessage> _cardHeldPublisher;
         private readonly Dictionary<IUpgradeCardSettings, int> _stacks = new();
         private readonly List<IUpgradeCardSettings> _offer = new();
         private readonly List<IUpgradeCardSettings> _deck = new();
@@ -92,7 +94,7 @@ namespace BalloonParty.Game.Upgrades
 
         public RunUpgrades(IProjectileFlightConfig flight, IUpgradeSettings settings, ILevelPacingConfiguration pacing,
             IRetryState retryState, ILevelProgress levelProgress,
-            IPublisher<BonusCardDealtMessage> bonusDealtPublisher)
+            IPublisher<BonusCardDealtMessage> bonusDealtPublisher, IPublisher<UpgradeCardHeldMessage> cardHeldPublisher)
         {
             _flight = flight;
             _settings = settings;
@@ -100,6 +102,7 @@ namespace BalloonParty.Game.Upgrades
             _retryState = retryState;
             _levelProgress = levelProgress;
             _bonusDealtPublisher = bonusDealtPublisher;
+            _cardHeldPublisher = cardHeldPublisher;
             _shieldsPerBall = new ReactiveProperty<int>(StartingShields);
         }
 
@@ -200,9 +203,14 @@ namespace BalloonParty.Game.Upgrades
                 case LevelUpPhase.Transitioning:
                     // The attempt that earned the bonus is won: the bonus goes, the pick stays.
                     _bonus = null;
-                    CommitStaged();
+                    var held = CommitStaged();
                     CloseHand();
                     Recompute();
+                    if (held != null)
+                    {
+                        _cardHeldPublisher.Publish(new UpgradeCardHeldMessage(held, StacksOf(held)));
+                    }
+
                     break;
                 case LevelUpPhase.Playing:
                     // Reached from Pending only by an aborted level-up: its hand and pick are void.
@@ -233,17 +241,19 @@ namespace BalloonParty.Game.Upgrades
             _deck.Clear();
         }
 
-        private void CommitStaged()
+        // The card now held, or null when nothing was staged or it was already maxed.
+        private IUpgradeCardSettings CommitStaged()
         {
             var card = _staged;
             _staged = null;
             if (card == null || StacksOf(card) >= card.MaxStacks)
             {
-                return;
+                return null;
             }
 
             _stacks[card] = StacksOf(card) + 1;
             Log.Info("Upgrades", $"Holding {card.Title} ({StacksOf(card)}/{card.MaxStacks})");
+            return card;
         }
 
         // Seeded by the retry count too, so each bought retry of the same level can deal a different card.
@@ -263,7 +273,7 @@ namespace BalloonParty.Game.Upgrades
             _deck.Clear();
 
             Log.Info("Upgrades", $"Bonus card for this attempt: {_bonus.Title}");
-            _bonusDealtPublisher.Publish(new BonusCardDealtMessage(_bonus));
+            _bonusDealtPublisher.Publish(new BonusCardDealtMessage(_bonus, StacksOf(_bonus) + 1));
         }
 
         private void CloseHand()

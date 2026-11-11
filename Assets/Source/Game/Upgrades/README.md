@@ -51,7 +51,7 @@ stateDiagram-v2
 |---|---|
 | `→ Pending` | Opens: deals the hand for entering `Level + 1`, or nothing on a level-up that deals no cards |
 | `Pick(slot)` | Stages that card. Rejected when no hand is open, a pick is already staged, or the slot is outside the hand |
-| `→ Transitioning` | The level has advanced: the staged card is held, and the hand closes |
+| `→ Transitioning` | The level has advanced: the staged card is held, and the hand closes. A held card is announced with `UpgradeCardHeldMessage` (the card and its stacks now), which the card reveal queues (`Game/CardReveal/README.md`) |
 | `→ Playing` | Reached from `Pending` only when the level-up is aborted (a loss became certain mid-beat): the hand and any pick are void |
 | `ResetRun` | The hand and any pick are void |
 
@@ -86,7 +86,9 @@ deep level with the base weapon, which makes it both too slow to clear and unlik
 The game-over screen can offer a retry with a bonus card, bought with a rewarded ad
 (`IFailureOffers.TryBonusRetryAsync`, see `Game/Run/README.md`). When that retry's reset runs
 (`IRetryState.RetryWithBonusCard`), `ResetRun` deals one card by weight and publishes
-`BonusCardDealtMessage`; the on-screen tooltip names it once play resumes (see `UI/Tooltip/README.md`).
+`BonusCardDealtMessage` with the stacks the attempt plays with (held plus the bonus); the on-screen
+tooltip names it once play resumes (see `UI/Tooltip/README.md`), or the card reveal shows it when its
+view is attached (`Game/CardReveal/README.md`).
 
 | Rule | Why |
 |---|---|

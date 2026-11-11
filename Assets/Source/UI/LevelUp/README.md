@@ -72,7 +72,9 @@ With `_pickScreen` off (the prefab's setting), or on an empty hand (every level-
 `CardEveryLevels`th, see `Game/Upgrades/README.md`), there is no screen. `PassInPlay` takes the hand's
 first card through `IUpgradeDraft.Pick(0)` when one was dealt (the deal is already a draw by weight),
 shows the on-screen tooltip (`TooltipMessage`; see `UI/Tooltip/README.md`), `Level N` by
-`_inPlayTooltipFormat` or `Level N: Card` by `_inPlayCardTooltipFormat`, publishes
+`_inPlayTooltipFormat` or `Level N: Card` by `_inPlayCardTooltipFormat` (only `Level N` while a card
+reveal's view is attached, `ICardReveals.HasStage`, since the reveal announces the card; see
+`Game/CardReveal/README.md`), publishes
 `LevelUpDismissedMessage(passedInPlay: true)` and releases its pause, with no freeze, no animator and
 no fill trails, and the Ascent follows as usual. The pick comes before the dismissal: the dismissal
 is what holds it, and it closes the hand. The colour bars reset on

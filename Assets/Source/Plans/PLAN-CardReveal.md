@@ -6,7 +6,10 @@
 > balloon pops and leaves behind a slip of paper, like the one inside a fortune cookie, with the card
 > handwritten on it.
 
-**Status:** Planned, not started. The pops are 16 separate physics simulations, baked in Blender by
+**Status:** Phase 1 built (the controller, its queue and the pop pick); phase 2 (the bake of one
+pop) is next. Nothing changes on screen until the view (phase 4) attaches a stage.
+
+The pops are 16 separate physics simulations, baked in Blender by
 a script in this repo (§5), so the reveal never pops the same way twice in a row.
 
 ---
@@ -43,7 +46,7 @@ About 2.5 s in all, on unscaled time like the heads-ups, so slow-motion beats do
 |---|---|
 | Never pauses or slows play | The pick screen was switched off for stopping play |
 | Plays on the UI canvas, over the board, never inside the level-up cinematic's trail path | The trail path is a known fragile area; the reveal only listens to the level-up, it doesn't hook into it |
-| Replaces the `Level N: Card` tooltip on card level-ups | One announcement, not two. Level-ups without a card keep the tooltip |
+| Replaces the `Level N: Card` tooltip on card level-ups with `Level N` | One announcement of the card, not two. The level number still shows, as on level-ups without a card |
 | Also plays for a bonus card at the start of a retry (the ad's or one bought with coins, `PLAN-Coins.md`) | The same prize, the same way. Replaces the `BonusCardDealtMessage` tooltip |
 | A pop is picked at random, never one of the last two shown | 16 sims are there for variety; repeating the last one would waste it |
 | The balloon is tinted from the palette, not baked in one colour | The sims are rendered in greyscale with the shading kept, and tinted at runtime, so the reveal can follow the level's colours |
@@ -54,12 +57,12 @@ About 2.5 s in all, on unscaled time like the heads-ups, so slow-motion beats do
 
 | Piece | Where | Responsibility |
 |---|---|---|
-| `CardRevealController` | `UI/CardReveal/` | Plain C#. Subscribes the card being held at a level-up (the `Transitioning` phase, when `RunUpgrades` holds the pick) and `BonusCardDealtMessage`; queues reveals, picks the pop, and tells the view which card to show |
+| `CardRevealController` (built) | `Game/CardReveal/` | Plain C#, beside the other game-side services (`Game/HeadsUp/`, `Game/Coins/`). Subscribes `UpgradeCardHeldMessage` (published by `RunUpgrades` when it holds the pick, at `Transitioning`) and `BonusCardDealtMessage`; queues reveals, picks the pop, and exposes the one to play (`ICardReveals.Current`, a `RevealedCard`). The view attaches itself as the stage; with none attached nothing is queued and the tooltip keeps announcing cards |
 | `CardRevealView` | `UI/CardReveal/` | `MonoBehaviour` on the game canvas. Plays the chosen pop on a UI `Image`, then the slip: a `HandwrittenHeadsUp`-style label written through `WriteOnText`, the icon, and the flutter-out tween. Kills its tweens on disable |
 | `FlipbookPlayer` | `UI/CardReveal/` | Steps a `Sprite[]` (one pop's frames, sliced from its sheet) at a set frame rate on unscaled time. Swapping the sprite on one `Image` keeps it one draw call |
 | `PopSheetLoader` | `UI/CardReveal/` | Loads only the chosen pop's sheet when the level-up turns `Pending` (before the transition, so the pop starts on time) and releases it after. The 16 sheets never sit in memory together |
-| `ICardRevealSettings` | `Shared/`, authored on the game display config | The pop sheets, frame rate, hold time, slip sway, and per card kind the icon and where the slip flies to |
-| `LevelUpPopUp` (changed) | `UI/LevelUp/` | Skips its card tooltip when a reveal is wired, so the reveal is the one announcement |
+| `ICardRevealSettings` (built: `PopCount`, `RecentPopsAvoided`) | `Configuration/CardReveal/`, its own `CardRevealSettings` asset (defaults when unassigned, like `HeadsUpSettings`) | Phase 4 adds the pop sheets, frame rate, hold time, slip sway, and per card kind the icon and where the slip flies to |
+| `LevelUpPopUp`, `TooltipBanner` (changed) | `UI/LevelUp/`, `UI/Tooltip/` | Leave the card to the reveal while a stage is attached (`ICardReveals.HasStage`): the level-up line drops the card's name, the bonus card line isn't shown |
 
 The flipbook is a sprite swap rather than a shader so each frame can be checked in the Editor. If
 the profiler flags it, one material with a UV offset is the fallback.
@@ -100,7 +103,7 @@ sprite atlases, like the other baked art (`Sprites/README.md`), under `Assets/Sp
 
 | Phase | What | Needs art |
 |---|---|---|
-| 1 | `CardRevealController` and its queue, the pick that avoids the last two pops, the tooltip hand-off, EditMode tests | No |
+| 1 (done) | `CardRevealController` and its queue, the pick that avoids the last two pops, the tooltip hand-off, EditMode tests | No |
 | 2 | The bake script: the balloon, one pop, rendered and packed. The owner reviews that one pop from the contact sheet before the other 15 are baked | Makes it |
 | 3 | The other 15 pops and the slip, reviewed together on the contact sheet | Makes it |
 | 4 | `FlipbookPlayer`, `PopSheetLoader` and `CardRevealView`: the pop, the write-on and the flutter-out | Yes: phases 2 and 3 |

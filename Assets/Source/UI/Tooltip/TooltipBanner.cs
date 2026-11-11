@@ -1,3 +1,4 @@
+using BalloonParty.Game.CardReveal;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
@@ -32,6 +33,7 @@ namespace BalloonParty.UI.Tooltip
 
         [Inject] private ISubscriber<TooltipMessage> _tooltipSubscriber;
         [Inject] private ISubscriber<BonusCardDealtMessage> _bonusDealtSubscriber;
+        [Inject] private ICardReveals _cardReveals;
 
         private Sequence _sequence;
         private string _pendingBonus;
@@ -58,6 +60,12 @@ namespace BalloonParty.UI.Tooltip
 
         private void OnBonusDealt(BonusCardDealtMessage message)
         {
+            // With a reveal on stage the bonus card is its to show.
+            if (_cardReveals.HasStage)
+            {
+                return;
+            }
+
             _pendingBonus = _bonusCardFormat.FormatOrRaw(message.Card.Title);
             if (Navigation.Current.Value == NavigationState.Game)
             {

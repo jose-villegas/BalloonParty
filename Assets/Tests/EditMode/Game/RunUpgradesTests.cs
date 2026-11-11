@@ -450,6 +450,46 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void LevelUp_HoldingACard_AnnouncesItWithItsStacks()
+        {
+            _rig.Hold(_shield);
+            _rig.CardHeld.Received(1).Publish(Arg.Is<UpgradeCardHeldMessage>(m => m.Card == _shield && m.Stacks == 1));
+
+            _rig.Hold(_shield);
+            _rig.CardHeld.Received(1).Publish(Arg.Is<UpgradeCardHeldMessage>(m => m.Card == _shield && m.Stacks == 2));
+        }
+
+        [Test]
+        public void LevelUp_WithNoPick_AnnouncesNothing()
+        {
+            _rig.Present(3);
+            _rig.Advance();
+
+            _rig.CardHeld.DidNotReceiveWithAnyArgs().Publish(default);
+        }
+
+        [Test]
+        public void TakeCardsOnTheWayTo_AnnouncesNothing()
+        {
+            Upgrades.TakeCardsOnTheWayTo(7);
+
+            Assert.Greater(_rig.Cards.Sum(Upgrades.StacksOf), 0, "the cheat start holds cards");
+            _rig.CardHeld.DidNotReceiveWithAnyArgs().Publish(default);
+        }
+
+        [Test]
+        public void BonusRetry_AnnouncesTheStacksTheAttemptPlaysWith()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_shield);
+            _rig.Hold(_shield);
+
+            _rig.Retry(4, withBonusCard: true);
+
+            _rig.BonusDealt.Received(1).Publish(Arg.Is<BonusCardDealtMessage>(m => m.Card == _shield && m.Stacks == 2));
+        }
+
+        [Test]
         public void BonusRetry_DealsABonusCardOnTopOfTheHeldOnes()
         {
             _rig.Hold(_shield);
