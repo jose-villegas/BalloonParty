@@ -67,13 +67,13 @@ namespace BalloonParty.Configuration.Effects
         [SerializeField] [Range(0.05f, 1f)] private float _scaleTweenDuration = 0.3f;
 
         [Header("Glow (HDR)")]
-        [Tooltip("How much brighter than its palette colour the field gets for each shield past the first. "
-                 + "Above 1 the field is brighter than white: the tonemapper rolls it toward white and bloom "
-                 + "spreads it into a halo.")]
+        [Tooltip("How much brighter the field's halo gets for each shield past the first. Above 1 the halo "
+                 + "is brighter than white: the tonemapper rolls it toward white and bloom spreads it. The "
+                 + "field lines keep the palette colour.")]
         [SerializeField] [Range(0f, 1f)] private float _glowPerShield = 0.35f;
 
-        [Tooltip("The most the field's colour is multiplied by, however many shields it holds. "
-                 + "1 keeps the field at its palette colour.")]
+        [Tooltip("The most the halo is multiplied by, however many shields the shot holds. 1 keeps the "
+                 + "halo as authored.")]
         [SerializeField] [Range(1f, 4f)] private float _maxGlow = 2.5f;
 
         public float DissolveSeconds => _dissolveSeconds;

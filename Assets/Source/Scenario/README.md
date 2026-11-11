@@ -257,7 +257,9 @@ The pipeline renders in HDR with post-processing always on (see `Plans/PLAN-HDR.
 lives in the URP default volume profile (`Assets/DefaultVolumeProfile.asset`): Neutral tonemapping,
 plus Color Adjustments that keep the frame as bright as it was in LDR (+0.35 stops, +15 contrast, +3
 saturation, matched by mean brightness and saturation at noon and at night on the sky and the water).
-It applies everywhere, the launcher included.
+It applies everywhere, the launcher included. The same profile holds the bloom: its threshold sits
+above anything a gameplay balloon reaches, so only the emitters that go past white glow (the lightning,
+the laser beam, a stacked shield; see `Plans/PLAN-HDR.md`, Phase 2).
 The grade's volume sits on top and replaces the base's Color Adjustments, so the view adds the grade's
 exposure, contrast and saturation to the base's and multiplies the filters: a grade's numbers are
 relative to the base. With `Enabled` off, or the Scenario Grade cheat off, the view disables its volume

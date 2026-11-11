@@ -94,7 +94,7 @@ Shaders are under `Assets/Shaders/BalloonParty/`, materials under `Assets/Materi
 |---|---|---|---|---|
 | 4 | **Item and projectile glows**: `Display/PierceConeSpiral` (`Items/Snipe/Snipe` has `_Color` 2), `Display/EMShieldField` glow, `Scenario/WallNet` (`[HDR]` net colours: 1.4–1.7 default, `_DisturbedColor` (2.12, 3.23, 3.69) in `Scenario/WallNet.mat`) | Already authored above 1, so already clipping. | Medium. The net's disturbed flash and the snipe cone become real glows. | **Medium.** These change look the most visibly the day HDR goes on, because their authored values above 1 stop clipping. Check each against the Phase 0 baselines. |
 | 5 | **Additive particles**: bomb sparks, lightning sparks, score-trail sparks (built-in `Mobile/Particles/Additive`), and the alpha-blended pop, shield and lightning-line particles (`Mobile/Particles/Alpha Blended`), `Particle/LightResponsive` | Sprite, particle, trail and line colours reach the shader as 8-bit vertex colours, so a single particle can't exceed 1; only overlapping additive particles stack above it. `LightResponsive` also `saturate()`s its light factor, so night dims it but a pop can't brighten it. | Medium. Dense bursts get a hot centre. | Low for stacking (free). Per-particle brightness above 1 needs an `[HDR]` intensity on the material: add `[HDR] _Color` (or an `_Intensity`) to `LightResponsive`, and move the built-in mobile particle materials that should glow onto it. |
-| 6 | **Level-up cinematic**: score trails (`UI/ScoreTrail` on `Sprite/SpriteShadow`, `UI/TrailMaterial_ScoreTrail` additive), the flying orbs, `UI/ShineLevelUpFill`, `UI/PSMaterial_LevelUpFill`, `UI/LevelUpRays` (`PicoTanks/UI/Rays`, an imported shader) | The fill shine and trails are additive on bright UI. | High as a **showcase**: the moment the player is meant to feel rewarded. | Medium. Mostly on the Screen Space – Camera canvas, so it shares the UI's tonemapping question. Fragile area (the trail path); look-only changes, no timing changes. |
+| 6 | **Level-up cinematic** (the score trails and the level-up canvases draw on the HUD overlay camera, post off, so neither the tonemapper nor bloom reaches them; a showcase needs its burst on a game layer): score trails (`UI/ScoreTrail` on `Sprite/SpriteShadow`, `UI/TrailMaterial_ScoreTrail` additive), the flying orbs, `UI/ShineLevelUpFill`, `UI/PSMaterial_LevelUpFill`, `UI/LevelUpRays` (`PicoTanks/UI/Rays`, an imported shader) | The fill shine and trails are additive on bright UI. | High as a **showcase**: the moment the player is meant to feel rewarded. | Medium. Mostly on the Screen Space – Camera canvas, so it shares the UI's tonemapping question. Fragile area (the trail path); look-only changes, no timing changes. |
 | 7 | **Screen-space light overlay**: `Display/ScreenSpaceLightOverlay` (`Blend DstColor SrcColor`, 0.5 is neutral) | A shadow over a clipped pop darkens white, not the pop; bounce above 0.5 brightens and clips. | Medium, mostly correctness: shadows keep the ratio over bright light. | Low. Re-check `_BounceStrength` against the HDR frame; the bounce now lifts values above 1 instead of clipping. |
 | 8 | **`fixed` precision on paths that carry values above 1** | 42 shaders under `Assets/Shaders/BalloonParty/` have a `fixed4` fragment function. Vulkan and Metal compile `fixed` at half precision, but OpenGL ES may use `lowp`, which only has to reach ±2, so values above 2 can clip inside the shader on GL devices even with an HDR buffer. | Enables 1–6 on the OpenGL ES fallback. | Low. Change to `half` only on the paths that carry range (glitter, shine, the unbreakable, rainbow, `SpriteDiffuse`, `SpriteLightDriven`, `EMShieldField`, `PierceConeSpiral`, `TraceGlitterLine`, `WallNet`, `SpriteShine*`). A blanket conversion is churn. |
 
@@ -216,8 +216,8 @@ flowchart TD
     P0["Phase 0: prep that changes nothing on screen"]
     P1["Phase 1: switch the pipeline, in the Editor with the user"]
     Gate1{"Empty-post cost fits the frame budget on device?"}
-    P2["Phase 2: use the range, in sweep order"]
-    P3["Phase 3: bloom"]
+    P2["Phase 2: the effects that glow, then the sweep"]
+    P3["Phase 3: bloom on device"]
     Gate3{"Bloom fits the budget?"}
     P4["Phase 4: optional follow-ups"]
     Park["Park HDR, keep the Phase 0 prep"]
@@ -282,21 +282,56 @@ the share of clipped pixels, then by eye.
   starts, so a script that edits that profile in Play mode must call `VolumeManager.instance.OnVolumeProfileChanged`.
   The `capture/` scripts in each baseline folder do both.
 
-### Phase 2 — use the range, in sweep order
+### Phase 2 — the effects that should glow
 
-1. Pops on lit surfaces (item 1): judge the meadow and the balloons in a pop, then remove the
-   water's hand-made ease and match it.
-2. Glitter (item 2): re-author the overdriven materials to a sane peak.
-3. Shine and specular (item 3).
-4. Item glows, particle intensity, overlay re-check (items 4, 5, 7).
-5. The level-up showcase (item 6).
+The user asked for the strong effects to stand out: "the lightning or lasers", and "the bullet
+shield as it grows". So Phase 2 started with item 4 and 5's emitters rather than the sweep order,
+and pulled bloom (Phase 3) forward with it. Without bloom, Neutral only maps values past 1 into the
+last ~12% of display brightness: too little to read as a glow.
 
-### Phase 3 — bloom (if chosen)
+**Rule:** only emitters go past 1. Gameplay colours (balloons, the shot's palette colour, lit
+surfaces) stay within 0–1 and keep their hue; the bloom threshold sits above white so they never
+bloom.
 
-A Bloom override on the same global Volume: threshold above 1 (tuned in gamma units), Dual or
-Kawase filter, Quarter downscale, about 4 iterations, a `clamp` as a backstop against an
-overdriven material. Tune per effect, then measure on device. Fallback ladder: fewer iterations
-→ tonemap only → no bloom.
+| Task | Status |
+|---|---|
+| 2.1 `BalloonParty/Particle/Glow`: an unlit sprite/line/particle shader with a material-side `_HdrBoost`. Sprite, line and particle colours are 8-bit, so the material is the only way past 1. One name for the HDR multiplier everywhere, so later sweeps find every emitter by searching for it. | Done |
+| 2.2 The lightning: `LineMaterial_Lightning` (`_HdrBoost` 3) and `LineMaterial_LightningGlow` (2.5) on Glow. `ChainLightningView._glowColorIntensity` back to 1 on the prefab: it scaled the sprite colour, which clips per channel and shifted the hue before the boost. | Done, values to confirm in the Editor |
+| 2.3 The laser: `Beam` (2.5) and `BeamShine` (2) on Glow. `LaserGlitter` (3.27, red only) rides with it unchanged. | Done, values to confirm |
+| 2.4 The shield: `EMShieldField` gets `_HdrBoost` on the **halo only**; `ProjectileShieldView` drives it from the shield count (`ShieldGlow.For`: 1 at one shield, `GlowPerShield` 0.35 more per shield, up to `MaxGlow` 2.5), ramped over the layer's reveal or dissolve. The field lines keep the palette colour: Neutral works per channel, so a scaled palette colour would drift (orange toward yellow, purple toward pink). | Done, values to confirm |
+| 2.5 Bloom, pulled forward from Phase 3: the Bloom override in the URP default volume profile (`Assets/DefaultVolumeProfile.asset`), so the launcher has it too: threshold 1.4, intensity 0.8, scatter 0.6, clamp 16, Kawase, Quarter, 4 iterations. | Done; **the device cost is open** (the Phase 1 gate plus bloom's chain) |
+| 2.6 Accidental bloomers: values above the threshold that aren't meant to glow (see below). | Checked in the Editor (below) |
+| 2.7 Pops on lit surfaces (item 1), shine and specular (item 3), the overlay (item 7). | Open |
+
+**Where bloom lives.** In the default volume profile, beside the base look, so the launcher and the
+game share it (decided 2026-11-11). Not on the scenario grade's Volume: it switches itself off with
+the grade. URP keeps every component in the default profile, so Bloom was already there at
+intensity 0; Phase 2 only set its values. A device gate, if the measurement needs one, would set
+the stack's bloom intensity to 0 on weak devices.
+
+**The threshold.** URP converts the threshold to linear, adds a soft knee of half of it, and in
+Gamma colour space squares each pixel before comparing (`BloomPostProcessPass`, `Bloom.shader`).
+So bloom picks pixels up from about half the linear threshold:
+
+| Threshold | What blooms |
+|---|---|
+| 1.0 | 12.5% of pure white and about 7% of the 0.92 sky: the whole frame hazes |
+| about 1.37 | Nothing at or below 1 |
+| **1.4 (shipped)** | Starts at gamma 1.02, full from about 1.77 |
+
+**Watch list** (values above 1 that predate this phase): `Items/PickupInSightGlitter` (speck colour
+191.7, 74.4, 53.4: on screen while a pickup is in sight), `Items/AppearGlitter` (16 × 3, brief),
+`Balloon/UnbreakableFormationGlitter` (1.5, always on the board), `Items/Snipe` (`_Color` 2 × its
+`_Glow` 1.15, while aiming), `Scenario/WallNet`'s disturbed flash (2.1, 3.2, 3.7, a long shape), and
+the scene-light field's pops (up to about 4× on lit balloons and ground). Bloom's `clamp` of 16 bounds
+any of them per pixel.
+
+### Phase 3 — bloom on device
+
+Bloom itself went in with Phase 2 (2.5). What's left is the device: measure the post pass, the HUD
+camera's copy and bloom's chain together on the phone (open; ask the user before running anything
+on it). Fallback ladder: fewer iterations → Dual instead of Kawase only if it's cheaper on the
+device → bloom intensity 0 on weak devices → no bloom.
 
 ### Phase 4 — optional follow-ups
 

@@ -22,6 +22,7 @@ namespace BalloonParty.Projectile.View
         private static readonly int RevealProgressId = Shader.PropertyToID("_RevealProgress");
         private static readonly int ActiveLayersId = Shader.PropertyToID("_ActiveLayers");
         private static readonly int ColorId = Shader.PropertyToID("_Color");
+        private static readonly int HdrBoostId = Shader.PropertyToID("_HdrBoost");
         private static readonly int VelocityFactorId = Shader.PropertyToID("_VelocityFactor");
         private static readonly int NoiseScrollDirId = Shader.PropertyToID("_NoiseScrollDir");
         private static readonly int ShapeLerpId = Shader.PropertyToID("_ShapeLerp");
@@ -468,10 +469,8 @@ namespace BalloonParty.Projectile.View
             _block.SetFloatArray(DissolveProgressId, _layerDissolve);
             _block.SetFloatArray(RevealProgressId, _layerReveal);
             _block.SetFloat(ActiveLayersId, _settings.MaxVisualLayers);
-            // Past 1 on purpose: the field brightens into the HDR range as shields stack, so a big shield
-            // blooms. Only the colour is scaled; the alpha stays the field's coverage.
-            _block.SetColor(ColorId, new Color(
-                _currentColor.r * _glow, _currentColor.g * _glow, _currentColor.b * _glow, _currentColor.a));
+            _block.SetColor(ColorId, _currentColor);
+            _block.SetFloat(HdrBoostId, _glow);
             _block.SetFloat(VelocityFactorId, _velFactor);
             _block.SetVector(NoiseScrollDirId, _noiseScrollDir);
             _block.SetFloat(ShapeLerpId, _shapeLerp);

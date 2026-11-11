@@ -34,6 +34,9 @@ Shader "BalloonParty/Display/EMShieldField"
         _FieldLineThickness("Line Thickness", Range(0.001, 0.02)) = 0.006
         _GlowWidth("Glow Width", Range(0.005, 0.1)) = 0.03
         _GlowIntensity("Glow Intensity", Range(0, 3)) = 1.2
+        // Multiplies the halo only, so the field lines keep the shot's palette colour while the halo goes
+        // past white into the HDR range. ProjectileShieldView drives it from the shield count.
+        _HdrBoost("HDR Boost (halo)", Range(1, 4)) = 1
         _PulseSpeed("Pulse Speed", Range(0, 10)) = 3.0
 
         [Header(Flow)]
@@ -115,8 +118,6 @@ Shader "BalloonParty/Display/EMShieldField"
             struct v2f
             {
                 float4 vertex   : SV_POSITION;
-                // half, not fixed: the tint goes past 1 as shields stack (ProjectileShieldView), and
-                // OpenGL ES may run fixed at lowp, which only reaches 2.
                 half4 color     : COLOR;
                 float2 texcoord : TEXCOORD0;
             };
@@ -142,6 +143,7 @@ Shader "BalloonParty/Display/EMShieldField"
             float _FieldLineThickness;
             float _GlowWidth;
             float _GlowIntensity;
+            float _HdrBoost;
             float _PulseSpeed;
             float _FlowSpeed;
             float _FlowFrequency;
@@ -409,7 +411,7 @@ Shader "BalloonParty/Display/EMShieldField"
                 float3 glowColor = (_ColorShift > 0.001)
                     ? coloredGlow / max(totalGlow, 1e-4)
                     : float3(1, 1, 1);
-                float glowVal = totalGlow * _GlowIntensity * 0.25 * shapeMask;
+                float glowVal = totalGlow * _GlowIntensity * 0.25 * shapeMask * _HdrBoost;
                 float coreVal = totalCore * shapeMask;
 
                 if (coreVal + glowVal < 0.001)

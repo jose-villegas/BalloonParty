@@ -76,6 +76,13 @@ visually squashes against the surface — compressing along the wall normal and 
 sideways — then springs back. This works for both flat wall bounces and angled deflector
 bounces. The field also ripples faster the quicker the ball moves.
 
+The field's halo also burns brighter as shields stack. With one shield it is as authored; each
+further shield multiplies it by `GlowPerShield` more, up to `MaxGlow` (`ShieldGlow.For`, sent to
+the shader as `_HdrBoost`). Past 1 the halo is brighter than white, so a big shield glows; see
+@ref plan_hdr. Only the halo is boosted: the field lines keep the shot's palette colour, which stays
+within 0–1. The brightening ramps in over the new layer's reveal and out over a lost layer's
+dissolve.
+
 A four-state cycle (Cruising → Closing → Bracing → Opening) drives the shape transition.
 The game predicts how far the next wall is; when it falls below a threshold, closing begins.
 On bounce, the shield force-snaps to circle regardless of the current state.

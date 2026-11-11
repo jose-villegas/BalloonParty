@@ -19,7 +19,8 @@ namespace BalloonParty.Item.Lightning
     {
         [SerializeField] private LineRenderer[] _lineRenderers;
         [SerializeField] private SpriteRenderer _glowRenderer;
-        [SerializeField] [Range(0f, 4f)] private float _glowColorIntensity = 1f;
+        // At most 1: a sprite colour is 8-bit, so more only clips. The glow material's _HdrBoost takes it past white.
+        [SerializeField] [Range(0f, 1f)] private float _glowColorIntensity = 1f;
 
         private CancellationTokenSource _cts;
         private float _fractalDecay;

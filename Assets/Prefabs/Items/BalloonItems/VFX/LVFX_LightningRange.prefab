@@ -193,7 +193,7 @@ MonoBehaviour:
   - {fileID: 5735112468169355169}
   - {fileID: 1780500698417090463}
   _glowRenderer: {fileID: 5838023478284772440}
-  _glowColorIntensity: 1.8
+  _glowColorIntensity: 1
 --- !u!1 &3178895422590311903
 GameObject:
   m_ObjectHideFlags: 0

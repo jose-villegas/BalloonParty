@@ -2,8 +2,8 @@ Shader "BalloonParty/Particle/Glow"
 {
     // An unlit sprite, line or particle whose colour can reach past white into the HDR range, for the few
     // effects meant to glow (the lightning, the laser beam). Vertex and sprite colours are 8-bit, so a
-    // renderer's own colour stops at 1; _Glow multiplies after it, on the material. The tonemapper rolls
-    // the result off toward white and bloom spreads whatever passes its threshold into a halo. At _Glow 1
+    // renderer's own colour stops at 1; _HdrBoost multiplies after it, on the material. The tonemapper rolls
+    // the result off toward white and bloom spreads whatever passes its threshold into a halo. At _HdrBoost 1
     // this is the built-in Mobile/Particles shaders' look (texture × vertex colour), with the blend exposed
     // so one shader serves the alpha-blended (the default) and the additive materials.
     Properties
@@ -12,7 +12,7 @@ Shader "BalloonParty/Particle/Glow"
         _Color ("Tint", Color) = (1, 1, 1, 1)
         // 1 = the authored colour. Above 1 the effect is brighter than white; keep it to the few that
         // should bloom, and below about 4 (gamma units, so about 20x in linear light).
-        _Glow ("Glow", Range(0, 8)) = 1
+        _HdrBoost ("HDR Boost", Range(0, 8)) = 1
         [HideInInspector] _RendererColor ("RendererColor", Color) = (1, 1, 1, 1)
 
         [Header(Blend)]
@@ -74,7 +74,7 @@ Shader "BalloonParty/Particle/Glow"
             sampler2D _MainTex;
             float4 _MainTex_ST;
             half4 _Color;
-            half _Glow;
+            half _HdrBoost;
 
             v2f vert(appdata_t IN)
             {
@@ -84,7 +84,7 @@ Shader "BalloonParty/Particle/Glow"
                 OUT.vertex = UnityObjectToClipPos(IN.vertex);
                 OUT.uv = TRANSFORM_TEX(IN.uv, _MainTex);
                 OUT.color = IN.color * _Color * _RendererColor;
-                OUT.color.rgb *= _Glow;
+                OUT.color.rgb *= _HdrBoost;
                 return OUT;
             }
 
