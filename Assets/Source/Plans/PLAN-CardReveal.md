@@ -6,8 +6,9 @@
 > balloon pops and leaves behind a slip of paper, like the one inside a fortune cookie, with the card
 > handwritten on it.
 
-**Status:** Phase 1 built (the controller, its queue and the pop pick); phase 2 (the bake of one
-pop) is next. Nothing changes on screen until the view (phase 4) attaches a stage.
+**Status:** Phase 1 built (the controller, its queue and the pop pick). Phase 2 built: the bake
+script makes pop 0, waiting on the owner's review before the other 15 are baked. Nothing changes on
+screen until the view (phase 4) attaches a stage.
 
 The pops are 16 separate physics simulations, baked in Blender by
 a script in this repo (§5), so the reveal never pops the same way twice in a row.
@@ -69,23 +70,24 @@ the profiler flags it, one material with a UV offset is the fallback.
 
 ## 5. How the pops are made
 
-A script under `Tools/art/balloon_pop/` drives Blender headless (`blender -b -P bake_pops.py`) and
-writes the 16 sheets and a contact sheet to review them. Everything is seeded, so a run redraws the
-same set, and a seed can be swapped to replace one pop.
+Two scripts under `Tools/art/balloon_pop/` (built; its README has the commands): `bake_pops.py`
+drives Blender headless and renders each pop's frames, and `pack_sheets.py` packs them into the
+game's sheets and draws a contact sheet and an animated preview to review them by. Everything is
+seeded, so a run redraws the same set, and a seed can be swapped to replace one pop.
 
 | Step | How |
 |---|---|
-| The balloon | A balloon mesh (body, neck, knot), modelled once in the script, inflated by cloth pressure to its rest shape. The same rest frame starts every sim, so the drift-up looks the same whatever pop follows |
-| The puncture | A random point on the body. Cracks grow from it across the mesh, branching, and the mesh is cut along them. Seeded per sim: where it starts (side, top, near the knot), how many branches, how far they run before the pop |
-| The tear | At the cut the pressure goes, and the rubber's stored stretch is released (cloth shrinking): each flap snaps back toward the knot and curls on itself, with self-collision so flaps don't pass through each other. Rubber thickness and stiffness vary a little per sim |
-| Timing | A real pop is over in about 40 ms. The sim runs with fine substeps over that time and is sampled into 24 frames, played at 30 fps: about 0.8 s, roughly 20× slow motion |
-| Rendering | Eevee, orthographic camera, transparent background. A rubber material (soft subsurface, one sharp highlight), lit from the top left like the UI's sun, rendered in greyscale for tinting |
-| Packing | Each sim's 24 frames, 256×256 each, into a 6×4 sheet (1536×1024). The balloon's centre is the same pixel in every frame |
+| The balloon | A balloon mesh modelled once in the script, already inflated (an egg gathered into the neck), and a static neck and knot. The same rest frame starts every sim, so the drift-up looks the same whatever pop follows |
+| The puncture | A random point on the body. Cracks grow from it across the mesh, branching, and the mesh is cut along them; a loop that would cut a piece loose is stitched back at one edge. Seeded per sim: where it starts (side, top, near the knot), how many cracks, how far they run and wander |
+| The tear | A release front sweeps out from the puncture, and behind it the rubber's stored stretch lets go (cloth shrinking to about 40%): each flap snaps back toward the pinned neck and buckles and curls, with self-collision so flaps don't pass through each other. A Weld keeps each crack shut until it opens, so the rest frame shows no seams. How far it shrinks and how stiff it bends vary per sim |
+| The fall | Once the rubber has gathered at the knot, the knot drops out of the frame with the shreds trailing, so the last frames are empty and the slip has the stage |
+| Timing | The sim runs 48 frames at a slow time scale and every second one is kept: 24 frames played at 30 fps, about 0.8 s. Roughly: 2 frames whole, 7 tearing, 8 gathering, 7 falling |
+| Rendering | Cycles on the CPU (about a second a frame at 512 px, and no GPU needed headless), orthographic camera, transparent background. A rubber material (soft subsurface, one sharp clear-coat highlight), lit from the top left like the UI's sun, packed as greyscale for tinting |
+| Packing | Each sim's 24 frames, rendered at 512 px and scaled to 256×256, into a 6×4 sheet (1536×1024). The balloon's centre is the same pixel in every frame |
 | The slip | Rendered by the same script with a paper material, so it matches the balloon's lighting: a narrow, curled strip, off-white, with a faint fold |
 
-If Blender's cloth can't make the tear read as rubber (flaps that sag instead of snapping), the
-fallback is a small membrane solver in the script itself (masses, springs that break past a strain,
-the stored stretch released at the cut), with Blender only rendering its baked frames.
+Blender's cloth made the tear read as rubber (the flaps snap back rather than sag), so the fallback
+of a membrane solver in the script itself wasn't needed.
 
 **Budget.** 16 sheets of 1536×1024, compressed (ASTC 6×6 on phones) at about 0.7 MB each: about
 11 MB in the build, and only one in memory at a time (`PopSheetLoader`). The sheets stay out of the
@@ -104,7 +106,7 @@ sprite atlases, like the other baked art (`Sprites/README.md`), under `Assets/Sp
 | Phase | What | Needs art |
 |---|---|---|
 | 1 (done) | `CardRevealController` and its queue, the pick that avoids the last two pops, the tooltip hand-off, EditMode tests | No |
-| 2 | The bake script: the balloon, one pop, rendered and packed. The owner reviews that one pop from the contact sheet before the other 15 are baked | Makes it |
+| 2 (built, in review) | The bake script: the balloon, one pop, rendered and packed. The owner reviews that one pop from the contact sheet before the other 15 are baked | Makes it |
 | 3 | The other 15 pops and the slip, reviewed together on the contact sheet | Makes it |
 | 4 | `FlipbookPlayer`, `PopSheetLoader` and `CardRevealView`: the pop, the write-on and the flutter-out | Yes: phases 2 and 3 |
 | 5 | A playtest pass on a phone: timing, how well the slip reads over a busy board, and whether 256 px frames are sharp enough | — |
