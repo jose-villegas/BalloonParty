@@ -223,7 +223,7 @@ namespace BalloonParty.Editor
                 var label = TooltipLabel(root);
                 if (label == null)
                 {
-                    Debug.LogError("[CardReveal] The tooltip's label isn't assigned or has no WriteOnText; the slip takes its pencil.");
+                    Debug.LogError("[CardReveal] The tooltip's label isn't assigned or has no WriteOnText; the ribbons take its pencil.");
                     return;
                 }
 
@@ -308,7 +308,11 @@ namespace BalloonParty.Editor
             var clone = Object.Instantiate(label.gameObject, rect, false);
             clone.name = "Text";
             Object.DestroyImmediate(clone.GetComponent<WriteOnText>());
-            Stretch((RectTransform)clone.transform);
+            var textRect = (RectTransform)clone.transform;
+            Stretch(textRect);
+
+            // Centred, so a glyph's x is measured from the ribbon's centre, as the ribbon's wave is.
+            textRect.pivot = new Vector2(0.5f, 0.5f);
             var text = clone.GetComponent<TMP_Text>();
             text.text = string.Empty;
             text.alignment = TextAlignmentOptions.Center;

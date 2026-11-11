@@ -125,7 +125,8 @@ namespace BalloonParty.Game.CardReveal
         }
 
         // Play, or a level-up's ceremony and ascent, which is where a level-up's card plays: over the board, with
-        // nothing in front of it. Not the launch or game-over screens.
+        // nothing in front of it. Not the launch or game-over screens. A reveal already queued (a bonus card) can so
+        // start during the ceremony, before the level-up's own card: with the pick screen off, nothing covers it.
         private static bool IsOnStage(NavigationState state)
         {
             return state == NavigationState.Game || state == NavigationState.LevelUp;

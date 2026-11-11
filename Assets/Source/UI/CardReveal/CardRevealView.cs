@@ -162,7 +162,8 @@ namespace BalloonParty.UI.CardReveal
         // The pop's frames and the ribbons' flight on one clock. The frame follows the time played rather than one
         // delay per frame, which would round up to whole screen refreshes and run slow; a frame the screen skips is
         // skipped, not delayed. The ribbons' end is looked at again each frame until they start to leave, since the
-        // level's ascent can begin after they are out.
+        // level's ascent can begin after they are out. Both clocks are unscaled: the ascent runs on unscaled time
+        // too (LevelAscendCinematic), so its length here is its length on screen.
         private async UniTask PopAsync(float revealStartedAt, CancellationToken token)
         {
             var frames = _settings.SheetColumns * _settings.SheetRows;

@@ -125,7 +125,7 @@ namespace BalloonParty.UI.CardReveal
             var info = _text.textInfo;
             for (var i = 0; i < info.characterCount; i++)
             {
-                var character = info.characterInfo[i];
+                ref var character = ref info.characterInfo[i];
                 if (!character.isVisible)
                 {
                     continue;
