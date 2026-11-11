@@ -18,10 +18,13 @@ Shader "BalloonParty/Display/ScreenSpaceLightOverlay"
         // The most the overlay may brighten the brightest balloon (per channel). The blend can't see the frame,
         // so the cap is on the multiplier, divided by how bright the light lets a balloon get at that spot: at
         // noon a white balloon stays under the bloom start (1.02) and only emitters glow, while the dark night
-        // leaves the bounce room to colour its neighbours (PLAN-HDR). Shadows and the hue shift are untouched.
-        _MaxLift        ("Max Lift",        Range(1, 2)) = 1.02
-        // The balloon body's night re-grade (DiffuseSprite and the other balloon materials): the brightest
-        // surface under the overlay, so the cap above is measured against it.
+        // leaves the bounce room to colour its neighbours (PLAN-HDR). Per channel: shadows and darkening are
+        // untouched, but at noon a bright channel's tint goes with its brightening (scaling all three down
+        // instead would darken the others and tint the frame). Up to 1.5 keeps the output under lowp's 2.
+        _MaxLift        ("Max Lift",        Range(1, 1.5)) = 1.02
+        // The balloon body's night re-grade, the brightest surface under the overlay, so the cap above is
+        // measured against it. Copied by hand from DiffuseSprite, ShineRotation, ShineRotationTough and
+        // ToughBalloonMaterial (the overlay's material is built from these defaults): retune them together.
         _AmbientHue     ("Balloon Ambient Hue",     Range(0, 1)) = 0.25
         _AmbientDimming ("Balloon Ambient Dimming", Range(0, 1)) = 0.4
     }
