@@ -29,6 +29,7 @@ namespace BalloonParty.Scenario.View
         private WhiteBalance _whiteBalance;
         private ShadowsMidtonesHighlights _tones;
         private ColorAdjustments _baseAdjustments;
+        private ColorAdjustments _neutralAdjustments;
 
         private void Start()
         {
@@ -56,10 +57,11 @@ namespace BalloonParty.Scenario.View
 
             var grade = ScenarioGrade.Lerp(
                 _settings.For(ScenarioKind.Sky), _settings.For(_mix.Surface), _mix.Coverage);
-            _adjustments.postExposure.value = BaseExposure() + grade.Exposure;
-            _adjustments.contrast.value = grade.Contrast;
-            _adjustments.saturation.value = grade.Saturation;
-            _adjustments.colorFilter.value = grade.Filter;
+            var baseLook = BaseAdjustments();
+            _adjustments.postExposure.value = baseLook.postExposure.value + grade.Exposure;
+            _adjustments.contrast.value = baseLook.contrast.value + grade.Contrast;
+            _adjustments.saturation.value = baseLook.saturation.value + grade.Saturation;
+            _adjustments.colorFilter.value = baseLook.colorFilter.value * grade.Filter;
             _whiteBalance.temperature.value = grade.Temperature;
             _whiteBalance.tint.value = grade.Tint;
             _tones.shadows.value = Trackball(grade.Shadows, grade.ShadowLift);
@@ -71,6 +73,11 @@ namespace BalloonParty.Scenario.View
             if (_profile != null)
             {
                 Destroy(_profile);
+            }
+
+            if (_neutralAdjustments != null)
+            {
+                Destroy(_neutralAdjustments);
             }
         }
 
@@ -98,20 +105,28 @@ namespace BalloonParty.Scenario.View
             return _settings.Enabled;
         }
 
-        // This volume overrides post exposure outright, so the grade's exposure is added to the base's to stay
-        // relative to it. Read every frame so the base can be tuned live.
-        private float BaseExposure()
+        // This volume overrides Color Adjustments outright, so the grade's exposure, contrast, saturation and
+        // filter are applied on top of the base's to stay relative to it. The values are read every frame, so the
+        // base can be tuned live; a missing base reads as neutral.
+        private ColorAdjustments BaseAdjustments()
         {
-            if (_baseAdjustments == null)
+            if (_baseAdjustments != null)
             {
-                var profile = VolumeManager.instance.globalDefaultProfile;
-                if (profile == null || !profile.TryGet(out _baseAdjustments))
-                {
-                    return 0f;
-                }
+                return _baseAdjustments;
             }
 
-            return _baseAdjustments.postExposure.value;
+            var profile = VolumeManager.instance.globalDefaultProfile;
+            if (profile != null && profile.TryGet(out _baseAdjustments))
+            {
+                return _baseAdjustments;
+            }
+
+            if (_neutralAdjustments == null)
+            {
+                _neutralAdjustments = ScriptableObject.CreateInstance<ColorAdjustments>();
+            }
+
+            return _neutralAdjustments;
         }
     }
 }
