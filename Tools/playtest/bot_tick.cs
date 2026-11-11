@@ -17,7 +17,8 @@
 // (board fill: the share of open slots balloons fill, IBoardFill.Occupancy; a full board is where hearts are lost;
 // wallet: the coins the player holds, ICoinBalance.Balance, which carries over between runs; breather: seconds
 // left in the spawn clock's breather after a big clear, ISpawnClock.BreatherSecondsLeft, 0 outside one)
-// or "<time> RESTART" / "<time> GAMEOVER", or "nogame <navigation>" while the game scope isn't up.
+// or "<time> RESTART" / "<time> GAMEOVER", "<time> LAUNCH" while it presses Play on the launch screen, or
+// "nogame <navigation>" while the game scope isn't up.
 var mode = "__MODE__";
 var reactFloor = __REACT_FLOOR__f;
 var reactMean = __REACT_MEAN__f;
@@ -186,6 +187,17 @@ if (UnityEditor.SessionState.GetString(IdKey, "") != botId)
 
 var time = UnityEngine.Time.time.ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
 var nav = Nav();
+if (nav == "Launch")
+{
+    // Play mode entered from the Launcher scene waits on its Play button; Play() ignores repeat presses.
+    var launch = UnityEngine.Object.FindAnyObjectByType<BalloonParty.Game.LaunchPlayTrigger>();
+    if (launch != null)
+    {
+        launch.Play();
+        return time + " LAUNCH";
+    }
+}
+
 var game = FindGame();
 if (game == null)
 {
