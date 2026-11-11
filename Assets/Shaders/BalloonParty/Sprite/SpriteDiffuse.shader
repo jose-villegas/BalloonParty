@@ -27,6 +27,10 @@ Shader "BalloonParty/Sprite/Diffuse"
         // How much of the time-of-day light's DIMMING the sprite takes: 1 = all of it, 0 = none, as if
         // a key light stayed on it. Leaves the backdrop to carry the night.
         _AmbientDimming ("Ambient Dimming", Range(0, 1)) = 1
+        // How much of its colour the sprite loses as the time-of-day light darkens: 0 = none, 1 = grey
+        // under a black light. Colour fades with light (the Hunt effect), so a balloon kept bright at
+        // night by the two settings above would otherwise look more vivid than the night around it.
+        _AmbientDesaturation ("Ambient Desaturation", Range(0, 1)) = 0
 
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
     }
@@ -91,6 +95,20 @@ Shader "BalloonParty/Sprite/Diffuse"
             float _LightMode;
             float _AmbientHue;
             float _AmbientDimming;
+            float _AmbientDesaturation;
+
+            // The grey a colour fades to keeps its OKLab lightness. A luma grey would not: it turns
+            // saturated red and purple muddy and green pale, since they look lighter than their luma.
+            float3 SameLightnessGrey(float3 encoded)
+            {
+                float3 lin = pow(max(encoded, 0.0), 2.2);
+                float3 lms = float3(
+                    dot(lin, float3(0.4122214708, 0.5363325363, 0.0514459929)),
+                    dot(lin, float3(0.2119034982, 0.6806995451, 0.1073969566)),
+                    dot(lin, float3(0.0883024619, 0.2817188376, 0.6299787005)));
+                float okL = dot(pow(lms, 1.0 / 3.0), float3(0.2104542553, 0.7936177850, -0.0040720468));
+                return pow(okL * okL * okL, 1.0 / 2.2).xxx;
+            }
 
             v2f vert(appdata_t IN)
             {
@@ -128,6 +146,11 @@ Shader "BalloonParty/Sprite/Diffuse"
                     float3 graded = lerp(dot(ambient, float3(0.2126, 0.7152, 0.0722)).xxx, ambient, _AmbientHue);
                     graded = lerp(float3(1.0, 1.0, 1.0), graded, _AmbientDimming);
                     OUT.lightTint += graded - ambient;
+
+                    // The vertex colour carries the sprite's colour (a balloon's palette tint), so fading it
+                    // here costs nothing per pixel. Full at noon, where the ambient's brightness is 1.
+                    float dark = 1.0 - saturate(dot(ambient, float3(0.2126, 0.7152, 0.0722)));
+                    OUT.color.rgb = lerp(OUT.color.rgb, SameLightnessGrey(OUT.color.rgb), _AmbientDesaturation * dark);
                 }
 
                 #ifdef PIXELSNAP_ON

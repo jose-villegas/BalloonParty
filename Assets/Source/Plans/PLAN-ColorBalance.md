@@ -21,7 +21,7 @@ are what the eight are measured against.
 | # | Palette id | sRGB | Job | Must stand apart from |
 |---|---|---|---|---|
 | 1 | Green | (0.467, 0.867, 0.467) | Gameplay colour | the other three, the meadow grass |
-| 2 | Red | (1, 0.412, 0.380) | Gameplay colour | green (colour-blind players), Prediction |
+| 2 | Red | (0.84, 0.289, 0.21), was (1, 0.412, 0.380) | Gameplay colour | green (colour-blind players), Prediction |
 | 3 | Blue | (0.012, 0.663, 0.957) | Gameplay colour | the water, Formation blue |
 | 4 | Purple | (0.612, 0.153, 0.690) | Gameplay colour | blue, the night backdrops |
 | 5 | Tough | (0.3, 0.3, 0.3) | Armour on tough balloons | every backdrop at night |
@@ -113,8 +113,10 @@ at midnight, by `balloons` (where each balloon is) and `palette_measure2.py` (th
   the frame costs the same. The `Scenario Grade` cheat swaps back to URP's curve for comparison.
 - **Re-tune the base look** in `Assets/DefaultVolumeProfile.asset`. The +0.35 stops and +15
   contrast compensated for URP Neutral darkening the midtones (0.5 became 0.42); PBR Neutral
-  does not. The base is now +15 contrast and nothing else, which leaves every authored colour
-  below 0.76 as authored; +0.2 stops and +20 contrast measured close but slightly less saturated.
+  does not. The base is now +15 contrast and −10 saturation. PBR Neutral keeps the authored
+  colours below 0.76 as authored, and the contrast adds some chroma on top, so the frame came out
+  about 35 % more colourful than under URP Neutral; the user found that a bit much, and −10 takes
+  the edge off without moving any pair under 30. +0.2 stops and +20 contrast measured close.
 - **Remove the meadow's shadow lift and the global desaturation** from
   `ScenarioGradeSettings.asset`. A lift adds the same amount to every channel, which is what
   haze does: it cuts contrast and chroma together.
@@ -127,16 +129,25 @@ at midnight, by `balloons` (where each balloon is) and `palette_measure2.py` (th
   balloons took all of the blue midnight light: red turned maroon, green turned teal, and blue
   and purple sank into the night sky. Four settings were compared at night in all three scenes;
   this one kept every pair furthest apart and every hue within 11° of its noon hue (OKLCh).
+- **Done:** kept that bright at full chroma, the balloons looked more vivid than the night around
+  them; colourfulness falls with light (the Hunt effect [16]). `_AmbientDesaturation` (0.5) fades
+  the balloon's colour toward a grey of the same OKLab lightness as the time-of-day light darkens:
+  nothing at noon, about a quarter of the chroma at midnight. A luma grey was tried first and
+  turned red and purple muddy and green pale, because saturated colours look lighter than their
+  luma (Helmholtz–Kohlrausch [15]).
 - **Open:** the tough, unbreakable and rainbow balloons have their own shaders and still take the
   full night light; give them the same two controls if they read too dark at night.
 - **Open:** the backdrops keep their own night look. Cut their chroma at night only if the
   balloons still don't separate.
 
-### Phase 3 — palette (needs the user's sign-off)
+### Phase 3 — palette · **red done**
 
-- Darken red toward L\* 48–52, which takes green–red past 20 for deuteranopes and separates
-  red from blue in lightness.
-- Check green against the pale sky and purple against the night meadow; give either a rim if
+- **Done, signed off by the user:** red went from (1, 0.412, 0.380) to (0.84, 0.289, 0.21): the
+  same hue and chroma, OKLab lightness 0.71 → 0.60 (L\* 63.5 → 51). Lightness is what a
+  deuteranope keeps, so green–red went from 8 to about 19 for them (authored values), and red
+  moved from 6 to 10 away from the aim line (Prediction). Three candidates were rendered; at full
+  chroma the darker red looked more saturated than the old one, so the chroma stayed where it was.
+- **Open:** check green against the pale sky and purple against the night sky and water; give either a rim if
   it misses 3:1.
 
 ### Phase 4 — glow only on emitters
@@ -149,27 +160,31 @@ at midnight, by `balloons` (where each balloon is) and `palette_measure2.py` (th
 ## Measurements
 
 Before is URP Neutral with the first grade (+0.35 stops, the meadow's lift and desaturation);
-after is Phases 1 and 2. Each cell is before → **after**, measured in the Editor on full frames
-(1080 × 1920) at noon (time-of-day angle 135) and midnight (315), on boards with every colour of
-the level. Smallest ΔE is the closest pair of gameplay colours; the contrast column is the range
-over the gameplay colours, each against the backdrop around it.
+after is Phases 1–3 as shipped (PBR Neutral, +15 contrast and −10 saturation, the balloons'
+night response, the darker red). Each cell is before → **after**, measured in the Editor on full
+frames (1080 × 1920) at noon (time-of-day angle 135) and midnight (315), on boards with every
+colour of the level. Smallest ΔE is the closest pair of gameplay colours; the contrast column is
+the range over the gameplay colours, each against the backdrop around it.
 
 | Scene | Smallest ΔE2000 | Smallest ΔE2000, deuteranope | Contrast with backdrop | Mean balloon chroma (OKLCh) | Backdrop black (1st percentile Y) |
 |---|---|---|---|---|---|
-| sky noon | 34 → **37** | 9 → **10** | 1.1–2.5 → **1.1–2.5** | 0.157 → **0.188** | 0.2512 → **0.1734** |
-| sky night | 19 → **38** | 9 → **8** | 1.1–1.6 → **1.2–3.7** | 0.105 → **0.172** | 0.0300 → **0.0097** |
-| meadow noon | 37 → **43** | 8 → **13** | 2.1–3.3 → **4.7–7.3** | 0.114 → **0.155** | 0.0482 → **0.0082** |
-| meadow night | 27 → **48** | 11 → **10** | 2.0–3.4 → **4.2–7.4** | 0.111 → **0.174** | 0.0048 → **0.0005** |
-| water noon | 33 → **35** | 8 → **12** | 1.1–2.2 → **1.2–3.4** | 0.140 → **0.184** | 0.0905 → **0.0415** |
-| water night | 17 → **38** | 10 → **10** | 1.1–1.9 → **1.9–6.5** | 0.114 → **0.182** | 0.0075 → **0.0024** |
+| sky noon | 34 → **37** | 9 → **16** | 1.1–2.5 → **1.1–2.4** | 0.157 → **0.183** | 0.2512 → **0.1579** |
+| sky night | 19 → **31** | 9 → **17** | 1.1–1.6 → **1.1–3.9** | 0.105 → **0.122** | 0.0300 → **0.0089** |
+| meadow noon | 37 → **48** | 8 → **18** | 2.1–3.3 → **3.9–8.8** | 0.114 → **0.166** | 0.0482 → **0.0076** |
+| meadow night | 27 → **42** | 11 → **27** | 2.0–3.4 → **2.3–6.9** | 0.111 → **0.120** | 0.0048 → **0.0003** |
+| water noon | 33 → **37** | 8 → **14** | 1.1–2.2 → **1.2–3.6** | 0.140 → **0.187** | 0.0905 → **0.0341** |
+| water night | 17 → **31** | 10 → **18** | 1.1–1.9 → **1.5–6.1** | 0.114 → **0.133** | 0.0075 → **0.0018** |
 
 What it shows:
-- Every pair now clears 30 in every scene, night included (it was 17–19 at night on the sky and
-  the water). The blacks went down everywhere, so nothing reads as haze.
-- **Still short, and only the palette can fix it (Phase 3):** for a deuteranope, green and red stay
-  8–13 apart. On the pale noon sky and the water, the lightest balloons sit about 1.2:1 from the
-  backdrop, and purple is about 1.2:1 against the night sky and water. They are told apart by
-  hue there, not lightness.
+- Every pair clears 30 in every scene, night included (it was 17–19 at night on the sky and the
+  water). The blacks went down everywhere, so nothing reads as haze.
+- For a deuteranope the closest pair went from 8–11 to 14–27; green–red is no longer the
+  weakest, blue–purple is (13–20, unchanged).
+- At night the balloons are about as colourful as before, but in their own hues; at noon they are
+  more colourful than before, which the −10 saturation tempers.
+- **Still short:** on the pale noon sky and the water the lightest balloons sit about 1.2:1 from
+  the backdrop, and purple and red are 1.1–1.5:1 against the night sky and water. They are told
+  apart by hue there, not lightness. A rim, or a lighter purple, would fix it (Phase 3, open).
 
 ---
 

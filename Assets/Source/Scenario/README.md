@@ -256,8 +256,8 @@ the grade turns with the hole. The Launch screen, which always shows sky, gets t
 The pipeline renders in HDR with post-processing always on (see `Plans/PLAN-HDR.md`), and the base look
 lives in the URP default volume profile (`Assets/DefaultVolumeProfile.asset`): Neutral tonemapping,
 which the game's own grading-LUT shader turns into Khronos PBR Neutral (it leaves colours below 0.76
-alone and keeps their hue above; see `Plans/PLAN-ColorBalance.md`), plus +15 contrast in Color
-Adjustments. It applies everywhere, the launcher included. The same profile holds the bloom: its threshold sits
+alone and keeps their hue above; see `Plans/PLAN-ColorBalance.md`), plus +15 contrast and −10
+saturation in Color Adjustments. It applies everywhere, the launcher included. The same profile holds the bloom: its threshold sits
 above anything a gameplay balloon reaches, so only the emitters that go past white glow (the lightning,
 the laser beam, a stacked shield; see `Plans/PLAN-HDR.md`, Phase 2).
 The grade's volume sits on top and replaces the base's Color Adjustments, so the view adds the grade's
