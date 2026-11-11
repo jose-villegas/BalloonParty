@@ -40,8 +40,8 @@ namespace BalloonParty.Cheats
         /// <see cref="TimeOfDayCheat" />; read (under this guard) by the clock each tick.</summary>
         public static float TimeOfDaySpeedScale = 1f;
 
-        /// <summary>While true, <c>ScenarioGradeView</c> drops the scenario colour grade (and the camera's
-        /// post-processing with it), to compare the scenes with and without it. Set by
+        /// <summary>While true, <c>ScenarioGradeView</c> drops the scenario colour grade, leaving the base look
+        /// of the default volume profile, to compare the scenes with and without it. Set by
         /// <see cref="ScenarioGradeCheat" />.</summary>
         public static bool ScenarioGradeOff;
 

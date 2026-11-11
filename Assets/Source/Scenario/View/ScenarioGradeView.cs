@@ -11,9 +11,10 @@ namespace BalloonParty.Scenario.View
     ///     Grades the whole frame per scenario (<see cref="IScenarioGradeSettings" />), so the sky, the meadow and
     ///     the water read in the same light. One global Volume holds a runtime profile whose values blend from the
     ///     sky's grade to the surface's by how much of the screen the surface covers (<see cref="BackdropMix" />),
-    ///     so the grade follows the mist reveal frame by frame. The grade needs the main camera's post-processing,
-    ///     which this turns on while the grade is enabled and gives back otherwise. The HUD canvases render
-    ///     through that camera, so they take the grade too.
+    ///     so the grade follows the mist reveal frame by frame. It sits on top of the base look in the default
+    ///     volume profile (ACES and the exposure that makes up for how much ACES darkens the frame), which the
+    ///     HDR pipeline applies everywhere, the launcher included. The HUD canvases render through the main
+    ///     camera, so they take the grade too.
     /// </summary>
     internal sealed class ScenarioGradeView : MonoBehaviour
     {
@@ -27,9 +28,7 @@ namespace BalloonParty.Scenario.View
         private ColorAdjustments _adjustments;
         private WhiteBalance _whiteBalance;
         private ShadowsMidtonesHighlights _tones;
-        private UniversalAdditionalCameraData _cameraData;
-        private bool _cameraHadPostProcessing;
-        private bool _applied;
+        private ColorAdjustments _baseAdjustments;
 
         private void Start()
         {
@@ -49,16 +48,15 @@ namespace BalloonParty.Scenario.View
         // Late, after GroundView (early order) has written this frame's mix; the volume stack updates at render.
         private void LateUpdate()
         {
-            var on = IsOn();
-            Apply(on);
-            if (!on)
+            _volume.enabled = IsOn();
+            if (!_volume.enabled)
             {
                 return;
             }
 
             var grade = ScenarioGrade.Lerp(
                 _settings.For(ScenarioKind.Sky), _settings.For(_mix.Surface), _mix.Coverage);
-            _adjustments.postExposure.value = grade.Exposure;
+            _adjustments.postExposure.value = BaseExposure() + grade.Exposure;
             _adjustments.contrast.value = grade.Contrast;
             _adjustments.saturation.value = grade.Saturation;
             _adjustments.colorFilter.value = grade.Filter;
@@ -70,7 +68,6 @@ namespace BalloonParty.Scenario.View
 
         private void OnDestroy()
         {
-            Apply(false);
             if (_profile != null)
             {
                 Destroy(_profile);
@@ -101,34 +98,20 @@ namespace BalloonParty.Scenario.View
             return _settings.Enabled;
         }
 
-        // Turns the camera's post-processing on with the grade, and back to what it was without it. The main
-        // camera can come up after this view, so it is looked up until found.
-        private void Apply(bool on)
+        // This volume overrides post exposure outright, so the grade's exposure is added to the base's to stay
+        // relative to it. Read every frame so the base can be tuned live.
+        private float BaseExposure()
         {
-            if (_volume != null)
+            if (_baseAdjustments == null)
             {
-                _volume.enabled = on;
-            }
-
-            if (on == _applied)
-            {
-                return;
-            }
-
-            if (_cameraData == null)
-            {
-                var camera = Camera.main;
-                if (camera == null)
+                var profile = VolumeManager.instance.globalDefaultProfile;
+                if (profile == null || !profile.TryGet(out _baseAdjustments))
                 {
-                    return;
+                    return 0f;
                 }
-
-                _cameraData = camera.GetUniversalAdditionalCameraData();
-                _cameraHadPostProcessing = _cameraData.renderPostProcessing;
             }
 
-            _cameraData.renderPostProcessing = on || _cameraHadPostProcessing;
-            _applied = on;
+            return _baseAdjustments.postExposure.value;
         }
     }
 }

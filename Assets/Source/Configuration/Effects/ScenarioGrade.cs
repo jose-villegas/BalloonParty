@@ -13,7 +13,7 @@ namespace BalloonParty.Configuration.Effects
     {
         public static readonly ScenarioGrade Neutral = new(0f, 0f, 0f, 0f, 0f, Color.white, Color.white, 0f, Color.white);
 
-        [Tooltip("Brightness in stops, before the rest of the grade.")]
+        [Tooltip("Brightness in stops, on top of the default volume profile's exposure, before the rest of the grade.")]
         [Range(-2f, 2f)]
         [SerializeField] private float _exposure;
 

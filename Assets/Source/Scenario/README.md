@@ -253,10 +253,13 @@ reveals: the surface it is on and how much of the screen that surface covers (0 
 surface). The view blends from the sky's grade to that surface's by that amount, so during a mist reveal
 the grade turns with the hole. The Launch screen, which always shows sky, gets the sky's grade.
 
-The grade needs the main camera's post-processing. The view turns it on while the grade is enabled and
-gives it back otherwise; with `Enabled` off, or the Scenario Grade cheat off, the frame costs what it
-did before. The HUD canvases render through the same camera, so they take the grade too: keep the
-grades gentle. The GI's scene capture has its own camera with post-processing off, so the grade never
+The pipeline renders in HDR with post-processing always on (see `Plans/PLAN-HDR.md`), and the base look
+lives in the URP default volume profile (`Assets/DefaultVolumeProfile.asset`): ACES tonemapping and a
+post exposure that makes up for how much ACES darkens the frame. It applies everywhere, the launcher
+included. The grade's volume sits on top: its exposure is added to the base's, so a grade's `Exposure`
+is relative to the base. With `Enabled` off, or the Scenario Grade cheat off, the view disables its
+volume and the base look remains. The HUD canvases render through the same camera, so they take the
+tonemapping and the grade too: keep the grades gentle. The GI's scene capture has its own camera with post-processing off, so the grade never
 feeds back into the lighting it is correcting.
 
 ## BackgroundFieldService

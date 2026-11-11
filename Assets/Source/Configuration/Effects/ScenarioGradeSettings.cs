@@ -11,7 +11,7 @@ namespace BalloonParty.Configuration.Effects
     [CreateAssetMenu(menuName = "Configuration/Scenario Grade Settings", fileName = "ScenarioGradeSettings")]
     internal sealed class ScenarioGradeSettings : ScriptableObject, IScenarioGradeSettings
     {
-        [Tooltip("Off turns the camera's post-processing back off, so the grade costs nothing.")]
+        [Tooltip("Off leaves the frame with only the base look of the default volume profile (ACES and its exposure).")]
         [SerializeField] private bool _enabled = true;
 
         [SerializeField] private ScenarioGrade _sky = ScenarioGrade.Neutral;
