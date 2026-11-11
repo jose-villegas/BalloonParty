@@ -15,6 +15,10 @@ namespace BalloonParty.Item
         [SerializeField] private SpriteRenderer[] _spritesToSetColor;
         [SerializeField] private Renderer[] _sortingRenderers;
         [SerializeField] [Range(0f, 1f)] private float _spritesAlpha;
+        // The soft disc behind the icon, on an additive Glow material: it takes the balloon's own colour at full
+        // strength and the material's _HdrBoost carries it past white, so an item balloon reads as a light source
+        // while plain balloons stay capped at white (see PLAN-HDR).
+        [SerializeField] private SpriteRenderer _coreGlow;
 
         private static MaterialPropertyBlock _rainbowBlock;
 
@@ -41,6 +45,12 @@ namespace BalloonParty.Item
             foreach (var sr in _spritesToSetColor)
             {
                 sr.color = balloonColor.WithAlpha(_spritesAlpha);
+            }
+
+            // After the loop: a variant may list the disc among its tinted sprites too.
+            if (_coreGlow != null)
+            {
+                _coreGlow.color = balloonColor.WithAlpha(1f);
             }
         }
 
