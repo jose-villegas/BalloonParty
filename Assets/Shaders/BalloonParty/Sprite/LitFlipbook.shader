@@ -44,8 +44,8 @@ Shader "BalloonParty/Sprite/LitFlipbook"
         // How wide each step between tones is at the least; never narrower than a screen pixel.
         _BandSoftness ("Band Softness", Range(0, 0.3)) = 0.01
         // The baked occlusion below this reads as a crease, drawn in the crease tone.
-        _CreaseEdge ("Crease Edge", Range(0, 1)) = 0.55
-        _CreaseTone ("Crease Tone", Range(0, 1)) = 0.6
+        _CreaseEdge ("Crease Edge", Range(0, 1)) = 0.3
+        _CreaseTone ("Crease Tone", Range(0, 1)) = 0.8
         // The highlight, a spot of the light's own colour as on the board's balloons: how much of the surface it
         // covers (lower is bigger), how soft its edge is at the least, and how much of the light it shows.
         _HighlightSize ("Highlight Size", Range(0.8, 1)) = 0.985

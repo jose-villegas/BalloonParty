@@ -42,7 +42,7 @@ namespace BalloonParty.Configuration.CardReveal
 
         [Tooltip("How fast the torn rubber's fall speeds up, in canvas units per second squared (the canvas is " +
                  "225 wide).")]
-        [SerializeField] [Min(0f)] private float _rubberFallGravity = 520f;
+        [SerializeField] [Min(0f)] private float _rubberFallGravity = 380f;
 
         [Header("Ribbons")]
         [Tooltip("The pop's frame on which the ribbons fly out: once the rubber has opened.")]
