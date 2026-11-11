@@ -12,9 +12,9 @@ namespace BalloonParty.Scenario.View
     ///     the water read in the same light. One global Volume holds a runtime profile whose values blend from the
     ///     sky's grade to the surface's by how much of the screen the surface covers (<see cref="BackdropMix" />),
     ///     so the grade follows the mist reveal frame by frame. It sits on top of the base look in the default
-    ///     volume profile (Neutral tonemapping and the Color Adjustments that keep the frame as bright as it was in
-    ///     LDR), which the HDR pipeline applies everywhere, the launcher included. The HUD canvases render through the main
-    ///     camera, so they take the grade too.
+    ///     volume profile (Neutral tonemapping and the Color Adjustments that keep the frame as bright as it was
+    ///     in LDR), which the HDR pipeline applies everywhere, the launcher included. The HUD canvases render
+    ///     through the HUD overlay camera, after post-processing, so the grade does not touch them.
     /// </summary>
     internal sealed class ScenarioGradeView : MonoBehaviour
     {

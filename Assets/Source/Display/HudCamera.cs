@@ -20,6 +20,15 @@ namespace BalloonParty.Display
 
         private void OnEnable()
         {
+            if (_mainCamera == null)
+            {
+                return;
+            }
+
+            // Only the ortho size moves at runtime (the device fit, a cinematic zoom); the rest is copied once.
+            _camera.orthographic = _mainCamera.orthographic;
+            _camera.nearClipPlane = _mainCamera.nearClipPlane;
+            _camera.farClipPlane = _mainCamera.farClipPlane;
             MirrorMainCamera();
             Canvas.preWillRenderCanvases += MirrorMainCamera;
         }
@@ -33,11 +42,16 @@ namespace BalloonParty.Display
         // camera, so a Screen Space - Camera canvas never fits last frame's view.
         private void MirrorMainCamera()
         {
-            _camera.orthographic = _mainCamera.orthographic;
-            _camera.orthographicSize = _mainCamera.orthographicSize;
-            _camera.fieldOfView = _mainCamera.fieldOfView;
-            _camera.nearClipPlane = _mainCamera.nearClipPlane;
-            _camera.farClipPlane = _mainCamera.farClipPlane;
+            if (_mainCamera == null)
+            {
+                return;
+            }
+
+            var size = _mainCamera.orthographicSize;
+            if (!Mathf.Approximately(_camera.orthographicSize, size))
+            {
+                _camera.orthographicSize = size;
+            }
         }
     }
 }

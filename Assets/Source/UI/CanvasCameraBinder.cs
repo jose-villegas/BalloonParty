@@ -1,4 +1,5 @@
 using BalloonParty.Display;
+using BalloonParty.Shared.Diagnostics;
 using UnityEngine;
 
 namespace BalloonParty.UI
@@ -52,6 +53,12 @@ namespace BalloonParty.UI
             if (root.worldCamera == null)
             {
                 var hud = mainCamera.GetComponentInChildren<HudCamera>();
+                if (hud == null)
+                {
+                    Log.Warn(nameof(CanvasCameraBinder),
+                        $"no HudCamera under {mainCamera.name}: {root.name} binds to the main camera and takes its tonemapping");
+                }
+
                 root.worldCamera = hud != null ? hud.Camera : mainCamera;
             }
 
