@@ -31,6 +31,10 @@ const string HeartbeatKey = "BalloonPartyBot.Heartbeat";
 const string ShotsKey = "BalloonPartyBot.Shots";
 const float CheckInterval = 0.05f;
 const float HeartbeatTimeout = 10f;
+const string LaunchSeenKey = "BalloonPartyBot.LaunchSeen.";
+const string LaunchTapKey = "BalloonPartyBot.LaunchTap.";
+const float LaunchPressDelay = 1.5f;
+const float LaunchRetapDelay = 10f;
 
 var flags = System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
 var staticFlags = System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static;
@@ -189,13 +193,31 @@ var time = UnityEngine.Time.time.ToString("F1", System.Globalization.CultureInfo
 var nav = Nav();
 if (nav == "Launch")
 {
-    // Play mode entered from the Launcher scene waits on its Play button; Play() ignores repeat presses.
-    var launch = UnityEngine.Object.FindAnyObjectByType<BalloonParty.Game.LaunchPlayTrigger>();
-    if (launch != null)
+    // Play mode entered from the Launcher scene waits on its Play button. The bot taps it the way a finger
+    // does (AutoplayTap, as the device autoplay), so its press animation and the ascend play, after a
+    // moment on the screen, and taps again only if a tap plainly didn't take.
+    var now = (float)UnityEditor.EditorApplication.timeSinceStartup;
+    var seenKey = LaunchSeenKey + botId;
+    var seen = UnityEditor.SessionState.GetFloat(seenKey, -1f);
+    if (seen < 0f)
     {
-        launch.Play();
-        return time + " LAUNCH";
+        UnityEditor.SessionState.SetFloat(seenKey, now);
+        seen = now;
     }
+
+    var tapKey = LaunchTapKey + botId;
+    if (now - seen >= LaunchPressDelay && now - UnityEditor.SessionState.GetFloat(tapKey, -100f) >= LaunchRetapDelay)
+    {
+        var tap = asm.GetType("BalloonParty.Cheats.Autoplay.AutoplayTap").GetMethod("ButtonThatCalls", staticFlags)
+            .MakeGenericMethod(typeof(BalloonParty.Game.LaunchPlayTrigger));
+        if ((bool)tap.Invoke(null, new object[] { "Play" }))
+        {
+            UnityEditor.SessionState.SetFloat(tapKey, now);
+            return time + " LAUNCH tapped Play";
+        }
+    }
+
+    return time + " LAUNCH";
 }
 
 var game = FindGame();

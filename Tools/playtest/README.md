@@ -42,7 +42,8 @@ open, not yours.
    rounded to the tick. The shooter aims with the game's best-shot solver (the **Fire Best Shot**
    cheat) and removes itself when Play mode ends, a newer session replaces it, or ticks stop coming
    for 10 s. If Play mode starts on the launch screen (the Editor has the Launcher scene open), a tick
-   presses its Play button. The session ends at the first game over, so each one is a single run: how long it lasted
+   taps its Play button the way a finger does, after 1.5 s on the screen (the device autoplay's
+   `AutoplayTap`), so the press and the ascend play as they would for a player. The session ends at the first game over, so each one is a single run: how long it lasted
    and what lost it. `--restart` presses Restart on the game-over screen instead and plays run after
    run until the time is up.
 3. Leaves Play mode, which flushes the telemetry still buffered (`--keep-playing` skips this).
