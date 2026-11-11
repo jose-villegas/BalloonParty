@@ -11,7 +11,7 @@
 <area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Configuration_1_1Buffs_1_1IBuffConfiguration.html" title=" " alt="" coords="285,197,482,237"/>
 <area shape="rect" id="Node000007" href="$classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffConfiguration.html" title=" " alt="" coords="577,197,775,237"/>
 <area shape="poly" id="edge4_Node000008_Node000007" title=" " alt="" coords="495,215,577,215,577,220,495,220"/>
-<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html" title="How the card reveal (Game/CardReveal/) chooses its balloon pop." alt="" coords="267,261,500,301"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html" title="The card reveal (Game/CardReveal/, UI/CardReveal/): which balloon pops there are, how one is chosen,..." alt="" coords="267,261,500,301"/>
 <area shape="rect" id="Node000009" href="$classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html" title="The card reveal&#39;s settings." alt="" coords="561,261,791,301"/>
 <area shape="poly" id="edge5_Node000010_Node000009" title=" " alt="" coords="514,279,561,279,561,284,514,284"/>
 <area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Configuration_1_1Cinematics_1_1ICinematicsSettings.html" title="The single setup point for cinematics: one composed entry per CinematicState." alt="" coords="269,325,498,365"/>

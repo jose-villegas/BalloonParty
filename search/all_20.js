@@ -62,7 +62,7 @@ var searchData=
   ['visited_59',['Visited',['../classBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder.html#a3cadaf45926095823fd72c09e769d6f3a97997416a98b6bc65d68ffebc9d75206',1,'BalloonParty::Balloon::Controller::BalanceDebugRecorder']]],
   ['visual_20components_20—_20register_20via_20tt_20itemdisplayservice_20tt_60',['Item visual components — register via &lt;tt&gt;ItemDisplayService&lt;/tt&gt;',['../plan_bubble_cluster_hit_feedback.html#autotoc_md346',1,'']]],
   ['visual_20feedback_61',['8.5 Visual Feedback',['../plan_future_ideas.html#autotoc_md503',1,'']]],
-  ['visual_20language_62',['Visual language',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/UI/HeadsUp/README.md#autotoc_md1097',1,'']]],
+  ['visual_20language_62',['Visual language',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/UI/HeadsUp/README.md#autotoc_md1102',1,'']]],
   ['visual_20polish_63',['Visual Polish',['../plan_future_ideas.html#autotoc_md492',1,'6.1 Visual Polish'],['../plan_future_ideas.html#autotoc_md552',1,'Bush Visual Polish']]],
   ['visual_20question_64',['13.7 Card presentation (the open visual question)',['../plan_future_ideas.html#autotoc_md542',1,'']]],
   ['visualprefab_65',['VisualPrefab',['../classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#ae7340b8c676b75d5b85fbd9991a06994',1,'BalloonParty::Configuration::Items::ItemSettings']]],

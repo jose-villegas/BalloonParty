@@ -1,5 +1,5 @@
 <map id="BalloonParty.Configuration.CardReveal.ICardRevealSettings" name="BalloonParty.Configuration.CardReveal.ICardRevealSettings">
-<area shape="rect" id="Node000001" title="How the card reveal (Game/CardReveal/) chooses its balloon pop." alt="" coords="5,5,239,45"/>
+<area shape="rect" id="Node000001" title="The card reveal (Game/CardReveal/, UI/CardReveal/): which balloon pops there are, how one is chosen,..." alt="" coords="5,5,239,45"/>
 <area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html" title="The card reveal&#39;s settings." alt="" coords="7,93,237,133"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,59,125,93,119,93,119,59"/>
 </map>

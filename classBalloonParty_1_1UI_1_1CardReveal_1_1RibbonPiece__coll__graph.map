@@ -1,0 +1,9 @@
+<map id="BalloonParty.UI.CardReveal.RibbonPiece" name="BalloonParty.UI.CardReveal.RibbonPiece">
+<area shape="rect" id="Node000001" title="One piece of ribbon with a line of the card written on it, flown off the popped balloon by CardReveal..." alt="" coords="5,183,208,223"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="23,87,147,113"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,125,105,182,100,183,88,126"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonGraphic.html" title="A strip of ribbon filling its rect: swallowtail&#45;notched at both ends, with a wave running along it th..." alt="" coords="172,80,375,120"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="232,130,139,185,137,180,229,125"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="206,5,341,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="276,44,276,80,271,80,271,44"/>
+</map>

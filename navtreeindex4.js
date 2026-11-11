@@ -1,10 +1,15 @@
 var NAVTREEINDEX4 =
 {
+"WaterImpactCollector_8cs.html":[7,0,13,12],
+"WaterRippleBuffer_8cs.html":[7,0,13,0,7],
+"WaveDamageMessage_8cs.html":[7,0,14,7,54],
+"WaveDeficitCalculator_8cs.html":[7,0,7,6,6],
+"WaveDeficit_8cs.html":[7,0,7,6,5],
 "WeightedPickExtensions_8cs.html":[7,0,14,4,23],
 "WindSoundRouter_8cs.html":[7,0,0,2,6],
 "WorldPolylineGizmo_8cs.html":[7,0,14,10,14],
-"WriteOnMath_8cs.html":[7,0,18,4,3],
-"WriteOnText_8cs.html":[7,0,18,4,4],
+"WriteOnMath_8cs.html":[7,0,18,5,3],
+"WriteOnText_8cs.html":[7,0,18,5,4],
 "annotated.html":[6,0],
 "arch_balance_flow.html":[2,4],
 "arch_balance_flow.html#autotoc_md64":[2,4,0],
@@ -244,10 +249,5 @@ var NAVTREEINDEX4 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a440a7a284af2eeb136950faf3023ef99":[5,0,0,0,0,4,3],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a440a7a284af2eeb136950faf3023ef99":[6,0,0,0,0,4,3],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a468bd79e772a331f00cacec419fa3252":[5,0,0,0,0,4,4],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a468bd79e772a331f00cacec419fa3252":[6,0,0,0,0,4,4],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a51d1caae7f0b14e21ae901d8fd1f41d7":[5,0,0,0,0,4,9],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a51d1caae7f0b14e21ae901d8fd1f41d7":[6,0,0,0,0,4,9],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a6d3a45e36ea1f3e9d91777724cd10455":[5,0,0,0,0,4,15],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a6d3a45e36ea1f3e9d91777724cd10455":[6,0,0,0,0,4,15],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a6fd328b03967bf03119f5e87cf6a8ac3":[5,0,0,0,0,4,13]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a468bd79e772a331f00cacec419fa3252":[6,0,0,0,0,4,4]
 };

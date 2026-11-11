@@ -75,6 +75,7 @@ var hierarchy =
     [ "BalloonParty.Game.Cinematics.CameraRigCinematic", "classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html", null ],
     [ "BalloonParty.Game.Cinematics.CameraRigCinematicConfig", "classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematicConfig.html", null ],
     [ "BalloonParty.Configuration.Cinematics.CameraRigCinematicSettings", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CameraRigCinematicSettings.html", null ],
+    [ "BalloonParty.Editor.CardRevealBuilder", "classBalloonParty_1_1Editor_1_1CardRevealBuilder.html", null ],
     [ "BalloonParty.Editor.ShieldChains.ShieldChainWindow.ChainContext", "structBalloonParty_1_1Editor_1_1ShieldChains_1_1ShieldChainWindow_1_1ChainContext.html", null ],
     [ "BalloonParty.Item.Lightning.ChainLightningGeometry", "classBalloonParty_1_1Item_1_1Lightning_1_1ChainLightningGeometry.html", null ],
     [ "BalloonParty.Editor.CheatsInReleaseToggle", "classBalloonParty_1_1Editor_1_1CheatsInReleaseToggle.html", null ],
@@ -149,6 +150,7 @@ var hierarchy =
     [ "BalloonParty.Projectile.Buffs.ProjectileBuffService.Entry", "structBalloonParty_1_1Projectile_1_1Buffs_1_1ProjectileBuffService_1_1Entry.html", null ],
     [ "BalloonParty.Projectile.ProjectileRegistry.Entry", "structBalloonParty_1_1Projectile_1_1ProjectileRegistry_1_1Entry.html", null ],
     [ "BalloonParty.Game.Run.FailureOffer", "structBalloonParty_1_1Game_1_1Run_1_1FailureOffer.html", null ],
+    [ "BalloonParty.Editor.CardRevealBuilder.Flight", "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html", null ],
     [ "BalloonParty.Editor.EffectPreview.PaintSplashPreviewModule.FlightState", "classBalloonParty_1_1Editor_1_1EffectPreview_1_1PaintSplashPreviewModule_1_1FlightState.html", null ],
     [ "BalloonParty.Shared.Messages.ForceDestroyProjectileMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ForceDestroyProjectileMessage.html", null ],
     [ "BalloonParty.Balloon.Formation.FormationAssignment", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html", null ],
@@ -1187,6 +1189,7 @@ var hierarchy =
     [ "BalloonParty.Editor.Maps.GameRenderMapsWindow.MapDescriptor", "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html", null ],
     [ "BalloonParty.Configuration.Editor.MapLimitsSceneOverlay", "classBalloonParty_1_1Configuration_1_1Editor_1_1MapLimitsSceneOverlay.html", null ],
     [ "MaskableGraphic", null, [
+      [ "BalloonParty.UI.CardReveal.RibbonGraphic", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonGraphic.html", null ],
       [ "BalloonParty.UI.TimeOfDaySpecular", "classBalloonParty_1_1UI_1_1TimeOfDaySpecular.html", null ]
     ] ],
     [ "MaterialPropertyDrawer", null, [
@@ -1273,6 +1276,8 @@ var hierarchy =
       [ "BalloonParty.Thrower.ThrowerView", "classBalloonParty_1_1Thrower_1_1ThrowerView.html", null ],
       [ "BalloonParty.UI.AnimatorGameEntryGate", "classBalloonParty_1_1UI_1_1AnimatorGameEntryGate.html", null ],
       [ "BalloonParty.UI.CanvasCameraBinder", "classBalloonParty_1_1UI_1_1CanvasCameraBinder.html", null ],
+      [ "BalloonParty.UI.CardReveal.CardRevealView", "classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html", null ],
+      [ "BalloonParty.UI.CardReveal.RibbonPiece", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html", null ],
       [ "BalloonParty.UI.Coins.CoinCounterView", "classBalloonParty_1_1UI_1_1Coins_1_1CoinCounterView.html", null ],
       [ "BalloonParty.UI.Danger.DangerGradientView", "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html", null ],
       [ "BalloonParty.UI.Danger.DangerHeartLossView", "classBalloonParty_1_1UI_1_1Danger_1_1DangerHeartLossView.html", null ],

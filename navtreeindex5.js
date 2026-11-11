@@ -1,5 +1,10 @@
 var NAVTREEINDEX5 =
 {
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a51d1caae7f0b14e21ae901d8fd1f41d7":[5,0,0,0,0,4,9],
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a51d1caae7f0b14e21ae901d8fd1f41d7":[6,0,0,0,0,4,9],
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a6d3a45e36ea1f3e9d91777724cd10455":[5,0,0,0,0,4,15],
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a6d3a45e36ea1f3e9d91777724cd10455":[6,0,0,0,0,4,15],
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a6fd328b03967bf03119f5e87cf6a8ac3":[5,0,0,0,0,4,13],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a6fd328b03967bf03119f5e87cf6a8ac3":[6,0,0,0,0,4,13],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a7553a46828a6044c92f3559a8fdbeec4":[5,0,0,0,0,4,14],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a7553a46828a6044c92f3559a8fdbeec4":[6,0,0,0,0,4,14],
@@ -244,10 +249,5 @@ var NAVTREEINDEX5 =
 "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a1eca5210d00909f8620a6675c674991a":[5,0,0,0,2,0,0],
 "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a1eca5210d00909f8620a6675c674991a":[6,0,0,0,2,0,0],
 "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a1f5e37323f7ce1f77e44e557e389b872":[5,0,0,0,2,0,48],
-"classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a1f5e37323f7ce1f77e44e557e389b872":[6,0,0,0,2,0,48],
-"classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a1fd9edd666bcae882f8d7f18771a05cd":[5,0,0,0,2,0,46],
-"classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a1fd9edd666bcae882f8d7f18771a05cd":[6,0,0,0,2,0,46],
-"classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a20b5aa91783e49f3b5e52a89689e7cee":[5,0,0,0,2,0,2],
-"classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a20b5aa91783e49f3b5e52a89689e7cee":[6,0,0,0,2,0,2],
-"classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a226e3497ad48ef4ceb32713baab80cdf":[5,0,0,0,2,0,4]
+"classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html#a1f5e37323f7ce1f77e44e557e389b872":[6,0,0,0,2,0,48]
 };

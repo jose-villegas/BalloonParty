@@ -11,6 +11,7 @@ var namespaceBalloonParty_1_1Editor =
     [ "SpriteCombine", "namespaceBalloonParty_1_1Editor_1_1SpriteCombine.html", "namespaceBalloonParty_1_1Editor_1_1SpriteCombine" ],
     [ "TestRunner", "namespaceBalloonParty_1_1Editor_1_1TestRunner.html", "namespaceBalloonParty_1_1Editor_1_1TestRunner" ],
     [ "AutoFieldPropertyDrawer", "classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html", "classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer" ],
+    [ "CardRevealBuilder", "classBalloonParty_1_1Editor_1_1CardRevealBuilder.html", "classBalloonParty_1_1Editor_1_1CardRevealBuilder" ],
     [ "ChainLightningViewEditor", "classBalloonParty_1_1Editor_1_1ChainLightningViewEditor.html", "classBalloonParty_1_1Editor_1_1ChainLightningViewEditor" ],
     [ "CheatsInReleaseToggle", "classBalloonParty_1_1Editor_1_1CheatsInReleaseToggle.html", "classBalloonParty_1_1Editor_1_1CheatsInReleaseToggle" ],
     [ "CloudNoiseTextureGenerator", "classBalloonParty_1_1Editor_1_1CloudNoiseTextureGenerator.html", "classBalloonParty_1_1Editor_1_1CloudNoiseTextureGenerator" ],

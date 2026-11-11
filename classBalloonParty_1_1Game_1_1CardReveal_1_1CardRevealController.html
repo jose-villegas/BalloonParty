@@ -112,6 +112,7 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealC
 <a href="#pac-methods">Package Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Game.CardReveal.CardRevealController Class Reference<span class="mlabels"><span class="mlabel sealed">sealed</span></span></div></div>
@@ -185,6 +186,11 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a100f8032244ef72d49aca8f16a019e5f" id="r_a100f8032244ef72d49aca8f16a019e5f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a100f8032244ef72d49aca8f16a019e5f">TryStartNext</a> ()</td></tr>
 <tr class="separator:a100f8032244ef72d49aca8f16a019e5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a52e0a8049acbaf64983afb0c5e574cb7" id="r_a52e0a8049acbaf64983afb0c5e574cb7"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a52e0a8049acbaf64983afb0c5e574cb7">IsOnStage</a> (<a class="el" href="namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6">NavigationState</a> state)</td></tr>
+<tr class="separator:a52e0a8049acbaf64983afb0c5e574cb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a30276ce47131ee7718c47d5a8396fe4e" id="r_a30276ce47131ee7718c47d5a8396fe4e"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html">BonusCardDealtMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a30276ce47131ee7718c47d5a8396fe4e">_bonusSubscriber</a></td></tr>
@@ -210,7 +216,7 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Queues a reveal for each card the player wins: a level-up's card as it's held (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage.html" title="A level-up&#39;s card is now held: published as the level advances, when its pick is kept.">UpgradeCardHeldMessage</a>) and a retry's bonus card as it's dealt (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html" title="A retry bought with a rewarded ad was dealt its bonus card, for that attempt only.">BonusCardDealtMessage</a>). </p>
-<p>One plays at a time, and only on the <a class="el" href="namespaceBalloonParty_1_1Game.html">Game</a> screen, so a bonus dealt behind the game-over screen waits for play to resume. Each reveal gets a pop chosen at random, never one of the last <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a7df24f359dccf8f0b6754e0037055585" title="How many of the last pops shown a new reveal never repeats, so a pop rarely comes back soon.">ICardRevealSettings.RecentPopsAvoided</a> shown. Nothing is queued while no stage is attached, so until the reveal's view exists the cards stay the tooltip's. </p>
+<p>One plays at a time, and only over the board (in play, or a level-up's ascent, where a level-up's card plays), so a bonus dealt behind the game-over screen waits for play to resume. Each reveal gets a pop chosen at random, never one of the last <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a7df24f359dccf8f0b6754e0037055585" title="How many of the last pops shown a new reveal never repeats, so a pop rarely comes back soon.">ICardRevealSettings.RecentPopsAvoided</a> shown. Nothing is queued while no stage is attached, so until the reveal's view exists the cards stay the tooltip's. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="acf4883c6ad6b15bea9cb7d6d176dd114" name="acf4883c6ad6b15bea9cb7d6d176dd114"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acf4883c6ad6b15bea9cb7d6d176dd114">&#9670;&#160;</a></span>CardRevealController() <span class="overload">[1/2]</span></h2>
@@ -404,6 +410,31 @@ Private Attributes</h2></td></tr>
 <p>A reveal a reset or detach already dropped finishes nothing, so a stage still animating it can't cut off the reveal that replaced it. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1CardReveal_1_1ICardReveals.html#a834c055d5590fe737bdeb12a65671c2f">BalloonParty.Game.CardReveal.ICardReveals</a>.</p>
+
+</div>
+</div>
+<a id="a52e0a8049acbaf64983afb0c5e574cb7" name="a52e0a8049acbaf64983afb0c5e574cb7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52e0a8049acbaf64983afb0c5e574cb7">&#9670;&#160;</a></span>IsOnStage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Game.CardReveal.CardRevealController.IsOnStage </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6">NavigationState</a></td>          <td class="paramname"><span class="paramname"><em>state</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

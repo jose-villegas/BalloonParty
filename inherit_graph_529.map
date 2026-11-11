@@ -1,25 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="5,333,120,358"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Game_1_1AppLifetimeScope.html" title="The persistent app root: the single VContainer scope that lives for the whole session (DontDestroyOnL..." alt="" coords="175,5,403,45"/>
-<area shape="poly" id="edge670_Node000000_Node000001" title=" " alt="" coords="63,318,70,263,87,193,100,155,118,119,139,85,166,55,183,43,186,48,170,59,144,88,122,121,105,157,92,194,75,264,68,319"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1GameLifetimeScope.html" title=" " alt="" coords="168,69,411,109"/>
-<area shape="poly" id="edge671_Node000000_Node000002" title=" " alt="" coords="66,318,77,275,96,221,125,166,144,141,166,119,184,107,187,112,170,123,148,145,130,169,101,223,82,277,71,320"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Game_1_1LaunchLifetimeScope.html" title=" " alt="" coords="192,133,387,173"/>
-<area shape="poly" id="edge672_Node000000_Node000003" title=" " alt="" coords="71,318,106,251,133,214,166,183,191,170,193,174,170,187,137,218,111,254,76,321"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Thrower_1_1ThrowerLifetimeScope.html" title=" " alt="" coords="182,197,397,237"/>
-<area shape="poly" id="edge673_Node000000_Node000004" title=" " alt="" coords="82,320,119,282,167,247,193,235,196,240,169,252,122,286,85,323"/>
-<area shape="rect" id="Node000005" href="$classBalloonParty_1_1UI_1_1Coins_1_1CoinUILifetimeScope.html" title="Child scope for the coin counter: binds the balance label and injects the counter&#39;s view." alt="" coords="193,261,386,301"/>
-<area shape="poly" id="edge674_Node000000_Node000005" title=" " alt="" coords="117,326,167,311,210,299,212,304,169,316,118,331"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1UI_1_1Danger_1_1DangerUILifetimeScope.html" title="Child scope for the danger early&#45;warning UI; binds every DangerGradientView to the parent scope&#39;s dan..." alt="" coords="179,325,400,365"/>
-<area shape="poly" id="edge675_Node000000_Node000006" title=" " alt="" coords="134,343,179,343,179,348,134,348"/>
-<area shape="rect" id="Node000007" href="$classBalloonParty_1_1UI_1_1GameOver_1_1GameOverLifetimeScope.html" title=" " alt="" coords="191,389,388,429"/>
-<area shape="poly" id="edge676_Node000000_Node000007" title=" " alt="" coords="118,360,169,375,212,387,210,392,167,380,117,365"/>
-<area shape="rect" id="Node000008" href="$classBalloonParty_1_1UI_1_1Health_1_1HealthUILifetimeScope.html" title="Child scope for the health UI; binds HealthCounterLabel to live HP and drives HeartTrailController." alt="" coords="182,453,397,493"/>
-<area shape="poly" id="edge677_Node000000_Node000008" title=" " alt="" coords="85,367,122,404,169,439,196,451,193,456,167,444,119,408,82,371"/>
-<area shape="rect" id="Node000009" href="$classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpLifetimeScope.html" title=" " alt="" coords="199,517,380,557"/>
-<area shape="poly" id="edge678_Node000000_Node000009" title=" " alt="" coords="76,370,111,437,137,473,170,503,199,519,197,524,166,508,133,476,106,440,71,372"/>
-<area shape="rect" id="Node000010" href="$classBalloonParty_1_1UI_1_1Score_1_1ScoreUILifetimeScope.html" title=" " alt="" coords="189,581,389,621"/>
-<area shape="poly" id="edge679_Node000000_Node000010" title=" " alt="" coords="71,371,82,414,101,467,130,521,148,546,170,567,190,580,187,585,166,571,144,549,125,524,96,469,77,416,66,372"/>
-<area shape="rect" id="Node000011" href="$classBalloonParty_1_1UI_1_1Shields_1_1ShieldUILifetimeScope.html" title=" " alt="" coords="202,645,377,685"/>
-<area shape="poly" id="edge680_Node000000_Node000011" title=" " alt="" coords="68,372,75,426,92,497,105,533,122,569,144,602,170,631,203,651,200,655,166,635,139,606,118,572,100,535,87,498,70,427,63,372"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,13,113,38"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Scenario_1_1WaterImpactCollector.html" title="Holds this frame&#39;s impacts (every outward disturbance stamp: a ball&#39;s steps, pops,..." alt="" coords="161,5,365,45"/>
+<area shape="poly" id="edge670_Node000000_Node000001" title=" " alt="" coords="127,23,161,23,161,28,127,28"/>
 </map>

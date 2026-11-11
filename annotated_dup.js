@@ -379,6 +379,7 @@ var annotated_dup =
           [ "EditModeTestRunner", "classBalloonParty_1_1Editor_1_1TestRunner_1_1EditModeTestRunner.html", "classBalloonParty_1_1Editor_1_1TestRunner_1_1EditModeTestRunner" ]
         ] ],
         [ "AutoFieldPropertyDrawer", "classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html", "classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer" ],
+        [ "CardRevealBuilder", "classBalloonParty_1_1Editor_1_1CardRevealBuilder.html", "classBalloonParty_1_1Editor_1_1CardRevealBuilder" ],
         [ "ChainLightningViewEditor", "classBalloonParty_1_1Editor_1_1ChainLightningViewEditor.html", "classBalloonParty_1_1Editor_1_1ChainLightningViewEditor" ],
         [ "CheatsInReleaseToggle", "classBalloonParty_1_1Editor_1_1CheatsInReleaseToggle.html", "classBalloonParty_1_1Editor_1_1CheatsInReleaseToggle" ],
         [ "CloudNoiseTextureGenerator", "classBalloonParty_1_1Editor_1_1CloudNoiseTextureGenerator.html", "classBalloonParty_1_1Editor_1_1CloudNoiseTextureGenerator" ],
@@ -1137,6 +1138,11 @@ var annotated_dup =
           [ "IReactiveBindable< T >", "interfaceBalloonParty_1_1UI_1_1Binding_1_1IReactiveBindable-1-g.html", "interfaceBalloonParty_1_1UI_1_1Binding_1_1IReactiveBindable-1-g" ],
           [ "ReactiveBinderRegistration", "classBalloonParty_1_1UI_1_1Binding_1_1ReactiveBinderRegistration.html", "classBalloonParty_1_1UI_1_1Binding_1_1ReactiveBinderRegistration" ],
           [ "ReactivePropertyBinder< TView, TValue >", "classBalloonParty_1_1UI_1_1Binding_1_1ReactivePropertyBinder-2-g.html", "classBalloonParty_1_1UI_1_1Binding_1_1ReactivePropertyBinder-2-g" ]
+        ] ],
+        [ "CardReveal", "namespaceBalloonParty_1_1UI_1_1CardReveal.html", [
+          [ "CardRevealView", "classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html", "classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView" ],
+          [ "RibbonGraphic", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonGraphic.html", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonGraphic" ],
+          [ "RibbonPiece", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece" ]
         ] ],
         [ "Coins", "namespaceBalloonParty_1_1UI_1_1Coins.html", [
           [ "CoinCounterLabel", "classBalloonParty_1_1UI_1_1Coins_1_1CoinCounterLabel.html", "classBalloonParty_1_1UI_1_1Coins_1_1CoinCounterLabel" ],

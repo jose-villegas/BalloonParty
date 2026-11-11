@@ -1,0 +1,22 @@
+<map id="BalloonParty.UI.CardReveal.CardRevealView" name="BalloonParty.UI.CardReveal.CardRevealView">
+<area shape="rect" id="Node000001" title="The card reveal&#39;s stage (ICardReveals): plays each reveal the controller hands it." alt="" coords="904,188,1107,228"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="229,15,353,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="366,13,473,4,537,3,605,5,676,12,747,26,816,47,881,76,917,101,948,130,993,186,989,189,944,134,913,105,879,81,814,52,746,31,675,18,605,10,537,8,473,9,366,19"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html" title="One piece of ribbon with a line of the card written on it, flown off the popped balloon by CardReveal..." alt="" coords="509,60,711,100"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="366,37,509,61,508,66,366,43"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="721,100,800,121,881,147,967,185,965,190,879,152,799,126,720,106"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonGraphic.html" title="A strip of ribbon filling its rect: swallowtail&#45;notched at both ends, with a wave running along it th..." alt="" coords="189,70,392,110"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="406,88,469,86,508,85,509,90,469,92,406,93"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,78,140,103"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="154,88,189,88,189,93,154,93"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1CardReveal_1_1ICardReveals.html" title="The reveals a stage plays, one at a time." alt="" coords="496,124,724,164"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="738,162,904,189,903,194,737,167"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html" title="The card reveal (Game/CardReveal/, UI/CardReveal/): which balloon pops there are, how one is chosen,..." alt="" coords="493,188,727,228"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="741,205,904,205,904,210,741,210"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Configuration_1_1Cinematics_1_1ICinematicsSettings.html" title="The single setup point for cinematics: one composed entry per CinematicState." alt="" coords="495,252,725,292"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="738,248,903,222,904,227,739,254"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="511,316,709,356"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="722,310,800,290,879,265,966,226,969,230,881,270,801,296,723,316"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html" title="Single read surface for the live per&#45;level difficulty mix; never read ILevelPacingConfiguration direc..." alt="" coords="516,380,704,420"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="717,380,799,358,840,342,879,323,911,301,941,275,986,226,990,230,945,279,915,305,881,327,842,347,800,363,719,385"/>
+</map>

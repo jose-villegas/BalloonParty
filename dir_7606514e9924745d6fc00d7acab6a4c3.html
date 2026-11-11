@@ -154,6 +154,8 @@ Files</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="NearLevelUpCheat_8cs.html">NearLevelUpCheat.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="RevealCardCheat_8cs.html">RevealCardCheat.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ScenarioGradeCheat_8cs.html">ScenarioGradeCheat.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ScoreCheatHelper_8cs.html">ScoreCheatHelper.cs</a></td></tr>
@@ -232,26 +234,28 @@ Current cheats</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Trigger Level Up   </td><td class="markdownTableBodyNone">Score   </td><td class="markdownTableBodyNone">Fills all color bars to the current threshold and immediately triggers the level-up ceremony. Fills through the real scoring pipeline (one pop per colour carrying the whole shortfall), but under <code>CheatState.InstantScoreTrails</code> so <code>ScoreTrailService</code> confirms each group instantly instead of spawning flying pen-trails — a level's worth of points is granted with no visual flood    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Reveal A Card   </td><td class="markdownTableBodyNone">Run   </td><td class="markdownTableBodyNone">Plays the card reveal (<code>UI/CardReveal/</code>) for a random card, as if a level-up had just won it, without holding the card: publishes <code>UpgradeCardHeldMessage</code> (stacks 1). With no level ascent running, the ribbons fly their <code>RibbonSecondsWithoutAscent</code>; <code>Trigger Level Up</code> on a card level shows them timed to the ascent. Shows nothing when the reveal has no stage (no pops baked), and waits off the game screen until play resumes    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Near Level Up   </td><td class="markdownTableBodyNone">Score   </td><td class="markdownTableBodyNone">Fills all color bars to three points below the threshold — pop one balloon of each color to complete the level naturally. Uses the same instant fill as Trigger Level Up (no pen-trail flood)    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Award Score Pop   </td><td class="markdownTableBodyNone">Score   </td><td class="markdownTableBodyNone">Awards one N-point pop of a chosen colour through the real hit pipeline (streak reset first so it lands on exactly N) — the way to summon any BigScore catalog shape on demand. Interactive: point field, colour cycle button, and preset buttons per catalog denomination    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Level Lock   </td><td class="markdownTableBodyNone">Score   </td><td class="markdownTableBodyNone">Toggle — locks the current level: score trails still fly on a pop but nothing sticks (<code>ClaimProgress</code> grants the visual only; both <code>OnTrailArrived</code> handlers skip their commit, so score/bars stay put), no level-up cinematic/ceremony can start (<code>WillLevelUp</code>/<code>CheckLevelUp</code> guarded), <code>PlayerHealthController.Damage</code> no-ops (hearts never drain), and <code>RunController.EndRun</code> no-ops (no loss). Sit on a level indefinitely to test it; toggle off to resume normal play. Sets the dev-only <code>CheatState.BlockLevelUp</code> flag    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Force Game Over   </td><td class="markdownTableBodyNone">Run   </td><td class="markdownTableBodyNone">Calls <code>RunController.EndRun()</code> — commits the run and shows the GameOver screen    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Restart Run   </td><td class="markdownTableBodyNone">Run   </td><td class="markdownTableBodyNone">Calls <code>RunController.RestartRun()</code> — resets every <code>IRunResettable</code> and returns to <code>Game</code>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Start From Level   </td><td class="markdownTableBodyNone">Run   </td><td class="markdownTableBodyNone">Sets the dev start-level override then restarts the run so it begins at the chosen level — the in-play equivalent of the Level Pacing window's "play from here". A run started this way (or by Jump To Scenario, or the window) holds the cards a run reaching that level would: <code>RunUpgrades</code> plays out every card level-up on the way, taking each hand's first card as the level-up does in play    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Jump To Scenario   </td><td class="markdownTableBodyNone">Run   </td><td class="markdownTableBodyNone">Sky, Meadow or Water: restarts the run at the first level of the next stretch of that scenario after the current level, found in this run's own schedule. Keeps the run's seed through that restart (<code>CheatState.KeepRunSeed</code>, read by <code>RunSeed</code>), since a new seed lays out a different schedule. It jumps forward, so each jump lands on a harder level; pair it with Block Level Up to look around without losing hearts    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Stamp Disturbance   </td><td class="markdownTableBodyNone">Grid   </td><td class="markdownTableBodyNone">Toggle on, then mouse-drag to stamp disturbances into the shared disturbance field. Uses <code>DisturbanceFieldService.Stamp()</code> at the mouse world position with drag direction    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Place <a class="el" href="UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d">Light</a>   </td><td class="markdownTableBodyNone">Lighting   </td><td class="markdownTableBodyNone">Toggle on, pick a palette colour from the dropdown, then tap the board to drop a light into the shared light field there; "Clear" removes every light placed so far    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Scenario Grade   </td><td class="markdownTableBodyNone">Lighting   </td><td class="markdownTableBodyNone">Toggle — turns the per-scenario colour grade (<code>ScenarioGradeView</code>) off and on, to compare the scenes with and without it. Sets the dev-only <code>CheatState.ScenarioGradeOff</code> flag    </td></tr>
+<td class="markdownTableBodyNone">Place <a class="el" href="UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d">Light</a>   </td><td class="markdownTableBodyNone">Lighting   </td><td class="markdownTableBodyNone">Toggle on, pick a palette colour from the dropdown, then tap the board to drop a light into the shared light field there; "Clear" removes every light placed so far    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Scenario Grade   </td><td class="markdownTableBodyNone">Lighting   </td><td class="markdownTableBodyNone">Toggle — turns the per-scenario colour grade (<code>ScenarioGradeView</code>) off and on, to compare the scenes with and without it. Sets the dev-only <code>CheatState.ScenarioGradeOff</code> flag    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Time of Day   </td><td class="markdownTableBodyNone">Lighting   </td><td class="markdownTableBodyNone">Scrub the day/night angle directly (drives whichever source is active) — the slider tints the arc that counts as night — and set how fast the Realtime source advances it (Freeze/1x/8x/30x presets)   </td></tr>
 </table>
 </div><!-- contents -->

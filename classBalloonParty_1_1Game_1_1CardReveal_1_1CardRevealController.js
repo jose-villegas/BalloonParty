@@ -7,6 +7,7 @@ var classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController =
     [ "Dispose", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#aced2faf1f4e3638f99fee5fcf731d57e", null ],
     [ "Enqueue", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ad502cc63fe56f0ab60423fd1c1ac9eca", null ],
     [ "Finish", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#aa382606199882fa9581ba5e859a11b6c", null ],
+    [ "IsOnStage", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a52e0a8049acbaf64983afb0c5e574cb7", null ],
     [ "PickPop", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a4571bd9d6802bf38512e4348b2959f68", null ],
     [ "ResetRun", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a9827c944a3c115b219783c2d8f8d3f38", null ],
     [ "Start", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a9848c68a3af98e7fc6e7fa7ce2c6aefb", null ],

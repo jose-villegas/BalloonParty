@@ -113,25 +113,25 @@ $(function(){initNavTree('plan_card_reveal.html',''); initResizable(true); });
 <div class="textblock"><h1><a class="anchor" id="autotoc_md367"></a>
 The Card Reveal</h1>
 <blockquote class="doxtable">
-<p>Working plan for showing a won upgrade card: during the level-to-level transition a realistic balloon pops and leaves behind a slip of paper, like the one inside a fortune cookie, with the card handwritten on it. </p>
+<p>Working plan for showing a won upgrade card: during the level-to-level transition a realistic balloon pops, and two pieces of ribbon fly off it, one with the card's name and one with what it does, drifting across the screen while the level's ascent plays. </p>
 </blockquote>
-<p><b>Status:</b> Phase 1 built (the controller, its queue and the pop pick). Phase 2 built: the bake script makes pop 0, waiting on the owner's review before the other 15 are baked. Nothing changes on screen until the view (phase 4) attaches a stage.</p>
+<p><b>Status:</b> Phase 1 built (the controller, its queue and the pop pick). Phase 2 built: the bake script makes pop 0. Phase 4 built with pop 0 alone, to see it in game before the other 15 are baked: <code>CardRevealView</code> plays it on the game canvas during the level-up, lit live by the scene's light, and the ribbons fly with the ascent. The cheat Reveal A Card shows one on demand. Not built yet: a card icon, and loading one sheet at a time.</p>
 <p>The pops are 16 separate physics simulations, baked in Blender by a script in this repo (§5), so the reveal never pops the same way twice in a row.</p>
 <hr  />
 <h2><a class="anchor" id="autotoc_md369"></a>
 1. Why</h2>
 <p>Winning a card is the run's only source of power (<code><a class="el" href="Game_2Upgrades_2README_8md.html">Game/Upgrades/README.md</a></code>), yet today it shows as one line of the tooltip, <code>Level N: Card</code>, which is easy to miss in a busy board. The pick screen that showed cards was switched off because it stopped play (<code><a class="el" href="UI_2LevelUp_2README_8md.html">UI/LevelUp/README.md</a></code>). The reveal has to be loud enough to notice, and still never stop play.</p>
-<p>A popping balloon is the game's own verb. Here it pays out a prize instead of points: the pop uncovers a fortune-cookie slip with what the player won. Hand-drawn frames can't make rubber tear and snap back convincingly; a cloth simulation can, so the pops are simulated and baked.</p>
+<p>A popping balloon is the game's own verb. Here it pays out a prize instead of points: the pop sets free the ribbons that say what the player won. Hand-drawn frames can't make rubber tear and snap back convincingly; a cloth simulation can, so the pops are simulated and baked.</p>
 <h2><a class="anchor" id="autotoc_md370"></a>
 2. What the player sees</h2>
 <ol type="1">
-<li>On a level-up that deals a card, as the transition to the next level starts, a balloon drifts up into the top third of the screen, the slip already inside it as a faint shadow.</li>
+<li>On a level-up that deals a card, as the level-up starts, a balloon in one of the level's colours rises to a little above the screen's middle, two rolled-up ribbons inside it as a faint shadow.</li>
 <li>It pops: one of 16 baked simulations, chosen at random. The rubber splits from a puncture, the flaps snap back and curl, and the shreds fall away, in slow motion, the way high-speed footage shows it.</li>
-<li>The slip is left where the balloon was, curled at the ends, settling with a slight sway.</li>
-<li>The card's title is handwritten on the slip in pencil (<code>UI/HeadsUp/WriteOnText</code>), its icon beside it, and the description below in a smaller hand.</li>
-<li>The slip holds for a moment, then flutters out toward the weapon it changed: the cannon for Extra Ball, Faster Reload and Shield, the board for More Items.</li>
+<li>As the rubber opens, the two ribbons burst out: the card's title on the upper one, what it does on the lower one (<code>Reload 15% faster</code>), in the tooltip's pencil hand. The ribbons ripple, and the writing ripples with them.</li>
+<li>They drift and sway while the level's ascent plays, the old board falling away under them.</li>
+<li>Just before the next level settles, they fly off, up and outward, and fade.</li>
 </ol>
-<p>About 2.5 s in all, on unscaled time like the heads-ups, so slow-motion beats don't stretch it.</p>
+<p>On a level-up the whole reveal runs about 3.7 s, inside the ascent's 4 s. A retry's bonus card has no ascent, so its ribbons fly a set time instead. All on unscaled time like the heads-ups, so slow-motion beats don't stretch it.</p>
 <h2><a class="anchor" id="autotoc_md371"></a>
 3. Rules</h2>
 <table class="markdownTable">
@@ -148,11 +148,15 @@ The Card Reveal</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">A pop is picked at random, never one of the last two shown   </td><td class="markdownTableBodyNone">16 sims are there for variety; repeating the last one would waste it    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">The balloon is tinted from the palette, not baked in one colour   </td><td class="markdownTableBodyNone">The sims are rendered in greyscale with the shading kept, and tinted at runtime, so the reveal can follow the level's colours    </td></tr>
+<td class="markdownTableBodyNone">The balloon is tinted from the palette and lit by the scene, not baked in one colour or one light   </td><td class="markdownTableBodyNone">The sims are baked as surface data (the normal and the occlusion, not a picture) and lit at runtime by the scene's light, so the reveal follows the level's colours and the time of day as the board's balloons do    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Text, never baked into the art   </td><td class="markdownTableBodyNone">The card's title and description come from <code>IUpgradeCardSettings</code>, so a new card needs no new art beyond its icon    </td></tr>
+<td class="markdownTableBodyNone">The ribbons are inside the balloon, not behind it   </td><td class="markdownTableBodyNone">Each frame is baked in two layers, the rubber in front of the balloon's centre and the rubber behind it, and the ribbons are drawn between them. While the balloon moves the layers part slightly (parallax), so they read as inside    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">A second card won while a slip is showing waits its turn   </td><td class="markdownTableBodyNone">Rare (cards come every 2 levels), but a retry's bonus card can meet a level-up's   </td></tr>
+<td class="markdownTableBodyNone">A level-up's reveal plays with the ascent, and is over just before the next level settles   </td><td class="markdownTableBodyNone">The ascent is the level-up's quiet stretch: nothing to aim at, the screen moving. Ending before it settles leaves the new board clear to read    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Text, never baked into the art   </td><td class="markdownTableBodyNone">The card's title and description come from <code>IUpgradeCardSettings</code>, so a new card needs no new art    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">A second card won while a reveal plays waits its turn   </td><td class="markdownTableBodyNone">Rare (cards come every 2 levels), but a retry's bonus card can meet a level-up's   </td></tr>
 </table>
 <h2><a class="anchor" id="autotoc_md372"></a>
 4. Architecture</h2>
@@ -160,19 +164,21 @@ The Card Reveal</h1>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Piece   </th><th class="markdownTableHeadNone">Where   </th><th class="markdownTableHeadNone">Responsibility    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>CardRevealController</code> (built)   </td><td class="markdownTableBodyNone"><code>Game/CardReveal/</code>   </td><td class="markdownTableBodyNone">Plain C#, beside the other game-side services (<code>Game/HeadsUp/</code>, <code>Game/Coins/</code>). Subscribes <code>UpgradeCardHeldMessage</code> (published by <code>RunUpgrades</code> when it holds the pick, at <code>Transitioning</code>) and <code>BonusCardDealtMessage</code>; queues reveals, picks the pop, and exposes the one to play (<code>ICardReveals.Current</code>, a <code>RevealedCard</code>). The view attaches itself as the stage; with none attached nothing is queued and the tooltip keeps announcing cards    </td></tr>
+<td class="markdownTableBodyNone"><code>CardRevealController</code> (built)   </td><td class="markdownTableBodyNone"><code>Game/CardReveal/</code>   </td><td class="markdownTableBodyNone">Plain C#, beside the other game-side services (<code>Game/HeadsUp/</code>, <code>Game/Coins/</code>). Subscribes <code>UpgradeCardHeldMessage</code> (published by <code>RunUpgrades</code> when it holds the pick, at <code>Transitioning</code>) and <code>BonusCardDealtMessage</code>; queues reveals, picks the pop, and exposes the one to play (<code>ICardReveals.Current</code>, a <code>RevealedCard</code>). Starts one in play or during a level-up, whose navigation stays on <code>LevelUp</code> through the ascent. The view attaches itself as the stage; with none attached nothing is queued and the tooltip keeps announcing cards    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>CardRevealView</code>   </td><td class="markdownTableBodyNone"><code>UI/CardReveal/</code>   </td><td class="markdownTableBodyNone"><code>MonoBehaviour</code> on the game canvas. Plays the chosen pop on a UI <code>Image</code>, then the slip: a <code>HandwrittenHeadsUp</code>-style label written through <code>WriteOnText</code>, the icon, and the flutter-out tween. Kills its tweens on disable    </td></tr>
+<td class="markdownTableBodyNone"><code>CardRevealView</code> (built)   </td><td class="markdownTableBodyNone"><code>UI/CardReveal/</code>   </td><td class="markdownTableBodyNone"><code>MonoBehaviour</code> on the game canvas, built there by <code>CardRevealBuilder</code>. Attaches the stage when the settings hold a pop. Plays the chosen pop on two <code>RawImage</code>s (the back and front layers, the ribbons between them), stepping the frame through each one's UV rect on unscaled time, and flies the ribbons from the pop. Times their exit to the ascent (<code>LevelAscendStartedMessage</code> and its length)    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>FlipbookPlayer</code>   </td><td class="markdownTableBodyNone"><code>UI/CardReveal/</code>   </td><td class="markdownTableBodyNone">Steps a <code>Sprite[]</code> (one pop's frames, sliced from its sheet) at a set frame rate on unscaled time. Swapping the sprite on one <code>Image</code> keeps it one draw call    </td></tr>
+<td class="markdownTableBodyNone"><code>RibbonPiece</code>, <code>RibbonGraphic</code> (built)   </td><td class="markdownTableBodyNone"><code>UI/CardReveal/</code>   </td><td class="markdownTableBodyNone">A piece of ribbon with a line written on it: a UI strip notched at both ends with a wave running along it, shaded as satin, the TMP text bent glyph by glyph to ride the wave. The piece poses itself through its flight: rolled up inside, burst, drift and sway, exit    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>PopSheetLoader</code>   </td><td class="markdownTableBodyNone"><code>UI/CardReveal/</code>   </td><td class="markdownTableBodyNone">Loads only the chosen pop's sheet when the level-up turns <code>Pending</code> (before the transition, so the pop starts on time) and releases it after. The 16 sheets never sit in memory together    </td></tr>
+<td class="markdownTableBodyNone"><code>BalloonParty/Sprite/LitFlipbook</code> (built)   </td><td class="markdownTableBodyNone"><code>Assets/Shaders/BalloonParty/Sprite/</code>   </td><td class="markdownTableBodyNone">Lights a layer's surface data with the scene's light (<code>SceneLight.cginc</code>): a wrapped diffuse, the occlusion, a highlight, and thin-latex transmission, so a face turned from the light glows deeper instead of going dark. The tint is the <code>RawImage</code>'s colour, re-graded by the time of day like the balloons' bodies    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>ICardRevealSettings</code> (built: <code>PopCount</code>, <code>RecentPopsAvoided</code>)   </td><td class="markdownTableBodyNone"><code>Configuration/CardReveal/</code>, its own <code>CardRevealSettings</code> asset (defaults when unassigned, like <code>HeadsUpSettings</code>)   </td><td class="markdownTableBodyNone">Phase 4 adds the pop sheets, frame rate, hold time, slip sway, and per card kind the icon and where the slip flies to    </td></tr>
+<td class="markdownTableBodyNone"><code>PopSheetLoader</code>   </td><td class="markdownTableBodyNone"><code>UI/CardReveal/</code>   </td><td class="markdownTableBodyNone">Loads only the chosen pop's sheet when the level-up turns <code>Pending</code> (before the transition, so the pop starts on time) and releases it after. The 16 sheets never sit in memory together. Not needed while there is one pop: the settings reference the sheets directly, so all of them load with the game scene    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>ICardRevealSettings</code> (built)   </td><td class="markdownTableBodyNone"><code>Configuration/CardReveal/</code>, its own <code>CardRevealSettings</code> asset (with none assigned, a default with no pops, and the reveal stays off)   </td><td class="markdownTableBodyNone">The pop sheets, how many recent pops to avoid, the sheet layout and frame rate, and how the reveal plays (the rise, the beat before the pop, the parallax, and the ribbons' flight: the frame they fly out on, their burst and exit, and when they are gone with and without an ascent)    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>LevelUpPopUp</code>, <code>TooltipBanner</code> (changed)   </td><td class="markdownTableBodyNone"><code>UI/LevelUp/</code>, <code>UI/Tooltip/</code>   </td><td class="markdownTableBodyNone">Leave the card to the reveal while a stage is attached (<code>ICardReveals.HasStage</code>): the level-up line drops the card's name, the bonus card line isn't shown   </td></tr>
 </table>
-<p>The flipbook is a sprite swap rather than a shader so each frame can be checked in the Editor. If the profiler flags it, one material with a UV offset is the fallback.</p>
+<p>The flipbook was planned as a sprite swap. It became a UV rect on a <code>RawImage</code> once the frames were lighting data rather than pictures: a frame looks like nothing until the shader lights it, so checking frames one by one in the Editor gained nothing, and a UV rect needs no sliced sprites.</p>
 <h2><a class="anchor" id="autotoc_md373"></a>
 5. How the pops are made</h2>
 <p>Two scripts under <code>Tools/art/balloon_pop/</code> (built; its README has the commands): <code>bake_pops.py</code> drives Blender headless and renders each pop's frames, and <code>pack_sheets.py</code> packs them into the game's sheets and draws a contact sheet and an animated preview to review them by. Everything is seeded, so a run redraws the same set, and a seed can be swapped to replace one pop.</p>
@@ -186,29 +192,29 @@ The Card Reveal</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">The tear   </td><td class="markdownTableBodyNone">A release front sweeps out from the puncture, and behind it the rubber's stored stretch lets go (cloth shrinking to about 40%): each flap snaps back toward the pinned neck and buckles and curls, with self-collision so flaps don't pass through each other. A Weld keeps each crack shut until it opens, so the rest frame shows no seams. How far it shrinks and how stiff it bends vary per sim    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">The fall   </td><td class="markdownTableBodyNone">Once the rubber has gathered at the knot, the knot drops out of the frame with the shreds trailing, so the last frames are empty and the slip has the stage    </td></tr>
+<td class="markdownTableBodyNone">The fall   </td><td class="markdownTableBodyNone">Once the rubber has gathered at the knot, the knot drops out of the frame with the shreds trailing, so the last frames are empty and the ribbons have the stage    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Timing   </td><td class="markdownTableBodyNone">The sim runs 48 frames at a slow time scale and every second one is kept: 24 frames played at 30 fps, about 0.8 s. Roughly: 2 frames whole, 7 tearing, 8 gathering, 7 falling    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Rendering   </td><td class="markdownTableBodyNone">Cycles on the CPU (about a second a frame at 512 px, and no GPU needed headless), orthographic camera, transparent background. A rubber material (soft subsurface, one sharp clear-coat highlight), lit from the top left like the UI's sun, packed as greyscale for tinting    </td></tr>
+<td class="markdownTableBodyNone">Rendering   </td><td class="markdownTableBodyNone">Cycles on the CPU (no GPU needed headless), orthographic camera, transparent background, no colour transform. Not a lit picture but the surface as data: red and green the normal's x and y as the camera sees it, blue the ambient occlusion, alpha the coverage, with the inside of the rubber turned to face the camera. Each frame is rendered twice, split at the balloon's centre by the camera's clip planes: the front layer and the back layer. A whole pop renders in about a minute    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Packing   </td><td class="markdownTableBodyNone">Each sim's 24 frames, rendered at 512 px and scaled to 256×256, into a 6×4 sheet (1536×1024). The balloon's centre is the same pixel in every frame    </td></tr>
+<td class="markdownTableBodyNone">Lighting   </td><td class="markdownTableBodyNone">In game, by <code>BalloonParty/Sprite/LitFlipbook</code> with the scene's light (§4). <code>pack_sheets.py</code> lights its review files with the same model, under three lights, to judge the bake without opening Unity    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">The slip   </td><td class="markdownTableBodyNone">Rendered by the same script with a paper material, so it matches the balloon's lighting: a narrow, curled strip, off-white, with a faint fold   </td></tr>
+<td class="markdownTableBodyNone">Packing   </td><td class="markdownTableBodyNone">Each sim's 24 frames, rendered at 512 px and scaled to 256×256: the front layer's in a 6×4 grid in the top half of the sheet, the back layer's in the bottom half (1536×2048). Imported as linear data. The balloon's centre is the same pixel in every frame   </td></tr>
 </table>
 <p>Blender's cloth made the tear read as rubber (the flaps snap back rather than sag), so the fallback of a membrane solver in the script itself wasn't needed.</p>
-<p><b>Budget.</b> 16 sheets of 1536×1024, compressed (ASTC 6×6 on phones) at about 0.7 MB each: about 11 MB in the build, and only one in memory at a time (<code>PopSheetLoader</code>). The sheets stay out of the sprite atlases, like the other baked art (<code>Sprites/README.md</code>), under <code>Assets/Sprites/UI/CardReveal/</code>.</p>
+<p><b>Budget.</b> 16 sheets of 1536×2048 (two layers), compressed (ASTC 6×6 on phones) at about 1.4 MB each: about 22 MB in the build, twice the single-layer plan, and only one in memory at a time (<code>PopSheetLoader</code>). Normals in ASTC may band; if they do on a phone, 4×4 for these sheets is the first fix to try. The sheets stay out of the sprite atlases, like the other baked art (<code>Sprites/README.md</code>), under <code>Assets/Sprites/UI/CardReveal/</code>.</p>
 <h2><a class="anchor" id="autotoc_md374"></a>
 6. Assets</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Asset   </th><th class="markdownTableHeadNone">Size   </th><th class="markdownTableHeadNone">Made by    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">16 balloon pops   </td><td class="markdownTableBodyNone">16 sheets, 1536×1024 (24 frames of 256×256)   </td><td class="markdownTableBodyNone">The bake script (§5)    </td></tr>
+<td class="markdownTableBodyNone">16 balloon pops   </td><td class="markdownTableBodyNone">16 sheets, 1536×2048 (24 frames of 256×256, two layers)   </td><td class="markdownTableBodyNone">The bake script (§5)    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Fortune-cookie slip, and its shadow   </td><td class="markdownTableBodyNone">About 640×180   </td><td class="markdownTableBodyNone">The bake script, so it's lit like the balloon    </td></tr>
+<td class="markdownTableBodyNone">The ribbons   </td><td class="markdownTableBodyNone">None: drawn as a mesh (<code>RibbonGraphic</code>)   </td><td class="markdownTableBodyNone">Code    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Card icons   </td><td class="markdownTableBodyNone">4 × 192×192   </td><td class="markdownTableBodyNone">Drawn in the UI style, shared with the coin shop (<code><a class="el" href="PLAN-Coins_8md.html">PLAN-Coins.md</a></code> §7)   </td></tr>
+<td class="markdownTableBodyNone">Card icons, if the ribbons get them   </td><td class="markdownTableBodyNone">4 × 192×192   </td><td class="markdownTableBodyNone">Drawn in the UI style, shared with the coin shop (<code><a class="el" href="PLAN-Coins_8md.html">PLAN-Coins.md</a></code> §7)   </td></tr>
 </table>
 <h2><a class="anchor" id="autotoc_md375"></a>
 7. Phases</h2>
@@ -220,17 +226,17 @@ The Card Reveal</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">2 (built, in review)   </td><td class="markdownTableBodyNone">The bake script: the balloon, one pop, rendered and packed. The owner reviews that one pop from the contact sheet before the other 15 are baked   </td><td class="markdownTableBodyNone">Makes it    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">3   </td><td class="markdownTableBodyNone">The other 15 pops and the slip, reviewed together on the contact sheet   </td><td class="markdownTableBodyNone">Makes it    </td></tr>
+<td class="markdownTableBodyNone">3   </td><td class="markdownTableBodyNone">The other 15 pops, reviewed together on the contact sheet   </td><td class="markdownTableBodyNone">Makes it    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">4   </td><td class="markdownTableBodyNone"><code>FlipbookPlayer</code>, <code>PopSheetLoader</code> and <code>CardRevealView</code>: the pop, the write-on and the flutter-out   </td><td class="markdownTableBodyNone">Yes: phases 2 and 3    </td></tr>
+<td class="markdownTableBodyNone">4 (built with pop 0)   </td><td class="markdownTableBodyNone"><code>CardRevealView</code>, <code>LitFlipbook</code> and the ribbons: the pop, lit and in two layers, the ribbons flying with the ascent. Still to come: <code>PopSheetLoader</code>, once there is more than one pop   </td><td class="markdownTableBodyNone">Yes: phases 2 and 3    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">5   </td><td class="markdownTableBodyNone">A playtest pass on a phone: timing, how well the slip reads over a busy board, and whether 256 px frames are sharp enough   </td><td class="markdownTableBodyNone">—   </td></tr>
+<td class="markdownTableBodyNone">5   </td><td class="markdownTableBodyNone">A playtest pass on a phone: timing, how well the ribbons read over a busy board, and whether 256 px frames are sharp enough   </td><td class="markdownTableBodyNone">—   </td></tr>
 </table>
 <h2><a class="anchor" id="autotoc_md376"></a>
 8. Open questions</h2>
 <ul>
-<li>Does the slip fly to the weapon it changed, or just fade? Flying ties the card to its effect, but it crosses the board.</li>
-<li>Should a card that stacks (a second Shield) say so on the slip, e.g. <code>Shield ×2</code>?</li>
+<li>Should a ribbon fly to the weapon its card changed rather than off the screen? It would tie the card to its effect, but it crosses the board.</li>
+<li>Should a card that stacks (a second Shield) say so on its ribbon, e.g. <code>Thick Skin ×2</code>?</li>
 <li>Are 256 px frames enough? The balloon fills about a quarter of the screen width, about 270 px on a 1080 px phone. 384 px frames would be sharper, at about twice the build size. </li>
 </ul>
 </div></div><!-- contents -->

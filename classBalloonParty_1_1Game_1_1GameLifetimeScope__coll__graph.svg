@@ -2042,7 +2042,7 @@ var sectionId = 'dynsection-1';
 <!-- Node161 -->
 <g id="Node000161" class="node">
 <title>Node161</title>
-<g id="a_Node000161"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html" target="_top" xlink:title="How the card reveal (Game/CardReveal/) chooses its balloon pop.">
+<g id="a_Node000161"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html" target="_top" xlink:title="The card reveal (Game/CardReveal/, UI/CardReveal/): which balloon pops there are, how one is chosen,...">
 <polygon fill="white" stroke="#666666" points="193.5,-1440.5 18.5,-1440.5 18.5,-1410.5 193.5,-1410.5 193.5,-1440.5"/>
 <text text-anchor="start" x="26.5" y="-1428.5" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text text-anchor="middle" x="106" y="-1417.5" font-family="Helvetica,sans-Serif" font-size="10.00">CardReveal.ICardRevealSettings</text>

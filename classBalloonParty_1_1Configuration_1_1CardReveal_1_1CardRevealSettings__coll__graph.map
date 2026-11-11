@@ -2,6 +2,6 @@
 <area shape="rect" id="Node000001" title="The card reveal&#39;s settings." alt="" coords="58,93,287,133"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,13,135,38"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,45,152,91,148,95,93,49"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html" title="How the card reveal (Game/CardReveal/) chooses its balloon pop." alt="" coords="159,5,392,45"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html" title="The card reveal (Game/CardReveal/, UI/CardReveal/): which balloon pops there are, how one is chosen,..." alt="" coords="159,5,392,45"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="244,56,197,95,194,91,240,52"/>
 </map>

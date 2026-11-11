@@ -128,7 +128,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ab9bc58cb971f6c10541e477a5ae58cb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec75aa2fe4e1b39f65b990025b76f0a7" id="r_aec75aa2fe4e1b39f65b990025b76f0a7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aec75aa2fe4e1b39f65b990025b76f0a7">IsRegistered</a> (string key)</td></tr>
 <tr class="separator:aec75aa2fe4e1b39f65b990025b76f0a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b0b5027499d1e5d71c8beb1abcce867" id="r_a5b0b5027499d1e5d71c8beb1abcce867"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5b0b5027499d1e5d71c8beb1abcce867">KeyFor</a> (<a class="el" href="HeadsUpBuilder_8cs.html#aef19bab18b9814edeef255c43e4f6bbc">Object</a> prefab)</td></tr>
+<tr class="memitem:a5b0b5027499d1e5d71c8beb1abcce867" id="r_a5b0b5027499d1e5d71c8beb1abcce867"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5b0b5027499d1e5d71c8beb1abcce867">KeyFor</a> (<a class="el" href="CardRevealBuilder_8cs.html#aef19bab18b9814edeef255c43e4f6bbc">Object</a> prefab)</td></tr>
 <tr class="memdesc:a5b0b5027499d1e5d71c8beb1abcce867"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cached pool key for a prefab — <code>Object.name</code> allocates on every access.  <br /></td></tr>
 <tr class="separator:a5b0b5027499d1e5d71c8beb1abcce867"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad69df90780853f996cd4be847d148540" id="r_ad69df90780853f996cd4be847d148540"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad69df90780853f996cd4be847d148540">Prewarm</a> (string key, int count)</td></tr>
@@ -162,7 +162,7 @@ Properties</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a107a1515096b88f183d59edcd55fd22b" id="r_a107a1515096b88f183d59edcd55fd22b"><td class="memItemLeft" align="right" valign="top">readonly Dictionary&lt; string, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolChannel.html">IPoolChannel</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a107a1515096b88f183d59edcd55fd22b">_channels</a> = new()</td></tr>
 <tr class="separator:a107a1515096b88f183d59edcd55fd22b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70db34af0cdd58c4f800f02ec0400265" id="r_a70db34af0cdd58c4f800f02ec0400265"><td class="memItemLeft" align="right" valign="top">readonly Dictionary&lt; <a class="el" href="HeadsUpBuilder_8cs.html#aef19bab18b9814edeef255c43e4f6bbc">Object</a>, string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a70db34af0cdd58c4f800f02ec0400265">_prefabKeys</a> = new()</td></tr>
+<tr class="memitem:a70db34af0cdd58c4f800f02ec0400265" id="r_a70db34af0cdd58c4f800f02ec0400265"><td class="memItemLeft" align="right" valign="top">readonly Dictionary&lt; <a class="el" href="CardRevealBuilder_8cs.html#aef19bab18b9814edeef255c43e4f6bbc">Object</a>, string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a70db34af0cdd58c4f800f02ec0400265">_prefabKeys</a> = new()</td></tr>
 <tr class="separator:a70db34af0cdd58c4f800f02ec0400265"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9197a2578304c7c37872c504c82863d" id="r_ac9197a2578304c7c37872c504c82863d"><td class="memItemLeft" align="right" valign="top">Transform&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac9197a2578304c7c37872c504c82863d">_root</a></td></tr>
 <tr class="separator:ac9197a2578304c7c37872c504c82863d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -281,7 +281,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">string BalloonParty.Shared.Pool.PoolManager.KeyFor </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="HeadsUpBuilder_8cs.html#aef19bab18b9814edeef255c43e4f6bbc">Object</a></td>          <td class="paramname"><span class="paramname"><em>prefab</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="CardRevealBuilder_8cs.html#aef19bab18b9814edeef255c43e4f6bbc">Object</a></td>          <td class="paramname"><span class="paramname"><em>prefab</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -554,7 +554,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">readonly Dictionary&lt;<a class="el" href="HeadsUpBuilder_8cs.html#aef19bab18b9814edeef255c43e4f6bbc">Object</a>, string&gt; BalloonParty.Shared.Pool.PoolManager._prefabKeys = new()</td>
+          <td class="memname">readonly Dictionary&lt;<a class="el" href="CardRevealBuilder_8cs.html#aef19bab18b9814edeef255c43e4f6bbc">Object</a>, string&gt; BalloonParty.Shared.Pool.PoolManager._prefabKeys = new()</td>
         </tr>
       </table>
   </td>

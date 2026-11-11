@@ -114,7 +114,7 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Configuration_1_1CardReveal_1
 </div><!--header-->
 <div class="contents">
 
-<p>How the card reveal (<code>Game/CardReveal/</code>) chooses its balloon pop.  
+<p>The card reveal (<code>Game/CardReveal/</code>, <code>UI/CardReveal/</code>): which balloon pops there are, how one is chosen, and how the reveal plays.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Configuration.CardReveal.ICardRevealSettings:</div>
@@ -126,16 +126,158 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Configuration_1_1CardReveal_1
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a7519057eaff5377811d9f045fd90d09f" id="r_a7519057eaff5377811d9f045fd90d09f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7519057eaff5377811d9f045fd90d09f">FramesPerSecond</a><code> [get]</code></td></tr>
+<tr class="separator:a7519057eaff5377811d9f045fd90d09f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3b052cade559a7ad47695590cd97f79" id="r_ae3b052cade559a7ad47695590cd97f79"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae3b052cade559a7ad47695590cd97f79">HoldBeforePopSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:ae3b052cade559a7ad47695590cd97f79"><td class="mdescLeft">&#160;</td><td class="mdescRight">The whole balloon's beat at its place before it pops.  <br /></td></tr>
+<tr class="separator:ae3b052cade559a7ad47695590cd97f79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03fa25f1086a1b597742cb5245757391" id="r_a03fa25f1086a1b597742cb5245757391"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a03fa25f1086a1b597742cb5245757391">InsideShowThrough</a><code> [get]</code></td></tr>
+<tr class="memdesc:a03fa25f1086a1b597742cb5245757391"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much of the ribbons inside shows through the whole front rubber, as a shadow inside the balloon: 0 to 1.  <br /></td></tr>
+<tr class="separator:a03fa25f1086a1b597742cb5245757391"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace7495106fd03eb6272a5dbfa6b2e526" id="r_ace7495106fd03eb6272a5dbfa6b2e526"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace7495106fd03eb6272a5dbfa6b2e526">Parallax</a><code> [get]</code></td></tr>
+<tr class="memdesc:ace7495106fd03eb6272a5dbfa6b2e526"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far the two rubber layers part while the balloon moves, as a share of its distance from its place: the front leads, the back lags, so what is inside reads as inside it.  <br /></td></tr>
+<tr class="separator:ace7495106fd03eb6272a5dbfa6b2e526"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad25cf5e0a35671a2cc5f1c0d28bf4214" id="r_ad25cf5e0a35671a2cc5f1c0d28bf4214"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad25cf5e0a35671a2cc5f1c0d28bf4214">PopCount</a><code> [get]</code></td></tr>
-<tr class="memdesc:ad25cf5e0a35671a2cc5f1c0d28bf4214"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many baked pops there are to choose from, 1 or more.  <br /></td></tr>
+<tr class="memdesc:ad25cf5e0a35671a2cc5f1c0d28bf4214"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many pops there are to choose from: one per sheet, 1 or more.  <br /></td></tr>
 <tr class="separator:ad25cf5e0a35671a2cc5f1c0d28bf4214"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a6c09860a4052f22acbe5b545265bbd" id="r_a3a6c09860a4052f22acbe5b545265bbd"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; Texture2D &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3a6c09860a4052f22acbe5b545265bbd">PopSheets</a><code> [get]</code></td></tr>
+<tr class="memdesc:a3a6c09860a4052f22acbe5b545265bbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The baked pops' sheets (<code>Tools/art/balloon_pop</code>): each the front layer's frames over the back layer's, holding the rubber's surface for <code>BalloonParty/Sprite/LitFlipbook</code> to light.  <br /></td></tr>
+<tr class="separator:a3a6c09860a4052f22acbe5b545265bbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7df24f359dccf8f0b6754e0037055585" id="r_a7df24f359dccf8f0b6754e0037055585"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7df24f359dccf8f0b6754e0037055585">RecentPopsAvoided</a><code> [get]</code></td></tr>
 <tr class="memdesc:a7df24f359dccf8f0b6754e0037055585"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many of the last pops shown a new reveal never repeats, so a pop rarely comes back soon.  <br /></td></tr>
 <tr class="separator:a7df24f359dccf8f0b6754e0037055585"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87bae69d5a8c6c65abda8f8069f45484" id="r_a87bae69d5a8c6c65abda8f8069f45484"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a87bae69d5a8c6c65abda8f8069f45484">RibbonBurstSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:a87bae69d5a8c6c65abda8f8069f45484"><td class="mdescLeft">&#160;</td><td class="mdescRight">How long the ribbons take to burst out of the balloon to their spots.  <br /></td></tr>
+<tr class="separator:a87bae69d5a8c6c65abda8f8069f45484"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a248bf3337d766f1f696cc104003f7c52" id="r_a248bf3337d766f1f696cc104003f7c52"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a248bf3337d766f1f696cc104003f7c52">RibbonExitSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:a248bf3337d766f1f696cc104003f7c52"><td class="mdescLeft">&#160;</td><td class="mdescRight">How long the ribbons take to fly off and fade at the end.  <br /></td></tr>
+<tr class="separator:a248bf3337d766f1f696cc104003f7c52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7dbe0bdd5322b655042d1418e105507a" id="r_a7dbe0bdd5322b655042d1418e105507a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7dbe0bdd5322b655042d1418e105507a">RibbonMinimumSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:a7dbe0bdd5322b655042d1418e105507a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The ribbons' shortest flight, from the pop to gone, so they can always be read.  <br /></td></tr>
+<tr class="separator:a7dbe0bdd5322b655042d1418e105507a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6a8923d4282b072c3470ebae2ad349d" id="r_ac6a8923d4282b072c3470ebae2ad349d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac6a8923d4282b072c3470ebae2ad349d">RibbonSecondsWithoutAscent</a><code> [get]</code></td></tr>
+<tr class="memdesc:ac6a8923d4282b072c3470ebae2ad349d"><td class="mdescLeft">&#160;</td><td class="mdescRight">How long the ribbons fly when no ascent runs with the reveal (a retry's bonus card, the cheat), from the pop to gone.  <br /></td></tr>
+<tr class="separator:ac6a8923d4282b072c3470ebae2ad349d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad02e1bfe8d09602b97e2f0b8016d4af6" id="r_ad02e1bfe8d09602b97e2f0b8016d4af6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad02e1bfe8d09602b97e2f0b8016d4af6">RibbonsFromFrame</a><code> [get]</code></td></tr>
+<tr class="memdesc:ad02e1bfe8d09602b97e2f0b8016d4af6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The frame of the pop on which the ribbons fly out: once the rubber has opened.  <br /></td></tr>
+<tr class="separator:ad02e1bfe8d09602b97e2f0b8016d4af6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe039a31abd778ef5a17a9aac52e05d9" id="r_afe039a31abd778ef5a17a9aac52e05d9"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe039a31abd778ef5a17a9aac52e05d9">RibbonsGoneAtAscent</a><code> [get]</code></td></tr>
+<tr class="memdesc:afe039a31abd778ef5a17a9aac52e05d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">On a level-up, the share of the level's ascent by which the ribbons are gone: just before the next level settles on screen.  <br /></td></tr>
+<tr class="separator:afe039a31abd778ef5a17a9aac52e05d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fa912a9bdc244148ee0631efb0854d4" id="r_a9fa912a9bdc244148ee0631efb0854d4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9fa912a9bdc244148ee0631efb0854d4">RiseSeconds</a><code> [get]</code></td></tr>
+<tr class="separator:a9fa912a9bdc244148ee0631efb0854d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bd275eed8a7b0eb3a3b258b0a006ba9" id="r_a5bd275eed8a7b0eb3a3b258b0a006ba9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5bd275eed8a7b0eb3a3b258b0a006ba9">SheetColumns</a><code> [get]</code></td></tr>
+<tr class="memdesc:a5bd275eed8a7b0eb3a3b258b0a006ba9"><td class="mdescLeft">&#160;</td><td class="mdescRight">A layer's frames across one half of a sheet.  <br /></td></tr>
+<tr class="separator:a5bd275eed8a7b0eb3a3b258b0a006ba9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadc7457259dd9b044121000695409996" id="r_aadc7457259dd9b044121000695409996"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aadc7457259dd9b044121000695409996">SheetRows</a><code> [get]</code></td></tr>
+<tr class="memdesc:aadc7457259dd9b044121000695409996"><td class="mdescLeft">&#160;</td><td class="mdescRight">A layer's frames down one half of a sheet.  <br /></td></tr>
+<tr class="separator:aadc7457259dd9b044121000695409996"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>How the card reveal (<code>Game/CardReveal/</code>) chooses its balloon pop. </p>
+<div class="textblock"><p>The card reveal (<code>Game/CardReveal/</code>, <code>UI/CardReveal/</code>): which balloon pops there are, how one is chosen, and how the reveal plays. </p>
 </div><h2 class="groupheader">Property Documentation</h2>
+<a id="a7519057eaff5377811d9f045fd90d09f" name="a7519057eaff5377811d9f045fd90d09f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7519057eaff5377811d9f045fd90d09f">&#9670;&#160;</a></span>FramesPerSecond</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.ICardRevealSettings.FramesPerSecond</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a15b83647d5a739a165e49ffa7845187e">BalloonParty.Configuration.CardReveal.CardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="ae3b052cade559a7ad47695590cd97f79" name="ae3b052cade559a7ad47695590cd97f79"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3b052cade559a7ad47695590cd97f79">&#9670;&#160;</a></span>HoldBeforePopSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.ICardRevealSettings.HoldBeforePopSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The whole balloon's beat at its place before it pops. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ac7252f33c862b50bfd5e5a97b7307b3b">BalloonParty.Configuration.CardReveal.CardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="a03fa25f1086a1b597742cb5245757391" name="a03fa25f1086a1b597742cb5245757391"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03fa25f1086a1b597742cb5245757391">&#9670;&#160;</a></span>InsideShowThrough</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.ICardRevealSettings.InsideShowThrough</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How much of the ribbons inside shows through the whole front rubber, as a shadow inside the balloon: 0 to 1. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aa96214ec9ae3edbae534a85d9fec39ad">BalloonParty.Configuration.CardReveal.CardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="ace7495106fd03eb6272a5dbfa6b2e526" name="ace7495106fd03eb6272a5dbfa6b2e526"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace7495106fd03eb6272a5dbfa6b2e526">&#9670;&#160;</a></span>Parallax</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.ICardRevealSettings.Parallax</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How far the two rubber layers part while the balloon moves, as a share of its distance from its place: the front leads, the back lags, so what is inside reads as inside it. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a9fe5ed3ff9a3b6e5bbaf8f4f7a0c04bd">BalloonParty.Configuration.CardReveal.CardRevealSettings</a>.</p>
+
+</div>
+</div>
 <a id="ad25cf5e0a35671a2cc5f1c0d28bf4214" name="ad25cf5e0a35671a2cc5f1c0d28bf4214"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad25cf5e0a35671a2cc5f1c0d28bf4214">&#9670;&#160;</a></span>PopCount</h2>
 
@@ -156,9 +298,36 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>How many baked pops there are to choose from, 1 or more. </p>
+<p>How many pops there are to choose from: one per sheet, 1 or more. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a046108486f642d33d98f2287fc7b4fc6">BalloonParty.Configuration.CardReveal.CardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="a3a6c09860a4052f22acbe5b545265bbd" name="a3a6c09860a4052f22acbe5b545265bbd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a6c09860a4052f22acbe5b545265bbd">&#9670;&#160;</a></span>PopSheets</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyList&lt;Texture2D&gt; BalloonParty.Configuration.CardReveal.ICardRevealSettings.PopSheets</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The baked pops' sheets (<code>Tools/art/balloon_pop</code>): each the front layer's frames over the back layer's, holding the rubber's surface for <code>BalloonParty/Sprite/LitFlipbook</code> to light. </p>
+<p>Empty until a pop is baked, and then the reveal stays off. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ac9173086ea2182c9c72df959d4979394">BalloonParty.Configuration.CardReveal.CardRevealSettings</a>.</p>
 
 </div>
 </div>
@@ -185,6 +354,238 @@ Properties</h2></td></tr>
 <p>How many of the last pops shown a new reveal never repeats, so a pop rarely comes back soon. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a57d7302fe7b1bcf4f9c53318eb7d51e1">BalloonParty.Configuration.CardReveal.CardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="a87bae69d5a8c6c65abda8f8069f45484" name="a87bae69d5a8c6c65abda8f8069f45484"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87bae69d5a8c6c65abda8f8069f45484">&#9670;&#160;</a></span>RibbonBurstSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.ICardRevealSettings.RibbonBurstSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How long the ribbons take to burst out of the balloon to their spots. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a24689f2f26cf2be10ea267dc5687750a">BalloonParty.Configuration.CardReveal.CardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="a248bf3337d766f1f696cc104003f7c52" name="a248bf3337d766f1f696cc104003f7c52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a248bf3337d766f1f696cc104003f7c52">&#9670;&#160;</a></span>RibbonExitSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.ICardRevealSettings.RibbonExitSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How long the ribbons take to fly off and fade at the end. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aaa28a05e84bad186c52cf88553b94767">BalloonParty.Configuration.CardReveal.CardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="a7dbe0bdd5322b655042d1418e105507a" name="a7dbe0bdd5322b655042d1418e105507a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7dbe0bdd5322b655042d1418e105507a">&#9670;&#160;</a></span>RibbonMinimumSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.ICardRevealSettings.RibbonMinimumSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The ribbons' shortest flight, from the pop to gone, so they can always be read. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a706570291747637175b218ec39813791">BalloonParty.Configuration.CardReveal.CardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="ac6a8923d4282b072c3470ebae2ad349d" name="ac6a8923d4282b072c3470ebae2ad349d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6a8923d4282b072c3470ebae2ad349d">&#9670;&#160;</a></span>RibbonSecondsWithoutAscent</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.ICardRevealSettings.RibbonSecondsWithoutAscent</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How long the ribbons fly when no ascent runs with the reveal (a retry's bonus card, the cheat), from the pop to gone. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a3bd99322ad1755a8f93a2a871d182393">BalloonParty.Configuration.CardReveal.CardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="ad02e1bfe8d09602b97e2f0b8016d4af6" name="ad02e1bfe8d09602b97e2f0b8016d4af6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad02e1bfe8d09602b97e2f0b8016d4af6">&#9670;&#160;</a></span>RibbonsFromFrame</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.CardReveal.ICardRevealSettings.RibbonsFromFrame</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The frame of the pop on which the ribbons fly out: once the rubber has opened. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a9ce108e13f6db51208415578f2a8b8af">BalloonParty.Configuration.CardReveal.CardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="afe039a31abd778ef5a17a9aac52e05d9" name="afe039a31abd778ef5a17a9aac52e05d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe039a31abd778ef5a17a9aac52e05d9">&#9670;&#160;</a></span>RibbonsGoneAtAscent</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.ICardRevealSettings.RibbonsGoneAtAscent</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>On a level-up, the share of the level's ascent by which the ribbons are gone: just before the next level settles on screen. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a34747a27fa73541e63c11058accd07bf">BalloonParty.Configuration.CardReveal.CardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="a9fa912a9bdc244148ee0631efb0854d4" name="a9fa912a9bdc244148ee0631efb0854d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9fa912a9bdc244148ee0631efb0854d4">&#9670;&#160;</a></span>RiseSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.ICardRevealSettings.RiseSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a80b6151ca92f971135212ec49d962832">BalloonParty.Configuration.CardReveal.CardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="a5bd275eed8a7b0eb3a3b258b0a006ba9" name="a5bd275eed8a7b0eb3a3b258b0a006ba9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5bd275eed8a7b0eb3a3b258b0a006ba9">&#9670;&#160;</a></span>SheetColumns</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.CardReveal.ICardRevealSettings.SheetColumns</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A layer's frames across one half of a sheet. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a53df8769fb4bb08729164ebd5bae624c">BalloonParty.Configuration.CardReveal.CardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="aadc7457259dd9b044121000695409996" name="aadc7457259dd9b044121000695409996"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadc7457259dd9b044121000695409996">&#9670;&#160;</a></span>SheetRows</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.CardReveal.ICardRevealSettings.SheetRows</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A layer's frames down one half of a sheet. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a83d012ff6fecff22d7fd54eb2f0f01ef">BalloonParty.Configuration.CardReveal.CardRevealSettings</a>.</p>
 
 </div>
 </div>
