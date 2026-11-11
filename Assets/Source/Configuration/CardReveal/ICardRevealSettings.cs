@@ -88,5 +88,15 @@ namespace BalloonParty.Configuration.CardReveal
 
         /// <summary>How fast the torn rubber's fall speeds up, in canvas units per second squared.</summary>
         float RubberFallGravity { get; }
+
+        /// <summary>
+        ///     The light of the balloon's colour its tear flashes into the scene light field, in world units: it
+        ///     lights the board around the reveal, and the reveal itself.
+        /// </summary>
+        float PopFlashRadius { get; }
+
+        float PopFlashIntensity { get; }
+
+        float PopFlashSeconds { get; }
     }
 }

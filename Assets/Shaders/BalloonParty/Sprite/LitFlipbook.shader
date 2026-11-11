@@ -18,12 +18,15 @@ Shader "BalloonParty/Sprite/LitFlipbook"
     //   it is never cut off at the frame's edge) and tinted a dark shade of the balloon's colour.
     //
     // The steps between tones are anti-aliased to a screen pixel (fwidth), however far the sheet is scaled, so
-    // the fragment shader has no per-pixel branches. The light's colour and dimming are taken as the balloons'
-    // body takes them (Sprite/Diffuse in Ambient mode on Balloon/DiffuseSprite), so a reveal at dusk sits in the
-    // same light as the balloons. Works on a RawImage (pick the frame with its UV rect). Not mask-safe: it has no
-    // UI clip rect or stencil, so under a RectMask2D or Mask it draws unclipped (PencilText's block is the one
-    // to copy if it ever needs to). Tools/art/balloon_pop/pack_sheets.py previews the bake with a smooth
-    // version of this light, not the cel look; the game is the place to judge the shading.
+    // the fragment shader has no per-pixel branches. The light is read from the scene light field per corner
+    // (SceneLight.cginc), as the balloons' body takes it (Sprite/Diffuse in Full mode): the time-of-day light,
+    // re-graded as on the balloons, plus local lights (a pop's flash, a laser), whose colour adds and whose
+    // direction bends the shading toward them; it needs the vertex stage's texture reads (target 3.5). The
+    // card reveal draws it on a World Space canvas among the board's sprites (UI/CameraFittedCanvas), so the
+    // screen-space light tints it and its scene capture sees it. Works on a RawImage (pick the frame with its UV
+    // rect). Not mask-safe: it has no UI clip rect or stencil, so under a RectMask2D or Mask it draws unclipped
+    // (PencilText's block is the one to copy if it ever needs to). Tools/art/balloon_pop/pack_sheets.py
+    // previews the bake with a smooth version of this light, not the cel look; the game is the place to judge it.
     Properties
     {
         [PerRendererData] _MainTex ("Surface (normal xy, occlusion, coverage)", 2D) = "white" {}
@@ -106,7 +109,7 @@ Shader "BalloonParty/Sprite/LitFlipbook"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #pragma target 3.0
+            #pragma target 3.5
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
 
@@ -178,22 +181,25 @@ Shader "BalloonParty/Sprite/LitFlipbook"
             v2f vert(appdata_t IN)
             {
                 v2f OUT;
+                // The light field where this corner is: the time-of-day light plus any local light (a pop's flash,
+                // a laser), as the balloons' bodies take it (Sprite/Diffuse in Full mode), and a direction bent
+                // toward a near light. Read per corner, so a light beside the balloon lights its near side more.
+                float2 world = mul(unity_ObjectToWorld, IN.vertex).xy;
+                OUT.lightTint = SceneLightTintAtLOD(world) + SceneLightAmbientRegrade(_AmbientHue, _AmbientDimming);
+                // The 2D game camera looks straight down the board, so the screen's axes are the world's.
+                OUT.toLight = normalize(float3(SceneLightDirectionAtLOD(world), _LightHeight));
+                OUT.halfway = normalize(OUT.toLight + float3(0.0, 0.0, 1.0));
+                OUT.shadowFade = ShadowLightFadeAtLOD(world);
+
                 // The shadow's image is the back layer's, moved away from the light: on a canvas, object space is
-                // the canvas's, so the distance is in canvas units.
+                // the canvas's, so the distance is in canvas units. The time-of-day light's direction, the same at
+                // every corner, so the image moves whole.
                 float4 position = IN.vertex;
                 position.xy -= SceneLightDirection() * _ShadowOffset * _DropShadow;
                 OUT.vertex = UnityObjectToClipPos(position);
                 OUT.texcoord = IN.texcoord;
                 OUT.color = IN.color * _Color * _RendererColor;
-
-                // One light for the whole quad: the flat global one, as the balloons' bodies take it.
-                OUT.lightTint = SceneLightTint() + SceneLightAmbientRegrade(_AmbientHue, _AmbientDimming);
                 OUT.color.rgb = SceneLightDesaturate(OUT.color.rgb, _AmbientDesaturation);
-
-                // The 2D game camera looks straight down the board, so the screen's axes are the world's.
-                OUT.toLight = normalize(float3(SceneLightDirection(), _LightHeight));
-                OUT.halfway = normalize(OUT.toLight + float3(0.0, 0.0, 1.0));
-                OUT.shadowFade = ShadowLightFade();
                 return OUT;
             }
 

@@ -44,6 +44,15 @@ namespace BalloonParty.Configuration.CardReveal
                  "225 wide).")]
         [SerializeField] [Min(0f)] private float _rubberFallGravity = 380f;
 
+        [Header("Light")]
+        [Tooltip("When the rubber tears, it flashes a light of its colour into the scene light field, lighting the " +
+                 "board around it (and the ribbons), and stirs the disturbance field as a board pop does. Its " +
+                 "radius in world units, its strength, and how long it lasts.")]
+        [SerializeField] [Min(0f)] private float _popFlashRadius = 2.4f;
+
+        [SerializeField] [Min(0f)] private float _popFlashIntensity = 2.5f;
+        [SerializeField] [Min(0f)] private float _popFlashSeconds = 0.3f;
+
         [Header("Ribbons")]
         [Tooltip("The pop's frame on which the ribbons fly out: once the rubber has opened.")]
         [FormerlySerializedAs("_writeFromFrame")]
@@ -88,5 +97,8 @@ namespace BalloonParty.Configuration.CardReveal
         public float Parallax => _parallax;
         public int RubberFallsFromFrame => _rubberFallsFromFrame;
         public float RubberFallGravity => _rubberFallGravity;
+        public float PopFlashRadius => _popFlashRadius;
+        public float PopFlashIntensity => _popFlashIntensity;
+        public float PopFlashSeconds => _popFlashSeconds;
     }
 }

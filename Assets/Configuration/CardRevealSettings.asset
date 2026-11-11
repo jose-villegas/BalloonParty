@@ -24,6 +24,9 @@ MonoBehaviour:
   _parallax: 0.02
   _rubberFallsFromFrame: 3
   _rubberFallGravity: 380
+  _popFlashRadius: 2.4
+  _popFlashIntensity: 2.5
+  _popFlashSeconds: 0.3
   _ribbonsFromFrame: 4
   _ribbonBurstSeconds: 0.4
   _ribbonExitSeconds: 0.5

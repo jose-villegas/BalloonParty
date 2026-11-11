@@ -6,10 +6,12 @@ Shader "BalloonParty/Sprite/CelRibbon"
     // along the ribbon's middle and 0 at its edges, and -1 marks the copy of the strip that draws its drop
     // shadow, which this shader moves away from the light.
     // A fold facing the light is drawn in the ribbon's colour, one facing away in the shadow tone, with a hard
-    // step between, and a satin sheen runs along the middle of the lit folds. The colour takes the time-of-day
-    // light as the balloons' bodies do (Sprite/Diffuse in Ambient mode). For a canvas: the batch's object space
-    // is the canvas's, so the shadow's distance is in canvas units. Not mask-safe: it has no UI clip rect or
-    // stencil, so under a RectMask2D or Mask it draws unclipped (PencilText's block is the one to copy).
+    // step between, and a satin sheen runs along the middle of the lit folds. The light is the scene light field's
+    // at each vertex, as on Sprite/LitFlipbook: the time-of-day light as the balloons' bodies take it, plus local
+    // lights, which add their colour and turn the lit side toward them (target 3.5, for the vertex reads). For a
+    // canvas: the batch's object space is the canvas's, so the shadow's distance is in canvas units. Not
+    // mask-safe: it has no UI clip rect or stencil, so under a RectMask2D or Mask it draws unclipped (PencilText's
+    // block is the one to copy).
     Properties
     {
         [PerRendererData] _MainTex ("Unused", 2D) = "white" {}
@@ -56,7 +58,7 @@ Shader "BalloonParty/Sprite/CelRibbon"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #pragma target 3.0
+            #pragma target 3.5
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
 
@@ -75,6 +77,7 @@ Shader "BalloonParty/Sprite/CelRibbon"
                 float3 lightTint : TEXCOORD1;
                 float  lightSide : TEXCOORD2;
                 float  isShadow  : TEXCOORD3;
+                float  shadowFade : TEXCOORD4;
             };
 
             half4 _Color;
@@ -92,18 +95,22 @@ Shader "BalloonParty/Sprite/CelRibbon"
             v2f vert(appdata_t IN)
             {
                 v2f OUT;
-                float2 toLight = SceneLightDirection();
+                // The light field where this vertex is, as on Sprite/LitFlipbook: local lights add their colour and
+                // bend the direction toward them.
+                float2 world = mul(unity_ObjectToWorld, IN.vertex).xy;
+                OUT.lightTint = SceneLightTintAtLOD(world) + SceneLightAmbientRegrade(_AmbientHue, _AmbientDimming);
+                OUT.shadowFade = ShadowLightFadeAtLOD(world);
+                // A fold turns only left or right (the ribbon twisting along its length), so only the light's side lights it.
+                OUT.lightSide = SceneLightDirectionAtLOD(world).x;
+
+                // The shadow's copy of the strip moves whole, along the time-of-day light.
                 OUT.isShadow = IN.texcoord.y < -0.5 ? 1.0 : 0.0;
                 float4 position = IN.vertex;
-                position.xy -= toLight * _ShadowReach * OUT.isShadow;
+                position.xy -= SceneLightDirection() * _ShadowReach * OUT.isShadow;
                 OUT.vertex = UnityObjectToClipPos(position);
                 OUT.color = IN.color * _Color;
                 OUT.color.rgb = SceneLightDesaturate(OUT.color.rgb, _AmbientDesaturation);
                 OUT.shading = IN.texcoord;
-                OUT.lightTint = SceneLightTint() + SceneLightAmbientRegrade(_AmbientHue, _AmbientDimming);
-
-                // A fold turns only left or right (the ribbon twisting along its length), so only the light's side lights it.
-                OUT.lightSide = toLight.x;
                 return OUT;
             }
 
@@ -112,7 +119,7 @@ Shader "BalloonParty/Sprite/CelRibbon"
                 float alpha = IN.color.a;
                 if (IN.isShadow > 0.5)
                 {
-                    float shadow = _ShadowColor.a * alpha * ShadowLightFade();
+                    float shadow = _ShadowColor.a * alpha * IN.shadowFade;
                     return half4(_ShadowColor.rgb * shadow, shadow);
                 }
 

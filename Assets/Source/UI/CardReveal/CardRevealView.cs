@@ -4,8 +4,12 @@ using BalloonParty.Configuration.CardReveal;
 using BalloonParty.Configuration.Cinematics;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.CardReveal;
+using BalloonParty.Configuration.Effects;
 using BalloonParty.Game.Level;
+using BalloonParty.Shared.Disturbance;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.SceneLight;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MessagePipe;
@@ -22,7 +26,10 @@ namespace BalloonParty.UI.CardReveal
     ///     pops (one of the baked pops, its two rubber layers either side of the ribbons), and the ribbons fly off
     ///     it, one with the card's title on it and one with what the card does, readable as they drift. On a
     ///     level-up they fly with the level's ascent and are gone just before the next level settles. The rubber
-    ///     is surface data lit live by <c>BalloonParty/Sprite/LitFlipbook</c>, so it takes the scene's light.
+    ///     is surface data lit live by <c>BalloonParty/Sprite/LitFlipbook</c>, so it takes the scene's light, and
+    ///     its tear flashes a light of its colour into the scene light field and stirs the disturbance field, as a
+    ///     board pop does. It sits on its own World Space canvas among the board's sprites
+    ///     (<see cref="CameraFittedCanvas" />), so the screen-space light tints it and sees it.
     ///     Attaches as the stage only when there are pops to play; until then the tooltip announces the cards.
     ///     Built by <c>Tools/BalloonParty/CardReveal/Build Card Reveal</c>.
     /// </summary>
@@ -53,16 +60,20 @@ namespace BalloonParty.UI.CardReveal
         [Inject] private IGamePalette _palette;
         [Inject] private IActiveLevelParameters _level;
         [Inject] private ISubscriber<LevelAscendStartedMessage> _ascendStarted;
+        [Inject] private SceneLightFieldService _lightField;
+        [Inject] private DisturbanceFieldService _disturbanceField;
 
         private CancellationTokenSource _playing;
         private IDisposable _subscriptions;
         private Material _rubber;
         private Material _rubberShadow;
         private Vector2 _place;
+        private string _colorId;
         private float _ascentStartedAt = float.NegativeInfinity;
         private float _releasedAt;
         private float _exitFrom;
         private bool _attached;
+        private bool _burst;
 
         private void Awake()
         {
@@ -201,6 +212,7 @@ namespace BalloonParty.UI.CardReveal
             var releaseAt = Mathf.Min(_settings.RibbonsFromFrame, frames - 1) / _settings.FramesPerSecond;
             _releasedAt = float.NaN;
             _exitFrom = float.NaN;
+            _burst = false;
             var elapsed = 0f;
             while (true)
             {
@@ -209,6 +221,7 @@ namespace BalloonParty.UI.CardReveal
                 SetRubberShown(frame < frames);
                 ShowFrame(Mathf.Min(frame, frames - 1));
                 Fall(FallDistance(elapsed, _settings));
+                BurstOnTear(frame);
                 var gone = elapsed >= releaseAt && FlyRibbons(revealStartedAt) >= 1f;
                 if (gone && elapsed * _settings.FramesPerSecond >= frames)
                 {
@@ -265,17 +278,37 @@ namespace BalloonParty.UI.CardReveal
             _group.alpha = 1f;
         }
 
-        // One of the colours the level's balloons come in, so the prize balloon looks like one of them.
+        // One of the colours the level's balloons come in, so the prize balloon looks like one of them. Kept, so
+        // its tear flashes that colour.
         private Color TintForTheLevel()
         {
             var colors = _level.Current.AllowedColors;
             if (colors == null || colors.Count == 0)
             {
+                _colorId = null;
                 return Color.white;
             }
 
-            var entry = _palette.GetEntry(colors[UnityEngine.Random.Range(0, colors.Count)]);
+            _colorId = colors[UnityEngine.Random.Range(0, colors.Count)];
+            var entry = _palette.GetEntry(_colorId);
             return entry != null ? entry.Color : Color.white;
+        }
+
+        // Once, when the rubber tears: a flash of the balloon's colour in the light field, which lights the board
+        // around it and the reveal itself, and a pop's stir in the disturbance field, as a board balloon's pop.
+        private void BurstOnTear(int frame)
+        {
+            if (_burst || frame < _settings.RubberFallsFromFrame)
+            {
+                return;
+            }
+
+            _burst = true;
+            var at = _balloon.position;
+            var paletteIndex = _palette.PaletteIndexOf(_colorId);
+            _lightField.Flash(at, _settings.PopFlashRadius, _settings.PopFlashIntensity, _settings.PopFlashSeconds,
+                paletteIndex);
+            _disturbanceField.Stamp(StampSource.BalloonPop, at, Vector2.zero, paletteIndex);
         }
 
         private Material WithSheetGrid(Material material)

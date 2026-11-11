@@ -2,12 +2,15 @@ using System.Collections.Generic;
 using System.Linq;
 using BalloonParty.Configuration.CardReveal;
 using BalloonParty.Game;
+using BalloonParty.UI;
 using BalloonParty.UI.CardReveal;
 using BalloonParty.UI.HeadsUp;
 using BalloonParty.UI.Tooltip;
 using TMPro;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
@@ -16,10 +19,13 @@ namespace BalloonParty.Editor
     /// <summary>
     ///     Builds the card reveal: imports the baked pop sheets under <c>Assets/Sprites/UI/CardReveal/</c> as linear
     ///     data, lists them on the <see cref="CardRevealSettings" /> asset (made if missing, and assigned to the
-    ///     game scope), makes the rubber's material, and builds the <see cref="CardRevealView" /> on
-    ///     <c>GameCanvas</c>: the balloon's back layer, the two ribbons (the card's title and what it does), its
-    ///     front layer. The ribbons are cream satin written in the tooltip's pencil font. A starting look to
-    ///     restyle by hand; running it again rebuilds it.
+    ///     game scope), makes the materials, and builds the <see cref="CardRevealView" /> on a canvas of its own,
+    ///     the <c>CardRevealCanvas</c> prefab, placed in the Game scene: the balloon's shadow and back layer, the two
+    ///     ribbons (the card's title and what it does), its front layer. The canvas is World Space, fitted to the
+    ///     camera (<see cref="CameraFittedCanvas" />), on the Balloons layer and sorted just under the screen-space
+    ///     light, so the reveal takes part in the game's lighting as the board's balloons do. The ribbons are cream
+    ///     satin written in the tooltip's pencil font. A starting look to restyle by hand; running it again
+    ///     rebuilds it.
     /// </summary>
     internal static class CardRevealBuilder
     {
@@ -33,6 +39,17 @@ namespace BalloonParty.Editor
         private const string RibbonMaterialPath = "Assets/Materials/UI/CardRevealRibbon.mat";
         private const string RibbonShaderName = "BalloonParty/Sprite/CelRibbon";
         private const string RootName = "CardReveal";
+        private const string CanvasPrefabPath = "Assets/Prefabs/Game/CardRevealCanvas.prefab";
+        private const string GameScenePath = "Assets/Scenes/Game.unity";
+
+        // A layer the main camera draws and the screen-space light's scene capture records (SceneCaptureService's
+        // captured layers), so the reveal casts and bounces light as the board's balloons do.
+        private const string RevealLayer = "Balloons";
+
+        // Above every gameplay sprite, and just under the screen-space light's overlay (ScreenSpaceLightService:
+        // Sky, 32000), which then tints the reveal like the board.
+        private const string RevealSortingLayer = "Sky";
+        private const int RevealSortingOrder = 31999;
 
         // In canvas units (the canvas is 225 wide): a frame shows the balloon about 93 across, two fifths of the
         // screen.
@@ -208,44 +225,115 @@ namespace BalloonParty.Editor
 
         private static void BuildOnCanvas(Materials materials, bool askBeforeRebuild)
         {
-            var path = PrefabRebuild.FindPrefabWithChild<TooltipBanner>("GameCanvas");
-            if (path == null)
+            var gameCanvasPath = PrefabRebuild.FindPrefabWithChild<TooltipBanner>("GameCanvas");
+            if (gameCanvasPath == null)
             {
                 Debug.LogError("[CardReveal] GameCanvas (the prefab with the tooltip) wasn't found.");
                 return;
             }
 
-            var root = PrefabUtility.LoadPrefabContents(path);
+            if (askBeforeRebuild && AssetDatabase.LoadAssetAtPath<GameObject>(CanvasPrefabPath) != null &&
+                !EditorUtility.DisplayDialog("Card reveal",
+                    $"{CanvasPrefabPath} already exists. Rebuild it? Hand edits to it are lost.", "Rebuild", "Cancel"))
+            {
+                return;
+            }
+
+            var gameCanvas = PrefabUtility.LoadPrefabContents(gameCanvasPath);
             try
             {
-                var existing = root.transform.Find(RootName);
-                if (existing != null)
-                {
-                    if (askBeforeRebuild && !EditorUtility.DisplayDialog("Card reveal",
-                            $"{path} already has {RootName}. Rebuild it? Hand edits to it are lost.", "Rebuild",
-                            "Cancel"))
-                    {
-                        return;
-                    }
-
-                    Object.DestroyImmediate(existing.gameObject);
-                }
-
-                var label = TooltipLabel(root);
+                var label = TooltipLabel(gameCanvas);
                 if (label == null)
                 {
                     Debug.LogError("[CardReveal] The tooltip's label isn't assigned or has no WriteOnText; the ribbons take its pencil.");
                     return;
                 }
 
-                BuildReveal(root.transform, label, materials);
-                PrefabUtility.SaveAsPrefabAsset(root, path);
-                Debug.Log($"[CardReveal] Built {RootName} on {path}.");
+                BuildCanvasPrefab(label, materials);
+
+                // Built on the game canvas before it had a canvas of its own: drawn above the screen-space light.
+                var old = gameCanvas.transform.Find(RootName);
+                if (old != null)
+                {
+                    Object.DestroyImmediate(old.gameObject);
+                    PrefabUtility.SaveAsPrefabAsset(gameCanvas, gameCanvasPath);
+                }
             }
             finally
             {
-                PrefabUtility.UnloadPrefabContents(root);
+                PrefabUtility.UnloadPrefabContents(gameCanvas);
             }
+
+            PlaceInGameScene();
+            Debug.Log($"[CardReveal] Built {CanvasPrefabPath}.");
+        }
+
+        private static void BuildCanvasPrefab(TMP_Text label, Materials materials)
+        {
+            var root = new GameObject(System.IO.Path.GetFileNameWithoutExtension(CanvasPrefabPath),
+                typeof(RectTransform)) { layer = LayerMask.NameToLayer(RevealLayer) };
+            try
+            {
+                var canvas = root.AddComponent<Canvas>();
+                canvas.renderMode = RenderMode.WorldSpace;
+                canvas.sortingLayerName = RevealSortingLayer;
+                canvas.sortingOrder = RevealSortingOrder;
+                root.AddComponent<CameraFittedCanvas>();
+                BuildReveal(root.transform, label, materials);
+
+                // The ribbons' text is cloned from the game canvas, on the UI layer, which the main camera skips.
+                foreach (var child in root.GetComponentsInChildren<Transform>(true))
+                {
+                    child.gameObject.layer = root.layer;
+                }
+
+                PrefabUtility.SaveAsPrefabAsset(root, CanvasPrefabPath);
+            }
+            finally
+            {
+                Object.DestroyImmediate(root);
+            }
+        }
+
+        // An instance in the Game scene, if it has none. A Game scene open with unsaved changes isn't saved for it.
+        private static void PlaceInGameScene()
+        {
+            var scene = SceneManager.GetSceneByPath(GameScenePath);
+            var opened = !scene.isLoaded;
+            if (opened)
+            {
+                scene = EditorSceneManager.OpenScene(GameScenePath, OpenSceneMode.Additive);
+            }
+
+            try
+            {
+                if (scene.GetRootGameObjects().Any(IsRevealCanvas))
+                {
+                    return;
+                }
+
+                if (scene.isDirty)
+                {
+                    Debug.LogWarning($"[CardReveal] Save {GameScenePath} and build again to place {CanvasPrefabPath} in it.");
+                    return;
+                }
+
+                PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath<GameObject>(CanvasPrefabPath), scene);
+                EditorSceneManager.MarkSceneDirty(scene);
+                EditorSceneManager.SaveScene(scene);
+            }
+            finally
+            {
+                if (opened)
+                {
+                    EditorSceneManager.CloseScene(scene, true);
+                }
+            }
+        }
+
+        private static bool IsRevealCanvas(GameObject go)
+        {
+            return PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(go) == CanvasPrefabPath;
         }
 
         private static TMP_Text TooltipLabel(GameObject canvas)
