@@ -50,12 +50,18 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
         [Header(Specular)]
         _SpecColor      ("Specular",       Color)              = (1, 1, 1, 1)
         _SpecSize       ("Size",           Range(0.01, 0.30))  = 0.10
-        _SpecSharpness  ("Sharpness",      Range(2, 25))       = 6.0
+        // How much of the glint's radius fades out at its edge: low = a crisp window reflection, the
+        // balloons' gloss, 1 = a soft dot that fades from its centre (reads as haze on the thin film).
+        _SpecSoftness   ("Edge Softness",  Range(0.05, 1))     = 0.4
 
         [Header(Light Response)]
         // Diffuse response to the scene light (colour x intensity, like Sprite/Diffuse):
         // 0 = unlit (authored look always), 1 = fully lit.
         _LightInfluence ("Light Influence", Range(0, 1)) = 1
+        // How much of the time-of-day light's colour (hue) and darkening (dimming) the bubble and its glint
+        // take, as on Sprite/Diffuse: 1 = all of it. Local lights are untouched.
+        _AmbientHue ("Ambient Hue", Range(0, 1)) = 1
+        _AmbientDimming ("Ambient Dimming", Range(0, 1)) = 1
         // Direction is derived from the scene light; only the distance stays authored.
         _SpecDistance   ("Distance",       Range(0, 0.35))     = 0.1414
 
@@ -163,8 +169,10 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
             float  _FloatSpeed;
             fixed4 _SpecColor;
             float  _SpecSize;
-            float  _SpecSharpness;
+            float  _SpecSoftness;
             float  _LightInfluence;
+            float  _AmbientHue;
+            float  _AmbientDimming;
             float  _SpecDistance;
             float  _FloatAmount;
             float  _BreatheAmount;
@@ -285,7 +293,9 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                 // across it per-fragment.
                 float2 clusterCenterWorld = float2(unity_ObjectToWorld._m03, unity_ObjectToWorld._m13);
                 OUT.lightDir  = SceneLightDirectionAtLOD(clusterCenterWorld);
-                OUT.lightTint = SceneLightTintAtLOD(clusterCenterWorld);
+                // The balloons' night response, or the glint sinks into the dark film at night.
+                OUT.lightTint = SceneLightTintAtLOD(clusterCenterWorld)
+                              + SceneLightAmbientRegrade(_AmbientHue, _AmbientDimming);
                 #ifdef _SHADOW_ON
                 OUT.shadowFade = ShadowLightFadeAtLOD(clusterCenterWorld);
                 #endif
@@ -446,8 +456,7 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                                                -ownCentre.x * sinR + ownCentre.y * cosR);
                 float2 specPos  = ownCentreUnrot + IN.lightDir * _SpecDistance;
                 float  specDist = length(uvRaw - specPos);
-                float  specMask = pow(saturate(1.0 - specDist / max(_SpecSize, 0.001)),
-                                      _SpecSharpness);
+                float  specMask = 1.0 - smoothstep(_SpecSize * (1.0 - _SpecSoftness), _SpecSize, specDist);
 
                 // ── Compose main layer ─────────────────────────────────────
                 fixed3 col = lerp(interiorColor, filmColor, filmMask);

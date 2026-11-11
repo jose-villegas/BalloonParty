@@ -26,6 +26,8 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
+    - _AmbientDimming: 0.4
+    - _AmbientHue: 0.25
     - _BreatheAmount: 0.15
     - _BreatheSpeed: 0.5
     - _BubbleCount: 3
@@ -52,8 +54,8 @@ Material:
     - _ShadowSoftness: 0.06
     - _SpecOffsetX: -0.1
     - _SpecOffsetY: 0.1
-    - _SpecSharpness: 5
-    - _SpecSize: 0.2
+    - _SpecSize: 0.06
+    - _SpecSoftness: 0.4
     - _SpriteScale: 1
     - _TimeOffset: 0
     m_Colors:

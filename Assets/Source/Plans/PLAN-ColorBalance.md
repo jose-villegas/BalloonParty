@@ -141,6 +141,10 @@ at midnight, by `balloons` (where each balloon is) and `palette_measure2.py` (th
   discs in the night sky, and the tough balloon, a black body whose shape is mostly its glint,
   nearly vanished on the night meadow. The tough body (`ToughBalloon.shader`) takes the same two
   controls. The re-grade lives in `SceneLightAmbientRegrade` (`SceneLight.cginc`) for all three.
+- **Done:** the water level's bubble clusters (`SoapBubbleCluster.shader` on `SoapClusterMaterial.mat`)
+  take the same hue 0.25 and dimming 0.4; at night they had almost vanished. Their glint is now a
+  crisp dot (`_SpecSize` 0.06, `_SpecSoftness` 0.4) instead of a soft falloff that read as haze at
+  noon too.
 - **Open:** the unbreakable and rainbow balloons have their own shaders and still take the full
   night light; give them the same two controls if they read too dark at night.
 - **Open:** the backdrops keep their own night look. Cut their chroma at night only if the
