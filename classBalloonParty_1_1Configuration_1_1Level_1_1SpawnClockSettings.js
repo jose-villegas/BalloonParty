@@ -1,13 +1,16 @@
 var classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings =
 [
     [ "SpawnClockSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#adc7a21c25e3338aedefe03ff6c239c72", null ],
-    [ "SpawnClockSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a387376b1a55708e8ad86a54dc96da496", null ],
+    [ "SpawnClockSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a18c5c37b359263062208020bd071709f", null ],
     [ "IntervalForLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a64697f030cf1338f753efbfc0d5cc1cc", null ],
+    [ "StepsToMinInterval", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a4ad7d504412e5515c1d039db9374fd71", null ],
     [ "_firstLevelInterval", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a6090a280db81c0d58ed40a5c11d0f8b1", null ],
     [ "_flightPressureSeconds", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a6a0f551b4779e6b4eb5004173976ff35", null ],
     [ "_flightSpeedup", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a7d297d4355636efc7be22150460decde", null ],
     [ "_graceSeconds", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a8e5a36bf6cce78be1e35f1aecefd8327", null ],
     [ "_intervalDecayPerLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#afa64ec7a1feac45095c7810672e003a6", null ],
+    [ "_lateIntervalDecayPerLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a4428c805552e2d4ff39b91351d15873b", null ],
+    [ "_lateMinInterval", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#ade6be35adb1aeda83537053043da8714", null ],
     [ "_linesPerWave", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a2d24dfc44864fe625827082fcefd028f", null ],
     [ "_minInterval", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a2efaf17c8640d9935d5871171e417d6c", null ],
     [ "_occupancyWeight", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#ade80ff796109e3a3916ad6a8fd6aa1dc", null ],

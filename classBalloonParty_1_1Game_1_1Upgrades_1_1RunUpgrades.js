@@ -16,6 +16,8 @@ var classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades =
     [ "ResetRun", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a99b15bac1d5db87378a72acca170a759", null ],
     [ "StacksOf", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#aac068daabdf0b0a0c761c322f6675b81", null ],
     [ "Start", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a9549afc110fc346c955d7f66bdbebaaf", null ],
+    [ "TakeCardsOnTheWayTo", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#af845a6d27c4a7b648a92dcdb1469b73d", null ],
+    [ "TakeCheatStartCards", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a5f6976b1da93aa8babf349a0f2e8f626", null ],
     [ "_ballCapBonus", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a6ea340064d65bfb3e4a80835b0299486", null ],
     [ "_bonus", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#af9bdebc79b614933a6f1dc8f8e3507ee", null ],
     [ "_bonusDealtPublisher", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a7d4176655dd4ef70713ca32611075c7e", null ],

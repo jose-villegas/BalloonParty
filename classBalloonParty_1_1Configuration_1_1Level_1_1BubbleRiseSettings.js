@@ -1,7 +1,9 @@
 var classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings =
 [
     [ "BubbleRiseSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#a9c668d09add77e4ed32603aba0fda29a", null ],
-    [ "BubbleRiseSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#a55086aaff4eae78f309b56187a5d4453", null ],
+    [ "BubbleRiseSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#a3530ee53848315228d2a4c197753c3ab", null ],
+    [ "StartBubblesForLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#a6aa4c068a3dddabc58a3849e3417fbda", null ],
+    [ "_extraBubbleEveryLevels", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#a244f3666e437f39c4c337dc53df017ca", null ],
     [ "_graceSeconds", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#a43272e1e5bcd41ced6187305e9f1a962", null ],
     [ "_maxBubbles", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#ad615de8fbb18a8c17620954e84a81bb1", null ],
     [ "_maxShare", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#aaacc0a117178572d2a4ba79e88012bd2", null ],
@@ -12,6 +14,5 @@ var classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings =
     [ "MaxBubbles", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#a8df0082d5839ba473887da28e5bc026f", null ],
     [ "MaxShare", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#a6cf59c356c687a9df60aac7ce9041462", null ],
     [ "RampSeconds", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#ac934fa5b1f59ee9d3b077b2cb9eadfbe", null ],
-    [ "StartBubbles", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#a6463c1c519e713d6434ad13fa603a14a", null ],
     [ "StartShare", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html#a4d72ff2b73e69927b0885e3e08c518c4", null ]
 ];

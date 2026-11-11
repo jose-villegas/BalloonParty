@@ -1,5 +1,6 @@
 var NAVTREEINDEX18 =
 {
+"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#ad995ae3a9650b5775efb3f6afc67f32b":[5,0,0,3,3,9,3],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#ad995ae3a9650b5775efb3f6afc67f32b":[6,0,0,3,3,9,3],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#afd54a7044313b7550aecc38ff9024475":[5,0,0,3,3,9,8],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#afd54a7044313b7550aecc38ff9024475":[6,0,0,3,3,9,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX18 =
 "classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html#a3cf0304be84c41bf558cddc230d885c7":[5,0,0,3,4,3,22],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html#a3cf0304be84c41bf558cddc230d885c7":[6,0,0,3,4,3,22],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html#a52e6807699a1e7e9233d83e49a2931f9":[5,0,0,3,4,3,15],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html#a52e6807699a1e7e9233d83e49a2931f9":[6,0,0,3,4,3,15],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html#a5656d10c5b0fb80377a3c1350c60e739":[5,0,0,3,4,3,7]
+"classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html#a52e6807699a1e7e9233d83e49a2931f9":[6,0,0,3,4,3,15]
 };

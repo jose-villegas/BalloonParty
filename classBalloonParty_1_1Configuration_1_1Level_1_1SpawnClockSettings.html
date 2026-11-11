@@ -111,13 +111,14 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1Level_1_1SpawnCl
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pac-methods">Package Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Configuration.Level.SpawnClockSettings Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>When balloon lines arrive: one line per interval of scaled game time, the interval shrinking each level towards a floor.  
+<p>When balloon lines arrive: one line per interval of scaled game time, the interval shrinking each level, quickly until it reaches <code>_minInterval</code>, then at a gentler late rate down to a floor.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Configuration.Level.SpawnClockSettings:</div>
@@ -144,8 +145,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a387376b1a55708e8ad86a54dc96da496" id="r_a387376b1a55708e8ad86a54dc96da496"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a387376b1a55708e8ad86a54dc96da496">SpawnClockSettings</a> (float firstLevelInterval, float intervalDecayPerLevel, float minInterval, float graceSeconds, int linesPerWave=1, float overlapShotPull=0f, float sparseBoardSpeedup=1f, float targetOccupancy=0.5f, float occupancyWeight=0f, float flightSpeedup=1f, float flightPressureSeconds=6f)</td></tr>
-<tr class="separator:a387376b1a55708e8ad86a54dc96da496"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18c5c37b359263062208020bd071709f" id="r_a18c5c37b359263062208020bd071709f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18c5c37b359263062208020bd071709f">SpawnClockSettings</a> (float firstLevelInterval, float intervalDecayPerLevel, float minInterval, float graceSeconds, int linesPerWave=1, float overlapShotPull=0f, float sparseBoardSpeedup=1f, float targetOccupancy=0.5f, float occupancyWeight=0f, float flightSpeedup=1f, float flightPressureSeconds=6f, float lateIntervalDecayPerLevel=1f, float lateMinInterval=0.1f)</td></tr>
+<tr class="separator:a18c5c37b359263062208020bd071709f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -174,6 +175,11 @@ Properties</h2></td></tr>
 <tr class="memdesc:a5998c743f39e1e857d4f5b68c4cf5ed0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Share of the board's open slots the clock pushes balloons towards, 0–1.  <br /></td></tr>
 <tr class="separator:a5998c743f39e1e857d4f5b68c4cf5ed0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a4ad7d504412e5515c1d039db9374fd71" id="r_a4ad7d504412e5515c1d039db9374fd71"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ad7d504412e5515c1d039db9374fd71">StepsToMinInterval</a> ()</td></tr>
+<tr class="separator:a4ad7d504412e5515c1d039db9374fd71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a6090a280db81c0d58ed40a5c11d0f8b1" id="r_a6090a280db81c0d58ed40a5c11d0f8b1"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6090a280db81c0d58ed40a5c11d0f8b1">_firstLevelInterval</a> = 2f</td></tr>
@@ -186,6 +192,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a8e5a36bf6cce78be1e35f1aecefd8327"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa64ec7a1feac45095c7810672e003a6" id="r_afa64ec7a1feac45095c7810672e003a6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa64ec7a1feac45095c7810672e003a6">_intervalDecayPerLevel</a> = 0.96f</td></tr>
 <tr class="separator:afa64ec7a1feac45095c7810672e003a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4428c805552e2d4ff39b91351d15873b" id="r_a4428c805552e2d4ff39b91351d15873b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4428c805552e2d4ff39b91351d15873b">_lateIntervalDecayPerLevel</a> = 0.98f</td></tr>
+<tr class="separator:a4428c805552e2d4ff39b91351d15873b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade6be35adb1aeda83537053043da8714" id="r_ade6be35adb1aeda83537053043da8714"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade6be35adb1aeda83537053043da8714">_lateMinInterval</a> = 0.55f</td></tr>
+<tr class="separator:ade6be35adb1aeda83537053043da8714"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d24dfc44864fe625827082fcefd028f" id="r_a2d24dfc44864fe625827082fcefd028f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2d24dfc44864fe625827082fcefd028f">_linesPerWave</a> = 3</td></tr>
 <tr class="separator:a2d24dfc44864fe625827082fcefd028f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2efaf17c8640d9935d5871171e417d6c" id="r_a2efaf17c8640d9935d5871171e417d6c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2efaf17c8640d9935d5871171e417d6c">_minInterval</a> = 1.25f</td></tr>
@@ -200,8 +210,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aed9c77d5c9a39b4591a7aa1acfddcc05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>When balloon lines arrive: one line per interval of scaled game time, the interval shrinking each level towards a floor. </p>
-<p>A formula rather than a per-range field, so it reaches every level and survives the move to generated levels (PLAN-FastPaced Phase 4). </p>
+<div class="textblock"><p>When balloon lines arrive: one line per interval of scaled game time, the interval shrinking each level, quickly until it reaches <code>_minInterval</code>, then at a gentler late rate down to a floor. </p>
+<p>The late rate is what keeps deep levels getting harder once the level generator has bought every threat. A formula rather than a per-range field, so it reaches every level and survives the move to generated levels (PLAN-FastPaced Phase 4). </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="adc7a21c25e3338aedefe03ff6c239c72" name="adc7a21c25e3338aedefe03ff6c239c72"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adc7a21c25e3338aedefe03ff6c239c72">&#9670;&#160;</a></span>SpawnClockSettings() <span class="overload">[1/2]</span></h2>
@@ -220,8 +230,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a387376b1a55708e8ad86a54dc96da496" name="a387376b1a55708e8ad86a54dc96da496"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a387376b1a55708e8ad86a54dc96da496">&#9670;&#160;</a></span>SpawnClockSettings() <span class="overload">[2/2]</span></h2>
+<a id="a18c5c37b359263062208020bd071709f" name="a18c5c37b359263062208020bd071709f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18c5c37b359263062208020bd071709f">&#9670;&#160;</a></span>SpawnClockSettings() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -282,7 +292,17 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>flightPressureSeconds</em></span><span class="paramdefsep"> = </span><span class="paramdefval">6f</span>&#160;)</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>flightPressureSeconds</em></span><span class="paramdefsep"> = </span><span class="paramdefval">6f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>lateIntervalDecayPerLevel</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>lateMinInterval</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0::1f</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -313,6 +333,31 @@ Private Attributes</h2></td></tr>
 <p>Seconds between lines at <em>level</em> ; levels below 1 run at level 1's pace. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a2c396acfe977955ea5d26778f4333bd9">BalloonParty.Configuration.Level.ISpawnClockSettings</a>.</p>
+
+</div>
+</div>
+<a id="a4ad7d504412e5515c1d039db9374fd71" name="a4ad7d504412e5515c1d039db9374fd71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ad7d504412e5515c1d039db9374fd71">&#9670;&#160;</a></span>StepsToMinInterval()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.SpawnClockSettings.StepsToMinInterval </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -416,6 +461,50 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.Configuration.Level.SpawnClockSettings._intervalDecayPerLevel = 0.96f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4428c805552e2d4ff39b91351d15873b" name="a4428c805552e2d4ff39b91351d15873b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4428c805552e2d4ff39b91351d15873b">&#9670;&#160;</a></span>_lateIntervalDecayPerLevel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.SpawnClockSettings._lateIntervalDecayPerLevel = 0.98f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ade6be35adb1aeda83537053043da8714" name="ade6be35adb1aeda83537053043da8714"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade6be35adb1aeda83537053043da8714">&#9670;&#160;</a></span>_lateMinInterval</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.SpawnClockSettings._lateMinInterval = 0.55f</td>
         </tr>
       </table>
   </td>

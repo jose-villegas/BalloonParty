@@ -191,6 +191,7 @@ A level-up's hand</h1>
 <h1><a class="anchor" id="autotoc_md261"></a>
 Run scope and retries</h1>
 <p><code>ResetRun</code> drops every card on a fresh run and keeps them on a retry (<code>IRetryState.RetryLevel &gt; 0</code>). It runs at <code>RunResetOrder.Counters</code>, before <code>RetryTracker</code> consumes the staged retry level.</p>
+<p>A fresh run that a start-level cheat begins past level 1 (<code>CheatState.StartLevel</code>, in checked builds) then takes the cards a run that played up to it would hold (<code>TakeCardsOnTheWayTo</code>): every card level-up on the way deals its seeded hand and takes the first card, as the level-up does in play. <code>Start</code> does the same for a session that opens at a start level. Without this, a jumped run plays a deep level with the base weapon, which makes it both too slow to clear and unlike the real level.</p>
 <h1><a class="anchor" id="autotoc_md262"></a>
 The bonus card</h1>
 <p>The game-over screen can offer a retry with a bonus card, bought with a rewarded ad (<code>IFailureOffers.TryBonusRetryAsync</code>, see <code><a class="el" href="Game_2Run_2README_8md.html">Game/Run/README.md</a></code>). When that retry's reset runs (<code>IRetryState.RetryWithBonusCard</code>), <code>ResetRun</code> deals one card by weight and publishes <code>BonusCardDealtMessage</code>; the on-screen tooltip names it once play resumes (see <code><a class="el" href="UI_2Tooltip_2README_8md.html">UI/Tooltip/README.md</a></code>).</p>

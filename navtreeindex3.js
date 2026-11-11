@@ -68,6 +68,7 @@ var NAVTREEINDEX3 =
 "ShieldFieldSettings_8cs.html":[7,0,3,4,25],
 "ShieldGainSource_8cs.html":[7,0,14,7,41],
 "ShieldGainedMessage_8cs.html":[7,0,14,7,40],
+"ShieldGlow_8cs.html":[7,0,12,3,3],
 "ShieldItemHandler_8cs.html":[7,0,8,6,1],
 "ShieldLostMessage_8cs.html":[7,0,14,7,42],
 "ShieldRangePreview_8cs.html":[7,0,8,5,14],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "WriteOnMath_8cs.html":[7,0,18,4,3],
 "WriteOnText_8cs.html":[7,0,18,4,4],
 "annotated.html":[6,0],
-"arch_balance_flow.html":[2,4],
-"arch_balance_flow.html#autotoc_md64":[2,4,0]
+"arch_balance_flow.html":[2,4]
 };

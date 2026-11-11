@@ -1484,6 +1484,7 @@ var hierarchy =
     [ "BalloonParty.Game.Score.Behaviours.ShapeCatalog", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html", null ],
     [ "BalloonParty.Item.Shield.ShieldChainPlanner", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldChainPlanner.html", null ],
     [ "BalloonParty.Shared.Messages.ShieldGainedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html", null ],
+    [ "BalloonParty.Projectile.View.ShieldGlow", "classBalloonParty_1_1Projectile_1_1View_1_1ShieldGlow.html", null ],
     [ "BalloonParty.Item.Shield.ShieldHostCandidate", "structBalloonParty_1_1Item_1_1Shield_1_1ShieldHostCandidate.html", null ],
     [ "BalloonParty.Shared.Messages.ShieldLostMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html", null ],
     [ "BalloonParty.Item.Shield.ShieldPlacement", "structBalloonParty_1_1Item_1_1Shield_1_1ShieldPlacement.html", null ],

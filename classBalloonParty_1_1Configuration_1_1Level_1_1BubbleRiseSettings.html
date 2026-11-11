@@ -138,11 +138,14 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1Level_1_1BubbleR
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a9c668d09add77e4ed32603aba0fda29a" id="r_a9c668d09add77e4ed32603aba0fda29a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9c668d09add77e4ed32603aba0fda29a">BubbleRiseSettings</a> ()</td></tr>
 <tr class="separator:a9c668d09add77e4ed32603aba0fda29a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6aa4c068a3dddabc58a3849e3417fbda" id="r_a6aa4c068a3dddabc58a3849e3417fbda"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6aa4c068a3dddabc58a3849e3417fbda">StartBubblesForLevel</a> (int level)</td></tr>
+<tr class="memdesc:a6aa4c068a3dddabc58a3849e3417fbda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bubbles in a cluster a line brings at <em>level</em> : few early, so merges have room to grow it, and more at depth.  <br /></td></tr>
+<tr class="separator:a6aa4c068a3dddabc58a3849e3417fbda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a55086aaff4eae78f309b56187a5d4453" id="r_a55086aaff4eae78f309b56187a5d4453"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a55086aaff4eae78f309b56187a5d4453">BubbleRiseSettings</a> (float graceSeconds, float startShare, float maxShare, float rampSeconds, int maxBubbles=12, int startBubbles=1)</td></tr>
-<tr class="separator:a55086aaff4eae78f309b56187a5d4453"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3530ee53848315228d2a4c197753c3ab" id="r_a3530ee53848315228d2a4c197753c3ab"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3530ee53848315228d2a4c197753c3ab">BubbleRiseSettings</a> (float graceSeconds, float startShare, float maxShare, float rampSeconds, int maxBubbles=12, int startBubbles=1, int extraBubbleEveryLevels=0)</td></tr>
+<tr class="separator:a3530ee53848315228d2a4c197753c3ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -158,15 +161,14 @@ Properties</h2></td></tr>
 <tr class="memitem:ac934fa5b1f59ee9d3b077b2cb9eadfbe" id="r_ac934fa5b1f59ee9d3b077b2cb9eadfbe"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac934fa5b1f59ee9d3b077b2cb9eadfbe">RampSeconds</a><code> [get]</code></td></tr>
 <tr class="memdesc:ac934fa5b1f59ee9d3b077b2cb9eadfbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds after the grace the share takes to climb from start to max.  <br /></td></tr>
 <tr class="separator:ac934fa5b1f59ee9d3b077b2cb9eadfbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6463c1c519e713d6434ad13fa603a14a" id="r_a6463c1c519e713d6434ad13fa603a14a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6463c1c519e713d6434ad13fa603a14a">StartBubbles</a><code> [get]</code></td></tr>
-<tr class="memdesc:a6463c1c519e713d6434ad13fa603a14a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bubbles in a cluster a line brings, so merges have room to grow it.  <br /></td></tr>
-<tr class="separator:a6463c1c519e713d6434ad13fa603a14a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d72ff2b73e69927b0885e3e08c518c4" id="r_a4d72ff2b73e69927b0885e3e08c518c4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4d72ff2b73e69927b0885e3e08c518c4">StartShare</a><code> [get]</code></td></tr>
 <tr class="memdesc:a4d72ff2b73e69927b0885e3e08c518c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Share of a line's places that are bubbles as the grace ends (0..1).  <br /></td></tr>
 <tr class="separator:a4d72ff2b73e69927b0885e3e08c518c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a244f3666e437f39c4c337dc53df017ca" id="r_a244f3666e437f39c4c337dc53df017ca"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a244f3666e437f39c4c337dc53df017ca">_extraBubbleEveryLevels</a> = 15</td></tr>
+<tr class="separator:a244f3666e437f39c4c337dc53df017ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43272e1e5bcd41ced6187305e9f1a962" id="r_a43272e1e5bcd41ced6187305e9f1a962"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a43272e1e5bcd41ced6187305e9f1a962">_graceSeconds</a> = 6f</td></tr>
 <tr class="separator:a43272e1e5bcd41ced6187305e9f1a962"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad615de8fbb18a8c17620954e84a81bb1" id="r_ad615de8fbb18a8c17620954e84a81bb1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad615de8fbb18a8c17620954e84a81bb1">_maxBubbles</a> = 12</td></tr>
@@ -200,8 +202,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a55086aaff4eae78f309b56187a5d4453" name="a55086aaff4eae78f309b56187a5d4453"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a55086aaff4eae78f309b56187a5d4453">&#9670;&#160;</a></span>BubbleRiseSettings() <span class="overload">[2/2]</span></h2>
+<a id="a3530ee53848315228d2a4c197753c3ab" name="a3530ee53848315228d2a4c197753c3ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3530ee53848315228d2a4c197753c3ab">&#9670;&#160;</a></span>BubbleRiseSettings() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -237,7 +239,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>startBubbles</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1</span>&#160;)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>startBubbles</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>extraBubbleEveryLevels</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -249,7 +256,52 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a6aa4c068a3dddabc58a3849e3417fbda" name="a6aa4c068a3dddabc58a3849e3417fbda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6aa4c068a3dddabc58a3849e3417fbda">&#9670;&#160;</a></span>StartBubblesForLevel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Level.BubbleRiseSettings.StartBubblesForLevel </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>level</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Bubbles in a cluster a line brings at <em>level</em> : few early, so merges have room to grow it, and more at depth. </p>
+<p>Not capped here; the spawner caps it at the merge maximum. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html#afe236c0fd76aab5085ded440b03fa9d2">BalloonParty.Configuration.Level.IBubbleRiseSettings</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a244f3666e437f39c4c337dc53df017ca" name="a244f3666e437f39c4c337dc53df017ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a244f3666e437f39c4c337dc53df017ca">&#9670;&#160;</a></span>_extraBubbleEveryLevels</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Level.BubbleRiseSettings._extraBubbleEveryLevels = 15</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a43272e1e5bcd41ced6187305e9f1a962" name="a43272e1e5bcd41ced6187305e9f1a962"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a43272e1e5bcd41ced6187305e9f1a962">&#9670;&#160;</a></span>_graceSeconds</h2>
 
@@ -484,32 +536,6 @@ Private Attributes</h2></td></tr>
 <p>Seconds after the grace the share takes to climb from start to max. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html#af57a2e7d6f7c0f78d3bcdb4329b10f95">BalloonParty.Configuration.Level.IBubbleRiseSettings</a>.</p>
-
-</div>
-</div>
-<a id="a6463c1c519e713d6434ad13fa603a14a" name="a6463c1c519e713d6434ad13fa603a14a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6463c1c519e713d6434ad13fa603a14a">&#9670;&#160;</a></span>StartBubbles</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int BalloonParty.Configuration.Level.BubbleRiseSettings.StartBubbles</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Bubbles in a cluster a line brings, so merges have room to grow it. </p>
-
-<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html#aa841fd67037845e6125c123b39387e2c">BalloonParty.Configuration.Level.IBubbleRiseSettings</a>.</p>
 
 </div>
 </div>

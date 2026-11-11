@@ -1,5 +1,6 @@
 var NAVTREEINDEX17 =
 {
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#ae4cc13ea2a43bfeaf783c7bf5e4b7430":[5,0,0,3,2,2,1],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#ae4cc13ea2a43bfeaf783c7bf5e4b7430":[6,0,0,3,2,2,1],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#ae7070d64f8e3eb1c0720654da99f9796":[5,0,0,3,2,2,8],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicsSettings.html#ae7070d64f8e3eb1c0720654da99f9796":[6,0,0,3,2,2,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX17 =
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#a86d1c6a09184f301ab15763d03a24d97":[5,0,0,3,3,9,0],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#a86d1c6a09184f301ab15763d03a24d97":[6,0,0,3,3,9,0],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#aa4d9ccb4f3f902dd17740157404244a5":[5,0,0,3,3,9,5],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#aa4d9ccb4f3f902dd17740157404244a5":[6,0,0,3,3,9,5],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#ad995ae3a9650b5775efb3f6afc67f32b":[5,0,0,3,3,9,3]
+"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorNameDrawer.html#aa4d9ccb4f3f902dd17740157404244a5":[6,0,0,3,3,9,5]
 };

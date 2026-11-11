@@ -3,6 +3,8 @@ var interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IShieldFieldSettings =
     [ "AppearSeconds", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IShieldFieldSettings.html#a5c18acc6b15dd75d980cab4063ad49e3", null ],
     [ "DissolveSeconds", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IShieldFieldSettings.html#a45a23a14a539a416ae3e6f9e9aed2632", null ],
     [ "FinalDissolveSeconds", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IShieldFieldSettings.html#a2f8a45c96e5c0189c61346a299f55a9f", null ],
+    [ "GlowPerShield", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IShieldFieldSettings.html#a37c51070669d10d6ba87e8078f011525", null ],
+    [ "MaxGlow", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IShieldFieldSettings.html#a5ef3b4dbae81c580b584103206e27df6", null ],
     [ "MaxScaleMultiplier", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IShieldFieldSettings.html#a8ffc8d7d231970bac95b9c88e55c394e", null ],
     [ "MaxVisualLayers", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IShieldFieldSettings.html#acf0a3a81f1d5ae0f6787462795707bb5", null ],
     [ "MaxVisualSpeed", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IShieldFieldSettings.html#a1ae306963ab4e100a676fe5d40776e00", null ],

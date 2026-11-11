@@ -739,7 +739,8 @@ var annotated_dup =
         [ "View", "namespaceBalloonParty_1_1Projectile_1_1View.html", [
           [ "ProjectileShieldView", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileShieldView.html", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileShieldView" ],
           [ "ProjectileTrail", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileTrail.html", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileTrail" ],
-          [ "ProjectileView", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView" ]
+          [ "ProjectileView", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView" ],
+          [ "ShieldGlow", "classBalloonParty_1_1Projectile_1_1View_1_1ShieldGlow.html", "classBalloonParty_1_1Projectile_1_1View_1_1ShieldGlow" ]
         ] ],
         [ "IProjectileFacingSource", "interfaceBalloonParty_1_1Projectile_1_1IProjectileFacingSource.html", "interfaceBalloonParty_1_1Projectile_1_1IProjectileFacingSource" ],
         [ "IProjectileRegistry", "interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html", "interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry" ],

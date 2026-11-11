@@ -10,6 +10,7 @@ var classBalloonParty_1_1Item_1_1ItemVisualView =
     [ "SetRainbow", "classBalloonParty_1_1Item_1_1ItemVisualView.html#a8a30b7bb331c6630ad347fccdc23d909", null ],
     [ "SetVisible", "classBalloonParty_1_1Item_1_1ItemVisualView.html#a89444a0aa75ec8dd23cfb4053a47f09c", null ],
     [ "_animator", "classBalloonParty_1_1Item_1_1ItemVisualView.html#a9ed6d00c114e59fde06ddec892e3f681", null ],
+    [ "_coreGlow", "classBalloonParty_1_1Item_1_1ItemVisualView.html#af27be02bd081902a4b0b25365658104e", null ],
     [ "_rainbowBlock", "classBalloonParty_1_1Item_1_1ItemVisualView.html#a351fb14db6f92a2b48a9d2827c595742", null ],
     [ "_sortingRenderers", "classBalloonParty_1_1Item_1_1ItemVisualView.html#a24c93790937478217c43714ec5131227", null ],
     [ "_spritesAlpha", "classBalloonParty_1_1Item_1_1ItemVisualView.html#a1261ddc1d57162b538271dbd80828cca", null ],
