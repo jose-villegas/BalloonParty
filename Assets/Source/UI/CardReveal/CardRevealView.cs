@@ -25,7 +25,7 @@ namespace BalloonParty.UI.CardReveal
     ///     it, and it pops (one of the baked pops, its two rubber layers either side of the ribbons, starting as
     ///     the needle goes in at the pop's puncture), and the ribbons fly off it, one with the card's title on it
     ///     and one with what the card does, readable as they drift. On a level-up they fly with the level's
-    ///     ascent and are gone about as the next level settles. The rubber and the pin are surface data lit live
+    ///     ascent and are gone just before the next level settles. The rubber and the pin are surface data lit live
     ///     by <c>BalloonParty/Sprite/LitFlipbook</c>, so they take the scene's light, and the tear flashes a light
     ///     into the scene light field, stirs the disturbance field as a board pop does, and flings shreds far
     ///     out. It sits on its own World Space canvas among the board's sprites

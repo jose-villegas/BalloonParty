@@ -26,7 +26,7 @@ All on unscaled time, so slow-motion beats don't stretch it.
 
 When the ribbons go depends on the ascent:
 
-- **On a level-up**, the ascent (`LevelAscendStartedMessage`, `ICinematicsSettings.LevelAscend.AscentSeconds`) starts just after the reveal. The ribbons stay until `RibbonsGoneAtAscent` of the way through it (0.82), after the next level's balloons come in (the ascent's spawn cue, 0.6), and then `RibbonsAfterAscentSeconds` (1 s) more, so they leave about as the new level settles.
+- **On a level-up**, the ascent (`LevelAscendStartedMessage`, `ICinematicsSettings.LevelAscend.AscentSeconds`) starts just after the reveal. The ribbons stay until `RibbonsGoneAtAscent` of the way through it (0.82), after the next level's balloons come in (the ascent's spawn cue, 0.6), and then `RibbonsAfterAscentSeconds` (0.5 s) more, so they leave just before the new level settles.
 - **Without an ascent** (a retry's bonus card, the cheat), they fly `RibbonSecondsWithoutAscent` from the pop.
 - **Either way**, they fly at least `RibbonMinimumSeconds`, so they can always be read.
 

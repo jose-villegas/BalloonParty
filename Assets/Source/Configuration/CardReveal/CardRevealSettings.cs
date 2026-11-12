@@ -104,13 +104,13 @@ namespace BalloonParty.Configuration.CardReveal
         [SerializeField] [Range(0f, 1f)] private float _ribbonsGoneAtAscent = 0.82f;
 
         [Tooltip("Seconds the ribbons stay after that share of the ascent.")]
-        [SerializeField] [Min(0f)] private float _ribbonsAfterAscentSeconds = 1f;
+        [SerializeField] [Min(0f)] private float _ribbonsAfterAscentSeconds = 0.5f;
 
         [Tooltip("With no ascent (a retry's bonus card, the cheat): seconds from the pop until the ribbons are gone.")]
-        [SerializeField] [Min(0f)] private float _ribbonSecondsWithoutAscent = 4.4f;
+        [SerializeField] [Min(0f)] private float _ribbonSecondsWithoutAscent = 3.9f;
 
         [Tooltip("The ribbons' shortest flight, from the pop until gone, so they can always be read.")]
-        [SerializeField] [Min(0f)] private float _ribbonMinimumSeconds = 3.4f;
+        [SerializeField] [Min(0f)] private float _ribbonMinimumSeconds = 2.9f;
 
         [Header("Pushpin")]
         [Tooltip("Where each pop's puncture is in its first frame, as a share of the frame from its bottom left, " +

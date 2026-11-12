@@ -42,8 +42,8 @@ back convincingly; a cloth simulation can, so the pops are simulated and baked.
 4. They drift and sway while the level's ascent plays, the old board falling away under them.
 5. Just before the next level settles, they fly off, up and outward, and fade.
 
-On a level-up the ribbons are gone 0.82 of the way through the ascent and a second more (about 4.3 s
-into its 4 s, a moment after it ends; the ascent starts just after the reveal). A retry's bonus card has
+On a level-up the ribbons are gone 0.82 of the way through the ascent and half a second more (about
+3.8 s into its 4 s, just before it ends; the ascent starts just after the reveal). A retry's bonus card has
 no ascent, so its ribbons fly a set time instead. All on unscaled time like the heads-ups, so
 slow-motion beats don't stretch it.
 
@@ -58,7 +58,7 @@ slow-motion beats don't stretch it.
 | A pop is picked at random, never one of the last two shown | 16 sims are there for variety; repeating the last one would waste it |
 | The balloon is tinted at runtime and lit by the scene, not baked in one colour or one light | The sims are baked as surface data (the normal and the occlusion, not a picture) and lit at runtime by the scene's light, so the reveal takes any colour (`BalloonColor`, silver) and follows the time of day as the board's balloons do |
 | The ribbons are inside the balloon, not behind it | Each frame is baked in two layers, the rubber in front of the balloon's centre and the rubber behind it, and the ribbons are drawn between them. While the balloon moves the layers part slightly (parallax), so they read as inside |
-| A level-up's reveal plays with the ascent, and is over about as the next level settles | The ascent is the level-up's quiet stretch: nothing to aim at, the screen moving. The ribbons stay a second past most of it, so the card is read, and leave as the new board settles |
+| A level-up's reveal plays with the ascent, and is over just before the next level settles | The ascent is the level-up's quiet stretch: nothing to aim at, the screen moving. The ribbons stay half a second past most of it, so the card is read, and leave as the new board settles |
 | Text, never baked into the art | The card's title and description come from `IUpgradeCardSettings`, so a new card needs no new art |
 | A second card won while a reveal plays waits its turn | Rare (cards come every 2 levels), but a retry's bonus card can meet a level-up's |
 
