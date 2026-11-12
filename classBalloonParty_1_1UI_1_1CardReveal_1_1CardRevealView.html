@@ -109,6 +109,7 @@ $(function(){initNavTree('classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealVie
 <div class="header">
   <div class="summary">
 <a href="#pac-static-methods">Static Package Functions</a> &#124;
+<a href="#properties">Properties</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
@@ -137,6 +138,9 @@ $(function(){initNavTree('classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealVie
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
+<tr class="memitem:a97b63681f50059cdd880582c057723d8" id="r_a97b63681f50059cdd880582c057723d8"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a97b63681f50059cdd880582c057723d8">ContactAt</a> (bool hasPin, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a> settings)</td></tr>
+<tr class="memdesc:a97b63681f50059cdd880582c057723d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">When the pop starts, from the start of the balloon's float: as it comes to rest, or with a pin (<em>hasPin</em> ) slower than that, once the pin is in, the balloon holding at rest longer.  <br /></td></tr>
+<tr class="separator:a97b63681f50059cdd880582c057723d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9b46039e89939bdc755cc9395db6b73" id="r_aa9b46039e89939bdc755cc9395db6b73"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9b46039e89939bdc755cc9395db6b73">FallDistance</a> (float sincePop, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a> settings)</td></tr>
 <tr class="memdesc:aa9b46039e89939bdc755cc9395db6b73"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far down the frames move <em>sincePop</em>  seconds into the pop, in frame heights: the bake's camera's path.  <br /></td></tr>
 <tr class="separator:aa9b46039e89939bdc755cc9395db6b73"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -146,9 +150,23 @@ Static Package Functions</h2></td></tr>
 <tr class="memitem:abff532c7f8ea5346a2e8a16f9cb0bda0" id="r_abff532c7f8ea5346a2e8a16f9cb0bda0"><td class="memItemLeft" align="right" valign="top">static Rect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abff532c7f8ea5346a2e8a16f9cb0bda0">FrameRect</a> (int frame, bool front, int columns, int rows)</td></tr>
 <tr class="memdesc:abff532c7f8ea5346a2e8a16f9cb0bda0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The UV rect of a frame of one layer: the front layer's frames fill the sheet's top half, the back layer's its bottom half, each read left to right, top to bottom.  <br /></td></tr>
 <tr class="separator:abff532c7f8ea5346a2e8a16f9cb0bda0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a321aec7032b96c945cac053afdd43fd3" id="r_a321aec7032b96c945cac053afdd43fd3"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a321aec7032b96c945cac053afdd43fd3">PinLeadSeconds</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a> settings)</td></tr>
+<tr class="memdesc:a321aec7032b96c945cac053afdd43fd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">How long before its needle goes in the pin starts to come in.  <br /></td></tr>
+<tr class="separator:a321aec7032b96c945cac053afdd43fd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42d288d9f63eae2c2a98564571b224ef" id="r_a42d288d9f63eae2c2a98564571b224ef"><td class="memItemLeft" align="right" valign="top">static Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a42d288d9f63eae2c2a98564571b224ef">PinPose</a> (float sinceContact, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a> settings)</td></tr>
+<tr class="memdesc:a42d288d9f63eae2c2a98564571b224ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where the pin is <em>sinceContact</em>  seconds from its needle reaching the puncture (negative before): x its distance back from the puncture along its axis, in canvas units (below 0 is into the rubber), y its opacity.  <br /></td></tr>
+<tr class="separator:a42d288d9f63eae2c2a98564571b224ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ddd1a260efe6d3786d1a21a07735f6c" id="r_a2ddd1a260efe6d3786d1a21a07735f6c"><td class="memItemLeft" align="right" valign="top">static Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2ddd1a260efe6d3786d1a21a07735f6c">Puncture</a> (int pop, IReadOnlyList&lt; Vector2 &gt; punctures)</td></tr>
+<tr class="memdesc:a2ddd1a260efe6d3786d1a21a07735f6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where pop <em>pop</em>  is punctured, as a share of its frame from the bottom left: its listed puncture, or the top of the balloon's front if it has none.  <br /></td></tr>
+<tr class="separator:a2ddd1a260efe6d3786d1a21a07735f6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae59c3eb1f7a1e3a1884c63136f0f36b1" id="r_ae59c3eb1f7a1e3a1884c63136f0f36b1"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae59c3eb1f7a1e3a1884c63136f0f36b1">RibbonsGoneAt</a> (float releasedAt, float revealStartedAt, float ascentStartedAt, float ascentSeconds, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a> settings)</td></tr>
 <tr class="memdesc:ae59c3eb1f7a1e3a1884c63136f0f36b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">When the ribbons released at <em>releasedAt</em>  must be gone, on the unscaled clock.  <br /></td></tr>
 <tr class="separator:ae59c3eb1f7a1e3a1884c63136f0f36b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
+Properties</h2></td></tr>
+<tr class="memitem:acc9fe0a296c50a1a89a930524338885c" id="r_acc9fe0a296c50a1a89a930524338885c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acc9fe0a296c50a1a89a930524338885c">PinBuilt</a><code> [get]</code></td></tr>
+<tr class="separator:acc9fe0a296c50a1a89a930524338885c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -158,6 +176,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:ab1edd935fc9f08bce624b48d969e0c3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f82a82cca01a48cccdb2bcc71f49ec1" id="r_a8f82a82cca01a48cccdb2bcc71f49ec1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8f82a82cca01a48cccdb2bcc71f49ec1">Dress</a> (<a class="el" href="classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html">RevealedCard</a> reveal)</td></tr>
 <tr class="separator:a8f82a82cca01a48cccdb2bcc71f49ec1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a610dfe0b49b898751f04a3f14f97b1a0" id="r_a610dfe0b49b898751f04a3f14f97b1a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a610dfe0b49b898751f04a3f14f97b1a0">DressPin</a> (int pop)</td></tr>
+<tr class="separator:a610dfe0b49b898751f04a3f14f97b1a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba416aa4642e94ce9dab97fc8033687d" id="r_aba416aa4642e94ce9dab97fc8033687d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba416aa4642e94ce9dab97fc8033687d">Fall</a> (float frameHeights)</td></tr>
 <tr class="separator:aba416aa4642e94ce9dab97fc8033687d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8145f693e11c13c23adc4e5ddb626c13" id="r_a8145f693e11c13c23adc4e5ddb626c13"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8145f693e11c13c23adc4e5ddb626c13">Float</a> (float seconds)</td></tr>
@@ -170,6 +190,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a81b3b6f43356c98c325dd51bfc4fc651"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa100f91b883a71f2d3713cd647c8133" id="r_afa100f91b883a71f2d3713cd647c8133"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afa100f91b883a71f2d3713cd647c8133">PlaceLayers</a> (Vector2 front, Vector2 back)</td></tr>
 <tr class="separator:afa100f91b883a71f2d3713cd647c8133"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb6df8935ca928c82bfc47f1d8e0f0fb" id="r_aeb6df8935ca928c82bfc47f1d8e0f0fb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeb6df8935ca928c82bfc47f1d8e0f0fb">PlacePin</a> (float sinceContact)</td></tr>
+<tr class="separator:aeb6df8935ca928c82bfc47f1d8e0f0fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08fadd66f47f120cf54d5aa20caf2908" id="r_a08fadd66f47f120cf54d5aa20caf2908"><td class="memItemLeft" align="right" valign="top">async UniTaskVoid&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a08fadd66f47f120cf54d5aa20caf2908">PlayAsync</a> (<a class="el" href="classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html">RevealedCard</a> reveal, CancellationToken token)</td></tr>
 <tr class="separator:a08fadd66f47f120cf54d5aa20caf2908"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7e2dec05e3001f7c2a10bf89b9a1bee" id="r_ad7e2dec05e3001f7c2a10bf89b9a1bee"><td class="memItemLeft" align="right" valign="top">async UniTask&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad7e2dec05e3001f7c2a10bf89b9a1bee">PopAsync</a> (float revealStartedAt, CancellationToken token)</td></tr>
@@ -189,6 +211,8 @@ Private Member Functions</h2></td></tr>
 Static Private Member Functions</h2></td></tr>
 <tr class="memitem:ac73f3214169a7e076e3bae951618ae75" id="r_ac73f3214169a7e076e3bae951618ae75"><td class="memItemLeft" align="right" valign="top">static async UniTask&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac73f3214169a7e076e3bae951618ae75">AnimateAsync</a> (float seconds, Action&lt; float &gt; step, CancellationToken token)</td></tr>
 <tr class="separator:ac73f3214169a7e076e3bae951618ae75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a351e6bc7590f6815c1799e2a053a3e2a" id="r_a351e6bc7590f6815c1799e2a053a3e2a"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a351e6bc7590f6815c1799e2a053a3e2a">Progress</a> (float elapsed, float seconds)</td></tr>
+<tr class="separator:a351e6bc7590f6815c1799e2a053a3e2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -220,10 +244,22 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a7edcd7963c36d554b752ab622c716440"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7de9350a0330a7f447f038c1c1b0281c" id="r_a7de9350a0330a7f447f038c1c1b0281c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7de9350a0330a7f447f038c1c1b0281c">_lightField</a></td></tr>
 <tr class="separator:a7de9350a0330a7f447f038c1c1b0281c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1719168163dd58182959f23d4ea56d1d" id="r_a1719168163dd58182959f23d4ea56d1d"><td class="memItemLeft" align="right" valign="top">RectTransform&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1719168163dd58182959f23d4ea56d1d">_pin</a></td></tr>
+<tr class="separator:a1719168163dd58182959f23d4ea56d1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac733f103e504336e06f21f8deb886767" id="r_ac733f103e504336e06f21f8deb886767"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac733f103e504336e06f21f8deb886767">_pinAxis</a></td></tr>
+<tr class="separator:ac733f103e504336e06f21f8deb886767"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad17b80641f110c3b82694016b4d1aaa2" id="r_ad17b80641f110c3b82694016b4d1aaa2"><td class="memItemLeft" align="right" valign="top">RawImage&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad17b80641f110c3b82694016b4d1aaa2">_pinHead</a></td></tr>
+<tr class="separator:ad17b80641f110c3b82694016b4d1aaa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcb15be4cd1b53d20813ca88e759b9f9" id="r_abcb15be4cd1b53d20813ca88e759b9f9"><td class="memItemLeft" align="right" valign="top">RawImage&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abcb15be4cd1b53d20813ca88e759b9f9">_pinNeedle</a></td></tr>
+<tr class="separator:abcb15be4cd1b53d20813ca88e759b9f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a03402b4bd753762d604d7dc6aac6bb08" id="r_a03402b4bd753762d604d7dc6aac6bb08"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a03402b4bd753762d604d7dc6aac6bb08">_place</a></td></tr>
 <tr class="separator:a03402b4bd753762d604d7dc6aac6bb08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79a3a619dcbf35cbc7829b3104cc5118" id="r_a79a3a619dcbf35cbc7829b3104cc5118"><td class="memItemLeft" align="right" valign="top">CancellationTokenSource&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a79a3a619dcbf35cbc7829b3104cc5118">_playing</a></td></tr>
 <tr class="separator:a79a3a619dcbf35cbc7829b3104cc5118"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a254a36f9de1fa189b81f80bc4a3995d5" id="r_a254a36f9de1fa189b81f80bc4a3995d5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html">PoolManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a254a36f9de1fa189b81f80bc4a3995d5">_pool</a></td></tr>
+<tr class="separator:a254a36f9de1fa189b81f80bc4a3995d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7070d44cba4e7dea417a9b3595dbff6f" id="r_a7070d44cba4e7dea417a9b3595dbff6f"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7070d44cba4e7dea417a9b3595dbff6f">_puncture</a></td></tr>
+<tr class="separator:a7070d44cba4e7dea417a9b3595dbff6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec5ddefc487153ee11ffef022380f554" id="r_aec5ddefc487153ee11ffef022380f554"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aec5ddefc487153ee11ffef022380f554">_releasedAt</a></td></tr>
 <tr class="separator:aec5ddefc487153ee11ffef022380f554"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf78191f9a4d7e5172a1634b0a6a731e" id="r_acf78191f9a4d7e5172a1634b0a6a731e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf78191f9a4d7e5172a1634b0a6a731e">_riseDistance</a> = 260f</td></tr>
@@ -243,12 +279,14 @@ Private Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
+<tr class="memitem:a3f22a9caa61a7f747435bdb0f1ab9d1e" id="r_a3f22a9caa61a7f747435bdb0f1ab9d1e"><td class="memItemLeft" align="right" valign="top">static readonly Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f22a9caa61a7f747435bdb0f1ab9d1e">DefaultPuncture</a> = new(0.5f, 0.8f)</td></tr>
+<tr class="separator:a3f22a9caa61a7f747435bdb0f1ab9d1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8750eed14bac3221822c161c1a53a0a" id="r_ac8750eed14bac3221822c161c1a53a0a"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac8750eed14bac3221822c161c1a53a0a">SheetGridId</a> = Shader.PropertyToID(&quot;_SheetGrid&quot;)</td></tr>
 <tr class="separator:ac8750eed14bac3221822c161c1a53a0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The card reveal's stage (<a class="el" href="interfaceBalloonParty_1_1Game_1_1CardReveal_1_1ICardReveals.html" title="The reveals a stage plays, one at a time.">ICardReveals</a>): plays each reveal the controller hands it. </p>
-<p>A balloon in one of the level's colours rises to its place with two pieces of ribbon rolled up inside it, pops (one of the baked pops, its two rubber layers either side of the ribbons), and the ribbons fly off it, one with the card's title on it and one with what the card does, readable as they drift. On a level-up they fly with the level's ascent and are gone just before the next level settles. The rubber is surface data lit live by <code>BalloonParty/Sprite/LitFlipbook</code>, so it takes the scene's light, and its tear flashes a light of its colour into the scene light field and stirs the disturbance field, as a board pop does. It sits on its own World Space canvas among the board's sprites (<a class="el" href="classBalloonParty_1_1UI_1_1CameraFittedCanvas.html" title="Keeps a World Space canvas over the main camera&#39;s view, sized and scaled the way a Screen Space canva...">CameraFittedCanvas</a>), so the screen-space light tints it and sees it. Attaches as the stage only when there are pops to play; until then the tooltip announces the cards. Built by <code>Tools/BalloonParty/CardReveal/Build Card Reveal</code>. </p>
+<p>A silver balloon floats up to its place with two pieces of ribbon rolled up inside it, a pushpin pricks it, and it pops (one of the baked pops, its two rubber layers either side of the ribbons, starting as the needle goes in at the pop's puncture), and the ribbons fly off it, one with the card's title on it and one with what the card does, readable as they drift. On a level-up they fly with the level's ascent and are gone just before the next level settles. The rubber and the pin are surface data lit live by <code>BalloonParty/Sprite/LitFlipbook</code>, so they take the scene's light, and the tear flashes a light into the scene light field, stirs the disturbance field as a board pop does, and flings shreds far out. It sits on its own World Space canvas among the board's sprites (<a class="el" href="classBalloonParty_1_1UI_1_1CameraFittedCanvas.html" title="Keeps a World Space canvas over the main camera&#39;s view, sized and scaled the way a Screen Space canva...">CameraFittedCanvas</a>), so the screen-space light tints it and sees it. Attaches as the stage only when there are pops to play; until then the tooltip announces the cards. Built by <code>Tools/BalloonParty/CardReveal/Build Card Reveal</code>. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ac73f3214169a7e076e3bae951618ae75" name="ac73f3214169a7e076e3bae951618ae75"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac73f3214169a7e076e3bae951618ae75">&#9670;&#160;</a></span>AnimateAsync()</h2>
@@ -334,6 +372,37 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a97b63681f50059cdd880582c057723d8" name="a97b63681f50059cdd880582c057723d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97b63681f50059cdd880582c057723d8">&#9670;&#160;</a></span>ContactAt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static float BalloonParty.UI.CardReveal.CardRevealView.ContactAt </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>hasPin</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a></td>          <td class="paramname"><span class="paramname"><em>settings</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>When the pop starts, from the start of the balloon's float: as it comes to rest, or with a pin (<em>hasPin</em> ) slower than that, once the pin is in, the balloon holding at rest longer. </p>
+
+</div>
+</div>
 <a id="a8f82a82cca01a48cccdb2bcc71f49ec1" name="a8f82a82cca01a48cccdb2bcc71f49ec1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8f82a82cca01a48cccdb2bcc71f49ec1">&#9670;&#160;</a></span>Dress()</h2>
 
@@ -347,6 +416,31 @@ Static Private Attributes</h2></td></tr>
           <td class="memname">void BalloonParty.UI.CardReveal.CardRevealView.Dress </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html">RevealedCard</a></td>          <td class="paramname"><span class="paramname"><em>reveal</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a610dfe0b49b898751f04a3f14f97b1a0" name="a610dfe0b49b898751f04a3f14f97b1a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a610dfe0b49b898751f04a3f14f97b1a0">&#9670;&#160;</a></span>DressPin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.CardReveal.CardRevealView.DressPin </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>pop</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -594,6 +688,65 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a321aec7032b96c945cac053afdd43fd3" name="a321aec7032b96c945cac053afdd43fd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a321aec7032b96c945cac053afdd43fd3">&#9670;&#160;</a></span>PinLeadSeconds()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static float BalloonParty.UI.CardReveal.CardRevealView.PinLeadSeconds </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a></td>          <td class="paramname"><span class="paramname"><em>settings</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How long before its needle goes in the pin starts to come in. </p>
+
+</div>
+</div>
+<a id="a42d288d9f63eae2c2a98564571b224ef" name="a42d288d9f63eae2c2a98564571b224ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42d288d9f63eae2c2a98564571b224ef">&#9670;&#160;</a></span>PinPose()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static Vector2 BalloonParty.UI.CardReveal.CardRevealView.PinPose </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>sinceContact</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a></td>          <td class="paramname"><span class="paramname"><em>settings</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Where the pin is <em>sinceContact</em>  seconds from its needle reaching the puncture (negative before): x its distance back from the puncture along its axis, in canvas units (below 0 is into the rubber), y its opacity. </p>
+<p>It comes in from afar, easing to a hover by the puncture and fading in, draws back, jabs in speeding up, stays in as the rubber tears, then the burst throws it back out as it fades. Until <a class="el" href="#a321aec7032b96c945cac053afdd43fd3" title="How long before its needle goes in the pin starts to come in.">PinLeadSeconds</a> before contact it is out of sight. </p>
+
+</div>
+</div>
 <a id="afa100f91b883a71f2d3713cd647c8133" name="afa100f91b883a71f2d3713cd647c8133"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afa100f91b883a71f2d3713cd647c8133">&#9670;&#160;</a></span>PlaceLayers()</h2>
 
@@ -612,6 +765,31 @@ Static Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>back</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aeb6df8935ca928c82bfc47f1d8e0f0fb" name="aeb6df8935ca928c82bfc47f1d8e0f0fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb6df8935ca928c82bfc47f1d8e0f0fb">&#9670;&#160;</a></span>PlacePin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.CardReveal.CardRevealView.PlacePin </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>sinceContact</em></span></td><td>)</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -678,6 +856,66 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a351e6bc7590f6815c1799e2a053a3e2a" name="a351e6bc7590f6815c1799e2a053a3e2a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a351e6bc7590f6815c1799e2a053a3e2a">&#9670;&#160;</a></span>Progress()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static float BalloonParty.UI.CardReveal.CardRevealView.Progress </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>elapsed</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>seconds</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2ddd1a260efe6d3786d1a21a07735f6c" name="a2ddd1a260efe6d3786d1a21a07735f6c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ddd1a260efe6d3786d1a21a07735f6c">&#9670;&#160;</a></span>Puncture()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static Vector2 BalloonParty.UI.CardReveal.CardRevealView.Puncture </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>pop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IReadOnlyList&lt; Vector2 &gt;</td>          <td class="paramname"><span class="paramname"><em>punctures</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Where pop <em>pop</em>  is punctured, as a share of its frame from the bottom left: its listed puncture, or the top of the balloon's front if it has none. </p>
 
 </div>
 </div>
@@ -1162,6 +1400,94 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a1719168163dd58182959f23d4ea56d1d" name="a1719168163dd58182959f23d4ea56d1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1719168163dd58182959f23d4ea56d1d">&#9670;&#160;</a></span>_pin</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RectTransform BalloonParty.UI.CardReveal.CardRevealView._pin</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac733f103e504336e06f21f8deb886767" name="ac733f103e504336e06f21f8deb886767"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac733f103e504336e06f21f8deb886767">&#9670;&#160;</a></span>_pinAxis</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector2 BalloonParty.UI.CardReveal.CardRevealView._pinAxis</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad17b80641f110c3b82694016b4d1aaa2" name="ad17b80641f110c3b82694016b4d1aaa2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad17b80641f110c3b82694016b4d1aaa2">&#9670;&#160;</a></span>_pinHead</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RawImage BalloonParty.UI.CardReveal.CardRevealView._pinHead</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abcb15be4cd1b53d20813ca88e759b9f9" name="abcb15be4cd1b53d20813ca88e759b9f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abcb15be4cd1b53d20813ca88e759b9f9">&#9670;&#160;</a></span>_pinNeedle</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RawImage BalloonParty.UI.CardReveal.CardRevealView._pinNeedle</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a03402b4bd753762d604d7dc6aac6bb08" name="a03402b4bd753762d604d7dc6aac6bb08"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a03402b4bd753762d604d7dc6aac6bb08">&#9670;&#160;</a></span>_place</h2>
 
@@ -1195,6 +1521,50 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">CancellationTokenSource BalloonParty.UI.CardReveal.CardRevealView._playing</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a254a36f9de1fa189b81f80bc4a3995d5" name="a254a36f9de1fa189b81f80bc4a3995d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a254a36f9de1fa189b81f80bc4a3995d5">&#9670;&#160;</a></span>_pool</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html">PoolManager</a> BalloonParty.UI.CardReveal.CardRevealView._pool</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7070d44cba4e7dea417a9b3595dbff6f" name="a7070d44cba4e7dea417a9b3595dbff6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7070d44cba4e7dea417a9b3595dbff6f">&#9670;&#160;</a></span>_puncture</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector2 BalloonParty.UI.CardReveal.CardRevealView._puncture</td>
         </tr>
       </table>
   </td>
@@ -1382,6 +1752,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a3f22a9caa61a7f747435bdb0f1ab9d1e" name="a3f22a9caa61a7f747435bdb0f1ab9d1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f22a9caa61a7f747435bdb0f1ab9d1e">&#9670;&#160;</a></span>DefaultPuncture</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly Vector2 BalloonParty.UI.CardReveal.CardRevealView.DefaultPuncture = new(0.5f, 0.8f)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ac8750eed14bac3221822c161c1a53a0a" name="ac8750eed14bac3221822c161c1a53a0a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac8750eed14bac3221822c161c1a53a0a">&#9670;&#160;</a></span>SheetGridId</h2>
 
@@ -1398,6 +1790,29 @@ Static Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Property Documentation</h2>
+<a id="acc9fe0a296c50a1a89a930524338885c" name="acc9fe0a296c50a1a89a930524338885c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc9fe0a296c50a1a89a930524338885c">&#9670;&#160;</a></span>PinBuilt</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.UI.CardReveal.CardRevealView.PinBuilt</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

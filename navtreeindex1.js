@@ -1,18 +1,19 @@
 var NAVTREEINDEX1 =
 {
+"FreesoundResponseParser_8cs.html":[7,0,0,1,3],
 "FreesoundSfxProvider_8cs.html":[7,0,0,1,4],
 "FreesoundTokenSource_8cs.html":[7,0,0,1,5],
 "GameDisplayConfigurationDrawer_8cs.html":[7,0,3,4,1],
 "GameDisplayConfiguration_8cs.html":[7,0,3,13],
 "GameLifetimeScope_8cs.html":[7,0,7,13],
 "GameOverDismissedMessage_8cs.html":[7,0,14,7,11],
-"GameOverLayoutBuilder_8cs.html":[7,0,6,19],
+"GameOverLayoutBuilder_8cs.html":[7,0,6,20],
 "GameOverLifetimeScope_8cs.html":[7,0,18,4,0],
 "GameOverLossCinematic_8cs.html":[7,0,7,1,9],
 "GameOverMessage_8cs.html":[7,0,14,7,12],
 "GameOverPresentationGate_8cs.html":[7,0,7,8,2],
 "GameOverScreen_8cs.html":[7,0,18,4,1],
-"GamePaletteAdapter_8cs.html":[7,0,6,20],
+"GamePaletteAdapter_8cs.html":[7,0,6,21],
 "GamePaletteExtensions_8cs.html":[7,0,3,10,1],
 "GamePalette_8cs.html":[7,0,3,10,0],
 "GameRenderMapsWindow_8cs.html":[7,0,6,3,0],
@@ -21,7 +22,7 @@ var NAVTREEINDEX1 =
 "GameplayMetricsService_8cs.html":[7,0,7,10,8],
 "GatekeeperActorModel_8cs.html":[7,0,15,0,0,11],
 "GizmoDrawingHelper_8cs.html":[7,0,14,10,4],
-"GradientTextureDrawer_8cs.html":[7,0,6,21],
+"GradientTextureDrawer_8cs.html":[7,0,6,22],
 "GradientTextureHelper_8cs.html":[7,0,14,10,5],
 "GraphicColorableRenderer_8cs.html":[7,0,18,8,2],
 "GrassBladeMesh_8cs.html":[7,0,13,0,0],
@@ -43,7 +44,7 @@ var NAVTREEINDEX1 =
 "GroundView_8cs.html":[7,0,13,0,2],
 "HandwrittenHeadsUp_8cs.html":[7,0,18,5,0],
 "HeadsUpAnchor_8cs.html":[7,0,7,5,1],
-"HeadsUpBuilder_8cs.html":[7,0,6,22],
+"HeadsUpBuilder_8cs.html":[7,0,6,23],
 "HeadsUpHandle_8cs.html":[7,0,7,5,2],
 "HeadsUpLayer_8cs.html":[7,0,18,5,1],
 "HeadsUpMergeKey_8cs.html":[7,0,7,5,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "ImageExtensions_8cs.html":[7,0,14,4,8],
 "ImageShadowBakerEditor_8cs.html":[7,0,6,5,0],
 "ImageShadowBaker_8cs.html":[7,0,14,10,6],
-"ImpactEventBus_8cs.html":[7,0,14,21],
-"InitialLayerPlan_8cs.html":[7,0,1,3,6]
+"ImpactEventBus_8cs.html":[7,0,14,21]
 };

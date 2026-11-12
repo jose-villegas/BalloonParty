@@ -117,7 +117,7 @@ $(function(){initNavTree('classBalloonParty_1_1Editor_1_1CardRevealBuilder.html'
 </div><!--header-->
 <div class="contents">
 
-<p>Builds the card reveal: imports the baked pop sheets under <code>Assets/Sprites/UI/CardReveal/</code> as linear data, lists them on the <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html" title="The card reveal&#39;s settings.">CardRevealSettings</a> asset (made if missing, and assigned to the game scope), makes the materials, and builds the <a class="el" href="classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html" title="The card reveal&#39;s stage (ICardReveals): plays each reveal the controller hands it.">CardRevealView</a> on a canvas of its own, the <code>CardRevealCanvas</code> prefab, placed in the <a class="el" href="namespaceBalloonParty_1_1Game.html">Game</a> scene: the balloon's shadow and back layer, the two ribbons (the card's title and what it does), its front layer.  
+<p>Builds the card reveal: imports the baked pop sheets under <code>Assets/Sprites/UI/CardReveal/</code> as linear data, lists them on the <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html" title="The card reveal&#39;s settings.">CardRevealSettings</a> asset (made if missing, and assigned to the game scope), makes the materials, and builds the <a class="el" href="classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html" title="The card reveal&#39;s stage (ICardReveals): plays each reveal the controller hands it.">CardRevealView</a> on a canvas of its own, the <code>CardRevealCanvas</code> prefab, placed in the <a class="el" href="namespaceBalloonParty_1_1Game.html">Game</a> scene: the balloon's shadow and back layer, the two ribbons (the card's title and what it does), its front layer, and the pushpin that pricks it (its baked sheet, <code>pin.png</code>, lit as the rubber is).  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Editor.CardRevealBuilder:</div>
@@ -132,6 +132,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html">Flight</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html">Materials</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1PinImages.html">PinImages</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
@@ -152,16 +154,26 @@ Static Private Member Functions</h2></td></tr>
 <tr class="separator:aca33e020202cbf9e01eddf030de5b84a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ab8dea725b855cef956c11fdbca9ef5" id="r_a5ab8dea725b855cef956c11fdbca9ef5"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5ab8dea725b855cef956c11fdbca9ef5">BuildReveal</a> (Transform canvas, TMP_Text label, <a class="el" href="structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html">Materials</a> materials)</td></tr>
 <tr class="separator:a5ab8dea725b855cef956c11fdbca9ef5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7ec16e66cb30a864fc112f1703bfd7e" id="r_ac7ec16e66cb30a864fc112f1703bfd7e"><td class="memItemLeft" align="right" valign="top">static RawImage&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac7ec16e66cb30a864fc112f1703bfd7e">CreateLayer</a> (string name, RectTransform balloon, Material material)</td></tr>
-<tr class="separator:ac7ec16e66cb30a864fc112f1703bfd7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6b53b050b4e2bb7d9dfd219ec87f485" id="r_ac6b53b050b4e2bb7d9dfd219ec87f485"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac6b53b050b4e2bb7d9dfd219ec87f485">CompressedForPhones</a> (TextureImporterPlatformSettings settings)</td></tr>
+<tr class="separator:ac6b53b050b4e2bb7d9dfd219ec87f485"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66077c302fe1806153d01b9bd2b69251" id="r_a66077c302fe1806153d01b9bd2b69251"><td class="memItemLeft" align="right" valign="top">static RawImage&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a66077c302fe1806153d01b9bd2b69251">CreateLayer</a> (string name, RectTransform parent, Material material)</td></tr>
+<tr class="separator:a66077c302fe1806153d01b9bd2b69251"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fdf61192dcfa103d34c318bbc5e20ba" id="r_a1fdf61192dcfa103d34c318bbc5e20ba"><td class="memItemLeft" align="right" valign="top">static ? <a class="el" href="structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1PinImages.html">PinImages</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1fdf61192dcfa103d34c318bbc5e20ba">CreatePin</a> (RectTransform root, Material material)</td></tr>
+<tr class="separator:a1fdf61192dcfa103d34c318bbc5e20ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba3f4bd964e446d46fa902681ddddce2" id="r_aba3f4bd964e446d46fa902681ddddce2"><td class="memItemLeft" align="right" valign="top">static RawImage&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba3f4bd964e446d46fa902681ddddce2">CreatePinPart</a> (string name, RectTransform pin, Texture2D sheet, Material material, Rect cell)</td></tr>
+<tr class="separator:aba3f4bd964e446d46fa902681ddddce2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9625c72e6a98b6765fa55c6956af597" id="r_ae9625c72e6a98b6765fa55c6956af597"><td class="memItemLeft" align="right" valign="top">static RectTransform&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae9625c72e6a98b6765fa55c6956af597">CreateRect</a> (string name, Transform parent)</td></tr>
 <tr class="separator:ae9625c72e6a98b6765fa55c6956af597"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7af2b31ea24cb635a1cd78535d568a86" id="r_a7af2b31ea24cb635a1cd78535d568a86"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html">RibbonPiece</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7af2b31ea24cb635a1cd78535d568a86">CreateRibbon</a> (string name, RectTransform balloon, TMP_Text label, Material material, Vector2 centre, float height, float fontSize, <a class="el" href="structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html">Flight</a> flight)</td></tr>
 <tr class="separator:a7af2b31ea24cb635a1cd78535d568a86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af3446ad6dcf56f048ecbdd1d8f913d33" id="r_af3446ad6dcf56f048ecbdd1d8f913d33"><td class="memItemLeft" align="right" valign="top">static Material&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3446ad6dcf56f048ecbdd1d8f913d33">EnsureMaterial</a> (string path, string shaderName, string switchedOn=null)</td></tr>
 <tr class="separator:af3446ad6dcf56f048ecbdd1d8f913d33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a875907b6e96a2a3c6d556e64d0ed6d39" id="r_a875907b6e96a2a3c6d556e64d0ed6d39"><td class="memItemLeft" align="right" valign="top">static Material&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a875907b6e96a2a3c6d556e64d0ed6d39">EnsurePinMaterial</a> ()</td></tr>
+<tr class="separator:a875907b6e96a2a3c6d556e64d0ed6d39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa12151e02737e143db06e14838304df8" id="r_aa12151e02737e143db06e14838304df8"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html">CardRevealSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa12151e02737e143db06e14838304df8">EnsureSettings</a> (IReadOnlyList&lt; Texture2D &gt; sheets)</td></tr>
 <tr class="separator:aa12151e02737e143db06e14838304df8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea1342af7c27765a97cdf3d4db37ef85" id="r_aea1342af7c27765a97cdf3d4db37ef85"><td class="memItemLeft" align="right" valign="top">static Texture2D&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aea1342af7c27765a97cdf3d4db37ef85">ImportAsData</a> (string path)</td></tr>
+<tr class="separator:aea1342af7c27765a97cdf3d4db37ef85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87da91c22fbfa619b262ea5b15199187" id="r_a87da91c22fbfa619b262ea5b15199187"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a87da91c22fbfa619b262ea5b15199187">ImportedAsData</a> (TextureImporter importer)</td></tr>
 <tr class="separator:a87da91c22fbfa619b262ea5b15199187"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaad23d3cdc62958f11b2ffde2726e318" id="r_aaad23d3cdc62958f11b2ffde2726e318"><td class="memItemLeft" align="right" valign="top">static List&lt; Texture2D &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaad23d3cdc62958f11b2ffde2726e318">ImportSheets</a> ()</td></tr>
@@ -177,6 +189,8 @@ Static Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
+<tr class="memitem:a04a44a36e668d5f167367f9a3dc45fe9" id="r_a04a44a36e668d5f167367f9a3dc45fe9"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a04a44a36e668d5f167367f9a3dc45fe9">BestCompression</a> = 100</td></tr>
+<tr class="separator:a04a44a36e668d5f167367f9a3dc45fe9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12001c6edc9097caedab2c076cf7b42a" id="r_a12001c6edc9097caedab2c076cf7b42a"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a12001c6edc9097caedab2c076cf7b42a">CanvasPrefabPath</a> = &quot;Assets/Prefabs/Game/CardRevealCanvas.prefab&quot;</td></tr>
 <tr class="separator:a12001c6edc9097caedab2c076cf7b42a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7284bffe96259d20ec7044c96a857702" id="r_a7284bffe96259d20ec7044c96a857702"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7284bffe96259d20ec7044c96a857702">CentreAboveFrame</a> = 0.039f</td></tr>
@@ -197,6 +211,18 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:a661bfde9fbfda68fa458b268841db9d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a877d2cdb1b66a9f7d5ea938013c7e0d9" id="r_a877d2cdb1b66a9f7d5ea938013c7e0d9"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a877d2cdb1b66a9f7d5ea938013c7e0d9">MenuRoot</a> = &quot;Tools/BalloonParty/CardReveal/&quot;</td></tr>
 <tr class="separator:a877d2cdb1b66a9f7d5ea938013c7e0d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cc654b48b05c2459d782aa679f8ee9d" id="r_a3cc654b48b05c2459d782aa679f8ee9d"><td class="memItemLeft" align="right" valign="top">static readonly string[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3cc654b48b05c2459d782aa679f8ee9d">PhonePlatforms</a> = { &quot;Android&quot;, &quot;iPhone&quot; }</td></tr>
+<tr class="separator:a3cc654b48b05c2459d782aa679f8ee9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01e72659724f9de7637b32cd08653afc" id="r_a01e72659724f9de7637b32cd08653afc"><td class="memItemLeft" align="right" valign="top">static readonly Rect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a01e72659724f9de7637b32cd08653afc">PinHeadCell</a> = new(0f, 0.5f, 0.5f, 0.5f)</td></tr>
+<tr class="separator:a01e72659724f9de7637b32cd08653afc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07245661b91dfe3be24adbdeb67bcbc5" id="r_a07245661b91dfe3be24adbdeb67bcbc5"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a07245661b91dfe3be24adbdeb67bcbc5">PinMaterialPath</a> = &quot;Assets/<a class="el" href="structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html">Materials</a>/UI/CardRevealPin.mat&quot;</td></tr>
+<tr class="separator:a07245661b91dfe3be24adbdeb67bcbc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cabd788fc9efb8ef90a6b937c0ab829" id="r_a3cabd788fc9efb8ef90a6b937c0ab829"><td class="memItemLeft" align="right" valign="top">static readonly Rect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3cabd788fc9efb8ef90a6b937c0ab829">PinNeedleCell</a> = new(0.5f, 0.5f, 0.5f, 0.5f)</td></tr>
+<tr class="separator:a3cabd788fc9efb8ef90a6b937c0ab829"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ae32524ec59968511f39e4fede09285" id="r_a1ae32524ec59968511f39e4fede09285"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ae32524ec59968511f39e4fede09285">PinSheetColumns</a> = 2</td></tr>
+<tr class="separator:a1ae32524ec59968511f39e4fede09285"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0df0bf5f5eec753d31938d933dc8f986" id="r_a0df0bf5f5eec753d31938d933dc8f986"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0df0bf5f5eec753d31938d933dc8f986">PinSheetPath</a> = &quot;Assets/Sprites/UI/CardReveal/pin.png&quot;</td></tr>
+<tr class="separator:a0df0bf5f5eec753d31938d933dc8f986"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd4ed8e20bad05dfdb8d0e81728db965" id="r_afd4ed8e20bad05dfdb8d0e81728db965"><td class="memItemLeft" align="right" valign="top">static readonly Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afd4ed8e20bad05dfdb8d0e81728db965">Place</a> = new(0f, 12f)</td></tr>
 <tr class="separator:afd4ed8e20bad05dfdb8d0e81728db965"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a587edeb6cdba260ac75dcf744904d1c3" id="r_a587edeb6cdba260ac75dcf744904d1c3"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a587edeb6cdba260ac75dcf744904d1c3">RevealLayer</a> = &quot;Balloons&quot;</td></tr>
@@ -213,6 +239,8 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:a5cb9b4d26b1efb2a7a0e7f8b32f03f56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a14fae3d6f3b7989f0d821c09233c4af8" id="r_a14fae3d6f3b7989f0d821c09233c4af8"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a14fae3d6f3b7989f0d821c09233c4af8">RootName</a> = &quot;CardReveal&quot;</td></tr>
 <tr class="separator:a14fae3d6f3b7989f0d821c09233c4af8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5cfd69abe765fc9359bf40d28ebda70c" id="r_a5cfd69abe765fc9359bf40d28ebda70c"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5cfd69abe765fc9359bf40d28ebda70c">ScatterId</a> = Shader.PropertyToID(&quot;_Scatter&quot;)</td></tr>
+<tr class="separator:a5cfd69abe765fc9359bf40d28ebda70c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc1087ee84d3183bc4054655bf755b35" id="r_adc1087ee84d3183bc4054655bf755b35"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc1087ee84d3183bc4054655bf755b35">ScopePrefabPath</a> = &quot;Assets/Prefabs/Game/GameLifetimeScope.prefab&quot;</td></tr>
 <tr class="separator:adc1087ee84d3183bc4054655bf755b35"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fde95c3b2e75ea3899b1fefabd63db3" id="r_a3fde95c3b2e75ea3899b1fefabd63db3"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3fde95c3b2e75ea3899b1fefabd63db3">SettingsPath</a> = &quot;Assets/Configuration/CardRevealSettings.asset&quot;</td></tr>
@@ -223,13 +251,15 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:a4eb77c277ee1786dea6cc80ec9f053c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72175d9b4ebd0ccb22fb06f8d350d7fc" id="r_a72175d9b4ebd0ccb22fb06f8d350d7fc"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a72175d9b4ebd0ccb22fb06f8d350d7fc">SheetFolder</a> = &quot;Assets/Sprites/UI/CardReveal&quot;</td></tr>
 <tr class="separator:a72175d9b4ebd0ccb22fb06f8d350d7fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa23e725b71f036662489ff7226c671d8" id="r_aa23e725b71f036662489ff7226c671d8"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa23e725b71f036662489ff7226c671d8">SheetGridId</a> = Shader.PropertyToID(&quot;_SheetGrid&quot;)</td></tr>
+<tr class="separator:aa23e725b71f036662489ff7226c671d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a490b95a9cd3ece302e6a9ea5944a10e7" id="r_a490b95a9cd3ece302e6a9ea5944a10e7"><td class="memItemLeft" align="right" valign="top">static readonly <a class="el" href="structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html">Flight</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a490b95a9cd3ece302e6a9ea5944a10e7">TitleFlight</a></td></tr>
 <tr class="separator:a490b95a9cd3ece302e6a9ea5944a10e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acbaaeafabe4b416b843cfdb0d38699c8" id="r_acbaaeafabe4b416b843cfdb0d38699c8"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acbaaeafabe4b416b843cfdb0d38699c8">TitleRibbonHeight</a> = 16f</td></tr>
 <tr class="separator:acbaaeafabe4b416b843cfdb0d38699c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Builds the card reveal: imports the baked pop sheets under <code>Assets/Sprites/UI/CardReveal/</code> as linear data, lists them on the <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html" title="The card reveal&#39;s settings.">CardRevealSettings</a> asset (made if missing, and assigned to the game scope), makes the materials, and builds the <a class="el" href="classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html" title="The card reveal&#39;s stage (ICardReveals): plays each reveal the controller hands it.">CardRevealView</a> on a canvas of its own, the <code>CardRevealCanvas</code> prefab, placed in the <a class="el" href="namespaceBalloonParty_1_1Game.html">Game</a> scene: the balloon's shadow and back layer, the two ribbons (the card's title and what it does), its front layer. </p>
+<div class="textblock"><p>Builds the card reveal: imports the baked pop sheets under <code>Assets/Sprites/UI/CardReveal/</code> as linear data, lists them on the <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html" title="The card reveal&#39;s settings.">CardRevealSettings</a> asset (made if missing, and assigned to the game scope), makes the materials, and builds the <a class="el" href="classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html" title="The card reveal&#39;s stage (ICardReveals): plays each reveal the controller hands it.">CardRevealView</a> on a canvas of its own, the <code>CardRevealCanvas</code> prefab, placed in the <a class="el" href="namespaceBalloonParty_1_1Game.html">Game</a> scene: the balloon's shadow and back layer, the two ribbons (the card's title and what it does), its front layer, and the pushpin that pricks it (its baked sheet, <code>pin.png</code>, lit as the rubber is). </p>
 <p>The canvas is World Space, fitted to the camera (<a class="el" href="classBalloonParty_1_1UI_1_1CameraFittedCanvas.html" title="Keeps a World Space canvas over the main camera&#39;s view, sized and scaled the way a Screen Space canva...">CameraFittedCanvas</a>), on the Balloons layer and sorted just under the screen-space light, so the reveal takes part in the game's lighting as the board's balloons do. The ribbons are cream satin written in the tooltip's pencil font. A starting look to restyle by hand; running it again rebuilds it. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ad37c4a92745535591de9f509a06f2049" name="ad37c4a92745535591de9f509a06f2049"></a>
@@ -406,8 +436,33 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ac7ec16e66cb30a864fc112f1703bfd7e" name="ac7ec16e66cb30a864fc112f1703bfd7e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac7ec16e66cb30a864fc112f1703bfd7e">&#9670;&#160;</a></span>CreateLayer()</h2>
+<a id="ac6b53b050b4e2bb7d9dfd219ec87f485" name="ac6b53b050b4e2bb7d9dfd219ec87f485"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6b53b050b4e2bb7d9dfd219ec87f485">&#9670;&#160;</a></span>CompressedForPhones()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Editor.CardRevealBuilder.CompressedForPhones </td>
+          <td>(</td>
+          <td class="paramtype">TextureImporterPlatformSettings</td>          <td class="paramname"><span class="paramname"><em>settings</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a66077c302fe1806153d01b9bd2b69251" name="a66077c302fe1806153d01b9bd2b69251"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66077c302fe1806153d01b9bd2b69251">&#9670;&#160;</a></span>CreateLayer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -423,12 +478,85 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">RectTransform</td>          <td class="paramname"><span class="paramname"><em>balloon</em></span>, </td>
+          <td class="paramtype">RectTransform</td>          <td class="paramname"><span class="paramname"><em>parent</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">Material</td>          <td class="paramname"><span class="paramname"><em>material</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1fdf61192dcfa103d34c318bbc5e20ba" name="a1fdf61192dcfa103d34c318bbc5e20ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fdf61192dcfa103d34c318bbc5e20ba">&#9670;&#160;</a></span>CreatePin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static ? <a class="el" href="structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1PinImages.html">PinImages</a> BalloonParty.Editor.CardRevealBuilder.CreatePin </td>
+          <td>(</td>
+          <td class="paramtype">RectTransform</td>          <td class="paramname"><span class="paramname"><em>root</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Material</td>          <td class="paramname"><span class="paramname"><em>material</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aba3f4bd964e446d46fa902681ddddce2" name="aba3f4bd964e446d46fa902681ddddce2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba3f4bd964e446d46fa902681ddddce2">&#9670;&#160;</a></span>CreatePinPart()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static RawImage BalloonParty.Editor.CardRevealBuilder.CreatePinPart </td>
+          <td>(</td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>name</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">RectTransform</td>          <td class="paramname"><span class="paramname"><em>pin</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Texture2D</td>          <td class="paramname"><span class="paramname"><em>sheet</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Material</td>          <td class="paramname"><span class="paramname"><em>material</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Rect</td>          <td class="paramname"><span class="paramname"><em>cell</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -562,6 +690,31 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a875907b6e96a2a3c6d556e64d0ed6d39" name="a875907b6e96a2a3c6d556e64d0ed6d39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a875907b6e96a2a3c6d556e64d0ed6d39">&#9670;&#160;</a></span>EnsurePinMaterial()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static Material BalloonParty.Editor.CardRevealBuilder.EnsurePinMaterial </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aa12151e02737e143db06e14838304df8" name="aa12151e02737e143db06e14838304df8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa12151e02737e143db06e14838304df8">&#9670;&#160;</a></span>EnsureSettings()</h2>
 
@@ -575,6 +728,31 @@ Static Private Attributes</h2></td></tr>
           <td class="memname">static <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html">CardRevealSettings</a> BalloonParty.Editor.CardRevealBuilder.EnsureSettings </td>
           <td>(</td>
           <td class="paramtype">IReadOnlyList&lt; Texture2D &gt;</td>          <td class="paramname"><span class="paramname"><em>sheets</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aea1342af7c27765a97cdf3d4db37ef85" name="aea1342af7c27765a97cdf3d4db37ef85"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea1342af7c27765a97cdf3d4db37ef85">&#9670;&#160;</a></span>ImportAsData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static Texture2D BalloonParty.Editor.CardRevealBuilder.ImportAsData </td>
+          <td>(</td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>path</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -738,6 +916,28 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a04a44a36e668d5f167367f9a3dc45fe9" name="a04a44a36e668d5f167367f9a3dc45fe9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04a44a36e668d5f167367f9a3dc45fe9">&#9670;&#160;</a></span>BestCompression</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int BalloonParty.Editor.CardRevealBuilder.BestCompression = 100</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a12001c6edc9097caedab2c076cf7b42a" name="a12001c6edc9097caedab2c076cf7b42a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a12001c6edc9097caedab2c076cf7b42a">&#9670;&#160;</a></span>CanvasPrefabPath</h2>
 
@@ -960,6 +1160,138 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a3cc654b48b05c2459d782aa679f8ee9d" name="a3cc654b48b05c2459d782aa679f8ee9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3cc654b48b05c2459d782aa679f8ee9d">&#9670;&#160;</a></span>PhonePlatforms</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly string [] BalloonParty.Editor.CardRevealBuilder.PhonePlatforms = { &quot;Android&quot;, &quot;iPhone&quot; }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a01e72659724f9de7637b32cd08653afc" name="a01e72659724f9de7637b32cd08653afc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01e72659724f9de7637b32cd08653afc">&#9670;&#160;</a></span>PinHeadCell</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly Rect BalloonParty.Editor.CardRevealBuilder.PinHeadCell = new(0f, 0.5f, 0.5f, 0.5f)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a07245661b91dfe3be24adbdeb67bcbc5" name="a07245661b91dfe3be24adbdeb67bcbc5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07245661b91dfe3be24adbdeb67bcbc5">&#9670;&#160;</a></span>PinMaterialPath</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const string BalloonParty.Editor.CardRevealBuilder.PinMaterialPath = &quot;Assets/<a class="el" href="structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html">Materials</a>/UI/CardRevealPin.mat&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3cabd788fc9efb8ef90a6b937c0ab829" name="a3cabd788fc9efb8ef90a6b937c0ab829"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3cabd788fc9efb8ef90a6b937c0ab829">&#9670;&#160;</a></span>PinNeedleCell</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly Rect BalloonParty.Editor.CardRevealBuilder.PinNeedleCell = new(0.5f, 0.5f, 0.5f, 0.5f)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1ae32524ec59968511f39e4fede09285" name="a1ae32524ec59968511f39e4fede09285"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ae32524ec59968511f39e4fede09285">&#9670;&#160;</a></span>PinSheetColumns</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int BalloonParty.Editor.CardRevealBuilder.PinSheetColumns = 2</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0df0bf5f5eec753d31938d933dc8f986" name="a0df0bf5f5eec753d31938d933dc8f986"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0df0bf5f5eec753d31938d933dc8f986">&#9670;&#160;</a></span>PinSheetPath</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const string BalloonParty.Editor.CardRevealBuilder.PinSheetPath = &quot;Assets/Sprites/UI/CardReveal/pin.png&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="afd4ed8e20bad05dfdb8d0e81728db965" name="afd4ed8e20bad05dfdb8d0e81728db965"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afd4ed8e20bad05dfdb8d0e81728db965">&#9670;&#160;</a></span>Place</h2>
 
@@ -1136,6 +1468,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a5cfd69abe765fc9359bf40d28ebda70c" name="a5cfd69abe765fc9359bf40d28ebda70c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5cfd69abe765fc9359bf40d28ebda70c">&#9670;&#160;</a></span>ScatterId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Editor.CardRevealBuilder.ScatterId = Shader.PropertyToID(&quot;_Scatter&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="adc1087ee84d3183bc4054655bf755b35" name="adc1087ee84d3183bc4054655bf755b35"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adc1087ee84d3183bc4054655bf755b35">&#9670;&#160;</a></span>ScopePrefabPath</h2>
 
@@ -1235,6 +1589,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">const string BalloonParty.Editor.CardRevealBuilder.SheetFolder = &quot;Assets/Sprites/UI/CardReveal&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa23e725b71f036662489ff7226c671d8" name="aa23e725b71f036662489ff7226c671d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa23e725b71f036662489ff7226c671d8">&#9670;&#160;</a></span>SheetGridId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Editor.CardRevealBuilder.SheetGridId = Shader.PropertyToID(&quot;_SheetGrid&quot;)</td>
         </tr>
       </table>
   </td>

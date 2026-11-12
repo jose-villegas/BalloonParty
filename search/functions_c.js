@@ -9,7 +9,7 @@ var searchData=
   ['matchdisplaytarget_6',['MatchDisplayTarget',['../classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#ab6efe0ee1e01c31fe6ff5b0604889e9b',1,'BalloonParty::Shared::Diagnostics::FrameRateSettings']]],
   ['matches_7',['Matches',['../structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1Entry.html#a1fc29bcee55798c1a1568a2523e7da72',1,'BalloonParty::Editor::MetricBindingDrawer::Entry']]],
   ['matchscaler_8',['MatchScaler',['../classBalloonParty_1_1UI_1_1CameraFittedCanvas.html#aa04244c9ddae6b31f3a2ee7ce32a4c89',1,'BalloonParty::UI::CameraFittedCanvas']]],
-  ['materials_9',['Materials',['../structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html#ae719d74e1fc4166649717c9994813bf8',1,'BalloonParty::Editor::CardRevealBuilder::Materials']]],
+  ['materials_9',['Materials',['../structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html#a82f3cbf6a219aeb1b9cf2dc539b90d50',1,'BalloonParty::Editor::CardRevealBuilder::Materials']]],
   ['max_10',['Max',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#aa17fc9af18620caf0432830db89b5097',1,'BalloonParty::Game::Score::Behaviours::ShapeCatalog']]],
   ['maxactiveweightedentries_11',['MaxActiveWeightedEntries',['../classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#ab662641d8d21589c9d4e48c2881d7a84',1,'BalloonParty::Editor::LevelPacingWindow']]],
   ['maxactorgatecount_12',['MaxActorGateCount',['../classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#ad5da75d1c359c556cfafd7a5a7fc859d',1,'BalloonParty::Editor::LevelPacingWindow']]],
