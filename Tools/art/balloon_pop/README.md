@@ -13,7 +13,7 @@ the review files (`out/` is ignored by git):
 
 | File | What it is |
 |---|---|
-| `out/sheets/pop_NN.png` | The game's sheet, 2048×3072: the front layer's 48 frames of 256×256 in the top half, 8 across by 6 down, read left to right and top to bottom, and the back layer's in the bottom half in the same order. The balloon's centre is the same pixel in every frame. The empty texels around the rubber hold its surface data bled outward (coverage stays 0), so the game's filtering doesn't bend the edge's normals. Copy it to `Assets/Sprites/UI/CardReveal/` and run Tools ▸ BalloonParty ▸ CardReveal ▸ Build Card Reveal, which imports it as linear data and lists it in the settings |
+| `out/sheets/pop_NN.png` | The game's sheet, 2048×3072: the front layer's 48 frames of 256×256 in the top half, 8 across by 6 down, read left to right and top to bottom, and the back layer's in the bottom half in the same order. The balloon's centre is the same pixel in every frame. The rim's texels, the rubber seen edge on, take the surface data of the solid rubber just inside (where a pixel mixes faces turned toward the camera and away, the back layer's flipped normals jump between lit and shadow and the occlusion dips, which the game's cel steps would draw as a sawtooth round the outline); a thin flap more than two texels from solid rubber keeps its own. The empty texels around the rubber hold the data bled outward (coverage stays 0), so the game's filtering doesn't bend the edge's normals. Then the coverage is blurred a little (`EDGE_BLUR`), so the outline is soft at the size the game draws it and the two layers' outlines meet without a seam. Copy it to `Assets/Sprites/UI/CardReveal/` and run Tools ▸ BalloonParty ▸ CardReveal ▸ Build Card Reveal, which imports it as linear data and lists it in the settings |
 | `out/review/pop_NN.png` | The contact sheet: the frames at 512 px, numbered, lit from the top left and tinted a balloon red, with a stand-in slip between the layers, on paper |
 | `out/review/pop_NN.gif` | The pop playing at 24 fps, in slow motion as the game plays it, under three lights side by side: the day's sun from the top left, a light from the right, and a low orange dusk |
 
@@ -27,7 +27,10 @@ inside the balloon. `pack_sheets.py` lights the review files with a smooth light
 its top), enough to judge the tear and the timing; the game cel shades the rubber, so judge its look
 in game.
 
-A seed is one pop. `--seeds 0,4,9` bakes several; re-running a seed redraws the same pop. `--detail 5
+A seed is one pop. The game has eight: seeds 0, 12, 18, 19, 20, 24, 25 and 27. Each is punctured on the
+balloon's front, where the pushpin can reach it, and its falling rubber stays inside the frame, but for a few
+thin strands the border fade takes; most seeds' falls trail whole flaps out past the frame's top or sides,
+which would show as a straight cut (measure a new one before keeping it). `--seeds 0,4,9` bakes several; re-running a seed redraws the same pop. `--detail 5
 --size 256 --samples 8` gives a quick look in about 20 s; the defaults (`--detail 6 --size 512
 --samples 32`) take about a minute and a quarter a pop. `--blend` also saves each pop's scene to open in
 Blender.

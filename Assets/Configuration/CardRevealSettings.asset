@@ -47,6 +47,13 @@ MonoBehaviour:
   _ribbonMinimumSeconds: 2.9
   _popPunctures:
   - {x: 0.511, y: 0.803}
+  - {x: 0.327, y: 0.616}
+  - {x: 0.334, y: 0.468}
+  - {x: 0.561, y: 0.719}
+  - {x: 0.428, y: 0.834}
+  - {x: 0.644, y: 0.736}
+  - {x: 0.788, y: 0.567}
+  - {x: 0.414, y: 0.704}
   _pinHeadColor: {r: 0.86, g: 0.16, b: 0.2, a: 1}
   _pinNeedleColor: {r: 0.78, g: 0.8, b: 0.84, a: 1}
   _pinTip: {x: 0.25, y: 0.15}

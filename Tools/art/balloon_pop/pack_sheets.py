@@ -23,7 +23,7 @@ import sys
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 COLUMNS = 8
 ROWS = 6
@@ -57,9 +57,30 @@ DUSK = ((0.9, -0.1), (1.0, 0.62, 0.38))
 
 def scaled(frame, size):
     # Premultiplied while resampling, so the transparent edge doesn't pick up the background's values.
-    return bled(frame.convert("RGBa").resize((size, size), Image.LANCZOS).convert("RGBA"))
+    return softened(bled(frame.convert("RGBa").resize((size, size), Image.LANCZOS).convert("RGBA")))
 
 
+def softened(frame):
+    """The coverage blurred a little, so the outline is soft: the game draws a frame about three times its
+    size, and a one-texel edge shows its steps, and where the two layers' outlines don't quite meet, their
+    seam. The surface data under the widened edge is already spread outward (bled). Then faded out toward
+    the frame's border, so a strand that trails past it (the rubber falling, the camera following the knot)
+    thins away rather than ending in a straight cut."""
+    r, g, b, a = frame.split()
+    coverage = np.asarray(a.filter(ImageFilter.GaussianBlur(EDGE_BLUR)), dtype=np.float32)
+    h, w = coverage.shape
+    ys, xs = np.mgrid[0:h, 0:w]
+    to_border = np.minimum(np.minimum(xs, w - 1 - xs), np.minimum(ys, h - 1 - ys)).astype(np.float32)
+    t = np.clip(to_border / BORDER_FADE, 0.0, 1.0)
+    coverage *= t * t * (3.0 - 2.0 * t)
+    return Image.merge("RGBA", (r, g, b, Image.fromarray((coverage + 0.5).astype(np.uint8), "L")))
+
+
+# How soft the outline is, in texels of the 256 px frames (a Gaussian's radius).
+EDGE_BLUR = 0.8
+# How far in from a frame's border its coverage fades out, in texels: the pops kept for the game cut only
+# thin strands there (most seeds' falls trail whole flaps past it, and are left out).
+BORDER_FADE = 8
 NEIGHBOURS = ((-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1))
 # How far in from solid rubber the rim's texels take its data; past that a thin flap keeps its own.
 RIM_REACH = 2

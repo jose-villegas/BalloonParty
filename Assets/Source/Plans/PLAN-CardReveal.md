@@ -7,12 +7,12 @@
 > does, drifting across the screen while the level's ascent plays.
 
 **Status:** Phase 1 built (the controller, its queue and the pop pick). Phase 2 built: the bake
-script makes pop 0. Phase 4 built with pop 0 alone, to see it in game before the other 15 are baked:
+script makes the pops; eight are in the game (seeds whose falling rubber stays inside the frame). Phase 4 built:
 `CardRevealView` plays it on a World Space canvas of its own during the level-up, lit live by the scene's light field and the screen-space light like the board, and
 the ribbons fly with the ascent. The cheat Reveal A Card shows one on demand. Not built yet: a card
 icon, and loading one sheet at a time.
 
-The pops are 16 separate physics simulations, baked in Blender by
+The pops are 8 separate physics simulations, baked in Blender by
 a script in this repo (§5), so the reveal never pops the same way twice in a row.
 
 ---
@@ -32,7 +32,7 @@ back convincingly; a cloth simulation can, so the pops are simulated and baked.
 
 1. On a level-up that deals a card, as the level-up starts, a silver balloon (none of the board's colours)
    floats up to a little above the screen's middle, bobbing and swaying to rest, two rolled-up ribbons inside it as a faint shadow.
-2. A red pushpin comes in and jabs it, and it pops: one of 16 baked simulations, chosen at random.
+2. A red pushpin comes in and jabs it, and it pops: one of 8 baked simulations, chosen at random.
    The rubber splits from where the pin went in, the flaps snap back and curl, and the shreds fall
    away, in slow motion, the way high-speed footage shows it, while scraps fly far out and flutter
    down and the pin is thrown back out.
@@ -55,7 +55,7 @@ slow-motion beats don't stretch it.
 | Plays on the UI canvas, over the board, never inside the level-up cinematic's trail path | The trail path is a known fragile area; the reveal only listens to the level-up, it doesn't hook into it |
 | Replaces the `Level N: Card` tooltip on card level-ups with `Level N` | One announcement of the card, not two. The level number still shows, as on level-ups without a card |
 | Also plays for a bonus card at the start of a retry (the ad's or one bought with coins, `PLAN-Coins.md`) | The same prize, the same way. Replaces the `BonusCardDealtMessage` tooltip |
-| A pop is picked at random, never one of the last two shown | 16 sims are there for variety; repeating the last one would waste it |
+| A pop is picked at random, never one of the last two shown | 8 sims are there for variety; repeating the last one would waste it |
 | The balloon is tinted at runtime and lit by the scene, not baked in one colour or one light | The sims are baked as surface data (the normal and the occlusion, not a picture) and lit at runtime by the scene's light, so the reveal takes any colour (`BalloonColor`, silver) and follows the time of day as the board's balloons do |
 | The ribbons are inside the balloon, not behind it | Each frame is baked in two layers, the rubber in front of the balloon's centre and the rubber behind it, and the ribbons are drawn between them. While the balloon moves the layers part slightly (parallax), so they read as inside |
 | A level-up's reveal plays with the ascent, and is over just before the next level settles | The ascent is the level-up's quiet stretch: nothing to aim at, the screen moving. The ribbons stay half a second past most of it, so the card is read, and leave as the new board settles |
@@ -99,17 +99,17 @@ seeded, so a run redraws the same set, and a seed can be swapped to replace one 
 Blender's cloth made the tear read as rubber (the flaps snap back rather than sag), so the fallback
 of a membrane solver in the script itself wasn't needed.
 
-**Budget.** 16 sheets of 2048×3072 (48 frames, two layers), compressed (ASTC 6×6 on phones) at about
-2.8 MB each: about 45 MB in the build, four times the single-layer 24-frame plan, and only one in memory at a time
-(`PopSheetLoader`). Normals in ASTC may band; if they do on a phone, 4×4 for these sheets is the
-first fix to try. The sheets stay out of the
+**Budget.** 8 sheets of 2048×3072 (48 frames, two layers), ASTC 4×4 on phones (6×6 and ETC2 blocked
+the normals into steps the cel shading drew as stairs) at about 6.3 MB each: about 50 MB in the build.
+Until `PopSheetLoader` is built the settings reference every sheet, so all eight load with the scene;
+the loader keeps only the chosen one in memory. The sheets stay out of the
 sprite atlases, like the other baked art (`Sprites/README.md`), under `Assets/Sprites/UI/CardReveal/`.
 
 ## 6. Assets
 
 | Asset | Size | Made by |
 |---|---|---|
-| 16 balloon pops | 16 sheets, 2048×3072 (48 frames of 256×256, two layers) | The bake script (§5) |
+| 8 balloon pops | 8 sheets, 2048×3072 (48 frames of 256×256, two layers) | The bake script (§5) |
 | The ribbons | None: drawn as a mesh (`RibbonGraphic`) | Code |
 | The pushpin | One sheet, 512×512 (its head and needle, 256×256 each, in the top half) | `bake_pin.py`, the pops' surface data and scene |
 | The shreds | One sheet, 256×256 (four torn scraps) | `make_shreds.py` |
@@ -122,7 +122,7 @@ sprite atlases, like the other baked art (`Sprites/README.md`), under `Assets/Sp
 | 1 (done) | `CardRevealController` and its queue, the pick that avoids the last two pops, the tooltip hand-off, EditMode tests | No |
 | 2 (built, in review) | The bake script: the balloon, one pop, rendered and packed. The owner reviews that one pop from the contact sheet before the other 15 are baked | Makes it |
 | 3 | The other 15 pops, reviewed together on the contact sheet | Makes it |
-| 4 (built with pop 0) | `CardRevealView`, `LitFlipbook` and the ribbons: the pop, lit and in two layers, the ribbons flying with the ascent, the pushpin that pricks it, and the shreds it flings. Still to come: `PopSheetLoader`, once there is more than one pop | Yes: phases 2 and 3 |
+| 4 (built with 8 pops) | `CardRevealView`, `LitFlipbook` and the ribbons: the pop, lit and in two layers, the ribbons flying with the ascent, the pushpin that pricks it, and the shreds it flings. Still to come: `PopSheetLoader`, once there is more than one pop | Yes: phases 2 and 3 |
 | 5 | A playtest pass on a phone: timing, how well the ribbons read over a busy board, and whether 256 px frames are sharp enough | — |
 
 ## 8. Open questions

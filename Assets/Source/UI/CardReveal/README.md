@@ -105,7 +105,7 @@ light.
 
 `Tools > BalloonParty > CardReveal > Build Card Reveal` does all of this:
 
-- imports every `pop_*.png` under `Assets/Sprites/UI/CardReveal/` as linear data (no sRGB, no mipmaps, clamped), skipping sheets already imported that way;
+- imports every `pop_*.png` under `Assets/Sprites/UI/CardReveal/` as linear data (no sRGB, no mipmaps, clamped), and on phones as ASTC 4×4 at its best quality (the default, ETC2, smears the normals into 4×4 blocks, which the cel steps draw as stairs; ASTC 4×4 is the same 8 bits a texel), skipping sheets already imported that way;
 - lists them on `Assets/Configuration/CardRevealSettings.asset` (made if missing, and assigned to the `GameLifetimeScope` prefab);
 - makes `Materials/UI/CardRevealRubber.mat`, `CardRevealRubberShadow.mat` (the same shader with Drop Shadow on), `CardRevealRibbon.mat` and `CardRevealPin.mat` (the rubber's shader on the pin's two cells, without the glow);
 - imports `pin.png` (`bake_pin.py`) as data, as the pop sheets are; without it the reveal is built with no pin, with a warning;
