@@ -1,5 +1,6 @@
 var interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings =
 [
+    [ "BalloonColor", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a85506378245e5c6b777be02e5c7b5701", null ],
     [ "FramesPerSecond", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a7519057eaff5377811d9f045fd90d09f", null ],
     [ "HoldBeforePopSeconds", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ae3b052cade559a7ad47695590cd97f79", null ],
     [ "InsideShowThrough", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a03fa25f1086a1b597742cb5245757391", null ],
@@ -18,9 +19,16 @@ var interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings 
     [ "RibbonSecondsWithoutAscent", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ac6a8923d4282b072c3470ebae2ad349d", null ],
     [ "RibbonsFromFrame", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ad02e1bfe8d09602b97e2f0b8016d4af6", null ],
     [ "RibbonsGoneAtAscent", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#afe039a31abd778ef5a17a9aac52e05d9", null ],
+    [ "RiseOvershoot", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a49231db8faaff77cb5716401bea9304c", null ],
     [ "RiseSeconds", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a9fa912a9bdc244148ee0631efb0854d4", null ],
+    [ "RiseSway", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a5695bde47a86a5170aa99a0fbf68c501", null ],
+    [ "RiseSwaySeconds", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a2467272248c5a235f0caf49bf1ef4a84", null ],
+    [ "RiseTilt", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ad7ae64b625de6154de57050c06351f1b", null ],
     [ "RubberFallGravity", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a6fc529b9cac53a8d3735822e7379372d", null ],
     [ "RubberFallsFromFrame", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a630b905c75223418d42221b6a5347cff", null ],
+    [ "RubberRecentreFrames", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a6648954e10066517522e02cef780c4c7", null ],
+    [ "RubberRecentreFromFrame", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aa28949182f9d2e4685986292f9269ad9", null ],
+    [ "RubberRecentreHeight", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a251495c4dfd319b8142f052121bc83ce", null ],
     [ "SheetColumns", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a5bd275eed8a7b0eb3a3b258b0a006ba9", null ],
     [ "SheetRows", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aadc7457259dd9b044121000695409996", null ]
 ];

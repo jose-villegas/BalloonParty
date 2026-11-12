@@ -134,10 +134,13 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1CardReveal_1_1Ca
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:ae17ae7beb541a12f90a19c9bc5ecd673" id="r_ae17ae7beb541a12f90a19c9bc5ecd673"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae17ae7beb541a12f90a19c9bc5ecd673">BalloonColor</a><code> [get]</code></td></tr>
+<tr class="memdesc:ae17ae7beb541a12f90a19c9bc5ecd673"><td class="mdescLeft">&#160;</td><td class="mdescRight">The prize balloon's colour: none of the board's, so it reads as the reward.  <br /></td></tr>
+<tr class="separator:ae17ae7beb541a12f90a19c9bc5ecd673"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15b83647d5a739a165e49ffa7845187e" id="r_a15b83647d5a739a165e49ffa7845187e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a15b83647d5a739a165e49ffa7845187e">FramesPerSecond</a><code> [get]</code></td></tr>
 <tr class="separator:a15b83647d5a739a165e49ffa7845187e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7252f33c862b50bfd5e5a97b7307b3b" id="r_ac7252f33c862b50bfd5e5a97b7307b3b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac7252f33c862b50bfd5e5a97b7307b3b">HoldBeforePopSeconds</a><code> [get]</code></td></tr>
-<tr class="memdesc:ac7252f33c862b50bfd5e5a97b7307b3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The whole balloon's beat at its place before it pops.  <br /></td></tr>
+<tr class="memdesc:ac7252f33c862b50bfd5e5a97b7307b3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The whole balloon bobbing to rest at its place before it pops.  <br /></td></tr>
 <tr class="separator:ac7252f33c862b50bfd5e5a97b7307b3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa96214ec9ae3edbae534a85d9fec39ad" id="r_aa96214ec9ae3edbae534a85d9fec39ad"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa96214ec9ae3edbae534a85d9fec39ad">InsideShowThrough</a><code> [get]</code></td></tr>
 <tr class="memdesc:aa96214ec9ae3edbae534a85d9fec39ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much of the ribbons inside shows through the whole front rubber, as a shadow inside the balloon: 0 to 1.  <br /></td></tr>
@@ -151,7 +154,7 @@ Properties</h2></td></tr>
 <tr class="memitem:ad6d2e7017879e086ea433b3ee0fa8482" id="r_ad6d2e7017879e086ea433b3ee0fa8482"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad6d2e7017879e086ea433b3ee0fa8482">PopFlashIntensity</a><code> [get]</code></td></tr>
 <tr class="separator:ad6d2e7017879e086ea433b3ee0fa8482"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97116ce7176b9349d2175cadde1677e5" id="r_a97116ce7176b9349d2175cadde1677e5"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a97116ce7176b9349d2175cadde1677e5">PopFlashRadius</a><code> [get]</code></td></tr>
-<tr class="memdesc:a97116ce7176b9349d2175cadde1677e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The light of the balloon's colour its tear flashes into the scene light field, in world units: it lights the board around the reveal, and the reveal itself.  <br /></td></tr>
+<tr class="memdesc:a97116ce7176b9349d2175cadde1677e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The white light its tear flashes into the scene light field, its radius in world units: it lights the board around the reveal, and the reveal itself.  <br /></td></tr>
 <tr class="separator:a97116ce7176b9349d2175cadde1677e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bca2304af84661d15752cec81c55fc0" id="r_a1bca2304af84661d15752cec81c55fc0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1bca2304af84661d15752cec81c55fc0">PopFlashSeconds</a><code> [get]</code></td></tr>
 <tr class="separator:a1bca2304af84661d15752cec81c55fc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -185,14 +188,36 @@ Properties</h2></td></tr>
 <tr class="memitem:a34747a27fa73541e63c11058accd07bf" id="r_a34747a27fa73541e63c11058accd07bf"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a34747a27fa73541e63c11058accd07bf">RibbonsGoneAtAscent</a><code> [get]</code></td></tr>
 <tr class="memdesc:a34747a27fa73541e63c11058accd07bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">On a level-up, the share of the level's ascent by which the ribbons are gone: just before the next level settles on screen.  <br /></td></tr>
 <tr class="separator:a34747a27fa73541e63c11058accd07bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d741d552914e7eb64ecfc85fcad91db" id="r_a7d741d552914e7eb64ecfc85fcad91db"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d741d552914e7eb64ecfc85fcad91db">RiseOvershoot</a><code> [get]</code></td></tr>
+<tr class="memdesc:a7d741d552914e7eb64ecfc85fcad91db"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far past its place the balloon floats before bobbing back, as a share of its rise.  <br /></td></tr>
+<tr class="separator:a7d741d552914e7eb64ecfc85fcad91db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80b6151ca92f971135212ec49d962832" id="r_a80b6151ca92f971135212ec49d962832"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80b6151ca92f971135212ec49d962832">RiseSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:a80b6151ca92f971135212ec49d962832"><td class="mdescLeft">&#160;</td><td class="mdescRight">How long the balloon takes to float up to the top of its bob, just past its place.  <br /></td></tr>
 <tr class="separator:a80b6151ca92f971135212ec49d962832"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a790355352ecc162ae2200bf430233488" id="r_a790355352ecc162ae2200bf430233488"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a790355352ecc162ae2200bf430233488">RiseSway</a><code> [get]</code></td></tr>
+<tr class="memdesc:a790355352ecc162ae2200bf430233488"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far the balloon sways to each side as it rises, in canvas units, dying away by the pop.  <br /></td></tr>
+<tr class="separator:a790355352ecc162ae2200bf430233488"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad704c40805a10be07da20e6ace9bce81" id="r_ad704c40805a10be07da20e6ace9bce81"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad704c40805a10be07da20e6ace9bce81">RiseSwaySeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:ad704c40805a10be07da20e6ace9bce81"><td class="mdescLeft">&#160;</td><td class="mdescRight">The time of one sway from side to side.  <br /></td></tr>
+<tr class="separator:ad704c40805a10be07da20e6ace9bce81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a610a54c46d89960cefbe04f59d38e1a6" id="r_a610a54c46d89960cefbe04f59d38e1a6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a610a54c46d89960cefbe04f59d38e1a6">RiseTilt</a><code> [get]</code></td></tr>
+<tr class="memdesc:a610a54c46d89960cefbe04f59d38e1a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far the balloon leans into its sway, in degrees.  <br /></td></tr>
+<tr class="separator:a610a54c46d89960cefbe04f59d38e1a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea4ae2609bf3378588fe2acd1835298b" id="r_aea4ae2609bf3378588fe2acd1835298b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aea4ae2609bf3378588fe2acd1835298b">RubberFallGravity</a><code> [get]</code></td></tr>
-<tr class="memdesc:aea4ae2609bf3378588fe2acd1835298b"><td class="mdescLeft">&#160;</td><td class="mdescRight">How fast the torn rubber's fall speeds up, in canvas units per second squared.  <br /></td></tr>
+<tr class="memdesc:aea4ae2609bf3378588fe2acd1835298b"><td class="mdescLeft">&#160;</td><td class="mdescRight">How fast the torn rubber's fall speeds up, in frame heights per pop frame squared: the bake's <code>FALL_ACCELERATION</code> over its camera's <code>ortho_scale</code>, so the game's motion is the one the shreds trail in, at any frame rate.  <br /></td></tr>
 <tr class="separator:aea4ae2609bf3378588fe2acd1835298b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3a0a26238dd3523ff3a15202598dc2b" id="r_ae3a0a26238dd3523ff3a15202598dc2b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae3a0a26238dd3523ff3a15202598dc2b">RubberFallsFromFrame</a><code> [get]</code></td></tr>
-<tr class="memdesc:ae3a0a26238dd3523ff3a15202598dc2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The pop's frame on which the torn rubber starts to fall.  <br /></td></tr>
+<tr class="memdesc:ae3a0a26238dd3523ff3a15202598dc2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The pop's frame on which the torn rubber starts to fall: the bake's <code>FALL_START</code>.  <br /></td></tr>
 <tr class="separator:ae3a0a26238dd3523ff3a15202598dc2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a676ecfabf7e286ca3dc263557f3e6769" id="r_a676ecfabf7e286ca3dc263557f3e6769"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a676ecfabf7e286ca3dc263557f3e6769">RubberRecentreFrames</a><code> [get]</code></td></tr>
+<tr class="memdesc:a676ecfabf7e286ca3dc263557f3e6769"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many frames that easing takes: the bake's <code>RECENTRE_FRAMES</code>.  <br /></td></tr>
+<tr class="separator:a676ecfabf7e286ca3dc263557f3e6769"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade7901a04b1e0d9fd80e05066fd23afc" id="r_ade7901a04b1e0d9fd80e05066fd23afc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade7901a04b1e0d9fd80e05066fd23afc">RubberRecentreFromFrame</a><code> [get]</code></td></tr>
+<tr class="memdesc:ade7901a04b1e0d9fd80e05066fd23afc"><td class="mdescLeft">&#160;</td><td class="mdescRight">The pop's frame from which the bake's camera eases further down than the knot, lifting it toward the frame's middle so the gathered rubber stays inside the frame: the bake's <code>RECENTRE_START</code> - 1.  <br /></td></tr>
+<tr class="separator:ade7901a04b1e0d9fd80e05066fd23afc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1f133f05ebb41623fbc5c7e7622c699" id="r_aa1f133f05ebb41623fbc5c7e7622c699"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa1f133f05ebb41623fbc5c7e7622c699">RubberRecentreHeight</a><code> [get]</code></td></tr>
+<tr class="memdesc:aa1f133f05ebb41623fbc5c7e7622c699"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far the camera eases down, in frame heights: the bake's <code>RECENTRE</code> over its camera's <code>ortho_scale</code>.  <br /></td></tr>
+<tr class="separator:aa1f133f05ebb41623fbc5c7e7622c699"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53df8769fb4bb08729164ebd5bae624c" id="r_a53df8769fb4bb08729164ebd5bae624c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a53df8769fb4bb08729164ebd5bae624c">SheetColumns</a><code> [get]</code></td></tr>
 <tr class="memdesc:a53df8769fb4bb08729164ebd5bae624c"><td class="mdescLeft">&#160;</td><td class="mdescRight">A layer's frames across one half of a sheet.  <br /></td></tr>
 <tr class="separator:a53df8769fb4bb08729164ebd5bae624c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -202,9 +227,11 @@ Properties</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:acf5dd5188770205802188261cc1217da" id="r_acf5dd5188770205802188261cc1217da"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf5dd5188770205802188261cc1217da">_framesPerSecond</a> = 12f</td></tr>
+<tr class="memitem:a2091f49f89bb1f573405e725c7639fca" id="r_a2091f49f89bb1f573405e725c7639fca"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2091f49f89bb1f573405e725c7639fca">_balloonColor</a> = new(0.8f, 0.82f, 0.87f, 1f)</td></tr>
+<tr class="separator:a2091f49f89bb1f573405e725c7639fca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf5dd5188770205802188261cc1217da" id="r_acf5dd5188770205802188261cc1217da"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf5dd5188770205802188261cc1217da">_framesPerSecond</a> = 24f</td></tr>
 <tr class="separator:acf5dd5188770205802188261cc1217da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4bee6d863401d4999092ff7caf08b9f2" id="r_a4bee6d863401d4999092ff7caf08b9f2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4bee6d863401d4999092ff7caf08b9f2">_holdBeforePopSeconds</a> = 0.15f</td></tr>
+<tr class="memitem:a4bee6d863401d4999092ff7caf08b9f2" id="r_a4bee6d863401d4999092ff7caf08b9f2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4bee6d863401d4999092ff7caf08b9f2">_holdBeforePopSeconds</a> = 0.5f</td></tr>
 <tr class="separator:a4bee6d863401d4999092ff7caf08b9f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a20402f649d342f147250dc8397b1d241" id="r_a20402f649d342f147250dc8397b1d241"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a20402f649d342f147250dc8397b1d241">_insideShowThrough</a> = 0.12f</td></tr>
 <tr class="separator:a20402f649d342f147250dc8397b1d241"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -232,25 +259,61 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a89bbea1b8bbda8bdd31c0a44fc63f2b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af27479823407b5f1f57a14612dcea405" id="r_af27479823407b5f1f57a14612dcea405"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af27479823407b5f1f57a14612dcea405">_ribbonSecondsWithoutAscent</a> = 3.4f</td></tr>
 <tr class="separator:af27479823407b5f1f57a14612dcea405"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adc28b07dabac3375dd4b06f011fd770f" id="r_adc28b07dabac3375dd4b06f011fd770f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc28b07dabac3375dd4b06f011fd770f">_ribbonsFromFrame</a> = 4</td></tr>
+<tr class="memitem:adc28b07dabac3375dd4b06f011fd770f" id="r_adc28b07dabac3375dd4b06f011fd770f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adc28b07dabac3375dd4b06f011fd770f">_ribbonsFromFrame</a> = 8</td></tr>
 <tr class="separator:adc28b07dabac3375dd4b06f011fd770f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace46149a8bbe76e41402c49a87d2a20a" id="r_ace46149a8bbe76e41402c49a87d2a20a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace46149a8bbe76e41402c49a87d2a20a">_ribbonsGoneAtAscent</a> = 0.82f</td></tr>
 <tr class="separator:ace46149a8bbe76e41402c49a87d2a20a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7fcf37c3a3a4f0a43fae6faee5a93c73" id="r_a7fcf37c3a3a4f0a43fae6faee5a93c73"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7fcf37c3a3a4f0a43fae6faee5a93c73">_riseSeconds</a> = 0.45f</td></tr>
+<tr class="memitem:a00f2b33170eb74ca0f4966e5dd834ba2" id="r_a00f2b33170eb74ca0f4966e5dd834ba2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a00f2b33170eb74ca0f4966e5dd834ba2">_riseOvershoot</a> = 0.06f</td></tr>
+<tr class="separator:a00f2b33170eb74ca0f4966e5dd834ba2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fcf37c3a3a4f0a43fae6faee5a93c73" id="r_a7fcf37c3a3a4f0a43fae6faee5a93c73"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7fcf37c3a3a4f0a43fae6faee5a93c73">_riseSeconds</a> = 0.8f</td></tr>
 <tr class="separator:a7fcf37c3a3a4f0a43fae6faee5a93c73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3bd0afd3ead250e1341f60fe8c96ff6" id="r_af3bd0afd3ead250e1341f60fe8c96ff6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3bd0afd3ead250e1341f60fe8c96ff6">_rubberFallGravity</a> = 95f</td></tr>
+<tr class="memitem:a0bf9b0a0eb087a8090eae6b1d7e564c8" id="r_a0bf9b0a0eb087a8090eae6b1d7e564c8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0bf9b0a0eb087a8090eae6b1d7e564c8">_riseSway</a> = 6f</td></tr>
+<tr class="separator:a0bf9b0a0eb087a8090eae6b1d7e564c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a576b42216554c436559c56a4edeb8ecd" id="r_a576b42216554c436559c56a4edeb8ecd"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a576b42216554c436559c56a4edeb8ecd">_riseSwaySeconds</a> = 0.55f</td></tr>
+<tr class="separator:a576b42216554c436559c56a4edeb8ecd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88b9df8e3af5e16f40c6fd75a604a739" id="r_a88b9df8e3af5e16f40c6fd75a604a739"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a88b9df8e3af5e16f40c6fd75a604a739">_riseTilt</a> = 5f</td></tr>
+<tr class="separator:a88b9df8e3af5e16f40c6fd75a604a739"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3bd0afd3ead250e1341f60fe8c96ff6" id="r_af3bd0afd3ead250e1341f60fe8c96ff6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3bd0afd3ead250e1341f60fe8c96ff6">_rubberFallGravity</a> = 0.0045f</td></tr>
 <tr class="separator:af3bd0afd3ead250e1341f60fe8c96ff6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1bf9c33b99d756e2686a93da04953220" id="r_a1bf9c33b99d756e2686a93da04953220"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1bf9c33b99d756e2686a93da04953220">_rubberFallsFromFrame</a> = 3</td></tr>
+<tr class="memitem:a1bf9c33b99d756e2686a93da04953220" id="r_a1bf9c33b99d756e2686a93da04953220"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1bf9c33b99d756e2686a93da04953220">_rubberFallsFromFrame</a> = 4</td></tr>
 <tr class="separator:a1bf9c33b99d756e2686a93da04953220"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40fc56164c7c2704d1189808a9bc3cb0" id="r_a40fc56164c7c2704d1189808a9bc3cb0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40fc56164c7c2704d1189808a9bc3cb0">_sheetColumns</a> = 6</td></tr>
+<tr class="memitem:aafbac6453ded4747411695906eebe1e7" id="r_aafbac6453ded4747411695906eebe1e7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aafbac6453ded4747411695906eebe1e7">_rubberRecentreFrames</a> = 12</td></tr>
+<tr class="separator:aafbac6453ded4747411695906eebe1e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac12f93f43f04922773d8b1e2ff1fecab" id="r_ac12f93f43f04922773d8b1e2ff1fecab"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac12f93f43f04922773d8b1e2ff1fecab">_rubberRecentreFromFrame</a> = 18</td></tr>
+<tr class="separator:ac12f93f43f04922773d8b1e2ff1fecab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83f20eab18c0bbd19eb5cd3c2eaa9569" id="r_a83f20eab18c0bbd19eb5cd3c2eaa9569"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a83f20eab18c0bbd19eb5cd3c2eaa9569">_rubberRecentreHeight</a> = 0.52f</td></tr>
+<tr class="separator:a83f20eab18c0bbd19eb5cd3c2eaa9569"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40fc56164c7c2704d1189808a9bc3cb0" id="r_a40fc56164c7c2704d1189808a9bc3cb0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40fc56164c7c2704d1189808a9bc3cb0">_sheetColumns</a> = 8</td></tr>
 <tr class="separator:a40fc56164c7c2704d1189808a9bc3cb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31aa3f0032f47d9c42bed0ab39a436e1" id="r_a31aa3f0032f47d9c42bed0ab39a436e1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31aa3f0032f47d9c42bed0ab39a436e1">_sheetRows</a> = 4</td></tr>
+<tr class="memitem:a31aa3f0032f47d9c42bed0ab39a436e1" id="r_a31aa3f0032f47d9c42bed0ab39a436e1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31aa3f0032f47d9c42bed0ab39a436e1">_sheetRows</a> = 6</td></tr>
 <tr class="separator:a31aa3f0032f47d9c42bed0ab39a436e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The card reveal's settings. </p>
 <p>Unassigned on the game scope, a default instance stands in, which has no pops, so the reveal stays off (<code><a class="el" href="PLAN-CardReveal_8md.html">Plans/PLAN-CardReveal.md</a></code>). </p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="a2091f49f89bb1f573405e725c7639fca" name="a2091f49f89bb1f573405e725c7639fca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2091f49f89bb1f573405e725c7639fca">&#9670;&#160;</a></span>_balloonColor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Color BalloonParty.Configuration.CardReveal.CardRevealSettings._balloonColor = new(0.8f, 0.82f, 0.87f, 1f)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="acf5dd5188770205802188261cc1217da" name="acf5dd5188770205802188261cc1217da"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acf5dd5188770205802188261cc1217da">&#9670;&#160;</a></span>_framesPerSecond</h2>
 
@@ -261,7 +324,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._framesPerSecond = 12f</td>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._framesPerSecond = 24f</td>
         </tr>
       </table>
   </td>
@@ -283,7 +346,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._holdBeforePopSeconds = 0.15f</td>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._holdBeforePopSeconds = 0.5f</td>
         </tr>
       </table>
   </td>
@@ -591,7 +654,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int BalloonParty.Configuration.CardReveal.CardRevealSettings._ribbonsFromFrame = 4</td>
+          <td class="memname">int BalloonParty.Configuration.CardReveal.CardRevealSettings._ribbonsFromFrame = 8</td>
         </tr>
       </table>
   </td>
@@ -625,6 +688,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a00f2b33170eb74ca0f4966e5dd834ba2" name="a00f2b33170eb74ca0f4966e5dd834ba2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00f2b33170eb74ca0f4966e5dd834ba2">&#9670;&#160;</a></span>_riseOvershoot</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._riseOvershoot = 0.06f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a7fcf37c3a3a4f0a43fae6faee5a93c73" name="a7fcf37c3a3a4f0a43fae6faee5a93c73"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7fcf37c3a3a4f0a43fae6faee5a93c73">&#9670;&#160;</a></span>_riseSeconds</h2>
 
@@ -635,7 +720,73 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._riseSeconds = 0.45f</td>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._riseSeconds = 0.8f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0bf9b0a0eb087a8090eae6b1d7e564c8" name="a0bf9b0a0eb087a8090eae6b1d7e564c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0bf9b0a0eb087a8090eae6b1d7e564c8">&#9670;&#160;</a></span>_riseSway</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._riseSway = 6f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a576b42216554c436559c56a4edeb8ecd" name="a576b42216554c436559c56a4edeb8ecd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a576b42216554c436559c56a4edeb8ecd">&#9670;&#160;</a></span>_riseSwaySeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._riseSwaySeconds = 0.55f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a88b9df8e3af5e16f40c6fd75a604a739" name="a88b9df8e3af5e16f40c6fd75a604a739"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88b9df8e3af5e16f40c6fd75a604a739">&#9670;&#160;</a></span>_riseTilt</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._riseTilt = 5f</td>
         </tr>
       </table>
   </td>
@@ -657,7 +808,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._rubberFallGravity = 95f</td>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._rubberFallGravity = 0.0045f</td>
         </tr>
       </table>
   </td>
@@ -679,7 +830,73 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int BalloonParty.Configuration.CardReveal.CardRevealSettings._rubberFallsFromFrame = 3</td>
+          <td class="memname">int BalloonParty.Configuration.CardReveal.CardRevealSettings._rubberFallsFromFrame = 4</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aafbac6453ded4747411695906eebe1e7" name="aafbac6453ded4747411695906eebe1e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafbac6453ded4747411695906eebe1e7">&#9670;&#160;</a></span>_rubberRecentreFrames</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.CardReveal.CardRevealSettings._rubberRecentreFrames = 12</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac12f93f43f04922773d8b1e2ff1fecab" name="ac12f93f43f04922773d8b1e2ff1fecab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac12f93f43f04922773d8b1e2ff1fecab">&#9670;&#160;</a></span>_rubberRecentreFromFrame</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.CardReveal.CardRevealSettings._rubberRecentreFromFrame = 18</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a83f20eab18c0bbd19eb5cd3c2eaa9569" name="a83f20eab18c0bbd19eb5cd3c2eaa9569"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83f20eab18c0bbd19eb5cd3c2eaa9569">&#9670;&#160;</a></span>_rubberRecentreHeight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._rubberRecentreHeight = 0.52f</td>
         </tr>
       </table>
   </td>
@@ -701,7 +918,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int BalloonParty.Configuration.CardReveal.CardRevealSettings._sheetColumns = 6</td>
+          <td class="memname">int BalloonParty.Configuration.CardReveal.CardRevealSettings._sheetColumns = 8</td>
         </tr>
       </table>
   </td>
@@ -723,7 +940,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int BalloonParty.Configuration.CardReveal.CardRevealSettings._sheetRows = 4</td>
+          <td class="memname">int BalloonParty.Configuration.CardReveal.CardRevealSettings._sheetRows = 6</td>
         </tr>
       </table>
   </td>
@@ -736,6 +953,32 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="ae17ae7beb541a12f90a19c9bc5ecd673" name="ae17ae7beb541a12f90a19c9bc5ecd673"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae17ae7beb541a12f90a19c9bc5ecd673">&#9670;&#160;</a></span>BalloonColor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Color BalloonParty.Configuration.CardReveal.CardRevealSettings.BalloonColor</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The prize balloon's colour: none of the board's, so it reads as the reward. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a85506378245e5c6b777be02e5c7b5701">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
 <a id="a15b83647d5a739a165e49ffa7845187e" name="a15b83647d5a739a165e49ffa7845187e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a15b83647d5a739a165e49ffa7845187e">&#9670;&#160;</a></span>FramesPerSecond</h2>
 
@@ -780,7 +1023,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The whole balloon's beat at its place before it pops. </p>
+<p>The whole balloon bobbing to rest at its place before it pops. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ae3b052cade559a7ad47695590cd97f79">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
 
@@ -908,7 +1151,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The light of the balloon's colour its tear flashes into the scene light field, in world units: it lights the board around the reveal, and the reveal itself. </p>
+<p>The white light its tear flashes into the scene light field, its radius in world units: it lights the board around the reveal, and the reveal itself. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#af82dc26655ae575e2f2aa1a25f796596">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
 
@@ -1199,6 +1442,32 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a7d741d552914e7eb64ecfc85fcad91db" name="a7d741d552914e7eb64ecfc85fcad91db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d741d552914e7eb64ecfc85fcad91db">&#9670;&#160;</a></span>RiseOvershoot</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings.RiseOvershoot</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How far past its place the balloon floats before bobbing back, as a share of its rise. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a49231db8faaff77cb5716401bea9304c">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
 <a id="a80b6151ca92f971135212ec49d962832" name="a80b6151ca92f971135212ec49d962832"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a80b6151ca92f971135212ec49d962832">&#9670;&#160;</a></span>RiseSeconds</h2>
 
@@ -1219,7 +1488,87 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>How long the balloon takes to float up to the top of its bob, just past its place. </p>
+
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a9fa912a9bdc244148ee0631efb0854d4">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="a790355352ecc162ae2200bf430233488" name="a790355352ecc162ae2200bf430233488"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a790355352ecc162ae2200bf430233488">&#9670;&#160;</a></span>RiseSway</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings.RiseSway</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How far the balloon sways to each side as it rises, in canvas units, dying away by the pop. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a5695bde47a86a5170aa99a0fbf68c501">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="ad704c40805a10be07da20e6ace9bce81" name="ad704c40805a10be07da20e6ace9bce81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad704c40805a10be07da20e6ace9bce81">&#9670;&#160;</a></span>RiseSwaySeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings.RiseSwaySeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The time of one sway from side to side. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a2467272248c5a235f0caf49bf1ef4a84">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="a610a54c46d89960cefbe04f59d38e1a6" name="a610a54c46d89960cefbe04f59d38e1a6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a610a54c46d89960cefbe04f59d38e1a6">&#9670;&#160;</a></span>RiseTilt</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings.RiseTilt</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How far the balloon leans into its sway, in degrees. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ad7ae64b625de6154de57050c06351f1b">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
 
 </div>
 </div>
@@ -1243,7 +1592,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>How fast the torn rubber's fall speeds up, in canvas units per second squared. </p>
+<p>How fast the torn rubber's fall speeds up, in frame heights per pop frame squared: the bake's <code>FALL_ACCELERATION</code> over its camera's <code>ortho_scale</code>, so the game's motion is the one the shreds trail in, at any frame rate. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a6fc529b9cac53a8d3735822e7379372d">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
 
@@ -1269,10 +1618,89 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The pop's frame on which the torn rubber starts to fall. </p>
-<p>The bake keeps the balloon's neck where it was until its last frames, so the fall is the game's. </p>
+<p>The pop's frame on which the torn rubber starts to fall: the bake's <code>FALL_START</code>. </p>
+<p>The bake drops the knot from there and its camera follows it, so the shreds trail above the knot in the frames while the game moves the frames down. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a630b905c75223418d42221b6a5347cff">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="a676ecfabf7e286ca3dc263557f3e6769" name="a676ecfabf7e286ca3dc263557f3e6769"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a676ecfabf7e286ca3dc263557f3e6769">&#9670;&#160;</a></span>RubberRecentreFrames</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.CardReveal.CardRevealSettings.RubberRecentreFrames</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How many frames that easing takes: the bake's <code>RECENTRE_FRAMES</code>. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a6648954e10066517522e02cef780c4c7">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="ade7901a04b1e0d9fd80e05066fd23afc" name="ade7901a04b1e0d9fd80e05066fd23afc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade7901a04b1e0d9fd80e05066fd23afc">&#9670;&#160;</a></span>RubberRecentreFromFrame</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.CardReveal.CardRevealSettings.RubberRecentreFromFrame</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The pop's frame from which the bake's camera eases further down than the knot, lifting it toward the frame's middle so the gathered rubber stays inside the frame: the bake's <code>RECENTRE_START</code> - 1. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aa28949182f9d2e4685986292f9269ad9">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="aa1f133f05ebb41623fbc5c7e7622c699" name="aa1f133f05ebb41623fbc5c7e7622c699"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1f133f05ebb41623fbc5c7e7622c699">&#9670;&#160;</a></span>RubberRecentreHeight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings.RubberRecentreHeight</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How far the camera eases down, in frame heights: the bake's <code>RECENTRE</code> over its camera's <code>ortho_scale</code>. </p>
+<p>The game moves the frames down by it too, so the knot's path stays the fall's. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a251495c4dfd319b8142f052121bc83ce">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
 
 </div>
 </div>

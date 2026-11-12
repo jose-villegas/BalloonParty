@@ -27,6 +27,7 @@ var classBalloonParty_1_1Editor_1_1CardRevealBuilder =
     [ "FrameSize", "classBalloonParty_1_1Editor_1_1CardRevealBuilder.html#a396834464514dd0f772bbef4ebfdf087", null ],
     [ "GameScenePath", "classBalloonParty_1_1Editor_1_1CardRevealBuilder.html#a348da64556b949c3665ff26db1f58eb8", null ],
     [ "MaterialPath", "classBalloonParty_1_1Editor_1_1CardRevealBuilder.html#abdaabf6de24478f396fea42202685e68", null ],
+    [ "MaxSheetSize", "classBalloonParty_1_1Editor_1_1CardRevealBuilder.html#a661bfde9fbfda68fa458b268841db9d8", null ],
     [ "MenuRoot", "classBalloonParty_1_1Editor_1_1CardRevealBuilder.html#a877d2cdb1b66a9f7d5ea938013c7e0d9", null ],
     [ "Place", "classBalloonParty_1_1Editor_1_1CardRevealBuilder.html#afd4ed8e20bad05dfdb8d0e81728db965", null ],
     [ "RevealLayer", "classBalloonParty_1_1Editor_1_1CardRevealBuilder.html#a587edeb6cdba260ac75dcf744904d1c3", null ],

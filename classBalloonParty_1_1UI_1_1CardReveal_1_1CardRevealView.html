@@ -138,8 +138,11 @@ $(function(){initNavTree('classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealVie
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
 <tr class="memitem:aa9b46039e89939bdc755cc9395db6b73" id="r_aa9b46039e89939bdc755cc9395db6b73"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9b46039e89939bdc755cc9395db6b73">FallDistance</a> (float sincePop, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a> settings)</td></tr>
-<tr class="memdesc:aa9b46039e89939bdc755cc9395db6b73"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far the torn rubber has fallen <em>sincePop</em>  seconds into the pop: nothing until its fall's frame, then speeding up under the settings' gravity.  <br /></td></tr>
+<tr class="memdesc:aa9b46039e89939bdc755cc9395db6b73"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far down the frames move <em>sincePop</em>  seconds into the pop, in frame heights: the bake's camera's path.  <br /></td></tr>
 <tr class="separator:aa9b46039e89939bdc755cc9395db6b73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a960597b5c88e568541507152e84e7547" id="r_a960597b5c88e568541507152e84e7547"><td class="memItemLeft" align="right" valign="top">static Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a960597b5c88e568541507152e84e7547">FloatOffset</a> (float seconds, float distance, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a> settings)</td></tr>
+<tr class="memdesc:a960597b5c88e568541507152e84e7547"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where the balloon floats <em>seconds</em>  into its rise, from its place: x and y in canvas units, z its tilt in degrees.  <br /></td></tr>
+<tr class="separator:a960597b5c88e568541507152e84e7547"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abff532c7f8ea5346a2e8a16f9cb0bda0" id="r_abff532c7f8ea5346a2e8a16f9cb0bda0"><td class="memItemLeft" align="right" valign="top">static Rect&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abff532c7f8ea5346a2e8a16f9cb0bda0">FrameRect</a> (int frame, bool front, int columns, int rows)</td></tr>
 <tr class="memdesc:abff532c7f8ea5346a2e8a16f9cb0bda0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The UV rect of a frame of one layer: the front layer's frames fill the sheet's top half, the back layer's its bottom half, each read left to right, top to bottom.  <br /></td></tr>
 <tr class="separator:abff532c7f8ea5346a2e8a16f9cb0bda0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -155,8 +158,10 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:ab1edd935fc9f08bce624b48d969e0c3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f82a82cca01a48cccdb2bcc71f49ec1" id="r_a8f82a82cca01a48cccdb2bcc71f49ec1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8f82a82cca01a48cccdb2bcc71f49ec1">Dress</a> (<a class="el" href="classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html">RevealedCard</a> reveal)</td></tr>
 <tr class="separator:a8f82a82cca01a48cccdb2bcc71f49ec1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af681dcfb7828a6463f717c8474a88591" id="r_af681dcfb7828a6463f717c8474a88591"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af681dcfb7828a6463f717c8474a88591">Fall</a> (float drop)</td></tr>
-<tr class="separator:af681dcfb7828a6463f717c8474a88591"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba416aa4642e94ce9dab97fc8033687d" id="r_aba416aa4642e94ce9dab97fc8033687d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba416aa4642e94ce9dab97fc8033687d">Fall</a> (float frameHeights)</td></tr>
+<tr class="separator:aba416aa4642e94ce9dab97fc8033687d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8145f693e11c13c23adc4e5ddb626c13" id="r_a8145f693e11c13c23adc4e5ddb626c13"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8145f693e11c13c23adc4e5ddb626c13">Float</a> (float seconds)</td></tr>
+<tr class="separator:a8145f693e11c13c23adc4e5ddb626c13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24312149203d3365f03723f58dad809c" id="r_a24312149203d3365f03723f58dad809c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24312149203d3365f03723f58dad809c">FlyRibbons</a> (float revealStartedAt)</td></tr>
 <tr class="separator:a24312149203d3365f03723f58dad809c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e50736ea8a1d7e49630dc73f40e846e" id="r_a7e50736ea8a1d7e49630dc73f40e846e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7e50736ea8a1d7e49630dc73f40e846e">OnDestroy</a> ()</td></tr>
@@ -169,8 +174,6 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a08fadd66f47f120cf54d5aa20caf2908"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7e2dec05e3001f7c2a10bf89b9a1bee" id="r_ad7e2dec05e3001f7c2a10bf89b9a1bee"><td class="memItemLeft" align="right" valign="top">async UniTask&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad7e2dec05e3001f7c2a10bf89b9a1bee">PopAsync</a> (float revealStartedAt, CancellationToken token)</td></tr>
 <tr class="separator:ad7e2dec05e3001f7c2a10bf89b9a1bee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d35c158eac5a83a0f4f5e93acf016cb" id="r_a9d35c158eac5a83a0f4f5e93acf016cb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9d35c158eac5a83a0f4f5e93acf016cb">Rise</a> (float t)</td></tr>
-<tr class="separator:a9d35c158eac5a83a0f4f5e93acf016cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7168f4cc72a43cbb32ef881ed2914323" id="r_a7168f4cc72a43cbb32ef881ed2914323"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7168f4cc72a43cbb32ef881ed2914323">SetRubberShown</a> (bool shown)</td></tr>
 <tr class="separator:a7168f4cc72a43cbb32ef881ed2914323"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bff43e3643eec65d203ad03d9b72a2b" id="r_a1bff43e3643eec65d203ad03d9b72a2b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1bff43e3643eec65d203ad03d9b72a2b">ShowFrame</a> (int frame)</td></tr>
@@ -179,8 +182,6 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a1a7bf17f6eb856323a49dc3d4be85bc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6085c8f020c150b582015f0cd2a82a6f" id="r_a6085c8f020c150b582015f0cd2a82a6f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6085c8f020c150b582015f0cd2a82a6f">Stop</a> ()</td></tr>
 <tr class="separator:a6085c8f020c150b582015f0cd2a82a6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f07007730a44c23608ea4258e44b855" id="r_a2f07007730a44c23608ea4258e44b855"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f07007730a44c23608ea4258e44b855">TintForTheLevel</a> ()</td></tr>
-<tr class="separator:a2f07007730a44c23608ea4258e44b855"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aceacb6374d4558dd3ef536cae118fd34" id="r_aceacb6374d4558dd3ef536cae118fd34"><td class="memItemLeft" align="right" valign="top">Material&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aceacb6374d4558dd3ef536cae118fd34">WithSheetGrid</a> (Material material)</td></tr>
 <tr class="separator:aceacb6374d4558dd3ef536cae118fd34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -188,8 +189,6 @@ Private Member Functions</h2></td></tr>
 Static Private Member Functions</h2></td></tr>
 <tr class="memitem:ac73f3214169a7e076e3bae951618ae75" id="r_ac73f3214169a7e076e3bae951618ae75"><td class="memItemLeft" align="right" valign="top">static async UniTask&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac73f3214169a7e076e3bae951618ae75">AnimateAsync</a> (float seconds, Action&lt; float &gt; step, CancellationToken token)</td></tr>
 <tr class="separator:ac73f3214169a7e076e3bae951618ae75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79998e633d36bb6d66fb9f89e6aba9d8" id="r_a79998e633d36bb6d66fb9f89e6aba9d8"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a79998e633d36bb6d66fb9f89e6aba9d8">Milliseconds</a> (float seconds)</td></tr>
-<tr class="separator:a79998e633d36bb6d66fb9f89e6aba9d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -209,8 +208,6 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a1f7ca7328e70016067e8286902816f20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66f0bf20926f3ac3babf30aa95afcdf9" id="r_a66f0bf20926f3ac3babf30aa95afcdf9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Cinematics_1_1ICinematicsSettings.html">ICinematicsSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a66f0bf20926f3ac3babf30aa95afcdf9">_cinematics</a></td></tr>
 <tr class="separator:a66f0bf20926f3ac3babf30aa95afcdf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab17e689812383f7abd5d4a8c06f4e4f7" id="r_ab17e689812383f7abd5d4a8c06f4e4f7"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab17e689812383f7abd5d4a8c06f4e4f7">_colorId</a></td></tr>
-<tr class="separator:ab17e689812383f7abd5d4a8c06f4e4f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6a28672499da9b26e508ae9a78936d6" id="r_ae6a28672499da9b26e508ae9a78936d6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html">RibbonPiece</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae6a28672499da9b26e508ae9a78936d6">_descriptionRibbon</a></td></tr>
 <tr class="separator:ae6a28672499da9b26e508ae9a78936d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b9ded761cc1096132bb678b79ab415e" id="r_a6b9ded761cc1096132bb678b79ab415e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html">DisturbanceFieldService</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6b9ded761cc1096132bb678b79ab415e">_disturbanceField</a></td></tr>
@@ -221,12 +218,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aea66a50a74c4e4148b1b9d8c03f7bad9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7edcd7963c36d554b752ab622c716440" id="r_a7edcd7963c36d554b752ab622c716440"><td class="memItemLeft" align="right" valign="top">CanvasGroup&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7edcd7963c36d554b752ab622c716440">_group</a></td></tr>
 <tr class="separator:a7edcd7963c36d554b752ab622c716440"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a01b444405f5143369f4cdddd25c735de" id="r_a01b444405f5143369f4cdddd25c735de"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html">IActiveLevelParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a01b444405f5143369f4cdddd25c735de">_level</a></td></tr>
-<tr class="separator:a01b444405f5143369f4cdddd25c735de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7de9350a0330a7f447f038c1c1b0281c" id="r_a7de9350a0330a7f447f038c1c1b0281c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7de9350a0330a7f447f038c1c1b0281c">_lightField</a></td></tr>
 <tr class="separator:a7de9350a0330a7f447f038c1c1b0281c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21847aae3e5080e23e4f6fe5ee02a291" id="r_a21847aae3e5080e23e4f6fe5ee02a291"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a21847aae3e5080e23e4f6fe5ee02a291">_palette</a></td></tr>
-<tr class="separator:a21847aae3e5080e23e4f6fe5ee02a291"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a03402b4bd753762d604d7dc6aac6bb08" id="r_a03402b4bd753762d604d7dc6aac6bb08"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a03402b4bd753762d604d7dc6aac6bb08">_place</a></td></tr>
 <tr class="separator:a03402b4bd753762d604d7dc6aac6bb08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79a3a619dcbf35cbc7829b3104cc5118" id="r_a79a3a619dcbf35cbc7829b3104cc5118"><td class="memItemLeft" align="right" valign="top">CancellationTokenSource&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a79a3a619dcbf35cbc7829b3104cc5118">_playing</a></td></tr>
@@ -366,8 +359,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="af681dcfb7828a6463f717c8474a88591" name="af681dcfb7828a6463f717c8474a88591"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af681dcfb7828a6463f717c8474a88591">&#9670;&#160;</a></span>Fall()</h2>
+<a id="aba416aa4642e94ce9dab97fc8033687d" name="aba416aa4642e94ce9dab97fc8033687d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba416aa4642e94ce9dab97fc8033687d">&#9670;&#160;</a></span>Fall()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -378,7 +371,7 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void BalloonParty.UI.CardReveal.CardRevealView.Fall </td>
           <td>(</td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>drop</em></span></td><td>)</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>frameHeights</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -418,7 +411,70 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>How far the torn rubber has fallen <em>sincePop</em>  seconds into the pop: nothing until its fall's frame, then speeding up under the settings' gravity. </p>
+<p>How far down the frames move <em>sincePop</em>  seconds into the pop, in frame heights: the bake's camera's path. </p>
+<p>Nothing until the fall's frame, then speeding up under the settings' gravity, counted in the pop's frames as the bake's knot falls, so the rubber falling with it in the frames matches the motion at any frame rate; plus the recentring, the bake's camera easing further down to keep the gathered rubber in the frame, added back so the knot's path stays the fall's. </p>
+
+</div>
+</div>
+<a id="a8145f693e11c13c23adc4e5ddb626c13" name="a8145f693e11c13c23adc4e5ddb626c13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8145f693e11c13c23adc4e5ddb626c13">&#9670;&#160;</a></span>Float()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.CardReveal.CardRevealView.Float </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>seconds</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a960597b5c88e568541507152e84e7547" name="a960597b5c88e568541507152e84e7547"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a960597b5c88e568541507152e84e7547">&#9670;&#160;</a></span>FloatOffset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static Vector3 BalloonParty.UI.CardReveal.CardRevealView.FloatOffset </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>seconds</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>distance</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a></td>          <td class="paramname"><span class="paramname"><em>settings</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Where the balloon floats <em>seconds</em>  into its rise, from its place: x and y in canvas units, z its tilt in degrees. </p>
+<p>It rises as a spring let go <em>distance</em>  below, floating <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a49231db8faaff77cb5716401bea9304c" title="How far past its place the balloon floats before bobbing back, as a share of its rise.">ICardRevealSettings.RiseOvershoot</a> past its place at <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a9fa912a9bdc244148ee0631efb0854d4" title="How long the balloon takes to float up to the top of its bob, just past its place.">ICardRevealSettings.RiseSeconds</a> and bobbing back to rest, and sways side to side, leaning into the sway, both dying away, the way a balloon let go rises. </p>
 
 </div>
 </div>
@@ -485,31 +541,6 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The UV rect of a frame of one layer: the front layer's frames fill the sheet's top half, the back layer's its bottom half, each read left to right, top to bottom. </p>
-
-</div>
-</div>
-<a id="a79998e633d36bb6d66fb9f89e6aba9d8" name="a79998e633d36bb6d66fb9f89e6aba9d8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a79998e633d36bb6d66fb9f89e6aba9d8">&#9670;&#160;</a></span>Milliseconds()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static int BalloonParty.UI.CardReveal.CardRevealView.Milliseconds </td>
-          <td>(</td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>seconds</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>
@@ -697,31 +728,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a9d35c158eac5a83a0f4f5e93acf016cb" name="a9d35c158eac5a83a0f4f5e93acf016cb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9d35c158eac5a83a0f4f5e93acf016cb">&#9670;&#160;</a></span>Rise()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void BalloonParty.UI.CardReveal.CardRevealView.Rise </td>
-          <td>(</td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>t</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a7168f4cc72a43cbb32ef881ed2914323" name="a7168f4cc72a43cbb32ef881ed2914323"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7168f4cc72a43cbb32ef881ed2914323">&#9670;&#160;</a></span>SetRubberShown()</h2>
 
@@ -808,31 +814,6 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">void BalloonParty.UI.CardReveal.CardRevealView.Stop </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a2f07007730a44c23608ea4258e44b855" name="a2f07007730a44c23608ea4258e44b855"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2f07007730a44c23608ea4258e44b855">&#9670;&#160;</a></span>TintForTheLevel()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Color BalloonParty.UI.CardReveal.CardRevealView.TintForTheLevel </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -1049,28 +1030,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ab17e689812383f7abd5d4a8c06f4e4f7" name="ab17e689812383f7abd5d4a8c06f4e4f7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab17e689812383f7abd5d4a8c06f4e4f7">&#9670;&#160;</a></span>_colorId</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">string BalloonParty.UI.CardReveal.CardRevealView._colorId</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="ae6a28672499da9b26e508ae9a78936d6" name="ae6a28672499da9b26e508ae9a78936d6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae6a28672499da9b26e508ae9a78936d6">&#9670;&#160;</a></span>_descriptionRibbon</h2>
 
@@ -1181,28 +1140,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a01b444405f5143369f4cdddd25c735de" name="a01b444405f5143369f4cdddd25c735de"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a01b444405f5143369f4cdddd25c735de">&#9670;&#160;</a></span>_level</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html">IActiveLevelParameters</a> BalloonParty.UI.CardReveal.CardRevealView._level</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a7de9350a0330a7f447f038c1c1b0281c" name="a7de9350a0330a7f447f038c1c1b0281c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7de9350a0330a7f447f038c1c1b0281c">&#9670;&#160;</a></span>_lightField</h2>
 
@@ -1214,28 +1151,6 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a> BalloonParty.UI.CardReveal.CardRevealView._lightField</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a21847aae3e5080e23e4f6fe5ee02a291" name="a21847aae3e5080e23e4f6fe5ee02a291"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a21847aae3e5080e23e4f6fe5ee02a291">&#9670;&#160;</a></span>_palette</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> BalloonParty.UI.CardReveal.CardRevealView._palette</td>
         </tr>
       </table>
   </td>
