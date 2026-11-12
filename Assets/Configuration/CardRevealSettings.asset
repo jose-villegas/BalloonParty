@@ -26,7 +26,7 @@ MonoBehaviour:
   _riseSway: 6
   _riseSwaySeconds: 0.55
   _riseTilt: 5
-  _shredsPrefab: {fileID: 0}
+  _shredsPrefab: {fileID: 1888460987706070607, guid: 461eb82cfd9b2d24ab94011055fe1cb5, type: 3}
   _parallax: 0.02
   _rubberFallsFromFrame: 4
   _rubberFallGravity: 0.0045
