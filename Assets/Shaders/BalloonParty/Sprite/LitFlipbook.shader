@@ -67,6 +67,9 @@ Shader "BalloonParty/Sprite/LitFlipbook"
         _Transmission ("From Behind", Range(0, 2)) = 0.7
         // Where the summed glow turns the tone over: lower glows more of the surface.
         _ScatterEdge ("Glow Edge", Range(0, 1)) = 0.5
+        // How soft the glow's edge is: wider than the tone steps, since what it thresholds is filtered up from the
+        // sheet's texels, and a sharp edge of it steps along them.
+        _GlowSoftness ("Glow Softness", Range(0, 0.5)) = 0.15
         // How much brighter than the tint the glow is: the light comes through richer and lighter.
         _GlowLift ("Glow Lift", Range(0, 1)) = 0.45
 
@@ -152,6 +155,7 @@ Shader "BalloonParty/Sprite/LitFlipbook"
             float _ScatterThin;
             float _Transmission;
             float _ScatterEdge;
+            float _GlowSoftness;
             float _GlowLift;
             float _DropShadow;
             fixed4 _ShadowColor;
@@ -249,9 +253,15 @@ Shader "BalloonParty/Sprite/LitFlipbook"
                 float toward = (Rubber(uv + tap, toOther, cellMin, cellMax)
                     + Rubber(uv + 2.0 * tap, toOther, cellMin, cellMax)
                     + Rubber(uv + 3.0 * tap, toOther, cellMin, cellMax)) / 6.0;
-                float lone = 1.0 - 0.5 * (surface.a + tex2Dlod(_MainTex, float4(uv + toOther, 0.0, 0.0)).a);
+                // How much of this rubber has none behind it, measured against its own coverage, so the outline's
+                // soft edge, where both layers thin out together, isn't read as lone rubber: it would ring the
+                // silhouette in a thread of glow, stepped by the texels.
+                float behind = tex2Dlod(_MainTex, float4(uv + toOther, 0.0, 0.0)).a;
+                float lone = 0.5 * saturate(1.0 - behind / max(surface.a, 1e-3));
                 float scatter = (1.0 - toward) * _ScatterRim + lone * _ScatterThin + saturate(-facing) * _Transmission;
-                float glow = Step(scatter, _ScatterEdge, _BandSoftness) * _Scatter * (1.0 - crease);
+                // Softer than the tone steps: the taps' coverage is the sheet's, filtered up, so a sharp contour of
+                // it shows the texels' kinks as stairs.
+                float glow = Step(scatter, _ScatterEdge, _GlowSoftness) * _Scatter * (1.0 - crease);
                 float3 glowColor = saturate(albedo * (albedo + _GlowLift) * (1.0 + _GlowLift));
 
                 // The highlight replaces the colour rather than adding to it, so it reads white, not a paler red.

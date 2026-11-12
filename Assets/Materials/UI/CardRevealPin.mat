@@ -38,7 +38,7 @@ Material:
     - _DropShadow: 0
     - _GlowLift: 0.45
     - _HighlightSize: 0.985
-    - _HighlightSoftness: 0.008
+    - _HighlightSoftness: 0.016
     - _LightHeight: 0.9
     - _LitEdge: 0.45
     - _MidTone: 0.86
