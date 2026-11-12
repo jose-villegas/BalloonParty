@@ -1,23 +1,19 @@
 <map id="BalloonParty.Configuration.RunConfig" name="BalloonParty.Configuration.RunConfig">
-<area shape="rect" id="Node000001" title=" " alt="" coords="912,119,1109,159"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="912,73,1109,113"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="613,5,742,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="746,32,777,41,880,79,967,117,965,122,878,84,775,46,745,37"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="749,31,921,70,920,75,748,36"/>
 <area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1IRunConfig.html" title="Run&#45;level rules: starting hit points, retry allowance, the level&#45;complete beat and upgrade cards." alt="" coords="585,55,769,95"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="783,93,912,118,911,123,782,98"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="783,78,912,85,912,90,783,83"/>
 <area shape="rect" id="Node000004" href="$classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html" title="Inspector&#45;authored IShieldChainSettings, serialized inside RunConfig beside the toggle that turns cha..." alt="" coords="579,119,776,159"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="790,137,911,137,911,142,790,142"/>
-<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html" title="Tuning for how shield chains are planned: the fan of openings tried, and how selective the planner is..." alt="" coords="277,103,476,143"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="490,127,578,131,578,137,490,132"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="789,121,911,104,912,109,790,126"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1IShieldChainSettings.html" title="Tuning for how shield chains are planned: the fan of openings tried, and how selective the planner is..." alt="" coords="277,119,476,159"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="490,137,578,137,578,142,490,142"/>
 <area shape="rect" id="Node000006" href="$classBalloonParty_1_1Configuration_1_1UpgradeSettings.html" title="Inspector&#45;authored IUpgradeSettings, serialized inside RunConfig: cards are run&#45;scoped,..." alt="" coords="579,183,776,223"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="789,179,911,156,912,161,790,185"/>
-<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html" title="When the level&#45;up deals cards, how many, and from which deck." alt="" coords="269,167,484,207"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="498,191,579,195,579,201,498,196"/>
-<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html" title="Inspector&#45;authored IUpgradeCardSettings." alt="" coords="278,231,475,271"/>
-<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="488,231,578,216,579,222,489,236"/>
-<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html" title="One card the level&#45;up can offer." alt="" coords="5,231,220,271"/>
-<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="234,249,278,249,278,254,234,254"/>
-<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Configuration_1_1CoinSettings.html" title="Inspector&#45;authored ICoinSettings, serialized inside RunConfig." alt="" coords="579,279,776,319"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="733,271,887,197,968,157,970,162,889,202,735,276"/>
-<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Shared_1_1ICoinSettings.html" title="When coins drop, and how they fly to the counter. Coins reward reaching the deep levels." alt="" coords="283,295,471,335"/>
-<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="484,307,578,302,579,307,485,312"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="766,177,887,139,962,110,964,115,889,145,768,182"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html" title="When the level&#45;up deals cards, how many, and from which deck." alt="" coords="269,183,484,223"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="498,201,579,201,579,206,498,206"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html" title="Inspector&#45;authored IUpgradeCardSettings." alt="" coords="278,247,475,287"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="484,242,582,221,583,226,485,247"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html" title="One card the level&#45;up can offer." alt="" coords="5,247,220,287"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="234,265,278,265,278,270,234,270"/>
 </map>

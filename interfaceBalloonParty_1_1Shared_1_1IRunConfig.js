@@ -1,6 +1,5 @@
 var interfaceBalloonParty_1_1Shared_1_1IRunConfig =
 [
-    [ "Coins", "interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#ab8bbfffac4e7b6b2280aab72794a810c", null ],
     [ "DeflectChainShieldEvery", "interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#a5cb302725103f7d1c9e98a639f148994", null ],
     [ "LevelCompleteFlightGrace", "interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#adb5b752e5b7a35c90daeb6dd3fabaefd", null ],
     [ "LevelCompleteRampUpDuration", "interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#a05c3849296a9e25f7d22dba16149cfc0", null ],

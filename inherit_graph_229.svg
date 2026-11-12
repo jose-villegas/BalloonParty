@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html" target="_top" xlink:title="Hand&#45;authored 3D shape data for BigScore formations.">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Game_1_1Score_1_1ColorStreak.html" target="_top" xlink:title="One ball&#39;s same&#45;colour pop streak.">
 <polygon fill="white" stroke="#666666" points="142,-30 0,-30 0,0 142,0 142,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.Score.</text>
-<text text-anchor="middle" x="71" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Behaviours.ShapeCatalog</text>
+<text text-anchor="middle" x="71" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">ColorStreak</text>
 </a>
 </g>
 </g>

@@ -127,7 +127,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>The loss screen shown when a run ends. It sits <em>inside</em> the loss cinematic (<code>Game/Cinematics/GameOverLossCinematic</code>), split like the level-up popup: a slow-mo push-in plays, the screen shows over the held (pushed-in) frame, and on dismiss the camera pulls back — the run only restarts once that pull-back ends.</p>
-<h1><a class="anchor" id="autotoc_md1097"></a>
+<h1><a class="anchor" id="autotoc_md1089"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -139,7 +139,7 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>Game/Run/GameOverPresentationGate</code>   </td><td class="markdownTableBodyNone">DI singleton the screen awaits before showing; armed and opened by <code>GameOverLossCinematic</code>. Registered in <code>GameLifetimeScope</code> (<code>RegisterPresentation</code>) so the producer and screen share one instance. Implements <code>IReadyGate</code> for consistency, but injected by concrete type — the producer needs <code>Arm</code>/<code>Open</code>, and binding it as the interface would collide with the scope's <code>NavigationReadyGate(Game)</code>   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md1098"></a>
+<h1><a class="anchor" id="autotoc_md1090"></a>
 Wiring requirements</h1>
 <ul>
 <li>The screen root GameObject must stay <b>active</b> in the scene — visibility is driven by the <code>CanvasGroup</code> (alpha / interactable / blocksRaycasts), not <code>SetActive</code>. If it were disabled, <code>Start</code> would never run and <code>GameOverMessage</code> would never be subscribed.</li>
@@ -147,7 +147,7 @@ Wiring requirements</h1>
 <li>The Restart button dismisses (hides the screen + plays the restore) rather than restarting on the spot — expect a beat between the press and the fresh board while the camera pulls back.</li>
 <li>The panel's layout is built by <b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Game Over &gt; Rebuild Layout</b> (<code>Editor/GameOverLayoutBuilder</code>): a rounded card sized to its content by layout groups, so a longer label or a new tile grows the card instead of spilling out of it. Restyle through the builder, not by hand: running it again replaces hand edits. The prefab is a variant of <code>Prefabs/UI/Popup/Popup.prefab</code>; the builder removes the base popup's panel, re-creates its Restart button (which a variant can't move), turns the popup's glow into a dark dim and hides its rays.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md1099"></a>
+<h1><a class="anchor" id="autotoc_md1091"></a>
 Theme</h1>
 <p>The screen uses the UI theme, "glossy balloon": every panel and button is a stack of soft layers, back to front a drop shadow, a glow outline, a darker lip under the face, the gradient face, a sheen over its top and the balloons' specular along its rim. The shapes come from <code>Tools/art/make_ui_shapes.py</code> (see <code>Sprites/README.md</code>), drawn from distance fields so every edge softens evenly.</p>
 <table class="markdownTable">
@@ -167,7 +167,7 @@ Theme</h1>
 <p>The light follows the time of day, as on the balloons. Each shape's specular is a <code>UI/TimeOfDaySpecular</code>, which runs along the rim where it faces the scene light and takes a little of its colour; the faces take a quarter of the light's tint through a <code>TimeOfDayTint</code> on the card. Text uses one TMP material per role (title, number, button), kept in <code>Assets/Fonts/Materials/</code>.</p><ul>
 <li><code>_bonusRetryButton</code> and <code>_offers</code> are optional.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md1100"></a>
+<h1><a class="anchor" id="autotoc_md1092"></a>
 Interactions</h1>
 <ul>
 <li><b><code>GameOverMessage</code></b> — published by <code>RunController.EndRun</code> (see <code>Game/Run/</code>); carries the final level/score. Populates the labels and starts the loss cinematic; the screen reveals once the cinematic opens <code>GameOverPresentationGate</code>.</li>

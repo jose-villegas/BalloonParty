@@ -2,7 +2,6 @@ var dir_c33286056d2acf479cd8641ef845fec1 =
 [
     [ "CardReveal", "dir_daf1a4f8af675150610a5d7470aac4c6.html", "dir_daf1a4f8af675150610a5d7470aac4c6" ],
     [ "Cinematics", "dir_edc49c4a498859dd64a99e6d0526fd42.html", "dir_edc49c4a498859dd64a99e6d0526fd42" ],
-    [ "Coins", "dir_21bfe178033eb8267bf26edce0dc11fb.html", "dir_21bfe178033eb8267bf26edce0dc11fb" ],
     [ "Danger", "dir_ea8901c9b65b82ddfefe553bb5e6f778.html", "dir_ea8901c9b65b82ddfefe553bb5e6f778" ],
     [ "Flight", "dir_54dfc3c3e1c0be8bd88c3a687b075396.html", "dir_54dfc3c3e1c0be8bd88c3a687b075396" ],
     [ "HeadsUp", "dir_d955aeccaf1e6692fb7321b08413529a.html", "dir_d955aeccaf1e6692fb7321b08413529a" ],

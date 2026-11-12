@@ -1,5 +1,0 @@
-<map id="BalloonParty.Game.Coins.ICoinCounterVisibility" name="BalloonParty.Game.Coins.ICoinCounterVisibility">
-<area shape="rect" id="Node000001" title="Whether the coin counter shows: once it does, it stays for the session." alt="" coords="5,5,195,45"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Coins_1_1CoinCounterVisibility.html" title="Keeps the coin counter hidden until coins mean something to this player: the run reaches ICoinSetting..." alt="" coords="5,93,195,133"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,59,103,93,97,93,97,59"/>
-</map>

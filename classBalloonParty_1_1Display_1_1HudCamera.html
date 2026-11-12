@@ -116,7 +116,7 @@ $(function(){initNavTree('classBalloonParty_1_1Display_1_1HudCamera.html',''); i
 </div><!--header-->
 <div class="contents">
 
-<p>The camera the HUD renders through: an overlay in the main camera's URP stack with post-processing off, so the canvases (the <a class="el" href="namespaceBalloonParty_1_1UI.html">UI</a> and Launch layers) and the score, heart and coin trails flying into them (the Trail layer) draw over the finished, tonemapped frame in their authored colours.  
+<p>The camera the HUD renders through: an overlay in the main camera's URP stack with post-processing off, so the canvases (the <a class="el" href="namespaceBalloonParty_1_1UI.html">UI</a> and Launch layers) and the score and heart trails flying into them (the Trail layer) draw over the finished, tonemapped frame in their authored colours.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Display.HudCamera:</div>
@@ -155,7 +155,7 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a7b836261f2ced1326ee002ab80988489"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The camera the HUD renders through: an overlay in the main camera's URP stack with post-processing off, so the canvases (the <a class="el" href="namespaceBalloonParty_1_1UI.html">UI</a> and Launch layers) and the score, heart and coin trails flying into them (the Trail layer) draw over the finished, tonemapped frame in their authored colours. </p>
+<div class="textblock"><p>The camera the HUD renders through: an overlay in the main camera's URP stack with post-processing off, so the canvases (the <a class="el" href="namespaceBalloonParty_1_1UI.html">UI</a> and Launch layers) and the score and heart trails flying into them (the Trail layer) draw over the finished, tonemapped frame in their authored colours. </p>
 <p>URP applies post-processing per camera in a stack, so the main camera's tonemapper never touches them. It mirrors the main camera's projection every frame, so the canvases keep the world positions the trails fly to, through a cinematic zoom too. <code>CanvasCameraBinder</code> binds the canvases to it. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a48dc929e071480438a4baec9c015c633" name="a48dc929e071480438a4baec9c015c633"></a>

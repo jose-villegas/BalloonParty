@@ -18,7 +18,6 @@ var dir_da555cc5272c9bb1aca8990be5c6787a =
     [ "ContactRadius.cs", "ContactRadius_8cs.html", "ContactRadius_8cs" ],
     [ "DeflectChainRule.cs", "DeflectChainRule_8cs.html", "DeflectChainRule_8cs" ],
     [ "EnumIndexedAttribute.cs", "EnumIndexedAttribute_8cs.html", "EnumIndexedAttribute_8cs" ],
-    [ "ICoinSettings.cs", "ICoinSettings_8cs.html", "ICoinSettings_8cs" ],
     [ "IDeflectorField.cs", "IDeflectorField_8cs.html", "IDeflectorField_8cs" ],
     [ "IEffect.cs", "IEffect_8cs.html", "IEffect_8cs" ],
     [ "ImpactEventBus.cs", "ImpactEventBus_8cs.html", "ImpactEventBus_8cs" ],

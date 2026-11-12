@@ -133,7 +133,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Short handwritten heads-ups that tell the player what just happened, written on as if by a pencil. Built in phases from <code><a class="el" href="PLAN-HeadsUp_8md.html">Plans/PLAN-HeadsUp.md</a></code>. This folder draws them; which ones show, and when, is <code>Game/HeadsUp/</code>.</p>
-<h1><a class="anchor" id="autotoc_md1102"></a>
+<h1><a class="anchor" id="autotoc_md1094"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -151,7 +151,7 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>WriteOnMath</code>   </td><td class="markdownTableBodyNone">The reveal in characters, pure and EditMode-tested: where each glyph corner sits (<code>CornerPosition</code>), how revealed it is for a given head (<code>RevealAlpha</code>), and where the head starts after a delay (<code>StartHead</code>) and ends (<code>EndHead</code>)   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md1103"></a>
+<h1><a class="anchor" id="autotoc_md1095"></a>
 Visual language</h1>
 <p>Each kind of heads-up has a look of its own, so the player reads what happened from the colour and size before the words. The defaults come from a research pass (perception, game-accessibility guidelines, game feedback studies); where it's convention rather than evidence, it says so.</p>
 <table class="markdownTable">
@@ -179,7 +179,7 @@ Visual language</h1>
 <li><b>Convention, not research</b>: gold or warm colours for achievement, red for danger and size for importance are genre convention, and red-means-loss is cultural (red reads as "up" in mainland China).</li>
 </ul>
 <p>Planned kinds keep to the same scheme: a streak <code>x3!</code> in ochre <code>#9A6700</code>, a lost heart <code>-1</code> in vermilion at 1.5× and never suppressed, <code>tap!</code> / <code>pierce!</code> in italic graphite.</p>
-<h1><a class="anchor" id="autotoc_md1104"></a>
+<h1><a class="anchor" id="autotoc_md1096"></a>
 How the reveal works</h1>
 <p>TMP lays the text out once. Each frame while writing, <code>WriteOnText</code> works out how far the write head has passed every visible glyph corner and hands that to the mesh in one of two ways, chosen per mesh by its material:</p>
 <ul>
@@ -187,7 +187,7 @@ How the reveal works</h1>
 <li>On any other material (a fallback font on TMP's stock shader), it scales the corner's vertex alpha, starting from the colours TMP generated so rich-text colours and gradients keep their own alpha, and pushes only colours (<code>UpdateVertexData(Colors32)</code>).</li>
 </ul>
 <p>It never uses <code>maxVisibleCharacters</code>, which would re-lay out the text on every step. While writing it listens for TMP's <code>TEXT_CHANGED_EVENT</code>: a mesh TMP rebuilds mid-write (a canvas rebuild, a re-enable) comes back fully shown, so the colours and materials are re-captured and the reveal re-applied at once. A glyph the cache doesn't cover is skipped rather than read out of range. After the write nothing listens, and a rebuild shows the text whole, which is the written state anyway.</p>
-<h1><a class="anchor" id="autotoc_md1105"></a>
+<h1><a class="anchor" id="autotoc_md1097"></a>
 Who uses it</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -197,7 +197,7 @@ Who uses it</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>UI/Tooltip/TooltipBanner</code>   </td><td class="markdownTableBodyNone">Writes each tooltip line on through its optional <code>_writeOn</code>, starting once its fade-in is done (a short line would otherwise be written while still nearly invisible), and lengthens the line's hold by the write   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md1106"></a>
+<h1><a class="anchor" id="autotoc_md1098"></a>
 Wiring requirements</h1>
 <ul>
 <li><code>_text</code> must be assigned. On the <code>Tooltip</code> prefab it's the <code>Text (TMP)</code> label, on the same object.</li>

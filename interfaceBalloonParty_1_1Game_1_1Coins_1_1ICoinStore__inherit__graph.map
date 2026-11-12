@@ -1,5 +1,0 @@
-<map id="BalloonParty.Game.Coins.ICoinStore" name="BalloonParty.Game.Coins.ICoinStore">
-<area shape="rect" id="Node000001" title="Where the wallet&#39;s balance is kept between sessions." alt="" coords="5,5,195,45"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Coins_1_1PlayerPrefsCoinStore.html" title="Keeps the balance in PlayerPrefs, beside the best run (see RunMeta)." alt="" coords="5,93,195,133"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,59,103,93,97,93,97,59"/>
-</map>

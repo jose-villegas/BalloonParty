@@ -1,5 +1,0 @@
-<map id="BalloonParty.Shared.ICoinSettings" name="BalloonParty.Shared.ICoinSettings">
-<area shape="rect" id="Node000001" title="When coins drop, and how they fly to the counter. Coins reward reaching the deep levels." alt="" coords="10,5,198,45"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1CoinSettings.html" title="Inspector&#45;authored ICoinSettings, serialized inside RunConfig." alt="" coords="5,93,203,133"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,59,107,93,101,93,101,59"/>
-</map>

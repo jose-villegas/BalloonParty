@@ -1,5 +1,0 @@
-<map id="BalloonParty.UI.Coins.CoinUILifetimeScope" name="BalloonParty.UI.Coins.CoinUILifetimeScope">
-<area shape="rect" id="Node000001" title="Child scope for the coin counter: binds the balance label and injects the counter&#39;s view." alt="" coords="5,79,199,119"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="45,5,159,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,44,105,79,99,79,99,44"/>
-</map>
