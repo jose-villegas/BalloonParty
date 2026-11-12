@@ -9,7 +9,6 @@ using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.SceneLight;
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
 using MessagePipe;
 using UniRx;
 using UnityEngine;
@@ -148,6 +147,31 @@ namespace BalloonParty.UI.CardReveal
         }
 
         /// <summary>
+        ///     Where the balloon floats <paramref name="seconds" /> into its rise, from its place: x and y in canvas
+        ///     units, z its tilt in degrees. It rises as a spring let go <paramref name="distance" /> below, floating
+        ///     <see cref="ICardRevealSettings.RiseOvershoot" /> past its place at
+        ///     <see cref="ICardRevealSettings.RiseSeconds" /> and bobbing back to rest, and sways side to side,
+        ///     leaning into the sway, both dying away, the way a balloon let go rises.
+        /// </summary>
+        internal static Vector3 FloatOffset(float seconds, float distance, ICardRevealSettings settings)
+        {
+            // An under-damped spring whose first peak is the overshoot, reached at RiseSeconds.
+            var logOvershoot = Mathf.Log(Mathf.Clamp(settings.RiseOvershoot, 1e-3f, 0.9f));
+            var damping = -logOvershoot / Mathf.Sqrt(Mathf.PI * Mathf.PI + logOvershoot * logOvershoot);
+            var bobRate = Mathf.PI / Mathf.Max(settings.RiseSeconds, 1e-3f);
+            var decayRate = damping / Mathf.Sqrt(1f - damping * damping) * bobRate;
+            var below = Mathf.Exp(-decayRate * seconds) *
+                        (Mathf.Cos(bobRate * seconds) + decayRate / bobRate * Mathf.Sin(bobRate * seconds));
+
+            var swayPhase = Mathf.PI * seconds / Mathf.Max(settings.RiseSwaySeconds, 1e-3f);
+            var swayFade = Mathf.Exp(-0.5f * decayRate * seconds);
+            return new Vector3(
+                settings.RiseSway * Mathf.Sin(swayPhase) * swayFade,
+                -distance * below,
+                -settings.RiseTilt * Mathf.Cos(swayPhase) * swayFade);
+        }
+
+        /// <summary>
         ///     How far down the frames move <paramref name="sincePop" /> seconds into the pop, in frame heights: the
         ///     bake's camera's path. Nothing until the fall's frame, then speeding up under the settings' gravity,
         ///     counted in the pop's frames as the bake's knot falls, so the rubber falling with it in the frames
@@ -190,8 +214,9 @@ namespace BalloonParty.UI.CardReveal
             {
                 var startedAt = Time.unscaledTime;
                 Dress(reveal);
-                await AnimateAsync(_settings.RiseSeconds, Rise, token);
-                await UniTask.Delay(Milliseconds(_settings.HoldBeforePopSeconds), true, cancellationToken: token);
+                var floatSeconds = _settings.RiseSeconds + _settings.HoldBeforePopSeconds;
+                await AnimateAsync(floatSeconds, t => Float(t * floatSeconds), token);
+                Float(float.PositiveInfinity);
                 await PopAsync(startedAt, token);
                 _group.alpha = 0f;
                 _cardReveals.Finish(reveal);
@@ -275,7 +300,7 @@ namespace BalloonParty.UI.CardReveal
             _descriptionRibbon.Rest();
             SetRubberShown(true);
             ShowFrame(0);
-            Rise(0f);
+            Float(0f);
             _group.alpha = 1f;
         }
 
@@ -316,13 +341,14 @@ namespace BalloonParty.UI.CardReveal
             _shadow.uvRect = _back.uvRect;
         }
 
-        // The layers part by how far the balloon still is from its place, the front leading, and meet there.
-        private void Rise(float t)
+        // The layers part by how far the balloon still is from its place, the front leading, and meet there. At
+        // infinity it is at rest: the pop starts square at its place, so the rubber falls straight down.
+        private void Float(float seconds)
         {
-            var eased = DOVirtual.EasedValue(0f, 1f, t, Ease.OutCubic);
-            var offset = Vector2.down * (_riseDistance * (1f - eased));
-            _balloon.anchoredPosition = _place + offset;
-            var part = offset * _settings.Parallax;
+            var offset = float.IsPositiveInfinity(seconds) ? Vector3.zero : FloatOffset(seconds, _riseDistance, _settings);
+            _balloon.anchoredPosition = _place + (Vector2)offset;
+            _balloon.localRotation = Quaternion.Euler(0f, 0f, offset.z);
+            var part = (Vector2)offset * _settings.Parallax;
             PlaceLayers(part, -part);
         }
 
@@ -352,11 +378,6 @@ namespace BalloonParty.UI.CardReveal
             }
 
             step(1f);
-        }
-
-        private static int Milliseconds(float seconds)
-        {
-            return Mathf.RoundToInt(seconds * 1000f);
         }
     }
 }

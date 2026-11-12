@@ -30,8 +30,8 @@ back convincingly; a cloth simulation can, so the pops are simulated and baked.
 
 ## 2. What the player sees
 
-1. On a level-up that deals a card, as the level-up starts, a gold balloon (none of the board's colours)
-   rises to a little above the screen's middle, two rolled-up ribbons inside it as a faint shadow.
+1. On a level-up that deals a card, as the level-up starts, a silver balloon (none of the board's colours)
+   floats up to a little above the screen's middle, bobbing and swaying to rest, two rolled-up ribbons inside it as a faint shadow.
 2. It pops: one of 16 baked simulations, chosen at random. The rubber splits from a puncture, the
    flaps snap back and curl, and the shreds fall away, in slow motion, the way high-speed footage
    shows it.
@@ -54,7 +54,7 @@ slow-motion beats don't stretch it.
 | Replaces the `Level N: Card` tooltip on card level-ups with `Level N` | One announcement of the card, not two. The level number still shows, as on level-ups without a card |
 | Also plays for a bonus card at the start of a retry (the ad's or one bought with coins, `PLAN-Coins.md`) | The same prize, the same way. Replaces the `BonusCardDealtMessage` tooltip |
 | A pop is picked at random, never one of the last two shown | 16 sims are there for variety; repeating the last one would waste it |
-| The balloon is tinted at runtime and lit by the scene, not baked in one colour or one light | The sims are baked as surface data (the normal and the occlusion, not a picture) and lit at runtime by the scene's light, so the reveal takes any colour (`BalloonColor`, gold) and follows the time of day as the board's balloons do |
+| The balloon is tinted at runtime and lit by the scene, not baked in one colour or one light | The sims are baked as surface data (the normal and the occlusion, not a picture) and lit at runtime by the scene's light, so the reveal takes any colour (`BalloonColor`, silver) and follows the time of day as the board's balloons do |
 | The ribbons are inside the balloon, not behind it | Each frame is baked in two layers, the rubber in front of the balloon's centre and the rubber behind it, and the ribbons are drawn between them. While the balloon moves the layers part slightly (parallax), so they read as inside |
 | A level-up's reveal plays with the ascent, and is over just before the next level settles | The ascent is the level-up's quiet stretch: nothing to aim at, the screen moving. Ending before it settles leaves the new board clear to read |
 | Text, never baked into the art | The card's title and description come from `IUpgradeCardSettings`, so a new card needs no new art |

@@ -55,11 +55,12 @@ Blender.
    (`Raw`), so the values written are the data: an emission shader outputs the normal and the
    occlusion, and there are no lights.
 
-The simulation runs 48 frames at a slow time scale and every one is rendered (`--frames 24` keeps every
-second one): 1.6 s at the scene's 30 fps, and the game plays them slower still, at 24 fps (2 s), as a
-slow-motion beat that stays smooth. What varies per seed: the puncture, the number of cracks (2 to 4), their length,
-wander and branching, how far the rubber shrinks, how stiff it is to bend, and how fast the front
-sweeps.
+The simulation runs 48 frames at a slow time scale and every one is rendered: 1.6 s at the scene's
+30 fps, and the game plays them slower still, at 24 fps (2 s), as a slow-motion beat that stays smooth.
+(`--frames 24` renders every second one, for a quick look; `pack_sheets.py` packs 48.) What varies per
+seed: the puncture, the number of cracks (2 to 4), their length, wander and branching, how far the
+rubber shrinks, how stiff it is to bend, and how fast the front sweeps. The bake ends by printing the
+fall settings `CardRevealSettings` needs to match it.
 
 The tuning lives in the constants at the top of `bake_pops.py` (`TIME_SCALE` for how slow the
 motion is, `FALL_START`, `FALL_ACCELERATION` and the `RECENTRE_*` for the fall, which the game's settings must match, `NECK_Z` and `CRACK_STOP_Z` for the

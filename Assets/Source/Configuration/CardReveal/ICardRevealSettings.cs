@@ -39,10 +39,23 @@ namespace BalloonParty.Configuration.CardReveal
         /// </summary>
         float InsideShowThrough { get; }
 
+        /// <summary>How long the balloon takes to float up to the top of its bob, just past its place.</summary>
         float RiseSeconds { get; }
 
-        /// <summary>The whole balloon's beat at its place before it pops.</summary>
+        /// <summary>The whole balloon bobbing to rest at its place before it pops.</summary>
         float HoldBeforePopSeconds { get; }
+
+        /// <summary>How far past its place the balloon floats before bobbing back, as a share of its rise.</summary>
+        float RiseOvershoot { get; }
+
+        /// <summary>How far the balloon sways to each side as it rises, in canvas units, dying away by the pop.</summary>
+        float RiseSway { get; }
+
+        /// <summary>The time of one sway from side to side.</summary>
+        float RiseSwaySeconds { get; }
+
+        /// <summary>How far the balloon leans into its sway, in degrees.</summary>
+        float RiseTilt { get; }
 
         /// <summary>The frame of the pop on which the ribbons fly out: once the rubber has opened.</summary>
         int RibbonsFromFrame { get; }

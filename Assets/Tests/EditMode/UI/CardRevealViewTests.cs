@@ -55,6 +55,38 @@ namespace BalloonParty.Tests.UI
         }
 
         [Test]
+        public void FloatOffset_AtTheStart_IsTheRiseDistanceBelow()
+        {
+            SetFloat();
+            Assert.AreEqual(-200f, CardRevealView.FloatOffset(0f, 200f, _settings).y, 1e-3f);
+        }
+
+        [Test]
+        public void FloatOffset_AtRiseSeconds_FloatsTheOvershootPastItsPlace()
+        {
+            SetFloat();
+            Assert.AreEqual(0.1f * 200f, CardRevealView.FloatOffset(0.8f, 200f, _settings).y, 1e-2f);
+        }
+
+        [Test]
+        public void FloatOffset_LongAfter_HasBobbedAndSwayedToRest()
+        {
+            SetFloat();
+            var settled = CardRevealView.FloatOffset(10f, 200f, _settings);
+            Assert.AreEqual(0f, settled.x, 1e-2f);
+            Assert.AreEqual(0f, settled.y, 1e-2f);
+            Assert.AreEqual(0f, settled.z, 1e-2f);
+        }
+
+        [Test]
+        public void FloatOffset_SwayingRight_LeansRight()
+        {
+            // A quarter into the first sway it is moving right: it leans clockwise, a negative z.
+            SetFloat();
+            Assert.Less(CardRevealView.FloatOffset(0.05f, 200f, _settings).z, 0f);
+        }
+
+        [Test]
         public void FallDistance_BeforeTheRubberTears_IsNothing()
         {
             _settings.RubberFallsFromFrame.Returns(3);
@@ -169,6 +201,15 @@ namespace BalloonParty.Tests.UI
             Assert.AreEqual(expected.y, actual.y, Tolerance, "y");
             Assert.AreEqual(expected.width, actual.width, Tolerance, "width");
             Assert.AreEqual(expected.height, actual.height, Tolerance, "height");
+        }
+
+        private void SetFloat()
+        {
+            _settings.RiseSeconds.Returns(0.8f);
+            _settings.RiseOvershoot.Returns(0.1f);
+            _settings.RiseSway.Returns(6f);
+            _settings.RiseSwaySeconds.Returns(0.5f);
+            _settings.RiseTilt.Returns(5f);
         }
     }
 }

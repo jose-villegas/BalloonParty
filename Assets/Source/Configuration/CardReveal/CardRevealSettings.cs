@@ -26,15 +26,24 @@ namespace BalloonParty.Configuration.CardReveal
 
         [Tooltip("The prize balloon's colour: none of the board's, so it reads as the reward. The rubber is cel " +
                  "shaded in the scene's light over it, with a white highlight.")]
-        [SerializeField] private Color _balloonColor = new(0.97f, 0.75f, 0.26f, 1f);
+        [SerializeField] [ColorUsage(false)] private Color _balloonColor = new(0.8f, 0.82f, 0.87f, 1f);
 
         [Header("Playing")]
         [Tooltip("How much of the ribbons inside shows through the whole front rubber: a shadow inside the balloon.")]
         [FormerlySerializedAs("_slipShowThrough")]
         [SerializeField] [Range(0f, 1f)] private float _insideShowThrough = 0.12f;
 
-        [SerializeField] [Min(0f)] private float _riseSeconds = 0.45f;
-        [SerializeField] [Min(0f)] private float _holdBeforePopSeconds = 0.15f;
+        [Tooltip("The balloon floats up like a balloon let go: it rises past its place by Rise Overshoot (a share " +
+                 "of its rise), at its highest after Rise Seconds, and bobs back to rest over Hold Before Pop " +
+                 "Seconds, swaying side to side by Rise Sway (canvas units, one side to the other in Rise Sway " +
+                 "Seconds) and leaning into the sway by Rise Tilt degrees, the sway dying away by the pop.")]
+        [SerializeField] [Min(0f)] private float _riseSeconds = 0.8f;
+
+        [SerializeField] [Min(0f)] private float _holdBeforePopSeconds = 0.5f;
+        [SerializeField] [Range(0.001f, 0.5f)] private float _riseOvershoot = 0.06f;
+        [SerializeField] [Min(0f)] private float _riseSway = 6f;
+        [SerializeField] [Min(0.01f)] private float _riseSwaySeconds = 0.55f;
+        [SerializeField] [Range(0f, 20f)] private float _riseTilt = 5f;
 
         [Tooltip("How far the rubber's two layers part while the balloon moves, as a share of its distance from " +
                  "its place: the front leads and the back lags, so what is inside reads as inside it.")]
@@ -56,7 +65,10 @@ namespace BalloonParty.Configuration.CardReveal
                  "over the camera's ortho_scale, 3.1).")]
         [SerializeField] [Min(0)] private int _rubberRecentreFromFrame = 18;
 
+        [Tooltip("How many frames the bake's camera takes to ease down: its RECENTRE_FRAMES.")]
         [SerializeField] [Min(1)] private int _rubberRecentreFrames = 12;
+
+        [Tooltip("How far the bake's camera eases down, in frame heights: its RECENTRE over ortho_scale (3.1).")]
         [SerializeField] [Min(0f)] private float _rubberRecentreHeight = 0.52f;
 
         [Header("Light")]
@@ -102,6 +114,10 @@ namespace BalloonParty.Configuration.CardReveal
         public float InsideShowThrough => _insideShowThrough;
         public float RiseSeconds => _riseSeconds;
         public float HoldBeforePopSeconds => _holdBeforePopSeconds;
+        public float RiseOvershoot => _riseOvershoot;
+        public float RiseSway => _riseSway;
+        public float RiseSwaySeconds => _riseSwaySeconds;
+        public float RiseTilt => _riseTilt;
         public int RibbonsFromFrame => _ribbonsFromFrame;
         public float RibbonBurstSeconds => _ribbonBurstSeconds;
         public float RibbonExitSeconds => _ribbonExitSeconds;

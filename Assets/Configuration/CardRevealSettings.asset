@@ -18,10 +18,14 @@ MonoBehaviour:
   _sheetColumns: 8
   _sheetRows: 6
   _framesPerSecond: 24
-  _balloonColor: {r: 0.97, g: 0.75, b: 0.26, a: 1}
+  _balloonColor: {r: 0.8, g: 0.82, b: 0.87, a: 1}
   _insideShowThrough: 0.12
-  _riseSeconds: 0.45
-  _holdBeforePopSeconds: 0.15
+  _riseSeconds: 0.8
+  _holdBeforePopSeconds: 0.5
+  _riseOvershoot: 0.06
+  _riseSway: 6
+  _riseSwaySeconds: 0.55
+  _riseTilt: 5
   _parallax: 0.02
   _rubberFallsFromFrame: 4
   _rubberFallGravity: 0.0045

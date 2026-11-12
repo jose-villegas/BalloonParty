@@ -15,8 +15,8 @@ Usage (Blender 5.2, headless):
 Options after "--":
     --seeds 0,3,7     the pops to bake (each seed is one pop; default 0)
     --out DIR         where frames/pop_NN/ go (default: out/ beside this script)
-    --frames 48       frames rendered per pop, out of the simulation's 48 (48 renders every one, 24 every
-                      second one); a divisor of 48
+    --frames 48       frames rendered per pop, out of the simulation's 48 (a divisor of 48). pack_sheets.py
+                      packs 48; fewer are for a quick look at the frames only
     --size 512        rendered frame size in px (pack_sheets.py scales the sheets down)
     --samples 32      Cycles samples per frame
     --detail 6        icosphere subdivisions of the rubber (5 for quick looks)
@@ -478,10 +478,22 @@ def bake(seed, args):
     print(f"pop {seed}: rendered {args.frames} frames in {time.time() - started:.0f}s", flush=True)
 
 
+def print_game_settings(frames):
+    """CardRevealSettings mirrors the fall, by hand: printed so a retuned bake shows what to set there."""
+    step = SIM_FRAMES // frames
+    print("CardRevealSettings for this bake (frames count from 0 there):")
+    print(f"  Rubber Falls From Frame   {(FALL_START - 1) / step:g}")
+    print(f"  Rubber Fall Gravity       {FALL_ACCELERATION * step * step / ORTHO_SCALE:.6g}")
+    print(f"  Rubber Recentre From Frame {(RECENTRE_START - 1) / step:g}")
+    print(f"  Rubber Recentre Frames    {RECENTRE_FRAMES / step:g}")
+    print(f"  Rubber Recentre Height    {RECENTRE / ORTHO_SCALE:.6g}", flush=True)
+
+
 def main():
     args = parse_args()
     for seed in (int(s) for s in args.seeds.split(",")):
         bake(seed, args)
+    print_game_settings(args.frames)
 
 
 main()
