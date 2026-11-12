@@ -3,8 +3,10 @@ CardRevealView fires as the balloon tears (Assets/Prefabs/Game/CardRevealShreds,
 BalloonParty/Sprite/Diffuse and tinted the balloon's colour).
 
 Each scrap is a curled, torn strip: a ragged outline, a lit and a shadowed tone split along its curl as
-the cel-shaded balloon is, and a thin highlight along the lit edge. Greys, so the particles' colour tints
-them. Seeded, so the sheet is the same every run.
+the cel-shaded balloon is, and a thin highlight along the lit edge. Near white, so the particles' colour
+tints them as the balloon's cel tones tint its rubber (the shadow tone is LitFlipbook's, 0.68 of the colour
+in linear light): darker greys, multiplied by the tint and the scene's light, read as soot, not rubber.
+Seeded, so the sheet is the same every run.
 
 Usage: python3 Tools/art/balloon_pop/make_shreds.py [OUT]
        (OUT defaults to Assets/Sprites/UI/CardReveal/shreds.png)
@@ -19,8 +21,8 @@ from PIL import Image, ImageChops, ImageDraw, ImageFilter
 CELL = 128
 GRID = 2
 SUPERSAMPLE = 4
-LIT = 236
-SHADOW = 168
+LIT = 246
+SHADOW = 216
 HIGHLIGHT = 255
 SEED = 7
 

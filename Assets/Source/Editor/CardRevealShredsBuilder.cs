@@ -104,7 +104,9 @@ namespace BalloonParty.Editor
 
         // In canvas units: the burst is parented to the reveal's canvas (225 wide), so it scales with the screen
         // and follows the camera. Flung out fast from the balloon's skin, slowed by the air, then fluttering down
-        // under gravity, tumbling, on unscaled time like the reveal.
+        // under gravity, tumbling, on unscaled time like the reveal. A scrap's strip fills a part of its cell, so
+        // the particles are larger than the strips look; they tip and rock rather than spin through edge-on,
+        // where a flat scrap shows as a dark sliver.
         private static ParticleSystem CreatePrefab(Material material)
         {
             var root = new GameObject(System.IO.Path.GetFileNameWithoutExtension(PrefabPath))
@@ -128,12 +130,12 @@ namespace BalloonParty.Editor
                 main.startLifetime = new ParticleSystem.MinMaxCurve(2.6f, 3.4f);
                 main.startSpeed = new ParticleSystem.MinMaxCurve(140f, 280f);
                 main.startSize3D = true;
-                main.startSizeX = new ParticleSystem.MinMaxCurve(7f, 13f);
-                main.startSizeY = new ParticleSystem.MinMaxCurve(5f, 9f);
+                main.startSizeX = new ParticleSystem.MinMaxCurve(16f, 26f);
+                main.startSizeY = new ParticleSystem.MinMaxCurve(14f, 22f);
                 main.startSizeZ = 1f;
                 main.startRotation3D = true;
-                main.startRotationX = new ParticleSystem.MinMaxCurve(0f, Mathf.PI * 2f);
-                main.startRotationY = new ParticleSystem.MinMaxCurve(0f, Mathf.PI * 2f);
+                main.startRotationX = new ParticleSystem.MinMaxCurve(-0.8f, 0.8f);
+                main.startRotationY = new ParticleSystem.MinMaxCurve(-0.8f, 0.8f);
                 main.startRotationZ = new ParticleSystem.MinMaxCurve(0f, Mathf.PI * 2f);
                 main.gravityModifier = 0f;
 
@@ -164,9 +166,9 @@ namespace BalloonParty.Editor
                 var tumble = particles.rotationOverLifetime;
                 tumble.enabled = true;
                 tumble.separateAxes = true;
-                tumble.x = new ParticleSystem.MinMaxCurve(-9f, 9f);
-                tumble.y = new ParticleSystem.MinMaxCurve(-6f, 6f);
-                tumble.z = new ParticleSystem.MinMaxCurve(-4f, 4f);
+                tumble.x = new ParticleSystem.MinMaxCurve(-1.2f, 1.2f);
+                tumble.y = new ParticleSystem.MinMaxCurve(-1.2f, 1.2f);
+                tumble.z = new ParticleSystem.MinMaxCurve(-5f, 5f);
 
                 var fade = particles.colorOverLifetime;
                 fade.enabled = true;
