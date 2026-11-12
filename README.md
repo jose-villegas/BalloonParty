@@ -18,6 +18,18 @@ defense (shields) and offense (bombs, lightning). Level-ups earn their own cinem
 tipping trail is intercepted mid-flight and the camera dives after it, handing control
 back through a curve-driven restore.
 
+The run moves through three scenarios, Sky, Meadow and Water, under a day that turns to night:
+
+![Sky, Meadow and Water, each at morning and at night](Docs/readme/scenarios.jpg)
+
+Balloons carry items that go off when popped: a bomb's blast, a laser's beam, lightning
+that jumps between balloons, paint that turns its neighbours one colour, and two that ride
+on the next ball, a shield and a piercing snipe:
+
+![The six items, each at the moment its effect is fullest](Docs/readme/items.jpg)
+
+These stills are retaken by a script (`Tools/readme_shots/`), not by hand.
+
 ## Releases
 
 🎮 **[Latest Release](https://github.com/jose-villegas/BalloonParty/releases/latest)** —
