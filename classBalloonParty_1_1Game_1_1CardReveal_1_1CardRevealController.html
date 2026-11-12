@@ -174,6 +174,9 @@ Properties</h2></td></tr>
 <tr class="memitem:aec05337071a0f49ae917788a05473118" id="r_aec05337071a0f49ae917788a05473118"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aec05337071a0f49ae917788a05473118">HasStage</a><code> [get]</code></td></tr>
 <tr class="memdesc:aec05337071a0f49ae917788a05473118"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether a stage is attached, so cards are announced by the reveal rather than the tooltip.  <br /></td></tr>
 <tr class="separator:aec05337071a0f49ae917788a05473118"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3706fbc63442fb310946ee4658b75f4d" id="r_a3706fbc63442fb310946ee4658b75f4d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3706fbc63442fb310946ee4658b75f4d">NextPop</a><code> [get]</code></td></tr>
+<tr class="memdesc:a3706fbc63442fb310946ee4658b75f4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The pop the next reveal will play, chosen a reveal ahead so the stage can load its sheet while the game plays.  <br /></td></tr>
+<tr class="separator:a3706fbc63442fb310946ee4658b75f4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b04ffbb812ebd78f86135d1b2893f89" id="r_a6b04ffbb812ebd78f86135d1b2893f89"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6b04ffbb812ebd78f86135d1b2893f89">ResetOrder</a><code> [get]</code></td></tr>
 <tr class="separator:a6b04ffbb812ebd78f86135d1b2893f89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -201,6 +204,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a37da7caa6b0d444845b6dbd89c585b4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08a1559761431abfa339b9f95822900d" id="r_a08a1559761431abfa339b9f95822900d"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1GameState_1_1INavigation.html">INavigation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a08a1559761431abfa339b9f95822900d">_navigation</a></td></tr>
 <tr class="separator:a08a1559761431abfa339b9f95822900d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0626894ffb8799a0636248cb5fe42e9" id="r_ad0626894ffb8799a0636248cb5fe42e9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad0626894ffb8799a0636248cb5fe42e9">_nextPop</a> = -1</td></tr>
+<tr class="separator:ad0626894ffb8799a0636248cb5fe42e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a07128ee8c4f7f4c748eaad68ed4ae701" id="r_a07128ee8c4f7f4c748eaad68ed4ae701"><td class="memItemLeft" align="right" valign="top">readonly Queue&lt;(<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> Card, int Stacks, bool IsBonus)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a07128ee8c4f7f4c748eaad68ed4ae701">_queue</a> = new()</td></tr>
 <tr class="separator:a07128ee8c4f7f4c748eaad68ed4ae701"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af621aa488ebba9103b8d2090632f85ec" id="r_af621aa488ebba9103b8d2090632f85ec"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="UnbreakableFormationService_8cs.html#a832e8f52fca5a678819ec96269dcb532">Random</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af621aa488ebba9103b8d2090632f85ec">_random</a></td></tr>
@@ -216,7 +221,7 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Queues a reveal for each card the player wins: a level-up's card as it's held (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage.html" title="A level-up&#39;s card is now held: published as the level advances, when its pick is kept.">UpgradeCardHeldMessage</a>) and a retry's bonus card as it's dealt (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html" title="A retry bought with a rewarded ad was dealt its bonus card, for that attempt only.">BonusCardDealtMessage</a>). </p>
-<p>One plays at a time, and only over the board (in play, or a level-up's ascent, where a level-up's card plays), so a bonus dealt behind the game-over screen waits for play to resume. Each reveal gets a pop chosen at random, never one of the last <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a7df24f359dccf8f0b6754e0037055585" title="How many of the last pops shown a new reveal never repeats, so a pop rarely comes back soon.">ICardRevealSettings.RecentPopsAvoided</a> shown. Nothing is queued while no stage is attached, so until the reveal's view exists the cards stay the tooltip's. </p>
+<p>One plays at a time, and only over the board (in play, or a level-up's ascent, where a level-up's card plays), so a bonus dealt behind the game-over screen waits for play to resume. Each reveal gets a pop chosen at random, a reveal ahead (<a class="el" href="#a3706fbc63442fb310946ee4658b75f4d" title="The pop the next reveal will play, chosen a reveal ahead so the stage can load its sheet while the ga...">NextPop</a>), never one of the last <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a7df24f359dccf8f0b6754e0037055585" title="How many of the last pops shown a new reveal never repeats, so a pop rarely comes back soon.">ICardRevealSettings.RecentPopsAvoided</a> shown. Nothing is queued while no stage is attached, so until the reveal's view exists the cards stay the tooltip's. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="acf4883c6ad6b15bea9cb7d6d176dd114" name="acf4883c6ad6b15bea9cb7d6d176dd114"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acf4883c6ad6b15bea9cb7d6d176dd114">&#9670;&#160;</a></span>CardRevealController() <span class="overload">[1/2]</span></h2>
@@ -621,6 +626,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ad0626894ffb8799a0636248cb5fe42e9" name="ad0626894ffb8799a0636248cb5fe42e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0626894ffb8799a0636248cb5fe42e9">&#9670;&#160;</a></span>_nextPop</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Game.CardReveal.CardRevealController._nextPop = -1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a07128ee8c4f7f4c748eaad68ed4ae701" name="a07128ee8c4f7f4c748eaad68ed4ae701"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a07128ee8c4f7f4c748eaad68ed4ae701">&#9670;&#160;</a></span>_queue</h2>
 
@@ -803,6 +830,33 @@ Private Attributes</h2></td></tr>
 <p>Whether a stage is attached, so cards are announced by the reveal rather than the tooltip. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1CardReveal_1_1ICardReveals.html#ae2b63001dec19b98b2a35e777cd1cea1">BalloonParty.Game.CardReveal.ICardReveals</a>.</p>
+
+</div>
+</div>
+<a id="a3706fbc63442fb310946ee4658b75f4d" name="a3706fbc63442fb310946ee4658b75f4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3706fbc63442fb310946ee4658b75f4d">&#9670;&#160;</a></span>NextPop</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Game.CardReveal.CardRevealController.NextPop</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The pop the next reveal will play, chosen a reveal ahead so the stage can load its sheet while the game plays. </p>
+<p>Chosen when a stage first attaches, and re-chosen as each reveal starts, before <a class="el" href="#a87413acc6a4d2ce312f414f388b5572b" title="The reveal to play now, or null between reveals.">Current</a> publishes; -1 before a stage attaches. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1CardReveal_1_1ICardReveals.html#a1a5b8d2616374946587a2fa8a2a49beb">BalloonParty.Game.CardReveal.ICardReveals</a>.</p>
 
 </div>
 </div>

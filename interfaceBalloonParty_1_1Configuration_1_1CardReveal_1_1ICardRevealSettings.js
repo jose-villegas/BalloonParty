@@ -25,7 +25,7 @@ var interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings 
     [ "PopFlashRadius", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#af82dc26655ae575e2f2aa1a25f796596", null ],
     [ "PopFlashSeconds", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#af957ad79a860ac5f93e0490e990a0742", null ],
     [ "PopPunctures", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ace0a10bfe049b60301a9b27d269a6822", null ],
-    [ "PopSheets", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a3a6c09860a4052f22acbe5b545265bbd", null ],
+    [ "PopSheetPaths", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a52bdd1bdd0f46b9f329fe1a0137c033c", null ],
     [ "RecentPopsAvoided", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a7df24f359dccf8f0b6754e0037055585", null ],
     [ "RibbonBurstSeconds", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a87bae69d5a8c6c65abda8f8069f45484", null ],
     [ "RibbonExitSeconds", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a248bf3337d766f1f696cc104003f7c52", null ],

@@ -1,9 +1,10 @@
 var NAVTREEINDEX3 =
 {
+"RetryTracker_8cs.html":[7,0,7,8,14],
 "RevealCardCheat_8cs.html":[7,0,2,19],
 "RevealedCard_8cs.html":[7,0,7,0,2],
-"RibbonGraphic_8cs.html":[7,0,18,1,1],
-"RibbonPiece_8cs.html":[7,0,18,1,2],
+"RibbonGraphic_8cs.html":[7,0,18,1,2],
+"RibbonPiece_8cs.html":[7,0,18,1,3],
 "RollingCounterDisplay_8cs.html":[7,0,18,20],
 "RollingTextAnimator_8cs.html":[7,0,14,0,1],
 "RunConfig_8cs.html":[7,0,3,23],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "VoiceLimiter_8cs.html":[7,0,0,19],
 "VoicePlayback_8cs.html":[7,0,0,20],
 "WallBounceEndCondition_8cs.html":[7,0,12,0,3],
-"WallHitMessage_8cs.html":[7,0,14,7,53],
-"WallLimits_8cs.html":[7,0,14,37]
+"WallHitMessage_8cs.html":[7,0,14,7,53]
 };

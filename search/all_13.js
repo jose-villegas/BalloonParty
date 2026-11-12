@@ -222,7 +222,7 @@ var searchData=
   ['importassprite_219',['ImportAsSprite',['../classBalloonParty_1_1Editor_1_1ShadowBake_1_1ShadowBakeUtility.html#a604faff653dd6629cdcc871ce1c6f56b',1,'BalloonParty.Editor.ShadowBake.ShadowBakeUtility.ImportAsSprite()'],['../classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html#ac5fbfa0bf68cacbb7a3dc05f79ae418d',1,'BalloonParty.Editor.SpriteCombine.SpriteLayerCombinerEditor.ImportAsSprite()']]],
   ['importasync_220',['ImportAsync',['../classBalloonParty_1_1Audio_1_1Editor_1_1SfxClipImporter.html#a99d59979ef09c3fab89394b8680f6feb',1,'BalloonParty::Audio::Editor::SfxClipImporter']]],
   ['importedasdata_221',['ImportedAsData',['../classBalloonParty_1_1Editor_1_1CardRevealBuilder.html#a87da91c22fbfa619b262ea5b15199187',1,'BalloonParty::Editor::CardRevealBuilder']]],
-  ['importsheets_222',['ImportSheets',['../classBalloonParty_1_1Editor_1_1CardRevealBuilder.html#aaad23d3cdc62958f11b2ffde2726e318',1,'BalloonParty::Editor::CardRevealBuilder']]],
+  ['importsheets_222',['ImportSheets',['../classBalloonParty_1_1Editor_1_1CardRevealBuilder.html#a7ed8976bb8aba54fb1583804c284bcc4',1,'BalloonParty::Editor::CardRevealBuilder']]],
   ['importtexture_223',['ImportTexture',['../classBalloonParty_1_1Editor_1_1CardRevealShredsBuilder.html#a77eca7031342e7fe3b4c58adf9244b3e',1,'BalloonParty::Editor::CardRevealShredsBuilder']]],
   ['improvements_224',['Improvements',['../plan_future_ideas.html#autotoc_md457',1,'1 — VFX Improvements'],['../plan_future_ideas.html',1,'Future Ideas &amp; Improvements'],['../plan_future_ideas.html#autotoc_md455',1,'Future Ideas &amp; Improvements']]],
   ['impulse_225',['&lt;tt&gt;OnHit&lt;/tt&gt; — spin impulse',['../plan_bubble_cluster_hit_feedback.html#autotoc_md359',1,'']]],

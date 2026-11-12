@@ -16,6 +16,7 @@ var classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController =
     [ "_current", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ad8606a7469e79115a773bd5b61684a24", null ],
     [ "_heldSubscriber", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a37da7caa6b0d444845b6dbd89c585b4a", null ],
     [ "_navigation", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a08a1559761431abfa339b9f95822900d", null ],
+    [ "_nextPop", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ad0626894ffb8799a0636248cb5fe42e9", null ],
     [ "_queue", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a07128ee8c4f7f4c748eaad68ed4ae701", null ],
     [ "_random", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#af621aa488ebba9103b8d2090632f85ec", null ],
     [ "_recentPops", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a652af528e4f8c07616ed674d05edba84", null ],
@@ -24,5 +25,6 @@ var classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController =
     [ "_subscriptions", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ab1c7506d02875197178fe9c128848ae6", null ],
     [ "Current", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a87413acc6a4d2ce312f414f388b5572b", null ],
     [ "HasStage", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#aec05337071a0f49ae917788a05473118", null ],
+    [ "NextPop", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a3706fbc63442fb310946ee4658b75f4d", null ],
     [ "ResetOrder", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a6b04ffbb812ebd78f86135d1b2893f89", null ]
 ];

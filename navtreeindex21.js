@@ -1,5 +1,6 @@
 var NAVTREEINDEX21 =
 {
+"classBalloonParty_1_1Configuration_1_1Effects_1_1PuffCloudSettings.html#af575b57a39b80e673596127566f5454c":[6,0,0,3,5,26,0],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGradeSettings.html":[5,0,0,3,5,28],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGradeSettings.html":[6,0,0,3,5,28],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGradeSettings.html#a1ba519aa1d131a9db2eb487f98ef114b":[5,0,0,3,5,28,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX21 =
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html#af5a54f0d9e47ec47a54004f6824fc54a":[6,0,0,3,5,30,38],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html#af767b026ed65aff5f7f554991d34231f":[5,0,0,3,5,30,4],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html#af767b026ed65aff5f7f554991d34231f":[6,0,0,3,5,30,4],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html#af8f9bb13579a681b107c350c4deb7f45":[5,0,0,3,5,30,17],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html#af8f9bb13579a681b107c350c4deb7f45":[6,0,0,3,5,30,17]
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ShieldFieldSettings.html#af8f9bb13579a681b107c350c4deb7f45":[5,0,0,3,5,30,17]
 };

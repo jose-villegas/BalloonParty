@@ -194,11 +194,11 @@ Properties</h2></td></tr>
 <tr class="memitem:af957ad79a860ac5f93e0490e990a0742" id="r_af957ad79a860ac5f93e0490e990a0742"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af957ad79a860ac5f93e0490e990a0742">PopFlashSeconds</a><code> [get]</code></td></tr>
 <tr class="separator:af957ad79a860ac5f93e0490e990a0742"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace0a10bfe049b60301a9b27d269a6822" id="r_ace0a10bfe049b60301a9b27d269a6822"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; Vector2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace0a10bfe049b60301a9b27d269a6822">PopPunctures</a><code> [get]</code></td></tr>
-<tr class="memdesc:ace0a10bfe049b60301a9b27d269a6822"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where each pop's puncture is in its first frame, as a share of the frame's width and height from its bottom left, one per sheet in <a class="el" href="#a3a6c09860a4052f22acbe5b545265bbd" title="The baked pops&#39; sheets (Tools/art/balloon_pop): each the front layer&#39;s frames over the back layer&#39;s,...">PopSheets</a>' order: where the pushpin pricks, so the tear opens from its needle.  <br /></td></tr>
+<tr class="memdesc:ace0a10bfe049b60301a9b27d269a6822"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where each pop's puncture is in its first frame, as a share of the frame's width and height from its bottom left, one per sheet in <a class="el" href="#a52bdd1bdd0f46b9f329fe1a0137c033c" title="Where the baked pops&#39; sheets are (Tools/art/balloon_pop), as Resources paths: listed rather than refe...">PopSheetPaths</a>' order: where the pushpin pricks, so the tear opens from its needle.  <br /></td></tr>
 <tr class="separator:ace0a10bfe049b60301a9b27d269a6822"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a6c09860a4052f22acbe5b545265bbd" id="r_a3a6c09860a4052f22acbe5b545265bbd"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; Texture2D &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3a6c09860a4052f22acbe5b545265bbd">PopSheets</a><code> [get]</code></td></tr>
-<tr class="memdesc:a3a6c09860a4052f22acbe5b545265bbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The baked pops' sheets (<code>Tools/art/balloon_pop</code>): each the front layer's frames over the back layer's, holding the rubber's surface for <code>BalloonParty/Sprite/LitFlipbook</code> to light.  <br /></td></tr>
-<tr class="separator:a3a6c09860a4052f22acbe5b545265bbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52bdd1bdd0f46b9f329fe1a0137c033c" id="r_a52bdd1bdd0f46b9f329fe1a0137c033c"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a52bdd1bdd0f46b9f329fe1a0137c033c">PopSheetPaths</a><code> [get]</code></td></tr>
+<tr class="memdesc:a52bdd1bdd0f46b9f329fe1a0137c033c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where the baked pops' sheets are (<code>Tools/art/balloon_pop</code>), as <code>Resources</code> paths: listed rather than referenced, so they don't all load with the scene (<code>UI/CardReveal/PopSheetLoader</code>).  <br /></td></tr>
+<tr class="separator:a52bdd1bdd0f46b9f329fe1a0137c033c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7df24f359dccf8f0b6754e0037055585" id="r_a7df24f359dccf8f0b6754e0037055585"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7df24f359dccf8f0b6754e0037055585">RecentPopsAvoided</a><code> [get]</code></td></tr>
 <tr class="memdesc:a7df24f359dccf8f0b6754e0037055585"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many of the last pops shown a new reveal never repeats, so a pop rarely comes back soon.  <br /></td></tr>
 <tr class="separator:a7df24f359dccf8f0b6754e0037055585"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -908,15 +908,15 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Where each pop's puncture is in its first frame, as a share of the frame's width and height from its bottom left, one per sheet in <a class="el" href="#a3a6c09860a4052f22acbe5b545265bbd" title="The baked pops&#39; sheets (Tools/art/balloon_pop): each the front layer&#39;s frames over the back layer&#39;s,...">PopSheets</a>' order: where the pushpin pricks, so the tear opens from its needle. </p>
+<p>Where each pop's puncture is in its first frame, as a share of the frame's width and height from its bottom left, one per sheet in <a class="el" href="#a52bdd1bdd0f46b9f329fe1a0137c033c" title="Where the baked pops&#39; sheets are (Tools/art/balloon_pop), as Resources paths: listed rather than refe...">PopSheetPaths</a>' order: where the pushpin pricks, so the tear opens from its needle. </p>
 <p>The bake prints them (<code>bake_pops.py</code>). </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a187ad6e70eedf9dfb4fb8a905907d26a">BalloonParty.Configuration.CardReveal.CardRevealSettings</a>.</p>
 
 </div>
 </div>
-<a id="a3a6c09860a4052f22acbe5b545265bbd" name="a3a6c09860a4052f22acbe5b545265bbd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3a6c09860a4052f22acbe5b545265bbd">&#9670;&#160;</a></span>PopSheets</h2>
+<a id="a52bdd1bdd0f46b9f329fe1a0137c033c" name="a52bdd1bdd0f46b9f329fe1a0137c033c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52bdd1bdd0f46b9f329fe1a0137c033c">&#9670;&#160;</a></span>PopSheetPaths</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -925,7 +925,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">IReadOnlyList&lt;Texture2D&gt; BalloonParty.Configuration.CardReveal.ICardRevealSettings.PopSheets</td>
+          <td class="memname">IReadOnlyList&lt;string&gt; BalloonParty.Configuration.CardReveal.ICardRevealSettings.PopSheetPaths</td>
         </tr>
       </table>
   </td>
@@ -935,10 +935,10 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The baked pops' sheets (<code>Tools/art/balloon_pop</code>): each the front layer's frames over the back layer's, holding the rubber's surface for <code>BalloonParty/Sprite/LitFlipbook</code> to light. </p>
-<p>Empty until a pop is baked, and then the reveal stays off. </p>
+<p>Where the baked pops' sheets are (<code>Tools/art/balloon_pop</code>), as <code>Resources</code> paths: listed rather than referenced, so they don't all load with the scene (<code>UI/CardReveal/PopSheetLoader</code>). </p>
+<p>Each is the front layer's frames over the back layer's, holding the rubber's surface for <code>BalloonParty/Sprite/LitFlipbook</code> to light. Empty until a pop is baked, and then the reveal stays off. </p>
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ac9173086ea2182c9c72df959d4979394">BalloonParty.Configuration.CardReveal.CardRevealSettings</a>.</p>
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aa21f2522433e2b218b9df7d24c286419">BalloonParty.Configuration.CardReveal.CardRevealSettings</a>.</p>
 
 </div>
 </div>

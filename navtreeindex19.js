@@ -1,5 +1,6 @@
 var NAVTREEINDEX19 =
 {
+"classBalloonParty_1_1Configuration_1_1Editor_1_1ProjectileFlightConfigEditor.html#ad43f80b8e44893415d0295b5ec0f0c4c":[6,0,0,3,4,11,0],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1StampProfileDrawer.html":[5,0,0,3,4,12],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1StampProfileDrawer.html":[6,0,0,3,4,12],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1StampProfileDrawer.html#a713c4122d4b7e91f8e04ec7e559fff6a":[5,0,0,3,4,12,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX19 =
 "classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html#abbd7ad17299024b66dc94709439d0aaf":[6,0,0,3,5,3,4],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html#abdc5e77e2b7dcbdf25ba4ea7699e0e14":[5,0,0,3,5,3,9],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html#abdc5e77e2b7dcbdf25ba4ea7699e0e14":[6,0,0,3,5,3,9],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html#ac29f06e6480c22a987ae98a32635f4fd":[5,0,0,3,5,3,29],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html#ac29f06e6480c22a987ae98a32635f4fd":[6,0,0,3,5,3,29]
+"classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html#ac29f06e6480c22a987ae98a32635f4fd":[5,0,0,3,5,3,29]
 };

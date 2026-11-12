@@ -1,5 +1,6 @@
 var NAVTREEINDEX29 =
 {
+"classBalloonParty_1_1Display_1_1CameraShakeView.html#ae1d731d794951951171c3efc6713d083":[6,0,0,4,2,12],
 "classBalloonParty_1_1Display_1_1CameraShakeView.html#af7f85b784e7379b3070a52cbb313e360":[5,0,0,4,2,6],
 "classBalloonParty_1_1Display_1_1CameraShakeView.html#af7f85b784e7379b3070a52cbb313e360":[6,0,0,4,2,6],
 "classBalloonParty_1_1Display_1_1HudCamera.html":[5,0,0,4,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX29 =
 "classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerWindow.html#a1cf0b8cacddcc50bed93091920649b73":[6,0,0,5,0,1,1],
 "classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerWindow.html#a252aaa751d424d37526a25f3a53c04cf":[5,0,0,5,0,1,48],
 "classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerWindow.html#a252aaa751d424d37526a25f3a53c04cf":[6,0,0,5,0,1,48],
-"classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerWindow.html#a27066ca5cfbfa73a0e4e061963f4a08d":[5,0,0,5,0,1,10],
-"classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerWindow.html#a27066ca5cfbfa73a0e4e061963f4a08d":[6,0,0,5,0,1,10]
+"classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerWindow.html#a27066ca5cfbfa73a0e4e061963f4a08d":[5,0,0,5,0,1,10]
 };

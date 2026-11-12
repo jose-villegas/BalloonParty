@@ -1,7 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="5,45,184,70"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteMaskDrawer.html" title="Material drawer for a Float shader property: [PaletteMask] renders a multi&#45;select of the GamePalette ..." alt="" coords="235,5,432,45"/>
-<area shape="poly" id="edge686_Node000000_Node000001" title=" " alt="" coords="197,41,234,36,235,41,198,46"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Editor_1_1GradientTextureDrawer.html" title="Replaces the default texture slot for a 2D shader property with a native gradient picker,..." alt="" coords="232,69,435,109"/>
-<area shape="poly" id="edge687_Node000000_Node000002" title=" " alt="" coords="198,68,232,73,232,78,197,74"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,45,140,70"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonGraphic.html" title="A strip of ribbon filling its rect: swallowtail&#45;notched at both ends, with a wave running along it th..." alt="" coords="188,5,391,45"/>
+<area shape="poly" id="edge685_Node000000_Node000001" title=" " alt="" coords="153,43,187,38,188,43,154,48"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1UI_1_1TimeOfDaySpecular.html" title="A rounded UI shape&#39;s specular, lit like the balloons: a soft stroke that runs along the inside of the..." alt="" coords="190,69,389,109"/>
+<area shape="poly" id="edge686_Node000000_Node000002" title=" " alt="" coords="154,67,190,72,189,77,154,72"/>
 </map>

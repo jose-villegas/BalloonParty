@@ -143,6 +143,9 @@ Properties</h2></td></tr>
 <tr class="memitem:ae2b63001dec19b98b2a35e777cd1cea1" id="r_ae2b63001dec19b98b2a35e777cd1cea1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae2b63001dec19b98b2a35e777cd1cea1">HasStage</a><code> [get]</code></td></tr>
 <tr class="memdesc:ae2b63001dec19b98b2a35e777cd1cea1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether a stage is attached, so cards are announced by the reveal rather than the tooltip.  <br /></td></tr>
 <tr class="separator:ae2b63001dec19b98b2a35e777cd1cea1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a5b8d2616374946587a2fa8a2a49beb" id="r_a1a5b8d2616374946587a2fa8a2a49beb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a5b8d2616374946587a2fa8a2a49beb">NextPop</a><code> [get]</code></td></tr>
+<tr class="memdesc:a1a5b8d2616374946587a2fa8a2a49beb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The pop the next reveal will play, chosen a reveal ahead so the stage can load its sheet while the game plays.  <br /></td></tr>
+<tr class="separator:a1a5b8d2616374946587a2fa8a2a49beb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The reveals a stage plays, one at a time. </p>
@@ -258,6 +261,33 @@ Properties</h2></td></tr>
 <p>Whether a stage is attached, so cards are announced by the reveal rather than the tooltip. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#aec05337071a0f49ae917788a05473118">BalloonParty.Game.CardReveal.CardRevealController</a>.</p>
+
+</div>
+</div>
+<a id="a1a5b8d2616374946587a2fa8a2a49beb" name="a1a5b8d2616374946587a2fa8a2a49beb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1a5b8d2616374946587a2fa8a2a49beb">&#9670;&#160;</a></span>NextPop</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Game.CardReveal.ICardReveals.NextPop</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The pop the next reveal will play, chosen a reveal ahead so the stage can load its sheet while the game plays. </p>
+<p>Chosen when a stage first attaches, and re-chosen as each reveal starts, before <a class="el" href="#a4a228cf5cd0578d86fdaaf1e232bbb87" title="The reveal to play now, or null between reveals.">Current</a> publishes; -1 before a stage attaches. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a3706fbc63442fb310946ee4658b75f4d">BalloonParty.Game.CardReveal.CardRevealController</a>.</p>
 
 </div>
 </div>
