@@ -39,6 +39,14 @@ namespace BalloonParty.Editor
         private const float MorningAngle = 60f;
         private const float NightAngle = 300f;
         private const float ItemAngle = 120f;
+        private const string FireCheat = "Fire Best Shot";
+
+        // Past level 1's single colour, so an item's effect reads against a mixed board, and short of the
+        // levels whose starting board overflows at once.
+        private const int ItemLevel = 3;
+
+        // How long a ball armed by a popped item takes to be the held one, before it's fired.
+        private const float ArmSeconds = 0.6f;
         private const float LaunchTimeout = 120f;
         private const float BoardSettleSeconds = 3f;
         private const float ItemAppearSeconds = 1.5f;
@@ -55,11 +63,12 @@ namespace BalloonParty.Editor
             (ScenarioKind.Sky, "sky"), (ScenarioKind.Ground, "meadow"), (ScenarioKind.Water, "water")
         };
 
-        // Each item and when, after its balloon pops, its effect is fullest, in seconds of game time.
-        private static readonly (ItemType Item, float Seconds)[] Items =
+        // Each item and when its effect is fullest, in seconds of game time: after its balloon pops, or for an
+        // item that arms the ball (Fires), after the armed ball is fired, since its effect rides on the ball.
+        private static readonly (ItemType Item, float Seconds, bool Fires)[] Items =
         {
-            (ItemType.Bomb, 0.3f), (ItemType.Laser, 0.3f), (ItemType.Lightning, 0.5f),
-            (ItemType.Paint, 0.5f), (ItemType.Shield, 0.3f), (ItemType.Snipe, 0.3f)
+            (ItemType.Bomb, 0.3f, false), (ItemType.Laser, 0.5f, false), (ItemType.Lightning, 0.4f, false),
+            (ItemType.Paint, 0.6f, false), (ItemType.Shield, 0.4f, true), (ItemType.Snipe, 0.4f, true)
         };
 
         private static readonly float[] BurstSeconds = { 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.8f, 1f, 1.2f };
@@ -106,9 +115,9 @@ namespace BalloonParty.Editor
             Until(() => Navigation.Current.Value == NavigationState.Game, LaunchTimeout);
             Do(Prepare);
 
-            foreach (var (item, seconds) in Items)
+            foreach (var (item, seconds, fires) in Items)
             {
-                PlanItem(item, burst ? BurstSeconds : new[] { seconds });
+                PlanItem(item, fires, burst ? BurstSeconds : new[] { seconds });
             }
 
             foreach (var (kind, name) in Scenarios)
@@ -119,12 +128,12 @@ namespace BalloonParty.Editor
             Do(Unfreeze);
         }
 
-        private static void PlanItem(ItemType item, IReadOnlyList<float> moments)
+        private static void PlanItem(ItemType item, bool fires, IReadOnlyList<float> moments)
         {
             Do(() =>
             {
                 Unfreeze();
-                CheatState.StartLevel = 1;
+                CheatState.StartLevel = ItemLevel;
                 Resolve<RunController>().RestartRun();
             });
             Wait(BoardSettleSeconds);
@@ -135,6 +144,12 @@ namespace BalloonParty.Editor
             });
             Wait(ItemAppearSeconds);
             Do(Pop);
+            if (fires)
+            {
+                Wait(ArmSeconds);
+                Do(Fire);
+            }
+
             var since = 0f;
             for (var i = 0; i < moments.Count; i++)
             {
@@ -242,6 +257,20 @@ namespace BalloonParty.Editor
             var hit = ActorHitMessage.From((IHitable)_host, _hostPosition, Vector3.up,
                 new DamageContext(1, DamageFlags.Piercing));
             Resolve<IHitDispatcher>().Dispatch(hit);
+        }
+
+        private static void Fire()
+        {
+            foreach (var cheat in Resolve<IEnumerable<ICheat>>())
+            {
+                if (cheat.Name == FireCheat)
+                {
+                    cheat.Execute();
+                    return;
+                }
+            }
+
+            throw new InvalidOperationException($"No {FireCheat} cheat");
         }
 
         private static void JumpTo(ScenarioKind kind)
