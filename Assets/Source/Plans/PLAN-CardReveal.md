@@ -32,16 +32,18 @@ back convincingly; a cloth simulation can, so the pops are simulated and baked.
 
 1. On a level-up that deals a card, as the level-up starts, a silver balloon (none of the board's colours)
    floats up to a little above the screen's middle, bobbing and swaying to rest, two rolled-up ribbons inside it as a faint shadow.
-2. It pops: one of 16 baked simulations, chosen at random. The rubber splits from a puncture, the
-   flaps snap back and curl, and the shreds fall away, in slow motion, the way high-speed footage
-   shows it.
+2. A red pushpin comes in and jabs it, and it pops: one of 16 baked simulations, chosen at random.
+   The rubber splits from where the pin went in, the flaps snap back and curl, and the shreds fall
+   away, in slow motion, the way high-speed footage shows it, while scraps fly far out and flutter
+   down and the pin is thrown back out.
 3. As the rubber opens, the two ribbons burst out: the card's title on the upper one, what it does
    on the lower one (`Reload 15% faster`), in the tooltip's pencil hand. The ribbons ripple, and the
    writing ripples with them.
 4. They drift and sway while the level's ascent plays, the old board falling away under them.
 5. Just before the next level settles, they fly off, up and outward, and fade.
 
-On a level-up the whole reveal runs about 3.7 s, inside the ascent's 4 s. A retry's bonus card has
+On a level-up the ribbons are gone 0.82 of the way through the ascent and a second more (about 4.3 s
+into its 4 s, a moment after it ends; the ascent starts just after the reveal). A retry's bonus card has
 no ascent, so its ribbons fly a set time instead. All on unscaled time like the heads-ups, so
 slow-motion beats don't stretch it.
 
@@ -56,7 +58,7 @@ slow-motion beats don't stretch it.
 | A pop is picked at random, never one of the last two shown | 16 sims are there for variety; repeating the last one would waste it |
 | The balloon is tinted at runtime and lit by the scene, not baked in one colour or one light | The sims are baked as surface data (the normal and the occlusion, not a picture) and lit at runtime by the scene's light, so the reveal takes any colour (`BalloonColor`, silver) and follows the time of day as the board's balloons do |
 | The ribbons are inside the balloon, not behind it | Each frame is baked in two layers, the rubber in front of the balloon's centre and the rubber behind it, and the ribbons are drawn between them. While the balloon moves the layers part slightly (parallax), so they read as inside |
-| A level-up's reveal plays with the ascent, and is over just before the next level settles | The ascent is the level-up's quiet stretch: nothing to aim at, the screen moving. Ending before it settles leaves the new board clear to read |
+| A level-up's reveal plays with the ascent, and is over about as the next level settles | The ascent is the level-up's quiet stretch: nothing to aim at, the screen moving. The ribbons stay a second past most of it, so the card is read, and leave as the new board settles |
 | Text, never baked into the art | The card's title and description come from `IUpgradeCardSettings`, so a new card needs no new art |
 | A second card won while a reveal plays waits its turn | Rare (cards come every 2 levels), but a retry's bonus card can meet a level-up's |
 
@@ -65,7 +67,7 @@ slow-motion beats don't stretch it.
 | Piece | Where | Responsibility |
 |---|---|---|
 | `CardRevealController` (built) | `Game/CardReveal/` | Plain C#, beside the other game-side services (`Game/HeadsUp/`, `Game/Coins/`). Subscribes `UpgradeCardHeldMessage` (published by `RunUpgrades` when it holds the pick, at `Transitioning`) and `BonusCardDealtMessage`; queues reveals, picks the pop, and exposes the one to play (`ICardReveals.Current`, a `RevealedCard`). Starts one in play or during a level-up, whose navigation stays on `LevelUp` through the ascent. The view attaches itself as the stage; with none attached nothing is queued and the tooltip keeps announcing cards |
-| `CardRevealView` (built) | `UI/CardReveal/` | `MonoBehaviour` on `CardRevealCanvas`, a World Space canvas fitted to the camera in the Game scene, built by `CardRevealBuilder`. Attaches the stage when the settings hold a pop. Plays the chosen pop on two `RawImage`s (the back and front layers, the ribbons between them), stepping the frame through each one's UV rect on unscaled time, and flies the ribbons from the pop. Times their exit to the ascent (`LevelAscendStartedMessage` and its length) |
+| `CardRevealView` (built) | `UI/CardReveal/` | `MonoBehaviour` on `CardRevealCanvas`, a World Space canvas fitted to the camera in the Game scene, built by `CardRevealBuilder`. Attaches the stage when the settings hold a pop. Plays the chosen pop on two `RawImage`s (the back and front layers, the ribbons between them), stepping the frame through each one's UV rect on unscaled time, and flies the ribbons from the pop. A baked pushpin jabs the pop's puncture to start it, and a particle burst of shreds flies far out as it tears. Times their exit to the ascent (`LevelAscendStartedMessage` and its length) |
 | `RibbonPiece`, `RibbonGraphic` (built) | `UI/CardReveal/` | A piece of ribbon with a line written on it: a UI strip notched at both ends with a wave running along it, shaded as satin, the TMP text bent glyph by glyph to ride the wave. The piece poses itself through its flight: rolled up inside, burst, drift and sway, exit |
 | `BalloonParty/Sprite/LitFlipbook` (built) | `Assets/Shaders/BalloonParty/Sprite/` | Lights a layer's surface data with the scene's light (`SceneLight.cginc`): a wrapped diffuse, the occlusion, a highlight, and thin-latex transmission, so a face turned from the light glows deeper instead of going dark. The tint is the `RawImage`'s colour, re-graded by the time of day like the balloons' bodies |
 | `PopSheetLoader` | `UI/CardReveal/` | Loads only the chosen pop's sheet when the level-up turns `Pending` (before the transition, so the pop starts on time) and releases it after. The 16 sheets never sit in memory together. Not needed while there is one pop: the settings reference the sheets directly, so all of them load with the game scene |
@@ -109,6 +111,8 @@ sprite atlases, like the other baked art (`Sprites/README.md`), under `Assets/Sp
 |---|---|---|
 | 16 balloon pops | 16 sheets, 2048×3072 (48 frames of 256×256, two layers) | The bake script (§5) |
 | The ribbons | None: drawn as a mesh (`RibbonGraphic`) | Code |
+| The pushpin | One sheet, 512×512 (its head and needle, 256×256 each, in the top half) | `bake_pin.py`, the pops' surface data and scene |
+| The shreds | One sheet, 256×256 (four torn scraps) | `make_shreds.py` |
 | Card icons, if the ribbons get them | 4 × 192×192 | Drawn in the UI style, shared with the coin shop (`PLAN-Coins.md` §7) |
 
 ## 7. Phases
@@ -118,7 +122,7 @@ sprite atlases, like the other baked art (`Sprites/README.md`), under `Assets/Sp
 | 1 (done) | `CardRevealController` and its queue, the pick that avoids the last two pops, the tooltip hand-off, EditMode tests | No |
 | 2 (built, in review) | The bake script: the balloon, one pop, rendered and packed. The owner reviews that one pop from the contact sheet before the other 15 are baked | Makes it |
 | 3 | The other 15 pops, reviewed together on the contact sheet | Makes it |
-| 4 (built with pop 0) | `CardRevealView`, `LitFlipbook` and the ribbons: the pop, lit and in two layers, the ribbons flying with the ascent. Still to come: `PopSheetLoader`, once there is more than one pop | Yes: phases 2 and 3 |
+| 4 (built with pop 0) | `CardRevealView`, `LitFlipbook` and the ribbons: the pop, lit and in two layers, the ribbons flying with the ascent, the pushpin that pricks it, and the shreds it flings. Still to come: `PopSheetLoader`, once there is more than one pop | Yes: phases 2 and 3 |
 | 5 | A playtest pass on a phone: timing, how well the ribbons read over a busy board, and whether 256 px frames are sharp enough | — |
 
 ## 8. Open questions

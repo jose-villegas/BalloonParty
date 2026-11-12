@@ -124,6 +124,35 @@ namespace BalloonParty.Tests.UI
         }
 
         [Test]
+        public void PinPose_WithAPhaseOfNoLength_SkipsIt()
+        {
+            // No jab time: drawn back until contact, then in the rubber at once.
+            SetPin();
+            _settings.PinJabSeconds.Returns(0f);
+            Assert.AreEqual(12f + 10f, CardRevealView.PinPose(-0.001f, _settings).x, 1e-2f);
+            Assert.AreEqual(-3f, CardRevealView.PinPose(0f, _settings).x, 1e-3f);
+        }
+
+        [Test]
+        public void ContactAt_WithAQuickPin_IsWhenTheBalloonRests()
+        {
+            SetPin();
+            _settings.RiseSeconds.Returns(0.8f);
+            _settings.HoldBeforePopSeconds.Returns(0.5f);
+            Assert.AreEqual(1.3f, CardRevealView.ContactAt(true, _settings), Tolerance);
+        }
+
+        [Test]
+        public void ContactAt_WithASlowPin_WaitsForItToGoIn()
+        {
+            SetPin();
+            _settings.RiseSeconds.Returns(0.2f);
+            _settings.HoldBeforePopSeconds.Returns(0.1f);
+            Assert.AreEqual(0.6f, CardRevealView.ContactAt(true, _settings), Tolerance);
+            Assert.AreEqual(0.3f, CardRevealView.ContactAt(false, _settings), Tolerance);
+        }
+
+        [Test]
         public void Puncture_OfAListedPop_IsItsOwn()
         {
             var punctures = new List<Vector2> { new(0.2f, 0.3f), new(0.6f, 0.7f) };

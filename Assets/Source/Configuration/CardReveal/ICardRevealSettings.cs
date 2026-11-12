@@ -48,7 +48,9 @@ namespace BalloonParty.Configuration.CardReveal
         /// <summary>How far past its place the balloon floats before bobbing back, as a share of its rise.</summary>
         float RiseOvershoot { get; }
 
-        /// <summary>How far the balloon sways to each side as it rises, in canvas units, dying away by the pop.</summary>
+        /// <summary>
+        ///     How far the balloon sways to each side as it rises, in canvas units, dying away by the pop.
+        /// </summary>
         float RiseSway { get; }
 
         /// <summary>The time of one sway from side to side.</summary>

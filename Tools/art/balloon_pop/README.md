@@ -59,9 +59,40 @@ The simulation runs 48 frames at a slow time scale and every one is rendered: 1.
 30 fps, and the game plays them slower still, at 24 fps (2 s), as a slow-motion beat that stays smooth.
 (`--frames 24` renders every second one, for a quick look; `pack_sheets.py` packs 48.) What varies per
 seed: the puncture, the number of cracks (2 to 4), their length, wander and branching, how far the
-rubber shrinks, how stiff it is to bend, and how fast the front sweeps. The bake ends by printing the
-fall settings `CardRevealSettings` needs to match it.
+rubber shrinks, how stiff it is to bend, and how fast the front sweeps (5 to 8 frames: a hard snap).
+The bake ends by printing the settings `CardRevealSettings` needs to match it: the fall, and each
+pop's puncture in its first frame (`Pop Punctures`, where the game's pushpin pricks), with the side
+of the balloon it is on.
 
 The tuning lives in the constants at the top of `bake_pops.py` (`TIME_SCALE` for how slow the
 motion is, `FALL_START`, `FALL_ACCELERATION` and the `RECENTRE_*` for the fall, which the game's settings must match, `NECK_Z` and `CRACK_STOP_Z` for the
 pinned neck and where cracks stop) and in `pop_params`, the per-seed ranges.
+
+## The pushpin
+
+```bash
+"C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b --factory-startup -P Tools/art/balloon_pop/bake_pin.py
+```
+
+`bake_pin.py` bakes the pushpin that pricks the card reveal's balloon, straight to
+`Assets/Sprites/UI/CardReveal/pin.png` (`-- --out PATH` to write it elsewhere). It takes the pops'
+surface material and scene from `bake_pops.py`, so the pin is surface data too, lit in game by the
+same shader as the rubber. A map pin's head and needle are turned on a lathe from the profiles at the
+script's top, about a third of the balloon's height, and held at the angle it jabs in at: leant
+toward the camera (`TILT_TOWARD`) and to the right (`LEAN`). The game tints the head and the needle
+apart, so each is rendered on its own, the needle cut where the head covers it, into the two cells of
+the sheet's top half (512×512: the head on the left, the needle on the right; the bottom half, a pop
+sheet's back layer, is empty), bled outward as the pops are. It takes a few seconds, and prints the
+settings `CardRevealSettings` needs to match it: where the needle's tip is in a cell (`TIP`), the
+cell's size in pop frame heights (`PIN_VIEW` over the pops' `ORTHO_SCALE`) and the lean.
+
+## The shreds
+
+```bash
+python3 Tools/art/balloon_pop/make_shreds.py
+```
+
+`make_shreds.py` draws the scraps the reveal flings far out as the balloon tears (the frames can't
+carry rubber that far): four torn, curled strips on a 256×256 sheet, lit and shadowed along their
+curl, in near-white greys so the particles' colour tints them. Seeded, written straight to
+`Assets/Sprites/UI/CardReveal/shreds.png`.

@@ -1,6 +1,6 @@
 # UI/CardReveal
 
-Plays the card reveal on a canvas of its own, drawn in the scene and lit with the board. A balloon rises and pops. Two pieces of ribbon fly off it:
+Plays the card reveal on a canvas of its own, drawn in the scene and lit with the board. A balloon rises, a pushpin pricks it, and it pops. Two pieces of ribbon fly off it:
 one carries the won card's title, the other says what the card does. On a level-up they drift while
 the level's ascent plays and are gone just before the next level settles. Which reveal plays, and
 when, is decided by `Game/CardReveal/`; this folder only plays it. The design is in
@@ -19,13 +19,14 @@ when, is decided by `Game/CardReveal/`; this folder only plays it. The design is
 All on unscaled time, so slow-motion beats don't stretch it.
 
 1. The balloon is tinted `BalloonColor` (silver), none of the board's colours, so it reads as the prize. It floats up from below the way a balloon let go does (`FloatOffset`, tested): rising like a spring, a little past its place (`RiseOvershoot`) at its highest after `RiseSeconds`, then bobbing back to rest over `HoldBeforePopSeconds`, swaying side to side (`RiseSway`, `RiseSwaySeconds`) and leaning into the sway (`RiseTilt`), the sway dying away. It pops square at its place, so the rubber falls straight down. The ribbons show faintly inside it.
-2. The chosen pop's 48 frames play at `FramesPerSecond` (24: 2 s, a slow-motion beat so the tear reads; the bake renders every frame of its simulation, so the slow motion stays smooth). The frame follows the time played, so a slow frame skips a frame rather than slowing the pop. From `RubberFallsFromFrame`, once it tears, the rubber falls, speeding up under `RubberFallGravity`. The fall is the bake's: its knot falls from the tear with the rubber falling around it under the same gravity, its camera following the knot, so the frames hold the rubber's motion as it falls and the game moves them down by the camera's path (`FallDistance`, tested). Both are counted in the pop's frames, so it falls in slow motion with the pop. Once the rubber gathers, the bake's camera also eases down a little more (`RubberRecentreFromFrame`, `RubberRecentreFrames`, `RubberRecentreHeight`) to keep it inside the frame, and the game adds that back too. Only the rubber falls; the ribbons fly their own way.
-3. On `RibbonsFromFrame`, once the rubber has opened, the ribbons fly out (`RibbonBurstSeconds`). The title goes above the balloon's place, to the left; the description goes under it, to the right.
-4. They swell to `RibbonGrowth` (1.3) over `RibbonGrowSeconds`, so the card grows into view, but never wider than the screen allows (`GrownScale`, tested). They drift and sway, readable, until it is time to go. Then they fly off, up and outward, and fade (`RibbonExitSeconds`).
+2. A pushpin pricks it (`PinPose`, tested). The pin is baked as the rubber is (`Tools/art/balloon_pop/bake_pin.py`) and lit by the same shader, its head (`PinHeadColor`, red) and needle (`PinNeedleColor`, steel) tinted apart. It comes in along the angle it was baked at (`PinLean`), from `PinEnterDistance` away, fading in and easing to hover `PinHoverDistance` from the pop's puncture (`PopPunctures`: where the bake's tear starts, which the bake prints), draws back `PinWindupDistance`, and jabs in, speeding up, `PinDepth` into the rubber. The needle goes in as the balloon comes to rest, and the pop starts then, so the tear opens from it. It stays in for `PinStaySeconds` as the rubber tears, then the burst throws it back (`PinRecoilDistance`) as it fades (`PinLeaveSeconds`). With no pin built, the balloon pops on its own.
+3. The chosen pop's 48 frames play at `FramesPerSecond` (24: 2 s, a slow-motion beat so the tear reads; the bake renders every frame of its simulation, so the slow motion stays smooth). The frame follows the time played, so a slow frame skips a frame rather than slowing the pop. From `RubberFallsFromFrame`, once it tears, the rubber falls, speeding up under `RubberFallGravity`. The fall is the bake's: its knot falls from the tear with the rubber falling around it under the same gravity, its camera following the knot, so the frames hold the rubber's motion as it falls and the game moves them down by the camera's path (`FallDistance`, tested). Both are counted in the pop's frames, so it falls in slow motion with the pop. Once the rubber gathers, the bake's camera also eases down a little more (`RubberRecentreFromFrame`, `RubberRecentreFrames`, `RubberRecentreHeight`) to keep it inside the frame, and the game adds that back too. Only the rubber falls; the ribbons fly their own way. As it tears, shreds of rubber in its colour fly far out (`ShredsPrefab`, a pooled particle burst parented to the canvas and laid out in its units): the frames can't carry rubber that far from the balloon. Slowed by the air, they rock and flutter down off the screen.
+4. On `RibbonsFromFrame`, once the rubber has opened, the ribbons fly out (`RibbonBurstSeconds`). The title goes above the balloon's place, to the left; the description goes under it, to the right.
+5. They swell to `RibbonGrowth` (1.3) over `RibbonGrowSeconds`, so the card grows into view, but never wider than the screen allows (`GrownScale`, tested). They drift and sway, readable, until it is time to go. Then they fly off, up and outward, and fade (`RibbonExitSeconds`).
 
 When the ribbons go depends on the ascent:
 
-- **On a level-up**, the ascent (`LevelAscendStartedMessage`, `ICinematicsSettings.LevelAscend.AscentSeconds`) starts just after the reveal. The ribbons are gone `RibbonsGoneAtAscent` of the way through it (0.82). That is after the next level's balloons come in (the ascent's spawn cue, 0.6) and before it settles.
+- **On a level-up**, the ascent (`LevelAscendStartedMessage`, `ICinematicsSettings.LevelAscend.AscentSeconds`) starts just after the reveal. The ribbons stay until `RibbonsGoneAtAscent` of the way through it (0.82), after the next level's balloons come in (the ascent's spawn cue, 0.6), and then `RibbonsAfterAscentSeconds` (1 s) more, so they leave about as the new level settles.
 - **Without an ascent** (a retry's bonus card, the cheat), they fly `RibbonSecondsWithoutAscent` from the pop.
 - **Either way**, they fly at least `RibbonMinimumSeconds`, so they can always be read.
 
@@ -67,6 +68,14 @@ it. The ribbons sit between them, so they read as inside the balloon:
 While the balloon rises the two layers part a little, the front leading and the back lagging
 (`Parallax`). They meet at its place, so the depth reads even before it pops.
 
+The pushpin is `Pin`, beside `Balloon` and after it, so it draws over the rubber and the ribbons: a
+`Needle` and a `Head` image, cut from the two cells of its sheet (`pin.png`, the head on the left, the
+needle on the right, in the top half as a pop's front layer) on `CardRevealPin`, the rubber's shader
+without its glow (plastic and steel let no light through). The view lays it out from the settings:
+its size (`PinSize`, in frame heights, so it is drawn to the balloon's scale), hung from its needle's
+tip (`PinTip`), and placed by the puncture from the balloon's place, not its layers, since it goes in
+as the balloon rests.
+
 ## In the game's light
 
 The reveal is drawn in the scene, not over it, so it takes part in the game's lighting as the
@@ -84,7 +93,10 @@ board's balloons do:
   the light toward them. A flash or a nearby lit item reaches the reveal.
 - **Its own pop.** When the rubber tears, `CardRevealView` flashes a white light
   into the field and stirs the disturbance field, as a board pop does: the board around it lights
-  up, and the ribbons bursting out catch it.
+  up, and the ribbons bursting out catch it. The shreds are on `CardRevealShred`
+  (`BalloonParty/Sprite/Diffuse`), lit by the field as the board's sprites are. Their scraps are near
+  white, so the tint and the light shade them as the cel tones shade the rubber.
+- **The pin** is lit by the field too, as the rubber is.
 
 The drop shadows still fall along the time-of-day light only, so they don't swing toward a local
 light.
@@ -95,7 +107,9 @@ light.
 
 - imports every `pop_*.png` under `Assets/Sprites/UI/CardReveal/` as linear data (no sRGB, no mipmaps, clamped), skipping sheets already imported that way;
 - lists them on `Assets/Configuration/CardRevealSettings.asset` (made if missing, and assigned to the `GameLifetimeScope` prefab);
-- makes `Materials/UI/CardRevealRubber.mat`, `CardRevealRubberShadow.mat` (the same shader with Drop Shadow on) and `CardRevealRibbon.mat`;
+- makes `Materials/UI/CardRevealRubber.mat`, `CardRevealRubberShadow.mat` (the same shader with Drop Shadow on), `CardRevealRibbon.mat` and `CardRevealPin.mat` (the rubber's shader on the pin's two cells, without the glow);
+- imports `pin.png` (`bake_pin.py`) as data, as the pop sheets are; without it the reveal is built with no pin, with a warning;
+- sets up the shreds (`CardRevealShredsBuilder`): imports `shreds.png` (`Tools/art/balloon_pop/make_shreds.py`), makes `Materials/UI/CardRevealShred.mat` and the `Prefabs/Game/CardRevealShreds` particle prefab if they are missing, and assigns the prefab on the settings if it has none. Delete the prefab to rebuild it with the builder's values;
 - builds the `Assets/Prefabs/Game/CardRevealCanvas` prefab, every object on the `Balloons` layer (the ribbons' text is cloned from the tooltip's, on `UI`, which the main camera skips);
 - removes a reveal built on `GameCanvas` by an older version of the tool;
 - places an instance in `Assets/Scenes/Game.unity` if it has none (a Game scene open with unsaved changes is left alone, with a warning).

@@ -28,13 +28,16 @@ namespace BalloonParty.Editor
         private static readonly int AmbientDimmingId = Shader.PropertyToID("_AmbientDimming");
         private static readonly int AmbientDesaturationId = Shader.PropertyToID("_AmbientDesaturation");
 
-        /// <summary>Makes what is missing and assigns the prefab on <paramref name="settings" /> if it has none.</summary>
+        /// <summary>
+        ///     Makes what is missing and assigns the prefab on <paramref name="settings" /> if it has none.
+        /// </summary>
         internal static void Build(CardRevealSettings settings)
         {
             var texture = ImportTexture();
             if (texture == null)
             {
-                Debug.LogWarning($"[CardReveal] No {TexturePath}; run Tools/art/balloon_pop/make_shreds.py. No shreds.");
+                Debug.LogWarning(
+                    $"[CardReveal] No {TexturePath}; run Tools/art/balloon_pop/make_shreds.py. No shreds.");
                 return;
             }
 
@@ -175,7 +178,10 @@ namespace BalloonParty.Editor
                 var gradient = new Gradient();
                 gradient.SetKeys(
                     new[] { new GradientColorKey(Color.white, 0f), new GradientColorKey(Color.white, 1f) },
-                    new[] { new GradientAlphaKey(1f, 0f), new GradientAlphaKey(1f, 0.8f), new GradientAlphaKey(0f, 1f) });
+                    new[]
+                    {
+                        new GradientAlphaKey(1f, 0f), new GradientAlphaKey(1f, 0.8f), new GradientAlphaKey(0f, 1f)
+                    });
                 fade.color = gradient;
 
                 // One scrap of the four, at random, kept for its life.

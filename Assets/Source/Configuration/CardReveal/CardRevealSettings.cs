@@ -134,7 +134,8 @@ namespace BalloonParty.Configuration.CardReveal
                  "Distance from the puncture, over Pin Enter Seconds; draws back Pin Windup Distance more; jabs in, " +
                  "speeding up, Pin Depth into the rubber; stays Pin Stay Seconds as the rubber tears; then the burst " +
                  "throws it back Pin Recoil Distance as it fades. It goes in as the balloon comes to rest, and the " +
-                 "pop starts then.")]
+                 "pop starts then; a pin slower than the rise and the hold holds the balloon at rest until it is " +
+                 "in.")]
         [SerializeField] [Min(0f)] private float _pinEnterSeconds = 0.3f;
 
         [SerializeField] [Min(0f)] private float _pinEnterDistance = 120f;

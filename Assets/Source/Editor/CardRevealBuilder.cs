@@ -48,7 +48,8 @@ namespace BalloonParty.Editor
         // A sheet is 2048 x 3072 (48 frames of 256 a layer, two layers): imported whole, never scaled down.
         private const int MaxSheetSize = 4096;
 
-        // The pin's sheet holds its head and its needle side by side in its top half (Tools/art/balloon_pop/bake_pin.py).
+        // The pin's sheet holds its head and its needle side by side in its top half
+        // (Tools/art/balloon_pop/bake_pin.py).
         private const int PinSheetColumns = 2;
 
         // A layer the main camera draws and the screen-space light's scene capture records (SceneCaptureService's

@@ -21,13 +21,14 @@ namespace BalloonParty.UI.CardReveal
 {
     /// <summary>
     ///     The card reveal's stage (<see cref="ICardReveals" />): plays each reveal the controller hands it. A
-    ///     balloon in one of the level's colours rises to its place with two pieces of ribbon rolled up inside it,
-    ///     pops (one of the baked pops, its two rubber layers either side of the ribbons), and the ribbons fly off
-    ///     it, one with the card's title on it and one with what the card does, readable as they drift. On a
-    ///     level-up they fly with the level's ascent and are gone just before the next level settles. The rubber
-    ///     is surface data lit live by <c>BalloonParty/Sprite/LitFlipbook</c>, so it takes the scene's light, and
-    ///     its tear flashes a light into the scene light field and stirs the disturbance field, as a board pop
-    ///     does. A pushpin, lit the same way, pricks it: the pop starts as its needle goes in at the pop's puncture. It sits on its own World Space canvas among the board's sprites
+    ///     silver balloon floats up to its place with two pieces of ribbon rolled up inside it, a pushpin pricks
+    ///     it, and it pops (one of the baked pops, its two rubber layers either side of the ribbons, starting as
+    ///     the needle goes in at the pop's puncture), and the ribbons fly off it, one with the card's title on it
+    ///     and one with what the card does, readable as they drift. On a level-up they fly with the level's
+    ///     ascent and are gone about as the next level settles. The rubber and the pin are surface data lit live
+    ///     by <c>BalloonParty/Sprite/LitFlipbook</c>, so they take the scene's light, and the tear flashes a light
+    ///     into the scene light field, stirs the disturbance field as a board pop does, and flings shreds far
+    ///     out. It sits on its own World Space canvas among the board's sprites
     ///     (<see cref="CameraFittedCanvas" />), so the screen-space light tints it and sees it.
     ///     Attaches as the stage only when there are pops to play; until then the tooltip announces the cards.
     ///     Built by <c>Tools/BalloonParty/CardReveal/Build Card Reveal</c>.
@@ -83,6 +84,9 @@ namespace BalloonParty.UI.CardReveal
         private float _exitFrom;
         private bool _attached;
         private bool _burst;
+
+        // All three, or the balloon pops on its own: a prefab edited by hand can't leave half a pin.
+        private bool PinBuilt => _pin != null && _pinHead != null && _pinNeedle != null;
 
         private void Awake()
         {
@@ -259,6 +263,16 @@ namespace BalloonParty.UI.CardReveal
         }
 
         /// <summary>
+        ///     When the pop starts, from the start of the balloon's float: as it comes to rest, or with a pin
+        ///     (<paramref name="hasPin" />) slower than that, once the pin is in, the balloon holding at rest longer.
+        /// </summary>
+        internal static float ContactAt(bool hasPin, ICardRevealSettings settings)
+        {
+            var floatSeconds = settings.RiseSeconds + settings.HoldBeforePopSeconds;
+            return hasPin ? Mathf.Max(floatSeconds, PinLeadSeconds(settings)) : floatSeconds;
+        }
+
+        /// <summary>
         ///     Where pop <paramref name="pop" /> is punctured, as a share of its frame from the bottom left: its
         ///     listed puncture, or the top of the balloon's front if it has none.
         /// </summary>
@@ -294,10 +308,7 @@ namespace BalloonParty.UI.CardReveal
             {
                 var startedAt = Time.unscaledTime;
                 Dress(reveal);
-                // The pin goes in as the balloon comes to rest, and the pop starts then; a pin slower than the float
-                // keeps the balloon at rest until it is in.
-                var floatSeconds = _settings.RiseSeconds + _settings.HoldBeforePopSeconds;
-                var contactAt = _pin != null ? Mathf.Max(floatSeconds, PinLeadSeconds(_settings)) : floatSeconds;
+                var contactAt = ContactAt(PinBuilt, _settings);
                 await AnimateAsync(contactAt, t =>
                 {
                     Float(t * contactAt);
@@ -398,7 +409,7 @@ namespace BalloonParty.UI.CardReveal
         // baked at. The puncture is placed from the balloon's place, not its layers: the pin goes in as it rests.
         private void DressPin(int pop)
         {
-            if (_pin == null)
+            if (!PinBuilt)
             {
                 return;
             }
@@ -414,7 +425,7 @@ namespace BalloonParty.UI.CardReveal
 
         private void PlacePin(float sinceContact)
         {
-            if (_pin == null)
+            if (!PinBuilt)
             {
                 return;
             }
@@ -481,7 +492,9 @@ namespace BalloonParty.UI.CardReveal
         // infinity it is at rest: the pop starts square at its place, so the rubber falls straight down.
         private void Float(float seconds)
         {
-            var offset = float.IsPositiveInfinity(seconds) ? Vector3.zero : FloatOffset(seconds, _riseDistance, _settings);
+            var offset = float.IsPositiveInfinity(seconds)
+                ? Vector3.zero
+                : FloatOffset(seconds, _riseDistance, _settings);
             _balloon.anchoredPosition = _place + (Vector2)offset;
             _balloon.localRotation = Quaternion.Euler(0f, 0f, offset.z);
             var part = (Vector2)offset * _settings.Parallax;
