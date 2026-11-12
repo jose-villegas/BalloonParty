@@ -60,16 +60,33 @@ def scaled(frame, size):
     return bled(frame.convert("RGBa").resize((size, size), Image.LANCZOS).convert("RGBA"))
 
 
+NEIGHBOURS = ((-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1))
+# How far in from solid rubber the rim's texels take its data; past that a thin flap keeps its own.
+RIM_REACH = 2
+
+
 def bled(frame, steps=8):
-    """The surface data spread outward into the empty texels around the rubber, coverage kept. The game
-    filters the sheet, so an edge texel blends with its empty neighbours: empty texels holding black would
-    bend the edge's normal hard toward the bottom left and ring the silhouette in the wrong tone."""
+    """The surface data spread outward from the solid rubber, coverage kept. First over the rim: the texels
+    the rubber only partly covers, and their neighbours, hold the rubber seen edge on, where a pixel mixes
+    faces turned toward the camera and away (the back layer's are flipped to face it, so they flip between
+    lit and shadow) and the occlusion dips, and the game's cel steps would draw them as a lit and dark
+    sawtooth round the outline. Then into the empty texels: the game filters the sheet, so an edge texel
+    blends with its empty neighbours, and empty texels holding black would bend the edge's normal hard
+    toward the bottom left and ring the silhouette in the wrong tone."""
     a = np.asarray(frame, dtype=np.float32).copy()
-    rgb, known = a[..., :3], a[..., 3] > 0
-    for _ in range(steps):
+    rgb, alpha = a[..., :3], a[..., 3]
+    covered = alpha > 0
+    solid = alpha >= 250
+    known = solid.copy()
+    for dy, dx in NEIGHBOURS:
+        known &= np.roll(solid, (dy, dx), axis=(0, 1))
+    for step in range(RIM_REACH + steps):
+        if step == RIM_REACH:
+            # A thin flap the solid rubber didn't reach keeps its own data, and spreads it outward too.
+            known = known | covered
         total = np.zeros_like(rgb)
         count = np.zeros(known.shape, dtype=np.float32)
-        for dy, dx in ((-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)):
+        for dy, dx in NEIGHBOURS:
             shifted = np.roll(known, (dy, dx), axis=(0, 1))
             total += np.roll(rgb, (dy, dx), axis=(0, 1)) * shifted[..., None]
             count += shifted

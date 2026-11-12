@@ -48,6 +48,10 @@ namespace BalloonParty.Editor
         // A sheet is 2048 x 3072 (48 frames of 256 a layer, two layers): imported whole, never scaled down.
         private const int MaxSheetSize = 4096;
 
+        // Phones' default (ETC2) smears the normals in its 4x4 blocks, and the cel steps draw that as stairs.
+        // ASTC 4x4, at its best, is the same 8 bits a texel and keeps them smooth.
+        private const int BestCompression = 100;
+
         // The pin's sheet holds its head and its needle side by side in its top half
         // (Tools/art/balloon_pop/bake_pin.py).
         private const int PinSheetColumns = 2;
@@ -75,6 +79,8 @@ namespace BalloonParty.Editor
         private const float DescriptionRibbonHeight = 12.5f;
 
         // A little above the screen's middle.
+        private static readonly string[] PhonePlatforms = { "Android", "iPhone" };
+
         private static readonly Vector2 Place = new(0f, 12f);
 
         // Cream, a little warmer than the board's white, so the pencil reads on it over any scenery.
@@ -155,13 +161,26 @@ namespace BalloonParty.Editor
                 importer.npotScale = TextureImporterNPOTScale.None;
                 importer.maxTextureSize = MaxSheetSize;
                 importer.textureCompression = TextureImporterCompression.CompressedHQ;
+                foreach (var platform in PhonePlatforms)
+                {
+                    importer.SetPlatformTextureSettings(new TextureImporterPlatformSettings
+                    {
+                        name = platform,
+                        overridden = true,
+                        maxTextureSize = MaxSheetSize,
+                        format = TextureImporterFormat.ASTC_4x4,
+                        textureCompression = TextureImporterCompression.CompressedHQ,
+                        compressionQuality = BestCompression
+                    });
+                }
+
                 importer.SaveAndReimport();
             }
 
             return AssetDatabase.LoadAssetAtPath<Texture2D>(path);
         }
 
-        // Already imported as ImportSheets sets it up, so a rebuild doesn't reimport every sheet.
+        // Already imported as ImportAsData sets it up, so a rebuild doesn't reimport every sheet.
         private static bool ImportedAsData(TextureImporter importer)
         {
             return importer.textureType == TextureImporterType.Default && !importer.sRGBTexture &&
@@ -169,7 +188,14 @@ namespace BalloonParty.Editor
                    !importer.mipmapEnabled && importer.wrapMode == TextureWrapMode.Clamp &&
                    importer.filterMode == FilterMode.Bilinear && importer.npotScale == TextureImporterNPOTScale.None &&
                    importer.maxTextureSize == MaxSheetSize &&
-                   importer.textureCompression == TextureImporterCompression.CompressedHQ;
+                   importer.textureCompression == TextureImporterCompression.CompressedHQ &&
+                   PhonePlatforms.All(platform => CompressedForPhones(importer.GetPlatformTextureSettings(platform)));
+        }
+
+        private static bool CompressedForPhones(TextureImporterPlatformSettings settings)
+        {
+            return settings.overridden && settings.format == TextureImporterFormat.ASTC_4x4 &&
+                   settings.maxTextureSize == MaxSheetSize && settings.compressionQuality == BestCompression;
         }
 
         private static CardRevealSettings EnsureSettings(IReadOnlyList<Texture2D> sheets)
