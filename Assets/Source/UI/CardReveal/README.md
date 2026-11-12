@@ -18,8 +18,8 @@ when, is decided by `Game/CardReveal/`; this folder only plays it. The design is
 
 All on unscaled time, so slow-motion beats don't stretch it.
 
-1. The balloon is tinted one of the level's colours, at random. It rises from below to its place (`RiseSeconds`) and holds a beat (`HoldBeforePopSeconds`). The ribbons show faintly inside it.
-2. The chosen pop's 48 frames play at `FramesPerSecond` (24: 2 s, a slow-motion beat so the tear reads; the bake renders every frame of its simulation, so the slow motion stays smooth). The frame follows the time played, so a slow frame skips a frame rather than slowing the pop. From `RubberFallsFromFrame`, once it tears, the rubber falls, speeding up under `RubberFallGravity` (`FallDistance`, tested; slowed with the pop, so it falls in slow motion too): the bake keeps the balloon's neck where it was until its last frames, so without it the pop plays out in one place. Only the rubber falls; the ribbons fly their own way.
+1. The balloon is tinted `BalloonColor` (gold), none of the board's colours, so it reads as the prize. It rises from below to its place (`RiseSeconds`) and holds a beat (`HoldBeforePopSeconds`). The ribbons show faintly inside it.
+2. The chosen pop's 48 frames play at `FramesPerSecond` (24: 2 s, a slow-motion beat so the tear reads; the bake renders every frame of its simulation, so the slow motion stays smooth). The frame follows the time played, so a slow frame skips a frame rather than slowing the pop. From `RubberFallsFromFrame`, once it tears, the rubber falls, speeding up under `RubberFallGravity`. The fall is the bake's: its knot falls from the tear with the rubber falling around it under the same gravity, its camera following the knot, so the frames hold the rubber's motion as it falls and the game moves them down by the camera's path (`FallDistance`, tested). Both are counted in the pop's frames, so it falls in slow motion with the pop. Once the rubber gathers, the bake's camera also eases down a little more (`RubberRecentreFromFrame`, `RubberRecentreFrames`, `RubberRecentreHeight`) to keep it inside the frame, and the game adds that back too. Only the rubber falls; the ribbons fly their own way.
 3. On `RibbonsFromFrame`, once the rubber has opened, the ribbons fly out (`RibbonBurstSeconds`). The title goes above the balloon's place, to the left; the description goes under it, to the right.
 4. They swell to `RibbonGrowth` (1.3) over `RibbonGrowSeconds`, so the card grows into view, but never wider than the screen allows (`GrownScale`, tested). They drift and sway, readable, until it is time to go. Then they fly off, up and outward, and fade (`RibbonExitSeconds`).
 
@@ -82,7 +82,7 @@ board's balloons do:
 - **The scene light field.** The rubber and ribbon shaders read the field per vertex
   (`SceneLight*AtLOD`): the time-of-day light, plus local lights, which add their colour and turn
   the light toward them. A flash or a nearby lit item reaches the reveal.
-- **Its own pop.** When the rubber tears, `CardRevealView` flashes a light of the balloon's colour
+- **Its own pop.** When the rubber tears, `CardRevealView` flashes a white light
   into the field and stirs the disturbance field, as a board pop does: the board around it lights
   up, and the ribbons bursting out catch it.
 

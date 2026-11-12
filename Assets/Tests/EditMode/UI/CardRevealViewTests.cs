@@ -59,19 +59,49 @@ namespace BalloonParty.Tests.UI
         {
             _settings.RubberFallsFromFrame.Returns(3);
             _settings.FramesPerSecond.Returns(30f);
-            _settings.RubberFallGravity.Returns(500f);
+            _settings.RubberFallGravity.Returns(0.5f);
             Assert.AreEqual(0f, CardRevealView.FallDistance(0.09f, _settings), Tolerance);
         }
 
         [Test]
         public void FallDistance_AfterItTears_SpeedsUpUnderGravity()
         {
-            // Torn at frame 3 of 30 a second (0.1 s): 0.4 s of falling at 500 is 40, and twice as long is four times.
+            // Torn at frame 3 of 30 a second: 12 frames of falling at 0.5 a frame squared is 36 frame heights, and
+            // twice as long is four times.
             _settings.RubberFallsFromFrame.Returns(3);
             _settings.FramesPerSecond.Returns(30f);
-            _settings.RubberFallGravity.Returns(500f);
-            Assert.AreEqual(40f, CardRevealView.FallDistance(0.5f, _settings), 1e-3f);
-            Assert.AreEqual(160f, CardRevealView.FallDistance(0.9f, _settings), 1e-3f);
+            _settings.RubberFallGravity.Returns(0.5f);
+            Assert.AreEqual(36f, CardRevealView.FallDistance(0.5f, _settings), 1e-3f);
+            Assert.AreEqual(144f, CardRevealView.FallDistance(0.9f, _settings), 1e-3f);
+        }
+
+        [Test]
+        public void FallDistance_AfterTheRecentring_AddsItsWholeHeight()
+        {
+            // Recentred from frame 20 over 10 frames by 0.3: by frame 30 (1 s) the fall's 0.5 x 0.01 x 27 squared
+            // plus all of the 0.3; halfway through it, half of it.
+            _settings.RubberFallsFromFrame.Returns(3);
+            _settings.FramesPerSecond.Returns(30f);
+            _settings.RubberFallGravity.Returns(0.01f);
+            _settings.RubberRecentreFromFrame.Returns(20);
+            _settings.RubberRecentreFrames.Returns(10);
+            _settings.RubberRecentreHeight.Returns(0.3f);
+            Assert.AreEqual(0.5f * 0.01f * 27f * 27f + 0.3f, CardRevealView.FallDistance(1f, _settings), 1e-4f);
+            Assert.AreEqual(0.5f * 0.01f * 22f * 22f + 0.15f, CardRevealView.FallDistance(25f / 30f, _settings),
+                1e-4f);
+        }
+
+        [Test]
+        public void FallDistance_IsCountedInFrames_SoASlowerPopFallsSlower()
+        {
+            // The same frame reached at half the frame rate has fallen as far: the shreds trailing in the frames
+            // keep matching the motion.
+            _settings.RubberFallsFromFrame.Returns(3);
+            _settings.RubberFallGravity.Returns(0.5f);
+            _settings.FramesPerSecond.Returns(30f);
+            var atFull = CardRevealView.FallDistance(0.5f, _settings);
+            _settings.FramesPerSecond.Returns(15f);
+            Assert.AreEqual(atFull, CardRevealView.FallDistance(1f, _settings), 1e-3f);
         }
 
         [Test]

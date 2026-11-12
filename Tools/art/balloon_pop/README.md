@@ -45,8 +45,12 @@ Blender.
    so the flaps snap back toward the neck, which is pinned, and buckle and curl as they gather. A
    Weld after the cloth keeps each crack shut until its sides separate, so the balloon shows no seams
    before it tears.
-4. **The fall.** Once the rubber has gathered, the knot drops out of the frame and the shreds trail
-   after it, leaving the stage to the slip.
+4. **The fall.** From the tear the knot falls (`FALL_START`, `FALL_ACCELERATION`), and the cloth
+   falls with it under gravity, switched on at the tear and as strong as the knot's fall
+   (`CLOTH_FALL_PER_GRAVITY`, measured), so the shreds trail it only as the air holds them back. The
+   camera follows the knot, so it stays in the frame, and eases lower once the rubber gathers so the
+   rubber stays inside it (`RECENTRE`). The game moves the frames down by the camera's path:
+   `CardRevealSettings`' fall and recentre settings mirror these constants (their comments say how).
 5. **Rendering** is Cycles, orthographic, on a transparent background, with no colour transform
    (`Raw`), so the values written are the data: an emission shader outputs the normal and the
    occlusion, and there are no lights.
@@ -58,5 +62,5 @@ wander and branching, how far the rubber shrinks, how stiff it is to bend, and h
 sweeps.
 
 The tuning lives in the constants at the top of `bake_pops.py` (`TIME_SCALE` for how slow the
-motion is, `FALL_START` and `FALL_ACCELERATION` for the fall, `NECK_Z` and `CRACK_STOP_Z` for the
+motion is, `FALL_START`, `FALL_ACCELERATION` and the `RECENTRE_*` for the fall, which the game's settings must match, `NECK_Z` and `CRACK_STOP_Z` for the
 pinned neck and where cracks stop) and in `pop_params`, the per-seed ranges.

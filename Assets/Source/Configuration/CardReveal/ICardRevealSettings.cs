@@ -30,6 +30,9 @@ namespace BalloonParty.Configuration.CardReveal
 
         float FramesPerSecond { get; }
 
+        /// <summary>The prize balloon's colour: none of the board's, so it reads as the reward.</summary>
+        Color BalloonColor { get; }
+
         /// <summary>
         ///     How much of the ribbons inside shows through the whole front rubber, as a shadow inside the
         ///     balloon: 0 to 1.
@@ -81,17 +84,37 @@ namespace BalloonParty.Configuration.CardReveal
         float Parallax { get; }
 
         /// <summary>
-        ///     The pop's frame on which the torn rubber starts to fall. The bake keeps the balloon's neck where it was
-        ///     until its last frames, so the fall is the game's.
+        ///     The pop's frame on which the torn rubber starts to fall: the bake's <c>FALL_START</c>. The bake drops
+        ///     the knot from there and its camera follows it, so the shreds trail above the knot in the frames
+        ///     while the game moves the frames down.
         /// </summary>
         int RubberFallsFromFrame { get; }
 
-        /// <summary>How fast the torn rubber's fall speeds up, in canvas units per second squared.</summary>
+        /// <summary>
+        ///     How fast the torn rubber's fall speeds up, in frame heights per pop frame squared: the bake's
+        ///     <c>FALL_ACCELERATION</c> over its camera's <c>ortho_scale</c>, so the game's motion is the one the
+        ///     shreds trail in, at any frame rate.
+        /// </summary>
         float RubberFallGravity { get; }
 
         /// <summary>
-        ///     The light of the balloon's colour its tear flashes into the scene light field, in world units: it
-        ///     lights the board around the reveal, and the reveal itself.
+        ///     The pop's frame from which the bake's camera eases further down than the knot, lifting it toward the
+        ///     frame's middle so the gathered rubber stays inside the frame: the bake's <c>RECENTRE_START</c> - 1.
+        /// </summary>
+        int RubberRecentreFromFrame { get; }
+
+        /// <summary>How many frames that easing takes: the bake's <c>RECENTRE_FRAMES</c>.</summary>
+        int RubberRecentreFrames { get; }
+
+        /// <summary>
+        ///     How far the camera eases down, in frame heights: the bake's <c>RECENTRE</c> over its camera's
+        ///     <c>ortho_scale</c>. The game moves the frames down by it too, so the knot's path stays the fall's.
+        /// </summary>
+        float RubberRecentreHeight { get; }
+
+        /// <summary>
+        ///     The white light its tear flashes into the scene light field, its radius in world units: it lights
+        ///     the board around the reveal, and the reveal itself.
         /// </summary>
         float PopFlashRadius { get; }
 

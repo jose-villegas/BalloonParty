@@ -24,6 +24,10 @@ namespace BalloonParty.Configuration.CardReveal
         [SerializeField] [Min(1)] private int _sheetRows = 6;
         [SerializeField] [Min(1f)] private float _framesPerSecond = 24f;
 
+        [Tooltip("The prize balloon's colour: none of the board's, so it reads as the reward. The rubber is cel " +
+                 "shaded in the scene's light over it, with a white highlight.")]
+        [SerializeField] private Color _balloonColor = new(0.97f, 0.75f, 0.26f, 1f);
+
         [Header("Playing")]
         [Tooltip("How much of the ribbons inside shows through the whole front rubber: a shadow inside the balloon.")]
         [FormerlySerializedAs("_slipShowThrough")]
@@ -36,16 +40,27 @@ namespace BalloonParty.Configuration.CardReveal
                  "its place: the front leads and the back lags, so what is inside reads as inside it.")]
         [SerializeField] [Range(0f, 0.5f)] private float _parallax = 0.02f;
 
-        [Tooltip("The pop's frame on which the torn rubber starts to fall: the bake keeps its neck where it was, " +
-                 "so without this the pop plays out in one place.")]
-        [SerializeField] [Min(0)] private int _rubberFallsFromFrame = 6;
+        [Tooltip("The pop's frame on which the torn rubber starts to fall: the bake's FALL_START. The bake drops " +
+                 "the knot from there with its camera following, so the shreds trail above it in the frames.")]
+        [SerializeField] [Min(0)] private int _rubberFallsFromFrame = 4;
 
-        [Tooltip("How fast the torn rubber's fall speeds up, in canvas units per second squared (the canvas is " +
-                 "225 wide).")]
-        [SerializeField] [Min(0f)] private float _rubberFallGravity = 95f;
+        [Tooltip("How fast the torn rubber's fall speeds up, in frame heights per pop frame squared: the bake's " +
+                 "FALL_ACCELERATION over its camera's ortho_scale (3.1), so the frames' trailing shreds match the " +
+                 "motion at any frame rate.")]
+        [SerializeField] [Min(0f)] private float _rubberFallGravity = 0.0045f;
+
+        [Tooltip("Once the rubber gathers, the bake's camera eases further down than the knot, lifting it toward " +
+                 "the frame's middle so the rubber stays inside the frame; the game moves the frames down by the " +
+                 "same, so the knot's path stays the fall's. From this frame (the bake's RECENTRE_START - 1), over " +
+                 "Rubber Recentre Frames (RECENTRE_FRAMES), by Rubber Recentre Height in frame heights (RECENTRE " +
+                 "over the camera's ortho_scale, 3.1).")]
+        [SerializeField] [Min(0)] private int _rubberRecentreFromFrame = 18;
+
+        [SerializeField] [Min(1)] private int _rubberRecentreFrames = 12;
+        [SerializeField] [Min(0f)] private float _rubberRecentreHeight = 0.52f;
 
         [Header("Light")]
-        [Tooltip("When the rubber tears, it flashes a light of its colour into the scene light field, lighting the " +
+        [Tooltip("When the rubber tears, it flashes a white light into the scene light field, lighting the " +
                  "board around it (and the ribbons), and stirs the disturbance field as a board pop does. Its " +
                  "radius in world units, its strength, and how long it lasts.")]
         [SerializeField] [Min(0f)] private float _popFlashRadius = 2.4f;
@@ -83,6 +98,7 @@ namespace BalloonParty.Configuration.CardReveal
         public int SheetColumns => _sheetColumns;
         public int SheetRows => _sheetRows;
         public float FramesPerSecond => _framesPerSecond;
+        public Color BalloonColor => _balloonColor;
         public float InsideShowThrough => _insideShowThrough;
         public float RiseSeconds => _riseSeconds;
         public float HoldBeforePopSeconds => _holdBeforePopSeconds;
@@ -97,6 +113,9 @@ namespace BalloonParty.Configuration.CardReveal
         public float Parallax => _parallax;
         public int RubberFallsFromFrame => _rubberFallsFromFrame;
         public float RubberFallGravity => _rubberFallGravity;
+        public int RubberRecentreFromFrame => _rubberRecentreFromFrame;
+        public int RubberRecentreFrames => _rubberRecentreFrames;
+        public float RubberRecentreHeight => _rubberRecentreHeight;
         public float PopFlashRadius => _popFlashRadius;
         public float PopFlashIntensity => _popFlashIntensity;
         public float PopFlashSeconds => _popFlashSeconds;

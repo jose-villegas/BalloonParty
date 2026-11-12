@@ -30,7 +30,7 @@ back convincingly; a cloth simulation can, so the pops are simulated and baked.
 
 ## 2. What the player sees
 
-1. On a level-up that deals a card, as the level-up starts, a balloon in one of the level's colours
+1. On a level-up that deals a card, as the level-up starts, a gold balloon (none of the board's colours)
    rises to a little above the screen's middle, two rolled-up ribbons inside it as a faint shadow.
 2. It pops: one of 16 baked simulations, chosen at random. The rubber splits from a puncture, the
    flaps snap back and curl, and the shreds fall away, in slow motion, the way high-speed footage
@@ -54,7 +54,7 @@ slow-motion beats don't stretch it.
 | Replaces the `Level N: Card` tooltip on card level-ups with `Level N` | One announcement of the card, not two. The level number still shows, as on level-ups without a card |
 | Also plays for a bonus card at the start of a retry (the ad's or one bought with coins, `PLAN-Coins.md`) | The same prize, the same way. Replaces the `BonusCardDealtMessage` tooltip |
 | A pop is picked at random, never one of the last two shown | 16 sims are there for variety; repeating the last one would waste it |
-| The balloon is tinted from the palette and lit by the scene, not baked in one colour or one light | The sims are baked as surface data (the normal and the occlusion, not a picture) and lit at runtime by the scene's light, so the reveal follows the level's colours and the time of day as the board's balloons do |
+| The balloon is tinted at runtime and lit by the scene, not baked in one colour or one light | The sims are baked as surface data (the normal and the occlusion, not a picture) and lit at runtime by the scene's light, so the reveal takes any colour (`BalloonColor`, gold) and follows the time of day as the board's balloons do |
 | The ribbons are inside the balloon, not behind it | Each frame is baked in two layers, the rubber in front of the balloon's centre and the rubber behind it, and the ribbons are drawn between them. While the balloon moves the layers part slightly (parallax), so they read as inside |
 | A level-up's reveal plays with the ascent, and is over just before the next level settles | The ascent is the level-up's quiet stretch: nothing to aim at, the screen moving. Ending before it settles leaves the new board clear to read |
 | Text, never baked into the art | The card's title and description come from `IUpgradeCardSettings`, so a new card needs no new art |
@@ -88,7 +88,7 @@ seeded, so a run redraws the same set, and a seed can be swapped to replace one 
 | The balloon | A balloon mesh modelled once in the script, already inflated (an egg gathered into the neck), and a static neck and knot. The same rest frame starts every sim, so the drift-up looks the same whatever pop follows |
 | The puncture | A random point on the body. Cracks grow from it across the mesh, branching, and the mesh is cut along them; a loop that would cut a piece loose is stitched back at one edge. Seeded per sim: where it starts (side, top, near the knot), how many cracks, how far they run and wander |
 | The tear | A release front sweeps out from the puncture, and behind it the rubber's stored stretch lets go (cloth shrinking to about 40%): each flap snaps back toward the pinned neck and buckles and curls, with self-collision so flaps don't pass through each other. A Weld keeps each crack shut until it opens, so the rest frame shows no seams. How far it shrinks and how stiff it bends vary per sim |
-| The fall | Once the rubber has gathered at the knot, the knot drops out of the frame with the shreds trailing, so the last frames are empty and the ribbons have the stage |
+| The fall | From the tear the knot falls, and the rubber falls with it under the same gravity (switched on at the tear, so the whole balloon doesn't sag), trailing as the air holds it back. The camera follows the knot, easing lower once the rubber gathers so it stays in the frame; the game moves the frames down by the camera's path, counted in frames, so the motion in the frames and on screen are one fall at any playback speed |
 | Timing | The sim runs 48 frames at a slow time scale and every one is rendered: 48 frames, 1.6 s at 30 fps; the game plays them in slow motion (`FramesPerSecond`, 24: 2 s). Roughly: 4 frames whole, 14 tearing, 16 gathering, 14 falling |
 | Rendering | Cycles on the CPU (no GPU needed headless), orthographic camera, transparent background, no colour transform. Not a lit picture but the surface as data: red and green the normal's x and y as the camera sees it, blue the ambient occlusion, alpha the coverage, with the inside of the rubber turned to face the camera. Each frame is rendered twice, split at the balloon's centre by the camera's clip planes: the front layer and the back layer. A whole pop renders in about a minute |
 | Lighting | In game, by `BalloonParty/Sprite/LitFlipbook` with the scene's light (§4). `pack_sheets.py` lights its review files with the same model, under three lights, to judge the bake without opening Unity |

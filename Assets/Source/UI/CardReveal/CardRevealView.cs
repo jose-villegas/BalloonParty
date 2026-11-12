@@ -2,10 +2,8 @@ using System;
 using System.Threading;
 using BalloonParty.Configuration.CardReveal;
 using BalloonParty.Configuration.Cinematics;
-using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.CardReveal;
 using BalloonParty.Configuration.Effects;
-using BalloonParty.Game.Level;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
@@ -57,8 +55,6 @@ namespace BalloonParty.UI.CardReveal
         [Inject] private ICardReveals _cardReveals;
         [Inject] private ICardRevealSettings _settings;
         [Inject] private ICinematicsSettings _cinematics;
-        [Inject] private IGamePalette _palette;
-        [Inject] private IActiveLevelParameters _level;
         [Inject] private ISubscriber<LevelAscendStartedMessage> _ascendStarted;
         [Inject] private SceneLightFieldService _lightField;
         [Inject] private DisturbanceFieldService _disturbanceField;
@@ -68,7 +64,6 @@ namespace BalloonParty.UI.CardReveal
         private Material _rubber;
         private Material _rubberShadow;
         private Vector2 _place;
-        private string _colorId;
         private float _ascentStartedAt = float.NegativeInfinity;
         private float _releasedAt;
         private float _exitFrom;
@@ -153,13 +148,19 @@ namespace BalloonParty.UI.CardReveal
         }
 
         /// <summary>
-        ///     How far the torn rubber has fallen <paramref name="sincePop" /> seconds into the pop: nothing until its
-        ///     fall's frame, then speeding up under the settings' gravity.
+        ///     How far down the frames move <paramref name="sincePop" /> seconds into the pop, in frame heights: the
+        ///     bake's camera's path. Nothing until the fall's frame, then speeding up under the settings' gravity,
+        ///     counted in the pop's frames as the bake's knot falls, so the rubber falling with it in the frames
+        ///     matches the motion at any frame rate; plus the recentring, the bake's camera easing further down to
+        ///     keep the gathered rubber in the frame, added back so the knot's path stays the fall's.
         /// </summary>
         internal static float FallDistance(float sincePop, ICardRevealSettings settings)
         {
-            var falling = sincePop - settings.RubberFallsFromFrame / settings.FramesPerSecond;
-            return falling > 0f ? 0.5f * settings.RubberFallGravity * falling * falling : 0f;
+            var frame = sincePop * settings.FramesPerSecond;
+            var falling = frame - settings.RubberFallsFromFrame;
+            var drop = falling > 0f ? 0.5f * settings.RubberFallGravity * falling * falling : 0f;
+            var recentring = (frame - settings.RubberRecentreFromFrame) / Mathf.Max(1f, settings.RubberRecentreFrames);
+            return drop + settings.RubberRecentreHeight * Mathf.SmoothStep(0f, 1f, recentring);
         }
 
         private void OnReveal(RevealedCard reveal)
@@ -262,7 +263,7 @@ namespace BalloonParty.UI.CardReveal
             _front.texture = sheet;
             _shadow.texture = sheet;
 
-            var tint = TintForTheLevel();
+            var tint = _settings.BalloonColor;
             _back.color = tint;
             _shadow.color = tint;
             tint.a = 1f - _settings.InsideShowThrough;
@@ -278,24 +279,9 @@ namespace BalloonParty.UI.CardReveal
             _group.alpha = 1f;
         }
 
-        // One of the colours the level's balloons come in, so the prize balloon looks like one of them. Kept, so
-        // its tear flashes that colour.
-        private Color TintForTheLevel()
-        {
-            var colors = _level.Current.AllowedColors;
-            if (colors == null || colors.Count == 0)
-            {
-                _colorId = null;
-                return Color.white;
-            }
-
-            _colorId = colors[UnityEngine.Random.Range(0, colors.Count)];
-            var entry = _palette.GetEntry(_colorId);
-            return entry != null ? entry.Color : Color.white;
-        }
-
-        // Once, when the rubber tears: a flash of the balloon's colour in the light field, which lights the board
-        // around it and the reveal itself, and a pop's stir in the disturbance field, as a board balloon's pop.
+        // Once, when the rubber tears: a flash of white light in the field (the prize balloon is none of the
+        // palette's colours), which lights the board around it and the reveal itself, and a pop's stir in the
+        // disturbance field, as a board balloon's pop.
         private void BurstOnTear(int frame)
         {
             if (_burst || frame < _settings.RubberFallsFromFrame)
@@ -305,10 +291,8 @@ namespace BalloonParty.UI.CardReveal
 
             _burst = true;
             var at = _balloon.position;
-            var paletteIndex = _palette.PaletteIndexOf(_colorId);
-            _lightField.Flash(at, _settings.PopFlashRadius, _settings.PopFlashIntensity, _settings.PopFlashSeconds,
-                paletteIndex);
-            _disturbanceField.Stamp(StampSource.BalloonPop, at, Vector2.zero, paletteIndex);
+            _lightField.Flash(at, _settings.PopFlashRadius, _settings.PopFlashIntensity, _settings.PopFlashSeconds);
+            _disturbanceField.Stamp(StampSource.BalloonPop, at, Vector2.zero);
         }
 
         private Material WithSheetGrid(Material material)
@@ -343,9 +327,9 @@ namespace BalloonParty.UI.CardReveal
         }
 
         // Only the rubber falls: the ribbons are the balloon's too, and fly their own way.
-        private void Fall(float drop)
+        private void Fall(float frameHeights)
         {
-            var down = Vector2.down * drop;
+            var down = Vector2.down * (frameHeights * _back.rectTransform.rect.height);
             PlaceLayers(down, down);
         }
 

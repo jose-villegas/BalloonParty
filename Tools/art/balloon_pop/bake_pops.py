@@ -37,8 +37,26 @@ from mathutils import Matrix, Vector
 # front's frames) count its frames, so the pop is the same however many of them are rendered.
 SIM_FRAMES = 48
 TIME_SCALE = 0.03
-FALL_START = 26
-FALL_ACCELERATION = 0.008
+# The knot falls from the tear, speeding up by FALL_ACCELERATION units a frame each frame, and the cloth falls
+# with it under gravity, its shreds trailing as the air holds them back; the camera follows the knot. The game
+# moves the frames down by the same fall:
+# CardRevealSettings' Rubber Falls From Frame is FALL_START - 1 (frames count from 0 there) and its Rubber
+# Fall Gravity FALL_ACCELERATION / ORTHO_SCALE, in frame heights.
+FALL_START = 5
+FALL_ACCELERATION = 0.01395
+ORTHO_SCALE = 3.1
+CAMERA_HEIGHT = -0.12
+# Once the flaps have folded, the rubber gathers around the knot, which sits near the frame's bottom: the camera
+# eases RECENTRE units further down over RECENTRE_FRAMES from RECENTRE_START, lifting the knot toward the frame's
+# middle so the gathered rubber stays inside it. The game adds the same back (Rubber Recentre From Frame
+# RECENTRE_START - 1, Rubber Recentre Frames, Rubber Recentre Height RECENTRE / ORTHO_SCALE), so the knot's path
+# stays the fall's.
+RECENTRE_START = 19
+RECENTRE_FRAMES = 12
+RECENTRE = 1.612
+# Measured: at TIME_SCALE and 30 fps, a free cloth falls this many units a frame squared per unit of scene
+# gravity, so the gravity that drops it with the knot is FALL_ACCELERATION over it (about 13,000).
+CLOTH_FALL_PER_GRAVITY = 1.0605e-6
 
 # The camera sits 10 units in front of the balloon's centre: the front layer is the rubber nearer than
 # that, the back layer the rubber beyond it.
@@ -307,14 +325,31 @@ def add_knot(material):
     return objects
 
 
-def add_fall(objects, sim_frames):
-    """Once the rubber has gathered at the knot, the knot drops out of the frame and the shreds trail
-    after it (the cloth's pinned neck moves with its object), leaving the stage to the slip."""
+def add_fall(objects, camera, sim_frames):
+    """From the tear the knot falls, and the shreds trail after it: the cloth's pinned neck moves with its
+    object, and the rest falls with it under gravity (add_gravity). The camera falls with the knot, keeping
+    it in the frame (lifted toward the middle once the rubber gathers: RECENTRE); the game moves the frame by
+    the same fall."""
     for frame in range(1, sim_frames + 1):
         t = max(0, frame - FALL_START)
+        drop = -0.5 * FALL_ACCELERATION * t * t
         for obj in objects:
-            obj.location.z = -0.5 * FALL_ACCELERATION * t * t
+            obj.location.z = drop
             obj.keyframe_insert("location", index=2, frame=frame)
+        recentre = RECENTRE * smoothstep(RECENTRE_START, RECENTRE_START + RECENTRE_FRAMES, frame)
+        camera.location.z = CAMERA_HEIGHT + drop - recentre
+        camera.keyframe_insert("location", index=2, frame=frame)
+
+
+def add_gravity(cloth, sim_frames):
+    """The cloth falls with the knot from the tear, so the shreds trail it only as the air holds them back;
+    without it the neck alone drags them, and they stretch into a rope. Off before the tear, so the whole
+    balloon doesn't sag. Keyed every frame, so the curve's interpolation never matters."""
+    bpy.context.scene.gravity = (0.0, 0.0, -FALL_ACCELERATION / CLOTH_FALL_PER_GRAVITY)
+    weights = cloth.settings.effector_weights
+    for frame in range(1, sim_frames + 1):
+        weights.gravity = 1.0 if frame > FALL_START else 0.0
+        weights.keyframe_insert("gravity", frame=frame)
 
 
 def surface_material():
@@ -391,9 +426,9 @@ def setup_scene(size, samples):
 
     cam_data = bpy.data.cameras.new("Camera")
     cam_data.type = "ORTHO"
-    cam_data.ortho_scale = 3.1
+    cam_data.ortho_scale = ORTHO_SCALE
     cam = bpy.data.objects.new("Camera", cam_data)
-    cam.location = (0.0, -CAMERA_DISTANCE, -0.12)
+    cam.location = (0.0, -CAMERA_DISTANCE, CAMERA_HEIGHT)
     cam.rotation_euler = (math.radians(90.0), 0.0, 0.0)
     bpy.context.collection.objects.link(cam)
     scene.camera = cam
@@ -413,7 +448,8 @@ def bake(seed, args):
     sim_frames = SIM_FRAMES
     add_release_front(obj, params, balloon_point(params["puncture"]), sim_frames)
     add_cloth(obj, params, sim_frames)
-    add_fall([obj] + knot, sim_frames)
+    add_gravity(obj.modifiers["Cloth"], sim_frames)
+    add_fall([obj] + knot, scene.camera, sim_frames)
 
     out = Path(args.out) / "frames" / f"pop_{seed:02d}"
     out.mkdir(parents=True, exist_ok=True)
