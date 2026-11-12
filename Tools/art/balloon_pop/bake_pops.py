@@ -227,7 +227,7 @@ def pop_params(rng):
         "branching": rng.uniform(0.015, 0.04),
         "shrink": rng.uniform(0.55, 0.68),
         "bending": rng.uniform(0.02, 0.08),
-        "front_frames": rng.randint(8, 12),
+        "front_frames": rng.randint(5, 8),
     }
 
 
@@ -476,24 +476,41 @@ def bake(seed, args):
             scene.render.filepath = str(out / f"{i:02d}_{layer}.png")
             bpy.ops.render.render(write_still=True)
     print(f"pop {seed}: rendered {args.frames} frames in {time.time() - started:.0f}s", flush=True)
+    return params
 
 
-def print_game_settings(frames):
-    """CardRevealSettings mirrors the fall, by hand: printed so a retuned bake shows what to set there."""
+def puncture_in_frame(puncture):
+    """Where the puncture is in the pop's first frame, as a share of its width and height from the bottom
+    left: where the game's pushpin pricks. The camera hasn't moved yet (the fall starts after the tear)."""
+    point = balloon_point(puncture)
+    return 0.5 + point.x / ORTHO_SCALE, 0.5 + (point.z - CAMERA_HEIGHT) / ORTHO_SCALE
+
+
+def print_game_settings(frames, punctures):
+    """CardRevealSettings mirrors the fall and the punctures, by hand: printed so a retuned bake shows what to
+    set there."""
     step = SIM_FRAMES // frames
     print("CardRevealSettings for this bake (frames count from 0 there):")
     print(f"  Rubber Falls From Frame   {(FALL_START - 1) / step:g}")
     print(f"  Rubber Fall Gravity       {FALL_ACCELERATION * step * step / ORTHO_SCALE:.6g}")
     print(f"  Rubber Recentre From Frame {(RECENTRE_START - 1) / step:g}")
     print(f"  Rubber Recentre Frames    {RECENTRE_FRAMES / step:g}")
-    print(f"  Rubber Recentre Height    {RECENTRE / ORTHO_SCALE:.6g}", flush=True)
+    print(f"  Rubber Recentre Height    {RECENTRE / ORTHO_SCALE:.6g}")
+    for seed, puncture in punctures:
+        u, v = puncture_in_frame(puncture)
+        side = "front" if puncture.y < 0.0 else "back (the pin pricks through the balloon)"
+        print(f"  Pop Punctures, pop_{seed:02d}   ({u:.3f}, {v:.3f}), on the {side}")
+    sys.stdout.flush()
 
 
 def main():
     args = parse_args()
+    punctures = []
     for seed in (int(s) for s in args.seeds.split(",")):
-        bake(seed, args)
-    print_game_settings(args.frames)
+        punctures.append((seed, bake(seed, args)["puncture"]))
+    print_game_settings(args.frames, punctures)
 
 
-main()
+# Imported by bake_pin.py for its surface material and scene; run, it bakes.
+if __name__ == "__main__":
+    main()

@@ -57,6 +57,12 @@ namespace BalloonParty.Configuration.CardReveal
         /// <summary>How far the balloon leans into its sway, in degrees.</summary>
         float RiseTilt { get; }
 
+        /// <summary>
+        ///     The burst of torn rubber flung far out as the balloon tears, tinted its colour: a pooled particle
+        ///     system laid out in canvas units, parented to the reveal's canvas. None, and the pop has no shreds.
+        /// </summary>
+        ParticleSystem ShredsPrefab { get; }
+
         /// <summary>The frame of the pop on which the ribbons fly out: once the rubber has opened.</summary>
         int RibbonsFromFrame { get; }
 
@@ -80,6 +86,9 @@ namespace BalloonParty.Configuration.CardReveal
         ///     level settles on screen.
         /// </summary>
         float RibbonsGoneAtAscent { get; }
+
+        /// <summary>How long after <see cref="RibbonsGoneAtAscent" /> the ribbons stay before they are gone.</summary>
+        float RibbonsAfterAscentSeconds { get; }
 
         /// <summary>
         ///     How long the ribbons fly when no ascent runs with the reveal (a retry's bonus card, the cheat), from
@@ -134,5 +143,64 @@ namespace BalloonParty.Configuration.CardReveal
         float PopFlashIntensity { get; }
 
         float PopFlashSeconds { get; }
+
+        /// <summary>
+        ///     Where each pop's puncture is in its first frame, as a share of the frame's width and height from its
+        ///     bottom left, one per sheet in <see cref="PopSheets" />' order: where the pushpin pricks, so the tear
+        ///     opens from its needle. The bake prints them (<c>bake_pops.py</c>).
+        /// </summary>
+        IReadOnlyList<Vector2> PopPunctures { get; }
+
+        /// <summary>The pushpin's plastic head's colour.</summary>
+        Color PinHeadColor { get; }
+
+        /// <summary>The pushpin's needle's colour.</summary>
+        Color PinNeedleColor { get; }
+
+        /// <summary>
+        ///     Where the needle's tip is in the pin's image, as a share of its width and height from its bottom left:
+        ///     the pin hangs from it. <c>bake_pin.py</c>'s <c>TIP</c>.
+        /// </summary>
+        Vector2 PinTip { get; }
+
+        /// <summary>
+        ///     The pin's image's size, in pop frame heights: <c>bake_pin.py</c>'s <c>PIN_VIEW</c> over the pops'
+        ///     camera's <c>ortho_scale</c>, so the pin is drawn to the balloon's scale.
+        /// </summary>
+        float PinSize { get; }
+
+        /// <summary>
+        ///     The angle the pin is baked at, in degrees from straight up toward the right: its head's side of its
+        ///     tip. It jabs along it. <c>bake_pin.py</c>'s <c>LEAN</c>.
+        /// </summary>
+        float PinLean { get; }
+
+        /// <summary>How long the pin takes to come in from afar to hover by the puncture.</summary>
+        float PinEnterSeconds { get; }
+
+        /// <summary>How far away the pin comes in from, along its axis, in canvas units.</summary>
+        float PinEnterDistance { get; }
+
+        /// <summary>How far from the puncture the pin hovers, along its axis, in canvas units.</summary>
+        float PinHoverDistance { get; }
+
+        /// <summary>How much further the pin draws back before it jabs, in canvas units.</summary>
+        float PinWindupDistance { get; }
+
+        float PinWindupSeconds { get; }
+
+        /// <summary>How long the jab takes, speeding up, from drawn back to in the rubber.</summary>
+        float PinJabSeconds { get; }
+
+        /// <summary>How far the needle goes into the rubber, in canvas units.</summary>
+        float PinDepth { get; }
+
+        /// <summary>How long the needle stays in as the rubber tears around it.</summary>
+        float PinStaySeconds { get; }
+
+        /// <summary>How far the burst throws the pin back out, in canvas units, as it fades.</summary>
+        float PinRecoilDistance { get; }
+
+        float PinLeaveSeconds { get; }
     }
 }

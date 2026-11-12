@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BalloonParty.Configuration.CardReveal;
 using BalloonParty.UI.CardReveal;
 using NSubstitute;
@@ -52,6 +53,88 @@ namespace BalloonParty.Tests.UI
             // A reveal that waited its turn: the ascent that ran before it doesn't time its ribbons.
             Assert.AreEqual(10.7f + 2.6f, CardRevealView.RibbonsGoneAt(10.7f, 10f, 6f, AscentSeconds, _settings),
                 Tolerance);
+        }
+
+        [Test]
+        public void RibbonsGoneAt_WithTimeAfterTheAscentsShare_StaysThatMuchLonger()
+        {
+            // As the first case, a second more after the ascent's share.
+            _settings.RibbonsAfterAscentSeconds.Returns(1f);
+            Assert.AreEqual(10.2f + 2.8f + 1f,
+                CardRevealView.RibbonsGoneAt(10.7f, 10f, 10.2f, AscentSeconds, _settings), Tolerance);
+        }
+
+        [Test]
+        public void PinPose_LongBeforeContact_IsOutOfSight()
+        {
+            SetPin();
+            Assert.AreEqual(0f, CardRevealView.PinPose(-5f, _settings).y, Tolerance);
+        }
+
+        [Test]
+        public void PinLeadSeconds_IsItsWayInWindupAndJab()
+        {
+            SetPin();
+            Assert.AreEqual(0.3f + 0.2f + 0.1f, CardRevealView.PinLeadSeconds(_settings), Tolerance);
+        }
+
+        [Test]
+        public void PinPose_AsItWindsUp_HoversFullyShownByThePuncture()
+        {
+            // Wind-up starts the jab's and wind-up's 0.3 s before contact.
+            SetPin();
+            var hovering = CardRevealView.PinPose(-0.3f, _settings);
+            Assert.AreEqual(12f, hovering.x, 1e-3f);
+            Assert.AreEqual(1f, hovering.y, Tolerance);
+        }
+
+        [Test]
+        public void PinPose_AsItJabs_IsDrawnBackFurther()
+        {
+            SetPin();
+            Assert.AreEqual(12f + 10f, CardRevealView.PinPose(-0.1f, _settings).x, 1e-3f);
+        }
+
+        [Test]
+        public void PinPose_TheJab_SpeedsUpToTheRubber()
+        {
+            // Accelerating: it covers less of the way in the jab's first half than in its second.
+            SetPin();
+            var start = CardRevealView.PinPose(-0.1f, _settings).x;
+            var middle = CardRevealView.PinPose(-0.05f, _settings).x;
+            var end = CardRevealView.PinPose(0f, _settings).x;
+            Assert.Less(start - middle, middle - end);
+        }
+
+        [Test]
+        public void PinPose_AtContactAndWhileItStays_IsInTheRubber()
+        {
+            SetPin();
+            Assert.AreEqual(-3f, CardRevealView.PinPose(0f, _settings).x, 1e-3f);
+            Assert.AreEqual(-3f, CardRevealView.PinPose(0.05f, _settings).x, 1e-3f);
+        }
+
+        [Test]
+        public void PinPose_OnceGone_IsThrownBackAndFaded()
+        {
+            SetPin();
+            var gone = CardRevealView.PinPose(0.08f + 0.4f, _settings);
+            Assert.AreEqual(36f, gone.x, 1e-3f);
+            Assert.AreEqual(0f, gone.y, Tolerance);
+        }
+
+        [Test]
+        public void Puncture_OfAListedPop_IsItsOwn()
+        {
+            var punctures = new List<Vector2> { new(0.2f, 0.3f), new(0.6f, 0.7f) };
+            Assert.AreEqual(new Vector2(0.6f, 0.7f), CardRevealView.Puncture(1, punctures));
+        }
+
+        [Test]
+        public void Puncture_OfAPopNotListed_IsTheTopOfTheBalloonsFront()
+        {
+            var punctures = new List<Vector2> { new(0.2f, 0.3f) };
+            Assert.AreEqual(new Vector2(0.5f, 0.8f), CardRevealView.Puncture(3, punctures));
         }
 
         [Test]
@@ -201,6 +284,20 @@ namespace BalloonParty.Tests.UI
             Assert.AreEqual(expected.y, actual.y, Tolerance, "y");
             Assert.AreEqual(expected.width, actual.width, Tolerance, "width");
             Assert.AreEqual(expected.height, actual.height, Tolerance, "height");
+        }
+
+        private void SetPin()
+        {
+            _settings.PinEnterSeconds.Returns(0.3f);
+            _settings.PinEnterDistance.Returns(120f);
+            _settings.PinHoverDistance.Returns(12f);
+            _settings.PinWindupDistance.Returns(10f);
+            _settings.PinWindupSeconds.Returns(0.2f);
+            _settings.PinJabSeconds.Returns(0.1f);
+            _settings.PinDepth.Returns(3f);
+            _settings.PinStaySeconds.Returns(0.08f);
+            _settings.PinRecoilDistance.Returns(36f);
+            _settings.PinLeaveSeconds.Returns(0.4f);
         }
 
         private void SetFloat()

@@ -45,6 +45,11 @@ namespace BalloonParty.Configuration.CardReveal
         [SerializeField] [Min(0.01f)] private float _riseSwaySeconds = 0.55f;
         [SerializeField] [Range(0f, 20f)] private float _riseTilt = 5f;
 
+        [Tooltip("The torn rubber flung far out as the balloon tears, tinted its colour, fluttering down off the " +
+                 "screen: a pooled particle system in canvas units (the canvas is 225 wide), made by the card " +
+                 "reveal's builder. None, and the pop has no shreds.")]
+        [SerializeField] private ParticleSystem _shredsPrefab;
+
         [Tooltip("How far the rubber's two layers part while the balloon moves, as a share of its distance from " +
                  "its place: the front leads and the back lags, so what is inside reads as inside it.")]
         [SerializeField] [Range(0f, 0.5f)] private float _parallax = 0.02f;
@@ -98,11 +103,49 @@ namespace BalloonParty.Configuration.CardReveal
                  "next level settles on screen. Its balloons come in at the ascent's spawn cue (0.6).")]
         [SerializeField] [Range(0f, 1f)] private float _ribbonsGoneAtAscent = 0.82f;
 
+        [Tooltip("Seconds the ribbons stay after that share of the ascent.")]
+        [SerializeField] [Min(0f)] private float _ribbonsAfterAscentSeconds = 1f;
+
         [Tooltip("With no ascent (a retry's bonus card, the cheat): seconds from the pop until the ribbons are gone.")]
-        [SerializeField] [Min(0f)] private float _ribbonSecondsWithoutAscent = 3.4f;
+        [SerializeField] [Min(0f)] private float _ribbonSecondsWithoutAscent = 4.4f;
 
         [Tooltip("The ribbons' shortest flight, from the pop until gone, so they can always be read.")]
-        [SerializeField] [Min(0f)] private float _ribbonMinimumSeconds = 2.4f;
+        [SerializeField] [Min(0f)] private float _ribbonMinimumSeconds = 3.4f;
+
+        [Header("Pushpin")]
+        [Tooltip("Where each pop's puncture is in its first frame, as a share of the frame from its bottom left, " +
+                 "one per pop sheet in order: where the pushpin pricks, so the tear opens from its needle. The " +
+                 "bake prints them (bake_pops.py). A pop with none is pricked at the top of the balloon's front.")]
+        [SerializeField] private Vector2[] _popPunctures = { new(0.511f, 0.803f) };
+
+        [SerializeField] [ColorUsage(false)] private Color _pinHeadColor = new(0.86f, 0.16f, 0.2f, 1f);
+        [SerializeField] [ColorUsage(false)] private Color _pinNeedleColor = new(0.78f, 0.8f, 0.84f, 1f);
+
+        [Tooltip("The pin's baked image (Tools/art/balloon_pop/bake_pin.py): where its needle's tip is, as a share " +
+                 "of the image from its bottom left (TIP); its size in pop frame heights (PIN_VIEW over the pops' " +
+                 "ortho_scale, 3.1); and the angle it is baked at, degrees from straight up toward its head (LEAN). " +
+                 "The bake prints them.")]
+        [SerializeField] private Vector2 _pinTip = new(0.25f, 0.15f);
+
+        [SerializeField] [Min(0f)] private float _pinSize = 0.3226f;
+        [SerializeField] [Range(-90f, 90f)] private float _pinLean = 35f;
+
+        [Tooltip("The pin comes in from Pin Enter Distance away along its axis (canvas units) to hover Pin Hover " +
+                 "Distance from the puncture, over Pin Enter Seconds; draws back Pin Windup Distance more; jabs in, " +
+                 "speeding up, Pin Depth into the rubber; stays Pin Stay Seconds as the rubber tears; then the burst " +
+                 "throws it back Pin Recoil Distance as it fades. It goes in as the balloon comes to rest, and the " +
+                 "pop starts then.")]
+        [SerializeField] [Min(0f)] private float _pinEnterSeconds = 0.3f;
+
+        [SerializeField] [Min(0f)] private float _pinEnterDistance = 120f;
+        [SerializeField] [Min(0f)] private float _pinHoverDistance = 12f;
+        [SerializeField] [Min(0f)] private float _pinWindupDistance = 10f;
+        [SerializeField] [Min(0f)] private float _pinWindupSeconds = 0.18f;
+        [SerializeField] [Min(0f)] private float _pinJabSeconds = 0.06f;
+        [SerializeField] [Min(0f)] private float _pinDepth = 3f;
+        [SerializeField] [Min(0f)] private float _pinStaySeconds = 0.08f;
+        [SerializeField] [Min(0f)] private float _pinRecoilDistance = 36f;
+        [SerializeField] [Min(0f)] private float _pinLeaveSeconds = 0.4f;
 
         public IReadOnlyList<Texture2D> PopSheets => _popSheets;
         public int PopCount => Mathf.Max(1, _popSheets.Length);
@@ -118,12 +161,14 @@ namespace BalloonParty.Configuration.CardReveal
         public float RiseSway => _riseSway;
         public float RiseSwaySeconds => _riseSwaySeconds;
         public float RiseTilt => _riseTilt;
+        public ParticleSystem ShredsPrefab => _shredsPrefab;
         public int RibbonsFromFrame => _ribbonsFromFrame;
         public float RibbonBurstSeconds => _ribbonBurstSeconds;
         public float RibbonExitSeconds => _ribbonExitSeconds;
         public float RibbonGrowth => _ribbonGrowth;
         public float RibbonGrowSeconds => _ribbonGrowSeconds;
         public float RibbonsGoneAtAscent => _ribbonsGoneAtAscent;
+        public float RibbonsAfterAscentSeconds => _ribbonsAfterAscentSeconds;
         public float RibbonSecondsWithoutAscent => _ribbonSecondsWithoutAscent;
         public float RibbonMinimumSeconds => _ribbonMinimumSeconds;
         public float Parallax => _parallax;
@@ -135,5 +180,21 @@ namespace BalloonParty.Configuration.CardReveal
         public float PopFlashRadius => _popFlashRadius;
         public float PopFlashIntensity => _popFlashIntensity;
         public float PopFlashSeconds => _popFlashSeconds;
+        public IReadOnlyList<Vector2> PopPunctures => _popPunctures;
+        public Color PinHeadColor => _pinHeadColor;
+        public Color PinNeedleColor => _pinNeedleColor;
+        public Vector2 PinTip => _pinTip;
+        public float PinSize => _pinSize;
+        public float PinLean => _pinLean;
+        public float PinEnterSeconds => _pinEnterSeconds;
+        public float PinEnterDistance => _pinEnterDistance;
+        public float PinHoverDistance => _pinHoverDistance;
+        public float PinWindupDistance => _pinWindupDistance;
+        public float PinWindupSeconds => _pinWindupSeconds;
+        public float PinJabSeconds => _pinJabSeconds;
+        public float PinDepth => _pinDepth;
+        public float PinStaySeconds => _pinStaySeconds;
+        public float PinRecoilDistance => _pinRecoilDistance;
+        public float PinLeaveSeconds => _pinLeaveSeconds;
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Configuration.CardReveal;
 using BalloonParty.Configuration.Cinematics;
@@ -7,6 +8,7 @@ using BalloonParty.Configuration.Effects;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.SceneLight;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
@@ -24,8 +26,8 @@ namespace BalloonParty.UI.CardReveal
     ///     it, one with the card's title on it and one with what the card does, readable as they drift. On a
     ///     level-up they fly with the level's ascent and are gone just before the next level settles. The rubber
     ///     is surface data lit live by <c>BalloonParty/Sprite/LitFlipbook</c>, so it takes the scene's light, and
-    ///     its tear flashes a light of its colour into the scene light field and stirs the disturbance field, as a
-    ///     board pop does. It sits on its own World Space canvas among the board's sprites
+    ///     its tear flashes a light into the scene light field and stirs the disturbance field, as a board pop
+    ///     does. A pushpin, lit the same way, pricks it: the pop starts as its needle goes in at the pop's puncture. It sits on its own World Space canvas among the board's sprites
     ///     (<see cref="CameraFittedCanvas" />), so the screen-space light tints it and sees it.
     ///     Attaches as the stage only when there are pops to play; until then the tooltip announces the cards.
     ///     Built by <c>Tools/BalloonParty/CardReveal/Build Card Reveal</c>.
@@ -33,6 +35,9 @@ namespace BalloonParty.UI.CardReveal
     public class CardRevealView : MonoBehaviour
     {
         private static readonly int SheetGridId = Shader.PropertyToID("_SheetGrid");
+
+        // Where a pop with no puncture listed is pricked: the top of the balloon's front.
+        private static readonly Vector2 DefaultPuncture = new(0.5f, 0.8f);
 
         [Tooltip("Holds the whole reveal; shown while one plays.")]
         [SerializeField] private CanvasGroup _group;
@@ -48,6 +53,13 @@ namespace BalloonParty.UI.CardReveal
         [SerializeField] private RibbonPiece _titleRibbon;
         [SerializeField] private RibbonPiece _descriptionRibbon;
 
+        [Tooltip("The pushpin that pricks the balloon, over it, hung from its needle's tip; its head and needle are " +
+                 "tinted apart. None, and the balloon pops on its own.")]
+        [SerializeField] private RectTransform _pin;
+
+        [SerializeField] private RawImage _pinHead;
+        [SerializeField] private RawImage _pinNeedle;
+
         [Tooltip("How far below its place the balloon starts its rise, in canvas units.")]
         [SerializeField] private float _riseDistance = 260f;
 
@@ -57,12 +69,15 @@ namespace BalloonParty.UI.CardReveal
         [Inject] private ISubscriber<LevelAscendStartedMessage> _ascendStarted;
         [Inject] private SceneLightFieldService _lightField;
         [Inject] private DisturbanceFieldService _disturbanceField;
+        [Inject] private PoolManager _pool;
 
         private CancellationTokenSource _playing;
         private IDisposable _subscriptions;
         private Material _rubber;
         private Material _rubberShadow;
         private Vector2 _place;
+        private Vector2 _puncture;
+        private Vector2 _pinAxis;
         private float _ascentStartedAt = float.NegativeInfinity;
         private float _releasedAt;
         private float _exitFrom;
@@ -142,7 +157,8 @@ namespace BalloonParty.UI.CardReveal
                 return releasedAt + settings.RibbonSecondsWithoutAscent;
             }
 
-            var withAscent = ascentStartedAt + ascentSeconds * Mathf.Clamp01(settings.RibbonsGoneAtAscent);
+            var withAscent = ascentStartedAt + ascentSeconds * Mathf.Clamp01(settings.RibbonsGoneAtAscent) +
+                             settings.RibbonsAfterAscentSeconds;
             return Mathf.Max(withAscent, releasedAt + settings.RibbonMinimumSeconds);
         }
 
@@ -187,6 +203,70 @@ namespace BalloonParty.UI.CardReveal
             return drop + settings.RubberRecentreHeight * Mathf.SmoothStep(0f, 1f, recentring);
         }
 
+        /// <summary>
+        ///     Where the pin is <paramref name="sinceContact" /> seconds from its needle reaching the puncture
+        ///     (negative before): x its distance back from the puncture along its axis, in canvas units (below 0 is
+        ///     into the rubber), y its opacity. It comes in from afar, easing to a hover by the puncture and fading
+        ///     in, draws back, jabs in speeding up, stays in as the rubber tears, then the burst throws it back out
+        ///     as it fades. Until <see cref="PinLeadSeconds" /> before contact it is out of sight.
+        /// </summary>
+        internal static Vector2 PinPose(float sinceContact, ICardRevealSettings settings)
+        {
+            var jabFrom = -settings.PinJabSeconds;
+            var windupFrom = jabFrom - settings.PinWindupSeconds;
+            var enterFrom = windupFrom - settings.PinEnterSeconds;
+            var hover = settings.PinHoverDistance;
+            var drawn = hover + settings.PinWindupDistance;
+            if (sinceContact < enterFrom)
+            {
+                return new Vector2(hover + settings.PinEnterDistance, 0f);
+            }
+
+            if (sinceContact < windupFrom)
+            {
+                var entered = Progress(sinceContact - enterFrom, settings.PinEnterSeconds);
+                var left = 1f - entered;
+                return new Vector2(hover + settings.PinEnterDistance * left * left * left, Mathf.Clamp01(2f * entered));
+            }
+
+            if (sinceContact < jabFrom)
+            {
+                var wound = Progress(sinceContact - windupFrom, settings.PinWindupSeconds);
+                return new Vector2(Mathf.Lerp(hover, drawn, Mathf.SmoothStep(0f, 1f, wound)), 1f);
+            }
+
+            if (sinceContact < 0f)
+            {
+                var jabbed = Progress(sinceContact - jabFrom, settings.PinJabSeconds);
+                return new Vector2(Mathf.Lerp(drawn, -settings.PinDepth, jabbed * jabbed), 1f);
+            }
+
+            if (sinceContact < settings.PinStaySeconds)
+            {
+                return new Vector2(-settings.PinDepth, 1f);
+            }
+
+            var gone = Progress(sinceContact - settings.PinStaySeconds, settings.PinLeaveSeconds);
+            var still = 1f - gone;
+            return new Vector2(Mathf.Lerp(-settings.PinDepth, settings.PinRecoilDistance, 1f - still * still * still),
+                still);
+        }
+
+        /// <summary>How long before its needle goes in the pin starts to come in.</summary>
+        internal static float PinLeadSeconds(ICardRevealSettings settings)
+        {
+            return settings.PinEnterSeconds + settings.PinWindupSeconds + settings.PinJabSeconds;
+        }
+
+        /// <summary>
+        ///     Where pop <paramref name="pop" /> is punctured, as a share of its frame from the bottom left: its
+        ///     listed puncture, or the top of the balloon's front if it has none.
+        /// </summary>
+        internal static Vector2 Puncture(int pop, IReadOnlyList<Vector2> punctures)
+        {
+            return pop >= 0 && pop < punctures.Count ? punctures[pop] : DefaultPuncture;
+        }
+
         private void OnReveal(RevealedCard reveal)
         {
             Stop();
@@ -214,8 +294,15 @@ namespace BalloonParty.UI.CardReveal
             {
                 var startedAt = Time.unscaledTime;
                 Dress(reveal);
+                // The pin goes in as the balloon comes to rest, and the pop starts then; a pin slower than the float
+                // keeps the balloon at rest until it is in.
                 var floatSeconds = _settings.RiseSeconds + _settings.HoldBeforePopSeconds;
-                await AnimateAsync(floatSeconds, t => Float(t * floatSeconds), token);
+                var contactAt = _pin != null ? Mathf.Max(floatSeconds, PinLeadSeconds(_settings)) : floatSeconds;
+                await AnimateAsync(contactAt, t =>
+                {
+                    Float(t * contactAt);
+                    PlacePin(t * contactAt - contactAt);
+                }, token);
                 Float(float.PositiveInfinity);
                 await PopAsync(startedAt, token);
                 _group.alpha = 0f;
@@ -247,6 +334,7 @@ namespace BalloonParty.UI.CardReveal
                 SetRubberShown(frame < frames);
                 ShowFrame(Mathf.Min(frame, frames - 1));
                 Fall(FallDistance(elapsed, _settings));
+                PlacePin(elapsed);
                 BurstOnTear(frame);
                 var gone = elapsed >= releaseAt && FlyRibbons(revealStartedAt) >= 1f;
                 if (gone && elapsed * _settings.FramesPerSecond >= frames)
@@ -283,7 +371,8 @@ namespace BalloonParty.UI.CardReveal
 
         private void Dress(RevealedCard reveal)
         {
-            var sheet = _settings.PopSheets[reveal.Pop % _settings.PopSheets.Count];
+            var pop = reveal.Pop % _settings.PopSheets.Count;
+            var sheet = _settings.PopSheets[pop];
             _back.texture = sheet;
             _front.texture = sheet;
             _shadow.texture = sheet;
@@ -301,12 +390,53 @@ namespace BalloonParty.UI.CardReveal
             SetRubberShown(true);
             ShowFrame(0);
             Float(0f);
+            DressPin(pop);
             _group.alpha = 1f;
         }
 
+        // The pin is drawn to the balloon's scale, hung from its needle's tip, and jabs along the angle it was
+        // baked at. The puncture is placed from the balloon's place, not its layers: the pin goes in as it rests.
+        private void DressPin(int pop)
+        {
+            if (_pin == null)
+            {
+                return;
+            }
+
+            var frame = _back.rectTransform.rect.size;
+            _pin.pivot = _settings.PinTip;
+            _pin.sizeDelta = Vector2.one * (_settings.PinSize * frame.y);
+            _puncture = _place + Vector2.Scale(Puncture(pop, _settings.PopPunctures) - new Vector2(0.5f, 0.5f), frame);
+            var lean = _settings.PinLean * Mathf.Deg2Rad;
+            _pinAxis = new Vector2(Mathf.Sin(lean), Mathf.Cos(lean));
+            PlacePin(float.NegativeInfinity);
+        }
+
+        private void PlacePin(float sinceContact)
+        {
+            if (_pin == null)
+            {
+                return;
+            }
+
+            var pose = PinPose(sinceContact, _settings);
+            _pin.anchoredPosition = _puncture + _pinAxis * pose.x;
+            var shown = pose.y > 0f;
+            _pinHead.enabled = shown;
+            _pinNeedle.enabled = shown;
+            var head = _settings.PinHeadColor;
+            head.a = pose.y;
+            _pinHead.color = head;
+            var needle = _settings.PinNeedleColor;
+            needle.a = pose.y;
+            _pinNeedle.color = needle;
+        }
+
         // Once, when the rubber tears: a flash of white light in the field (the prize balloon is none of the
-        // palette's colours), which lights the board around it and the reveal itself, and a pop's stir in the
-        // disturbance field, as a board balloon's pop.
+        // palette's colours), which lights the board around it and the reveal itself, a pop's stir in the
+        // disturbance field, as a board balloon's pop, and the shreds flung far out. The baked frames can't carry
+        // rubber far from the balloon, so the shreds are particles, laid out in canvas units: parented to the
+        // canvas, they scale with the screen and follow the camera. The pool takes them back when they stop.
         private void BurstOnTear(int frame)
         {
             if (_burst || frame < _settings.RubberFallsFromFrame)
@@ -318,6 +448,12 @@ namespace BalloonParty.UI.CardReveal
             var at = _balloon.position;
             _lightField.Flash(at, _settings.PopFlashRadius, _settings.PopFlashIntensity, _settings.PopFlashSeconds);
             _disturbanceField.Stamp(StampSource.BalloonPop, at, Vector2.zero);
+            if (_settings.ShredsPrefab != null)
+            {
+                var shreds = _pool.PlayParticle(_settings.ShredsPrefab, at, _settings.BalloonColor).transform;
+                shreds.SetParent(transform, false);
+                shreds.position = at;
+            }
         }
 
         private Material WithSheetGrid(Material material)
@@ -364,6 +500,11 @@ namespace BalloonParty.UI.CardReveal
             _front.rectTransform.anchoredPosition = front;
             _back.rectTransform.anchoredPosition = back;
             _shadow.rectTransform.anchoredPosition = back;
+        }
+
+        private static float Progress(float elapsed, float seconds)
+        {
+            return seconds > 0f ? Mathf.Clamp01(elapsed / seconds) : 1f;
         }
 
         // On unscaled time, like the heads-ups: slow-motion beats don't stretch the reveal.

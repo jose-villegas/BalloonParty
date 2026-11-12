@@ -21,7 +21,8 @@ namespace BalloonParty.Editor
     ///     data, lists them on the <see cref="CardRevealSettings" /> asset (made if missing, and assigned to the
     ///     game scope), makes the materials, and builds the <see cref="CardRevealView" /> on a canvas of its own,
     ///     the <c>CardRevealCanvas</c> prefab, placed in the Game scene: the balloon's shadow and back layer, the two
-    ///     ribbons (the card's title and what it does), its front layer. The canvas is World Space, fitted to the
+    ///     ribbons (the card's title and what it does), its front layer, and the pushpin that pricks it (its baked
+    ///     sheet, <c>pin.png</c>, lit as the rubber is). The canvas is World Space, fitted to the
     ///     camera (<see cref="CameraFittedCanvas" />), on the Balloons layer and sorted just under the screen-space
     ///     light, so the reveal takes part in the game's lighting as the board's balloons do. The ribbons are cream
     ///     satin written in the tooltip's pencil font. A starting look to restyle by hand; running it again
@@ -35,6 +36,8 @@ namespace BalloonParty.Editor
         private const string ScopePrefabPath = "Assets/Prefabs/Game/GameLifetimeScope.prefab";
         private const string MaterialPath = "Assets/Materials/UI/CardRevealRubber.mat";
         private const string ShadowMaterialPath = "Assets/Materials/UI/CardRevealRubberShadow.mat";
+        private const string PinMaterialPath = "Assets/Materials/UI/CardRevealPin.mat";
+        private const string PinSheetPath = "Assets/Sprites/UI/CardReveal/pin.png";
         private const string ShaderName = "BalloonParty/Sprite/LitFlipbook";
         private const string RibbonMaterialPath = "Assets/Materials/UI/CardRevealRibbon.mat";
         private const string RibbonShaderName = "BalloonParty/Sprite/CelRibbon";
@@ -44,6 +47,9 @@ namespace BalloonParty.Editor
 
         // A sheet is 2048 x 3072 (48 frames of 256 a layer, two layers): imported whole, never scaled down.
         private const int MaxSheetSize = 4096;
+
+        // The pin's sheet holds its head and its needle side by side in its top half (Tools/art/balloon_pop/bake_pin.py).
+        private const int PinSheetColumns = 2;
 
         // A layer the main camera draws and the screen-space light's scene capture records (SceneCaptureService's
         // captured layers), so the reveal casts and bounces light as the board's balloons do.
@@ -73,6 +79,11 @@ namespace BalloonParty.Editor
         // Cream, a little warmer than the board's white, so the pencil reads on it over any scenery.
         private static readonly Color RibbonColor = new(0.98f, 0.965f, 0.925f, 1f);
 
+        private static readonly Rect PinHeadCell = new(0f, 0.5f, 0.5f, 0.5f);
+        private static readonly Rect PinNeedleCell = new(0.5f, 0.5f, 0.5f, 0.5f);
+        private static readonly int SheetGridId = Shader.PropertyToID("_SheetGrid");
+        private static readonly int ScatterId = Shader.PropertyToID("_Scatter");
+
         // Rolled up inside the balloon, then out: the title above the balloon's place, to the left, and what the
         // card does under it, to the right, each flying off its own way at the end.
         private static readonly Flight TitleFlight = new(new Vector2(0f, 6f), -8f, new Vector2(-8f, 42f), -4f,
@@ -99,9 +110,10 @@ namespace BalloonParty.Editor
 
             var settings = EnsureSettings(sheets);
             AssignToScope(settings);
+            CardRevealShredsBuilder.Build(settings);
             var materials = new Materials(EnsureMaterial(MaterialPath, ShaderName),
                 EnsureMaterial(ShadowMaterialPath, ShaderName, "_DropShadow"),
-                EnsureMaterial(RibbonMaterialPath, RibbonShaderName));
+                EnsureMaterial(RibbonMaterialPath, RibbonShaderName), EnsurePinMaterial());
             if (materials.Rubber == null || materials.Shadow == null || materials.Ribbon == null)
             {
                 Debug.LogError($"[CardReveal] No {ShaderName} or {RibbonShaderName} shader.");
@@ -111,37 +123,41 @@ namespace BalloonParty.Editor
             BuildOnCanvas(materials, askBeforeRebuild);
         }
 
-        // Linear (the pixels are normals and occlusion, not colour), no mipmaps (the frames sit side by side,
-        // and a mip would bleed one into the next), clamped.
         private static List<Texture2D> ImportSheets()
         {
-            var sheets = new List<Texture2D>();
-            var paths = AssetDatabase.FindAssets("pop_ t:Texture2D", new[] { SheetFolder })
+            return AssetDatabase.FindAssets("pop_ t:Texture2D", new[] { SheetFolder })
                 .Select(AssetDatabase.GUIDToAssetPath)
                 .Where(path => System.IO.Path.GetFileName(path).StartsWith("pop_"))
-                .OrderBy(path => path);
-            foreach (var path in paths)
-            {
-                var importer = (TextureImporter)AssetImporter.GetAtPath(path);
-                if (!ImportedAsData(importer))
-                {
-                    importer.textureType = TextureImporterType.Default;
-                    importer.sRGBTexture = false;
-                    importer.alphaSource = TextureImporterAlphaSource.FromInput;
-                    importer.alphaIsTransparency = false;
-                    importer.mipmapEnabled = false;
-                    importer.wrapMode = TextureWrapMode.Clamp;
-                    importer.filterMode = FilterMode.Bilinear;
-                    importer.npotScale = TextureImporterNPOTScale.None;
-                    importer.maxTextureSize = MaxSheetSize;
-                    importer.textureCompression = TextureImporterCompression.CompressedHQ;
-                    importer.SaveAndReimport();
-                }
+                .OrderBy(path => path)
+                .Select(ImportAsData)
+                .ToList();
+        }
 
-                sheets.Add(AssetDatabase.LoadAssetAtPath<Texture2D>(path));
+        // Linear (the pixels are normals and occlusion, not colour), no mipmaps (the frames sit side by side,
+        // and a mip would bleed one into the next), clamped. Null if there is no texture at the path.
+        private static Texture2D ImportAsData(string path)
+        {
+            if (AssetImporter.GetAtPath(path) is not TextureImporter importer)
+            {
+                return null;
             }
 
-            return sheets;
+            if (!ImportedAsData(importer))
+            {
+                importer.textureType = TextureImporterType.Default;
+                importer.sRGBTexture = false;
+                importer.alphaSource = TextureImporterAlphaSource.FromInput;
+                importer.alphaIsTransparency = false;
+                importer.mipmapEnabled = false;
+                importer.wrapMode = TextureWrapMode.Clamp;
+                importer.filterMode = FilterMode.Bilinear;
+                importer.npotScale = TextureImporterNPOTScale.None;
+                importer.maxTextureSize = MaxSheetSize;
+                importer.textureCompression = TextureImporterCompression.CompressedHQ;
+                importer.SaveAndReimport();
+            }
+
+            return AssetDatabase.LoadAssetAtPath<Texture2D>(path);
         }
 
         // Already imported as ImportSheets sets it up, so a rebuild doesn't reimport every sheet.
@@ -223,6 +239,29 @@ namespace BalloonParty.Editor
             }
 
             AssetDatabase.CreateAsset(material, path);
+            return material;
+        }
+
+        // The rubber's shader on the pin's two cells, without the rubber's glow: plastic and steel don't let the
+        // light through. Made only if missing, so its tuning is kept.
+        private static Material EnsurePinMaterial()
+        {
+            var existing = AssetDatabase.LoadAssetAtPath<Material>(PinMaterialPath);
+            if (existing != null)
+            {
+                return existing;
+            }
+
+            var material = EnsureMaterial(PinMaterialPath, ShaderName);
+            if (material == null)
+            {
+                return null;
+            }
+
+            material.SetVector(SheetGridId, new Vector4(PinSheetColumns, 1f));
+            material.SetFloat(ScatterId, 0f);
+            EditorUtility.SetDirty(material);
+            AssetDatabase.SaveAssets();
             return material;
         }
 
@@ -381,6 +420,7 @@ namespace BalloonParty.Editor
             var description = CreateRibbon("DescriptionRibbon", balloon, label, materials.Ribbon, centre,
                 DescriptionRibbonHeight, label.fontSize * DescriptionScale, DescriptionFlight);
             var front = CreateLayer("Front", balloon, materials.Rubber);
+            var pin = CreatePin(root, materials.Pin);
 
             var view = root.gameObject.AddComponent<CardRevealView>();
             var fields = new SerializedObject(view);
@@ -391,12 +431,47 @@ namespace BalloonParty.Editor
             fields.FindProperty("_front").objectReferenceValue = front;
             fields.FindProperty("_titleRibbon").objectReferenceValue = title;
             fields.FindProperty("_descriptionRibbon").objectReferenceValue = description;
+            if (pin.HasValue)
+            {
+                fields.FindProperty("_pin").objectReferenceValue = pin.Value.Root;
+                fields.FindProperty("_pinHead").objectReferenceValue = pin.Value.Head;
+                fields.FindProperty("_pinNeedle").objectReferenceValue = pin.Value.Needle;
+            }
+
             fields.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        private static RawImage CreateLayer(string name, RectTransform balloon, Material material)
+        // Over the balloon and its ribbons, beside it rather than in it: the view lays it out from the settings
+        // (its size, its tip) and moves it to the puncture. The needle under the head.
+        private static PinImages? CreatePin(RectTransform root, Material material)
         {
-            var rect = CreateRect(name, balloon);
+            var sheet = ImportAsData(PinSheetPath);
+            if (sheet == null || material == null)
+            {
+                Debug.LogWarning($"[CardReveal] No {PinSheetPath} (bake it with Tools/art/balloon_pop/bake_pin.py); " +
+                                 "the balloon pops with no pin.");
+                return null;
+            }
+
+            var pin = CreateRect("Pin", root);
+            var needle = CreatePinPart("Needle", pin, sheet, material, PinNeedleCell);
+            var head = CreatePinPart("Head", pin, sheet, material, PinHeadCell);
+            return new PinImages(pin, head, needle);
+        }
+
+        private static RawImage CreatePinPart(string name, RectTransform pin, Texture2D sheet, Material material,
+            Rect cell)
+        {
+            var image = CreateLayer(name, pin, material);
+            image.texture = sheet;
+            image.uvRect = cell;
+            image.enabled = false;
+            return image;
+        }
+
+        private static RawImage CreateLayer(string name, RectTransform parent, Material material)
+        {
+            var rect = CreateRect(name, parent);
             Stretch(rect);
             var image = rect.gameObject.AddComponent<RawImage>();
             image.material = material;
@@ -469,18 +544,35 @@ namespace BalloonParty.Editor
             rect.offsetMax = Vector2.zero;
         }
 
-        // The reveal's three materials: the rubber, its drop shadow (the same shader with Drop Shadow on), the ribbons.
+        // The reveal's materials: the rubber, its drop shadow (the same shader with Drop Shadow on), the ribbons, and
+        // the pin (the same shader, without the glow; none if the shader is missing).
         private readonly struct Materials
         {
             public readonly Material Rubber;
             public readonly Material Shadow;
             public readonly Material Ribbon;
+            public readonly Material Pin;
 
-            public Materials(Material rubber, Material shadow, Material ribbon)
+            public Materials(Material rubber, Material shadow, Material ribbon, Material pin)
             {
                 Rubber = rubber;
                 Shadow = shadow;
                 Ribbon = ribbon;
+                Pin = pin;
+            }
+        }
+
+        private readonly struct PinImages
+        {
+            public readonly RectTransform Root;
+            public readonly RawImage Head;
+            public readonly RawImage Needle;
+
+            public PinImages(RectTransform root, RawImage head, RawImage needle)
+            {
+                Root = root;
+                Head = head;
+                Needle = needle;
             }
         }
 
