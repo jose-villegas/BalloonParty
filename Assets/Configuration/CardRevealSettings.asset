@@ -14,6 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Configuration.CardReveal.CardRevealSettings
   _popSheets:
   - {fileID: 2800000, guid: 83daae4bb7bdeda47ade7b8fa6b4b9cb, type: 3}
+  - {fileID: 2800000, guid: 79083eedd6550b243a48ee5f95641ad1, type: 3}
+  - {fileID: 2800000, guid: bbf28788c094a5046a6b4a8cd6d40ddf, type: 3}
+  - {fileID: 2800000, guid: a361f792fcd9f194886b79a26897c3c3, type: 3}
+  - {fileID: 2800000, guid: b5c17465bf83d3642a55dfac4229be73, type: 3}
+  - {fileID: 2800000, guid: 6707a6fc1c180bc4094ccc349d08f3fb, type: 3}
+  - {fileID: 2800000, guid: 64ef9f2adc434b546ac343139d911f26, type: 3}
+  - {fileID: 2800000, guid: de9ac40c23e8365469a1c30767e9ea83, type: 3}
   _recentPopsAvoided: 2
   _sheetColumns: 8
   _sheetRows: 6
