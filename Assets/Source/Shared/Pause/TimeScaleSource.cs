@@ -20,6 +20,10 @@ namespace BalloonParty.Shared.Pause
         /// <summary>The level-up ceremony's tipping beat and its hand-off to the popup. Claimed
         /// EXCLUSIVELY for the beat so a doomed shot's LastShield curve can't drag it slower than the
         /// ceremony asked for.</summary>
-        LevelUpCeremony
+        LevelUpCeremony,
+
+        /// <summary>An editor tool holding the world still to take a shot (<c>Editor/ReadmeShotCapture</c>);
+        /// claimed exclusively, so nothing in play moves it on.</summary>
+        Capture
     }
 }
