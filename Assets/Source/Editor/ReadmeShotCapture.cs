@@ -67,8 +67,8 @@ namespace BalloonParty.Editor
         // item that arms the ball (Fires), after the armed ball is fired, since its effect rides on the ball.
         private static readonly (ItemType Item, float Seconds, bool Fires)[] Items =
         {
-            (ItemType.Bomb, 0.3f, false), (ItemType.Laser, 0.5f, false), (ItemType.Lightning, 0.4f, false),
-            (ItemType.Paint, 0.6f, false), (ItemType.Shield, 0.4f, true), (ItemType.Snipe, 0.4f, true)
+            (ItemType.Bomb, 0.3f, false), (ItemType.Laser, 0.3f, false), (ItemType.Lightning, 0.2f, false),
+            (ItemType.Paint, 0.4f, false), (ItemType.Shield, 0.2f, true), (ItemType.Snipe, 0.3f, true)
         };
 
         private static readonly float[] BurstSeconds = { 0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.8f, 1f, 1.2f };
