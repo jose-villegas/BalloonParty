@@ -71,7 +71,8 @@ namespace BalloonParty.UI.CardReveal
 
         /// <summary>
         ///     Pop <paramref name="pop" />'s sheet once it has loaded: at once if it was held ahead. Held from here
-        ///     on if it wasn't. Null if there is no such pop or its sheet is missing.
+        ///     on if it wasn't. Null if there is no such pop, its sheet is missing, or it was let go before it
+        ///     arrived (then it's unloaded).
         /// </summary>
         internal async UniTask<Texture2D> GetAsync(int pop, CancellationToken token)
         {
@@ -86,7 +87,7 @@ namespace BalloonParty.UI.CardReveal
                 await sheet.Loading.AttachExternalCancellation(token);
             }
 
-            return sheet.Texture;
+            return sheet.Wanted ? sheet.Texture : null;
         }
 
         // Holds pop's sheet, loading it if it isn't already. A sheet let go while it was still loading is still
@@ -115,7 +116,18 @@ namespace BalloonParty.UI.CardReveal
         private async UniTask LoadAsync(int pop, Sheet sheet)
         {
             var path = _paths[pop];
-            var texture = await _load(path);
+            Texture2D texture;
+            try
+            {
+                texture = await _load(path);
+            }
+            catch (Exception e)
+            {
+                // Taken as missing, so the sheet still settles: left loading, it could never be let go.
+                Log.Warn("CardReveal", $"Loading the pop sheet at Resources/{path} failed: {e.Message}");
+                texture = null;
+            }
+
             if (texture == null)
             {
                 Log.Warn("CardReveal", $"No pop sheet at Resources/{path}.");

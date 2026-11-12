@@ -247,6 +247,7 @@ namespace BalloonParty.Tests.Game
             var chosenBefore = _controller.NextPop;
             Held(_shield);
 
+            // Different only since the setup avoids recent pops, the one playing among them.
             Assert.AreEqual(1, nextAtPublish.Count);
             Assert.AreNotEqual(chosenBefore, nextAtPublish[0], "a stage reading it as the reveal starts loads the " +
                                                              "one after, not the one playing");

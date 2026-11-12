@@ -16,8 +16,8 @@ namespace BalloonParty.Game.CardReveal
 
         /// <summary>
         ///     The pop the next reveal will play, chosen a reveal ahead so the stage can load its sheet while the
-        ///     game plays. Chosen when a stage first attaches, and again as each reveal starts with the last one;
-        ///     -1 before a stage attaches.
+        ///     game plays. Chosen when a stage first attaches, and re-chosen as each reveal starts, before
+        ///     <see cref="Current" /> publishes; -1 before a stage attaches.
         /// </summary>
         int NextPop { get; }
 

@@ -192,6 +192,33 @@ namespace BalloonParty.Tests.UI
         }
 
         [Test]
+        public void GetAsync_ASheetLetGoBeforeItArrives_IsNull()
+        {
+            var get = _loader.GetAsync(0, CancellationToken.None);
+            _loader.Dispose();
+
+            Arrive(Paths[0]);
+
+            Assert.IsNull(get.GetAwaiter().GetResult(), "it was unloaded as it arrived");
+            CollectionAssert.AreEqual(new[] { _textures[Paths[0]] }, _unloaded);
+        }
+
+        [Test]
+        public void ALoadThatFails_IsTakenAsMissing_AndCanBeLetGo()
+        {
+            LogAssert.Expect(LogType.Warning, new Regex("Loading the pop sheet at Resources/Pops/pop_01 failed"));
+            LogAssert.Expect(LogType.Warning, new Regex("No pop sheet at Resources/Pops/pop_01"));
+            var get = _loader.GetAsync(1, CancellationToken.None);
+
+            _pending[Paths[1]].TrySetException(new System.InvalidOperationException("broken"));
+
+            Assert.IsNull(get.GetAwaiter().GetResult());
+            _loader.Hold(-1, -1);
+            _loader.Hold(-1, 1);
+            Assert.AreEqual(2, _loads.FindAll(path => path == Paths[1]).Count, "let go, so it's tried afresh");
+        }
+
+        [Test]
         public void Dispose_UnloadsEverySheet_EvenOneStillLoading()
         {
             _loader.Hold(0, 1);

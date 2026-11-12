@@ -102,7 +102,7 @@ of a membrane solver in the script itself wasn't needed.
 **Budget.** 8 sheets of 2048×3072 (48 frames, two layers), ASTC 4×4 on phones (6×6 and ETC2 blocked
 the normals into steps the cel shading drew as stairs) at about 6.3 MB each: about 50 MB in the build.
 At most two are in memory (`PopSheetLoader`): the next reveal's, loaded ahead, and the one playing, about
-6–13 MB. The sheets stay out of the sprite atlases, like the other baked art (`Sprites/README.md`), under
+6.3 MB each. The sheets stay out of the sprite atlases, like the other baked art (`Sprites/README.md`), under
 `Assets/Sprites/UI/CardReveal/Resources/CardRevealPops/`.
 
 ## 6. Assets
@@ -122,7 +122,7 @@ At most two are in memory (`PopSheetLoader`): the next reveal's, loaded ahead, a
 | 1 (done) | `CardRevealController` and its queue, the pick that avoids the last two pops, the tooltip hand-off, EditMode tests | No |
 | 2 (built, in review) | The bake script: the balloon, one pop, rendered and packed. The owner reviews that one pop from the contact sheet before the other 15 are baked | Makes it |
 | 3 | The other 15 pops, reviewed together on the contact sheet | Makes it |
-| 4 (built with 8 pops) | `CardRevealView`, `LitFlipbook` and the ribbons: the pop, lit and in two layers, the ribbons flying with the ascent, the pushpin that pricks it, and the shreds it flings. and `PopSheetLoader`, which keeps only two sheets in memory | Yes: phases 2 and 3 |
+| 4 (built with 8 pops) | `CardRevealView`, `LitFlipbook` and the ribbons: the pop, lit and in two layers, the ribbons flying with the ascent, the pushpin that pricks it, and the shreds it flings; and `PopSheetLoader`, which keeps only two sheets in memory | Yes: phases 2 and 3 |
 | 5 | A playtest pass on a phone: timing, how well the ribbons read over a busy board, and whether 256 px frames are sharp enough | — |
 
 ## 8. Open questions

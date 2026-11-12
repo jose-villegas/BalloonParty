@@ -115,7 +115,6 @@ namespace BalloonParty.UI.CardReveal
 
             _cardReveals.AttachStage();
             _attached = true;
-            HoldSheets(null);
             _subscriptions = new CompositeDisposable(
                 _ascendStarted.Subscribe(_ => _ascentStartedAt = Time.unscaledTime),
                 _cardReveals.Current.Subscribe(OnReveal));
@@ -287,6 +286,7 @@ namespace BalloonParty.UI.CardReveal
             return pop >= 0 && pop < punctures.Count ? punctures[pop] : DefaultPuncture;
         }
 
+        // Also called with the null Current holds on subscribing, which starts the next reveal's sheet loading.
         private void OnReveal(RevealedCard reveal)
         {
             Stop();
@@ -315,6 +315,7 @@ namespace BalloonParty.UI.CardReveal
         {
             try
             {
+                // From before the sheet's wait: a reveal whose sheet came late still leaves with its ascent.
                 var startedAt = Time.unscaledTime;
                 var pop = SheetOf(reveal.Pop);
                 var sheet = await _sheets.GetAsync(pop, token);
