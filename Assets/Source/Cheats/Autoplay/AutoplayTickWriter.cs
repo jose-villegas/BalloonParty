@@ -53,7 +53,6 @@ namespace BalloonParty.Cheats.Autoplay
                 .Append(", \"shots\": ").Append(sample.Shots)
                 .Append(", \"fill\": ").Append(sample.Fill.ToString("F2", CultureInfo.InvariantCulture))
                 .Append(", \"inflight\": ").Append(sample.InFlight)
-                .Append(", \"coins\": ").Append(sample.Coins)
                 .Append('}');
             WriteLine(_line.ToString());
         }
@@ -115,10 +114,9 @@ namespace BalloonParty.Cheats.Autoplay
         internal readonly int Shots;
         internal readonly float Fill;
         internal readonly int InFlight;
-        internal readonly int Coins;
 
         internal AutoplaySample(float time, int level, int score, int hearts, string navigation, string phase,
-            int shots, float fill, int inFlight, int coins)
+            int shots, float fill, int inFlight)
         {
             Time = time;
             Level = level;
@@ -129,7 +127,6 @@ namespace BalloonParty.Cheats.Autoplay
             Shots = shots;
             Fill = fill;
             InFlight = inFlight;
-            Coins = coins;
         }
     }
 }

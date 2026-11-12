@@ -254,13 +254,6 @@ with its flight is silent, so a flight ending is never a break. At level-up the 
 clears every streak and announces it once, so the service forgets the remembered values
 too.
 
-## Coins
-
-`coins_earned` sums `CoinDroppedMessage.Amount` into the Level scope. It is a copy of what
-went into the wallet, for tuning the drop chance; the wallet itself is progression and is
-kept on the device by `Game/Coins/`, never read back from here. A coin that drops after the
-game over still reaches the wallet but is not counted: the level's record is closed.
-
 ## Pause handling
 
 Subscribes `PauseService.IsAnyPaused` directly (reference-counted and reset-safe) rather

@@ -357,7 +357,7 @@ namespace BalloonParty.Editor
             return label;
         }
 
-        // The row of ways to make the retry easier, the tiles sharing its width; the coin shop's tile joins it.
+        // The row of ways to make the retry easier, the tiles sharing its width.
         private static GameObject BuildOffers(Transform panel, Button bonus, Kit kit)
         {
             var offers = Node("Offers", panel);

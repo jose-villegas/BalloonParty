@@ -144,7 +144,7 @@ spawner.SpawnFollow(from, () => balloon.position, duration, onArrived);  // curv
 
 `SpawnFollow` (backed by `FlyingTrail.SetupFollow`) eases from its launch point to a **live-updating** target over `duration` along the move curve, instead of tweening to a fixed point — used by `HeartTrailController` so an overflow heart lands on its balloon even while the pile compacts up under it. It honours `TrailMotion` like the fixed-point flights.
 
-Used by `ScoreTrailService` for score trail spawning, `HeartTrailController` for overflow heart trails, `CoinTrailService` for coins flying to the coin counter, and `LevelUpPopUp` for fill trails.
+Used by `ScoreTrailService` for score trail spawning, `HeartTrailController` for overflow heart trails, and `LevelUpPopUp` for fill trails.
 
 ### `TrailEndpointRegistry` + `ITrailEndpoint`
 

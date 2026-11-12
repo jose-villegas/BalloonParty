@@ -19,7 +19,6 @@ using BalloonParty.Configuration;
 using BalloonParty.Display;
 using BalloonParty.Game.CardReveal;
 using BalloonParty.Game.Cinematics;
-using BalloonParty.Game.Coins;
 using BalloonParty.Game.Danger;
 using BalloonParty.Game.Flight;
 using BalloonParty.Game.HeadsUp;
@@ -125,8 +124,6 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ItemActivatedMessage>(options);
             builder.RegisterMessageBroker<TransformCapturedMessage>(options);
             builder.RegisterMessageBroker<ShieldGainedMessage>(options);
-            builder.RegisterMessageBroker<CoinDroppedMessage>(options);
-            builder.RegisterMessageBroker<CoinLandedMessage>(options);
             builder.RegisterMessageBroker<ShieldLostMessage>(options);
             builder.RegisterMessageBroker<WallHitMessage>(options);
             builder.RegisterMessageBroker<DeflectChainMessage>(options);
@@ -211,15 +208,6 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<RunUpgrades>()
                 .As<IWeaponStats>().As<IShieldsPerBall>().As<IUpgradeDraft>().As<IBonusCardSource>()
                 .As<IRunResettable>();
-            builder.Register<ICoinStore, PlayerPrefsCoinStore>(Lifetime.Singleton);
-            builder.Register<CoinWallet>(Lifetime.Singleton)
-                .As<ICoinBalance>().As<ICoinWallet>().As<ICoinWalletPersistence>();
-            builder.Register<AppSuspendSignal>(Lifetime.Singleton).As<IAppSuspendSignal>();
-            builder.RegisterEntryPoint<CoinWalletSaver>();
-            builder.RegisterEntryPoint<CoinCreditor>();
-            builder.RegisterEntryPoint<CoinDropController>().As<IRunResettable>();
-            builder.RegisterEntryPoint<CoinTrailService>().AsSelf().As<IRunResettable>().As<ITransitionOutgoingContent>();
-            builder.RegisterEntryPoint<CoinCounterVisibility>().As<ICoinCounterVisibility>();
             builder.RegisterEntryPoint<CardRevealController>().As<ICardReveals>().As<IRunResettable>();
 
 #if UNITY_ANDROID && !UNITY_EDITOR

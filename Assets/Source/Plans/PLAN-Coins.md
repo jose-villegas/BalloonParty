@@ -5,9 +5,10 @@
 > Working plan for a coin currency earned deep in a run and spent on the game-over screen for a card
 > that helps the retry.
 
-**Status:** Phases 1 to 3 built: the wallet, the drop and telemetry, the tuning runs, and the coin's
-flight to the bottom-left counter (see `Game/Coins/README.md` and `UI/Coins/README.md`). Phase 4,
-the shop, is next. Decided with the owner: a card bought with coins applies to the
+**Status:** Held out of `main` until after the first release, to keep that release simple. Phases 1
+to 3 are built on the `feature/coins` branch: the wallet, the drop and telemetry, the tuning runs, and
+the coin's flight to the bottom-left counter (see `Game/Coins/README.md` and `UI/Coins/README.md`
+there). Phase 4, the shop, comes after it returns. Decided with the owner: a card bought with coins applies to the
 retry at the level reached; coins are a saved wallet; they drop from pops from level 10 on; the
 counter sits bottom left and appears only once coins exist. Claude draws the art in the existing UI
 style (§7); the coin is drawn.

@@ -15,7 +15,6 @@ The entry point that starts and runs the game.
 | `Score/` | Score tracking, level progress, streaks, and trail orb management — see `Score/README.md` |
 | `Run/` | Run lifecycle — end-of-run commit, restart reset ordering, best-run meta — see `Run/README.md` |
 | `Upgrades/` | Run-scoped upgrade cards dealt at level-ups, and the weapon they add up to (ball cap, reload, shields, item odds) — see `Upgrades/README.md` |
-| `Coins/` | The saved coin wallet and the coin drop from pops deep in a run — see `Coins/README.md` |
 | `Health/` | Player hit-point pool and loss forecast — see `Health/README.md` |
 | `Danger/` | Space-pressure early-warning signal — see `Danger/README.md` |
 | `HeadsUp/` | Which handwritten heads-ups show, and when: the routers that turn gameplay messages into requests, the queue that caps and prioritises them, and the service that drives the view — see `HeadsUp/README.md` |

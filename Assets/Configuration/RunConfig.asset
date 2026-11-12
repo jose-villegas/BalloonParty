@@ -60,8 +60,3 @@ MonoBehaviour:
       _amount: 0.25
       _maxStacks: 4
       _weight: 1
-  _coins:
-    _coinsFromLevel: 10
-    _dropChance: 0.01
-    _trailDuration: 0.7
-    _trailPrewarm: 8

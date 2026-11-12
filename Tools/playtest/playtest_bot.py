@@ -36,7 +36,7 @@ REPO_ROOT = os.path.dirname(os.path.dirname(TOOL_DIR))
 TICK_RE = re.compile(
     r"^(?P<t>[\d.]+) L(?P<level>\d+) score (?P<score>-?\d+) hearts (?P<hearts>-?\d+) "
     r"(?P<nav>\w+)/(?P<phase>\w+) shots (?P<shots>\d+)(?: fill (?P<fill>[\d.]+))?(?: inflight (?P<inflight>\d+))?"
-    r"(?: coins (?P<coins>\d+))?(?: breather (?P<breather>[\d.]+))?$")
+    r"(?: breather (?P<breather>[\d.]+))?$")
 FLOAT_FIELDS = ("t", "fill", "breather")
 # A gap between two playing ticks longer than this (a level-up, a pause, a restart) ends a release or tension stretch.
 STRETCH_BREAK_SECONDS = 2.0
@@ -168,7 +168,7 @@ def summarize_runs(samples):
             if current and current["ticks"]:
                 runs.append(current)
             current = {"ticks": 0, "level": 0, "score": 0, "hearts": None, "shots": 0, "first": None, "last": None,
-                       "shots_at_start": None, "coins_at_start": None, "coins": None}
+                       "shots_at_start": None}
             if ends_run(sample):
                 continue
         if "level" not in sample:
@@ -180,10 +180,6 @@ def summarize_runs(samples):
         if current["shots_at_start"] is None:
             current["shots_at_start"] = sample["shots"]
         current["shots"] = sample["shots"] - current["shots_at_start"]
-        if "coins" in sample:
-            if current["coins_at_start"] is None:
-                current["coins_at_start"] = sample["coins"]
-            current["coins"] = sample["coins"]
         current["first"] = sample["t"] if current["first"] is None else current["first"]
         current["last"] = sample["t"]
     if current and current["ticks"]:
@@ -341,15 +337,13 @@ def build_report(label, seconds, player, tuning, samples, records):
     if runs:
         ended = [ended for _, ended in split_runs(samples)]
         lines += ["## Runs", "",
-                  "| Run | Ended | Reached level | Score | Hearts at end | Shots | Seconds | Coins earned | Wallet |",
-                  "|---|---|---|---|---|---|---|---|---|"]
+                  "| Run | Ended | Reached level | Score | Hearts at end | Shots | Seconds |",
+                  "|---|---|---|---|---|---|---|"]
         for index, run in enumerate(runs, 1):
             span = (run["last"] or 0) - (run["first"] or 0)
             outcome = "game over" if index <= len(ended) and ended[index - 1] else "still playing"
-            earned = "-" if run["coins"] is None else run["coins"] - run["coins_at_start"]
-            wallet = "-" if run["coins"] is None else run["coins"]
             lines.append(f"| {index} | {outcome} | {run['level']} | {run['score']} | {run['hearts']} | "
-                         f"{run['shots']} | {span:.0f} | {earned} | {wallet} |")
+                         f"{run['shots']} | {span:.0f} |")
         failures = sum(ended)
         lines += ["", f"{failures} of {len(runs)} runs ended in a game over."]
         lines.append("")
@@ -378,8 +372,8 @@ def build_report(label, seconds, player, tuning, samples, records):
     levels = [r for r in records if r.get("record_kind") == "level"]
     if levels:
         lines += ["## Levels (telemetry)", "",
-                  "| Level | Cleared | Seconds | Shots | Pops | Pops per shot | Hearts lost | Max streak | Coins |",
-                  "|---|---|---|---|---|---|---|---|---|"]
+                  "| Level | Cleared | Seconds | Shots | Pops | Pops per shot | Hearts lost | Max streak |",
+                  "|---|---|---|---|---|---|---|---|"]
         for record in levels:
             metrics = record.get("metrics", {})
             shots = metrics.get("shots_fired", 0)
@@ -388,8 +382,7 @@ def build_report(label, seconds, player, tuning, samples, records):
             lines.append(
                 f"| {record.get('level_index')} | {'yes' if record.get('completed') else 'no'} | "
                 f"{record.get('timers', {}).get('gameplay_seconds', 0):.1f} | {shots} | {pops} | {per_shot} | "
-                f"{metrics.get('hearts_lost', 0)} | {metrics.get('max_streak', 0)} | "
-                f"{metrics.get('coins_earned', 0)} |")
+                f"{metrics.get('hearts_lost', 0)} | {metrics.get('max_streak', 0)} |")
         lines.append("")
 
     # Hearts are lost only when a spawning line finds the board full, so how full it runs is the danger.

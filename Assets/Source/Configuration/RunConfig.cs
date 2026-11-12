@@ -50,9 +50,6 @@ namespace BalloonParty.Configuration
         [Header("Upgrades")]
         [SerializeField] private UpgradeSettings _upgrades = new();
 
-        [Header("Coins")]
-        [SerializeField] private CoinSettings _coins = new();
-
         public int StartingHitPoints => _startingHitPoints;
         public int LevelUpHeartRefill => _levelUpHeartRefill;
         public int MaxRetries => _maxRetries;
@@ -65,6 +62,5 @@ namespace BalloonParty.Configuration
         public float LevelCompleteFlightGrace => _levelCompleteFlightGrace;
         public float LevelCompleteRampUpScale => _levelCompleteRampUpScale;
         public IUpgradeSettings Upgrades => _upgrades;
-        public ICoinSettings Coins => _coins;
     }
 }

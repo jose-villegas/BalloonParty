@@ -37,7 +37,6 @@ namespace BalloonParty.Game.Telemetry
         BoardCleared,
         LevelsCompleted,
         RetriesUsed,
-        TotalScore,
-        CoinsEarned
+        TotalScore
     }
 }

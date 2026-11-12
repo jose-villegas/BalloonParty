@@ -2,7 +2,6 @@
 using System;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Game;
-using BalloonParty.Game.Coins;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
@@ -39,7 +38,6 @@ namespace BalloonParty.Cheats.Autoplay
         private readonly IRunScore _score;
         private readonly IBoardFill _fill;
         private readonly IProjectileRegistry _projectiles;
-        private readonly ICoinBalance _coins;
         private readonly IProjectileFlightConfig _flight;
         private readonly FireBestShotCheat _solver;
         private readonly System.Random _random;
@@ -63,7 +61,6 @@ namespace BalloonParty.Cheats.Autoplay
             IRunScore score,
             IBoardFill fill,
             IProjectileRegistry projectiles,
-            ICoinBalance coins,
             IProjectileFlightConfig flight,
             FireBestShotCheat solver)
         {
@@ -73,7 +70,6 @@ namespace BalloonParty.Cheats.Autoplay
             _score = score;
             _fill = fill;
             _projectiles = projectiles;
-            _coins = coins;
             _flight = flight;
             _solver = solver;
             _random = settings.Seed.HasValue ? new System.Random(settings.Seed.Value) : new System.Random();
@@ -261,8 +257,7 @@ namespace BalloonParty.Cheats.Autoplay
                 _progress.Phase.Value.ToString(),
                 _shots,
                 _fill.Occupancy,
-                _projectiles.InFlightCount,
-                _coins.Balance.Value));
+                _projectiles.InFlightCount));
         }
 
         private float NextUniform()

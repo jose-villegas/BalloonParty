@@ -124,33 +124,6 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void CoinsEarned_SumIntoTheLevelRecord()
-        {
-            _harness.EnterGame();
-            Play();
-            _harness.CoinDropped.Handle(new CoinDroppedMessage(1, Vector3.zero));
-            _harness.CoinDropped.Handle(new CoinDroppedMessage(1, Vector3.zero));
-
-            _harness.CompleteLevel(2);
-
-            Assert.AreEqual(2, _harness.LastOf(RecordKind.Level).Metrics[MetricId.CoinsEarned]);
-        }
-
-        [Test]
-        public void CoinsEarned_AfterGameOver_AreNotCounted()
-        {
-            _harness.EnterGame();
-            Play();
-            _harness.CoinDropped.Handle(new CoinDroppedMessage(1, Vector3.zero));
-            _harness.GameOver.Handle(new GameOverMessage(1, 100));
-
-            // A straggler pop after the game over still drops a coin, but the level is closed.
-            _harness.CoinDropped.Handle(new CoinDroppedMessage(1, Vector3.zero));
-
-            Assert.AreEqual(1, _harness.LastOf(RecordKind.Level).Metrics[MetricId.CoinsEarned]);
-        }
-
-        [Test]
         public void CeremonySnapshot_IsImmutableAndDivergesFromTheFlushSnapshot()
         {
             _harness.EnterGame();
