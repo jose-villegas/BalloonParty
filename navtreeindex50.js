@@ -1,5 +1,6 @@
 var NAVTREEINDEX50 =
 {
+"classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a682712772e6a2e4987183bf675fb10d4":[5,0,0,6,9,4,3],
 "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a682712772e6a2e4987183bf675fb10d4":[6,0,0,6,9,4,3],
 "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a710289b38fd636dea5837f53705e284a":[5,0,0,6,9,4,33],
 "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a710289b38fd636dea5837f53705e284a":[6,0,0,6,9,4,33],
@@ -248,6 +249,5 @@ var NAVTREEINDEX50 =
 "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a5a82682b9dac960510a9513886776157":[5,0,0,6,10,7,38],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a5a82682b9dac960510a9513886776157":[6,0,0,6,10,7,38],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a5d459263b37fd9b161c4cfd29a74640a":[5,0,0,6,10,7,15],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a5d459263b37fd9b161c4cfd29a74640a":[6,0,0,6,10,7,15],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a5fbfdbcff2fcafb4217759adec22cac1":[5,0,0,6,10,7,74]
+"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a5d459263b37fd9b161c4cfd29a74640a":[6,0,0,6,10,7,15]
 };

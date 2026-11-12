@@ -1,5 +1,6 @@
 var NAVTREEINDEX98 =
 {
+"interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistryWriter.html#a2995eb3c00ca94214f661fc9f9d08f4f":[5,0,0,10,6,6],
 "interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistryWriter.html#a2995eb3c00ca94214f661fc9f9d08f4f":[6,0,0,10,6,6],
 "interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistryWriter.html#a2b6a22467f4c441c8734472af037c6da":[5,0,0,10,6,14],
 "interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistryWriter.html#a2b6a22467f4c441c8734472af037c6da":[6,0,0,10,6,14],
@@ -248,6 +249,5 @@ var NAVTREEINDEX98 =
 "interfaceBalloonParty_1_1Shared_1_1IRunConfig.html":[5,0,0,12,27],
 "interfaceBalloonParty_1_1Shared_1_1IRunConfig.html":[6,0,0,12,27],
 "interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#a05c3849296a9e25f7d22dba16149cfc0":[5,0,0,12,27,3],
-"interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#a05c3849296a9e25f7d22dba16149cfc0":[6,0,0,12,27,3],
-"interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#a05e7a059dd6f744faf423f2be72cbfca":[5,0,0,12,27,10]
+"interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#a05c3849296a9e25f7d22dba16149cfc0":[6,0,0,12,27,3]
 };

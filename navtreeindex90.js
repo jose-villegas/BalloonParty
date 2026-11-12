@@ -1,5 +1,6 @@
 var NAVTREEINDEX90 =
 {
+"classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html#af568f2e3c4d675c241a6a63e43190abd":[5,0,0,16,8,6,4],
 "classBalloonParty_1_1UI_1_1Score_1_1ScoreCounterLabel.html#af568f2e3c4d675c241a6a63e43190abd":[6,0,0,16,8,6,4],
 "classBalloonParty_1_1UI_1_1Score_1_1ScoreUILifetimeScope.html":[5,0,0,16,8,7],
 "classBalloonParty_1_1UI_1_1Score_1_1ScoreUILifetimeScope.html":[6,0,0,16,8,7],
@@ -248,6 +249,5 @@ var NAVTREEINDEX90 =
 "classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#ab144009cd067291e28cdfededd3e6818":[5,0,0,16,26,10],
 "classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#ab144009cd067291e28cdfededd3e6818":[6,0,0,16,26,10],
 "classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#ae71b411ec9c82aa8feadde77c5ed39cb":[5,0,0,16,26,2],
-"classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#ae71b411ec9c82aa8feadde77c5ed39cb":[6,0,0,16,26,2],
-"classBalloonParty_1_1UI_1_1Tooltip_1_1TooltipBanner.html":[5,0,0,16,11,0]
+"classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#ae71b411ec9c82aa8feadde77c5ed39cb":[6,0,0,16,26,2]
 };

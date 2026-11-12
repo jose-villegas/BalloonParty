@@ -1,5 +1,6 @@
 var NAVTREEINDEX41 =
 {
+"classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a4a33be68d2d4343e593ba5b2d4e0ffae":[5,0,0,6,12,5],
 "classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a4a33be68d2d4343e593ba5b2d4e0ffae":[6,0,0,6,12,5],
 "classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a560bbc0d8e30ba1895182085b2a4cabd":[5,0,0,6,12,7],
 "classBalloonParty_1_1Game_1_1AppLifetimeScope.html#a560bbc0d8e30ba1895182085b2a4cabd":[6,0,0,6,12,7],
@@ -248,6 +249,5 @@ var NAVTREEINDEX41 =
 "classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicCameraRig.html#acbe52b3e18489ef5089ad6ddbf587b7f":[5,0,0,6,1,5,6],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicCameraRig.html#acbe52b3e18489ef5089ad6ddbf587b7f":[6,0,0,6,1,5,6],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicCameraRig.html#ad7719a06f12d0f1e83f084042d1d9a93":[5,0,0,6,1,5,7],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicCameraRig.html#ad7719a06f12d0f1e83f084042d1d9a93":[6,0,0,6,1,5,7],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicCameraRig.html#add4d1ec14bb038cb3604609ec85b4713":[5,0,0,6,1,5,8]
+"classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicCameraRig.html#ad7719a06f12d0f1e83f084042d1d9a93":[6,0,0,6,1,5,7]
 };

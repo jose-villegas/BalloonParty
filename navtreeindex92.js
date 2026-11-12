@@ -1,5 +1,6 @@
 var NAVTREEINDEX92 =
 {
+"functions_vars_b.html":[6,3,2,2],
 "functions_vars_c.html":[6,3,2,3],
 "functions_vars_d.html":[6,3,2,4],
 "functions_vars_e.html":[6,3,2,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX92 =
 "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a257c39732c39b18f764f34019402044e":[5,0,0,3,2,1,11],
 "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a257c39732c39b18f764f34019402044e":[6,0,0,3,2,1,11],
 "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a2769a2815f15d9ae1cce826c359cdf71":[5,0,0,3,2,1,12],
-"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a2769a2815f15d9ae1cce826c359cdf71":[6,0,0,3,2,1,12],
-"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a2e44a97f326d30a9d83aacb322865d1e":[5,0,0,3,2,1,9]
+"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a2769a2815f15d9ae1cce826c359cdf71":[6,0,0,3,2,1,12]
 };

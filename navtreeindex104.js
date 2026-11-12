@@ -1,5 +1,7 @@
 var NAVTREEINDEX104 =
 {
+"plan_level_up_timing.html#autotoc_md735":[3,16,0,6,6],
+"plan_level_up_timing.html#autotoc_md736":[3,16,0,7],
 "plan_level_up_timing.html#autotoc_md737":[3,16,0,8],
 "plan_level_up_timing.html#autotoc_md738":[3,16,0,9],
 "plan_level_up_timing.html#autotoc_md739":[3,16,0,10],
@@ -247,7 +249,5 @@ var NAVTREEINDEX104 =
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1EdgeRecord.html#abaa53f92de72e9a18ec0a49554a508ac":[6,0,0,1,0,0,0,6],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1EdgeRecord.html#af6666cb3a0a3c48a3ae286638bba49dd":[5,0,0,1,0,0,0,5],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1EdgeRecord.html#af6666cb3a0a3c48a3ae286638bba49dd":[6,0,0,1,0,0,0,5],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1EdgeRecord.html#af8c74db7395a4e568dc9591b9a7f74ab":[5,0,0,1,0,0,0,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1EdgeRecord.html#af8c74db7395a4e568dc9591b9a7f74ab":[6,0,0,1,0,0,0,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1MoveRecord.html":[5,0,0,1,0,0,1]
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1EdgeRecord.html#af8c74db7395a4e568dc9591b9a7f74ab":[5,0,0,1,0,0,0,1]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX87 =
 {
+"classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#a23c8819a19d2d234e78f8b605e29168b":[5,0,0,16,6,2,18],
 "classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#a23c8819a19d2d234e78f8b605e29168b":[6,0,0,16,6,2,18],
 "classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#a4374b064d7cae03c6e95d039cb445f91":[5,0,0,16,6,2,16],
 "classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#a4374b064d7cae03c6e95d039cb445f91":[6,0,0,16,6,2,16],
@@ -248,6 +249,5 @@ var NAVTREEINDEX87 =
 "classBalloonParty_1_1UI_1_1RectAnchorMath.html#abec1fee62b58689d794c080f6802cfd8":[5,0,0,16,19,0],
 "classBalloonParty_1_1UI_1_1RectAnchorMath.html#abec1fee62b58689d794c080f6802cfd8":[6,0,0,16,19,0],
 "classBalloonParty_1_1UI_1_1RectAnchorMath.html#ae3d6e9bf080562b64b7b3a671b4cd07d":[5,0,0,16,19,1],
-"classBalloonParty_1_1UI_1_1RectAnchorMath.html#ae3d6e9bf080562b64b7b3a671b4cd07d":[6,0,0,16,19,1],
-"classBalloonParty_1_1UI_1_1RollingCounterDisplay.html":[5,0,0,16,20]
+"classBalloonParty_1_1UI_1_1RectAnchorMath.html#ae3d6e9bf080562b64b7b3a671b4cd07d":[6,0,0,16,19,1]
 };

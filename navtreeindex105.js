@@ -1,5 +1,7 @@
 var NAVTREEINDEX105 =
 {
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1EdgeRecord.html#af8c74db7395a4e568dc9591b9a7f74ab":[6,0,0,1,0,0,0,1],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1MoveRecord.html":[5,0,0,1,0,0,1],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1MoveRecord.html":[6,0,0,1,0,0,1],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1MoveRecord.html#a1782c2c46e2fb9144142cd8cbd402146":[5,0,0,1,0,0,1,2],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1MoveRecord.html#a1782c2c46e2fb9144142cd8cbd402146":[6,0,0,1,0,0,1,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX105 =
 "structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html#a1a93d24ceaf250392206e9524b2fb5ac":[6,0,0,3,5,24,3],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html#a26b97afabd0a22c4cbbd9aec25df9a9a":[5,0,0,3,5,24,2],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html#a26b97afabd0a22c4cbbd9aec25df9a9a":[6,0,0,3,5,24,2],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html#a2aec7a97904642d398130d1b7b1610cd":[5,0,0,3,5,24,1],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html#a2aec7a97904642d398130d1b7b1610cd":[6,0,0,3,5,24,1],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html#a6bf002f2cf6c6acd1f30b88e2ca2131e":[5,0,0,3,5,24,4]
+"structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html#a2aec7a97904642d398130d1b7b1610cd":[5,0,0,3,5,24,1]
 };

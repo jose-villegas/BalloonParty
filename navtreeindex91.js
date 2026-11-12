@@ -1,5 +1,6 @@
 var NAVTREEINDEX91 =
 {
+"classBalloonParty_1_1UI_1_1Tooltip_1_1TooltipBanner.html":[5,0,0,16,11,0],
 "classBalloonParty_1_1UI_1_1Tooltip_1_1TooltipBanner.html":[6,0,0,16,11,0],
 "classBalloonParty_1_1UI_1_1Tooltip_1_1TooltipBanner.html#a0b06295561eb57ff2fffc290555fa03e":[5,0,0,16,11,0,1],
 "classBalloonParty_1_1UI_1_1Tooltip_1_1TooltipBanner.html#a0b06295561eb57ff2fffc290555fa03e":[6,0,0,16,11,0,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX91 =
 "functions_v.html":[6,3,0,22],
 "functions_vars.html":[6,3,2],
 "functions_vars.html":[6,3,2,0],
-"functions_vars_a.html":[6,3,2,1],
-"functions_vars_b.html":[6,3,2,2]
+"functions_vars_a.html":[6,3,2,1]
 };

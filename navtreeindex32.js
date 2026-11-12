@@ -1,5 +1,6 @@
 var NAVTREEINDEX32 =
 {
+"classBalloonParty_1_1Editor_1_1CardRevealBuilder.html#ac6b53b050b4e2bb7d9dfd219ec87f485":[5,0,0,5,11,9],
 "classBalloonParty_1_1Editor_1_1CardRevealBuilder.html#ac6b53b050b4e2bb7d9dfd219ec87f485":[6,0,0,5,11,9],
 "classBalloonParty_1_1Editor_1_1CardRevealBuilder.html#ac8afe0ac35edc39c920a8735f7df0c82":[5,0,0,5,11,48],
 "classBalloonParty_1_1Editor_1_1CardRevealBuilder.html#ac8afe0ac35edc39c920a8735f7df0c82":[6,0,0,5,11,48],
@@ -248,6 +249,5 @@ var NAVTREEINDEX32 =
 "classBalloonParty_1_1Editor_1_1EffectPreview_1_1ChainLightningPreviewModule.html#af09e4d09ad9b11b8c30420f6660f628f":[5,0,0,5,1,0,29],
 "classBalloonParty_1_1Editor_1_1EffectPreview_1_1ChainLightningPreviewModule.html#af09e4d09ad9b11b8c30420f6660f628f":[6,0,0,5,1,0,29],
 "classBalloonParty_1_1Editor_1_1EffectPreview_1_1ChainLightningPreviewModule.html#afb7b4e23fbd68ac99814ee8b704de5dd":[5,0,0,5,1,0,34],
-"classBalloonParty_1_1Editor_1_1EffectPreview_1_1ChainLightningPreviewModule.html#afb7b4e23fbd68ac99814ee8b704de5dd":[6,0,0,5,1,0,34],
-"classBalloonParty_1_1Editor_1_1EffectPreview_1_1ChainLightningPreviewModule.html#afb8aa610232d2b69b4c814a282acc06f":[5,0,0,5,1,0,15]
+"classBalloonParty_1_1Editor_1_1EffectPreview_1_1ChainLightningPreviewModule.html#afb7b4e23fbd68ac99814ee8b704de5dd":[6,0,0,5,1,0,34]
 };

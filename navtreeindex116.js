@@ -1,5 +1,7 @@
 var NAVTREEINDEX116 =
 {
+"structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#ac61ae0f647e180a95d1a24196cef94f2":[6,0,0,14,7,5],
+"structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#ac727fba2588ffecd8981f636cce2397b":[5,0,0,14,7,11],
 "structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#ac727fba2588ffecd8981f636cce2397b":[6,0,0,14,7,11],
 "structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#adc19a8e54ffa6d4b6a60294f9e0a60f1":[5,0,0,14,7,0],
 "structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#adc19a8e54ffa6d4b6a60294f9e0a60f1":[6,0,0,14,7,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX116 =
 "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a259839e9234f9434391350accd4849a7":[6,0,0,14,24,14],
 "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a26ee4965efe4ac2194354b8517586afa":[5,0,0,14,24,4],
 "structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a26ee4965efe4ac2194354b8517586afa":[6,0,0,14,24,4],
-"structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a2b1eaaee78d366ddc37b0bcf63ac85bf":[5,0,0,14,24,1],
-"structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a2b1eaaee78d366ddc37b0bcf63ac85bf":[6,0,0,14,24,1],
-"structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a565e2ba7709d72a2b52268776853cca7":[5,0,0,14,24,10]
+"structBalloonParty_1_1Solver_1_1ShotSolveContext.html#a2b1eaaee78d366ddc37b0bcf63ac85bf":[5,0,0,14,24,1]
 };

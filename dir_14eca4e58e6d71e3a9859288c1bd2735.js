@@ -39,6 +39,7 @@ var dir_14eca4e58e6d71e3a9859288c1bd2735 =
     [ "PrefabRebuild.cs", "PrefabRebuild_8cs.html", "PrefabRebuild_8cs" ],
     [ "PropertyDrawerHelper.cs", "PropertyDrawerHelper_8cs.html", "PropertyDrawerHelper_8cs" ],
     [ "RainbowBalloonVariantEditor.cs", "RainbowBalloonVariantEditor_8cs.html", "RainbowBalloonVariantEditor_8cs" ],
+    [ "ReadmeShotCapture.cs", "ReadmeShotCapture_8cs.html", null ],
     [ "SceneCaptureServiceEditor.cs", "SceneCaptureServiceEditor_8cs.html", "SceneCaptureServiceEditor_8cs" ],
     [ "SceneDrawingHelper.cs", "SceneDrawingHelper_8cs.html", "SceneDrawingHelper_8cs" ],
     [ "ScreenSpaceLightServiceEditor.cs", "ScreenSpaceLightServiceEditor_8cs.html", "ScreenSpaceLightServiceEditor_8cs" ],

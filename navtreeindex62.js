@@ -1,5 +1,6 @@
 var NAVTREEINDEX62 =
 {
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a165fdad06136004fb8b6eb67f47c0c15":[5,0,0,9,7,10],
 "classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a165fdad06136004fb8b6eb67f47c0c15":[6,0,0,9,7,10],
 "classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a518d52efc061fec3027e3f6f2c6c02ba":[5,0,0,9,7,9],
 "classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a518d52efc061fec3027e3f6f2c6c02ba":[6,0,0,9,7,9],
@@ -248,6 +249,5 @@ var NAVTREEINDEX62 =
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html#afaec98cf01a9371c97084d3b1806ff55":[5,0,0,10,1,6,2],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html#afaec98cf01a9371c97084d3b1806ff55":[6,0,0,10,1,6,2],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html":[5,0,0,10,1,8],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html":[6,0,0,10,1,8],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html#a11146c5a3a97c3a82faafb79f20a9da1":[5,0,0,10,1,8,11]
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html":[6,0,0,10,1,8]
 };

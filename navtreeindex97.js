@@ -1,5 +1,6 @@
 var NAVTREEINDEX97 =
 {
+"interfaceBalloonParty_1_1Game_1_1Run_1_1IBoardResettable.html":[5,0,0,6,8,5],
 "interfaceBalloonParty_1_1Game_1_1Run_1_1IBoardResettable.html":[6,0,0,6,8,5],
 "interfaceBalloonParty_1_1Game_1_1Run_1_1IBoardResettable.html#a347699f041bd2f73a8326aa24a351d81":[5,0,0,6,8,5,1],
 "interfaceBalloonParty_1_1Game_1_1Run_1_1IBoardResettable.html#a347699f041bd2f73a8326aa24a351d81":[6,0,0,6,8,5,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX97 =
 "interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistryWriter.html#a1241360bade70321271136aa24b22bf2":[5,0,0,10,6,3],
 "interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistryWriter.html#a1241360bade70321271136aa24b22bf2":[6,0,0,10,6,3],
 "interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistryWriter.html#a15ffdb799237d93d6a0bfeb755fac90b":[5,0,0,10,6,0],
-"interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistryWriter.html#a15ffdb799237d93d6a0bfeb755fac90b":[6,0,0,10,6,0],
-"interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistryWriter.html#a2995eb3c00ca94214f661fc9f9d08f4f":[5,0,0,10,6,6]
+"interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistryWriter.html#a15ffdb799237d93d6a0bfeb755fac90b":[6,0,0,10,6,0]
 };

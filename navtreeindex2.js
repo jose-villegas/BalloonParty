@@ -239,6 +239,7 @@ var NAVTREEINDEX2 =
 "ReactiveBinderRegistration_8cs.html":[7,0,18,0,2],
 "ReactiveCounterLabel_8cs.html":[7,0,18,18],
 "ReactivePropertyBinder_8cs.html":[7,0,18,0,3],
+"ReadmeShotCapture_8cs.html":[7,0,6,39],
 "RecordField_8cs.html":[7,0,18,10,7],
 "RecordKind_8cs.html":[7,0,7,10,24],
 "RectAnchorMath_8cs.html":[7,0,18,19],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "ReleaseUploadWindow_8cs.html#a0100be52d45f14348918ea69ec09f959":[7,0,6,4,1,2],
 "RendererExtensions_8cs.html":[7,0,14,4,14],
 "ResolvedGridActorGate_8cs.html":[7,0,3,6,4],
-"RestartRiseStartedMessage_8cs.html":[7,0,14,7,34],
-"ResumedMessage_8cs.html":[7,0,14,8,4]
+"RestartRiseStartedMessage_8cs.html":[7,0,14,7,34]
 };

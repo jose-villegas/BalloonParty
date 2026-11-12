@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"WallHitMessage_8cs.html":[7,0,14,7,53],
 "WallLimits_8cs.html":[7,0,14,37],
 "WallNetView_8cs.html":[7,0,13,0,5],
 "WaterCausticBuffer_8cs.html":[7,0,13,0,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a3dd599dff25d559b379efc4c674feb04":[5,0,0,0,0,4,7],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a3dd599dff25d559b379efc4c674feb04":[6,0,0,0,0,4,7],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a40dcaafa366f085b9bb19dcb7ef74830":[5,0,0,0,0,4,5],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a40dcaafa366f085b9bb19dcb7ef74830":[6,0,0,0,0,4,5],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a440a7a284af2eeb136950faf3023ef99":[5,0,0,0,0,4,3]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a40dcaafa366f085b9bb19dcb7ef74830":[6,0,0,0,0,4,5]
 };

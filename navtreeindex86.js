@@ -1,5 +1,6 @@
 var NAVTREEINDEX86 =
 {
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a331fe9b3c5a1628e11d7fc47df206b69a7acdf85c69cc3c5305456a293524386e":[5,0,0,16,5,0,0,0],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a331fe9b3c5a1628e11d7fc47df206b69a7acdf85c69cc3c5305456a293524386e":[6,0,0,16,5,0,0,0],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a331fe9b3c5a1628e11d7fc47df206b69aaf96ab416602c6852b1ba5201feaacf6":[5,0,0,16,5,0,0,1],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a331fe9b3c5a1628e11d7fc47df206b69aaf96ab416602c6852b1ba5201feaacf6":[6,0,0,16,5,0,0,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX86 =
 "classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#a16ad6246fb8f0aa091daca7cb8873cbf":[5,0,0,16,6,2,8],
 "classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#a16ad6246fb8f0aa091daca7cb8873cbf":[6,0,0,16,6,2,8],
 "classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#a1e727be3fb6f054009dcbb62a9a5de92":[5,0,0,16,6,2,12],
-"classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#a1e727be3fb6f054009dcbb62a9a5de92":[6,0,0,16,6,2,12],
-"classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#a23c8819a19d2d234e78f8b605e29168b":[5,0,0,16,6,2,18]
+"classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#a1e727be3fb6f054009dcbb62a9a5de92":[6,0,0,16,6,2,12]
 };
