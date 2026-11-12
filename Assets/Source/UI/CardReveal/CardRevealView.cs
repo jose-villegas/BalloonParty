@@ -29,7 +29,8 @@ namespace BalloonParty.UI.CardReveal
     ///     by <c>BalloonParty/Sprite/LitFlipbook</c>, so they take the scene's light, and the tear flashes a light
     ///     into the scene light field, stirs the disturbance field as a board pop does, and flings shreds far
     ///     out. It sits on its own World Space canvas among the board's sprites
-    ///     (<see cref="CameraFittedCanvas" />), so the screen-space light tints it and sees it.
+    ///     (<see cref="CameraFittedCanvas" />), so the screen-space light tints it and sees it. Only the playing
+    ///     pop's sheet and the next one's are in memory (<see cref="PopSheetLoader" />).
     ///     Attaches as the stage only when there are pops to play; until then the tooltip announces the cards.
     ///     Built by <c>Tools/BalloonParty/CardReveal/Build Card Reveal</c>.
     /// </summary>
@@ -74,6 +75,7 @@ namespace BalloonParty.UI.CardReveal
 
         private CancellationTokenSource _playing;
         private IDisposable _subscriptions;
+        private PopSheetLoader _sheets;
         private Material _rubber;
         private Material _rubberShadow;
         private Vector2 _place;
@@ -96,10 +98,12 @@ namespace BalloonParty.UI.CardReveal
 
         private void Start()
         {
-            if (_settings.PopSheets.Count == 0)
+            if (_settings.PopSheetPaths.Count == 0)
             {
                 return;
             }
+
+            _sheets = new PopSheetLoader(_settings.PopSheetPaths);
 
             // The shader keeps its taps inside the frame being shown, so it needs the sheet's grid. Copies of the
             // materials, so the assets aren't written in the editor.
@@ -111,6 +115,7 @@ namespace BalloonParty.UI.CardReveal
 
             _cardReveals.AttachStage();
             _attached = true;
+            HoldSheets(null);
             _subscriptions = new CompositeDisposable(
                 _ascendStarted.Subscribe(_ => _ascentStartedAt = Time.unscaledTime),
                 _cardReveals.Current.Subscribe(OnReveal));
@@ -122,6 +127,7 @@ namespace BalloonParty.UI.CardReveal
             // being torn down.
             _subscriptions?.Dispose();
             Stop();
+            _sheets?.Dispose();
             if (_attached)
             {
                 _cardReveals.DetachStage();
@@ -284,6 +290,9 @@ namespace BalloonParty.UI.CardReveal
         private void OnReveal(RevealedCard reveal)
         {
             Stop();
+            // Off the layers before a sheet is let go: an unloaded texture would draw as blank.
+            ShowSheet(null);
+            HoldSheets(reveal);
             if (reveal == null)
             {
                 // A reset or a detach dropped it: nothing left to finish.
@@ -307,7 +316,15 @@ namespace BalloonParty.UI.CardReveal
             try
             {
                 var startedAt = Time.unscaledTime;
-                Dress(reveal);
+                var pop = SheetOf(reveal.Pop);
+                var sheet = await _sheets.GetAsync(pop, token);
+                if (sheet == null)
+                {
+                    _cardReveals.Finish(reveal);
+                    return;
+                }
+
+                Dress(reveal, pop, sheet);
                 var contactAt = ContactAt(PinBuilt, _settings);
                 await AnimateAsync(contactAt, t =>
                 {
@@ -380,13 +397,9 @@ namespace BalloonParty.UI.CardReveal
             return exit;
         }
 
-        private void Dress(RevealedCard reveal)
+        private void Dress(RevealedCard reveal, int pop, Texture2D sheet)
         {
-            var pop = reveal.Pop % _settings.PopSheets.Count;
-            var sheet = _settings.PopSheets[pop];
-            _back.texture = sheet;
-            _front.texture = sheet;
-            _shadow.texture = sheet;
+            ShowSheet(sheet);
 
             var tint = _settings.BalloonColor;
             _back.color = tint;
@@ -465,6 +478,24 @@ namespace BalloonParty.UI.CardReveal
                 shreds.SetParent(transform, false);
                 shreds.position = at;
             }
+        }
+
+        // The playing reveal's sheet, if any, and the next reveal's, loaded ahead.
+        private void HoldSheets(RevealedCard playing)
+        {
+            _sheets.Hold(playing != null ? SheetOf(playing.Pop) : -1, SheetOf(_cardReveals.NextPop));
+        }
+
+        private int SheetOf(int pop)
+        {
+            return pop < 0 ? -1 : pop % _settings.PopSheetPaths.Count;
+        }
+
+        private void ShowSheet(Texture2D sheet)
+        {
+            _back.texture = sheet;
+            _front.texture = sheet;
+            _shadow.texture = sheet;
         }
 
         private Material WithSheetGrid(Material material)

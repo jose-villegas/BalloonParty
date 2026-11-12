@@ -19,7 +19,7 @@ namespace BalloonParty.Game.CardReveal
     ///     (<see cref="UpgradeCardHeldMessage" />) and a retry's bonus card as it's dealt
     ///     (<see cref="BonusCardDealtMessage" />). One plays at a time, and only over the board (in play, or a
     ///     level-up's ascent, where a level-up's card plays), so a bonus dealt behind the game-over screen waits
-    ///     for play to resume. Each reveal gets a pop chosen at random,
+    ///     for play to resume. Each reveal gets a pop chosen at random, a reveal ahead (<see cref="NextPop" />),
     ///     never one of the last <see cref="ICardRevealSettings.RecentPopsAvoided" /> shown. Nothing is queued
     ///     while no stage is attached, so until the reveal's view exists the cards stay the tooltip's.
     /// </summary>
@@ -36,12 +36,14 @@ namespace BalloonParty.Game.CardReveal
         private readonly CompositeDisposable _subscriptions = new();
 
         private int _stages;
+        private int _nextPop = -1;
 
         // Before RunUpgrades (Counters) deals a retry's bonus card in the same reset, so clearing the old run's
         // reveals never drops the new one's.
         public int ResetOrder => RunResetOrder.Quiesce;
         public IReadOnlyReactiveProperty<RevealedCard> Current => _current;
         public bool HasStage => _stages > 0;
+        public int NextPop => _nextPop;
 
         [Inject]
         internal CardRevealController(ICardRevealSettings settings, INavigation navigation,
@@ -88,6 +90,11 @@ namespace BalloonParty.Game.CardReveal
         public void AttachStage()
         {
             _stages++;
+            if (_nextPop < 0)
+            {
+                _nextPop = PickPop();
+            }
+
             TryStartNext();
         }
 
@@ -139,11 +146,15 @@ namespace BalloonParty.Game.CardReveal
                 return;
             }
 
+            // The next pop is chosen before the reveal publishes, so a stage reading it then sees the new one.
             var (card, stacks, isBonus) = _queue.Dequeue();
-            _current.Value = new RevealedCard(card, stacks, isBonus, PickPop());
+            var pop = _nextPop;
+            _nextPop = PickPop();
+            _current.Value = new RevealedCard(card, stacks, isBonus, pop);
         }
 
-        // Uniform over the pops not among the last few shown; those stay distinct, since each pick skips them.
+        // Uniform over the pops not among the last few chosen, which are the last few shown, a reveal on: those
+        // stay distinct, since each pick skips them.
         private int PickPop()
         {
             var count = _settings.PopCount;

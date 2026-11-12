@@ -215,6 +215,56 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void NextPop_BeforeAStageAttaches_IsNone()
+        {
+            Assert.AreEqual(-1, _controller.NextPop);
+        }
+
+        [Test]
+        public void NextPop_IsThePopTheNextRevealPlays()
+        {
+            _controller.AttachStage();
+            for (var i = 0; i < 20; i++)
+            {
+                var next = _controller.NextPop;
+                Assert.That(next, Is.InRange(0, 15));
+
+                Held(_shield);
+
+                Assert.AreEqual(next, _controller.Current.Value.Pop, $"reveal {i}");
+                _controller.Finish(_controller.Current.Value);
+            }
+        }
+
+        [Test]
+        public void NextPop_IsChosenAgainBeforeARevealPublishes()
+        {
+            _controller.AttachStage();
+            var nextAtPublish = new List<int>();
+            using var watching = _controller.Current.Where(reveal => reveal != null)
+                .Subscribe(reveal => nextAtPublish.Add(_controller.NextPop));
+
+            var chosenBefore = _controller.NextPop;
+            Held(_shield);
+
+            Assert.AreEqual(1, nextAtPublish.Count);
+            Assert.AreNotEqual(chosenBefore, nextAtPublish[0], "a stage reading it as the reveal starts loads the " +
+                                                             "one after, not the one playing");
+        }
+
+        [Test]
+        public void NextPop_AStageAttachingAgain_KeepsTheOneChosen()
+        {
+            _controller.AttachStage();
+            var next = _controller.NextPop;
+
+            _controller.DetachStage();
+            _controller.AttachStage();
+
+            Assert.AreEqual(next, _controller.NextPop, "its sheet may already be loading");
+        }
+
+        [Test]
         public void Pop_WithFewerPopsThanAvoided_StillPicksOne()
         {
             _settings.PopCount.Returns(2);

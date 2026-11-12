@@ -31,7 +31,10 @@ namespace BalloonParty.Editor
     internal static class CardRevealBuilder
     {
         private const string MenuRoot = "Tools/BalloonParty/CardReveal/";
-        private const string SheetFolder = "Assets/Sprites/UI/CardReveal";
+        // Under a Resources folder, so the settings can list the sheets by path and the reveal loads only the
+        // ones it needs (PopSheetLoader); a reference would load them all with the scene.
+        private const string ResourcesFolder = "Assets/Sprites/UI/CardReveal/Resources/";
+        private const string SheetFolder = ResourcesFolder + "CardRevealPops";
         private const string SettingsPath = "Assets/Configuration/CardRevealSettings.asset";
         private const string ScopePrefabPath = "Assets/Prefabs/Game/GameLifetimeScope.prefab";
         private const string MaterialPath = "Assets/Materials/UI/CardRevealRubber.mat";
@@ -115,7 +118,7 @@ namespace BalloonParty.Editor
                 return;
             }
 
-            var settings = EnsureSettings(sheets);
+            var settings = EnsureSettings(sheets.Select(ResourcePath).ToList());
             AssignToScope(settings);
             CardRevealShredsBuilder.Build(settings);
             var materials = new Materials(EnsureMaterial(MaterialPath, ShaderName),
@@ -130,14 +133,23 @@ namespace BalloonParty.Editor
             BuildOnCanvas(materials, askBeforeRebuild);
         }
 
-        private static List<Texture2D> ImportSheets()
+        // The sheets' asset paths, each imported as data.
+        private static List<string> ImportSheets()
         {
-            return AssetDatabase.FindAssets("pop_ t:Texture2D", new[] { SheetFolder })
+            var paths = AssetDatabase.FindAssets("pop_ t:Texture2D", new[] { SheetFolder })
                 .Select(AssetDatabase.GUIDToAssetPath)
                 .Where(path => System.IO.Path.GetFileName(path).StartsWith("pop_"))
                 .OrderBy(path => path)
-                .Select(ImportAsData)
                 .ToList();
+            paths.RemoveAll(path => ImportAsData(path) == null);
+            return paths;
+        }
+
+        // What Resources.Load takes: the path under the Resources folder, without the extension.
+        private static string ResourcePath(string assetPath)
+        {
+            var underResources = assetPath.Substring(ResourcesFolder.Length);
+            return System.IO.Path.ChangeExtension(underResources, null);
         }
 
         // Linear (the pixels are normals and occlusion, not colour), no mipmaps (the frames sit side by side,
@@ -198,7 +210,7 @@ namespace BalloonParty.Editor
                    settings.maxTextureSize == MaxSheetSize && settings.compressionQuality == BestCompression;
         }
 
-        private static CardRevealSettings EnsureSettings(IReadOnlyList<Texture2D> sheets)
+        private static CardRevealSettings EnsureSettings(IReadOnlyList<string> sheetPaths)
         {
             var settings = AssetDatabase.LoadAssetAtPath<CardRevealSettings>(SettingsPath);
             if (settings == null)
@@ -208,11 +220,11 @@ namespace BalloonParty.Editor
             }
 
             var fields = new SerializedObject(settings);
-            var list = fields.FindProperty("_popSheets");
-            list.arraySize = sheets.Count;
-            for (var i = 0; i < sheets.Count; i++)
+            var list = fields.FindProperty("_popSheetPaths");
+            list.arraySize = sheetPaths.Count;
+            for (var i = 0; i < sheetPaths.Count; i++)
             {
-                list.GetArrayElementAtIndex(i).objectReferenceValue = sheets[i];
+                list.GetArrayElementAtIndex(i).stringValue = sheetPaths[i];
             }
 
             fields.ApplyModifiedPropertiesWithoutUndo();

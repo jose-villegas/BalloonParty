@@ -10,11 +10,13 @@ namespace BalloonParty.Configuration.CardReveal
     internal interface ICardRevealSettings
     {
         /// <summary>
-        ///     The baked pops' sheets (<c>Tools/art/balloon_pop</c>): each the front layer's frames over the back
-        ///     layer's, holding the rubber's surface for <c>BalloonParty/Sprite/LitFlipbook</c> to light. Empty
-        ///     until a pop is baked, and then the reveal stays off.
+        ///     Where the baked pops' sheets are (<c>Tools/art/balloon_pop</c>), as <c>Resources</c> paths: listed
+        ///     rather than referenced, so they don't all load with the scene (<c>UI/CardReveal/PopSheetLoader</c>).
+        ///     Each is the front layer's frames over the back layer's, holding the rubber's surface for
+        ///     <c>BalloonParty/Sprite/LitFlipbook</c> to light. Empty until a pop is baked, and then the reveal
+        ///     stays off.
         /// </summary>
-        IReadOnlyList<Texture2D> PopSheets { get; }
+        IReadOnlyList<string> PopSheetPaths { get; }
 
         /// <summary>How many pops there are to choose from: one per sheet, 1 or more.</summary>
         int PopCount { get; }
@@ -148,7 +150,7 @@ namespace BalloonParty.Configuration.CardReveal
 
         /// <summary>
         ///     Where each pop's puncture is in its first frame, as a share of the frame's width and height from its
-        ///     bottom left, one per sheet in <see cref="PopSheets" />' order: where the pushpin pricks, so the tear
+        ///     bottom left, one per sheet in <see cref="PopSheetPaths" />' order: where the pushpin pricks, so the tear
         ///     opens from its needle. The bake prints them (<c>bake_pops.py</c>).
         /// </summary>
         IReadOnlyList<Vector2> PopPunctures { get; }

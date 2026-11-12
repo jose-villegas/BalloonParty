@@ -14,6 +14,13 @@ namespace BalloonParty.Game.CardReveal
         /// <summary>Whether a stage is attached, so cards are announced by the reveal rather than the tooltip.</summary>
         bool HasStage { get; }
 
+        /// <summary>
+        ///     The pop the next reveal will play, chosen a reveal ahead so the stage can load its sheet while the
+        ///     game plays. Chosen when a stage first attaches, and again as each reveal starts with the last one;
+        ///     -1 before a stage attaches.
+        /// </summary>
+        int NextPop { get; }
+
         void AttachStage();
 
         void DetachStage();

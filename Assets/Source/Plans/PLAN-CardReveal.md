@@ -10,7 +10,7 @@
 script makes the pops; eight are in the game (seeds whose falling rubber stays inside the frame). Phase 4 built:
 `CardRevealView` plays it on a World Space canvas of its own during the level-up, lit live by the scene's light field and the screen-space light like the board, and
 the ribbons fly with the ascent. The cheat Reveal A Card shows one on demand. Not built yet: a card
-icon, and loading one sheet at a time.
+icon.
 
 The pops are 8 separate physics simulations, baked in Blender by
 a script in this repo (§5), so the reveal never pops the same way twice in a row.
@@ -70,7 +70,7 @@ slow-motion beats don't stretch it.
 | `CardRevealView` (built) | `UI/CardReveal/` | `MonoBehaviour` on `CardRevealCanvas`, a World Space canvas fitted to the camera in the Game scene, built by `CardRevealBuilder`. Attaches the stage when the settings hold a pop. Plays the chosen pop on two `RawImage`s (the back and front layers, the ribbons between them), stepping the frame through each one's UV rect on unscaled time, and flies the ribbons from the pop. A baked pushpin jabs the pop's puncture to start it, and a particle burst of shreds flies far out as it tears. Times their exit to the ascent (`LevelAscendStartedMessage` and its length) |
 | `RibbonPiece`, `RibbonGraphic` (built) | `UI/CardReveal/` | A piece of ribbon with a line written on it: a UI strip notched at both ends with a wave running along it, shaded as satin, the TMP text bent glyph by glyph to ride the wave. The piece poses itself through its flight: rolled up inside, burst, drift and sway, exit |
 | `BalloonParty/Sprite/LitFlipbook` (built) | `Assets/Shaders/BalloonParty/Sprite/` | Lights a layer's surface data with the scene's light (`SceneLight.cginc`): a wrapped diffuse, the occlusion, a highlight, and thin-latex transmission, so a face turned from the light glows deeper instead of going dark. The tint is the `RawImage`'s colour, re-graded by the time of day like the balloons' bodies |
-| `PopSheetLoader` | `UI/CardReveal/` | Loads only the chosen pop's sheet when the level-up turns `Pending` (before the transition, so the pop starts on time) and releases it after. The 16 sheets never sit in memory together. Not needed while there is one pop: the settings reference the sheets directly, so all of them load with the game scene |
+| `PopSheetLoader` (built) | `UI/CardReveal/` | Plain C#, owned by the view. The controller picks each pop a reveal ahead (`ICardReveals.NextPop`), and the loader keeps that one's sheet loaded from `Resources` while the game plays, plus the one playing; the rest are unloaded. Loading ahead rather than at the level-up's `Pending` also covers a retry's bonus card, which has no `Pending`, and a reveal right after another. The settings list the sheets by path, so none loads with the scene |
 | `ICardRevealSettings` (built) | `Configuration/CardReveal/`, its own `CardRevealSettings` asset (with none assigned, a default with no pops, and the reveal stays off) | The pop sheets, how many recent pops to avoid, the sheet layout and frame rate, and how the reveal plays (the rise, the beat before the pop, the parallax, and the ribbons' flight: the frame they fly out on, their burst and exit, and when they are gone with and without an ascent) |
 | `LevelUpPopUp`, `TooltipBanner` (changed) | `UI/LevelUp/`, `UI/Tooltip/` | Leave the card to the reveal while a stage is attached (`ICardReveals.HasStage`): the level-up line drops the card's name, the bonus card line isn't shown |
 
@@ -101,9 +101,9 @@ of a membrane solver in the script itself wasn't needed.
 
 **Budget.** 8 sheets of 2048×3072 (48 frames, two layers), ASTC 4×4 on phones (6×6 and ETC2 blocked
 the normals into steps the cel shading drew as stairs) at about 6.3 MB each: about 50 MB in the build.
-Until `PopSheetLoader` is built the settings reference every sheet, so all eight load with the scene;
-the loader keeps only the chosen one in memory. The sheets stay out of the
-sprite atlases, like the other baked art (`Sprites/README.md`), under `Assets/Sprites/UI/CardReveal/`.
+At most two are in memory (`PopSheetLoader`): the next reveal's, loaded ahead, and the one playing, about
+6–13 MB. The sheets stay out of the sprite atlases, like the other baked art (`Sprites/README.md`), under
+`Assets/Sprites/UI/CardReveal/Resources/CardRevealPops/`.
 
 ## 6. Assets
 
@@ -122,7 +122,7 @@ sprite atlases, like the other baked art (`Sprites/README.md`), under `Assets/Sp
 | 1 (done) | `CardRevealController` and its queue, the pick that avoids the last two pops, the tooltip hand-off, EditMode tests | No |
 | 2 (built, in review) | The bake script: the balloon, one pop, rendered and packed. The owner reviews that one pop from the contact sheet before the other 15 are baked | Makes it |
 | 3 | The other 15 pops, reviewed together on the contact sheet | Makes it |
-| 4 (built with 8 pops) | `CardRevealView`, `LitFlipbook` and the ribbons: the pop, lit and in two layers, the ribbons flying with the ascent, the pushpin that pricks it, and the shreds it flings. Still to come: `PopSheetLoader`, once there is more than one pop | Yes: phases 2 and 3 |
+| 4 (built with 8 pops) | `CardRevealView`, `LitFlipbook` and the ribbons: the pop, lit and in two layers, the ribbons flying with the ascent, the pushpin that pricks it, and the shreds it flings. and `PopSheetLoader`, which keeps only two sheets in memory | Yes: phases 2 and 3 |
 | 5 | A playtest pass on a phone: timing, how well the ribbons read over a busy board, and whether 256 px frames are sharp enough | — |
 
 ## 8. Open questions

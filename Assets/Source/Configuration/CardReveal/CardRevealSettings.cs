@@ -11,9 +11,10 @@ namespace BalloonParty.Configuration.CardReveal
     [CreateAssetMenu(menuName = "Configuration/Card Reveal Settings", fileName = "CardRevealSettings")]
     internal sealed class CardRevealSettings : ScriptableObject, ICardRevealSettings
     {
-        [Tooltip("The baked pops (Tools/art/balloon_pop): one sheet each, the front layer's frames over the back " +
-                 "layer's. Imported as linear data (sRGB off), no mipmaps, clamped. Empty, the reveal stays off.")]
-        [SerializeField] private Texture2D[] _popSheets = new Texture2D[0];
+        [Tooltip("The baked pops' sheets (Tools/art/balloon_pop), as paths under a Resources folder, so none loads " +
+                 "with the scene: the reveal loads only the ones it needs. Each the front layer's frames over the " +
+                 "back layer's, imported as linear data (sRGB off), no mipmaps, clamped. Empty, the reveal stays off.")]
+        [SerializeField] private string[] _popSheetPaths = new string[0];
 
         [Tooltip("A new reveal never uses one of this many pops shown last. Capped at one fewer than the pops, " +
                  "so there is always a pop to choose.")]
@@ -148,8 +149,8 @@ namespace BalloonParty.Configuration.CardReveal
         [SerializeField] [Min(0f)] private float _pinRecoilDistance = 36f;
         [SerializeField] [Min(0f)] private float _pinLeaveSeconds = 0.4f;
 
-        public IReadOnlyList<Texture2D> PopSheets => _popSheets;
-        public int PopCount => Mathf.Max(1, _popSheets.Length);
+        public IReadOnlyList<string> PopSheetPaths => _popSheetPaths;
+        public int PopCount => Mathf.Max(1, _popSheetPaths.Length);
         public int RecentPopsAvoided => Mathf.Max(0, _recentPopsAvoided);
         public int SheetColumns => _sheetColumns;
         public int SheetRows => _sheetRows;
