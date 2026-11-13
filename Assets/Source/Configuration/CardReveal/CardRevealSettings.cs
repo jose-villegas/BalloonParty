@@ -115,6 +115,12 @@ namespace BalloonParty.Configuration.CardReveal
         [SerializeField] [Min(0f)] private float _ribbonBurstSeconds = 0.4f;
         [SerializeField] [Min(0f)] private float _ribbonExitSeconds = 0.5f;
 
+        [Tooltip("A bonus that lands on a card at its limit: how long its struck title stands once the capped " +
+                 "ribbon has burst out, then how long it takes to dissolve.")]
+        [SerializeField] [Min(0f)] private float _cappedDissolveDelay = 0.5f;
+
+        [SerializeField] [Min(0f)] private float _cappedDissolveSeconds = 0.9f;
+
         [Tooltip("After the burst the ribbons swell to this scale, easing in over Ribbon Grow Seconds, so the card " +
                  "grows into view. Never wider than the screen allows.")]
         [SerializeField] [Min(1f)] private float _ribbonGrowth = 1.3f;
@@ -188,6 +194,8 @@ namespace BalloonParty.Configuration.CardReveal
         public int RibbonsFromFrame => _ribbonsFromFrame;
         public float RibbonBurstSeconds => _ribbonBurstSeconds;
         public float RibbonExitSeconds => _ribbonExitSeconds;
+        public float CappedDissolveDelay => _cappedDissolveDelay;
+        public float CappedDissolveSeconds => _cappedDissolveSeconds;
         public float RibbonGrowth => _ribbonGrowth;
         public float RibbonGrowSeconds => _ribbonGrowSeconds;
         public float RibbonsGoneAtAscent => _ribbonsGoneAtAscent;

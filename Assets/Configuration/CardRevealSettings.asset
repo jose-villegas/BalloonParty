@@ -51,6 +51,8 @@ MonoBehaviour:
   _ribbonsFromFrame: 8
   _ribbonBurstSeconds: 0.4
   _ribbonExitSeconds: 0.5
+  _cappedDissolveDelay: 0.5
+  _cappedDissolveSeconds: 0.9
   _ribbonGrowth: 1.3
   _ribbonGrowSeconds: 1.2
   _ribbonsGoneAtAscent: 0.82

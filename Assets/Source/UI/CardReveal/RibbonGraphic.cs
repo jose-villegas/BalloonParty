@@ -8,11 +8,16 @@ namespace BalloonParty.UI.CardReveal
     ///     the driver moves on by setting <see cref="WaveTime" />. It is cel shaded in the scene's light by its
     ///     material (<c>BalloonParty/Sprite/CelRibbon</c>), from what the mesh tells it: how each fold turns, and
     ///     a copy of the strip for the drop shadow. <see cref="WaveAt" /> is the same wave, for text riding on the
-    ///     ribbon to bend with it.
+    ///     ribbon to bend with it. <see cref="Dissolve" /> crumbles it away in ragged patches
+    ///     (<see cref="DissolvedAt" />), which its writing and strike follow.
     /// </summary>
     [RequireComponent(typeof(CanvasRenderer))]
     public class RibbonGraphic : MaskableGraphic
     {
+        // The patches a dissolve eats, in canvas units, and how soft each patch's edge is (a share of the dissolve).
+        private const float DissolveCell = 7f;
+        private const float DissolveSoftness = 0.25f;
+
         [Tooltip("Columns along the strip: more bends the wave more smoothly.")]
         [SerializeField] [Range(2, 64)] private int _segments = 24;
 
@@ -29,6 +34,7 @@ namespace BalloonParty.UI.CardReveal
         [SerializeField] private float _waveSpeed = 0.9f;
 
         private float _waveTime;
+        private float _dissolve;
 
         /// <summary>Seconds the wave has run: set each frame by whatever flies the ribbon.</summary>
         internal float WaveTime
@@ -37,6 +43,17 @@ namespace BalloonParty.UI.CardReveal
             set
             {
                 _waveTime = value;
+                SetVerticesDirty();
+            }
+        }
+
+        /// <summary>How far the ribbon has crumbled away, 0 whole to 1 gone.</summary>
+        internal float Dissolve
+        {
+            get => _dissolve;
+            set
+            {
+                _dissolve = value;
                 SetVerticesDirty();
             }
         }
@@ -51,6 +68,30 @@ namespace BalloonParty.UI.CardReveal
         internal static float Wave(float x, float time, float height, float length, float speed)
         {
             return height * Mathf.Sin(Phase(x, time, length, speed));
+        }
+
+        /// <summary>
+        ///     How far a ribbon <paramref name="halfWidth" /> each side of its centre has crumbled away at
+        ///     <paramref name="x" />, <paramref name="progress" /> (0 to 1) through its dissolve: 0 still there, 1 gone.
+        ///     It eats in from the left, in ragged patches, so the dissolve reads as the ribbon falling apart.
+        /// </summary>
+        internal static float DissolvedAt(float x, float halfWidth, float progress)
+        {
+            if (progress <= 0f)
+            {
+                return 0f;
+            }
+
+            if (progress >= 1f)
+            {
+                return 1f;
+            }
+
+            var across = halfWidth > 0f ? Mathf.Clamp01((x + halfWidth) / (2f * halfWidth)) : 0.5f;
+            var cell = Mathf.FloorToInt(x / DissolveCell);
+            var noise = Mathf.Repeat(Mathf.Sin(cell * 12.9898f) * 43758.547f, 1f);
+            var threshold = Mathf.Lerp(across, noise, 0.6f);
+            return Mathf.Clamp01((progress * (1f + DissolveSoftness) - threshold) / DissolveSoftness);
         }
 
         protected override void OnPopulateMesh(VertexHelper vh)
@@ -102,8 +143,15 @@ namespace BalloonParty.UI.CardReveal
         // shadow's copy).
         private void AddVertex(VertexHelper vh, float x, float y, Rect rect, float row)
         {
-            var turn = -Mathf.Cos(Phase(x - rect.center.x, _waveTime, _waveLength, _waveSpeed));
-            vh.AddVert(new Vector3(x, y + WaveAt(x - rect.center.x), 0f), color, new Vector2(turn, row));
+            var fromCentre = x - rect.center.x;
+            var turn = -Mathf.Cos(Phase(fromCentre, _waveTime, _waveLength, _waveSpeed));
+            Color32 tint = color;
+            if (_dissolve > 0f)
+            {
+                tint.a = (byte)(tint.a * (1f - DissolvedAt(fromCentre, rect.width * 0.5f, _dissolve)));
+            }
+
+            vh.AddVert(new Vector3(x, y + WaveAt(fromCentre), 0f), tint, new Vector2(turn, row));
         }
     }
 }

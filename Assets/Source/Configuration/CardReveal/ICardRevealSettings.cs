@@ -76,6 +76,12 @@ namespace BalloonParty.Configuration.CardReveal
         /// <summary>How long the ribbons take to fly off and fade at the end.</summary>
         float RibbonExitSeconds { get; }
 
+        /// <summary>How long a capped title stands, once the capped ribbon has burst out, before it dissolves.</summary>
+        float CappedDissolveDelay { get; }
+
+        /// <summary>How long a capped title takes to dissolve.</summary>
+        float CappedDissolveSeconds { get; }
+
         /// <summary>
         ///     The scale the ribbons swell to after the burst, so the card grows into view (1 or more), never wider
         ///     than the screen allows.

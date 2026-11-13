@@ -461,12 +461,14 @@ namespace BalloonParty.Editor
             var shadow = CreateLayer("Shadow", balloon, materials.Shadow);
             var back = CreateLayer("Back", balloon, materials.Rubber);
             var centre = new Vector2(0f, FrameSize * CentreAboveFrame);
-            var capped = CreateRibbon("CappedRibbon", balloon, label, materials.Ribbon, centre,
-                DescriptionRibbonHeight, label.fontSize * DescriptionScale, CappedFlight, CappedRibbonColor, RibbonColor);
             var title = CreateRibbon("TitleRibbon", balloon, label, materials.Ribbon, centre, TitleRibbonHeight,
-                label.fontSize, TitleFlight);
+                label.fontSize, TitleFlight, withStrike: true);
             var description = CreateRibbon("DescriptionRibbon", balloon, label, materials.Ribbon, centre,
                 DescriptionRibbonHeight, label.fontSize * DescriptionScale, DescriptionFlight);
+
+            // Last of the ribbons, so it lands over the struck title.
+            var capped = CreateRibbon("CappedRibbon", balloon, label, materials.Ribbon, centre,
+                DescriptionRibbonHeight, label.fontSize * DescriptionScale, CappedFlight, CappedRibbonColor, RibbonColor);
             var front = CreateLayer("Front", balloon, materials.Rubber);
             var pin = CreatePin(root, materials.Pin);
 
@@ -531,7 +533,8 @@ namespace BalloonParty.Editor
         // Its flight is relative to the balloon's centre in the frame (centre). The text is the tooltip's label,
         // cloned for its pencil font and colour, without its write-on: the line is on the ribbon from the start.
         private static RibbonPiece CreateRibbon(string name, RectTransform balloon, TMP_Text label, Material material,
-            Vector2 centre, float height, float fontSize, Flight flight, Color? ribbonColor = null, Color? textColor = null)
+            Vector2 centre, float height, float fontSize, Flight flight, Color? ribbonColor = null, Color? textColor = null,
+            bool withStrike = false)
         {
             var rect = CreateRect(name, balloon);
             rect.sizeDelta = new Vector2(60f, height);
@@ -565,6 +568,11 @@ namespace BalloonParty.Editor
 
             var piece = rect.gameObject.AddComponent<RibbonPiece>();
             var fields = new SerializedObject(piece);
+            if (withStrike)
+            {
+                fields.FindProperty("_strike").objectReferenceValue = CreateStrike(textRect, ribbon, text.color);
+            }
+
             fields.FindProperty("_ribbon").objectReferenceValue = ribbon;
             fields.FindProperty("_text").objectReferenceValue = text;
             fields.FindProperty("_group").objectReferenceValue = group;
@@ -579,6 +587,22 @@ namespace BalloonParty.Editor
             fields.ApplyModifiedPropertiesWithoutUndo();
             rect.anchoredPosition = centre + flight.Rest;
             return piece;
+        }
+
+        // Under the text and in its space, so it draws over the letters and measures from the ribbon's centre.
+        private static RibbonStrike CreateStrike(RectTransform text, RibbonGraphic ribbon, Color color)
+        {
+            var rect = CreateRect("Strike", text);
+            Stretch(rect);
+            rect.pivot = new Vector2(0.5f, 0.5f);
+            var strike = rect.gameObject.AddComponent<RibbonStrike>();
+            strike.color = color;
+            strike.raycastTarget = false;
+            var fields = new SerializedObject(strike);
+            fields.FindProperty("_ribbon").objectReferenceValue = ribbon;
+            fields.ApplyModifiedPropertiesWithoutUndo();
+            rect.gameObject.SetActive(false);
+            return strike;
         }
 
         private static RectTransform CreateRect(string name, Transform parent)

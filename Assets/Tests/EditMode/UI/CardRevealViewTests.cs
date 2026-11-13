@@ -25,6 +25,73 @@ namespace BalloonParty.Tests.UI
         }
 
         [Test]
+        public void CappedDissolve_WaitsForTheCappedRibbonToLandAndStand()
+        {
+            _settings.RibbonBurstSeconds.Returns(0.4f);
+            _settings.CappedDissolveDelay.Returns(0.5f);
+            _settings.CappedDissolveSeconds.Returns(1f);
+
+            Assert.AreEqual(0f, CardRevealView.CappedDissolve(0.9f, _settings), Tolerance);
+            Assert.AreEqual(0.5f, CardRevealView.CappedDissolve(1.4f, _settings), Tolerance);
+            Assert.AreEqual(1f, CardRevealView.CappedDissolve(5f, _settings), Tolerance);
+        }
+
+        [Test]
+        public void CappedDissolve_WithNoTimeToDissolve_GoesAtOnce()
+        {
+            _settings.RibbonBurstSeconds.Returns(0.4f);
+            _settings.CappedDissolveDelay.Returns(0.5f);
+            _settings.CappedDissolveSeconds.Returns(0f);
+
+            Assert.AreEqual(0f, CardRevealView.CappedDissolve(0.8f, _settings));
+            Assert.AreEqual(1f, CardRevealView.CappedDissolve(0.9f, _settings));
+        }
+
+        [Test]
+        public void DissolvedAt_IsWholeBeforeAndGoneAfter_Everywhere()
+        {
+            for (var x = -60f; x <= 60f; x += 3f)
+            {
+                Assert.AreEqual(0f, RibbonGraphic.DissolvedAt(x, 60f, 0f));
+                Assert.AreEqual(1f, RibbonGraphic.DissolvedAt(x, 60f, 1f));
+            }
+        }
+
+        [Test]
+        public void DissolvedAt_NeverGrowsBackAsTheDissolveRuns()
+        {
+            for (var x = -60f; x <= 60f; x += 3f)
+            {
+                var last = 0f;
+                for (var progress = 0f; progress <= 1f; progress += 0.05f)
+                {
+                    var crumbled = RibbonGraphic.DissolvedAt(x, 60f, progress);
+                    Assert.GreaterOrEqual(crumbled, last, $"x {x}, progress {progress}");
+                    last = crumbled;
+                }
+            }
+        }
+
+        [Test]
+        public void DissolvedAt_HalfwayThrough_HasEatenTheLeftMoreThanTheRight()
+        {
+            float Share(float from, float to)
+            {
+                var total = 0f;
+                var count = 0;
+                for (var x = from; x <= to; x += 1f)
+                {
+                    total += RibbonGraphic.DissolvedAt(x, 60f, 0.5f);
+                    count++;
+                }
+
+                return total / count;
+            }
+
+            Assert.Greater(Share(-60f, -20f), Share(20f, 60f));
+        }
+
+        [Test]
         public void RibbonsGoneAt_WithAnAscentSinceTheRevealStarted_IsItsShareOfTheAscent()
         {
             // Reveal at 10, ascent from 10.2, ribbons out at 10.7: gone 0.7 of the way through a 4 s ascent.

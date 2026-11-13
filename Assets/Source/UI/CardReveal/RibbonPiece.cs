@@ -10,13 +10,18 @@ namespace BalloonParty.UI.CardReveal
     ///     One piece of ribbon with a line of the card written on it, flown off the popped balloon by
     ///     <see cref="CardRevealView" />. Before the pop it rests rolled up inside the balloon; once released it
     ///     bursts out to its spot, drifts and sways there while its wave runs and the text rides the wave, and at
-    ///     the end flies off and fades. The ribbon sizes itself to its text.
+    ///     the end flies off and fades. The ribbon sizes itself to its text. A line can be struck through
+    ///     (<see cref="RibbonStrike" />), and the whole piece can crumble away (<see cref="Dissolve" />): the
+    ///     ribbon in patches, each letter fading as it drops out of its patch.
     /// </summary>
     public class RibbonPiece : MonoBehaviour
     {
         [SerializeField] private RibbonGraphic _ribbon;
         [SerializeField] private TMP_Text _text;
         [SerializeField] private CanvasGroup _group;
+
+        [Tooltip("The stroke through a struck line. None, and a struck line falls back to TMP's flat strikethrough.")]
+        [SerializeField] private RibbonStrike _strike;
 
         [Tooltip("Room left and right of the text, inside the notches, in canvas units.")]
         [SerializeField] [Min(0f)] private float _padding = 7f;
@@ -49,18 +54,49 @@ namespace BalloonParty.UI.CardReveal
         [Tooltip("The widest it may swell to after the burst, in canvas units, so a long line stays on screen.")]
         [SerializeField] [Min(1f)] private float _widest = 205f;
 
-        private Vector3[][] _sourceVertices = Array.Empty<Vector3[]>();
+        [Tooltip("How far a letter drops as it crumbles away in a dissolve, in canvas units.")]
+        [SerializeField] [Min(0f)] private float _crumbleDrop = 8f;
 
-        /// <summary>Writes <paramref name="line" /> on the ribbon and sizes the ribbon to it.</summary>
-        internal void Show(string line)
+        private Vector3[][] _sourceVertices = Array.Empty<Vector3[]>();
+        private Color32[][] _sourceColors = Array.Empty<Color32[]>();
+        private float _dissolve;
+
+        /// <summary>
+        ///     Writes <paramref name="line" /> on the ribbon, <paramref name="struck" /> through or not, and sizes the
+        ///     ribbon to it. The ribbon comes back whole.
+        /// </summary>
+        internal void Show(string line, bool struck = false)
         {
-            _text.SetText(line);
+            _text.SetText(struck && _strike == null ? $"<s>{line}</s>" : line);
             _text.ForceMeshUpdate();
             var rect = (RectTransform)transform;
             var height = rect.sizeDelta.y;
             rect.sizeDelta = new Vector2(_text.preferredWidth + 2f * _padding + height, height);
             _text.ForceMeshUpdate();
             CaptureVertices();
+            if (_strike != null)
+            {
+                _strike.gameObject.SetActive(struck);
+                if (struck)
+                {
+                    StrikeThroughText();
+                }
+            }
+
+            Dissolve(0f);
+        }
+
+        /// <summary>
+        ///     Crumbles the piece <paramref name="progress" /> (0 to 1) of the way away; the next pose shows it.
+        /// </summary>
+        internal void Dissolve(float progress)
+        {
+            _dissolve = progress;
+            _ribbon.Dissolve = progress;
+            if (_strike != null)
+            {
+                _strike.Dissolve = progress;
+            }
         }
 
         /// <summary>Rolled up inside the balloon, before the pop.</summary>
@@ -110,6 +146,47 @@ namespace BalloonParty.UI.CardReveal
             _group.alpha = alpha;
             _ribbon.WaveTime = waveTime;
             BendText();
+            if (_strike != null && _strike.gameObject.activeSelf)
+            {
+                _strike.Refresh();
+            }
+        }
+
+        // Across the written letters, at the height of the letters themselves (an icon may stand taller).
+        private void StrikeThroughText()
+        {
+            var info = _text.textInfo;
+            var from = float.MaxValue;
+            var to = float.MinValue;
+            var baseline = 0f;
+            var top = 0f;
+            var letters = 0;
+            for (var i = 0; i < info.characterCount; i++)
+            {
+                ref var character = ref info.characterInfo[i];
+                if (!character.isVisible)
+                {
+                    continue;
+                }
+
+                from = Mathf.Min(from, character.bottomLeft.x);
+                to = Mathf.Max(to, character.topRight.x);
+                if (character.elementType == TMP_TextElementType.Character)
+                {
+                    baseline += character.baseLine;
+                    top += character.ascender;
+                    letters++;
+                }
+            }
+
+            if (letters == 0)
+            {
+                _strike.gameObject.SetActive(false);
+                return;
+            }
+
+            _strike.color = _text.color;
+            _strike.Strike(from, to, baseline / letters, top / letters);
         }
 
         private void CaptureVertices()
@@ -118,6 +195,7 @@ namespace BalloonParty.UI.CardReveal
             if (_sourceVertices.Length < meshes.Length)
             {
                 Array.Resize(ref _sourceVertices, meshes.Length);
+                Array.Resize(ref _sourceColors, meshes.Length);
             }
 
             for (var m = 0; m < meshes.Length; m++)
@@ -133,13 +211,27 @@ namespace BalloonParty.UI.CardReveal
                 {
                     Array.Copy(vertices, _sourceVertices[m], length);
                 }
+
+                var colors = meshes[m].colors32;
+                var colorCount = colors?.Length ?? 0;
+                if (_sourceColors[m] == null || _sourceColors[m].Length < colorCount)
+                {
+                    _sourceColors[m] = new Color32[colorCount];
+                }
+
+                if (colorCount > 0)
+                {
+                    Array.Copy(colors, _sourceColors[m], colorCount);
+                }
             }
         }
 
-        // Each glyph corner lifted by the ribbon's wave where it sits, so the writing rides the folds.
+        // Each glyph corner lifted by the ribbon's wave where it sits, so the writing rides the folds. In a
+        // dissolve each glyph fades and drops as the ribbon under its middle crumbles.
         private void BendText()
         {
             var info = _text.textInfo;
+            var halfWidth = ((RectTransform)transform).rect.width * 0.5f;
             for (var i = 0; i < info.characterCount; i++)
             {
                 ref var character = ref info.characterInfo[i];
@@ -155,16 +247,26 @@ namespace BalloonParty.UI.CardReveal
                 }
 
                 var vertices = info.meshInfo[mesh].vertices;
+                var colors = info.meshInfo[mesh].colors32;
+                var first = character.vertexIndex;
+                var middle = (_sourceVertices[mesh][first].x + _sourceVertices[mesh][first + 2].x) * 0.5f;
+                var crumbled = RibbonGraphic.DissolvedAt(middle, halfWidth, _dissolve);
                 for (var corner = 0; corner < 4; corner++)
                 {
-                    var index = character.vertexIndex + corner;
+                    var index = first + corner;
                     var source = _sourceVertices[mesh][index];
-                    source.y += _ribbon.WaveAt(source.x);
+                    source.y += _ribbon.WaveAt(source.x) - crumbled * _crumbleDrop;
                     vertices[index] = source;
+                    if (index < _sourceColors[mesh].Length && index < colors.Length)
+                    {
+                        var tint = _sourceColors[mesh][index];
+                        tint.a = (byte)(tint.a * (1f - crumbled));
+                        colors[index] = tint;
+                    }
                 }
             }
 
-            _text.UpdateVertexData(TMP_VertexDataUpdateFlags.Vertices);
+            _text.UpdateVertexData(TMP_VertexDataUpdateFlags.Vertices | TMP_VertexDataUpdateFlags.Colors32);
         }
     }
 }

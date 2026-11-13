@@ -91,6 +91,7 @@ namespace BalloonParty.UI.CardReveal
         private Vector2 _pinAxis;
         private float _ascentStartedAt = float.NegativeInfinity;
         private float _releasedAt;
+        private bool _titleDissolves;
         private float _exitFrom;
 
         // This pop's swing: its reach and pace (around 1) and where in the swing the fall starts.
@@ -250,6 +251,22 @@ namespace BalloonParty.UI.CardReveal
 
             var buildUp = Mathf.Max(settings.RubberSwingSeconds, 1e-3f);
             return rate * falling * falling / (falling + buildUp);
+        }
+
+        /// <summary>
+        ///     How far a capped title has dissolved (0 to 1), <paramref name="sinceRelease" /> seconds after the
+        ///     ribbons flew: whole until the capped ribbon has burst out and stood a moment, then crumbling away.
+        /// </summary>
+        internal static float CappedDissolve(float sinceRelease, ICardRevealSettings settings)
+        {
+            var from = settings.RibbonBurstSeconds + settings.CappedDissolveDelay;
+            var seconds = settings.CappedDissolveSeconds;
+            if (seconds <= 0f)
+            {
+                return sinceRelease >= from ? 1f : 0f;
+            }
+
+            return Mathf.Clamp01((sinceRelease - from) / seconds);
         }
 
         /// <summary>
@@ -452,6 +469,11 @@ namespace BalloonParty.UI.CardReveal
             }
 
             var exit = float.IsNaN(_exitFrom) ? 0f : Mathf.Clamp01((now - _exitFrom) / exitSeconds);
+            if (_titleDissolves)
+            {
+                _titleRibbon.Dissolve(CappedDissolve(now - _releasedAt, _settings));
+            }
+
             _titleRibbon.Fly(now - _releasedAt, exit, _settings);
             if (_descriptionRibbon.gameObject.activeSelf)
             {
@@ -484,13 +506,14 @@ namespace BalloonParty.UI.CardReveal
             _group.alpha = 1f;
         }
 
-        // A capped bonus keeps its title, struck through, with the capped ribbon behind it instead of the description.
-        // A canvas built before the capped ribbon still strikes the title and drops the description.
+        // A capped bonus keeps its title, struck through, with the capped ribbon over it instead of the
+        // description, and the title then dissolves. A canvas built before the capped ribbon still strikes and
+        // dissolves the title and drops the description.
         private void DressRibbons(RevealedCard reveal)
         {
             var capped = reveal.IsCapped;
-            var title = UpgradeCardText.Title(reveal.Card);
-            _titleRibbon.Show(capped ? StruckThrough(title) : title);
+            _titleDissolves = capped;
+            _titleRibbon.Show(UpgradeCardText.Title(reveal.Card), struck: capped);
             _titleRibbon.Rest();
             _descriptionRibbon.gameObject.SetActive(!capped);
             if (!capped)
@@ -510,11 +533,6 @@ namespace BalloonParty.UI.CardReveal
                 _cappedRibbon.Show(_cappedText);
                 _cappedRibbon.Rest();
             }
-        }
-
-        private static string StruckThrough(string line)
-        {
-            return $"<s>{line}</s>";
         }
 
         // The pin is drawn to the balloon's scale, hung from its needle's tip, and jabs along the angle it was
