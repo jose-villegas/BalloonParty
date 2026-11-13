@@ -14,30 +14,33 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
         [HideInInspector] _RendererColor ("Renderer Color", Color) = (1, 1, 1, 1)
 
         [Header(Gold)]
-        _GoldLit    ("Lit",    Color) = (1.00, 0.84, 0.42, 1)
-        _GoldShade  ("Shade",  Color) = (0.42, 0.25, 0.05, 1)
-        _GoldEdge   ("Edge",   Color) = (0.20, 0.11, 0.02, 1)
+        _GoldLit    ("Lit",    Color) = (1.00, 0.86, 0.40, 1)
+        _GoldShade  ("Shade",  Color) = (0.62, 0.38, 0.05, 1)
+        _GoldEdge   ("Edge",   Color) = (0.30, 0.16, 0.02, 1)
         _EdgePower  ("Edge Falloff", Range(1, 8)) = 3.0
         // The light's height over the board: low rakes across the ball, high lights it face-on.
         _LightHeight ("Light Height", Range(0.1, 3)) = 0.9
 
         [Header(Plates)]
-        _PlateScale    ("Plates Across the Radius", Range(1, 8)) = 2.6
+        _PlateScale    ("Plates Across the Radius", Range(1, 8)) = 3.2
         _PlateJitter   ("Irregularity", Range(0, 1)) = 0.8
-        _PlateTilt     ("Tilt", Range(0, 0.6)) = 0.22
+        _PlateTilt     ("Tilt", Range(0, 0.6)) = 0.16
         _PlateVariance ("Brightness Variance", Range(0, 0.5)) = 0.12
         _PlateSway     ("Sway", Range(0, 1)) = 0.35
         _PlateSwaySpeed("Sway Speed", Range(0, 2)) = 0.4
 
         [Header(Seams)]
-        _SeamColor ("Color", Color) = (0.16, 0.08, 0.01, 1)
-        _SeamWidth ("Width", Range(0, 0.2)) = 0.045
-        _SeamDepth ("Depth", Range(0, 1)) = 0.8
+        _SeamColor ("Color", Color) = (0.36, 0.20, 0.03, 1)
+        _SeamWidth ("Width", Range(0, 0.2)) = 0.03
+        _SeamDepth ("Depth", Range(0, 1)) = 0.6
 
         [Header(Glint)]
         _GlintColor     ("Color", Color) = (1.00, 0.96, 0.80, 1)
-        _GlintPower     ("Sharpness", Range(4, 200)) = 48
-        _GlintIntensity ("Intensity", Range(0, 4)) = 1.4
+        _GlintPower     ("Sharpness", Range(4, 200)) = 32
+        _GlintIntensity ("Intensity", Range(0, 4)) = 1.8
+        // The broad metallic sheen under the glint, per plate too.
+        _SheenPower     ("Sheen Sharpness", Range(1, 32)) = 5
+        _SheenIntensity ("Sheen Intensity", Range(0, 2)) = 0.5
 
         [Header(Glitter)]
         _GlitterColor     ("Color", Color) = (1.00, 0.98, 0.88, 1)
@@ -146,6 +149,8 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
             fixed4 _GlintColor;
             float  _GlintPower;
             float  _GlintIntensity;
+            float  _SheenPower;
+            float  _SheenIntensity;
 
             fixed4 _GlitterColor;
             float  _GlitterScale;
@@ -286,9 +291,11 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
                 col *= 1.0 + (plateRnd - 0.5) * 2.0 * _PlateVariance;
                 col = lerp(col, _GoldEdge.rgb, pow(rFlat, _EdgePower));
 
-                // ---- Glint: each plate's own highlight, so it breaks at the seams ----
+                // ---- Sheen and glint: each plate's own highlight, so it breaks at the seams ----
                 float3 halfway = normalize(toLight + float3(0, 0, 1));
-                float  glint   = pow(saturate(dot(plateNormal, halfway)), _GlintPower);
+                float  toHalf  = saturate(dot(plateNormal, halfway));
+                float  glint   = pow(toHalf, _GlintPower);
+                col += _GoldLit.rgb * pow(toHalf, _SheenPower) * _SheenIntensity;
                 col += _GlintColor.rgb * glint * _GlintIntensity;
 
                 // ---- Seams ----
