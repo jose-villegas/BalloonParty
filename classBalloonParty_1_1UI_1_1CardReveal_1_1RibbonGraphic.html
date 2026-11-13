@@ -115,6 +115,7 @@ $(function(){initNavTree('classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonGraphic
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonGraphic-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.UI.CardReveal.RibbonGraphic Class Reference</div></div>
 </div><!--header-->
@@ -150,12 +151,18 @@ Package Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
+<tr class="memitem:ad313e2623b8c7ea7f358c5910edc0c76" id="r_ad313e2623b8c7ea7f358c5910edc0c76"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad313e2623b8c7ea7f358c5910edc0c76">DissolvedAt</a> (float x, float halfWidth, float progress)</td></tr>
+<tr class="memdesc:ad313e2623b8c7ea7f358c5910edc0c76"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far a ribbon <em>halfWidth</em>  each side of its centre has crumbled away at <em>x</em> , <em>progress</em>  (0 to 1) through its dissolve: 0 still there, 1 gone.  <br /></td></tr>
+<tr class="separator:ad313e2623b8c7ea7f358c5910edc0c76"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8685c9ac784cba08d36581b7ef1a7a7" id="r_ab8685c9ac784cba08d36581b7ef1a7a7"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8685c9ac784cba08d36581b7ef1a7a7">Wave</a> (float x, float time, float height, float length, float speed)</td></tr>
 <tr class="memdesc:ab8685c9ac784cba08d36581b7ef1a7a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The wave's height at <em>x</em> , <em>time</em>  seconds in.  <br /></td></tr>
 <tr class="separator:ab8685c9ac784cba08d36581b7ef1a7a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:af10f3aebb6504720255966450277ed6e" id="r_af10f3aebb6504720255966450277ed6e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af10f3aebb6504720255966450277ed6e">Dissolve</a><code> [get, set]</code></td></tr>
+<tr class="memdesc:af10f3aebb6504720255966450277ed6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far the ribbon has crumbled away, 0 whole to 1 gone.  <br /></td></tr>
+<tr class="separator:af10f3aebb6504720255966450277ed6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a914ad9111648e595b373a5b4c7878e81" id="r_a914ad9111648e595b373a5b4c7878e81"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a914ad9111648e595b373a5b4c7878e81">WaveTime</a><code> [get, set]</code></td></tr>
 <tr class="memdesc:a914ad9111648e595b373a5b4c7878e81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds the wave has run: set each frame by whatever flies the ribbon.  <br /></td></tr>
 <tr class="separator:a914ad9111648e595b373a5b4c7878e81"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -174,6 +181,8 @@ Static Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a413d008b36d1ec15931170b0a0e1651a" id="r_a413d008b36d1ec15931170b0a0e1651a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a413d008b36d1ec15931170b0a0e1651a">_dissolve</a></td></tr>
+<tr class="separator:a413d008b36d1ec15931170b0a0e1651a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05fe3a62c43905f13033751310c6324b" id="r_a05fe3a62c43905f13033751310c6324b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a05fe3a62c43905f13033751310c6324b">_notch</a> = 0.45f</td></tr>
 <tr class="separator:a05fe3a62c43905f13033751310c6324b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9967995633a2cea937c169788268a5b" id="r_ae9967995633a2cea937c169788268a5b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae9967995633a2cea937c169788268a5b">_segments</a> = 24</td></tr>
@@ -186,10 +195,17 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a2cb5f74822658c9b89fd464b379d36cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9faa2f23f009dc62a158fd0b5db9ebf8" id="r_a9faa2f23f009dc62a158fd0b5db9ebf8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9faa2f23f009dc62a158fd0b5db9ebf8">_waveTime</a></td></tr>
 <tr class="separator:a9faa2f23f009dc62a158fd0b5db9ebf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:aa74eb14fc4edc176696b42677bcaf2f6" id="r_aa74eb14fc4edc176696b42677bcaf2f6"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa74eb14fc4edc176696b42677bcaf2f6">DissolveCell</a> = 7f</td></tr>
+<tr class="separator:aa74eb14fc4edc176696b42677bcaf2f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a67b860075a8587dc5ab98786c2d36c79" id="r_a67b860075a8587dc5ab98786c2d36c79"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67b860075a8587dc5ab98786c2d36c79">DissolveSoftness</a> = 0.25f</td></tr>
+<tr class="separator:a67b860075a8587dc5ab98786c2d36c79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A strip of ribbon filling its rect: swallowtail-notched at both ends, with a wave running along it that the driver moves on by setting <a class="el" href="#a914ad9111648e595b373a5b4c7878e81" title="Seconds the wave has run: set each frame by whatever flies the ribbon.">WaveTime</a>. </p>
-<p>It is cel shaded in the scene's light by its material (<code>BalloonParty/Sprite/CelRibbon</code>), from what the mesh tells it: how each fold turns, and a copy of the strip for the drop shadow. <a class="el" href="#a0992df3a7a74a2ccb6808610e4b585f2" title="How far the wave lifts the ribbon at x  (from the rect&#39;s centre).">WaveAt</a> is the same wave, for text riding on the ribbon to bend with it. </p>
+<p>It is cel shaded in the scene's light by its material (<code>BalloonParty/Sprite/CelRibbon</code>), from what the mesh tells it: how each fold turns, and a copy of the strip for the drop shadow. <a class="el" href="#a0992df3a7a74a2ccb6808610e4b585f2" title="How far the wave lifts the ribbon at x  (from the rect&#39;s centre).">WaveAt</a> is the same wave, for text riding on the ribbon to bend with it. <a class="el" href="#af10f3aebb6504720255966450277ed6e" title="How far the ribbon has crumbled away, 0 whole to 1 gone.">Dissolve</a> crumbles it away in ragged patches (<a class="el" href="#ad313e2623b8c7ea7f358c5910edc0c76" title="How far a ribbon halfWidth  each side of its centre has crumbled away at x , progress  (0 to 1) throu...">DissolvedAt</a>), which its writing and strike follow. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a2e7c2f24b12cf87cdab55debb8d3c5aa" name="a2e7c2f24b12cf87cdab55debb8d3c5aa"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2e7c2f24b12cf87cdab55debb8d3c5aa">&#9670;&#160;</a></span>AddStrip()</h2>
@@ -261,6 +277,43 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad313e2623b8c7ea7f358c5910edc0c76" name="ad313e2623b8c7ea7f358c5910edc0c76"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad313e2623b8c7ea7f358c5910edc0c76">&#9670;&#160;</a></span>DissolvedAt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static float BalloonParty.UI.CardReveal.RibbonGraphic.DissolvedAt </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>halfWidth</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>progress</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How far a ribbon <em>halfWidth</em>  each side of its centre has crumbled away at <em>x</em> , <em>progress</em>  (0 to 1) through its dissolve: 0 still there, 1 gone. </p>
+<p>It eats in from the left, in ragged patches, so the dissolve reads as the ribbon falling apart. </p>
 
 </div>
 </div>
@@ -402,6 +455,28 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a413d008b36d1ec15931170b0a0e1651a" name="a413d008b36d1ec15931170b0a0e1651a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a413d008b36d1ec15931170b0a0e1651a">&#9670;&#160;</a></span>_dissolve</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.UI.CardReveal.RibbonGraphic._dissolve</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a05fe3a62c43905f13033751310c6324b" name="a05fe3a62c43905f13033751310c6324b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a05fe3a62c43905f13033751310c6324b">&#9670;&#160;</a></span>_notch</h2>
 
@@ -534,7 +609,75 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aa74eb14fc4edc176696b42677bcaf2f6" name="aa74eb14fc4edc176696b42677bcaf2f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa74eb14fc4edc176696b42677bcaf2f6">&#9670;&#160;</a></span>DissolveCell</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float BalloonParty.UI.CardReveal.RibbonGraphic.DissolveCell = 7f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a67b860075a8587dc5ab98786c2d36c79" name="a67b860075a8587dc5ab98786c2d36c79"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a67b860075a8587dc5ab98786c2d36c79">&#9670;&#160;</a></span>DissolveSoftness</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float BalloonParty.UI.CardReveal.RibbonGraphic.DissolveSoftness = 0.25f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="af10f3aebb6504720255966450277ed6e" name="af10f3aebb6504720255966450277ed6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af10f3aebb6504720255966450277ed6e">&#9670;&#160;</a></span>Dissolve</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.UI.CardReveal.RibbonGraphic.Dissolve</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel set">set</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How far the ribbon has crumbled away, 0 whole to 1 gone. </p>
+
+</div>
+</div>
 <a id="a914ad9111648e595b373a5b4c7878e81" name="a914ad9111648e595b373a5b4c7878e81"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a914ad9111648e595b373a5b4c7878e81">&#9670;&#160;</a></span>WaveTime</h2>
 

@@ -138,6 +138,9 @@ $(function(){initNavTree('classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealVie
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
+<tr class="memitem:a692aebb7bb88acd5b92e51d44b3870cb" id="r_a692aebb7bb88acd5b92e51d44b3870cb"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a692aebb7bb88acd5b92e51d44b3870cb">CappedDissolve</a> (float sinceRelease, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a> settings)</td></tr>
+<tr class="memdesc:a692aebb7bb88acd5b92e51d44b3870cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far a capped title has dissolved (0 to 1), <em>sinceRelease</em>  seconds after the ribbons flew: whole until the capped ribbon has burst out and stood a moment, then crumbling away.  <br /></td></tr>
+<tr class="separator:a692aebb7bb88acd5b92e51d44b3870cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97b63681f50059cdd880582c057723d8" id="r_a97b63681f50059cdd880582c057723d8"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a97b63681f50059cdd880582c057723d8">ContactAt</a> (bool hasPin, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a> settings)</td></tr>
 <tr class="memdesc:a97b63681f50059cdd880582c057723d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">When the pop starts, from the start of the balloon's float: as it comes to rest, or with a pin (<em>hasPin</em> ) slower than that, once the pin is in, the balloon holding at rest longer.  <br /></td></tr>
 <tr class="separator:a97b63681f50059cdd880582c057723d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -231,8 +234,6 @@ Static Private Member Functions</h2></td></tr>
 <tr class="separator:ac73f3214169a7e076e3bae951618ae75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a351e6bc7590f6815c1799e2a053a3e2a" id="r_a351e6bc7590f6815c1799e2a053a3e2a"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a351e6bc7590f6815c1799e2a053a3e2a">Progress</a> (float elapsed, float seconds)</td></tr>
 <tr class="separator:a351e6bc7590f6815c1799e2a053a3e2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ba3802e938da94ba79adb912ce41bf6" id="r_a9ba3802e938da94ba79adb912ce41bf6"><td class="memItemLeft" align="right" valign="top">static string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ba3802e938da94ba79adb912ce41bf6">StruckThrough</a> (string line)</td></tr>
-<tr class="separator:a9ba3802e938da94ba79adb912ce41bf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -308,6 +309,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a5940de3cbb8ed85c7151b87da85369a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30bc556064f2f60a44c0667b60d5db60" id="r_a30bc556064f2f60a44c0667b60d5db60"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a30bc556064f2f60a44c0667b60d5db60">_swingReach</a> = 1f</td></tr>
 <tr class="separator:a30bc556064f2f60a44c0667b60d5db60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3b9e238d47569d5817847a881e3bb07" id="r_aa3b9e238d47569d5817847a881e3bb07"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa3b9e238d47569d5817847a881e3bb07">_titleDissolves</a></td></tr>
+<tr class="separator:aa3b9e238d47569d5817847a881e3bb07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b5c8f1506f2b1ebaaadb2d864c77df7" id="r_a2b5c8f1506f2b1ebaaadb2d864c77df7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html">RibbonPiece</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2b5c8f1506f2b1ebaaadb2d864c77df7">_titleRibbon</a></td></tr>
 <tr class="separator:a2b5c8f1506f2b1ebaaadb2d864c77df7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -403,6 +406,37 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a692aebb7bb88acd5b92e51d44b3870cb" name="a692aebb7bb88acd5b92e51d44b3870cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a692aebb7bb88acd5b92e51d44b3870cb">&#9670;&#160;</a></span>CappedDissolve()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static float BalloonParty.UI.CardReveal.CardRevealView.CappedDissolve </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>sinceRelease</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a></td>          <td class="paramname"><span class="paramname"><em>settings</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How far a capped title has dissolved (0 to 1), <em>sinceRelease</em>  seconds after the ribbons flew: whole until the capped ribbon has burst out and stood a moment, then crumbling away. </p>
 
 </div>
 </div>
@@ -1322,31 +1356,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a9ba3802e938da94ba79adb912ce41bf6" name="a9ba3802e938da94ba79adb912ce41bf6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9ba3802e938da94ba79adb912ce41bf6">&#9670;&#160;</a></span>StruckThrough()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static string BalloonParty.UI.CardReveal.CardRevealView.StruckThrough </td>
-          <td>(</td>
-          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>line</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="aa927f7c31a380a490e0e7813ce06ab18" name="aa927f7c31a380a490e0e7813ce06ab18"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa927f7c31a380a490e0e7813ce06ab18">&#9670;&#160;</a></span>TiltLayers()</h2>
 
@@ -2179,6 +2188,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.UI.CardReveal.CardRevealView._swingReach = 1f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa3b9e238d47569d5817847a881e3bb07" name="aa3b9e238d47569d5817847a881e3bb07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3b9e238d47569d5817847a881e3bb07">&#9670;&#160;</a></span>_titleDissolves</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.UI.CardReveal.CardRevealView._titleDissolves</td>
         </tr>
       </table>
   </td>

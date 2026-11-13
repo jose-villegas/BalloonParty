@@ -1,5 +1,14 @@
 var NAVTREEINDEX18 =
 {
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a0b13d83d23eef29c2dd1bec98ac3662f":[6,0,0,3,3,0,6],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a193d9be6fcc9281b3b3ebc7d9c388d94":[5,0,0,3,3,0,0],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a193d9be6fcc9281b3b3ebc7d9c388d94":[6,0,0,3,3,0,0],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a23d3b9934a168dc46e6425921a1c0c79":[5,0,0,3,3,0,2],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a23d3b9934a168dc46e6425921a1c0c79":[6,0,0,3,3,0,2],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a442b06275d4195869e993ffc837f38b6":[5,0,0,3,3,0,8],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a442b06275d4195869e993ffc837f38b6":[6,0,0,3,3,0,8],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a4efb6b106938b1d592202e4776fd4b0b":[5,0,0,3,3,0,11],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a4efb6b106938b1d592202e4776fd4b0b":[6,0,0,3,3,0,11],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a688e8cfd3650093a3eee51dc10d95830":[5,0,0,3,3,0,3],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a688e8cfd3650093a3eee51dc10d95830":[6,0,0,3,3,0,3],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a6a20b7e8e18ae9c3996cc23af85489f5":[5,0,0,3,3,0,10],
@@ -240,14 +249,5 @@ var NAVTREEINDEX18 =
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html":[6,0,0,3,4,7],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html#a00843026af25c9bec62fc53224220aa2":[5,0,0,3,4,7,5],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html#a00843026af25c9bec62fc53224220aa2":[6,0,0,3,4,7,5],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html#a136872cbc4c8efb2a57e8576ceb2aadf":[5,0,0,3,4,7,4],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html#a136872cbc4c8efb2a57e8576ceb2aadf":[6,0,0,3,4,7,4],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html#a3fd2346e1e148e847a826b563d6d400b":[5,0,0,3,4,7,0],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html#a3fd2346e1e148e847a826b563d6d400b":[6,0,0,3,4,7,0],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html#a4af93e921ab49c9325c286cb91c0db4f":[5,0,0,3,4,7,2],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html#a4af93e921ab49c9325c286cb91c0db4f":[6,0,0,3,4,7,2],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html#a5cfd257fa95ff5a96cf873c28bec92ba":[5,0,0,3,4,7,6],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html#a5cfd257fa95ff5a96cf873c28bec92ba":[6,0,0,3,4,7,6],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html#a9d533836a63378eabbfaf571cdcbc84a":[5,0,0,3,4,7,3],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html#a9d533836a63378eabbfaf571cdcbc84a":[6,0,0,3,4,7,3]
+"classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html#a136872cbc4c8efb2a57e8576ceb2aadf":[5,0,0,3,4,7,4]
 };

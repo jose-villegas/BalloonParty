@@ -1,6 +1,8 @@
 var classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings =
 [
     [ "_balloonColor", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a2091f49f89bb1f573405e725c7639fca", null ],
+    [ "_cappedDissolveDelay", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ae017a0e0957bdc84dba04743ba722c47", null ],
+    [ "_cappedDissolveSeconds", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a5665dce344b02ef4c1d1df402afdc96e", null ],
     [ "_framesPerSecond", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#acf5dd5188770205802188261cc1217da", null ],
     [ "_holdBeforePopSeconds", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a4bee6d863401d4999092ff7caf08b9f2", null ],
     [ "_insideShowThrough", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a20402f649d342f147250dc8397b1d241", null ],
@@ -54,6 +56,8 @@ var classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings =
     [ "_sheetRows", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a31aa3f0032f47d9c42bed0ab39a436e1", null ],
     [ "_shredsPrefab", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ae443524951a659437a369e5c5a4bb68e", null ],
     [ "BalloonColor", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ae17ae7beb541a12f90a19c9bc5ecd673", null ],
+    [ "CappedDissolveDelay", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ae0bbd3aef91cee896a765a6fa537f9e3", null ],
+    [ "CappedDissolveSeconds", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#abbafe003d238b1db075bf3e7a032607d", null ],
     [ "FramesPerSecond", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a15b83647d5a739a165e49ffa7845187e", null ],
     [ "HoldBeforePopSeconds", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ac7252f33c862b50bfd5e5a97b7307b3b", null ],
     [ "InsideShowThrough", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aa96214ec9ae3edbae534a85d9fec39ad", null ],

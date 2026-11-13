@@ -137,6 +137,12 @@ Properties</h2></td></tr>
 <tr class="memitem:ae17ae7beb541a12f90a19c9bc5ecd673" id="r_ae17ae7beb541a12f90a19c9bc5ecd673"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae17ae7beb541a12f90a19c9bc5ecd673">BalloonColor</a><code> [get]</code></td></tr>
 <tr class="memdesc:ae17ae7beb541a12f90a19c9bc5ecd673"><td class="mdescLeft">&#160;</td><td class="mdescRight">The prize balloon's colour: none of the board's, so it reads as the reward.  <br /></td></tr>
 <tr class="separator:ae17ae7beb541a12f90a19c9bc5ecd673"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0bbd3aef91cee896a765a6fa537f9e3" id="r_ae0bbd3aef91cee896a765a6fa537f9e3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae0bbd3aef91cee896a765a6fa537f9e3">CappedDissolveDelay</a><code> [get]</code></td></tr>
+<tr class="memdesc:ae0bbd3aef91cee896a765a6fa537f9e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">How long a capped title stands, once the capped ribbon has burst out, before it dissolves.  <br /></td></tr>
+<tr class="separator:ae0bbd3aef91cee896a765a6fa537f9e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbafe003d238b1db075bf3e7a032607d" id="r_abbafe003d238b1db075bf3e7a032607d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abbafe003d238b1db075bf3e7a032607d">CappedDissolveSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:abbafe003d238b1db075bf3e7a032607d"><td class="mdescLeft">&#160;</td><td class="mdescRight">How long a capped title takes to dissolve.  <br /></td></tr>
+<tr class="separator:abbafe003d238b1db075bf3e7a032607d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15b83647d5a739a165e49ffa7845187e" id="r_a15b83647d5a739a165e49ffa7845187e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a15b83647d5a739a165e49ffa7845187e">FramesPerSecond</a><code> [get]</code></td></tr>
 <tr class="separator:a15b83647d5a739a165e49ffa7845187e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7252f33c862b50bfd5e5a97b7307b3b" id="r_ac7252f33c862b50bfd5e5a97b7307b3b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac7252f33c862b50bfd5e5a97b7307b3b">HoldBeforePopSeconds</a><code> [get]</code></td></tr>
@@ -296,6 +302,10 @@ Properties</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a2091f49f89bb1f573405e725c7639fca" id="r_a2091f49f89bb1f573405e725c7639fca"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2091f49f89bb1f573405e725c7639fca">_balloonColor</a> = new(0.8f, 0.82f, 0.87f, 1f)</td></tr>
 <tr class="separator:a2091f49f89bb1f573405e725c7639fca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae017a0e0957bdc84dba04743ba722c47" id="r_ae017a0e0957bdc84dba04743ba722c47"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae017a0e0957bdc84dba04743ba722c47">_cappedDissolveDelay</a> = 0.5f</td></tr>
+<tr class="separator:ae017a0e0957bdc84dba04743ba722c47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5665dce344b02ef4c1d1df402afdc96e" id="r_a5665dce344b02ef4c1d1df402afdc96e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5665dce344b02ef4c1d1df402afdc96e">_cappedDissolveSeconds</a> = 0.9f</td></tr>
+<tr class="separator:a5665dce344b02ef4c1d1df402afdc96e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf5dd5188770205802188261cc1217da" id="r_acf5dd5188770205802188261cc1217da"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf5dd5188770205802188261cc1217da">_framesPerSecond</a> = 24f</td></tr>
 <tr class="separator:acf5dd5188770205802188261cc1217da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bee6d863401d4999092ff7caf08b9f2" id="r_a4bee6d863401d4999092ff7caf08b9f2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4bee6d863401d4999092ff7caf08b9f2">_holdBeforePopSeconds</a> = 0.5f</td></tr>
@@ -416,6 +426,50 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">Color BalloonParty.Configuration.CardReveal.CardRevealSettings._balloonColor = new(0.8f, 0.82f, 0.87f, 1f)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae017a0e0957bdc84dba04743ba722c47" name="ae017a0e0957bdc84dba04743ba722c47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae017a0e0957bdc84dba04743ba722c47">&#9670;&#160;</a></span>_cappedDissolveDelay</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._cappedDissolveDelay = 0.5f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5665dce344b02ef4c1d1df402afdc96e" name="a5665dce344b02ef4c1d1df402afdc96e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5665dce344b02ef4c1d1df402afdc96e">&#9670;&#160;</a></span>_cappedDissolveSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._cappedDissolveSeconds = 0.9f</td>
         </tr>
       </table>
   </td>
@@ -1595,6 +1649,58 @@ Private Attributes</h2></td></tr>
 <p>The prize balloon's colour: none of the board's, so it reads as the reward. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a85506378245e5c6b777be02e5c7b5701">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="ae0bbd3aef91cee896a765a6fa537f9e3" name="ae0bbd3aef91cee896a765a6fa537f9e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0bbd3aef91cee896a765a6fa537f9e3">&#9670;&#160;</a></span>CappedDissolveDelay</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings.CappedDissolveDelay</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How long a capped title stands, once the capped ribbon has burst out, before it dissolves. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aba63742e62a7e1d45d69d29c39992db9">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="abbafe003d238b1db075bf3e7a032607d" name="abbafe003d238b1db075bf3e7a032607d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abbafe003d238b1db075bf3e7a032607d">&#9670;&#160;</a></span>CappedDissolveSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings.CappedDissolveSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How long a capped title takes to dissolve. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ac3de5592b28bdcdfa69ad01c097955d6">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
 
 </div>
 </div>

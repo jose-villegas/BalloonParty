@@ -238,6 +238,7 @@ var NAVTREEINDEX2 =
 "RevealedCard_8cs.html":[7,0,7,0,2],
 "RibbonGraphic_8cs.html":[7,0,18,1,2],
 "RibbonPiece_8cs.html":[7,0,18,1,3],
+"RibbonStrike_8cs.html":[7,0,18,1,4],
 "RollingCounterDisplay_8cs.html":[7,0,18,19],
 "RollingTextAnimator_8cs.html":[7,0,14,0,1],
 "RunConfig_8cs.html":[7,0,3,22],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "RunResetOrder_8cs.html":[7,0,7,7,17],
 "RunRestartCompletedMessage_8cs.html":[7,0,14,7,34],
 "RunSeed_8cs.html":[7,0,7,7,18],
-"RunUpgrades_8cs.html":[7,0,7,10,3],
-"ScaleDownButton_8cs.html":[7,0,18,20]
+"RunUpgrades_8cs.html":[7,0,7,10,3]
 };

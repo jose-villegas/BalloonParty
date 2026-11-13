@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"ScaleDownButton_8cs.html":[7,0,18,20],
 "ScenarioContentRoot_8cs.html":[7,0,15,0,18],
 "ScenarioController_8cs.html":[7,0,7,6,7],
 "ScenarioGradeCheat_8cs.html":[7,0,2,20],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "WorldPolylineGizmo_8cs.html":[7,0,14,10,14],
 "WriteOnMath_8cs.html":[7,0,18,4,3],
 "WriteOnText_8cs.html":[7,0,18,4,4],
-"annotated.html":[6,0],
-"arch_balance_flow.html":[2,4]
+"annotated.html":[6,0]
 };

@@ -1,9 +1,13 @@
 <map id="BalloonParty.UI.CardReveal.RibbonPiece" name="BalloonParty.UI.CardReveal.RibbonPiece">
-<area shape="rect" id="Node000001" title="One piece of ribbon with a line of the card written on it, flown off the popped balloon by CardReveal..." alt="" coords="5,183,208,223"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="23,87,147,113"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,125,105,182,100,183,88,126"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonGraphic.html" title="A strip of ribbon filling its rect: swallowtail&#45;notched at both ends, with a wave running along it th..." alt="" coords="172,80,375,120"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="232,130,139,185,137,180,229,125"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="206,5,341,31"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="276,44,276,80,271,80,271,44"/>
+<area shape="rect" id="Node000001" title="One piece of ribbon with a line of the card written on it, flown off the popped balloon by CardReveal..." alt="" coords="792,50,995,90"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="533,5,657,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="671,28,792,50,791,55,670,34"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonGraphic.html" title="A strip of ribbon filling its rect: swallowtail&#45;notched at both ends, with a wave running along it th..." alt="" coords="189,71,392,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="406,85,792,71,792,76,406,90"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonStrike.html" title="A pen stroke through a ribbon&#39;s line, bent by the same wave as the ribbon and its writing,..." alt="" coords="493,118,696,158"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="406,106,493,120,493,125,405,112"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,120,140,145"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="153,115,189,108,190,113,154,120"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="154,131,493,134,493,140,154,136"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="709,114,767,101,819,88,821,93,769,106,710,119"/>
 </map>

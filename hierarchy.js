@@ -1156,6 +1156,7 @@ var hierarchy =
     [ "BalloonParty.Configuration.Editor.MapLimitsSceneOverlay", "classBalloonParty_1_1Configuration_1_1Editor_1_1MapLimitsSceneOverlay.html", null ],
     [ "MaskableGraphic", null, [
       [ "BalloonParty.UI.CardReveal.RibbonGraphic", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonGraphic.html", null ],
+      [ "BalloonParty.UI.CardReveal.RibbonStrike", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonStrike.html", null ],
       [ "BalloonParty.UI.TimeOfDaySpecular", "classBalloonParty_1_1UI_1_1TimeOfDaySpecular.html", null ]
     ] ],
     [ "MaterialPropertyDrawer", null, [

@@ -164,8 +164,10 @@ Static Private Member Functions</h2></td></tr>
 <tr class="separator:aba3f4bd964e446d46fa902681ddddce2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9625c72e6a98b6765fa55c6956af597" id="r_ae9625c72e6a98b6765fa55c6956af597"><td class="memItemLeft" align="right" valign="top">static RectTransform&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae9625c72e6a98b6765fa55c6956af597">CreateRect</a> (string name, Transform parent)</td></tr>
 <tr class="separator:ae9625c72e6a98b6765fa55c6956af597"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ece931e72efb92ab7ea49e24c01c18f" id="r_a1ece931e72efb92ab7ea49e24c01c18f"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html">RibbonPiece</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ece931e72efb92ab7ea49e24c01c18f">CreateRibbon</a> (string name, RectTransform balloon, TMP_Text label, Material material, Vector2 centre, float height, float fontSize, <a class="el" href="structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html">Flight</a> flight, Color? ribbonColor=null, Color? textColor=null)</td></tr>
-<tr class="separator:a1ece931e72efb92ab7ea49e24c01c18f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9ae1bc9e0c568f4a5c84aa68f08ed37" id="r_aa9ae1bc9e0c568f4a5c84aa68f08ed37"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html">RibbonPiece</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9ae1bc9e0c568f4a5c84aa68f08ed37">CreateRibbon</a> (string name, RectTransform balloon, TMP_Text label, Material material, Vector2 centre, float height, float fontSize, <a class="el" href="structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html">Flight</a> flight, Color? ribbonColor=null, Color? textColor=null, bool withStrike=false)</td></tr>
+<tr class="separator:aa9ae1bc9e0c568f4a5c84aa68f08ed37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1f131fffb3c64173fd60e2d536678a9" id="r_ae1f131fffb3c64173fd60e2d536678a9"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonStrike.html">RibbonStrike</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae1f131fffb3c64173fd60e2d536678a9">CreateStrike</a> (RectTransform text, <a class="el" href="classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonGraphic.html">RibbonGraphic</a> ribbon, Color color)</td></tr>
+<tr class="separator:ae1f131fffb3c64173fd60e2d536678a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af3446ad6dcf56f048ecbdd1d8f913d33" id="r_af3446ad6dcf56f048ecbdd1d8f913d33"><td class="memItemLeft" align="right" valign="top">static Material&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3446ad6dcf56f048ecbdd1d8f913d33">EnsureMaterial</a> (string path, string shaderName, string switchedOn=null)</td></tr>
 <tr class="separator:af3446ad6dcf56f048ecbdd1d8f913d33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a875907b6e96a2a3c6d556e64d0ed6d39" id="r_a875907b6e96a2a3c6d556e64d0ed6d39"><td class="memItemLeft" align="right" valign="top">static Material&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a875907b6e96a2a3c6d556e64d0ed6d39">EnsurePinMaterial</a> ()</td></tr>
@@ -605,8 +607,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a1ece931e72efb92ab7ea49e24c01c18f" name="a1ece931e72efb92ab7ea49e24c01c18f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1ece931e72efb92ab7ea49e24c01c18f">&#9670;&#160;</a></span>CreateRibbon()</h2>
+<a id="aa9ae1bc9e0c568f4a5c84aa68f08ed37" name="aa9ae1bc9e0c568f4a5c84aa68f08ed37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9ae1bc9e0c568f4a5c84aa68f08ed37">&#9670;&#160;</a></span>CreateRibbon()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -662,7 +664,46 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Color?</td>          <td class="paramname"><span class="paramname"><em>textColor</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>&#160;)</td>
+          <td class="paramtype">Color?</td>          <td class="paramname"><span class="paramname"><em>textColor</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>withStrike</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae1f131fffb3c64173fd60e2d536678a9" name="ae1f131fffb3c64173fd60e2d536678a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1f131fffb3c64173fd60e2d536678a9">&#9670;&#160;</a></span>CreateStrike()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonStrike.html">RibbonStrike</a> BalloonParty.Editor.CardRevealBuilder.CreateStrike </td>
+          <td>(</td>
+          <td class="paramtype">RectTransform</td>          <td class="paramname"><span class="paramname"><em>text</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonGraphic.html">RibbonGraphic</a></td>          <td class="paramname"><span class="paramname"><em>ribbon</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Color</td>          <td class="paramname"><span class="paramname"><em>color</em></span>&#160;)</td>
         </tr>
       </table>
   </td>

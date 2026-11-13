@@ -1,6 +1,8 @@
 var interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings =
 [
     [ "BalloonColor", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a85506378245e5c6b777be02e5c7b5701", null ],
+    [ "CappedDissolveDelay", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aba63742e62a7e1d45d69d29c39992db9", null ],
+    [ "CappedDissolveSeconds", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ac3de5592b28bdcdfa69ad01c097955d6", null ],
     [ "FramesPerSecond", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a7519057eaff5377811d9f045fd90d09f", null ],
     [ "HoldBeforePopSeconds", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ae3b052cade559a7ad47695590cd97f79", null ],
     [ "InsideShowThrough", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a03fa25f1086a1b597742cb5245757391", null ],

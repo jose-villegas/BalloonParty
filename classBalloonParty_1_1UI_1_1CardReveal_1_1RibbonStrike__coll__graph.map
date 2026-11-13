@@ -1,0 +1,8 @@
+<map id="BalloonParty.UI.CardReveal.RibbonStrike" name="BalloonParty.UI.CardReveal.RibbonStrike">
+<area shape="rect" id="Node000001" title="A pen stroke through a ribbon&#39;s line, bent by the same wave as the ribbon and its writing,..." alt="" coords="5,183,208,223"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="34,5,169,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,44,109,183,103,183,99,45"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonGraphic.html" title="A strip of ribbon filling its rect: swallowtail&#45;notched at both ends, with a wave running along it th..." alt="" coords="123,80,325,120"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="132,36,197,78,194,82,129,40"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="193,131,130,185,127,181,190,127"/>
+</map>
