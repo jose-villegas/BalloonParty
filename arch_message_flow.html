@@ -110,13 +110,13 @@ $(function(){initNavTree('arch_message_flow.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">Message Flow</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md85"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md86"></a>
 Message Flow</h1>
 <div class="image">
 <object type="image/svg+xml" data="message_flow.svg" style="pointer-events: none;"></object>
 <div class="caption">
 MessagePipe Pub/Sub Flow</div></div>
-<h2><a class="anchor" id="autotoc_md86"></a>
+<h2><a class="anchor" id="autotoc_md87"></a>
 What this diagram shows</h2>
 <p>The principal MessagePipe pub/sub connections — which systems publish which messages and which systems subscribe to them. This is the primary decoupling mechanism: publishers know nothing about subscribers; subscribers know nothing about publishers.</p>
 <p>Not exhaustive, and deliberately so. <code>GameplayMetricsService</code> alone subscribes to 21 messages; drawing every edge would bury the gameplay flows this page exists to make legible. Telemetry is shown with dotted edges from the messages already on the diagram, and <code><a class="el" href="Game_2Telemetry_2README_8md.html">Assets/Source/Game/Telemetry/README.md</a></code> carries its full subscription list.</p>
@@ -127,7 +127,7 @@ What this diagram shows</h2>
 <li><code>LevelController</code> → <code>ScoreLevelUpMessage</code> → (<code>LevelUpPopUp</code>, <code>ColorProgressBar</code>, <code>ColorStreakTracker</code>, <code>ThrowerController</code>, <code>BalloonSpawner</code>, <code>ScoreController</code>, <code>PlayerHealthController</code>, <code>LevelDifficultyResolver</code>, <code>WallNetView</code>, <code>ProgressionSoundRouter</code>) — announces the <em>confirmed</em> level-up (the cinematic itself triggers off <code>ILevelProgress.Phase == Completing</code> — detection at claim time in <code>LevelController.TryBeginCompleting</code>)</li>
 <li><code>ProjectileView</code> → <code>ProjectileDestroyedMessage</code> → (<code>ThrowerController</code>, <code>ProjectileFacingSource</code>, <code>LevelController</code>, <code>CombatSoundRouter</code>) — signals that a ball (named in the message) has been destroyed; <code>LevelController</code> uses it as the sole trigger for presenting the level-up popup</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md87"></a>
+<h2><a class="anchor" id="autotoc_md88"></a>
 Guidance</h2>
 <p><b>Use MessagePipe when:</b></p><ul>
 <li>Two systems should not hold direct references to each other (e.g. <code>ProjectileView</code> should not know about <code>ScoreController</code>)</li>

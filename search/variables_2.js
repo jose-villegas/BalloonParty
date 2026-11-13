@@ -103,9 +103,10 @@ var searchData=
   ['buttongreen_100',['ButtonGreen',['../classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html#a338d4bd099d650a80291933db68be0a3',1,'BalloonParty::Editor::GameOverLayoutBuilder::Kit']]],
   ['buttonred_101',['ButtonRed',['../classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html#a0ccbbd47746f30c61878bf16f424905b',1,'BalloonParty::Editor::GameOverLayoutBuilder::Kit']]],
   ['bybubblesdescending_102',['ByBubblesDescending',['../classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule.html#af730819ba478ad33639a3474e1c96910',1,'BalloonParty::Balloon::Controller::BubbleMergeRule']]],
-  ['bydistance_103',['ByDistance',['../classBalloonParty_1_1Item_1_1Lightning_1_1LightningChain.html#a75b453abad26e1274af83b3818b4a10d',1,'BalloonParty::Item::Lightning::LightningChain']]],
-  ['byid_104',['ById',['../classBalloonParty_1_1Game_1_1Telemetry_1_1MetricCatalog.html#a509e0879fdcacda55e6e895b2975cff0',1,'BalloonParty.Game.Telemetry.MetricCatalog.ById'],['../classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog.html#af3ad51760a1fa85f25fd4ee4ac81ac37',1,'BalloonParty.Game.Telemetry.TimerCatalog.ById']]],
-  ['byinterventionorder_105',['ByInterventionOrder',['../classBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner.html#aa76cc611d22f769443b5add7fbbb2a90',1,'BalloonParty::Balloon::Controller::BalancePlanner']]],
-  ['byroamorder_106',['ByRoamOrder',['../classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a4ac9b3fa306a76420b7796e2df71a948',1,'BalloonParty::Balloon::Controller::BalloonBalancer']]],
-  ['byspawnweightascending_107',['BySpawnWeightAscending',['../classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a247e490b50566756b301095e4329d25d',1,'BalloonParty::Balloon::Spawner::BalloonSpawner']]]
+  ['bycolumn_103',['ByColumn',['../classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a51a6b4986cb6bef5432b491cbe37affe',1,'BalloonParty::Balloon::Formation::UnbreakableFormationService']]],
+  ['bydistance_104',['ByDistance',['../classBalloonParty_1_1Item_1_1Lightning_1_1LightningChain.html#a75b453abad26e1274af83b3818b4a10d',1,'BalloonParty::Item::Lightning::LightningChain']]],
+  ['byid_105',['ById',['../classBalloonParty_1_1Game_1_1Telemetry_1_1MetricCatalog.html#a509e0879fdcacda55e6e895b2975cff0',1,'BalloonParty.Game.Telemetry.MetricCatalog.ById'],['../classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog.html#af3ad51760a1fa85f25fd4ee4ac81ac37',1,'BalloonParty.Game.Telemetry.TimerCatalog.ById']]],
+  ['byinterventionorder_106',['ByInterventionOrder',['../classBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner.html#aa76cc611d22f769443b5add7fbbb2a90',1,'BalloonParty::Balloon::Controller::BalancePlanner']]],
+  ['byroamorder_107',['ByRoamOrder',['../classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a4ac9b3fa306a76420b7796e2df71a948',1,'BalloonParty::Balloon::Controller::BalloonBalancer']]],
+  ['byspawnweightascending_108',['BySpawnWeightAscending',['../classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a247e490b50566756b301095e4329d25d',1,'BalloonParty::Balloon::Spawner::BalloonSpawner']]]
 ];

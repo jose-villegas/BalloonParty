@@ -165,6 +165,9 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
+<tr class="memitem:af6b57fbee98d4ba9aa01827667ab247f" id="r_af6b57fbee98d4ba9aa01827667ab247f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af6b57fbee98d4ba9aa01827667ab247f">DealWeight</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> card)</td></tr>
+<tr class="memdesc:af6b57fbee98d4ba9aa01827667ab247f"><td class="mdescLeft">&#160;</td><td class="mdescRight">How likely <em>card</em>  is in a deal: its weight, and Raise the Bar's once for every card at its limit, so the more cards are capped, the likelier the raise.  <br /></td></tr>
+<tr class="separator:af6b57fbee98d4ba9aa01827667ab247f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a293b77f7b1316bc594c57a2c36c5e107" id="r_a293b77f7b1316bc594c57a2c36c5e107"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a293b77f7b1316bc594c57a2c36c5e107">IsCardLevel</a> (int newLevel)</td></tr>
 <tr class="separator:a293b77f7b1316bc594c57a2c36c5e107"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af845a6d27c4a7b648a92dcdb1469b73d" id="r_af845a6d27c4a7b648a92dcdb1469b73d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af845a6d27c4a7b648a92dcdb1469b73d">TakeCardsOnTheWayTo</a> (int startLevel)</td></tr>
@@ -209,6 +212,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:ac327c21a9033e68c542632d34aef9d07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a787844def88bef1d71686769fa62ac80" id="r_a787844def88bef1d71686769fa62ac80"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a787844def88bef1d71686769fa62ac80">BuildDeck</a> (bool forBonus, bool withCapped=false)</td></tr>
 <tr class="separator:a787844def88bef1d71686769fa62ac80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a667b8232e76a5a537423b9a0bad85c5a" id="r_a667b8232e76a5a537423b9a0bad85c5a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a667b8232e76a5a537423b9a0bad85c5a">CardsAtTheirLimit</a> ()</td></tr>
+<tr class="separator:a667b8232e76a5a537423b9a0bad85c5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a919051b87f3e35bd6398c8931cc9419d" id="r_a919051b87f3e35bd6398c8931cc9419d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a919051b87f3e35bd6398c8931cc9419d">CloseHand</a> ()</td></tr>
 <tr class="separator:a919051b87f3e35bd6398c8931cc9419d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab44fddd81fc8ab7bd9b53f04d85d8984" id="r_ab44fddd81fc8ab7bd9b53f04d85d8984"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab44fddd81fc8ab7bd9b53f04d85d8984">CommitStaged</a> ()</td></tr>
@@ -236,6 +241,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a7d4176655dd4ef70713ca32611075c7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3250cb9232f23933e69520e2aa3951d9" id="r_a3250cb9232f23933e69520e2aa3951d9"><td class="memItemLeft" align="right" valign="top">readonly IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage.html">UpgradeCardHeldMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3250cb9232f23933e69520e2aa3951d9">_cardHeldPublisher</a></td></tr>
 <tr class="separator:a3250cb9232f23933e69520e2aa3951d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a117624d390ff92ad4f889f76ddfca671" id="r_a117624d390ff92ad4f889f76ddfca671"><td class="memItemLeft" align="right" valign="top">readonly Func&lt; <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a>, float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a117624d390ff92ad4f889f76ddfca671">_dealWeight</a></td></tr>
+<tr class="separator:a117624d390ff92ad4f889f76ddfca671"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac47234ceb9740760ee026daeb4202de5" id="r_ac47234ceb9740760ee026daeb4202de5"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac47234ceb9740760ee026daeb4202de5">_deck</a> = new()</td></tr>
 <tr class="separator:ac47234ceb9740760ee026daeb4202de5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb56dfaa6ffc7e3321e0397bcd307e03" id="r_aeb56dfaa6ffc7e3321e0397bcd307e03"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeb56dfaa6ffc7e3321e0397bcd307e03">_extraItemChance</a></td></tr>
@@ -408,6 +415,31 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a667b8232e76a5a537423b9a0bad85c5a" name="a667b8232e76a5a537423b9a0bad85c5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a667b8232e76a5a537423b9a0bad85c5a">&#9670;&#160;</a></span>CardsAtTheirLimit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Game.Upgrades.RunUpgrades.CardsAtTheirLimit </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a919051b87f3e35bd6398c8931cc9419d" name="a919051b87f3e35bd6398c8931cc9419d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a919051b87f3e35bd6398c8931cc9419d">&#9670;&#160;</a></span>CloseHand()</h2>
 
@@ -480,6 +512,33 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="af6b57fbee98d4ba9aa01827667ab247f" name="af6b57fbee98d4ba9aa01827667ab247f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6b57fbee98d4ba9aa01827667ab247f">&#9670;&#160;</a></span>DealWeight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Game.Upgrades.RunUpgrades.DealWeight </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a></td>          <td class="paramname"><span class="paramname"><em>card</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How likely <em>card</em>  is in a deal: its weight, and Raise the Bar's once for every card at its limit, so the more cards are capped, the likelier the raise. </p>
 
 </div>
 </div>
@@ -872,6 +931,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly IPublisher&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage.html">UpgradeCardHeldMessage</a>&gt; BalloonParty.Game.Upgrades.RunUpgrades._cardHeldPublisher</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a117624d390ff92ad4f889f76ddfca671" name="a117624d390ff92ad4f889f76ddfca671"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a117624d390ff92ad4f889f76ddfca671">&#9670;&#160;</a></span>_dealWeight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly Func&lt;<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a>, float&gt; BalloonParty.Game.Upgrades.RunUpgrades._dealWeight</td>
         </tr>
       </table>
   </td>

@@ -128,6 +128,8 @@ Files</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IFormationReinforcements_8cs.html">IFormationReinforcements.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="SnakeWalk_8cs.html">SnakeWalk.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="StandingFormation_8cs.html">StandingFormation.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="UnbreakableFormationService_8cs.html">UnbreakableFormationService.cs</a></td></tr>
@@ -142,16 +144,18 @@ Contents</h1>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">File   </th><th class="markdownTableHeadNone">What it does    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>FormationShape</code>   </td><td class="markdownTableBodyNone">The four shapes: <code>Horizontal</code>, <code>DiagonalDownRight</code>, <code>DiagonalDownLeft</code>, and <code>ItemCover</code> (a ring of six around a balloon that carries an item: no shot reaches the item, and the item can't move)    </td></tr>
+<td class="markdownTableBodyNone"><code>FormationShape</code>   </td><td class="markdownTableBodyNone">The five shapes: <code>Horizontal</code>, <code>DiagonalDownRight</code>, <code>DiagonalDownLeft</code>, <code>ItemCover</code> (a ring of six around a balloon that carries an item: no shot reaches the item, and the item can't move), and <code>Snake</code> (a line that walks the board)    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>SnakeWalk</code>   </td><td class="markdownTableBodyNone">Where a snake's head steps next: straight on if it can, else the gentlest open turn    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>FormationPlanner</code>   </td><td class="markdownTableBodyNone">Pure planning. For one shape it lists every spot on the board where the shape fits, works out how far the members would travel to fill it, and picks at random among the few cheapest spots. It then says which member goes to which slot. It reads the grid but never changes it    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>FormationAssignment</code>   </td><td class="markdownTableBodyNone">One member and the slot it goes to    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>StandingFormation</code>   </td><td class="markdownTableBodyNone">One standing formation: its members, its shape, the waves it has left to hold, and whether a member was pierced since it formed    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>UnbreakableFormationService</code>   </td><td class="markdownTableBodyNone">The controller. It decides when each formation forms, holds, changes and breaks up, marks members as in formation, and rolls for reinforcements    </td></tr>
+<td class="markdownTableBodyNone"><code>StandingFormation</code>   </td><td class="markdownTableBodyNone">One standing formation: its members, its shape, the waves it has left to hold, and whether a member was pierced since it formed    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>UnbreakableFormationService</code>   </td><td class="markdownTableBodyNone">The controller. It decides when each formation forms, holds, changes and breaks up, marks members as in formation, and rolls for reinforcements    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>IFormationReinforcements</code>   </td><td class="markdownTableBodyNone">The reinforcements the formations have called in. <code>BalloonSpawner</code> takes them at each wave's first line   </td></tr>
 </table>
 <h1><a class="anchor" id="autotoc_md21"></a>
@@ -165,10 +169,20 @@ How a formation runs</h1>
 <li><b>Breaking up.</b> The service watches <code>SlotGrid.OnChanged</code>. When a member leaves the grid (it was pierced, or the board was cleared) it drops out of its formation. If fewer than <code>MinMembers</code> are left in that formation, the rest are released at once. The other formations stand. The next line's balance, or the timed pulse, floats the released ones up. <code>ResetRun</code> releases everything.</li>
 </ol>
 <h1><a class="anchor" id="autotoc_md22"></a>
+Snakes</h1>
+<p>A snake forms as a row, like a horizontal line, of at most <code>SnakeMaxMembers</code>. It sets off along the row, east or west at random, led by the member at that end. From then on it walks on the board's own beat: the balancer's pulse (<code>FlightRebalanceInterval</code>, every 4 s), so the player can see each step coming. Every <code>SnakeStepPulses</code> pulses the balancer asks the service to <code>StepSnakes</code>, right before that pulse's race:</p>
+<ul>
+<li>The head steps one slot along the snake's heading (<code>HexCoordinates.Step</code>, six directions numbered from east, clockwise). When that slot is off the board, below the row clearance, or taken, <code>SnakeWalk</code> tries the gentlest turn instead: 60° right, 60° left, 120° right, 120° left. It never turns back.</li>
+<li>Each member behind the head steps into the slot the member ahead of it just left. When a member was popped, the one behind it closes the gap, so the snake stays one line.</li>
+<li>Boxed in, the snake turns round: its tail leads the way back.</li>
+</ul>
+<p>Members stay anchored and blue as they walk (<code>IFormationMember.Walking</code>), and the board settles around each step in the same pulse. The snake keeps the row's limits: never in the bottom <code>HorizontalBottomClearance</code> rows. Like any formation it changes shape after <code>HoldWaves</code>, breaks below <code>MinMembers</code>, and calls reinforcements while untouched.</p>
+<p>The shot solver predicts the pulse's rise but not a snake's step, so a shot that meets a step mid-flight can play out differently from its prediction.</p>
+<h1><a class="anchor" id="autotoc_md23"></a>
 Reinforcements</h1>
 <p>A formation the player doesn't break calls for help. At each wave start, every formation that has had no member pierced since it formed rolls <code>ReinforcementChance</code>. Each success calls in one more unbreakable. The wave a formation forms in doesn't roll, so the player always gets a wave to answer it. A formation keeps its record through shape changes: once pierced, it never calls again.</p>
 <p>The service only counts the calls (<code>IFormationReinforcements</code>). <code>BalloonSpawner</code> takes them right after the formations arrange, since both run at the wave's first line, and adds that many unbreakables to the line. They enter like any other balloon. They don't count against the level's own unbreakable cap or wave quota. Instead, at most <code>ReinforcementCeiling</code> of them are on the board at once (<code>ReinforcementPlan</code>). Calls past the ceiling, or past the line's open places, are dropped. On the board they are ordinary unbreakables: they roam, and once enough are free they form a formation of their own.</p>
-<h1><a class="anchor" id="autotoc_md23"></a>
+<h1><a class="anchor" id="autotoc_md24"></a>
 Rules a formation keeps</h1>
 <ul>
 <li><b>No pushing.</b> A formation slot must be empty or already hold one of the unbreakables it is planning with. A formation never pushes another balloon aside, and never plans over another formation's members.</li>
@@ -178,7 +192,7 @@ Rules a formation keeps</h1>
 <li><b>Members keep their slot.</b> A member already standing on a formation slot keeps it: assignment takes the nearest pairs first, so its distance-0 pair always wins. As a result, no member ever has to move into a slot another member still holds.</li>
 <li><b>The covered item stays put.</b> With every neighbour taken by an anchored member, the item's balloon has nowhere to move. If it pops anyway (a blast reaches it), the ring stays where it is until the next change.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md24"></a>
+<h1><a class="anchor" id="autotoc_md25"></a>
 Anchoring</h1>
 <p>A member in formation reports <code>IBalanceAnchor.IsAnchored</code> (from <code>Slots/Actor</code>). Everything that moves balloons leaves an anchored actor in its slot:</p><ul>
 <li>the balance race (<code>BalancePlanner</code>) and <code>BalloonBalancer.HasPossibleMove</code>,</li>
@@ -186,10 +200,10 @@ Anchoring</h1>
 <li><code>PressurePropagation</code>, where an anchored actor blocks the shove the way a static actor does,</li>
 <li>the shot solver. <code>ShotBoardGather</code> copies the flag into <code>BalanceProfile.Anchored</code>, and <code>ShotSimDynamicActor</code> reports it, so the solver's predicted pulses leave anchored balloons in place too.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md25"></a>
+<h1><a class="anchor" id="autotoc_md26"></a>
 Look</h1>
 <p><code>Balloon/Type/UnbreakableFormationLook</code> turns a member blue once it has arrived in its slot (in formation and <code>IsStable</code>). The core glow, the inner rim and the exhaust trail all change, and a <code>GlitterSwirl</code> halo fades in behind the sphere. The halo doesn't sway or spin with its balloon: the service gives every member its formation's heading (<code>IFormationMember.FormationHeading</code>, a world direction), and the look turns the halo so its swirl drifts that way. A line heads along its slots, and an item cover heads up at the item. The unbreakable's periodic burst is tagged blue too, so its specks match. All the blue comes from the palette's <code>UnbreakableFormation</code> entry. See <code><a class="el" href="Balloon_2Type_2README_8md.html">Balloon/Type/README.md</a></code>.</p>
-<h1><a class="anchor" id="autotoc_md26"></a>
+<h1><a class="anchor" id="autotoc_md27"></a>
 Settings</h1>
 <p>The settings are <code>IUnbreakableFormationSettings</code>, nested in <code>BalloonsConfiguration</code> under "Unbreakable Formations":</p><ul>
 <li><code>Enabled</code></li>
@@ -197,9 +211,10 @@ Settings</h1>
 <li><code>HoldWaves</code> (3)</li>
 <li><code>BottomClearance</code> (2) and <code>HorizontalBottomClearance</code> (4, for horizontal lines)</li>
 <li><code>HorizontalMaxMembers</code> (3, for horizontal lines; an item cover always takes six)</li>
+<li><code>SnakeMaxMembers</code> (4) and <code>SnakeStepPulses</code> (1: a step on every pulse)</li>
 <li><code>SpotChoices</code> (3)</li>
 <li><code>ReinforcementChance</code> (0.35) and <code>ReinforcementCeiling</code> (4)</li>
-<li>the shape weights: horizontal 1, each diagonal 1, item cover 2</li>
+<li>the shape weights: horizontal 1, each diagonal 1, item cover 2, snake 1</li>
 </ul>
 <p>The design and its open risks are in <code><a class="el" href="PLAN-UnbreakableFormations_8md.html">Plans/PLAN-UnbreakableFormations.md</a></code>. </p>
 </div><!-- contents -->

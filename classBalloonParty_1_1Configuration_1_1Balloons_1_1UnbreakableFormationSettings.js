@@ -12,6 +12,9 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettin
     [ "_minMembers", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a3e63b8b181d9a24fc94648b63fe8400c", null ],
     [ "_reinforcementCeiling", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a66df98d79f114edc2671d5626431bc69", null ],
     [ "_reinforcementChance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a34f8392829f77fc8030ccdb6fcadfc2b", null ],
+    [ "_snakeMaxMembers", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a5062abc551a70153d4366e14810e954e", null ],
+    [ "_snakeStepPulses", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#abaa5f0704813d90808ca1a67ca08b05e", null ],
+    [ "_snakeWeight", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#aa60454dfcd1273fd3a73090aeca8534a", null ],
     [ "_spotChoices", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#ac7344a28bdd942d3472fbeb79033e65e", null ],
     [ "BottomClearance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#ab5c0ad5596ec2193680a896854ae5369", null ],
     [ "DiagonalWeight", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a4dc4b4513ca9d8bd892c94934e9c4a2a", null ],
@@ -25,5 +28,8 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettin
     [ "MinMembers", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a06177224e85e0e05d3922e61f7313cce", null ],
     [ "ReinforcementCeiling", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a39dd49aaef8c457d22eb8cdb7abca9e9", null ],
     [ "ReinforcementChance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a9f1b9027d29b00bd5eb5b6bef33a1447", null ],
+    [ "SnakeMaxMembers", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a81c3c54e098f5754dfc34f1201278e50", null ],
+    [ "SnakeStepPulses", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#aeac828bffe74a0739ca98c9f8e84be6c", null ],
+    [ "SnakeWeight", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a186aa4137e2010dd61e369cd2746228e", null ],
     [ "SpotChoices", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a95e1c1f792b7403976313e50a1e782ff", null ]
 ];

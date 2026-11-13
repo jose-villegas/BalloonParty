@@ -1509,6 +1509,7 @@ var hierarchy =
     [ "BalloonParty.Slots.Grid.SlotGridChangedEvent", "structBalloonParty_1_1Slots_1_1Grid_1_1SlotGridChangedEvent.html", null ],
     [ "BalloonParty.Slots.Actor.Archetype.SlotRenderData", "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html", null ],
     [ "BalloonParty.Scenario.SmokeFieldResources", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html", null ],
+    [ "BalloonParty.Balloon.Formation.SnakeWalk", "classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk.html", null ],
     [ "BalloonParty.Item.Effects.SnipeEffectParams", "structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html", null ],
     [ "BalloonParty.Configuration.Items.SnipeSettings", "classBalloonParty_1_1Configuration_1_1Items_1_1SnipeSettings.html", null ],
     [ "BalloonParty.Shared.Rendering.SortingHelper", "classBalloonParty_1_1Shared_1_1Rendering_1_1SortingHelper.html", null ],

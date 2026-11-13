@@ -12,5 +12,8 @@ var interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationS
     [ "MinMembers", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a8a7e96cbdf0a2c82cb071c964262be84", null ],
     [ "ReinforcementCeiling", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a6b7a262c9dcf6c0506e34865c0d30b18", null ],
     [ "ReinforcementChance", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#ab57ce9338d75ace4254ea5c59f50c575", null ],
+    [ "SnakeMaxMembers", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a9049ea6657189c05859a740e6f67a8f8", null ],
+    [ "SnakeStepPulses", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#ab87940dbc5b09c3fdfe62c7bd5c7b3cd", null ],
+    [ "SnakeWeight", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a7da097d9ad46cdaf9471eb941d324602", null ],
     [ "SpotChoices", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#ada71cd4f8cd3413be4ec54509e232556", null ]
 ];

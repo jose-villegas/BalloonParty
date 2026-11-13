@@ -7,11 +7,13 @@ var classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel =
     [ "ResolveScoreAttribution", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#aeafe6ebfb50a555858f2055d1e0b89f5", null ],
     [ "SetFormationHeading", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#a0191b6bc7584734dc821d2eafea3d7cb", null ],
     [ "SetInFormation", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#ab2d15a8db16d1d7126a4903913c07c68", null ],
+    [ "SetWalking", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#a11d9ee0c3e1684ea66d599f20b8ebf1f", null ],
     [ "TryPickRelocation", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#ab5ae46615f323c9acc4b7cc7c4328c88", null ],
     [ "WeightBias", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#aea56ecf61f3446e632329fee67d94ed8", null ],
     [ "_colorSource", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#aa3cc9846840d4a1f085e9e90f6ba5edc", null ],
     [ "_formationHeading", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#a4c8e74af42ee0bdfa1bcba98b0095f8a", null ],
     [ "_inFormation", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#a99b1a40cfc270705e7ffd5408642314d", null ],
+    [ "_walking", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#afe947594843ef24559e164e87d3c5313", null ],
     [ "BalancePriority", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#a2600a21c9a273a51aafc048e85c4e6fd", null ],
     [ "BiasKind", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#aae07fa2810a5ab7595449903b49a3b6e", null ],
     [ "BiasTypeId", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#a8c3761c788318a9a6e9a675fe237cd2d", null ],
@@ -40,5 +42,6 @@ var classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel =
     [ "SlotIndex", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#a3dc2521cee200da8e6891ca6f284e06f", null ],
     [ "SlotIndex", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#a2066d9ec0d8b0cee371c41689c99ef27", null ],
     [ "SurviveOutcome", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#a930632f81c404fd8533854103a3a5c32", null ],
-    [ "TypeName", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#ae76ae1159cbc6a4d31c8242453ac46f8", null ]
+    [ "TypeName", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#ae76ae1159cbc6a4d31c8242453ac46f8", null ],
+    [ "Walking", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html#a3c8b163de19ade4509f49713cbcc7252", null ]
 ];

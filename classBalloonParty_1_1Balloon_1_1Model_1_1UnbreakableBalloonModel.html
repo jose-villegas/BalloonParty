@@ -144,6 +144,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0191b6bc7584734dc821d2eafea3d7cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2d15a8db16d1d7126a4903913c07c68" id="r_ab2d15a8db16d1d7126a4903913c07c68"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab2d15a8db16d1d7126a4903913c07c68">SetInFormation</a> (bool inFormation)</td></tr>
 <tr class="separator:ab2d15a8db16d1d7126a4903913c07c68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11d9ee0c3e1684ea66d599f20b8ebf1f" id="r_a11d9ee0c3e1684ea66d599f20b8ebf1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a11d9ee0c3e1684ea66d599f20b8ebf1f">SetWalking</a> (bool walking)</td></tr>
+<tr class="separator:a11d9ee0c3e1684ea66d599f20b8ebf1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5ae46615f323c9acc4b7cc7c4328c88" id="r_ab5ae46615f323c9acc4b7cc7c4328c88"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab5ae46615f323c9acc4b7cc7c4328c88">TryPickRelocation</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, IReadOnlyList&lt; Vector2Int &gt; restingSlots, out Vector2Int target)</td></tr>
 <tr class="memdesc:ab5ae46615f323c9acc4b7cc7c4328c88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Picks a destination from <em>restingSlots</em>  (empty slots needing no further settling); false = stays put this turn.  <br /></td></tr>
 <tr class="separator:ab5ae46615f323c9acc4b7cc7c4328c88"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -235,6 +237,9 @@ Properties</h2></td></tr>
 <tr class="separator:a930632f81c404fd8533854103a3a5c32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae76ae1159cbc6a4d31c8242453ac46f8" id="r_ae76ae1159cbc6a4d31c8242453ac46f8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60e">BalloonType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#ae76ae1159cbc6a4d31c8242453ac46f8">TypeName</a><code> [get]</code></td></tr>
 <tr class="separator:ae76ae1159cbc6a4d31c8242453ac46f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c8b163de19ade4509f49713cbcc7252" id="r_a3c8b163de19ade4509f49713cbcc7252"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3c8b163de19ade4509f49713cbcc7252">Walking</a><code> [get]</code></td></tr>
+<tr class="memdesc:a3c8b163de19ade4509f49713cbcc7252"><td class="mdescLeft">&#160;</td><td class="mdescRight">Its formation walks (a snake): it keeps the formation's look while it glides from slot to slot.  <br /></td></tr>
+<tr class="separator:a3c8b163de19ade4509f49713cbcc7252"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -249,6 +254,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a4c8e74af42ee0bdfa1bcba98b0095f8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99b1a40cfc270705e7ffd5408642314d" id="r_a99b1a40cfc270705e7ffd5408642314d"><td class="memItemLeft" align="right" valign="top">readonly ReactiveProperty&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a99b1a40cfc270705e7ffd5408642314d">_inFormation</a> = new(false)</td></tr>
 <tr class="separator:a99b1a40cfc270705e7ffd5408642314d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe947594843ef24559e164e87d3c5313" id="r_afe947594843ef24559e164e87d3c5313"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe947594843ef24559e164e87d3c5313">_walking</a></td></tr>
+<tr class="separator:afe947594843ef24559e164e87d3c5313"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a92244b6ea231937d9e27c48958aa54e8" name="a92244b6ea231937d9e27c48958aa54e8"></a>
@@ -441,6 +448,25 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a11d9ee0c3e1684ea66d599f20b8ebf1f" name="a11d9ee0c3e1684ea66d599f20b8ebf1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11d9ee0c3e1684ea66d599f20b8ebf1f">&#9670;&#160;</a></span>SetWalking()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Model.UnbreakableBalloonModel.SetWalking </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>walking</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html#ad4c9c118fd31a0313c49643afd51ee24">BalloonParty.Balloon.Model.IWriteableFormationMember</a>.</p>
+
+</div>
+</div>
 <a id="ab5ae46615f323c9acc4b7cc7c4328c88" name="ab5ae46615f323c9acc4b7cc7c4328c88"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab5ae46615f323c9acc4b7cc7c4328c88">&#9670;&#160;</a></span>TryPickRelocation()</h2>
 
@@ -560,6 +586,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly ReactiveProperty&lt;bool&gt; BalloonParty.Balloon.Model.UnbreakableBalloonModel._inFormation = new(false)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afe947594843ef24559e164e87d3c5313" name="afe947594843ef24559e164e87d3c5313"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe947594843ef24559e164e87d3c5313">&#9670;&#160;</a></span>_walking</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Balloon.Model.UnbreakableBalloonModel._walking</td>
         </tr>
       </table>
   </td>
@@ -1289,6 +1337,33 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html#a4009b159afd7c256d2d1b986837e4a62">BalloonParty.Balloon.Model.IBalloonModel</a>.</p>
+
+</div>
+</div>
+<a id="a3c8b163de19ade4509f49713cbcc7252" name="a3c8b163de19ade4509f49713cbcc7252"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c8b163de19ade4509f49713cbcc7252">&#9670;&#160;</a></span>Walking</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Balloon.Model.UnbreakableBalloonModel.Walking</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Its formation walks (a snake): it keeps the formation's look while it glides from slot to slot. </p>
+<p>Cleared when it leaves its formation. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html#a843a3af2b56fadf7fdcd7d43859ab9d9">BalloonParty.Balloon.Model.IFormationMember</a>.</p>
 
 </div>
 </div>

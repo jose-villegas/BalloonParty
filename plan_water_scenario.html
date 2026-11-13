@@ -110,19 +110,19 @@ $(function(){initNavTree('plan_water_scenario.html',''); initResizable(true); })
   <div class="headertitle"><div class="title">Water Scenario &amp; Bubble Merge</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md855"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md856"></a>
 Water scenario, rising bubbles and the bubble merge</h1>
 <blockquote class="doxtable">
 <p>A third backdrop beside the sky and the meadow: a <b>water surface</b> that ripples where the ball and the balloons pass, read from the same disturbance field the grass bends to. On a water level soap bubbles keep landing on the board, more often the longer the level runs, and two bubbles <b>merge</b> whenever they sit next to each other. Planned 2026-11-10; the owner settled the open decisions the same day. <b>Status: building.</b> </p>
 </blockquote>
 <hr  />
-<h2><a class="anchor" id="autotoc_md857"></a>
+<h2><a class="anchor" id="autotoc_md858"></a>
 Owner direction (2026-11-10)</h2>
 <p>"Another scenario, a water surface, same using disturbance to draw ripples over the background,
 here bubbles spawn and the more we stay on this level the more bubbles spawn over balloons, this
 session also finishes the merge logic for bubbles neighbors, bubbles merge only on nudge when the
 nudge puts them closer to a neighbor bubble."</p>
-<h2><a class="anchor" id="autotoc_md858"></a>
+<h2><a class="anchor" id="autotoc_md859"></a>
 What exists (verified 2026-11-10)</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -148,13 +148,13 @@ What exists (verified 2026-11-10)</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Nudge   </td><td class="markdownTableBodyNone"><code>Nudge/NudgeService</code>   </td><td class="markdownTableBodyNone">a transient impulse (out and back) on <code>INudgeable</code> views: <code>Neighbor</code> (the six neighbours of a hit, away from it), <code>Deflect</code>, <code>Shockwave</code> (every actor, away from the origin)   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md859"></a>
+<h2><a class="anchor" id="autotoc_md860"></a>
 Design</h2>
-<h3><a class="anchor" id="autotoc_md860"></a>
+<h3><a class="anchor" id="autotoc_md861"></a>
 1. Water in the schedule</h3>
 <p><code>ScenarioKind.Water = 2</code>. Sky stretches still separate every two surface stretches, so the mist reveal is always sky ↔ surface and never ground ↔ water. The surface stretch right after the first meadow is always water (<code>WaterAfterFirstMeadow</code>, owner 2026-11-11: "meadow first then water"), so every run meets it early, around levels 12–14. Each surface stretch after that rolls whether it is a meadow or water (<code>WaterShare</code>, 50%). A surface stretch's length is rolled as before, in the meadow's range, before its kind: turning water on leaves every stretch where it was, and only some meadows become water. The kind roll hashes the stretch's first level with its own key, mixed with the schedule salt and the run seed like every other roll, so a run's layout is stable across retries and each run gets its own. The first meadow stays fixed: bushes still arrive on time.</p>
 <p><b>The water surface has no clouds or bushes, and nothing on it bounces shots but the unbreakable balloon</b> (owner rules). <code>IContentPiece.KeptOffWater</code> marks what a water level leaves out: puff clouds, bushes, the Tough and Tougher balloons (they deflect until their last hit), and the Deflector and Gatekeeper actors. <code>LevelGenerator</code> drops those pieces before any budget is spent, as a sky level drops ground-only ones, so their budget buys the level's other threats rather than a pick that comes out empty. Clouds aren't faded out as they are over a clearing meadow: on water they're simply absent, and <code>ScenarioStretch</code>'s puff-cloud and bush shares are 0 there. <code>RequiresGround</code> stays a ground-only flag beside it.</p>
-<h3><a class="anchor" id="autotoc_md861"></a>
+<h3><a class="anchor" id="autotoc_md862"></a>
 2. The water backdrop</h3>
 <p><code>GroundView</code> becomes the view of every <b>surface</b> scenario: the floor quad swaps its material between the meadow floor and a new <code>BalloonParty/Scenario/Water</code> material, and the grass blades and their wake draw on ground only. The mist reveal, the depth scaling, <code>_GroundCoverage</code> and the sky hiding all apply to water unchanged (the planner and the curve read "not sky" instead of "ground"). The water settings (material, colours, ripple tuning) live on <code>GroundSettings</code> next to the floor's, through <code>IGroundSettings</code>.</p>
 <ul>
@@ -169,13 +169,13 @@ Design</h2>
   is no flow, tension or resonance, no height or breakup"): the shallow-water simulation replaced them, pressed smoothly by each impact rather than re-driven by the whole field every frame. Its first foam came from every steep slope and every big splash and covered half the screen after a board clear (owner: "it should be bound to where the normals suddenly change, so around peaks"), and its waves barely showed through the swell and the caustics until they stood taller, shaded their crests and bent the bottom more. Tuning that against one shot on calm water misled twice: a crest that breaks too early kept a normal hit's peaks under the foam threshold and its waves faint (owner: "barely visible", "is the foam even present?"), while letting it break later, with the waves lasting 2.5 s and the walls reflecting them, built up so much energy in real play that the water saturated and foamed everywhere. The sim is tuned while the game plays: waves fade over a second, crests break past 0.15 a cell. Foam from per-cell curvature still barely showed (owner: "foam should basically trail behind the peaks"): the waves are several cells wide, so only the crests right at an impact bent sharply enough. Foam from a crest's height, lasting most of a second as a trail, foamed the whole top of every big swell in a coarse lace (owner: "too strong now, and doesn't feel local to the peaks, almost like it's own thing"; "maybe
   instead of trailing just appear at the inflexion, this will carry it"). Foam now comes from the fold: how sharply a crest standing past 0.15 folds over in its sharpest direction (axes and diagonals), which a crest line does across itself and a broad swell never does. It lasts a tenth of a second, so it sits on the fold and moves with the crest, in a fine, light lace. The tile's cell wrap uses <code>id - n·floor((id + 0.5)/n)</code>, not <code>fmod</code>: GPU division is approximate, <code>fmod(10, 5)</code> can return 5, and the tile then shows a seam.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md862"></a>
+<h3><a class="anchor" id="autotoc_md863"></a>
 3. Bubbles that build up on water</h3>
 <p>Bubbles arrive <b>with the clock's lines</b>, taking a growing share of each line the longer the level runs, until a line brings more bubbles than balloons. <code>SpawnClock</code> counts the level's playing seconds (<code>ISpawnClock.SecondsOnLevel</code>, under the clock's own holds: Game screen, <code>Playing</code>, not paused; reset on level-up and run reset). On a water level, <code>BalloonSpawner</code> rolls each pick of a clock line against the bubble share before the level's weighted pick: a hit takes a bubble in that place, a miss the usual balloon. The initial fill has no bubbles.</p>
 <p>The share is a pure function of seconds on the level (<code>BubbleRiseCurve.ShareAt(settings,
 seconds)</code>): none during <code>GraceSeconds</code> (6 s), then it climbs linearly from <code>StartShare</code> (15%) to <code>MaxShare</code> (65%) over <code>RampSeconds</code> (60 s) and holds. <code>MaxBubbles</code> (12) caps the bubbles on the board at once; past it the pick falls back to the usual balloon. A water bubble starts as <code>StartBubbles</code> (1) bubbles, so merges have room to grow it, plus one more every <code>ExtraBubbleEveryLevels</code> (15) levels (<code>StartBubblesForLevel</code>: 2 from level 16, 3 from level 31), never past <code>BubbleMergeMax</code>. Water leaves out the Tough and Tougher balloons, and on deep levels the threat budget they free has nothing left to buy, so bigger bubbles are what bring balloons that take several hits back to deep water levels. Settings: <code>IBubbleRiseSettings</code>, a <code>[Serializable]</code> block on <code>LevelPacingConfiguration</code>.</p>
 <p>The bubble uses the balloon catalogue's <code>BubbleCluster</code> prefab entry, even while the level generator's entry is <code>Withheld</code>: the water rise is its own path.</p>
-<h3><a class="anchor" id="autotoc_md863"></a>
+<h3><a class="anchor" id="autotoc_md864"></a>
 4. The merge</h3>
 <p>Two bubble clusters in neighbouring slots merge, whatever brought them there: a spawn, the board settling, a pop opening the way. <code>BubbleMergeService</code> (<code>Balloon/Controller/</code>, a tick) looks again whenever the grid has changed (<code>SlotGrid.MutationVersion</code>), a cluster was hit, or its own last pass merged something, and merges every neighbouring pair where the larger still has room. <code>BubbleMergeRule</code> is the pure rule, tested on its own.</p>
 <ul>
@@ -184,7 +184,7 @@ seconds)</code>): none during <code>GraceSeconds</code> (6 s), then it climbs li
 <li>Each cluster merges at most once a frame, and a pass that merged looks again on the next frame, so a group gathers a step a frame. A hit on a cluster also wakes it: knocking a full cluster down makes room for its smaller neighbour to give again.</li>
 <li>A first version merged only when a nudge pushed two bubbles closer; the owner dropped that: "Just merge them when next to each other, no nudge".</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md864"></a>
+<h2><a class="anchor" id="autotoc_md865"></a>
 Owner decisions (2026-11-10)</h2>
 <ol type="1">
 <li><b>How often water comes up:</b> a coin flip for every surface stretch after the first meadow. Revised 2026-11-11: the first surface after the first meadow is always water, then the coin flip; on the flip alone, half of runs first met water around levels 12–16 and the rest later or never.</li>
@@ -198,7 +198,7 @@ Owner decisions (2026-11-10)</h2>
 <li><b>What water leaves out:</b> "water surface has no clouds or bushes", and "no deflector balloons
    except for unbreakable": no Tough, Tougher, Deflector or Gatekeeper on water either.</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md865"></a>
+<h2><a class="anchor" id="autotoc_md866"></a>
 Phases</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">

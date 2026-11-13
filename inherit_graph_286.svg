@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewStroke.html" target="_top" xlink:title="One polyline the preview&#39;s pens trace, as a range into ItemPreviewShape.Points.">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightOrder.html" target="_top" xlink:title="Orders a set of sighted item hosts first&#45;to&#45;last along the trace they were found on — the sequence It...">
 <polygon fill="white" stroke="#666666" points="146,-30 0,-30 0,0 146,0 146,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Preview.</text>
-<text text-anchor="middle" x="73" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">ItemPreviewStroke</text>
+<text text-anchor="middle" x="73" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">ItemPreviewSightOrder</text>
 </a>
 </g>
 </g>

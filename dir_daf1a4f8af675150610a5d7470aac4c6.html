@@ -129,7 +129,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Decides which won card is revealed, and when. A reveal is a balloon that pops over the board, and two pieces of ribbon fly off it with the card written on them. This folder holds the plain C# side: the queue and the pick of which baked pop plays. The view that draws it is <code>UI/CardReveal/CardRevealView</code>, which attaches itself as the <b>stage</b> when the settings hold at least one baked pop. Until a stage is attached, nothing is queued, and the cards are announced by the tooltip as before.</p>
-<h1><a class="anchor" id="autotoc_md178"></a>
+<h1><a class="anchor" id="autotoc_md179"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -142,7 +142,7 @@ Contents</h1>
 <td class="markdownTableBodyNone"><code>RevealedCard</code>   </td><td class="markdownTableBodyNone">One reveal: the card, its stacks once won (<code>Shield</code> held twice is 2; a bonus card counts the held stacks plus itself), whether it is a retry's bonus card, whether that bonus landed on a card at its limit (<code>IsCapped</code>: it plays breaking, and the card dealt in its place is queued right behind it), and the pop to play   </td></tr>
 </table>
 <p>The settings are <code>ICardRevealSettings</code> in <code>Configuration/CardReveal/</code>: the baked pops' sheets (<code>PopCount</code> is how many) and how many recent ones to avoid (<code>RecentPopsAvoided</code>, 2). With no asset assigned, <code>GameLifetimeScope</code> falls back to a default that has no pops, so no stage attaches.</p>
-<h1><a class="anchor" id="autotoc_md179"></a>
+<h1><a class="anchor" id="autotoc_md180"></a>
 Who announces a card</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">

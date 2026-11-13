@@ -146,7 +146,7 @@ Properties</h2></td></tr>
 <tr class="memitem:a5b37aa7112069dd23b5e36c1b1492f94" id="r_a5b37aa7112069dd23b5e36c1b1492f94"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5b37aa7112069dd23b5e36c1b1492f94">HorizontalWeight</a><code> [get]</code></td></tr>
 <tr class="separator:a5b37aa7112069dd23b5e36c1b1492f94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8673f39cf5e400fa604513f81968d1b3" id="r_a8673f39cf5e400fa604513f81968d1b3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8673f39cf5e400fa604513f81968d1b3">ItemCoverWeight</a><code> [get]</code></td></tr>
-<tr class="memdesc:a8673f39cf5e400fa604513f81968d1b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pick weight of covering an item from below; only in the pick while an item is on the board.  <br /></td></tr>
+<tr class="memdesc:a8673f39cf5e400fa604513f81968d1b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pick weight of ringing an item; only in the pick while an item is on the board.  <br /></td></tr>
 <tr class="separator:a8673f39cf5e400fa604513f81968d1b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b851ecb128d8c14a4b32708508885ac" id="r_a0b851ecb128d8c14a4b32708508885ac"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b851ecb128d8c14a4b32708508885ac">MaxMembers</a><code> [get]</code></td></tr>
 <tr class="memdesc:a0b851ecb128d8c14a4b32708508885ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Most unbreakables in one formation; the rest roam, or form a formation of their own.  <br /></td></tr>
@@ -160,6 +160,15 @@ Properties</h2></td></tr>
 <tr class="memitem:ab57ce9338d75ace4254ea5c59f50c575" id="r_ab57ce9338d75ace4254ea5c59f50c575"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab57ce9338d75ace4254ea5c59f50c575">ReinforcementChance</a><code> [get]</code></td></tr>
 <tr class="memdesc:ab57ce9338d75ace4254ea5c59f50c575"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chance, at each wave start, that a formation which stood untouched through the last wave calls in one more unbreakable.  <br /></td></tr>
 <tr class="separator:ab57ce9338d75ace4254ea5c59f50c575"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9049ea6657189c05859a740e6f67a8f8" id="r_a9049ea6657189c05859a740e6f67a8f8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9049ea6657189c05859a740e6f67a8f8">SnakeMaxMembers</a><code> [get]</code></td></tr>
+<tr class="memdesc:a9049ea6657189c05859a740e6f67a8f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Most unbreakables in a snake, the line that walks the board.  <br /></td></tr>
+<tr class="separator:a9049ea6657189c05859a740e6f67a8f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab87940dbc5b09c3fdfe62c7bd5c7b3cd" id="r_ab87940dbc5b09c3fdfe62c7bd5c7b3cd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab87940dbc5b09c3fdfe62c7bd5c7b3cd">SnakeStepPulses</a><code> [get]</code></td></tr>
+<tr class="memdesc:ab87940dbc5b09c3fdfe62c7bd5c7b3cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Balancer pulses between a snake's steps, so each step lands on the board's own beat.  <br /></td></tr>
+<tr class="separator:ab87940dbc5b09c3fdfe62c7bd5c7b3cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7da097d9ad46cdaf9471eb941d324602" id="r_a7da097d9ad46cdaf9471eb941d324602"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7da097d9ad46cdaf9471eb941d324602">SnakeWeight</a><code> [get]</code></td></tr>
+<tr class="memdesc:a7da097d9ad46cdaf9471eb941d324602"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pick weight of a snake.  <br /></td></tr>
+<tr class="separator:a7da097d9ad46cdaf9471eb941d324602"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada71cd4f8cd3413be4ec54509e232556" id="r_ada71cd4f8cd3413be4ec54509e232556"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada71cd4f8cd3413be4ec54509e232556">SpotChoices</a><code> [get]</code></td></tr>
 <tr class="memdesc:ada71cd4f8cd3413be4ec54509e232556"><td class="mdescLeft">&#160;</td><td class="mdescRight">A formation picks at random among this many of its least-travel spots.  <br /></td></tr>
 <tr class="separator:ada71cd4f8cd3413be4ec54509e232556"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -365,7 +374,7 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Pick weight of covering an item from below; only in the pick while an item is on the board. </p>
+<p>Pick weight of ringing an item; only in the pick while an item is on the board. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#ad1f360877b29faa467fd44b79fd21b78">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
 
@@ -472,6 +481,84 @@ Properties</h2></td></tr>
 <p>Chance, at each wave start, that a formation which stood untouched through the last wave calls in one more unbreakable. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a9f1b9027d29b00bd5eb5b6bef33a1447">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="a9049ea6657189c05859a740e6f67a8f8" name="a9049ea6657189c05859a740e6f67a8f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9049ea6657189c05859a740e6f67a8f8">&#9670;&#160;</a></span>SnakeMaxMembers</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings.SnakeMaxMembers</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Most unbreakables in a snake, the line that walks the board. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a81c3c54e098f5754dfc34f1201278e50">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="ab87940dbc5b09c3fdfe62c7bd5c7b3cd" name="ab87940dbc5b09c3fdfe62c7bd5c7b3cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab87940dbc5b09c3fdfe62c7bd5c7b3cd">&#9670;&#160;</a></span>SnakeStepPulses</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings.SnakeStepPulses</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Balancer pulses between a snake's steps, so each step lands on the board's own beat. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#aeac828bffe74a0739ca98c9f8e84be6c">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="a7da097d9ad46cdaf9471eb941d324602" name="a7da097d9ad46cdaf9471eb941d324602"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7da097d9ad46cdaf9471eb941d324602">&#9670;&#160;</a></span>SnakeWeight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings.SnakeWeight</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Pick weight of a snake. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a186aa4137e2010dd61e369cd2746228e">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
 
 </div>
 </div>

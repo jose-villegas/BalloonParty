@@ -109,6 +109,8 @@ $(function(){initNavTree('classBalloonParty_1_1Slots_1_1Grid_1_1HexCoordinates.h
 <div class="header">
   <div class="summary">
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pac-static-attribs">Static Package Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Slots_1_1Grid_1_1HexCoordinates-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Slots.Grid.HexCoordinates Class Reference</div></div>
 </div><!--header-->
@@ -122,6 +124,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a6e86f542f5e5f03cef47ba142d741b84" id="r_a6e86f542f5e5f03cef47ba142d741b84"><td class="memItemLeft" align="right" valign="top">static Vector2Int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6e86f542f5e5f03cef47ba142d741b84">DiagonalDown</a> (Vector2Int slot, bool right)</td></tr>
 <tr class="memdesc:a6e86f542f5e5f03cef47ba142d741b84"><td class="mdescLeft">&#160;</td><td class="mdescRight">The next slot one row down along a diagonal: down-right when <em>right</em> , else down-left.  <br /></td></tr>
 <tr class="separator:a6e86f542f5e5f03cef47ba142d741b84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2555d587532cf3c12144b392528ea6d7" id="r_a2555d587532cf3c12144b392528ea6d7"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2555d587532cf3c12144b392528ea6d7">DirectionBetween</a> (Vector2Int from, Vector2Int to)</td></tr>
+<tr class="memdesc:a2555d587532cf3c12144b392528ea6d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The direction from <em>from</em>  to its neighbour <em>to</em> , or -1.  <br /></td></tr>
+<tr class="separator:a2555d587532cf3c12144b392528ea6d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad37e7a843d135a9ef5b400092dc4c678" id="r_ad37e7a843d135a9ef5b400092dc4c678"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad37e7a843d135a9ef5b400092dc4c678">Distance</a> (Vector2Int a, Vector2Int b)</td></tr>
 <tr class="memdesc:ad37e7a843d135a9ef5b400092dc4c678"><td class="mdescLeft">&#160;</td><td class="mdescRight">Steps between two slots along hex neighbours (odd rows shifted right).  <br /></td></tr>
 <tr class="separator:ad37e7a843d135a9ef5b400092dc4c678"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -131,6 +136,23 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a17b83fd500e4149aa935c79417c612c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80a20e1c7d34a3e2155a7b459bfe48a4" id="r_a80a20e1c7d34a3e2155a7b459bfe48a4"><td class="memItemLeft" align="right" valign="top">static Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80a20e1c7d34a3e2155a7b459bfe48a4">IndexToWorldPosition</a> (Vector2Int index, Vector2 separation, Vector2 offset)</td></tr>
 <tr class="separator:a80a20e1c7d34a3e2155a7b459bfe48a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab98ceaa27dad848be1ada5a45480c8bf" id="r_ab98ceaa27dad848be1ada5a45480c8bf"><td class="memItemLeft" align="right" valign="top">static Vector2Int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab98ceaa27dad848be1ada5a45480c8bf">Step</a> (Vector2Int slot, int direction)</td></tr>
+<tr class="memdesc:ab98ceaa27dad848be1ada5a45480c8bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">The neighbour one step from <em>slot</em>  in <em>direction</em> : 0 east, then clockwise on screen in 60° turns.  <br /></td></tr>
+<tr class="separator:ab98ceaa27dad848be1ada5a45480c8bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2bb1ec73269ffdf3b57d129849ec329" id="r_ae2bb1ec73269ffdf3b57d129849ec329"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae2bb1ec73269ffdf3b57d129849ec329">Turn</a> (int direction, int turns)</td></tr>
+<tr class="memdesc:ae2bb1ec73269ffdf3b57d129849ec329"><td class="mdescLeft">&#160;</td><td class="mdescRight"><em>direction</em>  turned <em>turns</em>  60° steps clockwise, in 0 to 5.  <br /></td></tr>
+<tr class="separator:ae2bb1ec73269ffdf3b57d129849ec329"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-attribs" name="pac-static-attribs"></a>
+Static Package Attributes</h2></td></tr>
+<tr class="memitem:aafe71571a639619d6bbe1c6ad3cefe58" id="r_aafe71571a639619d6bbe1c6ad3cefe58"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aafe71571a639619d6bbe1c6ad3cefe58">Directions</a> = 6</td></tr>
+<tr class="memdesc:aafe71571a639619d6bbe1c6ad3cefe58"><td class="mdescLeft">&#160;</td><td class="mdescRight">The six ways out of a slot, numbered from east clockwise on screen (rows run down).  <br /></td></tr>
+<tr class="separator:aafe71571a639619d6bbe1c6ad3cefe58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:af9352fd851cf825e71be0f1c888a8733" id="r_af9352fd851cf825e71be0f1c888a8733"><td class="memItemLeft" align="right" valign="top">static readonly Vector2Int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af9352fd851cf825e71be0f1c888a8733">AxialSteps</a></td></tr>
+<tr class="separator:af9352fd851cf825e71be0f1c888a8733"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Pure coordinate math for the pointy-top, odd-row-shifted hex grid used by <a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a>. </p>
@@ -163,6 +185,37 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The next slot one row down along a diagonal: down-right when <em>right</em> , else down-left. </p>
+
+</div>
+</div>
+<a id="a2555d587532cf3c12144b392528ea6d7" name="a2555d587532cf3c12144b392528ea6d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2555d587532cf3c12144b392528ea6d7">&#9670;&#160;</a></span>DirectionBetween()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int BalloonParty.Slots.Grid.HexCoordinates.DirectionBetween </td>
+          <td>(</td>
+          <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>from</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>to</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The direction from <em>from</em>  to its neighbour <em>to</em> , or -1. </p>
 
 </div>
 </div>
@@ -291,6 +344,120 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab98ceaa27dad848be1ada5a45480c8bf" name="ab98ceaa27dad848be1ada5a45480c8bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab98ceaa27dad848be1ada5a45480c8bf">&#9670;&#160;</a></span>Step()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static Vector2Int BalloonParty.Slots.Grid.HexCoordinates.Step </td>
+          <td>(</td>
+          <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>slot</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>direction</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The neighbour one step from <em>slot</em>  in <em>direction</em> : 0 east, then clockwise on screen in 60° turns. </p>
+<p>Any whole number wraps round. </p>
+
+</div>
+</div>
+<a id="ae2bb1ec73269ffdf3b57d129849ec329" name="ae2bb1ec73269ffdf3b57d129849ec329"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2bb1ec73269ffdf3b57d129849ec329">&#9670;&#160;</a></span>Turn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int BalloonParty.Slots.Grid.HexCoordinates.Turn </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>direction</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>turns</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><em>direction</em>  turned <em>turns</em>  60° steps clockwise, in 0 to 5. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="af9352fd851cf825e71be0f1c888a8733" name="af9352fd851cf825e71be0f1c888a8733"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9352fd851cf825e71be0f1c888a8733">&#9670;&#160;</a></span>AxialSteps</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly Vector2Int [] BalloonParty.Slots.Grid.HexCoordinates.AxialSteps</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">        {</div>
+<div class="line">            <span class="keyword">new</span>(1, 0), <span class="keyword">new</span>(0, 1), <span class="keyword">new</span>(-1, 1), <span class="keyword">new</span>(-1, 0), <span class="keyword">new</span>(0, -1), <span class="keyword">new</span>(1, -1),</div>
+<div class="line">        }</div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="aafe71571a639619d6bbe1c6ad3cefe58" name="aafe71571a639619d6bbe1c6ad3cefe58"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafe71571a639619d6bbe1c6ad3cefe58">&#9670;&#160;</a></span>Directions</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int BalloonParty.Slots.Grid.HexCoordinates.Directions = 6</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The six ways out of a slot, numbered from east clockwise on screen (rows run down). </p>
 
 </div>
 </div>

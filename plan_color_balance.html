@@ -110,14 +110,14 @@ $(function(){initNavTree('plan_color_balance.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">Colour Balance</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md386"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md387"></a>
 Colour balance — crisp gameplay colours over every scene</h1>
 <blockquote class="doxtable">
 <p>Keep the colours that carry the game crisp, contrasting and recognisable in all three scenarios at every time of day, and let only real light sources glow. Written 2026-11-11 after the first scenario grade (see <code>ScenarioGradeView</code>) made the meadow look washed out. It measures the eight colours that matter most on the rendered frame, sets targets for them from colour-science research, and changes the tonemapper and the grades to meet them.</p>
 <p>Works with <a class="el" href="plan_hdr.html">HDR Rendering</a>, which switched on HDR rendering, the tonemapper and bloom. </p>
 </blockquote>
 <hr  />
-<h2><a class="anchor" id="autotoc_md388"></a>
+<h2><a class="anchor" id="autotoc_md389"></a>
 The eight colours</h2>
 <p>The colours a player reads to make a decision, plus the ones that have to stand apart from them. All live in <code>Assets/Configuration/GamePalette.asset</code>; the backdrops are not in the eight, they are what the eight are measured against.</p>
 <table class="markdownTable">
@@ -141,7 +141,7 @@ The eight colours</h2>
 <td class="markdownTableBodyNone">8   </td><td class="markdownTableBodyNone">Prediction   </td><td class="markdownTableBodyNone">(1, 0.388, 0.278)   </td><td class="markdownTableBodyNone">The aim line   </td><td class="markdownTableBodyNone">Red, every backdrop   </td></tr>
 </table>
 <hr  />
-<h2><a class="anchor" id="autotoc_md390"></a>
+<h2><a class="anchor" id="autotoc_md391"></a>
 What the research says</h2>
 <p>The full notes, with every source, are summarised here; the numbers in brackets are the references at the end.</p>
 <p><b>Telling colours apart.</b></p><ul>
@@ -170,7 +170,7 @@ What the research says</h2>
 <li>Khronos PBR Neutral [30] leaves everything below 0.76 alone, compresses only the brightest channel and blends toward white at constant hue. On this palette it keeps hue within 1° and chroma within 7 % at 1×.</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md392"></a>
+<h2><a class="anchor" id="autotoc_md393"></a>
 Targets</h2>
 <p>Measured on the final frame (after the tonemapper and the grade), for each scenario at noon and at midnight, by <code>balloons</code> (where each balloon is) and <code>palette_measure2.py</code> (the numbers).</p>
 <table class="markdownTable">
@@ -194,16 +194,16 @@ Targets</h2>
 <td class="markdownTableBodyNone">Pixels above surface white   </td><td class="markdownTableBodyNone">only on emitters   </td><td class="markdownTableBodyNone">glow is for light sources [19]   </td></tr>
 </table>
 <hr  />
-<h2><a class="anchor" id="autotoc_md394"></a>
+<h2><a class="anchor" id="autotoc_md395"></a>
 Phases</h2>
-<h3><a class="anchor" id="autotoc_md395"></a>
+<h3><a class="anchor" id="autotoc_md396"></a>
 Phase 1 — a hue-preserving tonemapper, and no lift · <b>done</b></h3>
 <ul>
 <li><b>PBR Neutral in the grading LUT.</b> URP picks the shader that builds the HDR grading LUT from the renderer's PostProcessData asset. <code>Assets/Settings/URP/GamePostProcessData.asset</code> is a copy of URP's with one change: it builds the LUT with <code>Assets/Shaders/BalloonParty/Display/LutBuilderHdr.shader</code>, a copy of URP's that tonemaps with Khronos PBR Neutral when the volume asks for Neutral. The tonemapper is baked into the LUT, so the frame costs the same. The <code>Scenario Grade</code> cheat swaps back to URP's curve for comparison.</li>
 <li><b>Re-tune the base look</b> in <code>Assets/DefaultVolumeProfile.asset</code>. The +0.35 stops and +15 contrast compensated for URP Neutral darkening the midtones (0.5 became 0.42); PBR Neutral does not. The base is now +15 contrast and −10 saturation. PBR Neutral keeps the authored colours below 0.76 as authored, and the contrast adds some chroma on top, so the frame came out about 35 % more colourful than under URP Neutral; the user found that a bit much, and −10 takes the edge off without moving any pair under 30. +0.2 stops and +20 contrast measured close.</li>
 <li><b>Remove the meadow's shadow lift and the global desaturation</b> from <code>ScenarioGradeSettings.asset</code>. A lift adds the same amount to every channel, which is what haze does: it cuts contrast and chroma together.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md396"></a>
+<h3><a class="anchor" id="autotoc_md397"></a>
 Phase 2 — night darkens the backdrop, not the balloons · <b>balloon body done</b></h3>
 <ul>
 <li><b>Done:</b> the balloon body (<code>Sprite/SpriteDiffuse.shader</code> on <code>DiffuseSprite.mat</code>) takes a quarter of the time-of-day light's colour (<code>_AmbientHue</code> 0.25) and 40 % of its dimming (<code>_AmbientDimming</code> 0.4). Local lights (a pop, an item) still tint it in full. Before, the balloons took all of the blue midnight light: red turned maroon, green turned teal, and blue and purple sank into the night sky. Four settings were compared at night in all three scenes; this one kept every pair furthest apart and every hue within 11° of its noon hue (OKLCh).</li>
@@ -213,20 +213,20 @@ Phase 2 — night darkens the backdrop, not the balloons · <b>balloon body done
 <li><b>Open:</b> the unbreakable and rainbow balloons have their own shaders and still take the full night light; give them the same two controls if they read too dark at night.</li>
 <li><b>Open:</b> the backdrops keep their own night look. Cut their chroma at night only if the balloons still don't separate.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md397"></a>
+<h3><a class="anchor" id="autotoc_md398"></a>
 Phase 3 — palette · <b>red done</b></h3>
 <ul>
 <li><b>Done, signed off by the user:</b> red went from (1, 0.412, 0.380) to (0.84, 0.289, 0.21): the same hue and chroma, OKLab lightness 0.71 → 0.60 (L* 63.5 → 51). Lightness is what a deuteranope keeps, so green–red went from 8 to about 19 for them (authored values), and red moved from 6 to 10 away from the aim line (Prediction). Three candidates were rendered; at full chroma the darker red looked more saturated than the old one, so the chroma stayed where it was.</li>
 <li><b>Open:</b> check green against the pale sky and purple against the night sky and water; give either a rim if it misses 3:1.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md398"></a>
+<h3><a class="anchor" id="autotoc_md399"></a>
 Phase 4 — glow only on emitters</h3>
 <ul>
 <li>Sparks, the shield halo, lightning and the laser are the emitters (see <a class="el" href="plan_hdr.html">HDR Rendering</a>). Bloom's threshold is 1.4, above every surface; check no balloon surface crosses it after Phase 1–3.</li>
 <li>The screen-space light overlay caps how far it brightens: at noon a white balloon stays under the bloom start, at night the bounce keeps its room to colour neighbours (<a class="el" href="plan_hdr.html">HDR Rendering</a>, task 2.8).</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md400"></a>
+<h2><a class="anchor" id="autotoc_md401"></a>
 Measurements</h2>
 <p>Before is URP Neutral with the first grade (+0.35 stops, the meadow's lift and desaturation); after is Phases 1–3 as shipped (PBR Neutral, +15 contrast and −10 saturation, the balloons' night response, the darker red). Each cell is before → <b>after</b>, measured in the Editor on full frames (1080 × 1920) at noon (time-of-day angle 135) and midnight (315), on boards with every colour of the level. Smallest ΔE is the closest pair of gameplay colours; the contrast column is the range over the gameplay colours, each against the backdrop around it.</p>
 <table class="markdownTable">
@@ -252,7 +252,7 @@ Measurements</h2>
 <li><b>Still short:</b> on the pale noon sky and the water the lightest balloons sit about 1.2:1 from the backdrop, and purple and red are 1.1–1.5:1 against the night sky and water. They are told apart by hue there, not lightness. A rim, or a lighter purple, would fix it (Phase 3, open).</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md402"></a>
+<h2><a class="anchor" id="autotoc_md403"></a>
 References</h2>
 <ol type="1">
 <li>Luo, Cui &amp; Rigg (2001), <em>The development of the CIE 2000 colour-difference formula: CIEDE2000</em>. Color Res. Appl. 26(5).</li>

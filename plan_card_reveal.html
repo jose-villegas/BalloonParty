@@ -110,7 +110,7 @@ $(function(){initNavTree('plan_card_reveal.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">The Card Reveal</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md364"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md365"></a>
 The Card Reveal</h1>
 <blockquote class="doxtable">
 <p>Working plan for showing a won upgrade card: during the level-to-level transition a realistic balloon pops, and two pieces of ribbon fly off it, one with the card's name and one with what it does, drifting across the screen while the level's ascent plays. </p>
@@ -118,11 +118,11 @@ The Card Reveal</h1>
 <p><b>Status:</b> Phase 1 built (the controller, its queue and the pop pick). Phase 2 built: the bake script makes the pops; eight are in the game (seeds whose falling rubber stays inside the frame). Phase 4 built: <code>CardRevealView</code> plays it on a World Space canvas of its own during the level-up, lit live by the scene's light field and the screen-space light like the board, and the ribbons fly with the ascent. The cheat Reveal A Card shows one on demand. The title ribbon starts with the card's hand-drawn icon (<code><a class="el" href="Game_2Upgrades_2README_8md.html">Game/Upgrades/README.md</a></code>), bent with the words.</p>
 <p>The pops are 8 separate physics simulations, baked in Blender by a script in this repo (§5), so the reveal never pops the same way twice in a row.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md366"></a>
+<h2><a class="anchor" id="autotoc_md367"></a>
 1. Why</h2>
 <p>Winning a card is the run's only source of power (<code><a class="el" href="Game_2Upgrades_2README_8md.html">Game/Upgrades/README.md</a></code>), yet today it shows as one line of the tooltip, <code>Level N: Card</code>, which is easy to miss in a busy board. The pick screen that showed cards was switched off because it stopped play (<code><a class="el" href="UI_2LevelUp_2README_8md.html">UI/LevelUp/README.md</a></code>). The reveal has to be loud enough to notice, and still never stop play.</p>
 <p>A popping balloon is the game's own verb. Here it pays out a prize instead of points: the pop sets free the ribbons that say what the player won. Hand-drawn frames can't make rubber tear and snap back convincingly; a cloth simulation can, so the pops are simulated and baked.</p>
-<h2><a class="anchor" id="autotoc_md367"></a>
+<h2><a class="anchor" id="autotoc_md368"></a>
 2. What the player sees</h2>
 <ol type="1">
 <li>On a level-up that deals a card, as the level-up starts, a silver balloon (none of the board's colours) floats up to a little above the screen's middle, bobbing and swaying to rest, two rolled-up ribbons inside it as a faint shadow.</li>
@@ -132,7 +132,7 @@ The Card Reveal</h1>
 <li>Just before the next level settles, they fly off, up and outward, and fade.</li>
 </ol>
 <p>On a level-up the ribbons are gone 0.82 of the way through the ascent and half a second more (about 3.8 s into its 4 s, just before it ends; the ascent starts just after the reveal). A retry's bonus card has no ascent, so its ribbons fly a set time instead. All on unscaled time like the heads-ups, so slow-motion beats don't stretch it.</p>
-<h2><a class="anchor" id="autotoc_md368"></a>
+<h2><a class="anchor" id="autotoc_md369"></a>
 3. Rules</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -158,7 +158,7 @@ The Card Reveal</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">A second card won while a reveal plays waits its turn   </td><td class="markdownTableBodyNone">Rare (cards come every 2 levels), but a retry's bonus card can meet a level-up's   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md369"></a>
+<h2><a class="anchor" id="autotoc_md370"></a>
 4. Architecture</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -179,7 +179,7 @@ The Card Reveal</h1>
 <td class="markdownTableBodyNone"><code>LevelUpPopUp</code>, <code>TooltipBanner</code> (changed)   </td><td class="markdownTableBodyNone"><code>UI/LevelUp/</code>, <code>UI/Tooltip/</code>   </td><td class="markdownTableBodyNone">Leave the card to the reveal while a stage is attached (<code>ICardReveals.HasStage</code>): the level-up line drops the card's name, the bonus card line isn't shown   </td></tr>
 </table>
 <p>The flipbook was planned as a sprite swap. It became a UV rect on a <code>RawImage</code> once the frames were lighting data rather than pictures: a frame looks like nothing until the shader lights it, so checking frames one by one in the Editor gained nothing, and a UV rect needs no sliced sprites.</p>
-<h2><a class="anchor" id="autotoc_md370"></a>
+<h2><a class="anchor" id="autotoc_md371"></a>
 5. How the pops are made</h2>
 <p>Two scripts under <code>Tools/art/balloon_pop/</code> (built; its README has the commands): <code>bake_pops.py</code> drives Blender headless and renders each pop's frames, and <code>pack_sheets.py</code> packs them into the game's sheets and draws a contact sheet and an animated preview to review them by. Everything is seeded, so a run redraws the same set, and a seed can be swapped to replace one pop.</p>
 <table class="markdownTable">
@@ -204,7 +204,7 @@ The Card Reveal</h1>
 </table>
 <p>Blender's cloth made the tear read as rubber (the flaps snap back rather than sag), so the fallback of a membrane solver in the script itself wasn't needed.</p>
 <p><b>Budget.</b> 8 sheets of 2048×3072 (48 frames, two layers), ASTC 4×4 on phones (6×6 and ETC2 blocked the normals into steps the cel shading drew as stairs) at about 6.3 MB each: about 50 MB in the build. At most two are in memory (<code>PopSheetLoader</code>): the next reveal's, loaded ahead, and the one playing, about 6.3 MB each. The sheets stay out of the sprite atlases, like the other baked art (<code>Sprites/README.md</code>), under <code>Assets/Sprites/UI/CardReveal/Resources/CardRevealPops/</code>.</p>
-<h2><a class="anchor" id="autotoc_md371"></a>
+<h2><a class="anchor" id="autotoc_md372"></a>
 6. Assets</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -220,7 +220,7 @@ The Card Reveal</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Card icons   </td><td class="markdownTableBodyNone">One atlas, 768×128 (six 128×128 doodles, one per card kind)   </td><td class="markdownTableBodyNone"><code>Tools/art/make_card_icons.py</code>, built into the <code>CardIcons</code> TextMeshPro sprite asset   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md372"></a>
+<h2><a class="anchor" id="autotoc_md373"></a>
 7. Phases</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -236,7 +236,7 @@ The Card Reveal</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">5   </td><td class="markdownTableBodyNone">A playtest pass on a phone: timing, how well the ribbons read over a busy board, and whether 256 px frames are sharp enough   </td><td class="markdownTableBodyNone">—   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md373"></a>
+<h2><a class="anchor" id="autotoc_md374"></a>
 8. Open questions</h2>
 <ul>
 <li>Should a ribbon fly to the weapon its card changed rather than off the screen? It would tie the card to its effect, but it crosses the board.</li>

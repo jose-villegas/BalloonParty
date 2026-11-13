@@ -113,6 +113,7 @@ var NAVTREEINDEX3 =
 "SmokeFieldService_8cs.html":[7,0,13,11],
 "SmokeFieldSettings_8cs.html":[7,0,3,5,27],
 "SmokeFieldView_8cs.html":[7,0,13,0,4],
+"SnakeWalk_8cs.html":[7,0,1,1,4],
 "SnipeDischargeBloom_8cs.html":[7,0,8,7,0],
 "SnipeItemHandler_8cs.html":[7,0,8,7,1],
 "SnipeRangePreview_8cs.html":[7,0,8,5,15],
@@ -150,7 +151,7 @@ var NAVTREEINDEX3 =
 "SpriteShadowBakerEditor_8cs.html":[7,0,6,5,2],
 "SpriteShadowBaker_8cs.html":[7,0,14,10,13],
 "StampProfileDrawer_8cs.html":[7,0,3,4,10],
-"StandingFormation_8cs.html":[7,0,1,1,4],
+"StandingFormation_8cs.html":[7,0,1,1,5],
 "StartFromLevelCheat_8cs.html":[7,0,2,24],
 "StaticActorModel_8cs.html":[7,0,15,0,23],
 "StaticActorSpawner_8cs.html":[7,0,15,0,24],
@@ -218,8 +219,8 @@ var NAVTREEINDEX3 =
 "UnbreakableBalloonVariant_8cs.html":[7,0,1,4,7],
 "UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d":[7,0,1,4,7,1],
 "UnbreakableFormationLook_8cs.html":[7,0,1,4,8],
-"UnbreakableFormationService_8cs.html":[7,0,1,1,5],
-"UnbreakableFormationService_8cs.html#a832e8f52fca5a678819ec96269dcb532":[7,0,1,1,5,1],
+"UnbreakableFormationService_8cs.html":[7,0,1,1,6],
+"UnbreakableFormationService_8cs.html#a832e8f52fca5a678819ec96269dcb532":[7,0,1,1,6,1],
 "UnbreakableFormationSettings_8cs.html":[7,0,3,0,7],
 "UnitCircleAttribute_8cs.html":[7,0,14,35],
 "UnitCircleDrawer_8cs.html":[7,0,6,51],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "WindSoundRouter_8cs.html":[7,0,0,2,6],
 "WorldPolylineGizmo_8cs.html":[7,0,14,10,14],
 "WriteOnMath_8cs.html":[7,0,18,4,3],
-"WriteOnText_8cs.html":[7,0,18,4,4],
-"annotated.html":[6,0]
+"WriteOnText_8cs.html":[7,0,18,4,4]
 };
