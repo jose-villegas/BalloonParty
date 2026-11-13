@@ -62,6 +62,22 @@ namespace BalloonParty.Tests.Configuration
         }
 
         [Test]
+        public void Generate_ExtraColorLevel_BringsItsExtraItemChance_OtherLevelsNone()
+        {
+            // A chance of 1 from level 1: odd levels play an extra colour, even ones don't.
+            var settings = ShippedLevelCatalogue.Build(new ExtraColorLevelSettings(1, 1f, 0.65f, 0.2f));
+
+            for (var level = 21; level <= 30; level++)
+            {
+                var result = LevelGenerator.Generate(settings, level, settings.SeedForLevel(level));
+                var expected = result.IsExtraColorLevel ? 0.2f : 0f;
+
+                Assert.AreEqual(expected, result.ExtraItemChance, $"level {level}");
+                Assert.AreEqual(expected, result.Resolve(0f, new System.Random(1)).ExtraItemChance, $"level {level}");
+            }
+        }
+
+        [Test]
         public void Generate_ExtraColorLevel_KeepsTheUsualAidsAndItems()
         {
             // The threats are dropped after the pick, so what the level would have had otherwise stays.

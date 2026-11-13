@@ -51,6 +51,10 @@ namespace BalloonParty.Configuration.Level
         [Tooltip("The time between spawn lines, as a share of the clock's usual: 0.5 = lines twice as often.")]
         [SerializeField] [Range(0.1f, 1f)] private float _spawnIntervalScale = 1f;
 
+        [Tooltip("Extra items per wave, the Lucky Find card's roll, added to the player's own: 0 but on an " +
+                 "extra-colour level.")]
+        [SerializeField] [Range(0f, 1f)] private float _extraItemChance;
+
         [Tooltip("An extra-colour level: no threats, so formations left from the level before call no " +
                  "reinforcements either.")]
         [SerializeField] private bool _isExtraColorLevel;
@@ -66,6 +70,7 @@ namespace BalloonParty.Configuration.Level
         public GridActorTypeGate[] GridActorGates => _gridActorGates;
         public int AllowedColorsMask => _allowedColorsMask;
         public float SpawnIntervalScale => _spawnIntervalScale;
+        public float ExtraItemChance => _extraItemChance;
         public bool IsExtraColorLevel => _isExtraColorLevel;
 
         // IPaletteColorMasked: a range maps its difficulty mix to the level's allowed palette colours.
@@ -78,10 +83,11 @@ namespace BalloonParty.Configuration.Level
         internal RangedLevelParameters(int boardLines, RangedInt itemCadence, AnimationCurve initialItemCountWeights,
             AnimationCurve itemCountWeights, BalloonTypeWeight[] balloonWeights, ItemTypeWeight[] itemWeights,
             GridActorTypeGate[] gridActorGates, int allowedColorsMask, float spawnIntervalScale = 1f,
-            bool isExtraColorLevel = false)
+            bool isExtraColorLevel = false, float extraItemChance = 0f)
         {
             _isExtraColorLevel = isExtraColorLevel;
             _spawnIntervalScale = spawnIntervalScale;
+            _extraItemChance = extraItemChance;
             _boardLines = boardLines;
             _itemCadence = itemCadence;
             _initialItemCountWeights = initialItemCountWeights ?? new AnimationCurve();
@@ -104,7 +110,8 @@ namespace BalloonParty.Configuration.Level
                 ResolveGridActorGates(positionInRange, rng),
                 _allowedColorsMask,
                 _spawnIntervalScale,
-                _isExtraColorLevel);
+                _isExtraColorLevel,
+                _extraItemChance);
         }
 
         private ResolvedGridActorGate[] ResolveGridActorGates(float positionInRange, System.Random rng)

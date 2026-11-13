@@ -276,6 +276,21 @@ namespace BalloonParty.Tests.Item
         }
 
         [Test]
+        public void OnItemCheck_LevelsOwnExtraItemChance_AddsToLuckyFind()
+        {
+            _weapon.ExtraItemChance.Returns(0.3f);
+            _current.ExtraItemChance.Returns(0.2f);
+            var bomb = CreateItemSettings(ItemType.Bomb);
+            _current.Items.Returns(new List<ItemSettings> { bomb });
+            _current.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>()).Returns(bomb);
+
+            FireItemCheck(new[] { new BalloonModel(), new BalloonModel() }, wave: 1);
+
+            _current.Received(1).FillExtraItems(
+                Arg.Any<List<ItemSettings>>(), Arg.Any<Dictionary<string, int>>(), 0.5f);
+        }
+
+        [Test]
         public void OnItemCheck_LuckyFind_StillPlacesWhenTheDrawIsZero()
         {
             _current.ItemCountWeights.Returns(WeightsForCount(0));

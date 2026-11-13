@@ -5,8 +5,8 @@ namespace BalloonParty.Configuration.Level
 {
     /// <summary>
     ///     A rare level that plays one more colour than its step gives (the fourth, purple), with no threats and
-    ///     lines arriving much faster: the pressure is a colour more to juggle and a busier board, not armour to
-    ///     break. Rolled per level from the run's seed, so runs differ and a retry replays it. Never two in a row,
+    ///     lines arriving faster: the pressure is a colour more to juggle and a busier board, not armour to
+    ///     break. More items come with it, to help sort the extra colour out. Rolled per level from the run's seed, so runs differ and a retry replays it. Never two in a row,
     ///     so the level after one is back to the usual colours.
     /// </summary>
     [Serializable]
@@ -24,21 +24,28 @@ namespace BalloonParty.Configuration.Level
         [SerializeField] [Range(0f, 1f)] private float _chance = 0.2f;
 
         [Tooltip("The time between lines on such a level, as a share of the usual: 0.5 = lines twice as often.")]
-        [SerializeField] [Range(0.1f, 1f)] private float _spawnIntervalScale = 0.5f;
+        [SerializeField] [Range(0.1f, 1f)] private float _spawnIntervalScale = 0.65f;
+
+        [Tooltip("Extra items on such a level: the same roll as the Lucky Find card (each item rolls this times its " +
+                 "ExtraItemShare per wave), added to the player's own. 0.1 is one Lucky Find stack.")]
+        [SerializeField] [Range(0f, 1f)] private float _extraItemChance = 0.2f;
 
         internal static ExtraColorLevelSettings Off => new(1, 0f, 1f);
 
         public float SpawnIntervalScale => _spawnIntervalScale;
+        public float ExtraItemChance => _extraItemChance;
 
         public ExtraColorLevelSettings()
         {
         }
 
-        internal ExtraColorLevelSettings(int fromLevel, float chance, float spawnIntervalScale)
+        internal ExtraColorLevelSettings(int fromLevel, float chance, float spawnIntervalScale,
+            float extraItemChance = 0f)
         {
             _fromLevel = fromLevel;
             _chance = chance;
             _spawnIntervalScale = spawnIntervalScale;
+            _extraItemChance = extraItemChance;
         }
 
         /// <summary>

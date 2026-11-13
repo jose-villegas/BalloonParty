@@ -163,11 +163,13 @@ namespace BalloonParty.Item
             return placed;
         }
 
-        // Lucky Find cards: each item rolls its own share of the chance, so a strong item gains less than a weak one.
+        // Lucky Find cards, plus the level's own (an extra-colour level's): each item rolls its own share of the
+        // chance, so a strong item gains less than a weak one.
         private void PlaceExtraItems()
         {
             _fillBuffer.Clear();
-            _levelParams.Current.FillExtraItems(_fillBuffer, _activeCountsBuffer, _weapon.ExtraItemChance);
+            var level = _levelParams.Current;
+            level.FillExtraItems(_fillBuffer, _activeCountsBuffer, _weapon.ExtraItemChance + level.ExtraItemChance);
 
             // The fill comes grouped by catalogue order; shuffled, a wave short of hosts drops a random extra
             // instead of always the last types'.

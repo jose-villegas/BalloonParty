@@ -112,7 +112,8 @@ namespace BalloonParty.Configuration.Level
                 gates.ToArray(),
                 (1 << Math.Min(settings.ColorsForLevel(level) + (extraColor ? 1 : 0), 31)) - 1,
                 extraColor ? settings.ExtraColor.SpawnIntervalScale : 1f,
-                extraColor);
+                extraColor,
+                extraColor ? settings.ExtraColor.ExtraItemChance : 0f);
         }
 
         // Every threat but the staple balloons, which are the level itself: an extra-colour level has no armour

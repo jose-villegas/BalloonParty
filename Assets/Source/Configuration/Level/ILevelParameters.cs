@@ -33,6 +33,12 @@ namespace BalloonParty.Configuration.Level
         /// </summary>
         bool IsExtraColorLevel { get; }
 
+        /// <summary>
+        ///     The level's own Lucky Find chance, added to the player's (<see cref="FillExtraItems" />): above 0 on an
+        ///     extra-colour level, 0 otherwise.
+        /// </summary>
+        float ExtraItemChance { get; }
+
         /// <param name="waveQuotas">Remaining per-wave allowance by pool key; entries at 0 are excluded, absent keys are unlimited.</param>
         BalloonPrefabEntry PickBalloonEntry(
             IReadOnlyDictionary<string, int> activeCounts, IReadOnlyDictionary<string, int> waveQuotas = null);
