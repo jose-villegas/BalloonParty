@@ -243,11 +243,11 @@ namespace BalloonParty.Balloon.Type
 
                     // Lit while moving, faded out when settled. The gradual fade also bridges the gaps
                     // between 50 Hz balance-move writes so a 120 Hz frame with no delta doesn't flicker it.
-                    // A snake member walks in its formation blue; a glide into a formation is still red. Set only
+                    // Any move under a formation, a snake's step or a glide into its slots, tints blue. Set only
                     // while moving, so a fade-out keeps the colour it moved in.
                     if (moving)
                     {
-                        _moveLight.PaletteIndex.Value = _model != null && UnbreakableFormationLook.ShowsFormation(_model)
+                        _moveLight.PaletteIndex.Value = _model is IFormationMember { InFormation: { Value: true } }
                             ? _formationColorIndex
                             : _unbreakableColorIndex;
                     }
