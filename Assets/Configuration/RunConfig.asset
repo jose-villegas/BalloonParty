@@ -60,3 +60,9 @@ MonoBehaviour:
       _amount: 0.1
       _maxStacks: 4
       _weight: 1
+    - _kind: 4
+      _title: Raise the Bar
+      _description: +1 to every card's limit
+      _amount: 1
+      _maxStacks: 2
+      _weight: 0.5

@@ -557,6 +557,82 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void RaiseLimits_IsNotDealtUntilACardIsAtItsLimit()
+        {
+            var raise = UpgradeRig.Card(UpgradeKind.RaiseLimits, 1f, maxStacks: 2);
+            var shield = UpgradeRig.Card(UpgradeKind.Shield, 1f, maxStacks: 1);
+            _rig.Cards.Clear();
+            _rig.Cards.AddRange(new[] { raise, shield, _reload });
+
+            CollectionAssert.DoesNotContain(_rig.Present(3), raise, "nothing to raise yet");
+            _rig.Abort();
+            _rig.Hold(shield);
+
+            CollectionAssert.Contains(_rig.Present(5), raise);
+        }
+
+        [Test]
+        public void Hold_RaiseLimits_LetsACardAtItsLimitBeDealtAndHeldAgain()
+        {
+            var raise = UpgradeRig.Card(UpgradeKind.RaiseLimits, 1f, maxStacks: 2);
+            var shield = UpgradeRig.Card(UpgradeKind.Shield, 1f, maxStacks: 1);
+            _rig.Cards.Clear();
+            _rig.Cards.AddRange(new[] { raise, shield });
+
+            _rig.Hold(shield);
+            _rig.Hold(raise);
+
+            Assert.AreEqual(2, Upgrades.LimitOf(shield));
+            _rig.Hold(shield);
+            Assert.AreEqual(2, Upgrades.StacksOf(shield));
+            Assert.AreEqual(BaseShields + 2, Upgrades.StartingShields);
+        }
+
+        [Test]
+        public void LimitOf_RaiseLimits_NeverRaisesItself()
+        {
+            var raise = UpgradeRig.Card(UpgradeKind.RaiseLimits, 1f, maxStacks: 2);
+            var shield = UpgradeRig.Card(UpgradeKind.Shield, 1f, maxStacks: 1);
+            _rig.Cards.Clear();
+            _rig.Cards.AddRange(new[] { raise, shield });
+
+            _rig.Hold(shield);
+            _rig.Hold(raise);
+
+            Assert.AreEqual(2, Upgrades.LimitOf(raise));
+            Assert.AreEqual(2, Upgrades.LimitOf(shield));
+        }
+
+        [Test]
+        public void ResetRun_AFreshRun_DropsTheRaisedLimits()
+        {
+            var raise = UpgradeRig.Card(UpgradeKind.RaiseLimits, 1f, maxStacks: 2);
+            var shield = UpgradeRig.Card(UpgradeKind.Shield, 1f, maxStacks: 1);
+            _rig.Cards.Clear();
+            _rig.Cards.AddRange(new[] { raise, shield });
+            _rig.Hold(shield);
+            _rig.Hold(raise);
+
+            _rig.RetryState.RetryLevel.Returns(0);
+            Upgrades.ResetRun(1);
+
+            Assert.AreEqual(1, Upgrades.LimitOf(shield));
+        }
+
+        [Test]
+        public void CanDealBonus_OnlyRaiseLimitsLeft_IsFalse()
+        {
+            var raise = UpgradeRig.Card(UpgradeKind.RaiseLimits, 1f, maxStacks: 2);
+            var shield = UpgradeRig.Card(UpgradeKind.Shield, 1f, maxStacks: 1);
+            _rig.Cards.Clear();
+            _rig.Cards.AddRange(new[] { raise, shield });
+
+            _rig.Hold(shield);
+
+            Assert.IsFalse(Upgrades.CanDealBonus, "the ad's card lasts one attempt; a raised limit has no room to fill");
+        }
+
+        [Test]
         public void BonusRetry_TheAttemptIsWon_TheBonusGoes()
         {
             _rig.Cards.Clear();

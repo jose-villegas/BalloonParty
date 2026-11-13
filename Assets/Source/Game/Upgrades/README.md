@@ -12,7 +12,7 @@ particular never rises with level, only through a card.
 | File | Responsibility |
 |---|---|
 | `IWeaponStats` | The run's weapon after its cards: `MaxBallsInFlight`, `ReloadSeconds` (the reload while another ball flies), `IdleReloadSeconds` (the near-instant one with nothing flying, which no card changes), `StartingShields`, `ExtraItemChance`. Each value is the configured base (`IProjectileFlightConfig`) plus every card held. Read these, not the flight config, wherever a card can change the value |
-| `IUpgradeDraft` | The cards side: `Offer` (the hand of the level-up being presented, empty when none is pending or it deals none), `BonusCard` (the current attempt's bonus card, or null), `StacksOf(card)`, and `Pick(slot)`, which stages a card of the hand as the level-up's pick |
+| `IUpgradeDraft` | The cards side: `Offer` (the hand of the level-up being presented, empty when none is pending or it deals none), `BonusCard` (the current attempt's bonus card, or null), `StacksOf(card)`, `LimitOf(card)` (its `MaxStacks` plus what held Raise the Bar cards add), and `Pick(slot)`, which stages a card of the hand as the level-up's pick |
 | `RunUpgrades` | Implements both, plus `Game/Run`'s `IBonusCardSource`, `IRunResettable` and `IStartable` (it follows `ILevelProgress.Phase`). Holds the stack count per card and the bonus card, and recomputes the weapon when either changes |
 
 The deck and its rules are `IUpgradeSettings` (authored in `RunConfig` as `Upgrades`, and registered
@@ -27,9 +27,10 @@ and `Cards`, each with a kind, title, description, a per-stack `Amount`, `MaxSta
 | `BallCap` | +`Amount` balls in flight at once (rounded) | `ThrowerReload.HasFreeSlot`, and the projectile pool, which `ThrowerController` tops up on the next load |
 | `FasterReload` | The reload while another ball flies × (1 − `Amount`); stacks multiply, and the total never drops below 10% of the base. The idle reload, with nothing flying, is already near-instant and stays as it is | `ThrowerReload.Restart` |
 | `Shield` | +`Amount` starting shields on every ball (rounded) | `ThrowerController.LoadProjectile`, the shield-chain planner in `ItemAssigner`, and the shot solver (`ShotBoardGather.Gather`'s `startingShields`, passed by the Fire Best Shot cheat and the Shot Solver window) |
+| `RaiseLimits` | +`Amount` to every other card's limit (rounded), so a card at its limit is dealt again. Dealt only once some card has reached its limit, and never as the ad's bonus card (that lasts one attempt, with no room to grow into). Its own limit is its `MaxStacks`. Raise the Bar in the deck: +1 a stack, 2 stacks, half the others' weight | `RunUpgrades.LimitOf`, which the deal, the pick and the pick screen's `held/limit` label read |
 | `ItemOdds` | On every item roll (the initial board fill included), each item the level holds gets a chance of `Amount` × its `ExtraItemShare` (`ItemConfiguration`) at an extra copy: 1 for the Shield, down to 0.25 for the Snipe, so strong items grow slower. The whole part always lands; the fraction is a chance; the level's caps still hold | `ILevelParameters.FillExtraItems`, placed by `ItemAssigner` |
 
-All four are read live, so a held card applies from the next ball loaded and the next item roll.
+Every card is read live, so a held card applies from the next ball loaded and the next item roll.
 
 ## A level-up's hand
 

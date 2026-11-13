@@ -430,7 +430,7 @@ namespace BalloonParty.UI.LevelUp
 
                 if (i < offer.Count && view.IsWired)
                 {
-                    view.Show(offer[i], _draft.StacksOf(offer[i]), i, OnCardPicked);
+                    view.Show(offer[i], _draft.StacksOf(offer[i]), _draft.LimitOf(offer[i]), i, OnCardPicked);
                 }
                 else
                 {

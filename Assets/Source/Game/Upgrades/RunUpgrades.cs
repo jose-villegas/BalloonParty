@@ -58,6 +58,7 @@ namespace BalloonParty.Game.Upgrades
         private float _reloadScale = 1f;
         private int _shieldBonus;
         private float _extraItemChance;
+        private int _limitBonus;
 
         public int MaxBallsInFlight => _flight.MaxBallsInFlight + _ballCapBonus;
 
@@ -123,6 +124,16 @@ namespace BalloonParty.Game.Upgrades
         public int StacksOf(IUpgradeCardSettings card)
         {
             return card != null && _stacks.TryGetValue(card, out var count) ? count : 0;
+        }
+
+        public int LimitOf(IUpgradeCardSettings card)
+        {
+            if (card == null)
+            {
+                return 0;
+            }
+
+            return card.Kind == UpgradeKind.RaiseLimits ? card.MaxStacks : card.MaxStacks + _limitBonus;
         }
 
         public bool Pick(int slot)
@@ -246,13 +257,13 @@ namespace BalloonParty.Game.Upgrades
         {
             var card = _staged;
             _staged = null;
-            if (card == null || StacksOf(card) >= card.MaxStacks)
+            if (card == null || StacksOf(card) >= LimitOf(card))
             {
                 return null;
             }
 
             _stacks[card] = StacksOf(card) + 1;
-            Log.Info("Upgrades", $"Holding {card.Title} ({StacksOf(card)}/{card.MaxStacks})");
+            Log.Info("Upgrades", $"Holding {card.Title} ({StacksOf(card)}/{LimitOf(card)})");
             return card;
         }
 
@@ -295,12 +306,36 @@ namespace BalloonParty.Game.Upgrades
             }
         }
 
-        // An ad never buys the ball cap (PLAN-FastPaced §8), so a bonus is never an Extra Pen. A maxed card
-        // is out of both deals, so a bonus never takes a card past its max either.
+        // An ad never buys the ball cap (PLAN-FastPaced §8), so a bonus is never an Extra Pen. A card at its
+        // limit is out of both deals, so a bonus never takes a card past its limit either. Raise the Bar only
+        // matters once a card is at its limit, so it waits for one; and the bonus lasts one attempt, which
+        // has no room to grow into a raised limit, so it is never the bonus.
         private bool IsDealable(IUpgradeCardSettings card, bool forBonus)
         {
-            return card != null && card.Weight > 0f && StacksOf(card) < card.MaxStacks
-                && !(forBonus && card.Kind == UpgradeKind.BallCap);
+            if (card == null || card.Weight <= 0f || StacksOf(card) >= LimitOf(card))
+            {
+                return false;
+            }
+
+            return card.Kind switch
+            {
+                UpgradeKind.BallCap => !forBonus,
+                UpgradeKind.RaiseLimits => !forBonus && AnyCardAtItsLimit(),
+                _ => true
+            };
+        }
+
+        private bool AnyCardAtItsLimit()
+        {
+            foreach (var (card, count) in _stacks)
+            {
+                if (card.Kind != UpgradeKind.RaiseLimits && count >= LimitOf(card))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void Recompute()
@@ -309,6 +344,7 @@ namespace BalloonParty.Game.Upgrades
             _reloadScale = 1f;
             _shieldBonus = 0;
             _extraItemChance = 0f;
+            _limitBonus = 0;
 
             foreach (var (card, count) in _stacks)
             {
@@ -342,6 +378,9 @@ namespace BalloonParty.Game.Upgrades
                     break;
                 case UpgradeKind.ItemOdds:
                     _extraItemChance += card.Amount;
+                    break;
+                case UpgradeKind.RaiseLimits:
+                    _limitBonus += Mathf.RoundToInt(card.Amount);
                     break;
             }
         }

@@ -14,10 +14,12 @@ namespace BalloonParty.Configuration
         [SerializeField] private string _description;
 
         [Tooltip("Ball cap and Shield: whole units per stack. Faster Reload: the share of reload time " +
-            "taken off per stack (0.15 = 15% faster). Item Odds: chance of one more item per item roll.")]
+            "taken off per stack (0.15 = 15% faster). Item Odds: chance of one more item per item roll, times each item's share. Raise Limits: " +
+            "how much higher every other card's limit goes per stack.")]
         [SerializeField] [Min(0f)] private float _amount = 1f;
 
-        [Tooltip("Most times a run can hold this card; once maxed it is no longer dealt.")]
+        [Tooltip("Most times a run can hold this card, before Raise Limits cards raise it; at its limit it is no " +
+            "longer dealt.")]
         [SerializeField] [Min(1)] private int _maxStacks = 3;
 
         [Tooltip("Relative odds of this card being dealt. 0 keeps it out of the deck.")]
@@ -36,13 +38,14 @@ namespace BalloonParty.Configuration
         }
 
         internal UpgradeCardSettings(UpgradeKind kind, string title, string description, float amount,
-            int maxStacks)
+            int maxStacks, float weight = 1f)
         {
             _kind = kind;
             _title = title;
             _description = description;
             _amount = amount;
             _maxStacks = maxStacks;
+            _weight = weight;
         }
     }
 
@@ -68,7 +71,8 @@ namespace BalloonParty.Configuration
             new(UpgradeKind.BallCap, "Extra Pen", "+1 pen in flight", 1f, 3),
             new(UpgradeKind.FasterReload, "Quick Hands", "Reload 15% faster", 0.15f, 4),
             new(UpgradeKind.Shield, "Thick Skin", "+1 shield on every pen", 1f, 3),
-            new(UpgradeKind.ItemOdds, "Lucky Find", "More items on the board", 0.1f, 4)
+            new(UpgradeKind.ItemOdds, "Lucky Find", "More items on the board", 0.1f, 4),
+            new(UpgradeKind.RaiseLimits, "Raise the Bar", "+1 to every card's limit", 1f, 2, 0.5f)
         };
 
         public int CardEveryLevels => _cardEveryLevels;

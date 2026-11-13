@@ -27,6 +27,12 @@ namespace BalloonParty.Game.Upgrades
         int StacksOf(IUpgradeCardSettings card);
 
         /// <summary>
+        ///     The most times the run can hold <paramref name="card" />: its <c>MaxStacks</c>, plus what the held
+        ///     <see cref="UpgradeKind.RaiseLimits" /> cards add (to every card but themselves).
+        /// </summary>
+        int LimitOf(IUpgradeCardSettings card);
+
+        /// <summary>
         ///     Stages the card in <paramref name="slot" /> of <see cref="Offer" /> as this level-up's pick.
         ///     False, and nothing staged, when no hand is open, a pick is already staged, or the slot is
         ///     outside the hand.

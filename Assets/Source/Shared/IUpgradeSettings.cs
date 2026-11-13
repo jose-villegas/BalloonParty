@@ -15,7 +15,13 @@ namespace BalloonParty.Shared
         Shield,
 
         /// <summary>+<see cref="IUpgradeCardSettings.Amount" /> chance of one more item per item roll.</summary>
-        ItemOdds
+        ItemOdds,
+
+        /// <summary>
+        ///     +<see cref="IUpgradeCardSettings.Amount" /> to every other card's <see cref="IUpgradeCardSettings.MaxStacks" />
+        ///     (rounded). Dealt only once another card has reached its limit.
+        /// </summary>
+        RaiseLimits
     }
 
     /// <summary>One card the level-up can offer.</summary>
@@ -28,7 +34,10 @@ namespace BalloonParty.Shared
         /// <summary>The per-stack value; what it means depends on <see cref="Kind" />.</summary>
         float Amount { get; }
 
-        /// <summary>Most times a run can hold this card; a maxed card stops being offered.</summary>
+        /// <summary>
+        ///     Most times a run can hold this card, before any <see cref="UpgradeKind.RaiseLimits" /> card; a card at
+        ///     its limit stops being offered.
+        /// </summary>
         int MaxStacks { get; }
 
         /// <summary>Relative odds of the card being dealt. 0 keeps it out of the deck.</summary>

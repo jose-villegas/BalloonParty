@@ -35,7 +35,7 @@ namespace BalloonParty.UI.LevelUp
             }
         }
 
-        internal void Show(IUpgradeCardSettings card, int heldStacks, int slot, Action<int> onPicked)
+        internal void Show(IUpgradeCardSettings card, int heldStacks, int limit, int slot, Action<int> onPicked)
         {
             // Bound here rather than in Awake: a card that starts inactive never runs Awake.
             if (!_listening)
@@ -50,7 +50,7 @@ namespace BalloonParty.UI.LevelUp
             _descriptionLabel.text = card.Description;
             if (_stacksLabel != null)
             {
-                _stacksLabel.text = $"{heldStacks}/{card.MaxStacks}";
+                _stacksLabel.text = $"{heldStacks}/{limit}";
             }
 
             _button.interactable = true;
