@@ -127,6 +127,9 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IUpgradeD
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:aa8cb09304db77cc53406b6a7d3093947" id="r_aa8cb09304db77cc53406b6a7d3093947"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa8cb09304db77cc53406b6a7d3093947">LimitOf</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> card)</td></tr>
+<tr class="memdesc:aa8cb09304db77cc53406b6a7d3093947"><td class="mdescLeft">&#160;</td><td class="mdescRight">The most times the run can hold <em>card</em> : its <code>MaxStacks</code>, plus what the held UpgradeKind.RaiseLimits cards add (to every card but themselves).  <br /></td></tr>
+<tr class="separator:aa8cb09304db77cc53406b6a7d3093947"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8213bf18a8938f3f9a2845dedd32c92" id="r_aa8213bf18a8938f3f9a2845dedd32c92"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa8213bf18a8938f3f9a2845dedd32c92">Pick</a> (int slot)</td></tr>
 <tr class="memdesc:aa8213bf18a8938f3f9a2845dedd32c92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stages the card in <em>slot</em>  of <a class="el" href="#af7982374e11797f5088fe792e55fddd9" title="The hand dealt by the level-up being presented.">Offer</a> as this level-up's pick.  <br /></td></tr>
 <tr class="separator:aa8213bf18a8938f3f9a2845dedd32c92"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,6 +150,27 @@ Properties</h2></td></tr>
 <div class="textblock"><p>The cards a level-up deals and the run holds. </p>
 <p>The hand opens when a level-up is presented (<code>LevelUpPhase.Pending</code>), and a pick is only held once that level-up advances the level (<code>Transitioning</code>); an aborted level-up voids the hand and any pick with it. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa8cb09304db77cc53406b6a7d3093947" name="aa8cb09304db77cc53406b6a7d3093947"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8cb09304db77cc53406b6a7d3093947">&#9670;&#160;</a></span>LimitOf()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Game.Upgrades.IUpgradeDraft.LimitOf </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a></td>          <td class="paramname"><span class="paramname"><em>card</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The most times the run can hold <em>card</em> : its <code>MaxStacks</code>, plus what the held UpgradeKind.RaiseLimits cards add (to every card but themselves). </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a24bb7e231e58d1703aa8c4e98df4a998">BalloonParty.Game.Upgrades.RunUpgrades</a>.</p>
+
+</div>
+</div>
 <a id="aa8213bf18a8938f3f9a2845dedd32c92" name="aa8213bf18a8938f3f9a2845dedd32c92"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa8213bf18a8938f3f9a2845dedd32c92">&#9670;&#160;</a></span>Pick()</h2>
 

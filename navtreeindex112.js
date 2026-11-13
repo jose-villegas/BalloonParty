@@ -1,5 +1,14 @@
 var NAVTREEINDEX112 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1DeflectChainMessage.html#a9c9d8de24e5e5bc9212e65edf04713bb":[6,0,0,12,7,6,4],
+"structBalloonParty_1_1Shared_1_1Messages_1_1DeflectChainMessage.html#abba411253c38e65ea35039fd33c1f361":[5,0,0,12,7,6,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1DeflectChainMessage.html#abba411253c38e65ea35039fd33c1f361":[6,0,0,12,7,6,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1DeflectChainMessage.html#ac4e6877bb26501acd9b58bfc158402af":[5,0,0,12,7,6,2],
+"structBalloonParty_1_1Shared_1_1Messages_1_1DeflectChainMessage.html#ac4e6877bb26501acd9b58bfc158402af":[6,0,0,12,7,6,2],
+"structBalloonParty_1_1Shared_1_1Messages_1_1EndRunRequestedMessage.html":[5,0,0,12,7,7],
+"structBalloonParty_1_1Shared_1_1Messages_1_1EndRunRequestedMessage.html":[6,0,0,12,7,7],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ForceDestroyProjectileMessage.html":[5,0,0,12,7,8],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ForceDestroyProjectileMessage.html":[6,0,0,12,7,8],
 "structBalloonParty_1_1Shared_1_1Messages_1_1GameOverDismissedMessage.html":[5,0,0,12,7,9],
 "structBalloonParty_1_1Shared_1_1Messages_1_1GameOverDismissedMessage.html":[6,0,0,12,7,9],
 "structBalloonParty_1_1Shared_1_1Messages_1_1GameOverMessage.html":[5,0,0,12,7,10],
@@ -240,14 +249,5 @@ var NAVTREEINDEX112 =
 "structBalloonParty_1_1Shared_1_1Messages_1_1SpeedTapMintedMessage.html#abfd8e1122abbd0bd1906a64e0c8b024a":[6,0,0,12,7,42,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html":[5,0,0,12,7,43],
 "structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html":[6,0,0,12,7,43],
-"structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html#a410bb8864a84d2c6912168d208730fc7":[5,0,0,12,7,43,3],
-"structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html#a410bb8864a84d2c6912168d208730fc7":[6,0,0,12,7,43,3],
-"structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html#a6e65fb4de3fafca00d0042d28e403bc6":[5,0,0,12,7,43,1],
-"structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html#a6e65fb4de3fafca00d0042d28e403bc6":[6,0,0,12,7,43,1],
-"structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html#a7295d5bab9bf66a388a5c9a2e0297d0b":[5,0,0,12,7,43,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html#a7295d5bab9bf66a388a5c9a2e0297d0b":[6,0,0,12,7,43,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html#a9163fcbe2b3461c086cc0f14052ce537":[5,0,0,12,7,43,2],
-"structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html#a9163fcbe2b3461c086cc0f14052ce537":[6,0,0,12,7,43,2],
-"structBalloonParty_1_1Shared_1_1Messages_1_1StreakGrewMessage.html":[5,0,0,12,7,44],
-"structBalloonParty_1_1Shared_1_1Messages_1_1StreakGrewMessage.html":[6,0,0,12,7,44]
+"structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html#a410bb8864a84d2c6912168d208730fc7":[5,0,0,12,7,43,3]
 };

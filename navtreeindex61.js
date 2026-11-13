@@ -1,5 +1,11 @@
 var NAVTREEINDEX61 =
 {
+"classBalloonParty_1_1Prediction_1_1TraceHitGeometry.html":[5,0,0,9,6],
+"classBalloonParty_1_1Prediction_1_1TraceHitGeometry.html":[6,0,0,9,6],
+"classBalloonParty_1_1Prediction_1_1TraceHitGeometry.html#a6d238405ba476e3806bfe906c5eb1038":[5,0,0,9,6,0],
+"classBalloonParty_1_1Prediction_1_1TraceHitGeometry.html#a6d238405ba476e3806bfe906c5eb1038":[6,0,0,9,6,0],
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html":[5,0,0,9,7],
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html":[6,0,0,9,7],
 "classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a0bf71fd070518e040d6a5360001a197d":[5,0,0,9,7,8],
 "classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a0bf71fd070518e040d6a5360001a197d":[6,0,0,9,7,8],
 "classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a165fdad06136004fb8b6eb67f47c0c15":[5,0,0,9,7,10],
@@ -243,11 +249,5 @@ var NAVTREEINDEX61 =
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html#a3be4c17acf3623c4bbb22ab9e10fa239":[5,0,0,10,1,6,7],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html#a3be4c17acf3623c4bbb22ab9e10fa239":[6,0,0,10,1,6,7],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html#a6858e872e7b9f57c5f7b173d6f8ad5f7":[5,0,0,10,1,6,3],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html#a6858e872e7b9f57c5f7b173d6f8ad5f7":[6,0,0,10,1,6,3],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html#a7768a9b41bcd1eb035ffbf5580ee96cf":[5,0,0,10,1,6,0],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html#a7768a9b41bcd1eb035ffbf5580ee96cf":[6,0,0,10,1,6,0],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html#ad7d27b90d9ae7df0f5085e1e17111bb0":[5,0,0,10,1,6,4],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html#ad7d27b90d9ae7df0f5085e1e17111bb0":[6,0,0,10,1,6,4],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html#afaec98cf01a9371c97084d3b1806ff55":[5,0,0,10,1,6,2],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html#afaec98cf01a9371c97084d3b1806ff55":[6,0,0,10,1,6,2]
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html#a6858e872e7b9f57c5f7b173d6f8ad5f7":[6,0,0,10,1,6,3]
 };

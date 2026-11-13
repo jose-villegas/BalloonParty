@@ -44,6 +44,7 @@ var namespaceBalloonParty_1_1Shared =
       [ "BallCap", "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523a816190aef027b1d71a17ab86998a40a5", null ],
       [ "FasterReload", "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523a13306407a9fcc8bf32cafa63c19d150a", null ],
       [ "Shield", "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523a970da5f1f2e32aeb9e488dd017160ab4", null ],
-      [ "ItemOdds", "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523acf271677f22958bc28853c01ef5e5079", null ]
+      [ "ItemOdds", "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523acf271677f22958bc28853c01ef5e5079", null ],
+      [ "RaiseLimits", "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523aa4642f39b6a749350f1edc4cd03517ee", null ]
     ] ]
 ];

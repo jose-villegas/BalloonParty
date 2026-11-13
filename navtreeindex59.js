@@ -1,5 +1,11 @@
 var NAVTREEINDEX59 =
 {
+"classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#a9b2ab27497172b99135f15a5db74435d":[5,0,0,7,28,16],
+"classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#a9b2ab27497172b99135f15a5db74435d":[6,0,0,7,28,16],
+"classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#ac0a97cbbd782fdd39c4ecfbd4e022615":[5,0,0,7,28,6],
+"classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#ac0a97cbbd782fdd39c4ecfbd4e022615":[6,0,0,7,28,6],
+"classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#ad06fe94c148fd180feda557db46df014":[5,0,0,7,28,10],
+"classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#ad06fe94c148fd180feda557db46df014":[6,0,0,7,28,10],
 "classBalloonParty_1_1Item_1_1SightRampReaction.html":[5,0,0,7,29],
 "classBalloonParty_1_1Item_1_1SightRampReaction.html":[6,0,0,7,29],
 "classBalloonParty_1_1Item_1_1SightRampReaction.html#a006b12819976bcb8877e5ad1aa91e94f":[5,0,0,7,29,3],
@@ -243,11 +249,5 @@ var NAVTREEINDEX59 =
 "classBalloonParty_1_1Nudge_1_1NudgeOverride.html#a27aada66b93956592bde4a1f1bc6a4d6":[5,0,0,8,3,0],
 "classBalloonParty_1_1Nudge_1_1NudgeOverride.html#a27aada66b93956592bde4a1f1bc6a4d6":[6,0,0,8,3,0],
 "classBalloonParty_1_1Nudge_1_1NudgeOverride.html#a62784a5a228120e766aa8c060820527b":[5,0,0,8,3,4],
-"classBalloonParty_1_1Nudge_1_1NudgeOverride.html#a62784a5a228120e766aa8c060820527b":[6,0,0,8,3,4],
-"classBalloonParty_1_1Nudge_1_1NudgeOverride.html#a64b0aacbeec6b83d16bdae46f2043ad4":[5,0,0,8,3,1],
-"classBalloonParty_1_1Nudge_1_1NudgeOverride.html#a64b0aacbeec6b83d16bdae46f2043ad4":[6,0,0,8,3,1],
-"classBalloonParty_1_1Nudge_1_1NudgeOverride.html#a85dfbcc7bffb155fef5731c07d329419":[5,0,0,8,3,3],
-"classBalloonParty_1_1Nudge_1_1NudgeOverride.html#a85dfbcc7bffb155fef5731c07d329419":[6,0,0,8,3,3],
-"classBalloonParty_1_1Nudge_1_1NudgeOverride.html#a9a09c44b02b21b34c3a108a095368686":[5,0,0,8,3,7],
-"classBalloonParty_1_1Nudge_1_1NudgeOverride.html#a9a09c44b02b21b34c3a108a095368686":[6,0,0,8,3,7]
+"classBalloonParty_1_1Nudge_1_1NudgeOverride.html#a62784a5a228120e766aa8c060820527b":[6,0,0,8,3,4]
 };

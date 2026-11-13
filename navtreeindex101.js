@@ -1,5 +1,14 @@
 var NAVTREEINDEX101 =
 {
+"namespaceBalloonParty_1_1Slots_1_1Actor.html#abf97dbdfa7dd43a6769e73afa51a0f7fa91c2bd5787da3925c1d8bad8ff05587a":[5,0,0,13,0,22,1],
+"namespaceBalloonParty_1_1Slots_1_1Actor.html#ac84e9ada75983ac915188467e0a2efbf":[5,0,0,13,0,24],
+"namespaceBalloonParty_1_1Slots_1_1Actor.html#ac84e9ada75983ac915188467e0a2efbfa249694a485fc5d3289c38986b4f8e887":[5,0,0,13,0,24,1],
+"namespaceBalloonParty_1_1Slots_1_1Actor.html#ac84e9ada75983ac915188467e0a2efbfa64663f4646781c9c0110838b905daa23":[5,0,0,13,0,24,0],
+"namespaceBalloonParty_1_1Slots_1_1Actor.html#adbab49aebf9c1f422de5a17b7033167e":[5,0,0,13,0,23],
+"namespaceBalloonParty_1_1Slots_1_1Actor.html#adbab49aebf9c1f422de5a17b7033167ea84a8921b25f505d0d2077aeb5db4bc16":[5,0,0,13,0,23,1],
+"namespaceBalloonParty_1_1Slots_1_1Actor.html#adbab49aebf9c1f422de5a17b7033167ea971fd8cc345d8bd9f92e9f7d88fdf20c":[5,0,0,13,0,23,0],
+"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html":[5,0,0,13,0,0],
+"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473":[5,0,0,13,0,0,22],
 "namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473a59988751eea31359e0983b22e1531b70":[5,0,0,13,0,0,22,3],
 "namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473a68e6202e50e4806f18d28cab574e0d82":[5,0,0,13,0,0,22,2],
 "namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473a79083698467c2e5753058afc20884569":[5,0,0,13,0,0,22,0],
@@ -240,14 +249,5 @@ var NAVTREEINDEX101 =
 "plan_future_ideas.html#autotoc_md509":[3,5,0,9,1,2],
 "plan_future_ideas.html#autotoc_md510":[3,5,0,9,1,3],
 "plan_future_ideas.html#autotoc_md511":[3,5,0,9,1,4],
-"plan_future_ideas.html#autotoc_md512":[3,5,0,9,1,5],
-"plan_future_ideas.html#autotoc_md513":[3,5,0,9,1,6],
-"plan_future_ideas.html#autotoc_md514":[3,5,0,9,1,7],
-"plan_future_ideas.html#autotoc_md515":[3,5,0,9,2],
-"plan_future_ideas.html#autotoc_md516":[3,5,0,9,3],
-"plan_future_ideas.html#autotoc_md517":[3,5,0,9,4],
-"plan_future_ideas.html#autotoc_md519":[3,5,0,10],
-"plan_future_ideas.html#autotoc_md521":[3,5,0,11],
-"plan_future_ideas.html#autotoc_md523":[3,5,0,12],
-"plan_future_ideas.html#autotoc_md524":[3,5,0,12,0]
+"plan_future_ideas.html#autotoc_md512":[3,5,0,9,1,5]
 };

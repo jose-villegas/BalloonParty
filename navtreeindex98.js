@@ -1,5 +1,13 @@
 var NAVTREEINDEX98 =
 {
+"interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#a7e4016602dc7738982b1bf87bc1e36c4":[5,0,0,12,30,1],
+"interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#a7e4016602dc7738982b1bf87bc1e36c4":[6,0,0,12,30,1],
+"interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#aad7016329cf854302e1b6e79a3460a65":[5,0,0,12,30,5],
+"interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#aad7016329cf854302e1b6e79a3460a65":[6,0,0,12,30,5],
+"interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#acd73ddcc2474f9fd01cdf07922cc3187":[5,0,0,12,30,2],
+"interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#acd73ddcc2474f9fd01cdf07922cc3187":[6,0,0,12,30,2],
+"interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#af54b18941a4f7b47ffe859bd047fbf62":[5,0,0,12,30,4],
+"interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#af54b18941a4f7b47ffe859bd047fbf62":[6,0,0,12,30,4],
 "interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#af57c63e37b105adc392737b0449e34fd":[5,0,0,12,30,3],
 "interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#af57c63e37b105adc392737b0449e34fd":[6,0,0,12,30,3],
 "interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html":[5,0,0,12,31],
@@ -241,13 +249,5 @@ var NAVTREEINDEX98 =
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html":[5,0,0,13,1,6],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html":[6,0,0,13,1,6],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html#a295c65ca54574bca653d348f8c0ed7cf":[5,0,0,13,1,6,0],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html#a295c65ca54574bca653d348f8c0ed7cf":[6,0,0,13,1,6,0],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html":[5,0,0,13,1,7],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html":[6,0,0,13,1,7],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html#adaf9d7fc481f54c2fcee73214ac42857":[5,0,0,13,1,7,0],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html#adaf9d7fc481f54c2fcee73214ac42857":[6,0,0,13,1,7,0],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScoreColor.html":[5,0,0,13,1,8],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScoreColor.html":[6,0,0,13,1,8],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScoreColor.html#a6f63c972c549c25ce456da1d3477b5e7":[5,0,0,13,1,8,0],
-"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScoreColor.html#a6f63c972c549c25ce456da1d3477b5e7":[6,0,0,13,1,8,0]
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html#a295c65ca54574bca653d348f8c0ed7cf":[6,0,0,13,1,6,0]
 };

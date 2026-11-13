@@ -1,6 +1,7 @@
 var classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades =
 [
     [ "RunUpgrades", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a11699648e5d47772eb9e3e91f0f2ca46", null ],
+    [ "AnyCardAtItsLimit", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a9d82c7207556424ef63535d86c1d1936", null ],
     [ "Apply", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#ac327c21a9033e68c542632d34aef9d07", null ],
     [ "BuildDeck", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a993b8498c346f0637fe609b67166ee94", null ],
     [ "CloseHand", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a919051b87f3e35bd6398c8931cc9419d", null ],
@@ -9,6 +10,7 @@ var classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades =
     [ "Dispose", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#ac5df6870bd948feb54bedaac72ae434e", null ],
     [ "IsCardLevel", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a293b77f7b1316bc594c57a2c36c5e107", null ],
     [ "IsDealable", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#ac40ed3720027292c0b9162fdcdbecd6d", null ],
+    [ "LimitOf", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a24bb7e231e58d1703aa8c4e98df4a998", null ],
     [ "OnPhaseChanged", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a54105c0a9217f409f976e51c55a11bae", null ],
     [ "OpenHand", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a31d231ffc832b020c6f9e4633980a08e", null ],
     [ "Pick", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#aab49bcb7552a40ecd994c0d7e03ab98d", null ],
@@ -26,6 +28,7 @@ var classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades =
     [ "_extraItemChance", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#aeb56dfaa6ffc7e3321e0397bcd307e03", null ],
     [ "_flight", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#acd3299360d1580cf7e50f3c521198b55", null ],
     [ "_levelProgress", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a5a1356ed35eb9313ebd8e4cb2078ee2e", null ],
+    [ "_limitBonus", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a47e885cc984196a0d32db2c9fa9db577", null ],
     [ "_offer", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a1e34b8d99525e9b1c5796b2a854db72f", null ],
     [ "_pacing", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a28a90ad530de15274fcb2ed22277b883", null ],
     [ "_phaseSubscription", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#acc7ec131d8446556d6422a41465dff3e", null ],

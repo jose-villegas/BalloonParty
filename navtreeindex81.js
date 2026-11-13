@@ -1,5 +1,11 @@
 var NAVTREEINDEX81 =
 {
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#a540742f10227afd890e3cbcbcd844ab6":[5,0,0,14,22,42],
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#a540742f10227afd890e3cbcbcd844ab6":[6,0,0,14,22,42],
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#a6f187c0d2304254be825750ef1de9df5":[5,0,0,14,22,35],
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#a6f187c0d2304254be825750ef1de9df5":[6,0,0,14,22,35],
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#a73b35546cd2cbc967011ce1eeb2ceb83":[5,0,0,14,22,18],
+"classBalloonParty_1_1Solver_1_1ShotSimulator.html#a73b35546cd2cbc967011ce1eeb2ceb83":[6,0,0,14,22,18],
 "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a799679b3d7426ffb7a1ed315ca2f2480":[5,0,0,14,22,14],
 "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a799679b3d7426ffb7a1ed315ca2f2480":[6,0,0,14,22,14],
 "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a79baede448c83cac1211d3092990738a":[5,0,0,14,22,29],
@@ -243,11 +249,5 @@ var NAVTREEINDEX81 =
 "classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html#ad0cdffe39bcca66f6caceaa69c688281":[5,0,0,15,3,7],
 "classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html#ad0cdffe39bcca66f6caceaa69c688281":[6,0,0,15,3,7],
 "classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html#ae3004d8eaf61cc95dda0ecc5edd08f52":[5,0,0,15,3,5],
-"classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html#ae3004d8eaf61cc95dda0ecc5edd08f52":[6,0,0,15,3,5],
-"classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html#ae7c29927ac9bbbdba245f19509434090":[5,0,0,15,3,0],
-"classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html#ae7c29927ac9bbbdba245f19509434090":[6,0,0,15,3,0],
-"classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html#ae86bb322aacf8f4764370452a864a83a":[5,0,0,15,3,3],
-"classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html#ae86bb322aacf8f4764370452a864a83a":[6,0,0,15,3,3],
-"classBalloonParty_1_1Thrower_1_1ThrowerReload.html":[5,0,0,15,4],
-"classBalloonParty_1_1Thrower_1_1ThrowerReload.html":[6,0,0,15,4]
+"classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html#ae3004d8eaf61cc95dda0ecc5edd08f52":[6,0,0,15,3,5]
 };

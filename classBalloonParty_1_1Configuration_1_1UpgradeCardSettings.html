@@ -137,8 +137,8 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1UpgradeCardSetti
 Package Functions</h2></td></tr>
 <tr class="memitem:a404c3c2f99b05e95c9ef38db9a0080bc" id="r_a404c3c2f99b05e95c9ef38db9a0080bc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a404c3c2f99b05e95c9ef38db9a0080bc">UpgradeCardSettings</a> ()</td></tr>
 <tr class="separator:a404c3c2f99b05e95c9ef38db9a0080bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7599786d0f1c422559333d29e82dd1af" id="r_a7599786d0f1c422559333d29e82dd1af"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7599786d0f1c422559333d29e82dd1af">UpgradeCardSettings</a> (<a class="el" href="namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523">UpgradeKind</a> kind, string title, string description, float amount, int maxStacks)</td></tr>
-<tr class="separator:a7599786d0f1c422559333d29e82dd1af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0510edb70491190fc982494411b876d" id="r_ab0510edb70491190fc982494411b876d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab0510edb70491190fc982494411b876d">UpgradeCardSettings</a> (<a class="el" href="namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523">UpgradeKind</a> kind, string title, string description, float amount, int maxStacks, float weight=1f)</td></tr>
+<tr class="separator:ab0510edb70491190fc982494411b876d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -150,7 +150,7 @@ Properties</h2></td></tr>
 <tr class="memitem:a42bfd9ab54ab54fff98f427c0549fc29" id="r_a42bfd9ab54ab54fff98f427c0549fc29"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523">UpgradeKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a42bfd9ab54ab54fff98f427c0549fc29">Kind</a><code> [get]</code></td></tr>
 <tr class="separator:a42bfd9ab54ab54fff98f427c0549fc29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a834f656ae0efac2706045e79da9c5a20" id="r_a834f656ae0efac2706045e79da9c5a20"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a834f656ae0efac2706045e79da9c5a20">MaxStacks</a><code> [get]</code></td></tr>
-<tr class="memdesc:a834f656ae0efac2706045e79da9c5a20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Most times a run can hold this card; a maxed card stops being offered.  <br /></td></tr>
+<tr class="memdesc:a834f656ae0efac2706045e79da9c5a20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Most times a run can hold this card, before any UpgradeKind.RaiseLimits card; a card at its limit stops being offered.  <br /></td></tr>
 <tr class="separator:a834f656ae0efac2706045e79da9c5a20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47c27fb7212dde51b6c8ecede9b7ffd5" id="r_a47c27fb7212dde51b6c8ecede9b7ffd5"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a47c27fb7212dde51b6c8ecede9b7ffd5">Title</a><code> [get]</code></td></tr>
 <tr class="separator:a47c27fb7212dde51b6c8ecede9b7ffd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -201,8 +201,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a7599786d0f1c422559333d29e82dd1af" name="a7599786d0f1c422559333d29e82dd1af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7599786d0f1c422559333d29e82dd1af">&#9670;&#160;</a></span>UpgradeCardSettings() <span class="overload">[2/2]</span></h2>
+<a id="ab0510edb70491190fc982494411b876d" name="ab0510edb70491190fc982494411b876d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0510edb70491190fc982494411b876d">&#9670;&#160;</a></span>UpgradeCardSettings() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -233,7 +233,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>maxStacks</em></span>&#160;)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>maxStacks</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>weight</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1f</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -473,7 +478,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Most times a run can hold this card; a maxed card stops being offered. </p>
+<p>Most times a run can hold this card, before any UpgradeKind.RaiseLimits card; a card at its limit stops being offered. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#af57c63e37b105adc392737b0449e34fd">BalloonParty.Shared.IUpgradeCardSettings</a>.</p>
 

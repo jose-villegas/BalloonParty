@@ -142,6 +142,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a11699648e5d47772eb9e3e91f0f2ca46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5df6870bd948feb54bedaac72ae434e" id="r_ac5df6870bd948feb54bedaac72ae434e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac5df6870bd948feb54bedaac72ae434e">Dispose</a> ()</td></tr>
 <tr class="separator:ac5df6870bd948feb54bedaac72ae434e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24bb7e231e58d1703aa8c4e98df4a998" id="r_a24bb7e231e58d1703aa8c4e98df4a998"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24bb7e231e58d1703aa8c4e98df4a998">LimitOf</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> card)</td></tr>
+<tr class="memdesc:a24bb7e231e58d1703aa8c4e98df4a998"><td class="mdescLeft">&#160;</td><td class="mdescRight">The most times the run can hold <em>card</em> : its <code>MaxStacks</code>, plus what the held UpgradeKind.RaiseLimits cards add (to every card but themselves).  <br /></td></tr>
+<tr class="separator:a24bb7e231e58d1703aa8c4e98df4a998"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab49bcb7552a40ecd994c0d7e03ab98d" id="r_aab49bcb7552a40ecd994c0d7e03ab98d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab49bcb7552a40ecd994c0d7e03ab98d">Pick</a> (int slot)</td></tr>
 <tr class="memdesc:aab49bcb7552a40ecd994c0d7e03ab98d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stages the card in <em>slot</em>  of <a class="el" href="#ab6bf1f506e233830f7217f55f1a5a25d" title="The hand dealt by the level-up being presented.">Offer</a> as this level-up's pick.  <br /></td></tr>
 <tr class="separator:aab49bcb7552a40ecd994c0d7e03ab98d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -200,6 +203,8 @@ Properties</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a9d82c7207556424ef63535d86c1d1936" id="r_a9d82c7207556424ef63535d86c1d1936"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9d82c7207556424ef63535d86c1d1936">AnyCardAtItsLimit</a> ()</td></tr>
+<tr class="separator:a9d82c7207556424ef63535d86c1d1936"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac327c21a9033e68c542632d34aef9d07" id="r_ac327c21a9033e68c542632d34aef9d07"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac327c21a9033e68c542632d34aef9d07">Apply</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> card)</td></tr>
 <tr class="separator:ac327c21a9033e68c542632d34aef9d07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a993b8498c346f0637fe609b67166ee94" id="r_a993b8498c346f0637fe609b67166ee94"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a993b8498c346f0637fe609b67166ee94">BuildDeck</a> (bool forBonus)</td></tr>
@@ -239,6 +244,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:acd3299360d1580cf7e50f3c521198b55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a1356ed35eb9313ebd8e4cb2078ee2e" id="r_a5a1356ed35eb9313ebd8e4cb2078ee2e"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5a1356ed35eb9313ebd8e4cb2078ee2e">_levelProgress</a></td></tr>
 <tr class="separator:a5a1356ed35eb9313ebd8e4cb2078ee2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a47e885cc984196a0d32db2c9fa9db577" id="r_a47e885cc984196a0d32db2c9fa9db577"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a47e885cc984196a0d32db2c9fa9db577">_limitBonus</a></td></tr>
+<tr class="separator:a47e885cc984196a0d32db2c9fa9db577"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e34b8d99525e9b1c5796b2a854db72f" id="r_a1e34b8d99525e9b1c5796b2a854db72f"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e34b8d99525e9b1c5796b2a854db72f">_offer</a> = new()</td></tr>
 <tr class="separator:a1e34b8d99525e9b1c5796b2a854db72f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28a90ad530de15274fcb2ed22277b883" id="r_a28a90ad530de15274fcb2ed22277b883"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html">ILevelPacingConfiguration</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a28a90ad530de15274fcb2ed22277b883">_pacing</a></td></tr>
@@ -322,6 +329,31 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a9d82c7207556424ef63535d86c1d1936" name="a9d82c7207556424ef63535d86c1d1936"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d82c7207556424ef63535d86c1d1936">&#9670;&#160;</a></span>AnyCardAtItsLimit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Game.Upgrades.RunUpgrades.AnyCardAtItsLimit </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ac327c21a9033e68c542632d34aef9d07" name="ac327c21a9033e68c542632d34aef9d07"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac327c21a9033e68c542632d34aef9d07">&#9670;&#160;</a></span>Apply()</h2>
 
@@ -515,6 +547,27 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a24bb7e231e58d1703aa8c4e98df4a998" name="a24bb7e231e58d1703aa8c4e98df4a998"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24bb7e231e58d1703aa8c4e98df4a998">&#9670;&#160;</a></span>LimitOf()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Game.Upgrades.RunUpgrades.LimitOf </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a></td>          <td class="paramname"><span class="paramname"><em>card</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The most times the run can hold <em>card</em> : its <code>MaxStacks</code>, plus what the held UpgradeKind.RaiseLimits cards add (to every card but themselves). </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IUpgradeDraft.html#aa8cb09304db77cc53406b6a7d3093947">BalloonParty.Game.Upgrades.IUpgradeDraft</a>.</p>
 
 </div>
 </div>
@@ -898,6 +951,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a> BalloonParty.Game.Upgrades.RunUpgrades._levelProgress</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a47e885cc984196a0d32db2c9fa9db577" name="a47e885cc984196a0d32db2c9fa9db577"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47e885cc984196a0d32db2c9fa9db577">&#9670;&#160;</a></span>_limitBonus</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Game.Upgrades.RunUpgrades._limitBonus</td>
         </tr>
       </table>
   </td>

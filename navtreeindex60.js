@@ -1,5 +1,11 @@
 var NAVTREEINDEX60 =
 {
+"classBalloonParty_1_1Nudge_1_1NudgeOverride.html#a64b0aacbeec6b83d16bdae46f2043ad4":[5,0,0,8,3,1],
+"classBalloonParty_1_1Nudge_1_1NudgeOverride.html#a64b0aacbeec6b83d16bdae46f2043ad4":[6,0,0,8,3,1],
+"classBalloonParty_1_1Nudge_1_1NudgeOverride.html#a85dfbcc7bffb155fef5731c07d329419":[5,0,0,8,3,3],
+"classBalloonParty_1_1Nudge_1_1NudgeOverride.html#a85dfbcc7bffb155fef5731c07d329419":[6,0,0,8,3,3],
+"classBalloonParty_1_1Nudge_1_1NudgeOverride.html#a9a09c44b02b21b34c3a108a095368686":[5,0,0,8,3,7],
+"classBalloonParty_1_1Nudge_1_1NudgeOverride.html#a9a09c44b02b21b34c3a108a095368686":[6,0,0,8,3,7],
 "classBalloonParty_1_1Nudge_1_1NudgeOverride.html#aa0be21a09f3e2af5f3b17263331677ab":[5,0,0,8,3,2],
 "classBalloonParty_1_1Nudge_1_1NudgeOverride.html#aa0be21a09f3e2af5f3b17263331677ab":[6,0,0,8,3,2],
 "classBalloonParty_1_1Nudge_1_1NudgeOverride.html#ab7bce42b62ff9e8a080b563472dda531":[5,0,0,8,3,6],
@@ -243,11 +249,5 @@ var NAVTREEINDEX60 =
 "classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#af2ae482970b80263426292789ddaeb81":[5,0,0,9,5,3],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#af2ae482970b80263426292789ddaeb81":[6,0,0,9,5,3],
 "classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#afb50e862f435de8984fd2fcc99f79172":[5,0,0,9,5,28],
-"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#afb50e862f435de8984fd2fcc99f79172":[6,0,0,9,5,28],
-"classBalloonParty_1_1Prediction_1_1TraceHitGeometry.html":[5,0,0,9,6],
-"classBalloonParty_1_1Prediction_1_1TraceHitGeometry.html":[6,0,0,9,6],
-"classBalloonParty_1_1Prediction_1_1TraceHitGeometry.html#a6d238405ba476e3806bfe906c5eb1038":[5,0,0,9,6,0],
-"classBalloonParty_1_1Prediction_1_1TraceHitGeometry.html#a6d238405ba476e3806bfe906c5eb1038":[6,0,0,9,6,0],
-"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html":[5,0,0,9,7],
-"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html":[6,0,0,9,7]
+"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#afb50e862f435de8984fd2fcc99f79172":[6,0,0,9,5,28]
 };

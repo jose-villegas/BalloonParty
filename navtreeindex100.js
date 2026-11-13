@@ -1,5 +1,13 @@
 var NAVTREEINDEX100 =
 {
+"namespaceBalloonParty_1_1Game_1_1Flight.html":[5,0,0,6,3],
+"namespaceBalloonParty_1_1Game_1_1HeadsUp.html":[5,0,0,6,4],
+"namespaceBalloonParty_1_1Game_1_1HeadsUp.html#a1a709e3252ec1c2f9caf67fa7f935995":[5,0,0,6,4,10],
+"namespaceBalloonParty_1_1Game_1_1HeadsUp.html#a1a709e3252ec1c2f9caf67fa7f935995a2ceea82aab3ac5bc623e79186b389481":[5,0,0,6,4,10,2],
+"namespaceBalloonParty_1_1Game_1_1HeadsUp.html#a1a709e3252ec1c2f9caf67fa7f935995a498f79c4c5bbde77f1bceb6c86fd0f6d":[5,0,0,6,4,10,1],
+"namespaceBalloonParty_1_1Game_1_1HeadsUp.html#a1a709e3252ec1c2f9caf67fa7f935995a74339e8d9916761b9b69183a081076c6":[5,0,0,6,4,10,0],
+"namespaceBalloonParty_1_1Game_1_1HeadsUp_1_1Routing.html":[5,0,0,6,4,0],
+"namespaceBalloonParty_1_1Game_1_1Health.html":[5,0,0,6,5],
 "namespaceBalloonParty_1_1Game_1_1Level.html":[5,0,0,6,6],
 "namespaceBalloonParty_1_1Game_1_1Level.html#a57ec4a7422d3ec908dda0a536e08a712":[5,0,0,6,6,8],
 "namespaceBalloonParty_1_1Game_1_1Level.html#a57ec4a7422d3ec908dda0a536e08a712a2d13df6f8b5e4c5af9f87e0dc39df69d":[5,0,0,6,6,8,1],
@@ -158,6 +166,7 @@ var NAVTREEINDEX100 =
 "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523a13306407a9fcc8bf32cafa63c19d150a":[5,0,0,12,40,1],
 "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523a816190aef027b1d71a17ab86998a40a5":[5,0,0,12,40,0],
 "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523a970da5f1f2e32aeb9e488dd017160ab4":[5,0,0,12,40,2],
+"namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523aa4642f39b6a749350f1edc4cd03517ee":[5,0,0,12,40,4],
 "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523acf271677f22958bc28853c01ef5e5079":[5,0,0,12,40,3],
 "namespaceBalloonParty_1_1Shared_1_1Animation.html":[5,0,0,12,0],
 "namespaceBalloonParty_1_1Shared_1_1Animation.html#a3b98750e703da851323fd98e58c6879b":[5,0,0,12,0,5],
@@ -240,14 +249,5 @@ var NAVTREEINDEX100 =
 "namespaceBalloonParty_1_1Slots_1_1Actor.html#abf97dbdfa7dd43a6769e73afa51a0f7f":[5,0,0,13,0,22],
 "namespaceBalloonParty_1_1Slots_1_1Actor.html#abf97dbdfa7dd43a6769e73afa51a0f7fa0d91da2e739f8120cb341bff5daa5648":[5,0,0,13,0,22,3],
 "namespaceBalloonParty_1_1Slots_1_1Actor.html#abf97dbdfa7dd43a6769e73afa51a0f7fa4803e6b9e63dabf04de980788d6a13c4":[5,0,0,13,0,22,2],
-"namespaceBalloonParty_1_1Slots_1_1Actor.html#abf97dbdfa7dd43a6769e73afa51a0f7fa6adf97f83acf6453d4a6a4b1070f3754":[5,0,0,13,0,22,0],
-"namespaceBalloonParty_1_1Slots_1_1Actor.html#abf97dbdfa7dd43a6769e73afa51a0f7fa91c2bd5787da3925c1d8bad8ff05587a":[5,0,0,13,0,22,1],
-"namespaceBalloonParty_1_1Slots_1_1Actor.html#ac84e9ada75983ac915188467e0a2efbf":[5,0,0,13,0,24],
-"namespaceBalloonParty_1_1Slots_1_1Actor.html#ac84e9ada75983ac915188467e0a2efbfa249694a485fc5d3289c38986b4f8e887":[5,0,0,13,0,24,1],
-"namespaceBalloonParty_1_1Slots_1_1Actor.html#ac84e9ada75983ac915188467e0a2efbfa64663f4646781c9c0110838b905daa23":[5,0,0,13,0,24,0],
-"namespaceBalloonParty_1_1Slots_1_1Actor.html#adbab49aebf9c1f422de5a17b7033167e":[5,0,0,13,0,23],
-"namespaceBalloonParty_1_1Slots_1_1Actor.html#adbab49aebf9c1f422de5a17b7033167ea84a8921b25f505d0d2077aeb5db4bc16":[5,0,0,13,0,23,1],
-"namespaceBalloonParty_1_1Slots_1_1Actor.html#adbab49aebf9c1f422de5a17b7033167ea971fd8cc345d8bd9f92e9f7d88fdf20c":[5,0,0,13,0,23,0],
-"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html":[5,0,0,13,0,0],
-"namespaceBalloonParty_1_1Slots_1_1Actor_1_1Archetype.html#a88ec606a89830d8d05e349537cc52473":[5,0,0,13,0,0,22]
+"namespaceBalloonParty_1_1Slots_1_1Actor.html#abf97dbdfa7dd43a6769e73afa51a0f7fa6adf97f83acf6453d4a6a4b1070f3754":[5,0,0,13,0,22,0]
 };

@@ -1,5 +1,14 @@
 var NAVTREEINDEX113 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html#a410bb8864a84d2c6912168d208730fc7":[6,0,0,12,7,43,3],
+"structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html#a6e65fb4de3fafca00d0042d28e403bc6":[5,0,0,12,7,43,1],
+"structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html#a6e65fb4de3fafca00d0042d28e403bc6":[6,0,0,12,7,43,1],
+"structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html#a7295d5bab9bf66a388a5c9a2e0297d0b":[5,0,0,12,7,43,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html#a7295d5bab9bf66a388a5c9a2e0297d0b":[6,0,0,12,7,43,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html#a9163fcbe2b3461c086cc0f14052ce537":[5,0,0,12,7,43,2],
+"structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html#a9163fcbe2b3461c086cc0f14052ce537":[6,0,0,12,7,43,2],
+"structBalloonParty_1_1Shared_1_1Messages_1_1StreakGrewMessage.html":[5,0,0,12,7,44],
+"structBalloonParty_1_1Shared_1_1Messages_1_1StreakGrewMessage.html":[6,0,0,12,7,44],
 "structBalloonParty_1_1Shared_1_1Messages_1_1StreakGrewMessage.html#a140877d4d961b26e882911bbad603105":[5,0,0,12,7,44,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1StreakGrewMessage.html#a140877d4d961b26e882911bbad603105":[6,0,0,12,7,44,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1StreakGrewMessage.html#a524e300009bb0f1698f95f3b561e2f33":[5,0,0,12,7,44,0],
@@ -240,14 +249,5 @@ var NAVTREEINDEX113 =
 "structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html#ac4c1cdcbeaff538fe1f28611da415b92":[6,0,0,13,1,0,0],
 "structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html#adcc134f7d8299b549f22cdd93ebee44d":[5,0,0,13,1,0,4],
 "structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html#adcc134f7d8299b549f22cdd93ebee44d":[6,0,0,13,1,0,4],
-"structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html":[5,0,0,13,1,15],
-"structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html":[6,0,0,13,1,15],
-"structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html#a1903cfc156fcfa37354d8f45e45d39fe":[5,0,0,13,1,15,0],
-"structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html#a1903cfc156fcfa37354d8f45e45d39fe":[6,0,0,13,1,15,0],
-"structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html#a30de055f3a116b255d54f857725e34b0":[5,0,0,13,1,15,1],
-"structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html#a30de055f3a116b255d54f857725e34b0":[6,0,0,13,1,15,1],
-"structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html#a688000243af7e290bc99385d584f8f7a":[5,0,0,13,1,15,4],
-"structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html#a688000243af7e290bc99385d584f8f7a":[6,0,0,13,1,15,4],
-"structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html#a979c94d0c5e56ecc16bd394a5a3c945c":[5,0,0,13,1,15,3],
-"structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html#a979c94d0c5e56ecc16bd394a5a3c945c":[6,0,0,13,1,15,3]
+"structBalloonParty_1_1Slots_1_1Capabilities_1_1ScoreAttribution.html":[5,0,0,13,1,15]
 };

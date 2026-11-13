@@ -139,7 +139,7 @@ Components</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>IWeaponStats</code>   </td><td class="markdownTableBodyNone">The run's weapon after its cards: <code>MaxBallsInFlight</code>, <code>ReloadSeconds</code> (the reload while another ball flies), <code>IdleReloadSeconds</code> (the near-instant one with nothing flying, which no card changes), <code>StartingShields</code>, <code>ExtraItemChance</code>. Each value is the configured base (<code>IProjectileFlightConfig</code>) plus every card held. Read these, not the flight config, wherever a card can change the value    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>IUpgradeDraft</code>   </td><td class="markdownTableBodyNone">The cards side: <code>Offer</code> (the hand of the level-up being presented, empty when none is pending or it deals none), <code>BonusCard</code> (the current attempt's bonus card, or null), <code>StacksOf(card)</code>, and <code>Pick(slot)</code>, which stages a card of the hand as the level-up's pick    </td></tr>
+<td class="markdownTableBodyNone"><code>IUpgradeDraft</code>   </td><td class="markdownTableBodyNone">The cards side: <code>Offer</code> (the hand of the level-up being presented, empty when none is pending or it deals none), <code>BonusCard</code> (the current attempt's bonus card, or null), <code>StacksOf(card)</code>, <code>LimitOf(card)</code> (its <code>MaxStacks</code> plus what held Raise the Bar cards add), and <code>Pick(slot)</code>, which stages a card of the hand as the level-up's pick    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>RunUpgrades</code>   </td><td class="markdownTableBodyNone">Implements both, plus <code>Game/Run</code>'s <code>IBonusCardSource</code>, <code>IRunResettable</code> and <code>IStartable</code> (it follows <code>ILevelProgress.Phase</code>). Holds the stack count per card and the bonus card, and recomputes the weapon when either changes   </td></tr>
 </table>
@@ -156,9 +156,11 @@ The cards</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>Shield</code>   </td><td class="markdownTableBodyNone">+<code>Amount</code> starting shields on every ball (rounded)   </td><td class="markdownTableBodyNone"><code>ThrowerController.LoadProjectile</code>, the shield-chain planner in <code>ItemAssigner</code>, and the shot solver (<code>ShotBoardGather.Gather</code>'s <code>startingShields</code>, passed by the Fire Best Shot cheat and the Shot Solver window)    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>RaiseLimits</code>   </td><td class="markdownTableBodyNone">+<code>Amount</code> to every other card's limit (rounded), so a card at its limit is dealt again. Dealt only once some card has reached its limit, and never as the ad's bonus card (that lasts one attempt, with no room to grow into). Its own limit is its <code>MaxStacks</code>. Raise the Bar in the deck: +1 a stack, 2 stacks, half the others' weight   </td><td class="markdownTableBodyNone"><code>RunUpgrades.LimitOf</code>, which the deal, the pick and the pick screen's <code>held/limit</code> label read    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ItemOdds</code>   </td><td class="markdownTableBodyNone">On every item roll (the initial board fill included), each item the level holds gets a chance of <code>Amount</code> × its <code>ExtraItemShare</code> (<code>ItemConfiguration</code>) at an extra copy: 1 for the Shield, down to 0.25 for the Snipe, so strong items grow slower. The whole part always lands; the fraction is a chance; the level's caps still hold   </td><td class="markdownTableBodyNone"><code>ILevelParameters.FillExtraItems</code>, placed by <code>ItemAssigner</code>   </td></tr>
 </table>
-<p>All four are read live, so a held card applies from the next ball loaded and the next item roll.</p>
+<p>Every card is read live, so a held card applies from the next ball loaded and the next item roll.</p>
 <h1><a class="anchor" id="autotoc_md258"></a>
 A level-up's hand</h1>
 <p>The hand follows the level-up phase (<code><a class="el" href="Game_2Level_2README_8md.html">Game/Level/README.md</a></code>):</p>

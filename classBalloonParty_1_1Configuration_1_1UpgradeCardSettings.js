@@ -1,7 +1,7 @@
 var classBalloonParty_1_1Configuration_1_1UpgradeCardSettings =
 [
     [ "UpgradeCardSettings", "classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#a404c3c2f99b05e95c9ef38db9a0080bc", null ],
-    [ "UpgradeCardSettings", "classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#a7599786d0f1c422559333d29e82dd1af", null ],
+    [ "UpgradeCardSettings", "classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#ab0510edb70491190fc982494411b876d", null ],
     [ "_amount", "classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#ac8cb50d0c7b820b5194c97d3c305d527", null ],
     [ "_description", "classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#a9873b04815aacabef0e7d8874e330164", null ],
     [ "_kind", "classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html#abf43f3b4474762195d14565146253e6a", null ],
