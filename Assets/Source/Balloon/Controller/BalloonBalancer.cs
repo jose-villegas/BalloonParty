@@ -289,6 +289,10 @@ namespace BalloonParty.Balloon.Controller
             {
                 var actor = roamer.Actor;
                 CollectRestingSlots();
+                if (_formations != null && ShotWall.Walls(actor))
+                {
+                    _formations.DropWallClosingSlots(actor.SlotIndex.Value, _restingSlots);
+                }
                 if (!((IPreBalanceRelocatable)actor).TryPickRelocation(_grid, _restingSlots, out var target))
                 {
                     continue;

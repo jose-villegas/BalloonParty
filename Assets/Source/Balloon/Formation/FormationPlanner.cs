@@ -15,8 +15,9 @@ namespace BalloonParty.Balloon.Formation
     ///     Reads the grid only; the caller moves the members. A formation slot must be empty or already
     ///     hold one of the candidates, so a formation never plans over another formation. It never sits in
     ///     the bottom <see cref="IUnbreakableFormationSettings.BottomClearance" /> rows (a horizontal line, the
-    ///     bottom <see cref="IUnbreakableFormationSettings.HorizontalBottomClearance" />). Among the spots that
-    ///     fit, the planner picks at random among the few with the least total travel.
+    ///     bottom <see cref="IUnbreakableFormationSettings.HorizontalBottomClearance" />), and never where it would
+    ///     link the board's unbreakables side to side (<see cref="ShotWall" />). Among the spots that fit, the
+    ///     planner picks at random among the few with the least total travel.
     /// </summary>
     internal sealed class FormationPlanner
     {
@@ -30,6 +31,10 @@ namespace BalloonParty.Balloon.Formation
         private readonly List<bool> _candidateUsed = new();
         private readonly List<bool> _slotUsed = new();
         private readonly List<FormationAssignment> _scratch = new();
+        private readonly ShotWall _wall = new();
+
+        // Whether the board was walled before this plan; a wall something else made is no reason to stand still.
+        private bool _walledBefore;
 
         /// <summary>
         ///     Plans <paramref name="shape" /> for up to <see cref="IUnbreakableFormationSettings.MaxMembers" />
@@ -56,6 +61,8 @@ namespace BalloonParty.Balloon.Formation
                 return false;
             }
 
+            _wall.Load(grid);
+            _walledBefore = _wall.Spans();
             CollectSpots(grid, shape, candidates, count, lastRow);
             if (_spots.Count == 0)
             {
@@ -91,10 +98,16 @@ namespace BalloonParty.Balloon.Formation
                         continue;
                     }
 
+                    var cost = Assign(candidates, count, _scratch);
+                    if (ClosesWall(_scratch))
+                    {
+                        continue;
+                    }
+
                     _spots.Add(new Spot
                     {
                         Anchor = anchor,
-                        Cost = Assign(candidates, count, _scratch),
+                        Cost = cost,
                         Order = _spots.Count,
                     });
                 }
@@ -171,6 +184,35 @@ namespace BalloonParty.Balloon.Formation
                 _ => settings.MaxMembers,
             };
             return Mathf.Min(candidates, most);
+        }
+
+        // Tries the plan on the wall: every member off its slot, onto its target, then back.
+        private bool ClosesWall(IReadOnlyList<FormationAssignment> assignments)
+        {
+            if (_walledBefore)
+            {
+                return false;
+            }
+
+            Move(assignments, toTargets: true);
+            var closes = _wall.Spans();
+            Move(assignments, toTargets: false);
+            return closes;
+        }
+
+        private void Move(IReadOnlyList<FormationAssignment> assignments, bool toTargets)
+        {
+            for (var i = 0; i < assignments.Count; i++)
+            {
+                var a = assignments[i];
+                _wall.Set(toTargets ? a.Member.SlotIndex.Value : a.Target, false);
+            }
+
+            for (var i = 0; i < assignments.Count; i++)
+            {
+                var a = assignments[i];
+                _wall.Set(toTargets ? a.Target : a.Member.SlotIndex.Value, true);
+            }
         }
 
         private bool AllSlotsFree(SlotGrid grid, IReadOnlyList<IWriteableFormationMember> candidates)

@@ -88,6 +88,13 @@ unbreakables: they roam, and once enough are free they form a formation of their
   members.
 - **Spawn room.** It never uses the bottom `BottomClearance` rows, so spawn lines always have room to
   enter.
+- **No wall across the board.** Every formation keeps its own row short, but two of them, or one and a
+  roamer, could still meet: a row of three beside a snake of four fills a seven-wide row, and two lines one
+  row apart can touch end to end. So nothing that moves an unbreakable may link the board's unbreakables
+  (and deflectors) from one side wall to the other (`Slots/Grid/ShotWall`). The planner drops every spot
+  that would, a snake's head turns away from a step that would, and `BalloonBalancer`'s roam pre-pass drops
+  the landing slots that would (`DropWallClosingSlots`). A board some other way walled already (the balance
+  race floating unbreakables up, say) is no reason to freeze them, so then the check stands aside.
 - **Rows stay up and short.** A horizontal line never uses the bottom `HorizontalBottomClearance` rows,
   and takes at most `HorizontalMaxMembers`: close to the cannon, or across the board, a wall shuts the
   player out. Diagonals leave lanes open, so they keep `BottomClearance` and `MaxMembers`. The

@@ -186,6 +186,39 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void Horizontal_NeverFillsARowOtherUnbreakablesHalfHold()
+        {
+            // Row 2 is the only row a line fits on, and another formation's four already stand at its west end:
+            // three more there would wall the board side to side.
+            _settings.HorizontalMaxMembers.Returns(3);
+            BuildGrid(7, 6);
+            FillRow(0);
+            FillRow(1);
+            FillRow(3);
+            FillWithOutsiders(2, 0, 3);
+            AddMembers(new Vector2Int(0, 4), new Vector2Int(2, 4), new Vector2Int(4, 5));
+
+            Assert.IsFalse(Plan(FormationShape.Horizontal));
+        }
+
+        [Test]
+        public void Horizontal_BesideOtherUnbreakables_LeavesTheRowAGap()
+        {
+            _settings.HorizontalMaxMembers.Returns(3);
+            BuildGrid(7, 6);
+            FillRow(0);
+            FillRow(1);
+            FillRow(3);
+            FillWithOutsiders(2, 0, 2);
+            AddMembers(new Vector2Int(0, 4), new Vector2Int(2, 4), new Vector2Int(4, 5));
+
+            Assert.IsTrue(Plan(FormationShape.Horizontal));
+
+            var row = Enumerable.Range(0, _grid.Columns).Count(col => !_grid.IsEmpty(col, 2)) + Targets().Count;
+            Assert.Less(row, _grid.Columns, "the row keeps a slot open");
+        }
+
+        [Test]
         public void AMemberStandingOnAFormationSlotKeepsIt()
         {
             BuildGrid(7, 8);
@@ -358,7 +391,12 @@ namespace BalloonParty.Tests.Balloon
 
         private void FillRowWithOutsiders(int row)
         {
-            for (var col = 0; col < _grid.Columns; col++)
+            FillWithOutsiders(row, 0, _grid.Columns - 1);
+        }
+
+        private void FillWithOutsiders(int row, int fromColumn, int toColumn)
+        {
+            for (var col = fromColumn; col <= toColumn; col++)
             {
                 _grid.Place(new UnbreakableBalloonModel(new BalloonModelConfig()), null, new Vector2Int(col, row));
             }

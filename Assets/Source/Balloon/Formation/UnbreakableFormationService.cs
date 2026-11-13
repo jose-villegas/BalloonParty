@@ -40,6 +40,7 @@ namespace BalloonParty.Balloon.Formation
         private readonly SlotGrid _grid;
         private readonly IUnbreakableFormationSettings _settings;
         private readonly FormationPlanner _planner = new();
+        private readonly ShotWall _wall = new();
         private readonly List<IWriteableFormationMember> _candidates = new();
         private readonly List<IWriteableFormationMember> _members = new();
         private readonly List<StandingFormation> _formations = new();
@@ -198,14 +199,17 @@ namespace BalloonParty.Balloon.Formation
         private void Walk(StandingFormation snake, int lastRow, Action<IWriteableDynamicSlotActor, Vector2Int> relocate)
         {
             var members = snake.MemberList;
-            if (!SnakeWalk.TryStep(_grid, members[0].SlotIndex.Value, snake.Heading, lastRow, out var direction))
+            var wall = LoadWall();
+            if (!SnakeWalk.TryStep(_grid, members[0].SlotIndex.Value, members[^1].SlotIndex.Value, snake.Heading,
+                    lastRow, wall, out var direction))
             {
                 members.Reverse();
                 var back = members.Count > 1
                     ? HexCoordinates.DirectionBetween(members[1].SlotIndex.Value, members[0].SlotIndex.Value)
                     : -1;
                 snake.Heading = back >= 0 ? back : HexCoordinates.Turn(snake.Heading, 3);
-                if (!SnakeWalk.TryStep(_grid, members[0].SlotIndex.Value, snake.Heading, lastRow, out direction))
+                if (!SnakeWalk.TryStep(_grid, members[0].SlotIndex.Value, members[^1].SlotIndex.Value, snake.Heading,
+                        lastRow, wall, out direction))
                 {
                     // Boxed in at both ends: it stays turned round, and next beat tries the other end again.
                     return;
@@ -227,6 +231,40 @@ namespace BalloonParty.Balloon.Formation
                 relocate(member, target);
                 target = from;
             }
+        }
+
+        /// <summary>
+        ///     Drops from <paramref name="slots" /> every slot an unbreakable roaming from <paramref name="from" />
+        ///     would link the board's unbreakables side to side by landing on (<see cref="ShotWall" />).
+        /// </summary>
+        internal void DropWallClosingSlots(Vector2Int from, List<Vector2Int> slots)
+        {
+            var wall = LoadWall();
+            if (wall == null)
+            {
+                return;
+            }
+
+            wall.Set(from, false);
+            for (var i = slots.Count - 1; i >= 0; i--)
+            {
+                var slot = slots[i];
+                wall.Set(slot, true);
+                var closes = wall.Spans();
+                wall.Set(slot, false);
+                if (closes)
+                {
+                    slots.RemoveAt(i);
+                }
+            }
+        }
+
+        // The board's wall, loaded; null when it is walled already, by a path nothing here controls, so a move
+        // that keeps it is no worse than standing still.
+        private ShotWall LoadWall()
+        {
+            _wall.Load(_grid);
+            return _wall.Spans() ? null : _wall;
         }
 
         private void RollReinforcements()

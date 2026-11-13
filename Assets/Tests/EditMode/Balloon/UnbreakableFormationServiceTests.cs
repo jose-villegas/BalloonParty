@@ -501,6 +501,56 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void ASnake_NeverStepsWhereItWouldWallTheBoard()
+        {
+            // The snake holds row 2's west end. East of it stand three roamers, and one more sits above its tail:
+            // stepping east, the head would link them all from wall to wall, so it turns south-east instead.
+            var snake = FormSnake();
+            Outsider(new Vector2Int(0, 1));
+            Outsider(new Vector2Int(4, 2));
+            Outsider(new Vector2Int(5, 2));
+            Outsider(new Vector2Int(6, 2));
+            var head = snake.Members[0].SlotIndex.Value;
+
+            _service.StepSnakes(Relocate);
+
+            Assert.AreEqual(1, snake.Heading);
+            Assert.AreEqual(HexCoordinates.Step(head, 1), snake.Members[0].SlotIndex.Value);
+        }
+
+        [Test]
+        public void DropWallClosingSlots_DropsTheSlotsThatWouldWallTheBoard()
+        {
+            for (var col = 0; col < 6; col++)
+            {
+                Outsider(new Vector2Int(col, 3));
+            }
+
+            var roamer = Outsider(new Vector2Int(2, 6));
+            var slots = new List<Vector2Int> { new(6, 3), new(6, 0), new(5, 4) };
+
+            _service.DropWallClosingSlots(roamer.SlotIndex.Value, slots);
+
+            CollectionAssert.AreEqual(new[] { new Vector2Int(6, 0), new Vector2Int(5, 4) }, slots);
+        }
+
+        [Test]
+        public void DropWallClosingSlots_OnABoardWalledAlready_DropsNothing()
+        {
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                Outsider(new Vector2Int(col, 3));
+            }
+
+            var roamer = Outsider(new Vector2Int(2, 6));
+            var slots = new List<Vector2Int> { new(6, 4), new(0, 0) };
+
+            _service.DropWallClosingSlots(roamer.SlotIndex.Value, slots);
+
+            Assert.AreEqual(2, slots.Count);
+        }
+
+        [Test]
         public void ASnakeMemberPopped_TheOneBehindClosesTheGap()
         {
             _settings.MinMembers.Returns(3);
@@ -616,6 +666,14 @@ namespace BalloonParty.Tests.Balloon
             {
                 AddUnbreakable(slot);
             }
+        }
+
+        // An unbreakable placed after the formations arranged, so it stays out of them.
+        private UnbreakableBalloonModel Outsider(Vector2Int slot)
+        {
+            var unbreakable = new UnbreakableBalloonModel(new BalloonModelConfig());
+            _grid.Place(unbreakable, null, slot);
+            return unbreakable;
         }
 
         private UnbreakableBalloonModel AddUnbreakable(Vector2Int slot)
