@@ -12,7 +12,7 @@ var classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen =
     [ "PlayEntrance", "classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#a34bedf4ce1f8e6b1806e920fbd78a522", null ],
     [ "RetryAsync", "classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#a3794ffdc0b3a9c57c69bb0c175b6bb5b", null ],
     [ "RetryText", "classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#a5e8aac686eeb34c940c42450fae3aa24", null ],
-    [ "RevealAfterGateAsync", "classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#ae1e4f397cd0addd960252656942af4ca", null ],
+    [ "RevealAfterGateAsync", "classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#ad16f7731f59cd87c0d13120fcef1dc94", null ],
     [ "SetRetryInteractable", "classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#aad7554296731139208cda5fea2bbd9ca", null ],
     [ "SetVisible", "classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#a52f9043e3214e9c83a304b3fc49de2e8", null ],
     [ "ShowRetryOffer", "classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#ad2e5b8891498403fd31c802b06447fa7", null ],

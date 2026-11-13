@@ -247,7 +247,7 @@ var searchData=
   ['returnstreaknotice_244',['ReturnStreakNotice',['../classBalloonParty_1_1UI_1_1Score_1_1ProgressNoticePresenter.html#a6a9fc5df8727103069a0fca20d31764d',1,'BalloonParty::UI::Score::ProgressNoticePresenter']]],
   ['returntopool_245',['ReturnToPool',['../classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html#ad20e4a36d9296ef3d2562ed44ecc12de',1,'BalloonParty::Balloon::Controller::BalloonController']]],
   ['reveal_246',['Reveal',['../classBalloonParty_1_1Scenario_1_1ActiveScenario.html#aca16104cd68f91e1b18af3bb7045480e',1,'BalloonParty::Scenario::ActiveScenario']]],
-  ['revealaftergateasync_247',['RevealAfterGateAsync',['../classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#ae1e4f397cd0addd960252656942af4ca',1,'BalloonParty::UI::GameOver::GameOverScreen']]],
+  ['revealaftergateasync_247',['RevealAfterGateAsync',['../classBalloonParty_1_1UI_1_1GameOver_1_1GameOverScreen.html#ad16f7731f59cd87c0d13120fcef1dc94',1,'BalloonParty::UI::GameOver::GameOverScreen']]],
   ['revealalpha_248',['RevealAlpha',['../classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnMath.html#acc66c3c79910d60b9b65902b3ef3436d',1,'BalloonParty::UI::HeadsUp::WriteOnMath']]],
   ['revealedcard_249',['RevealedCard',['../classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html#a40e6a78c7ef470fa82f006879328f2c5',1,'BalloonParty::Game::CardReveal::RevealedCard']]],
   ['revealshieldonfirstfreeframe_250',['RevealShieldOnFirstFreeFrame',['../classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#af6c3655d354f34d7f8a649f6fe4210b3',1,'BalloonParty::Projectile::View::ProjectileView']]],
