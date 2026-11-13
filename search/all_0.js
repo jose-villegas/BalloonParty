@@ -1,7 +1,7 @@
 var searchData=
 [
   ['0_20—_20prep_20that_20changes_20nothing_20on_20screen_0',['Phase 0 — prep that changes nothing on screen',['../plan_hdr.html#autotoc_md661',1,'']]],
-  ['0_20—_20prerequisite_20refactors_20no_20behavior_20change_20the_20existing_2022_20test_20suite_20stays_20green_1',['Phase 0 — Prerequisite refactors (no behavior change; the existing 22-test suite stays green)',['../plan_shot_solver_accuracy.html#autotoc_md793',1,'']]],
+  ['0_20—_20prerequisite_20refactors_20no_20behavior_20change_20the_20existing_2022_20test_20suite_20stays_20green_1',['Phase 0 — Prerequisite refactors (no behavior change; the existing 22-test suite stays green)',['../plan_shot_solver_accuracy.html#autotoc_md801',1,'']]],
   ['0_20—_20spawner_20coordination_2',['✅ Phase 8.0 — Spawner Coordination',['../plan_grid_actor_expansion.html#autotoc_md596',1,'']]],
   ['0_20confirms_20spikes_20matter_3',['G1 — Blit budget controller · &lt;strong&gt;opus&lt;/strong&gt;, after Step 0 confirms spikes matter',['../plan_performance_recovery.html#autotoc_md772',1,'']]],
   ['0_20evidence_4',['Tier 3: Architectural (gated on Step 0 evidence)',['../plan_performance_recovery.html#autotoc_md775',1,'']]],
@@ -21,13 +21,13 @@ var searchData=
   ['07_2023_20strong_18',['G4 — BackgroundField bake fine-octave skip · &lt;strong&gt;SHIPPED THEN REVERTED 2026-07-23&lt;/strong&gt;',['../plan_performance_recovery.html#autotoc_md771',1,'']]],
   ['07_2023_3a_20all_20commits_20exist_20and_20match_19',['Phase 1 — Completed ✅ (spot-checked 2026-07-23: all commits exist and match)',['../plan_performance_recovery.html#autotoc_md743',1,'']]],
   ['07_2023_3a_20u1_20reverted_20u2_20kept_20strong_20',['Tier 1: UI arrival storm — &lt;strong&gt;RESOLVED 2026-07-23: U1 reverted, U2 kept&lt;/strong&gt;',['../plan_performance_recovery.html#autotoc_md764',1,'']]],
-  ['07_2025_21',['Phase G — Headless level diagnostics (follow-up tier; scoped 2026-07-25)',['../plan_shot_solver_accuracy.html#autotoc_md800',1,'']]],
-  ['07_2026_22',['8. Remaining work — detailed status (2026-07-26)',['../plan_shot_solver_accuracy.html#autotoc_md804',1,'']]],
-  ['08_23',['08',['../plan_terrain_biomes.html#autotoc_md823',1,'Decisions (signed off 2026-11-08)'],['../plan_terrain_biomes.html#autotoc_md815',1,'Verified inventory (2026-11-08)']]],
+  ['07_2025_21',['Phase G — Headless level diagnostics (follow-up tier; scoped 2026-07-25)',['../plan_shot_solver_accuracy.html#autotoc_md808',1,'']]],
+  ['07_2026_22',['8. Remaining work — detailed status (2026-07-26)',['../plan_shot_solver_accuracy.html#autotoc_md812',1,'']]],
+  ['08_23',['08',['../plan_terrain_biomes.html#autotoc_md831',1,'Decisions (signed off 2026-11-08)'],['../plan_terrain_biomes.html#autotoc_md823',1,'Verified inventory (2026-11-08)']]],
   ['0_3a_20diagnose_20before_20optimizing_20mandatory_20do_20first_24',['Step 0: Diagnose before optimizing (mandatory, do first)',['../plan_performance_recovery.html#autotoc_md745',1,'']]],
   ['0_3a_20free_20near_20free_20wins_25',['Tier 0: Free / Near-Free Wins',['../plan_performance_recovery.html#autotoc_md758',1,'']]],
-  ['0a_26',['Phase D-core — Rainbow scoring + in-sim buff state (G4-scoring, G8) — depends on 0a',['../plan_shot_solver_accuracy.html#autotoc_md796',1,'']]],
-  ['0a_20e2_20folds_20c6_27',['Phase E — Flight residuals (G5, G6, G7 + E4) — depends on 0a; E2 folds C6',['../plan_shot_solver_accuracy.html#autotoc_md798',1,'']]],
-  ['0b_28',['Phase A — Interactive static geometry (G1) — depends on 0b',['../plan_shot_solver_accuracy.html#autotoc_md794',1,'']]],
-  ['0b_20parallel_20to_20a_29',['Phase B — Weight-system fidelity (G2) — depends on 0b; parallel to A',['../plan_shot_solver_accuracy.html#autotoc_md795',1,'']]]
+  ['0a_26',['Phase D-core — Rainbow scoring + in-sim buff state (G4-scoring, G8) — depends on 0a',['../plan_shot_solver_accuracy.html#autotoc_md804',1,'']]],
+  ['0a_20e2_20folds_20c6_27',['Phase E — Flight residuals (G5, G6, G7 + E4) — depends on 0a; E2 folds C6',['../plan_shot_solver_accuracy.html#autotoc_md806',1,'']]],
+  ['0b_28',['Phase A — Interactive static geometry (G1) — depends on 0b',['../plan_shot_solver_accuracy.html#autotoc_md802',1,'']]],
+  ['0b_20parallel_20to_20a_29',['Phase B — Weight-system fidelity (G2) — depends on 0b; parallel to A',['../plan_shot_solver_accuracy.html#autotoc_md803',1,'']]]
 ];

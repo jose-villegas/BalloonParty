@@ -1,5 +1,13 @@
 var NAVTREEINDEX108 =
 {
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a14145c61c047b3815ff17210ee3b9844":[6,0,0,3,9,22,12],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a146c08a9e0be4480f1e680885374bfab":[5,0,0,3,9,22,11],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a146c08a9e0be4480f1e680885374bfab":[6,0,0,3,9,22,11],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a2f8df43167f3556571dbbb11d49b60ca":[5,0,0,3,9,22,7],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a2f8df43167f3556571dbbb11d49b60ca":[6,0,0,3,9,22,7],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a3056668ddb975767b08b012693ae1522":[5,0,0,3,9,22,0],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a3056668ddb975767b08b012693ae1522":[6,0,0,3,9,22,0],
+"structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a3b3ac29386df743763c2086e568eb903":[5,0,0,3,9,22,6],
 "structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a3b3ac29386df743763c2086e568eb903":[6,0,0,3,9,22,6],
 "structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a494bd39055005d2556e1a17a7211d673":[5,0,0,3,9,22,10],
 "structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a494bd39055005d2556e1a17a7211d673":[6,0,0,3,9,22,10],
@@ -241,13 +249,5 @@ var NAVTREEINDEX108 =
 "structBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Palette.html#aa9639b6ef59bea97e001418c9256c554":[6,0,0,5,19,1,1],
 "structBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Palette.html#ade84acbdaa040f35529845ed1a3f6fcc":[5,0,0,5,19,1,0],
 "structBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Palette.html#ade84acbdaa040f35529845ed1a3f6fcc":[6,0,0,5,19,1,0],
-"structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1Entry.html":[5,0,0,5,29,0],
-"structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1Entry.html":[6,0,0,5,29,0],
-"structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1Entry.html#a02a43a9d394785d87f478cb9d9c2fb00":[5,0,0,5,29,0,9],
-"structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1Entry.html#a02a43a9d394785d87f478cb9d9c2fb00":[6,0,0,5,29,0,9],
-"structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1Entry.html#a1fc29bcee55798c1a1568a2523e7da72":[5,0,0,5,29,0,1],
-"structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1Entry.html#a1fc29bcee55798c1a1568a2523e7da72":[6,0,0,5,29,0,1],
-"structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1Entry.html#a20743e2b814963c35b6b24e0ca4df3ba":[5,0,0,5,29,0,6],
-"structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1Entry.html#a20743e2b814963c35b6b24e0ca4df3ba":[6,0,0,5,29,0,6],
-"structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1Entry.html#a69e0b2c0d78d16cd8593221f06f7da1d":[5,0,0,5,29,0,8]
+"structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1Entry.html":[5,0,0,5,29,0]
 };

@@ -1,5 +1,13 @@
 var NAVTREEINDEX114 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedEndedMessage.html":[6,0,0,12,7,28],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedEndedMessage.html#a0662b8cf86592ba96d855b6773c53065":[5,0,0,12,7,28,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedEndedMessage.html#a0662b8cf86592ba96d855b6773c53065":[6,0,0,12,7,28,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedEndedMessage.html#a67b84fe454d9b93251f30a3c63cc95bb":[5,0,0,12,7,28,1],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedEndedMessage.html#a67b84fe454d9b93251f30a3c63cc95bb":[6,0,0,12,7,28,1],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedStartedMessage.html":[5,0,0,12,7,29],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedStartedMessage.html":[6,0,0,12,7,29],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedStartedMessage.html#a56872c3010cd716a9f44e96c1ea0a298":[5,0,0,12,7,29,0],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedStartedMessage.html#a56872c3010cd716a9f44e96c1ea0a298":[6,0,0,12,7,29,0],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedStartedMessage.html#a91a0ed079795b38e1e9c81bfe6ecb480":[5,0,0,12,7,29,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedStartedMessage.html#a91a0ed079795b38e1e9c81bfe6ecb480":[6,0,0,12,7,29,1],
@@ -241,13 +249,5 @@ var NAVTREEINDEX114 =
 "structBalloonParty_1_1Shared_1_1WallLimits.html#a173c680fef4f00606d8aafd5d94525f6":[6,0,0,12,40,0],
 "structBalloonParty_1_1Shared_1_1WallLimits.html#a2dc1c8265d4c07128088263be0072642":[5,0,0,12,40,3],
 "structBalloonParty_1_1Shared_1_1WallLimits.html#a2dc1c8265d4c07128088263be0072642":[6,0,0,12,40,3],
-"structBalloonParty_1_1Shared_1_1WallLimits.html#a5708a4e24531d34322f90bdeb5e706f3":[5,0,0,12,40,5],
-"structBalloonParty_1_1Shared_1_1WallLimits.html#a5708a4e24531d34322f90bdeb5e706f3":[6,0,0,12,40,5],
-"structBalloonParty_1_1Shared_1_1WallLimits.html#a7bc6650dba207369bacd5c78c029552b":[5,0,0,12,40,6],
-"structBalloonParty_1_1Shared_1_1WallLimits.html#a7bc6650dba207369bacd5c78c029552b":[6,0,0,12,40,6],
-"structBalloonParty_1_1Shared_1_1WallLimits.html#aafc45dc25e6d981126acdab6bf730691":[5,0,0,12,40,7],
-"structBalloonParty_1_1Shared_1_1WallLimits.html#aafc45dc25e6d981126acdab6bf730691":[6,0,0,12,40,7],
-"structBalloonParty_1_1Shared_1_1WallLimits.html#ab639b8ee37620ddb64293b7360889d04":[5,0,0,12,40,1],
-"structBalloonParty_1_1Shared_1_1WallLimits.html#ab639b8ee37620ddb64293b7360889d04":[6,0,0,12,40,1],
-"structBalloonParty_1_1Shared_1_1WallLimits.html#ae33a240e0a9f370dfe2a5865f7cf6a13":[5,0,0,12,40,8]
+"structBalloonParty_1_1Shared_1_1WallLimits.html#a5708a4e24531d34322f90bdeb5e706f3":[5,0,0,12,40,5]
 };
