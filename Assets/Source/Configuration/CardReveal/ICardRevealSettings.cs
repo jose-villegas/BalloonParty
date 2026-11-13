@@ -154,6 +154,12 @@ namespace BalloonParty.Configuration.CardReveal
         float RubberSwingVariance { get; }
 
         /// <summary>
+        ///     How fast the torn rubber turns as it falls, in degrees a second once its spin has built up over one
+        ///     <see cref="RubberSwingSeconds" />. Each pop picks the direction and varies the speed.
+        /// </summary>
+        float RubberSpin { get; }
+
+        /// <summary>
         ///     The white light its tear flashes into the scene light field, its radius in world units: it lights
         ///     the board around the reveal, and the reveal itself.
         /// </summary>

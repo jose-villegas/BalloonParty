@@ -89,6 +89,7 @@ namespace BalloonParty.UI.CardReveal
         private float _swingReach = 1f;
         private float _swingPace = 1f;
         private float _swingPhase;
+        private float _spinRate;
         private bool _attached;
         private bool _burst;
 
@@ -223,6 +224,24 @@ namespace BalloonParty.UI.CardReveal
             return new Vector2(
                 settings.RubberSwing * reach * Mathf.Sin(angle) * grow,
                 -settings.RubberSwingTilt * reach * Mathf.Cos(angle) * grow);
+        }
+
+        /// <summary>
+        ///     How far the torn rubber has turned <paramref name="sincePop" /> seconds into the pop, in degrees, at
+        ///     <paramref name="rate" /> degrees a second (its sign the direction). Nothing until it starts to fall;
+        ///     then the turn picks up over one <see cref="ICardRevealSettings.RubberSwingSeconds" />, so the fall
+        ///     starts square, and runs on at the rate, falling behind it by that one swing's worth.
+        /// </summary>
+        internal static float FallSpin(float sincePop, float rate, ICardRevealSettings settings)
+        {
+            var falling = sincePop - settings.RubberFallsFromFrame / Mathf.Max(settings.FramesPerSecond, 1e-3f);
+            if (falling <= 0f)
+            {
+                return 0f;
+            }
+
+            var buildUp = Mathf.Max(settings.RubberSwingSeconds, 1e-3f);
+            return rate * falling * falling / (falling + buildUp);
         }
 
         /// <summary>
@@ -393,6 +412,7 @@ namespace BalloonParty.UI.CardReveal
                 SetRubberShown(frame < frames);
                 ShowFrame(Mathf.Min(frame, frames - 1));
                 var swing = FallSwing(elapsed, _swingReach, _swingPace, _swingPhase, _settings);
+                swing.y += FallSpin(elapsed, _spinRate, _settings);
                 Fall(FallDistance(elapsed, _settings), swing);
                 PlacePin(elapsed);
                 BurstOnTear(frame);
@@ -580,6 +600,8 @@ namespace BalloonParty.UI.CardReveal
             _swingReach = 1f + UnityEngine.Random.Range(-variance, variance);
             _swingPace = 1f + UnityEngine.Random.Range(-variance, variance);
             _swingPhase = UnityEngine.Random.Range(0f, 2f * Mathf.PI);
+            var direction = UnityEngine.Random.value < 0.5f ? -1f : 1f;
+            _spinRate = direction * _settings.RubberSpin * (1f + UnityEngine.Random.Range(-variance, variance));
         }
 
         private void TiltLayers(float degrees)

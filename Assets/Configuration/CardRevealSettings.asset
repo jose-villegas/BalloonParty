@@ -44,6 +44,7 @@ MonoBehaviour:
   _rubberSwingSeconds: 0.4
   _rubberSwingTilt: 15
   _rubberSwingVariance: 0.3
+  _rubberSpin: 120
   _popFlashRadius: 2.4
   _popFlashIntensity: 2.5
   _popFlashSeconds: 0.3

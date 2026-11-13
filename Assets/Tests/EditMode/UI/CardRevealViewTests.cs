@@ -236,6 +236,33 @@ namespace BalloonParty.Tests.UI
         }
 
         [Test]
+        public void FallSpin_BeforeTheRubberTears_IsNothing()
+        {
+            UseSwing();
+            Assert.AreEqual(0f, CardRevealView.FallSpin(0.09f, 120f, _settings));
+        }
+
+        [Test]
+        public void FallSpin_PicksUpOverOneSwing_ThenTurnsAtItsRate()
+        {
+            // Torn at 0.1 s with a 0.4 s swing: just after the tear it has barely turned; well into the fall each
+            // further second adds close to the full rate.
+            UseSwing();
+            Assert.Less(CardRevealView.FallSpin(0.15f, 120f, _settings), 1f);
+            var late = CardRevealView.FallSpin(10.1f, 120f, _settings);
+            var later = CardRevealView.FallSpin(11.1f, 120f, _settings);
+            Assert.AreEqual(120f, later - late, 1f);
+        }
+
+        [Test]
+        public void FallSpin_TurnsTheWayItsRatePoints()
+        {
+            UseSwing();
+            Assert.AreEqual(-CardRevealView.FallSpin(1f, 120f, _settings),
+                CardRevealView.FallSpin(1f, -120f, _settings), 1e-4f);
+        }
+
+        [Test]
         public void FallDistance_BeforeTheRubberTears_IsNothing()
         {
             _settings.RubberFallsFromFrame.Returns(3);
