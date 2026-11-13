@@ -2147,12 +2147,12 @@ MonoBehaviour:
       _cost: 1
       _weight:
         _introWeight: 2.25
-        _minWeight: 1.5
-        _maxWeight: 2.25
-        _lateMinWeight: 0.75
-        _lateMaxWeight: 1.25
+        _minWeight: 2
+        _maxWeight: 3
+        _lateMinWeight: 1
+        _lateMaxWeight: 1.75
         _rampLevels: 6
-      _maximumAllowedOverride: 2
+      _maximumAllowedOverride: 3
       _introGuaranteedCount: 1
       _guaranteedInitialCount: 0
     _gridActors:
