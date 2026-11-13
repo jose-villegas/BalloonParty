@@ -29,3 +29,4 @@ Working design plans and roadmaps for upcoming features.
 - @subpage plan_headsup
 - @subpage plan_coins
 - @subpage plan_card_reveal
+- @subpage plan_reward_balloons
