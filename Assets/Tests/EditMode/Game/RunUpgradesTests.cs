@@ -745,6 +745,75 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void BonusRetry_LandingOnACappedCard_BreaksIt_ThenDealsOneWithRoom()
+        {
+            // The shield is at its limit and all but certain to be drawn; the reload has room.
+            var capped = UpgradeRig.Card(UpgradeKind.Shield, 1f, maxStacks: 1);
+            capped.Weight.Returns(1000f);
+            _rig.Cards.Clear();
+            _rig.Cards.Add(capped);
+            _rig.Hold(capped);
+            _rig.Cards.Add(_reload);
+
+            _rig.Retry(4, withBonusCard: true);
+
+            Assert.AreSame(_reload, Upgrades.BonusCard);
+            Assert.AreEqual(1, Upgrades.StacksOf(capped), "a capped draw adds nothing");
+            Received.InOrder(() =>
+            {
+                _rig.BonusDealt.Publish(Arg.Is<BonusCardDealtMessage>(m => m.Card == capped && m.Capped && m.Stacks == 1));
+                _rig.BonusDealt.Publish(Arg.Is<BonusCardDealtMessage>(m => m.Card == _reload && !m.Capped));
+            });
+        }
+
+        [Test]
+        public void BonusRetry_NeverGivesACappedCard()
+        {
+            // Weighted to be drawn first nearly every time, so the re-deal is what keeps it out.
+            var capped = UpgradeRig.Card(UpgradeKind.Shield, 1f, maxStacks: 1);
+            capped.Weight.Returns(1000f);
+            _rig.Cards.Clear();
+            _rig.Cards.Add(capped);
+            _rig.Hold(capped);
+            _rig.Cards.Add(_reload);
+            _rig.Cards.Add(_itemOdds);
+
+            for (var used = 0; used < 20; used++)
+            {
+                _rig.RetryState.RetriesUsed.Returns(used);
+                _rig.Retry(4, withBonusCard: true);
+
+                Assert.AreNotSame(capped, Upgrades.BonusCard, $"retry {used}");
+            }
+        }
+
+        [Test]
+        public void BonusRetry_WithEveryCardCapped_ShowsNoBreak()
+        {
+            var capped = UpgradeRig.Card(UpgradeKind.Shield, 1f, maxStacks: 1);
+            _rig.Cards.Clear();
+            _rig.Cards.Add(capped);
+            _rig.Hold(capped);
+
+            _rig.Retry(4, withBonusCard: true);
+
+            Assert.IsNull(Upgrades.BonusCard);
+            _rig.BonusDealt.DidNotReceiveWithAnyArgs().Publish(default);
+        }
+
+        [Test]
+        public void BonusRetry_WithRoomOnTheDrawnCard_DealsOnce()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_shield);
+
+            _rig.Retry(4, withBonusCard: true);
+
+            _rig.BonusDealt.Received(1).Publish(Arg.Any<BonusCardDealtMessage>());
+            _rig.BonusDealt.DidNotReceive().Publish(Arg.Is<BonusCardDealtMessage>(m => m.Capped));
+        }
+
+        [Test]
         public void BonusRetry_SameLevelAndRetryCount_DealsTheSameCard()
         {
             _rig.RetryState.RetriesUsed.Returns(1);

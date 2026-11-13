@@ -61,8 +61,9 @@ namespace BalloonParty.UI.Tooltip
 
         private void OnBonusDealt(BonusCardDealtMessage message)
         {
-            // With a reveal on stage the bonus card is its to show.
-            if (_cardReveals.HasStage)
+            // With a reveal on stage the bonus card is its to show. A capped draw isn't the card the attempt gets:
+            // the one dealt after it is.
+            if (message.Capped || _cardReveals.HasStage)
             {
                 return;
             }

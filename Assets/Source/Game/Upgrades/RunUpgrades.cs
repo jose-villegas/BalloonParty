@@ -80,7 +80,7 @@ namespace BalloonParty.Game.Upgrades
                 var cards = _settings.Cards;
                 for (var i = 0; i < cards.Count; i++)
                 {
-                    if (IsDealable(cards[i], forBonus: true))
+                    if (IsDealable(cards[i], forBonus: true, withCapped: false))
                     {
                         return true;
                     }
@@ -270,9 +270,11 @@ namespace BalloonParty.Game.Upgrades
         // Seeded by the retry count too, so each bought retry of the same level can deal a different card.
         // RetriesUsed is read before RetryTracker counts this retry (it resets later), so the run's first
         // retry seeds with 0.
+        // A card at its limit stays in the bonus deal: landing on one breaks it on screen (BonusCardDealtMessage.
+        // Capped), and the deal goes again among the cards with room, so the ad still buys a card.
         private void DealBonus(int level)
         {
-            BuildDeck(forBonus: true);
+            BuildDeck(forBonus: true, withCapped: true);
             if (_deck.Count == 0)
             {
                 return;
@@ -280,7 +282,22 @@ namespace BalloonParty.Game.Upgrades
 
             var seed = unchecked((_pacing.SeedForLevel(level) ^ BonusSeedSalt) + _retryState.RetriesUsed * RetrySeedStep);
             var rng = new System.Random(seed);
-            _bonus = _deck[_deck.PickWeightedIndex(card => card.Weight, (float)rng.NextDouble())];
+            var pick = _deck[_deck.PickWeightedIndex(card => card.Weight, (float)rng.NextDouble())];
+            if (StacksOf(pick) >= LimitOf(pick))
+            {
+                // Only broken on screen when a card with room can take its place.
+                BuildDeck(forBonus: true);
+                if (_deck.Count == 0)
+                {
+                    return;
+                }
+
+                Log.Info("Upgrades", $"Bonus card {pick.Title} is at its limit; dealing again");
+                _bonusDealtPublisher.Publish(new BonusCardDealtMessage(pick, StacksOf(pick), capped: true));
+                pick = _deck[_deck.PickWeightedIndex(card => card.Weight, (float)rng.NextDouble())];
+            }
+
+            _bonus = pick;
             _deck.Clear();
 
             Log.Info("Upgrades", $"Bonus card for this attempt: {_bonus.Title}");
@@ -293,13 +310,13 @@ namespace BalloonParty.Game.Upgrades
             _staged = null;
         }
 
-        private void BuildDeck(bool forBonus)
+        private void BuildDeck(bool forBonus, bool withCapped = false)
         {
             _deck.Clear();
             var cards = _settings.Cards;
             for (var i = 0; i < cards.Count; i++)
             {
-                if (IsDealable(cards[i], forBonus))
+                if (IsDealable(cards[i], forBonus, withCapped))
                 {
                     _deck.Add(cards[i]);
                 }
@@ -307,12 +324,12 @@ namespace BalloonParty.Game.Upgrades
         }
 
         // An ad never buys the ball cap (PLAN-FastPaced §8), so a bonus is never an Extra Pen. A card at its
-        // limit is out of both deals, so a bonus never takes a card past its limit either. Raise the Bar only
-        // matters once a card is at its limit, so it waits for one; and the bonus lasts one attempt, which
-        // has no room to grow into a raised limit, so it is never the bonus.
-        private bool IsDealable(IUpgradeCardSettings card, bool forBonus)
+        // limit is dealt only with withCapped, the bonus deal's first draw, which shows it breaking and deals
+        // again. Raise the Bar only matters once a card is at its limit, so it waits for one; and the bonus lasts
+        // one attempt, with no room to grow into a raised limit, so it is never the bonus.
+        private bool IsDealable(IUpgradeCardSettings card, bool forBonus, bool withCapped)
         {
-            if (card == null || card.Weight <= 0f || StacksOf(card) >= LimitOf(card))
+            if (card == null || card.Weight <= 0f || (!withCapped && StacksOf(card) >= LimitOf(card)))
             {
                 return false;
             }

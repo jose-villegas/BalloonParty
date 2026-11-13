@@ -30,7 +30,7 @@ namespace BalloonParty.Game.CardReveal
         private readonly ISubscriber<UpgradeCardHeldMessage> _heldSubscriber;
         private readonly ISubscriber<BonusCardDealtMessage> _bonusSubscriber;
         private readonly Random _random;
-        private readonly Queue<(IUpgradeCardSettings Card, int Stacks, bool IsBonus)> _queue = new();
+        private readonly Queue<(IUpgradeCardSettings Card, int Stacks, bool IsBonus, bool IsCapped)> _queue = new();
         private readonly List<int> _recentPops = new();
         private readonly ReactiveProperty<RevealedCard> _current = new();
         private readonly CompositeDisposable _subscriptions = new();
@@ -65,9 +65,9 @@ namespace BalloonParty.Game.CardReveal
 
         public void Start()
         {
-            _heldSubscriber.Subscribe(message => Enqueue(message.Card, message.Stacks, isBonus: false))
+            _heldSubscriber.Subscribe(message => Enqueue(message.Card, message.Stacks, isBonus: false, isCapped: false))
                 .AddTo(_subscriptions);
-            _bonusSubscriber.Subscribe(message => Enqueue(message.Card, message.Stacks, isBonus: true))
+            _bonusSubscriber.Subscribe(message => Enqueue(message.Card, message.Stacks, isBonus: true, message.Capped))
                 .AddTo(_subscriptions);
             _navigation.Current.Where(IsOnStage)
                 .Subscribe(_ => TryStartNext())
@@ -120,14 +120,14 @@ namespace BalloonParty.Game.CardReveal
             TryStartNext();
         }
 
-        private void Enqueue(IUpgradeCardSettings card, int stacks, bool isBonus)
+        private void Enqueue(IUpgradeCardSettings card, int stacks, bool isBonus, bool isCapped)
         {
             if (!HasStage || card == null)
             {
                 return;
             }
 
-            _queue.Enqueue((card, stacks, isBonus));
+            _queue.Enqueue((card, stacks, isBonus, isCapped));
             TryStartNext();
         }
 
@@ -147,10 +147,10 @@ namespace BalloonParty.Game.CardReveal
             }
 
             // The next pop is chosen before the reveal publishes, so a stage reading it then sees the new one.
-            var (card, stacks, isBonus) = _queue.Dequeue();
+            var (card, stacks, isBonus, isCapped) = _queue.Dequeue();
             var pop = _nextPop;
             _nextPop = PickPop();
-            _current.Value = new RevealedCard(card, stacks, isBonus, pop);
+            _current.Value = new RevealedCard(card, stacks, isBonus, pop, isCapped);
         }
 
         // Uniform over the pops not among the last few chosen, which are the last few shown, a reveal on: those

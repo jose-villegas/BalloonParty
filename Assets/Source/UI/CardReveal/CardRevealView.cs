@@ -56,6 +56,13 @@ namespace BalloonParty.UI.CardReveal
         [SerializeField] private RibbonPiece _titleRibbon;
         [SerializeField] private RibbonPiece _descriptionRibbon;
 
+        [Tooltip("Tucked behind the title on a bonus that landed on a card at its limit, in place of the " +
+                 "description; the title is struck through.")]
+        [SerializeField] private RibbonPiece _cappedRibbon;
+
+        [Tooltip("What the capped ribbon says.")]
+        [SerializeField] private string _cappedText = "Capped";
+
         [Tooltip("The pushpin that pricks the balloon, over it, hung from its needle's tip; its head and needle are " +
                  "tinted apart. None, and the balloon pops on its own.")]
         [SerializeField] private RectTransform _pin;
@@ -446,7 +453,16 @@ namespace BalloonParty.UI.CardReveal
 
             var exit = float.IsNaN(_exitFrom) ? 0f : Mathf.Clamp01((now - _exitFrom) / exitSeconds);
             _titleRibbon.Fly(now - _releasedAt, exit, _settings);
-            _descriptionRibbon.Fly(now - _releasedAt, exit, _settings);
+            if (_descriptionRibbon.gameObject.activeSelf)
+            {
+                _descriptionRibbon.Fly(now - _releasedAt, exit, _settings);
+            }
+
+            if (_cappedRibbon != null && _cappedRibbon.gameObject.activeSelf)
+            {
+                _cappedRibbon.Fly(now - _releasedAt, exit, _settings);
+            }
+
             return exit;
         }
 
@@ -460,15 +476,45 @@ namespace BalloonParty.UI.CardReveal
             tint.a = 1f - _settings.InsideShowThrough;
             _front.color = tint;
 
-            _titleRibbon.Show(UpgradeCardText.Title(reveal.Card));
-            _descriptionRibbon.Show(reveal.Card.Description);
-            _titleRibbon.Rest();
-            _descriptionRibbon.Rest();
+            DressRibbons(reveal);
             SetRubberShown(true);
             ShowFrame(0);
             Float(0f);
             DressPin(pop);
             _group.alpha = 1f;
+        }
+
+        // A capped bonus keeps its title, struck through, with the capped ribbon behind it instead of the description.
+        // A canvas built before the capped ribbon still strikes the title and drops the description.
+        private void DressRibbons(RevealedCard reveal)
+        {
+            var capped = reveal.IsCapped;
+            var title = UpgradeCardText.Title(reveal.Card);
+            _titleRibbon.Show(capped ? StruckThrough(title) : title);
+            _titleRibbon.Rest();
+            _descriptionRibbon.gameObject.SetActive(!capped);
+            if (!capped)
+            {
+                _descriptionRibbon.Show(reveal.Card.Description);
+                _descriptionRibbon.Rest();
+            }
+
+            if (_cappedRibbon == null)
+            {
+                return;
+            }
+
+            _cappedRibbon.gameObject.SetActive(capped);
+            if (capped)
+            {
+                _cappedRibbon.Show(_cappedText);
+                _cappedRibbon.Rest();
+            }
+        }
+
+        private static string StruckThrough(string line)
+        {
+            return $"<s>{line}</s>";
         }
 
         // The pin is drawn to the balloon's scale, hung from its needle's tip, and jabs along the angle it was

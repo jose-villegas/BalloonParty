@@ -89,6 +89,9 @@ namespace BalloonParty.Editor
         // Cream, a little warmer than the board's white, so the pencil reads on it over any scenery.
         private static readonly Color RibbonColor = new(0.98f, 0.965f, 0.925f, 1f);
 
+        // A bonus that landed on a card at its limit: a red ribbon, written in the cream, crossing behind the title.
+        private static readonly Color CappedRibbonColor = new(0.8f, 0.24f, 0.2f, 1f);
+
         private static readonly Rect PinHeadCell = new(0f, 0.5f, 0.5f, 0.5f);
         private static readonly Rect PinNeedleCell = new(0.5f, 0.5f, 0.5f, 0.5f);
         private static readonly int SheetGridId = Shader.PropertyToID("_SheetGrid");
@@ -101,6 +104,10 @@ namespace BalloonParty.Editor
 
         private static readonly Flight DescriptionFlight = new(new Vector2(0f, -6f), 6f, new Vector2(10f, 18f), 3f,
             new Vector2(1f, 4f), 2.1f, new Vector2(70f, 120f), 12f);
+
+        // Behind the title, down and to the right, leaning the other way, so the two cross.
+        private static readonly Flight CappedFlight = new(new Vector2(0f, 2f), 4f, new Vector2(14f, 31f), 9f,
+            new Vector2(1f, 4.5f), 1.1f, new Vector2(65f, 125f), 16f);
 
         [MenuItem(MenuRoot + "Build Card Reveal")]
         private static void BuildFromMenu()
@@ -454,6 +461,8 @@ namespace BalloonParty.Editor
             var shadow = CreateLayer("Shadow", balloon, materials.Shadow);
             var back = CreateLayer("Back", balloon, materials.Rubber);
             var centre = new Vector2(0f, FrameSize * CentreAboveFrame);
+            var capped = CreateRibbon("CappedRibbon", balloon, label, materials.Ribbon, centre,
+                DescriptionRibbonHeight, label.fontSize * DescriptionScale, CappedFlight, CappedRibbonColor, RibbonColor);
             var title = CreateRibbon("TitleRibbon", balloon, label, materials.Ribbon, centre, TitleRibbonHeight,
                 label.fontSize, TitleFlight);
             var description = CreateRibbon("DescriptionRibbon", balloon, label, materials.Ribbon, centre,
@@ -470,6 +479,7 @@ namespace BalloonParty.Editor
             fields.FindProperty("_front").objectReferenceValue = front;
             fields.FindProperty("_titleRibbon").objectReferenceValue = title;
             fields.FindProperty("_descriptionRibbon").objectReferenceValue = description;
+            fields.FindProperty("_cappedRibbon").objectReferenceValue = capped;
             if (pin.HasValue)
             {
                 fields.FindProperty("_pin").objectReferenceValue = pin.Value.Root;
@@ -521,7 +531,7 @@ namespace BalloonParty.Editor
         // Its flight is relative to the balloon's centre in the frame (centre). The text is the tooltip's label,
         // cloned for its pencil font and colour, without its write-on: the line is on the ribbon from the start.
         private static RibbonPiece CreateRibbon(string name, RectTransform balloon, TMP_Text label, Material material,
-            Vector2 centre, float height, float fontSize, Flight flight)
+            Vector2 centre, float height, float fontSize, Flight flight, Color? ribbonColor = null, Color? textColor = null)
         {
             var rect = CreateRect(name, balloon);
             rect.sizeDelta = new Vector2(60f, height);
@@ -529,7 +539,7 @@ namespace BalloonParty.Editor
             group.interactable = false;
             group.blocksRaycasts = false;
             var ribbon = rect.gameObject.AddComponent<RibbonGraphic>();
-            ribbon.color = RibbonColor;
+            ribbon.color = ribbonColor ?? RibbonColor;
             ribbon.material = material;
             ribbon.raycastTarget = false;
 
@@ -548,6 +558,10 @@ namespace BalloonParty.Editor
             text.enableAutoSizing = false;
             text.fontSize = fontSize;
             text.raycastTarget = false;
+            if (textColor.HasValue)
+            {
+                text.color = textColor.Value;
+            }
 
             var piece = rect.gameObject.AddComponent<RibbonPiece>();
             var fields = new SerializedObject(piece);

@@ -92,6 +92,21 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void CappedBonus_PlaysBroken_ThenTheCardDealtInItsPlace()
+        {
+            _controller.AttachStage();
+            _bonusHandler.Handle(new BonusCardDealtMessage(_shield, 3, capped: true));
+            Bonus(_reload);
+
+            Assert.AreSame(_shield, _controller.Current.Value.Card);
+            Assert.IsTrue(_controller.Current.Value.IsCapped);
+
+            _controller.Finish(_controller.Current.Value);
+            Assert.AreSame(_reload, _controller.Current.Value.Card);
+            Assert.IsFalse(_controller.Current.Value.IsCapped);
+        }
+
+        [Test]
         public void BonusDealtBehindTheGameOverScreen_WaitsForPlayToResume()
         {
             _controller.AttachStage();
