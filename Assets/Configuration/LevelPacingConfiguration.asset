@@ -2143,7 +2143,7 @@ MonoBehaviour:
       _introGuaranteedCount: 1
       _guaranteedInitialCount: 0
     - _type: 6
-      _unlockLevel: 8
+      _unlockLevel: 5
       _cost: 1
       _weight:
         _introWeight: 2.25
