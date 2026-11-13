@@ -48,7 +48,7 @@ It is a second way to buy what the rewarded ad already buys (a bonus card for on
 | A bought card lasts one attempt: dropped when the level is won or on any reset | The same rule as the ad's bonus card, so spending never stacks power across levels |
 | One bonus card per attempt: buying with coins and the ad bonus exclude each other | Keeps the retry's power bounded, and the screen simple |
 | The coin card is **picked** from three; the ad's card stays random | Gives the coins a reason to exist next to the ad: you choose |
-| Never an Extra Ball, never a maxed card | The same deck rules as the ad's bonus card (`Plans/PLAN-FastPaced.md` §8) |
+| Never an Extra Pen, never a maxed card | The same deck rules as the ad's bonus card (`Plans/PLAN-FastPaced.md` §8) |
 | The price is the same every time | Easy to read. If the bot shows wallets piling up, a price that rises per purchase in a run is the lever (§9) |
 | Coins are progression, not telemetry | Kept on the device on purpose. Coins earned and spent per level are *also* reported as metrics, which leave the device (see `Game/Telemetry/README.md`) |
 
@@ -101,7 +101,7 @@ Each phase gets the reviewer pass before the next one starts.
 - **Losing mid-flight.** Coins fly on real time, so those still in the air when the run ends land
   during the game-over pan-in and the balance is complete when the screen shows. Any left when the
   player leaves the screen land at once.
-- **No card can be dealt.** When only Extra Ball and maxed cards are left, the shop hides, as the ad's
+- **No card can be dealt.** When only Extra Pen and maxed cards are left, the shop hides, as the ad's
   bonus button does.
 
 ## 7. Assets
@@ -117,7 +117,7 @@ with the rest of `UI/`.
 | `coin.png`, `coin-fill.png` | 512×512 | The flying coin, the counter icon, the price chip | Drawn (`Tools/art/make_coin.py`): gold face, embossed ring, a stamped balloon. Reads at 32 px |
 | Counter backing | Reused | Behind the counter | `Sprites/UI/background_counter.png`, as the other HUD counters |
 | Card frame | 9-slice, about 360×500 | The shop's card slots, and the level-up pick screen when it returns | To draw (phase 4) |
-| Card icons | 4 × 192×192 | Extra Ball, Faster Reload, Shield, More Items; shared with `PLAN-CardReveal.md` | To draw (phase 4) |
+| Card icons | 4 × 192×192 | Extra Pen, Faster Reload, Shield, More Items; shared with `PLAN-CardReveal.md` | To draw (phase 4) |
 | Price chip | 9-slice, about 200×72 | The price under each card: the coin and a number | To draw (phase 4) |
 | Buy button, short of coins | The Retry button | A greyed state | A tint of the existing button, no new art |
 

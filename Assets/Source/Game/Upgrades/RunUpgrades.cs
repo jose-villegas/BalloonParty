@@ -295,7 +295,7 @@ namespace BalloonParty.Game.Upgrades
             }
         }
 
-        // An ad never buys the ball cap (PLAN-FastPaced §8), so a bonus is never an Extra Ball. A maxed card
+        // An ad never buys the ball cap (PLAN-FastPaced §8), so a bonus is never an Extra Pen. A maxed card
         // is out of both deals, so a bonus never takes a card past its max either.
         private bool IsDealable(IUpgradeCardSettings card, bool forBonus)
         {

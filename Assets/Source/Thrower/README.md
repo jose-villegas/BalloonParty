@@ -37,7 +37,7 @@ Because firing now reads a moment in the past, the very last frame's prediction 
 
 ### Rapid fire — several balls at once
 
-Up to `IWeaponStats.MaxBallsInFlight` balls fly at the same time: `IProjectileFlightConfig.MaxBallsInFlight` (3 in the shipped asset) plus any Extra Ball cards (see `Game/Upgrades/README.md`). The thrower always holds a ball: `ThrowerController.EnsureLoaded` loads a fresh one right after a shot leaves, and only into an empty thrower, so a ball being aimed is never thrown away.
+Up to `IWeaponStats.MaxBallsInFlight` balls fly at the same time: `IProjectileFlightConfig.MaxBallsInFlight` (3 in the shipped asset) plus any Extra Pen cards (see `Game/Upgrades/README.md`). The thrower always holds a ball: `ThrowerController.EnsureLoaded` loads a fresh one right after a shot leaves, and only into an empty thrower, so a ball being aimed is never thrown away.
 
 A freshly loaded ball does not fire straight away. It slides from the thrower's pivot out to the muzzle, in scaled time (so a freeze or slow-mo stretches it too), and how fast depends on what's in the air:
 

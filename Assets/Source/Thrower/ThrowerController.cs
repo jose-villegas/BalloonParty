@@ -90,7 +90,7 @@ namespace BalloonParty.Thrower
         private bool _tracePublished;
         private bool _wasReady;
 
-        // The cap the pool was last warmed for; an Extra Ball card raises the cap mid-run.
+        // The cap the pool was last warmed for; an Extra Pen card raises the cap mid-run.
         private int _warmedCap;
         private PredictionTraceCalculator _traceCalculator;
         private PredictionTraceLights _traceLights;

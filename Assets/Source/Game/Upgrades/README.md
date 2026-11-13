@@ -92,13 +92,13 @@ view is attached (`Game/CardReveal/README.md`).
 
 | Rule | Why |
 |---|---|
-| Never an Extra Ball | An ad never buys the ball cap (`Plans/PLAN-FastPaced.md` §8) |
+| Never an Extra Pen | An ad never buys the ball cap (`Plans/PLAN-FastPaced.md` §8) |
 | Never a maxed card | So a bonus never takes a card past its max |
 | Applied on top of the held cards, not counted in `StacksOf` | It isn't a pick: it doesn't fill a card's stacks or change the next hand |
 | Dropped when the attempt ends: on `Transitioning` (the level is won) and on any reset | The advantage is per attempt, so repeated ads never stack power. An aborted level-up doesn't end the attempt, so it keeps the bonus |
 | Seeded by the level and the retries used | Each bought retry of a level can deal a different card |
 
-`CanDealBonus` (its `IBonusCardSource` side) is false once only Extra Ball and maxed cards are
+`CanDealBonus` (its `IBonusCardSource` side) is false once only Extra Pen and maxed cards are
 left, and the screen then hides the bonus button.
 
 ## Not built yet

@@ -65,9 +65,9 @@ namespace BalloonParty.Configuration
 
         [SerializeField] private UpgradeCardSettings[] _cards =
         {
-            new(UpgradeKind.BallCap, "Extra Ball", "+1 ball in flight", 1f, 3),
+            new(UpgradeKind.BallCap, "Extra Pen", "+1 pen in flight", 1f, 3),
             new(UpgradeKind.FasterReload, "Quick Hands", "Reload 15% faster", 0.15f, 4),
-            new(UpgradeKind.Shield, "Thick Skin", "+1 shield on every ball", 1f, 3),
+            new(UpgradeKind.Shield, "Thick Skin", "+1 shield on every pen", 1f, 3),
             new(UpgradeKind.ItemOdds, "Lucky Find", "More items on the board", 0.5f, 4)
         };
 

@@ -37,8 +37,8 @@ MonoBehaviour:
     _cardsOffered: 3
     _cards:
     - _kind: 0
-      _title: Extra Ball
-      _description: +1 ball in flight
+      _title: Extra Pen
+      _description: +1 pen in flight
       _amount: 1
       _maxStacks: 3
       _weight: 1
@@ -50,7 +50,7 @@ MonoBehaviour:
       _weight: 1
     - _kind: 2
       _title: Thick Skin
-      _description: +1 shield on every ball
+      _description: +1 shield on every pen
       _amount: 1
       _maxStacks: 3
       _weight: 1

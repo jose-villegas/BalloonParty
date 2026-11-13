@@ -19,7 +19,7 @@ namespace BalloonParty.Game.Upgrades
 
         /// <summary>
         ///     The bonus card a retry bought with a rewarded ad was dealt, for that attempt only; null when
-        ///     none. Never an Extra Ball, and not counted in <see cref="StacksOf" />.
+        ///     none. Never an Extra Pen, and not counted in <see cref="StacksOf" />.
         /// </summary>
         IUpgradeCardSettings BonusCard { get; }
 
