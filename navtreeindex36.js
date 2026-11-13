@@ -1,5 +1,13 @@
 var NAVTREEINDEX36 =
 {
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a748aefb07ef76d44fe42c66080aa07da":[5,0,0,5,26,60],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a748aefb07ef76d44fe42c66080aa07da":[6,0,0,5,26,60],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a753aaff7006d3684901477fb6855cc73":[5,0,0,5,26,70],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a753aaff7006d3684901477fb6855cc73":[6,0,0,5,26,70],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a7d84d26ef072eacef05382e098a025ae":[5,0,0,5,26,44],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a7d84d26ef072eacef05382e098a025ae":[6,0,0,5,26,44],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a81929679553dacd898eba271f54a84af":[5,0,0,5,26,42],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a81929679553dacd898eba271f54a84af":[6,0,0,5,26,42],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a852cbe059e0953c0ec78e5c73f09db6b":[5,0,0,5,26,85],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a852cbe059e0953c0ec78e5c73f09db6b":[6,0,0,5,26,85],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a866414d51eb6498f91415dd14fb2e211":[5,0,0,5,26,75],
@@ -241,13 +249,5 @@ var NAVTREEINDEX36 =
 "classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#a19e4dd0200206291ee54ab69c178e6bb":[5,0,0,5,28,4],
 "classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#a19e4dd0200206291ee54ab69c178e6bb":[6,0,0,5,28,4],
 "classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#a7b6808bf0d1649dbbdaccab991ad23f5":[5,0,0,5,28,10],
-"classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#a7b6808bf0d1649dbbdaccab991ad23f5":[6,0,0,5,28,10],
-"classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#a7c77a9eea9399a65975ae09ea4bdbc17":[5,0,0,5,28,12],
-"classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#a7c77a9eea9399a65975ae09ea4bdbc17":[6,0,0,5,28,12],
-"classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#a8f5131362fd1d60c6b5ddfac3bbf9052":[5,0,0,5,28,11],
-"classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#a8f5131362fd1d60c6b5ddfac3bbf9052":[6,0,0,5,28,11],
-"classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#a91f6dcb734a656eff0c9df4fc1ae1f78":[5,0,0,5,28,3],
-"classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#a91f6dcb734a656eff0c9df4fc1ae1f78":[6,0,0,5,28,3],
-"classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#abb15fde243da30387dfe9f2e0d9ce227":[5,0,0,5,28,5],
-"classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#abb15fde243da30387dfe9f2e0d9ce227":[6,0,0,5,28,5]
+"classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#a7b6808bf0d1649dbbdaccab991ad23f5":[6,0,0,5,28,10]
 };

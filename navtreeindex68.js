@@ -1,5 +1,13 @@
 var NAVTREEINDEX68 =
 {
+"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FPSCounter.html#ab473badfcbe91eb7ae94464864813a9d":[5,0,0,12,2,1,2],
+"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FPSCounter.html#ab473badfcbe91eb7ae94464864813a9d":[6,0,0,12,2,1,2],
+"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FPSCounter.html#ad92fee598ae63736cf23ca71ee668bee":[5,0,0,12,2,1,5],
+"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FPSCounter.html#ad92fee598ae63736cf23ca71ee668bee":[6,0,0,12,2,1,5],
+"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html":[5,0,0,12,2,2],
+"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html":[6,0,0,12,2,2],
+"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#a0da9f0d71e7354dd28a4b772ff5b72ed":[5,0,0,12,2,2,2],
+"classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#a0da9f0d71e7354dd28a4b772ff5b72ed":[6,0,0,12,2,2,2],
 "classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#a37df79c299b3e57c6b867d5d8e11556c":[5,0,0,12,2,2,3],
 "classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#a37df79c299b3e57c6b867d5d8e11556c":[6,0,0,12,2,2,3],
 "classBalloonParty_1_1Shared_1_1Diagnostics_1_1FrameRateSettings.html#a5d52f235947f76c63ad6bb4c29612be9":[5,0,0,12,2,2,4],
@@ -241,13 +249,5 @@ var NAVTREEINDEX68 =
 "classBalloonParty_1_1Shared_1_1EnumIndexedAttribute.html":[5,0,0,12,18],
 "classBalloonParty_1_1Shared_1_1EnumIndexedAttribute.html":[6,0,0,12,18],
 "classBalloonParty_1_1Shared_1_1EnumIndexedAttribute.html#a3538048070309836f5f3a38c8fea0313":[5,0,0,12,18,0],
-"classBalloonParty_1_1Shared_1_1EnumIndexedAttribute.html#a3538048070309836f5f3a38c8fea0313":[6,0,0,12,18,0],
-"classBalloonParty_1_1Shared_1_1EnumIndexedAttribute.html#a996c49796ea9f06534bbd84d8b33ead8":[5,0,0,12,18,1],
-"classBalloonParty_1_1Shared_1_1EnumIndexedAttribute.html#a996c49796ea9f06534bbd84d8b33ead8":[6,0,0,12,18,1],
-"classBalloonParty_1_1Shared_1_1Extensions_1_1AnimationCurveExtensions.html":[5,0,0,12,4,0],
-"classBalloonParty_1_1Shared_1_1Extensions_1_1AnimationCurveExtensions.html":[6,0,0,12,4,0],
-"classBalloonParty_1_1Shared_1_1Extensions_1_1AnimationCurveExtensions.html#a4fb0c20f499639659da2e5e47e4a1b5e":[5,0,0,12,4,0,0],
-"classBalloonParty_1_1Shared_1_1Extensions_1_1AnimationCurveExtensions.html#a4fb0c20f499639659da2e5e47e4a1b5e":[6,0,0,12,4,0,0],
-"classBalloonParty_1_1Shared_1_1Extensions_1_1AnimationCurveExtensions.html#aad6ac8bd82b682388d8c4c23772b3342":[5,0,0,12,4,0,3],
-"classBalloonParty_1_1Shared_1_1Extensions_1_1AnimationCurveExtensions.html#aad6ac8bd82b682388d8c4c23772b3342":[6,0,0,12,4,0,3]
+"classBalloonParty_1_1Shared_1_1EnumIndexedAttribute.html#a3538048070309836f5f3a38c8fea0313":[6,0,0,12,18,0]
 };

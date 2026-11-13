@@ -1,5 +1,13 @@
 var NAVTREEINDEX28 =
 {
+"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#aa634ff80371c4081929680f77d282a22":[5,0,0,3,27,0],
+"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#aa634ff80371c4081929680f77d282a22":[6,0,0,3,27,0],
+"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ab7b8fd69e97e814c066e281fb4c35028":[5,0,0,3,27,13],
+"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ab7b8fd69e97e814c066e281fb4c35028":[6,0,0,3,27,13],
+"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#abaeb09222d0547a6b4fe71a9bcc37f17":[5,0,0,3,27,1],
+"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#abaeb09222d0547a6b4fe71a9bcc37f17":[6,0,0,3,27,1],
+"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ad0a64e70d7d8d41c3fa63ba33bdbc11d":[5,0,0,3,27,5],
+"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ad0a64e70d7d8d41c3fa63ba33bdbc11d":[6,0,0,3,27,5],
 "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ae50419a0d7a8da0c50bbbd7f1f3d164d":[5,0,0,3,27,8],
 "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ae50419a0d7a8da0c50bbbd7f1f3d164d":[6,0,0,3,27,8],
 "classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html":[5,0,0,3,29],
@@ -241,13 +249,5 @@ var NAVTREEINDEX28 =
 "classBalloonParty_1_1Display_1_1NavigationCameraReveal.html#ad022c6375ba07bdb5836a5b0ae322c01":[5,0,0,4,4,0],
 "classBalloonParty_1_1Display_1_1NavigationCameraReveal.html#ad022c6375ba07bdb5836a5b0ae322c01":[6,0,0,4,4,0],
 "classBalloonParty_1_1Display_1_1NavigationCameraReveal.html#af2dffb6ddd4e08805f86db50b75750b1":[5,0,0,4,4,2],
-"classBalloonParty_1_1Display_1_1NavigationCameraReveal.html#af2dffb6ddd4e08805f86db50b75750b1":[6,0,0,4,4,2],
-"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html":[5,0,0,4,5],
-"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html":[6,0,0,4,5],
-"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a12861a200bf35d6f87876fc18893bc11":[5,0,0,4,5,1],
-"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a12861a200bf35d6f87876fc18893bc11":[6,0,0,4,5,1],
-"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a1ecd80e7c0ffd3068b1e24f95f032d7d":[5,0,0,4,5,4],
-"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a1ecd80e7c0ffd3068b1e24f95f032d7d":[6,0,0,4,5,4],
-"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a77918dda4cfdca86c50c1fea1b6f8bc6":[5,0,0,4,5,3],
-"classBalloonParty_1_1Display_1_1OrthogonalSizeCameraController.html#a77918dda4cfdca86c50c1fea1b6f8bc6":[6,0,0,4,5,3]
+"classBalloonParty_1_1Display_1_1NavigationCameraReveal.html#af2dffb6ddd4e08805f86db50b75750b1":[6,0,0,4,4,2]
 };

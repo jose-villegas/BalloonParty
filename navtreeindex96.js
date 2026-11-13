@@ -1,5 +1,15 @@
 var NAVTREEINDEX96 =
 {
+"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ITelemetrySink.html#a7b548fb70eb48967dcf03cc59e1b42d1":[5,0,0,6,9,11,0],
+"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ITelemetrySink.html#a7b548fb70eb48967dcf03cc59e1b42d1":[6,0,0,6,9,11,0],
+"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ITelemetrySink.html#ad384b6aa1f1f81578c1c2c1255db3a99":[5,0,0,6,9,11,1],
+"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ITelemetrySink.html#ad384b6aa1f1f81578c1c2c1255db3a99":[6,0,0,6,9,11,1],
+"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IShieldsPerBall.html":[5,0,0,6,10,0],
+"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IShieldsPerBall.html":[6,0,0,6,10,0],
+"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IShieldsPerBall.html#a8fbbc14a1a201d8fa403b1756c4a0d6a":[5,0,0,6,10,0,0],
+"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IShieldsPerBall.html#a8fbbc14a1a201d8fa403b1756c4a0d6a":[6,0,0,6,10,0,0],
+"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IUpgradeDraft.html":[5,0,0,6,10,1],
+"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IUpgradeDraft.html":[6,0,0,6,10,1],
 "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IUpgradeDraft.html#a58a7307bd1d8417f4c70612fc0128d2c":[5,0,0,6,10,1,1],
 "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IUpgradeDraft.html#a58a7307bd1d8417f4c70612fc0128d2c":[6,0,0,6,10,1,1],
 "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IUpgradeDraft.html#aa8213bf18a8938f3f9a2845dedd32c92":[5,0,0,6,10,1,0],
@@ -239,15 +249,5 @@ var NAVTREEINDEX96 =
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html#a31d116544707bcc3494eb313b60f0631":[5,0,0,10,2,3,3],
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html#a31d116544707bcc3494eb313b60f0631":[6,0,0,10,2,3,3],
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html#a3aafadee32db27707445ca3f18c8574d":[5,0,0,10,2,3,5],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html#a3aafadee32db27707445ca3f18c8574d":[6,0,0,10,2,3,5],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html#a562c3e4e70939165f011f621d8a098bf":[5,0,0,10,2,3,7],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html#a562c3e4e70939165f011f621d8a098bf":[6,0,0,10,2,3,7],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html#a917a5b23dc40cbb6cc0eebc5bca68fba":[5,0,0,10,2,3,13],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html#a917a5b23dc40cbb6cc0eebc5bca68fba":[6,0,0,10,2,3,13],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html#aad0f95ea535d73b3e6d0c5622df7a803":[5,0,0,10,2,3,9],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html#aad0f95ea535d73b3e6d0c5622df7a803":[6,0,0,10,2,3,9],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html#ab7b351702f6ba5f2020dd8061a824717":[5,0,0,10,2,3,4],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html#ab7b351702f6ba5f2020dd8061a824717":[6,0,0,10,2,3,4],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html#ad0a04c3e1a6c39194e4928ca12035be7":[5,0,0,10,2,3,8],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html#ad0a04c3e1a6c39194e4928ca12035be7":[6,0,0,10,2,3,8]
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html#a3aafadee32db27707445ca3f18c8574d":[6,0,0,10,2,3,5]
 };

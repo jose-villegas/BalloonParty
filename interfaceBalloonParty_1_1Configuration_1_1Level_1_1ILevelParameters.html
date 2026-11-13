@@ -127,6 +127,9 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILe
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:ae180df06125cd6dd5b8211a9bfcb2607" id="r_ae180df06125cd6dd5b8211a9bfcb2607"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae180df06125cd6dd5b8211a9bfcb2607">FillExtraItems</a> (List&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html">ItemSettings</a> &gt; output, Dictionary&lt; string, int &gt; activeCounts, float chance)</td></tr>
+<tr class="memdesc:ae180df06125cd6dd5b8211a9bfcb2607"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lucky Find: each of the level's items rolls <em>chance</em>  × its <a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a5a8f58e576ee23b958d4a02a3b8d8bf1">ItemSettings.ExtraItemShare</a> for extra copies, respecting caps.  <br /></td></tr>
+<tr class="separator:ae180df06125cd6dd5b8211a9bfcb2607"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad72a95268fedce8202423d5c86398962" id="r_ad72a95268fedce8202423d5c86398962"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad72a95268fedce8202423d5c86398962">FillGuaranteedBalloons</a> (List&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html">BalloonPrefabEntry</a> &gt; output, Dictionary&lt; string, int &gt; activeCounts)</td></tr>
 <tr class="memdesc:ad72a95268fedce8202423d5c86398962"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fills guaranteed balloon entries for the initial board fill, respecting caps.  <br /></td></tr>
 <tr class="separator:ad72a95268fedce8202423d5c86398962"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -174,6 +177,37 @@ Properties</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The read surface of a fully-resolved level; cross-level queries stay on the resolver instead. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ae180df06125cd6dd5b8211a9bfcb2607" name="ae180df06125cd6dd5b8211a9bfcb2607"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae180df06125cd6dd5b8211a9bfcb2607">&#9670;&#160;</a></span>FillExtraItems()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Configuration.Level.ILevelParameters.FillExtraItems </td>
+          <td>(</td>
+          <td class="paramtype">List&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html">ItemSettings</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>output</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Dictionary&lt; string, int &gt;</td>          <td class="paramname"><span class="paramname"><em>activeCounts</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>chance</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Lucky Find: each of the level's items rolls <em>chance</em>  × its <a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a5a8f58e576ee23b958d4a02a3b8d8bf1">ItemSettings.ExtraItemShare</a> for extra copies, respecting caps. </p>
+<p>Counts them into <em>activeCounts</em>  whether or not a host is found for each. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a1e85588004e70196f38908e5ef6b0d6a">BalloonParty.Configuration.Level.LevelParameters</a>.</p>
+
+</div>
+</div>
 <a id="ad72a95268fedce8202423d5c86398962" name="ad72a95268fedce8202423d5c86398962"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad72a95268fedce8202423d5c86398962">&#9670;&#160;</a></span>FillGuaranteedBalloons()</h2>
 

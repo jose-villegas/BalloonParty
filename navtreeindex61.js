@@ -1,5 +1,13 @@
 var NAVTREEINDEX61 =
 {
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a904e4cf328b18051f34f8c4fa6632c1d":[5,0,0,9,7,0],
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a904e4cf328b18051f34f8c4fa6632c1d":[6,0,0,9,7,0],
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#ac114c9fec13aadc1a326f71a782d32b2":[5,0,0,9,7,6],
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#ac114c9fec13aadc1a326f71a782d32b2":[6,0,0,9,7,6],
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#acf8c0860dc169f5b66d14bfd2f22e1d8":[5,0,0,9,7,3],
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#acf8c0860dc169f5b66d14bfd2f22e1d8":[6,0,0,9,7,3],
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#afaea73053fd99bf0102725dd8e00fa24":[5,0,0,9,7,5],
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#afaea73053fd99bf0102725dd8e00fa24":[6,0,0,9,7,5],
 "classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#afafce404e080f9cc990516fa34dc7b85":[5,0,0,9,7,4],
 "classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#afafce404e080f9cc990516fa34dc7b85":[6,0,0,9,7,4],
 "classBalloonParty_1_1Projectile_1_1Buffs_1_1PierceEndedEndCondition.html":[5,0,0,10,0,1],
@@ -241,13 +249,5 @@ var NAVTREEINDEX61 =
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html#a593ddc7287ac69c5a5665ca34605f1d2":[5,0,0,10,1,8,13],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html#a593ddc7287ac69c5a5665ca34605f1d2":[6,0,0,10,1,8,13],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html#a5ec3dcb9a7f8e8ca19e89f2e7366e160":[5,0,0,10,1,8,12],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html#a5ec3dcb9a7f8e8ca19e89f2e7366e160":[6,0,0,10,1,8,12],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html#a903b676bef28d698d4753a53e9c8e0a1":[5,0,0,10,1,8,9],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html#a903b676bef28d698d4753a53e9c8e0a1":[6,0,0,10,1,8,9],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html#a9ea6fbc768b8a622a4a685d3e4899231":[5,0,0,10,1,8,1],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html#a9ea6fbc768b8a622a4a685d3e4899231":[6,0,0,10,1,8,1],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html#aa6a8e3ce07ae1a3c48860a44d6e150ba":[5,0,0,10,1,8,6],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html#aa6a8e3ce07ae1a3c48860a44d6e150ba":[6,0,0,10,1,8,6],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html#ab13eb8fabbeb9ade5843841196c00061":[5,0,0,10,1,8,3],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html#ab13eb8fabbeb9ade5843841196c00061":[6,0,0,10,1,8,3]
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html#a5ec3dcb9a7f8e8ca19e89f2e7366e160":[6,0,0,10,1,8,12]
 };

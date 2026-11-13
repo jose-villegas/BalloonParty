@@ -1,5 +1,15 @@
 var NAVTREEINDEX101 =
 {
+"namespaceBalloonParty_1_1Slots_1_1Spawner.html#a59fd3232168b8edfa6b95ac465991a16a5d8b8ad417e7aa9bdee173cc254de9a2":[5,0,0,13,3,2,1],
+"namespaceBalloonParty_1_1Slots_1_1Spawner.html#a59fd3232168b8edfa6b95ac465991a16aed4a94a9da2f48c5a3d691daa7a5e330":[5,0,0,13,3,2,2],
+"namespaceBalloonParty_1_1Solver.html":[5,0,0,14],
+"namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355d":[5,0,0,14,26],
+"namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355da5111807ed3e431097d2b56c0c3041e0b":[5,0,0,14,26,0],
+"namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355da6428bf61b19c9f6c90d034777a20ca77":[5,0,0,14,26,1],
+"namespaceBalloonParty_1_1Thrower.html":[5,0,0,15],
+"namespaceBalloonParty_1_1UI.html":[5,0,0,16],
+"namespaceBalloonParty_1_1UI_1_1Binding.html":[5,0,0,16,0],
+"namespaceBalloonParty_1_1UI_1_1CardReveal.html":[5,0,0,16,1],
 "namespaceBalloonParty_1_1UI_1_1Danger.html":[5,0,0,16,2],
 "namespaceBalloonParty_1_1UI_1_1GameOver.html":[5,0,0,16,3],
 "namespaceBalloonParty_1_1UI_1_1HeadsUp.html":[5,0,0,16,4],
@@ -239,15 +249,5 @@ var NAVTREEINDEX101 =
 "plan_gameplay_telemetry.html#autotoc_md562":[3,11,0,2,6],
 "plan_gameplay_telemetry.html#autotoc_md563":[3,11,0,2,7],
 "plan_gameplay_telemetry.html#autotoc_md566":[3,11,0,3],
-"plan_gameplay_telemetry.html#autotoc_md567":[3,11,0,3,0],
-"plan_gameplay_telemetry.html#autotoc_md568":[3,11,0,3,1],
-"plan_gameplay_telemetry.html#autotoc_md569":[3,11,0,3,2],
-"plan_gameplay_telemetry.html#autotoc_md570":[3,11,0,3,3],
-"plan_gameplay_telemetry.html#autotoc_md572":[3,11,0,4],
-"plan_gameplay_telemetry.html#autotoc_md575":[3,11,0,5],
-"plan_gameplay_telemetry.html#autotoc_md576":[3,11,0,5,0],
-"plan_gameplay_telemetry.html#autotoc_md577":[3,11,0,5,0,0],
-"plan_gameplay_telemetry.html#autotoc_md578":[3,11,0,5,0,1],
-"plan_gameplay_telemetry.html#autotoc_md579":[3,11,0,5,1],
-"plan_gameplay_telemetry.html#autotoc_md581":[3,11,0,6]
+"plan_gameplay_telemetry.html#autotoc_md567":[3,11,0,3,0]
 };

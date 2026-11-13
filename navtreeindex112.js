@@ -1,5 +1,15 @@
 var NAVTREEINDEX112 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpAbortedMessage.html":[5,0,0,12,7,18],
+"structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpAbortedMessage.html":[6,0,0,12,7,18],
+"structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpDismissedMessage.html":[5,0,0,12,7,19],
+"structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpDismissedMessage.html":[6,0,0,12,7,19],
+"structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpDismissedMessage.html#a227a1160af7d94276b3b793ffd8b4226":[5,0,0,12,7,19,1],
+"structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpDismissedMessage.html#a227a1160af7d94276b3b793ffd8b4226":[6,0,0,12,7,19,1],
+"structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpDismissedMessage.html#aa3f56f65ec9f79e8f464f3e41070b12e":[5,0,0,12,7,19,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpDismissedMessage.html#aa3f56f65ec9f79e8f464f3e41070b12e":[6,0,0,12,7,19,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpFillTrailsMessage.html":[5,0,0,12,7,20],
+"structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpFillTrailsMessage.html":[6,0,0,12,7,20],
 "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpFillTrailsMessage.html#a15318f099fd09bf5c122fffe1b8f7e19":[5,0,0,12,7,20,2],
 "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpFillTrailsMessage.html#a15318f099fd09bf5c122fffe1b8f7e19":[6,0,0,12,7,20,2],
 "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpFillTrailsMessage.html#a2597fe2fd11df227ac2fd4eb544a9239":[5,0,0,12,7,20,1],
@@ -239,15 +249,5 @@ var NAVTREEINDEX112 =
 "structBalloonParty_1_1Shared_1_1Messages_1_1TransformCapturedMessage.html#a215ae166fefdd2e54cda153bf72da07a":[5,0,0,12,7,48,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1TransformCapturedMessage.html#a215ae166fefdd2e54cda153bf72da07a":[6,0,0,12,7,48,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1TransformCapturedMessage.html#a80043ff2f7232d9f597fc8afc226120a":[5,0,0,12,7,48,2],
-"structBalloonParty_1_1Shared_1_1Messages_1_1TransformCapturedMessage.html#a80043ff2f7232d9f597fc8afc226120a":[6,0,0,12,7,48,2],
-"structBalloonParty_1_1Shared_1_1Messages_1_1TransformCapturedMessage.html#ae112af13722c4e7e5479afed238070d7":[5,0,0,12,7,48,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1TransformCapturedMessage.html#ae112af13722c4e7e5479afed238070d7":[6,0,0,12,7,48,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage.html":[5,0,0,12,7,49],
-"structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage.html":[6,0,0,12,7,49],
-"structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage.html#a9bc98c9ab6bf06acb1a71c2094a48b85":[5,0,0,12,7,49,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage.html#a9bc98c9ab6bf06acb1a71c2094a48b85":[6,0,0,12,7,49,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage.html#ad736f6567b0b977704e0f6a0886fcbef":[5,0,0,12,7,49,1],
-"structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage.html#ad736f6567b0b977704e0f6a0886fcbef":[6,0,0,12,7,49,1],
-"structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage.html#ad75adc5bbfa66a3674548f6540723024":[5,0,0,12,7,49,2],
-"structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage.html#ad75adc5bbfa66a3674548f6540723024":[6,0,0,12,7,49,2]
+"structBalloonParty_1_1Shared_1_1Messages_1_1TransformCapturedMessage.html#a80043ff2f7232d9f597fc8afc226120a":[6,0,0,12,7,48,2]
 };

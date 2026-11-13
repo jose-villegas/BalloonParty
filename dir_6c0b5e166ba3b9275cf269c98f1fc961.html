@@ -156,7 +156,7 @@ The cards</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>Shield</code>   </td><td class="markdownTableBodyNone">+<code>Amount</code> starting shields on every ball (rounded)   </td><td class="markdownTableBodyNone"><code>ThrowerController.LoadProjectile</code>, the shield-chain planner in <code>ItemAssigner</code>, and the shot solver (<code>ShotBoardGather.Gather</code>'s <code>startingShields</code>, passed by the Fire Best Shot cheat and the Shot Solver window)    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>ItemOdds</code>   </td><td class="markdownTableBodyNone">+<code>Amount</code> extra items per item roll, the initial board fill included. The whole part always lands; the fraction is a chance   </td><td class="markdownTableBodyNone"><code>ItemAssigner.ExtraItems</code>   </td></tr>
+<td class="markdownTableBodyNone"><code>ItemOdds</code>   </td><td class="markdownTableBodyNone">On every item roll (the initial board fill included), each item the level holds gets a chance of <code>Amount</code> × its <code>ExtraItemShare</code> (<code>ItemConfiguration</code>) at an extra copy: 1 for the Shield, down to 0.25 for the Snipe, so strong items grow slower. The whole part always lands; the fraction is a chance; the level's caps still hold   </td><td class="markdownTableBodyNone"><code>ILevelParameters.FillExtraItems</code>, placed by <code>ItemAssigner</code>   </td></tr>
 </table>
 <p>All four are read live, so a held card applies from the next ball loaded and the next item roll.</p>
 <h1><a class="anchor" id="autotoc_md258"></a>

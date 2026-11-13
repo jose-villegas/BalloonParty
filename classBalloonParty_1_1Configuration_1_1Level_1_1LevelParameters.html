@@ -110,6 +110,7 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1Level_1_1LevelPa
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pac-methods">Package Functions</a> &#124;
+<a href="#pac-static-methods">Static Package Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters-members.html">List of all members</a>  </div>
@@ -138,6 +139,9 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1Level_1_1LevelPa
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a5e8b79d0962e3ea8001a88acfc9588ec" id="r_a5e8b79d0962e3ea8001a88acfc9588ec"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e8b79d0962e3ea8001a88acfc9588ec">LevelParameters</a> ()</td></tr>
 <tr class="separator:a5e8b79d0962e3ea8001a88acfc9588ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e85588004e70196f38908e5ef6b0d6a" id="r_a1e85588004e70196f38908e5ef6b0d6a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e85588004e70196f38908e5ef6b0d6a">FillExtraItems</a> (List&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html">ItemSettings</a> &gt; output, Dictionary&lt; string, int &gt; activeCounts, float chance)</td></tr>
+<tr class="memdesc:a1e85588004e70196f38908e5ef6b0d6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lucky Find: each of the level's items rolls <em>chance</em>  × its <a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a5a8f58e576ee23b958d4a02a3b8d8bf1">ItemSettings.ExtraItemShare</a> for extra copies, respecting caps.  <br /></td></tr>
+<tr class="separator:a1e85588004e70196f38908e5ef6b0d6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a986faa6e911d6afd8bf6aeabeeb7218d" id="r_a986faa6e911d6afd8bf6aeabeeb7218d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a986faa6e911d6afd8bf6aeabeeb7218d">FillGuaranteedBalloons</a> (List&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html">BalloonPrefabEntry</a> &gt; output, Dictionary&lt; string, int &gt; activeCounts)</td></tr>
 <tr class="memdesc:a986faa6e911d6afd8bf6aeabeeb7218d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fills <em>output</em>  with guaranteed balloon entries for the initial board, respecting MaxCount caps.  <br /></td></tr>
 <tr class="separator:a986faa6e911d6afd8bf6aeabeeb7218d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -170,6 +174,11 @@ Package Functions</h2></td></tr>
 <tr class="separator:aa9552c672202558a82cb10ba641d5d4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d1ee4491163e2a385c93a96d477eaab" id="r_a9d1ee4491163e2a385c93a96d477eaab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9d1ee4491163e2a385c93a96d477eaab">BindResolved</a> (IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html">ResolvedBalloonEntry</a> &gt; balloonPickList, IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedItemEntry.html">ResolvedItemEntry</a> &gt; itemPickList, IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html">ItemSettings</a> &gt; items, IReadOnlyList&lt; string &gt; allowedColorNames)</td></tr>
 <tr class="separator:a9d1ee4491163e2a385c93a96d477eaab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
+Static Package Functions</h2></td></tr>
+<tr class="memitem:a2244b80a50186ee28033bcef63ee4df6" id="r_a2244b80a50186ee28033bcef63ee4df6"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2244b80a50186ee28033bcef63ee4df6">RollExtraCount</a> (float chance, float roll01)</td></tr>
+<tr class="separator:a2244b80a50186ee28033bcef63ee4df6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -342,6 +351,37 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a1e85588004e70196f38908e5ef6b0d6a" name="a1e85588004e70196f38908e5ef6b0d6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e85588004e70196f38908e5ef6b0d6a">&#9670;&#160;</a></span>FillExtraItems()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Configuration.Level.LevelParameters.FillExtraItems </td>
+          <td>(</td>
+          <td class="paramtype">List&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html">ItemSettings</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>output</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Dictionary&lt; string, int &gt;</td>          <td class="paramname"><span class="paramname"><em>activeCounts</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>chance</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Lucky Find: each of the level's items rolls <em>chance</em>  × its <a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a5a8f58e576ee23b958d4a02a3b8d8bf1">ItemSettings.ExtraItemShare</a> for extra copies, respecting caps. </p>
+<p>Counts them into <em>activeCounts</em>  whether or not a host is found for each. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#ae180df06125cd6dd5b8211a9bfcb2607">BalloonParty.Configuration.Level.ILevelParameters</a>.</p>
+
+</div>
+</div>
 <a id="a986faa6e911d6afd8bf6aeabeeb7218d" name="a986faa6e911d6afd8bf6aeabeeb7218d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a986faa6e911d6afd8bf6aeabeeb7218d">&#9670;&#160;</a></span>FillGuaranteedBalloons()</h2>
 
@@ -462,6 +502,35 @@ Private Attributes</h2></td></tr>
 <p>Weighted pick restricted to the level's simple-family entries (plain/silver/gold) — used for extra pop-spawns. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a3c6daa3990df43137d4afe2c01764145">BalloonParty.Configuration.Level.ILevelParameters</a>.</p>
+
+</div>
+</div>
+<a id="a2244b80a50186ee28033bcef63ee4df6" name="a2244b80a50186ee28033bcef63ee4df6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2244b80a50186ee28033bcef63ee4df6">&#9670;&#160;</a></span>RollExtraCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int BalloonParty.Configuration.Level.LevelParameters.RollExtraCount </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>chance</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>roll01</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

@@ -250,6 +250,6 @@ var searchData=
   ['extraction_20actually_20costs_247',['What extraction actually costs',['../plan_gameplay_telemetry.html#autotoc_md569',1,'']]],
   ['extractleaves_248',['ExtractLeaves',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerWindow.html#adf48857e47b24e7a62bdc7f3429492f8',1,'BalloonParty::Editor::Bush::BushBakerWindow']]],
   ['extraitemchance_249',['ExtraItemChance',['../interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#af8cf36b0a33fc84ce2888dcb9d32d853',1,'BalloonParty.Game.Upgrades.IWeaponStats.ExtraItemChance'],['../classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a742d0e5fcbf4b70c2cbc132fe5b85574',1,'BalloonParty.Game.Upgrades.RunUpgrades.ExtraItemChance']]],
-  ['extraitems_250',['ExtraItems',['../classBalloonParty_1_1Item_1_1ItemAssigner.html#a97376cf1cc705938d941a440e0edc695',1,'BalloonParty::Item::ItemAssigner']]],
+  ['extraitemshare_250',['ExtraItemShare',['../classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a5a8f58e576ee23b958d4a02a3b8d8bf1',1,'BalloonParty::Configuration::Items::ItemSettings']]],
   ['extrapolatetail_251',['ExtrapolateTail',['../structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a4c9a508f565ded10f7b505b86ed28e54',1,'BalloonParty::Configuration::Level::LevelScoringCurve']]]
 ];

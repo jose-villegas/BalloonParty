@@ -176,7 +176,7 @@ Properties</h2></td></tr>
 <tr class="memitem:a18261076fc2b80ef2f935c17d8a56b54" id="r_a18261076fc2b80ef2f935c17d8a56b54"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18261076fc2b80ef2f935c17d8a56b54">CanDealBonus</a><code> [get]</code></td></tr>
 <tr class="separator:a18261076fc2b80ef2f935c17d8a56b54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a742d0e5fcbf4b70c2cbc132fe5b85574" id="r_a742d0e5fcbf4b70c2cbc132fe5b85574"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a742d0e5fcbf4b70c2cbc132fe5b85574">ExtraItemChance</a><code> [get]</code></td></tr>
-<tr class="memdesc:a742d0e5fcbf4b70c2cbc132fe5b85574"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extra items per item roll; the whole part always lands, the fraction is a chance.  <br /></td></tr>
+<tr class="memdesc:a742d0e5fcbf4b70c2cbc132fe5b85574"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lucky Find's chance per item roll, scaled per item by its <code>ExtraItemShare</code>; the whole part always lands, the fraction is a chance.  <br /></td></tr>
 <tr class="separator:a742d0e5fcbf4b70c2cbc132fe5b85574"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a641fe01d49ef9e22a7a8aba0179626c7" id="r_a641fe01d49ef9e22a7a8aba0179626c7"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a641fe01d49ef9e22a7a8aba0179626c7">IdleReloadSeconds</a><code> [get]</code></td></tr>
 <tr class="memdesc:a641fe01d49ef9e22a7a8aba0179626c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds the next ball takes to load while no ball is flying: <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html#a030a7eeaa586c59ff14565c3d535a7bb" title="Seconds the held ball takes to reach the muzzle while no ball is flying: the near-instant reload.">IProjectileFlightConfig.ProjectileLoadDuration</a>, which cards don't change.  <br /></td></tr>
@@ -1289,7 +1289,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Extra items per item roll; the whole part always lands, the fraction is a chance. </p>
+<p>Lucky Find's chance per item roll, scaled per item by its <code>ExtraItemShare</code>; the whole part always lands, the fraction is a chance. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#af8cf36b0a33fc84ce2888dcb9d32d853">BalloonParty.Game.Upgrades.IWeaponStats</a>.</p>
 

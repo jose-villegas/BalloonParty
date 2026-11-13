@@ -94,6 +94,5 @@ var searchData=
   ['extract_91',['Extract',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafExtractor.html#aa4e3a4e07e5a80bd2fc00ebf183ae853',1,'BalloonParty.Editor.Bush.BushLeafExtractor.Extract(int seed, BushBranchBakeSettings branchSettings, int leafVariantCount)'],['../classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafExtractor.html#a6f11eb3b388af1e0c420a3c3504f1da2',1,'BalloonParty.Editor.Bush.BushLeafExtractor.Extract(Texture2D branchMap, int seed, BushBranchBakeSettings branchSettings, int leafVariantCount)']]],
   ['extractblock_92',['ExtractBlock',['../classBalloonParty_1_1Editor_1_1GradientTextureDrawer.html#a337b44e02534af5f981d79e6a16613ef',1,'BalloonParty::Editor::GradientTextureDrawer']]],
   ['extractleaves_93',['ExtractLeaves',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerWindow.html#adf48857e47b24e7a62bdc7f3429492f8',1,'BalloonParty::Editor::Bush::BushBakerWindow']]],
-  ['extraitems_94',['ExtraItems',['../classBalloonParty_1_1Item_1_1ItemAssigner.html#a97376cf1cc705938d941a440e0edc695',1,'BalloonParty::Item::ItemAssigner']]],
-  ['extrapolatetail_95',['ExtrapolateTail',['../structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a4c9a508f565ded10f7b505b86ed28e54',1,'BalloonParty::Configuration::Level::LevelScoringCurve']]]
+  ['extrapolatetail_94',['ExtrapolateTail',['../structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a4c9a508f565ded10f7b505b86ed28e54',1,'BalloonParty::Configuration::Level::LevelScoringCurve']]]
 ];
