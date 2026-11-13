@@ -1,12 +1,13 @@
 var classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters =
 [
     [ "RangedLevelParameters", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a1fba35edd281ed5b3f03eacf70a1c977", null ],
-    [ "RangedLevelParameters", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ae9372f9610bc8e571796dedb5fefa6eb", null ],
+    [ "RangedLevelParameters", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ad940ff024619cb8d29824e90b05ab113", null ],
     [ "Resolve", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ad0a8f4680319a2fb2e41bc07edae1384", null ],
     [ "ResolveGridActorGates", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a0d795735a151c98576ceee02f1dfc476", null ],
     [ "_allowedColorsMask", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a4801dae5c84d5af8080444ce38355c10", null ],
     [ "_balloonWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a0661c4feda0ba8d1f51e5ce915e00501", null ],
     [ "_boardLines", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a39bbfaa4d0d600e33df38eb92a949daa", null ],
+    [ "_extraItemChance", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#acd69744ba1058cbab170792e90a8cc55", null ],
     [ "_gridActorGates", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a1cedc1b23b3e1478dadf86459eaf83be", null ],
     [ "_initialItemCountWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#af7cff732bdd8b626c26f3b7c71211ad4", null ],
     [ "_isExtraColorLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ae99552ceaf009581d1154c6add61e67f", null ],
@@ -18,6 +19,7 @@ var classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters =
     [ "BalloonWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ae6b2f97066105dfba6ca65ce8838ab5f", null ],
     [ "BoardLines", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#abfcfd6a493daead126858ce7431c3ed2", null ],
     [ "ColorMask", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a558c23c668583fd558e545c25b6b7e67", null ],
+    [ "ExtraItemChance", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ac868a8dc3b11625885ea584379dac1b8", null ],
     [ "GridActorGates", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ad37aad743d6d4f7f601b9013bfc9dea7", null ],
     [ "InitialItemCountWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a246bc83e13d83c58552d897b09aa7a9d", null ],
     [ "IsExtraColorLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ad952277316e8e36bc285a76d4413017a", null ],

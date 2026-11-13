@@ -119,7 +119,7 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1Level_1_1ExtraCo
 </div><!--header-->
 <div class="contents">
 
-<p>A rare level that plays one more colour than its step gives (the fourth, purple), with no threats and lines arriving much faster: the pressure is a colour more to juggle and a busier board, not armour to break.  
+<p>A rare level that plays one more colour than its step gives (the fourth, purple), with no threats and lines arriving faster: the pressure is a colour more to juggle and a busier board, not armour to break.  
  <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -129,14 +129,16 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a1349414c9f0c982b9b8d7ce5a581e3c5" id="r_a1349414c9f0c982b9b8d7ce5a581e3c5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1349414c9f0c982b9b8d7ce5a581e3c5">ExtraColorLevelSettings</a> (int fromLevel, float chance, float spawnIntervalScale)</td></tr>
-<tr class="separator:a1349414c9f0c982b9b8d7ce5a581e3c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac637e4ee49c37eee7ed14adcc881572a" id="r_ac637e4ee49c37eee7ed14adcc881572a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac637e4ee49c37eee7ed14adcc881572a">ExtraColorLevelSettings</a> (int fromLevel, float chance, float spawnIntervalScale, float extraItemChance=0f)</td></tr>
+<tr class="separator:ac637e4ee49c37eee7ed14adcc881572a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff38abf929ba46a7049e907cb02f3683" id="r_aff38abf929ba46a7049e907cb02f3683"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff38abf929ba46a7049e907cb02f3683">IsExtraColorLevel</a> (int level, int runSeed)</td></tr>
 <tr class="memdesc:aff38abf929ba46a7049e907cb02f3683"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether <em>level</em>  plays an extra colour in the run seeded <em>runSeed</em> : it rolled under the chance, and the level before it isn't one.  <br /></td></tr>
 <tr class="separator:aff38abf929ba46a7049e907cb02f3683"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a0d94f1492f573cb185d84396e5cb4497" id="r_a0d94f1492f573cb185d84396e5cb4497"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0d94f1492f573cb185d84396e5cb4497">ExtraItemChance</a><code> [get]</code></td></tr>
+<tr class="separator:a0d94f1492f573cb185d84396e5cb4497"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada7811191bf1c5bd6890fbb876063060" id="r_ada7811191bf1c5bd6890fbb876063060"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ExtraColorLevelSettings.html">ExtraColorLevelSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada7811191bf1c5bd6890fbb876063060">Off</a><code> [get]</code></td></tr>
 <tr class="separator:ada7811191bf1c5bd6890fbb876063060"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d59d99f7acc4565fe5c74f91ada14e2" id="r_a5d59d99f7acc4565fe5c74f91ada14e2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d59d99f7acc4565fe5c74f91ada14e2">SpawnIntervalScale</a><code> [get]</code></td></tr>
@@ -151,9 +153,11 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:aab5af7e56445bddf07783454718e3a29" id="r_aab5af7e56445bddf07783454718e3a29"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab5af7e56445bddf07783454718e3a29">_chance</a> = 0.2f</td></tr>
 <tr class="separator:aab5af7e56445bddf07783454718e3a29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29bcffe610dc89446ac63b35e67f9184" id="r_a29bcffe610dc89446ac63b35e67f9184"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29bcffe610dc89446ac63b35e67f9184">_extraItemChance</a> = 0.2f</td></tr>
+<tr class="separator:a29bcffe610dc89446ac63b35e67f9184"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab613440a9a826a27b32265aaae5279ef" id="r_ab613440a9a826a27b32265aaae5279ef"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab613440a9a826a27b32265aaae5279ef">_fromLevel</a> = 13</td></tr>
 <tr class="separator:ab613440a9a826a27b32265aaae5279ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5947a88d3c227648e5aace0e6a9767f5" id="r_a5947a88d3c227648e5aace0e6a9767f5"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5947a88d3c227648e5aace0e6a9767f5">_spawnIntervalScale</a> = 0.5f</td></tr>
+<tr class="memitem:a5947a88d3c227648e5aace0e6a9767f5" id="r_a5947a88d3c227648e5aace0e6a9767f5"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5947a88d3c227648e5aace0e6a9767f5">_spawnIntervalScale</a> = 0.65f</td></tr>
 <tr class="separator:a5947a88d3c227648e5aace0e6a9767f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
@@ -162,8 +166,8 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:aa73806ffe8f31a53e6e4faff5ceb85bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A rare level that plays one more colour than its step gives (the fourth, purple), with no threats and lines arriving much faster: the pressure is a colour more to juggle and a busier board, not armour to break. </p>
-<p>Rolled per level from the run's seed, so runs differ and a retry replays it. Never two in a row, so the level after one is back to the usual colours. </p>
+<div class="textblock"><p>A rare level that plays one more colour than its step gives (the fourth, purple), with no threats and lines arriving faster: the pressure is a colour more to juggle and a busier board, not armour to break. </p>
+<p>More items come with it, to help sort the extra colour out. Rolled per level from the run's seed, so runs differ and a retry replays it. Never two in a row, so the level after one is back to the usual colours. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a1cf5aaf5a8b415d4bbbe5e7f39f46760" name="a1cf5aaf5a8b415d4bbbe5e7f39f46760"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1cf5aaf5a8b415d4bbbe5e7f39f46760">&#9670;&#160;</a></span>ExtraColorLevelSettings() <span class="overload">[1/2]</span></h2>
@@ -182,8 +186,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a1349414c9f0c982b9b8d7ce5a581e3c5" name="a1349414c9f0c982b9b8d7ce5a581e3c5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1349414c9f0c982b9b8d7ce5a581e3c5">&#9670;&#160;</a></span>ExtraColorLevelSettings() <span class="overload">[2/2]</span></h2>
+<a id="ac637e4ee49c37eee7ed14adcc881572a" name="ac637e4ee49c37eee7ed14adcc881572a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac637e4ee49c37eee7ed14adcc881572a">&#9670;&#160;</a></span>ExtraColorLevelSettings() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -204,7 +208,12 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>spawnIntervalScale</em></span>&#160;)</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>spawnIntervalScale</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>extraItemChance</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0f</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -300,6 +309,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a29bcffe610dc89446ac63b35e67f9184" name="a29bcffe610dc89446ac63b35e67f9184"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29bcffe610dc89446ac63b35e67f9184">&#9670;&#160;</a></span>_extraItemChance</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.ExtraColorLevelSettings._extraItemChance = 0.2f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ab613440a9a826a27b32265aaae5279ef" name="ab613440a9a826a27b32265aaae5279ef"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab613440a9a826a27b32265aaae5279ef">&#9670;&#160;</a></span>_fromLevel</h2>
 
@@ -332,7 +363,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Configuration.Level.ExtraColorLevelSettings._spawnIntervalScale = 0.5f</td>
+          <td class="memname">float BalloonParty.Configuration.Level.ExtraColorLevelSettings._spawnIntervalScale = 0.65f</td>
         </tr>
       </table>
   </td>
@@ -367,6 +398,28 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="a0d94f1492f573cb185d84396e5cb4497" name="a0d94f1492f573cb185d84396e5cb4497"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d94f1492f573cb185d84396e5cb4497">&#9670;&#160;</a></span>ExtraItemChance</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.ExtraColorLevelSettings.ExtraItemChance</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ada7811191bf1c5bd6890fbb876063060" name="ada7811191bf1c5bd6890fbb876063060"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ada7811191bf1c5bd6890fbb876063060">&#9670;&#160;</a></span>Off</h2>
 

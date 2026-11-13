@@ -170,8 +170,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a3a4618f8cb77b16657dc2a89c92b3607" id="r_a3a4618f8cb77b16657dc2a89c92b3607"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3a4618f8cb77b16657dc2a89c92b3607">LevelParameters</a> (int boardLines, int itemCadence, AnimationCurve initialItemCountWeights, AnimationCurve itemCountWeights, <a class="el" href="structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html">BalloonTypeWeight</a>[] balloonWeights, <a class="el" href="structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html">ItemTypeWeight</a>[] itemWeights, <a class="el" href="structBalloonParty_1_1Configuration_1_1GridActors_1_1ResolvedGridActorGate.html">ResolvedGridActorGate</a>[] gridActorGates, int allowedColorsMask, float spawnIntervalScale=1f, bool isExtraColorLevel=false)</td></tr>
-<tr class="separator:a3a4618f8cb77b16657dc2a89c92b3607"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17c71fedbb8d66a93c150935a10db679" id="r_a17c71fedbb8d66a93c150935a10db679"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a17c71fedbb8d66a93c150935a10db679">LevelParameters</a> (int boardLines, int itemCadence, AnimationCurve initialItemCountWeights, AnimationCurve itemCountWeights, <a class="el" href="structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html">BalloonTypeWeight</a>[] balloonWeights, <a class="el" href="structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html">ItemTypeWeight</a>[] itemWeights, <a class="el" href="structBalloonParty_1_1Configuration_1_1GridActors_1_1ResolvedGridActorGate.html">ResolvedGridActorGate</a>[] gridActorGates, int allowedColorsMask, float spawnIntervalScale=1f, bool isExtraColorLevel=false, float extraItemChance=0f)</td></tr>
+<tr class="separator:a17c71fedbb8d66a93c150935a10db679"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d1ee4491163e2a385c93a96d477eaab" id="r_a9d1ee4491163e2a385c93a96d477eaab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9d1ee4491163e2a385c93a96d477eaab">BindResolved</a> (IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html">ResolvedBalloonEntry</a> &gt; balloonPickList, IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedItemEntry.html">ResolvedItemEntry</a> &gt; itemPickList, IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html">ItemSettings</a> &gt; items, IReadOnlyList&lt; string &gt; allowedColorNames)</td></tr>
 <tr class="separator:a9d1ee4491163e2a385c93a96d477eaab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -191,6 +191,9 @@ Properties</h2></td></tr>
 <tr class="separator:a72c28855613282e30d9d53baf4f1f498"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31f04c2c8c976166a57a155774a3e054" id="r_a31f04c2c8c976166a57a155774a3e054"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31f04c2c8c976166a57a155774a3e054">BoardLines</a><code> [get]</code></td></tr>
 <tr class="separator:a31f04c2c8c976166a57a155774a3e054"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1e8d8a3bdb41ac702738847f075cb28" id="r_af1e8d8a3bdb41ac702738847f075cb28"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af1e8d8a3bdb41ac702738847f075cb28">ExtraItemChance</a><code> [get]</code></td></tr>
+<tr class="memdesc:af1e8d8a3bdb41ac702738847f075cb28"><td class="mdescLeft">&#160;</td><td class="mdescRight">The level's own Lucky Find chance, added to the player's (<a class="el" href="#a1e85588004e70196f38908e5ef6b0d6a" title="Lucky Find: each of the level&#39;s items rolls chance  × its ItemSettings.ExtraItemShare for extra copie...">FillExtraItems</a>): above 0 on an extra-colour level, 0 otherwise.  <br /></td></tr>
+<tr class="separator:af1e8d8a3bdb41ac702738847f075cb28"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e6388a5e4a651adde617b6fc8797a9a" id="r_a4e6388a5e4a651adde617b6fc8797a9a"><td class="memItemLeft" align="right" valign="top">AnimationCurve&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e6388a5e4a651adde617b6fc8797a9a">InitialItemCountWeights</a><code> [get]</code></td></tr>
 <tr class="separator:a4e6388a5e4a651adde617b6fc8797a9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a33e655c0c76c29154336ffafa1fc2a8e" id="r_a33e655c0c76c29154336ffafa1fc2a8e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a33e655c0c76c29154336ffafa1fc2a8e">IsExtraColorLevel</a><code> [get]</code></td></tr>
@@ -221,6 +224,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a3ed30f80cdbe93ab9092eb8062068aa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c20579427e7cbb656783d28894b38b2" id="r_a5c20579427e7cbb656783d28894b38b2"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5c20579427e7cbb656783d28894b38b2">_boardLines</a> = 5</td></tr>
 <tr class="separator:a5c20579427e7cbb656783d28894b38b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a342e83753bce7e6522d644ec07a73786" id="r_a342e83753bce7e6522d644ec07a73786"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a342e83753bce7e6522d644ec07a73786">_extraItemChance</a></td></tr>
+<tr class="separator:a342e83753bce7e6522d644ec07a73786"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade461ba8b946d76c2b7c894f23f598ca" id="r_ade461ba8b946d76c2b7c894f23f598ca"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="structBalloonParty_1_1Configuration_1_1GridActors_1_1ResolvedGridActorGate.html">ResolvedGridActorGate</a>[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade461ba8b946d76c2b7c894f23f598ca">_gridActorGates</a></td></tr>
 <tr class="separator:ade461ba8b946d76c2b7c894f23f598ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a201448b90c9dc69d05238b0a26cab278" id="r_a201448b90c9dc69d05238b0a26cab278"><td class="memItemLeft" align="right" valign="top">readonly AnimationCurve&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a201448b90c9dc69d05238b0a26cab278">_initialItemCountWeights</a> = new()</td></tr>
@@ -262,8 +267,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a3a4618f8cb77b16657dc2a89c92b3607" name="a3a4618f8cb77b16657dc2a89c92b3607"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3a4618f8cb77b16657dc2a89c92b3607">&#9670;&#160;</a></span>LevelParameters() <span class="overload">[2/2]</span></h2>
+<a id="a17c71fedbb8d66a93c150935a10db679" name="a17c71fedbb8d66a93c150935a10db679"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17c71fedbb8d66a93c150935a10db679">&#9670;&#160;</a></span>LevelParameters() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -319,7 +324,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isExtraColorLevel</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isExtraColorLevel</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>extraItemChance</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0f</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -717,6 +727,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a342e83753bce7e6522d644ec07a73786" name="a342e83753bce7e6522d644ec07a73786"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a342e83753bce7e6522d644ec07a73786">&#9670;&#160;</a></span>_extraItemChance</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly float BalloonParty.Configuration.Level.LevelParameters._extraItemChance</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ade461ba8b946d76c2b7c894f23f598ca" name="ade461ba8b946d76c2b7c894f23f598ca"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ade461ba8b946d76c2b7c894f23f598ca">&#9670;&#160;</a></span>_gridActorGates</h2>
 
@@ -1037,6 +1069,32 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a17461a491eb0534886f81b4a1889c85f">BalloonParty.Configuration.Level.ILevelParameters</a>.</p>
+
+</div>
+</div>
+<a id="af1e8d8a3bdb41ac702738847f075cb28" name="af1e8d8a3bdb41ac702738847f075cb28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1e8d8a3bdb41ac702738847f075cb28">&#9670;&#160;</a></span>ExtraItemChance</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.LevelParameters.ExtraItemChance</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The level's own Lucky Find chance, added to the player's (<a class="el" href="#a1e85588004e70196f38908e5ef6b0d6a" title="Lucky Find: each of the level&#39;s items rolls chance  × its ItemSettings.ExtraItemShare for extra copie...">FillExtraItems</a>): above 0 on an extra-colour level, 0 otherwise. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a2c6617b6814a3386d96b308f0ef7c29f">BalloonParty.Configuration.Level.ILevelParameters</a>.</p>
 
 </div>
 </div>
