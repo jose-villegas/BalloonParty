@@ -46,7 +46,7 @@ namespace BalloonParty.UI.LevelUp
 
             _slot = slot;
             _onPicked = onPicked;
-            _titleLabel.text = card.Title;
+            _titleLabel.text = UpgradeCardText.Title(card);
             _descriptionLabel.text = card.Description;
             if (_stacksLabel != null)
             {

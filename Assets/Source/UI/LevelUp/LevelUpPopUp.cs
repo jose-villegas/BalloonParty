@@ -4,6 +4,7 @@ using BalloonParty.Game.CardReveal;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Score;
 using BalloonParty.Game.Upgrades;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
@@ -584,7 +585,7 @@ namespace BalloonParty.UI.LevelUp
             var tookCard = _draft.Offer.Count > 0 && _draft.Pick(0);
             if (tookCard && !_cardReveals.HasStage)
             {
-                tooltip = _inPlayCardTooltipFormat.FormatOrRaw(newLevel, _draft.Offer[0].Title);
+                tooltip = _inPlayCardTooltipFormat.FormatOrRaw(newLevel, UpgradeCardText.Title(_draft.Offer[0]));
             }
 
             Resume(passedInPlay: true);

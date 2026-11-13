@@ -5,6 +5,7 @@ using BalloonParty.Configuration.CardReveal;
 using BalloonParty.Configuration.Cinematics;
 using BalloonParty.Game.CardReveal;
 using BalloonParty.Configuration.Effects;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
@@ -439,7 +440,7 @@ namespace BalloonParty.UI.CardReveal
             tint.a = 1f - _settings.InsideShowThrough;
             _front.color = tint;
 
-            _titleRibbon.Show(reveal.Card.Title);
+            _titleRibbon.Show(UpgradeCardText.Title(reveal.Card));
             _descriptionRibbon.Show(reveal.Card.Description);
             _titleRibbon.Rest();
             _descriptionRibbon.Rest();

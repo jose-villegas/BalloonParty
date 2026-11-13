@@ -9,8 +9,8 @@
 **Status:** Phase 1 built (the controller, its queue and the pop pick). Phase 2 built: the bake
 script makes the pops; eight are in the game (seeds whose falling rubber stays inside the frame). Phase 4 built:
 `CardRevealView` plays it on a World Space canvas of its own during the level-up, lit live by the scene's light field and the screen-space light like the board, and
-the ribbons fly with the ascent. The cheat Reveal A Card shows one on demand. Not built yet: a card
-icon.
+the ribbons fly with the ascent. The cheat Reveal A Card shows one on demand. The title ribbon
+starts with the card's hand-drawn icon (`Game/Upgrades/README.md`), bent with the words.
 
 The pops are 8 separate physics simulations, baked in Blender by
 a script in this repo (§5), so the reveal never pops the same way twice in a row.
@@ -113,7 +113,7 @@ At most two are in memory (`PopSheetLoader`): the next reveal's, loaded ahead, a
 | The ribbons | None: drawn as a mesh (`RibbonGraphic`) | Code |
 | The pushpin | One sheet, 512×512 (its head and needle, 256×256 each, in the top half) | `bake_pin.py`, the pops' surface data and scene |
 | The shreds | One sheet, 256×256 (four torn scraps) | `make_shreds.py` |
-| Card icons, if the ribbons get them | 4 × 192×192 | Drawn in the UI style, shared with the coin shop (`PLAN-Coins.md` §7) |
+| Card icons | One atlas, 768×128 (six 128×128 doodles, one per card kind) | `Tools/art/make_card_icons.py`, built into the `CardIcons` TextMeshPro sprite asset |
 
 ## 7. Phases
 

@@ -1,4 +1,5 @@
 using BalloonParty.Game.CardReveal;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
@@ -66,7 +67,7 @@ namespace BalloonParty.UI.Tooltip
                 return;
             }
 
-            _pendingBonus = _bonusCardFormat.FormatOrRaw(message.Card.Title);
+            _pendingBonus = _bonusCardFormat.FormatOrRaw(UpgradeCardText.Title(message.Card));
             if (Navigation.Current.Value == NavigationState.Game)
             {
                 ShowPendingBonus();

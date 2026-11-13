@@ -32,6 +32,12 @@ and `Cards`, each with a kind, title, description, a per-stack `Amount`, `MaxSta
 
 Every card is read live, so a held card applies from the next ball loaded and the next item roll.
 
+Wherever a card is named (the pick screen, the reveal's ribbon, the tooltips), its title starts with a
+hand-drawn icon for its kind: `UpgradeCardText.Title` writes it as a TextMeshPro sprite from the `CardIcons`
+sprite asset, tinted with the text. The icons are drawn by `Tools/art/make_card_icons.py` and built into
+the sprite asset by Tools > BalloonParty > Upgrades > Build Card Icons (`CardIconSpriteAssetBuilder`). A
+new kind needs its icon drawn and named there too; an EditMode test fails until it is.
+
 ## A level-up's hand
 
 The hand follows the level-up phase (`Game/Level/README.md`):
