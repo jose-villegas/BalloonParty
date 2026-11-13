@@ -164,7 +164,7 @@ namespace BalloonParty.UI.GameOver
             _finalScore.Set(msg.FinalScore);
             _best.Set(_runMeta.BestLevel.Value, _runMeta.BestScore.Value);
             ShowRetryOffer(_failureOffers.Current);
-            RevealAfterGateAsync().Forget();
+            RevealAfterGateAsync(_offerCts.Token).Forget();
         }
 
         private async UniTaskVoid RetryAsync(bool withBonusCard, CancellationToken ct)
@@ -218,9 +218,15 @@ namespace BalloonParty.UI.GameOver
             _offerCts = null;
         }
 
-        private async UniTaskVoid RevealAfterGateAsync()
+        // ct is the offer's: a restart before the reveal (or leaving GameOver) cancels it, so the screen can't
+        // pop up over the run that restart started.
+        private async UniTaskVoid RevealAfterGateAsync(CancellationToken ct)
         {
-            await _presentationGate.WaitAsync(destroyCancellationToken);
+            if (await _presentationGate.WaitAsync(ct).SuppressCancellationThrow())
+            {
+                return;
+            }
+
             SetVisible(true);
             PlayEntrance();
         }

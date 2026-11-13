@@ -233,12 +233,20 @@ if (nav == "GameOver")
         return time + " GAMEOVER";
     }
 
+    // A finger can only press Restart once the screen is up: after the loss cinematic, the fade-in and its
+    // input guard, when its canvas group turns interactable. Pressing earlier skips the cinematic.
     var screen = UnityEngine.Object.FindAnyObjectByType<BalloonParty.UI.GameOver.GameOverScreen>();
-    if (screen != null && screen.isActiveAndEnabled)
+    var group = screen != null
+        ? typeof(BalloonParty.UI.GameOver.GameOverScreen)
+            .GetField("_canvasGroup", flags)?.GetValue(screen) as UnityEngine.CanvasGroup
+        : null;
+    if (screen != null && screen.isActiveAndEnabled && group != null && group.interactable)
     {
         screen.OnRestartPressed();
         return time + " RESTART";
     }
+
+    return time + " GAMEOVER waiting for the screen";
 }
 
 var progress = game.Resolve(progressType);

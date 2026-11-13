@@ -44,8 +44,8 @@ open, not yours.
    for 10 s. If Play mode starts on the launch screen (the Editor has the Launcher scene open), a tick
    taps its Play button the way a finger does, after 1.5 s on the screen (the device autoplay's
    `AutoplayTap`), so the press and the ascend play as they would for a player. The session ends at the first game over, so each one is a single run: how long it lasted
-   and what lost it. `--restart` presses Restart on the game-over screen instead and plays run after
-   run until the time is up.
+   and what lost it. `--restart` presses Restart on the game-over screen instead, once the screen is up and pressable
+   (after the loss cinematic, as a finger would), and plays run after run until the time is up.
 3. Leaves Play mode, which flushes the telemetry still buffered (`--keep-playing` skips this).
 4. Reads the telemetry records written since it started (`JsonLinesTelemetrySink`, under
    `Application.persistentDataPath/telemetry/`) and writes the report.
