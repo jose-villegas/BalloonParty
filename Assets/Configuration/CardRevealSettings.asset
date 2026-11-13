@@ -40,9 +40,9 @@ MonoBehaviour:
   _rubberRecentreFromFrame: 18
   _rubberRecentreFrames: 12
   _rubberRecentreHeight: 0.52
-  _rubberSwing: 0.08
+  _rubberSwing: 0.15
   _rubberSwingSeconds: 0.4
-  _rubberSwingTilt: 12
+  _rubberSwingTilt: 15
   _rubberSwingVariance: 0.3
   _popFlashRadius: 2.4
   _popFlashIntensity: 2.5
