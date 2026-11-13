@@ -34,6 +34,11 @@ namespace BalloonParty.Configuration.Level
         /// <summary>Picks guaranteed items for the initial board, respecting caps. Returns the number placed.</summary>
         int FillGuaranteedItems(List<ItemSettings> output, Dictionary<string, int> activeCounts);
 
+        /// <summary>Lucky Find: each of the level's items rolls <paramref name="chance" /> × its
+        /// <see cref="ItemSettings.ExtraItemShare" /> for extra copies, respecting caps. Updates
+        /// <paramref name="activeCounts" />.</summary>
+        void FillExtraItems(List<ItemSettings> output, Dictionary<string, int> activeCounts, float chance);
+
         /// <summary>Rolls each curve-bearing type's spawn allowance for the upcoming wave into <paramref name="quotas" /> (absent key = unlimited).</summary>
         void RollWaveQuotas(Dictionary<string, int> quotas, bool isInitial);
         ItemSettings PickItemEntry(IReadOnlyDictionary<string, int> activeCounts);

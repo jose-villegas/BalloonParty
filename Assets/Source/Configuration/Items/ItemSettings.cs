@@ -12,6 +12,11 @@ namespace BalloonParty.Configuration.Items
     {
         [SerializeField] private ItemType _type;
         [SerializeField] private int _maximumAllowed;
+
+        [Tooltip("How much of a Lucky Find card's chance this item rolls for, each time items are placed: " +
+                 "1 = all of it. The stronger the item, the smaller its share, so it still grows, but slower.")]
+        [SerializeField] [Range(0f, 1f)] private float _extraItemShare = 1f;
+
         [SerializeField] private GameObject _visualPrefab;
         [SerializeField] private EffectView _activationEffectPrefab;
 
@@ -28,6 +33,7 @@ namespace BalloonParty.Configuration.Items
 
         /// <summary>Catalog fallback unless ItemTypeWeight.MaximumAllowedOverride is set.</summary>
         public int MaximumAllowed => _maximumAllowed;
+        public float ExtraItemShare => _extraItemShare;
         public GameObject VisualPrefab => _visualPrefab;
         public EffectView ActivationEffectPrefab => _activationEffectPrefab;
         public int Damage => _damage;

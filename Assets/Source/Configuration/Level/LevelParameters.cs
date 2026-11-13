@@ -165,6 +165,43 @@ namespace BalloonParty.Configuration.Level
             return placed;
         }
 
+        public void FillExtraItems(List<ItemSettings> output, Dictionary<string, int> activeCounts, float chance)
+        {
+            if (chance <= 0f)
+            {
+                return;
+            }
+
+            foreach (var entry in _itemPickList)
+            {
+                var wanted = RollExtraCount(chance * entry.Source.ExtraItemShare, UnityEngine.Random.value);
+                var current = activeCounts.GetValueOrDefault(entry.PoolKey);
+                var toAdd = entry.MaxCount > 0 ? Mathf.Min(wanted, entry.MaxCount - current) : wanted;
+
+                for (var i = 0; i < toAdd; i++)
+                {
+                    output.Add(entry.Source);
+                }
+
+                if (toAdd > 0)
+                {
+                    activeCounts[entry.PoolKey] = current + toAdd;
+                }
+            }
+        }
+
+        // The whole part of the chance always lands, the fraction is a roll.
+        internal static int RollExtraCount(float chance, float roll01)
+        {
+            if (chance <= 0f)
+            {
+                return 0;
+            }
+
+            var whole = Mathf.FloorToInt(chance);
+            return whole + (roll01 < chance - whole ? 1 : 0);
+        }
+
         // Rolls each curve-bearing type's allowance for the upcoming wave (absent key = unlimited).
         public void RollWaveQuotas(Dictionary<string, int> quotas, bool isInitial)
         {

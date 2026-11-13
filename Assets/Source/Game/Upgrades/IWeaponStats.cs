@@ -26,7 +26,8 @@ namespace BalloonParty.Game.Upgrades
         /// <summary>Shields each new ball starts with: the configured count plus cards.</summary>
         int StartingShields { get; }
 
-        /// <summary>Extra items per item roll; the whole part always lands, the fraction is a chance.</summary>
+        /// <summary>Lucky Find's chance per item roll, scaled per item by its <c>ExtraItemShare</c>; the whole
+        /// part always lands, the fraction is a chance.</summary>
         float ExtraItemChance { get; }
     }
 }

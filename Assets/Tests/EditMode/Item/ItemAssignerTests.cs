@@ -259,27 +259,29 @@ namespace BalloonParty.Tests.Item
         }
 
         [Test]
-        public void OnItemCheck_ItemOddsCard_AddsItemsOnTopOfTheDraw()
+        public void OnItemCheck_LuckyFind_PlacesTheLevelsExtraItemsOnTopOfTheDraw()
         {
-            _weapon.ExtraItemChance.Returns(2f);
+            _weapon.ExtraItemChance.Returns(0.3f);
             var bomb = CreateItemSettings(ItemType.Bomb);
             _current.Items.Returns(new List<ItemSettings> { bomb });
             _current.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>()).Returns(bomb);
+            GiveExtras(bomb, bomb);
 
             var models = new[] { new BalloonModel(), new BalloonModel(), new BalloonModel(), new BalloonModel() };
             FireItemCheck(models, wave: 1);
 
-            Assert.AreEqual(3, CountBombs(models), "one from the draw, two from the whole part of the chance");
+            Assert.AreEqual(3, CountBombs(models), "one from the draw, two extras");
+            _current.Received(1).FillExtraItems(
+                Arg.Any<List<ItemSettings>>(), Arg.Any<Dictionary<string, int>>(), 0.3f);
         }
 
         [Test]
-        public void OnItemCheck_ItemOddsCard_StillGivesItemsWhenTheDrawIsZero()
+        public void OnItemCheck_LuckyFind_StillPlacesWhenTheDrawIsZero()
         {
-            _weapon.ExtraItemChance.Returns(1f);
             _current.ItemCountWeights.Returns(WeightsForCount(0));
             var bomb = CreateItemSettings(ItemType.Bomb);
             _current.Items.Returns(new List<ItemSettings> { bomb });
-            _current.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>()).Returns(bomb);
+            GiveExtras(bomb);
 
             var models = new[] { new BalloonModel(), new BalloonModel() };
             FireItemCheck(models, wave: 1);
@@ -288,33 +290,34 @@ namespace BalloonParty.Tests.Item
         }
 
         [Test]
-        public void OnItemCheck_ItemOddsCard_WaveNotOnCadence_AddsNothing()
+        public void OnItemCheck_LuckyFind_WaveNotOnCadence_RollsNothing()
         {
             _weapon.ExtraItemChance.Returns(5f);
             _current.ItemCadence.Returns(3);
             var bomb = CreateItemSettings(ItemType.Bomb);
             _current.Items.Returns(new List<ItemSettings> { bomb });
-            _current.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>()).Returns(bomb);
+            GiveExtras(bomb, bomb);
 
             var models = new[] { new BalloonModel(), new BalloonModel() };
             FireItemCheck(models, wave: 2);
 
-            Assert.AreEqual(0, CountBombs(models), "cards raise the count on a cadence wave, they do not add waves");
+            Assert.AreEqual(0, CountBombs(models), "cards add items to a cadence wave, they do not add waves");
+            _current.DidNotReceive().FillExtraItems(
+                Arg.Any<List<ItemSettings>>(), Arg.Any<Dictionary<string, int>>(), Arg.Any<float>());
         }
 
         [Test]
-        public void OnItemCheck_ItemOddsCard_StopsAtTheEntryCap()
+        public void OnItemCheck_LuckyFind_StopsWhenTheWaveRunsOutOfHosts()
         {
-            _weapon.ExtraItemChance.Returns(3f);
+            _current.ItemCountWeights.Returns(WeightsForCount(0));
             var bomb = CreateItemSettings(ItemType.Bomb);
             _current.Items.Returns(new List<ItemSettings> { bomb });
-            _current.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>())
-                .Returns(bomb, bomb, (ItemSettings)null);
+            GiveExtras(bomb, bomb, bomb);
 
-            var models = new[] { new BalloonModel(), new BalloonModel(), new BalloonModel(), new BalloonModel() };
+            var models = new[] { new BalloonModel(), new BalloonModel() };
             FireItemCheck(models, wave: 1);
 
-            Assert.AreEqual(2, CountBombs(models), "extra grants go through the same capped pick");
+            Assert.AreEqual(2, CountBombs(models));
         }
 
         [Test]
@@ -322,26 +325,6 @@ namespace BalloonParty.Tests.Item
         {
             Assert.AreEqual(0, ItemAssigner.SampleCount(new AnimationCurve(), 0.5f));
             Assert.AreEqual(0, ItemAssigner.SampleCount(null, 0.5f));
-        }
-
-        [Test]
-        public void ExtraItems_NoItemOddsCards_AddsNothing()
-        {
-            Assert.AreEqual(0, ItemAssigner.ExtraItems(0f, 0f));
-        }
-
-        [Test]
-        public void ExtraItems_FractionalChance_IsARoll()
-        {
-            Assert.AreEqual(1, ItemAssigner.ExtraItems(0.5f, 0.49f));
-            Assert.AreEqual(0, ItemAssigner.ExtraItems(0.5f, 0.5f));
-        }
-
-        [Test]
-        public void ExtraItems_ChancePastOne_AlwaysLandsTheWholePart()
-        {
-            Assert.AreEqual(1, ItemAssigner.ExtraItems(1.5f, 0.99f), "three Lucky Find stacks at 0.5 each");
-            Assert.AreEqual(2, ItemAssigner.ExtraItems(1.5f, 0.1f));
         }
 
         [Test]
@@ -399,6 +382,14 @@ namespace BalloonParty.Tests.Item
 
             Assert.AreEqual(1, ItemAssigner.PickWeightedIndex(candidates, 0f));
             Assert.AreEqual(1, ItemAssigner.PickWeightedIndex(candidates, 0.999f));
+        }
+
+        private void GiveExtras(params ItemSettings[] extras)
+        {
+            _current
+                .When(c => c.FillExtraItems(
+                    Arg.Any<List<ItemSettings>>(), Arg.Any<Dictionary<string, int>>(), Arg.Any<float>()))
+                .Do(call => ((List<ItemSettings>)call[0]).AddRange(extras));
         }
 
         private static int CountBombs(IReadOnlyList<BalloonModel> models)

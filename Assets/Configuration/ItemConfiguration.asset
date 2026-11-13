@@ -15,6 +15,7 @@ MonoBehaviour:
   _items:
   - _type: 2
     _maximumAllowed: 3
+    _extraItemShare: 0.6
     _visualPrefab: {fileID: 6668210511114258713, guid: c84f5087a41054dfab7db5d53bf62e5e,
       type: 3}
     _activationEffectPrefab: {fileID: 1545043174332561462, guid: 00eef9bcf5537e24b8829da45a994469,
@@ -181,6 +182,7 @@ MonoBehaviour:
       _snipeColorCycles: 2
   - _type: 3
     _maximumAllowed: 2
+    _extraItemShare: 0.35
     _visualPrefab: {fileID: 6897192337968396076, guid: db265edefece34cbf86ee0995069bbbf,
       type: 3}
     _activationEffectPrefab: {fileID: 6370257692819509042, guid: 09e04fef865adae47bf118af97e3e371,
@@ -343,6 +345,7 @@ MonoBehaviour:
       _snipeColorCycles: 2
   - _type: 4
     _maximumAllowed: 2
+    _extraItemShare: 0.5
     _visualPrefab: {fileID: 868192500419445839, guid: ad757d902f90141549750e28fe439d82,
       type: 3}
     _activationEffectPrefab: {fileID: 7298086300349085861, guid: 13e7e2e2dfc559e4589ff207046c99ee,
@@ -505,6 +508,7 @@ MonoBehaviour:
       _snipeColorCycles: 2
   - _type: 1
     _maximumAllowed: 3
+    _extraItemShare: 1
     _visualPrefab: {fileID: 8514083812438296857, guid: f951c5e126eee4e2da2094bbdc729ced,
       type: 3}
     _activationEffectPrefab: {fileID: 7907502374385259114, guid: c9065b5aefca784428d0d85cce5fa762,
@@ -667,6 +671,7 @@ MonoBehaviour:
       _snipeColorCycles: 2
   - _type: 5
     _maximumAllowed: 3
+    _extraItemShare: 0.8
     _visualPrefab: {fileID: 5155374104672875301, guid: caddd14ec47634b779cdad172791812c,
       type: 3}
     _activationEffectPrefab: {fileID: 2759438572946340449, guid: 5bb0cadbda3ad422484d6595910d8315,
@@ -865,6 +870,7 @@ MonoBehaviour:
       _snipeColorCycles: 2
   - _type: 6
     _maximumAllowed: 3
+    _extraItemShare: 0.25
     _visualPrefab: {fileID: 5155374104672875301, guid: 5e584528ec8b54477804361a90b025e2,
       type: 3}
     _activationEffectPrefab: {fileID: 0}

@@ -222,6 +222,82 @@ namespace BalloonParty.Tests.Configuration
         }
 
         // ─────────────────────────────────────────────────────────────────────
+        // FillExtraItems
+        // ─────────────────────────────────────────────────────────────────────
+
+        [Test]
+        public void FillExtraItems_NoChance_AddsNothing()
+        {
+            var parameters = CreateLevelParametersWithItems(new[] { CreateExtraEntry(ItemType.Bomb, 1f, 0) });
+
+            var output = new List<ItemSettings>();
+            parameters.FillExtraItems(output, new Dictionary<string, int>(), 0f);
+
+            Assert.AreEqual(0, output.Count);
+        }
+
+        [Test]
+        public void FillExtraItems_EachItemRollsItsOwnShare()
+        {
+            var shield = CreateExtraEntry(ItemType.Shield, 1f, 0);
+            var snipe = CreateExtraEntry(ItemType.Snipe, 0.5f, 0);
+            var parameters = CreateLevelParametersWithItems(new[] { shield, snipe });
+
+            var output = new List<ItemSettings>();
+            var activeCounts = new Dictionary<string, int>();
+            parameters.FillExtraItems(output, activeCounts, 2f);
+
+            // Whole chances land with no roll: 2 × 1 for the shield, 2 × 0.5 for the snipe.
+            Assert.AreEqual(2, activeCounts[ItemType.Shield.ToString()]);
+            Assert.AreEqual(1, activeCounts[ItemType.Snipe.ToString()]);
+            Assert.AreEqual(3, output.Count);
+        }
+
+        [Test]
+        public void FillExtraItems_ZeroShare_NeverGrows()
+        {
+            var parameters = CreateLevelParametersWithItems(new[] { CreateExtraEntry(ItemType.Laser, 0f, 0) });
+
+            var output = new List<ItemSettings>();
+            parameters.FillExtraItems(output, new Dictionary<string, int>(), 4f);
+
+            Assert.AreEqual(0, output.Count);
+        }
+
+        [Test]
+        public void FillExtraItems_StopsAtTheCap()
+        {
+            var parameters = CreateLevelParametersWithItems(new[] { CreateExtraEntry(ItemType.Bomb, 1f, 2) });
+
+            var output = new List<ItemSettings>();
+            var activeCounts = new Dictionary<string, int> { [ItemType.Bomb.ToString()] = 1 };
+            parameters.FillExtraItems(output, activeCounts, 3f);
+
+            Assert.AreEqual(1, output.Count);
+            Assert.AreEqual(2, activeCounts[ItemType.Bomb.ToString()]);
+        }
+
+        [Test]
+        public void RollExtraCount_NoChance_AddsNothing()
+        {
+            Assert.AreEqual(0, LevelParameters.RollExtraCount(0f, 0f));
+        }
+
+        [Test]
+        public void RollExtraCount_FractionalChance_IsARoll()
+        {
+            Assert.AreEqual(1, LevelParameters.RollExtraCount(0.5f, 0.49f));
+            Assert.AreEqual(0, LevelParameters.RollExtraCount(0.5f, 0.5f));
+        }
+
+        [Test]
+        public void RollExtraCount_ChancePastOne_AlwaysLandsTheWholePart()
+        {
+            Assert.AreEqual(1, LevelParameters.RollExtraCount(1.5f, 0.99f));
+            Assert.AreEqual(2, LevelParameters.RollExtraCount(1.5f, 0.1f));
+        }
+
+        // ─────────────────────────────────────────────────────────────────────
         // Helpers
         // ─────────────────────────────────────────────────────────────────────
 
@@ -245,6 +321,13 @@ namespace BalloonParty.Tests.Configuration
             SetField(source, "_type", type);
 
             return new ResolvedItemEntry(source, weight: 1f, maxCount: maxCount, guaranteedInitialCount: guaranteed);
+        }
+
+        private static ResolvedItemEntry CreateExtraEntry(ItemType type, float share, int maxCount)
+        {
+            var entry = CreateResolvedItemEntry(type, guaranteed: 0, maxCount: maxCount);
+            SetField(entry.Source, "_extraItemShare", share);
+            return entry;
         }
 
         private static LevelParameters CreateLevelParametersWithBalloons(ResolvedBalloonEntry[] balloonEntries)

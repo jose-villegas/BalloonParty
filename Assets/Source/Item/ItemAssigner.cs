@@ -39,7 +39,7 @@ namespace BalloonParty.Item
         private readonly List<IHasWriteableItemSlot> _eligibleBuffer = new();
         private readonly Dictionary<string, int> _activeCountsBuffer = new();
 
-        private readonly List<ItemSettings> _guaranteedBuffer = new();
+        private readonly List<ItemSettings> _fillBuffer = new();
 
         // Hosts the shield chain picked, in flight order; drained as shields are handed out.
         private readonly List<ShieldPlacement> _chainBuffer = new();
@@ -107,7 +107,7 @@ namespace BalloonParty.Item
                 return;
             }
 
-            var count = SampleCount(weights, Random.value) + ExtraItems(_weapon.ExtraItemChance, Random.value);
+            var count = SampleCount(weights, Random.value);
             AssignItems(msg.NewBalloons, count, msg.IsInitialSpawn);
         }
 
@@ -140,16 +140,17 @@ namespace BalloonParty.Item
             }
 
             PlaceWeightedItems(Mathf.Min(count, _eligibleBuffer.Count));
+            PlaceExtraItems();
         }
 
         // Deterministic, not weighted — but they still take hosts from the same pool, so they go
         // through ConsumeHost and keep the chain's indices honest.
         private int PlaceGuaranteedItems()
         {
-            _guaranteedBuffer.Clear();
-            var placed = _levelParams.Current.FillGuaranteedItems(_guaranteedBuffer, _activeCountsBuffer);
+            _fillBuffer.Clear();
+            var placed = _levelParams.Current.FillGuaranteedItems(_fillBuffer, _activeCountsBuffer);
 
-            foreach (var item in _guaranteedBuffer)
+            foreach (var item in _fillBuffer)
             {
                 if (_eligibleBuffer.Count == 0 || !TryTakeHost(item.Type, out var indexOf))
                 {
@@ -160,6 +161,23 @@ namespace BalloonParty.Item
             }
 
             return placed;
+        }
+
+        // Lucky Find cards: each item rolls its own share of the chance, so a strong item gains less than a weak one.
+        private void PlaceExtraItems()
+        {
+            _fillBuffer.Clear();
+            _levelParams.Current.FillExtraItems(_fillBuffer, _activeCountsBuffer, _weapon.ExtraItemChance);
+
+            foreach (var item in _fillBuffer)
+            {
+                if (_eligibleBuffer.Count == 0 || !TryTakeHost(item.Type, out var indexOf))
+                {
+                    break;
+                }
+
+                ConsumeHost(indexOf, item.Type);
+            }
         }
 
         private void PlaceWeightedItems(int grants)
@@ -303,18 +321,6 @@ namespace BalloonParty.Item
         internal static int SampleCount(AnimationCurve weights, float roll01)
         {
             return weights.SampleWeightedCount(roll01);
-        }
-
-        // Item Odds cards: the whole part of the chance always adds an item, the fraction is a roll.
-        internal static int ExtraItems(float chance, float roll01)
-        {
-            if (chance <= 0f)
-            {
-                return 0;
-            }
-
-            var whole = Mathf.FloorToInt(chance);
-            return whole + (roll01 < chance - whole ? 1 : 0);
         }
 
         // Weighted-random index into candidates, biased by ItemActivationWeight; -1 if every weight is 0.
