@@ -13,6 +13,7 @@ using BalloonParty.Audio.Routing;
 using BalloonParty.Audio.View;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Formation;
+using BalloonParty.Balloon.Reward;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
@@ -251,6 +252,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<BubbleMergeService>();
             builder.RegisterEntryPoint<UnbreakableFormationService>().AsSelf().As<IRunResettable>()
                 .As<IFormationReinforcements>();
+            builder.RegisterEntryPoint<RewardBalloonService>().As<IRewardBalloonRequests>().As<IRunResettable>();
             builder.RegisterEntryPoint<GridActorHitController>();
             builder.Register<NavigationReadyGate>(Lifetime.Singleton).WithParameter(NavigationState.Game);
             builder.RegisterEntryPoint<GridSpawnerCoordinator>().AsSelf().As<IRunResettable>();

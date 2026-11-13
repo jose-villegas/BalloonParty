@@ -5,6 +5,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Game.Run;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Diagnostics;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Actor.Archetype;
 using MessagePipe;
@@ -161,6 +162,15 @@ namespace BalloonParty.Game.Level
 
             foreach (var catalogEntry in _balloonsConfig.Entries)
             {
+                // A weighted reward balloon would skip its once-a-level and one-on-the-board rules, and the
+                // spawner tells it apart by its entry, which a level's pick must never hand out.
+                if (catalogEntry.BalloonType.IsReward())
+                {
+                    Log.Assert(!TryFindActiveWeight(parameters.BalloonWeights, catalogEntry.BalloonType, out _),
+                        "LevelDifficulty", $"{catalogEntry.BalloonType} is a reward balloon and has a level weight; it is ignored");
+                    continue;
+                }
+
                 if (!TryFindActiveWeight(parameters.BalloonWeights, catalogEntry.BalloonType, out var rangeWeight))
                 {
                     // Absent (or zero-weight) from this level's set — the type gate.

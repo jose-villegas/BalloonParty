@@ -50,6 +50,16 @@ unbreakables keep their cap, and the spawner counts these apart, up to
 so the first ones dealt are tagged as the reinforcements, and an undealt one hands back no count. The
 unbreakable pool is prewarmed with room for the ceiling.
 
+### Reward balloons
+
+Each clock line asks `IRewardBalloonRequests.TryTakeDue` once, before the reinforcements, whether it
+brings a reward balloon (the golden one on a purple level, a heart for a player missing hearts; see
+`Balloon/Reward/README.md`). The answer takes one of the line's places, outside the level's caps and
+counts, and goes to the front of the batch after the sort, so a crowded line drops something else. When
+it lands, `Placed` hands back the callback the balloon calls on leaving, in place of the active-count
+release. A line with no room for it leaves it due for the next. It stays out of the item roll. Without a
+catalogue entry for the type nothing comes; each entry is prewarmed to one.
+
 ### Placement under pressure (clock lines)
 
 A blocked column isn't lost immediately. `BalloonPlacementResolver.Resolve` picks a slot in order, scanning columns nearest-first (`TryNearestColumn`):

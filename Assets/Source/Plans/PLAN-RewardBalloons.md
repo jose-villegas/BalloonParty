@@ -37,9 +37,11 @@
 | `GoldenBalloonModel` | `Balloon/Model/` | A `BalloonModelBase` of its own, not an `UnbreakableBalloonModel` (that would pull it into formations and roaming). `EvaluateHit`: a hit with `Piercing` and `DirectHit` pops; any other projectile hit deflects; an item hit is `HitOutcome.None`. `IDeflectsShots`, `IResistsPaint`, colourless |
 | `HeartBalloonModel` | `Balloon/Model/` | A colourless one-hit balloon, `IResistsPaint` |
 | `IsTough` | `Shared/Extensions/BalloonModelExtensions.cs` | Covers the golden balloon, so a piercing shot plows it and the projectile's telegraph and sweep see it |
-| `RewardBalloonService` | `Balloon/Reward/` | Plain C#. Watches the level's completion and the hearts, decides when each balloon is due, and queues a one-shot request. Re-arms on level-up, `IRunResettable` |
-| `IRewardBalloonRequests` | `Balloon/Reward/` | `TakeRequests()`, consumed by `BalloonSpawner` the way `IFormationReinforcements` is: the balloon joins the next line, outside the level's caps and counts, its own entry found with `FindEntry` and prewarmed to one |
-| `ILevelProgress.Completion` | `Game/Level/LevelController.cs` | A 0–1 fraction: each colour's confirmed points, capped at the requirement, over the requirement times the colours. Updated where progress is confirmed (`OnTrailArrived`) |
+| `RewardBalloonService` | `Balloon/Reward/` | Plain C#. Asked once per clock line, it reads the level's completion and the hearts and says which balloon is due, if any. It tracks which one is on the board through the leave callback, re-arms the golden balloon on each new level, `IRunResettable`. It only offers a type the catalogue has an entry for |
+| `IRewardBalloonRequests` | `Balloon/Reward/` | `TryTakeDue(out type)` and `Placed(type)`, which returns the callback for when the balloon leaves the board. `BalloonSpawner` asks before the reinforcements, so the balloon takes one of the line's places, outside the level's caps and counts, its own entry found with `FindEntry` and prewarmed to one. It deals first, so a crowded line drops something else; one that still had no room leaves the balloon due for the next line |
+| `LevelCompletion` | `Game/Level/` | A 0–1 fraction computed from `ILevelProgress` when asked: each colour's confirmed points, capped at the requirement, over the requirement times the colours |
+| `IPlayerHealth.Max` | `Game/Health/` | The heart cap, so the missing hearts and the heal agree on it |
+| `BalloonTypeExtensions.IsReward` | `Shared/Extensions/` | Golden and Heart. The level's pick list skips them, so no level mix brings one |
 | `IFreeCardGrant` | `Game/Upgrades/RunUpgrades.cs` | `GrantFreeCard()`: deals one dealable card on the run's seed, holds it, and publishes `UpgradeCardHeldMessage`, so the card reveal plays it. With every card at its limit there is nothing to give, and the golden balloon gives a heart instead |
 | `PlayerHealthController` | `Game/Health/` | Heals one on a heart balloon's pop (`RewardBalloonPoppedMessage`) |
 | `IRewardBalloonSettings` | `Configuration/Balloons/` | The tuning below, a block on `BalloonsConfiguration` |
@@ -52,9 +54,10 @@ sequenceDiagram
     participant Spw as BalloonSpawner
     participant Hit as ProjectileHitResolver
     participant Up as RunUpgrades
-    Lvl->>Rwd: completion reaches 0.75 on a purple level
-    Rwd->>Spw: golden balloon requested
-    Spw->>Spw: the next line brings it
+    Spw->>Rwd: a clock line asks what is due
+    Rwd->>Lvl: reads the completion, 0.75 on a purple level
+    Rwd-->>Spw: the golden balloon
+    Spw->>Rwd: placed, with a callback for when it leaves
     Hit->>Hit: a piercing shot plows it, shatters it at the wall
     Hit->>Up: golden balloon popped
     Up->>Up: deal and hold a free card, the reveal plays it
@@ -88,11 +91,16 @@ it's gone with the board, like any balloon.
 
 ## Phases
 
-1. **Reward hook.** `ILevelProgress.Completion`, `RewardBalloonService`, `IRewardBalloonRequests`,
+1. **Reward hook.** `LevelCompletion`, `RewardBalloonService`, `IRewardBalloonRequests`,
    the spawner's consumption and prewarm, the settings. Tests for completion, the 75% trigger once
    per level and only on purple, the heart chance by missing hearts and the cooldown.
 2. **Golden balloon.** Type, model, `IsTough`, item immunity, prefab with a placeholder gold retint
-   of the unbreakable, `IFreeCardGrant` and the reveal, sound and pop colour, solver parity. Tests
+   of the unbreakable, `IFreeCardGrant` and the reveal, sound and pop colour, solver parity.
+   `BalloonModelFactory` must map `Golden` before its catalogue entry goes in: it throws for an
+   unmapped type, after `Placed`, which would leave the balloon counted on the board for the rest of
+   the run. The spawn-balloon cheat lists every type, so it needs to route reward types through the
+   service or leave them out. The card grant goes on the pop, never on the leave callback, which a
+   board clear and a level change fire too. Tests
    for every hit path (projectile, pierce, bomb, laser, lightning, paint) and the grant.
 3. **Golden look.** The gold-plate shader with specular-gated glitter, its material and prefab.
    In-editor check at noon and night, frames sent for sign-off.

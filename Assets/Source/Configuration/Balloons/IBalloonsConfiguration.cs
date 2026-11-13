@@ -55,5 +55,7 @@ namespace BalloonParty.Configuration.Balloons
         int BubbleMergeMax { get; }
 
         IUnbreakableFormationSettings UnbreakableFormation { get; }
+
+        IRewardBalloonSettings RewardBalloons { get; }
     }
 }

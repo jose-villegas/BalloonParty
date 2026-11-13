@@ -4,6 +4,7 @@ using System.Threading;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Formation;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Reward;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
 using BalloonParty.Configuration.Level;
@@ -57,6 +58,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly ISpawnClock _spawnClock;
         private readonly IRunSeed _runSeed;
         private readonly IFormationReinforcements _reinforcements;
+        private readonly IRewardBalloonRequests _rewards;
         private readonly List<Vector3> _spawnPathBuffer = new();
         private readonly List<BalloonPrefabEntry> _spawnBatch = new();
         private readonly List<int> _lineColumns = new();
@@ -70,6 +72,9 @@ namespace BalloonParty.Balloon.Spawner
         private readonly BalloonPrefabEntry _bubbleEntry;
         // The catalogue's unbreakable, which a formation's reinforcements bring whatever the level's mix.
         private readonly BalloonPrefabEntry _unbreakableEntry;
+        // The reward balloons (IRewardBalloonRequests), never in a level's mix; null until configured.
+        private readonly BalloonPrefabEntry _goldenEntry;
+        private readonly BalloonPrefabEntry _heartEntry;
 
         private int[] _columnSortKeys;
         // Lines spawned this level; waves (ISpawnClockSettings.LinesPerWave) are counted from it.
@@ -86,6 +91,8 @@ namespace BalloonParty.Balloon.Spawner
         // and the totals still come out right because every unbreakable in the batch is the same
         // _unbreakableEntry. Give reinforcements an entry of their own and this has to track entries.
         private int _batchReinforcements;
+        // The reward balloon in the batch still to deal; it took no count, so it has none to hand back.
+        private BalloonPrefabEntry _batchReward;
 
         public SpawnStage SpawnPriority => SpawnStage.BalloonActors;
         public int ResetOrder => RunResetOrder.Counters;
@@ -111,7 +118,8 @@ namespace BalloonParty.Balloon.Spawner
             ILevelProgress levelProgress,
             ISpawnClock spawnClock,
             IRunSeed runSeed,
-            IFormationReinforcements reinforcements)
+            IFormationReinforcements reinforcements,
+            IRewardBalloonRequests rewards)
         {
             _grid = grid;
             _balloonsConfig = balloonsConfig;
@@ -133,8 +141,11 @@ namespace BalloonParty.Balloon.Spawner
             _spawnClock = spawnClock;
             _runSeed = runSeed;
             _reinforcements = reinforcements;
+            _rewards = rewards;
             _bubbleEntry = FindEntry(balloonsConfig, BalloonType.BubbleCluster);
             _unbreakableEntry = FindEntry(balloonsConfig, BalloonType.Unbreakable);
+            _goldenEntry = FindEntry(balloonsConfig, BalloonType.Golden);
+            _heartEntry = FindEntry(balloonsConfig, BalloonType.Heart);
 
             // Cached to avoid a per-sort delegate allocation.
             _byColumnKey = CompareColumnKeys;
@@ -171,6 +182,7 @@ namespace BalloonParty.Balloon.Spawner
             _activeCounts.Clear();
             _reinforcementsAlive = 0;
             _batchReinforcements = 0;
+            _batchReward = null;
             _linesThisLevel = 0;
             _newlySpawnedBalloons.Clear();
             _spawnBatch.Clear();
@@ -207,6 +219,12 @@ namespace BalloonParty.Balloon.Spawner
                 if (entry == _unbreakableEntry)
                 {
                     count += _balloonsConfig.UnbreakableFormation.ReinforcementCeiling;
+                }
+
+                // No level's mix holds a reward balloon, and at most one of each is on the board.
+                if (entry.BalloonType.IsReward())
+                {
+                    count = Math.Max(count, 1);
                 }
 
                 if (count <= 0)
@@ -346,8 +364,10 @@ namespace BalloonParty.Balloon.Spawner
         }
 
         // The entry comes from the batch picked for this fill or line; its active count was taken at batch
-        // time. A reinforcement counts toward _reinforcementsAlive instead.
-        private void SpawnBalloon(Vector2Int slot, BalloonPrefabEntry entry, bool reinforcement = false)
+        // time. A reinforcement counts toward _reinforcementsAlive instead, and a reward balloon tells
+        // IRewardBalloonRequests through onLeft and stays out of the item roll: it carries no item.
+        private void SpawnBalloon(
+            Vector2Int slot, BalloonPrefabEntry entry, bool reinforcement = false, Action onLeft = null)
         {
             var source = new Vector2Int(slot.x, slot.y + _balloonsConfig.SpawnEntryRowOffset);
             _grid.ComputePath(source, slot, _spawnPathBuffer);
@@ -358,7 +378,7 @@ namespace BalloonParty.Balloon.Spawner
                 _reinforcementsAlive++;
             }
 
-            var onReturned = reinforcement ? _releaseReinforcement : () => ReleaseActiveCount(poolKey);
+            var onReturned = onLeft ?? (reinforcement ? _releaseReinforcement : () => ReleaseActiveCount(poolKey));
             var model = _factory.Create(entry, slot, _spawnPathBuffer, onReturned);
             if (_waterBatch && model is BubbleClusterModel bubble)
             {
@@ -366,7 +386,10 @@ namespace BalloonParty.Balloon.Spawner
                 bubble.SetBubbles(Mathf.Min(bubbles, _balloonsConfig.BubbleMergeMax));
             }
 
-            _newlySpawnedBalloons.Add(model);
+            if (onLeft == null)
+            {
+                _newlySpawnedBalloons.Add(model);
+            }
         }
 
         // A balloon can return after a run reset cleared the counts (e.g. the loss→restart outgoing group),
@@ -447,7 +470,12 @@ namespace BalloonParty.Balloon.Spawner
                 if (slot.HasValue)
                 {
                     var entry = NextBatchEntry();
-                    if (entry != null)
+                    if (entry != null && entry == _batchReward)
+                    {
+                        _batchReward = null;
+                        SpawnBalloon(slot.Value, entry, onLeft: _rewards.Placed(entry.BalloonType));
+                    }
+                    else if (entry != null)
                     {
                         var reinforcement = entry == _unbreakableEntry && _batchReinforcements > 0;
                         if (reinforcement)
@@ -496,6 +524,8 @@ namespace BalloonParty.Balloon.Spawner
             }
             else
             {
+                // Asked exactly once per clock line: the heart's cooldown counts these calls.
+                AddRewardBalloon();
                 AddReinforcements(target);
             }
 
@@ -524,6 +554,7 @@ namespace BalloonParty.Balloon.Spawner
             else
             {
                 _spawnBatch.Sort(BySpawnWeightAscending);
+                MoveRewardToFront();
             }
         }
 
@@ -546,6 +577,43 @@ namespace BalloonParty.Balloon.Spawner
             }
 
             _batchReinforcements = count;
+        }
+
+        // The reward balloon this line brings, if one is due and configured. It goes in first, so the
+        // reinforcements and the level's pick share what is left of the line, and it takes no count: no level's
+        // mix holds its entry, which is what lets the dealing tell it apart by identity.
+        private void AddRewardBalloon()
+        {
+            if (_rewards == null || !_rewards.TryTakeDue(out var type))
+            {
+                return;
+            }
+
+            var entry = type == BalloonType.Golden ? _goldenEntry : type == BalloonType.Heart ? _heartEntry : null;
+            if (entry == null)
+            {
+                return;
+            }
+
+            _spawnBatch.Add(entry);
+            _batchReward = entry;
+        }
+
+        // The batch deals from the front and a crowded line drops its tail, so the reward goes first, whatever its
+        // spawn weight: it lands as long as any column takes a balloon.
+        private void MoveRewardToFront()
+        {
+            if (_batchReward == null)
+            {
+                return;
+            }
+
+            var index = _spawnBatch.IndexOf(_batchReward);
+            if (index > 0)
+            {
+                _spawnBatch.RemoveAt(index);
+                _spawnBatch.Insert(0, _batchReward);
+            }
         }
 
         // Reorders the freshly-picked initial batch into vertical layers instead of one bottom-heavy
@@ -644,12 +712,18 @@ namespace BalloonParty.Balloon.Spawner
                     continue;
                 }
 
+                if (entry == _batchReward)
+                {
+                    continue;
+                }
+
                 ReleaseActiveCount(entry.PoolKey);
             }
 
             _spawnBatch.Clear();
             _batchCursor = 0;
             _batchReinforcements = 0;
+            _batchReward = null;
         }
 
         // Spawns up to count balloons at their columns' own entries — no rehoming, no pressure, no

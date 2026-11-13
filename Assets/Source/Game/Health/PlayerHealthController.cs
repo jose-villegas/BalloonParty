@@ -38,6 +38,8 @@ namespace BalloonParty.Game.Health
 
         public IReadOnlyReactiveProperty<int> Current => _current;
 
+        public int Max => ClampedStartingHitPoints();
+
         public int ResetOrder => RunResetOrder.Counters;
 
         public void Start()

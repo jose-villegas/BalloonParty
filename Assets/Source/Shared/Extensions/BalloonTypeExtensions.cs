@@ -9,5 +9,11 @@ namespace BalloonParty.Shared.Extensions
         {
             return type is BalloonType.Simple or BalloonType.SimpleSilver or BalloonType.SimpleGold;
         }
+
+        /// <summary>The reward balloons, which only <c>RewardBalloonService</c> brings, never a level's mix.</summary>
+        internal static bool IsReward(this BalloonType type)
+        {
+            return type is BalloonType.Golden or BalloonType.Heart;
+        }
     }
 }

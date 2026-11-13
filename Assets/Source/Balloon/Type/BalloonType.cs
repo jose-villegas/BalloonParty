@@ -19,6 +19,10 @@ namespace BalloonParty.Balloon.Type
         // A colourable BalloonModel that starts in rainbow mode — see RainbowBalloonVariant.
         Rainbow,
 
-        Tougher
+        Tougher,
+
+        // Reward balloons (PLAN-RewardBalloons): placed by RewardBalloonService, never by a level's mix.
+        Golden,
+        Heart
     }
 }

@@ -79,6 +79,9 @@ namespace BalloonParty.Configuration.Balloons
         [Header("Unbreakable Formations")]
         [SerializeField] private UnbreakableFormationSettings _unbreakableFormation = new();
 
+        [Header("Reward Balloons")]
+        [SerializeField] private RewardBalloonSettings _rewardBalloons = new();
+
         public IReadOnlyList<BalloonPrefabEntry> Entries => _entries;
         public ParticleSystem DefaultPopVfxPrefab => _defaultPopVfxPrefab;
         public Material RainbowMaterial => _rainbowMaterial;
@@ -99,5 +102,6 @@ namespace BalloonParty.Configuration.Balloons
         public float BubbleMergeSeconds => _bubbleMergeSeconds;
         public int BubbleMergeMax => _bubbleMergeMax;
         public IUnbreakableFormationSettings UnbreakableFormation => _unbreakableFormation;
+        public IRewardBalloonSettings RewardBalloons => _rewardBalloons;
     }
 }

@@ -213,3 +213,9 @@ MonoBehaviour:
     _diagonalWeight: 1
     _itemCoverWeight: 2
     _snakeWeight: 1
+  _rewardBalloons:
+    _goldenAtCompletion: 0.75
+    _heartChanceMissingOne: 0.04
+    _heartChanceMissingTwo: 0.12
+    _heartChanceOnPurple: 0.05
+    _heartCooldownLines: 12
