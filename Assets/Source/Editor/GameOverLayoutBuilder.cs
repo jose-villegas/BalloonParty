@@ -28,6 +28,7 @@ namespace BalloonParty.Editor
         private const string DialogTitle = "Game-over layout";
         private const string PrefabPath = "Assets/Prefabs/GameOver/UI/GameOver.prefab";
         private const string HostPrefabPath = "Assets/Prefabs/Game/GameCanvas.prefab";
+        private const string HeartSpritePath = "Assets/Sprites/Heart/heart.png";
         private const string SpriteFolder = "Assets/Sprites/UI/";
         private const string FontFolder = "Assets/Fonts";
         private const string MaterialFolderName = "Materials";
@@ -201,6 +202,8 @@ namespace BalloonParty.Editor
             fields.FindProperty("_finalScoreLabel").objectReferenceValue = score;
             fields.FindProperty("_bestLabel").objectReferenceValue = best;
             fields.FindProperty("_retryLabel").objectReferenceValue = retryLabel;
+            fields.FindProperty("_retryPinFill").objectReferenceValue = RetryPins(retry.transform, kit);
+            fields.FindProperty("_retryAdBadge").objectReferenceValue = RetryAdBadge(retry.transform, kit);
             fields.FindProperty("_offers").objectReferenceValue = offers;
             fields.FindProperty("_panel").objectReferenceValue = panel;
             fields.FindProperty("_primaryButton").objectReferenceValue = retry.transform;
@@ -357,6 +360,63 @@ namespace BalloonParty.Editor
             return label;
         }
 
+        // A row of hearts pinned across Retry's top edge, from its left corner, one per free retry: the HUD's
+        // heart in a cream rim with a soft drop. The builder makes the first; the screen copies it as needed.
+        // Returns its fill, which the screen recolours.
+        private static Image RetryPins(Transform retry, Kit kit)
+        {
+            const float width = 17f;
+            const float height = 14.5f;
+            var row = Node("Pins", retry);
+            row.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
+            var rowRect = (RectTransform)row;
+            rowRect.anchorMin = rowRect.anchorMax = new Vector2(0f, 1f);
+            rowRect.pivot = new Vector2(0f, 0.5f);
+            rowRect.anchoredPosition = new Vector2(12f, 0f);
+            rowRect.sizeDelta = new Vector2(width * 5f, height);
+            var layout = row.gameObject.AddComponent<HorizontalLayoutGroup>();
+            layout.spacing = 1f;
+            layout.childAlignment = TextAnchor.MiddleLeft;
+            layout.childControlWidth = false;
+            layout.childControlHeight = false;
+            layout.childForceExpandWidth = false;
+            layout.childForceExpandHeight = false;
+
+            var pin = Node("Pin", row);
+            ((RectTransform)pin).sizeDelta = new Vector2(width, height);
+            pin.localRotation = Quaternion.Euler(0f, 0f, 8f);
+            HeartLayer(pin, "Shadow", kit, ShadowColor, 0f, new Vector2(0f, -1.5f));
+            HeartLayer(pin, "Rim", kit, Cream, 0f, Vector2.zero);
+            return HeartLayer(pin, "Fill", kit, Hex(0xFF4500), 2.2f, Vector2.zero);
+        }
+
+        private static Image HeartLayer(Transform pin, string name, Kit kit, Color color, float inset, Vector2 shift)
+        {
+            var image = Node(name, pin).gameObject.AddComponent<Image>();
+            image.sprite = kit.Heart;
+            image.color = color;
+            image.raycastTarget = false;
+            var rect = (RectTransform)image.transform;
+            Stretch(rect, inset);
+            rect.offsetMin += shift;
+            rect.offsetMax += shift;
+            return image;
+        }
+
+        // The boost tile's ad pill, inside Retry by its right end; the screen shows it once the free retries
+        // are used.
+        private static RectTransform RetryAdBadge(Transform retry, Kit kit)
+        {
+            var pill = AdPill(retry, kit, Green.Lip, null);
+            pill.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
+            var rect = (RectTransform)pill;
+            rect.anchorMin = rect.anchorMax = new Vector2(1f, 0.5f);
+            rect.pivot = new Vector2(1f, 0.5f);
+            rect.anchoredPosition = new Vector2(-10f, 1.5f);
+            pill.gameObject.SetActive(false);
+            return rect;
+        }
+
         // The row of ways to make the retry easier, the tiles sharing its width.
         private static GameObject BuildOffers(Transform panel, Button bonus, Kit kit)
         {
@@ -405,24 +465,36 @@ namespace BalloonParty.Editor
             var mark = Label(card, "Mark", "?", kit.TitleFont, kit.Plain, 16f, Plum.Lip);
             Stretch((RectTransform)mark.transform, 0f);
 
-            var pill = Node("Pill", content);
+            AdPill(content, kit, Plum.Lip, label);
+            Sash(tile.transform, "Boost", kit);
+        }
+
+        // A white pill with the play mark and "AD" in the given ink: the one picture for "this plays an ad".
+        // label is moved in and restyled; null makes a new one.
+        private static Transform AdPill(Transform parent, Kit kit, Color ink, TMP_Text label)
+        {
+            var pill = Node("Pill", parent);
             var pillFace = pill.gameObject.AddComponent<Image>();
             Rounded(pillFace, kit.Flat, Color.white, 10f);
             pillFace.raycastTarget = false;
             ((RectTransform)pill).sizeDelta = new Vector2(42f, 16f);
             Size(pill.gameObject, 42f, 16f);
-            var play = Icon(pill, "Play", kit.Play, Plum.Lip, 11f);
+            var play = Icon(pill, "Play", kit.Play, ink, 11f);
             var playRect = (RectTransform)play.transform;
             playRect.anchorMin = playRect.anchorMax = new Vector2(0f, 0.5f);
             playRect.anchoredPosition = new Vector2(10f, 0f);
 
+            if (label == null)
+            {
+                label = Node("Text", pill).gameObject.AddComponent<TextMeshProUGUI>();
+            }
+
             label.transform.SetParent(pill, false);
-            StyleLabel(label, "AD", kit.TitleFont, kit.Plain, 10.5f, Plum.Lip);
+            StyleLabel(label, "AD", kit.TitleFont, kit.Plain, 10.5f, ink);
             var labelRect = (RectTransform)label.transform;
             Stretch(labelRect, 0f);
             labelRect.offsetMin = new Vector2(14f, 0f);
-
-            Sash(tile.transform, "Boost", kit);
+            return pill;
         }
 
         // A ribbon across the tile's top-right corner, saying what the tile gives. It runs past the tile's
@@ -717,6 +789,7 @@ namespace BalloonParty.Editor
             public Sprite Gloss;
             public Sprite CardPlus;
             public Sprite Play;
+            public Sprite Heart;
             public TMP_FontAsset TitleFont;
             public TMP_FontAsset HandFont;
             public Material Title;
@@ -738,12 +811,13 @@ namespace BalloonParty.Editor
                     Gloss = SpriteAt("gloss"),
                     CardPlus = SpriteAt("card_plus"),
                     Play = SpriteAt("play"),
+                    Heart = AssetDatabase.LoadAssetAtPath<Sprite>(HeartSpritePath),
                     TitleFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(TitleFontPath),
                     HandFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(HandFontPath),
                 };
                 if (kit.Flat == null || kit.Gradient == null || kit.Shadow == null || kit.Glow == null
                     || kit.Smear == null || kit.DropShadow == null || kit.Gloss == null || kit.CardPlus == null
-                    || kit.Play == null
+                    || kit.Play == null || kit.Heart == null
                     || kit.TitleFont == null || kit.HandFont == null)
                 {
                     return null;

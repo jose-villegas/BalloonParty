@@ -26,9 +26,11 @@ namespace BalloonParty.Game.Run
                 var unlimited = _retryState.IsUnlimited;
                 var canRetry = unlimited || _retryState.RetriesRemaining > 0;
                 var freeRetries = _config.RetriesBeforeAd;
-                var needsAd = freeRetries > 0 && _retryState.RetriesUsed >= freeRetries;
+                var used = _retryState.RetriesUsed;
+                var needsAd = freeRetries > 0 && used >= freeRetries;
+                var free = FreeRetries(freeRetries, unlimited, used);
                 return new FailureOffer(canRetry, needsAd, unlimited ? -1 : _retryState.RetriesRemaining,
-                    _bonusCards.CanDealBonus);
+                    _bonusCards.CanDealBonus, free, free - used);
             }
         }
 
@@ -66,6 +68,18 @@ namespace BalloonParty.Game.Run
             }
 
             return Stage(level, withBonusCard: true, ct);
+        }
+
+        // A capped run never gets more free retries than it has retries at all.
+        private int FreeRetries(int beforeAd, bool unlimited, int used)
+        {
+            var cap = unlimited ? int.MaxValue : used + _retryState.RetriesRemaining;
+            if (beforeAd > 0)
+            {
+                return Math.Min(beforeAd, cap);
+            }
+
+            return unlimited ? 0 : cap;
         }
 
         private bool Stage(int level, bool withBonusCard, CancellationToken ct)

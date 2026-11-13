@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Game.Run;
 using BalloonParty.Shared.Extensions;
@@ -34,11 +35,23 @@ namespace BalloonParty.UI.GameOver
         [Tooltip("{0} is the level the retry starts at.")]
         [SerializeField] private string _retryFormat = "Retry level {0}";
 
-        [Tooltip("When retries are capped: {0} is the level, {1} the retries left.")]
-        [SerializeField] private string _retryCountFormat = "Retry level {0} ({1} left)";
+        [Tooltip("The fill of the first heart pinned on Retry's edge, one per free retry (FailureOffer." +
+            "FreeRetries). The rest are copies of its pin, made as needed. Hidden with no free retries to count. " +
+            "Optional.")]
+        [SerializeField] private UnityEngine.UI.Image _retryPinFill;
 
-        [Tooltip("Once the free retries are used: {0} is the level.")]
-        [SerializeField] private string _retryAdFormat = "Retry level {0} (ad)";
+        [Tooltip("A pin's fill while its retry is still free to use: the HUD hearts' red.")]
+        [SerializeField] private Color _pinLeftColor = new(1f, 0.27f, 0f, 1f);
+
+        [Tooltip("A pin's fill once its retry is used.")]
+        [SerializeField] private Color _pinUsedColor = new(0.06f, 0.14f, 0.23f, 0.35f);
+
+        [Tooltip("The ad mark inside Retry, shown once the free retries are used. The label keeps clear of it. " +
+            "Optional.")]
+        [SerializeField] private RectTransform _retryAdBadge;
+
+        [Tooltip("Space between the label and the ad mark.")]
+        [SerializeField] [Min(0f)] private float _adBadgeGap = 4f;
 
         [Tooltip("The heading and row of ways to make the retry easier; hidden while none is on offer. Optional.")]
         [SerializeField] private GameObject _offers;
@@ -72,7 +85,10 @@ namespace BalloonParty.UI.GameOver
         [Inject] private IPublisher<GameOverDismissedMessage> _dismissedPublisher;
         [Inject] private GameOverPresentationGate _presentationGate;
 
+        private readonly List<UnityEngine.UI.Image> _pinFills = new();
+
         private CanvasGroup _canvasGroup;
+        private Vector4 _retryLabelMargin;
         private FormattedLabel _finalLevel;
         private FormattedLabel _finalScore;
         private FormattedLabel _best;
@@ -93,6 +109,15 @@ namespace BalloonParty.UI.GameOver
             _finalLevel = new FormattedLabel(_finalLevelLabel);
             _finalScore = new FormattedLabel(_finalScoreLabel);
             _best = new FormattedLabel(_bestLabel);
+            if (_retryLabel != null)
+            {
+                _retryLabelMargin = _retryLabel.margin;
+            }
+
+            if (_retryPinFill != null)
+            {
+                _pinFills.Add(_retryPinFill);
+            }
 
             SetVisible(false);
         }
@@ -296,22 +321,57 @@ namespace BalloonParty.UI.GameOver
                 _offers.SetActive(offer.CanBonusRetry);
             }
 
+            ShowAdBadge(offer.RetryNeedsAd);
+            ShowPins(offer.FreeRetries, offer.FreeRetriesLeft);
             if (_retryLabel != null)
             {
-                _retryLabel.text = RetryText(offer);
+                _retryLabel.text = _retryFormat.FormatOrRaw(_deathLevel);
             }
         }
 
-        private string RetryText(FailureOffer offer)
+        private void ShowAdBadge(bool shown)
         {
-            if (offer.RetryNeedsAd)
+            if (_retryAdBadge == null)
             {
-                return _retryAdFormat.FormatOrRaw(_deathLevel);
+                return;
             }
 
-            return offer.RetriesLeft < 0
-                ? _retryFormat.FormatOrRaw(_deathLevel)
-                : _retryCountFormat.FormatOrRaw(_deathLevel, offer.RetriesLeft);
+            _retryAdBadge.gameObject.SetActive(shown);
+            if (_retryLabel != null)
+            {
+                var margin = _retryLabelMargin;
+                if (shown)
+                {
+                    margin.z += _retryAdBadge.rect.width + _adBadgeGap;
+                }
+
+                _retryLabel.margin = margin;
+            }
+        }
+
+        // The first pin is the authored one; more are copied from it the first time a run needs them.
+        private void ShowPins(int total, int left)
+        {
+            if (_retryPinFill == null)
+            {
+                return;
+            }
+
+            var pin = _retryPinFill.transform.parent;
+            var row = pin.parent;
+            row.gameObject.SetActive(total > 0);
+            var fillIndex = _retryPinFill.transform.GetSiblingIndex();
+            while (_pinFills.Count < total)
+            {
+                var copy = Instantiate(pin, row, false);
+                _pinFills.Add(copy.GetChild(fillIndex).GetComponent<UnityEngine.UI.Image>());
+            }
+
+            for (var i = 0; i < _pinFills.Count; i++)
+            {
+                _pinFills[i].transform.parent.gameObject.SetActive(i < total);
+                _pinFills[i].color = i < left ? _pinLeftColor : _pinUsedColor;
+            }
         }
 
         private void SetRetryInteractable(bool interactable)

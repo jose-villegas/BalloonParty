@@ -16,17 +16,30 @@ namespace BalloonParty.Game.Run
         public readonly int RetriesLeft;
 
         /// <summary>
+        ///     The retries this run gets without an ad: the free ones, or with no ad gate, every retry of a capped
+        ///     run. 0 when there's nothing to count (no gate and no cap).
+        /// </summary>
+        public readonly int FreeRetries;
+
+        /// <summary>How many of <see cref="FreeRetries" /> are still to use.</summary>
+        public readonly int FreeRetriesLeft;
+
+        /// <summary>
         ///     A rewarded ad can buy the retry with a bonus card for that attempt. Its ad also pays a retry
         ///     that <see cref="RetryNeedsAd" />, so one ad never costs two.
         /// </summary>
         public readonly bool CanBonusRetry;
 
-        public FailureOffer(bool canRetry, bool retryNeedsAd, int retriesLeft, bool canBonusRetry)
+        public FailureOffer(
+            bool canRetry, bool retryNeedsAd, int retriesLeft, bool canBonusRetry, int freeRetries = 0,
+            int freeRetriesLeft = 0)
         {
             CanRetry = canRetry;
             RetryNeedsAd = canRetry && retryNeedsAd;
             RetriesLeft = retriesLeft;
             CanBonusRetry = canRetry && canBonusRetry;
+            FreeRetries = freeRetries < 0 ? 0 : freeRetries;
+            FreeRetriesLeft = freeRetriesLeft < 0 ? 0 : freeRetriesLeft > FreeRetries ? FreeRetries : freeRetriesLeft;
         }
     }
 

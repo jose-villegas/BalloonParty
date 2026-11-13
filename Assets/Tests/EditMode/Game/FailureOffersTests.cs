@@ -77,6 +77,55 @@ namespace BalloonParty.Tests.Game
             Assert.AreEqual(2, _offers.Current.RetriesLeft);
         }
 
+        [TestCase(0, 2)]
+        [TestCase(1, 1)]
+        [TestCase(2, 0)]
+        [TestCase(5, 0)]
+        public void Current_CountsTheFreeRetriesLeft(int used, int left)
+        {
+            _retryState.RetriesUsed.Returns(used);
+
+            var offer = _offers.Current;
+
+            Assert.AreEqual(2, offer.FreeRetries, "RetriesBeforeAd");
+            Assert.AreEqual(left, offer.FreeRetriesLeft);
+        }
+
+        [Test]
+        public void Current_NoAdGateAndNoCap_HasNoFreeRetriesToCount()
+        {
+            _config.RetriesBeforeAd.Returns(0);
+
+            Assert.AreEqual(0, _offers.Current.FreeRetries);
+        }
+
+        [Test]
+        public void Current_NoAdGate_CountsACappedRunsRetries()
+        {
+            _config.RetriesBeforeAd.Returns(0);
+            _retryState.IsUnlimited.Returns(false);
+            _retryState.RetriesUsed.Returns(1);
+            _retryState.RetriesRemaining.Returns(2);
+
+            var offer = _offers.Current;
+
+            Assert.AreEqual(3, offer.FreeRetries);
+            Assert.AreEqual(2, offer.FreeRetriesLeft);
+        }
+
+        [Test]
+        public void Current_CapBelowTheFreeRetries_CountsOnlyTheCap()
+        {
+            _config.RetriesBeforeAd.Returns(3);
+            _retryState.IsUnlimited.Returns(false);
+            _retryState.RetriesRemaining.Returns(1);
+
+            var offer = _offers.Current;
+
+            Assert.AreEqual(1, offer.FreeRetries);
+            Assert.AreEqual(1, offer.FreeRetriesLeft);
+        }
+
         [Test]
         public void Current_LimitedRetriesRunOut_OffersNoRetry()
         {
