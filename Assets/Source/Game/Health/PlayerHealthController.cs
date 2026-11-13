@@ -11,7 +11,7 @@ using VContainer.Unity;
 namespace BalloonParty.Game.Health
 {
     /// <summary>The player's hit-point pool — the only loss trigger under the spawn-saturation model.</summary>
-    internal class PlayerHealthController : IStartable, IRunResettable, IDisposable, IPlayerHealth
+    internal class PlayerHealthController : IStartable, IRunResettable, IDisposable, IPlayerHealth, IPlayerHealing
     {
         private const int MaxHitPoints = 999;
 
@@ -46,6 +46,8 @@ namespace BalloonParty.Game.Health
         {
             _current.Value = ClampedStartingHitPoints();
             _subscription = _waveDamageSubscriber.Subscribe(msg => Damage(msg.HeartsLost));
+            // A partial refill lets hearts lost in one level carry into the next, so a level-up stops wiping
+            // the slate and a player who keeps losing hearts runs out over several levels.
             _levelUpSubscription = _levelUpSubscriber.Subscribe(_ => Heal(_config.LevelUpHeartRefill));
         }
 
@@ -58,6 +60,17 @@ namespace BalloonParty.Game.Health
         {
             _subscription?.Dispose();
             _levelUpSubscription?.Dispose();
+        }
+
+        public void Heal(int amount)
+        {
+            // A pop can land after the killing hit; a heal never brings the player back.
+            if (_current.Value <= 0)
+            {
+                return;
+            }
+
+            _current.Value = Mathf.Min(ClampedStartingHitPoints(), _current.Value + Mathf.Max(0, amount));
         }
 
         private void Damage(int amount)
@@ -84,13 +97,6 @@ namespace BalloonParty.Game.Health
                 // GameOver state gate stops a later blocked spawn from ending the run twice.
                 _endRunPublisher.Publish(default);
             }
-        }
-
-        // A partial refill lets hearts lost in one level carry into the next, so a level-up stops wiping
-        // the slate and a player who keeps losing hearts runs out over several levels.
-        private void Heal(int amount)
-        {
-            _current.Value = Mathf.Min(ClampedStartingHitPoints(), _current.Value + Mathf.Max(0, amount));
         }
 
         private int ClampedStartingHitPoints()

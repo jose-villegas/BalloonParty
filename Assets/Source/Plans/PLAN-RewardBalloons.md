@@ -42,8 +42,9 @@
 | `LevelCompletion` | `Game/Level/` | A 0–1 fraction computed from `ILevelProgress` when asked: each colour's confirmed points, capped at the requirement, over the requirement times the colours |
 | `IPlayerHealth.Max` | `Game/Health/` | The heart cap, so the missing hearts and the heal agree on it |
 | `BalloonTypeExtensions.IsReward` | `Shared/Extensions/` | Golden and Heart. The level's pick list skips them, so no level mix brings one |
-| `IFreeCardGrant` | `Game/Upgrades/RunUpgrades.cs` | `GrantFreeCard()`: deals one dealable card on the run's seed, holds it, and publishes `UpgradeCardHeldMessage`, so the card reveal plays it. With every card at its limit there is nothing to give, and the golden balloon gives a heart instead |
-| `PlayerHealthController` | `Game/Health/` | Heals one on a heart balloon's pop (`RewardBalloonPoppedMessage`) |
+| `IFreeCardGrant` | `Game/Upgrades/RunUpgrades.cs` | `GrantFreeCard(noCardLeft)`: deals one dealable card on the level's seed, holds it, and publishes `UpgradeCardHeldMessage`, so the card reveal plays it. A retry of the level it was won on gives it back; won while the level-up hand is up, it waits for the pick. With every card at its limit, then or once the pick is held, it calls `noCardLeft`, and the golden balloon gives a heart instead |
+| `RewardBalloonPayout` | `Balloon/Reward/` | Reads the reward balloons' pops from `ActorHitMessage` and pays them: the golden one's card (or heart), and in phase 4 the heart balloon's heart |
+| `IPlayerHealing` | `Game/Health/` | `Heal(amount)` on `PlayerHealthController`, up to `IPlayerHealth.Max` |
 | `IRewardBalloonSettings` | `Configuration/Balloons/` | The tuning below, a block on `BalloonsConfiguration` |
 | Shot solver | `Solver/` | `ShotBoardGather` builds a target for both (today it would see neither); the golden one deflects unless pierced, and is immune to the shared bomb and laser cores |
 
@@ -53,14 +54,16 @@ sequenceDiagram
     participant Rwd as RewardBalloonService
     participant Spw as BalloonSpawner
     participant Hit as ProjectileHitResolver
+    participant Pay as RewardBalloonPayout
     participant Up as RunUpgrades
     Spw->>Rwd: a clock line asks what is due
     Rwd->>Lvl: reads the completion, 0.75 on a purple level
     Rwd-->>Spw: the golden balloon
     Spw->>Rwd: placed, with a callback for when it leaves
     Hit->>Hit: a piercing shot plows it, shatters it at the wall
-    Hit->>Up: golden balloon popped
-    Up->>Up: deal and hold a free card, the reveal plays it
+    Hit->>Pay: golden balloon popped
+    Pay->>Up: grant a free card
+    Up->>Up: deal and hold it, the reveal plays it
 ```
 
 ## Tuning (`IRewardBalloonSettings`)

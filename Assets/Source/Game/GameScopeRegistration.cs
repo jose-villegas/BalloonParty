@@ -208,7 +208,7 @@ namespace BalloonParty.Game
             builder.Register<IFailureOffers, FailureOffers>(Lifetime.Singleton);
             builder.RegisterEntryPoint<RunUpgrades>()
                 .As<IWeaponStats>().As<IShieldsPerBall>().As<IUpgradeDraft>().As<IBonusCardSource>()
-                .As<IRunResettable>();
+                .As<IFreeCardGrant>().As<IRunResettable>();
             builder.RegisterEntryPoint<CardRevealController>().As<ICardReveals>().As<IRunResettable>();
 
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -253,6 +253,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<UnbreakableFormationService>().AsSelf().As<IRunResettable>()
                 .As<IFormationReinforcements>();
             builder.RegisterEntryPoint<RewardBalloonService>().As<IRewardBalloonRequests>().As<IRunResettable>();
+            builder.RegisterEntryPoint<RewardBalloonPayout>();
             builder.RegisterEntryPoint<GridActorHitController>();
             builder.Register<NavigationReadyGate>(Lifetime.Singleton).WithParameter(NavigationState.Game);
             builder.RegisterEntryPoint<GridSpawnerCoordinator>().AsSelf().As<IRunResettable>();
@@ -289,7 +290,8 @@ namespace BalloonParty.Game
             builder.Register<HitPipeline>(Lifetime.Singleton).As<IHitDispatcher>();
             builder.RegisterEntryPoint<RunController>().AsSelf();
             builder.Register<BoardClearController>(Lifetime.Singleton).As<IRunResettable>();
-            builder.RegisterEntryPoint<PlayerHealthController>().AsSelf().As<IRunResettable>().As<IPlayerHealth>();
+            builder.RegisterEntryPoint<PlayerHealthController>().AsSelf().As<IRunResettable>().As<IPlayerHealth>()
+                .As<IPlayerHealing>();
             builder.Register<ILossForecast, LossForecast>(Lifetime.Singleton);
             builder.RegisterEntryPoint<SpaceDanger>().AsSelf().As<IDangerLevel>();
             builder.Register<HeartTrailTracker>(Lifetime.Singleton).AsSelf().As<IRunResettable>();

@@ -221,12 +221,14 @@ namespace BalloonParty.Solver
         {
             snapshot = default;
 
+            // The golden balloon scores nothing and has no durability, yet deflects the shot like an unbreakable.
+            var golden = actor is GoldenBalloonModel;
             int hitsRemaining;
             if (actor is IHasDurability durable)
             {
                 hitsRemaining = durable.HitsRemaining.Value;
             }
-            else if (actor is UnbreakableBalloonModel)
+            else if (actor is UnbreakableBalloonModel || golden)
             {
                 hitsRemaining = int.MaxValue;
             }
@@ -235,7 +237,8 @@ namespace BalloonParty.Solver
                 return false;
             }
 
-            if (actor is not IHasScore scored)
+            var scored = actor as IHasScore;
+            if (scored == null && !golden)
             {
                 return false;
             }
@@ -269,6 +272,12 @@ namespace BalloonParty.Solver
                 biasValue: biasSource?.BiasValue ?? 0f,
                 biasTypeId: biasSource?.BiasTypeId ?? 0,
                 anchored: actor is IBalanceAnchor { IsAnchored: true });
+
+            if (golden)
+            {
+                snapshot = ShotBalloonSnapshot.ForGoldenTarget(position, radius, balance);
+                return true;
+            }
 
             var item = BuildItemProfile(actor, view);
 

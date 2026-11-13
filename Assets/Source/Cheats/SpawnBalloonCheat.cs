@@ -3,9 +3,11 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Reward;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Shared.Diagnostics;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
@@ -18,7 +20,9 @@ namespace BalloonParty.Cheats
 {
     /// <summary>
     ///     Force-spawns a chosen balloon type into open slots, optionally holding a chosen item, in a
-    ///     chosen quantity. Bypasses the weighted spawner and its caps by design — it's a debug tool.
+    ///     chosen quantity. Bypasses the weighted spawner and its caps by design — it's a debug tool. A reward
+    ///     balloon still reports to <see cref="IRewardBalloonRequests" />, so the spawner deals no second one while
+    ///     it's on the board.
     /// </summary>
     internal class SpawnBalloonCheat : ICheat, ICheatControls
     {
@@ -29,6 +33,7 @@ namespace BalloonParty.Cheats
         private readonly SlotGrid _grid;
         private readonly IBalloonsConfiguration _balloonsConfig;
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
+        private readonly IRewardBalloonRequests _rewards;
 
         private readonly List<Vector3> _spawnPath = new();
 
@@ -45,12 +50,14 @@ namespace BalloonParty.Cheats
             BalloonFactory factory,
             SlotGrid grid,
             IBalloonsConfiguration balloonsConfig,
-            IPublisher<BalanceBalloonsMessage> balancePublisher)
+            IPublisher<BalanceBalloonsMessage> balancePublisher,
+            IRewardBalloonRequests rewards)
         {
             _factory = factory;
             _grid = grid;
             _balloonsConfig = balloonsConfig;
             _balancePublisher = balancePublisher;
+            _rewards = rewards;
         }
 
         public void Execute()
@@ -121,7 +128,9 @@ namespace BalloonParty.Cheats
             _spawnPath.Clear();
             _spawnPath.Add(_grid.IndexToWorldPosition(slot));
 
-            var model = _factory.Create(entry, slot, _spawnPath, () => { });
+            var type = entry.BalloonType;
+            var onLeft = type.IsReward() ? _rewards.Placed(type) : () => { };
+            var model = _factory.Create(entry, slot, _spawnPath, onLeft);
 
             if (item != ItemType.None && model is IHasWriteableItemSlot itemSlot)
             {

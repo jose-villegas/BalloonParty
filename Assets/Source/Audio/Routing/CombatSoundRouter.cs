@@ -167,7 +167,11 @@ namespace BalloonParty.Audio.Routing
                 else if (deflectId == GameSoundId.BalloonDeflectUnbreakable)
                 {
                     // Clamped: a deflect no ball caused (a cheat) isn't counted, and would play below the root.
-                    var step = Math.Max(0, _flightStats.Of(message.Context.Projectile).DeflectsOf(BalloonType.Unbreakable) - 1);
+                    // The golden balloon shares the cue, and climbs on its own deflects.
+                    var type = message.Actor is IBalloonModel deflected
+                        ? deflected.TypeName
+                        : BalloonType.Unbreakable;
+                    var step = Math.Max(0, _flightStats.Of(message.Context.Projectile).DeflectsOf(type) - 1);
                     _player.Play(deflectId, message.WorldPosition, semitoneOffset: step);
                 }
                 else
@@ -191,13 +195,14 @@ namespace BalloonParty.Audio.Routing
                 BalloonType.Tougher => GameSoundId.BalloonPopTougher,
                 BalloonType.Rainbow => GameSoundId.BalloonPopRainbow,
                 BalloonType.Unbreakable => GameSoundId.BalloonPopUnbreakable,
+                BalloonType.Golden => GameSoundId.BalloonPopUnbreakable,
                 BalloonType.SimpleSilver => GameSoundId.BalloonPopSilver,
                 BalloonType.SimpleGold => GameSoundId.BalloonPopGold,
                 _ => GameSoundId.BalloonPop,
             };
         }
 
-        // Unbreakables get their own deflect cue; everything else uses the generic deflect.
+        // Unbreakables, and the plated golden balloon, get the metallic deflect; the generic one otherwise.
         private static GameSoundId DeflectSoundFor(BalloonType type)
         {
             return type switch
@@ -205,6 +210,7 @@ namespace BalloonParty.Audio.Routing
                 BalloonType.Tough => GameSoundId.BalloonDeflectTough,
                 BalloonType.Tougher => GameSoundId.BalloonDeflectTougher,
                 BalloonType.Unbreakable => GameSoundId.BalloonDeflectUnbreakable,
+                BalloonType.Golden => GameSoundId.BalloonDeflectUnbreakable,
                 _ => GameSoundId.BalloonDeflect,
             };
         }

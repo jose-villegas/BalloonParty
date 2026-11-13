@@ -130,13 +130,22 @@ namespace BalloonParty.Solver
         /// landmine).</summary>
         public readonly Vector2Int? StaticSlotIndex;
 
+        /// <summary>A reward balloon: its pop pays no score and leaves the streak alone (the golden balloon
+        /// isn't <c>IHasScoreColor</c>, so <c>ScoreController</c> skips it).</summary>
+        public readonly bool Scoreless;
+
+        /// <summary>Item effects (bomb, laser, lightning) do nothing to it: the golden balloon only pops to the
+        /// shot's own pierce.</summary>
+        public readonly bool ImmuneToEffects;
+
         /// <summary>Passthrough so downstream reads stay tidy — null/empty means colourless, exactly as
         /// <see cref="ColorProfile.ColorId" /> does.</summary>
         public string ColorId => Color.ColorId;
 
         private ShotBalloonSnapshot(
             Vector2 position, float radius, int scoreValue, int hitsRemaining, ColorProfile color,
-            BalanceProfile? balance, ShotContactKind contactKind, ItemProfile? item, Vector2Int? staticSlotIndex)
+            BalanceProfile? balance, ShotContactKind contactKind, ItemProfile? item, Vector2Int? staticSlotIndex,
+            bool scoreless = false, bool immuneToEffects = false)
         {
             Position = position;
             Radius = radius;
@@ -147,6 +156,8 @@ namespace BalloonParty.Solver
             ContactKind = contactKind;
             Item = item;
             StaticSlotIndex = staticSlotIndex;
+            Scoreless = scoreless;
+            ImmuneToEffects = immuneToEffects;
         }
 
         /// <summary>A poppable/deflectable colour-scoring target — mirrors a live balloon with
@@ -173,6 +184,16 @@ namespace BalloonParty.Solver
                 position, radius, scoreValue, hitsRemaining,
                 new ColorProfile(null, false, washesProjectileColor, paysSourceColor),
                 balance, ShotContactKind.Poppable, null, null);
+        }
+
+        /// <summary>The golden reward balloon: colourless, deflecting every ordinary hit forever
+        /// (<c>int.MaxValue</c>, so a pierce plows it and the discharge pops it), scoreless, and untouched by
+        /// item effects — mirrors <c>GoldenBalloonModel</c>.</summary>
+        public static ShotBalloonSnapshot ForGoldenTarget(Vector2 position, float radius, BalanceProfile? balance = null)
+        {
+            return new ShotBalloonSnapshot(
+                position, radius, 0, int.MaxValue, new ColorProfile(null, false, false), balance,
+                ShotContactKind.Poppable, null, null, scoreless: true, immuneToEffects: true);
         }
 
         /// <summary>A poppable rainbow/wildcard target — mirrors a live balloon whose colour is the
@@ -226,6 +247,8 @@ namespace BalloonParty.Solver
         public bool IsStatic;
         public bool WashesProjectileColor;
         public bool PaysSourceColor;
+        public bool Scoreless;
+        public bool ImmuneToEffects;
         public ShotSimDynamicActor Actor;
 
         public ShotBalloonState(in ShotBalloonSnapshot snapshot)
@@ -244,6 +267,8 @@ namespace BalloonParty.Solver
             PaysSourceColor = snapshot.Color.PaysSourceColor;
             IsRainbow = snapshot.Color.IsRainbow;
             IsStatic = snapshot.StaticSlotIndex.HasValue;
+            Scoreless = snapshot.Scoreless;
+            ImmuneToEffects = snapshot.ImmuneToEffects;
             Actor = null;
         }
     }

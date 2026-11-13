@@ -13,7 +13,8 @@ particular never rises with level, only through a card.
 |---|---|
 | `IWeaponStats` | The run's weapon after its cards: `MaxBallsInFlight`, `ReloadSeconds` (the reload while another ball flies), `IdleReloadSeconds` (the near-instant one with nothing flying, which no card changes), `StartingShields`, `ExtraItemChance`. Each value is the configured base (`IProjectileFlightConfig`) plus every card held. Read these, not the flight config, wherever a card can change the value |
 | `IUpgradeDraft` | The cards side: `Offer` (the hand of the level-up being presented, empty when none is pending or it deals none), `BonusCard` (the current attempt's bonus card, or null), `StacksOf(card)`, `LimitOf(card)` (its `MaxStacks` plus what held Raise the Bar cards add), and `Pick(slot)`, which stages a card of the hand as the level-up's pick |
-| `RunUpgrades` | Implements both, plus `Game/Run`'s `IBonusCardSource`, `IRunResettable` and `IStartable` (it follows `ILevelProgress.Phase`). Holds the stack count per card and the bonus card, and recomputes the weapon when either changes |
+| `RunUpgrades` | Implements both, plus `Game/Run`'s `IBonusCardSource`, `IFreeCardGrant`, `IRunResettable` and `IStartable` (it follows `ILevelProgress.Phase`). Holds the stack count per card and the bonus card, and recomputes the weapon when either changes |
+| `IFreeCardGrant` | `GrantFreeCard(noCardLeft)`: a card won in play, the golden balloon's (`Balloon/Reward/README.md`). See "Free cards" below |
 
 The deck and its rules are `IUpgradeSettings` (authored in `RunConfig` as `Upgrades`, and registered
 on its own so `RunUpgrades` depends on the deck alone): `CardEveryLevels` (2), `CardsOffered` (3)
@@ -107,6 +108,22 @@ view is attached (`Game/CardReveal/README.md`).
 
 `CanDealBonus` (its `IBonusCardSource` side) is false once only Extra Pen and maxed cards are
 left, and the screen then hides the bonus button.
+
+## Free cards
+
+Popping the golden balloon wins a card in play (`IFreeCardGrant.GrantFreeCard`). It is dealt from
+the same deck as a level-up's hand (an Extra Pen can come, a maxed card can't), held at once, and
+announced with `UpgradeCardHeldMessage`, so the card reveal plays it over the board. With every card
+at its limit it calls the caller's `noCardLeft` instead, and the golden balloon gives a heart. That
+holds for a card that waited for the pick too: if the pick took the last card, the fallback runs then.
+
+| Rule | Why |
+|---|---|
+| Held at once, and kept once its level is won (`Transitioning`) | It's the reward for the shot, so it helps straight away |
+| A retry of the level it was won on starts without it | A retry keeps the cards held when the level began, so a lost level can't be replayed to farm golden balloons |
+| Won while the level-up hand is on screen (`Pending`), it waits for the pick to be held, then is kept | A card dealt under the hand could take the picked card to its limit, and the pick would give nothing. An aborted level-up deals it as the level's own |
+| Won by a shot still in flight after the level's last claim (`Completing`), it is the level's own, and kept once the level-up goes through | The hand isn't dealt yet, so nothing on screen changes under it |
+| Seeded by the level and the free cards dealt this run | A replay of the level deals the same card, and a second one isn't stuck repeating the first |
 
 ## Not built yet
 

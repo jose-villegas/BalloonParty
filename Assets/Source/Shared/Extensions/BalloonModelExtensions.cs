@@ -16,10 +16,10 @@ namespace BalloonParty.Shared.Extensions
         }
 
         /// <summary>The reserved presentation color for a heavy type's impacts: metallic sparks for the
-        /// unbreakable, the tough entry otherwise.</summary>
+        /// unbreakable and the golden balloon, the tough entry otherwise.</summary>
         internal static string GetImpactColorId(this IBalloonModel model)
         {
-            return model.TypeName == BalloonType.Unbreakable
+            return model.TypeName is BalloonType.Unbreakable or BalloonType.Golden
                 ? GamePalette.SparksColorId
                 : GamePalette.ToughColorId;
         }
@@ -34,16 +34,17 @@ namespace BalloonParty.Shared.Extensions
                 return color;
             }
 
-            var isHeavy = model.TypeName is BalloonType.Tough or BalloonType.Unbreakable;
+            var isHeavy = model.TypeName is BalloonType.Tough or BalloonType.Unbreakable or BalloonType.Golden;
             return isHeavy ? model.GetImpactColorId() : color;
         }
 
         /// <summary>Whether a piercing shot plows this actor rather than one-shotting it — a durable
-        /// balloon with more than one hit left, or an unbreakable.</summary>
+        /// balloon with more than one hit left, or one that deflects an ordinary hit (an unbreakable, the golden
+        /// balloon).</summary>
         internal static bool IsTough(this IBalloonModel model)
         {
             return (model is IHasDurability durable && durable.HitsRemaining.Value > 1)
-                   || model is UnbreakableBalloonModel;
+                   || model is IDeflectsShots { DeflectsOrdinaryHit: true };
         }
 
         // Cube direction vectors for the six hex edges (used by the ring walk).

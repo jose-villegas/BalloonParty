@@ -969,6 +969,12 @@ namespace BalloonParty.Solver
                 // exactly like a pop does.
                 NudgeItemHit(dynamics, workingSet[index], tHit);
 
+                // The golden balloon: an item's hit is HitOutcome.None, neither a pop nor spent durability.
+                if (workingSet[index].ImmuneToEffects)
+                {
+                    continue;
+                }
+
                 var flags = hit.Kind == EffectHitKind.PiercingDamage ? DamageFlags.Piercing : outcome.Flags;
                 var pops = hit.Kind == EffectHitKind.PiercingDamage || flags.HasFlag(DamageFlags.Piercing);
                 if (!pops)
@@ -1123,6 +1129,16 @@ namespace BalloonParty.Solver
         // refunding on its own pop, live-faithfully (balloon is IHasColor gates the live refund, and
         // UnbreakableBalloonModel implements neither IHasColor nor IPaintable).
         private static void ResolvePopScore(
+            in ShotBalloonState balloon, in ShotScoreRules scoreRules, in ShotPopCause cause, ref ShotFlightState state)
+        {
+            // The golden balloon: no score, and the streak is left as it was.
+            if (!balloon.Scoreless)
+            {
+                ResolveScoredPop(in balloon, in scoreRules, in cause, ref state);
+            }
+        }
+
+        private static void ResolveScoredPop(
             in ShotBalloonState balloon, in ShotScoreRules scoreRules, in ShotPopCause cause, ref ShotFlightState state)
         {
             var allowedColors = scoreRules.AllowedColors;

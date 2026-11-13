@@ -11,6 +11,13 @@ board. The plan is `Plans/PLAN-RewardBalloons.md`.
 |---|---|
 | `IRewardBalloonRequests` | What `BalloonSpawner` asks. `TryTakeDue` once per clock line: whether this line brings one, and which. `Placed` once it is on the board: returns the callback to call when it leaves |
 | `RewardBalloonService` | The rules behind the answer. Registered as `IRewardBalloonRequests` and `IRunResettable` |
+| `RewardBalloonPayout` | Pays a reward balloon's pop, read from `ActorHitMessage`. The golden balloon: a free card (`IFreeCardGrant`), or a heart (`IPlayerHealing`) when every card is at its limit. Pays each balloon once |
+
+The golden balloon itself is `Balloon/Model/GoldenBalloonModel`: the shot's own ordinary hit bounces
+off it, a pierce pops it (it is tough, so the pierce plows it and it shatters at the next wall), and
+no item touches it: an item's damage has no `DirectHit`, and its hit is `HitOutcome.None`. It is
+colourless and scoreless, resists paint, and carries no item. Its prefab is a gold retint of the
+unbreakable's for now; the plated look is phase 3 of the plan.
 
 ## When each one is due
 
@@ -31,5 +38,5 @@ The tuning is `IRewardBalloonSettings`, a block on `BalloonsConfiguration`.
 ## Leaving the board
 
 Every way off the board (a pop, a board clear, a level change) calls the leave callback, which frees the
-slot for the next of that type. Each placement has its own number, so a callback from an earlier balloon,
+slot for the next of that type. Only a pop pays, which is why the payout reads the hit, not the leave. Each placement has its own number, so a callback from an earlier balloon,
 or from before a run reset, changes nothing. Anything a reward gives belongs on its pop, not on the leave.

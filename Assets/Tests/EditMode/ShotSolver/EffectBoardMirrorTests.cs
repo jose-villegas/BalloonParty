@@ -45,7 +45,10 @@ namespace BalloonParty.Tests.ShotSolver
             // Soap: colourless like Tough/Unbreakable, but IWashesProjectileColor, NOT IResistsPaint
             // (BubbleClusterModel implements neither IPaintable nor IResistsPaint) — see
             // ResistsPaint_ToughUnbreakableAndSoapOccupants_MatchesLiveFormulaOnBothBoards.
-            Soap
+            Soap,
+
+            // Golden reward balloon: colourless and IResistsPaint like an unbreakable, scoreless, effect-immune.
+            Golden
         }
 
         private readonly struct OccupantSpec
@@ -574,6 +577,30 @@ namespace BalloonParty.Tests.ShotSolver
             AssertResistsPaint(simBoard, new Vector2Int(3, 0), expectedPaintable: false, expectedResists: false);
         }
 
+        [Test]
+        public void ResistsPaint_GoldenOccupant_ResistsLikeUnbreakableOnBothBoards()
+        {
+            // The golden is colourless and IResistsPaint on the live board; the sim's snapshot must derive
+            // the same pair (not paintable, resists) or the solver would plan paint onto it.
+            var occupants = new[]
+            {
+                new OccupantSpec(new Vector2Int(0, 0), OccupantKind.Green, "Red"),
+                new OccupantSpec(new Vector2Int(1, 0), OccupantKind.Golden),
+            };
+
+            var grid = BuildGrid(2, 1);
+            PlaceOnGrid(grid, occupants);
+            var gridBoard = new GridEffectBoard(grid, OccupantRadius);
+            gridBoard.Rebuild();
+
+            var workingSet = BuildWorkingSet(grid, occupants);
+            var simBoard = new ShotSimEffectBoard(BuildLattice(grid));
+            simBoard.Bind(workingSet, workingSet.Length);
+
+            AssertResistsPaint(gridBoard, new Vector2Int(1, 0), expectedPaintable: false, expectedResists: true);
+            AssertResistsPaint(simBoard, new Vector2Int(1, 0), expectedPaintable: false, expectedResists: true);
+        }
+
         private static void AssertResistsPaint(
             IEffectBoard board, Vector2Int slot, bool expectedPaintable, bool expectedResists)
         {
@@ -637,6 +664,8 @@ namespace BalloonParty.Tests.ShotSolver
                         new BalloonModelConfig(typeName: BalloonType.Tough, hitsToPop: 5)),
                     OccupantKind.Unbreakable => new UnbreakableBalloonModel(
                         new BalloonModelConfig(typeName: BalloonType.Unbreakable)),
+                    OccupantKind.Golden => new GoldenBalloonModel(
+                        new BalloonModelConfig(typeName: BalloonType.Golden)),
                     OccupantKind.Soap => new BubbleClusterModel(
                         new BalloonModelConfig(typeName: BalloonType.BubbleCluster, hitsToPop: 5),
                         Substitute.For<IGamePalette>()),
@@ -669,6 +698,8 @@ namespace BalloonParty.Tests.ShotSolver
                         paysSourceColor: true),
                     OccupantKind.Rainbow => ShotBoardBuilder.Rainbow(
                         position, OccupantRadius, spec.ColorId, 1, 1, spec.Slot, 0, 0, 0f, false, null),
+                    OccupantKind.Golden => ShotBalloonSnapshot.ForGoldenTarget(
+                        position, OccupantRadius, new BalanceProfile(spec.Slot, 0, 0, 0f, false, null)),
                     OccupantKind.Soap => ShotBoardBuilder.Tough(
                         position, OccupantRadius, 1, int.MaxValue, spec.Slot, 0, 0, 0f, false, null, washes: true),
                     _ => ShotBoardBuilder.Green(

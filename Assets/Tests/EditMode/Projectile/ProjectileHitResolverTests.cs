@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Score;
@@ -173,6 +174,52 @@ namespace BalloonParty.Tests.Projectile
             Assert.AreEqual(0, _projectile.Flight.PendingPierceHits.Count, "a normal balloon pops, it isn't recorded");
             _hitDispatcher.Received(1).Dispatch(Arg.Is<ActorHitMessage>(m =>
                 m.Actor == balloon && m.Outcome == HitOutcome.Pop));
+        }
+
+        [Test]
+        public void Resolve_PlainContactOnGolden_DispatchesDeflectAndLeavesProjectileColour()
+        {
+            _projectile.ColorName.Value = "Red";
+            var golden = CreateGolden();
+            _grid.Place(golden, null, new Vector2Int(2, 3));
+
+            _resolver.Resolve(_projectile, golden, Vector3.zero);
+
+            _hitDispatcher.Received(1).Dispatch(Arg.Is<ActorHitMessage>(m =>
+                m.Actor == golden && m.Outcome == HitOutcome.Deflect));
+            Assert.AreEqual(0, _projectile.Flight.PendingPierceHits.Count, "a plain shot never plows it");
+            Assert.AreEqual("Red", _projectile.ColorName.Value, "the plating bounce steals no colour");
+        }
+
+        [Test]
+        public void Resolve_PiercingContactOnGolden_PlowsWithoutPoppingOnContact()
+        {
+            _projectile.IsPiercing.Value = true;
+            var golden = CreateGolden();
+            _grid.Place(golden, null, new Vector2Int(2, 3));
+
+            var result = _resolver.Resolve(_projectile, golden, new Vector3(1f, 2f, 0f));
+
+            Assert.AreEqual(ProjectileHitVisual.None, result);
+            Assert.AreEqual(1, _projectile.Flight.PendingPierceHits.Count, "the golden is recorded like an unbreakable");
+            Assert.AreSame(golden, _projectile.Flight.PendingPierceHits[0].Balloon);
+            _hitDispatcher.DidNotReceive().Dispatch(Arg.Any<ActorHitMessage>());
+        }
+
+        [Test]
+        public void DischargePending_PlowedGolden_DispatchesPopWithPiercingDirectHit()
+        {
+            _projectile.IsPiercing.Value = true;
+            var golden = CreateGolden();
+            _grid.Place(golden, Substitute.For<ISlotActorView>(), new Vector2Int(2, 3));
+            _resolver.Resolve(_projectile, golden, new Vector3(1f, 2f, 0f));
+
+            _resolver.DischargePending(_projectile);
+
+            _hitDispatcher.Received(1).Dispatch(Arg.Is<ActorHitMessage>(m =>
+                m.Actor == golden && m.Outcome == HitOutcome.Pop
+                && m.Context.Flags.HasFlag(DamageFlags.Piercing) && m.Context.Flags.HasFlag(DamageFlags.DirectHit)));
+            Assert.AreEqual(0, _projectile.Flight.PendingPierceHits.Count);
         }
 
         [Test]
@@ -549,6 +596,11 @@ namespace BalloonParty.Tests.Projectile
             var tough = new BalloonModel(new BalloonModelConfig(hitsToPop: 2));
             _grid.Place(tough, null, slot);
             _resolver.Resolve(_projectile, tough, _grid.IndexToWorldPosition(slot));
+        }
+
+        private static GoldenBalloonModel CreateGolden()
+        {
+            return new GoldenBalloonModel(new BalloonModelConfig(typeName: BalloonType.Golden));
         }
 
         private static BalloonModel CreateBalloon(int hitsToPop, string color)

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Game.Upgrades;
 using BalloonParty.Shared;
@@ -999,6 +1000,196 @@ namespace BalloonParty.Tests.Game
             IReadOnlyList<IUpgradeCardSettings> cards = new[] { _ballCap };
 
             Assert.AreEqual(-1, cards.PickWeightedIndex(card => card.Weight, 0.5f));
+        }
+
+        [Test]
+        public void GrantFreeCard_HoldsACardNow_AndAnnouncesIt()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_ballCap);
+
+            var noCard = false;
+            Upgrades.GrantFreeCard(() => noCard = true);
+
+            Assert.IsFalse(noCard);
+            Assert.AreEqual(1, Upgrades.StacksOf(_ballCap));
+            Assert.AreEqual(BaseCap + 1, Upgrades.MaxBallsInFlight);
+            _rig.CardHeld.Received(1).Publish(Arg.Is<UpgradeCardHeldMessage>(m => m.Card == _ballCap && m.Stacks == 1));
+        }
+
+        [Test]
+        public void GrantFreeCard_EveryCardAtItsLimit_SaysSo()
+        {
+            var once = UpgradeRig.Card(UpgradeKind.Shield, 1f, maxStacks: 1);
+            _rig.Cards.Clear();
+            _rig.Cards.Add(once);
+            Upgrades.GrantFreeCard(null);
+            _rig.CardHeld.ClearReceivedCalls();
+
+            var noCard = false;
+            Upgrades.GrantFreeCard(() => noCard = true);
+
+            Assert.IsTrue(noCard);
+            Assert.AreEqual(1, Upgrades.StacksOf(once));
+            _rig.CardHeld.DidNotReceiveWithAnyArgs().Publish(default);
+        }
+
+        [Test]
+        public void GrantFreeCard_ARetryOfItsLevel_StartsWithoutIt()
+        {
+            _rig.Hold(_shield);
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_ballCap);
+            Upgrades.GrantFreeCard(null);
+
+            _rig.Retry(_rig.Level.Value, withBonusCard: false);
+
+            Assert.AreEqual(0, Upgrades.StacksOf(_ballCap));
+            Assert.AreEqual(BaseCap, Upgrades.MaxBallsInFlight);
+            Assert.AreEqual(1, Upgrades.StacksOf(_shield), "the cards held when the level began are kept");
+        }
+
+        [Test]
+        public void GrantFreeCard_OnceItsLevelIsWon_ARetryKeepsIt()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_ballCap);
+            Upgrades.GrantFreeCard(null);
+            _rig.Present(_rig.Level.Value + 1);
+            _rig.Advance();
+
+            _rig.Retry(_rig.Level.Value, withBonusCard: false);
+
+            Assert.AreEqual(1, Upgrades.StacksOf(_ballCap));
+        }
+
+        [Test]
+        public void GrantFreeCard_AFreshRun_DropsIt()
+        {
+            Upgrades.GrantFreeCard(null);
+            _rig.RetryState.RetryLevel.Returns(0);
+
+            Upgrades.ResetRun(1);
+
+            Assert.AreEqual(BaseCap, Upgrades.MaxBallsInFlight);
+            Assert.AreEqual(0f, Upgrades.ExtraItemChance);
+            Assert.AreEqual(BaseShields, Upgrades.StartingShields);
+        }
+
+        [Test]
+        public void GrantFreeCard_WhileTheHandIsUp_WaitsForThePick_ThenIsKept()
+        {
+            var once = UpgradeRig.Card(UpgradeKind.Shield, 1f, maxStacks: 1);
+            _rig.Cards.Clear();
+            _rig.Cards.Add(once);
+            _rig.Settings.CardEveryLevels.Returns(1);
+            var hand = _rig.Present(_rig.Level.Value + 1);
+            Assert.AreEqual(1, hand.Count);
+            Upgrades.Pick(0);
+
+            var noCard = false;
+            Upgrades.GrantFreeCard(() => noCard = true);
+            Assert.AreEqual(0, Upgrades.StacksOf(once), "a card now would take the picked one to its limit");
+            Assert.IsFalse(noCard, "the pick isn't held yet");
+
+            _rig.Advance();
+            Assert.AreEqual(1, Upgrades.StacksOf(once), "the pick is held first");
+            Assert.IsTrue(noCard, "the pick took the last card, so the winner gets the fallback");
+
+            _rig.Retry(_rig.Level.Value, withBonusCard: false);
+            Assert.AreEqual(1, Upgrades.StacksOf(once));
+        }
+
+        [Test]
+        public void GrantFreeCard_WhileTheHandIsUp_ThenTheLevelUpAborts_IsThisLevels()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_ballCap);
+            _rig.Present(_rig.Level.Value + 1);
+            Upgrades.GrantFreeCard(null);
+
+            _rig.Abort();
+            Assert.AreEqual(1, Upgrades.StacksOf(_ballCap));
+
+            _rig.Retry(_rig.Level.Value, withBonusCard: false);
+            Assert.AreEqual(0, Upgrades.StacksOf(_ballCap));
+        }
+
+        [Test]
+        public void GrantFreeCard_WhileTheLastShotFlies_IsHeldNow_AndKeptOnceTheLevelIsWon()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_ballCap);
+            _rig.Phase.Value = LevelUpPhase.Completing;
+
+            Upgrades.GrantFreeCard(null);
+            Assert.AreEqual(1, Upgrades.StacksOf(_ballCap));
+
+            _rig.Present(_rig.Level.Value + 1);
+            _rig.Advance();
+            _rig.Retry(_rig.Level.Value, withBonusCard: false);
+            Assert.AreEqual(1, Upgrades.StacksOf(_ballCap));
+        }
+
+        [Test]
+        public void GrantFreeCard_AsTheLevelAdvances_IsKept()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_ballCap);
+            _rig.Level.Value++;
+            _rig.Phase.Value = LevelUpPhase.Transitioning;
+
+            Upgrades.GrantFreeCard(null);
+            _rig.Phase.Value = LevelUpPhase.Playing;
+            _rig.Retry(_rig.Level.Value, withBonusCard: false);
+
+            Assert.AreEqual(1, Upgrades.StacksOf(_ballCap));
+        }
+
+        [Test]
+        public void GrantFreeCard_TwoOnOneLevel_CanDealDifferentCards()
+        {
+            var dealt = new HashSet<IUpgradeCardSettings>();
+            for (var level = 1; level <= 20 && dealt.Count < 2; level++)
+            {
+                var rig = new UpgradeRig(_flight);
+                rig.Cards.AddRange(_rig.Cards);
+                rig.Level.Value = level;
+                rig.Upgrades.GrantFreeCard(null);
+                var first = rig.Cards.First(card => rig.Upgrades.StacksOf(card) == 1);
+                rig.Upgrades.GrantFreeCard(null);
+                if (rig.Cards.Any(card => card != first && rig.Upgrades.StacksOf(card) == 1))
+                {
+                    dealt.Add(first);
+                    dealt.Add(rig.Cards.First(card => card != first && rig.Upgrades.StacksOf(card) == 1));
+                }
+
+                rig.Upgrades.Dispose();
+            }
+
+            Assert.AreEqual(2, dealt.Count, "the second free card on a level isn't stuck repeating the first");
+        }
+
+        [Test]
+        public void GrantFreeCard_TheSameLevelDealsTheSameCard()
+        {
+            var first = new UpgradeRig(_flight);
+            var second = new UpgradeRig(_flight);
+            first.Cards.AddRange(_rig.Cards);
+            second.Cards.AddRange(_rig.Cards);
+            first.Level.Value = 7;
+            second.Level.Value = 7;
+
+            first.Upgrades.GrantFreeCard(null);
+            second.Upgrades.GrantFreeCard(null);
+
+            foreach (var card in _rig.Cards)
+            {
+                Assert.AreEqual(first.Upgrades.StacksOf(card), second.Upgrades.StacksOf(card), card.Title);
+            }
+
+            first.Upgrades.Dispose();
+            second.Upgrades.Dispose();
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
 using BalloonParty.Item;
 using BalloonParty.Item.Paint;
@@ -137,6 +138,22 @@ namespace BalloonParty.Tests.Item
 
             Assert.DoesNotThrow(() => _handler.Activate(HitToward(source, new Vector2Int(2, 2), new Vector2Int(1, 2))));
             Assert.IsFalse(tough is IPaintable);
+        }
+
+        [Test]
+        public void Activate_GoldenTarget_ResistsPaintAndStaysColourless()
+        {
+            var source = PlaceBalloon(2, 2, "Red");
+            var golden = new GoldenBalloonModel(new BalloonModelConfig(typeName: BalloonType.Golden));
+            _grid.Place(golden, null, new Vector2Int(1, 2));
+            var target = PlaceBalloon(0, 2, "Blue");
+
+            _handler.Activate(HitToward(source, new Vector2Int(2, 2), new Vector2Int(1, 2)));
+
+            Assert.IsTrue(golden is IResistsPaint);
+            Assert.IsFalse(golden is IPaintable, "colourless: nothing for the paint to commit to");
+            Assert.AreSame(golden, _grid.At(new Vector2Int(1, 2)), "the paint leaves it standing");
+            Assert.AreEqual("Red", target.Color.Value, "the paint still lands on paintable balloons past it");
         }
 
         [Test]

@@ -23,14 +23,18 @@ namespace BalloonParty.Game.Upgrades
     ///     announced with <see cref="UpgradeCardHeldMessage" /> (the card reveal's cue).
     ///     A retry bought with a rewarded ad also gets a bonus card: dealt at the retry's reset (announced with
     ///     <see cref="BonusCardDealtMessage" />), applied on top of the held cards, and dropped when that attempt
-    ///     ends, won or lost.
+    ///     ends, won or lost. A free card (<see cref="IFreeCardGrant" />, the golden balloon's) is held the moment
+    ///     it's won (or, while a level-up's hand is on screen, once its pick is held), and kept once its level is
+    ///     won; a retry of that level drops it, so the retry starts with the cards held when the level began, as it
+    ///     always does.
     /// </summary>
     internal sealed class RunUpgrades : IWeaponStats, IShieldsPerBall, IUpgradeDraft, IBonusCardSource,
-        IRunResettable, IStartable, IDisposable
+        IFreeCardGrant, IRunResettable, IStartable, IDisposable
     {
         // Keep the deals off the generator's and the resolver's streams, which share the level's seed.
         private const int DealSeedSalt = 0x2C1B3C6D;
         private const int BonusSeedSalt = 0x5BD1E995;
+        private const int FreeCardSeedSalt = 0x1B873593;
 
         // Golden-ratio step: spreads consecutive retry counts across the seed, where XOR-ing a small count
         // in would only flip its low bits.
@@ -49,6 +53,11 @@ namespace BalloonParty.Game.Upgrades
         private readonly Dictionary<IUpgradeCardSettings, int> _stacks = new();
         private readonly List<IUpgradeCardSettings> _offer = new();
         private readonly List<IUpgradeCardSettings> _deck = new();
+        // The free cards won on the level being played, which its retry gives back.
+        private readonly List<IUpgradeCardSettings> _freeThisLevel = new();
+        // Free cards won while a level-up's hand is on screen, dealt once its pick is held: what to call for each
+        // if no card is left by then.
+        private readonly List<Action> _freeCardsAfterHand = new();
         private readonly ReactiveProperty<int> _shieldsPerBall;
         private readonly Func<IUpgradeCardSettings, float> _dealWeight;
 
@@ -60,6 +69,8 @@ namespace BalloonParty.Game.Upgrades
         private int _shieldBonus;
         private float _extraItemChance;
         private int _limitBonus;
+        // Free cards dealt this run, so each deals a different one; a retry winds it back with the cards.
+        private int _freeCardsDealt;
 
         public int MaxBallsInFlight => _flight.MaxBallsInFlight + _ballCapBonus;
 
@@ -147,6 +158,25 @@ namespace BalloonParty.Game.Upgrades
             return card.Kind == UpgradeKind.RaiseLimits ? card.Weight * CardsAtTheirLimit() : card.Weight;
         }
 
+        // A shot still in flight can win one after the level's last claim. While the hand is on screen, a card
+        // now could take one of its cards to its limit under the pick, so it waits for the pick to be held. Once
+        // the level advances, the level is won and the card is kept.
+        public void GrantFreeCard(Action noCardLeft)
+        {
+            switch (_levelProgress.Phase.Value)
+            {
+                case LevelUpPhase.Pending:
+                    _freeCardsAfterHand.Add(noCardLeft);
+                    break;
+                case LevelUpPhase.Transitioning:
+                    DealFreeCard(keep: true, noCardLeft);
+                    break;
+                default:
+                    DealFreeCard(keep: false, noCardLeft);
+                    break;
+            }
+        }
+
         public bool Pick(int slot)
         {
             if (_staged != null || slot < 0 || slot >= _offer.Count)
@@ -162,9 +192,11 @@ namespace BalloonParty.Game.Upgrades
         {
             CloseHand();
             _bonus = null;
+            GiveBackFreeCards();
             if (_retryState.RetryLevel <= 0)
             {
                 _stacks.Clear();
+                _freeCardsDealt = 0;
                 TakeCheatStartCards();
             }
             else if (_retryState.RetryWithBonusCard)
@@ -223,8 +255,9 @@ namespace BalloonParty.Game.Upgrades
                     OpenHand(_levelProgress.Level.Value + 1);
                     break;
                 case LevelUpPhase.Transitioning:
-                    // The attempt that earned the bonus is won: the bonus goes, the pick stays.
+                    // The attempt that earned the bonus is won: the bonus goes, the pick and the free cards stay.
                     _bonus = null;
+                    _freeThisLevel.Clear();
                     var held = CommitStaged();
                     CloseHand();
                     Recompute();
@@ -233,10 +266,13 @@ namespace BalloonParty.Game.Upgrades
                         _cardHeldPublisher.Publish(new UpgradeCardHeldMessage(held, StacksOf(held)));
                     }
 
+                    DealFreeCardsAfterHand(keep: true);
                     break;
                 case LevelUpPhase.Playing:
-                    // Reached from Pending only by an aborted level-up: its hand and pick are void.
+                    // Reached from Pending only by an aborted level-up: its hand and pick are void, and the level
+                    // goes on, so a free card won meanwhile is still this level's.
                     CloseHand();
+                    DealFreeCardsAfterHand(keep: false);
                     break;
             }
         }
@@ -291,8 +327,7 @@ namespace BalloonParty.Game.Upgrades
                 return;
             }
 
-            var seed = unchecked((_pacing.SeedForLevel(level) ^ BonusSeedSalt) + _retryState.RetriesUsed * RetrySeedStep);
-            var rng = new System.Random(seed);
+            var rng = new System.Random(DealSeed(level, BonusSeedSalt, _retryState.RetriesUsed));
             var pick = _deck[_deck.PickWeightedIndex(_dealWeight, (float)rng.NextDouble())];
             if (StacksOf(pick) >= LimitOf(pick))
             {
@@ -313,6 +348,68 @@ namespace BalloonParty.Game.Upgrades
 
             Log.Info("Upgrades", $"Bonus card for this attempt: {_bonus.Title}");
             _bonusDealtPublisher.Publish(new BonusCardDealtMessage(_bonus, StacksOf(_bonus) + 1));
+        }
+
+        // Seeded by the level and the run's free cards so far, so a replay of the level deals the same ones.
+        private void DealFreeCard(bool keep, Action noCardLeft)
+        {
+            BuildDeck(forBonus: false);
+            if (_deck.Count == 0)
+            {
+                noCardLeft?.Invoke();
+                return;
+            }
+
+            var seed = DealSeed(_levelProgress.Level.Value, FreeCardSeedSalt, _freeCardsDealt);
+            var rng = new System.Random(seed);
+            var card = _deck[_deck.PickWeightedIndex(_dealWeight, (float)rng.NextDouble())];
+            _deck.Clear();
+
+            _stacks[card] = StacksOf(card) + 1;
+            _freeCardsDealt++;
+            if (!keep)
+            {
+                _freeThisLevel.Add(card);
+            }
+
+            Recompute();
+            Log.Info("Upgrades", $"Free card {card.Title} ({StacksOf(card)}/{LimitOf(card)})");
+            _cardHeldPublisher.Publish(new UpgradeCardHeldMessage(card, StacksOf(card)));
+        }
+
+        private void DealFreeCardsAfterHand(bool keep)
+        {
+            foreach (var noCardLeft in _freeCardsAfterHand)
+            {
+                DealFreeCard(keep, noCardLeft);
+            }
+
+            _freeCardsAfterHand.Clear();
+        }
+
+        private void GiveBackFreeCards()
+        {
+            _freeCardsAfterHand.Clear();
+            _freeCardsDealt -= _freeThisLevel.Count;
+            foreach (var card in _freeThisLevel)
+            {
+                var stacks = StacksOf(card) - 1;
+                if (stacks > 0)
+                {
+                    _stacks[card] = stacks;
+                }
+                else
+                {
+                    _stacks.Remove(card);
+                }
+            }
+
+            _freeThisLevel.Clear();
+        }
+
+        private int DealSeed(int level, int salt, int step)
+        {
+            return unchecked((_pacing.SeedForLevel(level) ^ salt) + step * RetrySeedStep);
         }
 
         private void CloseHand()
