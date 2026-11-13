@@ -35,6 +35,7 @@ namespace BalloonParty.Configuration.Level
 
         private readonly int _allowedColorsMask = ~0;
         private readonly float _spawnIntervalScale = 1f;
+        private readonly bool _isExtraColorLevel;
 
         private IReadOnlyList<ResolvedBalloonEntry> _balloonPickList = Array.Empty<ResolvedBalloonEntry>();
         private IReadOnlyList<ResolvedBalloonEntry> _simpleBalloonPickList = Array.Empty<ResolvedBalloonEntry>();
@@ -53,6 +54,7 @@ namespace BalloonParty.Configuration.Level
         public int AllowedColorsMask => _allowedColorsMask;
 
         public float SpawnIntervalScale => _spawnIntervalScale;
+        public bool IsExtraColorLevel => _isExtraColorLevel;
 
         // Not part of the ILevelParameters read surface consumers use — resolver-only.
         internal BalloonTypeWeight[] BalloonWeights => _balloonWeights;
@@ -66,8 +68,10 @@ namespace BalloonParty.Configuration.Level
             int boardLines, int itemCadence,
             AnimationCurve initialItemCountWeights, AnimationCurve itemCountWeights,
             BalloonTypeWeight[] balloonWeights, ItemTypeWeight[] itemWeights,
-            ResolvedGridActorGate[] gridActorGates, int allowedColorsMask, float spawnIntervalScale = 1f)
+            ResolvedGridActorGate[] gridActorGates, int allowedColorsMask, float spawnIntervalScale = 1f,
+            bool isExtraColorLevel = false)
         {
+            _isExtraColorLevel = isExtraColorLevel;
             _spawnIntervalScale = spawnIntervalScale;
             _boardLines = boardLines;
             _itemCadence = itemCadence;

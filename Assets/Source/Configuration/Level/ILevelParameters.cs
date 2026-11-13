@@ -27,6 +27,12 @@ namespace BalloonParty.Configuration.Level
         /// </summary>
         float SpawnIntervalScale { get; }
 
+        /// <summary>
+        ///     A rare level with one colour more and no threats (<see cref="ExtraColorLevelSettings" />): formations
+        ///     left on the board from the level before call no reinforcements on it.
+        /// </summary>
+        bool IsExtraColorLevel { get; }
+
         /// <param name="waveQuotas">Remaining per-wave allowance by pool key; entries at 0 are excluded, absent keys are unlimited.</param>
         BalloonPrefabEntry PickBalloonEntry(
             IReadOnlyDictionary<string, int> activeCounts, IReadOnlyDictionary<string, int> waveQuotas = null);

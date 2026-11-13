@@ -55,6 +55,9 @@ namespace BalloonParty.Tests.Configuration
                 Assert.IsEmpty(result.GridActorGates, $"level {level}");
                 Assert.AreEqual((1 << (settings.ColorsForLevel(level) + 1)) - 1, result.AllowedColorsMask);
                 Assert.AreEqual(0.5f, result.SpawnIntervalScale);
+                Assert.IsTrue(result.IsExtraColorLevel);
+                Assert.IsTrue(result.Resolve(0f, new System.Random(1)).IsExtraColorLevel);
+                Assert.AreEqual(0.5f, result.Resolve(0f, new System.Random(1)).SpawnIntervalScale);
             }
         }
 
@@ -116,6 +119,7 @@ namespace BalloonParty.Tests.Configuration
                 Assert.AreEqual(expected.GridActorGates.Length, result.GridActorGates.Length, $"level {level}");
                 Assert.AreEqual(expected.AllowedColorsMask, result.AllowedColorsMask);
                 Assert.AreEqual(1f, result.SpawnIntervalScale);
+                Assert.IsFalse(result.IsExtraColorLevel);
             }
         }
 

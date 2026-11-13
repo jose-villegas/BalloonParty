@@ -528,11 +528,12 @@ namespace BalloonParty.Balloon.Spawner
         }
 
         // The unbreakables the formations called in at this wave's start. They are the formation's doing, not
-        // the level's mix, so they bypass its cap and wave quota and are held to the ceiling instead.
+        // the level's mix, so they bypass its cap and wave quota and are held to the ceiling instead. An
+        // extra-colour level has no threats, so a formation left from the level before calls in nothing there.
         private void AddReinforcements(int target)
         {
             var calls = _reinforcements?.TakeReinforcementCalls() ?? 0;
-            if (calls <= 0 || _unbreakableEntry == null)
+            if (calls <= 0 || _unbreakableEntry == null || _levelParams.Current.IsExtraColorLevel)
             {
                 return;
             }
