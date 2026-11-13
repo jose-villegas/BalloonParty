@@ -39,6 +39,7 @@ var namespaceBalloonParty_1_1Shared =
     [ "SortingLayerNameAttribute", "classBalloonParty_1_1Shared_1_1SortingLayerNameAttribute.html", null ],
     [ "StreakShieldRule", "classBalloonParty_1_1Shared_1_1StreakShieldRule.html", "classBalloonParty_1_1Shared_1_1StreakShieldRule" ],
     [ "UnitCircleAttribute", "classBalloonParty_1_1Shared_1_1UnitCircleAttribute.html", null ],
+    [ "UpgradeCardText", "classBalloonParty_1_1Shared_1_1UpgradeCardText.html", "classBalloonParty_1_1Shared_1_1UpgradeCardText" ],
     [ "WallLimits", "structBalloonParty_1_1Shared_1_1WallLimits.html", "structBalloonParty_1_1Shared_1_1WallLimits" ],
     [ "UpgradeKind", "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523", [
       [ "BallCap", "namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523a816190aef027b1d71a17ab86998a40a5", null ],

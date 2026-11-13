@@ -115,7 +115,7 @@ The Card Reveal</h1>
 <blockquote class="doxtable">
 <p>Working plan for showing a won upgrade card: during the level-to-level transition a realistic balloon pops, and two pieces of ribbon fly off it, one with the card's name and one with what it does, drifting across the screen while the level's ascent plays. </p>
 </blockquote>
-<p><b>Status:</b> Phase 1 built (the controller, its queue and the pop pick). Phase 2 built: the bake script makes the pops; eight are in the game (seeds whose falling rubber stays inside the frame). Phase 4 built: <code>CardRevealView</code> plays it on a World Space canvas of its own during the level-up, lit live by the scene's light field and the screen-space light like the board, and the ribbons fly with the ascent. The cheat Reveal A Card shows one on demand. Not built yet: a card icon.</p>
+<p><b>Status:</b> Phase 1 built (the controller, its queue and the pop pick). Phase 2 built: the bake script makes the pops; eight are in the game (seeds whose falling rubber stays inside the frame). Phase 4 built: <code>CardRevealView</code> plays it on a World Space canvas of its own during the level-up, lit live by the scene's light field and the screen-space light like the board, and the ribbons fly with the ascent. The cheat Reveal A Card shows one on demand. The title ribbon starts with the card's hand-drawn icon (<code><a class="el" href="Game_2Upgrades_2README_8md.html">Game/Upgrades/README.md</a></code>), bent with the words.</p>
 <p>The pops are 8 separate physics simulations, baked in Blender by a script in this repo (§5), so the reveal never pops the same way twice in a row.</p>
 <hr  />
 <h2><a class="anchor" id="autotoc_md364"></a>
@@ -218,7 +218,7 @@ The Card Reveal</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">The shreds   </td><td class="markdownTableBodyNone">One sheet, 256×256 (four torn scraps)   </td><td class="markdownTableBodyNone"><code>make_shreds.py</code>    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Card icons, if the ribbons get them   </td><td class="markdownTableBodyNone">4 × 192×192   </td><td class="markdownTableBodyNone">Drawn in the UI style, shared with the coin shop (<code><a class="el" href="PLAN-Coins_8md.html">PLAN-Coins.md</a></code> §7)   </td></tr>
+<td class="markdownTableBodyNone">Card icons   </td><td class="markdownTableBodyNone">One atlas, 768×128 (six 128×128 doodles, one per card kind)   </td><td class="markdownTableBodyNone"><code>Tools/art/make_card_icons.py</code>, built into the <code>CardIcons</code> TextMeshPro sprite asset   </td></tr>
 </table>
 <h2><a class="anchor" id="autotoc_md370"></a>
 7. Phases</h2>

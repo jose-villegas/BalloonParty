@@ -12,6 +12,7 @@ var searchData=
   ['upgradecardheldmessage_9',['UpgradeCardHeldMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage.html',1,'BalloonParty::Shared::Messages']]],
   ['upgradecardsettings_10',['UpgradeCardSettings',['../classBalloonParty_1_1Configuration_1_1UpgradeCardSettings.html',1,'BalloonParty::Configuration']]],
   ['upgradecardslotbuilder_11',['UpgradeCardSlotBuilder',['../classBalloonParty_1_1Editor_1_1UpgradeCardSlotBuilder.html',1,'BalloonParty::Editor']]],
-  ['upgradecardview_12',['UpgradeCardView',['../classBalloonParty_1_1UI_1_1LevelUp_1_1UpgradeCardView.html',1,'BalloonParty::UI::LevelUp']]],
-  ['upgradesettings_13',['UpgradeSettings',['../classBalloonParty_1_1Configuration_1_1UpgradeSettings.html',1,'BalloonParty::Configuration']]]
+  ['upgradecardtext_12',['UpgradeCardText',['../classBalloonParty_1_1Shared_1_1UpgradeCardText.html',1,'BalloonParty::Shared']]],
+  ['upgradecardview_13',['UpgradeCardView',['../classBalloonParty_1_1UI_1_1LevelUp_1_1UpgradeCardView.html',1,'BalloonParty::UI::LevelUp']]],
+  ['upgradesettings_14',['UpgradeSettings',['../classBalloonParty_1_1Configuration_1_1UpgradeSettings.html',1,'BalloonParty::Configuration']]]
 ];

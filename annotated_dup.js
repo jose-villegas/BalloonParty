@@ -378,6 +378,7 @@ var annotated_dup =
           [ "EditModeTestRunner", "classBalloonParty_1_1Editor_1_1TestRunner_1_1EditModeTestRunner.html", "classBalloonParty_1_1Editor_1_1TestRunner_1_1EditModeTestRunner" ]
         ] ],
         [ "AutoFieldPropertyDrawer", "classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html", "classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer" ],
+        [ "CardIconSpriteAssetBuilder", "classBalloonParty_1_1Editor_1_1CardIconSpriteAssetBuilder.html", "classBalloonParty_1_1Editor_1_1CardIconSpriteAssetBuilder" ],
         [ "CardRevealBuilder", "classBalloonParty_1_1Editor_1_1CardRevealBuilder.html", "classBalloonParty_1_1Editor_1_1CardRevealBuilder" ],
         [ "CardRevealShredsBuilder", "classBalloonParty_1_1Editor_1_1CardRevealShredsBuilder.html", "classBalloonParty_1_1Editor_1_1CardRevealShredsBuilder" ],
         [ "ChainLightningViewEditor", "classBalloonParty_1_1Editor_1_1ChainLightningViewEditor.html", "classBalloonParty_1_1Editor_1_1ChainLightningViewEditor" ],
@@ -979,6 +980,7 @@ var annotated_dup =
         [ "SortingLayerNameAttribute", "classBalloonParty_1_1Shared_1_1SortingLayerNameAttribute.html", null ],
         [ "StreakShieldRule", "classBalloonParty_1_1Shared_1_1StreakShieldRule.html", "classBalloonParty_1_1Shared_1_1StreakShieldRule" ],
         [ "UnitCircleAttribute", "classBalloonParty_1_1Shared_1_1UnitCircleAttribute.html", null ],
+        [ "UpgradeCardText", "classBalloonParty_1_1Shared_1_1UpgradeCardText.html", "classBalloonParty_1_1Shared_1_1UpgradeCardText" ],
         [ "WallLimits", "structBalloonParty_1_1Shared_1_1WallLimits.html", "structBalloonParty_1_1Shared_1_1WallLimits" ]
       ] ],
       [ "Slots", "namespaceBalloonParty_1_1Slots.html", [

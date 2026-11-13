@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"GamePaletteAdapter_8cs.html":[7,0,6,21],
 "GamePaletteExtensions_8cs.html":[7,0,3,10,1],
 "GamePalette_8cs.html":[7,0,3,10,0],
 "GameRenderMapsWindow_8cs.html":[7,0,6,3,0],
@@ -8,7 +9,7 @@ var NAVTREEINDEX1 =
 "GameplayMetricsService_8cs.html":[7,0,7,9,8],
 "GatekeeperActorModel_8cs.html":[7,0,15,0,0,11],
 "GizmoDrawingHelper_8cs.html":[7,0,14,10,4],
-"GradientTextureDrawer_8cs.html":[7,0,6,21],
+"GradientTextureDrawer_8cs.html":[7,0,6,22],
 "GradientTextureHelper_8cs.html":[7,0,14,10,5],
 "GraphicColorableRenderer_8cs.html":[7,0,18,7,2],
 "GrassBladeMesh_8cs.html":[7,0,13,0,0],
@@ -30,7 +31,7 @@ var NAVTREEINDEX1 =
 "GroundView_8cs.html":[7,0,13,0,2],
 "HandwrittenHeadsUp_8cs.html":[7,0,18,4,0],
 "HeadsUpAnchor_8cs.html":[7,0,7,4,1],
-"HeadsUpBuilder_8cs.html":[7,0,6,22],
+"HeadsUpBuilder_8cs.html":[7,0,6,23],
 "HeadsUpHandle_8cs.html":[7,0,7,4,2],
 "HeadsUpLayer_8cs.html":[7,0,18,4,1],
 "HeadsUpMergeKey_8cs.html":[7,0,7,4,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "ItemPreviewConfigEditor_8cs.html":[7,0,3,4,3],
 "ItemPreviewConfig_8cs.html":[7,0,3,17],
 "ItemPreviewContext_8cs.html":[7,0,8,5,3],
-"ItemPreviewEntry_8cs.html":[7,0,8,5,4],
-"ItemPreviewPoolBootstrap_8cs.html":[7,0,8,5,5]
+"ItemPreviewEntry_8cs.html":[7,0,8,5,4]
 };

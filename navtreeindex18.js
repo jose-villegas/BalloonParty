@@ -1,5 +1,7 @@
 var NAVTREEINDEX18 =
 {
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a65b65af58f7af1509a95c9fa9e383299":[5,0,0,3,3,5,19],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a65b65af58f7af1509a95c9fa9e383299":[6,0,0,3,3,5,19],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a8f1f88d085962940ef07345dce6c0647":[5,0,0,3,3,5,16],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a8f1f88d085962940ef07345dce6c0647":[6,0,0,3,3,5,16],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a94193e100c30af316c9f6dacbdd2e426":[5,0,0,3,3,5,5],
@@ -247,7 +249,5 @@ var NAVTREEINDEX18 =
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html#a401516071780ac723de4ef3f788a7ce5":[5,0,0,3,5,0,8],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html#a401516071780ac723de4ef3f788a7ce5":[6,0,0,3,5,0,8],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html#a69c89398f06407297a34eee605e46cc5":[5,0,0,3,5,0,1],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html#a69c89398f06407297a34eee605e46cc5":[6,0,0,3,5,0,1],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html#a6e559aadb225e0941cd2e9f611d3a829":[5,0,0,3,5,0,0],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html#a6e559aadb225e0941cd2e9f611d3a829":[6,0,0,3,5,0,0]
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html#a69c89398f06407297a34eee605e46cc5":[6,0,0,3,5,0,1]
 };

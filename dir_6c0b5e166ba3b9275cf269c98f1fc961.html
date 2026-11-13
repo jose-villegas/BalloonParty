@@ -161,6 +161,7 @@ The cards</h1>
 <td class="markdownTableBodyNone"><code>ItemOdds</code>   </td><td class="markdownTableBodyNone">On every item roll (the initial board fill included), each item the level holds gets a chance of <code>Amount</code> × its <code>ExtraItemShare</code> (<code>ItemConfiguration</code>) at an extra copy: 1 for the Shield, down to 0.25 for the Snipe, so strong items grow slower. The whole part always lands; the fraction is a chance; the level's caps still hold   </td><td class="markdownTableBodyNone"><code>ILevelParameters.FillExtraItems</code>, placed by <code>ItemAssigner</code>   </td></tr>
 </table>
 <p>Every card is read live, so a held card applies from the next ball loaded and the next item roll.</p>
+<p>Wherever a card is named (the pick screen, the reveal's ribbon, the tooltips), its title starts with a hand-drawn icon for its kind: <code>UpgradeCardText.Title</code> writes it as a TextMeshPro sprite from the <code>CardIcons</code> sprite asset, tinted with the text. The icons are drawn by <code>Tools/art/make_card_icons.py</code> and built into the sprite asset by Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Upgrades &gt; Build Card Icons (<code>CardIconSpriteAssetBuilder</code>). A new kind needs its icon drawn and named there too; an EditMode test fails until it is.</p>
 <h1><a class="anchor" id="autotoc_md258"></a>
 A level-up's hand</h1>
 <p>The hand follows the level-up phase (<code><a class="el" href="Game_2Level_2README_8md.html">Game/Level/README.md</a></code>):</p>

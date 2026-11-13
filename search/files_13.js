@@ -11,6 +11,7 @@ var searchData=
   ['unusedassetswindow_2ecs_8',['UnusedAssetsWindow.cs',['../UnusedAssetsWindow_8cs.html',1,'']]],
   ['upgradecardheldmessage_2ecs_9',['UpgradeCardHeldMessage.cs',['../UpgradeCardHeldMessage_8cs.html',1,'']]],
   ['upgradecardslotbuilder_2ecs_10',['UpgradeCardSlotBuilder.cs',['../UpgradeCardSlotBuilder_8cs.html',1,'']]],
-  ['upgradecardview_2ecs_11',['UpgradeCardView.cs',['../UpgradeCardView_8cs.html',1,'']]],
-  ['upgradesettings_2ecs_12',['UpgradeSettings.cs',['../UpgradeSettings_8cs.html',1,'']]]
+  ['upgradecardtext_2ecs_11',['UpgradeCardText.cs',['../UpgradeCardText_8cs.html',1,'']]],
+  ['upgradecardview_2ecs_12',['UpgradeCardView.cs',['../UpgradeCardView_8cs.html',1,'']]],
+  ['upgradesettings_2ecs_13',['UpgradeSettings.cs',['../UpgradeSettings_8cs.html',1,'']]]
 ];

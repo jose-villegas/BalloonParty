@@ -36,5 +36,6 @@ var dir_da555cc5272c9bb1aca8990be5c6787a =
     [ "SortingLayerNameAttribute.cs", "SortingLayerNameAttribute_8cs.html", "SortingLayerNameAttribute_8cs" ],
     [ "StreakShieldRule.cs", "StreakShieldRule_8cs.html", "StreakShieldRule_8cs" ],
     [ "UnitCircleAttribute.cs", "UnitCircleAttribute_8cs.html", "UnitCircleAttribute_8cs" ],
+    [ "UpgradeCardText.cs", "UpgradeCardText_8cs.html", "UpgradeCardText_8cs" ],
     [ "WallLimits.cs", "WallLimits_8cs.html", "WallLimits_8cs" ]
 ];
