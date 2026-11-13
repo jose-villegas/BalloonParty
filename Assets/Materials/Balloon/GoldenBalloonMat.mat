@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: GoldenBalloonMat
+  m_Shader: {fileID: 4800000, guid: f39a9b31bb1b476abb4f745329731dba, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - PixelSnap: 0
+    - _AmbientDimming: 0.4
+    - _AmbientHue: 0.25
+    - _EdgePower: 3
+    - _EnvHorizon: -0.05
+    - _EnvStrength: 0.4
+    - _GlintIntensity: 2.4
+    - _GlintPower: 24
+    - _GlitterChance: 0.45
+    - _GlitterIntensity: 4.5
+    - _GlitterReach: 6
+    - _GlitterScale: 16
+    - _GlitterSharpness: 6
+    - _GlitterSize: 0.3
+    - _GlitterSpeed: 4
+    - _LightHeight: 0.9
+    - _LightInfluence: 1
+    - _PlateJitter: 0.8
+    - _PlateScale: 3.2
+    - _PlateSway: 0.35
+    - _PlateSwaySpeed: 0.4
+    - _PlateTilt: 0.16
+    - _PlateVariance: 0.12
+    - _RimWidth: 0.12
+    - _SeamDepth: 0.6
+    - _SeamWidth: 0.03
+    - _SheenIntensity: 0.5
+    - _SheenPower: 5
+    - _SpriteScale: 1
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _GlintColor: {r: 1, g: 0.96, b: 0.8, a: 1}
+    - _GlitterColor: {r: 1, g: 0.98, b: 0.88, a: 1}
+    - _GoldEdge: {r: 0.26, g: 0.14, b: 0.01, a: 1}
+    - _GoldLit: {r: 1, g: 0.87, b: 0.32, a: 1}
+    - _GoldShade: {r: 0.58, g: 0.36, b: 0.03, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _RimColor: {r: 0.55, g: 0.36, b: 0.08, a: 1}
+    - _SeamColor: {r: 0.36, g: 0.2, b: 0.03, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

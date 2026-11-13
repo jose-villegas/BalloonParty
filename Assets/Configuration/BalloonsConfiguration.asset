@@ -165,7 +165,7 @@ MonoBehaviour:
     _omnidirectionalBalance: 0
     _deflectStampScale: 0
     _spawnWeight: 0
-  - _prefab: {fileID: 2797266919102248843, guid: 8b0eff62cc7e346439d334ad64fadf4d, type: 3}
+  - _prefab: {fileID: 2456788019005336009, guid: 4e0e20a330e76fe43b632d56c7458743, type: 3}
     _balloonType: 8
     _nudgeOverrides:
     - _appliesTo: 1
