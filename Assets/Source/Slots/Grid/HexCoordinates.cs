@@ -66,6 +66,7 @@ namespace BalloonParty.Slots.Grid
         /// </summary>
         public static Vector2Int Step(Vector2Int slot, int direction)
         {
+            // No turn: Turn only wraps the direction into 0 to 5.
             var step = AxialSteps[Turn(direction, 0)];
             var q = slot.x - ((slot.y - (slot.y & 1)) / 2) + step.x;
             var r = slot.y + step.y;

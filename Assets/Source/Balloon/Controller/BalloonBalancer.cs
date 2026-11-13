@@ -231,7 +231,7 @@ namespace BalloonParty.Balloon.Controller
             if (_snakeStepDue)
             {
                 _snakeStepDue = false;
-                _formations?.StepSnakes(_relocateActor);
+                _formations?.StepSnakes(_relocateActor, afterArranging: atWaveStart);
             }
 
             _balanceMoves.Clear();

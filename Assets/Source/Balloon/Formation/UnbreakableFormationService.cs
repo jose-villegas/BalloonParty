@@ -54,6 +54,9 @@ namespace BalloonParty.Balloon.Formation
         private int _reinforcementCalls;
         private int _snakePulses;
 
+        // Counts wave-start arrangements, so a step in the same balance can skip the formations arranged in it.
+        private int _arrangePass;
+
         public int ResetOrder => RunResetOrder.Quiesce;
 
         // Exposed for tests.
@@ -109,6 +112,7 @@ namespace BalloonParty.Balloon.Formation
                 return;
             }
 
+            _arrangePass++;
             RollReinforcements();
 
             // The members' own moves remove and place them; that is not a member being lost.
@@ -153,8 +157,10 @@ namespace BalloonParty.Balloon.Formation
         ///     Every snake steps once: its head into the next open slot (<see cref="SnakeWalk" />), each member after
         ///     it into the slot the one ahead just left. A snake boxed in turns round and its tail leads. Like
         ///     <see cref="ArrangeAtWaveStart" />, <paramref name="relocate" /> moves each member.
+        ///     <paramref name="afterArranging" />: the same balance just arranged at wave start, and a snake formed or
+        ///     re-planned there waits for the next beat rather than stepping off its slots the moment it lands.
         /// </summary>
-        internal void StepSnakes(Action<IWriteableDynamicSlotActor, Vector2Int> relocate)
+        internal void StepSnakes(Action<IWriteableDynamicSlotActor, Vector2Int> relocate, bool afterArranging = false)
         {
             var lastRow = _grid.Rows - 1 - Mathf.Max(_settings.HorizontalBottomClearance, _settings.BottomClearance);
             _arranging = true;
@@ -162,9 +168,11 @@ namespace BalloonParty.Balloon.Formation
             {
                 for (var i = 0; i < _formations.Count; i++)
                 {
-                    if (_formations[i].Shape == FormationShape.Snake && _formations[i].MemberList.Count > 0)
+                    var formation = _formations[i];
+                    if (formation.Shape == FormationShape.Snake && formation.MemberList.Count > 0
+                        && !(afterArranging && formation.ArrangedOnPass == _arrangePass))
                     {
-                        Walk(_formations[i], lastRow, relocate);
+                        Walk(formation, lastRow, relocate);
                     }
                 }
             }
@@ -199,6 +207,7 @@ namespace BalloonParty.Balloon.Formation
                 snake.Heading = back >= 0 ? back : HexCoordinates.Turn(snake.Heading, 3);
                 if (!SnakeWalk.TryStep(_grid, members[0].SlotIndex.Value, snake.Heading, lastRow, out direction))
                 {
+                    // Boxed in at both ends: it stays turned round, and next beat tries the other end again.
                     return;
                 }
             }
@@ -302,6 +311,9 @@ namespace BalloonParty.Balloon.Formation
                 var member = assignment.Member;
                 member.SetFormationHeading(heading);
                 member.SetInFormation(true);
+
+                // A snake sets it again at its first step; any other shape stands, so a glide into it reads red.
+                member.SetWalking(false);
                 members.Add(member);
                 _formationOf[member] = formation;
                 if (member.SlotIndex.Value != assignment.Target)
@@ -312,6 +324,7 @@ namespace BalloonParty.Balloon.Formation
 
             formation.Shape = shape;
             formation.WavesLeft = _settings.HoldWaves - 1;
+            formation.ArrangedOnPass = _arrangePass;
             if (shape == FormationShape.Snake)
             {
                 LineUpSnake(formation);
@@ -455,6 +468,8 @@ namespace BalloonParty.Balloon.Formation
         // A step in direction, in world space, so the glitter drifts the way the snake walks.
         private Vector2 DirectionHeading(int direction)
         {
+            // The grid's spacing is the same everywhere, so any slot measures it; this one has all six neighbours
+            // on a board of 3 by 3 or more, though the world maths doesn't need them on the board.
             var from = new Vector2Int(2, 2);
             Vector2 step = _grid.IndexToWorldPosition(HexCoordinates.Step(from, direction)) - _grid.IndexToWorldPosition(from);
             return step.sqrMagnitude > 0f ? step.normalized : Vector2.right;

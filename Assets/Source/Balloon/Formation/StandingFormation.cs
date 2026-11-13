@@ -23,12 +23,16 @@ namespace BalloonParty.Balloon.Formation
         /// </summary>
         internal int Heading { get; set; }
 
+        /// <summary>The wave-start arrangement that last formed or re-planned it.</summary>
+        internal int ArrangedOnPass { get; set; }
+
         internal void Reset()
         {
             MemberList.Clear();
             WavesLeft = 0;
             Touched = false;
             Heading = 0;
+            ArrangedOnPass = 0;
         }
     }
 }

@@ -543,6 +543,37 @@ namespace BalloonParty.Tests.Balloon
             Assert.IsFalse(member.Walking);
         }
 
+        [Test]
+        public void ASnakeJustArranged_WaitsForTheNextBeat_InTheBalanceThatFormedIt()
+        {
+            var snake = FormSnake();
+            var formed = snake.Members.Select(m => m.SlotIndex.Value).ToList();
+
+            _service.StepSnakes(Relocate, afterArranging: true);
+
+            CollectionAssert.AreEqual(formed, snake.Members.Select(m => m.SlotIndex.Value).ToList());
+
+            _service.StepSnakes(Relocate);
+
+            CollectionAssert.AreNotEqual(formed, snake.Members.Select(m => m.SlotIndex.Value).ToList());
+        }
+
+        [Test]
+        public void ASnake_ChangingToAnotherShape_StopsWalking()
+        {
+            var snake = FormSnake();
+            _service.StepSnakes(Relocate);
+            _settings.SnakeWeight.Returns(0f);
+            _settings.HorizontalWeight.Returns(1f);
+            for (var wave = 0; wave < 3; wave++)
+            {
+                Arrange();
+            }
+
+            Assert.AreEqual(FormationShape.Horizontal, _service.CurrentShape);
+            Assert.IsTrue(_unbreakables.All(u => u.InFormation.Value && !u.Walking));
+        }
+
         private void SnakeOnly()
         {
             _settings.HorizontalWeight.Returns(0f);
