@@ -207,16 +207,16 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a9d82c7207556424ef63535d86c1d1936"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac327c21a9033e68c542632d34aef9d07" id="r_ac327c21a9033e68c542632d34aef9d07"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac327c21a9033e68c542632d34aef9d07">Apply</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> card)</td></tr>
 <tr class="separator:ac327c21a9033e68c542632d34aef9d07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a993b8498c346f0637fe609b67166ee94" id="r_a993b8498c346f0637fe609b67166ee94"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a993b8498c346f0637fe609b67166ee94">BuildDeck</a> (bool forBonus)</td></tr>
-<tr class="separator:a993b8498c346f0637fe609b67166ee94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a787844def88bef1d71686769fa62ac80" id="r_a787844def88bef1d71686769fa62ac80"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a787844def88bef1d71686769fa62ac80">BuildDeck</a> (bool forBonus, bool withCapped=false)</td></tr>
+<tr class="separator:a787844def88bef1d71686769fa62ac80"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a919051b87f3e35bd6398c8931cc9419d" id="r_a919051b87f3e35bd6398c8931cc9419d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a919051b87f3e35bd6398c8931cc9419d">CloseHand</a> ()</td></tr>
 <tr class="separator:a919051b87f3e35bd6398c8931cc9419d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab44fddd81fc8ab7bd9b53f04d85d8984" id="r_ab44fddd81fc8ab7bd9b53f04d85d8984"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab44fddd81fc8ab7bd9b53f04d85d8984">CommitStaged</a> ()</td></tr>
 <tr class="separator:ab44fddd81fc8ab7bd9b53f04d85d8984"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae31a44e0986299f8265be34647478568" id="r_ae31a44e0986299f8265be34647478568"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae31a44e0986299f8265be34647478568">DealBonus</a> (int level)</td></tr>
 <tr class="separator:ae31a44e0986299f8265be34647478568"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac40ed3720027292c0b9162fdcdbecd6d" id="r_ac40ed3720027292c0b9162fdcdbecd6d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac40ed3720027292c0b9162fdcdbecd6d">IsDealable</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> card, bool forBonus)</td></tr>
-<tr class="separator:ac40ed3720027292c0b9162fdcdbecd6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affdaa038957e30fe9d80bdec502939b6" id="r_affdaa038957e30fe9d80bdec502939b6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#affdaa038957e30fe9d80bdec502939b6">IsDealable</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> card, bool forBonus, bool withCapped)</td></tr>
+<tr class="separator:affdaa038957e30fe9d80bdec502939b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54105c0a9217f409f976e51c55a11bae" id="r_a54105c0a9217f409f976e51c55a11bae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a54105c0a9217f409f976e51c55a11bae">OnPhaseChanged</a> (<a class="el" href="namespaceBalloonParty_1_1Game_1_1Level.html#a57ec4a7422d3ec908dda0a536e08a712">LevelUpPhase</a> phase)</td></tr>
 <tr class="separator:a54105c0a9217f409f976e51c55a11bae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31d231ffc832b020c6f9e4633980a08e" id="r_a31d231ffc832b020c6f9e4633980a08e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31d231ffc832b020c6f9e4633980a08e">OpenHand</a> (int newLevel)</td></tr>
@@ -379,8 +379,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a993b8498c346f0637fe609b67166ee94" name="a993b8498c346f0637fe609b67166ee94"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a993b8498c346f0637fe609b67166ee94">&#9670;&#160;</a></span>BuildDeck()</h2>
+<a id="a787844def88bef1d71686769fa62ac80" name="a787844def88bef1d71686769fa62ac80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a787844def88bef1d71686769fa62ac80">&#9670;&#160;</a></span>BuildDeck()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -391,8 +391,12 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void BalloonParty.Game.Upgrades.RunUpgrades.BuildDeck </td>
           <td>(</td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>forBonus</em></span></td><td>)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>forBonus</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>withCapped</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -521,8 +525,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ac40ed3720027292c0b9162fdcdbecd6d" name="ac40ed3720027292c0b9162fdcdbecd6d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac40ed3720027292c0b9162fdcdbecd6d">&#9670;&#160;</a></span>IsDealable()</h2>
+<a id="affdaa038957e30fe9d80bdec502939b6" name="affdaa038957e30fe9d80bdec502939b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affdaa038957e30fe9d80bdec502939b6">&#9670;&#160;</a></span>IsDealable()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -538,7 +542,12 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>forBonus</em></span>&#160;)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>forBonus</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>withCapped</em></span>&#160;)</td>
         </tr>
       </table>
   </td>

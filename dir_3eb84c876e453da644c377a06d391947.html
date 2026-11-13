@@ -142,7 +142,7 @@ Contents</h1>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">File   </th><th class="markdownTableHeadNone">What it does    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>FormationShape</code>   </td><td class="markdownTableBodyNone">The four shapes: <code>Horizontal</code>, <code>DiagonalDownRight</code>, <code>DiagonalDownLeft</code>, and <code>ItemCover</code> (a row right under a balloon that carries an item, so shots from below can't reach the item directly)    </td></tr>
+<td class="markdownTableBodyNone"><code>FormationShape</code>   </td><td class="markdownTableBodyNone">The four shapes: <code>Horizontal</code>, <code>DiagonalDownRight</code>, <code>DiagonalDownLeft</code>, and <code>ItemCover</code> (a ring of six around a balloon that carries an item: no shot reaches the item, and the item can't move)    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>FormationPlanner</code>   </td><td class="markdownTableBodyNone">Pure planning. For one shape it lists every spot on the board where the shape fits, works out how far the members would travel to fill it, and picks at random among the few cheapest spots. It then says which member goes to which slot. It reads the grid but never changes it    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -158,7 +158,7 @@ Contents</h1>
 How a formation runs</h1>
 <ol type="1">
 <li><b>Wave start.</b> <code>BalloonBalancer.Balance(atWaveStart: true)</code> calls <code>ArrangeAtWaveStart</code> before the usual roam pre-pass. Roamers therefore see the formation's slots as already taken.</li>
-<li><b>Forming.</b> If at least <code>MinMembers</code> unbreakables are free (in no formation), the service picks a shape for them. The pick is weighted at random from the shape weights. It leaves out the shape just held, and leaves out <code>ItemCover</code> unless an item is on the board. If the picked shape fits nowhere, the service tries the next one. If nothing fits, nothing forms and the unbreakables roam as usual. A formation takes at most <code>MaxMembers</code>; while <code>MinMembers</code> or more are still free after it, they form another one.</li>
+<li><b>Forming.</b> If at least <code>MinMembers</code> unbreakables are free (in no formation), the service picks a shape for them. The pick is weighted at random from the shape weights. It leaves out the shape just held, and leaves out <code>ItemCover</code> unless an item is on the board. If the picked shape fits nowhere, the service tries the next one. If nothing fits, nothing forms and the unbreakables roam as usual. A formation takes at most <code>MaxMembers</code> (a horizontal line, <code>HorizontalMaxMembers</code>); an item cover takes exactly six. While <code>MinMembers</code> or more are still free after it, they form another one.</li>
 <li><b>Moving in.</b> The service hands each member's move to the balancer's relocate routine. That is the same routine roam jumps use, so the members glide in at their normal speed. Each member is marked in formation (<code>IWriteableFormationMember.SetInFormation</code>).</li>
 <li><b>Holding.</b> The formation lasts <code>HoldWaves</code> waves, counting the one it formed in. During that time the next wave starts only count down: nothing moves.</li>
 <li><b>Changing.</b> At the first wave start after the hold, a new shape is planned for that formation's members and any free unbreakables. Members that stay in the formation are never marked out, even for a moment. Members the new shape doesn't need turn red and roam again. If no shape fits, the formation breaks up. Each formation keeps its own count, so they change at different waves.</li>
@@ -173,8 +173,10 @@ Rules a formation keeps</h1>
 <ul>
 <li><b>No pushing.</b> A formation slot must be empty or already hold one of the unbreakables it is planning with. A formation never pushes another balloon aside, and never plans over another formation's members.</li>
 <li><b>Spawn room.</b> It never uses the bottom <code>BottomClearance</code> rows, so spawn lines always have room to enter.</li>
+<li><b>Rows stay up and short.</b> A horizontal line never uses the bottom <code>HorizontalBottomClearance</code> rows, and takes at most <code>HorizontalMaxMembers</code>: close to the cannon, or across the board, a wall shuts the player out. Diagonals leave lanes open, so they keep <code>BottomClearance</code> and <code>MaxMembers</code>. The unbreakables a row leaves out are free to form their own.</li>
+<li><b>A cover is a whole ring.</b> <code>ItemCover</code> takes all six neighbours of the item's balloon, so it needs six free unbreakables, and all six slots on the board and above <code>BottomClearance</code>: an item on the board's edge is never covered. Its place is the item's, so it never looks for a spot of its own.</li>
 <li><b>Members keep their slot.</b> A member already standing on a formation slot keeps it: assignment takes the nearest pairs first, so its distance-0 pair always wins. As a result, no member ever has to move into a slot another member still holds.</li>
-<li><b>The covered item isn't held.</b> <code>ItemCover</code> covers the item where it sits when the formation forms. The item's balloon is not anchored, so if it pops or rises away the cover stays where it is until the next change.</li>
+<li><b>The covered item stays put.</b> With every neighbour taken by an anchored member, the item's balloon has nowhere to move. If it pops anyway (a blast reaches it), the ring stays where it is until the next change.</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md24"></a>
 Anchoring</h1>
@@ -193,7 +195,8 @@ Settings</h1>
 <li><code>Enabled</code></li>
 <li><code>MinMembers</code> (3) and <code>MaxMembers</code> (5)</li>
 <li><code>HoldWaves</code> (3)</li>
-<li><code>BottomClearance</code> (2)</li>
+<li><code>BottomClearance</code> (2) and <code>HorizontalBottomClearance</code> (4, for horizontal lines)</li>
+<li><code>HorizontalMaxMembers</code> (3, for horizontal lines; an item cover always takes six)</li>
 <li><code>SpotChoices</code> (3)</li>
 <li><code>ReinforcementChance</code> (0.35) and <code>ReinforcementCeiling</code> (4)</li>
 <li>the shape weights: horizontal 1, each diagonal 1, item cover 2</li>

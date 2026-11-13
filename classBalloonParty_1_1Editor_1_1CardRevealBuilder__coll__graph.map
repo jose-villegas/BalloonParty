@@ -1,5 +1,5 @@
 <map id="BalloonParty.Editor.CardRevealBuilder" name="BalloonParty.Editor.CardRevealBuilder">
-<area shape="rect" id="Node000001" title="Builds the card reveal: imports the baked pop sheets under Assets/Sprites/UI/CardReveal/ as linear da..." alt="" coords="5,123,183,163"/>
+<area shape="rect" id="Node000001" title="Builds the card reveal: imports the baked pop sheets under Assets/Sprites/UI/CardReveal/ as linear da..." alt="" coords="5,137,183,177"/>
 <area shape="rect" id="Node000002" href="$structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html" title=" " alt="" coords="5,5,183,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,59,97,122,91,122,91,59"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,59,97,137,91,137,91,59"/>
 </map>

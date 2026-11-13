@@ -48,7 +48,7 @@ var searchData=
   ['iscardlevel_45',['IsCardLevel',['../classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a293b77f7b1316bc594c57a2c36c5e107',1,'BalloonParty::Game::Upgrades::RunUpgrades']]],
   ['isclearahead_46',['IsClearAhead',['../classBalloonParty_1_1Shared_1_1PathTrace.html#a1d74b87c63260480b65a6ce5d79c3296',1,'BalloonParty::Shared::PathTrace']]],
   ['iscoloractive_47',['IsColorActive',['../classBalloonParty_1_1UI_1_1Score_1_1ColorProgressBar.html#a4447c368e43ad512ca6eeac1e7dd89b3',1,'BalloonParty::UI::Score::ColorProgressBar']]],
-  ['isdealable_48',['IsDealable',['../classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#ac40ed3720027292c0b9162fdcdbecd6d',1,'BalloonParty::Game::Upgrades::RunUpgrades']]],
+  ['isdealable_48',['IsDealable',['../classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#affdaa038957e30fe9d80bdec502939b6',1,'BalloonParty::Game::Upgrades::RunUpgrades']]],
   ['isdroppedthreat_49',['IsDroppedThreat',['../classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html#ae151ee63f75f1eb907fb66b1c767751a',1,'BalloonParty::Configuration::Level::LevelGenerator']]],
   ['isdwelling_50',['IsDwelling',['../classBalloonParty_1_1Item_1_1LaserItemRotation.html#ae20cb14249d8d8ad3d7c009bfef84b37',1,'BalloonParty::Item::LaserItemRotation']]],
   ['isempty_51',['IsEmpty',['../classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a5260414784faa7763acd5421fde06b19',1,'BalloonParty::Slots::Grid::SlotGrid']]],

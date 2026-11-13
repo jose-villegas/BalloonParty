@@ -1,5 +1,17 @@
 var NAVTREEINDEX18 =
 {
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a688e8cfd3650093a3eee51dc10d95830":[5,0,0,3,3,0,3],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a688e8cfd3650093a3eee51dc10d95830":[6,0,0,3,3,0,3],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a6a20b7e8e18ae9c3996cc23af85489f5":[5,0,0,3,3,0,10],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a6a20b7e8e18ae9c3996cc23af85489f5":[6,0,0,3,3,0,10],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a70c7816ef72c871fbd15a36b3587fe33":[5,0,0,3,3,0,5],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a70c7816ef72c871fbd15a36b3587fe33":[6,0,0,3,3,0,5],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a953d4f135f7a1b280c17ecbb1c27cb8f":[5,0,0,3,3,0,7],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a953d4f135f7a1b280c17ecbb1c27cb8f":[6,0,0,3,3,0,7],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a9688a67929a5daef7933d25585df4593":[5,0,0,3,3,0,4],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a9688a67929a5daef7933d25585df4593":[6,0,0,3,3,0,4],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#acbc252c4a3acda7e21543f5c60976840":[5,0,0,3,3,0,9],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#acbc252c4a3acda7e21543f5c60976840":[6,0,0,3,3,0,9],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#adc763ebadd7b1eeb8d49e797a9956631":[5,0,0,3,3,0,1],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#adc763ebadd7b1eeb8d49e797a9956631":[6,0,0,3,3,0,1],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CameraRigCinematicSettings.html":[5,0,0,3,3,1],
@@ -237,17 +249,5 @@ var NAVTREEINDEX18 =
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html#a5cfd257fa95ff5a96cf873c28bec92ba":[5,0,0,3,4,7,6],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html#a5cfd257fa95ff5a96cf873c28bec92ba":[6,0,0,3,4,7,6],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html#a9d533836a63378eabbfaf571cdcbc84a":[5,0,0,3,4,7,3],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html#a9d533836a63378eabbfaf571cdcbc84a":[6,0,0,3,4,7,3],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html#aa86b955fa62015c1be9e717fc60b7cdf":[5,0,0,3,4,7,7],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html#aa86b955fa62015c1be9e717fc60b7cdf":[6,0,0,3,4,7,7],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html#afc3233ee67760a8a416a112073b592cb":[5,0,0,3,4,7,1],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html#afc3233ee67760a8a416a112073b592cb":[6,0,0,3,4,7,1],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html":[5,0,0,3,4,8],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html":[6,0,0,3,4,8],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#a0018c0e83729137c01c3e1c30b26392d":[5,0,0,3,4,8,2],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#a0018c0e83729137c01c3e1c30b26392d":[6,0,0,3,4,8,2],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#a0c23954eb9d0f4e8c6b52d4858ae653c":[5,0,0,3,4,8,5],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#a0c23954eb9d0f4e8c6b52d4858ae653c":[6,0,0,3,4,8,5],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#a2b481d6fc6b111a6a89c504d1ba924ad":[5,0,0,3,4,8,1],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#a2b481d6fc6b111a6a89c504d1ba924ad":[6,0,0,3,4,8,1]
+"classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html#a9d533836a63378eabbfaf571cdcbc84a":[6,0,0,3,4,7,3]
 };

@@ -1,5 +1,17 @@
 var NAVTREEINDEX20 =
 {
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData.html":[5,0,0,3,5,2],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData.html":[6,0,0,3,5,2],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData.html#a61317b285fbc3a043313b00c167d362d":[5,0,0,3,5,2,0],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData.html#a61317b285fbc3a043313b00c167d362d":[6,0,0,3,5,2,0],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData.html#a7acc4c4912c428ac6c6110ae85e6b281":[5,0,0,3,5,2,4],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData.html#a7acc4c4912c428ac6c6110ae85e6b281":[6,0,0,3,5,2,4],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData.html#ab925d272be5251334c4b87e0b9ffc265":[5,0,0,3,5,2,1],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData.html#ab925d272be5251334c4b87e0b9ffc265":[6,0,0,3,5,2,1],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData.html#ac7a9307bbffee90cd54159f82fab58c5":[5,0,0,3,5,2,5],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData.html#ac7a9307bbffee90cd54159f82fab58c5":[6,0,0,3,5,2,5],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData.html#ae78a5191ab5826173ec16e544ec7a64d":[5,0,0,3,5,2,2],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData.html#ae78a5191ab5826173ec16e544ec7a64d":[6,0,0,3,5,2,2],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData.html#afb920fe3ca56aa92958b8618ea202aba":[5,0,0,3,5,2,3],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData.html#afb920fe3ca56aa92958b8618ea202aba":[6,0,0,3,5,2,3],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html":[5,0,0,3,5,3],
@@ -237,17 +249,5 @@ var NAVTREEINDEX20 =
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a6398e8dca20adcb7ee5648617e22017b":[5,0,0,3,5,25,32],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a6398e8dca20adcb7ee5648617e22017b":[6,0,0,3,5,25,32],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a80bd5e87b286e4259b119b4731be921d":[5,0,0,3,5,25,40],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a80bd5e87b286e4259b119b4731be921d":[6,0,0,3,5,25,40],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a8137ee3de9bc5a92e8f85dbff00bb8ab":[5,0,0,3,5,25,41],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a8137ee3de9bc5a92e8f85dbff00bb8ab":[6,0,0,3,5,25,41],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a96c29ce43b191182578cddf3e2c37e34":[5,0,0,3,5,25,17],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a96c29ce43b191182578cddf3e2c37e34":[6,0,0,3,5,25,17],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a9966a83f407bff45ddce528d6eac9885":[5,0,0,3,5,25,20],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a9966a83f407bff45ddce528d6eac9885":[6,0,0,3,5,25,20],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a99d123e976664a2ba085585e5e48033a":[5,0,0,3,5,25,26],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a99d123e976664a2ba085585e5e48033a":[6,0,0,3,5,25,26],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a9cbd8a5ba9ff38a3b07a71df0324e636":[5,0,0,3,5,25,16],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a9cbd8a5ba9ff38a3b07a71df0324e636":[6,0,0,3,5,25,16],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a9e734984c1a3c5f8d1faf46f2fd5cc95":[5,0,0,3,5,25,35],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a9e734984c1a3c5f8d1faf46f2fd5cc95":[6,0,0,3,5,25,35]
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a80bd5e87b286e4259b119b4731be921d":[6,0,0,3,5,25,40]
 };

@@ -142,6 +142,12 @@ Properties</h2></td></tr>
 <tr class="memitem:a4341909c3eb246071fda4e4b37f976f7" id="r_a4341909c3eb246071fda4e4b37f976f7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4341909c3eb246071fda4e4b37f976f7">HoldWaves</a><code> [get]</code></td></tr>
 <tr class="memdesc:a4341909c3eb246071fda4e4b37f976f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Waves a formation holds, counting the wave it formed in, before it changes shape.  <br /></td></tr>
 <tr class="separator:a4341909c3eb246071fda4e4b37f976f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c4e050eb426c54d560e1bed7c3428db" id="r_a3c4e050eb426c54d560e1bed7c3428db"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3c4e050eb426c54d560e1bed7c3428db">HorizontalBottomClearance</a><code> [get]</code></td></tr>
+<tr class="memdesc:a3c4e050eb426c54d560e1bed7c3428db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bottom rows a horizontal line never uses, at least <a class="el" href="#ab5c0ad5596ec2193680a896854ae5369" title="Bottom rows a formation never uses, so spawn lines always have room to enter.">BottomClearance</a>, so a wall across the board stands well above the cannon.  <br /></td></tr>
+<tr class="separator:a3c4e050eb426c54d560e1bed7c3428db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa25e2e4e755fc2d876a1f50d06e55cac" id="r_aa25e2e4e755fc2d876a1f50d06e55cac"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa25e2e4e755fc2d876a1f50d06e55cac">HorizontalMaxMembers</a><code> [get]</code></td></tr>
+<tr class="memdesc:aa25e2e4e755fc2d876a1f50d06e55cac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Most unbreakables in a horizontal line, so a row never spans the board; the rest are free to form their own.  <br /></td></tr>
+<tr class="separator:aa25e2e4e755fc2d876a1f50d06e55cac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f3a845f32d75da37c96e1286a17a5a6" id="r_a6f3a845f32d75da37c96e1286a17a5a6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f3a845f32d75da37c96e1286a17a5a6">HorizontalWeight</a><code> [get]</code></td></tr>
 <tr class="separator:a6f3a845f32d75da37c96e1286a17a5a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad1f360877b29faa467fd44b79fd21b78" id="r_ad1f360877b29faa467fd44b79fd21b78"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1f360877b29faa467fd44b79fd21b78">ItemCoverWeight</a><code> [get]</code></td></tr>
@@ -173,6 +179,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a93acf9f2d01c02dcf4cf2628752908f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae82c18aa41ce769a6d875f3ecdb4ad3c" id="r_ae82c18aa41ce769a6d875f3ecdb4ad3c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae82c18aa41ce769a6d875f3ecdb4ad3c">_holdWaves</a> = 3</td></tr>
 <tr class="separator:ae82c18aa41ce769a6d875f3ecdb4ad3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f8435bb42127b8aa098e7c6d68f5bd6" id="r_a8f8435bb42127b8aa098e7c6d68f5bd6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8f8435bb42127b8aa098e7c6d68f5bd6">_horizontalBottomClearance</a> = 4</td></tr>
+<tr class="separator:a8f8435bb42127b8aa098e7c6d68f5bd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22133efd2192d0418037e04af7b6ab08" id="r_a22133efd2192d0418037e04af7b6ab08"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a22133efd2192d0418037e04af7b6ab08">_horizontalMaxMembers</a> = 3</td></tr>
+<tr class="separator:a22133efd2192d0418037e04af7b6ab08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba8e12675186f360248fc62a07eab64d" id="r_aba8e12675186f360248fc62a07eab64d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba8e12675186f360248fc62a07eab64d">_horizontalWeight</a> = 1f</td></tr>
 <tr class="separator:aba8e12675186f360248fc62a07eab64d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9b2712aa818cc2681ef51558d78927b" id="r_ad9b2712aa818cc2681ef51558d78927b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad9b2712aa818cc2681ef51558d78927b">_itemCoverWeight</a> = 2f</td></tr>
@@ -266,6 +276,50 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">int BalloonParty.Configuration.Balloons.UnbreakableFormationSettings._holdWaves = 3</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8f8435bb42127b8aa098e7c6d68f5bd6" name="a8f8435bb42127b8aa098e7c6d68f5bd6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f8435bb42127b8aa098e7c6d68f5bd6">&#9670;&#160;</a></span>_horizontalBottomClearance</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.UnbreakableFormationSettings._horizontalBottomClearance = 4</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a22133efd2192d0418037e04af7b6ab08" name="a22133efd2192d0418037e04af7b6ab08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22133efd2192d0418037e04af7b6ab08">&#9670;&#160;</a></span>_horizontalMaxMembers</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.UnbreakableFormationSettings._horizontalMaxMembers = 3</td>
         </tr>
       </table>
   </td>
@@ -531,6 +585,58 @@ Private Attributes</h2></td></tr>
 <p>Waves a formation holds, counting the wave it formed in, before it changes shape. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a1e2f9a7c649b859b07308f8b6d641764">BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="a3c4e050eb426c54d560e1bed7c3428db" name="a3c4e050eb426c54d560e1bed7c3428db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c4e050eb426c54d560e1bed7c3428db">&#9670;&#160;</a></span>HorizontalBottomClearance</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.UnbreakableFormationSettings.HorizontalBottomClearance</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Bottom rows a horizontal line never uses, at least <a class="el" href="#ab5c0ad5596ec2193680a896854ae5369" title="Bottom rows a formation never uses, so spawn lines always have room to enter.">BottomClearance</a>, so a wall across the board stands well above the cannon. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a29d6af280feaabfa6fc0601541bd818c">BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="aa25e2e4e755fc2d876a1f50d06e55cac" name="aa25e2e4e755fc2d876a1f50d06e55cac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa25e2e4e755fc2d876a1f50d06e55cac">&#9670;&#160;</a></span>HorizontalMaxMembers</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.UnbreakableFormationSettings.HorizontalMaxMembers</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Most unbreakables in a horizontal line, so a row never spans the board; the rest are free to form their own. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#aa690423d9a3d9014f13e12cf857a2f87">BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings</a>.</p>
 
 </div>
 </div>

@@ -115,13 +115,13 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCar
 </div><!--header-->
 <div class="contents">
 
-<p>One card to reveal: the card, how many of it the player now has, whether it's a retry's bonus card (for that attempt only) rather than one won at a level-up, and which baked pop shows it.  
+<p>One card to reveal: the card, how many of it the player now has, whether it's a retry's bonus card (for that attempt only) rather than one won at a level-up, whether it is a bonus that landed on a card at its limit and breaks, and which baked pop shows it.  
  <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a9893dfaec30de0deb06797961ab611b9" id="r_a9893dfaec30de0deb06797961ab611b9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9893dfaec30de0deb06797961ab611b9">RevealedCard</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> card, int stacks, bool isBonus, int pop)</td></tr>
-<tr class="separator:a9893dfaec30de0deb06797961ab611b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40e6a78c7ef470fa82f006879328f2c5" id="r_a40e6a78c7ef470fa82f006879328f2c5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40e6a78c7ef470fa82f006879328f2c5">RevealedCard</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> card, int stacks, bool isBonus, int pop, bool isCapped=false)</td></tr>
+<tr class="separator:a40e6a78c7ef470fa82f006879328f2c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -129,16 +129,18 @@ Properties</h2></td></tr>
 <tr class="separator:a14e7df03799f2de7266b3507ccedee61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7338f46ae17a97f3f314c04f6e44a6d2" id="r_a7338f46ae17a97f3f314c04f6e44a6d2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7338f46ae17a97f3f314c04f6e44a6d2">IsBonus</a><code> [get]</code></td></tr>
 <tr class="separator:a7338f46ae17a97f3f314c04f6e44a6d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d6adc2016a5bc76875fb026636e106e" id="r_a9d6adc2016a5bc76875fb026636e106e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9d6adc2016a5bc76875fb026636e106e">IsCapped</a><code> [get]</code></td></tr>
+<tr class="separator:a9d6adc2016a5bc76875fb026636e106e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79005690c5a720eb2610a8b2132105da" id="r_a79005690c5a720eb2610a8b2132105da"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a79005690c5a720eb2610a8b2132105da">Pop</a><code> [get]</code></td></tr>
 <tr class="separator:a79005690c5a720eb2610a8b2132105da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc453e466e834d6dd6f1c124eb3eb014" id="r_afc453e466e834d6dd6f1c124eb3eb014"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afc453e466e834d6dd6f1c124eb3eb014">Stacks</a><code> [get]</code></td></tr>
 <tr class="separator:afc453e466e834d6dd6f1c124eb3eb014"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>One card to reveal: the card, how many of it the player now has, whether it's a retry's bonus card (for that attempt only) rather than one won at a level-up, and which baked pop shows it. </p>
+<div class="textblock"><p>One card to reveal: the card, how many of it the player now has, whether it's a retry's bonus card (for that attempt only) rather than one won at a level-up, whether it is a bonus that landed on a card at its limit and breaks, and which baked pop shows it. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a9893dfaec30de0deb06797961ab611b9" name="a9893dfaec30de0deb06797961ab611b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9893dfaec30de0deb06797961ab611b9">&#9670;&#160;</a></span>RevealedCard()</h2>
+<a id="a40e6a78c7ef470fa82f006879328f2c5" name="a40e6a78c7ef470fa82f006879328f2c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40e6a78c7ef470fa82f006879328f2c5">&#9670;&#160;</a></span>RevealedCard()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -164,7 +166,12 @@ Properties</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>pop</em></span>&#160;)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>pop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isCapped</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -210,6 +217,28 @@ Properties</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool BalloonParty.Game.CardReveal.RevealedCard.IsBonus</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9d6adc2016a5bc76875fb026636e106e" name="a9d6adc2016a5bc76875fb026636e106e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d6adc2016a5bc76875fb026636e106e">&#9670;&#160;</a></span>IsCapped</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Game.CardReveal.RevealedCard.IsCapped</td>
         </tr>
       </table>
   </td>

@@ -182,8 +182,8 @@ Properties</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:ad502cc63fe56f0ab60423fd1c1ac9eca" id="r_ad502cc63fe56f0ab60423fd1c1ac9eca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad502cc63fe56f0ab60423fd1c1ac9eca">Enqueue</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> card, int stacks, bool isBonus)</td></tr>
-<tr class="separator:ad502cc63fe56f0ab60423fd1c1ac9eca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3a774f88dfa6a9307612e9e4d4bd1d9" id="r_ad3a774f88dfa6a9307612e9e4d4bd1d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3a774f88dfa6a9307612e9e4d4bd1d9">Enqueue</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> card, int stacks, bool isBonus, bool isCapped)</td></tr>
+<tr class="separator:ad3a774f88dfa6a9307612e9e4d4bd1d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4571bd9d6802bf38512e4348b2959f68" id="r_a4571bd9d6802bf38512e4348b2959f68"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4571bd9d6802bf38512e4348b2959f68">PickPop</a> ()</td></tr>
 <tr class="separator:a4571bd9d6802bf38512e4348b2959f68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a100f8032244ef72d49aca8f16a019e5f" id="r_a100f8032244ef72d49aca8f16a019e5f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a100f8032244ef72d49aca8f16a019e5f">TryStartNext</a> ()</td></tr>
@@ -206,8 +206,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a08a1559761431abfa339b9f95822900d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0626894ffb8799a0636248cb5fe42e9" id="r_ad0626894ffb8799a0636248cb5fe42e9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad0626894ffb8799a0636248cb5fe42e9">_nextPop</a> = -1</td></tr>
 <tr class="separator:ad0626894ffb8799a0636248cb5fe42e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07128ee8c4f7f4c748eaad68ed4ae701" id="r_a07128ee8c4f7f4c748eaad68ed4ae701"><td class="memItemLeft" align="right" valign="top">readonly Queue&lt;(<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> Card, int Stacks, bool IsBonus)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a07128ee8c4f7f4c748eaad68ed4ae701">_queue</a> = new()</td></tr>
-<tr class="separator:a07128ee8c4f7f4c748eaad68ed4ae701"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0f60a0c9264e09101ddba9cc4fed809" id="r_af0f60a0c9264e09101ddba9cc4fed809"><td class="memItemLeft" align="right" valign="top">readonly Queue&lt;(<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> Card, int Stacks, bool IsBonus, bool IsCapped)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af0f60a0c9264e09101ddba9cc4fed809">_queue</a> = new()</td></tr>
+<tr class="separator:af0f60a0c9264e09101ddba9cc4fed809"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af621aa488ebba9103b8d2090632f85ec" id="r_af621aa488ebba9103b8d2090632f85ec"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="UnbreakableFormationService_8cs.html#a832e8f52fca5a678819ec96269dcb532">Random</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af621aa488ebba9103b8d2090632f85ec">_random</a></td></tr>
 <tr class="separator:af621aa488ebba9103b8d2090632f85ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a652af528e4f8c07616ed674d05edba84" id="r_a652af528e4f8c07616ed674d05edba84"><td class="memItemLeft" align="right" valign="top">readonly List&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a652af528e4f8c07616ed674d05edba84">_recentPops</a> = new()</td></tr>
@@ -362,8 +362,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ad502cc63fe56f0ab60423fd1c1ac9eca" name="ad502cc63fe56f0ab60423fd1c1ac9eca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad502cc63fe56f0ab60423fd1c1ac9eca">&#9670;&#160;</a></span>Enqueue()</h2>
+<a id="ad3a774f88dfa6a9307612e9e4d4bd1d9" name="ad3a774f88dfa6a9307612e9e4d4bd1d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3a774f88dfa6a9307612e9e4d4bd1d9">&#9670;&#160;</a></span>Enqueue()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -384,7 +384,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isBonus</em></span>&#160;)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isBonus</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isCapped</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -648,8 +653,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a07128ee8c4f7f4c748eaad68ed4ae701" name="a07128ee8c4f7f4c748eaad68ed4ae701"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a07128ee8c4f7f4c748eaad68ed4ae701">&#9670;&#160;</a></span>_queue</h2>
+<a id="af0f60a0c9264e09101ddba9cc4fed809" name="af0f60a0c9264e09101ddba9cc4fed809"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0f60a0c9264e09101ddba9cc4fed809">&#9670;&#160;</a></span>_queue</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -658,7 +663,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">readonly Queue&lt;(<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> Card, int Stacks, bool IsBonus)&gt; BalloonParty.Game.CardReveal.CardRevealController._queue = new()</td>
+          <td class="memname">readonly Queue&lt;(<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> Card, int Stacks, bool IsBonus, bool IsCapped)&gt; BalloonParty.Game.CardReveal.CardRevealController._queue = new()</td>
         </tr>
       </table>
   </td>
