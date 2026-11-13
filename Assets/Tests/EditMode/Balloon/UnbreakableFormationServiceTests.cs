@@ -522,8 +522,8 @@ namespace BalloonParty.Tests.Balloon
         {
             Assert.IsFalse(_service.TakeSnakeBeat(), "no snake, no beat");
 
-            _settings.SnakeStepPulses.Returns(2);
             FormSnake();
+            _settings.SnakeStepPulses.Returns(2);
 
             Assert.IsFalse(_service.TakeSnakeBeat());
             Assert.IsTrue(_service.TakeSnakeBeat());
@@ -552,13 +552,14 @@ namespace BalloonParty.Tests.Balloon
             _settings.SnakeStepPulses.Returns(1);
         }
 
-        // A snake of count along row 1 from the west edge, heading east (Random01 is 0).
+        // A snake of count along row 2 from the west edge, heading east (Random01 is 0). An even row, so at the
+        // east edge the south-east slot is still on the board.
         private StandingFormation FormSnake(int count = 3)
         {
             SnakeOnly();
             for (var i = 0; i < count; i++)
             {
-                AddUnbreakable(new Vector2Int(i, 1));
+                AddUnbreakable(new Vector2Int(i, 2));
             }
 
             Arrange();

@@ -50,6 +50,7 @@ namespace BalloonParty.Game.Upgrades
         private readonly List<IUpgradeCardSettings> _offer = new();
         private readonly List<IUpgradeCardSettings> _deck = new();
         private readonly ReactiveProperty<int> _shieldsPerBall;
+        private readonly Func<IUpgradeCardSettings, float> _dealWeight;
 
         private IDisposable _phaseSubscription;
         private IUpgradeCardSettings _staged;
@@ -105,6 +106,7 @@ namespace BalloonParty.Game.Upgrades
             _bonusDealtPublisher = bonusDealtPublisher;
             _cardHeldPublisher = cardHeldPublisher;
             _shieldsPerBall = new ReactiveProperty<int>(StartingShields);
+            _dealWeight = DealWeight;
         }
 
         public void Start()
@@ -134,6 +136,15 @@ namespace BalloonParty.Game.Upgrades
             }
 
             return card.Kind == UpgradeKind.RaiseLimits ? card.MaxStacks : card.MaxStacks + _limitBonus;
+        }
+
+        /// <summary>
+        ///     How likely <paramref name="card" /> is in a deal: its weight, and Raise the Bar's once for every card
+        ///     at its limit, so the more cards are capped, the likelier the raise.
+        /// </summary>
+        internal float DealWeight(IUpgradeCardSettings card)
+        {
+            return card.Kind == UpgradeKind.RaiseLimits ? card.Weight * CardsAtTheirLimit() : card.Weight;
         }
 
         public bool Pick(int slot)
@@ -244,7 +255,7 @@ namespace BalloonParty.Game.Upgrades
             for (var i = 0; i < deal; i++)
             {
                 // Every deck card has a positive weight, so the pick is never -1.
-                var index = _deck.PickWeightedIndex(card => card.Weight, (float)rng.NextDouble());
+                var index = _deck.PickWeightedIndex(_dealWeight, (float)rng.NextDouble());
                 _offer.Add(_deck[index]);
                 _deck.RemoveAt(index);
             }
@@ -282,7 +293,7 @@ namespace BalloonParty.Game.Upgrades
 
             var seed = unchecked((_pacing.SeedForLevel(level) ^ BonusSeedSalt) + _retryState.RetriesUsed * RetrySeedStep);
             var rng = new System.Random(seed);
-            var pick = _deck[_deck.PickWeightedIndex(card => card.Weight, (float)rng.NextDouble())];
+            var pick = _deck[_deck.PickWeightedIndex(_dealWeight, (float)rng.NextDouble())];
             if (StacksOf(pick) >= LimitOf(pick))
             {
                 // Only broken on screen when a card with room can take its place.
@@ -294,7 +305,7 @@ namespace BalloonParty.Game.Upgrades
 
                 Log.Info("Upgrades", $"Bonus card {pick.Title} is at its limit; dealing again");
                 _bonusDealtPublisher.Publish(new BonusCardDealtMessage(pick, StacksOf(pick), capped: true));
-                pick = _deck[_deck.PickWeightedIndex(card => card.Weight, (float)rng.NextDouble())];
+                pick = _deck[_deck.PickWeightedIndex(_dealWeight, (float)rng.NextDouble())];
             }
 
             _bonus = pick;
@@ -344,15 +355,21 @@ namespace BalloonParty.Game.Upgrades
 
         private bool AnyCardAtItsLimit()
         {
+            return CardsAtTheirLimit() > 0;
+        }
+
+        private int CardsAtTheirLimit()
+        {
+            var capped = 0;
             foreach (var (card, count) in _stacks)
             {
                 if (card.Kind != UpgradeKind.RaiseLimits && count >= LimitOf(card))
                 {
-                    return true;
+                    capped++;
                 }
             }
 
-            return false;
+            return capped;
         }
 
         private void Recompute()

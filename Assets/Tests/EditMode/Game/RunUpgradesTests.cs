@@ -572,6 +572,24 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void DealWeight_RaiseLimits_GrowsWithEveryCardAtItsLimit()
+        {
+            var raise = UpgradeRig.Card(UpgradeKind.RaiseLimits, 1f, maxStacks: 2);
+            raise.Weight.Returns(2f);
+            var shield = UpgradeRig.Card(UpgradeKind.Shield, 1f, maxStacks: 1);
+            var reload = UpgradeRig.Card(UpgradeKind.FasterReload, 1f, maxStacks: 1);
+            _rig.Cards.Clear();
+            _rig.Cards.AddRange(new[] { raise, shield, reload });
+
+            Assert.AreEqual(0f, Upgrades.DealWeight(raise), "nothing capped, nothing to raise");
+            _rig.Hold(shield);
+            Assert.AreEqual(2f, Upgrades.DealWeight(raise), "one capped: its own weight");
+            _rig.Hold(reload);
+            Assert.AreEqual(4f, Upgrades.DealWeight(raise), "two capped: twice as likely");
+            Assert.AreEqual(1f, Upgrades.DealWeight(shield), "other cards keep their weight");
+        }
+
+        [Test]
         public void Hold_RaiseLimits_LetsACardAtItsLimitBeDealtAndHeldAgain()
         {
             var raise = UpgradeRig.Card(UpgradeKind.RaiseLimits, 1f, maxStacks: 2);
