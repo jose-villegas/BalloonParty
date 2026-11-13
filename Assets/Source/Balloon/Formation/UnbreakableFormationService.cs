@@ -30,7 +30,12 @@ namespace BalloonParty.Balloon.Formation
             FormationShape.DiagonalDownRight,
             FormationShape.DiagonalDownLeft,
             FormationShape.ItemCover,
+            FormationShape.Snake,
         };
+
+        // West to east, so a snake heading east reverses to lead with its eastmost member.
+        private static readonly Comparison<IWriteableFormationMember> ByColumn = (a, b) =>
+            a.SlotIndex.Value.x - b.SlotIndex.Value.x;
 
         private readonly SlotGrid _grid;
         private readonly IUnbreakableFormationSettings _settings;
@@ -47,6 +52,7 @@ namespace BalloonParty.Balloon.Formation
 
         private bool _arranging;
         private int _reinforcementCalls;
+        private int _snakePulses;
 
         public int ResetOrder => RunResetOrder.Quiesce;
 
@@ -73,6 +79,7 @@ namespace BalloonParty.Balloon.Formation
         {
             ReleaseAll();
             _reinforcementCalls = 0;
+            _snakePulses = 0;
         }
 
         public void Dispose()
@@ -117,6 +124,100 @@ namespace BalloonParty.Balloon.Formation
             }
 
             RebuildMemberList();
+        }
+
+        /// <summary>
+        ///     Counts one balancer pulse; true when a snake on the board is due its step
+        ///     (<see cref="IUnbreakableFormationSettings.SnakeStepPulses" /> pulses apart). With no snake the count
+        ///     starts over, so a new snake's first step comes a full beat after it forms.
+        /// </summary>
+        internal bool TakeSnakeBeat()
+        {
+            if (!HasSnake())
+            {
+                _snakePulses = 0;
+                return false;
+            }
+
+            _snakePulses++;
+            if (_snakePulses < _settings.SnakeStepPulses)
+            {
+                return false;
+            }
+
+            _snakePulses = 0;
+            return true;
+        }
+
+        /// <summary>
+        ///     Every snake steps once: its head into the next open slot (<see cref="SnakeWalk" />), each member after
+        ///     it into the slot the one ahead just left. A snake boxed in turns round and its tail leads. Like
+        ///     <see cref="ArrangeAtWaveStart" />, <paramref name="relocate" /> moves each member.
+        /// </summary>
+        internal void StepSnakes(Action<IWriteableDynamicSlotActor, Vector2Int> relocate)
+        {
+            var lastRow = _grid.Rows - 1 - Mathf.Max(_settings.HorizontalBottomClearance, _settings.BottomClearance);
+            _arranging = true;
+            try
+            {
+                for (var i = 0; i < _formations.Count; i++)
+                {
+                    if (_formations[i].Shape == FormationShape.Snake && _formations[i].MemberList.Count > 0)
+                    {
+                        Walk(_formations[i], lastRow, relocate);
+                    }
+                }
+            }
+            finally
+            {
+                _arranging = false;
+            }
+        }
+
+        private bool HasSnake()
+        {
+            for (var i = 0; i < _formations.Count; i++)
+            {
+                if (_formations[i].Shape == FormationShape.Snake)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void Walk(StandingFormation snake, int lastRow, Action<IWriteableDynamicSlotActor, Vector2Int> relocate)
+        {
+            var members = snake.MemberList;
+            if (!SnakeWalk.TryStep(_grid, members[0].SlotIndex.Value, snake.Heading, lastRow, out var direction))
+            {
+                members.Reverse();
+                var back = members.Count > 1
+                    ? HexCoordinates.DirectionBetween(members[1].SlotIndex.Value, members[0].SlotIndex.Value)
+                    : -1;
+                snake.Heading = back >= 0 ? back : HexCoordinates.Turn(snake.Heading, 3);
+                if (!SnakeWalk.TryStep(_grid, members[0].SlotIndex.Value, snake.Heading, lastRow, out direction))
+                {
+                    return;
+                }
+            }
+
+            snake.Heading = direction;
+            var heading = DirectionHeading(direction);
+            var target = HexCoordinates.Step(members[0].SlotIndex.Value, direction);
+
+            // Head first: each member's slot is free by the time the one behind steps into it, even across a gap
+            // a popped member left.
+            for (var i = 0; i < members.Count; i++)
+            {
+                var member = members[i];
+                var from = member.SlotIndex.Value;
+                member.SetWalking(true);
+                member.SetFormationHeading(heading);
+                relocate(member, target);
+                target = from;
+            }
         }
 
         private void RollReinforcements()
@@ -211,6 +312,29 @@ namespace BalloonParty.Balloon.Formation
 
             formation.Shape = shape;
             formation.WavesLeft = _settings.HoldWaves - 1;
+            if (shape == FormationShape.Snake)
+            {
+                LineUpSnake(formation);
+            }
+        }
+
+        // A snake forms as a row and sets off along it, east or west at random, led by the member at that end.
+        private void LineUpSnake(StandingFormation snake)
+        {
+            var members = snake.MemberList;
+            members.Sort(ByColumn);
+            var east = Random01() < 0.5f;
+            if (east)
+            {
+                members.Reverse();
+            }
+
+            snake.Heading = east ? 0 : 3;
+            var heading = DirectionHeading(snake.Heading);
+            for (var i = 0; i < members.Count; i++)
+            {
+                members[i].SetFormationHeading(heading);
+            }
         }
 
         // The unbreakables a formation may plan with: its own members and every free unbreakable. Members of
@@ -299,6 +423,7 @@ namespace BalloonParty.Balloon.Formation
                 FormationShape.DiagonalDownRight => _settings.DiagonalWeight,
                 FormationShape.DiagonalDownLeft => _settings.DiagonalWeight,
                 FormationShape.ItemCover => _settings.ItemCoverWeight,
+                FormationShape.Snake => _settings.SnakeWeight,
                 _ => 0f,
             };
         }
@@ -324,6 +449,14 @@ namespace BalloonParty.Balloon.Formation
             }
 
             Vector2 step = _grid.IndexToWorldPosition(to) - _grid.IndexToWorldPosition(Vector2Int.zero);
+            return step.sqrMagnitude > 0f ? step.normalized : Vector2.right;
+        }
+
+        // A step in direction, in world space, so the glitter drifts the way the snake walks.
+        private Vector2 DirectionHeading(int direction)
+        {
+            var from = new Vector2Int(2, 2);
+            Vector2 step = _grid.IndexToWorldPosition(HexCoordinates.Step(from, direction)) - _grid.IndexToWorldPosition(from);
             return step.sqrMagnitude > 0f ? step.normalized : Vector2.right;
         }
 

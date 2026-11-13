@@ -43,9 +43,10 @@ namespace BalloonParty.Balloon.Formation
             List<FormationAssignment> assignmentsOut)
         {
             assignmentsOut.Clear();
-            var isRow = shape == FormationShape.Horizontal;
+            var isRow = shape is FormationShape.Horizontal or FormationShape.Snake;
             var count = MemberCount(shape, candidates.Count, settings);
             // A row across the board this close to the cannon walls the player in; a diagonal leaves lanes open.
+            // A snake starts as a row and walks above the same rows.
             var clearance = isRow
                 ? Mathf.Max(settings.HorizontalBottomClearance, settings.BottomClearance)
                 : settings.BottomClearance;
@@ -109,6 +110,7 @@ namespace BalloonParty.Balloon.Formation
             switch (shape)
             {
                 case FormationShape.Horizontal:
+                case FormationShape.Snake:
                     for (var i = 0; i < count; i++)
                     {
                         _slots.Add(new Vector2Int(anchor.x + i, anchor.y));
@@ -151,7 +153,7 @@ namespace BalloonParty.Balloon.Formation
         }
 
         // A cover is the whole ring or nothing. A horizontal line stops at HorizontalMaxMembers so it never
-        // spans the board; a diagonal leaves lanes open and takes up to MaxMembers.
+        // spans the board, a snake at SnakeMaxMembers; a diagonal leaves lanes open and takes up to MaxMembers.
         private static int MemberCount(
             FormationShape shape, int candidates, IUnbreakableFormationSettings settings)
         {
@@ -160,9 +162,14 @@ namespace BalloonParty.Balloon.Formation
                 return candidates >= CoverMembers ? CoverMembers : 0;
             }
 
-            var most = shape == FormationShape.Horizontal && settings.HorizontalMaxMembers > 0
-                ? Mathf.Min(settings.HorizontalMaxMembers, settings.MaxMembers)
-                : settings.MaxMembers;
+            var most = shape switch
+            {
+                FormationShape.Horizontal when settings.HorizontalMaxMembers > 0 =>
+                    Mathf.Min(settings.HorizontalMaxMembers, settings.MaxMembers),
+                FormationShape.Snake when settings.SnakeMaxMembers > 0 =>
+                    Mathf.Min(settings.SnakeMaxMembers, settings.MaxMembers),
+                _ => settings.MaxMembers,
+            };
             return Mathf.Min(candidates, most);
         }
 

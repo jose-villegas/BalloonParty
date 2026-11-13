@@ -30,6 +30,14 @@ namespace BalloonParty.Configuration.Balloons
                  "the board; the rest are free to form their own. Held between Min Members and Max Members.")]
         [SerializeField] [Min(2)] private int _horizontalMaxMembers = 3;
 
+        [Tooltip("Most unbreakables in a snake, the line that walks the board. Held between Min Members and " +
+                 "Max Members.")]
+        [SerializeField] [Min(2)] private int _snakeMaxMembers = 4;
+
+        [Tooltip("Balancer pulses (Flight Rebalance Interval) between a snake's steps. Every step lands on the " +
+                 "board's own beat, so the player can see the next one coming.")]
+        [SerializeField] [Min(1)] private int _snakeStepPulses = 1;
+
         [Tooltip("A formation picks at random among this many of its least-travel spots, so it doesn't " +
                  "always form in the same place. 1 = always the least travel.")]
         [SerializeField] [Min(1)] private int _spotChoices = 3;
@@ -49,9 +57,11 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Weight of each of the two diagonals.")]
         [SerializeField] [Min(0f)] private float _diagonalWeight = 1f;
 
-        [Tooltip("Weight of covering an item from below. Only in the pick while a balloon on the board " +
-                 "carries an item.")]
+        [Tooltip("Weight of ringing an item. Only in the pick while a balloon on the board carries an item.")]
         [SerializeField] [Min(0f)] private float _itemCoverWeight = 2f;
+
+        [Tooltip("Weight of a snake, the line that walks the board.")]
+        [SerializeField] [Min(0f)] private float _snakeWeight = 1f;
 
         public bool Enabled => _enabled;
         public int MinMembers => _minMembers;
@@ -60,10 +70,13 @@ namespace BalloonParty.Configuration.Balloons
         public int BottomClearance => _bottomClearance;
         public int HorizontalBottomClearance => Mathf.Max(_horizontalBottomClearance, _bottomClearance);
         public int HorizontalMaxMembers => Mathf.Clamp(_horizontalMaxMembers, _minMembers, MaxMembers);
+        public int SnakeMaxMembers => Mathf.Clamp(_snakeMaxMembers, _minMembers, MaxMembers);
+        public int SnakeStepPulses => Mathf.Max(1, _snakeStepPulses);
         public int SpotChoices => _spotChoices;
         public float HorizontalWeight => _horizontalWeight;
         public float DiagonalWeight => _diagonalWeight;
         public float ItemCoverWeight => _itemCoverWeight;
+        public float SnakeWeight => _snakeWeight;
         public float ReinforcementChance => _reinforcementChance;
         public int ReinforcementCeiling => _reinforcementCeiling;
     }

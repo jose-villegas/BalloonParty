@@ -122,6 +122,26 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void Snake_FormsAsARowOfAtMostItsMaximum_AboveTheRowClearance()
+        {
+            _settings.SnakeMaxMembers.Returns(4);
+            _settings.HorizontalBottomClearance.Returns(4);
+            BuildGrid(7, 8);
+            AddMembers(new Vector2Int(0, 7), new Vector2Int(1, 7), new Vector2Int(2, 7), new Vector2Int(4, 7),
+                new Vector2Int(6, 7));
+
+            Assert.IsTrue(Plan(FormationShape.Snake));
+
+            var targets = Targets().OrderBy(t => t.x).ToList();
+            Assert.AreEqual(4, targets.Count);
+            Assert.IsTrue(targets.All(t => t.y == 3), "one row, as low as a line may stand");
+            for (var i = 1; i < targets.Count; i++)
+            {
+                Assert.AreEqual(targets[i - 1].x + 1, targets[i].x, "each member next to the one before");
+            }
+        }
+
+        [Test]
         public void Diagonal_KeepsTheShorterBottomClearance()
         {
             _settings.HorizontalBottomClearance.Returns(4);

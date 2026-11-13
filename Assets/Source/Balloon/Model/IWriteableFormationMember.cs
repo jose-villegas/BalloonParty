@@ -9,5 +9,7 @@ namespace BalloonParty.Balloon.Model
         void SetInFormation(bool inFormation);
 
         void SetFormationHeading(Vector2 heading);
+
+        void SetWalking(bool walking);
     }
 }

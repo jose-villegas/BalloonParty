@@ -116,10 +116,14 @@ namespace BalloonParty.Balloon.Type
             Apply(0f);
         }
 
-        /// <summary>Blue only once the member has arrived: while it still glides into its slot it stays red.</summary>
+        /// <summary>
+        ///     Blue only once the member has arrived: while it still glides into its slot it stays red. A walking
+        ///     member (a snake's) stays blue as it steps along.
+        /// </summary>
         internal static bool ShowsFormation(IBalloonModel model)
         {
-            return model is IFormationMember { InFormation: { Value: true } } && model.IsStable.Value;
+            return model is IFormationMember { InFormation: { Value: true } } member
+                   && (model.IsStable.Value || member.Walking);
         }
 
         private void CaptureRestLook()

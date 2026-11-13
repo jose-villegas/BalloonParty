@@ -17,11 +17,18 @@ namespace BalloonParty.Balloon.Formation
         /// <summary>A member was pierced since it formed; a touched formation calls no reinforcements.</summary>
         internal bool Touched { get; set; }
 
+        /// <summary>
+        ///     A snake's walking direction (<see cref="Slots.Grid.HexCoordinates.Step" />); its members run head
+        ///     first.
+        /// </summary>
+        internal int Heading { get; set; }
+
         internal void Reset()
         {
             MemberList.Clear();
             WavesLeft = 0;
             Touched = false;
+            Heading = 0;
         }
     }
 }

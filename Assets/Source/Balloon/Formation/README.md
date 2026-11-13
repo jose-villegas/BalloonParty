@@ -13,7 +13,8 @@ unbreakables, past the level's usual cap, and those form formations of their own
 
 | File | What it does |
 |---|---|
-| `FormationShape` | The four shapes: `Horizontal`, `DiagonalDownRight`, `DiagonalDownLeft`, and `ItemCover` (a ring of six around a balloon that carries an item: no shot reaches the item, and the item can't move) |
+| `FormationShape` | The five shapes: `Horizontal`, `DiagonalDownRight`, `DiagonalDownLeft`, `ItemCover` (a ring of six around a balloon that carries an item: no shot reaches the item, and the item can't move), and `Snake` (a line that walks the board) |
+| `SnakeWalk` | Where a snake's head steps next: straight on if it can, else the gentlest open turn |
 | `FormationPlanner` | Pure planning. For one shape it lists every spot on the board where the shape fits, works out how far the members would travel to fill it, and picks at random among the few cheapest spots. It then says which member goes to which slot. It reads the grid but never changes it |
 | `FormationAssignment` | One member and the slot it goes to |
 | `StandingFormation` | One standing formation: its members, its shape, the waves it has left to hold, and whether a member was pierced since it formed |
@@ -43,6 +44,28 @@ unbreakables, past the level's usual cap, and those form formations of their own
    pierced, or the board was cleared) it drops out of its formation. If fewer than `MinMembers` are left
    in that formation, the rest are released at once. The other formations stand. The next line's balance,
    or the timed pulse, floats the released ones up. `ResetRun` releases everything.
+
+## Snakes
+
+A snake forms as a row, like a horizontal line, of at most `SnakeMaxMembers`. It sets off along the row,
+east or west at random, led by the member at that end. From then on it walks on the board's own beat: the
+balancer's pulse (`FlightRebalanceInterval`, every 4 s), so the player can see each step coming. Every
+`SnakeStepPulses` pulses the balancer asks the service to `StepSnakes`, right before that pulse's race:
+
+- The head steps one slot along the snake's heading (`HexCoordinates.Step`, six directions numbered from
+  east, clockwise). When that slot is off the board, below the row clearance, or taken, `SnakeWalk` tries
+  the gentlest turn instead: 60° right, 60° left, 120° right, 120° left. It never turns back.
+- Each member behind the head steps into the slot the member ahead of it just left. When a member was
+  popped, the one behind it closes the gap, so the snake stays one line.
+- Boxed in, the snake turns round: its tail leads the way back.
+
+Members stay anchored and blue as they walk (`IFormationMember.Walking`), and the board settles around
+each step in the same pulse. The snake keeps the row's limits: never in the bottom
+`HorizontalBottomClearance` rows. Like any formation it changes shape after `HoldWaves`, breaks below
+`MinMembers`, and calls reinforcements while untouched.
+
+The shot solver predicts the pulse's rise but not a snake's step, so a shot that meets a step mid-flight
+can play out differently from its prediction.
 
 ## Reinforcements
 
@@ -108,8 +131,9 @@ The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfigurati
 - `HoldWaves` (3)
 - `BottomClearance` (2) and `HorizontalBottomClearance` (4, for horizontal lines)
 - `HorizontalMaxMembers` (3, for horizontal lines; an item cover always takes six)
+- `SnakeMaxMembers` (4) and `SnakeStepPulses` (1: a step on every pulse)
 - `SpotChoices` (3)
 - `ReinforcementChance` (0.35) and `ReinforcementCeiling` (4)
-- the shape weights: horizontal 1, each diagonal 1, item cover 2
+- the shape weights: horizontal 1, each diagonal 1, item cover 2, snake 1
 
 The design and its open risks are in `Plans/PLAN-UnbreakableFormations.md`.

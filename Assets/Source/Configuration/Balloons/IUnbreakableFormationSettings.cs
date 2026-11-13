@@ -32,6 +32,12 @@ namespace BalloonParty.Configuration.Balloons
         /// </summary>
         int HorizontalMaxMembers { get; }
 
+        /// <summary>Most unbreakables in a snake, the line that walks the board.</summary>
+        int SnakeMaxMembers { get; }
+
+        /// <summary>Balancer pulses between a snake's steps, so each step lands on the board's own beat.</summary>
+        int SnakeStepPulses { get; }
+
         /// <summary>A formation picks at random among this many of its least-travel spots.</summary>
         int SpotChoices { get; }
 
@@ -40,8 +46,11 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>Pick weight of each of the two diagonals.</summary>
         float DiagonalWeight { get; }
 
-        /// <summary>Pick weight of covering an item from below; only in the pick while an item is on the board.</summary>
+        /// <summary>Pick weight of ringing an item; only in the pick while an item is on the board.</summary>
         float ItemCoverWeight { get; }
+
+        /// <summary>Pick weight of a snake.</summary>
+        float SnakeWeight { get; }
 
         /// <summary>
         ///     Chance, at each wave start, that a formation which stood untouched through the last wave calls in

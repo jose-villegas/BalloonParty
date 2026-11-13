@@ -58,6 +58,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly CompositeDisposable _subscriptions = new();
 
         private bool _balanceRequested;
+        private bool _snakeStepDue;
         private int _generation;
         private float _flightRebalanceElapsed;
 
@@ -122,6 +123,7 @@ namespace BalloonParty.Balloon.Controller
             // Bumping the generation drops any balance already scheduled this frame.
             _generation = generation;
             _balanceRequested = false;
+            _snakeStepDue = false;
             _flightRebalanceElapsed = 0f;
             _turnSteps.Clear();
             _motionTicker.CancelAllBalanceMoves();
@@ -223,6 +225,13 @@ namespace BalloonParty.Balloon.Controller
                 // Formations go first, so the roamers see the formation's slots as taken.
                 _formations?.ArrangeAtWaveStart(_relocateActor);
                 RelocateRoamers();
+            }
+
+            // A snake's step rides the pulse that called it, before the race, so the board settles around it.
+            if (_snakeStepDue)
+            {
+                _snakeStepDue = false;
+                _formations?.StepSnakes(_relocateActor);
             }
 
             _balanceMoves.Clear();
@@ -471,7 +480,10 @@ namespace BalloonParty.Balloon.Controller
 
             _flightRebalanceElapsed = 0f;
 
-            if (!HasPossibleMove())
+            // A snake steps on the pulse even when nothing else would move.
+            var snakeBeat = _formations != null && _formations.TakeSnakeBeat();
+            _snakeStepDue |= snakeBeat;
+            if (!snakeBeat && !HasPossibleMove())
             {
                 return false;
             }

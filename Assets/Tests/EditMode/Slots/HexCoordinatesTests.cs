@@ -10,6 +10,58 @@ namespace BalloonParty.Tests.Slots
     {
         private const int Size = 13;
 
+        [TestCase(4, 4)]
+        [TestCase(4, 5)]
+        public void Step_EveryDirection_IsADifferentNeighbour(int col, int row)
+        {
+            var origin = new Vector2Int(col, row);
+            var neighbours = new HashSet<Vector2Int>(HexCoordinates.HexNeighborIndices(col, row));
+            var reached = new HashSet<Vector2Int>();
+
+            for (var direction = 0; direction < HexCoordinates.Directions; direction++)
+            {
+                var step = HexCoordinates.Step(origin, direction);
+                Assert.IsTrue(neighbours.Contains(step), $"{origin} step {direction} -> {step}");
+                reached.Add(step);
+            }
+
+            Assert.AreEqual(6, reached.Count);
+        }
+
+        [TestCase(4, 4)]
+        [TestCase(4, 5)]
+        public void Step_ThenTheOppositeWay_ComesHome(int col, int row)
+        {
+            var origin = new Vector2Int(col, row);
+
+            for (var direction = 0; direction < HexCoordinates.Directions; direction++)
+            {
+                var there = HexCoordinates.Step(origin, direction);
+                Assert.AreEqual(origin, HexCoordinates.Step(there, HexCoordinates.Turn(direction, 3)));
+                Assert.AreEqual(direction, HexCoordinates.DirectionBetween(origin, there));
+            }
+        }
+
+        [Test]
+        public void Step_RunsClockwiseFromEast()
+        {
+            var origin = new Vector2Int(4, 4);
+
+            Assert.AreEqual(new Vector2Int(5, 4), HexCoordinates.Step(origin, 0), "east");
+            Assert.AreEqual(5, HexCoordinates.Step(origin, 1).y, "south-east is a row down");
+            Assert.Greater(HexCoordinates.Step(origin, 1).x, HexCoordinates.Step(origin, 2).x, "south-east of south-west");
+            Assert.AreEqual(new Vector2Int(3, 4), HexCoordinates.Step(origin, 3), "west");
+            Assert.AreEqual(3, HexCoordinates.Step(origin, 4).y, "north-west is a row up");
+            Assert.Greater(HexCoordinates.Step(origin, 5).x, HexCoordinates.Step(origin, 4).x, "north-east of north-west");
+        }
+
+        [Test]
+        public void DirectionBetween_SlotsThatArentNeighbours_IsMinusOne()
+        {
+            Assert.AreEqual(-1, HexCoordinates.DirectionBetween(new Vector2Int(2, 2), new Vector2Int(5, 2)));
+            Assert.AreEqual(-1, HexCoordinates.DirectionBetween(new Vector2Int(2, 2), new Vector2Int(2, 2)));
+        }
+
         [Test]
         public void Distance_SameSlot_IsZero()
         {

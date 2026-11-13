@@ -429,6 +429,143 @@ namespace BalloonParty.Tests.Balloon
                 new Vector2Int(0, 5), new Vector2Int(6, 5), new Vector2Int(3, 4));
         }
 
+        [Test]
+        public void ASnake_FormsAsALine_LedFromOneEnd()
+        {
+            SnakeOnly();
+            AddUnbreakables(new Vector2Int(1, 0), new Vector2Int(3, 0), new Vector2Int(5, 0));
+
+            Arrange();
+
+            Assert.AreEqual(FormationShape.Snake, _service.CurrentShape);
+            var snake = _service.Formations[0];
+            Assert.AreEqual(0, snake.Heading, "Random01 0 sends it east");
+            var columns = snake.Members.Select(m => m.SlotIndex.Value.x).ToList();
+            CollectionAssert.AreEqual(columns.OrderByDescending(x => x).ToList(), columns, "led by its eastmost");
+        }
+
+        [Test]
+        public void ASnakeStep_MovesTheHeadOn_AndEachMemberIntoTheSlotAhead()
+        {
+            var snake = FormSnake();
+            var before = snake.Members.Select(m => m.SlotIndex.Value).ToList();
+
+            _service.StepSnakes(Relocate);
+
+            var after = snake.Members.Select(m => m.SlotIndex.Value).ToList();
+            Assert.AreEqual(HexCoordinates.Step(before[0], 0), after[0], "the head steps east");
+            for (var i = 1; i < after.Count; i++)
+            {
+                Assert.AreEqual(before[i - 1], after[i], "each member takes the slot the one ahead left");
+            }
+
+            Assert.IsTrue(snake.Members.All(m => m.Walking && m.InFormation.Value && m is IBalanceAnchor { IsAnchored: true }));
+        }
+
+        [Test]
+        public void ASnake_AtTheEdge_TurnsTheGentlestWayOpen()
+        {
+            var snake = FormSnake();
+            for (var i = 0; i < 6 && snake.Members[0].SlotIndex.Value.x < _grid.Columns - 1; i++)
+            {
+                _service.StepSnakes(Relocate);
+            }
+
+            var head = snake.Members[0].SlotIndex.Value;
+            _service.StepSnakes(Relocate);
+
+            Assert.AreEqual(1, snake.Heading, "east is off the board: it turns right, south-east");
+            Assert.AreEqual(HexCoordinates.Step(head, 1), snake.Members[0].SlotIndex.Value);
+        }
+
+        [Test]
+        public void ASnake_BoxedIn_TurnsRoundAndItsTailLeads()
+        {
+            var snake = FormSnake();
+            var head = snake.Members[0];
+            var tail = snake.Members[snake.Members.Count - 1];
+            for (var direction = 0; direction < HexCoordinates.Directions; direction++)
+            {
+                var slot = HexCoordinates.Step(head.SlotIndex.Value, direction);
+                if (_grid.InBounds(slot) && _grid.IsEmpty(slot.x, slot.y))
+                {
+                    _grid.Place(new BalloonModel(), null, slot);
+                }
+            }
+
+            var tailWas = tail.SlotIndex.Value;
+            _service.StepSnakes(Relocate);
+
+            Assert.AreSame(tail, snake.Members[0], "the tail leads now");
+            Assert.AreEqual(1, HexCoordinates.Distance(tailWas, tail.SlotIndex.Value), "and took a step");
+        }
+
+        [Test]
+        public void ASnakeMemberPopped_TheOneBehindClosesTheGap()
+        {
+            _settings.MinMembers.Returns(3);
+            _settings.SnakeMaxMembers.Returns(4);
+            var snake = FormSnake(4);
+            var middle = snake.Members[1];
+            var gap = middle.SlotIndex.Value;
+            _grid.Remove(gap);
+            var headWas = snake.Members[0].SlotIndex.Value;
+
+            _service.StepSnakes(Relocate);
+
+            Assert.AreEqual(3, snake.Members.Count);
+            Assert.AreEqual(headWas, snake.Members[1].SlotIndex.Value, "the member behind the gap follows the head");
+        }
+
+        [Test]
+        public void TakeSnakeBeat_ComesEverySnakeStepPulses_OnlyWithASnake()
+        {
+            Assert.IsFalse(_service.TakeSnakeBeat(), "no snake, no beat");
+
+            _settings.SnakeStepPulses.Returns(2);
+            FormSnake();
+
+            Assert.IsFalse(_service.TakeSnakeBeat());
+            Assert.IsTrue(_service.TakeSnakeBeat());
+            Assert.IsFalse(_service.TakeSnakeBeat());
+            Assert.IsTrue(_service.TakeSnakeBeat());
+        }
+
+        [Test]
+        public void ASnakeMember_LeavingItsFormation_StopsWalking()
+        {
+            var snake = FormSnake();
+            _service.StepSnakes(Relocate);
+            var member = (UnbreakableBalloonModel)snake.Members[0];
+
+            _service.ResetRun(1);
+
+            Assert.IsFalse(member.Walking);
+        }
+
+        private void SnakeOnly()
+        {
+            _settings.HorizontalWeight.Returns(0f);
+            _settings.DiagonalWeight.Returns(0f);
+            _settings.SnakeWeight.Returns(1f);
+            _settings.SnakeMaxMembers.Returns(5);
+            _settings.SnakeStepPulses.Returns(1);
+        }
+
+        // A snake of count along row 1 from the west edge, heading east (Random01 is 0).
+        private StandingFormation FormSnake(int count = 3)
+        {
+            SnakeOnly();
+            for (var i = 0; i < count; i++)
+            {
+                AddUnbreakable(new Vector2Int(i, 1));
+            }
+
+            Arrange();
+            Assert.AreEqual(FormationShape.Snake, _service.CurrentShape);
+            return _service.Formations[0];
+        }
+
         private void Arrange()
         {
             _service.ArrangeAtWaveStart(Relocate);

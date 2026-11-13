@@ -204,9 +204,12 @@ MonoBehaviour:
     _bottomClearance: 2
     _horizontalBottomClearance: 4
     _horizontalMaxMembers: 3
+    _snakeMaxMembers: 4
+    _snakeStepPulses: 1
     _spotChoices: 3
     _reinforcementChance: 0.35
     _reinforcementCeiling: 4
     _horizontalWeight: 1
     _diagonalWeight: 1
     _itemCoverWeight: 2
+    _snakeWeight: 1

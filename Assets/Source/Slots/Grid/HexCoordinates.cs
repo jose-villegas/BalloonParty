@@ -5,6 +5,15 @@ namespace BalloonParty.Slots.Grid
     /// <summary>Pure coordinate math for the pointy-top, odd-row-shifted hex grid used by <see cref="SlotGrid" />.</summary>
     internal static class HexCoordinates
     {
+        /// <summary>The six ways out of a slot, numbered from east clockwise on screen (rows run down).</summary>
+        internal const int Directions = 6;
+
+        // Axial steps in direction order: east, south-east, south-west, west, north-west, north-east.
+        private static readonly Vector2Int[] AxialSteps =
+        {
+            new(1, 0), new(0, 1), new(-1, 1), new(-1, 0), new(0, -1), new(1, -1),
+        };
+
         public static Vector2Int[] HexNeighborIndices(int col, int row)
         {
             var shiftedCol = col + (row % 2 == 0 ? -1 : 1);
@@ -49,6 +58,38 @@ namespace BalloonParty.Slots.Grid
             var dq = aq - bq;
             var dr = a.y - b.y;
             return (Mathf.Abs(dq) + Mathf.Abs(dr) + Mathf.Abs(dq + dr)) / 2;
+        }
+
+        /// <summary>
+        ///     The neighbour one step from <paramref name="slot" /> in <paramref name="direction" />: 0 east, then
+        ///     clockwise on screen in 60° turns. Any whole number wraps round.
+        /// </summary>
+        public static Vector2Int Step(Vector2Int slot, int direction)
+        {
+            var step = AxialSteps[Turn(direction, 0)];
+            var q = slot.x - ((slot.y - (slot.y & 1)) / 2) + step.x;
+            var r = slot.y + step.y;
+            return new Vector2Int(q + ((r - (r & 1)) / 2), r);
+        }
+
+        /// <summary><paramref name="direction" /> turned <paramref name="turns" /> 60° steps clockwise, in 0 to 5.</summary>
+        public static int Turn(int direction, int turns)
+        {
+            return (((direction + turns) % Directions) + Directions) % Directions;
+        }
+
+        /// <summary>The direction from <paramref name="from" /> to its neighbour <paramref name="to" />, or -1.</summary>
+        public static int DirectionBetween(Vector2Int from, Vector2Int to)
+        {
+            for (var direction = 0; direction < Directions; direction++)
+            {
+                if (Step(from, direction) == to)
+                {
+                    return direction;
+                }
+            }
+
+            return -1;
         }
 
         /// <summary>The next slot one row down along a diagonal: down-right when <paramref name="right" />, else down-left.</summary>

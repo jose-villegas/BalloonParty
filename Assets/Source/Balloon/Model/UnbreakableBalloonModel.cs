@@ -16,6 +16,7 @@ namespace BalloonParty.Balloon.Model
         private readonly ReactiveProperty<bool> _inFormation = new(false);
 
         private Vector2 _formationHeading = Vector2.right;
+        private bool _walking;
 
         public float DeflectStampScale { get; }
         public int ScoreValue { get; }
@@ -27,6 +28,7 @@ namespace BalloonParty.Balloon.Model
         public bool IsAnchored => _inFormation.Value;
         public IReadOnlyReactiveProperty<bool> InFormation => _inFormation;
         public Vector2 FormationHeading => _formationHeading;
+        public bool Walking => _walking;
 
         // Always: EvaluateHit returns Deflect for every non-piercing hit, and there is no durability to
         // spend down.
@@ -45,6 +47,15 @@ namespace BalloonParty.Balloon.Model
         public void SetInFormation(bool inFormation)
         {
             _inFormation.Value = inFormation;
+            if (!inFormation)
+            {
+                _walking = false;
+            }
+        }
+
+        public void SetWalking(bool walking)
+        {
+            _walking = walking;
         }
 
         public void SetFormationHeading(Vector2 heading)
