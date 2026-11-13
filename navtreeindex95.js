@@ -1,5 +1,15 @@
 var NAVTREEINDEX95 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#ab9107c0de283663a49c81f66d02d1024":[5,0,0,3,9,9,8],
+"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#ab9107c0de283663a49c81f66d02d1024":[6,0,0,3,9,9,8],
+"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#ac02d312b64af5af347c94bd2d6f68419":[5,0,0,3,9,9,11],
+"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#ac02d312b64af5af347c94bd2d6f68419":[6,0,0,3,9,9,11],
+"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#ad72a95268fedce8202423d5c86398962":[5,0,0,3,9,9,1],
+"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#ad72a95268fedce8202423d5c86398962":[6,0,0,3,9,9,1],
+"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#ad93ef4997a80ea587529b349b314576d":[5,0,0,3,9,9,2],
+"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#ad93ef4997a80ea587529b349b314576d":[6,0,0,3,9,9,2],
+"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#ae180df06125cd6dd5b8211a9bfcb2607":[5,0,0,3,9,9,0],
+"interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#ae180df06125cd6dd5b8211a9bfcb2607":[6,0,0,3,9,9,0],
 "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelStep.html":[5,0,0,3,9,10],
 "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelStep.html":[6,0,0,3,9,10],
 "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelStep.html#a76ac4920677a0b8e3515a9022ae5db04":[5,0,0,3,9,10,0],
@@ -239,15 +249,5 @@ var NAVTREEINDEX95 =
 "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html#a347699f041bd2f73a8326aa24a351d81":[5,0,0,6,7,11,1],
 "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html#a347699f041bd2f73a8326aa24a351d81":[6,0,0,6,7,11,1],
 "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html#aec1cf0f6798b207b14f85f1fce54e2dd":[5,0,0,6,7,11,0],
-"interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html#aec1cf0f6798b207b14f85f1fce54e2dd":[6,0,0,6,7,11,0],
-"interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html":[5,0,0,6,7,12],
-"interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html":[6,0,0,6,7,12],
-"interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html#ac73fa31c2bf8e872d978a7b7fd71282c":[5,0,0,6,7,12,0],
-"interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html#ac73fa31c2bf8e872d978a7b7fd71282c":[6,0,0,6,7,12,0],
-"interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed.html":[5,0,0,6,7,13],
-"interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed.html":[6,0,0,6,7,13],
-"interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed.html#a59a80dd494c696b8f2681161e76f31de":[5,0,0,6,7,13,0],
-"interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed.html#a59a80dd494c696b8f2681161e76f31de":[6,0,0,6,7,13,0],
-"interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailBehaviour.html":[5,0,0,6,8,0,8],
-"interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailBehaviour.html":[6,0,0,6,8,0,8]
+"interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html#aec1cf0f6798b207b14f85f1fce54e2dd":[6,0,0,6,7,11,0]
 };

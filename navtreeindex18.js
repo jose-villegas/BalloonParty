@@ -1,5 +1,9 @@
 var NAVTREEINDEX18 =
 {
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a8f1f88d085962940ef07345dce6c0647":[5,0,0,3,3,5,16],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a8f1f88d085962940ef07345dce6c0647":[6,0,0,3,3,5,16],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a94193e100c30af316c9f6dacbdd2e426":[5,0,0,3,3,5,5],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a94193e100c30af316c9f6dacbdd2e426":[6,0,0,3,3,5,5],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#aad3469cfd85697f34794aca104a0c764":[5,0,0,3,3,5,12],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#aad3469cfd85697f34794aca104a0c764":[6,0,0,3,3,5,12],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#ab60561269f1782afe82743faec00b6b0":[5,0,0,3,3,5,2],
@@ -245,9 +249,5 @@ var NAVTREEINDEX18 =
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html#a69c89398f06407297a34eee605e46cc5":[5,0,0,3,5,0,1],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html#a69c89398f06407297a34eee605e46cc5":[6,0,0,3,5,0,1],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html#a6e559aadb225e0941cd2e9f611d3a829":[5,0,0,3,5,0,0],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html#a6e559aadb225e0941cd2e9f611d3a829":[6,0,0,3,5,0,0],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html#a73071f1f8976c21f65ec7e0f50817a6a":[5,0,0,3,5,0,7],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html#a73071f1f8976c21f65ec7e0f50817a6a":[6,0,0,3,5,0,7],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html#a96dfee6b62b033dae439ab40e7eba8f2":[5,0,0,3,5,0,5],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html#a96dfee6b62b033dae439ab40e7eba8f2":[6,0,0,3,5,0,5]
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html#a6e559aadb225e0941cd2e9f611d3a829":[6,0,0,3,5,0,0]
 };

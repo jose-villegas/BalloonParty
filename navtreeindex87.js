@@ -1,5 +1,13 @@
 var NAVTREEINDEX87 =
 {
+"classBalloonParty_1_1UI_1_1ScaleDownButton.html#a8a6314a6f7acc40e81e5a5a59fe50f3d":[5,0,0,16,20,3],
+"classBalloonParty_1_1UI_1_1ScaleDownButton.html#a8a6314a6f7acc40e81e5a5a59fe50f3d":[6,0,0,16,20,3],
+"classBalloonParty_1_1UI_1_1ScaleDownButton.html#a96b74d3469588da20fc2ac83c4029a87":[5,0,0,16,20,7],
+"classBalloonParty_1_1UI_1_1ScaleDownButton.html#a96b74d3469588da20fc2ac83c4029a87":[6,0,0,16,20,7],
+"classBalloonParty_1_1UI_1_1ScaleDownButton.html#ab7c220f3e3d2dde2436e014c5549c394":[5,0,0,16,20,5],
+"classBalloonParty_1_1UI_1_1ScaleDownButton.html#ab7c220f3e3d2dde2436e014c5549c394":[6,0,0,16,20,5],
+"classBalloonParty_1_1UI_1_1ScaleDownButton.html#abb66658b33c6c6bb29e5c13fcc7025fb":[5,0,0,16,20,9],
+"classBalloonParty_1_1UI_1_1ScaleDownButton.html#abb66658b33c6c6bb29e5c13fcc7025fb":[6,0,0,16,20,9],
 "classBalloonParty_1_1UI_1_1ScaleDownButton.html#abd3040b62c7e4123444bbd19c1803c0a":[5,0,0,16,20,10],
 "classBalloonParty_1_1UI_1_1ScaleDownButton.html#abd3040b62c7e4123444bbd19c1803c0a":[6,0,0,16,20,10],
 "classBalloonParty_1_1UI_1_1ScaleDownButton.html#ac5f0b6787d554a680c210541a034bfd3":[5,0,0,16,20,8],
@@ -241,13 +249,5 @@ var NAVTREEINDEX87 =
 "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#ab8c60eb77236547f802d1ab4fe093709":[5,0,0,16,7,1,7],
 "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#ab8c60eb77236547f802d1ab4fe093709":[6,0,0,16,7,1,7],
 "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#ac84cb03f2b24fcd93f51f31c1c05373a":[5,0,0,16,7,1,24],
-"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#ac84cb03f2b24fcd93f51f31c1c05373a":[6,0,0,16,7,1,24],
-"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#acf06cb25e6b65e1eda7d211a94807042":[5,0,0,16,7,1,48],
-"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#acf06cb25e6b65e1eda7d211a94807042":[6,0,0,16,7,1,48],
-"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#acf4d14c44e63841cb3f1a8ac086cbca0":[5,0,0,16,7,1,31],
-"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#acf4d14c44e63841cb3f1a8ac086cbca0":[6,0,0,16,7,1,31],
-"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#addedda3700ec8fa1524a6a362cc2e121":[5,0,0,16,7,1,44],
-"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#addedda3700ec8fa1524a6a362cc2e121":[6,0,0,16,7,1,44],
-"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#ae83d0353e99a672afa276d2bf8e74e0d":[5,0,0,16,7,1,34],
-"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#ae83d0353e99a672afa276d2bf8e74e0d":[6,0,0,16,7,1,34]
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#ac84cb03f2b24fcd93f51f31c1c05373a":[6,0,0,16,7,1,24]
 };

@@ -1,5 +1,15 @@
 var NAVTREEINDEX102 =
 {
+"plan_future_ideas.html#autotoc_md502":[3,5,0,8],
+"plan_future_ideas.html#autotoc_md504":[3,5,0,9],
+"plan_future_ideas.html#autotoc_md505":[3,5,0,9,0],
+"plan_future_ideas.html#autotoc_md506":[3,5,0,9,1],
+"plan_future_ideas.html#autotoc_md507":[3,5,0,9,1,0],
+"plan_future_ideas.html#autotoc_md508":[3,5,0,9,1,1],
+"plan_future_ideas.html#autotoc_md509":[3,5,0,9,1,2],
+"plan_future_ideas.html#autotoc_md510":[3,5,0,9,1,3],
+"plan_future_ideas.html#autotoc_md511":[3,5,0,9,1,4],
+"plan_future_ideas.html#autotoc_md512":[3,5,0,9,1,5],
 "plan_future_ideas.html#autotoc_md513":[3,5,0,9,1,6],
 "plan_future_ideas.html#autotoc_md514":[3,5,0,9,1,7],
 "plan_future_ideas.html#autotoc_md515":[3,5,0,9,2],
@@ -239,15 +249,5 @@ var NAVTREEINDEX102 =
 "plan_shot_solver_accuracy.html#autotoc_md795":[3,14,0,3,5],
 "plan_shot_solver_accuracy.html#autotoc_md796":[3,14,0,3,6],
 "plan_shot_solver_accuracy.html#autotoc_md797":[3,14,0,3,7],
-"plan_shot_solver_accuracy.html#autotoc_md798":[3,14,0,4],
-"plan_shot_solver_accuracy.html#autotoc_md799":[3,14,0,5],
-"plan_shot_solver_accuracy.html#autotoc_md800":[3,14,0,6],
-"plan_shot_solver_accuracy.html#autotoc_md801":[3,14,0,7],
-"plan_shot_solver_accuracy.html#autotoc_md802":[3,14,0,7,0],
-"plan_shot_solver_accuracy.html#autotoc_md803":[3,14,0,7,1],
-"plan_shot_solver_accuracy.html#autotoc_md804":[3,14,0,7,2],
-"plan_shot_solver_accuracy.html#autotoc_md805":[3,14,0,7,3],
-"plan_shot_solver_accuracy.html#autotoc_md806":[3,14,0,7,4],
-"plan_shot_solver_accuracy.html#autotoc_md807":[3,14,0,7,5],
-"plan_shot_solver_accuracy.html#autotoc_md808":[3,14,0,7,6]
+"plan_shot_solver_accuracy.html#autotoc_md798":[3,14,0,4]
 };

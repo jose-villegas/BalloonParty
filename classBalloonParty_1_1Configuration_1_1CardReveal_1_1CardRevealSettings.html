@@ -267,6 +267,9 @@ Properties</h2></td></tr>
 <tr class="memitem:aa1f133f05ebb41623fbc5c7e7622c699" id="r_aa1f133f05ebb41623fbc5c7e7622c699"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa1f133f05ebb41623fbc5c7e7622c699">RubberRecentreHeight</a><code> [get]</code></td></tr>
 <tr class="memdesc:aa1f133f05ebb41623fbc5c7e7622c699"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far the camera eases down, in frame heights: the bake's <code>RECENTRE</code> over its camera's <code>ortho_scale</code>.  <br /></td></tr>
 <tr class="separator:aa1f133f05ebb41623fbc5c7e7622c699"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aded88acbe448d3ecbc080e4165682c25" id="r_aded88acbe448d3ecbc080e4165682c25"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aded88acbe448d3ecbc080e4165682c25">RubberSpin</a><code> [get]</code></td></tr>
+<tr class="memdesc:aded88acbe448d3ecbc080e4165682c25"><td class="mdescLeft">&#160;</td><td class="mdescRight">How fast the torn rubber turns as it falls, in degrees a second once its spin has built up over one <a class="el" href="#ac794745cc2959a86307129393776222f" title="Seconds for one swing from side to side; the swing grows in over as long.">RubberSwingSeconds</a>.  <br /></td></tr>
+<tr class="separator:aded88acbe448d3ecbc080e4165682c25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebd8df5117b33e7e20aa59d53fbac47f" id="r_aebd8df5117b33e7e20aa59d53fbac47f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aebd8df5117b33e7e20aa59d53fbac47f">RubberSwing</a><code> [get]</code></td></tr>
 <tr class="memdesc:aebd8df5117b33e7e20aa59d53fbac47f"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far the torn rubber swings side to side as it falls, in frame widths at its widest.  <br /></td></tr>
 <tr class="separator:aebd8df5117b33e7e20aa59d53fbac47f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -381,6 +384,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ac12f93f43f04922773d8b1e2ff1fecab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a83f20eab18c0bbd19eb5cd3c2eaa9569" id="r_a83f20eab18c0bbd19eb5cd3c2eaa9569"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a83f20eab18c0bbd19eb5cd3c2eaa9569">_rubberRecentreHeight</a> = 0.52f</td></tr>
 <tr class="separator:a83f20eab18c0bbd19eb5cd3c2eaa9569"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64658a24f4428f8d7abc18514c4fbaf6" id="r_a64658a24f4428f8d7abc18514c4fbaf6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a64658a24f4428f8d7abc18514c4fbaf6">_rubberSpin</a> = 120f</td></tr>
+<tr class="separator:a64658a24f4428f8d7abc18514c4fbaf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a901dee302c2c546044475e6bd3735fcb" id="r_a901dee302c2c546044475e6bd3735fcb"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a901dee302c2c546044475e6bd3735fcb">_rubberSwing</a> = 0.15f</td></tr>
 <tr class="separator:a901dee302c2c546044475e6bd3735fcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6745839ee37358f14b1a1fb7947a7d5a" id="r_a6745839ee37358f14b1a1fb7947a7d5a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6745839ee37358f14b1a1fb7947a7d5a">_rubberSwingSeconds</a> = 0.4f</td></tr>
@@ -1379,6 +1384,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._rubberRecentreHeight = 0.52f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a64658a24f4428f8d7abc18514c4fbaf6" name="a64658a24f4428f8d7abc18514c4fbaf6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64658a24f4428f8d7abc18514c4fbaf6">&#9670;&#160;</a></span>_rubberSpin</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._rubberSpin = 120f</td>
         </tr>
       </table>
   </td>
@@ -2734,6 +2761,33 @@ Private Attributes</h2></td></tr>
 <p>The game moves the frames down by it too, so the knot's path stays the fall's. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a251495c4dfd319b8142f052121bc83ce">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="aded88acbe448d3ecbc080e4165682c25" name="aded88acbe448d3ecbc080e4165682c25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aded88acbe448d3ecbc080e4165682c25">&#9670;&#160;</a></span>RubberSpin</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings.RubberSpin</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How fast the torn rubber turns as it falls, in degrees a second once its spin has built up over one <a class="el" href="#ac794745cc2959a86307129393776222f" title="Seconds for one swing from side to side; the swing grows in over as long.">RubberSwingSeconds</a>. </p>
+<p>Each pop picks the direction and varies the speed. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a4b71df03be16e2bebee81994888e2788">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
 
 </div>
 </div>

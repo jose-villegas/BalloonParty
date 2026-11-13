@@ -1,5 +1,9 @@
 var NAVTREEINDEX24 =
 {
+"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a2b095d93278097c9fcce0501593a4c82":[5,0,0,3,8,3,5],
+"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a2b095d93278097c9fcce0501593a4c82":[6,0,0,3,8,3,5],
+"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a2e6263b1cb5109291646277d172d4e85":[5,0,0,3,8,3,6],
+"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a2e6263b1cb5109291646277d172d4e85":[6,0,0,3,8,3,6],
 "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a347ce3021d852020d97d696dfdc8ee72":[5,0,0,3,8,3,11],
 "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a347ce3021d852020d97d696dfdc8ee72":[6,0,0,3,8,3,11],
 "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a45d98401723006aa9a36e697497016ae":[5,0,0,3,8,3,8],
@@ -245,9 +249,5 @@ var NAVTREEINDEX24 =
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a1a4b9de74e9ef1454d85a0af0e46da90":[5,0,0,3,9,15,3],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a1a4b9de74e9ef1454d85a0af0e46da90":[6,0,0,3,9,15,3],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a2324c783a3e03fa5c22e51423caa8118":[5,0,0,3,9,15,14],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a2324c783a3e03fa5c22e51423caa8118":[6,0,0,3,9,15,14],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a236a99d087a965689bc7097e386679bb":[5,0,0,3,9,15,5],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a236a99d087a965689bc7097e386679bb":[6,0,0,3,9,15,5],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a23a517a3f17ffacf0eef78c7d7e1c221":[5,0,0,3,9,15,30],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a23a517a3f17ffacf0eef78c7d7e1c221":[6,0,0,3,9,15,30]
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a2324c783a3e03fa5c22e51423caa8118":[6,0,0,3,9,15,14]
 };

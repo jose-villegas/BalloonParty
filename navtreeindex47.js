@@ -1,5 +1,9 @@
 var NAVTREEINDEX47 =
 {
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreFormationGizmos.html":[5,0,0,6,8,0,0],
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreFormationGizmos.html":[6,0,0,6,8,0,0],
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html":[5,0,0,6,8,0,3],
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html":[6,0,0,6,8,0,3],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a005de21f32ef896af2c807a785d2f4e7":[5,0,0,6,8,0,3,22],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a005de21f32ef896af2c807a785d2f4e7":[6,0,0,6,8,0,3,22],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#a0dd984dda539d9f1c8152707187a8bfe":[5,0,0,6,8,0,3,10],
@@ -245,9 +249,5 @@ var NAVTREEINDEX47 =
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a415e09962c9ea7b33dc10c68d2821dae":[5,0,0,6,8,0,13,35],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a415e09962c9ea7b33dc10c68d2821dae":[6,0,0,6,8,0,13,35],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a4b98dae67e2672b2e346df792ca4d382":[5,0,0,6,8,0,13,32],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a4b98dae67e2672b2e346df792ca4d382":[6,0,0,6,8,0,13,32],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a52786fd20e75a404d8cc1aeabd511de8":[5,0,0,6,8,0,13,5],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a52786fd20e75a404d8cc1aeabd511de8":[6,0,0,6,8,0,13,5],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a52bad5e7bddcf00ce7babd5e2084a1a3":[5,0,0,6,8,0,13,37],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a52bad5e7bddcf00ce7babd5e2084a1a3":[6,0,0,6,8,0,13,37]
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a4b98dae67e2672b2e346df792ca4d382":[6,0,0,6,8,0,13,32]
 };

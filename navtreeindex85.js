@@ -1,5 +1,13 @@
 var NAVTREEINDEX85 =
 {
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a7b28450c9124eaf6e0a63893206bcdb9":[5,0,0,16,4,0,8],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a7b28450c9124eaf6e0a63893206bcdb9":[6,0,0,16,4,0,8],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a8dc204d15b47f85248e27d98c33ecb6c":[5,0,0,16,4,0,39],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a8dc204d15b47f85248e27d98c33ecb6c":[6,0,0,16,4,0,39],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a933cb79cc791bb1640857629189c5380":[5,0,0,16,4,0,32],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a933cb79cc791bb1640857629189c5380":[6,0,0,16,4,0,32],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a93a58b00a37f678c0df101bd6bf1a8f3":[5,0,0,16,4,0,9],
+"classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a93a58b00a37f678c0df101bd6bf1a8f3":[6,0,0,16,4,0,9],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a9974afff02504b5c924f4a6053cb15a4":[5,0,0,16,4,0,37],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a9974afff02504b5c924f4a6053cb15a4":[6,0,0,16,4,0,37],
 "classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#a9a0cf1e724eef6285e9ff57b120d0b96":[5,0,0,16,4,0,42],
@@ -241,13 +249,5 @@ var NAVTREEINDEX85 =
 "classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#ad768b95856ed6697b41322177ea38619":[5,0,0,16,5,2,6],
 "classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#ad768b95856ed6697b41322177ea38619":[6,0,0,16,5,2,6],
 "classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#aecb406a91684bc053c2972fd57f4941d":[5,0,0,16,5,2,3],
-"classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#aecb406a91684bc053c2972fd57f4941d":[6,0,0,16,5,2,3],
-"classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#af59be99a47420bb2cc2354f923467ba4":[5,0,0,16,5,2,14],
-"classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#af59be99a47420bb2cc2354f923467ba4":[6,0,0,16,5,2,14],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpLifetimeScope.html":[5,0,0,16,6,0],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpLifetimeScope.html":[6,0,0,16,6,0],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpLifetimeScope.html#a16ff64edcdc8d971694d6f64544fd36f":[5,0,0,16,6,0,0],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpLifetimeScope.html#a16ff64edcdc8d971694d6f64544fd36f":[6,0,0,16,6,0,0],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html":[5,0,0,16,6,1],
-"classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html":[6,0,0,16,6,1]
+"classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html#aecb406a91684bc053c2972fd57f4941d":[6,0,0,16,5,2,3]
 };

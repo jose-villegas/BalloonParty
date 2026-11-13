@@ -144,6 +144,9 @@ Static Package Functions</h2></td></tr>
 <tr class="memitem:aa9b46039e89939bdc755cc9395db6b73" id="r_aa9b46039e89939bdc755cc9395db6b73"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9b46039e89939bdc755cc9395db6b73">FallDistance</a> (float sincePop, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a> settings)</td></tr>
 <tr class="memdesc:aa9b46039e89939bdc755cc9395db6b73"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far down the frames move <em>sincePop</em>  seconds into the pop, in frame heights: the bake's camera's path.  <br /></td></tr>
 <tr class="separator:aa9b46039e89939bdc755cc9395db6b73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba286c03331d46cb481dcec169d84bad" id="r_aba286c03331d46cb481dcec169d84bad"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba286c03331d46cb481dcec169d84bad">FallSpin</a> (float sincePop, float rate, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a> settings)</td></tr>
+<tr class="memdesc:aba286c03331d46cb481dcec169d84bad"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far the torn rubber has turned <em>sincePop</em>  seconds into the pop, in degrees, at <em>rate</em>  degrees a second (its sign the direction).  <br /></td></tr>
+<tr class="separator:aba286c03331d46cb481dcec169d84bad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a179bc50fdd2a31557f3d1e9907db89af" id="r_a179bc50fdd2a31557f3d1e9907db89af"><td class="memItemLeft" align="right" valign="top">static Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a179bc50fdd2a31557f3d1e9907db89af">FallSwing</a> (float sincePop, float reach, float pace, float phase, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a> settings)</td></tr>
 <tr class="memdesc:a179bc50fdd2a31557f3d1e9907db89af"><td class="mdescLeft">&#160;</td><td class="mdescRight">How the torn rubber swings <em>sincePop</em>  seconds into the pop: x sideways in frame widths, y its lean in degrees.  <br /></td></tr>
 <tr class="separator:a179bc50fdd2a31557f3d1e9907db89af"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -287,6 +290,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a89e10cd8c56b15c161088397c231fac9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad08c5d41d5c3ae631bed0d8e2eba311b" id="r_ad08c5d41d5c3ae631bed0d8e2eba311b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1UI_1_1CardReveal_1_1PopSheetLoader.html">PopSheetLoader</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad08c5d41d5c3ae631bed0d8e2eba311b">_sheets</a></td></tr>
 <tr class="separator:ad08c5d41d5c3ae631bed0d8e2eba311b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a200c93ffe0d607e5b4df84937550eb5e" id="r_a200c93ffe0d607e5b4df84937550eb5e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a200c93ffe0d607e5b4df84937550eb5e">_spinRate</a></td></tr>
+<tr class="separator:a200c93ffe0d607e5b4df84937550eb5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42c3795398e6209026de945720f02707" id="r_a42c3795398e6209026de945720f02707"><td class="memItemLeft" align="right" valign="top">IDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a42c3795398e6209026de945720f02707">_subscriptions</a></td></tr>
 <tr class="separator:a42c3795398e6209026de945720f02707"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e09f3270c6910aa333e122ba9b1ab3e" id="r_a7e09f3270c6910aa333e122ba9b1ab3e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7e09f3270c6910aa333e122ba9b1ab3e">_swingPace</a> = 1f</td></tr>
@@ -541,6 +546,43 @@ Static Private Attributes</h2></td></tr>
 
 <p>How far down the frames move <em>sincePop</em>  seconds into the pop, in frame heights: the bake's camera's path. </p>
 <p>Nothing until the fall's frame, then speeding up under the settings' gravity, counted in the pop's frames as the bake's knot falls, so the rubber falling with it in the frames matches the motion at any frame rate; plus the recentring, the bake's camera easing further down to keep the gathered rubber in the frame, added back so the knot's path stays the fall's. </p>
+
+</div>
+</div>
+<a id="aba286c03331d46cb481dcec169d84bad" name="aba286c03331d46cb481dcec169d84bad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba286c03331d46cb481dcec169d84bad">&#9670;&#160;</a></span>FallSpin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static float BalloonParty.UI.CardReveal.CardRevealView.FallSpin </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>sincePop</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>rate</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a></td>          <td class="paramname"><span class="paramname"><em>settings</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How far the torn rubber has turned <em>sincePop</em>  seconds into the pop, in degrees, at <em>rate</em>  degrees a second (its sign the direction). </p>
+<p>Nothing until it starts to fall; then the turn picks up over one <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aeb3902dad9d6c504e1a0ec22e327997b" title="Seconds for one swing from side to side; the swing grows in over as long.">ICardRevealSettings.RubberSwingSeconds</a>, so the fall starts square, and runs on at the rate, falling behind it by that one swing's worth. </p>
 
 </div>
 </div>
@@ -1925,6 +1967,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classBalloonParty_1_1UI_1_1CardReveal_1_1PopSheetLoader.html">PopSheetLoader</a> BalloonParty.UI.CardReveal.CardRevealView._sheets</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a200c93ffe0d607e5b4df84937550eb5e" name="a200c93ffe0d607e5b4df84937550eb5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a200c93ffe0d607e5b4df84937550eb5e">&#9670;&#160;</a></span>_spinRate</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.UI.CardReveal.CardRevealView._spinRate</td>
         </tr>
       </table>
   </td>

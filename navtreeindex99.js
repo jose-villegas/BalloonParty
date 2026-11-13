@@ -1,5 +1,15 @@
 var NAVTREEINDEX99 =
 {
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasItemSlot.html#a23a33023cd9acba63ce0c894548b9209":[5,0,0,13,1,5,1],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasItemSlot.html#a23a33023cd9acba63ce0c894548b9209":[6,0,0,13,1,5,1],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasItemSlot.html#aae22fdafdb5b1ed0de2e7e131b0fa82a":[5,0,0,13,1,5,0],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasItemSlot.html#aae22fdafdb5b1ed0de2e7e131b0fa82a":[6,0,0,13,1,5,0],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasItemSlot.html#ac8af66169265e10f0396d99f08f171e4":[5,0,0,13,1,5,2],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasItemSlot.html#ac8af66169265e10f0396d99f08f171e4":[6,0,0,13,1,5,2],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html":[5,0,0,13,1,6],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html":[6,0,0,13,1,6],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html#a295c65ca54574bca653d348f8c0ed7cf":[5,0,0,13,1,6,0],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html#a295c65ca54574bca653d348f8c0ed7cf":[6,0,0,13,1,6,0],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html":[5,0,0,13,1,7],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html":[6,0,0,13,1,7],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html#adaf9d7fc481f54c2fcee73214ac42857":[5,0,0,13,1,7,0],
@@ -239,15 +249,5 @@ var NAVTREEINDEX99 =
 "namespaceBalloonParty_1_1Editor_1_1Bush.html":[5,0,0,5,0],
 "namespaceBalloonParty_1_1Editor_1_1EffectPreview.html":[5,0,0,5,1],
 "namespaceBalloonParty_1_1Editor_1_1FrameDump.html":[5,0,0,5,2],
-"namespaceBalloonParty_1_1Editor_1_1Maps.html":[5,0,0,5,3],
-"namespaceBalloonParty_1_1Editor_1_1Release.html":[5,0,0,5,4],
-"namespaceBalloonParty_1_1Editor_1_1ShadowBake.html":[5,0,0,5,5],
-"namespaceBalloonParty_1_1Editor_1_1ShieldChains.html":[5,0,0,5,6],
-"namespaceBalloonParty_1_1Editor_1_1ShotSolver.html":[5,0,0,5,7],
-"namespaceBalloonParty_1_1Editor_1_1SpriteCombine.html":[5,0,0,5,8],
-"namespaceBalloonParty_1_1Editor_1_1TestRunner.html":[5,0,0,5,9],
-"namespaceBalloonParty_1_1Game.html":[5,0,0,6],
-"namespaceBalloonParty_1_1Game_1_1CardReveal.html":[5,0,0,6,0],
-"namespaceBalloonParty_1_1Game_1_1Cinematics.html":[5,0,0,6,1],
-"namespaceBalloonParty_1_1Game_1_1Danger.html":[5,0,0,6,2]
+"namespaceBalloonParty_1_1Editor_1_1Maps.html":[5,0,0,5,3]
 };

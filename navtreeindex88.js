@@ -1,5 +1,13 @@
 var NAVTREEINDEX88 =
 {
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#acf06cb25e6b65e1eda7d211a94807042":[5,0,0,16,7,1,48],
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#acf06cb25e6b65e1eda7d211a94807042":[6,0,0,16,7,1,48],
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#acf4d14c44e63841cb3f1a8ac086cbca0":[5,0,0,16,7,1,31],
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#acf4d14c44e63841cb3f1a8ac086cbca0":[6,0,0,16,7,1,31],
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#addedda3700ec8fa1524a6a362cc2e121":[5,0,0,16,7,1,44],
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#addedda3700ec8fa1524a6a362cc2e121":[6,0,0,16,7,1,44],
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#ae83d0353e99a672afa276d2bf8e74e0d":[5,0,0,16,7,1,34],
+"classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#ae83d0353e99a672afa276d2bf8e74e0d":[6,0,0,16,7,1,34],
 "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#af6ddb3261b536419d5b74f4b36b75434":[5,0,0,16,7,1,47],
 "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#af6ddb3261b536419d5b74f4b36b75434":[6,0,0,16,7,1,47],
 "classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#afb066320c00d457cd431cb29aadf2343":[5,0,0,16,7,1,23],
@@ -241,13 +249,5 @@ var NAVTREEINDEX88 =
 "classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterAnimation.html#ab1c6b28cecfbf189ecd8de8d96554154":[5,0,0,16,8,0,9],
 "classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterAnimation.html#ab1c6b28cecfbf189ecd8de8d96554154":[6,0,0,16,8,0,9],
 "classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterAnimation.html#ad8d49d6ef8681dfc1bba64a5d1e4314a":[5,0,0,16,8,0,7],
-"classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterAnimation.html#ad8d49d6ef8681dfc1bba64a5d1e4314a":[6,0,0,16,8,0,7],
-"classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterAnimation.html#ae176af5224842a64d120b52f62ed5995":[5,0,0,16,8,0,11],
-"classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterAnimation.html#ae176af5224842a64d120b52f62ed5995":[6,0,0,16,8,0,11],
-"classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterAnimation.html#ae6a2ee34bfd41e2864c8cb8072d574ce":[5,0,0,16,8,0,1],
-"classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterAnimation.html#ae6a2ee34bfd41e2864c8cb8072d574ce":[6,0,0,16,8,0,1],
-"classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterAnimation.html#aeb2b1c1647f8067178a15affc6a56185":[5,0,0,16,8,0,5],
-"classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterAnimation.html#aeb2b1c1647f8067178a15affc6a56185":[6,0,0,16,8,0,5],
-"classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterLabel.html":[5,0,0,16,8,1],
-"classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterLabel.html":[6,0,0,16,8,1]
+"classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterAnimation.html#ad8d49d6ef8681dfc1bba64a5d1e4314a":[6,0,0,16,8,0,7]
 };

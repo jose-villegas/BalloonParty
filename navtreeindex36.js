@@ -1,5 +1,9 @@
 var NAVTREEINDEX36 =
 {
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a54a9362de10a395a49b5144e4c5c3cfa":[5,0,0,5,26,93],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a54a9362de10a395a49b5144e4c5c3cfa":[6,0,0,5,26,93],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a55abe66bd3bb42c2733514aea970916d":[5,0,0,5,26,68],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a55abe66bd3bb42c2733514aea970916d":[6,0,0,5,26,68],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a5cad1eaf6c9bd72cb12c1e01d5855c5c":[5,0,0,5,26,9],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a5cad1eaf6c9bd72cb12c1e01d5855c5c":[6,0,0,5,26,9],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a5e4622d607e9b2fe74968e4fe9ae14a8":[5,0,0,5,26,57],
@@ -245,9 +249,5 @@ var NAVTREEINDEX36 =
 "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a5c31e0a30357c160024ea9934cd18e93":[5,0,0,5,3,0,0,5],
 "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a5c31e0a30357c160024ea9934cd18e93":[6,0,0,5,3,0,0,5],
 "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a69a34de0dd25a23538b54fbca8ff71cc":[5,0,0,5,3,0,0,12],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a69a34de0dd25a23538b54fbca8ff71cc":[6,0,0,5,3,0,0,12],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a74d02cfee5db6f8f00ccdba6dce3cbe4":[5,0,0,5,3,0,0,2],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a74d02cfee5db6f8f00ccdba6dce3cbe4":[6,0,0,5,3,0,0,2],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a88a2573ee757004895562d530bdfd6c3":[5,0,0,5,3,0,0,1],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a88a2573ee757004895562d530bdfd6c3":[6,0,0,5,3,0,0,1]
+"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a69a34de0dd25a23538b54fbca8ff71cc":[6,0,0,5,3,0,0,12]
 };

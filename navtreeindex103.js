@@ -1,5 +1,15 @@
 var NAVTREEINDEX103 =
 {
+"plan_shot_solver_accuracy.html#autotoc_md799":[3,14,0,5],
+"plan_shot_solver_accuracy.html#autotoc_md800":[3,14,0,6],
+"plan_shot_solver_accuracy.html#autotoc_md801":[3,14,0,7],
+"plan_shot_solver_accuracy.html#autotoc_md802":[3,14,0,7,0],
+"plan_shot_solver_accuracy.html#autotoc_md803":[3,14,0,7,1],
+"plan_shot_solver_accuracy.html#autotoc_md804":[3,14,0,7,2],
+"plan_shot_solver_accuracy.html#autotoc_md805":[3,14,0,7,3],
+"plan_shot_solver_accuracy.html#autotoc_md806":[3,14,0,7,4],
+"plan_shot_solver_accuracy.html#autotoc_md807":[3,14,0,7,5],
+"plan_shot_solver_accuracy.html#autotoc_md808":[3,14,0,7,6],
 "plan_terrain_biomes.html":[3,9],
 "plan_terrain_biomes.html#autotoc_md809":[3,9,0],
 "plan_terrain_biomes.html#autotoc_md811":[3,9,0,0],
@@ -239,15 +249,5 @@ var NAVTREEINDEX103 =
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html":[6,0,0,1,0,9],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#a01ef6214f975df281d75da2b2d413d95":[5,0,0,1,0,9,1],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#a01ef6214f975df281d75da2b2d413d95":[6,0,0,1,0,9,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#a7696107b04dcc75432da01bf993e7244":[5,0,0,1,0,9,2],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#a7696107b04dcc75432da01bf993e7244":[6,0,0,1,0,9,2],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#ae31b846c2fee38b3db33b8c143490c6c":[5,0,0,1,0,9,3],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#ae31b846c2fee38b3db33b8c143490c6c":[6,0,0,1,0,9,3],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#aed996b38360dec7c3ac244ec1d5f8bad":[5,0,0,1,0,9,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#aed996b38360dec7c3ac244ec1d5f8bad":[6,0,0,1,0,9,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Move.html":[5,0,0,1,0,12,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Move.html":[6,0,0,1,0,12,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Move.html#a4265df7fa4bc7ced8e852ab3b6c7663c":[5,0,0,1,0,12,0,2],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Move.html#a4265df7fa4bc7ced8e852ab3b6c7663c":[6,0,0,1,0,12,0,2],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Move.html#ab697e39cefd7adced5970bac197370d6":[5,0,0,1,0,12,0,1]
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#a7696107b04dcc75432da01bf993e7244":[5,0,0,1,0,9,2]
 };

@@ -259,6 +259,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a251495c4dfd319b8142f052121bc83ce" id="r_a251495c4dfd319b8142f052121bc83ce"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a251495c4dfd319b8142f052121bc83ce">RubberRecentreHeight</a><code> [get]</code></td></tr>
 <tr class="memdesc:a251495c4dfd319b8142f052121bc83ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far the camera eases down, in frame heights: the bake's <code>RECENTRE</code> over its camera's <code>ortho_scale</code>.  <br /></td></tr>
 <tr class="separator:a251495c4dfd319b8142f052121bc83ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b71df03be16e2bebee81994888e2788" id="r_a4b71df03be16e2bebee81994888e2788"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4b71df03be16e2bebee81994888e2788">RubberSpin</a><code> [get]</code></td></tr>
+<tr class="memdesc:a4b71df03be16e2bebee81994888e2788"><td class="mdescLeft">&#160;</td><td class="mdescRight">How fast the torn rubber turns as it falls, in degrees a second once its spin has built up over one <a class="el" href="#aeb3902dad9d6c504e1a0ec22e327997b" title="Seconds for one swing from side to side; the swing grows in over as long.">RubberSwingSeconds</a>.  <br /></td></tr>
+<tr class="separator:a4b71df03be16e2bebee81994888e2788"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a162506c7d709b66ed572c057d5f6c052" id="r_a162506c7d709b66ed572c057d5f6c052"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a162506c7d709b66ed572c057d5f6c052">RubberSwing</a><code> [get]</code></td></tr>
 <tr class="memdesc:a162506c7d709b66ed572c057d5f6c052"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far the torn rubber swings side to side as it falls, in frame widths at its widest.  <br /></td></tr>
 <tr class="separator:a162506c7d709b66ed572c057d5f6c052"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1473,6 +1476,33 @@ Properties</h2></td></tr>
 <p>The game moves the frames down by it too, so the knot's path stays the fall's. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aa1f133f05ebb41623fbc5c7e7622c699">BalloonParty.Configuration.CardReveal.CardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="a4b71df03be16e2bebee81994888e2788" name="a4b71df03be16e2bebee81994888e2788"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b71df03be16e2bebee81994888e2788">&#9670;&#160;</a></span>RubberSpin</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.ICardRevealSettings.RubberSpin</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How fast the torn rubber turns as it falls, in degrees a second once its spin has built up over one <a class="el" href="#aeb3902dad9d6c504e1a0ec22e327997b" title="Seconds for one swing from side to side; the swing grows in over as long.">RubberSwingSeconds</a>. </p>
+<p>Each pop picks the direction and varies the speed. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aded88acbe448d3ecbc080e4165682c25">BalloonParty.Configuration.CardReveal.CardRevealSettings</a>.</p>
 
 </div>
 </div>

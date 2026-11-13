@@ -1,5 +1,9 @@
 var NAVTREEINDEX41 =
 {
+"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#af621aa488ebba9103b8d2090632f85ec":[5,0,0,6,0,0,18],
+"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#af621aa488ebba9103b8d2090632f85ec":[6,0,0,6,0,0,18],
+"classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html":[5,0,0,6,0,2],
+"classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html":[6,0,0,6,0,2],
 "classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html#a14e7df03799f2de7266b3507ccedee61":[5,0,0,6,0,2,1],
 "classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html#a14e7df03799f2de7266b3507ccedee61":[6,0,0,6,0,2,1],
 "classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html#a7338f46ae17a97f3f314c04f6e44a6d2":[5,0,0,6,0,2,2],
@@ -245,9 +249,5 @@ var NAVTREEINDEX41 =
 "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a21911b313d1683912c4c9131151398da":[5,0,0,6,1,9,2],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a21911b313d1683912c4c9131151398da":[6,0,0,6,1,9,2],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a34e3f59426eeb757aea93a8409675280":[5,0,0,6,1,9,34],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a34e3f59426eeb757aea93a8409675280":[6,0,0,6,1,9,34],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a3526693c8fe8ad5608f15d6665eeb225":[5,0,0,6,1,9,42],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a3526693c8fe8ad5608f15d6665eeb225":[6,0,0,6,1,9,42],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a35ac8b540c04036c46213884186a8888":[5,0,0,6,1,9,14],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a35ac8b540c04036c46213884186a8888":[6,0,0,6,1,9,14]
+"classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a34e3f59426eeb757aea93a8409675280":[6,0,0,6,1,9,34]
 };
