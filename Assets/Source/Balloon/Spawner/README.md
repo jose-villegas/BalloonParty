@@ -9,6 +9,7 @@ Responsible for introducing balloons into the grid — the initial fill at game 
 | `SpawnClock` | `ITickable` + `IRunResettable` — the timer that brings lines in: publishes `SpawnBalloonLineMessage(1)` once per `ISpawnClockSettings.IntervalForLevel(level)` of scaled game time, after `GraceSeconds` at each level start and run reset. Holds while not on the `Game` screen, while the level is not `Playing`, during any pause, and while the only ball in flight is doomed (so no line lands in its frozen last moment). One line per tick: a long frame never lands a backlog. `ISpawnClock.NextLineProgress` (0 → 1 across the current wait) feeds the danger heart's shine |
 | `BalloonSpawner` | `IStartable` + `IGridSpawner` — creates and places balloons, manages per-type pool registration and active-count caps, and decides where each line's balloon goes. Each line first computes the deficit via `WaveDeficitCalculator`; if hearts would be lost it still spawns the line, tagged doomed, so `RejectedBalloonEffect` can show it, then publishes `WaveDamageMessage`. `SpawnPriority` is `SpawnStage.BalloonActors` (100). `Start()` registers pools and kicks off pre-warm asynchronously; `SpawnAsync()` awaits the pre-warm then populates the initial grid |
 | `RejectedBalloonEffect` | **Purely visual** overflow pile for balloons that couldn't be placed — HP drain is handled at the wave level by `WaveDamageMessage`, not per-balloon. `Play` queues a would-be balloon into the overflow rows below the grid. `ITickable` runs the pile as a **per-column queue**; balloons compact upward when one pops. During spawning, `BalloonSpawner` brackets doomed-line balloons with `BeginDoomedLine(lineIndex)` / `EndDoomedLine()` — those balloons are **not** auto-popped by the heart-drain interval. Instead, `PopDoomedLine(int)` bulk-pops every balloon tagged with a given line index (triggered by `HeartTrailController` when its strikethrough sequence completes). Non-doomed overflow balloons still drain one at a time (front-most first, serialized via `PopIntervalSeconds`). `IRunResettable` returns any transients on restart. `IsOverflowActive` (pile non-empty) holds the level-up transition and the heart-drain cinematic, but nothing pauses: play carries on while the pile drains. Timing/motion come from `IOverflowSettings` |
+| `ReinforcementPlan` | Pure: how many of the unbreakables the formations called in a line can bring, held to the ceiling and the line's open places. See `Balloon/Formation/README.md` |
 | `BalloonFactory` | Assembles a single balloon: pulls a view from the pool, builds the model (via `BalloonModelFactory`) and its `BalloonController`, places it on the grid, and plays the entry animation. The spawner owns scheduling, per-type caps, and path computation; the factory owns the object-graph wiring |
 | `BalloonPlacementResolver` | Decides which slot a line's balloon takes for a given column — own entry, re-home, or pressure-open (see "Placement under pressure") |
 | `BalloonPoolChannel` | `InjectingPoolChannel<BalloonView>` — creates balloon instances via `IObjectResolver.Instantiate()`, injecting all `[Inject]` fields from the parent container without creating child scopes |
@@ -37,6 +38,17 @@ Lines group into **waves** of `ISpawnClockSettings.LinesPerWave` (3). Counting r
 - Every line ends by publishing `BalanceBalloonsMessage` so the balancer settles the grid.
 
 A doomed line (one the board has no room for) still spawns: `BeginDoomedLine` / `EndDoomedLine` tag its overflow balloons so they wait for the strikethrough, and `WaveDamageMessage` goes out after them. `SpaceDanger` assumes this one-line-per-tick shape. The line hold while the doomed ball flies alone lives in `SpawnClock`, not here (`Projectile/README.md`).
+
+### Reinforcements
+
+A clock line also brings the unbreakables the board's formations called in at this wave's start
+(`IFormationReinforcements`, see `Balloon/Formation/README.md`). Like the initial fill's guaranteed
+entries, they go into the batch first and bypass the level's pick and its wave quota. They also bypass
+the level's cap for unbreakables: they aren't counted in the active counts, so the level's own
+unbreakables keep their cap, and the spawner counts these apart, up to
+`IUnbreakableFormationSettings.ReinforcementCeiling` alive at once. All unbreakables in a batch are alike,
+so the first ones dealt are tagged as the reinforcements, and an undealt one hands back no count. The
+unbreakable pool is prewarmed with room for the ceiling.
 
 ### Placement under pressure (clock lines)
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using UnityEngine;
@@ -12,9 +13,9 @@ namespace BalloonParty.Balloon.Formation
     /// <summary>
     ///     Finds where a formation of one shape can stand and which candidate goes to which of its slots.
     ///     Reads the grid only; the caller moves the members. A formation slot must be empty or already
-    ///     hold a formation member, and never sits in the bottom <see cref="IUnbreakableFormationSettings.BottomClearance" />
-    ///     rows. Among the spots that fit, the planner picks at random among the few with the least total
-    ///     travel.
+    ///     hold one of the candidates, so a formation never plans over another formation. It never sits in
+    ///     the bottom <see cref="IUnbreakableFormationSettings.BottomClearance" /> rows. Among the spots that
+    ///     fit, the planner picks at random among the few with the least total travel.
     /// </summary>
     internal sealed class FormationPlanner
     {
@@ -74,7 +75,7 @@ namespace BalloonParty.Balloon.Formation
                         continue;
                     }
 
-                    if (!BuildSlots(grid, shape, anchor, count, lastRow) || !AllSlotsFree(grid))
+                    if (!BuildSlots(grid, shape, anchor, count, lastRow) || !AllSlotsFree(grid, candidates))
                     {
                         continue;
                     }
@@ -180,18 +181,31 @@ namespace BalloonParty.Balloon.Formation
             }
         }
 
-        private bool AllSlotsFree(SlotGrid grid)
+        private bool AllSlotsFree(SlotGrid grid, IReadOnlyList<IWriteableFormationMember> candidates)
         {
             for (var i = 0; i < _slots.Count; i++)
             {
                 var slot = _slots[i];
-                if (!grid.IsEmpty(slot.x, slot.y) && grid.At(slot) is not IWriteableFormationMember)
+                if (!grid.IsEmpty(slot.x, slot.y) && !IsCandidate(grid.At(slot), candidates))
                 {
                     return false;
                 }
             }
 
             return true;
+        }
+
+        private static bool IsCandidate(IWriteableSlotActor occupant, IReadOnlyList<IWriteableFormationMember> candidates)
+        {
+            for (var i = 0; i < candidates.Count; i++)
+            {
+                if (ReferenceEquals(candidates[i], occupant))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static bool HostsItem(SlotGrid grid, Vector2Int slot)

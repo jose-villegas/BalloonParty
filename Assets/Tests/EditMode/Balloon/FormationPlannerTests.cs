@@ -98,6 +98,22 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void SkipsSlotsHeldByUnbreakablesThatAreNotCandidates()
+        {
+            BuildGrid(5, 6);
+
+            // Rows 0, 1 and 3 hold another formation's unbreakables, so row 2 is the only row a line fits on.
+            FillRowWithOutsiders(0);
+            FillRowWithOutsiders(1);
+            FillRowWithOutsiders(3);
+            AddMembers(new Vector2Int(0, 4), new Vector2Int(2, 4), new Vector2Int(4, 5));
+
+            Assert.IsTrue(Plan(FormationShape.Horizontal));
+
+            Assert.IsTrue(Targets().All(t => t.y == 2));
+        }
+
+        [Test]
         public void AMemberStandingOnAFormationSlotKeepsIt()
         {
             BuildGrid(7, 8);
@@ -216,6 +232,14 @@ namespace BalloonParty.Tests.Balloon
             for (var col = 0; col < _grid.Columns; col++)
             {
                 _grid.Place(new BalloonModel(), null, new Vector2Int(col, row));
+            }
+        }
+
+        private void FillRowWithOutsiders(int row)
+        {
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                _grid.Place(new UnbreakableBalloonModel(new BalloonModelConfig()), null, new Vector2Int(col, row));
             }
         }
 

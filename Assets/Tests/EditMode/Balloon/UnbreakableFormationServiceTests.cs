@@ -214,6 +214,160 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void SixUnbreakables_FormTwoFormations_OnSeparateSlots()
+        {
+            _settings.MaxMembers.Returns(3);
+            AddSixSpreadOut();
+
+            Arrange();
+
+            Assert.AreEqual(2, _service.Formations.Count);
+            Assert.IsTrue(_service.Formations.All(f => f.Members.Count == 3));
+            Assert.IsEmpty(_service.Formations[0].Members.Intersect(_service.Formations[1].Members));
+            Assert.IsTrue(_unbreakables.All(u => u.IsAnchored && _grid.At(u.SlotIndex.Value) == u));
+            Assert.AreEqual(6, _unbreakables.Select(u => u.SlotIndex.Value).Distinct().Count());
+        }
+
+        [Test]
+        public void FreeUnbreakablesPastAFullFormation_FormTheirOwn()
+        {
+            AddSixSpreadOut();
+            AddUnbreakables(new Vector2Int(2, 2), new Vector2Int(4, 2));
+
+            Arrange();
+
+            CollectionAssert.AreEquivalent(new[] { 5, 3 }, _service.Formations.Select(f => f.Members.Count));
+            Assert.IsTrue(_unbreakables.All(u => u.IsAnchored));
+        }
+
+        [Test]
+        public void TooFewFreeUnbreakablesForASecondFormation_StayFree()
+        {
+            AddSixSpreadOut();
+
+            Arrange();
+
+            Assert.AreEqual(1, _service.Formations.Count);
+            Assert.AreEqual(1, _unbreakables.Count(u => !u.IsAnchored));
+        }
+
+        [Test]
+        public void AReshape_TakesInAFreeUnbreakable_AndItStaysOutOfAnotherFormation()
+        {
+            AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
+            Arrange();
+            var newcomer = AddUnbreakable(new Vector2Int(6, 0));
+            Arrange();
+            Arrange();
+
+            Arrange();
+
+            Assert.AreEqual(1, _service.Formations.Count);
+            Assert.AreEqual(4, _service.Formations[0].Members.Count);
+            Assert.IsTrue(newcomer.IsAnchored);
+
+            AddUnbreakables(new Vector2Int(1, 5), new Vector2Int(5, 5));
+            for (var i = 0; i < 3; i++)
+            {
+                Arrange();
+            }
+
+            Assert.IsTrue(_service.Formations.All(f => f.Members.Count >= 3));
+            Assert.AreEqual(_service.Members.Count, _service.Members.Distinct().Count(), "no member in two formations");
+        }
+
+        [Test]
+        public void PiercingOneFormationBelowTheMinimum_LeavesTheOtherStanding()
+        {
+            _settings.MaxMembers.Returns(3);
+            AddSixSpreadOut();
+            Arrange();
+            var broken = _service.Formations[0];
+            var standing = _service.Formations[1];
+            var survivors = broken.Members.Skip(1).Cast<UnbreakableBalloonModel>().ToList();
+
+            _grid.Remove(broken.Members[0].SlotIndex.Value);
+
+            Assert.AreEqual(1, _service.Formations.Count);
+            Assert.AreSame(standing, _service.Formations[0]);
+            Assert.IsTrue(standing.Members.Cast<UnbreakableBalloonModel>().All(m => m.IsAnchored));
+            Assert.IsFalse(survivors.Any(m => m.IsAnchored));
+            Assert.AreEqual(3, _service.Members.Count);
+        }
+
+        [Test]
+        public void AnUntouchedFormation_CallsAReinforcementAtTheNextWaveStart()
+        {
+            _settings.ReinforcementChance.Returns(0.5f);
+            AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
+
+            Arrange();
+
+            Assert.AreEqual(0, _service.TakeReinforcementCalls(), "the wave it formed in calls nobody");
+
+            Arrange();
+
+            Assert.AreEqual(1, _service.TakeReinforcementCalls());
+            Assert.AreEqual(0, _service.TakeReinforcementCalls(), "a take clears the calls");
+        }
+
+        [Test]
+        public void EveryUntouchedFormation_RollsOnItsOwn()
+        {
+            _settings.MaxMembers.Returns(3);
+            _settings.ReinforcementChance.Returns(1f);
+            AddSixSpreadOut();
+            Arrange();
+
+            Arrange();
+
+            Assert.AreEqual(2, _service.TakeReinforcementCalls());
+        }
+
+        [Test]
+        public void ARollAtOrAboveTheChance_CallsNobody()
+        {
+            _settings.ReinforcementChance.Returns(0.5f);
+            AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
+            Arrange();
+            _service.Random01 = () => 0.5f;
+
+            Arrange();
+
+            Assert.AreEqual(0, _service.TakeReinforcementCalls());
+        }
+
+        [Test]
+        public void APiercedFormation_CallsNoMoreReinforcements()
+        {
+            _settings.ReinforcementChance.Returns(1f);
+            AddUnbreakables(
+                new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5), new Vector2Int(5, 0));
+            Arrange();
+
+            _grid.Remove(_unbreakables[0].SlotIndex.Value);
+            Arrange();
+            Arrange();
+            Arrange();
+
+            Assert.AreEqual(1, _service.Formations.Count, "three members still stand");
+            Assert.AreEqual(0, _service.TakeReinforcementCalls());
+        }
+
+        [Test]
+        public void ResetRun_DropsUntakenCalls()
+        {
+            _settings.ReinforcementChance.Returns(1f);
+            AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
+            Arrange();
+            Arrange();
+
+            _service.ResetRun(1);
+
+            Assert.AreEqual(0, _service.TakeReinforcementCalls());
+        }
+
+        [Test]
         public void ItemCoverOnly_WithAnItemOnTheBoard_CoversIt()
         {
             _settings.HorizontalWeight.Returns(0f);
@@ -263,6 +417,13 @@ namespace BalloonParty.Tests.Balloon
 
             Assert.AreEqual(0, _service.Members.Count);
             Assert.IsFalse(_unbreakables.Any(u => u.IsAnchored));
+        }
+
+        private void AddSixSpreadOut()
+        {
+            AddUnbreakables(
+                new Vector2Int(0, 0), new Vector2Int(6, 0), new Vector2Int(3, 1),
+                new Vector2Int(0, 5), new Vector2Int(6, 5), new Vector2Int(3, 4));
         }
 
         private void Arrange()

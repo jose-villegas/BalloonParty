@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Balloon.Controller;
+using BalloonParty.Balloon.Formation;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
@@ -55,6 +56,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly ILevelProgress _levelProgress;
         private readonly ISpawnClock _spawnClock;
         private readonly IRunSeed _runSeed;
+        private readonly IFormationReinforcements _reinforcements;
         private readonly List<Vector3> _spawnPathBuffer = new();
         private readonly List<BalloonPrefabEntry> _spawnBatch = new();
         private readonly List<int> _lineColumns = new();
@@ -63,8 +65,11 @@ namespace BalloonParty.Balloon.Spawner
         private readonly List<BalloonPrefabEntry> _layerHeavies = new();
         private readonly List<BalloonPrefabEntry> _layerLights = new();
         private readonly Comparison<int> _byColumnKey;
+        private readonly Action _releaseReinforcement;
         // The catalogue's bubble, which water lines bring whatever the level generator withholds; null without one.
         private readonly BalloonPrefabEntry _bubbleEntry;
+        // The catalogue's unbreakable, which a formation's reinforcements bring whatever the level's mix.
+        private readonly BalloonPrefabEntry _unbreakableEntry;
 
         private int[] _columnSortKeys;
         // Lines spawned this level; waves (ISpawnClockSettings.LinesPerWave) are counted from it.
@@ -73,6 +78,14 @@ namespace BalloonParty.Balloon.Spawner
         private bool _prewarmed;
         // Whether the batch being dealt is a water level's clock line, whose bubbles start small.
         private bool _waterBatch;
+        // Called-in unbreakables on the board. They sit outside _activeCounts, so the level's cap still
+        // holds for its own, and IUnbreakableFormationSettings.ReinforcementCeiling holds for these.
+        private int _reinforcementsAlive;
+        // Unbreakables in the batch still to deal that are reinforcements. A counter, not a tag on an entry:
+        // the batch is sorted (unstably) after they go in, so the first unbreakables dealt carry the tag,
+        // and the totals still come out right because every unbreakable in the batch is the same
+        // _unbreakableEntry. Give reinforcements an entry of their own and this has to track entries.
+        private int _batchReinforcements;
 
         public SpawnStage SpawnPriority => SpawnStage.BalloonActors;
         public int ResetOrder => RunResetOrder.Counters;
@@ -97,7 +110,8 @@ namespace BalloonParty.Balloon.Spawner
             BalloonPlacementResolver placement,
             ILevelProgress levelProgress,
             ISpawnClock spawnClock,
-            IRunSeed runSeed)
+            IRunSeed runSeed,
+            IFormationReinforcements reinforcements)
         {
             _grid = grid;
             _balloonsConfig = balloonsConfig;
@@ -118,10 +132,13 @@ namespace BalloonParty.Balloon.Spawner
             _levelProgress = levelProgress;
             _spawnClock = spawnClock;
             _runSeed = runSeed;
+            _reinforcements = reinforcements;
             _bubbleEntry = FindEntry(balloonsConfig, BalloonType.BubbleCluster);
+            _unbreakableEntry = FindEntry(balloonsConfig, BalloonType.Unbreakable);
 
             // Cached to avoid a per-sort delegate allocation.
             _byColumnKey = CompareColumnKeys;
+            _releaseReinforcement = ReleaseReinforcement;
         }
 
         public void Start()
@@ -152,6 +169,8 @@ namespace BalloonParty.Balloon.Spawner
         public void ResetRun(int generation)
         {
             _activeCounts.Clear();
+            _reinforcementsAlive = 0;
+            _batchReinforcements = 0;
             _linesThisLevel = 0;
             _newlySpawnedBalloons.Clear();
             _spawnBatch.Clear();
@@ -183,6 +202,11 @@ namespace BalloonParty.Balloon.Spawner
                     // Water lines bring bubbles even when no level's mix includes them.
                     var waterCap = _pacing.BubbleRise.MaxBubbles;
                     count = Math.Max(count, waterCap > 0 ? waterCap : _grid.Columns);
+                }
+
+                if (entry == _unbreakableEntry)
+                {
+                    count += _balloonsConfig.UnbreakableFormation.ReinforcementCeiling;
                 }
 
                 if (count <= 0)
@@ -321,14 +345,21 @@ namespace BalloonParty.Balloon.Spawner
             }
         }
 
-        // The entry comes from the batch picked for this fill or line; its active count was taken at batch time.
-        private void SpawnBalloon(Vector2Int slot, BalloonPrefabEntry entry)
+        // The entry comes from the batch picked for this fill or line; its active count was taken at batch
+        // time. A reinforcement counts toward _reinforcementsAlive instead.
+        private void SpawnBalloon(Vector2Int slot, BalloonPrefabEntry entry, bool reinforcement = false)
         {
             var source = new Vector2Int(slot.x, slot.y + _balloonsConfig.SpawnEntryRowOffset);
             _grid.ComputePath(source, slot, _spawnPathBuffer);
             var poolKey = entry.PoolKey;
 
-            var model = _factory.Create(entry, slot, _spawnPathBuffer, () => ReleaseActiveCount(poolKey));
+            if (reinforcement)
+            {
+                _reinforcementsAlive++;
+            }
+
+            var onReturned = reinforcement ? _releaseReinforcement : () => ReleaseActiveCount(poolKey);
+            var model = _factory.Create(entry, slot, _spawnPathBuffer, onReturned);
             if (_waterBatch && model is BubbleClusterModel bubble)
             {
                 var bubbles = _pacing.BubbleRise.StartBubblesForLevel(_levelProgress.Level.Value);
@@ -346,6 +377,12 @@ namespace BalloonParty.Balloon.Spawner
             {
                 _activeCounts[poolKey] = count - 1;
             }
+        }
+
+        // Like ReleaseActiveCount, a balloon from before a run reset may return after the count was zeroed.
+        private void ReleaseReinforcement()
+        {
+            _reinforcementsAlive = Mathf.Max(0, _reinforcementsAlive - 1);
         }
 
         private void SpawnLine()
@@ -412,7 +449,13 @@ namespace BalloonParty.Balloon.Spawner
                     var entry = NextBatchEntry();
                     if (entry != null)
                     {
-                        SpawnBalloon(slot.Value, entry);
+                        var reinforcement = entry == _unbreakableEntry && _batchReinforcements > 0;
+                        if (reinforcement)
+                        {
+                            _batchReinforcements--;
+                        }
+
+                        SpawnBalloon(slot.Value, entry, reinforcement);
                     }
 
                     continue;
@@ -445,10 +488,15 @@ namespace BalloonParty.Balloon.Spawner
             var bubbleShare = isInitial ? 0f : WaterBubbleShare();
             _waterBatch = bubbleShare > 0f;
 
-            // Guaranteed entries go first — they bypass the weighted pick and wave quotas.
+            // Guaranteed entries go first — they bypass the weighted pick and wave quotas. So do the
+            // unbreakables a formation called in.
             if (isInitial)
             {
                 _levelParams.Current.FillGuaranteedBalloons(_spawnBatch, _activeCounts);
+            }
+            else
+            {
+                AddReinforcements(target);
             }
 
             for (var i = _spawnBatch.Count; i < target; i++)
@@ -477,6 +525,26 @@ namespace BalloonParty.Balloon.Spawner
             {
                 _spawnBatch.Sort(BySpawnWeightAscending);
             }
+        }
+
+        // The unbreakables the formations called in at this wave's start. They are the formation's doing, not
+        // the level's mix, so they bypass its cap and wave quota and are held to the ceiling instead.
+        private void AddReinforcements(int target)
+        {
+            var calls = _reinforcements?.TakeReinforcementCalls() ?? 0;
+            if (calls <= 0 || _unbreakableEntry == null)
+            {
+                return;
+            }
+
+            var count = ReinforcementPlan.ToAdd(calls, _reinforcementsAlive,
+                _balloonsConfig.UnbreakableFormation.ReinforcementCeiling, target - _spawnBatch.Count);
+            for (var i = 0; i < count; i++)
+            {
+                _spawnBatch.Add(_unbreakableEntry);
+            }
+
+            _batchReinforcements = count;
         }
 
         // Reorders the freshly-picked initial batch into vertical layers instead of one bottom-heavy
@@ -562,16 +630,25 @@ namespace BalloonParty.Balloon.Spawner
             return _columnSortKeys[a] - _columnSortKeys[b];
         }
 
-        // Hands back the counts of entries the batch never placed (unresolvable columns, aborts).
+        // Hands back the counts of entries the batch never placed (unresolvable columns, aborts). A
+        // reinforcement never placed took no count, so it has none to hand back.
         private void ReleaseUnspawnedBatch()
         {
             for (var i = _batchCursor; i < _spawnBatch.Count; i++)
             {
-                ReleaseActiveCount(_spawnBatch[i].PoolKey);
+                var entry = _spawnBatch[i];
+                if (entry == _unbreakableEntry && _batchReinforcements > 0)
+                {
+                    _batchReinforcements--;
+                    continue;
+                }
+
+                ReleaseActiveCount(entry.PoolKey);
             }
 
             _spawnBatch.Clear();
             _batchCursor = 0;
+            _batchReinforcements = 0;
         }
 
         // Spawns up to count balloons at their columns' own entries — no rehoming, no pressure, no

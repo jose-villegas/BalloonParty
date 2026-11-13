@@ -258,6 +258,22 @@ Changes from the design above, made during implementation and review:
 - **The covered item isn't anchored.** If it pops or rises away during the hold, the cover stays where
   it is until the next change.
 
+### Second pass: several formations and reinforcements (2026-11-13)
+
+The owner had only ever seen one formation, and wanted two at once, lines that stack into a blockade. The
+reason was the level's cap: at most 4 unbreakables on the board, and a formation needs 3. The cap stays,
+since tough balloons get hard to handle in numbers. Instead a formation left alone grows the threat:
+
+- **Several formations.** The service keeps a list (`StandingFormation`). Each holds and changes on
+  its own count. Free unbreakables form a new formation whenever `MinMembers` of them are free. The
+  planner only plans over its own candidates' slots, so formations never overlap. Piercing a member
+  only touches its own formation.
+- **Reinforcements.** At each wave start, a formation with no member pierced since it formed rolls
+  `ReinforcementChance` (0.35) to call in one more unbreakable. The spawner adds the calls to that
+  line past the level's cap, up to `ReinforcementCeiling` (4) of them alive at once. They roam and form
+  their own formations like any others.
+- Not yet measured with the playtest bot, and not yet seen in the Editor.
+
 ## Phases
 
 ### Phase 1: Formation logic

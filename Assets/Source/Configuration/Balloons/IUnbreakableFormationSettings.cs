@@ -1,6 +1,9 @@
 namespace BalloonParty.Configuration.Balloons
 {
-    /// <summary>How unbreakables gather into formations, hold them, and pick the next shape.</summary>
+    /// <summary>
+    ///     How unbreakables gather into formations, hold them, pick the next shape, and call in more
+    ///     unbreakables while left alone.
+    /// </summary>
     public interface IUnbreakableFormationSettings
     {
         bool Enabled { get; }
@@ -8,7 +11,7 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>Fewest unbreakables on the board that form up.</summary>
         int MinMembers { get; }
 
-        /// <summary>Most unbreakables in one formation; the rest keep roaming.</summary>
+        /// <summary>Most unbreakables in one formation; the rest roam, or form a formation of their own.</summary>
         int MaxMembers { get; }
 
         /// <summary>Waves a formation holds, counting the wave it formed in, before it changes shape.</summary>
@@ -27,5 +30,14 @@ namespace BalloonParty.Configuration.Balloons
 
         /// <summary>Pick weight of covering an item from below; only in the pick while an item is on the board.</summary>
         float ItemCoverWeight { get; }
+
+        /// <summary>
+        ///     Chance, at each wave start, that a formation which stood untouched through the last wave calls in
+        ///     one more unbreakable.
+        /// </summary>
+        float ReinforcementChance { get; }
+
+        /// <summary>Most called-in unbreakables on the board at once, on top of the level's own cap.</summary>
+        int ReinforcementCeiling { get; }
     }
 }

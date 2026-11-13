@@ -203,6 +203,8 @@ MonoBehaviour:
     _holdWaves: 3
     _bottomClearance: 2
     _spotChoices: 3
+    _reinforcementChance: 0.35
+    _reinforcementCeiling: 4
     _horizontalWeight: 1
     _diagonalWeight: 1
     _itemCoverWeight: 2

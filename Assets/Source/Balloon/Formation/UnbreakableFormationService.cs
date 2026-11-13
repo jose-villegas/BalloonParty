@@ -14,12 +14,15 @@ using Random = UnityEngine.Random;
 namespace BalloonParty.Balloon.Formation
 {
     /// <summary>
-    ///     Gathers the board's unbreakables into formations. At each wave start the balancer asks it to
-    ///     arrange: with enough unbreakables it plans a shape and hands the balancer the moves, anchors the
-    ///     members, and holds them for <see cref="IUnbreakableFormationSettings.HoldWaves" /> waves before
-    ///     picking a different shape. A formation that loses members below the minimum breaks at once.
+    ///     Gathers the board's unbreakables into formations, as many as there are members for. At each wave
+    ///     start the balancer asks it to arrange: each formation holds for
+    ///     <see cref="IUnbreakableFormationSettings.HoldWaves" /> waves, then plans a different shape, and the
+    ///     unbreakables left free form new ones. It hands the balancer the moves and anchors the members. A
+    ///     formation that loses members below the minimum breaks at once. One that stands untouched may call
+    ///     in another unbreakable (<see cref="IFormationReinforcements" />).
     /// </summary>
-    internal sealed class UnbreakableFormationService : IStartable, IRunResettable, IDisposable
+    internal sealed class UnbreakableFormationService : IStartable, IRunResettable, IDisposable,
+        IFormationReinforcements
     {
         private static readonly FormationShape[] Shapes =
         {
@@ -34,20 +37,23 @@ namespace BalloonParty.Balloon.Formation
         private readonly FormationPlanner _planner = new();
         private readonly List<IWriteableFormationMember> _candidates = new();
         private readonly List<IWriteableFormationMember> _members = new();
+        private readonly List<StandingFormation> _formations = new();
+        private readonly List<StandingFormation> _spareFormations = new();
+        private readonly Dictionary<IWriteableFormationMember, StandingFormation> _formationOf = new();
         private readonly List<FormationAssignment> _assignments = new();
         private readonly List<FormationShape> _shapePool = new();
         private readonly CompositeDisposable _subscriptions = new();
         private readonly Func<int, int> _pickIndex;
 
-        private FormationShape? _lastShape;
-        private int _wavesLeft;
         private bool _arranging;
+        private int _reinforcementCalls;
 
         public int ResetOrder => RunResetOrder.Quiesce;
 
         // Exposed for tests.
         internal IReadOnlyList<IWriteableFormationMember> Members => _members;
-        internal FormationShape? CurrentShape => _members.Count > 0 ? _lastShape : null;
+        internal IReadOnlyList<StandingFormation> Formations => _formations;
+        internal FormationShape? CurrentShape => _formations.Count > 0 ? _formations[0].Shape : null;
         internal Func<float> Random01 { get; set; } = () => Random.value;
 
         [Inject]
@@ -65,8 +71,8 @@ namespace BalloonParty.Balloon.Formation
 
         public void ResetRun(int generation)
         {
-            Release();
-            _lastShape = null;
+            ReleaseAll();
+            _reinforcementCalls = 0;
         }
 
         public void Dispose()
@@ -74,71 +80,154 @@ namespace BalloonParty.Balloon.Formation
             _subscriptions.Dispose();
         }
 
+        public int TakeReinforcementCalls()
+        {
+            var calls = _reinforcementCalls;
+            _reinforcementCalls = 0;
+            return calls;
+        }
+
         /// <summary>
-        ///     Runs once per wave start, before the roam pre-pass. Holds the current formation while it has
-        ///     waves left; otherwise plans the next one and moves each member with
-        ///     <paramref name="relocate" />, which owns the grid change and the glide.
+        ///     Runs once per wave start, before the roam pre-pass. Every formation that stood untouched through
+        ///     the last wave rolls for a reinforcement. A formation still holding counts down; one done holding
+        ///     plans its next shape, or breaks if none fits. Then the free unbreakables form new formations
+        ///     while there are enough of them. <paramref name="relocate" /> moves each member and owns the grid
+        ///     change and the glide.
         /// </summary>
         internal void ArrangeAtWaveStart(Action<IWriteableDynamicSlotActor, Vector2Int> relocate)
         {
             if (_settings == null || !_settings.Enabled)
             {
-                Release();
+                ReleaseAll();
                 return;
             }
 
-            if (_members.Count > 0 && _wavesLeft > 0)
-            {
-                _wavesLeft--;
-                return;
-            }
-
-            CollectCandidates();
-            if (_candidates.Count < _settings.MinMembers || !TryPlanNextShape(out var shape))
-            {
-                // The balancer runs the race right after this, so the released members settle there.
-                Release();
-                return;
-            }
-
-            var heading = HeadingFor(shape);
+            RollReinforcements();
 
             // The members' own moves remove and place them; that is not a member being lost.
             _arranging = true;
             try
             {
-                ReleaseMembersLeaving();
-                _members.Clear();
-                for (var i = 0; i < _assignments.Count; i++)
-                {
-                    var assignment = _assignments[i];
-                    var member = assignment.Member;
-                    member.SetFormationHeading(heading);
-                    member.SetInFormation(true);
-                    _members.Add(member);
-                    if (member.SlotIndex.Value != assignment.Target)
-                    {
-                        relocate(member, assignment.Target);
-                    }
-                }
+                ChangeFormationsDoneHolding(relocate);
+                FormFromFreeUnbreakables(relocate);
             }
             finally
             {
                 _arranging = false;
             }
 
-            _lastShape = shape;
-            _wavesLeft = _settings.HoldWaves - 1;
+            RebuildMemberList();
         }
 
-        private void CollectCandidates()
+        private void RollReinforcements()
+        {
+            var chance = _settings.ReinforcementChance;
+            if (chance <= 0f)
+            {
+                return;
+            }
+
+            for (var i = 0; i < _formations.Count; i++)
+            {
+                if (!_formations[i].Touched && Random01() < chance)
+                {
+                    _reinforcementCalls++;
+                }
+            }
+        }
+
+        private void ChangeFormationsDoneHolding(Action<IWriteableDynamicSlotActor, Vector2Int> relocate)
+        {
+            for (var i = 0; i < _formations.Count; i++)
+            {
+                var formation = _formations[i];
+                if (formation.WavesLeft > 0)
+                {
+                    formation.WavesLeft--;
+                    continue;
+                }
+
+                CollectCandidates(formation);
+                if (_candidates.Count < _settings.MinMembers || !TryPlanNextShape(formation.Shape, out var shape))
+                {
+                    // The balancer runs the race right after this, so the released members settle there.
+                    Release(formation);
+                    _formations.RemoveAt(i);
+                    i--;
+                    continue;
+                }
+
+                Apply(formation, shape, relocate);
+            }
+        }
+
+        // Each pass takes at least MinMembers free unbreakables, so the loop ends.
+        private void FormFromFreeUnbreakables(Action<IWriteableDynamicSlotActor, Vector2Int> relocate)
+        {
+            while (true)
+            {
+                CollectCandidates(null);
+                if (_candidates.Count < _settings.MinMembers || !TryPlanNextShape(null, out var shape))
+                {
+                    return;
+                }
+
+                var formation = TakeSpareFormation();
+                _formations.Add(formation);
+                Apply(formation, shape, relocate);
+            }
+        }
+
+        private void Apply(
+            StandingFormation formation, FormationShape shape, Action<IWriteableDynamicSlotActor, Vector2Int> relocate)
+        {
+            var heading = HeadingFor(shape);
+
+            // Only members the new shape drops go back to red; a member that stays never dips out of it.
+            var members = formation.MemberList;
+            for (var i = 0; i < members.Count; i++)
+            {
+                if (!IsAssigned(members[i]))
+                {
+                    members[i].SetInFormation(false);
+                    _formationOf.Remove(members[i]);
+                }
+            }
+
+            members.Clear();
+            for (var i = 0; i < _assignments.Count; i++)
+            {
+                var assignment = _assignments[i];
+                var member = assignment.Member;
+                member.SetFormationHeading(heading);
+                member.SetInFormation(true);
+                members.Add(member);
+                _formationOf[member] = formation;
+                if (member.SlotIndex.Value != assignment.Target)
+                {
+                    relocate(member, assignment.Target);
+                }
+            }
+
+            formation.Shape = shape;
+            formation.WavesLeft = _settings.HoldWaves - 1;
+        }
+
+        // The unbreakables a formation may plan with: its own members and every free unbreakable. Members of
+        // other formations are left out, so the planner treats their slots as taken. Null: free ones only.
+        private void CollectCandidates(StandingFormation own)
         {
             _candidates.Clear();
             for (var col = 0; col < _grid.Columns; col++)
             {
                 for (var row = 0; row < _grid.Rows; row++)
                 {
-                    if (!_grid.IsEmpty(col, row) && _grid.At(new Vector2Int(col, row)) is IWriteableFormationMember member)
+                    if (_grid.IsEmpty(col, row) || _grid.At(new Vector2Int(col, row)) is not IWriteableFormationMember member)
+                    {
+                        continue;
+                    }
+
+                    if (!_formationOf.TryGetValue(member, out var formation) || formation == own)
                     {
                         _candidates.Add(member);
                     }
@@ -148,12 +237,12 @@ namespace BalloonParty.Balloon.Formation
 
         // A weighted pick without the shape just held; a shape with no spot drops out and the pick goes
         // again. The held shape is the last resort, when nothing else fits.
-        private bool TryPlanNextShape(out FormationShape shape)
+        private bool TryPlanNextShape(FormationShape? lastShape, out FormationShape shape)
         {
             _shapePool.Clear();
             foreach (var candidate in Shapes)
             {
-                if (candidate != _lastShape && WeightOf(candidate) > 0f)
+                if (candidate != lastShape && WeightOf(candidate) > 0f)
                 {
                     _shapePool.Add(candidate);
                 }
@@ -170,10 +259,10 @@ namespace BalloonParty.Balloon.Formation
                 }
             }
 
-            if (_lastShape.HasValue && WeightOf(_lastShape.Value) > 0f
-                && _planner.TryPlan(_grid, _lastShape.Value, _candidates, _settings, _pickIndex, _assignments))
+            if (lastShape.HasValue && WeightOf(lastShape.Value) > 0f
+                && _planner.TryPlan(_grid, lastShape.Value, _candidates, _settings, _pickIndex, _assignments))
             {
-                shape = _lastShape.Value;
+                shape = lastShape.Value;
                 return true;
             }
 
@@ -243,41 +332,45 @@ namespace BalloonParty.Balloon.Formation
             return Mathf.Min((int)(Random01() * count), count - 1);
         }
 
-        // A member popped (or otherwise taken off the board) leaves the formation; below the minimum the
-        // rest are released at once. The next line's balance, or the timed pulse, floats them up.
+        // A member popped (or otherwise taken off the board) leaves its formation and marks it touched; below
+        // the minimum the rest of that formation are released at once. Other formations stand. The next
+        // line's balance, or the timed pulse, floats the released ones up.
         private void OnGridChanged(SlotGridChangedEvent change)
         {
-            if (_arranging || change.ChangeType != SlotGridChangeType.Removed || _members.Count == 0)
+            if (_arranging || change.ChangeType != SlotGridChangeType.Removed || _formations.Count == 0)
             {
                 return;
             }
 
-            for (var i = _members.Count - 1; i >= 0; i--)
+            var lost = false;
+            for (var f = _formations.Count - 1; f >= 0; f--)
             {
-                var member = _members[i];
-                var slot = member.SlotIndex.Value;
-                if (!_grid.InBounds(slot) || _grid.At(slot) != member)
+                var formation = _formations[f];
+                var members = formation.MemberList;
+                for (var i = members.Count - 1; i >= 0; i--)
                 {
-                    member.SetInFormation(false);
-                    _members.RemoveAt(i);
+                    var member = members[i];
+                    var slot = member.SlotIndex.Value;
+                    if (!_grid.InBounds(slot) || _grid.At(slot) != member)
+                    {
+                        member.SetInFormation(false);
+                        _formationOf.Remove(member);
+                        members.RemoveAt(i);
+                        formation.Touched = true;
+                        lost = true;
+                    }
+                }
+
+                if (members.Count < _settings.MinMembers)
+                {
+                    Release(formation);
+                    _formations.RemoveAt(f);
                 }
             }
 
-            if (_members.Count > 0 && _members.Count < _settings.MinMembers)
+            if (lost)
             {
-                Release();
-            }
-        }
-
-        // Only members the new formation drops go back to red; a member that stays never dips out of it.
-        private void ReleaseMembersLeaving()
-        {
-            for (var i = 0; i < _members.Count; i++)
-            {
-                if (!IsAssigned(_members[i]))
-                {
-                    _members[i].SetInFormation(false);
-                }
+                RebuildMemberList();
             }
         }
 
@@ -294,20 +387,57 @@ namespace BalloonParty.Balloon.Formation
             return false;
         }
 
-        private void Release()
+        private StandingFormation TakeSpareFormation()
         {
-            if (_members.Count == 0)
+            if (_spareFormations.Count == 0)
+            {
+                return new StandingFormation();
+            }
+
+            var last = _spareFormations.Count - 1;
+            var formation = _spareFormations[last];
+            _spareFormations.RemoveAt(last);
+            return formation;
+        }
+
+        // Frees the formation's members and keeps the formation object for the next one; the caller takes it
+        // out of the list.
+        private void Release(StandingFormation formation)
+        {
+            var members = formation.MemberList;
+            for (var i = 0; i < members.Count; i++)
+            {
+                members[i].SetInFormation(false);
+                _formationOf.Remove(members[i]);
+            }
+
+            formation.Reset();
+            _spareFormations.Add(formation);
+        }
+
+        private void ReleaseAll()
+        {
+            if (_formations.Count == 0)
             {
                 return;
             }
 
-            for (var i = 0; i < _members.Count; i++)
+            for (var i = 0; i < _formations.Count; i++)
             {
-                _members[i].SetInFormation(false);
+                Release(_formations[i]);
             }
 
+            _formations.Clear();
+            RebuildMemberList();
+        }
+
+        private void RebuildMemberList()
+        {
             _members.Clear();
-            _wavesLeft = 0;
+            for (var f = 0; f < _formations.Count; f++)
+            {
+                _members.AddRange(_formations[f].MemberList);
+            }
         }
     }
 }
