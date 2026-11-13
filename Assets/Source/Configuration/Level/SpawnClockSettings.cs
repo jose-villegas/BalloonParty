@@ -73,7 +73,7 @@ namespace BalloonParty.Configuration.Level
                  "the clock drops to Breather Pace and eases back to full pace over Breather Seconds, so a big " +
                  "clear buys a moment of calm before the pressure builds again. 0.25 = a quarter of the board. " +
                  "0 = never.")]
-        [SerializeField] [Range(0f, 1f)] private float _breatherClear = 0.25f;
+        [SerializeField] [Range(0f, 1f)] private float _breatherClear = 0.2f;
 
         [Tooltip("Seconds a clear must happen within to earn a breather. The same clear spread over longer " +
                  "earns nothing.")]
@@ -82,7 +82,7 @@ namespace BalloonParty.Configuration.Level
         [Tooltip("Seconds a breather lasts. Its pace eases from Breather Pace back to the clock's full pace " +
                  "(the sparse board and flight speedups included), so the board refills ever faster towards " +
                  "its end.")]
-        [SerializeField] [Min(0.1f)] private float _breatherSeconds = 6f;
+        [SerializeField] [Min(0.1f)] private float _breatherSeconds = 8f;
 
         [Tooltip("The clock's pace as a breather starts, as a share of its full pace: 0.2 = a fifth. A shot " +
                  "fired over another ball pulls the next line by the same share.")]
@@ -91,7 +91,7 @@ namespace BalloonParty.Configuration.Level
         [Tooltip("Seconds of play after a breather ends before a big clear can earn the next, so releases stay " +
                  "rarer than the clears on a crowded board would make them. A new level starts with none. " +
                  "0 = the next clear can earn one at once.")]
-        [SerializeField] [Min(0f)] private float _breatherCooldownSeconds = 20f;
+        [SerializeField] [Min(0f)] private float _breatherCooldownSeconds = 16f;
 
         public float GraceSeconds => _graceSeconds;
         public float OverlapShotPull => _overlapShotPull;
