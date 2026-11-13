@@ -35,12 +35,9 @@ namespace BalloonParty.Configuration.Level
             SelectPieces(settings, ContentRole.Threat, level, stretch.Kind, rng, included);
             SelectPieces(settings, ContentRole.Aid, level, stretch.Kind, rng, included);
 
-            // Dropped after the pick, so the aids and the rng stream are the ones the level would have anyway.
+            // Dropped after the pick, and their weights still rolled below, so the aids, the items and their
+            // weights are the ones the level would have anyway.
             var extraColor = settings.ExtraColor.IsExtraColorLevel(level, runSeed);
-            if (extraColor)
-            {
-                DropThreats(settings, included);
-            }
 
             var balloons = new List<BalloonTypeWeight>();
             var items = new List<ItemTypeWeight>();
@@ -51,7 +48,11 @@ namespace BalloonParty.Configuration.Level
             {
                 if (included.Contains(Key(BalloonKind, i)))
                 {
-                    balloons.Add(settings.Balloons[i].ToWeight(level, rng));
+                    var weight = settings.Balloons[i].ToWeight(level, rng);
+                    if (!extraColor || !IsDroppedThreat(settings.Balloons[i]))
+                    {
+                        balloons.Add(weight);
+                    }
                 }
             }
 
@@ -73,7 +74,8 @@ namespace BalloonParty.Configuration.Level
 
             for (var i = 0; i < settings.GridActors.Count; i++)
             {
-                if (!included.Contains(Key(GridActorKind, i)))
+                if (!included.Contains(Key(GridActorKind, i))
+                    || (extraColor && settings.GridActors[i].Role == ContentRole.Threat))
                 {
                     continue;
                 }
@@ -113,26 +115,11 @@ namespace BalloonParty.Configuration.Level
                 extraColor);
         }
 
-        // Every threat but the staple balloons, which are the level itself: an extra-colour level has no armour,
-        // no unbreakables and no threatening grid actors.
-        private static void DropThreats(LevelGenerationSettings settings, HashSet<int> included)
+        // Every threat but the staple balloons, which are the level itself: an extra-colour level has no armour
+        // and no unbreakables.
+        private static bool IsDroppedThreat(BalloonContentEntry entry)
         {
-            for (var i = 0; i < settings.Balloons.Count; i++)
-            {
-                var entry = settings.Balloons[i];
-                if (entry.Role == ContentRole.Threat && entry.Cost > 0)
-                {
-                    included.Remove(Key(BalloonKind, i));
-                }
-            }
-
-            for (var i = 0; i < settings.GridActors.Count; i++)
-            {
-                if (settings.GridActors[i].Role == ContentRole.Threat)
-                {
-                    included.Remove(Key(GridActorKind, i));
-                }
-            }
+            return entry.Role == ContentRole.Threat && entry.Cost > 0;
         }
 
         private static void SelectPieces(LevelGenerationSettings settings, ContentRole role, int level,

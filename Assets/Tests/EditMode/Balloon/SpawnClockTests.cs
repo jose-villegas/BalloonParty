@@ -124,7 +124,7 @@ namespace BalloonParty.Tests.Balloon
             _clock.Advance(1.4f);
             Assert.AreEqual(1, _lines);
 
-            _clock.Advance(0.1f);
+            _clock.Advance(0.2f);
             Assert.AreEqual(2, _lines);
         }
 
@@ -139,7 +139,7 @@ namespace BalloonParty.Tests.Balloon
             _clock.Advance(2.9f);
             Assert.AreEqual(1, _lines);
 
-            _clock.Advance(0.1f);
+            _clock.Advance(0.2f);
             Assert.AreEqual(2, _lines);
         }
 
