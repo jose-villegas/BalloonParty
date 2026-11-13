@@ -14,7 +14,8 @@ namespace BalloonParty.Balloon.Formation
     ///     Finds where a formation of one shape can stand and which candidate goes to which of its slots.
     ///     Reads the grid only; the caller moves the members. A formation slot must be empty or already
     ///     hold one of the candidates, so a formation never plans over another formation. It never sits in
-    ///     the bottom <see cref="IUnbreakableFormationSettings.BottomClearance" /> rows. Among the spots that
+    ///     the bottom <see cref="IUnbreakableFormationSettings.BottomClearance" /> rows (a row, a horizontal line or
+    ///     an item cover, the bottom <see cref="IUnbreakableFormationSettings.HorizontalBottomClearance" />). Among the spots that
     ///     fit, the planner picks at random among the few with the least total travel.
     /// </summary>
     internal sealed class FormationPlanner
@@ -39,7 +40,11 @@ namespace BalloonParty.Balloon.Formation
         {
             assignmentsOut.Clear();
             var count = Mathf.Min(candidates.Count, settings.MaxMembers);
-            var lastRow = grid.Rows - 1 - settings.BottomClearance;
+            // A row across the board this close to the cannon walls the player in; a diagonal leaves lanes open.
+            var clearance = shape is FormationShape.Horizontal or FormationShape.ItemCover
+                ? Mathf.Max(settings.HorizontalBottomClearance, settings.BottomClearance)
+                : settings.BottomClearance;
+            var lastRow = grid.Rows - 1 - clearance;
             if (count < 1 || lastRow < 0)
             {
                 return false;

@@ -82,6 +82,32 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void Horizontal_StaysAboveItsOwnBottomClearance()
+        {
+            // Four rows kept clear for a line: on eight rows, row 3 is the lowest it may take, however low the
+            // members start.
+            _settings.HorizontalBottomClearance.Returns(4);
+            BuildGrid(5, 8);
+            AddMembers(new Vector2Int(0, 7), new Vector2Int(2, 7), new Vector2Int(4, 7));
+
+            Assert.IsTrue(Plan(FormationShape.Horizontal));
+
+            Assert.IsTrue(Targets().All(t => t.y == 3), "as low as it may go, the least travel");
+        }
+
+        [Test]
+        public void Diagonal_KeepsTheShorterBottomClearance()
+        {
+            _settings.HorizontalBottomClearance.Returns(4);
+            BuildGrid(5, 8);
+            AddMembers(new Vector2Int(0, 7), new Vector2Int(1, 7), new Vector2Int(2, 7));
+
+            Assert.IsTrue(Plan(FormationShape.DiagonalDownRight));
+
+            Assert.AreEqual(5, Targets().Max(t => t.y), "a diagonal may still reach row 5");
+        }
+
+        [Test]
         public void SkipsSlotsHeldByOtherBalloons()
         {
             BuildGrid(5, 6);
@@ -174,6 +200,20 @@ namespace BalloonParty.Tests.Balloon
             var targets = Targets();
             CollectionAssert.Contains(targets, HexCoordinates.DiagonalDown(new Vector2Int(0, 2), true));
             Assert.IsTrue(targets.All(t => t.y == 3 && t.x >= 0));
+        }
+
+        [Test]
+        public void ItemCover_UnderAnItemTooCloseToTheCannon_HasNoSpot()
+        {
+            // The cover would be row 4 of eight; four rows kept clear for a row formation leave row 3 the lowest.
+            _settings.HorizontalBottomClearance.Returns(4);
+            BuildGrid(7, 8);
+            var host = new BalloonModel();
+            host.Item.Value = ItemType.Bomb;
+            _grid.Place(host, null, new Vector2Int(3, 3));
+            AddMembers(new Vector2Int(0, 1), new Vector2Int(6, 1), new Vector2Int(3, 1));
+
+            Assert.IsFalse(Plan(FormationShape.ItemCover));
         }
 
         [Test]

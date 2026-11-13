@@ -65,6 +65,9 @@ unbreakables: they roam, and once enough are free they form a formation of their
   members.
 - **Spawn room.** It never uses the bottom `BottomClearance` rows, so spawn lines always have room to
   enter.
+- **Rows stay up.** A row across the board (a horizontal line or an item cover) never uses the bottom
+  `HorizontalBottomClearance` rows: close to the cannon a wall shuts the player out. Diagonals leave
+  lanes open, so they keep `BottomClearance`.
 - **Members keep their slot.** A member already standing on a formation slot keeps it: assignment
   takes the nearest pairs first, so its distance-0 pair always wins. As a result, no member ever has to
   move into a slot another member still holds.
@@ -99,7 +102,7 @@ The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfigurati
 - `Enabled`
 - `MinMembers` (3) and `MaxMembers` (5)
 - `HoldWaves` (3)
-- `BottomClearance` (2)
+- `BottomClearance` (2) and `HorizontalBottomClearance` (4, for horizontal lines and item covers)
 - `SpotChoices` (3)
 - `ReinforcementChance` (0.35) and `ReinforcementCeiling` (4)
 - the shape weights: horizontal 1, each diagonal 1, item cover 2

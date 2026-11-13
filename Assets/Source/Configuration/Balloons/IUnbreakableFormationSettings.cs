@@ -20,6 +20,12 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>Bottom rows a formation never uses, so spawn lines always have room to enter.</summary>
         int BottomClearance { get; }
 
+        /// <summary>
+        ///     Bottom rows a row formation (a horizontal line, an item cover) never uses, at least <see cref="BottomClearance" />, so a wall across
+        ///     the board stands well above the cannon.
+        /// </summary>
+        int HorizontalBottomClearance { get; }
+
         /// <summary>A formation picks at random among this many of its least-travel spots.</summary>
         int SpotChoices { get; }
 
