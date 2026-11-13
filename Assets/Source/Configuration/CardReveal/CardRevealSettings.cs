@@ -93,6 +93,11 @@ namespace BalloonParty.Configuration.CardReveal
                  "wider or narrower, faster or slower.")]
         [SerializeField] [Range(0f, 0.9f)] private float _rubberSwingVariance = 0.3f;
 
+        [Tooltip("How fast the torn rubber turns as it falls, in degrees a second once it has picked up its spin " +
+                 "(over one swing, so the fall starts square). Each pop turns it one way or the other at random " +
+                 "and varies the speed by Rubber Swing Variance. 0 = it only leans with its swing.")]
+        [SerializeField] [Min(0f)] private float _rubberSpin = 120f;
+
         [Header("Light")]
         [Tooltip("When the rubber tears, it flashes a white light into the scene light field, lighting the " +
                  "board around it (and the ribbons), and stirs the disturbance field as a board pop does. Its " +
@@ -199,6 +204,7 @@ namespace BalloonParty.Configuration.CardReveal
         public float RubberSwingSeconds => _rubberSwingSeconds;
         public float RubberSwingTilt => _rubberSwingTilt;
         public float RubberSwingVariance => _rubberSwingVariance;
+        public float RubberSpin => _rubberSpin;
         public float PopFlashRadius => _popFlashRadius;
         public float PopFlashIntensity => _popFlashIntensity;
         public float PopFlashSeconds => _popFlashSeconds;
