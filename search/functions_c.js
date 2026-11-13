@@ -42,9 +42,10 @@ var searchData=
   ['movecurvefor_39',['MoveCurveFor',['../classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html#a9c099eb45247dfe338f34e56f5de4a5c',1,'BalloonParty::UI::Score::FlyingTrail']]],
   ['moved_40',['Moved',['../structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html#a9e36fe327cb513c44bb1e58a04900ef0',1,'BalloonParty::Projectile::Controller::ProjectileStep']]],
   ['moverecord_41',['MoveRecord',['../structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1MoveRecord.html#a2a6071378e7905fca52f4dfa4d4a438b',1,'BalloonParty::Balloon::Controller::BalanceDebugRecorder::MoveRecord']]],
-  ['movetip_42',['MoveTip',['../classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a6595184a14759059d35def85d1ddce13',1,'BalloonParty::UI::HeadsUp::WriteOnText']]],
-  ['moveto_43',['MoveTo',['../classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#ae7c4e3a8843c1ea3a2100013e90b6372',1,'BalloonParty::UI::HeadsUp::HandwrittenHeadsUp']]],
-  ['moveweightevaluator_44',['MoveWeightEvaluator',['../classBalloonParty_1_1Slots_1_1Grid_1_1MoveWeightEvaluator.html#abb109ebd8eb8fc6305ce28f5caa53276',1,'BalloonParty::Slots::Grid::MoveWeightEvaluator']]],
-  ['musicalnoteattribute_45',['MusicalNoteAttribute',['../classBalloonParty_1_1Shared_1_1MusicalNoteAttribute.html#ad09b56f710ab5f2d453dc508d6c9dfba',1,'BalloonParty::Shared::MusicalNoteAttribute']]],
-  ['musicsoundrouter_46',['MusicSoundRouter',['../classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#aa9d5056c237a49d00daefe2687857e97',1,'BalloonParty::Audio::Routing::MusicSoundRouter']]]
+  ['moverewardtofront_42',['MoveRewardToFront',['../classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a316496325da2a8217b516efee412f7dd',1,'BalloonParty::Balloon::Spawner::BalloonSpawner']]],
+  ['movetip_43',['MoveTip',['../classBalloonParty_1_1UI_1_1HeadsUp_1_1WriteOnText.html#a6595184a14759059d35def85d1ddce13',1,'BalloonParty::UI::HeadsUp::WriteOnText']]],
+  ['moveto_44',['MoveTo',['../classBalloonParty_1_1UI_1_1HeadsUp_1_1HandwrittenHeadsUp.html#ae7c4e3a8843c1ea3a2100013e90b6372',1,'BalloonParty::UI::HeadsUp::HandwrittenHeadsUp']]],
+  ['moveweightevaluator_45',['MoveWeightEvaluator',['../classBalloonParty_1_1Slots_1_1Grid_1_1MoveWeightEvaluator.html#abb109ebd8eb8fc6305ce28f5caa53276',1,'BalloonParty::Slots::Grid::MoveWeightEvaluator']]],
+  ['musicalnoteattribute_46',['MusicalNoteAttribute',['../classBalloonParty_1_1Shared_1_1MusicalNoteAttribute.html#ad09b56f710ab5f2d453dc508d6c9dfba',1,'BalloonParty::Shared::MusicalNoteAttribute']]],
+  ['musicsoundrouter_47',['MusicSoundRouter',['../classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html#aa9d5056c237a49d00daefe2687857e97',1,'BalloonParty::Audio::Routing::MusicSoundRouter']]]
 ];

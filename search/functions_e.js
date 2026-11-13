@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['of_0',['Of',['../classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#a7746e702343e5d9332d593dc22b84fc5',1,'BalloonParty.Game.Flight.FlightStatsService.Of()'],['../interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsSource.html#aa3f3c031b55a30c989715e2f0944cf29',1,'BalloonParty.Game.Flight.IFlightStatsSource.Of()']]],
+  ['of_0',['Of',['../classBalloonParty_1_1Game_1_1Flight_1_1FlightStatsService.html#a7746e702343e5d9332d593dc22b84fc5',1,'BalloonParty.Game.Flight.FlightStatsService.Of()'],['../interfaceBalloonParty_1_1Game_1_1Flight_1_1IFlightStatsSource.html#aa3f3c031b55a30c989715e2f0944cf29',1,'BalloonParty.Game.Flight.IFlightStatsSource.Of()'],['../classBalloonParty_1_1Game_1_1Level_1_1LevelCompletion.html#a6453747b2ae27a337b4f1f51215fdbea',1,'BalloonParty.Game.Level.LevelCompletion.Of()']]],
   ['ofbucket_1',['OfBucket',['../structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1Entry.html#ab1d0977cb14391c944cfcde73f396fa5',1,'BalloonParty::Editor::MetricBindingDrawer::Entry']]],
   ['offer_2',['Offer',['../classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#ad24a387b1fdfabceaaef772de79fd9c0',1,'BalloonParty::Game::HeadsUp::HeadsUpQueue']]],
   ['offield_3',['OfField',['../structBalloonParty_1_1Editor_1_1MetricBindingDrawer_1_1Entry.html#afe9c9661238c8ed0f2f40bc113f369c2',1,'BalloonParty::Editor::MetricBindingDrawer::Entry']]],

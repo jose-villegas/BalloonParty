@@ -1,5 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html" title="How unbreakables gather into formations, hold them, pick the next shape, and call in more unbreakable..." alt="" coords="5,5,292,45"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html" title=" " alt="" coords="340,5,623,45"/>
-<area shape="poly" id="edge76_Node000000_Node000001" title=" " alt="" coords="306,23,340,23,340,28,306,28"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html" title="When the reward balloons come (PLAN&#45;RewardBalloons): the golden one late in a purple level,..." alt="" coords="5,5,243,45"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html" title=" " alt="" coords="291,5,524,45"/>
+<area shape="poly" id="edge76_Node000000_Node000001" title=" " alt="" coords="256,23,290,23,290,28,256,28"/>
 </map>

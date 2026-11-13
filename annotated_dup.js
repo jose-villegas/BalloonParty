@@ -94,6 +94,10 @@ var annotated_dup =
           [ "ToughBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel" ],
           [ "UnbreakableBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel" ]
         ] ],
+        [ "Reward", "namespaceBalloonParty_1_1Balloon_1_1Reward.html", [
+          [ "IRewardBalloonRequests", "interfaceBalloonParty_1_1Balloon_1_1Reward_1_1IRewardBalloonRequests.html", "interfaceBalloonParty_1_1Balloon_1_1Reward_1_1IRewardBalloonRequests" ],
+          [ "RewardBalloonService", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService" ]
+        ] ],
         [ "Spawner", "namespaceBalloonParty_1_1Balloon_1_1Spawner.html", [
           [ "BalloonFactory", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonFactory.html", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonFactory" ],
           [ "BalloonPlacementResolver", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPlacementResolver.html", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPlacementResolver" ],
@@ -139,7 +143,9 @@ var annotated_dup =
           [ "BalloonTypeWeight", "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html", "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight" ],
           [ "HitVfxOverride", "classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride" ],
           [ "IBalloonsConfiguration", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration" ],
+          [ "IRewardBalloonSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings" ],
           [ "IUnbreakableFormationSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings" ],
+          [ "RewardBalloonSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings" ],
           [ "UnbreakableFormationSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings" ]
         ] ],
         [ "Buffs", "namespaceBalloonParty_1_1Configuration_1_1Buffs.html", [
@@ -491,6 +497,7 @@ var annotated_dup =
           [ "IActiveLevelParameters", "interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html", "interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters" ],
           [ "ILevelProgress", "interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html", "interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress" ],
           [ "ILevelThresholds", "interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelThresholds.html", "interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelThresholds" ],
+          [ "LevelCompletion", "classBalloonParty_1_1Game_1_1Level_1_1LevelCompletion.html", "classBalloonParty_1_1Game_1_1Level_1_1LevelCompletion" ],
           [ "LevelController", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html", "classBalloonParty_1_1Game_1_1Level_1_1LevelController" ],
           [ "LevelDifficultyResolver", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver" ],
           [ "LevelTransitionController", "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html", "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController" ],

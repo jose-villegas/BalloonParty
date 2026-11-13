@@ -110,14 +110,14 @@ $(function(){initNavTree('plan_unbreakable_formations.html',''); initResizable(t
   <div class="headertitle"><div class="title">Unbreakable Formations</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md837"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md842"></a>
 Unbreakable Formations</h1>
 <blockquote class="doxtable">
 <p>When three or more unbreakables are on the board, they stop roaming. They line up in a formation, hold it for a few turns, then switch to a different one. While they are in formation their red lights turn blue, and a blue glitter swirl spins behind each of them.</p>
 <p><b>No changes until this plan is actioned.</b> </p>
 </blockquote>
 <hr  />
-<h2><a class="anchor" id="autotoc_md839"></a>
+<h2><a class="anchor" id="autotoc_md844"></a>
 Goals</h2>
 <ol type="1">
 <li><b>Formations.</b> With at least 3 unbreakables on the board, they gather into a shape:<ul>
@@ -132,7 +132,7 @@ Goals</h2>
 </ol>
 <p>A <b>turn</b> here is a spawn <b>wave</b>, three lines on the spawn clock. Unbreakables already jump once per wave (<code>BalloonBalancer.Balance(atWaveStart: true)</code>), so a wave is the unit their movement is counted in today.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md841"></a>
+<h2><a class="anchor" id="autotoc_md846"></a>
 How unbreakables move today</h2>
 <ul>
 <li><b>Once per wave they roam.</b> <code>BalloonBalancer.RelocateRoamers</code> offers every <code>IPreBalanceRelocatable</code> the board's resting slots. These are empty slots that need no further settling. <code>UnbreakableBalloonModel.TryPickRelocation</code> jumps to the board's opposite side, preferring far slots.</li>
@@ -142,7 +142,7 @@ How unbreakables move today</h2>
 </ul>
 <p>A formation has to switch off all four of these for its members. If it doesn't, the race floats a horizontal line up as soon as there is a gap above it, and a spawn shove scatters it.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md843"></a>
+<h2><a class="anchor" id="autotoc_md848"></a>
 What makes an unbreakable red</h2>
 <p>Found in <code>Assets/Prefabs/Balloon/Unbreakable.prefab</code> and the materials it uses:</p>
 <table class="markdownTable">
@@ -163,7 +163,7 @@ What makes an unbreakable red</h2>
 </table>
 <p><code>Body (7)</code> and <code>Body (8)</code> are not in the variant's <code>_renderers</code> or <code>_innerRenderers</code>. They get their colour only from <code>SpriteRenderer.color</code>, so a tint on those two renderers is enough. The rest of the sphere (<code>UnbreakableMat</code>, <code>UnbreakableMatIN2</code>) is chrome and blue-grey and stays as it is.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md845"></a>
+<h2><a class="anchor" id="autotoc_md850"></a>
 The glitter effect</h2>
 <p>The night top-bar glitter is <code>ColorProgress.prefab</code> → <code>Slider/Shadow (1)</code>. It is a UI <code>Image</code> with the <code>ColorBarNightGlitter</code> material, using the shader <code>BalloonParty/Sprite/GlitterSwirl</code> (<code>Assets/Shaders/BalloonParty/Sprite/SpriteGlitterSwirl.shader</code>). Its <code>CanvasGroup</code> sits in <code>ColorProgressBar._nightFadeExtras</code>, so it fades in with night.</p>
 <p>The shader is a <b>sprite</b> shader, so it works on a world-space <code>SpriteRenderer</code> as well as on UI. <code>LaserGlitter.mat</code> and <code>PickupInSightGlitter.mat</code> already use it in the world. It never draws the sprite itself. The sprite's alpha, times the renderer's alpha, only masks where specks may appear, and the renderer colour tints them. So:</p>
@@ -174,9 +174,9 @@ The glitter effect</h2>
 </ul>
 <p>The bar material is tuned for a long bar (density 64, speck size 0.5, swirl speed 20). A halo about the size of a balloon needs its own material, <code>UnbreakableFormationGlitter.mat</code>, with lower density. The values get tuned in the Editor.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md847"></a>
+<h2><a class="anchor" id="autotoc_md852"></a>
 Design</h2>
-<h3><a class="anchor" id="autotoc_md848"></a>
+<h3><a class="anchor" id="autotoc_md853"></a>
 Rules</h3>
 <ul>
 <li><b>Who joins.</b> Unbreakables on the board, up to <code>MaxMembers</code>. Each formation change picks the members closest to the formation's spot. Any extra unbreakables keep roaming as today.</li>
@@ -191,7 +191,7 @@ Rules</h3>
 <li><b>Breaking up.</b> If members are popped (a piercing hit) and fewer than <code>MinMembers</code> are left, the formation breaks at once. The rest turn red, are released into the balance race, and roam from the next wave. A new unbreakable that spawns while a formation holds keeps roaming, and joins at the next change.</li>
 <li><b>Run reset or level-up:</b> the formation is cleared.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md849"></a>
+<h3><a class="anchor" id="autotoc_md854"></a>
 Shapes on the hex grid</h3>
 <p>The grid is pointy-top, with odd rows shifted half a column right, and row 0 at the top (<code>HexCoordinates</code>). For <code>k</code> members:</p>
 <div class="fragment"><div class="line">Horizontal            Diagonal &quot;\&quot;           Diagonal &quot;/&quot;          Item cover (k = 6)</div>
@@ -205,7 +205,7 @@ Shapes on the hex grid</h3>
 <li><b>Item cover:</b> all six neighbours of the item host, so it needs six members and an item off the board's edges. If several balloons carry items, the one whose cover costs the least travel is picked.</li>
 </ul>
 <p>Members <b>hover</b> in midair: they are anchored, not supported. Balloons below a formation rise until they reach it, so a formation also works as a ceiling, and holes open above it. That is the danger the formations add: a run of unbreakables the player has to shoot around. The score is not touched.</p>
-<h3><a class="anchor" id="autotoc_md850"></a>
+<h3><a class="anchor" id="autotoc_md855"></a>
 Architecture</h3>
 <div class="fragment"><div class="line">Balloon/Formation/                          (new folder, namespace BalloonParty.Balloon.Formation)</div>
 <div class="line">  FormationShape            enum: Horizontal, DiagonalDown, DiagonalUp, ItemCover</div>
@@ -238,7 +238,7 @@ Architecture</h3>
 </li>
 <li><b>Palette.</b> A new <code>UnbreakableFormation</code> entry in <code>GamePalette.asset</code> (blue, <code>presentationOnly</code>), with a <code>GamePalette.UnbreakableFormationColorId</code> constant. All the blue comes from this one entry.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md851"></a>
+<h3><a class="anchor" id="autotoc_md856"></a>
 Settings (<code>IUnbreakableFormationSettings</code>)</h3>
 <p>Nested in <code>BalloonsConfiguration</code> as <code>[SerializeField] UnbreakableFormationSettings _unbreakableFormation</code>, so no new asset or scope registration is needed. The values below are defaults, to be tuned after a playtest. The questions below may change them.</p>
 <table class="markdownTable">
@@ -260,7 +260,7 @@ Settings (<code>IUnbreakableFormationSettings</code>)</h3>
 <td class="markdownTableBodyNone"><code>ColorFadeDuration</code>   </td><td class="markdownTableBodyNone">0.4 s   </td><td class="markdownTableBodyNone">Red ↔ blue ease   </td></tr>
 </table>
 <hr  />
-<h2><a class="anchor" id="autotoc_md853"></a>
+<h2><a class="anchor" id="autotoc_md858"></a>
 Open questions</h2>
 <ol type="1">
 <li><b>N:</b> how many waves a formation holds.</li>
@@ -269,7 +269,7 @@ Open questions</h2>
 <li><b>Item cover against lines:</b> when it wins.</li>
 </ol>
 <p>The answers are recorded under <b>Decisions</b> once given.</p>
-<h2><a class="anchor" id="autotoc_md854"></a>
+<h2><a class="anchor" id="autotoc_md859"></a>
 Decisions</h2>
 <p>Answered by the user on 2026-11-10:</p>
 <ol type="1">
@@ -279,7 +279,7 @@ Decisions</h2>
 <li><b>Item cover joins the rotation</b> only while a balloon on the board carries an item. Its weight is higher than each line's: defaults 1 for each line shape and 2 for the item cover.</li>
 </ol>
 <hr  />
-<h2><a class="anchor" id="autotoc_md856"></a>
+<h2><a class="anchor" id="autotoc_md861"></a>
 As built</h2>
 <p>Changes from the design above, made during implementation and review:</p>
 <ul>
@@ -292,7 +292,7 @@ As built</h2>
 <li><b>Spawns already stop under a formation.</b> <code>BalloonPlacementResolver</code> treats every balloon as a ceiling, members included.</li>
 <li><b>The covered item isn't anchored.</b> If it pops or rises away during the hold, the cover stays where it is until the next change.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md857"></a>
+<h3><a class="anchor" id="autotoc_md862"></a>
 Second pass: several formations and reinforcements (2026-11-13)</h3>
 <p>The owner had only ever seen one formation, and wanted two at once, lines that stack into a blockade. The reason was the level's cap: at most 4 unbreakables on the board, and a formation needs 3. The cap stays, since tough balloons get hard to handle in numbers. Instead a formation left alone grows the threat:</p>
 <ul>
@@ -300,9 +300,9 @@ Second pass: several formations and reinforcements (2026-11-13)</h3>
 <li><b>Reinforcements.</b> At each wave start, a formation with no member pierced since it formed rolls <code>ReinforcementChance</code> (0.35) to call in one more unbreakable. The spawner adds the calls to that line past the level's cap, up to <code>ReinforcementCeiling</code> (4) of them alive at once. They roam and form their own formations like any others.</li>
 <li>Not yet measured with the playtest bot, and not yet seen in the Editor.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md858"></a>
+<h2><a class="anchor" id="autotoc_md863"></a>
 Phases</h2>
-<h3><a class="anchor" id="autotoc_md859"></a>
+<h3><a class="anchor" id="autotoc_md864"></a>
 Phase 1: Formation logic</h3>
 <ul>
 <li><code>IBalanceAnchor</code>, <code>IFormationMember</code>, the model changes, <code>FormationPlanner</code>, <code>FormationAssignment</code>, <code>UnbreakableFormationService</code>, and the settings.</li>
@@ -318,14 +318,14 @@ Phase 1: Formation logic</h3>
 </li>
 <li>Then run the architect, test-everything and reviewer agents, and curate their findings.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md860"></a>
+<h3><a class="anchor" id="autotoc_md865"></a>
 Phase 2: Visuals</h3>
 <ul>
 <li>The palette entry, the variant's blend (core lights, rim, trail, light and stamp colour), the <code>FormationGlitter</code> child and its material, and the prefab wiring.</li>
 <li><b>Needs an in-Editor check:</b> the shader values on the new material, the halo size and sort order, and how the blue reads against each terrain. <code>dotnet build</code> does not check prefab or material edits.</li>
 <li>Run the reviewer and optimizer agents (the glitter's draw calls, and allocations from the blend).</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md861"></a>
+<h3><a class="anchor" id="autotoc_md866"></a>
 Phase 3: Docs and playtest</h3>
 <ul>
 <li><code><a class="el" href="Balloon_2Formation_2README_8md.html">Balloon/Formation/README.md</a></code>; updates to <code><a class="el" href="Balloon_2README_8md.html">Balloon/README.md</a></code> (balance phase), <code><a class="el" href="Balloon_2Type_2README_8md.html">Balloon/Type/README.md</a></code> (the variant), <code><a class="el" href="Slots_2README_8md.html">Slots/README.md</a></code> (<code>IBalanceAnchor</code>) and <code>Solver</code> docs.</li>
@@ -333,7 +333,7 @@ Phase 3: Docs and playtest</h3>
 <li>The user's in-Editor playtest and sign-off.</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md863"></a>
+<h2><a class="anchor" id="autotoc_md868"></a>
 Risks</h2>
 <ul>
 <li><b>A horizontal line can cut the board.</b> Balloons below it can't rise past it. With <code>MaxMembers</code> 5 on a wider board, there is always a way around, and <code>BottomClearance</code> keeps spawns open. If the playtest shows lines blocking too much, cap the line length below the board width.</li>

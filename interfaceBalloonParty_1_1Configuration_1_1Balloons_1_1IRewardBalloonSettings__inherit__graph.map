@@ -1,0 +1,5 @@
+<map id="BalloonParty.Configuration.Balloons.IRewardBalloonSettings" name="BalloonParty.Configuration.Balloons.IRewardBalloonSettings">
+<area shape="rect" id="Node000001" title="When the reward balloons come (PLAN&#45;RewardBalloons): the golden one late in a purple level,..." alt="" coords="5,5,243,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html" title=" " alt="" coords="7,93,241,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,59,127,93,121,93,121,59"/>
+</map>

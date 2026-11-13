@@ -131,7 +131,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Upgrade cards: the run's source of power. Every few level-ups a hand of cards is dealt and one card is taken, which stays for the rest of the run. For now the level-up takes the hand's first card in play and names it in the tooltip; the pick screen that lets the player choose is switched off because it stopped play (see <code><a class="el" href="UI_2LevelUp_2README_8md.html">UI/LevelUp/README.md</a></code>). Pressure grows with level (the spawn clock, the level budget); power grows only with the player's picks. The ball cap in particular never rises with level, only through a card.</p>
-<h1><a class="anchor" id="autotoc_md259"></a>
+<h1><a class="anchor" id="autotoc_md264"></a>
 Components</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -144,7 +144,7 @@ Components</h1>
 <td class="markdownTableBodyNone"><code>RunUpgrades</code>   </td><td class="markdownTableBodyNone">Implements both, plus <code>Game/Run</code>'s <code>IBonusCardSource</code>, <code>IRunResettable</code> and <code>IStartable</code> (it follows <code>ILevelProgress.Phase</code>). Holds the stack count per card and the bonus card, and recomputes the weapon when either changes   </td></tr>
 </table>
 <p>The deck and its rules are <code>IUpgradeSettings</code> (authored in <code>RunConfig</code> as <code>Upgrades</code>, and registered on its own so <code>RunUpgrades</code> depends on the deck alone): <code>CardEveryLevels</code> (2), <code>CardsOffered</code> (3) and <code>Cards</code>, each with a kind, title, description, a per-stack <code>Amount</code>, <code>MaxStacks</code> and a deal <code>Weight</code>.</p>
-<h1><a class="anchor" id="autotoc_md260"></a>
+<h1><a class="anchor" id="autotoc_md265"></a>
 The cards</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -162,7 +162,7 @@ The cards</h1>
 </table>
 <p>Every card is read live, so a held card applies from the next ball loaded and the next item roll.</p>
 <p>Wherever a card is named (the pick screen, the reveal's ribbon, the tooltips), its title starts with a hand-drawn icon for its kind: <code>UpgradeCardText.Title</code> writes it as a TextMeshPro sprite from the <code>CardIcons</code> sprite asset, tinted with the text. The icons are drawn by <code>Tools/art/make_card_icons.py</code> and built into the sprite asset by Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Upgrades &gt; Build Card Icons (<code>CardIconSpriteAssetBuilder</code>). A new kind needs its icon drawn and named there too; an EditMode test fails until it is.</p>
-<h1><a class="anchor" id="autotoc_md261"></a>
+<h1><a class="anchor" id="autotoc_md266"></a>
 A level-up's hand</h1>
 <p>The hand follows the level-up phase (<code><a class="el" href="Game_2Level_2README_8md.html">Game/Level/README.md</a></code>):</p>
 <div class="fragment"><div class="line">stateDiagram-v2</div>
@@ -191,11 +191,11 @@ A level-up's hand</h1>
 <p>So a card is held only once the level that dealt it is completed. That is what lets a retry keep "the cards held when the level started" without a snapshot: the cards held at a loss are always the ones held when the lost level began.</p>
 <p>A level-up deals cards when <code>(newLevel − 1)</code> is a multiple of <code>CardEveryLevels</code>: with 2, entering levels 3, 5, 7 and so on. For now every level-up passes in play, and a card level-up takes the hand's first card, already the first draw by weight (see <code><a class="el" href="UI_2LevelUp_2README_8md.html">UI/LevelUp/README.md</a></code>). 0 turns cards off.</p>
 <p>The hand is drawn by weight (<code>WeightedPickExtensions.PickWeightedIndex</code>), without repeats, from the cards not yet maxed and not zero-weight; fewer are dealt when fewer are left, and none once every card is maxed. The draw is seeded from the level's seed (<code>ILevelPacingConfiguration.SeedForLevel</code>, salted), so reaching the same level-up with the same cards held deals the same hand, including the re-detected level-up after an abort.</p>
-<h1><a class="anchor" id="autotoc_md262"></a>
+<h1><a class="anchor" id="autotoc_md267"></a>
 Run scope and retries</h1>
 <p><code>ResetRun</code> drops every card on a fresh run and keeps them on a retry (<code>IRetryState.RetryLevel &gt; 0</code>). It runs at <code>RunResetOrder.Counters</code>, before <code>RetryTracker</code> consumes the staged retry level.</p>
 <p>A fresh run that a start-level cheat begins past level 1 (<code>CheatState.StartLevel</code>, in checked builds) then takes the cards a run that played up to it would hold (<code>TakeCardsOnTheWayTo</code>): every card level-up on the way deals its seeded hand and takes the first card, as the level-up does in play. <code>Start</code> does the same for a session that opens at a start level. Without this, a jumped run plays a deep level with the base weapon, which makes it both too slow to clear and unlike the real level.</p>
-<h1><a class="anchor" id="autotoc_md263"></a>
+<h1><a class="anchor" id="autotoc_md268"></a>
 The bonus card</h1>
 <p>The game-over screen can offer a retry with a bonus card, bought with a rewarded ad (<code>IFailureOffers.TryBonusRetryAsync</code>, see <code><a class="el" href="Game_2Run_2README_8md.html">Game/Run/README.md</a></code>). When that retry's reset runs (<code>IRetryState.RetryWithBonusCard</code>), <code>ResetRun</code> deals one card by weight and publishes <code>BonusCardDealtMessage</code> with the stacks the attempt plays with (held plus the bonus); the on-screen tooltip names it once play resumes (see <code><a class="el" href="UI_2Tooltip_2README_8md.html">UI/Tooltip/README.md</a></code>), or the card reveal shows it when its view is attached (<code><a class="el" href="Game_2CardReveal_2README_8md.html">Game/CardReveal/README.md</a></code>).</p>
 <table class="markdownTable">
@@ -213,7 +213,7 @@ The bonus card</h1>
 <td class="markdownTableBodyNone">Seeded by the level and the retries used   </td><td class="markdownTableBodyNone">Each bought retry of a level can deal a different card   </td></tr>
 </table>
 <p><code>CanDealBonus</code> (its <code>IBonusCardSource</code> side) is false once only Extra Pen and maxed cards are left, and the screen then hides the bonus button.</p>
-<h1><a class="anchor" id="autotoc_md264"></a>
+<h1><a class="anchor" id="autotoc_md269"></a>
 Not built yet</h1>
 <ul>
 <li><b>A pick for the bonus card.</b> It's dealt at random and named in the tooltip; a quick pick screen (three cards, as at a level-up) is banked for later.</li>

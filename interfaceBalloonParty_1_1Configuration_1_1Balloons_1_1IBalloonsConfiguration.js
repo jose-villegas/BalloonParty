@@ -16,6 +16,7 @@ var interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration
     [ "RainbowPopFlashIntensity", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a8d47ef7e0cb8507231d8912ca41501d5", null ],
     [ "RainbowPopFlashRadius", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a370eaf0042508ce639ccd69c32245ce1", null ],
     [ "RainbowPopFlashSeconds", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#ae22a1474fe15f596b0a0e5f7082c5047", null ],
+    [ "RewardBalloons", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a772f0c5a105dcebe2fbebcf07090b3ed", null ],
     [ "SpawnEntryRowOffset", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a30372316328d8c1654fe1d20a88a0876", null ],
     [ "TimeForBalloonsBalance", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a39bfc6e642acf7184f685a26662b6b8a", null ],
     [ "ToughLayerSpacing", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#aa53372cce06c74981950c29d7cd79af9", null ],

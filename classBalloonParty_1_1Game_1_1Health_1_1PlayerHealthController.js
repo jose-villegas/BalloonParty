@@ -16,5 +16,6 @@ var classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController =
     [ "_waveDamageSubscriber", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a4c0ef1fd4bf12d69e22e48efcfd7d5eb", null ],
     [ "MaxHitPoints", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#aa6b17d398d9cb064b59cc2d3412ae8ea", null ],
     [ "Current", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#af12875533cc7726641d441788e4e3708", null ],
+    [ "Max", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#ae7b9705763eec3cfa6c4272a8b9de369", null ],
     [ "ResetOrder", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#ab47687f74ed650a00a2fe658f4612c4c", null ]
 ];

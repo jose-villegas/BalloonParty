@@ -174,29 +174,29 @@ Files</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Runtime cheat console for testing and debugging without modifying game state manually.</p>
 <p>Toggle the console window in Play Mode with the <b>backtick</b> (<code>`</code>) key, or — on touch devices — a <b>3-finger tap</b> (three simultaneous touches; fires once on the rising edge, so it can't retrigger while held). The 3-finger tap only registers in a build that compiles the cheat system in — a <b>development build</b>, or a release build made with cheats enabled (see below) — and legacy <code>Input.touchCount</code> reads 0 in the editor Game view. The console GameObject is created automatically at runtime — no scene setup required. The console discovers all registered cheats automatically and organises them by section and tag.</p>
-<h1><a class="anchor" id="autotoc_md52"></a>
+<h1><a class="anchor" id="autotoc_md57"></a>
 In-game log console (on-device logs)</h1>
 <p><code>Debug.Log</code> output isn't visible on a device without a wired-up console. The project depends on yasirkula's <a href="https://github.com/yasirkula/UnityIngameDebugConsole">In-game Debug Console</a> (<code>com.yasirkula.ingamedebugconsole</code>, a UPM git dependency in <code>Packages/manifest.json</code>) for this.</p>
 <p><code>DevLogConsole</code> (a <code>MonoBehaviour</code>) spawns the console prefab at startup and <code>DontDestroyOnLoad</code>s it — <b>mobile development builds only</b> (plus mobile release builds made with <code>CHEATS_IN_RELEASE</code>). Its guard, <code>UNITY_EDITOR || ((UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE) &amp;&amp; (UNITY_ANDROID || UNITY_IOS))</code>, keeps the component wireable in the editor but strips it from desktop dev builds and ordinary release builds (the serialized prefab reference goes with it, so the console never ships there). At runtime it no-ops in the editor (the editor has its own Console window). Place one <code>DevLogConsole</code> in the <b>Launch scene</b> and assign the package's <code>IngameDebugConsole</code> prefab to its field.</p>
-<h1><a class="anchor" id="autotoc_md53"></a>
+<h1><a class="anchor" id="autotoc_md58"></a>
 Build visibility</h1>
 <p>The entire <code>Cheats/</code> system — console, <code>ICheat</code>, and all cheat implementations — is wrapped in <code>#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE</code>. It compiles out completely in ordinary release builds.</p>
 <p>Since Unity 6.6 the <b>Development Build</b> checkbox no longer decides this: <code>UNITY_ENABLE_CHECKS</code> comes from the per-platform <b>Managed Code Variant</b> (<em>Project Settings ▸ Player ▸ Other Settings</em>). The editor always defines it; a player gets it only with the <b>Checked</b> or <b><a class="el" href="ReleaseUploadWindow_8cs.html#a0100be52d45f14348918ea69ec09f959">Debug</a></b> variant. The default variant is Release, so a development build made by hand with the default has no cheats, no <code>Log.Info</code>/<code>Log.Assert</code> and no telemetry sink — set the variant to Checked first. <b>Tools → <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> → Upload Release</b> does this itself: its dev APK builds Checked (<a class="el" href="ReleaseUploadWindow_8cs.html#a0100be52d45f14348918ea69ec09f959">Debug</a> when script debugging is on), and both release APKs build Release, restoring your setting afterwards.</p>
 <p>Registration in <code>GameLifetimeScope</code> and the <code>CheatState</code> checks sprinkled through gameplay controllers are guarded by the same directive.</p>
-<h2><a class="anchor" id="autotoc_md54"></a>
+<h2><a class="anchor" id="autotoc_md59"></a>
 Release builds with cheats (<code>CHEATS_IN_RELEASE</code>)</h2>
 <p><b>Tools → <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> → Cheats In Release Builds</b> toggles the <code>CHEATS_IN_RELEASE</code> scripting define on the active build target (checkmark shows current state). While on, a normal release build includes the full cheat system — without paying the other development-build costs (<code>Log.Info</code>/<code>Log.Assert</code> stay stripped, no dev-build profiler/overlay overhead), so the build stays performance-representative. The define lives in ProjectSettings and <b>persists until toggled off</b> — turn it off before building anything meant to ship (the enable path logs a warning as a reminder).</p>
-<h1><a class="anchor" id="autotoc_md55"></a>
+<h1><a class="anchor" id="autotoc_md60"></a>
 Autoplay (device playtests)</h1>
 <p><code>Autoplay/</code> lets a checked build play itself, so <code>Tools/playtest/device_bot.py</code> can run playtest-bot sessions on emulators or phones while the Editor does something else. It compiles only under <code>UNITY_ENABLE_CHECKS</code> (not <code>CHEATS_IN_RELEASE</code>): its report reads the telemetry log, which only checked builds write.</p>
 <ul>
 <li><code>AutoplayLaunchArgument</code> reads the spec the app was launched with: the intent's <code>autoplay</code> extra on Android (&lsquo;adb shell am start -n &lt;package&gt;/&lt;activity&gt; -e autoplay 'player=human seconds=420&rsquo;<code>), the argument after</code>-autoplay<code>elsewhere. With none, nothing is registered and the build plays as usual. -</code>AutoplaySettings.TryParse<code>reads it:</code>player=human|best<code>,</code>seconds<code>,</code>restart=0|1<code>, and the human's knobs </code>floor<code>,</code>mean<code>,</code>aim<code>,</code>wild<code>(the playtest bot's, see</code>Tools/playtest/README.md<code>), plus an optional </code>seed<code>. A malformed spec is refused with a warning rather than played wrong. -</code>AutoplayController&lt;tt&gt;(Game scope) presses Play on the launch screen, fires as the chosen player once the cannon is ready (the best angle from</li>
 </ul>
 <p>FireBestShotCheat.TryFindBestAngle<code>, plus</code>AutoplayDice<code>'s reaction time and aim error for a human), presses Restart on game over or ends there, and quits the app when the time is up. -</code>AutoplayTap<code>presses those two buttons as a finger does. It finds the button that calls </code>LaunchPlayTrigger.Play<code>(or</code>GameOverScreen.OnRestartPressed<code>), from a Button's On Click or a </code>ScaleDownButton<code>'s On Scale Complete, raycasts the event system at its centre, and sends pointer down, up and click to what that hits. So every listener runs (the press animation, the scene load, the title animation), a covered button isn't tapped through, and the bot goes through the same screens a player does instead of calling into the game behind them. -</code>AutoplayTickWriter<code>writes</code>persistentDataPath/autoplay/ticks.jsonl<code>(the Editor bot's tick fields, twice a second) and a</code>done` file at the end, which is what the runner waits for.</p>
-<h1><a class="anchor" id="autotoc_md56"></a>
+<h1><a class="anchor" id="autotoc_md61"></a>
 VContainer registration</h1>
 <p><code>CheatConsoleView</code>, <code>BalloonRemoverCheat</code>, <code>DisturbanceStampCheat</code>, and <code>LightStampCheat</code> are MonoBehaviours created via <code>RegisterComponentOnNewGameObject</code>. VContainer singletons are <b>lazy</b> — the GameObject is only created when resolved. Each requires <code>RegisterBuildCallback(resolver =&gt; resolver.Resolve&lt;T&gt;())</code> to force eager creation at scope build time.</p>
-<h1><a class="anchor" id="autotoc_md57"></a>
+<h1><a class="anchor" id="autotoc_md62"></a>
 Adding a new cheat</h1>
 <ol type="1">
 <li>Create a class implementing <code>ICheat</code> — give it a <code>Name</code>, a <code>Section</code>, and one or more <code>Tags</code>.</li>
@@ -204,10 +204,10 @@ Adding a new cheat</h1>
 <li>Register it in <code>GameLifetimeScope</code>: <div class="fragment"><div class="line">builder.Register&lt;YourCheat&gt;(Lifetime.Singleton).AsImplementedInterfaces();</div>
 </div><!-- fragment --> That's all. The console picks it up automatically.</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md58"></a>
+<h2><a class="anchor" id="autotoc_md63"></a>
 Interactive cheats</h2>
 <p>A cheat that needs inputs (dropdowns, counters) also implements <code>ICheatControls.DrawControls()</code>. The console draws that IMGUI block in the cheat's row (below a plain name + ☆ header) instead of the one-shot Execute button — <code>SpawnBalloonCheat</code> is the reference. <code>DrawControls</code> is only ever called from within <code>OnGUI</code>. <code>Execute()</code> is still required by <code>ICheat</code>; make it perform the same action with the current selections so the cheat also works if surfaced as a plain button.</p>
-<h1><a class="anchor" id="autotoc_md59"></a>
+<h1><a class="anchor" id="autotoc_md64"></a>
 Console features</h1>
 <ul>
 <li><b>Search</b> — filters cheats by name as you type</li>
@@ -216,7 +216,7 @@ Console features</h1>
 <li><b>Favorites</b> — click ☆ next to any cheat to pin it to the top of the list</li>
 <li><b>Thrower held while open</b> — opening the console <code>Pause</code>s <code>PauseSource.Cheat</code> (releases on close/teardown), so the thrower stays inert and stray fires don't disturb testing</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md60"></a>
+<h1><a class="anchor" id="autotoc_md65"></a>
 Current cheats</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">

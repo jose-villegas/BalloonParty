@@ -3,6 +3,7 @@ var namespaceBalloonParty_1_1Game_1_1Level =
     [ "IActiveLevelParameters", "interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html", "interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters" ],
     [ "ILevelProgress", "interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html", "interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress" ],
     [ "ILevelThresholds", "interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelThresholds.html", "interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelThresholds" ],
+    [ "LevelCompletion", "classBalloonParty_1_1Game_1_1Level_1_1LevelCompletion.html", "classBalloonParty_1_1Game_1_1Level_1_1LevelCompletion" ],
     [ "LevelController", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html", "classBalloonParty_1_1Game_1_1Level_1_1LevelController" ],
     [ "LevelDifficultyResolver", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver" ],
     [ "LevelTransitionController", "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html", "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController" ],

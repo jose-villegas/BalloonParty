@@ -8,6 +8,8 @@ var BalloonType_8cs =
       [ "BalloonParty.Balloon.Type.BalloonType.SimpleSilver", "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60ea5b871c76d2685e91b52371b4d281c305", null ],
       [ "BalloonParty.Balloon.Type.BalloonType.SimpleGold", "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60eacda9af439530c93364d7e44ab31cfb07", null ],
       [ "BalloonParty.Balloon.Type.BalloonType.Rainbow", "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60ea4aca5ee9a087fb9218bfb662fe92605c", null ],
-      [ "BalloonParty.Balloon.Type.BalloonType.Tougher", "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60ea6a8220a3c5ab78a3431b332ea5899ea2", null ]
+      [ "BalloonParty.Balloon.Type.BalloonType.Tougher", "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60ea6a8220a3c5ab78a3431b332ea5899ea2", null ],
+      [ "BalloonParty.Balloon.Type.BalloonType.Golden", "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60ea7d2b88f5977b8a31c6193b4c81a43daf", null ],
+      [ "BalloonParty.Balloon.Type.BalloonType.Heart", "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60eaf4a6ceffc0054a855f31f42083328df9", null ]
     ] ]
 ];

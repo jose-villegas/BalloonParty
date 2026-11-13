@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html" target="_top" xlink:title="What a router asks to be written: a style, its number, where, and optionally the line it rewrites (Me...">
+<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue_1_1Slot.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="159,-30 0,-30 0,0 159,0 159,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.HeadsUp.</text>
-<text text-anchor="middle" x="79.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">HeadsUpRequest</text>
+<text text-anchor="middle" x="79.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">HeadsUpQueue.Slot</text>
 </a>
 </g>
 </g>

@@ -184,12 +184,13 @@ var searchData=
   ['trysweepsegment_181',['TrySweepSegment',['../classBalloonParty_1_1Solver_1_1ShotSimulator.html#a6f187c0d2304254be825750ef1de9df5',1,'BalloonParty::Solver::ShotSimulator']]],
   ['trytakechainhost_182',['TryTakeChainHost',['../classBalloonParty_1_1Item_1_1ItemAssigner.html#ab14cec020b5585dfb077c73ca3943eee',1,'BalloonParty::Item::ItemAssigner']]],
   ['trytakedirectorasync_183',['TryTakeDirectorAsync',['../classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#ac3e043aa3fc6a29d98ae8d4199543461',1,'BalloonParty::Game::Cinematics::GameOverLossCinematic']]],
-  ['trytakehost_184',['TryTakeHost',['../classBalloonParty_1_1Item_1_1ItemAssigner.html#a3a5f151262d46c2ea562b1bcc7a8c4b6',1,'BalloonParty::Item::ItemAssigner']]],
-  ['tryuploadasset_185',['TryUploadAsset',['../classBalloonParty_1_1Editor_1_1Release_1_1ReleasePublisher.html#a5ac5632055a59d261230c00259bcca6c',1,'BalloonParty::Editor::Release::ReleasePublisher']]],
-  ['trywalkcirclebackward_186',['TryWalkCircleBackward',['../classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewEntry.html#a7c1d146d59a78b50dbafb5dfeac5cf33',1,'BalloonParty::Item::Preview::ItemPreviewEntry']]],
-  ['trywalkcircleforward_187',['TryWalkCircleForward',['../classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewEntry.html#a2452bc49e60bc38451e6045552a0ff47',1,'BalloonParty::Item::Preview::ItemPreviewEntry']]],
-  ['tumbleaxis_188',['TumbleAxis',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#aaf7498b3e41d5c7c8f77dc9b6594abf1',1,'BalloonParty::Game::Score::Behaviours::BigScoreTrailBehaviour']]],
-  ['turn_189',['Turn',['../classBalloonParty_1_1Slots_1_1Grid_1_1HexCoordinates.html#ae2bb1ec73269ffdf3b57d129849ec329',1,'BalloonParty::Slots::Grid::HexCoordinates']]],
-  ['tweenfillfraction_190',['TweenFillFraction',['../classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a584b2add9af5278a398f906e01d9932f',1,'BalloonParty::UI::LevelUp::LevelUpPopUp']]],
-  ['tweenglow_191',['TweenGlow',['../classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a4f64066b9942a7fd31f18f7fa935be9c',1,'BalloonParty::Projectile::View::ProjectileView']]]
+  ['trytakedue_184',['TryTakeDue',['../interfaceBalloonParty_1_1Balloon_1_1Reward_1_1IRewardBalloonRequests.html#a9b7e5693fd52236ab04bc81aff9fd4c1',1,'BalloonParty.Balloon.Reward.IRewardBalloonRequests.TryTakeDue()'],['../classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a250b9c34e7a391c5e60fd81bcf5b3cfc',1,'BalloonParty.Balloon.Reward.RewardBalloonService.TryTakeDue()']]],
+  ['trytakehost_185',['TryTakeHost',['../classBalloonParty_1_1Item_1_1ItemAssigner.html#a3a5f151262d46c2ea562b1bcc7a8c4b6',1,'BalloonParty::Item::ItemAssigner']]],
+  ['tryuploadasset_186',['TryUploadAsset',['../classBalloonParty_1_1Editor_1_1Release_1_1ReleasePublisher.html#a5ac5632055a59d261230c00259bcca6c',1,'BalloonParty::Editor::Release::ReleasePublisher']]],
+  ['trywalkcirclebackward_187',['TryWalkCircleBackward',['../classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewEntry.html#a7c1d146d59a78b50dbafb5dfeac5cf33',1,'BalloonParty::Item::Preview::ItemPreviewEntry']]],
+  ['trywalkcircleforward_188',['TryWalkCircleForward',['../classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewEntry.html#a2452bc49e60bc38451e6045552a0ff47',1,'BalloonParty::Item::Preview::ItemPreviewEntry']]],
+  ['tumbleaxis_189',['TumbleAxis',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#aaf7498b3e41d5c7c8f77dc9b6594abf1',1,'BalloonParty::Game::Score::Behaviours::BigScoreTrailBehaviour']]],
+  ['turn_190',['Turn',['../classBalloonParty_1_1Slots_1_1Grid_1_1HexCoordinates.html#ae2bb1ec73269ffdf3b57d129849ec329',1,'BalloonParty::Slots::Grid::HexCoordinates']]],
+  ['tweenfillfraction_191',['TweenFillFraction',['../classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a584b2add9af5278a398f906e01d9932f',1,'BalloonParty::UI::LevelUp::LevelUpPopUp']]],
+  ['tweenglow_192',['TweenGlow',['../classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a4f64066b9942a7fd31f18f7fa935be9c',1,'BalloonParty::Projectile::View::ProjectileView']]]
 ];
