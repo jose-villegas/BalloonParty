@@ -1,6 +1,7 @@
 var classBalloonParty_1_1Game_1_1Run_1_1FailureOffers =
 [
     [ "FailureOffers", "classBalloonParty_1_1Game_1_1Run_1_1FailureOffers.html#ab90c5600ce30f61004c121f790060201", null ],
+    [ "FreeRetries", "classBalloonParty_1_1Game_1_1Run_1_1FailureOffers.html#af6ab86c7b7816dc2f824770a1054637d", null ],
     [ "ShowAdAsync", "classBalloonParty_1_1Game_1_1Run_1_1FailureOffers.html#aa05af5407a94bd20aa8be6d3209ecd2b", null ],
     [ "Stage", "classBalloonParty_1_1Game_1_1Run_1_1FailureOffers.html#a263217eed9c9526e390bdbda45e3eb10", null ],
     [ "TryBonusRetryAsync", "classBalloonParty_1_1Game_1_1Run_1_1FailureOffers.html#acf2a19180d33bfb3a9c3414ab9f24b8b", null ],

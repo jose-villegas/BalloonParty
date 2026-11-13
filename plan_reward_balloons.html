@@ -110,14 +110,14 @@ $(function(){initNavTree('plan_reward_balloons.html',''); initResizable(true); }
   <div class="headertitle"><div class="title">Reward Balloons</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md792"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md793"></a>
 Reward Balloons</h1>
 <blockquote class="doxtable">
 <p>Two rare balloons that pay the player instead of pressuring them. The <b>golden balloon</b> comes once to a purple level, late in it: plated in gold, it shrugs off every normal hit and item, and only a piercing shot pops it, for a free upgrade card. The <b>heart balloon</b> is a heart wrapped in bandages that gives a heart back; it comes to purple levels and to a player who is losing hearts.</p>
 <p><b>No changes until this plan is actioned.</b> </p>
 </blockquote>
 <hr  />
-<h2><a class="anchor" id="autotoc_md794"></a>
+<h2><a class="anchor" id="autotoc_md795"></a>
 Goals</h2>
 <ol type="1">
 <li><b>Golden balloon.</b><ul>
@@ -136,7 +136,7 @@ Goals</h2>
 </li>
 <li>Both are colourless: they never count toward a colour's goal, and never break or feed the streak.</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md795"></a>
+<h2><a class="anchor" id="autotoc_md796"></a>
 How it fits</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -160,12 +160,14 @@ How it fits</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>BalloonTypeExtensions.IsReward</code>   </td><td class="markdownTableBodyNone"><code>Shared/Extensions/</code>   </td><td class="markdownTableBodyNone">Golden and Heart. The level's pick list skips them, so no level mix brings one    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>IFreeCardGrant</code>   </td><td class="markdownTableBodyNone"><code><a class="el" href="RunUpgrades_8cs.html">Game/Upgrades/RunUpgrades.cs</a></code>   </td><td class="markdownTableBodyNone"><code>GrantFreeCard()</code>: deals one dealable card on the run's seed, holds it, and publishes <code>UpgradeCardHeldMessage</code>, so the card reveal plays it. With every card at its limit there is nothing to give, and the golden balloon gives a heart instead    </td></tr>
+<td class="markdownTableBodyNone"><code>IFreeCardGrant</code>   </td><td class="markdownTableBodyNone"><code><a class="el" href="RunUpgrades_8cs.html">Game/Upgrades/RunUpgrades.cs</a></code>   </td><td class="markdownTableBodyNone"><code>GrantFreeCard(noCardLeft)</code>: deals one dealable card on the level's seed, holds it, and publishes <code>UpgradeCardHeldMessage</code>, so the card reveal plays it. A retry of the level it was won on gives it back; won while the level-up hand is up, it waits for the pick. With every card at its limit, then or once the pick is held, it calls <code>noCardLeft</code>, and the golden balloon gives a heart instead    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>PlayerHealthController</code>   </td><td class="markdownTableBodyNone"><code>Game/Health/</code>   </td><td class="markdownTableBodyNone">Heals one on a heart balloon's pop (<code>RewardBalloonPoppedMessage</code>)    </td></tr>
+<td class="markdownTableBodyNone"><code>RewardBalloonPayout</code>   </td><td class="markdownTableBodyNone"><code>Balloon/Reward/</code>   </td><td class="markdownTableBodyNone">Reads the reward balloons' pops from <code>ActorHitMessage</code> and pays them: the golden one's card (or heart), and in phase 4 the heart balloon's heart    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>IRewardBalloonSettings</code>   </td><td class="markdownTableBodyNone"><code>Configuration/Balloons/</code>   </td><td class="markdownTableBodyNone">The tuning below, a block on <code>BalloonsConfiguration</code>    </td></tr>
+<td class="markdownTableBodyNone"><code>IPlayerHealing</code>   </td><td class="markdownTableBodyNone"><code>Game/Health/</code>   </td><td class="markdownTableBodyNone"><code>Heal(amount)</code> on <code>PlayerHealthController</code>, up to <code>IPlayerHealth.Max</code>    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>IRewardBalloonSettings</code>   </td><td class="markdownTableBodyNone"><code>Configuration/Balloons/</code>   </td><td class="markdownTableBodyNone">The tuning below, a block on <code>BalloonsConfiguration</code>    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Shot solver   </td><td class="markdownTableBodyNone"><code>Solver/</code>   </td><td class="markdownTableBodyNone"><code>ShotBoardGather</code> builds a target for both (today it would see neither); the golden one deflects unless pierced, and is immune to the shared bomb and laser cores   </td></tr>
 </table>
 <div class="fragment"><div class="line">sequenceDiagram</div>
@@ -173,15 +175,17 @@ How it fits</h2>
 <div class="line">    participant Rwd as RewardBalloonService</div>
 <div class="line">    participant Spw as BalloonSpawner</div>
 <div class="line">    participant Hit as ProjectileHitResolver</div>
+<div class="line">    participant Pay as RewardBalloonPayout</div>
 <div class="line">    participant Up as RunUpgrades</div>
 <div class="line">    Spw-&gt;&gt;Rwd: a clock line asks what is due</div>
 <div class="line">    Rwd-&gt;&gt;Lvl: reads the completion, 0.75 on a purple level</div>
 <div class="line">    Rwd--&gt;&gt;Spw: the golden balloon</div>
 <div class="line">    Spw-&gt;&gt;Rwd: placed, with a callback for when it leaves</div>
 <div class="line">    Hit-&gt;&gt;Hit: a piercing shot plows it, shatters it at the wall</div>
-<div class="line">    Hit-&gt;&gt;Up: golden balloon popped</div>
-<div class="line">    Up-&gt;&gt;Up: deal and hold a free card, the reveal plays it</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md796"></a>
+<div class="line">    Hit-&gt;&gt;Pay: golden balloon popped</div>
+<div class="line">    Pay-&gt;&gt;Up: grant a free card</div>
+<div class="line">    Up-&gt;&gt;Up: deal and hold it, the reveal plays it</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md797"></a>
 Tuning (<code>IRewardBalloonSettings</code>)</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -200,13 +204,13 @@ Tuning (<code>IRewardBalloonSettings</code>)</h2>
 <td class="markdownTableBodyNone">At most one of each on the board   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">A second one waits until the first is gone   </td></tr>
 </table>
 <p>Full hearts never roll one, so the heart balloon is help, not loot. A level ends with it unpopped and it's gone with the board, like any balloon.</p>
-<h2><a class="anchor" id="autotoc_md797"></a>
+<h2><a class="anchor" id="autotoc_md798"></a>
 The looks</h2>
 <ul>
 <li><b>Golden:</b> the unbreakable's sphere shading (<code>UnbreakableBalloon.shader</code>, the sphere state the variant pushes) as the base, with a gold plate layer: a cell pattern laid over the sphere, each plate tilted a little so its own specular comes and goes as the light moves, thin dark seams between them, and the glitter (<code>Include/Glitter.cginc</code>) gated by the specular so it sparkles only where the light catches. A new shader, not a retint: the plates are the point. Needs an in-editor look at noon and night.</li>
 <li><b>Heart:</b> a heart-shaped balloon body (a new sprite, drawn by script under <code>Tools/art/</code> like the card icons) lit like the others (<code>SpriteDiffuse</code>), red, with two or three cream cloth strips wrapped across it, slightly frayed, a knot at one side. The strips sway a little with the balloon.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md798"></a>
+<h2><a class="anchor" id="autotoc_md799"></a>
 Phases</h2>
 <ol type="1">
 <li><b>Reward hook.</b> <code>LevelCompletion</code>, <code>RewardBalloonService</code>, <code>IRewardBalloonRequests</code>, the spawner's consumption and prewarm, the settings. Tests for completion, the 75% trigger once per level and only on purple, the heart chance by missing hearts and the cooldown.</li>
@@ -216,7 +220,7 @@ Phases</h2>
 <li><b>Docs and measure.</b> READMEs (Balloon, Type, Spawner, Upgrades, Health), the bots on a forced purple level and on a low-heart run, a device build.</li>
 </ol>
 <p>Each phase follows the per-phase review: implement, architect, test-everything and reviewer, then fixes, then sign-off.</p>
-<h2><a class="anchor" id="autotoc_md799"></a>
+<h2><a class="anchor" id="autotoc_md800"></a>
 Open</h2>
 <ul>
 <li>Whether the card reveal should say where the card came from ("golden balloon!") in a heads-up.</li>

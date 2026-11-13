@@ -1,6 +1,10 @@
 var NAVTREEINDEX4 =
 {
-"WaveDeficit_8cs.html":[7,0,7,5,5],
+"WaterImpactCollector_8cs.html":[7,0,13,12],
+"WaterRippleBuffer_8cs.html":[7,0,13,0,7],
+"WaveDamageMessage_8cs.html":[7,0,14,7,52],
+"WaveDeficitCalculator_8cs.html":[7,0,7,5,7],
+"WaveDeficit_8cs.html":[7,0,7,5,6],
 "WeightedPickExtensions_8cs.html":[7,0,14,4,23],
 "WindSoundRouter_8cs.html":[7,0,0,2,6],
 "WorldPolylineGizmo_8cs.html":[7,0,14,10,14],
@@ -245,9 +249,5 @@ var NAVTREEINDEX4 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a440a7a284af2eeb136950faf3023ef99":[5,0,0,0,0,4,3],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a440a7a284af2eeb136950faf3023ef99":[6,0,0,0,0,4,3],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a468bd79e772a331f00cacec419fa3252":[5,0,0,0,0,4,4],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a468bd79e772a331f00cacec419fa3252":[6,0,0,0,0,4,4],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a51d1caae7f0b14e21ae901d8fd1f41d7":[5,0,0,0,0,4,9],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a51d1caae7f0b14e21ae901d8fd1f41d7":[6,0,0,0,0,4,9],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a6d3a45e36ea1f3e9d91777724cd10455":[5,0,0,0,0,4,15],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a6d3a45e36ea1f3e9d91777724cd10455":[6,0,0,0,0,4,15]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a468bd79e772a331f00cacec419fa3252":[6,0,0,0,0,4,4]
 };

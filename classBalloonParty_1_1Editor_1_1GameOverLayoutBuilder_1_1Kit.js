@@ -12,6 +12,7 @@ var classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit =
     [ "Glow", "classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html#a3f3a410c73b8a950e5a396c2ca3e03c8", null ],
     [ "Gradient", "classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html#a39f60451e991344e61d2f0c6f581da2b", null ],
     [ "HandFont", "classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html#aae61a2ddfed2a07ff3108481b70e4684", null ],
+    [ "Heart", "classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html#acf77be919fedfea7b0d0669c0a525cf1", null ],
     [ "Number", "classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html#acf6749ddbee95d0c0ca0fb896ea6a1ad", null ],
     [ "Plain", "classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html#ae95cfc9ae1f89dc885ae7e8b672b31c9", null ],
     [ "Play", "classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html#a53d476c658f411c5565524b3e2ae6d5c", null ],

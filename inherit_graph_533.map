@@ -1,13 +1,13 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
 <area shape="rect" id="Node000000" title=" " alt="" coords="5,141,96,166"/>
 <area shape="rect" id="Node000001" href="$classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule_1_1CandidateComparer.html" title=" " alt="" coords="144,5,415,45"/>
-<area shape="poly" id="edge644_Node000000_Node000001" title=" " alt="" coords="67,128,99,90,120,71,143,55,168,43,171,48,145,60,123,75,103,94,71,131"/>
+<area shape="poly" id="edge652_Node000000_Node000001" title=" " alt="" coords="67,128,99,90,120,71,143,55,168,43,171,48,145,60,123,75,103,94,71,131"/>
 <area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1PairByDistance.html" title=" " alt="" coords="160,69,399,109"/>
-<area shape="poly" id="edge645_Node000000_Node000002" title=" " alt="" coords="98,134,143,119,188,107,189,112,145,124,99,139"/>
+<area shape="poly" id="edge653_Node000000_Node000002" title=" " alt="" coords="98,134,143,119,188,107,189,112,145,124,99,139"/>
 <area shape="rect" id="Node000003" href="$classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1SpotByCost.html" title=" " alt="" coords="165,133,394,173"/>
-<area shape="poly" id="edge646_Node000000_Node000003" title=" " alt="" coords="110,151,165,151,165,156,110,156"/>
+<area shape="poly" id="edge654_Node000000_Node000003" title=" " alt="" coords="110,151,165,151,165,156,110,156"/>
 <area shape="rect" id="Node000004" href="$classBalloonParty_1_1Item_1_1ItemSightTracker_1_1TraceOffsetComparer.html" title=" " alt="" coords="175,197,383,237"/>
-<area shape="poly" id="edge647_Node000000_Node000004" title=" " alt="" coords="99,168,145,183,189,195,188,200,143,188,98,173"/>
+<area shape="poly" id="edge655_Node000000_Node000004" title=" " alt="" coords="99,168,145,183,189,195,188,200,143,188,98,173"/>
 <area shape="rect" id="Node000005" href="$classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewSightOrder_1_1TraceOffsetComparer.html" title=" " alt="" coords="155,262,404,317"/>
-<area shape="poly" id="edge648_Node000000_Node000005" title=" " alt="" coords="71,176,103,213,145,247,170,260,167,264,143,252,100,217,67,179"/>
+<area shape="poly" id="edge656_Node000000_Node000005" title=" " alt="" coords="71,176,103,213,145,247,170,260,167,264,143,252,100,217,67,179"/>
 </map>

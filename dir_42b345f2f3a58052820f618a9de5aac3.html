@@ -124,6 +124,8 @@ Files</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ILossForecast_8cs.html">ILossForecast.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IPlayerHealing_8cs.html">IPlayerHealing.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IPlayerHealth_8cs.html">IPlayerHealth.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="LossForecast_8cs.html">LossForecast.cs</a></td></tr>
@@ -147,12 +149,14 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>IPlayerHealth</code>   </td><td class="markdownTableBodyNone">Read-only seam (<code>Current</code>, and <code>Max</code>, the cap a heal stops at) — what UI binders and <code>SpaceDanger</code> inject instead of the concrete controller    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>IPlayerHealing</code>   </td><td class="markdownTableBodyNone"><code>Heal(amount)</code>, up to <code>Max</code>, and never for a player already out (a pop can land after the killing hit): the reward balloons' payout (<code>Balloon/Reward/RewardBalloonPayout</code>)    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>WaveDeficitCalculator</code>   </td><td class="markdownTableBodyNone">Pure static function: <code>Calculate(availableSpace, neededSlots, rowLength) → WaveDeficit</code>. The core formula: <code>heartsLost = floor(max(0, needed - available) / rowLength)</code>    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>WaveDeficit</code>   </td><td class="markdownTableBodyNone">Readonly struct result: <code>HeartsLost</code> (full lines of deficit) and <code>UnspawnedSlots</code> (total shortfall)    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>ILossForecast</code> / <code>LossForecast</code>   </td><td class="markdownTableBodyNone">Loss is imminent when HP is already at zero (damage is immediate under the line model, no pending charges)    </td></tr>
+<td class="markdownTableBodyNone"><code>WaveDeficit</code>   </td><td class="markdownTableBodyNone">Readonly struct result: <code>HeartsLost</code> (full lines of deficit) and <code>UnspawnedSlots</code> (total shortfall)    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>ILossForecast</code> / <code>LossForecast</code>   </td><td class="markdownTableBodyNone">Loss is imminent when HP is already at zero (damage is immediate under the line model, no pending charges)    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>HeartTrailTracker</code>   </td><td class="markdownTableBodyNone">The heart trails currently in flight (health UI → grid area), launch order preserved. <code>HeartTrailController</code> (<code>UI/Health/</code>) adds/removes them; the heart-drain cinematic frames the hearts in this set   </td></tr>
 </table>
 <h1><a class="anchor" id="autotoc_md213"></a>

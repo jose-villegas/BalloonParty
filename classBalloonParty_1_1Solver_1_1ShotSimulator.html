@@ -177,6 +177,8 @@ Static Private Member Functions</h2></td></tr>
 <tr class="separator:a13f1ff5fdbeb5a27b6dd1af11a28f05d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1838fa96f7dc61d7719e89dcef0f365d" id="r_a1838fa96f7dc61d7719e89dcef0f365d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1838fa96f7dc61d7719e89dcef0f365d">ResolvePopScore</a> (in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a> balloon, in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotScoreRules.html">ShotScoreRules</a> scoreRules, in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotPopCause.html">ShotPopCause</a> cause, ref <a class="el" href="structBalloonParty_1_1Solver_1_1ShotFlightState.html">ShotFlightState</a> state)</td></tr>
 <tr class="separator:a1838fa96f7dc61d7719e89dcef0f365d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bc60e707a5272d5f996dde1feedf882" id="r_a4bc60e707a5272d5f996dde1feedf882"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4bc60e707a5272d5f996dde1feedf882">ResolveScoredPop</a> (in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a> balloon, in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotScoreRules.html">ShotScoreRules</a> scoreRules, in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotPopCause.html">ShotPopCause</a> cause, ref <a class="el" href="structBalloonParty_1_1Solver_1_1ShotFlightState.html">ShotFlightState</a> state)</td></tr>
+<tr class="separator:a4bc60e707a5272d5f996dde1feedf882"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2f4f4d006c01c211fe559141e1888df" id="r_af2f4f4d006c01c211fe559141e1888df"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af2f4f4d006c01c211fe559141e1888df">ResolveToughPop</a> (int scoreValue, ref <a class="el" href="structBalloonParty_1_1Solver_1_1ShotFlightState.html">ShotFlightState</a> state)</td></tr>
 <tr class="separator:af2f4f4d006c01c211fe559141e1888df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e18a4ddf33e9c4365cf51afbac59044" id="r_a9e18a4ddf33e9c4365cf51afbac59044"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9e18a4ddf33e9c4365cf51afbac59044">RunItemEffects</a> (<a class="el" href="classBalloonParty_1_1Solver_1_1ShotItemLayer.html">ShotItemLayer</a> items, in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a> host, Vector2 hostCenter, Vector2 hostDirection, float tHit, <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a>[] workingSet, ref int activeCount, <a class="el" href="classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html">ShotBoardDynamics</a> dynamics, in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotScoreRules.html">ShotScoreRules</a> scoreRules, ref <a class="el" href="structBalloonParty_1_1Solver_1_1ShotFlightState.html">ShotFlightState</a> state)</td></tr>
@@ -1117,6 +1119,45 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">static void BalloonParty.Solver.ShotSimulator.ResolvePopScore </td>
+          <td>(</td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a></td>          <td class="paramname"><span class="paramname"><em>balloon</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotScoreRules.html">ShotScoreRules</a></td>          <td class="paramname"><span class="paramname"><em>scoreRules</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotPopCause.html">ShotPopCause</a></td>          <td class="paramname"><span class="paramname"><em>cause</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ref <a class="el" href="structBalloonParty_1_1Solver_1_1ShotFlightState.html">ShotFlightState</a></td>          <td class="paramname"><span class="paramname"><em>state</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4bc60e707a5272d5f996dde1feedf882" name="a4bc60e707a5272d5f996dde1feedf882"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bc60e707a5272d5f996dde1feedf882">&#9670;&#160;</a></span>ResolveScoredPop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void BalloonParty.Solver.ShotSimulator.ResolveScoredPop </td>
           <td>(</td>
           <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a></td>          <td class="paramname"><span class="paramname"><em>balloon</em></span>, </td>
         </tr>

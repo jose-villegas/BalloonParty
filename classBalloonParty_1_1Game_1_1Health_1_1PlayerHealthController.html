@@ -125,14 +125,14 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthCon
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController__inherit__graph.svg" width="462" height="216"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController__inherit__graph.svg" width="462" height="280"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Game.Health.PlayerHealthController:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController__coll__graph.svg" width="512" height="280"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController__coll__graph.svg" width="512" height="344"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -141,6 +141,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:acd6413e81a8a6f58eb84772f6db5c367"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a13ca9962bfa3604103112910ae089b75" id="r_a13ca9962bfa3604103112910ae089b75"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a13ca9962bfa3604103112910ae089b75">Dispose</a> ()</td></tr>
 <tr class="separator:a13ca9962bfa3604103112910ae089b75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e0ac40e95366b8e51bde5c185817b60" id="r_a0e0ac40e95366b8e51bde5c185817b60"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e0ac40e95366b8e51bde5c185817b60">Heal</a> (int amount)</td></tr>
+<tr class="separator:a0e0ac40e95366b8e51bde5c185817b60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31d41353205ba9fabcbc12f476f0d9cd" id="r_a31d41353205ba9fabcbc12f476f0d9cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31d41353205ba9fabcbc12f476f0d9cd">ResetRun</a> (int generation)</td></tr>
 <tr class="memdesc:a31d41353205ba9fabcbc12f476f0d9cd"><td class="mdescLeft">&#160;</td><td class="mdescRight"><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -169,8 +171,6 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:aab0a3fcc4229f6ac990fd84ee8ebb9c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53f16f08a5726486f628853c3e1a6444" id="r_a53f16f08a5726486f628853c3e1a6444"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a53f16f08a5726486f628853c3e1a6444">Damage</a> (int amount)</td></tr>
 <tr class="separator:a53f16f08a5726486f628853c3e1a6444"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e0ac40e95366b8e51bde5c185817b60" id="r_a0e0ac40e95366b8e51bde5c185817b60"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e0ac40e95366b8e51bde5c185817b60">Heal</a> (int amount)</td></tr>
-<tr class="separator:a0e0ac40e95366b8e51bde5c185817b60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -301,9 +301,6 @@ Static Private Attributes</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void BalloonParty.Game.Health.PlayerHealthController.Heal </td>
@@ -312,12 +309,9 @@ Static Private Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealing.html#a24e15bf4005853834dd9e3d763b124eb">BalloonParty.Game.Health.IPlayerHealing</a>.</p>
 
 </div>
 </div>

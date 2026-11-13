@@ -120,8 +120,8 @@ $(function(){initNavTree('structBalloonParty_1_1Game_1_1Run_1_1FailureOffer.html
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:acfc234afa29b5a7c5a72072a40b85995" id="r_acfc234afa29b5a7c5a72072a40b85995"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acfc234afa29b5a7c5a72072a40b85995">FailureOffer</a> (bool canRetry, bool retryNeedsAd, int retriesLeft, bool canBonusRetry)</td></tr>
-<tr class="separator:acfc234afa29b5a7c5a72072a40b85995"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77b35428197a2480b3c9b1ef2533ad62" id="r_a77b35428197a2480b3c9b1ef2533ad62"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a77b35428197a2480b3c9b1ef2533ad62">FailureOffer</a> (bool canRetry, bool retryNeedsAd, int retriesLeft, bool canBonusRetry, int freeRetries=0, int freeRetriesLeft=0)</td></tr>
+<tr class="separator:a77b35428197a2480b3c9b1ef2533ad62"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -131,6 +131,12 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:aa2003963a7a253fd1940ad4687872885" id="r_aa2003963a7a253fd1940ad4687872885"><td class="memItemLeft" align="right" valign="top">readonly bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2003963a7a253fd1940ad4687872885">CanRetry</a></td></tr>
 <tr class="memdesc:aa2003963a7a253fd1940ad4687872885"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retry at the level reached, with the same seeded mix.  <br /></td></tr>
 <tr class="separator:aa2003963a7a253fd1940ad4687872885"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bdfa3406f22e66d3dab2b6ab6a0ed97" id="r_a5bdfa3406f22e66d3dab2b6ab6a0ed97"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5bdfa3406f22e66d3dab2b6ab6a0ed97">FreeRetries</a></td></tr>
+<tr class="memdesc:a5bdfa3406f22e66d3dab2b6ab6a0ed97"><td class="mdescLeft">&#160;</td><td class="mdescRight">The retries this run gets without an ad: the free ones, or with no ad gate, every retry of a capped run.  <br /></td></tr>
+<tr class="separator:a5bdfa3406f22e66d3dab2b6ab6a0ed97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe100eaeedc840fc69560314cc27fb5c" id="r_afe100eaeedc840fc69560314cc27fb5c"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe100eaeedc840fc69560314cc27fb5c">FreeRetriesLeft</a></td></tr>
+<tr class="memdesc:afe100eaeedc840fc69560314cc27fb5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many of <a class="el" href="#a5bdfa3406f22e66d3dab2b6ab6a0ed97" title="The retries this run gets without an ad: the free ones, or with no ad gate, every retry of a capped r...">FreeRetries</a> are still to use.  <br /></td></tr>
+<tr class="separator:afe100eaeedc840fc69560314cc27fb5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87a6bdcd74b39a9351db293033b64111" id="r_a87a6bdcd74b39a9351db293033b64111"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a87a6bdcd74b39a9351db293033b64111">RetriesLeft</a></td></tr>
 <tr class="memdesc:a87a6bdcd74b39a9351db293033b64111"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retries left this run; -1 when they're unlimited.  <br /></td></tr>
 <tr class="separator:a87a6bdcd74b39a9351db293033b64111"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -141,8 +147,8 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>What the game-over screen may offer right now. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="acfc234afa29b5a7c5a72072a40b85995" name="acfc234afa29b5a7c5a72072a40b85995"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acfc234afa29b5a7c5a72072a40b85995">&#9670;&#160;</a></span>FailureOffer()</h2>
+<a id="a77b35428197a2480b3c9b1ef2533ad62" name="a77b35428197a2480b3c9b1ef2533ad62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a77b35428197a2480b3c9b1ef2533ad62">&#9670;&#160;</a></span>FailureOffer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -165,7 +171,17 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>canBonusRetry</em></span>&#160;)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>canBonusRetry</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>freeRetries</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>freeRetriesLeft</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -203,6 +219,39 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Retry at the level reached, with the same seeded mix. </p>
+
+</div>
+</div>
+<a id="a5bdfa3406f22e66d3dab2b6ab6a0ed97" name="a5bdfa3406f22e66d3dab2b6ab6a0ed97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5bdfa3406f22e66d3dab2b6ab6a0ed97">&#9670;&#160;</a></span>FreeRetries</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Game.Run.FailureOffer.FreeRetries</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The retries this run gets without an ad: the free ones, or with no ad gate, every retry of a capped run. </p>
+<p>0 when there's nothing to count (no gate and no cap). </p>
+
+</div>
+</div>
+<a id="afe100eaeedc840fc69560314cc27fb5c" name="afe100eaeedc840fc69560314cc27fb5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe100eaeedc840fc69560314cc27fb5c">&#9670;&#160;</a></span>FreeRetriesLeft</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Game.Run.FailureOffer.FreeRetriesLeft</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>How many of <a class="el" href="#a5bdfa3406f22e66d3dab2b6ab6a0ed97" title="The retries this run gets without an ad: the free ones, or with no ad gate, every retry of a capped r...">FreeRetries</a> are still to use. </p>
 
 </div>
 </div>

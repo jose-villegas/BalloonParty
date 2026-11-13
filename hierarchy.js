@@ -227,6 +227,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Model.BalloonModelBase", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html", [
         [ "BalloonParty.Balloon.Model.BalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html", null ],
         [ "BalloonParty.Balloon.Model.BubbleClusterModel", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html", null ],
+        [ "BalloonParty.Balloon.Model.GoldenBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html", null ],
         [ "BalloonParty.Balloon.Model.ToughBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html", null ],
         [ "BalloonParty.Balloon.Model.UnbreakableBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html", null ]
       ] ],
@@ -356,6 +357,7 @@ var hierarchy =
       [ "BalloonParty.Slots.Grid.SlotGridDeflectorField", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGridDeflectorField.html", null ]
     ] ],
     [ "BalloonParty.Slots.Capabilities.IDeflectsShots", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IDeflectsShots.html", [
+      [ "BalloonParty.Balloon.Model.GoldenBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html", null ],
       [ "BalloonParty.Balloon.Model.ToughBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html", null ],
       [ "BalloonParty.Balloon.Model.UnbreakableBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html", null ],
       [ "BalloonParty.Slots.Actor.Archetype.DeflectorActorModel", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1DeflectorActorModel.html", null ],
@@ -373,6 +375,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Controller.BalloonControllerRegistry", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html", null ],
       [ "BalloonParty.Balloon.Controller.BubbleMergeService", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html", null ],
       [ "BalloonParty.Balloon.Formation.UnbreakableFormationService", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html", null ],
+      [ "BalloonParty.Balloon.Reward.RewardBalloonPayout", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html", null ],
       [ "BalloonParty.Balloon.Reward.RewardBalloonService", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html", null ],
       [ "BalloonParty.Balloon.Spawner.BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html", null ],
       [ "BalloonParty.Balloon.Spawner.SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html", null ],
@@ -506,6 +509,9 @@ var hierarchy =
     [ "BalloonParty.Balloon.Formation.IFormationReinforcements", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements.html", [
       [ "BalloonParty.Balloon.Formation.UnbreakableFormationService", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html", null ]
     ] ],
+    [ "BalloonParty.Game.Upgrades.IFreeCardGrant", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IFreeCardGrant.html", [
+      [ "BalloonParty.Game.Upgrades.RunUpgrades", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html", null ]
+    ] ],
     [ "BalloonParty.Configuration.IGameDisplayConfiguration", "interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html", [
       [ "BalloonParty.Configuration.GameDisplayConfiguration", "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html", null ]
     ] ],
@@ -533,6 +539,7 @@ var hierarchy =
       ] ]
     ] ],
     [ "BalloonParty.Slots.Capabilities.IHasDeflectStamp", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasDeflectStamp.html", [
+      [ "BalloonParty.Balloon.Model.GoldenBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html", null ],
       [ "BalloonParty.Balloon.Model.ToughBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html", null ],
       [ "BalloonParty.Balloon.Model.UnbreakableBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html", null ]
     ] ],
@@ -671,6 +678,9 @@ var hierarchy =
     [ "BalloonParty.Shared.IPierceItemField", "interfaceBalloonParty_1_1Shared_1_1IPierceItemField.html", [
       [ "BalloonParty.Slots.Grid.SlotGridPierceItemField", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGridPierceItemField.html", null ]
     ] ],
+    [ "BalloonParty.Game.Health.IPlayerHealing", "interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealing.html", [
+      [ "BalloonParty.Game.Health.PlayerHealthController", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html", null ]
+    ] ],
     [ "BalloonParty.Game.Health.IPlayerHealth", "interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html", [
       [ "BalloonParty.Game.Health.PlayerHealthController", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html", null ]
     ] ],
@@ -762,6 +772,7 @@ var hierarchy =
       [ "BalloonParty.Shared.GameState.NavigationReadyGate", "classBalloonParty_1_1Shared_1_1GameState_1_1NavigationReadyGate.html", null ]
     ] ],
     [ "BalloonParty.Slots.Capabilities.IResistsPaint", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IResistsPaint.html", [
+      [ "BalloonParty.Balloon.Model.GoldenBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html", null ],
       [ "BalloonParty.Balloon.Model.ToughBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html", null ],
       [ "BalloonParty.Balloon.Model.UnbreakableBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html", null ]
     ] ],
@@ -961,6 +972,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Controller.BalloonControllerRegistry", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html", null ],
       [ "BalloonParty.Balloon.Controller.BubbleMergeService", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html", null ],
       [ "BalloonParty.Balloon.Formation.UnbreakableFormationService", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html", null ],
+      [ "BalloonParty.Balloon.Reward.RewardBalloonPayout", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html", null ],
       [ "BalloonParty.Balloon.Reward.RewardBalloonService", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html", null ],
       [ "BalloonParty.Balloon.Spawner.BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html", null ],
       [ "BalloonParty.Balloon.Spawner.SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html", null ],

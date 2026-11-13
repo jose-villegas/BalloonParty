@@ -110,14 +110,14 @@ $(function(){initNavTree('plan_hdr.html',''); initResizable(true); });
   <div class="headertitle"><div class="title">HDR Rendering</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md644"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md645"></a>
 HDR rendering — where the range goes, and how to switch it on</h1>
 <blockquote class="doxtable">
 <p>Turn on HDR rendering in the URP pipeline and use the range where the game already wants it: pops of light on lit surfaces, glitter, shine and specular sweeps, item glows, the level-up. Written 2026-11-10 from an audit of the pipeline assets, the runtime render targets, every shader under <code>Assets/Shaders/BalloonParty/</code> and every material under <code>Assets/Materials/</code>. <b>Nothing is switched yet.</b> The decisions taken after the audit are at the end.</p>
 <p>This plan replaces the HDR part (Wave B) of <a class="el" href="plan_hdr_color_pipeline.html">HDR Color Pipeline</a>. That plan made the switch to Linear colour space a prerequisite, because it read URP as refusing HDR colour grading in Gamma space. URP 17.6's source says otherwise (see <em>Gamma colour space</em> below), so HDR can ship first and Linear stays a separate, later choice. </p>
 </blockquote>
 <hr  />
-<h2><a class="anchor" id="autotoc_md646"></a>
+<h2><a class="anchor" id="autotoc_md647"></a>
 What HDR buys this game</h2>
 <p>Today every colour is clamped to 0–1 when it is written to the screen buffer. Three kinds of content lose something to that clamp:</p>
 <ol type="1">
@@ -127,7 +127,7 @@ What HDR buys this game</h2>
 </ol>
 <p>HDR keeps those values above 1 until the end of the frame. <b>On a normal (SDR) phone screen, range above 1 only becomes visible through something that reads it</b>: a tonemapper that rolls it off smoothly instead of clipping, bloom that spreads it into a glow, or a darkening pass that brings it back into range. HDR with post-processing off costs a full-screen copy each frame and shows nothing, so this plan always pairs HDR with post-processing.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md648"></a>
+<h2><a class="anchor" id="autotoc_md649"></a>
 The pipeline today (verified 2026-11-10)</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -145,7 +145,7 @@ The pipeline today (verified 2026-11-10)</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">UI canvases   </td><td class="markdownTableBodyNone"><code>GameCanvas</code> and <code>LauncherCanvas</code> are <b>Screen Space – Camera</b>; <code>CanvasCameraBinder</code> binds them to the main camera. Score, hearts, shields, level and popup canvases are World Space.   </td><td class="markdownTableBodyNone"><b>All UI goes through the camera's post-processing</b>: the scenario grade already reaches it, and a tonemapper or bloom would too.   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md649"></a>
+<h3><a class="anchor" id="autotoc_md650"></a>
 Offscreen cameras and render targets</h3>
 <p>URP gives an offscreen camera the format of its target texture (<code>UniversalRenderPipelineCore.CreateBackbufferInfo</code>: <code>format = camera.targetTexture.graphicsFormat</code>), so turning HDR on in the pipeline does <b>not</b> change any of these. Plain blits never go through the pipeline at all.</p>
 <table class="markdownTable">
@@ -176,10 +176,10 @@ Offscreen cameras and render targets</h3>
 </table>
 <p>The only render target HDR changes is the main camera's own colour buffer.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md651"></a>
+<h2><a class="anchor" id="autotoc_md652"></a>
 Where the range goes — the asset sweep</h2>
 <p>Ranked by visual payoff against risk. "Clips today" names the line or value that is lost. Shaders are under <code>Assets/Shaders/BalloonParty/</code>, materials under <code>Assets/Materials/</code>.</p>
-<h3><a class="anchor" id="autotoc_md652"></a>
+<h3><a class="anchor" id="autotoc_md653"></a>
 Tier 1 — large payoff, little or no new authoring</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -191,7 +191,7 @@ Tier 1 — large payoff, little or no new authoring</h3>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">3   </td><td class="markdownTableBodyNone"><b>Shine sweeps and specular</b>: <code>Sprite/SpriteShine</code>, <code>Sprite/SpriteShineShadow</code>, the shine in <code>Balloon/RainbowBalloon</code>, <code>Balloon/UnbreakableBalloon</code> (specular streak, rim, rim sweep, <code>_DeflectFlash</code>), <code>Balloon/UnbreakableBalloonRim</code>, <code>Paint/PaintBlob</code>'s specular, <code>Particle/SpecularDrop</code>, the water's glints (<code>color += _HighlightColor.rgb * glint</code>)   </td><td class="markdownTableBodyNone">Each is added onto a base that is often already near white. Metal colours on the unbreakable materials are authored just above 1 (<code>_MetalTopColor</code> 1.05, <code>_MetalCenterColor</code> 1.10).   </td><td class="markdownTableBodyNone">Medium–high. Highlights get a core; the chrome balloon reads as metal rather than grey-white.   </td><td class="markdownTableBodyNone">Low. Additive terms stay the same; only what happens above 1 changes.   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md653"></a>
+<h3><a class="anchor" id="autotoc_md654"></a>
 Tier 2 — good payoff, needs authoring or a small shader change</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -207,7 +207,7 @@ Tier 2 — good payoff, needs authoring or a small shader change</h3>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">8   </td><td class="markdownTableBodyNone"><b><code>fixed</code> precision on paths that carry values above 1</b>   </td><td class="markdownTableBodyNone">42 shaders under <code>Assets/Shaders/BalloonParty/</code> have a <code>fixed4</code> fragment function. Vulkan and Metal compile <code>fixed</code> at half precision, but OpenGL ES may use <code>lowp</code>, which only has to reach ±2, so values above 2 can clip inside the shader on GL devices even with an HDR buffer.   </td><td class="markdownTableBodyNone">Enables 1–6 on the OpenGL ES fallback.   </td><td class="markdownTableBodyNone">Low. Change to <code>half</code> only on the paths that carry range (glitter, shine, the unbreakable, rainbow, <code>SpriteDiffuse</code>, <code>SpriteLightDriven</code>, <code>EMShieldField</code>, <code>PierceConeSpiral</code>, <code>TraceGlitterLine</code>, <code>WallNet</code>, <code>SpriteShine*</code>). A blanket conversion is churn.   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md654"></a>
+<h3><a class="anchor" id="autotoc_md655"></a>
 Tier 3 — leave alone, or watch for damage</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -222,9 +222,9 @@ Tier 3 — leave alone, or watch for damage</h3>
 <td class="markdownTableBodyNone"><b>Editor bake shaders</b> (<code>Grid/Editor/*</code>)   </td><td class="markdownTableBodyNone">Render to their own ARGB32 targets; unaffected.   </td></tr>
 </table>
 <hr  />
-<h2><a class="anchor" id="autotoc_md656"></a>
+<h2><a class="anchor" id="autotoc_md657"></a>
 Cost and trade-offs</h2>
-<h3><a class="anchor" id="autotoc_md657"></a>
+<h3><a class="anchor" id="autotoc_md658"></a>
 Format</h3>
 <p>URP picks the camera colour format in <code>MakeRenderTextureGraphicsFormat</code>: <code>B10G11R11</code> (32-bit) when the precision is 32-bit and the device can blend into it, else <code>R16G16B16A16</code> (64-bit) when it can blend into that, else whatever the device calls its HDR default (possibly 8-bit, so effectively LDR). The fallback is automatic.</p>
 <table class="markdownTable">
@@ -240,7 +240,7 @@ Format</h3>
 <td class="markdownTableBodyNone">Range   </td><td class="markdownTableBodyNone">0 to about 65000, no negatives   </td><td class="markdownTableBodyNone">±65504   </td></tr>
 </table>
 <p>Because the game renders in <b>Gamma</b>, the buffer holds gamma-encoded values, and the bright half of every gradient is exactly where <code>B10G11R11</code> is coarsest. The sky's clear colour has blue at 0.92, so the sky, the mist and the water are the first places to band. Camera dithering (on with post) hides most of it.</p>
-<h3><a class="anchor" id="autotoc_md658"></a>
+<h3><a class="anchor" id="autotoc_md659"></a>
 Fixed cost of HDR</h3>
 <ul>
 <li>HDR forces an intermediate colour target and a final pass to the screen every frame.</li>
@@ -248,13 +248,13 @@ Fixed cost of HDR</h3>
 <li>The HUD overlay camera (Phase 1 item 3b) stops post-processing from writing straight to the screen: the base camera post-processes into an intermediate, the HUD draws over it, and a final copy goes to the screen. One more full-screen copy per frame.</li>
 <li>Measure this "empty post" cost, with the HUD camera, on device first (Phase 1). It is the go/no-go number for the whole plan, against the 8.33 ms frame budget at 120 Hz (see <a class="el" href="plan_performance_recovery.html">Performance Recovery</a>).</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md659"></a>
+<h3><a class="anchor" id="autotoc_md660"></a>
 Bloom</h3>
 <p>URP 17.6's Bloom has the mobile knobs: <code>filter</code> (Gaussian, <b>Dual</b>, <b>Kawase</b>), <code>downscale</code> (Half, <b>Quarter</b>), <code>maxIterations</code> (2–8), <code>highQualityFiltering</code> (keep off), <code>threshold</code>, <code>clamp</code>. A mobile starting point is Dual or Kawase, Quarter, 4 iterations, threshold above 1. Bloom's down-and-up chain is the second-largest new cost after the post pass. It is also the only way an SDR phone shows range above 1 as <em>glow</em> rather than just less clipping.</p>
-<h3><a class="anchor" id="autotoc_md660"></a>
+<h3><a class="anchor" id="autotoc_md661"></a>
 On-tile post-processing</h3>
 <p>URP 17.6 ships an <b>On-Tile Post Processing</b> renderer feature (<code>OnTilePostProcessFeature</code>) built for tile GPUs: grading LUT, tonemapping, vignette and film grain in one on-tile pass, <b>no bloom</b>. If the decision is "tonemap without bloom", it is the cheap path. Untested on the 2D renderer; check before relying on it.</p>
-<h3><a class="anchor" id="autotoc_md661"></a>
+<h3><a class="anchor" id="autotoc_md662"></a>
 Platforms</h3>
 <ul>
 <li><b>Android, Vulkan</b> (primary): both formats are widely supported for rendering and blending.</li>
@@ -263,7 +263,7 @@ Platforms</h3>
 <li><b>WebGL 2</b> (the web demo): float render targets need <code>EXT_color_buffer_float</code>, which most desktop browsers have; the demo may fall back. Check it in the web build before shipping.</li>
 <li>HDR <em>display</em> output (HDR10 panels) is a different feature and stays out of scope.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md662"></a>
+<h3><a class="anchor" id="autotoc_md663"></a>
 Gamma colour space</h3>
 <p>URP 17.6 handles HDR in Gamma: <code>UberPost.shader</code> converts sRGB to linear before grading and tonemapping and back after (<code>#if UNITY_COLORSPACE_GAMMA</code>), and <code>Bloom.shader</code> squares on the way in and takes the square root on the way out. Grading mode depends only on <code>settings.supportsHDR</code> (<code>UniversalRenderPipeline.CreatePostProcessingData</code>), not on colour space.</p>
 <p>What that means in practice:</p>
@@ -272,7 +272,7 @@ Gamma colour space</h3>
 <li>Blending is still in gamma, as now: the look of every alpha and additive blend stays the same. That is what lets HDR ship without the art re-tune a Linear switch needs.</li>
 <li>Linear stays available as its own later step (<a class="el" href="plan_hdr_color_pipeline.html">HDR Color Pipeline</a> Wave A). Doing it after HDR means re-tuning HDR values once more; doing it first means re-tuning every colour before getting any HDR payoff.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md663"></a>
+<h3><a class="anchor" id="autotoc_md664"></a>
 What happens to the scenario grade</h3>
 <p><code>ScenarioGradeView</code> drives one global Volume (Color Adjustments, White Balance, Shadows Midtones Highlights) blended between the sky's and the surface's grade by <code>BackdropMix</code>. Today it runs in <b>LDR grading mode</b>: the LUT grades the clamped 0–1 frame.</p>
 <p>With HDR on, URP switches the LUT to <b>HDR grading mode</b>: the frame is encoded in a log curve before the lookup, contrast pivots around mid-grey in a log space, white balance and shadows/midtones/highlights act on the unclamped range, and the tonemapper runs inside the same LUT. <b>The same <code>ScenarioGrade</code> numbers give a different picture</b>, so every grade (sky, meadow, water) needs re-tuning after the switch. Two consequences:</p>
@@ -282,7 +282,7 @@ What happens to the scenario grade</h3>
 </ul>
 <p>Tune the grades once, after the HDR decision. Tuning them in LDR now and again in HDR later is double work.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md665"></a>
+<h2><a class="anchor" id="autotoc_md666"></a>
 Phases</h2>
 <div class="fragment"><div class="line">flowchart TD</div>
 <div class="line">    P0[&quot;Phase 0: prep that changes nothing on screen&quot;]</div>
@@ -298,7 +298,7 @@ Phases</h2>
 <div class="line">    Gate1 -- no --&gt; Park</div>
 <div class="line">    Gate3 -- yes --&gt; P4</div>
 <div class="line">    Gate3 -- &quot;no: cheaper bloom, or none&quot; --&gt; P4</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md666"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md667"></a>
 Phase 0 — prep that changes nothing on screen</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -312,7 +312,7 @@ Phase 0 — prep that changes nothing on screen</h3>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">0.4 An HDR view in the Render Maps window   </td><td class="markdownTableBodyNone">An exposure slider and a "values above 1" highlight in <code>Editor/ChannelPreview</code>, so Phase 2 can see what it's doing.   </td><td class="markdownTableBodyNone">Done: "Exposure (stops)" and "Mark &gt; 1"   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md667"></a>
+<h3><a class="anchor" id="autotoc_md668"></a>
 Phase 1 — switch the pipeline (Editor, with the user)</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -332,7 +332,7 @@ Phase 1 — switch the pipeline (Editor, with the user)</h3>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">6. Re-tune the scenario grades in HDR grading mode.   </td><td class="markdownTableBodyNone">Checked, no change: with the base above, every scenario's noon frame matches LDR within 0.004 mean luma and its night frame within 0.02. The meadow at night reads a little deeper and more saturated   </td></tr>
 </table>
-<h4><a class="anchor" id="autotoc_md668"></a>
+<h4><a class="anchor" id="autotoc_md669"></a>
 Findings from the Editor (2026-11-11)</h4>
 <p>Measured on identical frames (game frozen, only the look changed), by mean luma, mean saturation and the share of clipped pixels, then by eye.</p>
 <table class="markdownTable">
@@ -357,7 +357,7 @@ Findings from the Editor (2026-11-11)</h4>
 <li><b>Pops still bloom to white</b> next to the burst. Those effects are authored to reach white; the tonemapper only softens what goes above 1. That is Phase 2, item 1.</li>
 <li><b>Capturing HDR.</b> The pipeline package's <code>capture game_view</code> renders the camera into an 8-bit texture, and URP gives an offscreen camera its target's format, so it cannot show HDR. Use <code>ScreenCapture.CaptureScreenshot</code> (the real Game view). The volume stack copies the default profile when it starts, so a script that edits that profile in Play mode must call <code>VolumeManager.instance.OnVolumeProfileChanged</code>. The <code>capture/</code> scripts in each baseline folder do both.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md669"></a>
+<h3><a class="anchor" id="autotoc_md670"></a>
 Phase 2 — the effects that should glow</h3>
 <p>The user asked for the strong effects to stand out: "the lightning or lasers", and "the bullet
 shield as it grows". So Phase 2 started with item 4 and 5's emitters rather than the sweep order, and pulled bloom (Phase 3) forward with it. Without bloom, Neutral only maps values past 1 into the last ~12% of display brightness: too little to read as a glow.</p>
@@ -419,10 +419,10 @@ shield as it grows". So Phase 2 started with item 4 and 5's emitters rather than
 </table>
 <p>No threshold separates the two: lit balloons ran hotter than the effects. Raising the threshold past them (about 5.2, so bloom starts near 3.8) and boosting the effects past that was the other option. It was dropped because stacked pops (a lightning popping six at once) can still pass any fixed line, and the ground already reached 4.4.</p>
 <p><b>Watch list</b> (values above 1 that predate this phase): <code>Items/PickupInSightGlitter</code> (speck colour 191.7, 74.4, 53.4: on screen while a pickup is in sight), <code>Items/AppearGlitter</code> (16 × 3, brief), <code>Balloon/UnbreakableFormationGlitter</code> (1.5, always on the board), <code>Items/Snipe</code> (<code>_Color</code> 2 × its <code>_Glow</code> 1.15, while aiming), <code>Scenario/WallNet</code>'s disturbed flash (2.1, 3.2, 3.7, a long shape), the special balloons that 2.6 doesn't cap (the rainbow's glitter, the tough balloon, the unbreakable's markers pass 1 even at rest), and the scene-light field's pops on the ground, water and bushes (up to about 4.4). Bloom's <code>clamp</code> of 16 bounds any of them per pixel.</p>
-<h3><a class="anchor" id="autotoc_md670"></a>
+<h3><a class="anchor" id="autotoc_md671"></a>
 Phase 3 — bloom on device</h3>
 <p>Bloom itself went in with Phase 2 (2.5). What's left is the device: measure the post pass, the HUD camera's copy and bloom's chain together on the phone (open; ask the user before running anything on it). Fallback ladder: fewer iterations → Dual instead of Kawase only if it's cheaper on the device → bloom intensity 0 on weak devices → no bloom.</p>
-<h3><a class="anchor" id="autotoc_md671"></a>
+<h3><a class="anchor" id="autotoc_md672"></a>
 Phase 4 — optional follow-ups</h3>
 <ul>
 <li>An <code>ARGBHalf</code> scene capture so the chrome balloon reflects a pop's real brightness (alpha required, so not <code>B10G11R11</code>).</li>
@@ -430,7 +430,7 @@ Phase 4 — optional follow-ups</h3>
 <li>HDR display output on HDR10 panels.</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md673"></a>
+<h2><a class="anchor" id="autotoc_md674"></a>
 Decisions (2026-11-10)</h2>
 <p>Taken by the user after this audit.</p>
 <table class="markdownTable">
@@ -445,7 +445,7 @@ Decisions (2026-11-10)</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">First effects   </td><td class="markdownTableBodyNone"><b>Pops on lit surfaces, then glitter</b> (items 1 and 2)   </td><td class="markdownTableBodyNone">The level-up (item 6) is the showcase once those read well.   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md674"></a>
+<h3><a class="anchor" id="autotoc_md675"></a>
 What ACES meant for this plan (superseded by Neutral)</h3>
 <ul>
 <li><b>Phase 1 is a look change, not a silent switch.</b> ACES darkens the whole 0–1 range and adds contrast, and it shifts the hue of saturated colours. Expect an exposure lift on the global Volume, and check the balloon palette for identity: gameplay colours must stay easy to tell apart. The Phase 0 baselines are what this is judged against.</li>

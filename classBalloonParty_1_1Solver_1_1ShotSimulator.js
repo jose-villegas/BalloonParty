@@ -22,6 +22,7 @@ var classBalloonParty_1_1Solver_1_1ShotSimulator =
     [ "RemoveActive", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#adefa979d895458a7fa064a0d2b309852", null ],
     [ "ResolveBalloonContact", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a13f1ff5fdbeb5a27b6dd1af11a28f05d", null ],
     [ "ResolvePopScore", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a1838fa96f7dc61d7719e89dcef0f365d", null ],
+    [ "ResolveScoredPop", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a4bc60e707a5272d5f996dde1feedf882", null ],
     [ "ResolveToughPop", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#af2f4f4d006c01c211fe559141e1888df", null ],
     [ "RunItemEffects", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#a9e18a4ddf33e9c4365cf51afbac59044", null ],
     [ "SegmentHitsAnyBalloon", "classBalloonParty_1_1Solver_1_1ShotSimulator.html#ae6987db6d4e244403d0f2566737d396c", null ],

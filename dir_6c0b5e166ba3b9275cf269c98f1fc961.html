@@ -120,6 +120,8 @@ $(function(){initNavTree('dir_6c0b5e166ba3b9275cf269c98f1fc961.html',''); initRe
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="files" name="files"></a>
 Files</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IFreeCardGrant_8cs.html">IFreeCardGrant.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IShieldsPerBall_8cs.html">IShieldsPerBall.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IUpgradeDraft_8cs.html">IUpgradeDraft.cs</a></td></tr>
@@ -141,7 +143,9 @@ Components</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>IUpgradeDraft</code>   </td><td class="markdownTableBodyNone">The cards side: <code>Offer</code> (the hand of the level-up being presented, empty when none is pending or it deals none), <code>BonusCard</code> (the current attempt's bonus card, or null), <code>StacksOf(card)</code>, <code>LimitOf(card)</code> (its <code>MaxStacks</code> plus what held Raise the Bar cards add), and <code>Pick(slot)</code>, which stages a card of the hand as the level-up's pick    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>RunUpgrades</code>   </td><td class="markdownTableBodyNone">Implements both, plus <code>Game/Run</code>'s <code>IBonusCardSource</code>, <code>IRunResettable</code> and <code>IStartable</code> (it follows <code>ILevelProgress.Phase</code>). Holds the stack count per card and the bonus card, and recomputes the weapon when either changes   </td></tr>
+<td class="markdownTableBodyNone"><code>RunUpgrades</code>   </td><td class="markdownTableBodyNone">Implements both, plus <code>Game/Run</code>'s <code>IBonusCardSource</code>, <code>IFreeCardGrant</code>, <code>IRunResettable</code> and <code>IStartable</code> (it follows <code>ILevelProgress.Phase</code>). Holds the stack count per card and the bonus card, and recomputes the weapon when either changes    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>IFreeCardGrant</code>   </td><td class="markdownTableBodyNone"><code>GrantFreeCard(noCardLeft)</code>: a card won in play, the golden balloon's (<code><a class="el" href="Balloon_2Reward_2README_8md.html">Balloon/Reward/README.md</a></code>). See "Free cards" below   </td></tr>
 </table>
 <p>The deck and its rules are <code>IUpgradeSettings</code> (authored in <code>RunConfig</code> as <code>Upgrades</code>, and registered on its own so <code>RunUpgrades</code> depends on the deck alone): <code>CardEveryLevels</code> (2), <code>CardsOffered</code> (3) and <code>Cards</code>, each with a kind, title, description, a per-stack <code>Amount</code>, <code>MaxStacks</code> and a deal <code>Weight</code>.</p>
 <h1><a class="anchor" id="autotoc_md265"></a>
@@ -214,6 +218,23 @@ The bonus card</h1>
 </table>
 <p><code>CanDealBonus</code> (its <code>IBonusCardSource</code> side) is false once only Extra Pen and maxed cards are left, and the screen then hides the bonus button.</p>
 <h1><a class="anchor" id="autotoc_md269"></a>
+Free cards</h1>
+<p>Popping the golden balloon wins a card in play (<code>IFreeCardGrant.GrantFreeCard</code>). It is dealt from the same deck as a level-up's hand (an Extra Pen can come, a maxed card can't), held at once, and announced with <code>UpgradeCardHeldMessage</code>, so the card reveal plays it over the board. With every card at its limit it calls the caller's <code>noCardLeft</code> instead, and the golden balloon gives a heart. That holds for a card that waited for the pick too: if the pick took the last card, the fallback runs then.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Rule   </th><th class="markdownTableHeadNone">Why    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Held at once, and kept once its level is won (<code>Transitioning</code>)   </td><td class="markdownTableBodyNone">It's the reward for the shot, so it helps straight away    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">A retry of the level it was won on starts without it   </td><td class="markdownTableBodyNone">A retry keeps the cards held when the level began, so a lost level can't be replayed to farm golden balloons    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Won while the level-up hand is on screen (<code>Pending</code>), it waits for the pick to be held, then is kept   </td><td class="markdownTableBodyNone">A card dealt under the hand could take the picked card to its limit, and the pick would give nothing. An aborted level-up deals it as the level's own    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Won by a shot still in flight after the level's last claim (<code>Completing</code>), it is the level's own, and kept once the level-up goes through   </td><td class="markdownTableBodyNone">The hand isn't dealt yet, so nothing on screen changes under it    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Seeded by the level and the free cards dealt this run   </td><td class="markdownTableBodyNone">A replay of the level deals the same card, and a second one isn't stuck repeating the first   </td></tr>
+</table>
+<h1><a class="anchor" id="autotoc_md270"></a>
 Not built yet</h1>
 <ul>
 <li><b>A pick for the bonus card.</b> It's dealt at random and named in the tooltip; a quick pick screen (three cards, as at a level-up) is banked for later.</li>

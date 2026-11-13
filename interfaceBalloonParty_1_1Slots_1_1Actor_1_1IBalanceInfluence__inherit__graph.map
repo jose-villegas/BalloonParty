@@ -1,15 +1,17 @@
 <map id="BalloonParty.Slots.Actor.IBalanceInfluence" name="BalloonParty.Slots.Actor.IBalanceInfluence">
-<area shape="rect" id="Node000001" title="Lets a dynamic actor shape how the balancer moves it: a per&#45;candidate weight offset added to the supp..." alt="" coords="5,133,184,173"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html" title=" " alt="" coords="232,101,435,141"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,137,232,132,232,138,198,142"/>
-<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html" title="Stub grid actor standing in for a live balloon in the dynamic&#45;board sim — enough of IWriteableDynamic..." alt="" coords="244,165,423,205"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="198,164,244,171,244,176,197,170"/>
+<area shape="rect" id="Node000001" title="Lets a dynamic actor shape how the balancer moves it: a per&#45;candidate weight offset added to the supp..." alt="" coords="5,165,184,205"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html" title=" " alt="" coords="232,133,435,173"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,169,232,164,232,170,198,174"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html" title="Stub grid actor standing in for a live balloon in the dynamic&#45;board sim — enough of IWriteableDynamic..." alt="" coords="244,197,423,237"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="198,196,244,203,244,208,197,202"/>
 <area shape="rect" id="Node000003" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html" title=" " alt="" coords="483,5,685,45"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="390,93,482,55,516,43,518,48,484,60,392,98"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="371,123,422,88,482,55,511,43,513,48,484,60,425,93,374,127"/>
 <area shape="rect" id="Node000004" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html" title="At destruction, distributes one ScoreAttribution per remaining bubble to a random palette colour...." alt="" coords="483,69,685,109"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="448,104,482,100,483,105,449,109"/>
-<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html" title=" " alt="" coords="483,133,685,173"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="449,133,483,138,482,143,448,139"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html" title=" " alt="" coords="483,197,685,237"/>
-<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="420,144,436,151,460,167,484,183,512,195,510,200,481,188,457,172,433,156,418,149"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="425,127,504,107,506,112,426,132"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html" title="The golden reward balloon (PLAN&#45;RewardBalloons): plated, so the shot&#39;s own ordinary hit bounces off a..." alt="" coords="483,133,685,173"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="448,151,483,151,483,156,448,156"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html" title=" " alt="" coords="483,197,685,237"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="426,174,506,195,504,200,425,179"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html" title=" " alt="" coords="483,261,685,301"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="427,177,436,183,452,200,461,216,469,232,484,247,505,259,502,263,481,251,465,235,456,219,448,203,433,187,424,182"/>
 </map>

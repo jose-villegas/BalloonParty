@@ -122,6 +122,8 @@ $(function(){initNavTree('dir_d993d8cc159445f0ebcb4ff58e539c38.html',''); initRe
 Files</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IRewardBalloonRequests_8cs.html">IRewardBalloonRequests.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="RewardBalloonPayout_8cs.html">RewardBalloonPayout.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="RewardBalloonService_8cs.html">RewardBalloonService.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -135,8 +137,11 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>IRewardBalloonRequests</code>   </td><td class="markdownTableBodyNone">What <code>BalloonSpawner</code> asks. <code>TryTakeDue</code> once per clock line: whether this line brings one, and which. <code>Placed</code> once it is on the board: returns the callback to call when it leaves    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>RewardBalloonService</code>   </td><td class="markdownTableBodyNone">The rules behind the answer. Registered as <code>IRewardBalloonRequests</code> and <code>IRunResettable</code>   </td></tr>
+<td class="markdownTableBodyNone"><code>RewardBalloonService</code>   </td><td class="markdownTableBodyNone">The rules behind the answer. Registered as <code>IRewardBalloonRequests</code> and <code>IRunResettable</code>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>RewardBalloonPayout</code>   </td><td class="markdownTableBodyNone">Pays a reward balloon's pop, read from <code>ActorHitMessage</code>. The golden balloon: a free card (<code>IFreeCardGrant</code>), or a heart (<code>IPlayerHealing</code>) when every card is at its limit. Pays each balloon once   </td></tr>
 </table>
+<p>The golden balloon itself is <code>Balloon/Model/GoldenBalloonModel</code>: the shot's own ordinary hit bounces off it, a pierce pops it (it is tough, so the pierce plows it and it shatters at the next wall), and no item touches it: an item's damage has no <code>DirectHit</code>, and its hit is <code>HitOutcome.None</code>. It is colourless and scoreless, resists paint, and carries no item. Its prefab is a gold retint of the unbreakable's for now; the plated look is phase 3 of the plan.</p>
 <h1><a class="anchor" id="autotoc_md39"></a>
 When each one is due</h1>
 <p>Only while the level is being played (<code>LevelUpPhase.Playing</code>), and only for a type the balloon catalogue has an entry for.</p>
@@ -147,7 +152,7 @@ When each one is due</h1>
 <p>The tuning is <code>IRewardBalloonSettings</code>, a block on <code>BalloonsConfiguration</code>.</p>
 <h1><a class="anchor" id="autotoc_md40"></a>
 Leaving the board</h1>
-<p>Every way off the board (a pop, a board clear, a level change) calls the leave callback, which frees the slot for the next of that type. Each placement has its own number, so a callback from an earlier balloon, or from before a run reset, changes nothing. Anything a reward gives belongs on its pop, not on the leave. </p>
+<p>Every way off the board (a pop, a board clear, a level change) calls the leave callback, which frees the slot for the next of that type. Only a pop pays, which is why the payout reads the hit, not the leave. Each placement has its own number, so a callback from an earlier balloon, or from before a run reset, changes nothing. Anything a reward gives belongs on its pop, not on the leave. </p>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

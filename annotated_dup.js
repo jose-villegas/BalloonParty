@@ -86,6 +86,7 @@ var annotated_dup =
           [ "BalloonModelFactory", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelFactory.html", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelFactory" ],
           [ "BubbleClusterModel", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel" ],
           [ "ColorSource", "structBalloonParty_1_1Balloon_1_1Model_1_1ColorSource.html", "structBalloonParty_1_1Balloon_1_1Model_1_1ColorSource" ],
+          [ "GoldenBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel" ],
           [ "IBalloonModel", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel" ],
           [ "IFormationMember", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember" ],
           [ "IHasWriteableItemSlot", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IHasWriteableItemSlot.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IHasWriteableItemSlot" ],
@@ -96,6 +97,7 @@ var annotated_dup =
         ] ],
         [ "Reward", "namespaceBalloonParty_1_1Balloon_1_1Reward.html", [
           [ "IRewardBalloonRequests", "interfaceBalloonParty_1_1Balloon_1_1Reward_1_1IRewardBalloonRequests.html", "interfaceBalloonParty_1_1Balloon_1_1Reward_1_1IRewardBalloonRequests" ],
+          [ "RewardBalloonPayout", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout" ],
           [ "RewardBalloonService", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService" ]
         ] ],
         [ "Spawner", "namespaceBalloonParty_1_1Balloon_1_1Spawner.html", [
@@ -487,6 +489,7 @@ var annotated_dup =
         [ "Health", "namespaceBalloonParty_1_1Game_1_1Health.html", [
           [ "HeartTrailTracker", "classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html", "classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker" ],
           [ "ILossForecast", "interfaceBalloonParty_1_1Game_1_1Health_1_1ILossForecast.html", "interfaceBalloonParty_1_1Game_1_1Health_1_1ILossForecast" ],
+          [ "IPlayerHealing", "interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealing.html", "interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealing" ],
           [ "IPlayerHealth", "interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html", "interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth" ],
           [ "LossForecast", "classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html", "classBalloonParty_1_1Game_1_1Health_1_1LossForecast" ],
           [ "PlayerHealthController", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController" ],
@@ -579,6 +582,7 @@ var annotated_dup =
           [ "TimerCatalog", "classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog.html", "classBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog" ]
         ] ],
         [ "Upgrades", "namespaceBalloonParty_1_1Game_1_1Upgrades.html", [
+          [ "IFreeCardGrant", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IFreeCardGrant.html", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IFreeCardGrant" ],
           [ "IShieldsPerBall", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IShieldsPerBall.html", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IShieldsPerBall" ],
           [ "IUpgradeDraft", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IUpgradeDraft.html", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IUpgradeDraft" ],
           [ "IWeaponStats", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats" ],

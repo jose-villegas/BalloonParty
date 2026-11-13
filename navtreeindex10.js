@@ -1,5 +1,9 @@
 var NAVTREEINDEX10 =
 {
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule_1_1CandidateComparer.html#a40dbf039c19e354d3e55abcaa95af47c":[5,0,0,1,0,10,0,0],
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule_1_1CandidateComparer.html#a40dbf039c19e354d3e55abcaa95af47c":[6,0,0,1,0,10,0,0],
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html":[5,0,0,1,0,11],
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html":[6,0,0,1,0,11],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html#a109809d39d7103f70f31527e92a0cc93":[5,0,0,1,0,11,5],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html#a109809d39d7103f70f31527e92a0cc93":[6,0,0,1,0,11,5],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html#a3c8f3ed7a9cc59ddcef0280af926bb8a":[5,0,0,1,0,11,11],
@@ -245,9 +249,5 @@ var NAVTREEINDEX10 =
 "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a97790f65e0d4a43b8e21a8a28e8ceb31":[5,0,0,1,1,5,52],
 "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a97790f65e0d4a43b8e21a8a28e8ceb31":[6,0,0,1,1,5,52],
 "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#ab234a6f492cbbedb77eef3006efd7f33":[5,0,0,1,1,5,13],
-"classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#ab234a6f492cbbedb77eef3006efd7f33":[6,0,0,1,1,5,13],
-"classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#ab2bb99b73824508e586bddbacd69c4bf":[5,0,0,1,1,5,23],
-"classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#ab2bb99b73824508e586bddbacd69c4bf":[6,0,0,1,1,5,23],
-"classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#ab33c5e3918153c7cd5e23aa1bb4469d5":[5,0,0,1,1,5,40],
-"classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#ab33c5e3918153c7cd5e23aa1bb4469d5":[6,0,0,1,1,5,40]
+"classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#ab234a6f492cbbedb77eef3006efd7f33":[6,0,0,1,1,5,13]
 };

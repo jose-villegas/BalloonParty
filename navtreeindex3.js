@@ -1,10 +1,14 @@
 var NAVTREEINDEX3 =
 {
+"RunConfig_8cs.html":[7,0,3,22],
+"RunController_8cs.html":[7,0,7,7,15],
+"RunMeta_8cs.html":[7,0,7,7,16],
+"RunMetricsSnapshot_8cs.html":[7,0,7,9,25],
 "RunResetMessage_8cs.html":[7,0,14,7,33],
 "RunResetOrder_8cs.html":[7,0,7,7,17],
 "RunRestartCompletedMessage_8cs.html":[7,0,14,7,34],
 "RunSeed_8cs.html":[7,0,7,7,18],
-"RunUpgrades_8cs.html":[7,0,7,10,3],
+"RunUpgrades_8cs.html":[7,0,7,10,4],
 "ScaleDownButton_8cs.html":[7,0,18,20],
 "ScenarioContentRoot_8cs.html":[7,0,15,0,18],
 "ScenarioController_8cs.html":[7,0,7,6,8],
@@ -202,7 +206,7 @@ var NAVTREEINDEX3 =
 "TmpTextExtensions_8cs.html":[7,0,14,4,19],
 "TooltipBanner_8cs.html":[7,0,18,10,0],
 "TooltipMessage_8cs.html":[7,0,14,7,48],
-"ToughBalloonModel_8cs.html":[7,0,1,2,11],
+"ToughBalloonModel_8cs.html":[7,0,1,2,12],
 "ToughBalloonVariant_8cs.html":[7,0,1,5,6],
 "TraceHitGeometry_8cs.html":[7,0,11,6],
 "TraceHitMarker_8cs.html":[7,0,11,7],
@@ -221,7 +225,7 @@ var NAVTREEINDEX3 =
 "TweenOscillator_8cs.html":[7,0,14,0,2],
 "TweenTracker_8cs.html":[7,0,14,0,3],
 "UiSfxEmitter_8cs.html":[7,0,0,3,1],
-"UnbreakableBalloonModel_8cs.html":[7,0,1,2,12],
+"UnbreakableBalloonModel_8cs.html":[7,0,1,2,13],
 "UnbreakableBalloonVariant_8cs.html":[7,0,1,5,7],
 "UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d":[7,0,1,5,7,1],
 "UnbreakableFormationLook_8cs.html":[7,0,1,5,8],
@@ -245,9 +249,5 @@ var NAVTREEINDEX3 =
 "WallHitMessage_8cs.html":[7,0,14,7,51],
 "WallLimits_8cs.html":[7,0,14,37],
 "WallNetView_8cs.html":[7,0,13,0,5],
-"WaterCausticBuffer_8cs.html":[7,0,13,0,6],
-"WaterImpactCollector_8cs.html":[7,0,13,12],
-"WaterRippleBuffer_8cs.html":[7,0,13,0,7],
-"WaveDamageMessage_8cs.html":[7,0,14,7,52],
-"WaveDeficitCalculator_8cs.html":[7,0,7,5,6]
+"WaterCausticBuffer_8cs.html":[7,0,13,0,6]
 };
