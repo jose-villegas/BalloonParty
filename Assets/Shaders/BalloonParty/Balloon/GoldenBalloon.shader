@@ -14,10 +14,14 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
         [HideInInspector] _RendererColor ("Renderer Color", Color) = (1, 1, 1, 1)
 
         [Header(Gold)]
-        _GoldLit    ("Lit",    Color) = (1.00, 0.86, 0.40, 1)
-        _GoldShade  ("Shade",  Color) = (0.62, 0.38, 0.05, 1)
-        _GoldEdge   ("Edge",   Color) = (0.30, 0.16, 0.02, 1)
+        _GoldLit    ("Lit",    Color) = (1.00, 0.87, 0.32, 1)
+        _GoldShade  ("Shade",  Color) = (0.58, 0.36, 0.03, 1)
+        _GoldEdge   ("Edge",   Color) = (0.26, 0.14, 0.01, 1)
         _EdgePower  ("Edge Falloff", Range(1, 8)) = 3.0
+        // A metal ball's reflected horizon: bright sky above it, dark ground below, broken up by
+        // the plates' tilts. Fixed to the world's up, whatever the light does.
+        _EnvStrength ("Horizon Strength", Range(0, 1)) = 0.4
+        _EnvHorizon  ("Horizon Height", Range(-0.8, 0.8)) = -0.05
         // The light's height over the board: low rakes across the ball, high lights it face-on.
         _LightHeight ("Light Height", Range(0.1, 3)) = 0.9
 
@@ -49,9 +53,9 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
         _GlitterSpeed     ("Twinkle Speed", Range(0, 12)) = 4
         _GlitterSharpness ("Twinkle Sharpness", Range(1, 16)) = 6
         _GlitterChance    ("Chance", Range(0, 1)) = 0.45
-        _GlitterIntensity ("Intensity", Range(0, 6)) = 2.5
+        _GlitterIntensity ("Intensity", Range(0, 6)) = 3.5
         // How far the glitter reaches past the glint: it sparkles where glint x reach > 1.
-        _GlitterReach     ("Reach", Range(0.5, 20)) = 5
+        _GlitterReach     ("Reach", Range(0.5, 20)) = 6
 
         [Header(Rim)]
         _RimColor ("Color", Color) = (0.55, 0.36, 0.08, 1)
@@ -133,6 +137,8 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
             fixed4 _GoldShade;
             fixed4 _GoldEdge;
             float  _EdgePower;
+            float  _EnvStrength;
+            float  _EnvHorizon;
             float  _LightHeight;
 
             float  _PlateScale;
@@ -288,6 +294,11 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
                 // ---- Gold body: shade to lit by the plate's own facing, darkening to the edge ----
                 float  facing = saturate(dot(plateNormal, toLight));
                 fixed3 col = lerp(_GoldShade.rgb, _GoldLit.rgb, facing);
+                // The view looks straight down -z, so the reflected ray's height is 2 n.z n.y.
+                float  reflectedUp = 2.0 * plateNormal.z * plateNormal.y;
+                float  sky = smoothstep(_EnvHorizon - 0.06, _EnvHorizon + 0.06, reflectedUp);
+                fixed3 env = lerp(_GoldShade.rgb * 0.55, _GoldLit.rgb * 1.15, sky);
+                col = lerp(col, env, _EnvStrength);
                 col *= 1.0 + (plateRnd - 0.5) * 2.0 * _PlateVariance;
                 col = lerp(col, _GoldEdge.rgb, pow(rFlat, _EdgePower));
 
