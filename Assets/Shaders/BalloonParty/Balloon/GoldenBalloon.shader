@@ -40,20 +40,20 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
 
         [Header(Glint)]
         _GlintColor     ("Color", Color) = (1.00, 0.96, 0.80, 1)
-        _GlintPower     ("Sharpness", Range(4, 200)) = 32
-        _GlintIntensity ("Intensity", Range(0, 4)) = 1.8
+        _GlintPower     ("Sharpness", Range(4, 200)) = 24
+        _GlintIntensity ("Intensity", Range(0, 4)) = 2.4
         // The broad metallic sheen under the glint, per plate too.
         _SheenPower     ("Sheen Sharpness", Range(1, 32)) = 5
         _SheenIntensity ("Sheen Intensity", Range(0, 2)) = 0.5
 
         [Header(Glitter)]
         _GlitterColor     ("Color", Color) = (1.00, 0.98, 0.88, 1)
-        _GlitterScale     ("Density", Range(4, 80)) = 26
-        _GlitterSize      ("Speck Size", Range(0.05, 0.5)) = 0.2
+        _GlitterScale     ("Density", Range(4, 80)) = 16
+        _GlitterSize      ("Speck Size", Range(0.05, 0.5)) = 0.3
         _GlitterSpeed     ("Twinkle Speed", Range(0, 12)) = 4
         _GlitterSharpness ("Twinkle Sharpness", Range(1, 16)) = 6
         _GlitterChance    ("Chance", Range(0, 1)) = 0.45
-        _GlitterIntensity ("Intensity", Range(0, 6)) = 3.5
+        _GlitterIntensity ("Intensity", Range(0, 6)) = 4.5
         // How far the glitter reaches past the glint: it sparkles where glint x reach > 1.
         _GlitterReach     ("Reach", Range(0.5, 20)) = 6
 
