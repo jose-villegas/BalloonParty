@@ -199,6 +199,43 @@ namespace BalloonParty.Tests.UI
         }
 
         [Test]
+        public void FallSwing_BeforeTheRubberTears_IsNothing()
+        {
+            UseSwing();
+            Assert.AreEqual(Vector2.zero, CardRevealView.FallSwing(0.09f, 1f, 1f, 1f, _settings));
+        }
+
+        [Test]
+        public void FallSwing_StartsSquare_WhereverItsPhase()
+        {
+            // Torn at frame 3 of 30 a second: at the tear the swing hasn't grown in yet.
+            UseSwing();
+            Assert.AreEqual(0f, CardRevealView.FallSwing(0.1f, 1f, 1f, 1.3f, _settings).magnitude, Tolerance);
+        }
+
+        [Test]
+        public void FallSwing_OnceGrown_SwingsSideToSideWithinItsReach()
+        {
+            // A 0.4 s swing, grown in by 0.5 s after the tear: half a swing later it is on the other side.
+            UseSwing();
+            var one = CardRevealView.FallSwing(0.1f + 0.5f, 1f, 1f, 0f, _settings);
+            var other = CardRevealView.FallSwing(0.1f + 0.9f, 1f, 1f, 0f, _settings);
+            Assert.AreEqual(-one.x, other.x, 1e-4f);
+            Assert.LessOrEqual(Mathf.Abs(one.x), 0.1f + Tolerance);
+            Assert.LessOrEqual(Mathf.Abs(one.y), 10f + Tolerance);
+        }
+
+        [Test]
+        public void FallSwing_ScalesWithThePopsReach()
+        {
+            UseSwing();
+            var full = CardRevealView.FallSwing(0.7f, 1f, 1f, 0.5f, _settings);
+            var half = CardRevealView.FallSwing(0.7f, 0.5f, 1f, 0.5f, _settings);
+            Assert.AreEqual(full.x * 0.5f, half.x, 1e-4f);
+            Assert.AreEqual(full.y * 0.5f, half.y, 1e-4f);
+        }
+
+        [Test]
         public void FallDistance_BeforeTheRubberTears_IsNothing()
         {
             _settings.RubberFallsFromFrame.Returns(3);
@@ -336,6 +373,15 @@ namespace BalloonParty.Tests.UI
             _settings.RiseSway.Returns(6f);
             _settings.RiseSwaySeconds.Returns(0.5f);
             _settings.RiseTilt.Returns(5f);
+        }
+
+        private void UseSwing()
+        {
+            _settings.RubberFallsFromFrame.Returns(3);
+            _settings.FramesPerSecond.Returns(30f);
+            _settings.RubberSwing.Returns(0.1f);
+            _settings.RubberSwingSeconds.Returns(0.4f);
+            _settings.RubberSwingTilt.Returns(10f);
         }
     }
 }

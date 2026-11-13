@@ -77,6 +77,22 @@ namespace BalloonParty.Configuration.CardReveal
         [Tooltip("How far the bake's camera eases down, in frame heights: its RECENTRE over ortho_scale (3.1).")]
         [SerializeField] [Min(0f)] private float _rubberRecentreHeight = 0.52f;
 
+        [Tooltip("How far the torn rubber swings side to side as it falls, in frame widths at its widest, the way " +
+                 "a scrap of rubber flutters down. Each pop varies it (Rubber Swing Variance) and starts it at a " +
+                 "random point, so no two fall alike. 0 = it falls straight.")]
+        [SerializeField] [Min(0f)] private float _rubberSwing = 0.08f;
+
+        [Tooltip("Seconds for one swing from one side to the other. The swing also grows in over this long, " +
+                 "since the pop starts square at its place.")]
+        [SerializeField] [Min(0.01f)] private float _rubberSwingSeconds = 0.4f;
+
+        [Tooltip("How far the rubber leans into its swing, in degrees.")]
+        [SerializeField] [Range(0f, 45f)] private float _rubberSwingTilt = 12f;
+
+        [Tooltip("How much each pop varies the swing's reach and pace, as a share either way: 0.3 = up to 30% " +
+                 "wider or narrower, faster or slower.")]
+        [SerializeField] [Range(0f, 0.9f)] private float _rubberSwingVariance = 0.3f;
+
         [Header("Light")]
         [Tooltip("When the rubber tears, it flashes a white light into the scene light field, lighting the " +
                  "board around it (and the ribbons), and stirs the disturbance field as a board pop does. Its " +
@@ -179,6 +195,10 @@ namespace BalloonParty.Configuration.CardReveal
         public int RubberRecentreFromFrame => _rubberRecentreFromFrame;
         public int RubberRecentreFrames => _rubberRecentreFrames;
         public float RubberRecentreHeight => _rubberRecentreHeight;
+        public float RubberSwing => _rubberSwing;
+        public float RubberSwingSeconds => _rubberSwingSeconds;
+        public float RubberSwingTilt => _rubberSwingTilt;
+        public float RubberSwingVariance => _rubberSwingVariance;
         public float PopFlashRadius => _popFlashRadius;
         public float PopFlashIntensity => _popFlashIntensity;
         public float PopFlashSeconds => _popFlashSeconds;

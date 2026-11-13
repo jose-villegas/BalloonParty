@@ -84,6 +84,11 @@ namespace BalloonParty.UI.CardReveal
         private float _ascentStartedAt = float.NegativeInfinity;
         private float _releasedAt;
         private float _exitFrom;
+
+        // This pop's swing: its reach and pace (around 1) and where in the swing the fall starts.
+        private float _swingReach = 1f;
+        private float _swingPace = 1f;
+        private float _swingPhase;
         private bool _attached;
         private bool _burst;
 
@@ -194,6 +199,30 @@ namespace BalloonParty.UI.CardReveal
                 settings.RiseSway * Mathf.Sin(swayPhase) * swayFade,
                 -distance * below,
                 -settings.RiseTilt * Mathf.Cos(swayPhase) * swayFade);
+        }
+
+        /// <summary>
+        ///     How the torn rubber swings <paramref name="sincePop" /> seconds into the pop: x sideways in frame widths,
+        ///     y its lean in degrees. Nothing until it starts to fall, then side to side every
+        ///     <see cref="ICardRevealSettings.RubberSwingSeconds" /> × <paramref name="pace" />, starting
+        ///     <paramref name="phase" /> into the swing, growing in over one swing so the fall starts square, and
+        ///     leaning into it as the rise's sway does.
+        /// </summary>
+        internal static Vector2 FallSwing(
+            float sincePop, float reach, float pace, float phase, ICardRevealSettings settings)
+        {
+            var falling = sincePop - settings.RubberFallsFromFrame / Mathf.Max(settings.FramesPerSecond, 1e-3f);
+            if (falling <= 0f)
+            {
+                return Vector2.zero;
+            }
+
+            var swingSeconds = Mathf.Max(settings.RubberSwingSeconds * pace, 1e-3f);
+            var angle = Mathf.PI * falling / swingSeconds + phase;
+            var grow = Mathf.SmoothStep(0f, 1f, falling / swingSeconds);
+            return new Vector2(
+                settings.RubberSwing * reach * Mathf.Sin(angle) * grow,
+                -settings.RubberSwingTilt * reach * Mathf.Cos(angle) * grow);
         }
 
         /// <summary>
@@ -355,6 +384,7 @@ namespace BalloonParty.UI.CardReveal
             _releasedAt = float.NaN;
             _exitFrom = float.NaN;
             _burst = false;
+            RollSwing();
             var elapsed = 0f;
             while (true)
             {
@@ -362,7 +392,8 @@ namespace BalloonParty.UI.CardReveal
                 var frame = (int)(elapsed * _settings.FramesPerSecond);
                 SetRubberShown(frame < frames);
                 ShowFrame(Mathf.Min(frame, frames - 1));
-                Fall(FallDistance(elapsed, _settings));
+                var swing = FallSwing(elapsed, _swingReach, _swingPace, _swingPhase, _settings);
+                Fall(FallDistance(elapsed, _settings), swing);
                 PlacePin(elapsed);
                 BurstOnTear(frame);
                 var gone = elapsed >= releaseAt && FlyRibbons(revealStartedAt) >= 1f;
@@ -531,13 +562,32 @@ namespace BalloonParty.UI.CardReveal
             _balloon.localRotation = Quaternion.Euler(0f, 0f, offset.z);
             var part = (Vector2)offset * _settings.Parallax;
             PlaceLayers(part, -part);
+            TiltLayers(0f);
         }
 
         // Only the rubber falls: the ribbons are the balloon's too, and fly their own way.
-        private void Fall(float frameHeights)
+        private void Fall(float frameHeights, Vector2 swing)
         {
-            var down = Vector2.down * (frameHeights * _back.rectTransform.rect.height);
-            PlaceLayers(down, down);
+            var size = _back.rectTransform.rect.size;
+            var at = new Vector2(swing.x * size.x, -frameHeights * size.y);
+            PlaceLayers(at, at);
+            TiltLayers(swing.y);
+        }
+
+        private void RollSwing()
+        {
+            var variance = _settings.RubberSwingVariance;
+            _swingReach = 1f + UnityEngine.Random.Range(-variance, variance);
+            _swingPace = 1f + UnityEngine.Random.Range(-variance, variance);
+            _swingPhase = UnityEngine.Random.Range(0f, 2f * Mathf.PI);
+        }
+
+        private void TiltLayers(float degrees)
+        {
+            var tilt = Quaternion.Euler(0f, 0f, degrees);
+            _front.rectTransform.localRotation = tilt;
+            _back.rectTransform.localRotation = tilt;
+            _shadow.rectTransform.localRotation = tilt;
         }
 
         private void PlaceLayers(Vector2 front, Vector2 back)

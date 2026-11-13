@@ -139,6 +139,21 @@ namespace BalloonParty.Configuration.CardReveal
         float RubberRecentreHeight { get; }
 
         /// <summary>
+        ///     How far the torn rubber swings side to side as it falls, in frame widths at its widest. Each pop
+        ///     varies it by <see cref="RubberSwingVariance" /> and starts it at a random point.
+        /// </summary>
+        float RubberSwing { get; }
+
+        /// <summary>Seconds for one swing from side to side; the swing grows in over as long.</summary>
+        float RubberSwingSeconds { get; }
+
+        /// <summary>How far the rubber leans into its swing, in degrees.</summary>
+        float RubberSwingTilt { get; }
+
+        /// <summary>How much each pop varies the swing's reach and pace, as a share either way.</summary>
+        float RubberSwingVariance { get; }
+
+        /// <summary>
         ///     The white light its tear flashes into the scene light field, its radius in world units: it lights
         ///     the board around the reveal, and the reveal itself.
         /// </summary>
