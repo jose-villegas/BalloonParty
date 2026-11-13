@@ -1,5 +1,10 @@
 var NAVTREEINDEX17 =
 {
+"classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffEntry.html":[5,0,0,3,1,1],
+"classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffEntry.html":[6,0,0,3,1,1],
+"classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffEntry.html#a7c03644e6b5fc9acd18c79944dcf33d7":[5,0,0,3,1,1,3],
+"classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffEntry.html#a7c03644e6b5fc9acd18c79944dcf33d7":[6,0,0,3,1,1,3],
+"classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffEntry.html#aa4701155f5dcd23388e59329d1cec2bd":[5,0,0,3,1,1,1],
 "classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffEntry.html#aa4701155f5dcd23388e59329d1cec2bd":[6,0,0,3,1,1,1],
 "classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffEntry.html#aba9a662fd2b68357af0717193abff74b":[5,0,0,3,1,1,2],
 "classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffEntry.html#aba9a662fd2b68357af0717193abff74b":[6,0,0,3,1,1,2],
@@ -244,10 +249,5 @@ var NAVTREEINDEX17 =
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a9688a67929a5daef7933d25585df4593":[5,0,0,3,3,0,4],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#a9688a67929a5daef7933d25585df4593":[6,0,0,3,3,0,4],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#acbc252c4a3acda7e21543f5c60976840":[5,0,0,3,3,0,9],
-"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#acbc252c4a3acda7e21543f5c60976840":[6,0,0,3,3,0,9],
-"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#adc763ebadd7b1eeb8d49e797a9956631":[5,0,0,3,3,0,1],
-"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#adc763ebadd7b1eeb8d49e797a9956631":[6,0,0,3,3,0,1],
-"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CameraRigCinematicSettings.html":[5,0,0,3,3,1],
-"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CameraRigCinematicSettings.html":[6,0,0,3,3,1],
-"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CameraRigCinematicSettings.html#a1b40b5bd2cd1dced105031e41e884a9b":[5,0,0,3,3,1,6]
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#acbc252c4a3acda7e21543f5c60976840":[6,0,0,3,3,0,9]
 };

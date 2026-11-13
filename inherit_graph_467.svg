@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafTier.html" target="_top" xlink:title="One depth tier of leaf instances for a single slot.">
+<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafBatch.html" target="_top" xlink:title="A draw&#45;ready batch of leaves merged across slots (≤1023 instances).">
 <polygon fill="white" stroke="#666666" points="134,-30 0,-30 0,0 134,0 134,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Actor.</text>
-<text text-anchor="middle" x="67" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Archetype.LeafTier</text>
+<text text-anchor="middle" x="67" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Archetype.LeafBatch</text>
 </a>
 </g>
 </g>

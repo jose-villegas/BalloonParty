@@ -6,6 +6,7 @@ var dir_b27bc693c6b7f05286ab1d00a653a044 =
     [ "BudgetFormula.cs", "BudgetFormula_8cs.html", "BudgetFormula_8cs" ],
     [ "ContentRole.cs", "ContentRole_8cs.html", "ContentRole_8cs" ],
     [ "ContentWeightRamp.cs", "ContentWeightRamp_8cs.html", "ContentWeightRamp_8cs" ],
+    [ "ExtraColorLevelSettings.cs", "ExtraColorLevelSettings_8cs.html", "ExtraColorLevelSettings_8cs" ],
     [ "GridActorContentEntry.cs", "GridActorContentEntry_8cs.html", "GridActorContentEntry_8cs" ],
     [ "IBubbleRiseSettings.cs", "IBubbleRiseSettings_8cs.html", "IBubbleRiseSettings_8cs" ],
     [ "IContentPiece.cs", "IContentPiece_8cs.html", "IContentPiece_8cs" ],

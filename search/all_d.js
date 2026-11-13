@@ -398,7 +398,7 @@ var searchData=
   ['colorbucketindex_395',['ColorBucketIndex',['../classBalloonParty_1_1UI_1_1Telemetry_1_1MetricValueResolver.html#a4e78e30a456ec0dac444113bf84cf2e4',1,'BalloonParty::UI::Telemetry::MetricValueResolver']]],
   ['colorbucketname_396',['ColorBucketName',['../structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html#a1b8257bea75ca19787fa9b33b56aa198',1,'BalloonParty::UI::Telemetry::MetricBinding']]],
   ['colorbucketnames_397',['ColorBucketNames',['../classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#a19e4dd0200206291ee54ab69c178e6bb',1,'BalloonParty::Editor::MetricBindingDrawer']]],
-  ['colorcount_398',['ColorCount',['../structBalloonParty_1_1Game_1_1Telemetry_1_1ColorCount.html',1,'BalloonParty.Game.Telemetry.ColorCount'],['../structBalloonParty_1_1Game_1_1Telemetry_1_1ColorCount.html#ab9b65f04631b1c079788cc71ec1b14af',1,'BalloonParty.Game.Telemetry.ColorCount.ColorCount()']]],
+  ['colorcount_398',['ColorCount',['../structBalloonParty_1_1Game_1_1Telemetry_1_1ColorCount.html',1,'BalloonParty.Game.Telemetry.ColorCount'],['../classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html#a7178ddd1b2fbad7f3102a1dde049c7cb',1,'BalloonParty.Editor.LevelGenerationPreview.ColorCount()'],['../structBalloonParty_1_1Game_1_1Telemetry_1_1ColorCount.html#ab9b65f04631b1c079788cc71ec1b14af',1,'BalloonParty.Game.Telemetry.ColorCount.ColorCount()']]],
   ['colorcount_2ecs_399',['ColorCount.cs',['../ColorCount_8cs.html',1,'']]],
   ['colorcycle_400',['ColorCycle',['../classBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycle.html',1,'BalloonParty::Shared::Rendering']]],
   ['colorcycle_2ecs_401',['ColorCycle.cs',['../ColorCycle_8cs.html',1,'']]],

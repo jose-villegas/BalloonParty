@@ -3,6 +3,7 @@ var classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator =
     [ "PieceSlot", "structBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator_1_1PieceSlot.html", "structBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator_1_1PieceSlot" ],
     [ "Generate", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html#aef6c44258a93a03abeb93636ce5c2ec5", null ],
     [ "IncludeUnlockedBushes", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html#a68334979e1a5001b1a2956a281de79c7", null ],
+    [ "IsDroppedThreat", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html#ae151ee63f75f1eb907fb66b1c767751a", null ],
     [ "Key", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html#a9f88741b5f4da7044302d299ea68c10b", null ],
     [ "Partition< T >", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html#a7039b38ba5221afdc3f83ff1410d9f1c", null ],
     [ "Scaled", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html#a234a32e6b05cb58bc4a80cd9e93ef0e4", null ],

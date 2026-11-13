@@ -170,8 +170,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:aa9552c672202558a82cb10ba641d5d4e" id="r_aa9552c672202558a82cb10ba641d5d4e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9552c672202558a82cb10ba641d5d4e">LevelParameters</a> (int boardLines, int itemCadence, AnimationCurve initialItemCountWeights, AnimationCurve itemCountWeights, <a class="el" href="structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html">BalloonTypeWeight</a>[] balloonWeights, <a class="el" href="structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html">ItemTypeWeight</a>[] itemWeights, <a class="el" href="structBalloonParty_1_1Configuration_1_1GridActors_1_1ResolvedGridActorGate.html">ResolvedGridActorGate</a>[] gridActorGates, int allowedColorsMask)</td></tr>
-<tr class="separator:aa9552c672202558a82cb10ba641d5d4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a4618f8cb77b16657dc2a89c92b3607" id="r_a3a4618f8cb77b16657dc2a89c92b3607"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3a4618f8cb77b16657dc2a89c92b3607">LevelParameters</a> (int boardLines, int itemCadence, AnimationCurve initialItemCountWeights, AnimationCurve itemCountWeights, <a class="el" href="structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html">BalloonTypeWeight</a>[] balloonWeights, <a class="el" href="structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html">ItemTypeWeight</a>[] itemWeights, <a class="el" href="structBalloonParty_1_1Configuration_1_1GridActors_1_1ResolvedGridActorGate.html">ResolvedGridActorGate</a>[] gridActorGates, int allowedColorsMask, float spawnIntervalScale=1f, bool isExtraColorLevel=false)</td></tr>
+<tr class="separator:a3a4618f8cb77b16657dc2a89c92b3607"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d1ee4491163e2a385c93a96d477eaab" id="r_a9d1ee4491163e2a385c93a96d477eaab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9d1ee4491163e2a385c93a96d477eaab">BindResolved</a> (IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html">ResolvedBalloonEntry</a> &gt; balloonPickList, IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedItemEntry.html">ResolvedItemEntry</a> &gt; itemPickList, IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html">ItemSettings</a> &gt; items, IReadOnlyList&lt; string &gt; allowedColorNames)</td></tr>
 <tr class="separator:a9d1ee4491163e2a385c93a96d477eaab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -193,6 +193,9 @@ Properties</h2></td></tr>
 <tr class="separator:a31f04c2c8c976166a57a155774a3e054"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e6388a5e4a651adde617b6fc8797a9a" id="r_a4e6388a5e4a651adde617b6fc8797a9a"><td class="memItemLeft" align="right" valign="top">AnimationCurve&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e6388a5e4a651adde617b6fc8797a9a">InitialItemCountWeights</a><code> [get]</code></td></tr>
 <tr class="separator:a4e6388a5e4a651adde617b6fc8797a9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33e655c0c76c29154336ffafa1fc2a8e" id="r_a33e655c0c76c29154336ffafa1fc2a8e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a33e655c0c76c29154336ffafa1fc2a8e">IsExtraColorLevel</a><code> [get]</code></td></tr>
+<tr class="memdesc:a33e655c0c76c29154336ffafa1fc2a8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">A rare level with one colour more and no threats (<a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ExtraColorLevelSettings.html" title="A rare level that plays one more colour than its step gives (the fourth, purple), with no threats and...">ExtraColorLevelSettings</a>): formations left on the board from the level before call no reinforcements on it.  <br /></td></tr>
+<tr class="separator:a33e655c0c76c29154336ffafa1fc2a8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d2532fc3f6bbef0ab46480bbaf26c63" id="r_a9d2532fc3f6bbef0ab46480bbaf26c63"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9d2532fc3f6bbef0ab46480bbaf26c63">ItemCadence</a><code> [get]</code></td></tr>
 <tr class="memdesc:a9d2532fc3f6bbef0ab46480bbaf26c63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Every this many spawn waves, the wave rolls for items. 0 = never.  <br /></td></tr>
 <tr class="separator:a9d2532fc3f6bbef0ab46480bbaf26c63"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -202,6 +205,9 @@ Properties</h2></td></tr>
 <tr class="separator:af467183c001d9001c9e6468dad5daa84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68d74a11bacbe7df83cccba710d97ca5" id="r_a68d74a11bacbe7df83cccba710d97ca5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html">ItemTypeWeight</a>[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a68d74a11bacbe7df83cccba710d97ca5">ItemWeights</a><code> [get]</code></td></tr>
 <tr class="separator:a68d74a11bacbe7df83cccba710d97ca5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f424d0ba27bc4206e0ae1977a1ab480" id="r_a7f424d0ba27bc4206e0ae1977a1ab480"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f424d0ba27bc4206e0ae1977a1ab480">SpawnIntervalScale</a><code> [get]</code></td></tr>
+<tr class="memdesc:a7f424d0ba27bc4206e0ae1977a1ab480"><td class="mdescLeft">&#160;</td><td class="mdescRight">The time between spawn lines on this level, as a share of the clock's usual: below 1 on an extra-colour level (<a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ExtraColorLevelSettings.html" title="A rare level that plays one more colour than its step gives (the fourth, purple), with no threats and...">ExtraColorLevelSettings</a>), 1 otherwise.  <br /></td></tr>
+<tr class="separator:a7f424d0ba27bc4206e0ae1977a1ab480"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -219,6 +225,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ade461ba8b946d76c2b7c894f23f598ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a201448b90c9dc69d05238b0a26cab278" id="r_a201448b90c9dc69d05238b0a26cab278"><td class="memItemLeft" align="right" valign="top">readonly AnimationCurve&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a201448b90c9dc69d05238b0a26cab278">_initialItemCountWeights</a> = new()</td></tr>
 <tr class="separator:a201448b90c9dc69d05238b0a26cab278"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afeceb64217bca261eea6950260b23fe5" id="r_afeceb64217bca261eea6950260b23fe5"><td class="memItemLeft" align="right" valign="top">readonly bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afeceb64217bca261eea6950260b23fe5">_isExtraColorLevel</a></td></tr>
+<tr class="separator:afeceb64217bca261eea6950260b23fe5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae696a65f0bc275b73d752783070ba7be" id="r_ae696a65f0bc275b73d752783070ba7be"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae696a65f0bc275b73d752783070ba7be">_itemCadence</a> = 5</td></tr>
 <tr class="separator:ae696a65f0bc275b73d752783070ba7be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa840036a504dba4ffe7dc5267a2a5fb4" id="r_aa840036a504dba4ffe7dc5267a2a5fb4"><td class="memItemLeft" align="right" valign="top">readonly AnimationCurve&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa840036a504dba4ffe7dc5267a2a5fb4">_itemCountWeights</a></td></tr>
@@ -231,6 +239,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a630634ca2853fdd53870999fa78601c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9588c2ad958d52e9fd3846faeee38e20" id="r_a9588c2ad958d52e9fd3846faeee38e20"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html">ResolvedBalloonEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9588c2ad958d52e9fd3846faeee38e20">_simpleBalloonPickList</a> = Array.Empty&lt;<a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html">ResolvedBalloonEntry</a>&gt;()</td></tr>
 <tr class="separator:a9588c2ad958d52e9fd3846faeee38e20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68e48ca1c07590e94a641a3627b4ff7d" id="r_a68e48ca1c07590e94a641a3627b4ff7d"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a68e48ca1c07590e94a641a3627b4ff7d">_spawnIntervalScale</a> = 1f</td></tr>
+<tr class="separator:a68e48ca1c07590e94a641a3627b4ff7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Field defaults are the parameterless fallback (Simple-only) used when no authored range contains a level. </p>
@@ -252,8 +262,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aa9552c672202558a82cb10ba641d5d4e" name="aa9552c672202558a82cb10ba641d5d4e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa9552c672202558a82cb10ba641d5d4e">&#9670;&#160;</a></span>LevelParameters() <span class="overload">[2/2]</span></h2>
+<a id="a3a4618f8cb77b16657dc2a89c92b3607" name="a3a4618f8cb77b16657dc2a89c92b3607"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a4618f8cb77b16657dc2a89c92b3607">&#9670;&#160;</a></span>LevelParameters() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -299,7 +309,17 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>allowedColorsMask</em></span>&#160;)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>allowedColorsMask</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>spawnIntervalScale</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isExtraColorLevel</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -745,6 +765,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="afeceb64217bca261eea6950260b23fe5" name="afeceb64217bca261eea6950260b23fe5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afeceb64217bca261eea6950260b23fe5">&#9670;&#160;</a></span>_isExtraColorLevel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly bool BalloonParty.Configuration.Level.LevelParameters._isExtraColorLevel</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ae696a65f0bc275b73d752783070ba7be" name="ae696a65f0bc275b73d752783070ba7be"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae696a65f0bc275b73d752783070ba7be">&#9670;&#160;</a></span>_itemCadence</h2>
 
@@ -879,6 +921,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a68e48ca1c07590e94a641a3627b4ff7d" name="a68e48ca1c07590e94a641a3627b4ff7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68e48ca1c07590e94a641a3627b4ff7d">&#9670;&#160;</a></span>_spawnIntervalScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly float BalloonParty.Configuration.Level.LevelParameters._spawnIntervalScale = 1f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Property Documentation</h2>
 <a id="a38284c731da835e650da19a1f855e716" name="a38284c731da835e650da19a1f855e716"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a38284c731da835e650da19a1f855e716">&#9670;&#160;</a></span>AllowedColors</h2>
@@ -1000,6 +1064,32 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a33e655c0c76c29154336ffafa1fc2a8e" name="a33e655c0c76c29154336ffafa1fc2a8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33e655c0c76c29154336ffafa1fc2a8e">&#9670;&#160;</a></span>IsExtraColorLevel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Configuration.Level.LevelParameters.IsExtraColorLevel</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A rare level with one colour more and no threats (<a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ExtraColorLevelSettings.html" title="A rare level that plays one more colour than its step gives (the fourth, purple), with no threats and...">ExtraColorLevelSettings</a>): formations left on the board from the level before call no reinforcements on it. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#ac9cdbe504f155ad39940cb91d58fa6c5">BalloonParty.Configuration.Level.ILevelParameters</a>.</p>
+
+</div>
+</div>
 <a id="a9d2532fc3f6bbef0ab46480bbaf26c63" name="a9d2532fc3f6bbef0ab46480bbaf26c63"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9d2532fc3f6bbef0ab46480bbaf26c63">&#9670;&#160;</a></span>ItemCadence</h2>
 
@@ -1093,6 +1183,32 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7f424d0ba27bc4206e0ae1977a1ab480" name="a7f424d0ba27bc4206e0ae1977a1ab480"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f424d0ba27bc4206e0ae1977a1ab480">&#9670;&#160;</a></span>SpawnIntervalScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.LevelParameters.SpawnIntervalScale</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The time between spawn lines on this level, as a share of the clock's usual: below 1 on an extra-colour level (<a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ExtraColorLevelSettings.html" title="A rare level that plays one more colour than its step gives (the fourth, purple), with no threats and...">ExtraColorLevelSettings</a>), 1 otherwise. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a18795de12534818c682d7cc35513bcf1">BalloonParty.Configuration.Level.ILevelParameters</a>.</p>
 
 </div>
 </div>

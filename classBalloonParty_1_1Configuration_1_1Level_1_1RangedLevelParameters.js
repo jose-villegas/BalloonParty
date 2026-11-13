@@ -1,7 +1,7 @@
 var classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters =
 [
     [ "RangedLevelParameters", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a1fba35edd281ed5b3f03eacf70a1c977", null ],
-    [ "RangedLevelParameters", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a89b0bca5553ccdecbee891638a71ca5a", null ],
+    [ "RangedLevelParameters", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ae9372f9610bc8e571796dedb5fefa6eb", null ],
     [ "Resolve", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ad0a8f4680319a2fb2e41bc07edae1384", null ],
     [ "ResolveGridActorGates", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a0d795735a151c98576ceee02f1dfc476", null ],
     [ "_allowedColorsMask", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a4801dae5c84d5af8080444ce38355c10", null ],
@@ -9,16 +9,20 @@ var classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters =
     [ "_boardLines", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a39bbfaa4d0d600e33df38eb92a949daa", null ],
     [ "_gridActorGates", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a1cedc1b23b3e1478dadf86459eaf83be", null ],
     [ "_initialItemCountWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#af7cff732bdd8b626c26f3b7c71211ad4", null ],
+    [ "_isExtraColorLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ae99552ceaf009581d1154c6add61e67f", null ],
     [ "_itemCadence", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a0d605533454c9020dc6e13aa7095b253", null ],
     [ "_itemCountWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a1ec161848fd56e11278cab175450881f", null ],
     [ "_itemWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a73332adc4bcbf8d14130de5ef6767dd1", null ],
+    [ "_spawnIntervalScale", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a47d114177eff980b1b4b525868770193", null ],
     [ "AllowedColorsMask", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#adbea8c1eb12cf7454e7075ecbfbebbe3", null ],
     [ "BalloonWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ae6b2f97066105dfba6ca65ce8838ab5f", null ],
     [ "BoardLines", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#abfcfd6a493daead126858ce7431c3ed2", null ],
     [ "ColorMask", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a558c23c668583fd558e545c25b6b7e67", null ],
     [ "GridActorGates", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ad37aad743d6d4f7f601b9013bfc9dea7", null ],
     [ "InitialItemCountWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a246bc83e13d83c58552d897b09aa7a9d", null ],
+    [ "IsExtraColorLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ad952277316e8e36bc285a76d4413017a", null ],
     [ "ItemCadence", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ade93678d434e8698681361eeea195248", null ],
     [ "ItemCountWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a9ff3eb2fd26f52a1c3107e080a7ae824", null ],
-    [ "ItemWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a4b34d481161624bd8212bbc6d953dd4e", null ]
+    [ "ItemWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#a4b34d481161624bd8212bbc6d953dd4e", null ],
+    [ "SpawnIntervalScale", "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#af9256810e80458f4ca4872ddfe907260", null ]
 ];

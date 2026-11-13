@@ -1,5 +1,10 @@
 var NAVTREEINDEX16 =
 {
+"classBalloonParty_1_1Balloon_1_1View_1_1ParticleColorableRenderer.html#a30d728015a3f4e619358893bc2ba502b":[5,0,0,1,5,5,1],
+"classBalloonParty_1_1Balloon_1_1View_1_1ParticleColorableRenderer.html#a30d728015a3f4e619358893bc2ba502b":[6,0,0,1,5,5,1],
+"classBalloonParty_1_1Balloon_1_1View_1_1ParticleColorableRenderer.html#a361241699a0cb95ff1d7a60907510378":[5,0,0,1,5,5,3],
+"classBalloonParty_1_1Balloon_1_1View_1_1ParticleColorableRenderer.html#a361241699a0cb95ff1d7a60907510378":[6,0,0,1,5,5,3],
+"classBalloonParty_1_1Balloon_1_1View_1_1ParticleColorableRenderer.html#a68365720df3d06e1ae16fbf8fc46023e":[5,0,0,1,5,5,7],
 "classBalloonParty_1_1Balloon_1_1View_1_1ParticleColorableRenderer.html#a68365720df3d06e1ae16fbf8fc46023e":[6,0,0,1,5,5,7],
 "classBalloonParty_1_1Balloon_1_1View_1_1ParticleColorableRenderer.html#a74aa7bb21701afd531fa2c9085728e74":[5,0,0,1,5,5,0],
 "classBalloonParty_1_1Balloon_1_1View_1_1ParticleColorableRenderer.html#a74aa7bb21701afd531fa2c9085728e74":[6,0,0,1,5,5,0],
@@ -244,10 +249,5 @@ var NAVTREEINDEX16 =
 "classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffConfiguration.html#a075af2587b088fdd2eeb856eaf189456":[5,0,0,3,1,0,1],
 "classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffConfiguration.html#a075af2587b088fdd2eeb856eaf189456":[6,0,0,3,1,0,1],
 "classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffConfiguration.html#a5a76bcadf39eeaf34326978b2858f4ea":[5,0,0,3,1,0,0],
-"classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffConfiguration.html#a5a76bcadf39eeaf34326978b2858f4ea":[6,0,0,3,1,0,0],
-"classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffEntry.html":[5,0,0,3,1,1],
-"classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffEntry.html":[6,0,0,3,1,1],
-"classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffEntry.html#a7c03644e6b5fc9acd18c79944dcf33d7":[5,0,0,3,1,1,3],
-"classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffEntry.html#a7c03644e6b5fc9acd18c79944dcf33d7":[6,0,0,3,1,1,3],
-"classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffEntry.html#aa4701155f5dcd23388e59329d1cec2bd":[5,0,0,3,1,1,1]
+"classBalloonParty_1_1Configuration_1_1Buffs_1_1BuffConfiguration.html#a5a76bcadf39eeaf34326978b2858f4ea":[6,0,0,3,1,0,0]
 };

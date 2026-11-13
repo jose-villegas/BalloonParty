@@ -148,6 +148,7 @@ var hierarchy =
     [ "BalloonParty.Game.Telemetry.TimerCatalog.Entry", "structBalloonParty_1_1Game_1_1Telemetry_1_1TimerCatalog_1_1Entry.html", null ],
     [ "BalloonParty.Projectile.Buffs.ProjectileBuffService.Entry", "structBalloonParty_1_1Projectile_1_1Buffs_1_1ProjectileBuffService_1_1Entry.html", null ],
     [ "BalloonParty.Projectile.ProjectileRegistry.Entry", "structBalloonParty_1_1Projectile_1_1ProjectileRegistry_1_1Entry.html", null ],
+    [ "BalloonParty.Configuration.Level.ExtraColorLevelSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1ExtraColorLevelSettings.html", null ],
     [ "BalloonParty.Game.Run.FailureOffer", "structBalloonParty_1_1Game_1_1Run_1_1FailureOffer.html", null ],
     [ "BalloonParty.Editor.CardRevealBuilder.Flight", "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Flight.html", null ],
     [ "BalloonParty.Editor.EffectPreview.PaintSplashPreviewModule.FlightState", "classBalloonParty_1_1Editor_1_1EffectPreview_1_1PaintSplashPreviewModule_1_1FlightState.html", null ],

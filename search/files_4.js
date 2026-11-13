@@ -9,5 +9,6 @@ var searchData=
   ['effectviewpreviewplayer_2ecs_6',['EffectViewPreviewPlayer.cs',['../EffectViewPreviewPlayer_8cs.html',1,'']]],
   ['endrunrequestedmessage_2ecs_7',['EndRunRequestedMessage.cs',['../EndRunRequestedMessage_8cs.html',1,'']]],
   ['enumindexedattribute_2ecs_8',['EnumIndexedAttribute.cs',['../EnumIndexedAttribute_8cs.html',1,'']]],
-  ['enumindexeddrawer_2ecs_9',['EnumIndexedDrawer.cs',['../EnumIndexedDrawer_8cs.html',1,'']]]
+  ['enumindexeddrawer_2ecs_9',['EnumIndexedDrawer.cs',['../EnumIndexedDrawer_8cs.html',1,'']]],
+  ['extracolorlevelsettings_2ecs_10',['ExtraColorLevelSettings.cs',['../ExtraColorLevelSettings_8cs.html',1,'']]]
 ];

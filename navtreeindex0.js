@@ -213,6 +213,7 @@ var NAVTREEINDEX0 =
 "EndRunRequestedMessage_8cs.html":[7,0,14,7,7],
 "EnumIndexedAttribute_8cs.html":[7,0,14,17],
 "EnumIndexedDrawer_8cs.html":[7,0,6,19],
+"ExtraColorLevelSettings_8cs.html":[7,0,3,9,6],
 "FPSCounter_8cs.html":[7,0,14,2,1],
 "FadeImage_8cs.html":[7,0,18,14],
 "FailureOffers_8cs.html":[7,0,7,7,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "GameOverLifetimeScope_8cs.html":[7,0,18,3,0],
 "GameOverLossCinematic_8cs.html":[7,0,7,1,9],
 "GameOverMessage_8cs.html":[7,0,14,7,10],
-"GameOverPresentationGate_8cs.html":[7,0,7,7,2],
-"GameOverScreen_8cs.html":[7,0,18,3,1]
+"GameOverPresentationGate_8cs.html":[7,0,7,7,2]
 };

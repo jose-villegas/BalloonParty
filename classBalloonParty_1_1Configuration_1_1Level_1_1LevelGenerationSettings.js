@@ -1,7 +1,7 @@
 var classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings =
 [
     [ "LevelGenerationSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a131317305ddc487a36e43473fa2f116c", null ],
-    [ "LevelGenerationSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a131c9d821c36cc03cf502a5d1b3272b2", null ],
+    [ "LevelGenerationSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a4e8114319012d28ed917382518ebef06", null ],
     [ "BoardLinesForLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#ad49b37de1383c0451284b156ec46aa96", null ],
     [ "BudgetForLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a1a4b9de74e9ef1454d85a0af0e46da90", null ],
     [ "CheckDuplicates< T >", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a32cbffe1bdcb322f10539186057819ca", null ],
@@ -17,6 +17,7 @@ var classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings =
     [ "_balloons", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a2324c783a3e03fa5c22e51423caa8118", null ],
     [ "_boardLines", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a1519d4d1d8058942cf8af26f4c166be2", null ],
     [ "_colors", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a829a2bc4901d4d1fdbf16956e6026d3e", null ],
+    [ "_extraColor", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a9d9bdc6b5d76b23a6b53ab0c9606c068", null ],
     [ "_featuredLevels", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#ae066120aa7742a410e1c0e7d332f4800", null ],
     [ "_gridActors", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a289c015cb7c546aa1846694410f5f54e", null ],
     [ "_itemCadence", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#acba9af6805647d30f6636a50f8f1873a", null ],
@@ -26,6 +27,7 @@ var classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings =
     [ "_seedSalt", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a761c887de6091765bef689e0789e5da7", null ],
     [ "_threatBudget", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#ab246befc78b26b2cd8c9a685bad750fe", null ],
     [ "Balloons", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a3f8702c9a5aba77b04cb739f8fbabe7c", null ],
+    [ "ExtraColor", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a492258e095ad566879392667fd36044d", null ],
     [ "FeaturedLevels", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a5aabdd4cd761d40738ff3c8cc645002a", null ],
     [ "GridActors", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a249999ec19dd2a684003354c4590d841", null ],
     [ "ItemCadence", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#a5408a21f485645f1586d266b599429d9", null ],

@@ -12,7 +12,9 @@ var interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters =
     [ "AllowedColorsMask", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a249f8cf811f4e4cbc66df319b13f785c", null ],
     [ "BoardLines", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a17461a491eb0534886f81b4a1889c85f", null ],
     [ "InitialItemCountWeights", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#ac02d312b64af5af347c94bd2d6f68419", null ],
+    [ "IsExtraColorLevel", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#ac9cdbe504f155ad39940cb91d58fa6c5", null ],
     [ "ItemCadence", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a66cda602340c34587a0c1c94779b9135", null ],
     [ "ItemCountWeights", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a46cc75624abd5624b612eb0ef5376f4e", null ],
-    [ "Items", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a4e53894ef76f91888973262e2456eb4a", null ]
+    [ "Items", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a4e53894ef76f91888973262e2456eb4a", null ],
+    [ "SpawnIntervalScale", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a18795de12534818c682d7cc35513bcf1", null ]
 ];

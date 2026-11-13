@@ -1,5 +1,10 @@
 var NAVTREEINDEX18 =
 {
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#adc763ebadd7b1eeb8d49e797a9956631":[5,0,0,3,3,0,1],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1BoardFloatAwaySettings.html#adc763ebadd7b1eeb8d49e797a9956631":[6,0,0,3,3,0,1],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CameraRigCinematicSettings.html":[5,0,0,3,3,1],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CameraRigCinematicSettings.html":[6,0,0,3,3,1],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CameraRigCinematicSettings.html#a1b40b5bd2cd1dced105031e41e884a9b":[5,0,0,3,3,1,6],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CameraRigCinematicSettings.html#a1b40b5bd2cd1dced105031e41e884a9b":[6,0,0,3,3,1,6],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CameraRigCinematicSettings.html#a1f37b1f2f625aeffcc2e88d060988340":[5,0,0,3,3,1,3],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CameraRigCinematicSettings.html#a1f37b1f2f625aeffcc2e88d060988340":[6,0,0,3,3,1,3],
@@ -244,10 +249,5 @@ var NAVTREEINDEX18 =
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#a0c23954eb9d0f4e8c6b52d4858ae653c":[5,0,0,3,4,8,5],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#a0c23954eb9d0f4e8c6b52d4858ae653c":[6,0,0,3,4,8,5],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#a2b481d6fc6b111a6a89c504d1ba924ad":[5,0,0,3,4,8,1],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#a2b481d6fc6b111a6a89c504d1ba924ad":[6,0,0,3,4,8,1],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#a716284cfbaebf88397e74199c91bfe43":[5,0,0,3,4,8,3],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#a716284cfbaebf88397e74199c91bfe43":[6,0,0,3,4,8,3],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#a839c254413228d341aa56cb222a04220":[5,0,0,3,4,8,8],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#a839c254413228d341aa56cb222a04220":[6,0,0,3,4,8,8],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#a8c10739a1f70c64175a08d4fa9232d50":[5,0,0,3,4,8,6]
+"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#a2b481d6fc6b111a6a89c504d1ba924ad":[6,0,0,3,4,8,1]
 };

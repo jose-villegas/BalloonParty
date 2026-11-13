@@ -248,6 +248,7 @@ var annotated_dup =
           [ "BubbleRiseSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings" ],
           [ "BudgetFormula", "structBalloonParty_1_1Configuration_1_1Level_1_1BudgetFormula.html", "structBalloonParty_1_1Configuration_1_1Level_1_1BudgetFormula" ],
           [ "ContentWeightRamp", "structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html", "structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp" ],
+          [ "ExtraColorLevelSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1ExtraColorLevelSettings.html", "classBalloonParty_1_1Configuration_1_1Level_1_1ExtraColorLevelSettings" ],
           [ "GridActorContentEntry", "structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry.html", "structBalloonParty_1_1Configuration_1_1Level_1_1GridActorContentEntry" ],
           [ "IBubbleRiseSettings", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings" ],
           [ "IContentPiece", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece.html", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1IContentPiece" ],

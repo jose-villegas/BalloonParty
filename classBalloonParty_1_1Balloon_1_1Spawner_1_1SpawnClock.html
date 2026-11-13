@@ -118,7 +118,7 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.
 </div><!--header-->
 <div class="contents">
 
-<p>Brings balloon lines in on a timer, whatever the player does: one line per <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a2c396acfe977955ea5d26778f4333bd9" title="Seconds between lines at level ; levels below 1 run at level 1&#39;s pace.">ISpawnClockSettings.IntervalForLevel</a> of scaled game time, after a grace at each level's start.  
+<p>Brings balloon lines in on a timer, whatever the player does: one line per <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a2c396acfe977955ea5d26778f4333bd9" title="Seconds between lines at level ; levels below 1 run at level 1&#39;s pace.">ISpawnClockSettings.IntervalForLevel</a> of scaled game time (shorter on an extra-colour level, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a18795de12534818c682d7cc35513bcf1" title="The time between spawn lines on this level, as a share of the clock&#39;s usual: below 1 on an extra-colo...">ILevelParameters.SpawnIntervalScale</a>), after a grace at each level's start.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Balloon.Spawner.SpawnClock:</div>
@@ -155,8 +155,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a7156cc18e7d3767ab5478babd4a82344" id="r_a7156cc18e7d3767ab5478babd4a82344"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7156cc18e7d3767ab5478babd4a82344">SpawnClock</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html">ILevelPacingConfiguration</a> pacing, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a> levelProgress, <a class="el" href="classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html">PauseService</a> pauseService, <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html">IProjectileRegistry</a> projectiles, <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1IBoardFill.html">IBoardFill</a> boardFill, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBalloonLineMessage.html">SpawnBalloonLineMessage</a> &gt; linePublisher, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileFiredMessage.html">ProjectileFiredMessage</a> &gt; firedSubscriber)</td></tr>
-<tr class="separator:a7156cc18e7d3767ab5478babd4a82344"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02e134ef573667baa8db427bf29c514e" id="r_a02e134ef573667baa8db427bf29c514e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02e134ef573667baa8db427bf29c514e">SpawnClock</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html">ILevelPacingConfiguration</a> pacing, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a> levelProgress, <a class="el" href="classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html">PauseService</a> pauseService, <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html">IProjectileRegistry</a> projectiles, <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1IBoardFill.html">IBoardFill</a> boardFill, IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBalloonLineMessage.html">SpawnBalloonLineMessage</a> &gt; linePublisher, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileFiredMessage.html">ProjectileFiredMessage</a> &gt; firedSubscriber, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html">IActiveLevelParameters</a> levelParams)</td></tr>
+<tr class="separator:a02e134ef573667baa8db427bf29c514e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0fdff0c4fd714ec4ffdaa872eea5ecbd" id="r_a0fdff0c4fd714ec4ffdaa872eea5ecbd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0fdff0c4fd714ec4ffdaa872eea5ecbd">Advance</a> (float deltaTime)</td></tr>
 <tr class="separator:a0fdff0c4fd714ec4ffdaa872eea5ecbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -184,6 +184,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a27302135e846a67488416839114c7fda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68cbf55f2f23499013f1cac36a90c0e7" id="r_a68cbf55f2f23499013f1cac36a90c0e7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a68cbf55f2f23499013f1cac36a90c0e7">IsRunning</a> ()</td></tr>
 <tr class="separator:a68cbf55f2f23499013f1cac36a90c0e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29ee069e745e2870e4558a1cf65b9955" id="r_a29ee069e745e2870e4558a1cf65b9955"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29ee069e745e2870e4558a1cf65b9955">LineInterval</a> ()</td></tr>
+<tr class="separator:a29ee069e745e2870e4558a1cf65b9955"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82df526b296e5819fd17efb963048355" id="r_a82df526b296e5819fd17efb963048355"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a82df526b296e5819fd17efb963048355">OnFired</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileFiredMessage.html">ProjectileFiredMessage</a> msg)</td></tr>
 <tr class="separator:a82df526b296e5819fd17efb963048355"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44126bacf9970a56a8a8478252b85b27" id="r_a44126bacf9970a56a8a8478252b85b27"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a44126bacf9970a56a8a8478252b85b27">Pace</a> (float flightSeconds)</td></tr>
@@ -207,6 +209,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:affc45ff5f400ee9fc885273e2ba24c34"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08ec7e48aec5d2880ea6fa50e19076e3" id="r_a08ec7e48aec5d2880ea6fa50e19076e3"><td class="memItemLeft" align="right" valign="top">readonly Dictionary&lt; <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a>, float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a08ec7e48aec5d2880ea6fa50e19076e3">_flightAges</a> = new()</td></tr>
 <tr class="separator:a08ec7e48aec5d2880ea6fa50e19076e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8d8faa4750a3ba4200cfbd861d468ef" id="r_aa8d8faa4750a3ba4200cfbd861d468ef"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html">IActiveLevelParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa8d8faa4750a3ba4200cfbd861d468ef">_levelParams</a></td></tr>
+<tr class="separator:aa8d8faa4750a3ba4200cfbd861d468ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a35c3bc06aee0c0b6343156e8a1fa80ad" id="r_a35c3bc06aee0c0b6343156e8a1fa80ad"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a35c3bc06aee0c0b6343156e8a1fa80ad">_levelProgress</a></td></tr>
 <tr class="separator:a35c3bc06aee0c0b6343156e8a1fa80ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97c3f25ce790c4493b90e42c65de0621" id="r_a97c3f25ce790c4493b90e42c65de0621"><td class="memItemLeft" align="right" valign="top">readonly IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1SpawnBalloonLineMessage.html">SpawnBalloonLineMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a97c3f25ce790c4493b90e42c65de0621">_linePublisher</a></td></tr>
@@ -229,11 +233,11 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ac14e660a6ee2582f2402550e8d9c477c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Brings balloon lines in on a timer, whatever the player does: one line per <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a2c396acfe977955ea5d26778f4333bd9" title="Seconds between lines at level ; levels below 1 run at level 1&#39;s pace.">ISpawnClockSettings.IntervalForLevel</a> of scaled game time, after a grace at each level's start. </p>
+<div class="textblock"><p>Brings balloon lines in on a timer, whatever the player does: one line per <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a2c396acfe977955ea5d26778f4333bd9" title="Seconds between lines at level ; levels below 1 run at level 1&#39;s pace.">ISpawnClockSettings.IntervalForLevel</a> of scaled game time (shorter on an extra-colour level, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html#a18795de12534818c682d7cc35513bcf1" title="The time between spawn lines on this level, as a share of the clock&#39;s usual: below 1 on an extra-colo...">ILevelParameters.SpawnIntervalScale</a>), after a grace at each level's start. </p>
 <p>Scaled, so slow-mo slows it with everything else. It stops outright through pauses, the level-up and game over, and while a lone doomed ball glides its last breath: lines landing in that frozen moment read wrong, and the board must hold still under the glide. Firing while another ball is still flying pulls the next line closer (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a37c8f81313b27845d06db758f98f865a" title="Share of the current wait a ball fired while another is still flying takes off the next line: 0....">ISpawnClockSettings.OverlapShotPull</a>), so every extra ball in the air costs room. A sparse board runs the clock faster (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#aa173f4601d26778f7f687554b608aa56" title="How much faster the clock runs on an empty board.">ISpawnClockSettings.SparseBoardSpeedup</a>), so clearing it never leaves the player waiting on an empty screen. Balls in the air push it too, by how long each has flown (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#abe600f412b0b06d955d15040eb82f18f" title="Pace balls in flight add on top of the board&#39;s: at full flight pressure the clock runs this many time...">ISpawnClockSettings.FlightSpeedup</a>): the board refills while long ricochets and rapid fire clear it. A big clear in a short window (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a5bec4bdbf2e2a88462e66a1dde3eceb6" title="Share of the board&#39;s open slots that, cleared within BreatherClearWindow, earns a breather: the clock...">ISpawnClockSettings.BreatherClear</a>) earns a breather instead: the clock drops to <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#ad33347e74e6f9aaace096faef807dd5c" title="The clock&#39;s pace as a breather starts, as a share of its full pace, 0–1.">ISpawnClockSettings.BreatherPace</a> and eases back to its full pace, so the release after a great shot lasts a moment before the tension builds again. A cooldown after each (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a8ed4a84719c76dff6296c798ac179f1a" title="Seconds of play after a breather ends before a big clear can earn the next; 0 at a level&#39;s start.">ISpawnClockSettings.BreatherCooldownSeconds</a>) keeps releases rarer than the clears. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a7156cc18e7d3767ab5478babd4a82344" name="a7156cc18e7d3767ab5478babd4a82344"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7156cc18e7d3767ab5478babd4a82344">&#9670;&#160;</a></span>SpawnClock()</h2>
+<a id="a02e134ef573667baa8db427bf29c514e" name="a02e134ef573667baa8db427bf29c514e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02e134ef573667baa8db427bf29c514e">&#9670;&#160;</a></span>SpawnClock()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -274,7 +278,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileFiredMessage.html">ProjectileFiredMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>firedSubscriber</em></span>&#160;)</td>
+          <td class="paramtype">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileFiredMessage.html">ProjectileFiredMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>firedSubscriber</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html">IActiveLevelParameters</a></td>          <td class="paramname"><span class="paramname"><em>levelParams</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -415,6 +424,31 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool BalloonParty.Balloon.Spawner.SpawnClock.IsRunning </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a29ee069e745e2870e4558a1cf65b9955" name="a29ee069e745e2870e4558a1cf65b9955"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29ee069e745e2870e4558a1cf65b9955">&#9670;&#160;</a></span>LineInterval()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Balloon.Spawner.SpawnClock.LineInterval </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -715,6 +749,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly Dictionary&lt;<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a>, float&gt; BalloonParty.Balloon.Spawner.SpawnClock._flightAges = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa8d8faa4750a3ba4200cfbd861d468ef" name="aa8d8faa4750a3ba4200cfbd861d468ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8d8faa4750a3ba4200cfbd861d468ef">&#9670;&#160;</a></span>_levelParams</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html">IActiveLevelParameters</a> BalloonParty.Balloon.Spawner.SpawnClock._levelParams</td>
         </tr>
       </table>
   </td>

@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Editor_1_1CardRevealBuilder.html" target="_top" xlink:title="Builds the card reveal: imports the baked pop sheets under Assets/Sprites/UI/CardReveal/ as linear da...">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Editor_1_1CardIconSpriteAssetBuilder.html" target="_top" xlink:title="Makes the CardIcons TextMeshPro sprite asset the card titles draw their icons from (UpgradeCardText):...">
 <polygon fill="white" stroke="#666666" points="133,-30 0,-30 0,0 133,0 133,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Editor.Card</text>
-<text text-anchor="middle" x="66.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">RevealBuilder</text>
+<text text-anchor="middle" x="66.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">IconSpriteAssetBuilder</text>
 </a>
 </g>
 </g>

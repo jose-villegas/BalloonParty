@@ -3,6 +3,7 @@ var classBalloonParty_1_1Editor_1_1LevelGenerationPreview =
     [ "Actors", "classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html#a4b3859334ea6e1c2c96e121c10b86a04", null ],
     [ "Append", "classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html#add04c63ac05ee4a00fca36d459d6349e", null ],
     [ "Balloons", "classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html#aba74033bf0f851e5e35c71282bd3fb68", null ],
+    [ "ColorCount", "classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html#a7178ddd1b2fbad7f3102a1dde049c7cb", null ],
     [ "Draw", "classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html#a038d5f69323b29208330167986f214dd", null ],
     [ "DrawHeader", "classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html#a7f47d11ab57cbb2c0dc4ab7ff14404a4", null ],
     [ "DrawLevelRow", "classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html#a3a8e5c7ffd536f023e6427f9b27858eb", null ],
