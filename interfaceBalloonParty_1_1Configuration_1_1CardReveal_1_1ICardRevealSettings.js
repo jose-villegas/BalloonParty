@@ -46,6 +46,10 @@ var interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings 
     [ "RubberRecentreFrames", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a6648954e10066517522e02cef780c4c7", null ],
     [ "RubberRecentreFromFrame", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aa28949182f9d2e4685986292f9269ad9", null ],
     [ "RubberRecentreHeight", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a251495c4dfd319b8142f052121bc83ce", null ],
+    [ "RubberSwing", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a162506c7d709b66ed572c057d5f6c052", null ],
+    [ "RubberSwingSeconds", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aeb3902dad9d6c504e1a0ec22e327997b", null ],
+    [ "RubberSwingTilt", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a0bbcd13b14e3b028472cf53a96e07d0e", null ],
+    [ "RubberSwingVariance", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a4d4ad9698ce08d906b2dc40aed877143", null ],
     [ "SheetColumns", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a5bd275eed8a7b0eb3a3b258b0a006ba9", null ],
     [ "SheetRows", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aadc7457259dd9b044121000695409996", null ],
     [ "ShredsPrefab", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a03453aa51d044f8edb05f342cd995a59", null ]

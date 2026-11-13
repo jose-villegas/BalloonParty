@@ -267,6 +267,18 @@ Properties</h2></td></tr>
 <tr class="memitem:aa1f133f05ebb41623fbc5c7e7622c699" id="r_aa1f133f05ebb41623fbc5c7e7622c699"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa1f133f05ebb41623fbc5c7e7622c699">RubberRecentreHeight</a><code> [get]</code></td></tr>
 <tr class="memdesc:aa1f133f05ebb41623fbc5c7e7622c699"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far the camera eases down, in frame heights: the bake's <code>RECENTRE</code> over its camera's <code>ortho_scale</code>.  <br /></td></tr>
 <tr class="separator:aa1f133f05ebb41623fbc5c7e7622c699"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebd8df5117b33e7e20aa59d53fbac47f" id="r_aebd8df5117b33e7e20aa59d53fbac47f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aebd8df5117b33e7e20aa59d53fbac47f">RubberSwing</a><code> [get]</code></td></tr>
+<tr class="memdesc:aebd8df5117b33e7e20aa59d53fbac47f"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far the torn rubber swings side to side as it falls, in frame widths at its widest.  <br /></td></tr>
+<tr class="separator:aebd8df5117b33e7e20aa59d53fbac47f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac794745cc2959a86307129393776222f" id="r_ac794745cc2959a86307129393776222f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac794745cc2959a86307129393776222f">RubberSwingSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:ac794745cc2959a86307129393776222f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds for one swing from side to side; the swing grows in over as long.  <br /></td></tr>
+<tr class="separator:ac794745cc2959a86307129393776222f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70ddd2a423236f62fe182050ae7d6e82" id="r_a70ddd2a423236f62fe182050ae7d6e82"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a70ddd2a423236f62fe182050ae7d6e82">RubberSwingTilt</a><code> [get]</code></td></tr>
+<tr class="memdesc:a70ddd2a423236f62fe182050ae7d6e82"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far the rubber leans into its swing, in degrees.  <br /></td></tr>
+<tr class="separator:a70ddd2a423236f62fe182050ae7d6e82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65252710297453f3dbb3ffcfb98d0a73" id="r_a65252710297453f3dbb3ffcfb98d0a73"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a65252710297453f3dbb3ffcfb98d0a73">RubberSwingVariance</a><code> [get]</code></td></tr>
+<tr class="memdesc:a65252710297453f3dbb3ffcfb98d0a73"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much each pop varies the swing's reach and pace, as a share either way.  <br /></td></tr>
+<tr class="separator:a65252710297453f3dbb3ffcfb98d0a73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53df8769fb4bb08729164ebd5bae624c" id="r_a53df8769fb4bb08729164ebd5bae624c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a53df8769fb4bb08729164ebd5bae624c">SheetColumns</a><code> [get]</code></td></tr>
 <tr class="memdesc:a53df8769fb4bb08729164ebd5bae624c"><td class="mdescLeft">&#160;</td><td class="mdescRight">A layer's frames across one half of a sheet.  <br /></td></tr>
 <tr class="separator:a53df8769fb4bb08729164ebd5bae624c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -369,6 +381,14 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ac12f93f43f04922773d8b1e2ff1fecab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a83f20eab18c0bbd19eb5cd3c2eaa9569" id="r_a83f20eab18c0bbd19eb5cd3c2eaa9569"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a83f20eab18c0bbd19eb5cd3c2eaa9569">_rubberRecentreHeight</a> = 0.52f</td></tr>
 <tr class="separator:a83f20eab18c0bbd19eb5cd3c2eaa9569"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a901dee302c2c546044475e6bd3735fcb" id="r_a901dee302c2c546044475e6bd3735fcb"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a901dee302c2c546044475e6bd3735fcb">_rubberSwing</a> = 0.08f</td></tr>
+<tr class="separator:a901dee302c2c546044475e6bd3735fcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6745839ee37358f14b1a1fb7947a7d5a" id="r_a6745839ee37358f14b1a1fb7947a7d5a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6745839ee37358f14b1a1fb7947a7d5a">_rubberSwingSeconds</a> = 0.4f</td></tr>
+<tr class="separator:a6745839ee37358f14b1a1fb7947a7d5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a206eef1763a7b110d012fee4c6d8cfd3" id="r_a206eef1763a7b110d012fee4c6d8cfd3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a206eef1763a7b110d012fee4c6d8cfd3">_rubberSwingTilt</a> = 12f</td></tr>
+<tr class="separator:a206eef1763a7b110d012fee4c6d8cfd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0bb48e24ee32d98fb29c69ef1ea9576" id="r_aa0bb48e24ee32d98fb29c69ef1ea9576"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa0bb48e24ee32d98fb29c69ef1ea9576">_rubberSwingVariance</a> = 0.3f</td></tr>
+<tr class="separator:aa0bb48e24ee32d98fb29c69ef1ea9576"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40fc56164c7c2704d1189808a9bc3cb0" id="r_a40fc56164c7c2704d1189808a9bc3cb0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40fc56164c7c2704d1189808a9bc3cb0">_sheetColumns</a> = 8</td></tr>
 <tr class="separator:a40fc56164c7c2704d1189808a9bc3cb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31aa3f0032f47d9c42bed0ab39a436e1" id="r_a31aa3f0032f47d9c42bed0ab39a436e1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31aa3f0032f47d9c42bed0ab39a436e1">_sheetRows</a> = 6</td></tr>
@@ -1359,6 +1379,94 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._rubberRecentreHeight = 0.52f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a901dee302c2c546044475e6bd3735fcb" name="a901dee302c2c546044475e6bd3735fcb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a901dee302c2c546044475e6bd3735fcb">&#9670;&#160;</a></span>_rubberSwing</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._rubberSwing = 0.08f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6745839ee37358f14b1a1fb7947a7d5a" name="a6745839ee37358f14b1a1fb7947a7d5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6745839ee37358f14b1a1fb7947a7d5a">&#9670;&#160;</a></span>_rubberSwingSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._rubberSwingSeconds = 0.4f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a206eef1763a7b110d012fee4c6d8cfd3" name="a206eef1763a7b110d012fee4c6d8cfd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a206eef1763a7b110d012fee4c6d8cfd3">&#9670;&#160;</a></span>_rubberSwingTilt</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._rubberSwingTilt = 12f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa0bb48e24ee32d98fb29c69ef1ea9576" name="aa0bb48e24ee32d98fb29c69ef1ea9576"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0bb48e24ee32d98fb29c69ef1ea9576">&#9670;&#160;</a></span>_rubberSwingVariance</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._rubberSwingVariance = 0.3f</td>
         </tr>
       </table>
   </td>
@@ -2626,6 +2734,111 @@ Private Attributes</h2></td></tr>
 <p>The game moves the frames down by it too, so the knot's path stays the fall's. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a251495c4dfd319b8142f052121bc83ce">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="aebd8df5117b33e7e20aa59d53fbac47f" name="aebd8df5117b33e7e20aa59d53fbac47f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aebd8df5117b33e7e20aa59d53fbac47f">&#9670;&#160;</a></span>RubberSwing</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings.RubberSwing</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How far the torn rubber swings side to side as it falls, in frame widths at its widest. </p>
+<p>Each pop varies it by <a class="el" href="#a65252710297453f3dbb3ffcfb98d0a73" title="How much each pop varies the swing&#39;s reach and pace, as a share either way.">RubberSwingVariance</a> and starts it at a random point. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a162506c7d709b66ed572c057d5f6c052">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="ac794745cc2959a86307129393776222f" name="ac794745cc2959a86307129393776222f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac794745cc2959a86307129393776222f">&#9670;&#160;</a></span>RubberSwingSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings.RubberSwingSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds for one swing from side to side; the swing grows in over as long. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aeb3902dad9d6c504e1a0ec22e327997b">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="a70ddd2a423236f62fe182050ae7d6e82" name="a70ddd2a423236f62fe182050ae7d6e82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70ddd2a423236f62fe182050ae7d6e82">&#9670;&#160;</a></span>RubberSwingTilt</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings.RubberSwingTilt</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How far the rubber leans into its swing, in degrees. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a0bbcd13b14e3b028472cf53a96e07d0e">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="a65252710297453f3dbb3ffcfb98d0a73" name="a65252710297453f3dbb3ffcfb98d0a73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65252710297453f3dbb3ffcfb98d0a73">&#9670;&#160;</a></span>RubberSwingVariance</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings.RubberSwingVariance</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How much each pop varies the swing's reach and pace, as a share either way. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a4d4ad9698ce08d906b2dc40aed877143">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
 
 </div>
 </div>
