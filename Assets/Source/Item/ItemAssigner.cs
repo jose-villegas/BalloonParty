@@ -169,6 +169,14 @@ namespace BalloonParty.Item
             _fillBuffer.Clear();
             _levelParams.Current.FillExtraItems(_fillBuffer, _activeCountsBuffer, _weapon.ExtraItemChance);
 
+            // The fill comes grouped by catalogue order; shuffled, a wave short of hosts drops a random extra
+            // instead of always the last types'.
+            for (var i = _fillBuffer.Count - 1; i > 0; i--)
+            {
+                var j = Random.Range(0, i + 1);
+                (_fillBuffer[i], _fillBuffer[j]) = (_fillBuffer[j], _fillBuffer[i]);
+            }
+
             foreach (var item in _fillBuffer)
             {
                 if (_eligibleBuffer.Count == 0 || !TryTakeHost(item.Type, out var indexOf))

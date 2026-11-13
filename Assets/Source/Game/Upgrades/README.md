@@ -27,7 +27,7 @@ and `Cards`, each with a kind, title, description, a per-stack `Amount`, `MaxSta
 | `BallCap` | +`Amount` balls in flight at once (rounded) | `ThrowerReload.HasFreeSlot`, and the projectile pool, which `ThrowerController` tops up on the next load |
 | `FasterReload` | The reload while another ball flies × (1 − `Amount`); stacks multiply, and the total never drops below 10% of the base. The idle reload, with nothing flying, is already near-instant and stays as it is | `ThrowerReload.Restart` |
 | `Shield` | +`Amount` starting shields on every ball (rounded) | `ThrowerController.LoadProjectile`, the shield-chain planner in `ItemAssigner`, and the shot solver (`ShotBoardGather.Gather`'s `startingShields`, passed by the Fire Best Shot cheat and the Shot Solver window) |
-| `ItemOdds` | Each item roll (the initial board fill included), each of the level's items rolls +`Amount` × its `ExtraItemShare` (`ItemConfiguration`) for an extra copy: 1 for the Shield, down to 0.25 for the Snipe, so strong items grow slower. The whole part always lands; the fraction is a chance; the level's caps still hold | `ILevelParameters.FillExtraItems`, placed by `ItemAssigner` |
+| `ItemOdds` | On every item roll (the initial board fill included), each item the level holds gets a chance of `Amount` × its `ExtraItemShare` (`ItemConfiguration`) at an extra copy: 1 for the Shield, down to 0.25 for the Snipe, so strong items grow slower. The whole part always lands; the fraction is a chance; the level's caps still hold | `ILevelParameters.FillExtraItems`, placed by `ItemAssigner` |
 
 All four are read live, so a held card applies from the next ball loaded and the next item roll.
 

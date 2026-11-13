@@ -14,7 +14,8 @@ namespace BalloonParty.Configuration.Items
         [SerializeField] private int _maximumAllowed;
 
         [Tooltip("How much of a Lucky Find card's chance this item rolls for, each time items are placed: " +
-                 "1 = all of it. The stronger the item, the smaller its share, so it still grows, but slower.")]
+                 "1 = all of it. The stronger the item, the smaller its share, so it still grows, but slower. " +
+                 "The level's cap on the item still holds.")]
         [SerializeField] [Range(0f, 1f)] private float _extraItemShare = 1f;
 
         [SerializeField] private GameObject _visualPrefab;

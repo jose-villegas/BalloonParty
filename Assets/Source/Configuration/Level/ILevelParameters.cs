@@ -35,8 +35,8 @@ namespace BalloonParty.Configuration.Level
         int FillGuaranteedItems(List<ItemSettings> output, Dictionary<string, int> activeCounts);
 
         /// <summary>Lucky Find: each of the level's items rolls <paramref name="chance" /> × its
-        /// <see cref="ItemSettings.ExtraItemShare" /> for extra copies, respecting caps. Updates
-        /// <paramref name="activeCounts" />.</summary>
+        /// <see cref="ItemSettings.ExtraItemShare" /> for extra copies, respecting caps. Counts
+        /// them into <paramref name="activeCounts" /> whether or not a host is found for each.</summary>
         void FillExtraItems(List<ItemSettings> output, Dictionary<string, int> activeCounts, float chance);
 
         /// <summary>Rolls each curve-bearing type's spawn allowance for the upcoming wave into <paramref name="quotas" /> (absent key = unlimited).</summary>
