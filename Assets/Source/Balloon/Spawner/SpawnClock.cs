@@ -18,8 +18,9 @@ namespace BalloonParty.Balloon.Spawner
 {
     /// <summary>
     ///     Brings balloon lines in on a timer, whatever the player does: one line per
-    ///     <see cref="ISpawnClockSettings.IntervalForLevel" /> of scaled game time, after a grace at each
-    ///     level's start. Scaled, so slow-mo slows it with everything else. It stops outright through
+    ///     <see cref="ISpawnClockSettings.IntervalForLevel" /> of scaled game time (shorter on an extra-colour
+    ///     level, <see cref="ILevelParameters.SpawnIntervalScale" />), after a grace at each level's start.
+    ///     Scaled, so slow-mo slows it with everything else. It stops outright through
     ///     pauses, the level-up and game over, and while a lone doomed ball glides its last breath: lines
     ///     landing in that frozen moment read wrong, and the board must hold still under the glide.
     ///     Firing while another ball is still flying pulls the next line closer
@@ -41,6 +42,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly IProjectileRegistry _projectiles;
         private readonly IBoardFill _boardFill;
         private readonly IPublisher<SpawnBalloonLineMessage> _linePublisher;
+        private readonly IActiveLevelParameters _levelParams;
         private readonly ISubscriber<ProjectileFiredMessage> _firedSubscriber;
         private readonly CompositeDisposable _subscriptions = new();
 
@@ -71,8 +73,10 @@ namespace BalloonParty.Balloon.Spawner
             IProjectileRegistry projectiles,
             IBoardFill boardFill,
             IPublisher<SpawnBalloonLineMessage> linePublisher,
-            ISubscriber<ProjectileFiredMessage> firedSubscriber)
+            ISubscriber<ProjectileFiredMessage> firedSubscriber,
+            IActiveLevelParameters levelParams)
         {
+            _levelParams = levelParams;
             _settings = pacing.SpawnClock;
             _levelProgress = levelProgress;
             _pauseService = pauseService;
@@ -125,7 +129,7 @@ namespace BalloonParty.Balloon.Spawner
             }
 
             // One line per tick, however long the frame: a hitch must not land a backlog of lines at once.
-            StartWindow(_settings.IntervalForLevel(_levelProgress.Level.Value));
+            StartWindow(LineInterval());
             _linePublisher.Publish(new SpawnBalloonLineMessage(1));
         }
 
@@ -244,6 +248,13 @@ namespace BalloonParty.Balloon.Spawner
             _cooldownLeft = 0f;
             _recentPeakOccupancy = 0f;
             StartWindow(_settings.GraceSeconds);
+        }
+
+        // An extra-colour level brings its lines faster (ILevelParameters.SpawnIntervalScale).
+        private float LineInterval()
+        {
+            var scale = _levelParams.Current?.SpawnIntervalScale ?? 1f;
+            return _settings.IntervalForLevel(_levelProgress.Level.Value) * (scale > 0f ? scale : 1f);
         }
 
         private void StartWindow(float seconds)

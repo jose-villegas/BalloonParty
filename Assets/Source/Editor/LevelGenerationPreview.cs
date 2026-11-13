@@ -88,7 +88,10 @@ namespace BalloonParty.Editor
                          $"{settings.BudgetForLevel(ContentRole.Aid, level):0.#}";
             GUILayout.Label(budget, style, GUILayout.Width(NumberColWidth));
             GUILayout.Label(parameters.BoardLines.ToString(), style, GUILayout.Width(NumberColWidth));
-            GUILayout.Label(settings.ColorsForLevel(level).ToString(), style, GUILayout.Width(NumberColWidth));
+            // From the level's own mask, so an extra-colour level shows its extra colour (for run seed 0).
+            var colors = ColorCount(parameters.AllowedColorsMask).ToString();
+            GUILayout.Label(parameters.SpawnIntervalScale < 1f ? colors + "+" : colors, style,
+                GUILayout.Width(NumberColWidth));
             ListLabel(Balloons(parameters, level, settings), style);
             ListLabel(Items(parameters, level, settings), style);
             ListLabel(Actors(parameters, level, settings), style);
@@ -104,6 +107,17 @@ namespace BalloonParty.Editor
         }
 
         // The full list rides in the tooltip, since a long one is clipped in the column.
+        private static int ColorCount(int mask)
+        {
+            var count = 0;
+            for (var bits = (uint)mask; bits != 0; bits >>= 1)
+            {
+                count += (int)(bits & 1);
+            }
+
+            return count;
+        }
+
         private static void ListLabel(string text, GUIStyle style)
         {
             GUILayout.Label(new GUIContent(text, text), style, GUILayout.MinWidth(ListColMinWidth));

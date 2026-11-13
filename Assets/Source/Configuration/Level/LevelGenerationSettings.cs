@@ -31,6 +31,9 @@ namespace BalloonParty.Configuration.Level
         [Tooltip("Palette colours in play, by level. Each step holds until the next.")]
         [SerializeField] private IntLevelStep[] _colors = { new(1, 1) };
 
+        [Tooltip("A rare level with one colour more than the steps give, no threats and faster lines.")]
+        [SerializeField] private ExtraColorLevelSettings _extraColor = new();
+
         [Tooltip("Lines on the initial board fill, by level. Each step holds until the next.")]
         [SerializeField] private IntLevelStep[] _boardLines = { new(1, 5) };
 
@@ -60,6 +63,7 @@ namespace BalloonParty.Configuration.Level
         public IReadOnlyList<ItemContentEntry> Items => _items;
         public IReadOnlyList<GridActorContentEntry> GridActors => _gridActors;
         public ScenarioScheduleSettings Scenario => _scenario;
+        public ExtraColorLevelSettings ExtraColor => _extraColor;
 
         /// <summary>The most lines any level's initial board fill can hold.</summary>
         public int MaxBoardLines
@@ -83,8 +87,9 @@ namespace BalloonParty.Configuration.Level
         internal LevelGenerationSettings(BudgetFormula threatBudget, BudgetFormula aidBudget,
             IntLevelStep[] colors, IntLevelStep[] boardLines, ItemCountStep[] itemCounts,
             BalloonContentEntry[] balloons, ItemContentEntry[] items, GridActorContentEntry[] gridActors,
-            int itemCadence = 1, int seedSalt = 1, int featuredLevels = 2)
+            int itemCadence = 1, int seedSalt = 1, int featuredLevels = 2, ExtraColorLevelSettings extraColor = null)
         {
+            _extraColor = extraColor ?? ExtraColorLevelSettings.Off;
             _threatBudget = threatBudget;
             _aidBudget = aidBudget;
             _featuredLevels = featuredLevels;

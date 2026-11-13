@@ -34,6 +34,7 @@ namespace BalloonParty.Configuration.Level
         };
 
         private readonly int _allowedColorsMask = ~0;
+        private readonly float _spawnIntervalScale = 1f;
 
         private IReadOnlyList<ResolvedBalloonEntry> _balloonPickList = Array.Empty<ResolvedBalloonEntry>();
         private IReadOnlyList<ResolvedBalloonEntry> _simpleBalloonPickList = Array.Empty<ResolvedBalloonEntry>();
@@ -51,6 +52,8 @@ namespace BalloonParty.Configuration.Level
         /// <summary>Same bit-per-color convention as <see cref="ColorableBalloonVariant" />'s mask — all bits set = every palette color.</summary>
         public int AllowedColorsMask => _allowedColorsMask;
 
+        public float SpawnIntervalScale => _spawnIntervalScale;
+
         // Not part of the ILevelParameters read surface consumers use — resolver-only.
         internal BalloonTypeWeight[] BalloonWeights => _balloonWeights;
         internal ItemTypeWeight[] ItemWeights => _itemWeights;
@@ -63,8 +66,9 @@ namespace BalloonParty.Configuration.Level
             int boardLines, int itemCadence,
             AnimationCurve initialItemCountWeights, AnimationCurve itemCountWeights,
             BalloonTypeWeight[] balloonWeights, ItemTypeWeight[] itemWeights,
-            ResolvedGridActorGate[] gridActorGates, int allowedColorsMask)
+            ResolvedGridActorGate[] gridActorGates, int allowedColorsMask, float spawnIntervalScale = 1f)
         {
+            _spawnIntervalScale = spawnIntervalScale;
             _boardLines = boardLines;
             _itemCadence = itemCadence;
             _initialItemCountWeights = initialItemCountWeights;

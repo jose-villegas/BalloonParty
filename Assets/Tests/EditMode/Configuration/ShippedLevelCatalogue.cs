@@ -13,14 +13,14 @@ namespace BalloonParty.Tests.Configuration
     /// </summary>
     internal static class ShippedLevelCatalogue
     {
-        internal static LevelGenerationSettings Build()
+        internal static LevelGenerationSettings Build(ExtraColorLevelSettings extraColor = null)
         {
             var toughCount = new AnimationCurve(new Keyframe(0f, 0f), new Keyframe(2f, 0f), new Keyframe(5f, 1f));
 
             return new LevelGenerationSettings(
                 threatBudget: new BudgetFormula(2f, 0.75f, 30f),
                 aidBudget: new BudgetFormula(3f, 0.25f, 5f),
-                colors: new[] { new IntLevelStep(1, 1), new IntLevelStep(2, 2), new IntLevelStep(5, 3), new IntLevelStep(13, 4) },
+                colors: new[] { new IntLevelStep(1, 1), new IntLevelStep(2, 2), new IntLevelStep(5, 3) },
                 boardLines: new[] { new IntLevelStep(1, 8), new IntLevelStep(2, 5), new IntLevelStep(5, 4) },
                 itemCounts: new[]
                 {
@@ -54,7 +54,8 @@ namespace BalloonParty.Tests.Configuration
                     new GridActorContentEntry(GridActorType.Puff, 3, 1, new RangedInt(7, 9), new RangedInt(10, 13), 6, 5),
                     new GridActorContentEntry(GridActorType.Bush, 6, 2, new RangedInt(3, 9), new RangedInt(3, 9), 0, 3,
                         requiresGround: true),
-                });
+                },
+                extraColor: extraColor);
         }
     }
 }

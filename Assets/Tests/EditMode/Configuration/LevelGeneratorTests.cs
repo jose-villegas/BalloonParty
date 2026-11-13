@@ -37,6 +37,89 @@ namespace BalloonParty.Tests.Configuration
         }
 
         [Test]
+        public void Generate_ExtraColorLevel_KeepsOnlyStaplesAndAids_PlaysOneMoreColour_AndBringsLinesFaster()
+        {
+            // A chance of 1 from level 1: every odd level plays an extra colour.
+            var settings = ShippedLevelCatalogue.Build(new ExtraColorLevelSettings(1, 1f, 0.5f));
+
+            for (var level = 21; level <= 41; level += 2)
+            {
+                var result = LevelGenerator.Generate(settings, level, settings.SeedForLevel(level));
+
+                foreach (var weight in result.BalloonWeights)
+                {
+                    var entry = settings.Balloons.First(b => b.Type == weight.Type);
+                    Assert.IsTrue(entry.Role == ContentRole.Aid || entry.Cost == 0, $"{weight.Type} on level {level}");
+                }
+
+                Assert.IsEmpty(result.GridActorGates, $"level {level}");
+                Assert.AreEqual((1 << (settings.ColorsForLevel(level) + 1)) - 1, result.AllowedColorsMask);
+                Assert.AreEqual(0.5f, result.SpawnIntervalScale);
+            }
+        }
+
+        [Test]
+        public void Generate_ExtraColorLevel_KeepsTheUsualAidsAndItems()
+        {
+            // The threats are dropped after the pick, so what the level would have had otherwise stays.
+            var settings = ShippedLevelCatalogue.Build(new ExtraColorLevelSettings(1, 1f, 0.5f));
+            var usual = ShippedLevelCatalogue.Build();
+
+            for (var level = 21; level <= 41; level += 2)
+            {
+                var result = LevelGenerator.Generate(settings, level, settings.SeedForLevel(level));
+                var expected = LevelGenerator.Generate(usual, level, usual.SeedForLevel(level));
+
+                CollectionAssert.AreEqual(
+                    expected.BalloonWeights.Where(w => IsKept(usual, w.Type)).Select(w => (w.Type, w.Weight)),
+                    result.BalloonWeights.Select(w => (w.Type, w.Weight)), $"level {level}");
+                CollectionAssert.AreEqual(expected.ItemWeights.Select(w => (w.Type, w.Weight)),
+                    result.ItemWeights.Select(w => (w.Type, w.Weight)), $"level {level}");
+            }
+        }
+
+        [Test]
+        public void Generate_ExtraColor_FollowsTheRunSeed_TheSameForARetry()
+        {
+            var settings = ShippedLevelCatalogue.Build(new ExtraColorLevelSettings(13, 0.3f, 0.5f));
+            var differs = false;
+
+            for (var level = 13; level <= 80; level++)
+            {
+                var seed = settings.SeedForLevel(level);
+                var first = LevelGenerator.Generate(settings, level, seed, runSeed: 4);
+                var retry = LevelGenerator.Generate(settings, level, seed, runSeed: 4);
+                var otherRun = LevelGenerator.Generate(settings, level, seed, runSeed: 5);
+
+                Assert.AreEqual(first.AllowedColorsMask, retry.AllowedColorsMask, $"level {level}");
+                Assert.AreEqual(first.SpawnIntervalScale, retry.SpawnIntervalScale, $"level {level}");
+                Assert.AreEqual(settings.ExtraColor.IsExtraColorLevel(level, 4), first.SpawnIntervalScale < 1f);
+                differs |= first.AllowedColorsMask != otherRun.AllowedColorsMask;
+            }
+
+            Assert.IsTrue(differs, "two runs had the same extra-colour levels throughout");
+        }
+
+        [Test]
+        public void Generate_LevelAfterAnExtraColorLevel_IsBackToTheUsualMix()
+        {
+            var settings = ShippedLevelCatalogue.Build(new ExtraColorLevelSettings(1, 1f, 0.5f));
+            var usual = ShippedLevelCatalogue.Build();
+
+            for (var level = 22; level <= 42; level += 2)
+            {
+                var result = LevelGenerator.Generate(settings, level, settings.SeedForLevel(level));
+                var expected = LevelGenerator.Generate(usual, level, usual.SeedForLevel(level));
+
+                CollectionAssert.AreEqual(expected.BalloonWeights.Select(w => w.Type),
+                    result.BalloonWeights.Select(w => w.Type), $"level {level}");
+                Assert.AreEqual(expected.GridActorGates.Length, result.GridActorGates.Length, $"level {level}");
+                Assert.AreEqual(expected.AllowedColorsMask, result.AllowedColorsMask);
+                Assert.AreEqual(1f, result.SpawnIntervalScale);
+            }
+        }
+
+        [Test]
         public void Generate_OnlyIncludesPiecesUnlockedByTheLevel()
         {
             var settings = ShippedLevelCatalogue.Build();
@@ -890,6 +973,12 @@ namespace BalloonParty.Tests.Configuration
             Assert.IsTrue(Has(water, BalloonType.Unbreakable));
             Assert.IsFalse(Has(water, BalloonType.Tough));
             Assert.IsEmpty(water.GridActorGates);
+        }
+
+        private static bool IsKept(LevelGenerationSettings settings, BalloonType type)
+        {
+            var entry = settings.Balloons.First(b => b.Type == type);
+            return entry.Role == ContentRole.Aid || entry.Cost == 0;
         }
 
         private static void AssertNothingKeptOffWater(RangedLevelParameters result, int level)

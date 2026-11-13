@@ -48,6 +48,9 @@ namespace BalloonParty.Configuration.Level
         [Tooltip("All bits set (default) = every palette color allowed.")]
         [SerializeField] [PaletteColorMask] private int _allowedColorsMask = ~0;
 
+        [Tooltip("The time between spawn lines, as a share of the clock's usual: 0.5 = lines twice as often.")]
+        [SerializeField] [Range(0.1f, 1f)] private float _spawnIntervalScale = 1f;
+
         public int BoardLines => _boardLines;
         public RangedInt ItemCadence => _itemCadence;
 
@@ -58,6 +61,7 @@ namespace BalloonParty.Configuration.Level
         public ItemTypeWeight[] ItemWeights => _itemWeights;
         public GridActorTypeGate[] GridActorGates => _gridActorGates;
         public int AllowedColorsMask => _allowedColorsMask;
+        public float SpawnIntervalScale => _spawnIntervalScale;
 
         // IPaletteColorMasked: a range maps its difficulty mix to the level's allowed palette colours.
         int IPaletteColorMasked.ColorMask => _allowedColorsMask;
@@ -68,8 +72,9 @@ namespace BalloonParty.Configuration.Level
 
         internal RangedLevelParameters(int boardLines, RangedInt itemCadence, AnimationCurve initialItemCountWeights,
             AnimationCurve itemCountWeights, BalloonTypeWeight[] balloonWeights, ItemTypeWeight[] itemWeights,
-            GridActorTypeGate[] gridActorGates, int allowedColorsMask)
+            GridActorTypeGate[] gridActorGates, int allowedColorsMask, float spawnIntervalScale = 1f)
         {
+            _spawnIntervalScale = spawnIntervalScale;
             _boardLines = boardLines;
             _itemCadence = itemCadence;
             _initialItemCountWeights = initialItemCountWeights ?? new AnimationCurve();
@@ -90,7 +95,8 @@ namespace BalloonParty.Configuration.Level
                 _balloonWeights,
                 _itemWeights,
                 ResolveGridActorGates(positionInRange, rng),
-                _allowedColorsMask);
+                _allowedColorsMask,
+                _spawnIntervalScale);
         }
 
         private ResolvedGridActorGate[] ResolveGridActorGates(float positionInRange, System.Random rng)

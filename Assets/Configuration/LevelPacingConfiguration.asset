@@ -1223,8 +1223,10 @@ MonoBehaviour:
       _value: 2
     - _fromLevel: 5
       _value: 3
-    - _fromLevel: 13
-      _value: 4
+    _extraColor:
+      _fromLevel: 13
+      _chance: 0.2
+      _spawnIntervalScale: 0.5
     _boardLines:
     - _fromLevel: 1
       _value: 8

@@ -21,6 +21,12 @@ namespace BalloonParty.Configuration.Level
         IReadOnlyList<string> AllowedColors { get; }
         int AllowedColorsMask { get; }
 
+        /// <summary>
+        ///     The time between spawn lines on this level, as a share of the clock's usual: below 1 on an extra-colour
+        ///     level (<see cref="ExtraColorLevelSettings" />), 1 otherwise.
+        /// </summary>
+        float SpawnIntervalScale { get; }
+
         /// <param name="waveQuotas">Remaining per-wave allowance by pool key; entries at 0 are excluded, absent keys are unlimited.</param>
         BalloonPrefabEntry PickBalloonEntry(
             IReadOnlyDictionary<string, int> activeCounts, IReadOnlyDictionary<string, int> waveQuotas = null);

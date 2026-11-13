@@ -111,6 +111,39 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void Advance_OnAnExtraColorLevel_LinesComeAtItsShareOfTheInterval()
+        {
+            // Level 1's 3s interval at a 0.5 share: the next line 1.5s after the first.
+            var current = Substitute.For<ILevelParameters>();
+            current.SpawnIntervalScale.Returns(0.5f);
+            var levelParams = Substitute.For<IActiveLevelParameters>();
+            levelParams.Current.Returns(current);
+            BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f), levelParams);
+
+            _clock.Advance(4f);
+            _clock.Advance(1.4f);
+            Assert.AreEqual(1, _lines);
+
+            _clock.Advance(0.1f);
+            Assert.AreEqual(2, _lines);
+        }
+
+        [Test]
+        public void Advance_WithoutALevelResolved_KeepsTheUsualInterval()
+        {
+            var levelParams = Substitute.For<IActiveLevelParameters>();
+            levelParams.Current.Returns((ILevelParameters)null);
+            BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f), levelParams);
+
+            _clock.Advance(4f);
+            _clock.Advance(2.9f);
+            Assert.AreEqual(1, _lines);
+
+            _clock.Advance(0.1f);
+            Assert.AreEqual(2, _lines);
+        }
+
+        [Test]
         public void Advance_HugeDelta_PublishesAtMostOneLine()
         {
             _clock.Advance(1000f);
@@ -644,13 +677,13 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(1, _lines, "the new level's 4s grace runs at full pace");
         }
 
-        private void BuildClock(SpawnClockSettings settings)
+        private void BuildClock(SpawnClockSettings settings, IActiveLevelParameters levelParams = null)
         {
             _clock?.Dispose();
             var pacing = Substitute.For<ILevelPacingConfiguration>();
             pacing.SpawnClock.Returns(settings);
             _clock = new SpawnClock(pacing, _progress, _pauseService, _registry, _boardFill, _publisher,
-                _firedSubscriber);
+                _firedSubscriber, levelParams ?? UsualLevel());
             _clock.Start();
         }
 
@@ -677,6 +710,16 @@ namespace BalloonParty.Tests.Balloon
         }
 
         // Small steps, as frames would: the breather eases through its length.
+        // The level's interval share is 1, as on every level but an extra-colour one.
+        private static IActiveLevelParameters UsualLevel()
+        {
+            var current = Substitute.For<ILevelParameters>();
+            current.SpawnIntervalScale.Returns(1f);
+            var levelParams = Substitute.For<IActiveLevelParameters>();
+            levelParams.Current.Returns(current);
+            return levelParams;
+        }
+
         private void Run(float seconds)
         {
             for (var t = 0f; t < seconds - 0.001f; t += 0.05f)

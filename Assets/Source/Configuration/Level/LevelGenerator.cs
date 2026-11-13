@@ -35,6 +35,13 @@ namespace BalloonParty.Configuration.Level
             SelectPieces(settings, ContentRole.Threat, level, stretch.Kind, rng, included);
             SelectPieces(settings, ContentRole.Aid, level, stretch.Kind, rng, included);
 
+            // Dropped after the pick, so the aids and the rng stream are the ones the level would have anyway.
+            var extraColor = settings.ExtraColor.IsExtraColorLevel(level, runSeed);
+            if (extraColor)
+            {
+                DropThreats(settings, included);
+            }
+
             var balloons = new List<BalloonTypeWeight>();
             var items = new List<ItemTypeWeight>();
             var gates = new List<GridActorTypeGate>();
@@ -59,7 +66,7 @@ namespace BalloonParty.Configuration.Level
             // A meadow trades its puff clouds for bushes as it goes (ScenarioStretch.PuffCloudShare / BushShare).
             // Applied after the pick, so the rest of the level's mix and its rng stream are the same as they'd be
             // under full clouds.
-            if (stretch.IsClearingMeadow)
+            if (stretch.IsClearingMeadow && !extraColor)
             {
                 IncludeUnlockedBushes(settings, level, included);
             }
@@ -101,7 +108,30 @@ namespace BalloonParty.Configuration.Level
                 balloons.ToArray(),
                 items.ToArray(),
                 gates.ToArray(),
-                (1 << settings.ColorsForLevel(level)) - 1);
+                (1 << Math.Min(settings.ColorsForLevel(level) + (extraColor ? 1 : 0), 31)) - 1,
+                extraColor ? settings.ExtraColor.SpawnIntervalScale : 1f);
+        }
+
+        // Every threat but the staple balloons, which are the level itself: an extra-colour level has no armour,
+        // no unbreakables and no threatening grid actors.
+        private static void DropThreats(LevelGenerationSettings settings, HashSet<int> included)
+        {
+            for (var i = 0; i < settings.Balloons.Count; i++)
+            {
+                var entry = settings.Balloons[i];
+                if (entry.Role == ContentRole.Threat && entry.Cost > 0)
+                {
+                    included.Remove(Key(BalloonKind, i));
+                }
+            }
+
+            for (var i = 0; i < settings.GridActors.Count; i++)
+            {
+                if (settings.GridActors[i].Role == ContentRole.Threat)
+                {
+                    included.Remove(Key(GridActorKind, i));
+                }
+            }
         }
 
         private static void SelectPieces(LevelGenerationSettings settings, ContentRole role, int level,

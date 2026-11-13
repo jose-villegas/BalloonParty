@@ -24,6 +24,107 @@ namespace BalloonParty.Tests.Configuration
         }
 
         [Test]
+        public void ExtraColor_NeverBeforeItsFromLevel()
+        {
+            var extra = new ExtraColorLevelSettings(13, 1f, 0.5f);
+
+            for (var level = 1; level < 13; level++)
+            {
+                Assert.IsFalse(extra.IsExtraColorLevel(level, 7), $"level {level}");
+            }
+
+            Assert.IsTrue(extra.IsExtraColorLevel(13, 7));
+        }
+
+        [Test]
+        public void ExtraColor_AtNoChance_Never()
+        {
+            var extra = new ExtraColorLevelSettings(1, 0f, 0.5f);
+
+            for (var level = 1; level <= 100; level++)
+            {
+                Assert.IsFalse(extra.IsExtraColorLevel(level, 3), $"level {level}");
+            }
+        }
+
+        [Test]
+        public void ExtraColor_EveryLevelRolling_Alternates()
+        {
+            // Each level rolls in, so each one after an extra-colour level is back to the usual colours.
+            var extra = new ExtraColorLevelSettings(13, 1f, 0.5f);
+
+            Assert.IsTrue(extra.IsExtraColorLevel(13, 1));
+            Assert.IsFalse(extra.IsExtraColorLevel(14, 1));
+            Assert.IsTrue(extra.IsExtraColorLevel(15, 1));
+            Assert.IsFalse(extra.IsExtraColorLevel(16, 1));
+        }
+
+        [Test]
+        public void ExtraColor_NeverTwoInARow_AndHappensNowAndThen()
+        {
+            var extra = new ExtraColorLevelSettings(1, 0.5f, 0.5f);
+            var count = 0;
+
+            for (var runSeed = 0; runSeed < 20; runSeed++)
+            {
+                for (var level = 2; level <= 200; level++)
+                {
+                    var now = extra.IsExtraColorLevel(level, runSeed);
+                    Assert.IsFalse(now && extra.IsExtraColorLevel(level - 1, runSeed),
+                        $"levels {level - 1} and {level}, run seed {runSeed}");
+                    count += now ? 1 : 0;
+                }
+            }
+
+            Assert.Greater(count, 0);
+        }
+
+        [Test]
+        public void ExtraColor_AtAFifth_LandsOnAboutOneLevelInSix()
+        {
+            // A roll lands unless the level before landed: p / (1 + p) of levels in the long run, 1 in 6 at 0.2.
+            var extra = new ExtraColorLevelSettings(1, 0.2f, 0.5f);
+            var count = 0;
+            const int levels = 20000;
+
+            for (var level = 1; level <= levels; level++)
+            {
+                count += extra.IsExtraColorLevel(level, 5) ? 1 : 0;
+            }
+
+            Assert.AreEqual(1f / 6f, count / (float)levels, 0.02f);
+        }
+
+        [Test]
+        public void Settings_BuiltWithoutAnExtraColour_NeverRollOne()
+        {
+            var settings = new LevelGenerationSettings(new BudgetFormula(1f, 0f, 1f), new BudgetFormula(1f, 0f, 1f),
+                new[] { new IntLevelStep(1, 3) }, new[] { new IntLevelStep(1, 5) }, Array.Empty<ItemCountStep>(),
+                Array.Empty<BalloonContentEntry>(), Array.Empty<ItemContentEntry>(),
+                Array.Empty<GridActorContentEntry>());
+
+            for (var level = 1; level <= 100; level++)
+            {
+                Assert.IsFalse(settings.ExtraColor.IsExtraColorLevel(level, 9), $"level {level}");
+            }
+        }
+
+        [Test]
+        public void ExtraColor_DiffersBetweenRuns_AndRepeatsWithinOne()
+        {
+            var extra = new ExtraColorLevelSettings(1, 0.3f, 0.5f);
+            var differs = false;
+
+            for (var level = 1; level <= 100; level++)
+            {
+                Assert.AreEqual(extra.IsExtraColorLevel(level, 11), extra.IsExtraColorLevel(level, 11));
+                differs |= extra.IsExtraColorLevel(level, 11) != extra.IsExtraColorLevel(level, 12);
+            }
+
+            Assert.IsTrue(differs);
+        }
+
+        [Test]
         public void BudgetFormula_NeverExceedsItsCap()
         {
             Assert.AreEqual(12f, new BudgetFormula(2f, 1.5f, 12f).ForLevel(50), 0.0001f);
