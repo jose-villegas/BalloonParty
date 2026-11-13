@@ -1,0 +1,5 @@
+<map id="BalloonParty.Balloon.Formation.FormationPlanner" name="BalloonParty.Balloon.Formation.FormationPlanner">
+<area shape="rect" id="Node000001" title="Finds where a formation of one shape can stand and which candidate goes to which of its slots." alt="" coords="5,108,235,148"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Slots_1_1Grid_1_1ShotWall.html" title="Whether the balloons no ordinary shot gets through (unbreakables, deflectors) link one side of the bo..." alt="" coords="33,5,207,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,59,123,108,117,108,117,59"/>
+</map>

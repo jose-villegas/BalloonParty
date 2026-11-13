@@ -1070,6 +1070,7 @@ var annotated_dup =
           [ "HexCoordinates", "classBalloonParty_1_1Slots_1_1Grid_1_1HexCoordinates.html", "classBalloonParty_1_1Slots_1_1Grid_1_1HexCoordinates" ],
           [ "IShieldSlotPreference", "interfaceBalloonParty_1_1Slots_1_1Grid_1_1IShieldSlotPreference.html", "interfaceBalloonParty_1_1Slots_1_1Grid_1_1IShieldSlotPreference" ],
           [ "MoveWeightEvaluator", "classBalloonParty_1_1Slots_1_1Grid_1_1MoveWeightEvaluator.html", "classBalloonParty_1_1Slots_1_1Grid_1_1MoveWeightEvaluator" ],
+          [ "ShotWall", "classBalloonParty_1_1Slots_1_1Grid_1_1ShotWall.html", "classBalloonParty_1_1Slots_1_1Grid_1_1ShotWall" ],
           [ "ShoveVector", "structBalloonParty_1_1Slots_1_1Grid_1_1ShoveVector.html", "structBalloonParty_1_1Slots_1_1Grid_1_1ShoveVector" ],
           [ "SlotGrid", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid" ],
           [ "SlotGridChangedEvent", "structBalloonParty_1_1Slots_1_1Grid_1_1SlotGridChangedEvent.html", "structBalloonParty_1_1Slots_1_1Grid_1_1SlotGridChangedEvent" ],

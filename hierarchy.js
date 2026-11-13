@@ -1497,6 +1497,7 @@ var hierarchy =
     [ "BalloonParty.Solver.ShotSolveContext", "structBalloonParty_1_1Solver_1_1ShotSolveContext.html", null ],
     [ "BalloonParty.Editor.ShotSolver.ShotSolverWindow.ShotSolverWindowEntry", "structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html", null ],
     [ "BalloonParty.Solver.ShotStaticActorSnapshot", "structBalloonParty_1_1Solver_1_1ShotStaticActorSnapshot.html", null ],
+    [ "BalloonParty.Slots.Grid.ShotWall", "classBalloonParty_1_1Slots_1_1Grid_1_1ShotWall.html", null ],
     [ "BalloonParty.Slots.Grid.ShoveVector", "structBalloonParty_1_1Slots_1_1Grid_1_1ShoveVector.html", null ],
     [ "BalloonParty.Item.ItemSightTracker.SightedItem", "structBalloonParty_1_1Item_1_1ItemSightTracker_1_1SightedItem.html", null ],
     [ "BalloonParty.Editor.Bush.LeafVenationSimulator.SimulationSettings", "structBalloonParty_1_1Editor_1_1Bush_1_1LeafVenationSimulator_1_1SimulationSettings.html", null ],

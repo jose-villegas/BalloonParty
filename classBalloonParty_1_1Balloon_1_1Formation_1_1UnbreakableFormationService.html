@@ -162,6 +162,9 @@ Package Functions</h2></td></tr>
 <tr class="memitem:af1a38e69f86794b616c1a9463dab17fe" id="r_af1a38e69f86794b616c1a9463dab17fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af1a38e69f86794b616c1a9463dab17fe">ArrangeAtWaveStart</a> (Action&lt; <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html">IWriteableDynamicSlotActor</a>, Vector2Int &gt; relocate)</td></tr>
 <tr class="memdesc:af1a38e69f86794b616c1a9463dab17fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Runs once per wave start, before the roam pre-pass.  <br /></td></tr>
 <tr class="separator:af1a38e69f86794b616c1a9463dab17fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2475830109b55f1fa70b5ee77834a657" id="r_a2475830109b55f1fa70b5ee77834a657"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2475830109b55f1fa70b5ee77834a657">DropWallClosingSlots</a> (Vector2Int from, List&lt; Vector2Int &gt; slots)</td></tr>
+<tr class="memdesc:a2475830109b55f1fa70b5ee77834a657"><td class="mdescLeft">&#160;</td><td class="mdescRight">Drops from <em>slots</em>  every slot an unbreakable roaming from <em>from</em>  would link the board's unbreakables side to side by landing on (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1ShotWall.html" title="Whether the balloons no ordinary shot gets through (unbreakables, deflectors) link one side of the bo...">ShotWall</a>).  <br /></td></tr>
+<tr class="separator:a2475830109b55f1fa70b5ee77834a657"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2bb99b73824508e586bddbacd69c4bf" id="r_ab2bb99b73824508e586bddbacd69c4bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab2bb99b73824508e586bddbacd69c4bf">StepSnakes</a> (Action&lt; <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html">IWriteableDynamicSlotActor</a>, Vector2Int &gt; relocate, bool afterArranging=false)</td></tr>
 <tr class="memdesc:ab2bb99b73824508e586bddbacd69c4bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Every snake steps once: its head into the next open slot (<a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk.html" title="Where a snake&#39;s head steps next: on along its heading when that slot is open, else the gentlest open ...">SnakeWalk</a>), each member after it into the slot the one ahead just left.  <br /></td></tr>
 <tr class="separator:ab2bb99b73824508e586bddbacd69c4bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -202,6 +205,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:af5db3a099f0d6e8223182284200227e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a704a1c67f0a07b87212fd8554b91d24c" id="r_a704a1c67f0a07b87212fd8554b91d24c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a704a1c67f0a07b87212fd8554b91d24c">LineUpSnake</a> (<a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html">StandingFormation</a> snake)</td></tr>
 <tr class="separator:a704a1c67f0a07b87212fd8554b91d24c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab234a6f492cbbedb77eef3006efd7f33" id="r_ab234a6f492cbbedb77eef3006efd7f33"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1ShotWall.html">ShotWall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab234a6f492cbbedb77eef3006efd7f33">LoadWall</a> ()</td></tr>
+<tr class="separator:ab234a6f492cbbedb77eef3006efd7f33"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a056f72f1eeb18d8af73ab82e33db31f5" id="r_a056f72f1eeb18d8af73ab82e33db31f5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a056f72f1eeb18d8af73ab82e33db31f5">OnGridChanged</a> (<a class="el" href="structBalloonParty_1_1Slots_1_1Grid_1_1SlotGridChangedEvent.html">SlotGridChangedEvent</a> change)</td></tr>
 <tr class="separator:a056f72f1eeb18d8af73ab82e33db31f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb691d9ab40143252e1dc4c564e62e21" id="r_acb691d9ab40143252e1dc4c564e62e21"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acb691d9ab40143252e1dc4c564e62e21">PickIndex</a> (int count)</td></tr>
@@ -259,6 +264,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a6b8453d12111df7c9ca29bc809c1faad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11f4c0aee35d032feb96210d5fb3d599" id="r_a11f4c0aee35d032feb96210d5fb3d599"><td class="memItemLeft" align="right" valign="top">readonly CompositeDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a11f4c0aee35d032feb96210d5fb3d599">_subscriptions</a> = new()</td></tr>
 <tr class="separator:a11f4c0aee35d032feb96210d5fb3d599"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26c862e7620263a62064e245f194fb61" id="r_a26c862e7620263a62064e245f194fb61"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1ShotWall.html">ShotWall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a26c862e7620263a62064e245f194fb61">_wall</a> = new()</td></tr>
+<tr class="separator:a26c862e7620263a62064e245f194fb61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -455,6 +462,37 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a2475830109b55f1fa70b5ee77834a657" name="a2475830109b55f1fa70b5ee77834a657"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2475830109b55f1fa70b5ee77834a657">&#9670;&#160;</a></span>DropWallClosingSlots()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Formation.UnbreakableFormationService.DropWallClosingSlots </td>
+          <td>(</td>
+          <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>from</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">List&lt; Vector2Int &gt;</td>          <td class="paramname"><span class="paramname"><em>slots</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Drops from <em>slots</em>  every slot an unbreakable roaming from <em>from</em>  would link the board's unbreakables side to side by landing on (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1ShotWall.html" title="Whether the balloons no ordinary shot gets through (unbreakables, deflectors) link one side of the bo...">ShotWall</a>). </p>
+
+</div>
+</div>
 <a id="a46f733a84053d602b4f1f0edd37168dc" name="a46f733a84053d602b4f1f0edd37168dc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a46f733a84053d602b4f1f0edd37168dc">&#9670;&#160;</a></span>FormFromFreeUnbreakables()</h2>
 
@@ -568,6 +606,31 @@ Static Private Attributes</h2></td></tr>
           <td class="memname">void BalloonParty.Balloon.Formation.UnbreakableFormationService.LineUpSnake </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html">StandingFormation</a></td>          <td class="paramname"><span class="paramname"><em>snake</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab234a6f492cbbedb77eef3006efd7f33" name="ab234a6f492cbbedb77eef3006efd7f33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab234a6f492cbbedb77eef3006efd7f33">&#9670;&#160;</a></span>LoadWall()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1ShotWall.html">ShotWall</a> BalloonParty.Balloon.Formation.UnbreakableFormationService.LoadWall </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1335,6 +1398,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly CompositeDisposable BalloonParty.Balloon.Formation.UnbreakableFormationService._subscriptions = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a26c862e7620263a62064e245f194fb61" name="a26c862e7620263a62064e245f194fb61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26c862e7620263a62064e245f194fb61">&#9670;&#160;</a></span>_wall</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1ShotWall.html">ShotWall</a> BalloonParty.Balloon.Formation.UnbreakableFormationService._wall = new()</td>
         </tr>
       </table>
   </td>

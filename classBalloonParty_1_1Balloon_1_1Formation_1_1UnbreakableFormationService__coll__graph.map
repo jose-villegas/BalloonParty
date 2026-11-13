@@ -1,28 +1,31 @@
 <map id="BalloonParty.Balloon.Formation.UnbreakableFormationService" name="BalloonParty.Balloon.Formation.UnbreakableFormationService">
-<area shape="rect" id="Node000001" title="Gathers the board&#39;s unbreakables into formations, as many as there are members for." alt="" coords="1025,199,1255,239"/>
+<area shape="rect" id="Node000001" title="Gathers the board&#39;s unbreakables into formations, as many as there are members for." alt="" coords="1025,210,1255,250"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="727,5,813,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="827,12,867,13,913,18,959,29,1003,48,1047,81,1084,122,1112,164,1131,198,1126,200,1107,167,1079,126,1043,85,1000,52,957,34,912,23,867,18,827,17"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="827,12,868,12,913,18,959,29,1003,48,1048,84,1085,128,1114,172,1132,208,1127,211,1109,175,1081,131,1045,88,1000,52,958,34,912,23,867,18,827,17"/>
 <area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,66,212,106"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="226,77,366,75,539,80,727,95,822,109,914,127,965,142,1016,160,1100,197,1098,202,1014,165,964,147,913,133,821,114,727,101,539,85,366,80,226,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="226,71,367,62,540,61,633,65,728,74,823,88,914,109,972,129,1026,155,1112,208,1109,212,1024,160,970,134,913,114,822,94,728,79,633,71,540,66,367,67,226,76"/>
 <area shape="rect" id="Node000007" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="267,106,440,146"/>
 <area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="226,102,267,109,266,114,225,108"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="721,207,819,232"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="833,217,1025,217,1025,222,833,222"/>
-<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements.html" title="Unbreakables the board&#39;s formations have called in." alt="" coords="655,257,885,297"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="898,254,1024,234,1025,240,899,259"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="683,142,857,182"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="871,175,1026,199,1025,204,870,180"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="454,132,683,152,683,157,454,137"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="721,188,819,213"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="833,203,1025,218,1025,224,833,208"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements.html" title="Unbreakables the board&#39;s formations have called in." alt="" coords="655,238,885,278"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="899,246,1025,236,1025,241,899,251"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="683,123,857,163"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="871,163,914,173,1058,207,1057,213,913,178,870,168"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="454,127,683,137,683,142,454,133"/>
 <area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="261,170,445,210"/>
-<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="459,184,602,177,683,169,683,175,603,182,459,190"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="459,176,683,150,684,156,459,181"/>
 <area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="264,234,443,274"/>
-<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="456,240,529,226,602,205,626,192,682,175,684,180,628,196,604,210,530,231,457,245"/>
+<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="456,240,529,223,601,194,613,184,625,173,682,153,684,158,628,178,616,188,604,199,531,228,457,245"/>
 <area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,234,198,274"/>
 <area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="212,251,264,251,264,257,212,257"/>
 <area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="264,298,443,338"/>
-<area shape="poly" id="edge11_Node000006_Node000011" title=" " alt="" coords="456,314,494,308,532,297,569,281,601,259,611,243,612,227,614,209,625,192,652,175,682,165,684,170,654,180,629,196,619,211,617,228,616,245,605,263,571,286,534,302,495,313,457,319"/>
-<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html" title="How unbreakables gather into formations, hold them, pick the next shape, and call in more unbreakable..." alt="" coords="627,321,913,361"/>
-<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="882,315,913,306,1010,271,1093,237,1095,242,1012,276,914,311,884,320"/>
-<area shape="rect" id="Node000013" href="$classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html" title="Finds where a formation of one shape can stand and which candidate goes to which of its slots." alt="" coords="655,385,885,425"/>
-<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="890,378,912,370,973,341,1030,304,1115,238,1118,242,1033,309,976,345,914,375,892,383"/>
+<area shape="poly" id="edge11_Node000006_Node000011" title=" " alt="" coords="457,314,495,308,533,297,569,281,601,257,608,248,612,238,612,217,612,195,616,184,625,173,652,155,682,145,684,150,654,160,628,177,621,187,618,196,617,217,617,239,613,250,605,261,572,285,535,302,496,313,457,320"/>
+<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html" title="How unbreakables gather into formations, hold them, pick the next shape, and call in more unbreakable..." alt="" coords="627,302,913,342"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="875,296,913,287,1066,247,1067,253,914,293,876,302"/>
+<area shape="rect" id="Node000013" href="$classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html" title="Finds where a formation of one shape can stand and which candidate goes to which of its slots." alt="" coords="655,429,885,469"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="898,445,951,433,1000,412,1024,395,1045,375,1082,330,1109,285,1128,249,1132,251,1114,288,1086,333,1049,379,1027,399,1003,416,952,438,899,450"/>
+<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Slots_1_1Grid_1_1ShotWall.html" title="Whether the balloons no ordinary shot gets through (unbreakables, deflectors) link one side of the bo..." alt="" coords="267,370,440,410"/>
+<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="454,390,704,388,826,381,875,374,913,366,973,342,1029,310,1077,277,1113,248,1117,252,1080,281,1031,315,975,347,914,371,876,380,826,386,704,393,454,395"/>
+<area shape="poly" id="edge14_Node000013_Node000014" title=" " alt="" coords="454,409,470,411,656,435,655,441,469,417,453,414"/>
 </map>

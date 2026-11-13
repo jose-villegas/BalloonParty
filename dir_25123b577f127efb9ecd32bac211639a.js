@@ -5,6 +5,7 @@ var dir_25123b577f127efb9ecd32bac211639a =
     [ "HexCoordinates.cs", "HexCoordinates_8cs.html", "HexCoordinates_8cs" ],
     [ "IShieldSlotPreference.cs", "IShieldSlotPreference_8cs.html", "IShieldSlotPreference_8cs" ],
     [ "MoveWeightEvaluator.cs", "MoveWeightEvaluator_8cs.html", "MoveWeightEvaluator_8cs" ],
+    [ "ShotWall.cs", "ShotWall_8cs.html", "ShotWall_8cs" ],
     [ "ShoveVector.cs", "ShoveVector_8cs.html", "ShoveVector_8cs" ],
     [ "SlotGrid.cs", "SlotGrid_8cs.html", "SlotGrid_8cs" ],
     [ "SlotGridChangedEvent.cs", "SlotGridChangedEvent_8cs.html", "SlotGridChangedEvent_8cs" ],

@@ -1,5 +1,6 @@
 var NAVTREEINDEX8 =
 {
+"classBalloonParty_1_1Audio_1_1View_1_1UiSfxEmitter.html#a0305b133777ec2d86286befff9d37ffa":[6,0,0,0,3,1,0],
 "classBalloonParty_1_1Audio_1_1View_1_1UiSfxEmitter.html#a2b8ac6326bf5a254bbbfe086aadb2de6":[5,0,0,0,3,1,2],
 "classBalloonParty_1_1Audio_1_1View_1_1UiSfxEmitter.html#a2b8ac6326bf5a254bbbfe086aadb2de6":[6,0,0,0,3,1,2],
 "classBalloonParty_1_1Audio_1_1View_1_1UiSfxEmitter.html#a62eb1c2da91c942340d76dffe1f4df60":[5,0,0,0,3,1,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX8 =
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#afb37f7292de459b0b9bee842fdccdace":[6,0,0,1,0,3,44],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#affd772b43163ba728e96fe632085b9f9":[5,0,0,1,0,3,39],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#affd772b43163ba728e96fe632085b9f9":[6,0,0,1,0,3,39],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html":[5,0,0,1,0,4],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html":[6,0,0,1,0,4]
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonController.html":[5,0,0,1,0,4]
 };

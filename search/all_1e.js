@@ -609,7 +609,7 @@ var searchData=
   ['trysolvemovingentry_606',['TrySolveMovingEntry',['../classBalloonParty_1_1Solver_1_1ShotMotionMath.html#ae8663275de562b36ffa78b86358d133d',1,'BalloonParty::Solver::ShotMotionMath']]],
   ['tryspendbankedcharge_607',['TrySpendBankedCharge',['../classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html#a14a6b53f6315e5d21425123da7dfff7d',1,'BalloonParty::Item::Snipe::SnipeItemHandler']]],
   ['trystartnext_608',['TryStartNext',['../classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a100f8032244ef72d49aca8f16a019e5f',1,'BalloonParty::Game::CardReveal::CardRevealController']]],
-  ['trystep_609',['TryStep',['../classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk.html#a9d372e39c13be18f6ee55a1a2e8432e3',1,'BalloonParty::Balloon::Formation::SnakeWalk']]],
+  ['trystep_609',['TryStep',['../classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk.html#a7d2326aed94c62ecd1e8e6305b9f5505',1,'BalloonParty::Balloon::Formation::SnakeWalk']]],
   ['trysweepsegment_610',['TrySweepSegment',['../classBalloonParty_1_1Solver_1_1ShotSimulator.html#a6f187c0d2304254be825750ef1de9df5',1,'BalloonParty::Solver::ShotSimulator']]],
   ['trytakechainhost_611',['TryTakeChainHost',['../classBalloonParty_1_1Item_1_1ItemAssigner.html#ab14cec020b5585dfb077c73ca3943eee',1,'BalloonParty::Item::ItemAssigner']]],
   ['trytakedirectorasync_612',['TryTakeDirectorAsync',['../classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#ac3e043aa3fc6a29d98ae8d4199543461',1,'BalloonParty::Game::Cinematics::GameOverLossCinematic']]],
