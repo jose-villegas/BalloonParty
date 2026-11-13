@@ -8,6 +8,8 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettin
     [ "_itemCoverWeight", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#ad9b2712aa818cc2681ef51558d78927b", null ],
     [ "_maxMembers", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#aad829dea8fb7f2f599ae892c7d2f09cd", null ],
     [ "_minMembers", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a3e63b8b181d9a24fc94648b63fe8400c", null ],
+    [ "_reinforcementCeiling", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a66df98d79f114edc2671d5626431bc69", null ],
+    [ "_reinforcementChance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a34f8392829f77fc8030ccdb6fcadfc2b", null ],
     [ "_spotChoices", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#ac7344a28bdd942d3472fbeb79033e65e", null ],
     [ "BottomClearance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#ab5c0ad5596ec2193680a896854ae5369", null ],
     [ "DiagonalWeight", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a4dc4b4513ca9d8bd892c94934e9c4a2a", null ],
@@ -17,5 +19,7 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettin
     [ "ItemCoverWeight", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#ad1f360877b29faa467fd44b79fd21b78", null ],
     [ "MaxMembers", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a8327aceebc4cc2d91f047ac53c595b11", null ],
     [ "MinMembers", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a06177224e85e0e05d3922e61f7313cce", null ],
+    [ "ReinforcementCeiling", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a39dd49aaef8c457d22eb8cdb7abca9e9", null ],
+    [ "ReinforcementChance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a9f1b9027d29b00bd5eb5b6bef33a1447", null ],
     [ "SpotChoices", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a95e1c1f792b7403976313e50a1e782ff", null ]
 ];

@@ -114,7 +114,7 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1
 </div><!--header-->
 <div class="contents">
 
-<p>How unbreakables gather into formations, hold them, and pick the next shape.  
+<p>How unbreakables gather into formations, hold them, pick the next shape, and call in more unbreakables while left alone.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings:</div>
@@ -143,17 +143,23 @@ Properties</h2></td></tr>
 <tr class="memdesc:a8673f39cf5e400fa604513f81968d1b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pick weight of covering an item from below; only in the pick while an item is on the board.  <br /></td></tr>
 <tr class="separator:a8673f39cf5e400fa604513f81968d1b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b851ecb128d8c14a4b32708508885ac" id="r_a0b851ecb128d8c14a4b32708508885ac"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b851ecb128d8c14a4b32708508885ac">MaxMembers</a><code> [get]</code></td></tr>
-<tr class="memdesc:a0b851ecb128d8c14a4b32708508885ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Most unbreakables in one formation; the rest keep roaming.  <br /></td></tr>
+<tr class="memdesc:a0b851ecb128d8c14a4b32708508885ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Most unbreakables in one formation; the rest roam, or form a formation of their own.  <br /></td></tr>
 <tr class="separator:a0b851ecb128d8c14a4b32708508885ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a7e96cbdf0a2c82cb071c964262be84" id="r_a8a7e96cbdf0a2c82cb071c964262be84"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a7e96cbdf0a2c82cb071c964262be84">MinMembers</a><code> [get]</code></td></tr>
 <tr class="memdesc:a8a7e96cbdf0a2c82cb071c964262be84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fewest unbreakables on the board that form up.  <br /></td></tr>
 <tr class="separator:a8a7e96cbdf0a2c82cb071c964262be84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b7a262c9dcf6c0506e34865c0d30b18" id="r_a6b7a262c9dcf6c0506e34865c0d30b18"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6b7a262c9dcf6c0506e34865c0d30b18">ReinforcementCeiling</a><code> [get]</code></td></tr>
+<tr class="memdesc:a6b7a262c9dcf6c0506e34865c0d30b18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Most called-in unbreakables on the board at once, on top of the level's own cap.  <br /></td></tr>
+<tr class="separator:a6b7a262c9dcf6c0506e34865c0d30b18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab57ce9338d75ace4254ea5c59f50c575" id="r_ab57ce9338d75ace4254ea5c59f50c575"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab57ce9338d75ace4254ea5c59f50c575">ReinforcementChance</a><code> [get]</code></td></tr>
+<tr class="memdesc:ab57ce9338d75ace4254ea5c59f50c575"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chance, at each wave start, that a formation which stood untouched through the last wave calls in one more unbreakable.  <br /></td></tr>
+<tr class="separator:ab57ce9338d75ace4254ea5c59f50c575"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada71cd4f8cd3413be4ec54509e232556" id="r_ada71cd4f8cd3413be4ec54509e232556"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada71cd4f8cd3413be4ec54509e232556">SpotChoices</a><code> [get]</code></td></tr>
 <tr class="memdesc:ada71cd4f8cd3413be4ec54509e232556"><td class="mdescLeft">&#160;</td><td class="mdescRight">A formation picks at random among this many of its least-travel spots.  <br /></td></tr>
 <tr class="separator:ada71cd4f8cd3413be4ec54509e232556"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>How unbreakables gather into formations, hold them, and pick the next shape. </p>
+<div class="textblock"><p>How unbreakables gather into formations, hold them, pick the next shape, and call in more unbreakables while left alone. </p>
 </div><h2 class="groupheader">Property Documentation</h2>
 <a id="abf9e9826d99af0a92744527a179189d9" name="abf9e9826d99af0a92744527a179189d9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abf9e9826d99af0a92744527a179189d9">&#9670;&#160;</a></span>BottomClearance</h2>
@@ -327,7 +333,7 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Most unbreakables in one formation; the rest keep roaming. </p>
+<p>Most unbreakables in one formation; the rest roam, or form a formation of their own. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a8327aceebc4cc2d91f047ac53c595b11">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
 
@@ -356,6 +362,58 @@ Properties</h2></td></tr>
 <p>Fewest unbreakables on the board that form up. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a06177224e85e0e05d3922e61f7313cce">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="a6b7a262c9dcf6c0506e34865c0d30b18" name="a6b7a262c9dcf6c0506e34865c0d30b18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b7a262c9dcf6c0506e34865c0d30b18">&#9670;&#160;</a></span>ReinforcementCeiling</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings.ReinforcementCeiling</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Most called-in unbreakables on the board at once, on top of the level's own cap. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a39dd49aaef8c457d22eb8cdb7abca9e9">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="ab57ce9338d75ace4254ea5c59f50c575" name="ab57ce9338d75ace4254ea5c59f50c575"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab57ce9338d75ace4254ea5c59f50c575">&#9670;&#160;</a></span>ReinforcementChance</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings.ReinforcementChance</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Chance, at each wave start, that a formation which stood untouched through the last wave calls in one more unbreakable. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a9f1b9027d29b00bd5eb5b6bef33a1447">BalloonParty.Configuration.Balloons.UnbreakableFormationSettings</a>.</p>
 
 </div>
 </div>

@@ -126,11 +126,16 @@ Files</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="FormationShape_8cs.html">FormationShape.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IFormationReinforcements_8cs.html">IFormationReinforcements.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="StandingFormation_8cs.html">StandingFormation.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="UnbreakableFormationService_8cs.html">UnbreakableFormationService.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Unbreakable balloons normally roam: once per wave each one jumps toward the far side of the board. When three or more are on the board, they gather into a <b>formation</b> instead. They line up, stay in place for a few waves, then switch to a different line. While a formation stands, its members float in midair: the balloons below rise until they reach the formation, and spawn lines stop under it.</p>
+<p>Several formations can stand at once. Unbreakables left over after one formation is full form a second one, so two lines can stack into a blockade. A formation the player leaves alone calls in more unbreakables, past the level's usual cap, and those form formations of their own.</p>
 <h1><a class="anchor" id="autotoc_md20"></a>
 Contents</h1>
 <table class="markdownTable">
@@ -143,27 +148,35 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>FormationAssignment</code>   </td><td class="markdownTableBodyNone">One member and the slot it goes to    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>UnbreakableFormationService</code>   </td><td class="markdownTableBodyNone">The controller. It decides when to form, hold, change and break up, and it marks members as in formation   </td></tr>
+<td class="markdownTableBodyNone"><code>StandingFormation</code>   </td><td class="markdownTableBodyNone">One standing formation: its members, its shape, the waves it has left to hold, and whether a member was pierced since it formed    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>UnbreakableFormationService</code>   </td><td class="markdownTableBodyNone">The controller. It decides when each formation forms, holds, changes and breaks up, marks members as in formation, and rolls for reinforcements    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>IFormationReinforcements</code>   </td><td class="markdownTableBodyNone">The reinforcements the formations have called in. <code>BalloonSpawner</code> takes them at each wave's first line   </td></tr>
 </table>
 <h1><a class="anchor" id="autotoc_md21"></a>
 How a formation runs</h1>
 <ol type="1">
 <li><b>Wave start.</b> <code>BalloonBalancer.Balance(atWaveStart: true)</code> calls <code>ArrangeAtWaveStart</code> before the usual roam pre-pass. Roamers therefore see the formation's slots as already taken.</li>
-<li><b>Forming.</b> If at least <code>MinMembers</code> unbreakables are on the board, the service picks a shape. The pick is weighted at random from the shape weights. It leaves out the shape just held, and leaves out <code>ItemCover</code> unless an item is on the board. If the picked shape fits nowhere, the service tries the next one. If nothing fits, nothing forms and the unbreakables roam as usual.</li>
+<li><b>Forming.</b> If at least <code>MinMembers</code> unbreakables are free (in no formation), the service picks a shape for them. The pick is weighted at random from the shape weights. It leaves out the shape just held, and leaves out <code>ItemCover</code> unless an item is on the board. If the picked shape fits nowhere, the service tries the next one. If nothing fits, nothing forms and the unbreakables roam as usual. A formation takes at most <code>MaxMembers</code>; while <code>MinMembers</code> or more are still free after it, they form another one.</li>
 <li><b>Moving in.</b> The service hands each member's move to the balancer's relocate routine. That is the same routine roam jumps use, so the members glide in at their normal speed. Each member is marked in formation (<code>IWriteableFormationMember.SetInFormation</code>).</li>
 <li><b>Holding.</b> The formation lasts <code>HoldWaves</code> waves, counting the one it formed in. During that time the next wave starts only count down: nothing moves.</li>
-<li><b>Changing.</b> At the first wave start after the hold, a new shape is planned. Members that stay in the formation are never marked out, even for a moment. Members the new shape doesn't need turn red and roam again.</li>
-<li><b>Breaking up.</b> The service watches <code>SlotGrid.OnChanged</code>. When a member leaves the grid (it was pierced, or the board was cleared) it drops out of the formation. If fewer than <code>MinMembers</code> are left, the rest are released at once. The next line's balance, or the timed pulse, floats them up. <code>ResetRun</code> releases everything.</li>
+<li><b>Changing.</b> At the first wave start after the hold, a new shape is planned for that formation's members and any free unbreakables. Members that stay in the formation are never marked out, even for a moment. Members the new shape doesn't need turn red and roam again. If no shape fits, the formation breaks up. Each formation keeps its own count, so they change at different waves.</li>
+<li><b>Breaking up.</b> The service watches <code>SlotGrid.OnChanged</code>. When a member leaves the grid (it was pierced, or the board was cleared) it drops out of its formation. If fewer than <code>MinMembers</code> are left in that formation, the rest are released at once. The other formations stand. The next line's balance, or the timed pulse, floats the released ones up. <code>ResetRun</code> releases everything.</li>
 </ol>
 <h1><a class="anchor" id="autotoc_md22"></a>
+Reinforcements</h1>
+<p>A formation the player doesn't break calls for help. At each wave start, every formation that has had no member pierced since it formed rolls <code>ReinforcementChance</code>. Each success calls in one more unbreakable. The wave a formation forms in doesn't roll, so the player always gets a wave to answer it. A formation keeps its record through shape changes: once pierced, it never calls again.</p>
+<p>The service only counts the calls (<code>IFormationReinforcements</code>). <code>BalloonSpawner</code> takes them right after the formations arrange, since both run at the wave's first line, and adds that many unbreakables to the line. They enter like any other balloon. They don't count against the level's own unbreakable cap or wave quota. Instead, at most <code>ReinforcementCeiling</code> of them are on the board at once (<code>ReinforcementPlan</code>). Calls past the ceiling, or past the line's open places, are dropped. On the board they are ordinary unbreakables: they roam, and once enough are free they form a formation of their own.</p>
+<h1><a class="anchor" id="autotoc_md23"></a>
 Rules a formation keeps</h1>
 <ul>
-<li><b>No pushing.</b> A formation slot must be empty or already hold an unbreakable. A formation never pushes another balloon aside.</li>
+<li><b>No pushing.</b> A formation slot must be empty or already hold one of the unbreakables it is planning with. A formation never pushes another balloon aside, and never plans over another formation's members.</li>
 <li><b>Spawn room.</b> It never uses the bottom <code>BottomClearance</code> rows, so spawn lines always have room to enter.</li>
 <li><b>Members keep their slot.</b> A member already standing on a formation slot keeps it: assignment takes the nearest pairs first, so its distance-0 pair always wins. As a result, no member ever has to move into a slot another member still holds.</li>
 <li><b>The covered item isn't held.</b> <code>ItemCover</code> covers the item where it sits when the formation forms. The item's balloon is not anchored, so if it pops or rises away the cover stays where it is until the next change.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md23"></a>
+<h1><a class="anchor" id="autotoc_md24"></a>
 Anchoring</h1>
 <p>A member in formation reports <code>IBalanceAnchor.IsAnchored</code> (from <code>Slots/Actor</code>). Everything that moves balloons leaves an anchored actor in its slot:</p><ul>
 <li>the balance race (<code>BalancePlanner</code>) and <code>BalloonBalancer.HasPossibleMove</code>,</li>
@@ -171,10 +184,10 @@ Anchoring</h1>
 <li><code>PressurePropagation</code>, where an anchored actor blocks the shove the way a static actor does,</li>
 <li>the shot solver. <code>ShotBoardGather</code> copies the flag into <code>BalanceProfile.Anchored</code>, and <code>ShotSimDynamicActor</code> reports it, so the solver's predicted pulses leave anchored balloons in place too.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md24"></a>
+<h1><a class="anchor" id="autotoc_md25"></a>
 Look</h1>
 <p><code>Balloon/Type/UnbreakableFormationLook</code> turns a member blue once it has arrived in its slot (in formation and <code>IsStable</code>). The core glow, the inner rim and the exhaust trail all change, and a <code>GlitterSwirl</code> halo fades in behind the sphere. The halo doesn't sway or spin with its balloon: the service gives every member its formation's heading (<code>IFormationMember.FormationHeading</code>, a world direction), and the look turns the halo so its swirl drifts that way. A line heads along its slots, and an item cover heads up at the item. The unbreakable's periodic burst is tagged blue too, so its specks match. All the blue comes from the palette's <code>UnbreakableFormation</code> entry. See <code><a class="el" href="Balloon_2Type_2README_8md.html">Balloon/Type/README.md</a></code>.</p>
-<h1><a class="anchor" id="autotoc_md25"></a>
+<h1><a class="anchor" id="autotoc_md26"></a>
 Settings</h1>
 <p>The settings are <code>IUnbreakableFormationSettings</code>, nested in <code>BalloonsConfiguration</code> under "Unbreakable Formations":</p><ul>
 <li><code>Enabled</code></li>
@@ -182,6 +195,7 @@ Settings</h1>
 <li><code>HoldWaves</code> (3)</li>
 <li><code>BottomClearance</code> (2)</li>
 <li><code>SpotChoices</code> (3)</li>
+<li><code>ReinforcementChance</code> (0.35) and <code>ReinforcementCeiling</code> (4)</li>
 <li>the shape weights: horizontal 1, each diagonal 1, item cover 2</li>
 </ul>
 <p>The design and its open risks are in <code><a class="el" href="PLAN-UnbreakableFormations_8md.html">Plans/PLAN-UnbreakableFormations.md</a></code>. </p>

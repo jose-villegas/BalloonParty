@@ -1,0 +1,5 @@
+<map id="BalloonParty.Balloon.Formation.IFormationReinforcements" name="BalloonParty.Balloon.Formation.IFormationReinforcements">
+<area shape="rect" id="Node000001" title="Unbreakables the board&#39;s formations have called in." alt="" coords="5,5,235,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html" title="Gathers the board&#39;s unbreakables into formations, as many as there are members for." alt="" coords="5,93,235,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,59,123,93,117,93,117,59"/>
+</map>

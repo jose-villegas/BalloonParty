@@ -4,7 +4,7 @@
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,681,125,543,153,350,173,253,197,164,225,91,241,63,258,41,275,29,278,33,262,45,245,66,230,93,202,165,178,254,158,351,130,543,115,682"/>
 <area shape="rect" id="Node000003" href="$classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html" title=" " alt="" coords="264,55,491,95"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="111,681,128,555,159,382,179,295,202,216,228,150,243,125,258,105,273,94,276,98,262,109,247,128,233,153,207,217,184,296,164,383,134,556,116,682"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html" title="Gathers the board&#39;s unbreakables into formations." alt="" coords="263,119,492,159"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html" title="Gathers the board&#39;s unbreakables into formations, as many as there are members for." alt="" coords="263,119,492,159"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="112,681,131,566,163,413,183,336,206,266,231,209,258,170,274,157,277,162,262,173,236,211,211,268,188,338,168,414,137,567,118,682"/>
 <area shape="rect" id="Node000005" href="$classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html" title=" " alt="" coords="268,183,487,223"/>
 <area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="107,681,114,592,122,534,135,472,154,407,180,344,214,285,258,233,274,221,277,226,262,237,219,288,185,347,159,409,140,473,127,535,119,593,113,682"/>

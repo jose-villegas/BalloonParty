@@ -501,6 +501,9 @@ var hierarchy =
         [ "BalloonParty.Balloon.Model.UnbreakableBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html", null ]
       ] ]
     ] ],
+    [ "BalloonParty.Balloon.Formation.IFormationReinforcements", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements.html", [
+      [ "BalloonParty.Balloon.Formation.UnbreakableFormationService", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html", null ]
+    ] ],
     [ "BalloonParty.Configuration.IGameDisplayConfiguration", "interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html", [
       [ "BalloonParty.Configuration.GameDisplayConfiguration", "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html", null ]
     ] ],
@@ -1377,6 +1380,7 @@ var hierarchy =
     [ "BalloonParty.UI.Binding.ReactiveBinderRegistration", "classBalloonParty_1_1UI_1_1Binding_1_1ReactiveBinderRegistration.html", null ],
     [ "BalloonParty.UI.RectAnchorMath", "classBalloonParty_1_1UI_1_1RectAnchorMath.html", null ],
     [ "BalloonParty.Shared.SceneLight.SceneLightFieldService.Registration", "structBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService_1_1Registration.html", null ],
+    [ "BalloonParty.Balloon.Spawner.ReinforcementPlan", "classBalloonParty_1_1Balloon_1_1Spawner_1_1ReinforcementPlan.html", null ],
     [ "BalloonParty.Editor.Release.ReleasePublisher.ReleasePayload", "classBalloonParty_1_1Editor_1_1Release_1_1ReleasePublisher_1_1ReleasePayload.html", null ],
     [ "BalloonParty.Editor.Release.ReleasePublisher", "classBalloonParty_1_1Editor_1_1Release_1_1ReleasePublisher.html", null ],
     [ "BalloonParty.Editor.Release.ReleaseRequest", "structBalloonParty_1_1Editor_1_1Release_1_1ReleaseRequest.html", null ],
@@ -1518,6 +1522,7 @@ var hierarchy =
     [ "BalloonParty.Balloon.Formation.FormationPlanner.Spot", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Spot.html", null ],
     [ "BalloonParty.Shared.Extensions.SpriteRendererExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1SpriteRendererExtensions.html", null ],
     [ "BalloonParty.Configuration.Effects.StampProfile", "structBalloonParty_1_1Configuration_1_1Effects_1_1StampProfile.html", null ],
+    [ "BalloonParty.Balloon.Formation.StandingFormation", "classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html", null ],
     [ "BalloonParty.Shared.Messages.StreakChangedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html", null ],
     [ "BalloonParty.Shared.Messages.StreakGrewMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1StreakGrewMessage.html", null ],
     [ "BalloonParty.Shared.StreakShieldRule", "classBalloonParty_1_1Shared_1_1StreakShieldRule.html", null ],

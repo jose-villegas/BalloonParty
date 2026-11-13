@@ -988,7 +988,7 @@
 <!-- Node43 -->
 <g id="Node000043" class="node">
 <title>Node43</title>
-<g id="a_Node000043"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html" target="_top" xlink:title="How unbreakables gather into formations, hold them, and pick the next shape.">
+<g id="a_Node000043"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html" target="_top" xlink:title="How unbreakables gather into formations, hold them, pick the next shape, and call in more unbreakable...">
 <polygon fill="white" stroke="#666666" points="1185,-597 970,-597 970,-567 1185,-567 1185,-597"/>
 <text text-anchor="start" x="978" y="-585" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text text-anchor="middle" x="1077.5" y="-574" font-family="Helvetica,sans-Serif" font-size="10.00">Balloons.IUnbreakableFormationSettings</text>

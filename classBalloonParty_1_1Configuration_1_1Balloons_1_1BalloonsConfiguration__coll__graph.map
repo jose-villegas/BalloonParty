@@ -100,6 +100,6 @@
 <area shape="poly" id="edge57_Node000004_Node000041" title=" " alt="" coords="1553,92,1786,92,1786,97,1553,97"/>
 <area shape="rect" id="Node000042" href="$classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html" title=" " alt="" coords="1748,437,2031,477"/>
 <area shape="poly" id="edge59_Node000001_Node000042" title=" " alt="" coords="1927,427,2318,142,2321,146,1931,432"/>
-<area shape="rect" id="Node000043" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html" title="How unbreakables gather into formations, hold them, and pick the next shape." alt="" coords="1299,687,1585,727"/>
+<area shape="rect" id="Node000043" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html" title="How unbreakables gather into formations, hold them, pick the next shape, and call in more unbreakable..." alt="" coords="1299,687,1585,727"/>
 <area shape="poly" id="edge60_Node000042_Node000043" title=" " alt="" coords="1565,680,1584,672,1671,625,1751,570,1818,517,1865,475,1869,479,1821,521,1754,575,1674,630,1586,677,1567,685"/>
 </map>

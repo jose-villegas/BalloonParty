@@ -107,6 +107,7 @@ var NAVTREEINDEX1 =
 "IFlightStatsWriter_8cs.html":[7,0,7,3,4],
 "IFlightStats_8cs.html":[7,0,7,3,2],
 "IFormationMember_8cs.html":[7,0,1,2,7],
+"IFormationReinforcements_8cs.html":[7,0,1,1,3],
 "IGameDisplayConfiguration_8cs.html":[7,0,3,13],
 "IGamePalette_8cs.html":[7,0,3,10,2],
 "IGridActorConfiguration_8cs.html":[7,0,3,6,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "ItemEffectPlayer_8cs.html":[7,0,8,22],
 "ItemPreviewConfigEditor_8cs.html":[7,0,3,4,3],
 "ItemPreviewConfig_8cs.html":[7,0,3,17],
-"ItemPreviewContext_8cs.html":[7,0,8,5,3],
-"ItemPreviewEntry_8cs.html":[7,0,8,5,4]
+"ItemPreviewContext_8cs.html":[7,0,8,5,3]
 };

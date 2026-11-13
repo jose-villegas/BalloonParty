@@ -1,9 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="5,77,143,102"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Editor_1_1ChainLightningViewEditor.html" title=" " alt="" coords="191,5,375,45"/>
-<area shape="poly" id="edge665_Node000000_Node000001" title=" " alt="" coords="129,70,216,43,217,48,130,75"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Editor_1_1LaserViewEditor.html" title=" " alt="" coords="191,69,374,109"/>
-<area shape="poly" id="edge666_Node000000_Node000002" title=" " alt="" coords="156,87,191,87,191,92,156,92"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Editor_1_1PaintSplashViewEditor.html" title=" " alt="" coords="193,133,372,173"/>
-<area shape="poly" id="edge667_Node000000_Node000003" title=" " alt="" coords="130,104,217,131,216,136,129,109"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,45,140,70"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonGraphic.html" title="A strip of ribbon filling its rect: swallowtail&#45;notched at both ends, with a wave running along it th..." alt="" coords="188,5,391,45"/>
+<area shape="poly" id="edge662_Node000000_Node000001" title=" " alt="" coords="153,43,187,38,188,43,154,48"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1UI_1_1TimeOfDaySpecular.html" title="A rounded UI shape&#39;s specular, lit like the balloons: a soft stroke that runs along the inside of the..." alt="" coords="190,69,389,109"/>
+<area shape="poly" id="edge663_Node000000_Node000002" title=" " alt="" coords="154,67,190,72,189,77,154,72"/>
 </map>

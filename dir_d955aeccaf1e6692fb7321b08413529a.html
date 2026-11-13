@@ -145,7 +145,7 @@ Files</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Decides which handwritten heads-ups go on screen, and when. A heads-up is a short pencilled line such as <code>x3!</code>, <code>-1 bounce</code> or <code>ready</code>, written where something just happened. This folder does not draw them: <code>UI/HeadsUp/</code> draws them. The design is in <code><a class="el" href="PLAN-HeadsUp_8md.html">Plans/PLAN-HeadsUp.md</a></code> §3.</p>
 <p>Gameplay code publishes the messages it already has (a pop growing a streak, a wall hit, the cannon reloading). Each <b>router</b> turns those messages into heads-up requests. The <b>service</b> asks the <b>queue</b> whether a request may show, then tells the <b>presenter</b> (the view) what to draw. A burst of events can't flood the screen: there is a cap, and each kind of heads-up has a priority.</p>
-<h1><a class="anchor" id="autotoc_md201"></a>
+<h1><a class="anchor" id="autotoc_md203"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -174,7 +174,7 @@ Contents</h1>
 <td class="markdownTableBodyNone"><code>Routing/ProgressHeadsUpRouter</code>   </td><td class="markdownTableBodyNone"><code>-1</code> at the heart when a strikethrough costs one, and <code>{colour} done</code> at a colour's bar when it fills   </td></tr>
 </table>
 <p>The settings live in <code>Configuration/HeadsUp/</code>. <code>IHeadsUpSettings</code> gives the cap (<code>MaxConcurrent</code>) and one <code>HeadsUpStyleSettings</code> per <code>HeadsUpStyleId</code>. Each style sets the format, the look, the priority, the cooldown, how long the line stays, whether it is held, an offset from its anchor, the range of numbers worth writing, the count its size starts growing from, and the count it's underlined from. Which numbers a style writes (no <code>x2!</code>, taps only up to the third) is set there, not in the routers.</p>
-<h1><a class="anchor" id="autotoc_md202"></a>
+<h1><a class="anchor" id="autotoc_md204"></a>
 Adding a heads-up</h1>
 <ol type="1">
 <li>Add a <code>HeadsUpStyleId</code> and its default in <code>HeadsUpSettings.Defaults()</code>. <code>HeadsUpSettingsTests</code> fails until every id has exactly one style.</li>

@@ -74,6 +74,8 @@ var annotated_dup =
         [ "Formation", "namespaceBalloonParty_1_1Balloon_1_1Formation.html", [
           [ "FormationAssignment", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment" ],
           [ "FormationPlanner", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner" ],
+          [ "IFormationReinforcements", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements.html", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements" ],
+          [ "StandingFormation", "classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation" ],
           [ "UnbreakableFormationService", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService" ]
         ] ],
         [ "Model", "namespaceBalloonParty_1_1Balloon_1_1Model.html", [
@@ -100,6 +102,7 @@ var annotated_dup =
           [ "IBoardFill", "interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1IBoardFill.html", "interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1IBoardFill" ],
           [ "InitialLayerPlan", "classBalloonParty_1_1Balloon_1_1Spawner_1_1InitialLayerPlan.html", "classBalloonParty_1_1Balloon_1_1Spawner_1_1InitialLayerPlan" ],
           [ "ISpawnClock", "interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html", "interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock" ],
+          [ "ReinforcementPlan", "classBalloonParty_1_1Balloon_1_1Spawner_1_1ReinforcementPlan.html", "classBalloonParty_1_1Balloon_1_1Spawner_1_1ReinforcementPlan" ],
           [ "RejectedBalloonEffect", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect" ],
           [ "SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock" ]
         ] ],

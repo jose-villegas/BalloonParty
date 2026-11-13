@@ -1,5 +1,5 @@
 <map id="BalloonParty.Configuration.Balloons.UnbreakableFormationSettings" name="BalloonParty.Configuration.Balloons.UnbreakableFormationSettings">
 <area shape="rect" id="Node000001" title=" " alt="" coords="7,93,290,133"/>
-<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html" title="How unbreakables gather into formations, hold them, and pick the next shape." alt="" coords="5,5,292,45"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html" title="How unbreakables gather into formations, hold them, pick the next shape, and call in more unbreakable..." alt="" coords="5,5,292,45"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="151,59,151,93,146,93,146,59"/>
 </map>

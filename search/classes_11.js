@@ -172,12 +172,13 @@ var searchData=
   ['spriteshadowbakereditor_169',['SpriteShadowBakerEditor',['../classBalloonParty_1_1Editor_1_1ShadowBake_1_1SpriteShadowBakerEditor.html',1,'BalloonParty::Editor::ShadowBake']]],
   ['stampprofile_170',['StampProfile',['../structBalloonParty_1_1Configuration_1_1Effects_1_1StampProfile.html',1,'BalloonParty::Configuration::Effects']]],
   ['stampprofiledrawer_171',['StampProfileDrawer',['../classBalloonParty_1_1Configuration_1_1Editor_1_1StampProfileDrawer.html',1,'BalloonParty::Configuration::Editor']]],
-  ['staticactormodel_172',['StaticActorModel',['../classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorModel.html',1,'BalloonParty::Slots::Actor']]],
-  ['staticactorspawner_173',['StaticActorSpawner',['../classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html',1,'BalloonParty::Slots::Actor']]],
-  ['streakchangedmessage_174',['StreakChangedMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html',1,'BalloonParty::Shared::Messages']]],
-  ['streakgrewmessage_175',['StreakGrewMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1StreakGrewMessage.html',1,'BalloonParty::Shared::Messages']]],
-  ['streakshieldrule_176',['StreakShieldRule',['../classBalloonParty_1_1Shared_1_1StreakShieldRule.html',1,'BalloonParty::Shared']]],
-  ['strikethrougharrivedmessage_177',['StrikethroughArrivedMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1StrikethroughArrivedMessage.html',1,'BalloonParty::Shared::Messages']]],
-  ['stringformatextensions_178',['StringFormatExtensions',['../classBalloonParty_1_1Shared_1_1Extensions_1_1StringFormatExtensions.html',1,'BalloonParty::Shared::Extensions']]],
-  ['stubthermalsource_179',['StubThermalSource',['../classBalloonParty_1_1Shared_1_1Thermal_1_1StubThermalSource.html',1,'BalloonParty::Shared::Thermal']]]
+  ['standingformation_172',['StandingFormation',['../classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html',1,'BalloonParty::Balloon::Formation']]],
+  ['staticactormodel_173',['StaticActorModel',['../classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorModel.html',1,'BalloonParty::Slots::Actor']]],
+  ['staticactorspawner_174',['StaticActorSpawner',['../classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html',1,'BalloonParty::Slots::Actor']]],
+  ['streakchangedmessage_175',['StreakChangedMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1StreakChangedMessage.html',1,'BalloonParty::Shared::Messages']]],
+  ['streakgrewmessage_176',['StreakGrewMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1StreakGrewMessage.html',1,'BalloonParty::Shared::Messages']]],
+  ['streakshieldrule_177',['StreakShieldRule',['../classBalloonParty_1_1Shared_1_1StreakShieldRule.html',1,'BalloonParty::Shared']]],
+  ['strikethrougharrivedmessage_178',['StrikethroughArrivedMessage',['../structBalloonParty_1_1Shared_1_1Messages_1_1StrikethroughArrivedMessage.html',1,'BalloonParty::Shared::Messages']]],
+  ['stringformatextensions_179',['StringFormatExtensions',['../classBalloonParty_1_1Shared_1_1Extensions_1_1StringFormatExtensions.html',1,'BalloonParty::Shared::Extensions']]],
+  ['stubthermalsource_180',['StubThermalSource',['../classBalloonParty_1_1Shared_1_1Thermal_1_1StubThermalSource.html',1,'BalloonParty::Shared::Thermal']]]
 ];

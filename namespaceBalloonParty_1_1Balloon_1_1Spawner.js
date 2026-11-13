@@ -8,6 +8,7 @@ var namespaceBalloonParty_1_1Balloon_1_1Spawner =
     [ "IBoardFill", "interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1IBoardFill.html", "interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1IBoardFill" ],
     [ "InitialLayerPlan", "classBalloonParty_1_1Balloon_1_1Spawner_1_1InitialLayerPlan.html", "classBalloonParty_1_1Balloon_1_1Spawner_1_1InitialLayerPlan" ],
     [ "ISpawnClock", "interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html", "interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock" ],
+    [ "ReinforcementPlan", "classBalloonParty_1_1Balloon_1_1Spawner_1_1ReinforcementPlan.html", "classBalloonParty_1_1Balloon_1_1Spawner_1_1ReinforcementPlan" ],
     [ "RejectedBalloonEffect", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect" ],
     [ "SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock" ],
     [ "PlacementReach", "namespaceBalloonParty_1_1Balloon_1_1Spawner.html#ae16f087915c8b12ffd2f6ea5168e6406", [
