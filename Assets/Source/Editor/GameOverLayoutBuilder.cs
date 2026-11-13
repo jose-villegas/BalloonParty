@@ -193,6 +193,9 @@ namespace BalloonParty.Editor
             var level = Label(well, "Level", "Level {0}", kit.TitleFont, kit.Number, 25f, Color.white);
             var score = Label(well, "Score", "{0:N0} points", kit.TitleFont, kit.Plain, 12f, Blue);
             var best = Label(well, "Best", "best: level {0}, {1:N0} points", kit.HandFont, null, 12f, Graphite);
+            // Room for the hearts pinned across Retry's top edge: one more of the column's gaps, so they stay
+            // clear of the well even at the top of Retry's pulse.
+            Size(Node("PinRoom", panel).gameObject, -1f, 0f);
             var retryLabel = StyleRetry(retry, panel, kit);
             var offers = BuildOffers(panel, bonus, kit);
             StyleRestart(restart, panel, kit);
