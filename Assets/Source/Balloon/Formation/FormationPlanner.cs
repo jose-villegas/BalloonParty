@@ -14,12 +14,16 @@ namespace BalloonParty.Balloon.Formation
     ///     Finds where a formation of one shape can stand and which candidate goes to which of its slots.
     ///     Reads the grid only; the caller moves the members. A formation slot must be empty or already
     ///     hold one of the candidates, so a formation never plans over another formation. It never sits in
-    ///     the bottom <see cref="IUnbreakableFormationSettings.BottomClearance" /> rows (a row, a horizontal line or
-    ///     an item cover, the bottom <see cref="IUnbreakableFormationSettings.HorizontalBottomClearance" />). Among the spots that
+    ///     the bottom <see cref="IUnbreakableFormationSettings.BottomClearance" /> rows (a horizontal line, the
+    ///     bottom <see cref="IUnbreakableFormationSettings.HorizontalBottomClearance" />). Among the spots that
     ///     fit, the planner picks at random among the few with the least total travel.
     /// </summary>
     internal sealed class FormationPlanner
     {
+        // Every neighbour of the item: a ring with a gap would leave the item a way to be hit, and to move.
+        internal const int CoverMembers = 6;
+
+        private readonly Vector2Int[] _neighbours = new Vector2Int[CoverMembers];
         private readonly List<Vector2Int> _slots = new();
         private readonly List<Spot> _spots = new();
         private readonly List<Pair> _pairs = new();
@@ -39,9 +43,10 @@ namespace BalloonParty.Balloon.Formation
             List<FormationAssignment> assignmentsOut)
         {
             assignmentsOut.Clear();
-            var count = Mathf.Min(candidates.Count, settings.MaxMembers);
+            var isRow = shape == FormationShape.Horizontal;
+            var count = MemberCount(shape, candidates.Count, settings);
             // A row across the board this close to the cannon walls the player in; a diagonal leaves lanes open.
-            var clearance = shape is FormationShape.Horizontal or FormationShape.ItemCover
+            var clearance = isRow
                 ? Mathf.Max(settings.HorizontalBottomClearance, settings.BottomClearance)
                 : settings.BottomClearance;
             var lastRow = grid.Rows - 1 - clearance;
@@ -96,7 +101,8 @@ namespace BalloonParty.Balloon.Formation
         }
 
         // Fills _slots with the shape's slots from anchor (a line's first slot, or the covered item's
-        // host). False when any slot falls off the board or into the bottom clearance.
+        // host, whose six neighbours make the ring). False when any slot falls off the board or into the
+        // bottom clearance, so an item on the board's edge is never covered.
         private bool BuildSlots(SlotGrid grid, FormationShape shape, Vector2Int anchor, int count, int lastRow)
         {
             _slots.Clear();
@@ -123,7 +129,8 @@ namespace BalloonParty.Balloon.Formation
                     break;
 
                 case FormationShape.ItemCover:
-                    BuildCoverSlots(grid, anchor, count);
+                    HexCoordinates.HexNeighborIndices(anchor.x, anchor.y, _neighbours);
+                    _slots.AddRange(_neighbours);
                     break;
             }
 
@@ -143,47 +150,20 @@ namespace BalloonParty.Balloon.Formation
             return true;
         }
 
-        // The host's lower neighbours (one of them is off the board at an edge), then the row below the
-        // host grows outward, alternating right and left, until it holds count slots. Stops short when
-        // the row runs out both ways.
-        private void BuildCoverSlots(SlotGrid grid, Vector2Int host, int count)
+        // A cover is the whole ring or nothing. A horizontal line stops at HorizontalMaxMembers so it never
+        // spans the board; a diagonal leaves lanes open and takes up to MaxMembers.
+        private static int MemberCount(
+            FormationShape shape, int candidates, IUnbreakableFormationSettings settings)
         {
-            var left = HexCoordinates.DiagonalDown(host, false);
-            var right = HexCoordinates.DiagonalDown(host, true);
-            if (left.x >= 0)
+            if (shape == FormationShape.ItemCover)
             {
-                _slots.Add(left);
+                return candidates >= CoverMembers ? CoverMembers : 0;
             }
 
-            if (right.x < grid.Columns && _slots.Count < count)
-            {
-                _slots.Add(right);
-            }
-
-            var step = 1;
-            while (_slots.Count < count)
-            {
-                var nextRight = new Vector2Int(right.x + step, right.y);
-                var nextLeft = new Vector2Int(left.x - step, left.y);
-                var rightFits = nextRight.x < grid.Columns;
-                var leftFits = nextLeft.x >= 0;
-                if (!rightFits && !leftFits)
-                {
-                    return;
-                }
-
-                if (rightFits)
-                {
-                    _slots.Add(nextRight);
-                }
-
-                if (leftFits && _slots.Count < count)
-                {
-                    _slots.Add(nextLeft);
-                }
-
-                step++;
-            }
+            var most = shape == FormationShape.Horizontal && settings.HorizontalMaxMembers > 0
+                ? Mathf.Min(settings.HorizontalMaxMembers, settings.MaxMembers)
+                : settings.MaxMembers;
+            return Mathf.Min(candidates, most);
         }
 
         private bool AllSlotsFree(SlotGrid grid, IReadOnlyList<IWriteableFormationMember> candidates)

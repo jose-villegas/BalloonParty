@@ -151,8 +151,9 @@ namespace BalloonParty.Tests.Balloon
             _settings.DiagonalWeight.Returns(0f);
             var host = new BalloonModel();
             host.Item.Value = ItemType.Bomb;
-            _grid.Place(host, null, new Vector2Int(3, 1));
-            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(6, 5), new Vector2Int(5, 0));
+            _grid.Place(host, null, new Vector2Int(3, 2));
+            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(1, 5), new Vector2Int(2, 5), new Vector2Int(4, 5),
+                new Vector2Int(5, 5), new Vector2Int(6, 5));
 
             Arrange();
 
@@ -374,13 +375,15 @@ namespace BalloonParty.Tests.Balloon
             _settings.DiagonalWeight.Returns(0f);
             var host = new BalloonModel();
             host.Item.Value = ItemType.Bomb;
-            _grid.Place(host, null, new Vector2Int(3, 1));
-            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(6, 5), new Vector2Int(5, 0));
+            _grid.Place(host, null, new Vector2Int(3, 2));
+            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(1, 5), new Vector2Int(2, 5), new Vector2Int(4, 5),
+                new Vector2Int(5, 5), new Vector2Int(6, 5));
 
             Arrange();
 
             Assert.AreEqual(FormationShape.ItemCover, _service.CurrentShape);
-            Assert.IsTrue(_unbreakables.All(u => u.SlotIndex.Value.y == 2));
+            Assert.IsTrue(_unbreakables.All(u => HexCoordinates.Distance(u.SlotIndex.Value, new Vector2Int(3, 2)) == 1),
+                "all six around the item");
         }
 
         [Test]

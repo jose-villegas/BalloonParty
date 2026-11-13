@@ -21,10 +21,14 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Bottom rows a formation never uses, so spawn lines always have room to enter.")]
         [SerializeField] [Min(0)] private int _bottomClearance = 2;
 
-        [Tooltip("Bottom rows a row formation (a horizontal line, an item cover) never uses, so a wall " +
+        [Tooltip("Bottom rows a horizontal line never uses, so a wall " +
                  "across the board stands well above the cannon rather than walling it in; diagonals leave lanes " +
                  "open and keep Bottom Clearance. Never less than Bottom Clearance.")]
         [SerializeField] [Min(0)] private int _horizontalBottomClearance = 4;
+
+        [Tooltip("Most unbreakables in a horizontal line, so a row never spans " +
+                 "the board; the rest are free to form their own. Held between Min Members and Max Members.")]
+        [SerializeField] [Min(2)] private int _horizontalMaxMembers = 3;
 
         [Tooltip("A formation picks at random among this many of its least-travel spots, so it doesn't " +
                  "always form in the same place. 1 = always the least travel.")]
@@ -55,6 +59,7 @@ namespace BalloonParty.Configuration.Balloons
         public int HoldWaves => _holdWaves;
         public int BottomClearance => _bottomClearance;
         public int HorizontalBottomClearance => Mathf.Max(_horizontalBottomClearance, _bottomClearance);
+        public int HorizontalMaxMembers => Mathf.Clamp(_horizontalMaxMembers, _minMembers, MaxMembers);
         public int SpotChoices => _spotChoices;
         public float HorizontalWeight => _horizontalWeight;
         public float DiagonalWeight => _diagonalWeight;

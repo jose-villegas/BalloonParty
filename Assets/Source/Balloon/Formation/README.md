@@ -13,7 +13,7 @@ unbreakables, past the level's usual cap, and those form formations of their own
 
 | File | What it does |
 |---|---|
-| `FormationShape` | The four shapes: `Horizontal`, `DiagonalDownRight`, `DiagonalDownLeft`, and `ItemCover` (a row right under a balloon that carries an item, so shots from below can't reach the item directly) |
+| `FormationShape` | The four shapes: `Horizontal`, `DiagonalDownRight`, `DiagonalDownLeft`, and `ItemCover` (a ring of six around a balloon that carries an item: no shot reaches the item, and the item can't move) |
 | `FormationPlanner` | Pure planning. For one shape it lists every spot on the board where the shape fits, works out how far the members would travel to fill it, and picks at random among the few cheapest spots. It then says which member goes to which slot. It reads the grid but never changes it |
 | `FormationAssignment` | One member and the slot it goes to |
 | `StandingFormation` | One standing formation: its members, its shape, the waves it has left to hold, and whether a member was pierced since it formed |
@@ -28,8 +28,8 @@ unbreakables, past the level's usual cap, and those form formations of their own
    shape for them. The pick is weighted at random from the shape weights. It leaves out the shape just
    held, and leaves out `ItemCover` unless an item is on the board. If the picked shape fits nowhere, the
    service tries the next one. If nothing fits, nothing forms and the unbreakables roam as usual. A
-   formation takes at most `MaxMembers`; while `MinMembers` or more are still free after it, they form
-   another one.
+   formation takes at most `MaxMembers` (a horizontal line, `HorizontalMaxMembers`); an item cover takes
+   exactly six. While `MinMembers` or more are still free after it, they form another one.
 3. **Moving in.** The service hands each member's move to the balancer's relocate routine. That is the
    same routine roam jumps use, so the members glide in at their normal speed. Each member is marked
    in formation (`IWriteableFormationMember.SetInFormation`).
@@ -65,15 +65,19 @@ unbreakables: they roam, and once enough are free they form a formation of their
   members.
 - **Spawn room.** It never uses the bottom `BottomClearance` rows, so spawn lines always have room to
   enter.
-- **Rows stay up.** A row across the board (a horizontal line or an item cover) never uses the bottom
-  `HorizontalBottomClearance` rows: close to the cannon a wall shuts the player out. Diagonals leave
-  lanes open, so they keep `BottomClearance`.
+- **Rows stay up and short.** A horizontal line never uses the bottom `HorizontalBottomClearance` rows,
+  and takes at most `HorizontalMaxMembers`: close to the cannon, or across the board, a wall shuts the
+  player out. Diagonals leave lanes open, so they keep `BottomClearance` and `MaxMembers`. The
+  unbreakables a row leaves out are free to form their own.
+- **A cover is a whole ring.** `ItemCover` takes all six neighbours of the item's balloon, so it needs six
+  free unbreakables, and all six slots on the board and above `BottomClearance`: an item on the board's
+  edge is never covered. Its place is the item's, so it never looks for a spot of its own.
 - **Members keep their slot.** A member already standing on a formation slot keeps it: assignment
   takes the nearest pairs first, so its distance-0 pair always wins. As a result, no member ever has to
   move into a slot another member still holds.
-- **The covered item isn't held.** `ItemCover` covers the item where it sits when the formation forms.
-  The item's balloon is not anchored, so if it pops or rises away the cover stays where it is until the
-  next change.
+- **The covered item stays put.** With every neighbour taken by an anchored member, the item's balloon has
+  nowhere to move. If it pops anyway (a blast reaches it), the ring stays where it is until the next
+  change.
 
 ## Anchoring
 
@@ -102,7 +106,8 @@ The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfigurati
 - `Enabled`
 - `MinMembers` (3) and `MaxMembers` (5)
 - `HoldWaves` (3)
-- `BottomClearance` (2) and `HorizontalBottomClearance` (4, for horizontal lines and item covers)
+- `BottomClearance` (2) and `HorizontalBottomClearance` (4, for horizontal lines)
+- `HorizontalMaxMembers` (3, for horizontal lines; an item cover always takes six)
 - `SpotChoices` (3)
 - `ReinforcementChance` (0.35) and `ReinforcementCeiling` (4)
 - the shape weights: horizontal 1, each diagonal 1, item cover 2

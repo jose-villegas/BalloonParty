@@ -203,6 +203,7 @@ MonoBehaviour:
     _holdWaves: 3
     _bottomClearance: 2
     _horizontalBottomClearance: 4
+    _horizontalMaxMembers: 3
     _spotChoices: 3
     _reinforcementChance: 0.35
     _reinforcementCeiling: 4

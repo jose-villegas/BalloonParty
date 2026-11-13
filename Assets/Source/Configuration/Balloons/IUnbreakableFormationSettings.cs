@@ -21,10 +21,16 @@ namespace BalloonParty.Configuration.Balloons
         int BottomClearance { get; }
 
         /// <summary>
-        ///     Bottom rows a row formation (a horizontal line, an item cover) never uses, at least <see cref="BottomClearance" />, so a wall across
+        ///     Bottom rows a horizontal line never uses, at least <see cref="BottomClearance" />, so a wall across
         ///     the board stands well above the cannon.
         /// </summary>
         int HorizontalBottomClearance { get; }
+
+        /// <summary>
+        ///     Most unbreakables in a horizontal line, so a row never spans the board; the rest are free to
+        ///     form their own.
+        /// </summary>
+        int HorizontalMaxMembers { get; }
 
         /// <summary>A formation picks at random among this many of its least-travel spots.</summary>
         int SpotChoices { get; }

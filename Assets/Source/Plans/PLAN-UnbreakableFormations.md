@@ -15,7 +15,7 @@
 1. **Formations.** With at least 3 unbreakables on the board, they gather into a shape:
    - a **horizontal line**,
    - a **diagonal** in either direction (`/` or `\`),
-   - an **item cover**: a row of unbreakables right under a balloon that carries an item, so the
+   - an **item cover**: a ring of six unbreakables around a balloon that carries an item, so the
      player, who shoots from below, can't hit the item directly.
 2. **Holding.** A formation stays in place for **N turns**. Its members do not roam, and they do not
    float up in the balance race. When the N turns are over, they change into a different formation.
@@ -123,18 +123,18 @@ The grid is pointy-top, with odd rows shifted half a column right, and row 0 at 
 (`HexCoordinates`). For `k` members:
 
 ```
-Horizontal            Diagonal "\"           Diagonal "/"          Item cover (k = 3)
-row r:  U U U         row r:    U            row r:        U       row r:    [I]
-                      row r+1:   U           row r+1:     U        row r+1: U U U
+Horizontal            Diagonal "\"           Diagonal "/"          Item cover (k = 6)
+row r:  U U U         row r:    U            row r:        U       row r-1:  U U
+                      row r+1:   U           row r+1:     U        row r:   U [I] U
+                                                                   row r+1:  U U
                       row r+2:    U          row r+2:    U
 ```
 
 - **Horizontal:** `(c, r) … (c+k-1, r)`.
 - **Diagonals:** step `row + 1` each time. The column follows the odd-row shift, the same neighbour
   rule as `HexCoordinates.HexNeighborIndices`.
-- **Item cover:** the item host's two lower neighbours first (row `r+1`). The row then grows outward,
-  alternating left and right, until there are `k` slots. If several balloons carry items, the one
-  whose cover costs the least travel is picked.
+- **Item cover:** all six neighbours of the item host, so it needs six members and an item off the
+  board's edges. If several balloons carry items, the one whose cover costs the least travel is picked.
 
 Members **hover** in midair: they are anchored, not supported. Balloons below a formation rise until
 they reach it, so a formation also works as a ceiling, and holes open above it. That is the danger
@@ -282,7 +282,7 @@ since tough balloons get hard to handle in numbers. Instead a formation left alo
 - The balancer, planner, pressure and solver changes for anchored actors.
 - **Tests (EditMode):**
   - `FormationPlanner`: line and diagonal slots on even and odd rows; occupied slots rejected;
-    bottom clearance kept; the item cover takes the host's lower neighbours first; no spot gives none.
+    bottom clearance kept; the item cover rings the host with all six neighbours; no spot gives none.
   - `FormationAssignment`: least total travel.
   - The service: under 3 never forms; 3 form and anchor; a hold of N waves moves nothing; a change
     after N picks a different shape; dropping below 3 breaks it and releases the rest; a newcomer

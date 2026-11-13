@@ -96,6 +96,32 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void Horizontal_TakesAtMostItsOwnMaximum()
+        {
+            _settings.HorizontalMaxMembers.Returns(3);
+            BuildGrid(7, 8);
+            AddMembers(new Vector2Int(0, 0), new Vector2Int(2, 0), new Vector2Int(4, 0), new Vector2Int(6, 0),
+                new Vector2Int(3, 2));
+
+            Assert.IsTrue(Plan(FormationShape.Horizontal));
+
+            Assert.AreEqual(3, _assignments.Count);
+        }
+
+        [Test]
+        public void Diagonal_KeepsTheFullMaximum()
+        {
+            _settings.HorizontalMaxMembers.Returns(3);
+            BuildGrid(7, 8);
+            AddMembers(new Vector2Int(0, 0), new Vector2Int(2, 0), new Vector2Int(4, 0), new Vector2Int(6, 0),
+                new Vector2Int(3, 2));
+
+            Assert.IsTrue(Plan(FormationShape.DiagonalDownRight));
+
+            Assert.AreEqual(5, _assignments.Count);
+        }
+
+        [Test]
         public void Diagonal_KeepsTheShorterBottomClearance()
         {
             _settings.HorizontalBottomClearance.Returns(4);
@@ -168,50 +194,72 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void ItemCover_FillsTheRowUnderTheItemStartingWithItsLowerNeighbours()
+        public void ItemCover_RingsTheItemWithAllSixNeighbours()
         {
             BuildGrid(7, 8);
-            var host = new BalloonModel();
-            host.Item.Value = ItemType.Bomb;
-            _grid.Place(host, null, new Vector2Int(3, 1));
-            AddMembers(new Vector2Int(0, 5), new Vector2Int(6, 5), new Vector2Int(3, 5));
+            PlaceItem(new Vector2Int(3, 2));
+            AddSixMembers();
 
             Assert.IsTrue(Plan(FormationShape.ItemCover));
 
-            var targets = Targets();
-            CollectionAssert.Contains(targets, HexCoordinates.DiagonalDown(new Vector2Int(3, 1), false));
-            CollectionAssert.Contains(targets, HexCoordinates.DiagonalDown(new Vector2Int(3, 1), true));
-            Assert.IsTrue(targets.All(t => t.y == 2));
+            CollectionAssert.AreEquivalent(HexCoordinates.HexNeighborIndices(3, 2), Targets());
         }
 
         [Test]
-        public void ItemCover_AtTheEdge_UsesTheOneLowerNeighbourOnTheBoard()
+        public void ItemCover_WithFewerThanSixMembers_HasNoSpot()
         {
             BuildGrid(7, 8);
-            var host = new BalloonModel();
-            host.Item.Value = ItemType.Bomb;
+            PlaceItem(new Vector2Int(3, 2));
+            AddMembers(new Vector2Int(0, 5), new Vector2Int(1, 5), new Vector2Int(2, 5), new Vector2Int(4, 5),
+                new Vector2Int(5, 5));
 
-            // Even row, column 0: the lower-left neighbour is off the board.
-            _grid.Place(host, null, new Vector2Int(0, 2));
-            AddMembers(new Vector2Int(0, 5), new Vector2Int(6, 5), new Vector2Int(3, 5));
+            Assert.IsFalse(Plan(FormationShape.ItemCover));
+        }
 
-            Assert.IsTrue(Plan(FormationShape.ItemCover));
+        [TestCase(0, 2)]
+        [TestCase(3, 0)]
+        [TestCase(6, 3)]
+        public void ItemCover_AtTheBoardsEdge_HasNoSpot(int col, int row)
+        {
+            BuildGrid(7, 8);
+            PlaceItem(new Vector2Int(col, row));
+            AddSixMembers();
 
-            var targets = Targets();
-            CollectionAssert.Contains(targets, HexCoordinates.DiagonalDown(new Vector2Int(0, 2), true));
-            Assert.IsTrue(targets.All(t => t.y == 3 && t.x >= 0));
+            Assert.IsFalse(Plan(FormationShape.ItemCover));
         }
 
         [Test]
-        public void ItemCover_UnderAnItemTooCloseToTheCannon_HasNoSpot()
+        public void ItemCover_IgnoresTheHorizontalLimits()
         {
-            // The cover would be row 4 of eight; four rows kept clear for a row formation leave row 3 the lowest.
+            // Row 4 of eight is under a line's four clear rows, and six is past its three.
             _settings.HorizontalBottomClearance.Returns(4);
+            _settings.HorizontalMaxMembers.Returns(3);
             BuildGrid(7, 8);
-            var host = new BalloonModel();
-            host.Item.Value = ItemType.Bomb;
-            _grid.Place(host, null, new Vector2Int(3, 3));
-            AddMembers(new Vector2Int(0, 1), new Vector2Int(6, 1), new Vector2Int(3, 1));
+            PlaceItem(new Vector2Int(3, 4));
+            AddSixMembers();
+
+            Assert.IsTrue(Plan(FormationShape.ItemCover));
+
+            Assert.AreEqual(6, _assignments.Count);
+        }
+
+        [Test]
+        public void ItemCover_RingIntoTheBottomClearance_HasNoSpot()
+        {
+            BuildGrid(7, 8);
+            PlaceItem(new Vector2Int(3, 5));
+            AddSixMembers();
+
+            Assert.IsFalse(Plan(FormationShape.ItemCover), "row 6 is in the bottom two");
+        }
+
+        [Test]
+        public void ItemCover_NeverPushesABalloonOffTheRing()
+        {
+            BuildGrid(7, 8);
+            PlaceItem(new Vector2Int(3, 2));
+            _grid.Place(new BalloonModel(), null, new Vector2Int(2, 2));
+            AddSixMembers();
 
             Assert.IsFalse(Plan(FormationShape.ItemCover));
         }
@@ -249,6 +297,19 @@ namespace BalloonParty.Tests.Balloon
         private Vector2Int TargetOf(IWriteableFormationMember member)
         {
             return _assignments.Single(a => a.Member == member).Target;
+        }
+
+        private void PlaceItem(Vector2Int slot)
+        {
+            var host = new BalloonModel();
+            host.Item.Value = ItemType.Bomb;
+            _grid.Place(host, null, slot);
+        }
+
+        private void AddSixMembers()
+        {
+            AddMembers(new Vector2Int(0, 5), new Vector2Int(1, 5), new Vector2Int(2, 5), new Vector2Int(4, 5),
+                new Vector2Int(5, 5), new Vector2Int(6, 5));
         }
 
         private void AddMembers(params Vector2Int[] slots)

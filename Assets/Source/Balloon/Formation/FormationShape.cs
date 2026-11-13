@@ -6,7 +6,7 @@ namespace BalloonParty.Balloon.Formation
         DiagonalDownRight,
         DiagonalDownLeft,
 
-        // A row right under a balloon that carries an item, so shots from below can't reach the item.
+        // A ring of six around a balloon that carries an item: no shot reaches the item, and it can't move.
         ItemCover
     }
 }
