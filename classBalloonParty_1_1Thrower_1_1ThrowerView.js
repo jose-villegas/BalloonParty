@@ -3,7 +3,7 @@ var classBalloonParty_1_1Thrower_1_1ThrowerView =
     [ "AnimateEntrance", "classBalloonParty_1_1Thrower_1_1ThrowerView.html#aeb9bb306a9008afa887304e5c7a18068", null ],
     [ "Awake", "classBalloonParty_1_1Thrower_1_1ThrowerView.html#a358fce6f8d33d7cce1aa2f8eac7603b8", null ],
     [ "ClearTrace", "classBalloonParty_1_1Thrower_1_1ThrowerView.html#ab1c9bf4855c4b5e7eb1a334146f0f97c", null ],
-    [ "Construct", "classBalloonParty_1_1Thrower_1_1ThrowerView.html#ace9ff0396b27658ae439f7eae165abfc", null ],
+    [ "Construct", "classBalloonParty_1_1Thrower_1_1ThrowerView.html#ad1b0c64b2978e7e14f76dff7ce361f44", null ],
     [ "PlayRecoil", "classBalloonParty_1_1Thrower_1_1ThrowerView.html#a2ce4bfdb0c09160e4ed29fe41287c3e5", null ],
     [ "PlaySnipeWhirlwind", "classBalloonParty_1_1Thrower_1_1ThrowerView.html#a9ee8378db9c500d25a132e7295a83f30", null ],
     [ "RotateTo", "classBalloonParty_1_1Thrower_1_1ThrowerView.html#a4074e0974fdb1ecf40217144fed4296e", null ],

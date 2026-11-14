@@ -11,6 +11,7 @@ var SmokeFieldSettings_8cs =
       [ "BalloonParty.Configuration.Effects.PaintSource.ProjectileTrail", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda87950d62eb5a4df533e10c0411199f3c", null ],
       [ "BalloonParty.Configuration.Effects.PaintSource.ToughPop", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda238dd854590fed6a9209a36c2c22f5ed", null ],
       [ "BalloonParty.Configuration.Effects.PaintSource.ToughBreathing", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda81552e14e7348edf29e81ad2596d9133", null ],
-      [ "BalloonParty.Configuration.Effects.PaintSource.ToughDeflect", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda4925b41d0df91ae83e84e0ca1fedecf6", null ]
+      [ "BalloonParty.Configuration.Effects.PaintSource.ToughDeflect", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda4925b41d0df91ae83e84e0ca1fedecf6", null ],
+      [ "BalloonParty.Configuration.Effects.PaintSource.SnipeSkyLight", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda5f9970ae34cc55664cd63fa680706728", null ]
     ] ]
 ];

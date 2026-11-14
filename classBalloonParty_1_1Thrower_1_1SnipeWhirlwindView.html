@@ -117,7 +117,7 @@ $(function(){initNavTree('classBalloonParty_1_1Thrower_1_1SnipeWhirlwindView.htm
 </div><!--header-->
 <div class="contents">
 
-<p>The Sharpshooter card's announcement when a ball loads Snipe-armed: a bright light drops from the sky onto the cannon, dimming and tightening as it falls, and where it lands a whirlwind plays around the thrower: the Snipe's own cone spiral drilling into the muzzle, and a ring of glitter turning around the cannon, both tightening in as they fade.  
+<p>The Sharpshooter card's announcement when a ball loads Snipe-armed: a bright light drops from the sky onto the cannon, dimming and tightening as it falls, trailing white smoke and a wake through the disturbance field, and where it lands a burst displaces the field and a whirlwind plays around the thrower: the Snipe's own cone spiral drilling into the muzzle, and a ring of glitter turning around the cannon, both tightening in as they fade.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Thrower.SnipeWhirlwindView:</div>
@@ -136,9 +136,9 @@ $(function(){initNavTree('classBalloonParty_1_1Thrower_1_1SnipeWhirlwindView.htm
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a4ade6524c8521c5b0c5a5edc4cb8de5a" id="r_a4ade6524c8521c5b0c5a5edc4cb8de5a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ade6524c8521c5b0c5a5edc4cb8de5a">Bind</a> (<a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a> lightField)</td></tr>
-<tr class="memdesc:a4ade6524c8521c5b0c5a5edc4cb8de5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lights come from the scene light field; without one the whirlwind plays at once, unlit.  <br /></td></tr>
-<tr class="separator:a4ade6524c8521c5b0c5a5edc4cb8de5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0edd22116871362b08939bbe149a02f9" id="r_a0edd22116871362b08939bbe149a02f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0edd22116871362b08939bbe149a02f9">Bind</a> (<a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a> lightField, <a class="el" href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html">DisturbanceFieldService</a> disturbanceField, <a class="el" href="classBalloonParty_1_1Scenario_1_1SmokeFieldService.html">SmokeFieldService</a> smokeField)</td></tr>
+<tr class="memdesc:a0edd22116871362b08939bbe149a02f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The fields the sky light draws into.  <br /></td></tr>
+<tr class="separator:a0edd22116871362b08939bbe149a02f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6446143f827729fdbcfa96a3bc7b0c87" id="r_a6446143f827729fdbcfa96a3bc7b0c87"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6446143f827729fdbcfa96a3bc7b0c87">Play</a> (Color color, int skyLightPaletteIndex, float reloadSeconds)</td></tr>
 <tr class="memdesc:a6446143f827729fdbcfa96a3bc7b0c87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Drops the sky light in palette slot <em>skyLightPaletteIndex</em>  onto the cannon, then plays the whirlwind in <em>color</em> , timed to end as a reload of <em>reloadSeconds</em>  does.  <br /></td></tr>
 <tr class="separator:a6446143f827729fdbcfa96a3bc7b0c87"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,11 +171,17 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:adbdfb45d1417dbd89e846c8ccbabcc1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18f0a584f0d0ceefce2bd7b0ceeb1126" id="r_a18f0a584f0d0ceefce2bd7b0ceeb1126"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18f0a584f0d0ceefce2bd7b0ceeb1126">SetVisible</a> (bool visible)</td></tr>
 <tr class="separator:a18f0a584f0d0ceefce2bd7b0ceeb1126"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2886f889aa4a87c4ab8ed32d2c873f14" id="r_a2886f889aa4a87c4ab8ed32d2c873f14"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2886f889aa4a87c4ab8ed32d2c873f14">StampLanding</a> ()</td></tr>
+<tr class="separator:a2886f889aa4a87c4ab8ed32d2c873f14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cc9bcc3840dbacd567057142e6a158c" id="r_a2cc9bcc3840dbacd567057142e6a158c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2cc9bcc3840dbacd567057142e6a158c">TrailSkyLight</a> (Vector3 position)</td></tr>
+<tr class="separator:a2cc9bcc3840dbacd567057142e6a158c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a209d43dd78101ce4f51ac0643e6a527e" id="r_a209d43dd78101ce4f51ac0643e6a527e"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a209d43dd78101ce4f51ac0643e6a527e">_color</a></td></tr>
 <tr class="separator:a209d43dd78101ce4f51ac0643e6a527e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84f77a720af4e057f996c61d53e1cb9e" id="r_a84f77a720af4e057f996c61d53e1cb9e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html">DisturbanceFieldService</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a84f77a720af4e057f996c61d53e1cb9e">_disturbanceField</a></td></tr>
+<tr class="separator:a84f77a720af4e057f996c61d53e1cb9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26815fefc5b2c8a97161000fa64d2958" id="r_a26815fefc5b2c8a97161000fa64d2958"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a26815fefc5b2c8a97161000fa64d2958">_duration</a> = 0.5f</td></tr>
 <tr class="separator:a26815fefc5b2c8a97161000fa64d2958"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e39d85ad45eef32968cb3f4fc1dc2a4" id="r_a9e39d85ad45eef32968cb3f4fc1dc2a4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9e39d85ad45eef32968cb3f4fc1dc2a4">_endScale</a> = 0.85f</td></tr>
@@ -194,6 +200,14 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a32e729bb91086700481b2d6158fb9649"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4737178383d244d12ea43b62f55a550e" id="r_a4737178383d244d12ea43b62f55a550e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4737178383d244d12ea43b62f55a550e">_glitterSpin</a> = -540f</td></tr>
 <tr class="separator:a4737178383d244d12ea43b62f55a550e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac195d275e0eb70bbd504ab3f6fae2c1d" id="r_ac195d275e0eb70bbd504ab3f6fae2c1d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac195d275e0eb70bbd504ab3f6fae2c1d">_landingStampRadiusScale</a> = 2.5f</td></tr>
+<tr class="separator:ac195d275e0eb70bbd504ab3f6fae2c1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a922fe9cf695c64c58810016837a0aee7" id="r_a922fe9cf695c64c58810016837a0aee7"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a922fe9cf695c64c58810016837a0aee7">_landingStampSeconds</a> = 0.15f</td></tr>
+<tr class="separator:a922fe9cf695c64c58810016837a0aee7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff3064e3018c24e58f8bc3bb229ec1ec" id="r_aff3064e3018c24e58f8bc3bb229ec1ec"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff3064e3018c24e58f8bc3bb229ec1ec">_lastSmokePosition</a></td></tr>
+<tr class="separator:aff3064e3018c24e58f8bc3bb229ec1ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a721234c030de0d990a4b176eb8995a0f" id="r_a721234c030de0d990a4b176eb8995a0f"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a721234c030de0d990a4b176eb8995a0f">_lastStampPosition</a></td></tr>
+<tr class="separator:a721234c030de0d990a4b176eb8995a0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8c0fb56379e7c0efcd589cc610be3fdf" id="r_a8c0fb56379e7c0efcd589cc610be3fdf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8c0fb56379e7c0efcd589cc610be3fdf">_lightField</a></td></tr>
 <tr class="separator:a8c0fb56379e7c0efcd589cc610be3fdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56ab8d3726314d607635f1842dc55b7c" id="r_a56ab8d3726314d607635f1842dc55b7c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1Light.html">Light</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a56ab8d3726314d607635f1842dc55b7c">_skyLight</a></td></tr>
@@ -216,13 +230,17 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a4b30d69131b4b669e67ae40ca0383332"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae12b31e913ad47dd8faaa809ac3ea5cf" id="r_ae12b31e913ad47dd8faaa809ac3ea5cf"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae12b31e913ad47dd8faaa809ac3ea5cf">_skyLightStartRadius</a> = 3f</td></tr>
 <tr class="separator:ae12b31e913ad47dd8faaa809ac3ea5cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5ca068ea7275cd5f6c538799e0ef6b3" id="r_aa5ca068ea7275cd5f6c538799e0ef6b3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Scenario_1_1SmokeFieldService.html">SmokeFieldService</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5ca068ea7275cd5f6c538799e0ef6b3">_smokeField</a></td></tr>
+<tr class="separator:aa5ca068ea7275cd5f6c538799e0ef6b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ee55c217bebc84468609785f9f80c8d" id="r_a7ee55c217bebc84468609785f9f80c8d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7ee55c217bebc84468609785f9f80c8d">_smokeSpacing</a> = 0.15f</td></tr>
+<tr class="separator:a7ee55c217bebc84468609785f9f80c8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af43c9ac1c416428eb37b9bb82938c23a" id="r_af43c9ac1c416428eb37b9bb82938c23a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af43c9ac1c416428eb37b9bb82938c23a">_startScale</a> = 1.35f</td></tr>
 <tr class="separator:af43c9ac1c416428eb37b9bb82938c23a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12b81f12de46e74a63933c906a079fce" id="r_a12b81f12de46e74a63933c906a079fce"><td class="memItemLeft" align="right" valign="top">Tween&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a12b81f12de46e74a63933c906a079fce">_tween</a></td></tr>
 <tr class="separator:a12b81f12de46e74a63933c906a079fce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The Sharpshooter card's announcement when a ball loads Snipe-armed: a bright light drops from the sky onto the cannon, dimming and tightening as it falls, and where it lands a whirlwind plays around the thrower: the Snipe's own cone spiral drilling into the muzzle, and a ring of glitter turning around the cannon, both tightening in as they fade. </p>
+<div class="textblock"><p>The Sharpshooter card's announcement when a ball loads Snipe-armed: a bright light drops from the sky onto the cannon, dimming and tightening as it falls, trailing white smoke and a wake through the disturbance field, and where it lands a burst displaces the field and a whirlwind plays around the thrower: the Snipe's own cone spiral drilling into the muzzle, and a ring of glitter turning around the cannon, both tightening in as they fade. </p>
 <p>A child of the thrower, so the whirlwind turns with the aim; the light falls straight down the world, whatever the aim. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a6926329723512a18ee4bbfc15ebeab67" name="a6926329723512a18ee4bbfc15ebeab67"></a>
@@ -300,8 +318,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a4ade6524c8521c5b0c5a5edc4cb8de5a" name="a4ade6524c8521c5b0c5a5edc4cb8de5a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4ade6524c8521c5b0c5a5edc4cb8de5a">&#9670;&#160;</a></span>Bind()</h2>
+<a id="a0edd22116871362b08939bbe149a02f9" name="a0edd22116871362b08939bbe149a02f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0edd22116871362b08939bbe149a02f9">&#9670;&#160;</a></span>Bind()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -312,8 +330,17 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void BalloonParty.Thrower.SnipeWhirlwindView.Bind </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a></td>          <td class="paramname"><span class="paramname"><em>lightField</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService.html">SceneLightFieldService</a></td>          <td class="paramname"><span class="paramname"><em>lightField</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html">DisturbanceFieldService</a></td>          <td class="paramname"><span class="paramname"><em>disturbanceField</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Scenario_1_1SmokeFieldService.html">SmokeFieldService</a></td>          <td class="paramname"><span class="paramname"><em>smokeField</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -323,7 +350,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Lights come from the scene light field; without one the whirlwind plays at once, unlit. </p>
+<p>The fields the sky light draws into. </p>
+<p>Without a light field the whirlwind plays at once, unlit; the smoke and the displacement are each skipped when their field is missing. </p>
 
 </div>
 </div>
@@ -578,6 +606,56 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a2886f889aa4a87c4ab8ed32d2c873f14" name="a2886f889aa4a87c4ab8ed32d2c873f14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2886f889aa4a87c4ab8ed32d2c873f14">&#9670;&#160;</a></span>StampLanding()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Thrower.SnipeWhirlwindView.StampLanding </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2cc9bcc3840dbacd567057142e6a158c" name="a2cc9bcc3840dbacd567057142e6a158c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cc9bcc3840dbacd567057142e6a158c">&#9670;&#160;</a></span>TrailSkyLight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Thrower.SnipeWhirlwindView.TrailSkyLight </td>
+          <td>(</td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>position</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a209d43dd78101ce4f51ac0643e6a527e" name="a209d43dd78101ce4f51ac0643e6a527e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a209d43dd78101ce4f51ac0643e6a527e">&#9670;&#160;</a></span>_color</h2>
@@ -590,6 +668,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">Color BalloonParty.Thrower.SnipeWhirlwindView._color</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a84f77a720af4e057f996c61d53e1cb9e" name="a84f77a720af4e057f996c61d53e1cb9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84f77a720af4e057f996c61d53e1cb9e">&#9670;&#160;</a></span>_disturbanceField</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html">DisturbanceFieldService</a> BalloonParty.Thrower.SnipeWhirlwindView._disturbanceField</td>
         </tr>
       </table>
   </td>
@@ -788,6 +888,94 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.Thrower.SnipeWhirlwindView._glitterSpin = -540f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac195d275e0eb70bbd504ab3f6fae2c1d" name="ac195d275e0eb70bbd504ab3f6fae2c1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac195d275e0eb70bbd504ab3f6fae2c1d">&#9670;&#160;</a></span>_landingStampRadiusScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Thrower.SnipeWhirlwindView._landingStampRadiusScale = 2.5f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a922fe9cf695c64c58810016837a0aee7" name="a922fe9cf695c64c58810016837a0aee7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a922fe9cf695c64c58810016837a0aee7">&#9670;&#160;</a></span>_landingStampSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Thrower.SnipeWhirlwindView._landingStampSeconds = 0.15f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aff3064e3018c24e58f8bc3bb229ec1ec" name="aff3064e3018c24e58f8bc3bb229ec1ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff3064e3018c24e58f8bc3bb229ec1ec">&#9670;&#160;</a></span>_lastSmokePosition</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector3 BalloonParty.Thrower.SnipeWhirlwindView._lastSmokePosition</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a721234c030de0d990a4b176eb8995a0f" name="a721234c030de0d990a4b176eb8995a0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a721234c030de0d990a4b176eb8995a0f">&#9670;&#160;</a></span>_lastStampPosition</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector3 BalloonParty.Thrower.SnipeWhirlwindView._lastStampPosition</td>
         </tr>
       </table>
   </td>
@@ -1030,6 +1218,50 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.Thrower.SnipeWhirlwindView._skyLightStartRadius = 3f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa5ca068ea7275cd5f6c538799e0ef6b3" name="aa5ca068ea7275cd5f6c538799e0ef6b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5ca068ea7275cd5f6c538799e0ef6b3">&#9670;&#160;</a></span>_smokeField</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classBalloonParty_1_1Scenario_1_1SmokeFieldService.html">SmokeFieldService</a> BalloonParty.Thrower.SnipeWhirlwindView._smokeField</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7ee55c217bebc84468609785f9f80c8d" name="a7ee55c217bebc84468609785f9f80c8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ee55c217bebc84468609785f9f80c8d">&#9670;&#160;</a></span>_smokeSpacing</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Thrower.SnipeWhirlwindView._smokeSpacing = 0.15f</td>
         </tr>
       </table>
   </td>

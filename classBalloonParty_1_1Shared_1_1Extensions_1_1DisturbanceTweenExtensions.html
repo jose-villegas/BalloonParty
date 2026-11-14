@@ -120,6 +120,9 @@ $(function(){initNavTree('classBalloonParty_1_1Shared_1_1Extensions_1_1Disturban
 Static Package Functions</h2></td></tr>
 <tr class="memitem:a2a5cc9ce9ed039fb48ed87eb43a69f93" id="r_a2a5cc9ce9ed039fb48ed87eb43a69f93"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a5cc9ce9ed039fb48ed87eb43a69f93">GateStampSteps</a> (Vector3 currentPos, Vector3 lastStampPos, float spacing, out Vector3 newAnchor, out Vector2 direction)</td></tr>
 <tr class="separator:a2a5cc9ce9ed039fb48ed87eb43a69f93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1556240d33e95b3377085452aa3a4cb" id="r_ae1556240d33e95b3377085452aa3a4cb"><td class="memItemLeft" align="right" valign="top">static Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae1556240d33e95b3377085452aa3a4cb">StampAlong</a> (<a class="el" href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html">DisturbanceFieldService</a> field, <a class="el" href="structBalloonParty_1_1Configuration_1_1Effects_1_1StampProfile.html">StampProfile</a> profile, Vector3 pos, Vector3 lastStampPos, float scale=1f)</td></tr>
+<tr class="memdesc:ae1556240d33e95b3377085452aa3a4cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lays <em>profile</em> 's wake from <em>lastStampPos</em>  toward <em>pos</em> , one stamp per <code>Spacing</code> (Radius when 0) of travel, all scaled by <em>scale</em> .  <br /></td></tr>
+<tr class="separator:ae1556240d33e95b3377085452aa3a4cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad87f2fcc57cbef5d1127908b6f6ae5aa" id="r_ad87f2fcc57cbef5d1127908b6f6ae5aa"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad87f2fcc57cbef5d1127908b6f6ae5aa">StampDisturbanceAlongPath&lt; T &gt;</a> (this T tween, Transform target, <a class="el" href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html">DisturbanceFieldService</a> field, <a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0e">StampSource</a> source)</td></tr>
 <tr class="separator:ad87f2fcc57cbef5d1127908b6f6ae5aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -175,6 +178,53 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae1556240d33e95b3377085452aa3a4cb" name="ae1556240d33e95b3377085452aa3a4cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1556240d33e95b3377085452aa3a4cb">&#9670;&#160;</a></span>StampAlong()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static Vector3 BalloonParty.Shared.Extensions.DisturbanceTweenExtensions.StampAlong </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html">DisturbanceFieldService</a></td>          <td class="paramname"><span class="paramname"><em>field</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Configuration_1_1Effects_1_1StampProfile.html">StampProfile</a></td>          <td class="paramname"><span class="paramname"><em>profile</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>pos</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>lastStampPos</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>scale</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1f</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Lays <em>profile</em> 's wake from <em>lastStampPos</em>  toward <em>pos</em> , one stamp per <code>Spacing</code> (Radius when 0) of travel, all scaled by <em>scale</em> . </p>
+<p>Returns the new anchor to pass back next time; it trails <em>pos</em>  by less than a step. For a mover not driven by a tween. </p>
 
 </div>
 </div>

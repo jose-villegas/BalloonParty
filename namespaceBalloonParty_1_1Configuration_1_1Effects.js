@@ -49,7 +49,8 @@ var namespaceBalloonParty_1_1Configuration_1_1Effects =
       [ "ProjectileTrail", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda87950d62eb5a4df533e10c0411199f3c", null ],
       [ "ToughPop", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda238dd854590fed6a9209a36c2c22f5ed", null ],
       [ "ToughBreathing", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda81552e14e7348edf29e81ad2596d9133", null ],
-      [ "ToughDeflect", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda4925b41d0df91ae83e84e0ca1fedecf6", null ]
+      [ "ToughDeflect", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda4925b41d0df91ae83e84e0ca1fedecf6", null ],
+      [ "SnipeSkyLight", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda5f9970ae34cc55664cd63fa680706728", null ]
     ] ],
     [ "StampSource", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0e", [
       [ "Projectile", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0eaae7968d26b598ce434958b0825b7a4ac", null ],
@@ -64,7 +65,8 @@ var namespaceBalloonParty_1_1Configuration_1_1Effects =
       [ "RainbowColor", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0eaeeb8d0dd6adba29f1af768ccb23a0a79", null ],
       [ "ProjectileImpact", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea1f4a87dac642b8064a663eb742408cb2", null ],
       [ "UnbreakableBurst", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea52557e239f11db73b54f27817dac5aac", null ],
-      [ "PierceDischarge", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0eae1eb86b5a3508b638909eaf2544ca4ab", null ]
+      [ "PierceDischarge", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0eae1eb86b5a3508b638909eaf2544ca4ab", null ],
+      [ "SnipeSkyLight", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0ea5f9970ae34cc55664cd63fa680706728", null ]
     ] ],
     [ "TimeOfDaySource", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac49e29688fd680d7d4b970212051ce95", [
       [ "LevelSweep", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac49e29688fd680d7d4b970212051ce95af82b70e009a9e33bfaa99ab4ddb9a426", null ],
