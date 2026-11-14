@@ -78,7 +78,8 @@ python3 Tools/playtest/playtest_bot.py --on-loss bonus --seconds 600 --label ads
    `--seconds` of wall time have passed. The first tick installs the shooter on the Editor's update
    loop: it checks the cannon every 50 ms and fires as the chosen player, so a shot's timing isn't
    rounded to the tick. The shooter aims with the game's best-shot solver (the **Fire Best Shot**
-   cheat) and removes itself when Play mode ends, a newer session replaces it, or ticks stop coming
+   cheat, which goes for a golden balloon first, then a heart balloon that counts, then score) and
+   removes itself when Play mode ends, a newer session replaces it, or ticks stop coming
    for 10 s. If Play mode starts on the launch screen (the Editor has the Launcher scene open), a tick
    taps its Play button the way a finger does, after 1.5 s on the screen (the device autoplay's
    `AutoplayTap`), so the press and the ascend play as they would for a player. What a game over gets is

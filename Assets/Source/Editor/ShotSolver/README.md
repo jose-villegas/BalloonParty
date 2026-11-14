@@ -17,6 +17,7 @@ unit-testable outside the editor.
 | `ShotBoardSnapshot` | `Solver/` | The board's data types: `ShotBalloonSnapshot` (one target's geometry, `ColorProfile` colour identity, optional `BalanceProfile`, `ShotContactKind`, item), built only via its named factories (`ForColorTarget`/`ForToughTarget`/`ForRainbowTarget`/`ForGoldenTarget`/`ForStaticContact`) so every caller's field mapping stays honest as the struct grows; `ShotBalloonState`, its mutable per-simulation copy |
 | `ShotFlightState` | `Solver/` | Mutable per-flight state passed by `ref` through `Simulate` — position/direction/shields/elapsed, cruise/pierce state, and the Phase D-core buff/streak/colour fields (`HasRainbowBuff`, `SpeedBuffMultiplier`, `StreakColor`/`StreakCount`, `DeferredPops`, `ProjectileColor`) |
 | `ShotBoardGather` | `Solver/` | Snapshots the live board/thrower/projectile into the sim's input structs (`ShotBoardGather.Gather`) and converts sweep angles to world directions (`DirectionFromDegrees`). The sweep's sample grid (`ResolveSweepSampleCount`/`ResolveSweepAngle`, see below) lives on `Shared/AimAngleGrid` instead — `ShotBoardGather` consumes it rather than owning it. Called by `ShotSolverWindow` |
+| `ShotRanking` | `Solver/` | Orders simulated shots for the Fire Best Shot cheat (and the bots and autoplay aiming with it): a golden balloon popped beats any score, then a heart balloon popped while its heart counts (up to the hearts missing, or any on a purple level), then `RawScore` |
 | `ShotBoardDynamics` | `Solver/` | The dynamic-board half (plan §7): owns a real headless `SlotGrid` + `GridBalanceQuery` + `BalancePlanner` over stub actors, schedules flight-rebalance pulses on the sim timeline, and keeps per-balloon nudge-impulse state. Built once per gather, reset per simulated flight |
 | `ShotSimBoardActor` | `Solver/` | The stub actors (`ShotSimDynamicActor`/`ShotSimStaticActor`) the dynamics grid is populated with, plus the per-flight snapshot structs for non-target actors |
 | `ShotMotionMath` | `Solver/` | Pure math: the nudge `Reach` envelope (mirrors `BalloonMotionTicker` exactly) and the moving-circle entry solve (relative-velocity quadratic, reduces to the exact static solve at zero velocity) |
@@ -42,7 +43,9 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
 - **Golden balloon** (`ForGoldenTarget`) — deflects the shot like an unbreakable (`int.MaxValue`
   durability) and pops only to a pierce, but is `Scoreless` (its pop pays a card, not points, and
   leaves the streak alone) and `ImmuneToEffects` (no item hit reaches it, mirroring the live
-  model's `HitOutcome.None` for any hit without `DirectHit`). Colourless and item-free.
+  model's `HitOutcome.None` for any hit without `DirectHit`). Colourless and item-free. The result counts
+  reward pops apart (`GoldenPops`, `HeartPops`, told apart by `ImmuneToEffects`), since they add nothing
+  to `RawScore`; `ShotRanking` reads them to put a golden, then a heart that counts, ahead of score.
 - **Interactive statics** (Deflector/Gatekeeper/Absorber, Phase A) — collide with the shot while
   still occupying their balance-grid slot. A Deflector has no durability capability at all, so it
   gets the same `int.MaxValue` permanent-deflect treatment as an Unbreakable balloon. A

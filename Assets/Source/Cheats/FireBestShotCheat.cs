@@ -6,6 +6,7 @@ using BalloonParty.Balloon.Controller;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Upgrades;
 using BalloonParty.Shared;
@@ -22,7 +23,8 @@ using VContainer.Unity;
 namespace BalloonParty.Cheats
 {
     /// <summary>
-    ///     Sweeps the shot solver across the aim arc and fires the best-scoring angle through
+    ///     Sweeps the shot solver across the aim arc and fires the best angle (<see cref="ShotRanking" />: a
+    ///     golden balloon first, then a heart that counts, then score) through
     ///     <c>ThrowerController.FireAt</c> (one-shot) or sets <c>ThrowerController.DirectionOverride</c>
     ///     (auto toggle) so the player's next tap fires the optimal angle. Usable in development builds
     ///     on device.
@@ -43,6 +45,7 @@ namespace BalloonParty.Cheats
         private readonly IActiveLevelParameters _levelParams;
         private readonly IRunConfig _runConfig;
         private readonly IWeaponStats _weapon;
+        private readonly IPlayerHealth _health;
         private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
 
         private IDisposable _subscription;
@@ -66,6 +69,7 @@ namespace BalloonParty.Cheats
             IActiveLevelParameters levelParams,
             IRunConfig runConfig,
             IWeaponStats weapon,
+            IPlayerHealth health,
             ISubscriber<ProjectileLoadedMessage> loadedSubscriber)
         {
             _grid = grid;
@@ -78,6 +82,7 @@ namespace BalloonParty.Cheats
             _levelParams = levelParams;
             _runConfig = runConfig;
             _weapon = weapon;
+            _health = health;
             _loadedSubscriber = loadedSubscriber;
         }
 
@@ -134,14 +139,14 @@ namespace BalloonParty.Cheats
 
         private void SetDirectionOverride()
         {
-            if (!TrySolve(out var bestAngle, out var bestScore))
+            if (!TrySolve(out var bestAngle, out var best))
             {
                 return;
             }
 
             _cachedScope.Container.Resolve<ThrowerController>().DirectionOverride =
                 ShotBoardGather.DirectionFromDegrees(bestAngle);
-            Log.Info("FireBestShotCheat", $"override set: {bestAngle:F2}° (predicted score {bestScore}).");
+            Log.Info("FireBestShotCheat", $"override set: {bestAngle:F2}° ({Describe(best)}).");
         }
 
         /// <summary>
@@ -155,7 +160,7 @@ namespace BalloonParty.Cheats
 
         private void FireBest()
         {
-            if (!TrySolve(out var bestAngle, out var bestScore))
+            if (!TrySolve(out var bestAngle, out var best))
             {
                 Log.Warn("FireBestShotCheat", "no thrower in the scene, or no targets on the board.");
                 return;
@@ -163,13 +168,18 @@ namespace BalloonParty.Cheats
 
             _cachedScope.Container.Resolve<ThrowerController>()
                 .FireAt(ShotBoardGather.DirectionFromDegrees(bestAngle));
-            Log.Info("FireBestShotCheat", $"fired {bestAngle:F2}° (predicted score {bestScore}).");
+            Log.Info("FireBestShotCheat", $"fired {bestAngle:F2}° ({Describe(best)}).");
         }
 
-        private bool TrySolve(out float bestAngle, out int bestScore)
+        private static string Describe(in ShotSimulationResult best)
+        {
+            return $"predicted score {best.RawScore}, golden pops {best.GoldenPops}, heart pops {best.HeartPops}";
+        }
+
+        private bool TrySolve(out float bestAngle, out ShotSimulationResult best)
         {
             bestAngle = 0f;
-            bestScore = int.MinValue;
+            best = default;
             RefreshCachedRefs();
             if (_cachedScope == null || _cachedView == null)
             {
@@ -187,7 +197,7 @@ namespace BalloonParty.Cheats
             }
 
             var workingSet = new ShotBalloonState[context.Board.Count];
-            FindBestAngle(context, workingSet, out bestAngle, out bestScore);
+            FindBestAngle(context, workingSet, out bestAngle, out best);
             return true;
         }
 
@@ -195,25 +205,30 @@ namespace BalloonParty.Cheats
         // angle the same way, or the auto-set override could silently disagree with what "Fire Once"
         // would have chosen for the identical board.
         private void FindBestAngle(
-            in ShotSolveContext context, ShotBalloonState[] workingSet, out float bestAngle, out int bestScore)
+            in ShotSolveContext context, ShotBalloonState[] workingSet, out float bestAngle, out ShotSimulationResult best)
         {
             var sampleCount = AimAngleGrid.ResolveSweepSampleCount(
                 _config.AimAngleMinDegrees, _config.AimAngleMaxDegrees, _config.AimAngleStepDegrees,
                 ContinuousSampleCount);
+            var heartsWanted = ShotRanking.HeartsWanted(
+                _health.Current.Value, _health.Max, _levelParams.Current is { IsExtraColorLevel: true });
             bestAngle = _config.AimAngleMinDegrees;
-            bestScore = int.MinValue;
+            best = default;
+            var hasBest = false;
             for (var i = 0; i < sampleCount; i++)
             {
                 var angle = AimAngleGrid.ResolveSweepAngle(
                     i, _config.AimAngleMinDegrees, _config.AimAngleMaxDegrees, _config.AimAngleStepDegrees,
                     ContinuousSampleCount);
-                var score = ShotBoardGather.SimulateAt(angle, context, workingSet).RawScore;
-                if (score > bestScore)
+                var result = ShotBoardGather.SimulateAt(angle, context, workingSet);
+                if (!hasBest || ShotRanking.IsBetter(result, best, heartsWanted))
                 {
-                    bestScore = score;
+                    best = result;
                     bestAngle = angle;
+                    hasBest = true;
                 }
             }
+
         }
 
         private void RefreshCachedRefs()

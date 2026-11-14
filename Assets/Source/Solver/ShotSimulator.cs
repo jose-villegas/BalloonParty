@@ -115,6 +115,11 @@ namespace BalloonParty.Solver
     {
         public readonly int RawScore;
         public readonly int Pops;
+
+        /// <summary>Reward balloons popped, which pay no score: a ranking that wants them reads these.</summary>
+        public readonly int GoldenPops;
+
+        public readonly int HeartPops;
         public readonly int ToughsCleared;
         public readonly bool BoardCleared;
         public readonly int Events;
@@ -124,10 +129,12 @@ namespace BalloonParty.Solver
 
         public ShotSimulationResult(
             int rawScore, int pops, int toughsCleared, bool boardCleared, int events, bool died, bool capped,
-            bool absorbed)
+            bool absorbed, int goldenPops, int heartPops)
         {
             RawScore = rawScore;
             Pops = pops;
+            GoldenPops = goldenPops;
+            HeartPops = heartPops;
             ToughsCleared = toughsCleared;
             BoardCleared = boardCleared;
             Events = events;
@@ -305,7 +312,7 @@ namespace BalloonParty.Solver
 
             return new ShotSimulationResult(
                 state.RawScore, state.Pops, state.ToughsCleared, activeCount == 0, state.Events, state.Died,
-                state.Capped, state.Absorbed);
+                state.Capped, state.Absorbed, state.GoldenPops, state.HeartPops);
         }
 
         private static bool TryFindNearestBalloonEntryAny(
@@ -1131,10 +1138,21 @@ namespace BalloonParty.Solver
         private static void ResolvePopScore(
             in ShotBalloonState balloon, in ShotScoreRules scoreRules, in ShotPopCause cause, ref ShotFlightState state)
         {
-            // A reward balloon: no score, and the streak is left as it was.
             if (!balloon.Scoreless)
             {
                 ResolveScoredPop(in balloon, in scoreRules, in cause, ref state);
+                return;
+            }
+
+            // A reward balloon: no score, and the streak is left as it was. Only the golden is immune to
+            // item effects, which tells the two apart.
+            if (balloon.ImmuneToEffects)
+            {
+                state.GoldenPops++;
+            }
+            else
+            {
+                state.HeartPops++;
             }
         }
 

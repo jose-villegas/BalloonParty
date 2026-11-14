@@ -88,6 +88,7 @@ namespace BalloonParty.Tests.ShotSolver
                 workingSet: workingSet);
 
             Assert.AreEqual(0, result.Pops);
+            Assert.AreEqual(0, result.GoldenPops);
             Assert.AreEqual(0, result.RawScore);
             Assert.AreEqual(0, result.ToughsCleared);
             Assert.IsFalse(result.BoardCleared);
@@ -115,6 +116,8 @@ namespace BalloonParty.Tests.ShotSolver
 
             Assert.AreEqual(1 + 10 * 2, result.RawScore, "the golden pays nothing and the streak climbs through it");
             Assert.AreEqual(3, result.Pops);
+            Assert.AreEqual(1, result.GoldenPops, "counted apart, for a ranking that wants it");
+            Assert.AreEqual(0, result.HeartPops);
             Assert.AreEqual(0, result.ToughsCleared, "scoreless: not tallied as a tough clear either");
             Assert.IsTrue(result.BoardCleared);
         }
