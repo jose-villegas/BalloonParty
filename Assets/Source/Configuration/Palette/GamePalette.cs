@@ -53,6 +53,12 @@ namespace BalloonParty.Configuration.Palette
         /// </summary>
         public const string PredictionColorId = "Prediction";
 
+        /// <summary>
+        ///     Presentation-only palette entry for the god rays behind the golden reward balloon; its alpha is
+        ///     their strength — authored in the palette asset but never a spawnable balloon color.
+        /// </summary>
+        public const string GoldenRaysColorId = "GoldenRays";
+
         [SerializeField] private PaletteEntry[] _colors;
 
         private Dictionary<string, PaletteEntry> _byName;

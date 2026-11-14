@@ -21,7 +21,10 @@ off it, a pierce pops it (it is tough, so the pierce plows it and it shatters at
 no item touches it: an item's damage has no `DirectHit`, and its hit is `HitOutcome.None`. It is
 colourless and scoreless, resists paint, and carries no item. Its prefab (`Prefabs/Balloon/Golden`) is
 built from the tough balloon's, so it looks like a balloon, with a gold-plated body
-(`Shaders/BalloonParty/Balloon/GoldenBalloon.shader`) and a dark gold knot. The prefab keeps the tough
+(`Shaders/BalloonParty/Balloon/GoldenBalloon.shader`) and a dark gold knot. Faint god rays turn and breathe
+behind it (`Balloon/Type/GoldenRaysLook`, the `Shaders/BalloonParty/Sprite/GodRays.shader` fan on the `GoldenRays`
+material), so it stands out on a busy board: they sort below every balloon, so they show in the gaps around it.
+Their colour and strength are the palette's `GoldenRays` entry; their shape and motion are the material's. The prefab keeps the tough
 balloon's variant, which only draws cracks for a balloon with durability, so on the golden one it
 does nothing. It has its own cues (`CombatSoundRouter`): `BalloonDeflectGolden` when the shot bounces off,
 the unbreakable's metallic chime a fifth above the board's key with a high gold glint over it, climbing on

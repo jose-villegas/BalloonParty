@@ -43,3 +43,6 @@ MonoBehaviour:
   - _name: UnbreakableFormation
     _color: {r: 0.15, g: 0.5, b: 1, a: 1}
     _presentationOnly: 1
+  - _name: GoldenRays
+    _color: {r: 1, g: 0.86, b: 0.5, a: 0.6}
+    _presentationOnly: 1
