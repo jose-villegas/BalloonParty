@@ -19,10 +19,10 @@ namespace BalloonParty.Item.Snipe
         [SerializeField] [Min(0f)] private float _tipSpeed = 12f;
 
         [Tooltip("Seconds the finished line stays whole before it starts being erased.")]
-        [SerializeField] [Min(0f)] private float _holdSeconds = 1f;
+        [SerializeField] [Min(0f)] private float _holdSeconds = 0.8f;
 
         [Tooltip("Seconds the erase takes, from the first chunk wiped to the last one gone.")]
-        [SerializeField] [Min(0f)] private float _eraseSeconds = 0.7f;
+        [SerializeField] [Min(0f)] private float _eraseSeconds = 0.5f;
 
         [Tooltip("World length of one chunk the erase wipes away on its own.")]
         [SerializeField] [Min(0.05f)] private float _chunkLength = 0.7f;
