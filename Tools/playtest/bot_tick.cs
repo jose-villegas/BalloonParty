@@ -11,12 +11,15 @@
 //          process), at the solver's angle plus a normal aim error, or now and then (wildChance) at
 //          any angle, unaimed.
 // The handler removes itself when Play mode ends, when a newer bot replaces it, or when ticks stop
-// coming (the heartbeat). On the game-over screen a tick presses Restart (restart on) or just reports it.
+// coming (the heartbeat); the next tick installs it again, keeping the session's counts. Whether it is
+// installed is kept in the AppDomain, which a script reload replaces, so a reload reinstalls it too.
+// On the game-over screen a tick presses Restart (restart on) or just reports it.
 // Each tick returns one line:
-//   <time> L<level> score <score> hearts <hearts> <navigation>/<phase> shots <shots fired so far> fill <board fill> inflight <balls in the air> breather <seconds left> rewards <golden placed> <golden popped> <heart placed> <heart popped>
+//   <time> L<level> score <score> hearts <hearts> <navigation>/<phase> shots <shots fired so far> fill <board fill> inflight <balls in the air> breather <seconds left> rewards <golden placed> <heart placed>[ off]
 // (board fill: the share of open slots balloons fill, IBoardFill.Occupancy; a full board is where hearts are lost;
 // breather: seconds left in the spawn clock's breather after a big clear, ISpawnClock.BreatherSecondsLeft,
-// 0 outside one)
+// 0 outside one; rewards: the reward balloons placed so far, "off" once their counter stopped on an error.
+// Their pops are in the telemetry, which playtest_bot.py reads)
 // or "<time> RESTART" / "<time> GAMEOVER", "<time> LAUNCH" while it presses Play on the launch screen, or
 // "nogame <navigation>" while the game scope isn't up.
 var mode = "__MODE__";
@@ -29,6 +32,7 @@ var restart = __RESTART__;
 var purple = __PURPLE__;
 var startHearts = __HEARTS__;
 const string IdKey = "BalloonPartyBot.Id";
+const string ShooterKey = "BalloonPartyBot.Shooter";
 const string SetupKey = "BalloonPartyBot.Setup.";
 const string RewardsKey = "BalloonPartyBot.Rewards.";
 const string HeartbeatKey = "BalloonPartyBot.Heartbeat";
@@ -128,15 +132,12 @@ void FireLikeAPerson(VContainer.IObjectResolver resolver, object controller)
     controllerType.GetMethod("FireAt", flags).Invoke(controller, new object[] { direction });
 }
 
-// The reward balloons, counted on the shooter's loop so one placed and popped between two ticks still
-// counts: a placement is the service's on-board flag turning on, a pop the payout's last-paid balloon changing.
+// The reward balloons placed, counted on the shooter's 50 ms loop as the service's on-board flag turning on
+// (one placed and popped inside 50 ms goes uncounted). Their pops are counted by the telemetry.
 object watchedGame = null;
 object rewardService = null;
-object rewardPayout = null;
 var goldenWasAlive = false;
 var heartWasAlive = false;
-object lastGoldenPaid = null;
-object lastHeartPaid = null;
 var rewardsBroken = false;
 void CountUp(string key)
 {
@@ -149,19 +150,9 @@ void WatchRewards(VContainer.IObjectResolver resolver)
     {
         watchedGame = resolver;
         rewardService = resolver.Resolve(asm.GetType("BalloonParty.Balloon.Reward.IRewardBalloonRequests"));
-        var payoutType = asm.GetType("BalloonParty.Balloon.Reward.RewardBalloonPayout");
-        rewardPayout = null;
-        foreach (var startable in (System.Collections.IEnumerable)resolver.Resolve(
-                     typeof(System.Collections.Generic.IEnumerable<VContainer.Unity.IStartable>)))
-        {
-            if (startable.GetType() == payoutType)
-            {
-                rewardPayout = startable;
-            }
-        }
-
-        lastGoldenPaid = rewardPayout?.GetType().GetField("_lastGoldenPaid", flags).GetValue(rewardPayout);
-        lastHeartPaid = rewardPayout?.GetType().GetField("_lastHeartPaid", flags).GetValue(rewardPayout);
+        // A shooter installed again mid-session finds a balloon already on the board: counted when it came.
+        goldenWasAlive = (bool)rewardService.GetType().GetField("_goldenAlive", flags).GetValue(rewardService);
+        heartWasAlive = (bool)rewardService.GetType().GetField("_heartAlive", flags).GetValue(rewardService);
     }
 
     var goldenAlive = (bool)rewardService.GetType().GetField("_goldenAlive", flags).GetValue(rewardService);
@@ -178,32 +169,13 @@ void WatchRewards(VContainer.IObjectResolver resolver)
 
     goldenWasAlive = goldenAlive;
     heartWasAlive = heartAlive;
-    if (rewardPayout == null)
-    {
-        return;
-    }
-
-    var goldenPaid = rewardPayout.GetType().GetField("_lastGoldenPaid", flags).GetValue(rewardPayout);
-    var heartPaid = rewardPayout.GetType().GetField("_lastHeartPaid", flags).GetValue(rewardPayout);
-    if (goldenPaid != null && !object.ReferenceEquals(goldenPaid, lastGoldenPaid))
-    {
-        CountUp("GoldenPaid");
-    }
-
-    if (heartPaid != null && !object.ReferenceEquals(heartPaid, lastHeartPaid))
-    {
-        CountUp("HeartPaid");
-    }
-
-    lastGoldenPaid = goldenPaid;
-    lastHeartPaid = heartPaid;
 }
 
 string Rewards()
 {
     int Count(string key) { return UnityEditor.SessionState.GetInt(RewardsKey + key, 0); }
-    return " rewards " + Count("GoldenPlaced") + " " + Count("GoldenPaid") + " " + Count("HeartPlaced") + " "
-           + Count("HeartPaid");
+    var off = UnityEditor.SessionState.GetString(RewardsKey + "Off", "") != "" ? " off" : "";
+    return " rewards " + Count("GoldenPlaced") + " " + Count("HeartPlaced") + off;
 }
 
 var now = UnityEngine.Time.realtimeSinceStartup;
@@ -212,11 +184,14 @@ if (UnityEditor.SessionState.GetString(IdKey, "") != botId)
 {
     UnityEditor.SessionState.SetString(IdKey, botId);
     UnityEditor.SessionState.SetInt(ShotsKey, 0);
-    foreach (var key in new[] { "GoldenPlaced", "GoldenPaid", "HeartPlaced", "HeartPaid" })
-    {
-        UnityEditor.SessionState.EraseInt(RewardsKey + key);
-    }
+    UnityEditor.SessionState.EraseInt(RewardsKey + "GoldenPlaced");
+    UnityEditor.SessionState.EraseInt(RewardsKey + "HeartPlaced");
+    UnityEditor.SessionState.EraseString(RewardsKey + "Off");
+}
 
+if (System.AppDomain.CurrentDomain.GetData(ShooterKey) as string != botId)
+{
+    System.AppDomain.CurrentDomain.SetData(ShooterKey, botId);
     var nextCheck = 0f;
     var fireAt = -1f;
     UnityEditor.EditorApplication.CallbackFunction shooter = null;
@@ -224,13 +199,13 @@ if (UnityEditor.SessionState.GetString(IdKey, "") != botId)
     {
         var clock = UnityEngine.Time.realtimeSinceStartup;
         if (!UnityEditor.EditorApplication.isPlaying
-            || UnityEditor.SessionState.GetString(IdKey, "") != botId
+            || System.AppDomain.CurrentDomain.GetData(ShooterKey) as string != botId
             || clock - UnityEditor.SessionState.GetFloat(HeartbeatKey, 0f) > HeartbeatTimeout)
         {
             UnityEditor.EditorApplication.update -= shooter;
-            if (UnityEditor.SessionState.GetString(IdKey, "") == botId)
+            if (System.AppDomain.CurrentDomain.GetData(ShooterKey) as string == botId)
             {
-                UnityEditor.SessionState.EraseString(IdKey);
+                System.AppDomain.CurrentDomain.SetData(ShooterKey, null);
             }
 
             return;
@@ -245,14 +220,17 @@ if (UnityEditor.SessionState.GetString(IdKey, "") != botId)
         var resolver = FindGame();
         if (resolver != null && !rewardsBroken)
         {
-            // A renamed field would throw here every 50 ms and stop the shooting: the counters go, the bot plays on.
+            // A renamed field would throw here every 50 ms and stop the shooting: the counter goes, the bot plays on,
+            // and the ticks say the counter is off.
             try
             {
                 WatchRewards(resolver);
             }
-            catch (System.Exception)
+            catch (System.Exception exception)
             {
                 rewardsBroken = true;
+                UnityEditor.SessionState.SetString(RewardsKey + "Off", exception.GetType().Name);
+                UnityEngine.Debug.LogWarning("Playtest bot: the reward counter is off. " + exception);
             }
         }
 
@@ -352,69 +330,90 @@ if (nav == "GameOver")
 // The session's setup, once its first run is in play: purple restarts the run on the first level from the
 // level-up where purple can roll that the run's seed makes purple (Start From Level, keeping the seed, so the
 // same roll holds); hearts then sets the hearts the player has, so the session starts as low as asked.
+// A step that throws (a renamed member) ends the setup, so the session plays on as configured.
 var setupKey = SetupKey + botId;
 var setupStage = UnityEditor.SessionState.GetInt(setupKey, 0);
 if (setupStage < 2 && InPlay(game))
 {
-    if (setupStage == 0 && purple)
+    try
     {
-        var seed = (int)Prop(game.Resolve(asm.GetType("BalloonParty.Game.Run.IRunSeed")), asm.GetType("BalloonParty.Game.Run.IRunSeed"), "Value");
-        var pacingType = asm.GetType("BalloonParty.Configuration.Level.LevelPacingConfiguration");
-        var pacing = UnityEngine.Resources.FindObjectsOfTypeAll(pacingType)[0];
-        var generation = pacingType.GetProperty("Generation", flags).GetValue(pacing);
-        var extraColor = generation.GetType().GetProperty("ExtraColor", flags).GetValue(generation);
-        var isPurple = extraColor.GetType().GetMethod("IsExtraColorLevel", flags);
-        var purpleLevel = 1;
-        while (purpleLevel < 200 && !(bool)isPurple.Invoke(extraColor, new object[] { purpleLevel, seed }))
-        {
-            purpleLevel++;
-        }
-
-        if (purpleLevel >= 200)
-        {
-            // No purple level in reach (the extra colour's chance is 0): play on as configured.
-            UnityEditor.SessionState.SetInt(setupKey, 1);
-            UnityEditor.SessionState.SetInt(setupKey + ".Level", -1);
-            return time + " SETUP no purple level";
-        }
-
         var cheatState = asm.GetType("BalloonParty.Cheats.CheatState");
-        cheatState.GetField("StartLevel", staticFlags).SetValue(null, purpleLevel);
-        cheatState.GetField("KeepRunSeed", staticFlags).SetValue(null, true);
-        var runController = game.Resolve(asm.GetType("BalloonParty.Game.Run.RunController"));
-        runController.GetType().GetMethod("RestartRun", flags).Invoke(runController, new object[] { true });
-        UnityEditor.SessionState.SetInt(setupKey, 1);
-        UnityEditor.SessionState.SetInt(setupKey + ".Level", purpleLevel);
-        UnityEditor.SessionState.SetFloat(setupKey + ".Since", UnityEngine.Time.realtimeSinceStartup);
-        return time + " SETUP purple level " + purpleLevel;
-    }
+        if (setupStage == 0 && purple)
+        {
+            var seedType = asm.GetType("BalloonParty.Game.Run.IRunSeed");
+            var seed = (int)Prop(game.Resolve(seedType), seedType, "Value");
+            // The level the game would make of each number, from the pacing the game scope plays with.
+            var pacingType = asm.GetType("BalloonParty.Configuration.Level.ILevelPacingConfiguration");
+            var pacing = game.Resolve(pacingType);
+            var parametersFor = pacingType.GetMethod("ParametersForLevel");
+            bool IsPurple(int candidate)
+            {
+                var parameters = parametersFor.Invoke(pacing, new object[] { candidate, seed });
+                return (bool)parameters.GetType().GetProperty("IsExtraColorLevel").GetValue(parameters);
+            }
 
-    // The restart takes a moment: the hearts wait for the run it starts, or its reset would refill them. A run
-    // that never reaches the level (a retry level wins over the start level) gives up after a while.
-    var levelNow = (int)Value(Prop(game.Resolve(progressType), progressType, "Level"));
-    var wanted = UnityEditor.SessionState.GetInt(setupKey + ".Level", 0);
-    var waited = UnityEngine.Time.realtimeSinceStartup - UnityEditor.SessionState.GetFloat(setupKey + ".Since", 0f);
-    if (setupStage == 1 && wanted > 0 && levelNow != wanted && waited < 10f)
-    {
-        return time + " SETUP waiting for level " + wanted;
-    }
+            var purpleLevel = 1;
+            while (purpleLevel < 200 && !IsPurple(purpleLevel))
+            {
+                purpleLevel++;
+            }
 
-    UnityEditor.SessionState.SetInt(setupKey, 2);
-    var cheatReset = asm.GetType("BalloonParty.Cheats.CheatState");
-    cheatReset.GetField("StartLevel", staticFlags).SetValue(null, 1);
-    if (startHearts > 0)
-    {
-        var health = game.Resolve(asm.GetType("BalloonParty.Game.Health.PlayerHealthController"));
-        var max = (int)health.GetType().GetProperty("Max").GetValue(health);
-        var startWith = System.Math.Min(startHearts, max);
-        var current = health.GetType().GetField("_current", flags).GetValue(health);
-        current.GetType().GetProperty("Value").SetValue(current, startWith);
-        return time + " SETUP hearts " + startWith + (purple && levelNow != wanted && wanted > 0 ? " (not on the purple level)" : "");
-    }
+            if (purpleLevel >= 200)
+            {
+                // No purple level in reach (the extra colour's chance is 0): play on as configured.
+                UnityEditor.SessionState.SetInt(setupKey, 1);
+                UnityEditor.SessionState.SetInt(setupKey + ".Level", -1);
+                return time + " SETUP no purple level";
+            }
 
-    if (purple && wanted > 0 && levelNow != wanted)
+            UnityEditor.SessionState.SetInt(setupKey + ".PreviousStart", (int)cheatState.GetField("StartLevel", staticFlags).GetValue(null));
+            cheatState.GetField("StartLevel", staticFlags).SetValue(null, purpleLevel);
+            cheatState.GetField("KeepRunSeed", staticFlags).SetValue(null, true);
+            var runController = game.Resolve(asm.GetType("BalloonParty.Game.Run.RunController"));
+            runController.GetType().GetMethod("RestartRun", flags).Invoke(runController, new object[] { true });
+            UnityEditor.SessionState.SetInt(setupKey, 1);
+            UnityEditor.SessionState.SetInt(setupKey + ".Level", purpleLevel);
+            UnityEditor.SessionState.SetFloat(setupKey + ".Since", UnityEngine.Time.realtimeSinceStartup);
+            return time + " SETUP purple level " + purpleLevel;
+        }
+
+        // The restart takes a moment: the hearts wait for the run it starts, or its reset would refill them. A run
+        // that never reaches the level (a retry level wins over the start level) gives up after a while.
+        var levelNow = (int)Value(Prop(game.Resolve(progressType), progressType, "Level"));
+        var wanted = UnityEditor.SessionState.GetInt(setupKey + ".Level", 0);
+        var waited = UnityEngine.Time.realtimeSinceStartup - UnityEditor.SessionState.GetFloat(setupKey + ".Since", 0f);
+        if (setupStage == 1 && wanted > 0 && levelNow != wanted && waited < 10f)
+        {
+            return time + " SETUP waiting for level " + wanted;
+        }
+
+        UnityEditor.SessionState.SetInt(setupKey, 2);
+        if (wanted > 0)
+        {
+            // Put back the start level the bot changed, so a --restart run starts where a run of this Play would.
+            cheatState.GetField("StartLevel", staticFlags).SetValue(null, UnityEditor.SessionState.GetInt(setupKey + ".PreviousStart", 1));
+        }
+
+        if (startHearts > 0)
+        {
+            var health = game.Resolve(asm.GetType("BalloonParty.Game.Health.PlayerHealthController"));
+            var max = (int)health.GetType().GetProperty("Max").GetValue(health);
+            var startWith = System.Math.Min(startHearts, max);
+            var current = health.GetType().GetField("_current", flags).GetValue(health);
+            current.GetType().GetProperty("Value").SetValue(current, startWith);
+            return time + " SETUP hearts " + startWith + (purple && levelNow != wanted && wanted > 0 ? " (not on the purple level)" : "");
+        }
+
+        if (purple && wanted > 0 && levelNow != wanted)
+        {
+            return time + " SETUP gave up waiting for level " + wanted;
+        }
+    }
+    catch (System.Exception exception)
     {
-        return time + " SETUP gave up waiting for level " + wanted;
+        UnityEditor.SessionState.SetInt(setupKey, 2);
+        var cause = exception.InnerException ?? exception;
+        return time + " SETUP failed: " + cause.GetType().Name + " " + cause.Message;
     }
 }
 

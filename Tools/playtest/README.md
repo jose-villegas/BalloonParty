@@ -66,12 +66,12 @@ open, not yours.
 
 `Logs/playtest/<stamp>[-label]/` (git-ignored) gets `ticks.jsonl` (one line per tick: level, score,
 hearts, shots so far, board fill, balls in flight, seconds left in the spawn clock's
-breather, and the reward balloons placed and popped so far) and `report.md`:
+breather, and the reward balloons placed so far) and `report.md`:
 
 | Section | From | Says |
 |---|---|---|
 | Header | `ProjectileFlightConfig.asset`, the arguments | The reload and ball-cap values, and the player, the session ran with |
-| Reward balloons | The ticks | How many golden and heart balloons were placed and popped in the session, counted on the shooter's 50 ms loop (the reward service's on-board flags, the payout's last-paid balloon) |
+| Reward balloons | The ticks, the telemetry | How many golden and heart balloons were placed in the session, counted on the shooter's 50 ms loop (the reward service's on-board flags), and popped (the telemetry's pops by balloon type) |
 | Runs | The ticks | Each run's outcome (game over or still playing), highest level, score, hearts left, shots and length, and how many runs ended in a game over |
 | Hearts lost | The ticks | Every heart lost: run, level, seconds into the level, hearts left, and the lead-up (the 10 s before it): board fill just before and on average, shots per 10 s, balls in flight |
 | Levels | Telemetry `level` records | Seconds, shots, pops, pops per shot, hearts lost and max streak, per level |

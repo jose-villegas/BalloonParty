@@ -37,7 +37,7 @@ TICK_RE = re.compile(
     r"^(?P<t>[\d.]+) L(?P<level>\d+) score (?P<score>-?\d+) hearts (?P<hearts>-?\d+) "
     r"(?P<nav>\w+)/(?P<phase>\w+) shots (?P<shots>\d+)(?: fill (?P<fill>[\d.]+))?(?: inflight (?P<inflight>\d+))?"
     r"(?: breather (?P<breather>[\d.]+))?"
-    r"(?: rewards (?P<golden_placed>\d+) (?P<golden_paid>\d+) (?P<heart_placed>\d+) (?P<heart_paid>\d+))?$")
+    r"(?: rewards (?P<golden_placed>\d+) (?P<heart_placed>\d+)(?P<rewards_off> off)?)?$")
 FLOAT_FIELDS = ("t", "fill", "breather")
 # A gap between two playing ticks longer than this (a level-up, a pause, a restart) ends a release or tension stretch.
 STRETCH_BREAK_SECONDS = 2.0
@@ -128,8 +128,11 @@ def play(editor, seconds, tick_code, ticks_path):
             sample = {"wall": round(time.time(), 2), "line": line}
             match = TICK_RE.match(line or "")
             if match:
-                sample.update({k: (v if k in ("nav", "phase") else float(v) if k in FLOAT_FIELDS else int(v))
+                sample.update({k: (v if k in ("nav", "phase") else True if k == "rewards_off"
+                                   else float(v) if k in FLOAT_FIELDS else int(v))
                                for k, v in match.groupdict().items() if v is not None})
+            elif line and " SETUP " in line:
+                sample["setup"] = True
             elif line and line.endswith("RESTART"):
                 sample["restart"] = True
             elif line and line.endswith("GAMEOVER"):
@@ -204,13 +207,17 @@ def split_runs(samples):
 
 
 def heart_losses(samples):
-    """Each heart lost, with what the ticks show of the seconds before it."""
+    """Each heart lost, with what the ticks show of the seconds before it. The bot's own setup (--hearts) setting
+    the hearts between two ticks is not a loss."""
     losses = []
+    setups = [s["wall"] for s in samples if s.get("setup")]
     for run_index, (ticks, _) in enumerate(split_runs(samples), 1):
         level_start = ticks[0]["t"]
         for previous, tick in zip(ticks, ticks[1:]):
             if tick["level"] != previous["level"]:
                 level_start = tick["t"]
+                continue
+            if any(previous["wall"] < wall < tick["wall"] for wall in setups):
                 continue
             lost = previous["hearts"] - tick["hearts"]
             if lost <= 0:
@@ -323,18 +330,30 @@ def release_and_tension_lines(stretches):
     return lines
 
 
-def reward_lines(samples):
-    """The reward balloons the session saw: the tick's running counts, so the last tick holds the totals."""
+def reward_lines(samples, records):
+    """The reward balloons the session saw: placed from the ticks' running counts (the last tick holds the totals),
+    popped from the telemetry's pops by balloon type."""
     counted = [s for s in samples if "golden_placed" in s]
     if not counted:
         return []
     last = counted[-1]
-    return ["## Reward balloons (ticks)", "",
-            "Counted on the bot's 50 ms loop: placed when the reward service marks one on the board, popped when the "
-            "payout pays it. A golden pop pays a card (or a heart with every card at its limit), a heart pop a heart.", "",
-            "| Balloon | Placed | Popped |", "|---|---|---|",
-            f"| Golden | {last['golden_placed']} | {last['golden_paid']} |",
-            f"| Heart | {last['heart_placed']} | {last['heart_paid']} |", ""]
+    popped = {"Golden": 0, "Heart": 0}
+    for record in records:
+        if record.get("record_kind") == "level":
+            by_type = record.get("axes", {}).get("pops_balloon_type", {})
+            for name in popped:
+                popped[name] += by_type.get(name, 0)
+    lines = ["## Reward balloons", "",
+             "Placed: counted on the bot's 50 ms loop when the reward service marks one on the board. Popped: the "
+             "telemetry's pops by balloon type. A golden pop pays a card (or a heart with every card at its limit), "
+             "a heart pop a heart.", "",
+             "| Balloon | Placed | Popped |", "|---|---|---|",
+             f"| Golden | {last['golden_placed']} | {popped['Golden']} |",
+             f"| Heart | {last['heart_placed']} | {popped['Heart']} |", ""]
+    if any(s.get("rewards_off") for s in counted):
+        lines += ["The placement counter switched itself off after an error (a renamed field: the Editor console has "
+                  "it), so the placed counts stop there.", ""]
+    return lines
 
 
 def build_report(label, seconds, player, tuning, samples, records, setup=""):
@@ -365,7 +384,7 @@ def build_report(label, seconds, player, tuning, samples, records, setup=""):
         lines += ["", f"{failures} of {len(runs)} runs ended in a game over."]
         lines.append("")
 
-    lines += reward_lines(samples)
+    lines += reward_lines(samples, records)
 
     losses = heart_losses(samples)
     lines += ["## Hearts lost (ticks)", ""]
@@ -484,7 +503,7 @@ def main():
                  .replace("__PURPLE__", "true" if args.purple else "false")
                  .replace("__HEARTS__", str(args.hearts)))
     setup = ", ".join(([("started on the run's first purple level, through Start From Level")] if args.purple else [])
-                      + ([f"started with {args.hearts} hearts"] if args.hearts > 0 else []))
+                      + ([f"started with {args.hearts} heart{'s' if args.hearts != 1 else ''}"] if args.hearts > 0 else []))
     if args.player == "best":
         player = "best (the solver, fired the moment the cannon is ready)"
     else:
