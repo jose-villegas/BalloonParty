@@ -3,7 +3,7 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
     // The golden reward balloon's body: a balloon (the circle sprite, lit as a sphere like
     // ToughBalloon) plated in gold. Plates are Voronoi cells laid over the sphere, so they crowd
     // toward the rim the way tiles on a ball do, with thin dark seams between them. Each plate is
-    // tilted a little and sways slowly, so it shades and glints on its own as the scene light
+    // tilted a little and wobbles slowly, so it shades and glints on its own as the scene light
     // moves, and glitter sparkles only where a plate's glint lands. The shadow comes from the
     // prefab's baked shadow child, as on the tough balloon.
 
@@ -19,23 +19,25 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
         _GoldEdge   ("Edge",   Color) = (0.26, 0.14, 0.01, 1)
         _EdgePower  ("Edge Falloff", Range(1, 8)) = 3.0
         // A metal ball's reflected horizon: bright sky above it, dark ground below, broken up by
-        // the plates' tilts. Fixed to the world's up, whatever the light does.
+        // the plates' tilts. Fixed to the balloon's up, whatever the light does.
         _EnvStrength ("Horizon Strength", Range(0, 1)) = 0.4
         _EnvHorizon  ("Horizon Height", Range(-0.8, 0.8)) = -0.05
         // The light's height over the board: low rakes across the ball, high lights it face-on.
         _LightHeight ("Light Height", Range(0.1, 3)) = 0.9
 
         [Header(Plates)]
-        _PlateScale    ("Plates Across the Radius", Range(1, 8)) = 3.2
-        _PlateJitter   ("Irregularity", Range(0, 1)) = 0.8
-        _PlateTilt     ("Tilt", Range(0, 0.6)) = 0.16
-        _PlateVariance ("Brightness Variance", Range(0, 0.5)) = 0.12
-        _PlateSway     ("Sway", Range(0, 1)) = 0.35
-        _PlateSwaySpeed("Sway Speed", Range(0, 2)) = 0.4
+        _PlateScale       ("Plates Across the Radius", Range(1, 8)) = 3.2
+        // Past about 0.85 the seam search (3x3 around the nearest cell) can miss a border.
+        _PlateJitter      ("Irregularity", Range(0, 0.85)) = 0.8
+        _PlateTilt        ("Tilt", Range(0, 0.6)) = 0.16
+        _PlateVariance    ("Brightness Variance", Range(0, 0.5)) = 0.12
+        _PlateWobble      ("Wobble", Range(0, 1)) = 0.35
+        _PlateWobbleSpeed ("Wobble Speed", Range(0, 2)) = 0.4
 
         [Header(Seams)]
         _SeamColor ("Color", Color) = (0.36, 0.20, 0.03, 1)
-        _SeamWidth ("Width", Range(0, 0.2)) = 0.03
+        _SeamWidth ("Width", Range(0.005, 0.2)) = 0.03
+        // The off switch: a seam is never fully gone by width alone, its antialiasing keeps a trace.
         _SeamDepth ("Depth", Range(0, 1)) = 0.6
 
         [Header(Glint)]
@@ -60,6 +62,7 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
         [Header(Rim)]
         _RimColor ("Color", Color) = (0.55, 0.36, 0.08, 1)
         _RimWidth ("Width", Range(0, 0.5)) = 0.12
+        _RimBlend ("Blend", Range(0, 1)) = 0.6
 
         [Header(Lighting)]
         _LightInfluence ("Light Influence", Range(0, 1)) = 1
@@ -114,9 +117,11 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
                 float2 worldPos  : TEXCOORD1;
                 // xy = world-space object centre, z = world-space extent (X scale).
                 float3 worldData : TEXCOORD2;
-                // Sampled once per balloon, at its centre, so the whole body is lit from one direction.
-                float2 lightDir  : TEXCOORD3;
-                float3 lightTint : TEXCOORD4;
+                // The light is sampled once, at the balloon's centre, so these are the same at every
+                // vertex and need no renormalizing per pixel.
+                float3 toLight   : TEXCOORD3;
+                float3 halfway   : TEXCOORD4;
+                float3 lightTint : TEXCOORD5;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -133,9 +138,9 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
 
             fixed4 _Color;
 
-            fixed4 _GoldLit;
-            fixed4 _GoldShade;
-            fixed4 _GoldEdge;
+            half4  _GoldLit;
+            half4  _GoldShade;
+            half4  _GoldEdge;
             float  _EdgePower;
             float  _EnvStrength;
             float  _EnvHorizon;
@@ -145,20 +150,20 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
             float  _PlateJitter;
             float  _PlateTilt;
             float  _PlateVariance;
-            float  _PlateSway;
-            float  _PlateSwaySpeed;
+            float  _PlateWobble;
+            float  _PlateWobbleSpeed;
 
-            fixed4 _SeamColor;
+            half4  _SeamColor;
             float  _SeamWidth;
             float  _SeamDepth;
 
-            fixed4 _GlintColor;
+            half4  _GlintColor;
             float  _GlintPower;
             float  _GlintIntensity;
             float  _SheenPower;
             float  _SheenIntensity;
 
-            fixed4 _GlitterColor;
+            half4  _GlitterColor;
             float  _GlitterScale;
             float  _GlitterSize;
             float  _GlitterSpeed;
@@ -167,18 +172,26 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
             float  _GlitterIntensity;
             float  _GlitterReach;
 
-            fixed4 _RimColor;
+            half4  _RimColor;
             float  _RimWidth;
+            float  _RimBlend;
 
             float  _LightInfluence;
             float  _AmbientHue;
             float  _AmbientDimming;
             float  _SpriteScale;
 
+            // Two hashes from one: half the hashing of two Hash21 calls, and the Voronoi runs 18 of these.
+            float2 Hash22(float2 p)
+            {
+                float3 p3 = frac(float3(p.xyx) * float3(0.1031, 0.1030, 0.0973));
+                p3 += dot(p3, p3.yzx + 33.33);
+                return frac((p3.xx + p3.yz) * p3.zy);
+            }
+
             float2 PlatePoint(float2 cell)
             {
-                float2 jitter = float2(Hash21(cell + 3.1), Hash21(cell + 7.7)) - 0.5;
-                return 0.5 + jitter * _PlateJitter;
+                return 0.5 + (Hash22(cell) - 0.5) * _PlateJitter;
             }
 
             // The plate under uv: its cell id, and the distance to its nearest seam, measured
@@ -247,7 +260,11 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
                                                    unity_ObjectToWorld._m20));
                 OUT.worldData = float3(worldCenter, worldExtent);
 
-                OUT.lightDir  = SceneLightDirectionAtLOD(worldCenter);
+                // The sphere is shaded in the sprite's own space, which turns with the balloon's sway;
+                // the light isn't turned to match, so it drifts a little with the sway, accepted as on
+                // ToughBalloon's grain.
+                OUT.toLight = normalize(float3(SceneLightDirectionAtLOD(worldCenter), _LightHeight));
+                OUT.halfway = normalize(OUT.toLight + float3(0, 0, 1));
                 // The other balloons' night response, so gold dims with the board instead of glowing.
                 OUT.lightTint = SceneLightTintAtLOD(worldCenter) + SceneLightAmbientRegrade(_AmbientHue, _AmbientDimming);
 
@@ -271,62 +288,68 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
                     discard;
                 }
 
-                // ---- Sphere ----
                 float2 p      = (spriteUV - 0.5) * 2.0;
                 float  rFlat  = min(length(p), 0.9999);
                 float  zSph   = sqrt(1.0 - rFlat * rFlat);
                 float3 normal = float3(p, zSph);
-                float3 toLight = normalize(float3(IN.lightDir, _LightHeight));
 
-                // ---- Plates: even steps of arc over the sphere, from its centre ----
+                // Plates in even steps of arc from the sphere's centre, so they crowd toward the rim.
                 float  arc     = acos(zSph) / (UNITY_PI * 0.5);
                 float2 plateUV = p / max(rFlat, 0.0001) * arc * _PlateScale;
                 float  seamDistance;
                 float2 plate   = PlateCell(plateUV, seamDistance);
 
                 float  plateRnd = Hash21(plate + 11.0);
-                float2 tilt     = float2(Hash21(plate + 23.0), Hash21(plate + 37.0)) * 2.0 - 1.0;
-                float  sway     = _Time.y * _PlateSwaySpeed + plateRnd * BP_TAU;
-                tilt = (tilt + float2(sin(sway), cos(sway * 1.3)) * _PlateSway) * _PlateTilt;
+                float2 tilt     = Hash22(plate + 23.0) * 2.0 - 1.0;
+                float  wobble   = _Time.y * _PlateWobbleSpeed + plateRnd * BP_TAU;
+                tilt = (tilt + float2(sin(wobble), cos(wobble * 1.3)) * _PlateWobble) * _PlateTilt;
                 // A tilt along the surface; it fades toward the rim, where a plate is seen edge-on.
                 float3 plateNormal = normalize(normal + float3(tilt, 0) * zSph);
 
-                // ---- Gold body: shade to lit by the plate's own facing, darkening to the edge ----
-                float  facing = saturate(dot(plateNormal, toLight));
-                fixed3 col = lerp(_GoldShade.rgb, _GoldLit.rgb, facing);
-                // The view looks straight down -z, so the reflected ray's height is 2 n.z n.y.
+                float  facing = saturate(dot(plateNormal, IN.toLight));
+                half3  col = lerp(_GoldShade.rgb, _GoldLit.rgb, facing);
+
+                // The view looks straight down -z, so the reflected ray's height is 2 n.z n.y. The
+                // horizon is soft over a few hundredths, and the ground and sky are the gold's own shade
+                // and lit colours pushed apart a little, so the band reads without leaving the palette.
                 float  reflectedUp = 2.0 * plateNormal.z * plateNormal.y;
                 float  sky = smoothstep(_EnvHorizon - 0.06, _EnvHorizon + 0.06, reflectedUp);
-                fixed3 env = lerp(_GoldShade.rgb * 0.55, _GoldLit.rgb * 1.15, sky);
+                half3  env = lerp(_GoldShade.rgb * 0.55, _GoldLit.rgb * 1.15, sky);
                 col = lerp(col, env, _EnvStrength);
-                col *= 1.0 + (plateRnd - 0.5) * 2.0 * _PlateVariance;
+                // Faded toward the rim with the tilt, where the plates are too thin to vary without shimmering.
+                col *= 1.0 + (plateRnd - 0.5) * 2.0 * _PlateVariance * zSph;
                 col = lerp(col, _GoldEdge.rgb, pow(rFlat, _EdgePower));
 
-                // ---- Sheen and glint: each plate's own highlight, so it breaks at the seams ----
-                float3 halfway = normalize(toLight + float3(0, 0, 1));
-                float  toHalf  = saturate(dot(plateNormal, halfway));
-                float  glint   = pow(toHalf, _GlintPower);
+                // Each plate's own sheen and glint, so the highlight breaks at the seams.
+                float  toHalf = saturate(dot(plateNormal, IN.halfway));
+                float  glint  = pow(toHalf, _GlintPower);
                 col += _GoldLit.rgb * pow(toHalf, _SheenPower) * _SheenIntensity;
                 col += _GlintColor.rgb * glint * _GlintIntensity;
 
-                // ---- Seams ----
                 float seamSoft = max(fwidth(seamDistance), 0.002);
                 float seam = 1.0 - smoothstep(_SeamWidth - seamSoft, _SeamWidth + seamSoft, seamDistance);
                 col = lerp(col, _SeamColor.rgb, seam * _SeamDepth);
 
-                // ---- Glitter, only where the glint lands and off the seams ----
-                float glitter = GlitterAmountBase(p * _GlitterScale, _GlitterSize, _GlitterSpeed,
-                                                  _GlitterSharpness, _GlitterChance);
-                glitter *= saturate(glint * _GlitterReach) * (1.0 - seam);
-                col += _GlitterColor.rgb * glitter * _GlitterIntensity;
+                // Glitter only where the glint lands and off the seams. The glint is broad and smooth, so
+                // this branch is coherent and skips the specks over most of the body.
+                float glitterGate = saturate(glint * _GlitterReach) * (1.0 - seam);
+                if (glitterGate > 0.004)
+                {
+                    float glitter = GlitterAmountBase(p * _GlitterScale, _GlitterSize, _GlitterSpeed,
+                                                      _GlitterSharpness, _GlitterChance);
+                    col += _GlitterColor.rgb * glitter * glitterGate * _GlitterIntensity;
+                }
 
-                // ---- Rim (world space, so it never turns with the sway) ----
+                // World space, so the rim never turns with the sway.
                 float2 worldUV = (IN.worldPos - IN.worldData.xy) / max(IN.worldData.z, 0.0001);
                 float  rim = smoothstep(0.50 - _RimWidth, 0.50, length(worldUV));
-                col = lerp(col, _RimColor.rgb, rim * 0.6);
+                col = lerp(col, _RimColor.rgb, rim * _RimBlend);
 
-                // ---- Scene light: a plain multiply keeps the gold's hue under coloured light ----
-                col *= lerp(float3(1.0, 1.0, 1.0), IN.lightTint, _LightInfluence);
+                // A plain multiply keeps the gold's hue under coloured light. The tint is white on the
+                // prefab, and kept so a renderer colour can still dim or tint the balloon.
+                col *= lerp(float3(1.0, 1.0, 1.0), IN.lightTint, _LightInfluence) * IN.color.rgb;
+                // Balloons never bloom (Plans/PLAN-HDR): the glint and glitter top out at white.
+                col = SceneLightCapToWhite(col);
 
                 return fixed4(col * alpha, alpha);
             }
