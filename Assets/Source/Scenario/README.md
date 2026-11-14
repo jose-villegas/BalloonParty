@@ -169,7 +169,7 @@ The third scenario: the surface stretch right after the first meadow is always *
 (`ScenarioKind.Water`), so every run meets it around levels 12–14; each surface stretch after that is a
 meadow or water by a coin flip. Water levels have no puff clouds or bushes, and nothing on them bounces shots but the
 unbreakable balloon; the longer a water level runs, the more of each spawn line is bubble clusters
-(`Balloon/Spawner/BalloonSpawner`). Plan: `Plans/PLAN-WaterScenario.md`.
+(`Balloon/Spawner/BalloonSpawner`), except on an extra-colour level, which brings none. Plan: `Plans/PLAN-WaterScenario.md`.
 
 Water is a surface like the meadow, so everything above about reveals, depth, coverage and scrolling
 applies to it unchanged; the planner and the curve treat any kind but sky as a surface. Sky always sits

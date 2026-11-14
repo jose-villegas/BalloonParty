@@ -136,7 +136,8 @@ runs, until a line brings more bubbles than balloons. `SpawnClock` counts the le
 seconds (`ISpawnClock.SecondsOnLevel`, under the clock's own holds: Game screen, `Playing`, not
 paused; reset on level-up and run reset). On a water level, `BalloonSpawner` rolls each pick of a
 clock line against the bubble share before the level's weighted pick: a hit takes a bubble in that
-place, a miss the usual balloon. The initial fill has no bubbles.
+place, a miss the usual balloon. The initial fill has no bubbles, and an extra-colour (purple) level
+brings none at all: its extra colour and faster lines were already too much with bubbles on top.
 
 The share is a pure function of seconds on the level (`BubbleRiseCurve.ShareAt(settings,
 seconds)`): none during `GraceSeconds` (6 s), then it climbs linearly from `StartShare` (15%) to

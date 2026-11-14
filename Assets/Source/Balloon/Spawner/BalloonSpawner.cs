@@ -787,11 +787,12 @@ namespace BalloonParty.Balloon.Spawner
             return null;
         }
 
-        // The share of this line's places that are bubbles: 0 off water, else BubbleRiseCurve at the level's
-        // playing time so far.
+        // The share of this line's places that are bubbles: 0 off water and on an extra-colour level (whose extra
+        // colour and faster lines are pressure enough), else BubbleRiseCurve at the level's playing time so far.
         private float WaterBubbleShare()
         {
             if (_bubbleEntry == null
+                || _levelParams.Current.IsExtraColorLevel
                 || _pacing.ScenarioForLevel(_levelProgress.Level.Value, _runSeed.Value) != ScenarioKind.Water)
             {
                 return 0f;

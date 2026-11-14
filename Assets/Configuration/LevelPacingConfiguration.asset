@@ -1168,11 +1168,11 @@ MonoBehaviour:
     _occupancyWeight: 0.5
     _flightSpeedup: 3
     _flightPressureSeconds: 6
-    _breatherClear: 0.2
-    _breatherClearWindow: 2
-    _breatherSeconds: 8
+    _breatherClear: 0.15
+    _breatherClearWindow: 2.5
+    _breatherSeconds: 11
     _breatherPace: 0.2
-    _breatherCooldownSeconds: 16
+    _breatherCooldownSeconds: 14
   _scoringCurve:
     _controlPoints:
     - _level: 1
@@ -1226,8 +1226,8 @@ MonoBehaviour:
     _extraColor:
       _fromLevel: 13
       _chance: 0.2
-      _spawnIntervalScale: 0.57
-      _extraItemChance: 0.2
+      _spawnIntervalScale: 0.7
+      _extraItemChance: 0.3
     _boardLines:
     - _fromLevel: 1
       _value: 8

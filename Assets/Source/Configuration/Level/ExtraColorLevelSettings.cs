@@ -24,11 +24,11 @@ namespace BalloonParty.Configuration.Level
         [SerializeField] [Range(0f, 1f)] private float _chance = 0.2f;
 
         [Tooltip("The time between lines on such a level, as a share of the usual: 0.5 = lines twice as often.")]
-        [SerializeField] [Range(0.1f, 1f)] private float _spawnIntervalScale = 0.57f;
+        [SerializeField] [Range(0.1f, 1f)] private float _spawnIntervalScale = 0.7f;
 
         [Tooltip("Extra items on such a level: the same roll as the Lucky Find card (each item rolls this times its " +
                  "ExtraItemShare per wave), added to the player's own. 0.1 is one Lucky Find stack.")]
-        [SerializeField] [Range(0f, 1f)] private float _extraItemChance = 0.2f;
+        [SerializeField] [Range(0f, 1f)] private float _extraItemChance = 0.3f;
 
         internal static ExtraColorLevelSettings Off => new(1, 0f, 1f);
 
