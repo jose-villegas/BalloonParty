@@ -8,6 +8,7 @@ using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
 using UniRx;
+using UnityEngine;
 
 namespace BalloonParty.Tests.Projectile
 {
@@ -24,6 +25,7 @@ namespace BalloonParty.Tests.Projectile
         private ProjectileRegistry _registry;
         private ActiveProjectilePierce _pierce;
         private IMessageHandler<ProjectileLoadedMessage> _loadedHandler;
+        private IMessageHandler<ProjectileFiredMessage> _firedHandler;
         private IDisposable _armedSubscription;
 
         [SetUp]
@@ -36,8 +38,15 @@ namespace BalloonParty.Tests.Projectile
                     Arg.Any<MessageHandlerFilter<ProjectileLoadedMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
+            var firedSubscriber = Substitute.For<ISubscriber<ProjectileFiredMessage>>();
+            firedSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<ProjectileFiredMessage>>(h => _firedHandler = h),
+                    Arg.Any<MessageHandlerFilter<ProjectileFiredMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
             _registry = new ProjectileRegistry();
-            _pierce = new ActiveProjectilePierce(_registry, loadedSubscriber);
+            _pierce = new ActiveProjectilePierce(_registry, loadedSubscriber, firedSubscriber);
             _pierce.Start();
             _armed.Clear();
             _armedSubscription = _pierce.PierceArmed.Subscribe(_armed.Add);
@@ -130,12 +139,60 @@ namespace BalloonParty.Tests.Projectile
             Assert.IsTrue(piercingWhenArmed);
         }
 
+        [Test]
+        public void ABallArmedInTheThrower_IsNotPiercingYet()
+        {
+            var ball = Hold();
+
+            ball.IsPiercing.Value = true;
+
+            Assert.IsFalse(_pierce.IsPiercing.Value, "the pierce loop must not play while the ball is aimed");
+            Assert.IsEmpty(_armed);
+        }
+
+        [Test]
+        public void ABallArmedInTheThrower_ArmsOnceWhenItFires()
+        {
+            var ball = Hold();
+            ball.IsPiercing.Value = true;
+            var piercingWhenArmed = false;
+            using var watch = _pierce.PierceArmed.Subscribe(_ => piercingWhenArmed = _pierce.IsPiercing.Value);
+
+            Fire(ball);
+
+            CollectionAssert.AreEqual(new[] { ball }, _armed);
+            Assert.IsTrue(piercingWhenArmed);
+        }
+
+        [Test]
+        public void APlainBallFiring_ArmsNothing()
+        {
+            Fire(Hold());
+
+            Assert.IsEmpty(_armed);
+            Assert.IsFalse(_pierce.IsPiercing.Value);
+        }
+
+        // A ball that has left the thrower.
         private ProjectileModel Load()
+        {
+            var ball = Hold();
+            Fire(ball);
+            return ball;
+        }
+
+        private ProjectileModel Hold()
         {
             var ball = new ProjectileModel();
             _registry.Load(ball, null);
             _loadedHandler.Handle(new ProjectileLoadedMessage(ball));
             return ball;
+        }
+
+        private void Fire(ProjectileModel ball)
+        {
+            _registry.Launch(ball);
+            _firedHandler.Handle(new ProjectileFiredMessage(ball, Vector3.zero, Vector3.up));
         }
     }
 }

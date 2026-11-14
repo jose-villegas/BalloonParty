@@ -24,12 +24,16 @@ namespace BalloonParty.Projectile.Controller
     /// <summary>
     ///     Folds every live shot's piercing state into one shared signal, so systems that must hold off
     ///     while a shot plows through the board (the level-up ceremony) can gate on it and re-evaluate the
-    ///     moment the last pierce ends — without each tracking the shots themselves.
+    ///     moment the last pierce ends — without each tracking the shots themselves. A ball armed while still
+    ///     held in the thrower (a Snipe pickup, or the Sharpshooter card as it loads) counts only once it has
+    ///     left: its arming is announced when it fires, so the pierce loop and the Pierce heads-up start with
+    ///     the shot, not while it is aimed.
     /// </summary>
     internal sealed class ActiveProjectilePierce : IActiveProjectilePierce, IStartable, IDisposable
     {
         private readonly IProjectileRegistry _projectiles;
         private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
+        private readonly ISubscriber<ProjectileFiredMessage> _firedSubscriber;
         private readonly ReactiveProperty<bool> _isPiercing = new(false);
         private readonly Subject<IProjectileModel> _pierceArmed = new();
         private readonly CompositeDisposable _subscriptions = new();
@@ -40,15 +44,18 @@ namespace BalloonParty.Projectile.Controller
         public IObservable<IProjectileModel> PierceArmed => _pierceArmed;
 
         internal ActiveProjectilePierce(
-            IProjectileRegistry projectiles, ISubscriber<ProjectileLoadedMessage> loadedSubscriber)
+            IProjectileRegistry projectiles, ISubscriber<ProjectileLoadedMessage> loadedSubscriber,
+            ISubscriber<ProjectileFiredMessage> firedSubscriber)
         {
             _projectiles = projectiles;
             _loadedSubscriber = loadedSubscriber;
+            _firedSubscriber = firedSubscriber;
         }
 
         public void Start()
         {
             _loadedSubscriber.Subscribe(OnProjectileLoaded).AddTo(_subscriptions);
+            _firedSubscriber.Subscribe(OnProjectileFired).AddTo(_subscriptions);
             _projectiles.Retired.Subscribe(OnRetired).AddTo(_subscriptions);
         }
 
@@ -83,6 +90,19 @@ namespace BalloonParty.Projectile.Controller
             Refresh();
         }
 
+        // A ball armed in the thrower arms, as far as the fold and its listeners know, the moment it leaves.
+        private void OnProjectileFired(ProjectileFiredMessage msg)
+        {
+            var projectile = msg.Projectile;
+            if (projectile == null || !projectile.IsPiercing.Value || !IsTracked(projectile))
+            {
+                return;
+            }
+
+            Refresh();
+            _pierceArmed.OnNext(projectile);
+        }
+
         // A dying shot stops piercing before it publishes Destroyed, so retiring it later changes the
         // fold only for a ball that left without dying (game over, reset).
         private void OnRetired(IProjectileModel projectile)
@@ -104,7 +124,7 @@ namespace BalloonParty.Projectile.Controller
         private void OnPiercingChanged(IProjectileModel projectile, bool piercing)
         {
             Refresh();
-            if (piercing)
+            if (piercing && !IsHeld(projectile))
             {
                 _pierceArmed.OnNext(projectile);
             }
@@ -115,10 +135,28 @@ namespace BalloonParty.Projectile.Controller
             var any = false;
             foreach (var tracked in _tracked)
             {
-                any |= tracked.Projectile.IsPiercing.Value;
+                any |= tracked.Projectile.IsPiercing.Value && !IsHeld(tracked.Projectile);
             }
 
             _isPiercing.Value = any;
+        }
+
+        private bool IsHeld(IProjectileModel projectile)
+        {
+            return projectile == _projectiles.Loaded;
+        }
+
+        private bool IsTracked(IProjectileModel projectile)
+        {
+            foreach (var tracked in _tracked)
+            {
+                if (tracked.Projectile == projectile)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private readonly struct Tracked

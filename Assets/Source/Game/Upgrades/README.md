@@ -46,7 +46,9 @@ The roll happens once per ball, the moment the thrower loads it (`SnipeChanceRol
 when its reload starts. A hit arms the ball the way a Snipe pickup arms the ball still in the thrower
 (`ISnipeArmer`, implemented by `SnipeItemHandler`): it pierces, carries the Snipe's speed buff, and its
 pencil line starts at the muzzle when it fires. So it plays, scores and discharges like any Snipe lance,
-and the thrower's "ready" heads-up reads it as armed through `IsPiercing`.
+and the thrower's "ready" heads-up reads it as armed through `IsPiercing`. While it waits in the thrower it
+doesn't count as piercing for `IActiveProjectilePierce` (`Projectile/Controller/`): the pierce loop and the
+Pierce heads-up start when it fires, as they do for a ball armed in flight.
 
 A hit also plays a whirlwind around the cannon (`Thrower/SnipeWhirlwindView`, see `Thrower/README.md`)
 while the ball slides out to the muzzle: the roll has already landed, and the whirlwind announces it before
