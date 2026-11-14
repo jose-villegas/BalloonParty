@@ -193,7 +193,10 @@ MonoBehaviour:
   - _prefab: {fileID: 7744549277022113413, guid: 8cbfaad10f3379f4a86ceda33ac02505, type: 3}
     _balloonType: 9
     _nudgeOverrides: []
-    _hitVfxOverrides: []
+    _hitVfxOverrides:
+    - _appliesTo: 4
+      _prefab: {fileID: 2148469744637963286, guid: f05bdb02dcb0eae44b29f90e6e1fa540, type: 3}
+      _alongHit: 1
     _popPulse:
       _peakScale: 1.25
       _swellSeconds: 0.08
