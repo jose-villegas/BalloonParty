@@ -123,7 +123,7 @@ namespace BalloonParty.Cheats
             }
         }
 
-        private void SpawnAt(Vector2Int slot, BalloonPrefabEntry entry, ItemType item)
+        internal void SpawnAt(Vector2Int slot, BalloonPrefabEntry entry, ItemType item)
         {
             _spawnPath.Clear();
             _spawnPath.Add(_grid.IndexToWorldPosition(slot));
@@ -138,7 +138,7 @@ namespace BalloonParty.Cheats
             }
         }
 
-        private BalloonPrefabEntry FindEntry(BalloonType type)
+        internal BalloonPrefabEntry FindEntry(BalloonType type)
         {
             foreach (var entry in _balloonsConfig.Entries)
             {

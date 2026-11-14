@@ -1,0 +1,282 @@
+#!/usr/bin/env python3
+"""Puts a still scene together in the open Unity Editor, to judge a look without playing for it.
+
+Drives Assets/Source/Editor/Staging/SceneStage.cs through the Unity CLI: holds the world still, clears
+slots, places balloons, sets the time of day, pops a balloon or freezes its pop at a chosen moment,
+and renders the camera to a PNG. One command per call, or import it and script a whole scene:
+
+    python3 Tools/stage/stage.py begin --level 3
+    python3 Tools/stage/stage.py clear --slots 0,8:6,9
+    python3 Tools/stage/stage.py place Golden 4,9
+    python3 Tools/stage/stage.py time night
+    python3 Tools/stage/stage.py freeze-pop Golden 0.2 --hide
+    python3 Tools/stage/stage.py capture Logs/stage/golden-night.png --around Golden
+
+    from stage import Stage
+    stage = Stage()
+    stage.begin(level=3)
+
+The Editor must be open on the main checkout (it only sees committed, merged code). See
+Tools/stage/README.md.
+"""
+
+import argparse
+import json
+import os
+import sys
+import time
+
+TOOL_DIR = os.path.dirname(os.path.abspath(__file__))
+REPO_ROOT = os.path.dirname(os.path.dirname(TOOL_DIR))
+sys.path.insert(0, os.path.join(REPO_ROOT, "Tools", "playtest"))
+
+from playtest_bot import Editor, find_unity  # noqa: E402
+
+API = "BalloonParty.Editor.Staging.SceneStage"
+# The light's angle at the named times of day (the day/night gradient's keys, see SceneLightFieldSettings).
+TIMES = {"dawn": 45.0, "day": 135.0, "noon": 135.0, "dusk": 225.0, "night": 315.0}
+BEGIN_TIMEOUT = 180.0
+POLL_SECONDS = 0.5
+
+
+def cs(value):
+    """A C# literal for a Python string, number or bool."""
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, (int, float)):
+        return repr(float(value)) + "f" if isinstance(value, float) else str(value)
+    return json.dumps(str(value))
+
+
+class StageError(RuntimeError):
+    pass
+
+
+class Stage:
+    def __init__(self, project=REPO_ROOT, verbose=True):
+        self.editor = Editor(find_unity(), os.path.abspath(project))
+        self.verbose = verbose
+
+    def call(self, method, *args):
+        """Calls SceneStage.<method>(args) in the Editor and returns its answer; an "error: ..." answer raises."""
+        result = str(self.editor.eval(f"return {API}.{method}({', '.join(cs(a) for a in args)});"))
+        if self.verbose:
+            print(f"{method}: {result}", flush=True)
+        if result.startswith("error"):
+            raise StageError(result)
+        return result
+
+    def status(self):
+        return self.call("Status")
+
+    def begin(self, level=None, settle=2.5):
+        """Enters Play mode if needed, gets past the launch screen and holds the game; at `level`, restarts there."""
+        self.editor.wait_ready()
+        # An unfocused Editor stops ticking the game; these keep it running.
+        self.editor.command("editor", "set_auto_tick")
+        self.editor.command("editor.playmode", "set_run_in_background")
+        deadline = time.time() + BEGIN_TIMEOUT
+        while self.call("Begin") != "ready":
+            if time.time() > deadline:
+                raise StageError("the game didn't come up")
+            time.sleep(1.0)
+            self.editor.wait_ready()
+        if level is not None:
+            self.restart(level, settle)
+
+    def hold(self):
+        return self.call("Hold")
+
+    def release(self):
+        return self.call("Release")
+
+    def advance(self, seconds):
+        """Lets game time run `seconds`, then holds again; returns once it has."""
+        self.call("Advance", float(seconds))
+        while "advancing" in self._quiet("Status"):
+            time.sleep(POLL_SECONDS)
+
+    def restart(self, level, settle=2.5):
+        self.call("Restart", int(level))
+        self.advance(settle)
+
+    def time_of_day(self, when, settle=1.0):
+        """Sets the light to `when`: an angle in degrees, or dawn, day, dusk or night."""
+        angle = TIMES[when] if str(when) in TIMES else float(when)
+        self.call("SetTime", float(angle))
+        # The light's globals follow on the next ticks; real time passes while the game is held.
+        time.sleep(settle)
+
+    def list(self):
+        """The balloons on the board: [(type, (col, row), (x, y))], and the grid size."""
+        lines = self._quiet("List").splitlines()
+        balloons = []
+        for line in lines[:-1]:
+            kind, slot, world = line.split(" ")
+            balloons.append((kind, tuple(int(v) for v in slot.split(",")), tuple(float(v) for v in world.split(","))))
+        return balloons, lines[-1]
+
+    def clear(self, slots=None, around=None, radius=0.8, settle=1.5):
+        """Pops the balloons in a slot rectangle ((c0, r0), (c1, r1)) or within `radius` of a world point, and lets
+        the pops play out."""
+        if slots is not None:
+            (c0, r0), (c1, r1) = slots
+            self.call("Clear", int(c0), int(r0), int(c1), int(r1))
+        elif around is not None:
+            self.call("ClearAround", float(around[0]), float(around[1]), float(radius))
+        self.advance(settle)
+
+    def place(self, kind, slot, item="None", force=True):
+        """Puts a `kind` balloon at slot (col, row); with `force`, pops what's there first."""
+        col, row = slot
+        if force and any(s == (col, row) for _, s, _ in self.list()[0]):
+            self.clear(slots=((col, row), (col, row)))
+        return self.call("Place", kind, int(col), int(row), item)
+
+    def pop(self, target, settle=None):
+        """Pops a balloon for real (its type, or "col,row"); with `settle`, lets that much game time run."""
+        result = self.call("Pop", target)
+        if settle:
+            self.advance(settle)
+        return result
+
+    def freeze_pop(self, target, seconds, hide=False, dx=0.0, dy=0.0, seed=None, texture=None, start_frame=None,
+                   shader=None, shader_file=None, floats=None):
+        """Shows `target`'s pop stopped `seconds` in, from a fixed seed; see SceneStage.FreezePop for the swaps."""
+        options = {"hide": 1 if hide else 0, "dx": dx, "dy": dy}
+        if seed is not None:
+            options["seed"] = seed
+        if texture:
+            options["texture"] = os.path.abspath(texture).replace("\\", "/")
+        if start_frame is not None:
+            options["startFrame"] = start_frame
+        if shader:
+            options["shader"] = shader
+        if shader_file:
+            options["shaderFile"] = os.path.abspath(shader_file).replace("\\", "/")
+        options.update(floats or {})
+        return self.call("FreezePop", target, float(seconds), ";".join(f"{k}={v}" for k, v in options.items()))
+
+    def clear_effects(self):
+        return self.call("ClearEffects")
+
+    def capture(self, path, around="", size=480):
+        """Renders the camera to `path`: the whole frame, or a `size`-pixel square around a balloon (type or
+        "col,row") or a world point (x, y)."""
+        if isinstance(around, (tuple, list)):
+            around = f"{around[0]};{around[1]}"
+        return self.call("Capture", os.path.abspath(path).replace("\\", "/"), around, int(size))
+
+    def end(self):
+        """Clears frozen effects, lets the game run and leaves Play mode."""
+        self.call("ClearEffects")
+        self.call("Release")
+        self.editor.command("editor.playmode", "stop")
+        self.editor.wait_ready()
+
+    def _quiet(self, method, *args):
+        verbose, self.verbose = self.verbose, False
+        try:
+            return self.call(method, *args)
+        finally:
+            self.verbose = verbose
+
+
+def pair(text, kind=float):
+    a, b = text.split(",")
+    return kind(a), kind(b)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--project", default=REPO_ROOT, help="the Unity project the Editor has open")
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    begin = sub.add_parser("begin", help="enter Play mode, get past the launch screen, hold the game")
+    begin.add_argument("--level", type=int, help="restart the run at this level")
+    sub.add_parser("status", help="where things stand")
+    sub.add_parser("hold", help="stop game time")
+    sub.add_parser("release", help="let game time run")
+    advance = sub.add_parser("advance", help="let game time run a while, then hold again")
+    advance.add_argument("seconds", type=float)
+    restart = sub.add_parser("restart", help="start the run again at a level")
+    restart.add_argument("level", type=int)
+    when = sub.add_parser("time", help="set the time of day: dawn, day, dusk, night, or an angle")
+    when.add_argument("when")
+    sub.add_parser("list", help="the balloons on the board")
+    clear = sub.add_parser("clear", help="pop the balloons in an area")
+    clear.add_argument("--slots", help="a slot rectangle, c0,r0:c1,r1")
+    clear.add_argument("--around", help="a world point, x,y")
+    clear.add_argument("--radius", type=float, default=0.8)
+    place = sub.add_parser("place", help="put a balloon in a slot (what's there is popped first)")
+    place.add_argument("kind", help="a BalloonType: Ordinary, Unbreakable, Golden, Heart, ...")
+    place.add_argument("slot", help="col,row")
+    place.add_argument("--item", default="None")
+    pop = sub.add_parser("pop", help="pop a balloon for real")
+    pop.add_argument("target", help="a balloon type or col,row")
+    pop.add_argument("--settle", type=float, help="then let this much game time run")
+    freeze = sub.add_parser("freeze-pop", help="show a balloon's pop stopped some seconds in")
+    freeze.add_argument("target", help="a balloon type or col,row")
+    freeze.add_argument("seconds", type=float)
+    freeze.add_argument("--hide", action="store_true", help="hide the balloon, as if popped")
+    freeze.add_argument("--dx", type=float, default=0.0)
+    freeze.add_argument("--dy", type=float, default=0.0)
+    freeze.add_argument("--seed", type=int)
+    freeze.add_argument("--texture", help="a PNG to draw the shards from instead")
+    freeze.add_argument("--start-frame", type=float, help="the shards' random first frame, 0..1 of the sheet")
+    freeze.add_argument("--shader", help="a shader by name, for the shards")
+    freeze.add_argument("--shader-file", help="a .shader file, compiled on the spot (one not yet merged)")
+    freeze.add_argument("--set", action="append", default=[], metavar="_NAME=VALUE",
+                        help="a material float, e.g. _AmbientHue=0.25")
+    sub.add_parser("clear-effects", help="remove frozen pops and show the balloons they hid")
+    capture = sub.add_parser("capture", help="render the camera to a PNG")
+    capture.add_argument("path")
+    capture.add_argument("--around", default="", help="a balloon type, col,row, or a world point x;y")
+    capture.add_argument("--size", type=int, default=480)
+    sub.add_parser("end", help="clear frozen pops, let the game run and leave Play mode")
+    args = parser.parse_args()
+
+    stage = Stage(args.project)
+    try:
+        if args.command == "begin":
+            stage.begin(args.level)
+        elif args.command in ("status", "hold", "release", "clear-effects"):
+            stage.call({"status": "Status", "hold": "Hold", "release": "Release",
+                        "clear-effects": "ClearEffects"}[args.command])
+        elif args.command == "advance":
+            stage.advance(args.seconds)
+        elif args.command == "restart":
+            stage.restart(args.level)
+        elif args.command == "time":
+            stage.time_of_day(args.when)
+        elif args.command == "list":
+            balloons, grid = stage.list()
+            for kind, slot, world in balloons:
+                print(f"{kind:12} {slot[0]},{slot[1]:<4} {world[0]:.2f},{world[1]:.2f}")
+            print(grid)
+        elif args.command == "clear":
+            if args.slots:
+                a, b = args.slots.split(":")
+                stage.clear(slots=(pair(a, int), pair(b, int)))
+            elif args.around:
+                stage.clear(around=pair(args.around), radius=args.radius)
+            else:
+                parser.error("clear needs --slots or --around")
+        elif args.command == "place":
+            stage.place(args.kind, pair(args.slot, int), args.item)
+        elif args.command == "pop":
+            stage.pop(args.target, args.settle)
+        elif args.command == "freeze-pop":
+            stage.freeze_pop(args.target, args.seconds, args.hide, args.dx, args.dy, args.seed, args.texture,
+                             args.start_frame, args.shader, args.shader_file,
+                             dict(item.split("=", 1) for item in args.set))
+        elif args.command == "capture":
+            stage.capture(args.path, args.around, args.size)
+        elif args.command == "end":
+            stage.end()
+    except StageError as error:
+        sys.exit(str(error))
+
+
+if __name__ == "__main__":
+    main()
