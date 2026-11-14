@@ -20,7 +20,11 @@ colourless and scoreless, resists paint, and carries no item. Its prefab (`Prefa
 built from the tough balloon's, so it looks like a balloon, with a gold-plated body
 (`Shaders/BalloonParty/Balloon/GoldenBalloon.shader`) and a dark gold knot. The prefab keeps the tough
 balloon's variant, which only draws cracks for a balloon with durability, so on the golden one it
-does nothing.
+does nothing. It has its own cues (`CombatSoundRouter`): `BalloonDeflectGolden` when the shot bounces off,
+the unbreakable's metallic chime a fifth above the board's key with a high gold glint over it, climbing on
+each further bounce of the same shot; and `BalloonPopGolden` when it breaks, the gold-band balloon's pop with
+a balloon's burst under it and the chime an octave up as a coin ring. Both are layered from clips already in
+the sound bank (`SoundBankConfiguration`), so they can be retuned there.
 
 The heart balloon is `Balloon/Model/HeartBalloonModel`: any hit pops it, the shot's or an item's,
 whatever its catalogue entry's hit count says. It is colourless and scoreless, resists paint, and
@@ -28,7 +32,7 @@ carries no item, so its pop leaves the streak alone. Its pop gives back one hear
 maximum and never to a player already out. Its prefab (`Prefabs/Balloon/Heart`) is the balloon's, with a
 heart body and bandages drawn by `Tools/art/make_heart_balloon.py`, and its own highlight
 (`Shaders/BalloonParty/Balloon/HeartShine.shader`, lit from the heart's baked normals), because the
-round balloons' shine is drawn for a circle.
+round balloons' shine is drawn for a circle. Its pop cue is `BalloonPopHeart`, a kalimba note for now.
 
 ## When each one is due
 

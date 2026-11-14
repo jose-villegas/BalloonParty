@@ -1277,6 +1277,84 @@ MonoBehaviour:
     _tensionSemitones: 0
     _layers: []
     _fetchPrompt: 'A short, warm chime with a soft balloon pop under it: a heart-shaped balloon bursts and gives the player a life back.'
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: 0370e279dcf51485896dad01ce536809, type: 3}
+    _clipPickMode: 0
+    _clipWrapMode: 0
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 0.2, y: 0.3}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 8
+    _priority: 150
+    _loop: 0
+    _singleInstance: 0
+    _pan2D: 1
+    _delaySeconds: 0
+    _fadeInSeconds: 0
+    _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
+    _stopsOnPlay: 
+    _melodicMode: 3
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 2
+    _tensionSemitones: 7
+    _layers:
+    - _clips:
+      - {fileID: 8300000, guid: a8be14a2d166e4967af5241db0524b8c, type: 3}
+      _clipPickMode: 0
+      _clipWrapMode: 0
+      _pitchRange: {x: 1, y: 1}
+      _volumeRange: {x: 0.35, y: 0.35}
+      _melodicMode: 3
+      _melodicMaxOctaves: 2
+      _melodicSkipSteps: 1
+      _tensionSemitones: 19
+    _fetchPrompt: A short bright metallic clink, like a ball bouncing off a gold plate, with a small high glint.
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: a8be14a2d166e4967af5241db0524b8c, type: 3}
+    _clipPickMode: 0
+    _clipWrapMode: 0
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 0.7, y: 0.7}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 150
+    _loop: 0
+    _singleInstance: 0
+    _pan2D: 1
+    _delaySeconds: 0
+    _fadeInSeconds: 0
+    _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
+    _stopsOnPlay: 
+    _melodicMode: 1
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _layers:
+    - _clips:
+      - {fileID: 8300000, guid: 7c17adf0654b347e8928bd8e442f1daa, type: 3}
+      _clipPickMode: 0
+      _clipWrapMode: 0
+      _pitchRange: {x: 1.15, y: 1.15}
+      _volumeRange: {x: 0.6, y: 0.6}
+      _melodicMode: 0
+      _melodicMaxOctaves: 2
+      _melodicSkipSteps: 1
+      _tensionSemitones: 0
+    - _clips:
+      - {fileID: 8300000, guid: 0370e279dcf51485896dad01ce536809, type: 3}
+      _clipPickMode: 0
+      _clipWrapMode: 0
+      _pitchRange: {x: 1, y: 1}
+      _volumeRange: {x: 0.5, y: 0.5}
+      _melodicMode: 3
+      _melodicMaxOctaves: 2
+      _melodicSkipSteps: 1
+      _tensionSemitones: 12
+    _fetchPrompt: 'A bright balloon pop with a coin-like chime ringing over it: a gold-plated balloon breaks and pays a reward.'
   _melodicScale: 0000000002000000040000000700000009000000
   _melodicRootSemitone: 0
   _globalVoiceCap: 64
