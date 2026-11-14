@@ -1,5 +1,9 @@
 var NAVTREEINDEX105 =
 {
+"namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675a0ae61bd0474e04c9f1195d4baa0213a0":[5,0,0,13,1,18,3],
+"namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675a46c85769d351aab8660c128825634828":[5,0,0,13,1,18,1],
+"namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675a6428bf61b19c9f6c90d034777a20ca77":[5,0,0,13,1,18,4],
+"namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675a6adf97f83acf6453d4a6a4b1070f3754":[5,0,0,13,1,18,0],
 "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675ab1c94ca2fbc3e78fc30069c8d0f01680":[5,0,0,13,1,18,5],
 "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675ae1ff6a7360e99cb46db6bb5d3ff8e2eb":[5,0,0,13,1,18,2],
 "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#ac1d521bee5fff8ee83685d6d74a1068b":[5,0,0,13,1,19],
@@ -245,9 +249,5 @@ var NAVTREEINDEX105 =
 "plan_future_ideas.html#autotoc_md542":[3,5,0,13,2],
 "plan_future_ideas.html#autotoc_md543":[3,5,0,13,3],
 "plan_future_ideas.html#autotoc_md544":[3,5,0,13,4],
-"plan_future_ideas.html#autotoc_md545":[3,5,0,13,5],
-"plan_future_ideas.html#autotoc_md546":[3,5,0,13,6],
-"plan_future_ideas.html#autotoc_md547":[3,5,0,13,7],
-"plan_future_ideas.html#autotoc_md549":[3,5,0,14],
-"plan_future_ideas.html#autotoc_md550":[3,5,0,14,0]
+"plan_future_ideas.html#autotoc_md545":[3,5,0,13,5]
 };

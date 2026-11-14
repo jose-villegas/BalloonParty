@@ -1,5 +1,9 @@
 var NAVTREEINDEX95 =
 {
+"interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html#ad4c9c118fd31a0313c49643afd51ee24":[5,0,0,1,2,12,2],
+"interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html#ad4c9c118fd31a0313c49643afd51ee24":[6,0,0,1,2,12,2],
+"interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html#adb6f47d0cdc46121366eff80c4a6f0ff":[5,0,0,1,2,12,5],
+"interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html#adb6f47d0cdc46121366eff80c4a6f0ff":[6,0,0,1,2,12,5],
 "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html#ae295e13669f2335dde5195f851710138":[5,0,0,1,2,12,4],
 "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html#ae295e13669f2335dde5195f851710138":[6,0,0,1,2,12,4],
 "interfaceBalloonParty_1_1Balloon_1_1Reward_1_1IRewardBalloonRequests.html":[5,0,0,1,3,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX95 =
 "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#af957ad79a860ac5f93e0490e990a0742":[5,0,0,3,2,1,25],
 "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#af957ad79a860ac5f93e0490e990a0742":[6,0,0,3,2,1,25],
 "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#afa5c9f0e5cb4203400e6545cfafe4857":[5,0,0,3,2,1,31],
-"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#afa5c9f0e5cb4203400e6545cfafe4857":[6,0,0,3,2,1,31],
-"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#afe039a31abd778ef5a17a9aac52e05d9":[5,0,0,3,2,1,37],
-"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#afe039a31abd778ef5a17a9aac52e05d9":[6,0,0,3,2,1,37],
-"interfaceBalloonParty_1_1Configuration_1_1Cinematics_1_1ICinematicsSettings.html":[5,0,0,3,3,4],
-"interfaceBalloonParty_1_1Configuration_1_1Cinematics_1_1ICinematicsSettings.html":[6,0,0,3,3,4]
+"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#afa5c9f0e5cb4203400e6545cfafe4857":[6,0,0,3,2,1,31]
 };

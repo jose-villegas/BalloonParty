@@ -1,5 +1,9 @@
 var NAVTREEINDEX103 =
 {
+"interfaceBalloonParty_1_1Slots_1_1Grid_1_1IShieldSlotPreference.html#a33a24af686bd634243526a00e8c6d523":[5,0,0,13,2,3,0],
+"interfaceBalloonParty_1_1Slots_1_1Grid_1_1IShieldSlotPreference.html#a33a24af686bd634243526a00e8c6d523":[6,0,0,13,2,3,0],
+"interfaceBalloonParty_1_1Slots_1_1Spawner_1_1IGridSpawner.html":[5,0,0,13,3,1],
+"interfaceBalloonParty_1_1Slots_1_1Spawner_1_1IGridSpawner.html":[6,0,0,13,3,1],
 "interfaceBalloonParty_1_1Slots_1_1Spawner_1_1IGridSpawner.html#a00b9c88ab65536be281af22b69cfcad6":[5,0,0,13,3,1,1],
 "interfaceBalloonParty_1_1Slots_1_1Spawner_1_1IGridSpawner.html#a00b9c88ab65536be281af22b69cfcad6":[6,0,0,13,3,1,1],
 "interfaceBalloonParty_1_1Slots_1_1Spawner_1_1IGridSpawner.html#a3a78482b60eecad8116032c2df695b77":[5,0,0,13,3,1,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX103 =
 "namespaceBalloonParty_1_1Game_1_1Run.html#a860ea73c21c91390602565c41dbd77f1a8a10e06466b3311c50c21b05b44206aa":[5,0,0,6,7,21,0],
 "namespaceBalloonParty_1_1Game_1_1Run.html#a860ea73c21c91390602565c41dbd77f1ad9c8f187972e6320a34e9c40b4cba605":[5,0,0,6,7,21,1],
 "namespaceBalloonParty_1_1Game_1_1Run.html#ae32b042f074527467706d741395e3a74":[5,0,0,6,7,20],
-"namespaceBalloonParty_1_1Game_1_1Run.html#ae32b042f074527467706d741395e3a74a7b69c80559d67f1b49a821c83dbdba7d":[5,0,0,6,7,20,1],
-"namespaceBalloonParty_1_1Game_1_1Run.html#ae32b042f074527467706d741395e3a74ab68aa5cb0ed52573b6fcf3453b68d489":[5,0,0,6,7,20,0],
-"namespaceBalloonParty_1_1Game_1_1Score.html":[5,0,0,6,8],
-"namespaceBalloonParty_1_1Game_1_1Score_1_1Behaviours.html":[5,0,0,6,8,0],
-"namespaceBalloonParty_1_1Game_1_1Score_1_1Behaviours.html#a33bff20e5951e5e2eee9701fe3db921a":[5,0,0,6,8,0,15]
+"namespaceBalloonParty_1_1Game_1_1Run.html#ae32b042f074527467706d741395e3a74a7b69c80559d67f1b49a821c83dbdba7d":[5,0,0,6,7,20,1]
 };

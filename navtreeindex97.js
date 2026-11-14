@@ -1,5 +1,9 @@
 var NAVTREEINDEX97 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a3d965db79289946b25ec9b16dbf53055":[5,0,0,3,5,10,4],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a3d965db79289946b25ec9b16dbf53055":[6,0,0,3,5,10,4],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a7451c3bff615363846a5cfda73d76ff1":[5,0,0,3,5,10,2],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a7451c3bff615363846a5cfda73d76ff1":[6,0,0,3,5,10,2],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a7a05f37e1cfb47170d8eb56d8e5e8895":[5,0,0,3,5,10,0],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a7a05f37e1cfb47170d8eb56d8e5e8895":[6,0,0,3,5,10,0],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a987fbdaf0a21593d69c05f12c2907424":[5,0,0,3,5,10,1],
@@ -245,9 +249,5 @@ var NAVTREEINDEX97 =
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#ae5610dccea393b3c8b2427c808595be4":[5,0,0,3,5,22,1],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#ae5610dccea393b3c8b2427c808595be4":[6,0,0,3,5,22,1],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#af5369ba82cbd95f2728a22c56db2ab47":[5,0,0,3,5,22,9],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#af5369ba82cbd95f2728a22c56db2ab47":[6,0,0,3,5,22,9],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#af9e289430fb3698e455f32d248dc012a":[5,0,0,3,5,22,2],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#af9e289430fb3698e455f32d248dc012a":[6,0,0,3,5,22,2],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#afe98297e798568d2073f07848c3a31b5":[5,0,0,3,5,22,8],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#afe98297e798568d2073f07848c3a31b5":[6,0,0,3,5,22,8]
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#af5369ba82cbd95f2728a22c56db2ab47":[6,0,0,3,5,22,9]
 };

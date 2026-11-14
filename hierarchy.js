@@ -254,7 +254,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Type.UnbreakableBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html", null ]
     ] ],
     [ "BalloonParty.Balloon.View.IBalloonViewBinding", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonViewBinding.html", [
-      [ "BalloonParty.Balloon.Type.GoldenRaysLook", "classBalloonParty_1_1Balloon_1_1Type_1_1GoldenRaysLook.html", null ],
+      [ "BalloonParty.Balloon.Type.GodRaysLook", "classBalloonParty_1_1Balloon_1_1Type_1_1GodRaysLook.html", null ],
       [ "BalloonParty.Balloon.Type.RainbowBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html", null ],
       [ "BalloonParty.Balloon.Type.SoapBubbleClusterVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html", null ],
       [ "BalloonParty.Balloon.Type.ToughBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant.html", null ],
@@ -1208,7 +1208,7 @@ var hierarchy =
       [ "BalloonParty.Audio.View.AudioSourceVoice", "classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice.html", null ],
       [ "BalloonParty.Audio.View.UiSfxEmitter", "classBalloonParty_1_1Audio_1_1View_1_1UiSfxEmitter.html", null ],
       [ "BalloonParty.Balloon.Type.ColorableBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1ColorableBalloonVariant.html", null ],
-      [ "BalloonParty.Balloon.Type.GoldenRaysLook", "classBalloonParty_1_1Balloon_1_1Type_1_1GoldenRaysLook.html", null ],
+      [ "BalloonParty.Balloon.Type.GodRaysLook", "classBalloonParty_1_1Balloon_1_1Type_1_1GodRaysLook.html", null ],
       [ "BalloonParty.Balloon.Type.SoapBubbleClusterVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html", null ],
       [ "BalloonParty.Balloon.Type.ToughBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant.html", null ],
       [ "BalloonParty.Balloon.Type.UnbreakableBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html", null ],

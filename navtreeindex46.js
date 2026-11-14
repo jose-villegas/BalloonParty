@@ -1,5 +1,9 @@
 var NAVTREEINDEX46 =
 {
+"classBalloonParty_1_1Game_1_1GameLifetimeScope.html#ac9847526bcabd91cf5eabc20ab4883f2":[6,0,0,6,12,17],
+"classBalloonParty_1_1Game_1_1GameLifetimeScope.html#acfd803ffbee1dc55376ab3bdb7c93925":[5,0,0,6,12,8],
+"classBalloonParty_1_1Game_1_1GameLifetimeScope.html#acfd803ffbee1dc55376ab3bdb7c93925":[6,0,0,6,12,8],
+"classBalloonParty_1_1Game_1_1GameLifetimeScope.html#ad8afd1a927d5e438d9e45408730447d2":[5,0,0,6,12,26],
 "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#ad8afd1a927d5e438d9e45408730447d2":[6,0,0,6,12,26],
 "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#adab843a0bc7ec987e63d671431c6329d":[5,0,0,6,12,15],
 "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#adab843a0bc7ec987e63d671431c6329d":[6,0,0,6,12,15],
@@ -245,9 +249,5 @@ var NAVTREEINDEX46 =
 "classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html#ad06573d449e9574902ba2d028eac7051":[6,0,0,6,5,0,3],
 "classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html#aec97b2aafe3f088c83517998d2ff4df2":[5,0,0,6,5,0,2],
 "classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html#aec97b2aafe3f088c83517998d2ff4df2":[6,0,0,6,5,0,2],
-"classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html":[5,0,0,6,5,4],
-"classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html":[6,0,0,6,5,4],
-"classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html#a46065db2ef8fab46d3928d8b26e1958a":[5,0,0,6,5,4,0],
-"classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html#a46065db2ef8fab46d3928d8b26e1958a":[6,0,0,6,5,4,0],
-"classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html#a62dd0d388a210364496bfe3b36f834e6":[5,0,0,6,5,4,2]
+"classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html":[5,0,0,6,5,4]
 };

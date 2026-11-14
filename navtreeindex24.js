@@ -1,5 +1,7 @@
 var NAVTREEINDEX24 =
 {
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings.html#a1c923ff1fce88f3e08cf6c615f4d0bbb":[6,0,0,3,5,32,24],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings.html#a1d22f795d29624d5856ce1bccb56d3e4":[5,0,0,3,5,32,23],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings.html#a1d22f795d29624d5856ce1bccb56d3e4":[6,0,0,3,5,32,23],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings.html#a1e96b957a9e88008b86cdb6384200ce5":[5,0,0,3,5,32,4],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings.html#a1e96b957a9e88008b86cdb6384200ce5":[6,0,0,3,5,32,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX24 =
 "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSettings.html#a370e76462b27f906173bc704c3fd854c":[6,0,0,3,7,0,13],
 "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSettings.html#a45a9762a459013428cf3a6ea8ff78c48":[5,0,0,3,7,0,5],
 "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSettings.html#a45a9762a459013428cf3a6ea8ff78c48":[6,0,0,3,7,0,5],
-"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSettings.html#a60f7edc0bf1463291fc4077a63d72d9a":[5,0,0,3,7,0,2],
-"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSettings.html#a60f7edc0bf1463291fc4077a63d72d9a":[6,0,0,3,7,0,2],
-"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSettings.html#a6caf7b03634ad785d7afed307da5a514":[5,0,0,3,7,0,1]
+"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpSettings.html#a60f7edc0bf1463291fc4077a63d72d9a":[5,0,0,3,7,0,2]
 };

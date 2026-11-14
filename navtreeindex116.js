@@ -1,5 +1,9 @@
 var NAVTREEINDEX116 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1BalanceBalloonsMessage.html":[6,0,0,12,7,1],
+"structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html":[5,0,0,12,7,2],
+"structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html":[6,0,0,12,7,2],
+"structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html#a13f7b309f23db4b1a3a517f59f37c6c8":[5,0,0,12,7,2,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html#a13f7b309f23db4b1a3a517f59f37c6c8":[6,0,0,12,7,2,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html#a21868f8a92fb8bb98caf6d90ccb7a346":[5,0,0,12,7,2,5],
 "structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html#a21868f8a92fb8bb98caf6d90ccb7a346":[6,0,0,12,7,2,5],
@@ -245,9 +249,5 @@ var NAVTREEINDEX116 =
 "structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html#a2174c6689b3070ae5c9011584f814e4e":[6,0,0,12,7,38,3],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html#a894270f5641777f1977e0807c61320b8":[5,0,0,12,7,38,2],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html#a894270f5641777f1977e0807c61320b8":[6,0,0,12,7,38,2],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html#ab7b68b61d100e5f0fa6987f39d47a806":[5,0,0,12,7,38,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html#ab7b68b61d100e5f0fa6987f39d47a806":[6,0,0,12,7,38,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html#ac592a7d4ab3893c052d7054d75957c67":[5,0,0,12,7,38,4],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html#ac592a7d4ab3893c052d7054d75957c67":[6,0,0,12,7,38,4],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html":[5,0,0,12,7,39]
+"structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html#ab7b68b61d100e5f0fa6987f39d47a806":[5,0,0,12,7,38,0]
 };

@@ -1,5 +1,9 @@
 var NAVTREEINDEX84 =
 {
+"classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html#afabae5d914299bdf2460b2ecc6cca2bb":[6,0,0,14,19,11],
+"classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html#afbbff528f418b4f9530684e8d381bc81":[5,0,0,14,19,27],
+"classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html#afbbff528f418b4f9530684e8d381bc81":[6,0,0,14,19,27],
+"classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html#afe7fdbe3a4299174ab59b36e542b6b74":[5,0,0,14,19,4],
 "classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html#afe7fdbe3a4299174ab59b36e542b6b74":[6,0,0,14,19,4],
 "classBalloonParty_1_1Solver_1_1ShotSimEffectBoard.html":[5,0,0,14,20],
 "classBalloonParty_1_1Solver_1_1ShotSimEffectBoard.html":[6,0,0,14,20],
@@ -245,9 +249,5 @@ var NAVTREEINDEX84 =
 "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ab9e46d1c17b03ca6792472d9b2e85eda":[6,0,0,15,1,0],
 "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ac497d1607399c4a0644aa0ffd0f66c71":[5,0,0,15,1,4],
 "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ac497d1607399c4a0644aa0ffd0f66c71":[6,0,0,15,1,4],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#ac527fbcefd83285caea3552cb3ddec9b":[5,0,0,15,1,71],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#ac527fbcefd83285caea3552cb3ddec9b":[6,0,0,15,1,71],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#acd8343d4fc283429803580edaef6cdfe":[5,0,0,15,1,60],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#acd8343d4fc283429803580edaef6cdfe":[6,0,0,15,1,60],
-"classBalloonParty_1_1Thrower_1_1ThrowerController.html#acf7c3023e29ab76fd5380d26a3896b72":[5,0,0,15,1,7]
+"classBalloonParty_1_1Thrower_1_1ThrowerController.html#ac527fbcefd83285caea3552cb3ddec9b":[5,0,0,15,1,71]
 };

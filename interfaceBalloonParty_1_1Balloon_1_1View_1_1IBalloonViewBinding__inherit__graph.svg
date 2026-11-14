@@ -32,10 +32,10 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="classBalloonParty_1_1Balloon_1_1Type_1_1GoldenRaysLook.html" target="_top" xlink:title="Tints the golden reward balloon&#39;s god rays from the palette.">
+<g id="a_Node000002"><a xlink:href="classBalloonParty_1_1Balloon_1_1Type_1_1GodRaysLook.html" target="_top" xlink:title="Tints a reward balloon&#39;s god rays from its palette entry (the golden balloon&#39;s GoldenRays,...">
 <polygon fill="white" stroke="#666666" points="330,-270 185,-270 185,-240 330,-240 330,-270"/>
 <text text-anchor="start" x="193" y="-258" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Type.</text>
-<text text-anchor="middle" x="257.5" y="-247" font-family="Helvetica,sans-Serif" font-size="10.00">GoldenRaysLook</text>
+<text text-anchor="middle" x="257.5" y="-247" font-family="Helvetica,sans-Serif" font-size="10.00">GodRaysLook</text>
 </a>
 </g>
 </g>

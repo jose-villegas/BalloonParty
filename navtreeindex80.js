@@ -1,5 +1,9 @@
 var NAVTREEINDEX80 =
 {
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html":[6,0,0,13,0,0,20],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html#a08da43df6360e982a7c181a099363f9d":[5,0,0,13,0,0,20,1],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html#a08da43df6360e982a7c181a099363f9d":[6,0,0,13,0,0,20,1],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html#a0c1fd040ac538217f25bd66a63ad42da":[5,0,0,13,0,0,20,3],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html#a0c1fd040ac538217f25bd66a63ad42da":[6,0,0,13,0,0,20,3],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html#a13d2601304b0dbb3023514b6e8e9583d":[5,0,0,13,0,0,20,0],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html#a13d2601304b0dbb3023514b6e8e9583d":[6,0,0,13,0,0,20,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX80 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a26a27a409156dc3ca74e9f70c8afab1e":[6,0,0,13,0,17,6],
 "classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a336c3527de442390deaa97809f88f6b2":[5,0,0,13,0,17,4],
 "classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a336c3527de442390deaa97809f88f6b2":[6,0,0,13,0,17,4],
-"classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a61e2f62571d01341eb8c296c7c365b6f":[5,0,0,13,0,17,8],
-"classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a61e2f62571d01341eb8c296c7c365b6f":[6,0,0,13,0,17,8],
-"classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a669ccc69f1bcf5152e3aff7f1006f7f8":[5,0,0,13,0,17,0],
-"classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a669ccc69f1bcf5152e3aff7f1006f7f8":[6,0,0,13,0,17,0],
-"classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a8bf9ea0d972409cb19b8b0ec76ca4acf":[5,0,0,13,0,17,7]
+"classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a61e2f62571d01341eb8c296c7c365b6f":[5,0,0,13,0,17,8]
 };

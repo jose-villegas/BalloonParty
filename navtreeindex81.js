@@ -1,5 +1,9 @@
 var NAVTREEINDEX81 =
 {
+"classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a61e2f62571d01341eb8c296c7c365b6f":[6,0,0,13,0,17,8],
+"classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a669ccc69f1bcf5152e3aff7f1006f7f8":[5,0,0,13,0,17,0],
+"classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a669ccc69f1bcf5152e3aff7f1006f7f8":[6,0,0,13,0,17,0],
+"classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a8bf9ea0d972409cb19b8b0ec76ca4acf":[5,0,0,13,0,17,7],
 "classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a8bf9ea0d972409cb19b8b0ec76ca4acf":[6,0,0,13,0,17,7],
 "classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a9697cdf2a05a04f7d27b95273ad6a9b3":[5,0,0,13,0,17,2],
 "classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a9697cdf2a05a04f7d27b95273ad6a9b3":[6,0,0,13,0,17,2],
@@ -245,9 +249,5 @@ var NAVTREEINDEX81 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#a306ef4ab414703102f4b01f594e218a9":[6,0,0,13,0,21,9],
 "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#a3945a6be610e72b316c7c643527476f5":[5,0,0,13,0,21,0],
 "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#a3945a6be610e72b316c7c643527476f5":[6,0,0,13,0,21,0],
-"classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#a3e7208ec921ac30e2633f91da6eeefb7":[5,0,0,13,0,21,17],
-"classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#a3e7208ec921ac30e2633f91da6eeefb7":[6,0,0,13,0,21,17],
-"classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#a50a31a696753de913efb129c58590362":[5,0,0,13,0,21,20],
-"classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#a50a31a696753de913efb129c58590362":[6,0,0,13,0,21,20],
-"classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#a536ebffafd03bcc27dc7f472c64e8ee9":[5,0,0,13,0,21,21]
+"classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#a3e7208ec921ac30e2633f91da6eeefb7":[5,0,0,13,0,21,17]
 };

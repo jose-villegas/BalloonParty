@@ -1,7 +1,7 @@
 var namespaceBalloonParty_1_1Balloon_1_1Type =
 [
     [ "ColorableBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1ColorableBalloonVariant.html", "classBalloonParty_1_1Balloon_1_1Type_1_1ColorableBalloonVariant" ],
-    [ "GoldenRaysLook", "classBalloonParty_1_1Balloon_1_1Type_1_1GoldenRaysLook.html", "classBalloonParty_1_1Balloon_1_1Type_1_1GoldenRaysLook" ],
+    [ "GodRaysLook", "classBalloonParty_1_1Balloon_1_1Type_1_1GodRaysLook.html", "classBalloonParty_1_1Balloon_1_1Type_1_1GodRaysLook" ],
     [ "IBalloonVariant", "interfaceBalloonParty_1_1Balloon_1_1Type_1_1IBalloonVariant.html", "interfaceBalloonParty_1_1Balloon_1_1Type_1_1IBalloonVariant" ],
     [ "RainbowBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html", "classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant" ],
     [ "SimpleBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1SimpleBalloonVariant.html", "classBalloonParty_1_1Balloon_1_1Type_1_1SimpleBalloonVariant" ],

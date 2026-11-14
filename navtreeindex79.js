@@ -1,5 +1,9 @@
 var NAVTREEINDEX79 =
 {
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1DeflectorActorModel.html#a3cec6f142b68a6d308ae2993e788f888":[6,0,0,13,0,0,10,1],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1DeflectorActorModel.html#a4df4d1ec045e26d0fbf7c2c3a2823557":[5,0,0,13,0,0,10,3],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1DeflectorActorModel.html#a4df4d1ec045e26d0fbf7c2c3a2823557":[6,0,0,13,0,0,10,3],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1DeflectorActorModel.html#a671aff0f7e142454e1bd0614aab7988f":[5,0,0,13,0,0,10,0],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1DeflectorActorModel.html#a671aff0f7e142454e1bd0614aab7988f":[6,0,0,13,0,0,10,0],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1DeflectorActorModel.html#af3958d57e31b4c266403a7987c3d02db":[5,0,0,13,0,0,10,2],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1DeflectorActorModel.html#af3958d57e31b4c266403a7987c3d02db":[6,0,0,13,0,0,10,2],
@@ -245,9 +249,5 @@ var NAVTREEINDEX79 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#af14922d6ea2fadc7e7cd27b33bbc4828":[6,0,0,13,0,0,19,2],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#af1cda09287cc4a50360580e858a2a950":[5,0,0,13,0,0,19,22],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#af1cda09287cc4a50360580e858a2a950":[6,0,0,13,0,0,19,22],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html":[5,0,0,13,0,0,20],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html":[6,0,0,13,0,0,20],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html#a08da43df6360e982a7c181a099363f9d":[5,0,0,13,0,0,20,1],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html#a08da43df6360e982a7c181a099363f9d":[6,0,0,13,0,0,20,1],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html#a0c1fd040ac538217f25bd66a63ad42da":[5,0,0,13,0,0,20,3]
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html":[5,0,0,13,0,0,20]
 };

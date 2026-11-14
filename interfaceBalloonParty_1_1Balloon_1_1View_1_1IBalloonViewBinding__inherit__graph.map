@@ -1,6 +1,6 @@
 <map id="BalloonParty.Balloon.View.IBalloonViewBinding" name="BalloonParty.Balloon.View.IBalloonViewBinding">
 <area shape="rect" id="Node000001" title="Implemented by prefab MonoBehaviours that react to model binding; BalloonView discovers and calls the..." alt="" coords="5,165,200,205"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Type_1_1GoldenRaysLook.html" title="Tints the golden reward balloon&#39;s god rays from the palette." alt="" coords="252,5,445,45"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Type_1_1GodRaysLook.html" title="Tints a reward balloon&#39;s god rays from its palette entry (the golden balloon&#39;s GoldenRays,..." alt="" coords="252,5,445,45"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,153,180,103,212,78,247,55,272,43,274,48,249,60,216,82,184,107,133,157"/>
 <area shape="rect" id="Node000003" href="$classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html" title="A colourable balloon that starts in rainbow mode and pushes the level&#39;s allowed colours into the band..." alt="" coords="252,69,445,109"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="157,157,247,119,281,107,283,112,249,124,160,162"/>

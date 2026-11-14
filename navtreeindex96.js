@@ -1,5 +1,9 @@
 var NAVTREEINDEX96 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#afe039a31abd778ef5a17a9aac52e05d9":[5,0,0,3,2,1,37],
+"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#afe039a31abd778ef5a17a9aac52e05d9":[6,0,0,3,2,1,37],
+"interfaceBalloonParty_1_1Configuration_1_1Cinematics_1_1ICinematicsSettings.html":[5,0,0,3,3,4],
+"interfaceBalloonParty_1_1Configuration_1_1Cinematics_1_1ICinematicsSettings.html":[6,0,0,3,3,4],
 "interfaceBalloonParty_1_1Configuration_1_1Cinematics_1_1ICinematicsSettings.html#a0a36a352c0a1c9efd0833635d3c6a394":[5,0,0,3,3,4,4],
 "interfaceBalloonParty_1_1Configuration_1_1Cinematics_1_1ICinematicsSettings.html#a0a36a352c0a1c9efd0833635d3c6a394":[6,0,0,3,3,4,4],
 "interfaceBalloonParty_1_1Configuration_1_1Cinematics_1_1ICinematicsSettings.html#a1d8913f659928a6b5bd3f62015471888":[5,0,0,3,3,4,2],
@@ -245,9 +249,5 @@ var NAVTREEINDEX96 =
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html":[5,0,0,3,5,10],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html":[6,0,0,3,5,10],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a2cad68087d62f131c1e062800541cbb8":[5,0,0,3,5,10,3],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a2cad68087d62f131c1e062800541cbb8":[6,0,0,3,5,10,3],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a3d965db79289946b25ec9b16dbf53055":[5,0,0,3,5,10,4],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a3d965db79289946b25ec9b16dbf53055":[6,0,0,3,5,10,4],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a7451c3bff615363846a5cfda73d76ff1":[5,0,0,3,5,10,2],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a7451c3bff615363846a5cfda73d76ff1":[6,0,0,3,5,10,2]
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IPuffCloudSettings.html#a2cad68087d62f131c1e062800541cbb8":[6,0,0,3,5,10,3]
 };

@@ -1,5 +1,9 @@
 var NAVTREEINDEX98 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#af9e289430fb3698e455f32d248dc012a":[5,0,0,3,5,22,2],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#af9e289430fb3698e455f32d248dc012a":[6,0,0,3,5,22,2],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#afe98297e798568d2073f07848c3a31b5":[5,0,0,3,5,22,8],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html#afe98297e798568d2073f07848c3a31b5":[6,0,0,3,5,22,8],
 "interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IGridActorConfiguration.html":[5,0,0,3,6,3],
 "interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IGridActorConfiguration.html":[6,0,0,3,6,3],
 "interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IGridActorConfiguration.html#afbb6e45cfa58779017d017751cc440b3":[5,0,0,3,6,3,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX98 =
 "interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#a7226ac114b3040766db46ac419d5607d":[5,0,0,3,10,2,4],
 "interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#a7226ac114b3040766db46ac419d5607d":[6,0,0,3,10,2,4],
 "interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#abb63ed32834590aaff82f62949b7906f":[5,0,0,3,10,2,5],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#abb63ed32834590aaff82f62949b7906f":[6,0,0,3,10,2,5],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#ac60a5e06ad3460836cccdf8585d33e54":[5,0,0,3,10,2,6],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#ac60a5e06ad3460836cccdf8585d33e54":[6,0,0,3,10,2,6],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#adf02c370c7c1fc9a247daf4630beaf0e":[5,0,0,3,10,2,0],
-"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#adf02c370c7c1fc9a247daf4630beaf0e":[6,0,0,3,10,2,0]
+"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html#abb63ed32834590aaff82f62949b7906f":[6,0,0,3,10,2,5]
 };
