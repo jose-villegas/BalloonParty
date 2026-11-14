@@ -64,10 +64,13 @@ namespace BalloonParty.Item.Snipe
 
         /// <summary>
         ///     Ends the open run at <paramref name="wall" />, reporting where it began. A lance still armed
-        ///     past the wall starts its next run there; otherwise the shot stops being tracked. False when no
-        ///     run was open, or the run is too short to draw.
+        ///     past the wall starts its next run there; otherwise the shot stops being tracked. True only for a
+        ///     run the lance <paramref name="discharged" /> on: the line marks where the lance was spent, so a
+        ///     run that merely carried it to a wall, with nothing plowed, draws nothing. Also false when no run
+        ///     was open, or the run is too short to draw.
         /// </summary>
-        internal bool TryCloseRun(IProjectileModel shot, Vector3 wall, bool stillPiercing, out Vector3 from)
+        internal bool TryCloseRun(
+            IProjectileModel shot, Vector3 wall, bool stillPiercing, bool discharged, out Vector3 from)
         {
             from = default;
             if (shot == null || !_runStarts.TryGetValue(shot, out var start))
@@ -85,7 +88,7 @@ namespace BalloonParty.Item.Snipe
             }
 
             from = start;
-            return (wall - start).sqrMagnitude >= MinRunLength * MinRunLength;
+            return discharged && (wall - start).sqrMagnitude >= MinRunLength * MinRunLength;
         }
 
         internal void Drop(IProjectileModel shot)

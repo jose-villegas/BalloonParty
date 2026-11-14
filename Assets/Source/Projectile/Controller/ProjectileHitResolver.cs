@@ -85,13 +85,14 @@ namespace BalloonParty.Projectile.Controller
         // The discharge: shatter every tough the shot plowed through but left standing, each at the
         // position it was struck (piercing kill — unbreakables included). Skips any that already left
         // the board since the plow. A rainbow lance also blooms a colour conversion around the shattered
-        // line, scaled by how much armor it ate. Clears the pending set.
-        public void DischargePending(IWriteableProjectileModel projectile)
+        // line, scaled by how much armor it ate. Clears the pending set. True when something shattered and
+        // the discharge was announced; false when nothing was pending, or every plowed tough had left.
+        public bool DischargePending(IWriteableProjectileModel projectile)
         {
             var pending = projectile.Flight.PendingPierceHits;
             if (pending.Count == 0)
             {
-                return;
+                return false;
             }
 
             // Captured at plow time: the pierce end that precedes this discharge already dropped the
@@ -125,7 +126,7 @@ namespace BalloonParty.Projectile.Controller
             if (resolvedCount == 0)
             {
                 pending.Clear();
-                return;
+                return false;
             }
 
             // Announce the discharge so its feel can play — the rainbow bloom, and (later) lights /
@@ -141,6 +142,7 @@ namespace BalloonParty.Projectile.Controller
                 projectile.Direction, projectile.Flight.SegmentStartPosition));
 
             pending.Clear();
+            return true;
         }
 
         // The pop path for a balloon the shot destroys on contact (normal balloons, and any hit while

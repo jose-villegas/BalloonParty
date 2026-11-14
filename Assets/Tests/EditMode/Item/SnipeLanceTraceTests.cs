@@ -6,8 +6,9 @@ using UnityEngine;
 namespace BalloonParty.Tests.Item
 {
     /// <summary>
-    ///     How the Snipe pencil line cuts a lance's flight into straight runs: from where it armed to the
-    ///     first wall, then wall to wall while the lance carries on, and nothing for a pierce no Snipe armed.
+    ///     How the Snipe pencil line cuts a lance's flight into straight runs (from where it armed to the
+    ///     first wall, then wall to wall while the lance carries on) and which one it draws: only the run the
+    ///     lance discharges on, and nothing for a pierce no Snipe armed.
     /// </summary>
     [TestFixture]
     public class SnipeLanceTraceTests
@@ -31,25 +32,37 @@ namespace BalloonParty.Tests.Item
         {
             _trace.Open(_shot, ArmPoint);
 
-            Assert.IsTrue(_trace.TryCloseRun(_shot, FirstWall, stillPiercing: false, out var from));
+            Assert.IsTrue(_trace.TryCloseRun(_shot, FirstWall, stillPiercing: false, discharged: true, out var from));
             Assert.AreEqual(ArmPoint, from);
             Assert.IsFalse(_trace.IsOpen(_shot));
         }
 
+        // The user's rule: the line marks where the lance is used, not where the item was picked up. A run
+        // that carries the lance to a wall with nothing plowed draws nothing, and the line that does come
+        // starts at that wall, not back at the pickup.
         [Test]
-        public void TryCloseRun_LanceCarriesOnPastTheWall_NextRunStartsAtThatWall()
+        public void TryCloseRun_RunEndsWithoutADischarge_DrawsNothingAndTheDischargeRunStartsAtThatWall()
         {
             _trace.Open(_shot, ArmPoint);
-            _trace.TryCloseRun(_shot, FirstWall, stillPiercing: true, out _);
 
-            Assert.IsTrue(_trace.TryCloseRun(_shot, SecondWall, stillPiercing: false, out var from));
+            Assert.IsFalse(_trace.TryCloseRun(_shot, FirstWall, stillPiercing: true, discharged: false, out _));
+            Assert.IsTrue(_trace.TryCloseRun(_shot, SecondWall, stillPiercing: false, discharged: true, out var from));
             Assert.AreEqual(FirstWall, from);
+        }
+
+        [Test]
+        public void TryCloseRun_LanceNeverDischarges_NeverDraws()
+        {
+            _trace.Open(_shot, ArmPoint);
+
+            Assert.IsFalse(_trace.TryCloseRun(_shot, FirstWall, stillPiercing: true, discharged: false, out _));
+            Assert.IsFalse(_trace.TryCloseRun(_shot, SecondWall, stillPiercing: true, discharged: false, out _));
         }
 
         [Test]
         public void TryCloseRun_PierceNoSnipeArmed_DrawsNothing()
         {
-            Assert.IsFalse(_trace.TryCloseRun(_shot, FirstWall, stillPiercing: true, out _));
+            Assert.IsFalse(_trace.TryCloseRun(_shot, FirstWall, stillPiercing: true, discharged: true, out _));
             Assert.IsFalse(_trace.IsOpen(_shot));
         }
 
@@ -61,7 +74,7 @@ namespace BalloonParty.Tests.Item
             _trace.Open(_shot, ArmPoint);
             _trace.Open(_shot, FirstWall);
 
-            Assert.IsTrue(_trace.TryCloseRun(_shot, FirstWall, stillPiercing: true, out var from));
+            Assert.IsTrue(_trace.TryCloseRun(_shot, FirstWall, stillPiercing: true, discharged: true, out var from));
             Assert.AreEqual(ArmPoint, from);
         }
 
@@ -72,8 +85,8 @@ namespace BalloonParty.Tests.Item
         {
             _trace.Open(_shot, FirstWall);
 
-            Assert.IsFalse(_trace.TryCloseRun(_shot, FirstWall, stillPiercing: true, out _));
-            Assert.IsTrue(_trace.TryCloseRun(_shot, SecondWall, stillPiercing: false, out var from));
+            Assert.IsFalse(_trace.TryCloseRun(_shot, FirstWall, stillPiercing: true, discharged: true, out _));
+            Assert.IsTrue(_trace.TryCloseRun(_shot, SecondWall, stillPiercing: false, discharged: true, out var from));
             Assert.AreEqual(FirstWall, from);
         }
 
@@ -86,7 +99,7 @@ namespace BalloonParty.Tests.Item
             Assert.IsFalse(_trace.IsOpen(_shot), "no run before the shot leaves the thrower");
             _trace.Launched(_shot, muzzle);
 
-            Assert.IsTrue(_trace.TryCloseRun(_shot, FirstWall, stillPiercing: false, out var from));
+            Assert.IsTrue(_trace.TryCloseRun(_shot, FirstWall, stillPiercing: false, discharged: true, out var from));
             Assert.AreEqual(muzzle, from);
         }
 
@@ -127,7 +140,7 @@ namespace BalloonParty.Tests.Item
             _trace.Open(_shot, ArmPoint);
             _trace.Open(other, SecondWall);
 
-            Assert.IsTrue(_trace.TryCloseRun(other, FirstWall, stillPiercing: false, out var otherFrom));
+            Assert.IsTrue(_trace.TryCloseRun(other, FirstWall, stillPiercing: false, discharged: true, out var otherFrom));
             Assert.AreEqual(SecondWall, otherFrom);
             Assert.IsTrue(_trace.IsOpen(_shot));
         }

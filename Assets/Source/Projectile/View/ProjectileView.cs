@@ -530,9 +530,12 @@ namespace BalloonParty.Projectile.View
                 var velocityT = ComputeVelocityT(step.Speed);
                 _disturbanceField.StampShieldLoss(StampSource.ProjectileImpact, step.WallContact, velocityT);
                 FlashShieldLoss(step.WallContact, velocityT);
+                // DestroyProjectile below flushes whatever is pending, so a pending plow means this wall
+                // is where the lance discharges.
                 if (wasPiercing)
                 {
-                    _pierceWallReachedPublisher.Publish(new PierceWallReachedMessage(_model, step.WallContact));
+                    _pierceWallReachedPublisher.Publish(new PierceWallReachedMessage(
+                        _model, step.WallContact, _model.Flight.PendingPierceHits.Count > 0));
                 }
 
                 DestroyProjectile();
@@ -584,12 +587,13 @@ namespace BalloonParty.Projectile.View
                 }
             }
 
-            ResolvePierceAtBounce(step, segmentOrigin, wasPiercing);
+            var discharged = ResolvePierceAtBounce(step, segmentOrigin, wasPiercing);
 
             // After the discharge, so a listener reads whether the lance carries on past this wall.
             if (wasPiercing && step.Outcome == ProjectileStepOutcome.Bounced)
             {
-                _pierceWallReachedPublisher.Publish(new PierceWallReachedMessage(_model, step.WallContact));
+                _pierceWallReachedPublisher.Publish(
+                    new PierceWallReachedMessage(_model, step.WallContact, discharged));
             }
 
             transform.position = step.Position;
@@ -646,8 +650,8 @@ namespace BalloonParty.Projectile.View
         }
 
         // Everything the pierce owes a wall bounce: the tunneling safety net, spending the pierce when the
-        // net is what found the toughs, and the discharge itself.
-        private void ResolvePierceAtBounce(in ProjectileStep step, Vector3 segmentOrigin, bool wasPiercing)
+        // net is what found the toughs, and the discharge itself. True when the discharge shattered something.
+        private bool ResolvePierceAtBounce(in ProjectileStep step, Vector3 segmentOrigin, bool wasPiercing)
         {
             // Tunneling safety net: at any wall bounce while piercing, sweep the segment with a
             // CircleCastAll to catch toughs that OnTriggerEnter2D missed at high speed. Two cases:
@@ -673,9 +677,12 @@ namespace BalloonParty.Projectile.View
             if (_model.Flight.PendingPierceHits.Count > 0
                 && (step.Outcome == ProjectileStepOutcome.Bounced || !_model.IsPiercing.Value))
             {
-                _hitResolver.DischargePending(_model);
+                var discharged = _hitResolver.DischargePending(_model);
                 _projectileTrail?.Boost();
+                return discharged;
             }
+
+            return false;
         }
 
         private void OnBalloonDeflected(BalloonDeflectedMessage msg)

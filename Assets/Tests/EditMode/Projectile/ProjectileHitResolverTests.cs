@@ -312,7 +312,7 @@ namespace BalloonParty.Tests.Projectile
             _resolver.Resolve(_projectile, tough, new Vector3(1f, 2f, 0f));
             Assert.AreEqual(1, _projectile.Flight.PendingPierceHits.Count);
 
-            _resolver.DischargePending(_projectile);
+            Assert.IsTrue(_resolver.DischargePending(_projectile), "a shattered tough is a discharge");
 
             _hitDispatcher.Received(1).Dispatch(Arg.Is<ActorHitMessage>(m =>
                 m.Actor == tough && m.Outcome == HitOutcome.Pop));
@@ -328,7 +328,7 @@ namespace BalloonParty.Tests.Projectile
             tough.SlotIndex.Value = new Vector2Int(2, 3);
             _resolver.Resolve(_projectile, tough, Vector3.zero);
 
-            _resolver.DischargePending(_projectile);
+            Assert.IsFalse(_resolver.DischargePending(_projectile), "nothing left to shatter is no discharge");
 
             _hitDispatcher.DidNotReceive().Dispatch(Arg.Any<ActorHitMessage>());
         }

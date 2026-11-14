@@ -14,10 +14,10 @@ using VContainer.Unity;
 namespace BalloonParty.Item.Snipe
 {
     /// <summary>
-    ///     Draws a carbon pencil line along each straight run a Snipe lance plows, the moment the shot reaches
-    ///     the wall that ends it. The run starts where the lance armed (or at the wall it carried the lance
-    ///     past) and the line traces it start to wall, holds, then fades. Cruise-earned pierces draw nothing:
-    ///     only a Snipe opens a run.
+    ///     Draws a carbon pencil line along the straight run a Snipe lance is spent on, the moment the shot
+    ///     discharges at the wall that ends it. The run starts where the lance armed (or at the last wall it
+    ///     carried the lance past) and the line traces it start to wall, holds, then fades. Cruise-earned
+    ///     pierces draw nothing: only a Snipe opens a run.
     /// </summary>
     internal sealed class SnipeLanceLines : ISnipeLanceArming, IStartable, ITickable, IDisposable
     {
@@ -113,7 +113,8 @@ namespace BalloonParty.Item.Snipe
         private void OnWallReached(PierceWallReachedMessage msg)
         {
             var shot = msg.Projectile;
-            if (!_trace.TryCloseRun(shot, msg.Position, shot.IsPiercing.Value, out var from) || _prefab == null)
+            if (!_trace.TryCloseRun(shot, msg.Position, shot.IsPiercing.Value, msg.Discharged, out var from)
+                || _prefab == null)
             {
                 return;
             }
