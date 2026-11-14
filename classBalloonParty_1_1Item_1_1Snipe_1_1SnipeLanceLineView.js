@@ -18,7 +18,12 @@ var classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView =
     [ "_holdSeconds", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView.html#afb93fbf0850044ec153c065ef431c1f2", null ],
     [ "_line", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView.html#a98e45887a1e71a51d4db3d23721dab31", null ],
     [ "_shuffled", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView.html#a8b54ad5c8183ce8eeaa0f982229fff95", null ],
+    [ "_sides", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView.html#a387f2059e6a794bcb00767b6f7856e48", null ],
+    [ "_smearDistance", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView.html#a37d52696a2a01831a2bee39b6880d4aa", null ],
+    [ "_smearDrag", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView.html#ac8ccf6c016f4c92e437163599da3982f", null ],
+    [ "_smearSpread", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView.html#a85414ac6f92d1a3b1213aff24a6808bb", null ],
     [ "_tipSpeed", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView.html#ad4358ed916368285f82c0bcf266c32dc", null ],
     [ "_turns", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView.html#a71b40f76665dceaf64878c49757a2112", null ],
+    [ "_width", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView.html#ad74d9e9b8dd59c5af96d42123375c6de", null ],
     [ "Timing", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView.html#a0eb7fd5b10e4b7018aa27dae28280bd6", null ]
 ];
