@@ -6,6 +6,8 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings =
     [ "_heartChanceMissingOne", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#aee182b990bdb0719923937622c47c623", null ],
     [ "_heartChanceMissingTwo", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a3ae5768ae5f6a4cad63abde1405acea9", null ],
     [ "_heartCooldownLines", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#aa3c925294653d5175ee1b6b2ba5007b6", null ],
+    [ "_ordinaryGoldenChance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a69cebb322cda44122dd2e9c9bff90819", null ],
+    [ "_ordinaryGoldenEveryLevels", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#aa4764781018148399c3cd883cb59d167", null ],
     [ "_purpleHearts", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a9fc70720ace37c192158dfa42d8b1261", null ],
     [ "GoldenAtCompletion", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a367fc8cf38e0ae27a48dbb948c5afcb9", null ],
     [ "GoldenRepeatChances", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a17066c9d2f5676c78b30e3cedfdc9adf", null ],
@@ -13,5 +15,7 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings =
     [ "HeartChanceMissingOne", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a5fd348ccdbc2e7ec4856366d25b50dd0", null ],
     [ "HeartChanceMissingTwo", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a8caff051914e3ec6d6dc8392a9505a48", null ],
     [ "HeartCooldownLines", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#aa16191cd1fa456cda3392ed541de9132", null ],
+    [ "OrdinaryGoldenChance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a048d5775cb87bf8875a4fa1b71114ae1", null ],
+    [ "OrdinaryGoldenEveryLevels", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a29ed3a5c6c4ba3cd7d37adf019afd7cb", null ],
     [ "PurpleHearts", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#acf379663fec8cbc2d121e7b4bd48a110", null ]
 ];

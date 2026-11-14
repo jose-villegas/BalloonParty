@@ -121,7 +121,7 @@ Reward Balloons</h1>
 Goals</h2>
 <ol type="1">
 <li><b>Golden balloon.</b><ul>
-<li>Only on purple (extra-colour) levels, placed when the level is about half done (75% at first; moved to 50% after playtests). Its pop rolls once for another (25%, then 10% for a third: three a level at most), which comes a few lines later. Never more than one on the board, and only a pop rolls: one a board clear takes brings no other.</li>
+<li>On purple (extra-colour) levels, placed when the level is about half done (75% at first; moved to 50% after playtests). Added after playtests: every fifth level that isn't purple rolls once (40%) for a single golden balloon, at the same completion, whose pop rolls for no other. Its pop rolls once for another (25%, then 10% for a third: three a level at most), which comes a few lines later. Never more than one on the board, and only a pop rolls: one a board clear takes brings no other.</li>
 <li>Normal hits do nothing: the shot bounces off it as off an unbreakable. Items do nothing either (bomb, lightning, paint): a bomb beside it must not hand out the card.</li>
 <li>A piercing shot pops it: a cruise-earned pierce or a Snipe lance. It is plowed and shatters at the shot's next wall bounce, as an unbreakable is.</li>
 <li>A laser beam pops it too (added after playtests): the beam's damage carries <code>DamageFlags.Beam</code>, which a bomb's blast never does.</li>
@@ -201,6 +201,10 @@ Tuning (<code>IRewardBalloonSettings</code>)</h2>
 <td class="markdownTableBodyNone"><code>GoldenRepeatChances</code>   </td><td class="markdownTableBodyNone">0.25, 0.1   </td><td class="markdownTableBodyNone">The chance of the second and third golden balloon, each rolled once when the one before pops    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>GoldenRepeatDelayLines</code>   </td><td class="markdownTableBodyNone">3   </td><td class="markdownTableBodyNone">Lines after a golden pop before the one it won comes    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>OrdinaryGoldenEveryLevels</code>   </td><td class="markdownTableBodyNone">5   </td><td class="markdownTableBodyNone">Off a purple level, every this many levels rolls for a single golden balloon (0 is off)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>OrdinaryGoldenChance</code>   </td><td class="markdownTableBodyNone">0.4   </td><td class="markdownTableBodyNone">That roll's chance    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>HeartChanceMissingOne</code>   </td><td class="markdownTableBodyNone">0.04   </td><td class="markdownTableBodyNone">Chance per line of a heart balloon while one heart is missing    </td></tr>
 <tr class="markdownTableRowOdd">
