@@ -22,8 +22,9 @@ namespace BalloonParty.Configuration.Balloons
         int GoldenRepeatDelayLines { get; }
 
         /// <summary>
-        ///     A purple level's heart balloons, in order: each rolled once on the line that reaches its completion, at
-        ///     full hearts too. Their count caps the level's heart balloons; the roll while hurt is off there.
+        ///     A purple level's heart balloons, in any order: each rolled once on the line that reaches its
+        ///     completion, at full hearts too. Their count caps the level's heart balloons; the roll while hurt (and
+        ///     its cooldown) is off there.
         /// </summary>
         IReadOnlyList<PurpleHeartStep> PurpleHearts { get; }
 

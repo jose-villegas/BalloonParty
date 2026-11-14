@@ -5,7 +5,7 @@ model. Each heart represents one full spawn line. When the board can't absorb al
 a spawn wave, the player loses one heart per full line of deficit; partial-line shortfalls are
 forgiven. Reaching zero hearts ends the run. Hearts come back on a level-up (`LevelUpHeartRefill`) and
 when the player pops a heart balloon (`Balloon/Reward/`). On a purple level that pop can go past the
-starting hearts: an extra heart, with no cap, which a level-up refill keeps and a run reset (a retry
+starting hearts: an extra heart, with no design cap (only the controller's internal 999), which a level-up refill keeps and a run reset (a retry
 included) takes back to the starting hearts. The counter shows them as a higher number.
 
 ## Contents
@@ -14,7 +14,7 @@ included) takes back to the starting hearts. The counter shows them as a higher 
 |---|---|
 | `PlayerHealthController` | Plain C# entry point (`IStartable`, `IRunResettable`, `IDisposable`). Holds `ReactiveProperty<int> Current`, initialised and reset to `IRunConfig.StartingHitPoints` (clamped to a hard internal cap of 999). Subscribes to `WaveDamageMessage`; each message spends `HeartsLost` points in one shot. Gives back `IRunConfig.LevelUpHeartRefill` points on every `ScoreLevelUpMessage`, never past the starting points (1 in the shipped config, so hearts lost in one level carry into the next; set it to the starting points to refill to full). `IPlayerHealing`: `Heal` tops up to the starting points and never trims extra hearts; `HealPastMax` adds past them (a purple level's heart balloon). Neither revives a player at zero. When `Current` crosses to zero it publishes `EndRunRequestedMessage` exactly once. |
 | `IPlayerHealth` | Read-only seam (`Current`, which extra hearts can take past `Max`, and `Max`, the cap a heal stops at) — what UI binders and `SpaceDanger` inject instead of the concrete controller |
-| `IPlayerHealing` | `Heal(amount)`, up to `Max`, and never for a player already out (a pop can land after the killing hit): the reward balloons' payout (`Balloon/Reward/RewardBalloonPayout`) |
+| `IPlayerHealing` | `Heal(amount)`, up to `Max`, leaving any extra hearts alone; `HealPastMax(amount)`, past it (a purple level's heart balloon). Neither for a player already out (a pop can land after the killing hit): the reward balloons' payout (`Balloon/Reward/RewardBalloonPayout`) |
 | `WaveDeficitCalculator` | Pure static function: `Calculate(availableSpace, neededSlots, rowLength) → WaveDeficit`. The core formula: `heartsLost = floor(max(0, needed - available) / rowLength)` |
 | `WaveDeficit` | Readonly struct result: `HeartsLost` (full lines of deficit) and `UnspawnedSlots` (total shortfall) |
 | `ILossForecast` / `LossForecast` | Loss is imminent when HP is already at zero (damage is immediate under the line model, no pending charges) |

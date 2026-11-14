@@ -404,7 +404,7 @@ def reward_lines(samples, records):
     lines = ["## Reward balloons", "",
              "Placed: counted on the bot's 50 ms loop when the reward service marks one on the board. Popped: the "
              "telemetry's pops by balloon type. A golden pop pays a card (or a heart with every card at its limit), "
-             "a heart pop a heart.", "",
+             "a heart pop a heart (past the maximum on a purple level).", "",
              "| Balloon | Placed | Popped |", "|---|---|---|",
              f"| Golden | {last['golden_placed']} | {popped['Golden']} |",
              f"| Heart | {last['heart_placed']} | {popped['Heart']} |", ""]

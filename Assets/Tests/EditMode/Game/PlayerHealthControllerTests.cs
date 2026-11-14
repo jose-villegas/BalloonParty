@@ -216,6 +216,24 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void HealPastMax_NegativeAmount_RemovesNothing()
+        {
+            _controller.HealPastMax(2);
+
+            _controller.HealPastMax(-5);
+
+            Assert.AreEqual(StartingHitPoints + 2, _controller.Current.Value);
+        }
+
+        [Test]
+        public void HealPastMax_HugeAmount_CapsAtTheHardLimit()
+        {
+            _controller.HealPastMax(5000);
+
+            Assert.AreEqual(999, _controller.Current.Value);
+        }
+
+        [Test]
         public void HealPastMax_AfterTheLastHeart_NeverRevives()
         {
             DamageWave(StartingHitPoints);

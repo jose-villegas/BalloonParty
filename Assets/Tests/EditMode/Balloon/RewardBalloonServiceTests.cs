@@ -483,6 +483,63 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void PurpleHeart_TheGoldenTakesTheLine_TheStepsRollOnTheNextAndAreNotLost()
+        {
+            _roll = 1f;
+            SetCompletion(0.8f);
+            Assert.IsTrue(_service.TryTakeDue(out var first));
+            Assert.AreEqual(BalloonType.Golden, first);
+            _service.Placed(BalloonType.Golden);
+
+            _roll = 0f;
+
+            Assert.IsTrue(_service.TryTakeDue(out var second), "the sure 30% step");
+            Assert.AreEqual(BalloonType.Heart, second);
+            _service.Placed(BalloonType.Heart)();
+            Assert.IsTrue(_service.TryTakeDue(out var third), "the 60% step, rolled on this later line, won");
+            Assert.AreEqual(BalloonType.Heart, third);
+            _service.Placed(BalloonType.Heart)();
+            Assert.IsFalse(HeartWithin(20), "the 90% step is not reached");
+        }
+
+        [Test]
+        public void PurpleHeart_AllThreeWonWhileTheGoldenTookTheLine_AllComeOneAtATime()
+        {
+            _roll = 0f;
+            SetCompletion(0.95f);
+            Assert.IsTrue(_service.TryTakeDue(out var first));
+            Assert.AreEqual(BalloonType.Golden, first);
+            _service.Placed(BalloonType.Golden);
+
+            var hearts = 0;
+            for (var line = 0; line < 10; line++)
+            {
+                if (_service.TryTakeDue(out var type) && type == BalloonType.Heart)
+                {
+                    hearts++;
+                    _service.Placed(BalloonType.Heart)();
+                }
+            }
+
+            Assert.AreEqual(PurpleHearts.Length, hearts);
+        }
+
+        [Test]
+        public void PurpleHeart_PlacedWithNothingOwed_TheFirstStepStillBringsItsHeart()
+        {
+            _service.Placed(BalloonType.Heart)();
+            SetCompletion(0.1f);
+            Assert.IsFalse(HeartWithin(5));
+
+            SetCompletion(0.3f);
+
+            Assert.IsTrue(_service.TryTakeDue(out var type), "a spawn-cheat heart doesn't use up the owed count");
+            Assert.AreEqual(BalloonType.Heart, type);
+            _service.Placed(BalloonType.Heart)();
+            Assert.IsFalse(HeartWithin(20), "exactly one was owed");
+        }
+
+        [Test]
         public void PurpleHeart_TheRollWhileHurtIsOff()
         {
             _hearts.Value = 1;
@@ -524,6 +581,17 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void PurpleHeart_StepsListedOutOfOrder_EachRollsAtItsOwnCompletion()
+        {
+            _settings.PurpleHearts.Returns(new[] { PurpleHearts[2], PurpleHearts[1], PurpleHearts[0] });
+            _roll = 1f;
+            SetCompletion(0.3f);
+
+            Assert.IsTrue(_service.TryTakeDue(out var type), "the sure 30% step, though listed last");
+            Assert.AreEqual(BalloonType.Heart, type);
+        }
+
+        [Test]
         public void PurpleHeart_NoScheduleConfigured_NoHeartAndNoThrow()
         {
             _roll = 0f;
@@ -547,6 +615,32 @@ namespace BalloonParty.Tests.Balloon
             {
                 Assert.IsFalse(_service.TryTakeDue(out _));
             }
+        }
+
+        [Test]
+        public void Heart_PastTheMaxFromExtraHearts_NeverDueOffPurple()
+        {
+            _level.IsExtraColorLevel.Returns(false);
+            _hearts.Value = StartingHearts + 2;
+            _roll = 0f;
+
+            for (var i = 0; i < Cooldown * 3; i++)
+            {
+                Assert.IsFalse(_service.TryTakeDue(out _));
+            }
+        }
+
+        [Test]
+        public void Heart_PendingButExtraHeartsPutItPastTheMax_NoLongerDue()
+        {
+            _level.IsExtraColorLevel.Returns(false);
+            _hearts.Value = StartingHearts - 1;
+            _roll = 0f;
+            Assert.IsTrue(_service.TryTakeDue(out _));
+
+            _hearts.Value = StartingHearts + 1;
+
+            Assert.IsFalse(_service.TryTakeDue(out _));
         }
 
         [Test]

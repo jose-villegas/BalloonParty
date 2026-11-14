@@ -115,6 +115,20 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void TheHeartBalloonsPop_NoActiveLevel_StaysWithinTheMax()
+        {
+            var levelParams = Substitute.For<IActiveLevelParameters>();
+            levelParams.Current.Returns((ILevelParameters)null);
+            var payout = new RewardBalloonPayout(
+                Substitute.For<ISubscriber<ActorHitMessage>>(), _freeCards, _healing, levelParams);
+
+            payout.OnHit(Hit(Heart(), HitOutcome.Pop));
+
+            _healing.Received(1).Heal(1);
+            _healing.DidNotReceiveWithAnyArgs().HealPastMax(default);
+        }
+
+        [Test]
         public void TheGoldenBalloonsHeart_OnAPurpleLevel_StaysWithinTheMax()
         {
             _level.IsExtraColorLevel.Returns(true);

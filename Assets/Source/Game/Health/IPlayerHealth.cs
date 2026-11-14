@@ -7,7 +7,7 @@ namespace BalloonParty.Game.Health
     {
         IReadOnlyReactiveProperty<int> Current { get; }
 
-        /// <summary>The most hearts the player can hold; a heal never goes past it.</summary>
+        /// <summary>The cap a heal stops at; extra hearts (a purple level's heart balloons) take Current past it.</summary>
         int Max { get; }
     }
 }

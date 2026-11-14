@@ -46,8 +46,8 @@ namespace BalloonParty.Balloon.Reward
         private int _linesSinceGoldenPop;
         // The golden placement whose pop has rolled (or can no longer roll: one from an earlier level or run).
         private int _goldenRolled;
-        // The purple level's next heart step to roll, and the hearts its rolls won that are still to come.
-        private int _purpleHeartStep;
+        // The purple level's heart steps that have rolled (one bit each), and the hearts they won still to come.
+        private int _purpleHeartsRolled;
         private int _purpleHeartsOwed;
         private bool _goldenAlive;
         private bool _heartAlive;
@@ -228,7 +228,7 @@ namespace BalloonParty.Balloon.Reward
             _linesSinceGoldenPop = 0;
             // A golden balloon still on the board from before pops into a level that didn't place it: no roll.
             _goldenRolled = _goldenPlacement;
-            _purpleHeartStep = 0;
+            _purpleHeartsRolled = 0;
             _purpleHeartsOwed = 0;
         }
 
@@ -269,18 +269,23 @@ namespace BalloonParty.Balloon.Reward
         }
 
         // Every step the completion has reached rolls, once, even while a heart is on the board (a big clear can pass
-        // several in one line); what they win comes one at a time.
+        // several in one line), in whatever order the steps are listed; what they win comes one at a time.
         private bool PurpleHeartDue(ILevelParameters level)
         {
             var steps = _settings.PurpleHearts;
-            if (steps != null && _purpleHeartStep < steps.Count)
+            if (steps != null && steps.Count > 0)
             {
                 var completion = LevelCompletion.Of(_levelProgress, level.AllowedColors);
-                while (_purpleHeartStep < steps.Count && completion >= steps[_purpleHeartStep].AtCompletion)
+                for (var i = 0; i < steps.Count && i < 32; i++)
                 {
-                    var chance = steps[_purpleHeartStep].Chance;
-                    _purpleHeartStep++;
-                    if (chance >= 1f || Random01() < chance)
+                    var bit = 1 << i;
+                    if ((_purpleHeartsRolled & bit) != 0 || completion < steps[i].AtCompletion)
+                    {
+                        continue;
+                    }
+
+                    _purpleHeartsRolled |= bit;
+                    if (steps[i].Chance >= 1f || Random01() < steps[i].Chance)
                     {
                         _purpleHeartsOwed++;
                     }

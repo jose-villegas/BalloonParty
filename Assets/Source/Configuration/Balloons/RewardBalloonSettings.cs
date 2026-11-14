@@ -19,9 +19,10 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Spawn lines after a golden balloon's pop before the further one it won comes.")]
         [SerializeField] [Min(0)] private int _goldenRepeatDelayLines = 3;
 
-        [Tooltip("A purple level's heart balloons, in order: each rolled once, with its chance, on the line that " +
-                 "reaches its completion, at full hearts too (a heart popped there goes past the maximum). The roll " +
-                 "while hurt is off on a purple level. Never more than one on the board: a won one waits its turn.")]
+        [Tooltip("A purple level's heart balloons (32 at most): each rolled once, with its chance, on " +
+                 "the line that reaches its completion, at full hearts too (a heart popped there goes past the " +
+                 "maximum). The roll while hurt and its cooldown are off on a purple level. Never more than one on " +
+                 "the board: a won one waits its turn.")]
         [SerializeField] private PurpleHeartStep[] _purpleHearts =
         {
             new(0.3f, 1f),

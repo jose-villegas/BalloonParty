@@ -30,7 +30,7 @@
    - Any pop gives back one heart, up to the maximum. It pops like a plain balloon (any hit, items too).
    - On a purple level it comes on a schedule, at full hearts too: one at 30% completion, a 50% chance
      at 60% and a 25% chance at 90%, each rolled once and needing no pop of the one before. Popped there,
-     it gives an extra heart past the maximum, with no cap; a level-up refill keeps extras, a retry starts
+     it gives an extra heart past the maximum, with no design cap; a level-up refill keeps extras, a retry starts
      the hearts over. The roll while hurt is off there.
    - On any other level it comes while the player is missing hearts: the fewer left, the likelier. Never
      at full hearts.
@@ -51,7 +51,7 @@
 | `BalloonTypeExtensions.IsReward` | `Shared/Extensions/` | Golden and Heart. The level's pick list skips them, so no level mix brings one |
 | `IFreeCardGrant` | `Game/Upgrades/RunUpgrades.cs` | `GrantFreeCard(noCardLeft)`: deals one dealable card on the level's seed, holds it, and publishes `UpgradeCardHeldMessage`, so the card reveal plays it. A retry of the level it was won on gives it back; won while the level-up hand is up, it waits for the pick. With every card at its limit, then or once the pick is held, it calls `noCardLeft`, and the golden balloon gives a heart instead |
 | `RewardBalloonPayout` | `Balloon/Reward/` | Reads the reward balloons' pops from `ActorHitMessage` and pays them: the golden one's card (or heart), the heart balloon's heart |
-| `IPlayerHealing` | `Game/Health/` | `Heal(amount)` on `PlayerHealthController`, up to `IPlayerHealth.Max` |
+| `IPlayerHealing` | `Game/Health/` | `Heal(amount)` on `PlayerHealthController`, up to `IPlayerHealth.Max` without trimming extras, and `HealPastMax(amount)` for a purple level's heart |
 | `IRewardBalloonSettings` | `Configuration/Balloons/` | The tuning below, a block on `BalloonsConfiguration` |
 | Shot solver | `Solver/` | `ShotBoardGather` builds a target for both (today it would see neither); the golden one deflects unless pierced, and is immune to the shared bomb and laser cores |
 
