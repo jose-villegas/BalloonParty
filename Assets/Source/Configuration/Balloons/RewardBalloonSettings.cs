@@ -31,6 +31,10 @@ namespace BalloonParty.Configuration.Balloons
                  "roll (a purple level brings its own anyway). 0 for none.")]
         [SerializeField] [Min(0)] private int _sureGoldenLevel = 5;
 
+        [Tooltip("How much of the sure level is done when its golden balloon comes, 0 to 1: early, so the " +
+                 "player meets it with the level still ahead of them.")]
+        [SerializeField] [Range(0f, 1f)] private float _sureGoldenAtCompletion = 0.1f;
+
         [Tooltip("A purple level's heart balloons (32 at most): each rolled once, with its chance, on " +
                  "the line that reaches its completion, at full hearts too (a heart popped there goes past the " +
                  "maximum). The roll while hurt and its cooldown are off on a purple level. Never more than one on " +
@@ -58,6 +62,7 @@ namespace BalloonParty.Configuration.Balloons
         public int OrdinaryGoldenEveryLevels => _ordinaryGoldenEveryLevels;
         public float OrdinaryGoldenChance => _ordinaryGoldenChance;
         public int SureGoldenLevel => _sureGoldenLevel;
+        public float SureGoldenAtCompletion => _sureGoldenAtCompletion;
         public IReadOnlyList<PurpleHeartStep> PurpleHearts => _purpleHearts;
         public float HeartChanceMissingOne => _heartChanceMissingOne;
         public float HeartChanceMissingTwo => _heartChanceMissingTwo;

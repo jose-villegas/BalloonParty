@@ -18,7 +18,8 @@
    - On purple (extra-colour) levels, placed when the level is about half done (75% at first; moved to 50% after playtests).
      Added after playtests: every fifth level that isn't purple rolls once (40%) for a single golden balloon,
      at the same completion, whose pop rolls for no other. Level 5 always gets that single one, with no
-     roll: every player sees a golden balloon early. Its pop rolls once for
+     roll and at 10% completion rather than half: every player sees a golden balloon early, with the
+     level still ahead of them. Its pop rolls once for
      another (25%, then 10% for a third: three a level at most), which comes a few lines later. Never more
      than one on the board, and only a pop rolls: one a board clear takes brings no other.
    - Normal hits do nothing: the shot bounces off it as off an unbreakable. Items do nothing either
@@ -91,6 +92,7 @@ sequenceDiagram
 | `OrdinaryGoldenEveryLevels` | 5 | Off a purple level, every this many levels rolls for a single golden balloon (0 is off) |
 | `OrdinaryGoldenChance` | 0.4 | That roll's chance |
 | `SureGoldenLevel` | 5 | A level that always brings a single golden balloon, with no roll (0 for none) |
+| `SureGoldenAtCompletion` | 0.1 | The completion that level's golden balloon comes at |
 | `HeartChanceMissingOne` | 0.04 | Chance per line of a heart balloon while one heart is missing |
 | `HeartChanceMissingTwo` | 0.12 | The same with two missing (one heart left) |
 | `PurpleHearts` | 0.3 sure, 0.6 at 50%, 0.9 at 25% | A purple level's heart balloons: each step's completion and its chance, rolled once |

@@ -33,6 +33,9 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>A level that always brings a single golden balloon, with no roll; 0 for none.</summary>
         int SureGoldenLevel { get; }
 
+        /// <summary>The completion the sure level's golden balloon comes at, earlier than the others'.</summary>
+        float SureGoldenAtCompletion { get; }
+
         /// <summary>
         ///     A purple level's heart balloons, in any order: each rolled once on the line that reaches its
         ///     completion, at full hearts too. Their count caps the level's heart balloons; the roll while hurt (and

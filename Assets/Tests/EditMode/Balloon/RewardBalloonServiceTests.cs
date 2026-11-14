@@ -214,6 +214,35 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(0, rolls);
         }
 
+        // The player's first golden balloon comes early, with the level still ahead of them.
+        [Test]
+        public void SureGolden_ComesEarly_AtItsOwnCompletion()
+        {
+            UseOrdinaryGolden(level: 5, roll: 0.99f);
+            _settings.SureGoldenLevel.Returns(5);
+            _settings.SureGoldenAtCompletion.Returns(0.1f);
+            SetCompletion(0.05f);
+
+            Assert.IsFalse(_service.TryTakeDue(out _));
+
+            SetCompletion(0.12f);
+
+            Assert.IsTrue(_service.TryTakeDue(out var type));
+            Assert.AreEqual(BalloonType.Golden, type);
+        }
+
+        // The early completion is the sure level's alone: a rolled one still waits for the usual completion.
+        [Test]
+        public void ARolledGolden_StillWaitsForTheUsualCompletion()
+        {
+            UseOrdinaryGolden(level: 10, roll: 0f);
+            _settings.SureGoldenLevel.Returns(5);
+            _settings.SureGoldenAtCompletion.Returns(0.1f);
+            SetCompletion(0.12f);
+
+            Assert.IsFalse(_service.TryTakeDue(out _));
+        }
+
         [Test]
         public void SureGolden_OtherCheckLevelsStillRoll()
         {

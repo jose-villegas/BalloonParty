@@ -23,7 +23,7 @@ namespace BalloonParty.Balloon.Reward
     ///         lines later; a board clear or a level change rolls nothing. Off a purple level, every
     ///         <see cref="IRewardBalloonSettings.OrdinaryGoldenEveryLevels" /> levels roll once for a single one, at the
     ///         same completion, whose pop rolls for no other; <see cref="IRewardBalloonSettings.SureGoldenLevel" />
-    ///         always brings one.
+    ///         always brings one, early (<see cref="IRewardBalloonSettings.SureGoldenAtCompletion" />).
     ///     </para>
     ///     <para>
     ///         The heart balloon: on a purple level, the schedule's steps (<see cref="IRewardBalloonSettings.PurpleHearts" />),
@@ -52,6 +52,7 @@ namespace BalloonParty.Balloon.Reward
         // Off a purple level: whether this level has rolled for its single golden balloon, and won it.
         private bool _ordinaryGoldenRolled;
         private bool _ordinaryGoldenWon;
+        private float _ordinaryGoldenAt;
         // The purple level's heart steps that have rolled (one bit each), and the hearts they won still to come.
         private int _purpleHeartsRolled;
         private int _purpleHeartsOwed;
@@ -251,13 +252,15 @@ namespace BalloonParty.Balloon.Reward
             {
                 _ordinaryGoldenRolled = true;
                 var number = _levelProgress.Level.Value;
-                _ordinaryGoldenWon = (number > 0 && number == _settings.SureGoldenLevel)
+                var sure = number > 0 && number == _settings.SureGoldenLevel;
+                _ordinaryGoldenWon = sure
                                      || (IsOrdinaryGoldenLevel(_settings, number)
                                          && Random01() < _settings.OrdinaryGoldenChance);
+                _ordinaryGoldenAt = sure ? _settings.SureGoldenAtCompletion : _settings.GoldenAtCompletion;
             }
 
             return _ordinaryGoldenWon && _goldensThisLevel == 0
-                                      && LevelCompletion.Of(_levelProgress, level.AllowedColors) >= _settings.GoldenAtCompletion;
+                                      && LevelCompletion.Of(_levelProgress, level.AllowedColors) >= _ordinaryGoldenAt;
         }
 
         private void ForgetLevelsRewards()
