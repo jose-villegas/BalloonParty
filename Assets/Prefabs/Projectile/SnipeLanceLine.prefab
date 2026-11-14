@@ -168,3 +168,6 @@ MonoBehaviour:
   _eraseSeconds: 1.4
   _chunkLength: 0.7
   _chunkEraseShare: 0.3
+  _smearDistance: 0.2
+  _smearSpread: 1.2
+  _smearDrag: 0.4

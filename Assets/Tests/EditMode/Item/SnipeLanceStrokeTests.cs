@@ -124,5 +124,23 @@ namespace BalloonParty.Tests.Item
         {
             Assert.AreEqual(0.4f, SnipeLanceErase.ChunkErased(0.4f, 0, 1, 0.3f), 1e-5f);
         }
+
+        // Rubbed out: one side, then back across to the other, and still again by the time it's gone.
+        [Test]
+        public void Smear_AcrossTheWipe_OutToOneSideThenTheOther()
+        {
+            Assert.AreEqual(0f, SnipeLanceErase.Smear(0f), 1e-5f);
+            Assert.AreEqual(1f, SnipeLanceErase.Smear(0.25f), 1e-5f);
+            Assert.AreEqual(-1f, SnipeLanceErase.Smear(0.75f), 1e-5f);
+            Assert.AreEqual(0f, SnipeLanceErase.Smear(1f), 1e-5f);
+        }
+
+        [Test]
+        public void Spread_PeaksMidRub_NoneUntouchedOrGone()
+        {
+            Assert.AreEqual(0f, SnipeLanceErase.Spread(0f), 1e-5f);
+            Assert.AreEqual(1f, SnipeLanceErase.Spread(0.5f), 1e-5f);
+            Assert.AreEqual(0f, SnipeLanceErase.Spread(1f), 1e-5f);
+        }
     }
 }

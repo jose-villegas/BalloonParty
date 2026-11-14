@@ -89,5 +89,23 @@ namespace BalloonParty.Item.Snipe
 
             return Mathf.Clamp01((erased - start) / share);
         }
+
+        /// <summary>
+        ///     The rub that takes a chunk away: across its wipe it smears out to one side, back across to the
+        ///     other, and settles as it vanishes, like an eraser worked back and forth.
+        /// </summary>
+        /// <param name="wiped">How far the chunk is wiped, 0 to 1.</param>
+        /// <returns>The sideways push, -1 to 1 of the smear distance; 0 when untouched and when gone.</returns>
+        internal static float Smear(float wiped)
+        {
+            return Mathf.Sin(Mathf.Clamp01(wiped) * Mathf.PI * 2f);
+        }
+
+        /// <param name="wiped">How far the chunk is wiped, 0 to 1.</param>
+        /// <returns>How much the chunk has spread, 0 untouched to 1 at the height of the rub.</returns>
+        internal static float Spread(float wiped)
+        {
+            return Mathf.Sin(Mathf.Clamp01(wiped) * Mathf.PI);
+        }
     }
 }

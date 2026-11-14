@@ -30,13 +30,24 @@ namespace BalloonParty.Item.Snipe
         [Tooltip("Share of the erase each chunk takes to wipe; the rest staggers their turns.")]
         [SerializeField] [Range(0f, 1f)] private float _chunkEraseShare = 0.3f;
 
+        [Tooltip("World distance a chunk smears out to each side as it is rubbed away.")]
+        [SerializeField] [Min(0f)] private float _smearDistance = 0.2f;
+
+        [Tooltip("Extra width a chunk spreads to at the height of its rub, as a share of the line's width.")]
+        [SerializeField] [Min(0f)] private float _smearSpread = 1.2f;
+
+        [Tooltip("How much less the chunk's start smears than its end, so the rub drags the line askew.")]
+        [SerializeField] [Range(0f, 1f)] private float _smearDrag = 0.4f;
+
         // The prefab's own renderer is the first chunk; the rest are made from it as longer lines need them,
         // and stay with the pooled line from then on.
         private readonly List<LineRenderer> _chunks = new();
         private readonly List<int> _turns = new();
+        private readonly List<float> _sides = new();
 
         private Vector3 _from;
         private Color _color = Color.white;
+        private float _width;
         private bool _shuffled;
 
         internal SnipeLanceStrokeTiming Timing => new(_tipSpeed, _holdSeconds, _eraseSeconds);
@@ -49,6 +60,7 @@ namespace BalloonParty.Item.Snipe
             }
 
             _line.useWorldSpace = true;
+            _width = _line.widthMultiplier;
             _chunks.Add(_line);
             HideAll();
         }
@@ -86,6 +98,7 @@ namespace BalloonParty.Item.Snipe
             }
 
             var direction = run / length;
+            var across = new Vector3(-direction.y, direction.x, 0f);
             var count = Mathf.CeilToInt(drawn / _chunkLength);
             EnsureChunks(count);
             if (erased > 0f && !_shuffled)
@@ -110,24 +123,20 @@ namespace BalloonParty.Item.Snipe
                     continue;
                 }
 
-                // Each chunk keeps its start and is wiped back toward it: the material tiles from a line's
-                // start, so a moving start would slide the glitter under the eraser.
+                // The rub only moves a chunk sideways, never along the line: the material tiles from a line's
+                // start, so sliding it along would slide the glitter under the eraser.
                 var start = i * _chunkLength;
                 var stop = Mathf.Min(start + _chunkLength, drawn);
-                stop = Mathf.Lerp(stop, start, 1f - ((1f - wiped) * (1f - wiped)));
-                if (stop <= start)
-                {
-                    chunk.positionCount = 0;
-                    continue;
-                }
+                var smear = across * (_sides[i] * _smearDistance * SnipeLanceErase.Smear(wiped));
 
                 var color = _color;
                 color.a *= 1f - (wiped * wiped);
                 chunk.startColor = color;
                 chunk.endColor = color;
+                chunk.widthMultiplier = _width * (1f + (_smearSpread * SnipeLanceErase.Spread(wiped)));
                 chunk.positionCount = 2;
-                chunk.SetPosition(0, _from + (direction * start));
-                chunk.SetPosition(1, _from + (direction * stop));
+                chunk.SetPosition(0, _from + (direction * start) + (smear * (1f - _smearDrag)));
+                chunk.SetPosition(1, _from + (direction * stop) + smear);
             }
         }
 
@@ -149,6 +158,7 @@ namespace BalloonParty.Item.Snipe
             while (_turns.Count < _chunks.Count)
             {
                 _turns.Add(_turns.Count);
+                _sides.Add(1f);
             }
         }
 
@@ -181,6 +191,7 @@ namespace BalloonParty.Item.Snipe
             for (var i = 0; i < count; i++)
             {
                 _turns[i] = i;
+                _sides[i] = Random.value < 0.5f ? -1f : 1f;
             }
 
             for (var i = count - 1; i > 0; i--)
