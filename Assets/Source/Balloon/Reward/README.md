@@ -2,7 +2,7 @@
 
 Two balloons are rewards rather than threats, and no level's mix brings them. The **golden balloon** comes
 on a purple level, from the line that finds the level half done, and popping it can bring
-another, up to three a level. The **heart balloon** comes to a purple level on a schedule, up to three,
+another, up to three a level. Now and then an ordinary level gets a single one. The **heart balloon** comes to a purple level on a schedule, up to three,
 even at full hearts, where its pop gives an extra heart past the maximum; on any other level it comes to a
 player who is missing hearts, more often the more are missing. At most one of each is on the board. The
 plan is `Plans/PLAN-RewardBalloons.md`.
@@ -57,6 +57,9 @@ has an entry for.
   `ActorHitMessage` for it), so a golden balloon a board clear takes, or one popped after its level ended,
   brings no other. A new level starts over at the threshold, and anything still owed is dropped. One that
   could not be placed stays due for the next line. It wins a line over the heart.
+- **Golden, on another level.** Rare, and a single one. Every `OrdinaryGoldenEveryLevels` (5) levels, a
+  level that isn't purple rolls once, on its first line, against `OrdinaryGoldenChance` (40%). A won level
+  places one golden balloon at `GoldenAtCompletion`, as a purple level's first; its pop rolls for no other.
 - **Heart, on a purple level.** The schedule `PurpleHearts`: a step at 30% completion (sure), one at
   60% (a 50% chance) and one at 90% (25%), so three at most. Each step rolls once, on the line that
   reaches its completion, at full hearts too, and needs no pop of the heart before. A step won while a

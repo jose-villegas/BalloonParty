@@ -19,6 +19,14 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Spawn lines after a golden balloon's pop before the further one it won comes.")]
         [SerializeField] [Min(0)] private int _goldenRepeatDelayLines = 3;
 
+        [Tooltip("Off a purple level, every this many levels (the 5th, 10th, ...) rolls once for a single golden " +
+                 "balloon, which comes at Golden At Completion like a purple level's first. Its pop rolls for no " +
+                 "other. 0 turns it off.")]
+        [SerializeField] [Min(0)] private int _ordinaryGoldenEveryLevels = 5;
+
+        [Tooltip("The chance, 0 to 1, that such a level gets its golden balloon.")]
+        [SerializeField] [Range(0f, 1f)] private float _ordinaryGoldenChance = 0.4f;
+
         [Tooltip("A purple level's heart balloons (32 at most): each rolled once, with its chance, on " +
                  "the line that reaches its completion, at full hearts too (a heart popped there goes past the " +
                  "maximum). The roll while hurt and its cooldown are off on a purple level. Never more than one on " +
@@ -43,6 +51,8 @@ namespace BalloonParty.Configuration.Balloons
         public float GoldenAtCompletion => _goldenAtCompletion;
         public IReadOnlyList<float> GoldenRepeatChances => _goldenRepeatChances;
         public int GoldenRepeatDelayLines => _goldenRepeatDelayLines;
+        public int OrdinaryGoldenEveryLevels => _ordinaryGoldenEveryLevels;
+        public float OrdinaryGoldenChance => _ordinaryGoldenChance;
         public IReadOnlyList<PurpleHeartStep> PurpleHearts => _purpleHearts;
         public float HeartChanceMissingOne => _heartChanceMissingOne;
         public float HeartChanceMissingTwo => _heartChanceMissingTwo;

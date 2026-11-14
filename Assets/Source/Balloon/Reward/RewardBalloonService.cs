@@ -20,7 +20,9 @@ namespace BalloonParty.Balloon.Reward
     ///         The golden balloon, on a purple level: the first from the line that finds the level
     ///         <see cref="IRewardBalloonSettings.GoldenAtCompletion" /> done. Its pop rolls once for another
     ///         (<see cref="IRewardBalloonSettings.GoldenRepeatChances" />, up to three a level), which comes a few
-    ///         lines later; a board clear or a level change rolls nothing.
+    ///         lines later; a board clear or a level change rolls nothing. Off a purple level, every
+    ///         <see cref="IRewardBalloonSettings.OrdinaryGoldenEveryLevels" /> levels roll once for a single one, at the
+    ///         same completion, whose pop rolls for no other.
     ///     </para>
     ///     <para>
     ///         The heart balloon: on a purple level, the schedule's steps (<see cref="IRewardBalloonSettings.PurpleHearts" />),
@@ -46,6 +48,9 @@ namespace BalloonParty.Balloon.Reward
         private int _linesSinceGoldenPop;
         // The golden placement whose pop has rolled (or can no longer roll: one from an earlier level or run).
         private int _goldenRolled;
+        // Off a purple level: whether this level has rolled for its single golden balloon, and won it.
+        private bool _ordinaryGoldenRolled;
+        private bool _ordinaryGoldenWon;
         // The purple level's heart steps that have rolled (one bit each), and the hearts they won still to come.
         private int _purpleHeartsRolled;
         private int _purpleHeartsOwed;
@@ -172,6 +177,12 @@ namespace BalloonParty.Balloon.Reward
             }
 
             _goldenRolled = _goldenPlacement;
+            if (_levelParams.Current is not { IsExtraColorLevel: true })
+            {
+                // Off a purple level the golden balloon is a single one.
+                return;
+            }
+
             var chances = _settings.GoldenRepeatChances;
             var next = _goldensThisLevel - 1;
             _goldenOwed = chances != null && next >= 0 && next < chances.Count && Random01() < chances[next];
@@ -192,6 +203,12 @@ namespace BalloonParty.Balloon.Reward
             return missingHearts == 1 ? settings.HeartChanceMissingOne : settings.HeartChanceMissingTwo;
         }
 
+        internal static bool IsOrdinaryGoldenLevel(IRewardBalloonSettings settings, int level)
+        {
+            var every = settings.OrdinaryGoldenEveryLevels;
+            return every > 0 && level > 0 && level % every == 0;
+        }
+
         private static bool HasEntry(IBalloonsConfiguration balloons, BalloonType type)
         {
             foreach (var entry in balloons.Entries)
@@ -208,9 +225,14 @@ namespace BalloonParty.Balloon.Reward
         private bool GoldenDue()
         {
             var level = _levelParams.Current;
-            if (!_goldenPlaceable || _goldenAlive || level == null || !level.IsExtraColorLevel)
+            if (!_goldenPlaceable || _goldenAlive || level == null)
             {
                 return false;
+            }
+
+            if (!level.IsExtraColorLevel)
+            {
+                return OrdinaryGoldenDue(level);
             }
 
             if (_goldensThisLevel == 0)
@@ -221,11 +243,27 @@ namespace BalloonParty.Balloon.Reward
             return _goldenOwed && _linesSinceGoldenPop >= _settings.GoldenRepeatDelayLines;
         }
 
+        // Rolled on the level's first line, where the level's parameters are surely its own.
+        private bool OrdinaryGoldenDue(ILevelParameters level)
+        {
+            if (!_ordinaryGoldenRolled)
+            {
+                _ordinaryGoldenRolled = true;
+                _ordinaryGoldenWon = IsOrdinaryGoldenLevel(_settings, _levelProgress.Level.Value)
+                                     && Random01() < _settings.OrdinaryGoldenChance;
+            }
+
+            return _ordinaryGoldenWon && _goldensThisLevel == 0
+                                      && LevelCompletion.Of(_levelProgress, level.AllowedColors) >= _settings.GoldenAtCompletion;
+        }
+
         private void ForgetLevelsRewards()
         {
             _goldensThisLevel = 0;
             _goldenOwed = false;
             _linesSinceGoldenPop = 0;
+            _ordinaryGoldenRolled = false;
+            _ordinaryGoldenWon = false;
             // A golden balloon still on the board from before pops into a level that didn't place it: no roll.
             _goldenRolled = _goldenPlacement;
             _purpleHeartsRolled = 0;

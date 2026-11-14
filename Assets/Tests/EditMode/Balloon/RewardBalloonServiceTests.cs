@@ -110,6 +110,7 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(BalloonType.Golden, type);
         }
 
+        // With the single golden of an ordinary level off (OrdinaryGoldenEveryLevels 0, as the fixture leaves it).
         [Test]
         public void Golden_NormalLevel_NeverDue()
         {
@@ -117,6 +118,94 @@ namespace BalloonParty.Tests.Balloon
             SetCompletion(0.95f);
 
             Assert.IsFalse(_service.TryTakeDue(out _));
+        }
+
+        [Test]
+        public void OrdinaryGolden_ACheckLevelWinsItsRoll_OneComesAtTheThreshold()
+        {
+            UseOrdinaryGolden(level: 10, roll: 0.3f);
+            SetCompletion(0.7f);
+            Assert.IsFalse(_service.TryTakeDue(out _), "below the threshold");
+
+            SetCompletion(0.8f);
+            Assert.IsTrue(_service.TryTakeDue(out var type));
+            Assert.AreEqual(BalloonType.Golden, type);
+        }
+
+        [Test]
+        public void OrdinaryGolden_ACheckLevelLosesItsRoll_NoneThisLevel()
+        {
+            UseOrdinaryGolden(level: 5, roll: 0.5f);
+            SetCompletion(0.8f);
+
+            Assert.IsFalse(LinesUntilDue(20));
+        }
+
+        // One roll a level: a lost roll on the first line isn't tried again on the next.
+        [Test]
+        public void OrdinaryGolden_RollsOnceALevel()
+        {
+            UseOrdinaryGolden(level: 5, roll: 0.5f);
+            _service.TryTakeDue(out _);
+
+            _roll = 0f;
+            SetCompletion(0.8f);
+
+            Assert.IsFalse(LinesUntilDue(20));
+        }
+
+        [Test]
+        public void OrdinaryGolden_NotACheckLevel_NeverRolls()
+        {
+            UseOrdinaryGolden(level: 7, roll: 0f);
+            var rolls = 0;
+            _service.Random01 = () =>
+            {
+                rolls++;
+                return 0f;
+            };
+            SetCompletion(0.95f);
+
+            Assert.IsFalse(LinesUntilDue(20));
+            Assert.AreEqual(0, rolls);
+        }
+
+        // Off a purple level the golden is a single one: even a pop that would win a purple level's roll brings none.
+        [Test]
+        public void OrdinaryGolden_ItsPopRollsForNoOther()
+        {
+            UseOrdinaryGolden(level: 5, roll: 0f);
+
+            PlaceAndPopAGolden(roll: 0f);
+
+            Assert.IsFalse(LinesUntilDue(20));
+        }
+
+        [Test]
+        public void OrdinaryGolden_TheNextCheckLevelRollsAgain()
+        {
+            UseOrdinaryGolden(level: 5, roll: 0.5f);
+            SetCompletion(0.8f);
+            Assert.IsFalse(_service.TryTakeDue(out _));
+
+            _levelNumber.Value = 10;
+            _roll = 0.3f;
+
+            Assert.IsTrue(_service.TryTakeDue(out var type));
+            Assert.AreEqual(BalloonType.Golden, type);
+        }
+
+        [TestCase(5, 5, true)]
+        [TestCase(5, 10, true)]
+        [TestCase(5, 4, false)]
+        [TestCase(5, 6, false)]
+        [TestCase(0, 5, false)]
+        [TestCase(5, 0, false)]
+        public void IsOrdinaryGoldenLevel_EveryNthLevel(int every, int level, bool expected)
+        {
+            _settings.OrdinaryGoldenEveryLevels.Returns(every);
+
+            Assert.AreEqual(expected, RewardBalloonService.IsOrdinaryGoldenLevel(_settings, level));
         }
 
         [Test]
@@ -980,6 +1069,17 @@ namespace BalloonParty.Tests.Balloon
             }
 
             return false;
+        }
+
+        // A non-purple level that is a check level for the single golden balloon (every 5th, a 40% chance),
+        // with the roll it will make.
+        private void UseOrdinaryGolden(int level, float roll)
+        {
+            _settings.OrdinaryGoldenEveryLevels.Returns(5);
+            _settings.OrdinaryGoldenChance.Returns(0.4f);
+            _level.IsExtraColorLevel.Returns(false);
+            _levelNumber.Value = level;
+            _roll = roll;
         }
 
         private void SetCompletion(float fraction)

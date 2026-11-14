@@ -247,6 +247,8 @@ MonoBehaviour:
     - 0.25
     - 0.1
     _goldenRepeatDelayLines: 3
+    _ordinaryGoldenEveryLevels: 5
+    _ordinaryGoldenChance: 0.4
     _purpleHearts:
     - _atCompletion: 0.3
       _chance: 1

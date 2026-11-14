@@ -4,7 +4,8 @@ namespace BalloonParty.Configuration.Balloons
 {
     /// <summary>
     ///     When the reward balloons come (PLAN-RewardBalloons): the golden one late in a purple level, and the ones
-    ///     its pop wins; the heart one on a purple level's schedule, and elsewhere to a player missing hearts.
+    ///     its pop wins, and now and then a single one on another level; the heart one on a purple level's
+    ///     schedule, and elsewhere to a player missing hearts.
     /// </summary>
     public interface IRewardBalloonSettings
     {
@@ -20,6 +21,14 @@ namespace BalloonParty.Configuration.Balloons
 
         /// <summary>Spawn lines after a golden balloon's pop before the further one it won comes.</summary>
         int GoldenRepeatDelayLines { get; }
+
+        /// <summary>
+        ///     Off a purple level, every this many levels rolls once (<see cref="OrdinaryGoldenChance" />) for a single
+        ///     golden balloon at <see cref="GoldenAtCompletion" />, whose pop rolls for no other. 0 is off.
+        /// </summary>
+        int OrdinaryGoldenEveryLevels { get; }
+
+        float OrdinaryGoldenChance { get; }
 
         /// <summary>
         ///     A purple level's heart balloons, in any order: each rolled once on the line that reaches its
