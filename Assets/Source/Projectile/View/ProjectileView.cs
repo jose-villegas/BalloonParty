@@ -68,6 +68,10 @@ namespace BalloonParty.Projectile.View
         [Inject] private ISceneLightSettings _sceneLightSettings;
         [Inject] private IShieldFieldSettings _shieldSettings;
 
+        private readonly List<RaycastHit2D> _telegraphHits = new(16);
+        private readonly List<PierceCastCandidate> _telegraphCandidates = new(16);
+
+        private ContactFilter2D _balloonCastFilter;
         private IWriteableProjectileModel _model;
         private Light _light;
         private IDisposable _lightRegistration;
@@ -126,6 +130,12 @@ namespace BalloonParty.Projectile.View
                 BalloonsLayer = LayerMask.NameToLayer("Balloons");
             }
 
+            // Mirrors the layer-mask CircleCast overload's own defaults (balloons are triggers, and that
+            // overload follows the project's queriesHitTriggers), so only the result list changes.
+            _balloonCastFilter = new ContactFilter2D();
+            _balloonCastFilter.SetLayerMask(1 << BalloonsLayer);
+            _balloonCastFilter.useTriggers = Physics2D.queriesHitTriggers;
+
             _baseScale = transform.localScale;
 
             // World contact radius for exact-contact deflection: the tightest half-extent of our own
@@ -148,13 +158,22 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
+            // Once per frame for both readers: the light's telegraph and the spiral's fade-in.
+            var toughAhead = false;
+            var toughPosition = Vector3.zero;
+            var wallCrossing = Vector3.zero;
+            if (_model.IsPiercing.Value)
+            {
+                toughAhead = TryFindToughAhead(out toughPosition, out wallCrossing);
+            }
+
             // Null until the shot fires (registered in FixedUpdate's first free frame). Track both ends to
             // the same point so it stays a point light as it moves — otherwise the segment would stretch
             // from the muzzle (the fixed EndPosition) to the current position.
             if (_light != null)
             {
                 _light.Position.Value = transform.position;
-                if (_model.IsPiercing.Value && TryFindToughAhead(out _, out var wallCrossing))
+                if (toughAhead)
                 {
                     // Telegraph: stretch the shot's light into an area line along the whole doomed path —
                     // out to the next WALL hit, punching THROUGH the tough it's about to plow — so the
@@ -187,7 +206,7 @@ namespace BalloonParty.Projectile.View
             }
 
             TickRainbowGlow();
-            TickPierceSpiral();
+            TickPierceSpiral(toughAhead, toughPosition);
 
             if (_shieldFlashRegistration != null && Time.time >= _shieldFlashOffTime)
             {
@@ -763,7 +782,7 @@ namespace BalloonParty.Projectile.View
         // While armed it stays lit; each tap beat (the freeze-then-pickup window every cruise bounce
         // replays) only DUCKS it toward PierceTapBeatAlpha and it re-flourishes after — the aura
         // winding back up with the shot.
-        private void TickPierceSpiral()
+        private void TickPierceSpiral(bool toughAhead, Vector3 toughPos)
         {
             if (_pierceSpiralRenderer == null)
             {
@@ -780,7 +799,7 @@ namespace BalloonParty.Projectile.View
                 ? (inTapBeat ? _visual.PierceTapBeatAlpha : 1f)
                 : 0f;
 
-            if (pierceActive && _pierceAlpha < target && TryFindToughAhead(out var toughPos, out _))
+            if (pierceActive && _pierceAlpha < target && toughAhead)
             {
                 // Distance-based fade-in: alpha tracks spatial progress toward the tough ahead.
                 // PierceFadeInReach shrinks the effective distance so full alpha arrives before
@@ -906,9 +925,11 @@ namespace BalloonParty.Projectile.View
             LifecycleHelper.DisposeAndClear(ref _sparkFlashRegistration);
         }
 
-        // The next tough (hits>1) on the current flight segment, if any — a bounded forward cast up to the
-        // wall the shot is heading for. Drives the telegraph. TryGetHitBalloon skips the just-plowed
-        // balloon (LastHitBalloon), so the telegraph reaches the NEXT tough, not the one behind the shot.
+        // The next un-plowed tough on the current flight segment, if any — a bounded forward cast up to the
+        // wall the shot is heading for. Drives the telegraph. Reads every balloon the cast crosses, not
+        // just the first: the balloon nearest the shot is usually one it pops in passing, or the Snipe host
+        // it has just popped (the LastHitBalloon TryGetHitBalloon skips), and stopping there hid the line
+        // the moment the pierce armed.
         private bool TryFindToughAhead(out Vector3 position, out Vector3 wallCrossing)
         {
             position = default;
@@ -923,35 +944,27 @@ namespace BalloonParty.Projectile.View
 
             var direction = ((Vector2)_model.Direction).normalized;
             var length = Vector2.Distance(origin, crossing);
-            var hit = Physics2D.CircleCast(origin, _contactRadius, direction, length, 1 << BalloonsLayer);
-            if (hit.collider == null || !TryGetHitBalloon(hit.collider, out _, out var balloonModel))
+            Physics2D.CircleCast(origin, _contactRadius, direction, _balloonCastFilter, _telegraphHits, length);
+
+            _telegraphCandidates.Clear();
+            for (var i = 0; i < _telegraphHits.Count; i++)
+            {
+                var hit = _telegraphHits[i];
+                if (TryGetHitBalloon(hit.collider, out _, out var balloonModel))
+                {
+                    _telegraphCandidates.Add(
+                        new PierceCastCandidate(balloonModel, hit.distance, hit.collider.transform.position));
+                }
+            }
+
+            if (!PierceTelegraphScan.TrySelectNextTough(
+                    _telegraphCandidates, _model.Flight.PendingPierceHits, out var next))
             {
                 return false;
             }
 
-            // Only telegraph a tough the shot hasn't already plowed this run — else a just-plowed tough
-            // (or an earlier one still on the board after a bounce) would re-light a stale line.
-            if (balloonModel.IsTough() && !AlreadyPlowed(balloonModel))
-            {
-                position = hit.collider.transform.position;
-                return true;
-            }
-
-            return false;
-        }
-
-        private bool AlreadyPlowed(IBalloonModel balloon)
-        {
-            var pending = _model.Flight.PendingPierceHits;
-            for (var i = 0; i < pending.Count; i++)
-            {
-                if (ReferenceEquals(pending[i].Balloon, balloon))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            position = next.Position;
+            return true;
         }
 
         // Tunneling safety net: a full-segment CircleCastAll from the previous wall to the current
@@ -982,7 +995,7 @@ namespace BalloonParty.Projectile.View
                     continue;
                 }
 
-                if (!balloonModel.IsTough() || AlreadyPlowed(balloonModel))
+                if (!balloonModel.IsTough() || PierceTelegraphScan.IsPlowed(balloonModel, pending))
                 {
                     continue;
                 }
