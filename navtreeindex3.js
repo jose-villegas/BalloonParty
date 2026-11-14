@@ -94,9 +94,10 @@ var NAVTREEINDEX3 =
 "ShotFlightState_8cs.html":[7,0,16,3],
 "ShotItemLayer_8cs.html":[7,0,16,4],
 "ShotMotionMath_8cs.html":[7,0,16,5],
-"ShotSimBoardActor_8cs.html":[7,0,16,6],
-"ShotSimEffectBoard_8cs.html":[7,0,16,7],
-"ShotSimulator_8cs.html":[7,0,16,8],
+"ShotRanking_8cs.html":[7,0,16,6],
+"ShotSimBoardActor_8cs.html":[7,0,16,7],
+"ShotSimEffectBoard_8cs.html":[7,0,16,8],
+"ShotSimulator_8cs.html":[7,0,16,9],
 "ShotSolverWindow_8cs.html":[7,0,6,7,0],
 "ShotWall_8cs.html":[7,0,15,2,5],
 "ShoveVector_8cs.html":[7,0,15,2,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "UnusedAssetsWindow_8cs.html":[7,0,6,52],
 "UpgradeCardHeldMessage_8cs.html":[7,0,14,7,51],
 "UpgradeCardSlotBuilder_8cs.html":[7,0,6,53],
-"UpgradeCardText_8cs.html":[7,0,14,36],
-"UpgradeCardView_8cs.html":[7,0,18,6,2]
+"UpgradeCardText_8cs.html":[7,0,14,36]
 };

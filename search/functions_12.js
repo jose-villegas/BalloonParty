@@ -178,7 +178,7 @@ var searchData=
   ['shotpopcause_175',['ShotPopCause',['../structBalloonParty_1_1Solver_1_1ShotPopCause.html#a32bf10a07554c3733a513efede482862',1,'BalloonParty::Solver::ShotPopCause']]],
   ['shotscorerules_176',['ShotScoreRules',['../structBalloonParty_1_1Solver_1_1ShotScoreRules.html#a3c486cb11415589d529c9289e8fdaec3',1,'BalloonParty::Solver::ShotScoreRules']]],
   ['shotsimeffectboard_177',['ShotSimEffectBoard',['../classBalloonParty_1_1Solver_1_1ShotSimEffectBoard.html#a11ce51559fb1e267da5fd092d5371cee',1,'BalloonParty::Solver::ShotSimEffectBoard']]],
-  ['shotsimulationresult_178',['ShotSimulationResult',['../structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a58e6f90ed35bd5f0285520c10ec5091e',1,'BalloonParty::Solver::ShotSimulationResult']]],
+  ['shotsimulationresult_178',['ShotSimulationResult',['../structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a326bd80e66e56af49f021726967eadf1',1,'BalloonParty::Solver::ShotSimulationResult']]],
   ['shotslotlattice_179',['ShotSlotLattice',['../structBalloonParty_1_1Solver_1_1ShotSlotLattice.html#aa0b3f2d841a98ccd48c10b3e122ea2f2',1,'BalloonParty::Solver::ShotSlotLattice']]],
   ['shotsolvecontext_180',['ShotSolveContext',['../structBalloonParty_1_1Solver_1_1ShotSolveContext.html#aca25262b8b191fbe88baa60a87fe83f5',1,'BalloonParty::Solver::ShotSolveContext']]],
   ['shotsolverwindowentry_181',['ShotSolverWindowEntry',['../structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a60e4c1942977262ed32ec1ea09e4e899',1,'BalloonParty::Editor::ShotSolver::ShotSolverWindow::ShotSolverWindowEntry']]],

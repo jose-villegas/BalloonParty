@@ -4,6 +4,7 @@ var classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines =
     [ "SnipeLanceLines", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#add1a13168cb108e95d427996f0e30ead", null ],
     [ "CreateChannel", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#a5f608c4d222b8fe7aa326d5df85839e8", null ],
     [ "Dispose", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#a9fb02e786b586ba302a2779814739645", null ],
+    [ "HoldsStrokes", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#af7d2ccfa09af417fe581f9c45c9682a0", null ],
     [ "OnLanceArmed", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#ad31a5f7aeb2119ad6fd0cd66339c7684", null ],
     [ "OnLanceRearmed", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#a1bc898ff92af47dc7f28de5edcbfc78b", null ],
     [ "OnWallReached", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#a7f21b1eb0c70b60dd47fe6ecf537d9f9", null ],

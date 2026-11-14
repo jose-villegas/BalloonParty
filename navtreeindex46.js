@@ -1,5 +1,6 @@
 var NAVTREEINDEX46 =
 {
+"classBalloonParty_1_1Game_1_1GameLifetimeScope.html#af0766435eeb184ac7a7f5ac648deb15e":[5,0,0,6,12,28],
 "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#af0766435eeb184ac7a7f5ac648deb15e":[6,0,0,6,12,28],
 "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#af7500696180dd81b5727f9ffb622983d":[5,0,0,6,12,3],
 "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#af7500696180dd81b5727f9ffb622983d":[6,0,0,6,12,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX46 =
 "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a13ca9962bfa3604103112910ae089b75":[5,0,0,6,5,5,3],
 "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a13ca9962bfa3604103112910ae089b75":[6,0,0,6,5,5,3],
 "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a31d41353205ba9fabcbc12f476f0d9cd":[5,0,0,6,5,5,6],
-"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a31d41353205ba9fabcbc12f476f0d9cd":[6,0,0,6,5,5,6],
-"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a3aac7f8ca1f5f1b53f582a4e86436db3":[5,0,0,6,5,5,13]
+"classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a31d41353205ba9fabcbc12f476f0d9cd":[6,0,0,6,5,5,6]
 };

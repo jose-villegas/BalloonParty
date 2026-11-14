@@ -17,6 +17,7 @@ var namespaceBalloonParty_1_1Solver =
     [ "ShotMotionMath", "classBalloonParty_1_1Solver_1_1ShotMotionMath.html", "classBalloonParty_1_1Solver_1_1ShotMotionMath" ],
     [ "ShotNudgeImpulse", "structBalloonParty_1_1Solver_1_1ShotNudgeImpulse.html", "structBalloonParty_1_1Solver_1_1ShotNudgeImpulse" ],
     [ "ShotPopCause", "structBalloonParty_1_1Solver_1_1ShotPopCause.html", "structBalloonParty_1_1Solver_1_1ShotPopCause" ],
+    [ "ShotRanking", "classBalloonParty_1_1Solver_1_1ShotRanking.html", "classBalloonParty_1_1Solver_1_1ShotRanking" ],
     [ "ShotScoreRules", "structBalloonParty_1_1Solver_1_1ShotScoreRules.html", "structBalloonParty_1_1Solver_1_1ShotScoreRules" ],
     [ "ShotSimDynamicActor", "classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html", "classBalloonParty_1_1Solver_1_1ShotSimDynamicActor" ],
     [ "ShotSimEffectBoard", "classBalloonParty_1_1Solver_1_1ShotSimEffectBoard.html", "classBalloonParty_1_1Solver_1_1ShotSimEffectBoard" ],

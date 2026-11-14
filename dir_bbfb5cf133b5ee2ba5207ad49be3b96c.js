@@ -6,6 +6,7 @@ var dir_bbfb5cf133b5ee2ba5207ad49be3b96c =
     [ "ShotFlightState.cs", "ShotFlightState_8cs.html", "ShotFlightState_8cs" ],
     [ "ShotItemLayer.cs", "ShotItemLayer_8cs.html", "ShotItemLayer_8cs" ],
     [ "ShotMotionMath.cs", "ShotMotionMath_8cs.html", "ShotMotionMath_8cs" ],
+    [ "ShotRanking.cs", "ShotRanking_8cs.html", "ShotRanking_8cs" ],
     [ "ShotSimBoardActor.cs", "ShotSimBoardActor_8cs.html", "ShotSimBoardActor_8cs" ],
     [ "ShotSimEffectBoard.cs", "ShotSimEffectBoard_8cs.html", "ShotSimEffectBoard_8cs" ],
     [ "ShotSimulator.cs", "ShotSimulator_8cs.html", "ShotSimulator_8cs" ]

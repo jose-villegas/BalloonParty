@@ -423,7 +423,7 @@ var searchData=
   ['isassigned_420',['IsAssigned',['../classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#af5db3a099f0d6e8223182284200227e5',1,'BalloonParty::Balloon::Formation::UnbreakableFormationService']]],
   ['isauthorable_421',['IsAuthorable',['../classBalloonParty_1_1UI_1_1Telemetry_1_1MetricValueResolver.html#a89750c1e71decb625af3712a5068494b',1,'BalloonParty::UI::Telemetry::MetricValueResolver']]],
   ['isavailable_422',['IsAvailable',['../classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html#ae3004d8eaf61cc95dda0ecc5edd08f52',1,'BalloonParty::Thrower::ThrowerOriginProvider']]],
-  ['isbetter_423',['IsBetter',['../classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html#ac75953c2e7b64c8b7478ef6b28a8c600',1,'BalloonParty::UI::HeadsUp::HeadsUpPacking']]],
+  ['isbetter_423',['IsBetter',['../classBalloonParty_1_1Solver_1_1ShotRanking.html#afd597f7e2e7b744aacc6260ced7cfa81',1,'BalloonParty.Solver.ShotRanking.IsBetter()'],['../classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpPacking.html#ac75953c2e7b64c8b7478ef6b28a8c600',1,'BalloonParty.UI.HeadsUp.HeadsUpPacking.IsBetter()']]],
   ['isbetterdp_424',['IsBetterDp',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#aff7ab0dcff98194e0b05585c4500b78e',1,'BalloonParty::Game::Score::Behaviours::BigScoreTrailBehaviour']]],
   ['isbonus_425',['IsBonus',['../classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html#a7338f46ae17a97f3f314c04f6e44a6d2',1,'BalloonParty::Game::CardReveal::RevealedCard']]],
   ['iscadencewave_426',['IsCadenceWave',['../classBalloonParty_1_1Item_1_1ItemAssigner.html#aa44d5be45270094545a45f844a8940de',1,'BalloonParty::Item::ItemAssigner']]],

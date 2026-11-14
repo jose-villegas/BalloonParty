@@ -1,5 +1,6 @@
 var NAVTREEINDEX42 =
 {
+"classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html#a53d10782c516a317ff96876a6eaa3882":[5,0,0,5,8,0,6],
 "classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html#a53d10782c516a317ff96876a6eaa3882":[6,0,0,5,8,0,6],
 "classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html#a6309897d505269b0c994df680ea4e932":[5,0,0,5,8,0,10],
 "classBalloonParty_1_1Editor_1_1SpriteCombine_1_1SpriteLayerCombinerEditor.html#a6309897d505269b0c994df680ea4e932":[6,0,0,5,8,0,10],
@@ -248,6 +249,5 @@ var NAVTREEINDEX42 =
 "classBalloonParty_1_1Editor_1_1UpgradeCardSlotBuilder.html#aa3d1f20c7ad6fe493883f45e9d4cda01":[5,0,0,5,51,8],
 "classBalloonParty_1_1Editor_1_1UpgradeCardSlotBuilder.html#aa3d1f20c7ad6fe493883f45e9d4cda01":[6,0,0,5,51,8],
 "classBalloonParty_1_1Editor_1_1UpgradeCardSlotBuilder.html#ae5417a2b2542a14d6ddedcf0fede8def":[5,0,0,5,51,4],
-"classBalloonParty_1_1Editor_1_1UpgradeCardSlotBuilder.html#ae5417a2b2542a14d6ddedcf0fede8def":[6,0,0,5,51,4],
-"classBalloonParty_1_1Editor_1_1UpgradeCardSlotBuilder.html#af31113cbc1702176598f693448a247e2":[5,0,0,5,51,11]
+"classBalloonParty_1_1Editor_1_1UpgradeCardSlotBuilder.html#ae5417a2b2542a14d6ddedcf0fede8def":[6,0,0,5,51,4]
 };

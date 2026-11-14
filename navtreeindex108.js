@@ -1,5 +1,14 @@
 var NAVTREEINDEX108 =
 {
+"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html":[6,0,0,1,1,1,0],
+"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html#a7472e7dd70544a2213a1341f9e9e3d23":[5,0,0,1,1,1,0,2],
+"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html#a7472e7dd70544a2213a1341f9e9e3d23":[6,0,0,1,1,1,0,2],
+"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html#a7ec376ac3ce7eb694ea788e77f0dd3b8":[5,0,0,1,1,1,0,1],
+"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html#a7ec376ac3ce7eb694ea788e77f0dd3b8":[6,0,0,1,1,1,0,1],
+"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html#ab0f245ab270f99f70aad8c76729abe0d":[5,0,0,1,1,1,0,0],
+"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html#ab0f245ab270f99f70aad8c76729abe0d":[6,0,0,1,1,1,0,0],
+"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Spot.html":[5,0,0,1,1,1,2],
+"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Spot.html":[6,0,0,1,1,1,2],
 "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Spot.html#aa8fda79e39463d182a853b987180bb61":[5,0,0,1,1,1,2,0],
 "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Spot.html#aa8fda79e39463d182a853b987180bb61":[6,0,0,1,1,1,2,0],
 "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Spot.html#aab7334ccb50a47bd88fd218c639a09cd":[5,0,0,1,1,1,2,3],
@@ -240,14 +249,5 @@ var NAVTREEINDEX108 =
 "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a98d1988dcba9da94a74ea164d2006823":[6,0,0,3,5,35,17],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#ab455510189d12b4b93b28fb0eea52f44":[5,0,0,3,5,35,6],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#ab455510189d12b4b93b28fb0eea52f44":[6,0,0,3,5,35,6],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#ac402d9445e6a9ab335b1963d09ed88ae":[5,0,0,3,5,35,13],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#ac402d9445e6a9ab335b1963d09ed88ae":[6,0,0,3,5,35,13],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#ac62bd8ae9d5dae1076fb75b99b60851f":[5,0,0,3,5,35,1],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#ac62bd8ae9d5dae1076fb75b99b60851f":[6,0,0,3,5,35,1],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#acff100fd06b31d07571cb2e7870f54f9":[5,0,0,3,5,35,15],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#acff100fd06b31d07571cb2e7870f54f9":[6,0,0,3,5,35,15],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#ad4cc7d9b49f0085a99df53dd63204e4c":[5,0,0,3,5,35,7],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#ad4cc7d9b49f0085a99df53dd63204e4c":[6,0,0,3,5,35,7],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#ad5f1a2f3f2e282df2d8c0e68ddb846bf":[5,0,0,3,5,35,8],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#ad5f1a2f3f2e282df2d8c0e68ddb846bf":[6,0,0,3,5,35,8]
+"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#ac402d9445e6a9ab335b1963d09ed88ae":[5,0,0,3,5,35,13]
 };

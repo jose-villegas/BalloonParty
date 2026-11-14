@@ -1,5 +1,6 @@
 var NAVTREEINDEX53 =
 {
+"classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService_1_1BallFlight.html#a35344cb79428756b5d306d3b8812c9e8":[5,0,0,6,9,7,0,3],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService_1_1BallFlight.html#a35344cb79428756b5d306d3b8812c9e8":[6,0,0,6,9,7,0,3],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService_1_1BallFlight.html#a974e070e6d4df954f297e623c3f0744a":[5,0,0,6,9,7,0,0],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService_1_1BallFlight.html#a974e070e6d4df954f297e623c3f0744a":[6,0,0,6,9,7,0,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX53 =
 "classBalloonParty_1_1Game_1_1Telemetry_1_1SessionTelemetryContext.html#af219345c77b89179ea56826d8220fe0c":[5,0,0,6,9,20,4],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1SessionTelemetryContext.html#af219345c77b89179ea56826d8220fe0c":[6,0,0,6,9,20,4],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html":[5,0,0,6,9,22],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html":[6,0,0,6,9,22],
-"classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html#a1d6f8d5a74546c4a51d8a134becffd3c":[5,0,0,6,9,22,12]
+"classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelopeSerializer.html":[6,0,0,6,9,22]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX31 =
 {
+"classBalloonParty_1_1Display_1_1CameraShakeView.html#a155f5f33dffc6991b3583394a2471183":[5,0,0,4,2,10],
 "classBalloonParty_1_1Display_1_1CameraShakeView.html#a155f5f33dffc6991b3583394a2471183":[6,0,0,4,2,10],
 "classBalloonParty_1_1Display_1_1CameraShakeView.html#a40ed108125702c85659160a01774979e":[5,0,0,4,2,8],
 "classBalloonParty_1_1Display_1_1CameraShakeView.html#a40ed108125702c85659160a01774979e":[6,0,0,4,2,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX31 =
 "classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerState.html#ae5ac8e1bcf2e62a3c8e828efabb89158":[5,0,0,5,0,0,12],
 "classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerState.html#ae5ac8e1bcf2e62a3c8e828efabb89158":[6,0,0,5,0,0,12],
 "classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerState.html#ae740d4b787315b55dd29b4fc2653e207":[5,0,0,5,0,0,0],
-"classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerState.html#ae740d4b787315b55dd29b4fc2653e207":[6,0,0,5,0,0,0],
-"classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerState.html#aee13a8b2bb918dc8c3fe438d75736fcf":[5,0,0,5,0,0,7]
+"classBalloonParty_1_1Editor_1_1Bush_1_1BushBakerState.html#ae740d4b787315b55dd29b4fc2653e207":[6,0,0,5,0,0,0]
 };

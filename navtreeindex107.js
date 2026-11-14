@@ -1,5 +1,14 @@
 var NAVTREEINDEX107 =
 {
+"plan_unbreakable_formations.html#autotoc_md860":[3,1,0,5],
+"plan_unbreakable_formations.html#autotoc_md861":[3,1,0,6],
+"plan_unbreakable_formations.html#autotoc_md863":[3,1,0,7],
+"plan_unbreakable_formations.html#autotoc_md864":[3,1,0,7,0],
+"plan_unbreakable_formations.html#autotoc_md865":[3,1,0,8],
+"plan_unbreakable_formations.html#autotoc_md866":[3,1,0,8,0],
+"plan_unbreakable_formations.html#autotoc_md867":[3,1,0,8,1],
+"plan_unbreakable_formations.html#autotoc_md868":[3,1,0,8,2],
+"plan_unbreakable_formations.html#autotoc_md870":[3,1,0,9],
 "plan_water_scenario.html":[3,10],
 "plan_water_scenario.html#autotoc_md871":[3,10,0],
 "plan_water_scenario.html#autotoc_md873":[3,10,0,0],
@@ -240,14 +249,5 @@ var NAVTREEINDEX107 =
 "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html#ac8010fa493e1a7322a6d0faafebfc36c":[6,0,0,1,1,0,2],
 "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html#af14895b130e330c6a096c746cbfb5e5a":[5,0,0,1,1,0,0],
 "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html#af14895b130e330c6a096c746cbfb5e5a":[6,0,0,1,1,0,0],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html":[5,0,0,1,1,1,0],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html":[6,0,0,1,1,1,0],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html#a7472e7dd70544a2213a1341f9e9e3d23":[5,0,0,1,1,1,0,2],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html#a7472e7dd70544a2213a1341f9e9e3d23":[6,0,0,1,1,1,0,2],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html#a7ec376ac3ce7eb694ea788e77f0dd3b8":[5,0,0,1,1,1,0,1],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html#a7ec376ac3ce7eb694ea788e77f0dd3b8":[6,0,0,1,1,1,0,1],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html#ab0f245ab270f99f70aad8c76729abe0d":[5,0,0,1,1,1,0,0],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html#ab0f245ab270f99f70aad8c76729abe0d":[6,0,0,1,1,1,0,0],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Spot.html":[5,0,0,1,1,1,2],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Spot.html":[6,0,0,1,1,1,2]
+"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html":[5,0,0,1,1,1,0]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX20 =
 {
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#ae9c5ec59720c532d942cfcea74177b5e":[5,0,0,3,3,5,1],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#ae9c5ec59720c532d942cfcea74177b5e":[6,0,0,3,3,5,1],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#aefc3899a263a24d5fbe7d033c761d6d6":[5,0,0,3,3,5,7],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#aefc3899a263a24d5fbe7d033c761d6d6":[6,0,0,3,3,5,7],
@@ -248,6 +249,5 @@ var NAVTREEINDEX20 =
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a16a0de8b68f2f138dc96bb5af5e097e9":[5,0,0,3,5,1,47],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a16a0de8b68f2f138dc96bb5af5e097e9":[6,0,0,3,5,1,47],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a171fa1e318ebfe9e34bad992eea703d8":[5,0,0,3,5,1,30],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a171fa1e318ebfe9e34bad992eea703d8":[6,0,0,3,5,1,30],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a17979d3a56d31ad521469733ca5af838":[5,0,0,3,5,1,34]
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#a171fa1e318ebfe9e34bad992eea703d8":[6,0,0,3,5,1,30]
 };

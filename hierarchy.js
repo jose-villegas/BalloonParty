@@ -1527,6 +1527,7 @@ var hierarchy =
     [ "BalloonParty.Solver.ShotMotionMath", "classBalloonParty_1_1Solver_1_1ShotMotionMath.html", null ],
     [ "BalloonParty.Solver.ShotNudgeImpulse", "structBalloonParty_1_1Solver_1_1ShotNudgeImpulse.html", null ],
     [ "BalloonParty.Solver.ShotPopCause", "structBalloonParty_1_1Solver_1_1ShotPopCause.html", null ],
+    [ "BalloonParty.Solver.ShotRanking", "classBalloonParty_1_1Solver_1_1ShotRanking.html", null ],
     [ "BalloonParty.Solver.ShotScoreRules", "structBalloonParty_1_1Solver_1_1ShotScoreRules.html", null ],
     [ "BalloonParty.Solver.ShotSimulationResult", "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html", null ],
     [ "BalloonParty.Solver.ShotSimulator", "classBalloonParty_1_1Solver_1_1ShotSimulator.html", null ],
