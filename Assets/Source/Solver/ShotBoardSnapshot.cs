@@ -130,8 +130,8 @@ namespace BalloonParty.Solver
         /// landmine).</summary>
         public readonly Vector2Int? StaticSlotIndex;
 
-        /// <summary>A reward balloon: its pop pays no score and leaves the streak alone (the golden balloon
-        /// isn't <c>IHasScoreColor</c>, so <c>ScoreController</c> skips it).</summary>
+        /// <summary>A reward balloon: its pop pays no score and leaves the streak alone (neither reward balloon
+        /// is <c>IHasScoreColor</c>, so <c>ScoreController</c> skips it).</summary>
         public readonly bool Scoreless;
 
         /// <summary>Item effects (bomb, laser, lightning) do nothing to it: the golden balloon only pops to the
@@ -194,6 +194,15 @@ namespace BalloonParty.Solver
             return new ShotBalloonSnapshot(
                 position, radius, 0, int.MaxValue, new ColorProfile(null, false, false), balance,
                 ShotContactKind.Poppable, null, null, scoreless: true, immuneToEffects: true);
+        }
+
+        /// <summary>The heart reward balloon: colourless, scoreless, one hit pops it, the shot's or an item's —
+        /// mirrors <c>HeartBalloonModel</c>.</summary>
+        public static ShotBalloonSnapshot ForHeartTarget(Vector2 position, float radius, BalanceProfile? balance = null)
+        {
+            return new ShotBalloonSnapshot(
+                position, radius, 0, 1, new ColorProfile(null, false, false), balance,
+                ShotContactKind.Poppable, null, null, scoreless: true);
         }
 
         /// <summary>A poppable rainbow/wildcard target — mirrors a live balloon whose colour is the

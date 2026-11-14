@@ -221,8 +221,10 @@ namespace BalloonParty.Solver
         {
             snapshot = default;
 
-            // The golden balloon scores nothing and has no durability, yet deflects the shot like an unbreakable.
+            // The reward balloons score nothing and have no durability: the golden one deflects the shot like an
+            // unbreakable, the heart one pops to any hit.
             var golden = actor is GoldenBalloonModel;
+            var heart = actor is HeartBalloonModel;
             int hitsRemaining;
             if (actor is IHasDurability durable)
             {
@@ -232,13 +234,17 @@ namespace BalloonParty.Solver
             {
                 hitsRemaining = int.MaxValue;
             }
+            else if (heart)
+            {
+                hitsRemaining = 1;
+            }
             else
             {
                 return false;
             }
 
             var scored = actor as IHasScore;
-            if (scored == null && !golden)
+            if (scored == null && !golden && !heart)
             {
                 return false;
             }
@@ -276,6 +282,12 @@ namespace BalloonParty.Solver
             if (golden)
             {
                 snapshot = ShotBalloonSnapshot.ForGoldenTarget(position, radius, balance);
+                return true;
+            }
+
+            if (heart)
+            {
+                snapshot = ShotBalloonSnapshot.ForHeartTarget(position, radius, balance);
                 return true;
             }
 

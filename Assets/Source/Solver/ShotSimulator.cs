@@ -1131,7 +1131,7 @@ namespace BalloonParty.Solver
         private static void ResolvePopScore(
             in ShotBalloonState balloon, in ShotScoreRules scoreRules, in ShotPopCause cause, ref ShotFlightState state)
         {
-            // The golden balloon: no score, and the streak is left as it was.
+            // A reward balloon: no score, and the streak is left as it was.
             if (!balloon.Scoreless)
             {
                 ResolveScoredPop(in balloon, in scoreRules, in cause, ref state);

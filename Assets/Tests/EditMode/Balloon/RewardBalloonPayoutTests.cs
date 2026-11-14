@@ -87,6 +87,62 @@ namespace BalloonParty.Tests.Balloon
             _freeCards.DidNotReceive().GrantFreeCard(Arg.Any<Action>());
         }
 
+        [Test]
+        public void TheHeartBalloonsPop_GivesAHeart()
+        {
+            _payout.OnHit(Hit(Heart(), HitOutcome.Pop));
+
+            _healing.Received(1).Heal(1);
+            _freeCards.DidNotReceive().GrantFreeCard(Arg.Any<Action>());
+        }
+
+        [TestCase(HitOutcome.Deflect)]
+        [TestCase(HitOutcome.None)]
+        public void AHeartHitThatIsNoPop_PaysNothing(HitOutcome outcome)
+        {
+            _payout.OnHit(Hit(Heart(), outcome));
+
+            _healing.DidNotReceiveWithAnyArgs().Heal(default);
+        }
+
+        [Test]
+        public void TheSameHeartBalloonPoppedTwice_HealsOnce()
+        {
+            var heart = Heart();
+
+            _payout.OnHit(Hit(heart, HitOutcome.Pop));
+            _payout.OnHit(Hit(heart, HitOutcome.Pop));
+
+            _healing.Received(1).Heal(1);
+        }
+
+        [Test]
+        public void AGoldenPopBetweenTwoPopsOfOneHeart_StillHealsOnce()
+        {
+            var heart = Heart();
+
+            _payout.OnHit(Hit(heart, HitOutcome.Pop));
+            _payout.OnHit(Hit(Golden(), HitOutcome.Pop));
+            _payout.OnHit(Hit(heart, HitOutcome.Pop));
+
+            _healing.Received(1).Heal(1);
+            _freeCards.Received(1).GrantFreeCard(Arg.Any<Action>());
+        }
+
+        [Test]
+        public void TheNextHeartBalloon_HealsAgain()
+        {
+            _payout.OnHit(Hit(Heart(), HitOutcome.Pop));
+            _payout.OnHit(Hit(Heart(), HitOutcome.Pop));
+
+            _healing.Received(2).Heal(1);
+        }
+
+        private static HeartBalloonModel Heart()
+        {
+            return new HeartBalloonModel(new BalloonModelConfig(BalloonType.Heart));
+        }
+
         private static GoldenBalloonModel Golden()
         {
             return new GoldenBalloonModel(new BalloonModelConfig(BalloonType.Golden));

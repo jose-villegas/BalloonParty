@@ -196,6 +196,7 @@ namespace BalloonParty.Audio.Routing
                 BalloonType.Rainbow => GameSoundId.BalloonPopRainbow,
                 BalloonType.Unbreakable => GameSoundId.BalloonPopUnbreakable,
                 BalloonType.Golden => GameSoundId.BalloonPopUnbreakable,
+                BalloonType.Heart => GameSoundId.BalloonPopHeart,
                 BalloonType.SimpleSilver => GameSoundId.BalloonPopSilver,
                 BalloonType.SimpleGold => GameSoundId.BalloonPopGold,
                 _ => GameSoundId.BalloonPop,

@@ -101,6 +101,8 @@ namespace BalloonParty.Audio
 
         // Played by ItemSightSoundRouter each time the aim's prediction line newly crosses an
         // item-hosting balloon; several sighted at once step up a whole tone per note.
-        ItemSighted
+        ItemSighted,
+        // The heart reward balloon's pop, which gives a heart back: a warm note rather than a plain pop.
+        BalloonPopHeart
     }
 }
