@@ -30,10 +30,11 @@ var searchData=
   ['hitscratch_27',['HitScratch',['../classBalloonParty_1_1Item_1_1Laser_1_1LaserCross.html#a007e2a778b4dc2543c699b666fff978f',1,'BalloonParty::Item::Laser::LaserCross']]],
   ['hitsremaining_28',['HitsRemaining',['../structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a5512ca360b8804e3e7ec60738d6009cf',1,'BalloonParty.Solver.ShotBalloonSnapshot.HitsRemaining'],['../structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a25ce084feb61fbe6ec5280ffa290cd7e',1,'BalloonParty.Solver.ShotBalloonState.HitsRemaining']]],
   ['hitstopop_29',['HitsToPop',['../structBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelConfig.html#a52801eccd8fd9941a056d5c0715f2b7b',1,'BalloonParty::Balloon::Model::BalloonModelConfig']]],
-  ['hostballoontype_30',['HostBalloonType',['../structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewContext.html#aa34ca83563aeb9255a3453ceda106e7b',1,'BalloonParty::Item::Preview::ItemPreviewContext']]],
-  ['hostcolorid_31',['HostColorId',['../structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewContext.html#a4cf5904b25c859a76232f67c87dc2624',1,'BalloonParty::Item::Preview::ItemPreviewContext']]],
-  ['hostprefabpath_32',['HostPrefabPath',['../classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder.html#ae463d1dd4990c6bbec80775512c418a0',1,'BalloonParty::Editor::GameOverLayoutBuilder']]],
-  ['huejitter_33',['HueJitter',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafBakeSettings.html#a75b9751553a9a8c455527ed600d4be74',1,'BalloonParty::Editor::Bush::BushLeafBakeSettings']]],
-  ['hueshiftid_34',['HueShiftId',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafBaker.html#abca2837543a88b0ab7cf03591ef3cb72',1,'BalloonParty::Editor::Bush::BushLeafBaker']]],
-  ['hundredthsunit_35',['HundredthsUnit',['../classBalloonParty_1_1UI_1_1Telemetry_1_1MetricValueResolver.html#a85f74470f5edcd35116d0b4204fe9807',1,'BalloonParty::UI::Telemetry::MetricValueResolver']]]
+  ['holdseconds_30',['HoldSeconds',['../structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStrokeTiming.html#abc9dd99060b523908811d880dc35b12f',1,'BalloonParty::Item::Snipe::SnipeLanceStrokeTiming']]],
+  ['hostballoontype_31',['HostBalloonType',['../structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewContext.html#aa34ca83563aeb9255a3453ceda106e7b',1,'BalloonParty::Item::Preview::ItemPreviewContext']]],
+  ['hostcolorid_32',['HostColorId',['../structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewContext.html#a4cf5904b25c859a76232f67c87dc2624',1,'BalloonParty::Item::Preview::ItemPreviewContext']]],
+  ['hostprefabpath_33',['HostPrefabPath',['../classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder.html#ae463d1dd4990c6bbec80775512c418a0',1,'BalloonParty::Editor::GameOverLayoutBuilder']]],
+  ['huejitter_34',['HueJitter',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafBakeSettings.html#a75b9751553a9a8c455527ed600d4be74',1,'BalloonParty::Editor::Bush::BushLeafBakeSettings']]],
+  ['hueshiftid_35',['HueShiftId',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafBaker.html#abca2837543a88b0ab7cf03591ef3cb72',1,'BalloonParty::Editor::Bush::BushLeafBaker']]],
+  ['hundredthsunit_36',['HundredthsUnit',['../classBalloonParty_1_1UI_1_1Telemetry_1_1MetricValueResolver.html#a85f74470f5edcd35116d0b4204fe9807',1,'BalloonParty::UI::Telemetry::MetricValueResolver']]]
 ];

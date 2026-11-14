@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html" target="_top" xlink:title=" ">
+<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1UI_1_1FormattedLabel.html" target="_top" xlink:title="Wraps a TMP_Text whose authored text is a string.Format template; construct it before the label&#39;s tex...">
 <polygon fill="white" stroke="#666666" points="143,-30 0,-30 0,0 143,0 143,-30"/>
-<text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.UI.Telemetry.</text>
-<text text-anchor="middle" x="71.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">MetricBinding</text>
+<text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.UI.Formatted</text>
+<text text-anchor="middle" x="71.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">Label</text>
 </a>
 </g>
 </g>

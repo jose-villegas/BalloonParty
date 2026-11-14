@@ -1,24 +1,26 @@
 <map id="BalloonParty.Item.Snipe.SnipeItemHandler" name="BalloonParty.Item.Snipe.SnipeItemHandler">
-<area shape="rect" id="Node000001" title="Handles the Snipe item: arms the shot that popped the holder as a piercing lance — it plows through b..." alt="" coords="708,183,888,223"/>
+<area shape="rect" id="Node000001" title="Handles the Snipe item: arms the shot that popped the holder as a piercing lance — it plows through b..." alt="" coords="712,213,892,253"/>
 <area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Item_1_1IBalloonItem.html" title=" " alt="" coords="348,5,571,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="547,32,572,39,631,64,686,99,738,141,780,181,776,185,734,145,682,103,629,69,570,45,545,37"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="547,32,572,39,634,65,690,103,720,129,747,159,789,211,784,214,743,162,716,133,686,107,632,70,570,45,545,37"/>
 <area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Item_1_1IItem.html" title=" " alt="" coords="17,5,191,31"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="205,15,348,15,348,21,205,21"/>
 <area shape="rect" id="Node000004" title=" " alt="" coords="417,55,502,80"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="516,75,571,89,630,109,685,136,766,181,763,186,683,140,627,114,570,94,515,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="516,74,571,89,632,112,689,144,738,178,779,210,776,215,735,182,687,148,630,117,570,94,515,79"/>
 <area shape="rect" id="Node000005" title=" " alt="" coords="410,104,509,129"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="523,127,685,165,738,181,737,186,683,170,522,132"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="523,127,571,139,631,156,689,177,763,210,761,215,687,182,629,161,570,145,521,132"/>
 <area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Configuration_1_1Items_1_1IItemConfiguration.html" title=" " alt="" coords="361,154,558,194"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="572,181,708,193,708,198,572,186"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="572,190,712,215,711,220,571,196"/>
 <area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="5,221,203,261"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="216,234,571,218,707,208,708,214,571,223,217,240"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="216,237,712,231,712,236,216,242"/>
 <area shape="rect" id="Node000008" href="$classBalloonParty_1_1Item_1_1ItemEffectPlayer.html" title="Plays an item&#39;s one&#45;shot activation effect, pooled and tinted by the popped balloon&#39;s colour." alt="" coords="356,281,563,321"/>
 <area shape="poly" id="edge9_Node000008_Node000007" title=" " alt="" coords="212,261,227,263,356,284,355,289,226,269,211,266"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="576,288,630,278,683,263,728,244,766,221,769,226,730,248,685,269,631,283,577,293"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="576,283,687,263,738,250,739,255,689,269,577,289"/>
 <area shape="rect" id="Node000009" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="11,293,197,333"/>
 <area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="211,311,324,309,356,307,356,312,324,314,211,316"/>
 <area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Projectile_1_1Buffs_1_1IProjectileBuffs.html" title="Applies a buff to a shot." alt="" coords="374,345,545,385"/>
-<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="558,348,621,331,683,305,711,286,738,264,779,221,782,225,741,268,715,291,685,310,623,336,559,353"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="557,343,622,325,687,301,733,277,772,251,775,255,736,281,689,306,624,330,559,348"/>
 <area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="374,409,545,449"/>
-<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="558,412,622,392,653,378,682,360,718,328,747,290,785,222,790,225,751,293,722,331,686,364,656,382,624,397,559,417"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="557,407,623,385,687,353,717,329,744,302,785,251,789,255,748,305,720,333,689,358,625,390,559,412"/>
+<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeLanceArming.html" title="What SnipeItemHandler tells the pencil line when it arms a lance." alt="" coords="369,473,549,513"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="562,473,627,450,658,434,686,415,724,375,754,330,776,287,791,252,796,254,781,289,758,333,728,379,690,419,661,439,629,455,563,478"/>
 </map>

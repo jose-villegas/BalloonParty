@@ -76,6 +76,7 @@ var classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView =
     [ "_pauseService", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a9d65e2719509ce8abb79fe8dc9ef58a1", null ],
     [ "_pierceAlpha", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#ad2624de9b7a680920adfebcf0853f3dc", null ],
     [ "_pierceSpiralRenderer", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#ae2dc1455b851fffe4b101fc78913e360", null ],
+    [ "_pierceWallReachedPublisher", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#ad357c7396a1069aa7e874e8191ba00f6", null ],
     [ "_projectileTrail", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#ad5e7de5e18609cf14622e5325bf10438", null ],
     [ "_rainbowGlowActive", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a474b3e40c5ff658f130374acab708def", null ],
     [ "_rainbowGlowTimer", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a07eec0e443fe30e158a5038c3aae83ee", null ],

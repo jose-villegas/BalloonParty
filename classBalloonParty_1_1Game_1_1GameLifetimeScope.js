@@ -33,6 +33,7 @@ var classBalloonParty_1_1Game_1_1GameLifetimeScope =
     [ "_shieldFieldSettings", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a35c77b29fcb4bf621a06658114c6bc3f", null ],
     [ "_slotGridConfig", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a44ab957ab0bf92b667b188359777e982", null ],
     [ "_smokeFieldSettings", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#ade1ce9a94b6f55d35bc2fb0ab447cc9c", null ],
+    [ "_snipeLanceLinePrefab", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a0402a27bfc55d636e1cf31733daba161", null ],
     [ "_soundBank", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a27fefc7ae384253518a8e961dfb105f6", null ],
     [ "_speckFieldSettings", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a4ab16ba7506f9cb189fc5fa700033e08", null ],
     [ "_thermalGovernorSettings", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html#a9345fbd414893708312a08fee2716b7a", null ]

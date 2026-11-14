@@ -1,3 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$structBalloonParty_1_1Projectile_1_1Controller_1_1PierceCastCandidate.html" title="One balloon a piercing shot&#39;s forward cast crossed, already resolved off its collider." alt="" coords="5,5,229,45"/>
+<area shape="rect" id="Node000000" href="$structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html" title="Everything about a finished trace beyond its polyline: where piercing began, and what the line ran in..." alt="" coords="5,5,180,45"/>
 </map>

@@ -418,6 +418,7 @@ var hierarchy =
       [ "BalloonParty.Item.Preview.ItemRangePreviewController", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html", null ],
       [ "BalloonParty.Item.Snipe.SnipeDischargeBloom", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeDischargeBloom.html", null ],
       [ "BalloonParty.Item.Snipe.SnipeItemHandler", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html", null ],
+      [ "BalloonParty.Item.Snipe.SnipeLanceLines", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html", null ],
       [ "BalloonParty.Prediction.PredictionTraceLights", "classBalloonParty_1_1Prediction_1_1PredictionTraceLights.html", null ],
       [ "BalloonParty.Projectile.Buffs.ProjectileBuffService", "classBalloonParty_1_1Projectile_1_1Buffs_1_1ProjectileBuffService.html", null ],
       [ "BalloonParty.Projectile.Controller.ActiveProjectilePierce", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html", null ],
@@ -693,6 +694,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.View.BalloonView", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html", null ],
       [ "BalloonParty.Item.ItemVisualView", "classBalloonParty_1_1Item_1_1ItemVisualView.html", null ],
       [ "BalloonParty.Item.Preview.HighlightTrail", "classBalloonParty_1_1Item_1_1Preview_1_1HighlightTrail.html", null ],
+      [ "BalloonParty.Item.Snipe.SnipeLanceLineView", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView.html", null ],
       [ "BalloonParty.Projectile.View.ProjectileView", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html", null ],
       [ "BalloonParty.Shared.Pool.EffectView", "classBalloonParty_1_1Shared_1_1Pool_1_1EffectView.html", null ],
       [ "BalloonParty.Shared.Pool.PoolableParticle", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolableParticle.html", null ],
@@ -932,6 +934,9 @@ var hierarchy =
     [ "BalloonParty.Configuration.Effects.ISmokeFieldSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISmokeFieldSettings.html", [
       [ "BalloonParty.Configuration.Effects.SmokeFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings.html", null ]
     ] ],
+    [ "BalloonParty.Item.Snipe.ISnipeLanceArming", "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeLanceArming.html", [
+      [ "BalloonParty.Item.Snipe.SnipeLanceLines", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html", null ]
+    ] ],
     [ "BalloonParty.Audio.Configuration.ISoundBankConfiguration", "interfaceBalloonParty_1_1Audio_1_1Configuration_1_1ISoundBankConfiguration.html", [
       [ "BalloonParty.Audio.Configuration.SoundBankConfiguration", "classBalloonParty_1_1Audio_1_1Configuration_1_1SoundBankConfiguration.html", null ]
     ] ],
@@ -1006,6 +1011,7 @@ var hierarchy =
       [ "BalloonParty.Item.Preview.ItemRangePreviewController", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html", null ],
       [ "BalloonParty.Item.Snipe.SnipeDischargeBloom", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeDischargeBloom.html", null ],
       [ "BalloonParty.Item.Snipe.SnipeItemHandler", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html", null ],
+      [ "BalloonParty.Item.Snipe.SnipeLanceLines", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html", null ],
       [ "BalloonParty.Nudge.NudgeService", "classBalloonParty_1_1Nudge_1_1NudgeService.html", null ],
       [ "BalloonParty.Projectile.Buffs.ProjectileBuffService", "classBalloonParty_1_1Projectile_1_1Buffs_1_1ProjectileBuffService.html", null ],
       [ "BalloonParty.Projectile.Controller.ActiveProjectilePierce", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html", null ],
@@ -1069,6 +1075,7 @@ var hierarchy =
       [ "BalloonParty.Game.LaunchDisturbanceStamp", "classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html", null ],
       [ "BalloonParty.Game.Level.LevelController", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html", null ],
       [ "BalloonParty.Game.Level.TimeOfDayCycle", "classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle.html", null ],
+      [ "BalloonParty.Item.Snipe.SnipeLanceLines", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html", null ],
       [ "BalloonParty.Projectile.Controller.ProjectileDoomedTimeScaleController", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html", null ],
       [ "BalloonParty.Scenario.BackgroundFieldService", "classBalloonParty_1_1Scenario_1_1BackgroundFieldService.html", null ],
       [ "BalloonParty.Scenario.SmokeFieldService", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html", null ],
@@ -1234,6 +1241,7 @@ var hierarchy =
           [ "BalloonParty.Item.SightSpinReaction", "classBalloonParty_1_1Item_1_1SightSpinReaction.html", null ]
         ] ]
       ] ],
+      [ "BalloonParty.Item.Snipe.SnipeLanceLineView", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView.html", null ],
       [ "BalloonParty.Prediction.PredictionSightProbe", "classBalloonParty_1_1Prediction_1_1PredictionSightProbe.html", null ],
       [ "BalloonParty.Prediction.PredictionTraceView", "classBalloonParty_1_1Prediction_1_1PredictionTraceView.html", null ],
       [ "BalloonParty.Prediction.TraceHitMarker", "classBalloonParty_1_1Prediction_1_1TraceHitMarker.html", null ],
@@ -1346,6 +1354,7 @@ var hierarchy =
     [ "BalloonParty.Shared.Messages.PierceDischargedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html", null ],
     [ "BalloonParty.Shared.PierceItemCircle", "structBalloonParty_1_1Shared_1_1PierceItemCircle.html", null ],
     [ "BalloonParty.Projectile.Controller.PierceTelegraphScan", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceTelegraphScan.html", null ],
+    [ "BalloonParty.Shared.Messages.PierceWallReachedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1PierceWallReachedMessage.html", null ],
     [ "BalloonParty.Editor.CardRevealBuilder.PinImages", "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1PinImages.html", null ],
     [ "BalloonParty.Shared.Pool.PoolManager", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html", null ],
     [ "BalloonParty.Shared.Extensions.PoolManagerExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1PoolManagerExtensions.html", null ],
@@ -1538,6 +1547,10 @@ var hierarchy =
     [ "BalloonParty.Scenario.SmokeFieldResources", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html", null ],
     [ "BalloonParty.Balloon.Formation.SnakeWalk", "classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk.html", null ],
     [ "BalloonParty.Item.Effects.SnipeEffectParams", "structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html", null ],
+    [ "BalloonParty.Item.Snipe.SnipeLanceLinePrefab", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLinePrefab.html", null ],
+    [ "BalloonParty.Item.Snipe.SnipeLanceStroke", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStroke.html", null ],
+    [ "BalloonParty.Item.Snipe.SnipeLanceStrokeTiming", "structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStrokeTiming.html", null ],
+    [ "BalloonParty.Item.Snipe.SnipeLanceTrace", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceTrace.html", null ],
     [ "BalloonParty.Configuration.Items.SnipeSettings", "classBalloonParty_1_1Configuration_1_1Items_1_1SnipeSettings.html", null ],
     [ "BalloonParty.Shared.Rendering.SortingHelper", "classBalloonParty_1_1Shared_1_1Rendering_1_1SortingHelper.html", null ],
     [ "BalloonParty.Audio.Editor.SoundBankClipAssigner", "classBalloonParty_1_1Audio_1_1Editor_1_1SoundBankClipAssigner.html", null ],
@@ -1558,6 +1571,7 @@ var hierarchy =
     [ "BalloonParty.Shared.StreakShieldRule", "classBalloonParty_1_1Shared_1_1StreakShieldRule.html", null ],
     [ "BalloonParty.Shared.Messages.StrikethroughArrivedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1StrikethroughArrivedMessage.html", null ],
     [ "BalloonParty.Shared.Extensions.StringFormatExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1StringFormatExtensions.html", null ],
+    [ "BalloonParty.Item.Snipe.SnipeLanceLines.Stroke", "structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines_1_1Stroke.html", null ],
     [ "BalloonParty.Shared.Diagnostics.Log.TagPalette", "classBalloonParty_1_1Shared_1_1Diagnostics_1_1Log_1_1TagPalette.html", null ],
     [ "BalloonParty.Configuration.Level.TailGrowthConfig", "structBalloonParty_1_1Configuration_1_1Level_1_1TailGrowthConfig.html", null ],
     [ "BalloonParty.Game.Telemetry.TelemetryEnvelope", "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html", null ],

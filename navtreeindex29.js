@@ -1,5 +1,12 @@
 var NAVTREEINDEX29 =
 {
+"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteColorMaskedExtensions.html#a21dbcca6aef94d168bcdcfd091efec66":[6,0,0,3,10,6,0],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteColorNameAttribute.html":[5,0,0,3,10,7],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteColorNameAttribute.html":[6,0,0,3,10,7],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html":[5,0,0,3,10,8],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html":[6,0,0,3,10,8],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html#a76fea612ee9d1b2234ea6dc25b1f4107":[5,0,0,3,10,8,0],
+"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html#a76fea612ee9d1b2234ea6dc25b1f4107":[6,0,0,3,10,8,0],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html#a8f328dc0ab90cfb9afaa760c313bf961":[5,0,0,3,10,8,1],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html#a8f328dc0ab90cfb9afaa760c313bf961":[6,0,0,3,10,8,1],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html#a92eff46b3cdf11cb8d2560351a40bdab":[5,0,0,3,10,8,5],
@@ -242,12 +249,5 @@ var NAVTREEINDEX29 =
 "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#abaeb09222d0547a6b4fe71a9bcc37f17":[6,0,0,3,27,1],
 "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ad0a64e70d7d8d41c3fa63ba33bdbc11d":[5,0,0,3,27,5],
 "classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ad0a64e70d7d8d41c3fa63ba33bdbc11d":[6,0,0,3,27,5],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ae50419a0d7a8da0c50bbbd7f1f3d164d":[5,0,0,3,27,8],
-"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ae50419a0d7a8da0c50bbbd7f1f3d164d":[6,0,0,3,27,8],
-"classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html":[5,0,0,3,29],
-"classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html":[6,0,0,3,29],
-"classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html#a1027e4f1728e3470c4aa58b5d25da68a":[5,0,0,3,29,16],
-"classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html#a1027e4f1728e3470c4aa58b5d25da68a":[6,0,0,3,29,16],
-"classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html#a23f66d39922b4dab4ba3bd963bf9dfd6":[5,0,0,3,29,6],
-"classBalloonParty_1_1Configuration_1_1ShieldChainSettings.html#a23f66d39922b4dab4ba3bd963bf9dfd6":[6,0,0,3,29,6]
+"classBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourConfiguration.html#ae50419a0d7a8da0c50bbbd7f1f3d164d":[5,0,0,3,27,8]
 };

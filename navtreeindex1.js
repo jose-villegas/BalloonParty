@@ -206,6 +206,7 @@ var NAVTREEINDEX1 =
 "ISlotGridConfig_8cs.html":[7,0,14,28],
 "ISlotSelectionStrategy_8cs.html":[7,0,15,0,13],
 "ISmokeFieldSettings_8cs.html":[7,0,3,5,17],
+"ISnipeLanceArming_8cs.html":[7,0,8,7,0],
 "ISoundBankConfiguration_8cs.html":[7,0,0,0,4],
 "ISoundPlayer_8cs.html":[7,0,0,10],
 "ISpawnClockSettings_8cs.html":[7,0,3,9,14],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "ItemActivator_8cs.html":[7,0,8,19],
 "ItemAssigner_8cs.html":[7,0,8,20],
 "ItemCheckMessage_8cs.html":[7,0,14,7,13],
-"ItemConfiguration_8cs.html":[7,0,3,8,1],
-"ItemContentEntry_8cs.html":[7,0,3,9,15]
+"ItemConfiguration_8cs.html":[7,0,3,8,1]
 };

@@ -667,8 +667,15 @@ var annotated_dup =
           [ "ShieldSlotPreference", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldSlotPreference.html", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldSlotPreference" ]
         ] ],
         [ "Snipe", "namespaceBalloonParty_1_1Item_1_1Snipe.html", [
+          [ "ISnipeLanceArming", "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeLanceArming.html", "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeLanceArming" ],
           [ "SnipeDischargeBloom", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeDischargeBloom.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeDischargeBloom" ],
-          [ "SnipeItemHandler", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler" ]
+          [ "SnipeItemHandler", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler" ],
+          [ "SnipeLanceLinePrefab", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLinePrefab.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLinePrefab" ],
+          [ "SnipeLanceLines", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines" ],
+          [ "SnipeLanceLineView", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView" ],
+          [ "SnipeLanceStroke", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStroke.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStroke" ],
+          [ "SnipeLanceStrokeTiming", "structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStrokeTiming.html", "structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStrokeTiming" ],
+          [ "SnipeLanceTrace", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceTrace.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceTrace" ]
         ] ],
         [ "BalloonOverlapQuery", "classBalloonParty_1_1Item_1_1BalloonOverlapQuery.html", "classBalloonParty_1_1Item_1_1BalloonOverlapQuery" ],
         [ "IBalloonItem", "interfaceBalloonParty_1_1Item_1_1IBalloonItem.html", "interfaceBalloonParty_1_1Item_1_1IBalloonItem" ],
@@ -885,6 +892,7 @@ var annotated_dup =
           [ "LevelUpFillTrailsMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpFillTrailsMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpFillTrailsMessage" ],
           [ "OverflowHeartRequestedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage" ],
           [ "PierceDischargedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage" ],
+          [ "PierceWallReachedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1PierceWallReachedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1PierceWallReachedMessage" ],
           [ "ProgressBarCompletedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProgressBarCompletedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProgressBarCompletedMessage" ],
           [ "ProjectileBuffGainedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileBuffGainedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileBuffGainedMessage" ],
           [ "ProjectileCruiseEndedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseEndedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseEndedMessage" ],

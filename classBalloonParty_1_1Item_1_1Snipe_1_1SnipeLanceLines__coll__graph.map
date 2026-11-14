@@ -1,0 +1,29 @@
+<map id="BalloonParty.Item.Snipe.SnipeLanceLines" name="BalloonParty.Item.Snipe.SnipeLanceLines">
+<area shape="rect" id="Node000001" title="Draws a carbon pencil line along each straight run a Snipe lance plows, the moment the shot reaches t..." alt="" coords="631,251,811,291"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeLanceArming.html" title="What SnipeItemHandler tells the pencil line when it arms a lance." alt="" coords="283,5,463,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="469,47,540,77,576,97,608,121,641,153,669,188,710,249,706,252,665,191,637,156,605,125,573,101,538,82,467,52"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="331,70,416,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="430,89,486,104,550,128,608,163,662,207,703,249,699,252,658,211,605,168,548,133,485,109,429,94"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="333,119,413,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="427,139,486,153,548,174,608,200,690,248,688,253,605,205,546,179,485,159,426,144"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="324,169,423,194"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="437,190,518,207,607,229,666,248,664,253,606,235,517,212,436,195"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="288,219,459,259"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="473,245,631,260,630,265,472,250"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html" title="Prediction trace settings: how the line is segmented, how far it reaches, how many reflections it giv..." alt="" coords="261,283,485,323"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="499,288,630,276,631,282,499,294"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html" title="Reference&#45;counted per source so nested pause calls don&#39;t prematurely resume." alt="" coords="275,347,472,387"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="480,341,606,308,666,288,667,293,607,313,481,346"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,347,212,387"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="226,364,275,364,275,369,226,369"/>
+<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="280,411,467,451"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="477,404,542,383,605,355,655,322,696,289,699,293,658,327,608,360,544,388,479,409"/>
+<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView.html" title="One pencil stroke along a Snipe lance&#39;s run: a two&#45;point LineRenderer carrying the aim trace&#39;s smoke&#45;..." alt="" coords="283,475,463,515"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="476,472,543,449,575,433,605,414,638,384,666,350,706,289,711,292,671,354,642,388,608,418,578,438,545,454,478,477"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="47,454,171,479"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="184,472,284,483,283,488,184,477"/>
+<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="15,504,202,544"/>
+<area shape="poly" id="edge12_Node000011_Node000013" title=" " alt="" coords="215,510,283,502,284,507,216,515"/>
+<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceTrace.html" title="Where each Snipe&#45;armed shot&#39;s current straight run began: the point it armed at, then each wall it ca..." alt="" coords="283,539,463,579"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="476,541,544,519,576,503,605,482,627,460,646,436,677,382,699,330,712,290,717,292,704,332,682,384,650,438,631,464,608,486,579,507,546,524,478,547"/>
+</map>

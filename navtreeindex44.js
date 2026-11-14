@@ -1,5 +1,12 @@
 var NAVTREEINDEX44 =
 {
+"classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicScene.html#abbdbe3465b21140708dcd731c0380d85":[6,0,0,6,1,8,2],
+"classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicScene.html#ad4a0b1e36b38bddab5242bd1967d3766":[5,0,0,6,1,8,4],
+"classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicScene.html#ad4a0b1e36b38bddab5242bd1967d3766":[6,0,0,6,1,8,4],
+"classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicScene.html#ae291b3a585811d3de5cfb638ead98dcf":[5,0,0,6,1,8,1],
+"classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicScene.html#ae291b3a585811d3de5cfb638ead98dcf":[6,0,0,6,1,8,1],
+"classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html":[5,0,0,6,1,9],
+"classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html":[6,0,0,6,1,9],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a00aba3bb752127ca471fe77ba1486732":[5,0,0,6,1,9,32],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a00aba3bb752127ca471fe77ba1486732":[6,0,0,6,1,9,32],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a12edbe09825c3323306dd94d839229a1":[5,0,0,6,1,9,4],
@@ -242,12 +249,5 @@ var NAVTREEINDEX44 =
 "classBalloonParty_1_1Game_1_1Cinematics_1_1PointFocus.html#a49fbc9664c52c6ab7dcd4546c5011dc1":[6,0,0,6,1,16,0],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1PointFocus.html#aa464872e134a5419213381e8e4fad9d9":[5,0,0,6,1,16,1],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1PointFocus.html#aa464872e134a5419213381e8e4fad9d9":[6,0,0,6,1,16,1],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1PointFocus.html#af081cd43ab8f72d020dd8695486b1dd9":[5,0,0,6,1,16,2],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1PointFocus.html#af081cd43ab8f72d020dd8695486b1dd9":[6,0,0,6,1,16,2],
-"classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html":[5,0,0,6,2,1],
-"classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html":[6,0,0,6,2,1],
-"classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#a3d8b698a529436cdd9b62237212c4183":[5,0,0,6,2,1,7],
-"classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#a3d8b698a529436cdd9b62237212c4183":[6,0,0,6,2,1,7],
-"classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#a5a13c711aba63011980588b8f424ddf1":[5,0,0,6,2,1,6],
-"classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html#a5a13c711aba63011980588b8f424ddf1":[6,0,0,6,2,1,6]
+"classBalloonParty_1_1Game_1_1Cinematics_1_1PointFocus.html#af081cd43ab8f72d020dd8695486b1dd9":[5,0,0,6,1,16,2]
 };

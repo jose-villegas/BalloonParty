@@ -1,5 +1,12 @@
 var NAVTREEINDEX38 =
 {
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a4002c2612ae4f6869d641ee103c89658":[6,0,0,5,27,79],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a405471d4bd3dc8d2da3bfd154185db1a":[5,0,0,5,27,5],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a405471d4bd3dc8d2da3bfd154185db1a":[6,0,0,5,27,5],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a41c52f1622226b7f45512d3b24f0016b":[5,0,0,5,27,56],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a41c52f1622226b7f45512d3b24f0016b":[6,0,0,5,27,56],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a4bb6695bb61a8b99313fcf69a5b89146":[5,0,0,5,27,7],
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a4bb6695bb61a8b99313fcf69a5b89146":[6,0,0,5,27,7],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a4f1d50ba5c3051b41efe7b41a1614608":[5,0,0,5,27,47],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a4f1d50ba5c3051b41efe7b41a1614608":[6,0,0,5,27,47],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#a5207ac8d55d396379348a7093451e62a":[5,0,0,5,27,91],
@@ -242,12 +249,5 @@ var NAVTREEINDEX38 =
 "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#af66363757dcada3e2a81a848fbffe32e":[6,0,0,5,3,0,25],
 "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#afc0e93886b5f78c2e02fb2f2ac751ecc":[5,0,0,5,3,0,32],
 "classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#afc0e93886b5f78c2e02fb2f2ac751ecc":[6,0,0,5,3,0,32],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#aff6292ec59df6bf7d53b5d40c6658940":[5,0,0,5,3,0,11],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#aff6292ec59df6bf7d53b5d40c6658940":[6,0,0,5,3,0,11],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html":[5,0,0,5,3,0,0],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html":[6,0,0,5,3,0,0],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a036d0c341f44530a78b20e73e7ed74fd":[5,0,0,5,3,0,0,9],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a036d0c341f44530a78b20e73e7ed74fd":[6,0,0,5,3,0,0,9],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a17944ed864770454e2e56bdff72314a2":[5,0,0,5,3,0,0,6],
-"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow_1_1MapDescriptor.html#a17944ed864770454e2e56bdff72314a2":[6,0,0,5,3,0,0,6]
+"classBalloonParty_1_1Editor_1_1Maps_1_1GameRenderMapsWindow.html#aff6292ec59df6bf7d53b5d40c6658940":[5,0,0,5,3,0,11]
 };

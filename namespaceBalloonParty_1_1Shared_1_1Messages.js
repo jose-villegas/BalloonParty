@@ -23,6 +23,7 @@ var namespaceBalloonParty_1_1Shared_1_1Messages =
     [ "LevelUpFillTrailsMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpFillTrailsMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1LevelUpFillTrailsMessage" ],
     [ "OverflowHeartRequestedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1OverflowHeartRequestedMessage" ],
     [ "PierceDischargedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage" ],
+    [ "PierceWallReachedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1PierceWallReachedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1PierceWallReachedMessage" ],
     [ "ProgressBarCompletedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProgressBarCompletedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProgressBarCompletedMessage" ],
     [ "ProjectileBuffGainedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileBuffGainedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileBuffGainedMessage" ],
     [ "ProjectileCruiseEndedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseEndedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseEndedMessage" ],

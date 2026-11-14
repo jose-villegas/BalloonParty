@@ -1,5 +1,12 @@
 var NAVTREEINDEX26 =
 {
+"classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html#aab6eb3e904928d5a6ec70aaa720e2079":[6,0,0,3,8,5,17],
+"classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html#ac169f2d1728af08b7df9eff5883e0281":[5,0,0,3,8,5,1],
+"classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html#ac169f2d1728af08b7df9eff5883e0281":[6,0,0,3,8,5,1],
+"classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html#acad327320bff5323a50a2790eaf05795":[5,0,0,3,8,5,18],
+"classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html#acad327320bff5323a50a2790eaf05795":[6,0,0,3,8,5,18],
+"classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html#addff59992f3f90c413728466a5110d6f":[5,0,0,3,8,5,3],
+"classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html#addff59992f3f90c413728466a5110d6f":[6,0,0,3,8,5,3],
 "classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings.html":[5,0,0,3,8,6],
 "classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings.html":[6,0,0,3,8,6],
 "classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings.html#a08769f2e7eef9ebef685ee9435f615f1":[5,0,0,3,8,6,13],
@@ -242,12 +249,5 @@ var NAVTREEINDEX26 =
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#ae066120aa7742a410e1c0e7d332f4800":[6,0,0,3,9,16,18],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#affd1cf07455aa9127b9e5a55d07fddf9":[5,0,0,3,9,16,11],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#affd1cf07455aa9127b9e5a55d07fddf9":[6,0,0,3,9,16,11],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html":[5,0,0,3,9,17],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html":[6,0,0,3,9,17],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html#a0596b64672e9de76bb9deacab28d9e15":[5,0,0,3,9,17,9],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html#a0596b64672e9de76bb9deacab28d9e15":[6,0,0,3,9,17,9],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html#a1f5e5971a5b947811e0581189698b451":[5,0,0,3,9,17,10],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html#a1f5e5971a5b947811e0581189698b451":[6,0,0,3,9,17,10],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html#a234a32e6b05cb58bc4a80cd9e93ef0e4":[5,0,0,3,9,17,6],
-"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html#a234a32e6b05cb58bc4a80cd9e93ef0e4":[6,0,0,3,9,17,6]
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html":[5,0,0,3,9,17]
 };
