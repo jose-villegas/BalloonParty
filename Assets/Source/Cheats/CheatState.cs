@@ -39,6 +39,11 @@ namespace BalloonParty.Cheats
         /// schedule; read by <c>RunSeed.ResetRun</c>.</summary>
         public static bool KeepRunSeed;
 
+        /// <summary>One-shot: when not 0, the next run reset takes this seed instead of rolling one, then clears
+        /// this, so a staged scene deals the same board every time. Set by the scene stage
+        /// (<c>Editor/Staging</c>); read by <c>RunSeed.ResetRun</c>.</summary>
+        public static int ForcedRunSeed;
+
         /// <summary>Speed multiplier for the Realtime time-of-day clock (see <c>TimeOfDayClock</c>):
         /// 1 = the authored <c>SecondsPerCycle</c>, 0 = frozen, higher = faster. Set by
         /// <see cref="TimeOfDayCheat" />; read (under this guard) by the clock each tick.</summary>

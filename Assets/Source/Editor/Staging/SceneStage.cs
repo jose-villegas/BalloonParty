@@ -6,12 +6,14 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Balloon.View;
 using BalloonParty.Cheats;
 using BalloonParty.Cheats.Autoplay;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
+using BalloonParty.Configuration.Level;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game;
 using BalloonParty.Game.Level;
@@ -20,6 +22,8 @@ using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.SceneLight;
+using BalloonParty.Slots.Actor;
+using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using UnityEditor;
@@ -41,6 +45,7 @@ namespace BalloonParty.Editor.Staging
     {
         private const float LaunchTapDelay = 1.5f;
         private const int DefaultSeed = 4242;
+        private const int ScenarioSearchLevels = 500;
 
         private static readonly Regex RelativeInclude = new("#include\\s+\"((?:\\.\\./|\\./)[^\"]+)\"");
 
@@ -160,14 +165,71 @@ namespace BalloonParty.Editor.Staging
             return $"advancing {seconds:0.##} s";
         }
 
-        /// <summary>Starts the run again at <paramref name="level" />, keeping the run's seed.</summary>
-        public static string Restart(int level)
+        /// <summary>
+        ///     Deals a fresh board: the run restarted at <paramref name="level" /> (0 = the current one), or at the first
+        ///     level from there in <paramref name="scenario" /> (sky, meadow or water; empty = any), on run seed
+        ///     <paramref name="seed" /> (0 = keep the current one), which also seeds Unity's random, so the same call
+        ///     deals the same board. The board spawns over the next moments of game time (<see cref="Advance" />).
+        /// </summary>
+        public static string Deal(string scenario, int level, int seed)
         {
             ClearEffects();
-            CheatState.StartLevel = level;
-            CheatState.KeepRunSeed = true;
+            var runSeed = seed != 0 ? seed : Resolve<IRunSeed>().Value;
+            var start = level > 0 ? level : Resolve<ILevelProgress>().Level.Value;
+            if (!string.IsNullOrEmpty(scenario))
+            {
+                var kind = ParseScenario(scenario);
+                var pacing = Resolve<ILevelPacingConfiguration>();
+
+                // A stretch's start is where the scenario begins, so search from the level before.
+                start = JumpToScenarioCheat.NextStretchStart(l => pacing.ScenarioForLevel(l, runSeed), Math.Max(1, start - 1),
+                    kind, ScenarioSearchLevels);
+                if (start < 1)
+                {
+                    return $"error: no {kind} stretch in the {ScenarioSearchLevels} levels from {level}";
+                }
+            }
+
+            CheatState.StartLevel = start;
+            CheatState.ForcedRunSeed = runSeed;
+            UnityEngine.Random.InitState(runSeed);
             Resolve<RunController>().RestartRun();
-            return $"restarted at level {level}";
+            return $"dealt level {start} ({Resolve<ILevelPacingConfiguration>().ScenarioForLevel(start, runSeed)}), seed {runSeed}";
+        }
+
+        /// <summary>
+        ///     Takes kinds of things off the board at once, with no pop: <paramref name="what" /> is a comma list of
+        ///     <c>balloons</c>, <c>clouds</c>, <c>bushes</c>, <c>enemies</c> (deflectors, absorbers and gatekeepers),
+        ///     <c>obstacles</c> (all of those but the balloons), or a <see cref="GridActorType" /> by name.
+        /// </summary>
+        public static string Strip(string what)
+        {
+            var spawner = Resolve<StaticActorSpawner>();
+            var stripped = new List<string>();
+            foreach (var part in what.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                var name = part.Trim().ToLowerInvariant();
+                switch (name)
+                {
+                    case "balloons":
+                        Resolve<BalloonControllerRegistry>().ClearAll(false);
+                        break;
+                    case "obstacles":
+                        spawner.ClearStaticActors();
+                        break;
+                    default:
+                        foreach (var type in ActorTypes(name))
+                        {
+                            spawner.ClearStaticActors(type);
+                        }
+
+                        break;
+                }
+
+                stripped.Add(name);
+            }
+
+            return $"stripped {string.Join(", ", stripped)}";
         }
 
         /// <summary>Sets the time of day (the light's angle: 45 dawn, 135 noon, 225 dusk, 315 night) and stops the clock.</summary>
@@ -178,7 +240,7 @@ namespace BalloonParty.Editor.Staging
             return $"angle {degrees:0}";
         }
 
-        /// <summary>Every balloon on the board, one per line: type, slot, world position.</summary>
+        /// <summary>Every balloon and obstacle on the board, one per line: type, slot, world position.</summary>
         public static string List()
         {
             var lines = new StringBuilder();
@@ -196,6 +258,16 @@ namespace BalloonParty.Editor.Staging
             }
 
             var grid = Resolve<SlotGrid>();
+            foreach (var slot in grid.AllOccupiedSlots())
+            {
+                if (grid.At(slot) is IGridActorModel actor)
+                {
+                    var position = grid.IndexToWorldPosition(slot);
+                    lines.AppendLine(FormattableString.Invariant(
+                        $"{actor.ActorType} {slot.x},{slot.y} {position.x:0.00},{position.y:0.00}"));
+                }
+            }
+
             lines.Append($"grid {grid.Columns}x{grid.Rows}");
             return lines.ToString();
         }
@@ -412,6 +484,26 @@ namespace BalloonParty.Editor.Staging
             File.WriteAllBytes(path, pixels.EncodeToPNG());
             Object.DestroyImmediate(pixels);
             return $"wrote {cropWidth}x{cropHeight} to {path}";
+        }
+
+        private static ScenarioKind ParseScenario(string scenario)
+        {
+            return scenario.ToLowerInvariant() switch
+            {
+                "meadow" or "ground" => ScenarioKind.Ground,
+                _ => (ScenarioKind)Enum.Parse(typeof(ScenarioKind), scenario, true)
+            };
+        }
+
+        private static IEnumerable<GridActorType> ActorTypes(string name)
+        {
+            return name switch
+            {
+                "clouds" or "puffs" => new[] { GridActorType.Puff },
+                "bushes" => new[] { GridActorType.Bush },
+                "enemies" => new[] { GridActorType.Deflector, GridActorType.Absorber, GridActorType.Gatekeeper },
+                _ => new[] { (GridActorType)Enum.Parse(typeof(GridActorType), name, true) }
+            };
         }
 
         private static void AdvanceTick()

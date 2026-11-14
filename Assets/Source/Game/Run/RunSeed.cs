@@ -37,6 +37,14 @@ namespace BalloonParty.Game.Run
             }
 
 #if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
+            if (BalloonParty.Cheats.CheatState.ForcedRunSeed != 0)
+            {
+                _value = BalloonParty.Cheats.CheatState.ForcedRunSeed;
+                BalloonParty.Cheats.CheatState.ForcedRunSeed = 0;
+                Log.Info("RunSeed", $"Forced run seed {_value}");
+                return;
+            }
+
             if (BalloonParty.Cheats.CheatState.KeepRunSeed)
             {
                 BalloonParty.Cheats.CheatState.KeepRunSeed = false;

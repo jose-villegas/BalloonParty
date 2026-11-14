@@ -5,16 +5,14 @@ Drives Assets/Source/Editor/Staging/SceneStage.cs through the Unity CLI: holds t
 slots, places balloons, sets the time of day, pops a balloon or freezes its pop at a chosen moment,
 and renders the camera to a PNG. One command per call, or import it and script a whole scene:
 
-    python3 Tools/stage/stage.py begin --level 3
-    python3 Tools/stage/stage.py clear --slots 0,8:6,9
+    python3 Tools/stage/stage.py begin --scenario meadow --seed 7 --strip clouds,enemies --time night
     python3 Tools/stage/stage.py place Golden 4,9
-    python3 Tools/stage/stage.py time night
     python3 Tools/stage/stage.py freeze-pop Golden 0.2 --hide
     python3 Tools/stage/stage.py capture Logs/stage/golden-night.png --around Golden
 
     from stage import Stage
     stage = Stage()
-    stage.begin(level=3)
+    stage.begin(scenario="meadow", seed=7, strip=("clouds", "enemies"), time="night")
 
 The Editor must be open on the main checkout (it only sees committed, merged code). See
 Tools/stage/README.md.
@@ -69,8 +67,9 @@ class Stage:
     def status(self):
         return self.call("Status")
 
-    def begin(self, level=None, settle=2.5):
-        """Enters Play mode if needed, gets past the launch screen and holds the game; at `level`, restarts there."""
+    def begin(self, settle=2.5, **scene):
+        """Enters Play mode if needed, gets past the launch screen and holds the game, then sets the scene up as
+        `setup` does with the same keywords."""
         self.editor.wait_ready()
         # An unfocused Editor stops ticking the game; these keep it running.
         self.editor.command("editor", "set_auto_tick")
@@ -81,8 +80,19 @@ class Stage:
                 raise StageError("the game didn't come up")
             time.sleep(1.0)
             self.editor.wait_ready()
-        if level is not None:
-            self.restart(level, settle)
+        if scene:
+            self.setup(settle=settle, **scene)
+
+    def setup(self, scenario=None, level=None, seed=None, strip=(), time=None, settle=2.5):
+        """Builds the scene a test needs, each part a choice: a fresh board in a `scenario` (sky, meadow, water), at
+        a `level`, on a run `seed` (the same seed deals the same board); then `strip` takes kinds off it (balloons,
+        clouds, bushes, enemies, obstacles); then the `time` of day. Parts left out stay as they are."""
+        if scenario or level or seed:
+            self.deal(scenario, level, seed, settle)
+        if strip:
+            self.strip(*([strip] if isinstance(strip, str) else strip))
+        if time is not None:
+            self.time_of_day(time)
 
     def hold(self):
         return self.call("Hold")
@@ -96,9 +106,16 @@ class Stage:
         while "advancing" in self._quiet("Status"):
             time.sleep(POLL_SECONDS)
 
-    def restart(self, level, settle=2.5):
-        self.call("Restart", int(level))
+    def deal(self, scenario=None, level=None, seed=None, settle=2.5):
+        """A fresh board: the run restarted at `level` (default the current one) or the first level from there in
+        `scenario`, on run `seed` (default the current one), and `settle` seconds of game time for it to spawn."""
+        self.call("Deal", scenario or "", int(level or 0), int(seed or 0))
         self.advance(settle)
+
+    def strip(self, *kinds):
+        """Takes kinds of things off the board at once, with no pop: balloons, clouds, bushes, enemies (deflectors,
+        absorbers, gatekeepers), obstacles (all but the balloons), or a grid actor type by name."""
+        return self.call("Strip", ",".join(kinds))
 
     def time_of_day(self, when, settle=1.0):
         """Sets the light to `when`: an angle in degrees, or dawn, day, dusk or night."""
@@ -195,15 +212,21 @@ def main():
     parser.add_argument("--project", default=REPO_ROOT, help="the Unity project the Editor has open")
     sub = parser.add_subparsers(dest="command", required=True)
 
-    begin = sub.add_parser("begin", help="enter Play mode, get past the launch screen, hold the game")
-    begin.add_argument("--level", type=int, help="restart the run at this level")
+    scene = argparse.ArgumentParser(add_help=False)
+    scene.add_argument("--scenario", choices=("sky", "meadow", "water"), help="deal the first level in this scenario")
+    scene.add_argument("--level", type=int, help="deal this level (or search from it, with --scenario)")
+    scene.add_argument("--seed", type=int, help="the run seed: the same seed deals the same board")
+    scene.add_argument("--strip", default="",
+                       help="kinds to take off the board: balloons, clouds, bushes, enemies, obstacles (comma list)")
+    scene.add_argument("--time", help="the time of day: dawn, day, dusk, night, or an angle")
+    sub.add_parser("begin", parents=[scene],
+                   help="enter Play mode, get past the launch screen, hold the game, and set the scene up")
+    sub.add_parser("setup", parents=[scene], help="set the scene up: deal a board, strip kinds off it, set the time")
     sub.add_parser("status", help="where things stand")
     sub.add_parser("hold", help="stop game time")
     sub.add_parser("release", help="let game time run")
     advance = sub.add_parser("advance", help="let game time run a while, then hold again")
     advance.add_argument("seconds", type=float)
-    restart = sub.add_parser("restart", help="start the run again at a level")
-    restart.add_argument("level", type=int)
     when = sub.add_parser("time", help="set the time of day: dawn, day, dusk, night, or an angle")
     when.add_argument("when")
     sub.add_parser("list", help="the balloons on the board")
@@ -241,15 +264,18 @@ def main():
 
     stage = Stage(args.project)
     try:
-        if args.command == "begin":
-            stage.begin(args.level)
+        if args.command in ("begin", "setup"):
+            scene_args = dict(scenario=args.scenario, level=args.level, seed=args.seed,
+                              strip=[k for k in args.strip.split(",") if k], time=args.time)
+            if args.command == "begin":
+                stage.begin(**{k: v for k, v in scene_args.items() if v})
+            else:
+                stage.setup(**scene_args)
         elif args.command in ("status", "hold", "release", "clear-effects"):
             stage.call({"status": "Status", "hold": "Hold", "release": "Release",
                         "clear-effects": "ClearEffects"}[args.command])
         elif args.command == "advance":
             stage.advance(args.seconds)
-        elif args.command == "restart":
-            stage.restart(args.level)
         elif args.command == "time":
             stage.time_of_day(args.when)
         elif args.command == "list":

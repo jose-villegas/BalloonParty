@@ -1,16 +1,19 @@
 # Stage
 
-Puts a still scene together in the open Unity Editor, to judge a look without playing for it: a pop at
-each time of day, a balloon beside the ones around it, a shader not yet merged on a live board. It drives
-`SceneStage` (`Assets/Source/Editor/Staging/`) through the Unity CLI, one call per command, so a scene is a
-handful of commands or a short Python script.
+A peeking tool: puts a still scene together in the open Unity Editor, to judge a look without playing for
+it. A pop at each time of day, a balloon beside the ones around it, a scenario at night, a shader not yet
+merged on a live board. It drives `SceneStage` (`Assets/Source/Editor/Staging/`) through the Unity CLI, one
+call per command, so a scene is a handful of commands or a short Python script.
+
+The scene is built to fit what's being looked at, each part a choice: which scenario, level and seed (the
+same seed deals the same board), which kinds to take off the board (the balloons, the clouds, the bushes,
+the enemies), the time of day, and then exactly what to put on it.
 
 ```bash
-python3 Tools/stage/stage.py begin --level 3          # Play mode, past the launch screen, held at level 3
+python3 Tools/stage/stage.py begin --scenario meadow --seed 7 --strip clouds,enemies --time night
 python3 Tools/stage/stage.py list                     # what's on the board, by slot
-python3 Tools/stage/stage.py clear --slots 0,8:6,9    # pop a slot rectangle (and let the pops play out)
 python3 Tools/stage/stage.py place Golden 4,9         # a golden balloon in slot 4,9
-python3 Tools/stage/stage.py time night               # dawn, day, dusk, night, or an angle
+python3 Tools/stage/stage.py setup --strip balloons   # an empty board, the scenario's bushes kept
 python3 Tools/stage/stage.py freeze-pop Golden 0.2 --hide
 python3 Tools/stage/stage.py capture Logs/stage/golden-night.png --around Golden
 python3 Tools/stage/stage.py end                      # clear up, let the game run, leave Play mode
@@ -19,14 +22,14 @@ python3 Tools/stage/stage.py end                      # clear up, let the game r
 The Editor must be open on the main checkout: it only sees committed, merged code. `begin` enters Play
 mode itself and keeps the game ticking while the Editor is in the background. Between commands the game
 is **held**: time scale 0, the clock and the level-up stopped. So the board stays exactly as it was put,
-and only `advance`, `clear`, `pop --settle` and `restart` let game time run, for as long as they need.
+and only `advance`, `clear`, `pop --settle` and dealing a board let game time run, for as long as they need.
 
 | Command | Does |
 |---|---|
-| `begin [--level N]` | Play mode, past the launch screen, the clock and level-up stopped, held. With `--level`, the run restarted at that level |
+| `begin [scene options]` | Play mode, past the launch screen, the clock and level-up stopped, held; then the scene options, as `setup` |
+| `setup [--scenario S] [--level N] [--seed N] [--strip KINDS] [--time WHEN]` | Builds the scene, each part optional. `--scenario` (`sky`, `meadow`, `water`), `--level` and `--seed` deal a fresh board: the first level in the scenario from `--level`, on that run seed, so the same options deal the same board. `--strip` takes kinds off it at once, with no pop: `balloons`, `clouds`, `bushes`, `enemies` (deflectors, absorbers, gatekeepers), `obstacles` (everything but the balloons), or a grid actor type. `--time` as `time` |
 | `status` | `off`, `launch`, `loading`, or the level, `held` / `running` / `advancing`, and the light's angle |
 | `hold` / `release` / `advance S` | Game time off, on, or on for `S` seconds and then held |
-| `restart N` | The run again at level `N`, its seed kept |
 | `time WHEN` | The time of day: `dawn` (45), `day` (135), `dusk` (225), `night` (315), or an angle |
 | `list` | Every balloon's type, slot and world position, and the grid's size |
 | `clear --slots c0,r0:c1,r1` / `clear --around x,y [--radius r]` | Pops the balloons there and lets the pops play out |
@@ -49,9 +52,8 @@ import sys; sys.path.insert(0, "Tools/stage")
 from stage import Stage
 
 stage = Stage()
-stage.begin(level=3)
-stage.clear(slots=((0, 9), (6, 9)))
-stage.place("Unbreakable", (2, 9))
+stage.begin(scenario="sky", seed=7, strip=("balloons", "obstacles"))
+stage.place("Unbreakable", (2, 0))
 for when in ("dawn", "day", "dusk", "night"):
     stage.time_of_day(when)
     stage.freeze_pop("Unbreakable", 0.15, dy=0.9)

@@ -160,6 +160,23 @@ namespace BalloonParty.Slots.Actor
             }
         }
 
+        // One kind only, so the scene stage (Editor/Staging) can take the clouds off a board and leave its bushes.
+        internal void ClearStaticActors(GridActorType actorType)
+        {
+            if (!_poolsRegistered)
+            {
+                return;
+            }
+
+            foreach (var entry in _gridActorConfig.Entries)
+            {
+                if (entry.ActorType == actorType)
+                {
+                    ReturnActorsForEntry(entry);
+                }
+            }
+        }
+
         private void ReturnActorsForEntry(GridActorPrefabEntry entry)
         {
             for (var col = 0; col < _grid.Columns; col++)
