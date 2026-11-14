@@ -1,5 +1,6 @@
 var NAVTREEINDEX118 =
 {
+"structBalloonParty_1_1Solver_1_1ShotFlightSeed.html#a34938378528151c8c0d0f7fbbbeb3e06":[6,0,0,14,9,4],
 "structBalloonParty_1_1Solver_1_1ShotFlightSeed.html#a572f7e3a4851f17595235210e102cf35":[5,0,0,14,9,0],
 "structBalloonParty_1_1Solver_1_1ShotFlightSeed.html#a572f7e3a4851f17595235210e102cf35":[6,0,0,14,9,0],
 "structBalloonParty_1_1Solver_1_1ShotFlightSeed.html#a5d778593c1b50f24a8b5f7feb814f237":[5,0,0,14,9,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX118 =
 "structBalloonParty_1_1UI_1_1FormattedLabel.html#a818b5a1ba4565583826a8296e51fdc9c":[6,0,0,16,15,3],
 "structBalloonParty_1_1UI_1_1Score_1_1FlyingTrail_1_1MotionStyle.html":[5,0,0,16,7,1,0],
 "structBalloonParty_1_1UI_1_1Score_1_1FlyingTrail_1_1MotionStyle.html":[6,0,0,16,7,1,0],
-"structBalloonParty_1_1UI_1_1Score_1_1FlyingTrail_1_1MotionStyle.html#a0b6c25c7e2a64386334cd9bd84b06f11":[5,0,0,16,7,1,0,3],
-"structBalloonParty_1_1UI_1_1Score_1_1FlyingTrail_1_1MotionStyle.html#a0b6c25c7e2a64386334cd9bd84b06f11":[6,0,0,16,7,1,0,3]
+"structBalloonParty_1_1UI_1_1Score_1_1FlyingTrail_1_1MotionStyle.html#a0b6c25c7e2a64386334cd9bd84b06f11":[5,0,0,16,7,1,0,3]
 };

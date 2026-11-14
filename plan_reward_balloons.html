@@ -221,8 +221,27 @@ Phases</h2>
 </ol>
 <p>Each phase follows the per-phase review: implement, architect, test-everything and reviewer, then fixes, then sign-off.</p>
 <h2><a class="anchor" id="autotoc_md800"></a>
+Measured</h2>
+<p>The playtest bot's average player (<code>Tools/playtest/</code>, <code>--purple</code> and <code>--hearts</code>), in the Editor. It is a model of a player, not a person, so these numbers are for comparing tunings.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Session   </th><th class="markdownTableHeadNone">Golden placed / popped   </th><th class="markdownTableHeadNone">Heart placed / popped   </th><th class="markdownTableHeadNone">How it went    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">The seed's first purple level (15), 3 hearts   </td><td class="markdownTableBodyNone">1 / 0   </td><td class="markdownTableBodyNone">3 / 2   </td><td class="markdownTableBodyNone">Level 15 won in 102 s with 2 hearts lost, game over 18 s into level 16    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Its first purple level (13), 2 hearts   </td><td class="markdownTableBodyNone">1 / 0   </td><td class="markdownTableBodyNone">2 / 1   </td><td class="markdownTableBodyNone">Game over on level 13 after 83 s    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">One heart from level 1, 7 minutes   </td><td class="markdownTableBodyNone">0 / 0   </td><td class="markdownTableBodyNone">0 / 0   </td><td class="markdownTableBodyNone">The level-up refills had all 3 hearts back by level 3; no heart lost up to level 10   </td></tr>
+</table>
+<p>What it says:</p><ul>
+<li>The heart balloon comes where it's meant to, on a hard level after mid-level losses, and the average player catches most of them (3 of 5).</li>
+<li>Early on, the level-up refill heals faster than a heart balloon arrives, so a low-heart start barely sees one. That's fine: by then the help isn't needed.</li>
+<li>The golden balloon arrives on time, but the average player never broke it: only a piercing shot does, and this player doesn't seek one out. Whether that's too hard for a casual player is open (below).</li>
+</ul>
+<h2><a class="anchor" id="autotoc_md801"></a>
 Open</h2>
 <ul>
+<li>Whether the golden balloon should be easier to break for a player who doesn't hunt pierces. The average bot left it standing on both purple levels it played.</li>
 <li>Whether the card reveal should say where the card came from ("golden balloon!") in a heads-up.</li>
 <li>Whether a heart balloon should also drift, to make catching it a small skill test; it sits still in this plan.</li>
 <li>Before a third reward balloon: give the reward prefabs their own empty <code>RewardBalloonVariant</code> (the golden one borrows the tough variant and the heart the simple one, both doing nothing there), and let <code>RewardBalloonPayout</code> keep one map of the balloons it has paid instead of a field per type. </li>

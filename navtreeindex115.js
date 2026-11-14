@@ -1,5 +1,6 @@
 var NAVTREEINDEX115 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html#a13f7b309f23db4b1a3a517f59f37c6c8":[6,0,0,12,7,2,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html#a21868f8a92fb8bb98caf6d90ccb7a346":[5,0,0,12,7,2,5],
 "structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html#a21868f8a92fb8bb98caf6d90ccb7a346":[6,0,0,12,7,2,5],
 "structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html#a51557ddb782b91b25ae50d294248f6c4":[5,0,0,12,7,2,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX115 =
 "structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#a928aaee892766c709a9e8580c56a8c64":[6,0,0,12,7,38,2],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#abf14e538aa64959354cd5c867ed400ff":[5,0,0,12,7,38,3],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#abf14e538aa64959354cd5c867ed400ff":[6,0,0,12,7,38,3],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html":[5,0,0,12,7,39],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html":[6,0,0,12,7,39]
+"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html":[5,0,0,12,7,39]
 };

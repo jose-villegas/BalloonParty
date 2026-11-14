@@ -1,5 +1,6 @@
 var NAVTREEINDEX109 =
 {
+"structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html#a85018f1160dfba0b26c9b3e94f4ae421":[6,0,0,3,9,4,6],
 "structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html#a8e04d9998f03c186c0fcd2d098145efa":[5,0,0,3,9,4,5],
 "structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html#a8e04d9998f03c186c0fcd2d098145efa":[6,0,0,3,9,4,5],
 "structBalloonParty_1_1Configuration_1_1Level_1_1ContentWeightRamp.html#a91856e32b54c34494e7752cc2e713a87":[5,0,0,3,9,4,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX109 =
 "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html#af3de9ef536c08c53c7627583d5346f7d":[6,0,0,3,11,2,4],
 "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html#af5006f33328d2410c38e367033e2deb8":[5,0,0,3,11,2,6],
 "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html#af5006f33328d2410c38e367033e2deb8":[6,0,0,3,11,2,6],
-"structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry.html":[5,0,0,3,28],
-"structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry.html":[6,0,0,3,28]
+"structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry.html":[5,0,0,3,28]
 };

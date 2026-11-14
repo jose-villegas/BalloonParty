@@ -11,9 +11,9 @@ var searchData=
   ['3_203_20custom_20level_20editor_20window_20unity_20editor_8',['3.3 Custom Level Editor Window (Unity Editor)',['../plan_future_ideas.html#autotoc_md477',1,'']]],
   ['3_204_20level_20sequence_20integration_9',['3.4 Level Sequence Integration',['../plan_future_ideas.html#autotoc_md478',1,'']]],
   ['3_20architecture_10',['3. Architecture',['../plan_headsup.html#autotoc_md701',1,'']]],
-  ['3_20architecture_20decisions_20settled_11',['3. Architecture decisions (settled)',['../plan_shot_solver_accuracy.html#autotoc_md805',1,'']]],
+  ['3_20architecture_20decisions_20settled_11',['3. Architecture decisions (settled)',['../plan_shot_solver_accuracy.html#autotoc_md806',1,'']]],
   ['3_20assets_12',['3 Assets',['../plan_content_production.html',1,'Content Production Plan — Pre-8.3 Assets'],['../plan_content_production.html#autotoc_md410',1,'Content Production Plan — Pre-8.3 Assets']]],
-  ['3_20bubbles_20that_20build_20up_20on_20water_13',['3. Bubbles that build up on water',['../plan_water_scenario.html#autotoc_md877',1,'']]],
+  ['3_20bubbles_20that_20build_20up_20on_20water_13',['3. Bubbles that build up on water',['../plan_water_scenario.html#autotoc_md878',1,'']]],
   ['3_20clock_20turn_20pressure_20—_20score_20attack_20flavor_14',['12.3 Clock / turn pressure — score-attack flavor',['../plan_future_ideas.html#autotoc_md535',1,'']]],
   ['3_20color_20streak_20balancing_15',['2.3 Color Streak Balancing',['../plan_future_ideas.html#autotoc_md471',1,'']]],
   ['3_20custom_20level_20editor_20window_20unity_20editor_16',['3.3 Custom Level Editor Window (Unity Editor)',['../plan_future_ideas.html#autotoc_md477',1,'']]],
@@ -30,8 +30,8 @@ var searchData=
   ['3_20rules_27',['3 Rules',['../plan_card_reveal.html#autotoc_md375',1,'3. Rules'],['../plan_coins.html#autotoc_md385',1,'3. Rules']]],
   ['3_20suggested_20tier_20thresholds_28',['9.3 Suggested Tier Thresholds',['../plan_future_ideas.html#autotoc_md524',1,'']]],
   ['3_20what_20this_20deletes_29',['3. What this deletes',['../plan_level_up_timing.html#autotoc_md729',1,'']]],
-  ['33_20ms_20frame_30',['Performance (mobile, 120 Hz = 8.33 ms frame)',['../plan_terrain_biomes.html#autotoc_md833',1,'']]],
+  ['33_20ms_20frame_30',['Performance (mobile, 120 Hz = 8.33 ms frame)',['../plan_terrain_biomes.html#autotoc_md834',1,'']]],
   ['3_3a_20architectural_20gated_20on_20step_200_20evidence_31',['Tier 3: Architectural (gated on Step 0 evidence)',['../plan_performance_recovery.html#autotoc_md781',1,'']]],
-  ['3_3a_20docs_20and_20playtest_32',['Phase 3: Docs and playtest',['../plan_unbreakable_formations.html#autotoc_md867',1,'']]],
+  ['3_3a_20docs_20and_20playtest_32',['Phase 3: Docs and playtest',['../plan_unbreakable_formations.html#autotoc_md868',1,'']]],
   ['3_3a_20spawn_20clock_33',['6. Phase 3: spawn clock',['../plan_fast_paced.html#autotoc_md451',1,'']]]
 ];

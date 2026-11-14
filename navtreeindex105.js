@@ -243,11 +243,11 @@ var NAVTREEINDEX105 =
 "plan_reward_balloons.html#autotoc_md798":[3,22,0,3],
 "plan_reward_balloons.html#autotoc_md799":[3,22,0,4],
 "plan_reward_balloons.html#autotoc_md800":[3,22,0,5],
+"plan_reward_balloons.html#autotoc_md801":[3,22,0,6],
 "plan_shot_solver_accuracy.html":[3,14],
-"plan_shot_solver_accuracy.html#autotoc_md801":[3,14,0],
-"plan_shot_solver_accuracy.html#autotoc_md803":[3,14,0,0],
-"plan_shot_solver_accuracy.html#autotoc_md804":[3,14,0,1],
-"plan_shot_solver_accuracy.html#autotoc_md805":[3,14,0,2],
-"plan_shot_solver_accuracy.html#autotoc_md806":[3,14,0,3],
-"plan_shot_solver_accuracy.html#autotoc_md807":[3,14,0,3,0]
+"plan_shot_solver_accuracy.html#autotoc_md802":[3,14,0],
+"plan_shot_solver_accuracy.html#autotoc_md804":[3,14,0,0],
+"plan_shot_solver_accuracy.html#autotoc_md805":[3,14,0,1],
+"plan_shot_solver_accuracy.html#autotoc_md806":[3,14,0,2],
+"plan_shot_solver_accuracy.html#autotoc_md807":[3,14,0,3]
 };

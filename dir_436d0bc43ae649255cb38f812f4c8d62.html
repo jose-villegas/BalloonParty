@@ -133,7 +133,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Plays the card reveal on a canvas of its own, drawn in the scene and lit with the board. A balloon rises, a pushpin pricks it, and it pops. Two pieces of ribbon fly off it: one carries the won card's title, the other says what the card does. On a level-up they drift while the level's ascent plays and are gone just before the next level settles. Which reveal plays, and when, is decided by <code>Game/CardReveal/</code>; this folder only plays it. The design is in <code><a class="el" href="PLAN-CardReveal_8md.html">Plans/PLAN-CardReveal.md</a></code>.</p>
-<h1><a class="anchor" id="autotoc_md1101"></a>
+<h1><a class="anchor" id="autotoc_md1102"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -149,7 +149,7 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>RibbonStrike</code>   </td><td class="markdownTableBodyNone">A pen stroke through a ribbon's line, a UI graphic under the text: bent by the ribbon's wave so it rides the folds with the letters, rising a little toward its end like a quick stroke, and dissolving with the ribbon   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md1102"></a>
+<h1><a class="anchor" id="autotoc_md1103"></a>
 A reveal, step by step</h1>
 <p>All on unscaled time, so slow-motion beats don't stretch it.</p>
 <ol type="1">
@@ -166,7 +166,7 @@ A reveal, step by step</h1>
 <li><b>Either way</b>, they fly at least <code>RibbonMinimumSeconds</code>, so they can always be read.</li>
 </ul>
 <p><code>RibbonsGoneAt</code> works out that moment and is tested. It is checked again every frame until the ribbons leave, since the ascent can begin after they are out. Once they have started to leave they don't come back: an ascent held up for more than about 2 s after the pop (waiting on another cinematic, or a board overflow) finds them already gone.</p>
-<h1><a class="anchor" id="autotoc_md1103"></a>
+<h1><a class="anchor" id="autotoc_md1104"></a>
 How the balloon is drawn</h1>
 <p>The pop is baked (<code>Tools/art/balloon_pop</code>), but not as pictures. Each frame holds the rubber's surface: its normal as the camera saw it, and its ambient occlusion. <code>BalloonParty/Sprite/LitFlipbook</code> cel shades it with the live scene light: its direction, colour and dimming, taken the way the balloons' bodies take them. So the reveal sits in the board's light, and in its flat, toon style:</p>
 <ul>
@@ -190,7 +190,7 @@ How the balloon is drawn</h1>
 </table>
 <p>While the balloon rises the two layers part a little, the front leading and the back lagging (<code>Parallax</code>). They meet at its place, so the depth reads even before it pops.</p>
 <p>The pushpin is <code>Pin</code>, beside <code>Balloon</code> and after it, so it draws over the rubber and the ribbons: a <code>Needle</code> and a <code>Head</code> image, cut from the two cells of its sheet (<code>pin.png</code>, the head on the left, the needle on the right, in the top half as a pop's front layer) on <code>CardRevealPin</code>, the rubber's shader without its glow (plastic and steel let no light through). The view lays it out from the settings: its size (<code>PinSize</code>, in frame heights, so it is drawn to the balloon's scale), hung from its needle's tip (<code>PinTip</code>), and placed by the puncture from the balloon's place, not its layers, since it goes in as the balloon rests.</p>
-<h1><a class="anchor" id="autotoc_md1104"></a>
+<h1><a class="anchor" id="autotoc_md1105"></a>
 In the game's light</h1>
 <p>The reveal is drawn in the scene, not over it, so it takes part in the game's lighting as the board's balloons do:</p>
 <ul>
@@ -200,7 +200,7 @@ In the game's light</h1>
 <li><b>The pin</b> is lit by the field too, as the rubber is.</li>
 </ul>
 <p>The drop shadows still fall along the time-of-day light only, so they don't swing toward a local light.</p>
-<h1><a class="anchor" id="autotoc_md1105"></a>
+<h1><a class="anchor" id="autotoc_md1106"></a>
 Building it</h1>
 <p><code>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; CardReveal &gt; Build Card Reveal</code> does all of this:</p>
 <ul>
