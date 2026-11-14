@@ -1,12 +1,14 @@
+using System.Collections.Generic;
 using BalloonParty.Shared.Pool;
 using UnityEngine;
 
 namespace BalloonParty.Item.Snipe
 {
     /// <summary>
-    ///     One pencil stroke along a Snipe lance's run: a two-point <see cref="LineRenderer" /> carrying the
-    ///     aim trace's smoke-and-glitter material, so the shot's path reads in the same carbon hand as the
-    ///     cannon's aim. Driven entirely by <see cref="SnipeLanceLines" />; it only renders what it is told.
+    ///     One pencil stroke along a Snipe lance's run, carrying the aim trace's smoke-and-glitter material so
+    ///     the shot's path reads in the same carbon hand as the cannon's aim. The line is built from chunks of
+    ///     a fixed length, each its own two-point <see cref="LineRenderer" />, so the erase can wipe them away
+    ///     one at a time. Driven entirely by <see cref="SnipeLanceLines" />; it only renders what it is told.
     /// </summary>
     [RequireComponent(typeof(LineRenderer))]
     internal sealed class SnipeLanceLineView : MonoBehaviour, IPoolable
@@ -16,16 +18,28 @@ namespace BalloonParty.Item.Snipe
         [Tooltip("World units a second the pencil tip runs along the lance's run, behind the shot and on to the wall.")]
         [SerializeField] [Min(0f)] private float _tipSpeed = 12f;
 
-        [Tooltip("Seconds the finished line stays at full strength.")]
-        [SerializeField] [Min(0f)] private float _holdSeconds = 0.7f;
+        [Tooltip("Seconds the finished line stays whole before it starts being erased.")]
+        [SerializeField] [Min(0f)] private float _holdSeconds = 1f;
 
-        [Tooltip("Seconds the line takes to fade out after the hold.")]
-        [SerializeField] [Min(0f)] private float _fadeSeconds = 0.6f;
+        [Tooltip("Seconds the erase takes, from the first chunk wiped to the last one gone.")]
+        [SerializeField] [Min(0f)] private float _eraseSeconds = 1.4f;
+
+        [Tooltip("World length of one chunk the erase wipes away on its own.")]
+        [SerializeField] [Min(0.05f)] private float _chunkLength = 0.7f;
+
+        [Tooltip("Share of the erase each chunk takes to wipe; the rest staggers their turns.")]
+        [SerializeField] [Range(0f, 1f)] private float _chunkEraseShare = 0.3f;
+
+        // The prefab's own renderer is the first chunk; the rest are made from it as longer lines need them,
+        // and stay with the pooled line from then on.
+        private readonly List<LineRenderer> _chunks = new();
+        private readonly List<int> _turns = new();
 
         private Vector3 _from;
         private Color _color = Color.white;
+        private bool _shuffled;
 
-        internal SnipeLanceStrokeTiming Timing => new(_tipSpeed, _holdSeconds, _fadeSeconds);
+        internal SnipeLanceStrokeTiming Timing => new(_tipSpeed, _holdSeconds, _eraseSeconds);
 
         private void Awake()
         {
@@ -35,43 +49,145 @@ namespace BalloonParty.Item.Snipe
             }
 
             _line.useWorldSpace = true;
-            _line.positionCount = 0;
+            _chunks.Add(_line);
+            HideAll();
         }
 
         public void OnSpawned()
         {
-            _line.positionCount = 0;
+            HideAll();
         }
 
         public void OnDespawned()
         {
-            _line.positionCount = 0;
+            HideAll();
         }
 
         internal void Begin(Vector3 from, Color color)
         {
             _from = from;
             _color = color;
-            _line.positionCount = 0;
+            _shuffled = false;
+            HideAll();
         }
 
-        /// <param name="tip">Where the pencil tip is now, on the run.</param>
-        /// <param name="alpha">The whole stroke's opacity, multiplied onto the colour's own.</param>
-        internal void Render(Vector3 tip, float alpha)
+        /// <param name="end">The run's end now: the shot while it flies, the wall once reached.</param>
+        /// <param name="drawn">How far along the run the pencil tip has drawn, in world units.</param>
+        /// <param name="erased">How far the erase has got, 0 (untouched) to 1 (gone).</param>
+        internal void Render(Vector3 end, float drawn, float erased)
         {
-            if (alpha <= 0f || (tip - _from).sqrMagnitude <= 0f)
+            var run = end - _from;
+            var length = run.magnitude;
+            drawn = Mathf.Min(drawn, length);
+            if (drawn <= 0f || erased >= 1f)
             {
-                _line.positionCount = 0;
+                HideAll();
                 return;
             }
 
-            var color = _color;
-            color.a *= alpha;
-            _line.startColor = color;
-            _line.endColor = color;
-            _line.positionCount = 2;
-            _line.SetPosition(0, _from);
-            _line.SetPosition(1, tip);
+            var direction = run / length;
+            var count = Mathf.CeilToInt(drawn / _chunkLength);
+            EnsureChunks(count);
+            if (erased > 0f && !_shuffled)
+            {
+                ShuffleTurns(count);
+                _shuffled = true;
+            }
+
+            for (var i = 0; i < _chunks.Count; i++)
+            {
+                var chunk = _chunks[i];
+                if (i >= count)
+                {
+                    chunk.positionCount = 0;
+                    continue;
+                }
+
+                var wiped = erased > 0f ? SnipeLanceErase.ChunkErased(erased, _turns[i], count, _chunkEraseShare) : 0f;
+                if (wiped >= 1f)
+                {
+                    chunk.positionCount = 0;
+                    continue;
+                }
+
+                // Each chunk keeps its start and is wiped back toward it: the material tiles from a line's
+                // start, so a moving start would slide the glitter under the eraser.
+                var start = i * _chunkLength;
+                var stop = Mathf.Min(start + _chunkLength, drawn);
+                stop = Mathf.Lerp(stop, start, 1f - ((1f - wiped) * (1f - wiped)));
+                if (stop <= start)
+                {
+                    chunk.positionCount = 0;
+                    continue;
+                }
+
+                var color = _color;
+                color.a *= 1f - (wiped * wiped);
+                chunk.startColor = color;
+                chunk.endColor = color;
+                chunk.positionCount = 2;
+                chunk.SetPosition(0, _from + (direction * start));
+                chunk.SetPosition(1, _from + (direction * stop));
+            }
+        }
+
+        private void HideAll()
+        {
+            foreach (var chunk in _chunks)
+            {
+                chunk.positionCount = 0;
+            }
+        }
+
+        private void EnsureChunks(int count)
+        {
+            while (_chunks.Count < count)
+            {
+                _chunks.Add(CreateChunk(_chunks.Count));
+            }
+
+            while (_turns.Count < _chunks.Count)
+            {
+                _turns.Add(_turns.Count);
+            }
+        }
+
+        private LineRenderer CreateChunk(int index)
+        {
+            var go = new GameObject($"Chunk{index}") { layer = gameObject.layer };
+            go.transform.SetParent(transform, false);
+            var chunk = go.AddComponent<LineRenderer>();
+            chunk.useWorldSpace = true;
+            chunk.sharedMaterials = _line.sharedMaterials;
+            chunk.widthCurve = _line.widthCurve;
+            chunk.widthMultiplier = _line.widthMultiplier;
+            chunk.textureMode = _line.textureMode;
+            chunk.textureScale = _line.textureScale;
+            chunk.numCapVertices = _line.numCapVertices;
+            chunk.numCornerVertices = _line.numCornerVertices;
+            chunk.alignment = _line.alignment;
+            chunk.shadowCastingMode = _line.shadowCastingMode;
+            chunk.receiveShadows = false;
+            chunk.lightProbeUsage = _line.lightProbeUsage;
+            chunk.reflectionProbeUsage = _line.reflectionProbeUsage;
+            chunk.sortingLayerID = _line.sortingLayerID;
+            chunk.sortingOrder = _line.sortingOrder;
+            chunk.positionCount = 0;
+            return chunk;
+        }
+
+        private void ShuffleTurns(int count)
+        {
+            for (var i = 0; i < count; i++)
+            {
+                _turns[i] = i;
+            }
+
+            for (var i = count - 1; i > 0; i--)
+            {
+                var j = Random.Range(0, i + 1);
+                (_turns[i], _turns[j]) = (_turns[j], _turns[i]);
+            }
         }
     }
 }

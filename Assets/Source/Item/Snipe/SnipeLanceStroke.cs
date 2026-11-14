@@ -7,21 +7,21 @@ namespace BalloonParty.Item.Snipe
     {
         internal readonly float TipSpeed;
         internal readonly float HoldSeconds;
-        internal readonly float FadeSeconds;
+        internal readonly float EraseSeconds;
 
         /// <param name="tipSpeed">World units a second the pencil tip runs; 0 or less draws the run at once.</param>
-        internal SnipeLanceStrokeTiming(float tipSpeed, float holdSeconds, float fadeSeconds)
+        internal SnipeLanceStrokeTiming(float tipSpeed, float holdSeconds, float eraseSeconds)
         {
             TipSpeed = Mathf.Max(0f, tipSpeed);
             HoldSeconds = Mathf.Max(0f, holdSeconds);
-            FadeSeconds = Mathf.Max(0f, fadeSeconds);
+            EraseSeconds = Mathf.Max(0f, eraseSeconds);
         }
     }
 
     /// <summary>
     ///     One pencil stroke's progress: the tip runs at a steady speed toward the end of the run, never past
     ///     it. The end can still be moving (the shot that is drawing it is still flying), so the stroke only
-    ///     holds and fades once the run is closed and the tip has reached its end.
+    ///     holds and then gets erased once the run is closed and the tip has reached its end.
     /// </summary>
     internal struct SnipeLanceStroke
     {
@@ -34,10 +34,10 @@ namespace BalloonParty.Item.Snipe
 
         /// <param name="length">The run's length so far: up to the shot while it flies, then up to its wall.</param>
         /// <param name="closed">Whether the run has ended, so <paramref name="length" /> won't grow again.</param>
-        /// <param name="alpha">The whole stroke's opacity.</param>
-        /// <returns>False once the stroke has fully faded and its line can go back to the pool.</returns>
+        /// <param name="erased">How far the erase has got, 0 (untouched) to 1 (gone).</param>
+        /// <returns>False once the stroke is fully erased and its line can go back to the pool.</returns>
         internal bool Advance(float deltaTime, float length, bool closed, in SnipeLanceStrokeTiming timing,
-            out float alpha)
+            out float erased)
         {
             length = Mathf.Max(0f, length);
             _drawn = timing.TipSpeed > 0f ? Mathf.Min(_drawn + (timing.TipSpeed * deltaTime), length) : length;
@@ -51,14 +51,43 @@ namespace BalloonParty.Item.Snipe
                 _reached = true;
             }
 
-            var fadeT = !_reached || _sinceReached < timing.HoldSeconds
+            erased = !_reached || _sinceReached < timing.HoldSeconds
                 ? 0f
-                : timing.FadeSeconds > 0f
-                    ? Mathf.Clamp01((_sinceReached - timing.HoldSeconds) / timing.FadeSeconds)
+                : timing.EraseSeconds > 0f
+                    ? Mathf.Clamp01((_sinceReached - timing.HoldSeconds) / timing.EraseSeconds)
                     : 1f;
-            alpha = 1f - fadeT;
 
-            return alpha > 0f;
+            return erased < 1f;
+        }
+    }
+
+    /// <summary>
+    ///     The erase's order: the finished line is cut into chunks, and each is wiped away in its own slice of
+    ///     the erase, the chunks taking their turn in a shuffled order, so the line is cleaned off piece by
+    ///     piece rather than fading as one.
+    /// </summary>
+    internal static class SnipeLanceErase
+    {
+        /// <param name="erased">The whole erase's progress, 0 to 1.</param>
+        /// <param name="turn">The chunk's place in the erase order, 0 first.</param>
+        /// <param name="chunkCount">How many chunks the line was cut into.</param>
+        /// <param name="chunkShare">The share of the erase each chunk takes to wipe; above 1/count, turns overlap.</param>
+        /// <returns>How far that chunk is wiped, 0 (whole) to 1 (gone).</returns>
+        internal static float ChunkErased(float erased, int turn, int chunkCount, float chunkShare)
+        {
+            if (chunkCount <= 1)
+            {
+                return Mathf.Clamp01(erased);
+            }
+
+            var share = Mathf.Clamp01(chunkShare);
+            var start = turn / (float)(chunkCount - 1) * (1f - share);
+            if (share <= 0f)
+            {
+                return erased >= start ? 1f : 0f;
+            }
+
+            return Mathf.Clamp01((erased - start) / share);
         }
     }
 }

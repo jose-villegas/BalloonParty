@@ -18,7 +18,7 @@ namespace BalloonParty.Item.Snipe
     ///     the lance armed (or at the last wall it carried the lance past). The pencil starts the moment the
     ///     run is sure to discharge, when the lance plows its first tough, and its tip runs behind the shot
     ///     at a steady speed and on to the wall, so the line is seen drawing across the board; then it holds
-    ///     and fades. Cruise-earned pierces draw nothing: only a Snipe opens a run.
+    ///     and is erased chunk by chunk. Cruise-earned pierces draw nothing: only a Snipe opens a run.
     /// </summary>
     internal sealed class SnipeLanceLines : ISnipeLanceArming, IStartable, ITickable, IDisposable
     {
@@ -101,9 +101,9 @@ namespace BalloonParty.Item.Snipe
                     stroke.End = shotPosition;
                 }
 
-                if (stroke.Progress.Advance(deltaTime, stroke.Length, stroke.Closed, stroke.Line.Timing, out var alpha))
+                if (stroke.Progress.Advance(deltaTime, stroke.Length, stroke.Closed, stroke.Line.Timing, out var erased))
                 {
-                    stroke.Line.Render(stroke.Tip, alpha);
+                    stroke.Line.Render(stroke.End, stroke.Progress.Drawn, erased);
                     _strokes[i] = stroke;
                     continue;
                 }
@@ -161,7 +161,7 @@ namespace BalloonParty.Item.Snipe
             if (drawing >= 0)
             {
                 // Not drawing on means every plowed tough had already left the board, so nothing shattered
-                // here: the pencil stops where it is and the line fades.
+                // here: the pencil stops where it is and the line is erased.
                 var stroke = _strokes[drawing];
                 stroke.End = draws ? msg.Position : stroke.Tip;
                 stroke.Closed = true;

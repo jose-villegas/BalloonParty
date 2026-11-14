@@ -14,9 +14,9 @@ namespace BalloonParty.Tests.Item
         {
             var stroke = new SnipeLanceStroke();
 
-            Assert.IsTrue(stroke.Advance(0.1f, 5f, closed: true, Timing, out var alpha));
+            Assert.IsTrue(stroke.Advance(0.1f, 5f, closed: true, Timing, out var erased));
             Assert.AreEqual(1f, stroke.Drawn, 1e-5f);
-            Assert.AreEqual(1f, alpha, 1e-5f);
+            Assert.AreEqual(0f, erased, 1e-5f);
         }
 
         // The end is the flying shot: the pencil follows it, never ahead of it.
@@ -31,14 +31,14 @@ namespace BalloonParty.Tests.Item
         }
 
         [Test]
-        public void Advance_OpenRun_CaughtUpWithTheShot_NeverFades()
+        public void Advance_OpenRun_CaughtUpWithTheShot_NeverErased()
         {
             var stroke = new SnipeLanceStroke();
 
             for (var i = 0; i < 20; i++)
             {
-                stroke.Advance(0.5f, 2f, closed: false, Timing, out var alpha);
-                Assert.AreEqual(1f, alpha, 1e-5f);
+                stroke.Advance(0.5f, 2f, closed: false, Timing, out var erased);
+                Assert.AreEqual(0f, erased, 1e-5f);
             }
         }
 
@@ -55,37 +55,37 @@ namespace BalloonParty.Tests.Item
 
         // The wall closes the run while the tip is still behind: it draws on to the wall before the hold.
         [Test]
-        public void Advance_ClosedWhileBehind_DrawsOnToTheWallAtFullStrength()
+        public void Advance_ClosedWhileBehind_DrawsOnToTheWallUntouched()
         {
             var stroke = new SnipeLanceStroke();
             stroke.Advance(0.1f, 4f, closed: false, Timing, out _);
 
-            Assert.IsTrue(stroke.Advance(0.2f, 4f, closed: true, Timing, out var alpha));
+            Assert.IsTrue(stroke.Advance(0.2f, 4f, closed: true, Timing, out var erased));
             Assert.AreEqual(3f, stroke.Drawn, 1e-5f);
-            Assert.AreEqual(1f, alpha, 1e-5f);
+            Assert.AreEqual(0f, erased, 1e-5f);
         }
 
         [Test]
-        public void Advance_ReachedTheWall_HoldsThenFades()
+        public void Advance_ReachedTheWall_HoldsThenErases()
         {
             var stroke = new SnipeLanceStroke();
             stroke.Advance(0.1f, 1f, closed: true, Timing, out _);
 
-            stroke.Advance(0.5f, 1f, closed: true, Timing, out var held);
-            stroke.Advance(0.2f, 1f, closed: true, Timing, out var fading);
+            stroke.Advance(0.5f, 1f, closed: true, Timing, out var holding);
+            stroke.Advance(0.2f, 1f, closed: true, Timing, out var erasing);
 
-            Assert.AreEqual(1f, held, 1e-5f);
-            Assert.AreEqual(0.5f, fading, 1e-4f);
+            Assert.AreEqual(0f, holding, 1e-5f);
+            Assert.AreEqual(0.5f, erasing, 1e-4f);
         }
 
         [Test]
-        public void Advance_PastTheFade_FinishedAndInvisible()
+        public void Advance_PastTheErase_FinishedAndGone()
         {
             var stroke = new SnipeLanceStroke();
             stroke.Advance(0.1f, 1f, closed: true, Timing, out _);
 
-            Assert.IsFalse(stroke.Advance(1f, 1f, closed: true, Timing, out var alpha));
-            Assert.AreEqual(0f, alpha, 1e-5f);
+            Assert.IsFalse(stroke.Advance(1f, 1f, closed: true, Timing, out var erased));
+            Assert.AreEqual(1f, erased, 1e-5f);
         }
 
         [Test]
@@ -96,6 +96,33 @@ namespace BalloonParty.Tests.Item
             stroke.Advance(0f, 5f, closed: false, new SnipeLanceStrokeTiming(0f, 0.5f, 0.4f), out _);
 
             Assert.AreEqual(5f, stroke.Drawn, 1e-5f);
+        }
+
+        [Test]
+        public void ChunkErased_FirstTurn_WipesAsTheEraseStarts()
+        {
+            Assert.Greater(SnipeLanceErase.ChunkErased(0.1f, 0, 5, 0.3f), 0f);
+        }
+
+        [Test]
+        public void ChunkErased_LastTurn_UntouchedUntilLateThenGoneAtTheEnd()
+        {
+            Assert.AreEqual(0f, SnipeLanceErase.ChunkErased(0.6f, 4, 5, 0.3f), 1e-5f);
+            Assert.AreEqual(1f, SnipeLanceErase.ChunkErased(1f, 4, 5, 0.3f), 1e-5f);
+        }
+
+        // Piece by piece: midway, earlier turns are gone while later ones are still whole.
+        [Test]
+        public void ChunkErased_Midway_EarlierTurnsGoneLaterOnesWhole()
+        {
+            Assert.AreEqual(1f, SnipeLanceErase.ChunkErased(0.5f, 0, 5, 0.3f), 1e-5f);
+            Assert.AreEqual(0f, SnipeLanceErase.ChunkErased(0.5f, 3, 5, 0.3f), 1e-5f);
+        }
+
+        [Test]
+        public void ChunkErased_OneChunk_FollowsTheWholeErase()
+        {
+            Assert.AreEqual(0.4f, SnipeLanceErase.ChunkErased(0.4f, 0, 1, 0.3f), 1e-5f);
         }
     }
 }
