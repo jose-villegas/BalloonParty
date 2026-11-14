@@ -1,5 +1,16 @@
 var NAVTREEINDEX117 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#a163ec43120216168d81ece78d798a20c":[5,0,0,12,7,39,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#a163ec43120216168d81ece78d798a20c":[6,0,0,12,7,39,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#a732c406fea11979499bad7b692f1f1d4":[5,0,0,12,7,39,1],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#a732c406fea11979499bad7b692f1f1d4":[6,0,0,12,7,39,1],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#a928aaee892766c709a9e8580c56a8c64":[5,0,0,12,7,39,2],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#a928aaee892766c709a9e8580c56a8c64":[6,0,0,12,7,39,2],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#abf14e538aa64959354cd5c867ed400ff":[5,0,0,12,7,39,3],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#abf14e538aa64959354cd5c867ed400ff":[6,0,0,12,7,39,3],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html":[5,0,0,12,7,40],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html":[6,0,0,12,7,40],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html#a43d72896e8d3bee32bd3fa4671efd059":[5,0,0,12,7,40,0],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html#a43d72896e8d3bee32bd3fa4671efd059":[6,0,0,12,7,40,0],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html#aaf6c4dae95498d1ab6d33531183844bb":[5,0,0,12,7,40,2],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html#aaf6c4dae95498d1ab6d33531183844bb":[6,0,0,12,7,40,2],
@@ -238,16 +249,5 @@ var NAVTREEINDEX117 =
 "structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1PendingSpeck.html#a98cc30ad4a746d0a5b04c90c35f660b3":[5,0,0,13,0,18,0,2],
 "structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1PendingSpeck.html#a98cc30ad4a746d0a5b04c90c35f660b3":[6,0,0,13,0,18,0,2],
 "structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1PendingSpeck.html#a992dbe4a2435edc778a2b8c5aebc7af3":[5,0,0,13,0,18,0,0],
-"structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1PendingSpeck.html#a992dbe4a2435edc778a2b8c5aebc7af3":[6,0,0,13,0,18,0,0],
-"structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1Speck.html":[5,0,0,13,0,18,1],
-"structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1Speck.html":[6,0,0,13,0,18,1],
-"structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1Speck.html#a11b6580ea95ef34860919067721612f2":[5,0,0,13,0,18,1,1],
-"structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1Speck.html#a11b6580ea95ef34860919067721612f2":[6,0,0,13,0,18,1,1],
-"structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1Speck.html#a3115e1ae4a97e3ceccf458d3e5f648da":[5,0,0,13,0,18,1,8],
-"structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1Speck.html#a3115e1ae4a97e3ceccf458d3e5f648da":[6,0,0,13,0,18,1,8],
-"structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1Speck.html#a549ac666a56cb06b2cb6dd5ce7d90a15":[5,0,0,13,0,18,1,4],
-"structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1Speck.html#a549ac666a56cb06b2cb6dd5ce7d90a15":[6,0,0,13,0,18,1,4],
-"structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1Speck.html#a8a5ec70b87e3e8f8ae5206ddd055e367":[5,0,0,13,0,18,1,6],
-"structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1Speck.html#a8a5ec70b87e3e8f8ae5206ddd055e367":[6,0,0,13,0,18,1,6],
-"structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1Speck.html#a985811a54ddc377984ebb6d0babfe5ea":[5,0,0,13,0,18,1,3]
+"structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1PendingSpeck.html#a992dbe4a2435edc778a2b8c5aebc7af3":[6,0,0,13,0,18,0,0]
 };

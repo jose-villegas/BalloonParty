@@ -1,5 +1,16 @@
 var NAVTREEINDEX107 =
 {
+"plan_unbreakable_formations.html":[3,1],
+"plan_unbreakable_formations.html#autotoc_md844":[3,1,0],
+"plan_unbreakable_formations.html#autotoc_md846":[3,1,0,0],
+"plan_unbreakable_formations.html#autotoc_md848":[3,1,0,1],
+"plan_unbreakable_formations.html#autotoc_md850":[3,1,0,2],
+"plan_unbreakable_formations.html#autotoc_md852":[3,1,0,3],
+"plan_unbreakable_formations.html#autotoc_md854":[3,1,0,4],
+"plan_unbreakable_formations.html#autotoc_md855":[3,1,0,4,0],
+"plan_unbreakable_formations.html#autotoc_md856":[3,1,0,4,1],
+"plan_unbreakable_formations.html#autotoc_md857":[3,1,0,4,2],
+"plan_unbreakable_formations.html#autotoc_md858":[3,1,0,4,3],
 "plan_unbreakable_formations.html#autotoc_md860":[3,1,0,5],
 "plan_unbreakable_formations.html#autotoc_md861":[3,1,0,6],
 "plan_unbreakable_formations.html#autotoc_md863":[3,1,0,7],
@@ -238,16 +249,5 @@ var NAVTREEINDEX107 =
 "structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Node.html#a871144ee3eaf82d199b68159de723658":[5,0,0,1,0,12,1,1],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Node.html#a871144ee3eaf82d199b68159de723658":[6,0,0,1,0,12,1,1],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Node.html#ad03d76c3ca0b6973498a3f25d604f3ea":[5,0,0,1,0,12,1,2],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Node.html#ad03d76c3ca0b6973498a3f25d604f3ea":[6,0,0,1,0,12,1,2],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Node.html#aea1da28d9436a78ec1eef8538e457a8d":[5,0,0,1,0,12,1,3],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Node.html#aea1da28d9436a78ec1eef8538e457a8d":[6,0,0,1,0,12,1,3],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html":[5,0,0,1,1,0],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html":[6,0,0,1,1,0],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html#a6bd8cd92a3cb884da4c89e9703374837":[5,0,0,1,1,0,1],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html#a6bd8cd92a3cb884da4c89e9703374837":[6,0,0,1,1,0,1],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html#ac8010fa493e1a7322a6d0faafebfc36c":[5,0,0,1,1,0,2],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html#ac8010fa493e1a7322a6d0faafebfc36c":[6,0,0,1,1,0,2],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html#af14895b130e330c6a096c746cbfb5e5a":[5,0,0,1,1,0,0],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html#af14895b130e330c6a096c746cbfb5e5a":[6,0,0,1,1,0,0],
-"structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html":[5,0,0,1,1,1,0]
+"structBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation_1_1Node.html#ad03d76c3ca0b6973498a3f25d604f3ea":[6,0,0,1,0,12,1,2]
 };

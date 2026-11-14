@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"UpgradeCardText_8cs.html":[7,0,14,36],
 "UpgradeCardView_8cs.html":[7,0,18,6,2],
 "UpgradeSettings_8cs.html":[7,0,3,27],
 "VariationPicker_8cs.html":[7,0,0,18],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#afe39d9707d7e9e684f4de82f9857b6a7":[6,0,0,0,0,3,6],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html":[5,0,0,0,0,4],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html":[6,0,0,0,0,4],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a03cecc02b282be5535a164c6881d47ad":[5,0,0,0,0,4,18],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a03cecc02b282be5535a164c6881d47ad":[6,0,0,0,0,4,18]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a03cecc02b282be5535a164c6881d47ad":[5,0,0,0,0,4,18]
 };

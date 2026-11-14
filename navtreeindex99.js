@@ -1,5 +1,16 @@
 var NAVTREEINDEX99 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IPaletteColorMasked.html":[5,0,0,3,10,3],
+"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IPaletteColorMasked.html":[6,0,0,3,10,3],
+"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IPaletteColorMasked.html#ac1c174fb9eeda55c0684df79315d5b58":[5,0,0,3,10,3,0],
+"interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IPaletteColorMasked.html#ac1c174fb9eeda55c0684df79315d5b58":[6,0,0,3,10,3,0],
+"interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html":[5,0,0,3,11,0],
+"interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html":[6,0,0,3,11,0],
+"interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html#a13349dcb9c5c3c426078b3f9bf04ad37":[5,0,0,3,11,0,1],
+"interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html#a13349dcb9c5c3c426078b3f9bf04ad37":[6,0,0,3,11,0,1],
+"interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html#a216e6b95d0a04ed08408b2c7642e60d3":[5,0,0,3,11,0,2],
+"interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html#a216e6b95d0a04ed08408b2c7642e60d3":[6,0,0,3,11,0,2],
+"interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html#a21f9c08b80c0d07d98db6fa77320d50b":[5,0,0,3,11,0,0],
 "interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html#a21f9c08b80c0d07d98db6fa77320d50b":[6,0,0,3,11,0,0],
 "interfaceBalloonParty_1_1Editor_1_1EffectPreview_1_1IEffectPreviewModule.html":[5,0,0,5,1,4],
 "interfaceBalloonParty_1_1Editor_1_1EffectPreview_1_1IEffectPreviewModule.html":[6,0,0,5,1,4],
@@ -238,16 +249,5 @@ var NAVTREEINDEX99 =
 "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ISealedMetrics.html#af01e784f1fb4c7bdb1799bfed690669a":[5,0,0,6,9,10,1],
 "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ISealedMetrics.html#af01e784f1fb4c7bdb1799bfed690669a":[6,0,0,6,9,10,1],
 "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ITelemetrySink.html":[5,0,0,6,9,11],
-"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ITelemetrySink.html":[6,0,0,6,9,11],
-"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ITelemetrySink.html#a7b548fb70eb48967dcf03cc59e1b42d1":[5,0,0,6,9,11,0],
-"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ITelemetrySink.html#a7b548fb70eb48967dcf03cc59e1b42d1":[6,0,0,6,9,11,0],
-"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ITelemetrySink.html#ad384b6aa1f1f81578c1c2c1255db3a99":[5,0,0,6,9,11,1],
-"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ITelemetrySink.html#ad384b6aa1f1f81578c1c2c1255db3a99":[6,0,0,6,9,11,1],
-"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IFreeCardGrant.html":[5,0,0,6,10,0],
-"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IFreeCardGrant.html":[6,0,0,6,10,0],
-"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IFreeCardGrant.html#aec6c658fdbb094a75d3469075107014f":[5,0,0,6,10,0,0],
-"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IFreeCardGrant.html#aec6c658fdbb094a75d3469075107014f":[6,0,0,6,10,0,0],
-"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IShieldsPerBall.html":[5,0,0,6,10,1],
-"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IShieldsPerBall.html":[6,0,0,6,10,1],
-"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IShieldsPerBall.html#a8fbbc14a1a201d8fa403b1756c4a0d6a":[5,0,0,6,10,1,0]
+"interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ITelemetrySink.html":[6,0,0,6,9,11]
 };

@@ -1,0 +1,9 @@
+<map id="BalloonParty.Balloon.Type.GoldenRaysLook" name="BalloonParty.Balloon.Type.GoldenRaysLook">
+<area shape="rect" id="Node000001" title="Tints the golden reward balloon&#39;s god rays from the palette." alt="" coords="308,55,501,95"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="42,5,166,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="180,30,308,54,307,60,179,35"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonViewBinding.html" title="Implemented by prefab MonoBehaviours that react to model binding; BalloonView discovers and calls the..." alt="" coords="7,55,201,95"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="215,73,308,73,308,78,215,78"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="5,119,203,159"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="211,114,310,93,311,98,212,119"/>
+</map>

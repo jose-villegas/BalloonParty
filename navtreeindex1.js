@@ -11,6 +11,7 @@ var NAVTREEINDEX1 =
 "GatekeeperActorModel_8cs.html":[7,0,15,0,0,11],
 "GizmoDrawingHelper_8cs.html":[7,0,14,10,4],
 "GoldenBalloonModel_8cs.html":[7,0,1,2,6],
+"GoldenRaysLook_8cs.html":[7,0,1,5,2],
 "GradientTextureDrawer_8cs.html":[7,0,6,22],
 "GradientTextureHelper_8cs.html":[7,0,14,10,5],
 "GraphicColorableRenderer_8cs.html":[7,0,18,7,2],
@@ -72,7 +73,7 @@ var NAVTREEINDEX1 =
 "IBalloonItem_8cs.html":[7,0,8,12],
 "IBalloonModel_8cs.html":[7,0,1,2,8],
 "IBalloonMotionView_8cs.html":[7,0,1,6,2],
-"IBalloonVariant_8cs.html":[7,0,1,5,2],
+"IBalloonVariant_8cs.html":[7,0,1,5,3],
 "IBalloonViewBinding_8cs.html":[7,0,1,6,3],
 "IBalloonsConfiguration_8cs.html":[7,0,3,0,5],
 "IBoardEffect_8cs.html":[7,0,7,1,12],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "ItemActivationCount_8cs.html":[7,0,7,9,13],
 "ItemActivator_8cs.html":[7,0,8,19],
 "ItemAssigner_8cs.html":[7,0,8,20],
-"ItemCheckMessage_8cs.html":[7,0,14,7,13],
-"ItemConfiguration_8cs.html":[7,0,3,8,1]
+"ItemCheckMessage_8cs.html":[7,0,14,7,13]
 };

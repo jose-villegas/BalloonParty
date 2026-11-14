@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"RewardBalloonService_8cs.html":[7,0,1,3,3],
 "RewardBalloonSettings_8cs.html":[7,0,3,0,9],
 "RibbonGraphic_8cs.html":[7,0,18,1,2],
 "RibbonPiece_8cs.html":[7,0,18,1,3],
@@ -110,7 +111,7 @@ var NAVTREEINDEX3 =
 "SightScalePulseReaction_8cs.html":[7,0,8,34],
 "SightShakeReaction_8cs.html":[7,0,8,35],
 "SightSpinReaction_8cs.html":[7,0,8,36],
-"SimpleBalloonVariant_8cs.html":[7,0,1,5,4],
+"SimpleBalloonVariant_8cs.html":[7,0,1,5,5],
 "SimplePoolChannel_8cs.html":[7,0,14,9,11],
 "SkyScatterService_8cs.html":[7,0,13,9],
 "SkyScatterSettings_8cs.html":[7,0,3,5,26],
@@ -139,7 +140,7 @@ var NAVTREEINDEX3 =
 "SnipeLanceStroke_8cs.html":[7,0,8,7,6],
 "SnipeLanceTrace_8cs.html":[7,0,8,7,7],
 "SnipeRangePreview_8cs.html":[7,0,8,5,15],
-"SoapBubbleClusterVariant_8cs.html":[7,0,1,5,5],
+"SoapBubbleClusterVariant_8cs.html":[7,0,1,5,6],
 "SortingHelper_8cs.html":[7,0,14,10,11],
 "SortingLayerNameAttribute_8cs.html":[7,0,14,33],
 "SortingLayerNameDrawer_8cs.html":[7,0,6,47],
@@ -219,7 +220,7 @@ var NAVTREEINDEX3 =
 "TooltipBanner_8cs.html":[7,0,18,10,0],
 "TooltipMessage_8cs.html":[7,0,14,7,49],
 "ToughBalloonModel_8cs.html":[7,0,1,2,13],
-"ToughBalloonVariant_8cs.html":[7,0,1,5,6],
+"ToughBalloonVariant_8cs.html":[7,0,1,5,7],
 "TraceHitGeometry_8cs.html":[7,0,11,6],
 "TraceHitMarker_8cs.html":[7,0,11,7],
 "TrackedTrailSettings_8cs.html":[7,0,3,3,6],
@@ -238,9 +239,9 @@ var NAVTREEINDEX3 =
 "TweenTracker_8cs.html":[7,0,14,0,3],
 "UiSfxEmitter_8cs.html":[7,0,0,3,1],
 "UnbreakableBalloonModel_8cs.html":[7,0,1,2,14],
-"UnbreakableBalloonVariant_8cs.html":[7,0,1,5,7],
-"UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d":[7,0,1,5,7,1],
-"UnbreakableFormationLook_8cs.html":[7,0,1,5,8],
+"UnbreakableBalloonVariant_8cs.html":[7,0,1,5,8],
+"UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d":[7,0,1,5,8,1],
+"UnbreakableFormationLook_8cs.html":[7,0,1,5,9],
 "UnbreakableFormationService_8cs.html":[7,0,1,1,6],
 "UnbreakableFormationService_8cs.html#a832e8f52fca5a678819ec96269dcb532":[7,0,1,1,6,1],
 "UnbreakableFormationSettings_8cs.html":[7,0,3,0,10],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "UnitCircleDrawer_8cs.html":[7,0,6,51],
 "UnusedAssetsWindow_8cs.html":[7,0,6,52],
 "UpgradeCardHeldMessage_8cs.html":[7,0,14,7,51],
-"UpgradeCardSlotBuilder_8cs.html":[7,0,6,53],
-"UpgradeCardText_8cs.html":[7,0,14,36]
+"UpgradeCardSlotBuilder_8cs.html":[7,0,6,53]
 };

@@ -1,5 +1,16 @@
 var NAVTREEINDEX116 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html#a21868f8a92fb8bb98caf6d90ccb7a346":[5,0,0,12,7,2,5],
+"structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html#a21868f8a92fb8bb98caf6d90ccb7a346":[6,0,0,12,7,2,5],
+"structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html#a51557ddb782b91b25ae50d294248f6c4":[5,0,0,12,7,2,2],
+"structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html#a51557ddb782b91b25ae50d294248f6c4":[6,0,0,12,7,2,2],
+"structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html#a66a7167070a87998d843c97d42fdfb9f":[5,0,0,12,7,2,4],
+"structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html#a66a7167070a87998d843c97d42fdfb9f":[6,0,0,12,7,2,4],
+"structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html#a8fce10d930283cd131f59f958ff52065":[5,0,0,12,7,2,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html#a8fce10d930283cd131f59f958ff52065":[6,0,0,12,7,2,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html#a9f873316c3683f3cebf133ffe8afa99a":[5,0,0,12,7,2,3],
+"structBalloonParty_1_1Shared_1_1Messages_1_1BalloonDeflectedMessage.html#a9f873316c3683f3cebf133ffe8afa99a":[6,0,0,12,7,2,3],
+"structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage.html":[5,0,0,12,7,3],
 "structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage.html":[6,0,0,12,7,3],
 "structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage.html#a20f590cf3830e3ab803a2e568cb63adf":[5,0,0,12,7,3,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage.html#a20f590cf3830e3ab803a2e568cb63adf":[6,0,0,12,7,3,1],
@@ -238,16 +249,5 @@ var NAVTREEINDEX116 =
 "structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html#ac592a7d4ab3893c052d7054d75957c67":[5,0,0,12,7,38,4],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ScoreTrailArrivedMessage.html#ac592a7d4ab3893c052d7054d75957c67":[6,0,0,12,7,38,4],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html":[5,0,0,12,7,39],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html":[6,0,0,12,7,39],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#a163ec43120216168d81ece78d798a20c":[5,0,0,12,7,39,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#a163ec43120216168d81ece78d798a20c":[6,0,0,12,7,39,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#a732c406fea11979499bad7b692f1f1d4":[5,0,0,12,7,39,1],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#a732c406fea11979499bad7b692f1f1d4":[6,0,0,12,7,39,1],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#a928aaee892766c709a9e8580c56a8c64":[5,0,0,12,7,39,2],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#a928aaee892766c709a9e8580c56a8c64":[6,0,0,12,7,39,2],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#abf14e538aa64959354cd5c867ed400ff":[5,0,0,12,7,39,3],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#abf14e538aa64959354cd5c867ed400ff":[6,0,0,12,7,39,3],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html":[5,0,0,12,7,40],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html":[6,0,0,12,7,40],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldLostMessage.html#a43d72896e8d3bee32bd3fa4671efd059":[5,0,0,12,7,40,0]
+"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html":[6,0,0,12,7,39]
 };
