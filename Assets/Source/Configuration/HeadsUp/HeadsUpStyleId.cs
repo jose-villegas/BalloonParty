@@ -18,6 +18,7 @@ namespace BalloonParty.Configuration.HeadsUp
         Shattered = 9,
         HeartLost = 10,
         ColorDone = 11,
-        Rainbow = 12
+        Rainbow = 12,
+        SnipeReady = 13
     }
 }

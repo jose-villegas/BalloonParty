@@ -18,15 +18,15 @@ MonoBehaviour:
     _format: ready
     _look:
       _color: {r: 0.2901961, g: 0.2901961, b: 0.32156864, a: 1}
-      _size: 0.85
+      _size: 0.95
       _growth: 0
-      _maxSize: 0.85
+      _maxSize: 0.95
       _fontStyle: 0
     _priority: 0
     _cooldownSeconds: 0
     _holdSeconds: 0.35
     _held: 1
-    _worldOffset: {x: 0.75, y: 0}
+    _worldOffset: {x: 0.75, y: 0.2}
     _minArg: 0
     _maxArg: 0
     _escalateFrom: 1
@@ -222,6 +222,22 @@ MonoBehaviour:
     _holdSeconds: 0.35
     _held: 0
     _worldOffset: {x: 0, y: 0.3}
+    _minArg: 0
+    _maxArg: 0
+    _escalateFrom: 1
+  - _id: 13
+    _format: <i>snipe!</i>
+    _look:
+      _color: {r: 0.5568628, g: 0.23137255, b: 0.5568628, a: 1}
+      _size: 0.95
+      _growth: 0
+      _maxSize: 0.95
+      _fontStyle: 1
+    _priority: 0
+    _cooldownSeconds: 0
+    _holdSeconds: 0.35
+    _held: 1
+    _worldOffset: {x: 0.75, y: 0.2}
     _minArg: 0
     _maxArg: 0
     _escalateFrom: 1

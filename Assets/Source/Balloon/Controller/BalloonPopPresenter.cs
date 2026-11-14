@@ -39,8 +39,11 @@ namespace BalloonParty.Balloon.Controller
             _balloonsConfig = balloonsConfig;
         }
 
-        // vfxParent lets the burst ride a moving transform (e.g. a level transition) instead of firing in place.
-        public void Present(IBalloonModel model, Vector3 worldPos, BalloonView view, Transform vfxParent = null)
+        // vfxParent lets the burst ride a moving transform (e.g. a level transition) instead of firing in place;
+        // hitDirection is the heading of the shot that popped it, zero when nothing did (a board clear).
+        public void Present(
+            IBalloonModel model, Vector3 worldPos, BalloonView view, Transform vfxParent = null,
+            Vector3 hitDirection = default)
         {
             var colorId = model.GetPopColorId();
 
@@ -62,7 +65,7 @@ namespace BalloonParty.Balloon.Controller
                 _smokeField.Paint(PaintSource.ToughPop, worldPos);
             }
 
-            view.PlayHitVfxForOutcome(HitOutcome.Pop, vfxParent);
+            view.PlayHitVfxForOutcome(HitOutcome.Pop, vfxParent, hitDirection);
         }
     }
 }

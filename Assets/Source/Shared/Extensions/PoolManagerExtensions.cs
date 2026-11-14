@@ -30,6 +30,17 @@ namespace BalloonParty.Shared.Extensions
             this PoolManager pool,
             ParticleSystem prefab,
             Vector3 position,
+            Quaternion rotation)
+        {
+            var effect = GetPooledParticle(pool, prefab);
+            effect.Play(position, rotation, effect.ReturnToPool);
+            return effect;
+        }
+
+        internal static PoolableParticle PlayParticle(
+            this PoolManager pool,
+            ParticleSystem prefab,
+            Vector3 position,
             Quaternion rotation,
             Color tint)
         {

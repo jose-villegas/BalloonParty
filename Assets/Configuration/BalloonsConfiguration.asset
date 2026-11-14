@@ -194,6 +194,10 @@ MonoBehaviour:
     _balloonType: 9
     _nudgeOverrides: []
     _hitVfxOverrides: []
+    _popPulse:
+      _peakScale: 1.25
+      _swellSeconds: 0.08
+      _shrinkSeconds: 0.14
     _hitsToPop: 1
     _scoreValue: 0
     _itemActivationWeight: 0

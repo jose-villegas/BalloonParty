@@ -69,7 +69,7 @@ namespace BalloonParty.Balloon.Spawner
             view.Variant.Initialize(model, _levelParams.Current.AllowedColorsMask);
 
             var controller = new BalloonController(
-                model, view, poolKey, onReturned, entry.HitVfxOverrides, _controllerContext);
+                model, view, poolKey, onReturned, entry, _controllerContext);
             controller.Start();
 
             _grid.Place(model, view, slot);

@@ -65,8 +65,8 @@ namespace BalloonParty.Configuration.HeadsUp
             return new[]
             {
                 new HeadsUpStyleSettings(HeadsUpStyleId.Ready, "ready",
-                        Look(Graphite, 1f, 0.85f, 0f, 0.85f, FontStyles.Normal), 0)
-                    .HeldUntilReleased().WithOffset(0.75f, 0f),
+                        Look(Graphite, 1f, 0.95f, 0f, 0.95f, FontStyles.Normal), 0)
+                    .HeldUntilReleased().WithOffset(0.75f, 0.2f),
                 new HeadsUpStyleSettings(HeadsUpStyleId.BouncePickup, "+{0} <i>bounce</i>",
                         Look(Blue, 1f, 1f, 0.15f, 1.35f, FontStyles.Bold), 2)
                     .WithOffset(0f, 0.25f),
@@ -103,7 +103,10 @@ namespace BalloonParty.Configuration.HeadsUp
                     .WithOffset(0f, -0.35f),
                 new HeadsUpStyleSettings(HeadsUpStyleId.Rainbow, "<i>any colour!</i>",
                         Look(Blue, 1f, 1f, 0f, 1f, FontStyles.Bold), 2)
-                    .WithOffset(0f, 0.3f)
+                    .WithOffset(0f, 0.3f),
+                new HeadsUpStyleSettings(HeadsUpStyleId.SnipeReady, "<i>snipe!</i>",
+                        Look(Plum, 1f, 0.95f, 0f, 0.95f, FontStyles.Bold), 0)
+                    .HeldUntilReleased().WithOffset(0.75f, 0.2f)
             };
         }
 

@@ -18,6 +18,9 @@ namespace BalloonParty.Configuration.Balloons
 
         [SerializeField] private HitVfxOverride[] _hitVfxOverrides;
 
+        [Tooltip("How the balloon goes when it pops: off, it vanishes at once; on, it swells and shrinks away while its pop effect plays.")]
+        [SerializeField] private PopPulse _popPulse = new();
+
         [Tooltip("How many hits this balloon type absorbs before popping. 1 = normal, 2+ = tough, -1 = unbreakable.")]
         [SerializeField] private int _hitsToPop = 1;
 
@@ -56,6 +59,7 @@ namespace BalloonParty.Configuration.Balloons
         public NudgeOverride[] NudgeOverrides => _nudgeOverrides;
 
         public HitVfxOverride[] HitVfxOverrides => _hitVfxOverrides;
+        public PopPulse PopPulse => _popPulse;
 
         public int HitsToPop => _hitsToPop;
         public int ScoreValue => _scoreValue;

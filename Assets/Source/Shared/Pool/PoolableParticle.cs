@@ -12,12 +12,14 @@ namespace BalloonParty.Shared.Pool
         private string _poolKey;
         private Action _selfReturn;
         private Vector3 _authoredScale = Vector3.one;
+        private Quaternion _authoredRotation = Quaternion.identity;
 
         internal Action ReturnToPool => _selfReturn;
 
         private void Awake()
         {
             _authoredScale = transform.localScale;
+            _authoredRotation = transform.localRotation;
             _particle = GetComponent<ParticleSystem>();
             if (_particle != null)
             {
@@ -64,6 +66,9 @@ namespace BalloonParty.Shared.Pool
             // restore the prefab's own, or the burst stays mis-sized for good.
             transform.localScale = _authoredScale;
 
+            // A play turned onto a shot (a hit effect along the hit) would leave the next plain play turned too.
+            transform.localRotation = _authoredRotation;
+
             // Stop+clear so "Play on Awake" doesn't fire with a stale colour from last use.
             _particle?.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
@@ -97,6 +102,12 @@ namespace BalloonParty.Shared.Pool
             var main = _particle.main;
             main.startColor = tint;
             _particle.Play();
+        }
+
+        public void Play(Vector3 position, Quaternion rotation, Action onComplete = null)
+        {
+            transform.rotation = rotation;
+            Play(position, onComplete);
         }
 
         public void Play(Vector3 position, Quaternion rotation, Color tint, Action onComplete = null)

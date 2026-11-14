@@ -245,6 +245,25 @@ namespace BalloonParty.Balloon.View
             }
         }
 
+        /// <summary>Swells the popped balloon to the pulse's peak and shrinks it away, then calls
+        /// <paramref name="onDone"/> to hand it back to the pool. Its collider goes at once, so nothing hits it.</summary>
+        public void PlayPopPulse(PopPulse pulse, Action onDone)
+        {
+            if (_collider != null)
+            {
+                _collider.enabled = false;
+            }
+
+            _itemService?.Unbind();
+            transform.DOKill();
+            DOTween.Sequence()
+                .SetTarget(transform)
+                .SetLink(gameObject)
+                .Append(transform.DOScale(transform.localScale * pulse.PeakScale, pulse.SwellSeconds).SetEase(Ease.OutQuad))
+                .Append(transform.DOScale(Vector3.zero, pulse.ShrinkSeconds).SetEase(Ease.InQuad))
+                .OnComplete(() => onDone());
+        }
+
         /// <summary>Hides all visuals and disables the collider immediately, before the balloon returns to pool.</summary>
         public void Hide()
         {
@@ -282,12 +301,13 @@ namespace BalloonParty.Balloon.View
         }
 
         // parent lets the VFX ride a moving transform (e.g. level transition) instead of firing in place.
-        public void PlayHitVfxForOutcome(HitOutcome outcome, Transform parent = null)
+        // hitDirection is the shot's heading, for an override authored to fly along it; zero leaves it upright.
+        public void PlayHitVfxForOutcome(HitOutcome outcome, Transform parent = null, Vector3 hitDirection = default)
         {
-            var prefab = FindHitVfxPrefab(outcome);
-            if (prefab != null)
+            var hitOverride = FindHitVfxOverride(outcome);
+            if (hitOverride != null && hitOverride.Prefab != null)
             {
-                Reparent(PlayHitEffect(prefab), parent);
+                Reparent(PlayHitEffect(hitOverride, hitDirection), parent);
                 return;
             }
 
@@ -317,7 +337,7 @@ namespace BalloonParty.Balloon.View
                 parent);
         }
 
-        private ParticleSystem FindHitVfxPrefab(HitOutcome outcome)
+        private HitVfxOverride FindHitVfxOverride(HitOutcome outcome)
         {
             if (_hitVfxOverrides == null)
             {
@@ -328,22 +348,24 @@ namespace BalloonParty.Balloon.View
             {
                 if (o.AppliesTo.HasFlag(outcome))
                 {
-                    return o.Prefab;
+                    return o;
                 }
             }
 
             return null;
         }
 
-        private PoolableParticle PlayHitEffect(ParticleSystem prefab)
+        private PoolableParticle PlayHitEffect(HitVfxOverride hitOverride, Vector3 hitDirection)
         {
+            var prefab = hitOverride.Prefab;
+            var rotation = hitOverride.AlongHit ? hitDirection.UpAlongXY() : Quaternion.identity;
             if (Model is IHasColor c && !string.IsNullOrEmpty(c.Color.Value))
             {
-                return _poolManager.PlayParticle(prefab, transform.position,
+                return _poolManager.PlayParticle(prefab, transform.position, rotation,
                     _palette.GetColor(c.Color.Value));
             }
 
-            return _poolManager.PlayParticle(prefab, transform.position);
+            return _poolManager.PlayParticle(prefab, transform.position, rotation);
         }
 
         // worldPositionStays keeps the spawn point; the effect detaches back to its pool on its own.

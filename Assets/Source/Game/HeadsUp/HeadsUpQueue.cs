@@ -7,12 +7,12 @@ namespace BalloonParty.Game.HeadsUp
     ///     Which heads-ups get a place on screen. A request is checked against its style's argument range, then
     ///     rewrites a showing line of its style and merge key, then waits out its style's cooldown, then takes a
     ///     free slot, or evicts the oldest of the lowest priority showing if that is lower than its own, or equal and
-    ///     shown at an earlier moment, or is dropped. A rewrite makes its line the newest. Held styles (the cannon's ready) have a lane of their own outside the cap. Plain C#: the time
+    ///     shown at an earlier moment, or is dropped. A rewrite makes its line the newest. Held styles (the cannon's ready and snipe!) have a lane of their own outside the cap. Plain C#: the time
     ///     is passed in.
     /// </summary>
     internal sealed class HeadsUpQueue
     {
-        // One per held style that can show at once; ready is the only one today.
+        // One per held line that can show at once: the cannon's ready or snipe!, which take turns, never both.
         private const int HeldLaneSize = 2;
 
         private readonly IHeadsUpSettings _settings;

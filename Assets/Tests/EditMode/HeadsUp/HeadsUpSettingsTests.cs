@@ -45,11 +45,12 @@ namespace BalloonParty.Tests.HeadsUp
         }
 
         [Test]
-        public void OnlyReady_IsHeld()
+        public void OnlyTheCannonsLabels_AreHeld()
         {
             foreach (HeadsUpStyleId id in Enum.GetValues(typeof(HeadsUpStyleId)))
             {
-                Assert.AreEqual(id == HeadsUpStyleId.Ready, _settings.Style(id).Held, id.ToString());
+                var cannon = id is HeadsUpStyleId.Ready or HeadsUpStyleId.SnipeReady;
+                Assert.AreEqual(cannon, _settings.Style(id).Held, id.ToString());
             }
         }
 

@@ -39,6 +39,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly SmokeFieldService _smokeField;
         private readonly IGamePalette _palette;
         private readonly BalloonPopPresenter _popPresenter;
+        private readonly PopPulse _popPulse;
 
         private Action _onReturned;
         private IDisposable _itemActivatedSubscription;
@@ -49,14 +50,15 @@ namespace BalloonParty.Balloon.Controller
             BalloonView view,
             string poolKey,
             Action onReturned,
-            HitVfxOverride[] hitVfxOverrides,
+            BalloonPrefabEntry entry,
             BalloonControllerContext context)
         {
             _model = model;
             _view = view;
             _poolKey = poolKey;
             _onReturned = onReturned;
-            _hitVfxOverrides = hitVfxOverrides;
+            _hitVfxOverrides = entry?.HitVfxOverrides;
+            _popPulse = entry?.PopPulse;
             _itemActivatedSubscriber = context.ItemActivatedSubscriber;
             _registry = context.Registry;
             _transformCapturedPublisher = context.TransformCapturedPublisher;
@@ -89,7 +91,7 @@ namespace BalloonParty.Balloon.Controller
             switch (msg.Outcome)
             {
                 case HitOutcome.Pop:
-                    Pop();
+                    Pop(msg.ProjectileDirection);
                     break;
                 case HitOutcome.Deflect:
                     Deflect(msg);
@@ -246,18 +248,26 @@ namespace BalloonParty.Balloon.Controller
             _poolManager.Return(_poolKey, _view);
         }
 
-        private void Pop()
+        private void Pop(Vector3 hitDirection)
         {
             _popped = true;
 
-            _popPresenter.Present(_model, _view.transform.position, _view);
+            _popPresenter.Present(_model, _view.transform.position, _view, hitDirection: hitDirection);
             _grid.Remove(_model.SlotIndex.Value);
 
             if (_model is not IHasItemSlot itemSlot || itemSlot.Item.Value == ItemType.None)
             {
                 _registry.Unregister(_model);
                 _onReturned?.Invoke();
-                _poolManager.Return(_poolKey, _view);
+                if (_popPulse is { Enabled: true })
+                {
+                    // Out of play already (grid, registry, type count): only its look lingers while it shrinks.
+                    _view.PlayPopPulse(_popPulse, () => _poolManager.Return(_poolKey, _view));
+                }
+                else
+                {
+                    _poolManager.Return(_poolKey, _view);
+                }
             }
             else
             {
