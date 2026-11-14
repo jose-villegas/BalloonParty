@@ -1,5 +1,16 @@
 var NAVTREEINDEX111 =
 {
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html#ad21f74fd27fa909ae7fe142a89ceac00":[5,0,0,6,4,1,1],
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html#ad21f74fd27fa909ae7fe142a89ceac00":[6,0,0,6,4,1,1],
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html#af82e560dba2fdab3c38c1e2b68704144":[5,0,0,6,4,1,0],
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html#af82e560dba2fdab3c38c1e2b68704144":[6,0,0,6,4,1,0],
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html":[5,0,0,6,4,2],
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html":[6,0,0,6,4,2],
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#a00b76c69f75438f095750e409984819c":[5,0,0,6,4,2,6],
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#a00b76c69f75438f095750e409984819c":[6,0,0,6,4,2,6],
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#a18417b2d79accfafec81ee11fdadf1c4":[5,0,0,6,4,2,4],
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#a18417b2d79accfafec81ee11fdadf1c4":[6,0,0,6,4,2,4],
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#a1dc1f108f5e2d38d696f270e40403d46":[5,0,0,6,4,2,8],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#a1dc1f108f5e2d38d696f270e40403d46":[6,0,0,6,4,2,8],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#a2e64e11b3ea968c7845392782425f914":[5,0,0,6,4,2,0],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#a2e64e11b3ea968c7845392782425f914":[6,0,0,6,4,2,0],
@@ -238,16 +249,5 @@ var NAVTREEINDEX111 =
 "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#acc23d999013b3e393d2bd4fba4d5def9":[5,0,0,6,9,2,4],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#acc23d999013b3e393d2bd4fba4d5def9":[6,0,0,6,9,2,4],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#ae9dccbc9ec38a3db59e13983de89e529":[5,0,0,6,9,2,5],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#ae9dccbc9ec38a3db59e13983de89e529":[6,0,0,6,9,2,5],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#aeb3ea57f8fd829e3c5e93e65df9f0a1d":[5,0,0,6,9,2,1],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#aeb3ea57f8fd829e3c5e93e65df9f0a1d":[6,0,0,6,9,2,1],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html":[5,0,0,6,9,3],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html":[6,0,0,6,9,3],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html#a36d537a6da2484b955601e4153ff7049":[5,0,0,6,9,3,2],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html#a36d537a6da2484b955601e4153ff7049":[6,0,0,6,9,3,2],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html#a6d3ab8625506e5ae6ab79881c8d8e1c9":[5,0,0,6,9,3,0],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html#a6d3ab8625506e5ae6ab79881c8d8e1c9":[6,0,0,6,9,3,0],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html#a75821c3fba28f9fb40898223f64da1da":[5,0,0,6,9,3,1],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1BalloonTypeCount.html#a75821c3fba28f9fb40898223f64da1da":[6,0,0,6,9,3,1],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1ColorCount.html":[5,0,0,6,9,4]
+"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#ae9dccbc9ec38a3db59e13983de89e529":[6,0,0,6,9,2,5]
 };

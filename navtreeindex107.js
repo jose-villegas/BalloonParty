@@ -1,5 +1,16 @@
 var NAVTREEINDEX107 =
 {
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#a44cec23a867979e37f45b6f8a71b0876":[5,0,0,1,0,7,1,1],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#a44cec23a867979e37f45b6f8a71b0876":[6,0,0,1,0,7,1,1],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#afe75b9f1c154a5e167f2bfd96d9a7474":[5,0,0,1,0,7,1,2],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#afe75b9f1c154a5e167f2bfd96d9a7474":[6,0,0,1,0,7,1,2],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html":[5,0,0,1,0,9],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html":[6,0,0,1,0,9],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#a01ef6214f975df281d75da2b2d413d95":[5,0,0,1,0,9,1],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#a01ef6214f975df281d75da2b2d413d95":[6,0,0,1,0,9,1],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#a7696107b04dcc75432da01bf993e7244":[5,0,0,1,0,9,2],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#a7696107b04dcc75432da01bf993e7244":[6,0,0,1,0,9,2],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#ae31b846c2fee38b3db33b8c143490c6c":[5,0,0,1,0,9,3],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#ae31b846c2fee38b3db33b8c143490c6c":[6,0,0,1,0,9,3],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#aed996b38360dec7c3ac244ec1d5f8bad":[5,0,0,1,0,9,0],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#aed996b38360dec7c3ac244ec1d5f8bad":[6,0,0,1,0,9,0],
@@ -238,16 +249,5 @@ var NAVTREEINDEX107 =
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#af4c7836d54b5f57772b63533cadba9a3":[5,0,0,3,5,27,13],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#af4c7836d54b5f57772b63533cadba9a3":[6,0,0,3,5,27,13],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#af657a4136d15554b2683564a43baf401":[5,0,0,3,5,27,6],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#af657a4136d15554b2683564a43baf401":[6,0,0,3,5,27,6],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html":[5,0,0,3,5,35],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html":[6,0,0,3,5,35],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a06b1bcd62162a3fc19971b0ed36838d6":[5,0,0,3,5,35,11],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a06b1bcd62162a3fc19971b0ed36838d6":[6,0,0,3,5,35,11],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a0bdede36bc9557fb9d8de953ba9f78bf":[5,0,0,3,5,35,22],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a0bdede36bc9557fb9d8de953ba9f78bf":[6,0,0,3,5,35,22],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a16fb6745c6dc547a23a59863db7886ef":[5,0,0,3,5,35,3],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a16fb6745c6dc547a23a59863db7886ef":[6,0,0,3,5,35,3],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a1ee3863a9ca441cf102bf9319e13762a":[5,0,0,3,5,35,4],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a1ee3863a9ca441cf102bf9319e13762a":[6,0,0,3,5,35,4],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1SpeckLookProfile.html#a274acaa798fbf4c85b2847cdb174da73":[5,0,0,3,5,35,20]
+"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#af657a4136d15554b2683564a43baf401":[6,0,0,3,5,27,6]
 };

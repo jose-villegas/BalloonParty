@@ -1,5 +1,16 @@
 var NAVTREEINDEX106 =
 {
+"plan_shot_solver_accuracy.html#autotoc_md808":[3,14,0,3,1],
+"plan_shot_solver_accuracy.html#autotoc_md809":[3,14,0,3,2],
+"plan_shot_solver_accuracy.html#autotoc_md810":[3,14,0,3,3],
+"plan_shot_solver_accuracy.html#autotoc_md811":[3,14,0,3,4],
+"plan_shot_solver_accuracy.html#autotoc_md812":[3,14,0,3,5],
+"plan_shot_solver_accuracy.html#autotoc_md813":[3,14,0,3,6],
+"plan_shot_solver_accuracy.html#autotoc_md814":[3,14,0,3,7],
+"plan_shot_solver_accuracy.html#autotoc_md815":[3,14,0,4],
+"plan_shot_solver_accuracy.html#autotoc_md816":[3,14,0,5],
+"plan_shot_solver_accuracy.html#autotoc_md817":[3,14,0,6],
+"plan_shot_solver_accuracy.html#autotoc_md818":[3,14,0,7],
 "plan_shot_solver_accuracy.html#autotoc_md819":[3,14,0,7,0],
 "plan_shot_solver_accuracy.html#autotoc_md820":[3,14,0,7,1],
 "plan_shot_solver_accuracy.html#autotoc_md821":[3,14,0,7,2],
@@ -238,16 +249,5 @@ var NAVTREEINDEX106 =
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html":[5,0,0,1,0,7,1],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html":[6,0,0,1,0,7,1],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#a0eca132d879742cab96ef47b9d1f60ed":[5,0,0,1,0,7,1,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#a0eca132d879742cab96ef47b9d1f60ed":[6,0,0,1,0,7,1,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#a44cec23a867979e37f45b6f8a71b0876":[5,0,0,1,0,7,1,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#a44cec23a867979e37f45b6f8a71b0876":[6,0,0,1,0,7,1,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#afe75b9f1c154a5e167f2bfd96d9a7474":[5,0,0,1,0,7,1,2],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#afe75b9f1c154a5e167f2bfd96d9a7474":[6,0,0,1,0,7,1,2],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html":[5,0,0,1,0,9],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html":[6,0,0,1,0,9],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#a01ef6214f975df281d75da2b2d413d95":[5,0,0,1,0,9,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#a01ef6214f975df281d75da2b2d413d95":[6,0,0,1,0,9,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#a7696107b04dcc75432da01bf993e7244":[5,0,0,1,0,9,2],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#a7696107b04dcc75432da01bf993e7244":[6,0,0,1,0,9,2],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#ae31b846c2fee38b3db33b8c143490c6c":[5,0,0,1,0,9,3]
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#a0eca132d879742cab96ef47b9d1f60ed":[6,0,0,1,0,7,1,0]
 };

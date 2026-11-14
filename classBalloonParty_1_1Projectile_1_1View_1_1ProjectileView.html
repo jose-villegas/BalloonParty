@@ -167,8 +167,6 @@ Properties</h2></td></tr>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a4f82801ddff53fe46018c4c1d45c256b" id="r_a4f82801ddff53fe46018c4c1d45c256b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4f82801ddff53fe46018c4c1d45c256b">ActivateInitialGlow</a> ()</td></tr>
 <tr class="separator:a4f82801ddff53fe46018c4c1d45c256b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a80ec4bcbc7e79b815ed96a5a0ad1cf78" id="r_a80ec4bcbc7e79b815ed96a5a0ad1cf78"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80ec4bcbc7e79b815ed96a5a0ad1cf78">AlreadyPlowed</a> (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a> balloon)</td></tr>
-<tr class="separator:a80ec4bcbc7e79b815ed96a5a0ad1cf78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11d3e664f92bdc83b16d850abcbad4fe" id="r_a11d3e664f92bdc83b16d850abcbad4fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a11d3e664f92bdc83b16d850abcbad4fe">ApplyGlow</a> (Color color)</td></tr>
 <tr class="separator:a11d3e664f92bdc83b16d850abcbad4fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70e967469cd15e7236d023e96fc958b8" id="r_a70e967469cd15e7236d023e96fc958b8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a70e967469cd15e7236d023e96fc958b8">Awake</a> ()</td></tr>
@@ -217,8 +215,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:af6c3655d354f34d7f8a649f6fe4210b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ba2b209955044b8c63dd50548779d37" id="r_a1ba2b209955044b8c63dd50548779d37"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ba2b209955044b8c63dd50548779d37">SweepPierceMisses</a> (Vector3 segmentStart, Vector3 wallHit)</td></tr>
 <tr class="separator:a1ba2b209955044b8c63dd50548779d37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad90de7b05a44d5fd6beebf83da2b7553" id="r_ad90de7b05a44d5fd6beebf83da2b7553"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad90de7b05a44d5fd6beebf83da2b7553">TickPierceSpiral</a> ()</td></tr>
-<tr class="separator:ad90de7b05a44d5fd6beebf83da2b7553"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9525d9897eafd82593e0295ed69e2fd8" id="r_a9525d9897eafd82593e0295ed69e2fd8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9525d9897eafd82593e0295ed69e2fd8">TickPierceSpiral</a> (bool toughAhead, Vector3 toughPos)</td></tr>
+<tr class="separator:a9525d9897eafd82593e0295ed69e2fd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a51da028fef056b256c665b15913a58e1" id="r_a51da028fef056b256c665b15913a58e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a51da028fef056b256c665b15913a58e1">TickRainbowGlow</a> ()</td></tr>
 <tr class="separator:a51da028fef056b256c665b15913a58e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6dff20e059db098d132a149254acc016" id="r_a6dff20e059db098d132a149254acc016"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6dff20e059db098d132a149254acc016">TryAwardSweepTap</a> (Vector3 wallHitPosition, Vector3 travelDirection)</td></tr>
@@ -240,6 +238,8 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:ab752cd6a65490e64c8201fa38d1c3560" id="r_ab752cd6a65490e64c8201fa38d1c3560"><td class="memItemLeft" align="right" valign="top">IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BalanceBalloonsMessage.html">BalanceBalloonsMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab752cd6a65490e64c8201fa38d1c3560">_balancePublisher</a></td></tr>
 <tr class="separator:ab752cd6a65490e64c8201fa38d1c3560"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a927fae092f400348b8339a23e8dee0cf" id="r_a927fae092f400348b8339a23e8dee0cf"><td class="memItemLeft" align="right" valign="top">ContactFilter2D&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a927fae092f400348b8339a23e8dee0cf">_balloonCastFilter</a></td></tr>
+<tr class="separator:a927fae092f400348b8339a23e8dee0cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af440b2862f9441516bafe7f35a7e3bf3" id="r_af440b2862f9441516bafe7f35a7e3bf3"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af440b2862f9441516bafe7f35a7e3bf3">_baseScale</a></td></tr>
 <tr class="separator:af440b2862f9441516bafe7f35a7e3bf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a95bea5dcb9b3ab5240d5ff36e075d869" id="r_a95bea5dcb9b3ab5240d5ff36e075d869"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a95bea5dcb9b3ab5240d5ff36e075d869">_colliderOffset</a></td></tr>
@@ -354,6 +354,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ae558003af15f94677112e6962b0df62d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c2ea16a6811c480f7f6473ba63e64ac" id="r_a6c2ea16a6811c480f7f6473ba63e64ac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html">ProjectileTapResolver</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6c2ea16a6811c480f7f6473ba63e64ac">_tapResolver</a></td></tr>
 <tr class="separator:a6c2ea16a6811c480f7f6473ba63e64ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d6e75dcbc142938307820dcdc40d822" id="r_a7d6e75dcbc142938307820dcdc40d822"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="structBalloonParty_1_1Projectile_1_1Controller_1_1PierceCastCandidate.html">PierceCastCandidate</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d6e75dcbc142938307820dcdc40d822">_telegraphCandidates</a> = new(16)</td></tr>
+<tr class="separator:a7d6e75dcbc142938307820dcdc40d822"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a319ae7dc7a6820394842ccb7f54cd845" id="r_a319ae7dc7a6820394842ccb7f54cd845"><td class="memItemLeft" align="right" valign="top">readonly List&lt; RaycastHit2D &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a319ae7dc7a6820394842ccb7f54cd845">_telegraphHits</a> = new(16)</td></tr>
+<tr class="separator:a319ae7dc7a6820394842ccb7f54cd845"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a128366a3792b094b8750b0cbe9c8e05a" id="r_a128366a3792b094b8750b0cbe9c8e05a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html">IProjectileVisualConfig</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a128366a3792b094b8750b0cbe9c8e05a">_visual</a></td></tr>
 <tr class="separator:a128366a3792b094b8750b0cbe9c8e05a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64c00c517ebbede3729b8feb747ad7cf" id="r_a64c00c517ebbede3729b8feb747ad7cf"><td class="memItemLeft" align="right" valign="top">IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage.html">WallHitMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a64c00c517ebbede3729b8feb747ad7cf">_wallHitPublisher</a></td></tr>
@@ -378,31 +382,6 @@ Static Private Attributes</h2></td></tr>
           <td class="memname">void BalloonParty.Projectile.View.ProjectileView.ActivateInitialGlow </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a80ec4bcbc7e79b815ed96a5a0ad1cf78" name="a80ec4bcbc7e79b815ed96a5a0ad1cf78"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a80ec4bcbc7e79b815ed96a5a0ad1cf78">&#9670;&#160;</a></span>AlreadyPlowed()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool BalloonParty.Projectile.View.ProjectileView.AlreadyPlowed </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html">IBalloonModel</a></td>          <td class="paramname"><span class="paramname"><em>balloon</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1151,8 +1130,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ad90de7b05a44d5fd6beebf83da2b7553" name="ad90de7b05a44d5fd6beebf83da2b7553"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad90de7b05a44d5fd6beebf83da2b7553">&#9670;&#160;</a></span>TickPierceSpiral()</h2>
+<a id="a9525d9897eafd82593e0295ed69e2fd8" name="a9525d9897eafd82593e0295ed69e2fd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9525d9897eafd82593e0295ed69e2fd8">&#9670;&#160;</a></span>TickPierceSpiral()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1163,8 +1142,12 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void BalloonParty.Projectile.View.ProjectileView.TickPierceSpiral </td>
           <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>toughAhead</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>toughPos</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -1409,6 +1392,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">IPublisher&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BalanceBalloonsMessage.html">BalanceBalloonsMessage</a>&gt; BalloonParty.Projectile.View.ProjectileView._balancePublisher</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a927fae092f400348b8339a23e8dee0cf" name="a927fae092f400348b8339a23e8dee0cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a927fae092f400348b8339a23e8dee0cf">&#9670;&#160;</a></span>_balloonCastFilter</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ContactFilter2D BalloonParty.Projectile.View.ProjectileView._balloonCastFilter</td>
         </tr>
       </table>
   </td>
@@ -2663,6 +2668,50 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html">ProjectileTapResolver</a> BalloonParty.Projectile.View.ProjectileView._tapResolver</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7d6e75dcbc142938307820dcdc40d822" name="a7d6e75dcbc142938307820dcdc40d822"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d6e75dcbc142938307820dcdc40d822">&#9670;&#160;</a></span>_telegraphCandidates</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;<a class="el" href="structBalloonParty_1_1Projectile_1_1Controller_1_1PierceCastCandidate.html">PierceCastCandidate</a>&gt; BalloonParty.Projectile.View.ProjectileView._telegraphCandidates = new(16)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a319ae7dc7a6820394842ccb7f54cd845" name="a319ae7dc7a6820394842ccb7f54cd845"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a319ae7dc7a6820394842ccb7f54cd845">&#9670;&#160;</a></span>_telegraphHits</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;RaycastHit2D&gt; BalloonParty.Projectile.View.ProjectileView._telegraphHits = new(16)</td>
         </tr>
       </table>
   </td>

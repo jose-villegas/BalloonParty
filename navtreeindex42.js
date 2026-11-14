@@ -1,5 +1,6 @@
 var NAVTREEINDEX42 =
 {
+"classBalloonParty_1_1Editor_1_1TextureAuditWindow.html#a57adb8dd925f8b38b5436aded8279147":[5,0,0,5,47,13],
 "classBalloonParty_1_1Editor_1_1TextureAuditWindow.html#a57adb8dd925f8b38b5436aded8279147":[6,0,0,5,47,13],
 "classBalloonParty_1_1Editor_1_1TextureAuditWindow.html#a63c12bf491504852f0b425b815984ef7":[5,0,0,5,47,5],
 "classBalloonParty_1_1Editor_1_1TextureAuditWindow.html#a63c12bf491504852f0b425b815984ef7":[6,0,0,5,47,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX42 =
 "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#acf4883c6ad6b15bea9cb7d6d176dd114":[5,0,0,6,0,0,0],
 "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#acf4883c6ad6b15bea9cb7d6d176dd114":[6,0,0,6,0,0,0],
 "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ad0626894ffb8799a0636248cb5fe42e9":[5,0,0,6,0,0,16],
-"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ad0626894ffb8799a0636248cb5fe42e9":[6,0,0,6,0,0,16],
-"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ad3a774f88dfa6a9307612e9e4d4bd1d9":[5,0,0,6,0,0,5]
+"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ad0626894ffb8799a0636248cb5fe42e9":[6,0,0,6,0,0,16]
 };

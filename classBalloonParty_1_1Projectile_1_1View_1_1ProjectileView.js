@@ -1,7 +1,6 @@
 var classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView =
 [
     [ "ActivateInitialGlow", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a4f82801ddff53fe46018c4c1d45c256b", null ],
-    [ "AlreadyPlowed", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a80ec4bcbc7e79b815ed96a5a0ad1cf78", null ],
     [ "ApplyGlow", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a11d3e664f92bdc83b16d850abcbad4fe", null ],
     [ "Awake", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a70e967469cd15e7236d023e96fc958b8", null ],
     [ "Bind", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#aba7744178ab8e4fb284e3beb1ac15d43", null ],
@@ -31,7 +30,7 @@ var classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView =
     [ "ResolvePierceAtBounce", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a98d60febca46aa74d73d911341d14531", null ],
     [ "RevealShieldOnFirstFreeFrame", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#af6c3655d354f34d7f8a649f6fe4210b3", null ],
     [ "SweepPierceMisses", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a1ba2b209955044b8c63dd50548779d37", null ],
-    [ "TickPierceSpiral", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#ad90de7b05a44d5fd6beebf83da2b7553", null ],
+    [ "TickPierceSpiral", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a9525d9897eafd82593e0295ed69e2fd8", null ],
     [ "TickRainbowGlow", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a51da028fef056b256c665b15913a58e1", null ],
     [ "TryAwardSweepTap", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a6dff20e059db098d132a149254acc016", null ],
     [ "TryEnterCruise", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a8f6e0732a52715e29bb373e48a0c83f8", null ],
@@ -41,6 +40,7 @@ var classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView =
     [ "Update", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a3d06d0868f44ccdb115bb95760defa5f", null ],
     [ "UpdateGlowColor", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#ab184bcd257084e19d465b0affc72e8a9", null ],
     [ "_balancePublisher", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#ab752cd6a65490e64c8201fa38d1c3560", null ],
+    [ "_balloonCastFilter", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a927fae092f400348b8339a23e8dee0cf", null ],
     [ "_baseScale", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#af440b2862f9441516bafe7f35a7e3bf3", null ],
     [ "_colliderOffset", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a95bea5dcb9b3ab5240d5ff36e075d869", null ],
     [ "_contactRadius", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a387e55ed5c77ca235caa01cad43399e9", null ],
@@ -98,6 +98,8 @@ var classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView =
     [ "_speedTapPublisher", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a4abdd50686d61b03467f7d0467bc4692", null ],
     [ "_stampScale", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#ae558003af15f94677112e6962b0df62d", null ],
     [ "_tapResolver", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a6c2ea16a6811c480f7f6473ba63e64ac", null ],
+    [ "_telegraphCandidates", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a7d6e75dcbc142938307820dcdc40d822", null ],
+    [ "_telegraphHits", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a319ae7dc7a6820394842ccb7f54cd845", null ],
     [ "_visual", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a128366a3792b094b8750b0cbe9c8e05a", null ],
     [ "_wallHitPublisher", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a64c00c517ebbede3729b8feb747ad7cf", null ],
     [ "BalloonsLayer", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a380f930191e7eade1b6441d6b1d9fa48", null ],

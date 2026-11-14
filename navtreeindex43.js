@@ -1,5 +1,6 @@
 var NAVTREEINDEX43 =
 {
+"classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ad3a774f88dfa6a9307612e9e4d4bd1d9":[5,0,0,6,0,0,5],
 "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ad3a774f88dfa6a9307612e9e4d4bd1d9":[6,0,0,6,0,0,5],
 "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ad8606a7469e79115a773bd5b61684a24":[5,0,0,6,0,0,13],
 "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ad8606a7469e79115a773bd5b61684a24":[6,0,0,6,0,0,13],
@@ -248,6 +249,5 @@ var NAVTREEINDEX43 =
 "classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicScene.html#ae291b3a585811d3de5cfb638ead98dcf":[5,0,0,6,1,8,1],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicScene.html#ae291b3a585811d3de5cfb638ead98dcf":[6,0,0,6,1,8,1],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html":[5,0,0,6,1,9],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html":[6,0,0,6,1,9],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#a00aba3bb752127ca471fe77ba1486732":[5,0,0,6,1,9,32]
+"classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html":[6,0,0,6,1,9]
 };

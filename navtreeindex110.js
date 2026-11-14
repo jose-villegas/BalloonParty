@@ -1,5 +1,16 @@
 var NAVTREEINDEX110 =
 {
+"structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry.html#a19c4572daf0ad43823bc891fdf988507":[5,0,0,3,28,3],
+"structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry.html#a19c4572daf0ad43823bc891fdf988507":[6,0,0,3,28,3],
+"structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry.html#a652106d4f686a97fe51493be69938ae9":[5,0,0,3,28,2],
+"structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry.html#a652106d4f686a97fe51493be69938ae9":[6,0,0,3,28,2],
+"structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry.html#aceb88fb525ddb15ceee3e7e06b385164":[5,0,0,3,28,1],
+"structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry.html#aceb88fb525ddb15ceee3e7e06b385164":[6,0,0,3,28,1],
+"structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry.html#aeb21835cab1ae6010bc87b97a83f847f":[5,0,0,3,28,4],
+"structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry.html#aeb21835cab1ae6010bc87b97a83f847f":[6,0,0,3,28,4],
+"structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry.html#afc4f8843f0f463823ce853a6c77f772f":[5,0,0,3,28,0],
+"structBalloonParty_1_1Configuration_1_1ScoreTrailBehaviourEntry.html#afc4f8843f0f463823ce853a6c77f772f":[6,0,0,3,28,0],
+"structBalloonParty_1_1Editor_1_1Bush_1_1BushBranchGenerator_1_1Segment.html":[5,0,0,5,0,4,0],
 "structBalloonParty_1_1Editor_1_1Bush_1_1BushBranchGenerator_1_1Segment.html":[6,0,0,5,0,4,0],
 "structBalloonParty_1_1Editor_1_1Bush_1_1BushBranchGenerator_1_1Segment.html#a4acfbb95cff52184db887d67f40bf64d":[5,0,0,5,0,4,0,0],
 "structBalloonParty_1_1Editor_1_1Bush_1_1BushBranchGenerator_1_1Segment.html#a4acfbb95cff52184db887d67f40bf64d":[6,0,0,5,0,4,0,0],
@@ -238,16 +249,5 @@ var NAVTREEINDEX110 =
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html#ab2b1c8d4a5e5908788c8261190abcc90":[5,0,0,6,4,1,5],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html#ab2b1c8d4a5e5908788c8261190abcc90":[6,0,0,6,4,1,5],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html#aca54b34cf1291c853f2f114b64e98b4d":[5,0,0,6,4,1,3],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html#aca54b34cf1291c853f2f114b64e98b4d":[6,0,0,6,4,1,3],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html#ad21f74fd27fa909ae7fe142a89ceac00":[5,0,0,6,4,1,1],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html#ad21f74fd27fa909ae7fe142a89ceac00":[6,0,0,6,4,1,1],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html#af82e560dba2fdab3c38c1e2b68704144":[5,0,0,6,4,1,0],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html#af82e560dba2fdab3c38c1e2b68704144":[6,0,0,6,4,1,0],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html":[5,0,0,6,4,2],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html":[6,0,0,6,4,2],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#a00b76c69f75438f095750e409984819c":[5,0,0,6,4,2,6],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#a00b76c69f75438f095750e409984819c":[6,0,0,6,4,2,6],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#a18417b2d79accfafec81ee11fdadf1c4":[5,0,0,6,4,2,4],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#a18417b2d79accfafec81ee11fdadf1c4":[6,0,0,6,4,2,4],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#a1dc1f108f5e2d38d696f270e40403d46":[5,0,0,6,4,2,8]
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html#aca54b34cf1291c853f2f114b64e98b4d":[6,0,0,6,4,1,3]
 };

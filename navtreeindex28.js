@@ -1,5 +1,6 @@
 var NAVTREEINDEX28 =
 {
+"classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioSchedule.html":[5,0,0,3,9,28],
 "classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioSchedule.html":[6,0,0,3,9,28],
 "classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioSchedule.html#a156af539cc8c16b1e9b8f1d16bf41964":[5,0,0,3,9,28,5],
 "classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioSchedule.html#a156af539cc8c16b1e9b8f1d16bf41964":[6,0,0,3,9,28,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX28 =
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html":[5,0,0,3,10,8],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html":[6,0,0,3,10,8],
 "classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html#a76fea612ee9d1b2234ea6dc25b1f4107":[5,0,0,3,10,8,0],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html#a76fea612ee9d1b2234ea6dc25b1f4107":[6,0,0,3,10,8,0],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html#a8f328dc0ab90cfb9afaa760c313bf961":[5,0,0,3,10,8,1]
+"classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteEntry.html#a76fea612ee9d1b2234ea6dc25b1f4107":[6,0,0,3,10,8,0]
 };

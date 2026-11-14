@@ -1,5 +1,16 @@
 var NAVTREEINDEX96 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#a7b37e311ef9a522c6f1c3cc4097d4902":[6,0,0,3,5,9,15],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#a8ce9b8f303d645ae3adf98c3214a6361":[5,0,0,3,5,9,14],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#a8ce9b8f303d645ae3adf98c3214a6361":[6,0,0,3,5,9,14],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#a90964bd77a33f6431bf762eea05101b6":[5,0,0,3,5,9,4],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#a90964bd77a33f6431bf762eea05101b6":[6,0,0,3,5,9,4],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#a932759f91d3cd588cfa3d69e990171d2":[5,0,0,3,5,9,20],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#a932759f91d3cd588cfa3d69e990171d2":[6,0,0,3,5,9,20],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#a94e3325b02c8040b6961ad5decf2b916":[5,0,0,3,5,9,7],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#a94e3325b02c8040b6961ad5decf2b916":[6,0,0,3,5,9,7],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#a9a67601170854ced3c796d7cf532e196":[5,0,0,3,5,9,9],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#a9a67601170854ced3c796d7cf532e196":[6,0,0,3,5,9,9],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#aa58edbfa73859910527f5a19df5cd8c0":[5,0,0,3,5,9,2],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#aa58edbfa73859910527f5a19df5cd8c0":[6,0,0,3,5,9,2],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#aa70f16eba45133a9ed996e61bd6ddea4":[5,0,0,3,5,9,0],
@@ -238,16 +249,5 @@ var NAVTREEINDEX96 =
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings.html#a7178d9092f077146e73dd5f99b5b18a5":[6,0,0,3,5,20,4],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings.html#aac340cc1e92db0b53c5c4fbb1b5365ed":[5,0,0,3,5,20,3],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings.html#aac340cc1e92db0b53c5c4fbb1b5365ed":[6,0,0,3,5,20,3],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings.html#aad02ec462e12592e4b78355cb8a6afaa":[5,0,0,3,5,20,8],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings.html#aad02ec462e12592e4b78355cb8a6afaa":[6,0,0,3,5,20,8],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings.html#ab90e9870c3fb5cc3c42064545639a42e":[5,0,0,3,5,20,5],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings.html#ab90e9870c3fb5cc3c42064545639a42e":[6,0,0,3,5,20,5],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings.html#ae42d87ff471b6106eca3192208971f76":[5,0,0,3,5,20,2],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings.html#ae42d87ff471b6106eca3192208971f76":[6,0,0,3,5,20,2],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings.html#af82431e0f98a041e17243725f26cbbfa":[5,0,0,3,5,20,6],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings.html#af82431e0f98a041e17243725f26cbbfa":[6,0,0,3,5,20,6],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckSpawnSettings.html":[5,0,0,3,5,21],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckSpawnSettings.html":[6,0,0,3,5,21],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckSpawnSettings.html#a1d1f0671471b84b966791408a3a82321":[5,0,0,3,5,21,3],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckSpawnSettings.html#a1d1f0671471b84b966791408a3a82321":[6,0,0,3,5,21,3]
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckMotionSettings.html#aad02ec462e12592e4b78355cb8a6afaa":[5,0,0,3,5,20,8]
 };

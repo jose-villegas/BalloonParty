@@ -1,5 +1,16 @@
 var NAVTREEINDEX79 =
 {
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#a26682eef3cb52cbcbbb99c1aeaa24128":[5,0,0,13,0,0,19,12],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#a26682eef3cb52cbcbbb99c1aeaa24128":[6,0,0,13,0,0,19,12],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#a3b79ac6245f3b3dd2642ea0a37346963":[5,0,0,13,0,0,19,19],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#a3b79ac6245f3b3dd2642ea0a37346963":[6,0,0,13,0,0,19,19],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#a50e641ba727e8427f0c0c2bd0664c172":[5,0,0,13,0,0,19,4],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#a50e641ba727e8427f0c0c2bd0664c172":[6,0,0,13,0,0,19,4],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#a5225e538a2d285a8ec1f4a0cdcbe90fb":[5,0,0,13,0,0,19,18],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#a5225e538a2d285a8ec1f4a0cdcbe90fb":[6,0,0,13,0,0,19,18],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#a5811cef6932d4719e0eed4bbc8c13fb1":[5,0,0,13,0,0,19,15],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#a5811cef6932d4719e0eed4bbc8c13fb1":[6,0,0,13,0,0,19,15],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#a58742ebee7df75c1458bde66e329405b":[5,0,0,13,0,0,19,11],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#a58742ebee7df75c1458bde66e329405b":[6,0,0,13,0,0,19,11],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#a5b22218786361289e0e0bb2cdc1b3e77":[5,0,0,13,0,0,19,0],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html#a5b22218786361289e0e0bb2cdc1b3e77":[6,0,0,13,0,0,19,0],
@@ -238,16 +249,5 @@ var NAVTREEINDEX79 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html#a95f5801a976060d0700c12394a636132":[5,0,0,13,0,1,7,16],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html#a95f5801a976060d0700c12394a636132":[6,0,0,13,0,1,7,16],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html#a9d0dfe4c60d54aa9acad58d1f6f99628":[5,0,0,13,0,1,7,23],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html#a9d0dfe4c60d54aa9acad58d1f6f99628":[6,0,0,13,0,1,7,23],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html#aac9ae709d978e8921135a7d645215422":[5,0,0,13,0,1,7,7],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html#aac9ae709d978e8921135a7d645215422":[6,0,0,13,0,1,7,7],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html#ab27bcb7c1f5187307be04358aeee66de":[5,0,0,13,0,1,7,15],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html#ab27bcb7c1f5187307be04358aeee66de":[6,0,0,13,0,1,7,15],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html#ab2cbce22fe4d8ba80fdedde0ef997b57":[5,0,0,13,0,1,7,2],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html#ab2cbce22fe4d8ba80fdedde0ef997b57":[6,0,0,13,0,1,7,2],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html#abb83210f4c51ce5433ccb010a7479e23":[5,0,0,13,0,1,7,4],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html#abb83210f4c51ce5433ccb010a7479e23":[6,0,0,13,0,1,7,4],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html#abffac52da70a44ce362f585628eaac75":[5,0,0,13,0,1,7,0],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html#abffac52da70a44ce362f585628eaac75":[6,0,0,13,0,1,7,0],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html#ad242f9ff8f4570b3441e6f30a9f861db":[5,0,0,13,0,1,7,20]
+"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html#a9d0dfe4c60d54aa9acad58d1f6f99628":[6,0,0,13,0,1,7,23]
 };

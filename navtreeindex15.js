@@ -1,5 +1,6 @@
 var NAVTREEINDEX15 =
 {
+"classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a737cff70bfdd7095adb9fd6f44537823":[5,0,0,1,4,10,35],
 "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a737cff70bfdd7095adb9fd6f44537823":[6,0,0,1,4,10,35],
 "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a82df526b296e5819fd17efb963048355":[5,0,0,1,4,10,8],
 "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a82df526b296e5819fd17efb963048355":[6,0,0,1,4,10,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX15 =
 "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a6dbea46f85b5a600bbd701db497e405c":[5,0,0,1,5,6,32],
 "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a6dbea46f85b5a600bbd701db497e405c":[6,0,0,1,5,6,32],
 "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a77128e5db140dc3036d7d3e27feb3cc1":[5,0,0,1,5,6,19],
-"classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a77128e5db140dc3036d7d3e27feb3cc1":[6,0,0,1,5,6,19],
-"classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a7770ab990f9a0fa64845cdff360a4f44":[5,0,0,1,5,6,29]
+"classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html#a77128e5db140dc3036d7d3e27feb3cc1":[6,0,0,1,5,6,19]
 };
