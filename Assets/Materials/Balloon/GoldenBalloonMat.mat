@@ -32,6 +32,11 @@ Material:
     - PixelSnap: 0
     - _AmbientDimming: 0.4
     - _AmbientHue: 0.25
+    - _BevelDepth: 0.7
+    - _BevelWidth: 0.16
+    - _BoltDome: 1.4
+    - _BoltInset: 0.62
+    - _BoltRadius: 0.075
     - _EdgePower: 3
     - _EnvHorizon: -0.05
     - _EnvStrength: 0.4
@@ -46,8 +51,7 @@ Material:
     - _GlitterSpeed: 4
     - _LightHeight: 0.9
     - _LightInfluence: 1
-    - _PlateJitter: 0.8
-    - _PlateScale: 3.2
+    - _PlateScale: 2.6
     - _PlateTilt: 0.16
     - _PlateVariance: 0.12
     - _PlateWobble: 0.35

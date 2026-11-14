@@ -85,9 +85,11 @@ it's gone with the board, like any balloon.
 - **Golden:** a balloon, built from the tough balloon's prefab (body, knot, the shine sprites, the
   baked shadow), so it reads as one of the balloons and not as an unbreakable. Its body is
   `Balloon/GoldenBalloon.shader`: the tough balloon's sphere projection and scene light, plated in
-  gold. The plates are Voronoi cells over the sphere, crowding toward the rim like tiles on a ball,
-  with thin dark seams. Each plate is tilted a little and sways slowly, so it shades, reflects the
-  horizon and glints on its own as the light moves, and the glitter (`Include/Glitter.cginc`) is
+  gold. The plates are even hexagons over the sphere, crowding toward the rim like tiles on a ball.
+  They are even on purpose: irregular Voronoi plates read like the tough balloon's cracks. Each plate
+  is bevelled down into a thin dark seam, with a domed bolt inset from each corner, which gives it
+  relief. Each is also tilted a little and wobbles slowly, so it shades, reflects the horizon and
+  glints on its own as the light moves, and the glitter (`Include/Glitter.cginc`) is
   gated by the glint, so it sparkles only where the light catches. The knot is dark gold. Checked
   in the Editor at noon and at night.
 - **Heart:** a heart-shaped balloon body (a new sprite, drawn by script under `Tools/art/` like the card
