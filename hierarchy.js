@@ -228,6 +228,7 @@ var hierarchy =
         [ "BalloonParty.Balloon.Model.BalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html", null ],
         [ "BalloonParty.Balloon.Model.BubbleClusterModel", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html", null ],
         [ "BalloonParty.Balloon.Model.GoldenBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html", null ],
+        [ "BalloonParty.Balloon.Model.HeartBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1HeartBalloonModel.html", null ],
         [ "BalloonParty.Balloon.Model.ToughBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html", null ],
         [ "BalloonParty.Balloon.Model.UnbreakableBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html", null ]
       ] ],
@@ -773,6 +774,7 @@ var hierarchy =
     ] ],
     [ "BalloonParty.Slots.Capabilities.IResistsPaint", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IResistsPaint.html", [
       [ "BalloonParty.Balloon.Model.GoldenBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html", null ],
+      [ "BalloonParty.Balloon.Model.HeartBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1HeartBalloonModel.html", null ],
       [ "BalloonParty.Balloon.Model.ToughBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html", null ],
       [ "BalloonParty.Balloon.Model.UnbreakableBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html", null ]
     ] ],

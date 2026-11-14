@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"RollingTextAnimator_8cs.html":[7,0,14,0,1],
 "RunConfig_8cs.html":[7,0,3,22],
 "RunController_8cs.html":[7,0,7,7,15],
 "RunMeta_8cs.html":[7,0,7,7,16],
@@ -206,7 +207,7 @@ var NAVTREEINDEX3 =
 "TmpTextExtensions_8cs.html":[7,0,14,4,19],
 "TooltipBanner_8cs.html":[7,0,18,10,0],
 "TooltipMessage_8cs.html":[7,0,14,7,48],
-"ToughBalloonModel_8cs.html":[7,0,1,2,12],
+"ToughBalloonModel_8cs.html":[7,0,1,2,13],
 "ToughBalloonVariant_8cs.html":[7,0,1,5,6],
 "TraceHitGeometry_8cs.html":[7,0,11,6],
 "TraceHitMarker_8cs.html":[7,0,11,7],
@@ -225,7 +226,7 @@ var NAVTREEINDEX3 =
 "TweenOscillator_8cs.html":[7,0,14,0,2],
 "TweenTracker_8cs.html":[7,0,14,0,3],
 "UiSfxEmitter_8cs.html":[7,0,0,3,1],
-"UnbreakableBalloonModel_8cs.html":[7,0,1,2,13],
+"UnbreakableBalloonModel_8cs.html":[7,0,1,2,14],
 "UnbreakableBalloonVariant_8cs.html":[7,0,1,5,7],
 "UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d":[7,0,1,5,7,1],
 "UnbreakableFormationLook_8cs.html":[7,0,1,5,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "WallBounceEndCondition_8cs.html":[7,0,12,0,3],
 "WallHitMessage_8cs.html":[7,0,14,7,51],
 "WallLimits_8cs.html":[7,0,14,37],
-"WallNetView_8cs.html":[7,0,13,0,5],
-"WaterCausticBuffer_8cs.html":[7,0,13,0,6]
+"WallNetView_8cs.html":[7,0,13,0,5]
 };

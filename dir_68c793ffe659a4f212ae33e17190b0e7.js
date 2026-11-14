@@ -7,6 +7,7 @@ var dir_68c793ffe659a4f212ae33e17190b0e7 =
     [ "BubbleClusterModel.cs", "BubbleClusterModel_8cs.html", "BubbleClusterModel_8cs" ],
     [ "ColorSource.cs", "ColorSource_8cs.html", "ColorSource_8cs" ],
     [ "GoldenBalloonModel.cs", "GoldenBalloonModel_8cs.html", "GoldenBalloonModel_8cs" ],
+    [ "HeartBalloonModel.cs", "HeartBalloonModel_8cs.html", "HeartBalloonModel_8cs" ],
     [ "IBalloonModel.cs", "IBalloonModel_8cs.html", "IBalloonModel_8cs" ],
     [ "IFormationMember.cs", "IFormationMember_8cs.html", "IFormationMember_8cs" ],
     [ "IHasWriteableItemSlot.cs", "IHasWriteableItemSlot_8cs.html", "IHasWriteableItemSlot_8cs" ],

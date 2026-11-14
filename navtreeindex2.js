@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"ItemCountStep_8cs.html":[7,0,3,9,16],
 "ItemDisplayService_8cs.html":[7,0,8,21],
 "ItemEffectParams_8cs.html":[7,0,8,1,2],
 "ItemEffectPlayer_8cs.html":[7,0,8,22],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "RibbonGraphic_8cs.html":[7,0,18,1,2],
 "RibbonPiece_8cs.html":[7,0,18,1,3],
 "RibbonStrike_8cs.html":[7,0,18,1,4],
-"RollingCounterDisplay_8cs.html":[7,0,18,19],
-"RollingTextAnimator_8cs.html":[7,0,14,0,1]
+"RollingCounterDisplay_8cs.html":[7,0,18,19]
 };

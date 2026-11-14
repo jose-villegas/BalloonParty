@@ -7,6 +7,7 @@ var namespaceBalloonParty_1_1Balloon_1_1Model =
     [ "BubbleClusterModel", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel" ],
     [ "ColorSource", "structBalloonParty_1_1Balloon_1_1Model_1_1ColorSource.html", "structBalloonParty_1_1Balloon_1_1Model_1_1ColorSource" ],
     [ "GoldenBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel" ],
+    [ "HeartBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1HeartBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1HeartBalloonModel" ],
     [ "IBalloonModel", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel" ],
     [ "IFormationMember", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember" ],
     [ "IHasWriteableItemSlot", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IHasWriteableItemSlot.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IHasWriteableItemSlot" ],

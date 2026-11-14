@@ -3,6 +3,7 @@ var structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot =
     [ "ShotBalloonSnapshot", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#afc3a6f05235ce7cfcd91e28e83a4238c", null ],
     [ "ForColorTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a5de603fe9f4b4f8e42870b24e84cd978", null ],
     [ "ForGoldenTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a947847b185f8db3f3058dfe987127b51", null ],
+    [ "ForHeartTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#ac6069f037cdf5d7b3d5cdb1a2e5dfc82", null ],
     [ "ForRainbowTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#ac0a61d12c30167f287dd79b24044094d", null ],
     [ "ForStaticContact", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#ac17d2677c674928759ad59ff0110bb2d", null ],
     [ "ForToughTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#ab188e52fddc2ea32587c6c4172aba22b", null ],

@@ -72,6 +72,9 @@ var namespaceBalloonParty_1_1Audio =
       [ "BalloonPopTougher", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13ab9ff9a9da8c1a8695184b580506db156", null ],
       [ "BalloonDeflectTougher", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a6169cd5bb097937f1d80bf8ebbe6f54c", null ],
       [ "Strikethrough", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a926a51baad949d12035107e5d06e2fdb", null ],
-      [ "ItemSighted", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13aa65762fb22742c8d8fa01d1fbb3438ce", null ]
+      [ "ItemSighted", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13aa65762fb22742c8d8fa01d1fbb3438ce", null ],
+      [ "BalloonPopHeart", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13af85d58c6f16554dc45df5ab38da217cd", null ],
+      [ "BalloonDeflectGolden", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a3b996b75cf3bf098505493637212e4e1", null ],
+      [ "BalloonPopGolden", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a5a26f3e47748c8276d5021eb897b3870", null ]
     ] ]
 ];

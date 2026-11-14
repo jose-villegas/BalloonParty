@@ -9,6 +9,7 @@ var classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout =
     [ "_giveAHeart", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html#a5ad87bac3803129fe461afb029c6cfae", null ],
     [ "_healing", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html#a1235e41a5bd644f9bf765557494f5a44", null ],
     [ "_hitSubscriber", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html#a3ec4729f34fe2429ab24fa2735197c95", null ],
-    [ "_lastPaid", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html#ac27727c487928d8ed8c0ad2618e58443", null ],
+    [ "_lastGoldenPaid", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html#a043fe50101386b63901c414f38b7939a", null ],
+    [ "_lastHeartPaid", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html#afc0c8923ba9e56b889c15425932b44a5", null ],
     [ "_subscription", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html#a7906e68a75b5ff6c408726d3f1bcffe4", null ]
 ];
