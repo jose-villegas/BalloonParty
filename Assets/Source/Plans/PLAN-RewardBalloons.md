@@ -87,7 +87,8 @@ it's gone with the board, like any balloon.
   `Balloon/GoldenBalloon.shader`: the tough balloon's sphere projection and scene light, plated in
   gold. The plates are even hexagons over the sphere, crowding toward the rim like tiles on a ball.
   They are even on purpose: irregular Voronoi plates read like the tough balloon's cracks. The plates
-  stand apart, and the balloon's orange rubber shows in the gaps, lit as one smooth sphere with its
+  are thick and stand apart: toward the rim each shows its side wall, each casts a shadow into the
+  gaps, and the balloon's orange rubber shows at the bottom of the gaps, lit as one smooth sphere with its
   own gloss, so it reads as a balloon wearing the plates. Each plate is bevelled at its edges and held
   by two domed bolts, at its top and bottom corners, which gives it relief. Each is also tilted a little and wobbles slowly, so it shades, reflects the horizon and
   glints on its own as the light moves, and the glitter (`Include/Glitter.cginc`) is
