@@ -27,7 +27,7 @@ var classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView =
     [ "PlayBounceEffect", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a1b573c152919f3cbf7b8aae5c26d7fd1", null ],
     [ "PlayDisappear", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a857e94fa7fabce09a997ee0c2ef1957f", null ],
     [ "ResetPierceSpiral", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a6b56204b6bbef2fa13efab1c59c74374", null ],
-    [ "ResolvePierceAtBounce", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a98d60febca46aa74d73d911341d14531", null ],
+    [ "ResolvePierceAtBounce", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a238c54e00e273992de2525316a8980b6", null ],
     [ "RevealShieldOnFirstFreeFrame", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#af6c3655d354f34d7f8a649f6fe4210b3", null ],
     [ "SweepPierceMisses", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a1ba2b209955044b8c63dd50548779d37", null ],
     [ "TickPierceSpiral", "classBalloonParty_1_1Projectile_1_1View_1_1ProjectileView.html#a9525d9897eafd82593e0295ed69e2fd8", null ],

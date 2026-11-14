@@ -1,5 +1,5 @@
 <map id="BalloonParty.Item.Snipe.SnipeLanceLines" name="BalloonParty.Item.Snipe.SnipeLanceLines">
-<area shape="rect" id="Node000001" title="Draws a carbon pencil line along each straight run a Snipe lance plows, the moment the shot reaches t..." alt="" coords="216,93,396,133"/>
+<area shape="rect" id="Node000001" title="Draws a carbon pencil line along the straight run a Snipe lance is spent on, the moment the shot disc..." alt="" coords="216,93,396,133"/>
 <area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeLanceArming.html" title="What SnipeItemHandler tells the pencil line when it arms a lance." alt="" coords="5,5,185,45"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="155,48,261,91,259,96,153,53"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="210,13,295,38"/>

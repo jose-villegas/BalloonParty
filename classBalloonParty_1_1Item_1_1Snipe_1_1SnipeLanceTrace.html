@@ -136,9 +136,9 @@ Package Functions</h2></td></tr>
 <tr class="memitem:a2bcbbbb8cfcb6d896ccf10355514751f" id="r_a2bcbbbb8cfcb6d896ccf10355514751f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2bcbbbb8cfcb6d896ccf10355514751f">OpenAtLaunch</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> shot)</td></tr>
 <tr class="memdesc:a2bcbbbb8cfcb6d896ccf10355514751f"><td class="mdescLeft">&#160;</td><td class="mdescRight">A lance armed on a shot still in the thrower: its first run starts at the muzzle, once <a class="el" href="#a31b166eb7df124f11f4414989ba7e4ca">Launched</a> says where that is.  <br /></td></tr>
 <tr class="separator:a2bcbbbb8cfcb6d896ccf10355514751f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af243d5f7cebe6818444049324e46a253" id="r_af243d5f7cebe6818444049324e46a253"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af243d5f7cebe6818444049324e46a253">TryCloseRun</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> shot, Vector3 wall, bool stillPiercing, out Vector3 from)</td></tr>
-<tr class="memdesc:af243d5f7cebe6818444049324e46a253"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ends the open run at <em>wall</em> , reporting where it began.  <br /></td></tr>
-<tr class="separator:af243d5f7cebe6818444049324e46a253"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a717c91ede2514b420fee3ee2cbc493cc" id="r_a717c91ede2514b420fee3ee2cbc493cc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a717c91ede2514b420fee3ee2cbc493cc">TryCloseRun</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> shot, Vector3 wall, bool stillPiercing, bool discharged, out Vector3 from)</td></tr>
+<tr class="memdesc:a717c91ede2514b420fee3ee2cbc493cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ends the open run at <em>wall</em> , reporting where it began.  <br /></td></tr>
+<tr class="separator:a717c91ede2514b420fee3ee2cbc493cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -325,8 +325,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="af243d5f7cebe6818444049324e46a253" name="af243d5f7cebe6818444049324e46a253"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af243d5f7cebe6818444049324e46a253">&#9670;&#160;</a></span>TryCloseRun()</h2>
+<a id="a717c91ede2514b420fee3ee2cbc493cc" name="a717c91ede2514b420fee3ee2cbc493cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a717c91ede2514b420fee3ee2cbc493cc">&#9670;&#160;</a></span>TryCloseRun()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -352,6 +352,11 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>discharged</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">out Vector3</td>          <td class="paramname"><span class="paramname"><em>from</em></span>&#160;)</td>
         </tr>
       </table>
@@ -363,7 +368,7 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Ends the open run at <em>wall</em> , reporting where it began. </p>
-<p>A lance still armed past the wall starts its next run there; otherwise the shot stops being tracked. False when no run was open, or the run is too short to draw. </p>
+<p>A lance still armed past the wall starts its next run there; otherwise the shot stops being tracked. True only for a run the lance <em>discharged</em>  on: the line marks where the lance was spent, so a run that merely carried it to a wall, with nothing plowed, draws nothing. Also false when no run was open, or the run is too short to draw. </p>
 
 </div>
 </div>

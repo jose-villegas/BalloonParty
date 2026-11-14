@@ -127,11 +127,13 @@ $(function(){initNavTree('structBalloonParty_1_1Shared_1_1Messages_1_1PierceWall
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a56fa3258e9a1163049df4b7d137909d8" id="r_a56fa3258e9a1163049df4b7d137909d8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a56fa3258e9a1163049df4b7d137909d8">PierceWallReachedMessage</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> projectile, Vector3 position)</td></tr>
-<tr class="separator:a56fa3258e9a1163049df4b7d137909d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae656064e24069c1f64bb198d5456b397" id="r_ae656064e24069c1f64bb198d5456b397"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae656064e24069c1f64bb198d5456b397">PierceWallReachedMessage</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> projectile, Vector3 position, bool discharged)</td></tr>
+<tr class="separator:ae656064e24069c1f64bb198d5456b397"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:a31ada9d4a7cd0d57695b454cc3987c93" id="r_a31ada9d4a7cd0d57695b454cc3987c93"><td class="memItemLeft" align="right" valign="top">readonly bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31ada9d4a7cd0d57695b454cc3987c93">Discharged</a></td></tr>
+<tr class="separator:a31ada9d4a7cd0d57695b454cc3987c93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ec3d8d0127a6e1caf4c8e6d15bb428d" id="r_a1ec3d8d0127a6e1caf4c8e6d15bb428d"><td class="memItemLeft" align="right" valign="top">readonly Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ec3d8d0127a6e1caf4c8e6d15bb428d">Position</a></td></tr>
 <tr class="separator:a1ec3d8d0127a6e1caf4c8e6d15bb428d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a872568146c1dd0e47e7403d0beb0ca93" id="r_a872568146c1dd0e47e7403d0beb0ca93"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a872568146c1dd0e47e7403d0beb0ca93">Projectile</a></td></tr>
@@ -139,10 +141,10 @@ Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A shot that was piercing reached a wall: the straight run it plowed ends at <a class="el" href="#a1ec3d8d0127a6e1caf4c8e6d15bb428d">Position</a>. </p>
-<p>Published after the wall's discharge has resolved, so the shot's <code>IsPiercing</code> already says whether the lance carries on past this wall. Also published for the wall a piercing shot dies on. </p>
+<p>Published after the wall's discharge has resolved, so the shot's <code>IsPiercing</code> already says whether the lance carries on past this wall. Also published for the wall a piercing shot dies on. <a class="el" href="#a31ada9d4a7cd0d57695b454cc3987c93">Discharged</a> says whether the toughs it plowed shattered at this wall — the run that spent the lance, as opposed to one it merely carried. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a56fa3258e9a1163049df4b7d137909d8" name="a56fa3258e9a1163049df4b7d137909d8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a56fa3258e9a1163049df4b7d137909d8">&#9670;&#160;</a></span>PierceWallReachedMessage()</h2>
+<a id="ae656064e24069c1f64bb198d5456b397" name="ae656064e24069c1f64bb198d5456b397"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae656064e24069c1f64bb198d5456b397">&#9670;&#160;</a></span>PierceWallReachedMessage()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -155,7 +157,12 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>position</em></span>&#160;)</td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>position</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>discharged</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -163,6 +170,20 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a31ada9d4a7cd0d57695b454cc3987c93" name="a31ada9d4a7cd0d57695b454cc3987c93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a31ada9d4a7cd0d57695b454cc3987c93">&#9670;&#160;</a></span>Discharged</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly bool BalloonParty.Shared.Messages.PierceWallReachedMessage.Discharged</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a1ec3d8d0127a6e1caf4c8e6d15bb428d" name="a1ec3d8d0127a6e1caf4c8e6d15bb428d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1ec3d8d0127a6e1caf4c8e6d15bb428d">&#9670;&#160;</a></span>Position</h2>
 

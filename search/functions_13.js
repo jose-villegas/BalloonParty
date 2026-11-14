@@ -100,7 +100,7 @@ var searchData=
   ['trycamera_97',['TryCamera',['../classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpLayer.html#a19bb439f67dc6c829ec7957823bbda09',1,'BalloonParty::UI::HeadsUp::HeadsUpLayer']]],
   ['tryclaimonleg_98',['TryClaimOnLeg',['../classBalloonParty_1_1Item_1_1Shield_1_1ShieldChainPlanner.html#a0696d6c37a7435702f82a10bcf399d92',1,'BalloonParty::Item::Shield::ShieldChainPlanner']]],
   ['tryclassify_99',['TryClassify',['../classBalloonParty_1_1Item_1_1Paint_1_1PaintItemHandler.html#a920f302f649251672e9338254c2e350e',1,'BalloonParty::Item::Paint::PaintItemHandler']]],
-  ['trycloserun_100',['TryCloseRun',['../classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceTrace.html#af243d5f7cebe6818444049324e46a253',1,'BalloonParty::Item::Snipe::SnipeLanceTrace']]],
+  ['trycloserun_100',['TryCloseRun',['../classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceTrace.html#a717c91ede2514b420fee3ee2cbc493cc',1,'BalloonParty::Item::Snipe::SnipeLanceTrace']]],
   ['trycolorbucketindexof_101',['TryColorBucketIndexOf',['../classBalloonParty_1_1Game_1_1Telemetry_1_1AxisBucketNaming.html#ae8ca19eaa1941e0332dbb061f2633f7b',1,'BalloonParty::Game::Telemetry::AxisBucketNaming']]],
   ['trycolumn_102',['TryColumn',['../classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPlacementResolver.html#af2624e12cf2bc6e8b5c130c17b87c18e',1,'BalloonParty::Balloon::Spawner::BalloonPlacementResolver']]],
   ['trycomputecontactnormal_103',['TryComputeContactNormal',['../classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html#a6858e872e7b9f57c5f7b173d6f8ad5f7',1,'BalloonParty::Projectile::Controller::ProjectileMotionResolver']]],
