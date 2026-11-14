@@ -122,8 +122,9 @@ Goals</h2>
 <ol type="1">
 <li><b>Golden balloon.</b><ul>
 <li>Only on purple (extra-colour) levels, placed when the level is about half done (75% at first; moved to 50% after playtests). Its pop rolls once for another (25%, then 10% for a third: three a level at most), which comes a few lines later. Never more than one on the board, and only a pop rolls: one a board clear takes brings no other.</li>
-<li>Normal hits do nothing: the shot bounces off it as off an unbreakable. Items do nothing either (bomb, laser, lightning, paint): a bomb beside it must not hand out the card.</li>
+<li>Normal hits do nothing: the shot bounces off it as off an unbreakable. Items do nothing either (bomb, lightning, paint): a bomb beside it must not hand out the card.</li>
 <li>A piercing shot pops it: a cruise-earned pierce or a Snipe lance. It is plowed and shatters at the shot's next wall bounce, as an unbreakable is.</li>
+<li>A laser beam pops it too (added after playtests): the beam's damage carries <code>DamageFlags.Beam</code>, which a bomb's blast never does.</li>
 <li>Popped, it gives a <b>free upgrade card</b>, kept for the run, shown with the card reveal.</li>
 <li>It still looks like a balloon (body and knot, unlike the unbreakable's sphere), plated in metallic gold: plates wrapping it, each catching the light on its own, with glitter where the speculars land.</li>
 </ul>
@@ -145,7 +146,7 @@ How it fits</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>BalloonType.Golden</code>, <code>BalloonType.Heart</code>   </td><td class="markdownTableBodyNone"><code><a class="el" href="BalloonType_8cs.html">Balloon/Type/BalloonType.cs</a></code>   </td><td class="markdownTableBodyNone">Appended at the end: the names are a telemetry wire contract, the values must stay dense. <code>SimpleGold</code> already names the gold-band plain balloon, hence <code>Golden</code>    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>GoldenBalloonModel</code>   </td><td class="markdownTableBodyNone"><code>Balloon/Model/</code>   </td><td class="markdownTableBodyNone">A <code>BalloonModelBase</code> of its own, not an <code>UnbreakableBalloonModel</code> (that would pull it into formations and roaming). <code>EvaluateHit</code>: a hit with <code>Piercing</code> and <code>DirectHit</code> pops; any other projectile hit deflects; an item hit is <code>HitOutcome.None</code>. <code>IDeflectsShots</code>, <code>IResistsPaint</code>, colourless    </td></tr>
+<td class="markdownTableBodyNone"><code>GoldenBalloonModel</code>   </td><td class="markdownTableBodyNone"><code>Balloon/Model/</code>   </td><td class="markdownTableBodyNone">A <code>BalloonModelBase</code> of its own, not an <code>UnbreakableBalloonModel</code> (that would pull it into formations and roaming). <code>EvaluateHit</code>: a laser's <code>Beam</code> pops; a hit with <code>Piercing</code> and <code>DirectHit</code> pops; any other projectile hit deflects; an item hit is <code>HitOutcome.None</code>. <code>IDeflectsShots</code>, <code>IResistsPaint</code>, colourless    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>HeartBalloonModel</code>   </td><td class="markdownTableBodyNone"><code>Balloon/Model/</code>   </td><td class="markdownTableBodyNone">A colourless one-hit balloon, <code>IResistsPaint</code>    </td></tr>
 <tr class="markdownTableRowEven">
@@ -169,7 +170,7 @@ How it fits</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>IRewardBalloonSettings</code>   </td><td class="markdownTableBodyNone"><code>Configuration/Balloons/</code>   </td><td class="markdownTableBodyNone">The tuning below, a block on <code>BalloonsConfiguration</code>    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Shot solver   </td><td class="markdownTableBodyNone"><code>Solver/</code>   </td><td class="markdownTableBodyNone"><code>ShotBoardGather</code> builds a target for both (today it would see neither); the golden one deflects unless pierced, and is immune to the shared bomb and laser cores   </td></tr>
+<td class="markdownTableBodyNone">Shot solver   </td><td class="markdownTableBodyNone"><code>Solver/</code>   </td><td class="markdownTableBodyNone"><code>ShotBoardGather</code> builds a target for both (today it would see neither); the golden one deflects unless pierced, and is immune to the shared bomb core but not the laser's   </td></tr>
 </table>
 <div class="fragment"><div class="line">sequenceDiagram</div>
 <div class="line">    participant Lvl as LevelController</div>
@@ -249,7 +250,7 @@ Measured</h2>
 <h2><a class="anchor" id="autotoc_md801"></a>
 Open</h2>
 <ul>
-<li>Whether the golden balloon should be easier to break for a player who doesn't hunt pierces. The average bot left it standing on both purple levels it played.</li>
+<li>Whether the golden balloon should be easier to break for a player who doesn't hunt pierces. The average bot left it standing on both purple levels it played. Since then a laser beam breaks it too, it comes at half done, and the bots aim for it.</li>
 <li>Whether the card reveal should say where the card came from ("golden balloon!") in a heads-up.</li>
 <li>Whether a heart balloon should also drift, to make catching it a small skill test; it sits still in this plan.</li>
 <li>Before a third reward balloon: give the reward prefabs their own empty <code>RewardBalloonVariant</code> (the golden one borrows the tough variant and the heart the simple one, both doing nothing there), and let <code>RewardBalloonPayout</code> keep one map of the balloons it has paid instead of a field per type. </li>

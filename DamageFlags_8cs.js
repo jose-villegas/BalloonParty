@@ -6,6 +6,7 @@ var DamageFlags_8cs =
       [ "BalloonParty.Slots.Capabilities.DamageFlags.WildcardStreak", "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762ab3fb6cd550a52ce3f69b60a4261937fa", null ],
       [ "BalloonParty.Slots.Capabilities.DamageFlags.DirectHit", "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762aa5dcddfe1229c26686d7abc62e4223ec", null ],
       [ "BalloonParty.Slots.Capabilities.DamageFlags.DeferredStreak", "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762afd7495145e5651d0a7edad206f333719", null ],
-      [ "BalloonParty.Slots.Capabilities.DamageFlags.CarryStreak", "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762aff6e0f3ea4bd148ea37497a00a98bf98", null ]
+      [ "BalloonParty.Slots.Capabilities.DamageFlags.CarryStreak", "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762aff6e0f3ea4bd148ea37497a00a98bf98", null ],
+      [ "BalloonParty.Slots.Capabilities.DamageFlags.Beam", "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762adc6e84a67852dd96c1ba57da273b26ac", null ]
     ] ]
 ];

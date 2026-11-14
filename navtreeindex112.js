@@ -1,5 +1,6 @@
 var NAVTREEINDEX112 =
 {
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#a7ad86c3dfa9f5d1fa48e08ba91db89f4":[6,0,0,6,4,2,9],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#a82e52ccb139284c043371566b918081f":[5,0,0,6,4,2,3],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#a82e52ccb139284c043371566b918081f":[6,0,0,6,4,2,3],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html#ad52a93511643ea693ad6d7259f0d6dc4":[5,0,0,6,4,2,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX112 =
 "structBalloonParty_1_1Game_1_1Telemetry_1_1ColorCount.html#ae31b87f5e263b8e00af8a15e30bde44d":[6,0,0,6,9,4,2],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1ColorCount.html#affdb96bcd753db52465d10fb6ec31dfc":[5,0,0,6,9,4,1],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1ColorCount.html#affdb96bcd753db52465d10fb6ec31dfc":[6,0,0,6,9,4,1],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1ItemActivationCount.html":[5,0,0,6,9,12],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1ItemActivationCount.html":[6,0,0,6,9,12]
+"structBalloonParty_1_1Game_1_1Telemetry_1_1ItemActivationCount.html":[5,0,0,6,9,12]
 };

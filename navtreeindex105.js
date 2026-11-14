@@ -11,6 +11,7 @@ var NAVTREEINDEX105 =
 "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762a960b44c579bc2f6818d2daaf9e4c16f0":[5,0,0,13,1,17,0],
 "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762aa5dcddfe1229c26686d7abc62e4223ec":[5,0,0,13,1,17,3],
 "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762ab3fb6cd550a52ce3f69b60a4261937fa":[5,0,0,13,1,17,2],
+"namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762adc6e84a67852dd96c1ba57da273b26ac":[5,0,0,13,1,17,6],
 "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762afd7495145e5651d0a7edad206f333719":[5,0,0,13,1,17,4],
 "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762aff6e0f3ea4bd148ea37497a00a98bf98":[5,0,0,13,1,17,5],
 "namespaceBalloonParty_1_1Slots_1_1Grid.html":[5,0,0,13,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX105 =
 "plan_future_ideas.html#autotoc_md546":[3,5,0,13,6],
 "plan_future_ideas.html#autotoc_md547":[3,5,0,13,7],
 "plan_future_ideas.html#autotoc_md549":[3,5,0,14],
-"plan_future_ideas.html#autotoc_md550":[3,5,0,14,0],
-"plan_future_ideas.html#autotoc_md551":[3,5,0,14,1]
+"plan_future_ideas.html#autotoc_md550":[3,5,0,14,0]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX117 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html":[6,0,0,12,7,39],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#a163ec43120216168d81ece78d798a20c":[5,0,0,12,7,39,0],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#a163ec43120216168d81ece78d798a20c":[6,0,0,12,7,39,0],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html#a732c406fea11979499bad7b692f1f1d4":[5,0,0,12,7,39,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX117 =
 "structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1PendingSpeck.html#a58a54b1e48576a0dd054b726b32a2eef":[6,0,0,13,0,18,0,1],
 "structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1PendingSpeck.html#a98cc30ad4a746d0a5b04c90c35f660b3":[5,0,0,13,0,18,0,2],
 "structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1PendingSpeck.html#a98cc30ad4a746d0a5b04c90c35f660b3":[6,0,0,13,0,18,0,2],
-"structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1PendingSpeck.html#a992dbe4a2435edc778a2b8c5aebc7af3":[5,0,0,13,0,18,0,0],
-"structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1PendingSpeck.html#a992dbe4a2435edc778a2b8c5aebc7af3":[6,0,0,13,0,18,0,0]
+"structBalloonParty_1_1Slots_1_1Actor_1_1SpeckField_1_1PendingSpeck.html#a992dbe4a2435edc778a2b8c5aebc7af3":[5,0,0,13,0,18,0,0]
 };

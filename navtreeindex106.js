@@ -1,5 +1,6 @@
 var NAVTREEINDEX106 =
 {
+"plan_future_ideas.html#autotoc_md551":[3,5,0,14,1],
 "plan_future_ideas.html#autotoc_md552":[3,5,0,14,2],
 "plan_future_ideas.html#autotoc_md553":[3,5,0,15],
 "plan_future_ideas.html#autotoc_md554":[3,5,0,16],
@@ -248,6 +249,5 @@ var NAVTREEINDEX106 =
 "plan_terrain_biomes.html#autotoc_md838":[3,9,0,3],
 "plan_terrain_biomes.html#autotoc_md839":[3,9,0,4],
 "plan_terrain_biomes.html#autotoc_md840":[3,9,0,5],
-"plan_terrain_biomes.html#autotoc_md841":[3,9,0,6],
-"plan_terrain_biomes.html#autotoc_md843":[3,9,0,7]
+"plan_terrain_biomes.html#autotoc_md841":[3,9,0,6]
 };
