@@ -1,5 +1,8 @@
-// Renders one balloon on the board alone, lit by the live scene light, on a transparent background: the source
-// picture for make_shatter_sheet.py. Sent to the open Editor in Play mode with
+// Renders one balloon on the board alone, under neutral noon light, on a transparent background: the source
+// picture for make_shatter_sheet.py. Whatever the time of day, the render sees white light from the upper left
+// with no local lights (the scene-light globals are swapped for it and put back), so the sheet carries no tint:
+// the shards' material lights them at runtime, and a tint baked in would land on top of it. Sent to the open
+// Editor in Play mode with
 //   unity command script eval --file <this, placeholders filled in> --result-only
 // Not part of the Unity project (it lives outside Assets/); the Pipeline package compiles it on each call.
 //
@@ -75,15 +78,29 @@ cam.allowHDR = false;
 cam.allowMSAA = false;
 camGo.transform.position = new UnityEngine.Vector3(centre.x, centre.y, centre.z - 10f);
 
+var lightDir = UnityEngine.Shader.PropertyToID("_SceneLightDir");
+var lightColor = UnityEngine.Shader.PropertyToID("_SceneLightColor");
+var fieldOn = UnityEngine.Shader.PropertyToID("_SceneLightFieldOn");
+var liveDir = UnityEngine.Shader.GetGlobalVector(lightDir);
+var liveColor = UnityEngine.Shader.GetGlobalColor(lightColor);
+var liveField = UnityEngine.Shader.GetGlobalFloat(fieldOn);
 var rt = new UnityEngine.RenderTexture(Pixels, Pixels, 24, UnityEngine.RenderTextureFormat.ARGB32);
 try
 {
+    // Noon: the toward-light direction at 135 degrees, where the day/night gradient is white.
+    UnityEngine.Shader.SetGlobalVector(lightDir, new UnityEngine.Vector4(-0.70710678f, 0.70710678f, 0f, 0f));
+    UnityEngine.Shader.SetGlobalColor(lightColor, UnityEngine.Color.white);
+    UnityEngine.Shader.SetGlobalFloat(fieldOn, 0f);
     cam.targetTexture = rt;
     cam.Render();
     cam.targetTexture = null;
 }
 finally
 {
+    UnityEngine.Shader.SetGlobalVector(lightDir, liveDir);
+    UnityEngine.Shader.SetGlobalColor(lightColor, liveColor);
+    UnityEngine.Shader.SetGlobalFloat(fieldOn, liveField);
+
     foreach (var (go, layer) in picked)
     {
         go.layer = layer;

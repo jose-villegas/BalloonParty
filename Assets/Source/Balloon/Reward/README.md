@@ -29,7 +29,7 @@ material), so it stands out on a busy board: they sort below every balloon, so t
 Their colour and strength are the palette's `GoldenRays` entry; their shape and motion are the material's. The prefab keeps the tough
 balloon's variant, which only draws cracks for a balloon with durability, so on the golden one it
 does nothing. Its pop shatters it into gold plates (`PSVFX_GoldenPop`, the unbreakable's shatter drawing the
-`Sprites/Balloons/Golden/golden_parts` sheet, cut from a capture of the balloon by `Tools/art/shatter`). It has its own cues (`CombatSoundRouter`): `BalloonDeflectGolden` when the shot bounces off,
+`Sprites/Balloons/Golden/golden_parts` sheet, cut from a capture of the balloon by `Tools/art/shatter`), lit by the time of day like the balloon (`Particle/SceneLit`). It has its own cues (`CombatSoundRouter`): `BalloonDeflectGolden` when the shot bounces off,
 the unbreakable's metallic chime a fifth above the board's key with a high gold glint over it, climbing on
 each further bounce of the same shot; and `BalloonPopGolden` when it breaks, the gold-band balloon's pop with
 a balloon's burst under it and the chime an octave up as a coin ring. Both are layered from clips already in

@@ -9,7 +9,7 @@ together.
 
 | Folder | Contents |
 |---|---|
-| `Balloons/` | Balloon body/shine/spec/blur; `Unbreakable/` holds the chrome-sphere parts; `Golden/` holds `golden_parts`, the golden balloon's shatter sheet, baked by `Tools/art/shatter/make_shatter_sheet.py` (material-only, so not atlased) |
+| `Balloons/` | Balloon body/shine/spec/blur; `Unbreakable/` holds the chrome-sphere parts and `unbreakable_parts`, its shatter sheet; `Golden/` holds `golden_parts`, the golden balloon's; both baked by `Tools/art/shatter/make_shatter_sheet.py` (material-only, so not atlased) |
 | `Thrower/` | Thrower shell, caparace, and tap-charge sprites |
 | `Projectile/` | The thrown ball only — `bullet`, `bullet_blur` |
 | `Items/` | Item effect art — bomb, laser, lightning, spark, shield-lose (bomb/laser/lightning/shield) |
