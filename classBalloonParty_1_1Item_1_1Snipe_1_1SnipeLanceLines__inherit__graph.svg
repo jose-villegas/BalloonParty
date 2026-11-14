@@ -22,7 +22,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Draws a carbon pencil line along the straight run a Snipe lance is spent on, the moment the shot disc...">
+<g id="a_Node000001"><a xlink:title="Draws a carbon pencil line along the straight run a Snipe lance is spent on.">
 <polygon fill="#999999" stroke="#666666" points="290.5,-33.5 156,-33.5 156,0 290.5,0 290.5,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="164" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Snipe.</text>
 <text xml:space="preserve" text-anchor="middle" x="223.25" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">SnipeLanceLines</text>

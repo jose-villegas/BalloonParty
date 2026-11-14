@@ -1,5 +1,5 @@
 <map id="BalloonParty.Item.Snipe.SnipeLanceLines" name="BalloonParty.Item.Snipe.SnipeLanceLines">
-<area shape="rect" id="Node000001" title="Draws a carbon pencil line along the straight run a Snipe lance is spent on, the moment the shot disc..." alt="" coords="628,264,808,309"/>
+<area shape="rect" id="Node000001" title="Draws a carbon pencil line along the straight run a Snipe lance is spent on." alt="" coords="628,264,808,309"/>
 <area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeLanceArming.html" title="What SnipeItemHandler tells the pencil line when it arms a lance." alt="" coords="283,5,462,50"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="471,53,541,84,575,104,606,128,638,162,667,198,707,264,702,263,662,201,634,165,603,132,572,109,539,89,471,58"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="330,74,415,102"/>
@@ -18,7 +18,7 @@
 <area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="226,388,276,389,271,392,228,393"/>
 <area shape="rect" id="Node000010" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="280,437,466,482"/>
 <area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="476,430,540,406,603,376,652,342,691,310,696,308,655,346,606,380,542,411,478,435"/>
-<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView.html" title="One pencil stroke along a Snipe lance&#39;s run: a two&#45;point LineRenderer carrying the aim trace&#39;s smoke&#45;..." alt="" coords="283,507,462,551"/>
+<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView.html" title="One pencil stroke along a Snipe lance&#39;s run, carrying the aim trace&#39;s smoke&#45;and&#45;glitter material so t..." alt="" coords="283,507,462,551"/>
 <area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="476,503,542,477,574,460,603,440,636,408,664,372,703,310,708,307,668,375,639,412,606,444,576,465,544,482,478,508"/>
 <area shape="rect" id="Node000012" title=" " alt="" coords="47,486,170,514"/>
 <area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="185,505,285,518,280,520,186,511"/>

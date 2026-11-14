@@ -2,13 +2,17 @@ var classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines =
 [
     [ "Stroke", "structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines_1_1Stroke.html", "structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines_1_1Stroke" ],
     [ "SnipeLanceLines", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#add1a13168cb108e95d427996f0e30ead", null ],
+    [ "BeginStroke", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#a9cfd9b669f981901a5b37e1601f23924", null ],
     [ "CreateChannel", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#a5f608c4d222b8fe7aa326d5df85839e8", null ],
     [ "Dispose", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#a9fb02e786b586ba302a2779814739645", null ],
     [ "HoldsStrokes", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#af7d2ccfa09af417fe581f9c45c9682a0", null ],
+    [ "IndexOfDrawingStroke", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#aa659e84dc7e243d25287ca0aeffb3d34", null ],
     [ "OnLanceArmed", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#ad31a5f7aeb2119ad6fd0cd66339c7684", null ],
     [ "OnLanceRearmed", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#a1bc898ff92af47dc7f28de5edcbfc78b", null ],
+    [ "OnRetired", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#afd26dcca9ace01108d3909512b8ea460", null ],
     [ "OnWallReached", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#a7f21b1eb0c70b60dd47fe6ecf537d9f9", null ],
     [ "Start", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#a4ecc056a73ce59000a74fb670a8e559f", null ],
+    [ "StartStrokesOnPlow", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#a8da3c453001d08815a9c2aefe65a4b5a", null ],
     [ "Tick", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#a73d3ea38f096ee72f151d739f6549bae", null ],
     [ "TryGetInFlightPosition", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#af26aa6d52d4b27f851c6a9e8187c5efd", null ],
     [ "_firedSubscriber", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#add6b4235023a2ba05c7c391a97e4cd5b", null ],
@@ -21,5 +25,6 @@ var classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines =
     [ "_subscriptions", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#ab9759c88e8eb8b3e7cc030ab807a25c6", null ],
     [ "_trace", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#a43ea7a8a7017d67a6923288185af82d3", null ],
     [ "_traceConfig", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#a92ba949b2a8e07918cc01da84f3ea6a5", null ],
-    [ "_wallReachedSubscriber", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#a8a96c6839a61523c1c35df21bf217e79", null ]
+    [ "_wallReachedSubscriber", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#a8a96c6839a61523c1c35df21bf217e79", null ],
+    [ "DeltaTime", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#a6c8b071564c0826fa70c424df8d102ec", null ]
 ];

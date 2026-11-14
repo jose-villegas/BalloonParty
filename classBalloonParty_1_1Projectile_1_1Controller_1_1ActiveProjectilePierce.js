@@ -1,13 +1,17 @@
 var classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce =
 [
     [ "Tracked", "structBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce_1_1Tracked.html", "structBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce_1_1Tracked" ],
-    [ "ActiveProjectilePierce", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html#a4071f4a43ad18c71fb4c9f10e0925037", null ],
+    [ "ActiveProjectilePierce", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html#ae83adfaf3d54360c1cecbcafc8b51f61", null ],
     [ "Dispose", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html#aecc7d71dea235991ed85782bd0355bfa", null ],
+    [ "IsHeld", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html#a36e5b7cede8335f05768ef660fb52a78", null ],
+    [ "IsTracked", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html#a2d0e870ab2233f86a8dceb59dbcd77a7", null ],
     [ "OnPiercingChanged", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html#a907bcfbb2d59bdc192cb76e8b607f66b", null ],
+    [ "OnProjectileFired", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html#ae84568fa8840ae162fab55db14fffdbf", null ],
     [ "OnProjectileLoaded", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html#a43483086e0512c9253be336127af9390", null ],
     [ "OnRetired", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html#a87ad92ba659f50203ff6156dbfabbe48", null ],
     [ "Refresh", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html#a485658845e743bacf0212706345fedd3", null ],
     [ "Start", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html#a5ab25f0a423cd395a317f34a5242b411", null ],
+    [ "_firedSubscriber", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html#aca4ab12750c6c6c8838726f2b376c79c", null ],
     [ "_isPiercing", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html#a9115b0bba45a794df1c1fe118aa2f7dc", null ],
     [ "_loadedSubscriber", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html#a489fe1fbd8466ba909de58ffa380c90b", null ],
     [ "_pierceArmed", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html#a39ed757f98dca84c5f6a45f56b8796df", null ],

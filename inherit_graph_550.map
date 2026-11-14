@@ -1,9 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="5,83,139,111"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonGraphic.html" title="A strip of ribbon filling its rect: swallowtail&#45;notched at both ends, with a wave running along it th..." alt="" coords="187,5,389,50"/>
-<area shape="poly" id="edge685_Node000000_Node000001" title=" " alt="" coords="131,76,218,49,214,52,133,80"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonStrike.html" title="A pen stroke through a ribbon&#39;s line, bent by the same wave as the ribbon and its writing,..." alt="" coords="187,75,389,119"/>
-<area shape="poly" id="edge686_Node000000_Node000002" title=" " alt="" coords="154,94,189,96,184,98,155,100"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1UI_1_1TimeOfDaySpecular.html" title="A rounded UI shape&#39;s specular, lit like the balloons: a soft stroke that runs along the inside of the..." alt="" coords="189,144,386,189"/>
-<area shape="poly" id="edge687_Node000000_Node000003" title=" " alt="" coords="132,113,218,142,214,144,131,119"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,14,99,42"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Editor_1_1TextureAuditWindow_1_1Entry.html" title=" " alt="" coords="147,5,341,50"/>
+<area shape="poly" id="edge677_Node000000_Node000001" title=" " alt="" coords="114,25,149,27,144,28,114,30"/>
 </map>

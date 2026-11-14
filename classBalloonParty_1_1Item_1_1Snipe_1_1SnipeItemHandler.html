@@ -125,7 +125,7 @@ $(function(){initNavTree('classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler__inherit__graph.svg" width="463" height="207"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler__inherit__graph.svg" width="100%" height="458"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Item.Snipe.SnipeItemHandler:</div>
@@ -140,6 +140,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a76e7fdb7e6e2f3d36414954a980fffcf" id="r_a76e7fdb7e6e2f3d36414954a980fffcf"><td class="memItemLeft" align="right" valign="top">UniTask&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a76e7fdb7e6e2f3d36414954a980fffcf">Activate</a> (<a class="el" href="structBalloonParty_1_1Item_1_1ItemActivationContext.html">ItemActivationContext</a> activation)</td></tr>
 <tr class="memdesc:a76e7fdb7e6e2f3d36414954a980fffcf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Activations can overlap, so per-activation state must live in locals, never handler fields.  <br /></td></tr>
 <tr class="separator:a76e7fdb7e6e2f3d36414954a980fffcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89a08d4eca6a41cb1442269e9428197a" id="r_a89a08d4eca6a41cb1442269e9428197a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89a08d4eca6a41cb1442269e9428197a">Arm</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html">IWriteableProjectileModel</a> shot)</td></tr>
+<tr class="memdesc:a89a08d4eca6a41cb1442269e9428197a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arms <em>shot</em>  as a plain (not rainbow) lance with the <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a>'s speed buff, and opens its pencil line: at the muzzle when it fires, if it's still in the thrower.  <br /></td></tr>
+<tr class="separator:a89a08d4eca6a41cb1442269e9428197a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6472f22a1130c04265c2691c7bb36d17" id="r_a6472f22a1130c04265c2691c7bb36d17"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6472f22a1130c04265c2691c7bb36d17">Dispose</a> ()</td></tr>
 <tr class="separator:a6472f22a1130c04265c2691c7bb36d17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afeb4f57d57f0f9c54aa04e1acc9efd1a" id="r_afeb4f57d57f0f9c54aa04e1acc9efd1a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afeb4f57d57f0f9c54aa04e1acc9efd1a">Start</a> ()</td></tr>
@@ -157,6 +160,8 @@ Properties</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a907eaa341637c23bf39f5b7ee54a89dd" id="r_a907eaa341637c23bf39f5b7ee54a89dd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a907eaa341637c23bf39f5b7ee54a89dd">ArmFreshLance</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html">IWriteableProjectileModel</a> shot, bool isRainbowHost)</td></tr>
+<tr class="separator:a907eaa341637c23bf39f5b7ee54a89dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd5dff26bb3a7148f0b9d9adfd8b435e" id="r_acd5dff26bb3a7148f0b9d9adfd8b435e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acd5dff26bb3a7148f0b9d9adfd8b435e">ArmLance</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html">IWriteableProjectileModel</a> shot, float speedBuffMultiplier, bool isRainbowHost)</td></tr>
 <tr class="separator:acd5dff26bb3a7148f0b9d9adfd8b435e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3dcfd6eb9efa13b33617929ee8d20954" id="r_a3dcfd6eb9efa13b33617929ee8d20954"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3dcfd6eb9efa13b33617929ee8d20954">TrySpendBankedCharge</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1PierceDischargedMessage.html">PierceDischargedMessage</a> discharge)</td></tr>
@@ -258,6 +263,56 @@ Private Attributes</h2></td></tr>
 <p>Activations can overlap, so per-activation state must live in locals, never handler fields. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Item_1_1IBalloonItem.html#a78a3686662519ab76965dce0304dfe87">BalloonParty.Item.IBalloonItem</a>.</p>
+
+</div>
+</div>
+<a id="a89a08d4eca6a41cb1442269e9428197a" name="a89a08d4eca6a41cb1442269e9428197a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89a08d4eca6a41cb1442269e9428197a">&#9670;&#160;</a></span>Arm()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Snipe.SnipeItemHandler.Arm </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html">IWriteableProjectileModel</a></td>          <td class="paramname"><span class="paramname"><em>shot</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Arms <em>shot</em>  as a plain (not rainbow) lance with the <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a>'s speed buff, and opens its pencil line: at the muzzle when it fires, if it's still in the thrower. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeArmer.html#af8f1620f237dc2b3ab6abe5b3e55abf6">BalloonParty.Item.Snipe.ISnipeArmer</a>.</p>
+
+</div>
+</div>
+<a id="a907eaa341637c23bf39f5b7ee54a89dd" name="a907eaa341637c23bf39f5b7ee54a89dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a907eaa341637c23bf39f5b7ee54a89dd">&#9670;&#160;</a></span>ArmFreshLance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Snipe.SnipeItemHandler.ArmFreshLance </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IWriteableProjectileModel.html">IWriteableProjectileModel</a></td>          <td class="paramname"><span class="paramname"><em>shot</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>isRainbowHost</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

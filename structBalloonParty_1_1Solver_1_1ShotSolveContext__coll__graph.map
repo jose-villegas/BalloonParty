@@ -1,9 +1,9 @@
 <map id="BalloonParty.Solver.ShotSolveContext" name="BalloonParty.Solver.ShotSolveContext">
-<area shape="rect" id="Node000001" title="Everything one ShotSimulator.Simulate sweep needs, gathered from the live game — shared by the editor..." alt="" coords="2128,231,2306,275"/>
+<area shape="rect" id="Node000001" title="Everything one ShotSimulator.Simulate sweep needs, gathered from the live game — shared by the editor..." alt="" coords="2128,260,2306,305"/>
 <area shape="rect" id="Node000002" href="$structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html" title="The cruise knobs, mirroring ProjectileMotionResolver/ProjectileView exactly (see ShotSimulator&#39;s crui..." alt="" coords="1816,161,1994,206"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="2010,204,2130,233,2125,233,2009,209"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="2002,208,2105,240,2157,260,2151,259,2103,245,2002,214"/>
 <area shape="rect" id="Node000003" href="$classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html" title="Owns a real headless SlotGrid + GridBalanceQuery + BalancePlanner over stub actors,..." alt="" coords="1816,231,1994,275"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="2009,250,2130,253,2125,253,2010,256"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="2009,260,2130,274,2125,274,2009,265"/>
 <area shape="rect" id="Node000004" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="642,113,814,158"/>
 <area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="829,144,1057,168,1264,185,1425,196,1586,209,1792,232,1818,238,1812,238,1791,237,1585,214,1425,201,1263,190,1057,173,830,149"/>
 <area shape="rect" id="Node000011" href="$classBalloonParty_1_1Slots_1_1Grid_1_1GridBalanceQuery.html" title="Balance heuristics over a SlotGrid: whether a slot should fall, and where." alt="" coords="1085,113,1257,158"/>
@@ -36,7 +36,7 @@
 <area shape="rect" id="Node000014" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html" title=" " alt="" coords="1057,291,1285,335"/>
 <area shape="poly" id="edge16_Node000013_Node000014" title=" " alt="" coords="1301,310,1452,313,1447,313,1301,316"/>
 <area shape="rect" id="Node000015" href="$classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html" title="Stub grid actor standing in for a live balloon in the dynamic&#45;board sim — enough of IWriteableDynamic..." alt="" coords="1082,371,1260,415"/>
-<area shape="poly" id="edge17_Node000003_Node000015" title=" " alt="" coords="1276,401,1360,406,1457,406,1559,398,1659,379,1720,358,1779,330,1869,277,1875,275,1781,335,1722,363,1660,384,1560,403,1457,411,1360,411,1276,407"/>
+<area shape="poly" id="edge17_Node000003_Node000015" title=" " alt="" coords="1276,402,1360,407,1457,406,1559,398,1659,379,1699,366,1728,351,1790,307,1814,285,1835,277,1841,275,1817,290,1793,311,1731,356,1701,371,1660,384,1560,404,1457,412,1360,412,1276,407"/>
 <area shape="poly" id="edge18_Node000015_Node000016" title=" " alt="" coords="845,493,937,468,1032,437,1056,425,1087,416,1092,415,1058,430,1034,442,939,474,846,498"/>
 <area shape="poly" id="edge19_Node000016_Node000017" title=" " alt="" coords="437,422,660,497,655,499,437,427"/>
 <area shape="rect" id="Node000018" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceInfluence.html" title="Lets a dynamic actor shape how the balancer moves it: a per&#45;candidate weight offset added to the supp..." alt="" coords="639,291,817,335"/>
@@ -46,12 +46,14 @@
 <area shape="rect" id="Node000020" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceAnchor.html" title="A dynamic actor that can be pinned where it is." alt="" coords="639,429,817,474"/>
 <area shape="poly" id="edge24_Node000015_Node000020" title=" " alt="" coords="832,435,1084,404,1079,405,833,441"/>
 <area shape="poly" id="edge25_Node000003_Node000021" title=" " alt="" coords="1048,250,1818,252,1813,254,1049,256"/>
-<area shape="rect" id="Node000022" href="$classBalloonParty_1_1Solver_1_1ShotItemLayer.html" title="Item&#45;carrier selection + params for the shot solver (Shot Solver Accuracy Phase C) — selection and ou..." alt="" coords="1816,353,1994,398"/>
-<area shape="poly" id="edge27_Node000001_Node000022" title=" " alt="" coords="1978,345,2156,276,2161,275,1979,350"/>
+<area shape="rect" id="Node000022" href="$classBalloonParty_1_1Solver_1_1ShotItemLayer.html" title="Item&#45;carrier selection + params for the shot solver (Shot Solver Accuracy Phase C) — selection and ou..." alt="" coords="1816,300,1994,345"/>
+<area shape="poly" id="edge27_Node000001_Node000022" title=" " alt="" coords="2009,306,2125,294,2130,293,2010,312"/>
 <area shape="rect" id="Node000023" href="$classBalloonParty_1_1Solver_1_1ShotSimEffectBoard.html" title="Solver&#45;side IEffectBoard — runs purely over the working set + ShotSlotLattice (Shot Solver Accuracy P..." alt="" coords="1458,441,1636,486"/>
-<area shape="poly" id="edge28_Node000022_Node000023" title=" " alt="" coords="1651,453,1721,443,1791,426,1828,412,1860,399,1865,398,1830,417,1792,431,1722,448,1652,458"/>
+<area shape="poly" id="edge28_Node000022_Node000023" title=" " alt="" coords="1652,470,1688,467,1724,459,1759,446,1790,427,1801,411,1802,394,1803,375,1814,355,1828,346,1833,344,1818,359,1808,376,1807,394,1806,413,1794,431,1762,451,1726,464,1689,472,1652,475"/>
 <area shape="rect" id="Node000024" href="$interfaceBalloonParty_1_1Item_1_1Effects_1_1IEffectBoard.html" title="The occupant read&#45;set an item&#45;effect core selects against — implemented by GridEffectBoard (live) and..." alt="" coords="1078,509,1265,554"/>
 <area shape="poly" id="edge29_Node000023_Node000024" title=" " alt="" coords="1280,509,1455,480,1460,480,1280,515"/>
 <area shape="rect" id="Node000025" href="$structBalloonParty_1_1Solver_1_1ShotSlotLattice.html" title="The hex&#45;lattice geometry an item effect core needs, snapshotted once — no SlotGrid/dynamics reference..." alt="" coords="1082,440,1260,485"/>
 <area shape="poly" id="edge30_Node000023_Node000025" title=" " alt="" coords="1276,460,1460,463,1455,463,1276,465"/>
+<area shape="rect" id="Node000026" href="$structBalloonParty_1_1Solver_1_1ShotFlightSeed.html" title="Seeds a ShotFlightState at construction — the test seam standing in for a mid&#45;flight item grant (Phas..." alt="" coords="1816,369,1994,414"/>
+<area shape="poly" id="edge31_Node000001_Node000026" title=" " alt="" coords="2000,362,2103,327,2162,306,2168,305,2105,333,2001,367"/>
 </map>

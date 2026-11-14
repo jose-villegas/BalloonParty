@@ -2224,7 +2224,7 @@ var sectionId = 'dynsection-1';
 <!-- Node212 -->
 <g id="Node000212" class="node">
 <title>Node212</title>
-<g id="a_Node000212"><a xlink:href="classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView.html" target="_top" xlink:title="One pencil stroke along a Snipe lance&#39;s run: a two&#45;point LineRenderer carrying the aim trace&#39;s smoke&#45;...">
+<g id="a_Node000212"><a xlink:href="classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView.html" target="_top" xlink:title="One pencil stroke along a Snipe lance&#39;s run, carrying the aim trace&#39;s smoke&#45;and&#45;glitter material so t...">
 <polygon fill="white" stroke="#666666" points="881.75,-175.91 747.25,-175.91 747.25,-142.41 881.75,-142.41 881.75,-175.91"/>
 <text xml:space="preserve" text-anchor="start" x="755.25" y="-162.41" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Snipe.</text>
 <text xml:space="preserve" text-anchor="middle" x="814.5" y="-149.66" font-family="Helvetica,sans-Serif" font-size="10.00">SnipeLanceLineView</text>

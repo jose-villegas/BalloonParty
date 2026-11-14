@@ -1,6 +1,7 @@
 var structBalloonParty_1_1Solver_1_1ShotFlightSeed =
 [
     [ "ShotFlightSeed", "structBalloonParty_1_1Solver_1_1ShotFlightSeed.html#a572f7e3a4851f17595235210e102cf35", null ],
+    [ "Armed", "structBalloonParty_1_1Solver_1_1ShotFlightSeed.html#ab3840fdc29c8ee22e7cd0a914b0d64b3", null ],
     [ "Fresh", "structBalloonParty_1_1Solver_1_1ShotFlightSeed.html#aeef94c89d44aa590c28f7f3f4b3b6c38", null ],
     [ "WithRainbowBuff", "structBalloonParty_1_1Solver_1_1ShotFlightSeed.html#accc576aabf7a82a12128316803c68809", null ],
     [ "WithStreak", "structBalloonParty_1_1Solver_1_1ShotFlightSeed.html#a5d778593c1b50f24a8b5f7feb814f237", null ],

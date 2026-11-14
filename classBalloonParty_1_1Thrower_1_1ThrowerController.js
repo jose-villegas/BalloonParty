@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Thrower_1_1ThrowerController =
 [
-    [ "ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ab9e46d1c17b03ca6792472d9b2e85eda", null ],
+    [ "ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a25de2d7225a38b70bd9d554fe6c92d6f", null ],
     [ "AnnounceReady", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a09f2ce83ee2de61aa7ca8ed288bbd4fe", null ],
     [ "ClampAndQuantizeAimDirection", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#acfc24424de127a8fecc2acf833a7bbfa", null ],
     [ "ClearLoaded", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#ae6bf5b80cebe205ab8fa4b438c1416b1", null ],
@@ -60,6 +60,7 @@ var classBalloonParty_1_1Thrower_1_1ThrowerController =
     [ "_resolver", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#af96b7bd08f351b28cf972c77a85159c1", null ],
     [ "_restartCompletedSubscriber", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a1329989a75dcfd7c79952f9f17fefc42", null ],
     [ "_settings", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a387cedf1e978337f89042444a11cae1b", null ],
+    [ "_snipeChance", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a671bebd4ae370d38fbf28bc3187eef05", null ],
     [ "_subscriptions", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#acd8343d4fc283429803580edaef6cdfe", null ],
     [ "_traceCalculator", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#adc2ae7ce87a75686c2175c1918e067d4", null ],
     [ "_traceConfig", "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a81f9d4f82a1bfd9af96205adb425e2c2", null ],

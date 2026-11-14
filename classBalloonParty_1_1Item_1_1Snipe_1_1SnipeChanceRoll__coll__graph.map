@@ -1,0 +1,9 @@
+<map id="BalloonParty.Item.Snipe.SnipeChanceRoll" name="BalloonParty.Item.Snipe.SnipeChanceRoll">
+<area shape="rect" id="Node000001" title="The Sharpshooter card&#39;s roll, once per ball the thrower loads." alt="" coords="330,75,509,119"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeChanceRoll.html" title="What the thrower asks of each ball it loads: roll the Sharpshooter card&#39;s chance at a Snipe lance." alt="" coords="23,5,202,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="217,49,332,76,327,78,217,54"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html" title="The run&#39;s weapon after its upgrade cards: the configured base plus every card held." alt="" coords="5,75,220,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="235,94,332,96,327,98,236,100"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeArmer.html" title="Arms a shot as a Snipe lance without a pickup: what SnipeItemHandler does for one." alt="" coords="23,144,202,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="217,140,326,118,332,117,218,145"/>
+</map>

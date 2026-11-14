@@ -48,6 +48,7 @@ var classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades =
     [ "_settings", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a5817776b752764eae460e33e18d2227f", null ],
     [ "_shieldBonus", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#afeccbbab6ff40026d0da42ea41b9c3c1", null ],
     [ "_shieldsPerBall", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a15e08be7b60f7a587288f66143a93133", null ],
+    [ "_snipeChance", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a79358152bef966079a2176d2ba0bb7c3", null ],
     [ "_stacks", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a99f788b3b9013e30c736f2b750c71a19", null ],
     [ "_staged", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#af1eb99c9fdb743026c3ecdddc9cf3782", null ],
     [ "BonusSeedSalt", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#abd2248656aae0efac4a937b9b5866dff", null ],
@@ -64,5 +65,6 @@ var classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades =
     [ "ReloadSeconds", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a299396207a9721966916c29991bc3219", null ],
     [ "ResetOrder", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a039c8a7d612ba419c5c782dad780545b", null ],
     [ "ShieldsPerBall", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a6ba90e7ea13f34da1c6355006d8b6dd2", null ],
+    [ "SnipeChance", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a8a5c03bdc203114c3a48bd125361f4ca", null ],
     [ "StartingShields", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#aa409b3da5aa1d315ed8413f7a60771a1", null ]
 ];

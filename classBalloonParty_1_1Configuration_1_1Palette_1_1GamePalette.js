@@ -18,6 +18,8 @@ var classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette =
     [ "PredictionColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a9d25ed70cd0747f4809a7887cd7f2f12", null ],
     [ "ProjectileColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a855a2e34e0fe446574122d182d3909f0", null ],
     [ "RainbowColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ab1c22d1c348537d6dc9985e1c5728746", null ],
+    [ "SnipeSkyLightColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a715a284a3f4d729f7cfd950a1d70fa3a", null ],
+    [ "SnipeWhirlwindColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a14e1a96833c3f19b5ede2e9e6e76ac11", null ],
     [ "SparksColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ac2aeb10121b120e25a3001f97dc0e1d3", null ],
     [ "ToughColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a56633d10adabd807d96626b1d565ff82", null ],
     [ "UnbreakableColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#aa61b2d2440310f309a83750f92d8d401", null ],

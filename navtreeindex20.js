@@ -1,5 +1,8 @@
 var NAVTREEINDEX20 =
 {
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html":[6,0,0,3,3,5],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a051c872da61ab210649bea35c993e247":[5,0,0,3,3,5,9],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a051c872da61ab210649bea35c993e247":[6,0,0,3,3,5,9],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a202123ee351a392240890434fd25e697":[5,0,0,3,3,5,4],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a202123ee351a392240890434fd25e697":[6,0,0,3,3,5,4],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a36ea66102331870e89ef0434310a7ed9":[5,0,0,3,3,5,6],
@@ -246,8 +249,5 @@ var NAVTREEINDEX20 =
 "classBalloonParty_1_1Configuration_1_1Editor_1_1StampProfileDrawer.html":[6,0,0,3,4,12],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1StampProfileDrawer.html#a713c4122d4b7e91f8e04ec7e559fff6a":[5,0,0,3,4,12,0],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1StampProfileDrawer.html#a713c4122d4b7e91f8e04ec7e559fff6a":[6,0,0,3,4,12,0],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1StampProfileDrawer.html#a8494cf77d2d0cd7480296fac78b86225":[5,0,0,3,4,12,1],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1StampProfileDrawer.html#a8494cf77d2d0cd7480296fac78b86225":[6,0,0,3,4,12,1],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html":[5,0,0,3,5,0],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html":[6,0,0,3,5,0]
+"classBalloonParty_1_1Configuration_1_1Editor_1_1StampProfileDrawer.html#a8494cf77d2d0cd7480296fac78b86225":[5,0,0,3,4,12,1]
 };

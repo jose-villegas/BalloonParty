@@ -670,13 +670,17 @@ var annotated_dup =
           [ "ShieldSlotPreference", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldSlotPreference.html", "classBalloonParty_1_1Item_1_1Shield_1_1ShieldSlotPreference" ]
         ] ],
         [ "Snipe", "namespaceBalloonParty_1_1Item_1_1Snipe.html", [
+          [ "ISnipeArmer", "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeArmer.html", "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeArmer" ],
+          [ "ISnipeChanceRoll", "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeChanceRoll.html", "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeChanceRoll" ],
           [ "ISnipeLanceArming", "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeLanceArming.html", "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeLanceArming" ],
+          [ "SnipeChanceRoll", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll" ],
           [ "SnipeDischargeBloom", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeDischargeBloom.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeDischargeBloom" ],
           [ "SnipeItemHandler", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler" ],
+          [ "SnipeLanceErase", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceErase.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceErase" ],
           [ "SnipeLanceLinePrefab", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLinePrefab.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLinePrefab" ],
           [ "SnipeLanceLines", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines" ],
           [ "SnipeLanceLineView", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView" ],
-          [ "SnipeLanceStroke", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStroke.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStroke" ],
+          [ "SnipeLanceStroke", "structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStroke.html", "structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStroke" ],
           [ "SnipeLanceStrokeTiming", "structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStrokeTiming.html", "structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStrokeTiming" ],
           [ "SnipeLanceTrace", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceTrace.html", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceTrace" ]
         ] ],
@@ -1139,6 +1143,7 @@ var annotated_dup =
       ] ],
       [ "Thrower", "namespaceBalloonParty_1_1Thrower.html", [
         [ "AimDirectionHistory", "classBalloonParty_1_1Thrower_1_1AimDirectionHistory.html", "classBalloonParty_1_1Thrower_1_1AimDirectionHistory" ],
+        [ "SnipeWhirlwindView", "classBalloonParty_1_1Thrower_1_1SnipeWhirlwindView.html", "classBalloonParty_1_1Thrower_1_1SnipeWhirlwindView" ],
         [ "ThrowerController", "classBalloonParty_1_1Thrower_1_1ThrowerController.html", "classBalloonParty_1_1Thrower_1_1ThrowerController" ],
         [ "ThrowerLifetimeScope", "classBalloonParty_1_1Thrower_1_1ThrowerLifetimeScope.html", "classBalloonParty_1_1Thrower_1_1ThrowerLifetimeScope" ],
         [ "ThrowerOriginProvider", "classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider.html", "classBalloonParty_1_1Thrower_1_1ThrowerOriginProvider" ],

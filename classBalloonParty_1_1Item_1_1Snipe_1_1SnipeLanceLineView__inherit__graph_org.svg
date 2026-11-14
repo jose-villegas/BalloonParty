@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="One pencil stroke along a Snipe lance&#39;s run: a two&#45;point LineRenderer carrying the aim trace&#39;s smoke&#45;...">
+<g id="a_Node000001"><a xlink:title="One pencil stroke along a Snipe lance&#39;s run, carrying the aim trace&#39;s smoke&#45;and&#45;glitter material so t...">
 <polygon fill="#999999" stroke="#666666" points="180.5,-33.5 46,-33.5 46,0 180.5,0 180.5,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="54" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Snipe.</text>
 <text xml:space="preserve" text-anchor="middle" x="113.25" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">SnipeLanceLineView</text>

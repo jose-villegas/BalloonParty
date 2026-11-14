@@ -1,5 +1,12 @@
 var NAVTREEINDEX38 =
 {
+"classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a5eab68e5ec7a29fa619378c626236f97":[6,0,0,5,25,5],
+"classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a65730c6ef156f6eeb8caaf687d8a144d":[5,0,0,5,25,3],
+"classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a65730c6ef156f6eeb8caaf687d8a144d":[6,0,0,5,25,3],
+"classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a67dfd9afaebda39b93393fc920d09db1":[5,0,0,5,25,23],
+"classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a67dfd9afaebda39b93393fc920d09db1":[6,0,0,5,25,23],
+"classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a75b3eb06f8f1355dc13b49bd98f6d38c":[5,0,0,5,25,6],
+"classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a75b3eb06f8f1355dc13b49bd98f6d38c":[6,0,0,5,25,6],
 "classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a763ceb4e8b47163de076ad043a3a9aab":[5,0,0,5,25,0],
 "classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a763ceb4e8b47163de076ad043a3a9aab":[6,0,0,5,25,0],
 "classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a850637f7da60b935a9103156461be043":[5,0,0,5,25,18],
@@ -242,12 +249,5 @@ var NAVTREEINDEX38 =
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#af69ecc60bbb459a1ce0e1f534292b0ee":[6,0,0,5,27,11],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#af835117da7ab7c02af6be27fa857f07d":[5,0,0,5,27,35],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#af835117da7ab7c02af6be27fa857f07d":[6,0,0,5,27,35],
-"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#af853b1a31a95da10758b1525c0f02f5c":[5,0,0,5,27,38],
-"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#af853b1a31a95da10758b1525c0f02f5c":[6,0,0,5,27,38],
-"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#afd9ed2ef35564f90c9387346b6838d68":[5,0,0,5,27,36],
-"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#afd9ed2ef35564f90c9387346b6838d68":[6,0,0,5,27,36],
-"classBalloonParty_1_1Editor_1_1LevelRangeEntryDrawer.html":[5,0,0,5,28],
-"classBalloonParty_1_1Editor_1_1LevelRangeEntryDrawer.html":[6,0,0,5,28],
-"classBalloonParty_1_1Editor_1_1LevelRangeEntryDrawer.html#a5a9f18eb3a0151498be99c803b3eba6c":[5,0,0,5,28,0],
-"classBalloonParty_1_1Editor_1_1LevelRangeEntryDrawer.html#a5a9f18eb3a0151498be99c803b3eba6c":[6,0,0,5,28,0]
+"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#af853b1a31a95da10758b1525c0f02f5c":[5,0,0,5,27,38]
 };

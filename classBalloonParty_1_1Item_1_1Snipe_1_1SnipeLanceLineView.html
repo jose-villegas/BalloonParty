@@ -118,7 +118,7 @@ $(function(){initNavTree('classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineVi
 </div><!--header-->
 <div class="contents">
 
-<p>One pencil stroke along a <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a> lance's run: a two-point LineRenderer carrying the aim trace's smoke-and-glitter material, so the shot's path reads in the same carbon hand as the cannon's aim.  
+<p>One pencil stroke along a <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a> lance's run, carrying the aim trace's smoke-and-glitter material so the shot's path reads in the same carbon hand as the cannon's aim.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Item.Snipe.SnipeLanceLineView:</div>
@@ -144,17 +144,17 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a8bfc55f4244259674cda3631588ed887" id="r_a8bfc55f4244259674cda3631588ed887"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8bfc55f4244259674cda3631588ed887">Begin</a> (Vector3 from, Vector3 to, Color color)</td></tr>
-<tr class="separator:a8bfc55f4244259674cda3631588ed887"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6bd00b1c65dff4d94fb4b18eb99cc36" id="r_ab6bd00b1c65dff4d94fb4b18eb99cc36"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab6bd00b1c65dff4d94fb4b18eb99cc36">Render</a> (float drawn, float alpha)</td></tr>
-<tr class="memdesc:ab6bd00b1c65dff4d94fb4b18eb99cc36"><td class="mdescLeft">&#160;</td><td class="mdescRight"><dl class="params"><dt>Parameters</dt><dd>
+<tr class="memitem:a44a09b6d216340844fdae6ff6adbcfff" id="r_a44a09b6d216340844fdae6ff6adbcfff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a44a09b6d216340844fdae6ff6adbcfff">Begin</a> (Vector3 from, Color color)</td></tr>
+<tr class="separator:a44a09b6d216340844fdae6ff6adbcfff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cc65e9f524ad6e1c06b4c73bbb16a0d" id="r_a9cc65e9f524ad6e1c06b4c73bbb16a0d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9cc65e9f524ad6e1c06b4c73bbb16a0d">Render</a> (Vector3 end, float drawn, float erased)</td></tr>
+<tr class="memdesc:a9cc65e9f524ad6e1c06b4c73bbb16a0d"><td class="mdescLeft">&#160;</td><td class="mdescRight"><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">drawn</td><td>How far the tip has run from the start toward the wall, 0 to 1. </td></tr>
+    <tr><td class="paramname">end</td><td>The run's end now: the shot while it flies, the wall once reached. </td></tr>
   </table>
   </dd>
 </dl>
  <br /></td></tr>
-<tr class="separator:ab6bd00b1c65dff4d94fb4b18eb99cc36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a9cc65e9f524ad6e1c06b4c73bbb16a0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -165,27 +165,43 @@ Properties</h2></td></tr>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:aee8f32f0dd866d07c887f130952205d0" id="r_aee8f32f0dd866d07c887f130952205d0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aee8f32f0dd866d07c887f130952205d0">Awake</a> ()</td></tr>
 <tr class="separator:aee8f32f0dd866d07c887f130952205d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29c5f54e3c149f7549bbb7784e533274" id="r_a29c5f54e3c149f7549bbb7784e533274"><td class="memItemLeft" align="right" valign="top">LineRenderer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29c5f54e3c149f7549bbb7784e533274">CreateChunk</a> (int index)</td></tr>
+<tr class="separator:a29c5f54e3c149f7549bbb7784e533274"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae633e05ca3dd72f90f8690c43274b961" id="r_ae633e05ca3dd72f90f8690c43274b961"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae633e05ca3dd72f90f8690c43274b961">EnsureChunks</a> (int count)</td></tr>
+<tr class="separator:ae633e05ca3dd72f90f8690c43274b961"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a564011a1643d77832e68b94a97bf1966" id="r_a564011a1643d77832e68b94a97bf1966"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a564011a1643d77832e68b94a97bf1966">HideAll</a> ()</td></tr>
+<tr class="separator:a564011a1643d77832e68b94a97bf1966"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbaac93e341b375b75e83da68c151be4" id="r_afbaac93e341b375b75e83da68c151be4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afbaac93e341b375b75e83da68c151be4">ShuffleTurns</a> (int count)</td></tr>
+<tr class="separator:afbaac93e341b375b75e83da68c151be4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:af49f7a3c6c00a43b6a2199bd3bc6f65f" id="r_af49f7a3c6c00a43b6a2199bd3bc6f65f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af49f7a3c6c00a43b6a2199bd3bc6f65f">_chunkEraseShare</a> = 0.3f</td></tr>
+<tr class="separator:af49f7a3c6c00a43b6a2199bd3bc6f65f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02516bfd4bfa8b5c913832835cc12aac" id="r_a02516bfd4bfa8b5c913832835cc12aac"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02516bfd4bfa8b5c913832835cc12aac">_chunkLength</a> = 0.7f</td></tr>
+<tr class="separator:a02516bfd4bfa8b5c913832835cc12aac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ad59bb86bfd633d610a9aa79e5048a4" id="r_a4ad59bb86bfd633d610a9aa79e5048a4"><td class="memItemLeft" align="right" valign="top">readonly List&lt; LineRenderer &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ad59bb86bfd633d610a9aa79e5048a4">_chunks</a> = new()</td></tr>
+<tr class="separator:a4ad59bb86bfd633d610a9aa79e5048a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afcc3d2c3ecca10378ad4431c07f4d888" id="r_afcc3d2c3ecca10378ad4431c07f4d888"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afcc3d2c3ecca10378ad4431c07f4d888">_color</a> = Color.white</td></tr>
 <tr class="separator:afcc3d2c3ecca10378ad4431c07f4d888"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acdf91adad0e1e7f09206043eb7f5234d" id="r_acdf91adad0e1e7f09206043eb7f5234d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acdf91adad0e1e7f09206043eb7f5234d">_drawSeconds</a> = 0.18f</td></tr>
-<tr class="separator:acdf91adad0e1e7f09206043eb7f5234d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a894b647abfddfdbdfdb38fe570a29540" id="r_a894b647abfddfdbdfdb38fe570a29540"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a894b647abfddfdbdfdb38fe570a29540">_fadeSeconds</a> = 0.6f</td></tr>
-<tr class="separator:a894b647abfddfdbdfdb38fe570a29540"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e9482d637fa918f600db7313fe99ad3" id="r_a1e9482d637fa918f600db7313fe99ad3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e9482d637fa918f600db7313fe99ad3">_eraseSeconds</a> = 1.4f</td></tr>
+<tr class="separator:a1e9482d637fa918f600db7313fe99ad3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac4f2b3d66e1eeddc07bdfe644413f3cd" id="r_ac4f2b3d66e1eeddc07bdfe644413f3cd"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac4f2b3d66e1eeddc07bdfe644413f3cd">_from</a></td></tr>
 <tr class="separator:ac4f2b3d66e1eeddc07bdfe644413f3cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb93fbf0850044ec153c065ef431c1f2" id="r_afb93fbf0850044ec153c065ef431c1f2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afb93fbf0850044ec153c065ef431c1f2">_holdSeconds</a> = 0.7f</td></tr>
+<tr class="memitem:afb93fbf0850044ec153c065ef431c1f2" id="r_afb93fbf0850044ec153c065ef431c1f2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afb93fbf0850044ec153c065ef431c1f2">_holdSeconds</a> = 1f</td></tr>
 <tr class="separator:afb93fbf0850044ec153c065ef431c1f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a98e45887a1e71a51d4db3d23721dab31" id="r_a98e45887a1e71a51d4db3d23721dab31"><td class="memItemLeft" align="right" valign="top">LineRenderer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a98e45887a1e71a51d4db3d23721dab31">_line</a></td></tr>
 <tr class="separator:a98e45887a1e71a51d4db3d23721dab31"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1db989c537ef9d84c56efcc94639fdde" id="r_a1db989c537ef9d84c56efcc94639fdde"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1db989c537ef9d84c56efcc94639fdde">_to</a></td></tr>
-<tr class="separator:a1db989c537ef9d84c56efcc94639fdde"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b54ad5c8183ce8eeaa0f982229fff95" id="r_a8b54ad5c8183ce8eeaa0f982229fff95"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8b54ad5c8183ce8eeaa0f982229fff95">_shuffled</a></td></tr>
+<tr class="separator:a8b54ad5c8183ce8eeaa0f982229fff95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4358ed916368285f82c0bcf266c32dc" id="r_ad4358ed916368285f82c0bcf266c32dc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad4358ed916368285f82c0bcf266c32dc">_tipSpeed</a> = 12f</td></tr>
+<tr class="separator:ad4358ed916368285f82c0bcf266c32dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71b40f76665dceaf64878c49757a2112" id="r_a71b40f76665dceaf64878c49757a2112"><td class="memItemLeft" align="right" valign="top">readonly List&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a71b40f76665dceaf64878c49757a2112">_turns</a> = new()</td></tr>
+<tr class="separator:a71b40f76665dceaf64878c49757a2112"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>One pencil stroke along a <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a> lance's run: a two-point LineRenderer carrying the aim trace's smoke-and-glitter material, so the shot's path reads in the same carbon hand as the cannon's aim. </p>
-<p>Driven entirely by <a class="el" href="classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html" title="Draws a carbon pencil line along the straight run a Snipe lance is spent on, the moment the shot disc...">SnipeLanceLines</a>; it only renders what it is told. </p>
+<div class="textblock"><p>One pencil stroke along a <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a> lance's run, carrying the aim trace's smoke-and-glitter material so the shot's path reads in the same carbon hand as the cannon's aim. </p>
+<p>The line is built from chunks of a fixed length, each its own two-point LineRenderer, so the erase can wipe them away one at a time. Driven entirely by <a class="el" href="classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html" title="Draws a carbon pencil line along the straight run a Snipe lance is spent on.">SnipeLanceLines</a>; it only renders what it is told. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="aee8f32f0dd866d07c887f130952205d0" name="aee8f32f0dd866d07c887f130952205d0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aee8f32f0dd866d07c887f130952205d0">&#9670;&#160;</a></span>Awake()</h2>
@@ -212,8 +228,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a8bfc55f4244259674cda3631588ed887" name="a8bfc55f4244259674cda3631588ed887"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8bfc55f4244259674cda3631588ed887">&#9670;&#160;</a></span>Begin()</h2>
+<a id="a44a09b6d216340844fdae6ff6adbcfff" name="a44a09b6d216340844fdae6ff6adbcfff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44a09b6d216340844fdae6ff6adbcfff">&#9670;&#160;</a></span>Begin()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -229,17 +245,87 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>to</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">Color</td>          <td class="paramname"><span class="paramname"><em>color</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a29c5f54e3c149f7549bbb7784e533274" name="a29c5f54e3c149f7549bbb7784e533274"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29c5f54e3c149f7549bbb7784e533274">&#9670;&#160;</a></span>CreateChunk()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">LineRenderer BalloonParty.Item.Snipe.SnipeLanceLineView.CreateChunk </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>index</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae633e05ca3dd72f90f8690c43274b961" name="ae633e05ca3dd72f90f8690c43274b961"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae633e05ca3dd72f90f8690c43274b961">&#9670;&#160;</a></span>EnsureChunks()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Snipe.SnipeLanceLineView.EnsureChunks </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>count</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a564011a1643d77832e68b94a97bf1966" name="a564011a1643d77832e68b94a97bf1966"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a564011a1643d77832e68b94a97bf1966">&#9670;&#160;</a></span>HideAll()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Snipe.SnipeLanceLineView.HideAll </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -284,8 +370,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ab6bd00b1c65dff4d94fb4b18eb99cc36" name="ab6bd00b1c65dff4d94fb4b18eb99cc36"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab6bd00b1c65dff4d94fb4b18eb99cc36">&#9670;&#160;</a></span>Render()</h2>
+<a id="a9cc65e9f524ad6e1c06b4c73bbb16a0d" name="a9cc65e9f524ad6e1c06b4c73bbb16a0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9cc65e9f524ad6e1c06b4c73bbb16a0d">&#9670;&#160;</a></span>Render()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -296,12 +382,17 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void BalloonParty.Item.Snipe.SnipeLanceLineView.Render </td>
           <td>(</td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>end</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>drawn</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>alpha</em></span>&#160;)</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>erased</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -313,21 +404,113 @@ Private Attributes</h2></td></tr>
 
 <p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">drawn</td><td>How far the tip has run from the start toward the wall, 0 to 1. </td></tr>
+    <tr><td class="paramname">end</td><td>The run's end now: the shot while it flies, the wall once reached. </td></tr>
   </table>
   </dd>
 </dl>
 </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">alpha</td><td>The whole stroke's opacity, multiplied onto the colour's own.</td></tr>
+    <tr><td class="paramname">drawn</td><td>How far along the run the pencil tip has drawn, in world units.</td></tr>
+    <tr><td class="paramname">erased</td><td>How far the erase has got, 0 (untouched) to 1 (gone).</td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
+<a id="afbaac93e341b375b75e83da68c151be4" name="afbaac93e341b375b75e83da68c151be4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbaac93e341b375b75e83da68c151be4">&#9670;&#160;</a></span>ShuffleTurns()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Snipe.SnipeLanceLineView.ShuffleTurns </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>count</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="af49f7a3c6c00a43b6a2199bd3bc6f65f" name="af49f7a3c6c00a43b6a2199bd3bc6f65f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af49f7a3c6c00a43b6a2199bd3bc6f65f">&#9670;&#160;</a></span>_chunkEraseShare</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Item.Snipe.SnipeLanceLineView._chunkEraseShare = 0.3f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a02516bfd4bfa8b5c913832835cc12aac" name="a02516bfd4bfa8b5c913832835cc12aac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02516bfd4bfa8b5c913832835cc12aac">&#9670;&#160;</a></span>_chunkLength</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Item.Snipe.SnipeLanceLineView._chunkLength = 0.7f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4ad59bb86bfd633d610a9aa79e5048a4" name="a4ad59bb86bfd633d610a9aa79e5048a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ad59bb86bfd633d610a9aa79e5048a4">&#9670;&#160;</a></span>_chunks</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;LineRenderer&gt; BalloonParty.Item.Snipe.SnipeLanceLineView._chunks = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="afcc3d2c3ecca10378ad4431c07f4d888" name="afcc3d2c3ecca10378ad4431c07f4d888"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afcc3d2c3ecca10378ad4431c07f4d888">&#9670;&#160;</a></span>_color</h2>
 
@@ -350,8 +533,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="acdf91adad0e1e7f09206043eb7f5234d" name="acdf91adad0e1e7f09206043eb7f5234d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acdf91adad0e1e7f09206043eb7f5234d">&#9670;&#160;</a></span>_drawSeconds</h2>
+<a id="a1e9482d637fa918f600db7313fe99ad3" name="a1e9482d637fa918f600db7313fe99ad3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e9482d637fa918f600db7313fe99ad3">&#9670;&#160;</a></span>_eraseSeconds</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -360,29 +543,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Item.Snipe.SnipeLanceLineView._drawSeconds = 0.18f</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a894b647abfddfdbdfdb38fe570a29540" name="a894b647abfddfdbdfdb38fe570a29540"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a894b647abfddfdbdfdb38fe570a29540">&#9670;&#160;</a></span>_fadeSeconds</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float BalloonParty.Item.Snipe.SnipeLanceLineView._fadeSeconds = 0.6f</td>
+          <td class="memname">float BalloonParty.Item.Snipe.SnipeLanceLineView._eraseSeconds = 1.4f</td>
         </tr>
       </table>
   </td>
@@ -426,7 +587,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Item.Snipe.SnipeLanceLineView._holdSeconds = 0.7f</td>
+          <td class="memname">float BalloonParty.Item.Snipe.SnipeLanceLineView._holdSeconds = 1f</td>
         </tr>
       </table>
   </td>
@@ -460,8 +621,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a1db989c537ef9d84c56efcc94639fdde" name="a1db989c537ef9d84c56efcc94639fdde"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1db989c537ef9d84c56efcc94639fdde">&#9670;&#160;</a></span>_to</h2>
+<a id="a8b54ad5c8183ce8eeaa0f982229fff95" name="a8b54ad5c8183ce8eeaa0f982229fff95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b54ad5c8183ce8eeaa0f982229fff95">&#9670;&#160;</a></span>_shuffled</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -470,7 +631,51 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Vector3 BalloonParty.Item.Snipe.SnipeLanceLineView._to</td>
+          <td class="memname">bool BalloonParty.Item.Snipe.SnipeLanceLineView._shuffled</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad4358ed916368285f82c0bcf266c32dc" name="ad4358ed916368285f82c0bcf266c32dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4358ed916368285f82c0bcf266c32dc">&#9670;&#160;</a></span>_tipSpeed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Item.Snipe.SnipeLanceLineView._tipSpeed = 12f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a71b40f76665dceaf64878c49757a2112" name="a71b40f76665dceaf64878c49757a2112"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71b40f76665dceaf64878c49757a2112">&#9670;&#160;</a></span>_turns</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;int&gt; BalloonParty.Item.Snipe.SnipeLanceLineView._turns = new()</td>
         </tr>
       </table>
   </td>

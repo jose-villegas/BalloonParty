@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Draws a carbon pencil line along the straight run a Snipe lance is spent on, the moment the shot disc...">
+<g id="a_Node000001"><a xlink:title="Draws a carbon pencil line along the straight run a Snipe lance is spent on.">
 <polygon fill="#999999" stroke="#666666" points="601.75,-267.5 467.25,-267.5 467.25,-234 601.75,-234 601.75,-267.5"/>
 <text xml:space="preserve" text-anchor="start" x="475.25" y="-254" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Snipe.</text>
 <text xml:space="preserve" text-anchor="middle" x="534.5" y="-241.25" font-family="Helvetica,sans-Serif" font-size="10.00">SnipeLanceLines</text>
@@ -193,7 +193,7 @@
 <!-- Node11 -->
 <g id="Node000011" class="node">
 <title>Node11</title>
-<g id="a_Node000011"><a xlink:href="classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView.html" target="_top" xlink:title="One pencil stroke along a Snipe lance&#39;s run: a two&#45;point LineRenderer carrying the aim trace&#39;s smoke&#45;...">
+<g id="a_Node000011"><a xlink:href="classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLineView.html" target="_top" xlink:title="One pencil stroke along a Snipe lance&#39;s run, carrying the aim trace&#39;s smoke&#45;and&#45;glitter material so t...">
 <polygon fill="white" stroke="#666666" points="342.75,-85.5 208.25,-85.5 208.25,-52 342.75,-52 342.75,-85.5"/>
 <text xml:space="preserve" text-anchor="start" x="216.25" y="-72" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Snipe.</text>
 <text xml:space="preserve" text-anchor="middle" x="275.5" y="-59.25" font-family="Helvetica,sans-Serif" font-size="10.00">SnipeLanceLineView</text>

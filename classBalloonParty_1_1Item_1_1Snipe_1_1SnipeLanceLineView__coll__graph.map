@@ -1,5 +1,5 @@
 <map id="BalloonParty.Item.Snipe.SnipeLanceLineView" name="BalloonParty.Item.Snipe.SnipeLanceLineView">
-<area shape="rect" id="Node000001" title="One pencil stroke along a Snipe lance&#39;s run: a two&#45;point LineRenderer carrying the aim trace&#39;s smoke&#45;..." alt="" coords="67,98,246,143"/>
+<area shape="rect" id="Node000001" title="One pencil stroke along a Snipe lance&#39;s run, carrying the aim trace&#39;s smoke&#45;and&#45;glitter material so t..." alt="" coords="67,98,246,143"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,14,129,42"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,50,138,97,132,98,89,55"/>
 <area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="152,5,339,50"/>

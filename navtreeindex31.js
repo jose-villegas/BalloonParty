@@ -1,5 +1,12 @@
 var NAVTREEINDEX31 =
 {
+"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#aa95922c68a978734f9bf1a1196b8e93e":[6,0,0,4,0,9],
+"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#aad2ac4ac0ef91cac0bafc25b608ff524":[5,0,0,4,0,3],
+"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#aad2ac4ac0ef91cac0bafc25b608ff524":[6,0,0,4,0,3],
+"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#ab15501b9e2301eeaa0f21ed5014512bf":[5,0,0,4,0,6],
+"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#ab15501b9e2301eeaa0f21ed5014512bf":[6,0,0,4,0,6],
+"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#acabb46987997ef9a8876bc3fc2a0e26c":[5,0,0,4,0,7],
+"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#acabb46987997ef9a8876bc3fc2a0e26c":[6,0,0,4,0,7],
 "classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#af1fe45e2c48ea44e6c6432ee0a699f4f":[5,0,0,4,0,1],
 "classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#af1fe45e2c48ea44e6c6432ee0a699f4f":[6,0,0,4,0,1],
 "classBalloonParty_1_1Display_1_1CameraShakeController.html":[5,0,0,4,1],
@@ -242,12 +249,5 @@ var NAVTREEINDEX31 =
 "classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html":[6,0,0,5,10],
 "classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a0cdc91b75d5a79aa9e1cd5660aaafe8a":[5,0,0,5,10,0],
 "classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a0cdc91b75d5a79aa9e1cd5660aaafe8a":[6,0,0,5,10,0],
-"classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a136872cbc4c8efb2a57e8576ceb2aadf":[5,0,0,5,10,4],
-"classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a136872cbc4c8efb2a57e8576ceb2aadf":[6,0,0,5,10,4],
-"classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a35b044d51e3d62c3cd5ff4e753caf9c2":[5,0,0,5,10,5],
-"classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a35b044d51e3d62c3cd5ff4e753caf9c2":[6,0,0,5,10,5],
-"classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a5cfd257fa95ff5a96cf873c28bec92ba":[5,0,0,5,10,6],
-"classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a5cfd257fa95ff5a96cf873c28bec92ba":[6,0,0,5,10,6],
-"classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a68af068219ce3e56b4a619048e408031":[5,0,0,5,10,7],
-"classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a68af068219ce3e56b4a619048e408031":[6,0,0,5,10,7]
+"classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a136872cbc4c8efb2a57e8576ceb2aadf":[5,0,0,5,10,4]
 };

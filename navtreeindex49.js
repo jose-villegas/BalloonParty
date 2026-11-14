@@ -1,5 +1,12 @@
 var NAVTREEINDEX49 =
 {
+"classBalloonParty_1_1Game_1_1Run_1_1FailureOffers.html#af6ab86c7b7816dc2f824770a1054637d":[6,0,0,6,7,2,1],
+"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html":[5,0,0,6,7,3],
+"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html":[6,0,0,6,7,3],
+"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#a173d820332ca30e3bd769dc8e3f0c59b":[5,0,0,6,7,3,1],
+"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#a173d820332ca30e3bd769dc8e3f0c59b":[6,0,0,6,7,3,1],
+"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#a64448b7ba3c6951f3408ad9142c53012":[5,0,0,6,7,3,3],
+"classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#a64448b7ba3c6951f3408ad9142c53012":[6,0,0,6,7,3,3],
 "classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#a7ac2f221d580b3f61d554e4f165f07f4":[5,0,0,6,7,3,0],
 "classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#a7ac2f221d580b3f61d554e4f165f07f4":[6,0,0,6,7,3,0],
 "classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#ab5267fa391ed24f46851daaa49524516":[5,0,0,6,7,3,2],
@@ -242,12 +249,5 @@ var NAVTREEINDEX49 =
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver.html":[6,0,0,6,8,0,10],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver.html#a00c5603a7a8a73624fcf0276f85bc26b":[5,0,0,6,8,0,10,6],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver.html#a00c5603a7a8a73624fcf0276f85bc26b":[6,0,0,6,8,0,10,6],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver.html#a1451fc6334926dbf2a6440fb976466d9":[5,0,0,6,8,0,10,5],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver.html#a1451fc6334926dbf2a6440fb976466d9":[6,0,0,6,8,0,10,5],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver.html#a3a600ddd5e1627b1b369c1f1ec418980":[5,0,0,6,8,0,10,8],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver.html#a3a600ddd5e1627b1b369c1f1ec418980":[6,0,0,6,8,0,10,8],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver.html#a5e3b0eb9bf0d24373dc6e07168c81d86":[5,0,0,6,8,0,10,4],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver.html#a5e3b0eb9bf0d24373dc6e07168c81d86":[6,0,0,6,8,0,10,4],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver.html#a732db577db05e0513770a1fafaeeb2cb":[5,0,0,6,8,0,10,2],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver.html#a732db577db05e0513770a1fafaeeb2cb":[6,0,0,6,8,0,10,2]
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver.html#a1451fc6334926dbf2a6440fb976466d9":[5,0,0,6,8,0,10,5]
 };

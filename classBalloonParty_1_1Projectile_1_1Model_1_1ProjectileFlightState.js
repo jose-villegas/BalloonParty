@@ -7,6 +7,7 @@ var classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState =
     [ "CurrentSpeed", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#a4cc37bdeb2997a270777b81c2519a5f0", null ],
     [ "LastBouncePosition", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#a62c3c25e5e65501136d51052ee16dbb7", null ],
     [ "LastTapWallHit", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#a34ce193e3bb0c8ed239a2a3140160402", null ],
+    [ "PendingPierceHitCount", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#a382e328a3bfb6dc47107913e82c01b23", null ],
     [ "PendingPierceHits", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#ad041014827cf6e09ae8149dc8fa4de44", null ],
     [ "PierceWasRainbow", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#a89ac417bb0f82af11e16ec40078bd84b", null ],
     [ "SegmentElapsed", "classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileFlightState.html#aa590aa30881fe389934d386da7043d2b", null ],

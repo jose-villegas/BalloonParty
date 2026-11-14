@@ -2,6 +2,8 @@ var classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler =
 [
     [ "SnipeItemHandler", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html#adcbd2c2cd8b48dc521d4122601507ca2", null ],
     [ "Activate", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html#a76e7fdb7e6e2f3d36414954a980fffcf", null ],
+    [ "Arm", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html#a89a08d4eca6a41cb1442269e9428197a", null ],
+    [ "ArmFreshLance", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html#a907eaa341637c23bf39f5b7ee54a89dd", null ],
     [ "ArmLance", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html#acd5dff26bb3a7148f0b9d9adfd8b435e", null ],
     [ "Dispose", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html#a6472f22a1130c04265c2691c7bb36d17", null ],
     [ "Start", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html#afeb4f57d57f0f9c54aa04e1acc9efd1a", null ],

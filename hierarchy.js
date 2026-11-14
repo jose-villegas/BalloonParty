@@ -935,6 +935,12 @@ var hierarchy =
     [ "BalloonParty.Configuration.Effects.ISmokeFieldSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISmokeFieldSettings.html", [
       [ "BalloonParty.Configuration.Effects.SmokeFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1SmokeFieldSettings.html", null ]
     ] ],
+    [ "BalloonParty.Item.Snipe.ISnipeArmer", "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeArmer.html", [
+      [ "BalloonParty.Item.Snipe.SnipeItemHandler", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html", null ]
+    ] ],
+    [ "BalloonParty.Item.Snipe.ISnipeChanceRoll", "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeChanceRoll.html", [
+      [ "BalloonParty.Item.Snipe.SnipeChanceRoll", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html", null ]
+    ] ],
     [ "BalloonParty.Item.Snipe.ISnipeLanceArming", "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeLanceArming.html", [
       [ "BalloonParty.Item.Snipe.SnipeLanceLines", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html", null ]
     ] ],
@@ -1275,6 +1281,7 @@ var hierarchy =
       ] ],
       [ "BalloonParty.Slots.Actor.SpeckField", "classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html", null ],
       [ "BalloonParty.Slots.Grid.SlotGridView", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGridView.html", null ],
+      [ "BalloonParty.Thrower.SnipeWhirlwindView", "classBalloonParty_1_1Thrower_1_1SnipeWhirlwindView.html", null ],
       [ "BalloonParty.Thrower.ThrowerView", "classBalloonParty_1_1Thrower_1_1ThrowerView.html", null ],
       [ "BalloonParty.UI.AnimatorGameEntryGate", "classBalloonParty_1_1UI_1_1AnimatorGameEntryGate.html", null ],
       [ "BalloonParty.UI.CameraFittedCanvas", "classBalloonParty_1_1UI_1_1CameraFittedCanvas.html", null ],
@@ -1552,8 +1559,9 @@ var hierarchy =
     [ "BalloonParty.Scenario.SmokeFieldResources", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html", null ],
     [ "BalloonParty.Balloon.Formation.SnakeWalk", "classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk.html", null ],
     [ "BalloonParty.Item.Effects.SnipeEffectParams", "structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html", null ],
+    [ "BalloonParty.Item.Snipe.SnipeLanceErase", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceErase.html", null ],
     [ "BalloonParty.Item.Snipe.SnipeLanceLinePrefab", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLinePrefab.html", null ],
-    [ "BalloonParty.Item.Snipe.SnipeLanceStroke", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStroke.html", null ],
+    [ "BalloonParty.Item.Snipe.SnipeLanceStroke", "structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStroke.html", null ],
     [ "BalloonParty.Item.Snipe.SnipeLanceStrokeTiming", "structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStrokeTiming.html", null ],
     [ "BalloonParty.Item.Snipe.SnipeLanceTrace", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceTrace.html", null ],
     [ "BalloonParty.Configuration.Items.SnipeSettings", "classBalloonParty_1_1Configuration_1_1Items_1_1SnipeSettings.html", null ],

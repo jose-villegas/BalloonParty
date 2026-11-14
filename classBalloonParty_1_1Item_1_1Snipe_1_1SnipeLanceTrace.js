@@ -7,6 +7,7 @@ var classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceTrace =
     [ "Open", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceTrace.html#a90dffa25738c3f9fad3e05d95e76fa35", null ],
     [ "OpenAtLaunch", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceTrace.html#a2bcbbbb8cfcb6d896ccf10355514751f", null ],
     [ "TryCloseRun", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceTrace.html#a717c91ede2514b420fee3ee2cbc493cc", null ],
+    [ "TryGetRunStart", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceTrace.html#ab363c63764b1f413c0ee6499430f7dd7", null ],
     [ "_armedBeforeLaunch", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceTrace.html#a5ac6189d9ac833c878d4ec7f51eb0117", null ],
     [ "_runStarts", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceTrace.html#ac54d5bef0026a36aa274f47afbf80b61", null ],
     [ "MinRunLength", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceTrace.html#af510c822dc49506e6ac43515af9a22e5", null ],

@@ -203,6 +203,9 @@ Properties</h2></td></tr>
 <tr class="separator:a039c8a7d612ba419c5c782dad780545b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ba90e7ea13f34da1c6355006d8b6dd2" id="r_a6ba90e7ea13f34da1c6355006d8b6dd2"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6ba90e7ea13f34da1c6355006d8b6dd2">ShieldsPerBall</a><code> [get]</code></td></tr>
 <tr class="separator:a6ba90e7ea13f34da1c6355006d8b6dd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a5c03bdc203114c3a48bd125361f4ca" id="r_a8a5c03bdc203114c3a48bd125361f4ca"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a5c03bdc203114c3a48bd125361f4ca">SnipeChance</a><code> [get]</code></td></tr>
+<tr class="memdesc:a8a5c03bdc203114c3a48bd125361f4ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sharpshooter's chance, 0 to 1, that a ball starts Snipe-armed as the thrower loads it.  <br /></td></tr>
+<tr class="separator:a8a5c03bdc203114c3a48bd125361f4ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa409b3da5aa1d315ed8413f7a60771a1" id="r_aa409b3da5aa1d315ed8413f7a60771a1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa409b3da5aa1d315ed8413f7a60771a1">StartingShields</a><code> [get]</code></td></tr>
 <tr class="memdesc:aa409b3da5aa1d315ed8413f7a60771a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shields each new ball starts with: the configured count plus cards.  <br /></td></tr>
 <tr class="separator:aa409b3da5aa1d315ed8413f7a60771a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -286,6 +289,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:afeccbbab6ff40026d0da42ea41b9c3c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15e08be7b60f7a587288f66143a93133" id="r_a15e08be7b60f7a587288f66143a93133"><td class="memItemLeft" align="right" valign="top">readonly ReactiveProperty&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a15e08be7b60f7a587288f66143a93133">_shieldsPerBall</a></td></tr>
 <tr class="separator:a15e08be7b60f7a587288f66143a93133"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79358152bef966079a2176d2ba0bb7c3" id="r_a79358152bef966079a2176d2ba0bb7c3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a79358152bef966079a2176d2ba0bb7c3">_snipeChance</a></td></tr>
+<tr class="separator:a79358152bef966079a2176d2ba0bb7c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99f788b3b9013e30c736f2b750c71a19" id="r_a99f788b3b9013e30c736f2b750c71a19"><td class="memItemLeft" align="right" valign="top">readonly Dictionary&lt; <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a>, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a99f788b3b9013e30c736f2b750c71a19">_stacks</a> = new()</td></tr>
 <tr class="separator:a99f788b3b9013e30c736f2b750c71a19"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1eb99c9fdb743026c3ecdddc9cf3782" id="r_af1eb99c9fdb743026c3ecdddc9cf3782"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af1eb99c9fdb743026c3ecdddc9cf3782">_staged</a></td></tr>
@@ -1470,6 +1475,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a79358152bef966079a2176d2ba0bb7c3" name="a79358152bef966079a2176d2ba0bb7c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79358152bef966079a2176d2ba0bb7c3">&#9670;&#160;</a></span>_snipeChance</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Game.Upgrades.RunUpgrades._snipeChance</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a99f788b3b9013e30c736f2b750c71a19" name="a99f788b3b9013e30c736f2b750c71a19"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a99f788b3b9013e30c736f2b750c71a19">&#9670;&#160;</a></span>_stacks</h2>
 
@@ -1852,6 +1879,32 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IShieldsPerBall.html#a8fbbc14a1a201d8fa403b1756c4a0d6a">BalloonParty.Game.Upgrades.IShieldsPerBall</a>.</p>
+
+</div>
+</div>
+<a id="a8a5c03bdc203114c3a48bd125361f4ca" name="a8a5c03bdc203114c3a48bd125361f4ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a5c03bdc203114c3a48bd125361f4ca">&#9670;&#160;</a></span>SnipeChance</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Game.Upgrades.RunUpgrades.SnipeChance</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sharpshooter's chance, 0 to 1, that a ball starts Snipe-armed as the thrower loads it. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#af825a4cd6218b0b9d8fb22a9f3362d6b">BalloonParty.Game.Upgrades.IWeaponStats</a>.</p>
 
 </div>
 </div>

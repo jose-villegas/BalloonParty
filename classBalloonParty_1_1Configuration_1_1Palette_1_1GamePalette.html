@@ -163,6 +163,12 @@ Static Public Attributes</h2></td></tr>
 <tr class="memitem:ab1c22d1c348537d6dc9985e1c5728746" id="r_ab1c22d1c348537d6dc9985e1c5728746"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab1c22d1c348537d6dc9985e1c5728746">RainbowColorId</a> = &quot;__rainbow__&quot;</td></tr>
 <tr class="memdesc:ab1c22d1c348537d6dc9985e1c5728746"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reserved color id for the "all colors" wildcard (the rainbow balloon).  <br /></td></tr>
 <tr class="separator:ab1c22d1c348537d6dc9985e1c5728746"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a715a284a3f4d729f7cfd950a1d70fa3a" id="r_a715a284a3f4d729f7cfd950a1d70fa3a"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a715a284a3f4d729f7cfd950a1d70fa3a">SnipeSkyLightColorId</a> = &quot;SnipeSkyLight&quot;</td></tr>
+<tr class="memdesc:a715a284a3f4d729f7cfd950a1d70fa3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The white light that falls from the sky onto the cannon before the Sharpshooter whirlwind — a scene light palette slot, never a spawnable balloon color.  <br /></td></tr>
+<tr class="separator:a715a284a3f4d729f7cfd950a1d70fa3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14e1a96833c3f19b5ede2e9e6e76ac11" id="r_a14e1a96833c3f19b5ede2e9e6e76ac11"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a14e1a96833c3f19b5ede2e9e6e76ac11">SnipeWhirlwindColorId</a> = &quot;SnipeWhirlwind&quot;</td></tr>
+<tr class="memdesc:a14e1a96833c3f19b5ede2e9e6e76ac11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Presentation-only palette entry for the whirlwind around the thrower when a ball loads Snipe-armed (the Sharpshooter card) — authored in the palette asset but never a spawnable balloon color.  <br /></td></tr>
+<tr class="separator:a14e1a96833c3f19b5ede2e9e6e76ac11"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2aeb10121b120e25a3001f97dc0e1d3" id="r_ac2aeb10121b120e25a3001f97dc0e1d3"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac2aeb10121b120e25a3001f97dc0e1d3">SparksColorId</a> = &quot;Sparks&quot;</td></tr>
 <tr class="memdesc:ac2aeb10121b120e25a3001f97dc0e1d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Presentation-only palette entry for the unbreakable's metallic impacts (its deflects and pierced pop) — authored in the palette asset but never a spawnable balloon color.  <br /></td></tr>
 <tr class="separator:ac2aeb10121b120e25a3001f97dc0e1d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -622,6 +628,54 @@ Private Attributes</h2></td></tr>
 
 <p>Reserved color id for the "all colors" wildcard (the rainbow balloon). </p>
 <p>Never a palette entry — a balloon carrying this has no concrete color, so colour interactions can detect it via <a class="el" href="#abdda03026a02335a7f9a7328d443b61a" title="True if colorId  is the reserved &quot;all colors&quot; wildcard (GamePalette.RainbowColorId).">IsRainbow</a> instead of acting on an arbitrary spawn colour. </p>
+
+</div>
+</div>
+<a id="a715a284a3f4d729f7cfd950a1d70fa3a" name="a715a284a3f4d729f7cfd950a1d70fa3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a715a284a3f4d729f7cfd950a1d70fa3a">&#9670;&#160;</a></span>SnipeSkyLightColorId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const string BalloonParty.Configuration.Palette.GamePalette.SnipeSkyLightColorId = &quot;SnipeSkyLight&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The white light that falls from the sky onto the cannon before the Sharpshooter whirlwind — a scene light palette slot, never a spawnable balloon color. </p>
+
+</div>
+</div>
+<a id="a14e1a96833c3f19b5ede2e9e6e76ac11" name="a14e1a96833c3f19b5ede2e9e6e76ac11"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14e1a96833c3f19b5ede2e9e6e76ac11">&#9670;&#160;</a></span>SnipeWhirlwindColorId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const string BalloonParty.Configuration.Palette.GamePalette.SnipeWhirlwindColorId = &quot;SnipeWhirlwind&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Presentation-only palette entry for the whirlwind around the thrower when a ball loads Snipe-armed (the Sharpshooter card) — authored in the palette asset but never a spawnable balloon color. </p>
 
 </div>
 </div>
