@@ -26,9 +26,10 @@ unbreakables, past the level's usual cap, and those form formations of their own
 1. **Wave start.** `BalloonBalancer.Balance(atWaveStart: true)` calls `ArrangeAtWaveStart` before the
    usual roam pre-pass. Roamers therefore see the formation's slots as already taken.
 2. **Forming.** If at least `MinMembers` unbreakables are free (in no formation), the service picks a
-   shape for them. The pick is weighted at random from the shape weights. It leaves out the shape just
-   held, and leaves out `ItemCover` unless an item is on the board. If the picked shape fits nowhere, the
-   service tries the next one. If nothing fits, nothing forms and the unbreakables roam as usual. A
+   shape for them. The pick is weighted at random from the shape weights. The snake's weight grows by
+   `SnakeWeightPerExtraUnbreakable` of itself for each unbreakable on the board beyond `MinMembers`, so a
+   crowded board snakes more often. It leaves out the shape just held, and leaves out `ItemCover` unless
+   an item is on the board. If the picked shape fits nowhere, the service tries the next one. If nothing fits, nothing forms and the unbreakables roam as usual. A
    formation takes at most `MaxMembers` (a horizontal line, `HorizontalMaxMembers`); an item cover takes
    exactly six. While `MinMembers` or more are still free after it, they form another one.
 3. **Moving in.** The service hands each member's move to the balancer's relocate routine. That is the
@@ -142,5 +143,7 @@ The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfigurati
 - `SpotChoices` (3)
 - `ReinforcementChance` (0.35) and `ReinforcementCeiling` (4)
 - the shape weights: horizontal 1, each diagonal 1, item cover 2, snake 1
+- `SnakeWeightPerExtraUnbreakable` (0.5: the snake's weight 1.5x with one unbreakable past `MinMembers`, 2x
+  with two)
 
 The design and its open risks are in `Plans/PLAN-UnbreakableFormations.md`.

@@ -240,6 +240,7 @@ MonoBehaviour:
     _diagonalWeight: 1
     _itemCoverWeight: 2
     _snakeWeight: 1
+    _snakeWeightPerExtraUnbreakable: 0.5
   _rewardBalloons:
     _goldenAtCompletion: 0.75
     _heartChanceMissingOne: 0.04

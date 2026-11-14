@@ -53,6 +53,12 @@ namespace BalloonParty.Configuration.Balloons
         float SnakeWeight { get; }
 
         /// <summary>
+        ///     Added to the snake's weight, as a share of <see cref="SnakeWeight" />, for each unbreakable on the
+        ///     board beyond <see cref="MinMembers" />: the more unbreakables, the likelier a snake.
+        /// </summary>
+        float SnakeWeightPerExtraUnbreakable { get; }
+
+        /// <summary>
         ///     Chance, at each wave start, that a formation which stood untouched through the last wave calls in
         ///     one more unbreakable.
         /// </summary>

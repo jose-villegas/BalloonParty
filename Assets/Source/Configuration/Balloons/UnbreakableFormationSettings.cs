@@ -63,6 +63,10 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Weight of a snake, the line that walks the board.")]
         [SerializeField] [Min(0f)] private float _snakeWeight = 1f;
 
+        [Tooltip("Added to the snake's weight, as a share of it, for each unbreakable on the board beyond Min " +
+                 "Members: 0.5 makes a snake 1.5x as likely with one more, 2x with two more.")]
+        [SerializeField] [Min(0f)] private float _snakeWeightPerExtraUnbreakable = 0.5f;
+
         public bool Enabled => _enabled;
         public int MinMembers => _minMembers;
         public int MaxMembers => Mathf.Max(_maxMembers, _minMembers);
@@ -77,6 +81,7 @@ namespace BalloonParty.Configuration.Balloons
         public float DiagonalWeight => _diagonalWeight;
         public float ItemCoverWeight => _itemCoverWeight;
         public float SnakeWeight => _snakeWeight;
+        public float SnakeWeightPerExtraUnbreakable => _snakeWeightPerExtraUnbreakable;
         public float ReinforcementChance => _reinforcementChance;
         public int ReinforcementCeiling => _reinforcementCeiling;
     }

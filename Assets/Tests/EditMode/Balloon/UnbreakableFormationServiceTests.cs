@@ -624,6 +624,33 @@ namespace BalloonParty.Tests.Balloon
             Assert.IsTrue(_unbreakables.All(u => u.InFormation.Value && !u.Walking));
         }
 
+        // Horizontal and snake only, weight 1 each, and a roll of 0.4. Three unbreakables: 0.4 of a total of 2 lands
+        // on the horizontal. Five, with the snake's weight up half for each of the two past the minimum: the snake
+        // weighs 2, and 0.4 of a total of 3 lands past the horizontal's 1, on the snake.
+        [TestCase(0.5f, 3, false)]
+        [TestCase(0.5f, 5, true)]
+        [TestCase(0f, 5, false)]
+        public void TheSnakesWeight_GrowsWithTheUnbreakablesOnTheBoard(
+            float perExtra, int unbreakables, bool snake)
+        {
+            _settings.DiagonalWeight.Returns(0f);
+            _settings.ItemCoverWeight.Returns(0f);
+            _settings.SnakeWeight.Returns(1f);
+            _settings.SnakeMaxMembers.Returns(5);
+            _settings.SnakeWeightPerExtraUnbreakable.Returns(perExtra);
+            _service.Random01 = () => 0.4f;
+            var spots = new[]
+            {
+                new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5), new Vector2Int(1, 1),
+                new Vector2Int(5, 3),
+            };
+            AddUnbreakables(spots.Take(unbreakables).ToArray());
+
+            Arrange();
+
+            Assert.AreEqual(snake ? FormationShape.Snake : FormationShape.Horizontal, _service.CurrentShape);
+        }
+
         private void SnakeOnly()
         {
             _settings.HorizontalWeight.Returns(0f);

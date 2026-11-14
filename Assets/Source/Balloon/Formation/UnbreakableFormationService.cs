@@ -52,6 +52,8 @@ namespace BalloonParty.Balloon.Formation
         private readonly Func<int, int> _pickIndex;
 
         private bool _arranging;
+        // Counted at the start of each shape plan, for the snake's weight in that plan's picks.
+        private int _unbreakablesOnBoard;
         private int _reinforcementCalls;
         private int _snakePulses;
 
@@ -414,6 +416,7 @@ namespace BalloonParty.Balloon.Formation
         // again. The held shape is the last resort, when nothing else fits.
         private bool TryPlanNextShape(FormationShape? lastShape, out FormationShape shape)
         {
+            _unbreakablesOnBoard = CountUnbreakables();
             _shapePool.Clear();
             foreach (var candidate in Shapes)
             {
@@ -474,9 +477,28 @@ namespace BalloonParty.Balloon.Formation
                 FormationShape.DiagonalDownRight => _settings.DiagonalWeight,
                 FormationShape.DiagonalDownLeft => _settings.DiagonalWeight,
                 FormationShape.ItemCover => _settings.ItemCoverWeight,
-                FormationShape.Snake => _settings.SnakeWeight,
+                FormationShape.Snake => _settings.SnakeWeight * (1f + _settings.SnakeWeightPerExtraUnbreakable
+                    * Mathf.Max(0, _unbreakablesOnBoard - _settings.MinMembers)),
                 _ => 0f,
             };
+        }
+
+        // Every unbreakable on the board, in a formation or not: the snake's weight grows with them.
+        private int CountUnbreakables()
+        {
+            var count = 0;
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                for (var row = 0; row < _grid.Rows; row++)
+                {
+                    if (!_grid.IsEmpty(col, row) && _grid.At(new Vector2Int(col, row)) is IWriteableFormationMember)
+                    {
+                        count++;
+                    }
+                }
+            }
+
+            return count;
         }
 
         // A line runs along its step between neighbouring slots, measured in world space so the diagonals
