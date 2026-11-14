@@ -1,5 +1,11 @@
 var NAVTREEINDEX113 =
 {
+"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlot.html#a2d6756b46af5d46c44e3fc3c66a8675d":[6,0,0,6,9,1,1],
+"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlot.html#a8009a70febf1c91619e4057b2126b64a":[5,0,0,6,9,1,0],
+"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlot.html#a8009a70febf1c91619e4057b2126b64a":[6,0,0,6,9,1,0],
+"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html":[5,0,0,6,9,2],
+"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html":[6,0,0,6,9,2],
+"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#a6675fc65b45cf7bc9b70f2184aabafe3":[5,0,0,6,9,2,0],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#a6675fc65b45cf7bc9b70f2184aabafe3":[6,0,0,6,9,2,0],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#a85313ac767f357c2ba2dd71aed242b6f":[5,0,0,6,9,2,2],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#a85313ac767f357c2ba2dd71aed242b6f":[6,0,0,6,9,2,2],
@@ -243,11 +249,5 @@ var NAVTREEINDEX113 =
 "structBalloonParty_1_1Item_1_1ItemActivationContext.html#a1aef32aa8c276d48fcc1cea2c19451fa":[6,0,0,7,14,1],
 "structBalloonParty_1_1Item_1_1ItemActivationContext.html#a65e91672578b5cbc0b8f361ccddc2689":[5,0,0,7,14,0],
 "structBalloonParty_1_1Item_1_1ItemActivationContext.html#a65e91672578b5cbc0b8f361ccddc2689":[6,0,0,7,14,0],
-"structBalloonParty_1_1Item_1_1ItemActivationContext.html#a842d84d6fcebc312e411b600658f30a7":[5,0,0,7,14,2],
-"structBalloonParty_1_1Item_1_1ItemActivationContext.html#a842d84d6fcebc312e411b600658f30a7":[6,0,0,7,14,2],
-"structBalloonParty_1_1Item_1_1ItemActivationContext.html#af6a9ba0e8d84052c6253f651bb8722b4":[5,0,0,7,14,3],
-"structBalloonParty_1_1Item_1_1ItemActivationContext.html#af6a9ba0e8d84052c6253f651bb8722b4":[6,0,0,7,14,3],
-"structBalloonParty_1_1Item_1_1ItemSightHit.html":[5,0,0,7,19],
-"structBalloonParty_1_1Item_1_1ItemSightHit.html":[6,0,0,7,19],
-"structBalloonParty_1_1Item_1_1ItemSightHit.html#a0c5d6a23937da13ffd0d87024b5c3d34":[5,0,0,7,19,4]
+"structBalloonParty_1_1Item_1_1ItemActivationContext.html#a842d84d6fcebc312e411b600658f30a7":[5,0,0,7,14,2]
 };

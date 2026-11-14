@@ -1,5 +1,9 @@
 var NAVTREEINDEX20 =
 {
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a202123ee351a392240890434fd25e697":[5,0,0,3,3,5,4],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a202123ee351a392240890434fd25e697":[6,0,0,3,3,5,4],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a36ea66102331870e89ef0434310a7ed9":[5,0,0,3,3,5,6],
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a36ea66102331870e89ef0434310a7ed9":[6,0,0,3,3,5,6],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a58cba6faab1a39b50edf2fc058684809":[5,0,0,3,3,5,17],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a58cba6faab1a39b50edf2fc058684809":[6,0,0,3,3,5,17],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1LevelAscendSettings.html#a5f9f1612fd4582a07f92bfc5dd2a9c3c":[5,0,0,3,3,5,18],
@@ -245,9 +249,5 @@ var NAVTREEINDEX20 =
 "classBalloonParty_1_1Configuration_1_1Editor_1_1StampProfileDrawer.html#a8494cf77d2d0cd7480296fac78b86225":[5,0,0,3,4,12,1],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1StampProfileDrawer.html#a8494cf77d2d0cd7480296fac78b86225":[6,0,0,3,4,12,1],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html":[5,0,0,3,5,0],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html":[6,0,0,3,5,0],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html#a13327410710967b20aa18dd4428a7f1d":[5,0,0,3,5,0,2],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html#a13327410710967b20aa18dd4428a7f1d":[6,0,0,3,5,0,2],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html#a30277dc7896a767bef3917edc17ea4af":[5,0,0,3,5,0,3],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html#a30277dc7896a767bef3917edc17ea4af":[6,0,0,3,5,0,3]
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html":[6,0,0,3,5,0]
 };

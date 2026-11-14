@@ -157,6 +157,9 @@ Properties</h2></td></tr>
 <tr class="memitem:acf379663fec8cbc2d121e7b4bd48a110" id="r_acf379663fec8cbc2d121e7b4bd48a110"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Configuration_1_1Balloons_1_1PurpleHeartStep.html">PurpleHeartStep</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf379663fec8cbc2d121e7b4bd48a110">PurpleHearts</a><code> [get]</code></td></tr>
 <tr class="memdesc:acf379663fec8cbc2d121e7b4bd48a110"><td class="mdescLeft">&#160;</td><td class="mdescRight">A purple level's heart balloons, in any order: each rolled once on the line that reaches its completion, at full hearts too.  <br /></td></tr>
 <tr class="separator:acf379663fec8cbc2d121e7b4bd48a110"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d08f189b1231aa67cce5929e4a85ae5" id="r_a6d08f189b1231aa67cce5929e4a85ae5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6d08f189b1231aa67cce5929e4a85ae5">SureGoldenLevel</a><code> [get]</code></td></tr>
+<tr class="memdesc:a6d08f189b1231aa67cce5929e4a85ae5"><td class="mdescLeft">&#160;</td><td class="mdescRight">A level that always brings a single golden balloon, with no roll; 0 for none.  <br /></td></tr>
+<tr class="separator:a6d08f189b1231aa67cce5929e4a85ae5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -178,6 +181,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aa4764781018148399c3cd883cb59d167"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9fc70720ace37c192158dfa42d8b1261" id="r_a9fc70720ace37c192158dfa42d8b1261"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Configuration_1_1Balloons_1_1PurpleHeartStep.html">PurpleHeartStep</a>[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9fc70720ace37c192158dfa42d8b1261">_purpleHearts</a></td></tr>
 <tr class="separator:a9fc70720ace37c192158dfa42d8b1261"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9744ae49c574a2270aadcd55c0a95596" id="r_a9744ae49c574a2270aadcd55c0a95596"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9744ae49c574a2270aadcd55c0a95596">_sureGoldenLevel</a> = 5</td></tr>
+<tr class="separator:a9744ae49c574a2270aadcd55c0a95596"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="ae333ba6706d3162ede733ecadd84525d" name="ae333ba6706d3162ede733ecadd84525d"></a>
@@ -382,6 +387,28 @@ Private Attributes</h2></td></tr>
 <div class="line">            <span class="keyword">new</span>(0.9f, 0.25f),</div>
 <div class="line">        }</div>
 </div><!-- fragment -->
+</div>
+</div>
+<a id="a9744ae49c574a2270aadcd55c0a95596" name="a9744ae49c574a2270aadcd55c0a95596"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9744ae49c574a2270aadcd55c0a95596">&#9670;&#160;</a></span>_sureGoldenLevel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.RewardBalloonSettings._sureGoldenLevel = 5</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
@@ -617,6 +644,32 @@ Private Attributes</h2></td></tr>
 <p>Their count caps the level's heart balloons; the roll while hurt (and its cooldown) is off there. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a97547095a4133f01e672e04bd3a0c143">BalloonParty.Configuration.Balloons.IRewardBalloonSettings</a>.</p>
+
+</div>
+</div>
+<a id="a6d08f189b1231aa67cce5929e4a85ae5" name="a6d08f189b1231aa67cce5929e4a85ae5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d08f189b1231aa67cce5929e4a85ae5">&#9670;&#160;</a></span>SureGoldenLevel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.RewardBalloonSettings.SureGoldenLevel</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A level that always brings a single golden balloon, with no roll; 0 for none. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a194ec25e5d96516ba4b63ee3575ca6c0">BalloonParty.Configuration.Balloons.IRewardBalloonSettings</a>.</p>
 
 </div>
 </div>

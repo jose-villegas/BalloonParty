@@ -1,5 +1,11 @@
 var NAVTREEINDEX112 =
 {
+"structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a8755605515e536ee392b113e715cda98":[6,0,0,5,7,0,0,4],
+"structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a97c5fdcd664ca9ac0602e99edd74f91e":[5,0,0,5,7,0,0,6],
+"structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a97c5fdcd664ca9ac0602e99edd74f91e":[6,0,0,5,7,0,0,6],
+"structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#acec98aa606a3b2d7aa7efa4149afe75b":[5,0,0,5,7,0,0,3],
+"structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#acec98aa606a3b2d7aa7efa4149afe75b":[6,0,0,5,7,0,0,3],
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html":[5,0,0,6,4,1],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html":[6,0,0,6,4,1],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html#a438ca055b2e936a3a7ba2797856d4197":[5,0,0,6,4,1,2],
 "structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html#a438ca055b2e936a3a7ba2797856d4197":[6,0,0,6,4,1,2],
@@ -243,11 +249,5 @@ var NAVTREEINDEX112 =
 "structBalloonParty_1_1Game_1_1Score_1_1TrailId.html#ae036f263891835697271cfecd82c1563":[6,0,0,6,8,6,6],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlot.html":[5,0,0,6,9,1],
 "structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlot.html":[6,0,0,6,9,1],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlot.html#a2d6756b46af5d46c44e3fc3c66a8675d":[5,0,0,6,9,1,1],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlot.html#a2d6756b46af5d46c44e3fc3c66a8675d":[6,0,0,6,9,1,1],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlot.html#a8009a70febf1c91619e4057b2126b64a":[5,0,0,6,9,1,0],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlot.html#a8009a70febf1c91619e4057b2126b64a":[6,0,0,6,9,1,0],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html":[5,0,0,6,9,2],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html":[6,0,0,6,9,2],
-"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlotInfo.html#a6675fc65b45cf7bc9b70f2184aabafe3":[5,0,0,6,9,2,0]
+"structBalloonParty_1_1Game_1_1Telemetry_1_1AxisSlot.html#a2d6756b46af5d46c44e3fc3c66a8675d":[5,0,0,6,9,1,1]
 };

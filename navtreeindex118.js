@@ -1,5 +1,11 @@
 var NAVTREEINDEX118 =
 {
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a1420491048c0fc50ecc4f81f74040e99":[6,0,0,13,0,0,21,1],
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a147fb17455c7484e4fe41236ef8a8263":[5,0,0,13,0,0,21,7],
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a147fb17455c7484e4fe41236ef8a8263":[6,0,0,13,0,0,21,7],
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a1a3ebdf3b82892286f247a51a129a9f9":[5,0,0,13,0,0,21,2],
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a1a3ebdf3b82892286f247a51a129a9f9":[6,0,0,13,0,0,21,2],
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a1c0b593e6fc606d812506b065372add1":[5,0,0,13,0,0,21,5],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a1c0b593e6fc606d812506b065372add1":[6,0,0,13,0,0,21,5],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a35c1ab7fcfff3c618fe63458f50d7c30":[5,0,0,13,0,0,21,4],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a35c1ab7fcfff3c618fe63458f50d7c30":[6,0,0,13,0,0,21,4],
@@ -243,11 +249,5 @@ var NAVTREEINDEX118 =
 "structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a3f48532d3c6e14b7e836cd3c1a319966":[6,0,0,14,7,6],
 "structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a76bd3ee39c5eb911ff8a6845ef9483a1":[5,0,0,14,7,7],
 "structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a76bd3ee39c5eb911ff8a6845ef9483a1":[6,0,0,14,7,7],
-"structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a7a4b2bde33b3c55858c2eaab018fd705":[5,0,0,14,7,2],
-"structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a7a4b2bde33b3c55858c2eaab018fd705":[6,0,0,14,7,2],
-"structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a89b8752b63c3ba4b51ad87ae2d8a90c3":[5,0,0,14,7,4],
-"structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a89b8752b63c3ba4b51ad87ae2d8a90c3":[6,0,0,14,7,4],
-"structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a9ea7bada1ba16cb50b8d7039a3ceaeb5":[5,0,0,14,7,10],
-"structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a9ea7bada1ba16cb50b8d7039a3ceaeb5":[6,0,0,14,7,10],
-"structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#ac61ae0f647e180a95d1a24196cef94f2":[5,0,0,14,7,5]
+"structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a7a4b2bde33b3c55858c2eaab018fd705":[5,0,0,14,7,2]
 };

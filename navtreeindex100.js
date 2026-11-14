@@ -1,5 +1,11 @@
 var NAVTREEINDEX100 =
 {
+"interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html":[5,0,0,6,8,3],
+"interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html":[6,0,0,6,8,3],
+"interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html#a02b19179ba4fcc1911b3b94513571ff9":[5,0,0,6,8,3,0],
+"interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html#a02b19179ba4fcc1911b3b94513571ff9":[6,0,0,6,8,3,0],
+"interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html#a9748e71f60e046c26fd283ae992d053c":[5,0,0,6,8,3,1],
+"interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html#a9748e71f60e046c26fd283ae992d053c":[6,0,0,6,8,3,1],
 "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html":[5,0,0,6,9,8],
 "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html":[6,0,0,6,9,8],
 "interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ILevelMetricsView.html#a0b39fa6b6e370b966a89e1a229f1b6a3":[5,0,0,6,9,8,0],
@@ -243,11 +249,5 @@ var NAVTREEINDEX100 =
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#ac567e096c3c53afed503fda3afe7fd6d":[5,0,0,10,2,1,10],
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#ac567e096c3c53afed503fda3afe7fd6d":[6,0,0,10,2,1,10],
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#aeefcee399460e5cebb1a645a2f90e49d":[5,0,0,10,2,1,1],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#aeefcee399460e5cebb1a645a2f90e49d":[6,0,0,10,2,1,1],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#af17d60c7ccc43629f765b3d2f3a9549d":[5,0,0,10,2,1,12],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#af17d60c7ccc43629f765b3d2f3a9549d":[6,0,0,10,2,1,12],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#af1babc92b9143b497be172f48a7059ea":[5,0,0,10,2,1,8],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#af1babc92b9143b497be172f48a7059ea":[6,0,0,10,2,1,8],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html":[5,0,0,10,2,2],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html":[6,0,0,10,2,2]
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#aeefcee399460e5cebb1a645a2f90e49d":[6,0,0,10,2,1,1]
 };

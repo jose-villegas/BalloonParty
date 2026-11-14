@@ -1,5 +1,9 @@
 var NAVTREEINDEX31 =
 {
+"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#af1fe45e2c48ea44e6c6432ee0a699f4f":[5,0,0,4,0,1],
+"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#af1fe45e2c48ea44e6c6432ee0a699f4f":[6,0,0,4,0,1],
+"classBalloonParty_1_1Display_1_1CameraShakeController.html":[5,0,0,4,1],
+"classBalloonParty_1_1Display_1_1CameraShakeController.html":[6,0,0,4,1],
 "classBalloonParty_1_1Display_1_1CameraShakeController.html#a01ff3dd6b6cefb8ccaadb7605564f40a":[5,0,0,4,1,3],
 "classBalloonParty_1_1Display_1_1CameraShakeController.html#a01ff3dd6b6cefb8ccaadb7605564f40a":[6,0,0,4,1,3],
 "classBalloonParty_1_1Display_1_1CameraShakeController.html#a06abbd490a60e11415d7a1d2d69e79df":[5,0,0,4,1,8],
@@ -245,9 +249,5 @@ var NAVTREEINDEX31 =
 "classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a5cfd257fa95ff5a96cf873c28bec92ba":[5,0,0,5,10,6],
 "classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a5cfd257fa95ff5a96cf873c28bec92ba":[6,0,0,5,10,6],
 "classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a68af068219ce3e56b4a619048e408031":[5,0,0,5,10,7],
-"classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a68af068219ce3e56b4a619048e408031":[6,0,0,5,10,7],
-"classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a7d14a9a2ecd89c6b65da41edec75951b":[5,0,0,5,10,2],
-"classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a7d14a9a2ecd89c6b65da41edec75951b":[6,0,0,5,10,2],
-"classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a9d533836a63378eabbfaf571cdcbc84a":[5,0,0,5,10,3],
-"classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a9d533836a63378eabbfaf571cdcbc84a":[6,0,0,5,10,3]
+"classBalloonParty_1_1Editor_1_1AutoFieldPropertyDrawer.html#a68af068219ce3e56b4a619048e408031":[6,0,0,5,10,7]
 };

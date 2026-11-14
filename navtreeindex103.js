@@ -1,5 +1,11 @@
 var NAVTREEINDEX103 =
 {
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html#a295c65ca54574bca653d348f8c0ed7cf":[5,0,0,13,1,6,0],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasNudge.html#a295c65ca54574bca653d348f8c0ed7cf":[6,0,0,13,1,6,0],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html":[5,0,0,13,1,7],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html":[6,0,0,13,1,7],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html#adaf9d7fc481f54c2fcee73214ac42857":[5,0,0,13,1,7,0],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScore.html#adaf9d7fc481f54c2fcee73214ac42857":[6,0,0,13,1,7,0],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScoreColor.html":[5,0,0,13,1,8],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScoreColor.html":[6,0,0,13,1,8],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScoreColor.html#a6f63c972c549c25ce456da1d3477b5e7":[5,0,0,13,1,8,0],
@@ -243,11 +249,5 @@ var NAVTREEINDEX103 =
 "namespaceBalloonParty_1_1Editor_1_1EffectPreview.html":[5,0,0,5,1],
 "namespaceBalloonParty_1_1Editor_1_1FrameDump.html":[5,0,0,5,2],
 "namespaceBalloonParty_1_1Editor_1_1Maps.html":[5,0,0,5,3],
-"namespaceBalloonParty_1_1Editor_1_1Release.html":[5,0,0,5,4],
-"namespaceBalloonParty_1_1Editor_1_1ShadowBake.html":[5,0,0,5,5],
-"namespaceBalloonParty_1_1Editor_1_1ShieldChains.html":[5,0,0,5,6],
-"namespaceBalloonParty_1_1Editor_1_1ShotSolver.html":[5,0,0,5,7],
-"namespaceBalloonParty_1_1Editor_1_1SpriteCombine.html":[5,0,0,5,8],
-"namespaceBalloonParty_1_1Editor_1_1TestRunner.html":[5,0,0,5,9],
-"namespaceBalloonParty_1_1Game.html":[5,0,0,6]
+"namespaceBalloonParty_1_1Editor_1_1Release.html":[5,0,0,5,4]
 };

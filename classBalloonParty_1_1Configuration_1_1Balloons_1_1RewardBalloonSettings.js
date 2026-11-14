@@ -9,6 +9,7 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings =
     [ "_ordinaryGoldenChance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a69cebb322cda44122dd2e9c9bff90819", null ],
     [ "_ordinaryGoldenEveryLevels", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#aa4764781018148399c3cd883cb59d167", null ],
     [ "_purpleHearts", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a9fc70720ace37c192158dfa42d8b1261", null ],
+    [ "_sureGoldenLevel", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a9744ae49c574a2270aadcd55c0a95596", null ],
     [ "GoldenAtCompletion", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a367fc8cf38e0ae27a48dbb948c5afcb9", null ],
     [ "GoldenRepeatChances", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a17066c9d2f5676c78b30e3cedfdc9adf", null ],
     [ "GoldenRepeatDelayLines", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#aa28d960fc201b625184132a9fd0dc573", null ],
@@ -17,5 +18,6 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings =
     [ "HeartCooldownLines", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#aa16191cd1fa456cda3392ed541de9132", null ],
     [ "OrdinaryGoldenChance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a048d5775cb87bf8875a4fa1b71114ae1", null ],
     [ "OrdinaryGoldenEveryLevels", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a29ed3a5c6c4ba3cd7d37adf019afd7cb", null ],
-    [ "PurpleHearts", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#acf379663fec8cbc2d121e7b4bd48a110", null ]
+    [ "PurpleHearts", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#acf379663fec8cbc2d121e7b4bd48a110", null ],
+    [ "SureGoldenLevel", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a6d08f189b1231aa67cce5929e4a85ae5", null ]
 ];

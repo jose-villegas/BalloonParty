@@ -1,5 +1,11 @@
 var NAVTREEINDEX101 =
 {
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#af17d60c7ccc43629f765b3d2f3a9549d":[5,0,0,10,2,1,12],
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#af17d60c7ccc43629f765b3d2f3a9549d":[6,0,0,10,2,1,12],
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#af1babc92b9143b497be172f48a7059ea":[5,0,0,10,2,1,8],
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileFlightState.html#af1babc92b9143b497be172f48a7059ea":[6,0,0,10,2,1,8],
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html":[5,0,0,10,2,2],
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html":[6,0,0,10,2,2],
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#a0e93c6829aa33afa642e0923417dee50":[5,0,0,10,2,2,0],
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#a0e93c6829aa33afa642e0923417dee50":[6,0,0,10,2,2,0],
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#a139546d417b244da5c9a3f31143bfa78":[5,0,0,10,2,2,11],
@@ -243,11 +249,5 @@ var NAVTREEINDEX101 =
 "interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html#af3b4eb5f921ccb6fa3202da23dd3c136":[5,0,0,12,29,1],
 "interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html#af3b4eb5f921ccb6fa3202da23dd3c136":[6,0,0,12,29,1],
 "interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html":[5,0,0,12,30],
-"interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html":[6,0,0,12,30],
-"interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#a19c3bc16482462914e62886e6d32f15f":[5,0,0,12,30,0],
-"interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#a19c3bc16482462914e62886e6d32f15f":[6,0,0,12,30,0],
-"interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#a7e4016602dc7738982b1bf87bc1e36c4":[5,0,0,12,30,1],
-"interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#a7e4016602dc7738982b1bf87bc1e36c4":[6,0,0,12,30,1],
-"interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#aad7016329cf854302e1b6e79a3460a65":[5,0,0,12,30,5],
-"interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#aad7016329cf854302e1b6e79a3460a65":[6,0,0,12,30,5]
+"interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html":[6,0,0,12,30]
 };
