@@ -7,6 +7,8 @@ namespace BalloonParty.Projectile.Model
     /// <see cref="ProjectileFlightState" /> is exposed only on <see cref="IWriteableProjectileModel" />.</summary>
     public interface IProjectileFlightState
     {
+        // Toughs the piercing shot has plowed and not yet shattered: above zero, its next wall discharges.
+        int PendingPierceHitCount { get; }
         int BankedPierceCharges { get; }
         int BankedRainbowPierceCharges { get; }
         int ConsecutiveWallBounces { get; }

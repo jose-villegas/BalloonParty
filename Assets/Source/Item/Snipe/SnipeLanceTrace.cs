@@ -28,6 +28,12 @@ namespace BalloonParty.Item.Snipe
             return shot != null && _runStarts.ContainsKey(shot);
         }
 
+        internal bool TryGetRunStart(IProjectileModel shot, out Vector3 start)
+        {
+            start = default;
+            return shot != null && _runStarts.TryGetValue(shot, out start);
+        }
+
         /// <summary>
         ///     Starts a run at <paramref name="start" />. Ignored while one is already open: a charge banked
         ///     on a running lance re-arms it without the shot ever leaving its path.

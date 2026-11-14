@@ -163,6 +163,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Item.Snipe.SnipeLanceLineView
   _line: {fileID: 5180730461829910276}
-  _drawSeconds: 0.18
+  _tipSpeed: 12
   _holdSeconds: 0.7
   _fadeSeconds: 0.6

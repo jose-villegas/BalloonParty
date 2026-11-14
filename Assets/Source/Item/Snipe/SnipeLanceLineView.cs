@@ -13,8 +13,8 @@ namespace BalloonParty.Item.Snipe
     {
         [SerializeField] private LineRenderer _line;
 
-        [Tooltip("Seconds the pencil tip takes to run from where the lance armed to the wall.")]
-        [SerializeField] [Min(0f)] private float _drawSeconds = 0.18f;
+        [Tooltip("World units a second the pencil tip runs along the lance's run, behind the shot and on to the wall.")]
+        [SerializeField] [Min(0f)] private float _tipSpeed = 12f;
 
         [Tooltip("Seconds the finished line stays at full strength.")]
         [SerializeField] [Min(0f)] private float _holdSeconds = 0.7f;
@@ -23,10 +23,9 @@ namespace BalloonParty.Item.Snipe
         [SerializeField] [Min(0f)] private float _fadeSeconds = 0.6f;
 
         private Vector3 _from;
-        private Vector3 _to;
         private Color _color = Color.white;
 
-        internal SnipeLanceStrokeTiming Timing => new(_drawSeconds, _holdSeconds, _fadeSeconds);
+        internal SnipeLanceStrokeTiming Timing => new(_tipSpeed, _holdSeconds, _fadeSeconds);
 
         private void Awake()
         {
@@ -49,19 +48,18 @@ namespace BalloonParty.Item.Snipe
             _line.positionCount = 0;
         }
 
-        internal void Begin(Vector3 from, Vector3 to, Color color)
+        internal void Begin(Vector3 from, Color color)
         {
             _from = from;
-            _to = to;
             _color = color;
-            Render(0f, 1f);
+            _line.positionCount = 0;
         }
 
-        /// <param name="drawn">How far the tip has run from the start toward the wall, 0 to 1.</param>
+        /// <param name="tip">Where the pencil tip is now, on the run.</param>
         /// <param name="alpha">The whole stroke's opacity, multiplied onto the colour's own.</param>
-        internal void Render(float drawn, float alpha)
+        internal void Render(Vector3 tip, float alpha)
         {
-            if (drawn <= 0f || alpha <= 0f)
+            if (alpha <= 0f || (tip - _from).sqrMagnitude <= 0f)
             {
                 _line.positionCount = 0;
                 return;
@@ -73,7 +71,7 @@ namespace BalloonParty.Item.Snipe
             _line.endColor = color;
             _line.positionCount = 2;
             _line.SetPosition(0, _from);
-            _line.SetPosition(1, Vector3.Lerp(_from, _to, drawn));
+            _line.SetPosition(1, tip);
         }
     }
 }

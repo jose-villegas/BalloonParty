@@ -39,6 +39,8 @@ namespace BalloonParty.Projectile.Model
         // positions — shattered together at the wall-discharge. Count doubles as the rainbow charge.
         public List<PendingPierceHit> PendingPierceHits { get; } = new();
 
+        public int PendingPierceHitCount => PendingPierceHits.Count;
+
         // Whether the shot was rainbow-buffed when it plowed a tough — captured at plow time because the
         // discharge ends the pierce (dropping the RainbowShield buff) BEFORE the discharge is resolved,
         // so HasBuff would already read false by then.

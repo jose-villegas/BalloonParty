@@ -144,5 +144,26 @@ namespace BalloonParty.Tests.Item
             Assert.AreEqual(SecondWall, otherFrom);
             Assert.IsTrue(_trace.IsOpen(_shot));
         }
+
+        // A pencil started on a plow, mid-run, draws from the run's start: past a wall that carried the lance
+        // on, that is the wall.
+        [Test]
+        public void TryGetRunStart_AfterAWallCarriedTheLanceOn_IsThatWall()
+        {
+            _trace.Open(_shot, ArmPoint);
+            _trace.TryCloseRun(_shot, FirstWall, stillPiercing: true, discharged: false, out _);
+
+            Assert.IsTrue(_trace.TryGetRunStart(_shot, out var start));
+            Assert.AreEqual(FirstWall, start);
+        }
+
+        // Armed in the thrower: no run until it fires, so a plow can't start a line from a stale point.
+        [Test]
+        public void TryGetRunStart_ArmedButNotYetLaunched_HasNone()
+        {
+            _trace.OpenAtLaunch(_shot);
+
+            Assert.IsFalse(_trace.TryGetRunStart(_shot, out _));
+        }
     }
 }
