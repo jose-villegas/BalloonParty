@@ -243,6 +243,10 @@ MonoBehaviour:
     _snakeWeightPerExtraUnbreakable: 0.5
   _rewardBalloons:
     _goldenAtCompletion: 0.75
+    _goldenRepeatChances:
+    - 0.25
+    - 0.1
+    _goldenRepeatDelayLines: 3
     _heartChanceMissingOne: 0.04
     _heartChanceMissingTwo: 0.12
     _heartChanceOnPurple: 0.05

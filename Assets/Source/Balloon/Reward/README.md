@@ -1,7 +1,8 @@
 # Balloon/Reward
 
 Two balloons are rewards rather than threats, and no level's mix brings them. The **golden balloon** comes
-once on a purple level, from the line that finds the level three quarters done. The **heart balloon**
+on a purple level, from the line that finds the level three quarters done, and popping it can bring
+another, up to three a level. The **heart balloon**
 comes to a player who is missing hearts, more often the more are missing. At most one of each is on the
 board. The plan is `Plans/PLAN-RewardBalloons.md`.
 
@@ -39,10 +40,13 @@ round balloons' shine is drawn for a circle. Its pop cue is `BalloonPopHeart`, a
 Only while the level is being played (`LevelUpPhase.Playing`), and only for a type the balloon catalogue
 has an entry for.
 
-- **Golden.** On a purple level (`IsExtraColorLevel`), once `LevelCompletion` reaches
-  `GoldenAtCompletion` (0.75): each colour's points, capped at the goal, over all the goals. Once per
-  level: a new level re-arms it. One that could not be placed stays due for the next line. It wins a line
-  over the heart.
+- **Golden.** On a purple level (`IsExtraColorLevel`), the first once `LevelCompletion` reaches
+  `GoldenAtCompletion` (0.75): each colour's points, capped at the goal, over all the goals. Its pop rolls
+  once for a second: `GoldenRepeatChances` (25%, then 10% for a third, so three at most). A won roll
+  brings it `GoldenRepeatDelayLines` (3) lines after the pop. Only a pop rolls (the service reads
+  `ActorHitMessage` for it), so a golden balloon a board clear takes, or one popped after its level ended,
+  brings no other. A new level starts over at the threshold, and anything still owed is dropped. One that
+  could not be placed stays due for the next line. It wins a line over the heart.
 - **Heart.** A roll per line while a heart is missing: `HeartChanceMissingOne`, or
   `HeartChanceMissingTwo` with two or more missing, plus `HeartChanceOnPurple` on a purple level. After
   one is placed, `HeartCooldownLines` lines pass before the next roll. A heart rolled for a line with no
@@ -53,5 +57,6 @@ The tuning is `IRewardBalloonSettings`, a block on `BalloonsConfiguration`.
 ## Leaving the board
 
 Every way off the board (a pop, a board clear, a level change) calls the leave callback, which frees the
-slot for the next of that type. Only a pop pays, which is why the payout reads the hit, not the leave. Each placement has its own number, so a callback from an earlier balloon,
+slot for the next of that type. Only a pop pays, and only a pop rolls for another golden balloon, which is
+why the payout and the service read the hit, not the leave. Each placement has its own number, so a callback from an earlier balloon,
 or from before a run reset, changes nothing. Anything a reward gives belongs on its pop, not on the leave.

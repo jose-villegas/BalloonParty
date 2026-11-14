@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BalloonParty.Configuration.Balloons
@@ -7,8 +8,16 @@ namespace BalloonParty.Configuration.Balloons
     public class RewardBalloonSettings : IRewardBalloonSettings
     {
         [Tooltip("The level's completion (each colour's points, capped at the goal, over all the goals) from which " +
-                 "a purple level's next line brings its golden balloon. Once a level.")]
+                 "a purple level's next line brings its first golden balloon.")]
         [SerializeField] [Range(0f, 1f)] private float _goldenAtCompletion = 0.75f;
+
+        [Tooltip("The chance of each further golden balloon on a purple level, rolled once when the one before it " +
+                 "pops (a board clear or a level change is no pop): the first entry for the second balloon, the next " +
+                 "for the third. Never more than one on the board.")]
+        [SerializeField] private float[] _goldenRepeatChances = { 0.25f, 0.1f };
+
+        [Tooltip("Spawn lines after a golden balloon's pop before the further one it won comes.")]
+        [SerializeField] [Min(0)] private int _goldenRepeatDelayLines = 3;
 
         [Tooltip("Chance per spawn line of a heart balloon while one heart is missing. Full hearts never roll one.")]
         [SerializeField] [Range(0f, 1f)] private float _heartChanceMissingOne = 0.04f;
@@ -23,6 +32,8 @@ namespace BalloonParty.Configuration.Balloons
         [SerializeField] [Min(0)] private int _heartCooldownLines = 12;
 
         public float GoldenAtCompletion => _goldenAtCompletion;
+        public IReadOnlyList<float> GoldenRepeatChances => _goldenRepeatChances;
+        public int GoldenRepeatDelayLines => _goldenRepeatDelayLines;
         public float HeartChanceMissingOne => _heartChanceMissingOne;
         public float HeartChanceMissingTwo => _heartChanceMissingTwo;
         public float HeartChanceOnPurple => _heartChanceOnPurple;

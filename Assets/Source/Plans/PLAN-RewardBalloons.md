@@ -14,7 +14,9 @@
 ## Goals
 
 1. **Golden balloon.**
-   - Only on purple (extra-colour) levels, once per level, placed when the level is about 75% done.
+   - Only on purple (extra-colour) levels, placed when the level is about 75% done. Its pop rolls once for
+     another (25%, then 10% for a third: three a level at most), which comes a few lines later. Never more
+     than one on the board, and only a pop rolls: one a board clear takes brings no other.
    - Normal hits do nothing: the shot bounces off it as off an unbreakable. Items do nothing either
      (bomb, laser, lightning, paint): a bomb beside it must not hand out the card.
    - A piercing shot pops it: a cruise-earned pierce or a Snipe lance. It is plowed and shatters at
@@ -37,7 +39,7 @@
 | `GoldenBalloonModel` | `Balloon/Model/` | A `BalloonModelBase` of its own, not an `UnbreakableBalloonModel` (that would pull it into formations and roaming). `EvaluateHit`: a hit with `Piercing` and `DirectHit` pops; any other projectile hit deflects; an item hit is `HitOutcome.None`. `IDeflectsShots`, `IResistsPaint`, colourless |
 | `HeartBalloonModel` | `Balloon/Model/` | A colourless one-hit balloon, `IResistsPaint` |
 | `IsTough` | `Shared/Extensions/BalloonModelExtensions.cs` | Covers the golden balloon, so a piercing shot plows it and the projectile's telegraph and sweep see it |
-| `RewardBalloonService` | `Balloon/Reward/` | Plain C#. Asked once per clock line, it reads the level's completion and the hearts and says which balloon is due, if any. It tracks which one is on the board through the leave callback, re-arms the golden balloon on each new level, `IRunResettable`. It only offers a type the catalogue has an entry for |
+| `RewardBalloonService` | `Balloon/Reward/` | Plain C#. Asked once per clock line, it reads the level's completion and the hearts and says which balloon is due, if any. It tracks which one is on the board through the leave callback, rolls for another golden balloon on its pop (read from `ActorHitMessage`), starts the golden balloons over on each new level, `IRunResettable`. It only offers a type the catalogue has an entry for |
 | `IRewardBalloonRequests` | `Balloon/Reward/` | `TryTakeDue(out type)` and `Placed(type)`, which returns the callback for when the balloon leaves the board. `BalloonSpawner` asks before the reinforcements, so the balloon takes one of the line's places, outside the level's caps and counts, its own entry found with `FindEntry` and prewarmed to one. It deals first, so a crowded line drops something else; one that still had no room leaves the balloon due for the next line |
 | `LevelCompletion` | `Game/Level/` | A 0–1 fraction computed from `ILevelProgress` when asked: each colour's confirmed points, capped at the requirement, over the requirement times the colours |
 | `IPlayerHealth.Max` | `Game/Health/` | The heart cap, so the missing hearts and the heal agree on it |
@@ -71,6 +73,8 @@ sequenceDiagram
 | Setting | Start at | Meaning |
 |---|---|---|
 | `GoldenAtCompletion` | 0.75 | The level's completion that places the golden balloon on a purple level |
+| `GoldenRepeatChances` | 0.25, 0.1 | The chance of the second and third golden balloon, each rolled once when the one before pops |
+| `GoldenRepeatDelayLines` | 3 | Lines after a golden pop before the one it won comes |
 | `HeartChanceMissingOne` | 0.04 | Chance per line of a heart balloon while one heart is missing |
 | `HeartChanceMissingTwo` | 0.12 | The same with two missing (one heart left) |
 | `HeartChanceOnPurple` | 0.05 | Added on a purple level, if a heart is missing |
