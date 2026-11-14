@@ -137,6 +137,7 @@ var goldenWasAlive = false;
 var heartWasAlive = false;
 object lastGoldenPaid = null;
 object lastHeartPaid = null;
+var rewardsBroken = false;
 void CountUp(string key)
 {
     UnityEditor.SessionState.SetInt(RewardsKey + key, UnityEditor.SessionState.GetInt(RewardsKey + key, 0) + 1);
@@ -242,9 +243,17 @@ if (UnityEditor.SessionState.GetString(IdKey, "") != botId)
 
         nextCheck = clock + CheckInterval;
         var resolver = FindGame();
-        if (resolver != null)
+        if (resolver != null && !rewardsBroken)
         {
-            WatchRewards(resolver);
+            // A renamed field would throw here every 50 ms and stop the shooting: the counters go, the bot plays on.
+            try
+            {
+                WatchRewards(resolver);
+            }
+            catch (System.Exception)
+            {
+                rewardsBroken = true;
+            }
         }
 
         var controller = FindController();
@@ -349,7 +358,6 @@ if (setupStage < 2 && InPlay(game))
 {
     if (setupStage == 0 && purple)
     {
-        UnityEditor.SessionState.SetInt(setupKey, 1);
         var seed = (int)Prop(game.Resolve(asm.GetType("BalloonParty.Game.Run.IRunSeed")), asm.GetType("BalloonParty.Game.Run.IRunSeed"), "Value");
         var pacingType = asm.GetType("BalloonParty.Configuration.Level.LevelPacingConfiguration");
         var pacing = UnityEngine.Resources.FindObjectsOfTypeAll(pacingType)[0];
@@ -362,29 +370,51 @@ if (setupStage < 2 && InPlay(game))
             purpleLevel++;
         }
 
-        UnityEditor.SessionState.SetInt(setupKey + ".Level", purpleLevel);
+        if (purpleLevel >= 200)
+        {
+            // No purple level in reach (the extra colour's chance is 0): play on as configured.
+            UnityEditor.SessionState.SetInt(setupKey, 1);
+            UnityEditor.SessionState.SetInt(setupKey + ".Level", -1);
+            return time + " SETUP no purple level";
+        }
+
         var cheatState = asm.GetType("BalloonParty.Cheats.CheatState");
         cheatState.GetField("StartLevel", staticFlags).SetValue(null, purpleLevel);
         cheatState.GetField("KeepRunSeed", staticFlags).SetValue(null, true);
         var runController = game.Resolve(asm.GetType("BalloonParty.Game.Run.RunController"));
-        runController.GetType().GetMethod("RestartRun", flags).Invoke(runController, null);
+        runController.GetType().GetMethod("RestartRun", flags).Invoke(runController, new object[] { true });
+        UnityEditor.SessionState.SetInt(setupKey, 1);
+        UnityEditor.SessionState.SetInt(setupKey + ".Level", purpleLevel);
+        UnityEditor.SessionState.SetFloat(setupKey + ".Since", UnityEngine.Time.realtimeSinceStartup);
         return time + " SETUP purple level " + purpleLevel;
     }
 
-    // The restart takes a moment: the hearts wait for the run it starts, or its reset would refill them.
+    // The restart takes a moment: the hearts wait for the run it starts, or its reset would refill them. A run
+    // that never reaches the level (a retry level wins over the start level) gives up after a while.
     var levelNow = (int)Value(Prop(game.Resolve(progressType), progressType, "Level"));
-    if (setupStage == 1 && levelNow != UnityEditor.SessionState.GetInt(setupKey + ".Level", 0))
+    var wanted = UnityEditor.SessionState.GetInt(setupKey + ".Level", 0);
+    var waited = UnityEngine.Time.realtimeSinceStartup - UnityEditor.SessionState.GetFloat(setupKey + ".Since", 0f);
+    if (setupStage == 1 && wanted > 0 && levelNow != wanted && waited < 10f)
     {
-        return time + " SETUP waiting for level " + UnityEditor.SessionState.GetInt(setupKey + ".Level", 0);
+        return time + " SETUP waiting for level " + wanted;
     }
 
     UnityEditor.SessionState.SetInt(setupKey, 2);
+    var cheatReset = asm.GetType("BalloonParty.Cheats.CheatState");
+    cheatReset.GetField("StartLevel", staticFlags).SetValue(null, 1);
     if (startHearts > 0)
     {
         var health = game.Resolve(asm.GetType("BalloonParty.Game.Health.PlayerHealthController"));
+        var max = (int)health.GetType().GetProperty("Max").GetValue(health);
+        var startWith = System.Math.Min(startHearts, max);
         var current = health.GetType().GetField("_current", flags).GetValue(health);
-        current.GetType().GetProperty("Value").SetValue(current, startHearts);
-        return time + " SETUP hearts " + startHearts;
+        current.GetType().GetProperty("Value").SetValue(current, startWith);
+        return time + " SETUP hearts " + startWith + (purple && levelNow != wanted && wanted > 0 ? " (not on the purple level)" : "");
+    }
+
+    if (purple && wanted > 0 && levelNow != wanted)
+    {
+        return time + " SETUP gave up waiting for level " + wanted;
     }
 }
 
