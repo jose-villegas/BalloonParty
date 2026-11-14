@@ -28,7 +28,7 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
         _LightHeight ("Light Height", Range(0.1, 3)) = 0.9
 
         [Header(Plates)]
-        _PlateScale       ("Plates Across the Radius", Range(1, 8)) = 2.6
+        _PlateScale       ("Plates Across the Radius", Range(1, 8)) = 2.3
         // How far in from a seam each plate slopes down to it, as a share of the plate's inner
         // radius (0.5), and how steeply: the relief.
         _BevelWidth       ("Bevel Width", Range(0, 0.45)) = 0.16
@@ -48,13 +48,13 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
 
         [Header(Balloon Between the Plates)]
         // Half the gap between two plates, in plate units.
-        _GapWidth         ("Gap", Range(0, 0.2)) = 0.07
-        _RubberLit        ("Lit", Color) = (0.93, 0.52, 0.12, 1)
-        _RubberShade      ("Shade", Color) = (0.40, 0.13, 0.02, 1)
-        _RubberGloss      ("Gloss", Range(0, 2)) = 0.9
-        _RubberGlossPower ("Gloss Sharpness", Range(4, 128)) = 40
+        _GapWidth         ("Gap", Range(0, 0.2)) = 0.11
+        _RubberLit        ("Lit", Color) = (1.00, 0.66, 0.25, 1)
+        _RubberShade      ("Shade", Color) = (0.55, 0.22, 0.05, 1)
+        _RubberGloss      ("Gloss", Range(0, 2)) = 1.2
+        _RubberGlossPower ("Gloss Sharpness", Range(4, 128)) = 24
         // The plates' shadow on the rubber, darkest at a plate's edge.
-        _GapShadow        ("Plate Shadow", Range(0, 1)) = 0.55
+        _GapShadow        ("Plate Shadow", Range(0, 1)) = 0.3
 
         [Header(Glint)]
         _GlintColor     ("Color", Color) = (1.00, 0.96, 0.80, 1)
