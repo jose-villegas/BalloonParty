@@ -16,8 +16,11 @@ board. The plan is `Plans/PLAN-RewardBalloons.md`.
 The golden balloon itself is `Balloon/Model/GoldenBalloonModel`: the shot's own ordinary hit bounces
 off it, a pierce pops it (it is tough, so the pierce plows it and it shatters at the next wall), and
 no item touches it: an item's damage has no `DirectHit`, and its hit is `HitOutcome.None`. It is
-colourless and scoreless, resists paint, and carries no item. Its prefab is a gold retint of the
-unbreakable's for now; the plated look is phase 3 of the plan.
+colourless and scoreless, resists paint, and carries no item. Its prefab (`Prefabs/Balloon/Golden`) is
+built from the tough balloon's, so it looks like a balloon, with a gold-plated body
+(`Shaders/BalloonParty/Balloon/GoldenBalloon.shader`) and a dark gold knot. The prefab keeps the tough
+balloon's variant, which only draws cracks for a balloon with durability, so on the golden one it
+does nothing.
 
 ## When each one is due
 

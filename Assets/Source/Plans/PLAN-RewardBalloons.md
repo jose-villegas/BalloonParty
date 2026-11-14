@@ -20,8 +20,8 @@
    - A piercing shot pops it: a cruise-earned pierce or a Snipe lance. It is plowed and shatters at
      the shot's next wall bounce, as an unbreakable is.
    - Popped, it gives a **free upgrade card**, kept for the run, shown with the card reveal.
-   - It looks metallic: gold plates wrapping the sphere, each catching the light on its own, with
-     glitter where the speculars land.
+   - It still looks like a balloon (body and knot, unlike the unbreakable's sphere), plated in metallic
+     gold: plates wrapping it, each catching the light on its own, with glitter where the speculars land.
 2. **Heart balloon.**
    - A heart-shaped balloon with cloth ribbons wrapped over it like bandages.
    - Any pop gives back one heart, up to the maximum. It pops like a plain balloon (any hit, items too).
@@ -82,12 +82,14 @@ it's gone with the board, like any balloon.
 
 ## The looks
 
-- **Golden:** the unbreakable's sphere shading (`UnbreakableBalloon.shader`, the sphere state the
-  variant pushes) as the base, with a gold plate layer: a cell pattern laid over the sphere, each
-  plate tilted a little so its own specular comes and goes as the light moves, thin dark seams
-  between them, and the glitter (`Include/Glitter.cginc`) gated by the specular so it sparkles only
-  where the light catches. A new shader, not a retint: the plates are the point. Needs an in-editor
-  look at noon and night.
+- **Golden:** a balloon, built from the tough balloon's prefab (body, knot, the shine sprites, the
+  baked shadow), so it reads as one of the balloons and not as an unbreakable. Its body is
+  `Balloon/GoldenBalloon.shader`: the tough balloon's sphere projection and scene light, plated in
+  gold. The plates are Voronoi cells over the sphere, crowding toward the rim like tiles on a ball,
+  with thin dark seams. Each plate is tilted a little and sways slowly, so it shades, reflects the
+  horizon and glints on its own as the light moves, and the glitter (`Include/Glitter.cginc`) is
+  gated by the glint, so it sparkles only where the light catches. The knot is dark gold. Checked
+  in the Editor at noon and at night.
 - **Heart:** a heart-shaped balloon body (a new sprite, drawn by script under `Tools/art/` like the card
   icons) lit like the others (`SpriteDiffuse`), red, with two or three cream cloth strips wrapped
   across it, slightly frayed, a knot at one side. The strips sway a little with the balloon.
@@ -97,15 +99,16 @@ it's gone with the board, like any balloon.
 1. **Reward hook.** `LevelCompletion`, `RewardBalloonService`, `IRewardBalloonRequests`,
    the spawner's consumption and prewarm, the settings. Tests for completion, the 75% trigger once
    per level and only on purple, the heart chance by missing hearts and the cooldown.
-2. **Golden balloon.** Type, model, `IsTough`, item immunity, prefab with a placeholder gold retint
-   of the unbreakable, `IFreeCardGrant` and the reveal, sound and pop colour, solver parity.
+2. **Golden balloon.** Type, model, `IsTough`, item immunity, a placeholder prefab (a gold retint
+   of the unbreakable, replaced in phase 3), `IFreeCardGrant` and the reveal, sound and pop colour, solver parity.
    `BalloonModelFactory` must map `Golden` before its catalogue entry goes in: it throws for an
    unmapped type, after `Placed`, which would leave the balloon counted on the board for the rest of
    the run. The spawn-balloon cheat lists every type, so it needs to route reward types through the
    service or leave them out. The card grant goes on the pop, never on the leave callback, which a
    board clear and a level change fire too. Tests
    for every hit path (projectile, pierce, bomb, laser, lightning, paint) and the grant.
-3. **Golden look.** The gold-plate shader with specular-gated glitter, its material and prefab.
+3. **Golden look.** The gold-plate shader with glint-gated glitter, its material, and the prefab
+   rebuilt as a balloon from the tough balloon's.
    In-editor check at noon and night, frames sent for sign-off.
 4. **Heart balloon.** Type, model, the heal, the heart sprite and bandage strips, prefab, sound.
    Tests for the heal cap and that only a missing heart brings it.

@@ -48,10 +48,11 @@ Material:
     - _LightInfluence: 1
     - _PlateJitter: 0.8
     - _PlateScale: 3.2
-    - _PlateSway: 0.35
-    - _PlateSwaySpeed: 0.4
     - _PlateTilt: 0.16
     - _PlateVariance: 0.12
+    - _PlateWobble: 0.35
+    - _PlateWobbleSpeed: 0.4
+    - _RimBlend: 0.6
     - _RimWidth: 0.12
     - _SeamDepth: 0.6
     - _SeamWidth: 0.03
