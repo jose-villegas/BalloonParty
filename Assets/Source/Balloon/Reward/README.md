@@ -44,7 +44,7 @@ being played when it pops, so one popped after a purple level ends heals as on t
 heart body and bandages drawn by `Tools/art/make_heart_balloon.py`, and its own highlight
 (`Shaders/BalloonParty/Balloon/HeartShine.shader`, lit from the heart's baked normals), because the
 round balloons' shine is drawn for a circle. Fainter god rays than the golden's turn behind it, white and
-shorter (`GodRaysLook` again, on the `HeartRays` material and palette entry). Its pop is a beat: its catalogue entry's `PopPulse` swells it to 1.25 and shrinks it away, while `PSVFX_HeartPop` throws a burst of hearts in its crimson and pink on along the shot (the override's `AlongHit`; a board clear throws them up). Its pop cue is `BalloonPopHeart`, a harp pluck (`harp005` by t1mp, CC BY) the sound bank pitches to the board's key.
+shorter (`GodRaysLook` again, on the `HeartRays` material and palette entry). Its pop is a beat: its catalogue entry's `PopPulse` swells it to 1.25 and shrinks it away, while `PSVFX_HeartPop` throws a burst of hearts on along the shot, drawn with the HUD heart's own sprite (`HeartTrail_Combined`: its shine and its soft baked shadow), spinning only in the board's plane so the shadow keeps falling to the lower right (the override's `AlongHit`; a board clear throws them up). Its pop cue is `BalloonPopHeart`, a harp pluck (`harp005` by t1mp, CC BY) the sound bank pitches to the board's key.
 
 ## When each one is due
 
