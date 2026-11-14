@@ -34,6 +34,10 @@ namespace BalloonParty.Item.Snipe
         private readonly List<Stroke> _strokes = new();
         private readonly CompositeDisposable _subscriptions = new();
 
+        // Unscaled by default. Tools that hold the game between captures (the stage) swap in a clock that
+        // stops while held, or the pencil runs on through every hold.
+        internal Func<float> DeltaTime { get; set; } = () => Time.unscaledDeltaTime;
+
         internal SnipeLanceLines(
             IProjectileRegistry projectiles,
             ISubscriber<PierceWallReachedMessage> wallReachedSubscriber,
@@ -92,7 +96,7 @@ namespace BalloonParty.Item.Snipe
 
             // Unscaled: the discharge's slow-mo dip lands while a stroke is drawing, and a pencil that
             // crawls through it reads as lag, not drama. The tip never passes the shot, so it can't outrun it.
-            var deltaTime = Time.unscaledDeltaTime;
+            var deltaTime = DeltaTime();
             for (var i = _strokes.Count - 1; i >= 0; i--)
             {
                 var stroke = _strokes[i];
