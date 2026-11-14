@@ -3,7 +3,9 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Reward;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
+using BalloonParty.Configuration.Level;
 using BalloonParty.Game.Health;
+using BalloonParty.Game.Level;
 using BalloonParty.Game.Upgrades;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
@@ -19,6 +21,7 @@ namespace BalloonParty.Tests.Balloon
     {
         private IFreeCardGrant _freeCards;
         private IPlayerHealing _healing;
+        private ILevelParameters _level;
         private RewardBalloonPayout _payout;
 
         [SetUp]
@@ -26,7 +29,11 @@ namespace BalloonParty.Tests.Balloon
         {
             _freeCards = Substitute.For<IFreeCardGrant>();
             _healing = Substitute.For<IPlayerHealing>();
-            _payout = new RewardBalloonPayout(Substitute.For<ISubscriber<ActorHitMessage>>(), _freeCards, _healing);
+            _level = Substitute.For<ILevelParameters>();
+            var levelParams = Substitute.For<IActiveLevelParameters>();
+            levelParams.Current.Returns(_level);
+            _payout = new RewardBalloonPayout(
+                Substitute.For<ISubscriber<ActorHitMessage>>(), _freeCards, _healing, levelParams);
         }
 
         [Test]
@@ -94,6 +101,29 @@ namespace BalloonParty.Tests.Balloon
 
             _healing.Received(1).Heal(1);
             _freeCards.DidNotReceive().GrantFreeCard(Arg.Any<Action>());
+        }
+
+        [Test]
+        public void TheHeartBalloonsPop_OnAPurpleLevel_GivesAnExtraHeart()
+        {
+            _level.IsExtraColorLevel.Returns(true);
+
+            _payout.OnHit(Hit(Heart(), HitOutcome.Pop));
+
+            _healing.Received(1).HealPastMax(1);
+            _healing.DidNotReceiveWithAnyArgs().Heal(default);
+        }
+
+        [Test]
+        public void TheGoldenBalloonsHeart_OnAPurpleLevel_StaysWithinTheMax()
+        {
+            _level.IsExtraColorLevel.Returns(true);
+            _freeCards.When(grant => grant.GrantFreeCard(Arg.Any<Action>())).Do(call => call.Arg<Action>()());
+
+            _payout.OnHit(Hit(Golden(), HitOutcome.Pop));
+
+            _healing.Received(1).Heal(1);
+            _healing.DidNotReceiveWithAnyArgs().HealPastMax(default);
         }
 
         [TestCase(HitOutcome.Deflect)]

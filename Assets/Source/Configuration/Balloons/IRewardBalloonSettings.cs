@@ -3,12 +3,12 @@ using System.Collections.Generic;
 namespace BalloonParty.Configuration.Balloons
 {
     /// <summary>
-    ///     When the reward balloons come (PLAN-RewardBalloons): the golden one late in a purple level, the heart one
-    ///     to a player missing hearts.
+    ///     When the reward balloons come (PLAN-RewardBalloons): the golden one late in a purple level, and the ones
+    ///     its pop wins; the heart one on a purple level's schedule, and elsewhere to a player missing hearts.
     /// </summary>
     public interface IRewardBalloonSettings
     {
-        /// <summary>The level's completion, 0 to 1, from which a purple level's next line brings its golden balloon.</summary>
+        /// <summary>The level's completion, 0 to 1, from which a purple level's next line brings its first golden balloon.</summary>
         float GoldenAtCompletion { get; }
 
         /// <summary>
@@ -21,14 +21,17 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>Spawn lines after a golden balloon's pop before the further one it won comes.</summary>
         int GoldenRepeatDelayLines { get; }
 
-        /// <summary>Chance per spawn line of a heart balloon while one heart is missing.</summary>
+        /// <summary>
+        ///     A purple level's heart balloons, in order: each rolled once on the line that reaches its completion, at
+        ///     full hearts too. Their count caps the level's heart balloons; the roll while hurt is off there.
+        /// </summary>
+        IReadOnlyList<PurpleHeartStep> PurpleHearts { get; }
+
+        /// <summary>Chance per spawn line of a heart balloon while one heart is missing, off a purple level.</summary>
         float HeartChanceMissingOne { get; }
 
         /// <summary>Chance per spawn line of a heart balloon while two or more hearts are missing.</summary>
         float HeartChanceMissingTwo { get; }
-
-        /// <summary>Added to the heart chance on a purple level, while a heart is missing.</summary>
-        float HeartChanceOnPurple { get; }
 
         /// <summary>Spawn lines after a heart balloon is placed before another can roll.</summary>
         int HeartCooldownLines { get; }

@@ -29,6 +29,13 @@ namespace BalloonParty.Tests.Balloon
         private static readonly string[] Colors = { "Red", "Blue", "Purple" };
         private static readonly float[] RepeatChances = { 0.25f, 0.1f };
 
+        private static readonly PurpleHeartStep[] PurpleHearts =
+        {
+            new(0.3f, 1f),
+            new(0.6f, 0.5f),
+            new(0.9f, 0.25f),
+        };
+
         private readonly Dictionary<string, int> _progress = new();
 
         private IRewardBalloonSettings _settings;
@@ -51,7 +58,7 @@ namespace BalloonParty.Tests.Balloon
             _settings.GoldenRepeatDelayLines.Returns(RepeatDelay);
             _settings.HeartChanceMissingOne.Returns(0.04f);
             _settings.HeartChanceMissingTwo.Returns(0.12f);
-            _settings.HeartChanceOnPurple.Returns(0.05f);
+            _settings.PurpleHearts.Returns(PurpleHearts);
             _settings.HeartCooldownLines.Returns(Cooldown);
 
             _levelNumber = new ReactiveProperty<int>(1);
@@ -308,8 +315,232 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void Golden_OwedButAnotherIsStillOnTheBoard_NotDueUntilItLeaves()
+        {
+            SetCompletion(0.8f);
+            _service.TryTakeDue(out _);
+            var left = _service.Placed(BalloonType.Golden);
+            _roll = 0f;
+            _service.OnHit(Hit(Golden(), HitOutcome.Pop));
+
+            Assert.IsFalse(LinesUntilDue(RepeatDelay * 3), "the owed one waits while a golden is on the board");
+            left();
+            Assert.IsTrue(_service.TryTakeDue(out var type));
+            Assert.AreEqual(BalloonType.Golden, type);
+        }
+
+        [Test]
+        public void Golden_PopOfAnotherBalloonType_RollsNothing()
+        {
+            SetCompletion(0.8f);
+            _service.TryTakeDue(out _);
+            var left = _service.Placed(BalloonType.Golden);
+            var other = Substitute.For<IBalloonModel>();
+            other.TypeName.Returns(BalloonType.Heart);
+            _roll = 0f;
+
+            _service.OnHit(Hit(other, HitOutcome.Pop));
+            left();
+
+            Assert.IsFalse(LinesUntilDue(20));
+        }
+
+        [Test]
+        public void Golden_NoRepeatChancesConfigured_RollsNothingAndDoesNotThrow()
+        {
+            _roll = 0f;
+            foreach (var chances in new float[][] { null, new float[0] })
+            {
+                _settings.GoldenRepeatChances.Returns(chances);
+                _service.ResetRun(1);
+
+                Assert.DoesNotThrow(() => PlaceAndPopAGolden(roll: 0f));
+                Assert.IsFalse(LinesUntilDue(20));
+            }
+        }
+
+        [Test]
+        public void Golden_OwedButNotYetDue_TheHeartStillRollsOnTheLinesBetween()
+        {
+            PlaceAndPopAGolden(roll: 0f);
+            _hearts.Value = StartingHearts - 1;
+            _roll = 0f;
+
+            Assert.IsTrue(_service.TryTakeDue(out var first));
+            Assert.AreEqual(BalloonType.Heart, first);
+            _service.Placed(BalloonType.Heart);
+
+            Assert.IsFalse(_service.TryTakeDue(out _), "line 2: heart on the board, golden not yet due");
+            Assert.IsTrue(_service.TryTakeDue(out var third));
+            Assert.AreEqual(BalloonType.Golden, third, "the golden is still owed on its due line");
+        }
+
+        [Test]
+        public void Golden_PopArrivingBeforeItsLeave_StillRolls()
+        {
+            SetCompletion(0.8f);
+            _service.TryTakeDue(out _);
+            var left = _service.Placed(BalloonType.Golden);
+            _roll = 0f;
+
+            _service.OnHit(Hit(Golden(), HitOutcome.Pop));
+            left();
+
+            Assert.IsTrue(LinesUntilDue(RepeatDelay));
+        }
+
+        [Test]
+        public void PurpleHeart_FullHearts_TheFirstComesAtItsCompletion()
+        {
+            _roll = 1f;
+            SetCompletion(0.29f);
+            Assert.IsFalse(_service.TryTakeDue(out _));
+
+            SetCompletion(0.3f);
+
+            Assert.IsTrue(_service.TryTakeDue(out var type), "the first step is sure");
+            Assert.AreEqual(BalloonType.Heart, type);
+        }
+
+        [TestCase(0.6f, 0.49f, true)]
+        [TestCase(0.6f, 0.5f, false)]
+        public void PurpleHeart_TheSecondRollsItsChanceAtItsCompletion(float completion, float roll, bool due)
+        {
+            PlaceAndLeaveAPurpleHeart(0.3f);
+            _roll = roll;
+            SetCompletion(completion);
+
+            Assert.AreEqual(due, _service.TryTakeDue(out _));
+        }
+
+        [TestCase(0.24f, true)]
+        [TestCase(0.25f, false)]
+        public void PurpleHeart_TheThirdRollsAQuarterAtNinety(float roll, bool due)
+        {
+            PlaceAndLeaveAPurpleHeart(0.3f);
+            _roll = 0f;
+            PlaceAndLeaveAPurpleHeart(0.6f);
+            _roll = roll;
+            SetCompletion(0.9f);
+
+            Assert.AreEqual(due, _service.TryTakeDue(out _));
+        }
+
+        [Test]
+        public void PurpleHeart_EachStepRollsOnce()
+        {
+            PlaceAndLeaveAPurpleHeart(0.3f);
+            _roll = 0.9f;
+            SetCompletion(0.6f);
+            Assert.IsFalse(_service.TryTakeDue(out _));
+
+            _roll = 0f;
+
+            Assert.IsFalse(HeartWithin(20), "the 60% step lost its roll; the next is at 90%");
+        }
+
+        [Test]
+        public void PurpleHeart_ThreeAtMost()
+        {
+            _roll = 0f;
+            PlaceAndLeaveAPurpleHeart(0.3f);
+            PlaceAndLeaveAPurpleHeart(0.6f);
+            PlaceAndLeaveAPurpleHeart(0.9f);
+            SetCompletion(1f);
+
+            Assert.IsFalse(HeartWithin(20));
+        }
+
+        [Test]
+        public void PurpleHeart_WonWhileOneIsOnTheBoard_ComesOnceItLeaves()
+        {
+            _roll = 0f;
+            SetCompletion(0.3f);
+            _service.TryTakeDue(out _);
+            var left = _service.Placed(BalloonType.Heart);
+            SetCompletion(0.6f);
+
+            Assert.IsFalse(HeartWithin(5), "one heart on the board at a time");
+            left();
+            Assert.IsTrue(_service.TryTakeDue(out var type));
+            Assert.AreEqual(BalloonType.Heart, type);
+        }
+
+        [Test]
+        public void PurpleHeart_ABigJump_RollsEveryStepItPasses_AndBringsThemOneAtATime()
+        {
+            _roll = 0f;
+            SetCompletion(0.95f);
+
+            for (var heart = 1; heart <= PurpleHearts.Length; heart++)
+            {
+                Assert.IsTrue(_service.TryTakeDue(out var type), $"heart {heart}");
+                Assert.AreEqual(BalloonType.Heart, type);
+                _service.Placed(BalloonType.Heart)();
+            }
+
+            Assert.IsFalse(HeartWithin(20));
+        }
+
+        [Test]
+        public void PurpleHeart_TheRollWhileHurtIsOff()
+        {
+            _hearts.Value = 1;
+            _roll = 0f;
+            SetCompletion(0.1f);
+
+            Assert.IsFalse(HeartWithin(Cooldown * 3));
+        }
+
+        [Test]
+        public void PurpleHeart_NextLevel_DropsWhatWasOwedAndStartsTheScheduleOver()
+        {
+            _roll = 0f;
+            SetCompletion(0.95f);
+            _service.TryTakeDue(out _);
+            _service.Placed(BalloonType.Heart)();
+            _levelNumber.Value = 2;
+            SetCompletion(0.1f);
+
+            Assert.IsFalse(HeartWithin(5), "the hearts the last level won are gone");
+            SetCompletion(0.3f);
+            Assert.IsTrue(_service.TryTakeDue(out _), "the new level's first step");
+        }
+
+        [Test]
+        public void PurpleHeart_RunReset_StartsTheScheduleOver()
+        {
+            _roll = 0f;
+            PlaceAndLeaveAPurpleHeart(0.3f);
+            SetCompletion(0.95f);
+            _service.TryTakeDue(out _);
+
+            _service.ResetRun(1);
+            SetCompletion(0.1f);
+
+            Assert.IsFalse(HeartWithin(5));
+            SetCompletion(0.3f);
+            Assert.IsTrue(_service.TryTakeDue(out _));
+        }
+
+        [Test]
+        public void PurpleHeart_NoScheduleConfigured_NoHeartAndNoThrow()
+        {
+            _roll = 0f;
+            foreach (var steps in new[] { null, new PurpleHeartStep[0] })
+            {
+                _settings.PurpleHearts.Returns(steps);
+                _service.ResetRun(1);
+                SetCompletion(0.95f);
+
+                Assert.DoesNotThrow(() => Assert.IsFalse(HeartWithin(5)));
+            }
+        }
+
+        [Test]
         public void Heart_FullHearts_NeverDue()
         {
+            _level.IsExtraColorLevel.Returns(false);
             _roll = 0f;
 
             for (var i = 0; i < 20; i++)
@@ -342,6 +573,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void Heart_WhileOneIsOnTheBoard_NotDue()
         {
+            _level.IsExtraColorLevel.Returns(false);
             _hearts.Value = 1;
             _roll = 0f;
             _service.TryTakeDue(out _);
@@ -482,7 +714,7 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void NoGoldenEntry_ALatePurpleLineStillRollsTheHeart()
+        public void NoGoldenEntry_ALatePurpleLineStillBringsTheHeart()
         {
             _service.Dispose();
             _service = CreateService(BalloonType.Heart);
@@ -494,16 +726,14 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(BalloonType.Heart, type);
         }
 
-        [TestCase(0, false, 0f)]
-        [TestCase(-1, false, 0f)]
-        [TestCase(0, true, 0f)]
-        [TestCase(1, false, 0.04f)]
-        [TestCase(1, true, 0.09f)]
-        [TestCase(2, false, 0.12f)]
-        [TestCase(3, true, 0.17f)]
-        public void HeartChance_ByMissingHeartsAndLevel(int missing, bool purple, float expected)
+        [TestCase(0, 0f)]
+        [TestCase(-1, 0f)]
+        [TestCase(1, 0.04f)]
+        [TestCase(2, 0.12f)]
+        [TestCase(3, 0.12f)]
+        public void HeartChance_ByMissingHearts(int missing, float expected)
         {
-            Assert.AreEqual(expected, RewardBalloonService.HeartChance(_settings, missing, purple), 1e-5f);
+            Assert.AreEqual(expected, RewardBalloonService.HeartChance(_settings, missing), 1e-5f);
         }
 
         [Test]
@@ -584,9 +814,34 @@ namespace BalloonParty.Tests.Balloon
             var left = _service.Placed(BalloonType.Golden);
             var golden = Golden();
             _roll = roll;
-            _service.OnHit(Hit(golden, HitOutcome.Pop));
+            // The game's order: the pop's leave runs before its hit is published (HitPipeline).
             left();
+            _service.OnHit(Hit(golden, HitOutcome.Pop));
             return golden;
+        }
+
+        // The purple level's next heart balloon, due at the given completion, placed and gone again (any way off the
+        // board: a purple heart needs no pop for the next).
+        private void PlaceAndLeaveAPurpleHeart(float completion)
+        {
+            SetCompletion(completion);
+            Assert.IsTrue(_service.TryTakeDue(out var type));
+            Assert.AreEqual(BalloonType.Heart, type);
+            _service.Placed(BalloonType.Heart)();
+        }
+
+        // Whether a heart balloon falls due within the given number of lines.
+        private bool HeartWithin(int lines)
+        {
+            for (var line = 0; line < lines; line++)
+            {
+                if (_service.TryTakeDue(out var type) && type == BalloonType.Heart)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         // Whether a golden balloon falls due within the given number of lines, stopping at the first that does.

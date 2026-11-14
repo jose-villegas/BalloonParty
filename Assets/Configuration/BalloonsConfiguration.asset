@@ -247,7 +247,13 @@ MonoBehaviour:
     - 0.25
     - 0.1
     _goldenRepeatDelayLines: 3
+    _purpleHearts:
+    - _atCompletion: 0.3
+      _chance: 1
+    - _atCompletion: 0.6
+      _chance: 0.5
+    - _atCompletion: 0.9
+      _chance: 0.25
     _heartChanceMissingOne: 0.04
     _heartChanceMissingTwo: 0.12
-    _heartChanceOnPurple: 0.05
     _heartCooldownLines: 12

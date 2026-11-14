@@ -2,9 +2,10 @@
 
 Two balloons are rewards rather than threats, and no level's mix brings them. The **golden balloon** comes
 on a purple level, from the line that finds the level three quarters done, and popping it can bring
-another, up to three a level. The **heart balloon**
-comes to a player who is missing hearts, more often the more are missing. At most one of each is on the
-board. The plan is `Plans/PLAN-RewardBalloons.md`.
+another, up to three a level. The **heart balloon** comes to a purple level on a schedule, up to three,
+even at full hearts, where its pop gives an extra heart past the maximum; on any other level it comes to a
+player who is missing hearts, more often the more are missing. At most one of each is on the board. The
+plan is `Plans/PLAN-RewardBalloons.md`.
 
 ## Contents
 
@@ -12,7 +13,8 @@ board. The plan is `Plans/PLAN-RewardBalloons.md`.
 |---|---|
 | `IRewardBalloonRequests` | What `BalloonSpawner` asks. `TryTakeDue` once per clock line: whether this line brings one, and which. `Placed` once it is on the board: returns the callback to call when it leaves |
 | `RewardBalloonService` | The rules behind the answer. Registered as `IRewardBalloonRequests` and `IRunResettable` |
-| `RewardBalloonPayout` | Pays a reward balloon's pop, read from `ActorHitMessage`. The golden balloon: a free card (`IFreeCardGrant`), or a heart (`IPlayerHealing`) when every card is at its limit. The heart balloon: a heart. Pays each balloon once |
+| `RewardBalloonPayout` | Pays a reward balloon's pop, read from `ActorHitMessage`. The golden balloon: a free card (`IFreeCardGrant`), or a heart (`IPlayerHealing.Heal`) when every card is at its limit. The heart balloon: a heart, or on a purple level an extra one past the maximum (`HealPastMax`). Pays each balloon once |
+| `RewardBalloonPop` | `TryGet(hit, out balloon)`: a reward balloon's pop. The payout and the service both read pops through it, so what one pays the other counts |
 
 The golden balloon itself is `Balloon/Model/GoldenBalloonModel`: the shot's own ordinary hit bounces
 off it, a pierce pops it (it is tough, so the pierce plows it and it shatters at the next wall), and
@@ -29,8 +31,9 @@ the sound bank (`SoundBankConfiguration`), so they can be retuned there.
 
 The heart balloon is `Balloon/Model/HeartBalloonModel`: any hit pops it, the shot's or an item's,
 whatever its catalogue entry's hit count says. It is colourless and scoreless, resists paint, and
-carries no item, so its pop leaves the streak alone. Its pop gives back one heart, never past the
-maximum and never to a player already out. Its prefab (`Prefabs/Balloon/Heart`) is the balloon's, with a
+carries no item, so its pop leaves the streak alone. Its pop gives back one heart, never to a player
+already out: up to the maximum, or on a purple level past it, as an extra heart (read from the level
+being played when it pops, so one popped after a purple level ends heals as on the next level). Its prefab (`Prefabs/Balloon/Heart`) is the balloon's, with a
 heart body and bandages drawn by `Tools/art/make_heart_balloon.py`, and its own highlight
 (`Shaders/BalloonParty/Balloon/HeartShine.shader`, lit from the heart's baked normals), because the
 round balloons' shine is drawn for a circle. Its pop cue is `BalloonPopHeart`, a kalimba note for now.
@@ -47,16 +50,24 @@ has an entry for.
   `ActorHitMessage` for it), so a golden balloon a board clear takes, or one popped after its level ended,
   brings no other. A new level starts over at the threshold, and anything still owed is dropped. One that
   could not be placed stays due for the next line. It wins a line over the heart.
-- **Heart.** A roll per line while a heart is missing: `HeartChanceMissingOne`, or
-  `HeartChanceMissingTwo` with two or more missing, plus `HeartChanceOnPurple` on a purple level. After
-  one is placed, `HeartCooldownLines` lines pass before the next roll. A heart rolled for a line with no
-  room for it is owed to the next line, unless the player has healed to full in between.
+- **Heart, on a purple level.** The schedule `PurpleHearts`: a step at 30% completion (sure), one at
+  60% (a 50% chance) and one at 90% (25%), so three at most. Each step rolls once, on the line that
+  reaches its completion, at full hearts too, and needs no pop of the heart before. A step won while a
+  heart is on the board waits until it leaves, and a big clear that passes several steps in one line rolls
+  them all and brings what they win one at a time. A new level starts the schedule over and drops what
+  was owed. The roll while hurt (below) is off on a purple level.
+- **Heart, elsewhere.** A roll per line while a heart is missing: `HeartChanceMissingOne`, or
+  `HeartChanceMissingTwo` with two or more missing. After one is placed, `HeartCooldownLines` lines pass
+  before the next roll. A heart rolled for a line with no room for it is owed to the next line, unless
+  the player has healed to full in between. Extra hearts past the maximum count as full.
 
 The tuning is `IRewardBalloonSettings`, a block on `BalloonsConfiguration`.
 
 ## Leaving the board
 
 Every way off the board (a pop, a board clear, a level change) calls the leave callback, which frees the
-slot for the next of that type. Only a pop pays, and only a pop rolls for another golden balloon, which is
-why the payout and the service read the hit, not the leave. Each placement has its own number, so a callback from an earlier balloon,
-or from before a run reset, changes nothing. Anything a reward gives belongs on its pop, not on the leave.
+slot for the next of that type. Only a pop pays, and only a pop rolls for another golden balloon, which
+is why the payout and the service read the hit, not the leave. The pop's leave runs before its hit is
+published, so the service guards its roll by the placement, not by whether a golden is on the board.
+Each placement has its own number, so a callback from an earlier balloon, or from before a run reset,
+changes nothing. Anything a reward gives belongs on its pop, not on the leave.

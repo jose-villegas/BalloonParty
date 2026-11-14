@@ -70,7 +70,24 @@ namespace BalloonParty.Game.Health
                 return;
             }
 
-            _current.Value = Mathf.Min(ClampedStartingHitPoints(), _current.Value + Mathf.Max(0, amount));
+            // Extra hearts (HealPastMax) stay: a heal only tops up to the maximum, so a level-up refill never trims them.
+            var max = ClampedStartingHitPoints();
+            if (_current.Value >= max)
+            {
+                return;
+            }
+
+            _current.Value = Mathf.Min(max, _current.Value + Mathf.Max(0, amount));
+        }
+
+        public void HealPastMax(int amount)
+        {
+            if (_current.Value <= 0)
+            {
+                return;
+            }
+
+            _current.Value = Mathf.Min(MaxHitPoints, _current.Value + Mathf.Max(0, amount));
         }
 
         private void Damage(int amount)

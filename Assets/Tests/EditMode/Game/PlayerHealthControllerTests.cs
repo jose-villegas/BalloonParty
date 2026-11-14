@@ -207,6 +207,65 @@ namespace BalloonParty.Tests.Game
             Assert.AreEqual(StartingHitPoints - 1, _controller.Current.Value);
         }
 
+        [Test]
+        public void HealPastMax_AtFullHearts_GivesAnExtraHeart()
+        {
+            _controller.HealPastMax(1);
+
+            Assert.AreEqual(StartingHitPoints + 1, _controller.Current.Value);
+        }
+
+        [Test]
+        public void HealPastMax_AfterTheLastHeart_NeverRevives()
+        {
+            DamageWave(StartingHitPoints);
+
+            _controller.HealPastMax(1);
+
+            Assert.AreEqual(0, _controller.Current.Value);
+        }
+
+        [Test]
+        public void Heal_WithExtraHearts_KeepsThem()
+        {
+            _controller.HealPastMax(2);
+
+            _controller.Heal(1);
+
+            Assert.AreEqual(StartingHitPoints + 2, _controller.Current.Value);
+        }
+
+        [Test]
+        public void LevelUp_WithExtraHearts_TheRefillKeepsThem()
+        {
+            _config.LevelUpHeartRefill.Returns(1);
+            _controller.HealPastMax(2);
+
+            _levelUpHandler.Handle(new ScoreLevelUpMessage(1));
+
+            Assert.AreEqual(StartingHitPoints + 2, _controller.Current.Value);
+        }
+
+        [Test]
+        public void ResetRun_WithExtraHearts_StartsOverFromTheStartingHearts()
+        {
+            _controller.HealPastMax(2);
+
+            _controller.ResetRun(1);
+
+            Assert.AreEqual(StartingHitPoints, _controller.Current.Value);
+        }
+
+        [Test]
+        public void ExtraHearts_LostInAWave_ComeOffTheTop()
+        {
+            _controller.HealPastMax(2);
+
+            DamageWave(1);
+
+            Assert.AreEqual(StartingHitPoints + 1, _controller.Current.Value);
+        }
+
         private void DamageWave(int heartsLost)
         {
             _waveDamageHandler.Handle(new WaveDamageMessage(heartsLost, heartsLost * 6, 6));
