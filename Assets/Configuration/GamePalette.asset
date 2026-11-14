@@ -46,3 +46,6 @@ MonoBehaviour:
   - _name: GoldenRays
     _color: {r: 1, g: 0.86, b: 0.5, a: 0.6}
     _presentationOnly: 1
+  - _name: HeartRays
+    _color: {r: 1, g: 1, b: 1, a: 0.3}
+    _presentationOnly: 1

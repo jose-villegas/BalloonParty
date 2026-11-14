@@ -24,7 +24,7 @@ carries `Piercing` like the beam, but never `Beam`, so a bomb beside it hands ou
 colourless and scoreless, resists paint, and carries no item. Its prefab (`Prefabs/Balloon/Golden`) is
 built from the tough balloon's, so it looks like a balloon, with a gold-plated body
 (`Shaders/BalloonParty/Balloon/GoldenBalloon.shader`) and a dark gold knot. Faint god rays turn and breathe
-behind it (`Balloon/Type/GoldenRaysLook`, the `Shaders/BalloonParty/Sprite/GodRays.shader` fan on the `GoldenRays`
+behind it (`Balloon/Type/GodRaysLook`, the `Shaders/BalloonParty/Sprite/GodRays.shader` fan on the `GoldenRays`
 material), so it stands out on a busy board: they sort below every balloon, so they show in the gaps around it.
 Their colour and strength are the palette's `GoldenRays` entry; their shape and motion are the material's. The prefab keeps the tough
 balloon's variant, which only draws cracks for a balloon with durability, so on the golden one it
@@ -42,7 +42,8 @@ already out: up to the maximum, or on a purple level past it, as an extra heart 
 being played when it pops, so one popped after a purple level ends heals as on the next level). Its prefab (`Prefabs/Balloon/Heart`) is the balloon's, with a
 heart body and bandages drawn by `Tools/art/make_heart_balloon.py`, and its own highlight
 (`Shaders/BalloonParty/Balloon/HeartShine.shader`, lit from the heart's baked normals), because the
-round balloons' shine is drawn for a circle. Its pop cue is `BalloonPopHeart`, a kalimba note for now.
+round balloons' shine is drawn for a circle. Fainter god rays than the golden's turn behind it, white and
+shorter (`GodRaysLook` again, on the `HeartRays` material and palette entry). Its pop cue is `BalloonPopHeart`, a kalimba note for now.
 
 ## When each one is due
 

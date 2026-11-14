@@ -495,8 +495,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 61c2fd03abfc4ff5960fe641b13e2c7b, type: 3}
   m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.Type.GoldenRaysLook
+  m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.Type.GodRaysLook
   _rays: {fileID: 2536592657193030698}
+  _colorId: GoldenRays
 --- !u!4 &4410392761180234517 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1788660481030380393, guid: 85afc73ba92384dafa9d8a43874d2dd6, type: 3}

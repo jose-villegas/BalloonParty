@@ -59,6 +59,12 @@ namespace BalloonParty.Configuration.Palette
         /// </summary>
         public const string GoldenRaysColorId = "GoldenRays";
 
+        /// <summary>
+        ///     Presentation-only palette entry for the fainter god rays behind the heart reward balloon; its alpha
+        ///     is their strength — authored in the palette asset but never a spawnable balloon color.
+        /// </summary>
+        public const string HeartRaysColorId = "HeartRays";
+
         [SerializeField] private PaletteEntry[] _colors;
 
         private Dictionary<string, PaletteEntry> _byName;
