@@ -121,7 +121,7 @@ Reward Balloons</h1>
 Goals</h2>
 <ol type="1">
 <li><b>Golden balloon.</b><ul>
-<li>Only on purple (extra-colour) levels, placed when the level is about 75% done. Its pop rolls once for another (25%, then 10% for a third: three a level at most), which comes a few lines later. Never more than one on the board, and only a pop rolls: one a board clear takes brings no other.</li>
+<li>Only on purple (extra-colour) levels, placed when the level is about half done (75% at first; moved to 50% after playtests). Its pop rolls once for another (25%, then 10% for a third: three a level at most), which comes a few lines later. Never more than one on the board, and only a pop rolls: one a board clear takes brings no other.</li>
 <li>Normal hits do nothing: the shot bounces off it as off an unbreakable. Items do nothing either (bomb, laser, lightning, paint): a bomb beside it must not hand out the card.</li>
 <li>A piercing shot pops it: a cruise-earned pierce or a Snipe lance. It is plowed and shatters at the shot's next wall bounce, as an unbreakable is.</li>
 <li>Popped, it gives a <b>free upgrade card</b>, kept for the run, shown with the card reveal.</li>
@@ -179,7 +179,7 @@ How it fits</h2>
 <div class="line">    participant Pay as RewardBalloonPayout</div>
 <div class="line">    participant Up as RunUpgrades</div>
 <div class="line">    Spw-&gt;&gt;Rwd: a clock line asks what is due</div>
-<div class="line">    Rwd-&gt;&gt;Lvl: reads the completion, 0.75 on a purple level</div>
+<div class="line">    Rwd-&gt;&gt;Lvl: reads the completion, 0.5 on a purple level</div>
 <div class="line">    Rwd--&gt;&gt;Spw: the golden balloon</div>
 <div class="line">    Spw-&gt;&gt;Rwd: placed, with a callback for when it leaves</div>
 <div class="line">    Hit-&gt;&gt;Hit: a piercing shot plows it, shatters it at the wall</div>
@@ -195,7 +195,7 @@ Tuning (<code>IRewardBalloonSettings</code>)</h2>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Setting   </th><th class="markdownTableHeadNone">Start at   </th><th class="markdownTableHeadNone">Meaning    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>GoldenAtCompletion</code>   </td><td class="markdownTableBodyNone">0.75   </td><td class="markdownTableBodyNone">The level's completion that places the golden balloon on a purple level    </td></tr>
+<td class="markdownTableBodyNone"><code>GoldenAtCompletion</code>   </td><td class="markdownTableBodyNone">0.5   </td><td class="markdownTableBodyNone">The level's completion that places the golden balloon on a purple level    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>GoldenRepeatChances</code>   </td><td class="markdownTableBodyNone">0.25, 0.1   </td><td class="markdownTableBodyNone">The chance of the second and third golden balloon, each rolled once when the one before pops    </td></tr>
 <tr class="markdownTableRowOdd">
