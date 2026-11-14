@@ -130,7 +130,7 @@ Files</h2></td></tr>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Call   </th><th class="markdownTableHeadNone">Does    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>Begin()</code>   </td><td class="markdownTableBodyNone">Enters Play mode, then in one step goes straight to a held game: past the launch screen (the switch its Play button makes, without the cloud scroll) or a fresh run after a game over, with time held from that frame and the clock and level-up stopped, so nothing plays out on its own. Called until it answers <code>ready</code>    </td></tr>
+<td class="markdownTableBodyNone"><code>Begin()</code>   </td><td class="markdownTableBodyNone">Enters Play mode, then in one step goes straight to a held game: past the launch screen (its Play button's own actions, so the button goes and the launcher hands over to the game scene, without the cloud scroll) or a fresh run after a game over, with time held from that frame and the clock and level-up stopped, so nothing plays out on its own. Called until it answers <code>ready</code>    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>Hold()</code> / <code>Release()</code> / <code>Advance(s)</code>   </td><td class="markdownTableBodyNone">Game time off, on, or on for <code>s</code> seconds. Holds through <code>ITimeScaleClaims</code> (<code>TimeScaleSource.Capture</code>, as the README shots do), so the shaders' clock stops too    </td></tr>
 <tr class="markdownTableRowOdd">
