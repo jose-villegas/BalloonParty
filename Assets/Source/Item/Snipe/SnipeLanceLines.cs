@@ -78,7 +78,7 @@ namespace BalloonParty.Item.Snipe
 
         public void Tick()
         {
-            if (_strokes.Count == 0 || _pause.IsAnyPaused.Value)
+            if (_strokes.Count == 0 || HoldsStrokes(_pause))
             {
                 return;
             }
@@ -108,6 +108,14 @@ namespace BalloonParty.Item.Snipe
             _subscriptions.Dispose();
             _strokes.Clear();
             _trace.Clear();
+        }
+
+        // Only the cheat console holds a stroke, so a tester can study it. The level-up, the ascent and the
+        // loss cinematic all hold a pause of their own for seconds on end, and a line frozen at full strength
+        // through them hangs over a board that has already moved on.
+        internal static bool HoldsStrokes(PauseService pause)
+        {
+            return pause.IsPaused(PauseSource.Cheat);
         }
 
         private void OnWallReached(PierceWallReachedMessage msg)
