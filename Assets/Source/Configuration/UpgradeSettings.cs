@@ -15,7 +15,8 @@ namespace BalloonParty.Configuration
 
         [Tooltip("Ball cap and Shield: whole units per stack. Faster Reload: the share of reload time " +
             "taken off per stack (0.15 = 15% faster). Item Odds: chance of one more item per item roll, times each item's share. Raise Limits: " +
-            "how much higher every other card's limit goes per stack.")]
+            "how much higher every other card's limit goes per stack. Snipe Chance: the chance per stack that a " +
+            "loaded ball starts Snipe-armed (the total stops at 1).")]
         [SerializeField] [Min(0f)] private float _amount = 1f;
 
         [Tooltip("Most times a run can hold this card, before Raise Limits cards raise it; at its limit it is no " +
@@ -72,7 +73,8 @@ namespace BalloonParty.Configuration
             new(UpgradeKind.FasterReload, "Quick Hands", "Reload 15% faster", 0.15f, 4),
             new(UpgradeKind.Shield, "Thick Skin", "+1 shield on every pen", 1f, 3),
             new(UpgradeKind.ItemOdds, "Lucky Find", "More items on the board", 0.1f, 4),
-            new(UpgradeKind.RaiseLimits, "Raise the Bar", "+1 to every card's limit", 1f, 2, 0.5f)
+            new(UpgradeKind.RaiseLimits, "Raise the Bar", "+1 to every card's limit", 1f, 2, 0.5f),
+            new(UpgradeKind.SnipeChance, "Sharpshooter", "15% of pens load as a Snipe", 0.15f, 3)
         };
 
         public int CardEveryLevels => _cardEveryLevels;

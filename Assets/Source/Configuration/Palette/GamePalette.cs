@@ -65,6 +65,12 @@ namespace BalloonParty.Configuration.Palette
         /// </summary>
         public const string HeartRaysColorId = "HeartRays";
 
+        /// <summary>
+        ///     Presentation-only palette entry for the whirlwind around the thrower when a ball loads Snipe-armed (the
+        ///     Sharpshooter card) — authored in the palette asset but never a spawnable balloon color.
+        /// </summary>
+        public const string SnipeWhirlwindColorId = "SnipeWhirlwind";
+
         [SerializeField] private PaletteEntry[] _colors;
 
         private Dictionary<string, PaletteEntry> _byName;

@@ -330,6 +330,7 @@ namespace BalloonParty.Game
             builder.Register<PaintItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<SnipeItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<SnipeLanceLines>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<SnipeChanceRoll>(Lifetime.Singleton).As<ISnipeChanceRoll>();
             builder.RegisterEntryPoint<SnipeDischargeBloom>();
             builder.RegisterEntryPoint<ItemSightTracker>().AsSelf();
 

@@ -8,6 +8,7 @@ using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Level;
 using BalloonParty.Item;
 using BalloonParty.Item.Effects;
+using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots.Actor;
@@ -52,12 +53,17 @@ namespace BalloonParty.Solver
         /// are opt-in board-scoped services <c>ShotSimulator.Simulate</c> accepts nullable.</summary>
         public readonly ShotItemLayer Items;
 
+        /// <summary>What the loaded ball already carries before it fires (<see cref="ShotBoardGather.SeedFor" />):
+        /// a ball armed in the thrower plans as the lance it is. <c>default</c> for a plain ball.</summary>
+        public readonly ShotFlightSeed LoadedSeed;
+
         public ShotSolveContext(
             IReadOnlyList<ShotBalloonSnapshot> board, Vector4 wallLimitsClockwise, Vector2 throwerPivot,
             Vector3 spawnLocalOffset, int startingShields, bool streakGrantsShields,
             float projectileContactRadius,
             float projectileSpeed, ShotCruiseConfig cruiseConfig, ShotBoardDynamics dynamics,
-            float nudgeAmplitude, IReadOnlyList<string> allowedColors, string rainbowColorId, ShotItemLayer items)
+            float nudgeAmplitude, IReadOnlyList<string> allowedColors, string rainbowColorId, ShotItemLayer items,
+            in ShotFlightSeed loadedSeed = default)
         {
             Board = board;
             WallLimitsClockwise = wallLimitsClockwise;
@@ -73,6 +79,7 @@ namespace BalloonParty.Solver
             AllowedColors = allowedColors;
             RainbowColorId = rainbowColorId;
             Items = items;
+            LoadedSeed = loadedSeed;
         }
     }
 
@@ -82,12 +89,14 @@ namespace BalloonParty.Solver
     {
         /// <summary>Snapshots the live game. <paramref name="pulseExecutionDelay" /> models the
         /// balancer's render-frame lag (callers estimate ~1.5 × frame time); <paramref name="firstPulseIn" />
-        /// is the live balancer's <c>SecondsUntilNextPulse</c>.</summary>
+        /// is the live balancer's <c>SecondsUntilNextPulse</c>. <paramref name="loaded" /> is the ball in the
+        /// thrower (<c>IProjectileRegistry.Loaded</c>): one already armed there plans as a lance.</summary>
         internal static ShotSolveContext Gather(
             SlotGrid grid, IProjectileFlightConfig config, int startingShields, ISlotGridConfig gridConfig,
             IBalloonsConfiguration balloonsConfig, IItemConfiguration itemConfig, ThrowerView thrower,
             ThrowerSettings throwerSettings, IGamePalette palette, IActiveLevelParameters levelParams,
-            IRunConfig runConfig, float pulseExecutionDelay, float firstPulseIn)
+            IRunConfig runConfig, float pulseExecutionDelay, float firstPulseIn,
+            IProjectileModel loaded = null)
         {
             var targets = new List<ShotBalloonSnapshot>();
             var otherDynamicActors = new List<ShotDynamicActorSnapshot>();
@@ -128,13 +137,14 @@ namespace BalloonParty.Solver
                 balloonsConfig.NudgeDistance,
                 levelParams.Current.AllowedColors,
                 GamePalette.RainbowColorId,
-                items);
+                items,
+                SeedFor(loaded));
         }
 
         internal static ShotSimulationResult SimulateAt(
             float angleDegrees, in ShotSolveContext context, ShotBalloonState[] workingSet,
             List<Vector2> pathOut = null, List<float> timesOut = null, float radiusBias = 0f,
-            string targetColorId = null, in ShotFlightSeed seed = default)
+            string targetColorId = null)
         {
             return ShotSimulator.Simulate(
                 context.Board, context.WallLimitsClockwise, OriginForAngle(angleDegrees, context),
@@ -142,8 +152,32 @@ namespace BalloonParty.Solver
                 workingSet, pathOut: pathOut, projectileSpeed: context.ProjectileSpeed,
                 cruiseConfig: context.CruiseConfig, dynamics: context.Dynamics, timestampsOut: timesOut,
                 targetColorId: targetColorId, radiusBias: radiusBias, allowedColors: context.AllowedColors,
-                rainbowColorId: context.RainbowColorId, seed: seed, items: context.Items,
+                rainbowColorId: context.RainbowColorId, seed: context.LoadedSeed, items: context.Items,
                 streakGrantsShields: context.StreakGrantsShields);
+        }
+
+        /// <summary>
+        ///     What <paramref name="loaded" />, the ball in the thrower, already carries: a lance armed there (a Snipe
+        ///     pickup, or the Sharpshooter card as it loaded) with its speed and rainbow grants, or a rainbow Shield
+        ///     grant that ends at the next wall. <c>default</c> for a plain ball or none.
+        /// </summary>
+        internal static ShotFlightSeed SeedFor(IProjectileModel loaded)
+        {
+            if (loaded == null)
+            {
+                return default;
+            }
+
+            var rainbow = loaded.HasBuff(ProjectileBuffId.RainbowShield);
+            if (loaded.IsPiercing.Value)
+            {
+                var speed = loaded.HasBuff(ProjectileBuffId.Speed)
+                    ? loaded.ComputeBuffedValue(ProjectileBuffId.Speed, 1f)
+                    : 0f;
+                return ShotFlightSeed.Armed(speed, rainbow);
+            }
+
+            return rainbow ? ShotFlightSeed.WithRainbowBuff(untilWall: true) : default;
         }
 
         // The thrower rotates around its pivot to aim (ThrowerView.RotateTo: fire-direction angle − 90°),

@@ -16,6 +16,9 @@ namespace BalloonParty.Thrower
         [SerializeField] private float _recoilDuration = 0.18f;
         [SerializeField] private int _recoilVibrato = 8;
 
+        [Tooltip("The whirlwind that plays when a ball loads Snipe-armed (the Sharpshooter card).")]
+        [SerializeField] private SnipeWhirlwindView _snipeWhirlwind;
+
         private PredictionTraceView _traceView;
         private Camera _camera;
         private Tween _recoilTween;
@@ -59,6 +62,14 @@ namespace BalloonParty.Thrower
             _recoilTween = transform
                 .DOPunchPosition(-fireDirection.normalized * _recoilDistance, _recoilDuration, _recoilVibrato)
                 .SetLink(gameObject);
+        }
+
+        public void PlaySnipeWhirlwind(Color color)
+        {
+            if (_snipeWhirlwind != null)
+            {
+                _snipeWhirlwind.Play(color);
+            }
         }
 
         public void RotateTo(Vector3 direction)

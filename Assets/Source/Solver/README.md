@@ -33,3 +33,14 @@ fail).
 Lives in the Runtime assembly so both the editor Shot Solver window AND runtime tooling (the
 Fire Best Shot cheat, development builds on device) can run the same simulation — the editor
 window keeps the sweeping/bisection UI, this folder owns the physics truth.
+
+## The loaded ball
+
+A ball can already carry a grant before it fires: a Snipe pickup that armed the ball still in the
+thrower, or the Sharpshooter card arming it as it loaded (`Game/Upgrades/README.md`). `Gather` takes the
+loaded ball (`IProjectileRegistry.Loaded`) and keeps what it carries as the context's `LoadedSeed`
+(`ShotBoardGather.SeedFor`): a piercing ball seeds as `ShotFlightSeed.Armed`, with its speed buff and a
+rainbow host's grant riding the pierce, and a rainbow Shield grant seeds as ending at the next wall.
+`SimulateAt` launches every angle from that seed, so the Fire Best Shot cheat, the autoplay that aims with
+it, and the Shot Solver window all plan an armed ball as the lance it is. Banked Snipe charges on a held
+ball aren't seeded; they matter only once its first pierce discharges.

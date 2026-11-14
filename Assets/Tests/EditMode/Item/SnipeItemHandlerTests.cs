@@ -86,6 +86,20 @@ namespace BalloonParty.Tests.Item
         }
 
         [Test]
+        public void Arm_HeldBall_ArmsAPlainLanceWithSpeedAndOpensItsLine()
+        {
+            var projectile = LoadProjectile();
+
+            _handler.Arm(projectile);
+
+            Assert.IsTrue(projectile.IsPiercing.Value);
+            _buffs.Received(1).Apply(projectile, Arg.Is<ProjectileBuff>(b => b.Id == ProjectileBuffId.Speed));
+            _buffs.DidNotReceive().Apply(
+                Arg.Any<IProjectileModel>(), Arg.Is<ProjectileBuff>(b => b.Id == ProjectileBuffId.RainbowShield));
+            _lanceArming.Received(1).OnLanceArmed(projectile);
+        }
+
+        [Test]
         public void Activate_ContextNamesABallAlreadyGone_ArmsTheCurrentBall()
         {
             var dead = new ProjectileModel();

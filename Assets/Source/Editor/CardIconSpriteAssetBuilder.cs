@@ -26,8 +26,7 @@ namespace BalloonParty.Editor
         // under the baseline, as a letter's descender does, so the drawing centres on the words beside it.
         private const float AboveBaseline = 0.88f;
 
-        // The atlas's cells, left to right, as make_card_icons.py lays them out. SnipeChance is drawn ahead of
-        // its card.
+        // The atlas's cells, left to right, as make_card_icons.py lays them out.
         internal static readonly string[] IconNames =
         {
             "BallCap", "FasterReload", "Shield", "ItemOdds", "RaiseLimits", "SnipeChance"

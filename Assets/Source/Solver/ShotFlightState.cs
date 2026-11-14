@@ -60,6 +60,17 @@ namespace BalloonParty.Solver
         {
             return new ShotFlightSeed(false, false, projectileColor, streakColor, streakCount, false, false, 1f);
         }
+
+        /// <summary>A ball already armed before it fires: a Snipe pickup that armed the ball still in the
+        /// thrower, or the Sharpshooter card arming it as it loaded. <paramref name="speedBuffMultiplier" />
+        /// is the Snipe's speed buff (≤ 0 for none); <paramref name="rainbow" /> the rainbow host's grant,
+        /// which rides the pierce.</summary>
+        public static ShotFlightSeed Armed(float speedBuffMultiplier, bool rainbow = false)
+        {
+            var hasSpeedBuff = speedBuffMultiplier > 0f;
+            return new ShotFlightSeed(
+                false, rainbow, null, null, 0, true, hasSpeedBuff, hasSpeedBuff ? speedBuffMultiplier : 1f);
+        }
     }
 
     /// <summary>One pop's scoring identity — replaces the ad-hoc bool seams <c>ResolvePopScore</c> used

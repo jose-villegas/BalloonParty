@@ -24,7 +24,7 @@ namespace BalloonParty.Item.Snipe
     ///     banked whole and activates at that discharge instead — two pierces can't overlap, so the grant
     ///     is saved, not wasted. Non-damaging: no damage, no shield change.
     /// </summary>
-    internal class SnipeItemHandler : IBalloonItem, IStartable, IDisposable
+    internal class SnipeItemHandler : IBalloonItem, ISnipeArmer, IStartable, IDisposable
     {
         private readonly IItemConfiguration _itemConfig;
         private readonly IGamePalette _palette;
@@ -95,13 +95,19 @@ namespace BalloonParty.Item.Snipe
                 }
                 else
                 {
-                    ArmLance(shot, settings.Snipe.SpeedBuffMultiplier, isRainbowHost);
-                    _lanceArming.OnLanceArmed(shot);
+                    ArmFreshLance(shot, isRainbowHost);
                 }
             }
 
             _effectPlayer.Play(settings, activation.WorldPosition, activation.Balloon.GetColorId());
             return UniTask.CompletedTask;
+        }
+
+        // The Sharpshooter card's ball, armed as it loads: the same lance a pickup gives the ball still in the
+        // thrower, so it plays, scores and draws its pencil line exactly as that one does.
+        public void Arm(IWriteableProjectileModel shot)
+        {
+            ArmFreshLance(shot, isRainbowHost: false);
         }
 
         // The discharge spent the pierce but SpendPierce kept the shot armed for a banked charge (so the
@@ -133,6 +139,12 @@ namespace BalloonParty.Item.Snipe
 
             ArmLance(shot, _itemConfig[ItemType.Snipe].Snipe.SpeedBuffMultiplier, isRainbowCharge);
             _lanceArming.OnLanceRearmed(shot, discharge.Position);
+        }
+
+        private void ArmFreshLance(IWriteableProjectileModel shot, bool isRainbowHost)
+        {
+            ArmLance(shot, _itemConfig[ItemType.Snipe].Snipe.SpeedBuffMultiplier, isRainbowHost);
+            _lanceArming.OnLanceArmed(shot);
         }
 
         // IsPiercing may already be true here — a banked charge re-arms a shot the discharge deliberately

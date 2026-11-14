@@ -666,7 +666,8 @@ namespace BalloonParty.Editor.ShotSolver
                 scope.Container.Resolve<IActiveLevelParameters>(),
                 scope.Container.Resolve<IRunConfig>(),
                 pulseDelay,
-                scope.Container.Resolve<BalloonBalancer>().SecondsUntilNextPulse);
+                scope.Container.Resolve<BalloonBalancer>().SecondsUntilNextPulse,
+                scope.Container.Resolve<IProjectileRegistry>().Loaded);
             return true;
         }
 

@@ -141,6 +141,59 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void NoSnipeCard_NoBallLoadsArmed()
+        {
+            Assert.AreEqual(0f, Upgrades.SnipeChance);
+        }
+
+        [Test]
+        public void Hold_SnipeChance_EachStackAddsItsAmount()
+        {
+            var snipe = UpgradeRig.Card(UpgradeKind.SnipeChance, 0.15f);
+
+            _rig.Hold(snipe);
+            Assert.AreEqual(0.15f, Upgrades.SnipeChance, 1e-5f);
+
+            _rig.Hold(snipe);
+            Assert.AreEqual(0.3f, Upgrades.SnipeChance, 1e-5f);
+        }
+
+        [Test]
+        public void Hold_SnipeChance_NeverPassesCertain()
+        {
+            var snipe = UpgradeRig.Card(UpgradeKind.SnipeChance, 0.6f);
+
+            _rig.Hold(snipe);
+            _rig.Hold(snipe);
+
+            Assert.AreEqual(1f, Upgrades.SnipeChance);
+        }
+
+        [Test]
+        public void Hold_SnipeChance_AtItsLimitStopsBeingDealt()
+        {
+            var snipe = UpgradeRig.Card(UpgradeKind.SnipeChance, 0.15f, maxStacks: 2);
+            _rig.Cards.Add(snipe);
+
+            _rig.Hold(snipe);
+            _rig.Hold(snipe);
+
+            CollectionAssert.DoesNotContain(_rig.Present(3), snipe);
+            Assert.AreEqual(0.3f, Upgrades.SnipeChance, 1e-5f);
+        }
+
+        [Test]
+        public void ResetRun_FreshRun_DropsTheSnipeChance()
+        {
+            _rig.Hold(UpgradeRig.Card(UpgradeKind.SnipeChance, 0.15f));
+            _rig.RetryState.RetryLevel.Returns(0);
+
+            Upgrades.ResetRun(1);
+
+            Assert.AreEqual(0f, Upgrades.SnipeChance);
+        }
+
+        [Test]
         public void Hold_MaxedCard_StopsBeingDealt()
         {
             for (var i = 0; i < 3; i++)

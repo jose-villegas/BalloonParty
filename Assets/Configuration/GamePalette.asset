@@ -49,3 +49,6 @@ MonoBehaviour:
   - _name: HeartRays
     _color: {r: 1, g: 1, b: 1, a: 0.3}
     _presentationOnly: 1
+  - _name: SnipeWhirlwind
+    _color: {r: 0.92, g: 0.96, b: 1, a: 1}
+    _presentationOnly: 1

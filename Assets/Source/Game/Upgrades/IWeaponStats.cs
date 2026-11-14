@@ -29,5 +29,8 @@ namespace BalloonParty.Game.Upgrades
         /// <summary>Lucky Find's chance per item roll, scaled per item by its <c>ExtraItemShare</c>; the whole
         /// part always lands, the fraction is a chance.</summary>
         float ExtraItemChance { get; }
+
+        /// <summary>Sharpshooter's chance, 0 to 1, that a ball starts Snipe-armed as the thrower loads it.</summary>
+        float SnipeChance { get; }
     }
 }

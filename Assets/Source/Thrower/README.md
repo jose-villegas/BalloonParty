@@ -11,6 +11,7 @@ The thrower is the player-controlled launcher at the bottom of the screen. It ai
 | `ThrowerView` | MonoBehaviour — owns the thrower's transform, rotation, entrance animation, prediction trace display, and pointer input (`IsAiming`, `FireReleased`, `TryGetAimDirection` — the only place that touches `Input`/`Camera`) |
 | `ThrowerLifetimeScope` | Child `LifetimeScope` on the Thrower GameObject — registers `ThrowerView` and `ThrowerController` (`.AsSelf()`, so editor tooling can resolve the concrete controller — see `FireAt` below) |
 | `ThrowerSettings` | Holds the `ProjectileView` prefab reference for pool creation (registered in `GameLifetimeScope`) |
+| `SnipeWhirlwindView` | MonoBehaviour on the `SnipeWhirlwind` child of `Thrower.prefab` (so it turns with the aim) — the cue that a ball loaded Snipe-armed (the Sharpshooter card). See Sharpshooter whirlwind below |
 | `AimDirectionHistory` | Fixed-capacity ring buffer of (timestamp, direction) aim samples backing the aim latch below |
 
 ## Gameplay
@@ -54,6 +55,23 @@ A freshly loaded ball does not fire straight away. It slides from the thrower's 
 - `ThrowerReadyMessage` is published once per ball, on the tick it becomes ready (`CombatSoundRouter` plays the reload "cock" on it). Its `AfterCapWait` says whether the cap held that ball back: `ThrowerReload.WaitedAtCap` turns true on any tick since the ball loaded with every slot taken, and `Restart` clears it for the next ball.
 
 `FireAt` skips the slide but still honours the cap and the phase (`ThrowerReload.CanLaunch`). The pool is pre-warmed with `2 * MaxBallsInFlight + 1` balls of the configured cap, because a dead ball stays out of the pool until its disappear animation finishes. A cap raised by a card is topped up (two more balls per extra slot) on the next load, which comes after the level-up's Ascent or a reset, so nothing Instantiates mid-play. Each loaded ball starts with `IWeaponStats.StartingShields`.
+
+### Sharpshooter whirlwind
+
+`LoadProjectile` asks `ISnipeChanceRoll` (`Item/Snipe/`) whether the ball it just loaded starts Snipe-armed:
+the Sharpshooter card's chance (`IWeaponStats.SnipeChance`, see `Game/Upgrades/README.md`). It asks before
+publishing `ProjectileLoadedMessage`, so every reader of that message sees the lance. On a hit the
+controller tells the view to play the whirlwind in the palette's `SnipeWhirlwind` colour
+(`ThrowerView.PlaySnipeWhirlwind`).
+
+The whirlwind plays while the armed ball slides out to the muzzle, so it announces the roll before the ball
+can fire, on top of the ball's own Snipe look. It reuses the Snipe's pieces: a `Funnel` quad on
+`SnipeWhirlwind.mat` (the Snipe pickup's `PierceConeSpiral` shader, wider, with more turns, its apex at the
+muzzle) and a `Glitter` disc on `SnipeWhirlwindGlitter.mat` (the `GlitterSwirl` halo of the blue formation
+unbreakables), which the view turns around the cannon. Both fade in, hold and fade out (`Envelope`) while
+tightening from `_startScale` to `_endScale` of their authored size, over `_duration` (0.5 s, scaled time).
+The tuning is on the prefab's `SnipeWhirlwindView`; the materials carry the look. A second armed ball
+restarts it.
 
 ## How it works
 

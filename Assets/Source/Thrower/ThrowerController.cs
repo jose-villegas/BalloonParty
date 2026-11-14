@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Upgrades;
+using BalloonParty.Item.Snipe;
 using BalloonParty.Prediction;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Controller;
@@ -52,6 +53,7 @@ namespace BalloonParty.Thrower
         private readonly ISubscriber<LevelUpAbandonedMessage> _levelUpAbandonedSubscriber;
         private readonly ILevelProgress _levelProgress;
         private readonly IWeaponStats _weapon;
+        private readonly ISnipeChanceRoll _snipeChance;
         private readonly PauseService _pauseService;
         private readonly IObjectResolver _resolver;
         private readonly List<Vector3> _tracePoints = new();
@@ -123,6 +125,7 @@ namespace BalloonParty.Thrower
             ISubscriber<LevelUpAbandonedMessage> levelUpAbandonedSubscriber,
             ILevelProgress levelProgress,
             IWeaponStats weapon,
+            ISnipeChanceRoll snipeChance,
             PauseService pauseService,
             IProjectileRegistryWriter registry,
             ThrowerOriginProvider originProvider,
@@ -151,6 +154,7 @@ namespace BalloonParty.Thrower
             _levelUpAbandonedSubscriber = levelUpAbandonedSubscriber;
             _levelProgress = levelProgress;
             _weapon = weapon;
+            _snipeChance = snipeChance;
             _pauseService = pauseService;
             _registry = registry;
             _originProvider = originProvider;
@@ -377,6 +381,15 @@ namespace BalloonParty.Thrower
 
             _loadedView.Bind(_loadedProjectile);
             _registry.Load(_loadedProjectile, _loadedView.transform);
+
+            // Rolled as the reload starts, so the whirlwind spins up while the ball is still sliding out to the
+            // muzzle: the ball arrives already armed. Before the loaded message, so every reader of it (the
+            // auto-fire cheat's solve among them) sees the lance.
+            if (_snipeChance.TryArm(_loadedProjectile))
+            {
+                _view.PlaySnipeWhirlwind(_palette.GetColor(GamePalette.SnipeWhirlwindColorId));
+            }
+
             _loadedPublisher.Publish(new ProjectileLoadedMessage(_loadedProjectile));
             _reload.Restart();
         }

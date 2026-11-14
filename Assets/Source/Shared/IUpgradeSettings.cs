@@ -21,7 +21,13 @@ namespace BalloonParty.Shared
         ///     +<see cref="IUpgradeCardSettings.Amount" /> to every other card's <see cref="IUpgradeCardSettings.MaxStacks" />
         ///     (rounded). Dealt only once another card has reached its limit.
         /// </summary>
-        RaiseLimits
+        RaiseLimits,
+
+        /// <summary>
+        ///     +<see cref="IUpgradeCardSettings.Amount" /> chance that each ball the thrower loads starts armed as a
+        ///     Snipe lance (the total never passes 1).
+        /// </summary>
+        SnipeChance
     }
 
     /// <summary>One card the level-up can offer.</summary>

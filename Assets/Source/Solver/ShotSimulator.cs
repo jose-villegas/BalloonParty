@@ -230,11 +230,10 @@ namespace BalloonParty.Solver
             var activeCount = CopyIntoWorkingSet(board, workingSet, dynamics, radiusBias);
 
             var direction = aimDirection.sqrMagnitude > AxisEpsilon ? aimDirection.normalized : Vector2.right;
-            // No live gather sets a non-default seed yet (buff GRANTS, and a streak already in progress
-            // when one lands mid-flight, are Phase C's item layer) — this is the seam that lets
-            // D-core's own scoring/end-condition mirrors (including a refund firing through an
-            // already-established streak once a buff takes over) be exercised by tests, and later a
-            // headless scenario, without a full item layer in place.
+            // The live gather seeds only what the loaded ball already carries in the thrower (a lance armed
+            // there, ShotBoardGather.SeedFor); grants landing mid-flight are the item layer's. Tests also use
+            // the seam to pin D-core's scoring/end-condition mirrors (including a refund firing through an
+            // already-established streak once a buff takes over) without a full item layer in place.
             var state = new ShotFlightState(origin, direction, startingShields, in seed);
             var scoreRules = new ShotScoreRules(
                 targetColorId, allowedColors, rainbowColorId, streakGrantsShields);

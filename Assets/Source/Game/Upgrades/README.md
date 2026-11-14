@@ -11,7 +11,7 @@ particular never rises with level, only through a card.
 
 | File | Responsibility |
 |---|---|
-| `IWeaponStats` | The run's weapon after its cards: `MaxBallsInFlight`, `ReloadSeconds` (the reload while another ball flies), `IdleReloadSeconds` (the near-instant one with nothing flying, which no card changes), `StartingShields`, `ExtraItemChance`. Each value is the configured base (`IProjectileFlightConfig`) plus every card held. Read these, not the flight config, wherever a card can change the value |
+| `IWeaponStats` | The run's weapon after its cards: `MaxBallsInFlight`, `ReloadSeconds` (the reload while another ball flies), `IdleReloadSeconds` (the near-instant one with nothing flying, which no card changes), `StartingShields`, `ExtraItemChance`, `SnipeChance`. Each value is the configured base (`IProjectileFlightConfig`) plus every card held. Read these, not the flight config, wherever a card can change the value |
 | `IUpgradeDraft` | The cards side: `Offer` (the hand of the level-up being presented, empty when none is pending or it deals none), `BonusCard` (the current attempt's bonus card, or null), `StacksOf(card)`, `LimitOf(card)` (its `MaxStacks` plus what held Raise the Bar cards add), and `Pick(slot)`, which stages a card of the hand as the level-up's pick |
 | `RunUpgrades` | Implements both, plus `Game/Run`'s `IBonusCardSource`, `IFreeCardGrant`, `IRunResettable` and `IStartable` (it follows `ILevelProgress.Phase`). Holds the stack count per card and the bonus card, and recomputes the weapon when either changes |
 | `IFreeCardGrant` | `GrantFreeCard(noCardLeft)`: a card won in play, the golden balloon's (`Balloon/Reward/README.md`). See "Free cards" below |
@@ -30,6 +30,7 @@ and `Cards`, each with a kind, title, description, a per-stack `Amount`, `MaxSta
 | `Shield` | +`Amount` starting shields on every ball (rounded) | `ThrowerController.LoadProjectile`, the shield-chain planner in `ItemAssigner`, and the shot solver (`ShotBoardGather.Gather`'s `startingShields`, passed by the Fire Best Shot cheat and the Shot Solver window) |
 | `RaiseLimits` | +`Amount` to every other card's limit (rounded), so a card at its limit is dealt again. Dealt only once some card has reached its limit, and likelier the more have: its weight counts once for every card at its limit (`DealWeight`). Never the ad's bonus card (that lasts one attempt, with no room to grow into). Its own limit is its `MaxStacks`. Raise the Bar in the deck: +1 a stack, 2 stacks, half the others' weight | `RunUpgrades.LimitOf`, which the deal, the pick and the pick screen's `held/limit` label read |
 | `ItemOdds` | On every item roll (the initial board fill included), each item the level holds gets a chance of `Amount` × its `ExtraItemShare` (`ItemConfiguration`) at an extra copy: 1 for the Shield, down to 0.25 for the Snipe, so strong items grow slower. The whole part always lands; the fraction is a chance; the level's caps still hold | `ILevelParameters.FillExtraItems`, placed by `ItemAssigner` |
+| `SnipeChance` | +`Amount` chance that each ball the thrower loads starts armed as a Snipe lance; the total never passes 1. Sharpshooter in the deck: 15% a stack, 3 stacks. See "Sharpshooter" below | `ThrowerController.LoadProjectile`, through `SnipeChanceRoll` (`Item/Snipe/`) |
 
 Every card is read live, so a held card applies from the next ball loaded and the next item roll.
 
@@ -38,6 +39,23 @@ hand-drawn icon for its kind: `UpgradeCardText.Title` writes it as a TextMeshPro
 sprite asset, tinted with the text. The icons are drawn by `Tools/art/make_card_icons.py` and built into
 the sprite asset by Tools > BalloonParty > Upgrades > Build Card Icons (`CardIconSpriteAssetBuilder`). A
 new kind needs its icon drawn and named there too; an EditMode test fails until it is.
+
+### Sharpshooter
+
+The roll happens once per ball, the moment the thrower loads it (`SnipeChanceRoll.TryArm`), which is also
+when its reload starts. A hit arms the ball the way a Snipe pickup arms the ball still in the thrower
+(`ISnipeArmer`, implemented by `SnipeItemHandler`): it pierces, carries the Snipe's speed buff, and its
+pencil line starts at the muzzle when it fires. So it plays, scores and discharges like any Snipe lance,
+and the thrower's "ready" heads-up reads it as armed through `IsPiercing`.
+
+A hit also plays a whirlwind around the cannon (`Thrower/SnipeWhirlwindView`, see `Thrower/README.md`)
+while the ball slides out to the muzzle: the roll has already landed, and the whirlwind announces it before
+the ball can be fired. It plays on top of the ball's own Snipe look.
+
+The roll comes before `ProjectileLoadedMessage`, so everything that reads the loaded ball sees the lance,
+the bots included: the shot solver seeds a ball armed in the thrower as piercing (`ShotBoardGather.SeedFor`,
+see `Solver/README.md`). A ball that already pierces is never rolled for. The draw is `Random.value`, not
+seeded, like the reward balloons' rolls.
 
 ## A level-up's hand
 

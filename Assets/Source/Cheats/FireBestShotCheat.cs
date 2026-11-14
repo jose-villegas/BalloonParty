@@ -9,6 +9,7 @@ using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Upgrades;
+using BalloonParty.Projectile;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Messages;
@@ -190,7 +191,8 @@ namespace BalloonParty.Cheats
             var context = ShotBoardGather.Gather(
                 _grid, _config, _weapon.StartingShields, _gridConfig, _balloonsConfig, _itemConfig, _cachedView, _throwerSettings, _palette,
                 _levelParams, _runConfig, pulseDelay,
-                _cachedScope.Container.Resolve<BalloonBalancer>().SecondsUntilNextPulse);
+                _cachedScope.Container.Resolve<BalloonBalancer>().SecondsUntilNextPulse,
+                _cachedScope.Container.Resolve<IProjectileRegistry>().Loaded);
             if (context.Board.Count == 0)
             {
                 return false;
