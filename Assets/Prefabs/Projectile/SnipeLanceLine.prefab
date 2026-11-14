@@ -165,7 +165,7 @@ MonoBehaviour:
   _line: {fileID: 5180730461829910276}
   _tipSpeed: 12
   _holdSeconds: 1
-  _eraseSeconds: 1.4
+  _eraseSeconds: 0.7
   _chunkLength: 0.7
   _chunkEraseShare: 0.3
   _smearDistance: 0.2

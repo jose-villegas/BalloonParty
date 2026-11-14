@@ -22,7 +22,7 @@ namespace BalloonParty.Item.Snipe
         [SerializeField] [Min(0f)] private float _holdSeconds = 1f;
 
         [Tooltip("Seconds the erase takes, from the first chunk wiped to the last one gone.")]
-        [SerializeField] [Min(0f)] private float _eraseSeconds = 1.4f;
+        [SerializeField] [Min(0f)] private float _eraseSeconds = 0.7f;
 
         [Tooltip("World length of one chunk the erase wipes away on its own.")]
         [SerializeField] [Min(0.05f)] private float _chunkLength = 0.7f;
