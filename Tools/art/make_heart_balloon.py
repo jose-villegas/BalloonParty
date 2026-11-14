@@ -1,7 +1,16 @@
 """Draws the heart reward balloon's sprites (PLAN-RewardBalloons): a heart-shaped balloon wrapped in bandages.
 
-- heart_balloon_body.png      the heart and its knot, white, so the renderer tints it and the scene light
-                              shades it like any balloon body. A soft darkening toward the edge puffs it up.
+- heart_balloon_body.png      the heart and its knot, near white, so the renderer tints it and the scene light
+                              shades it like any balloon body. Its volume is baked in: the heart inflated
+                              from a height map (a round profile over the distance to the edge), shaded
+                              mostly by how far it turns from the viewer, so each lobe rounds off and the
+                              cleft and the tip fall into shade whatever the light does, and a little from
+                              the upper left.
+- heart_balloon_normals.png   the same height map's surface normals (RGB, 0.5 + 0.5 * n, y up) over the heart
+                              (alpha), for the shine shader (Balloon/HeartShine.shader), which lights its
+                              highlight from them toward the scene light. The round balloons' shine is an arc
+                              drawn for a circle; this one follows the heart's own lobes. Imported linear
+                              (not sRGB) and uncompressed, or the normals bend.
 - heart_balloon_bandages.png  two cream cloth strips wrapped across it, bowed the way a band round a ball
                               looks, frayed a little along their edges, and tied off in a knot with two loose
                               tails on the right lobe. The strips darken where they wrap round the edge and
@@ -10,9 +19,9 @@
 - heart_balloon_shadow.png    the blurred silhouette for the baked shadow child, at half the body's pixels per
                               unit, grey like the other balloons' baked shadows (the renderer tints it).
 
-The body sprite is imported at 400 pixels per unit, pivot centre, so the heart is about as wide as a round
-balloon (0.64 units); the shadow at 200. Drawn at 4x and scaled down, so the edges are soft. Seeded, so a
-redraw gives the same strips.
+The body, bandage and normal sprites are imported at 400 pixels per unit, pivot centre, so the heart is about
+as wide as a round balloon (0.64 units); the shadow at 200. Drawn at 4x and scaled down, so the edges are
+soft. Seeded, so a redraw gives the same strips. Needs numpy and scipy (the height map).
 
 Usage: python3 Tools/art/make_heart_balloon.py Assets/Sprites/Balloons/HeartBalloon
 """
@@ -21,7 +30,9 @@ import random
 import sys
 from pathlib import Path
 
+import numpy as np
 from PIL import Image, ImageChops, ImageDraw, ImageFilter
+from scipy import ndimage
 
 SIZE = 288
 SS = 4
@@ -146,6 +157,35 @@ def _tie(size, kx, ky):
     return mask, ImageChops.multiply(shade, rounding)
 
 
+def _volume(heart):
+    """The inflated heart's shading (0-255) and its surface normals (x right, y down, z toward the viewer)."""
+    mask = np.asarray(heart, dtype=np.float32) / 255.0
+    distance = ndimage.distance_transform_edt(mask > 0.5)
+    deepest = distance.max()
+    height = deepest * np.sqrt(1.0 - (1.0 - np.clip(distance / deepest, 0.0, 1.0)) ** 2)
+    # Softened, or the ridge where the distance field folds (up the middle from the tip) shows as a crease.
+    height = ndimage.gaussian_filter(height, 9 * SS)
+    gy, gx = np.gradient(height)
+    normal = np.dstack((-gx, -gy, np.ones_like(height)))
+    normal /= np.linalg.norm(normal, axis=2, keepdims=True)
+    light = np.array([-0.45, -0.55, 0.70])
+    light /= np.linalg.norm(light)
+    lambert = np.clip(normal @ light, 0.0, 1.0)
+    shade = np.clip(0.48 + 0.34 * normal[..., 2] + 0.22 * lambert, 0.0, 1.0)
+    shade_image = Image.fromarray((shade * 255).astype(np.uint8), "L")
+    return shade_image, normal
+
+
+def _normals(normal, heart):
+    """The normals as a sprite for the shine shader: RGB the normal (y flipped to point up, as the sprite's
+    space does), 0.5 + 0.5 * n; alpha the heart, so nothing shines off its edge."""
+    up = normal * np.array([1.0, -1.0, 1.0])
+    rgb = Image.fromarray(np.round((up * 0.5 + 0.5) * 255).astype(np.uint8), "RGB")
+    image = rgb.convert("RGBA")
+    image.putalpha(heart)
+    return image
+
+
 def main(out_dir):
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
@@ -159,10 +199,10 @@ def main(out_dir):
     ImageDraw.Draw(heart).polygon(outline, fill=255)
     tip_y = max(y for _, y in outline)
 
-    # Body: white, darkening softly toward the edge; the knot under the tip.
+    # Body: the inflated heart's shading; the knot under the tip.
     inner = heart.filter(ImageFilter.GaussianBlur(14 * SS))
-    puff = Image.eval(inner, lambda v: int(196 + 59 * min(1.0, v / 200)))
-    body_rgb = Image.merge("RGB", (puff, puff, puff))
+    volume, normal = _volume(heart)
+    body_rgb = Image.merge("RGB", (volume, volume, volume))
     knot = Image.new("L", size, 0)
     _knot(ImageDraw.Draw(knot), cx, tip_y - 6 * SS, SS, 255)
     body_alpha = ImageChops.lighter(heart, knot)
@@ -172,8 +212,8 @@ def main(out_dir):
 
     # Bandages: two strips crossing the heart, clipped to it (they wrap round behind), tied on the right lobe.
     strips = [
-        ((cx - 150 * SS, cy - 96 * SS), (cx + 150 * SS, cy - 18 * SS), 30 * SS, 16 * SS, 7),
-        ((cx - 150 * SS, cy + 40 * SS), (cx + 150 * SS, cy - 34 * SS), 26 * SS, 14 * SS, 11),
+        ((cx - 150 * SS, cy - 40 * SS), (cx + 150 * SS, cy - 8 * SS), 30 * SS, 16 * SS, 7),
+        ((cx - 150 * SS, cy + 84 * SS), (cx + 150 * SS, cy - 22 * SS), 26 * SS, 14 * SS, 11),
     ]
     cloth_mask = Image.new("L", size, 0)
     cloth_shade = Image.new("L", size, 255)
@@ -186,12 +226,11 @@ def main(out_dir):
         cloth_shade = ImageChops.composite(ImageChops.multiply(cloth_shade, weave), cloth_shade, mask)
         cloth_mask = ImageChops.lighter(cloth_mask, mask)
 
-    # Darker where the cloth wraps round the heart's edge, out of the light.
-    wrap = Image.eval(inner, lambda v: int(150 + 105 * min(1.0, v / 170)))
-    cloth_shade = ImageChops.multiply(cloth_shade, wrap)
+    # The cloth follows the heart's volume, a little lifted (it is paler and sits proud of the rubber).
+    cloth_shade = ImageChops.multiply(cloth_shade, Image.eval(volume, lambda v: int(70 + v * 0.75)))
 
     # The knot sits on the right lobe, over the first strip; its tails may hang past the edge.
-    tie_mask, tie_shade = _tie(size, cx + 80 * SS, cy - 30 * SS)
+    tie_mask, tie_shade = _tie(size, cx + 80 * SS, cy - 2 * SS)
     tie_drop = ImageChops.offset(tie_mask.filter(ImageFilter.GaussianBlur(2 * SS)), SS, 3 * SS)
     cloth_shade = ImageChops.subtract(cloth_shade, Image.eval(tie_drop, lambda v: v // 4))
     cloth_shade = ImageChops.composite(tie_shade, cloth_shade, tie_mask)
@@ -211,6 +250,8 @@ def main(out_dir):
 
     body.resize((SIZE, SIZE), Image.LANCZOS).save(out / "heart_balloon_body.png")
     bandages.resize((SIZE, SIZE), Image.LANCZOS).save(out / "heart_balloon_bandages.png")
+
+    _normals(normal, heart).resize((SIZE, SIZE), Image.LANCZOS).save(out / "heart_balloon_normals.png")
 
     # Shadow: the silhouette (heart, knot, tails) blurred, at half the pixels per unit, padded for the blur.
     silhouette = ImageChops.lighter(body_alpha, tie_mask)

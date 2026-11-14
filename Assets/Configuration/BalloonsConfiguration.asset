@@ -190,6 +190,21 @@ MonoBehaviour:
     _omnidirectionalBalance: 0
     _deflectStampScale: 1.75
     _spawnWeight: 0
+  - _prefab: {fileID: 7744549277022113413, guid: 8cbfaad10f3379f4a86ceda33ac02505, type: 3}
+    _balloonType: 9
+    _nudgeOverrides: []
+    _hitVfxOverrides: []
+    _hitsToPop: 1
+    _scoreValue: 0
+    _itemActivationWeight: 0
+    _balanceBias: 3
+    _maxBalanceSteps: -1
+    _moveSpeed: 1.1
+    _balancePriority: 1
+    _directBalanceMotion: 0
+    _omnidirectionalBalance: 0
+    _deflectStampScale: 0
+    _spawnWeight: 0
   _defaultPopVfxPrefab: {fileID: 2148469744637963286, guid: 4a7c3a51e0404c1479c70235419a474d, type: 3}
   _rainbowMaterial: {fileID: 2100000, guid: 2a0e218b129144e0ca18ebc8a64ea0c4, type: 2}
   _rainbowPopFlashRadius: 1.5
