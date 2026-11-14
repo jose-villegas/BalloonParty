@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using BalloonParty.Prediction;
+using BalloonParty.Shared.SceneLight;
 using DG.Tweening;
 using UnityEngine;
+using VContainer;
 
 namespace BalloonParty.Thrower
 {
@@ -44,6 +46,15 @@ namespace BalloonParty.Thrower
             _traceView = GetComponentInChildren<PredictionTraceView>(true);
         }
 
+        [Inject]
+        internal void Construct(SceneLightFieldService lightField)
+        {
+            if (_snipeWhirlwind != null)
+            {
+                _snipeWhirlwind.Bind(lightField);
+            }
+        }
+
         public Tween AnimateEntrance()
         {
             return transform.DOMove(transform.position + _entranceOffset, _entranceDuration);
@@ -64,11 +75,11 @@ namespace BalloonParty.Thrower
                 .SetLink(gameObject);
         }
 
-        public void PlaySnipeWhirlwind(Color color)
+        public void PlaySnipeWhirlwind(Color color, int skyLightPaletteIndex)
         {
             if (_snipeWhirlwind != null)
             {
-                _snipeWhirlwind.Play(color);
+                _snipeWhirlwind.Play(color, skyLightPaletteIndex);
             }
         }
 

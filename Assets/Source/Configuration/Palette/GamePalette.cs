@@ -71,6 +71,12 @@ namespace BalloonParty.Configuration.Palette
         /// </summary>
         public const string SnipeWhirlwindColorId = "SnipeWhirlwind";
 
+        /// <summary>
+        ///     The white light that falls from the sky onto the cannon before the Sharpshooter whirlwind — a scene
+        ///     light palette slot, never a spawnable balloon color.
+        /// </summary>
+        public const string SnipeSkyLightColorId = "SnipeSkyLight";
+
         [SerializeField] private PaletteEntry[] _colors;
 
         private Dictionary<string, PaletteEntry> _byName;

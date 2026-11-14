@@ -1,13 +1,17 @@
+using System;
+using BalloonParty.Shared.SceneLight;
 using DG.Tweening;
 using UnityEngine;
+using Light = BalloonParty.Shared.SceneLight.Light;
 
 namespace BalloonParty.Thrower
 {
     /// <summary>
-    ///     The whirlwind around the thrower when a ball loads Snipe-armed (the Sharpshooter card): the Snipe's own
-    ///     cone spiral drilling into the muzzle, and a ring of glitter turning around the cannon, both tightening in
-    ///     as they fade. It plays while the armed ball slides out, so it announces the roll before the ball is ready.
-    ///     A child of the thrower, so it turns with the aim.
+    ///     The Sharpshooter card's announcement when a ball loads Snipe-armed: a bright light drops from the sky onto
+    ///     the cannon, dimming and tightening as it falls, and where it lands a whirlwind plays around the thrower:
+    ///     the Snipe's own cone spiral drilling into the muzzle, and a ring of glitter turning around the cannon, both
+    ///     tightening in as they fade. A child of the thrower, so the whirlwind turns with the aim; the light falls
+    ///     straight down the world, whatever the aim.
     /// </summary>
     internal sealed class SnipeWhirlwindView : MonoBehaviour
     {
@@ -35,6 +39,31 @@ namespace BalloonParty.Thrower
         [Tooltip("Degrees the glitter ring turns over the play; negative is clockwise.")]
         [SerializeField] private float _glitterSpin = -540f;
 
+        [Header("Sky light")]
+        [Tooltip("World units above the whirlwind the light starts, straight up: above the board's top edge.")]
+        [SerializeField] [Min(0f)] private float _skyLightHeight = 10f;
+
+        [Tooltip("Seconds the light takes to fall onto the cannon, in scaled time. The whirlwind starts as it lands; 0 skips the light.")]
+        [SerializeField] [Min(0f)] private float _skyLightSeconds = 0.4f;
+
+        [Tooltip("How the fall runs: an ease-in drops slowly from the sky and lands fast.")]
+        [SerializeField] private Ease _skyLightEase = Ease.InQuad;
+
+        [Tooltip("The light's intensity in the sky, where it starts.")]
+        [SerializeField] [Min(0f)] private float _skyLightStartIntensity = 6f;
+
+        [Tooltip("The light's intensity as it lands on the cannon.")]
+        [SerializeField] [Min(0f)] private float _skyLightEndIntensity = 1.5f;
+
+        [Tooltip("The light's radius in the sky, where it starts.")]
+        [SerializeField] [Min(0f)] private float _skyLightStartRadius = 3f;
+
+        [Tooltip("The light's radius as it lands on the cannon.")]
+        [SerializeField] [Min(0f)] private float _skyLightEndRadius = 1f;
+
+        private SceneLightFieldService _lightField;
+        private Light _skyLight;
+        private IDisposable _skyLightRegistration;
         private Tween _tween;
         private Vector3 _funnelScale;
         private Vector3 _glitterScale;
@@ -50,20 +79,45 @@ namespace BalloonParty.Thrower
         private void OnDisable()
         {
             _tween?.Kill();
+            ReleaseSkyLight();
             SetVisible(false);
         }
 
-        /// <summary>Plays the whirlwind once in <paramref name="color" />, restarting one already playing.</summary>
-        internal void Play(Color color)
+        /// <summary>Lights come from the scene light field; without one the whirlwind plays at once, unlit.</summary>
+        internal void Bind(SceneLightFieldService lightField)
+        {
+            _lightField = lightField;
+        }
+
+        /// <summary>
+        ///     Drops the sky light in palette slot <paramref name="skyLightPaletteIndex" /> onto the cannon, then
+        ///     plays the whirlwind in <paramref name="color" />. Restarts a play already running, from the sky.
+        /// </summary>
+        internal void Play(Color color, int skyLightPaletteIndex)
         {
             _tween?.Kill();
+            ReleaseSkyLight();
+            SetVisible(false);
             _color = color;
-            SetVisible(true);
-            Apply(0f);
-            _tween = DOVirtual.Float(0f, 1f, _duration, Apply)
-                .SetEase(Ease.Linear)
+
+            if (_lightField == null || _skyLightSeconds <= 0f)
+            {
+                PlayWhirlwind();
+                return;
+            }
+
+            _skyLight ??= new Light(transform.position);
+            _skyLight.PaletteIndex.Value = skyLightPaletteIndex;
+            ApplySkyLight(0f);
+            _skyLightRegistration = _lightField.RegisterLight(_skyLight);
+            _tween = DOVirtual.Float(0f, 1f, _skyLightSeconds, ApplySkyLight)
+                .SetEase(_skyLightEase)
                 .SetLink(gameObject)
-                .OnComplete(() => SetVisible(false));
+                .OnComplete(() =>
+                {
+                    ReleaseSkyLight();
+                    PlayWhirlwind();
+                });
         }
 
         /// <summary>
@@ -82,7 +136,37 @@ namespace BalloonParty.Thrower
             return Mathf.Min(rise, fall);
         }
 
-        private void Apply(float t)
+        /// <summary>
+        ///     Where the sky light is at <paramref name="fall" /> (0 in the sky, 1 on the cannon): straight above
+        ///     <paramref name="landing" /> by <paramref name="height" /> world units, coming down to it.
+        /// </summary>
+        internal static Vector3 SkyLightPosition(Vector3 landing, float height, float fall)
+        {
+            return landing + Vector3.up * (height * (1f - Mathf.Clamp01(fall)));
+        }
+
+        // fall is already eased, so the light dims and tightens with the distance it has come down.
+        private void ApplySkyLight(float fall)
+        {
+            _skyLight.Position.Value = SkyLightPosition(transform.position, _skyLightHeight, fall);
+            _skyLight.EndPosition.Value = _skyLight.Position.Value;
+            var radius = Mathf.Lerp(_skyLightStartRadius, _skyLightEndRadius, fall);
+            _skyLight.Radius.Value = radius;
+            _skyLight.EndRadius.Value = radius;
+            _skyLight.Intensity.Value = Mathf.Lerp(_skyLightStartIntensity, _skyLightEndIntensity, fall);
+        }
+
+        private void PlayWhirlwind()
+        {
+            SetVisible(true);
+            ApplyWhirlwind(0f);
+            _tween = DOVirtual.Float(0f, 1f, _duration, ApplyWhirlwind)
+                .SetEase(Ease.Linear)
+                .SetLink(gameObject)
+                .OnComplete(() => SetVisible(false));
+        }
+
+        private void ApplyWhirlwind(float t)
         {
             var alpha = Envelope(t, _fadeInShare, _fadeOutShare);
             var scale = Mathf.Lerp(_startScale, _endScale, DOVirtual.EasedValue(0f, 1f, t, Ease.OutCubic));
@@ -101,6 +185,12 @@ namespace BalloonParty.Thrower
                 glitterTransform.localScale = _glitterScale * scale;
                 glitterTransform.localRotation = Quaternion.AngleAxis(_glitterSpin * t, Vector3.forward);
             }
+        }
+
+        private void ReleaseSkyLight()
+        {
+            _skyLightRegistration?.Dispose();
+            _skyLightRegistration = null;
         }
 
         private void SetVisible(bool visible)

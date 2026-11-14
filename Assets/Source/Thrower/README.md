@@ -11,7 +11,7 @@ The thrower is the player-controlled launcher at the bottom of the screen. It ai
 | `ThrowerView` | MonoBehaviour — owns the thrower's transform, rotation, entrance animation, prediction trace display, and pointer input (`IsAiming`, `FireReleased`, `TryGetAimDirection` — the only place that touches `Input`/`Camera`) |
 | `ThrowerLifetimeScope` | Child `LifetimeScope` on the Thrower GameObject — registers `ThrowerView` and `ThrowerController` (`.AsSelf()`, so editor tooling can resolve the concrete controller — see `FireAt` below) |
 | `ThrowerSettings` | Holds the `ProjectileView` prefab reference for pool creation (registered in `GameLifetimeScope`) |
-| `SnipeWhirlwindView` | MonoBehaviour on the `SnipeWhirlwind` child of `Thrower.prefab` (so it turns with the aim) — the cue that a ball loaded Snipe-armed (the Sharpshooter card). See Sharpshooter whirlwind below |
+| `SnipeWhirlwindView` | MonoBehaviour on the `SnipeWhirlwind` child of `Thrower.prefab` (so it turns with the aim) — the cue that a ball loaded Snipe-armed (the Sharpshooter card): a white light falling from the sky onto the cannon, then a whirlwind around it. See Sharpshooter whirlwind below |
 | `AimDirectionHistory` | Fixed-capacity ring buffer of (timestamp, direction) aim samples backing the aim latch below |
 
 ## Gameplay
@@ -61,17 +61,25 @@ A freshly loaded ball does not fire straight away. It slides from the thrower's 
 `LoadProjectile` asks `ISnipeChanceRoll` (`Item/Snipe/`) whether the ball it just loaded starts Snipe-armed:
 the Sharpshooter card's chance (`IWeaponStats.SnipeChance`, see `Game/Upgrades/README.md`). It asks before
 publishing `ProjectileLoadedMessage`, so every reader of that message sees the lance. On a hit the
-controller tells the view to play the whirlwind in the palette's `SnipeWhirlwind` colour
-(`ThrowerView.PlaySnipeWhirlwind`).
+controller tells the view to play it (`ThrowerView.PlaySnipeWhirlwind`), with the palette's `SnipeWhirlwind`
+colour for the whirlwind and the `SnipeSkyLight` slot (white) for the light.
 
-The whirlwind plays while the armed ball slides out to the muzzle, so it announces the roll before the ball
-can fire, on top of the ball's own Snipe look. It reuses the Snipe's pieces: a `Funnel` quad on
+First a bright scene light (`Shared/SceneLight/`, registered on the field the view is handed through
+`ThrowerView`'s `[Inject]`) drops from `_skyLightHeight` (10 world units, above the board's top edge)
+straight down onto the cannon over `_skyLightSeconds` (0.4 s), on an ease-in, so it leaves the sky slowly and
+lands fast. Its intensity and radius lerp down with the distance it has come, from `_skyLightStartIntensity` /
+`_skyLightStartRadius` (6, 3) to `_skyLightEndIntensity` / `_skyLightEndRadius` (1.5, 1). It falls down the
+world, not along the aim. Where it lands it goes out and the whirlwind starts. 0 seconds skips the light.
+
+The ball is armed from the load, not when the light lands, so a ball fired early is still a lance and the
+light and whirlwind finish on their own. They play while the armed ball slides out to the muzzle, so they
+announce the roll before the ball can fire, on top of the ball's own Snipe look. It reuses the Snipe's pieces: a `Funnel` quad on
 `SnipeWhirlwind.mat` (the Snipe pickup's `PierceConeSpiral` shader, wider, with more turns, its apex at the
 muzzle) and a `Glitter` disc on `SnipeWhirlwindGlitter.mat` (the `GlitterSwirl` halo of the blue formation
 unbreakables), which the view turns around the cannon. Both fade in, hold and fade out (`Envelope`) while
 tightening from `_startScale` to `_endScale` of their authored size, over `_duration` (0.5 s, scaled time).
 The tuning is on the prefab's `SnipeWhirlwindView`; the materials carry the look. A second armed ball
-restarts it.
+restarts the whole thing from the sky, and disabling the thrower puts the light out.
 
 ## How it works
 
