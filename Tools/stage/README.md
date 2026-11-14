@@ -26,7 +26,7 @@ and only `advance`, `clear`, `pop --settle` and dealing a board let game time ru
 
 | Command | Does |
 |---|---|
-| `begin [scene options]` | Play mode, past the launch screen, the clock and level-up stopped, held; then the scene options, as `setup` |
+| `begin [scene options]` | Play mode, then straight to a held game (no Play button, no ascent), the clock and level-up stopped; then the scene options, as `setup` |
 | `setup [--scenario S] [--level N] [--seed N] [--strip KINDS] [--time WHEN]` | Builds the scene, each part optional. `--scenario` (`sky`, `meadow`, `water`), `--level` and `--seed` deal a fresh board: the first level in the scenario from `--level`, on that run seed, so the same options deal the same board. `--strip` takes kinds off it at once, with no pop: `balloons`, `clouds`, `bushes`, `enemies` (deflectors, absorbers, gatekeepers), `obstacles` (everything but the balloons), or a grid actor type. `--time` as `time` |
 | `status` | `off`, `launch`, `loading`, or the level, `held` / `running` / `advancing`, and the light's angle |
 | `hold` / `release` / `advance S` | Game time off, on, or on for `S` seconds and then held |

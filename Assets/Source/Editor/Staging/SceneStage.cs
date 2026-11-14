@@ -10,7 +10,6 @@ using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Balloon.View;
 using BalloonParty.Cheats;
-using BalloonParty.Cheats.Autoplay;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Level;
@@ -26,6 +25,7 @@ using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
+using DG.Tweening;
 using UnityEditor;
 using UnityEngine;
 using VContainer;
@@ -43,7 +43,6 @@ namespace BalloonParty.Editor.Staging
     /// </summary>
     public static class SceneStage
     {
-        private const float LaunchTapDelay = 1.5f;
         private const int DefaultSeed = 4242;
         private const int ScenarioSearchLevels = 500;
 
@@ -53,7 +52,6 @@ namespace BalloonParty.Editor.Staging
         private static readonly List<Object> Scratch = new();
         private static readonly List<Renderer> Hidden = new();
 
-        private static double _launchSeenAt = -1;
         private static float _advanceUntil = -1f;
 
         /// <summary>
@@ -84,9 +82,10 @@ namespace BalloonParty.Editor.Staging
         }
 
         /// <summary>
-        ///     One step toward a held game: enters Play mode, taps Play on the launch screen once it has shown for a
-        ///     moment, and once the game is up stops the clock and the level-up and holds the world. Call it until it
-        ///     answers <c>ready</c>.
+        ///     Gets to a held game in one step once Play mode is up: straight past the launch screen (the switch to the
+        ///     game its Play button makes after its cloud scroll, without the scroll), or a fresh run after a game over,
+        ///     with game time held from the same frame, the clock and the level-up stopped, so nothing plays out on its
+        ///     own. Enters Play mode first if it's off; call it until it answers <c>ready</c>.
         /// </summary>
         public static string Begin()
         {
@@ -98,44 +97,25 @@ namespace BalloonParty.Editor.Staging
 
             // In the background the Editor stops the player loop unless told otherwise.
             Application.runInBackground = true;
-            if (Navigation.Current.Value == NavigationState.Launch)
-            {
-                var now = EditorApplication.timeSinceStartup;
-                if (_launchSeenAt < 0)
-                {
-                    _launchSeenAt = now;
-                }
-
-                if (now - _launchSeenAt >= LaunchTapDelay && AutoplayTap.ButtonThatCalls<LaunchPlayTrigger>("Play"))
-                {
-                    _launchSeenAt = -1;
-                    return "tapped Play";
-                }
-
-                return "launch";
-            }
-
             if (Object.FindAnyObjectByType<GameLifetimeScope>() == null)
             {
                 return "loading";
             }
 
-            // A run left playing on its own ends in a game over; a fresh one is as good a stage.
-            if (Navigation.Current.Value == NavigationState.GameOver)
-            {
-                Resolve<RunController>().RestartRun();
-                return "restarted after a game over";
-            }
-
-            if (Navigation.Current.Value != NavigationState.Game)
-            {
-                return $"waiting ({Navigation.Current.Value})";
-            }
-
             CheatState.TimeOfDaySpeedScale = 0f;
             CheatState.BlockLevelUp = true;
             Hold();
-            return "ready";
+            switch (Navigation.Current.Value)
+            {
+                case NavigationState.Launch:
+                    Navigation.TransitionTo(NavigationState.Game);
+                    break;
+                case NavigationState.GameOver:
+                    Resolve<RunController>().RestartRun();
+                    break;
+            }
+
+            return Navigation.Current.Value == NavigationState.Game ? "ready" : $"waiting ({Navigation.Current.Value})";
         }
 
         /// <summary>Stops game time (time scale 0) until <see cref="Release" /> or <see cref="Advance" />.</summary>
@@ -347,6 +327,7 @@ namespace BalloonParty.Editor.Staging
             }
 
             spawner.SpawnAt(slot, entry, (ItemType)Enum.Parse(typeof(ItemType), item, true));
+            Settle(grid.ViewAt(slot) as BalloonView);
             return FormattableString.Invariant($"placed {balloonType} at {col},{row} ({grid.IndexToWorldPosition(slot).x:0.00},{grid.IndexToWorldPosition(slot).y:0.00})");
         }
 
@@ -523,6 +504,22 @@ namespace BalloonParty.Editor.Staging
             EditorApplication.update -= AdvanceTick;
             _advanceUntil = -1f;
             Hold();
+        }
+
+        // A placed balloon appears whole and at rest: its spawn scale-in finished (held time would leave it at 0),
+        // and its trails cleared of the line they'd draw from wherever the pool last had it.
+        private static void Settle(BalloonView view)
+        {
+            if (view == null)
+            {
+                return;
+            }
+
+            DOTween.Complete(view.transform);
+            foreach (var trail in view.GetComponentsInChildren<TrailRenderer>())
+            {
+                trail.Clear();
+            }
         }
 
         private static bool IsHeld()
