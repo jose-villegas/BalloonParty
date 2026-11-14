@@ -145,7 +145,7 @@ void CountUp(string key)
 
 void WatchRewards(VContainer.IObjectResolver resolver)
 {
-    if (!ReferenceEquals(watchedGame, resolver))
+    if (!object.ReferenceEquals(watchedGame, resolver))
     {
         watchedGame = resolver;
         rewardService = resolver.Resolve(asm.GetType("BalloonParty.Balloon.Reward.IRewardBalloonRequests"));
@@ -185,12 +185,12 @@ void WatchRewards(VContainer.IObjectResolver resolver)
 
     var goldenPaid = rewardPayout.GetType().GetField("_lastGoldenPaid", flags).GetValue(rewardPayout);
     var heartPaid = rewardPayout.GetType().GetField("_lastHeartPaid", flags).GetValue(rewardPayout);
-    if (goldenPaid != null && !ReferenceEquals(goldenPaid, lastGoldenPaid))
+    if (goldenPaid != null && !object.ReferenceEquals(goldenPaid, lastGoldenPaid))
     {
         CountUp("GoldenPaid");
     }
 
-    if (heartPaid != null && !ReferenceEquals(heartPaid, lastHeartPaid))
+    if (heartPaid != null && !object.ReferenceEquals(heartPaid, lastHeartPaid))
     {
         CountUp("HeartPaid");
     }
