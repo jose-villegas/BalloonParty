@@ -3,9 +3,10 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
     // The golden reward balloon's body: a balloon (the circle sprite, lit as a sphere like
     // ToughBalloon) plated in gold. The plates are even hexagons laid over the sphere, so they crowd
     // toward the rim the way tiles on a ball do; even, so they read as fitted plates and not as the
-    // tough balloon's cracks. Each plate is bevelled into a thin groove at its seams, and tilted a
-    // little and wobbling slowly, so it shades and glints on its own as the scene light moves, and
-    // glitter sparkles only where a plate's glint lands. The shadow comes from the prefab's baked
+    // tough balloon's cracks. The plates stand apart, so the balloon's rubber shows between them,
+    // shaded as the smooth sphere under them. Each plate is bevelled at its edges and held by two
+    // bolts, and tilted a little and wobbling slowly, so it shades and glints on its own as the scene
+    // light moves, and glitter sparkles only where a plate's glint lands. The shadow comes from the prefab's baked
     // shadow child, as on the tough balloon.
 
     Properties
@@ -43,12 +44,17 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
         _BoltRadius ("Size", Range(0.01, 0.15)) = 0.075
         _BoltInset  ("Inset From the Corner", Range(0.3, 0.95)) = 0.62
         _BoltDome   ("Dome", Range(0, 3)) = 1.4
+        _BoltRingColor ("Ring", Color) = (0.36, 0.20, 0.03, 1)
 
-        [Header(Seams)]
-        _SeamColor ("Color", Color) = (0.36, 0.20, 0.03, 1)
-        _SeamWidth ("Width", Range(0.005, 0.2)) = 0.03
-        // The off switch: a seam is never fully gone by width alone, its antialiasing keeps a trace.
-        _SeamDepth ("Depth", Range(0, 1)) = 0.6
+        [Header(Balloon Between the Plates)]
+        // Half the gap between two plates, in plate units.
+        _GapWidth         ("Gap", Range(0, 0.2)) = 0.07
+        _RubberLit        ("Lit", Color) = (0.93, 0.52, 0.12, 1)
+        _RubberShade      ("Shade", Color) = (0.40, 0.13, 0.02, 1)
+        _RubberGloss      ("Gloss", Range(0, 2)) = 0.9
+        _RubberGlossPower ("Gloss Sharpness", Range(4, 128)) = 40
+        // The plates' shadow on the rubber, darkest at a plate's edge.
+        _GapShadow        ("Plate Shadow", Range(0, 1)) = 0.55
 
         [Header(Glint)]
         _GlintColor     ("Color", Color) = (1.00, 0.96, 0.80, 1)
@@ -167,10 +173,14 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
             float  _BoltRadius;
             float  _BoltInset;
             float  _BoltDome;
+            half4  _BoltRingColor;
 
-            half4  _SeamColor;
-            float  _SeamWidth;
-            float  _SeamDepth;
+            float  _GapWidth;
+            half4  _RubberLit;
+            half4  _RubberShade;
+            float  _RubberGloss;
+            float  _RubberGlossPower;
+            float  _GapShadow;
 
             half4  _GlintColor;
             float  _GlintPower;
@@ -288,7 +298,8 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
 
                 // The relief: each plate slopes down into its seams, so a bevel catches the light on
                 // one side of the plate and falls into shade on the other.
-                float  bevel  = 1.0 - smoothstep(0.0, _BevelWidth, edgeDistance);
+                float  plateEdge = edgeDistance - _GapWidth;
+                float  bevel  = 1.0 - smoothstep(0.0, _BevelWidth, plateEdge);
                 float2 relief = edgeDirection * bevel * _BevelDepth;
 
                 // The nearer of the plate's two bolts, one at its top corner and one at its bottom, so
@@ -318,28 +329,37 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
                 col *= 1.0 + (plateRnd - 0.5) * 2.0 * _PlateVariance * zSph;
                 col = lerp(col, _GoldEdge.rgb, pow(rFlat, _EdgePower));
 
-                // Each plate's own sheen and glint, so the highlight breaks at the seams.
+                // Each plate's own sheen and glint, so the highlight breaks between the plates.
                 float  toHalf = saturate(dot(plateNormal, IN.halfway));
                 float  glint  = pow(toHalf, _GlintPower);
                 col += _GoldLit.rgb * pow(toHalf, _SheenPower) * _SheenIntensity;
                 col += _GlintColor.rgb * glint * _GlintIntensity;
 
-                float seamSoft = max(fwidth(edgeDistance), 0.002);
-                float seam = 1.0 - smoothstep(_SeamWidth - seamSoft, _SeamWidth + seamSoft, edgeDistance);
-                // Each bolt head sits in a thin dark ring, as its seam.
+                // Each bolt head sits in a thin dark ring.
                 float boltRing = 1.0 - smoothstep(0.0, 0.2 + boltSoft, abs(boltR - 1.0));
-                seam = max(seam, boltRing);
-                col = lerp(col, _SeamColor.rgb, seam * _SeamDepth);
+                col = lerp(col, _BoltRingColor.rgb, boltRing);
 
-                // Glitter only where the glint lands and off the seams. The glint is broad and smooth, so
-                // this branch is coherent and skips the specks over most of the body.
-                float glitterGate = saturate(glint * _GlitterReach) * (1.0 - seam);
+                float edgeSoft = max(fwidth(edgeDistance), 0.002);
+                float onPlate  = smoothstep(-edgeSoft, edgeSoft, plateEdge);
+
+                // Glitter only where the glint lands, on the plates and off the bolt rings. The glint is
+                // broad and smooth, so this branch is coherent and skips the specks over most of the body.
+                float glitterGate = saturate(glint * _GlitterReach) * onPlate * (1.0 - boltRing);
                 if (glitterGate > 0.004)
                 {
                     float glitter = GlitterAmountBase(p * _GlitterScale, _GlitterSize, _GlitterSpeed,
                                                       _GlitterSharpness, _GlitterChance);
                     col += _GlitterColor.rgb * glitter * glitterGate * _GlitterIntensity;
                 }
+
+                // The balloon between the plates, lit as the smooth sphere, so its shading and gloss run
+                // on unbroken from gap to gap and read as one skin under the plates. Shaded darkest at
+                // each plate's edge, where the plate stands over it.
+                half3 rubber = lerp(_RubberShade.rgb, _RubberLit.rgb, saturate(dot(normal, IN.toLight)));
+                rubber += pow(saturate(dot(normal, IN.halfway)), _RubberGlossPower) * _RubberGloss;
+                rubber *= 1.0 - _GapShadow * smoothstep(0.0, max(_GapWidth, 0.001), edgeDistance);
+                rubber = lerp(rubber, _RubberShade.rgb * 0.5, pow(rFlat, _EdgePower));
+                col = lerp(rubber, col, onPlate);
 
                 // World space, so the rim never turns with the sway.
                 float2 worldUV = (IN.worldPos - IN.worldData.xy) / max(IN.worldData.z, 0.0001);
