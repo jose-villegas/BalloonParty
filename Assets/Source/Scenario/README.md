@@ -303,7 +303,8 @@ palette-colored capsule stamps and decays them into animated smoke wisps. The 4t
 alongside Disturbance, SceneLight, and Background.
 
 **Profile-based stamping:** every stamp originates from a `PaintSource` (`ProjectileTrail`,
-`ToughPop`, `ToughBreathing`, `ToughDeflect`). The service resolves the source to a `PaintProfile`
+`ToughPop`, `ToughBreathing`, `ToughDeflect`, `SnipeSkyLight`: the white trail of the Sharpshooter's falling
+light, see `Thrower/README.md`). The service resolves the source to a `PaintProfile`
 (via `ISmokeFieldSettings.GetProfile`) that defines radius, opacity, and how color is chosen
 (`PaintColorMode.Dynamic` — caller supplies a palette index, `Palette` — profile names a fixed
 palette entry, `Custom` — profile carries a fixed RGB color). The public API is:

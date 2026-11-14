@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using BalloonParty.Prediction;
+using BalloonParty.Scenario;
+using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.SceneLight;
 using DG.Tweening;
 using UnityEngine;
@@ -47,11 +49,12 @@ namespace BalloonParty.Thrower
         }
 
         [Inject]
-        internal void Construct(SceneLightFieldService lightField)
+        internal void Construct(
+            SceneLightFieldService lightField, DisturbanceFieldService disturbanceField, SmokeFieldService smokeField)
         {
             if (_snipeWhirlwind != null)
             {
-                _snipeWhirlwind.Bind(lightField);
+                _snipeWhirlwind.Bind(lightField, disturbanceField, smokeField);
             }
         }
 

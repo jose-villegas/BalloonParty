@@ -76,9 +76,9 @@ Source is organized into per-context subfolders: `Balloons/`, `Buffs/`, `Cinemat
 | `PaletteColorMaskAttribute` | `PropertyAttribute` that marks an `int` field as a bitmask over `GamePalette.Colors` — rendered in the Inspector as per-color checkboxes via `PaletteColorMaskDrawer` |
 | `PaletteColorNameAttribute` | `PropertyAttribute` that marks a `string` field as a palette color name — rendered in the Inspector as a popup dropdown with color swatch via `PaletteColorNameDrawer` |
 | `StampProfile` | Serializable struct in `DisturbanceFieldSettings` — `StampSource` flags, `Radius`, `Strength`, `Duration`. Defines per-source disturbance parameters |
-| `StampSource` | `[Flags]` enum — `Projectile`, `BalloonPath`, `BalloonPop`, `Bomb`, `Laser`, `Paint`. Identifies which game system a `StampProfile` applies to |
+| `StampSource` | `[Flags]` enum — `Projectile`, `ProjectileFire`, `BalloonPath`, `BalloonPop`, `Bomb`, `Laser`, `Paint`, `BalloonDeflect`, `ToughWarning`, `RainbowColor`, `ProjectileImpact`, `UnbreakableBurst`, `PierceDischarge`, `SnipeSkyLight`. Identifies which game system a `StampProfile` applies to |
 | `PaintProfile` | Serializable struct in `SmokeFieldSettings` (`Effects/`) — `PaintSource` flags, `Radius`, `Opacity`, `PaintColorMode`, optional `PaletteColorName` or `CustomColor`. Defines per-source painting parameters |
-| `PaintSource` | `[Flags]` enum (`Effects/`) — `ProjectileTrail`, `ToughPop`, `ToughBreathing`, `ToughDeflect`. Identifies which game system a `PaintProfile` applies to |
+| `PaintSource` | `[Flags]` enum (`Effects/`) — `ProjectileTrail`, `ToughPop`, `ToughBreathing`, `ToughDeflect`, `SnipeSkyLight`. Identifies which game system a `PaintProfile` applies to |
 | `PaintColorMode` | Enum (`Effects/`) — `Dynamic` (caller supplies palette index), `Palette` (profile names a fixed entry), `Custom` (profile carries an authored RGB) |
 
 ### Editor

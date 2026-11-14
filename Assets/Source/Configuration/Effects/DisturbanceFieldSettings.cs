@@ -20,6 +20,7 @@ namespace BalloonParty.Configuration.Effects
         ProjectileImpact = 1 << 10,
         UnbreakableBurst = 1 << 11,
         PierceDischarge = 1 << 12,
+        SnipeSkyLight = 1 << 13,
     }
 
     [Serializable]

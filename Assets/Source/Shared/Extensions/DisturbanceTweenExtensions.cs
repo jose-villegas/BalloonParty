@@ -55,8 +55,19 @@ namespace BalloonParty.Shared.Extensions
         private static Vector3 StampStep(
             Transform target, DisturbanceFieldService field, StampProfile profile, Vector3 lastStampPos)
         {
-            var pos = target.position;
             var scale = target.localScale.x * target.localScale.x;
+            return StampAlong(field, profile, target.position, lastStampPos, scale);
+        }
+
+        /// <summary>
+        ///     Lays <paramref name="profile" />'s wake from <paramref name="lastStampPos" /> toward
+        ///     <paramref name="pos" />, one stamp per <c>Spacing</c> (Radius when 0) of travel, all scaled by
+        ///     <paramref name="scale" />. Returns the new anchor to pass back next time; it trails
+        ///     <paramref name="pos" /> by less than a step. For a mover not driven by a tween.
+        /// </summary>
+        internal static Vector3 StampAlong(
+            DisturbanceFieldService field, StampProfile profile, Vector3 pos, Vector3 lastStampPos, float scale = 1f)
+        {
             var spacing = (profile.Spacing > 0f ? profile.Spacing : profile.Radius) * scale;
 
             var steps = GateStampSteps(pos, lastStampPos, spacing, out var anchor, out var dir);

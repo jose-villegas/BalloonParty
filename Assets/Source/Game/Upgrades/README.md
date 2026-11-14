@@ -50,8 +50,8 @@ and the thrower's "ready" heads-up reads it as armed through `IsPiercing`. While
 doesn't count as piercing for `IActiveProjectilePierce` (`Projectile/Controller/`): the pierce loop and the
 Pierce heads-up start when it fires, as they do for a ball armed in flight.
 
-A hit also drops a white light from the sky onto the cannon, and where it lands a whirlwind plays around
-the cannon (`Thrower/SnipeWhirlwindView`, see `Thrower/README.md`), while the ball slides out to the muzzle:
+A hit also drops a white light from the sky onto the cannon, trailing white smoke and a wake through the
+clouds, and where it lands a burst shoves the field aside and a whirlwind plays around the cannon (`Thrower/SnipeWhirlwindView`, see `Thrower/README.md`), while the ball slides out to the muzzle:
 the roll has already landed, and they announce it before the ball can be fired. It plays on top of the ball's own Snipe look.
 
 The roll comes before `ProjectileLoadedMessage`, so everything that reads the loaded ball sees the lance,

@@ -48,3 +48,9 @@ MonoBehaviour:
     ColorMode: 1
     PaletteColorName: Tough
     CustomColor: {r: 1, g: 1, b: 1, a: 1}
+  - Sources: 16
+    Radius: 0.25
+    Opacity: 0.7
+    ColorMode: 1
+    PaletteColorName: SnipeSkyLight
+    CustomColor: {r: 1, g: 1, b: 1, a: 1}

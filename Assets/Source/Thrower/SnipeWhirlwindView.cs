@@ -1,4 +1,8 @@
 using System;
+using BalloonParty.Configuration.Effects;
+using BalloonParty.Scenario;
+using BalloonParty.Shared.Disturbance;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.SceneLight;
 using DG.Tweening;
 using UnityEngine;
@@ -8,7 +12,8 @@ namespace BalloonParty.Thrower
 {
     /// <summary>
     ///     The Sharpshooter card's announcement when a ball loads Snipe-armed: a bright light drops from the sky onto
-    ///     the cannon, dimming and tightening as it falls, and where it lands a whirlwind plays around the thrower:
+    ///     the cannon, dimming and tightening as it falls, trailing white smoke and a wake through the disturbance
+    ///     field, and where it lands a burst displaces the field and a whirlwind plays around the thrower:
     ///     the Snipe's own cone spiral drilling into the muzzle, and a ring of glitter turning around the cannon, both
     ///     tightening in as they fade. A child of the thrower, so the whirlwind turns with the aim; the light falls
     ///     straight down the world, whatever the aim.
@@ -64,7 +69,20 @@ namespace BalloonParty.Thrower
         [Tooltip("The light's radius as it lands on the cannon.")]
         [SerializeField] [Min(0f)] private float _skyLightEndRadius = 1f;
 
+        [Tooltip("World units the light falls between white smoke strokes (the SnipeSkyLight paint profile); each stroke runs from the last, so the trail is unbroken.")]
+        [SerializeField] [Min(0.01f)] private float _smokeSpacing = 0.15f;
+
+        [Tooltip("The landing's displacement burst: the SnipeSkyLight stamp profile's radius times this.")]
+        [SerializeField] [Min(0f)] private float _landingStampRadiusScale = 2.5f;
+
+        [Tooltip("Seconds the landing burst ramps over; 0 is a single-frame pop.")]
+        [SerializeField] [Min(0f)] private float _landingStampSeconds = 0.15f;
+
         private SceneLightFieldService _lightField;
+        private DisturbanceFieldService _disturbanceField;
+        private SmokeFieldService _smokeField;
+        private Vector3 _lastStampPosition;
+        private Vector3 _lastSmokePosition;
         private Light _skyLight;
         private IDisposable _skyLightRegistration;
         private Tween _tween;
@@ -86,10 +104,16 @@ namespace BalloonParty.Thrower
             SetVisible(false);
         }
 
-        /// <summary>Lights come from the scene light field; without one the whirlwind plays at once, unlit.</summary>
-        internal void Bind(SceneLightFieldService lightField)
+        /// <summary>
+        ///     The fields the sky light draws into. Without a light field the whirlwind plays at once, unlit; the
+        ///     smoke and the displacement are each skipped when their field is missing.
+        /// </summary>
+        internal void Bind(
+            SceneLightFieldService lightField, DisturbanceFieldService disturbanceField, SmokeFieldService smokeField)
         {
             _lightField = lightField;
+            _disturbanceField = disturbanceField;
+            _smokeField = smokeField;
         }
 
         /// <summary>
@@ -113,6 +137,8 @@ namespace BalloonParty.Thrower
 
             _skyLight ??= new Light(transform.position);
             _skyLight.PaletteIndex.Value = skyLightPaletteIndex;
+            _lastStampPosition = SkyLightPosition(transform.position, _skyLightHeight, 0f);
+            _lastSmokePosition = _lastStampPosition;
             ApplySkyLight(0f);
             _skyLightRegistration = _lightField.RegisterLight(_skyLight);
             _tween = DOVirtual.Float(0f, 1f, fallSeconds, ApplySkyLight)
@@ -121,6 +147,7 @@ namespace BalloonParty.Thrower
                 .OnComplete(() =>
                 {
                     ReleaseSkyLight();
+                    StampLanding();
                     PlayWhirlwind();
                 });
         }
@@ -174,6 +201,37 @@ namespace BalloonParty.Thrower
             _skyLight.Radius.Value = radius;
             _skyLight.EndRadius.Value = radius;
             _skyLight.Intensity.Value = Mathf.Lerp(_skyLightStartIntensity, _skyLightEndIntensity, fall);
+            TrailSkyLight(_skyLight.Position.Value);
+        }
+
+        // Distance-gated, like a balloon's path wake, so the trail doesn't thicken with the frame rate.
+        private void TrailSkyLight(Vector3 position)
+        {
+            if (_disturbanceField != null)
+            {
+                _lastStampPosition = DisturbanceTweenExtensions.StampAlong(
+                    _disturbanceField, _disturbanceField.GetProfile(StampSource.SnipeSkyLight), position,
+                    _lastStampPosition);
+            }
+
+            if (_smokeField != null && (position - _lastSmokePosition).sqrMagnitude >= _smokeSpacing * _smokeSpacing)
+            {
+                _smokeField.Paint(PaintSource.SnipeSkyLight, position, _lastSmokePosition);
+                _lastSmokePosition = position;
+            }
+        }
+
+        private void StampLanding()
+        {
+            if (_disturbanceField == null || _landingStampRadiusScale <= 0f)
+            {
+                return;
+            }
+
+            var profile = _disturbanceField.GetProfile(StampSource.SnipeSkyLight);
+            _disturbanceField.Stamp(
+                transform.position, profile.Radius * _landingStampRadiusScale, profile.Strength, Vector2.zero,
+                _landingStampSeconds);
         }
 
         private void PlayWhirlwind()

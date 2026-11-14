@@ -11,6 +11,7 @@ namespace BalloonParty.Configuration.Effects
         ToughPop         = 1 << 1,
         ToughBreathing   = 1 << 2,
         ToughDeflect     = 1 << 3,
+        SnipeSkyLight    = 1 << 4,
     }
 
     internal enum PaintColorMode
