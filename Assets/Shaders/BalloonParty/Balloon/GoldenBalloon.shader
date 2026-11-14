@@ -1,11 +1,12 @@
 Shader "BalloonParty/Balloon/GoldenBalloon"
 {
     // The golden reward balloon's body: a balloon (the circle sprite, lit as a sphere like
-    // ToughBalloon) plated in gold. Plates are Voronoi cells laid over the sphere, so they crowd
-    // toward the rim the way tiles on a ball do, with thin dark seams between them. Each plate is
-    // tilted a little and wobbles slowly, so it shades and glints on its own as the scene light
-    // moves, and glitter sparkles only where a plate's glint lands. The shadow comes from the
-    // prefab's baked shadow child, as on the tough balloon.
+    // ToughBalloon) plated in gold. The plates are even hexagons laid over the sphere, so they crowd
+    // toward the rim the way tiles on a ball do; even, so they read as fitted plates and not as the
+    // tough balloon's cracks. Each plate is bevelled into a thin groove at its seams, and tilted a
+    // little and wobbling slowly, so it shades and glints on its own as the scene light moves, and
+    // glitter sparkles only where a plate's glint lands. The shadow comes from the prefab's baked
+    // shadow child, as on the tough balloon.
 
     Properties
     {
@@ -26,13 +27,21 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
         _LightHeight ("Light Height", Range(0.1, 3)) = 0.9
 
         [Header(Plates)]
-        _PlateScale       ("Plates Across the Radius", Range(1, 8)) = 3.2
-        // Past about 0.85 the seam search (3x3 around the nearest cell) can miss a border.
-        _PlateJitter      ("Irregularity", Range(0, 0.85)) = 0.8
-        _PlateTilt        ("Tilt", Range(0, 0.6)) = 0.16
+        _PlateScale       ("Plates Across the Radius", Range(1, 8)) = 2.6
+        // How far in from a seam each plate slopes down to it, as a share of the plate's inner
+        // radius (0.5), and how steeply: the relief.
+        _BevelWidth       ("Bevel Width", Range(0, 0.45)) = 0.16
+        _BevelDepth       ("Bevel Depth", Range(0, 2)) = 0.7
+        _PlateTilt       ("Tilt", Range(0, 0.6)) = 0.16
         _PlateVariance    ("Brightness Variance", Range(0, 0.5)) = 0.12
         _PlateWobble      ("Wobble", Range(0, 1)) = 0.35
         _PlateWobbleSpeed ("Wobble Speed", Range(0, 2)) = 0.4
+
+        [Header(Bolts)]
+        // A bolt inset from each of a plate's corners, in plate units (the plate's inner radius is 0.5).
+        _BoltRadius ("Size", Range(0.01, 0.15)) = 0.075
+        _BoltInset  ("Inset From the Corner", Range(0.3, 0.95)) = 0.62
+        _BoltDome   ("Dome", Range(0, 3)) = 1.4
 
         [Header(Seams)]
         _SeamColor ("Color", Color) = (0.36, 0.20, 0.03, 1)
@@ -147,11 +156,16 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
             float  _LightHeight;
 
             float  _PlateScale;
-            float  _PlateJitter;
+            float  _BevelWidth;
+            float  _BevelDepth;
             float  _PlateTilt;
             float  _PlateVariance;
             float  _PlateWobble;
             float  _PlateWobbleSpeed;
+
+            float  _BoltRadius;
+            float  _BoltInset;
+            float  _BoltDome;
 
             half4  _SeamColor;
             float  _SeamWidth;
@@ -181,7 +195,7 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
             float  _AmbientDimming;
             float  _SpriteScale;
 
-            // Two hashes from one: half the hashing of two Hash21 calls, and the Voronoi runs 18 of these.
+            // Two hashes from one: half the hashing of two Hash21 calls.
             float2 Hash22(float2 p)
             {
                 float3 p3 = frac(float3(p.xyx) * float3(0.1031, 0.1030, 0.0973));
@@ -189,59 +203,24 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
                 return frac((p3.xx + p3.yz) * p3.zy);
             }
 
-            float2 PlatePoint(float2 cell)
+            // The hexagonal plate under uv, on a lattice whose neighbouring centres are 1 apart and
+            // with one centred on the origin, so the sphere's middle plate faces the camera square.
+            // Returns the plate's centre; out, the distance to its nearest edge and that edge's
+            // outward direction, which the bevel slopes along.
+            float2 HexPlate(float2 uv, out float edgeDistance, out float2 edgeDirection)
             {
-                return 0.5 + (Hash22(cell) - 0.5) * _PlateJitter;
-            }
+                const float2 lattice = float2(1.0, 1.7320508);
+                float2 shifted = uv - 0.5 * lattice;
+                float2 a = uv - lattice * floor(uv / lattice + 0.5);
+                float2 b = shifted - lattice * floor(uv / lattice);
+                float2 offset = dot(a, a) < dot(b, b) ? a : b;
 
-            // The plate under uv: its cell id, and the distance to its nearest seam, measured
-            // across the seam rather than to the second-nearest point, so seams keep one width.
-            float2 PlateCell(float2 uv, out float seamDistance)
-            {
-                float2 cell = floor(uv);
-                float2 f    = frac(uv);
-
-                float2 nearestCell = 0;
-                float2 nearest     = 0;
-                float  best        = 8.0;
-
-                UNITY_UNROLL
-                for (int y = -1; y <= 1; y++)
-                {
-                    UNITY_UNROLL
-                    for (int x = -1; x <= 1; x++)
-                    {
-                        float2 g = float2(x, y);
-                        float2 r = g + PlatePoint(cell + g) - f;
-                        float  d = dot(r, r);
-                        if (d < best)
-                        {
-                            best        = d;
-                            nearest     = r;
-                            nearestCell = g;
-                        }
-                    }
-                }
-
-                seamDistance = 8.0;
-
-                UNITY_UNROLL
-                for (int sy = -1; sy <= 1; sy++)
-                {
-                    UNITY_UNROLL
-                    for (int sx = -1; sx <= 1; sx++)
-                    {
-                        float2 g = nearestCell + float2(sx, sy);
-                        float2 r = g + PlatePoint(cell + g) - f;
-                        float2 between = r - nearest;
-                        if (dot(between, between) > 0.00001)
-                        {
-                            seamDistance = min(seamDistance, dot(0.5 * (nearest + r), normalize(between)));
-                        }
-                    }
-                }
-
-                return cell + nearestCell;
+                float2 side  = step(0.0, offset) * 2.0 - 1.0;
+                float2 abs0  = abs(offset);
+                float  slant = dot(abs0, float2(0.5, 0.8660254));
+                edgeDistance  = 0.5 - max(abs0.x, slant);
+                edgeDirection = abs0.x > slant ? float2(side.x, 0.0) : float2(0.5, 0.8660254) * side;
+                return uv - offset;
             }
 
             v2f vert(appdata_t IN)
@@ -296,15 +275,34 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
                 // Plates in even steps of arc from the sphere's centre, so they crowd toward the rim.
                 float  arc     = acos(zSph) / (UNITY_PI * 0.5);
                 float2 plateUV = p / max(rFlat, 0.0001) * arc * _PlateScale;
-                float  seamDistance;
-                float2 plate   = PlateCell(plateUV, seamDistance);
+                float  edgeDistance;
+                float2 edgeDirection;
+                float2 plate  = HexPlate(plateUV, edgeDistance, edgeDirection);
+                float2 offset = plateUV - plate;
 
                 float  plateRnd = Hash21(plate + 11.0);
                 float2 tilt     = Hash22(plate + 23.0) * 2.0 - 1.0;
                 float  wobble   = _Time.y * _PlateWobbleSpeed + plateRnd * BP_TAU;
                 tilt = (tilt + float2(sin(wobble), cos(wobble * 1.3)) * _PlateWobble) * _PlateTilt;
+
+                // The relief: each plate slopes down into its seams, so a bevel catches the light on
+                // one side of the plate and falls into shade on the other.
+                float  bevel  = 1.0 - smoothstep(0.0, _BevelWidth, edgeDistance);
+                float2 relief = edgeDirection * bevel * _BevelDepth;
+
+                // The bolt at the nearest corner (corners sit at 30 degrees plus steps of 60): a small
+                // dome that takes over the bevel under it, so it shades and glints as a bolt head.
+                const float sixth = UNITY_PI / 3.0;
+                float  cornerAngle = sixth * 0.5 + round((atan2(offset.y, offset.x) - sixth * 0.5) / sixth) * sixth;
+                float2 corner   = float2(cos(cornerAngle), sin(cornerAngle)) * (0.5773503 * _BoltInset);
+                float2 bolt     = (offset - corner) / _BoltRadius;
+                float  boltR    = length(bolt);
+                float  boltSoft = max(fwidth(boltR), 0.05);
+                float  boltMask = 1.0 - smoothstep(1.0 - boltSoft, 1.0 + boltSoft, boltR);
+                relief = lerp(relief, bolt * _BoltDome, boltMask);
+
                 // A tilt along the surface; it fades toward the rim, where a plate is seen edge-on.
-                float3 plateNormal = normalize(normal + float3(tilt, 0) * zSph);
+                float3 plateNormal = normalize(normal + float3(tilt + relief, 0) * zSph);
 
                 float  facing = saturate(dot(plateNormal, IN.toLight));
                 half3  col = lerp(_GoldShade.rgb, _GoldLit.rgb, facing);
@@ -326,8 +324,11 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
                 col += _GoldLit.rgb * pow(toHalf, _SheenPower) * _SheenIntensity;
                 col += _GlintColor.rgb * glint * _GlintIntensity;
 
-                float seamSoft = max(fwidth(seamDistance), 0.002);
-                float seam = 1.0 - smoothstep(_SeamWidth - seamSoft, _SeamWidth + seamSoft, seamDistance);
+                float seamSoft = max(fwidth(edgeDistance), 0.002);
+                float seam = 1.0 - smoothstep(_SeamWidth - seamSoft, _SeamWidth + seamSoft, edgeDistance);
+                // Each bolt head sits in a thin dark ring, as its seam.
+                float boltRing = 1.0 - smoothstep(0.0, 0.2 + boltSoft, abs(boltR - 1.0));
+                seam = max(seam, boltRing);
                 col = lerp(col, _SeamColor.rgb, seam * _SeamDepth);
 
                 // Glitter only where the glint lands and off the seams. The glint is broad and smooth, so
