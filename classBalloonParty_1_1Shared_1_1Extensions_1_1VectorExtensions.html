@@ -117,8 +117,10 @@ $(function(){initNavTree('classBalloonParty_1_1Shared_1_1Extensions_1_1VectorExt
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
 <tr class="memitem:a673021fd14f20f43805dbea32434f7e9" id="r_a673021fd14f20f43805dbea32434f7e9"><td class="memItemLeft" align="right" valign="top">static Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a673021fd14f20f43805dbea32434f7e9">PerpendicularXY</a> (this Vector3 v)</td></tr>
-<tr class="memdesc:a673021fd14f20f43805dbea32434f7e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The 90° counter-clockwise perpendicular in the XY plane (z zeroed).  <br /></td></tr>
 <tr class="separator:a673021fd14f20f43805dbea32434f7e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ea771ae66c57aa6b33827c892ac6c68" id="r_a5ea771ae66c57aa6b33827c892ac6c68"><td class="memItemLeft" align="right" valign="top">static Quaternion&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5ea771ae66c57aa6b33827c892ac6c68">UpAlongXY</a> (this Vector3 direction)</td></tr>
+<tr class="memdesc:a5ea771ae66c57aa6b33827c892ac6c68"><td class="mdescLeft">&#160;</td><td class="mdescRight">The 90° counter-clockwise perpendicular in the XY plane (z zeroed).  <br /></td></tr>
+<tr class="separator:a5ea771ae66c57aa6b33827c892ac6c68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a42f68de7df390834f7eb8341e57780d4" id="r_a42f68de7df390834f7eb8341e57780d4"><td class="memItemLeft" align="right" valign="top">static Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a42f68de7df390834f7eb8341e57780d4">WithY</a> (this Vector2 v, float y)</td></tr>
 <tr class="separator:a42f68de7df390834f7eb8341e57780d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9bf05e1de477f2e80d47e299bccc754e" id="r_a9bf05e1de477f2e80d47e299bccc754e"><td class="memItemLeft" align="right" valign="top">static Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9bf05e1de477f2e80d47e299bccc754e">WithY</a> (this Vector3 v, float y)</td></tr>
@@ -148,7 +150,33 @@ Static Package Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+</div>
+</div>
+<a id="a5ea771ae66c57aa6b33827c892ac6c68" name="a5ea771ae66c57aa6b33827c892ac6c68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ea771ae66c57aa6b33827c892ac6c68">&#9670;&#160;</a></span>UpAlongXY()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static Quaternion BalloonParty.Shared.Extensions.VectorExtensions.UpAlongXY </td>
+          <td>(</td>
+          <td class="paramtype">this Vector3</td>          <td class="paramname"><span class="paramname"><em>direction</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
 <p>The 90° counter-clockwise perpendicular in the XY plane (z zeroed). </p>
+<p>The turn about Z that brings local up onto <em>direction</em>  in the XY plane; identity when it has no length there. </p>
 
 </div>
 </div>

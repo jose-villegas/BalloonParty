@@ -1,5 +1,10 @@
 var NAVTREEINDEX15 =
 {
+"classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#ac667934e5f84908197c63ebfb812c16d":[5,0,0,1,4,9,1],
+"classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#ac667934e5f84908197c63ebfb812c16d":[6,0,0,1,4,9,1],
+"classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#adca0143dd5ae2112bab2784f7f5783c9":[5,0,0,1,4,9,5],
+"classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#adca0143dd5ae2112bab2784f7f5783c9":[6,0,0,1,4,9,5],
+"classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#ae08fb4c7c579fe9d8dd1a0e7627226d9":[5,0,0,1,4,9,15],
 "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#ae08fb4c7c579fe9d8dd1a0e7627226d9":[6,0,0,1,4,9,15],
 "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#af36144bb937a0a96e6e7ee560a8f3c07":[5,0,0,1,4,9,4],
 "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#af36144bb937a0a96e6e7ee560a8f3c07":[6,0,0,1,4,9,4],
@@ -244,10 +249,5 @@ var NAVTREEINDEX15 =
 "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#af767cce7db1cefdcc12254f20fad7e27":[5,0,0,1,5,5,20],
 "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#af767cce7db1cefdcc12254f20fad7e27":[6,0,0,1,5,5,20],
 "classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant.html":[5,0,0,1,5,6],
-"classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant.html":[6,0,0,1,5,6],
-"classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant.html#a01c78560e17b41bcc66e02f9b25c37c7":[5,0,0,1,5,6,6],
-"classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant.html#a01c78560e17b41bcc66e02f9b25c37c7":[6,0,0,1,5,6,6],
-"classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant.html#a02e92398ae0d2a02ee65bfbe61272881":[5,0,0,1,5,6,0],
-"classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant.html#a02e92398ae0d2a02ee65bfbe61272881":[6,0,0,1,5,6,0],
-"classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant.html#a200e74af704059e5ad65562caa412c89":[5,0,0,1,5,6,16]
+"classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant.html":[6,0,0,1,5,6]
 };

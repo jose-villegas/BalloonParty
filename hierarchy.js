@@ -1367,6 +1367,7 @@ var hierarchy =
     [ "BalloonParty.Editor.CardRevealBuilder.PinImages", "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1PinImages.html", null ],
     [ "BalloonParty.Shared.Pool.PoolManager", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html", null ],
     [ "BalloonParty.Shared.Extensions.PoolManagerExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1PoolManagerExtensions.html", null ],
+    [ "BalloonParty.Configuration.Balloons.PopPulse", "classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse.html", null ],
     [ "BalloonParty.Prediction.PredictionTraceCalculator", "classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html", null ],
     [ "BalloonParty.Prediction.PredictionTraceEnd", "structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html", null ],
     [ "BalloonParty.Prediction.PredictionTraceProvider", "classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html", null ],

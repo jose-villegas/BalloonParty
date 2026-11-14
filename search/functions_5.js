@@ -33,7 +33,7 @@ var searchData=
   ['findfirstemptyrowfromtop_30',['FindFirstEmptyRowFromTop',['../classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPlacementResolver.html#a78a3ee1f549b43657893b29241f311d4',1,'BalloonParty::Balloon::Spawner::BalloonPlacementResolver']]],
   ['findfirstreachableemptyrow_31',['FindFirstReachableEmptyRow',['../classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonPlacementResolver.html#aeffc24344ade6e8e3b3642954c2d3049',1,'BalloonParty::Balloon::Spawner::BalloonPlacementResolver']]],
   ['findgamecanvas_32',['FindGameCanvas',['../classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html#aad427f53a903f3ea7c958f9bc6b47853',1,'BalloonParty::Editor::HeadsUpBuilder']]],
-  ['findhitvfxprefab_33',['FindHitVfxPrefab',['../classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#aebfb68902508c6261c095ff8b5fb3b86',1,'BalloonParty::Balloon::View::BalloonView']]],
+  ['findhitvfxoverride_33',['FindHitVfxOverride',['../classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a769223aaf5ac3f0641dbf2cdde583f0c',1,'BalloonParty::Balloon::View::BalloonView']]],
   ['findnearestcolorid_34',['FindNearestColorId',['../classBalloonParty_1_1Shared_1_1Extensions_1_1BalloonModelExtensions.html#ac813825e5d5e37250d68953880e81ee5',1,'BalloonParty::Shared::Extensions::BalloonModelExtensions']]],
   ['findnearestconcretecolor_35',['FindNearestConcreteColor',['../classBalloonParty_1_1Item_1_1Lightning_1_1LightningChain.html#a69c9eb7cc10420eecd732fbfdfd70b5e',1,'BalloonParty::Item::Lightning::LightningChain']]],
   ['findoverride_36',['FindOverride',['../classBalloonParty_1_1Nudge_1_1NudgeOverrideResolver.html#ac9ec312bdbb3eb6ca2b37574724a1291',1,'BalloonParty::Nudge::NudgeOverrideResolver']]],

@@ -12,6 +12,7 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry =
     [ "_moveSpeed", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#a9d4af8e07a953a4586891641a4ef1f52", null ],
     [ "_nudgeOverrides", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#aa5783f5182de7b229dd2ffa2ec9b265c", null ],
     [ "_omnidirectionalBalance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#a64f0d2d995d9c6df62146b0928fb8c79", null ],
+    [ "_popPulse", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#a87860a48e847d7333a4572dda0c1a1a9", null ],
     [ "_prefab", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#a5cb0296327ed8ba2c2ea1ff9ac0a0f7e", null ],
     [ "_scoreValue", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#ab10fa196f196111a328c0603bbc8766d", null ],
     [ "_spawnWeight", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#ac2b1bb8101e669269eecd0818508a19c", null ],
@@ -28,6 +29,7 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry =
     [ "NudgeOverrides", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#a4cae1763385dc33a8aedbe16768c374b", null ],
     [ "OmnidirectionalBalance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#a8745c499ea83308edf33aefe398dd798", null ],
     [ "PoolKey", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#a3e5e8519d4be1c959ff191250eafca90", null ],
+    [ "PopPulse", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#a8dae688c6ab3c7bff8016a658fe87179", null ],
     [ "Prefab", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#ad054a19d203ae036e4b3bfcb66a9e926", null ],
     [ "ScoreValue", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#aae3dc0fc330b58dcd4f444576aabf321", null ],
     [ "SpawnWeight", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#af50edb452d30be2e27f9c84ed962380d", null ]

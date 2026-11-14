@@ -6,5 +6,6 @@ var classBalloonParty_1_1Shared_1_1Extensions_1_1PoolManagerExtensions =
     [ "PlayEffect", "classBalloonParty_1_1Shared_1_1Extensions_1_1PoolManagerExtensions.html#a89b274415fafb39041b20b7af7edf831", null ],
     [ "PlayParticle", "classBalloonParty_1_1Shared_1_1Extensions_1_1PoolManagerExtensions.html#abfd5796d163fb5e2bc1f27c75c740fbc", null ],
     [ "PlayParticle", "classBalloonParty_1_1Shared_1_1Extensions_1_1PoolManagerExtensions.html#a72590940d60a0d5d1bd3b8a8abf4c8f6", null ],
+    [ "PlayParticle", "classBalloonParty_1_1Shared_1_1Extensions_1_1PoolManagerExtensions.html#aa046b50f7f71f6ddcba63de6e8035c7e", null ],
     [ "PlayParticle", "classBalloonParty_1_1Shared_1_1Extensions_1_1PoolManagerExtensions.html#a20048a5ff06e171dea175b8ac472465f", null ]
 ];

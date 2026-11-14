@@ -121,7 +121,7 @@ Reward Balloons</h1>
 Goals</h2>
 <ol type="1">
 <li><b>Golden balloon.</b><ul>
-<li>On purple (extra-colour) levels, placed when the level is about half done (75% at first; moved to 50% after playtests). Added after playtests: every fifth level that isn't purple rolls once (40%) for a single golden balloon, at the same completion, whose pop rolls for no other. Level 5 always gets that single one, with no roll: every player sees a golden balloon early. Its pop rolls once for another (25%, then 10% for a third: three a level at most), which comes a few lines later. Never more than one on the board, and only a pop rolls: one a board clear takes brings no other.</li>
+<li>On purple (extra-colour) levels, placed when the level is about half done (75% at first; moved to 50% after playtests). Added after playtests: every fifth level that isn't purple rolls once (40%) for a single golden balloon, at the same completion, whose pop rolls for no other. Level 5 always gets that single one, with no roll and at 10% completion rather than half: every player sees a golden balloon early, with the level still ahead of them. Its pop rolls once for another (25%, then 10% for a third: three a level at most), which comes a few lines later. Never more than one on the board, and only a pop rolls: one a board clear takes brings no other.</li>
 <li>Normal hits do nothing: the shot bounces off it as off an unbreakable. Items do nothing either (bomb, lightning, paint): a bomb beside it must not hand out the card.</li>
 <li>A piercing shot pops it: a cruise-earned pierce or a Snipe lance. It is plowed and shatters at the shot's next wall bounce, as an unbreakable is.</li>
 <li>A laser beam pops it too (added after playtests): the beam's damage carries <code>DamageFlags.Beam</code>, which a bomb's blast never does.</li>
@@ -208,14 +208,16 @@ Tuning (<code>IRewardBalloonSettings</code>)</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>SureGoldenLevel</code>   </td><td class="markdownTableBodyNone">5   </td><td class="markdownTableBodyNone">A level that always brings a single golden balloon, with no roll (0 for none)    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>SureGoldenAtCompletion</code>   </td><td class="markdownTableBodyNone">0.1   </td><td class="markdownTableBodyNone">The completion that level's golden balloon comes at    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>HeartChanceMissingOne</code>   </td><td class="markdownTableBodyNone">0.04   </td><td class="markdownTableBodyNone">Chance per line of a heart balloon while one heart is missing    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>HeartChanceMissingTwo</code>   </td><td class="markdownTableBodyNone">0.12   </td><td class="markdownTableBodyNone">The same with two missing (one heart left)    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>PurpleHearts</code>   </td><td class="markdownTableBodyNone">0.3 sure, 0.6 at 50%, 0.9 at 25%   </td><td class="markdownTableBodyNone">A purple level's heart balloons: each step's completion and its chance, rolled once    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>HeartCooldownLines</code>   </td><td class="markdownTableBodyNone">12   </td><td class="markdownTableBodyNone">Lines after a heart balloon before another can come    </td></tr>
+<td class="markdownTableBodyNone"><code>PurpleHearts</code>   </td><td class="markdownTableBodyNone">0.3 sure, 0.6 at 50%, 0.9 at 25%   </td><td class="markdownTableBodyNone">A purple level's heart balloons: each step's completion and its chance, rolled once    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>HeartCooldownLines</code>   </td><td class="markdownTableBodyNone">12   </td><td class="markdownTableBodyNone">Lines after a heart balloon before another can come    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">At most one of each on the board   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">A second one waits until the first is gone   </td></tr>
 </table>
 <p>Off a purple level, full hearts never roll one, so the heart balloon is help, not loot. A purple level brings its schedule regardless, as part of that level's reward. A level ends with it unpopped and it's gone with the board, like any balloon.</p>

@@ -13,6 +13,7 @@ var HeadsUpStyleId_8cs =
       [ "BalloonParty.Configuration.HeadsUp.HeadsUpStyleId.Shattered", "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da623c468df79e6c7a55db12e4fc2f7807", null ],
       [ "BalloonParty.Configuration.HeadsUp.HeadsUpStyleId.HeartLost", "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56dad8f3658e1be8bbf0ae20fdbd26574569", null ],
       [ "BalloonParty.Configuration.HeadsUp.HeadsUpStyleId.ColorDone", "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da9b9288a52ab2d6fb37e00b022d524575", null ],
-      [ "BalloonParty.Configuration.HeadsUp.HeadsUpStyleId.Rainbow", "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da4aca5ee9a087fb9218bfb662fe92605c", null ]
+      [ "BalloonParty.Configuration.HeadsUp.HeadsUpStyleId.Rainbow", "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da4aca5ee9a087fb9218bfb662fe92605c", null ],
+      [ "BalloonParty.Configuration.HeadsUp.HeadsUpStyleId.SnipeReady", "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da40294a18436f1da3ed7661bbd90f9b9d", null ]
     ] ]
 ];

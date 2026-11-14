@@ -150,6 +150,7 @@ var annotated_dup =
           [ "IBalloonsConfiguration", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration" ],
           [ "IRewardBalloonSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings" ],
           [ "IUnbreakableFormationSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings" ],
+          [ "PopPulse", "classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse" ],
           [ "PurpleHeartStep", "structBalloonParty_1_1Configuration_1_1Balloons_1_1PurpleHeartStep.html", "structBalloonParty_1_1Configuration_1_1Balloons_1_1PurpleHeartStep" ],
           [ "RewardBalloonSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings" ],
           [ "UnbreakableFormationSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings" ]

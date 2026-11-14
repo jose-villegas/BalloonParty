@@ -35,6 +35,7 @@ var classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService =
     [ "_levelSubscription", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#abce5a9434e796dabb9536657fb8d1c52", null ],
     [ "_linesSinceGoldenPop", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a2f71d0fe6d0f332ea8b4c15554a7760a", null ],
     [ "_linesSinceHeart", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#ad99c6bd3f7aa9e954711f6ec1d9c3b03", null ],
+    [ "_ordinaryGoldenAt", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#aaddfe1ffe42685672a4a14ba4f68ee08", null ],
     [ "_ordinaryGoldenRolled", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a93884851884eb902df77462bbfe868a5", null ],
     [ "_ordinaryGoldenWon", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a67caa2bc4cf1740ace49680cf3f4013a", null ],
     [ "_purpleHeartsOwed", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a0bc32ac300d5ec68ed47f85305b78a46", null ],

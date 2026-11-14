@@ -9,6 +9,7 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings =
     [ "_ordinaryGoldenChance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a69cebb322cda44122dd2e9c9bff90819", null ],
     [ "_ordinaryGoldenEveryLevels", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#aa4764781018148399c3cd883cb59d167", null ],
     [ "_purpleHearts", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a9fc70720ace37c192158dfa42d8b1261", null ],
+    [ "_sureGoldenAtCompletion", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a560dcae54c2af16b3c560b61cc13fda2", null ],
     [ "_sureGoldenLevel", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a9744ae49c574a2270aadcd55c0a95596", null ],
     [ "GoldenAtCompletion", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a367fc8cf38e0ae27a48dbb948c5afcb9", null ],
     [ "GoldenRepeatChances", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a17066c9d2f5676c78b30e3cedfdc9adf", null ],
@@ -19,5 +20,6 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings =
     [ "OrdinaryGoldenChance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a048d5775cb87bf8875a4fa1b71114ae1", null ],
     [ "OrdinaryGoldenEveryLevels", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a29ed3a5c6c4ba3cd7d37adf019afd7cb", null ],
     [ "PurpleHearts", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#acf379663fec8cbc2d121e7b4bd48a110", null ],
+    [ "SureGoldenAtCompletion", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a7be98ea1ddb143a164d4294de621bf6b", null ],
     [ "SureGoldenLevel", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a6d08f189b1231aa67cce5929e4a85ae5", null ]
 ];

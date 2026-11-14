@@ -157,6 +157,9 @@ Properties</h2></td></tr>
 <tr class="memitem:acf379663fec8cbc2d121e7b4bd48a110" id="r_acf379663fec8cbc2d121e7b4bd48a110"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Configuration_1_1Balloons_1_1PurpleHeartStep.html">PurpleHeartStep</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf379663fec8cbc2d121e7b4bd48a110">PurpleHearts</a><code> [get]</code></td></tr>
 <tr class="memdesc:acf379663fec8cbc2d121e7b4bd48a110"><td class="mdescLeft">&#160;</td><td class="mdescRight">A purple level's heart balloons, in any order: each rolled once on the line that reaches its completion, at full hearts too.  <br /></td></tr>
 <tr class="separator:acf379663fec8cbc2d121e7b4bd48a110"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7be98ea1ddb143a164d4294de621bf6b" id="r_a7be98ea1ddb143a164d4294de621bf6b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7be98ea1ddb143a164d4294de621bf6b">SureGoldenAtCompletion</a><code> [get]</code></td></tr>
+<tr class="memdesc:a7be98ea1ddb143a164d4294de621bf6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The completion the sure level's golden balloon comes at, earlier than the others'.  <br /></td></tr>
+<tr class="separator:a7be98ea1ddb143a164d4294de621bf6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d08f189b1231aa67cce5929e4a85ae5" id="r_a6d08f189b1231aa67cce5929e4a85ae5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6d08f189b1231aa67cce5929e4a85ae5">SureGoldenLevel</a><code> [get]</code></td></tr>
 <tr class="memdesc:a6d08f189b1231aa67cce5929e4a85ae5"><td class="mdescLeft">&#160;</td><td class="mdescRight">A level that always brings a single golden balloon, with no roll; 0 for none.  <br /></td></tr>
 <tr class="separator:a6d08f189b1231aa67cce5929e4a85ae5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -181,6 +184,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aa4764781018148399c3cd883cb59d167"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9fc70720ace37c192158dfa42d8b1261" id="r_a9fc70720ace37c192158dfa42d8b1261"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Configuration_1_1Balloons_1_1PurpleHeartStep.html">PurpleHeartStep</a>[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9fc70720ace37c192158dfa42d8b1261">_purpleHearts</a></td></tr>
 <tr class="separator:a9fc70720ace37c192158dfa42d8b1261"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a560dcae54c2af16b3c560b61cc13fda2" id="r_a560dcae54c2af16b3c560b61cc13fda2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a560dcae54c2af16b3c560b61cc13fda2">_sureGoldenAtCompletion</a> = 0.1f</td></tr>
+<tr class="separator:a560dcae54c2af16b3c560b61cc13fda2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9744ae49c574a2270aadcd55c0a95596" id="r_a9744ae49c574a2270aadcd55c0a95596"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9744ae49c574a2270aadcd55c0a95596">_sureGoldenLevel</a> = 5</td></tr>
 <tr class="separator:a9744ae49c574a2270aadcd55c0a95596"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -387,6 +392,28 @@ Private Attributes</h2></td></tr>
 <div class="line">            <span class="keyword">new</span>(0.9f, 0.25f),</div>
 <div class="line">        }</div>
 </div><!-- fragment -->
+</div>
+</div>
+<a id="a560dcae54c2af16b3c560b61cc13fda2" name="a560dcae54c2af16b3c560b61cc13fda2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a560dcae54c2af16b3c560b61cc13fda2">&#9670;&#160;</a></span>_sureGoldenAtCompletion</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.RewardBalloonSettings._sureGoldenAtCompletion = 0.1f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
 </div>
 </div>
 <a id="a9744ae49c574a2270aadcd55c0a95596" name="a9744ae49c574a2270aadcd55c0a95596"></a>
@@ -644,6 +671,32 @@ Private Attributes</h2></td></tr>
 <p>Their count caps the level's heart balloons; the roll while hurt (and its cooldown) is off there. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a97547095a4133f01e672e04bd3a0c143">BalloonParty.Configuration.Balloons.IRewardBalloonSettings</a>.</p>
+
+</div>
+</div>
+<a id="a7be98ea1ddb143a164d4294de621bf6b" name="a7be98ea1ddb143a164d4294de621bf6b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7be98ea1ddb143a164d4294de621bf6b">&#9670;&#160;</a></span>SureGoldenAtCompletion</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Balloons.RewardBalloonSettings.SureGoldenAtCompletion</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The completion the sure level's golden balloon comes at, earlier than the others'. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#ab3f46eb1440f087b291cf9c25efb1d99">BalloonParty.Configuration.Balloons.IRewardBalloonSettings</a>.</p>
 
 </div>
 </div>
