@@ -125,7 +125,7 @@ Goals</h2>
 <li>Normal hits do nothing: the shot bounces off it as off an unbreakable. Items do nothing either (bomb, laser, lightning, paint): a bomb beside it must not hand out the card.</li>
 <li>A piercing shot pops it: a cruise-earned pierce or a Snipe lance. It is plowed and shatters at the shot's next wall bounce, as an unbreakable is.</li>
 <li>Popped, it gives a <b>free upgrade card</b>, kept for the run, shown with the card reveal.</li>
-<li>It looks metallic: gold plates wrapping the sphere, each catching the light on its own, with glitter where the speculars land.</li>
+<li>It still looks like a balloon (body and knot, unlike the unbreakable's sphere), plated in metallic gold: plates wrapping it, each catching the light on its own, with glitter where the speculars land.</li>
 </ul>
 </li>
 <li><b>Heart balloon.</b><ul>
@@ -207,15 +207,15 @@ Tuning (<code>IRewardBalloonSettings</code>)</h2>
 <h2><a class="anchor" id="autotoc_md798"></a>
 The looks</h2>
 <ul>
-<li><b>Golden:</b> the unbreakable's sphere shading (<code>UnbreakableBalloon.shader</code>, the sphere state the variant pushes) as the base, with a gold plate layer: a cell pattern laid over the sphere, each plate tilted a little so its own specular comes and goes as the light moves, thin dark seams between them, and the glitter (<code>Include/Glitter.cginc</code>) gated by the specular so it sparkles only where the light catches. A new shader, not a retint: the plates are the point. Needs an in-editor look at noon and night.</li>
+<li><b>Golden:</b> a balloon, built from the tough balloon's prefab (body, knot, the shine sprites, the baked shadow), so it reads as one of the balloons and not as an unbreakable. Its body is <code>Balloon/GoldenBalloon.shader</code>: the tough balloon's sphere projection and scene light, plated in gold. The plates are Voronoi cells over the sphere, crowding toward the rim like tiles on a ball, with thin dark seams. Each plate is tilted a little and sways slowly, so it shades, reflects the horizon and glints on its own as the light moves, and the glitter (<code>Include/Glitter.cginc</code>) is gated by the glint, so it sparkles only where the light catches. The knot is dark gold. Checked in the Editor at noon and at night.</li>
 <li><b>Heart:</b> a heart-shaped balloon body (a new sprite, drawn by script under <code>Tools/art/</code> like the card icons) lit like the others (<code>SpriteDiffuse</code>), red, with two or three cream cloth strips wrapped across it, slightly frayed, a knot at one side. The strips sway a little with the balloon.</li>
 </ul>
 <h2><a class="anchor" id="autotoc_md799"></a>
 Phases</h2>
 <ol type="1">
 <li><b>Reward hook.</b> <code>LevelCompletion</code>, <code>RewardBalloonService</code>, <code>IRewardBalloonRequests</code>, the spawner's consumption and prewarm, the settings. Tests for completion, the 75% trigger once per level and only on purple, the heart chance by missing hearts and the cooldown.</li>
-<li><b>Golden balloon.</b> Type, model, <code>IsTough</code>, item immunity, prefab with a placeholder gold retint of the unbreakable, <code>IFreeCardGrant</code> and the reveal, sound and pop colour, solver parity. <code>BalloonModelFactory</code> must map <code>Golden</code> before its catalogue entry goes in: it throws for an unmapped type, after <code>Placed</code>, which would leave the balloon counted on the board for the rest of the run. The spawn-balloon cheat lists every type, so it needs to route reward types through the service or leave them out. The card grant goes on the pop, never on the leave callback, which a board clear and a level change fire too. Tests for every hit path (projectile, pierce, bomb, laser, lightning, paint) and the grant.</li>
-<li><b>Golden look.</b> The gold-plate shader with specular-gated glitter, its material and prefab. In-editor check at noon and night, frames sent for sign-off.</li>
+<li><b>Golden balloon.</b> Type, model, <code>IsTough</code>, item immunity, a placeholder prefab (a gold retint of the unbreakable, replaced in phase 3), <code>IFreeCardGrant</code> and the reveal, sound and pop colour, solver parity. <code>BalloonModelFactory</code> must map <code>Golden</code> before its catalogue entry goes in: it throws for an unmapped type, after <code>Placed</code>, which would leave the balloon counted on the board for the rest of the run. The spawn-balloon cheat lists every type, so it needs to route reward types through the service or leave them out. The card grant goes on the pop, never on the leave callback, which a board clear and a level change fire too. Tests for every hit path (projectile, pierce, bomb, laser, lightning, paint) and the grant.</li>
+<li><b>Golden look.</b> The gold-plate shader with glint-gated glitter, its material, and the prefab rebuilt as a balloon from the tough balloon's. In-editor check at noon and night, frames sent for sign-off.</li>
 <li><b>Heart balloon.</b> Type, model, the heal, the heart sprite and bandage strips, prefab, sound. Tests for the heal cap and that only a missing heart brings it.</li>
 <li><b>Docs and measure.</b> READMEs (Balloon, Type, Spawner, Upgrades, Health), the bots on a forced purple level and on a low-heart run, a device build.</li>
 </ol>
