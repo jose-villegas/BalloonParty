@@ -114,6 +114,7 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Formation_1_1Formation
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Balloon.Formation.FormationPlanner Class Reference<span class="mlabels"><span class="mlabel sealed">sealed</span></span></div></div>
 </div><!--header-->
@@ -143,44 +144,60 @@ Classes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
 <tr class="memitem:ac67b206c68d4d54c90a92f4da651d116" id="r_ac67b206c68d4d54c90a92f4da651d116"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac67b206c68d4d54c90a92f4da651d116">TryPlan</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, <a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Formation.html#a7d189f644fea0191bb4f5acaef4bf746">FormationShape</a> shape, IReadOnlyList&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> &gt; candidates, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html">IUnbreakableFormationSettings</a> settings, Func&lt; int, int &gt; pickIndex, List&lt; <a class="el" href="structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html">FormationAssignment</a> &gt; assignmentsOut)</td></tr>
-<tr class="memdesc:ac67b206c68d4d54c90a92f4da651d116"><td class="mdescLeft">&#160;</td><td class="mdescRight">Plans <em>shape</em>  for up to <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a0b851ecb128d8c14a4b32708508885ac" title="Most unbreakables in one formation; the rest roam, or form a formation of their own.">IUnbreakableFormationSettings.MaxMembers</a> of <em>candidates</em> , filling <em>assignmentsOut</em>  with one entry per formation slot.  <br /></td></tr>
+<tr class="memdesc:ac67b206c68d4d54c90a92f4da651d116"><td class="mdescLeft">&#160;</td><td class="mdescRight">Plans <em>shape</em>  for up to <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a0b851ecb128d8c14a4b32708508885ac" title="Most unbreakables in one formation; the rest roam, or form a formation of their own.">IUnbreakableFormationSettings.MaxMembers</a> (an item cover, three to six) of <em>candidates</em> , filling <em>assignmentsOut</em>  with one entry per formation slot.  <br /></td></tr>
 <tr class="separator:ac67b206c68d4d54c90a92f4da651d116"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-attribs" name="pac-static-attribs"></a>
 Static Package Attributes</h2></td></tr>
 <tr class="memitem:a5dadd543520a4c59da548e035e4f54a7" id="r_a5dadd543520a4c59da548e035e4f54a7"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5dadd543520a4c59da548e035e4f54a7">CoverMembers</a> = 6</td></tr>
 <tr class="separator:a5dadd543520a4c59da548e035e4f54a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed7e5ae6e33605002e730546e7345aee" id="r_aed7e5ae6e33605002e730546e7345aee"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aed7e5ae6e33605002e730546e7345aee">CoverMinMembers</a> = 3</td></tr>
+<tr class="separator:aed7e5ae6e33605002e730546e7345aee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:af571487f64b8ebbda2da79989b8b9268" id="r_af571487f64b8ebbda2da79989b8b9268"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af571487f64b8ebbda2da79989b8b9268">AddCoverSlots</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, Vector2Int host, int count, int variant)</td></tr>
+<tr class="separator:af571487f64b8ebbda2da79989b8b9268"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30d37fd19fd082eb30b5d18deaea40b0" id="r_a30d37fd19fd082eb30b5d18deaea40b0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a30d37fd19fd082eb30b5d18deaea40b0">AllSlotsFree</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, IReadOnlyList&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> &gt; candidates)</td></tr>
 <tr class="separator:a30d37fd19fd082eb30b5d18deaea40b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40b09e1e0afdade18d90db396e688395" id="r_a40b09e1e0afdade18d90db396e688395"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40b09e1e0afdade18d90db396e688395">Assign</a> (IReadOnlyList&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> &gt; candidates, int count, List&lt; <a class="el" href="structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html">FormationAssignment</a> &gt; assignmentsOut)</td></tr>
 <tr class="separator:a40b09e1e0afdade18d90db396e688395"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ebfe0131bdcdacab7726fe13153e785" id="r_a1ebfe0131bdcdacab7726fe13153e785"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ebfe0131bdcdacab7726fe13153e785">BuildSlots</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, <a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Formation.html#a7d189f644fea0191bb4f5acaef4bf746">FormationShape</a> shape, Vector2Int anchor, int count, int lastRow)</td></tr>
-<tr class="separator:a1ebfe0131bdcdacab7726fe13153e785"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77c930473c87b499e48971b73c33767e" id="r_a77c930473c87b499e48971b73c33767e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a77c930473c87b499e48971b73c33767e">BuildSlots</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, <a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Formation.html#a7d189f644fea0191bb4f5acaef4bf746">FormationShape</a> shape, Vector2Int anchor, int count, int lastRow, int variant)</td></tr>
+<tr class="separator:a77c930473c87b499e48971b73c33767e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d9eef2c87bbcba185621b39c1a9855f" id="r_a7d9eef2c87bbcba185621b39c1a9855f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d9eef2c87bbcba185621b39c1a9855f">ClosesWall</a> (IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html">FormationAssignment</a> &gt; assignments)</td></tr>
 <tr class="separator:a7d9eef2c87bbcba185621b39c1a9855f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4980c1856889c5296cf49f20169f212" id="r_aa4980c1856889c5296cf49f20169f212"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa4980c1856889c5296cf49f20169f212">CollectCoverSpots</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, IReadOnlyList&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> &gt; candidates, int count, int lastRow, Vector2Int host)</td></tr>
+<tr class="separator:aa4980c1856889c5296cf49f20169f212"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24143f487cb37757bc2b575fddfd42e2" id="r_a24143f487cb37757bc2b575fddfd42e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24143f487cb37757bc2b575fddfd42e2">CollectSpots</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, <a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Formation.html#a7d189f644fea0191bb4f5acaef4bf746">FormationShape</a> shape, IReadOnlyList&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> &gt; candidates, int count, int lastRow)</td></tr>
 <tr class="separator:a24143f487cb37757bc2b575fddfd42e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f301dc4136de7922d6f23081f2c0e8e" id="r_a6f301dc4136de7922d6f23081f2c0e8e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f301dc4136de7922d6f23081f2c0e8e">Move</a> (IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html">FormationAssignment</a> &gt; assignments, bool toTargets)</td></tr>
 <tr class="separator:a6f301dc4136de7922d6f23081f2c0e8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59017c9866e0c951a2b6ae9c55f7161a" id="r_a59017c9866e0c951a2b6ae9c55f7161a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a59017c9866e0c951a2b6ae9c55f7161a">TryAddSpot</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, IReadOnlyList&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> &gt; candidates, int count, Vector2Int anchor, int variant)</td></tr>
+<tr class="separator:a59017c9866e0c951a2b6ae9c55f7161a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
-<tr class="memitem:a9191846efd2fac954b998da76fa68ca7" id="r_a9191846efd2fac954b998da76fa68ca7"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9191846efd2fac954b998da76fa68ca7">HostsItem</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, Vector2Int slot)</td></tr>
-<tr class="separator:a9191846efd2fac954b998da76fa68ca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed29d71e6e7d1dc808df5642ebc04f6a" id="r_aed29d71e6e7d1dc808df5642ebc04f6a"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aed29d71e6e7d1dc808df5642ebc04f6a">CoverFloor</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html">IUnbreakableFormationSettings</a> settings)</td></tr>
+<tr class="separator:aed29d71e6e7d1dc808df5642ebc04f6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1d78285e6c51ede05df6322ace948be" id="r_ae1d78285e6c51ede05df6322ace948be"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae1d78285e6c51ede05df6322ace948be">Holds</a> (IReadOnlyList&lt; Vector2Int &gt; slots, Vector2Int slot)</td></tr>
+<tr class="separator:ae1d78285e6c51ede05df6322ace948be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fb0b287f3a00c6ac72eb5fa413bb5e2" id="r_a4fb0b287f3a00c6ac72eb5fa413bb5e2"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4fb0b287f3a00c6ac72eb5fa413bb5e2">HostsCoveredItem</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, Vector2Int slot)</td></tr>
+<tr class="separator:a4fb0b287f3a00c6ac72eb5fa413bb5e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1778b1cb438bd0e5e01d185eddeeacf" id="r_aa1778b1cb438bd0e5e01d185eddeeacf"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa1778b1cb438bd0e5e01d185eddeeacf">IsCandidate</a> (<a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html">IWriteableSlotActor</a> occupant, IReadOnlyList&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> &gt; candidates)</td></tr>
 <tr class="separator:aa1778b1cb438bd0e5e01d185eddeeacf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f5ff03bc7f9cf0e2a19b99b2befcc1d" id="r_a7f5ff03bc7f9cf0e2a19b99b2befcc1d"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f5ff03bc7f9cf0e2a19b99b2befcc1d">MemberCount</a> (<a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Formation.html#a7d189f644fea0191bb4f5acaef4bf746">FormationShape</a> shape, int candidates, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html">IUnbreakableFormationSettings</a> settings)</td></tr>
 <tr class="separator:a7f5ff03bc7f9cf0e2a19b99b2befcc1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9dc3669a8afd7b952bbf9761d81fce8b" id="r_a9dc3669a8afd7b952bbf9761d81fce8b"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9dc3669a8afd7b952bbf9761d81fce8b">SameSlots</a> (IReadOnlyList&lt; Vector2Int &gt; a, IReadOnlyList&lt; Vector2Int &gt; b)</td></tr>
+<tr class="separator:a9dc3669a8afd7b952bbf9761d81fce8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a069ad34ac7c5279488170264005bdce6" id="r_a069ad34ac7c5279488170264005bdce6"><td class="memItemLeft" align="right" valign="top">readonly List&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a069ad34ac7c5279488170264005bdce6">_candidateUsed</a> = new()</td></tr>
 <tr class="separator:a069ad34ac7c5279488170264005bdce6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0d508ce31c20654d427f2ae808bc3366" id="r_a0d508ce31c20654d427f2ae808bc3366"><td class="memItemLeft" align="right" valign="top">readonly Vector2Int[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0d508ce31c20654d427f2ae808bc3366">_neighbours</a> = new Vector2Int[<a class="el" href="#a5dadd543520a4c59da548e035e4f54a7">CoverMembers</a>]</td></tr>
-<tr class="separator:a0d508ce31c20654d427f2ae808bc3366"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43b93806abf0e356974fce4942b15bbe" id="r_a43b93806abf0e356974fce4942b15bbe"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a43b93806abf0e356974fce4942b15bbe">_coverFloor</a></td></tr>
+<tr class="separator:a43b93806abf0e356974fce4942b15bbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf729e37a0ad647709e5f056e205648b" id="r_aaf729e37a0ad647709e5f056e205648b"><td class="memItemLeft" align="right" valign="top">readonly List&lt; Vector2Int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaf729e37a0ad647709e5f056e205648b">_firstCover</a> = new()</td></tr>
+<tr class="separator:aaf729e37a0ad647709e5f056e205648b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afde2d7a848ddc222379a1e026edb30aa" id="r_afde2d7a848ddc222379a1e026edb30aa"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html">Pair</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afde2d7a848ddc222379a1e026edb30aa">_pairs</a> = new()</td></tr>
 <tr class="separator:afde2d7a848ddc222379a1e026edb30aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0516e8e30223dad38f4dd96633fb63a1" id="r_a0516e8e30223dad38f4dd96633fb63a1"><td class="memItemLeft" align="right" valign="top">readonly List&lt; <a class="el" href="structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html">FormationAssignment</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0516e8e30223dad38f4dd96633fb63a1">_scratch</a> = new()</td></tr>
@@ -195,11 +212,55 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ae597484f200bffabbc6def3af0b8e5b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8eff9a950c14391ce288f62d05de5d4b" id="r_a8eff9a950c14391ce288f62d05de5d4b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8eff9a950c14391ce288f62d05de5d4b">_walledBefore</a></td></tr>
 <tr class="separator:a8eff9a950c14391ce288f62d05de5d4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a0cc826f5b26e8458f932a1118081cf21" id="r_a0cc826f5b26e8458f932a1118081cf21"><td class="memItemLeft" align="right" valign="top">static readonly int[][]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0cc826f5b26e8458f932a1118081cf21">CoverOrders</a></td></tr>
+<tr class="separator:a0cc826f5b26e8458f932a1118081cf21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Finds where a formation of one shape can stand and which candidate goes to which of its slots. </p>
 <p>Reads the grid only; the caller moves the members. A formation slot must be empty or already hold one of the candidates, so a formation never plans over another formation. It never sits in the bottom <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#abf9e9826d99af0a92744527a179189d9" title="Bottom rows a formation never uses, so spawn lines always have room to enter.">IUnbreakableFormationSettings.BottomClearance</a> rows (a horizontal line, the bottom <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a29d6af280feaabfa6fc0601541bd818c" title="Bottom rows a horizontal line never uses, at least BottomClearance, so a wall across the board stands...">IUnbreakableFormationSettings.HorizontalBottomClearance</a>), and never where it would link the board's unbreakables side to side (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1ShotWall.html" title="Whether the balloons no ordinary shot gets through (unbreakables, deflectors) link one side of the bo...">ShotWall</a>). Among the spots that fit, the planner picks at random among the few with the least total travel. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="af571487f64b8ebbda2da79989b8b9268" name="af571487f64b8ebbda2da79989b8b9268"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af571487f64b8ebbda2da79989b8b9268">&#9670;&#160;</a></span>AddCoverSlots()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Formation.FormationPlanner.AddCoverSlots </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a></td>          <td class="paramname"><span class="paramname"><em>grid</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>host</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>count</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>variant</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a30d37fd19fd082eb30b5d18deaea40b0" name="a30d37fd19fd082eb30b5d18deaea40b0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a30d37fd19fd082eb30b5d18deaea40b0">&#9670;&#160;</a></span>AllSlotsFree()</h2>
 
@@ -263,8 +324,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a1ebfe0131bdcdacab7726fe13153e785" name="a1ebfe0131bdcdacab7726fe13153e785"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1ebfe0131bdcdacab7726fe13153e785">&#9670;&#160;</a></span>BuildSlots()</h2>
+<a id="a77c930473c87b499e48971b73c33767e" name="a77c930473c87b499e48971b73c33767e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a77c930473c87b499e48971b73c33767e">&#9670;&#160;</a></span>BuildSlots()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -295,7 +356,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>lastRow</em></span>&#160;)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>lastRow</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>variant</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -321,6 +387,50 @@ Private Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype">IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html">FormationAssignment</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>assignments</em></span></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa4980c1856889c5296cf49f20169f212" name="aa4980c1856889c5296cf49f20169f212"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4980c1856889c5296cf49f20169f212">&#9670;&#160;</a></span>CollectCoverSpots()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Formation.FormationPlanner.CollectCoverSpots </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a></td>          <td class="paramname"><span class="paramname"><em>grid</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IReadOnlyList&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>candidates</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>count</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>lastRow</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>host</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -376,8 +486,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a9191846efd2fac954b998da76fa68ca7" name="a9191846efd2fac954b998da76fa68ca7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9191846efd2fac954b998da76fa68ca7">&#9670;&#160;</a></span>HostsItem()</h2>
+<a id="aed29d71e6e7d1dc808df5642ebc04f6a" name="aed29d71e6e7d1dc808df5642ebc04f6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed29d71e6e7d1dc808df5642ebc04f6a">&#9670;&#160;</a></span>CoverFloor()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -386,7 +496,61 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static bool BalloonParty.Balloon.Formation.FormationPlanner.HostsItem </td>
+          <td class="memname">static int BalloonParty.Balloon.Formation.FormationPlanner.CoverFloor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html">IUnbreakableFormationSettings</a></td>          <td class="paramname"><span class="paramname"><em>settings</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae1d78285e6c51ede05df6322ace948be" name="ae1d78285e6c51ede05df6322ace948be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1d78285e6c51ede05df6322ace948be">&#9670;&#160;</a></span>Holds()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Balloon.Formation.FormationPlanner.Holds </td>
+          <td>(</td>
+          <td class="paramtype">IReadOnlyList&lt; Vector2Int &gt;</td>          <td class="paramname"><span class="paramname"><em>slots</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>slot</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4fb0b287f3a00c6ac72eb5fa413bb5e2" name="a4fb0b287f3a00c6ac72eb5fa413bb5e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4fb0b287f3a00c6ac72eb5fa413bb5e2">&#9670;&#160;</a></span>HostsCoveredItem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Balloon.Formation.FormationPlanner.HostsCoveredItem </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a></td>          <td class="paramname"><span class="paramname"><em>grid</em></span>, </td>
         </tr>
@@ -497,6 +661,79 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a9dc3669a8afd7b952bbf9761d81fce8b" name="a9dc3669a8afd7b952bbf9761d81fce8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9dc3669a8afd7b952bbf9761d81fce8b">&#9670;&#160;</a></span>SameSlots()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Balloon.Formation.FormationPlanner.SameSlots </td>
+          <td>(</td>
+          <td class="paramtype">IReadOnlyList&lt; Vector2Int &gt;</td>          <td class="paramname"><span class="paramname"><em>a</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IReadOnlyList&lt; Vector2Int &gt;</td>          <td class="paramname"><span class="paramname"><em>b</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a59017c9866e0c951a2b6ae9c55f7161a" name="a59017c9866e0c951a2b6ae9c55f7161a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59017c9866e0c951a2b6ae9c55f7161a">&#9670;&#160;</a></span>TryAddSpot()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Formation.FormationPlanner.TryAddSpot </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a></td>          <td class="paramname"><span class="paramname"><em>grid</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">IReadOnlyList&lt; <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html">IWriteableFormationMember</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>candidates</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>count</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2Int</td>          <td class="paramname"><span class="paramname"><em>anchor</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>variant</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ac67b206c68d4d54c90a92f4da651d116" name="ac67b206c68d4d54c90a92f4da651d116"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac67b206c68d4d54c90a92f4da651d116">&#9670;&#160;</a></span>TryPlan()</h2>
 
@@ -544,7 +781,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Plans <em>shape</em>  for up to <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a0b851ecb128d8c14a4b32708508885ac" title="Most unbreakables in one formation; the rest roam, or form a formation of their own.">IUnbreakableFormationSettings.MaxMembers</a> of <em>candidates</em> , filling <em>assignmentsOut</em>  with one entry per formation slot. </p>
+<p>Plans <em>shape</em>  for up to <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a0b851ecb128d8c14a4b32708508885ac" title="Most unbreakables in one formation; the rest roam, or form a formation of their own.">IUnbreakableFormationSettings.MaxMembers</a> (an item cover, three to six) of <em>candidates</em> , filling <em>assignmentsOut</em>  with one entry per formation slot. </p>
 <p>False when no spot fits. <em>pickIndex</em>  maps a count n to an index in [0, n). </p>
 
 </div>
@@ -572,8 +809,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a0d508ce31c20654d427f2ae808bc3366" name="a0d508ce31c20654d427f2ae808bc3366"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0d508ce31c20654d427f2ae808bc3366">&#9670;&#160;</a></span>_neighbours</h2>
+<a id="a43b93806abf0e356974fce4942b15bbe" name="a43b93806abf0e356974fce4942b15bbe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43b93806abf0e356974fce4942b15bbe">&#9670;&#160;</a></span>_coverFloor</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -582,7 +819,29 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">readonly Vector2Int [] BalloonParty.Balloon.Formation.FormationPlanner._neighbours = new Vector2Int[<a class="el" href="#a5dadd543520a4c59da548e035e4f54a7">CoverMembers</a>]</td>
+          <td class="memname">int BalloonParty.Balloon.Formation.FormationPlanner._coverFloor</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aaf729e37a0ad647709e5f056e205648b" name="aaf729e37a0ad647709e5f056e205648b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf729e37a0ad647709e5f056e205648b">&#9670;&#160;</a></span>_firstCover</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;Vector2Int&gt; BalloonParty.Balloon.Formation.FormationPlanner._firstCover = new()</td>
         </tr>
       </table>
   </td>
@@ -768,6 +1027,55 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+</div>
+</div>
+<a id="aed7e5ae6e33605002e730546e7345aee" name="aed7e5ae6e33605002e730546e7345aee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed7e5ae6e33605002e730546e7345aee">&#9670;&#160;</a></span>CoverMinMembers</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int BalloonParty.Balloon.Formation.FormationPlanner.CoverMinMembers = 3</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0cc826f5b26e8458f932a1118081cf21" name="a0cc826f5b26e8458f932a1118081cf21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0cc826f5b26e8458f932a1118081cf21">&#9670;&#160;</a></span>CoverOrders</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int [][] BalloonParty.Balloon.Formation.FormationPlanner.CoverOrders</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">        {</div>
+<div class="line">            <span class="keyword">new</span>[] { 1, 2, 0, 3, 5, 4 },</div>
+<div class="line">            <span class="keyword">new</span>[] { 2, 1, 3, 0, 4, 5 },</div>
+<div class="line">        }</div>
+</div><!-- fragment -->
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>

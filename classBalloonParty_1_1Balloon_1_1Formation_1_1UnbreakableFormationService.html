@@ -193,6 +193,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a22448bb2d2a61965153c156ac350a6db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a279305f1f8777a1e4c5888e96c312829" id="r_a279305f1f8777a1e4c5888e96c312829"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a279305f1f8777a1e4c5888e96c312829">CollectCandidates</a> (<a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html">StandingFormation</a> own)</td></tr>
 <tr class="separator:a279305f1f8777a1e4c5888e96c312829"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dbb023cae298aabbdb614a1d2e6d5d8" id="r_a5dbb023cae298aabbdb614a1d2e6d5d8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5dbb023cae298aabbdb614a1d2e6d5d8">CountUnbreakables</a> ()</td></tr>
+<tr class="separator:a5dbb023cae298aabbdb614a1d2e6d5d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58cfa37dc72b8cc5ee2b3cc596563119" id="r_a58cfa37dc72b8cc5ee2b3cc596563119"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a58cfa37dc72b8cc5ee2b3cc596563119">DirectionHeading</a> (int direction)</td></tr>
 <tr class="separator:a58cfa37dc72b8cc5ee2b3cc596563119"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46f733a84053d602b4f1f0edd37168dc" id="r_a46f733a84053d602b4f1f0edd37168dc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a46f733a84053d602b4f1f0edd37168dc">FormFromFreeUnbreakables</a> (Action&lt; <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html">IWriteableDynamicSlotActor</a>, Vector2Int &gt; relocate)</td></tr>
@@ -264,6 +266,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a6b8453d12111df7c9ca29bc809c1faad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11f4c0aee35d032feb96210d5fb3d599" id="r_a11f4c0aee35d032feb96210d5fb3d599"><td class="memItemLeft" align="right" valign="top">readonly CompositeDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a11f4c0aee35d032feb96210d5fb3d599">_subscriptions</a> = new()</td></tr>
 <tr class="separator:a11f4c0aee35d032feb96210d5fb3d599"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a734de00aaa95f8c82076389c0eefc8a3" id="r_a734de00aaa95f8c82076389c0eefc8a3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a734de00aaa95f8c82076389c0eefc8a3">_unbreakablesOnBoard</a></td></tr>
+<tr class="separator:a734de00aaa95f8c82076389c0eefc8a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26c862e7620263a62064e245f194fb61" id="r_a26c862e7620263a62064e245f194fb61"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1ShotWall.html">ShotWall</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a26c862e7620263a62064e245f194fb61">_wall</a> = new()</td></tr>
 <tr class="separator:a26c862e7620263a62064e245f194fb61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -408,6 +412,31 @@ Static Private Attributes</h2></td></tr>
           <td class="memname">void BalloonParty.Balloon.Formation.UnbreakableFormationService.CollectCandidates </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html">StandingFormation</a></td>          <td class="paramname"><span class="paramname"><em>own</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5dbb023cae298aabbdb614a1d2e6d5d8" name="a5dbb023cae298aabbdb614a1d2e6d5d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5dbb023cae298aabbdb614a1d2e6d5d8">&#9670;&#160;</a></span>CountUnbreakables()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Formation.UnbreakableFormationService.CountUnbreakables </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1398,6 +1427,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly CompositeDisposable BalloonParty.Balloon.Formation.UnbreakableFormationService._subscriptions = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a734de00aaa95f8c82076389c0eefc8a3" name="a734de00aaa95f8c82076389c0eefc8a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a734de00aaa95f8c82076389c0eefc8a3">&#9670;&#160;</a></span>_unbreakablesOnBoard</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Formation.UnbreakableFormationService._unbreakablesOnBoard</td>
         </tr>
       </table>
   </td>

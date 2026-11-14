@@ -123,7 +123,7 @@ Goals</h2>
 <li><b>Formations.</b> With at least 3 unbreakables on the board, they gather into a shape:<ul>
 <li>a <b>horizontal line</b>,</li>
 <li>a <b>diagonal</b> in either direction (<code>/</code> or <code>\</code>),</li>
-<li>an <b>item cover</b>: a ring of six unbreakables around a balloon that carries an item, so the player, who shoots from below, can't hit the item directly.</li>
+<li>an <b>item cover</b>: three to six unbreakables around a balloon that carries a bomb, a snipe or a lightning, filling the slots below it first, then its sides, then above, so the player, who shoots from below, can't hit the item directly. (It began as a ring of exactly six around any item.)</li>
 </ul>
 </li>
 <li><b>Holding.</b> A formation stays in place for <b>N turns</b>. Its members do not roam, and they do not float up in the balance race. When the N turns are over, they change into a different formation.</li>
@@ -202,7 +202,7 @@ Shapes on the hex grid</h3>
 </div><!-- fragment --><ul>
 <li><b>Horizontal:</b> <code>(c, r) … (c+k-1, r)</code>.</li>
 <li><b>Diagonals:</b> step <code>row + 1</code> each time. The column follows the odd-row shift, the same neighbour rule as <code>HexCoordinates.HexNeighborIndices</code>.</li>
-<li><b>Item cover:</b> all six neighbours of the item host, so it needs six members and an item off the board's edges. If several balloons carry items, the one whose cover costs the least travel is picked.</li>
+<li><b>Item cover:</b> the item host's neighbours in order (below, then the sides, then above), three to six of them; a neighbour off the board is left to the edge. If several balloons carry items, the one whose cover costs the least travel is picked.</li>
 </ul>
 <p>Members <b>hover</b> in midair: they are anchored, not supported. Balloons below a formation rise until they reach it, so a formation also works as a ceiling, and holes open above it. That is the danger the formations add: a run of unbreakables the player has to shoot around. The score is not touched.</p>
 <h3><a class="anchor" id="autotoc_md857"></a>
@@ -308,7 +308,7 @@ Phase 1: Formation logic</h3>
 <li><code>IBalanceAnchor</code>, <code>IFormationMember</code>, the model changes, <code>FormationPlanner</code>, <code>FormationAssignment</code>, <code>UnbreakableFormationService</code>, and the settings.</li>
 <li>The balancer, planner, pressure and solver changes for anchored actors.</li>
 <li><b>Tests (EditMode):</b><ul>
-<li><code>FormationPlanner</code>: line and diagonal slots on even and odd rows; occupied slots rejected; bottom clearance kept; the item cover rings the host with all six neighbours; no spot gives none.</li>
+<li><code>FormationPlanner</code>: line and diagonal slots on even and odd rows; occupied slots rejected; bottom clearance kept; the item cover takes the host's neighbours below first; no spot gives none.</li>
 <li><code>FormationAssignment</code>: least total travel.</li>
 <li>The service: under 3 never forms; 3 form and anchor; a hold of N waves moves nothing; a change after N picks a different shape; dropping below 3 breaks it and releases the rest; a newcomer during a hold roams; a reset clears the formation.</li>
 <li><code>BalancePlanner</code>: an anchored actor in an unbalanced slot stays, and balloons below rise to it.</li>
