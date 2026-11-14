@@ -1,14 +1,14 @@
 <map id="BalloonParty.Configuration.Level.RangedLevelParameters" name="BalloonParty.Configuration.Level.RangedLevelParameters">
-<area shape="rect" id="Node000001" title="A level&#39;s difficulty mix before its ranges are rolled: what LevelGenerator outputs for every positive..." alt="" coords="675,132,893,172"/>
-<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IPaletteColorMasked.html" title="Base contract for a config entry keyed to a set of palette colours by a PaletteColorMaskAttribute bit..." alt="" coords="305,5,509,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="523,32,588,43,652,63,712,95,760,130,757,134,709,99,650,68,586,49,522,37"/>
-<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html" title="Pure — resolved once when a level begins, never re&#45;rolled per turn." alt="" coords="5,97,203,137"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="216,110,227,109,346,108,439,109,532,116,651,129,675,132,674,138,650,135,532,121,439,115,346,113,227,115,216,115"/>
-<area shape="rect" id="Node000006" href="$structBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorTypeGate.html" title="Presence in a range&#39;s array gates one GridActorType for that level." alt="" coords="299,132,515,172"/>
-<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="217,127,299,137,298,142,216,133"/>
-<area shape="rect" id="Node000004" href="$structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html" title="One entry of a range&#39;s static WeightedSet&lt;BalloonType&gt;; membership is the type gate." alt="" coords="303,196,510,236"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="523,194,674,168,675,173,524,199"/>
-<area shape="rect" id="Node000005" href="$structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html" title="Item counterpart of BalloonTypeWeight — same gate/override semantics." alt="" coords="308,260,505,300"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="507,254,578,234,650,211,742,170,745,175,652,216,579,240,509,259"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="529,149,674,149,674,155,529,155"/>
+<area shape="rect" id="Node000001" title="A level&#39;s difficulty mix before its ranges are rolled: what LevelGenerator outputs for every positive..." alt="" coords="671,140,889,185"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IPaletteColorMasked.html" title="Base contract for a config entry keyed to a set of palette colours by a PaletteColorMaskAttribute bit..." alt="" coords="303,5,506,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="521,37,585,50,648,71,707,102,755,140,750,139,704,107,646,75,584,55,521,42"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html" title="Pure — resolved once when a level begins, never re&#45;rolled per turn." alt="" coords="5,104,202,149"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="216,116,226,116,344,113,437,115,529,123,647,137,673,143,668,143,647,142,529,128,437,120,344,118,226,121,218,121"/>
+<area shape="rect" id="Node000006" href="$structBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorTypeGate.html" title="Presence in a range&#39;s array gates one GridActorType for that level." alt="" coords="297,140,512,185"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="217,137,299,148,294,151,217,143"/>
+<area shape="rect" id="Node000004" href="$structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html" title="One entry of a range&#39;s static WeightedSet&lt;BalloonType&gt;; membership is the type gate." alt="" coords="302,209,507,254"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="522,207,673,182,668,183,523,213"/>
+<area shape="rect" id="Node000005" href="$structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html" title="Item counterpart of BalloonTypeWeight — same gate/override semantics." alt="" coords="306,279,502,323"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="513,271,579,251,646,228,737,186,742,184,648,232,581,257,514,277"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="527,160,673,162,668,163,528,165"/>
 </map>

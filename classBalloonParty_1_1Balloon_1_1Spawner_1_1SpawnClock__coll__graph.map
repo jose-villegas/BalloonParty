@@ -1,26 +1,26 @@
 <map id="BalloonParty.Balloon.Spawner.SpawnClock" name="BalloonParty.Balloon.Spawner.SpawnClock">
-<area shape="rect" id="Node000001" title="Brings balloon lines in on a timer, whatever the player does: one line per ISpawnClockSettings...." alt="" coords="628,270,847,310"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="328,5,413,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="427,15,469,18,516,26,563,40,606,64,632,86,655,112,692,170,717,225,733,269,728,271,713,227,687,172,651,115,628,90,602,68,561,45,514,31,468,23,427,20"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="331,55,411,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="424,60,466,61,513,65,561,77,605,97,630,115,651,136,688,183,714,231,731,269,726,271,709,233,683,186,647,139,626,119,603,102,559,82,512,71,466,66,424,66"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,127,212,167"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="226,131,349,127,415,131,481,141,517,150,552,164,618,198,674,236,715,268,711,272,671,240,615,203,550,169,515,155,479,146,415,137,349,133,226,136"/>
-<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html" title="Reference&#45;counted per source so nested pause calls don&#39;t prematurely resume." alt="" coords="272,155,469,195"/>
-<area shape="poly" id="edge9_Node000009_Node000004" title=" " alt="" coords="226,157,272,162,272,167,225,162"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="321,220,420,245"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="434,240,628,270,628,276,433,245"/>
-<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html" title=" " alt="" coords="261,270,480,310"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="494,287,628,287,628,293,494,293"/>
-<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html" title=" " alt="" coords="272,334,469,374"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="482,332,627,306,628,312,483,337"/>
-<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html" title="Read surface of the player&#39;s progression through levels." alt="" coords="277,398,465,438"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="463,392,603,348,695,308,697,313,605,352,465,397"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="458,197,605,241,682,267,680,272,603,246,457,202"/>
-<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="285,462,456,502"/>
-<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="455,455,479,447,543,428,570,417,603,400,666,353,715,308,718,312,669,357,605,404,572,422,545,433,481,453,456,461"/>
-<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1IBoardFill.html" title=" " alt="" coords="261,526,480,566"/>
-<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="481,520,544,496,574,480,602,461,642,424,676,382,723,309,728,312,681,386,646,428,606,465,577,485,546,501,483,525"/>
-<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html" title="Single read surface for the live per&#45;level difficulty mix; never read ILevelPacingConfiguration direc..." alt="" coords="277,590,465,630"/>
-<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="477,591,543,569,574,552,602,532,628,506,651,477,687,415,713,355,728,309,733,311,718,357,692,417,655,480,632,510,606,536,577,557,545,573,479,596"/>
+<area shape="rect" id="Node000001" title="Brings balloon lines in on a timer, whatever the player does: one line per ISpawnClockSettings...." alt="" coords="625,280,843,324"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="328,5,412,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="426,16,469,19,514,28,561,43,603,66,629,89,652,116,689,175,714,233,729,280,724,278,709,235,684,178,648,119,625,93,600,71,559,48,513,33,468,25,428,21"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="330,57,409,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="424,64,466,64,512,69,559,81,603,101,627,119,649,141,685,190,711,239,728,280,722,279,706,241,680,193,645,144,624,123,600,105,557,86,511,74,466,70,426,69"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,130,212,175"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="226,136,349,132,415,135,479,145,515,154,550,168,615,204,670,243,711,279,706,279,666,247,612,208,547,173,513,159,478,150,414,141,349,137,229,141"/>
+<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html" title="Reference&#45;counted per source so nested pause calls don&#39;t prematurely resume." alt="" coords="272,160,468,204"/>
+<area shape="poly" id="edge9_Node000009_Node000004" title=" " alt="" coords="226,163,273,169,269,172,228,168"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="321,228,418,256"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="433,250,627,283,622,285,434,255"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1ISpawnClock.html" title=" " alt="" coords="261,280,478,324"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="493,299,627,301,622,303,494,304"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html" title=" " alt="" coords="272,349,468,394"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="483,347,627,321,623,324,484,352"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html" title="Read surface of the player&#39;s progression through levels." alt="" coords="276,418,463,463"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="466,411,600,364,693,323,688,326,602,369,469,416"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="464,206,602,250,677,278,671,279,600,255,464,212"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="284,488,455,532"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="458,480,477,473,541,451,568,439,600,421,663,371,711,326,715,323,666,375,603,425,570,444,543,456,479,478,460,485"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Balloon_1_1Spawner_1_1IBoardFill.html" title=" " alt="" coords="261,557,478,602"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="482,549,543,524,573,507,600,487,640,447,674,402,720,326,724,323,678,405,644,451,603,492,575,511,545,528,483,554"/>
+<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html" title="Single read surface for the live per&#45;level difficulty mix; never read ILevelPacingConfiguration direc..." alt="" coords="276,626,463,671"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="477,626,542,601,572,583,600,562,626,534,648,503,685,436,710,372,725,326,729,323,715,374,690,438,653,506,630,538,603,566,575,588,544,606,478,631"/>
 </map>

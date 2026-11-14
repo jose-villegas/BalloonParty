@@ -1,7 +1,7 @@
 <map id="BalloonParty.Editor.ShotSolver.ShotSolverWindow" name="BalloonParty.Editor.ShotSolver.ShotSolverWindow">
-<area shape="rect" id="Node000001" title="Sweeps aim angle against the live board (see plan_shot_geometry) and reports the windows that reach a..." alt="" coords="50,108,238,148"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,117,38"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="82,47,131,106,126,110,77,50"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="141,5,312,45"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="205,58,162,110,157,106,200,54"/>
+<area shape="rect" id="Node000001" title="Sweeps aim angle against the live board (see plan_shot_geometry) and reports the windows that reach a..." alt="" coords="50,115,237,160"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,14,117,42"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="82,52,130,114,125,115,79,57"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="141,5,312,50"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="203,61,162,116,159,112,198,63"/>
 </map>

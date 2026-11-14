@@ -1,5 +1,5 @@
 <map id="BalloonParty.Item.Lightning.LightningItemHandler.ByDistanceComparer" name="BalloonParty.Item.Lightning.LightningItemHandler.ByDistanceComparer">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,93,245,148"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="24,5,227,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="128,59,128,93,123,93,123,59"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,98,245,160"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="24,5,226,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,63,127,99,123,97,123,68"/>
 </map>

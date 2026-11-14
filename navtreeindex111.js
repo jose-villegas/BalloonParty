@@ -1,5 +1,9 @@
 var NAVTREEINDEX111 =
 {
+"structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html#aac6f92cb784231306a1ed545d91f8e67":[6,0,0,3,11,2,2],
+"structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html#aba93f523b9073320d265a19fe305fe63":[5,0,0,3,11,2,0],
+"structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html#aba93f523b9073320d265a19fe305fe63":[6,0,0,3,11,2,0],
+"structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html#af3de9ef536c08c53c7627583d5346f7d":[5,0,0,3,11,2,4],
 "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html#af3de9ef536c08c53c7627583d5346f7d":[6,0,0,3,11,2,4],
 "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html#af5006f33328d2410c38e367033e2deb8":[5,0,0,3,11,2,6],
 "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html#af5006f33328d2410c38e367033e2deb8":[6,0,0,3,11,2,6],
@@ -245,9 +249,5 @@ var NAVTREEINDEX111 =
 "structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#a97c5fdcd664ca9ac0602e99edd74f91e":[6,0,0,5,7,0,0,6],
 "structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#acec98aa606a3b2d7aa7efa4149afe75b":[5,0,0,5,7,0,0,3],
 "structBalloonParty_1_1Editor_1_1ShotSolver_1_1ShotSolverWindow_1_1ShotSolverWindowEntry.html#acec98aa606a3b2d7aa7efa4149afe75b":[6,0,0,5,7,0,0,3],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html":[5,0,0,6,4,1],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html":[6,0,0,6,4,1],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html#a438ca055b2e936a3a7ba2797856d4197":[5,0,0,6,4,1,2],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html#a438ca055b2e936a3a7ba2797856d4197":[6,0,0,6,4,1,2],
-"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html#a6d7042ab8b2ffe46d4e6ec461fe2c7e6":[5,0,0,6,4,1,4]
+"structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpAnchor.html":[5,0,0,6,4,1]
 };

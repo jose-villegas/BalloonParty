@@ -1,13 +1,13 @@
 <map id="BalloonParty.Game.Health.PlayerHealthController" name="BalloonParty.Game.Health.PlayerHealthController">
-<area shape="rect" id="Node000001" title="The player&#39;s hit&#45;point pool — the only loss trigger under the spawn&#45;saturation model." alt="" coords="260,113,456,153"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="66,5,151,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,26,213,41,278,75,331,110,328,115,275,80,211,46,164,31"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,55,212,95"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="210,96,271,110,270,115,209,101"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="59,120,158,145"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="172,130,260,130,260,135,172,135"/>
-<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html" title="Read&#45;only view of the player&#39;s hit&#45;point pool." alt="" coords="11,170,207,210"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="209,164,270,150,271,155,210,169"/>
-<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealing.html" title="Gives hearts back (the reward balloons&#39; payout). Neither brings back a player with none left." alt="" coords="11,234,207,274"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="194,227,211,220,274,185,327,151,330,155,277,190,213,224,196,232"/>
+<area shape="rect" id="Node000001" title="The player&#39;s hit&#45;point pool — the only loss trigger under the spawn&#45;saturation model." alt="" coords="260,117,455,162"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="66,5,151,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,27,213,42,277,77,330,116,325,117,274,82,211,47,166,32"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,57,212,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="218,103,264,115,259,117,219,108"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="60,125,157,153"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="172,137,262,138,257,141,173,142"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html" title="Read&#45;only view of the player&#39;s hit&#45;point pool." alt="" coords="11,177,206,222"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="218,170,264,161,259,163,220,175"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealing.html" title="Gives hearts back (the reward balloons&#39; payout). Neither brings back a player with none left." alt="" coords="11,246,206,291"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="197,237,210,231,273,196,324,163,329,161,276,200,213,236,199,242"/>
 </map>

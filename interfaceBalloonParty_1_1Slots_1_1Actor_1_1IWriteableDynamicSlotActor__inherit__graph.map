@@ -1,31 +1,31 @@
 <map id="BalloonParty.Slots.Actor.IWriteableDynamicSlotActor" name="BalloonParty.Slots.Actor.IWriteableDynamicSlotActor">
-<area shape="rect" id="Node000001" title=" " alt="" coords="459,299,665,339"/>
-<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableBalloonModel.html" title=" " alt="" coords="713,207,916,247"/>
-<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="630,291,758,244,760,249,632,296"/>
-<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html" title="The side of a formation member that only UnbreakableFormationService drives." alt="" coords="964,308,1173,348"/>
-<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="679,318,964,323,964,329,679,323"/>
-<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html" title="Stub grid actor standing in for a live balloon in the dynamic&#45;board sim — enough of IWriteableDynamic..." alt="" coords="725,356,904,396"/>
-<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="665,339,727,353,725,359,663,344"/>
-<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IDynamicSlotActor.html" title=" " alt="" coords="232,267,411,307"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="425,298,459,302,458,308,424,303"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="5,299,184,339"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="197,301,231,297,232,302,198,307"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="232,331,411,371"/>
-<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="198,331,232,335,231,341,197,336"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="424,334,458,330,459,335,425,340"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html" title=" " alt="" coords="967,197,1170,237"/>
-<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="929,220,967,218,967,224,930,225"/>
-<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html" title=" " alt="" coords="1221,5,1424,45"/>
-<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="1090,185,1144,119,1180,85,1220,55,1243,43,1246,48,1223,60,1184,89,1148,123,1094,188"/>
-<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html" title="At destruction, distributes one ScoreAttribution per remaining bubble to a random palette colour...." alt="" coords="1221,69,1424,109"/>
-<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="1107,187,1159,152,1220,119,1250,107,1252,112,1222,124,1162,157,1110,191"/>
-<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html" title="The golden reward balloon (PLAN&#45;RewardBalloons): plated, so the shot&#39;s own ordinary hit bounces off a..." alt="" coords="1221,133,1424,173"/>
-<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="1161,191,1242,171,1243,176,1163,196"/>
-<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Balloon_1_1Model_1_1HeartBalloonModel.html" title="The heart reward balloon (PLAN&#45;RewardBalloons): a heart wrapped in bandages that gives a heart back." alt="" coords="1221,197,1424,237"/>
-<area shape="poly" id="edge10_Node000006_Node000010" title=" " alt="" coords="1184,215,1221,215,1221,220,1184,220"/>
-<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html" title=" " alt="" coords="1221,261,1424,301"/>
-<area shape="poly" id="edge11_Node000006_Node000011" title=" " alt="" coords="1163,238,1243,259,1242,264,1161,243"/>
-<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html" title=" " alt="" coords="1221,325,1424,365"/>
-<area shape="poly" id="edge12_Node000006_Node000012" title=" " alt="" coords="1110,243,1162,278,1222,311,1252,323,1250,328,1220,316,1159,282,1107,248"/>
-<area shape="poly" id="edge14_Node000013_Node000012" title=" " alt="" coords="1187,333,1221,336,1221,341,1187,339"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="458,297,663,342"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableBalloonModel.html" title=" " alt="" coords="711,233,914,278"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="665,290,719,279,724,278,667,296"/>
+<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html" title="The side of a formation member that only UnbreakableFormationService drives." alt="" coords="962,317,1170,362"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="679,322,964,335,959,336,679,327"/>
+<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html" title="Stub grid actor standing in for a live balloon in the dynamic&#45;board sim — enough of IWriteableDynamic..." alt="" coords="723,357,902,402"/>
+<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="672,344,726,359,720,358,672,349"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IDynamicSlotActor.html" title=" " alt="" coords="232,263,410,307"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="425,297,460,305,455,305,425,303"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="5,297,184,342"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="198,301,234,298,228,300,200,306"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="232,332,410,377"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="199,333,234,340,228,341,199,338"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="425,337,460,334,455,335,426,342"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html" title=" " alt="" coords="965,213,1167,258"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="929,244,967,243,961,244,930,249"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html" title=" " alt="" coords="1218,5,1420,50"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="1088,198,1141,129,1177,92,1217,60,1237,52,1242,50,1219,65,1180,96,1145,132,1091,203"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html" title="At destruction, distributes one ScoreAttribution per remaining bubble to a random palette colour...." alt="" coords="1218,75,1420,119"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="1106,201,1157,165,1217,129,1242,121,1247,119,1219,134,1160,169,1108,206"/>
+<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html" title="The golden reward balloon (PLAN&#45;RewardBalloons): plated, so the shot&#39;s own ordinary hit bounces off a..." alt="" coords="1218,144,1420,189"/>
+<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="1164,206,1232,190,1238,189,1165,211"/>
+<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Balloon_1_1Model_1_1HeartBalloonModel.html" title="The heart reward balloon (PLAN&#45;RewardBalloons): a heart wrapped in bandages that gives a heart back." alt="" coords="1218,213,1420,258"/>
+<area shape="poly" id="edge10_Node000006_Node000010" title=" " alt="" coords="1182,233,1220,235,1215,236,1183,238"/>
+<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html" title=" " alt="" coords="1218,283,1420,327"/>
+<area shape="poly" id="edge11_Node000006_Node000011" title=" " alt="" coords="1165,260,1238,282,1232,282,1164,265"/>
+<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html" title=" " alt="" coords="1218,352,1420,397"/>
+<area shape="poly" id="edge12_Node000006_Node000012" title=" " alt="" coords="1115,264,1172,303,1195,321,1219,337,1246,352,1241,351,1217,342,1192,326,1168,307,1113,269"/>
+<area shape="poly" id="edge14_Node000013_Node000012" title=" " alt="" coords="1186,353,1220,361,1215,360,1185,359"/>
 </map>

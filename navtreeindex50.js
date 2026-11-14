@@ -1,5 +1,6 @@
 var NAVTREEINDEX50 =
 {
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver.html#ac324e241d7d11c6aac9fe7cdcaa907c4":[5,0,0,6,8,0,10,7],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver.html#ac324e241d7d11c6aac9fe7cdcaa907c4":[6,0,0,6,8,0,10,7],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html":[5,0,0,6,8,0,12],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html":[6,0,0,6,8,0,12],
@@ -248,6 +249,5 @@ var NAVTREEINDEX50 =
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a49a8b9aa5a58f38a26d69c5ac5b14178":[5,0,0,6,8,0,13,1,0],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a49a8b9aa5a58f38a26d69c5ac5b14178":[6,0,0,6,8,0,13,1,0],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a4b96381e40d6030a2e20133285af1e0c":[5,0,0,6,8,0,13,1,15],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a4b96381e40d6030a2e20133285af1e0c":[6,0,0,6,8,0,13,1,15],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a4daaa22f0b6c031a699edc4d5a0939d0":[5,0,0,6,8,0,13,1,18]
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a4b96381e40d6030a2e20133285af1e0c":[6,0,0,6,8,0,13,1,15]
 };

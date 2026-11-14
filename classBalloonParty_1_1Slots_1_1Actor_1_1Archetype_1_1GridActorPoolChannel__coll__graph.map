@@ -1,9 +1,9 @@
 <map id="BalloonParty.Slots.Actor.Archetype.GridActorPoolChannel" name="BalloonParty.Slots.Actor.Archetype.GridActorPoolChannel">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,269,240,309"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Shared_1_1Pool_1_1InjectingPoolChannel-1-g.html" title="Injects [Inject] fields from a parent IObjectResolver without a VContainer child scope per instance." alt="" coords="9,181,236,221"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,235,125,269,120,269,120,235"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolChannel-1-g.html" title=" " alt="" coords="29,93,216,133"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="125,147,125,181,120,181,120,147"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolChannel.html" title="Non&#45;generic marker so any PoolChannel can be stored in a typed dictionary." alt="" coords="29,5,216,45"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="125,59,125,93,120,93,120,59"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,283,239,328"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Shared_1_1Pool_1_1InjectingPoolChannel-1-g.html" title="Injects [Inject] fields from a parent IObjectResolver without a VContainer child scope per instance." alt="" coords="9,191,235,235"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="124,249,124,284,120,282,120,253"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolChannel-1-g.html" title=" " alt="" coords="29,98,215,143"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="123,156,125,191,119,190,121,161"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolChannel.html" title="Non&#45;generic marker so any PoolChannel can be stored in a typed dictionary." alt="" coords="29,5,215,50"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="123,63,125,98,119,97,121,68"/>
 </map>

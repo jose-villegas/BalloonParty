@@ -1,5 +1,9 @@
 var NAVTREEINDEX96 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ace7495106fd03eb6272a5dbfa6b2e526":[5,0,0,3,2,1,6],
+"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ace7495106fd03eb6272a5dbfa6b2e526":[6,0,0,3,2,1,6],
+"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ad02e1bfe8d09602b97e2f0b8016d4af6":[5,0,0,3,2,1,36],
+"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ad02e1bfe8d09602b97e2f0b8016d4af6":[6,0,0,3,2,1,36],
 "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ad25cf5e0a35671a2cc5f1c0d28bf4214":[5,0,0,3,2,1,22],
 "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ad25cf5e0a35671a2cc5f1c0d28bf4214":[6,0,0,3,2,1,22],
 "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ad7ae64b625de6154de57050c06351f1b":[5,0,0,3,2,1,42],
@@ -245,9 +249,5 @@ var NAVTREEINDEX96 =
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#aa58edbfa73859910527f5a19df5cd8c0":[5,0,0,3,5,9,2],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#aa58edbfa73859910527f5a19df5cd8c0":[6,0,0,3,5,9,2],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#aa70f16eba45133a9ed996e61bd6ddea4":[5,0,0,3,5,9,0],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#aa70f16eba45133a9ed996e61bd6ddea4":[6,0,0,3,5,9,0],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#ab32781b1e9393e4f7e7a35a162c2320e":[5,0,0,3,5,9,8],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#ab32781b1e9393e4f7e7a35a162c2320e":[6,0,0,3,5,9,8],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#ab774ae2d6cb92ea7ccf8f1c1abc82859":[5,0,0,3,5,9,6],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#ab774ae2d6cb92ea7ccf8f1c1abc82859":[6,0,0,3,5,9,6]
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#aa70f16eba45133a9ed996e61bd6ddea4":[6,0,0,3,5,9,0]
 };

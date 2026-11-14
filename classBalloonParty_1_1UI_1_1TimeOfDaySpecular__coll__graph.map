@@ -1,7 +1,7 @@
 <map id="BalloonParty.UI.TimeOfDaySpecular" name="BalloonParty.UI.TimeOfDaySpecular">
-<area shape="rect" id="Node000001" title="A rounded UI shape&#39;s specular, lit like the balloons: a soft stroke that runs along the inside of the..." alt="" coords="68,108,267,148"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,140,38"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,46,151,106,148,110,91,50"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ISceneLightRuntime.html" title="Read surface for the LIVE ambient scene light — the current time&#45;of&#45;day state the runtime owner (Time..." alt="" coords="165,5,359,45"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="237,57,187,110,183,106,233,54"/>
+<area shape="rect" id="Node000001" title="A rounded UI shape&#39;s specular, lit like the balloons: a soft stroke that runs along the inside of the..." alt="" coords="67,115,264,160"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,14,139,42"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,51,149,114,144,115,92,56"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1SceneLight_1_1ISceneLightRuntime.html" title="Read surface for the LIVE ambient scene light — the current time&#45;of&#45;day state the runtime owner (Time..." alt="" coords="163,5,357,50"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="233,61,186,116,183,112,228,63"/>
 </map>

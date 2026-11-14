@@ -1,5 +1,6 @@
 var NAVTREEINDEX28 =
 {
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#afeceb64217bca261eea6950260b23fe5":[5,0,0,3,9,20,20],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#afeceb64217bca261eea6950260b23fe5":[6,0,0,3,9,20,20],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelSeedHash.html":[5,0,0,3,9,23],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelSeedHash.html":[6,0,0,3,9,23],
@@ -248,6 +249,5 @@ var NAVTREEINDEX28 =
 "classBalloonParty_1_1Configuration_1_1OverflowSettings.html#a58e750df5b3c3849a27c4d2fd2fa4471":[5,0,0,3,23,1],
 "classBalloonParty_1_1Configuration_1_1OverflowSettings.html#a58e750df5b3c3849a27c4d2fd2fa4471":[6,0,0,3,23,1],
 "classBalloonParty_1_1Configuration_1_1OverflowSettings.html#a5a2b8c70b7843ef71304e316aa7d49d7":[5,0,0,3,23,19],
-"classBalloonParty_1_1Configuration_1_1OverflowSettings.html#a5a2b8c70b7843ef71304e316aa7d49d7":[6,0,0,3,23,19],
-"classBalloonParty_1_1Configuration_1_1OverflowSettings.html#a6043b23b231430396e107f26b9fc535a":[5,0,0,3,23,0]
+"classBalloonParty_1_1Configuration_1_1OverflowSettings.html#a5a2b8c70b7843ef71304e316aa7d49d7":[6,0,0,3,23,19]
 };

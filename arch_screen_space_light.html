@@ -113,7 +113,7 @@ $(function(){initNavTree('arch_screen_space_light.html',''); initResizable(true)
 <div class="textblock"><h1><a class="anchor" id="autotoc_md103"></a>
 Screen-Space Light (2D GI)</h1>
 <div class="dotgraph">
-<iframe scrolling="no" frameborder="0" src="dot_inline_dotgraph_3.svg" width="1940" height="928"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<iframe scrolling="no" frameborder="0" src="dot_inline_dotgraph_3.svg" width="1938" height="1003"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <h2><a class="anchor" id="autotoc_md104"></a>
 What this diagram shows</h2>
 <p>A whole-screen fake of a global 2D directional light, now <b>field-aware</b> and <b>multi-directional</b>: each fragment reads its local light direction from the scene light field (see <a class="el" href="arch_light_field.html">Scene Light Field (2D Multi-Light)</a>) and gathers bounce color from 4 directions at 90° spacing around it — an RSM-style Virtual Point <a class="el" href="UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d">Light</a> gather in 2D. Shadow stays single-direction (toward the light) for correct directionality. When the field is off, the shader falls back to the flat global direction — bit-identical to the original single-direction march.</p>

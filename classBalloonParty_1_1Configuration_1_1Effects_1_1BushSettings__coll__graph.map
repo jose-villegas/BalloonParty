@@ -1,44 +1,44 @@
 <map id="BalloonParty.Configuration.Effects.BushSettings" name="BalloonParty.Configuration.Effects.BushSettings">
-<area shape="rect" id="Node000001" title=" " alt="" coords="1637,90,1835,130"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="975,5,1104,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1117,15,1217,18,1342,27,1479,43,1614,70,1675,87,1673,93,1613,75,1478,48,1342,32,1217,24,1117,21"/>
-<area shape="rect" id="Node000016" href="$classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData.html" title="Pre&#45;baked bush variant: branch map texture + leaf attachment points." alt="" coords="1296,61,1493,101"/>
-<area shape="poly" id="edge24_Node000016_Node000002" title=" " alt="" coords="1118,29,1296,61,1295,66,1117,34"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html" title=" " alt="" coords="261,551,459,591"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="366,537,395,431,419,365,452,298,492,236,515,208,541,184,569,164,600,148,633,139,669,135,1396,135,1522,130,1637,120,1637,125,1522,136,1396,141,669,141,634,144,602,153,572,168,545,188,519,212,496,239,456,301,424,367,400,433,371,538"/>
-<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html" title="Cluster renderer for bush obstacles; falls back to per&#45;leaf DrawMesh when GPU instancing is unavailab..." alt="" coords="1305,378,1484,418"/>
-<area shape="poly" id="edge11_Node000005_Node000003" title=" " alt="" coords="473,570,612,569,785,563,974,549,1162,523,1218,513,1271,492,1327,454,1371,416,1375,420,1330,459,1273,496,1220,518,1163,529,974,554,785,568,612,575,473,576"/>
-<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushMaterialSet.html" title="Owns the bush&#39;s materials: two leaf instances (inner/outer render queue) and one branch material per ..." alt="" coords="571,671,770,711"/>
-<area shape="poly" id="edge13_Node000012_Node000003" title=" " alt="" coords="396,598,436,628,484,654,527,669,572,679,571,684,526,674,482,659,433,633,393,603"/>
-<area shape="rect" id="Node000013" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderDataBuilder.html" title="Assembles a bush&#39;s BushRenderData, merging every slot&#39;s leaves into ≤1023&#45;instance batches so the bus..." alt="" coords="916,609,1163,649"/>
-<area shape="poly" id="edge15_Node000013_Node000003" title=" " alt="" coords="473,589,571,602,752,616,916,623,916,629,751,621,570,607,472,594"/>
-<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRustleController.html" title="Spawns rustle VFX when any shot in flight passes near a bush slot, or an impact lands within one." alt="" coords="925,429,1154,469"/>
-<area shape="poly" id="edge21_Node000014_Node000003" title=" " alt="" coords="409,543,484,508,570,479,662,462,756,451,924,443,925,449,756,456,663,467,571,485,486,513,412,547"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1IClusterViewSettings.html" title="Shared visual configuration for cluster&#45;based renderers (clouds, bushes, etc.)." alt="" coords="5,551,212,591"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="226,569,261,569,261,574,226,574"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1428,367,1709,128,1713,132,1432,371"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterView.html" title="Expects the shader to declare _SlotCentersWorld (Vector4[]), _SlotCount (int), and _TimeOffset (float..." alt="" coords="950,175,1129,215"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="1143,194,1210,206,1243,218,1273,233,1313,265,1345,305,1370,344,1387,376,1382,379,1366,347,1341,308,1309,269,1271,238,1241,222,1208,211,1142,199"/>
-<area shape="rect" id="Node000007" title=" " alt="" coords="609,183,733,208"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="747,193,950,193,950,198,747,198"/>
-<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="585,357,756,397"/>
-<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="770,377,1305,393,1305,398,770,382"/>
-<area shape="poly" id="edge18_Node000014_Node000008" title=" " alt="" coords="770,393,937,426,936,431,769,399"/>
-<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Shared_1_1ImpactEventBus.html" title="Frame&#45;scoped impact events, written via Report and cleared each end&#45;of&#45;frame." alt="" coords="571,234,771,274"/>
-<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="785,245,891,246,1016,255,1082,265,1147,279,1212,298,1273,322,1323,349,1366,376,1363,380,1320,353,1271,327,1210,303,1146,285,1081,271,1015,261,891,251,785,250"/>
-<area shape="poly" id="edge19_Node000014_Node000009" title=" " alt="" coords="730,278,810,322,853,349,894,380,906,395,918,408,954,426,952,431,914,412,902,398,890,384,850,354,807,326,727,283"/>
-<area shape="rect" id="Node000010" title=" " alt="" coords="306,92,414,117"/>
-<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="395,122,474,168,572,217,608,231,606,236,570,222,472,173,392,127"/>
-<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="577,494,764,534"/>
-<area shape="poly" id="edge10_Node000005_Node000011" title=" " alt="" coords="778,518,862,520,959,518,1061,509,1162,493,1216,477,1269,457,1356,416,1358,421,1271,462,1218,482,1163,498,1062,515,959,523,862,525,778,524"/>
-<area shape="poly" id="edge20_Node000014_Node000011" title=" " alt="" coords="777,496,892,477,946,466,947,471,892,482,778,501"/>
-<area shape="poly" id="edge12_Node000005_Node000012" title=" " alt="" coords="769,711,883,727,948,730,1017,728,1085,719,1152,702,1214,675,1270,636,1295,611,1316,583,1350,521,1373,462,1386,418,1391,419,1378,464,1355,523,1321,586,1299,615,1274,640,1217,679,1154,707,1086,724,1017,733,948,735,882,732,768,717"/>
-<area shape="poly" id="edge16_Node000013_Node000012" title=" " alt="" coords="783,672,892,654,935,646,936,651,892,659,784,677"/>
-<area shape="poly" id="edge14_Node000005_Node000013" title=" " alt="" coords="1176,633,1225,623,1271,602,1295,584,1316,561,1349,509,1372,458,1386,417,1391,419,1377,460,1354,512,1320,564,1298,588,1273,607,1227,628,1177,638"/>
-<area shape="poly" id="edge17_Node000005_Node000014" title=" " alt="" coords="1167,428,1305,408,1306,413,1168,433"/>
-<area shape="rect" id="Node000015" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderData.html" title="The full render data for one bush: per&#45;slot entries plus merged inner/outer leaf batches." alt="" coords="939,302,1140,342"/>
-<area shape="poly" id="edge22_Node000005_Node000015" title=" " alt="" coords="1154,336,1273,359,1331,375,1330,380,1271,365,1153,341"/>
-<area shape="poly" id="edge23_Node000001_Node000016" title=" " alt="" coords="1507,88,1637,99,1637,104,1507,93"/>
-<area shape="rect" id="Node000017" href="$structBalloonParty_1_1Configuration_1_1Effects_1_1LeafSlotData.html" title=" " alt="" coords="941,61,1138,101"/>
-<area shape="poly" id="edge25_Node000016_Node000017" title=" " alt="" coords="1152,78,1296,78,1296,83,1152,83"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="1628,93,1825,138"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="970,5,1098,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1113,16,1213,18,1337,26,1472,43,1605,71,1666,92,1661,93,1604,76,1471,48,1336,32,1213,24,1114,21"/>
+<area shape="rect" id="Node000016" href="$classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData.html" title="Pre&#45;baked bush variant: branch map texture + leaf attachment points." alt="" coords="1289,62,1485,107"/>
+<area shape="poly" id="edge24_Node000016_Node000002" title=" " alt="" coords="1113,31,1291,66,1286,67,1113,36"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html" title=" " alt="" coords="260,580,456,624"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="364,563,391,452,414,382,446,312,486,247,509,218,535,193,564,172,595,156,629,145,666,142,1388,142,1513,137,1630,127,1625,129,1513,142,1389,147,666,147,630,151,597,161,566,176,538,197,513,222,490,250,450,315,419,384,396,453,368,566"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html" title="Cluster renderer for bush obstacles; falls back to per&#45;leaf DrawMesh when GPU instancing is unavailab..." alt="" coords="1298,400,1476,444"/>
+<area shape="poly" id="edge11_Node000005_Node000003" title=" " alt="" coords="472,602,610,601,782,596,970,581,1157,555,1212,544,1264,522,1319,483,1362,446,1367,443,1323,487,1266,527,1214,549,1157,560,970,587,782,601,611,607,472,607"/>
+<area shape="rect" id="Node000012" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushMaterialSet.html" title="Owns the bush&#39;s materials: two leaf instances (inner/outer render queue) and one branch material per ..." alt="" coords="568,705,766,750"/>
+<area shape="poly" id="edge13_Node000012_Node000003" title=" " alt="" coords="395,632,435,663,481,690,524,705,570,717,565,717,522,710,479,695,432,668,393,637"/>
+<area shape="rect" id="Node000013" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderDataBuilder.html" title="Assembles a bush&#39;s BushRenderData, merging every slot&#39;s leaves into ≤1023&#45;instance batches so the bus..." alt="" coords="911,640,1157,684"/>
+<area shape="poly" id="edge15_Node000013_Node000003" title=" " alt="" coords="472,621,568,635,747,650,913,659,908,660,747,655,567,640,472,626"/>
+<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRustleController.html" title="Spawns rustle VFX when any shot in flight passes near a bush slot, or an impact lands within one." alt="" coords="920,452,1148,496"/>
+<area shape="poly" id="edge21_Node000014_Node000003" title=" " alt="" coords="411,569,483,534,567,505,658,486,751,475,840,469,922,470,917,471,841,475,752,480,659,491,568,510,485,539,413,574"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1IClusterViewSettings.html" title="Shared visual configuration for cluster&#45;based renderers (clouds, bushes, etc.)." alt="" coords="5,580,211,624"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="225,599,262,601,257,603,227,604"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1423,387,1697,139,1702,137,1426,391"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterView.html" title="Expects the shader to declare _SlotCentersWorld (Vector4[]), _SlotCount (int), and _TimeOffset (float..." alt="" coords="945,182,1123,227"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="1138,206,1204,220,1237,231,1267,248,1306,282,1338,323,1363,364,1379,400,1374,398,1358,367,1334,326,1302,285,1263,252,1234,236,1203,225,1139,211"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="605,191,729,218"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="744,202,946,203,942,206,745,207"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="582,376,752,420"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="768,399,1300,418,1295,420,768,404"/>
+<area shape="poly" id="edge18_Node000014_Node000008" title=" " alt="" coords="767,418,791,423,922,451,917,452,790,428,767,423"/>
+<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Shared_1_1ImpactEventBus.html" title="Frame&#45;scoped impact events, written via Report and cleared each end&#45;of&#45;frame." alt="" coords="567,246,767,291"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="782,258,889,259,1013,269,1078,280,1143,295,1206,315,1266,341,1315,368,1358,399,1353,399,1312,373,1264,346,1204,320,1141,300,1077,285,1012,275,888,264,783,264"/>
+<area shape="poly" id="edge19_Node000014_Node000009" title=" " alt="" coords="728,296,808,342,849,370,889,401,900,417,912,430,948,451,942,451,909,435,896,420,885,405,846,374,805,346,728,301"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="304,97,412,125"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="394,131,474,177,568,227,606,245,601,246,566,232,471,182,395,136"/>
+<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="574,520,760,564"/>
+<area shape="poly" id="edge10_Node000005_Node000011" title=" " alt="" coords="775,547,859,550,956,548,1057,540,1156,523,1210,507,1261,486,1345,446,1350,444,1264,491,1211,512,1158,528,1058,545,956,554,859,555,776,553"/>
+<area shape="poly" id="edge20_Node000014_Node000011" title=" " alt="" coords="775,523,886,504,938,496,932,497,887,509,776,529"/>
+<area shape="poly" id="edge12_Node000005_Node000012" title=" " alt="" coords="779,750,893,765,957,767,1022,764,1088,754,1152,737,1211,709,1263,671,1288,644,1309,615,1343,551,1365,491,1379,446,1383,443,1370,492,1347,554,1313,618,1292,648,1267,674,1213,714,1153,742,1089,760,1023,769,957,772,892,770,779,756"/>
+<area shape="poly" id="edge16_Node000013_Node000012" title=" " alt="" coords="781,707,886,690,922,685,928,684,887,695,782,713"/>
+<area shape="poly" id="edge14_Node000005_Node000013" title=" " alt="" coords="1172,666,1220,656,1264,635,1288,616,1309,593,1342,539,1365,486,1379,446,1383,443,1370,488,1347,542,1313,596,1291,620,1266,640,1222,661,1173,671"/>
+<area shape="poly" id="edge17_Node000005_Node000014" title=" " alt="" coords="1163,452,1300,434,1295,435,1164,457"/>
+<area shape="rect" id="Node000015" href="$classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderData.html" title="The full render data for one bush: per&#45;slot entries plus merged inner/outer leaf batches." alt="" coords="934,317,1134,362"/>
+<area shape="poly" id="edge22_Node000005_Node000015" title=" " alt="" coords="1150,357,1266,382,1319,399,1313,399,1264,387,1150,362"/>
+<area shape="poly" id="edge23_Node000001_Node000016" title=" " alt="" coords="1500,92,1631,106,1625,107,1501,97"/>
+<area shape="rect" id="Node000017" href="$structBalloonParty_1_1Configuration_1_1Effects_1_1LeafSlotData.html" title=" " alt="" coords="936,62,1132,107"/>
+<area shape="poly" id="edge25_Node000016_Node000017" title=" " alt="" coords="1147,82,1291,84,1286,85,1148,87"/>
 </map>

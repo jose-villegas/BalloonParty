@@ -1,5 +1,9 @@
 var NAVTREEINDEX97 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#ab32781b1e9393e4f7e7a35a162c2320e":[5,0,0,3,5,9,8],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#ab32781b1e9393e4f7e7a35a162c2320e":[6,0,0,3,5,9,8],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#ab774ae2d6cb92ea7ccf8f1c1abc82859":[5,0,0,3,5,9,6],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#ab774ae2d6cb92ea7ccf8f1c1abc82859":[6,0,0,3,5,9,6],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#ab9b5dfd99e48c37d7958d9b7a7f46f3e":[5,0,0,3,5,9,11],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#ab9b5dfd99e48c37d7958d9b7a7f46f3e":[6,0,0,3,5,9,11],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html#abe058832dbf7a9ebb635a3ce8ac4c2bb":[5,0,0,3,5,9,5],
@@ -245,9 +249,5 @@ var NAVTREEINDEX97 =
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckSpawnSettings.html#a53d7e111291fa18353aa3077d9102f49":[5,0,0,3,5,21,1],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckSpawnSettings.html#a53d7e111291fa18353aa3077d9102f49":[6,0,0,3,5,21,1],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckSpawnSettings.html#a9adf6fc4252085a74ad680d7e0aff465":[5,0,0,3,5,21,2],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckSpawnSettings.html#a9adf6fc4252085a74ad680d7e0aff465":[6,0,0,3,5,21,2],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckSpawnSettings.html#ac7d0c7be5c40c5ac5aabd32b07de1dcb":[5,0,0,3,5,21,0],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckSpawnSettings.html#ac7d0c7be5c40c5ac5aabd32b07de1dcb":[6,0,0,3,5,21,0],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html":[5,0,0,3,5,22],
-"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ITimeOfDaySettings.html":[6,0,0,3,5,22]
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISpeckSpawnSettings.html#a9adf6fc4252085a74ad680d7e0aff465":[6,0,0,3,5,21,2]
 };

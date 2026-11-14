@@ -3,6 +3,7 @@ var classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner =
     [ "StaticActorSpawner", "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#a3945a6be610e72b316c7c643527476f5", null ],
     [ "StaticActorSpawner", "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#a9a61a8a308baaa5c5c47849bf8dbb734", null ],
     [ "ClearStaticActors", "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#a5e3165726d276c09d40ec4c6604945af", null ],
+    [ "ClearStaticActors", "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#a30e6548bf7ac049dfad054d418be09ed", null ],
     [ "CreateModel", "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#a00bc4de9f4adad2fa3e79f256a2be553", null ],
     [ "Dispose", "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#a7714be865e41770498d1e0b62f0927b1", null ],
     [ "GetStrategy", "classBalloonParty_1_1Slots_1_1Actor_1_1StaticActorSpawner.html#a2540c1f530203d86fef3a53a4352f8d5", null ],

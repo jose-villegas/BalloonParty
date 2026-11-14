@@ -1,5 +1,6 @@
 var NAVTREEINDEX29 =
 {
+"classBalloonParty_1_1Configuration_1_1OverflowSettings.html#a6043b23b231430396e107f26b9fc535a":[5,0,0,3,23,0],
 "classBalloonParty_1_1Configuration_1_1OverflowSettings.html#a6043b23b231430396e107f26b9fc535a":[6,0,0,3,23,0],
 "classBalloonParty_1_1Configuration_1_1OverflowSettings.html#a65157470b6ece19acb22e49a14cb856f":[5,0,0,3,23,14],
 "classBalloonParty_1_1Configuration_1_1OverflowSettings.html#a65157470b6ece19acb22e49a14cb856f":[6,0,0,3,23,14],
@@ -248,6 +249,5 @@ var NAVTREEINDEX29 =
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ac3b7f460bac8bf66958da027958c26ab":[5,0,0,3,25,32],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ac3b7f460bac8bf66958da027958c26ab":[6,0,0,3,25,32],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#aca717c7ab73b2cea13500060c5efef9f":[5,0,0,3,25,14],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#aca717c7ab73b2cea13500060c5efef9f":[6,0,0,3,25,14],
-"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#acfabde03accea8d48a2fc67e68269cd0":[5,0,0,3,25,8]
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#aca717c7ab73b2cea13500060c5efef9f":[6,0,0,3,25,14]
 };

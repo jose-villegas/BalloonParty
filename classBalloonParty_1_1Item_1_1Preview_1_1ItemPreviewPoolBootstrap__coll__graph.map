@@ -1,15 +1,15 @@
 <map id="BalloonParty.Item.Preview.ItemPreviewPoolBootstrap" name="BalloonParty.Item.Preview.ItemPreviewPoolBootstrap">
-<area shape="rect" id="Node000001" title="Registers and pre&#45;warms the HighlightTrail pen pool to IItemPreviewConfig.MaxPens — the same hard cei..." alt="" coords="584,78,779,118"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="297,5,383,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="397,26,561,62,611,75,610,80,559,67,396,31"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="247,55,433,95"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="447,80,584,89,584,94,447,85"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Item_1_1Preview_1_1HighlightTrail.html" title="One pen of an item&#45;range telegraph: a head sprite dragging a TrailRenderer ribbon,..." alt="" coords="243,119,437,159"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="451,123,583,107,584,112,451,129"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="37,99,161,124"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="175,117,243,125,242,131,174,123"/>
-<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="5,149,192,189"/>
-<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="206,153,242,149,243,154,206,158"/>
-<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html" title="Tuning for the aim&#45;time item range telegraph (Item Range Preview)." alt="" coords="241,183,439,223"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="437,177,559,142,631,116,633,121,561,147,439,182"/>
+<area shape="rect" id="Node000001" title="Registers and pre&#45;warms the HighlightTrail pen pool to IItemPreviewConfig.MaxPens — the same hard cei..." alt="" coords="581,81,776,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="297,5,381,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="397,27,558,63,610,80,604,80,557,68,397,32"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="246,57,432,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="448,84,583,96,578,97,448,89"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Item_1_1Preview_1_1HighlightTrail.html" title="One pen of an item&#45;range telegraph: a head sprite dragging a TrailRenderer ribbon,..." alt="" coords="242,126,436,171"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="452,131,583,116,578,117,452,136"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="37,105,160,133"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="175,126,244,136,239,138,176,131"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="5,157,192,202"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="207,163,244,160,239,162,208,168"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html" title="Tuning for the aim&#45;time item range telegraph (Item Range Preview)." alt="" coords="241,196,437,240"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="439,188,556,151,624,127,629,125,558,156,441,193"/>
 </map>

@@ -1,7 +1,7 @@
 <map id="BalloonParty.Configuration.Level.LevelScoringCurve" name="BalloonParty.Configuration.Level.LevelScoringCurve">
-<area shape="rect" id="Node000001" title="Monotone piecewise&#45;cubic scoring curve." alt="" coords="348,37,545,77"/>
-<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Configuration_1_1Level_1_1ScoringControlPoint.html" title="One authored milestone on the scoring curve." alt="" coords="5,5,203,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="217,33,348,46,348,51,216,38"/>
-<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Configuration_1_1Level_1_1TailGrowthConfig.html" title="Tail extrapolation configuration for LevelScoringCurve." alt="" coords="5,69,203,109"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="216,76,348,64,348,69,217,82"/>
+<area shape="rect" id="Node000001" title="Monotone piecewise&#45;cubic scoring curve." alt="" coords="346,40,542,85"/>
+<area shape="rect" id="Node000002" href="$structBalloonParty_1_1Configuration_1_1Level_1_1ScoringControlPoint.html" title="One authored milestone on the scoring curve." alt="" coords="5,5,202,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="217,37,348,51,343,53,217,42"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Configuration_1_1Level_1_1TailGrowthConfig.html" title="Tail extrapolation configuration for LevelScoringCurve." alt="" coords="5,75,202,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="217,83,348,72,343,73,217,88"/>
 </map>

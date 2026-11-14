@@ -1,7 +1,7 @@
 <map id="BalloonParty.Game.Score.ColorStreakTracker" name="BalloonParty.Game.Score.ColorStreakTracker">
-<area shape="rect" id="Node000001" title="Owns a ColorStreak per ball." alt="" coords="89,93,279,133"/>
-<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html" title="Read&#45;only access to the current same&#45;colour pop streak, for HUD feedback." alt="" coords="5,5,195,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,53,167,91,164,95,126,57"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="219,13,317,38"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="249,50,205,95,201,91,245,46"/>
+<area shape="rect" id="Node000001" title="Owns a ColorStreak per ball." alt="" coords="88,98,276,143"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1IColorStreak.html" title="Read&#45;only access to the current same&#45;colour pop streak, for HUD feedback." alt="" coords="5,5,194,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,59,165,98,160,98,128,64"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="218,14,315,42"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="246,52,204,100,201,95,241,54"/>
 </map>

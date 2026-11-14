@@ -1,7 +1,7 @@
 <map id="BalloonParty.UI.ScaleDownButton" name="BalloonParty.UI.ScaleDownButton">
-<area shape="rect" id="Node000001" title="On click, tweens a target&#39;s scale toward _targetScale and only then fires _onScaleComplete — so a but..." alt="" coords="51,79,247,119"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,129,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,38,131,77,127,80,87,42"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="154,5,309,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="211,42,170,80,167,77,208,38"/>
+<area shape="rect" id="Node000001" title="On click, tweens a target&#39;s scale toward _targetScale and only then fires _onScaleComplete — so a but..." alt="" coords="51,81,246,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,129,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,42,129,80,124,81,90,47"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="152,5,307,33"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="209,43,171,83,168,78,204,45"/>
 </map>

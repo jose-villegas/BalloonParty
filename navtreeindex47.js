@@ -1,5 +1,6 @@
 var NAVTREEINDEX47 =
 {
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1ProgressHeadsUpRouter.html#adcc9a10549d3bc997a748af9c7765d0f":[5,0,0,6,4,0,3,6],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1ProgressHeadsUpRouter.html#adcc9a10549d3bc997a748af9c7765d0f":[6,0,0,6,4,0,3,6],
 "classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html":[5,0,0,6,5,0],
 "classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html":[6,0,0,6,5,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX47 =
 "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ac8d7beb9f7683f54babbc0a9ac4aca1a":[5,0,0,6,6,4,28],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ac8d7beb9f7683f54babbc0a9ac4aca1a":[6,0,0,6,6,4,28],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ad26c6945c11dfba4d0fee34da1584983":[5,0,0,6,6,4,17],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ad26c6945c11dfba4d0fee34da1584983":[6,0,0,6,6,4,17],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ad918f98244e073801f63105ae04bbbc5":[5,0,0,6,6,4,55]
+"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#ad26c6945c11dfba4d0fee34da1584983":[6,0,0,6,6,4,17]
 };

@@ -1,12 +1,12 @@
 <map id="BalloonParty.UI.Score.ProgressNotice" name="BalloonParty.UI.Score.ProgressNotice">
-<area shape="rect" id="Node000001" title="Floating progress notice: rises in while fading up, holds, then rises out while fading down." alt="" coords="684,50,904,90"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="56,5,180,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,17,404,26,660,47,684,50,683,56,660,53,404,32,194,23"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Shared_1_1Rendering_1_1ColorableRenderer.html" title="Non&#45;generic base so Unity can serialise ColorableRenderer[] fields — [SerializeField] doesn&#39;t work on..." alt="" coords="280,50,505,90"/>
-<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="194,30,287,47,286,53,193,35"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="299,114,486,154"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="499,114,683,85,684,90,500,120"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="519,67,684,67,684,73,519,73"/>
-<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1Rendering_1_1IColorableRenderer.html" title=" " alt="" coords="5,59,231,99"/>
-<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="244,72,280,71,280,76,244,78"/>
+<area shape="rect" id="Node000001" title="Floating progress notice: rises in while fading up, holds, then rises out while fading down." alt="" coords="681,53,901,98"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="56,5,179,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,18,404,28,531,37,658,50,683,56,678,56,657,55,530,42,403,33,195,24"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Shared_1_1Rendering_1_1ColorableRenderer.html" title="Non&#45;generic base so Unity can serialise ColorableRenderer[] fields — [SerializeField] doesn&#39;t work on..." alt="" coords="279,53,503,98"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="194,32,281,51,276,53,195,37"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="298,122,484,167"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="499,123,678,94,683,94,500,128"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="519,73,684,75,678,76,519,78"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1Rendering_1_1IColorableRenderer.html" title=" " alt="" coords="5,60,230,104"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="245,76,281,77,276,78,246,81"/>
 </map>

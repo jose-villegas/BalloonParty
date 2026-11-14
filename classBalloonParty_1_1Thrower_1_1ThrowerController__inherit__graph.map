@@ -1,9 +1,9 @@
 <map id="BalloonParty.Thrower.ThrowerController" name="BalloonParty.Thrower.ThrowerController">
-<area shape="rect" id="Node000001" title=" " alt="" coords="47,79,262,119"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,91,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="76,37,131,76,127,81,73,41"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="115,5,195,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="157,44,157,79,152,79,152,44"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="219,5,317,31"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="241,41,184,81,180,76,238,36"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="46,81,260,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,90,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="77,40,127,79,122,81,75,45"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="113,5,192,33"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="155,47,155,82,150,79,151,51"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="216,5,314,33"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="237,41,184,83,181,78,232,43"/>
 </map>

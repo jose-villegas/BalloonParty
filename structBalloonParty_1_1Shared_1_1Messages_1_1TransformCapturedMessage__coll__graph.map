@@ -1,7 +1,7 @@
 <map id="BalloonParty.Shared.Messages.TransformCapturedMessage" name="BalloonParty.Shared.Messages.TransformCapturedMessage">
-<area shape="rect" id="Node000001" title=" " alt="" coords="91,108,315,148"/>
-<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="5,5,184,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,53,184,106,181,110,123,57"/>
-<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Item_1_1TransformSnapshot.html" title=" " alt="" coords="208,5,413,45"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="282,57,225,110,221,106,278,53"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="91,115,314,160"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="5,5,184,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="128,59,183,114,178,115,126,64"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Item_1_1TransformSnapshot.html" title=" " alt="" coords="208,5,413,50"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="280,60,226,117,223,112,275,62"/>
 </map>

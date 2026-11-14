@@ -1,5 +1,9 @@
 var NAVTREEINDEX108 =
 {
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html":[6,0,0,1,0,9],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#a01ef6214f975df281d75da2b2d413d95":[5,0,0,1,0,9,1],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#a01ef6214f975df281d75da2b2d413d95":[6,0,0,1,0,9,1],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#a7696107b04dcc75432da01bf993e7244":[5,0,0,1,0,9,2],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#a7696107b04dcc75432da01bf993e7244":[6,0,0,1,0,9,2],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#ae31b846c2fee38b3db33b8c143490c6c":[5,0,0,1,0,9,3],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html#ae31b846c2fee38b3db33b8c143490c6c":[6,0,0,1,0,9,3],
@@ -245,9 +249,5 @@ var NAVTREEINDEX108 =
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#a89923e47dfd5f8a7654f06bec37958e1":[6,0,0,3,5,27,12],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#aad179e180cb0427922c38dbad8045d4c":[5,0,0,3,5,27,3],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#aad179e180cb0427922c38dbad8045d4c":[6,0,0,3,5,27,3],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#aaef307d65ba0cb41ae7a3a54b537ead1":[5,0,0,3,5,27,9],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#aaef307d65ba0cb41ae7a3a54b537ead1":[6,0,0,3,5,27,9],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#ab8fb17c0254b1b6c39ed180d03b8a622":[5,0,0,3,5,27,19],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#ab8fb17c0254b1b6c39ed180d03b8a622":[6,0,0,3,5,27,19],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#ad62235d0945253230fb0e7006c8a93d0":[5,0,0,3,5,27,0]
+"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#aaef307d65ba0cb41ae7a3a54b537ead1":[5,0,0,3,5,27,9]
 };

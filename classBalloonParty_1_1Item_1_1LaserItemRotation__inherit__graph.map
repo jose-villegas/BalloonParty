@@ -1,9 +1,9 @@
 <map id="BalloonParty.Item.LaserItemRotation" name="BalloonParty.Item.LaserItemRotation">
-<area shape="rect" id="Node000001" title=" " alt="" coords="263,55,468,95"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="48,5,172,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,31,276,53,275,58,180,36"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Item_1_1ITransformCapture.html" title=" " alt="" coords="5,55,215,95"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="229,73,262,73,262,78,229,78"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Item_1_1ISpinningItemVisual.html" title="Read&#45;only spin state for a held item&#39;s visual — lets the shot solver&#39;s gather extrapolate a spinning ..." alt="" coords="10,119,210,159"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="203,113,284,93,286,98,205,118"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="262,57,466,102"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="48,5,171,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="186,34,269,55,264,57,186,40"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Item_1_1ITransformCapture.html" title=" " alt="" coords="5,57,214,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="229,77,264,79,258,80,230,82"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Item_1_1ISpinningItemVisual.html" title="Read&#45;only spin state for a held item&#39;s visual — lets the shot solver&#39;s gather extrapolate a spinning ..." alt="" coords="10,126,209,171"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="208,119,277,103,282,101,209,124"/>
 </map>

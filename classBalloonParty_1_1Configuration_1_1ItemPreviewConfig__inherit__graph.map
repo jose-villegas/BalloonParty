@@ -1,7 +1,7 @@
 <map id="BalloonParty.Configuration.ItemPreviewConfig" name="BalloonParty.Configuration.ItemPreviewConfig">
-<area shape="rect" id="Node000001" title=" " alt="" coords="65,93,262,133"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,135,38"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,45,145,91,141,95,91,49"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html" title="Tuning for the aim&#45;time item range telegraph (Item Range Preview)." alt="" coords="159,5,357,45"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="229,57,186,95,182,91,225,53"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="65,98,261,143"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,14,134,42"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,50,143,97,138,98,93,55"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html" title="Tuning for the aim&#45;time item range telegraph (Item Range Preview)." alt="" coords="158,5,354,50"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="226,60,186,100,183,96,221,62"/>
 </map>

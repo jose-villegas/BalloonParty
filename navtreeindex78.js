@@ -1,5 +1,6 @@
 var NAVTREEINDEX78 =
 {
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderDataBuilder.html":[5,0,0,13,0,0,5],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderDataBuilder.html":[6,0,0,13,0,0,5],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderDataBuilder.html#a0136067eea7a5c029255d6795cca5c1a":[5,0,0,13,0,0,5,1],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderDataBuilder.html#a0136067eea7a5c029255d6795cca5c1a":[6,0,0,13,0,0,5,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX78 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushViewController.html#a84571c8bd097a39f24d08151ada6f1d8":[5,0,0,13,0,0,9,19],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushViewController.html#a84571c8bd097a39f24d08151ada6f1d8":[6,0,0,13,0,0,9,19],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushViewController.html#a88f1c78558a52ced61bc9de6f0afeb78":[5,0,0,13,0,0,9,20],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushViewController.html#a88f1c78558a52ced61bc9de6f0afeb78":[6,0,0,13,0,0,9,20],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushViewController.html#a93a261d8554ea17b8817bb17330c7ff3":[5,0,0,13,0,0,9,23]
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushViewController.html#a88f1c78558a52ced61bc9de6f0afeb78":[6,0,0,13,0,0,9,20]
 };

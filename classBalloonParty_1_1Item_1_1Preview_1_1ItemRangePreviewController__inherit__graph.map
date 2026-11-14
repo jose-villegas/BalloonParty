@@ -1,9 +1,9 @@
 <map id="BalloonParty.Item.Preview.ItemRangePreviewController" name="BalloonParty.Item.Preview.ItemRangePreviewController">
-<area shape="rect" id="Node000001" title="Decides which item hosts the aim is sighted on, and drives the visible range telegraph through them i..." alt="" coords="65,79,274,119"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,91,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="79,36,142,76,139,81,76,41"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="115,5,223,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="172,44,172,79,167,79,167,44"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="248,5,347,31"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="268,40,202,81,199,76,265,36"/>
+<area shape="rect" id="Node000001" title="Decides which item hosts the aim is sighted on, and drives the visible range telegraph through them i..." alt="" coords="63,81,272,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,90,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="80,39,138,79,133,81,78,45"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="114,5,221,33"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="169,47,170,82,165,79,166,51"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="246,5,343,33"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="264,41,202,83,200,78,259,42"/>
 </map>

@@ -1,5 +1,9 @@
 var NAVTREEINDEX103 =
 {
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScoreColor.html":[5,0,0,13,1,8],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScoreColor.html":[6,0,0,13,1,8],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScoreColor.html#a6f63c972c549c25ce456da1d3477b5e7":[5,0,0,13,1,8,0],
+"interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasScoreColor.html#a6f63c972c549c25ce456da1d3477b5e7":[6,0,0,13,1,8,0],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHitable.html":[5,0,0,13,1,9],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHitable.html":[6,0,0,13,1,9],
 "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHitable.html#a5419ca3dc69e35376638bf36524942f6":[5,0,0,13,1,9,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX103 =
 "namespaceBalloonParty_1_1Editor_1_1ShotSolver.html":[5,0,0,5,7],
 "namespaceBalloonParty_1_1Editor_1_1SpriteCombine.html":[5,0,0,5,8],
 "namespaceBalloonParty_1_1Editor_1_1TestRunner.html":[5,0,0,5,9],
-"namespaceBalloonParty_1_1Game.html":[5,0,0,6],
-"namespaceBalloonParty_1_1Game_1_1CardReveal.html":[5,0,0,6,0],
-"namespaceBalloonParty_1_1Game_1_1Cinematics.html":[5,0,0,6,1],
-"namespaceBalloonParty_1_1Game_1_1Danger.html":[5,0,0,6,2],
-"namespaceBalloonParty_1_1Game_1_1Flight.html":[5,0,0,6,3]
+"namespaceBalloonParty_1_1Game.html":[5,0,0,6]
 };

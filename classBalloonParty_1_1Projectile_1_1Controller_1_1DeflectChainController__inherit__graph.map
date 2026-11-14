@@ -1,7 +1,7 @@
 <map id="BalloonParty.Projectile.Controller.DeflectChainController" name="BalloonParty.Projectile.Controller.DeflectChainController">
-<area shape="rect" id="Node000001" title="Counts each ball&#39;s deflects off balloons since it last touched a wall, announces the run from Deflect..." alt="" coords="5,79,241,119"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="23,5,109,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="85,40,112,77,107,80,80,43"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="133,5,231,31"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="167,43,140,80,135,77,163,40"/>
+<area shape="rect" id="Node000001" title="Counts each ball&#39;s deflects off balloons since it last touched a wall, announces the run from Deflect..." alt="" coords="5,81,241,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="24,5,108,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="85,44,110,80,105,81,82,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="132,5,229,33"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="165,45,140,82,136,78,160,47"/>
 </map>

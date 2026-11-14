@@ -1,9 +1,9 @@
 <map id="BalloonParty.Editor.LaserViewEditor" name="BalloonParty.Editor.LaserViewEditor">
-<area shape="rect" id="Node000001" title=" " alt="" coords="47,211,229,251"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,115,143,141"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,151,128,209,124,212,86,154"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Editor_1_1EffectPreview_1_1EffectViewPreviewPlayer.html" title="Reusable editor preview player for Shared.Pool.EffectView subclasses." alt="" coords="167,108,405,148"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="248,158,167,213,164,208,245,153"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Editor_1_1EffectPreview_1_1IEffectPreviewModule.html" title="Pluggable preview module for EffectViewPreviewPlayer; handles per&#45;effect rendering while the player m..." alt="" coords="177,5,395,45"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="289,59,289,108,283,108,283,59"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,225,187,269"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="6,124,143,151"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="82,165,94,225,89,224,78,169"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Editor_1_1EffectPreview_1_1EffectViewPreviewPlayer.html" title="Reusable editor preview player for Shared.Pool.EffectView subclasses." alt="" coords="168,115,406,160"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="238,167,136,226,133,222,232,168"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Editor_1_1EffectPreview_1_1IEffectPreviewModule.html" title="Pluggable preview module for EffectViewPreviewPlayer; handles per&#45;effect rendering while the player m..." alt="" coords="178,5,395,50"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="288,64,289,115,284,113,285,68"/>
 </map>

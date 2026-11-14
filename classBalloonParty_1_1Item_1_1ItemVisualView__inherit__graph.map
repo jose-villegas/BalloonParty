@@ -1,9 +1,9 @@
 <map id="BalloonParty.Item.ItemVisualView" name="BalloonParty.Item.ItemVisualView">
-<area shape="rect" id="Node000001" title=" " alt="" coords="135,93,378,119"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,129,38"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,41,230,91,228,96,107,46"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Item_1_1IItemView.html" title=" " alt="" coords="153,13,360,38"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="259,52,259,93,254,93,254,52"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="385,5,571,45"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="413,52,290,96,288,91,411,47"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="134,98,376,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,14,129,42"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,45,227,96,223,99,110,51"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Item_1_1IItemView.html" title=" " alt="" coords="152,14,358,42"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="257,56,257,99,253,96,253,59"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="382,5,568,50"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="405,55,291,100,289,95,400,56"/>
 </map>

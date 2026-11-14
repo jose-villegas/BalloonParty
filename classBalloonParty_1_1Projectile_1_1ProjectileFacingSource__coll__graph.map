@@ -1,9 +1,9 @@
 <map id="BalloonParty.Projectile.ProjectileFacingSource" name="BalloonParty.Projectile.ProjectileFacingSource">
-<area shape="rect" id="Node000001" title="Aggregates the DI&#45;only projectile providers (IProjectileRegistry, PredictionTraceProvider) with the f..." alt="" coords="327,69,497,109"/>
-<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileFacingSource.html" title="Read&#45;only facing surface for the loaded/flying shot, exposed to a pooled (non&#45;injected) item visual —..." alt="" coords="7,5,179,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,43,327,70,326,75,191,48"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="7,69,178,109"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="192,87,326,87,326,92,192,92"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html" title="Shared reference to the current aim&#45;prediction trace, decoupled from direct access." alt="" coords="5,133,180,173"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="193,131,326,104,327,109,194,136"/>
+<area shape="rect" id="Node000001" title="Aggregates the DI&#45;only projectile providers (IProjectileRegistry, PredictionTraceProvider) with the f..." alt="" coords="326,75,496,119"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileFacingSource.html" title="Read&#45;only facing surface for the loaded/flying shot, exposed to a pooled (non&#45;injected) item visual —..." alt="" coords="7,5,178,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="193,47,328,77,323,80,193,52"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="7,75,178,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="193,94,327,96,323,98,194,100"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Prediction_1_1PredictionTraceProvider.html" title="Shared reference to the current aim&#45;prediction trace, decoupled from direct access." alt="" coords="5,144,180,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="194,142,328,115,323,116,195,147"/>
 </map>

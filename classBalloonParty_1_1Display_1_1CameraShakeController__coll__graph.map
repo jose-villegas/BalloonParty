@@ -1,13 +1,13 @@
 <map id="BalloonParty.Display.CameraShakeController" name="BalloonParty.Display.CameraShakeController">
-<area shape="rect" id="Node000001" title="Decides WHEN the camera shakes: punches on WaveDamageMessage (once per heart lost) and recoils on Pro..." alt="" coords="511,66,719,106"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="240,5,325,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="339,26,487,55,524,63,523,69,486,61,338,31"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="233,55,332,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="346,68,511,78,510,83,346,74"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Display_1_1CameraShakeView.html" title="Camera&#45;shake View: owns the shake/recoil animation and the additive LateUpdate compositor on the (per..." alt="" coords="179,105,387,145"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="400,108,510,95,510,101,401,114"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="5,112,129,137"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="143,122,179,122,179,127,143,127"/>
-<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Shared_1_1GameState_1_1ICinematicState.html" title="Injectable seam over the static Cinematic state, testable without global state." alt="" coords="185,169,380,209"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="369,162,486,127,557,104,558,109,487,133,371,167"/>
+<area shape="rect" id="Node000001" title="Decides WHEN the camera shakes: punches on WaveDamageMessage (once per heart lost) and recoils on Pro..." alt="" coords="508,69,716,114"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="240,5,324,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="339,28,485,59,515,68,510,68,484,64,339,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="233,57,330,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="346,72,510,84,505,86,346,78"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Display_1_1CameraShakeView.html" title="Camera&#45;shake View: owns the shake/recoil animation and the additive LateUpdate compositor on the (per..." alt="" coords="178,109,385,154"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="400,114,510,103,505,104,401,119"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,117,129,145"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="144,129,180,130,175,132,145,134"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Shared_1_1GameState_1_1ICinematicState.html" title="Injectable seam over the static Cinematic state, testable without global state." alt="" coords="185,178,378,223"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="373,171,483,135,547,115,552,114,485,140,374,176"/>
 </map>

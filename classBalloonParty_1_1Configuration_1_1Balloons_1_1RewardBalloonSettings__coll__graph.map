@@ -1,7 +1,7 @@
 <map id="BalloonParty.Configuration.Balloons.RewardBalloonSettings" name="BalloonParty.Configuration.Balloons.RewardBalloonSettings">
-<area shape="rect" id="Node000001" title=" " alt="" coords="387,37,620,77"/>
-<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html" title="When the reward balloons come (PLAN&#45;RewardBalloons): the golden one late in a purple level,..." alt="" coords="5,5,243,45"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="257,34,387,45,386,50,256,39"/>
-<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Configuration_1_1Balloons_1_1PurpleHeartStep.html" title="One heart balloon of a purple level&#39;s schedule: rolled once, with Chance, on the line that finds the ..." alt="" coords="25,69,223,109"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="236,77,386,64,387,70,237,83"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="385,40,617,85"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html" title="When the reward balloons come (PLAN&#45;RewardBalloons): the golden one late in a purple level,..." alt="" coords="5,5,242,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="257,37,387,51,381,52,257,43"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Configuration_1_1Balloons_1_1PurpleHeartStep.html" title="One heart balloon of a purple level&#39;s schedule: rolled once, with Chance, on the line that finds the ..." alt="" coords="25,75,222,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="237,84,387,73,382,73,237,89"/>
 </map>

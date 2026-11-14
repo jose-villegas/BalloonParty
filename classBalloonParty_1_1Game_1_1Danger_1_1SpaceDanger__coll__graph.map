@@ -1,27 +1,27 @@
 <map id="BalloonParty.Game.Danger.SpaceDanger" name="BalloonParty.Game.Danger.SpaceDanger">
-<area shape="rect" id="Node000001" title="0→1 &quot;how close are we to dying&quot; signal: the next line&#39;s overflow relative to hearts left to absorb it..." alt="" coords="927,126,1125,166"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="683,5,769,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="783,26,826,40,919,82,994,124,991,128,916,86,824,44,782,32"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="672,55,780,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="794,81,826,89,954,123,953,128,825,94,793,86"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="677,104,775,129"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="789,120,927,134,926,139,789,125"/>
-<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Danger_1_1IDangerLevel.html" title="Read&#45;only 0→1 &quot;how close are we to dying&quot; signal, consumed by the danger gradient HUD." alt="" coords="627,154,825,194"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="839,161,926,153,927,158,839,166"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="639,218,813,258"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="805,211,959,163,961,169,806,216"/>
-<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="267,126,440,166"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="454,162,603,197,666,215,665,221,602,202,453,168"/>
-<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,126,212,166"/>
-<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="226,143,267,143,267,149,226,149"/>
-<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="261,190,445,230"/>
-<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="459,215,639,229,639,234,459,221"/>
-<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="264,254,443,294"/>
-<area shape="poly" id="edge9_Node000006_Node000010" title=" " alt="" coords="456,261,639,244,639,249,457,267"/>
-<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,254,198,294"/>
-<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="212,271,264,271,264,277,212,277"/>
-<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="264,318,443,358"/>
-<area shape="poly" id="edge11_Node000006_Node000012" title=" " alt="" coords="456,320,528,304,602,281,626,268,656,256,658,261,628,272,604,286,530,309,457,325"/>
-<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html" title="Read&#45;only view of the player&#39;s hit&#45;point pool." alt="" coords="628,282,824,322"/>
-<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="808,275,824,268,920,215,995,164,998,169,923,219,827,272,810,280"/>
+<area shape="rect" id="Node000001" title="0→1 &quot;how close are we to dying&quot; signal: the next line&#39;s overflow relative to hearts left to absorb it..." alt="" coords="924,132,1122,176"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="682,5,767,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="782,29,825,43,914,86,988,131,983,131,911,91,823,48,782,35"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="671,57,778,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="793,87,824,95,944,131,939,131,823,100,793,92"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="676,109,773,137"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="788,127,926,143,921,144,788,132"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Danger_1_1IDangerLevel.html" title="Read&#45;only 0→1 &quot;how close are we to dying&quot; signal, consumed by the danger gradient HUD." alt="" coords="625,161,824,206"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="839,169,926,163,921,164,840,175"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html" title=" " alt="" coords="638,230,811,275"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="808,222,950,177,955,176,809,227"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html" title="Tracks slots in&#45;transit from balance animations so spawn paths avoid them." alt="" coords="266,132,439,176"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="454,171,602,207,661,230,656,230,601,212,454,176"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,132,212,176"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="227,151,268,153,263,155,228,156"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Shared_1_1ISlotGridConfig.html" title="Slot grid layout: size, spacing, and origin offset." alt="" coords="261,201,444,246"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="460,229,640,245,635,246,460,234"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html" title=" " alt="" coords="264,270,442,315"/>
+<area shape="poly" id="edge9_Node000006_Node000010" title=" " alt="" coords="457,279,641,261,635,262,458,284"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActor.html" title=" " alt="" coords="19,270,198,315"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="213,290,266,292,260,293,214,295"/>
+<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ISlotActorView.html" title=" " alt="" coords="264,340,442,384"/>
+<area shape="poly" id="edge11_Node000006_Node000012" title=" " alt="" coords="457,341,528,323,600,299,624,285,650,276,656,275,627,290,602,304,530,329,458,346"/>
+<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html" title="Read&#45;only view of the player&#39;s hit&#45;point pool." alt="" coords="627,300,822,344"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="810,291,822,285,917,228,990,178,995,176,920,233,825,290,812,296"/>
 </map>

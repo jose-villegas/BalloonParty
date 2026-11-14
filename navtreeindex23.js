@@ -1,5 +1,6 @@
 var NAVTREEINDEX23 =
 {
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGradeSettings.html#ae69bcac875aa5d0c31acceda5cd336ee":[5,0,0,3,5,28,5],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGradeSettings.html#ae69bcac875aa5d0c31acceda5cd336ee":[6,0,0,3,5,28,5],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html":[5,0,0,3,5,29],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html":[6,0,0,3,5,29],
@@ -248,6 +249,5 @@ var NAVTREEINDEX23 =
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SkyScatterSettings.html#a22fe1a151d2b9136a844af3b91283df2":[5,0,0,3,5,31,2],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SkyScatterSettings.html#a22fe1a151d2b9136a844af3b91283df2":[6,0,0,3,5,31,2],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SkyScatterSettings.html#a2d826ad7c75f19ee2a16e0a3b7271a57":[5,0,0,3,5,31,6],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1SkyScatterSettings.html#a2d826ad7c75f19ee2a16e0a3b7271a57":[6,0,0,3,5,31,6],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1SkyScatterSettings.html#a38b7d98031ad7253cb8d0ec86365dcb1":[5,0,0,3,5,31,1]
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SkyScatterSettings.html#a2d826ad7c75f19ee2a16e0a3b7271a57":[6,0,0,3,5,31,6]
 };

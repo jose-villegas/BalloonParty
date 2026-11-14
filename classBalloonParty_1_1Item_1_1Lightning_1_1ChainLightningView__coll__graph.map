@@ -1,17 +1,17 @@
 <map id="BalloonParty.Item.Lightning.ChainLightningView" name="BalloonParty.Item.Lightning.ChainLightningView">
-<area shape="rect" id="Node000001" title="Poolable chain&#45;lightning effect." alt="" coords="676,147,880,187"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Shared_1_1Pool_1_1EffectView.html" title="Abstract base for poolable effect MonoBehaviours; pool via SimplePoolChannel&lt;TItem&gt;." alt="" coords="309,83,495,123"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="509,119,676,147,675,153,509,124"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="41,5,165,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="168,32,202,41,337,81,335,86,201,46,167,37"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="10,55,197,95"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="210,83,308,92,308,97,210,88"/>
-<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1IEffect.html" title="A tintable, positionable visual effect, agnostic to the underlying rendering technology." alt="" coords="5,120,201,145"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="215,119,308,110,309,115,215,124"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="10,170,197,210"/>
-<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="184,163,289,133,330,121,331,126,290,138,186,169"/>
-<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Item_1_1Lightning_1_1IChainEffect.html" title="Lets the handler configure a pooled effect without a hard downcast to the concrete view." alt="" coords="300,147,504,187"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="518,165,676,165,676,170,518,170"/>
-<area shape="rect" id="Node000008" href="$structBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycleState.html" title="Encapsulates the colour&#45;cycling state shared by rainbow laser, lightning, and paint effects." alt="" coords="289,211,515,251"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="528,207,675,182,676,187,529,213"/>
+<area shape="rect" id="Node000001" title="Poolable chain&#45;lightning effect." alt="" coords="672,156,875,200"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Shared_1_1Pool_1_1EffectView.html" title="Abstract base for poolable effect MonoBehaviours; pool via SimplePoolChannel&lt;TItem&gt;." alt="" coords="307,86,493,131"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="508,126,674,159,669,159,508,131"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="41,5,165,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="176,35,201,42,333,84,329,87,200,47,177,40"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="10,57,196,102"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="211,87,308,98,304,100,212,92"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1IEffect.html" title="A tintable, positionable visual effect, agnostic to the underlying rendering technology." alt="" coords="5,125,201,153"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="215,125,309,117,304,119,217,130"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="10,177,196,222"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="192,169,326,130,322,133,194,174"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Item_1_1Lightning_1_1IChainEffect.html" title="Lets the handler configure a pooled effect without a hard downcast to the concrete view." alt="" coords="298,156,502,200"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="517,175,674,177,669,178,517,180"/>
+<area shape="rect" id="Node000008" href="$structBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycleState.html" title="Encapsulates the colour&#45;cycling state shared by rainbow laser, lightning, and paint effects." alt="" coords="288,225,512,270"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="527,221,669,197,674,196,528,226"/>
 </map>

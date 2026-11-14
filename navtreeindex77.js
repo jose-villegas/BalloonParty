@@ -1,5 +1,6 @@
 var NAVTREEINDEX77 =
 {
+"classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#a5821e2ffd213118de7f19a50e5ce93a3":[5,0,0,12,11,5,17],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#a5821e2ffd213118de7f19a50e5ce93a3":[6,0,0,12,11,5,17],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#a5d69dd40d103e82cf41c2d7ec4929762":[5,0,0,12,11,5,5],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#a5d69dd40d103e82cf41c2d7ec4929762":[6,0,0,12,11,5,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX77 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderData.html#ab11ce991142e82efd6c66a8db40dbbe3":[5,0,0,13,0,0,4,0],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderData.html#ab11ce991142e82efd6c66a8db40dbbe3":[6,0,0,13,0,0,4,0],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderData.html#ac1b7483863e496d882d66a1b7c047841":[5,0,0,13,0,0,4,2],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderData.html#ac1b7483863e496d882d66a1b7c047841":[6,0,0,13,0,0,4,2],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderDataBuilder.html":[5,0,0,13,0,0,5]
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderData.html#ac1b7483863e496d882d66a1b7c047841":[6,0,0,13,0,0,4,2]
 };

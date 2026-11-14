@@ -1,5 +1,9 @@
 var NAVTREEINDEX117 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1ScorePointsGroupMessage.html#a0f930d8549ed530d4794e600151b8ac6":[6,0,0,12,7,37,5],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ScorePointsGroupMessage.html#a4646d70123d4b80e08dadbe99be7ccaf":[5,0,0,12,7,37,6],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ScorePointsGroupMessage.html#a4646d70123d4b80e08dadbe99be7ccaf":[6,0,0,12,7,37,6],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ScorePointsGroupMessage.html#a588344602f2e1157ad7db33746fe12dd":[5,0,0,12,7,37,3],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ScorePointsGroupMessage.html#a588344602f2e1157ad7db33746fe12dd":[6,0,0,12,7,37,3],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ScorePointsGroupMessage.html#a7b9fe11cc04eeae157aee0d4ac1f1952":[5,0,0,12,7,37,7],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ScorePointsGroupMessage.html#a7b9fe11cc04eeae157aee0d4ac1f1952":[6,0,0,12,7,37,7],
@@ -245,9 +249,5 @@ var NAVTREEINDEX117 =
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a147fb17455c7484e4fe41236ef8a8263":[6,0,0,13,0,0,21,7],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a1a3ebdf3b82892286f247a51a129a9f9":[5,0,0,13,0,0,21,2],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a1a3ebdf3b82892286f247a51a129a9f9":[6,0,0,13,0,0,21,2],
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a1c0b593e6fc606d812506b065372add1":[5,0,0,13,0,0,21,5],
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a1c0b593e6fc606d812506b065372add1":[6,0,0,13,0,0,21,5],
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a35c1ab7fcfff3c618fe63458f50d7c30":[5,0,0,13,0,0,21,4],
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a35c1ab7fcfff3c618fe63458f50d7c30":[6,0,0,13,0,0,21,4],
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a412a1df74bc3b7663161456a0a659e5b":[5,0,0,13,0,0,21,3]
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1SlotRenderData.html#a1c0b593e6fc606d812506b065372add1":[5,0,0,13,0,0,21,5]
 };

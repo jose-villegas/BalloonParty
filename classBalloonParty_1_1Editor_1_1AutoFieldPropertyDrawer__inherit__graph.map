@@ -1,15 +1,15 @@
 <map id="BalloonParty.Editor.AutoFieldPropertyDrawer" name="BalloonParty.Editor.AutoFieldPropertyDrawer">
-<area shape="rect" id="Node000001" title="Base class for property drawers that auto&#45;draw common fields, with a manual section for fields needin..." alt="" coords="177,133,355,173"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1BalloonPrefabEntryDrawer.html" title=" " alt="" coords="403,5,637,45"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="299,123,346,87,401,55,432,43,434,48,404,60,349,92,302,127"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1HitVfxOverrideDrawer.html" title=" " alt="" coords="417,69,623,109"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="359,127,439,107,441,112,360,132"/>
-<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1ItemSettingsDrawer.html" title=" " alt="" coords="421,133,619,173"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="369,151,421,151,421,156,369,156"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html" title=" " alt="" coords="421,197,619,237"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="360,174,441,195,439,200,359,179"/>
-<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html" title=" " alt="" coords="423,261,617,301"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="302,180,349,215,404,247,434,259,432,264,401,252,346,219,299,184"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,141,129,166"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,151,177,151,177,156,143,156"/>
+<area shape="rect" id="Node000001" title="Base class for property drawers that auto&#45;draw common fields, with a manual section for fields needin..." alt="" coords="177,144,353,189"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1BalloonPrefabEntryDrawer.html" title=" " alt="" coords="401,5,635,50"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="300,131,346,94,400,60,431,49,426,52,402,65,349,98,303,135"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1HitVfxOverrideDrawer.html" title=" " alt="" coords="415,75,621,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="363,137,436,119,431,121,364,142"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1ItemSettingsDrawer.html" title=" " alt="" coords="420,144,616,189"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="368,164,422,166,417,167,369,169"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Configuration_1_1Editor_1_1PaintProfileDrawer.html" title=" " alt="" coords="420,213,616,258"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="364,191,437,212,431,213,363,196"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Nudge_1_1Editor_1_1NudgeOverrideDrawer.html" title=" " alt="" coords="422,283,614,327"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="302,197,349,234,402,268,431,282,426,282,400,273,346,239,301,202"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,152,129,180"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,164,179,165,174,168,145,169"/>
 </map>

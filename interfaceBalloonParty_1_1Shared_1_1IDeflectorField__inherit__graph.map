@@ -1,5 +1,5 @@
 <map id="BalloonParty.Shared.IDeflectorField" name="BalloonParty.Shared.IDeflectorField">
-<area shape="rect" id="Node000001" title="The deflectors the aim telegraph must bounce off, in the geometry the projectile will actually meet." alt="" coords="5,5,224,45"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGridDeflectorField.html" title="Every occupied slot whose actor would turn an ordinary shot away, as circles." alt="" coords="28,93,201,133"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,59,117,93,112,93,112,59"/>
+<area shape="rect" id="Node000001" title="The deflectors the aim telegraph must bounce off, in the geometry the projectile will actually meet." alt="" coords="5,5,223,50"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Slots_1_1Grid_1_1SlotGridDeflectorField.html" title="Every occupied slot whose actor would turn an ordinary shot away, as circles." alt="" coords="28,98,200,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="116,64,116,99,112,97,112,68"/>
 </map>

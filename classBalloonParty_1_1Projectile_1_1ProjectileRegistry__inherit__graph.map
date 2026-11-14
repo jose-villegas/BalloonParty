@@ -1,9 +1,9 @@
 <map id="BalloonParty.Projectile.ProjectileRegistry" name="BalloonParty.Projectile.ProjectileRegistry">
-<area shape="rect" id="Node000001" title=" " alt="" coords="92,181,263,221"/>
-<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistryWriter.html" title="The write half of IProjectileRegistry." alt="" coords="5,93,187,133"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,142,161,179,157,183,122,145"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="11,5,181,45"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,59,99,93,93,93,93,59"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="211,101,309,126"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="241,138,198,183,194,179,238,134"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="92,191,262,235"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistryWriter.html" title="The write half of IProjectileRegistry." alt="" coords="5,98,186,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,152,160,190,155,191,124,157"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Projectile_1_1IProjectileRegistry.html" title="Which shots exist right now: the one held in the thrower, and every one in flight (oldest first)." alt="" coords="10,5,181,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="96,63,98,98,93,97,95,68"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="210,106,307,134"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="239,145,198,192,195,188,234,147"/>
 </map>

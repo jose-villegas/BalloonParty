@@ -1,19 +1,19 @@
 <map id="BalloonParty.Item.SightReaction" name="BalloonParty.Item.SightReaction">
-<area shape="rect" id="Node000001" title="Base for a behaviour that reacts to the loaded shot&#39;s aim&#45;prediction line being sighted on this item,..." alt="" coords="177,173,408,198"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Item_1_1SightRampReaction.html" title="A SightReaction that eases a continuous value every frame off the probe&#39;s raw centrality (0 = off&#45;aim..." alt="" coords="456,165,667,205"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="422,183,456,183,456,188,422,188"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,173,129,198"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,183,177,183,177,188,143,188"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Item_1_1PredictionSightSpiral.html" title="A SightRampReaction that dampens a PierceConeSpiral renderer&#39;s Climb Speed (_Speed) when the shot&#39;s a..." alt="" coords="719,5,925,45"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="589,154,644,103,677,77,713,55,740,43,742,48,716,60,680,82,647,107,593,157"/>
-<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Item_1_1SightFadeReaction.html" title="A SightRampReaction that fades a SpriteRenderer in and out with the aim&#39;s centrality on this item — a..." alt="" coords="721,69,923,109"/>
-<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="618,157,714,119,749,107,751,112,716,124,620,162"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html" title="A SightRampReaction that points a GlitterSwirl material&#39;s _Drift along the incoming shot — the specks..." alt="" coords="715,133,929,173"/>
-<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="680,168,714,164,715,169,681,173"/>
-<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Item_1_1SightScalePulseReaction.html" title="A SightRampReaction that throbs a transform&#39;s scale while the shot&#39;s aim is sighted on this item — a ..." alt="" coords="718,197,926,237"/>
-<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="681,197,718,202,717,207,680,203"/>
-<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Item_1_1SightShakeReaction.html" title="A SightRampReaction that jitters a transform while the shot&#39;s aim is sighted on this item — the ampli..." alt="" coords="716,261,928,301"/>
-<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="620,208,716,247,751,259,749,264,714,252,618,213"/>
-<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Item_1_1SightSpinReaction.html" title="A SightRampReaction that orbits a transform around a pivot — a local&#45;space offset from its rest posit..." alt="" coords="721,325,923,365"/>
-<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="593,213,647,263,680,289,716,311,742,323,740,328,713,316,677,293,644,267,589,217"/>
+<area shape="rect" id="Node000001" title="Base for a behaviour that reacts to the loaded shot&#39;s aim&#45;prediction line being sighted on this item,..." alt="" coords="177,187,406,215"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Item_1_1SightRampReaction.html" title="A SightReaction that eases a continuous value every frame off the probe&#39;s raw centrality (0 = off&#45;aim..." alt="" coords="454,179,664,223"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="421,198,456,200,451,202,422,204"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,187,129,215"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,199,179,200,174,202,145,203"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Item_1_1PredictionSightSpiral.html" title="A SightRampReaction that dampens a PierceConeSpiral renderer&#39;s Climb Speed (_Speed) when the shot&#39;s a..." alt="" coords="717,5,921,50"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="588,165,642,112,675,84,711,60,734,52,739,49,714,65,679,88,646,115,591,169"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Item_1_1SightFadeReaction.html" title="A SightRampReaction that fades a SpriteRenderer in and out with the aim&#39;s centrality on this item — a..." alt="" coords="718,75,920,119"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="620,169,711,129,747,119,742,121,713,134,622,174"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html" title="A SightRampReaction that points a GlitterSwirl material&#39;s _Drift along the incoming shot — the specks..." alt="" coords="712,144,926,189"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="679,182,715,180,709,181,680,188"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Item_1_1SightScalePulseReaction.html" title="A SightRampReaction that throbs a transform&#39;s scale while the shot&#39;s aim is sighted on this item — a ..." alt="" coords="715,213,923,258"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="679,214,718,222,712,222,680,220"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Item_1_1SightShakeReaction.html" title="A SightRampReaction that jitters a transform while the shot&#39;s aim is sighted on this item — the ampli..." alt="" coords="713,283,925,327"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="621,228,713,268,747,282,742,282,711,273,621,233"/>
+<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Item_1_1SightSpinReaction.html" title="A SightRampReaction that orbits a transform around a pivot — a local&#45;space offset from its rest posit..." alt="" coords="719,352,919,397"/>
+<area shape="poly" id="edge8_Node000003_Node000009" title=" " alt="" coords="591,233,646,287,679,314,714,337,739,352,734,351,711,342,675,318,642,290,589,238"/>
 </map>
