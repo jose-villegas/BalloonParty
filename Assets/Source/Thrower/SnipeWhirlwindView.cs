@@ -43,8 +43,11 @@ namespace BalloonParty.Thrower
         [Tooltip("World units above the whirlwind the light starts, straight up: above the board's top edge.")]
         [SerializeField] [Min(0f)] private float _skyLightHeight = 10f;
 
-        [Tooltip("Seconds the light takes to fall onto the cannon, in scaled time. The whirlwind starts as it lands; 0 skips the light.")]
-        [SerializeField] [Min(0f)] private float _skyLightSeconds = 0.4f;
+        [Tooltip("Shortest fall onto the cannon, in scaled time: a reload quicker than this and the whirlwind runs past ready.")]
+        [SerializeField] [Min(0f)] private float _skyLightMinSeconds = 0.4f;
+
+        [Tooltip("Longest fall onto the cannon, in scaled time. The fall fills what the reload leaves after the whirlwind, up to this; 0 skips the light.")]
+        [SerializeField] [Min(0f)] private float _skyLightMaxSeconds = 1.4f;
 
         [Tooltip("How the fall runs: an ease-in drops slowly from the sky and lands fast.")]
         [SerializeField] private Ease _skyLightEase = Ease.InQuad;
@@ -91,16 +94,18 @@ namespace BalloonParty.Thrower
 
         /// <summary>
         ///     Drops the sky light in palette slot <paramref name="skyLightPaletteIndex" /> onto the cannon, then
-        ///     plays the whirlwind in <paramref name="color" />. Restarts a play already running, from the sky.
+        ///     plays the whirlwind in <paramref name="color" />, timed to end as a reload of
+        ///     <paramref name="reloadSeconds" /> does. Restarts a play already running, from the sky.
         /// </summary>
-        internal void Play(Color color, int skyLightPaletteIndex)
+        internal void Play(Color color, int skyLightPaletteIndex, float reloadSeconds)
         {
             _tween?.Kill();
             ReleaseSkyLight();
             SetVisible(false);
             _color = color;
 
-            if (_lightField == null || _skyLightSeconds <= 0f)
+            var fallSeconds = SkyLightSeconds(reloadSeconds, _duration, _skyLightMinSeconds, _skyLightMaxSeconds);
+            if (_lightField == null || fallSeconds <= 0f)
             {
                 PlayWhirlwind();
                 return;
@@ -110,7 +115,7 @@ namespace BalloonParty.Thrower
             _skyLight.PaletteIndex.Value = skyLightPaletteIndex;
             ApplySkyLight(0f);
             _skyLightRegistration = _lightField.RegisterLight(_skyLight);
-            _tween = DOVirtual.Float(0f, 1f, _skyLightSeconds, ApplySkyLight)
+            _tween = DOVirtual.Float(0f, 1f, fallSeconds, ApplySkyLight)
                 .SetEase(_skyLightEase)
                 .SetLink(gameObject)
                 .OnComplete(() =>
@@ -134,6 +139,21 @@ namespace BalloonParty.Thrower
             var rise = fadeInShare > 0f ? Mathf.Clamp01(t / fadeInShare) : 1f;
             var fall = fadeOutShare > 0f ? Mathf.Clamp01((1f - t) / fadeOutShare) : 1f;
             return Mathf.Min(rise, fall);
+        }
+
+        /// <summary>
+        ///     How long the sky light falls: what <paramref name="reloadSeconds" /> leaves once the whirlwind's
+        ///     <paramref name="whirlwindSeconds" /> are taken out, so both end as the ball is ready, kept between
+        ///     <paramref name="minSeconds" /> and <paramref name="maxSeconds" />. A max of 0 means no light.
+        /// </summary>
+        internal static float SkyLightSeconds(float reloadSeconds, float whirlwindSeconds, float minSeconds, float maxSeconds)
+        {
+            if (maxSeconds <= 0f)
+            {
+                return 0f;
+            }
+
+            return Mathf.Clamp(reloadSeconds - whirlwindSeconds, Mathf.Min(minSeconds, maxSeconds), maxSeconds);
         }
 
         /// <summary>

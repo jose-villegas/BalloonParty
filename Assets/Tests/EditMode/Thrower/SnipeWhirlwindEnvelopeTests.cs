@@ -54,6 +54,20 @@ namespace BalloonParty.Tests.Thrower
             AssertNear(landing, SnipeWhirlwindView.SkyLightPosition(landing, 10f, fall));
         }
 
+        [TestCase(1.5f, 1f)]
+        [TestCase(2f, 1.4f)]
+        [TestCase(0.12f, 0.4f)]
+        public void SkyLightSeconds_FillsTheReloadLeftAfterTheWhirlwind_WithinItsBounds(float reload, float expected)
+        {
+            Assert.AreEqual(expected, SnipeWhirlwindView.SkyLightSeconds(reload, 0.5f, 0.4f, 1.4f), 1e-5f);
+        }
+
+        [Test]
+        public void SkyLightSeconds_NoMax_SkipsTheLight()
+        {
+            Assert.AreEqual(0f, SnipeWhirlwindView.SkyLightSeconds(2f, 0.5f, 0.4f, 0f));
+        }
+
         private static void AssertNear(Vector3 expected, Vector3 actual)
         {
             Assert.Less(Vector3.Distance(expected, actual), 1e-4f, $"expected {expected}, got {actual}");

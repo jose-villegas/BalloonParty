@@ -66,10 +66,14 @@ colour for the whirlwind and the `SnipeSkyLight` slot (white) for the light.
 
 First a bright scene light (`Shared/SceneLight/`, registered on the field the view is handed through
 `ThrowerView`'s `[Inject]`) drops from `_skyLightHeight` (10 world units, above the board's top edge)
-straight down onto the cannon over `_skyLightSeconds` (0.4 s), on an ease-in, so it leaves the sky slowly and
-lands fast. Its intensity and radius lerp down with the distance it has come, from `_skyLightStartIntensity` /
+straight down onto the cannon, on an ease-in, so it leaves the sky slowly and lands fast. The roll comes as
+the reload starts, so the light and the whirlwind only have the reload to play in: the fall takes what
+`IWeaponStats.ReloadSeconds` (the reload while a shot flies, as the one just fired does: 2 s, less with Faster
+Reload) leaves after the whirlwind's `_duration`, kept between `_skyLightMinSeconds` and `_skyLightMaxSeconds`
+(0.4 and 1.4 s; `SkyLightSeconds`). So with the 2 s reload it falls for 1.4 s and the whirlwind ends just
+before the ball is ready. Its intensity and radius lerp down with the distance it has come, from `_skyLightStartIntensity` /
 `_skyLightStartRadius` (6, 3) to `_skyLightEndIntensity` / `_skyLightEndRadius` (1.5, 1). It falls down the
-world, not along the aim. Where it lands it goes out and the whirlwind starts. 0 seconds skips the light.
+world, not along the aim. Where it lands it goes out and the whirlwind starts. A max of 0 skips the light.
 
 The ball is armed from the load, not when the light lands, so a ball fired early is still a lance and the
 light and whirlwind finish on their own. They play while the armed ball slides out to the muzzle, so they

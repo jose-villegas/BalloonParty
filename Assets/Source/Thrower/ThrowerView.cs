@@ -75,11 +75,11 @@ namespace BalloonParty.Thrower
                 .SetLink(gameObject);
         }
 
-        public void PlaySnipeWhirlwind(Color color, int skyLightPaletteIndex)
+        public void PlaySnipeWhirlwind(Color color, int skyLightPaletteIndex, float reloadSeconds)
         {
             if (_snipeWhirlwind != null)
             {
-                _snipeWhirlwind.Play(color, skyLightPaletteIndex);
+                _snipeWhirlwind.Play(color, skyLightPaletteIndex, reloadSeconds);
             }
         }
 

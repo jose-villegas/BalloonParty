@@ -383,13 +383,15 @@ namespace BalloonParty.Thrower
             _registry.Load(_loadedProjectile, _loadedView.transform);
 
             // Rolled as the reload starts, so the sky light falls and the whirlwind spins up while the ball is
-            // still sliding out to the muzzle: the ball is armed from here, even if fired before they finish. Before the loaded message, so every reader of it (the
+            // still sliding out to the muzzle, timed by the reload a shot in flight gets (the one just fired is):
+            // the ball is armed from here, even if fired before they finish. Before the loaded message, so every reader of it (the
             // auto-fire cheat's solve among them) sees the lance.
             if (_snipeChance.TryArm(_loadedProjectile))
             {
                 _view.PlaySnipeWhirlwind(
                     _palette.GetColor(GamePalette.SnipeWhirlwindColorId),
-                    _palette.PaletteIndexOf(GamePalette.SnipeSkyLightColorId));
+                    _palette.PaletteIndexOf(GamePalette.SnipeSkyLightColorId),
+                    _weapon.ReloadSeconds);
             }
 
             _loadedPublisher.Publish(new ProjectileLoadedMessage(_loadedProjectile));
