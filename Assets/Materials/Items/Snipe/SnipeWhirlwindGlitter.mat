@@ -31,10 +31,10 @@ Material:
     m_Floats:
     - PixelSnap: 0
     - _GlitterBrightness: 2.5
-    - _GlitterChance: 0.7
-    - _GlitterDensity: 18
+    - _GlitterChance: 0.85
+    - _GlitterDensity: 16
     - _GlitterSharpness: 24
-    - _GlitterSize: 0.3
+    - _GlitterSize: 0.25
     - _GlitterSpeed: 3
     - _MirrorX: 0
     - _SwirlRadius: 0.3
