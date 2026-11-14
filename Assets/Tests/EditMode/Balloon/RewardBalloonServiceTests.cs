@@ -195,6 +195,46 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(BalloonType.Golden, type);
         }
 
+        // The sure level is the player's first golden balloon: no roll, so even the worst roll brings it.
+        [Test]
+        public void SureGolden_ItsLevelAlwaysBringsOne_WithoutARoll()
+        {
+            UseOrdinaryGolden(level: 5, roll: 0.99f);
+            _settings.SureGoldenLevel.Returns(5);
+            var rolls = 0;
+            _service.Random01 = () =>
+            {
+                rolls++;
+                return 0.99f;
+            };
+            SetCompletion(0.8f);
+
+            Assert.IsTrue(_service.TryTakeDue(out var type));
+            Assert.AreEqual(BalloonType.Golden, type);
+            Assert.AreEqual(0, rolls);
+        }
+
+        [Test]
+        public void SureGolden_OtherCheckLevelsStillRoll()
+        {
+            UseOrdinaryGolden(level: 10, roll: 0.99f);
+            _settings.SureGoldenLevel.Returns(5);
+            SetCompletion(0.8f);
+
+            Assert.IsFalse(LinesUntilDue(20));
+        }
+
+        [Test]
+        public void SureGolden_IsASingleOne()
+        {
+            UseOrdinaryGolden(level: 5, roll: 0.99f);
+            _settings.SureGoldenLevel.Returns(5);
+
+            PlaceAndPopAGolden(roll: 0f);
+
+            Assert.IsFalse(LinesUntilDue(20));
+        }
+
         [TestCase(5, 5, true)]
         [TestCase(5, 10, true)]
         [TestCase(5, 4, false)]

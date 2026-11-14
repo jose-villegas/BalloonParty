@@ -22,7 +22,8 @@ namespace BalloonParty.Balloon.Reward
     ///         (<see cref="IRewardBalloonSettings.GoldenRepeatChances" />, up to three a level), which comes a few
     ///         lines later; a board clear or a level change rolls nothing. Off a purple level, every
     ///         <see cref="IRewardBalloonSettings.OrdinaryGoldenEveryLevels" /> levels roll once for a single one, at the
-    ///         same completion, whose pop rolls for no other.
+    ///         same completion, whose pop rolls for no other; <see cref="IRewardBalloonSettings.SureGoldenLevel" />
+    ///         always brings one.
     ///     </para>
     ///     <para>
     ///         The heart balloon: on a purple level, the schedule's steps (<see cref="IRewardBalloonSettings.PurpleHearts" />),
@@ -249,8 +250,10 @@ namespace BalloonParty.Balloon.Reward
             if (!_ordinaryGoldenRolled)
             {
                 _ordinaryGoldenRolled = true;
-                _ordinaryGoldenWon = IsOrdinaryGoldenLevel(_settings, _levelProgress.Level.Value)
-                                     && Random01() < _settings.OrdinaryGoldenChance;
+                var number = _levelProgress.Level.Value;
+                _ordinaryGoldenWon = (number > 0 && number == _settings.SureGoldenLevel)
+                                     || (IsOrdinaryGoldenLevel(_settings, number)
+                                         && Random01() < _settings.OrdinaryGoldenChance);
             }
 
             return _ordinaryGoldenWon && _goldensThisLevel == 0
