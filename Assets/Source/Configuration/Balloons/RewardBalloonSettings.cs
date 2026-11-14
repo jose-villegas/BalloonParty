@@ -9,7 +9,7 @@ namespace BalloonParty.Configuration.Balloons
     {
         [Tooltip("The level's completion (each colour's points, capped at the goal, over all the goals) from which " +
                  "a purple level's next line brings its first golden balloon.")]
-        [SerializeField] [Range(0f, 1f)] private float _goldenAtCompletion = 0.75f;
+        [SerializeField] [Range(0f, 1f)] private float _goldenAtCompletion = 0.5f;
 
         [Tooltip("The chance, 0 to 1, of each further golden balloon on a purple level, rolled once when the one " +
                  "before it pops (a board clear or a level change is no pop): the first entry for the second balloon, " +

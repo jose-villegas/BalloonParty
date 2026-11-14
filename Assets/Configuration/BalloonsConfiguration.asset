@@ -242,7 +242,7 @@ MonoBehaviour:
     _snakeWeight: 1
     _snakeWeightPerExtraUnbreakable: 0.5
   _rewardBalloons:
-    _goldenAtCompletion: 0.75
+    _goldenAtCompletion: 0.5
     _goldenRepeatChances:
     - 0.25
     - 0.1

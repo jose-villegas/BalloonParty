@@ -1,7 +1,7 @@
 # Balloon/Reward
 
 Two balloons are rewards rather than threats, and no level's mix brings them. The **golden balloon** comes
-on a purple level, from the line that finds the level three quarters done, and popping it can bring
+on a purple level, from the line that finds the level half done, and popping it can bring
 another, up to three a level. The **heart balloon** comes to a purple level on a schedule, up to three,
 even at full hearts, where its pop gives an extra heart past the maximum; on any other level it comes to a
 player who is missing hearts, more often the more are missing. At most one of each is on the board. The
@@ -44,7 +44,7 @@ Only while the level is being played (`LevelUpPhase.Playing`), and only for a ty
 has an entry for.
 
 - **Golden.** On a purple level (`IsExtraColorLevel`), the first once `LevelCompletion` reaches
-  `GoldenAtCompletion` (0.75): each colour's points, capped at the goal, over all the goals. Its pop rolls
+  `GoldenAtCompletion` (0.5): each colour's points, capped at the goal, over all the goals. Its pop rolls
   once for a second: `GoldenRepeatChances` (25%, then 10% for a third, so three at most). A won roll
   brings it `GoldenRepeatDelayLines` (3) lines after the pop. Only a pop rolls (the service reads
   `ActorHitMessage` for it), so a golden balloon a board clear takes, or one popped after its level ended,

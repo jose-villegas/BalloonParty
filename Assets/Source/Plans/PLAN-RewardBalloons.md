@@ -15,7 +15,7 @@
 ## Goals
 
 1. **Golden balloon.**
-   - Only on purple (extra-colour) levels, placed when the level is about 75% done. Its pop rolls once for
+   - Only on purple (extra-colour) levels, placed when the level is about half done (75% at first; moved to 50% after playtests). Its pop rolls once for
      another (25%, then 10% for a third: three a level at most), which comes a few lines later. Never more
      than one on the board, and only a pop rolls: one a board clear takes brings no other.
    - Normal hits do nothing: the shot bounces off it as off an unbreakable. Items do nothing either
@@ -64,7 +64,7 @@ sequenceDiagram
     participant Pay as RewardBalloonPayout
     participant Up as RunUpgrades
     Spw->>Rwd: a clock line asks what is due
-    Rwd->>Lvl: reads the completion, 0.75 on a purple level
+    Rwd->>Lvl: reads the completion, 0.5 on a purple level
     Rwd-->>Spw: the golden balloon
     Spw->>Rwd: placed, with a callback for when it leaves
     Hit->>Hit: a piercing shot plows it, shatters it at the wall
@@ -80,7 +80,7 @@ sequenceDiagram
 
 | Setting | Start at | Meaning |
 |---|---|---|
-| `GoldenAtCompletion` | 0.75 | The level's completion that places the golden balloon on a purple level |
+| `GoldenAtCompletion` | 0.5 | The level's completion that places the golden balloon on a purple level |
 | `GoldenRepeatChances` | 0.25, 0.1 | The chance of the second and third golden balloon, each rolled once when the one before pops |
 | `GoldenRepeatDelayLines` | 3 | Lines after a golden pop before the one it won comes |
 | `HeartChanceMissingOne` | 0.04 | Chance per line of a heart balloon while one heart is missing |
