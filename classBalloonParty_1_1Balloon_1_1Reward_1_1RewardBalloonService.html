@@ -109,6 +109,7 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloo
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pac-methods">Package Functions</a> &#124;
 <a href="#pac-static-methods">Static Package Functions</a> &#124;
 <a href="#properties">Properties</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
@@ -138,8 +139,8 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloo
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a967bd07c598338e2f491f7b4a09244cf" id="r_a967bd07c598338e2f491f7b4a09244cf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a967bd07c598338e2f491f7b4a09244cf">RewardBalloonService</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html">IBalloonsConfiguration</a> balloons, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a> levelProgress, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html">IActiveLevelParameters</a> levelParams, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html">IPlayerHealth</a> health)</td></tr>
-<tr class="separator:a967bd07c598338e2f491f7b4a09244cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa72959c12f6b73447e89471b5442d5f0" id="r_aa72959c12f6b73447e89471b5442d5f0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa72959c12f6b73447e89471b5442d5f0">RewardBalloonService</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html">IBalloonsConfiguration</a> balloons, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a> levelProgress, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html">IActiveLevelParameters</a> levelParams, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html">IPlayerHealth</a> health, ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html">ActorHitMessage</a> &gt; hitSubscriber)</td></tr>
+<tr class="separator:aa72959c12f6b73447e89471b5442d5f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3843213df88171061130bd894f8fc69" id="r_ad3843213df88171061130bd894f8fc69"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3843213df88171061130bd894f8fc69">Dispose</a> ()</td></tr>
 <tr class="separator:ad3843213df88171061130bd894f8fc69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a199b35f6a164e895144350892302c761" id="r_a199b35f6a164e895144350892302c761"><td class="memItemLeft" align="right" valign="top">Action&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a199b35f6a164e895144350892302c761">Placed</a> (<a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60e">BalloonType</a> type)</td></tr>
@@ -160,11 +161,17 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a250b9c34e7a391c5e60fd81bcf5b3cfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether this line brings a reward balloon, and which.  <br /></td></tr>
 <tr class="separator:a250b9c34e7a391c5e60fd81bcf5b3cfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
+Package Functions</h2></td></tr>
+<tr class="memitem:a73d1a67a968acd515d39ca4befc8a770" id="r_a73d1a67a968acd515d39ca4befc8a770"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a73d1a67a968acd515d39ca4befc8a770">OnHit</a> (<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html">ActorHitMessage</a> msg)</td></tr>
+<tr class="memdesc:a73d1a67a968acd515d39ca4befc8a770"><td class="mdescLeft">&#160;</td><td class="mdescRight">A golden balloon's pop rolls once for the level's next one.  <br /></td></tr>
+<tr class="separator:a73d1a67a968acd515d39ca4befc8a770"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
-<tr class="memitem:ae11cc2a792dfb1aead5b6c5eac9aa020" id="r_ae11cc2a792dfb1aead5b6c5eac9aa020"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae11cc2a792dfb1aead5b6c5eac9aa020">HeartChance</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html">IRewardBalloonSettings</a> settings, int missingHearts, bool purple)</td></tr>
-<tr class="memdesc:ae11cc2a792dfb1aead5b6c5eac9aa020"><td class="mdescLeft">&#160;</td><td class="mdescRight">The heart balloon's chance on a line: none at full hearts, more the more are missing.  <br /></td></tr>
-<tr class="separator:ae11cc2a792dfb1aead5b6c5eac9aa020"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1cbc6e3792f1abfe9c10d1747ce207c8" id="r_a1cbc6e3792f1abfe9c10d1747ce207c8"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1cbc6e3792f1abfe9c10d1747ce207c8">HeartChance</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html">IRewardBalloonSettings</a> settings, int missingHearts)</td></tr>
+<tr class="memdesc:a1cbc6e3792f1abfe9c10d1747ce207c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">The heart balloon's chance on a line off a purple level: none at full hearts (or past them), more the more are missing.  <br /></td></tr>
+<tr class="separator:a1cbc6e3792f1abfe9c10d1747ce207c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -175,6 +182,8 @@ Properties</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a0f5787372c09f1ad7541afd32e89e2b3" id="r_a0f5787372c09f1ad7541afd32e89e2b3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0f5787372c09f1ad7541afd32e89e2b3">ForgetLevelsRewards</a> ()</td></tr>
+<tr class="separator:a0f5787372c09f1ad7541afd32e89e2b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31ec97ecaa7e0db062d0c79bcbe60f53" id="r_a31ec97ecaa7e0db062d0c79bcbe60f53"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31ec97ecaa7e0db062d0c79bcbe60f53">GoldenDue</a> ()</td></tr>
 <tr class="separator:a31ec97ecaa7e0db062d0c79bcbe60f53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6926bd51065d42d710ad44a9ca9d34ed" id="r_a6926bd51065d42d710ad44a9ca9d34ed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6926bd51065d42d710ad44a9ca9d34ed">GoldenLeft</a> (int placement)</td></tr>
@@ -183,6 +192,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a370e5b898a3d7398e8f5e331f35dbded"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af08f48055cec8a5989b529e338997481" id="r_af08f48055cec8a5989b529e338997481"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af08f48055cec8a5989b529e338997481">HeartLeft</a> (int placement)</td></tr>
 <tr class="separator:af08f48055cec8a5989b529e338997481"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bb1d1ab5da0180c9fd01e744b5201d1" id="r_a4bb1d1ab5da0180c9fd01e744b5201d1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4bb1d1ab5da0180c9fd01e744b5201d1">PurpleHeartDue</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html">ILevelParameters</a> level)</td></tr>
+<tr class="separator:a4bb1d1ab5da0180c9fd01e744b5201d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -193,12 +204,16 @@ Static Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a78161b226ba7f2b7a0a13cf3d5a9b915" id="r_a78161b226ba7f2b7a0a13cf3d5a9b915"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a78161b226ba7f2b7a0a13cf3d5a9b915">_goldenAlive</a></td></tr>
 <tr class="separator:a78161b226ba7f2b7a0a13cf3d5a9b915"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3c1e1ed3b5e24f3f8fc9218e89783b7" id="r_aa3c1e1ed3b5e24f3f8fc9218e89783b7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa3c1e1ed3b5e24f3f8fc9218e89783b7">_goldenOwed</a></td></tr>
+<tr class="separator:aa3c1e1ed3b5e24f3f8fc9218e89783b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d5f808c4cd0f07da75a88ebe0af1af3" id="r_a0d5f808c4cd0f07da75a88ebe0af1af3"><td class="memItemLeft" align="right" valign="top">readonly bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0d5f808c4cd0f07da75a88ebe0af1af3">_goldenPlaceable</a></td></tr>
 <tr class="separator:a0d5f808c4cd0f07da75a88ebe0af1af3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a027c86032bf50452cb56d4ca6d09cce6" id="r_a027c86032bf50452cb56d4ca6d09cce6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a027c86032bf50452cb56d4ca6d09cce6">_goldenPlacedThisLevel</a></td></tr>
-<tr class="separator:a027c86032bf50452cb56d4ca6d09cce6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8fb98404cd3d0aaa8a3e8426a20fcd82" id="r_a8fb98404cd3d0aaa8a3e8426a20fcd82"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8fb98404cd3d0aaa8a3e8426a20fcd82">_goldenPlacement</a></td></tr>
 <tr class="separator:a8fb98404cd3d0aaa8a3e8426a20fcd82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd608dec4880aba6c20d76c1ee9339d8" id="r_afd608dec4880aba6c20d76c1ee9339d8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afd608dec4880aba6c20d76c1ee9339d8">_goldenRolled</a></td></tr>
+<tr class="separator:afd608dec4880aba6c20d76c1ee9339d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bc16a236834e93b91abefc697b190d7" id="r_a5bc16a236834e93b91abefc697b190d7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5bc16a236834e93b91abefc697b190d7">_goldensThisLevel</a></td></tr>
+<tr class="separator:a5bc16a236834e93b91abefc697b190d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e9b4129a8f762cf25a1d640017a5c69" id="r_a9e9b4129a8f762cf25a1d640017a5c69"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html">IPlayerHealth</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9e9b4129a8f762cf25a1d640017a5c69">_health</a></td></tr>
 <tr class="separator:a9e9b4129a8f762cf25a1d640017a5c69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3dbd524d9913d2747b2c67551cb26ef2" id="r_a3dbd524d9913d2747b2c67551cb26ef2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3dbd524d9913d2747b2c67551cb26ef2">_heartAlive</a></td></tr>
@@ -209,23 +224,35 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a720926dfd04a2bde6db5ed9dbfa8fd6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c2a782e0e49bffeb586fe8a1572f06c" id="r_a4c2a782e0e49bffeb586fe8a1572f06c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4c2a782e0e49bffeb586fe8a1572f06c">_heartPlacement</a></td></tr>
 <tr class="separator:a4c2a782e0e49bffeb586fe8a1572f06c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84c24d352b8c68c1299574bcb5ad547a" id="r_a84c24d352b8c68c1299574bcb5ad547a"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html">ActorHitMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a84c24d352b8c68c1299574bcb5ad547a">_hitSubscriber</a></td></tr>
+<tr class="separator:a84c24d352b8c68c1299574bcb5ad547a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1c67ea0a630d394ccce040b4667473b" id="r_ac1c67ea0a630d394ccce040b4667473b"><td class="memItemLeft" align="right" valign="top">IDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac1c67ea0a630d394ccce040b4667473b">_hitSubscription</a></td></tr>
+<tr class="separator:ac1c67ea0a630d394ccce040b4667473b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08e0f3b1c2a1d07331d608e59ed9df3e" id="r_a08e0f3b1c2a1d07331d608e59ed9df3e"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html">IActiveLevelParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a08e0f3b1c2a1d07331d608e59ed9df3e">_levelParams</a></td></tr>
 <tr class="separator:a08e0f3b1c2a1d07331d608e59ed9df3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a546ffb1ec30732dc9fc4ec28830cd07b" id="r_a546ffb1ec30732dc9fc4ec28830cd07b"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html">ILevelProgress</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a546ffb1ec30732dc9fc4ec28830cd07b">_levelProgress</a></td></tr>
 <tr class="separator:a546ffb1ec30732dc9fc4ec28830cd07b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abce5a9434e796dabb9536657fb8d1c52" id="r_abce5a9434e796dabb9536657fb8d1c52"><td class="memItemLeft" align="right" valign="top">IDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abce5a9434e796dabb9536657fb8d1c52">_levelSubscription</a></td></tr>
 <tr class="separator:abce5a9434e796dabb9536657fb8d1c52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f71d0fe6d0f332ea8b4c15554a7760a" id="r_a2f71d0fe6d0f332ea8b4c15554a7760a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f71d0fe6d0f332ea8b4c15554a7760a">_linesSinceGoldenPop</a></td></tr>
+<tr class="separator:a2f71d0fe6d0f332ea8b4c15554a7760a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad99c6bd3f7aa9e954711f6ec1d9c3b03" id="r_ad99c6bd3f7aa9e954711f6ec1d9c3b03"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad99c6bd3f7aa9e954711f6ec1d9c3b03">_linesSinceHeart</a></td></tr>
 <tr class="separator:ad99c6bd3f7aa9e954711f6ec1d9c3b03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bc32ac300d5ec68ed47f85305b78a46" id="r_a0bc32ac300d5ec68ed47f85305b78a46"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0bc32ac300d5ec68ed47f85305b78a46">_purpleHeartsOwed</a></td></tr>
+<tr class="separator:a0bc32ac300d5ec68ed47f85305b78a46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79336d29ed52258ce37027c811a80218" id="r_a79336d29ed52258ce37027c811a80218"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a79336d29ed52258ce37027c811a80218">_purpleHeartsRolled</a></td></tr>
+<tr class="separator:a79336d29ed52258ce37027c811a80218"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2231ffbfa5ed73b71115fc772ade5ba9" id="r_a2231ffbfa5ed73b71115fc772ade5ba9"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html">IRewardBalloonSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2231ffbfa5ed73b71115fc772ade5ba9">_settings</a></td></tr>
 <tr class="separator:a2231ffbfa5ed73b71115fc772ade5ba9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Decides when the reward balloons come (PLAN-RewardBalloons). </p>
-<p>The golden balloon: once a purple level, from the line that finds the level <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#ad81a3e19697759c3c484d8036213de15" title="The level&#39;s completion, 0 to 1, from which a purple level&#39;s next line brings its golden balloon.">IRewardBalloonSettings.GoldenAtCompletion</a> done. The heart balloon: a roll on every line while a heart is missing, likelier the more are, after a cooldown since the last. At most one of each on the board, and only a type the catalogue has an entry for. </p>
+<p>At most one of each on the board, and only a type the catalogue has an entry for. </p>
+<p>The golden balloon, on a purple level: the first from the line that finds the level <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#ad81a3e19697759c3c484d8036213de15" title="The level&#39;s completion, 0 to 1, from which a purple level&#39;s next line brings its first golden balloon...">IRewardBalloonSettings.GoldenAtCompletion</a> done. Its pop rolls once for another (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#ac48be21c5b219293314d71c019af419f" title="The chance of each further golden balloon on a purple level, rolled once when the one before it pops:...">IRewardBalloonSettings.GoldenRepeatChances</a>, up to three a level), which comes a few lines later; a board clear or a level change rolls nothing. </p>
+<p>The heart balloon: on a purple level, the schedule's steps (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a97547095a4133f01e672e04bd3a0c143" title="A purple level&#39;s heart balloons, in any order: each rolled once on the line that reaches its completi...">IRewardBalloonSettings.PurpleHearts</a>), each rolled once as the level's completion reaches it, at full hearts too. Elsewhere, a roll on every line while a heart is missing, likelier the more are, after a cooldown since the last. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a967bd07c598338e2f491f7b4a09244cf" name="a967bd07c598338e2f491f7b4a09244cf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a967bd07c598338e2f491f7b4a09244cf">&#9670;&#160;</a></span>RewardBalloonService()</h2>
+<a id="aa72959c12f6b73447e89471b5442d5f0" name="aa72959c12f6b73447e89471b5442d5f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa72959c12f6b73447e89471b5442d5f0">&#9670;&#160;</a></span>RewardBalloonService()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -248,7 +275,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html">IPlayerHealth</a></td>          <td class="paramname"><span class="paramname"><em>health</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html">IPlayerHealth</a></td>          <td class="paramname"><span class="paramname"><em>health</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html">ActorHitMessage</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>hitSubscriber</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -269,6 +301,31 @@ Private Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0f5787372c09f1ad7541afd32e89e2b3" name="a0f5787372c09f1ad7541afd32e89e2b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f5787372c09f1ad7541afd32e89e2b3">&#9670;&#160;</a></span>ForgetLevelsRewards()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Reward.RewardBalloonService.ForgetLevelsRewards </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -352,8 +409,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ae11cc2a792dfb1aead5b6c5eac9aa020" name="ae11cc2a792dfb1aead5b6c5eac9aa020"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae11cc2a792dfb1aead5b6c5eac9aa020">&#9670;&#160;</a></span>HeartChance()</h2>
+<a id="a1cbc6e3792f1abfe9c10d1747ce207c8" name="a1cbc6e3792f1abfe9c10d1747ce207c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1cbc6e3792f1abfe9c10d1747ce207c8">&#9670;&#160;</a></span>HeartChance()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -369,12 +426,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>missingHearts</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>purple</em></span>&#160;)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>missingHearts</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -384,7 +436,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The heart balloon's chance on a line: none at full hearts, more the more are missing. </p>
+<p>The heart balloon's chance on a line off a purple level: none at full hearts (or past them), more the more are missing. </p>
 
 </div>
 </div>
@@ -438,6 +490,34 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a73d1a67a968acd515d39ca4befc8a770" name="a73d1a67a968acd515d39ca4befc8a770"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73d1a67a968acd515d39ca4befc8a770">&#9670;&#160;</a></span>OnHit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Reward.RewardBalloonService.OnHit </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html">ActorHitMessage</a></td>          <td class="paramname"><span class="paramname"><em>msg</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A golden balloon's pop rolls once for the level's next one. </p>
+<p>Only a pop rolls: the leave callback also fires for a board clear and a level change. The pop's leave has already run when its hit arrives (<code>HitPipeline</code> routes the hit before publishing it), so the guard is the placement, not whether one is on the board. The spawn cheat can place a second golden beside the first; either one's pop then rolls for the newer. </p>
+
+</div>
+</div>
 <a id="a199b35f6a164e895144350892302c761" name="a199b35f6a164e895144350892302c761"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a199b35f6a164e895144350892302c761">&#9670;&#160;</a></span>Placed()</h2>
 
@@ -457,6 +537,31 @@ Private Attributes</h2></td></tr>
 <p>Returns what to call when it leaves it (popped, cleared or pooled), which a run reset in between makes a no-op. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Reward_1_1IRewardBalloonRequests.html#a321ed88fba707d9d464cd7cb05695d4f">BalloonParty.Balloon.Reward.IRewardBalloonRequests</a>.</p>
+
+</div>
+</div>
+<a id="a4bb1d1ab5da0180c9fd01e744b5201d1" name="a4bb1d1ab5da0180c9fd01e744b5201d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bb1d1ab5da0180c9fd01e744b5201d1">&#9670;&#160;</a></span>PurpleHeartDue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Balloon.Reward.RewardBalloonService.PurpleHeartDue </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelParameters.html">ILevelParameters</a></td>          <td class="paramname"><span class="paramname"><em>level</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -549,6 +654,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aa3c1e1ed3b5e24f3f8fc9218e89783b7" name="aa3c1e1ed3b5e24f3f8fc9218e89783b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3c1e1ed3b5e24f3f8fc9218e89783b7">&#9670;&#160;</a></span>_goldenOwed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Balloon.Reward.RewardBalloonService._goldenOwed</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a0d5f808c4cd0f07da75a88ebe0af1af3" name="a0d5f808c4cd0f07da75a88ebe0af1af3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0d5f808c4cd0f07da75a88ebe0af1af3">&#9670;&#160;</a></span>_goldenPlaceable</h2>
 
@@ -571,28 +698,6 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a027c86032bf50452cb56d4ca6d09cce6" name="a027c86032bf50452cb56d4ca6d09cce6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a027c86032bf50452cb56d4ca6d09cce6">&#9670;&#160;</a></span>_goldenPlacedThisLevel</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool BalloonParty.Balloon.Reward.RewardBalloonService._goldenPlacedThisLevel</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a8fb98404cd3d0aaa8a3e8426a20fcd82" name="a8fb98404cd3d0aaa8a3e8426a20fcd82"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8fb98404cd3d0aaa8a3e8426a20fcd82">&#9670;&#160;</a></span>_goldenPlacement</h2>
 
@@ -604,6 +709,50 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">int BalloonParty.Balloon.Reward.RewardBalloonService._goldenPlacement</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afd608dec4880aba6c20d76c1ee9339d8" name="afd608dec4880aba6c20d76c1ee9339d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd608dec4880aba6c20d76c1ee9339d8">&#9670;&#160;</a></span>_goldenRolled</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Reward.RewardBalloonService._goldenRolled</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5bc16a236834e93b91abefc697b190d7" name="a5bc16a236834e93b91abefc697b190d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5bc16a236834e93b91abefc697b190d7">&#9670;&#160;</a></span>_goldensThisLevel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Reward.RewardBalloonService._goldensThisLevel</td>
         </tr>
       </table>
   </td>
@@ -725,6 +874,50 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a84c24d352b8c68c1299574bcb5ad547a" name="a84c24d352b8c68c1299574bcb5ad547a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84c24d352b8c68c1299574bcb5ad547a">&#9670;&#160;</a></span>_hitSubscriber</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly ISubscriber&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ActorHitMessage.html">ActorHitMessage</a>&gt; BalloonParty.Balloon.Reward.RewardBalloonService._hitSubscriber</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac1c67ea0a630d394ccce040b4667473b" name="ac1c67ea0a630d394ccce040b4667473b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1c67ea0a630d394ccce040b4667473b">&#9670;&#160;</a></span>_hitSubscription</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IDisposable BalloonParty.Balloon.Reward.RewardBalloonService._hitSubscription</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a08e0f3b1c2a1d07331d608e59ed9df3e" name="a08e0f3b1c2a1d07331d608e59ed9df3e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a08e0f3b1c2a1d07331d608e59ed9df3e">&#9670;&#160;</a></span>_levelParams</h2>
 
@@ -791,6 +984,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a2f71d0fe6d0f332ea8b4c15554a7760a" name="a2f71d0fe6d0f332ea8b4c15554a7760a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f71d0fe6d0f332ea8b4c15554a7760a">&#9670;&#160;</a></span>_linesSinceGoldenPop</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Reward.RewardBalloonService._linesSinceGoldenPop</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ad99c6bd3f7aa9e954711f6ec1d9c3b03" name="ad99c6bd3f7aa9e954711f6ec1d9c3b03"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad99c6bd3f7aa9e954711f6ec1d9c3b03">&#9670;&#160;</a></span>_linesSinceHeart</h2>
 
@@ -802,6 +1017,50 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">int BalloonParty.Balloon.Reward.RewardBalloonService._linesSinceHeart</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0bc32ac300d5ec68ed47f85305b78a46" name="a0bc32ac300d5ec68ed47f85305b78a46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0bc32ac300d5ec68ed47f85305b78a46">&#9670;&#160;</a></span>_purpleHeartsOwed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Reward.RewardBalloonService._purpleHeartsOwed</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a79336d29ed52258ce37027c811a80218" name="a79336d29ed52258ce37027c811a80218"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79336d29ed52258ce37027c811a80218">&#9670;&#160;</a></span>_purpleHeartsRolled</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Reward.RewardBalloonService._purpleHeartsRolled</td>
         </tr>
       </table>
   </td>

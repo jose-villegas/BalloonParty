@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceTrace.html" target="_top" xlink:title="Where each Snipe&#45;armed shot&#39;s current straight run began: the point it armed at, then each wall it ca...">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStroke.html" target="_top" xlink:title="One pencil stroke&#39;s shape over time: the tip runs from the run&#39;s start to its wall,...">
 <polygon fill="white" stroke="#666666" points="135,-30 0,-30 0,0 135,0 135,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Snipe.</text>
-<text text-anchor="middle" x="67.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">SnipeLanceTrace</text>
+<text text-anchor="middle" x="67.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">SnipeLanceStroke</text>
 </a>
 </g>
 </g>

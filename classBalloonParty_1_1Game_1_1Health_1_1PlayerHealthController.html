@@ -142,7 +142,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a13ca9962bfa3604103112910ae089b75" id="r_a13ca9962bfa3604103112910ae089b75"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a13ca9962bfa3604103112910ae089b75">Dispose</a> ()</td></tr>
 <tr class="separator:a13ca9962bfa3604103112910ae089b75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e0ac40e95366b8e51bde5c185817b60" id="r_a0e0ac40e95366b8e51bde5c185817b60"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e0ac40e95366b8e51bde5c185817b60">Heal</a> (int amount)</td></tr>
+<tr class="memdesc:a0e0ac40e95366b8e51bde5c185817b60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Up to <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html#aba5dcf71aeedfa978a174823d9586c62" title="The cap a heal stops at; extra hearts (a purple level&#39;s heart balloons) take Current past it.">IPlayerHealth.Max</a>, keeping any extra hearts the player already has.  <br /></td></tr>
 <tr class="separator:a0e0ac40e95366b8e51bde5c185817b60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb7259a5b5727a6cac4a5246bf836e9c" id="r_afb7259a5b5727a6cac4a5246bf836e9c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afb7259a5b5727a6cac4a5246bf836e9c">HealPastMax</a> (int amount)</td></tr>
+<tr class="memdesc:afb7259a5b5727a6cac4a5246bf836e9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Past <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html#aba5dcf71aeedfa978a174823d9586c62" title="The cap a heal stops at; extra hearts (a purple level&#39;s heart balloons) take Current past it.">IPlayerHealth.Max</a>: extra hearts, a purple level's heart balloons' pay.  <br /></td></tr>
+<tr class="separator:afb7259a5b5727a6cac4a5246bf836e9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31d41353205ba9fabcbc12f476f0d9cd" id="r_a31d41353205ba9fabcbc12f476f0d9cd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a31d41353205ba9fabcbc12f476f0d9cd">ResetRun</a> (int generation)</td></tr>
 <tr class="memdesc:a31d41353205ba9fabcbc12f476f0d9cd"><td class="mdescLeft">&#160;</td><td class="mdescRight"><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -160,7 +164,7 @@ Properties</h2></td></tr>
 <tr class="memitem:af12875533cc7726641d441788e4e3708" id="r_af12875533cc7726641d441788e4e3708"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af12875533cc7726641d441788e4e3708">Current</a><code> [get]</code></td></tr>
 <tr class="separator:af12875533cc7726641d441788e4e3708"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7b9705763eec3cfa6c4272a8b9de369" id="r_ae7b9705763eec3cfa6c4272a8b9de369"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae7b9705763eec3cfa6c4272a8b9de369">Max</a><code> [get]</code></td></tr>
-<tr class="memdesc:ae7b9705763eec3cfa6c4272a8b9de369"><td class="mdescLeft">&#160;</td><td class="mdescRight">The most hearts the player can hold; a heal never goes past it.  <br /></td></tr>
+<tr class="memdesc:ae7b9705763eec3cfa6c4272a8b9de369"><td class="mdescLeft">&#160;</td><td class="mdescRight">The cap a heal stops at; extra hearts (a purple level's heart balloons) take Current past it.  <br /></td></tr>
 <tr class="separator:ae7b9705763eec3cfa6c4272a8b9de369"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab47687f74ed650a00a2fe658f4612c4c" id="r_ab47687f74ed650a00a2fe658f4612c4c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab47687f74ed650a00a2fe658f4612c4c">ResetOrder</a><code> [get]</code></td></tr>
 <tr class="separator:ab47687f74ed650a00a2fe658f4612c4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -311,7 +315,30 @@ Static Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Up to <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html#aba5dcf71aeedfa978a174823d9586c62" title="The cap a heal stops at; extra hearts (a purple level&#39;s heart balloons) take Current past it.">IPlayerHealth.Max</a>, keeping any extra hearts the player already has. </p>
+
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealing.html#a24e15bf4005853834dd9e3d763b124eb">BalloonParty.Game.Health.IPlayerHealing</a>.</p>
+
+</div>
+</div>
+<a id="afb7259a5b5727a6cac4a5246bf836e9c" name="afb7259a5b5727a6cac4a5246bf836e9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb7259a5b5727a6cac4a5246bf836e9c">&#9670;&#160;</a></span>HealPastMax()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Game.Health.PlayerHealthController.HealPastMax </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>amount</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Past <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html#aba5dcf71aeedfa978a174823d9586c62" title="The cap a heal stops at; extra hearts (a purple level&#39;s heart balloons) take Current past it.">IPlayerHealth.Max</a>: extra hearts, a purple level's heart balloons' pay. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealing.html#a8b813b2fe42bec84e92ed46e8b874ae1">BalloonParty.Game.Health.IPlayerHealing</a>.</p>
 
 </div>
 </div>
@@ -581,7 +608,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The most hearts the player can hold; a heal never goes past it. </p>
+<p>The cap a heal stops at; extra hearts (a purple level's heart balloons) take Current past it. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html#aba5dcf71aeedfa978a174823d9586c62">BalloonParty.Game.Health.IPlayerHealth</a>.</p>
 

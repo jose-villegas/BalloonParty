@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStroke.html" target="_top" xlink:title="One pencil stroke&#39;s shape over time: the tip runs from the run&#39;s start to its wall,...">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLinePrefab.html" target="_top" xlink:title="The pencil line&#39;s prefab, held so an unassigned one still registers.">
 <polygon fill="white" stroke="#666666" points="135,-30 0,-30 0,0 135,0 135,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Snipe.</text>
-<text text-anchor="middle" x="67.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">SnipeLanceStroke</text>
+<text text-anchor="middle" x="67.5" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">SnipeLanceLinePrefab</text>
 </a>
 </g>
 </g>

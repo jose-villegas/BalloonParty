@@ -113,7 +113,7 @@ $(function(){initNavTree('plan_reward_balloons.html',''); initResizable(true); }
 <div class="textblock"><h1><a class="anchor" id="autotoc_md793"></a>
 Reward Balloons</h1>
 <blockquote class="doxtable">
-<p>Two rare balloons that pay the player instead of pressuring them. The <b>golden balloon</b> comes once to a purple level, late in it: plated in gold, it shrugs off every normal hit and item, and only a piercing shot pops it, for a free upgrade card. The <b>heart balloon</b> is a heart wrapped in bandages that gives a heart back; it comes to purple levels and to a player who is losing hearts.</p>
+<p>Two rare balloons that pay the player instead of pressuring them. The <b>golden balloon</b> comes to a purple level, late in it, up to three a level: plated in gold, it shrugs off every normal hit and item, and only a piercing shot pops it, for a free upgrade card. The <b>heart balloon</b> is a heart wrapped in bandages that gives a heart back; it comes to purple levels on a schedule (an extra heart at full health) and to a player who is losing hearts.</p>
 <p><b>No changes until this plan is actioned.</b> </p>
 </blockquote>
 <hr  />
@@ -121,7 +121,7 @@ Reward Balloons</h1>
 Goals</h2>
 <ol type="1">
 <li><b>Golden balloon.</b><ul>
-<li>Only on purple (extra-colour) levels, once per level, placed when the level is about 75% done.</li>
+<li>Only on purple (extra-colour) levels, placed when the level is about 75% done. Its pop rolls once for another (25%, then 10% for a third: three a level at most), which comes a few lines later. Never more than one on the board, and only a pop rolls: one a board clear takes brings no other.</li>
 <li>Normal hits do nothing: the shot bounces off it as off an unbreakable. Items do nothing either (bomb, laser, lightning, paint): a bomb beside it must not hand out the card.</li>
 <li>A piercing shot pops it: a cruise-earned pierce or a Snipe lance. It is plowed and shatters at the shot's next wall bounce, as an unbreakable is.</li>
 <li>Popped, it gives a <b>free upgrade card</b>, kept for the run, shown with the card reveal.</li>
@@ -131,7 +131,8 @@ Goals</h2>
 <li><b>Heart balloon.</b><ul>
 <li>A heart-shaped balloon with cloth ribbons wrapped over it like bandages.</li>
 <li>Any pop gives back one heart, up to the maximum. It pops like a plain balloon (any hit, items too).</li>
-<li>It comes to purple levels, and to any level while the player is missing hearts: the fewer left, the likelier. Never at full hearts.</li>
+<li>On a purple level it comes on a schedule, at full hearts too: one at 30% completion, a 50% chance at 60% and a 25% chance at 90%, each rolled once and needing no pop of the one before. Popped there, it gives an extra heart past the maximum, with no design cap; a level-up refill keeps extras, a retry starts the hearts over. The roll while hurt is off there.</li>
+<li>On any other level it comes while the player is missing hearts: the fewer left, the likelier. Never at full hearts.</li>
 </ul>
 </li>
 <li>Both are colourless: they never count toward a colour's goal, and never break or feed the streak.</li>
@@ -150,7 +151,7 @@ How it fits</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>IsTough</code>   </td><td class="markdownTableBodyNone"><code><a class="el" href="BalloonModelExtensions_8cs.html">Shared/Extensions/BalloonModelExtensions.cs</a></code>   </td><td class="markdownTableBodyNone">Covers the golden balloon, so a piercing shot plows it and the projectile's telegraph and sweep see it    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>RewardBalloonService</code>   </td><td class="markdownTableBodyNone"><code>Balloon/Reward/</code>   </td><td class="markdownTableBodyNone">Plain C#. Asked once per clock line, it reads the level's completion and the hearts and says which balloon is due, if any. It tracks which one is on the board through the leave callback, re-arms the golden balloon on each new level, <code>IRunResettable</code>. It only offers a type the catalogue has an entry for    </td></tr>
+<td class="markdownTableBodyNone"><code>RewardBalloonService</code>   </td><td class="markdownTableBodyNone"><code>Balloon/Reward/</code>   </td><td class="markdownTableBodyNone">Plain C#. Asked once per clock line, it reads the level's completion and the hearts and says which balloon is due, if any. It tracks which one is on the board through the leave callback, rolls for another golden balloon on its pop (read from <code>ActorHitMessage</code>), starts the golden balloons over on each new level, <code>IRunResettable</code>. It only offers a type the catalogue has an entry for    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>IRewardBalloonRequests</code>   </td><td class="markdownTableBodyNone"><code>Balloon/Reward/</code>   </td><td class="markdownTableBodyNone"><code>TryTakeDue(out type)</code> and <code>Placed(type)</code>, which returns the callback for when the balloon leaves the board. <code>BalloonSpawner</code> asks before the reinforcements, so the balloon takes one of the line's places, outside the level's caps and counts, its own entry found with <code>FindEntry</code> and prewarmed to one. It deals first, so a crowded line drops something else; one that still had no room leaves the balloon due for the next line    </td></tr>
 <tr class="markdownTableRowOdd">
@@ -164,7 +165,7 @@ How it fits</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>RewardBalloonPayout</code>   </td><td class="markdownTableBodyNone"><code>Balloon/Reward/</code>   </td><td class="markdownTableBodyNone">Reads the reward balloons' pops from <code>ActorHitMessage</code> and pays them: the golden one's card (or heart), the heart balloon's heart    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>IPlayerHealing</code>   </td><td class="markdownTableBodyNone"><code>Game/Health/</code>   </td><td class="markdownTableBodyNone"><code>Heal(amount)</code> on <code>PlayerHealthController</code>, up to <code>IPlayerHealth.Max</code>    </td></tr>
+<td class="markdownTableBodyNone"><code>IPlayerHealing</code>   </td><td class="markdownTableBodyNone"><code>Game/Health/</code>   </td><td class="markdownTableBodyNone"><code>Heal(amount)</code> on <code>PlayerHealthController</code>, up to <code>IPlayerHealth.Max</code> without trimming extras, and <code>HealPastMax(amount)</code> for a purple level's heart    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>IRewardBalloonSettings</code>   </td><td class="markdownTableBodyNone"><code>Configuration/Balloons/</code>   </td><td class="markdownTableBodyNone">The tuning below, a block on <code>BalloonsConfiguration</code>    </td></tr>
 <tr class="markdownTableRowEven">
@@ -185,6 +186,9 @@ How it fits</h2>
 <div class="line">    Hit-&gt;&gt;Pay: golden balloon popped</div>
 <div class="line">    Pay-&gt;&gt;Up: grant a free card</div>
 <div class="line">    Up-&gt;&gt;Up: deal and hold it, the reveal plays it</div>
+<div class="line">    Hit-&gt;&gt;Rwd: golden balloon popped</div>
+<div class="line">    Rwd-&gt;&gt;Rwd: rolls once for the next, 25% then 10%</div>
+<div class="line">    Rwd--&gt;&gt;Spw: a won one, three lines later</div>
 </div><!-- fragment --><h2><a class="anchor" id="autotoc_md797"></a>
 Tuning (<code>IRewardBalloonSettings</code>)</h2>
 <table class="markdownTable">
@@ -193,17 +197,21 @@ Tuning (<code>IRewardBalloonSettings</code>)</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>GoldenAtCompletion</code>   </td><td class="markdownTableBodyNone">0.75   </td><td class="markdownTableBodyNone">The level's completion that places the golden balloon on a purple level    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>GoldenRepeatChances</code>   </td><td class="markdownTableBodyNone">0.25, 0.1   </td><td class="markdownTableBodyNone">The chance of the second and third golden balloon, each rolled once when the one before pops    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>GoldenRepeatDelayLines</code>   </td><td class="markdownTableBodyNone">3   </td><td class="markdownTableBodyNone">Lines after a golden pop before the one it won comes    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>HeartChanceMissingOne</code>   </td><td class="markdownTableBodyNone">0.04   </td><td class="markdownTableBodyNone">Chance per line of a heart balloon while one heart is missing    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>HeartChanceMissingTwo</code>   </td><td class="markdownTableBodyNone">0.12   </td><td class="markdownTableBodyNone">The same with two missing (one heart left)    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>HeartChanceOnPurple</code>   </td><td class="markdownTableBodyNone">0.05   </td><td class="markdownTableBodyNone">Added on a purple level, if a heart is missing    </td></tr>
+<td class="markdownTableBodyNone"><code>PurpleHearts</code>   </td><td class="markdownTableBodyNone">0.3 sure, 0.6 at 50%, 0.9 at 25%   </td><td class="markdownTableBodyNone">A purple level's heart balloons: each step's completion and its chance, rolled once    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>HeartCooldownLines</code>   </td><td class="markdownTableBodyNone">12   </td><td class="markdownTableBodyNone">Lines after a heart balloon before another can come    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">At most one of each on the board   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">A second one waits until the first is gone   </td></tr>
 </table>
-<p>Full hearts never roll one, so the heart balloon is help, not loot. A level ends with it unpopped and it's gone with the board, like any balloon.</p>
+<p>Off a purple level, full hearts never roll one, so the heart balloon is help, not loot. A purple level brings its schedule regardless, as part of that level's reward. A level ends with it unpopped and it's gone with the board, like any balloon.</p>
 <h2><a class="anchor" id="autotoc_md798"></a>
 The looks</h2>
 <ul>

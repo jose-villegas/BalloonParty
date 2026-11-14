@@ -1,5 +1,7 @@
 var NAVTREEINDEX3 =
 {
+"RewardBalloonSettings_8cs.html":[7,0,3,0,9],
+"RibbonGraphic_8cs.html":[7,0,18,1,2],
 "RibbonPiece_8cs.html":[7,0,18,1,3],
 "RibbonStrike_8cs.html":[7,0,18,1,4],
 "RollingCounterDisplay_8cs.html":[7,0,18,19],
@@ -240,14 +242,12 @@ var NAVTREEINDEX3 =
 "UnbreakableFormationLook_8cs.html":[7,0,1,5,8],
 "UnbreakableFormationService_8cs.html":[7,0,1,1,6],
 "UnbreakableFormationService_8cs.html#a832e8f52fca5a678819ec96269dcb532":[7,0,1,1,6,1],
-"UnbreakableFormationSettings_8cs.html":[7,0,3,0,9],
+"UnbreakableFormationSettings_8cs.html":[7,0,3,0,10],
 "UnitCircleAttribute_8cs.html":[7,0,14,35],
 "UnitCircleDrawer_8cs.html":[7,0,6,51],
 "UnusedAssetsWindow_8cs.html":[7,0,6,52],
 "UpgradeCardHeldMessage_8cs.html":[7,0,14,7,51],
 "UpgradeCardSlotBuilder_8cs.html":[7,0,6,53],
 "UpgradeCardText_8cs.html":[7,0,14,36],
-"UpgradeCardView_8cs.html":[7,0,18,6,2],
-"UpgradeSettings_8cs.html":[7,0,3,27],
-"VariationPicker_8cs.html":[7,0,0,18]
+"UpgradeCardView_8cs.html":[7,0,18,6,2]
 };

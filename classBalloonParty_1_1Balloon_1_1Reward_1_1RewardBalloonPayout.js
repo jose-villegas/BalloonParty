@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout =
 [
-    [ "RewardBalloonPayout", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html#a75819f5c3d99684d9db74571ab5617ac", null ],
+    [ "RewardBalloonPayout", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html#a4a7090f3a1bebb22b3df0fd10c786a59", null ],
     [ "Dispose", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html#aba33d683e1e534228a9d07a9fa7113d2", null ],
     [ "GiveAHeart", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html#a1089ec2360a2366f0fcf96471f0c8b05", null ],
     [ "OnHit", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html#a5a224feabcd6238e17fed5cef9640b9c", null ],
@@ -11,5 +11,6 @@ var classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout =
     [ "_hitSubscriber", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html#a3ec4729f34fe2429ab24fa2735197c95", null ],
     [ "_lastGoldenPaid", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html#a043fe50101386b63901c414f38b7939a", null ],
     [ "_lastHeartPaid", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html#afc0c8923ba9e56b889c15425932b44a5", null ],
+    [ "_levelParams", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html#a0359655f5ffb08e7f0fe2c9da4a13473", null ],
     [ "_subscription", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html#a7906e68a75b5ff6c408726d3f1bcffe4", null ]
 ];

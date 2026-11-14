@@ -126,39 +126,49 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1Balloons_1_1Rewa
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings__coll__graph.svg" width="248" height="139"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings__coll__graph.svg" width="626" height="115"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
 <tr class="memitem:a367fc8cf38e0ae27a48dbb948c5afcb9" id="r_a367fc8cf38e0ae27a48dbb948c5afcb9"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a367fc8cf38e0ae27a48dbb948c5afcb9">GoldenAtCompletion</a><code> [get]</code></td></tr>
-<tr class="memdesc:a367fc8cf38e0ae27a48dbb948c5afcb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The level's completion, 0 to 1, from which a purple level's next line brings its golden balloon.  <br /></td></tr>
+<tr class="memdesc:a367fc8cf38e0ae27a48dbb948c5afcb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The level's completion, 0 to 1, from which a purple level's next line brings its first golden balloon.  <br /></td></tr>
 <tr class="separator:a367fc8cf38e0ae27a48dbb948c5afcb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17066c9d2f5676c78b30e3cedfdc9adf" id="r_a17066c9d2f5676c78b30e3cedfdc9adf"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a17066c9d2f5676c78b30e3cedfdc9adf">GoldenRepeatChances</a><code> [get]</code></td></tr>
+<tr class="memdesc:a17066c9d2f5676c78b30e3cedfdc9adf"><td class="mdescLeft">&#160;</td><td class="mdescRight">The chance of each further golden balloon on a purple level, rolled once when the one before it pops: the first entry for the second balloon, the next for the third.  <br /></td></tr>
+<tr class="separator:a17066c9d2f5676c78b30e3cedfdc9adf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa28d960fc201b625184132a9fd0dc573" id="r_aa28d960fc201b625184132a9fd0dc573"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa28d960fc201b625184132a9fd0dc573">GoldenRepeatDelayLines</a><code> [get]</code></td></tr>
+<tr class="memdesc:aa28d960fc201b625184132a9fd0dc573"><td class="mdescLeft">&#160;</td><td class="mdescRight">Spawn lines after a golden balloon's pop before the further one it won comes.  <br /></td></tr>
+<tr class="separator:aa28d960fc201b625184132a9fd0dc573"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5fd348ccdbc2e7ec4856366d25b50dd0" id="r_a5fd348ccdbc2e7ec4856366d25b50dd0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5fd348ccdbc2e7ec4856366d25b50dd0">HeartChanceMissingOne</a><code> [get]</code></td></tr>
-<tr class="memdesc:a5fd348ccdbc2e7ec4856366d25b50dd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chance per spawn line of a heart balloon while one heart is missing.  <br /></td></tr>
+<tr class="memdesc:a5fd348ccdbc2e7ec4856366d25b50dd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chance per spawn line of a heart balloon while one heart is missing, off a purple level.  <br /></td></tr>
 <tr class="separator:a5fd348ccdbc2e7ec4856366d25b50dd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8caff051914e3ec6d6dc8392a9505a48" id="r_a8caff051914e3ec6d6dc8392a9505a48"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8caff051914e3ec6d6dc8392a9505a48">HeartChanceMissingTwo</a><code> [get]</code></td></tr>
 <tr class="memdesc:a8caff051914e3ec6d6dc8392a9505a48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chance per spawn line of a heart balloon while two or more hearts are missing.  <br /></td></tr>
 <tr class="separator:a8caff051914e3ec6d6dc8392a9505a48"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a537347c364efe94f6298c94a89f08076" id="r_a537347c364efe94f6298c94a89f08076"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a537347c364efe94f6298c94a89f08076">HeartChanceOnPurple</a><code> [get]</code></td></tr>
-<tr class="memdesc:a537347c364efe94f6298c94a89f08076"><td class="mdescLeft">&#160;</td><td class="mdescRight">Added to the heart chance on a purple level, while a heart is missing.  <br /></td></tr>
-<tr class="separator:a537347c364efe94f6298c94a89f08076"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa16191cd1fa456cda3392ed541de9132" id="r_aa16191cd1fa456cda3392ed541de9132"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa16191cd1fa456cda3392ed541de9132">HeartCooldownLines</a><code> [get]</code></td></tr>
 <tr class="memdesc:aa16191cd1fa456cda3392ed541de9132"><td class="mdescLeft">&#160;</td><td class="mdescRight">Spawn lines after a heart balloon is placed before another can roll.  <br /></td></tr>
 <tr class="separator:aa16191cd1fa456cda3392ed541de9132"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf379663fec8cbc2d121e7b4bd48a110" id="r_acf379663fec8cbc2d121e7b4bd48a110"><td class="memItemLeft" align="right" valign="top">IReadOnlyList&lt; <a class="el" href="structBalloonParty_1_1Configuration_1_1Balloons_1_1PurpleHeartStep.html">PurpleHeartStep</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf379663fec8cbc2d121e7b4bd48a110">PurpleHearts</a><code> [get]</code></td></tr>
+<tr class="memdesc:acf379663fec8cbc2d121e7b4bd48a110"><td class="mdescLeft">&#160;</td><td class="mdescRight">A purple level's heart balloons, in any order: each rolled once on the line that reaches its completion, at full hearts too.  <br /></td></tr>
+<tr class="separator:acf379663fec8cbc2d121e7b4bd48a110"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:ae333ba6706d3162ede733ecadd84525d" id="r_ae333ba6706d3162ede733ecadd84525d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae333ba6706d3162ede733ecadd84525d">_goldenAtCompletion</a> = 0.75f</td></tr>
 <tr class="separator:ae333ba6706d3162ede733ecadd84525d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add0707622277c311d5c170af5199e365" id="r_add0707622277c311d5c170af5199e365"><td class="memItemLeft" align="right" valign="top">float[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#add0707622277c311d5c170af5199e365">_goldenRepeatChances</a> = { 0.25f, 0.1f }</td></tr>
+<tr class="separator:add0707622277c311d5c170af5199e365"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49233db05a5543d0db6cb796ddc78f0c" id="r_a49233db05a5543d0db6cb796ddc78f0c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a49233db05a5543d0db6cb796ddc78f0c">_goldenRepeatDelayLines</a> = 3</td></tr>
+<tr class="separator:a49233db05a5543d0db6cb796ddc78f0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee182b990bdb0719923937622c47c623" id="r_aee182b990bdb0719923937622c47c623"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aee182b990bdb0719923937622c47c623">_heartChanceMissingOne</a> = 0.04f</td></tr>
 <tr class="separator:aee182b990bdb0719923937622c47c623"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ae5768ae5f6a4cad63abde1405acea9" id="r_a3ae5768ae5f6a4cad63abde1405acea9"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3ae5768ae5f6a4cad63abde1405acea9">_heartChanceMissingTwo</a> = 0.12f</td></tr>
 <tr class="separator:a3ae5768ae5f6a4cad63abde1405acea9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e0abea12020d95a3097fb11da5cde94" id="r_a5e0abea12020d95a3097fb11da5cde94"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e0abea12020d95a3097fb11da5cde94">_heartChanceOnPurple</a> = 0.05f</td></tr>
-<tr class="separator:a5e0abea12020d95a3097fb11da5cde94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa3c925294653d5175ee1b6b2ba5007b6" id="r_aa3c925294653d5175ee1b6b2ba5007b6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa3c925294653d5175ee1b6b2ba5007b6">_heartCooldownLines</a> = 12</td></tr>
 <tr class="separator:aa3c925294653d5175ee1b6b2ba5007b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fc70720ace37c192158dfa42d8b1261" id="r_a9fc70720ace37c192158dfa42d8b1261"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Configuration_1_1Balloons_1_1PurpleHeartStep.html">PurpleHeartStep</a>[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9fc70720ace37c192158dfa42d8b1261">_purpleHearts</a></td></tr>
+<tr class="separator:a9fc70720ace37c192158dfa42d8b1261"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="ae333ba6706d3162ede733ecadd84525d" name="ae333ba6706d3162ede733ecadd84525d"></a>
@@ -172,6 +182,50 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.Configuration.Balloons.RewardBalloonSettings._goldenAtCompletion = 0.75f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="add0707622277c311d5c170af5199e365" name="add0707622277c311d5c170af5199e365"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add0707622277c311d5c170af5199e365">&#9670;&#160;</a></span>_goldenRepeatChances</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float [] BalloonParty.Configuration.Balloons.RewardBalloonSettings._goldenRepeatChances = { 0.25f, 0.1f }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a49233db05a5543d0db6cb796ddc78f0c" name="a49233db05a5543d0db6cb796ddc78f0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49233db05a5543d0db6cb796ddc78f0c">&#9670;&#160;</a></span>_goldenRepeatDelayLines</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.RewardBalloonSettings._goldenRepeatDelayLines = 3</td>
         </tr>
       </table>
   </td>
@@ -227,28 +281,6 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a5e0abea12020d95a3097fb11da5cde94" name="a5e0abea12020d95a3097fb11da5cde94"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5e0abea12020d95a3097fb11da5cde94">&#9670;&#160;</a></span>_heartChanceOnPurple</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float BalloonParty.Configuration.Balloons.RewardBalloonSettings._heartChanceOnPurple = 0.05f</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="aa3c925294653d5175ee1b6b2ba5007b6" name="aa3c925294653d5175ee1b6b2ba5007b6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa3c925294653d5175ee1b6b2ba5007b6">&#9670;&#160;</a></span>_heartCooldownLines</h2>
 
@@ -269,6 +301,34 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+</div>
+</div>
+<a id="a9fc70720ace37c192158dfa42d8b1261" name="a9fc70720ace37c192158dfa42d8b1261"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9fc70720ace37c192158dfa42d8b1261">&#9670;&#160;</a></span>_purpleHearts</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structBalloonParty_1_1Configuration_1_1Balloons_1_1PurpleHeartStep.html">PurpleHeartStep</a> [] BalloonParty.Configuration.Balloons.RewardBalloonSettings._purpleHearts</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">        {</div>
+<div class="line">            <span class="keyword">new</span>(0.3f, 1f),</div>
+<div class="line">            <span class="keyword">new</span>(0.6f, 0.5f),</div>
+<div class="line">            <span class="keyword">new</span>(0.9f, 0.25f),</div>
+<div class="line">        }</div>
+</div><!-- fragment -->
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
@@ -292,9 +352,62 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The level's completion, 0 to 1, from which a purple level's next line brings its golden balloon. </p>
+<p>The level's completion, 0 to 1, from which a purple level's next line brings its first golden balloon. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#ad81a3e19697759c3c484d8036213de15">BalloonParty.Configuration.Balloons.IRewardBalloonSettings</a>.</p>
+
+</div>
+</div>
+<a id="a17066c9d2f5676c78b30e3cedfdc9adf" name="a17066c9d2f5676c78b30e3cedfdc9adf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17066c9d2f5676c78b30e3cedfdc9adf">&#9670;&#160;</a></span>GoldenRepeatChances</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyList&lt;float&gt; BalloonParty.Configuration.Balloons.RewardBalloonSettings.GoldenRepeatChances</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The chance of each further golden balloon on a purple level, rolled once when the one before it pops: the first entry for the second balloon, the next for the third. </p>
+<p>Their count caps the level's golden balloons at one more than it. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#ac48be21c5b219293314d71c019af419f">BalloonParty.Configuration.Balloons.IRewardBalloonSettings</a>.</p>
+
+</div>
+</div>
+<a id="aa28d960fc201b625184132a9fd0dc573" name="aa28d960fc201b625184132a9fd0dc573"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa28d960fc201b625184132a9fd0dc573">&#9670;&#160;</a></span>GoldenRepeatDelayLines</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.RewardBalloonSettings.GoldenRepeatDelayLines</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Spawn lines after a golden balloon's pop before the further one it won comes. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#ab2d045ec975642399a86f585bfd1039d">BalloonParty.Configuration.Balloons.IRewardBalloonSettings</a>.</p>
 
 </div>
 </div>
@@ -318,7 +431,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Chance per spawn line of a heart balloon while one heart is missing. </p>
+<p>Chance per spawn line of a heart balloon while one heart is missing, off a purple level. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a58c12265db08ed1f781ec0c850fd0959">BalloonParty.Configuration.Balloons.IRewardBalloonSettings</a>.</p>
 
@@ -350,32 +463,6 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a537347c364efe94f6298c94a89f08076" name="a537347c364efe94f6298c94a89f08076"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a537347c364efe94f6298c94a89f08076">&#9670;&#160;</a></span>HeartChanceOnPurple</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float BalloonParty.Configuration.Balloons.RewardBalloonSettings.HeartChanceOnPurple</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Added to the heart chance on a purple level, while a heart is missing. </p>
-
-<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a90146c07b01f038a4ef3f7254b7ce483">BalloonParty.Configuration.Balloons.IRewardBalloonSettings</a>.</p>
-
-</div>
-</div>
 <a id="aa16191cd1fa456cda3392ed541de9132" name="aa16191cd1fa456cda3392ed541de9132"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa16191cd1fa456cda3392ed541de9132">&#9670;&#160;</a></span>HeartCooldownLines</h2>
 
@@ -399,6 +486,33 @@ Private Attributes</h2></td></tr>
 <p>Spawn lines after a heart balloon is placed before another can roll. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a284eedc24d6c9d3e74c2d6efa2650496">BalloonParty.Configuration.Balloons.IRewardBalloonSettings</a>.</p>
+
+</div>
+</div>
+<a id="acf379663fec8cbc2d121e7b4bd48a110" name="acf379663fec8cbc2d121e7b4bd48a110"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf379663fec8cbc2d121e7b4bd48a110">&#9670;&#160;</a></span>PurpleHearts</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyList&lt;<a class="el" href="structBalloonParty_1_1Configuration_1_1Balloons_1_1PurpleHeartStep.html">PurpleHeartStep</a>&gt; BalloonParty.Configuration.Balloons.RewardBalloonSettings.PurpleHearts</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A purple level's heart balloons, in any order: each rolled once on the line that reaches its completion, at full hearts too. </p>
+<p>Their count caps the level's heart balloons; the roll while hurt (and its cooldown) is off there. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a97547095a4133f01e672e04bd3a0c143">BalloonParty.Configuration.Balloons.IRewardBalloonSettings</a>.</p>
 
 </div>
 </div>

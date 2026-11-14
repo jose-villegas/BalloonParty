@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html" title="Global knobs shared by every BigScore formation: radius, pen speed, coverage, spin and the scale&#45;over..." alt="" coords="5,5,204,45"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html" title="How unbreakables gather into formations, hold them, pick the next shape, and call in more unbreakable..." alt="" coords="5,5,292,45"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html" title=" " alt="" coords="340,5,623,45"/>
+<area shape="poly" id="edge77_Node000000_Node000001" title=" " alt="" coords="306,23,340,23,340,28,306,28"/>
 </map>

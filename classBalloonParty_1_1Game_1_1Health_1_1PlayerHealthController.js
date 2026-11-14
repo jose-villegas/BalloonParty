@@ -5,6 +5,7 @@ var classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController =
     [ "Damage", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a53f16f08a5726486f628853c3e1a6444", null ],
     [ "Dispose", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a13ca9962bfa3604103112910ae089b75", null ],
     [ "Heal", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a0e0ac40e95366b8e51bde5c185817b60", null ],
+    [ "HealPastMax", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#afb7259a5b5727a6cac4a5246bf836e9c", null ],
     [ "ResetRun", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a31d41353205ba9fabcbc12f476f0d9cd", null ],
     [ "Start", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a96da60ecd4fede678346dd944948256e", null ],
     [ "_config", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#aa75c6a842194986d6c754bb730c52e3b", null ],

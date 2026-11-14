@@ -219,6 +219,7 @@ var NAVTREEINDEX2 =
 "PuffCloudView_8cs.html":[7,0,15,0,0,16],
 "PuffClusterRegistry_8cs.html":[7,0,15,0,0,18],
 "PuffObstacleModel_8cs.html":[7,0,15,0,0,19],
+"PurpleHeartStep_8cs.html":[7,0,3,0,8],
 "QuadRendererBuilder_8cs.html":[7,0,14,10,9],
 "RainbowBalloonVariantEditor_8cs.html":[7,0,6,38],
 "RainbowBalloonVariant_8cs.html":[7,0,1,5,3],
@@ -247,7 +248,6 @@ var NAVTREEINDEX2 =
 "RevealCardCheat_8cs.html":[7,0,2,19],
 "RevealedCard_8cs.html":[7,0,7,0,2],
 "RewardBalloonPayout_8cs.html":[7,0,1,3,1],
-"RewardBalloonService_8cs.html":[7,0,1,3,2],
-"RewardBalloonSettings_8cs.html":[7,0,3,0,8],
-"RibbonGraphic_8cs.html":[7,0,18,1,2]
+"RewardBalloonPop_8cs.html":[7,0,1,3,2],
+"RewardBalloonService_8cs.html":[7,0,1,3,3]
 };

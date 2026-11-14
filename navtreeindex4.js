@@ -1,5 +1,7 @@
 var NAVTREEINDEX4 =
 {
+"UpgradeSettings_8cs.html":[7,0,3,27],
+"VariationPicker_8cs.html":[7,0,0,18],
 "VectorExtensions_8cs.html":[7,0,14,4,21],
 "VectorMathExtensions_8cs.html":[7,0,14,4,22],
 "VoiceLimiter_8cs.html":[7,0,0,19],
@@ -247,7 +249,5 @@ var NAVTREEINDEX4 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html":[6,0,0,0,0,4],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a03cecc02b282be5535a164c6881d47ad":[5,0,0,0,0,4,18],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a03cecc02b282be5535a164c6881d47ad":[6,0,0,0,0,4,18],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a141b83ed5fc2a200ed751927db3d8412":[5,0,0,0,0,4,10],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a141b83ed5fc2a200ed751927db3d8412":[6,0,0,0,0,4,10],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a1aedd57b6b5448bc679b7b511b1b5b60":[5,0,0,0,0,4,6]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxLayerEntry.html#a141b83ed5fc2a200ed751927db3d8412":[5,0,0,0,0,4,10]
 };

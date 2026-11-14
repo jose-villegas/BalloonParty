@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Solver_1_1ShotItemLayer.html" target="_top" xlink:title="Item&#45;carrier selection + params for the shot solver (Shot Solver Accuracy Phase C) — selection and ou...">
+<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Solver_1_1ShotFlightState.html" target="_top" xlink:title="Mutable per&#45;flight state threaded through ShotSimulator.Simulate — passed by ref to every helper that...">
 <polygon fill="white" stroke="#666666" points="134,-30 0,-30 0,0 134,0 134,-30"/>
 <text text-anchor="start" x="8" y="-18" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Solver.Shot</text>
-<text text-anchor="middle" x="67" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">ItemLayer</text>
+<text text-anchor="middle" x="67" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">FlightState</text>
 </a>
 </g>
 </g>

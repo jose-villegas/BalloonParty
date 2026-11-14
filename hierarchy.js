@@ -1411,6 +1411,7 @@ var hierarchy =
       [ "BalloonParty.Editor.UnitCircleDrawer", "classBalloonParty_1_1Editor_1_1UnitCircleDrawer.html", null ]
     ] ],
     [ "BalloonParty.Editor.PropertyDrawerHelper", "classBalloonParty_1_1Editor_1_1PropertyDrawerHelper.html", null ],
+    [ "BalloonParty.Configuration.Balloons.PurpleHeartStep", "structBalloonParty_1_1Configuration_1_1Balloons_1_1PurpleHeartStep.html", null ],
     [ "BalloonParty.Shared.Rendering.QuadRendererBuilder", "classBalloonParty_1_1Shared_1_1Rendering_1_1QuadRendererBuilder.html", null ],
     [ "BalloonParty.Configuration.Ranges.RangedFloat", "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedFloat.html", null ],
     [ "BalloonParty.Configuration.Ranges.RangedInt", "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html", null ],
@@ -1429,6 +1430,7 @@ var hierarchy =
     [ "BalloonParty.Audio.Editor.FreesoundResponseParser.Result", "classBalloonParty_1_1Audio_1_1Editor_1_1FreesoundResponseParser_1_1Result.html", null ],
     [ "BalloonParty.Shared.Pause.ResumedMessage", "structBalloonParty_1_1Shared_1_1Pause_1_1ResumedMessage.html", null ],
     [ "BalloonParty.Game.CardReveal.RevealedCard", "classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html", null ],
+    [ "BalloonParty.Balloon.Reward.RewardBalloonPop", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPop.html", null ],
     [ "BalloonParty.Balloon.Controller.BalloonBalancer.RoamCandidate", "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html", null ],
     [ "BalloonParty.Shared.Messages.RunResetMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html", null ],
     [ "BalloonParty.Game.Run.RunResetOrder", "classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html", null ],

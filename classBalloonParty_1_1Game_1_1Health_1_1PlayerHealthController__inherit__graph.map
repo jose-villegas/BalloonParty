@@ -8,6 +8,6 @@
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="172,130,260,130,260,135,172,135"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html" title="Read&#45;only view of the player&#39;s hit&#45;point pool." alt="" coords="11,170,207,210"/>
 <area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="209,164,270,150,271,155,210,169"/>
-<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealing.html" title="Gives hearts back, never past IPlayerHealth.Max (the reward balloons&#39; payout)." alt="" coords="11,234,207,274"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealing.html" title="Gives hearts back (the reward balloons&#39; payout). Neither brings back a player with none left." alt="" coords="11,234,207,274"/>
 <area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="194,227,211,220,274,185,327,151,330,155,277,190,213,224,196,232"/>
 </map>

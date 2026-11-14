@@ -113,5 +113,6 @@ var searchData=
   ['puffcloudview_110',['PuffCloudView',['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudView.html',1,'BalloonParty::Slots::Actor::Archetype']]],
   ['puffcloudviewcontroller_111',['PuffCloudViewController',['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffCloudViewController.html',1,'BalloonParty::Slots::Actor::Archetype']]],
   ['puffclusterregistry_112',['PuffClusterRegistry',['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffClusterRegistry.html',1,'BalloonParty::Slots::Actor::Archetype']]],
-  ['puffobstaclemodel_113',['PuffObstacleModel',['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html',1,'BalloonParty::Slots::Actor::Archetype']]]
+  ['puffobstaclemodel_113',['PuffObstacleModel',['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1PuffObstacleModel.html',1,'BalloonParty::Slots::Actor::Archetype']]],
+  ['purpleheartstep_114',['PurpleHeartStep',['../structBalloonParty_1_1Configuration_1_1Balloons_1_1PurpleHeartStep.html',1,'BalloonParty::Configuration::Balloons']]]
 ];

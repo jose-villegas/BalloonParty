@@ -114,7 +114,7 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHeal
 </div><!--header-->
 <div class="contents">
 
-<p>Gives hearts back, never past <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html#aba5dcf71aeedfa978a174823d9586c62" title="The most hearts the player can hold; a heal never goes past it.">IPlayerHealth.Max</a> (the reward balloons' payout).  
+<p>Gives hearts back (the reward balloons' payout). Neither brings back a player with none left.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Game.Health.IPlayerHealing:</div>
@@ -127,10 +127,14 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHeal
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a24e15bf4005853834dd9e3d763b124eb" id="r_a24e15bf4005853834dd9e3d763b124eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24e15bf4005853834dd9e3d763b124eb">Heal</a> (int amount)</td></tr>
+<tr class="memdesc:a24e15bf4005853834dd9e3d763b124eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Up to <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html#aba5dcf71aeedfa978a174823d9586c62" title="The cap a heal stops at; extra hearts (a purple level&#39;s heart balloons) take Current past it.">IPlayerHealth.Max</a>, keeping any extra hearts the player already has.  <br /></td></tr>
 <tr class="separator:a24e15bf4005853834dd9e3d763b124eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b813b2fe42bec84e92ed46e8b874ae1" id="r_a8b813b2fe42bec84e92ed46e8b874ae1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8b813b2fe42bec84e92ed46e8b874ae1">HealPastMax</a> (int amount)</td></tr>
+<tr class="memdesc:a8b813b2fe42bec84e92ed46e8b874ae1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Past <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html#aba5dcf71aeedfa978a174823d9586c62" title="The cap a heal stops at; extra hearts (a purple level&#39;s heart balloons) take Current past it.">IPlayerHealth.Max</a>: extra hearts, a purple level's heart balloons' pay.  <br /></td></tr>
+<tr class="separator:a8b813b2fe42bec84e92ed46e8b874ae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Gives hearts back, never past <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html#aba5dcf71aeedfa978a174823d9586c62" title="The most hearts the player can hold; a heal never goes past it.">IPlayerHealth.Max</a> (the reward balloons' payout). </p>
+<div class="textblock"><p>Gives hearts back (the reward balloons' payout). Neither brings back a player with none left. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a24e15bf4005853834dd9e3d763b124eb" name="a24e15bf4005853834dd9e3d763b124eb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a24e15bf4005853834dd9e3d763b124eb">&#9670;&#160;</a></span>Heal()</h2>
@@ -147,7 +151,30 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Up to <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html#aba5dcf71aeedfa978a174823d9586c62" title="The cap a heal stops at; extra hearts (a purple level&#39;s heart balloons) take Current past it.">IPlayerHealth.Max</a>, keeping any extra hearts the player already has. </p>
+
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a0e0ac40e95366b8e51bde5c185817b60">BalloonParty.Game.Health.PlayerHealthController</a>.</p>
+
+</div>
+</div>
+<a id="a8b813b2fe42bec84e92ed46e8b874ae1" name="a8b813b2fe42bec84e92ed46e8b874ae1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b813b2fe42bec84e92ed46e8b874ae1">&#9670;&#160;</a></span>HealPastMax()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Game.Health.IPlayerHealing.HealPastMax </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>amount</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Past <a class="el" href="interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html#aba5dcf71aeedfa978a174823d9586c62" title="The cap a heal stops at; extra hearts (a purple level&#39;s heart balloons) take Current past it.">IPlayerHealth.Max</a>: extra hearts, a purple level's heart balloons' pay. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#afb7259a5b5727a6cac4a5246bf836e9c">BalloonParty.Game.Health.PlayerHealthController</a>.</p>
 
 </div>
 </div>

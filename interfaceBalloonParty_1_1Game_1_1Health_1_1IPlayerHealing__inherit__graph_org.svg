@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Gives hearts back, never past IPlayerHealth.Max (the reward balloons&#39; payout).">
+<g id="a_Node000001"><a xlink:title="Gives hearts back (the reward balloons&#39; payout). Neither brings back a player with none left.">
 <polygon fill="#999999" stroke="#666666" points="147,-96 0,-96 0,-66 147,-66 147,-96"/>
 <text text-anchor="start" x="8" y="-84" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.Health.</text>
 <text text-anchor="middle" x="73.5" y="-73" font-family="Helvetica,sans-Serif" font-size="10.00">IPlayerHealing</text>
