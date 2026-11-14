@@ -6,7 +6,8 @@
 //   unity command script eval --file <this, placeholders filled in> --result-only
 // Not part of the Unity project (it lives outside Assets/); the Pipeline package compiles it on each call.
 //
-// __MODEL__     the balloon's model type name, e.g. GoldenBalloonModel; the first one on the board is used
+// __MODEL__     the balloon's model type name, e.g. GoldenBalloonModel, or its prefab's name, e.g. TougherBalloon
+//               (the tough and the tougher share a model); the first one on the board is used
 // __RENDERERS__ comma-separated renderer names to draw (a name ending in * matches as a prefix), e.g. Body,Shine*:
 //               the body and its highlights, not its baked shadow (the sheet bakes its own) or anything around it
 // __OUT__       where to write the PNG (use forward slashes)
@@ -38,7 +39,7 @@ bool Wanted(string name)
 BalloonParty.Balloon.View.BalloonView balloon = null;
 foreach (var view in UnityEngine.Object.FindObjectsByType<BalloonParty.Balloon.View.BalloonView>())
 {
-    if (view.Model != null && view.Model.GetType().Name == modelName)
+    if (view.Model != null && (view.Model.GetType().Name == modelName || view.name == modelName + "(Clone)"))
     {
         balloon = view;
         break;

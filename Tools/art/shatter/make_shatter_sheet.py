@@ -3,19 +3,21 @@
 1. Split. The balloon's silhouette is cut into Voronoi cells (seeds spread out by a few rounds of Lloyd
    relaxation, so no shard is a sliver), and the cracks wander a little (the pixel grid is pushed by a smooth
    noise field before each pixel finds its nearest seed), so the edges don't read as ruled lines.
+   With --swirl each piece is then whirled about its own middle (as GIMP's Whirl), so its edges bend into
+   S-curves: the tough balloons' rubbery tear rather than a plate's crack.
 2. Border. Each shard gets a side wall: its own pixels, darkened, extruded a few pixels toward the shadow,
    so it reads as a piece of plate with thickness. The freshly cut edges catch a thin highlight.
 3. Shadow. A soft drop shadow is baked under the shard and its wall, offset the same way.
 4. Sheet. The shards go one to a cell, row by row from the top left (the particle system's frame order),
    each centred on its centroid so it spins about its middle, at the balloon's own scale: the balloon spans
-   DIAMETER_SHARE of a cell, so a particle drawn at its largest start size shows a shard at true size.
+   --diameter of a cell, so a particle drawn at its largest start size shows a shard at true size.
 
-The particle system reads the sheet as a grid (Texture Sheet Animation, Grid mode, tiles = --grid) and picks a
-random start frame per particle. Seeded, so a re-run gives the same shards.
+The particle system reads the sheet as a grid (Texture Sheet Animation, Grid mode, tiles = --grid, columns x
+rows) and picks a random start frame per particle. Seeded, so a re-run gives the same shards.
 
 Usage:
-  python3 Tools/art/shatter/make_shatter_sheet.py SOURCE.png OUT.png [--pieces 9] [--grid 3] [--size 2048]
-                                                   [--seed 7] [--review REVIEW.png]
+  python3 Tools/art/shatter/make_shatter_sheet.py SOURCE.png OUT.png [--pieces 9] [--grid 3 | 4x3] [--size 2048]
+                                                   [--diameter 0.95] [--swirl 0] [--seed 7] [--review REVIEW.png]
 
 SOURCE is the balloon alone on a transparent background (Tools/art/shatter/capture_balloon.cs renders one from
 the open Editor). Needs numpy, scipy and Pillow.
@@ -28,8 +30,12 @@ import numpy as np
 from PIL import Image
 from scipy import ndimage
 
-# Share of a cell the whole balloon spans: the unbreakable's sheet draws its shards at about this scale.
+# Share of a cell the whole balloon spans by default: the unbreakable's sheet draws its shards at about this scale.
 DIAMETER_SHARE = 0.95
+
+# The balloon's drawn size (pixels) the measures below are for: a 2048 sheet of 3x3 at DIAMETER_SHARE. They
+# scale with the balloon, so a smaller cell or --diameter keeps the same look.
+REFERENCE_DIAMETER = DIAMETER_SHARE * 2048 / 3
 
 # The side wall: how many pixels the shard is extruded (at a 2048 sheet), toward which way, and how dark.
 WALL_DEPTH = 14
@@ -102,6 +108,34 @@ def smooth_noise(shape, scale, rng):
     field = rng.standard_normal(shape)
     field = ndimage.gaussian_filter(field, sigma=scale, mode='wrap')
     return field / (np.abs(field).max() + 1e-9)
+
+
+def whirl(rgba, piece, outline, turns):
+    """The piece twisted about its own middle, as GIMP's Whirl: `turns` radians at the centre, easing to none at
+    its farthest point, so its corners stay put and its straight edges bend into S-curves. The picture on it
+    turns with it. Returns the three images with only the piece's surroundings changed."""
+    ys, xs = np.nonzero(piece)
+    cy, cx = ys.mean(), xs.mean()
+    radius = math.sqrt(((ys - cy) ** 2 + (xs - cx) ** 2).max()) + 2.0
+    h, w = piece.shape
+    y0, y1 = max(0, int(cy - radius)), min(h, int(cy + radius) + 1)
+    x0, x1 = max(0, int(cx - radius)), min(w, int(cx + radius) + 1)
+    yy, xx = np.mgrid[y0:y1, x0:x1].astype(np.float64)
+    dy, dx = yy - cy, xx - cx
+    spin = -turns * np.clip(1.0 - np.hypot(dx, dy) / radius, 0.0, 1.0) ** 2
+    cos, sin = np.cos(spin), np.sin(spin)
+    at = np.stack([cy + dx * sin + dy * cos, cx + dx * cos - dy * sin])
+
+    def warp(image):
+        out = image.copy()
+        out[y0:y1, x0:x1] = ndimage.map_coordinates(image.astype(np.float64), at, order=1, mode='constant')
+        return out
+
+    # Colours are warped premultiplied, so the piece's rim doesn't pick up the dark of empty pixels.
+    alpha = rgba[..., 3]
+    turned = np.stack([warp(rgba[..., c] * alpha) for c in range(3)] + [warp(alpha)], axis=-1)
+    turned[..., :3] /= np.maximum(turned[..., 3:4], 1e-6)
+    return turned, warp(piece) > 0.5, warp(outline) > 0.5
 
 
 def label_pieces(alpha, count, rng, px):
@@ -222,18 +256,31 @@ def main():
     parser.add_argument('source')
     parser.add_argument('out')
     parser.add_argument('--pieces', type=int, default=9)
-    parser.add_argument('--grid', type=int, default=3)
-    parser.add_argument('--size', type=int, default=2048)
+    parser.add_argument('--grid', default='3', help='cells: N for N x N, or COLSxROWS')
+    parser.add_argument('--size', type=int, default=2048, help="the sheet's width; its height follows the grid")
+    parser.add_argument('--diameter', type=float, default=DIAMETER_SHARE,
+                        help="share of a cell the whole balloon spans: match the particle system's start size")
+    parser.add_argument('--swirl', type=float, default=0.0,
+                        help="radians each piece is whirled at its middle (0: none, the plates' straight cracks)")
     parser.add_argument('--seed', type=int, default=7)
     parser.add_argument('--review', help='also write the sheet over a flat background, for a look')
     args = parser.parse_args()
 
-    if args.pieces > args.grid * args.grid:
+    cols, _, rows = args.grid.lower().partition('x')
+    cols, rows = int(cols), int(rows or cols)
+    if args.pieces > cols * rows:
         sys.exit(f'--pieces {args.pieces} needs a bigger --grid than {args.grid}')
 
-    cell = args.size / args.grid
-    px = args.size / 2048.0
-    rgba = load_source(args.source, DIAMETER_SHARE * cell)
+    cell = args.size / cols
+    height = round(cell * rows)
+    diameter = args.diameter * cell
+    px = diameter / REFERENCE_DIAMETER
+    rgba = load_source(args.source, diameter)
+    if args.swirl:
+        # Room around the balloon: a whirled piece reaches past where it was cut.
+        margin = round(0.5 * diameter)
+        rgba = np.pad(rgba, ((margin, margin), (margin, margin), (0, 0)))
+
     rng = np.random.default_rng(args.seed)
     pieces, mask = label_pieces(rgba[..., 3], args.pieces, rng, px)
 
@@ -242,10 +289,13 @@ def main():
 
     # Largest first, so a reader of the sheet sees the big plates at the top.
     pieces.sort(key=lambda p: -p.sum())
-    sheet = np.zeros((args.size, args.size, 4), dtype=np.float64)
+    sheet = np.zeros((height, args.size, 4), dtype=np.float64)
     for index, piece in enumerate(pieces):
-        image, (cx, cy) = render_piece(rgba, piece, outline, px)
-        row, col = divmod(index, args.grid)
+        if args.swirl:
+            image, (cx, cy) = render_piece(*whirl(rgba, piece, outline, args.swirl), px)
+        else:
+            image, (cx, cy) = render_piece(rgba, piece, outline, px)
+        row, col = divmod(index, cols)
         left = round((col + 0.5) * cell - cx)
         top = round((row + 0.5) * cell - cy)
         h, w = image.shape[:2]
@@ -264,12 +314,12 @@ def main():
 
     out = Image.fromarray((np.clip(sheet, 0.0, 1.0) * 255.0 + 0.5).astype(np.uint8), 'RGBA')
     out.save(args.out)
-    print(f'{len(pieces)} shards on a {args.grid}x{args.grid} sheet of {args.size} px -> {args.out}')
+    print(f'{len(pieces)} shards on a {cols}x{rows} sheet of {args.size}x{height} px -> {args.out}')
 
     if args.review:
         backdrop = Image.new('RGBA', out.size, (88, 140, 110, 255))
         backdrop.alpha_composite(out)
-        backdrop.convert('RGB').resize((args.size // 2, args.size // 2), Image.LANCZOS).save(args.review)
+        backdrop.convert('RGB').resize((args.size // 2, height // 2), Image.LANCZOS).save(args.review)
 
 
 if __name__ == '__main__':
