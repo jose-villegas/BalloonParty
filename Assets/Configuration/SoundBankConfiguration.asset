@@ -196,7 +196,7 @@ MonoBehaviour:
     _fadeInSeconds: 0
     _fadeOutSeconds: 0
     _maxPlaySeconds: 0
-    _stopsOnPlay: 06000000
+    _stopsOnPlay: 06000000i
     _melodicMode: 0
     _melodicMaxOctaves: 2
     _melodicSkipSteps: 1
@@ -1279,7 +1279,7 @@ MonoBehaviour:
     _fetchPrompt: 'A short, warm chime with a soft balloon pop under it: a heart-shaped balloon bursts and gives the player a life back.'
   - _channel: 0
     _clips:
-    - {fileID: 8300000, guid: 0370e279dcf51485896dad01ce536809, type: 3}
+    - {fileID: 8300000, guid: 9a776ab9d54fe459ba91c52b2b93b44f, type: 3}
     _clipPickMode: 0
     _clipWrapMode: 0
     _pitchRange: {x: 1, y: 1}
@@ -1355,7 +1355,7 @@ MonoBehaviour:
       _melodicSkipSteps: 1
       _tensionSemitones: 12
     _fetchPrompt: 'A bright balloon pop with a coin-like chime ringing over it: a gold-plated balloon breaks and pays a reward.'
-  _melodicScale: 0000000002000000040000000700000009000000
+  _melodicScale: 0000000002000000040000000700000009000000i
   _melodicRootSemitone: 0
   _globalVoiceCap: 64
   _dangerLevelThreshold: 0.6
