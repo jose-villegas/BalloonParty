@@ -3,8 +3,8 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
     // The golden reward balloon's body: a balloon (the circle sprite, lit as a sphere like
     // ToughBalloon) plated in gold. The plates are even hexagons laid over the sphere, so they crowd
     // toward the rim the way tiles on a ball do; even, so they read as fitted plates and not as the
-    // tough balloon's cracks. The plates stand apart, so the balloon's rubber shows between them,
-    // shaded as the smooth sphere under them. Each plate is bevelled at its edges and held by two
+    // tough balloon's cracks. The plates are thick and stand apart, so the balloon's rubber shows
+    // between them, deeper down, with the plates' side walls and shadows around it. Each plate is bevelled at its edges and held by two
     // bolts, and tilted a little and wobbling slowly, so it shades and glints on its own as the scene
     // light moves, and glitter sparkles only where a plate's glint lands. The shadow comes from the prefab's baked
     // shadow child, as on the tough balloon.
@@ -46,6 +46,14 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
         _BoltDome   ("Dome", Range(0, 3)) = 1.4
         _BoltRingColor ("Ring", Color) = (0.36, 0.20, 0.03, 1)
 
+        [Header(Thickness)]
+        // How far the plate tops stand over the rubber, as a share of the balloon's radius.
+        _PlateThickness ("Thickness", Range(0, 0.2)) = 0.07
+        // How much darker a side wall gets from its top down to the rubber.
+        _WallShade      ("Wall Darkening", Range(0, 1)) = 0.5
+        // The shadow each plate casts on the rubber, away from the light.
+        _CastShadow     ("Cast Shadow", Range(0, 1)) = 0.55
+
         [Header(Balloon Between the Plates)]
         // Half the gap between two plates, in plate units.
         _GapWidth         ("Gap", Range(0, 0.2)) = 0.11
@@ -53,8 +61,8 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
         _RubberShade      ("Shade", Color) = (0.55, 0.22, 0.05, 1)
         _RubberGloss      ("Gloss", Range(0, 2)) = 1.2
         _RubberGlossPower ("Gloss Sharpness", Range(4, 128)) = 24
-        // The plates' shadow on the rubber, darkest at a plate's edge.
-        _GapShadow        ("Plate Shadow", Range(0, 1)) = 0.3
+        // The rubber darkening at each plate's foot.
+        _GapShadow        ("Contact Shadow", Range(0, 1)) = 0.3
 
         [Header(Glint)]
         _GlintColor     ("Color", Color) = (1.00, 0.96, 0.80, 1)
@@ -113,6 +121,9 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
             #pragma target 3.5
             #pragma multi_compile _ PIXELSNAP_ON
             #pragma multi_compile_instancing
+
+            // Depth steps through the plates' thickness: enough that a wall shows no banding at the rim.
+            #define WALL_STEPS 6
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
             #include "../Include/Glitter.cginc"
@@ -181,6 +192,10 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
             float  _RubberGloss;
             float  _RubberGlossPower;
             float  _GapShadow;
+
+            float  _PlateThickness;
+            float  _WallShade;
+            float  _CastShadow;
 
             half4  _GlintColor;
             float  _GlintPower;
@@ -352,14 +367,53 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
                     col += _GlitterColor.rgb * glitter * glitterGate * _GlitterIntensity;
                 }
 
-                // The balloon between the plates, lit as the smooth sphere, so its shading and gloss run
-                // on unbroken from gap to gap and read as one skin under the plates. Shaded darkest at
-                // each plate's edge, where the plate stands over it.
-                half3 rubber = lerp(_RubberShade.rgb, _RubberLit.rgb, saturate(dot(normal, IN.toLight)));
-                rubber += pow(saturate(dot(normal, IN.halfway)), _RubberGlossPower) * _RubberGloss;
-                rubber *= 1.0 - _GapShadow * smoothstep(0.0, max(_GapWidth, 0.001), edgeDistance);
+                // The plates' thickness: the rubber is a smaller sphere under the plate tops, and the view
+                // ray is marched down through the shell between them. Where it passes through a plate
+                // below its top, that is the plate's side wall. The walls show more toward the rim, where
+                // the ray runs along the surface, as on a real ball. Layers blend front to back by
+                // coverage, so the plate and wall edges stay antialiased.
+                float  cover  = onPlate;
+                half3  layers = col * onPlate;
+                float2 radial = p / max(rFlat, 0.0001);
+                float  rubberRadius = 1.0 - _PlateThickness;
+                float  floorEdge = edgeDistance;
+                float2 floorUV   = plateUV;
+
+                UNITY_UNROLL
+                for (int layer = 1; layer <= WALL_STEPS; layer++)
+                {
+                    float  depth  = layer / (float)WALL_STEPS;
+                    float  theta  = asin(min(rFlat / lerp(1.0, rubberRadius, depth), 1.0));
+                    float2 wallUV = radial * (theta / (UNITY_PI * 0.5) * _PlateScale);
+                    float  wallEdge;
+                    float2 wallDirection;
+                    HexPlate(wallUV, wallEdge, wallDirection);
+                    float  hit = smoothstep(-edgeSoft, edgeSoft, wallEdge - _GapWidth) * (1.0 - cover);
+                    // A wall faces out of its plate, across the gap, tipped a little toward the viewer.
+                    float3 wallNormal = normalize(float3(wallDirection, 0.35));
+                    half3  wall = lerp(_GoldShade.rgb, _GoldLit.rgb, saturate(dot(wallNormal, IN.toLight)));
+                    layers += wall * (1.0 - _WallShade * depth) * hit;
+                    cover  += hit;
+                    floorEdge = wallEdge;
+                    floorUV   = wallUV;
+                }
+
+                // The balloon at the bottom of the gaps, lit as its own smooth sphere, so its shading and
+                // gloss run on unbroken from gap to gap and read as one skin under the plates.
+                float3 rubberNormal = normalize(float3(p, sqrt(max(rubberRadius * rubberRadius - rFlat * rFlat, 0.0))));
+                half3  rubber = lerp(_RubberShade.rgb, _RubberLit.rgb, saturate(dot(rubberNormal, IN.toLight)));
+                rubber += pow(saturate(dot(rubberNormal, IN.halfway)), _RubberGlossPower) * _RubberGloss;
+                rubber *= 1.0 - _GapShadow * smoothstep(0.0, max(_GapWidth, 0.001), floorEdge);
+                // The shadow a plate casts, found by looking from the rubber toward the light over the
+                // plates' height: it shows their height even mid-balloon, where no wall is seen.
+                float2 towardLight = IN.toLight.xy / max(IN.toLight.z, 0.3)
+                                   * (_PlateThickness / (UNITY_PI * 0.5) * _PlateScale);
+                float  casterEdge;
+                float2 casterDirection;
+                HexPlate(floorUV + towardLight, casterEdge, casterDirection);
+                rubber *= 1.0 - _CastShadow * smoothstep(-edgeSoft, edgeSoft, casterEdge - _GapWidth);
                 rubber = lerp(rubber, _RubberShade.rgb * 0.5, pow(rFlat, _EdgePower));
-                col = lerp(rubber, col, onPlate);
+                col = layers + rubber * (1.0 - cover);
 
                 // World space, so the rim never turns with the sway.
                 float2 worldUV = (IN.worldPos - IN.worldData.xy) / max(IN.worldData.z, 0.0001);
