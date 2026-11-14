@@ -235,6 +235,13 @@ namespace BalloonParty.Balloon.Spawner
 
         private bool IsRunning()
         {
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
+            if (BalloonParty.Cheats.CheatState.EmptyBoard)
+            {
+                return false;
+            }
+#endif
+
             return Navigation.Current.Value == NavigationState.Game
                    && _levelProgress.Phase.Value == LevelUpPhase.Playing
                    && !_pauseService.IsAnyPaused.Value

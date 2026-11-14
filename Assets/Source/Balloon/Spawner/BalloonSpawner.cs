@@ -173,6 +173,13 @@ namespace BalloonParty.Balloon.Spawner
         {
             // Re-awaitable, unlike a stored UniTask, so a restart re-spawn can wait on it again.
             await UniTask.WaitUntil(() => _prewarmed, cancellationToken: ct);
+#if UNITY_ENABLE_CHECKS || CHEATS_IN_RELEASE
+            if (BalloonParty.Cheats.CheatState.EmptyBoard)
+            {
+                return;
+            }
+#endif
+
             PopulateInitialGrid();
             PublishItemCheck(isInitial: true);
         }

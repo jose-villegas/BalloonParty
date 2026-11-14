@@ -44,6 +44,12 @@ namespace BalloonParty.Cheats
         /// (<c>Editor/Staging</c>); read by <c>RunSeed.ResetRun</c>.</summary>
         public static int ForcedRunSeed;
 
+        /// <summary>While true, no balloons come on their own: a run's opening board isn't dealt
+        /// (<c>BalloonSpawner.SpawnAsync</c>) and the spawn clock sends no lines, so the board holds only what's
+        /// put on it. The level's obstacles still come. Set by the scene stage (<c>Editor/Staging</c>) for its
+        /// still scenes.</summary>
+        public static bool EmptyBoard;
+
         /// <summary>Speed multiplier for the Realtime time-of-day clock (see <c>TimeOfDayClock</c>):
         /// 1 = the authored <c>SecondsPerCycle</c>, 0 = frozen, higher = faster. Set by
         /// <see cref="TimeOfDayCheat" />; read (under this guard) by the clock each tick.</summary>

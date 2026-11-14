@@ -124,7 +124,8 @@ class Stage:
         """A fresh board: the run restarted at `level` (default the current one) or the first level from there in
         `scenario`, on run `seed` (default the current one), and `settle` seconds of game time for it to spawn."""
         self.call("Deal", scenario or "", int(level or 0), int(seed or 0))
-        self.advance(settle)
+        if settle > 0:
+            self.advance(settle)
 
     def strip(self, *kinds):
         """Takes kinds of things off the board at once, with no pop: balloons, clouds, bushes, enemies (deflectors,
@@ -202,10 +203,8 @@ class Stage:
         return self.call("Capture", os.path.abspath(path).replace("\\", "/"), around, int(size))
 
     def end(self):
-        """Clears frozen effects, lets the game run and leaves Play mode."""
-        self.call("ClearEffects")
-        self.call("Release")
-        self.editor.command("editor.playmode", "stop")
+        """Clears frozen effects, gives the game back its clock, level-ups and balloons, and leaves Play mode."""
+        self.call("End")
         self.editor.wait_ready()
 
     def _quiet(self, method, *args):

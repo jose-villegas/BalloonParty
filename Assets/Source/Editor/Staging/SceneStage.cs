@@ -106,6 +106,9 @@ namespace BalloonParty.Editor.Staging
 
             CheatState.TimeOfDaySpeedScale = 0f;
             CheatState.BlockLevelUp = true;
+            CheatState.EmptyBoard = true;
+            EditorApplication.playModeStateChanged -= OnPlayModeChanged;
+            EditorApplication.playModeStateChanged += OnPlayModeChanged;
             Hold();
             switch (Navigation.Current.Value)
             {
@@ -116,9 +119,27 @@ namespace BalloonParty.Editor.Staging
                 case NavigationState.GameOver:
                     Resolve<RunController>().RestartRun();
                     break;
+                default:
+                    // A run already under way: its balloons go, so the stage starts as bare as a fresh one.
+                    Resolve<BalloonControllerRegistry>().ClearAll(false);
+                    break;
             }
 
             return Navigation.Current.Value == NavigationState.Game ? "ready" : $"waiting ({Navigation.Current.Value})";
+        }
+
+        /// <summary>Clears the frozen pops, gives the game back its own clock, level-ups and balloons, and leaves Play mode.</summary>
+        public static string End()
+        {
+            if (EditorApplication.isPlaying)
+            {
+                ClearEffects();
+                Release();
+                EditorApplication.isPlaying = false;
+            }
+
+            ResetCheats();
+            return "off";
         }
 
         /// <summary>Stops game time (time scale 0) until <see cref="Release" /> or <see cref="Advance" />.</summary>
@@ -531,6 +552,25 @@ namespace BalloonParty.Editor.Staging
 
                 return;
             }
+        }
+
+        // However Play mode ends (End, or the Editor's own Play button), the next session plays as the game does.
+        private static void OnPlayModeChanged(PlayModeStateChange change)
+        {
+            if (change == PlayModeStateChange.ExitingPlayMode)
+            {
+                ResetCheats();
+            }
+        }
+
+        private static void ResetCheats()
+        {
+            EditorApplication.playModeStateChanged -= OnPlayModeChanged;
+            EditorApplication.update -= AdvanceTick;
+            _advanceUntil = -1f;
+            CheatState.EmptyBoard = false;
+            CheatState.BlockLevelUp = false;
+            CheatState.TimeOfDaySpeedScale = 1f;
         }
 
         private static void AdvanceTick()
