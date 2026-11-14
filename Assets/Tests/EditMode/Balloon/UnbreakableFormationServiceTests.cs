@@ -387,6 +387,57 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void ItemCoverOnly_WithThreeUnbreakables_CoversTheItemFromBelow()
+        {
+            _settings.HorizontalWeight.Returns(0f);
+            _settings.DiagonalWeight.Returns(0f);
+            var item = new Vector2Int(3, 2);
+            var host = new BalloonModel();
+            host.Item.Value = ItemType.Snipe;
+            _grid.Place(host, null, item);
+            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+
+            Arrange();
+
+            Assert.AreEqual(FormationShape.ItemCover, _service.CurrentShape);
+            Assert.IsTrue(_unbreakables.All(u => u.IsAnchored));
+            Assert.IsTrue(_unbreakables.All(u => HexCoordinates.Distance(u.SlotIndex.Value, item) == 1));
+            var slots = _unbreakables.Select(u => u.SlotIndex.Value).ToList();
+            CollectionAssert.Contains(slots, HexCoordinates.Step(item, 1));
+            CollectionAssert.Contains(slots, HexCoordinates.Step(item, 2));
+        }
+
+        [Test]
+        public void ItemCoverOnly_WithAnItemItDoesNotShield_FormsNothing()
+        {
+            _settings.HorizontalWeight.Returns(0f);
+            _settings.DiagonalWeight.Returns(0f);
+            var host = new BalloonModel();
+            host.Item.Value = ItemType.Laser;
+            _grid.Place(host, null, new Vector2Int(3, 2));
+            AddUnbreakables(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+
+            Arrange();
+
+            Assert.IsNull(_service.CurrentShape);
+            Assert.IsFalse(_unbreakables.Any(u => u.IsAnchored));
+        }
+
+        [Test]
+        public void ItemCoverWeighted_WithAnItemItDoesNotShield_PicksAnotherShape()
+        {
+            var host = new BalloonModel();
+            host.Item.Value = ItemType.Laser;
+            _grid.Place(host, null, new Vector2Int(3, 2));
+            AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
+
+            Arrange();
+
+            Assert.IsNotNull(_service.CurrentShape);
+            Assert.AreNotEqual(FormationShape.ItemCover, _service.CurrentShape);
+        }
+
+        [Test]
         public void NoShapeFits_NobodyIsAnchored()
         {
             _settings.HorizontalWeight.Returns(0f);

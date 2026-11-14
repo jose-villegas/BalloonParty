@@ -258,27 +258,195 @@ namespace BalloonParty.Tests.Balloon
             CollectionAssert.AreEquivalent(HexCoordinates.HexNeighborIndices(3, 2), Targets());
         }
 
+        // Directions (HexCoordinates.Step): 1 and 2 below the item, toward the cannon; 0 and 3 its sides; 4 and 5
+        // above it. A cover fills below first, then the sides, then above.
         [Test]
-        public void ItemCover_WithFewerThanSixMembers_HasNoSpot()
+        public void ItemCover_ThreeMembers_TakeTheTwoBelowAndOneSide()
+        {
+            BuildGrid(7, 8);
+            var item = new Vector2Int(3, 2);
+            PlaceItem(item);
+            AddMembers(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+
+            Assert.IsTrue(Plan(FormationShape.ItemCover));
+
+            var targets = Targets();
+            Assert.AreEqual(3, targets.Count);
+            CollectionAssert.IsSubsetOf(Around(item, 1, 2), targets, "both slots below");
+            Assert.AreEqual(1, targets.Intersect(Around(item, 0, 3)).Count(), "one side");
+        }
+
+        [Test]
+        public void ItemCover_FourMembers_TakeBelowAndBothSides()
+        {
+            BuildGrid(7, 8);
+            var item = new Vector2Int(3, 2);
+            PlaceItem(item);
+            AddMembers(new Vector2Int(0, 5), new Vector2Int(2, 5), new Vector2Int(4, 5), new Vector2Int(6, 5));
+
+            Assert.IsTrue(Plan(FormationShape.ItemCover));
+
+            CollectionAssert.AreEquivalent(Around(item, 1, 2, 0, 3), Targets());
+        }
+
+        [Test]
+        public void ItemCover_FiveMembers_LeaveOneSlotAboveOpen()
+        {
+            BuildGrid(7, 8);
+            var item = new Vector2Int(3, 2);
+            PlaceItem(item);
+            AddMembers(new Vector2Int(0, 5), new Vector2Int(1, 5), new Vector2Int(2, 5), new Vector2Int(4, 5),
+                new Vector2Int(5, 5));
+
+            Assert.IsTrue(Plan(FormationShape.ItemCover));
+
+            var targets = Targets();
+            Assert.AreEqual(5, targets.Count);
+            CollectionAssert.IsSubsetOf(Around(item, 1, 2, 0, 3), targets);
+            Assert.AreEqual(1, targets.Intersect(Around(item, 4, 5)).Count(), "one above");
+        }
+
+        [Test]
+        public void ItemCover_WithFewerThanThreeMembers_HasNoSpot()
         {
             BuildGrid(7, 8);
             PlaceItem(new Vector2Int(3, 2));
-            AddMembers(new Vector2Int(0, 5), new Vector2Int(1, 5), new Vector2Int(2, 5), new Vector2Int(4, 5),
-                new Vector2Int(5, 5));
+            AddMembers(new Vector2Int(0, 5), new Vector2Int(6, 5));
 
             Assert.IsFalse(Plan(FormationShape.ItemCover));
         }
 
-        [TestCase(0, 2)]
-        [TestCase(3, 0)]
-        [TestCase(6, 3)]
-        public void ItemCover_AtTheBoardsEdge_HasNoSpot(int col, int row)
+        // The edge shields the side it's on, so the cover takes every neighbour still on the board.
+        [TestCase(0, 2, 3)]
+        [TestCase(3, 0, 4)]
+        [TestCase(6, 3, 3)]
+        public void ItemCover_AtTheBoardsEdge_TakesTheNeighboursOnTheBoard(int col, int row, int onBoard)
         {
             BuildGrid(7, 8);
-            PlaceItem(new Vector2Int(col, row));
+            var item = new Vector2Int(col, row);
+            PlaceItem(item);
             AddSixMembers();
 
+            Assert.IsTrue(Plan(FormationShape.ItemCover));
+
+            var expected = Around(item, 0, 1, 2, 3, 4, 5).Where(_grid.InBounds).ToList();
+            Assert.AreEqual(onBoard, expected.Count);
+            CollectionAssert.AreEquivalent(expected, Targets());
+        }
+
+        // The odd cover can lean east or west; the spot that moves its members least wins (SpotChoices 1).
+        [TestCase(4, 2, 2)]
+        [TestCase(2, 2, 4)]
+        public void ItemCover_OddCount_TakesTheSideAMemberAlreadyStandsOn(int sideCol, int sideRow, int otherCol)
+        {
+            BuildGrid(7, 8);
+            var item = new Vector2Int(3, 2);
+            PlaceItem(item);
+            var side = new Vector2Int(sideCol, sideRow);
+            AddMembers(side, new Vector2Int(0, 5), new Vector2Int(6, 5));
+
+            Assert.IsTrue(Plan(FormationShape.ItemCover));
+
+            CollectionAssert.Contains(Targets(), side);
+            CollectionAssert.DoesNotContain(Targets(), new Vector2Int(otherCol, 2));
+            Assert.AreEqual(side, TargetOf(_candidates[0]), "the member on the side stays put");
+        }
+
+        [Test]
+        public void ItemCover_OddCount_WithOneSideTaken_UsesTheOther()
+        {
+            BuildGrid(7, 8);
+            var item = new Vector2Int(3, 2);
+            PlaceItem(item);
+            var taken = HexCoordinates.Step(item, 0);
+            _grid.Place(new BalloonModel(), null, taken);
+            AddMembers(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+
+            Assert.IsTrue(Plan(FormationShape.ItemCover));
+
+            CollectionAssert.AreEquivalent(Around(item, 1, 2, 3), Targets());
+        }
+
+        [Test]
+        public void ItemCover_WithABelowSlotTaken_HasNoSpot()
+        {
+            BuildGrid(7, 8);
+            var item = new Vector2Int(3, 2);
+            PlaceItem(item);
+            _grid.Place(new BalloonModel(), null, HexCoordinates.Step(item, 1));
+            AddMembers(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+
             Assert.IsFalse(Plan(FormationShape.ItemCover));
+        }
+
+        [Test]
+        public void ItemCover_WhoseBelowSlotsFallInTheBottomClearance_HasNoSpot()
+        {
+            // Eight rows with two clear: row 5 is the lowest a slot may take, so an item on row 5 would have its
+            // below slots on row 6, and a cover never skips those for the sides.
+            BuildGrid(7, 8);
+            PlaceItem(new Vector2Int(3, 5));
+            AddMembers(new Vector2Int(0, 1), new Vector2Int(3, 1), new Vector2Int(6, 1));
+
+            Assert.IsFalse(Plan(FormationShape.ItemCover));
+        }
+
+        [Test]
+        public void ItemCover_OnTheBottomRowWithNoClearance_TakesTheSidesAndAbove()
+        {
+            _settings.BottomClearance.Returns(0);
+            BuildGrid(7, 8);
+            var item = new Vector2Int(3, 7);
+            PlaceItem(item);
+            AddMembers(new Vector2Int(0, 4), new Vector2Int(3, 4), new Vector2Int(6, 4));
+
+            Assert.IsTrue(Plan(FormationShape.ItemCover));
+
+            var targets = Targets();
+            Assert.AreEqual(3, targets.Count);
+            Assert.IsTrue(targets.All(_grid.InBounds));
+            CollectionAssert.IsSubsetOf(Around(item, 0, 3), targets, "both sides");
+            Assert.AreEqual(1, targets.Intersect(Around(item, 4, 5)).Count(), "one above");
+        }
+
+        [Test]
+        public void ItemCover_WithMoreThanSixCandidates_TakesSixWhateverMaxMembersSays()
+        {
+            BuildGrid(7, 8);
+            var item = new Vector2Int(3, 2);
+            PlaceItem(item);
+            AddSixMembers();
+            AddMember(new Vector2Int(3, 6));
+
+            Assert.IsTrue(Plan(FormationShape.ItemCover));
+
+            CollectionAssert.AreEquivalent(Around(item, 0, 1, 2, 3, 4, 5), Targets());
+        }
+
+        [Test]
+        public void ItemCover_WithFewerCandidatesThanMinMembers_HasNoSpot()
+        {
+            _settings.MinMembers.Returns(4);
+            BuildGrid(7, 8);
+            PlaceItem(new Vector2Int(3, 2));
+            AddMembers(new Vector2Int(0, 5), new Vector2Int(3, 5), new Vector2Int(6, 5));
+
+            Assert.IsFalse(Plan(FormationShape.ItemCover));
+        }
+
+        [TestCase(ItemType.Bomb, true)]
+        [TestCase(ItemType.Snipe, true)]
+        [TestCase(ItemType.Lightning, true)]
+        [TestCase(ItemType.Laser, false)]
+        [TestCase(ItemType.Paint, false)]
+        [TestCase(ItemType.Shield, false)]
+        public void ItemCover_OnlyShieldsABombASnipeOrALightning(ItemType item, bool covered)
+        {
+            BuildGrid(7, 8);
+            PlaceItem(new Vector2Int(3, 2), item);
+            AddSixMembers();
+
+            Assert.AreEqual(covered, Plan(FormationShape.ItemCover));
         }
 
         [Test]
@@ -352,11 +520,16 @@ namespace BalloonParty.Tests.Balloon
             return _assignments.Single(a => a.Member == member).Target;
         }
 
-        private void PlaceItem(Vector2Int slot)
+        private void PlaceItem(Vector2Int slot, ItemType item = ItemType.Bomb)
         {
             var host = new BalloonModel();
-            host.Item.Value = ItemType.Bomb;
+            host.Item.Value = item;
             _grid.Place(host, null, slot);
+        }
+
+        private static List<Vector2Int> Around(Vector2Int slot, params int[] directions)
+        {
+            return directions.Select(d => HexCoordinates.Step(slot, d)).ToList();
         }
 
         private void AddSixMembers()

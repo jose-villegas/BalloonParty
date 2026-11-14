@@ -6,7 +6,8 @@ namespace BalloonParty.Balloon.Formation
         DiagonalDownRight,
         DiagonalDownLeft,
 
-        // A ring of six around a balloon that carries an item: no shot reaches the item, and it can't move.
+        // Three to six around a balloon carrying a bomb, a snipe or a lightning, shielding it from the cannon:
+        // below it first, then its sides, then above. Six close the ring.
         ItemCover,
 
         // A line that walks the board on the balancer's pulse, each member stepping into the slot the one ahead

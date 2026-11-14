@@ -13,7 +13,7 @@ unbreakables, past the level's usual cap, and those form formations of their own
 
 | File | What it does |
 |---|---|
-| `FormationShape` | The five shapes: `Horizontal`, `DiagonalDownRight`, `DiagonalDownLeft`, `ItemCover` (a ring of six around a balloon that carries an item: no shot reaches the item, and the item can't move), and `Snake` (a line that walks the board) |
+| `FormationShape` | The five shapes: `Horizontal`, `DiagonalDownRight`, `DiagonalDownLeft`, `ItemCover` (three to six around a balloon carrying a bomb, a snipe or a lightning, shielding it from the cannon: below it first, then its sides, then above), and `Snake` (a line that walks the board) |
 | `SnakeWalk` | Where a snake's head steps next: straight on if it can, else the gentlest open turn |
 | `FormationPlanner` | Pure planning. For one shape it lists every spot on the board where the shape fits, works out how far the members would travel to fill it, and picks at random among the few cheapest spots. It then says which member goes to which slot. It reads the grid but never changes it |
 | `FormationAssignment` | One member and the slot it goes to |
@@ -28,10 +28,10 @@ unbreakables, past the level's usual cap, and those form formations of their own
 2. **Forming.** If at least `MinMembers` unbreakables are free (in no formation), the service picks a
    shape for them. The pick is weighted at random from the shape weights. The snake's weight grows by
    `SnakeWeightPerExtraUnbreakable` of itself for each unbreakable on the board beyond `MinMembers`, so a
-   crowded board snakes more often. It leaves out the shape just held, and leaves out `ItemCover` unless
-   an item is on the board. If the picked shape fits nowhere, the service tries the next one. If nothing fits, nothing forms and the unbreakables roam as usual. A
+   crowded board snakes more often. It leaves out the shape just held, and `ItemCover` finds no spot
+   unless a bomb, a snipe or a lightning is on the board. If the picked shape fits nowhere, the service tries the next one. If nothing fits, nothing forms and the unbreakables roam as usual. A
    formation takes at most `MaxMembers` (a horizontal line, `HorizontalMaxMembers`); an item cover takes
-   exactly six. While `MinMembers` or more are still free after it, they form another one.
+   three to six. While `MinMembers` or more are still free after it, they form another one.
 3. **Moving in.** The service hands each member's move to the balancer's relocate routine. That is the
    same routine roam jumps use, so the members glide in at their normal speed. Each member is marked
    in formation (`IWriteableFormationMember.SetInFormation`).
@@ -100,15 +100,22 @@ unbreakables: they roam, and once enough are free they form a formation of their
   and takes at most `HorizontalMaxMembers`: close to the cannon, or across the board, a wall shuts the
   player out. Diagonals leave lanes open, so they keep `BottomClearance` and `MaxMembers`. The
   unbreakables a row leaves out are free to form their own.
-- **A cover is a whole ring.** `ItemCover` takes all six neighbours of the item's balloon, so it needs six
-  free unbreakables, and all six slots on the board and above `BottomClearance`: an item on the board's
-  edge is never covered. Its place is the item's, so it never looks for a spot of its own.
+- **A cover is a shield against the cannon.** `ItemCover` stands around a balloon carrying a bomb, a snipe
+  or a lightning (the items that hit hardest; the others are left open). It takes three to six of the free
+  unbreakables, whatever `MaxMembers` says, and fills the item's neighbours in order: the two below it,
+  toward the cannon, then its two sides, and the two above only once those are taken. Six close the ring.
+  With an odd count it tries the left and the right side both and keeps the cheaper. A neighbour off the
+  board is shielded by the edge, so the cover skips it; a corner with fewer than three neighbours on the
+  board gets none. A slot it takes in `BottomClearance` rules the spot out. Its place is the item's, so it
+  never looks for a spot of its own.
 - **Members keep their slot.** A member already standing on a formation slot keeps it: assignment
   takes the nearest pairs first, so its distance-0 pair always wins. As a result, no member ever has to
   move into a slot another member still holds.
-- **The covered item stays put.** With every neighbour taken by an anchored member, the item's balloon has
-  nowhere to move. If it pops anyway (a blast reaches it), the ring stays where it is until the next
-  change.
+- **A full ring holds the item.** Six leave the item's balloon nowhere to move. A smaller cover leaves
+  the side above it open, so the item can float up out of it. If the item moves or pops, the cover stays
+  where it is until the next change.
+- **A cover's slots must be free.** A neighbour holding an ordinary balloon rules the spot out, as for
+  every shape: the cover never pushes a balloon aside, and a balloon is no shield, since a shot pops it.
 
 ## Anchoring
 
@@ -138,7 +145,7 @@ The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfigurati
 - `MinMembers` (3) and `MaxMembers` (5)
 - `HoldWaves` (3)
 - `BottomClearance` (2) and `HorizontalBottomClearance` (4, for horizontal lines)
-- `HorizontalMaxMembers` (3, for horizontal lines; an item cover always takes six)
+- `HorizontalMaxMembers` (3, for horizontal lines; an item cover takes three to six)
 - `SnakeMaxMembers` (4) and `SnakeStepPulses` (1: a step on every pulse)
 - `SpotChoices` (3)
 - `ReinforcementChance` (0.35) and `ReinforcementCeiling` (4)
