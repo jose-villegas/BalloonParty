@@ -44,7 +44,7 @@ being played when it pops, so one popped after a purple level ends heals as on t
 heart body and bandages drawn by `Tools/art/make_heart_balloon.py`, and its own highlight
 (`Shaders/BalloonParty/Balloon/HeartShine.shader`, lit from the heart's baked normals), because the
 round balloons' shine is drawn for a circle. Fainter god rays than the golden's turn behind it, white and
-shorter (`GodRaysLook` again, on the `HeartRays` material and palette entry). Its pop cue is `BalloonPopHeart`, a kalimba note for now.
+shorter (`GodRaysLook` again, on the `HeartRays` material and palette entry). Its pop cue is `BalloonPopHeart`, a harp pluck (`harp005` by t1mp, CC BY) the sound bank pitches to the board's key.
 
 ## When each one is due
 

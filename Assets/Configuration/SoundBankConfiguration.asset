@@ -1255,7 +1255,7 @@ MonoBehaviour:
 '
   - _channel: 0
     _clips:
-    - {fileID: 8300000, guid: cd4352eca4afd45a8960e4bf06fadf56, type: 3}
+    - {fileID: 8300000, guid: 8781a1418c410044c90981f31b48027f, type: 3}
     _clipPickMode: 0
     _clipWrapMode: 0
     _pitchRange: {x: 1, y: 1}
