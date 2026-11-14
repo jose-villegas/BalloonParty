@@ -19,7 +19,8 @@ python3 Tools/stage/stage.py capture Logs/stage/golden-night.png --around Golden
 python3 Tools/stage/stage.py end                      # clear up, let the game run, leave Play mode
 ```
 
-The Editor must be open on the main checkout: it only sees committed, merged code. `begin` enters Play
+The Editor must be open on the main checkout: it only sees committed, merged code. Run from a worktree, the
+tool still talks to the Editor on the main checkout (`--project` picks another). `begin` enters Play
 mode itself and keeps the game ticking while the Editor is in the background. Between commands the game
 is **held**: time scale 0, the clock and the level-up stopped. So the board stays exactly as it was put,
 and only `advance`, `clear`, `pop --settle` and dealing a board let game time run, for as long as they need.

@@ -21,6 +21,7 @@ Tools/stage/README.md.
 import argparse
 import json
 import os
+import subprocess
 import sys
 import time
 
@@ -29,6 +30,19 @@ REPO_ROOT = os.path.dirname(os.path.dirname(TOOL_DIR))
 sys.path.insert(0, os.path.join(REPO_ROOT, "Tools", "playtest"))
 
 from playtest_bot import Editor, find_unity  # noqa: E402
+
+
+def main_checkout():
+    """The repository's main checkout, the one the Editor has open, even when run from a worktree."""
+    try:
+        common = subprocess.run(["git", "-C", REPO_ROOT, "rev-parse", "--path-format=absolute", "--git-common-dir"],
+                                capture_output=True, text=True, check=True).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return REPO_ROOT
+    return os.path.dirname(common) if os.path.basename(common) == ".git" else REPO_ROOT
+
+
+EDITOR_PROJECT = main_checkout()
 
 API = "BalloonParty.Editor.Staging.SceneStage"
 # The light's angle at the named times of day (the day/night gradient's keys, see SceneLightFieldSettings).
@@ -51,7 +65,7 @@ class StageError(RuntimeError):
 
 
 class Stage:
-    def __init__(self, project=REPO_ROOT, verbose=True):
+    def __init__(self, project=EDITOR_PROJECT, verbose=True):
         self.editor = Editor(find_unity(), os.path.abspath(project))
         self.verbose = verbose
 
@@ -209,7 +223,8 @@ def pair(text, kind=float):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--project", default=REPO_ROOT, help="the Unity project the Editor has open")
+    parser.add_argument("--project", default=EDITOR_PROJECT,
+                        help="the Unity project the Editor has open (default: the main checkout)")
     sub = parser.add_subparsers(dest="command", required=True)
 
     scene = argparse.ArgumentParser(add_help=False)
