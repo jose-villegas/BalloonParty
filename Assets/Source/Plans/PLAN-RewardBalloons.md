@@ -128,7 +128,29 @@ it's gone with the board, like any balloon.
 Each phase follows the per-phase review: implement, architect, test-everything and reviewer, then
 fixes, then sign-off.
 
+## Measured
+
+The playtest bot's average player (`Tools/playtest/`, `--purple` and `--hearts`), in the Editor. It is
+a model of a player, not a person, so these numbers are for comparing tunings.
+
+| Session | Golden placed / popped | Heart placed / popped | How it went |
+|---|---|---|---|
+| The seed's first purple level (15), 3 hearts | 1 / 0 | 3 / 2 | Level 15 won in 102 s with 2 hearts lost, game over 18 s into level 16 |
+| Its first purple level (13), 2 hearts | 1 / 0 | 2 / 1 | Game over on level 13 after 83 s |
+| One heart from level 1, 7 minutes | 0 / 0 | 0 / 0 | The level-up refills had all 3 hearts back by level 3; no heart lost up to level 10 |
+
+What it says:
+- The heart balloon comes where it's meant to, on a hard level after mid-level losses, and the average
+  player catches most of them (3 of 5).
+- Early on, the level-up refill heals faster than a heart balloon arrives, so a low-heart start barely
+  sees one. That's fine: by then the help isn't needed.
+- The golden balloon arrives on time, but the average player never broke it: only a piercing shot does,
+  and this player doesn't seek one out. Whether that's too hard for a casual player is open (below).
+
 ## Open
+
+- Whether the golden balloon should be easier to break for a player who doesn't hunt pierces. The
+  average bot left it standing on both purple levels it played.
 
 - Whether the card reveal should say where the card came from ("golden balloon!") in a heads-up.
 - Whether a heart balloon should also drift, to make catching it a small skill test; it sits still
