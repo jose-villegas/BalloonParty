@@ -444,5 +444,13 @@ half3 SceneLightCapToWhite(half3 rgb)
     return rgb * min(1.0, 1.0 / max(peak, 0.001));
 }
 
+// A highlight's opacity from the light on it: the tint's magnitude over `fullAt` (the level that counts as full
+// daylight), shaped below full by `falloff` (1 = linear, >1 drops off fast toward dusk). The balloons' shines share
+// it so they dim together at night.
+float SceneLightAlphaRamp(float3 tint, float fullAt, float falloff)
+{
+    return pow(saturate(length(tint) / fullAt), falloff);
+}
+
 
 #endif // BALLOONPARTY_SCENE_LIGHT_INCLUDED

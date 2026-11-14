@@ -200,7 +200,6 @@ def main(out_dir):
     tip_y = max(y for _, y in outline)
 
     # Body: the inflated heart's shading; the knot under the tip.
-    inner = heart.filter(ImageFilter.GaussianBlur(14 * SS))
     volume, normal = _volume(heart)
     body_rgb = Image.merge("RGB", (volume, volume, volume))
     knot = Image.new("L", size, 0)

@@ -11,7 +11,7 @@ board. The plan is `Plans/PLAN-RewardBalloons.md`.
 |---|---|
 | `IRewardBalloonRequests` | What `BalloonSpawner` asks. `TryTakeDue` once per clock line: whether this line brings one, and which. `Placed` once it is on the board: returns the callback to call when it leaves |
 | `RewardBalloonService` | The rules behind the answer. Registered as `IRewardBalloonRequests` and `IRunResettable` |
-| `RewardBalloonPayout` | Pays a reward balloon's pop, read from `ActorHitMessage`. The golden balloon: a free card (`IFreeCardGrant`), or a heart (`IPlayerHealing`) when every card is at its limit. Pays each balloon once |
+| `RewardBalloonPayout` | Pays a reward balloon's pop, read from `ActorHitMessage`. The golden balloon: a free card (`IFreeCardGrant`), or a heart (`IPlayerHealing`) when every card is at its limit. The heart balloon: a heart. Pays each balloon once |
 
 The golden balloon itself is `Balloon/Model/GoldenBalloonModel`: the shot's own ordinary hit bounces
 off it, a pierce pops it (it is tough, so the pierce plows it and it shatters at the next wall), and
@@ -21,6 +21,14 @@ built from the tough balloon's, so it looks like a balloon, with a gold-plated b
 (`Shaders/BalloonParty/Balloon/GoldenBalloon.shader`) and a dark gold knot. The prefab keeps the tough
 balloon's variant, which only draws cracks for a balloon with durability, so on the golden one it
 does nothing.
+
+The heart balloon is `Balloon/Model/HeartBalloonModel`: any hit pops it, the shot's or an item's,
+whatever its catalogue entry's hit count says. It is colourless and scoreless, resists paint, and
+carries no item, so its pop leaves the streak alone. Its pop gives back one heart, never past the
+maximum and never to a player already out. Its prefab (`Prefabs/Balloon/Heart`) is the balloon's, with a
+heart body and bandages drawn by `Tools/art/make_heart_balloon.py`, and its own highlight
+(`Shaders/BalloonParty/Balloon/HeartShine.shader`, lit from the heart's baked normals), because the
+round balloons' shine is drawn for a circle.
 
 ## When each one is due
 

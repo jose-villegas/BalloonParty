@@ -43,7 +43,7 @@
 | `IPlayerHealth.Max` | `Game/Health/` | The heart cap, so the missing hearts and the heal agree on it |
 | `BalloonTypeExtensions.IsReward` | `Shared/Extensions/` | Golden and Heart. The level's pick list skips them, so no level mix brings one |
 | `IFreeCardGrant` | `Game/Upgrades/RunUpgrades.cs` | `GrantFreeCard(noCardLeft)`: deals one dealable card on the level's seed, holds it, and publishes `UpgradeCardHeldMessage`, so the card reveal plays it. A retry of the level it was won on gives it back; won while the level-up hand is up, it waits for the pick. With every card at its limit, then or once the pick is held, it calls `noCardLeft`, and the golden balloon gives a heart instead |
-| `RewardBalloonPayout` | `Balloon/Reward/` | Reads the reward balloons' pops from `ActorHitMessage` and pays them: the golden one's card (or heart), and in phase 4 the heart balloon's heart |
+| `RewardBalloonPayout` | `Balloon/Reward/` | Reads the reward balloons' pops from `ActorHitMessage` and pays them: the golden one's card (or heart), the heart balloon's heart |
 | `IPlayerHealing` | `Game/Health/` | `Heal(amount)` on `PlayerHealthController`, up to `IPlayerHealth.Max` |
 | `IRewardBalloonSettings` | `Configuration/Balloons/` | The tuning below, a block on `BalloonsConfiguration` |
 | Shot solver | `Solver/` | `ShotBoardGather` builds a target for both (today it would see neither); the golden one deflects unless pierced, and is immune to the shared bomb and laser cores |
@@ -94,9 +94,15 @@ it's gone with the board, like any balloon.
   glints on its own as the light moves, and the glitter (`Include/Glitter.cginc`) is
   gated by the glint, so it sparkles only where the light catches. The knot is dark gold. Checked
   in the Editor at noon and at night.
-- **Heart:** a heart-shaped balloon body (a new sprite, drawn by script under `Tools/art/` like the card
-  icons) lit like the others (`SpriteDiffuse`), red, with two or three cream cloth strips wrapped
-  across it, slightly frayed, a knot at one side. The strips sway a little with the balloon.
+- **Heart:** a heart-shaped balloon body, drawn by `Tools/art/make_heart_balloon.py` and lit like the
+  others (`SpriteDiffuse`), red. Its volume is baked in: the heart is inflated from a height map, so
+  each lobe rounds off and the cleft and the tip fall into shade. Two cream cloth strips wrap across
+  it below the lobes, slightly frayed, tied in a knot on the right lobe; they are children of the
+  sway pivot, so they sway with the balloon. Its highlight is its own: the round balloons' shine is an
+  arc drawn for a circle and swung round the balloon's centre, which a heart's outline doesn't follow,
+  so `Balloon/HeartShine.shader` lights the highlight from the heart's normals (baked from the same
+  height map) toward the scene light. It lands on each lobe at noon and follows the light round,
+  with the round shine's night response. Checked in the Editor at noon and at night.
 
 ## Phases
 
@@ -127,3 +133,6 @@ fixes, then sign-off.
 - Whether the card reveal should say where the card came from ("golden balloon!") in a heads-up.
 - Whether a heart balloon should also drift, to make catching it a small skill test; it sits still
   in this plan.
+- Before a third reward balloon: give the reward prefabs their own empty `RewardBalloonVariant` (the golden
+  one borrows the tough variant and the heart the simple one, both doing nothing there), and let
+  `RewardBalloonPayout` keep one map of the balloons it has paid instead of a field per type.

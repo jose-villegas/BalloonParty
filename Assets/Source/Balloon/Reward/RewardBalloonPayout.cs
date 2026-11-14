@@ -12,8 +12,9 @@ namespace BalloonParty.Balloon.Reward
 {
     /// <summary>
     ///     Pays a reward balloon's pop. The golden balloon gives a free card, or a heart back when every card is at
-    ///     its limit; the heart balloon gives a heart back, up to the maximum. Only a pop pays: the leave callback also fires for a board clear and a level change, and the
-    ///     level's closing pop wave publishes no hit at all. A pierce can land after the level's last claim;
+    ///     its limit; the heart balloon gives a heart back, up to the maximum. Only a pop pays: the leave
+    ///     callback also fires for a board clear and a level change, and the level's closing pop wave publishes
+    ///     no hit at all. A pierce can land after the level's last claim;
     ///     <see cref="IFreeCardGrant" /> holds that card back while the level-up hand is on screen, and gives the
     ///     heart then if the pick took the last card. The remover cheat's forced pop pays too.
     /// </summary>

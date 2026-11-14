@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
@@ -8,6 +9,7 @@ using BalloonParty.Game.Level;
 using BalloonParty.Item;
 using BalloonParty.Item.Effects;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Capabilities;
@@ -221,22 +223,23 @@ namespace BalloonParty.Solver
         {
             snapshot = default;
 
-            // The reward balloons score nothing and have no durability: the golden one deflects the shot like an
-            // unbreakable, the heart one pops to any hit.
-            var golden = actor is GoldenBalloonModel;
-            var heart = actor is HeartBalloonModel;
+            // The reward balloons score nothing and have no durability, so they take their own branch before the
+            // scored balloons' guards below.
+            if (actor is IBalloonModel { TypeName: var type } && type.IsReward())
+            {
+                LocateTarget(grid, index, out var rewardPosition, out var rewardRadius);
+                var rewardBalance = BuildTargetBalance(balloonsConfig, index, actor);
+                return TryBuildRewardSnapshot(type, rewardPosition, rewardRadius, rewardBalance, out snapshot);
+            }
+
             int hitsRemaining;
             if (actor is IHasDurability durable)
             {
                 hitsRemaining = durable.HitsRemaining.Value;
             }
-            else if (actor is UnbreakableBalloonModel || golden)
+            else if (actor is UnbreakableBalloonModel)
             {
                 hitsRemaining = int.MaxValue;
-            }
-            else if (heart)
-            {
-                hitsRemaining = 1;
             }
             else
             {
@@ -244,7 +247,7 @@ namespace BalloonParty.Solver
             }
 
             var scored = actor as IHasScore;
-            if (scored == null && !golden && !heart)
+            if (scored == null)
             {
                 return false;
             }
@@ -256,41 +259,8 @@ namespace BalloonParty.Solver
             // ToughBalloonModel). The solver approximates this via ResolveToughPop (flat score, streak
             // reset) — no PaysSourceColor override needed.
             var paysSourceColor = false;
-            var influence = actor as IBalanceInfluence;
-            var biasSource = actor as IBalanceBiasSource;
-            var nudgeOverrides = actor is IHasNudge nudgeable ? nudgeable.NudgeOverrides : null;
-
-            // The view's live position, not the slot's lattice home: balance tweens and nudge wobble
-            // displace views, and the shot collides with the view's collider — the slot is where the
-            // balloon belongs, the view is where it IS right now.
-            var view = grid.ActorViewAt<BalloonView>(index);
-            var radius = view != null ? view.ContactRadius : 0f;
-            var position = view != null
-                ? (Vector2)view.transform.position
-                : (Vector2)grid.IndexToWorldPosition(index);
-
-            var balance = new BalanceProfile(
-                index, influence?.BalancePriority ?? 0, influence?.MaxBalanceSteps ?? 0,
-                balloonsConfig.ResolveMoveSpeed(influence?.MoveSpeed ?? 0f),
-                influence?.DirectBalanceMotion ?? false, nudgeOverrides,
-                omnidirectional: influence?.OmnidirectionalBalance ?? false,
-                biasKind: biasSource?.BiasKind ?? BalanceBiasKind.None,
-                biasValue: biasSource?.BiasValue ?? 0f,
-                biasTypeId: biasSource?.BiasTypeId ?? 0,
-                anchored: actor is IBalanceAnchor { IsAnchored: true });
-
-            if (golden)
-            {
-                snapshot = ShotBalloonSnapshot.ForGoldenTarget(position, radius, balance);
-                return true;
-            }
-
-            if (heart)
-            {
-                snapshot = ShotBalloonSnapshot.ForHeartTarget(position, radius, balance);
-                return true;
-            }
-
+            var view = LocateTarget(grid, index, out var position, out var radius);
+            var balance = BuildTargetBalance(balloonsConfig, index, actor);
             var item = BuildItemProfile(actor, view);
 
             // A rainbow balloon's colour IS a real (non-empty) IHasColor value — the reserved
@@ -321,6 +291,55 @@ namespace BalloonParty.Solver
         // reads it; only the Laser's held icon spins (ISpinningItemVisual), so every other item type
         // (or no item at all) gathers 0 for both spin fields. LaserItemRotation.CaptureSnapshot is
         // destructive (stops the spin) — this reads the same component through TransformCapture instead.
+        // One snapshot per reward type, as BalloonModelFactory builds one model per type. An unmapped reward
+        // is no target: the solver aims as if it were not there rather than failing the shot.
+        private static bool TryBuildRewardSnapshot(
+            BalloonType type, Vector2 position, float radius, BalanceProfile balance, out ShotBalloonSnapshot snapshot)
+        {
+            switch (type)
+            {
+                case BalloonType.Golden:
+                    snapshot = ShotBalloonSnapshot.ForGoldenTarget(position, radius, balance);
+                    return true;
+                case BalloonType.Heart:
+                    snapshot = ShotBalloonSnapshot.ForHeartTarget(position, radius, balance);
+                    return true;
+                default:
+                    snapshot = default;
+                    return false;
+            }
+        }
+
+        // The view's live position, not the slot's lattice home: balance tweens and nudge wobble
+        // displace views, and the shot collides with the view's collider — the slot is where the
+        // balloon belongs, the view is where it IS right now.
+        private static BalloonView LocateTarget(SlotGrid grid, Vector2Int index, out Vector2 position, out float radius)
+        {
+            var view = grid.ActorViewAt<BalloonView>(index);
+            radius = view != null ? view.ContactRadius : 0f;
+            position = view != null
+                ? (Vector2)view.transform.position
+                : (Vector2)grid.IndexToWorldPosition(index);
+            return view;
+        }
+
+        private static BalanceProfile BuildTargetBalance(
+            IBalloonsConfiguration balloonsConfig, Vector2Int index, IWriteableSlotActor actor)
+        {
+            var influence = actor as IBalanceInfluence;
+            var biasSource = actor as IBalanceBiasSource;
+            var nudgeOverrides = actor is IHasNudge nudgeable ? nudgeable.NudgeOverrides : null;
+            return new BalanceProfile(
+                index, influence?.BalancePriority ?? 0, influence?.MaxBalanceSteps ?? 0,
+                balloonsConfig.ResolveMoveSpeed(influence?.MoveSpeed ?? 0f),
+                influence?.DirectBalanceMotion ?? false, nudgeOverrides,
+                omnidirectional: influence?.OmnidirectionalBalance ?? false,
+                biasKind: biasSource?.BiasKind ?? BalanceBiasKind.None,
+                biasValue: biasSource?.BiasValue ?? 0f,
+                biasTypeId: biasSource?.BiasTypeId ?? 0,
+                anchored: actor is IBalanceAnchor { IsAnchored: true });
+        }
+
         private static ItemProfile? BuildItemProfile(IWriteableSlotActor actor, BalloonView view)
         {
             if (actor is not IHasItemSlot itemSlot || itemSlot.Item.Value == ItemType.None)

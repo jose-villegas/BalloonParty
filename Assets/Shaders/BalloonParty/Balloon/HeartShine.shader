@@ -144,8 +144,7 @@ Shader "BalloonParty/Balloon/HeartShine"
 
                 half4 col;
                 col.rgb = SceneLightCapToWhite(IN.color.rgb * IN.lightTint);
-                float lit = saturate(length(IN.lightTint) / _AlphaFullAt);
-                col.a = spec * sprite.a * IN.color.a * pow(lit, _AlphaFalloff);
+                col.a = spec * sprite.a * IN.color.a * SceneLightAlphaRamp(IN.lightTint, _AlphaFullAt, _AlphaFalloff);
                 col.rgb *= col.a;
                 return col;
             }

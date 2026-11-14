@@ -170,6 +170,39 @@ namespace BalloonParty.Tests.Audio
         }
 
         [Test]
+        public void OnActorHit_GoldenPop_PlaysTheGoldenPop()
+        {
+            var golden = Substitute.For<IBalloonModel>();
+            golden.TypeName.Returns(BalloonType.Golden);
+
+            _hitHandler.Handle(new ActorHitMessage(golden, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+
+            _player.Received(1).Play(GameSoundId.BalloonPopGolden, Vector3.zero);
+        }
+
+        [Test]
+        public void OnActorHit_GoldenDeflect_PlaysTheGoldenDeflect()
+        {
+            var golden = Substitute.For<IBalloonModel>();
+            golden.TypeName.Returns(BalloonType.Golden);
+
+            _hitHandler.Handle(new ActorHitMessage(golden, Vector3.zero, Vector3.zero, HitOutcome.Deflect));
+
+            _player.Received(1).Play(GameSoundId.BalloonDeflectGolden, Vector3.zero);
+        }
+
+        [Test]
+        public void OnActorHit_HeartPop_PlaysTheHeartPop()
+        {
+            var heart = Substitute.For<IBalloonModel>();
+            heart.TypeName.Returns(BalloonType.Heart);
+
+            _hitHandler.Handle(new ActorHitMessage(heart, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+
+            _player.Received(1).Play(GameSoundId.BalloonPopHeart, Vector3.zero);
+        }
+
+        [Test]
         public void OnActorHit_UnbreakableDeflect_PlaysUnbreakableDeflect()
         {
             var unbreakable = Substitute.For<IBalloonModel>();

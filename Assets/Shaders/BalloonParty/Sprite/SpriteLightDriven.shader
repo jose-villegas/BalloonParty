@@ -338,8 +338,8 @@ Shader "BalloonParty/Sprite/LightDriven"
                 {
                     // Normalize so full daylight (magnitude _AlphaFullAt) reaches 1 before the falloff
                     // curve, so the curve shapes the low end without ever capping the daylight ceiling.
-                    float lit = saturate(length(IN.lightTint) / _AlphaFullAt);
-                    float alphaDrive = pow(lit, _AlphaFalloff) + IN.localBoost * _LocalAlphaBoost;
+                    float alphaDrive = SceneLightAlphaRamp(IN.lightTint, _AlphaFullAt, _AlphaFalloff)
+                        + IN.localBoost * _LocalAlphaBoost;
                     c.a *= lerp(_RestAlpha, 1.0, saturate(alphaDrive));
                 }
 
