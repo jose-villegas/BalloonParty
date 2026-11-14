@@ -5,15 +5,16 @@ it. A pop at each time of day, a balloon beside the ones around it, a scenario a
 merged on a live board. It drives `SceneStage` (`Assets/Source/Editor/Staging/`) through the Unity CLI, one
 call per command, so a scene is a handful of commands or a short Python script.
 
-The scene is built to fit what's being looked at, each part a choice: which scenario, level and seed (the
-same seed deals the same board), which kinds to take off the board (the balloons, the clouds, the bushes,
+The board starts empty, with no balloon unless one is placed: the run's own board and the lines that keep
+coming are held off. The rest is built to fit what's being looked at, each part a choice: which scenario,
+level and seed (the same seed deals the same obstacles), which of them to take off (the clouds, the bushes,
 the enemies), the time of day, and then exactly what to put on it.
 
 ```bash
 python3 Tools/stage/stage.py begin --scenario meadow --seed 7 --strip clouds,enemies --time night
 python3 Tools/stage/stage.py list                     # what's on the board, by slot
 python3 Tools/stage/stage.py place Golden 4,9         # a golden balloon in slot 4,9
-python3 Tools/stage/stage.py setup --strip balloons   # an empty board, the scenario's bushes kept
+python3 Tools/stage/stage.py setup --scenario water --strip enemies   # the water level's obstacles, its enemies off
 python3 Tools/stage/stage.py freeze-pop Golden 0.2 --hide
 python3 Tools/stage/stage.py capture Logs/stage/golden-night.png --around Golden
 python3 Tools/stage/stage.py end                      # clear up, let the game run, leave Play mode
@@ -27,8 +28,8 @@ and only `advance`, `clear`, `pop --settle` and dealing a board let game time ru
 
 | Command | Does |
 |---|---|
-| `begin [scene options]` | Play mode, then straight to a held game (no Play button, no ascent), the clock and level-up stopped; then the scene options, as `setup` |
-| `setup [--scenario S] [--level N] [--seed N] [--strip KINDS] [--time WHEN]` | Builds the scene, each part optional. `--scenario` (`sky`, `meadow`, `water`), `--level` and `--seed` deal a fresh board: the first level in the scenario from `--level`, on that run seed, so the same options deal the same board. `--strip` takes kinds off it at once, with no pop: `balloons`, `clouds`, `bushes`, `enemies` (deflectors, absorbers, gatekeepers), `obstacles` (everything but the balloons), or a grid actor type. `--time` as `time` |
+| `begin [scene options]` | Play mode, then straight to a held, empty game: no Play button or ascent, no balloon unless placed, the clock and level-up stopped (a run already under way loses its balloons); then the scene options, as `setup` |
+| `setup [--scenario S] [--level N] [--seed N] [--strip KINDS] [--time WHEN]` | Builds the scene, each part optional. `--scenario` (`sky`, `meadow`, `water`), `--level` and `--seed` deal a fresh board, its ground and obstacles but no balloons: the first level in the scenario from `--level`, on that run seed, so the same options deal the same board. `--strip` takes kinds off it at once, with no pop: `balloons` (placed ones), `clouds`, `bushes`, `enemies` (deflectors, absorbers, gatekeepers), `obstacles` (everything but the balloons), or a grid actor type. `--time` as `time` |
 | `status` | `off`, `launch`, `loading`, or the level, `held` / `running` / `advancing`, and the light's angle |
 | `hold` / `release` / `advance S` | Game time off, on, or on for `S` seconds and then held |
 | `time WHEN` | The time of day: `dawn` (45), `day` (135), `dusk` (225), `night` (315), or an angle |
@@ -39,7 +40,7 @@ and only `advance`, `clear`, `pop --settle` and dealing a board let game time ru
 | `freeze-pop TARGET SECONDS [...]` | The balloon's pop effect stopped `SECONDS` in, from a fixed seed so runs match. `--hide` hides the balloon; `--dx`/`--dy` move the effect off it; `--seed`; `--texture PNG` swaps the shards' sheet and `--start-frame F` their first-frame range (0..1 of the sheet); `--shader NAME` or `--shader-file PATH` (compiled on the spot, so a worktree's shader can be tried before it's merged) and `--set _Name=value` change their material. Swaps go on copies; no asset changes |
 | `clear-effects` | Removes the frozen pops and shows the balloons they hid |
 | `capture PATH [--around TARGET] [--size N]` | Renders the camera to a PNG: the whole frame, or an `N`-pixel square around a balloon or a world point `x;y` |
-| `end` | Clears the frozen pops, lets the game run and leaves Play mode |
+| `end` | Clears the frozen pops and leaves Play mode, giving the game back its clock, level-ups and balloons (leaving Play mode any other way does too) |
 
 Balloons float: a cleared slot is filled from below while the pops play out, so a cleared patch doesn't
 stay where it was cleared. Put balloons where they'd rest (against the stack, `list` shows it), and put
@@ -53,7 +54,7 @@ import sys; sys.path.insert(0, "Tools/stage")
 from stage import Stage
 
 stage = Stage()
-stage.begin(scenario="sky", seed=7, strip=("balloons", "obstacles"))
+stage.begin(scenario="sky", seed=7, strip="obstacles")
 stage.place("Unbreakable", (2, 0))
 for when in ("dawn", "day", "dusk", "night"):
     stage.time_of_day(when)

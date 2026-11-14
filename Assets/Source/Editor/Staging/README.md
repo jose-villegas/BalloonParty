@@ -2,9 +2,9 @@
 
 `SceneStage` puts a still scene together in Play mode, so a look can be judged without playing for it: a
 balloon's pop at dawn and at night, a reward balloon beside the ones around it, a scenario at night, a shader
-not yet merged on a live board. The scene is built to fit what's looked at: a board dealt in a chosen
-scenario, level and seed, the kinds that would get in the way taken off it, the time of day set, and then
-only what's wanted placed on it. It holds the world still, pops a balloon or freezes its pop at a chosen
+not yet merged on a live board. The scene is built to fit what's looked at: an empty board (no balloon comes
+unless placed), dealt in a chosen scenario, level and seed, the obstacles that would get in the way taken off
+it, the time of day set, and then only what's wanted placed on it. It holds the world still, pops a balloon or freezes its pop at a chosen
 moment, and renders the camera to a PNG.
 
 It's driven from outside, one call per Unity CLI eval, by `Tools/stage/stage.py` (see its README for the
@@ -15,9 +15,10 @@ until then.
 
 | Call | Does |
 |---|---|
-| `Begin()` | Enters Play mode, then in one step goes straight to a held game: past the launch screen (its Play button's own actions, so the button goes and the launcher hands over to the game scene, without the cloud scroll) or a fresh run after a game over, with time held from that frame and the clock and level-up stopped, so nothing plays out on its own. Called until it answers `ready` |
+| `Begin()` | Enters Play mode, then in one step goes straight to a held game: past the launch screen (its Play button's own actions, so the button goes and the launcher hands over to the game scene, without the cloud scroll) or a fresh run after a game over, with time held from that frame and the clock and level-up stopped, so nothing plays out on its own. The board is empty: `CheatState.EmptyBoard` keeps a run's opening board and the spawn clock's lines off (a run already under way loses its balloons). Called until it answers `ready` |
+| `End()` | Clears the frozen pops, leaves Play mode and gives the game back its clock, level-ups and balloons, as leaving Play mode any other way does |
 | `Hold()` / `Release()` / `Advance(s)` | Game time off, on, or on for `s` seconds. Holds through `ITimeScaleClaims` (`TimeScaleSource.Capture`, as the README shots do), so the shaders' clock stops too |
-| `Deal(scenario, level, seed)` | A fresh board: the run restarted at a level, or the first level from it in a scenario (as the Jump To Scenario cheat finds it), on a run seed, so the same call deals the same board. The seed goes through `CheatState.ForcedRunSeed`, a one-shot `RunSeed` reads on the reset, and also seeds Unity's random |
+| `Deal(scenario, level, seed)` | A fresh board, its ground and obstacles (no balloons, under `EmptyBoard`): the run restarted at a level, or the first level from it in a scenario (as the Jump To Scenario cheat finds it), on a run seed, so the same call deals the same board. The seed goes through `CheatState.ForcedRunSeed`, a one-shot `RunSeed` reads on the reset, and also seeds Unity's random |
 | `Strip(kinds)` | Takes kinds off the board at once, with no pop: the balloons (the board clear's `ClearAll`), the clouds, bushes or enemies (deflectors, absorbers, gatekeepers) through `StaticActorSpawner.ClearStaticActors(type)`, or every obstacle |
 | `SetTime(degrees)` | The light's angle (45 dawn, 135 noon, 225 dusk, 315 night), with the clock stopped |
 | `List()` | Each balloon's and obstacle's type, slot and world position, and the grid's size |

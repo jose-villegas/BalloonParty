@@ -81,7 +81,7 @@ class Stage:
     def status(self):
         return self.call("Status")
 
-    def begin(self, settle=2.5, **scene):
+    def begin(self, settle=1.5, **scene):
         """Enters Play mode if needed, gets past the launch screen and holds the game, then sets the scene up as
         `setup` does with the same keywords."""
         self.editor.wait_ready()
@@ -97,7 +97,7 @@ class Stage:
         if scene:
             self.setup(settle=settle, **scene)
 
-    def setup(self, scenario=None, level=None, seed=None, strip=(), time=None, settle=2.5):
+    def setup(self, scenario=None, level=None, seed=None, strip=(), time=None, settle=1.5):
         """Builds the scene a test needs, each part a choice: a fresh board in a `scenario` (sky, meadow, water), at
         a `level`, on a run `seed` (the same seed deals the same board); then `strip` takes kinds off it (balloons,
         clouds, bushes, enemies, obstacles); then the `time` of day. Parts left out stay as they are."""
@@ -120,9 +120,9 @@ class Stage:
         while "advancing" in self._quiet("Status"):
             time.sleep(POLL_SECONDS)
 
-    def deal(self, scenario=None, level=None, seed=None, settle=2.5):
+    def deal(self, scenario=None, level=None, seed=None, settle=1.5):
         """A fresh board: the run restarted at `level` (default the current one) or the first level from there in
-        `scenario`, on run `seed` (default the current one), and `settle` seconds of game time for it to spawn."""
+        `scenario`, on run `seed` (default the current one), and `settle` seconds of game time for its obstacles and the thrower to come up."""
         self.call("Deal", scenario or "", int(level or 0), int(seed or 0))
         if settle > 0:
             self.advance(settle)
