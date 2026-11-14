@@ -38,7 +38,8 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
         _PlateWobbleSpeed ("Wobble Speed", Range(0, 2)) = 0.4
 
         [Header(Bolts)]
-        // A bolt inset from each of a plate's corners, in plate units (the plate's inner radius is 0.5).
+        // Two bolts per plate, inset from its top and bottom corners, in plate units (the plate's
+        // inner radius is 0.5).
         _BoltRadius ("Size", Range(0.01, 0.15)) = 0.075
         _BoltInset  ("Inset From the Corner", Range(0.3, 0.95)) = 0.62
         _BoltDome   ("Dome", Range(0, 3)) = 1.4
@@ -290,11 +291,10 @@ Shader "BalloonParty/Balloon/GoldenBalloon"
                 float  bevel  = 1.0 - smoothstep(0.0, _BevelWidth, edgeDistance);
                 float2 relief = edgeDirection * bevel * _BevelDepth;
 
-                // The bolt at the nearest corner (corners sit at 30 degrees plus steps of 60): a small
-                // dome that takes over the bevel under it, so it shades and glints as a bolt head.
-                const float sixth = UNITY_PI / 3.0;
-                float  cornerAngle = sixth * 0.5 + round((atan2(offset.y, offset.x) - sixth * 0.5) / sixth) * sixth;
-                float2 corner   = float2(cos(cornerAngle), sin(cornerAngle)) * (0.5773503 * _BoltInset);
+                // The nearer of the plate's two bolts, one at its top corner and one at its bottom, so
+                // every plate is bolted the same way corner to corner: a small dome that takes over the
+                // bevel under it, so it shades and glints as a bolt head.
+                float2 corner   = float2(0.0, (offset.y < 0.0 ? -0.5773503 : 0.5773503) * _BoltInset);
                 float2 bolt     = (offset - corner) / _BoltRadius;
                 float  boltR    = length(bolt);
                 float  boltSoft = max(fwidth(boltR), 0.05);
