@@ -58,7 +58,8 @@ namespace BalloonParty.Tests.Balloon
             _settings.GoldenRepeatDelayLines.Returns(RepeatDelay);
             _settings.HeartChanceMissingOne.Returns(0.04f);
             _settings.HeartChanceMissingTwo.Returns(0.12f);
-            _settings.PurpleHearts.Returns(PurpleHearts);
+            // Off by default, so a golden test sees only the golden; a heart test turns it on (UsePurpleHearts).
+            _settings.PurpleHearts.Returns(new PurpleHeartStep[0]);
             _settings.HeartCooldownLines.Returns(Cooldown);
 
             _levelNumber = new ReactiveProperty<int>(1);
@@ -362,6 +363,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void Golden_OwedButNotYetDue_TheHeartStillRollsOnTheLinesBetween()
         {
+            UsePurpleHearts(withGolden: true);
             PlaceAndPopAGolden(roll: 0f);
             _hearts.Value = StartingHearts - 1;
             _roll = 0f;
@@ -392,6 +394,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void PurpleHeart_FullHearts_TheFirstComesAtItsCompletion()
         {
+            UsePurpleHearts(withGolden: false);
             _roll = 1f;
             SetCompletion(0.29f);
             Assert.IsFalse(_service.TryTakeDue(out _));
@@ -406,6 +409,7 @@ namespace BalloonParty.Tests.Balloon
         [TestCase(0.6f, 0.5f, false)]
         public void PurpleHeart_TheSecondRollsItsChanceAtItsCompletion(float completion, float roll, bool due)
         {
+            UsePurpleHearts(withGolden: false);
             PlaceAndLeaveAPurpleHeart(0.3f);
             _roll = roll;
             SetCompletion(completion);
@@ -417,6 +421,7 @@ namespace BalloonParty.Tests.Balloon
         [TestCase(0.25f, false)]
         public void PurpleHeart_TheThirdRollsAQuarterAtNinety(float roll, bool due)
         {
+            UsePurpleHearts(withGolden: false);
             PlaceAndLeaveAPurpleHeart(0.3f);
             _roll = 0f;
             PlaceAndLeaveAPurpleHeart(0.6f);
@@ -429,6 +434,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void PurpleHeart_EachStepRollsOnce()
         {
+            UsePurpleHearts(withGolden: false);
             PlaceAndLeaveAPurpleHeart(0.3f);
             _roll = 0.9f;
             SetCompletion(0.6f);
@@ -442,6 +448,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void PurpleHeart_ThreeAtMost()
         {
+            UsePurpleHearts(withGolden: false);
             _roll = 0f;
             PlaceAndLeaveAPurpleHeart(0.3f);
             PlaceAndLeaveAPurpleHeart(0.6f);
@@ -454,6 +461,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void PurpleHeart_WonWhileOneIsOnTheBoard_ComesOnceItLeaves()
         {
+            UsePurpleHearts(withGolden: false);
             _roll = 0f;
             SetCompletion(0.3f);
             _service.TryTakeDue(out _);
@@ -469,6 +477,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void PurpleHeart_ABigJump_RollsEveryStepItPasses_AndBringsThemOneAtATime()
         {
+            UsePurpleHearts(withGolden: false);
             _roll = 0f;
             SetCompletion(0.95f);
 
@@ -485,6 +494,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void PurpleHeart_TheGoldenTakesTheLine_TheStepsRollOnTheNextAndAreNotLost()
         {
+            UsePurpleHearts(withGolden: true);
             _roll = 1f;
             SetCompletion(0.8f);
             Assert.IsTrue(_service.TryTakeDue(out var first));
@@ -505,6 +515,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void PurpleHeart_AllThreeWonWhileTheGoldenTookTheLine_AllComeOneAtATime()
         {
+            UsePurpleHearts(withGolden: true);
             _roll = 0f;
             SetCompletion(0.95f);
             Assert.IsTrue(_service.TryTakeDue(out var first));
@@ -527,6 +538,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void PurpleHeart_PlacedWithNothingOwed_TheFirstStepStillBringsItsHeart()
         {
+            UsePurpleHearts(withGolden: false);
             _service.Placed(BalloonType.Heart)();
             SetCompletion(0.1f);
             Assert.IsFalse(HeartWithin(5));
@@ -542,6 +554,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void PurpleHeart_TheRollWhileHurtIsOff()
         {
+            UsePurpleHearts(withGolden: false);
             _hearts.Value = 1;
             _roll = 0f;
             SetCompletion(0.1f);
@@ -552,6 +565,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void PurpleHeart_NextLevel_DropsWhatWasOwedAndStartsTheScheduleOver()
         {
+            UsePurpleHearts(withGolden: false);
             _roll = 0f;
             SetCompletion(0.95f);
             _service.TryTakeDue(out _);
@@ -567,6 +581,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void PurpleHeart_RunReset_StartsTheScheduleOver()
         {
+            UsePurpleHearts(withGolden: false);
             _roll = 0f;
             PlaceAndLeaveAPurpleHeart(0.3f);
             SetCompletion(0.95f);
@@ -583,6 +598,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void PurpleHeart_StepsListedOutOfOrder_EachRollsAtItsOwnCompletion()
         {
+            UsePurpleHearts(withGolden: false);
             _settings.PurpleHearts.Returns(new[] { PurpleHearts[2], PurpleHearts[1], PurpleHearts[0] });
             _roll = 1f;
             SetCompletion(0.3f);
@@ -594,6 +610,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void PurpleHeart_NoScheduleConfigured_NoHeartAndNoThrow()
         {
+            UsePurpleHearts(withGolden: false);
             _roll = 0f;
             foreach (var steps in new[] { null, new PurpleHeartStep[0] })
             {
@@ -734,6 +751,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void Golden_WinsOverAHeartOnTheSameLine()
         {
+            UsePurpleHearts(withGolden: true);
             _hearts.Value = 1;
             _roll = 0f;
             SetCompletion(0.8f);
@@ -810,6 +828,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void NoGoldenEntry_ALatePurpleLineStillBringsTheHeart()
         {
+            UsePurpleHearts(withGolden: true);
             _service.Dispose();
             _service = CreateService(BalloonType.Heart);
             _hearts.Value = 1;
@@ -875,6 +894,17 @@ namespace BalloonParty.Tests.Balloon
             typeof(BalloonPrefabEntry).GetField("_balloonType", BindingFlags.NonPublic | BindingFlags.Instance)!
                 .SetValue(entry, type);
             return entry;
+        }
+
+        // The purple heart schedule on; without the golden, a heart test's late completion isn't taken by a golden.
+        private void UsePurpleHearts(bool withGolden)
+        {
+            _settings.PurpleHearts.Returns(PurpleHearts);
+            if (!withGolden)
+            {
+                _service.Dispose();
+                _service = CreateService(BalloonType.Heart);
+            }
         }
 
         private RewardBalloonService CreateService(params BalloonType[] catalogue)
