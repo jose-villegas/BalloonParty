@@ -40,6 +40,8 @@ Material:
     - _EdgePower: 3
     - _EnvHorizon: -0.05
     - _EnvStrength: 0.4
+    - _GapShadow: 0.3
+    - _GapWidth: 0.11
     - _GlintIntensity: 2.4
     - _GlintPower: 24
     - _GlitterChance: 0.45
@@ -51,19 +53,20 @@ Material:
     - _GlitterSpeed: 4
     - _LightHeight: 0.9
     - _LightInfluence: 1
-    - _PlateScale: 2.6
+    - _PlateScale: 2.3
     - _PlateTilt: 0.16
     - _PlateVariance: 0.12
     - _PlateWobble: 0.35
     - _PlateWobbleSpeed: 0.4
     - _RimBlend: 0.6
     - _RimWidth: 0.12
-    - _SeamDepth: 0.6
-    - _SeamWidth: 0.03
+    - _RubberGloss: 1.2
+    - _RubberGlossPower: 24
     - _SheenIntensity: 0.5
     - _SheenPower: 5
     - _SpriteScale: 1
     m_Colors:
+    - _BoltRingColor: {r: 0.36, g: 0.2, b: 0.03, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _GlintColor: {r: 1, g: 0.96, b: 0.8, a: 1}
     - _GlitterColor: {r: 1, g: 0.98, b: 0.88, a: 1}
@@ -72,6 +75,7 @@ Material:
     - _GoldShade: {r: 0.58, g: 0.36, b: 0.03, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _RimColor: {r: 0.55, g: 0.36, b: 0.08, a: 1}
-    - _SeamColor: {r: 0.36, g: 0.2, b: 0.03, a: 1}
+    - _RubberLit: {r: 1, g: 0.66, b: 0.25, a: 1}
+    - _RubberShade: {r: 0.55, g: 0.22, b: 0.05, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
