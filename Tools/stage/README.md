@@ -37,6 +37,11 @@ and only `advance`, `clear`, `pop --settle` and `restart` let game time run, for
 | `capture PATH [--around TARGET] [--size N]` | Renders the camera to a PNG: the whole frame, or an `N`-pixel square around a balloon or a world point `x;y` |
 | `end` | Clears the frozen pops, lets the game run and leaves Play mode |
 
+Balloons float: a cleared slot is filled from below while the pops play out, so a cleared patch doesn't
+stay where it was cleared. Put balloons where they'd rest (against the stack, `list` shows it), and put
+frozen effects in open space with `--dx`/`--dy`. `place` into a taken slot pops what's there and spawns in
+the same frame, so nothing floats up into it first.
+
 For a scene with several takes, import it:
 
 ```python

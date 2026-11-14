@@ -230,16 +230,23 @@ namespace BalloonParty.Editor.Staging
         }
 
         /// <summary>
-        ///     Puts a balloon of <paramref name="type" /> (a <see cref="BalloonType" /> name) in an empty slot, through
-        ///     the Spawn Balloon cheat, optionally holding <paramref name="item" /> (an <see cref="ItemType" /> name).
+        ///     Puts a balloon of <paramref name="type" /> (a <see cref="BalloonType" /> name) in a slot, through the
+        ///     Spawn Balloon cheat, optionally holding <paramref name="item" /> (an <see cref="ItemType" /> name). A taken
+        ///     slot is an error unless <paramref name="replace" />, which pops what's there and spawns into the slot in
+        ///     the same frame: given any game time first, a balloon below would float up into it.
         /// </summary>
-        public static string Place(string type, int col, int row, string item = "None")
+        public static string Place(string type, int col, int row, string item = "None", bool replace = false)
         {
             var grid = Resolve<SlotGrid>();
             var slot = new Vector2Int(col, row);
             if (col < 0 || row < 0 || col >= grid.Columns || row >= grid.Rows)
             {
                 return $"error: {col},{row} is off the {grid.Columns}x{grid.Rows} grid";
+            }
+
+            if (!grid.IsEmpty(col, row) && replace)
+            {
+                PopSlot(grid, slot);
             }
 
             if (!grid.IsEmpty(col, row))

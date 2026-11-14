@@ -126,12 +126,15 @@ class Stage:
             self.call("ClearAround", float(around[0]), float(around[1]), float(radius))
         self.advance(settle)
 
-    def place(self, kind, slot, item="None", force=True):
-        """Puts a `kind` balloon at slot (col, row); with `force`, pops what's there first."""
+    def place(self, kind, slot, item="None", replace=True, settle=1.5):
+        """Puts a `kind` balloon at slot (col, row); with `replace`, pops what's there in the same frame (and lets
+        that pop play out for `settle`)."""
         col, row = slot
-        if force and any(s == (col, row) for _, s, _ in self.list()[0]):
-            self.clear(slots=((col, row), (col, row)))
-        return self.call("Place", kind, int(col), int(row), item)
+        taken = any(s == (col, row) for _, s, _ in self.list()[0])
+        result = self.call("Place", kind, int(col), int(row), item, bool(replace))
+        if taken and settle:
+            self.advance(settle)
+        return result
 
     def pop(self, target, settle=None):
         """Pops a balloon for real (its type, or "col,row"); with `settle`, lets that much game time run."""
