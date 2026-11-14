@@ -37,6 +37,7 @@ namespace BalloonParty.Tests.Item
         private IMessageHandler<PierceDischargedMessage> _dischargedHandler;
         private IGamePalette _palette;
         private IProjectileBuffs _buffs;
+        private ISnipeLanceArming _lanceArming;
 
         [SetUp]
         public void SetUp()
@@ -58,6 +59,7 @@ namespace BalloonParty.Tests.Item
             _palette = Substitute.For<IGamePalette>();
             _palette.Colors.Returns(new List<PaletteEntry>());
             _buffs = Substitute.For<IProjectileBuffs>();
+            _lanceArming = Substitute.For<ISnipeLanceArming>();
 
             _handler = new SnipeItemHandler(
                 itemConfig,
@@ -65,7 +67,8 @@ namespace BalloonParty.Tests.Item
                 new ItemEffectPlayer(new PoolManager(), _palette),
                 _buffs,
                 _registry,
-                dischargedSubscriber);
+                dischargedSubscriber,
+                _lanceArming);
 
             _handler.Start();
         }
@@ -238,6 +241,43 @@ namespace BalloonParty.Tests.Item
             Discharge(projectile);
 
             _buffs.DidNotReceive().Apply(Arg.Any<IProjectileModel>(), Arg.Any<ProjectileBuff>());
+        }
+
+        // The pencil line traces each run from where the lance armed, so it has to hear of a fresh arming
+        // and of a banked charge re-arming at its discharge wall — and of nothing else.
+        [Test]
+        public void Activate_UnarmedShot_TellsThePencilLineTheLanceArmed()
+        {
+            var projectile = LoadProjectile();
+
+            Activate(projectile);
+
+            _lanceArming.Received(1).OnLanceArmed(projectile);
+        }
+
+        [Test]
+        public void PierceDischarged_WithBankedCharge_TellsThePencilLineWhereTheLanceReArmed()
+        {
+            var projectile = LoadProjectile();
+            projectile.IsPiercing.Value = true;
+            Activate(projectile);
+            var wall = new Vector3(2f, 5f, 0f);
+
+            _dischargedHandler.Handle(new PierceDischargedMessage(projectile, Vector3.zero, 1, false, Vector3.up, wall));
+
+            _lanceArming.DidNotReceive().OnLanceArmed(Arg.Any<IProjectileModel>());
+            _lanceArming.Received(1).OnLanceRearmed(projectile, wall);
+        }
+
+        [Test]
+        public void PierceDischarged_NothingBanked_TellsThePencilLineNothing()
+        {
+            var projectile = LoadProjectile();
+            projectile.IsPiercing.Value = true;
+
+            Discharge(projectile);
+
+            _lanceArming.DidNotReceive().OnLanceRearmed(Arg.Any<IProjectileModel>(), Arg.Any<Vector3>());
         }
 
         private ProjectileModel LoadProjectile()

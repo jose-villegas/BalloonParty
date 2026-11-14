@@ -130,6 +130,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<DeflectChainMessage>(options);
             builder.RegisterMessageBroker<SpeedTapMintedMessage>(options);
             builder.RegisterMessageBroker<PierceDischargedMessage>(options);
+            builder.RegisterMessageBroker<PierceWallReachedMessage>(options);
             builder.RegisterMessageBroker<ScoreTrailArrivedMessage>(options);
             builder.RegisterMessageBroker<LevelUpAbortedMessage>(options);
             builder.RegisterMessageBroker<LevelUpAbandonedMessage>(options);
@@ -328,6 +329,7 @@ namespace BalloonParty.Game
             builder.Register<LightningItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<PaintItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<SnipeItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<SnipeLanceLines>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.RegisterEntryPoint<SnipeDischargeBloom>();
             builder.RegisterEntryPoint<ItemSightTracker>().AsSelf();
 

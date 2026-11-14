@@ -57,6 +57,7 @@ namespace BalloonParty.Projectile.View
         [Inject] private IPublisher<ProjectileDoomedStartedMessage> _doomedStartedPublisher;
         [Inject] private IPublisher<ProjectileDoomedEndedMessage> _doomedEndedPublisher;
         [Inject] private IPublisher<SpeckSpawnRequestMessage> _speckPublisher;
+        [Inject] private IPublisher<PierceWallReachedMessage> _pierceWallReachedPublisher;
         [Inject] private ISubscriber<BalloonDeflectedMessage> _deflectedSubscriber;
         [Inject] private ProjectileHitResolver _hitResolver;
         [Inject] private ProjectileMotionResolver _motionResolver;
@@ -529,6 +530,11 @@ namespace BalloonParty.Projectile.View
                 var velocityT = ComputeVelocityT(step.Speed);
                 _disturbanceField.StampShieldLoss(StampSource.ProjectileImpact, step.WallContact, velocityT);
                 FlashShieldLoss(step.WallContact, velocityT);
+                if (wasPiercing)
+                {
+                    _pierceWallReachedPublisher.Publish(new PierceWallReachedMessage(_model, step.WallContact));
+                }
+
                 DestroyProjectile();
                 return;
             }
@@ -579,6 +585,12 @@ namespace BalloonParty.Projectile.View
             }
 
             ResolvePierceAtBounce(step, segmentOrigin, wasPiercing);
+
+            // After the discharge, so a listener reads whether the lance carries on past this wall.
+            if (wasPiercing && step.Outcome == ProjectileStepOutcome.Bounced)
+            {
+                _pierceWallReachedPublisher.Publish(new PierceWallReachedMessage(_model, step.WallContact));
+            }
 
             transform.position = step.Position;
             transform.up = step.Direction;

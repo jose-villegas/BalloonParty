@@ -32,6 +32,7 @@ namespace BalloonParty.Item.Snipe
         private readonly IProjectileBuffs _buffs;
         private readonly IProjectileRegistry _projectiles;
         private readonly ISubscriber<PierceDischargedMessage> _dischargedSubscriber;
+        private readonly ISnipeLanceArming _lanceArming;
 
         private IDisposable _dischargedSubscription;
 
@@ -44,7 +45,8 @@ namespace BalloonParty.Item.Snipe
             ItemEffectPlayer effectPlayer,
             IProjectileBuffs buffs,
             IProjectileRegistry projectiles,
-            ISubscriber<PierceDischargedMessage> dischargedSubscriber)
+            ISubscriber<PierceDischargedMessage> dischargedSubscriber,
+            ISnipeLanceArming lanceArming)
         {
             _itemConfig = itemConfig;
             _palette = palette;
@@ -52,11 +54,12 @@ namespace BalloonParty.Item.Snipe
             _buffs = buffs;
             _projectiles = projectiles;
             _dischargedSubscriber = dischargedSubscriber;
+            _lanceArming = lanceArming;
         }
 
         public void Start()
         {
-            _dischargedSubscription = _dischargedSubscriber.Subscribe(msg => TrySpendBankedCharge(msg.Projectile));
+            _dischargedSubscription = _dischargedSubscriber.Subscribe(TrySpendBankedCharge);
         }
 
         public void Dispose()
@@ -93,6 +96,7 @@ namespace BalloonParty.Item.Snipe
                 else
                 {
                     ArmLance(shot, settings.Snipe.SpeedBuffMultiplier, isRainbowHost);
+                    _lanceArming.OnLanceArmed(shot);
                 }
             }
 
@@ -104,9 +108,9 @@ namespace BalloonParty.Item.Snipe
         // level-up hold keyed off IsPiercing never releases mid-flight) — activate that saved pickup now.
         // A shot that died on the discharge wall has already overspent its shields: its charges die with
         // it, matching "piercing re-arms as long as the projectile still has shields".
-        private void TrySpendBankedCharge(IProjectileModel projectile)
+        private void TrySpendBankedCharge(PierceDischargedMessage discharge)
         {
-            if (projectile is not IWriteableProjectileModel shot || shot.ShieldsRemaining.Value < 0
+            if (discharge.Projectile is not IWriteableProjectileModel shot || shot.ShieldsRemaining.Value < 0
                 || !shot.IsPiercing.Value)
             {
                 return;
@@ -128,6 +132,7 @@ namespace BalloonParty.Item.Snipe
             }
 
             ArmLance(shot, _itemConfig[ItemType.Snipe].Snipe.SpeedBuffMultiplier, isRainbowCharge);
+            _lanceArming.OnLanceRearmed(shot, discharge.Position);
         }
 
         // IsPiercing may already be true here — a banked charge re-arms a shot the discharge deliberately

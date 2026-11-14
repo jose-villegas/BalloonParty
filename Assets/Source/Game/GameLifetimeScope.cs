@@ -1,5 +1,6 @@
 using BalloonParty.Configuration;
 using BalloonParty.Item.Preview;
+using BalloonParty.Item.Snipe;
 using BalloonParty.Projectile.View;
 using BalloonParty.Shared;
 using BalloonParty.Thrower;
@@ -69,6 +70,10 @@ namespace BalloonParty.Game
         [Tooltip("Tuning for the aim-time item range telegraph (dash pacing, bloom/hold timing, per-item " +
                  "overrides). Unassigned falls back to a default-constructed instance.")]
         [SerializeField] private ItemPreviewConfig _itemPreviewConfig;
+
+        [Tooltip("Pencil line drawn along each straight run a Snipe lance plows, once the shot reaches its " +
+                 "wall — a LineRenderer with the aim trace's material. Unassigned simply draws no line.")]
+        [SerializeField] private SnipeLanceLineView _snipeLanceLinePrefab;
 
         [SerializeField] private AudioSourceVoice _sfxVoicePrefab;
 
@@ -159,6 +164,7 @@ namespace BalloonParty.Game
             // ticker already no-ops on a null prefab) so the telegraph is opt-in by wiring the prefab,
             // not a hard startup failure before it's authored.
             builder.RegisterInstance(_itemPreviewPenPrefab);
+            builder.RegisterInstance(new SnipeLanceLinePrefab(_snipeLanceLinePrefab));
 
             // Degrades to a default instance carrying the sensible defaults, like the thermal governor
             // below — the telegraph works out of the box, and an authored asset only tunes it.
