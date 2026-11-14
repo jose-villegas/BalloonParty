@@ -110,9 +110,21 @@ namespace BalloonParty.Editor.Staging
                 return "launch";
             }
 
-            if (Object.FindAnyObjectByType<GameLifetimeScope>() == null || Navigation.Current.Value != NavigationState.Game)
+            if (Object.FindAnyObjectByType<GameLifetimeScope>() == null)
             {
                 return "loading";
+            }
+
+            // A run left playing on its own ends in a game over; a fresh one is as good a stage.
+            if (Navigation.Current.Value == NavigationState.GameOver)
+            {
+                Resolve<RunController>().RestartRun();
+                return "restarted after a game over";
+            }
+
+            if (Navigation.Current.Value != NavigationState.Game)
+            {
+                return $"waiting ({Navigation.Current.Value})";
             }
 
             CheatState.TimeOfDaySpeedScale = 0f;
