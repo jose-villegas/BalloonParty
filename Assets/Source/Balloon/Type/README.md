@@ -6,7 +6,7 @@ Balloon types define hit capacity, color selection, and per-type Inspector confi
 
 | File | What it does |
 |---|---|
-| `BalloonType` | Enum — `Simple`, `Tough`, `Unbreakable`, `BubbleCluster`, `SimpleSilver`, `SimpleGold`, `Rainbow` |
+| `BalloonType` | Enum — `Simple`, `Tough`, `Unbreakable`, `BubbleCluster`, `SimpleSilver`, `SimpleGold`, `Rainbow`, `Tougher`, and the reward balloons `Golden` and `Heart`. Append only: the names are a telemetry wire contract. `IsReward()` (`Shared/Extensions/BalloonTypeExtensions`) marks the reward balloons, which only `Balloon/Reward/RewardBalloonService` brings: a level's mix skips them |
 | `IBalloonVariant` | Interface on balloon prefab root MonoBehaviours — `Initialize(IWriteableBalloonModel model, int levelAllowedColorsMask)`. Type name, hit count, score, and nudge overrides are owned by `BalloonPrefabEntry` and baked into the model by `BalloonModelFactory` before `Initialize()` is called; the mask (only used by `ColorableBalloonVariant`) is the active level's color gate |
 | `IBalloonViewBinding` (in `Balloon/View/`) | Interface for MonoBehaviours on a balloon prefab that need to react to model binding. `BalloonView` discovers all components implementing this interface via `GetComponentsInChildren` and calls `Bind(IBalloonModel, CompositeDisposable)` automatically — keeping `BalloonView` agnostic of specific balloon types |
 | `ColorableBalloonVariant` | Abstract `MonoBehaviour` — picks a random color from `GamePalette` filtered by the intersection of `_allowedColorsMask` and the level's allowed-colors gate; sets `Color` on the model (via `IPaintable`) in `Initialize()` |
@@ -18,7 +18,7 @@ Balloon types define hit capacity, color selection, and per-type Inspector confi
 
 ## How it works
 
-During spawning, `BalloonModelFactory` builds the model from `BalloonPrefabEntry` — a `BalloonModelConfig` struct carries `TypeName`, `ScoreValue`, `HitsToPop`, and `NudgeOverrides` into the model constructor — before `BalloonFactory` calls `IBalloonVariant.Initialize(model, levelAllowedColorsMask)`. `Initialize()` is then responsible only for type-specific data: `Color` for colored types (it is a no-op on the others). This keeps per-type balance values centralized in the configuration asset rather than scattered across MonoBehaviours. Item eligibility is not a flag — it is determined structurally: `BalloonModel` implements `IHasWriteableItemSlot`; `ToughBalloonModel`, `UnbreakableBalloonModel`, and `BubbleClusterModel` do not. A `BubbleClusterModel` gets its bubble count from the config entry's `HitsToPop` (the variant's `_maxBubbles` should match it) — each surviving hit maps to one fewer visible bubble rather than a damage-progress float.
+During spawning, `BalloonModelFactory` builds the model from `BalloonPrefabEntry` — a `BalloonModelConfig` struct carries `TypeName`, `ScoreValue`, `HitsToPop`, and `NudgeOverrides` into the model constructor — before `BalloonFactory` calls `IBalloonVariant.Initialize(model, levelAllowedColorsMask)`. `Initialize()` is then responsible only for type-specific data: `Color` for colored types (it is a no-op on the others). This keeps per-type balance values centralized in the configuration asset rather than scattered across MonoBehaviours. The reward balloons have no variant of their own yet: the golden prefab carries the tough balloon's and the heart prefab the simple balloon's, and neither does anything for a model that is not `IHasDurability` or `IPaintable`. Item eligibility is not a flag — it is determined structurally: `BalloonModel` implements `IHasWriteableItemSlot`; `ToughBalloonModel`, `UnbreakableBalloonModel`, and `BubbleClusterModel` do not. A `BubbleClusterModel` gets its bubble count from the config entry's `HitsToPop` (the variant's `_maxBubbles` should match it) — each surviving hit maps to one fewer visible bubble rather than a damage-progress float.
 
 Then `BalloonView.Bind(model)` calls `Bind()` on all `IBalloonViewBinding` components found in its child hierarchy. `ToughBalloonVariant` uses this to subscribe to `HitsRemaining` and drive shader damage visuals.
 
@@ -82,7 +82,7 @@ The `BalloonParty/Balloon/UnbreakableBalloon` shader renders the chrome metallic
 
 ## Interactions
 
-- **BalloonFactory / BalloonModelFactory** — build the model from `BalloonPrefabEntry` before calling `Initialize()`; model class is chosen from `BalloonType`: `Simple` → `BalloonModel`, `BubbleCluster` → `BubbleClusterModel`, `Tough` → `ToughBalloonModel`, `Unbreakable` → `UnbreakableBalloonModel`
+- **BalloonFactory / BalloonModelFactory** — build the model from `BalloonPrefabEntry` before calling `Initialize()`; model class is chosen from `BalloonType`: `Simple`, `SimpleSilver`, `SimpleGold`, `Rainbow` → `BalloonModel`, `BubbleCluster` → `BubbleClusterModel`, `Tough`, `Tougher` → `ToughBalloonModel`, `Unbreakable` → `UnbreakableBalloonModel`, `Golden` → `GoldenBalloonModel`, `Heart` → `HeartBalloonModel`. An unmapped type throws
 - **BalloonView** — auto-discovers and calls `IBalloonViewBinding.Bind()` on all components in its child hierarchy
 - **BalloonController** — receives each hit's pre-computed outcome via `HitPipeline` → `BalloonControllerRegistry` routing
 - **GamePalette** — injected into `ColorableBalloonVariant` to resolve allowed color names

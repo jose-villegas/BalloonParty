@@ -13,7 +13,7 @@
 // The handler removes itself when Play mode ends, when a newer bot replaces it, or when ticks stop
 // coming (the heartbeat). On the game-over screen a tick presses Restart (restart on) or just reports it.
 // Each tick returns one line:
-//   <time> L<level> score <score> hearts <hearts> <navigation>/<phase> shots <shots fired so far> fill <board fill> inflight <balls in the air> breather <seconds left>
+//   <time> L<level> score <score> hearts <hearts> <navigation>/<phase> shots <shots fired so far> fill <board fill> inflight <balls in the air> breather <seconds left> rewards <golden placed> <golden popped> <heart placed> <heart popped>
 // (board fill: the share of open slots balloons fill, IBoardFill.Occupancy; a full board is where hearts are lost;
 // breather: seconds left in the spawn clock's breather after a big clear, ISpawnClock.BreatherSecondsLeft,
 // 0 outside one)
@@ -26,7 +26,11 @@ var aimSd = __AIM_SD__f;
 var wildChance = __WILD__f;
 var botId = "__BOT_ID__";
 var restart = __RESTART__;
+var purple = __PURPLE__;
+var startHearts = __HEARTS__;
 const string IdKey = "BalloonPartyBot.Id";
+const string SetupKey = "BalloonPartyBot.Setup.";
+const string RewardsKey = "BalloonPartyBot.Rewards.";
 const string HeartbeatKey = "BalloonPartyBot.Heartbeat";
 const string ShotsKey = "BalloonPartyBot.Shots";
 const float CheckInterval = 0.05f;
@@ -124,12 +128,94 @@ void FireLikeAPerson(VContainer.IObjectResolver resolver, object controller)
     controllerType.GetMethod("FireAt", flags).Invoke(controller, new object[] { direction });
 }
 
+// The reward balloons, counted on the shooter's loop so one placed and popped between two ticks still
+// counts: a placement is the service's on-board flag turning on, a pop the payout's last-paid balloon changing.
+object watchedGame = null;
+object rewardService = null;
+object rewardPayout = null;
+var goldenWasAlive = false;
+var heartWasAlive = false;
+object lastGoldenPaid = null;
+object lastHeartPaid = null;
+void CountUp(string key)
+{
+    UnityEditor.SessionState.SetInt(RewardsKey + key, UnityEditor.SessionState.GetInt(RewardsKey + key, 0) + 1);
+}
+
+void WatchRewards(VContainer.IObjectResolver resolver)
+{
+    if (!ReferenceEquals(watchedGame, resolver))
+    {
+        watchedGame = resolver;
+        rewardService = resolver.Resolve(asm.GetType("BalloonParty.Balloon.Reward.IRewardBalloonRequests"));
+        var payoutType = asm.GetType("BalloonParty.Balloon.Reward.RewardBalloonPayout");
+        rewardPayout = null;
+        foreach (var startable in (System.Collections.IEnumerable)resolver.Resolve(
+                     typeof(System.Collections.Generic.IEnumerable<VContainer.Unity.IStartable>)))
+        {
+            if (startable.GetType() == payoutType)
+            {
+                rewardPayout = startable;
+            }
+        }
+
+        lastGoldenPaid = rewardPayout?.GetType().GetField("_lastGoldenPaid", flags).GetValue(rewardPayout);
+        lastHeartPaid = rewardPayout?.GetType().GetField("_lastHeartPaid", flags).GetValue(rewardPayout);
+    }
+
+    var goldenAlive = (bool)rewardService.GetType().GetField("_goldenAlive", flags).GetValue(rewardService);
+    var heartAlive = (bool)rewardService.GetType().GetField("_heartAlive", flags).GetValue(rewardService);
+    if (goldenAlive && !goldenWasAlive)
+    {
+        CountUp("GoldenPlaced");
+    }
+
+    if (heartAlive && !heartWasAlive)
+    {
+        CountUp("HeartPlaced");
+    }
+
+    goldenWasAlive = goldenAlive;
+    heartWasAlive = heartAlive;
+    if (rewardPayout == null)
+    {
+        return;
+    }
+
+    var goldenPaid = rewardPayout.GetType().GetField("_lastGoldenPaid", flags).GetValue(rewardPayout);
+    var heartPaid = rewardPayout.GetType().GetField("_lastHeartPaid", flags).GetValue(rewardPayout);
+    if (goldenPaid != null && !ReferenceEquals(goldenPaid, lastGoldenPaid))
+    {
+        CountUp("GoldenPaid");
+    }
+
+    if (heartPaid != null && !ReferenceEquals(heartPaid, lastHeartPaid))
+    {
+        CountUp("HeartPaid");
+    }
+
+    lastGoldenPaid = goldenPaid;
+    lastHeartPaid = heartPaid;
+}
+
+string Rewards()
+{
+    int Count(string key) { return UnityEditor.SessionState.GetInt(RewardsKey + key, 0); }
+    return " rewards " + Count("GoldenPlaced") + " " + Count("GoldenPaid") + " " + Count("HeartPlaced") + " "
+           + Count("HeartPaid");
+}
+
 var now = UnityEngine.Time.realtimeSinceStartup;
 UnityEditor.SessionState.SetFloat(HeartbeatKey, now);
 if (UnityEditor.SessionState.GetString(IdKey, "") != botId)
 {
     UnityEditor.SessionState.SetString(IdKey, botId);
     UnityEditor.SessionState.SetInt(ShotsKey, 0);
+    foreach (var key in new[] { "GoldenPlaced", "GoldenPaid", "HeartPlaced", "HeartPaid" })
+    {
+        UnityEditor.SessionState.EraseInt(RewardsKey + key);
+    }
+
     var nextCheck = 0f;
     var fireAt = -1f;
     UnityEditor.EditorApplication.CallbackFunction shooter = null;
@@ -156,6 +242,11 @@ if (UnityEditor.SessionState.GetString(IdKey, "") != botId)
 
         nextCheck = clock + CheckInterval;
         var resolver = FindGame();
+        if (resolver != null)
+        {
+            WatchRewards(resolver);
+        }
+
         var controller = FindController();
         if (resolver == null || !InPlay(resolver) || !IsReady(controller))
         {
@@ -249,6 +340,54 @@ if (nav == "GameOver")
     return time + " GAMEOVER waiting for the screen";
 }
 
+// The session's setup, once its first run is in play: purple restarts the run on the first level from the
+// level-up where purple can roll that the run's seed makes purple (Start From Level, keeping the seed, so the
+// same roll holds); hearts then sets the hearts the player has, so the session starts as low as asked.
+var setupKey = SetupKey + botId;
+var setupStage = UnityEditor.SessionState.GetInt(setupKey, 0);
+if (setupStage < 2 && InPlay(game))
+{
+    if (setupStage == 0 && purple)
+    {
+        UnityEditor.SessionState.SetInt(setupKey, 1);
+        var seed = (int)Prop(game.Resolve(asm.GetType("BalloonParty.Game.Run.IRunSeed")), asm.GetType("BalloonParty.Game.Run.IRunSeed"), "Value");
+        var pacingType = asm.GetType("BalloonParty.Configuration.Level.LevelPacingConfiguration");
+        var pacing = UnityEngine.Resources.FindObjectsOfTypeAll(pacingType)[0];
+        var generation = pacingType.GetProperty("Generation", flags).GetValue(pacing);
+        var extraColor = generation.GetType().GetProperty("ExtraColor", flags).GetValue(generation);
+        var isPurple = extraColor.GetType().GetMethod("IsExtraColorLevel", flags);
+        var purpleLevel = 1;
+        while (purpleLevel < 200 && !(bool)isPurple.Invoke(extraColor, new object[] { purpleLevel, seed }))
+        {
+            purpleLevel++;
+        }
+
+        UnityEditor.SessionState.SetInt(setupKey + ".Level", purpleLevel);
+        var cheatState = asm.GetType("BalloonParty.Cheats.CheatState");
+        cheatState.GetField("StartLevel", staticFlags).SetValue(null, purpleLevel);
+        cheatState.GetField("KeepRunSeed", staticFlags).SetValue(null, true);
+        var runController = game.Resolve(asm.GetType("BalloonParty.Game.Run.RunController"));
+        runController.GetType().GetMethod("RestartRun", flags).Invoke(runController, null);
+        return time + " SETUP purple level " + purpleLevel;
+    }
+
+    // The restart takes a moment: the hearts wait for the run it starts, or its reset would refill them.
+    var levelNow = (int)Value(Prop(game.Resolve(progressType), progressType, "Level"));
+    if (setupStage == 1 && levelNow != UnityEditor.SessionState.GetInt(setupKey + ".Level", 0))
+    {
+        return time + " SETUP waiting for level " + UnityEditor.SessionState.GetInt(setupKey + ".Level", 0);
+    }
+
+    UnityEditor.SessionState.SetInt(setupKey, 2);
+    if (startHearts > 0)
+    {
+        var health = game.Resolve(asm.GetType("BalloonParty.Game.Health.PlayerHealthController"));
+        var current = health.GetType().GetField("_current", flags).GetValue(health);
+        current.GetType().GetProperty("Value").SetValue(current, startHearts);
+        return time + " SETUP hearts " + startHearts;
+    }
+}
+
 var progress = game.Resolve(progressType);
 var level = (int)Value(Prop(progress, progressType, "Level"));
 var phase = Value(Prop(progress, progressType, "Phase")).ToString();
@@ -264,4 +403,4 @@ var clockType = asm.GetType("BalloonParty.Balloon.Spawner.ISpawnClock");
 var breatherLeft = (float)Prop(game.Resolve(clockType), clockType, "BreatherSecondsLeft");
 var breather = breatherLeft.ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
 return time + " L" + level + " score " + score + " hearts " + hearts + " " + nav + "/" + phase + " shots " + shots
-       + " fill " + fill + " inflight " + inFlight + " breather " + breather;
+       + " fill " + fill + " inflight " + inFlight + " breather " + breather + Rewards();

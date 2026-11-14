@@ -27,6 +27,18 @@ a tuning changes is how often each one loses and what leads to it, so run the sk
 build and compare. Change one knob at a time, and compare against a `best` session to see how much of
 a level's difficulty is aim and how much is pace.
 
+Two options set up the first run, for measuring what only comes late or to a player in trouble:
+
+| Option | What it does |
+|---|---|
+| `--purple` | Once the first run is in play, restarts it on the first level its seed makes purple (one more colour, the golden balloon's level), through the Start From Level cheat with the seed kept, so the same roll holds. The run's first moments, before the restart, are on level 1 |
+| `--hearts N` | Once that run is in play, sets the player's hearts to N, so the session starts low on hearts (where the heart balloon comes). A later run (`--restart`) starts as configured |
+
+```bash
+python3 Tools/playtest/playtest_bot.py --purple --seconds 300 --label purple
+python3 Tools/playtest/playtest_bot.py --hearts 1 --seconds 420 --label one-heart
+```
+
 It needs the Unity CLI (`unity`, on `PATH` or in `~/AppData/Local/Unity/bin`) and the Editor open
 on the project with the Pipeline package installed (`unity pipeline install`). `--project` picks
 the project if you run it from another checkout: the Editor plays the code of the checkout it has
@@ -54,11 +66,12 @@ open, not yours.
 
 `Logs/playtest/<stamp>[-label]/` (git-ignored) gets `ticks.jsonl` (one line per tick: level, score,
 hearts, shots so far, board fill, balls in flight, seconds left in the spawn clock's
-breather) and `report.md`:
+breather, and the reward balloons placed and popped so far) and `report.md`:
 
 | Section | From | Says |
 |---|---|---|
 | Header | `ProjectileFlightConfig.asset`, the arguments | The reload and ball-cap values, and the player, the session ran with |
+| Reward balloons | The ticks | How many golden and heart balloons were placed and popped in the session, counted on the shooter's 50 ms loop (the reward service's on-board flags, the payout's last-paid balloon) |
 | Runs | The ticks | Each run's outcome (game over or still playing), highest level, score, hearts left, shots and length, and how many runs ended in a game over |
 | Hearts lost | The ticks | Every heart lost: run, level, seconds into the level, hearts left, and the lead-up (the 10 s before it): board fill just before and on average, shots per 10 s, balls in flight |
 | Levels | Telemetry `level` records | Seconds, shots, pops, pops per shot, hearts lost and max streak, per level |

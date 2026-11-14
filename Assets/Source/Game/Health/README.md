@@ -3,7 +3,8 @@
 The player's **hit-point pool** — the only loss trigger under the line-based spawn-saturation
 model. Each heart represents one full spawn line. When the board can't absorb all the lines in
 a spawn wave, the player loses one heart per full line of deficit; partial-line shortfalls are
-forgiven. Reaching zero hearts ends the run.
+forgiven. Reaching zero hearts ends the run. Hearts come back on a level-up (`LevelUpHeartRefill`) and
+when the player pops a heart balloon (`Balloon/Reward/`), which comes only while a heart is missing.
 
 ## Contents
 

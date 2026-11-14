@@ -36,7 +36,8 @@ REPO_ROOT = os.path.dirname(os.path.dirname(TOOL_DIR))
 TICK_RE = re.compile(
     r"^(?P<t>[\d.]+) L(?P<level>\d+) score (?P<score>-?\d+) hearts (?P<hearts>-?\d+) "
     r"(?P<nav>\w+)/(?P<phase>\w+) shots (?P<shots>\d+)(?: fill (?P<fill>[\d.]+))?(?: inflight (?P<inflight>\d+))?"
-    r"(?: breather (?P<breather>[\d.]+))?$")
+    r"(?: breather (?P<breather>[\d.]+))?"
+    r"(?: rewards (?P<golden_placed>\d+) (?P<golden_paid>\d+) (?P<heart_placed>\d+) (?P<heart_paid>\d+))?$")
 FLOAT_FIELDS = ("t", "fill", "breather")
 # A gap between two playing ticks longer than this (a level-up, a pause, a restart) ends a release or tension stretch.
 STRETCH_BREAK_SECONDS = 2.0
@@ -322,7 +323,21 @@ def release_and_tension_lines(stretches):
     return lines
 
 
-def build_report(label, seconds, player, tuning, samples, records):
+def reward_lines(samples):
+    """The reward balloons the session saw: the tick's running counts, so the last tick holds the totals."""
+    counted = [s for s in samples if "golden_placed" in s]
+    if not counted:
+        return []
+    last = counted[-1]
+    return ["## Reward balloons (ticks)", "",
+            "Counted on the bot's 50 ms loop: placed when the reward service marks one on the board, popped when the "
+            "payout pays it. A golden pop pays a card (or a heart with every card at its limit), a heart pop a heart.", "",
+            "| Balloon | Placed | Popped |", "|---|---|---|",
+            f"| Golden | {last['golden_placed']} | {last['golden_paid']} |",
+            f"| Heart | {last['heart_placed']} | {last['heart_paid']} |", ""]
+
+
+def build_report(label, seconds, player, tuning, samples, records, setup=""):
     lines = [f"# Playtest bot report{f' — {label}' if label else ''}", ""]
     lines.append(f"- Played {seconds:.0f} s of wall time, {len(samples)} ticks "
                  f"({seconds / max(1, len(samples)):.2f} s per tick).")
@@ -331,6 +346,8 @@ def build_report(label, seconds, player, tuning, samples, records):
     if tuning:
         lines.append("- Tuning: " + ", ".join(f"{k} {v}" for k, v in tuning.items()) + ".")
     lines.append(f"- Player: {player}.")
+    if setup:
+        lines.append(f"- Setup: {setup}.")
     lines.append("")
 
     runs = summarize_runs(samples)
@@ -347,6 +364,8 @@ def build_report(label, seconds, player, tuning, samples, records):
         failures = sum(ended)
         lines += ["", f"{failures} of {len(runs)} runs ended in a game over."]
         lines.append("")
+
+    lines += reward_lines(samples)
 
     losses = heart_losses(samples)
     lines += ["## Hearts lost (ticks)", ""]
@@ -441,6 +460,10 @@ def main():
                         help="human: mean of the exponential wait on top of the floor, seconds")
     parser.add_argument("--aim-sd", type=float, help="human: standard deviation of the aim error, degrees")
     parser.add_argument("--wild", type=float, help="human: share of shots fired unaimed, at any angle (0-1)")
+    parser.add_argument("--purple", action="store_true",
+                        help="restart the first run on the first purple (extra colour) level its seed rolls")
+    parser.add_argument("--hearts", type=int, default=0,
+                        help="start the first run with this many hearts (default: as configured)")
     args = parser.parse_args()
     for knob, value in SKILLS[args.skill].items():
         if getattr(args, knob) is None:
@@ -457,7 +480,11 @@ def main():
                  .replace("__AIM_SD__", repr(args.aim_sd))
                  .replace("__WILD__", repr(args.wild))
                  .replace("__BOT_ID__", stamp)
-                 .replace("__RESTART__", "true" if args.restart else "false"))
+                 .replace("__RESTART__", "true" if args.restart else "false")
+                 .replace("__PURPLE__", "true" if args.purple else "false")
+                 .replace("__HEARTS__", str(args.hearts)))
+    setup = ", ".join(([("started on the run's first purple level, through Start From Level")] if args.purple else [])
+                      + ([f"started with {args.hearts} hearts"] if args.hearts > 0 else []))
     if args.player == "best":
         player = "best (the solver, fired the moment the cannon is ready)"
     else:
@@ -486,7 +513,7 @@ def main():
         editor.wait_ready()
 
     report = build_report(args.label, played, player, read_tuning(editor.project), samples,
-                          telemetry_since(telemetry_dir, started))
+                          telemetry_since(telemetry_dir, started), setup)
     with open(os.path.join(out_dir, "report.md"), "w", encoding="utf-8") as out:
         out.write(report + "\n")
     print(report)
