@@ -15,7 +15,7 @@ until then.
 
 | Call | Does |
 |---|---|
-| `Begin()` | Enters Play mode, then in one step goes straight to a held game: past the launch screen (the switch its Play button makes, without the cloud scroll) or a fresh run after a game over, with time held from that frame and the clock and level-up stopped, so nothing plays out on its own. Called until it answers `ready` |
+| `Begin()` | Enters Play mode, then in one step goes straight to a held game: past the launch screen (its Play button's own actions, so the button goes and the launcher hands over to the game scene, without the cloud scroll) or a fresh run after a game over, with time held from that frame and the clock and level-up stopped, so nothing plays out on its own. Called until it answers `ready` |
 | `Hold()` / `Release()` / `Advance(s)` | Game time off, on, or on for `s` seconds. Holds through `ITimeScaleClaims` (`TimeScaleSource.Capture`, as the README shots do), so the shaders' clock stops too |
 | `Deal(scenario, level, seed)` | A fresh board: the run restarted at a level, or the first level from it in a scenario (as the Jump To Scenario cheat finds it), on a run seed, so the same call deals the same board. The seed goes through `CheatState.ForcedRunSeed`, a one-shot `RunSeed` reads on the reset, and also seeds Unity's random |
 | `Strip(kinds)` | Takes kinds off the board at once, with no pop: the balloons (the board clear's `ClearAll`), the clouds, bushes or enemies (deflectors, absorbers, gatekeepers) through `StaticActorSpawner.ClearStaticActors(type)`, or every obstacle |

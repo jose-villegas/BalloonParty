@@ -25,9 +25,11 @@ using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
+using BalloonParty.UI;
 using DG.Tweening;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 using VContainer;
 using Object = UnityEngine.Object;
 
@@ -82,8 +84,8 @@ namespace BalloonParty.Editor.Staging
         }
 
         /// <summary>
-        ///     Gets to a held game in one step once Play mode is up: straight past the launch screen (the switch to the
-        ///     game its Play button makes after its cloud scroll, without the scroll), or a fresh run after a game over,
+        ///     Gets to a held game in one step once Play mode is up: straight past the launch screen (its Play button's own
+        ///     actions, the button hidden and the launcher handed over to the game scene, without the cloud scroll), or a fresh run after a game over,
         ///     with game time held from the same frame, the clock and the level-up stopped, so nothing plays out on its
         ///     own. Enters Play mode first if it's off; call it until it answers <c>ready</c>.
         /// </summary>
@@ -108,6 +110,7 @@ namespace BalloonParty.Editor.Staging
             switch (Navigation.Current.Value)
             {
                 case NavigationState.Launch:
+                    PressLaunchPlay();
                     Navigation.TransitionTo(NavigationState.Game);
                     break;
                 case NavigationState.GameOver:
@@ -485,6 +488,49 @@ namespace BalloonParty.Editor.Staging
                 "enemies" => new[] { GridActorType.Deflector, GridActorType.Absorber, GridActorType.Gatekeeper },
                 _ => new[] { (GridActorType)Enum.Parse(typeof(GridActorType), name, true) }
             };
+        }
+
+        // The launch Play button's own actions (it hides itself, the launch screen animates out, the preloaded game
+        // scene takes over from the launcher's), all but LaunchPlayTrigger's, which waits out the cloud scroll
+        // before the switch to the game that Begin makes at once.
+        private static void PressLaunchPlay()
+        {
+            foreach (var button in Object.FindObjectsByType<ScaleDownButton>())
+            {
+                if (button.OnScaleComplete is not UnityEvent onPress)
+                {
+                    continue;
+                }
+
+                var states = new List<(int index, UnityEventCallState state)>();
+                for (var i = 0; i < onPress.GetPersistentEventCount(); i++)
+                {
+                    if (onPress.GetPersistentTarget(i) is LaunchPlayTrigger)
+                    {
+                        states.Add((i, onPress.GetPersistentListenerState(i)));
+                        onPress.SetPersistentListenerState(i, UnityEventCallState.Off);
+                    }
+                }
+
+                if (states.Count == 0)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    onPress.Invoke();
+                }
+                finally
+                {
+                    foreach (var (index, state) in states)
+                    {
+                        onPress.SetPersistentListenerState(index, state);
+                    }
+                }
+
+                return;
+            }
         }
 
         private static void AdvanceTick()
