@@ -180,8 +180,8 @@ namespace BalloonParty.Item.Laser
         {
             var radius = settings.Laser.CircleCastRadius;
             var distance = settings.Laser.RaycastDistance;
-            var context =
-                new DamageContext(settings.Damage, settings.Flags, balloon.GetColorId(), projectile);
+            var context = new DamageContext(
+                settings.Damage, settings.Flags | DamageFlags.Beam, balloon.GetColorId(), projectile);
 
             var right = laserRotation * Vector3.right;
             var left = laserRotation * Vector3.left;

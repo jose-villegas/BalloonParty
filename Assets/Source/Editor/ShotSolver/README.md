@@ -41,9 +41,9 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   actually takes on every deflect, closing what had been the dominant accuracy gap on
   deflect-heavy shots.
 - **Golden balloon** (`ForGoldenTarget`) — deflects the shot like an unbreakable (`int.MaxValue`
-  durability) and pops only to a pierce, but is `Scoreless` (its pop pays a card, not points, and
-  leaves the streak alone) and `ImmuneToEffects` (no item hit reaches it, mirroring the live
-  model's `HitOutcome.None` for any hit without `DirectHit`). Colourless and item-free. The result counts
+  durability) and pops to a pierce, but is `Scoreless` (its pop pays a card, not points, and
+  leaves the streak alone) and `ImmuneToEffects` (no item hit reaches it but a laser activation's,
+  mirroring the live model's `HitOutcome.None` for any hit without `DirectHit` or `Beam`). Colourless and item-free. The result counts
   reward pops apart (`GoldenPops`, `HeartPops`, told apart by `ImmuneToEffects`), since they add nothing
   to `RawScore`; `ShotRanking` reads them to put a golden, then a heart that counts, ahead of score.
 - **Interactive statics** (Deflector/Gatekeeper/Absorber, Phase A) — collide with the shot while

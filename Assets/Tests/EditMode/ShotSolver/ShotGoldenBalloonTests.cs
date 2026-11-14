@@ -10,8 +10,8 @@ using UnityEngine;
 namespace BalloonParty.Tests.ShotSolver
 {
     /// <summary>The golden reward balloon in the solver (PLAN-RewardBalloons phase 2): it deflects the
-    /// ordinary shot forever, pops only to a piercing shot, pays no score, leaves the streak alone, and is
-    /// untouched by item effects. Mirrors <c>GoldenBalloonModel.EvaluateHit</c>.</summary>
+    /// ordinary shot forever, pops to a piercing shot or a laser beam, pays no score, leaves the streak alone,
+    /// and is untouched by every other item effect. Mirrors <c>GoldenBalloonModel.EvaluateHit</c>.</summary>
     [TestFixture]
     public class ShotGoldenBalloonTests
     {
@@ -173,7 +173,7 @@ namespace BalloonParty.Tests.ShotSolver
         }
 
         [Test]
-        public void ApplyEffectHits_LaserThroughGolden_LeavesItStandingAndStillPopsTheRest()
+        public void ApplyEffectHits_LaserThroughGolden_PopsItScorelessWithTheRest()
         {
             var board = new[]
             {
@@ -190,10 +190,11 @@ namespace BalloonParty.Tests.ShotSolver
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
                 workingSet: workingSet, items: CreateLaserItemLayer());
 
-            Assert.AreEqual(2, result.Pops, "host + the Blue in the corridor; the golden is skipped");
-            Assert.AreEqual(2 + 3, result.RawScore);
+            Assert.AreEqual(3, result.Pops, "host, the Blue and the golden in the corridor");
+            Assert.AreEqual(1, result.GoldenPops);
+            Assert.AreEqual(2 + 3, result.RawScore, "the golden pays nothing");
             Assert.AreEqual(0, result.ToughsCleared);
-            Assert.IsFalse(result.BoardCleared);
+            Assert.IsTrue(result.BoardCleared);
         }
     }
 }

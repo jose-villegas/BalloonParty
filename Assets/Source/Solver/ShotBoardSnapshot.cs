@@ -134,8 +134,8 @@ namespace BalloonParty.Solver
         /// is <c>IHasScoreColor</c>, so <c>ScoreController</c> skips it).</summary>
         public readonly bool Scoreless;
 
-        /// <summary>Item effects (bomb, laser, lightning) do nothing to it: the golden balloon only pops to the
-        /// shot's own pierce.</summary>
+        /// <summary>Item effects (bomb, lightning) do nothing to it, all but the laser's beam: the golden balloon
+        /// pops only to the shot's own pierce or a laser.</summary>
         public readonly bool ImmuneToEffects;
 
         /// <summary>Passthrough so downstream reads stay tidy — null/empty means colourless, exactly as
@@ -188,7 +188,7 @@ namespace BalloonParty.Solver
 
         /// <summary>The golden reward balloon: colourless, deflecting every ordinary hit forever
         /// (<c>int.MaxValue</c>, so a pierce plows it and the discharge pops it), scoreless, and untouched by
-        /// item effects — mirrors <c>GoldenBalloonModel</c>.</summary>
+        /// item effects but the laser's — mirrors <c>GoldenBalloonModel</c>.</summary>
         public static ShotBalloonSnapshot ForGoldenTarget(Vector2 position, float radius, BalanceProfile? balance = null)
         {
             return new ShotBalloonSnapshot(

@@ -18,7 +18,9 @@ plan is `Plans/PLAN-RewardBalloons.md`.
 
 The golden balloon itself is `Balloon/Model/GoldenBalloonModel`: the shot's own ordinary hit bounces
 off it, a pierce pops it (it is tough, so the pierce plows it and it shatters at the next wall), and
-no item touches it: an item's damage has no `DirectHit`, and its hit is `HitOutcome.None`. It is
+so does a laser beam: the laser marks its damage `DamageFlags.Beam`. No other item touches it: an
+item's damage has no `DirectHit`, and its hit is `HitOutcome.None`. A bomb's blast on its neighbours
+carries `Piercing` like the beam, but never `Beam`, so a bomb beside it hands out no card. It is
 colourless and scoreless, resists paint, and carries no item. Its prefab (`Prefabs/Balloon/Golden`) is
 built from the tough balloon's, so it looks like a balloon, with a gold-plated body
 (`Shaders/BalloonParty/Balloon/GoldenBalloon.shader`) and a dark gold knot. Faint god rays turn and breathe

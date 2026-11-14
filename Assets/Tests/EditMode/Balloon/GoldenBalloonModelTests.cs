@@ -50,10 +50,18 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [TestCase(DamageFlags.Normal, TestName = "AnItemsOrdinaryDamage_DoesNothing")]
-        [TestCase(DamageFlags.Piercing, TestName = "ABombsNeighbourOrALasersPiercingDamage_DoesNothing")]
+        [TestCase(DamageFlags.Piercing, TestName = "ABombsNeighboursPiercingDamage_DoesNothing")]
         public void ItemDamage_DoesNothing(DamageFlags flags)
         {
             Assert.AreEqual(HitOutcome.None, _model.EvaluateHit(new DamageContext(99, flags)));
+        }
+
+        // The laser's beam carries Piercing like a bomb's blast; Beam is what tells it apart.
+        [TestCase(DamageFlags.Piercing | DamageFlags.Beam, TestName = "ALasersPiercingBeam_Pops")]
+        [TestCase(DamageFlags.Beam, TestName = "ALaserBeamConfiguredWithoutPiercing_Pops")]
+        public void ALaserBeam_Pops(DamageFlags flags)
+        {
+            Assert.AreEqual(HitOutcome.Pop, _model.EvaluateHit(new DamageContext(1, flags)));
         }
 
         [Test]

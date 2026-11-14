@@ -25,6 +25,11 @@ namespace BalloonParty.Slots.Capabilities
 
         /// <summary>A coloured projectile popped a rainbow — the streak multiplier should carry
         /// intact to the next colour the projectile adopts.</summary>
-        CarryStreak = 1 << 4
+        CarryStreak = 1 << 4,
+
+        /// <summary>A laser beam struck the actor. The beam's damage also carries <see cref="Piercing" />,
+        /// as a bomb's blast on its neighbours does; this tells the two apart, for the golden balloon, which
+        /// a beam breaks and a blast must not.</summary>
+        Beam = 1 << 5
     }
 }

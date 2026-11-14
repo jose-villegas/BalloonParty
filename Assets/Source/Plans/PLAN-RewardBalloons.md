@@ -19,9 +19,11 @@
      another (25%, then 10% for a third: three a level at most), which comes a few lines later. Never more
      than one on the board, and only a pop rolls: one a board clear takes brings no other.
    - Normal hits do nothing: the shot bounces off it as off an unbreakable. Items do nothing either
-     (bomb, laser, lightning, paint): a bomb beside it must not hand out the card.
+     (bomb, lightning, paint): a bomb beside it must not hand out the card.
    - A piercing shot pops it: a cruise-earned pierce or a Snipe lance. It is plowed and shatters at
      the shot's next wall bounce, as an unbreakable is.
+   - A laser beam pops it too (added after playtests): the beam's damage carries `DamageFlags.Beam`,
+     which a bomb's blast never does.
    - Popped, it gives a **free upgrade card**, kept for the run, shown with the card reveal.
    - It still looks like a balloon (body and knot, unlike the unbreakable's sphere), plated in metallic
      gold: plates wrapping it, each catching the light on its own, with glitter where the speculars land.
@@ -41,7 +43,7 @@
 | Piece | Where | What |
 |---|---|---|
 | `BalloonType.Golden`, `BalloonType.Heart` | `Balloon/Type/BalloonType.cs` | Appended at the end: the names are a telemetry wire contract, the values must stay dense. `SimpleGold` already names the gold-band plain balloon, hence `Golden` |
-| `GoldenBalloonModel` | `Balloon/Model/` | A `BalloonModelBase` of its own, not an `UnbreakableBalloonModel` (that would pull it into formations and roaming). `EvaluateHit`: a hit with `Piercing` and `DirectHit` pops; any other projectile hit deflects; an item hit is `HitOutcome.None`. `IDeflectsShots`, `IResistsPaint`, colourless |
+| `GoldenBalloonModel` | `Balloon/Model/` | A `BalloonModelBase` of its own, not an `UnbreakableBalloonModel` (that would pull it into formations and roaming). `EvaluateHit`: a laser's `Beam` pops; a hit with `Piercing` and `DirectHit` pops; any other projectile hit deflects; an item hit is `HitOutcome.None`. `IDeflectsShots`, `IResistsPaint`, colourless |
 | `HeartBalloonModel` | `Balloon/Model/` | A colourless one-hit balloon, `IResistsPaint` |
 | `IsTough` | `Shared/Extensions/BalloonModelExtensions.cs` | Covers the golden balloon, so a piercing shot plows it and the projectile's telegraph and sweep see it |
 | `RewardBalloonService` | `Balloon/Reward/` | Plain C#. Asked once per clock line, it reads the level's completion and the hearts and says which balloon is due, if any. It tracks which one is on the board through the leave callback, rolls for another golden balloon on its pop (read from `ActorHitMessage`), starts the golden balloons over on each new level, `IRunResettable`. It only offers a type the catalogue has an entry for |
@@ -53,7 +55,7 @@
 | `RewardBalloonPayout` | `Balloon/Reward/` | Reads the reward balloons' pops from `ActorHitMessage` and pays them: the golden one's card (or heart), the heart balloon's heart |
 | `IPlayerHealing` | `Game/Health/` | `Heal(amount)` on `PlayerHealthController`, up to `IPlayerHealth.Max` without trimming extras, and `HealPastMax(amount)` for a purple level's heart |
 | `IRewardBalloonSettings` | `Configuration/Balloons/` | The tuning below, a block on `BalloonsConfiguration` |
-| Shot solver | `Solver/` | `ShotBoardGather` builds a target for both (today it would see neither); the golden one deflects unless pierced, and is immune to the shared bomb and laser cores |
+| Shot solver | `Solver/` | `ShotBoardGather` builds a target for both (today it would see neither); the golden one deflects unless pierced, and is immune to the shared bomb core but not the laser's |
 
 ```mermaid
 sequenceDiagram
@@ -163,7 +165,8 @@ What it says:
 ## Open
 
 - Whether the golden balloon should be easier to break for a player who doesn't hunt pierces. The
-  average bot left it standing on both purple levels it played.
+  average bot left it standing on both purple levels it played. Since then a laser beam breaks it too,
+  it comes at half done, and the bots aim for it.
 
 - Whether the card reveal should say where the card came from ("golden balloon!") in a heads-up.
 - Whether a heart balloon should also drift, to make catching it a small skill test; it sits still

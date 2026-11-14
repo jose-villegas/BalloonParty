@@ -976,8 +976,9 @@ namespace BalloonParty.Solver
                 // exactly like a pop does.
                 NudgeItemHit(dynamics, workingSet[index], tHit);
 
-                // The golden balloon: an item's hit is HitOutcome.None, neither a pop nor spent durability.
-                if (workingSet[index].ImmuneToEffects)
+                // The golden balloon: an item's hit is HitOutcome.None, neither a pop nor spent durability, except
+                // the laser's beam (DamageFlags.Beam), which pops it.
+                if (workingSet[index].ImmuneToEffects && activation.Item != ItemType.Laser)
                 {
                     continue;
                 }
