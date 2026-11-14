@@ -179,7 +179,8 @@ def play_session(serial, player, args, stamp):
     samples = load_jsonl([ticks_path]) if os.path.exists(ticks_path) else []
     records = load_jsonl(glob.glob(os.path.join(out_dir, "telemetry", "telemetry_*.jsonl")))
     header = f"{name} on {serial}" + ("" if finished else " (ended early: the app stopped or never finished)")
-    report = build_report(header, played, describe(player), read_tuning(REPO_ROOT), samples, records)
+    report = build_report(header, played, describe(player), read_tuning(REPO_ROOT), samples, records,
+                          on_loss="restart" if args.restart else "stop")
     with open(os.path.join(out_dir, "report.md"), "w", encoding="utf-8") as out:
         out.write(report + "\n")
     return name, finished, out_dir

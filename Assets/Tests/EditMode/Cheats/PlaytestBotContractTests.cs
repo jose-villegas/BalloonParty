@@ -28,6 +28,7 @@ namespace BalloonParty.Tests.Cheats
         [TestCase("BalloonParty.Balloon.Spawner.IBoardFill", "Occupancy")]
         [TestCase("BalloonParty.Projectile.IProjectileRegistry", "InFlightCount")]
         [TestCase("BalloonParty.Balloon.Spawner.ISpawnClock", "BreatherSecondsLeft")]
+        [TestCase("BalloonParty.Game.Run.IFailureOffers", "Current")]
         public void Property_TheBotReads_Exists(string typeName, string property)
         {
             Assert.That(TypeNamed(typeName).GetProperty(property, Any), Is.Not.Null, $"{typeName}.{property}");
@@ -39,6 +40,9 @@ namespace BalloonParty.Tests.Cheats
         [TestCase("BalloonParty.Cheats.CheatState", "StartLevel", typeof(int))]
         [TestCase("BalloonParty.Cheats.CheatState", "KeepRunSeed", typeof(bool))]
         [TestCase("BalloonParty.UI.GameOver.GameOverScreen", "_canvasGroup", typeof(UnityEngine.CanvasGroup))]
+        [TestCase("BalloonParty.Game.Run.FailureOffer", "CanRetry", typeof(bool))]
+        [TestCase("BalloonParty.Game.Run.FailureOffer", "RetryNeedsAd", typeof(bool))]
+        [TestCase("BalloonParty.Game.Run.FailureOffer", "CanBonusRetry", typeof(bool))]
         public void Field_TheBotReadsOrWrites_HasItsType(string typeName, string field, Type type)
         {
             var found = TypeNamed(typeName).GetField(field, Any);
@@ -54,6 +58,8 @@ namespace BalloonParty.Tests.Cheats
         [TestCase("BalloonParty.Thrower.ThrowerController", "FireAt", new[] { typeof(UnityEngine.Vector3) })]
         [TestCase("BalloonParty.Cheats.FireBestShotCheat", "SetDirectionOverride", new Type[0])]
         [TestCase("BalloonParty.UI.GameOver.GameOverScreen", "OnRestartPressed", new Type[0])]
+        [TestCase("BalloonParty.UI.GameOver.GameOverScreen", "OnRetryPressed", new Type[0])]
+        [TestCase("BalloonParty.UI.GameOver.GameOverScreen", "OnBonusRetryPressed", new Type[0])]
         public void Method_TheBotCalls_TakesItsArguments(string typeName, string method, Type[] arguments)
         {
             Assert.That(TypeNamed(typeName).GetMethod(method, Any, null, arguments, null), Is.Not.Null,

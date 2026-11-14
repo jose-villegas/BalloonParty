@@ -3,7 +3,7 @@
 
 Drives the Editor through the Unity CLI and its Pipeline package (com.unity.pipeline): enters Play
 mode, sends bot_tick.cs once per tick (the first installs the shooter in the Editor; every tick
-reports state, and with --restart starts a new run on game over), then stops Play mode and builds a report from the
+reports state, and answers a game over as --on-loss says), then stops Play mode and builds a report from the
 game's own telemetry (JsonLinesTelemetrySink, under Application.persistentDataPath/telemetry).
 
 Two players:
@@ -39,6 +39,15 @@ TICK_RE = re.compile(
     r"(?: breather (?P<breather>[\d.]+))?"
     r"(?: rewards (?P<golden_placed>\d+) (?P<heart_placed>\d+)(?P<rewards_off> off)?)?$")
 FLOAT_FIELDS = ("t", "fill", "breather")
+# A loss the tick answered with a retry, which keeps the run going: "<time> RETRY ad <0|1>" or "<time> BONUS ad 1".
+RETRY_RE = re.compile(r" (RETRY|BONUS) ad ([01])$")
+# What a game over gets, per --on-loss: the tick's own words for the report.
+ON_LOSS = {
+    "stop": "the session ends at the first game over",
+    "restart": "Restart, a new run",
+    "retry": "Retry while the run has one (free first, then behind an ad), else Restart",
+    "bonus": "the bonus retry (a rewarded ad for a bonus card) while it is offered, else Retry, else Restart",
+}
 # A gap between two playing ticks longer than this (a level-up, a pause, a restart) ends a release or tension stretch.
 STRETCH_BREAK_SECONDS = 2.0
 
@@ -115,6 +124,37 @@ def ends_run(sample):
     return sample.get("restart") or sample.get("game_over")
 
 
+def settle_retries(samples):
+    """Marks a retry press that staged nothing (the next thing the ticks show is another press, not play) as failed,
+    so it counts neither as a retry nor as an ad."""
+    for index, sample in enumerate(samples):
+        if not sample.get("retry"):
+            continue
+        after = next((s for s in samples[index + 1:] if "level" in s or s.get("retry") or ends_run(s)), None)
+        sample["failed"] = after is not None and "level" not in after
+    return samples
+
+
+def parse_tick(line, wall):
+    """One tick's line as a sample: its state fields, or what it did on the launch or game-over screen."""
+    sample = {"wall": wall, "line": line}
+    match = TICK_RE.match(line or "")
+    retry = RETRY_RE.search(line or "")
+    if match:
+        sample.update({k: (v if k in ("nav", "phase") else True if k == "rewards_off"
+                           else float(v) if k in FLOAT_FIELDS else int(v))
+                       for k, v in match.groupdict().items() if v is not None})
+    elif line and " SETUP " in line:
+        sample["setup"] = True
+    elif line and line.endswith("RESTART"):
+        sample["restart"] = True
+    elif retry:
+        sample.update({"retry": True, "bonus": retry.group(1) == "BONUS", "ad": retry.group(2) == "1"})
+    elif line and line.endswith("GAMEOVER"):
+        sample["game_over"] = True
+    return sample
+
+
 def play(editor, seconds, tick_code, ticks_path):
     """Ticks until the time is up, or until the first game over when the tick doesn't restart."""
     deadline = time.time() + seconds
@@ -125,18 +165,7 @@ def play(editor, seconds, tick_code, ticks_path):
                 line = editor.eval(tick_code)
             except (RuntimeError, subprocess.TimeoutExpired) as error:
                 line = f"error {error}"
-            sample = {"wall": round(time.time(), 2), "line": line}
-            match = TICK_RE.match(line or "")
-            if match:
-                sample.update({k: (v if k in ("nav", "phase") else True if k == "rewards_off"
-                                   else float(v) if k in FLOAT_FIELDS else int(v))
-                               for k, v in match.groupdict().items() if v is not None})
-            elif line and " SETUP " in line:
-                sample["setup"] = True
-            elif line and line.endswith("RESTART"):
-                sample["restart"] = True
-            elif line and line.endswith("GAMEOVER"):
-                sample["game_over"] = True
+            sample = parse_tick(line, round(time.time(), 2))
             samples.append(sample)
             out.write(json.dumps(sample) + "\n")
             out.flush()
@@ -172,9 +201,16 @@ def summarize_runs(samples):
             if current and current["ticks"]:
                 runs.append(current)
             current = {"ticks": 0, "level": 0, "score": 0, "hearts": None, "shots": 0, "first": None, "last": None,
-                       "shots_at_start": None}
+                       "shots_at_start": None, "retries": 0, "bonus": 0, "ads": 0}
             if ends_run(sample):
                 continue
+        if sample.get("retry"):
+            if sample.get("failed"):
+                continue
+            current["retries"] += 1
+            current["bonus"] += sample["bonus"]
+            current["ads"] += sample["ad"]
+            continue
         if "level" not in sample:
             continue
         current["ticks"] += 1
@@ -330,6 +366,28 @@ def release_and_tension_lines(stretches):
     return lines
 
 
+def loss_lines(samples):
+    """Every game over the bot answered with a retry, and the run's last, with the level it came on."""
+    lines, run, level = [], 1, None
+    for sample in samples:
+        if "level" in sample:
+            level = sample["level"]
+        if sample.get("retry"):
+            answer = "bonus retry (ad)" if sample["bonus"] else "retry (ad)" if sample["ad"] else "retry (free)"
+            lines.append(f"| {run} | {level} | {answer}{', staged nothing' if sample.get('failed') else ''} |")
+        elif sample.get("restart"):
+            lines.append(f"| {run} | {level} | restart |")
+            run += 1
+    if not any(s.get("retry") for s in samples):
+        return []
+    return ["## Losses", "",
+            "Every game over and how the bot answered it. A retry replays the level the run was lost on, with "
+            "the hearts refilled; a bonus retry adds a card for that attempt. A press that staged nothing (an ad "
+            "not watched) is listed but not counted. A retried level's times in the other sections count from "
+            "its first attempt, game-over screens included.", "",
+            "| Run | Level | Answer |", "|---|---|---|"] + lines + [""]
+
+
 def reward_lines(samples, records):
     """The reward balloons the session saw: placed from the ticks' running counts (the last tick holds the totals),
     popped from the telemetry's pops by balloon type."""
@@ -356,12 +414,13 @@ def reward_lines(samples, records):
     return lines
 
 
-def build_report(label, seconds, player, tuning, samples, records, setup=""):
+def build_report(label, seconds, player, tuning, samples, records, setup="", on_loss="stop"):
     lines = [f"# Playtest bot report{f' — {label}' if label else ''}", ""]
     lines.append(f"- Played {seconds:.0f} s of wall time, {len(samples)} ticks "
                  f"({seconds / max(1, len(samples)):.2f} s per tick).")
+    lines.append(f"- On a game over: {ON_LOSS[on_loss]}.")
     if samples and samples[-1].get("game_over"):
-        lines.append("- Stopped at the first game over (--restart plays run after run instead).")
+        lines.append("- Stopped at the first game over.")
     if tuning:
         lines.append("- Tuning: " + ", ".join(f"{k} {v}" for k, v in tuning.items()) + ".")
     lines.append(f"- Player: {player}.")
@@ -373,17 +432,18 @@ def build_report(label, seconds, player, tuning, samples, records, setup=""):
     if runs:
         ended = [ended for _, ended in split_runs(samples)]
         lines += ["## Runs", "",
-                  "| Run | Ended | Reached level | Score | Hearts at end | Shots | Seconds |",
-                  "|---|---|---|---|---|---|---|"]
+                  "| Run | Ended | Reached level | Score | Hearts at end | Shots | Seconds | Retries | Of them bonus | Ads |",
+                  "|---|---|---|---|---|---|---|---|---|---|"]
         for index, run in enumerate(runs, 1):
             span = (run["last"] or 0) - (run["first"] or 0)
             outcome = "game over" if index <= len(ended) and ended[index - 1] else "still playing"
             lines.append(f"| {index} | {outcome} | {run['level']} | {run['score']} | {run['hearts']} | "
-                         f"{run['shots']} | {span:.0f} |")
+                         f"{run['shots']} | {span:.0f} | {run['retries']} | {run['bonus']} | {run['ads']} |")
         failures = sum(ended)
         lines += ["", f"{failures} of {len(runs)} runs ended in a game over."]
         lines.append("")
 
+    lines += loss_lines(samples)
     lines += reward_lines(samples, records)
 
     losses = heart_losses(samples)
@@ -466,8 +526,11 @@ def main():
     parser.add_argument("--label", default="", help="a name for this session, used in the folder and report")
     parser.add_argument("--project", default=REPO_ROOT,
                         help="the Unity project the Editor has open (default: this checkout)")
-    parser.add_argument("--restart", action="store_true",
-                        help="start a new run on game over instead of ending the session there")
+    parser.add_argument("--on-loss", choices=tuple(ON_LOSS), default="stop",
+                        help="what a game over gets: stop (default) ends the session; restart starts a new run; "
+                             "retry takes the run's retries (free, then behind an ad); bonus takes the rewarded-ad "
+                             "bonus retry while it is offered. Past the run's retries, a new run")
+    parser.add_argument("--restart", action="store_true", help="the same as --on-loss restart")
     parser.add_argument("--keep-playing", action="store_true", help="leave Play mode running afterwards")
     parser.add_argument("--player", choices=("best", "human"), default="human",
                         help="best: the solver, at once. human (default): reaction time and aim error")
@@ -484,6 +547,8 @@ def main():
     parser.add_argument("--hearts", type=int, default=0,
                         help="start the first run with this many hearts (default: as configured)")
     args = parser.parse_args()
+    if args.restart and args.on_loss == "stop":
+        args.on_loss = "restart"
     for knob, value in SKILLS[args.skill].items():
         if getattr(args, knob) is None:
             setattr(args, knob, value)
@@ -499,7 +564,7 @@ def main():
                  .replace("__AIM_SD__", repr(args.aim_sd))
                  .replace("__WILD__", repr(args.wild))
                  .replace("__BOT_ID__", stamp)
-                 .replace("__RESTART__", "true" if args.restart else "false")
+                 .replace("__ON_LOSS__", args.on_loss)
                  .replace("__PURPLE__", "true" if args.purple else "false")
                  .replace("__HEARTS__", str(args.hearts)))
     setup = ", ".join(([("started on the run's first purple level, through Start From Level")] if args.purple else [])
@@ -531,8 +596,8 @@ def main():
         editor.command("editor.playmode", "stop")
         editor.wait_ready()
 
-    report = build_report(args.label, played, player, read_tuning(editor.project), samples,
-                          telemetry_since(telemetry_dir, started), setup)
+    report = build_report(args.label, played, player, read_tuning(editor.project), settle_retries(samples),
+                          telemetry_since(telemetry_dir, started), setup, args.on_loss)
     with open(os.path.join(out_dir, "report.md"), "w", encoding="utf-8") as out:
         out.write(report + "\n")
     print(report)

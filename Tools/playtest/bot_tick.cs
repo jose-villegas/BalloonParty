@@ -13,14 +13,20 @@
 // The handler removes itself when Play mode ends, when a newer bot replaces it, or when ticks stop
 // coming (the heartbeat); the next tick installs it again, keeping the session's counts. Whether it is
 // installed is kept in the AppDomain, which a script reload replaces, so a reload reinstalls it too.
-// On the game-over screen a tick presses Restart (restart on) or just reports it.
+// On the game-over screen a tick answers the loss as onLoss says, once the screen is pressable:
+// - stop:    reports it; the session ends there.
+// - restart: presses Restart, a new run.
+// - retry:   presses Retry while the run has one (free ones first, then the ad-gated ones), else Restart.
+// - bonus:   presses the bonus retry (a rewarded ad for a bonus card on the retry) while it is offered,
+//            else as retry. In the Editor no ad SDK is plugged in, so every ad counts as watched.
 // Each tick returns one line:
 //   <time> L<level> score <score> hearts <hearts> <navigation>/<phase> shots <shots fired so far> fill <board fill> inflight <balls in the air> breather <seconds left> rewards <golden placed> <heart placed>[ off]
 // (board fill: the share of open slots balloons fill, IBoardFill.Occupancy; a full board is where hearts are lost;
 // breather: seconds left in the spawn clock's breather after a big clear, ISpawnClock.BreatherSecondsLeft,
 // 0 outside one; rewards: the reward balloons placed so far, "off" once their counter stopped on an error.
 // Their pops are in the telemetry, which playtest_bot.py reads)
-// or "<time> RESTART" / "<time> GAMEOVER", "<time> LAUNCH" while it presses Play on the launch screen, or
+// or "<time> RESTART" / "<time> GAMEOVER" / "<time> RETRY ad <0|1>" / "<time> BONUS ad 1" (ad: whether the
+// press asked for an ad), "<time> LAUNCH" while it presses Play on the launch screen, or
 // "nogame <navigation>" while the game scope isn't up.
 var mode = "__MODE__";
 var reactFloor = __REACT_FLOOR__f;
@@ -28,7 +34,7 @@ var reactMean = __REACT_MEAN__f;
 var aimSd = __AIM_SD__f;
 var wildChance = __WILD__f;
 var botId = "__BOT_ID__";
-var restart = __RESTART__;
+var onLoss = "__ON_LOSS__";
 var purple = __PURPLE__;
 var startHearts = __HEARTS__;
 const string IdKey = "BalloonPartyBot.Id";
@@ -41,6 +47,7 @@ const float CheckInterval = 0.05f;
 const float HeartbeatTimeout = 10f;
 const string LaunchSeenKey = "BalloonPartyBot.LaunchSeen.";
 const string LaunchTapKey = "BalloonPartyBot.LaunchTap.";
+const string LossPressesKey = "BalloonPartyBot.LossPresses";
 const float LaunchPressDelay = 1.5f;
 const float LaunchRetapDelay = 10f;
 
@@ -269,6 +276,10 @@ if (System.AppDomain.CurrentDomain.GetData(ShooterKey) as string != botId)
 
 var time = UnityEngine.Time.time.ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
 var nav = Nav();
+if (nav != "GameOver")
+{
+    UnityEditor.SessionState.EraseInt(LossPressesKey);
+}
 if (nav == "Launch")
 {
     // Play mode entered from the Launcher scene waits on its Play button. The bot taps it the way a finger
@@ -306,7 +317,7 @@ if (game == null)
 
 if (nav == "GameOver")
 {
-    if (!restart)
+    if (onLoss == "stop")
     {
         return time + " GAMEOVER";
     }
@@ -320,6 +331,37 @@ if (nav == "GameOver")
         : null;
     if (screen != null && screen.isActiveAndEnabled && group != null && group.interactable)
     {
+        // The screen comes back pressable when a retry stages nothing (an ad skipped or not shown), so each press
+        // for this loss steps down: the bonus retry once, then a plain retry once, then Restart.
+        var presses = UnityEditor.SessionState.GetInt(LossPressesKey, 0);
+        UnityEditor.SessionState.SetInt(LossPressesKey, presses + 1);
+        object offer = null;
+        if (onLoss == "retry" || onLoss == "bonus")
+        {
+            try
+            {
+                var offersType = asm.GetType("BalloonParty.Game.Run.IFailureOffers");
+                offer = offersType.GetProperty("Current").GetValue(game.Resolve(offersType));
+            }
+            catch (System.Exception)
+            {
+                offer = null;
+            }
+        }
+
+        bool Offers(string field) { return offer != null && (bool)offer.GetType().GetField(field).GetValue(offer); }
+        if (onLoss == "bonus" && presses == 0 && Offers("CanBonusRetry"))
+        {
+            screen.OnBonusRetryPressed();
+            return time + " BONUS ad 1";
+        }
+
+        if (presses <= (onLoss == "bonus" ? 1 : 0) && Offers("CanRetry"))
+        {
+            screen.OnRetryPressed();
+            return time + " RETRY ad " + (Offers("RetryNeedsAd") ? 1 : 0);
+        }
+
         screen.OnRestartPressed();
         return time + " RESTART";
     }

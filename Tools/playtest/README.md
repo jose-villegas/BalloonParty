@@ -32,7 +32,7 @@ Two options set up the first run, for measuring what only comes late or to a pla
 | Option | What it does |
 |---|---|
 | `--purple` | Once the first run is in play, restarts it on the first level its seed makes purple (one more colour, the golden balloon's level), through the Start From Level cheat with the seed kept, so the same roll holds. The run's first moments, before the restart, are on level 1 |
-| `--hearts N` | Once that run is in play, sets the player's hearts to N, so the session starts low on hearts (where the heart balloon comes). A later run (`--restart`) starts as configured |
+| `--hearts N` | Once that run is in play, sets the player's hearts to N, so the session starts low on hearts (where the heart balloon comes). A later run (`--on-loss restart`) starts as configured |
 
 ```bash
 python3 Tools/playtest/playtest_bot.py --purple --seconds 300 --label purple
@@ -43,6 +43,32 @@ It needs the Unity CLI (`unity`, on `PATH` or in `~/AppData/Local/Unity/bin`) an
 on the project with the Pipeline package installed (`unity pipeline install`). `--project` picks
 the project if you run it from another checkout: the Editor plays the code of the checkout it has
 open, not yours.
+
+## On a game over
+
+`--on-loss` says what the bot presses on the game-over screen. It presses once the screen is up and
+pressable (after the loss cinematic, as a finger would), and plays on until the time is up.
+
+| `--on-loss` | Presses |
+|---|---|
+| `stop` (default) | Nothing: the session ends at the first game over |
+| `restart` (or `--restart`) | Restart: a new run from level 1 |
+| `retry` | Retry, replaying the level with the hearts refilled, while the run has a retry: the free ones (`RunConfig.RetriesBeforeAd`), then the ones behind a rewarded ad. Restart once none is left |
+| `bonus` | The bonus retry while the game offers it: a rewarded ad that buys a card for the retried level. Otherwise as `retry` |
+
+A press that stages nothing (an ad skipped or not shown: the screen comes back) steps down for that loss: a
+failed bonus retry is followed by a plain retry, a failed retry by Restart. The report lists such a press but
+doesn't count it.
+
+There is no ad SDK yet (`NoAdService`), so in the Editor every ad counts as watched, at once: a
+`retry` or `bonus` session is a player who always watches the ad. The report counts the ads and lists
+every loss with its answer.
+
+```bash
+python3 Tools/playtest/playtest_bot.py --on-loss bonus --seconds 600 --label ads
+```
+
+`device_bot.py` only knows `--restart`: the device autoplay never retries.
 
 ## What it does
 
@@ -55,9 +81,9 @@ open, not yours.
    cheat) and removes itself when Play mode ends, a newer session replaces it, or ticks stop coming
    for 10 s. If Play mode starts on the launch screen (the Editor has the Launcher scene open), a tick
    taps its Play button the way a finger does, after 1.5 s on the screen (the device autoplay's
-   `AutoplayTap`), so the press and the ascend play as they would for a player. The session ends at the first game over, so each one is a single run: how long it lasted
-   and what lost it. `--restart` presses Restart on the game-over screen instead, once the screen is up and pressable
-   (after the loss cinematic, as a finger would), and plays run after run until the time is up.
+   `AutoplayTap`), so the press and the ascend play as they would for a player. What a game over gets is
+   `--on-loss` (below); by default the session ends there, so each one is a single run: how long it lasted
+   and what lost it.
 3. Leaves Play mode, which flushes the telemetry still buffered (`--keep-playing` skips this).
 4. Reads the telemetry records written since it started (`JsonLinesTelemetrySink`, under
    `Application.persistentDataPath/telemetry/`) and writes the report.
@@ -72,7 +98,8 @@ breather, and the reward balloons placed so far) and `report.md`:
 |---|---|---|
 | Header | `ProjectileFlightConfig.asset`, the arguments | The reload and ball-cap values, and the player, the session ran with |
 | Reward balloons | The ticks, the telemetry | How many golden and heart balloons were placed in the session, counted on the shooter's 50 ms loop (the reward service's on-board flags), and popped (the telemetry's pops by balloon type) |
-| Runs | The ticks | Each run's outcome (game over or still playing), highest level, score, hearts left, shots and length, and how many runs ended in a game over |
+| Runs | The ticks | Each run's outcome (game over or still playing), highest level, score, hearts left, shots and length, its retries (how many were bonus retries, how many asked for an ad), and how many runs ended in a game over. A retry doesn't end the run |
+| Losses | The ticks | With `--on-loss retry` or `bonus`: every game over, the level it came on and how the bot answered it |
 | Hearts lost | The ticks | Every heart lost: run, level, seconds into the level, hearts left, and the lead-up (the 10 s before it): board fill just before and on average, shots per 10 s, balls in flight |
 | Levels | Telemetry `level` records | Seconds, shots, pops, pops per shot, hearts lost and max streak, per level |
 | Board fill | The ticks | Per level, the share of open slots holding a balloon while playing (`IBoardFill.Occupancy`): mean, median, 90th percentile, max, and how often it ran at 0.9 or more. A heart is lost only when a new line finds no room, so this is how close each level came to costing one |
