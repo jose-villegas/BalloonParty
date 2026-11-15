@@ -74,12 +74,15 @@ namespace BalloonParty.Tests.HeadsUp
         }
 
         [Test]
-        public void AShatter_NeedsTwo()
+        public void HitsCut_ShowsFromOne_AndOutsizesAStreak()
         {
-            var shattered = _settings.Style(HeadsUpStyleId.Shattered);
+            var hits = _settings.Style(HeadsUpStyleId.Shattered);
+            var streak = _settings.Style(HeadsUpStyleId.Streak);
 
-            Assert.IsFalse(shattered.Accepts(1));
-            Assert.IsTrue(shattered.Accepts(2));
+            Assert.IsFalse(hits.Accepts(0));
+            Assert.IsTrue(hits.Accepts(1));
+            Assert.Greater(hits.SizeAt(1), streak.SizeAt(3));
+            Assert.Greater(hits.Priority, streak.Priority);
         }
 
         [Test]

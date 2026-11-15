@@ -105,6 +105,7 @@ namespace BalloonParty.Projectile.Controller
             // that trigger another pierce resolve before this loop finishes).
             var pendingCount = pending.Count;
             var resolvedCount = 0;
+            var hitsCut = 0;
             var center = Vector3.zero;
             for (var i = 0; i < pendingCount; i++)
             {
@@ -117,6 +118,8 @@ namespace BalloonParty.Projectile.Controller
                 }
 
                 resolvedCount++;
+                // Read before the hit: the piercing kill takes them all at once.
+                hitsCut += balloon is IHasDurability durable ? Mathf.Max(1, durable.HitsRemaining.Value) : 1;
                 center += hit.Position;
                 var context = new DamageContext(1, flags, projectile.ColorName.Value, projectile);
                 var outcome = balloon.EvaluateHit(context);
@@ -138,7 +141,7 @@ namespace BalloonParty.Projectile.Controller
             // for its "don't repaint what I'm about to fly back through" exclusion (the centroid would
             // exclude the wrong half — see PierceDischargedMessage's doc).
             _dischargedPublisher.Publish(new PierceDischargedMessage(
-                projectile, center / resolvedCount, resolvedCount, isRainbowBuff,
+                projectile, center / resolvedCount, resolvedCount, hitsCut, isRainbowBuff,
                 projectile.Direction, projectile.Flight.SegmentStartPosition));
 
             pending.Clear();

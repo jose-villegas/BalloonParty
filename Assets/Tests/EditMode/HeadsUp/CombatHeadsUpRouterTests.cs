@@ -84,13 +84,13 @@ namespace BalloonParty.Tests.HeadsUp
         }
 
         [Test]
-        public void APierceDischarge_WritesHowManyToughOnesItShattered()
+        public void APierceDischarge_WritesTheHitPointsItCut()
         {
-            _onDischarge.Handle(new PierceDischargedMessage(_ball, Vector3.zero, 3, false, Vector3.up,
+            _onDischarge.Handle(new PierceDischargedMessage(_ball, Vector3.zero, 2, 5, false, Vector3.up,
                 new Vector3(0f, 6f, 0f)));
 
             Assert.AreEqual(HeadsUpStyleId.Shattered, _requests[0].Style);
-            Assert.AreEqual(3, _requests[0].Arg);
+            Assert.AreEqual(5, _requests[0].Arg);
             Assert.AreEqual(new Vector2(0f, 6f), _requests[0].Anchor.Position);
         }
 

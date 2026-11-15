@@ -12,7 +12,7 @@ namespace BalloonParty.Game.HeadsUp.Routing
 {
     /// <summary>
     ///     The shot's heads-ups: a streak growing (<c>x3!</c> at the pop, rewriting itself per ball and colour), a
-    ///     speed tap off a wall, a pierce arming and what its discharge shattered, and the rainbow picked up.
+    ///     speed tap off a wall, a pierce arming and the hit points its discharge cut, and the rainbow picked up.
     ///     Which numbers are worth writing is each style's own range in <see cref="IHeadsUpSettings" />.
     /// </summary>
     internal sealed class CombatHeadsUpRouter : IStartable, IDisposable
@@ -71,7 +71,7 @@ namespace BalloonParty.Game.HeadsUp.Routing
 
         private void OnDischarge(PierceDischargedMessage msg)
         {
-            _headsUps.Request(new HeadsUpRequest(HeadsUpStyleId.Shattered, msg.ToughCount, HeadsUpAnchor.At(msg.Position)));
+            _headsUps.Request(new HeadsUpRequest(HeadsUpStyleId.Shattered, msg.HitsCut, HeadsUpAnchor.At(msg.Position)));
         }
 
         private void OnPierceArmed(IProjectileModel projectile)

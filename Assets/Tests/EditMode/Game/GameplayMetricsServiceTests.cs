@@ -568,7 +568,7 @@ namespace BalloonParty.Tests.Game
             _harness.ActorHit.Handle(GameplayMetricsHarness.Hit(
                 GameplayMetricsHarness.Balloon(BalloonType.Simple, GameplayMetricsHarness.Red), HitOutcome.Pop));
             _harness.SpeedTapMinted.Handle(new SpeedTapMintedMessage(null, Vector3.zero, 1));
-            _harness.PierceDischarged.Handle(new PierceDischargedMessage(null, Vector3.zero, 2, false, Vector3.zero,
+            _harness.PierceDischarged.Handle(new PierceDischargedMessage(null, Vector3.zero, 2, 2, false, Vector3.zero,
                 Vector3.zero));
             _harness.Destroy(ball);
 
@@ -780,8 +780,8 @@ namespace BalloonParty.Tests.Game
         {
             _harness.EnterGame();
             Play();
-            _harness.PierceDischarged.Handle(new PierceDischargedMessage(null, Vector3.zero, 3, false, Vector3.zero, Vector3.zero));
-            _harness.PierceDischarged.Handle(new PierceDischargedMessage(null, Vector3.zero, 2, true, Vector3.zero, Vector3.zero));
+            _harness.PierceDischarged.Handle(new PierceDischargedMessage(null, Vector3.zero, 3, 3, false, Vector3.zero, Vector3.zero));
+            _harness.PierceDischarged.Handle(new PierceDischargedMessage(null, Vector3.zero, 2, 2, true, Vector3.zero, Vector3.zero));
             _harness.CompleteLevel(2);
 
             var level = _harness.LastOf(RecordKind.Level);

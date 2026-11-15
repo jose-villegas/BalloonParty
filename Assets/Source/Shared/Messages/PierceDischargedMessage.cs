@@ -16,24 +16,28 @@ namespace BalloonParty.Shared.Messages
     ///     <see cref="Position" /> are both required (no defaulting) — an anti-exploit guard that silently
     ///     falls back to "exclude nothing" on a forgotten argument is worse than a compile error. The
     ///     discharge feel subscribes: the rainbow bloom, and (later) lights/shockwave.
-    ///     <see cref="Projectile" /> is the shot that discharged.
+    ///     <see cref="Projectile" /> is the shot that discharged. <see cref="HitsCut" /> is the hit points the
+    ///     shattered toughs still had (a 3-hit and a 2-hit make 5; one without hit points, an unbreakable,
+    ///     counts 1): what the heads-up writes.
     /// </summary>
     public readonly struct PierceDischargedMessage
     {
         public IProjectileModel Projectile { get; }
         public Vector3 Center { get; }
         public int ToughCount { get; }
+        public int HitsCut { get; }
         public bool IsRainbow { get; }
         public Vector3 Direction { get; }
         public Vector3 Position { get; }
 
         public PierceDischargedMessage(
-            IProjectileModel projectile, Vector3 center, int toughCount, bool isRainbow, Vector3 direction,
-            Vector3 position)
+            IProjectileModel projectile, Vector3 center, int toughCount, int hitsCut, bool isRainbow,
+            Vector3 direction, Vector3 position)
         {
             Projectile = projectile;
             Center = center;
             ToughCount = toughCount;
+            HitsCut = hitsCut;
             IsRainbow = isRainbow;
             Direction = direction;
             Position = position;

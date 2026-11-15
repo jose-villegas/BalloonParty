@@ -92,9 +92,9 @@ namespace BalloonParty.Configuration.HeadsUp
                 new HeadsUpStyleSettings(HeadsUpStyleId.Pierce, "<i>pierce!</i>",
                         Look(Graphite, 1f, 1f, 0f, 1f, FontStyles.Bold), 2)
                     .WithOffset(0f, 0.3f),
-                new HeadsUpStyleSettings(HeadsUpStyleId.Shattered, "x{0} <i>shattered</i>",
-                        Look(Plum, 1f, 1.1f, 0.2f, 1.5f, FontStyles.Bold), 3)
-                    .WithOffset(0f, 0.25f).WithArgRange(2, 0).EscalatingFrom(2),
+                new HeadsUpStyleSettings(HeadsUpStyleId.Shattered, "x{0} <i>hits!</i>",
+                        Look(Plum, 1f, 1.4f, 0.12f, 2f, FontStyles.Bold), 4)
+                    .WithOffset(0f, 0.3f).WithHold(0.6f).WithArgRange(1, 0).EscalatingFrom(2).UnderlinedFrom(6),
                 new HeadsUpStyleSettings(HeadsUpStyleId.HeartLost, "-1",
                         Look(Vermilion, 1f, 1.5f, 0f, 1.5f, FontStyles.Bold), 5)
                     .WithOffset(0f, -0.4f),

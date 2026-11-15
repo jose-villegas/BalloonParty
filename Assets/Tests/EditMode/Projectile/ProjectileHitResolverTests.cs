@@ -320,6 +320,36 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
+        public void DischargePending_CountsTheHitPointsTheToughsStillHad()
+        {
+            _projectile.IsPiercing.Value = true;
+            var threeHit = new BalloonModel(new BalloonModelConfig(hitsToPop: 3));
+            var twoHit = new BalloonModel(new BalloonModelConfig(hitsToPop: 2));
+            _grid.Place(threeHit, null, new Vector2Int(2, 3));
+            _grid.Place(twoHit, null, new Vector2Int(2, 5));
+            _resolver.Resolve(_projectile, threeHit, _grid.IndexToWorldPosition(new Vector2Int(2, 3)));
+            _resolver.Resolve(_projectile, twoHit, _grid.IndexToWorldPosition(new Vector2Int(2, 5)));
+
+            _resolver.DischargePending(_projectile);
+
+            _dischargedPublisher.Received(1).Publish(Arg.Is<PierceDischargedMessage>(m =>
+                m.ToughCount == 2 && m.HitsCut == 5));
+        }
+
+        [Test]
+        public void DischargePending_AToughWithoutHitPoints_CountsOne()
+        {
+            _projectile.IsPiercing.Value = true;
+            var golden = CreateGolden();
+            _grid.Place(golden, null, new Vector2Int(2, 3));
+            _resolver.Resolve(_projectile, golden, new Vector3(1f, 2f, 0f));
+
+            _resolver.DischargePending(_projectile);
+
+            _dischargedPublisher.Received(1).Publish(Arg.Is<PierceDischargedMessage>(m => m.HitsCut == 1));
+        }
+
+        [Test]
         public void DischargePending_SkipsToughThatLeftTheBoard()
         {
             _projectile.IsPiercing.Value = true;

@@ -277,7 +277,7 @@ namespace BalloonParty.Tests.Item
             Activate(projectile);
             var wall = new Vector3(2f, 5f, 0f);
 
-            _dischargedHandler.Handle(new PierceDischargedMessage(projectile, Vector3.zero, 1, false, Vector3.up, wall));
+            _dischargedHandler.Handle(new PierceDischargedMessage(projectile, Vector3.zero, 1, 1, false, Vector3.up, wall));
 
             _lanceArming.DidNotReceive().OnLanceArmed(Arg.Any<IProjectileModel>());
             _lanceArming.Received(1).OnLanceRearmed(projectile, wall);
@@ -318,7 +318,7 @@ namespace BalloonParty.Tests.Item
         private void Discharge(IProjectileModel projectile)
         {
             _dischargedHandler.Handle(
-                new PierceDischargedMessage(projectile, Vector3.zero, 1, false, Vector3.zero, Vector3.zero));
+                new PierceDischargedMessage(projectile, Vector3.zero, 1, 1, false, Vector3.zero, Vector3.zero));
         }
 
         private static ItemSettings CreateSnipeSettings()
