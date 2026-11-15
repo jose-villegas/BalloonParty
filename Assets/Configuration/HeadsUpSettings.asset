@@ -177,7 +177,6 @@ MonoBehaviour:
     _minArg: 1
     _maxArg: 0
     _escalateFrom: 2
-    _underlineFrom: 6
   - _id: 10
     _format: -1
     _look:
