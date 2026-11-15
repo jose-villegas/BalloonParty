@@ -24,7 +24,8 @@ namespace BalloonParty.Tests.Configuration
             var profile = settings.GetProfile(StampSource.SnipeSkyLight);
 
             Assert.IsTrue((profile.Sources & StampSource.SnipeSkyLight) != 0, "SnipeSkyLight should have a profile");
-            Assert.Greater(profile.Strength, 0f, "the wake should push, not only tag colour");
+            Assert.GreaterOrEqual(profile.Strength, 4f,
+                "the wake and the landing burst should shove the clouds visibly (1.5 read as too weak, 2026-11-15)");
         }
 
         [Test]

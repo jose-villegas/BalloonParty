@@ -157,8 +157,8 @@ MonoBehaviour:
     RadiusGrowth: 0
     StrengthFalloff: 0.5
   - Sources: 8192
-    Radius: 0.6
-    Strength: 1.5
+    Radius: 0.75
+    Strength: 4
     Duration: 0
     Interval: 0
     Spacing: 0.4
