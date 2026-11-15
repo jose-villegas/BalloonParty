@@ -27,9 +27,11 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void Wandering_GetsAroundTheScreen()
+        public void Wandering_GetsAroundTheScreen_WhenThereIsRoomBesideTheKeepOut()
         {
-            var wander = new BalloonWander(new BalloonWanderSettings(), Bounds, AroundPlay, new Vector2(60f, -125f), 7);
+            // Spots are only headed for in plain sight, so the way above runs up a side: give it some width.
+            var roomy = new KeepOut(AroundPlay.Bottom, AroundPlay.Top, 60f);
+            var wander = new BalloonWander(new BalloonWanderSettings(), Bounds, roomy, new Vector2(60f, -125f), 7);
             var left = false;
             var right = false;
             var above = false;
