@@ -1,4 +1,5 @@
 using BalloonParty.Game;
+using BalloonParty.Shared.GameState;
 using BalloonParty.UI;
 using TMPro;
 using UnityEditor;
@@ -93,7 +94,7 @@ namespace BalloonParty.Editor
             viewObject.FindProperty("_levelLabel").objectReferenceValue = label;
             viewObject.ApplyModifiedPropertiesWithoutUndo();
 
-            RewirePress(copy.GetComponent<ScaleDownButton>(), play, view);
+            RewirePress(copy.GetComponent<ScaleDownButton>(), play, view, source.GetComponent<SceneTransition>());
 
             var scopeObject = new SerializedObject(scope);
             scopeObject.FindProperty("_continueView").objectReferenceValue = view;
@@ -104,23 +105,37 @@ namespace BalloonParty.Editor
             return true;
         }
 
-        // The view requests the resume and then plays the ascent, so Play's own calls come off the copy.
-        private static void RewirePress(ScaleDownButton button, LaunchPlayTrigger play, LaunchContinueView view)
+        // The view requests the resume and then plays the ascent, so Play's own calls come off the copy. The copy's
+        // scene activation goes to Play's SceneTransition and the copied one is removed: it would preload a second
+        // Game scene the moment the button first shows.
+        private static void RewirePress(
+            ScaleDownButton button, LaunchPlayTrigger play, LaunchContinueView view, SceneTransition playTransition)
         {
             if (button.OnScaleComplete is not UnityEvent press)
             {
                 return;
             }
 
+            var copiedTransition = button.GetComponent<SceneTransition>();
             for (var i = press.GetPersistentEventCount() - 1; i >= 0; i--)
             {
-                if (press.GetPersistentTarget(i) == play)
+                var target = press.GetPersistentTarget(i);
+                if (target == play)
                 {
                     UnityEventTools.RemovePersistentListener(press, i);
+                }
+                else if (copiedTransition != null && target == copiedTransition && playTransition != null)
+                {
+                    UnityEventTools.RegisterVoidPersistentListener(press, i, playTransition.Load);
                 }
             }
 
             UnityEventTools.AddVoidPersistentListener(press, view.Continue);
+            if (copiedTransition != null && playTransition != null)
+            {
+                Object.DestroyImmediate(copiedTransition);
+            }
+
             EditorUtility.SetDirty(button);
         }
 
