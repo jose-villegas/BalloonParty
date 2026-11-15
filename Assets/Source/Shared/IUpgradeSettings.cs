@@ -48,6 +48,12 @@ namespace BalloonParty.Shared
 
         /// <summary>Relative odds of the card being dealt. 0 keeps it out of the deck.</summary>
         float Weight { get; }
+
+        /// <summary>
+        ///     Extra odds of this card being a bought retry's bonus card, on top of <see cref="Weight" />: × (1 + this).
+        ///     A retry follows a lost run, so the cards that keep the player alive come likelier. 0 = no extra.
+        /// </summary>
+        float RetryDealBoost { get; }
     }
 
     /// <summary>When the level-up deals cards, how many, and from which deck.</summary>

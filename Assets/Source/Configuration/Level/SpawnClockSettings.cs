@@ -101,6 +101,12 @@ namespace BalloonParty.Configuration.Level
                  "fly. 0 = never.")]
         [SerializeField] [Range(0f, 1f)] private float _breatherShapeCover = 0.5f;
 
+        [Tooltip("Danger (the share of the hearts left the next line would cost) at or above which the board " +
+                 "earns a breather, as a big clear does: the same length, pace and cooldown. A full board reads " +
+                 "0.5 with two hearts left and 1 with the last, so 0.5 lets the last two hearts dig out before the " +
+                 "line lands. 0 = never.")]
+        [SerializeField] [Range(0f, 1f)] private float _breatherDanger = 0.5f;
+
         public float GraceSeconds => _graceSeconds;
         public float OverlapShotPull => _overlapShotPull;
         public float SparseBoardSpeedup => Mathf.Max(1f, _sparseBoardSpeedup);
@@ -115,6 +121,7 @@ namespace BalloonParty.Configuration.Level
         public float BreatherPace => Mathf.Clamp01(_breatherPace);
         public float BreatherCooldownSeconds => Mathf.Max(0f, _breatherCooldownSeconds);
         public float BreatherShapeCover => Mathf.Clamp01(_breatherShapeCover);
+        public float BreatherDanger => Mathf.Clamp01(_breatherDanger);
 
         public SpawnClockSettings()
         {
@@ -125,9 +132,11 @@ namespace BalloonParty.Configuration.Level
             float targetOccupancy = 0.5f, float occupancyWeight = 0f, float flightSpeedup = 1f,
             float flightPressureSeconds = 6f, float lateIntervalDecayPerLevel = 1f, float lateMinInterval = 0.1f,
             float breatherClear = 0f, float breatherClearWindow = 2f, float breatherSeconds = 6f,
-            float breatherPace = 0.2f, float breatherCooldownSeconds = 0f, float breatherShapeCover = 0f)
+            float breatherPace = 0.2f, float breatherCooldownSeconds = 0f, float breatherShapeCover = 0f,
+            float breatherDanger = 0f)
         {
             _breatherShapeCover = breatherShapeCover;
+            _breatherDanger = breatherDanger;
             _breatherCooldownSeconds = breatherCooldownSeconds;
             _breatherClear = breatherClear;
             _breatherClearWindow = breatherClearWindow;

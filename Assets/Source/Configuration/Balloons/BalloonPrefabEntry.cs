@@ -54,6 +54,11 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Physical spawn weight: heavier types take the lower slots, entering under lighter ones (across the initial fill's lines, and across the columns of a line). 0 = neutral.")]
         [SerializeField] private int _spawnWeight;
 
+        [Tooltip("How much likelier a level's mix picks this balloon while the player is in need: its level weight " +
+                 "times (1 + this × need), need running 0 to 1 toward the last heart. For the balloons that help, " +
+                 "such as Rainbow. 0 = need never changes its odds.")]
+        [SerializeField] [Min(0f)] private float _needWeightBoost;
+
         public BalloonView Prefab => _prefab;
         public BalloonType BalloonType => _balloonType;
         public NudgeOverride[] NudgeOverrides => _nudgeOverrides;
@@ -72,6 +77,7 @@ namespace BalloonParty.Configuration.Balloons
         public bool OmnidirectionalBalance => _omnidirectionalBalance;
         public float DeflectStampScale => _deflectStampScale;
         public int SpawnWeight => _spawnWeight;
+        public float NeedWeightBoost => _needWeightBoost;
 
         /// <summary>Derived from the prefab's GameObject name — no manual key needed.</summary>
         public string PoolKey => _prefab != null ? _prefab.name : string.Empty;

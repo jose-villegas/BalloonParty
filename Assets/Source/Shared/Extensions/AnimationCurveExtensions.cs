@@ -25,14 +25,8 @@ namespace BalloonParty.Shared.Extensions
                 return 0;
             }
 
-            var maxCount = Mathf.Max(0, Mathf.RoundToInt(weights[weights.length - 1].time));
-
-            var total = 0f;
-            for (var i = 0; i <= maxCount; i++)
-            {
-                total += Mathf.Max(0f, weights.Evaluate(i));
-            }
-
+            var maxCount = MaxCount(weights);
+            var total = TotalWeight(weights, maxCount);
             if (total <= 0f)
             {
                 return 0;
@@ -52,6 +46,18 @@ namespace BalloonParty.Shared.Extensions
             return maxCount;
         }
 
+        /// <summary>Chance <see cref="SampleWeightedCount" /> draws more than 0 off the curve; 0 for empty/all-zero weights.</summary>
+        internal static float ChanceOfAnyCount(this AnimationCurve weights)
+        {
+            if (weights == null || weights.length == 0)
+            {
+                return 0f;
+            }
+
+            var total = TotalWeight(weights, MaxCount(weights));
+            return total > 0f ? 1f - Mathf.Max(0f, weights.Evaluate(0)) / total : 0f;
+        }
+
         /// <summary>Largest keyframed Y value on the curve (0 for a null/empty curve). Cubic interpolation can
         /// overshoot this between keys, so treat it as the authored peak, not a hard interpolated bound.</summary>
         internal static float MaxKeyValue(this AnimationCurve curve)
@@ -69,6 +75,22 @@ namespace BalloonParty.Shared.Extensions
             }
 
             return max;
+        }
+
+        private static int MaxCount(AnimationCurve weights)
+        {
+            return Mathf.Max(0, Mathf.RoundToInt(weights[weights.length - 1].time));
+        }
+
+        private static float TotalWeight(AnimationCurve weights, int maxCount)
+        {
+            var total = 0f;
+            for (var i = 0; i <= maxCount; i++)
+            {
+                total += Mathf.Max(0f, weights.Evaluate(i));
+            }
+
+            return total;
         }
     }
 }

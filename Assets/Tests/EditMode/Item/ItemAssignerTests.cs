@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
+using BalloonParty.Game.Assist;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Upgrades;
 using BalloonParty.Item;
@@ -29,6 +30,9 @@ namespace BalloonParty.Tests.Item
         private ILevelParameters _current;
         private IMessageHandler<ItemCheckMessage> _handler;
         private IWeaponStats _weapon;
+        private IPlayerNeed _need;
+        private IAssistSettings _assist;
+        private ItemAssigner _assigner;
 
         [SetUp]
         public void SetUp()
@@ -60,12 +64,96 @@ namespace BalloonParty.Tests.Item
             runConfig.PlanShieldChains.Returns(false);
 
             _weapon = Substitute.For<IWeaponStats>();
-            var assigner = new ItemAssigner(
+            _need = Substitute.For<IPlayerNeed>();
+            _assist = Substitute.For<IAssistSettings>();
+            var itemPity = Substitute.For<IPitySettings>();
+            itemPity.GrowthPerMiss.Returns(1f);
+            itemPity.MaxChance.Returns(0.9f);
+            _assist.ItemPity.Returns(itemPity);
+            _assigner = new ItemAssigner(
                 _levelParams, _grid, Substitute.For<ISlotGridConfig>(),
                 new BalloonContactRadii(null, 0.375f),
                 Substitute.For<IProjectileFlightConfig>(), runConfig, _weapon,
-                new ThrowerOriginProvider(), null, subscriber);
-            assigner.Start();
+                new ThrowerOriginProvider(), null, subscriber, _need, _assist);
+            _assigner.Start();
+        }
+
+        [Test]
+        public void RollWaveCount_OutOfNeed_KeepsTheCurvesDraw()
+        {
+            for (var i = 0; i < 5; i++)
+            {
+                Assert.AreEqual(0, _assigner.RollWaveCount(EvenOdds(), 0f, 0f), "no need, no pity, no lift");
+            }
+
+            Assert.AreEqual(1, _assigner.RollWaveCount(EvenOdds(), 0.99f, 0.99f));
+        }
+
+        [Test]
+        public void RollWaveCount_InNeed_AMissRaisesTheNextWavesChanceOfAny()
+        {
+            _need.Need.Returns(1f);
+
+            Assert.AreEqual(0, _assigner.RollWaveCount(EvenOdds(), 0f, 0f), "no pity yet: the curve's miss stands");
+
+            // 0.5 raised by 1 × 1 pity × 1 need to 1, capped at 0.9: a miss lifts with (0.9 - 0.5) / (1 - 0.5) = 0.8.
+            Assert.AreEqual(1, _assigner.RollWaveCount(EvenOdds(), 0f, 0.79f));
+        }
+
+        [Test]
+        public void RollWaveCount_InNeed_ALiftDrawPastTheRaisedShare_StaysAMiss()
+        {
+            _need.Need.Returns(1f);
+            _assigner.RollWaveCount(EvenOdds(), 0f, 0f);
+
+            Assert.AreEqual(0, _assigner.RollWaveCount(EvenOdds(), 0f, 0.81f));
+        }
+
+        [Test]
+        public void RollWaveCount_AWaveWithAnItem_ClearsThePity()
+        {
+            _need.Need.Returns(1f);
+            _assigner.RollWaveCount(EvenOdds(), 0f, 0f);
+            _assigner.RollWaveCount(EvenOdds(), 0.99f, 0f);
+
+            Assert.AreEqual(0, _assigner.RollWaveCount(EvenOdds(), 0f, 0.01f), "the hit cleared it: nothing to lift");
+        }
+
+        [Test]
+        public void RollWaveCount_ACurveThatNeverGivesItems_BuildsNoPity()
+        {
+            _need.Need.Returns(1f);
+            for (var i = 0; i < 5; i++)
+            {
+                Assert.AreEqual(0, _assigner.RollWaveCount(WeightsForCount(0), 0f, 0f));
+            }
+
+            Assert.AreEqual(0, _assigner.RollWaveCount(EvenOdds(), 0f, 0.01f), "a level without items owes none");
+        }
+
+        [Test]
+        public void ResetRun_ClearsTheItemPity()
+        {
+            _need.Need.Returns(1f);
+            _assigner.RollWaveCount(EvenOdds(), 0f, 0f);
+
+            _assigner.ResetRun(1);
+
+            Assert.AreEqual(0, _assigner.RollWaveCount(EvenOdds(), 0f, 0.01f));
+        }
+
+        [Test]
+        public void OnItemCheck_PicksWithThePlayersNeed()
+        {
+            _need.Need.Returns(0.75f);
+            var bomb = CreateItemSettings(ItemType.Bomb);
+            _current.Items.Returns(new List<ItemSettings> { bomb });
+            _current.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>(), 0.75f).Returns(bomb);
+
+            var model = new BalloonModel();
+            FireItemCheck(new IBalloonModel[] { model }, wave: 1);
+
+            Assert.AreEqual(ItemType.Bomb, model.Item.Value);
         }
 
         [Test]
@@ -424,6 +512,12 @@ namespace BalloonParty.Tests.Item
         private void FireItemCheck(IReadOnlyList<IBalloonModel> balloons, int wave, bool isInitial = false)
         {
             _handler.Handle(new ItemCheckMessage(balloons, wave, isInitial));
+        }
+
+        // Even odds of no item or one: a draw under 0.5 gives none.
+        private static AnimationCurve EvenOdds()
+        {
+            return new AnimationCurve(new Keyframe(0f, 1f), new Keyframe(1f, 1f));
         }
 
         // A curve whose only non-zero weight is at X = count, so SampleCount deterministically returns

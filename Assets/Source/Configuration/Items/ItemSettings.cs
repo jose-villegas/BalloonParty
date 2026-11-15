@@ -18,6 +18,11 @@ namespace BalloonParty.Configuration.Items
                  "The level's cap on the item still holds.")]
         [SerializeField] [Range(0f, 1f)] private float _extraItemShare = 1f;
 
+        [Tooltip("How much likelier this item is picked while the player is in need: its level weight times " +
+                 "(1 + this × need), need running 0 to 1 toward the last heart. Clearing items earn the most. " +
+                 "0 = need never changes its odds.")]
+        [SerializeField] [Min(0f)] private float _needWeightBoost;
+
         [SerializeField] private GameObject _visualPrefab;
         [SerializeField] private EffectView _activationEffectPrefab;
 
@@ -35,6 +40,7 @@ namespace BalloonParty.Configuration.Items
         /// <summary>Catalog fallback unless ItemTypeWeight.MaximumAllowedOverride is set.</summary>
         public int MaximumAllowed => _maximumAllowed;
         public float ExtraItemShare => _extraItemShare;
+        public float NeedWeightBoost => _needWeightBoost;
         public GameObject VisualPrefab => _visualPrefab;
         public EffectView ActivationEffectPrefab => _activationEffectPrefab;
         public int Damage => _damage;

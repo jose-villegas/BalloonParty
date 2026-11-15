@@ -125,7 +125,8 @@ deep level with the base weapon, which makes it both too slow to clear and unlik
 
 The game-over screen can offer a retry with a bonus card, bought with a rewarded ad
 (`IFailureOffers.TryBonusRetryAsync`, see `Game/Run/README.md`). When that retry's reset runs
-(`IRetryState.RetryWithBonusCard`), `ResetRun` deals one card by weight and publishes
+(`IRetryState.RetryWithBonusCard`), `ResetRun` deals one card by weight (`BonusDealWeight`: the deal weight
+× (1 + `RetryDealBoost`), so Thick Skin comes twice as often) and publishes
 `BonusCardDealtMessage` with the stacks the attempt plays with (held plus the bonus); the on-screen
 tooltip names it once play resumes (see `UI/Tooltip/README.md`), or the card reveal shows it when its
 view is attached (`Game/CardReveal/README.md`).
@@ -137,6 +138,7 @@ view is attached (`Game/CardReveal/README.md`).
 | Applied on top of the held cards, not counted in `StacksOf` | It isn't a pick: it doesn't fill a card's stacks or change the next hand |
 | Dropped when the attempt ends: on `Transitioning` (the level is won) and on any reset | The advantage is per attempt, so repeated ads never stack power. An aborted level-up doesn't end the attempt, so it keeps the bonus |
 | Seeded by the level and the retries used | Each bought retry of a level can deal a different card |
+| Leans defensive (`RetryDealBoost`) | A retry follows a lost run, so the cards that keep the player alive come likelier. The weights change, not the seed, so the deal stays deterministic |
 
 `CanDealBonus` (its `IBonusCardSource` side) is false once only Extra Pen and maxed cards are
 left, and the screen then hides the bonus button.

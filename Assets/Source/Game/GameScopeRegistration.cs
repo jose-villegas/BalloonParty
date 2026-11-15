@@ -302,13 +302,14 @@ namespace BalloonParty.Game
             builder.Register<ILossForecast, LossForecast>(Lifetime.Singleton);
             builder.RegisterEntryPoint<SpaceDanger>().AsSelf().As<IDangerLevel>();
             builder.Register<PlayerNeed>(Lifetime.Singleton).As<IPlayerNeed>();
+            builder.Register<ThreatEase>(Lifetime.Singleton);
             builder.Register<HeartTrailTracker>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
             builder.Register<DefaultScoreTrailBehaviour>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<ShapeFormationTicker>().AsSelf().As<IScoreShapeCover>();
             builder.Register<BigScoreTrailBehaviour>(Lifetime.Singleton).AsSelf();
             builder.Register(BuildScoreTrailResolver, Lifetime.Singleton);
             builder.RegisterEntryPoint<ScoreTrailService>().AsSelf().As<IRunResettable>().As<ITransitionOutgoingContent>();
-            builder.RegisterEntryPoint<ItemAssigner>();
+            builder.RegisterEntryPoint<ItemAssigner>().As<IRunResettable>();
             builder.RegisterEntryPoint<ItemActivator>();
             builder.RegisterEntryPoint<ProjectileBuffService>().As<IProjectileBuffs>();
             builder.RegisterEntryPoint<ActiveProjectilePierce>().As<IActiveProjectilePierce>();

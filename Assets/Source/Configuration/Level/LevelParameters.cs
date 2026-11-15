@@ -113,9 +113,10 @@ namespace BalloonParty.Configuration.Level
         }
 
         public BalloonPrefabEntry PickBalloonEntry(
-            IReadOnlyDictionary<string, int> activeCounts, IReadOnlyDictionary<string, int> waveQuotas = null)
+            IReadOnlyDictionary<string, int> activeCounts, IReadOnlyDictionary<string, int> waveQuotas = null,
+            float need = 0f)
         {
-            return _balloonPickList.PickRandom(activeCounts, waveQuotas)?.Source;
+            return _balloonPickList.PickRandom(activeCounts, waveQuotas, need)?.Source;
         }
 
         public BalloonPrefabEntry PickSimpleBalloonEntry(IReadOnlyDictionary<string, int> activeCounts)
@@ -235,9 +236,9 @@ namespace BalloonParty.Configuration.Level
             }
         }
 
-        public ItemSettings PickItemEntry(IReadOnlyDictionary<string, int> activeCounts)
+        public ItemSettings PickItemEntry(IReadOnlyDictionary<string, int> activeCounts, float need = 0f)
         {
-            return _itemPickList.PickRandom(activeCounts)?.Source;
+            return _itemPickList.PickRandom(activeCounts, need: need)?.Source;
         }
 
         public bool TryGetGridActorGate(GridActorType type, out ResolvedGridActorGate gate)
@@ -266,6 +267,7 @@ namespace BalloonParty.Configuration.Level
         public AnimationCurve WaveCountWeights { get; }
         public int GuaranteedInitialCount { get; }
         public string PoolKey => Source.PoolKey;
+        public float NeedBoost => Source.NeedWeightBoost;
 
         public ResolvedBalloonEntry(
             BalloonPrefabEntry source,
@@ -291,6 +293,7 @@ namespace BalloonParty.Configuration.Level
         public int MaxCount { get; }
         public int GuaranteedInitialCount { get; }
         public string PoolKey => Source.Type.ToString();
+        public float NeedBoost => Source.NeedWeightBoost;
 
         public ResolvedItemEntry(ItemSettings source, float weight, int maxCount, int guaranteedInitialCount = 0)
         {

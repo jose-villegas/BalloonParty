@@ -97,5 +97,24 @@ namespace BalloonParty.Tests.Game
 
             Assert.AreEqual(0.01f, _roll.ChanceFor(0.01f, 1f), 1e-6f);
         }
+
+        [Test]
+        public void Record_AMissInNeed_AddsTheNeed_AndAHitClearsIt()
+        {
+            _roll.Record(false, 1f);
+            _roll.Record(false, 0.5f);
+            Assert.AreEqual(1.5f, _roll.Pity, 1e-6f);
+
+            _roll.Record(true, 1f);
+            Assert.AreEqual(0f, _roll.Pity);
+        }
+
+        [Test]
+        public void Record_AMissOutOfNeed_BuildsNoPity()
+        {
+            _roll.Record(false, 0f);
+
+            Assert.AreEqual(0f, _roll.Pity);
+        }
     }
 }

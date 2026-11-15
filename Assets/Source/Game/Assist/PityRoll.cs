@@ -42,14 +42,16 @@ namespace BalloonParty.Game.Assist
                 return false;
             }
 
-            if (chance >= 1f || draw < chance)
-            {
-                _pity = 0f;
-                return true;
-            }
+            var hit = chance >= 1f || draw < chance;
+            Record(hit, need);
+            return hit;
+        }
 
-            _pity += Mathf.Clamp01(need);
-            return false;
+        // For a roll drawn elsewhere (one with more outcomes than hit or miss): a hit clears the pity, a miss in
+        // need adds that need.
+        internal void Record(bool hit, float need)
+        {
+            _pity = hit ? 0f : _pity + Mathf.Clamp01(need);
         }
 
         internal void Clear()

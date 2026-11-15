@@ -8,6 +8,7 @@ using BalloonParty.Balloon.Reward;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
 using BalloonParty.Configuration.Level;
+using BalloonParty.Game.Assist;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
@@ -59,6 +60,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly IRunSeed _runSeed;
         private readonly IFormationReinforcements _reinforcements;
         private readonly IRewardBalloonRequests _rewards;
+        private readonly ThreatEase _threatEase;
         private readonly List<Vector3> _spawnPathBuffer = new();
         private readonly List<BalloonPrefabEntry> _spawnBatch = new();
         private readonly List<int> _lineColumns = new();
@@ -119,7 +121,8 @@ namespace BalloonParty.Balloon.Spawner
             ISpawnClock spawnClock,
             IRunSeed runSeed,
             IFormationReinforcements reinforcements,
-            IRewardBalloonRequests rewards)
+            IRewardBalloonRequests rewards,
+            ThreatEase threatEase)
         {
             _grid = grid;
             _balloonsConfig = balloonsConfig;
@@ -142,6 +145,7 @@ namespace BalloonParty.Balloon.Spawner
             _runSeed = runSeed;
             _reinforcements = reinforcements;
             _rewards = rewards;
+            _threatEase = threatEase;
             _bubbleEntry = FindEntry(balloonsConfig, BalloonType.BubbleCluster);
             _unbreakableEntry = FindEntry(balloonsConfig, BalloonType.Unbreakable);
             _goldenEntry = FindEntry(balloonsConfig, BalloonType.Golden);
@@ -257,7 +261,8 @@ namespace BalloonParty.Balloon.Spawner
                 return;
             }
 
-            if (UnityEngine.Random.value < _balloonsConfig.PopSpawnChance && PopSpawnBudget() > 0)
+            // Eased in need: a player down to the last heart sees fewer extra balloons from their own pops.
+            if (UnityEngine.Random.value < _threatEase.Eased(_balloonsConfig.PopSpawnChance) && PopSpawnBudget() > 0)
             {
                 SpawnLooseBalloons(1);
             }
@@ -536,10 +541,11 @@ namespace BalloonParty.Balloon.Spawner
                 AddReinforcements(target);
             }
 
+            var need = _threatEase.Need;
             for (var i = _spawnBatch.Count; i < target; i++)
             {
                 var entry = RollWaterBubble(bubbleShare)
-                            ?? _levelParams.Current.PickBalloonEntry(_activeCounts, _waveQuotas);
+                            ?? _levelParams.Current.PickBalloonEntry(_activeCounts, _waveQuotas, need);
                 if (entry == null)
                 {
                     break;

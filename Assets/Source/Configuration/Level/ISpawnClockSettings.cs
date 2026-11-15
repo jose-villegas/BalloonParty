@@ -72,6 +72,12 @@ namespace BalloonParty.Configuration.Level
         /// </summary>
         float BreatherShapeCover { get; }
 
+        /// <summary>
+        ///     Danger (<c>IDangerLevel</c>: the share of the hearts left the next line would cost) at or above which
+        ///     the board earns a breather, as a big clear does (same length, pace and cooldown). 0 = never.
+        /// </summary>
+        float BreatherDanger { get; }
+
         /// <summary>Seconds between lines at <paramref name="level" />; levels below 1 run at level 1's pace.</summary>
         float IntervalForLevel(int level);
     }

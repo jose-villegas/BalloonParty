@@ -71,7 +71,8 @@ can play out differently from its prediction.
 ## Reinforcements
 
 A formation the player doesn't break calls for help. At each wave start, every formation that has had no
-member pierced since it formed rolls `ReinforcementChance`. Each success calls in one more unbreakable.
+member pierced since it formed rolls `ReinforcementChance`, eased while the player is in need
+(`Game/Assist/ThreatEase`: half as likely on the last heart). Each success calls in one more unbreakable.
 The wave a formation forms in doesn't roll, so the player always gets a wave to answer it. A formation
 keeps its record through shape changes: once pierced, it never calls again.
 
@@ -148,7 +149,7 @@ The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfigurati
 - `HorizontalMaxMembers` (3, for horizontal lines; an item cover takes three to six)
 - `SnakeMaxMembers` (4) and `SnakeStepPulses` (1: a step on every pulse)
 - `SpotChoices` (3)
-- `ReinforcementChance` (0.35) and `ReinforcementCeiling` (4)
+- `ReinforcementChance` (0.35, eased in need by `Game/Assist/ThreatEase`) and `ReinforcementCeiling` (4)
 - the shape weights: horizontal 1, each diagonal 1, item cover 2, snake 1
 - `SnakeWeightPerExtraUnbreakable` (0.5: the snake's weight 1.5x with one unbreakable past `MinMembers`, 2x
   with two)

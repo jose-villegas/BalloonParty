@@ -4,6 +4,7 @@ using BalloonParty.Balloon.Formation;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
+using BalloonParty.Game.Assist;
 using BalloonParty.Shared;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
@@ -44,7 +45,8 @@ namespace BalloonParty.Tests.Balloon
             var balloonsConfig = Substitute.For<IBalloonsConfiguration>();
             balloonsConfig.UnbreakableFormation.Returns(_settings);
 
-            _service = new UnbreakableFormationService(_grid, balloonsConfig)
+            _service = new UnbreakableFormationService(_grid, balloonsConfig,
+                new ThreatEase(Substitute.For<IPlayerNeed>(), Substitute.For<IAssistSettings>()))
             {
                 Random01 = () => 0f,
             };
@@ -294,6 +296,28 @@ namespace BalloonParty.Tests.Balloon
             Assert.IsTrue(standing.Members.Cast<UnbreakableBalloonModel>().All(m => m.IsAnchored));
             Assert.IsFalse(survivors.Any(m => m.IsAnchored));
             Assert.AreEqual(3, _service.Members.Count);
+        }
+
+        [Test]
+        public void AnUntouchedFormation_InFullNeed_CallsOnTheEasedChance()
+        {
+            var need = Substitute.For<IPlayerNeed>();
+            need.Need.Returns(1f);
+            var assist = Substitute.For<IAssistSettings>();
+            assist.ThreatEaseAtFullNeed.Returns(0.5f);
+            var balloonsConfig = Substitute.For<IBalloonsConfiguration>();
+            balloonsConfig.UnbreakableFormation.Returns(_settings);
+            _service = new UnbreakableFormationService(_grid, balloonsConfig, new ThreatEase(need, assist))
+            {
+                Random01 = () => 0.3f,
+            };
+            _settings.ReinforcementChance.Returns(0.5f);
+            AddUnbreakables(new Vector2Int(0, 0), new Vector2Int(6, 4), new Vector2Int(3, 5));
+
+            Arrange();
+            Arrange();
+
+            Assert.AreEqual(0, _service.TakeReinforcementCalls(), "0.5 eased to 0.25 at the last heart: 0.3 misses it");
         }
 
         [Test]

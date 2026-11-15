@@ -40,8 +40,10 @@ namespace BalloonParty.Configuration.Level
         float ExtraItemChance { get; }
 
         /// <param name="waveQuotas">Remaining per-wave allowance by pool key; entries at 0 are excluded, absent keys are unlimited.</param>
+        /// <param name="need">The player's need, 0 to 1: favours the balloons that help (<see cref="BalloonPrefabEntry.NeedWeightBoost" />).</param>
         BalloonPrefabEntry PickBalloonEntry(
-            IReadOnlyDictionary<string, int> activeCounts, IReadOnlyDictionary<string, int> waveQuotas = null);
+            IReadOnlyDictionary<string, int> activeCounts, IReadOnlyDictionary<string, int> waveQuotas = null,
+            float need = 0f);
 
         /// <summary>Weighted pick restricted to the level's simple-family entries (plain/silver/gold) — used for extra pop-spawns.</summary>
         BalloonPrefabEntry PickSimpleBalloonEntry(IReadOnlyDictionary<string, int> activeCounts);
@@ -59,7 +61,8 @@ namespace BalloonParty.Configuration.Level
 
         /// <summary>Rolls each curve-bearing type's spawn allowance for the upcoming wave into <paramref name="quotas" /> (absent key = unlimited).</summary>
         void RollWaveQuotas(Dictionary<string, int> quotas, bool isInitial);
-        ItemSettings PickItemEntry(IReadOnlyDictionary<string, int> activeCounts);
+        /// <param name="need">The player's need, 0 to 1: favours the items that help most (<see cref="ItemSettings.NeedWeightBoost" />).</param>
+        ItemSettings PickItemEntry(IReadOnlyDictionary<string, int> activeCounts, float need = 0f);
         bool TryGetGridActorGate(GridActorType type, out ResolvedGridActorGate gate);
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Configuration.Level;
+using BalloonParty.Game.Danger;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Score.Behaviours;
 using BalloonParty.Projectile;
@@ -31,6 +32,8 @@ namespace BalloonParty.Tests.Balloon
         private ISubscriber<ProjectileFiredMessage> _firedSubscriber;
         private IScoreShapeCover _shapeCover;
         private IProjectileFlightConfig _flightConfig;
+        private ReactiveProperty<float> _danger;
+        private IDangerLevel _dangerLevel;
         private SpawnClock _clock;
         private NavigationState _previousNavigation;
         private int _lines;
@@ -74,6 +77,9 @@ namespace BalloonParty.Tests.Balloon
 
             // A 4 x 8 play area (32 units squared), with no score shapes in the air.
             _shapeCover = Substitute.For<IScoreShapeCover>();
+            _danger = new ReactiveProperty<float>(0f);
+            _dangerLevel = Substitute.For<IDangerLevel>();
+            _dangerLevel.Level.Returns(_danger);
             _flightConfig = Substitute.For<IProjectileFlightConfig>();
             _flightConfig.LimitsClockwise.Returns(new Vector4(4f, 2f, -4f, -2f));
 
@@ -737,6 +743,64 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void Breather_DangerAtItsLevel_StartsOne()
+        {
+            UseDangerBreather();
+            Run(1f);
+
+            _danger.Value = 0.5f;
+            Run(3f);
+
+            Assert.Greater(_clock.BreatherSecondsLeft, 0f);
+            Assert.AreEqual(0, _lines, "without the breather the 4s grace is over by now");
+        }
+
+        [Test]
+        public void Breather_DangerShortOfItsLevel_StartsNone()
+        {
+            UseDangerBreather();
+            Run(1f);
+
+            _danger.Value = 0.49f;
+            Run(3.1f);
+
+            Assert.AreEqual(0f, _clock.BreatherSecondsLeft);
+            Assert.AreEqual(1, _lines);
+        }
+
+        [Test]
+        public void Breather_ZeroDangerLevel_NeverStartsOne()
+        {
+            BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, breatherSeconds: 4f, breatherPace: 0f));
+            Run(1f);
+
+            _danger.Value = 1f;
+            Run(3.1f);
+
+            Assert.AreEqual(0f, _clock.BreatherSecondsLeft);
+            Assert.AreEqual(1, _lines);
+        }
+
+        [Test]
+        public void Breather_Danger_WaitsOutTheCooldown()
+        {
+            BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, breatherSeconds: 4f, breatherPace: 0f,
+                breatherCooldownSeconds: 5f, breatherDanger: 0.5f));
+            _danger.Value = 1f;
+            Run(0.1f);
+            Assert.Greater(_clock.BreatherSecondsLeft, 0f);
+
+            Run(4f);
+            Assert.AreEqual(0f, _clock.BreatherSecondsLeft, "the breather ran out");
+
+            Run(4.8f);
+            Assert.AreEqual(0f, _clock.BreatherSecondsLeft, "a board left in danger waits out the cooldown");
+
+            Run(0.3f);
+            Assert.Greater(_clock.BreatherSecondsLeft, 0f, "and earns the next once it is over");
+        }
+
+        [Test]
         public void Breather_ScoreShapesShortOfTheShare_StartNone()
         {
             UseShapeBreather();
@@ -813,7 +877,7 @@ namespace BalloonParty.Tests.Balloon
             var pacing = Substitute.For<ILevelPacingConfiguration>();
             pacing.SpawnClock.Returns(settings);
             _clock = new SpawnClock(pacing, _progress, _pauseService, _registry, _boardFill, _publisher,
-                _firedSubscriber, levelParams ?? UsualLevel(), _shapeCover, _flightConfig);
+                _firedSubscriber, levelParams ?? UsualLevel(), _shapeCover, _flightConfig, _dangerLevel);
             _clock.Start();
         }
 
@@ -852,6 +916,13 @@ namespace BalloonParty.Tests.Balloon
         }
 
         // As UseBreather, with a 5s cooldown after each breather.
+        // Only danger starts a breather here: 0.5 or more starts a 4s one at a standstill.
+        private void UseDangerBreather()
+        {
+            BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, breatherSeconds: 4f, breatherPace: 0f,
+                breatherDanger: 0.5f));
+        }
+
         private void UseBreatherWithCooldown()
         {
             BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, breatherClear: 0.5f, breatherClearWindow: 1f,

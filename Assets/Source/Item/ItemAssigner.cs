@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
+using BalloonParty.Game.Assist;
 using BalloonParty.Game.Level;
+using BalloonParty.Game.Run;
 using BalloonParty.Game.Upgrades;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
@@ -23,7 +25,7 @@ using Random = UnityEngine.Random;
 
 namespace BalloonParty.Item
 {
-    internal class ItemAssigner : IStartable, IDisposable
+    internal class ItemAssigner : IStartable, IDisposable, IRunResettable
     {
         private readonly ISubscriber<ItemCheckMessage> _checkSubscriber;
         private readonly IActiveLevelParameters _levelParams;
@@ -35,6 +37,8 @@ namespace BalloonParty.Item
         private readonly IWeaponStats _weapon;
         private readonly ThrowerOriginProvider _origin;
         private readonly IDeflectorField _deflectorField;
+        private readonly IPlayerNeed _need;
+        private readonly PityRoll _itemPity;
 
         private readonly List<IHasWriteableItemSlot> _eligibleBuffer = new();
         private readonly Dictionary<string, int> _activeCountsBuffer = new();
@@ -50,6 +54,8 @@ namespace BalloonParty.Item
 
         private IDisposable _subscription;
 
+        public int ResetOrder => RunResetOrder.Counters;
+
         [Inject]
         internal ItemAssigner(
             IActiveLevelParameters levelParams,
@@ -61,7 +67,9 @@ namespace BalloonParty.Item
             IWeaponStats weapon,
             ThrowerOriginProvider origin,
             IDeflectorField deflectorField,
-            ISubscriber<ItemCheckMessage> checkSubscriber)
+            ISubscriber<ItemCheckMessage> checkSubscriber,
+            IPlayerNeed need,
+            IAssistSettings assist)
         {
             _levelParams = levelParams;
             _grid = grid;
@@ -73,6 +81,8 @@ namespace BalloonParty.Item
             _origin = origin;
             _deflectorField = deflectorField;
             _checkSubscriber = checkSubscriber;
+            _need = need;
+            _itemPity = new PityRoll(assist.ItemPity);
         }
 
         public void Start()
@@ -83,6 +93,11 @@ namespace BalloonParty.Item
         public void Dispose()
         {
             _subscription?.Dispose();
+        }
+
+        public void ResetRun(int generation)
+        {
+            _itemPity.Clear();
         }
 
         private void OnItemCheck(ItemCheckMessage msg)
@@ -107,8 +122,38 @@ namespace BalloonParty.Item
                 return;
             }
 
-            var count = SampleCount(weights, Random.value);
+            var count = msg.IsInitialSpawn
+                ? SampleCount(weights, Random.value)
+                : RollWaveCount(weights, Random.value, Random.value);
             AssignItems(msg.NewBalloons, count, msg.IsInitialSpawn);
+        }
+
+        // The curve's draw stands, but a wave it gives no item, while the player is in need, adds to the pity,
+        // which raises the next wave's chance of any: a miss is lifted to one item by the share of the raised
+        // chance the curve's own chance leaves out, so any item at all comes at the raised chance. A curve that
+        // never gives one (a level without items) builds no pity.
+        // Internal for tests: the draws come from Random.value.
+        internal int RollWaveCount(AnimationCurve weights, float draw, float liftDraw)
+        {
+            var count = SampleCount(weights, draw);
+            var baseChance = weights.ChanceOfAnyCount();
+            if (baseChance <= 0f)
+            {
+                return count;
+            }
+
+            var need = _need.Need;
+            if (count == 0 && baseChance < 1f)
+            {
+                var lift = _itemPity.ChanceFor(baseChance, need) - baseChance;
+                if (liftDraw * (1f - baseChance) < lift)
+                {
+                    count = 1;
+                }
+            }
+
+            _itemPity.Record(count > 0, need);
+            return count;
         }
 
         // Tracks running per-type counts so caps hold within the batch, not just the pre-existing board.
@@ -194,7 +239,7 @@ namespace BalloonParty.Item
         {
             for (var n = 0; n < grants; n++)
             {
-                var picked = _levelParams.Current.PickItemEntry(_activeCountsBuffer);
+                var picked = _levelParams.Current.PickItemEntry(_activeCountsBuffer, _need.Need);
                 if (picked == null || picked.Type == ItemType.None)
                 {
                     // Every candidate is at its cap.

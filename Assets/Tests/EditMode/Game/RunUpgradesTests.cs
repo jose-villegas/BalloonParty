@@ -644,6 +644,44 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void BonusDealWeight_RaisesTheDealWeightByTheRetryBoost()
+        {
+            _shield.RetryDealBoost.Returns(1f);
+
+            Assert.AreEqual(2f, Upgrades.BonusDealWeight(_shield));
+            Assert.AreEqual(1f, Upgrades.BonusDealWeight(_reload), "no boost: its deal weight");
+        }
+
+        [Test]
+        public void BonusRetry_FavoursABoostedCard()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.AddRange(new[] { _shield, _reload });
+            _shield.RetryDealBoost.Returns(3f);
+
+            var shields = 0;
+            for (var level = 2; level < 202; level++)
+            {
+                _rig.Retry(level, withBonusCard: true);
+                shields += Upgrades.BonusCard == _shield ? 1 : 0;
+            }
+
+            Assert.Greater(shields, 130, "4 to 1 against the reload: about 160 of 200");
+        }
+
+        [Test]
+        public void BonusRetry_WithABoost_StillDealsTheSameCardForTheSameSeed()
+        {
+            _shield.RetryDealBoost.Returns(3f);
+
+            _rig.Retry(7, withBonusCard: true);
+            var first = Upgrades.BonusCard;
+            _rig.Retry(7, withBonusCard: true);
+
+            Assert.AreSame(first, Upgrades.BonusCard);
+        }
+
+        [Test]
         public void Hold_RaiseLimits_LetsACardAtItsLimitBeDealtAndHeldAgain()
         {
             var raise = UpgradeRig.Card(UpgradeKind.RaiseLimits, 1f, maxStacks: 2);

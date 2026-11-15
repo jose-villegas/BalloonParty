@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration.Balloons;
+using BalloonParty.Game.Assist;
 using BalloonParty.Game.Run;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
@@ -39,6 +40,7 @@ namespace BalloonParty.Balloon.Formation
 
         private readonly SlotGrid _grid;
         private readonly IUnbreakableFormationSettings _settings;
+        private readonly ThreatEase _threatEase;
         private readonly FormationPlanner _planner = new();
         private readonly ShotWall _wall = new();
         private readonly List<IWriteableFormationMember> _candidates = new();
@@ -69,10 +71,11 @@ namespace BalloonParty.Balloon.Formation
         internal Func<float> Random01 { get; set; } = () => Random.value;
 
         [Inject]
-        internal UnbreakableFormationService(SlotGrid grid, IBalloonsConfiguration balloonsConfig)
+        internal UnbreakableFormationService(SlotGrid grid, IBalloonsConfiguration balloonsConfig, ThreatEase threatEase)
         {
             _grid = grid;
             _settings = balloonsConfig.UnbreakableFormation;
+            _threatEase = threatEase;
             _pickIndex = PickIndex;
         }
 
@@ -271,7 +274,8 @@ namespace BalloonParty.Balloon.Formation
 
         private void RollReinforcements()
         {
-            var chance = _settings.ReinforcementChance;
+            // Eased in need, so a player down to the last heart faces fewer calls.
+            var chance = _threatEase.Eased(_settings.ReinforcementChance);
             if (chance <= 0f)
             {
                 return;

@@ -10,13 +10,15 @@ namespace BalloonParty.Shared.Extensions
     {
         private static readonly List<IWeightedEntry> CandidateBuffer = new();
 
-        /// <summary>Weighted-random pick, excluding entries at their <see cref="IWeightedEntry.MaxCount"/> limit or with an exhausted <paramref name="waveQuotas"/> allowance (absent key = unlimited); returns <c>default</c> if none remain.</summary>
+        /// <summary>Weighted-random pick, excluding entries at their <see cref="IWeightedEntry.MaxCount"/> limit or with an exhausted <paramref name="waveQuotas"/> allowance (absent key = unlimited); returns <c>default</c> if none remain. The player's <paramref name="need"/> (0 to 1) raises each entry's weight by its <see cref="IWeightedEntry.NeedBoost"/>.</summary>
         internal static T PickRandom<T>(
             this IReadOnlyList<T> entries,
             IReadOnlyDictionary<string, int> activeCounts,
-            IReadOnlyDictionary<string, int> waveQuotas = null)
+            IReadOnlyDictionary<string, int> waveQuotas = null,
+            float need = 0f)
             where T : class, IWeightedEntry
         {
+            need = Mathf.Clamp01(need);
             CandidateBuffer.Clear();
             var totalWeight = 0f;
 
@@ -34,7 +36,7 @@ namespace BalloonParty.Shared.Extensions
                 }
 
                 CandidateBuffer.Add(e);
-                totalWeight += e.Weight;
+                totalWeight += WeightOf(e, need);
             }
 
             if (CandidateBuffer.Count == 0)
@@ -47,7 +49,7 @@ namespace BalloonParty.Shared.Extensions
 
             foreach (var candidate in CandidateBuffer)
             {
-                cumulative += candidate.Weight;
+                cumulative += WeightOf(candidate, need);
                 if (roll < cumulative)
                 {
                     return (T)candidate;
@@ -87,6 +89,11 @@ namespace BalloonParty.Shared.Extensions
             }
 
             return items.Count - 1;
+        }
+
+        private static float WeightOf(IWeightedEntry entry, float need)
+        {
+            return entry.Weight * (1f + Mathf.Max(0f, entry.NeedBoost) * need);
         }
     }
 }

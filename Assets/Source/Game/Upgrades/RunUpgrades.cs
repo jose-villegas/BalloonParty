@@ -60,6 +60,7 @@ namespace BalloonParty.Game.Upgrades
         private readonly List<Action> _freeCardsAfterHand = new();
         private readonly ReactiveProperty<int> _shieldsPerBall;
         private readonly Func<IUpgradeCardSettings, float> _dealWeight;
+        private readonly Func<IUpgradeCardSettings, float> _bonusDealWeight;
 
         private IDisposable _phaseSubscription;
         private IUpgradeCardSettings _staged;
@@ -120,6 +121,7 @@ namespace BalloonParty.Game.Upgrades
             _cardHeldPublisher = cardHeldPublisher;
             _shieldsPerBall = new ReactiveProperty<int>(StartingShields);
             _dealWeight = DealWeight;
+            _bonusDealWeight = BonusDealWeight;
         }
 
         public void Start()
@@ -158,6 +160,15 @@ namespace BalloonParty.Game.Upgrades
         internal float DealWeight(IUpgradeCardSettings card)
         {
             return card.Kind == UpgradeKind.RaiseLimits ? card.Weight * CardsAtTheirLimit() : card.Weight;
+        }
+
+        /// <summary>
+        ///     How likely <paramref name="card" /> is as a bought retry's bonus card: its <see cref="DealWeight" />,
+        ///     raised by its <see cref="IUpgradeCardSettings.RetryDealBoost" />.
+        /// </summary>
+        internal float BonusDealWeight(IUpgradeCardSettings card)
+        {
+            return DealWeight(card) * (1f + Mathf.Max(0f, card.RetryDealBoost));
         }
 
         // A shot still in flight can win one after the level's last claim. While the hand is on screen, a card
@@ -337,7 +348,8 @@ namespace BalloonParty.Game.Upgrades
             return card;
         }
 
-        // Seeded by the retry count too, so each bought retry of the same level can deal a different card.
+        // Seeded by the retry count too, so each bought retry of the same level can deal a different card. The
+        // deal favours the cards that keep the player alive (BonusDealWeight); the seed alone still decides it.
         // RetriesUsed is read before RetryTracker counts this retry (it resets later), so the run's first
         // retry seeds with 0.
         // A card at its limit stays in the bonus deal: landing on one breaks it on screen (BonusCardDealtMessage.
@@ -351,7 +363,7 @@ namespace BalloonParty.Game.Upgrades
             }
 
             var rng = new System.Random(DealSeed(level, BonusSeedSalt, _retryState.RetriesUsed));
-            var pick = _deck[_deck.PickWeightedIndex(_dealWeight, (float)rng.NextDouble())];
+            var pick = _deck[_deck.PickWeightedIndex(_bonusDealWeight, (float)rng.NextDouble())];
             if (StacksOf(pick) >= LimitOf(pick))
             {
                 // Only broken on screen when a card with room can take its place.
@@ -363,7 +375,7 @@ namespace BalloonParty.Game.Upgrades
 
                 Log.Info("Upgrades", $"Bonus card {pick.Title} is at its limit; dealing again");
                 _bonusDealtPublisher.Publish(new BonusCardDealtMessage(pick, StacksOf(pick), capped: true));
-                pick = _deck[_deck.PickWeightedIndex(_dealWeight, (float)rng.NextDouble())];
+                pick = _deck[_deck.PickWeightedIndex(_bonusDealWeight, (float)rng.NextDouble())];
             }
 
             _bonus = pick;

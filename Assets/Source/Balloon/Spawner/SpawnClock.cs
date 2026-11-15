@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration.Level;
+using BalloonParty.Game.Danger;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Game.Score.Behaviours;
@@ -36,6 +37,7 @@ namespace BalloonParty.Balloon.Spawner
     ///     <see cref="ISpawnClockSettings.BreatherPace" /> and eases back to its full pace, so the release
     ///     after a great shot lasts a moment before the tension builds again. A cooldown after each
     ///     (<see cref="ISpawnClockSettings.BreatherCooldownSeconds" />) keeps releases rarer than the clears.
+    ///     A board about to cost one of the last hearts earns one too (<see cref="ISpawnClockSettings.BreatherDanger" />).
     /// </summary>
     internal sealed class SpawnClock : IStartable, ITickable, IRunResettable, IDisposable, ISpawnClock
     {
@@ -49,6 +51,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly ISubscriber<ProjectileFiredMessage> _firedSubscriber;
         private readonly IScoreShapeCover _shapeCover;
         private readonly IProjectileFlightConfig _flightConfig;
+        private readonly IDangerLevel _danger;
         private readonly CompositeDisposable _subscriptions = new();
 
         // Each in-flight ball's flight time while the clock runs; dropped when the ball retires.
@@ -81,8 +84,10 @@ namespace BalloonParty.Balloon.Spawner
             ISubscriber<ProjectileFiredMessage> firedSubscriber,
             IActiveLevelParameters levelParams,
             IScoreShapeCover shapeCover,
-            IProjectileFlightConfig flightConfig)
+            IProjectileFlightConfig flightConfig,
+            IDangerLevel danger)
         {
+            _danger = danger;
             _levelParams = levelParams;
             _shapeCover = shapeCover;
             _flightConfig = flightConfig;
@@ -202,9 +207,9 @@ namespace BalloonParty.Balloon.Spawner
         }
 
         // Counts down a running breather and the cooldown after it, or starts one when the board has lost
-        // BreatherClear of its open slots within about the window, or when score shapes cover BreatherShapeCover
-        // of the play area. The peak follows the board through both, so no clear made then can start a breather
-        // once they end.
+        // BreatherClear of its open slots within about the window, when score shapes cover BreatherShapeCover
+        // of the play area, or when the danger reaches BreatherDanger. The peak follows the board through the
+        // breather and the cooldown, so no clear made then can start one once they end.
         private void TrackClears(float deltaTime)
         {
             var occupancy = _boardFill.Occupancy;
@@ -227,7 +232,7 @@ namespace BalloonParty.Balloon.Spawner
                 return;
             }
 
-            if (ShapesCoverTheBoard())
+            if (ShapesCoverTheBoard() || InDanger())
             {
                 StartBreather(occupancy);
                 return;
@@ -267,6 +272,14 @@ namespace BalloonParty.Balloon.Spawner
             var limits = _flightConfig.LimitsClockwise;
             var playArea = (limits.y - limits.w) * (limits.x - limits.z);
             return playArea > 0f && _shapeCover.CoveredArea >= share * playArea;
+        }
+
+        // A board about to cost one of the last hearts gets the release a big clear earns, so the player can dig
+        // out before the line lands. The cooldown still holds, so a board left full doesn't stay slowed.
+        private bool InDanger()
+        {
+            var level = _settings.BreatherDanger;
+            return level > 0f && _danger != null && _danger.Level.Value >= level;
         }
 
         // 0 as a breather starts, easing to 1 as it ends; 1 outside one.

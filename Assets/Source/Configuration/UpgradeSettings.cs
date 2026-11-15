@@ -26,12 +26,18 @@ namespace BalloonParty.Configuration
         [Tooltip("Relative odds of this card being dealt. 0 keeps it out of the deck.")]
         [SerializeField] [Min(0f)] private float _weight = 1f;
 
+        [Tooltip("Extra odds of this card being the bonus card a bought retry deals: its weight times (1 + this), " +
+            "so 1 = twice as likely. A retry follows a lost run, so the cards that keep the player alive should " +
+            "come likelier. 0 = no extra.")]
+        [SerializeField] [Min(0f)] private float _retryDealBoost;
+
         public UpgradeKind Kind => _kind;
         public string Title => _title;
         public string Description => _description;
         public float Amount => _amount;
         public int MaxStacks => _maxStacks;
         public float Weight => _weight;
+        public float RetryDealBoost => _retryDealBoost;
 
         // Unity's serializer and the inspector's "add element" construct through this one.
         internal UpgradeCardSettings()
@@ -39,8 +45,9 @@ namespace BalloonParty.Configuration
         }
 
         internal UpgradeCardSettings(UpgradeKind kind, string title, string description, float amount,
-            int maxStacks, float weight = 1f)
+            int maxStacks, float weight = 1f, float retryDealBoost = 0f)
         {
+            _retryDealBoost = retryDealBoost;
             _kind = kind;
             _title = title;
             _description = description;
@@ -71,10 +78,10 @@ namespace BalloonParty.Configuration
         {
             new(UpgradeKind.BallCap, "Extra Pen", "+1 pen in flight", 1f, 3),
             new(UpgradeKind.FasterReload, "Quick Hands", "Reload 15% faster", 0.15f, 4),
-            new(UpgradeKind.Shield, "Thick Skin", "+1 shield on every pen", 1f, 3),
+            new(UpgradeKind.Shield, "Thick Skin", "+1 shield on every pen", 1f, 3, retryDealBoost: 1f),
             new(UpgradeKind.ItemOdds, "Lucky Find", "More items on the board", 0.1f, 4),
             new(UpgradeKind.RaiseLimits, "Raise the Bar", "+1 to every card's limit", 1f, 2, 0.5f),
-            new(UpgradeKind.SnipeChance, "Sharpshooter", "Pens load as Snipes in a pinch", 0.01f, 3)
+            new(UpgradeKind.SnipeChance, "Sharpshooter", "Increased Snipe chance", 0.01f, 3)
         };
 
         [Tooltip("Seconds of game time after a pen loads as a Snipe (the Sharpshooter card) before another can, so " +
