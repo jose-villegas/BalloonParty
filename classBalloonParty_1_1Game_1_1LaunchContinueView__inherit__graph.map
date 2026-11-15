@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.LaunchContinueView" name="BalloonParty.Game.LaunchContinueView">
+<area shape="rect" id="Node000001" title="The launch screen&#39;s Continue button, beside Play: shown only while a run is saved,..." alt="" coords="5,81,200,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="41,5,164,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,47,105,81,100,79,101,51"/>
+</map>

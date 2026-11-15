@@ -43,7 +43,7 @@ var searchData=
   ['tipspeed_40',['TipSpeed',['../structBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceStrokeTiming.html#a3dff8729af87dd269821dd0c31a4aaa7',1,'BalloonParty::Item::Snipe::SnipeLanceStrokeTiming']]],
   ['tipspritepath_41',['TipSpritePath',['../classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html#a7ba416972f4235916b269d78b3f24fb6',1,'BalloonParty::Editor::HeadsUpBuilder']]],
   ['tiptaper_42',['TipTaper',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushBranchBakeSettings.html#abdb99924ade264a8cc4613225113287b',1,'BalloonParty::Editor::Bush::BushBranchBakeSettings']]],
-  ['title_43',['Title',['../classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html#a0c18829ec0b861ee86fe9b905e64f4c8',1,'BalloonParty::Editor::GameOverLayoutBuilder::Kit']]],
+  ['title_43',['Title',['../classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html#a0c18829ec0b861ee86fe9b905e64f4c8',1,'BalloonParty.Editor.GameOverLayoutBuilder.Kit.Title'],['../classBalloonParty_1_1Game_1_1Run_1_1HeldCardRecord.html#aa3d27877c9691d75777628742b69dccb',1,'BalloonParty.Game.Run.HeldCardRecord.Title']]],
   ['titlebgcolor_44',['TitleBgColor',['../classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#aed7323c2027b5c1547df8f5563ebfb6c',1,'BalloonParty::Editor::LevelPacingWindow']]],
   ['titleflight_45',['TitleFlight',['../classBalloonParty_1_1Editor_1_1CardRevealBuilder.html#a490b95a9cd3ece302e6a9ea5944a10e7',1,'BalloonParty::Editor::CardRevealBuilder']]],
   ['titlefont_46',['TitleFont',['../classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html#a31e6c844c5ce5f36ec54155ba06ecb14',1,'BalloonParty::Editor::GameOverLayoutBuilder::Kit']]],

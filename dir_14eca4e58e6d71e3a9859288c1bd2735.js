@@ -26,6 +26,7 @@ var dir_14eca4e58e6d71e3a9859288c1bd2735 =
     [ "GradientTextureDrawer.cs", "GradientTextureDrawer_8cs.html", "GradientTextureDrawer_8cs" ],
     [ "HeadsUpBuilder.cs", "HeadsUpBuilder_8cs.html", "HeadsUpBuilder_8cs" ],
     [ "LaserViewEditor.cs", "LaserViewEditor_8cs.html", "LaserViewEditor_8cs" ],
+    [ "LaunchContinueButtonBuilder.cs", "LaunchContinueButtonBuilder_8cs.html", "LaunchContinueButtonBuilder_8cs" ],
     [ "LevelGenerationPreview.cs", "LevelGenerationPreview_8cs.html", "LevelGenerationPreview_8cs" ],
     [ "LevelPacingCurvePanel.cs", "LevelPacingCurvePanel_8cs.html", "LevelPacingCurvePanel_8cs" ],
     [ "LevelPacingMigrationTool.cs", "LevelPacingMigrationTool_8cs.html", "LevelPacingMigrationTool_8cs" ],

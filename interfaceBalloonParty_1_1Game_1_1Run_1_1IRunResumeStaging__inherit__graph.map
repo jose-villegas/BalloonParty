@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.Run.IRunResumeStaging" name="BalloonParty.Game.Run.IRunResumeStaging">
+<area shape="rect" id="Node000001" title="Stages a saved run for the next reset." alt="" coords="8,5,215,50"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html" title="Tracks per&#45;run retry state." alt="" coords="5,98,218,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,64,114,99,109,97,110,68"/>
+</map>

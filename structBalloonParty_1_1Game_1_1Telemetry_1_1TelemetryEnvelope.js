@@ -1,6 +1,6 @@
 var structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope =
 [
-    [ "TelemetryEnvelope", "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a21b6050ec01fa5fe62ece61dbff859c1", null ],
+    [ "TelemetryEnvelope", "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#ad390ab03785de096197567f4119b41b9", null ],
     [ "AttemptId", "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a9ba0b33aecb407b433ef431ac07b18fe", null ],
     [ "AttemptIndex", "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#ade741fbbb50f02178096126d76c5c6e6", null ],
     [ "CheatActive", "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a5aa5b719432c842dc6934781208a0bb7", null ],
@@ -11,6 +11,7 @@ var structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope =
     [ "LevelAttemptOrdinal", "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a252bb5cd31fd60b76221255663f844b5", null ],
     [ "LevelIndex", "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#ac448d8c158f936af3fae38e3b2aafe02", null ],
     [ "Metrics", "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a15c6ea9790c2c773f19c43971c420af4", null ],
+    [ "Resumed", "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#af4bab87a449bae01ddd45c5b1849f447", null ],
     [ "RunId", "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a9b0b2ba81bd44a622b146e452430bc76", null ],
     [ "SchemaVersion", "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a070fd17235a6007a2e8df56bb618b4bd", null ],
     [ "SessionId", "structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEnvelope.html#a431b38ab8a809d98adb6ef4390f5aa66", null ],

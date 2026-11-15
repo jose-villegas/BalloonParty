@@ -23,10 +23,11 @@ var searchData=
   ['hearttrailcontroller_20',['HeartTrailController',['../classBalloonParty_1_1UI_1_1Health_1_1HeartTrailController.html',1,'BalloonParty::UI::Health']]],
   ['hearttrailfocus_21',['HeartTrailFocus',['../classBalloonParty_1_1Game_1_1Cinematics_1_1HeartTrailFocus.html',1,'BalloonParty::Game::Cinematics']]],
   ['hearttrailtracker_22',['HeartTrailTracker',['../classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html',1,'BalloonParty::Game::Health']]],
-  ['hexcoordinates_23',['HexCoordinates',['../classBalloonParty_1_1Slots_1_1Grid_1_1HexCoordinates.html',1,'BalloonParty::Slots::Grid']]],
-  ['highlighttrail_24',['HighlightTrail',['../classBalloonParty_1_1Item_1_1Preview_1_1HighlightTrail.html',1,'BalloonParty::Item::Preview']]],
-  ['hitpipeline_25',['HitPipeline',['../classBalloonParty_1_1Game_1_1HitPipeline.html',1,'BalloonParty::Game']]],
-  ['hitvfxoverride_26',['HitVfxOverride',['../classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html',1,'BalloonParty::Configuration::Balloons']]],
-  ['hitvfxoverridedrawer_27',['HitVfxOverrideDrawer',['../classBalloonParty_1_1Configuration_1_1Editor_1_1HitVfxOverrideDrawer.html',1,'BalloonParty::Configuration::Editor']]],
-  ['hudcamera_28',['HudCamera',['../classBalloonParty_1_1Display_1_1HudCamera.html',1,'BalloonParty::Display']]]
+  ['heldcardrecord_23',['HeldCardRecord',['../classBalloonParty_1_1Game_1_1Run_1_1HeldCardRecord.html',1,'BalloonParty::Game::Run']]],
+  ['hexcoordinates_24',['HexCoordinates',['../classBalloonParty_1_1Slots_1_1Grid_1_1HexCoordinates.html',1,'BalloonParty::Slots::Grid']]],
+  ['highlighttrail_25',['HighlightTrail',['../classBalloonParty_1_1Item_1_1Preview_1_1HighlightTrail.html',1,'BalloonParty::Item::Preview']]],
+  ['hitpipeline_26',['HitPipeline',['../classBalloonParty_1_1Game_1_1HitPipeline.html',1,'BalloonParty::Game']]],
+  ['hitvfxoverride_27',['HitVfxOverride',['../classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html',1,'BalloonParty::Configuration::Balloons']]],
+  ['hitvfxoverridedrawer_28',['HitVfxOverrideDrawer',['../classBalloonParty_1_1Configuration_1_1Editor_1_1HitVfxOverrideDrawer.html',1,'BalloonParty::Configuration::Editor']]],
+  ['hudcamera_29',['HudCamera',['../classBalloonParty_1_1Display_1_1HudCamera.html',1,'BalloonParty::Display']]]
 ];

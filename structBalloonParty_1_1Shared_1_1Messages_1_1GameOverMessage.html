@@ -117,8 +117,8 @@ $(function(){initNavTree('structBalloonParty_1_1Shared_1_1Messages_1_1GameOverMe
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5ba7867532d4a3d61b082b9fb1ad7418" id="r_a5ba7867532d4a3d61b082b9fb1ad7418"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5ba7867532d4a3d61b082b9fb1ad7418">GameOverMessage</a> (int finalLevel, int finalScore)</td></tr>
-<tr class="separator:a5ba7867532d4a3d61b082b9fb1ad7418"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a865c527982a4225378ba9022fb937a0a" id="r_a865c527982a4225378ba9022fb937a0a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a865c527982a4225378ba9022fb937a0a">GameOverMessage</a> (int finalLevel, int finalScore, bool restored=false)</td></tr>
+<tr class="separator:a865c527982a4225378ba9022fb937a0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -126,10 +126,13 @@ Public Attributes</h2></td></tr>
 <tr class="separator:aff185e5dd64780b996b19234d87fc3e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab639a535a6db4a1191ed9ae4908a6fcf" id="r_ab639a535a6db4a1191ed9ae4908a6fcf"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab639a535a6db4a1191ed9ae4908a6fcf">FinalScore</a></td></tr>
 <tr class="separator:ab639a535a6db4a1191ed9ae4908a6fcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3228ac79361c6409ca062052e6ab6dd2" id="r_a3228ac79361c6409ca062052e6ab6dd2"><td class="memItemLeft" align="right" valign="top">readonly bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3228ac79361c6409ca062052e6ab6dd2">Restored</a></td></tr>
+<tr class="memdesc:a3228ac79361c6409ca062052e6ab6dd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">The loss is one from a saved run, brought back on launch so the game-over screen and its offer return: it was already recorded, scored and sounded when it happened, so its beat isn't played again.  <br /></td></tr>
+<tr class="separator:a3228ac79361c6409ca062052e6ab6dd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a5ba7867532d4a3d61b082b9fb1ad7418" name="a5ba7867532d4a3d61b082b9fb1ad7418"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5ba7867532d4a3d61b082b9fb1ad7418">&#9670;&#160;</a></span>GameOverMessage()</h2>
+<a id="a865c527982a4225378ba9022fb937a0a" name="a865c527982a4225378ba9022fb937a0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a865c527982a4225378ba9022fb937a0a">&#9670;&#160;</a></span>GameOverMessage()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -142,7 +145,12 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>finalScore</em></span>&#160;)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>finalScore</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>restored</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -175,6 +183,22 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3228ac79361c6409ca062052e6ab6dd2" name="a3228ac79361c6409ca062052e6ab6dd2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3228ac79361c6409ca062052e6ab6dd2">&#9670;&#160;</a></span>Restored</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly bool BalloonParty.Shared.Messages.GameOverMessage.Restored</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The loss is one from a saved run, brought back on launch so the game-over screen and its offer return: it was already recorded, scored and sounded when it happened, so its beat isn't played again. </p>
 
 </div>
 </div>

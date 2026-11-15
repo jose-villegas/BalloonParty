@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.Run.PlayerPrefsRunSave" name="BalloonParty.Game.Run.PlayerPrefsRunSave">
+<area shape="rect" id="Node000001" title="IRunSave as one JSON string in PlayerPrefs, beside the best&#45;run record." alt="" coords="15,81,234,126"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSave.html" title="Where the interrupted run is kept between launches: one save at most, overwritten at each level bound..." alt="" coords="5,5,244,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,47,127,81,122,79,123,51"/>
+</map>

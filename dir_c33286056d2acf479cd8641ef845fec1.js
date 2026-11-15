@@ -15,6 +15,8 @@ var dir_c33286056d2acf479cd8641ef845fec1 =
     [ "GameLifetimeScope.cs", "GameLifetimeScope_8cs.html", "GameLifetimeScope_8cs" ],
     [ "GameScopeRegistration.cs", "GameScopeRegistration_8cs.html", "GameScopeRegistration_8cs" ],
     [ "HitPipeline.cs", "HitPipeline_8cs.html", "HitPipeline_8cs" ],
+    [ "LaunchContinueController.cs", "LaunchContinueController_8cs.html", "LaunchContinueController_8cs" ],
+    [ "LaunchContinueView.cs", "LaunchContinueView_8cs.html", "LaunchContinueView_8cs" ],
     [ "LaunchDisturbanceStamp.cs", "LaunchDisturbanceStamp_8cs.html", "LaunchDisturbanceStamp_8cs" ],
     [ "LaunchLifetimeScope.cs", "LaunchLifetimeScope_8cs.html", "LaunchLifetimeScope_8cs" ],
     [ "LaunchPlayTrigger.cs", "LaunchPlayTrigger_8cs.html", "LaunchPlayTrigger_8cs" ]

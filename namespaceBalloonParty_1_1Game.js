@@ -15,6 +15,8 @@ var namespaceBalloonParty_1_1Game =
     [ "GameLifetimeScope", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html", "classBalloonParty_1_1Game_1_1GameLifetimeScope" ],
     [ "GameScopeRegistration", "classBalloonParty_1_1Game_1_1GameScopeRegistration.html", "classBalloonParty_1_1Game_1_1GameScopeRegistration" ],
     [ "HitPipeline", "classBalloonParty_1_1Game_1_1HitPipeline.html", "classBalloonParty_1_1Game_1_1HitPipeline" ],
+    [ "LaunchContinueController", "classBalloonParty_1_1Game_1_1LaunchContinueController.html", "classBalloonParty_1_1Game_1_1LaunchContinueController" ],
+    [ "LaunchContinueView", "classBalloonParty_1_1Game_1_1LaunchContinueView.html", "classBalloonParty_1_1Game_1_1LaunchContinueView" ],
     [ "LaunchDisturbanceStamp", "classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html", "classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp" ],
     [ "LaunchLifetimeScope", "classBalloonParty_1_1Game_1_1LaunchLifetimeScope.html", "classBalloonParty_1_1Game_1_1LaunchLifetimeScope" ],
     [ "LaunchPlayTrigger", "classBalloonParty_1_1Game_1_1LaunchPlayTrigger.html", "classBalloonParty_1_1Game_1_1LaunchPlayTrigger" ]

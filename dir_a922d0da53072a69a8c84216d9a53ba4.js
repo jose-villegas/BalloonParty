@@ -11,12 +11,20 @@ var dir_a922d0da53072a69a8c84216d9a53ba4 =
     [ "IRetryState.cs", "IRetryState_8cs.html", "IRetryState_8cs" ],
     [ "IRunMeta.cs", "IRunMeta_8cs.html", "IRunMeta_8cs" ],
     [ "IRunResettable.cs", "IRunResettable_8cs.html", "IRunResettable_8cs" ],
+    [ "IRunResumeRequest.cs", "IRunResumeRequest_8cs.html", "IRunResumeRequest_8cs" ],
+    [ "IRunResumeStaging.cs", "IRunResumeStaging_8cs.html", "IRunResumeStaging_8cs" ],
+    [ "IRunSave.cs", "IRunSave_8cs.html", "IRunSave_8cs" ],
     [ "IRunScore.cs", "IRunScore_8cs.html", "IRunScore_8cs" ],
     [ "IRunSeed.cs", "IRunSeed_8cs.html", "IRunSeed_8cs" ],
     [ "NoAdService.cs", "NoAdService_8cs.html", "NoAdService_8cs" ],
+    [ "PlayerPrefsRunSave.cs", "PlayerPrefsRunSave_8cs.html", "PlayerPrefsRunSave_8cs" ],
     [ "RetryTracker.cs", "RetryTracker_8cs.html", "RetryTracker_8cs" ],
     [ "RunController.cs", "RunController_8cs.html", "RunController_8cs" ],
     [ "RunMeta.cs", "RunMeta_8cs.html", "RunMeta_8cs" ],
     [ "RunResetOrder.cs", "RunResetOrder_8cs.html", "RunResetOrder_8cs" ],
-    [ "RunSeed.cs", "RunSeed_8cs.html", "RunSeed_8cs" ]
+    [ "RunResumeController.cs", "RunResumeController_8cs.html", "RunResumeController_8cs" ],
+    [ "RunResumeRequest.cs", "RunResumeRequest_8cs.html", "RunResumeRequest_8cs" ],
+    [ "RunSaveRecorder.cs", "RunSaveRecorder_8cs.html", "RunSaveRecorder_8cs" ],
+    [ "RunSeed.cs", "RunSeed_8cs.html", "RunSeed_8cs" ],
+    [ "RunSnapshot.cs", "RunSnapshot_8cs.html", "RunSnapshot_8cs" ]
 ];

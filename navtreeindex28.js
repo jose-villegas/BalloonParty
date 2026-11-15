@@ -1,5 +1,17 @@
 var NAVTREEINDEX28 =
 {
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a2244b80a50186ee28033bcef63ee4df6":[6,0,0,3,9,20,9],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a25bfe463a1256dc13ab58d3102add119":[5,0,0,3,9,20,36],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a25bfe463a1256dc13ab58d3102add119":[6,0,0,3,9,20,36],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a31f04c2c8c976166a57a155774a3e054":[5,0,0,3,9,20,31],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a31f04c2c8c976166a57a155774a3e054":[6,0,0,3,9,20,31],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a33e655c0c76c29154336ffafa1fc2a8e":[5,0,0,3,9,20,34],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a33e655c0c76c29154336ffafa1fc2a8e":[6,0,0,3,9,20,34],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a342e83753bce7e6522d644ec07a73786":[5,0,0,3,9,20,17],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a342e83753bce7e6522d644ec07a73786":[6,0,0,3,9,20,17],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a34ad02ea733b8166d132bb26218646f0":[5,0,0,3,9,20,24],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a34ad02ea733b8166d132bb26218646f0":[6,0,0,3,9,20,24],
+"classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a38284c731da835e650da19a1f855e716":[5,0,0,3,9,20,28],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a38284c731da835e650da19a1f855e716":[6,0,0,3,9,20,28],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a3ed30f80cdbe93ab9092eb8062068aa4":[5,0,0,3,9,20,15],
 "classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a3ed30f80cdbe93ab9092eb8062068aa4":[6,0,0,3,9,20,15],
@@ -237,17 +249,5 @@ var NAVTREEINDEX28 =
 "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a2d24dfc44864fe625827082fcefd028f":[6,0,0,3,9,32,17],
 "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a2efaf17c8640d9935d5871171e417d6c":[5,0,0,3,9,32,18],
 "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a2efaf17c8640d9935d5871171e417d6c":[6,0,0,3,9,32,18],
-"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a2f0a6c4f44ff972540932b187959d032":[5,0,0,3,9,32,7],
-"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a2f0a6c4f44ff972540932b187959d032":[6,0,0,3,9,32,7],
-"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a334649a339ac588a676ba1393d49f7ab":[5,0,0,3,9,32,20],
-"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a334649a339ac588a676ba1393d49f7ab":[6,0,0,3,9,32,20],
-"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a3f3424ae27983320b8675236bfdabe73":[5,0,0,3,9,32,27],
-"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a3f3424ae27983320b8675236bfdabe73":[6,0,0,3,9,32,27],
-"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a4428c805552e2d4ff39b91351d15873b":[5,0,0,3,9,32,15],
-"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a4428c805552e2d4ff39b91351d15873b":[6,0,0,3,9,32,15],
-"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a4ad7d504412e5515c1d039db9374fd71":[5,0,0,3,9,32,3],
-"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a4ad7d504412e5515c1d039db9374fd71":[6,0,0,3,9,32,3],
-"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a4d2f7447147617b1d526c55b6e1860b1":[5,0,0,3,9,32,31],
-"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a4d2f7447147617b1d526c55b6e1860b1":[6,0,0,3,9,32,31],
-"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a530ba79688c51a1b5571f5fa83de86c7":[5,0,0,3,9,32,26]
+"classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a2f0a6c4f44ff972540932b187959d032":[5,0,0,3,9,32,7]
 };

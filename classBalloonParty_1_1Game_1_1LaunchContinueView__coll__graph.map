@@ -1,0 +1,7 @@
+<map id="BalloonParty.Game.LaunchContinueView" name="BalloonParty.Game.LaunchContinueView">
+<area shape="rect" id="Node000001" title="The launch screen&#39;s Continue button, beside Play: shown only while a run is saved,..." alt="" coords="60,115,255,160"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,14,129,42"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,51,142,114,137,115,87,56"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1UI_1_1FormattedLabel.html" title="Wraps a TMP_Text whose authored text is a string.Format template; construct it before the label&#39;s tex..." alt="" coords="153,5,344,50"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="223,61,178,116,174,112,218,63"/>
+</map>

@@ -128,6 +128,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html">GameOverPresentationGate</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Holds the GameOver screen shut until the loss cinematic finishes.  <a href="classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1HeldCardRecord.html">HeldCardRecord</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A held upgrade card, by its title, and how many times the run holds it.  <a href="classBalloonParty_1_1Game_1_1Run_1_1HeldCardRecord.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IAdService.html">IAdService</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The seam an ad SDK plugs into.  <a href="interfaceBalloonParty_1_1Game_1_1Run_1_1IAdService.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -152,6 +155,15 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html">IRunResettable</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RunController.html" title="Owns the run lifecycle — a loss is suppressed unless in NavigationState.Game with no loss-blocking ci...">RunController</a> invokes implementations in ascending <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html#a347699f041bd2f73a8326aa24a351d81">ResetOrder</a>, lower first.  <a href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResumeRequest.html">IRunResumeRequest</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The launch screen's Continue, handed to the game scope.  <a href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResumeRequest.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResumeStaging.html">IRunResumeStaging</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stages a saved run for the next reset.  <a href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResumeStaging.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSave.html">IRunSave</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where the interrupted run is kept between launches: one save at most, overwritten at each level boundary.  <a href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSave.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">interface &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html">IRunScore</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read-only view of the live run score, snapshotted by <a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RunController.html" title="Owns the run lifecycle — a loss is suppressed unless in NavigationState.Game with no loss-blocking ci...">RunController</a> when a run ends.  <a href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -160,6 +172,9 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1NoAdService.html">NoAdService</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">No ad SDK yet: every ad counts as watched, so a gated retry goes straight through.  <a href="classBalloonParty_1_1Game_1_1Run_1_1NoAdService.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1PlayerPrefsRunSave.html">PlayerPrefsRunSave</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSave.html" title="Where the interrupted run is kept between launches: one save at most, overwritten at each level bound...">IRunSave</a> as one JSON string in <code>PlayerPrefs</code>, beside the best-run record.  <a href="classBalloonParty_1_1Game_1_1Run_1_1PlayerPrefsRunSave.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html">RetryTracker</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tracks per-run retry state.  <a href="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html#details">More...</a><br /></td></tr>
@@ -172,7 +187,18 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html">RunResetOrder</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ordering for <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html#a347699f041bd2f73a8326aa24a351d81">IRunResettable.ResetOrder</a> — ascending, lower runs first.  <a href="classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RunResumeController.html">RunResumeController</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes the launch screen's Continue (<a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResumeRequest.html" title="The launch screen&#39;s Continue, handed to the game scope.">IRunResumeRequest</a>) and resumes the saved run while the launch screen is still up: stages it as a retry of its level that spends no retry, and resets the run.  <a href="classBalloonParty_1_1Game_1_1Run_1_1RunResumeController.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RunResumeRequest.html">RunResumeRequest</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RunSaveRecorder.html">RunSaveRecorder</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Keeps <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSave.html" title="Where the interrupted run is kept between launches: one save at most, overwritten at each level bound...">IRunSave</a> at the run's last level boundary: as each level begins (after a level-up's transition, and at a retry's reset) it saves what the level begins with, and on a loss it saves the game-over screen.  <a href="classBalloonParty_1_1Game_1_1Run_1_1RunSaveRecorder.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RunSeed.html">RunSeed</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RunSnapshot.html">RunSnapshot</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A run saved at a level boundary, so a run the OS killed can be picked up on the next launch.  <a href="classBalloonParty_1_1Game_1_1Run_1_1RunSnapshot.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>

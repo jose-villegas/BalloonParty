@@ -1,5 +1,11 @@
 <map id="BalloonParty.Game.LaunchLifetimeScope" name="BalloonParty.Game.LaunchLifetimeScope">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,81,200,126"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="45,5,160,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,47,105,81,100,79,101,51"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,225,200,269"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="24,124,138,151"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,165,101,225,96,224,85,169"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Game_1_1LaunchContinueView.html" title="The launch screen&#39;s Continue button, beside Play: shown only while a run is saved,..." alt="" coords="163,115,357,160"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="218,168,136,226,133,222,213,169"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="108,14,231,42"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="191,51,244,114,239,115,189,56"/>
+<area shape="rect" id="Node000005" href="$structBalloonParty_1_1UI_1_1FormattedLabel.html" title="Wraps a TMP_Text whose authored text is a string.Format template; construct it before the label&#39;s tex..." alt="" coords="255,5,446,50"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="324,61,280,116,276,112,320,64"/>
 </map>

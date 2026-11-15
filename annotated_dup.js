@@ -408,6 +408,7 @@ var annotated_dup =
         [ "GradientTextureDrawer", "classBalloonParty_1_1Editor_1_1GradientTextureDrawer.html", "classBalloonParty_1_1Editor_1_1GradientTextureDrawer" ],
         [ "HeadsUpBuilder", "classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html", "classBalloonParty_1_1Editor_1_1HeadsUpBuilder" ],
         [ "LaserViewEditor", "classBalloonParty_1_1Editor_1_1LaserViewEditor.html", "classBalloonParty_1_1Editor_1_1LaserViewEditor" ],
+        [ "LaunchContinueButtonBuilder", "classBalloonParty_1_1Editor_1_1LaunchContinueButtonBuilder.html", "classBalloonParty_1_1Editor_1_1LaunchContinueButtonBuilder" ],
         [ "LevelGenerationPreview", "classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html", "classBalloonParty_1_1Editor_1_1LevelGenerationPreview" ],
         [ "LevelPacingCurvePanel", "classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html", "classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel" ],
         [ "LevelPacingMigrationTool", "classBalloonParty_1_1Editor_1_1LevelPacingMigrationTool.html", "classBalloonParty_1_1Editor_1_1LevelPacingMigrationTool" ],
@@ -517,6 +518,7 @@ var annotated_dup =
           [ "FailureOffer", "structBalloonParty_1_1Game_1_1Run_1_1FailureOffer.html", "structBalloonParty_1_1Game_1_1Run_1_1FailureOffer" ],
           [ "FailureOffers", "classBalloonParty_1_1Game_1_1Run_1_1FailureOffers.html", "classBalloonParty_1_1Game_1_1Run_1_1FailureOffers" ],
           [ "GameOverPresentationGate", "classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate.html", "classBalloonParty_1_1Game_1_1Run_1_1GameOverPresentationGate" ],
+          [ "HeldCardRecord", "classBalloonParty_1_1Game_1_1Run_1_1HeldCardRecord.html", "classBalloonParty_1_1Game_1_1Run_1_1HeldCardRecord" ],
           [ "IAdService", "interfaceBalloonParty_1_1Game_1_1Run_1_1IAdService.html", "interfaceBalloonParty_1_1Game_1_1Run_1_1IAdService" ],
           [ "IBoardResettable", "interfaceBalloonParty_1_1Game_1_1Run_1_1IBoardResettable.html", "interfaceBalloonParty_1_1Game_1_1Run_1_1IBoardResettable" ],
           [ "IBonusCardSource", "interfaceBalloonParty_1_1Game_1_1Run_1_1IBonusCardSource.html", "interfaceBalloonParty_1_1Game_1_1Run_1_1IBonusCardSource" ],
@@ -525,14 +527,22 @@ var annotated_dup =
           [ "IRetryState", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState" ],
           [ "IRunMeta", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunMeta.html", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunMeta" ],
           [ "IRunResettable", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable" ],
+          [ "IRunResumeRequest", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResumeRequest.html", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResumeRequest" ],
+          [ "IRunResumeStaging", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResumeStaging.html", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResumeStaging" ],
+          [ "IRunSave", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSave.html", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSave" ],
           [ "IRunScore", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore" ],
           [ "IRunSeed", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed.html", "interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed" ],
           [ "NoAdService", "classBalloonParty_1_1Game_1_1Run_1_1NoAdService.html", "classBalloonParty_1_1Game_1_1Run_1_1NoAdService" ],
+          [ "PlayerPrefsRunSave", "classBalloonParty_1_1Game_1_1Run_1_1PlayerPrefsRunSave.html", "classBalloonParty_1_1Game_1_1Run_1_1PlayerPrefsRunSave" ],
           [ "RetryTracker", "classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html", "classBalloonParty_1_1Game_1_1Run_1_1RetryTracker" ],
           [ "RunController", "classBalloonParty_1_1Game_1_1Run_1_1RunController.html", "classBalloonParty_1_1Game_1_1Run_1_1RunController" ],
           [ "RunMeta", "classBalloonParty_1_1Game_1_1Run_1_1RunMeta.html", "classBalloonParty_1_1Game_1_1Run_1_1RunMeta" ],
           [ "RunResetOrder", "classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html", "classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder" ],
-          [ "RunSeed", "classBalloonParty_1_1Game_1_1Run_1_1RunSeed.html", "classBalloonParty_1_1Game_1_1Run_1_1RunSeed" ]
+          [ "RunResumeController", "classBalloonParty_1_1Game_1_1Run_1_1RunResumeController.html", "classBalloonParty_1_1Game_1_1Run_1_1RunResumeController" ],
+          [ "RunResumeRequest", "classBalloonParty_1_1Game_1_1Run_1_1RunResumeRequest.html", "classBalloonParty_1_1Game_1_1Run_1_1RunResumeRequest" ],
+          [ "RunSaveRecorder", "classBalloonParty_1_1Game_1_1Run_1_1RunSaveRecorder.html", "classBalloonParty_1_1Game_1_1Run_1_1RunSaveRecorder" ],
+          [ "RunSeed", "classBalloonParty_1_1Game_1_1Run_1_1RunSeed.html", "classBalloonParty_1_1Game_1_1Run_1_1RunSeed" ],
+          [ "RunSnapshot", "classBalloonParty_1_1Game_1_1Run_1_1RunSnapshot.html", "classBalloonParty_1_1Game_1_1Run_1_1RunSnapshot" ]
         ] ],
         [ "Score", "namespaceBalloonParty_1_1Game_1_1Score.html", [
           [ "Behaviours", "namespaceBalloonParty_1_1Game_1_1Score_1_1Behaviours.html", [
@@ -589,6 +599,7 @@ var annotated_dup =
         ] ],
         [ "Upgrades", "namespaceBalloonParty_1_1Game_1_1Upgrades.html", [
           [ "IFreeCardGrant", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IFreeCardGrant.html", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IFreeCardGrant" ],
+          [ "IHeldCards", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IHeldCards.html", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IHeldCards" ],
           [ "IShieldsPerBall", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IShieldsPerBall.html", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IShieldsPerBall" ],
           [ "IUpgradeDraft", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IUpgradeDraft.html", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IUpgradeDraft" ],
           [ "IWeaponStats", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html", "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats" ],
@@ -598,6 +609,8 @@ var annotated_dup =
         [ "GameLifetimeScope", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html", "classBalloonParty_1_1Game_1_1GameLifetimeScope" ],
         [ "GameScopeRegistration", "classBalloonParty_1_1Game_1_1GameScopeRegistration.html", "classBalloonParty_1_1Game_1_1GameScopeRegistration" ],
         [ "HitPipeline", "classBalloonParty_1_1Game_1_1HitPipeline.html", "classBalloonParty_1_1Game_1_1HitPipeline" ],
+        [ "LaunchContinueController", "classBalloonParty_1_1Game_1_1LaunchContinueController.html", "classBalloonParty_1_1Game_1_1LaunchContinueController" ],
+        [ "LaunchContinueView", "classBalloonParty_1_1Game_1_1LaunchContinueView.html", "classBalloonParty_1_1Game_1_1LaunchContinueView" ],
         [ "LaunchDisturbanceStamp", "classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html", "classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp" ],
         [ "LaunchLifetimeScope", "classBalloonParty_1_1Game_1_1LaunchLifetimeScope.html", "classBalloonParty_1_1Game_1_1LaunchLifetimeScope" ],
         [ "LaunchPlayTrigger", "classBalloonParty_1_1Game_1_1LaunchPlayTrigger.html", "classBalloonParty_1_1Game_1_1LaunchPlayTrigger" ]

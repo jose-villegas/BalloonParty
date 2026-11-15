@@ -1,31 +1,33 @@
 <map id="BalloonParty.Game.Upgrades.RunUpgrades" name="BalloonParty.Game.Upgrades.RunUpgrades">
-<area shape="rect" id="Node000001" title="The cards a run holds, the hand a level&#45;up deals, and the weapon the cards add up to." alt="" coords="381,439,595,483"/>
+<area shape="rect" id="Node000001" title="The cards a run holds, the hand a level&#45;up deals, and the weapon the cards add up to." alt="" coords="381,481,595,526"/>
 <area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html" title="The run&#39;s weapon after its upgrade cards: the configured base plus every card held." alt="" coords="12,5,227,50"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="222,54,235,60,275,84,305,106,330,133,359,170,404,242,439,318,466,387,483,439,477,438,461,388,434,320,399,245,354,173,326,136,301,110,272,88,232,65,224,59"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="222,54,235,60,276,85,305,107,331,135,359,173,384,213,407,257,443,344,469,423,484,481,479,480,464,424,438,346,402,259,380,216,354,176,327,138,302,111,273,89,232,65,224,59"/>
 <area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IShieldsPerBall.html" title="The shields every new ball starts with, as a value the HUD can watch: the configured count plus shiel..." alt="" coords="12,75,227,119"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="221,123,235,129,274,152,303,173,359,233,399,287,433,344,479,438,474,438,428,346,394,290,355,236,300,177,271,157,232,134,223,128"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="222,124,235,129,275,153,304,176,330,203,359,239,401,304,436,372,481,481,476,481,432,374,397,307,355,243,326,206,301,180,272,158,232,134,224,128"/>
 <area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IUpgradeDraft.html" title="The cards a level&#45;up deals and the run holds." alt="" coords="12,144,227,189"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="220,193,235,199,276,224,315,253,384,320,438,386,475,438,469,438,434,389,380,324,312,257,273,228,232,203,222,197"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="221,193,235,199,274,221,303,242,359,301,396,348,430,398,478,481,472,481,425,400,392,351,355,304,299,246,271,226,232,203,223,198"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IBonusCardSource.html" title="Whether a retry could be dealt a bonus card right now." alt="" coords="9,213,230,258"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="218,261,235,268,305,308,370,354,466,438,461,439,366,358,302,312,232,273,220,266"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="219,262,235,268,274,290,311,317,379,376,433,433,472,481,466,481,429,437,375,380,308,321,271,295,232,273,221,267"/>
 <area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IFreeCardGrant.html" title="A card won in play rather than at a level&#45;up (the golden balloon&#39;s pop)." alt="" coords="12,283,227,327"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="214,330,235,337,350,388,446,437,441,439,348,393,233,342,216,335"/>
-<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="16,352,223,397"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="235,398,357,426,396,437,392,439,356,432,237,403"/>
-<area shape="rect" id="Node000008" title=" " alt="" coords="77,420,162,448"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="176,436,382,451,378,455,178,441"/>
-<area shape="rect" id="Node000009" title=" " alt="" coords="71,472,168,500"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="183,479,382,466,378,470,185,484"/>
-<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html" title="Read&#45;only projectile flight configuration: physics, cruise, sweep, pierce, and doom tuning." alt="" coords="10,524,229,569"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="243,522,356,497,415,482,411,485,357,502,245,526"/>
-<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html" title="When the level&#45;up deals cards, how many, and from which deck." alt="" coords="13,593,226,638"/>
-<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="229,586,293,566,356,541,409,512,458,482,454,485,412,516,358,546,295,571,232,591"/>
-<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html" title="Level pacing; read by LevelDifficultyResolver (and by the balloon spawner&#39;s pool prewarm,..." alt="" coords="5,663,234,707"/>
-<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="235,655,297,632,355,600,390,572,422,540,469,485,473,482,426,544,394,576,358,604,299,637,238,660"/>
-<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html" title="Read&#45;only retry state — how many retries remain this run and the level to retry at (zero when the nex..." alt="" coords="11,732,228,777"/>
-<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="241,728,301,705,329,689,355,671,398,625,433,573,459,522,477,486,480,481,464,525,438,576,402,628,358,675,332,694,303,709,244,733"/>
-<area shape="rect" id="Node000014" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html" title="Read surface of the player&#39;s progression through levels." alt="" coords="26,801,213,846"/>
-<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="227,806,295,783,326,766,355,744,383,714,407,680,443,606,467,536,481,486,484,482,472,538,448,608,411,683,387,717,358,748,329,770,297,787,229,811"/>
-<area shape="rect" id="Node000015" href="$interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html" title="One card the level&#45;up can offer." alt="" coords="13,871,226,915"/>
-<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="241,885,302,868,330,854,355,836,391,796,420,749,442,699,458,648,477,553,484,486,487,481,482,553,463,649,447,701,424,752,395,799,358,840,333,859,303,873,242,891"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="217,331,235,337,300,371,363,410,460,480,455,482,360,414,298,376,233,342,219,336"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IHeldCards.html" title="The cards a saved run holds, written by the run save and restored when the run is resumed." alt="" coords="12,352,227,397"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="211,399,235,406,431,479,426,482,233,412,213,404"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="16,421,223,466"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="237,460,383,485,378,488,239,465"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="77,490,162,518"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="176,501,382,502,378,506,178,506"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="71,542,168,570"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="182,544,382,517,379,521,185,549"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html" title="Read&#45;only projectile flight configuration: physics, cruise, sweep, pierce, and doom tuning." alt="" coords="10,593,229,638"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="243,587,356,555,439,525,435,528,358,561,245,592"/>
+<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html" title="When the level&#45;up deals cards, how many, and from which deck." alt="" coords="13,663,226,707"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="210,655,233,648,296,630,323,621,355,605,414,565,465,525,461,528,417,569,358,610,325,626,298,635,234,653,213,660"/>
+<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html" title="Level pacing; read by LevelDifficultyResolver (and by the balloon spawner&#39;s pool prewarm,..." alt="" coords="5,732,234,777"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="231,724,295,699,355,663,392,629,424,592,471,528,475,524,429,595,396,633,358,667,298,703,234,729"/>
+<area shape="rect" id="Node000014" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html" title="Read&#45;only retry state — how many retries remain this run and the level to retry at (zero when the nex..." alt="" coords="11,801,228,846"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="241,797,301,773,329,757,355,737,379,713,401,685,436,626,461,570,478,529,481,524,466,572,441,629,405,688,383,716,358,741,332,761,304,778,244,802"/>
+<area shape="rect" id="Node000015" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html" title="Read surface of the player&#39;s progression through levels." alt="" coords="26,871,213,915"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="227,876,295,853,327,835,355,813,385,780,410,742,430,702,447,661,470,583,482,529,485,524,475,585,452,662,435,704,414,745,389,783,358,817,330,840,297,857,229,881"/>
+<area shape="rect" id="Node000016" href="$interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html" title="One card the level&#45;up can offer." alt="" coords="13,940,226,985"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="241,957,302,940,330,926,355,908,393,864,423,814,446,759,462,704,479,601,485,529,488,524,485,601,467,705,451,761,428,816,398,867,358,912,333,931,304,945,242,962"/>
 </map>

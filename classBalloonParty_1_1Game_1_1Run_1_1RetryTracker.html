@@ -124,20 +124,23 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html'
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker__inherit__graph.svg" width="488" height="195"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker__inherit__graph.svg" width="488" height="264"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Game.Run.RetryTracker:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker__coll__graph.svg" width="488" height="195"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker__coll__graph.svg" width="560" height="334"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a7347b0db98ec3a87b7d2e9a6f0deb308" id="r_a7347b0db98ec3a87b7d2e9a6f0deb308"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7347b0db98ec3a87b7d2e9a6f0deb308">RetryTracker</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html">IRunConfig</a> config)</td></tr>
 <tr class="separator:a7347b0db98ec3a87b7d2e9a6f0deb308"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a234df8515509fa809a38b4299fe060e1" id="r_a234df8515509fa809a38b4299fe060e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a234df8515509fa809a38b4299fe060e1">PrepareResume</a> (<a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RunSnapshot.html">RunSnapshot</a> snapshot)</td></tr>
+<tr class="memdesc:a234df8515509fa809a38b4299fe060e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The next reset restarts at the saved level as its retry would, with what the level began with restored from <em>snapshot</em> , and leaves the retries used as saved.  <br /></td></tr>
+<tr class="separator:a234df8515509fa809a38b4299fe060e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca4a1ea37438892f1f400cb5d522a4e1" id="r_aca4a1ea37438892f1f400cb5d522a4e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aca4a1ea37438892f1f400cb5d522a4e1">PrepareRetry</a> (int level, bool withBonusCard)</td></tr>
 <tr class="memdesc:aca4a1ea37438892f1f400cb5d522a4e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The next reset restarts at <em>level</em>  instead of a fresh run, dealing a bonus card for that attempt when <em>withBonusCard</em> .  <br /></td></tr>
 <tr class="separator:aca4a1ea37438892f1f400cb5d522a4e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -158,6 +161,9 @@ Properties</h2></td></tr>
 <tr class="separator:a1febebc18b6bfea598de81114ef0056c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a32da477d65fcf6f0c2dceb5c145f8585" id="r_a32da477d65fcf6f0c2dceb5c145f8585"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a32da477d65fcf6f0c2dceb5c145f8585">ResetOrder</a><code> [get]</code></td></tr>
 <tr class="separator:a32da477d65fcf6f0c2dceb5c145f8585"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1437369f793b179a045c5a57cb73d057" id="r_a1437369f793b179a045c5a57cb73d057"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RunSnapshot.html">RunSnapshot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1437369f793b179a045c5a57cb73d057">Resuming</a><code> [get]</code></td></tr>
+<tr class="memdesc:a1437369f793b179a045c5a57cb73d057"><td class="mdescLeft">&#160;</td><td class="mdescRight">The saved run the staged retry resumes, or null when it's a plain retry or a fresh run.  <br /></td></tr>
+<tr class="separator:a1437369f793b179a045c5a57cb73d057"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d67a4e0e3ff6a0cf7497ecc118dfd7e" id="r_a6d67a4e0e3ff6a0cf7497ecc118dfd7e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6d67a4e0e3ff6a0cf7497ecc118dfd7e">RetriesRemaining</a><code> [get]</code></td></tr>
 <tr class="memdesc:a6d67a4e0e3ff6a0cf7497ecc118dfd7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retries left this run; int.MaxValue while <a class="el" href="#a1febebc18b6bfea598de81114ef0056c" title="No retry cap (Shared.IRunConfig.MaxRetries of 0 or less).">IsUnlimited</a>.  <br /></td></tr>
 <tr class="separator:a6d67a4e0e3ff6a0cf7497ecc118dfd7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -180,6 +186,8 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a8756a607a636072d0ab462cb3efa731f" id="r_a8756a607a636072d0ab462cb3efa731f"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8756a607a636072d0ab462cb3efa731f">_maxRetries</a></td></tr>
 <tr class="separator:a8756a607a636072d0ab462cb3efa731f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23759eab060acef2688c2e55ef9c1d42" id="r_a23759eab060acef2688c2e55ef9c1d42"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RunSnapshot.html">RunSnapshot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a23759eab060acef2688c2e55ef9c1d42">_resuming</a></td></tr>
+<tr class="separator:a23759eab060acef2688c2e55ef9c1d42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa61efb131191e71593fa7cf2f36553f3" id="r_aa61efb131191e71593fa7cf2f36553f3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa61efb131191e71593fa7cf2f36553f3">_retriesUsed</a></td></tr>
 <tr class="separator:aa61efb131191e71593fa7cf2f36553f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f65fd709b82e6f4c01f54f6995b5b3d" id="r_a4f65fd709b82e6f4c01f54f6995b5b3d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4f65fd709b82e6f4c01f54f6995b5b3d">_retryLevel</a></td></tr>
@@ -189,7 +197,7 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Tracks per-run retry state. </p>
-<p><a class="el" href="#aca4a1ea37438892f1f400cb5d522a4e1" title="The next reset restarts at level  instead of a fresh run, dealing a bonus card for that attempt when ...">PrepareRetry</a> (staged by <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IFailureOffers.html" title="Decides what a loss offers the player: a plain retry, one gated behind an ad, and a retry with a bonu...">IFailureOffers</a>) makes the next restart a retry at that level; otherwise it's a fresh run. </p>
+<p><a class="el" href="#aca4a1ea37438892f1f400cb5d522a4e1" title="The next reset restarts at level  instead of a fresh run, dealing a bonus card for that attempt when ...">PrepareRetry</a> (staged by <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IFailureOffers.html" title="Decides what a loss offers the player: a plain retry, one gated behind an ad, and a retry with a bonu...">IFailureOffers</a>) makes the next restart a retry at that level; otherwise it's a fresh run. <a class="el" href="#a234df8515509fa809a38b4299fe060e1" title="The next reset restarts at the saved level as its retry would, with what the level began with restore...">PrepareResume</a> stages a saved run the same way, as a retry of its level that spends no retry. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a7347b0db98ec3a87b7d2e9a6f0deb308" name="a7347b0db98ec3a87b7d2e9a6f0deb308"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7347b0db98ec3a87b7d2e9a6f0deb308">&#9670;&#160;</a></span>RetryTracker()</h2>
@@ -231,6 +239,27 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a234df8515509fa809a38b4299fe060e1" name="a234df8515509fa809a38b4299fe060e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a234df8515509fa809a38b4299fe060e1">&#9670;&#160;</a></span>PrepareResume()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Game.Run.RetryTracker.PrepareResume </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RunSnapshot.html">RunSnapshot</a></td>          <td class="paramname"><span class="paramname"><em>snapshot</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The next reset restarts at the saved level as its retry would, with what the level began with restored from <em>snapshot</em> , and leaves the retries used as saved. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResumeStaging.html#aacc56c11382af1931d212a25cdde3cd4">BalloonParty.Game.Run.IRunResumeStaging</a>.</p>
 
 </div>
 </div>
@@ -298,6 +327,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly int BalloonParty.Game.Run.RetryTracker._maxRetries</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a23759eab060acef2688c2e55ef9c1d42" name="a23759eab060acef2688c2e55ef9c1d42"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23759eab060acef2688c2e55ef9c1d42">&#9670;&#160;</a></span>_resuming</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RunSnapshot.html">RunSnapshot</a> BalloonParty.Game.Run.RetryTracker._resuming</td>
         </tr>
       </table>
   </td>
@@ -423,6 +474,33 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html#a347699f041bd2f73a8326aa24a351d81">BalloonParty.Game.Run.IRunResettable</a>.</p>
+
+</div>
+</div>
+<a id="a1437369f793b179a045c5a57cb73d057" name="a1437369f793b179a045c5a57cb73d057"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1437369f793b179a045c5a57cb73d057">&#9670;&#160;</a></span>Resuming</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RunSnapshot.html">RunSnapshot</a> BalloonParty.Game.Run.RetryTracker.Resuming</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The saved run the staged retry resumes, or null when it's a plain retry or a fresh run. </p>
+<p>Read with <a class="el" href="#a4018073f3c2633e27511b39d536a8c83" title="The level the next restart should begin at.">RetryLevel</a> during the reset cascade, by each service that restores its part of the save (seed, score, hearts, cards), and cleared with it. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html#a6d8fff1cac6bf80cbe15ddf4487db7d7">BalloonParty.Game.Run.IRetryState</a>.</p>
 
 </div>
 </div>

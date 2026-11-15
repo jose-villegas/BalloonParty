@@ -1,0 +1,7 @@
+<map id="BalloonParty.Game.LaunchContinueController" name="BalloonParty.Game.LaunchContinueController">
+<area shape="rect" id="Node000001" title="Offers Continue on the launch screen while a run is saved." alt="" coords="8,81,202,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,90,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="66,44,92,80,87,81,64,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="114,5,211,33"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="147,45,122,82,118,78,142,47"/>
+</map>

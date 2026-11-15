@@ -129,6 +129,9 @@ Properties</h2></td></tr>
 <tr class="memitem:ad19f22b35fb57a25b02b9322ba5d93f1" id="r_ad19f22b35fb57a25b02b9322ba5d93f1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad19f22b35fb57a25b02b9322ba5d93f1">IsUnlimited</a><code> [get]</code></td></tr>
 <tr class="memdesc:ad19f22b35fb57a25b02b9322ba5d93f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">No retry cap (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#aff5e95c5f910f536e2097bb24245f350" title="How many times the player may retry at the level reached, per run (0 or less = unlimited).">Shared.IRunConfig.MaxRetries</a> of 0 or less).  <br /></td></tr>
 <tr class="separator:ad19f22b35fb57a25b02b9322ba5d93f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d8fff1cac6bf80cbe15ddf4487db7d7" id="r_a6d8fff1cac6bf80cbe15ddf4487db7d7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RunSnapshot.html">RunSnapshot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6d8fff1cac6bf80cbe15ddf4487db7d7">Resuming</a><code> [get]</code></td></tr>
+<tr class="memdesc:a6d8fff1cac6bf80cbe15ddf4487db7d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The saved run the staged retry resumes, or null when it's a plain retry or a fresh run.  <br /></td></tr>
+<tr class="separator:a6d8fff1cac6bf80cbe15ddf4487db7d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37b95f79a4daecef6d9a226741037df8" id="r_a37b95f79a4daecef6d9a226741037df8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a37b95f79a4daecef6d9a226741037df8">RetriesRemaining</a><code> [get]</code></td></tr>
 <tr class="memdesc:a37b95f79a4daecef6d9a226741037df8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retries left this run; int.MaxValue while <a class="el" href="#ad19f22b35fb57a25b02b9322ba5d93f1" title="No retry cap (Shared.IRunConfig.MaxRetries of 0 or less).">IsUnlimited</a>.  <br /></td></tr>
 <tr class="separator:a37b95f79a4daecef6d9a226741037df8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -168,6 +171,33 @@ Properties</h2></td></tr>
 <p>No retry cap (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IRunConfig.html#aff5e95c5f910f536e2097bb24245f350" title="How many times the player may retry at the level reached, per run (0 or less = unlimited).">Shared.IRunConfig.MaxRetries</a> of 0 or less). </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html#a1febebc18b6bfea598de81114ef0056c">BalloonParty.Game.Run.RetryTracker</a>.</p>
+
+</div>
+</div>
+<a id="a6d8fff1cac6bf80cbe15ddf4487db7d7" name="a6d8fff1cac6bf80cbe15ddf4487db7d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d8fff1cac6bf80cbe15ddf4487db7d7">&#9670;&#160;</a></span>Resuming</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RunSnapshot.html">RunSnapshot</a> BalloonParty.Game.Run.IRetryState.Resuming</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The saved run the staged retry resumes, or null when it's a plain retry or a fresh run. </p>
+<p>Read with <a class="el" href="#a5a32f733325d45b99ff00a98e0e14e9e" title="The level the next restart should begin at.">RetryLevel</a> during the reset cascade, by each service that restores its part of the save (seed, score, hearts, cards), and cleared with it. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1Run_1_1RetryTracker.html#a1437369f793b179a045c5a57cb73d057">BalloonParty.Game.Run.RetryTracker</a>.</p>
 
 </div>
 </div>

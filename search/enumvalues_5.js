@@ -7,5 +7,6 @@ var searchData=
   ['flat_4',['Flat',['../namespaceBalloonParty_1_1Projectile_1_1Model.html#a51a7cfe4e8f083cd12e30f878834e748a745e3db6a7ffd50e1a72b39482f0882d',1,'BalloonParty::Projectile::Model']]],
   ['flight_5',['Flight',['../namespaceBalloonParty_1_1Game_1_1Telemetry.html#a3d10738649138d0d994cf40a2bc2cbeda98415a6f570af1d10bebd54f054ce4b4',1,'BalloonParty.Game.Telemetry.Flight'],['../namespaceBalloonParty_1_1Game_1_1Telemetry.html#a634f9537c09ea241a0544abc34bd93bca98415a6f570af1d10bebd54f054ce4b4',1,'BalloonParty.Game.Telemetry.Flight']]],
   ['flightsstarted_6',['FlightsStarted',['../namespaceBalloonParty_1_1Game_1_1Telemetry.html#a6b59775576a0381e26672b9cce7bc7ebabc1993067f0854edbb08f9bb57b81883',1,'BalloonParty::Game::Telemetry']]],
-  ['full_7',['Full',['../namespaceBalloonParty_1_1Shared_1_1SceneLight.html#aba1f92fb89a50c3bfb7903105772e9b9abbd47109890259c0127154db1af26c75',1,'BalloonParty::Shared::SceneLight']]]
+  ['fresh_7',['Fresh',['../classBalloonParty_1_1Game_1_1Run_1_1RunSaveRecorder.html#a3e2609c703417153c657e4da5bb74d3fafe8965a9748c1bc48af1711be837124e',1,'BalloonParty::Game::Run::RunSaveRecorder']]],
+  ['full_8',['Full',['../namespaceBalloonParty_1_1Shared_1_1SceneLight.html#aba1f92fb89a50c3bfb7903105772e9b9abbd47109890259c0127154db1af26c75',1,'BalloonParty::Shared::SceneLight']]]
 ];

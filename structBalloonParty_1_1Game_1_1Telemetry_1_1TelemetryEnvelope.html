@@ -117,8 +117,8 @@ $(function(){initNavTree('structBalloonParty_1_1Game_1_1Telemetry_1_1TelemetryEn
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a21b6050ec01fa5fe62ece61dbff859c1" id="r_a21b6050ec01fa5fe62ece61dbff859c1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a21b6050ec01fa5fe62ece61dbff859c1">TelemetryEnvelope</a> (<a class="el" href="namespaceBalloonParty_1_1Game_1_1Telemetry.html#a634f9537c09ea241a0544abc34bd93bc">RecordKind</a> kind, int schemaVersion, string sessionId, int runId, int attemptId, int attemptIndex, int levelIndex, int levelAttemptOrdinal, int flightIndex, bool completed, bool cheatActive, string endCause, long timestampUtcTicks, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ISealedMetrics.html">ISealedMetrics</a> metrics)</td></tr>
-<tr class="separator:a21b6050ec01fa5fe62ece61dbff859c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad390ab03785de096197567f4119b41b9" id="r_ad390ab03785de096197567f4119b41b9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad390ab03785de096197567f4119b41b9">TelemetryEnvelope</a> (<a class="el" href="namespaceBalloonParty_1_1Game_1_1Telemetry.html#a634f9537c09ea241a0544abc34bd93bc">RecordKind</a> kind, int schemaVersion, string sessionId, int runId, int attemptId, int attemptIndex, int levelIndex, int levelAttemptOrdinal, int flightIndex, bool completed, bool cheatActive, string endCause, long timestampUtcTicks, <a class="el" href="interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ISealedMetrics.html">ISealedMetrics</a> metrics, bool resumed=false)</td></tr>
+<tr class="separator:ad390ab03785de096197567f4119b41b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -142,6 +142,8 @@ Properties</h2></td></tr>
 <tr class="separator:ac448d8c158f936af3fae38e3b2aafe02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15c6ea9790c2c773f19c43971c420af4" id="r_a15c6ea9790c2c773f19c43971c420af4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ISealedMetrics.html">ISealedMetrics</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a15c6ea9790c2c773f19c43971c420af4">Metrics</a><code> [get]</code></td></tr>
 <tr class="separator:a15c6ea9790c2c773f19c43971c420af4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4bab87a449bae01ddd45c5b1849f447" id="r_af4bab87a449bae01ddd45c5b1849f447"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af4bab87a449bae01ddd45c5b1849f447">Resumed</a><code> [get]</code></td></tr>
+<tr class="separator:af4bab87a449bae01ddd45c5b1849f447"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b0b2ba81bd44a622b146e452430bc76" id="r_a9b0b2ba81bd44a622b146e452430bc76"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9b0b2ba81bd44a622b146e452430bc76">RunId</a><code> [get]</code></td></tr>
 <tr class="separator:a9b0b2ba81bd44a622b146e452430bc76"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a070fd17235a6007a2e8df56bb618b4bd" id="r_a070fd17235a6007a2e8df56bb618b4bd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a070fd17235a6007a2e8df56bb618b4bd">SchemaVersion</a><code> [get]</code></td></tr>
@@ -152,8 +154,8 @@ Properties</h2></td></tr>
 <tr class="separator:a94ed8e052936db5429e37145321d3fb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a21b6050ec01fa5fe62ece61dbff859c1" name="a21b6050ec01fa5fe62ece61dbff859c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a21b6050ec01fa5fe62ece61dbff859c1">&#9670;&#160;</a></span>TelemetryEnvelope()</h2>
+<a id="ad390ab03785de096197567f4119b41b9" name="ad390ab03785de096197567f4119b41b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad390ab03785de096197567f4119b41b9">&#9670;&#160;</a></span>TelemetryEnvelope()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -226,7 +228,12 @@ Properties</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ISealedMetrics.html">ISealedMetrics</a></td>          <td class="paramname"><span class="paramname"><em>metrics</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ISealedMetrics.html">ISealedMetrics</a></td>          <td class="paramname"><span class="paramname"><em>metrics</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>resumed</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -443,6 +450,28 @@ Properties</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="interfaceBalloonParty_1_1Game_1_1Telemetry_1_1ISealedMetrics.html">ISealedMetrics</a> BalloonParty.Game.Telemetry.TelemetryEnvelope.Metrics</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af4bab87a449bae01ddd45c5b1849f447" name="af4bab87a449bae01ddd45c5b1849f447"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4bab87a449bae01ddd45c5b1849f447">&#9670;&#160;</a></span>Resumed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Game.Telemetry.TelemetryEnvelope.Resumed</td>
         </tr>
       </table>
   </td>

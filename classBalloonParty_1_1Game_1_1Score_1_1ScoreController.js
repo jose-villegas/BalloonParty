@@ -33,6 +33,7 @@ var classBalloonParty_1_1Game_1_1Score_1_1ScoreController =
     [ "_trailSubscription", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a013ee02bf8feb164c1d6d0c1d90976a0", null ],
     [ "MinAnnouncedStreak", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#ab8ab0bae461dff038d617bbba4f4c95b", null ],
     [ "NightScoreMultiplier", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#afa30002226082a5378488bf1779183a2", null ],
+    [ "LevelStartScore", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a9903c31b55ef62c72bb59341f61549bf", null ],
     [ "ResetOrder", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a710289b38fd636dea5837f53705e284a", null ],
     [ "TotalScore", "classBalloonParty_1_1Game_1_1Score_1_1ScoreController.html#a2eb6c7ab6be715c738e55d63216bac33", null ]
 ];

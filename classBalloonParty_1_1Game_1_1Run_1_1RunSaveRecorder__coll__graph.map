@@ -1,0 +1,23 @@
+<map id="BalloonParty.Game.Run.RunSaveRecorder" name="BalloonParty.Game.Run.RunSaveRecorder">
+<area shape="rect" id="Node000001" title="Keeps IRunSave at the run&#39;s last level boundary: as each level begins (after a level&#45;up&#39;s transition,..." alt="" coords="391,264,593,309"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="21,5,228,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="235,53,304,81,338,100,368,122,404,156,436,195,481,264,475,264,431,198,400,160,365,126,335,104,302,86,236,58"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="82,74,167,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="181,94,273,117,322,136,368,161,400,185,429,212,475,264,470,264,425,216,396,189,365,166,320,141,272,122,183,99"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="76,126,173,154"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="188,146,276,165,323,179,368,197,421,228,466,263,461,264,418,233,365,202,321,184,274,170,189,151"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSave.html" title="Where the interrupted run is kept between launches: one save at most, overwritten at each level bound..." alt="" coords="5,178,244,206"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="207,207,244,214,306,227,367,241,431,263,426,264,366,246,305,232,243,220,209,212"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRetryState.html" title="Read&#45;only retry state — how many retries remain this run and the level to retry at (zero when the nex..." alt="" coords="16,229,233,274"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="247,261,392,275,388,278,249,266"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html" title="Read surface of the player&#39;s progression through levels." alt="" coords="31,299,218,343"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="233,308,392,294,388,298,235,313"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunScore.html" title="Read&#45;only view of the live run score, snapshotted by RunController when a run ends." alt="" coords="21,368,228,413"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="236,361,366,326,429,308,424,311,367,331,238,366"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html" title="Read&#45;only view of the player&#39;s hit&#45;point pool." alt="" coords="27,437,222,482"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="220,430,243,422,306,403,365,376,418,341,462,310,467,307,422,346,368,380,308,408,244,428,222,435"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSeed.html" title="The run&#39;s own roll, mixed into what may differ from one run to the next (which levels are on the grou..." alt="" coords="5,506,244,534"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="226,499,298,475,333,458,365,437,400,406,430,371,475,311,479,307,435,374,404,410,368,441,336,463,300,480,228,504"/>
+<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IHeldCards.html" title="The cards a saved run holds, written by the run save and restored when the run is resumed." alt="" coords="17,557,232,602"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="246,562,308,542,338,527,365,509,389,487,410,462,444,406,468,351,483,311,486,307,473,353,449,408,414,465,393,491,368,513,341,532,310,547,247,567"/>
+</map>

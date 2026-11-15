@@ -1,0 +1,9 @@
+<map id="BalloonParty.Game.Run.RunSaveRecorder" name="BalloonParty.Game.Run.RunSaveRecorder">
+<area shape="rect" id="Node000001" title="Keeps IRunSave at the run&#39;s last level boundary: as each level begins (after a level&#45;up&#39;s transition,..." alt="" coords="177,98,379,143"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,5,212,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="163,55,240,97,235,98,162,60"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="236,14,320,42"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="280,55,280,99,276,96,276,59"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="344,14,441,42"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="367,50,307,100,304,95,362,52"/>
+</map>

@@ -55,6 +55,7 @@ var classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService =
     [ "_actorHitSubscriber", "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#aaff942c85f15154794e7b2373cde68f5", null ],
     [ "_attemptId", "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a3ae3ebe9517c356f2803cfc856284067", null ],
     [ "_attemptIndex", "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#abf2cdece138ae3f177dea31742fd23e1", null ],
+    [ "_attemptResumed", "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a9943e65bbc9665c7fcf2b3115f75ef8e", null ],
     [ "_boardDepletedSubscriber", "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a4045114e6e98dd90e03244cf61618c2c", null ],
     [ "_ceremonyLevel", "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a39736b7769350649c8e8bdf01e47d950", null ],
     [ "_ceremonyLevelIndex", "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html#a79cf1401894cbcee32281708563b9f22", null ],

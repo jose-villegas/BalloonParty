@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController =
 [
-    [ "PlayerHealthController", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#acd6413e81a8a6f58eb84772f6db5c367", null ],
+    [ "PlayerHealthController", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a10fca38ec0c8d172d6755a7258ad7ff1", null ],
     [ "ClampedStartingHitPoints", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#aab0a3fcc4229f6ac990fd84ee8ebb9c9", null ],
     [ "Damage", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a53f16f08a5726486f628853c3e1a6444", null ],
     [ "Dispose", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a13ca9962bfa3604103112910ae089b75", null ],
@@ -13,6 +13,7 @@ var classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController =
     [ "_endRunPublisher", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#ae1c6b47e01a6e823cdd93714f45871cd", null ],
     [ "_levelUpSubscriber", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a94fc4776815bf7908dfdcbbc49ede029", null ],
     [ "_levelUpSubscription", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a857041de69699e39bf646c1904938e32", null ],
+    [ "_retryState", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a3281fcf814ddf692f3bcfc54cbda87df", null ],
     [ "_subscription", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a3aac7f8ca1f5f1b53f582a4e86436db3", null ],
     [ "_waveDamageSubscriber", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#a4c0ef1fd4bf12d69e22e48efcfd7d5eb", null ],
     [ "MaxHitPoints", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html#aa6b17d398d9cb064b59cc2d3412ae8ea", null ],

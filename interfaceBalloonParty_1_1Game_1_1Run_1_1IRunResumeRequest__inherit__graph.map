@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.Run.IRunResumeRequest" name="BalloonParty.Game.Run.IRunResumeRequest">
+<area shape="rect" id="Node000001" title="The launch screen&#39;s Continue, handed to the game scope." alt="" coords="5,5,212,50"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Run_1_1RunResumeRequest.html" title=" " alt="" coords="7,98,210,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,64,111,99,106,97,107,68"/>
+</map>

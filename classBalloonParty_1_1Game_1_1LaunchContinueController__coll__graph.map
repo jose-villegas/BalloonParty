@@ -1,0 +1,20 @@
+<map id="BalloonParty.Game.LaunchContinueController" name="BalloonParty.Game.LaunchContinueController">
+<area shape="rect" id="Node000001" title="Offers Continue on the launch screen while a run is saved." alt="" coords="633,138,827,183"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="364,5,448,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="463,26,526,43,574,64,621,89,698,138,693,138,618,93,572,69,524,48,463,31"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="357,57,454,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="469,81,526,94,664,137,659,138,524,99,470,86"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Game_1_1LaunchContinueView.html" title="The launch screen&#39;s Continue button, beside Play: shown only while a run is saved,..." alt="" coords="309,178,503,223"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="518,184,635,172,630,173,519,189"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="39,123,162,150"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="177,150,311,179,306,182,178,155"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Game_1_1LaunchPlayTrigger.html" title="Play button for the launch screen: rolls the clouds (the ascend scroll) for _ascendDuration and only ..." alt="" coords="309,109,503,154"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="177,133,311,131,307,135,179,138"/>
+<area shape="rect" id="Node000006" href="$structBalloonParty_1_1UI_1_1FormattedLabel.html" title="Wraps a TMP_Text whose authored text is a string.Format template; construct it before the label&#39;s tex..." alt="" coords="5,180,196,224"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="211,199,311,200,306,202,212,204"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="518,139,635,151,630,152,519,144"/>
+<area shape="rect" id="Node000008" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSave.html" title="Where the interrupted run is kept between launches: one save at most, overwritten at each level bound..." alt="" coords="287,247,525,274"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="496,240,524,233,602,207,670,184,675,183,604,212,526,238,497,245"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResumeRequest.html" title="The launch screen&#39;s Continue, handed to the game scope." alt="" coords="303,298,509,343"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="504,290,524,283,567,268,608,247,658,214,700,184,704,182,661,218,610,252,569,273,526,288,505,296"/>
+</map>
