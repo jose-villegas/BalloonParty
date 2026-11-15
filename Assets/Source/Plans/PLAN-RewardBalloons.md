@@ -3,10 +3,10 @@
 # Reward Balloons
 
 > Two rare balloons that pay the player instead of pressuring them. The **golden balloon** comes to a
-> purple level, late in it, up to three a level: plated in gold, it shrugs off every normal hit and item,
+> purple level, from 15% done, up to three a level: plated in gold, it shrugs off every normal hit and item,
 > and only a piercing shot pops it, for a free upgrade card. The **heart balloon** is a heart wrapped in
-> bandages that gives a heart back; it comes to purple levels on a schedule (an extra heart at full
-> health) and to a player who is losing hearts.
+> bandages that gives a heart back; it comes to purple levels from their start, up to five (an extra heart
+> at full health), and to a player who is losing hearts.
 >
 > **No changes until this plan is actioned.**
 
@@ -19,9 +19,9 @@
      Added after playtests: every fifth level that isn't purple rolls once (40%) for a single golden balloon,
      at the same completion, whose pop rolls for no other. Level 5 always gets that single one, with no
      roll and at 10% completion rather than half: every player sees a golden balloon early, with the
-     level still ahead of them. Its pop rolls once for
-     another (25%, then 10% for a third: three a level at most), which comes a few lines later. Never more
-     than one on the board, and only a pop rolls: one a board clear takes brings no other.
+     level still ahead of them. On a purple level its pop used to roll once for another (25%, then 10%);
+     since 2026-11-15 (the owner) a purple level rolls for it every 6 lines from 15% done instead, 35%, then
+     20%, then 10%: three a level at most, each rarer. Never more than one on the board.
    - Normal hits do nothing: the shot bounces off it as off an unbreakable. Items do nothing either
      (bomb, lightning, paint): a bomb beside it must not hand out the card.
    - A piercing shot pops it: a cruise-earned pierce or a Snipe lance. It is plowed and shatters at
@@ -34,8 +34,9 @@
 2. **Heart balloon.**
    - A heart-shaped balloon with cloth ribbons wrapped over it like bandages.
    - Any pop gives back one heart, up to the maximum. It pops like a plain balloon (any hit, items too).
-   - On a purple level it comes on a schedule, at full hearts too: one at 30% completion, a 50% chance
-     at 60% and a 25% chance at 90%, each rolled once and needing no pop of the one before. Popped there,
+   - On a purple level it rolls every 6 lines from the level's start, at full hearts too: 40%, then 30%,
+     20%, 12% and 6%, so five at most, each rarer (2026-11-15, the owner; it was a schedule of three at 30%,
+     60% and 90% done). Popped there,
      it gives an extra heart past the maximum, with no design cap; a level-up refill keeps extras, a retry starts
      the hearts over. The roll while hurt is off there.
    - On any other level it comes while the player is missing hearts: the fewer left, the likelier. Never
@@ -70,37 +71,37 @@ sequenceDiagram
     participant Pay as RewardBalloonPayout
     participant Up as RunUpgrades
     Spw->>Rwd: a clock line asks what is due
-    Rwd->>Lvl: reads the completion, 0.5 on a purple level
+    Rwd->>Lvl: reads the completion, 0.15 on a purple level
     Rwd-->>Spw: the golden balloon
     Spw->>Rwd: placed, with a callback for when it leaves
     Hit->>Hit: a piercing shot plows it, shatters it at the wall
     Hit->>Pay: golden balloon popped
     Pay->>Up: grant a free card
     Up->>Up: deal and hold it, the reveal plays it
-    Hit->>Rwd: golden balloon popped
-    Rwd->>Rwd: rolls once for the next, 25% then 10%
-    Rwd-->>Spw: a won one, three lines later
+    Spw->>Rwd: every 6 lines once it has left, a roll for the next, 20% then 10%
+    Rwd-->>Spw: a won one
 ```
 
 ## Tuning (`IRewardBalloonSettings`)
 
 | Setting | Start at | Meaning |
 |---|---|---|
-| `GoldenAtCompletion` | 0.5 | The level's completion that places the golden balloon on a purple level |
-| `GoldenRepeatChances` | 0.25, 0.1 | The chance of the second and third golden balloon, each rolled once when the one before pops |
-| `GoldenRepeatDelayLines` | 3 | Lines after a golden pop before the one it won comes |
+| `GoldenAtCompletion` | 0.5 | The completion an ordinary level's won golden balloon comes at |
+| `PurpleRollEveryLines` | 6 | Lines between a purple level's reward rolls, each kind on its own count |
+| `PurpleGoldenAtCompletion` | 0.15 | The completion from which a purple level rolls for golden balloons |
+| `PurpleGoldenChances` | 0.35, 0.2, 0.1 | Each roll's chance at the next golden balloon on a purple level; the count caps it |
+| `PurpleHeartChances` | 0.4, 0.3, 0.2, 0.12, 0.06 | The same for heart balloons, from the level's start |
 | `OrdinaryGoldenEveryLevels` | 5 | Off a purple level, every this many levels rolls for a single golden balloon (0 is off) |
 | `OrdinaryGoldenChance` | 0.4 | That roll's chance |
 | `SureGoldenLevel` | 5 | A level that always brings a single golden balloon, with no roll (0 for none) |
 | `SureGoldenAtCompletion` | 0.1 | The completion that level's golden balloon comes at |
 | `HeartChanceMissingOne` | 0.04 | Chance per line of a heart balloon while one heart is missing |
 | `HeartChanceMissingTwo` | 0.12 | The same with two missing (one heart left) |
-| `PurpleHearts` | 0.3 sure, 0.6 at 50%, 0.9 at 25% | A purple level's heart balloons: each step's completion and its chance, rolled once |
 | `HeartCooldownLines` | 12 | Lines after a heart balloon before another can come |
 | At most one of each on the board | | A second one waits until the first is gone |
 
 Off a purple level, full hearts never roll one, so the heart balloon is help, not loot. A purple level
-brings its schedule regardless, as part of that level's reward. A level ends with it unpopped and it's gone
+rolls for them regardless, as part of that level's reward. A level ends with it unpopped and it's gone
 with the board, like any balloon.
 
 ## The looks

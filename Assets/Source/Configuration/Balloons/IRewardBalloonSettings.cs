@@ -3,28 +3,21 @@ using System.Collections.Generic;
 namespace BalloonParty.Configuration.Balloons
 {
     /// <summary>
-    ///     When the reward balloons come (PLAN-RewardBalloons): the golden one late in a purple level, and the ones
-    ///     its pop wins, and now and then a single one on another level; the heart one on a purple level's
-    ///     schedule, and elsewhere to a player missing hearts.
+    ///     When the reward balloons come (PLAN-RewardBalloons): on a purple level, both rolled every few lines with
+    ///     each further one rarer; elsewhere, now and then a single golden one, and a heart one for a player missing
+    ///     hearts.
     /// </summary>
     public interface IRewardBalloonSettings
     {
-        /// <summary>The level's completion, 0 to 1, from which a purple level's next line brings its first golden balloon.</summary>
+        /// <summary>
+        ///     The level's completion, 0 to 1, from which an ordinary level that won its golden balloon brings it
+        ///     (<see cref="OrdinaryGoldenEveryLevels" />).
+        /// </summary>
         float GoldenAtCompletion { get; }
 
         /// <summary>
-        ///     The chance of each further golden balloon on a purple level, rolled once when the one before it pops:
-        ///     the first entry for the second balloon, the next for the third. Their count caps the level's golden
-        ///     balloons at one more than it.
-        /// </summary>
-        IReadOnlyList<float> GoldenRepeatChances { get; }
-
-        /// <summary>Spawn lines after a golden balloon's pop before the further one it won comes.</summary>
-        int GoldenRepeatDelayLines { get; }
-
-        /// <summary>
         ///     Off a purple level, every this many levels rolls once (<see cref="OrdinaryGoldenChance" />) for a single
-        ///     golden balloon at <see cref="GoldenAtCompletion" />, whose pop rolls for no other. 0 is off.
+        ///     golden balloon at <see cref="GoldenAtCompletion" />. 0 is off.
         /// </summary>
         int OrdinaryGoldenEveryLevels { get; }
 
@@ -37,11 +30,26 @@ namespace BalloonParty.Configuration.Balloons
         float SureGoldenAtCompletion { get; }
 
         /// <summary>
-        ///     A purple level's heart balloons, in any order: each rolled once on the line that reaches its
-        ///     completion, at full hearts too. Their count caps the level's heart balloons; the roll while hurt (and
-        ///     its cooldown) is off there.
+        ///     Spawn lines between a purple level's reward rolls, golden and heart each on its own count. The first roll
+        ///     of each comes on the first line it can; lines while one of that kind is on the board don't count.
         /// </summary>
-        IReadOnlyList<PurpleHeartStep> PurpleHearts { get; }
+        int PurpleRollEveryLines { get; }
+
+        /// <summary>The level's completion, 0 to 1, from which a purple level rolls for golden balloons.</summary>
+        float PurpleGoldenAtCompletion { get; }
+
+        /// <summary>
+        ///     A purple level's golden balloons: the chance each roll brings the next one, the first entry for the
+        ///     first. Their count caps the level's golden balloons.
+        /// </summary>
+        IReadOnlyList<float> PurpleGoldenChances { get; }
+
+        /// <summary>
+        ///     A purple level's heart balloons, rolled from the level's start, at full hearts too: the chance each roll
+        ///     brings the next one, the first entry for the first. Their count caps the level's heart balloons; the
+        ///     roll while hurt (and its cooldown) is off there.
+        /// </summary>
+        IReadOnlyList<float> PurpleHeartChances { get; }
 
         /// <summary>Chance per spawn line of a heart balloon while one heart is missing, off a purple level.</summary>
         float HeartChanceMissingOne { get; }

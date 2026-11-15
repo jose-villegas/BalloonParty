@@ -1,11 +1,11 @@
 # Balloon/Reward
 
-Two balloons are rewards rather than threats, and no level's mix brings them. The **golden balloon** comes
-on a purple level, from the line that finds the level half done, and popping it can bring
-another, up to three a level. Level 5 always gets a single one early on, the player's first, and now and then
-another ordinary level does too. The **heart balloon** comes to a purple level on a schedule, up to three,
-even at full hearts, where its pop gives an extra heart past the maximum; on any other level it comes to a
-player who is missing hearts, more often the more are missing. At most one of each is on the board. The
+Two balloons are rewards rather than threats, and no level's mix brings them. On a purple level both are
+rolled every few lines, each further one rarer: the **heart balloon** from the level's start, up to five, even
+at full hearts, where its pop gives an extra heart past the maximum; the **golden balloon** from 15% done, up
+to three. Level 5 always gets a single golden one early on, the player's first, and now and then another
+ordinary level does too. Off a purple level the heart comes to a player who is missing hearts, more often the
+more are missing. At most one of each is on the board. The
 plan is `Plans/PLAN-RewardBalloons.md`.
 
 ## Contents
@@ -51,24 +51,20 @@ shorter (`GodRaysLook` again, on the `HeartRays` material and palette entry). It
 Only while the level is being played (`LevelUpPhase.Playing`), and only for a type the balloon catalogue
 has an entry for.
 
-- **Golden.** On a purple level (`IsExtraColorLevel`), the first once `LevelCompletion` reaches
-  `GoldenAtCompletion` (0.5): each colour's points, capped at the goal, over all the goals. Its pop rolls
-  once for a second: `GoldenRepeatChances` (25%, then 10% for a third, so three at most). A won roll
-  brings it `GoldenRepeatDelayLines` (3) lines after the pop. Only a pop rolls (the service reads
-  `ActorHitMessage` for it), so a golden balloon a board clear takes, or one popped after its level ended,
-  brings no other. A new level starts over at the threshold, and anything still owed is dropped. One that
-  could not be placed stays due for the next line. It wins a line over the heart.
+- **On a purple level** (`IsExtraColorLevel`), both kinds roll every `PurpleRollEveryLines` (6) lines, each
+  on its own count, and each kind's first roll is on the first line it can. Lines while one of that kind is on
+  the board don't count. Each roll's chance is the next entry of the kind's list, so each further one is rarer
+  and the list's length caps the level: `PurpleGoldenChances` (35%, 20%, 10%: three at most) and
+  `PurpleHeartChances` (40%, 30%, 20%, 12%, 6%: five at most). The golden rolls only once `LevelCompletion`
+  reaches `PurpleGoldenAtCompletion` (0.15; each colour's points, capped at the goal, over all the goals); the
+  heart from the level's first line, at full hearts too, and the roll while hurt (below) is off there. A won
+  roll stays due until it is placed (a line with no room for it passes it on). A new level starts both counts
+  over and drops anything owed. The golden wins a line over the heart.
 - **Golden, on another level.** Rare, and a single one. Every `OrdinaryGoldenEveryLevels` (5) levels, a
   level that isn't purple rolls once, on its first line, against `OrdinaryGoldenChance` (40%). A won level
-  places one golden balloon at `GoldenAtCompletion`, as a purple level's first; its pop rolls for no other.
+  places one golden balloon at `GoldenAtCompletion` (0.5).
   `SureGoldenLevel` (5) needs no roll: it always places its one, and early in the level
   (`SureGoldenAtCompletion`, 10% done), so every player meets a golden balloon with the level still ahead.
-- **Heart, on a purple level.** The schedule `PurpleHearts`: a step at 30% completion (sure), one at
-  60% (a 50% chance) and one at 90% (25%), so three at most. Each step rolls once, on the line that
-  reaches its completion, at full hearts too, and needs no pop of the heart before. A step won while a
-  heart is on the board waits until it leaves, and a big clear that passes several steps in one line rolls
-  them all and brings what they win one at a time. A new level starts the schedule over and drops what
-  was owed. The roll while hurt (below) is off on a purple level.
 - **Heart, elsewhere.** A roll per line while a heart is missing: `HeartChanceMissingOne`, or
   `HeartChanceMissingTwo` with two or more missing. After one is placed, `HeartCooldownLines` lines pass
   before the next roll. A heart rolled for a line with no room for it is owed to the next line, unless
