@@ -4,6 +4,8 @@ var classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1
     [ "CandidateCenter", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#abf52cd0d8c975007ef8c2ca284023947", null ],
     [ "CandidateScale", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a897f30c195184c398ed03051ab3a089f", null ],
     [ "Center", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a6301552d4c9582ed0ea6795507855d23", null ],
+    [ "ClearanceStep", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a62ca85eee8a57afd5e0ede44bfe4a31f", null ],
+    [ "ClearanceVelocity", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a62f1a55752addc38173c9bd5743b6454", null ],
     [ "Duration", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#aae25b53cc72b518669243d2e0e97c314", null ],
     [ "Elapsed", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a7a5a357ddd75b6a54bcb15288d74a15a", null ],
     [ "FadeElapsed", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#abeaf9b5bf53539526a3e2d445ad9c3ff", null ],

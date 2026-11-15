@@ -1,5 +1,17 @@
 var NAVTREEINDEX70 =
 {
+"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#af2ae482970b80263426292789ddaeb81":[5,0,0,9,5,3],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#af2ae482970b80263426292789ddaeb81":[6,0,0,9,5,3],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#afb50e862f435de8984fd2fcc99f79172":[5,0,0,9,5,28],
+"classBalloonParty_1_1Prediction_1_1PredictionTraceView.html#afb50e862f435de8984fd2fcc99f79172":[6,0,0,9,5,28],
+"classBalloonParty_1_1Prediction_1_1TraceHitGeometry.html":[5,0,0,9,6],
+"classBalloonParty_1_1Prediction_1_1TraceHitGeometry.html":[6,0,0,9,6],
+"classBalloonParty_1_1Prediction_1_1TraceHitGeometry.html#a6d238405ba476e3806bfe906c5eb1038":[5,0,0,9,6,0],
+"classBalloonParty_1_1Prediction_1_1TraceHitGeometry.html#a6d238405ba476e3806bfe906c5eb1038":[6,0,0,9,6,0],
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html":[5,0,0,9,7],
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html":[6,0,0,9,7],
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a0bf71fd070518e040d6a5360001a197d":[5,0,0,9,7,8],
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a0bf71fd070518e040d6a5360001a197d":[6,0,0,9,7,8],
 "classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a165fdad06136004fb8b6eb67f47c0c15":[5,0,0,9,7,10],
 "classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a165fdad06136004fb8b6eb67f47c0c15":[6,0,0,9,7,10],
 "classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a518d52efc061fec3027e3f6f2c6c02ba":[5,0,0,9,7,9],
@@ -237,17 +249,5 @@ var NAVTREEINDEX70 =
 "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html#ad92fdae13c971b1ed0642e08752f7cec":[5,0,0,10,2,4,7],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html#ad92fdae13c971b1ed0642e08752f7cec":[6,0,0,10,2,4,7],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html#adde1d9b610c21f8a41698b1a85d2c858":[5,0,0,10,2,4,10],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html#adde1d9b610c21f8a41698b1a85d2c858":[6,0,0,10,2,4,10],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceTelegraphScan.html":[5,0,0,10,2,5],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceTelegraphScan.html":[6,0,0,10,2,5],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceTelegraphScan.html#a95515a2cfa9f0c2bde6d1105cf0145ce":[5,0,0,10,2,5,0],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceTelegraphScan.html#a95515a2cfa9f0c2bde6d1105cf0145ce":[6,0,0,10,2,5,0],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceTelegraphScan.html#add66ca847929995202bfdf3e0aa58beb":[5,0,0,10,2,5,1],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceTelegraphScan.html#add66ca847929995202bfdf3e0aa58beb":[6,0,0,10,2,5,1],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html":[5,0,0,10,2,6],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html":[6,0,0,10,2,6],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#a2ffd18ed30668f794e66de25d74f4340":[5,0,0,10,2,6,9],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#a2ffd18ed30668f794e66de25d74f4340":[6,0,0,10,2,6,9],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#a33a10654332ba940eca24783a87a3d13":[5,0,0,10,2,6,10],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html#a33a10654332ba940eca24783a87a3d13":[6,0,0,10,2,6,10]
+"classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html#adde1d9b610c21f8a41698b1a85d2c858":[6,0,0,10,2,4,10]
 };

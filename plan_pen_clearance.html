@@ -203,6 +203,7 @@ Formations orbit the circle</h3>
 <li>The push goes into the same <code>SeparationOffset</code>, so the existing relax brings the shape back onto its path to the bar once the ball has passed. That slide out and back is the "orbit".</li>
 <li><b>The principal is pushed too.</b> Its <code>PrincipalPushDamping</code> steadies it against other formations, because the level-up camera follows it. A ball matters more, so the clearance pass gives every formation full weight. Once the level-up cinematic takes the principal it is <code>Paused</code>, and paused formations are never moved.</li>
 <li>The formation pass caps each frame's push at a share of the formation's radius. That is no use here: a shape still blooming from a point has almost no radius, and a ball at about 10 world units a second would cross a full-size shape before a radius-scaled push moved it. The clearance pass caps its push by a speed instead, <code>FormationPushSpeed</code> (world units a second, faster than a ball), so a shape slides out of the way smoothly at any frame rate, and one born on the ball slides off it while it blooms.</li>
+<li>The push is a velocity that eases toward the speed the overlap asks for, not a capped step each frame. The first build stepped, and in playtest a ball passing through a shape made it lurch and flip direction, which dragged its pens' ribbons into long straight streaks. Eased, the shape speeds up out of the way and coasts to a stop. The guide's comet line is carried along by each frame's push, so it doesn't kink.</li>
 </ul>
 <h3><a class="anchor" id="autotoc_md775"></a>
 Trails bend round the rim</h3>
@@ -261,7 +262,7 @@ Settings</h3>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>EffectFloorAlpha</code>   </td><td class="markdownTableBodyNone">0.3   </td><td class="markdownTableBodyNone">How much of an effect is left at the ball    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>FormationPushSpeed</code>   </td><td class="markdownTableBodyNone">14 world units/s   </td><td class="markdownTableBodyNone">How fast a formation slides out of a circle: faster than a ball (about 10 u/s), so one can't overrun a shape    </td></tr>
+<td class="markdownTableBodyNone"><code>FormationPushSpeed</code>   </td><td class="markdownTableBodyNone">14 world units/s   </td><td class="markdownTableBodyNone">Top speed a formation slides out of a circle at: faster than a ball (about 10 u/s), so one can't overrun a shape    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>PushFormations</code> / <code>BendTrails</code> / <code>FadeEffects</code>   </td><td class="markdownTableBodyNone">on   </td><td class="markdownTableBodyNone">Each consumer can be switched off on its own, to compare in a playtest (<code>FadeEffects</code> off publishes no circles to the shaders)   </td></tr>
 </table>

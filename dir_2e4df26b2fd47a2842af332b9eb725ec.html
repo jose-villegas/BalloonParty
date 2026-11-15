@@ -164,7 +164,7 @@ A circle's life</h1>
 <h1><a class="anchor" id="autotoc_md944"></a>
 Who reads it</h1>
 <ul>
-<li><b>Score formations</b> (<code>Game/Score/Behaviours/ShapeFormationTicker</code>): after their own overlap packing, each moving formation is pushed out of every circle into its persistent <code>SeparationOffset</code>, at up to <code>FormationPushSpeed</code> world units a second. The circles never give way. See <code><a class="el" href="Game_2Score_2README_8md.html">Game/Score/README.md</a></code>, Overlap Resolution.</li>
+<li><b>Score formations</b> (<code>Game/Score/Behaviours/ShapeFormationTicker</code>): after their own overlap packing, each moving formation is pushed out of every circle into its persistent <code>SeparationOffset</code>, at an eased speed of up to <code>FormationPushSpeed</code> world units a second. The circles never give way. See <code><a class="el" href="Game_2Score_2README_8md.html">Game/Score/README.md</a></code>, Overlap Resolution.</li>
 <li><b>Score trails</b> (<code>UI/Score/FlyingTrail</code>): <code>ScoreTrailService</code> builds its <code>TrailSpawner</code>s with the field (or null with <code>BendTrails</code> off), and the spawner hands it to every trail it spawns on a flight. In <code>LateUpdate</code>, after DOTween or the follow has moved it, a trail on its own flight replaces its position with <code>Deflect(position)</code>, so its ribbon curves round the ball. A head nothing moved since its last bend (a tween paused by the level-up cinematic) is left alone: the bend is not idempotent and would creep it out to the band's edge. The bend's soft band lies just outside the circle (out to radius × (1 + <code>RimSoftness</code>)) and everything inside is squeezed into it, so a bent trail never enters the circle; the effect fade's soft edge lies just inside, so a bent trail is never also faded. Formation pens, range pens and the heart trail don't bend (see the plan for why).</li>
 <li><b>Effect shaders</b>: the ticker publishes <code>_ClearanceCircles</code> (8 × <code>float4</code>: centre xy, effective radius, strength), <code>_ClearanceCount</code>, <code>_ClearanceFloor</code> and <code>_ClearanceSoftness</code> every frame. With <code>FadeEffects</code> off it publishes a count of 0.</li>
 </ul>
@@ -182,7 +182,7 @@ Settings</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>EffectFloorAlpha</code>   </td><td class="markdownTableBodyNone">0.3   </td><td class="markdownTableBodyNone">Alpha an effect keeps at a full-strength circle's centre    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>FormationPushSpeed</code>   </td><td class="markdownTableBodyNone">14   </td><td class="markdownTableBodyNone">World units a second a formation slides out of a circle; faster than a ball (about 10)    </td></tr>
+<td class="markdownTableBodyNone"><code>FormationPushSpeed</code>   </td><td class="markdownTableBodyNone">14   </td><td class="markdownTableBodyNone">Top speed a formation slides out of a circle at, in world units a second; faster than a ball (about 10)    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>PushFormations</code> / <code>BendTrails</code> / <code>FadeEffects</code>   </td><td class="markdownTableBodyNone">on   </td><td class="markdownTableBodyNone">Switch each reader off on its own, to compare in a playtest   </td></tr>
 </table>
