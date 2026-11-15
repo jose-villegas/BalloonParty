@@ -34,9 +34,9 @@ namespace BalloonParty.Editor
         private static readonly Color White = new(0.97f, 0.97f, 0.98f, 1f);
 
         // The body art is a flat silhouette; the balloon's depth is all in its specular glows. A white body under
-        // them would hide them, so it's a pale cool grey and the glows pure white, standing out as Play's cream
-        // glows do on its blue.
-        private static readonly Color BodyColor = new(0.8f, 0.82f, 0.87f, 1f);
+        // them would hide them, so it's a cool grey and the glows pure white: the scene light warms both alike, and
+        // the glows stand out by being brighter and warmer, as Play's cream glows do on its blue.
+        private static readonly Color BodyColor = new(0.7f, 0.74f, 0.84f, 1f);
         private static readonly Color RibbonColor = new(0.98f, 0.965f, 0.925f, 1f);
         private static readonly Color InkColor = new(0.2f, 0.2f, 0.2f, 1f);
 
