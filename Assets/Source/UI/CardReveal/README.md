@@ -22,9 +22,11 @@ A purple level starts with a ribbon naming it: `ICardRevealSettings.BonusRibbonT
 the capped ribbon tinted the level's extra colour (the last of its colours). `CardRevealView` plays it off
 `Game/Level/IBonusLevelCue`, `BonusRibbonDelaySeconds` (0.4) after play begins, growing in from
 `_bonusRibbonFrom` to `_bonusRibbonTo` (the view's own layout, high in the middle of the board) and flying
-`BonusRibbonSeconds` (2.2) with its exit, all on unscaled time. The copy is made the first time, under the
-canvas beside the view (whose own object carries the reveal's group, faded out between reveals), so it shows without a reveal and over one still flying. It works
-with no pops baked too. It doesn't hold the board.
+`BonusRibbonSeconds` (2.2) with its exit, all on unscaled time. It is drawn `_bonusRibbonScale` (1.8) times a
+reveal ribbon's size, on a holder (the ribbon poses its own scale as it flies), so its layout is in that scaled
+space. The copy is made the first time, under the canvas beside the view (whose own object carries the reveal's
+group, faded out between reveals), so it shows without a reveal and over one still flying. It works with no pops
+baked too. It doesn't hold the board.
 
 ## A reveal, step by step
 

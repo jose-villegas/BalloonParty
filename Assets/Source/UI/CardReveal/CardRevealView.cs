@@ -76,19 +76,23 @@ namespace BalloonParty.UI.CardReveal
         [SerializeField] private float _riseDistance = 260f;
 
         [Header("Bonus ribbon")]
-        [Tooltip("A purple level starts with a ribbon naming it, a copy of the capped ribbon in the level's purple: " +
-                 "it grows in from here (canvas units from the canvas's centre), tilted and scaled as below.")]
-        [SerializeField] private Vector2 _bonusRibbonFrom = new(0f, 62f);
+        [Tooltip("A purple level starts with a ribbon naming it, a copy of the capped ribbon in the level's purple, " +
+                 "drawn this many times a reveal ribbon's size: an announcement, read at a glance. The positions " +
+                 "below are in that scaled space, from the canvas's centre.")]
+        [SerializeField] [Min(0.1f)] private float _bonusRibbonScale = 1.8f;
+
+        [Tooltip("Where the bonus ribbon grows in from, tilted and scaled as below.")]
+        [SerializeField] private Vector2 _bonusRibbonFrom = new(0f, 34f);
 
         [SerializeField] private float _bonusRibbonFromTilt = -12f;
         [SerializeField] [Range(0.1f, 1f)] private float _bonusRibbonFromScale = 0.2f;
 
         [Tooltip("Where the bonus ribbon bursts to, its tilt there, its drift a second, and how far it flies off.")]
-        [SerializeField] private Vector2 _bonusRibbonTo = new(0f, 70f);
+        [SerializeField] private Vector2 _bonusRibbonTo = new(0f, 40f);
 
         [SerializeField] private float _bonusRibbonTilt = -4f;
-        [SerializeField] private Vector2 _bonusRibbonDrift = new(0f, 3f);
-        [SerializeField] private Vector2 _bonusRibbonExitBy = new(0f, 120f);
+        [SerializeField] private Vector2 _bonusRibbonDrift = new(0f, 1.5f);
+        [SerializeField] private Vector2 _bonusRibbonExitBy = new(0f, 80f);
 
         [Inject] private ICardReveals _cardReveals;
         [Inject] private ICardRevealSettings _settings;
@@ -744,8 +748,18 @@ namespace BalloonParty.UI.CardReveal
                     return;
                 }
 
-                _bonusRibbon = Instantiate(_cappedRibbon, transform.parent != null ? transform.parent : transform);
-                _bonusRibbon.name = "BonusRibbon";
+                // The ribbon poses its own scale as it flies, so the bonus size goes on a holder around it.
+                var holder = new GameObject("BonusRibbon", typeof(RectTransform));
+                var holderRect = (RectTransform)holder.transform;
+                holderRect.SetParent(transform.parent != null ? transform.parent : transform, false);
+                holderRect.anchorMin = new Vector2(0.5f, 0.5f);
+                holderRect.anchorMax = new Vector2(0.5f, 0.5f);
+                holderRect.anchoredPosition = Vector2.zero;
+                holderRect.sizeDelta = Vector2.zero;
+                holderRect.localScale = Vector3.one * _bonusRibbonScale;
+                holder.layer = gameObject.layer;
+                _bonusRibbon = Instantiate(_cappedRibbon, holderRect);
+                _bonusRibbon.name = "Ribbon";
                 var rect = (RectTransform)_bonusRibbon.transform;
                 rect.anchorMin = new Vector2(0.5f, 0.5f);
                 rect.anchorMax = new Vector2(0.5f, 0.5f);
