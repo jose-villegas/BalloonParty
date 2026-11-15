@@ -86,6 +86,7 @@ var annotated_dup =
           [ "BalloonModelFactory", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelFactory.html", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelFactory" ],
           [ "BubbleClusterModel", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel" ],
           [ "ColorSource", "structBalloonParty_1_1Balloon_1_1Model_1_1ColorSource.html", "structBalloonParty_1_1Balloon_1_1Model_1_1ColorSource" ],
+          [ "DiscoBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1DiscoBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1DiscoBalloonModel" ],
           [ "GoldenBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel" ],
           [ "HeartBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1HeartBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1HeartBalloonModel" ],
           [ "IBalloonModel", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel" ],
@@ -93,11 +94,15 @@ var annotated_dup =
           [ "IHasWriteableItemSlot", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IHasWriteableItemSlot.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IHasWriteableItemSlot" ],
           [ "IWriteableBalloonModel", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableBalloonModel.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableBalloonModel" ],
           [ "IWriteableFormationMember", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember" ],
+          [ "PlatedBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel" ],
           [ "ToughBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel" ],
           [ "UnbreakableBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel" ]
         ] ],
         [ "Reward", "namespaceBalloonParty_1_1Balloon_1_1Reward.html", [
+          [ "DiscoWave", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave" ],
           [ "IRewardBalloonRequests", "interfaceBalloonParty_1_1Balloon_1_1Reward_1_1IRewardBalloonRequests.html", "interfaceBalloonParty_1_1Balloon_1_1Reward_1_1IRewardBalloonRequests" ],
+          [ "PlatedRewardSchedule", "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html", "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule" ],
+          [ "PlatedRewardTuning", "structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html", "structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning" ],
           [ "RewardBalloonPayout", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout" ],
           [ "RewardBalloonPop", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPop.html", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPop" ],
           [ "RewardBalloonService", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService" ]
@@ -117,6 +122,7 @@ var annotated_dup =
         ] ],
         [ "Type", "namespaceBalloonParty_1_1Balloon_1_1Type.html", [
           [ "ColorableBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1ColorableBalloonVariant.html", "classBalloonParty_1_1Balloon_1_1Type_1_1ColorableBalloonVariant" ],
+          [ "DiscoBallLook", "classBalloonParty_1_1Balloon_1_1Type_1_1DiscoBallLook.html", "classBalloonParty_1_1Balloon_1_1Type_1_1DiscoBallLook" ],
           [ "GodRaysLook", "classBalloonParty_1_1Balloon_1_1Type_1_1GodRaysLook.html", "classBalloonParty_1_1Balloon_1_1Type_1_1GodRaysLook" ],
           [ "IBalloonVariant", "interfaceBalloonParty_1_1Balloon_1_1Type_1_1IBalloonVariant.html", "interfaceBalloonParty_1_1Balloon_1_1Type_1_1IBalloonVariant" ],
           [ "RainbowBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html", "classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant" ],
@@ -129,8 +135,10 @@ var annotated_dup =
         [ "View", "namespaceBalloonParty_1_1Balloon_1_1View.html", [
           [ "BalanceGizmos", "classBalloonParty_1_1Balloon_1_1View_1_1BalanceGizmos.html", null ],
           [ "BalloonView", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView" ],
+          [ "DiscoWaveView", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView" ],
           [ "IBalloonMotionView", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonMotionView.html", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonMotionView" ],
           [ "IBalloonViewBinding", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonViewBinding.html", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonViewBinding" ],
+          [ "IDiscoWaveView", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IDiscoWaveView.html", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IDiscoWaveView" ],
           [ "PaintDripOverlay", "classBalloonParty_1_1Balloon_1_1View_1_1PaintDripOverlay.html", "classBalloonParty_1_1Balloon_1_1View_1_1PaintDripOverlay" ],
           [ "ParticleColorableRenderer", "classBalloonParty_1_1Balloon_1_1View_1_1ParticleColorableRenderer.html", "classBalloonParty_1_1Balloon_1_1View_1_1ParticleColorableRenderer" ],
           [ "SpriteColorableRenderer", "classBalloonParty_1_1Balloon_1_1View_1_1SpriteColorableRenderer.html", "classBalloonParty_1_1Balloon_1_1View_1_1SpriteColorableRenderer" ]
@@ -146,8 +154,10 @@ var annotated_dup =
           [ "BalloonPrefabEntry", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry" ],
           [ "BalloonsConfiguration", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration" ],
           [ "BalloonTypeWeight", "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight.html", "structBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonTypeWeight" ],
+          [ "DiscoWaveSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1DiscoWaveSettings.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1DiscoWaveSettings" ],
           [ "HitVfxOverride", "classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride" ],
           [ "IBalloonsConfiguration", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration" ],
+          [ "IDiscoWaveSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IDiscoWaveSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IDiscoWaveSettings" ],
           [ "IRewardBalloonSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings" ],
           [ "IUnbreakableFormationSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings" ],
           [ "PopPulse", "classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse" ],
@@ -667,6 +677,7 @@ var annotated_dup =
           [ "PaintSplashView", "classBalloonParty_1_1Item_1_1Paint_1_1PaintSplashView.html", "classBalloonParty_1_1Item_1_1Paint_1_1PaintSplashView" ],
           [ "PaintSpread", "classBalloonParty_1_1Item_1_1Paint_1_1PaintSpread.html", "classBalloonParty_1_1Item_1_1Paint_1_1PaintSpread" ],
           [ "PaintSpreadParams", "structBalloonParty_1_1Item_1_1Paint_1_1PaintSpreadParams.html", "structBalloonParty_1_1Item_1_1Paint_1_1PaintSpreadParams" ],
+          [ "PaintTargets", "classBalloonParty_1_1Item_1_1Paint_1_1PaintTargets.html", "classBalloonParty_1_1Item_1_1Paint_1_1PaintTargets" ],
           [ "PaintTriangle", "structBalloonParty_1_1Item_1_1Paint_1_1PaintTriangle.html", "structBalloonParty_1_1Item_1_1Paint_1_1PaintTriangle" ]
         ] ],
         [ "Preview", "namespaceBalloonParty_1_1Item_1_1Preview.html", [
@@ -778,7 +789,8 @@ var annotated_dup =
           [ "ProjectileHitResolver", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver" ],
           [ "ProjectileMotionResolver", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver" ],
           [ "ProjectileStep", "structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html", "structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep" ],
-          [ "ProjectileTapResolver", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver" ]
+          [ "ProjectileTapResolver", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver" ],
+          [ "ShotPaintLedger", "classBalloonParty_1_1Projectile_1_1Controller_1_1ShotPaintLedger.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ShotPaintLedger" ]
         ] ],
         [ "Model", "namespaceBalloonParty_1_1Projectile_1_1Model.html", [
           [ "IProjectileBuffEndCondition", "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition.html", "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition" ],

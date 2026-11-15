@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse.html" title="A pop that swells and then shrinks away instead of vanishing at once: the heart balloon&#39;s beat." alt="" coords="5,5,202,50"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IDiscoWaveSettings.html" title="The disco ball&#39;s wave (PLAN&#45;DiscoBalloon): a disc that grows from the pop across the board and paints..." alt="" coords="5,5,216,50"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1Balloons_1_1DiscoWaveSettings.html" title=" " alt="" coords="264,5,470,50"/>
+<area shape="poly" id="edge76_Node000000_Node000001" title=" " alt="" coords="231,25,266,28,261,28,231,30"/>
 </map>

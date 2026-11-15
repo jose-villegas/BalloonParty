@@ -202,6 +202,11 @@ var NAVTREEINDEX0 =
 "DeflectChainRule_8cs.html":[7,0,14,16],
 "DeflectorActorModel_8cs.html":[7,0,15,0,0,10],
 "DevLogConsole_8cs.html":[7,0,2,9],
+"DiscoBallLook_8cs.html":[7,0,1,5,2],
+"DiscoBalloonModel_8cs.html":[7,0,1,2,6],
+"DiscoWaveSettings_8cs.html":[7,0,3,0,4],
+"DiscoWaveView_8cs.html":[7,0,1,6,2],
+"DiscoWave_8cs.html":[7,0,1,3,0],
 "DisturbanceFieldCoordinates_8cs.html":[7,0,14,3,0],
 "DisturbanceFieldResources_8cs.html":[7,0,14,3,1],
 "DisturbanceFieldService_8cs.html":[7,0,14,3,2],
@@ -244,10 +249,5 @@ var NAVTREEINDEX0 =
 "FrameDebuggerEventWalker_8cs.html":[7,0,6,2,2],
 "FrameDebuggerReflection_8cs.html":[7,0,6,2,3],
 "FrameRateSettings_8cs.html":[7,0,14,2,2],
-"FreesoundQueryBuilder_8cs.html":[7,0,0,1,2],
-"FreesoundResponseParser_8cs.html":[7,0,0,1,3],
-"FreesoundSfxProvider_8cs.html":[7,0,0,1,4],
-"FreesoundTokenSource_8cs.html":[7,0,0,1,5],
-"GameDisplayConfigurationDrawer_8cs.html":[7,0,3,4,1],
-"GameDisplayConfiguration_8cs.html":[7,0,3,13]
+"FreesoundQueryBuilder_8cs.html":[7,0,0,1,2]
 };

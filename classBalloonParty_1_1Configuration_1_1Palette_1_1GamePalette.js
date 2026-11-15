@@ -13,6 +13,7 @@ var classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette =
     [ "_names", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#aa9dcbd6dc5c7e443948774f9dfafd622", null ],
     [ "_namesByMask", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a40850ecccdc6706f0e37b73a50ce4576", null ],
     [ "_progressNames", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a136de7759a508251fc2873ccdc4e7605", null ],
+    [ "DiscoRaysColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a9db84c98ba3bc21ceb5d5953a6278ec5", null ],
     [ "GoldenRaysColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#acf2d85ecede39d07bb66b4a864ea9d3b", null ],
     [ "HeartRaysColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#ab92cb42963458f20d5e276ad7c1ae9da", null ],
     [ "PredictionColorId", "classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a9d25ed70cd0747f4809a7887cd7f2f12", null ],

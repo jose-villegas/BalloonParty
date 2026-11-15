@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Scenario_1_1GroundRevealPlanner.html" target="_top" xlink:title="Decides how GroundView answers the active scenario and the navigation state.">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Scenario_1_1GroundRevealCurve.html" target="_top" xlink:title="The timing of the mist reveal, as one curve over how open the ground is.">
 <polygon fill="white" stroke="#666666" points="159.25,-33.5 0,-33.5 0,0 159.25,0 159.25,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Scenario.Ground</text>
-<text xml:space="preserve" text-anchor="middle" x="79.62" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">RevealPlanner</text>
+<text xml:space="preserve" text-anchor="middle" x="79.62" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">RevealCurve</text>
 </a>
 </g>
 </g>

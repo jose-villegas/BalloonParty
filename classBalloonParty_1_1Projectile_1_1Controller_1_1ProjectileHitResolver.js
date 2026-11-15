@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver =
 [
-    [ "ProjectileHitResolver", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a4a4223cf83622273e256e3e5ca90c153", null ],
+    [ "ProjectileHitResolver", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a74771b454c72550e5d936d418bc04190", null ],
     [ "ApplyColorChange", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a406b419d354f9b4fe533c7c0c035b85d", null ],
     [ "ConvertSideNeighboursToRainbow", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#aeb364cdbc61c7065f934faa2dd871c27", null ],
     [ "DischargePending", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a25017efe052d3822bddc0f56983f6648", null ],
@@ -12,6 +12,7 @@ var classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver =
     [ "_grid", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a747520ff37070e60f7649509048b5757", null ],
     [ "_hitDispatcher", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a2d4437afd6e9619bae712adc8d7f2980", null ],
     [ "_neighborBuffer", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a457b3a93aeb952416434d13d6aac42da", null ],
+    [ "_paintLedger", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#abc4035b7628d465d41d9b3fcc4f295ee", null ],
     [ "_runConfig", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a4c335ddf2b3d0119c4fd270eff325062", null ],
     [ "_shieldGainedPublisher", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a80b738cbb4593f3a726e767b6110c544", null ],
     [ "_sideNeighborOffsets", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileHitResolver.html#a41e96c8ba5639b8440e0c7c5625f06b6", null ],

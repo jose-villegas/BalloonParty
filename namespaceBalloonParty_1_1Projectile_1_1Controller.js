@@ -11,6 +11,7 @@ var namespaceBalloonParty_1_1Projectile_1_1Controller =
     [ "ProjectileMotionResolver", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileMotionResolver" ],
     [ "ProjectileStep", "structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep.html", "structBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileStep" ],
     [ "ProjectileTapResolver", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileTapResolver" ],
+    [ "ShotPaintLedger", "classBalloonParty_1_1Projectile_1_1Controller_1_1ShotPaintLedger.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ShotPaintLedger" ],
     [ "ProjectileHitVisual", "namespaceBalloonParty_1_1Projectile_1_1Controller.html#adcae15a3eb95c064df9a6b8fc67069e5", [
       [ "None", "namespaceBalloonParty_1_1Projectile_1_1Controller.html#adcae15a3eb95c064df9a6b8fc67069e5a6adf97f83acf6453d4a6a4b1070f3754", null ],
       [ "Recolored", "namespaceBalloonParty_1_1Projectile_1_1Controller.html#adcae15a3eb95c064df9a6b8fc67069e5a9f1462fa57e31e5a3b89e249fc75f381", null ],

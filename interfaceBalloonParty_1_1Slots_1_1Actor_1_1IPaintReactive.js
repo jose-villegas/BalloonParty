@@ -1,6 +1,7 @@
 var interfaceBalloonParty_1_1Slots_1_1Actor_1_1IPaintReactive =
 [
-    [ "PlayPaintDrip", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IPaintReactive.html#a5dfac4bc04b424dfe16e143f59267ca7", null ],
+    [ "PlayPaintDrip", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IPaintReactive.html#a8f761f24e5c94bfb1e6e96cd1dd90a75", null ],
+    [ "PlayRecolourBurst", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IPaintReactive.html#a22ca4d4d0c262281ee285f9d87f847bf", null ],
     [ "ActorKind", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IPaintReactive.html#ab9bf672fb5c40effcf0f585e8ead937c", null ],
     [ "ContactCenter", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IPaintReactive.html#ae9f7a0d348a554d513dbae931bee1584", null ],
     [ "ContactRadius", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IPaintReactive.html#aca1f4563ee99f1860a695c3c91932e79", null ],

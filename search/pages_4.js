@@ -4,11 +4,12 @@ var searchData=
   ['balance_1',['Colour Balance',['../plan_color_balance.html',1,'plans']]],
   ['balance_20flow_2',['Balance Flow',['../arch_balance_flow.html',1,'architecture']]],
   ['balance_20pipeline_3',['Hit, Spawn and Balance Pipeline',['../arch_turn_pipeline.html',1,'architecture']]],
-  ['balloonparty_4',['BalloonParty',['../index.html',1,'']]],
-  ['balloons_5',['Reward Balloons',['../plan_reward_balloons.html',1,'plans']]],
-  ['biomes_6',['Terrain &amp; Biomes',['../plan_terrain_biomes.html',1,'plans']]],
-  ['bubble_20cluster_20hit_20feedback_7',['Bubble Cluster Hit Feedback',['../plan_bubble_cluster_hit_feedback.html',1,'plans']]],
-  ['bubble_20merge_8',['Water Scenario &amp; Bubble Merge',['../plan_water_scenario.html',1,'plans']]],
-  ['bush_20baking_20tools_9',['Bush Baking Tools',['../editor_bush.html',1,'']]],
-  ['bush_20system_10',['Bush System',['../arch_bush_system.html',1,'architecture']]]
+  ['balloon_4',['Disco Balloon',['../plan_disco_balloon.html',1,'plans']]],
+  ['balloonparty_5',['BalloonParty',['../index.html',1,'']]],
+  ['balloons_6',['Reward Balloons',['../plan_reward_balloons.html',1,'plans']]],
+  ['biomes_7',['Terrain &amp; Biomes',['../plan_terrain_biomes.html',1,'plans']]],
+  ['bubble_20cluster_20hit_20feedback_8',['Bubble Cluster Hit Feedback',['../plan_bubble_cluster_hit_feedback.html',1,'plans']]],
+  ['bubble_20merge_9',['Water Scenario &amp; Bubble Merge',['../plan_water_scenario.html',1,'plans']]],
+  ['bush_20baking_20tools_10',['Bush Baking Tools',['../editor_bush.html',1,'']]],
+  ['bush_20system_11',['Bush System',['../arch_bush_system.html',1,'architecture']]]
 ];

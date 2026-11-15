@@ -163,8 +163,12 @@ Static Private Member Functions</h2></td></tr>
 <tr class="separator:af3f1a7ef82edff20abbbc25fb294decd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a799679b3d7426ffb7a1ed315ca2f2480" id="r_a799679b3d7426ffb7a1ed315ca2f2480"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a799679b3d7426ffb7a1ed315ca2f2480">IsPathClearAhead</a> (in <a class="el" href="structBalloonParty_1_1Shared_1_1WallLimits.html">WallLimits</a> walls, Vector2 position, Vector2 direction, int bounces, float projectileContactRadius, <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a>[] workingSet, int activeCount, float tHit, <a class="el" href="classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html">ShotBoardDynamics</a> dynamics)</td></tr>
 <tr class="separator:a799679b3d7426ffb7a1ed315ca2f2480"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f22ccd848fa59e0fc42cce3449d7948" id="r_a7f22ccd848fa59e0fc42cce3449d7948"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f22ccd848fa59e0fc42cce3449d7948">IsRainbowPaintable</a> (in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a> balloon)</td></tr>
+<tr class="separator:a7f22ccd848fa59e0fc42cce3449d7948"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29a958ed54839de533a042058f38bb91" id="r_a29a958ed54839de533a042058f38bb91"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29a958ed54839de533a042058f38bb91">NudgeItemHit</a> (<a class="el" href="classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html">ShotBoardDynamics</a> dynamics, in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a> balloon, float tHit)</td></tr>
 <tr class="separator:a29a958ed54839de533a042058f38bb91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94b29f1dcfb9b18f7b546dcfc5d7445c" id="r_a94b29f1dcfb9b18f7b546dcfc5d7445c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a94b29f1dcfb9b18f7b546dcfc5d7445c">PaintBoardIfDisco</a> (<a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a>[] workingSet, int activeCount, <a class="el" href="namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7">ShotRewardKind</a> reward, string rainbowColorId)</td></tr>
+<tr class="separator:a94b29f1dcfb9b18f7b546dcfc5d7445c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8f5cb1035af6f6394fff4b181a70d54" id="r_ac8f5cb1035af6f6394fff4b181a70d54"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac8f5cb1035af6f6394fff4b181a70d54">PopItemHit</a> (<a class="el" href="classBalloonParty_1_1Solver_1_1ShotItemLayer.html">ShotItemLayer</a> items, <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a>[] workingSet, ref int activeCount, int index, float tHit, <a class="el" href="classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html">ShotBoardDynamics</a> dynamics, in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotScoreRules.html">ShotScoreRules</a> scoreRules, string sourceColorId, <a class="el" href="namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762">DamageFlags</a> flags, ref <a class="el" href="structBalloonParty_1_1Solver_1_1ShotFlightState.html">ShotFlightState</a> state)</td></tr>
 <tr class="separator:ac8f5cb1035af6f6394fff4b181a70d54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4ba01acda9faabd8a32dff16d55f4e9" id="r_af4ba01acda9faabd8a32dff16d55f4e9"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af4ba01acda9faabd8a32dff16d55f4e9">RecolorSideNeighbor</a> (<a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a>[] workingSet, int sideIndex, string rainbowColorId)</td></tr>
@@ -839,6 +843,31 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a7f22ccd848fa59e0fc42cce3449d7948" name="a7f22ccd848fa59e0fc42cce3449d7948"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f22ccd848fa59e0fc42cce3449d7948">&#9670;&#160;</a></span>IsRainbowPaintable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.Solver.ShotSimulator.IsRainbowPaintable </td>
+          <td>(</td>
+          <td class="paramtype">in <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a></td>          <td class="paramname"><span class="paramname"><em>balloon</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a29a958ed54839de533a042058f38bb91" name="a29a958ed54839de533a042058f38bb91"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a29a958ed54839de533a042058f38bb91">&#9670;&#160;</a></span>NudgeItemHit()</h2>
 
@@ -862,6 +891,45 @@ Static Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>tHit</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a94b29f1dcfb9b18f7b546dcfc5d7445c" name="a94b29f1dcfb9b18f7b546dcfc5d7445c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94b29f1dcfb9b18f7b546dcfc5d7445c">&#9670;&#160;</a></span>PaintBoardIfDisco()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void BalloonParty.Solver.ShotSimulator.PaintBoardIfDisco </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonState.html">ShotBalloonState</a>[]</td>          <td class="paramname"><span class="paramname"><em>workingSet</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>activeCount</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7">ShotRewardKind</a></td>          <td class="paramname"><span class="paramname"><em>reward</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>rainbowColorId</em></span>&#160;)</td>
         </tr>
       </table>
   </td>

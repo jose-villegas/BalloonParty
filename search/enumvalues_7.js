@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['heart_0',['Heart',['../namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60eaf4a6ceffc0054a855f31f42083328df9',1,'BalloonParty::Balloon::Type']]],
+  ['heart_0',['Heart',['../namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60eaf4a6ceffc0054a855f31f42083328df9',1,'BalloonParty.Balloon.Type.Heart'],['../namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7af4a6ceffc0054a855f31f42083328df9',1,'BalloonParty.Solver.Heart']]],
   ['heartdrain_1',['HeartDrain',['../namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a7b549c39b6c31bcfbcc0dfda6224863b',1,'BalloonParty.Audio.HeartDrain'],['../namespaceBalloonParty_1_1Shared_1_1GameState.html#a215f59d6ae03f95cde0cf7bc71abdd3ea7b549c39b6c31bcfbcc0dfda6224863b',1,'BalloonParty.Shared.GameState.HeartDrain']]],
   ['heartdrainrestore_2',['HeartDrainRestore',['../namespaceBalloonParty_1_1Shared_1_1GameState.html#a215f59d6ae03f95cde0cf7bc71abdd3ea3ee82ab8ac31133a3785e0599d698a1a',1,'BalloonParty::Shared::GameState']]],
   ['heartlost_3',['HeartLost',['../namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56dad8f3658e1be8bbf0ae20fdbd26574569',1,'BalloonParty::Configuration::HeadsUp']]],

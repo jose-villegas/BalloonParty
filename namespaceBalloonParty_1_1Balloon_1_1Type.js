@@ -1,6 +1,7 @@
 var namespaceBalloonParty_1_1Balloon_1_1Type =
 [
     [ "ColorableBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1ColorableBalloonVariant.html", "classBalloonParty_1_1Balloon_1_1Type_1_1ColorableBalloonVariant" ],
+    [ "DiscoBallLook", "classBalloonParty_1_1Balloon_1_1Type_1_1DiscoBallLook.html", "classBalloonParty_1_1Balloon_1_1Type_1_1DiscoBallLook" ],
     [ "GodRaysLook", "classBalloonParty_1_1Balloon_1_1Type_1_1GodRaysLook.html", "classBalloonParty_1_1Balloon_1_1Type_1_1GodRaysLook" ],
     [ "IBalloonVariant", "interfaceBalloonParty_1_1Balloon_1_1Type_1_1IBalloonVariant.html", "interfaceBalloonParty_1_1Balloon_1_1Type_1_1IBalloonVariant" ],
     [ "RainbowBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html", "classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant" ],
@@ -19,6 +20,7 @@ var namespaceBalloonParty_1_1Balloon_1_1Type =
       [ "Rainbow", "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60ea4aca5ee9a087fb9218bfb662fe92605c", null ],
       [ "Tougher", "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60ea6a8220a3c5ab78a3431b332ea5899ea2", null ],
       [ "Golden", "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60ea7d2b88f5977b8a31c6193b4c81a43daf", null ],
-      [ "Heart", "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60eaf4a6ceffc0054a855f31f42083328df9", null ]
+      [ "Heart", "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60eaf4a6ceffc0054a855f31f42083328df9", null ],
+      [ "Disco", "namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60ea6b8a071d3bbcb8dbc788e488f7ece25c", null ]
     ] ]
 ];

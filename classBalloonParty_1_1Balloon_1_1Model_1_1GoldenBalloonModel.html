@@ -117,7 +117,7 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloon
 </div><!--header-->
 <div class="contents">
 
-<p>The golden reward balloon (PLAN-RewardBalloons): plated, so the shot's own ordinary hit bounces off and no item but the laser touches it.  
+<p>The golden reward balloon (PLAN-RewardBalloons): a <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel.html" title="A plated reward balloon (the golden balloon, the disco ball): the shot&#39;s own ordinary hit bounces off...">PlatedBalloonModel</a> whose pop pays a free card (<code>RewardBalloonPayout</code>).  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Balloon.Model.GoldenBalloonModel:</div>
@@ -136,8 +136,8 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloon
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a94bb26751342e3d406dee4e045aab9ff" id="r_a94bb26751342e3d406dee4e045aab9ff"><td class="memItemLeft" align="right" valign="top">override <a class="el" href="namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675">HitOutcome</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a94bb26751342e3d406dee4e045aab9ff">EvaluateHit</a> (<a class="el" href="structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html">DamageContext</a> context)</td></tr>
-<tr class="separator:a94bb26751342e3d406dee4e045aab9ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a944855d0e161e453c5eed26300685716" id="r_a944855d0e161e453c5eed26300685716"><td class="memItemLeft" align="right" valign="top">override <a class="el" href="namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675">HitOutcome</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel.html#a944855d0e161e453c5eed26300685716">EvaluateHit</a> (<a class="el" href="structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html">DamageContext</a> context)</td></tr>
+<tr class="separator:a944855d0e161e453c5eed26300685716"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea56ecf61f3446e632329fee67d94ed8" id="r_aea56ecf61f3446e632329fee67d94ed8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#aea56ecf61f3446e632329fee67d94ed8">WeightBias</a> (<a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, Vector2Int candidate)</td></tr>
 <tr class="memdesc:aea56ecf61f3446e632329fee67d94ed8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Offset added to <em>candidate</em> 's balance weight; higher = preferred.  <br /></td></tr>
 <tr class="separator:aea56ecf61f3446e632329fee67d94ed8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -169,12 +169,12 @@ Properties</h2></td></tr>
 <tr class="memitem:a0d8adaf1a03ab6f41b8532b51f31e78a" id="r_a0d8adaf1a03ab6f41b8532b51f31e78a"><td class="memItemLeft" align="right" valign="top">string IBalanceBiasSource.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a0d8adaf1a03ab6f41b8532b51f31e78a">ColorId</a><code> [get]</code></td></tr>
 <tr class="memdesc:a0d8adaf1a03ab6f41b8532b51f31e78a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Palette color ID, or empty when colorless.  <br /></td></tr>
 <tr class="separator:a0d8adaf1a03ab6f41b8532b51f31e78a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb2e79a741fb4f3be609fbf2841b8f99" id="r_acb2e79a741fb4f3be609fbf2841b8f99"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acb2e79a741fb4f3be609fbf2841b8f99">DeflectsOrdinaryHit</a><code> [get]</code></td></tr>
-<tr class="memdesc:acb2e79a741fb4f3be609fbf2841b8f99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the next ordinary (non-piercing, 1 damage) hit would bounce.  <br /></td></tr>
-<tr class="separator:acb2e79a741fb4f3be609fbf2841b8f99"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2f4de9cc5a438e378d3768611cdcd33" id="r_ac2f4de9cc5a438e378d3768611cdcd33"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac2f4de9cc5a438e378d3768611cdcd33">DeflectStampScale</a><code> [get]</code></td></tr>
-<tr class="memdesc:ac2f4de9cc5a438e378d3768611cdcd33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplier on the BalloonDeflect stamp profile's radius; 0 = no stamp.  <br /></td></tr>
-<tr class="separator:ac2f4de9cc5a438e378d3768611cdcd33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a839d4f0a2d7c25e72a2ae706c09445cb" id="r_a839d4f0a2d7c25e72a2ae706c09445cb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel.html#a839d4f0a2d7c25e72a2ae706c09445cb">DeflectsOrdinaryHit</a><code> [get]</code></td></tr>
+<tr class="memdesc:a839d4f0a2d7c25e72a2ae706c09445cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the next ordinary (non-piercing, 1 damage) hit would bounce.  <br /></td></tr>
+<tr class="separator:a839d4f0a2d7c25e72a2ae706c09445cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a267172e564bafacd953371094a87ebfc" id="r_a267172e564bafacd953371094a87ebfc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel.html#a267172e564bafacd953371094a87ebfc">DeflectStampScale</a><code> [get]</code></td></tr>
+<tr class="memdesc:a267172e564bafacd953371094a87ebfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplier on the BalloonDeflect stamp profile's radius; 0 = no stamp.  <br /></td></tr>
+<tr class="separator:a267172e564bafacd953371094a87ebfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23aad630e6dd316a26c31b21063ae9e0" id="r_a23aad630e6dd316a26c31b21063ae9e0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a23aad630e6dd316a26c31b21063ae9e0">DirectBalanceMotion</a><code> [get]</code></td></tr>
 <tr class="memdesc:a23aad630e6dd316a26c31b21063ae9e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Animate a resolve straight to the final slot instead of touring every waypoint.  <br /></td></tr>
 <tr class="separator:a23aad630e6dd316a26c31b21063ae9e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -194,9 +194,9 @@ Properties</h2></td></tr>
 <tr class="memitem:afa7e2b113fb717b2ad20b67e2a4bf623" id="r_afa7e2b113fb717b2ad20b67e2a4bf623"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#afa7e2b113fb717b2ad20b67e2a4bf623">MoveSpeed</a><code> [get]</code></td></tr>
 <tr class="memdesc:afa7e2b113fb717b2ad20b67e2a4bf623"><td class="mdescLeft">&#160;</td><td class="mdescRight">This actor's resolved travel speed (world units/sec) for balance moves — the per-type value (or config fallback) with its one-off spawn-time variation already applied.  <br /></td></tr>
 <tr class="separator:afa7e2b113fb717b2ad20b67e2a4bf623"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1757a0d0b45aad9f6e2ef9563cb36437" id="r_a1757a0d0b45aad9f6e2ef9563cb36437"><td class="memItemLeft" align="right" valign="top">override IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Nudge_1_1NudgeOverride.html">NudgeOverride</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1757a0d0b45aad9f6e2ef9563cb36437">NudgeOverrides</a><code> [get]</code></td></tr>
-<tr class="memdesc:a1757a0d0b45aad9f6e2ef9563cb36437"><td class="mdescLeft">&#160;</td><td class="mdescRight">Per-type nudge overrides. Empty/null = use global config defaults.  <br /></td></tr>
-<tr class="separator:a1757a0d0b45aad9f6e2ef9563cb36437"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbeb6844298efbe334817ea529809a07" id="r_adbeb6844298efbe334817ea529809a07"><td class="memItemLeft" align="right" valign="top">override IReadOnlyList&lt; <a class="el" href="classBalloonParty_1_1Nudge_1_1NudgeOverride.html">NudgeOverride</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel.html#adbeb6844298efbe334817ea529809a07">NudgeOverrides</a><code> [get]</code></td></tr>
+<tr class="memdesc:adbeb6844298efbe334817ea529809a07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Per-type nudge overrides. Empty/null = use global config defaults.  <br /></td></tr>
+<tr class="separator:adbeb6844298efbe334817ea529809a07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22f8ea549452a62da8d27eb109d28ee7" id="r_a22f8ea549452a62da8d27eb109d28ee7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html#a22f8ea549452a62da8d27eb109d28ee7">OmnidirectionalBalance</a><code> [get]</code></td></tr>
 <tr class="memdesc:a22f8ea549452a62da8d27eb109d28ee7"><td class="mdescLeft">&#160;</td><td class="mdescRight">When true, side and down neighbours are valid balance candidates even without a shove.  <br /></td></tr>
 <tr class="separator:a22f8ea549452a62da8d27eb109d28ee7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -219,8 +219,7 @@ Properties</h2></td></tr>
 <tr class="separator:ae76ae1159cbc6a4d31c8242453ac46f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The golden reward balloon (PLAN-RewardBalloons): plated, so the shot's own ordinary hit bounces off and no item but the laser touches it. </p>
-<p>A piercing shot pops it, plowing it like an unbreakable and shattering it at the next wall, and so does a laser beam; its pop pays a free card (<code>RewardBalloonPayout</code>). Colourless and scoreless, so it never counts toward a goal or moves the streak. Not an <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html">UnbreakableBalloonModel</a>: that would pull it into formations and roaming. </p>
+<div class="textblock"><p>The golden reward balloon (PLAN-RewardBalloons): a <a class="el" href="classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel.html" title="A plated reward balloon (the golden balloon, the disco ball): the shot&#39;s own ordinary hit bounces off...">PlatedBalloonModel</a> whose pop pays a free card (<code>RewardBalloonPayout</code>). </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a22bc3342bfb222ff0220fa75f670bbfd" name="a22bc3342bfb222ff0220fa75f670bbfd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a22bc3342bfb222ff0220fa75f670bbfd">&#9670;&#160;</a></span>GoldenBalloonModel()</h2>
@@ -248,8 +247,8 @@ Properties</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a94bb26751342e3d406dee4e045aab9ff" name="a94bb26751342e3d406dee4e045aab9ff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a94bb26751342e3d406dee4e045aab9ff">&#9670;&#160;</a></span>EvaluateHit()</h2>
+<a id="a944855d0e161e453c5eed26300685716" name="a944855d0e161e453c5eed26300685716"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a944855d0e161e453c5eed26300685716">&#9670;&#160;</a></span>EvaluateHit()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -258,7 +257,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">override <a class="el" href="namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675">HitOutcome</a> BalloonParty.Balloon.Model.GoldenBalloonModel.EvaluateHit </td>
+          <td class="memname">override <a class="el" href="namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675">HitOutcome</a> BalloonParty.Balloon.Model.PlatedBalloonModel.EvaluateHit </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structBalloonParty_1_1Slots_1_1Capabilities_1_1DamageContext.html">DamageContext</a></td>          <td class="paramname"><span class="paramname"><em>context</em></span></td><td>)</td>
           <td></td>
@@ -266,7 +265,7 @@ Properties</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel virtual">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel virtual">virtual</span><span class="mlabel inherited">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -464,8 +463,8 @@ Properties</h2></td></tr>
 
 </div>
 </div>
-<a id="acb2e79a741fb4f3be609fbf2841b8f99" name="acb2e79a741fb4f3be609fbf2841b8f99"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acb2e79a741fb4f3be609fbf2841b8f99">&#9670;&#160;</a></span>DeflectsOrdinaryHit</h2>
+<a id="a839d4f0a2d7c25e72a2ae706c09445cb" name="a839d4f0a2d7c25e72a2ae706c09445cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a839d4f0a2d7c25e72a2ae706c09445cb">&#9670;&#160;</a></span>DeflectsOrdinaryHit</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -474,12 +473,12 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool BalloonParty.Balloon.Model.GoldenBalloonModel.DeflectsOrdinaryHit</td>
+          <td class="memname">bool BalloonParty.Balloon.Model.PlatedBalloonModel.DeflectsOrdinaryHit</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel inherited">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -490,8 +489,8 @@ Properties</h2></td></tr>
 
 </div>
 </div>
-<a id="ac2f4de9cc5a438e378d3768611cdcd33" name="ac2f4de9cc5a438e378d3768611cdcd33"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac2f4de9cc5a438e378d3768611cdcd33">&#9670;&#160;</a></span>DeflectStampScale</h2>
+<a id="a267172e564bafacd953371094a87ebfc" name="a267172e564bafacd953371094a87ebfc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a267172e564bafacd953371094a87ebfc">&#9670;&#160;</a></span>DeflectStampScale</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -500,12 +499,12 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Balloon.Model.GoldenBalloonModel.DeflectStampScale</td>
+          <td class="memname">float BalloonParty.Balloon.Model.PlatedBalloonModel.DeflectStampScale</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel inherited">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -711,8 +710,8 @@ Properties</h2></td></tr>
 
 </div>
 </div>
-<a id="a1757a0d0b45aad9f6e2ef9563cb36437" name="a1757a0d0b45aad9f6e2ef9563cb36437"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1757a0d0b45aad9f6e2ef9563cb36437">&#9670;&#160;</a></span>NudgeOverrides</h2>
+<a id="adbeb6844298efbe334817ea529809a07" name="adbeb6844298efbe334817ea529809a07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbeb6844298efbe334817ea529809a07">&#9670;&#160;</a></span>NudgeOverrides</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -721,12 +720,12 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">override IReadOnlyList&lt;<a class="el" href="classBalloonParty_1_1Nudge_1_1NudgeOverride.html">NudgeOverride</a>&gt; BalloonParty.Balloon.Model.GoldenBalloonModel.NudgeOverrides</td>
+          <td class="memname">override IReadOnlyList&lt;<a class="el" href="classBalloonParty_1_1Nudge_1_1NudgeOverride.html">NudgeOverride</a>&gt; BalloonParty.Balloon.Model.PlatedBalloonModel.NudgeOverrides</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel inherited">inherited</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

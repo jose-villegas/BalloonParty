@@ -3,7 +3,7 @@ var classBalloonParty_1_1Item_1_1Paint_1_1PaintItemHandler =
     [ "PaintTarget", "structBalloonParty_1_1Item_1_1Paint_1_1PaintItemHandler_1_1PaintTarget.html", "structBalloonParty_1_1Item_1_1Paint_1_1PaintItemHandler_1_1PaintTarget" ],
     [ "PaintItemHandler", "classBalloonParty_1_1Item_1_1Paint_1_1PaintItemHandler.html#a475d05aad27be37cea1065228a0554da", null ],
     [ "Activate", "classBalloonParty_1_1Item_1_1Paint_1_1PaintItemHandler.html#ab79a22488c804e0f0820bc3656d42903", null ],
-    [ "ApplyPaint", "classBalloonParty_1_1Item_1_1Paint_1_1PaintItemHandler.html#afd701339e23d2ad7891cf3b5aa6f02e3", null ],
+    [ "ApplyPaint", "classBalloonParty_1_1Item_1_1Paint_1_1PaintItemHandler.html#acf852e575cc850e2fbea39054be75cbe", null ],
     [ "CollectPaintTargets", "classBalloonParty_1_1Item_1_1Paint_1_1PaintItemHandler.html#ac79ea7e97ce2f3eba6e0cdbfd78016d3", null ],
     [ "NearestBlob", "classBalloonParty_1_1Item_1_1Paint_1_1PaintItemHandler.html#a1cfd52d3d3bee36509dee2ab065cfcc8", null ],
     [ "TryClassify", "classBalloonParty_1_1Item_1_1Paint_1_1PaintItemHandler.html#a920f302f649251672e9338254c2e350e", null ],

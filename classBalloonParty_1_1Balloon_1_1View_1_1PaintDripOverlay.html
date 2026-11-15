@@ -138,8 +138,8 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1View_1_1PaintDripOverl
 Package Functions</h2></td></tr>
 <tr class="memitem:acdd5a106889630560d485e51afe206d7" id="r_acdd5a106889630560d485e51afe206d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acdd5a106889630560d485e51afe206d7">ApplySortingOrder</a> (int order)</td></tr>
 <tr class="separator:acdd5a106889630560d485e51afe206d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd5ad42b386b7aff052bfe8bb3dc3e79" id="r_abd5ad42b386b7aff052bfe8bb3dc3e79"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abd5ad42b386b7aff052bfe8bb3dc3e79">Play</a> (Color paintColor)</td></tr>
-<tr class="separator:abd5ad42b386b7aff052bfe8bb3dc3e79"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae077437560ed31c9b5fa1eaf6b256312" id="r_ae077437560ed31c9b5fa1eaf6b256312"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae077437560ed31c9b5fa1eaf6b256312">Play</a> (Color paintColor, bool rainbow)</td></tr>
+<tr class="separator:ae077437560ed31c9b5fa1eaf6b256312"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29b6f29377e87a9ef1d6f375da6bcb7f" id="r_a29b6f29377e87a9ef1d6f375da6bcb7f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29b6f29377e87a9ef1d6f375da6bcb7f">Stop</a> ()</td></tr>
 <tr class="separator:a29b6f29377e87a9ef1d6f375da6bcb7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -173,12 +173,14 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:ae8b648d090443cda68eb420681e0644c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7031daa15e697353c4bd302a22805ed" id="r_ab7031daa15e697353c4bd302a22805ed"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab7031daa15e697353c4bd302a22805ed">ProgressId</a> = Shader.PropertyToID(&quot;_Progress&quot;)</td></tr>
 <tr class="separator:ab7031daa15e697353c4bd302a22805ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13577121a83cbbb1f0d6217336523397" id="r_a13577121a83cbbb1f0d6217336523397"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a13577121a83cbbb1f0d6217336523397">RainbowId</a> = Shader.PropertyToID(&quot;_Rainbow&quot;)</td></tr>
+<tr class="separator:a13577121a83cbbb1f0d6217336523397"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1341436a0aca89965e2a3a92c8c29a21" id="r_a1341436a0aca89965e2a3a92c8c29a21"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1341436a0aca89965e2a3a92c8c29a21">SeedId</a> = Shader.PropertyToID(&quot;_Seed&quot;)</td></tr>
 <tr class="separator:a1341436a0aca89965e2a3a92c8c29a21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Trigger-and-forget paint-drip overlay: a child sprite over the balloon body that plays a wavy, wet dissolve of the incoming paint colour, then hides itself. </p>
-<p>Accept vs reject is not this component's concern — the balloon body underneath has (accept) or hasn't (reject) already committed the colour, so the same drip reads as paint settling or sliding off. Runs entirely off a MaterialPropertyBlock, so many balloons dripping at once batch on one shared material. </p>
+<p>Accept vs reject is not this component's concern — the balloon body underneath has (accept) or hasn't (reject) already committed the colour, so the same drip reads as paint settling or sliding off. Rainbow paint draws the level's colours in bands instead of one colour. Runs entirely off a MaterialPropertyBlock, so many balloons dripping at once batch on one shared material. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a19aea3db02b1708d57a46c112f128a50" name="a19aea3db02b1708d57a46c112f128a50"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a19aea3db02b1708d57a46c112f128a50">&#9670;&#160;</a></span>Apply()</h2>
@@ -255,8 +257,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="abd5ad42b386b7aff052bfe8bb3dc3e79" name="abd5ad42b386b7aff052bfe8bb3dc3e79"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abd5ad42b386b7aff052bfe8bb3dc3e79">&#9670;&#160;</a></span>Play()</h2>
+<a id="ae077437560ed31c9b5fa1eaf6b256312" name="ae077437560ed31c9b5fa1eaf6b256312"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae077437560ed31c9b5fa1eaf6b256312">&#9670;&#160;</a></span>Play()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -267,8 +269,12 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void BalloonParty.Balloon.View.PaintDripOverlay.Play </td>
           <td>(</td>
-          <td class="paramtype">Color</td>          <td class="paramname"><span class="paramname"><em>paintColor</em></span></td><td>)</td>
+          <td class="paramtype">Color</td>          <td class="paramname"><span class="paramname"><em>paintColor</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>rainbow</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -496,6 +502,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly int BalloonParty.Balloon.View.PaintDripOverlay.ProgressId = Shader.PropertyToID(&quot;_Progress&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a13577121a83cbbb1f0d6217336523397" name="a13577121a83cbbb1f0d6217336523397"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13577121a83cbbb1f0d6217336523397">&#9670;&#160;</a></span>RainbowId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Balloon.View.PaintDripOverlay.RainbowId = Shader.PropertyToID(&quot;_Rainbow&quot;)</td>
         </tr>
       </table>
   </td>

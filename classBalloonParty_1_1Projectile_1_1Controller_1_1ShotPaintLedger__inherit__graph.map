@@ -1,0 +1,5 @@
+<map id="BalloonParty.Projectile.Controller.ShotPaintLedger" name="BalloonParty.Projectile.Controller.ShotPaintLedger">
+<area shape="rect" id="Node000001" title="Which balloons each shot painted rainbow itself (the disco ball&#39;s wave, PLAN&#45;DiscoBalloon)." alt="" coords="5,81,199,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="53,5,151,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,47,104,81,100,79,100,51"/>
+</map>

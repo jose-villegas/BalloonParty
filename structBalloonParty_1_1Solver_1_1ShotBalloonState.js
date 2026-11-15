@@ -11,11 +11,13 @@ var structBalloonParty_1_1Solver_1_1ShotBalloonState =
     [ "Item", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#aef4754fb2bc81cbbecd295872e4b1817", null ],
     [ "ItemSpinDegrees", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a6d4a3621ea83575e8312e07c7c3c28fc", null ],
     [ "ItemSpinRate", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a98ce48454f46d6239b733264768cb0d0", null ],
+    [ "OwnPaint", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a1f69a8ccd3973163322749a5402a6469", null ],
     [ "PaysSourceColor", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a0fd0d92ca987dc8d497f01b0323f703c", null ],
     [ "Position", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a03a7f6cf3037de8a941155aaadbb9b54", null ],
     [ "Radius", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#aac38d0567dea36c599d6fb44bf88cf08", null ],
-    [ "Scoreless", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#ac58d41bc9a561e99b546c821ee27d29e", null ],
+    [ "Reward", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#abd99b12a968836af6ca5e822439098a6", null ],
     [ "ScoreValue", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a8e7fa5d1d03d091001a9c5d31c872ad3", null ],
     [ "SlotIndex", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a637f15de3887be771d088f8743597c77", null ],
-    [ "WashesProjectileColor", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a40d961a3aae7954995846f8c21dc5a3f", null ]
+    [ "WashesProjectileColor", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a40d961a3aae7954995846f8c21dc5a3f", null ],
+    [ "Scoreless", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#ac58d41bc9a561e99b546c821ee27d29e", null ]
 ];

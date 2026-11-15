@@ -1,0 +1,5 @@
+<map id="BalloonParty.Configuration.Balloons.IDiscoWaveSettings" name="BalloonParty.Configuration.Balloons.IDiscoWaveSettings">
+<area shape="rect" id="Node000001" title="The disco ball&#39;s wave (PLAN&#45;DiscoBalloon): a disc that grows from the pop across the board and paints..." alt="" coords="5,5,216,50"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1Balloons_1_1DiscoWaveSettings.html" title=" " alt="" coords="7,98,214,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="112,64,113,99,108,97,109,68"/>
+</map>

@@ -1,5 +1,5 @@
 <map id="BalloonParty.Balloon.Reward.RewardBalloonService" name="BalloonParty.Balloon.Reward.RewardBalloonService">
-<area shape="rect" id="Node000001" title="Decides when the reward balloons come (PLAN&#45;RewardBalloons)." alt="" coords="265,96,476,141"/>
+<area shape="rect" id="Node000001" title="Decides when the reward balloons come (PLAN&#45;RewardBalloons, PLAN&#45;DiscoBalloon)." alt="" coords="265,96,476,141"/>
 <area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Balloon_1_1Reward_1_1IRewardBalloonRequests.html" title="The reward balloons a spawn line should bring." alt="" coords="5,5,217,50"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,53,218,60,311,95,305,96,216,65,197,58"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="69,74,153,102"/>

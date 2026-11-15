@@ -6,6 +6,7 @@ var namespaceBalloonParty_1_1Balloon_1_1Model =
     [ "BalloonModelFactory", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelFactory.html", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelFactory" ],
     [ "BubbleClusterModel", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel" ],
     [ "ColorSource", "structBalloonParty_1_1Balloon_1_1Model_1_1ColorSource.html", "structBalloonParty_1_1Balloon_1_1Model_1_1ColorSource" ],
+    [ "DiscoBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1DiscoBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1DiscoBalloonModel" ],
     [ "GoldenBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel" ],
     [ "HeartBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1HeartBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1HeartBalloonModel" ],
     [ "IBalloonModel", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel" ],
@@ -13,6 +14,7 @@ var namespaceBalloonParty_1_1Balloon_1_1Model =
     [ "IHasWriteableItemSlot", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IHasWriteableItemSlot.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IHasWriteableItemSlot" ],
     [ "IWriteableBalloonModel", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableBalloonModel.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableBalloonModel" ],
     [ "IWriteableFormationMember", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember" ],
+    [ "PlatedBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel" ],
     [ "ToughBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel" ],
     [ "UnbreakableBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel" ]
 ];

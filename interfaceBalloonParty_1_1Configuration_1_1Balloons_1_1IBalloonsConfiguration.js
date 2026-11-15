@@ -4,6 +4,7 @@ var interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration
     [ "BubbleMergeSeconds", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#af6f40a26e4f5612261dc160b6997f9b6", null ],
     [ "DefaultBalloonMoveSpeed", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a4dba1e0e7385bf68bf5c79d7a393ac4a", null ],
     [ "DefaultPopVfxPrefab", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#afe51c74f72c91843e8e3e6ded6db062e", null ],
+    [ "DiscoWave", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a6b4963e95e20d56cac41002b5599c3a4", null ],
     [ "Entries", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#aff26d2f5807e3d5ac48c9ba4d3023ef7", null ],
     [ "FlightRebalanceInterval", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a3bba664bd622094f3112fa2a546fbfa8", null ],
     [ "MoveSpeedVariation", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a5cab970fcf1b7bfb1101f43207fb2890", null ],

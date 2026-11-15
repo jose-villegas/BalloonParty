@@ -1,0 +1,7 @@
+<map id="BalloonParty.Balloon.Type.DiscoBallLook" name="BalloonParty.Balloon.Type.DiscoBallLook">
+<area shape="rect" id="Node000001" title="The disco ball&#39;s body (BalloonParty/Balloon/DiscoBall): gives each ball its own turn of the mirror gr..." alt="" coords="62,98,254,143"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,14,129,42"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="92,50,139,97,133,98,90,55"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonViewBinding.html" title="Implemented by prefab MonoBehaviours that react to model binding; BalloonView discovers and calls the..." alt="" coords="153,5,346,50"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="219,60,181,100,178,96,214,62"/>
+</map>

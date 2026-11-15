@@ -9,5 +9,6 @@ var dir_b176905ad996c1e1ce33152c0e724b3a =
     [ "ProjectileHitVisual.cs", "ProjectileHitVisual_8cs.html", "ProjectileHitVisual_8cs" ],
     [ "ProjectileMotionResolver.cs", "ProjectileMotionResolver_8cs.html", "ProjectileMotionResolver_8cs" ],
     [ "ProjectileStep.cs", "ProjectileStep_8cs.html", "ProjectileStep_8cs" ],
-    [ "ProjectileTapResolver.cs", "ProjectileTapResolver_8cs.html", "ProjectileTapResolver_8cs" ]
+    [ "ProjectileTapResolver.cs", "ProjectileTapResolver_8cs.html", "ProjectileTapResolver_8cs" ],
+    [ "ShotPaintLedger.cs", "ShotPaintLedger_8cs.html", "ShotPaintLedger_8cs" ]
 ];

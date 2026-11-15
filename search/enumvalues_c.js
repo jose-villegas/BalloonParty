@@ -3,5 +3,6 @@ var searchData=
   ['openair_0',['OpenAir',['../namespaceBalloonParty_1_1Prediction.html#a254a3b76e2281f08bf6f5a0b1024809ba694d154d83bf9e21a5dccd5cbf861add',1,'BalloonParty::Prediction']]],
   ['opening_1',['Opening',['../classBalloonParty_1_1Projectile_1_1View_1_1ProjectileShieldView.html#a8cbb3f09d52df56431e51199cad285caa9bd99a0beea48f10663fc4a7d7a33140',1,'BalloonParty::Projectile::View::ProjectileShieldView']]],
   ['overflowthud_2',['OverflowThud',['../namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a6031438b31d33e2f2dd94869b63e3069',1,'BalloonParty::Audio']]],
-  ['owncolumn_3',['OwnColumn',['../namespaceBalloonParty_1_1Balloon_1_1Spawner.html#ae16f087915c8b12ffd2f6ea5168e6406a8e817e1716265abd403dbe13c2c664e6',1,'BalloonParty::Balloon::Spawner']]]
+  ['owncolumn_3',['OwnColumn',['../namespaceBalloonParty_1_1Balloon_1_1Spawner.html#ae16f087915c8b12ffd2f6ea5168e6406a8e817e1716265abd403dbe13c2c664e6',1,'BalloonParty::Balloon::Spawner']]],
+  ['ownpaint_4',['OwnPaint',['../namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762a3afe0d7cdba2953d9d9538360d4ad4bc',1,'BalloonParty::Slots::Capabilities']]]
 ];

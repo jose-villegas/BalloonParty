@@ -1,9 +1,11 @@
 var structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot =
 [
-    [ "ShotBalloonSnapshot", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#afc3a6f05235ce7cfcd91e28e83a4238c", null ],
+    [ "ShotBalloonSnapshot", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#aa755df35fde7f6feb538d52f9e5426d8", null ],
     [ "ForColorTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a5de603fe9f4b4f8e42870b24e84cd978", null ],
+    [ "ForDiscoTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a26f8a7fb0a3cd9dae0934d4fae2c11a0", null ],
     [ "ForGoldenTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a947847b185f8db3f3058dfe987127b51", null ],
     [ "ForHeartTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#ac6069f037cdf5d7b3d5cdb1a2e5dfc82", null ],
+    [ "ForPlatedTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#aff353a649e17e25b440057a5f9f9e006", null ],
     [ "ForRainbowTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#ac0a61d12c30167f287dd79b24044094d", null ],
     [ "ForStaticContact", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#ac17d2677c674928759ad59ff0110bb2d", null ],
     [ "ForToughTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#ab188e52fddc2ea32587c6c4172aba22b", null ],
@@ -15,7 +17,7 @@ var structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot =
     [ "Item", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#abede3ca7e487c0107ff5aec9e0342f5a", null ],
     [ "Position", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a89254385521172cf7eeb90c03513a999", null ],
     [ "Radius", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#aece45edafd880994da1c976318f231be", null ],
-    [ "Scoreless", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#aa6c6e45113f4961d3d019dcc20b90d89", null ],
+    [ "Reward", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a92073e768704a4c8d4bbdf53a2010a8b", null ],
     [ "ScoreValue", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#aab92f235305c7983ce35cb6db4d72574", null ],
     [ "StaticSlotIndex", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#ab7e0c199e855e1d5d1da073d4dbae491", null ],
     [ "ColorId", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a8f673aa641b48e9c7641bbfc610841ba", null ]

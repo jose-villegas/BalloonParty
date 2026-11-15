@@ -112,6 +112,7 @@ $(function(){initNavTree('structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.ht
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#properties">Properties</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Solver.ShotBalloonSnapshot Struct Reference</div></div>
 </div><!--header-->
@@ -132,8 +133,11 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a5de603fe9f4b4f8e42870b24e84cd978" id="r_a5de603fe9f4b4f8e42870b24e84cd978"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5de603fe9f4b4f8e42870b24e84cd978">ForColorTarget</a> (Vector2 position, float radius, string colorId, int scoreValue, int hitsRemaining, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>? balance=null, <a class="el" href="structBalloonParty_1_1Solver_1_1ItemProfile.html">ItemProfile</a>? item=null)</td></tr>
 <tr class="memdesc:a5de603fe9f4b4f8e42870b24e84cd978"><td class="mdescLeft">&#160;</td><td class="mdescRight">A poppable/deflectable colour-scoring target — mirrors a live balloon with <code>IHasColor</code> (streak + colour adoption rules apply).  <br /></td></tr>
 <tr class="separator:a5de603fe9f4b4f8e42870b24e84cd978"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26f8a7fb0a3cd9dae0934d4fae2c11a0" id="r_a26f8a7fb0a3cd9dae0934d4fae2c11a0"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a26f8a7fb0a3cd9dae0934d4fae2c11a0">ForDiscoTarget</a> (Vector2 position, float radius, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>? balance=null)</td></tr>
+<tr class="memdesc:a26f8a7fb0a3cd9dae0934d4fae2c11a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The disco ball reward balloon — see <a class="el" href="#aff353a649e17e25b440057a5f9f9e006" title="A plated reward balloon: colourless, deflecting every ordinary hit forever (int.MaxValue,...">ForPlatedTarget</a>.  <br /></td></tr>
+<tr class="separator:a26f8a7fb0a3cd9dae0934d4fae2c11a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a947847b185f8db3f3058dfe987127b51" id="r_a947847b185f8db3f3058dfe987127b51"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a947847b185f8db3f3058dfe987127b51">ForGoldenTarget</a> (Vector2 position, float radius, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>? balance=null)</td></tr>
-<tr class="memdesc:a947847b185f8db3f3058dfe987127b51"><td class="mdescLeft">&#160;</td><td class="mdescRight">The golden reward balloon: colourless, deflecting every ordinary hit forever (<code>int.MaxValue</code>, so a pierce plows it and the discharge pops it), scoreless, and untouched by item effects but the laser's — mirrors <code>GoldenBalloonModel</code>.  <br /></td></tr>
+<tr class="memdesc:a947847b185f8db3f3058dfe987127b51"><td class="mdescLeft">&#160;</td><td class="mdescRight">The golden reward balloon — see <a class="el" href="#aff353a649e17e25b440057a5f9f9e006" title="A plated reward balloon: colourless, deflecting every ordinary hit forever (int.MaxValue,...">ForPlatedTarget</a>.  <br /></td></tr>
 <tr class="separator:a947847b185f8db3f3058dfe987127b51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6069f037cdf5d7b3d5cdb1a2e5dfc82" id="r_ac6069f037cdf5d7b3d5cdb1a2e5dfc82"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac6069f037cdf5d7b3d5cdb1a2e5dfc82">ForHeartTarget</a> (Vector2 position, float radius, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>? balance=null)</td></tr>
 <tr class="memdesc:ac6069f037cdf5d7b3d5cdb1a2e5dfc82"><td class="mdescLeft">&#160;</td><td class="mdescRight">The heart reward balloon: colourless, scoreless, one hit pops it, the shot's or an item's — mirrors <code>HeartBalloonModel</code>.  <br /></td></tr>
@@ -159,7 +163,7 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a5512ca360b8804e3e7ec60738d6009cf" id="r_a5512ca360b8804e3e7ec60738d6009cf"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5512ca360b8804e3e7ec60738d6009cf">HitsRemaining</a></td></tr>
 <tr class="separator:a5512ca360b8804e3e7ec60738d6009cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afed526596b37860d43204885c1da4b44" id="r_afed526596b37860d43204885c1da4b44"><td class="memItemLeft" align="right" valign="top">readonly bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afed526596b37860d43204885c1da4b44">ImmuneToEffects</a></td></tr>
-<tr class="memdesc:afed526596b37860d43204885c1da4b44"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespaceBalloonParty_1_1Item.html">Item</a> effects (bomb, lightning) do nothing to it, all but the laser's beam: the golden balloon pops only to the shot's own pierce or a laser.  <br /></td></tr>
+<tr class="memdesc:afed526596b37860d43204885c1da4b44"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespaceBalloonParty_1_1Item.html">Item</a> effects (bomb, lightning) do nothing to it, all but the laser's beam: a plated reward balloon pops only to the shot's own pierce or a laser.  <br /></td></tr>
 <tr class="separator:afed526596b37860d43204885c1da4b44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abede3ca7e487c0107ff5aec9e0342f5a" id="r_abede3ca7e487c0107ff5aec9e0342f5a"><td class="memItemLeft" align="right" valign="top">readonly? <a class="el" href="structBalloonParty_1_1Solver_1_1ItemProfile.html">ItemProfile</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abede3ca7e487c0107ff5aec9e0342f5a">Item</a></td></tr>
 <tr class="separator:abede3ca7e487c0107ff5aec9e0342f5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -167,9 +171,9 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a89254385521172cf7eeb90c03513a999"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aece45edafd880994da1c976318f231be" id="r_aece45edafd880994da1c976318f231be"><td class="memItemLeft" align="right" valign="top">readonly float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aece45edafd880994da1c976318f231be">Radius</a></td></tr>
 <tr class="separator:aece45edafd880994da1c976318f231be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa6c6e45113f4961d3d019dcc20b90d89" id="r_aa6c6e45113f4961d3d019dcc20b90d89"><td class="memItemLeft" align="right" valign="top">readonly bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa6c6e45113f4961d3d019dcc20b90d89">Scoreless</a></td></tr>
-<tr class="memdesc:aa6c6e45113f4961d3d019dcc20b90d89"><td class="mdescLeft">&#160;</td><td class="mdescRight">A reward balloon: its pop pays no score and leaves the streak alone (neither reward balloon is <code>IHasScoreColor</code>, so <code>ScoreController</code> skips it).  <br /></td></tr>
-<tr class="separator:aa6c6e45113f4961d3d019dcc20b90d89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92073e768704a4c8d4bbdf53a2010a8b" id="r_a92073e768704a4c8d4bbdf53a2010a8b"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7">ShotRewardKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a92073e768704a4c8d4bbdf53a2010a8b">Reward</a></td></tr>
+<tr class="memdesc:a92073e768704a4c8d4bbdf53a2010a8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Which reward balloon this is, if any: its pop pays no score and leaves the streak alone (no reward balloon is <code>IHasScoreColor</code>, so <code>ScoreController</code> skips it).  <br /></td></tr>
+<tr class="separator:a92073e768704a4c8d4bbdf53a2010a8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab92f235305c7983ce35cb6db4d72574" id="r_aab92f235305c7983ce35cb6db4d72574"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab92f235305c7983ce35cb6db4d72574">ScoreValue</a></td></tr>
 <tr class="separator:aab92f235305c7983ce35cb6db4d72574"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7e0c199e855e1d5d1da073d4dbae491" id="r_ab7e0c199e855e1d5d1da073d4dbae491"><td class="memItemLeft" align="right" valign="top">readonly? Vector2Int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab7e0c199e855e1d5d1da073d4dbae491">StaticSlotIndex</a></td></tr>
@@ -184,15 +188,21 @@ Properties</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:afc3a6f05235ce7cfcd91e28e83a4238c" id="r_afc3a6f05235ce7cfcd91e28e83a4238c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afc3a6f05235ce7cfcd91e28e83a4238c">ShotBalloonSnapshot</a> (Vector2 position, float radius, int scoreValue, int hitsRemaining, <a class="el" href="structBalloonParty_1_1Solver_1_1ColorProfile.html">ColorProfile</a> color, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>? balance, <a class="el" href="namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355d">ShotContactKind</a> contactKind, <a class="el" href="structBalloonParty_1_1Solver_1_1ItemProfile.html">ItemProfile</a>? item, Vector2Int? staticSlotIndex, bool scoreless=false, bool immuneToEffects=false)</td></tr>
-<tr class="separator:afc3a6f05235ce7cfcd91e28e83a4238c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa755df35fde7f6feb538d52f9e5426d8" id="r_aa755df35fde7f6feb538d52f9e5426d8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa755df35fde7f6feb538d52f9e5426d8">ShotBalloonSnapshot</a> (Vector2 position, float radius, int scoreValue, int hitsRemaining, <a class="el" href="structBalloonParty_1_1Solver_1_1ColorProfile.html">ColorProfile</a> color, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>? balance, <a class="el" href="namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355d">ShotContactKind</a> contactKind, <a class="el" href="structBalloonParty_1_1Solver_1_1ItemProfile.html">ItemProfile</a>? item, Vector2Int? staticSlotIndex, <a class="el" href="namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7">ShotRewardKind</a> reward=<a class="el" href="namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7a6adf97f83acf6453d4a6a4b1070f3754">ShotRewardKind.None</a>, bool immuneToEffects=false)</td></tr>
+<tr class="separator:aa755df35fde7f6feb538d52f9e5426d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:aff353a649e17e25b440057a5f9f9e006" id="r_aff353a649e17e25b440057a5f9f9e006"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff353a649e17e25b440057a5f9f9e006">ForPlatedTarget</a> (Vector2 position, float radius, <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>? balance, <a class="el" href="namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7">ShotRewardKind</a> reward)</td></tr>
+<tr class="memdesc:aff353a649e17e25b440057a5f9f9e006"><td class="mdescLeft">&#160;</td><td class="mdescRight">A plated reward balloon: colourless, deflecting every ordinary hit forever (<code>int.MaxValue</code>, so a pierce plows it and the discharge pops it), scoreless, and untouched by item effects but the laser's — mirrors <code>PlatedBalloonModel</code>.  <br /></td></tr>
+<tr class="separator:aff353a649e17e25b440057a5f9f9e006"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>One board actor as the solver sees it — enough to reproduce pop/deflect/score rules without a live <code>IBalloonModel</code>. </p>
 <p>Grown by composition (<a class="el" href="plan_shot_solver_accuracy.html">Shot Solver Accuracy</a> §3): a geometry/scoring core, a <a class="el" href="structBalloonParty_1_1Solver_1_1ColorProfile.html" title="Colour identity of a snapshot target — split out of the geometry/scoring core so rainbow/wildcard fie...">ColorProfile</a>, an optional <a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html" title="Balance-grid identity/behaviour for a snapshot target — absent (null on the owning ShotBalloonSnapsho...">BalanceProfile</a> (null ⇒ no dynamic stub backs this entry — see <a class="el" href="classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html" title="Owns a real headless SlotGrid + GridBalanceQuery + BalancePlanner over stub actors,...">ShotBoardDynamics</a>'s null-<code><a class="el" href="namespaceBalloonParty_1_1Slots_1_1Actor.html">Actor</a></code> gating), a <a class="el" href="namespaceBalloonParty_1_1Solver.html#a1769ac6bda0231538d8f844507a8355d" title="How a contact resolves once the ray reaches it.">ShotContactKind</a>, and an optional <a class="el" href="structBalloonParty_1_1Solver_1_1ItemProfile.html" title="A hosted item&#39;s data-only identity + spin state — rides only ShotBalloonSnapshot.ForColorTarget/ Shot...">ItemProfile</a> (data-only in this phase — the item layer reads it starting Phase C1). Construct via the named factories, never the (private) field-order constructor directly — that is what keeps every caller's field mapping honest as the struct grows. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="afc3a6f05235ce7cfcd91e28e83a4238c" name="afc3a6f05235ce7cfcd91e28e83a4238c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc3a6f05235ce7cfcd91e28e83a4238c">&#9670;&#160;</a></span>ShotBalloonSnapshot()</h2>
+<a id="aa755df35fde7f6feb538d52f9e5426d8" name="aa755df35fde7f6feb538d52f9e5426d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa755df35fde7f6feb538d52f9e5426d8">&#9670;&#160;</a></span>ShotBalloonSnapshot()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -248,7 +258,7 @@ Private Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>scoreless</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>, </td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7">ShotRewardKind</a></td>          <td class="paramname"><span class="paramname"><em>reward</em></span><span class="paramdefsep"> = </span><span class="paramdefval"><a class="el" href="namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7a6adf97f83acf6453d4a6a4b1070f3754">ShotRewardKind::None</a></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -322,6 +332,42 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a26f8a7fb0a3cd9dae0934d4fae2c11a0" name="a26f8a7fb0a3cd9dae0934d4fae2c11a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26f8a7fb0a3cd9dae0934d4fae2c11a0">&#9670;&#160;</a></span>ForDiscoTarget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a> BalloonParty.Solver.ShotBalloonSnapshot.ForDiscoTarget </td>
+          <td>(</td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>position</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>?</td>          <td class="paramname"><span class="paramname"><em>balance</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The disco ball reward balloon — see <a class="el" href="#aff353a649e17e25b440057a5f9f9e006" title="A plated reward balloon: colourless, deflecting every ordinary hit forever (int.MaxValue,...">ForPlatedTarget</a>. </p>
+
+</div>
+</div>
 <a id="a947847b185f8db3f3058dfe987127b51" name="a947847b185f8db3f3058dfe987127b51"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a947847b185f8db3f3058dfe987127b51">&#9670;&#160;</a></span>ForGoldenTarget()</h2>
 
@@ -354,7 +400,7 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The golden reward balloon: colourless, deflecting every ordinary hit forever (<code>int.MaxValue</code>, so a pierce plows it and the discharge pops it), scoreless, and untouched by item effects but the laser's — mirrors <code>GoldenBalloonModel</code>. </p>
+<p>The golden reward balloon — see <a class="el" href="#aff353a649e17e25b440057a5f9f9e006" title="A plated reward balloon: colourless, deflecting every ordinary hit forever (int.MaxValue,...">ForPlatedTarget</a>. </p>
 
 </div>
 </div>
@@ -391,6 +437,47 @@ Private Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The heart reward balloon: colourless, scoreless, one hit pops it, the shot's or an item's — mirrors <code>HeartBalloonModel</code>. </p>
+
+</div>
+</div>
+<a id="aff353a649e17e25b440057a5f9f9e006" name="aff353a649e17e25b440057a5f9f9e006"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff353a649e17e25b440057a5f9f9e006">&#9670;&#160;</a></span>ForPlatedTarget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html">ShotBalloonSnapshot</a> BalloonParty.Solver.ShotBalloonSnapshot.ForPlatedTarget </td>
+          <td>(</td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>position</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>radius</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structBalloonParty_1_1Solver_1_1BalanceProfile.html">BalanceProfile</a>?</td>          <td class="paramname"><span class="paramname"><em>balance</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7">ShotRewardKind</a></td>          <td class="paramname"><span class="paramname"><em>reward</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A plated reward balloon: colourless, deflecting every ordinary hit forever (<code>int.MaxValue</code>, so a pierce plows it and the discharge pops it), scoreless, and untouched by item effects but the laser's — mirrors <code>PlatedBalloonModel</code>. </p>
 
 </div>
 </div>
@@ -623,7 +710,7 @@ Private Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="namespaceBalloonParty_1_1Item.html">Item</a> effects (bomb, lightning) do nothing to it, all but the laser's beam: the golden balloon pops only to the shot's own pierce or a laser. </p>
+<p><a class="el" href="namespaceBalloonParty_1_1Item.html">Item</a> effects (bomb, lightning) do nothing to it, all but the laser's beam: a plated reward balloon pops only to the shot's own pierce or a laser. </p>
 
 </div>
 </div>
@@ -669,19 +756,19 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aa6c6e45113f4961d3d019dcc20b90d89" name="aa6c6e45113f4961d3d019dcc20b90d89"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa6c6e45113f4961d3d019dcc20b90d89">&#9670;&#160;</a></span>Scoreless</h2>
+<a id="a92073e768704a4c8d4bbdf53a2010a8b" name="a92073e768704a4c8d4bbdf53a2010a8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92073e768704a4c8d4bbdf53a2010a8b">&#9670;&#160;</a></span>Reward</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">readonly bool BalloonParty.Solver.ShotBalloonSnapshot.Scoreless</td>
+          <td class="memname">readonly <a class="el" href="namespaceBalloonParty_1_1Solver.html#a542a88f2d2015fc35cc0479c6b46c6a7">ShotRewardKind</a> BalloonParty.Solver.ShotBalloonSnapshot.Reward</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>A reward balloon: its pop pays no score and leaves the streak alone (neither reward balloon is <code>IHasScoreColor</code>, so <code>ScoreController</code> skips it). </p>
+<p>Which reward balloon this is, if any: its pop pays no score and leaves the streak alone (no reward balloon is <code>IHasScoreColor</code>, so <code>ScoreController</code> skips it). </p>
 
 </div>
 </div>

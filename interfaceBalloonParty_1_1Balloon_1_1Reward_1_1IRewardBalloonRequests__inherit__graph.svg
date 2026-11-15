@@ -32,7 +32,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html" target="_top" xlink:title="Decides when the reward balloons come (PLAN&#45;RewardBalloons).">
+<g id="a_Node000002"><a xlink:href="classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html" target="_top" xlink:title="Decides when the reward balloons come (PLAN&#45;RewardBalloons, PLAN&#45;DiscoBalloon).">
 <polygon fill="white" stroke="#666666" points="158.5,-33.5 0,-33.5 0,0 158.5,0 158.5,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Reward.</text>
 <text xml:space="preserve" text-anchor="middle" x="79.25" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">RewardBalloonService</text>

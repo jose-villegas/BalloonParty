@@ -1,7 +1,7 @@
 var classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel =
 [
     [ "GoldenBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#a22bc3342bfb222ff0220fa75f670bbfd", null ],
-    [ "EvaluateHit", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#a94bb26751342e3d406dee4e045aab9ff", null ],
+    [ "EvaluateHit", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#a944855d0e161e453c5eed26300685716", null ],
     [ "EvaluateNormalHit", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#a38f649d61b0710f4730ca8060ec7d969", null ],
     [ "WeightBias", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#aea56ecf61f3446e632329fee67d94ed8", null ],
     [ "BalancePriority", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#a2600a21c9a273a51aafc048e85c4e6fd", null ],
@@ -9,8 +9,8 @@ var classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel =
     [ "BiasTypeId", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#a8c3761c788318a9a6e9a675fe237cd2d", null ],
     [ "BiasValue", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#a699bd10d0ba943b45cf778473bbf5e85", null ],
     [ "ColorId", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#a0d8adaf1a03ab6f41b8532b51f31e78a", null ],
-    [ "DeflectsOrdinaryHit", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#acb2e79a741fb4f3be609fbf2841b8f99", null ],
-    [ "DeflectStampScale", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#ac2f4de9cc5a438e378d3768611cdcd33", null ],
+    [ "DeflectsOrdinaryHit", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#a839d4f0a2d7c25e72a2ae706c09445cb", null ],
+    [ "DeflectStampScale", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#a267172e564bafacd953371094a87ebfc", null ],
     [ "DirectBalanceMotion", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#a23aad630e6dd316a26c31b21063ae9e0", null ],
     [ "HitsRemaining", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#a37f033fca8c42c486e3755289d518315", null ],
     [ "IsStable", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#a128f930790cc3c403f5a9e41dabb8e02", null ],
@@ -19,7 +19,7 @@ var classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel =
     [ "MaxBalanceSteps", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#a201b02378868a9c2c481f0debafded33", null ],
     [ "MaxHitPoints", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#a9d8d116c99c312e03850149c950f73aa", null ],
     [ "MoveSpeed", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#afa7e2b113fb717b2ad20b67e2a4bf623", null ],
-    [ "NudgeOverrides", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#a1757a0d0b45aad9f6e2ef9563cb36437", null ],
+    [ "NudgeOverrides", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#adbeb6844298efbe334817ea529809a07", null ],
     [ "OmnidirectionalBalance", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#a22f8ea549452a62da8d27eb109d28ee7", null ],
     [ "PushResponse", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#a3c70d4b8a1918af03e4a3815c67b4762", null ],
     [ "RegistryHandle", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html#a41c756776fb1dbb3fc8a9f0b23072aba", null ],

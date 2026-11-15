@@ -134,8 +134,18 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Slots_1_1Actor_1_1IPaintReact
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5dfac4bc04b424dfe16e143f59267ca7" id="r_a5dfac4bc04b424dfe16e143f59267ca7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5dfac4bc04b424dfe16e143f59267ca7">PlayPaintDrip</a> (Color paintColor)</td></tr>
-<tr class="separator:a5dfac4bc04b424dfe16e143f59267ca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f761f24e5c94bfb1e6e96cd1dd90a75" id="r_a8f761f24e5c94bfb1e6e96cd1dd90a75"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8f761f24e5c94bfb1e6e96cd1dd90a75">PlayPaintDrip</a> (Color paintColor, bool rainbow)</td></tr>
+<tr class="memdesc:a8f761f24e5c94bfb1e6e96cd1dd90a75"><td class="mdescLeft">&#160;</td><td class="mdescRight"><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rainbow</td><td>Rainbow paint: the drip draws the level's colours in bands, not <em>paintColor</em> .</td></tr>
+  </table>
+  </dd>
+</dl>
+ <br /></td></tr>
+<tr class="separator:a8f761f24e5c94bfb1e6e96cd1dd90a75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22ca4d4d0c262281ee285f9d87f847bf" id="r_a22ca4d4d0c262281ee285f9d87f847bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a22ca4d4d0c262281ee285f9d87f847bf">PlayRecolourBurst</a> (Color oldColor, float scale)</td></tr>
+<tr class="memdesc:a22ca4d4d0c262281ee285f9d87f847bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">A small burst of the colour the balloon just lost, for a recolour that should read as a pop without one (the disco ball's wave).  <br /></td></tr>
+<tr class="separator:a22ca4d4d0c262281ee285f9d87f847bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -162,8 +172,8 @@ Properties</h2></td></tr>
 <div class="textblock"><p>A slot-actor view that can play the paint-splash drip reaction. </p>
 <p>Resolved off the grid via <code>ActorViewAt&lt;<a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IPaintReactive.html" title="A slot-actor view that can play the paint-splash drip reaction.">IPaintReactive</a>&gt;</code> so the Paint handler stays view-agnostic. The drip is the same overlay for accept and reject — layering decides the read: an accepted balloon has already committed the new colour underneath, a resisting one hasn't, so the incoming paint either settles or slides off to reveal the unchanged body. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a5dfac4bc04b424dfe16e143f59267ca7" name="a5dfac4bc04b424dfe16e143f59267ca7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5dfac4bc04b424dfe16e143f59267ca7">&#9670;&#160;</a></span>PlayPaintDrip()</h2>
+<a id="a8f761f24e5c94bfb1e6e96cd1dd90a75" name="a8f761f24e5c94bfb1e6e96cd1dd90a75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f761f24e5c94bfb1e6e96cd1dd90a75">&#9670;&#160;</a></span>PlayPaintDrip()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -171,13 +181,51 @@ Properties</h2></td></tr>
         <tr>
           <td class="memname">void BalloonParty.Slots.Actor.IPaintReactive.PlayPaintDrip </td>
           <td>(</td>
-          <td class="paramtype">Color</td>          <td class="paramname"><span class="paramname"><em>paintColor</em></span></td><td>)</td>
+          <td class="paramtype">Color</td>          <td class="paramname"><span class="paramname"><em>paintColor</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>rainbow</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a0b649f2153c88fe1e0de076d41e1f09a">BalloonParty.Balloon.View.BalloonView</a>.</p>
+<p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rainbow</td><td>Rainbow paint: the drip draws the level's colours in bands, not <em>paintColor</em> .</td></tr>
+  </table>
+  </dd>
+</dl>
+</p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#a4694bf89593b9aa32a944f32678b7050">BalloonParty.Balloon.View.BalloonView</a>.</p>
+
+</div>
+</div>
+<a id="a22ca4d4d0c262281ee285f9d87f847bf" name="a22ca4d4d0c262281ee285f9d87f847bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22ca4d4d0c262281ee285f9d87f847bf">&#9670;&#160;</a></span>PlayRecolourBurst()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Slots.Actor.IPaintReactive.PlayRecolourBurst </td>
+          <td>(</td>
+          <td class="paramtype">Color</td>          <td class="paramname"><span class="paramname"><em>oldColor</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>scale</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A small burst of the colour the balloon just lost, for a recolour that should read as a pop without one (the disco ball's wave). </p>
+<p><em>scale</em>  is a share of a pop's size. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html#ab21d6c22c36a9d2f42de7ac3a7679020">BalloonParty.Balloon.View.BalloonView</a>.</p>
 
 </div>
 </div>

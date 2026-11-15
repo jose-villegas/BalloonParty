@@ -234,8 +234,11 @@ var hierarchy =
       [ "BalloonParty.Balloon.Model.BalloonModelBase", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html", [
         [ "BalloonParty.Balloon.Model.BalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModel.html", null ],
         [ "BalloonParty.Balloon.Model.BubbleClusterModel", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html", null ],
-        [ "BalloonParty.Balloon.Model.GoldenBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html", null ],
         [ "BalloonParty.Balloon.Model.HeartBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1HeartBalloonModel.html", null ],
+        [ "BalloonParty.Balloon.Model.PlatedBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel.html", [
+          [ "BalloonParty.Balloon.Model.DiscoBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1DiscoBalloonModel.html", null ],
+          [ "BalloonParty.Balloon.Model.GoldenBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html", null ]
+        ] ],
         [ "BalloonParty.Balloon.Model.ToughBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html", null ],
         [ "BalloonParty.Balloon.Model.UnbreakableBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html", null ]
       ] ],
@@ -261,6 +264,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Type.UnbreakableBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableBalloonVariant.html", null ]
     ] ],
     [ "BalloonParty.Balloon.View.IBalloonViewBinding", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBalloonViewBinding.html", [
+      [ "BalloonParty.Balloon.Type.DiscoBallLook", "classBalloonParty_1_1Balloon_1_1Type_1_1DiscoBallLook.html", null ],
       [ "BalloonParty.Balloon.Type.GodRaysLook", "classBalloonParty_1_1Balloon_1_1Type_1_1GodRaysLook.html", null ],
       [ "BalloonParty.Balloon.Type.RainbowBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1RainbowBalloonVariant.html", null ],
       [ "BalloonParty.Balloon.Type.SoapBubbleClusterVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html", null ],
@@ -369,11 +373,17 @@ var hierarchy =
       [ "BalloonParty.Slots.Grid.SlotGridDeflectorField", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGridDeflectorField.html", null ]
     ] ],
     [ "BalloonParty.Slots.Capabilities.IDeflectsShots", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IDeflectsShots.html", [
-      [ "BalloonParty.Balloon.Model.GoldenBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html", null ],
+      [ "BalloonParty.Balloon.Model.PlatedBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel.html", null ],
       [ "BalloonParty.Balloon.Model.ToughBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html", null ],
       [ "BalloonParty.Balloon.Model.UnbreakableBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html", null ],
       [ "BalloonParty.Slots.Actor.Archetype.DeflectorActorModel", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1DeflectorActorModel.html", null ],
       [ "BalloonParty.Slots.Actor.Archetype.GatekeeperActorModel", "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GatekeeperActorModel.html", null ]
+    ] ],
+    [ "BalloonParty.Configuration.Balloons.IDiscoWaveSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IDiscoWaveSettings.html", [
+      [ "BalloonParty.Configuration.Balloons.DiscoWaveSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1DiscoWaveSettings.html", null ]
+    ] ],
+    [ "BalloonParty.Balloon.View.IDiscoWaveView", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IDiscoWaveView.html", [
+      [ "BalloonParty.Balloon.View.DiscoWaveView", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html", null ]
     ] ],
     [ "IDisposable", null, [
       [ "BalloonParty.Audio.AudioChannelController", "classBalloonParty_1_1Audio_1_1AudioChannelController.html", null ],
@@ -387,6 +397,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Controller.BalloonControllerRegistry", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html", null ],
       [ "BalloonParty.Balloon.Controller.BubbleMergeService", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html", null ],
       [ "BalloonParty.Balloon.Formation.UnbreakableFormationService", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html", null ],
+      [ "BalloonParty.Balloon.Reward.DiscoWave", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html", null ],
       [ "BalloonParty.Balloon.Reward.RewardBalloonPayout", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html", null ],
       [ "BalloonParty.Balloon.Reward.RewardBalloonService", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html", null ],
       [ "BalloonParty.Balloon.Spawner.BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html", null ],
@@ -441,6 +452,7 @@ var hierarchy =
       [ "BalloonParty.Projectile.Controller.DeflectChainController", "classBalloonParty_1_1Projectile_1_1Controller_1_1DeflectChainController.html", null ],
       [ "BalloonParty.Projectile.Controller.PierceDischargeEffects", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceDischargeEffects.html", null ],
       [ "BalloonParty.Projectile.Controller.ProjectileDoomedTimeScaleController", "classBalloonParty_1_1Projectile_1_1Controller_1_1ProjectileDoomedTimeScaleController.html", null ],
+      [ "BalloonParty.Projectile.Controller.ShotPaintLedger", "classBalloonParty_1_1Projectile_1_1Controller_1_1ShotPaintLedger.html", null ],
       [ "BalloonParty.Projectile.Model.IProjectileBuffEndCondition", "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileBuffEndCondition.html", [
         [ "BalloonParty.Projectile.Buffs.PierceEndedEndCondition", "classBalloonParty_1_1Projectile_1_1Buffs_1_1PierceEndedEndCondition.html", null ],
         [ "BalloonParty.Projectile.Buffs.WallBounceEndCondition", "classBalloonParty_1_1Projectile_1_1Buffs_1_1WallBounceEndCondition.html", null ]
@@ -557,7 +569,7 @@ var hierarchy =
       ] ]
     ] ],
     [ "BalloonParty.Slots.Capabilities.IHasDeflectStamp", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasDeflectStamp.html", [
-      [ "BalloonParty.Balloon.Model.GoldenBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html", null ],
+      [ "BalloonParty.Balloon.Model.PlatedBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel.html", null ],
       [ "BalloonParty.Balloon.Model.ToughBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html", null ],
       [ "BalloonParty.Balloon.Model.UnbreakableBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html", null ]
     ] ],
@@ -800,8 +812,8 @@ var hierarchy =
       [ "BalloonParty.Shared.GameState.NavigationReadyGate", "classBalloonParty_1_1Shared_1_1GameState_1_1NavigationReadyGate.html", null ]
     ] ],
     [ "BalloonParty.Slots.Capabilities.IResistsPaint", "interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IResistsPaint.html", [
-      [ "BalloonParty.Balloon.Model.GoldenBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html", null ],
       [ "BalloonParty.Balloon.Model.HeartBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1HeartBalloonModel.html", null ],
+      [ "BalloonParty.Balloon.Model.PlatedBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel.html", null ],
       [ "BalloonParty.Balloon.Model.ToughBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html", null ],
       [ "BalloonParty.Balloon.Model.UnbreakableBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html", null ]
     ] ],
@@ -827,6 +839,7 @@ var hierarchy =
       [ "BalloonParty.Audio.SfxService", "classBalloonParty_1_1Audio_1_1SfxService.html", null ],
       [ "BalloonParty.Balloon.Controller.BalloonBalancer", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html", null ],
       [ "BalloonParty.Balloon.Formation.UnbreakableFormationService", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html", null ],
+      [ "BalloonParty.Balloon.Reward.DiscoWave", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html", null ],
       [ "BalloonParty.Balloon.Reward.RewardBalloonService", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html", null ],
       [ "BalloonParty.Balloon.Spawner.BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html", null ],
       [ "BalloonParty.Balloon.Spawner.RejectedBalloonEffect", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html", null ],
@@ -1027,6 +1040,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Controller.BalloonControllerRegistry", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html", null ],
       [ "BalloonParty.Balloon.Controller.BubbleMergeService", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html", null ],
       [ "BalloonParty.Balloon.Formation.UnbreakableFormationService", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html", null ],
+      [ "BalloonParty.Balloon.Reward.DiscoWave", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html", null ],
       [ "BalloonParty.Balloon.Reward.RewardBalloonPayout", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html", null ],
       [ "BalloonParty.Balloon.Reward.RewardBalloonService", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html", null ],
       [ "BalloonParty.Balloon.Spawner.BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html", null ],
@@ -1121,6 +1135,7 @@ var hierarchy =
       [ "BalloonParty.Audio.Routing.WindSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1WindSoundRouter.html", null ],
       [ "BalloonParty.Balloon.Controller.BalloonBalancer", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html", null ],
       [ "BalloonParty.Balloon.Controller.BubbleMergeService", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html", null ],
+      [ "BalloonParty.Balloon.Reward.DiscoWave", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html", null ],
       [ "BalloonParty.Balloon.Spawner.RejectedBalloonEffect", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html", null ],
       [ "BalloonParty.Balloon.Spawner.SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html", null ],
       [ "BalloonParty.Game.CardReveal.CardRevealBoardHold", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealBoardHold.html", null ],
@@ -1268,6 +1283,7 @@ var hierarchy =
       [ "BalloonParty.Audio.View.AudioSourceVoice", "classBalloonParty_1_1Audio_1_1View_1_1AudioSourceVoice.html", null ],
       [ "BalloonParty.Audio.View.UiSfxEmitter", "classBalloonParty_1_1Audio_1_1View_1_1UiSfxEmitter.html", null ],
       [ "BalloonParty.Balloon.Type.ColorableBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1ColorableBalloonVariant.html", null ],
+      [ "BalloonParty.Balloon.Type.DiscoBallLook", "classBalloonParty_1_1Balloon_1_1Type_1_1DiscoBallLook.html", null ],
       [ "BalloonParty.Balloon.Type.GodRaysLook", "classBalloonParty_1_1Balloon_1_1Type_1_1GodRaysLook.html", null ],
       [ "BalloonParty.Balloon.Type.SoapBubbleClusterVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html", null ],
       [ "BalloonParty.Balloon.Type.ToughBalloonVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1ToughBalloonVariant.html", null ],
@@ -1275,6 +1291,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Type.UnbreakableFormationLook", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html", null ],
       [ "BalloonParty.Balloon.View.BalanceGizmos", "classBalloonParty_1_1Balloon_1_1View_1_1BalanceGizmos.html", null ],
       [ "BalloonParty.Balloon.View.BalloonView", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html", null ],
+      [ "BalloonParty.Balloon.View.DiscoWaveView", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html", null ],
       [ "BalloonParty.Balloon.View.PaintDripOverlay", "classBalloonParty_1_1Balloon_1_1View_1_1PaintDripOverlay.html", null ],
       [ "BalloonParty.Cheats.DevLogConsole", "classBalloonParty_1_1Cheats_1_1DevLogConsole.html", null ],
       [ "BalloonParty.Display.CameraBackgroundTint", "classBalloonParty_1_1Display_1_1CameraBackgroundTint.html", null ],
@@ -1397,6 +1414,7 @@ var hierarchy =
     [ "BalloonParty.Item.Paint.PaintSpread", "classBalloonParty_1_1Item_1_1Paint_1_1PaintSpread.html", null ],
     [ "BalloonParty.Item.Paint.PaintSpreadParams", "structBalloonParty_1_1Item_1_1Paint_1_1PaintSpreadParams.html", null ],
     [ "BalloonParty.Item.Paint.PaintItemHandler.PaintTarget", "structBalloonParty_1_1Item_1_1Paint_1_1PaintItemHandler_1_1PaintTarget.html", null ],
+    [ "BalloonParty.Item.Paint.PaintTargets", "classBalloonParty_1_1Item_1_1Paint_1_1PaintTargets.html", null ],
     [ "BalloonParty.Item.Paint.PaintTriangle", "structBalloonParty_1_1Item_1_1Paint_1_1PaintTriangle.html", null ],
     [ "BalloonParty.Balloon.Formation.FormationPlanner.Pair", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner_1_1Pair.html", null ],
     [ "BalloonParty.Editor.GameOverLayoutBuilder.Palette", "structBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Palette.html", null ],
@@ -1422,6 +1440,8 @@ var hierarchy =
     [ "BalloonParty.Shared.Messages.PierceWallReachedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1PierceWallReachedMessage.html", null ],
     [ "BalloonParty.Editor.CardRevealBuilder.PinImages", "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1PinImages.html", null ],
     [ "BalloonParty.Game.Assist.PityRoll", "classBalloonParty_1_1Game_1_1Assist_1_1PityRoll.html", null ],
+    [ "BalloonParty.Balloon.Reward.PlatedRewardSchedule", "classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html", null ],
+    [ "BalloonParty.Balloon.Reward.PlatedRewardTuning", "structBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardTuning.html", null ],
     [ "BalloonParty.Shared.Pool.PoolManager", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html", null ],
     [ "BalloonParty.Shared.Extensions.PoolManagerExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1PoolManagerExtensions.html", null ],
     [ "BalloonParty.Configuration.Balloons.PopPulse", "classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse.html", null ],

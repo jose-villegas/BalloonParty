@@ -6,12 +6,16 @@
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="405,165,457,112,490,84,525,60,551,49,547,52,527,65,493,88,461,116,408,169"/>
 <area shape="rect" id="Node000004" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html" title="At destruction, distributes one ScoreAttribution per remaining bubble to a random palette colour...." alt="" coords="526,75,728,119"/>
 <area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="436,169,525,129,559,119,554,121,527,134,438,174"/>
-<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html" title="The golden reward balloon (PLAN&#45;RewardBalloons): plated, so the shot&#39;s own ordinary hit bounces off a..." alt="" coords="526,144,728,189"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Balloon_1_1Model_1_1HeartBalloonModel.html" title="The heart reward balloon (PLAN&#45;RewardBalloons): a heart wrapped in bandages that gives a heart back." alt="" coords="526,144,728,189"/>
 <area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="493,182,528,180,523,181,494,187"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Balloon_1_1Model_1_1HeartBalloonModel.html" title="The heart reward balloon (PLAN&#45;RewardBalloons): a heart wrapped in bandages that gives a heart back." alt="" coords="526,213,728,258"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel.html" title="A plated reward balloon (the golden balloon, the disco ball): the shot&#39;s own ordinary hit bounces off..." alt="" coords="526,213,728,258"/>
 <area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="493,215,528,221,523,222,494,220"/>
-<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html" title=" " alt="" coords="526,283,728,327"/>
-<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="437,228,527,268,559,282,554,282,525,273,437,233"/>
-<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html" title=" " alt="" coords="526,352,728,397"/>
-<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="408,232,461,286,493,314,527,337,552,352,546,351,525,342,490,318,457,290,406,237"/>
+<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html" title=" " alt="" coords="526,283,728,327"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="437,228,527,268,559,282,554,282,525,273,437,233"/>
+<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html" title=" " alt="" coords="526,352,728,397"/>
+<area shape="poly" id="edge9_Node000002_Node000010" title=" " alt="" coords="408,232,461,286,493,314,527,337,552,352,546,351,525,342,490,318,457,290,406,237"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Balloon_1_1Model_1_1DiscoBalloonModel.html" title="The disco ball reward balloon (PLAN&#45;DiscoBalloon): a PlatedBalloonModel whose pop sends a wave across..." alt="" coords="776,179,979,223"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="743,217,779,215,773,216,744,222"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html" title="The golden reward balloon (PLAN&#45;RewardBalloons): a PlatedBalloonModel whose pop pays a free card (Rew..." alt="" coords="776,248,979,293"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="744,249,779,256,773,256,744,254"/>
 </map>

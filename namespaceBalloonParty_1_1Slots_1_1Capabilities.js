@@ -24,7 +24,8 @@ var namespaceBalloonParty_1_1Slots_1_1Capabilities =
       [ "DirectHit", "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762aa5dcddfe1229c26686d7abc62e4223ec", null ],
       [ "DeferredStreak", "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762afd7495145e5651d0a7edad206f333719", null ],
       [ "CarryStreak", "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762aff6e0f3ea4bd148ea37497a00a98bf98", null ],
-      [ "Beam", "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762adc6e84a67852dd96c1ba57da273b26ac", null ]
+      [ "Beam", "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762adc6e84a67852dd96c1ba57da273b26ac", null ],
+      [ "OwnPaint", "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762a3afe0d7cdba2953d9d9538360d4ad4bc", null ]
     ] ],
     [ "HitOutcome", "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675", [
       [ "None", "namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675a6adf97f83acf6453d4a6a4b1070f3754", null ],

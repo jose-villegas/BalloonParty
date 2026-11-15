@@ -149,11 +149,21 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac2165a0e32c4e449b6d848d511cc4ee2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf56195a1c533029650b61d7f1706228" id="r_adf56195a1c533029650b61d7f1706228"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adf56195a1c533029650b61d7f1706228">PlayHitVfxForOutcome</a> (<a class="el" href="namespaceBalloonParty_1_1Slots_1_1Capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675">HitOutcome</a> outcome, Transform parent=null, Vector3 hitDirection=default)</td></tr>
 <tr class="separator:adf56195a1c533029650b61d7f1706228"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b649f2153c88fe1e0de076d41e1f09a" id="r_a0b649f2153c88fe1e0de076d41e1f09a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b649f2153c88fe1e0de076d41e1f09a">PlayPaintDrip</a> (Color paintColor)</td></tr>
-<tr class="separator:a0b649f2153c88fe1e0de076d41e1f09a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4694bf89593b9aa32a944f32678b7050" id="r_a4694bf89593b9aa32a944f32678b7050"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4694bf89593b9aa32a944f32678b7050">PlayPaintDrip</a> (Color paintColor, bool rainbow)</td></tr>
+<tr class="memdesc:a4694bf89593b9aa32a944f32678b7050"><td class="mdescLeft">&#160;</td><td class="mdescRight"><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rainbow</td><td>Rainbow paint: the drip draws the level's colours in bands, not <em>paintColor</em> .</td></tr>
+  </table>
+  </dd>
+</dl>
+ <br /></td></tr>
+<tr class="separator:a4694bf89593b9aa32a944f32678b7050"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4290336cb955f6fd332b7db3d142a03" id="r_ab4290336cb955f6fd332b7db3d142a03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab4290336cb955f6fd332b7db3d142a03">PlayPopPulse</a> (<a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse.html">PopPulse</a> pulse, Action onDone)</td></tr>
 <tr class="memdesc:ab4290336cb955f6fd332b7db3d142a03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Swells the popped balloon to the pulse's peak and shrinks it away, then calls <em>onDone</em>  to hand it back to the pool.  <br /></td></tr>
 <tr class="separator:ab4290336cb955f6fd332b7db3d142a03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab21d6c22c36a9d2f42de7ac3a7679020" id="r_ab21d6c22c36a9d2f42de7ac3a7679020"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab21d6c22c36a9d2f42de7ac3a7679020">PlayRecolourBurst</a> (Color oldColor, float scale)</td></tr>
+<tr class="memdesc:ab21d6c22c36a9d2f42de7ac3a7679020"><td class="mdescLeft">&#160;</td><td class="mdescRight">A small burst of the colour the balloon just lost, for a recolour that should read as a pop without one (the disco ball's wave).  <br /></td></tr>
+<tr class="separator:ab21d6c22c36a9d2f42de7ac3a7679020"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af682033b151687cc02eaec9e7df9d9c1" id="r_af682033b151687cc02eaec9e7df9d9c1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af682033b151687cc02eaec9e7df9d9c1">RegisterDisposeOnDespawn</a> (IDisposable disposable)</td></tr>
 <tr class="separator:af682033b151687cc02eaec9e7df9d9c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ac9588db99a9b0a3408b82be3ad54aa" id="r_a1ac9588db99a9b0a3408b82be3ad54aa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ac9588db99a9b0a3408b82be3ad54aa">SetHitVfxOverrides</a> (<a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html">HitVfxOverride</a>[] overrides)</td></tr>
@@ -647,8 +657,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a0b649f2153c88fe1e0de076d41e1f09a" name="a0b649f2153c88fe1e0de076d41e1f09a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0b649f2153c88fe1e0de076d41e1f09a">&#9670;&#160;</a></span>PlayPaintDrip()</h2>
+<a id="a4694bf89593b9aa32a944f32678b7050" name="a4694bf89593b9aa32a944f32678b7050"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4694bf89593b9aa32a944f32678b7050">&#9670;&#160;</a></span>PlayPaintDrip()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -656,13 +666,25 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void BalloonParty.Balloon.View.BalloonView.PlayPaintDrip </td>
           <td>(</td>
-          <td class="paramtype">Color</td>          <td class="paramname"><span class="paramname"><em>paintColor</em></span></td><td>)</td>
+          <td class="paramtype">Color</td>          <td class="paramname"><span class="paramname"><em>paintColor</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>rainbow</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Implements <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IPaintReactive.html#a5dfac4bc04b424dfe16e143f59267ca7">BalloonParty.Slots.Actor.IPaintReactive</a>.</p>
+<p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">rainbow</td><td>Rainbow paint: the drip draws the level's colours in bands, not <em>paintColor</em> .</td></tr>
+  </table>
+  </dd>
+</dl>
+</p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IPaintReactive.html#a8f761f24e5c94bfb1e6e96cd1dd90a75">BalloonParty.Slots.Actor.IPaintReactive</a>.</p>
 
 </div>
 </div>
@@ -687,6 +709,32 @@ Static Private Attributes</h2></td></tr>
 
 <p>Swells the popped balloon to the pulse's peak and shrinks it away, then calls <em>onDone</em>  to hand it back to the pool. </p>
 <p>Its collider goes at once, so nothing hits it. </p>
+
+</div>
+</div>
+<a id="ab21d6c22c36a9d2f42de7ac3a7679020" name="ab21d6c22c36a9d2f42de7ac3a7679020"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab21d6c22c36a9d2f42de7ac3a7679020">&#9670;&#160;</a></span>PlayRecolourBurst()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.View.BalloonView.PlayRecolourBurst </td>
+          <td>(</td>
+          <td class="paramtype">Color</td>          <td class="paramname"><span class="paramname"><em>oldColor</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>scale</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>A small burst of the colour the balloon just lost, for a recolour that should read as a pop without one (the disco ball's wave). </p>
+<p><em>scale</em>  is a share of a pop's size. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Slots_1_1Actor_1_1IPaintReactive.html#a22ca4d4d0c262281ee285f9d87f847bf">BalloonParty.Slots.Actor.IPaintReactive</a>.</p>
 
 </div>
 </div>

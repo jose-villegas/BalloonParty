@@ -120,8 +120,8 @@ $(function(){initNavTree('structBalloonParty_1_1Solver_1_1ShotSimulationResult.h
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a326bd80e66e56af49f021726967eadf1" id="r_a326bd80e66e56af49f021726967eadf1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a326bd80e66e56af49f021726967eadf1">ShotSimulationResult</a> (int rawScore, int pops, int toughsCleared, bool boardCleared, int events, bool died, bool capped, bool absorbed, int goldenPops, int heartPops)</td></tr>
-<tr class="separator:a326bd80e66e56af49f021726967eadf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f6ae20ba426d35b449056cedf2e1d2d" id="r_a1f6ae20ba426d35b449056cedf2e1d2d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1f6ae20ba426d35b449056cedf2e1d2d">ShotSimulationResult</a> (int rawScore, int pops, int toughsCleared, bool boardCleared, int events, bool died, bool capped, bool absorbed, int goldenPops, int heartPops, int discoPops)</td></tr>
+<tr class="separator:a1f6ae20ba426d35b449056cedf2e1d2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -133,6 +133,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a13d013506632605b32f4a2f2cfebe3fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45e2e9743dceda3ae170e0a6cb89f432" id="r_a45e2e9743dceda3ae170e0a6cb89f432"><td class="memItemLeft" align="right" valign="top">readonly bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a45e2e9743dceda3ae170e0a6cb89f432">Died</a></td></tr>
 <tr class="separator:a45e2e9743dceda3ae170e0a6cb89f432"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a344cc65a94b06ec5a8963f06f9cab965" id="r_a344cc65a94b06ec5a8963f06f9cab965"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a344cc65a94b06ec5a8963f06f9cab965">DiscoPops</a></td></tr>
+<tr class="separator:a344cc65a94b06ec5a8963f06f9cab965"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7337d1ee8e1b9ec6ffc8e4a18521ee60" id="r_a7337d1ee8e1b9ec6ffc8e4a18521ee60"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7337d1ee8e1b9ec6ffc8e4a18521ee60">Events</a></td></tr>
 <tr class="separator:a7337d1ee8e1b9ec6ffc8e4a18521ee60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af118bad95657ceb9aae91533c84bac8e" id="r_af118bad95657ceb9aae91533c84bac8e"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af118bad95657ceb9aae91533c84bac8e">GoldenPops</a></td></tr>
@@ -150,8 +152,8 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Outcome of one deterministic flight — see <a class="el" href="classBalloonParty_1_1Solver_1_1ShotSimulator.html#adbcab1422f5654df4fca61e07fbae07b" title="Simulates one aim direction to completion.">ShotSimulator.Simulate</a>. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a326bd80e66e56af49f021726967eadf1" name="a326bd80e66e56af49f021726967eadf1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a326bd80e66e56af49f021726967eadf1">&#9670;&#160;</a></span>ShotSimulationResult()</h2>
+<a id="a1f6ae20ba426d35b449056cedf2e1d2d" name="a1f6ae20ba426d35b449056cedf2e1d2d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f6ae20ba426d35b449056cedf2e1d2d">&#9670;&#160;</a></span>ShotSimulationResult()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -204,7 +206,12 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>heartPops</em></span>&#160;)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>heartPops</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>discoPops</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -262,6 +269,20 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly bool BalloonParty.Solver.ShotSimulationResult.Died</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a344cc65a94b06ec5a8963f06f9cab965" name="a344cc65a94b06ec5a8963f06f9cab965"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a344cc65a94b06ec5a8963f06f9cab965">&#9670;&#160;</a></span>DiscoPops</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Solver.ShotSimulationResult.DiscoPops</td>
         </tr>
       </table>
 </div><div class="memdoc">

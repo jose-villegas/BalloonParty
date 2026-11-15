@@ -15,10 +15,15 @@ var searchData=
   ['deflectoractormodel_12',['DeflectorActorModel',['../classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1DeflectorActorModel.html',1,'BalloonParty::Slots::Actor::Archetype']]],
   ['deflectorcircle_13',['DeflectorCircle',['../structBalloonParty_1_1Shared_1_1DeflectorCircle.html',1,'BalloonParty::Shared']]],
   ['devlogconsole_14',['DevLogConsole',['../classBalloonParty_1_1Cheats_1_1DevLogConsole.html',1,'BalloonParty::Cheats']]],
-  ['disturbancefieldcoordinates_15',['DisturbanceFieldCoordinates',['../classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldCoordinates.html',1,'BalloonParty::Shared::Disturbance']]],
-  ['disturbancefieldresources_16',['DisturbanceFieldResources',['../classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldResources.html',1,'BalloonParty::Shared::Disturbance']]],
-  ['disturbancefieldservice_17',['DisturbanceFieldService',['../classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html',1,'BalloonParty::Shared::Disturbance']]],
-  ['disturbancefieldsettings_18',['DisturbanceFieldSettings',['../classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html',1,'BalloonParty::Configuration::Effects']]],
-  ['disturbancepulseextensions_19',['DisturbancePulseExtensions',['../classBalloonParty_1_1Shared_1_1Extensions_1_1DisturbancePulseExtensions.html',1,'BalloonParty::Shared::Extensions']]],
-  ['disturbancetweenextensions_20',['DisturbanceTweenExtensions',['../classBalloonParty_1_1Shared_1_1Extensions_1_1DisturbanceTweenExtensions.html',1,'BalloonParty::Shared::Extensions']]]
+  ['discoballlook_15',['DiscoBallLook',['../classBalloonParty_1_1Balloon_1_1Type_1_1DiscoBallLook.html',1,'BalloonParty::Balloon::Type']]],
+  ['discoballoonmodel_16',['DiscoBalloonModel',['../classBalloonParty_1_1Balloon_1_1Model_1_1DiscoBalloonModel.html',1,'BalloonParty::Balloon::Model']]],
+  ['discowave_17',['DiscoWave',['../classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html',1,'BalloonParty::Balloon::Reward']]],
+  ['discowavesettings_18',['DiscoWaveSettings',['../classBalloonParty_1_1Configuration_1_1Balloons_1_1DiscoWaveSettings.html',1,'BalloonParty::Configuration::Balloons']]],
+  ['discowaveview_19',['DiscoWaveView',['../classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html',1,'BalloonParty::Balloon::View']]],
+  ['disturbancefieldcoordinates_20',['DisturbanceFieldCoordinates',['../classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldCoordinates.html',1,'BalloonParty::Shared::Disturbance']]],
+  ['disturbancefieldresources_21',['DisturbanceFieldResources',['../classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldResources.html',1,'BalloonParty::Shared::Disturbance']]],
+  ['disturbancefieldservice_22',['DisturbanceFieldService',['../classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html',1,'BalloonParty::Shared::Disturbance']]],
+  ['disturbancefieldsettings_23',['DisturbanceFieldSettings',['../classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html',1,'BalloonParty::Configuration::Effects']]],
+  ['disturbancepulseextensions_24',['DisturbancePulseExtensions',['../classBalloonParty_1_1Shared_1_1Extensions_1_1DisturbancePulseExtensions.html',1,'BalloonParty::Shared::Extensions']]],
+  ['disturbancetweenextensions_25',['DisturbanceTweenExtensions',['../classBalloonParty_1_1Shared_1_1Extensions_1_1DisturbanceTweenExtensions.html',1,'BalloonParty::Shared::Extensions']]]
 ];
