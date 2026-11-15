@@ -72,4 +72,4 @@ MonoBehaviour:
       _amount: 0.1
       _maxStacks: 3
       _weight: 1
-    _snipeCooldownSeconds: 12
+    _snipeCooldownSeconds: 8

@@ -79,7 +79,7 @@ namespace BalloonParty.Configuration
 
         [Tooltip("Seconds of game time after a pen loads as a Snipe (the Sharpshooter card) before another can, so " +
             "rapid fire can't chain them. 0 = every load rolls.")]
-        [SerializeField] [Min(0f)] private float _snipeCooldownSeconds = 12f;
+        [SerializeField] [Min(0f)] private float _snipeCooldownSeconds = 8f;
 
         public int CardEveryLevels => _cardEveryLevels;
         public int CardsOffered => _cardsOffered;

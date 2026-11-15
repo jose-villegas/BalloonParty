@@ -86,7 +86,14 @@ trails are distance-gated, so they don't thicken with the frame rate. A max of 0
 trails. The view gets all three fields through `ThrowerView`'s `[Inject]`.
 
 The ball is armed from the load, not when the light lands, so a ball fired early is still a lance and the
-light and whirlwind finish on their own. They play while the armed ball slides out to the muzzle, so they
+light and whirlwind finish on their own.
+
+A lance the player is still holding when the level ends carries into the next level. The new level loads a
+fresh ball (`LoadForNewLevel`), and the level-end kill of a held ball (`ForceDestroyProjectiles` with nothing in
+flight) clears its pierce, so the controller notes the held ball's `IsPiercing` first (`_lanceCarried`), as it
+does for a lance un-fired in the level-up frame while the next ball was already held. The new level's first
+ball is armed through `ISnipeArmer` without the roll (it doesn't start the card's cooldown) and replays the sky
+light, whirlwind and gust. A run reset, a game over or an abandoned level-up drops the carry. They play while the armed ball slides out to the muzzle, so they
 announce the roll before the ball can fire, on top of the ball's own Snipe look. It reuses the Snipe's pieces: a `Funnel` quad on
 `SnipeWhirlwind.mat` (the Snipe pickup's `PierceConeSpiral` shader, wider, with more turns, its apex at the
 muzzle) and a `Glitter` disc on `SnipeWhirlwindGlitter.mat` (the `GlitterSwirl` halo of the blue formation

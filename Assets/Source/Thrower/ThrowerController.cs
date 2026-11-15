@@ -54,6 +54,7 @@ namespace BalloonParty.Thrower
         private readonly ILevelProgress _levelProgress;
         private readonly IWeaponStats _weapon;
         private readonly ISnipeChanceRoll _snipeChance;
+        private readonly ISnipeArmer _snipeArmer;
         private readonly PauseService _pauseService;
         private readonly IObjectResolver _resolver;
         private readonly List<Vector3> _tracePoints = new();
@@ -92,6 +93,10 @@ namespace BalloonParty.Thrower
         private bool _tracePublished;
         private bool _wasReady;
 
+        // The ball held when the level ended was a Snipe lance. The new level loads a fresh ball (and the level-end
+        // kill clears the old one's pierce), so this is what arms that ball again: a held lance survives the level-up.
+        private bool _lanceCarried;
+
         // The cap the pool was last warmed for; an Extra Pen card raises the cap mid-run.
         private int _warmedCap;
         private PredictionTraceCalculator _traceCalculator;
@@ -126,6 +131,7 @@ namespace BalloonParty.Thrower
             ILevelProgress levelProgress,
             IWeaponStats weapon,
             ISnipeChanceRoll snipeChance,
+            ISnipeArmer snipeArmer,
             PauseService pauseService,
             IProjectileRegistryWriter registry,
             ThrowerOriginProvider originProvider,
@@ -155,6 +161,7 @@ namespace BalloonParty.Thrower
             _levelProgress = levelProgress;
             _weapon = weapon;
             _snipeChance = snipeChance;
+            _snipeArmer = snipeArmer;
             _pauseService = pauseService;
             _registry = registry;
             _originProvider = originProvider;
@@ -201,12 +208,12 @@ namespace BalloonParty.Thrower
 
             // Completing was abandoned (run ending/restarting), so the skipped reload happens now or the
             // thrower stays empty forever.
-            _levelUpAbandonedSubscriber.Subscribe(_ => LoadProjectile()).AddTo(_subscriptions);
+            _levelUpAbandonedSubscriber.Subscribe(_ => LoadAfterAbandon()).AddTo(_subscriptions);
 
             // Force-destroy: the level controller commands every shot to die through its canonical
             // death path (board depleted, or the CompletingCap timed out).
             _forceDestroySubscriber.Subscribe(_ => ForceDestroyProjectiles()).AddTo(_subscriptions);
-            _levelTransitionCompletedSubscriber.Subscribe(_ => LoadProjectile()).AddTo(_subscriptions);
+            _levelTransitionCompletedSubscriber.Subscribe(_ => LoadForNewLevel()).AddTo(_subscriptions);
 
             // A shot fired in the very frame the level-up triggers never takes a physics step before the
             // freeze — un-fire it, or the dismissal swap scale-drifts it from the muzzle like a phantom.
@@ -352,7 +359,22 @@ namespace BalloonParty.Thrower
             _warmedCap = cap;
         }
 
-        private void LoadProjectile()
+        private void LoadForNewLevel()
+        {
+            var lanceCarried = _lanceCarried || (_loadedProjectile?.IsPiercing.Value ?? false);
+            _lanceCarried = false;
+            LoadProjectile(lanceCarried);
+        }
+
+        // Completing was abandoned because the run is ending or restarting: nothing carries into it.
+        private void LoadAfterAbandon()
+        {
+            _lanceCarried = false;
+            LoadProjectile();
+        }
+
+        // lanceCarried: the new level's first ball takes over the Snipe lance the player was holding.
+        private void LoadProjectile(bool lanceCarried = false)
         {
             WarmPoolForCap();
 
@@ -385,8 +407,14 @@ namespace BalloonParty.Thrower
             // Rolled as the reload starts, so the sky light falls and the whirlwind spins up while the ball is
             // still sliding out to the muzzle, timed by the reload a shot in flight gets (the one just fired is):
             // the ball is armed from here, even if fired before they finish. Before the loaded message, so every reader of it (the
-            // auto-fire cheat's solve among them) sees the lance.
-            if (_snipeChance.TryArm(_loadedProjectile))
+            // auto-fire cheat's solve among them) sees the lance. A carried lance arms without the roll (and the
+            // roll then skips the already-piercing ball), and replays the cue so the player sees it survived.
+            if (lanceCarried)
+            {
+                _snipeArmer.Arm(_loadedProjectile);
+            }
+
+            if (lanceCarried || _snipeChance.TryArm(_loadedProjectile))
             {
                 _view.PlaySnipeWhirlwind(
                     _palette.GetColor(GamePalette.SnipeWhirlwindColorId),
@@ -420,6 +448,8 @@ namespace BalloonParty.Thrower
                 }
                 else
                 {
+                    // The thrower already holds the next ball, so a lance fired in this frame would be lost.
+                    _lanceCarried |= view.Model.IsPiercing.Value;
                     _registry.Retire(view.Model);
                     _poolManager.Return(_projectilePoolKey, view);
                 }
@@ -457,6 +487,8 @@ namespace BalloonParty.Thrower
             {
                 if (_loadedView != null)
                 {
+                    // Read before the kill, whose death path clears the pierce.
+                    _lanceCarried |= _loadedProjectile.IsPiercing.Value;
                     _loadedView.ForceDestroy();
                 }
 
@@ -477,6 +509,7 @@ namespace BalloonParty.Thrower
         // restart). No Destroyed is published, so Clear retires them all.
         private void ScaleAwayAllProjectiles()
         {
+            _lanceCarried = false;
             foreach (var view in _inFlight)
             {
                 ScaleAway(view);
@@ -522,6 +555,8 @@ namespace BalloonParty.Thrower
 
         private void OnRunReset(RunResetMessage message)
         {
+            _lanceCarried = false;
+
             // Only an immediate restart reloads here; a cinematic-deferred board waits for
             // RunRestartCompletedMessage so the shot lands with the settled board, not mid-transition.
             if (message.BoardReset)
