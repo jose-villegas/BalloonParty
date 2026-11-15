@@ -18,7 +18,7 @@ namespace BalloonParty.Tests.Balloon
     /// <summary>
     ///     The service over a real grid: merges where the giver keeps bubbles, which need no controller (only an
     ///     absorb slides one away), and when the service looks again. Clusters spawn with the shipped HitsToPop, below
-    ///     the merge cap, as they do in play.
+    ///     the merge cap, as they do in play. Each merge's <see cref="BubbleMergedMessage" /> is what the view plays.
     /// </summary>
     [TestFixture]
     public class BubbleMergeServiceTests
@@ -29,9 +29,15 @@ namespace BalloonParty.Tests.Balloon
         private static readonly Vector2Int Left = new(1, 1);
         private static readonly Vector2Int Right = new(2, 1);
 
+        private readonly List<BubbleMergedMessage> _merged = new();
+        // Each cluster's count as the message went out, (left, right).
+        private readonly List<(int, int)> _countsAtPublish = new();
+
         private SlotGrid _grid;
         private IGamePalette _palette;
         private IMessageHandler<ActorHitMessage> _hitHandler;
+        private BubbleClusterModel _left;
+        private BubbleClusterModel _right;
         private BubbleMergeService _service;
 
         [SetUp]
@@ -47,7 +53,11 @@ namespace BalloonParty.Tests.Balloon
             var balloonsConfig = Substitute.For<IBalloonsConfiguration>();
             balloonsConfig.BubbleMergeMax.Returns(MergeMax);
             var registry = new BalloonControllerRegistry(null, Substitute.For<IPublisher<BoardDepletedMessage>>());
-            _service = new BubbleMergeService(_grid, registry, balloonsConfig, CaptureHits());
+            _merged.Clear();
+            _countsAtPublish.Clear();
+            _left = null;
+            _right = null;
+            _service = new BubbleMergeService(_grid, registry, balloonsConfig, CaptureHits(), CaptureMerges());
             _service.Start();
         }
 
@@ -115,12 +125,95 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(3, giver.HitsRemaining.Value);
         }
 
+        [Test]
+        public void APartialMerge_PublishesWhoGaveHowManyAndWhere()
+        {
+            _left = Place(Left, SpawnHits);
+            _right = Place(Right, SpawnHits);
+
+            _service.Tick();
+
+            Assert.AreEqual(1, _merged.Count);
+            var merge = _merged[0];
+            Assert.AreEqual(Right, merge.GiverSlot);
+            Assert.AreEqual(Left, merge.ReceiverSlot);
+            Assert.AreEqual(_grid.IndexToWorldPosition(Right), merge.From);
+            Assert.AreEqual(_grid.IndexToWorldPosition(Left), merge.To);
+            Assert.AreEqual(MergeMax - SpawnHits, merge.Given);
+            Assert.IsFalse(merge.Absorbed);
+        }
+
+        [Test]
+        public void TheMessage_GoesOutBeforeTheCountsChange()
+        {
+            // The view holds each cluster at the count it showed and steps it as bubbles hop: it must see the old ones.
+            _left = Place(Left, SpawnHits);
+            _right = Place(Right, SpawnHits);
+
+            _service.Tick();
+
+            Assert.AreEqual((SpawnHits, SpawnHits), _countsAtPublish[0]);
+            Assert.AreEqual(MergeMax, _left.HitsRemaining.Value);
+        }
+
+        [Test]
+        public void NoMerge_PublishesNothing()
+        {
+            Place(Left, 5);
+            Place(Right, 3);
+
+            _service.Tick();
+
+            Assert.IsEmpty(_merged);
+        }
+
+        [Test]
+        public void AGiverWithNoControllerToAbsorbIt_PublishesNothing()
+        {
+            // It would give all it has, but nothing can slide it away: no merge happens, so nothing is shown.
+            var receiver = Place(Left, SpawnHits);
+            Place(Right, 1);
+
+            _service.Tick();
+
+            Assert.IsEmpty(_merged);
+            Assert.AreEqual(SpawnHits, receiver.HitsRemaining.Value);
+        }
+
+        [Test]
+        public void EachMergeOfAPass_PublishesOnce()
+        {
+            // Two separate pairs merge in the same pass.
+            Place(Left, SpawnHits);
+            Place(Right, SpawnHits);
+            Place(new Vector2Int(1, 3), SpawnHits);
+            Place(new Vector2Int(2, 3), SpawnHits);
+
+            _service.Tick();
+
+            Assert.AreEqual(2, _merged.Count);
+            Assert.AreNotEqual(_merged[0].ReceiverSlot, _merged[1].ReceiverSlot);
+        }
+
         private BubbleClusterModel Place(Vector2Int slot, int bubbles)
         {
             var model = new BubbleClusterModel(new BalloonModelConfig(hitsToPop: SpawnHits, scoreValue: 1), _palette);
             model.SetBubbles(bubbles);
             _grid.Place(model, null, slot);
             return model;
+        }
+
+        private IPublisher<BubbleMergedMessage> CaptureMerges()
+        {
+            var publisher = Substitute.For<IPublisher<BubbleMergedMessage>>();
+            publisher
+                .When(p => p.Publish(Arg.Any<BubbleMergedMessage>()))
+                .Do(call =>
+                {
+                    _merged.Add(call.Arg<BubbleMergedMessage>());
+                    _countsAtPublish.Add((_left?.HitsRemaining.Value ?? 0, _right?.HitsRemaining.Value ?? 0));
+                });
+            return publisher;
         }
 
         private ISubscriber<ActorHitMessage> CaptureHits()

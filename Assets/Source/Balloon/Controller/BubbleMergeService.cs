@@ -18,7 +18,8 @@ namespace BalloonParty.Balloon.Controller
     ///     the larger as many bubbles as it has room for, up to a full cluster, and is absorbed once it has given
     ///     them all. Looks again the frame after anything could open room: the grid changing (a spawn, a pop, the
     ///     board settling), a cluster being hit, or a merge of its own. Each cluster merges at most once a pass, so
-    ///     a group gathers a step a frame.
+    ///     a group gathers a step a frame. Each merge publishes <see cref="BubbleMergedMessage" /> just before the counts
+    ///     change, which <c>BubbleMergeView</c> plays as bubbles hopping across.
     /// </summary>
     internal sealed class BubbleMergeService : IStartable, ITickable, IDisposable
     {
@@ -26,6 +27,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly BalloonControllerRegistry _registry;
         private readonly IBalloonsConfiguration _balloonsConfig;
         private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
+        private readonly IPublisher<BubbleMergedMessage> _mergedPublisher;
         private readonly CompositeDisposable _subscriptions = new();
         private readonly List<IWriteableSlotActor> _neighbors = new();
         private readonly List<BubbleMergeCandidate> _candidates = new();
@@ -39,12 +41,14 @@ namespace BalloonParty.Balloon.Controller
 
         [Inject]
         internal BubbleMergeService(SlotGrid grid, BalloonControllerRegistry registry,
-            IBalloonsConfiguration balloonsConfig, ISubscriber<ActorHitMessage> hitSubscriber)
+            IBalloonsConfiguration balloonsConfig, ISubscriber<ActorHitMessage> hitSubscriber,
+            IPublisher<BubbleMergedMessage> mergedPublisher)
         {
             _grid = grid;
             _registry = registry;
             _balloonsConfig = balloonsConfig;
             _hitSubscriber = hitSubscriber;
+            _mergedPublisher = mergedPublisher;
         }
 
         public void Start()
@@ -139,6 +143,7 @@ namespace BalloonParty.Balloon.Controller
             var left = giver.HitsRemaining.Value - given;
             if (left > 0)
             {
+                Publish(merge, given, absorbed: false);
                 giver.SetBubbles(left);
                 receiver.SetBubbles(merge.Bubbles);
                 return;
@@ -146,9 +151,17 @@ namespace BalloonParty.Balloon.Controller
 
             if (_registry.TryResolve(giver, out var controller))
             {
+                Publish(merge, given, absorbed: true);
                 receiver.SetBubbles(merge.Bubbles);
                 controller.AbsorbInto(_grid.IndexToWorldPosition(merge.Receiver), _balloonsConfig.BubbleMergeSeconds);
             }
+        }
+
+        private void Publish(BubbleMergeCandidate merge, int given, bool absorbed)
+        {
+            _mergedPublisher.Publish(new BubbleMergedMessage(
+                merge.Giver, merge.Receiver, _grid.IndexToWorldPosition(merge.Giver),
+                _grid.IndexToWorldPosition(merge.Receiver), given, absorbed));
         }
     }
 }

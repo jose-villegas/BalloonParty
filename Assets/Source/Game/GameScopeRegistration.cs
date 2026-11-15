@@ -140,6 +140,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<BonusCardDealtMessage>(options);
             builder.RegisterMessageBroker<DiscoWaveAdvancedMessage>(options);
             builder.RegisterMessageBroker<DiscoWaveReachedMessage>(options);
+            builder.RegisterMessageBroker<BubbleMergedMessage>(options);
             builder.RegisterMessageBroker<UpgradeCardHeldMessage>(options);
             builder.RegisterMessageBroker<GameOverDismissedMessage>(options);
             builder.RegisterMessageBroker<LevelTransitionCompletedMessage>(options);
@@ -256,6 +257,9 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<BalloonBalancer>().AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<NudgeService>();
             builder.RegisterEntryPoint<BubbleMergeService>();
+            builder.RegisterComponentOnNewGameObject<BubbleMergeView>(Lifetime.Singleton, "BubbleMerge");
+            // Nothing depends on the view: it only listens, so build it with the scope.
+            builder.RegisterBuildCallback(resolver => resolver.Resolve<BubbleMergeView>());
             builder.RegisterEntryPoint<UnbreakableFormationService>().AsSelf().As<IRunResettable>()
                 .As<IFormationReinforcements>();
             builder.RegisterEntryPoint<RewardBalloonService>().As<IRewardBalloonRequests>().As<IRunResettable>();

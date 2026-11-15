@@ -76,6 +76,9 @@ namespace BalloonParty.Configuration.Balloons
         [Range(1, 5)]
         [SerializeField] private int _bubbleMergeMax = 5;
 
+        [Tooltip("How a merge looks: the bubbles hop across and the receiver wobbles as each lands.")]
+        [SerializeField] private BubbleMergeCueSettings _bubbleMergeCue = new();
+
         [Header("Unbreakable Formations")]
         [SerializeField] private UnbreakableFormationSettings _unbreakableFormation = new();
 
@@ -104,6 +107,7 @@ namespace BalloonParty.Configuration.Balloons
         public float NudgeFalloff => _nudgeFalloff;
         public float BubbleMergeSeconds => _bubbleMergeSeconds;
         public int BubbleMergeMax => _bubbleMergeMax;
+        public IBubbleMergeCueSettings BubbleMergeCue => _bubbleMergeCue;
         public IUnbreakableFormationSettings UnbreakableFormation => _unbreakableFormation;
         public IRewardBalloonSettings RewardBalloons => _rewardBalloons;
         public IDiscoWaveSettings DiscoWave => _discoWave;

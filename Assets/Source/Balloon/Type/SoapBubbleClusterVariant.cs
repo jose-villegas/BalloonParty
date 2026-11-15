@@ -6,15 +6,17 @@ using BalloonParty.Balloon.View;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots.Capabilities;
+using DG.Tweening;
 using UniRx;
 using UnityEngine;
 using BalloonParty.Configuration.Cinematics;
 
 namespace BalloonParty.Balloon.Type
 {
-    /// <summary>Drives the SoapBubbleCluster shader's bubble count and float/spin clock; the shader animates itself from <c>_Time.y</c> after Bind.</summary>
+    /// <summary>Drives the SoapBubbleCluster shader's bubble count and float/spin clock; the shader animates itself from <c>_Time.y</c> after Bind.
+    /// During a merge it shows the count a bubble at a time and wobbles (<see cref="IBubbleMergeReactive" />).</summary>
     [ExecuteAlways]
-    public class SoapBubbleClusterVariant : MonoBehaviour, IBalloonVariant, IBalloonViewBinding
+    public class SoapBubbleClusterVariant : MonoBehaviour, IBalloonVariant, IBalloonViewBinding, IBubbleMergeReactive
     {
         private static readonly int BubbleCountId = Shader.PropertyToID("_BubbleCount");
         private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
@@ -36,10 +38,27 @@ namespace BalloonParty.Balloon.Type
         [SerializeField] private int _previewBubbleCount = 5;
 
         private MaterialPropertyBlock _block;
+        private IHasDurability _durable;
+        private Vector3 _rendererRestScale = Vector3.one;
+        private int _shownCount;
+        private int _countHolds;
+        private int _binding;
         private float _instancePhase;
         private float _rotationAngle;
         private float _rotationSpeedRad;
         private float _lastTime = -1f;
+
+        SpriteRenderer IBubbleMergeReactive.BubbleRenderer => _renderer;
+        int IBubbleMergeReactive.Binding => _binding;
+
+        Vector3 IBubbleMergeReactive.BubbleWorldScale
+        {
+            get
+            {
+                var parent = _renderer != null ? _renderer.transform.parent : null;
+                return parent != null ? Vector3.Scale(parent.lossyScale, _rendererRestScale) : _rendererRestScale;
+            }
+        }
 
         private void Awake()
         {
@@ -51,6 +70,7 @@ namespace BalloonParty.Balloon.Type
             if (_renderer != null)
             {
                 _renderer.transform.localRotation = Quaternion.identity;
+                _rendererRestScale = _renderer.transform.localScale;
             }
 
             // Instances that never Bind (scene-placed, previews) still get a live clock.
@@ -91,6 +111,47 @@ namespace BalloonParty.Balloon.Type
             PushBubbleCount(Mathf.Clamp(_previewBubbleCount, 1, _maxBubbles));
         }
 
+        void IBubbleMergeReactive.HoldCount()
+        {
+            _countHolds++;
+        }
+
+        void IBubbleMergeReactive.StepCount(int delta)
+        {
+            if (_countHolds > 0)
+            {
+                PushBubbleCount(Mathf.Clamp(_shownCount + delta, 1, _maxBubbles));
+            }
+        }
+
+        void IBubbleMergeReactive.ReleaseCount()
+        {
+            if (_countHolds == 0)
+            {
+                return;
+            }
+
+            _countHolds--;
+            if (_countHolds == 0 && _durable != null)
+            {
+                PushBubbleCount(Mathf.Clamp(_durable.HitsRemaining.Value, 1, _maxBubbles));
+            }
+        }
+
+        // The renderer child, not the root: the root's position and scale belong to the balance and absorb tweens.
+        void IBubbleMergeReactive.Wobble(float strength, float seconds)
+        {
+            if (_renderer == null || strength <= 0f)
+            {
+                return;
+            }
+
+            var body = _renderer.transform;
+            body.DOKill();
+            body.localScale = _rendererRestScale;
+            body.DOPunchScale(_rendererRestScale * strength, seconds, vibrato: 5, elasticity: 0.6f);
+        }
+
         public void Initialize(IWriteableBalloonModel model, int levelAllowedColorsMask) { }
 
         public void Bind(IBalloonModel model, CompositeDisposable disposables)
@@ -109,6 +170,11 @@ namespace BalloonParty.Balloon.Type
                 return;
             }
 
+            _durable = durable;
+            ResetMergeCue();
+            // Cleared on despawn and on a level transition's freeze, so no hold or wobble outlives the binding.
+            disposables.Add(Disposable.Create(ResetMergeCue));
+
             _rotationAngle = Random.Range(0f, Mathf.PI * 2f);
             _rotationSpeedRad = Random.Range(5f, 12f) * Mathf.Deg2Rad
                                                       * (Random.value < 0.5f ? 1f : -1f);
@@ -118,7 +184,7 @@ namespace BalloonParty.Balloon.Type
             PushBubbleCount(Mathf.Clamp(durable.HitsRemaining.Value, 1, _maxBubbles));
 
             durable.HitsRemaining
-                .Subscribe(hits => PushBubbleCount(Mathf.Clamp(hits, 1, _maxBubbles)))
+                .Subscribe(OnHitsChanged)
                 .AddTo(disposables);
         }
 
@@ -135,8 +201,35 @@ namespace BalloonParty.Balloon.Type
             }
         }
 
+        // A merge holds the shown count and steps it itself until its bubbles have landed.
+        private void OnHitsChanged(int hits)
+        {
+            if (_countHolds == 0)
+            {
+                PushBubbleCount(Mathf.Clamp(hits, 1, _maxBubbles));
+            }
+        }
+
+        // A freeze mid-merge would otherwise leave the cluster showing a count between the two.
+        private void ResetMergeCue()
+        {
+            if (_countHolds > 0 && _durable != null)
+            {
+                PushBubbleCount(Mathf.Clamp(_durable.HitsRemaining.Value, 1, _maxBubbles));
+            }
+
+            _countHolds = 0;
+            _binding++;
+            if (_renderer != null)
+            {
+                _renderer.transform.DOKill();
+                _renderer.transform.localScale = _rendererRestScale;
+            }
+        }
+
         private void PushBubbleCount(int count)
         {
+            _shownCount = count;
             if (_renderer == null || _block == null)
             {
                 return;
