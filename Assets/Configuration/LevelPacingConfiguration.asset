@@ -1174,7 +1174,7 @@ MonoBehaviour:
     _breatherPace: 0.2
     _breatherCooldownSeconds: 14
     _breatherShapeCover: 0.5
-    _breatherDanger: 0.5
+    _breatherDanger: 1
   _scoringCurve:
     _controlPoints:
     - _level: 1

@@ -103,9 +103,9 @@ namespace BalloonParty.Configuration.Level
 
         [Tooltip("Danger (the share of the hearts left the next line would cost) at or above which the board " +
                  "earns a breather, as a big clear does: the same length, pace and cooldown. A full board reads " +
-                 "0.5 with two hearts left and 1 with the last, so 0.5 lets the last two hearts dig out before the " +
-                 "line lands. 0 = never.")]
-        [SerializeField] [Range(0f, 1f)] private float _breatherDanger = 0.5f;
+                 "0.5 with two hearts left and 1 with the last, so 1 saves it for the last heart and 0.5 adds the " +
+                 "second to last. 0 = never.")]
+        [SerializeField] [Range(0f, 1f)] private float _breatherDanger = 1f;
 
         public float GraceSeconds => _graceSeconds;
         public float OverlapShotPull => _overlapShotPull;

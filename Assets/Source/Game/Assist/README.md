@@ -33,7 +33,7 @@ applies, and loads inside it neither roll nor build pity.
 | Helpful balloons picked more | `Balloon/Spawner/BalloonSpawner`'s line pick → `ILevelParameters.PickBalloonEntry` | The same rule off `BalloonPrefabEntry.NeedWeightBoost`: Rainbow 1, the rest 0. Rejected-balloon re-picks stay neutral |
 | Fewer extra balloons from pops | `BalloonSpawner`, `IBalloonsConfiguration.PopSpawnChance` | Eased by `ThreatEase` |
 | Fewer reinforcement calls | `Balloon/Formation/UnbreakableFormationService`, `ReinforcementChance` | Eased by `ThreatEase` |
-| A breather before the line that would cost a heart | `Balloon/Spawner/SpawnClock`, `ISpawnClockSettings.BreatherDanger` (0.5) | Danger at or above it starts the breather a big clear earns, under the same cooldown: a full board with two hearts or one left |
+| A breather before the line that would cost a heart | `Balloon/Spawner/SpawnClock`, `ISpawnClockSettings.BreatherDanger` (1) | Danger at or above it starts the breather a big clear earns, under the same cooldown: a full board on the last heart. At 0.5 it played too slow: a board left full with two hearts was slowed nearly half the time |
 | A retry's bonus card leans defensive | `Game/Upgrades/RunUpgrades.BonusDealWeight` | Each card's deal weight × (1 + `IUpgradeCardSettings.RetryDealBoost`): Thick Skin 1, so twice as likely. A retry follows a lost run, so it reads full need without asking. The deal stays seeded |
 
 ## Adding a roll

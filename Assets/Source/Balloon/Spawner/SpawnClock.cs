@@ -37,7 +37,7 @@ namespace BalloonParty.Balloon.Spawner
     ///     <see cref="ISpawnClockSettings.BreatherPace" /> and eases back to its full pace, so the release
     ///     after a great shot lasts a moment before the tension builds again. A cooldown after each
     ///     (<see cref="ISpawnClockSettings.BreatherCooldownSeconds" />) keeps releases rarer than the clears.
-    ///     A board about to cost one of the last hearts earns one too (<see cref="ISpawnClockSettings.BreatherDanger" />).
+    ///     A board about to cost the last heart earns one too (<see cref="ISpawnClockSettings.BreatherDanger" />).
     /// </summary>
     internal sealed class SpawnClock : IStartable, ITickable, IRunResettable, IDisposable, ISpawnClock
     {
@@ -274,7 +274,7 @@ namespace BalloonParty.Balloon.Spawner
             return playArea > 0f && _shapeCover.CoveredArea >= share * playArea;
         }
 
-        // A board about to cost one of the last hearts gets the release a big clear earns, so the player can dig
+        // A board about to cost the last heart gets the release a big clear earns, so the player can dig
         // out before the line lands. The cooldown still holds, so a board left full doesn't stay slowed.
         private bool InDanger()
         {
