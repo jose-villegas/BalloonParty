@@ -20,7 +20,8 @@ var searchData=
   ['queue_20many_20triggers_17',['Cadence: one queue, many triggers',['../plan_gameplay_telemetry.html#autotoc_md595',1,'']]],
   ['queue_20problem_20not_20a_20timestamp_20problem_18',['Offline is a queue problem, not a timestamp problem',['../plan_gameplay_telemetry.html#autotoc_md596',1,'']]],
   ['queuefor_19',['QueueFor',['../classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#afa9c95ec80101b4324a8692454836078',1,'BalloonParty::Balloon::Spawner::RejectedBalloonEffect']]],
-  ['quick_20links_20',['Quick Links',['../index.html#autotoc_md302',1,'']]],
-  ['quick_20reference_21',['Quick reference',['../style_guide.html#autotoc_md988',1,'']]],
-  ['quiesce_22',['Quiesce',['../classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html#a2642e704750e459bb8e344a1ff936279',1,'BalloonParty::Game::Run::RunResetOrder']]]
+  ['queuestamp_20',['QueueStamp',['../classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#a15b3f30c0f1c2129e668e4242c983dad',1,'BalloonParty::Scenario::SmokeFieldService']]],
+  ['quick_20links_21',['Quick Links',['../index.html#autotoc_md302',1,'']]],
+  ['quick_20reference_22',['Quick reference',['../style_guide.html#autotoc_md988',1,'']]],
+  ['quiesce_23',['Quiesce',['../classBalloonParty_1_1Game_1_1Run_1_1RunResetOrder.html#a2642e704750e459bb8e344a1ff936279',1,'BalloonParty::Game::Run::RunResetOrder']]]
 ];

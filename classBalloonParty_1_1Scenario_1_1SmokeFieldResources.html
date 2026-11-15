@@ -113,7 +113,6 @@ $(function(){initNavTree('classBalloonParty_1_1Scenario_1_1SmokeFieldResources.h
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
-<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Scenario_1_1SmokeFieldResources-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Scenario.SmokeFieldResources Class Reference<span class="mlabels"><span class="mlabel sealed">sealed</span></span></div></div>
 </div><!--header-->
@@ -124,6 +123,8 @@ $(function(){initNavTree('classBalloonParty_1_1Scenario_1_1SmokeFieldResources.h
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:aa7de17656ccf6240d0d624f3b4da424a" id="r_aa7de17656ccf6240d0d624f3b4da424a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa7de17656ccf6240d0d624f3b4da424a">SmokeFieldResources</a> (string globalTextureName=&quot;_SmokeTex&quot;)</td></tr>
+<tr class="separator:aa7de17656ccf6240d0d624f3b4da424a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47a934d3dc133fd20a49c40599ac50b3" id="r_a47a934d3dc133fd20a49c40599ac50b3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a47a934d3dc133fd20a49c40599ac50b3">BlitAndSwap</a> (Material material)</td></tr>
 <tr class="separator:a47a934d3dc133fd20a49c40599ac50b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac3103e6afa0289fc39c245681585c69b" id="r_ac3103e6afa0289fc39c245681585c69b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac3103e6afa0289fc39c245681585c69b">Clear</a> ()</td></tr>
@@ -172,19 +173,35 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a0f85782ce0408934ccb4352fbd402f61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea941b1f37b9c8946fdb71db5bbd8468" id="r_aea941b1f37b9c8946fdb71db5bbd8468"><td class="memItemLeft" align="right" valign="top">RenderTexture&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aea941b1f37b9c8946fdb71db5bbd8468">_fieldB</a></td></tr>
 <tr class="separator:aea941b1f37b9c8946fdb71db5bbd8468"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a467857e9b97f2e163b1a38cac8fabf30" id="r_a467857e9b97f2e163b1a38cac8fabf30"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a467857e9b97f2e163b1a38cac8fabf30">_globalTextureId</a></td></tr>
+<tr class="separator:a467857e9b97f2e163b1a38cac8fabf30"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb07a7c1e67f07934d821ee8c72998e3" id="r_acb07a7c1e67f07934d821ee8c72998e3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acb07a7c1e67f07934d821ee8c72998e3">_readFromA</a> = true</td></tr>
 <tr class="separator:acb07a7c1e67f07934d821ee8c72998e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af8d8353d908497576189d9b4fe08d1b4" id="r_af8d8353d908497576189d9b4fe08d1b4"><td class="memItemLeft" align="right" valign="top">Material&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af8d8353d908497576189d9b4fe08d1b4">_stampMaterial</a></td></tr>
 <tr class="separator:af8d8353d908497576189d9b4fe08d1b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
-Static Private Attributes</h2></td></tr>
-<tr class="memitem:af9a4e5203097c1162da31e72de27c5b1" id="r_af9a4e5203097c1162da31e72de27c5b1"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af9a4e5203097c1162da31e72de27c5b1">GlobalSmokeTexId</a> = Shader.PropertyToID(&quot;_SmokeTex&quot;)</td></tr>
-<tr class="separator:af9a4e5203097c1162da31e72de27c5b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Holds the smoke field's GPU resources: ping-pong RTs and blit-and-swap, separate from <a class="el" href="classBalloonParty_1_1Scenario_1_1SmokeFieldService.html" title="Owns the smoke field: a persistent screen-space RT that accumulates palette-colored stamps and decays...">SmokeFieldService</a>'s stamp/decay logic. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+<p>The paper's ink field is a second set, published under its own global name. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aa7de17656ccf6240d0d624f3b4da424a" name="aa7de17656ccf6240d0d624f3b4da424a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7de17656ccf6240d0d624f3b4da424a">&#9670;&#160;</a></span>SmokeFieldResources()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">BalloonParty.Scenario.SmokeFieldResources.SmokeFieldResources </td>
+          <td>(</td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>globalTextureName</em></span><span class="paramdefsep"> = </span><span class="paramdefval">&quot;_SmokeTex&quot;</span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a id="a47a934d3dc133fd20a49c40599ac50b3" name="a47a934d3dc133fd20a49c40599ac50b3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a47a934d3dc133fd20a49c40599ac50b3">&#9670;&#160;</a></span>BlitAndSwap()</h2>
 
@@ -487,6 +504,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a467857e9b97f2e163b1a38cac8fabf30" name="a467857e9b97f2e163b1a38cac8fabf30"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a467857e9b97f2e163b1a38cac8fabf30">&#9670;&#160;</a></span>_globalTextureId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Scenario.SmokeFieldResources._globalTextureId</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="acb07a7c1e67f07934d821ee8c72998e3" name="acb07a7c1e67f07934d821ee8c72998e3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acb07a7c1e67f07934d821ee8c72998e3">&#9670;&#160;</a></span>_readFromA</h2>
 
@@ -525,28 +564,6 @@ Static Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="af9a4e5203097c1162da31e72de27c5b1" name="af9a4e5203097c1162da31e72de27c5b1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af9a4e5203097c1162da31e72de27c5b1">&#9670;&#160;</a></span>GlobalSmokeTexId</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">readonly int BalloonParty.Scenario.SmokeFieldResources.GlobalSmokeTexId = Shader.PropertyToID(&quot;_SmokeTex&quot;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

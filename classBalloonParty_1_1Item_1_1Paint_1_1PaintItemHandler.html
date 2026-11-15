@@ -144,8 +144,8 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af79fde501e0f57fb6e438903b8d0c6ff" id="r_af79fde501e0f57fb6e438903b8d0c6ff"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af79fde501e0f57fb6e438903b8d0c6ff">PaintItemHandler</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> palette, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Items_1_1IItemConfiguration.html">IItemConfiguration</a> itemConfig, <a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, <a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html">PoolManager</a> poolManager, <a class="el" href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html">DisturbanceFieldService</a> disturbanceField)</td></tr>
-<tr class="separator:af79fde501e0f57fb6e438903b8d0c6ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a475d05aad27be37cea1065228a0554da" id="r_a475d05aad27be37cea1065228a0554da"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a475d05aad27be37cea1065228a0554da">PaintItemHandler</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html">IGamePalette</a> palette, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Items_1_1IItemConfiguration.html">IItemConfiguration</a> itemConfig, <a class="el" href="classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html">SlotGrid</a> grid, <a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html">PoolManager</a> poolManager, <a class="el" href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html">DisturbanceFieldService</a> disturbanceField, <a class="el" href="classBalloonParty_1_1Scenario_1_1SmokeFieldService.html">SmokeFieldService</a> smokeField)</td></tr>
+<tr class="separator:a475d05aad27be37cea1065228a0554da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab79a22488c804e0f0820bc3656d42903" id="r_ab79a22488c804e0f0820bc3656d42903"><td class="memItemLeft" align="right" valign="top">UniTask&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab79a22488c804e0f0820bc3656d42903">Activate</a> (<a class="el" href="structBalloonParty_1_1Item_1_1ItemActivationContext.html">ItemActivationContext</a> context)</td></tr>
 <tr class="memdesc:ab79a22488c804e0f0820bc3656d42903"><td class="mdescLeft">&#160;</td><td class="mdescRight">Activations can overlap, so per-activation state must live in locals, never handler fields.  <br /></td></tr>
 <tr class="separator:ab79a22488c804e0f0820bc3656d42903"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -181,6 +181,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aa5228dbca54da115cf5be384b66c880d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2cdfaa00a3ee89af1aadb2b03a39c75a" id="r_a2cdfaa00a3ee89af1aadb2b03a39c75a"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html">PoolManager</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2cdfaa00a3ee89af1aadb2b03a39c75a">_poolManager</a></td></tr>
 <tr class="separator:a2cdfaa00a3ee89af1aadb2b03a39c75a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a100375f413a70969b72535276d079bb5" id="r_a100375f413a70969b72535276d079bb5"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Scenario_1_1SmokeFieldService.html">SmokeFieldService</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a100375f413a70969b72535276d079bb5">_smokeField</a></td></tr>
+<tr class="separator:a100375f413a70969b72535276d079bb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -191,8 +193,8 @@ Static Private Attributes</h2></td></tr>
 <div class="textblock"><p>Handles the <a class="el" href="namespaceBalloonParty_1_1Item_1_1Paint.html">Paint</a> item: recolours balloons within landed blob radii of a packed splash triangle to the paint-holder's colour. </p>
 <p>A rainbow holder's colour is the rainbow wildcard id, so the same recolour converts targets to rainbow. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="af79fde501e0f57fb6e438903b8d0c6ff" name="af79fde501e0f57fb6e438903b8d0c6ff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af79fde501e0f57fb6e438903b8d0c6ff">&#9670;&#160;</a></span>PaintItemHandler()</h2>
+<a id="a475d05aad27be37cea1065228a0554da" name="a475d05aad27be37cea1065228a0554da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a475d05aad27be37cea1065228a0554da">&#9670;&#160;</a></span>PaintItemHandler()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -220,7 +222,12 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html">DisturbanceFieldService</a></td>          <td class="paramname"><span class="paramname"><em>disturbanceField</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html">DisturbanceFieldService</a></td>          <td class="paramname"><span class="paramname"><em>disturbanceField</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Scenario_1_1SmokeFieldService.html">SmokeFieldService</a></td>          <td class="paramname"><span class="paramname"><em>smokeField</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -485,6 +492,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly <a class="el" href="classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html">PoolManager</a> BalloonParty.Item.Paint.PaintItemHandler._poolManager</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a100375f413a70969b72535276d079bb5" name="a100375f413a70969b72535276d079bb5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a100375f413a70969b72535276d079bb5">&#9670;&#160;</a></span>_smokeField</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="classBalloonParty_1_1Scenario_1_1SmokeFieldService.html">SmokeFieldService</a> BalloonParty.Item.Paint.PaintItemHandler._smokeField</td>
         </tr>
       </table>
   </td>

@@ -9,43 +9,43 @@
 <area shape="rect" id="Node000005" href="$classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldService.html" title="Screen&#45;space disturbance field any system can stamp into; GPU resources live in DisturbanceFieldResou..." alt="" coords="736,271,972,315"/>
 <area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="987,273,1140,254,1135,256,989,278"/>
 <area shape="rect" id="Node000006" title=" " alt="" coords="428,387,512,415"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="526,394,558,385,586,370,594,360,597,349,601,337,610,326,639,309,671,298,738,288,734,290,672,303,642,314,614,330,605,339,602,350,599,362,590,374,560,390,529,399"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="526,394,558,385,586,370,594,360,597,349,601,337,610,326,639,309,671,298,738,287,734,290,672,303,642,314,614,330,605,339,602,350,599,362,590,374,560,390,529,399"/>
 <area shape="rect" id="Node000017" href="$classBalloonParty_1_1Scenario_1_1SmokeFieldService.html" title="Owns the smoke field: a persistent screen&#45;space RT that accumulates palette&#45;colored stamps and decays..." alt="" coords="750,597,959,642"/>
-<area shape="poly" id="edge18_Node000017_Node000006" title=" " alt="" coords="526,411,589,430,654,455,713,489,782,544,835,597,829,597,778,548,711,494,651,460,587,436,527,417"/>
+<area shape="poly" id="edge18_Node000017_Node000006" title=" " alt="" coords="526,411,589,430,654,457,714,493,780,546,834,597,828,597,777,550,710,498,651,462,587,436,527,416"/>
 <area shape="rect" id="Node000007" title=" " alt="" coords="430,332,510,360"/>
 <area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="523,338,556,329,586,316,598,304,611,292,641,282,673,276,738,275,733,277,673,281,643,287,613,297,602,308,590,321,558,334,526,342"/>
-<area shape="poly" id="edge19_Node000017_Node000007" title=" " alt="" coords="524,350,558,359,590,374,602,388,614,403,640,417,663,424,687,430,714,445,755,482,791,523,842,598,837,597,787,527,751,486,710,450,684,435,661,429,637,422,610,407,598,392,586,378,556,364,525,355"/>
+<area shape="poly" id="edge19_Node000017_Node000007" title=" " alt="" coords="524,350,558,359,590,374,602,388,614,403,640,418,663,425,687,433,714,448,754,484,790,525,842,598,836,597,786,528,750,488,710,452,684,437,661,430,637,423,610,407,598,392,586,378,556,364,525,355"/>
 <area shape="rect" id="Node000008" title=" " alt="" coords="421,279,518,307"/>
 <area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="532,276,612,258,662,255,712,258,768,269,763,271,712,264,662,260,612,264,535,281"/>
 <area shape="poly" id="edge20_Node000017_Node000008" title=" " alt="" coords="533,295,563,304,590,319,600,332,603,345,606,358,614,370,638,384,662,389,686,393,714,407,760,453,798,505,827,556,846,598,841,596,822,559,793,508,756,456,710,411,685,398,661,394,636,389,610,374,601,360,598,346,595,334,586,323,561,309,534,300"/>
-<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html" title="Implemented by field services that perform periodic RT blits on a cadence timer." alt="" coords="363,517,577,562"/>
-<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="592,548,654,540,683,531,711,517,738,497,762,473,800,416,827,360,845,318,848,314,832,362,805,419,766,476,741,501,713,522,685,536,655,545,593,553"/>
-<area shape="poly" id="edge21_Node000017_Node000009" title=" " alt="" coords="572,566,590,575,602,588,613,599,646,611,680,619,752,627,747,628,680,624,644,616,611,603,598,591,586,579,572,571"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Shared_1_1Cadence_1_1ICadencedEffect.html" title="Implemented by field services that perform periodic RT blits on a cadence timer." alt="" coords="363,521,577,566"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="591,550,653,541,683,531,711,517,738,497,761,472,800,416,827,360,845,318,848,314,832,362,805,419,766,476,741,501,713,522,685,536,655,546,593,555"/>
+<area shape="poly" id="edge21_Node000017_Node000009" title=" " alt="" coords="543,569,589,588,613,598,681,611,752,619,746,620,681,616,611,604,587,593,544,575"/>
 <area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IDisturbanceFieldSettings.html" title=" " alt="" coords="5,117,241,162"/>
 <area shape="poly" id="edge9_Node000005_Node000010" title=" " alt="" coords="255,144,532,165,649,180,690,189,714,199,725,213,727,229,729,243,738,256,755,270,750,270,734,260,724,245,722,229,720,215,710,203,688,194,648,185,531,170,257,149"/>
 <area shape="rect" id="Node000014" href="$classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldResources.html" title="Holds the disturbance field&#39;s GPU resources and blit&#45;and&#45;swap, separate from DisturbanceFieldService&#39;..." alt="" coords="352,75,588,119"/>
 <area shape="poly" id="edge14_Node000014_Node000010" title=" " alt="" coords="255,121,353,110,349,113,258,125"/>
 <area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html" title=" " alt="" coords="370,445,570,490"/>
 <area shape="poly" id="edge10_Node000005_Node000011" title=" " alt="" coords="553,437,587,424,710,366,814,314,809,317,712,371,589,429,556,442"/>
-<area shape="poly" id="edge23_Node000017_Node000011" title=" " alt="" coords="559,493,589,502,713,551,810,597,804,597,711,555,587,508,560,498"/>
+<area shape="poly" id="edge23_Node000017_Node000011" title=" " alt="" coords="550,493,589,506,651,527,713,551,810,597,805,597,711,555,650,532,587,512,550,498"/>
 <area shape="rect" id="Node000012" href="$classBalloonParty_1_1Shared_1_1ImpactEventBus.html" title="Frame&#45;scoped impact events, written via Report and cleared each end&#45;of&#45;frame." alt="" coords="370,209,570,254"/>
 <area shape="poly" id="edge11_Node000005_Node000012" title=" " alt="" coords="584,220,649,224,713,239,726,247,737,256,767,270,762,271,735,261,723,251,711,243,648,229,585,225"/>
 <area shape="rect" id="Node000013" title=" " alt="" coords="69,218,177,246"/>
 <area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="191,229,372,230,368,234,193,234"/>
 <area shape="poly" id="edge13_Node000005_Node000014" title=" " alt="" coords="603,92,663,108,690,122,714,140,725,155,729,170,727,200,725,229,729,243,738,257,753,270,747,270,734,260,724,245,720,229,722,199,724,171,720,158,710,144,687,126,661,113,604,97"/>
-<area shape="rect" id="Node000015" href="$classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldCoordinates.html" title="Converts world positions/radii to the normalised UV space the stamp shaders expect." alt="" coords="352,589,588,634"/>
-<area shape="poly" id="edge15_Node000005_Node000015" title=" " alt="" coords="602,609,659,595,686,584,710,569,741,542,767,510,789,475,807,438,832,369,847,318,850,314,837,370,812,441,793,478,771,513,745,546,714,573,688,589,661,600,604,614"/>
-<area shape="poly" id="edge27_Node000017_Node000015" title=" " alt="" coords="556,637,612,653,662,657,712,653,779,642,774,643,712,658,662,663,612,658,556,642"/>
+<area shape="rect" id="Node000015" href="$classBalloonParty_1_1Shared_1_1Disturbance_1_1DisturbanceFieldCoordinates.html" title="Converts world positions/radii to the normalised UV space the stamp shaders expect." alt="" coords="352,603,588,647"/>
+<area shape="poly" id="edge15_Node000005_Node000015" title=" " alt="" coords="603,615,660,599,686,586,710,571,740,543,766,510,788,475,806,438,832,368,847,318,850,314,837,370,811,440,793,477,771,513,744,546,714,575,689,591,661,604,604,620"/>
+<area shape="poly" id="edge27_Node000017_Node000015" title=" " alt="" coords="579,648,612,653,662,656,712,653,779,642,774,643,712,658,662,662,612,658,580,653"/>
 <area shape="rect" id="Node000016" href="$classBalloonParty_1_1Shared_1_1Disturbance_1_1LerpStampScheduler.html" title="Spreads a stamp&#39;s strength over its duration as sub&#45;stamps; evicts the oldest ramp when maxStamps is ..." alt="" coords="352,5,588,50"/>
 <area shape="poly" id="edge16_Node000005_Node000016" title=" " alt="" coords="603,22,634,28,664,38,690,53,714,73,730,96,735,119,733,143,728,166,722,189,720,211,724,234,738,257,752,270,746,270,734,260,719,236,715,212,717,188,723,165,728,142,729,120,725,98,710,76,687,57,661,43,633,33,605,27"/>
 <area shape="poly" id="edge17_Node000001_Node000017" title=" " alt="" coords="887,584,1208,266,1213,264,890,589"/>
-<area shape="rect" id="Node000018" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISmokeFieldSettings.html" title="Read&#45;only tuning for the smoke field (see SmokeFieldService)." alt="" coords="369,800,570,845"/>
-<area shape="poly" id="edge22_Node000017_Node000018" title=" " alt="" coords="585,804,649,787,711,760,749,733,784,701,835,644,839,641,788,704,753,737,713,764,651,792,586,810"/>
-<area shape="rect" id="Node000019" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="372,869,568,914"/>
-<area shape="poly" id="edge28_Node000001_Node000019" title=" " alt="" coords="583,894,648,887,711,870,795,832,853,790,906,738,970,670,1017,617,1060,561,1133,443,1188,338,1222,267,1226,263,1193,340,1138,446,1064,564,1021,621,974,673,909,741,857,794,797,836,713,876,649,892,584,899"/>
-<area shape="poly" id="edge24_Node000017_Node000019" title=" " alt="" coords="582,873,648,853,681,838,710,820,756,778,793,729,822,680,841,644,845,641,826,683,798,732,760,782,714,824,683,843,650,858,583,879"/>
-<area shape="rect" id="Node000020" href="$interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html" title="The scenario the backdrop is on (sky or ground), and whether it got there by a cut or a mist reveal." alt="" coords="365,661,575,706"/>
-<area shape="poly" id="edge25_Node000017_Node000020" title=" " alt="" coords="590,690,651,688,711,679,765,662,811,644,816,642,767,667,713,685,652,693,591,695"/>
-<area shape="rect" id="Node000021" href="$classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html" title="Holds the smoke field&#39;s GPU resources: ping&#45;pong RTs and blit&#45;and&#45;swap, separate from SmokeFieldServi..." alt="" coords="365,731,574,775"/>
-<area shape="poly" id="edge26_Node000017_Node000021" title=" " alt="" coords="590,741,651,730,711,712,743,696,774,678,824,644,829,641,777,682,746,701,713,716,652,735,591,747"/>
+<area shape="rect" id="Node000018" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISmokeFieldSettings.html" title="Read&#45;only tuning for the smoke field (see SmokeFieldService)." alt="" coords="369,817,570,862"/>
+<area shape="poly" id="edge22_Node000017_Node000018" title=" " alt="" coords="585,827,650,811,681,799,711,784,752,751,788,713,817,674,838,644,842,641,822,677,793,716,756,755,713,788,683,804,651,816,586,832"/>
+<area shape="rect" id="Node000019" href="$interfaceBalloonParty_1_1Configuration_1_1Palette_1_1IGamePalette.html" title=" " alt="" coords="372,887,568,931"/>
+<area shape="poly" id="edge28_Node000001_Node000019" title=" " alt="" coords="584,913,648,906,711,889,765,863,817,832,865,795,911,755,993,665,1063,569,1122,474,1168,387,1223,267,1227,263,1172,390,1126,477,1068,572,997,668,915,758,869,799,820,836,768,868,713,894,649,912,584,918"/>
+<area shape="poly" id="edge24_Node000017_Node000019" title=" " alt="" coords="582,895,649,876,681,862,710,844,736,822,759,796,797,740,825,685,843,644,847,641,830,687,802,743,763,800,740,826,714,848,683,867,651,881,583,900"/>
+<area shape="rect" id="Node000020" href="$interfaceBalloonParty_1_1Scenario_1_1IActiveScenario.html" title="The scenario the backdrop is on (sky or ground), and whether it got there by a cut or a mist reveal." alt="" coords="365,679,575,723"/>
+<area shape="poly" id="edge25_Node000017_Node000020" title=" " alt="" coords="590,697,651,691,711,679,763,662,809,644,814,642,765,667,713,685,652,696,591,702"/>
+<area shape="rect" id="Node000021" href="$classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html" title="Holds the smoke field&#39;s GPU resources: ping&#45;pong RTs and blit&#45;and&#45;swap, separate from SmokeFieldServi..." alt="" coords="365,748,574,793"/>
+<area shape="poly" id="edge26_Node000017_Node000021" title=" " alt="" coords="589,765,651,755,711,735,747,715,780,690,831,644,836,641,784,694,750,720,713,740,652,760,590,770"/>
 </map>

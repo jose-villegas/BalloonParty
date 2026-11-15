@@ -1,9 +1,5 @@
 var NAVTREEINDEX38 =
 {
-"classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html#adf8ecaf790cd62a946a05b98b7adb946":[5,0,0,5,19,0,0],
-"classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html#adf8ecaf790cd62a946a05b98b7adb946":[6,0,0,5,19,0,0],
-"classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html#ae95cfc9ae1f89dc885ae7e8b672b31c9":[5,0,0,5,19,0,14],
-"classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html#ae95cfc9ae1f89dc885ae7e8b672b31c9":[6,0,0,5,19,0,14],
 "classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html#afea067954f426cc2b1c0a8e0aeb40b42":[5,0,0,5,19,0,7],
 "classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder_1_1Kit.html#afea067954f426cc2b1c0a8e0aeb40b42":[6,0,0,5,19,0,7],
 "classBalloonParty_1_1Editor_1_1GamePaletteAdapter.html":[5,0,0,5,20],
@@ -249,5 +245,9 @@ var NAVTREEINDEX38 =
 "classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html#add04c63ac05ee4a00fca36d459d6349e":[5,0,0,5,25,1],
 "classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html#add04c63ac05ee4a00fca36d459d6349e":[6,0,0,5,25,1],
 "classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html#addafaf6328fae3a8f48dfbaf4150d1a5":[5,0,0,5,25,15],
-"classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html#addafaf6328fae3a8f48dfbaf4150d1a5":[6,0,0,5,25,15]
+"classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html#addafaf6328fae3a8f48dfbaf4150d1a5":[6,0,0,5,25,15],
+"classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html":[5,0,0,5,26],
+"classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html":[6,0,0,5,26],
+"classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a08718879b445cd15429cb7daf02ef96d":[5,0,0,5,26,22],
+"classBalloonParty_1_1Editor_1_1LevelPacingCurvePanel.html#a08718879b445cd15429cb7daf02ef96d":[6,0,0,5,26,22]
 };

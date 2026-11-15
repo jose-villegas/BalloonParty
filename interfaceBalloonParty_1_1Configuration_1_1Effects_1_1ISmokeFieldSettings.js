@@ -6,7 +6,6 @@ var interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISmokeFieldSettings =
     [ "DecayTickInterval", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISmokeFieldSettings.html#a1a060e8f95707bcf40b6ffbd2c2f084a", null ],
     [ "InkOnPaper", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISmokeFieldSettings.html#aaa35744556ea8852e09cd6510926ed87", null ],
     [ "PaperStrokeScale", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISmokeFieldSettings.html#ac6b3a2cee1d5ab1fea12c5104b17c6a8", null ],
-    [ "PersistOnPaper", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISmokeFieldSettings.html#a6a1edbe604ca4183c1346b253dd11ab5", null ],
     [ "StampShader", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISmokeFieldSettings.html#a7a3bb9fc18cf7dbb1d7c8a91a08e4de4", null ],
     [ "TexelsPerUnit", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISmokeFieldSettings.html#a08e2d3520a2d766fbd94280ea39d55f7", null ],
     [ "WindAgeBias", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISmokeFieldSettings.html#a0f2fafbc9a55ef773fdcadf2355d5556", null ],

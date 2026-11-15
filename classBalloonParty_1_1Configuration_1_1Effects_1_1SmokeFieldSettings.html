@@ -146,14 +146,11 @@ Properties</h2></td></tr>
 <tr class="memdesc:a2103cd5c737242f7963dff057b9367cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds between decay blit ticks (0 = every frame).  <br /></td></tr>
 <tr class="separator:a2103cd5c737242f7963dff057b9367cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9e4aad8b613fd3a308e52ef583173a9" id="r_af9e4aad8b613fd3a308e52ef583173a9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af9e4aad8b613fd3a308e52ef583173a9">InkOnPaper</a><code> [get]</code></td></tr>
-<tr class="memdesc:af9e4aad8b613fd3a308e52ef583173a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether paper levels draw the smoke as flat ink blobs with clean edges instead of soft wisps.  <br /></td></tr>
+<tr class="memdesc:af9e4aad8b613fd3a308e52ef583173a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether paper (bonus) levels keep an ink field: the <a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Effects.html#abd031b2ebaae099e719c3ec4e6322d5ca2bf0074bb2c7b5812e901258f98f91d3">PaintLayer.Ink</a> sources (pops, the Paint item) stamp into it, it never decays, and the paper draws it into the page.  <br /></td></tr>
 <tr class="separator:af9e4aad8b613fd3a308e52ef583173a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa522eb5872b71b45913ef41bbde8cbe8" id="r_aa522eb5872b71b45913ef41bbde8cbe8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa522eb5872b71b45913ef41bbde8cbe8">PaperStrokeScale</a><code> [get]</code></td></tr>
-<tr class="memdesc:aa522eb5872b71b45913ef41bbde8cbe8"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much wider every stroke stamps on paper levels (1 = as authored), so the ink, which never spreads like the smoke, still reads as blobs.  <br /></td></tr>
+<tr class="memdesc:aa522eb5872b71b45913ef41bbde8cbe8"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much wider an ink stamp is than its profile's radius (1 = as authored), so the ink, which never spreads like the smoke, still reads as blots.  <br /></td></tr>
 <tr class="separator:aa522eb5872b71b45913ef41bbde8cbe8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf0b443e8b33711e9406c3c62a4c4764" id="r_acf0b443e8b33711e9406c3c62a4c4764"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf0b443e8b33711e9406c3c62a4c4764">PersistOnPaper</a><code> [get]</code></td></tr>
-<tr class="memdesc:acf0b443e8b33711e9406c3c62a4c4764"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the smoke stays on paper (bonus) levels: no decay, so every stroke stays on the page and a newer one paints over what is under it.  <br /></td></tr>
-<tr class="separator:acf0b443e8b33711e9406c3c62a4c4764"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae5b06d50f4d420808adb6d821fba3273" id="r_ae5b06d50f4d420808adb6d821fba3273"><td class="memItemLeft" align="right" valign="top">Shader&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae5b06d50f4d420808adb6d821fba3273">StampShader</a><code> [get]</code></td></tr>
 <tr class="memdesc:ae5b06d50f4d420808adb6d821fba3273"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blit shader for batched color stamps into the smoke RT.  <br /></td></tr>
 <tr class="separator:ae5b06d50f4d420808adb6d821fba3273"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -196,8 +193,6 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a0958b10b05257996ca4ac550b734a657"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a451550e7d554133311ef88484c7c888b" id="r_a451550e7d554133311ef88484c7c888b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a451550e7d554133311ef88484c7c888b">_paperStrokeScale</a> = 1.6f</td></tr>
 <tr class="separator:a451550e7d554133311ef88484c7c888b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a26fcbf1135a525c50b01aa389a6602" id="r_a2a26fcbf1135a525c50b01aa389a6602"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a26fcbf1135a525c50b01aa389a6602">_persistOnPaper</a> = true</td></tr>
-<tr class="separator:a2a26fcbf1135a525c50b01aa389a6602"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e96b957a9e88008b86cdb6384200ce5" id="r_a1e96b957a9e88008b86cdb6384200ce5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html">PaintProfile</a>[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e96b957a9e88008b86cdb6384200ce5">_stampProfiles</a></td></tr>
 <tr class="separator:a1e96b957a9e88008b86cdb6384200ce5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5a91a191624a80fec989063d1f5e6e0" id="r_af5a91a191624a80fec989063d1f5e6e0"><td class="memItemLeft" align="right" valign="top">Shader&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af5a91a191624a80fec989063d1f5e6e0">_stampShader</a></td></tr>
@@ -363,28 +358,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a2a26fcbf1135a525c50b01aa389a6602" name="a2a26fcbf1135a525c50b01aa389a6602"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2a26fcbf1135a525c50b01aa389a6602">&#9670;&#160;</a></span>_persistOnPaper</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool BalloonParty.Configuration.Effects.SmokeFieldSettings._persistOnPaper = true</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a1e96b957a9e88008b86cdb6384200ce5" name="a1e96b957a9e88008b86cdb6384200ce5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1e96b957a9e88008b86cdb6384200ce5">&#9670;&#160;</a></span>_stampProfiles</h2>
 
@@ -412,8 +385,8 @@ Static Private Attributes</h2></td></tr>
 <div class="line">            <span class="keyword">new</span> PaintProfile { Sources = PaintSource.ToughDeflect, Radius = 0.3f, Opacity = 0.5f, ColorMode = PaintColorMode.Palette, PaletteColorName = <span class="stringliteral">&quot;Tough&quot;</span>, CustomColor = Color.white },</div>
 <div class="line">        }</div>
 <div class="ttc" id="anamespaceBalloonParty_1_1Configuration_1_1Effects_html_ac4f273f40bd759431308899fdb1194bd"><div class="ttname"><a href="namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bd">BalloonParty.Configuration.Effects.PaintSource</a></div><div class="ttdeci">PaintSource</div><div class="ttdef"><b>Definition</b> SmokeFieldSettings.cs:9</div></div>
-<div class="ttc" id="anamespaceBalloonParty_1_1Configuration_1_1Effects_html_acd622b71fc538338a703329872e54688"><div class="ttname"><a href="namespaceBalloonParty_1_1Configuration_1_1Effects.html#acd622b71fc538338a703329872e54688">BalloonParty.Configuration.Effects.PaintColorMode</a></div><div class="ttdeci">PaintColorMode</div><div class="ttdef"><b>Definition</b> SmokeFieldSettings.cs:18</div></div>
-<div class="ttc" id="astructBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile_html"><div class="ttname"><a href="structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html">BalloonParty.Configuration.Effects.PaintProfile</a></div><div class="ttdef"><b>Definition</b> SmokeFieldSettings.cs:26</div></div>
+<div class="ttc" id="anamespaceBalloonParty_1_1Configuration_1_1Effects_html_acd622b71fc538338a703329872e54688"><div class="ttname"><a href="namespaceBalloonParty_1_1Configuration_1_1Effects.html#acd622b71fc538338a703329872e54688">BalloonParty.Configuration.Effects.PaintColorMode</a></div><div class="ttdeci">PaintColorMode</div><div class="ttdef"><b>Definition</b> SmokeFieldSettings.cs:27</div></div>
+<div class="ttc" id="astructBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile_html"><div class="ttname"><a href="structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html">BalloonParty.Configuration.Effects.PaintProfile</a></div><div class="ttdef"><b>Definition</b> SmokeFieldSettings.cs:35</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -723,7 +696,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Whether paper levels draw the smoke as flat ink blobs with clean edges instead of soft wisps. </p>
+<p>Whether paper (bonus) levels keep an ink field: the <a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Effects.html#abd031b2ebaae099e719c3ec4e6322d5ca2bf0074bb2c7b5812e901258f98f91d3">PaintLayer.Ink</a> sources (pops, the Paint item) stamp into it, it never decays, and the paper draws it into the page. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISmokeFieldSettings.html#aaa35744556ea8852e09cd6510926ed87">BalloonParty.Configuration.Effects.ISmokeFieldSettings</a>.</p>
 
@@ -749,35 +722,9 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>How much wider every stroke stamps on paper levels (1 = as authored), so the ink, which never spreads like the smoke, still reads as blobs. </p>
+<p>How much wider an ink stamp is than its profile's radius (1 = as authored), so the ink, which never spreads like the smoke, still reads as blots. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISmokeFieldSettings.html#ac6b3a2cee1d5ab1fea12c5104b17c6a8">BalloonParty.Configuration.Effects.ISmokeFieldSettings</a>.</p>
-
-</div>
-</div>
-<a id="acf0b443e8b33711e9406c3c62a4c4764" name="acf0b443e8b33711e9406c3c62a4c4764"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acf0b443e8b33711e9406c3c62a4c4764">&#9670;&#160;</a></span>PersistOnPaper</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool BalloonParty.Configuration.Effects.SmokeFieldSettings.PersistOnPaper</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Whether the smoke stays on paper (bonus) levels: no decay, so every stroke stays on the page and a newer one paints over what is under it. </p>
-
-<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISmokeFieldSettings.html#a6a1edbe604ca4183c1346b253dd11ab5">BalloonParty.Configuration.Effects.ISmokeFieldSettings</a>.</p>
 
 </div>
 </div>

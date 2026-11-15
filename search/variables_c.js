@@ -31,7 +31,7 @@ var searchData=
   ['lateralsublengthminid_28',['LateralSubLengthMinId',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafBaker.html#a8f8cd6bdb451c5769d5adeea84d70db5',1,'BalloonParty::Editor::Bush::BushLeafBaker']]],
   ['lateralwidthid_29',['LateralWidthId',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafBaker.html#ae753c6a2fbc2554a58673bc830007514',1,'BalloonParty::Editor::Bush::BushLeafBaker']]],
   ['lateralwidthratio_30',['LateralWidthRatio',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafBakeSettings.html#a4124898f81136809fe0dc2a3cbfc07eb',1,'BalloonParty::Editor::Bush::BushLeafBakeSettings']]],
-  ['layer_31',['Layer',['../classBalloonParty_1_1Editor_1_1CardRevealShredsBuilder.html#a1f56bbbb694bb314959daf1585e32ae3',1,'BalloonParty::Editor::CardRevealShredsBuilder']]],
+  ['layer_31',['Layer',['../structBalloonParty_1_1Configuration_1_1Effects_1_1PaintProfile.html#acc25e66a7999e5e7a61dc2a7ea8dd294',1,'BalloonParty.Configuration.Effects.PaintProfile.Layer'],['../classBalloonParty_1_1Editor_1_1CardRevealShredsBuilder.html#a1f56bbbb694bb314959daf1585e32ae3',1,'BalloonParty.Editor.CardRevealShredsBuilder.Layer']]],
   ['layername_32',['LayerName',['../classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html#a13b47390ec04a25ec7c99a23a15d18bd',1,'BalloonParty::Editor::HeadsUpBuilder']]],
   ['layout_33',['Layout',['../classBalloonParty_1_1Scenario_1_1View_1_1GrassBladeMesh.html#a02fdabd0e99a2fb231b17a9f972c23aa',1,'BalloonParty::Scenario::View::GrassBladeMesh']]],
   ['leafattachmentbias_34',['LeafAttachmentBias',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushBranchBakeSettings.html#a6c4b7ed830c8cb097f62d56182c2db2b',1,'BalloonParty::Editor::Bush::BushBranchBakeSettings']]],

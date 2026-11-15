@@ -227,6 +227,11 @@ Enumerations</h2></td></tr>
 , <a class="el" href="#acd622b71fc538338a703329872e54688a90589c47f06eb971d548591f23c285af">Custom</a>
  }</td></tr>
 <tr class="separator:acd622b71fc538338a703329872e54688"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd031b2ebaae099e719c3ec4e6322d5c" id="r_abd031b2ebaae099e719c3ec4e6322d5c"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abd031b2ebaae099e719c3ec4e6322d5c">PaintLayer</a> { <a class="el" href="#abd031b2ebaae099e719c3ec4e6322d5cabc93fd0fa19ed26b6adf8293ada55404">Smoke</a>
+, <a class="el" href="#abd031b2ebaae099e719c3ec4e6322d5ca2bf0074bb2c7b5812e901258f98f91d3">Ink</a>
+ }</td></tr>
+<tr class="memdesc:abd031b2ebaae099e719c3ec4e6322d5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Which field a source stamps: the smoke, everywhere, or the paper's ink, only on paper.  <a href="#abd031b2ebaae099e719c3ec4e6322d5c">More...</a><br /></td></tr>
+<tr class="separator:abd031b2ebaae099e719c3ec4e6322d5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac4f273f40bd759431308899fdb1194bd" id="r_ac4f273f40bd759431308899fdb1194bd"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac4f273f40bd759431308899fdb1194bd">PaintSource</a> { <br />
 &#160;&#160;<a class="el" href="#ac4f273f40bd759431308899fdb1194bda87950d62eb5a4df533e10c0411199f3c">ProjectileTrail</a> = 1 &lt;&lt; 0
 , <a class="el" href="#ac4f273f40bd759431308899fdb1194bda238dd854590fed6a9209a36c2c22f5ed">ToughPop</a> = 1 &lt;&lt; 1
@@ -234,6 +239,8 @@ Enumerations</h2></td></tr>
 , <a class="el" href="#ac4f273f40bd759431308899fdb1194bda4925b41d0df91ae83e84e0ca1fedecf6">ToughDeflect</a> = 1 &lt;&lt; 3
 , <br />
 &#160;&#160;<a class="el" href="#ac4f273f40bd759431308899fdb1194bda5f9970ae34cc55664cd63fa680706728">SnipeSkyLight</a> = 1 &lt;&lt; 4
+, <a class="el" href="#ac4f273f40bd759431308899fdb1194bda3892e1810e69b0e5f0065fbddd5ba998">PaintSplash</a> = 1 &lt;&lt; 5
+, <a class="el" href="#ac4f273f40bd759431308899fdb1194bda8e42741ff46f887bb0109738fbae034d">BalloonPop</a> = 1 &lt;&lt; 6
 <br />
  }</td></tr>
 <tr class="separator:ac4f273f40bd759431308899fdb1194bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -292,6 +299,34 @@ Enumerations</h2></td></tr>
 
 </div>
 </div>
+<a id="abd031b2ebaae099e719c3ec4e6322d5c" name="abd031b2ebaae099e719c3ec4e6322d5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd031b2ebaae099e719c3ec4e6322d5c">&#9670;&#160;</a></span>PaintLayer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#abd031b2ebaae099e719c3ec4e6322d5c">BalloonParty.Configuration.Effects.PaintLayer</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Which field a source stamps: the smoke, everywhere, or the paper's ink, only on paper. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="abd031b2ebaae099e719c3ec4e6322d5cabc93fd0fa19ed26b6adf8293ada55404" name="abd031b2ebaae099e719c3ec4e6322d5cabc93fd0fa19ed26b6adf8293ada55404"></a>Smoke&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="abd031b2ebaae099e719c3ec4e6322d5ca2bf0074bb2c7b5812e901258f98f91d3" name="abd031b2ebaae099e719c3ec4e6322d5ca2bf0074bb2c7b5812e901258f98f91d3"></a>Ink&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
 <a id="ac4f273f40bd759431308899fdb1194bd" name="ac4f273f40bd759431308899fdb1194bd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac4f273f40bd759431308899fdb1194bd">&#9670;&#160;</a></span>PaintSource</h2>
 
@@ -317,6 +352,8 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="ac4f273f40bd759431308899fdb1194bda81552e14e7348edf29e81ad2596d9133" name="ac4f273f40bd759431308899fdb1194bda81552e14e7348edf29e81ad2596d9133"></a>ToughBreathing&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ac4f273f40bd759431308899fdb1194bda4925b41d0df91ae83e84e0ca1fedecf6" name="ac4f273f40bd759431308899fdb1194bda4925b41d0df91ae83e84e0ca1fedecf6"></a>ToughDeflect&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="ac4f273f40bd759431308899fdb1194bda5f9970ae34cc55664cd63fa680706728" name="ac4f273f40bd759431308899fdb1194bda5f9970ae34cc55664cd63fa680706728"></a>SnipeSkyLight&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ac4f273f40bd759431308899fdb1194bda3892e1810e69b0e5f0065fbddd5ba998" name="ac4f273f40bd759431308899fdb1194bda3892e1810e69b0e5f0065fbddd5ba998"></a>PaintSplash&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ac4f273f40bd759431308899fdb1194bda8e42741ff46f887bb0109738fbae034d" name="ac4f273f40bd759431308899fdb1194bda8e42741ff46f887bb0109738fbae034d"></a>BalloonPop&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>

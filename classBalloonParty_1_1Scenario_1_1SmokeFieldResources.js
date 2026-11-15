@@ -1,5 +1,6 @@
 var classBalloonParty_1_1Scenario_1_1SmokeFieldResources =
 [
+    [ "SmokeFieldResources", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html#aa7de17656ccf6240d0d624f3b4da424a", null ],
     [ "BlitAndSwap", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html#a47a934d3dc133fd20a49c40599ac50b3", null ],
     [ "Clear", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html#ac3103e6afa0289fc39c245681585c69b", null ],
     [ "ClearToEmpty", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html#a2bafb1fba60b3b42d50336fef1118e5c", null ],
@@ -13,9 +14,9 @@ var classBalloonParty_1_1Scenario_1_1SmokeFieldResources =
     [ "_decayMaterial", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html#a8f5b60380e289dfe5a229c8cb0d3c411", null ],
     [ "_fieldA", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html#a0f85782ce0408934ccb4352fbd402f61", null ],
     [ "_fieldB", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html#aea941b1f37b9c8946fdb71db5bbd8468", null ],
+    [ "_globalTextureId", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html#a467857e9b97f2e163b1a38cac8fabf30", null ],
     [ "_readFromA", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html#acb07a7c1e67f07934d821ee8c72998e3", null ],
     [ "_stampMaterial", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html#af8d8353d908497576189d9b4fe08d1b4", null ],
-    [ "GlobalSmokeTexId", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html#af9a4e5203097c1162da31e72de27c5b1", null ],
     [ "DecayMaterial", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html#a694a05bb6ee93945015f54bb22ee9ffe", null ],
     [ "IsReady", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html#ade4298e9fe0d8152fe7a7543a8c2fab5", null ],
     [ "ReadTexture", "classBalloonParty_1_1Scenario_1_1SmokeFieldResources.html#a01a6b9b86414a0c4ee147116cc320ba0", null ],

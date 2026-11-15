@@ -45,12 +45,18 @@ var namespaceBalloonParty_1_1Configuration_1_1Effects =
       [ "Palette", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#acd622b71fc538338a703329872e54688a278f9a3d3077c522e71022e302b9e0e4", null ],
       [ "Custom", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#acd622b71fc538338a703329872e54688a90589c47f06eb971d548591f23c285af", null ]
     ] ],
+    [ "PaintLayer", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#abd031b2ebaae099e719c3ec4e6322d5c", [
+      [ "Smoke", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#abd031b2ebaae099e719c3ec4e6322d5cabc93fd0fa19ed26b6adf8293ada55404", null ],
+      [ "Ink", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#abd031b2ebaae099e719c3ec4e6322d5ca2bf0074bb2c7b5812e901258f98f91d3", null ]
+    ] ],
     [ "PaintSource", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bd", [
       [ "ProjectileTrail", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda87950d62eb5a4df533e10c0411199f3c", null ],
       [ "ToughPop", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda238dd854590fed6a9209a36c2c22f5ed", null ],
       [ "ToughBreathing", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda81552e14e7348edf29e81ad2596d9133", null ],
       [ "ToughDeflect", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda4925b41d0df91ae83e84e0ca1fedecf6", null ],
-      [ "SnipeSkyLight", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda5f9970ae34cc55664cd63fa680706728", null ]
+      [ "SnipeSkyLight", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda5f9970ae34cc55664cd63fa680706728", null ],
+      [ "PaintSplash", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda3892e1810e69b0e5f0065fbddd5ba998", null ],
+      [ "BalloonPop", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#ac4f273f40bd759431308899fdb1194bda8e42741ff46f887bb0109738fbae034d", null ]
     ] ],
     [ "StampSource", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0e", [
       [ "Projectile", "namespaceBalloonParty_1_1Configuration_1_1Effects.html#aa497a0a93fafc1826a66a3c8ee7b8a0eaae7968d26b598ce434958b0825b7a4ac", null ],

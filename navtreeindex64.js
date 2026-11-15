@@ -1,7 +1,5 @@
 var NAVTREEINDEX64 =
 {
-"classBalloonParty_1_1Item_1_1ProjectileFacingRotator.html#aeffc6d7b1bdb1724a96443299cb70c4d":[5,0,0,7,26,13],
-"classBalloonParty_1_1Item_1_1ProjectileFacingRotator.html#aeffc6d7b1bdb1724a96443299cb70c4d":[6,0,0,7,26,13],
 "classBalloonParty_1_1Item_1_1ProjectileFacingRotator.html#affd020946aa4987aa04ac8c7b2424e7d":[5,0,0,7,26,14],
 "classBalloonParty_1_1Item_1_1ProjectileFacingRotator.html#affd020946aa4987aa04ac8c7b2424e7d":[6,0,0,7,26,14],
 "classBalloonParty_1_1Item_1_1Shield_1_1ShieldChainPlanner.html":[5,0,0,7,6,0],
@@ -249,5 +247,7 @@ var NAVTREEINDEX64 =
 "classBalloonParty_1_1Item_1_1SightScalePulseReaction.html#a9b2ab27497172b99135f15a5db74435d":[5,0,0,7,31,19],
 "classBalloonParty_1_1Item_1_1SightScalePulseReaction.html#a9b2ab27497172b99135f15a5db74435d":[6,0,0,7,31,19],
 "classBalloonParty_1_1Item_1_1SightScalePulseReaction.html#acf875ab7715365bc5db2d15f20f4ee8c":[5,0,0,7,31,16],
-"classBalloonParty_1_1Item_1_1SightScalePulseReaction.html#acf875ab7715365bc5db2d15f20f4ee8c":[6,0,0,7,31,16]
+"classBalloonParty_1_1Item_1_1SightScalePulseReaction.html#acf875ab7715365bc5db2d15f20f4ee8c":[6,0,0,7,31,16],
+"classBalloonParty_1_1Item_1_1SightScalePulseReaction.html#ad06fe94c148fd180feda557db46df014":[5,0,0,7,31,10],
+"classBalloonParty_1_1Item_1_1SightScalePulseReaction.html#ad06fe94c148fd180feda557db46df014":[6,0,0,7,31,10]
 };

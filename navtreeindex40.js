@@ -1,9 +1,5 @@
 var NAVTREEINDEX40 =
 {
-"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#ad5da75d1c359c556cfafd7a5a7fc859d":[5,0,0,5,28,34],
-"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#ad5da75d1c359c556cfafd7a5a7fc859d":[6,0,0,5,28,34],
-"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#addde2315133390bf44cb2b0c1e506434":[5,0,0,5,28,1],
-"classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#addde2315133390bf44cb2b0c1e506434":[6,0,0,5,28,1],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#ae012c5ad3439c07f89b26df5b0b6708a":[5,0,0,5,28,50],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#ae012c5ad3439c07f89b26df5b0b6708a":[6,0,0,5,28,50],
 "classBalloonParty_1_1Editor_1_1LevelPacingWindow.html#ae04476ef336028cee9d9eaa0dbee01f8":[5,0,0,5,28,41],
@@ -249,5 +245,9 @@ var NAVTREEINDEX40 =
 "classBalloonParty_1_1Editor_1_1PencilFontBuilder.html#a6cce0f79d9b88574a69cb9b6091667a2":[5,0,0,5,34,8],
 "classBalloonParty_1_1Editor_1_1PencilFontBuilder.html#a6cce0f79d9b88574a69cb9b6091667a2":[6,0,0,5,34,8],
 "classBalloonParty_1_1Editor_1_1PencilFontBuilder.html#a94cdd84b1f633b10d41717e00dfed545":[5,0,0,5,34,0],
-"classBalloonParty_1_1Editor_1_1PencilFontBuilder.html#a94cdd84b1f633b10d41717e00dfed545":[6,0,0,5,34,0]
+"classBalloonParty_1_1Editor_1_1PencilFontBuilder.html#a94cdd84b1f633b10d41717e00dfed545":[6,0,0,5,34,0],
+"classBalloonParty_1_1Editor_1_1PencilFontBuilder.html#aa2cc758c14186e7270faaaff4b6da5dc":[5,0,0,5,34,4],
+"classBalloonParty_1_1Editor_1_1PencilFontBuilder.html#aa2cc758c14186e7270faaaff4b6da5dc":[6,0,0,5,34,4],
+"classBalloonParty_1_1Editor_1_1PencilFontBuilder.html#acd1c7f9e7df6527c8fdc3b0eeb22a3a5":[5,0,0,5,34,6],
+"classBalloonParty_1_1Editor_1_1PencilFontBuilder.html#acd1c7f9e7df6527c8fdc3b0eeb22a3a5":[6,0,0,5,34,6]
 };
