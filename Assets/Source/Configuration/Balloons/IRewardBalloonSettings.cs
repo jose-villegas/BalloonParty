@@ -51,6 +51,34 @@ namespace BalloonParty.Configuration.Balloons
         /// </summary>
         IReadOnlyList<float> PurpleHeartChances { get; }
 
+        /// <summary>
+        ///     The disco ball's completion, 0 to 1, from which an ordinary level that won it brings it
+        ///     (<see cref="OrdinaryDiscoEveryLevels" />). The golden balloon's rules, its own numbers (PLAN-DiscoBalloon).
+        /// </summary>
+        float DiscoAtCompletion { get; }
+
+        /// <summary>
+        ///     Off a purple level, every this many levels, from <see cref="SureDiscoLevel" /> on, rolls once
+        ///     (<see cref="OrdinaryDiscoChance" />) for a single disco ball. 0 is off.
+        /// </summary>
+        int OrdinaryDiscoEveryLevels { get; }
+
+        float OrdinaryDiscoChance { get; }
+
+        /// <summary>A level that always brings a single disco ball, with no roll; 0 for none.</summary>
+        int SureDiscoLevel { get; }
+
+        float SureDiscoAtCompletion { get; }
+
+        /// <summary>The level's completion, 0 to 1, from which a purple level rolls for disco balls.</summary>
+        float PurpleDiscoAtCompletion { get; }
+
+        /// <summary>
+        ///     A purple level's disco balls: the chance each roll brings the next one, the first entry for the first
+        ///     (1 makes it sure). Their count caps the level's disco balls.
+        /// </summary>
+        IReadOnlyList<float> PurpleDiscoChances { get; }
+
         /// <summary>Chance per spawn line of a heart balloon while one heart is missing, off a purple level.</summary>
         float HeartChanceMissingOne { get; }
 

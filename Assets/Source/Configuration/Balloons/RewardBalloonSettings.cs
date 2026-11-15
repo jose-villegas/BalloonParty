@@ -44,6 +44,35 @@ namespace BalloonParty.Configuration.Balloons
                  "purple level. Never more than one on the board.")]
         [SerializeField] [Range(0f, 1f)] private float[] _purpleHeartChances = { 0.4f, 0.3f, 0.2f, 0.12f, 0.06f };
 
+        [Tooltip("The disco ball (PLAN-DiscoBalloon) follows the golden balloon's rules with its own numbers, a little " +
+                 "more often than the golden and less than the heart. The level's completion from which an " +
+                 "ordinary level that won its disco ball brings it.")]
+        [SerializeField] [Range(0f, 1f)] private float _discoAtCompletion = 0.35f;
+
+        [Tooltip("Off a purple level, every this many levels from the Sure Disco Level on (the 8th, 12th, ...) rolls " +
+                 "once for a single disco ball, which comes at Disco At Completion. 0 turns it off.")]
+        [SerializeField] [Min(0)] private int _ordinaryDiscoEveryLevels = 4;
+
+        [Tooltip("The chance, 0 to 1, that such a level gets its disco ball.")]
+        [SerializeField] [Range(0f, 1f)] private float _ordinaryDiscoChance = 0.45f;
+
+        [Tooltip("A level that always brings a single disco ball, the player's first sight of one, with no roll. " +
+                 "After the golden balloon's sure level, so the player already knows only a pierce breaks a plated " +
+                 "balloon. 0 for none.")]
+        [SerializeField] [Min(0)] private int _sureDiscoLevel = 8;
+
+        [Tooltip("How much of the sure level is done when its disco ball comes, 0 to 1: early, so the rainbow board " +
+                 "has the level still ahead of it.")]
+        [SerializeField] [Range(0f, 1f)] private float _sureDiscoAtCompletion = 0.15f;
+
+        [Tooltip("The level's completion, 0 to 1, from which a purple level rolls for disco balls.")]
+        [SerializeField] [Range(0f, 1f)] private float _purpleDiscoAtCompletion = 0.25f;
+
+        [Tooltip("A purple level's disco balls: the chance each roll brings the next one, the first entry for the " +
+                 "first. 1 makes it sure: every purple level gets one. The count caps the level's disco balls. Never " +
+                 "more than one on the board.")]
+        [SerializeField] [Range(0f, 1f)] private float[] _purpleDiscoChances = { 1f, 0.25f, 0.15f };
+
         [Tooltip("Chance per spawn line of a heart balloon while one heart is missing, off a purple level. Full " +
                  "hearts never roll one.")]
         [SerializeField] [Range(0f, 1f)] private float _heartChanceMissingOne = 0.04f;
@@ -63,6 +92,13 @@ namespace BalloonParty.Configuration.Balloons
         public float PurpleGoldenAtCompletion => _purpleGoldenAtCompletion;
         public IReadOnlyList<float> PurpleGoldenChances => _purpleGoldenChances;
         public IReadOnlyList<float> PurpleHeartChances => _purpleHeartChances;
+        public float DiscoAtCompletion => _discoAtCompletion;
+        public int OrdinaryDiscoEveryLevels => _ordinaryDiscoEveryLevels;
+        public float OrdinaryDiscoChance => _ordinaryDiscoChance;
+        public int SureDiscoLevel => _sureDiscoLevel;
+        public float SureDiscoAtCompletion => _sureDiscoAtCompletion;
+        public float PurpleDiscoAtCompletion => _purpleDiscoAtCompletion;
+        public IReadOnlyList<float> PurpleDiscoChances => _purpleDiscoChances;
         public float HeartChanceMissingOne => _heartChanceMissingOne;
         public float HeartChanceMissingTwo => _heartChanceMissingTwo;
         public int HeartCooldownLines => _heartCooldownLines;

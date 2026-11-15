@@ -74,9 +74,9 @@ namespace BalloonParty.Balloon.Spawner
         private readonly BalloonPrefabEntry _bubbleEntry;
         // The catalogue's unbreakable, which a formation's reinforcements bring whatever the level's mix.
         private readonly BalloonPrefabEntry _unbreakableEntry;
-        // The reward balloons (IRewardBalloonRequests), never in a level's mix; null until configured.
-        private readonly BalloonPrefabEntry _goldenEntry;
-        private readonly BalloonPrefabEntry _heartEntry;
+        // The reward balloons (IRewardBalloonRequests) by type, never in a level's mix; a type without an entry
+        // isn't here.
+        private readonly Dictionary<BalloonType, BalloonPrefabEntry> _rewardEntries = new();
 
         private int[] _columnSortKeys;
         // Lines spawned this level; waves (ISpawnClockSettings.LinesPerWave) are counted from it.
@@ -148,8 +148,13 @@ namespace BalloonParty.Balloon.Spawner
             _threatEase = threatEase;
             _bubbleEntry = FindEntry(balloonsConfig, BalloonType.BubbleCluster);
             _unbreakableEntry = FindEntry(balloonsConfig, BalloonType.Unbreakable);
-            _goldenEntry = FindEntry(balloonsConfig, BalloonType.Golden);
-            _heartEntry = FindEntry(balloonsConfig, BalloonType.Heart);
+            foreach (var entry in balloonsConfig.Entries)
+            {
+                if (entry.BalloonType.IsReward())
+                {
+                    _rewardEntries.TryAdd(entry.BalloonType, entry);
+                }
+            }
 
             // Cached to avoid a per-sort delegate allocation.
             _byColumnKey = CompareColumnKeys;
@@ -602,8 +607,7 @@ namespace BalloonParty.Balloon.Spawner
                 return;
             }
 
-            var entry = type == BalloonType.Golden ? _goldenEntry : type == BalloonType.Heart ? _heartEntry : null;
-            if (entry == null)
+            if (!_rewardEntries.TryGetValue(type, out var entry))
             {
                 return;
             }

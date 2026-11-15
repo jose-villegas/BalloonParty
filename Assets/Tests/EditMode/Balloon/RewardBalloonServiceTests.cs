@@ -267,8 +267,9 @@ namespace BalloonParty.Tests.Balloon
         public void IsOrdinaryGoldenLevel_EveryNthLevel(int every, int level, bool expected)
         {
             _settings.OrdinaryGoldenEveryLevels.Returns(every);
+            var golden = PlatedRewardTuning.Golden(_settings);
 
-            Assert.AreEqual(expected, RewardBalloonService.IsOrdinaryGoldenLevel(_settings, level));
+            Assert.AreEqual(expected, PlatedRewardSchedule.IsOrdinaryLevel(in golden, level));
         }
 
         [Test]
@@ -960,6 +961,194 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(0f, LevelCompletion.Of(_levelProgress, Colors));
         }
 
+        // A bonus (purple) level always gets its first disco ball: the first entry is 1, so no roll can lose it.
+        [Test]
+        public void Disco_PurpleLevel_TheFirstIsSure()
+        {
+            UseDisco();
+            _roll = 0.99f;
+            SetCompletion(0.3f);
+
+            Assert.IsTrue(_service.TryTakeDue(out var type));
+            Assert.AreEqual(BalloonType.Disco, type);
+        }
+
+        [Test]
+        public void Disco_PurpleLevelBelowItsThreshold_NotDue()
+        {
+            UseDisco();
+            SetCompletion(0.2f);
+
+            Assert.AreEqual(0, FirstDueLine(BalloonType.Disco, 10));
+        }
+
+        // After the sure one, each further disco ball is a roll on the next entry.
+        [Test]
+        public void Disco_PurpleLevel_TheSecondIsARoll()
+        {
+            UseDisco();
+            SetCompletion(0.3f);
+            Assert.IsTrue(_service.TryTakeDue(out _));
+            _service.Placed(BalloonType.Disco)();
+
+            _roll = 0.25f;
+            Assert.AreEqual(0, FirstDueLine(BalloonType.Disco, 10), "a roll at the chance loses");
+
+            _roll = 0.24f;
+            Assert.AreEqual(1, FirstDueLine(BalloonType.Disco, 10));
+        }
+
+        [Test]
+        public void Disco_PurpleLevel_TheListsLengthCapsTheLevel()
+        {
+            UseDisco();
+            SetCompletion(0.3f);
+            _roll = 0f;
+            for (var i = 0; i < 2; i++)
+            {
+                Assert.Greater(FirstDueLine(BalloonType.Disco, 10), 0, $"disco {i + 1}");
+                _service.Placed(BalloonType.Disco)();
+            }
+
+            Assert.AreEqual(0, FirstDueLine(BalloonType.Disco, 20));
+        }
+
+        [Test]
+        public void Disco_OneOnTheBoardAtATime()
+        {
+            UseDisco();
+            SetCompletion(0.3f);
+            _roll = 0f;
+            Assert.IsTrue(_service.TryTakeDue(out _));
+            var left = _service.Placed(BalloonType.Disco);
+
+            Assert.AreEqual(0, FirstDueLine(BalloonType.Disco, 10), "while one is on the board");
+
+            left();
+            Assert.AreEqual(1, FirstDueLine(BalloonType.Disco, 10));
+        }
+
+        // A disco ball placed before a run reset leaving afterwards must not clear the one on the board now.
+        [Test]
+        public void Disco_AStaleLeave_DoesNotFreeTheBoardsOne()
+        {
+            UseDisco();
+            SetCompletion(0.3f);
+            _roll = 0f;
+            Assert.IsTrue(_service.TryTakeDue(out _));
+            var staleLeft = _service.Placed(BalloonType.Disco);
+            _service.ResetRun(1);
+            Assert.IsTrue(_service.TryTakeDue(out _));
+            _service.Placed(BalloonType.Disco);
+
+            staleLeft();
+
+            Assert.AreEqual(0, FirstDueLine(BalloonType.Disco, 10));
+        }
+
+        // The golden balloon wins a line both are due on; the disco ball stays due and takes the next.
+        [Test]
+        public void Disco_TheGoldenWinsALine_TheDiscoComesOnTheNext()
+        {
+            UseDisco();
+            SetCompletion(0.8f);
+
+            Assert.IsTrue(_service.TryTakeDue(out var first));
+            Assert.AreEqual(BalloonType.Golden, first);
+            _service.Placed(BalloonType.Golden);
+
+            Assert.IsTrue(_service.TryTakeDue(out var second));
+            Assert.AreEqual(BalloonType.Disco, second);
+        }
+
+        [Test]
+        public void Disco_WinsALineOverAHeart()
+        {
+            UseDisco();
+            _settings.PurpleHeartChances.Returns(new[] { 1f });
+            SetCompletion(0.3f);
+
+            Assert.IsTrue(_service.TryTakeDue(out var first));
+            Assert.AreEqual(BalloonType.Disco, first);
+            _service.Placed(BalloonType.Disco);
+
+            Assert.IsTrue(_service.TryTakeDue(out var second));
+            Assert.AreEqual(BalloonType.Heart, second);
+        }
+
+        [Test]
+        public void Disco_WithoutACatalogueEntry_NeverDue()
+        {
+            SetCompletion(0.3f);
+            _settings.PurpleDiscoAtCompletion.Returns(0.25f);
+            _settings.PurpleDiscoChances.Returns(new[] { 1f });
+
+            Assert.AreEqual(0, FirstDueLine(BalloonType.Disco, 10));
+        }
+
+        // The sure level is the player's first disco ball: no roll, early in the level.
+        [Test]
+        public void SureDisco_ItsLevelAlwaysBringsOne_Early()
+        {
+            UseDisco();
+            UseOrdinaryLevel(level: 8, roll: 1f);
+            SetCompletion(0.1f);
+            Assert.IsFalse(_service.TryTakeDue(out _), "below the sure level's threshold");
+
+            SetCompletion(0.2f);
+            Assert.IsTrue(_service.TryTakeDue(out var type));
+            Assert.AreEqual(BalloonType.Disco, type);
+        }
+
+        [Test]
+        public void OrdinaryDisco_ACheckLevelWinsItsRoll_OneComesAtTheThreshold()
+        {
+            UseDisco();
+            UseOrdinaryLevel(level: 12, roll: 0.44f);
+            SetCompletion(0.3f);
+            Assert.IsFalse(_service.TryTakeDue(out _), "below the threshold");
+
+            SetCompletion(0.4f);
+            Assert.IsTrue(_service.TryTakeDue(out var type));
+            Assert.AreEqual(BalloonType.Disco, type);
+        }
+
+        [Test]
+        public void OrdinaryDisco_ALostRoll_BringsNone()
+        {
+            UseDisco();
+            UseOrdinaryLevel(level: 12, roll: 0.45f);
+            SetCompletion(0.9f);
+
+            Assert.AreEqual(0, FirstDueLine(BalloonType.Disco, 20));
+        }
+
+        // Level 4 is a multiple of the disco's 4, but comes before its sure level: the player meets it there first.
+        [Test]
+        public void OrdinaryDisco_ACheckLevelBeforeTheSureLevel_NeverRolls()
+        {
+            UseDisco();
+            UseOrdinaryLevel(level: 4, roll: 0f);
+            SetCompletion(0.9f);
+
+            Assert.AreEqual(0, FirstDueLine(BalloonType.Disco, 20));
+            Assert.AreEqual(0, _draws);
+        }
+
+        [TestCase(4, 0, 4, true)]
+        [TestCase(4, 0, 6, false)]
+        [TestCase(4, 8, 4, false)]
+        [TestCase(4, 8, 8, true)]
+        [TestCase(4, 8, 12, true)]
+        [TestCase(0, 0, 4, false)]
+        [TestCase(4, 0, 0, false)]
+        public void IsOrdinaryLevel_EveryNthLevel_FromTheSureLevelOn(int every, int sure, int level, bool expected)
+        {
+            var tuning = new PlatedRewardTuning(every, 0.5f, 0.5f, sure, 0.1f, 0.5f, null);
+
+            Assert.AreEqual(expected, PlatedRewardSchedule.IsOrdinaryLevel(in tuning, level));
+        }
+
         private static BalloonPrefabEntry Entry(BalloonType type)
         {
             var entry = new BalloonPrefabEntry();
@@ -1083,6 +1272,29 @@ namespace BalloonParty.Tests.Balloon
         {
             _settings.OrdinaryGoldenEveryLevels.Returns(5);
             _settings.OrdinaryGoldenChance.Returns(0.4f);
+            _level.IsExtraColorLevel.Returns(false);
+            _levelNumber.Value = level;
+            _roll = roll;
+        }
+
+        // A catalogue with the disco ball, on its own numbers: sure first on a purple level from 25% done, then 25%;
+        // off a purple level every 4th level from level 8 on (45%) at 35% done, and level 8 always, at 15% done.
+        private void UseDisco()
+        {
+            _settings.PurpleDiscoAtCompletion.Returns(0.25f);
+            _settings.PurpleDiscoChances.Returns(new[] { 1f, 0.25f });
+            _settings.OrdinaryDiscoEveryLevels.Returns(4);
+            _settings.OrdinaryDiscoChance.Returns(0.45f);
+            _settings.DiscoAtCompletion.Returns(0.35f);
+            _settings.SureDiscoLevel.Returns(8);
+            _settings.SureDiscoAtCompletion.Returns(0.15f);
+            _service.Dispose();
+            _service = CreateService(BalloonType.Golden, BalloonType.Disco, BalloonType.Heart);
+        }
+
+        // A non-purple level, with the roll it will make; the golden balloon's ordinary roll stays off.
+        private void UseOrdinaryLevel(int level, float roll)
+        {
             _level.IsExtraColorLevel.Returns(false);
             _levelNumber.Value = level;
             _roll = roll;

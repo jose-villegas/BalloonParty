@@ -41,8 +41,8 @@ code is the model, the wave, the ledger that guards the streak, and the look.
 | `PlatedBalloonModel` (new, abstract) | `Balloon/Model/` | Moves the golden balloon's hit rules out of `GoldenBalloonModel`: a `Beam` pops; a hit with both `Piercing` and `DirectHit` pops; any other shot hit deflects; an item hit is `HitOutcome.None`. It also takes `IHasDeflectStamp`, `IResistsPaint`, `IDeflectsShots` and the nudge overrides. `GoldenBalloonModel` and `DiscoBalloonModel` both extend it, so the two rules can't drift apart. `IsTough` already covers any `IDeflectsShots`, so the pierce plows it with no change |
 | `DiscoBalloonModel` (new) | `Balloon/Model/` | An empty subclass. It gets its own type so the payout, the solver and the sound can tell it apart |
 | `BalloonModelFactory` | `Balloon/Model/` | Maps `Disco`. This has to land before the catalogue entry does: the factory throws for an unmapped type after `Placed` has run, which would leave the balloon counted on the board for the rest of the run (the trap noted in the reward plan) |
-| `RewardBalloonService` / `IRewardBalloonSettings` | `Balloon/Reward/`, `Configuration/Balloons/` | Decides when a disco balloon is due (*When it comes*) and tracks the one on the board through the leave callback |
-| `BalloonSpawner.AddRewardBalloon` | `Balloon/Spawner/` | Today a ternary picks the golden or heart entry. It becomes a lookup by type, so a third reward type doesn't add a third branch. The disco entry is prewarmed to one, like the other two |
+| `RewardBalloonService` / `PlatedRewardSchedule` / `IRewardBalloonSettings` | `Balloon/Reward/`, `Configuration/Balloons/` | Decides when a disco balloon is due (*When it comes*) and tracks the one on the board through the leave callback. The golden balloon's schedule moved into `PlatedRewardSchedule`, which both plated balloons run on their own numbers (`PlatedRewardTuning`) |
+| `BalloonSpawner.AddRewardBalloon` | `Balloon/Spawner/` | Looks the reward's catalogue entry up by type, so a third reward type didn't add a third branch. The disco entry is prewarmed to one, like the other two |
 | `DiscoWave` (new) | `Balloon/Reward/` | Plain C#, `ITickable` and `IRunResettable`. It reads the ball's pop from `ActorHitMessage` through `RewardBalloonPop.TryGet`, the same gate `RewardBalloonPayout` uses, so only a real pop starts a wave, never a board clear or a level change. It runs the disc: the radius each frame, which balloons the edge has crossed, and what happens to each (*The wave*). One wave at a time, since there is never more than one ball on the board |
 | `DiscoWaveView` (new) | `Balloon/View/` | A pooled `MonoBehaviour` quad drawing the disc. The wave pushes the centre and radius to it each frame, so what you see and what gets painted can't drift apart. Its `CompositeDisposable` is cleared and its tweens are killed in `OnDespawned` |
 | `PaintTargets` (new, static) | `Item/Paint/` | Moves `PaintItemHandler.TryClassify` out so it can be shared. Accept: paintable and not already that colour. Reject: `IResistsPaint`, or a rainbow balloon hit by concrete paint. Ignore: anything else. The Paint item and the wave both classify through it, so a balloon immune to the Paint item is immune to the wave |
@@ -85,15 +85,19 @@ mix's caps count balloons, not jackpots. The service already does what this ball
 the board, per-level rolls, a completion threshold, and a guaranteed first meeting. A level that rolls one
 sees it at most once.
 
-Proposed defaults (all tuning lives in `IRewardBalloonSettings`):
+It follows the golden balloon's rules with its own numbers (decided 2026-11-15): a rare roll on an ordinary
+level, sure on a bonus (purple) level, a little more often than the golden balloon and less than the heart.
+The two plated balloons share one schedule (`Balloon/Reward/PlatedRewardSchedule`), so the rules can't drift
+apart. All the tuning lives in `IRewardBalloonSettings`:
 
-| Setting | Default | Why |
-|---|---|---|
-| `DiscoFromLevel` | 8 | After the golden balloon's introduction on level 5, so the player already knows "only a pierce breaks the plated ones" |
-| `SureDiscoLevel` | 10 | Every player meets one, with no roll, early in the level (`SureDiscoAtCompletion` 0.15), with the level still ahead of them |
-| `DiscoChance` | 0.2 | After that, each ordinary level rolls once, on its first line |
-| `DiscoAtCompletion` | 0.35 | A won roll places the ball once the level is 35% done. Later than that, the rainbow pays out goals the level is nearly finished with (Open questions, 1) |
-| Purple levels | off | Purple levels already carry the golden and heart rolls, and on paper the rays and mirror have little light to work with. Revisit after a playtest |
+| Setting | Disco | Golden | Why |
+|---|---|---|---|
+| `SureDiscoLevel` | 8 | 5 | Every player meets one with no roll, early in the level (`SureDiscoAtCompletion` 0.15). After the golden balloon's level, so the player already knows only a pierce breaks a plated balloon |
+| `OrdinaryDiscoEveryLevels` | 4 | 5 | Off a purple level, every 4th level from the sure level on (12, 16, ...) rolls once, on its first line. A level before the sure one never rolls, so the sure level is the first sight |
+| `OrdinaryDiscoChance` | 0.45 | 0.4 | About one level in nine gets one, against one in twelve for the golden balloon |
+| `DiscoAtCompletion` | 0.35 | 0.5 | Earlier than the golden balloon: the rainbow board pays out goals, and needs goals left to pay (Open questions, 1) |
+| `PurpleDiscoAtCompletion` | 0.25 | 0.15 | On a purple level, rolled every `PurpleRollEveryLines` (6) lines from a quarter done |
+| `PurpleDiscoChances` | 1, 0.25, 0.15 | 0.35, 0.2, 0.1 | The first is sure, so every purple level gets one. The next two are rolls, rarer than the heart's (0.4, 0.3, 0.2, 0.12, 0.06) |
 
 When more than one reward is due on the same line, the golden balloon goes first (it already beats the
 heart), then the disco balloon, then the heart. A reward that is due but finds no room on its line stays
@@ -247,8 +251,10 @@ built from the golden balloon's, so it keeps the knot and reads as a balloon.
 `GodRays.shader` gets a `_RainbowRays` toggle. When it is on, each ray's colour is
 `RainbowBandColor(rayIndex)`, the **level's own allowed colours**, the same bands as the rainbow balloon's
 body, so the rays show exactly what the ball will turn the board into. The `DiscoRays` material holds the
-shape: more rays than the golden balloon's, narrower, and spinning faster. A new `DiscoRays` palette entry
-holds the strength in its alpha.
+shape: more rays than the golden balloon's, narrower, and visibly spinning: `_SpinSpeed` 0.9 rad/s, above the
+golden balloon's 0.6 and the heart's 0.45, with the second fan counter-rotating at 0.7x as the shader already
+does. A new `DiscoRays` palette entry holds the strength in its alpha. Until then, the phase 2 placeholder
+prefab keeps the golden balloon's `GoldenRays` material, so it spins at the golden balloon's speed.
 
 **The disc: `Sprite/DiscoWave.shader`** on `DiscoWaveView`. A quad covering the board, with the centre and
 radius pushed each frame. It draws a soft wash inside the disc that fades as the disc grows, and a bright
@@ -291,7 +297,8 @@ fifty clips. All of these are layered from clips already in the sound bank, as t
 6. **Dancing lights on the board.** A real disco ball throws moving specks of light around the room. Two or
    three tagged scene lights orbiting the ball while it's on the board would do that. They are left out of
    the phases as a stretch goal, because the light field is shared and busy.
-7. **Purple levels**, where paper is now the scenario: off for now. Turn them on after a look on paper?
+7. ~~Purple levels~~: settled (2026-11-15). Each purple level gets a sure one; the look on paper is checked in
+   Phase 4.
 
 ## Phases
 

@@ -1,12 +1,13 @@
 # Balloon/Reward
 
-Two balloons are rewards rather than threats, and no level's mix brings them. On a purple level both are
-rolled every few lines, each further one rarer: the **heart balloon** from the level's start, up to five, even
-at full hearts, where its pop gives an extra heart past the maximum; the **golden balloon** from 15% done, up
-to three. Level 5 always gets a single golden one early on, the player's first, and now and then another
-ordinary level does too. Off a purple level the heart comes to a player who is missing hearts, more often the
-more are missing. At most one of each is on the board. The
-plan is `Plans/PLAN-RewardBalloons.md`.
+Three balloons are rewards rather than threats, and no level's mix brings them. On a purple level all three
+are rolled every few lines, each further one rarer: the **heart balloon** from the level's start, up to five,
+even at full hearts, where its pop gives an extra heart past the maximum; the **golden balloon** from 15% done,
+up to three; the **disco ball** from 25% done, the first one sure, up to three. Level 5 always gets a single
+golden one early on, the player's first, and level 8 a single disco ball; now and then another ordinary level
+gets one or the other. Off a purple level the heart comes to a player who is missing hearts, more often the
+more are missing. At most one of each is on the board. The plans are `Plans/PLAN-RewardBalloons.md` and
+`Plans/PLAN-DiscoBalloon.md`; the disco ball's pop does nothing yet (its rainbow wave is that plan's phase 3).
 
 ## Contents
 
@@ -14,6 +15,8 @@ plan is `Plans/PLAN-RewardBalloons.md`.
 |---|---|
 | `IRewardBalloonRequests` | What `BalloonSpawner` asks. `TryTakeDue` once per clock line: whether this line brings one, and which. `Placed` once it is on the board: returns the callback to call when it leaves |
 | `RewardBalloonService` | The rules behind the answer. Registered as `IRewardBalloonRequests` and `IRunResettable` |
+| `PlatedRewardSchedule` | When one plated balloon (the golden one, the disco ball) is due, and whether one is on the board: the purple rolls, the ordinary level's single roll, the sure level. The service runs one for each; `RollPurple` is shared with the heart |
+| `PlatedRewardTuning` | One plated balloon's numbers, read from `IRewardBalloonSettings` each line (`Golden(settings)`, `Disco(settings)`), so the two share the rules and differ only in these |
 | `RewardBalloonPayout` | Pays a reward balloon's pop, read from `ActorHitMessage`. The golden balloon: a free card (`IFreeCardGrant`), or a heart (`IPlayerHealing.Heal`) when every card is at its limit. The heart balloon: a heart, or on a purple level an extra one past the maximum (`HealPastMax`). Pays each balloon once |
 | `RewardBalloonPop` | `TryGet(hit, out balloon)`: a reward balloon's pop. The payout and the service both read pops through it, so what one pays the other counts |
 
@@ -60,12 +63,18 @@ has an entry for.
   reaches `PurpleGoldenAtCompletion` (0.15; each colour's points, capped at the goal, over all the goals); the
   heart from the level's first line, at full hearts too, and the roll while hurt (below) is off there. A won
   roll stays due until it is placed (a line with no room for it passes it on). A new level starts both counts
-  over and drops anything owed. The golden wins a line over the heart.
+  over and drops anything owed. The disco ball rolls like the golden one, from `PurpleDiscoAtCompletion`
+  (0.25), on `PurpleDiscoChances` (100%, 25%, 15%): the first is sure, so every purple level gets one. A line
+  brings one balloon at most: the golden first, then the disco ball, then the heart; the others stay due.
 - **Golden, on another level.** Rare, and a single one. Every `OrdinaryGoldenEveryLevels` (5) levels, a
   level that isn't purple rolls once, on its first line, against `OrdinaryGoldenChance` (40%). A won level
   places one golden balloon at `GoldenAtCompletion` (0.5).
   `SureGoldenLevel` (5) needs no roll: it always places its one, and early in the level
   (`SureGoldenAtCompletion`, 10% done), so every player meets a golden balloon with the level still ahead.
+  Only levels from the sure level on roll.
+- **Disco ball, on another level.** The golden balloon's rules on its own numbers, a little more often: every
+  `OrdinaryDiscoEveryLevels` (4) levels from `SureDiscoLevel` (8) on, against `OrdinaryDiscoChance` (45%),
+  placed at `DiscoAtCompletion` (0.35). Level 8 always places its one, at `SureDiscoAtCompletion` (15% done).
 - **Heart, elsewhere.** A roll per line while a heart is missing: `HeartChanceMissingOne`, or
   `HeartChanceMissingTwo` with two or more missing. After one is placed, `HeartCooldownLines` lines pass
   before the next roll. Each line rolled without one while the player is in need raises the next line's
