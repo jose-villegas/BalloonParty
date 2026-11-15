@@ -1,5 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunSave.html" title="Where the interrupted run is kept between launches: one save at most, overwritten at each level bound..." alt="" coords="5,14,244,42"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Game_1_1Run_1_1PlayerPrefsRunSave.html" title="IRunSave as one JSON string in PlayerPrefs, beside the best&#45;run record." alt="" coords="292,5,510,50"/>
-<area shape="poly" id="edge557_Node000000_Node000001" title=" " alt="" coords="259,25,294,28,289,28,259,30"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunMeta.html" title="Persisted cross&#45;run record — best level and best score." alt="" coords="5,5,245,33"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Game_1_1Run_1_1RunMeta.html" title=" " alt="" coords="293,5,528,33"/>
+<area shape="poly" id="edge558_Node000000_Node000001" title=" " alt="" coords="260,17,295,19,289,19,260,22"/>
 </map>

@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService =
 [
-    [ "RewardBalloonService", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a967bd07c598338e2f491f7b4a09244cf", null ],
+    [ "RewardBalloonService", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#adc09f5b8ff14e0c05ecea0bae96c6a0f", null ],
     [ "Dispose", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#ad3843213df88171061130bd894f8fc69", null ],
     [ "ForgetLevelsRewards", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a0f5787372c09f1ad7541afd32e89e2b3", null ],
     [ "GoldenDue", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a31ec97ecaa7e0db062d0c79bcbe60f53", null ],
@@ -25,6 +25,7 @@ var classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService =
     [ "_health", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a9e9b4129a8f762cf25a1d640017a5c69", null ],
     [ "_heartAlive", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a3dbd524d9913d2747b2c67551cb26ef2", null ],
     [ "_heartPending", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a889b3fbdc94e09cd4754c494985c44b6", null ],
+    [ "_heartPity", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a7ba972fe9670ea0139c5408c06f1e2c3", null ],
     [ "_heartPlaceable", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a720926dfd04a2bde6db5ed9dbfa8fd6f", null ],
     [ "_heartPlacement", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a4c2a782e0e49bffeb586fe8a1572f06c", null ],
     [ "_heartRollLines", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a6542b142ee34d6547c7a206079b84ff0", null ],
@@ -33,6 +34,7 @@ var classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService =
     [ "_levelProgress", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a546ffb1ec30732dc9fc4ec28830cd07b", null ],
     [ "_levelSubscription", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#abce5a9434e796dabb9536657fb8d1c52", null ],
     [ "_linesSinceHeart", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#ad99c6bd3f7aa9e954711f6ec1d9c3b03", null ],
+    [ "_need", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#ab7055d57354fcfc4dbc202b1d2a31c27", null ],
     [ "_ordinaryGoldenAt", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#aaddfe1ffe42685672a4a14ba4f68ee08", null ],
     [ "_ordinaryGoldenRolled", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a93884851884eb902df77462bbfe868a5", null ],
     [ "_ordinaryGoldenWon", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a67caa2bc4cf1740ace49680cf3f4013a", null ],

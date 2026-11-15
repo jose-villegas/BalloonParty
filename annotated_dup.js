@@ -307,6 +307,7 @@ var annotated_dup =
           [ "RangedFloat", "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedFloat.html", "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedFloat" ],
           [ "RangedInt", "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html", "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt" ]
         ] ],
+        [ "AssistSettings", "classBalloonParty_1_1Configuration_1_1AssistSettings.html", "classBalloonParty_1_1Configuration_1_1AssistSettings" ],
         [ "BigScoreFormationSettings", "structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html", "structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings" ],
         [ "GameDisplayConfiguration", "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration.html", "classBalloonParty_1_1Configuration_1_1GameDisplayConfiguration" ],
         [ "IBombPreviewSettings", "interfaceBalloonParty_1_1Configuration_1_1IBombPreviewSettings.html", "interfaceBalloonParty_1_1Configuration_1_1IBombPreviewSettings" ],
@@ -319,6 +320,7 @@ var annotated_dup =
         [ "ItemPreviewConfig", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig.html", "classBalloonParty_1_1Configuration_1_1ItemPreviewConfig" ],
         [ "IThermalGovernorSettings", "interfaceBalloonParty_1_1Configuration_1_1IThermalGovernorSettings.html", "interfaceBalloonParty_1_1Configuration_1_1IThermalGovernorSettings" ],
         [ "OverflowSettings", "classBalloonParty_1_1Configuration_1_1OverflowSettings.html", "classBalloonParty_1_1Configuration_1_1OverflowSettings" ],
+        [ "PitySettings", "classBalloonParty_1_1Configuration_1_1PitySettings.html", "classBalloonParty_1_1Configuration_1_1PitySettings" ],
         [ "PredictionTraceConfig", "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html", "classBalloonParty_1_1Configuration_1_1PredictionTraceConfig" ],
         [ "ProjectileFlightConfig", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html", "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig" ],
         [ "RunConfig", "classBalloonParty_1_1Configuration_1_1RunConfig.html", "classBalloonParty_1_1Configuration_1_1RunConfig" ],
@@ -439,6 +441,11 @@ var annotated_dup =
         [ "UpgradeCardSlotBuilder", "classBalloonParty_1_1Editor_1_1UpgradeCardSlotBuilder.html", "classBalloonParty_1_1Editor_1_1UpgradeCardSlotBuilder" ]
       ] ],
       [ "Game", "namespaceBalloonParty_1_1Game.html", [
+        [ "Assist", "namespaceBalloonParty_1_1Game_1_1Assist.html", [
+          [ "IPlayerNeed", "interfaceBalloonParty_1_1Game_1_1Assist_1_1IPlayerNeed.html", "interfaceBalloonParty_1_1Game_1_1Assist_1_1IPlayerNeed" ],
+          [ "PityRoll", "classBalloonParty_1_1Game_1_1Assist_1_1PityRoll.html", "classBalloonParty_1_1Game_1_1Assist_1_1PityRoll" ],
+          [ "PlayerNeed", "classBalloonParty_1_1Game_1_1Assist_1_1PlayerNeed.html", "classBalloonParty_1_1Game_1_1Assist_1_1PlayerNeed" ]
+        ] ],
         [ "CardReveal", "namespaceBalloonParty_1_1Game_1_1CardReveal.html", [
           [ "CardRevealBoardHold", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealBoardHold.html", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealBoardHold" ],
           [ "CardRevealController", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController" ],
@@ -1011,10 +1018,12 @@ var annotated_dup =
         [ "DeflectChainRule", "classBalloonParty_1_1Shared_1_1DeflectChainRule.html", "classBalloonParty_1_1Shared_1_1DeflectChainRule" ],
         [ "DeflectorCircle", "structBalloonParty_1_1Shared_1_1DeflectorCircle.html", "structBalloonParty_1_1Shared_1_1DeflectorCircle" ],
         [ "EnumIndexedAttribute", "classBalloonParty_1_1Shared_1_1EnumIndexedAttribute.html", "classBalloonParty_1_1Shared_1_1EnumIndexedAttribute" ],
+        [ "IAssistSettings", "interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html", "interfaceBalloonParty_1_1Shared_1_1IAssistSettings" ],
         [ "IDeflectorField", "interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html", "interfaceBalloonParty_1_1Shared_1_1IDeflectorField" ],
         [ "IEffect", "interfaceBalloonParty_1_1Shared_1_1IEffect.html", "interfaceBalloonParty_1_1Shared_1_1IEffect" ],
         [ "ImpactEventBus", "classBalloonParty_1_1Shared_1_1ImpactEventBus.html", "classBalloonParty_1_1Shared_1_1ImpactEventBus" ],
         [ "IPierceItemField", "interfaceBalloonParty_1_1Shared_1_1IPierceItemField.html", "interfaceBalloonParty_1_1Shared_1_1IPierceItemField" ],
+        [ "IPitySettings", "interfaceBalloonParty_1_1Shared_1_1IPitySettings.html", "interfaceBalloonParty_1_1Shared_1_1IPitySettings" ],
         [ "IPredictionTraceConfig", "interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html", "interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig" ],
         [ "IProjectileFlightConfig", "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html", "interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig" ],
         [ "IReadyGate", "interfaceBalloonParty_1_1Shared_1_1IReadyGate.html", "interfaceBalloonParty_1_1Shared_1_1IReadyGate" ],

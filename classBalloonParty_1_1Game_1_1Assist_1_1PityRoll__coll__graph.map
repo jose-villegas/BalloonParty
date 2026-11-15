@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.Assist.PityRoll" name="BalloonParty.Game.Assist.PityRoll">
+<area shape="rect" id="Node000001" title="A chance roll that forgives a player in trouble." alt="" coords="5,115,197,160"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Shared_1_1IPitySettings.html" title="How a chance roll forgives a player in trouble (Game/Assist/PityRoll): each roll it misses while the ..." alt="" coords="9,5,193,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,64,104,115,98,114,99,68"/>
+</map>

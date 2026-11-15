@@ -244,7 +244,7 @@ var searchData=
   ['snapshot_241',['Snapshot',['../classBalloonParty_1_1Game_1_1Run_1_1RunSaveRecorder.html#a2b4af93313be6e5cc152e56aa6befd30',1,'BalloonParty::Game::Run::RunSaveRecorder']]],
   ['snaptolevel_242',['SnapToLevel',['../classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle.html#a095cd86a1c31ccbc1ab3cfff7eb27bd0',1,'BalloonParty::Game::Level::TimeOfDayCycle']]],
   ['snaptotext_243',['SnapToText',['../classBalloonParty_1_1UI_1_1Score_1_1LevelLabel.html#ab3f2f68d6b3a462e7b409bb63bc2d5e3',1,'BalloonParty::UI::Score::LevelLabel']]],
-  ['snipechanceroll_244',['SnipeChanceRoll',['../classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#a688e5f95863675fcc12800fb77562e4c',1,'BalloonParty::Item::Snipe::SnipeChanceRoll']]],
+  ['snipechanceroll_244',['SnipeChanceRoll',['../classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#af6dad14d02ae524266326fafc102d719',1,'BalloonParty::Item::Snipe::SnipeChanceRoll']]],
   ['snipedischargebloom_245',['SnipeDischargeBloom',['../classBalloonParty_1_1Item_1_1Snipe_1_1SnipeDischargeBloom.html#a552ed4a40c2599f902c5e54edb45f34e',1,'BalloonParty::Item::Snipe::SnipeDischargeBloom']]],
   ['snipeeffectparams_246',['SnipeEffectParams',['../structBalloonParty_1_1Item_1_1Effects_1_1SnipeEffectParams.html#a62985e1c0ae79b671c6fd6dc9e4bf287',1,'BalloonParty::Item::Effects::SnipeEffectParams']]],
   ['snipeitemhandler_247',['SnipeItemHandler',['../classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html#adcbd2c2cd8b48dc521d4122601507ca2',1,'BalloonParty::Item::Snipe::SnipeItemHandler']]],

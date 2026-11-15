@@ -1,5 +1,6 @@
 var classBalloonParty_1_1Configuration_1_1RunConfig =
 [
+    [ "_assist", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a88ae9412a671f8528fd3e44c4ef9317e", null ],
     [ "_deflectChainShieldEvery", "classBalloonParty_1_1Configuration_1_1RunConfig.html#ade885c1cf15ff4287166f1daedc2bc75", null ],
     [ "_levelCompleteFlightGrace", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a81c0733284f770883adfb7301a989498", null ],
     [ "_levelCompleteRampUpDuration", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a74406e2dd93188032564acde7c7bac79", null ],
@@ -12,6 +13,7 @@ var classBalloonParty_1_1Configuration_1_1RunConfig =
     [ "_startingHitPoints", "classBalloonParty_1_1Configuration_1_1RunConfig.html#af7543729b240eb6945c720ed60d3c7f9", null ],
     [ "_streakGrantsShields", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a4e3fc3f305c7909e51035a8305a48b37", null ],
     [ "_upgrades", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a8186322911107e64ce022bbc20b48dce", null ],
+    [ "Assist", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a13fb8fd9929d99649c76578b210eba1b", null ],
     [ "DeflectChainShieldEvery", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a7239d9778a56909153ecea410725e7e5", null ],
     [ "LevelCompleteFlightGrace", "classBalloonParty_1_1Configuration_1_1RunConfig.html#ac4df57b1ea374fd488694d091c521576", null ],
     [ "LevelCompleteRampUpDuration", "classBalloonParty_1_1Configuration_1_1RunConfig.html#a9790d7253d70d56dcb22239ce843acd8", null ],

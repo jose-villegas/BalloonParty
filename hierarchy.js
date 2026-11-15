@@ -210,6 +210,9 @@ var hierarchy =
     [ "BalloonParty.Game.Run.IAdService", "interfaceBalloonParty_1_1Game_1_1Run_1_1IAdService.html", [
       [ "BalloonParty.Game.Run.NoAdService", "classBalloonParty_1_1Game_1_1Run_1_1NoAdService.html", null ]
     ] ],
+    [ "BalloonParty.Shared.IAssistSettings", "interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html", [
+      [ "BalloonParty.Configuration.AssistSettings", "classBalloonParty_1_1Configuration_1_1AssistSettings.html", null ]
+    ] ],
     [ "BalloonParty.Audio.IAudioMixerRouter", "interfaceBalloonParty_1_1Audio_1_1IAudioMixerRouter.html", [
       [ "BalloonParty.Audio.AudioMixerRouter", "classBalloonParty_1_1Audio_1_1AudioMixerRouter.html", null ],
       [ "BalloonParty.Audio.NullAudioMixerRouter", "classBalloonParty_1_1Audio_1_1NullAudioMixerRouter.html", null ]
@@ -693,11 +696,17 @@ var hierarchy =
     [ "BalloonParty.Shared.IPierceItemField", "interfaceBalloonParty_1_1Shared_1_1IPierceItemField.html", [
       [ "BalloonParty.Slots.Grid.SlotGridPierceItemField", "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGridPierceItemField.html", null ]
     ] ],
+    [ "BalloonParty.Shared.IPitySettings", "interfaceBalloonParty_1_1Shared_1_1IPitySettings.html", [
+      [ "BalloonParty.Configuration.PitySettings", "classBalloonParty_1_1Configuration_1_1PitySettings.html", null ]
+    ] ],
     [ "BalloonParty.Game.Health.IPlayerHealing", "interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealing.html", [
       [ "BalloonParty.Game.Health.PlayerHealthController", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html", null ]
     ] ],
     [ "BalloonParty.Game.Health.IPlayerHealth", "interfaceBalloonParty_1_1Game_1_1Health_1_1IPlayerHealth.html", [
       [ "BalloonParty.Game.Health.PlayerHealthController", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html", null ]
+    ] ],
+    [ "BalloonParty.Game.Assist.IPlayerNeed", "interfaceBalloonParty_1_1Game_1_1Assist_1_1IPlayerNeed.html", [
+      [ "BalloonParty.Game.Assist.PlayerNeed", "classBalloonParty_1_1Game_1_1Assist_1_1PlayerNeed.html", null ]
     ] ],
     [ "IPointerClickHandler", null, [
       [ "BalloonParty.UI.ScaleDownButton", "classBalloonParty_1_1UI_1_1ScaleDownButton.html", null ]
@@ -839,6 +848,7 @@ var hierarchy =
       [ "BalloonParty.Game.Score.ScoreTrailService", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html", null ],
       [ "BalloonParty.Game.Telemetry.GameplayMetricsService", "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html", null ],
       [ "BalloonParty.Game.Upgrades.RunUpgrades", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html", null ],
+      [ "BalloonParty.Item.Snipe.SnipeChanceRoll", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html", null ],
       [ "BalloonParty.Shared.Pause.PauseService", "classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html", null ],
       [ "BalloonParty.Shared.Pause.TimeScaleService", "classBalloonParty_1_1Shared_1_1Pause_1_1TimeScaleService.html", null ],
       [ "BalloonParty.Slots.Grid.BalancePathHolder", "classBalloonParty_1_1Slots_1_1Grid_1_1BalancePathHolder.html", null ]
@@ -1401,6 +1411,7 @@ var hierarchy =
     [ "BalloonParty.Projectile.Controller.PierceTelegraphScan", "classBalloonParty_1_1Projectile_1_1Controller_1_1PierceTelegraphScan.html", null ],
     [ "BalloonParty.Shared.Messages.PierceWallReachedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1PierceWallReachedMessage.html", null ],
     [ "BalloonParty.Editor.CardRevealBuilder.PinImages", "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1PinImages.html", null ],
+    [ "BalloonParty.Game.Assist.PityRoll", "classBalloonParty_1_1Game_1_1Assist_1_1PityRoll.html", null ],
     [ "BalloonParty.Shared.Pool.PoolManager", "classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html", null ],
     [ "BalloonParty.Shared.Extensions.PoolManagerExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1PoolManagerExtensions.html", null ],
     [ "BalloonParty.Configuration.Balloons.PopPulse", "classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse.html", null ],

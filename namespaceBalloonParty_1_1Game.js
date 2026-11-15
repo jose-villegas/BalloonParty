@@ -1,5 +1,6 @@
 var namespaceBalloonParty_1_1Game =
 [
+    [ "Assist", "namespaceBalloonParty_1_1Game_1_1Assist.html", "namespaceBalloonParty_1_1Game_1_1Assist" ],
     [ "CardReveal", "namespaceBalloonParty_1_1Game_1_1CardReveal.html", "namespaceBalloonParty_1_1Game_1_1CardReveal" ],
     [ "Cinematics", "namespaceBalloonParty_1_1Game_1_1Cinematics.html", "namespaceBalloonParty_1_1Game_1_1Cinematics" ],
     [ "Danger", "namespaceBalloonParty_1_1Game_1_1Danger.html", "namespaceBalloonParty_1_1Game_1_1Danger" ],

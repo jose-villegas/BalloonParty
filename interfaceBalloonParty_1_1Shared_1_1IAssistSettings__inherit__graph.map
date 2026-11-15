@@ -1,0 +1,5 @@
+<map id="BalloonParty.Shared.IAssistSettings" name="BalloonParty.Shared.IAssistSettings">
+<area shape="rect" id="Node000001" title="Help that comes only when the player needs it: how need is judged (Game/Assist/PlayerNeed) and how ea..." alt="" coords="5,5,203,50"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1AssistSettings.html" title="Inspector&#45;authored IAssistSettings, serialized inside RunConfig: help that comes only when the player..." alt="" coords="6,98,202,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,64,106,99,102,97,102,68"/>
+</map>
