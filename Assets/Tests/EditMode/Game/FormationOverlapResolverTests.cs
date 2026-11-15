@@ -293,7 +293,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void ResolveAgainstFixed_OverlappingCircle_PushedAlongCentreLineToExactlyTouchingWithPadding()
         {
-            var centers = new[] { new Vector3(3f, 4f, 0f) };
+            var centers = new[] { new Vector3(0.6f, 0.8f, 0f) };
             var offsets = new Vector3[1];
             var fixedCenter = new Vector2(0f, 0f);
 
