@@ -123,11 +123,11 @@ each moving formation out of every clearance circle:
   because the level-up camera follows it. A ball matters more, so the clearance pass gives every formation
   full weight. Once the level-up cinematic takes the principal it is `Paused`, and paused formations are
   never moved.
-- A ball flies at about 10 world units a second and a formation's radius is up to about 0.9, so the
-  per-frame cap the formation pass uses (half the formation's radius) would let a ball cross a shape before
-  it got out of the way. The clearance pass has its own cap, `FormationPushFraction`.
-- A formation still blooming from a point has almost no radius, so the push it can take grows with it: a
-  shape born on the ball grows out to one side of it rather than jumping away.
+- The formation pass caps each frame's push at a share of the formation's radius. That is no use here: a
+  shape still blooming from a point has almost no radius, and a ball at about 10 world units a second would
+  cross a full-size shape before a radius-scaled push moved it. The clearance pass caps its push by a
+  speed instead, `FormationPushSpeed` (world units a second, faster than a ball), so a shape slides out of
+  the way smoothly at any frame rate, and one born on the ball slides off it while it blooms.
 
 ### Trails bend round the rim
 
@@ -197,8 +197,8 @@ sweeps onto it), the ribbon thins out rather than crossing over.
 | `FadeIn` | 0.15 s | No circle pops in at launch |
 | `FadeOut` | 0.4 s | The last pop's site stays clear while its effects start |
 | `EffectFloorAlpha` | 0.3 | How much of an effect is left at the ball |
-| `FormationPushFraction` | 1.5 | Per-frame push cap for formations, as a share of their radius: fast enough to clear a ball at 10 u/s |
-| `PushFormations` / `BendTrails` / `FadeEffects` | on | Each consumer can be switched off on its own, to compare in a playtest (`FadeEffects` off sets the floor to 1) |
+| `FormationPushSpeed` | 14 world units/s | How fast a formation slides out of a circle: faster than a ball (about 10 u/s), so one can't overrun a shape |
+| `PushFormations` / `BendTrails` / `FadeEffects` | on | Each consumer can be switched off on its own, to compare in a playtest (`FadeEffects` off publishes no circles to the shaders) |
 
 `ClearanceSettings` is a new SO under `Assets/Configuration/`, bound as `IClearanceSettings` in
 `GameLifetimeScope` like the other effect settings.
@@ -234,7 +234,6 @@ Each phase goes through the review protocol (reviewer every phase; architect and
 
 1. **Should the circle show?** This plan draws nothing for the circle itself: the clearance is felt through
    what moves and fades around it. A faint ring could come later if the owner wants one.
-2. **"Lighting".** The owner wrote "lighting". Lightning is covered above. If it meant the light and
-   shadow over the board (the screen-space light overlay, which darkens the ball at night), the overlay
-   could ease towards neutral inside the circle, a soft spotlight that follows each ball. It changes the
-   night's look, so it is left out unless the owner wants it.
+
+Settled: the owner's "lighting" meant lightning (2026-11-15), so the screen-space light overlay is left
+alone.

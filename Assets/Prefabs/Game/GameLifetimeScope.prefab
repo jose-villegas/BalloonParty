@@ -74,6 +74,7 @@ MonoBehaviour:
   _thermalGovernorSettings: {fileID: 11400000, guid: f19fc68a72ffb4b00af1a0690911bab8, type: 2}
   _headsUpSettings: {fileID: 0}
   _cardRevealSettings: {fileID: 11400000, guid: 75334cd4a7d6bc648956fe7b5339d519, type: 2}
+  _clearanceSettings: {fileID: 11400000, guid: f357020f2b754dc8b1be4aa6b9aba064, type: 2}
   _soundBank: {fileID: 11400000, guid: 9c284084ced24491880c598ac7e35607, type: 2}
   _audioMixerSettings: {fileID: 11400000, guid: 3cc092ef79ee34b5bba33c6dfd00bd45, type: 2}
   _projectilePrefab: {fileID: 7317932863533360661, guid: 514e1ddc348a5498aa3edae2404ff130, type: 3}

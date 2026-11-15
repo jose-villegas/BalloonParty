@@ -199,6 +199,16 @@ overkill for a background flourish):
    full-size constellation frozen mid-air during the level-up zoom — exactly the moment the camera is closest
    and a flythrough would be most visible — would be invisible to every other formation's overlap check.
 
+   **The balls' clear circles** (`Projectile/Clearance/`): after the packing and its relax, **Pass B2**
+   (`PushOutOfClearance`) pushes every moving formation out of each ball's clear circle through
+   `FormationOverlapResolver.ResolveAgainstFixed`. The circles never give way, so the formation takes the
+   whole push, into the same persistent `SeparationOffset`, and the relax brings it back onto its path once
+   the ball has passed: the shape slides round the ball. The principal is pushed at full weight here
+   (`PrincipalPushDamping` only steadies it against other formations; a principal the cinematic has taken is
+   Paused, so never pushed). The push is capped by a speed, `IClearanceSettings.FormationPushSpeed`, not a share
+   of the radius: a shape still blooming from a point has almost no radius, and a ball at about 10 world units
+   a second would cross a full-size shape before a radius-scaled push moved it.
+
 **Transport bridge** — the group's anchor `TrailFlight` handle is the pause/snap/slow-mo interface, shared by
 every formation in the group (so a cinematic pause/completion fans out to the whole constellation), polled per
 tick: `Paused` freezes the formation and inflates its ribbon time so the drawn figure survives the freeze; `Idle`

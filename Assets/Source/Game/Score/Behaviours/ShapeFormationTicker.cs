@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Configuration;
+using BalloonParty.Configuration.Effects;
+using BalloonParty.Projectile.Clearance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.UI.Score;
@@ -121,6 +123,8 @@ namespace BalloonParty.Game.Score.Behaviours
         // high spin speed from snapping the ribbons with a big rotation delta on the first ticks.
         private const float SpinRampRate = 2f;
 
+        private readonly IClearanceField _clearance;
+        private readonly IClearanceSettings _clearanceSettings;
         private readonly List<FormationState> _states = new(16);
         private readonly Stack<FormationState> _pool = new(16);
         private readonly Stack<Transform> _anchorPool = new(8);
@@ -137,6 +141,10 @@ namespace BalloonParty.Game.Score.Behaviours
         // enter the SAME overlap-resolve call as _pending, always at weight 0 — immovable, never committed by
         // Pass C (their Center/LastScale are already stable, that's what "frozen"/"fading" means).
         private readonly List<FormationState> _stationary = new(8);
+
+        // The clear circles, copied out of the field once a tick for the resolver's plain arrays.
+        private readonly Vector2[] _clearanceCenters = new Vector2[ClearanceCircle.MaxCircles];
+        private readonly float[] _clearanceRadii = new float[ClearanceCircle.MaxCircles];
 
         // Grow-only scratch for FormationOverlapResolver.Resolve's O(n²) pass — resized only when too small
         // (mirrors FlyingTrail._ribbonScratch / BigScoreTrailBehaviour._dpPieces), never shrunk.
@@ -162,6 +170,12 @@ namespace BalloonParty.Game.Score.Behaviours
             }
         }
 
+        internal ShapeFormationTicker(IClearanceField clearance, IClearanceSettings clearanceSettings)
+        {
+            _clearance = clearance;
+            _clearanceSettings = clearanceSettings;
+        }
+
         public void LateTick()
         {
             var dt = Time.deltaTime;
@@ -184,6 +198,11 @@ namespace BalloonParty.Game.Score.Behaviours
             // passively relax it back toward zero — see ResolveOverlaps for why this needs to persist
             // across ticks instead of being recomputed fresh from CandidateCenter alone every frame.
             ResolveOverlaps(_pending, _stationary, dt);
+
+            // Pass B2: after the packing and its relax, slide every moving formation out of the balls' clear
+            // circles, into the same persistent offset — so the shape keeps sliding clear over the following
+            // frames, and the relax brings it back onto its path once the ball has passed.
+            PushOutOfClearance(_pending, dt);
 
             // Pass C: commit each pending formation to its corrected center — rotation/ribbon reframe/pen
             // placement/guide/anchor/report, same math the old single-pass AdvanceFormation did, just fed the
@@ -454,6 +473,44 @@ namespace BalloonParty.Game.Score.Behaviours
                 var state = pending[i];
                 var relax = Mathf.Exp(-state.Group.Settings.SeparationRelaxRate * dt);
                 state.SeparationOffset *= relax;
+            }
+        }
+
+        // Every pending formation at full weight, the principal included: its damping steadies the level-up
+        // camera against other formations, but a ball matters more, and a principal the cinematic has taken
+        // is Paused (stationary), never pending.
+        private void PushOutOfClearance(IReadOnlyList<FormationState> pending, float dt)
+        {
+            var circles = _clearance.Count;
+            if (circles == 0 || pending.Count == 0 || !_clearanceSettings.PushFormations)
+            {
+                return;
+            }
+
+            for (var j = 0; j < circles; j++)
+            {
+                var circle = _clearance.CircleAt(j);
+                _clearanceCenters[j] = circle.Center;
+                _clearanceRadii[j] = circle.Radius;
+            }
+
+            EnsureCorrectionCapacity(pending.Count);
+            for (var i = 0; i < pending.Count; i++)
+            {
+                var state = pending[i];
+                _correctionCenters[i] = state.CandidateCenter + state.SeparationOffset;
+                _correctionRadii[i] = state.FormationRadius * state.CandidateScale;
+                _correctionPadding[i] = state.Group.Settings.OverlapPadding;
+            }
+
+            FormationOverlapResolver.ResolveAgainstFixed(
+                _correctionCenters, _correctionRadii, _correctionPadding, pending.Count,
+                _clearanceCenters, _clearanceRadii, circles,
+                _clearanceSettings.FormationPushSpeed * dt, _correctionOffsets);
+
+            for (var i = 0; i < pending.Count; i++)
+            {
+                pending[i].SeparationOffset += _correctionOffsets[i];
             }
         }
 

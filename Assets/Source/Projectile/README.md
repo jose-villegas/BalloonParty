@@ -141,6 +141,12 @@ The discharge fires at the **next wall bounce** after the shot plows at least on
 
 **Tunneling safety net** — at high cruise/pierce speeds the projectile can tunnel through balloons (Unity's `OnTriggerEnter2D` fires per-fixed-step and can skip thin colliders). On every wall bounce while piercing, `SweepPierceMisses` runs a `CircleCastAll` from the segment's start to the wall hit. Any tough balloon in the swept path that wasn't already registered via trigger is added to `PendingPierceHits` before the discharge resolves — guaranteeing every tough in the flight line is shattered.
 
+## Clear circles (`Clearance/`)
+
+Every ball in flight carries a clear circle that score formations slide out of and the effects drawn over
+the ball fade inside, so the player can always see the ball. `ClearanceFieldTicker` follows the registry's
+balls in flight into `IClearanceField`; see `Clearance/README.md`.
+
 ## Buffs (`Buffs/`)
 
 A **projectile buff** is a temporary stat modifier on one ball following the
