@@ -229,9 +229,9 @@ pops at the next wall, so the solver lets the rest of the flight score painted b
 projection, the scene light helpers in `Include/SceneLight.cginc`, and the glint-gated glitter), on a prefab
 built from the golden balloon's, so it keeps the knot and reads as a balloon.
 
-- **Tiles.** A latitude–longitude grid of small square mirrors over the sphere, with thin dark grout
-  between them. The tiles get narrower toward the poles, as on a real disco ball. The grid turns slowly
-  around the vertical axis (`_SpinSpeed`), so tiles slide across the face and over the limb. Each tile is
+- **Tiles.** A latitude–longitude grid of small square mirrors over the sphere, with thin aluminium grout
+  between them. The tiles get narrower toward the poles, as on a real disco ball. The grid turns about
+  once every five seconds around the vertical axis (`_SpinSpeed`, 1.2 rad/s), so the ball reads as spinning: tiles slide across the face and over the limb. Each tile is
   flat: its normal is the sphere normal at the tile's centre, quantized. That one choice is what makes it
   read as a mosaic and not as chrome.
 - **Reflection.** Each tile samples `_SceneCaptureTex`, the board as `SceneCaptureService` renders it, which

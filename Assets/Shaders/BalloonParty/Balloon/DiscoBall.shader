@@ -2,7 +2,7 @@ Shader "BalloonParty/Balloon/DiscoBall"
 {
     // The disco ball reward balloon's body (PLAN-DiscoBalloon): a balloon (the circle sprite, lit as a sphere
     // like GoldenBalloon) tiled with small flat mirrors on a latitude-longitude grid, narrower toward the poles,
-    // with dark grout between them. The grid turns slowly about the balloon's up, so tiles slide across the face
+    // with aluminium grout between them. The grid turns about the balloon's up, about once every five seconds, so the ball reads as spinning, so tiles slide across the face
     // and over the limb. Each tile is flat (one normal, its centre's, tipped a little at random), which is what
     // makes it read as a mosaic and not as chrome: it reflects its own piece of the board from the shared scene
     // capture (_SceneCaptureTex, SceneCaptureService), and the pieces jump from tile to tile. The base silver is
@@ -24,21 +24,21 @@ Shader "BalloonParty/Balloon/DiscoBall"
         _TileRows    ("Rows", Range(4, 24)) = 11
         // Half the grout between two tiles, in tile units.
         _Grout       ("Grout", Range(0, 0.3)) = 0.08
-        _GroutColor  ("Grout Colour", Color) = (0.08, 0.08, 0.10, 1)
+        _GroutColor  ("Grout Colour", Color) = (0.66, 0.68, 0.72, 1)
         _TileTilt    ("Tile Tilt", Range(0, 0.4)) = 0.12
         _TileVariance ("Brightness Variance", Range(0, 0.5)) = 0.4
         // The bevel round each tile, in tile units, and how much its slope lights or darkens the edge.
         _BevelWidth    ("Bevel Width", Range(0, 0.45)) = 0.2
         _BevelContrast ("Bevel Contrast", Range(0, 3)) = 1.6
         // Radians per second about the balloon's up.
-        _SpinSpeed   ("Spin Speed", Range(0, 2)) = 0.35
+        _SpinSpeed   ("Spin Speed", Range(0, 3)) = 1.2
         [PerRendererData] _SpinPhase ("Spin Phase", Float) = 0
 
         [Header(Silver)]
         _SilverLit   ("Lit", Color) = (0.86, 0.88, 0.92, 1)
         _SilverShade ("Shade", Color) = (0.30, 0.32, 0.36, 1)
-        _EdgeColor   ("Edge", Color) = (0.10, 0.10, 0.12, 1)
-        _EdgePower   ("Edge Falloff", Range(1, 8)) = 3.5
+        _EdgeColor   ("Edge", Color) = (0.38, 0.40, 0.44, 1)
+        _EdgePower   ("Edge Falloff", Range(1, 8)) = 6
         _LightHeight ("Light Height", Range(0.1, 3)) = 0.9
         // The ball as one sphere: how dark its far side gets, and how far the light wraps round it.
         _FormShade   ("Form Shade", Range(0, 1)) = 0.45
@@ -74,9 +74,9 @@ Shader "BalloonParty/Balloon/DiscoBall"
         _GlitterReach     ("Reach", Range(0.5, 20)) = 5
 
         [Header(Rim)]
-        _RimColor ("Colour", Color) = (0.20, 0.20, 0.24, 1)
+        _RimColor ("Colour", Color) = (0.60, 0.62, 0.66, 1)
         _RimWidth ("Width", Range(0, 0.5)) = 0.1
-        _RimBlend ("Blend", Range(0, 1)) = 0.5
+        _RimBlend ("Blend", Range(0, 1)) = 0.3
 
         [Header(Lighting)]
         _LightInfluence ("Light Influence", Range(0, 1)) = 1
