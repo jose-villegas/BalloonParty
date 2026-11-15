@@ -82,6 +82,9 @@ namespace BalloonParty.Configuration.Balloons
         [Header("Reward Balloons")]
         [SerializeField] private RewardBalloonSettings _rewardBalloons = new();
 
+        [Header("Disco Ball Wave")]
+        [SerializeField] private DiscoWaveSettings _discoWave = new();
+
         public IReadOnlyList<BalloonPrefabEntry> Entries => _entries;
         public ParticleSystem DefaultPopVfxPrefab => _defaultPopVfxPrefab;
         public Material RainbowMaterial => _rainbowMaterial;
@@ -103,5 +106,6 @@ namespace BalloonParty.Configuration.Balloons
         public int BubbleMergeMax => _bubbleMergeMax;
         public IUnbreakableFormationSettings UnbreakableFormation => _unbreakableFormation;
         public IRewardBalloonSettings RewardBalloons => _rewardBalloons;
+        public IDiscoWaveSettings DiscoWave => _discoWave;
     }
 }

@@ -209,6 +209,12 @@ namespace BalloonParty.Game.Score
                 "ScoreController",
                 "WildcardStreak/CarryStreak without DirectHit — only ProjectileHitResolver may author these flags.");
 
+            // Before the rainbow flags: a balloon the shot painted itself is still rainbow, and must not climb.
+            if (flags.HasFlag(DamageFlags.OwnPaint))
+            {
+                return Math.Max(1, streak.CurrentStreak);
+            }
+
             // A colour-agnostic (rainbow-buffed) projectile keeps the streak climbing on any pop.
             // WildcardStreak is only ever set on the shot's own hits, never an item/AOE one, so this
             // branch already excludes bombs/lasers/lightning without needing its own DirectHit check.

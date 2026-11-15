@@ -130,12 +130,12 @@ follow the board afterwards, so a balloon line arriving mid-wave doesn't drag th
   so the balloons beside the ball turn almost together, then slows, so the far edge of the board reads as
   a ripple travelling outward. A fixed duration keeps the wave short on a big board and makes it easy to
   tune.
-- Each frame, the wave visits every occupied slot whose centre falls between last frame's radius and this
-  frame's. It keeps a set of the models it has already visited, so a balloon that moves between frames is
-  never painted twice.
-- When `t` reaches `T`, a **final sweep** paints every paintable balloon still on the board and not yet
-  visited. This covers balloons that spawned or slid outside the edge mid-wave. The spec is "every balloon
-  on screen", and the sweep is what makes that true.
+- Each frame, the wave visits every occupied slot inside this frame's radius that it hasn't visited yet.
+  It keeps a set of the models it has already visited, so a balloon that moves between frames is never
+  painted twice, and one that slides into ground the disc has already covered is reached on the next
+  frame.
+- When `t` reaches `T`, a **final sweep** reaches every balloon still on the board and not yet visited.
+  The spec is "every balloon on screen", and the sweep is what makes that true.
 
 **What each reached balloon gets.** The checks are the Paint item's, through `PaintTargets`:
 
@@ -153,10 +153,10 @@ follow the board afterwards, so a balloon line arriving mid-wave doesn't drag th
   ripple reads the same right across the board.
 - **Burst:** a small cosmetic burst in the balloon's old colour, as if that colour pops off and leaves the
   rainbow underneath. The balloon is **not popped**: nothing is scored, it doesn't leave the grid, and no
-  `ActorHitMessage` is sent. It needs a new `BalloonView.PlayRecolourBurst(Color)` that plays the pop's
-  particle at a smaller scale, plus a `DisturbanceField` stamp (`StampSource.Paint`) like the Paint
-  item's blob landing. Using the real pop path is ruled out: `BalloonPopPresenter.Present` drives the
-  outcome VFX of an actual pop.
+  `ActorHitMessage` is sent. It is `IPaintReactive.PlayRecolourBurst(Color, scale)`, which `BalloonView`
+  plays as the pop's particle at `DiscoWaveSettings.BurstScale`, plus a `DisturbanceField` stamp
+  (`StampSource.Paint`) tagged with the old colour, like the Paint item's blob landing. Using the real pop
+  path is ruled out: `BalloonPopPresenter.Present` drives the outcome VFX of an actual pop.
 - **Drip:** `IPaintReactive.PlayPaintDrip`, resolved from the grid as `PaintItemHandler.ApplyPaint` does.
   The colour is committed first, so the drip reads as paint settling. Today a rainbow drip is white
   (`GamePalette.GetColor` returns white for the wildcard). Phase 4 gives the `PaintDrip` shader the
@@ -204,8 +204,11 @@ the ledger holds (this projectile, this balloon):
 - the pop scores at whatever multiplier is already live, and the streak neither climbs nor breaks. It needs
   a new `DamageFlags.OwnPaint`, read by `ScoreController.RecordStreakMultiplier` as "return the current
   multiplier, change nothing". The `Log.Assert` that guards against items authoring streak flags covers it;
+- the pop refunds no streak shield. A continued streak pays a shield on every pop from x2, so a painter at
+  x2 or more would otherwise refill its shields off its own paint and fly on through the rainbow board;
 - the balloon still pays its rainbow attribution to every allowed colour. Goal progress is not the trap:
-  progress is still earned one pop at a time. The guard is only about the uncapped multiplier.
+  progress is still earned one pop at a time. The guard is only about the uncapped multiplier and the
+  shields.
 
 A shot carrying the rainbow buff (`isRainbowBuff`) climbs on any pop anyway. That comes from the buff, not
 from the disco ball, so the ledger doesn't change it.
@@ -216,7 +219,9 @@ the two existing guards onto it is a possible follow-up, but **not** part of thi
 keep the board's colour for the shot's next hit.
 
 The solver has to mirror the rule (`ShotSimulator`), or it will rate a disco shot by a streak it can never
-cash in.
+cash in. It paints the board the moment the simulated ball pops, marking each balloon as its own shot's
+paint (`ShotBalloonState.OwnPaint`). Live, the disc takes 0.9 s to cross the board and a pierced ball only
+pops at the next wall, so the solver lets the rest of the flight score painted balloons a little early.
 
 ## The look
 
@@ -319,7 +324,8 @@ fixes; then your sign-off.
    resolver and score changes, with the solver mirroring them. Tests: the wave paints every paintable and
    none of the immune; a balloon is painted once; the final sweep; the cancel; and, written first, **the
    breaking shot's later pop of a painted balloon leaves its streak unchanged while another shot's pop
-   climbs**.
+   climbs**. Built, with the shield refund guarded too (see the self-feeding check). The disc's settings
+   are `IBalloonsConfiguration.DiscoWave`; the ring is a `LineRenderer` (`DiscoWaveView`).
 4. **The look.** `DiscoBall.shader`, `DiscoBallVariant`, the prefab built from the golden balloon's, the
    rainbow `GodRays` toggle and `DiscoRays`, `DiscoWave.shader`, the rainbow `PaintDrip`, and the shatter
    sheet and `PSVFX_DiscoPop`. **Shaders: `dotnet build` doesn't check them.** Checked in the Editor at

@@ -12,5 +12,11 @@ namespace BalloonParty.Slots.Actor
     public interface IPaintReactive : ISlotActorView
     {
         void PlayPaintDrip(Color paintColor);
+
+        /// <summary>
+        ///     A small burst of the colour the balloon just lost, for a recolour that should read as a pop without
+        ///     one (the disco ball's wave). <paramref name="scale" /> is a share of a pop's size.
+        /// </summary>
+        void PlayRecolourBurst(Color oldColor, float scale);
     }
 }

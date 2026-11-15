@@ -7,7 +7,7 @@ up to three; the **disco ball** from 25% done, the first one sure, up to three. 
 golden one early on, the player's first, and level 8 a single disco ball; now and then another ordinary level
 gets one or the other. Off a purple level the heart comes to a player who is missing hearts, more often the
 more are missing. At most one of each is on the board. The plans are `Plans/PLAN-RewardBalloons.md` and
-`Plans/PLAN-DiscoBalloon.md`; the disco ball's pop does nothing yet (its rainbow wave is that plan's phase 3).
+`Plans/PLAN-DiscoBalloon.md`. The disco ball's pop paints the board rainbow (see The disco ball's wave).
 
 ## Contents
 
@@ -19,9 +19,10 @@ more are missing. At most one of each is on the board. The plans are `Plans/PLAN
 | `PlatedRewardTuning` | One plated balloon's numbers, read from `IRewardBalloonSettings` each line (`Golden(settings)`, `Disco(settings)`), so the two share the rules and differ only in these |
 | `RewardBalloonPayout` | Pays a reward balloon's pop, read from `ActorHitMessage`. The golden balloon: a free card (`IFreeCardGrant`), or a heart (`IPlayerHealing.Heal`) when every card is at its limit. The heart balloon: a heart, or on a purple level an extra one past the maximum (`HealPastMax`). Pays each balloon once |
 | `RewardBalloonPop` | `TryGet(hit, out balloon)`: a reward balloon's pop. The payout and the service both read pops through it, so what one pays the other counts |
+| `DiscoWave` | The disco ball's pop: a disc that grows from it across the board and paints every paintable balloon rainbow. Registered as an entry point and `IRunResettable`; drawn by `Balloon/View/DiscoWaveView` |
 
 The golden balloon itself is `Balloon/Model/GoldenBalloonModel`, a `PlatedBalloonModel`, whose hit rules a third
-reward balloon, the disco ball (`DiscoBalloonModel`, `Plans/PLAN-DiscoBalloon.md`, not placed yet), shares: the shot's own ordinary hit bounces
+reward balloon, the disco ball (`DiscoBalloonModel`, `Plans/PLAN-DiscoBalloon.md`), shares: the shot's own ordinary hit bounces
 off it, a pierce pops it (it is tough, so the pierce plows it and it shatters at the next wall), and
 so does a laser beam: the laser marks its damage `DamageFlags.Beam`. No other item touches it: an
 item's damage has no `DirectHit`, and its hit is `HitOutcome.None`. A bomb's blast on its neighbours
@@ -83,6 +84,34 @@ has an entry for.
   between. Extra hearts past the maximum count as full.
 
 The tuning is `IRewardBalloonSettings`, a block on `BalloonsConfiguration`.
+
+## The disco ball's wave
+
+When a disco ball pops, `DiscoWave` grows a disc from where it popped until it covers the whole board, in
+`IDiscoWaveSettings.Seconds` (0.9 s), fast at first and slowing at the far side. Every balloon the disc's
+edge reaches is nudged away from the pop once (`NudgeType.Wave`). Then `Item/Paint/PaintTargets` decides
+the rest, with the same rules as the Paint item:
+
+- a balloon of an ordinary colour turns rainbow. It bursts in its old colour (`IPaintReactive.PlayRecolourBurst`,
+  a smaller pop particle, with no pop: nothing scores and it stays on the board), takes the paint drip, and
+  stamps the disturbance field;
+- a balloon immune to paint (tough, unbreakable, the golden and heart balloons) takes the drip and keeps
+  its colour;
+- a rainbow balloon, or anything that isn't a balloon, is only nudged.
+
+The disc is fixed where the ball popped, and a balloon that moves into ground it has covered is still
+reached, on the next frame. When the time is up a last sweep reaches anything left. A run reset, a level
+change or game over stops the wave where it is; what it painted stays painted. It runs on scaled time, so a
+pause holds it.
+
+What the wave paints is booked to the shot that broke the ball (`Projectile/Controller/ShotPaintLedger`).
+That shot is still flying (a pierce breaks the ball at the next wall, and the shot behind a laser flies on),
+and a rainbow pop would climb its streak whatever the colour. So its own pops of what it painted score at
+its streak as it stands, climb nothing, and refund no streak shield (`DamageFlags.OwnPaint`). Any other
+shot, and every later throw, pops the rainbow board as usual.
+
+For now the disc is drawn as a ring (`DiscoWaveView`, a `LineRenderer` on `IDiscoWaveSettings.RingMaterial`,
+which must be assigned or nothing is drawn); its look is phase 4 of the plan.
 
 ## Leaving the board
 

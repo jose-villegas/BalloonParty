@@ -30,6 +30,11 @@ namespace BalloonParty.Slots.Capabilities
         /// <summary>A laser beam struck the actor. The beam's damage also carries <see cref="Piercing" />,
         /// as a bomb's blast on its neighbours does; this tells the two apart, for the golden balloon, which
         /// a beam breaks and a blast must not.</summary>
-        Beam = 1 << 5
+        Beam = 1 << 5,
+
+        /// <summary>The shot popped a balloon it painted rainbow itself (the disco ball's wave,
+        /// <c>ShotPaintLedger</c>): the pop scores at the streak as it stands and leaves it unchanged, so a
+        /// shot can't climb on paint it laid.</summary>
+        OwnPaint = 1 << 6
     }
 }

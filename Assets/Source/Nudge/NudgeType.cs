@@ -9,6 +9,7 @@ namespace BalloonParty.Nudge
         Deflect = 1 << 0,
         Neighbor = 1 << 1,
         Shockwave = 1 << 2,
-        All = Deflect | Neighbor | Shockwave
+        Wave = 1 << 3,
+        All = Deflect | Neighbor | Shockwave | Wave
     }
 }

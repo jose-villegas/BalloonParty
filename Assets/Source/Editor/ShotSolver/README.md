@@ -48,6 +48,13 @@ The simulator reproduces these runtime rules without touching a live `IBalloonMo
   `ShotRewardKind` (`Scoreless` is any kind but `None`), and the result counts reward pops apart by it
   (`GoldenPops`, `HeartPops`, `DiscoPops`), since they add nothing to `RawScore`; `ShotRanking` reads them
   to put a golden, then a heart that counts, then a disco ball, ahead of score.
+- **The disco ball's wave** — when the simulated ball pops a disco ball, every paintable balloon in the
+  working set (coloured, not static, not already rainbow) turns rainbow at once and is marked
+  `ShotBalloonState.OwnPaint`. The shot's later pops of those pay every allowed colour at its streak as it
+  stands and grant no streak shield, as `DamageFlags.OwnPaint` does live. An approximation: live, the disc
+  takes `IDiscoWaveSettings.Seconds` to cross the board and a pierced ball only pops at the next wall, so the
+  simulation lets the rest of the flight score painted balloons a little early. Needs the gather's
+  `rainbowColorId`; without one nothing is painted.
 - **Interactive statics** (Deflector/Gatekeeper/Absorber, Phase A) — collide with the shot while
   still occupying their balance-grid slot. A Deflector has no durability capability at all, so it
   gets the same `int.MaxValue` permanent-deflect treatment as an Unbreakable balloon. A

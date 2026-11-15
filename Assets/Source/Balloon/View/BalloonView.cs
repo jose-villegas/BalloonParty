@@ -177,6 +177,18 @@ namespace BalloonParty.Balloon.View
             _paintDrip?.Play(paintColor);
         }
 
+        // The pool restores the authored scale on spawn, so scaling the spawned burst here never leaks.
+        public void PlayRecolourBurst(Color oldColor, float scale)
+        {
+            var prefab = _balloonsConfig.DefaultPopVfxPrefab;
+            if (prefab == null || scale <= 0f)
+            {
+                return;
+            }
+
+            _poolManager.PlayParticle(prefab, transform.position, oldColor).transform.localScale *= scale;
+        }
+
         // Stops the idle animator so a board effect's tween owns the balloon's rotation without the idle
         // clip clobbering it each frame. OnSpawned re-enables it for the next reuse.
         internal void SuspendAnimator()

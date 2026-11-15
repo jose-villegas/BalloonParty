@@ -57,5 +57,7 @@ namespace BalloonParty.Configuration.Balloons
         IUnbreakableFormationSettings UnbreakableFormation { get; }
 
         IRewardBalloonSettings RewardBalloons { get; }
+
+        IDiscoWaveSettings DiscoWave { get; }
     }
 }

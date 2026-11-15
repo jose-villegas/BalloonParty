@@ -819,14 +819,17 @@ namespace BalloonParty.Solver
             // Built from the CURRENT (pre-adoption) projectile colour — ResolvePopScore's own adoption
             // step mutates state.ProjectileColor, so the cause must snapshot it first (@ref
             // plan_shot_solver_accuracy Phase C §1.5).
+            var isOwnPaint = balloon.IsRainbow && balloon.OwnPaint && !state.HasRainbowBuff;
             var cause = ShotPopCause.ProjectileContact(
                 state.HasRainbowBuff, state.IsPiercing,
-                isRainbowTargetDeferred: balloon.IsRainbow && !state.HasRainbowBuff
+                isRainbowTargetDeferred: balloon.IsRainbow && !state.HasRainbowBuff && !isOwnPaint
                     && string.IsNullOrEmpty(state.ProjectileColor),
-                isRainbowTargetCarry: balloon.IsRainbow && !state.HasRainbowBuff
+                isRainbowTargetCarry: balloon.IsRainbow && !state.HasRainbowBuff && !isOwnPaint
                     && !string.IsNullOrEmpty(state.ProjectileColor),
-                projectileColor: state.ProjectileColor);
+                projectileColor: state.ProjectileColor,
+                isOwnPaint: isOwnPaint);
             ResolvePopScore(balloon, in scoreRules, in cause, ref state);
+            PaintBoardIfDisco(workingSet, activeCount, balloon.Reward, scoreRules.RainbowColorId);
 
             // A rainbow-buffed shot converts nearby paintable balloons on every pop it lands, not
             // just a rainbow-target one — mirrors ProjectileHitResolver.ConvertSideNeighboursToRainbow,
@@ -1040,6 +1043,7 @@ namespace BalloonParty.Solver
         {
             var cause = ShotPopCause.ItemEffect(sourceColorId, flags);
             ResolvePopScore(workingSet[index], in scoreRules, in cause, ref state);
+            PaintBoardIfDisco(workingSet, activeCount, workingSet[index].Reward, scoreRules.RainbowColorId);
 
             state.Pops++;
 
@@ -1184,7 +1188,15 @@ namespace BalloonParty.Solver
 
             int multiplier;
             string attributedColorId;
-            if (cause.Flags.HasFlag(DamageFlags.WildcardStreak))
+            if (cause.Flags.HasFlag(DamageFlags.OwnPaint))
+            {
+                // Mirrors ScoreController's OwnPaint: scores at the streak as it stands and leaves it there.
+                multiplier = Math.Max(1, state.StreakCount);
+                attributedColorId = ContainsColor(allowedColors, cause.SourceColorId)
+                    ? cause.SourceColorId
+                    : allowedColors[0];
+            }
+            else if (cause.Flags.HasFlag(DamageFlags.WildcardStreak))
             {
                 state.DeferredPops = 0;
                 multiplier = ++state.StreakCount;
@@ -1256,7 +1268,8 @@ namespace BalloonParty.Solver
             state.RawScore += (counts ? balloon.ScoreValue * payColors : 0) * multiplier;
 
             if (StreakShieldRule.GrantsShield(
-                    scoreRules.StreakGrantsShields, cause.IsProjectileContact,
+                    scoreRules.StreakGrantsShields,
+                    cause.IsProjectileContact && !cause.Flags.HasFlag(DamageFlags.OwnPaint),
                     !string.IsNullOrEmpty(balloon.ColorId), state.StreakCount, state.StreakColor,
                     state.ProjectileColor))
             {
@@ -1369,9 +1382,36 @@ namespace BalloonParty.Solver
             }
 
             var i = SideNeighborWorkingSetIndicesScratch[sideIndex];
-            if (!workingSet[i].IsStatic && !workingSet[i].IsRainbow && !string.IsNullOrEmpty(workingSet[i].ColorId))
+            if (IsRainbowPaintable(in workingSet[i]))
             {
                 ApplyRecolor(ref workingSet[i], rainbowColorId, rainbowColorId);
+            }
+        }
+
+        // Mirrors PaintTargets under rainbow paint: a colourless balloon (tough, unbreakable, plated) resists it.
+        private static bool IsRainbowPaintable(in ShotBalloonState balloon)
+        {
+            return !balloon.IsStatic && !balloon.IsRainbow && !string.IsNullOrEmpty(balloon.ColorId);
+        }
+
+        // A disco ball's pop paints the whole board rainbow (DiscoWave), booked to this shot. Live, the disc takes
+        // DiscoWaveSettings.Seconds to cross the board and a pierced ball only pops at the next wall; here it is
+        // instant, which lets the rest of the flight score painted balloons a little early.
+        private static void PaintBoardIfDisco(
+            ShotBalloonState[] workingSet, int activeCount, ShotRewardKind reward, string rainbowColorId)
+        {
+            if (reward != ShotRewardKind.Disco || string.IsNullOrEmpty(rainbowColorId))
+            {
+                return;
+            }
+
+            for (var i = 0; i < activeCount; i++)
+            {
+                if (IsRainbowPaintable(in workingSet[i]))
+                {
+                    ApplyRecolor(ref workingSet[i], rainbowColorId, rainbowColorId);
+                    workingSet[i].OwnPaint = true;
+                }
             }
         }
 

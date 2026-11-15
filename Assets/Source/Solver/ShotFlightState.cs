@@ -102,16 +102,18 @@ namespace BalloonParty.Solver
         /// <see cref="DamageFlags.Piercing" /> under a rainbow buff; <see cref="DamageFlags.Piercing" />
         /// alone under an armed (non-buffed) shot; <see cref="DamageFlags.DeferredStreak" /> for a
         /// colourless projectile popping a rainbow target absent a buff; <see cref="DamageFlags.CarryStreak" />
-        /// for a coloured projectile popping a rainbow target absent a buff.</summary>
+        /// for a coloured projectile popping a rainbow target absent a buff; <see cref="DamageFlags.OwnPaint" />
+        /// in place of those two for a rainbow the shot painted itself.</summary>
         public static ShotPopCause ProjectileContact(
             bool hasRainbowBuff, bool isPiercing, bool isRainbowTargetDeferred, bool isRainbowTargetCarry,
-            string projectileColor)
+            string projectileColor, bool isOwnPaint = false)
         {
             var flags = DamageFlags.DirectHit
                 | (hasRainbowBuff ? DamageFlags.WildcardStreak : DamageFlags.Normal)
                 | (isPiercing ? DamageFlags.Piercing : DamageFlags.Normal)
                 | (isRainbowTargetDeferred ? DamageFlags.DeferredStreak : DamageFlags.Normal)
-                | (isRainbowTargetCarry ? DamageFlags.CarryStreak : DamageFlags.Normal);
+                | (isRainbowTargetCarry ? DamageFlags.CarryStreak : DamageFlags.Normal)
+                | (isOwnPaint ? DamageFlags.OwnPaint : DamageFlags.Normal);
             return new ShotPopCause(true, projectileColor, flags);
         }
 

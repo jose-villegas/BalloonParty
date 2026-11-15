@@ -271,6 +271,8 @@ namespace BalloonParty.Solver
         public bool PaysSourceColor;
         public ShotRewardKind Reward;
         public bool ImmuneToEffects;
+        // Painted rainbow by this shot's own disco ball pop: mirrors ShotPaintLedger, for the one shot simulated.
+        public bool OwnPaint;
         public ShotSimDynamicActor Actor;
 
         public bool Scoreless => Reward != ShotRewardKind.None;
@@ -293,6 +295,7 @@ namespace BalloonParty.Solver
             IsStatic = snapshot.StaticSlotIndex.HasValue;
             Reward = snapshot.Reward;
             ImmuneToEffects = snapshot.ImmuneToEffects;
+            OwnPaint = false;
             Actor = null;
         }
     }

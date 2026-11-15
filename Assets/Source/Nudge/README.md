@@ -8,7 +8,7 @@ Elastic push-out/return animations for actors — triggered by projectile hits, 
 |---|---|
 | `NudgeService` | `IStartable` — subscribes to `ActorHitMessage` (filtered by `IHasNudge`) and `NudgeMessage`; resolves per-actor and per-publisher overrides; dispatches nudge animations to any view implementing `INudgeable` |
 | `INudgeable` | View-side contract — `Nudge(Vector3 direction, float distance, float duration)`. Decouples `NudgeService` from `BalloonView` specifically. |
-| `NudgeType` | `[Flags]` enum — `Deflect`, `Neighbor`, `Shockwave`; controls which override entries apply |
+| `NudgeType` | `[Flags]` enum — `Deflect`, `Neighbor`, `Shockwave`, `Wave`; controls which override entries apply |
 | `NudgeOverride` | Serializable per-source struct: `AppliesTo` (flag mask), `Distance`, `Duration`, `Falloff` |
 | `NudgeOverrideResolver` | Resolves distance, duration, and falloff through the 3-tier cascade (actor → publisher → config default). Injected into `NudgeService` |
 | `NudgeMessage` | Pub/sub signal — carries target actor (null = shockwave), origin, source type, and optional publisher overrides. `Actor` is typed as `IHasNudge` so any nudgeable actor can be a target, not only balloons. |
@@ -23,6 +23,7 @@ Elastic push-out/return animations for actors — triggered by projectile hits, 
 | `Neighbor` | Any `ActorHitMessage` where the hit actor implements `IHasNudge` | All 6 grid neighbors that also implement `IHasNudge` |
 | `Deflect` | Projectile bounces off a tough or unbreakable balloon | The deflecting balloon itself via `NudgeMessage` |
 | `Shockwave` | Item handler (e.g. Bomb) publishes `NudgeMessage(Source=Shockwave, Actor=null)` | All occupied grid slots, attenuated by distance |
+| `Wave` | The disco ball's wave (`Balloon/Reward/DiscoWave`) publishes `NudgeMessage(Source=Wave)` for each actor as its edge passes | That actor, away from the pop, at the same distance wherever it is (no falloff; the default comes from `IDiscoWaveSettings.NudgeOverrides`) |
 
 ## Override resolution
 

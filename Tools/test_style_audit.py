@@ -623,6 +623,40 @@ namespace BalloonParty.Shared.Pause
 }
 """, [], path="Shared/Pause/TimeScaleService.cs")
 
+expect_lines("accessibility: a property of an internal type is flagged", "accessibility", """\
+namespace BalloonParty.Foo
+{
+    public class Config
+    {
+        public DiscoWave Wave => _wave;
+    }
+}
+""", [5], internal=["DiscoWave"])
+
+expect_lines("accessibility: a property named like an internal type is not", "accessibility", """\
+namespace BalloonParty.Foo
+{
+    public class Config
+    {
+        public IDiscoWaveSettings DiscoWave => _discoWave;
+        public int Count { get; } = DiscoWave.Default;
+    }
+}
+""", [], internal=["DiscoWave"])
+
+expect_lines("accessibility: an internal parameter type is flagged, default values and all", "accessibility", """\
+namespace BalloonParty.Foo
+{
+    public class Config
+    {
+        public void Apply(int count = 2,
+            DiscoWave wave = null)
+        {
+        }
+    }
+}
+""", [5], internal=["DiscoWave"])
+
 
 def main():
     print("style_audit tests\n")

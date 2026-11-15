@@ -583,6 +583,47 @@ namespace BalloonParty.Tests.Game
             Assert.AreEqual(3, _streakTracker.For(ballA).CurrentStreak, "A resumes from its own x2, not B's x3");
         }
 
+        // PLAN-DiscoBalloon: the shot that breaks a disco ball paints the board rainbow while it still flies.
+        // Its pops of what it painted score at its streak as it stands and leave it there; another ball's
+        // pop of the same rainbow climbs as any rainbow pop does.
+        [Test]
+        public void Streak_OwnPaintPop_ScoresAtTheStreakAndLeavesIt_WhileAnotherBallsRainbowPopClimbs()
+        {
+            var painter = NewBall();
+            var other = NewBall();
+            FirePopFrom(painter, Red);
+            FirePopFrom(painter, Red);
+            FirePopFrom(other, Red);
+            FirePopFrom(other, Red);
+            _scoredPublisher.ClearReceivedCalls();
+            _streakGrewPublisher.ClearReceivedCalls();
+
+            FireRainbowPopFrom(painter, DamageFlags.DirectHit | DamageFlags.OwnPaint);
+
+            Assert.AreEqual(2, _streakTracker.For(painter).CurrentStreak);
+            _scoredPublisher.Received().Publish(Arg.Is<ScorePointsGroupMessage>(m => m.Multiplier == 2));
+            _scoredPublisher.DidNotReceive().Publish(Arg.Is<ScorePointsGroupMessage>(m => m.Multiplier != 2));
+            _streakGrewPublisher.DidNotReceive().Publish(Arg.Any<StreakGrewMessage>());
+
+            FireRainbowPopFrom(other, DamageFlags.DirectHit | DamageFlags.CarryStreak);
+
+            Assert.AreEqual(3, _streakTracker.For(other).CurrentStreak);
+            Assert.AreEqual(2, _streakTracker.For(painter).CurrentStreak);
+        }
+
+        // A colourless painter has no streak: its own-paint pops score at 1 and bank nothing for its next colour.
+        [Test]
+        public void Streak_OwnPaintPops_OnAColourlessBall_BankNothing()
+        {
+            var painter = NewBall();
+            FireRainbowPopFrom(painter, DamageFlags.DirectHit | DamageFlags.OwnPaint);
+            FireRainbowPopFrom(painter, DamageFlags.DirectHit | DamageFlags.OwnPaint);
+
+            FirePopFrom(painter, Red);
+
+            Assert.AreEqual(1, _streakTracker.For(painter).CurrentStreak);
+        }
+
         [Test]
         public void Streak_HitNoBallCaused_RecordsOnTheSharedStreak_NotOnAnyBall()
         {

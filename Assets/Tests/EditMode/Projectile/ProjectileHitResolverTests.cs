@@ -31,6 +31,8 @@ namespace BalloonParty.Tests.Projectile
         private IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
         private IPublisher<PierceDischargedMessage> _dischargedPublisher;
         private ColorStreakTracker _streakTracker;
+        private ProjectileRegistry _registry;
+        private ShotPaintLedger _paintLedger;
         private IRunConfig _runConfig;
         private SlotGrid _grid;
         private ProjectileHitResolver _resolver;
@@ -67,13 +69,15 @@ namespace BalloonParty.Tests.Projectile
                     Arg.Any<MessageHandlerFilter<ProjectileLoadedMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
+            _registry = new ProjectileRegistry();
+            _paintLedger = new ShotPaintLedger(_registry);
             _streakTracker = new ColorStreakTracker(
                 Substitute.For<IPublisher<StreakChangedMessage>>(), levelUpSubscriber, projectileLoadedSubscriber,
-                new ProjectileRegistry());
+                _registry);
 
             _resolver = new ProjectileHitResolver(
                 _hitDispatcher, _shieldGainedPublisher, _dischargedPublisher,
-                Substitute.For<IFlightStatsWriter>(), _streakTracker, _runConfig, _grid);
+                Substitute.For<IFlightStatsWriter>(), _streakTracker, _runConfig, _grid, _paintLedger);
             _projectile = new ProjectileModel { IsFree = true };
         }
 
@@ -536,6 +540,58 @@ namespace BalloonParty.Tests.Projectile
 
             Assert.AreEqual(0, _projectile.ShieldsRemaining.Value);
             _shieldGainedPublisher.DidNotReceive().Publish(Arg.Any<ShieldGainedMessage>());
+        }
+
+        // PLAN-DiscoBalloon: a rainbow this shot painted itself can't climb its streak; one another shot painted can.
+        [Test]
+        public void Resolve_RainbowThisShotPainted_DispatchesOwnPaint_NotCarry()
+        {
+            _registry.Load(_projectile, null);
+            var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            balloon.Color.Value = GamePalette.RainbowColorId;
+            _paintLedger.Record(_projectile, balloon);
+            _projectile.ColorName.Value = "Blue";
+
+            _resolver.Resolve(_projectile, balloon, Vector3.zero);
+
+            _hitDispatcher.Received(1).Dispatch(Arg.Is<ActorHitMessage>(m =>
+                m.Context.Flags.HasFlag(DamageFlags.OwnPaint)
+                && !m.Context.Flags.HasFlag(DamageFlags.CarryStreak)
+                && !m.Context.Flags.HasFlag(DamageFlags.DeferredStreak)));
+        }
+
+        // A streak-shield refund on every painted pop would let a disco shot refill its shields off its own paint.
+        [Test]
+        public void Resolve_RainbowThisShotPainted_StreakAtTwo_GrantsNoShield()
+        {
+            _registry.Load(_projectile, null);
+            _streakTracker.For(_projectile).Record("Blue", false);
+            _streakTracker.For(_projectile).Record("Blue", false);
+            var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            balloon.Color.Value = GamePalette.RainbowColorId;
+            _paintLedger.Record(_projectile, balloon);
+            _projectile.ColorName.Value = "Blue";
+
+            _resolver.Resolve(_projectile, balloon, Vector3.zero);
+
+            Assert.AreEqual(0, _projectile.ShieldsRemaining.Value);
+            _shieldGainedPublisher.DidNotReceive().Publish(Arg.Any<ShieldGainedMessage>());
+        }
+
+        [Test]
+        public void Resolve_RainbowAnotherShotPainted_DispatchesCarry()
+        {
+            var painter = new ProjectileModel();
+            _registry.Load(painter, null);
+            var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            balloon.Color.Value = GamePalette.RainbowColorId;
+            _paintLedger.Record(painter, balloon);
+            _projectile.ColorName.Value = "Blue";
+
+            _resolver.Resolve(_projectile, balloon, Vector3.zero);
+
+            _hitDispatcher.Received(1).Dispatch(Arg.Is<ActorHitMessage>(m =>
+                m.Context.Flags.HasFlag(DamageFlags.CarryStreak) && !m.Context.Flags.HasFlag(DamageFlags.OwnPaint)));
         }
 
         [Test]

@@ -176,9 +176,7 @@ namespace BalloonParty.Item.Paint
             return buckets;
         }
 
-        // Accept: paintable, not already the paint colour, not rainbow. Reject: an IResistsPaint balloon
-        // (tough/unbreakable) OR a rainbow balloon hit by non-rainbow paint — the drip still plays and
-        // slides off, but no colour commits. Empty / non-balloon slots yield no target.
+        // Empty slots and PaintVerdict.Ignore yield no target; a reject is a target with no paintable.
         private bool TryClassify(Vector2Int slot, string paintColor, out PaintTarget target)
         {
             target = default;
@@ -188,34 +186,14 @@ namespace BalloonParty.Item.Paint
                 return false;
             }
 
-            var actor = _grid.At(slot);
-
-            if (actor is IPaintable paintable)
+            var verdict = PaintTargets.Classify(_grid.At(slot), paintColor, _palette, out var paintable);
+            if (verdict == PaintVerdict.Ignore)
             {
-                if (paintable.Color.Value == paintColor)
-                {
-                    return false;
-                }
-
-                // A rainbow balloon resists concrete paint — its identity is the rainbow wildcard,
-                // so only another rainbow holder (same id) would match above and short-circuit.
-                if (_palette.IsRainbow(paintable.Color.Value))
-                {
-                    target = new PaintTarget(slot, null);
-                    return true;
-                }
-
-                target = new PaintTarget(slot, paintable);
-                return true;
+                return false;
             }
 
-            if (actor is IResistsPaint)
-            {
-                target = new PaintTarget(slot, null);
-                return true;
-            }
-
-            return false;
+            target = new PaintTarget(slot, paintable);
+            return true;
         }
 
         private static int NearestBlob(IReadOnlyList<Vector2> blobPositions, Vector2 position, out float bestSqr)

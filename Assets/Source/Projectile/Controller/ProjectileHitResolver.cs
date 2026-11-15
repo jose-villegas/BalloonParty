@@ -24,6 +24,7 @@ namespace BalloonParty.Projectile.Controller
         private readonly ColorStreakTracker _streakTracker;
         private readonly IRunConfig _runConfig;
         private readonly SlotGrid _grid;
+        private readonly ShotPaintLedger _paintLedger;
         private readonly Vector2Int[] _neighborBuffer = new Vector2Int[6];
         private readonly Vector2[] _sideNeighborOffsets = new Vector2[6];
         private readonly Vector2Int[] _sideValidNeighborSlots = new Vector2Int[6];
@@ -35,7 +36,8 @@ namespace BalloonParty.Projectile.Controller
             IFlightStatsWriter flightStats,
             ColorStreakTracker streakTracker,
             IRunConfig runConfig,
-            SlotGrid grid)
+            SlotGrid grid,
+            ShotPaintLedger paintLedger)
         {
             _hitDispatcher = hitDispatcher;
             _shieldGainedPublisher = shieldGainedPublisher;
@@ -44,6 +46,7 @@ namespace BalloonParty.Projectile.Controller
             _streakTracker = streakTracker;
             _runConfig = runConfig;
             _grid = grid;
+            _paintLedger = paintLedger;
         }
 
         public ProjectileHitVisual Resolve(
@@ -183,10 +186,21 @@ namespace BalloonParty.Projectile.Controller
             // carry — even though the balloon is otherwise IHasColor.
             var isWildcardPop = balloon is IHasColor wildcard && wildcard.Color.Value == GamePalette.RainbowColorId;
 
-            // A colourless projectile popping a rainbow can't anchor the streak yet — defer the count
-            // so it folds into the streak once the projectile adopts a real colour on a later hit.
-            if (isWildcardPop && !isRainbowBuff && string.IsNullOrEmpty(projectile.ColorName.Value))
+            // A rainbow this shot painted itself (the disco ball's wave) scores but can't climb its streak, nor
+            // refund a shield below: painting the board must not feed the shot that painted it.
+            var isOwnPaint = isWildcardPop && !isRainbowBuff && _paintLedger.Painted(projectile, balloon);
+            if (isOwnPaint)
             {
+                damageContext = new DamageContext(
+                    damageContext.Damage,
+                    damageContext.Flags | DamageFlags.OwnPaint,
+                    damageContext.SourceColorId,
+                    projectile);
+            }
+            else if (isWildcardPop && !isRainbowBuff && string.IsNullOrEmpty(projectile.ColorName.Value))
+            {
+                // A colourless projectile popping a rainbow can't anchor the streak yet — defer the count
+                // so it folds into the streak once the projectile adopts a real colour on a later hit.
                 damageContext = new DamageContext(
                     damageContext.Damage,
                     damageContext.Flags | DamageFlags.DeferredStreak,
@@ -221,7 +235,7 @@ namespace BalloonParty.Projectile.Controller
             // Dispatch runs the streak stage synchronously, so this ball's streak is already current here.
             var streak = _streakTracker.For(projectile);
             if (StreakShieldRule.GrantsShield(
-                    _runConfig.StreakGrantsShields, outcome == HitOutcome.Pop, balloon is IHasColor,
+                    _runConfig.StreakGrantsShields, outcome == HitOutcome.Pop && !isOwnPaint, balloon is IHasColor,
                     streak.CurrentStreak, streak.LastColor, projectile.ColorName.Value))
             {
                 projectile.ShieldsRemaining.Value++;

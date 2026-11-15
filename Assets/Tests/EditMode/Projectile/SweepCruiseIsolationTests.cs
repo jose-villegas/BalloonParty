@@ -79,7 +79,8 @@ namespace BalloonParty.Tests.Projectile
 
             _hitResolver = new ProjectileHitResolver(
                 _hitDispatcher, shieldGainedPublisher, dischargedPublisher,
-                Substitute.For<IFlightStatsWriter>(), streakTracker, runConfig, grid);
+                Substitute.For<IFlightStatsWriter>(), streakTracker, runConfig, grid,
+                new ShotPaintLedger(new ProjectileRegistry()));
             _motionResolver = new ProjectileMotionResolver(flightConfig, new ProjectileTapResolver(flightConfig));
             _projectile = new ProjectileModel { IsFree = true };
             _projectile.ShieldsRemaining.Value = 10;

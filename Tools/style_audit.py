@@ -1043,6 +1043,30 @@ def check_public_visibility(path: Path, lines: list[str], result: AuditResult):
             f"'{type_name}' is public — consider internal if not used cross-assembly"))
 
 
+def _member_type_text(signature: str) -> str:
+    """The part of a public member's signature that can name a type: its type and parameter list.
+
+    Drops the member's own name and whatever follows its `=>`, `{` or initializer `=`, since a member may share
+    its name with an internal type (`IDiscoWaveSettings DiscoWave => ...`) and a body or initializer exposes
+    nothing. A parameter's default value stays: inside the parentheses an `=` does not end the signature.
+    """
+    depth = 0
+    end = len(signature)
+    for index, char in enumerate(signature):
+        if char == "(":
+            depth += 1
+        elif char == ")":
+            depth -= 1
+        elif depth == 0 and (char == "{" or (char == "=" and signature[index + 1:index + 2] != "=")):
+            end = index
+            break
+    head = signature[:end]
+    paren = head.find("(")
+    if paren >= 0:
+        return re.sub(r"\w+\s*(?:<[^()]*>)?\s*$", "", head[:paren]) + head[paren:]
+    return re.sub(r"\w+\s*;?\s*$", "", head)
+
+
 def check_inconsistent_accessibility(path: Path, lines: list[str], result: AuditResult):
     """Detect public members in public types that expose internal types.
 
@@ -1086,7 +1110,7 @@ def check_inconsistent_accessibility(path: Path, lines: list[str], result: Audit
                 if "{" in stripped or ";" in stripped or "=>" in stripped:
                     in_public = False
                     full_sig = " ".join(sig_lines)
-                    m = internal_re.search(full_sig)
+                    m = internal_re.search(_member_type_text(full_sig))
                     if m:
                         result.add(Violation(str(path), sig_start, "inconsistent-accessibility",
                             f"public member exposes internal type '{m.group(1)}'"))
@@ -1096,7 +1120,7 @@ def check_inconsistent_accessibility(path: Path, lines: list[str], result: Audit
             if "{" in stripped or ";" in stripped or "=>" in stripped:
                 in_public = False
                 full_sig = " ".join(sig_lines)
-                m = internal_re.search(full_sig)
+                m = internal_re.search(_member_type_text(full_sig))
                 if m:
                     result.add(Violation(str(path), sig_start, "inconsistent-accessibility",
                         f"public member exposes internal type '{m.group(1)}'"))

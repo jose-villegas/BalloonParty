@@ -196,6 +196,7 @@ namespace BalloonParty.Game
             builder.Register<ProjectileFacingSource>(Lifetime.Singleton).As<IProjectileFacingSource>();
             builder.Register<NudgeOverrideResolver>(Lifetime.Singleton);
             builder.Register<ColorStreakTracker>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<ShotPaintLedger>(Lifetime.Singleton);
             builder.Register<ProjectileHitResolver>(Lifetime.Singleton);
             builder.Register<ProjectileTapResolver>(Lifetime.Singleton);
             builder.RegisterEntryPoint<DeflectChainController>();
@@ -257,6 +258,8 @@ namespace BalloonParty.Game
                 .As<IFormationReinforcements>();
             builder.RegisterEntryPoint<RewardBalloonService>().As<IRewardBalloonRequests>().As<IRunResettable>();
             builder.RegisterEntryPoint<RewardBalloonPayout>();
+            builder.RegisterEntryPoint<DiscoWave>().As<IRunResettable>();
+            builder.RegisterComponentOnNewGameObject<DiscoWaveView>(Lifetime.Singleton, "DiscoWave").As<IDiscoWaveView>();
             builder.RegisterEntryPoint<GridActorHitController>();
             builder.Register<NavigationReadyGate>(Lifetime.Singleton).WithParameter(NavigationState.Game);
             builder.RegisterEntryPoint<GridSpawnerCoordinator>().AsSelf().As<IRunResettable>();
