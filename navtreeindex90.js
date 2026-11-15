@@ -1,5 +1,7 @@
 var NAVTREEINDEX90 =
 {
+"classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html#ad08c5d41d5c3ae631bed0d8e2eba311b":[5,0,0,16,1,0,84],
+"classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html#ad08c5d41d5c3ae631bed0d8e2eba311b":[6,0,0,16,1,0,84],
 "classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html#ad15167a3aaacfc10de604cdf608bf65d":[5,0,0,16,1,0,47],
 "classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html#ad15167a3aaacfc10de604cdf608bf65d":[6,0,0,16,1,0,47],
 "classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html#ad17b80641f110c3b82694016b4d1aaa2":[5,0,0,16,1,0,72],
@@ -247,7 +249,5 @@ var NAVTREEINDEX90 =
 "classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonWriting_1_1Face.html#a590a65e98755a0c9e7b11e8d01b99e91":[5,0,0,16,2,1,0,3],
 "classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonWriting_1_1Face.html#a590a65e98755a0c9e7b11e8d01b99e91":[6,0,0,16,2,1,0,3],
 "classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonWriting_1_1Face.html#a5a1252d7693e857901c0231cd632da10":[5,0,0,16,2,1,0,4],
-"classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonWriting_1_1Face.html#a5a1252d7693e857901c0231cd632da10":[6,0,0,16,2,1,0,4],
-"classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonWriting_1_1Face.html#a7c08c58286cdaf5e27f6a7530a83689c":[5,0,0,16,2,1,0,0],
-"classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonWriting_1_1Face.html#a7c08c58286cdaf5e27f6a7530a83689c":[6,0,0,16,2,1,0,0]
+"classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonWriting_1_1Face.html#a5a1252d7693e857901c0231cd632da10":[6,0,0,16,2,1,0,4]
 };

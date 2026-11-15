@@ -1,5 +1,7 @@
 var NAVTREEINDEX104 =
 {
+"interfaceBalloonParty_1_1Game_1_1Cinematics_1_1IBoardEffect.html#a7ac9498a4234e200958db33e0b98d09f":[5,0,0,6,2,12,1],
+"interfaceBalloonParty_1_1Game_1_1Cinematics_1_1IBoardEffect.html#a7ac9498a4234e200958db33e0b98d09f":[6,0,0,6,2,12,1],
 "interfaceBalloonParty_1_1Game_1_1Cinematics_1_1IBoardEffect.html#ac2992905810e139f987d5309759cfd8c":[5,0,0,6,2,12,0],
 "interfaceBalloonParty_1_1Game_1_1Cinematics_1_1IBoardEffect.html#ac2992905810e139f987d5309759cfd8c":[6,0,0,6,2,12,0],
 "interfaceBalloonParty_1_1Game_1_1Cinematics_1_1ICinematicFocus.html":[5,0,0,6,2,13],
@@ -247,7 +249,5 @@ var NAVTREEINDEX104 =
 "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IFreeCardGrant.html#aec6c658fdbb094a75d3469075107014f":[5,0,0,6,11,0,0],
 "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IFreeCardGrant.html#aec6c658fdbb094a75d3469075107014f":[6,0,0,6,11,0,0],
 "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IHeldCards.html":[5,0,0,6,11,1],
-"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IHeldCards.html":[6,0,0,6,11,1],
-"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IHeldCards.html#a8dd59f3c268111e7099d898d8b589960":[5,0,0,6,11,1,0],
-"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IHeldCards.html#a8dd59f3c268111e7099d898d8b589960":[6,0,0,6,11,1,0]
+"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IHeldCards.html":[6,0,0,6,11,1]
 };

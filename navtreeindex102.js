@@ -1,5 +1,7 @@
 var NAVTREEINDEX102 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IScreenSpaceLightSettings.html#a6ee621508240ba701b35fcf867a58d6b":[5,0,0,3,5,14,0],
+"interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IScreenSpaceLightSettings.html#a6ee621508240ba701b35fcf867a58d6b":[6,0,0,3,5,14,0],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IScreenSpaceLightSettings.html#a868c2cacfa8c7c81ba725ed732925a9d":[5,0,0,3,5,14,10],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IScreenSpaceLightSettings.html#a868c2cacfa8c7c81ba725ed732925a9d":[6,0,0,3,5,14,10],
 "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IScreenSpaceLightSettings.html#aa5a0e323be98f982b7859663c2636137":[5,0,0,3,5,14,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX102 =
 "interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html#ad3443fba749b4a732ec954012a437c43":[5,0,0,3,17,1],
 "interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html#ad3443fba749b4a732ec954012a437c43":[6,0,0,3,17,1],
 "interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html#af2d7a4f558f3a567132412346908c873":[5,0,0,3,17,11],
-"interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html#af2d7a4f558f3a567132412346908c873":[6,0,0,3,17,11],
-"interfaceBalloonParty_1_1Configuration_1_1IOverflowSettings.html":[5,0,0,3,18],
-"interfaceBalloonParty_1_1Configuration_1_1IOverflowSettings.html":[6,0,0,3,18]
+"interfaceBalloonParty_1_1Configuration_1_1IItemPreviewConfig.html#af2d7a4f558f3a567132412346908c873":[6,0,0,3,17,11]
 };

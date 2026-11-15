@@ -1,5 +1,7 @@
 var NAVTREEINDEX43 =
 {
+"classBalloonParty_1_1Editor_1_1TelemetryLogMenu.html#a222696578e2fedabad3b628a00f836b0":[5,0,0,5,47,5],
+"classBalloonParty_1_1Editor_1_1TelemetryLogMenu.html#a222696578e2fedabad3b628a00f836b0":[6,0,0,5,47,5],
 "classBalloonParty_1_1Editor_1_1TelemetryLogMenu.html#a7c7c4b6c9c0b152fb76127ee2bbff8c8":[5,0,0,5,47,2],
 "classBalloonParty_1_1Editor_1_1TelemetryLogMenu.html#a7c7c4b6c9c0b152fb76127ee2bbff8c8":[6,0,0,5,47,2],
 "classBalloonParty_1_1Editor_1_1TelemetryLogMenu.html#a8f87cbb48d7bf6be479c9eaace2f07c2":[5,0,0,5,47,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX43 =
 "classBalloonParty_1_1Game_1_1AppLifetimeScope.html#af33ea4b79c57f24da02ef0c071597ece":[5,0,0,6,12,0],
 "classBalloonParty_1_1Game_1_1AppLifetimeScope.html#af33ea4b79c57f24da02ef0c071597ece":[6,0,0,6,12,0],
 "classBalloonParty_1_1Game_1_1AppLifetimeScope.html#af84e7e9b4ea31f26d3d5f3a81a5e8517":[5,0,0,6,12,8],
-"classBalloonParty_1_1Game_1_1AppLifetimeScope.html#af84e7e9b4ea31f26d3d5f3a81a5e8517":[6,0,0,6,12,8],
-"classBalloonParty_1_1Game_1_1Assist_1_1PityRoll.html":[5,0,0,6,0,1],
-"classBalloonParty_1_1Game_1_1Assist_1_1PityRoll.html":[6,0,0,6,0,1]
+"classBalloonParty_1_1Game_1_1AppLifetimeScope.html#af84e7e9b4ea31f26d3d5f3a81a5e8517":[6,0,0,6,12,8]
 };

@@ -1,5 +1,7 @@
 var NAVTREEINDEX122 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileFiredMessage.html#ace1192022ae45e01b5965289e9661d14":[5,0,0,12,7,31,3],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileFiredMessage.html#ace1192022ae45e01b5965289e9661d14":[6,0,0,12,7,31,3],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html":[5,0,0,12,7,32],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html":[6,0,0,12,7,32],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html#a5b5bf160a6be03d7129a5d6f99517eca":[5,0,0,12,7,32,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX122 =
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafBatch.html#a284c975767cd0316a7b0f034fa8ec3ae":[5,0,0,13,0,0,15,3],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafBatch.html#a284c975767cd0316a7b0f034fa8ec3ae":[6,0,0,13,0,0,15,3],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafBatch.html#a415effaba9c47ae88a1310040bad2c75":[5,0,0,13,0,0,15,5],
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafBatch.html#a415effaba9c47ae88a1310040bad2c75":[6,0,0,13,0,0,15,5],
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafBatch.html#a7ee9f9aef5d4f4e466779260e8d700c4":[5,0,0,13,0,0,15,4],
-"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafBatch.html#a7ee9f9aef5d4f4e466779260e8d700c4":[6,0,0,13,0,0,15,4]
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafBatch.html#a415effaba9c47ae88a1310040bad2c75":[6,0,0,13,0,0,15,5]
 };

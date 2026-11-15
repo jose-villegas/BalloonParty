@@ -1,5 +1,7 @@
 var NAVTREEINDEX110 =
 {
+"namespaceBalloonParty_1_1Slots_1_1Actor.html#a62e521bc8cad6be75a1029d9b639d2cca52557e239f11db73b54f27817dac5aac":[5,0,0,13,0,25,1],
+"namespaceBalloonParty_1_1Slots_1_1Actor.html#a62e521bc8cad6be75a1029d9b639d2cca6111722f15c613a723c91bec33c27995":[5,0,0,13,0,25,3],
 "namespaceBalloonParty_1_1Slots_1_1Actor.html#a62e521bc8cad6be75a1029d9b639d2cca8e42741ff46f887bb0109738fbae034d":[5,0,0,13,0,25,0],
 "namespaceBalloonParty_1_1Slots_1_1Actor.html#abf97dbdfa7dd43a6769e73afa51a0f7f":[5,0,0,13,0,22],
 "namespaceBalloonParty_1_1Slots_1_1Actor.html#abf97dbdfa7dd43a6769e73afa51a0f7fa0d91da2e739f8120cb341bff5daa5648":[5,0,0,13,0,22,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX110 =
 "plan_future_ideas.html#autotoc_md514":[3,5,0,7,4],
 "plan_future_ideas.html#autotoc_md515":[3,5,0,7,5],
 "plan_future_ideas.html#autotoc_md516":[3,5,0,7,6],
-"plan_future_ideas.html#autotoc_md518":[3,5,0,8],
-"plan_future_ideas.html#autotoc_md520":[3,5,0,9],
-"plan_future_ideas.html#autotoc_md521":[3,5,0,9,0]
+"plan_future_ideas.html#autotoc_md518":[3,5,0,8]
 };

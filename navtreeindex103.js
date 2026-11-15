@@ -1,5 +1,7 @@
 var NAVTREEINDEX103 =
 {
+"interfaceBalloonParty_1_1Configuration_1_1IOverflowSettings.html":[5,0,0,3,18],
+"interfaceBalloonParty_1_1Configuration_1_1IOverflowSettings.html":[6,0,0,3,18],
 "interfaceBalloonParty_1_1Configuration_1_1IOverflowSettings.html#a0daaab4ae714a41a30d112f3713c1c6d":[5,0,0,3,18,5],
 "interfaceBalloonParty_1_1Configuration_1_1IOverflowSettings.html#a0daaab4ae714a41a30d112f3713c1c6d":[6,0,0,3,18,5],
 "interfaceBalloonParty_1_1Configuration_1_1IOverflowSettings.html#a0f5915977970c8dc6c72bdb92234797b":[5,0,0,3,18,9],
@@ -247,7 +249,5 @@ var NAVTREEINDEX103 =
 "interfaceBalloonParty_1_1Game_1_1CardReveal_1_1ICardReveals.html#ae2b63001dec19b98b2a35e777cd1cea1":[5,0,0,6,1,2,5],
 "interfaceBalloonParty_1_1Game_1_1CardReveal_1_1ICardReveals.html#ae2b63001dec19b98b2a35e777cd1cea1":[6,0,0,6,1,2,5],
 "interfaceBalloonParty_1_1Game_1_1Cinematics_1_1IBoardEffect.html":[5,0,0,6,2,12],
-"interfaceBalloonParty_1_1Game_1_1Cinematics_1_1IBoardEffect.html":[6,0,0,6,2,12],
-"interfaceBalloonParty_1_1Game_1_1Cinematics_1_1IBoardEffect.html#a7ac9498a4234e200958db33e0b98d09f":[5,0,0,6,2,12,1],
-"interfaceBalloonParty_1_1Game_1_1Cinematics_1_1IBoardEffect.html#a7ac9498a4234e200958db33e0b98d09f":[6,0,0,6,2,12,1]
+"interfaceBalloonParty_1_1Game_1_1Cinematics_1_1IBoardEffect.html":[6,0,0,6,2,12]
 };

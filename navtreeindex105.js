@@ -1,5 +1,7 @@
 var NAVTREEINDEX105 =
 {
+"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IHeldCards.html#a8dd59f3c268111e7099d898d8b589960":[5,0,0,6,11,1,0],
+"interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IHeldCards.html#a8dd59f3c268111e7099d898d8b589960":[6,0,0,6,11,1,0],
 "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IShieldsPerBall.html":[5,0,0,6,11,2],
 "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IShieldsPerBall.html":[6,0,0,6,11,2],
 "interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IShieldsPerBall.html#a8fbbc14a1a201d8fa403b1756c4a0d6a":[5,0,0,6,11,2,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX105 =
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#aaf4fdb3674a5ddfefe5d181d91dc014c":[5,0,0,10,2,2,5],
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#aaf4fdb3674a5ddfefe5d181d91dc014c":[6,0,0,10,2,2,5],
 "interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#ad04eaaf52b9a59f10f29b4fce881704d":[5,0,0,10,2,2,9],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#ad04eaaf52b9a59f10f29b4fce881704d":[6,0,0,10,2,2,9],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#aea458f3a32fed107324212396401b6e5":[5,0,0,10,2,2,8],
-"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#aea458f3a32fed107324212396401b6e5":[6,0,0,10,2,2,8]
+"interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html#ad04eaaf52b9a59f10f29b4fce881704d":[6,0,0,10,2,2,9]
 };

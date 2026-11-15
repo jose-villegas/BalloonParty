@@ -172,7 +172,7 @@ Properties</h2></td></tr>
 <tr class="memdesc:a5f02bd219a69f4bbcc36796b065455e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Summed flight seconds of every ball in the air that reach full flight pressure: 6 = one ball cruising 6 s, or three balls 2 s each.  <br /></td></tr>
 <tr class="separator:a5f02bd219a69f4bbcc36796b065455e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae36359fcb49134eddbe1472e83b963d6" id="r_ae36359fcb49134eddbe1472e83b963d6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae36359fcb49134eddbe1472e83b963d6">FlightSpeedup</a><code> [get]</code></td></tr>
-<tr class="memdesc:ae36359fcb49134eddbe1472e83b963d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pace balls in flight add on top of the board's: at full flight pressure the clock runs this many times faster than the board alone would have it (1 = flight never matters).  <br /></td></tr>
+<tr class="memdesc:ae36359fcb49134eddbe1472e83b963d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pace balls in flight add on top of the board's: at full flight pressure, on an empty board, the clock runs this many times faster than the board alone would have it.  <br /></td></tr>
 <tr class="separator:ae36359fcb49134eddbe1472e83b963d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d2f7447147617b1d526c55b6e1860b1" id="r_a4d2f7447147617b1d526c55b6e1860b1"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4d2f7447147617b1d526c55b6e1860b1">GraceSeconds</a><code> [get]</code></td></tr>
 <tr class="memdesc:a4d2f7447147617b1d526c55b6e1860b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds of play after a level starts, or a run restarts, before its first line arrives.  <br /></td></tr>
@@ -184,7 +184,7 @@ Properties</h2></td></tr>
 <tr class="memdesc:a8503d0555bbd85e3953332e25ca61ae3"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much the board's fill is read as occupancy against <a class="el" href="#a5998c743f39e1e857d4f5b68c4cf5ed0" title="Share of the board&#39;s open slots the clock pushes balloons towards, 0–1.">TargetOccupancy</a> rather than against the level's starting fill: 0 = starting fill only, 1 = occupancy only.  <br /></td></tr>
 <tr class="separator:a8503d0555bbd85e3953332e25ca61ae3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c7080dbc36603b8731f85e0e5ab259a" id="r_a1c7080dbc36603b8731f85e0e5ab259a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1c7080dbc36603b8731f85e0e5ab259a">OverlapShotPull</a><code> [get]</code></td></tr>
-<tr class="memdesc:a1c7080dbc36603b8731f85e0e5ab259a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Share of the current wait a ball fired while another is still flying takes off the next line: 0.35 = that line arrives 35% of an interval sooner.  <br /></td></tr>
+<tr class="memdesc:a1c7080dbc36603b8731f85e0e5ab259a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Share of the current wait a ball fired while another is still flying takes off the next line on an empty board: 0.35 = that line arrives 35% of an interval sooner.  <br /></td></tr>
 <tr class="separator:a1c7080dbc36603b8731f85e0e5ab259a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeba089fda0f83e847a7e90cdb548e7a5" id="r_aeba089fda0f83e847a7e90cdb548e7a5"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeba089fda0f83e847a7e90cdb548e7a5">SparseBoardSpeedup</a><code> [get]</code></td></tr>
 <tr class="memdesc:aeba089fda0f83e847a7e90cdb548e7a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much faster the clock runs on an empty board.  <br /></td></tr>
@@ -1045,7 +1045,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Pace balls in flight add on top of the board's: at full flight pressure the clock runs this many times faster than the board alone would have it (1 = flight never matters). </p>
+<p>Pace balls in flight add on top of the board's: at full flight pressure, on an empty board, the clock runs this many times faster than the board alone would have it. </p>
+<p>The extra shrinks as the board fills, to nothing at its normal fill (1 = flight never matters). </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#abe600f412b0b06d955d15040eb82f18f">BalloonParty.Configuration.Level.ISpawnClockSettings</a>.</p>
 
@@ -1150,8 +1151,8 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Share of the current wait a ball fired while another is still flying takes off the next line: 0.35 = that line arrives 35% of an interval sooner. </p>
-<p>One ball at a time costs nothing. </p>
+<p>Share of the current wait a ball fired while another is still flying takes off the next line on an empty board: 0.35 = that line arrives 35% of an interval sooner. </p>
+<p>It shrinks as the board fills, to nothing at its normal fill. One ball at a time costs nothing. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a37c8f81313b27845d06db758f98f865a">BalloonParty.Configuration.Level.ISpawnClockSettings</a>.</p>
 

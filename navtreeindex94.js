@@ -1,5 +1,7 @@
 var NAVTREEINDEX94 =
 {
+"classBalloonParty_1_1UI_1_1Health_1_1HealthCounterLabel.html#adc9b5dd707cd81c86b1f0b0cedd59a1a":[5,0,0,16,6,0,3],
+"classBalloonParty_1_1UI_1_1Health_1_1HealthCounterLabel.html#adc9b5dd707cd81c86b1f0b0cedd59a1a":[6,0,0,16,6,0,3],
 "classBalloonParty_1_1UI_1_1Health_1_1HealthCounterLabel.html#ae30ce3bedc1c68b0f3dafd8c41d12a86":[5,0,0,16,6,0,2],
 "classBalloonParty_1_1UI_1_1Health_1_1HealthCounterLabel.html#ae30ce3bedc1c68b0f3dafd8c41d12a86":[6,0,0,16,6,0,2],
 "classBalloonParty_1_1UI_1_1Health_1_1HealthCounterLabel.html#af568f2e3c4d675c241a6a63e43190abd":[5,0,0,16,6,0,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX94 =
 "classBalloonParty_1_1UI_1_1ReactiveCounterLabel.html":[5,0,0,16,18],
 "classBalloonParty_1_1UI_1_1ReactiveCounterLabel.html":[6,0,0,16,18],
 "classBalloonParty_1_1UI_1_1ReactiveCounterLabel.html#a2d075bd227612a1a5676285618f8f921":[5,0,0,16,18,6],
-"classBalloonParty_1_1UI_1_1ReactiveCounterLabel.html#a2d075bd227612a1a5676285618f8f921":[6,0,0,16,18,6],
-"classBalloonParty_1_1UI_1_1ReactiveCounterLabel.html#a56288ac071b175c68ac46f376fee791f":[5,0,0,16,18,7],
-"classBalloonParty_1_1UI_1_1ReactiveCounterLabel.html#a56288ac071b175c68ac46f376fee791f":[6,0,0,16,18,7]
+"classBalloonParty_1_1UI_1_1ReactiveCounterLabel.html#a2d075bd227612a1a5676285618f8f921":[6,0,0,16,18,6]
 };
