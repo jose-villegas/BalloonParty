@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"GameOverPresentationGate_8cs.html":[7,0,7,7,2],
 "GameOverScreen_8cs.html":[7,0,18,3,1],
 "GamePaletteAdapter_8cs.html":[7,0,6,22],
 "GamePaletteExtensions_8cs.html":[7,0,3,10,1],
@@ -85,7 +86,7 @@ var NAVTREEINDEX1 =
 "IBushSettings_8cs.html":[7,0,3,5,6],
 "ICadencedEffect_8cs.html":[7,0,14,1,1],
 "ICardRevealSettings_8cs.html":[7,0,3,2,1],
-"ICardReveals_8cs.html":[7,0,7,0,1],
+"ICardReveals_8cs.html":[7,0,7,0,2],
 "IChainEffect_8cs.html":[7,0,8,3,2],
 "ICheatControls_8cs.html":[7,0,2,15],
 "ICheat_8cs.html":[7,0,2,14],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "IntLevelStep_8cs.html":[7,0,3,9,13],
 "ItemActivatedMessage_8cs.html":[7,0,14,7,12],
 "ItemActivationContext_8cs.html":[7,0,8,18],
-"ItemActivationCount_8cs.html":[7,0,7,9,13],
-"ItemActivator_8cs.html":[7,0,8,19]
+"ItemActivationCount_8cs.html":[7,0,7,9,13]
 };

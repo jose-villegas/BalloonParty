@@ -128,10 +128,11 @@ var NAVTREEINDEX0 =
 "CannonHeadsUpRouter_8cs.html":[7,0,7,4,0,1],
 "CanvasCameraBinder_8cs.html":[7,0,18,13],
 "CardIconSpriteAssetBuilder_8cs.html":[7,0,6,13],
+"CardRevealBoardHold_8cs.html":[7,0,7,0,0],
 "CardRevealBuilder_8cs.html":[7,0,6,14],
 "CardRevealBuilder_8cs.html#aef19bab18b9814edeef255c43e4f6bbc":[7,0,6,14,4],
-"CardRevealController_8cs.html":[7,0,7,0,0],
-"CardRevealController_8cs.html#a24953b19d956caa76c403684c71b4e5b":[7,0,7,0,0,1],
+"CardRevealController_8cs.html":[7,0,7,0,1],
+"CardRevealController_8cs.html#a24953b19d956caa76c403684c71b4e5b":[7,0,7,0,1,1],
 "CardRevealSettings_8cs.html":[7,0,3,2,0],
 "CardRevealShredsBuilder_8cs.html":[7,0,6,15],
 "CardRevealView_8cs.html":[7,0,18,1,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "GameOverLayoutBuilder_8cs.html":[7,0,6,21],
 "GameOverLifetimeScope_8cs.html":[7,0,18,3,0],
 "GameOverLossCinematic_8cs.html":[7,0,7,1,9],
-"GameOverMessage_8cs.html":[7,0,14,7,10],
-"GameOverPresentationGate_8cs.html":[7,0,7,7,2]
+"GameOverMessage_8cs.html":[7,0,14,7,10]
 };

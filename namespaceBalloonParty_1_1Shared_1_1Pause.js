@@ -9,7 +9,8 @@ var namespaceBalloonParty_1_1Shared_1_1Pause =
       [ "Cinematic", "namespaceBalloonParty_1_1Shared_1_1Pause.html#ab006bd98ba69f3aaa2ba396e176136b5a8fce77fd86da3af309c0ad415d8d7952", null ],
       [ "LevelUp", "namespaceBalloonParty_1_1Shared_1_1Pause.html#ab006bd98ba69f3aaa2ba396e176136b5ae7c8e9e1f90eadea8b03762d9e9215c7", null ],
       [ "LevelTransition", "namespaceBalloonParty_1_1Shared_1_1Pause.html#ab006bd98ba69f3aaa2ba396e176136b5a46a7156acae700b350b6b84f4f2fe4a1", null ],
-      [ "Cheat", "namespaceBalloonParty_1_1Shared_1_1Pause.html#ab006bd98ba69f3aaa2ba396e176136b5a527f7a9fd5f7e086d6f7dab86a247564", null ]
+      [ "Cheat", "namespaceBalloonParty_1_1Shared_1_1Pause.html#ab006bd98ba69f3aaa2ba396e176136b5a527f7a9fd5f7e086d6f7dab86a247564", null ],
+      [ "CardReveal", "namespaceBalloonParty_1_1Shared_1_1Pause.html#ab006bd98ba69f3aaa2ba396e176136b5a5fd69af7dfec39ca9709b909d5212277", null ]
     ] ],
     [ "TimeScaleSource", "namespaceBalloonParty_1_1Shared_1_1Pause.html#acc1e7c1eb619c5c323a6c18c9a586b9a", [
       [ "Cinematic", "namespaceBalloonParty_1_1Shared_1_1Pause.html#acc1e7c1eb619c5c323a6c18c9a586b9aa8fce77fd86da3af309c0ad415d8d7952", null ],

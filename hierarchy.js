@@ -382,6 +382,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Spawner.BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html", null ],
       [ "BalloonParty.Balloon.Spawner.SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html", null ],
       [ "BalloonParty.Display.CameraShakeController", "classBalloonParty_1_1Display_1_1CameraShakeController.html", null ],
+      [ "BalloonParty.Game.CardReveal.CardRevealBoardHold", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealBoardHold.html", null ],
       [ "BalloonParty.Game.CardReveal.CardRevealController", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html", null ],
       [ "BalloonParty.Game.Cinematics.CameraRigCinematicProducer", "classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematicProducer.html", [
         [ "BalloonParty.Game.Cinematics.GameOverLossCinematic", "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html", null ],
@@ -994,6 +995,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Spawner.BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html", null ],
       [ "BalloonParty.Balloon.Spawner.SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html", null ],
       [ "BalloonParty.Display.CameraShakeController", "classBalloonParty_1_1Display_1_1CameraShakeController.html", null ],
+      [ "BalloonParty.Game.CardReveal.CardRevealBoardHold", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealBoardHold.html", null ],
       [ "BalloonParty.Game.CardReveal.CardRevealController", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html", null ],
       [ "BalloonParty.Game.Cinematics.CameraRigCinematicProducer", "classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematicProducer.html", null ],
       [ "BalloonParty.Game.Danger.SpaceDanger", "classBalloonParty_1_1Game_1_1Danger_1_1SpaceDanger.html", null ],

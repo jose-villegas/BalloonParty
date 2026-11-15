@@ -1,5 +1,6 @@
 var NAVTREEINDEX15 =
 {
+"classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#adca0143dd5ae2112bab2784f7f5783c9":[6,0,0,1,4,9,5],
 "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#ae08fb4c7c579fe9d8dd1a0e7627226d9":[5,0,0,1,4,9,15],
 "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#ae08fb4c7c579fe9d8dd1a0e7627226d9":[6,0,0,1,4,9,15],
 "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html#af36144bb937a0a96e6e7ee560a8f3c07":[5,0,0,1,4,9,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX15 =
 "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#abf7f142ccadb0083defc3e4ae7a8f467":[6,0,0,1,5,5,10],
 "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#ace1b266c71632cdb3e4ea62f071450b7":[5,0,0,1,5,5,12],
 "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#ace1b266c71632cdb3e4ea62f071450b7":[6,0,0,1,5,5,12],
-"classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#ad998bdc3029c62e5c41d12b1cdd7d9f1":[5,0,0,1,5,5,13],
-"classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#ad998bdc3029c62e5c41d12b1cdd7d9f1":[6,0,0,1,5,5,13]
+"classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html#ad998bdc3029c62e5c41d12b1cdd7d9f1":[5,0,0,1,5,5,13]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX37 =
 {
+"classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder.html#ac9809eb180cff5dca1da6f7fcf87a9d8":[6,0,0,5,19,26],
 "classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder.html#acacb3218d1101b85aea63a885ac82481":[5,0,0,5,19,20],
 "classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder.html#acacb3218d1101b85aea63a885ac82481":[6,0,0,5,19,20],
 "classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder.html#ad9691d56b65a20b1bdf15c328cd3a37b":[5,0,0,5,19,68],
@@ -248,6 +249,5 @@ var NAVTREEINDEX37 =
 "classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html#a446eb7d915d0ef5ffaf8df1e22b5115f":[6,0,0,5,24,9],
 "classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html#a4b3859334ea6e1c2c96e121c10b86a04":[5,0,0,5,24,0],
 "classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html#a4b3859334ea6e1c2c96e121c10b86a04":[6,0,0,5,24,0],
-"classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html#a5148a8320b22c41a1c2c33100d8ac1dd":[5,0,0,5,24,14],
-"classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html#a5148a8320b22c41a1c2c33100d8ac1dd":[6,0,0,5,24,14]
+"classBalloonParty_1_1Editor_1_1LevelGenerationPreview.html#a5148a8320b22c41a1c2c33100d8ac1dd":[5,0,0,5,24,14]
 };

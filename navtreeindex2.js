@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"ItemActivator_8cs.html":[7,0,8,19],
 "ItemAssigner_8cs.html":[7,0,8,20],
 "ItemCheckMessage_8cs.html":[7,0,14,7,13],
 "ItemConfiguration_8cs.html":[7,0,3,8,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "RestartRiseStartedMessage_8cs.html":[7,0,14,7,33],
 "ResumedMessage_8cs.html":[7,0,14,8,4],
 "RetryTracker_8cs.html":[7,0,7,7,14],
-"RevealCardCheat_8cs.html":[7,0,2,19],
-"RevealedCard_8cs.html":[7,0,7,0,2]
+"RevealCardCheat_8cs.html":[7,0,2,19]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"RevealedCard_8cs.html":[7,0,7,0,3],
 "RewardBalloonPayout_8cs.html":[7,0,1,3,1],
 "RewardBalloonPop_8cs.html":[7,0,1,3,2],
 "RewardBalloonService_8cs.html":[7,0,1,3,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "UnbreakableBalloonVariant_8cs.html#a90519392e763b626f8e41b3c580fa94d":[7,0,1,5,8,1],
 "UnbreakableFormationLook_8cs.html":[7,0,1,5,9],
 "UnbreakableFormationService_8cs.html":[7,0,1,1,6],
-"UnbreakableFormationService_8cs.html#a832e8f52fca5a678819ec96269dcb532":[7,0,1,1,6,1],
-"UnbreakableFormationSettings_8cs.html":[7,0,3,0,10]
+"UnbreakableFormationService_8cs.html#a832e8f52fca5a678819ec96269dcb532":[7,0,1,1,6,1]
 };

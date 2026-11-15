@@ -1,5 +1,6 @@
 var NAVTREEINDEX20 =
 {
+"classBalloonParty_1_1Configuration_1_1Cinematics_1_1CameraRigCinematicSettings.html#a3e81d1a63a650cacbc9bd785c89c67e2":[6,0,0,3,3,1,5],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CameraRigCinematicSettings.html#a5c62352fa52e0b05dad6c3a37aec4ec3":[5,0,0,3,3,1,1],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CameraRigCinematicSettings.html#a5c62352fa52e0b05dad6c3a37aec4ec3":[6,0,0,3,3,1,1],
 "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CameraRigCinematicSettings.html#a69f78c05fa0eb15451bb57affc647183":[5,0,0,3,3,1,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX20 =
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#ac8d3a7e44ddd390471bed4b798cdbe6c":[6,0,0,3,4,8,0],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#acdfaf4ed89d4529caca0b3621d05a4a1":[5,0,0,3,4,8,7],
 "classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#acdfaf4ed89d4529caca0b3621d05a4a1":[6,0,0,3,4,8,7],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#ad5f8b1fbb5acd623882e70a018fdecb4":[5,0,0,3,4,8,9],
-"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#ad5f8b1fbb5acd623882e70a018fdecb4":[6,0,0,3,4,8,9]
+"classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#ad5f8b1fbb5acd623882e70a018fdecb4":[5,0,0,3,4,8,9]
 };
