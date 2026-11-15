@@ -53,6 +53,15 @@ namespace BalloonParty.Scenario
             return target != ScenarioKind.Sky ? clamped : 1f - clamped;
         }
 
+        /// <summary>
+        ///     How far a paper swap's hole has opened, 0..1 over the beat, eased at both ends. It has no mist to roll in
+        ///     first: the surface under it already covers the screen, so the hole grows the whole way.
+        /// </summary>
+        public static float SwapOpening(float progress)
+        {
+            return Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(progress));
+        }
+
         /// <param name="opening">0 = sky with no mist, 1 = all ground.</param>
         /// <param name="mistInShare">Share of the curve the mist takes to roll in before the hole opens.</param>
         /// <param name="closedRadius">A radius that shows no ground at all (below zero, past the edge's wander).</param>

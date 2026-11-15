@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using BalloonParty.Configuration;
 using BalloonParty.Configuration.Effects;
+using BalloonParty.Configuration.Level;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Scenario;
 using BalloonParty.Shared.Messages;
@@ -16,11 +17,14 @@ namespace BalloonParty.Tests.Scenario
     [TestFixture]
     public class SmokeFieldServiceTests
     {
+        private static readonly int SmokeInkId = Shader.PropertyToID("_SmokeInk");
+
         private ISmokeFieldSettings _settings;
         private IGameDisplayConfiguration _display;
         private IGamePalette _palette;
         private ISubscriber<LevelUpDismissedMessage> _levelUpDismissedSubscriber;
         private SmokeFieldService _service;
+        private ActiveScenario _scenario;
 
         [SetUp]
         public void SetUp()
@@ -41,6 +45,11 @@ namespace BalloonParty.Tests.Scenario
                 CustomColor = Color.white
             });
 
+            _settings.PersistOnPaper.Returns(true);
+            _settings.InkOnPaper.Returns(true);
+            _settings.PaperStrokeScale.Returns(1.6f);
+            _scenario = new ActiveScenario();
+
             _display = Substitute.For<IGameDisplayConfiguration>();
             _palette = Substitute.For<IGamePalette>();
 
@@ -58,7 +67,14 @@ namespace BalloonParty.Tests.Scenario
                 .Subscribe(Arg.Any<IMessageHandler<GameOverMessage>>(), Arg.Any<MessageHandlerFilter<GameOverMessage>[]>())
                 .Returns(Substitute.For<System.IDisposable>());
 
-            _service = new SmokeFieldService(_settings, _display, _palette, _levelUpDismissedSubscriber, gameOverSubscriber);
+            _service = new SmokeFieldService(_settings, _display, _palette, _levelUpDismissedSubscriber, gameOverSubscriber,
+                _scenario);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            ((System.IDisposable)_service).Dispose();
         }
 
         // --- SetWindDampen min-accumulator ---
@@ -103,6 +119,75 @@ namespace BalloonParty.Tests.Scenario
             Assert.AreEqual(1f, GetWindDampen(), 0.001f);
         }
 
+        // --- Paper: persistent ink ---
+
+        [Test]
+        public void Paper_KeepsTheSmoke()
+        {
+            Start();
+
+            _scenario.Reveal(ScenarioKind.Paper, 4f);
+
+            Assert.IsTrue(_service.IsPersistent);
+        }
+
+        [Test]
+        public void LeavingPaper_LetsTheSmokeDecayAgain()
+        {
+            _scenario.Cut(ScenarioKind.Paper);
+            Start();
+
+            _scenario.Reveal(ScenarioKind.Ground, 4f);
+
+            Assert.IsFalse(_service.IsPersistent);
+        }
+
+        [Test]
+        public void OtherScenarios_LetTheSmokeDecay()
+        {
+            Start();
+
+            foreach (var kind in new[] { ScenarioKind.Sky, ScenarioKind.Ground, ScenarioKind.Water })
+            {
+                _scenario.Cut(kind);
+                Assert.IsFalse(_service.IsPersistent, kind.ToString());
+            }
+        }
+
+        [Test]
+        public void Paper_WithPersistenceOff_LetsTheSmokeDecay()
+        {
+            _settings.PersistOnPaper.Returns(false);
+            Start();
+
+            _scenario.Cut(ScenarioKind.Paper);
+
+            Assert.IsFalse(_service.IsPersistent);
+        }
+
+        [Test]
+        public void Paper_TurnsTheInkOn_AndLeavingTurnsItOff()
+        {
+            Start();
+
+            _scenario.Cut(ScenarioKind.Paper);
+            Assert.AreEqual(1f, Shader.GetGlobalFloat(SmokeInkId));
+
+            _scenario.Cut(ScenarioKind.Water);
+            Assert.AreEqual(0f, Shader.GetGlobalFloat(SmokeInkId));
+        }
+
+        [Test]
+        public void Paper_WithInkOff_KeepsTheWisps()
+        {
+            _settings.InkOnPaper.Returns(false);
+            Start();
+
+            _scenario.Cut(ScenarioKind.Paper);
+
+            Assert.AreEqual(0f, Shader.GetGlobalFloat(SmokeInkId));
+        }
+
         // --- Paint rejection (resources not ready) ---
 
         [Test]
@@ -143,6 +228,12 @@ namespace BalloonParty.Tests.Scenario
         }
 
         // --- Helpers ---
+
+        // Without stamp and decay shaders the field stays disabled, but the paper switch still follows the scenario.
+        private void Start()
+        {
+            ((IStartable)_service).Start();
+        }
 
         private float GetWindDampen()
         {

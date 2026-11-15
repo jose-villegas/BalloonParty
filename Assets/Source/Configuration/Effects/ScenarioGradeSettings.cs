@@ -4,7 +4,7 @@ using UnityEngine;
 namespace BalloonParty.Configuration.Effects
 {
     /// <summary>
-    ///     Authored colour grade for each scenario, so the sky, the meadow and the water read in the same light
+    ///     Authored colour grade for each scenario, so the sky, the meadow, the water and the paper read in the same light
     ///     (see <c>ScenarioGradeView</c>). Read every frame: tune it live in Play mode. Wire the asset into
     ///     GameLifetimeScope.
     /// </summary>
@@ -17,6 +17,7 @@ namespace BalloonParty.Configuration.Effects
         [SerializeField] private ScenarioGrade _sky = ScenarioGrade.Neutral;
         [SerializeField] private ScenarioGrade _meadow = ScenarioGrade.Neutral;
         [SerializeField] private ScenarioGrade _water = ScenarioGrade.Neutral;
+        [SerializeField] private ScenarioGrade _paper = ScenarioGrade.Neutral;
 
         public bool Enabled => _enabled;
 
@@ -26,6 +27,7 @@ namespace BalloonParty.Configuration.Effects
             {
                 ScenarioKind.Ground => _meadow,
                 ScenarioKind.Water => _water,
+                ScenarioKind.Paper => _paper,
                 _ => _sky
             };
         }

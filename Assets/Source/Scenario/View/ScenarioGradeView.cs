@@ -1,5 +1,4 @@
 using BalloonParty.Configuration.Effects;
-using BalloonParty.Configuration.Level;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -56,7 +55,7 @@ namespace BalloonParty.Scenario.View
             }
 
             var grade = ScenarioGrade.Lerp(
-                _settings.For(ScenarioKind.Sky), _settings.For(_mix.Surface), _mix.Coverage);
+                _settings.For(_mix.Under), _settings.For(_mix.Surface), _mix.Coverage);
             var baseLook = BaseAdjustments();
             _adjustments.postExposure.value = baseLook.postExposure.value + grade.Exposure;
             _adjustments.contrast.value = baseLook.contrast.value + grade.Contrast;

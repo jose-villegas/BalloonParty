@@ -100,5 +100,36 @@ namespace BalloonParty.Tests.Scenario
 
             Assert.AreEqual(GroundRevealAction.None, decision.Action);
         }
+
+        // ScenarioKind is internal, and NUnit's test methods are public, so the cases pass it as an int.
+        [TestCase((int)ScenarioKind.Ground, (int)ScenarioKind.Paper)]
+        [TestCase((int)ScenarioKind.Water, (int)ScenarioKind.Paper)]
+        [TestCase((int)ScenarioKind.Paper, (int)ScenarioKind.Ground)]
+        [TestCase((int)ScenarioKind.Paper, (int)ScenarioKind.Water)]
+        public void PaperAndASurface_SwapWithNoSkyBetween(int from, int to)
+        {
+            Assert.IsTrue(GroundRevealPlanner.IsPaperSwap((ScenarioKind)from, (ScenarioKind)to));
+        }
+
+        [TestCase((int)ScenarioKind.Sky, (int)ScenarioKind.Paper)]
+        [TestCase((int)ScenarioKind.Paper, (int)ScenarioKind.Sky)]
+        [TestCase((int)ScenarioKind.Sky, (int)ScenarioKind.Ground)]
+        [TestCase((int)ScenarioKind.Water, (int)ScenarioKind.Sky)]
+        [TestCase((int)ScenarioKind.Paper, (int)ScenarioKind.Paper)]
+        public void TheSkyOrNoPaper_RevealsThroughTheMist(int from, int to)
+        {
+            Assert.IsFalse(GroundRevealPlanner.IsPaperSwap((ScenarioKind)from, (ScenarioKind)to));
+        }
+
+        [Test]
+        public void IntoPaper_RevealsLikeAnyOtherSurface()
+        {
+            var decision = GroundRevealPlanner.Decide(
+                new ScenarioShift(ScenarioKind.Paper, 4f), NavigationState.Game, NavigationState.Game,
+                ScenarioKind.Ground, canReveal: true);
+
+            Assert.AreEqual(GroundRevealAction.Reveal, decision.Action);
+            Assert.AreEqual(ScenarioKind.Paper, decision.Target);
+        }
     }
 }

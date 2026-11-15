@@ -93,6 +93,16 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("How fast the wind swings back and forth (cycles per second).")]
         [SerializeField] [Range(0.01f, 2f)] private float _windSwingSpeed = 0.1f;
 
+        [Header("Paper")]
+        [Tooltip("Keep the smoke on paper (bonus) levels: it never decays, so every stroke stays on the page and a newer one paints over what is under it. It still clears with the level.")]
+        [SerializeField] private bool _persistOnPaper = true;
+
+        [Tooltip("Draw the smoke on paper levels as flat ink blobs with clean edges instead of soft wisps. The ink's look (edge, darkness, grain) is tuned on the SmokeTrailDisplay material.")]
+        [SerializeField] private bool _inkOnPaper = true;
+
+        [Tooltip("How much wider every stroke stamps on paper levels (1 = as authored). The ink never spreads the way the smoke does, so a wider stroke keeps it reading as blobs.")]
+        [SerializeField] [Range(1f, 3f)] private float _paperStrokeScale = 1.6f;
+
         [Header("Stamp Profiles")]
         [SerializeField] private PaintProfile[] _stampProfiles = new[]
         {
@@ -113,6 +123,9 @@ namespace BalloonParty.Configuration.Effects
         public Vector2 WindDirection => _windDirection.normalized;
         public float WindSwingAngle => _windSwingAngle;
         public float WindSwingSpeed => _windSwingSpeed;
+        public bool PersistOnPaper => _persistOnPaper;
+        public bool InkOnPaper => _inkOnPaper;
+        public float PaperStrokeScale => _paperStrokeScale;
 
         PaintProfile ISmokeFieldSettings.GetProfile(PaintSource source)
         {

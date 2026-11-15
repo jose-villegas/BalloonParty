@@ -202,5 +202,26 @@ namespace BalloonParty.Tests.Scenario
             var dry = GroundRevealCurve.Depth(ScenarioKind.Ground, water, 1.5f);
             Assert.AreEqual((dry.Ground, dry.Sky, dry.Incoming, dry.Outgoing), (wet.Ground, wet.Sky, wet.Incoming, wet.Outgoing));
         }
+
+        [Test]
+        public void ASwap_OpensFromClosedToFullyOpen()
+        {
+            Assert.AreEqual(0f, GroundRevealCurve.SwapOpening(0f), 1e-5f);
+            Assert.AreEqual(1f, GroundRevealCurve.SwapOpening(1f), 1e-5f);
+            Assert.AreEqual(0f, GroundRevealCurve.SwapOpening(-0.5f), 1e-5f);
+            Assert.AreEqual(1f, GroundRevealCurve.SwapOpening(1.5f), 1e-5f);
+        }
+
+        [Test]
+        public void ASwap_NeverClosesAgainOnTheWay()
+        {
+            var previous = 0f;
+            for (var i = 1; i <= 20; i++)
+            {
+                var open = GroundRevealCurve.SwapOpening(i / 20f);
+                Assert.GreaterOrEqual(open, previous);
+                previous = open;
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Configuration.Effects;
+using BalloonParty.Configuration.Level;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Shared.Cadence;
 using BalloonParty.Shared.Diagnostics;
@@ -9,6 +10,7 @@ using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
+using UniRx;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -19,7 +21,10 @@ namespace BalloonParty.Scenario
     ///     and decays them over time. Publishes the RT as global shader properties
     ///     (<c>_SmokeTex</c>, <c>_SmokeBoundsMin/Size</c>) so any consumer can sample it.
     ///     Architecture mirrors <c>DisturbanceFieldService</c> / <c>SceneLightFieldService</c>:
-    ///     plain-C# DI singleton, no MonoBehaviour, ping-pong blit pipeline.
+    ///     plain-C# DI singleton, no MonoBehaviour, ping-pong blit pipeline. On a paper (bonus) level
+    ///     (<see cref="IActiveScenario" />) the smoke turns to ink: it stops decaying, so every stroke stays on the page,
+    ///     a newer stroke paints over what is under it, strokes stamp wider, and the global <c>_SmokeInk</c> tells the
+    ///     display to draw flat blobs instead of wisps.
     /// </summary>
     internal sealed class SmokeFieldService : IStartable, ITickable, IDisposable, ICadencedEffect
     {
@@ -39,12 +44,16 @@ namespace BalloonParty.Scenario
         private static readonly int WindDirId = Shader.PropertyToID("_WindDir");
         private static readonly int WindAgeBiasId = Shader.PropertyToID("_WindAgeBias");
         private static readonly int SmokeTimeId = Shader.PropertyToID("_SmokeTime");
+        private static readonly int TexelSizeId = Shader.PropertyToID("_SmokeTexelSize");
+        private static readonly int SmokeInkId = Shader.PropertyToID("_SmokeInk");
+        private static readonly int StampOverwriteId = Shader.PropertyToID("_StampOverwrite");
 
         private readonly ISmokeFieldSettings _settings;
         private readonly IGameDisplayConfiguration _display;
         private readonly IGamePalette _palette;
         private readonly ISubscriber<LevelUpDismissedMessage> _levelUpDismissedSubscriber;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
+        private readonly IActiveScenario _scenario;
         private readonly SmokeFieldResources _resources = new();
         private readonly List<PendingStamp> _pendingStamps = new();
         private readonly Vector4[] _batchCenters = new Vector4[MaxStampsPerBatch];
@@ -59,23 +68,32 @@ namespace BalloonParty.Scenario
         private float _windDampen = 1f;
         private IDisposable _levelUpDismissedSubscription;
         private IDisposable _gameOverSubscription;
+        private IDisposable _scenarioSubscription;
+        private float _strokeScale = 1f;
+
+        internal bool IsPersistent { get; private set; }
 
         public SmokeFieldService(
             ISmokeFieldSettings settings,
             IGameDisplayConfiguration display,
             IGamePalette palette,
             ISubscriber<LevelUpDismissedMessage> levelUpDismissedSubscriber,
-            ISubscriber<GameOverMessage> gameOverSubscriber)
+            ISubscriber<GameOverMessage> gameOverSubscriber,
+            IActiveScenario scenario)
         {
             _settings = settings;
             _display = display;
             _palette = palette;
             _levelUpDismissedSubscriber = levelUpDismissedSubscriber;
             _gameOverSubscriber = gameOverSubscriber;
+            _scenario = scenario;
         }
 
         void IStartable.Start()
         {
+            // Before the resources, so the ink switch follows the scenario even with the field disabled.
+            _scenarioSubscription = _scenario.Current.Subscribe(shift => SetPaper(shift.Kind == ScenarioKind.Paper));
+
             if (_settings?.StampShader == null || _settings.DecayShader == null || _display == null)
             {
                 Log.Warn("SmokeField", "disabled: assign stamp + decay shaders on SmokeFieldSettings.");
@@ -85,6 +103,7 @@ namespace BalloonParty.Scenario
             _coords = new DisturbanceFieldCoordinates(_display, _settings.TexelsPerUnit);
             _bounds = _coords.Bounds;
             _resources.Initialize(_settings, _coords.Width, _coords.Height);
+            PushStampOverwrite();
 
             PushBoundsGlobals();
             Shader.SetGlobalFloat(ActiveId, 1f);
@@ -125,7 +144,9 @@ namespace BalloonParty.Scenario
         {
             _levelUpDismissedSubscription?.Dispose();
             _gameOverSubscription?.Dispose();
+            _scenarioSubscription?.Dispose();
             Shader.SetGlobalFloat(ActiveId, 0f);
+            Shader.SetGlobalFloat(SmokeInkId, 0f);
             _resources.Dispose();
         }
 
@@ -171,7 +192,7 @@ namespace BalloonParty.Scenario
             {
                 Center = _coords.WorldToUV(worldPosition),
                 PrevCenter = _coords.WorldToUV(prevWorldPosition),
-                Radius = _coords.WorldRadiusToUV(profile.Radius),
+                Radius = _coords.WorldRadiusToUV(profile.Radius * _strokeScale),
                 Color = new Vector4(c.r, c.g, c.b, Mathf.Clamp01(profile.Opacity))
             });
         }
@@ -196,7 +217,7 @@ namespace BalloonParty.Scenario
 
             var c = color.Value;
             var stampColor = new Vector4(c.r, c.g, c.b, Mathf.Clamp01(profile.Opacity));
-            var stampRadius = _coords.WorldRadiusToUV(profile.Radius);
+            var stampRadius = _coords.WorldRadiusToUV(profile.Radius * _strokeScale);
 
             for (var i = 0; i < count; i++)
             {
@@ -252,6 +273,24 @@ namespace BalloonParty.Scenario
             _windDampen = Mathf.Min(_windDampen, Mathf.Clamp01(factor));
         }
 
+        // The level clears the page as it always clears the smoke (LevelUpDismissedMessage, GameOverMessage), so a
+        // switch needs no clear of its own: the field is already empty by the Ascent that brings the change.
+        private void SetPaper(bool paper)
+        {
+            IsPersistent = paper && _settings.PersistOnPaper;
+            _strokeScale = paper ? Mathf.Max(1f, _settings.PaperStrokeScale) : 1f;
+            Shader.SetGlobalFloat(SmokeInkId, paper && _settings.InkOnPaper ? 1f : 0f);
+            PushStampOverwrite();
+        }
+
+        private void PushStampOverwrite()
+        {
+            if (_resources.StampMaterial != null)
+            {
+                _resources.StampMaterial.SetFloat(StampOverwriteId, IsPersistent ? 1f : 0f);
+            }
+        }
+
         private void Clear()
         {
             _pendingStamps.Clear();
@@ -304,6 +343,11 @@ namespace BalloonParty.Scenario
 
         private bool TickDecay()
         {
+            if (IsPersistent)
+            {
+                return false;
+            }
+
             if (_settings.DecayTickInterval > 0f &&
                 Time.time - _lastDecayTime < _settings.DecayTickInterval)
             {
@@ -335,6 +379,7 @@ namespace BalloonParty.Scenario
         {
             Shader.SetGlobalVector(BoundsMinId, new Vector4(_bounds.xMin, _bounds.yMin, 0f, 0f));
             Shader.SetGlobalVector(BoundsSizeId, new Vector4(_bounds.width, _bounds.height, 0f, 0f));
+            Shader.SetGlobalVector(TexelSizeId, new Vector4(1f / _coords.Width, 1f / _coords.Height, 0f, 0f));
         }
 
         private Vector4 ComputeSwungWindDirection()

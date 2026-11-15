@@ -231,11 +231,49 @@ bounce reference to `WaterBounceReference`.
   fringes along the sun and blurs it where the water is deep. The tile is not tied to the view, so it costs
   the same on any screen.
 
+### Paper
+
+Bonus (extra-colour, purple) levels play on a fourth scenario, **paper** (`ScenarioKind.Paper`): a papyrus-like
+page the balloons cast their shadows on and the smoke dries on as ink. It is a backdrop, not a place in the
+schedule: `LevelBackdrop.BackdropForLevel` (`Configuration/Level/`) is paper wherever
+`ILevelPacingConfiguration.IsExtraColorLevel` rolls one and the scheduled scenario everywhere else, and
+`ScenarioController` writes that to `ActiveScenario`. The level's content still follows the schedule: a bonus
+level in a meadow stretch keeps its meadow's bushes, now drawn standing on the page.
+
+Paper is a surface like the meadow and the water, so at rest everything above applies: `_GroundCoverage` is 1,
+the sky is hidden, the clouds keep only their shadows, and the sprites' drop shadows land on it. It draws on a
+quad of its own (`IGroundSettings.PaperMaterial`, sorting order −13: over the floor and the blades, under the
+smoke and the clouds), not on the floor quad, because it can arrive straight from the meadow or the water: a bonus
+level in a surface stretch has no sky on either side.
+
+- From or to the **sky**, paper comes and goes through the mist reveal, depth and all, like any surface.
+- From or to the **meadow or the water** it is a paper swap (`GroundRevealPlanner.IsPaperSwap`): no mist, no
+  depth. The floor stays at rest under it, showing the surface arriving or leaving, and the paper quad draws in
+  the same wandering hole the mist reveal uses, growing over the beat (`GroundRevealCurve.SwapOpening`): inside
+  the hole on the way in, the page spreading out from the middle; outside it on the way out, the page opening
+  onto the meadow. `GroundView` keeps `_GroundReveal`'s flag at 0 and passes the hole's radius in it anyway, with
+  the swap in `_PaperReveal`, so every other coverage reader stays at rest (both layers cover the screen) and only
+  the paper reads the hole. `BackdropMix` carries both surfaces (`Under`), so the grade turns with the hole.
+
+- `Shaders/BalloonParty/Scenario/Paper.shader`: the page, from one baked tile, `Assets/Textures/Scenario/
+  PaperTileable.png` (R the paper's tone, GB its slope, A its height), drawn by `Tools/art/make_paper.py`
+  (numpy): two layers of pressed strips across each other, long streaks along them, loose fibres mostly along the
+  strips, fine grain, a few specks, and a slow undulation of the sheet. No noise runs per frame. Five taps: the
+  tile, a second turned and larger tap of it so the repeat never shows, and three of its height read very large
+  for the swells. The scene light lights it per pixel: its relief and its swells shade toward the light field's
+  direction at the pixel, so a pop rakes the fibres from where it burst, and the time of day and local light tint
+  it (`SceneLightTintAt`). The tone pulls between `_PaperColor` and `_FibreColor`, so a retint needs no rebake.
+  In a swap its edge frays along the fibres (the tile's height), browns a little just inside, and casts a soft
+  shadow on the surface under it, away from the light. Premultiplied by its coverage, opaque at rest, writing
+  colour only, like the floor.
+
+The smoke turns to ink on paper; see `SmokeFieldService` below.
+
 Shader changes are checked in the editor only; `dotnet build` doesn't compile them.
 
 ### Colour grade
 
-The sky, the meadow and the water each light the board differently, so the same balloon can look a
+The sky, the meadow, the water and the paper each light the board differently, so the same balloon can look a
 different colour on each. `ScenarioGradeView` grades the whole frame per scenario to bring them closer.
 Each scenario has a grade in `ScenarioGradeSettings` (`IScenarioGradeSettings`): exposure, contrast,
 saturation, white balance (temperature and tint), a colour filter, tints for the shadows and the
@@ -251,8 +289,8 @@ on the balloons, not on the frame's mean.
 
 The grade follows the backdrop, not the schedule. `GroundView` writes `BackdropMix` as it cuts or
 reveals: the surface it is on and how much of the screen that surface covers (0 is all sky, 1 all
-surface). The view blends from the sky's grade to that surface's by that amount, so during a mist reveal
-the grade turns with the hole. The Launch screen, which always shows sky, gets the sky's grade.
+surface). The view blends from the grade of the layer under it (the sky, or the meadow or the water under
+opening paper) to that surface's by that amount, so during a reveal the grade turns with the hole. The Launch screen, which always shows sky, gets the sky's grade.
 
 The pipeline renders in HDR with post-processing always on (see `Plans/PLAN-HDR.md`), and the base look
 lives in the URP default volume profile (`Assets/DefaultVolumeProfile.asset`): Neutral tonemapping,
@@ -327,6 +365,19 @@ stamps get dampened wind so they don't smear.
 **Lifecycle:** clears the RT on `LevelUpDismissedMessage` (new level = blank canvas) and on
 `GameOverMessage` (descend/game-over = blank canvas).
 
+**Ink on paper:** while `IActiveScenario` is on paper, the smoke is ink on the page. The decay pass doesn't run
+(`ISmokeFieldSettings.PersistOnPaper`), so nothing drifts, spreads or fades, and every stroke stays until the level
+clears the field as usual. The stamp shader's `_StampOverwrite` makes a new stroke cover the colour under it
+wherever it lands in full, instead of mixing with it, so newer strokes paint over older ones. Strokes stamp wider
+(`PaperStrokeScale`, 1.6), since ink never spreads the way the smoke does. And the global `_SmokeInk`
+(`InkOnPaper`) switches `SmokeTrailDisplay` to its ink branch: one flat colour per blob out to a clean,
+antialiased edge at a set opacity (`_InkThreshold`), a little darker than the stroke's colour (`_InkDeepen`), with
+a dried line just inside the edge, the paper grain through it and the scene light on it, and no swirl or wisps.
+The ink reads the field through `SmokeFieldInkSample`, which weighs each texel's colour by its own opacity, so the
+empty texels around a stroke don't darken its edge. The field is already empty when the scenario changes (the
+level-up dismissal and the game over clear it before the beat that brings the change), so the switch needs no
+clear of its own.
+
 ### SmokeFieldResources
 
 `SmokeFieldResources.cs` — owns the GPU resources: two `ARGBHalf` ping-pong RTs and the stamp +
@@ -346,15 +397,16 @@ material, and sits on the Default sorting layer at order −1 (behind the clouds
 |---|---|
 | `SmokeFieldStamp` | Capsule SDF batched blit (32 stamps/pass) |
 | `SmokeFieldDecay` | Smoke dispersion: wind + turbulence + expansion + erosion + decay |
-| `SmokeTrailDisplay` | Display: curl-noise swirl, 5-tap bleed, sigmoid edges, wisp noise, paper grain, sky transmission, shadow lift, scene-light integration |
-| `SmokeField.cginc` | Consumer include — exposes global `_SmokeTex` |
+| `SmokeTrailDisplay` | Display: curl-noise swirl, 5-tap bleed, sigmoid edges, wisp noise, paper grain, sky transmission, shadow lift, scene-light integration; on paper, flat ink blobs instead |
+| `SmokeField.cginc` | Consumer include — exposes global `_SmokeTex`, and `SmokeFieldInkSample` for the ink |
 
 ### Configuration
 
 `ISmokeFieldSettings` / `SmokeFieldSettings` SO — stamps shader, decay shader, texels-per-unit,
 decay rate, decay tick interval, wind speed/influence/age-bias/direction/swing, and a `PaintProfile[]`
 array (each entry maps `PaintSource` flags → radius, opacity, `PaintColorMode`, palette name / custom
-color). `GetProfile(PaintSource)` resolves the active profile for a given source.
+color), and the paper switches: `PersistOnPaper`, `InkOnPaper`, `PaperStrokeScale`. `GetProfile(PaintSource)`
+resolves the active profile for a given source.
 
 ## WallNetView
 

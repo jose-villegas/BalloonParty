@@ -23,6 +23,9 @@ MonoBehaviour:
   _windDirection: {x: 0, y: 0.1}
   _windSwingAngle: 15
   _windSwingSpeed: 0.1
+  _persistOnPaper: 1
+  _inkOnPaper: 1
+  _paperStrokeScale: 1.6
   _stampProfiles:
   - Sources: 1
     Radius: 0.1

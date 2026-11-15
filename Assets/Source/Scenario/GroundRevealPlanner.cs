@@ -52,5 +52,15 @@ namespace BalloonParty.Scenario
                 ? new GroundRevealDecision(GroundRevealAction.None, target, 0f)
                 : new GroundRevealDecision(GroundRevealAction.Reveal, target, shift.Seconds);
         }
+
+        /// <summary>
+        ///     Whether a reveal from <paramref name="from" /> to <paramref name="to" /> opens the paper straight over
+        ///     the meadow or the water (or that surface through the paper), with no sky between to reveal through.
+        /// </summary>
+        public static bool IsPaperSwap(ScenarioKind from, ScenarioKind to)
+        {
+            return (from == ScenarioKind.Paper) != (to == ScenarioKind.Paper)
+                && from != ScenarioKind.Sky && to != ScenarioKind.Sky;
+        }
     }
 }

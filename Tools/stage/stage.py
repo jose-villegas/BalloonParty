@@ -98,7 +98,7 @@ class Stage:
             self.setup(settle=settle, **scene)
 
     def setup(self, scenario=None, level=None, seed=None, strip=(), time=None, settle=1.5):
-        """Builds the scene a test needs, each part a choice: a fresh board in a `scenario` (sky, meadow, water), at
+        """Builds the scene a test needs, each part a choice: a fresh board in a `scenario` (sky, meadow, water, paper), at
         a `level`, on a run `seed` (the same seed deals the same board); then `strip` takes kinds off it (balloons,
         clouds, bushes, enemies, obstacles); then the `time` of day. Parts left out stay as they are."""
         if scenario or level or seed:
@@ -227,7 +227,7 @@ def main():
     sub = parser.add_subparsers(dest="command", required=True)
 
     scene = argparse.ArgumentParser(add_help=False)
-    scene.add_argument("--scenario", choices=("sky", "meadow", "water"), help="deal the first level in this scenario")
+    scene.add_argument("--scenario", choices=("sky", "meadow", "water", "paper"), help="deal the first level in this scenario")
     scene.add_argument("--level", type=int, help="deal this level (or search from it, with --scenario)")
     scene.add_argument("--seed", type=int, help="the run seed: the same seed deals the same board")
     scene.add_argument("--strip", default="",

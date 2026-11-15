@@ -171,9 +171,10 @@ namespace BalloonParty.Editor.Staging
 
         /// <summary>
         ///     Deals a fresh board: the run restarted at <paramref name="level" /> (0 = the current one), or at the first
-        ///     level from there in <paramref name="scenario" /> (sky, meadow or water; empty = any), on run seed
-        ///     <paramref name="seed" /> (0 = keep the current one), which also seeds Unity's random, so the same call
-        ///     deals the same board. The board spawns over the next moments of game time (<see cref="Advance" />).
+        ///     level from there in <paramref name="scenario" /> (sky, meadow, water, or paper: the next bonus level;
+        ///     empty = any), on run seed <paramref name="seed" /> (0 = keep the current one), which also seeds Unity's
+        ///     random, so the same call deals the same board. The board spawns over the next moments of game time
+        ///     (<see cref="Advance" />).
         /// </summary>
         public static string Deal(string scenario, int level, int seed)
         {
@@ -186,7 +187,7 @@ namespace BalloonParty.Editor.Staging
                 var pacing = Resolve<ILevelPacingConfiguration>();
 
                 // A stretch's start is where the scenario begins, so search from the level before.
-                start = JumpToScenarioCheat.NextStretchStart(l => pacing.ScenarioForLevel(l, runSeed), Math.Max(1, start - 1),
+                start = JumpToScenarioCheat.NextStretchStart(l => pacing.BackdropForLevel(l, runSeed), Math.Max(1, start - 1),
                     kind, ScenarioSearchLevels);
                 if (start < 1)
                 {
@@ -198,7 +199,7 @@ namespace BalloonParty.Editor.Staging
             CheatState.ForcedRunSeed = runSeed;
             UnityEngine.Random.InitState(runSeed);
             Resolve<RunController>().RestartRun();
-            return $"dealt level {start} ({Resolve<ILevelPacingConfiguration>().ScenarioForLevel(start, runSeed)}), seed {runSeed}";
+            return $"dealt level {start} ({Resolve<ILevelPacingConfiguration>().BackdropForLevel(start, runSeed)}), seed {runSeed}";
         }
 
         /// <summary>

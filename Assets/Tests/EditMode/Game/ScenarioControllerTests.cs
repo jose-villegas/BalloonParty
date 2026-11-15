@@ -281,5 +281,57 @@ namespace BalloonParty.Tests.Game
         {
             Assert.DoesNotThrow(_controller.Dispose);
         }
+
+        [Test]
+        public void Start_OnABonusLevel_CutsToPaper()
+        {
+            _level.Value = 20;
+            _pacing.IsExtraColorLevel(20, RunSeedValue).Returns(true);
+
+            ((IStartable)_controller).Start();
+
+            Assert.AreEqual(new ScenarioShift(ScenarioKind.Paper, 0f), _scenario.Current.Value);
+        }
+
+        [Test]
+        public void Ascend_IntoABonusLevel_RevealsThePaperOverTheAscent()
+        {
+            _level.Value = 16;
+            ((IStartable)_controller).Start();
+
+            _pacing.IsExtraColorLevel(17, RunSeedValue).Returns(true);
+            _level.Value = 17;
+            _ascendHandler.Handle(default);
+
+            Assert.AreEqual(ScenarioKind.Paper, _scenario.Current.Value.Kind);
+            Assert.AreEqual(AscentSeconds, _scenario.Current.Value.Seconds, 1e-4f);
+        }
+
+        [Test]
+        public void Ascend_OutOfABonusLevel_RevealsTheScheduledScenario()
+        {
+            _level.Value = 17;
+            _pacing.IsExtraColorLevel(17, RunSeedValue).Returns(true);
+            ((IStartable)_controller).Start();
+
+            _level.Value = 18;
+            _ascendHandler.Handle(default);
+
+            Assert.AreEqual(ScenarioKind.Ground, _scenario.Current.Value.Kind);
+            Assert.IsFalse(_scenario.Current.Value.IsCut);
+        }
+
+        [Test]
+        public void TwoBonusLevelsInARow_StayOnThePaper()
+        {
+            _level.Value = 17;
+            _pacing.IsExtraColorLevel(Arg.Any<int>(), RunSeedValue).Returns(true);
+            ((IStartable)_controller).Start();
+
+            _level.Value = 18;
+            _ascendHandler.Handle(default);
+
+            Assert.AreEqual(new ScenarioShift(ScenarioKind.Paper, 0f), _scenario.Current.Value);
+        }
     }
 }

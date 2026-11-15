@@ -11,8 +11,8 @@ using VContainer.Unity;
 namespace BalloonParty.Game.Level
 {
     /// <summary>
-    ///     Keeps <see cref="ActiveScenario" /> on the current level's scenario (sky or ground, per
-    ///     <see cref="ILevelPacingConfiguration.ScenarioForLevel" />). Cuts on run start and on a plain restart, so
+    ///     Keeps <see cref="ActiveScenario" /> on the current level's backdrop (<see cref="LevelBackdrop" />: its
+    ///     scheduled sky, meadow or water, or paper on a bonus level). Cuts on run start and on a plain restart, so
     ///     the start-level cheat and a restart land on the right backdrop. Reveals through the mist over the
     ///     length of the beat on a level-up Ascent and on the restart rise after a loss. A loss's restart leaves the
     ///     scenario alone until its rise starts, since the reveal scales the content root and the new scenery is
@@ -91,7 +91,7 @@ namespace BalloonParty.Game.Level
 
         private ScenarioKind LevelScenario()
         {
-            return _pacing.ScenarioForLevel(_levelProgress.Level.Value, _runSeed.Value);
+            return _pacing.BackdropForLevel(_levelProgress.Level.Value, _runSeed.Value);
         }
     }
 }

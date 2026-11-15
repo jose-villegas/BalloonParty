@@ -10,8 +10,8 @@ using BalloonParty.Shared.Diagnostics;
 namespace BalloonParty.Cheats
 {
     /// <summary>
-    ///     Restarts the run at the start of the next stretch of a chosen scenario (sky, meadow or water), looked up
-    ///     in this run's own schedule, so everything that reads the schedule (the backdrop, the spawner's bubbles,
+    ///     Restarts the run at the start of the next stretch of a chosen scenario (sky, meadow, water, or the paper
+    ///     of the next bonus level), looked up in this run's own schedule and bonus rolls (<see cref="LevelBackdrop" />), so everything that reads the schedule (the backdrop, the spawner's bubbles,
     ///     the pacing) agrees with it. Keeps the run's seed through the restart (<see cref="CheatState.KeepRunSeed" />):
     ///     a new seed lays out a new schedule, where the level found could be another scenario.
     /// </summary>
@@ -20,8 +20,8 @@ namespace BalloonParty.Cheats
         // How far ahead to look. Water comes up on about half the surface stretches, so it is always well inside.
         private const int SearchLevels = 500;
 
-        private static readonly ScenarioKind[] Kinds = { ScenarioKind.Sky, ScenarioKind.Ground, ScenarioKind.Water };
-        private static readonly string[] Labels = { "Sky", "Meadow", "Water" };
+        private static readonly ScenarioKind[] Kinds = { ScenarioKind.Sky, ScenarioKind.Ground, ScenarioKind.Water, ScenarioKind.Paper };
+        private static readonly string[] Labels = { "Sky", "Meadow", "Water", "Paper" };
 
         private readonly RunController _runController;
         private readonly ILevelPacingConfiguration _pacing;
@@ -47,7 +47,7 @@ namespace BalloonParty.Cheats
         public void Execute()
         {
             var seed = _runSeed.Value;
-            var level = NextStretchStart(l => _pacing.ScenarioForLevel(l, seed), _levelProgress.Level.Value, _kind,
+            var level = NextStretchStart(l => _pacing.BackdropForLevel(l, seed), _levelProgress.Level.Value, _kind,
                 SearchLevels);
             if (level < 1)
             {

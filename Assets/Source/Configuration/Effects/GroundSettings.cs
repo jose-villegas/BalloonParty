@@ -4,7 +4,7 @@ using UnityEngine;
 namespace BalloonParty.Configuration.Effects
 {
     /// <summary>Authored tuning for the surface backdrops: the floor quad and the grass blades over it on ground
-    /// levels, the water surface on water levels, and the mist reveal between either and the sky. Assign both materials here and wire the asset into GameLifetimeScope.</summary>
+    /// levels, the water surface on water levels, the paper page of bonus levels, and the mist reveal between either and the sky. Assign both materials here and wire the asset into GameLifetimeScope.</summary>
     [CreateAssetMenu(menuName = "Configuration/Ground Settings", fileName = "GroundSettings")]
     internal sealed class GroundSettings : ScriptableObject, IGroundSettings
     {
@@ -89,6 +89,16 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("The water's average unlit colour, which the GI measures bounce against on water levels, as it does the meadow's on ground levels.")]
         [SerializeField] private Color _waterBounceReference = new(0.125f, 0.30f, 0.33f, 1f);
 
+        [Header("Paper")]
+        [Tooltip("Material using BalloonParty/Scenario/Paper: the page bonus (extra-colour) levels play on, drawn on its own quad over the floor, so it can open over the meadow or the water. Its look (colours, relief, the opening edge) is tuned there. Without one bonus levels show the sky.")]
+        [SerializeField] private Material _paperMaterial;
+
+        [Tooltip("Sorting order for the paper quad — above the floor (-15) and the blades (-14), below the smoke (-11) and the cloud backdrop (-10).")]
+        [SerializeField] private int _paperSortingOrder = -13;
+
+        [Tooltip("The paper's average unlit colour, which the GI measures bounce against on bonus levels, as it does the meadow's on ground levels.")]
+        [SerializeField] private Color _paperBounceReference = new(0.86f, 0.83f, 0.75f, 1f);
+
         [Header("Mist Reveal")]
         [Tooltip("Material using BalloonParty/Scenario/GroundMist — the mist the meadow opens out of on the way down and closes back into on the way up. Without one the scenario switches with a cut.")]
         [SerializeField] private Material _mistMaterial;
@@ -142,6 +152,9 @@ namespace BalloonParty.Configuration.Effects
         public Material WaterRippleMaterial => _waterRippleMaterial;
         public float WaterRippleTexelsPerUnit => _waterRippleTexelsPerUnit;
         public Color WaterBounceReference => _waterBounceReference;
+        public Material PaperMaterial => _paperMaterial;
+        public int PaperSortingOrder => _paperSortingOrder;
+        public Color PaperBounceReference => _paperBounceReference;
         public Material MistMaterial => _mistMaterial;
         public int MistSortingOrder => _mistSortingOrder;
         public float MistInShare => _mistInShare;

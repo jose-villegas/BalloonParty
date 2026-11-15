@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BalloonParty.Configuration.Effects
 {
-    /// <summary>Read-only tuning for the surface backdrops (ground and water) (see <c>GroundView</c>).</summary>
+    /// <summary>Read-only tuning for the surface backdrops (ground, water and the bonus levels' paper) (see <c>GroundView</c>).</summary>
     internal interface IGroundSettings
     {
         /// <summary>Floor material using BalloonParty/Scenario/Ground — the dark ground under the blades.</summary>
@@ -78,6 +78,16 @@ namespace BalloonParty.Configuration.Effects
 
         /// <summary>The water's average unlit colour, which the GI measures bounce against on water levels.</summary>
         Color WaterBounceReference { get; }
+
+        /// <summary>Material using BalloonParty/Scenario/Paper: the page bonus levels play on, drawn on its own quad over
+        /// the floor. Without one bonus levels show the sky.</summary>
+        Material PaperMaterial { get; }
+
+        /// <summary>Sorting order for the paper quad — above the floor and the blades, below the smoke and the clouds.</summary>
+        int PaperSortingOrder { get; }
+
+        /// <summary>The paper's average unlit colour, which the GI measures bounce against on bonus levels.</summary>
+        Color PaperBounceReference { get; }
 
         /// <summary>Material using BalloonParty/Scenario/GroundMist — the mist of the sky/ground reveal. Without one
         /// the scenario switches with a cut.</summary>

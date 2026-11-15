@@ -3,9 +3,12 @@ Shader "BalloonParty/Display/SmokeFieldStamp"
     // Batched stamp blit for the smoke field: writes RGB colors into the RT at stamp positions.
     // Up to 32 stamps per pass. Colors blend additively weighted by stamp mask — overlapping colors
     // mix naturally (blue + yellow → green-ish). RT layout: RGB = accumulated color, A = opacity.
+    // On paper (_StampOverwrite = 1, set by SmokeFieldService) the field is ink that never decays, and a new
+    // stroke covers the colour under it wherever it lands in full instead of mixing with it.
     Properties
     {
         [HideInInspector] _MainTex ("Source (read RT)", 2D) = "black" {}
+        [HideInInspector] _StampOverwrite ("Overwrite", Float) = 0
     }
 
     SubShader
@@ -28,6 +31,7 @@ Shader "BalloonParty/Display/SmokeFieldStamp"
             float4 _StampCenters[MAX_STAMPS];
             float _StampRadii[MAX_STAMPS];
             float4 _StampColors[MAX_STAMPS];
+            float _StampOverwrite;
 
             struct appdata
             {
@@ -57,6 +61,7 @@ Shader "BalloonParty/Display/SmokeFieldStamp"
 
                 float3 stampAccum = float3(0, 0, 0);
                 float stampWeight = 0.0;
+                float stampCover = 0.0;
 
                 for (int s = 0; s < _StampCount; s++)
                 {
@@ -72,6 +77,7 @@ Shader "BalloonParty/Display/SmokeFieldStamp"
                     float dist = length(pa - ba * h);
 
                     float mask = 1.0 - smoothstep(radius * 0.7, radius, dist);
+                    stampCover = max(stampCover, mask);
                     mask *= _StampColors[s].a;
 
                     stampAccum += stampColor * mask;
@@ -88,6 +94,7 @@ Shader "BalloonParty/Display/SmokeFieldStamp"
 
                 // Blend existing color toward new stamp color, weighted by stamp strength vs existing.
                 float blendFactor = stampWeight / (stampWeight + existingAlpha + 0.001);
+                blendFactor = lerp(blendFactor, stampCover, _StampOverwrite);
                 float3 outColor = lerp(existingColor, newColor, blendFactor);
 
                 // Alpha pushes toward 1 with each stamp (saturates, never overshoots).

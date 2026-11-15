@@ -34,6 +34,9 @@ MonoBehaviour:
   _waterRippleMaterial: {fileID: 2100000, guid: 9207b91976d84499844ec86e2a0ed16a, type: 2}
   _waterRippleTexelsPerUnit: 16
   _waterBounceReference: {r: 0.125, g: 0.3, b: 0.33, a: 1}
+  _paperMaterial: {fileID: 2100000, guid: 122ed130165e4f1db2fcc4e2dec58864, type: 2}
+  _paperSortingOrder: -13
+  _paperBounceReference: {r: 0.86, g: 0.83, b: 0.75, a: 1}
   _mistMaterial: {fileID: 2100000, guid: 6b1f3c2e9d4a4f7e8c5a2b1d0e9f8a71, type: 2}
   _mistSortingOrder: -9
   _mistInShare: 0.35
