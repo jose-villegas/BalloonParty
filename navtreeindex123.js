@@ -1,5 +1,9 @@
 var NAVTREEINDEX123 =
 {
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafBatch.html#a284c975767cd0316a7b0f034fa8ec3ae":[5,0,0,13,0,0,15,3],
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafBatch.html#a284c975767cd0316a7b0f034fa8ec3ae":[6,0,0,13,0,0,15,3],
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafBatch.html#a415effaba9c47ae88a1310040bad2c75":[5,0,0,13,0,0,15,5],
+"structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafBatch.html#a415effaba9c47ae88a1310040bad2c75":[6,0,0,13,0,0,15,5],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafBatch.html#a7ee9f9aef5d4f4e466779260e8d700c4":[5,0,0,13,0,0,15,4],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafBatch.html#a7ee9f9aef5d4f4e466779260e8d700c4":[6,0,0,13,0,0,15,4],
 "structBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1LeafBatch.html#ab1ee633425c41395f03ee7b4ded6e0b8":[5,0,0,13,0,0,15,2],
@@ -245,9 +249,5 @@ var NAVTREEINDEX123 =
 "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a6f298208af13ea353c9964e13907403c":[5,0,0,14,4,5],
 "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a6f298208af13ea353c9964e13907403c":[6,0,0,14,4,5],
 "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a8e7fa5d1d03d091001a9c5d31c872ad3":[5,0,0,14,4,15],
-"structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a8e7fa5d1d03d091001a9c5d31c872ad3":[6,0,0,14,4,15],
-"structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a98ce48454f46d6239b733264768cb0d0":[5,0,0,14,4,10],
-"structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a98ce48454f46d6239b733264768cb0d0":[6,0,0,14,4,10],
-"structBalloonParty_1_1Solver_1_1ShotBalloonState.html#aac38d0567dea36c599d6fb44bf88cf08":[5,0,0,14,4,13],
-"structBalloonParty_1_1Solver_1_1ShotBalloonState.html#aac38d0567dea36c599d6fb44bf88cf08":[6,0,0,14,4,13]
+"structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a8e7fa5d1d03d091001a9c5d31c872ad3":[6,0,0,14,4,15]
 };

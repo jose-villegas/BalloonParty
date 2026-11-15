@@ -1,5 +1,9 @@
 var NAVTREEINDEX80 =
 {
+"classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#a8b0a8f1001fc7ce40a79f419eabb3934":[5,0,0,12,11,5,9],
+"classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#a8b0a8f1001fc7ce40a79f419eabb3934":[6,0,0,12,11,5,9],
+"classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#a911eba2cae90545e2fef3edb7689277f":[5,0,0,12,11,5,16],
+"classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#a911eba2cae90545e2fef3edb7689277f":[6,0,0,12,11,5,16],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#aaa7b579b8be49338267d9a192cc6984b":[5,0,0,12,11,5,2],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#aaa7b579b8be49338267d9a192cc6984b":[6,0,0,12,11,5,2],
 "classBalloonParty_1_1Shared_1_1SceneLight_1_1TimeOfDayClock.html#ab7e472cd71b04b0013324cf15df1b503":[5,0,0,12,11,5,11],
@@ -245,9 +249,5 @@ var NAVTREEINDEX80 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderDataBuilder.html#a087108f0f7823189b208e5948b2fb572":[5,0,0,13,0,0,5,4],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderDataBuilder.html#a087108f0f7823189b208e5948b2fb572":[6,0,0,13,0,0,5,4],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderDataBuilder.html#a2a9bc582af72fa6d4bd8e12d8008f751":[5,0,0,13,0,0,5,3],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderDataBuilder.html#a2a9bc582af72fa6d4bd8e12d8008f751":[6,0,0,13,0,0,5,3],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderDataBuilder.html#a2bc10b91bb31b0ba4bf1fde6118c8eb5":[5,0,0,13,0,0,5,6],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderDataBuilder.html#a2bc10b91bb31b0ba4bf1fde6118c8eb5":[6,0,0,13,0,0,5,6],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderDataBuilder.html#a5a93ee694a0c3dfc88e7af6131376c9f":[5,0,0,13,0,0,5,0],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderDataBuilder.html#a5a93ee694a0c3dfc88e7af6131376c9f":[6,0,0,13,0,0,5,0]
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushRenderDataBuilder.html#a2a9bc582af72fa6d4bd8e12d8008f751":[6,0,0,13,0,0,5,3]
 };

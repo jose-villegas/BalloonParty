@@ -1,5 +1,9 @@
 var NAVTREEINDEX113 =
 {
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html":[5,0,0,1,0,7,1],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html":[6,0,0,1,0,7,1],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#a0eca132d879742cab96ef47b9d1f60ed":[5,0,0,1,0,7,1,0],
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#a0eca132d879742cab96ef47b9d1f60ed":[6,0,0,1,0,7,1,0],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#a44cec23a867979e37f45b6f8a71b0876":[5,0,0,1,0,7,1,1],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#a44cec23a867979e37f45b6f8a71b0876":[6,0,0,1,0,7,1,1],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#afe75b9f1c154a5e167f2bfd96d9a7474":[5,0,0,1,0,7,1,2],
@@ -245,9 +249,5 @@ var NAVTREEINDEX113 =
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#aaef307d65ba0cb41ae7a3a54b537ead1":[5,0,0,3,5,27,9],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#aaef307d65ba0cb41ae7a3a54b537ead1":[6,0,0,3,5,27,9],
 "structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#ab8fb17c0254b1b6c39ed180d03b8a622":[5,0,0,3,5,27,19],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#ab8fb17c0254b1b6c39ed180d03b8a622":[6,0,0,3,5,27,19],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#ad62235d0945253230fb0e7006c8a93d0":[5,0,0,3,5,27,0],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#ad62235d0945253230fb0e7006c8a93d0":[6,0,0,3,5,27,0],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#af4c7836d54b5f57772b63533cadba9a3":[5,0,0,3,5,27,13],
-"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#af4c7836d54b5f57772b63533cadba9a3":[6,0,0,3,5,27,13]
+"structBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGrade.html#ab8fb17c0254b1b6c39ed180d03b8a622":[6,0,0,3,5,27,19]
 };

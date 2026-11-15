@@ -25,6 +25,7 @@ var classBalloonParty_1_1Game_1_1LaunchContinueView =
     [ "_lit", "classBalloonParty_1_1Game_1_1LaunchContinueView.html#a0e7eacddc8004401d9870dbb3878187e", null ],
     [ "_obstacles", "classBalloonParty_1_1Game_1_1LaunchContinueView.html#a7fe0984258c4cbeff5dd70c74149e1bc", null ],
     [ "_play", "classBalloonParty_1_1Game_1_1LaunchContinueView.html#ad321f87165fef67b084f3ce1cd1416da", null ],
+    [ "_playGap", "classBalloonParty_1_1Game_1_1LaunchContinueView.html#a6e23d9e7165ed8d8e1978b8f35b0035b", null ],
     [ "_pressed", "classBalloonParty_1_1Game_1_1LaunchContinueView.html#a288373ef21ce540cf8f4b6b229ad48b7", null ],
     [ "_ribbon", "classBalloonParty_1_1Game_1_1LaunchContinueView.html#a3b86164a4ccf0f8f461645bf8c1fe3f2", null ],
     [ "_ribbonCloth", "classBalloonParty_1_1Game_1_1LaunchContinueView.html#a77c8f0c9984be01a42b2b2df33442e69", null ],

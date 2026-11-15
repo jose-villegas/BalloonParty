@@ -130,17 +130,19 @@ Static Private Member Functions</h2></td></tr>
 <tr class="separator:aa7ddc8ed1d3bad7a946428f261ff7d2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab3a509a672d965bd82152ff790a8f10" id="r_aab3a509a672d965bd82152ff790a8f10"><td class="memItemLeft" align="right" valign="top">static TMP_Text&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab3a509a672d965bd82152ff790a8f10">NewText</a> (string name, Transform parent, TMP_FontAsset font)</td></tr>
 <tr class="separator:aab3a509a672d965bd82152ff790a8f10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a625c53f3e281b55cf746ddb274bf8782" id="r_a625c53f3e281b55cf746ddb274bf8782"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a625c53f3e281b55cf746ddb274bf8782">Recolor</a> (GameObject balloon)</td></tr>
+<tr class="separator:a625c53f3e281b55cf746ddb274bf8782"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af3f34a437d8087bcca1ca645d3825b2d" id="r_af3f34a437d8087bcca1ca645d3825b2d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3f34a437d8087bcca1ca645d3825b2d">RewirePress</a> (<a class="el" href="classBalloonParty_1_1UI_1_1ScaleDownButton.html">ScaleDownButton</a> button, <a class="el" href="classBalloonParty_1_1Game_1_1LaunchPlayTrigger.html">LaunchPlayTrigger</a> play, <a class="el" href="classBalloonParty_1_1Game_1_1LaunchContinueView.html">LaunchContinueView</a> view, <a class="el" href="classBalloonParty_1_1Shared_1_1GameState_1_1SceneTransition.html">SceneTransition</a> playTransition)</td></tr>
 <tr class="separator:af3f34a437d8087bcca1ca645d3825b2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d292c7b268fad3fb6ddb2d561053cf2" id="r_a5d292c7b268fad3fb6ddb2d561053cf2"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d292c7b268fad3fb6ddb2d561053cf2">TryBuild</a> (Scene scene)</td></tr>
 <tr class="separator:a5d292c7b268fad3fb6ddb2d561053cf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acee6304fa4cdb7dc381898cd9a61e280" id="r_acee6304fa4cdb7dc381898cd9a61e280"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acee6304fa4cdb7dc381898cd9a61e280">Whiten</a> (GameObject balloon)</td></tr>
-<tr class="separator:acee6304fa4cdb7dc381898cd9a61e280"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
 <tr class="memitem:a51e572a20843bc81d36539b8684f226f" id="r_a51e572a20843bc81d36539b8684f226f"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a51e572a20843bc81d36539b8684f226f">BalloonScale</a> = 0.36f</td></tr>
 <tr class="separator:a51e572a20843bc81d36539b8684f226f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c36641c9fa8777fbe3e3748cfc7d7a5" id="r_a6c36641c9fa8777fbe3e3748cfc7d7a5"><td class="memItemLeft" align="right" valign="top">static readonly Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6c36641c9fa8777fbe3e3748cfc7d7a5">BodyColor</a> = new(0.8f, 0.82f, 0.87f, 1f)</td></tr>
+<tr class="separator:a6c36641c9fa8777fbe3e3748cfc7d7a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c1bb530bf5cd4a283d49343b3d1251f" id="r_a9c1bb530bf5cd4a283d49343b3d1251f"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9c1bb530bf5cd4a283d49343b3d1251f">FontPath</a> = &quot;Assets/Fonts/PatrickHand-Regular SDF.asset&quot;</td></tr>
 <tr class="separator:a9c1bb530bf5cd4a283d49343b3d1251f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c1e6129a8ff320a32067fc22f6137f0" id="r_a1c1e6129a8ff320a32067fc22f6137f0"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1c1e6129a8ff320a32067fc22f6137f0">FontSize</a> = 9.5f</td></tr>
@@ -312,6 +314,31 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a625c53f3e281b55cf746ddb274bf8782" name="a625c53f3e281b55cf746ddb274bf8782"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a625c53f3e281b55cf746ddb274bf8782">&#9670;&#160;</a></span>Recolor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void BalloonParty.Editor.LaunchContinueButtonBuilder.Recolor </td>
+          <td>(</td>
+          <td class="paramtype">GameObject</td>          <td class="paramname"><span class="paramname"><em>balloon</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="af3f34a437d8087bcca1ca645d3825b2d" name="af3f34a437d8087bcca1ca645d3825b2d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af3f34a437d8087bcca1ca645d3825b2d">&#9670;&#160;</a></span>RewirePress()</h2>
 
@@ -376,31 +403,6 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="acee6304fa4cdb7dc381898cd9a61e280" name="acee6304fa4cdb7dc381898cd9a61e280"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acee6304fa4cdb7dc381898cd9a61e280">&#9670;&#160;</a></span>Whiten()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static void BalloonParty.Editor.LaunchContinueButtonBuilder.Whiten </td>
-          <td>(</td>
-          <td class="paramtype">GameObject</td>          <td class="paramname"><span class="paramname"><em>balloon</em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a51e572a20843bc81d36539b8684f226f" name="a51e572a20843bc81d36539b8684f226f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a51e572a20843bc81d36539b8684f226f">&#9670;&#160;</a></span>BalloonScale</h2>
@@ -413,6 +415,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">const float BalloonParty.Editor.LaunchContinueButtonBuilder.BalloonScale = 0.36f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6c36641c9fa8777fbe3e3748cfc7d7a5" name="a6c36641c9fa8777fbe3e3748cfc7d7a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c36641c9fa8777fbe3e3748cfc7d7a5">&#9670;&#160;</a></span>BodyColor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly Color BalloonParty.Editor.LaunchContinueButtonBuilder.BodyColor = new(0.8f, 0.82f, 0.87f, 1f)</td>
         </tr>
       </table>
   </td>

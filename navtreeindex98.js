@@ -1,5 +1,9 @@
 var NAVTREEINDEX98 =
 {
+"classBalloonParty_1_1UI_1_1TimeOfDayTint.html#ac7fc4676bf04edf62007ce0465c51318":[5,0,0,16,25,7],
+"classBalloonParty_1_1UI_1_1TimeOfDayTint.html#ac7fc4676bf04edf62007ce0465c51318":[6,0,0,16,25,7],
+"classBalloonParty_1_1UI_1_1TimeOfDayTint.html#acc5759cabd050a2d1e6e215dc00e2f7b":[5,0,0,16,25,3],
+"classBalloonParty_1_1UI_1_1TimeOfDayTint.html#acc5759cabd050a2d1e6e215dc00e2f7b":[6,0,0,16,25,3],
 "classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html":[5,0,0,16,26],
 "classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html":[6,0,0,16,26],
 "classBalloonParty_1_1UI_1_1TimeOfDayVisibility.html#a0b6033924f41580e528312f63e89ff21":[5,0,0,16,26,4],
@@ -245,9 +249,5 @@ var NAVTREEINDEX98 =
 "functions_p.html":[6,3,0,16],
 "functions_prop.html":[6,3,4],
 "functions_prop.html":[6,3,4,0],
-"functions_prop_b.html":[6,3,4,1],
-"functions_prop_c.html":[6,3,4,2],
-"functions_prop_d.html":[6,3,4,3],
-"functions_prop_e.html":[6,3,4,4],
-"functions_prop_f.html":[6,3,4,5]
+"functions_prop_b.html":[6,3,4,1]
 };

@@ -1,5 +1,9 @@
 var NAVTREEINDEX111 =
 {
+"plan_future_ideas.html#autotoc_md514":[3,5,0,7,4],
+"plan_future_ideas.html#autotoc_md515":[3,5,0,7,5],
+"plan_future_ideas.html#autotoc_md516":[3,5,0,7,6],
+"plan_future_ideas.html#autotoc_md518":[3,5,0,8],
 "plan_future_ideas.html#autotoc_md520":[3,5,0,9],
 "plan_future_ideas.html#autotoc_md521":[3,5,0,9,0],
 "plan_future_ideas.html#autotoc_md522":[3,5,0,9,1],
@@ -245,9 +249,5 @@ var NAVTREEINDEX111 =
 "plan_reward_balloons.html#autotoc_md808":[3,22,0,6],
 "plan_shot_solver_accuracy.html":[3,14],
 "plan_shot_solver_accuracy.html#autotoc_md809":[3,14,0],
-"plan_shot_solver_accuracy.html#autotoc_md811":[3,14,0,0],
-"plan_shot_solver_accuracy.html#autotoc_md812":[3,14,0,1],
-"plan_shot_solver_accuracy.html#autotoc_md813":[3,14,0,2],
-"plan_shot_solver_accuracy.html#autotoc_md814":[3,14,0,3],
-"plan_shot_solver_accuracy.html#autotoc_md815":[3,14,0,3,0]
+"plan_shot_solver_accuracy.html#autotoc_md811":[3,14,0,0]
 };

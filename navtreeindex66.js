@@ -1,5 +1,9 @@
 var NAVTREEINDEX66 =
 {
+"classBalloonParty_1_1Nudge_1_1NudgeOverrideResolver.html#a19acc7ce032f1a5130e6f0d532a91780":[5,0,0,8,4,3],
+"classBalloonParty_1_1Nudge_1_1NudgeOverrideResolver.html#a19acc7ce032f1a5130e6f0d532a91780":[6,0,0,8,4,3],
+"classBalloonParty_1_1Nudge_1_1NudgeOverrideResolver.html#a20b8161f02a48d48feca5c35c2434d74":[5,0,0,8,4,2],
+"classBalloonParty_1_1Nudge_1_1NudgeOverrideResolver.html#a20b8161f02a48d48feca5c35c2434d74":[6,0,0,8,4,2],
 "classBalloonParty_1_1Nudge_1_1NudgeOverrideResolver.html#aa42cf47fe6c3b05bd2b1cc2f8752a58d":[5,0,0,8,4,5],
 "classBalloonParty_1_1Nudge_1_1NudgeOverrideResolver.html#aa42cf47fe6c3b05bd2b1cc2f8752a58d":[6,0,0,8,4,5],
 "classBalloonParty_1_1Nudge_1_1NudgeOverrideResolver.html#ac78621e73578d6573b3b74e1c3c2a821":[5,0,0,8,4,4],
@@ -245,9 +249,5 @@ var NAVTREEINDEX66 =
 "classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a659b691fb1de5e71462fdc7826ac09c1":[5,0,0,9,7,2],
 "classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a659b691fb1de5e71462fdc7826ac09c1":[6,0,0,9,7,2],
 "classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a68620f846965361af152332ff2e674a8":[5,0,0,9,7,11],
-"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a68620f846965361af152332ff2e674a8":[6,0,0,9,7,11],
-"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a75e2c31f0bbe03cc471560649982b3f0":[5,0,0,9,7,7],
-"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a75e2c31f0bbe03cc471560649982b3f0":[6,0,0,9,7,7],
-"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a8dc8035d23fb30edc2c0693c116022cc":[5,0,0,9,7,1],
-"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a8dc8035d23fb30edc2c0693c116022cc":[6,0,0,9,7,1]
+"classBalloonParty_1_1Prediction_1_1TraceHitMarker.html#a68620f846965361af152332ff2e674a8":[6,0,0,9,7,11]
 };

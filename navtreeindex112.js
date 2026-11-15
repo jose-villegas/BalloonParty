@@ -1,5 +1,9 @@
 var NAVTREEINDEX112 =
 {
+"plan_shot_solver_accuracy.html#autotoc_md812":[3,14,0,1],
+"plan_shot_solver_accuracy.html#autotoc_md813":[3,14,0,2],
+"plan_shot_solver_accuracy.html#autotoc_md814":[3,14,0,3],
+"plan_shot_solver_accuracy.html#autotoc_md815":[3,14,0,3,0],
 "plan_shot_solver_accuracy.html#autotoc_md816":[3,14,0,3,1],
 "plan_shot_solver_accuracy.html#autotoc_md817":[3,14,0,3,2],
 "plan_shot_solver_accuracy.html#autotoc_md818":[3,14,0,3,3],
@@ -245,9 +249,5 @@ var NAVTREEINDEX112 =
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html#a3bd445f5a87cc1659e50aef04d95dd6b":[5,0,0,1,0,3,0,2],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html#a3bd445f5a87cc1659e50aef04d95dd6b":[6,0,0,1,0,3,0,2],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html#abf916cea9911f206e641e043b014f292":[5,0,0,1,0,3,0,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html#abf916cea9911f206e641e043b014f292":[6,0,0,1,0,3,0,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html":[5,0,0,1,0,7,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html":[6,0,0,1,0,7,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#a0eca132d879742cab96ef47b9d1f60ed":[5,0,0,1,0,7,1,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker_1_1NudgeImpulse.html#a0eca132d879742cab96ef47b9d1f60ed":[6,0,0,1,0,7,1,0]
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer_1_1RoamCandidate.html#abf916cea9911f206e641e043b014f292":[6,0,0,1,0,3,0,0]
 };
