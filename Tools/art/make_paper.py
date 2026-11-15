@@ -4,7 +4,8 @@ depth under the scene light with no noise run per frame.
 R = the paper's tone: 1 is clean paper, lower leans toward the fibre colour (the material sets both colours, so a
 retint needs no rebake). G and B = the surface's slope along x and y, 0.5-biased, the same packing as the floors'
 DetailNoiseTileable: a shader lights the bump with one tap, and the mips average the slope out as it shrinks.
-A = the height itself, for anything that settles into the paper's valleys.
+A = the sheet's slow undulation alone, smooth, which Paper.shader reads very large for the swells: the strips and
+fibres stay out of it, or a few texels' difference of their fine relief, magnified that much, draws dark streaks.
 
 The surface is papyrus-like: two layers of pressed strips laid across each other (the front one horizontal, the
 back one fainter and vertical), long streaks along each strip, loose fibres mostly along the strips, fine grain,
@@ -139,7 +140,8 @@ scale = np.percentile(np.abs(np.concatenate([slope_x, slope_y])), 99)
 gx = np.clip(0.5 + 0.5 * slope_x / scale, 0.0, 1.0)
 gy = np.clip(0.5 - 0.5 * slope_y / scale, 0.0, 1.0)
 
-rgba = np.stack([tone, gx, gy, height], axis=-1)
+swell = normalized(undulation)
+rgba = np.stack([tone, gx, gy, swell], axis=-1)
 OUT.parent.mkdir(parents=True, exist_ok=True)
 Image.fromarray(np.round(rgba * 255).astype(np.uint8), "RGBA").save(OUT)
 print(f"{OUT}: slope scale {scale:.5f} per texel, tone mean {tone.mean():.3f}")

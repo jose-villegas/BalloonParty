@@ -2,10 +2,10 @@ Shader "BalloonParty/Scenario/Paper"
 {
     // The page bonus (extra-colour) levels play on: GroundView's paper quad, over the floor and the blades, under the
     // smoke (drawn as ink there) and the clouds. A papyrus-like sheet from one baked tile (Tools/art/make_paper.py:
-    // R tone, GB slope, A height), so no noise runs per frame. The scene light rakes its relief per pixel, by the
+    // R tone, GB slope, A the sheet's smooth undulation), so no noise runs per frame. The scene light rakes its relief per pixel, by the
     // light field's direction where a pop or an item lights it, and tints it with the time of day: two taps of the
-    // tile for the fibres and grain (the second turned and larger, so the repeat never shows) and three of its height
-    // far larger for the sheet's slow undulation. A fourth tap, of the floors' speckle map, flags a very sparse
+    // tile for the fibres and grain (the second turned and larger, so the repeat never shows) and three of its
+    // undulation far larger for the sheet's slow swells. A fourth tap, of the floors' speckle map, flags a very sparse
     // share of grains that glint where their own little facet turns to the light.
     // Coverage: opaque at rest. From the sky it comes and goes through the mist reveal like the meadow
     // (GroundCoverageAt). From the meadow or the water it opens straight over them (_PaperReveal, a paper swap): it
@@ -13,7 +13,7 @@ Shader "BalloonParty/Scenario/Paper"
     // casts a soft shadow on the surface under it.
     Properties
     {
-        [NoScaleOffset] _PaperTex ("Paper (R tone, GB slope, A height, linear)", 2D) = "gray" {}
+        [NoScaleOffset] _PaperTex ("Paper (R tone, GB slope, A undulation, linear)", 2D) = "gray" {}
         _TileSize       ("Tile Size (world)",           Float)           = 3.0
 
         [Header(Colour)]
@@ -143,12 +143,12 @@ Shader "BalloonParty/Scenario/Paper"
             }
 
             // How much of the screen the paper covers at a point: the mist reveal's hole from the sky, the swap's hole
-            // over a surface (frayed along the fibres by the tile's height), or all of it at rest.
-            half Coverage(float2 worldPos, half height)
+            // over a surface (frayed along the fibres by their slope, 0.5-biased), or all of it at rest.
+            half Coverage(float2 worldPos, half fray)
             {
                 [branch] if (_PaperReveal.x > 0.5)
                 {
-                    float d = GroundRevealDistance(worldPos) + (height - 0.5h) * _EdgeDeckle;
+                    float d = GroundRevealDistance(worldPos) + (fray - 0.5h) * _EdgeDeckle;
                     float inside = 1.0 - smoothstep(-0.02, 0.02, d);
                     return (half)(_PaperReveal.y > 0.5 ? inside : 1.0 - inside);
                 }
@@ -166,12 +166,13 @@ Shader "BalloonParty/Scenario/Paper"
                 half2 slope = (near.gb * 2.0h - 1.0h) * 0.65h
                             + half2(0.8h * farSlope.x + 0.6h * farSlope.y, -0.6h * farSlope.x + 0.8h * farSlope.y) * 0.35h;
 
-                // The sheet's swells, from the tile's height read very large (its broad undulation dominates the height).
-                float2 delta = float2(0.02, 0.0);
+                // The sheet's swells, from the tile's smooth undulation read very large. The taps sit a few dozen texels
+                // apart, so the 8-bit steps of the height never band the shading.
+                float2 delta = float2(0.05, 0.0);
                 half h0 = tex2D(_PaperTex, IN.swellUV).a;
                 half hx = tex2D(_PaperTex, IN.swellUV + delta.xy).a;
                 half hy = tex2D(_PaperTex, IN.swellUV + delta.yx).a;
-                half2 swell = half2(hx - h0, hy - h0) * 25.0h;
+                half2 swell = half2(hx - h0, hy - h0) * 6.0h;
 
                 // A slope that climbs away from the light faces it. The light field's direction, so a pop rakes the
                 // fibres from where it burst.
@@ -186,25 +187,23 @@ Shader "BalloonParty/Scenario/Paper"
                 // and items where the light field carries it.
                 half3 light = lerp(half3(1.0h, 1.0h, 1.0h), (half3)SceneLightTintAt(IN.worldPos), _LightInfluence);
 
-                half coverage = Coverage(IN.worldPos, near.a);
+                half coverage = Coverage(IN.worldPos, near.g);
                 half shadow = 0.0h;
                 [branch] if (_PaperReveal.x > 0.5)
                 {
                     // Browned just inside the edge, where the sheet ends.
-                    float d = GroundRevealDistance(IN.worldPos) + (near.a - 0.5h) * _EdgeDeckle;
+                    float d = GroundRevealDistance(IN.worldPos) + (near.g - 0.5h) * _EdgeDeckle;
                     float intoPaper = _PaperReveal.y > 0.5 ? -d : d;
                     half brown = (half)(1.0 - smoothstep(0.0, _EdgeBrownWidth, intoPaper)) * _EdgeBrown;
                     color = lerp(color, _EdgeBrownColor.rgb, brown);
 
                     // The sheet lies on the surface under it: the paper toward the light shades this point.
                     float2 caster = IN.worldPos + (float2)toLight * _EdgeShadowOffset;
-                    float dc = GroundRevealDistance(caster) + (near.a - 0.5h) * _EdgeDeckle;
+                    float dc = GroundRevealDistance(caster) + (near.g - 0.5h) * _EdgeDeckle;
                     float casterInside = 1.0 - smoothstep(-_EdgeShadowSoftness, _EdgeShadowSoftness, dc);
                     shadow = (half)(_PaperReveal.y > 0.5 ? casterInside : 1.0 - casterInside) * _EdgeShadow;
                 }
 
-                // Premultiplied, so the same output is right opaque at rest (coverage 1) and blended in a reveal; the
-                // shadow darkens only what the paper leaves uncovered.
                 // Sparse glints: each flagged grain is a tiny facet with its own tilt, riding the paper's, and flashes
                 // only when it faces the light. The mips average the speckle toward 0.5, so they fade with distance
                 // rather than shimmer.
@@ -214,6 +213,9 @@ Shader "BalloonParty/Scenario/Paper"
                 half glint = flagged * grainFacing * grainFacing * grainFacing * grainFacing * _GlintStrength;
 
                 half3 lit = (color * shade + glint) * light;
+
+                // Premultiplied, so the same output is right opaque at rest (coverage 1) and blended in a reveal; the
+                // shadow darkens only what the paper leaves uncovered.
                 return half4(lit * coverage, coverage + (1.0h - coverage) * shadow);
             }
             ENDCG

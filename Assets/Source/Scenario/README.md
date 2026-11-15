@@ -256,18 +256,19 @@ level in a surface stretch has no sky on either side.
   the paper reads the hole. `BackdropMix` carries both surfaces (`Under`), so the grade turns with the hole.
 
 - `Shaders/BalloonParty/Scenario/Paper.shader`: the page, from one baked tile, `Assets/Textures/Scenario/
-  PaperTileable.png` (R the paper's tone, GB its slope, A its height), drawn by `Tools/art/make_paper.py`
-  (numpy): two layers of pressed strips across each other, long streaks along them, loose fibres mostly along the
-  strips, fine grain, a few specks, and a slow undulation of the sheet. No noise runs per frame. Six taps: the
-  tile, a second turned and larger tap of it so the repeat never shows, three of its height read very large
-  for the swells, and one of the floors' speckle map (`DetailNoiseTileable`, as in `FloorDetail.cginc`) that flags
-  a very sparse share of grains (`_GlintShare`, 0.6%) as specular glints: each is a tiny facet with its own tilt
-  and flashes only when it faces the light. The scene light lights it per pixel: its relief and its swells shade toward the light field's
-  direction at the pixel, so a pop rakes the fibres from where it burst, and the time of day and local light tint
-  it (`SceneLightTintAt`). The tone pulls between `_PaperColor` and `_FibreColor`, so a retint needs no rebake.
-  In a swap its edge frays along the fibres (the tile's height), browns a little just inside, and casts a soft
-  shadow on the surface under it, away from the light. Premultiplied by its coverage, opaque at rest, writing
-  colour only, like the floor.
+  PaperTileable.png` (R the paper's tone, GB its slope, A the sheet's smooth undulation), drawn by
+  `Tools/art/make_paper.py` (numpy): two layers of pressed strips across each other, long streaks along them,
+  loose fibres mostly along the strips, fine grain, a few specks, and a slow undulation of the sheet. No noise
+  runs per frame. Six taps: the tile, a second turned and larger tap of it so the repeat never shows, three of
+  its undulation read very large for the swells (A holds the undulation alone: the fine relief, magnified that
+  much, drew dark streaks), and one of the floors' speckle map (`DetailNoiseTileable`, as in
+  `FloorDetail.cginc`) that flags a very sparse share of grains (`_GlintShare`, 0.6%) as specular glints: each is
+  a tiny facet with its own tilt and flashes only when it faces the light. The scene light lights it per pixel:
+  its relief and its swells shade toward the light field's direction at the pixel, so a pop rakes the fibres from
+  where it burst, and the time of day and local light tint it (`SceneLightTintAt`). The tone pulls between
+  `_PaperColor` and `_FibreColor`, so a retint needs no rebake. In a swap its edge frays along the fibres (the
+  tile's slope), browns a little just inside, and casts a soft shadow on the surface under it, away from the
+  light. Premultiplied by its coverage, opaque at rest, writing colour only, like the floor.
 
 The smoke turns to ink on paper; see `SmokeFieldService` below.
 
@@ -370,14 +371,18 @@ stamps get dampened wind so they don't smear.
 **Ink on paper:** while `IActiveScenario` is on paper, the smoke is ink on the page. The decay pass doesn't run
 (`ISmokeFieldSettings.PersistOnPaper`), so nothing drifts, spreads or fades, and every stroke stays until the level
 clears the field as usual (the level-up dismissal, a game over, a restart; leaving paper clears it too).
-The stamp shader's `_StampOverwrite` makes a new stroke cover the colour under it
-wherever it lands in full, instead of mixing with it, so newer strokes paint over older ones. Strokes stamp wider
+The stamp shader's `_StampOverwrite` makes a new stroke cover the colour under it wherever it lands in full,
+instead of mixing with it, so newer strokes paint over older ones; its opacity is the strongest stamp's rather
+than their sum, so a stroke's overlapping capsules don't swell its edge into scallops. Strokes stamp wider
 (`PaperStrokeScale`, 1.6), since ink never spreads the way the smoke does. And the global `_SmokeInk`
 (`InkOnPaper`) switches `SmokeTrailDisplay` to its ink branch: one flat colour per blob out to a clean,
 antialiased edge at a set opacity (`_InkThreshold`), a little darker than the stroke's colour (`_InkDeepen`), with
 a dried line just inside the edge, the paper grain through it and the scene light on it, and no swirl or wisps.
 The ink reads the field through `SmokeFieldInkSample`, which weighs each texel's colour by its own opacity, so the
 empty texels around a stroke don't darken its edge.
+`SmokeFieldView` follows `SmokeFieldService.Inking` and switches its material's alpha blend (`_CoverSrcBlend`,
+`_CoverDstBlend`) so the ink leaves the target's alpha alone: the scene capture reads alpha as the GI's casters,
+and ink lying flat on the page would otherwise cast a grey copy of every stroke beside it.
 
 ### SmokeFieldResources
 

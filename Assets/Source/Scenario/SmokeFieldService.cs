@@ -60,6 +60,7 @@ namespace BalloonParty.Scenario
         private readonly Vector4[] _batchCenters = new Vector4[MaxStampsPerBatch];
         private readonly float[] _batchRadii = new float[MaxStampsPerBatch];
         private readonly Vector4[] _batchColors = new Vector4[MaxStampsPerBatch];
+        private readonly ReactiveProperty<bool> _inking = new ReactiveProperty<bool>(false);
 
         private DisturbanceFieldCoordinates _coords;
         private Rect _bounds;
@@ -74,6 +75,8 @@ namespace BalloonParty.Scenario
         private float _strokeScale = 1f;
 
         internal bool IsPersistent { get; private set; }
+        // Whether the display draws the field as ink; SmokeFieldView reads it to keep ink out of the GI's casters.
+        internal IReadOnlyReactiveProperty<bool> Inking => _inking;
 
         public SmokeFieldService(
             ISmokeFieldSettings settings,
@@ -156,6 +159,7 @@ namespace BalloonParty.Scenario
             _runResetSubscription?.Dispose();
             Shader.SetGlobalFloat(ActiveId, 0f);
             Shader.SetGlobalFloat(SmokeInkId, 0f);
+            _inking.Dispose();
             _resources.Dispose();
         }
 
@@ -300,7 +304,8 @@ namespace BalloonParty.Scenario
             }
 
             _strokeScale = paper ? Mathf.Max(1f, _settings.PaperStrokeScale) : 1f;
-            Shader.SetGlobalFloat(SmokeInkId, paper && _settings.InkOnPaper ? 1f : 0f);
+            _inking.Value = paper && _settings.InkOnPaper;
+            Shader.SetGlobalFloat(SmokeInkId, _inking.Value ? 1f : 0f);
             PushStampOverwrite();
         }
 

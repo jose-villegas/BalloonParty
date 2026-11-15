@@ -62,6 +62,7 @@ Shader "BalloonParty/Display/SmokeFieldStamp"
                 float3 stampAccum = float3(0, 0, 0);
                 float stampWeight = 0.0;
                 float stampCover = 0.0;
+                float stampPeak = 0.0;
 
                 for (int s = 0; s < _StampCount; s++)
                 {
@@ -79,6 +80,7 @@ Shader "BalloonParty/Display/SmokeFieldStamp"
                     float mask = 1.0 - smoothstep(radius * 0.7, radius, dist);
                     stampCover = max(stampCover, mask);
                     mask *= _StampColors[s].a;
+                    stampPeak = max(stampPeak, mask);
 
                     stampAccum += stampColor * mask;
                     stampWeight += mask;
@@ -97,8 +99,11 @@ Shader "BalloonParty/Display/SmokeFieldStamp"
                 blendFactor = lerp(blendFactor, stampCover, _StampOverwrite);
                 float3 outColor = lerp(existingColor, newColor, blendFactor);
 
-                // Alpha pushes toward 1 with each stamp (saturates, never overshoots).
-                float outAlpha = saturate(existingAlpha + stampWeight * (1.0 - existingAlpha));
+                // Alpha pushes toward 1 with each stamp (saturates, never overshoots). Overwriting takes the strongest
+                // stamp instead: the summed soft edges of a stroke's overlapping capsules swell into scallops where the
+                // ink display cuts its edge, while their max is the clean edge of the whole stroke.
+                float accumulated = saturate(existingAlpha + stampWeight * (1.0 - existingAlpha));
+                float outAlpha = lerp(accumulated, max(existingAlpha, stampPeak), _StampOverwrite);
 
                 return float4(outColor, outAlpha);
             }

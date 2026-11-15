@@ -68,6 +68,11 @@ Shader "BalloonParty/Scenario/SmokeTrailDisplay"
         [Header(Lighting)]
         _LightResponse      ("Light Response",          Range(0, 1))        = 0.6
         _LightGlow          ("Local Light Glow",        Range(0, 1))        = 0.3
+
+        // The alpha blend, set by SmokeFieldView: the smoke adds to the scene capture's caster mask as before, the
+        // ink (Zero, One) leaves it, so it never shadows the page it lies on.
+        [HideInInspector] _CoverSrcBlend ("Cover Src Blend", Float) = 1
+        [HideInInspector] _CoverDstBlend ("Cover Dst Blend", Float) = 10
     }
 
     SubShader
@@ -83,7 +88,7 @@ Shader "BalloonParty/Scenario/SmokeTrailDisplay"
         Cull Off
         Lighting Off
         ZWrite Off
-        Blend One OneMinusSrcAlpha
+        Blend One OneMinusSrcAlpha, [_CoverSrcBlend] [_CoverDstBlend]
 
         Pass
         {
