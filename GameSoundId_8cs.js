@@ -55,6 +55,7 @@ var GameSoundId_8cs =
       [ "BalloonParty.Audio.GameSoundId.ItemSighted", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13aa65762fb22742c8d8fa01d1fbb3438ce", null ],
       [ "BalloonParty.Audio.GameSoundId.BalloonPopHeart", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13af85d58c6f16554dc45df5ab38da217cd", null ],
       [ "BalloonParty.Audio.GameSoundId.BalloonDeflectGolden", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a3b996b75cf3bf098505493637212e4e1", null ],
-      [ "BalloonParty.Audio.GameSoundId.BalloonPopGolden", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a5a26f3e47748c8276d5021eb897b3870", null ]
+      [ "BalloonParty.Audio.GameSoundId.BalloonPopGolden", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a5a26f3e47748c8276d5021eb897b3870", null ],
+      [ "BalloonParty.Audio.GameSoundId.SnipeSkyLight", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a5f9970ae34cc55664cd63fa680706728", null ]
     ] ]
 ];

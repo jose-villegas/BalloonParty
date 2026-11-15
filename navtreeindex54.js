@@ -1,5 +1,11 @@
 var NAVTREEINDEX54 =
 {
+"classBalloonParty_1_1Game_1_1Telemetry_1_1MetricSet.html#a749e023a22eaeb0c02315f93b6d26546":[5,0,0,6,9,17,2],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1MetricSet.html#a749e023a22eaeb0c02315f93b6d26546":[6,0,0,6,9,17,2],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1MetricSet.html#a89ba69d9d35247ea8a3696c7cf68a6f7":[5,0,0,6,9,17,0],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1MetricSet.html#a89ba69d9d35247ea8a3696c7cf68a6f7":[6,0,0,6,9,17,0],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1MetricSet.html#a9383011c3c1dd15a3515fdf200672e85":[5,0,0,6,9,17,9],
+"classBalloonParty_1_1Game_1_1Telemetry_1_1MetricSet.html#a9383011c3c1dd15a3515fdf200672e85":[6,0,0,6,9,17,9],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricSet.html#a948cdcf342a124b16685504d70ae3706":[5,0,0,6,9,17,11],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricSet.html#a948cdcf342a124b16685504d70ae3706":[6,0,0,6,9,17,11],
 "classBalloonParty_1_1Game_1_1Telemetry_1_1MetricSet.html#a953bba4baf65b3b1888d02af3f5ff9a9":[5,0,0,6,9,17,4],
@@ -243,11 +249,5 @@ var NAVTREEINDEX54 =
 "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a5a1356ed35eb9313ebd8e4cb2078ee2e":[5,0,0,6,10,4,38],
 "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a5a1356ed35eb9313ebd8e4cb2078ee2e":[6,0,0,6,10,4,38],
 "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a5d1ba05030351d7faaba994dbf8c04b4":[5,0,0,6,10,4,13],
-"classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a5d1ba05030351d7faaba994dbf8c04b4":[6,0,0,6,10,4,13],
-"classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a5f6976b1da93aa8babf349a0f2e8f626":[5,0,0,6,10,4,26],
-"classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a5f6976b1da93aa8babf349a0f2e8f626":[6,0,0,6,10,4,26],
-"classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a641fe01d49ef9e22a7a8aba0179626c7":[5,0,0,6,10,4,59],
-"classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a641fe01d49ef9e22a7a8aba0179626c7":[6,0,0,6,10,4,59],
-"classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a656d9e3e9e43b6efad965a5351a5f228":[5,0,0,6,10,4,36],
-"classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a656d9e3e9e43b6efad965a5351a5f228":[6,0,0,6,10,4,36]
+"classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a5d1ba05030351d7faaba994dbf8c04b4":[6,0,0,6,10,4,13]
 };

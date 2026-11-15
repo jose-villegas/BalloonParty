@@ -1,5 +1,11 @@
 var NAVTREEINDEX47 =
 {
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CannonHeadsUpRouter.html#ab0a21d62db21f0a60d246f24a374ec73":[5,0,0,6,4,0,1,8],
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CannonHeadsUpRouter.html#ab0a21d62db21f0a60d246f24a374ec73":[6,0,0,6,4,0,1,8],
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CannonHeadsUpRouter.html#adc8a9f5cdc26ae9430be6232456f40ae":[5,0,0,6,4,0,1,11],
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CannonHeadsUpRouter.html#adc8a9f5cdc26ae9430be6232456f40ae":[6,0,0,6,4,0,1,11],
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CannonHeadsUpRouter.html#afeaf1516a06afdab552248462b9aff8f":[5,0,0,6,4,0,1,3],
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CannonHeadsUpRouter.html#afeaf1516a06afdab552248462b9aff8f":[6,0,0,6,4,0,1,3],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html":[5,0,0,6,4,0,2],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html":[6,0,0,6,4,0,2],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html#a0c6eccf89f63b362c9a67b1fb69d6f62":[5,0,0,6,4,0,2,5],
@@ -243,11 +249,5 @@ var NAVTREEINDEX47 =
 "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a64bdbc61147c78df68cc2a2806792f71":[5,0,0,6,6,4,2],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a64bdbc61147c78df68cc2a2806792f71":[6,0,0,6,6,4,2],
 "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a6674f69ec3b1b24295bd5901a0cce34e":[5,0,0,6,6,4,22],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a6674f69ec3b1b24295bd5901a0cce34e":[6,0,0,6,6,4,22],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a69a18af018a86b7353d3649f32584953":[5,0,0,6,6,4,59],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a69a18af018a86b7353d3649f32584953":[6,0,0,6,6,4,59],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a6ab02096eed2ae996bba447129e8f725":[5,0,0,6,6,4,30],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a6ab02096eed2ae996bba447129e8f725":[6,0,0,6,6,4,30],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a72148a10018f547b54ab58f0f2c30459":[5,0,0,6,6,4,60],
-"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a72148a10018f547b54ab58f0f2c30459":[6,0,0,6,6,4,60]
+"classBalloonParty_1_1Game_1_1Level_1_1LevelController.html#a6674f69ec3b1b24295bd5901a0cce34e":[6,0,0,6,6,4,22]
 };

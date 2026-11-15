@@ -4,6 +4,7 @@ var classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter =
     [ "Dispose", "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#aeea39a08bed5330baac1d675f231d51c", null ],
     [ "NextPickupIndex", "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#ad89f72031209214403dab83ff842a12a", null ],
     [ "OnItemActivated", "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#abf069f0a1169d9bb5ebe928c87303c81", null ],
+    [ "OnLoaded", "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#a129a6ea00d3b0dd137c3729463bcdf1e", null ],
     [ "OnOverflowHeart", "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#a0df10f3223ebcb5816901fb1a810ed24", null ],
     [ "Start", "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#a7aab98be6656f1100e00e3403e83d10d", null ],
     [ "_itemActivatedSubscriber", "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#aeb0e30c1cd4ea041e2cdb652a4ef3d3c", null ],

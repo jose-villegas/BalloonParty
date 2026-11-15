@@ -128,9 +128,9 @@ $(function(){initNavTree('classBalloonParty_1_1Prediction_1_1PredictionTraceCalc
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a78ab1909dc7d5aa5eba9e9586a00a8ca" id="r_a78ab1909dc7d5aa5eba9e9586a00a8ca"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a78ab1909dc7d5aa5eba9e9586a00a8ca">PredictionTraceCalculator</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPredictionTraceConfig.html">IPredictionTraceConfig</a> config, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IProjectileFlightConfig.html">IProjectileFlightConfig</a> flightConfig, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IDeflectorField.html">IDeflectorField</a> deflectorField, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPierceItemField.html">IPierceItemField</a> pierceItemField)</td></tr>
 <tr class="separator:a78ab1909dc7d5aa5eba9e9586a00a8ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d5d0a81896e184ad2cf1f9adde1ba85" id="r_a7d5d0a81896e184ad2cf1f9adde1ba85"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d5d0a81896e184ad2cf1f9adde1ba85">Calculate</a> (Vector3 origin, Vector3 direction, float projectileContactRadius, List&lt; Vector3 &gt; results, out <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a> end)</td></tr>
-<tr class="memdesc:a7d5d0a81896e184ad2cf1f9adde1ba85"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the prediction trace, bouncing off all four walls and off any balloon that would deflect the shot rather than let it through — until the path crosses a pierce-item host, from which point on it just continues straight through every tough instead, matching a piercing shot's real flight.  <br /></td></tr>
-<tr class="separator:a7d5d0a81896e184ad2cf1f9adde1ba85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40d1c0b556ebd1848535bae42a4cc751" id="r_a40d1c0b556ebd1848535bae42a4cc751"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40d1c0b556ebd1848535bae42a4cc751">Calculate</a> (Vector3 origin, Vector3 direction, float projectileContactRadius, List&lt; Vector3 &gt; results, out <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a> end, bool startsPiercing=false)</td></tr>
+<tr class="memdesc:a40d1c0b556ebd1848535bae42a4cc751"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates the prediction trace, bouncing off all four walls and off any balloon that would deflect the shot rather than let it through — until the path crosses a pierce-item host, from which point on it just continues straight through every tough instead, matching a piercing shot's real flight.  <br /></td></tr>
+<tr class="separator:a40d1c0b556ebd1848535bae42a4cc751"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-types" name="pri-types"></a>
 Private Types</h2></td></tr>
@@ -227,8 +227,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a7d5d0a81896e184ad2cf1f9adde1ba85" name="a7d5d0a81896e184ad2cf1f9adde1ba85"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7d5d0a81896e184ad2cf1f9adde1ba85">&#9670;&#160;</a></span>Calculate()</h2>
+<a id="a40d1c0b556ebd1848535bae42a4cc751" name="a40d1c0b556ebd1848535bae42a4cc751"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40d1c0b556ebd1848535bae42a4cc751">&#9670;&#160;</a></span>Calculate()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -256,7 +256,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">out <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a></td>          <td class="paramname"><span class="paramname"><em>end</em></span>&#160;)</td>
+          <td class="paramtype">out <a class="el" href="structBalloonParty_1_1Prediction_1_1PredictionTraceEnd.html">PredictionTraceEnd</a></td>          <td class="paramname"><span class="paramname"><em>end</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>startsPiercing</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -267,6 +272,7 @@ Private Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">projectileContactRadius</td><td>The shot's own contact radius. Every deflector (and pierce-item host) is inflated by it, because contact happens when the two circles touch — <code>ProjectileView</code> passes <code>SurfaceRadius + _contactRadius</code> to the real deflection for the same reason. Treating the shot as a point shrinks every target and draws grazing hits as misses. </td></tr>
     <tr><td class="paramname">end</td><td>Where piercing began (or -1), plus what the line ran into at the end and that contact's surface normal. Piercing's index lets a view style just the trailing pierced run; the end contact lets one draw the bounce leaving it without re-deriving a normal this already solved. </td></tr>
+    <tr><td class="paramname">startsPiercing</td><td>The shot leaves the muzzle already piercing (a ball loaded as a Snipe lance): the whole line runs straight through balloons, turning only at walls, and its pierce starts at its first point. </td></tr>
   </table>
   </dd>
 </dl>

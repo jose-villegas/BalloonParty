@@ -1,5 +1,11 @@
 var NAVTREEINDEX49 =
 {
+"classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle.html#a857f65eeac76d2588af6f20b159b1ad7":[5,0,0,6,6,8,20],
+"classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle.html#a857f65eeac76d2588af6f20b159b1ad7":[6,0,0,6,6,8,20],
+"classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle.html#a92cb6a5d8d1658a343e34f519f5ae30c":[5,0,0,6,6,8,6],
+"classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle.html#a92cb6a5d8d1658a343e34f519f5ae30c":[6,0,0,6,6,8,6],
+"classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle.html#aabdf5469770f4056760a31a9ebe4f4a0":[5,0,0,6,6,8,1],
+"classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle.html#aabdf5469770f4056760a31a9ebe4f4a0":[6,0,0,6,6,8,1],
 "classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle.html#acd5da26f40a7b0ee3d481c1ed61108bb":[5,0,0,6,6,8,14],
 "classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle.html#acd5da26f40a7b0ee3d481c1ed61108bb":[6,0,0,6,6,8,14],
 "classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle.html#aef0661f57fb85b93d6e2505515014320":[5,0,0,6,6,8,21],
@@ -243,11 +249,5 @@ var NAVTREEINDEX49 =
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html#a573617eeee87fa37636904db7522667c":[5,0,0,6,8,0,4,2],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html#a573617eeee87fa37636904db7522667c":[6,0,0,6,8,0,4,2],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html#a6ee5ffc331bce18a3454fa457efa99e6":[5,0,0,6,8,0,4,4],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html#a6ee5ffc331bce18a3454fa457efa99e6":[6,0,0,6,8,0,4,4],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html#ad03c3a75d18fb3dc9786a3652c34f736":[5,0,0,6,8,0,4,0],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html#ad03c3a75d18fb3dc9786a3652c34f736":[6,0,0,6,8,0,4,0],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationOverlapResolver.html":[5,0,0,6,8,0,5],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationOverlapResolver.html":[6,0,0,6,8,0,5],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationOverlapResolver.html#a2a671be61273f766fe9b9003179d1635":[5,0,0,6,8,0,5,2],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationOverlapResolver.html#a2a671be61273f766fe9b9003179d1635":[6,0,0,6,8,0,5,2]
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html#a6ee5ffc331bce18a3454fa457efa99e6":[6,0,0,6,8,0,4,4]
 };

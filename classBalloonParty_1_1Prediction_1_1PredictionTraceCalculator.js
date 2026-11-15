@@ -7,7 +7,7 @@ var classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator =
       [ "PiercedAndDeflected", "classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html#a3da9399151e38b6b17f5f76319cab383a65d0c13a6dffd00c82e5ca9258cc82df", null ]
     ] ],
     [ "PredictionTraceCalculator", "classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html#a78ab1909dc7d5aa5eba9e9586a00a8ca", null ],
-    [ "Calculate", "classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html#a7d5d0a81896e184ad2cf1f9adde1ba85", null ],
+    [ "Calculate", "classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html#a40d1c0b556ebd1848535bae42a4cc751", null ],
     [ "ResolveStepEvent", "classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html#ab49e4f4075026316b829d0121343d41e", null ],
     [ "TryFindNearestDeflector", "classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html#ac76e57718990ef5a083967f6febfb874", null ],
     [ "TryFindNearestPierceItem", "classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html#acd8838c5f991a00d63502d8028f0aed4", null ],

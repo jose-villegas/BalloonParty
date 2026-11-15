@@ -16,7 +16,7 @@ var searchData=
   ['cadence_13',['Cadence',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Shared/SceneLight/README.md#autotoc_md1058',1,'']]],
   ['cadence_14',['Findings — third pass, 2026-07-23 night (20-min longitudinal monitor, 15s cadence)',['../plan_performance_recovery.html#autotoc_md762',1,'']]],
   ['cadence_3a_20one_20queue_20many_20triggers_15',['Cadence: one queue, many triggers',['../plan_gameplay_telemetry.html#autotoc_md588',1,'']]],
-  ['calculate_16',['Calculate',['../classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator.html#af2f922dd59a8926fbd5ce65ac3b16e20',1,'BalloonParty.Game.Health.WaveDeficitCalculator.Calculate()'],['../classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html#a7d5d0a81896e184ad2cf1f9adde1ba85',1,'BalloonParty.Prediction.PredictionTraceCalculator.Calculate()']]],
+  ['calculate_16',['Calculate',['../classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator.html#af2f922dd59a8926fbd5ce65ac3b16e20',1,'BalloonParty.Game.Health.WaveDeficitCalculator.Calculate()'],['../classBalloonParty_1_1Prediction_1_1PredictionTraceCalculator.html#a40d1c0b556ebd1848535bae42a4cc751',1,'BalloonParty.Prediction.PredictionTraceCalculator.Calculate()']]],
   ['calculateswatchheight_17',['CalculateSwatchHeight',['../classBalloonParty_1_1Configuration_1_1Editor_1_1PaletteColorMaskDrawer.html#a2b481d6fc6b111a6a89c504d1ba924ad',1,'BalloonParty::Configuration::Editor::PaletteColorMaskDrawer']]],
   ['calculateweight_18',['CalculateWeight',['../classBalloonParty_1_1Slots_1_1Grid_1_1MoveWeightEvaluator.html#af905d94c9a02f630cc7307cede6fd6fe',1,'BalloonParty::Slots::Grid::MoveWeightEvaluator']]],
   ['calculation_19',['2.4 Full Grid Clear-Out Calculation',['../plan_future_ideas.html#autotoc_md474',1,'']]],

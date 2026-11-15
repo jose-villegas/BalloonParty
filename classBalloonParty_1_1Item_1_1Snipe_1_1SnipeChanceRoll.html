@@ -131,7 +131,7 @@ $(function(){initNavTree('classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll__coll__graph.svg" width="515" height="195"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll__coll__graph.svg" width="516" height="264"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -142,11 +142,13 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:ad1b265d28b7172dc16a917efee550ef0" id="r_ad1b265d28b7172dc16a917efee550ef0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad1b265d28b7172dc16a917efee550ef0">SnipeChanceRoll</a> (<a class="el" href="interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html">IWeaponStats</a> weapon, <a class="el" href="interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeArmer.html">ISnipeArmer</a> armer)</td></tr>
-<tr class="separator:ad1b265d28b7172dc16a917efee550ef0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a688e5f95863675fcc12800fb77562e4c" id="r_a688e5f95863675fcc12800fb77562e4c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a688e5f95863675fcc12800fb77562e4c">SnipeChanceRoll</a> (<a class="el" href="interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html">IWeaponStats</a> weapon, <a class="el" href="interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeArmer.html">ISnipeArmer</a> armer, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html">IUpgradeSettings</a> settings)</td></tr>
+<tr class="separator:a688e5f95863675fcc12800fb77562e4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a4ac5500bcafe9b6897e6cf1ced73c3b0" id="r_a4ac5500bcafe9b6897e6cf1ced73c3b0"><td class="memItemLeft" align="right" valign="top">Func&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ac5500bcafe9b6897e6cf1ced73c3b0">Now</a> = () =&gt; Time.time<code> [get, set]</code></td></tr>
+<tr class="separator:a4ac5500bcafe9b6897e6cf1ced73c3b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb0ead921e09789ca001c11c60caa458" id="r_abb0ead921e09789ca001c11c60caa458"><td class="memItemLeft" align="right" valign="top">Func&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abb0ead921e09789ca001c11c60caa458">Random01</a> = () =&gt; Random.value<code> [get, set]</code></td></tr>
 <tr class="separator:abb0ead921e09789ca001c11c60caa458"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -154,15 +156,19 @@ Properties</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a072d07e6213b003714886eceb063d30e" id="r_a072d07e6213b003714886eceb063d30e"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeArmer.html">ISnipeArmer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a072d07e6213b003714886eceb063d30e">_armer</a></td></tr>
 <tr class="separator:a072d07e6213b003714886eceb063d30e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2b073936df3274ee467f9c67ed913d7" id="r_ae2b073936df3274ee467f9c67ed913d7"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae2b073936df3274ee467f9c67ed913d7">_lastArmedAt</a> = float.NegativeInfinity</td></tr>
+<tr class="separator:ae2b073936df3274ee467f9c67ed913d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b31c225ffb06f6a5e02c44e09a2d7a5" id="r_a9b31c225ffb06f6a5e02c44e09a2d7a5"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html">IUpgradeSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9b31c225ffb06f6a5e02c44e09a2d7a5">_settings</a></td></tr>
+<tr class="separator:a9b31c225ffb06f6a5e02c44e09a2d7a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68362094b22c40bb4f3c25f376c5b332" id="r_a68362094b22c40bb4f3c25f376c5b332"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html">IWeaponStats</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a68362094b22c40bb4f3c25f376c5b332">_weapon</a></td></tr>
 <tr class="separator:a68362094b22c40bb4f3c25f376c5b332"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The Sharpshooter card's roll, once per ball the thrower loads. </p>
-<p>A hit arms the ball through the <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a>'s own path (<a class="el" href="interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeArmer.html" title="Arms a shot as a Snipe lance without a pickup: what SnipeItemHandler does for one.">ISnipeArmer</a>), so it is a <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a> lance in every way, pencil line included. </p>
+<p>A hit arms the ball through the <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a>'s own path (<a class="el" href="interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeArmer.html" title="Arms a shot as a Snipe lance without a pickup: what SnipeItemHandler does for one.">ISnipeArmer</a>), so it is a <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a> lance in every way, pencil line included. After a hit, no load rolls for <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html#a15d87374de3fc76122c686ddd8513808" title="Seconds of game time after a ball loads as a Snipe (UpgradeKind.SnipeChance) before the next load can...">IUpgradeSettings.SnipeCooldownSeconds</a>, so rapid fire can't chain lances. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ad1b265d28b7172dc16a917efee550ef0" name="ad1b265d28b7172dc16a917efee550ef0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad1b265d28b7172dc16a917efee550ef0">&#9670;&#160;</a></span>SnipeChanceRoll()</h2>
+<a id="a688e5f95863675fcc12800fb77562e4c" name="a688e5f95863675fcc12800fb77562e4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a688e5f95863675fcc12800fb77562e4c">&#9670;&#160;</a></span>SnipeChanceRoll()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -178,7 +184,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeArmer.html">ISnipeArmer</a></td>          <td class="paramname"><span class="paramname"><em>armer</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeArmer.html">ISnipeArmer</a></td>          <td class="paramname"><span class="paramname"><em>armer</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html">IUpgradeSettings</a></td>          <td class="paramname"><span class="paramname"><em>settings</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -236,6 +247,50 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ae2b073936df3274ee467f9c67ed913d7" name="ae2b073936df3274ee467f9c67ed913d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2b073936df3274ee467f9c67ed913d7">&#9670;&#160;</a></span>_lastArmedAt</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Item.Snipe.SnipeChanceRoll._lastArmedAt = float.NegativeInfinity</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9b31c225ffb06f6a5e02c44e09a2d7a5" name="a9b31c225ffb06f6a5e02c44e09a2d7a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b31c225ffb06f6a5e02c44e09a2d7a5">&#9670;&#160;</a></span>_settings</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html">IUpgradeSettings</a> BalloonParty.Item.Snipe.SnipeChanceRoll._settings</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a68362094b22c40bb4f3c25f376c5b332" name="a68362094b22c40bb4f3c25f376c5b332"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a68362094b22c40bb4f3c25f376c5b332">&#9670;&#160;</a></span>_weapon</h2>
 
@@ -259,6 +314,28 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="a4ac5500bcafe9b6897e6cf1ced73c3b0" name="a4ac5500bcafe9b6897e6cf1ced73c3b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ac5500bcafe9b6897e6cf1ced73c3b0">&#9670;&#160;</a></span>Now</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Func&lt;float&gt; BalloonParty.Item.Snipe.SnipeChanceRoll.Now = () =&gt; Time.time</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel set">set</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="abb0ead921e09789ca001c11c60caa458" name="abb0ead921e09789ca001c11c60caa458"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abb0ead921e09789ca001c11c60caa458">&#9670;&#160;</a></span>Random01</h2>
 
