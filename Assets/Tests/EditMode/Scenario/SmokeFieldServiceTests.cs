@@ -67,8 +67,13 @@ namespace BalloonParty.Tests.Scenario
                 .Subscribe(Arg.Any<IMessageHandler<GameOverMessage>>(), Arg.Any<MessageHandlerFilter<GameOverMessage>[]>())
                 .Returns(Substitute.For<System.IDisposable>());
 
+            var runResetSubscriber = Substitute.For<ISubscriber<RunResetMessage>>();
+            runResetSubscriber
+                .Subscribe(Arg.Any<IMessageHandler<RunResetMessage>>(), Arg.Any<MessageHandlerFilter<RunResetMessage>[]>())
+                .Returns(Substitute.For<System.IDisposable>());
+
             _service = new SmokeFieldService(_settings, _display, _palette, _levelUpDismissedSubscriber, gameOverSubscriber,
-                _scenario);
+                runResetSubscriber, _scenario);
         }
 
         [TearDown]

@@ -53,6 +53,7 @@ namespace BalloonParty.Scenario
         private readonly IGamePalette _palette;
         private readonly ISubscriber<LevelUpDismissedMessage> _levelUpDismissedSubscriber;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
+        private readonly ISubscriber<RunResetMessage> _runResetSubscriber;
         private readonly IActiveScenario _scenario;
         private readonly SmokeFieldResources _resources = new();
         private readonly List<PendingStamp> _pendingStamps = new();
@@ -69,6 +70,7 @@ namespace BalloonParty.Scenario
         private IDisposable _levelUpDismissedSubscription;
         private IDisposable _gameOverSubscription;
         private IDisposable _scenarioSubscription;
+        private IDisposable _runResetSubscription;
         private float _strokeScale = 1f;
 
         internal bool IsPersistent { get; private set; }
@@ -79,6 +81,7 @@ namespace BalloonParty.Scenario
             IGamePalette palette,
             ISubscriber<LevelUpDismissedMessage> levelUpDismissedSubscriber,
             ISubscriber<GameOverMessage> gameOverSubscriber,
+            ISubscriber<RunResetMessage> runResetSubscriber,
             IActiveScenario scenario)
         {
             _settings = settings;
@@ -86,6 +89,7 @@ namespace BalloonParty.Scenario
             _palette = palette;
             _levelUpDismissedSubscriber = levelUpDismissedSubscriber;
             _gameOverSubscriber = gameOverSubscriber;
+            _runResetSubscriber = runResetSubscriber;
             _scenario = scenario;
         }
 
@@ -110,6 +114,10 @@ namespace BalloonParty.Scenario
             _lastDecayTime = Time.time;
             _levelUpDismissedSubscription = _levelUpDismissedSubscriber.Subscribe(_ => Clear());
             _gameOverSubscription = _gameOverSubscriber.Subscribe(_ => Clear());
+
+            // A restart from the pause menu publishes neither of the above. The smoke would fade on its own; the ink
+            // would carry over onto the retried page.
+            _runResetSubscription = _runResetSubscriber.Subscribe(_ => Clear());
         }
 
         void ITickable.Tick()
@@ -145,6 +153,7 @@ namespace BalloonParty.Scenario
             _levelUpDismissedSubscription?.Dispose();
             _gameOverSubscription?.Dispose();
             _scenarioSubscription?.Dispose();
+            _runResetSubscription?.Dispose();
             Shader.SetGlobalFloat(ActiveId, 0f);
             Shader.SetGlobalFloat(SmokeInkId, 0f);
             _resources.Dispose();
@@ -273,11 +282,23 @@ namespace BalloonParty.Scenario
             _windDampen = Mathf.Min(_windDampen, Mathf.Clamp01(factor));
         }
 
-        // The level clears the page as it always clears the smoke (LevelUpDismissedMessage, GameOverMessage), so a
-        // switch needs no clear of its own: the field is already empty by the Ascent that brings the change.
+        // The level clears the page as it always clears the smoke (the level-up dismissal, a game over, a restart),
+        // so the field is normally empty by the beat that brings a change. Leaving paper clears it anyway: ink left
+        // there would turn to wisps over the page as it goes.
         private void SetPaper(bool paper)
         {
+            if (_settings == null)
+            {
+                return;
+            }
+
+            var wasPersistent = IsPersistent;
             IsPersistent = paper && _settings.PersistOnPaper;
+            if (wasPersistent && !IsPersistent && _resources.IsReady)
+            {
+                Clear();
+            }
+
             _strokeScale = paper ? Mathf.Max(1f, _settings.PaperStrokeScale) : 1f;
             Shader.SetGlobalFloat(SmokeInkId, paper && _settings.InkOnPaper ? 1f : 0f);
             PushStampOverwrite();

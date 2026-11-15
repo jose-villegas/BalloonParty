@@ -5,7 +5,8 @@ Shader "BalloonParty/Scenario/Paper"
     // R tone, GB slope, A height), so no noise runs per frame. The scene light rakes its relief per pixel, by the
     // light field's direction where a pop or an item lights it, and tints it with the time of day: two taps of the
     // tile for the fibres and grain (the second turned and larger, so the repeat never shows) and three of its height
-    // far larger for the sheet's slow undulation.
+    // far larger for the sheet's slow undulation. A fourth tap, of the floors' speckle map, flags a very sparse
+    // share of grains that glint where their own little facet turns to the light.
     // Coverage: opaque at rest. From the sky it comes and goes through the mist reveal like the meadow
     // (GroundCoverageAt). From the meadow or the water it opens straight over them (_PaperReveal, a paper swap): it
     // shows inside the hole on the way in and outside it on the way out, with a frayed, slightly browned edge that
@@ -27,6 +28,15 @@ Shader "BalloonParty/Scenario/Paper"
         // The sheet's slow swells: their world size, and how much they shade toward the light.
         _UndulationSize ("Undulation Size (world)",     Float)           = 14.0
         _Undulation     ("Undulation Relief",           Range(0, 1))     = 0.25
+
+        [Header(Glints)]
+        // The floors' speckle map (Tools/art/make_detail_noise.py): GB = a grain's slope, A = a flattened speckle, so
+        // a threshold of 1 - share flags exactly that share of grains.
+        [NoScaleOffset] _GlintTex ("Grain Speckle (GB slope, A flattened)", 2D) = "gray" {}
+        _GlintSize      ("Grain Tile Size (world)",     Float)           = 1.6
+        // The share of grains that can glint: keep it tiny, a few specks across the screen.
+        _GlintShare     ("Glint Share",                 Range(0, 0.05))  = 0.006
+        _GlintStrength  ("Glint Strength",              Range(0, 2))     = 0.7
 
         [Header(Lighting)]
         // Scene-light colour x intensity multiplies the paper: 0 = authored colours always, 1 = fully lit.
@@ -86,6 +96,10 @@ Shader "BalloonParty/Scenario/Paper"
             float  _UndulationSize;
             half   _Undulation;
             half   _LightInfluence;
+            sampler2D _GlintTex;
+            float  _GlintSize;
+            half   _GlintShare;
+            half   _GlintStrength;
             float  _EdgeDeckle;
             half4  _EdgeBrownColor;
             float  _EdgeBrownWidth;
@@ -111,6 +125,7 @@ Shader "BalloonParty/Scenario/Paper"
                 float4 tileUV   : TEXCOORD0;
                 float2 worldPos : TEXCOORD1;
                 float2 swellUV  : TEXCOORD2;
+                float2 glintUV  : TEXCOORD3;
             };
 
             v2f vert(appdata_t IN)
@@ -123,6 +138,7 @@ Shader "BalloonParty/Scenario/Paper"
                 OUT.tileUV = float4(uv, float2(0.8 * uv.x - 0.6 * uv.y, 0.6 * uv.x + 0.8 * uv.y) * 0.61 + float2(0.37, 0.19));
                 OUT.worldPos = wp;
                 OUT.swellUV = paper / max(_UndulationSize, 1e-3) + float2(0.53, 0.11);
+                OUT.glintUV = paper / max(_GlintSize, 1e-3) + float2(0.29, 0.83);
                 return OUT;
             }
 
@@ -189,7 +205,15 @@ Shader "BalloonParty/Scenario/Paper"
 
                 // Premultiplied, so the same output is right opaque at rest (coverage 1) and blended in a reveal; the
                 // shadow darkens only what the paper leaves uncovered.
-                half3 lit = color * shade * light;
+                // Sparse glints: each flagged grain is a tiny facet with its own tilt, riding the paper's, and flashes
+                // only when it faces the light. The mips average the speckle toward 0.5, so they fade with distance
+                // rather than shimmer.
+                half4 grain = tex2D(_GlintTex, IN.glintUV);
+                half flagged = smoothstep(0.995h - _GlintShare, 1.005h - _GlintShare, grain.a);
+                half grainFacing = saturate(-dot((grain.gb * 2.0h - 1.0h) + slope * 0.5h, toLight));
+                half glint = flagged * grainFacing * grainFacing * grainFacing * grainFacing * _GlintStrength;
+
+                half3 lit = (color * shade + glint) * light;
                 return half4(lit * coverage, coverage + (1.0h - coverage) * shadow);
             }
             ENDCG

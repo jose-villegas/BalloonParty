@@ -59,6 +59,7 @@ namespace BalloonParty.Scenario.View
         private static readonly int MistReachId = Shader.PropertyToID("_MistReach");
         private static readonly int MistOpacityId = Shader.PropertyToID("_MistOpacity");
         private static readonly int PaperRevealId = Shader.PropertyToID("_PaperReveal");
+        private static readonly int PaperEdgeDeckleId = Shader.PropertyToID("_EdgeDeckle");
 
         private readonly CompositeDisposable _subscriptions = new();
 
@@ -90,6 +91,8 @@ namespace BalloonParty.Scenario.View
         private Material _paperMaterial;
         // This reveal opens the paper straight over the meadow or the water, or that surface through it.
         private bool _swap;
+        // How far the paper's edge frays past the hole either way (half its material's fray).
+        private float _paperFray;
         private GameObject _blades;
         private Mesh _bladeMesh;
         private GrassWakeBuffer _wake;
@@ -131,10 +134,7 @@ namespace BalloonParty.Scenario.View
             _quadRenderer = _quad.GetComponent<Renderer>();
 
             var overscan = Mathf.Max(1f, _settings.OverscanMultiplier);
-            _quad.transform.localScale = new Vector3(
-                _display.ReferenceWorldWidth * overscan,
-                _display.ReferenceWorldHeight * overscan,
-                1f);
+            _quad.transform.localScale = OverscanScale(overscan);
             _quad.SetActive(false);
 
             // Floor and blades read the same patch noise, so the patch and dirt settings are globals: the drier tips sit
@@ -312,10 +312,7 @@ namespace BalloonParty.Scenario.View
             _mist = QuadRendererBuilder.Build(
                 "GroundMist", _settings.MistMaterial, 0, _settings.SortingLayerName, _settings.MistSortingOrder);
             _mist.transform.SetParent(transform, worldPositionStays: false);
-            _mist.transform.localScale = new Vector3(
-                _display.ReferenceWorldWidth * overscan,
-                _display.ReferenceWorldHeight * overscan,
-                1f);
+            _mist.transform.localScale = OverscanScale(overscan);
 
             var reach = Mathf.Max(0.01f, _settings.MistReach);
             var block = new MaterialPropertyBlock();
@@ -364,13 +361,13 @@ namespace BalloonParty.Scenario.View
             }
 
             _paperMaterial = new Material(_settings.PaperMaterial);
+            _paperFray = _paperMaterial.HasFloat(PaperEdgeDeckleId)
+                ? 0.5f * Mathf.Abs(_paperMaterial.GetFloat(PaperEdgeDeckleId))
+                : 0f;
             _paperQuad = QuadRendererBuilder.Build(
                 "Paper", _paperMaterial, GroundLayer, _settings.SortingLayerName, _settings.PaperSortingOrder);
             _paperQuad.transform.SetParent(transform, worldPositionStays: false);
-            _paperQuad.transform.localScale = new Vector3(
-                _display.ReferenceWorldWidth * overscan,
-                _display.ReferenceWorldHeight * overscan,
-                1f);
+            _paperQuad.transform.localScale = OverscanScale(overscan);
             _paperQuad.SetActive(false);
         }
 
@@ -505,7 +502,8 @@ namespace BalloonParty.Scenario.View
             _mix.Set(ScenarioKind.Paper, _surface, paperIncoming ? open : 1f - open);
 
             Shader.SetGlobalVector(GroundRevealId, new Vector4(
-                0f, Mathf.Lerp(_closedRadius, _openRadius, open), Mathf.Max(0.01f, _settings.RevealEdgeSoftness), 0f));
+                0f, Mathf.Lerp(_closedRadius - _paperFray, _openRadius + _paperFray, open),
+                Mathf.Max(0.01f, _settings.RevealEdgeSoftness), 0f));
             Shader.SetGlobalVector(GroundRevealShapeId, new Vector4(
                 Mathf.Max(0f, _settings.RevealEdgeWander), _revealElapsed, 1f, 1f));
             Shader.SetGlobalVector(PaperRevealId, new Vector4(1f, paperIncoming ? 1f : 0f, 0f, 0f));
@@ -618,6 +616,12 @@ namespace BalloonParty.Scenario.View
             SetBlend(_floorMaterial, dstBlend);
             SetBlend(_waterMaterial, dstBlend);
             SetBlend(_paperMaterial, dstBlend);
+        }
+
+        // Every backdrop quad is overscanned the same way, so a camera shake or cinematic pan never reveals an edge.
+        private Vector3 OverscanScale(float overscan)
+        {
+            return new Vector3(_display.ReferenceWorldWidth * overscan, _display.ReferenceWorldHeight * overscan, 1f);
         }
 
         private static void SetBlend(Material material, float dstBlend)
