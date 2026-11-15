@@ -188,10 +188,11 @@ var NAVTREEINDEX1 =
 "ISceneLightFieldSettings_8cs.html":[7,0,3,5,12],
 "ISceneLightRuntime_8cs.html":[7,0,14,11,0],
 "ISceneLightSettings_8cs.html":[7,0,3,5,13],
+"IScoreShapeCover_8cs.html":[7,0,7,8,0,4],
 "IScoreTrailBehaviourConfiguration_8cs.html":[7,0,3,16],
-"IScoreTrailBehaviour_8cs.html":[7,0,7,8,0,4],
+"IScoreTrailBehaviour_8cs.html":[7,0,7,8,0,5],
 "IScoreTrailConfig_8cs.html":[7,0,14,26],
-"IScoreTrailReporter_8cs.html":[7,0,7,8,0,5],
+"IScoreTrailReporter_8cs.html":[7,0,7,8,0,6],
 "IScreenSpaceLightSettings_8cs.html":[7,0,3,5,14],
 "ISealedMetrics_8cs.html":[7,0,7,9,11],
 "ISfxProvider_8cs.html":[7,0,0,1,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "ItemActivatedMessage_8cs.html":[7,0,14,7,12],
 "ItemActivationContext_8cs.html":[7,0,8,18],
 "ItemActivationCount_8cs.html":[7,0,7,9,13],
-"ItemActivator_8cs.html":[7,0,8,19],
-"ItemAssigner_8cs.html":[7,0,8,20]
+"ItemActivator_8cs.html":[7,0,8,19]
 };

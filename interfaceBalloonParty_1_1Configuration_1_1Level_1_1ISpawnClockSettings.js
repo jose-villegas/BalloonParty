@@ -6,6 +6,7 @@ var interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings =
     [ "BreatherCooldownSeconds", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a8ed4a84719c76dff6296c798ac179f1a", null ],
     [ "BreatherPace", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#ad33347e74e6f9aaace096faef807dd5c", null ],
     [ "BreatherSeconds", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a2fb00c751c93f250fa3631362b39b258", null ],
+    [ "BreatherShapeCover", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#ab369a0d2245f4ed369073068c117db9d", null ],
     [ "FlightPressureSeconds", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#aad708cad47c8e4403af4951fce6c115f", null ],
     [ "FlightSpeedup", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#abe600f412b0b06d955d15040eb82f18f", null ],
     [ "GraceSeconds", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a10248f2f3b3368901fa91bff8fbcd508", null ],

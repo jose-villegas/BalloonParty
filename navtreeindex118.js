@@ -1,5 +1,13 @@
 var NAVTREEINDEX118 =
 {
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage.html#af419d8104ea3c5066d6ad6e27f07abd1":[5,0,0,12,7,27,1],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileCruiseStartedMessage.html#af419d8104ea3c5066d6ad6e27f07abd1":[6,0,0,12,7,27,1],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage.html":[5,0,0,12,7,28],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage.html":[6,0,0,12,7,28],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage.html#aa1dca79f0266e61dd015bc0f989255cd":[5,0,0,12,7,28,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage.html#aa1dca79f0266e61dd015bc0f989255cd":[6,0,0,12,7,28,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage.html#aed04f95b0f6efcf8c0038076fda3014f":[5,0,0,12,7,28,1],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDestroyedMessage.html#aed04f95b0f6efcf8c0038076fda3014f":[6,0,0,12,7,28,1],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedEndedMessage.html":[5,0,0,12,7,29],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedEndedMessage.html":[6,0,0,12,7,29],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileDoomedEndedMessage.html#a0662b8cf86592ba96d855b6773c53065":[5,0,0,12,7,29,0],
@@ -241,13 +249,5 @@ var NAVTREEINDEX118 =
 "structBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService_1_1Registration.html#a0c04b4596c4483d56377bd23ec5f9526":[5,0,0,12,11,4,1,0],
 "structBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService_1_1Registration.html#a0c04b4596c4483d56377bd23ec5f9526":[6,0,0,12,11,4,1,0],
 "structBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService_1_1Registration.html#a1d5f522805161916a44d56ca50c3b4c0":[5,0,0,12,11,4,1,1],
-"structBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService_1_1Registration.html#a1d5f522805161916a44d56ca50c3b4c0":[6,0,0,12,11,4,1,1],
-"structBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService_1_1Registration.html#a75cae93ab54ce70e545d14f03b5fca84":[5,0,0,12,11,4,1,2],
-"structBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService_1_1Registration.html#a75cae93ab54ce70e545d14f03b5fca84":[6,0,0,12,11,4,1,2],
-"structBalloonParty_1_1Shared_1_1WallLimits.html":[5,0,0,12,40],
-"structBalloonParty_1_1Shared_1_1WallLimits.html":[6,0,0,12,40],
-"structBalloonParty_1_1Shared_1_1WallLimits.html#a173c680fef4f00606d8aafd5d94525f6":[5,0,0,12,40,0],
-"structBalloonParty_1_1Shared_1_1WallLimits.html#a173c680fef4f00606d8aafd5d94525f6":[6,0,0,12,40,0],
-"structBalloonParty_1_1Shared_1_1WallLimits.html#a2dc1c8265d4c07128088263be0072642":[5,0,0,12,40,3],
-"structBalloonParty_1_1Shared_1_1WallLimits.html#a2dc1c8265d4c07128088263be0072642":[6,0,0,12,40,3]
+"structBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService_1_1Registration.html#a1d5f522805161916a44d56ca50c3b4c0":[6,0,0,12,11,4,1,1]
 };

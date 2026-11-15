@@ -1,5 +1,17 @@
 var NAVTREEINDEX78 =
 {
+"classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#a4e0266b367edf1855b2b52040a56a6fb":[5,0,0,12,12,2,9],
+"classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#a4e0266b367edf1855b2b52040a56a6fb":[6,0,0,12,12,2,9],
+"classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#a6c42ca80a6e8eac97ff35d1c786f5bf3":[5,0,0,12,12,2,16],
+"classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#a6c42ca80a6e8eac97ff35d1c786f5bf3":[6,0,0,12,12,2,16],
+"classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#a6fd7464ac440c7b7a8a7d57d4179e146":[5,0,0,12,12,2,15],
+"classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#a6fd7464ac440c7b7a8a7d57d4179e146":[6,0,0,12,12,2,15],
+"classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#a8cae77ef0d2fca45a49b6f3186326d8c":[5,0,0,12,12,2,14],
+"classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#a8cae77ef0d2fca45a49b6f3186326d8c":[6,0,0,12,12,2,14],
+"classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#aa717feb25ac65f00b29cb36e03c73029":[5,0,0,12,12,2,7],
+"classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#aa717feb25ac65f00b29cb36e03c73029":[6,0,0,12,12,2,7],
+"classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#ab49411524b30dbfc473f30e51f7ba76c":[5,0,0,12,12,2,0],
+"classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#ab49411524b30dbfc473f30e51f7ba76c":[6,0,0,12,12,2,0],
 "classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#ab4f9c2654df8b7d9145482b14190c2a8":[5,0,0,12,12,2,12],
 "classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#ab4f9c2654df8b7d9145482b14190c2a8":[6,0,0,12,12,2,12],
 "classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#ac11d95a13b798deae3b5df9fd3966f5f":[5,0,0,12,12,2,4],
@@ -237,17 +249,5 @@ var NAVTREEINDEX78 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#ad9dc92c4ca3130edf24649cd0ff5b8b7":[5,0,0,13,0,0,7,6],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#ad9dc92c4ca3130edf24649cd0ff5b8b7":[6,0,0,13,0,0,7,6],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#adf7e6fbe8e39fdcb9507ab058bc5f461":[5,0,0,13,0,0,7,13],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#adf7e6fbe8e39fdcb9507ab058bc5f461":[6,0,0,13,0,0,7,13],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#ae925f1820d5ea95c06a82cab079061d1":[5,0,0,13,0,0,7,15],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#ae925f1820d5ea95c06a82cab079061d1":[6,0,0,13,0,0,7,15],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#af2a3b0af9573be63ce0efee9936531db":[5,0,0,13,0,0,7,16],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#af2a3b0af9573be63ce0efee9936531db":[6,0,0,13,0,0,7,16],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#af9fbeb29b8480592c0435c16c4713b96":[5,0,0,13,0,0,7,4],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#af9fbeb29b8480592c0435c16c4713b96":[6,0,0,13,0,0,7,4],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#afa948473b885b42659407c060bd649a0":[5,0,0,13,0,0,7,8],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#afa948473b885b42659407c060bd649a0":[6,0,0,13,0,0,7,8],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html":[5,0,0,13,0,0,8],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html":[6,0,0,13,0,0,8],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html#a005ef0facd800feb7ace2448d584e9b5":[5,0,0,13,0,0,8,13],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushView.html#a005ef0facd800feb7ace2448d584e9b5":[6,0,0,13,0,0,8,13]
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#adf7e6fbe8e39fdcb9507ab058bc5f461":[6,0,0,13,0,0,7,13]
 };

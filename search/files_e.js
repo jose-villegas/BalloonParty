@@ -118,6 +118,5 @@ var searchData=
   ['puffcloudview_2ecs_115',['PuffCloudView.cs',['../PuffCloudView_8cs.html',1,'']]],
   ['puffcloudviewcontroller_2ecs_116',['PuffCloudViewController.cs',['../PuffCloudViewController_8cs.html',1,'']]],
   ['puffclusterregistry_2ecs_117',['PuffClusterRegistry.cs',['../PuffClusterRegistry_8cs.html',1,'']]],
-  ['puffobstaclemodel_2ecs_118',['PuffObstacleModel.cs',['../PuffObstacleModel_8cs.html',1,'']]],
-  ['purpleheartstep_2ecs_119',['PurpleHeartStep.cs',['../PurpleHeartStep_8cs.html',1,'']]]
+  ['puffobstaclemodel_2ecs_118',['PuffObstacleModel.cs',['../PuffObstacleModel_8cs.html',1,'']]]
 ];

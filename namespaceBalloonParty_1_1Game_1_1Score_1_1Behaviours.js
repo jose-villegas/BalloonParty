@@ -8,6 +8,7 @@ var namespaceBalloonParty_1_1Game_1_1Score_1_1Behaviours =
     [ "FormationOverlapResolver", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationOverlapResolver.html", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationOverlapResolver" ],
     [ "FormationShape", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape.html", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape" ],
     [ "FormationWalk", "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationWalk.html", "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationWalk" ],
+    [ "IScoreShapeCover", "interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreShapeCover.html", "interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreShapeCover" ],
     [ "IScoreTrailBehaviour", "interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailBehaviour.html", "interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailBehaviour" ],
     [ "IScoreTrailReporter", "interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailReporter.html", "interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailReporter" ],
     [ "ScoreTrailBehaviourResolver", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver.html", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver" ],

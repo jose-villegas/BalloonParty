@@ -4,6 +4,7 @@ var dir_edeabde84bfb81c1c6ee2903a52894b6 =
     [ "BigScoreTrailBehaviour.cs", "BigScoreTrailBehaviour_8cs.html", "BigScoreTrailBehaviour_8cs" ],
     [ "DefaultScoreTrailBehaviour.cs", "DefaultScoreTrailBehaviour_8cs.html", "DefaultScoreTrailBehaviour_8cs" ],
     [ "FormationOverlapResolver.cs", "FormationOverlapResolver_8cs.html", "FormationOverlapResolver_8cs" ],
+    [ "IScoreShapeCover.cs", "IScoreShapeCover_8cs.html", "IScoreShapeCover_8cs" ],
     [ "IScoreTrailBehaviour.cs", "IScoreTrailBehaviour_8cs.html", "IScoreTrailBehaviour_8cs" ],
     [ "IScoreTrailReporter.cs", "IScoreTrailReporter_8cs.html", "IScoreTrailReporter_8cs" ],
     [ "ScoreTrailBehaviourId.cs", "ScoreTrailBehaviourId_8cs.html", "ScoreTrailBehaviourId_8cs" ],

@@ -846,6 +846,9 @@ var hierarchy =
     [ "BalloonParty.Configuration.Effects.ISceneLightSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightSettings.html", [
       [ "BalloonParty.Configuration.Effects.SceneLightFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html", null ]
     ] ],
+    [ "BalloonParty.Game.Score.Behaviours.IScoreShapeCover", "interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreShapeCover.html", [
+      [ "BalloonParty.Game.Score.Behaviours.ShapeFormationTicker", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html", null ]
+    ] ],
     [ "BalloonParty.Game.Score.Behaviours.IScoreTrailBehaviour", "interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailBehaviour.html", [
       [ "BalloonParty.Game.Score.Behaviours.BigScoreTrailBehaviour", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html", null ],
       [ "BalloonParty.Game.Score.Behaviours.DefaultScoreTrailBehaviour", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html", null ]
@@ -1421,7 +1424,6 @@ var hierarchy =
       [ "BalloonParty.Editor.UnitCircleDrawer", "classBalloonParty_1_1Editor_1_1UnitCircleDrawer.html", null ]
     ] ],
     [ "BalloonParty.Editor.PropertyDrawerHelper", "classBalloonParty_1_1Editor_1_1PropertyDrawerHelper.html", null ],
-    [ "BalloonParty.Configuration.Balloons.PurpleHeartStep", "structBalloonParty_1_1Configuration_1_1Balloons_1_1PurpleHeartStep.html", null ],
     [ "BalloonParty.Shared.Rendering.QuadRendererBuilder", "classBalloonParty_1_1Shared_1_1Rendering_1_1QuadRendererBuilder.html", null ],
     [ "BalloonParty.Configuration.Ranges.RangedFloat", "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedFloat.html", null ],
     [ "BalloonParty.Configuration.Ranges.RangedInt", "structBalloonParty_1_1Configuration_1_1Ranges_1_1RangedInt.html", null ],

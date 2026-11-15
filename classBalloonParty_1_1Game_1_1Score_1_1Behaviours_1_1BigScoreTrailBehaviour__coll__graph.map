@@ -1,13 +1,15 @@
 <map id="BalloonParty.Game.Score.Behaviours.BigScoreTrailBehaviour" name="BalloonParty.Game.Score.Behaviours.BigScoreTrailBehaviour">
-<area shape="rect" id="Node000001" title="Decomposes a big score into a catalog of 3D shapes and launches them all at once." alt="" coords="563,99,812,143"/>
-<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailBehaviour.html" title="A per&#45;group choreography handler: it owns everything between the group&#39;s spawn and its arrivals." alt="" coords="168,5,399,50"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="407,51,540,81,600,98,595,98,539,86,407,56"/>
-<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html" title="Global knobs shared by every BigScore formation: radius, pen speed, coverage, spin and the scale&#45;over..." alt="" coords="185,75,382,119"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="397,101,565,113,560,114,398,106"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html" title="Pooled, zero&#45;allocation per&#45;frame driver for every in&#45;flight shape formation." alt="" coords="162,144,405,189"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="420,148,565,134,560,136,421,154"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="5,152,113,180"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="127,164,164,165,159,167,129,169"/>
-<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Configuration_1_1IScoreTrailBehaviourConfiguration.html" title="Read&#45;only view of the score&#45;trail choreography table — the ordered ScoreTrailBehaviourEntry list the ..." alt="" coords="163,213,404,258"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="397,207,539,169,620,145,626,143,540,174,399,212"/>
+<area shape="rect" id="Node000001" title="Decomposes a big score into a catalog of 3D shapes and launches them all at once." alt="" coords="672,99,921,143"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailBehaviour.html" title="A per&#45;group choreography handler: it owns everything between the group&#39;s spawn and its arrivals." alt="" coords="277,5,508,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="516,51,649,81,709,98,704,98,648,86,516,56"/>
+<area shape="rect" id="Node000003" href="$structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html" title="Global knobs shared by every BigScore formation: radius, pen speed, coverage, spin and the scale&#45;over..." alt="" coords="294,75,491,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="506,101,674,113,669,114,507,106"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html" title="Pooled, zero&#45;allocation per&#45;frame driver for every in&#45;flight shape formation." alt="" coords="271,144,514,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="529,148,674,134,669,135,530,154"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="60,123,167,151"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="182,142,273,152,268,155,183,147"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreShapeCover.html" title="How much of the board the BigScore shapes being drawn in the air take up right now." alt="" coords="5,175,222,219"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="237,181,273,179,268,180,238,186"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Configuration_1_1IScoreTrailBehaviourConfiguration.html" title="Read&#45;only view of the score&#45;trail choreography table — the ordered ScoreTrailBehaviourEntry list the ..." alt="" coords="272,213,513,258"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="507,207,648,169,729,145,735,143,649,174,508,212"/>
 </map>

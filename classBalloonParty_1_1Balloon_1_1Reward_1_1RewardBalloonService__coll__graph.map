@@ -8,7 +8,7 @@
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="241,171,365,201,412,215,407,216,364,206,242,177"/>
 <area shape="rect" id="Node000005" title=" " alt="" coords="75,194,172,222"/>
 <area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="187,210,365,224,391,228,386,229,364,229,188,215"/>
-<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html" title="When the reward balloons come (PLAN&#45;RewardBalloons): the golden one late in a purple level,..." alt="" coords="5,245,242,290"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html" title="When the reward balloons come (PLAN&#45;RewardBalloons): on a purple level, both rolled every few lines w..." alt="" coords="5,245,242,290"/>
 <area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="256,255,390,245,386,248,258,260"/>
 <area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html" title="Read surface of the player&#39;s progression through levels." alt="" coords="30,315,217,359"/>
 <area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="231,310,364,275,424,260,419,262,365,281,233,315"/>

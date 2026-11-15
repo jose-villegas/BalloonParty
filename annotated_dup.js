@@ -151,7 +151,6 @@ var annotated_dup =
           [ "IRewardBalloonSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings" ],
           [ "IUnbreakableFormationSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings" ],
           [ "PopPulse", "classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1PopPulse" ],
-          [ "PurpleHeartStep", "structBalloonParty_1_1Configuration_1_1Balloons_1_1PurpleHeartStep.html", "structBalloonParty_1_1Configuration_1_1Balloons_1_1PurpleHeartStep" ],
           [ "RewardBalloonSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings" ],
           [ "UnbreakableFormationSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings" ]
         ] ],
@@ -544,6 +543,7 @@ var annotated_dup =
             [ "FormationOverlapResolver", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationOverlapResolver.html", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationOverlapResolver" ],
             [ "FormationShape", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape.html", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape" ],
             [ "FormationWalk", "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationWalk.html", "structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationWalk" ],
+            [ "IScoreShapeCover", "interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreShapeCover.html", "interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreShapeCover" ],
             [ "IScoreTrailBehaviour", "interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailBehaviour.html", "interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailBehaviour" ],
             [ "IScoreTrailReporter", "interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailReporter.html", "interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailReporter" ],
             [ "ScoreTrailBehaviourResolver", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver.html", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver" ],

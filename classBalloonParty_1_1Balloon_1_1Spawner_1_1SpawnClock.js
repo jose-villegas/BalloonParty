@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock =
 [
-    [ "SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a02e134ef573667baa8db427bf29c514e", null ],
+    [ "SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a18534d9149806058c16f2774c5575206", null ],
     [ "Advance", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a0fdff0c4fd714ec4ffdaa872eea5ecbd", null ],
     [ "AgeFlights", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a9db27699abea2c79bb4f8a14479b1de8", null ],
     [ "AnotherBallInFlight", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a609377121378f09bc17a5d24c71bccdd", null ],
@@ -11,7 +11,9 @@ var classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock =
     [ "OnFired", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a82df526b296e5819fd17efb963048355", null ],
     [ "Pace", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a44126bacf9970a56a8a8478252b85b27", null ],
     [ "ResetRun", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#afe7206b7c54e90149191d29d0dc5420c", null ],
+    [ "ShapesCoverTheBoard", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a3004b2b048c0f4190bb8bdb6b1bd1385", null ],
     [ "Start", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#adf653caa65cb552e978e8a01005b55ab", null ],
+    [ "StartBreather", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#ada82572ba44f67bce2594d134533e9f0", null ],
     [ "StartLevel", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#ac7b21b42fcd83867f72d65b3b473b849", null ],
     [ "StartWindow", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a1766a2cbc776f4f625d6fb469ea2d6eb", null ],
     [ "Tick", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#abfa4e6c06a01bccb5a0cedd4f49e54ac", null ],
@@ -21,6 +23,7 @@ var classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock =
     [ "_cooldownLeft", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a95d0e3ab64c8f6c20aa535b87f8f4a26", null ],
     [ "_firedSubscriber", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#affc45ff5f400ee9fc885273e2ba24c34", null ],
     [ "_flightAges", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a08ec7e48aec5d2880ea6fa50e19076e3", null ],
+    [ "_flightConfig", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#ae1431ee7c2b1eefe090a696c32085e12", null ],
     [ "_levelParams", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#aa8d8faa4750a3ba4200cfbd861d468ef", null ],
     [ "_levelProgress", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a35c3bc06aee0c0b6343156e8a1fa80ad", null ],
     [ "_linePublisher", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a97c3f25ce790c4493b90e42c65de0621", null ],
@@ -30,6 +33,7 @@ var classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock =
     [ "_remaining", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a5befad74947dcf09afd9f6e4838570d0", null ],
     [ "_secondsOnLevel", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a9bd5b9b2bcebf613699aed74e7a1784d", null ],
     [ "_settings", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a325ec228eaaec7f62b55a080445ddd8b", null ],
+    [ "_shapeCover", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a7a7c869c71eb7fcaed13c2884f072358", null ],
     [ "_subscriptions", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a008f580b3e6c2640c78ea2c812f9fe7b", null ],
     [ "_window", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#ac14e660a6ee2582f2402550e8d9c477c", null ],
     [ "BreatherSecondsLeft", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a0d8afe230fc085dc495fcf50cf241d7f", null ],

@@ -46,5 +46,6 @@ var classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker =
     [ "MaxVertexCount", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a66774b0b4bff3c5c745300e3c4ca309a", null ],
     [ "MinDuration", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#a29474076fcd198329a4de8f3257b08a5", null ],
     [ "SnapFadeDuration", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#adec6901ed367f27c5050c82f7b9894f0", null ],
-    [ "SpinRampRate", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#ad86478fb044ab55d5ac89aaa2be1881c", null ]
+    [ "SpinRampRate", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#ad86478fb044ab55d5ac89aaa2be1881c", null ],
+    [ "CoveredArea", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#ad7a2058d03a3a51aca9c96a2afab34db", null ]
 ];

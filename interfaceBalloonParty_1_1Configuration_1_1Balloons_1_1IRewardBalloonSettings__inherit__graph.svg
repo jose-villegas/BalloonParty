@@ -22,7 +22,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="When the reward balloons come (PLAN&#45;RewardBalloons): the golden one late in a purple level,...">
+<g id="a_Node000001"><a xlink:title="When the reward balloons come (PLAN&#45;RewardBalloons): on a purple level, both rolled every few lines w...">
 <polygon fill="#999999" stroke="#666666" points="177.25,-103 0,-103 0,-69.5 177.25,-69.5 177.25,-103"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-89.5" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text xml:space="preserve" text-anchor="middle" x="88.62" y="-76.75" font-family="Helvetica,sans-Serif" font-size="10.00">Balloons.IRewardBalloonSettings</text>

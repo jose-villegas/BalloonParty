@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseCurve.html" target="_top" xlink:title="Pure answer to &quot;what share of a line&#39;s places are bubbles, this far into a water level?...">
+<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Configuration_1_1Level_1_1BudgetFormula.html" target="_top" xlink:title="A level&#39;s budget: a base, plus a step per level after the first, never past a cap.">
 <polygon fill="white" stroke="#666666" points="147.25,-33.5 0,-33.5 0,0 147.25,0 147.25,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
-<text xml:space="preserve" text-anchor="middle" x="73.62" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">Level.BubbleRiseCurve</text>
+<text xml:space="preserve" text-anchor="middle" x="73.62" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">Level.BudgetFormula</text>
 </a>
 </g>
 </g>
