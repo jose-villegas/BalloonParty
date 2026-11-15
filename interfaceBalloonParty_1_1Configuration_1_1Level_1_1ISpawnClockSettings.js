@@ -14,6 +14,10 @@ var interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings =
     [ "LinesPerWave", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a2fb27416a2c93f3b00f21f5dc005f3fa", null ],
     [ "OccupancyWeight", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a54219a76f4b1150caecaf1540b48f71c", null ],
     [ "OverlapShotPull", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a37c8f81313b27845d06db758f98f865a", null ],
+    [ "PressureBuildSeconds", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#abe037710257d9a098c47c317921fae47", null ],
+    [ "PressureHoldOccupancy", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a25d314a71bf35afe02fd602a5c83efdc", null ],
+    [ "PressureKeptOnHeartLoss", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#af5cb0ea7b51d5a79e1162c499fd93d65", null ],
+    [ "PressureSpeedup", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a2c9e1fae46d86bd3f0cd35098b692f73", null ],
     [ "SparseBoardSpeedup", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#aa173f4601d26778f7f687554b608aa56", null ],
     [ "TargetOccupancy", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#af59d50067fb118dc6702ca4e76be767a", null ]
 ];

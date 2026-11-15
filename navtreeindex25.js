@@ -1,5 +1,17 @@
 var NAVTREEINDEX25 =
 {
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckAppearanceSettings.html#a10ae397e50119db31503e653cb47a17e":[5,0,0,3,5,33,15],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckAppearanceSettings.html#a10ae397e50119db31503e653cb47a17e":[6,0,0,3,5,33,15],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckAppearanceSettings.html#a2824884f0adeff9fac44ac7d962bea11":[5,0,0,3,5,33,9],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckAppearanceSettings.html#a2824884f0adeff9fac44ac7d962bea11":[6,0,0,3,5,33,9],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckAppearanceSettings.html#a28e4f9c8cc1ec917f12f1974ef91674d":[5,0,0,3,5,33,12],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckAppearanceSettings.html#a28e4f9c8cc1ec917f12f1974ef91674d":[6,0,0,3,5,33,12],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckAppearanceSettings.html#a2be945bf0d924e5f371fd97343f27193":[5,0,0,3,5,33,4],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckAppearanceSettings.html#a2be945bf0d924e5f371fd97343f27193":[6,0,0,3,5,33,4],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckAppearanceSettings.html#a49a2fb9cd1fc5d6ae9d3156c0c5429d1":[5,0,0,3,5,33,6],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckAppearanceSettings.html#a49a2fb9cd1fc5d6ae9d3156c0c5429d1":[6,0,0,3,5,33,6],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckAppearanceSettings.html#a4c44ac69944c4e05fcefb3ca37926c39":[5,0,0,3,5,33,20],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckAppearanceSettings.html#a4c44ac69944c4e05fcefb3ca37926c39":[6,0,0,3,5,33,20],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckAppearanceSettings.html#a5359b6ddfb50ec8f4a7a7aa08f3458fe":[5,0,0,3,5,33,1],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckAppearanceSettings.html#a5359b6ddfb50ec8f4a7a7aa08f3458fe":[6,0,0,3,5,33,1],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1SpeckAppearanceSettings.html#a576ac2372210057b3bc920a5c6a9f85c":[5,0,0,3,5,33,26],
@@ -237,17 +249,5 @@ var NAVTREEINDEX25 =
 "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a1b7a31e1c5e598a964afa71820033b0b":[5,0,0,3,7,4,14],
 "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a1b7a31e1c5e598a964afa71820033b0b":[6,0,0,3,7,4,14],
 "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a2d416bc88861e5b540560c1c03b8e1f1":[5,0,0,3,7,4,21],
-"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a2d416bc88861e5b540560c1c03b8e1f1":[6,0,0,3,7,4,21],
-"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a31b8b871e590228add0dafbfa918b11e":[5,0,0,3,7,4,23],
-"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a31b8b871e590228add0dafbfa918b11e":[6,0,0,3,7,4,23],
-"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a3ed516d7e09e3ac0d8e5c7f1453744c2":[5,0,0,3,7,4,9],
-"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a3ed516d7e09e3ac0d8e5c7f1453744c2":[6,0,0,3,7,4,9],
-"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a42be2685bdb59b64d011bc9633584482":[5,0,0,3,7,4,10],
-"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a42be2685bdb59b64d011bc9633584482":[6,0,0,3,7,4,10],
-"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a46d532122c88a417c3d5a16c30b9cd25":[5,0,0,3,7,4,8],
-"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a46d532122c88a417c3d5a16c30b9cd25":[6,0,0,3,7,4,8],
-"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a559598dd17de712ab18c6028ea48603c":[5,0,0,3,7,4,29],
-"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a559598dd17de712ab18c6028ea48603c":[6,0,0,3,7,4,29],
-"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a59005a543423f0103804980b6196fa62":[5,0,0,3,7,4,31],
-"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a59005a543423f0103804980b6196fa62":[6,0,0,3,7,4,31]
+"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a2d416bc88861e5b540560c1c03b8e1f1":[6,0,0,3,7,4,21]
 };

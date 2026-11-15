@@ -145,8 +145,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:af694e1abd6757bbc1823b36cfb05ff34" id="r_af694e1abd6757bbc1823b36cfb05ff34"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af694e1abd6757bbc1823b36cfb05ff34">SpawnClockSettings</a> (float firstLevelInterval, float intervalDecayPerLevel, float minInterval, float graceSeconds, int linesPerWave=1, float overlapShotPull=0f, float sparseBoardSpeedup=1f, float targetOccupancy=0.5f, float occupancyWeight=0f, float flightSpeedup=1f, float flightPressureSeconds=6f, float lateIntervalDecayPerLevel=1f, float lateMinInterval=0.1f, float breatherClear=0f, float breatherClearWindow=2f, float breatherSeconds=6f, float breatherPace=0.2f, float breatherCooldownSeconds=0f, float breatherShapeCover=0f, float breatherDanger=0f)</td></tr>
-<tr class="separator:af694e1abd6757bbc1823b36cfb05ff34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a974a30d7b351d37fd36247e324319cdf" id="r_a974a30d7b351d37fd36247e324319cdf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a974a30d7b351d37fd36247e324319cdf">SpawnClockSettings</a> (float firstLevelInterval, float intervalDecayPerLevel, float minInterval, float graceSeconds, int linesPerWave=1, float overlapShotPull=0f, float sparseBoardSpeedup=1f, float targetOccupancy=0.5f, float occupancyWeight=0f, float flightSpeedup=1f, float flightPressureSeconds=6f, float lateIntervalDecayPerLevel=1f, float lateMinInterval=0.1f, float breatherClear=0f, float breatherClearWindow=2f, float breatherSeconds=6f, float breatherPace=0.2f, float breatherCooldownSeconds=0f, float breatherShapeCover=0f, float breatherDanger=0f, float pressureSpeedup=1f, float pressureBuildSeconds=120f, float pressureHoldOccupancy=0.85f, float pressureKeptOnHeartLoss=0.5f)</td></tr>
+<tr class="separator:a974a30d7b351d37fd36247e324319cdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -189,6 +189,18 @@ Properties</h2></td></tr>
 <tr class="memitem:a1c7080dbc36603b8731f85e0e5ab259a" id="r_a1c7080dbc36603b8731f85e0e5ab259a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1c7080dbc36603b8731f85e0e5ab259a">OverlapShotPull</a><code> [get]</code></td></tr>
 <tr class="memdesc:a1c7080dbc36603b8731f85e0e5ab259a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Share of the current wait a ball fired while another is still flying takes off the next line on an empty board: 0.35 = that line arrives 35% of an interval sooner.  <br /></td></tr>
 <tr class="separator:a1c7080dbc36603b8731f85e0e5ab259a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4059149f542b128119dcca5004581e83" id="r_a4059149f542b128119dcca5004581e83"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4059149f542b128119dcca5004581e83">PressureBuildSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:a4059149f542b128119dcca5004581e83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds of comfortable play (no need) that build pressure from none to full; need slows it.  <br /></td></tr>
+<tr class="separator:a4059149f542b128119dcca5004581e83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a315dd864da26a5773dca151579e15157" id="r_a315dd864da26a5773dca151579e15157"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a315dd864da26a5773dca151579e15157">PressureHoldOccupancy</a><code> [get]</code></td></tr>
+<tr class="memdesc:a315dd864da26a5773dca151579e15157"><td class="mdescLeft">&#160;</td><td class="mdescRight">Share of the open slots in balloons at or above which pressure stops building and holds.  <br /></td></tr>
+<tr class="separator:a315dd864da26a5773dca151579e15157"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90e2de843159f66d6d988c20fbb245ef" id="r_a90e2de843159f66d6d988c20fbb245ef"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a90e2de843159f66d6d988c20fbb245ef">PressureKeptOnHeartLoss</a><code> [get]</code></td></tr>
+<tr class="memdesc:a90e2de843159f66d6d988c20fbb245ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Share of the pressure kept when a line costs a heart, 0 to 1.  <br /></td></tr>
+<tr class="separator:a90e2de843159f66d6d988c20fbb245ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02f63f70f07cedea47a125fcdc1c3c52" id="r_a02f63f70f07cedea47a125fcdc1c3c52"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02f63f70f07cedea47a125fcdc1c3c52">PressureSpeedup</a><code> [get]</code></td></tr>
+<tr class="memdesc:a02f63f70f07cedea47a125fcdc1c3c52"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much faster the clock runs at full pressure (1 = never).  <br /></td></tr>
+<tr class="separator:a02f63f70f07cedea47a125fcdc1c3c52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeba089fda0f83e847a7e90cdb548e7a5" id="r_aeba089fda0f83e847a7e90cdb548e7a5"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeba089fda0f83e847a7e90cdb548e7a5">SparseBoardSpeedup</a><code> [get]</code></td></tr>
 <tr class="memdesc:aeba089fda0f83e847a7e90cdb548e7a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much faster the clock runs on an empty board.  <br /></td></tr>
 <tr class="separator:aeba089fda0f83e847a7e90cdb548e7a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -239,6 +251,14 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ade80ff796109e3a3916ad6a8fd6aa1dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a334649a339ac588a676ba1393d49f7ab" id="r_a334649a339ac588a676ba1393d49f7ab"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a334649a339ac588a676ba1393d49f7ab">_overlapShotPull</a> = 0.35f</td></tr>
 <tr class="separator:a334649a339ac588a676ba1393d49f7ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7ede047ba477d4c1432ac3dd91dc044" id="r_ac7ede047ba477d4c1432ac3dd91dc044"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac7ede047ba477d4c1432ac3dd91dc044">_pressureBuildSeconds</a> = 120f</td></tr>
+<tr class="separator:ac7ede047ba477d4c1432ac3dd91dc044"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70aeffc9eec4308db742d98f750c046b" id="r_a70aeffc9eec4308db742d98f750c046b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a70aeffc9eec4308db742d98f750c046b">_pressureHoldOccupancy</a> = 0.85f</td></tr>
+<tr class="separator:a70aeffc9eec4308db742d98f750c046b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa90ba7e97dd960cc56765749e32fee53" id="r_aa90ba7e97dd960cc56765749e32fee53"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa90ba7e97dd960cc56765749e32fee53">_pressureKeptOnHeartLoss</a> = 0.5f</td></tr>
+<tr class="separator:aa90ba7e97dd960cc56765749e32fee53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9053f05c73d928c51b1654224bf87a7d" id="r_a9053f05c73d928c51b1654224bf87a7d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9053f05c73d928c51b1654224bf87a7d">_pressureSpeedup</a> = 2f</td></tr>
+<tr class="separator:a9053f05c73d928c51b1654224bf87a7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace8cfc41cc7809c0e57d89d0922a981e" id="r_ace8cfc41cc7809c0e57d89d0922a981e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace8cfc41cc7809c0e57d89d0922a981e">_sparseBoardSpeedup</a> = 8f</td></tr>
 <tr class="separator:ace8cfc41cc7809c0e57d89d0922a981e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed9c77d5c9a39b4591a7aa1acfddcc05" id="r_aed9c77d5c9a39b4591a7aa1acfddcc05"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aed9c77d5c9a39b4591a7aa1acfddcc05">_targetOccupancy</a> = 0.5f</td></tr>
@@ -265,8 +285,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="af694e1abd6757bbc1823b36cfb05ff34" name="af694e1abd6757bbc1823b36cfb05ff34"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af694e1abd6757bbc1823b36cfb05ff34">&#9670;&#160;</a></span>SpawnClockSettings() <span class="overload">[2/2]</span></h2>
+<a id="a974a30d7b351d37fd36247e324319cdf" name="a974a30d7b351d37fd36247e324319cdf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a974a30d7b351d37fd36247e324319cdf">&#9670;&#160;</a></span>SpawnClockSettings() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -372,7 +392,27 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>breatherDanger</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0f</span>&#160;)</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>breatherDanger</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>pressureSpeedup</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>pressureBuildSeconds</em></span><span class="paramdefsep"> = </span><span class="paramdefval">120f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>pressureHoldOccupancy</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0::85f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>pressureKeptOnHeartLoss</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0::5f</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -828,6 +868,94 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ac7ede047ba477d4c1432ac3dd91dc044" name="ac7ede047ba477d4c1432ac3dd91dc044"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7ede047ba477d4c1432ac3dd91dc044">&#9670;&#160;</a></span>_pressureBuildSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.SpawnClockSettings._pressureBuildSeconds = 120f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a70aeffc9eec4308db742d98f750c046b" name="a70aeffc9eec4308db742d98f750c046b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70aeffc9eec4308db742d98f750c046b">&#9670;&#160;</a></span>_pressureHoldOccupancy</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.SpawnClockSettings._pressureHoldOccupancy = 0.85f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa90ba7e97dd960cc56765749e32fee53" name="aa90ba7e97dd960cc56765749e32fee53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa90ba7e97dd960cc56765749e32fee53">&#9670;&#160;</a></span>_pressureKeptOnHeartLoss</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.SpawnClockSettings._pressureKeptOnHeartLoss = 0.5f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9053f05c73d928c51b1654224bf87a7d" name="a9053f05c73d928c51b1654224bf87a7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9053f05c73d928c51b1654224bf87a7d">&#9670;&#160;</a></span>_pressureSpeedup</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.SpawnClockSettings._pressureSpeedup = 2f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ace8cfc41cc7809c0e57d89d0922a981e" name="ace8cfc41cc7809c0e57d89d0922a981e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ace8cfc41cc7809c0e57d89d0922a981e">&#9670;&#160;</a></span>_sparseBoardSpeedup</h2>
 
@@ -1214,6 +1342,111 @@ Private Attributes</h2></td></tr>
 <p>It shrinks as the board fills, to nothing at its normal fill. One ball at a time costs nothing. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a37c8f81313b27845d06db758f98f865a">BalloonParty.Configuration.Level.ISpawnClockSettings</a>.</p>
+
+</div>
+</div>
+<a id="a4059149f542b128119dcca5004581e83" name="a4059149f542b128119dcca5004581e83"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4059149f542b128119dcca5004581e83">&#9670;&#160;</a></span>PressureBuildSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.SpawnClockSettings.PressureBuildSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds of comfortable play (no need) that build pressure from none to full; need slows it. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#abe037710257d9a098c47c317921fae47">BalloonParty.Configuration.Level.ISpawnClockSettings</a>.</p>
+
+</div>
+</div>
+<a id="a315dd864da26a5773dca151579e15157" name="a315dd864da26a5773dca151579e15157"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a315dd864da26a5773dca151579e15157">&#9670;&#160;</a></span>PressureHoldOccupancy</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.SpawnClockSettings.PressureHoldOccupancy</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Share of the open slots in balloons at or above which pressure stops building and holds. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a25d314a71bf35afe02fd602a5c83efdc">BalloonParty.Configuration.Level.ISpawnClockSettings</a>.</p>
+
+</div>
+</div>
+<a id="a90e2de843159f66d6d988c20fbb245ef" name="a90e2de843159f66d6d988c20fbb245ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90e2de843159f66d6d988c20fbb245ef">&#9670;&#160;</a></span>PressureKeptOnHeartLoss</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.SpawnClockSettings.PressureKeptOnHeartLoss</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Share of the pressure kept when a line costs a heart, 0 to 1. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#af5cb0ea7b51d5a79e1162c499fd93d65">BalloonParty.Configuration.Level.ISpawnClockSettings</a>.</p>
+
+</div>
+</div>
+<a id="a02f63f70f07cedea47a125fcdc1c3c52" name="a02f63f70f07cedea47a125fcdc1c3c52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02f63f70f07cedea47a125fcdc1c3c52">&#9670;&#160;</a></span>PressureSpeedup</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.SpawnClockSettings.PressureSpeedup</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How much faster the clock runs at full pressure (1 = never). </p>
+<p>Pressure is the push back on a comfortable player: it builds while the board stays under <a class="el" href="#a315dd864da26a5773dca151579e15157" title="Share of the open slots in balloons at or above which pressure stops building and holds.">PressureHoldOccupancy</a> and the player is not in need, holds above it, and partly goes when a line costs a heart. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html#a2c9e1fae46d86bd3f0cd35098b692f73">BalloonParty.Configuration.Level.ISpawnClockSettings</a>.</p>
 
 </div>
 </div>

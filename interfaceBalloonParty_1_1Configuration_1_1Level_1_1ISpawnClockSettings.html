@@ -169,6 +169,18 @@ Properties</h2></td></tr>
 <tr class="memitem:a37c8f81313b27845d06db758f98f865a" id="r_a37c8f81313b27845d06db758f98f865a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a37c8f81313b27845d06db758f98f865a">OverlapShotPull</a><code> [get]</code></td></tr>
 <tr class="memdesc:a37c8f81313b27845d06db758f98f865a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Share of the current wait a ball fired while another is still flying takes off the next line on an empty board: 0.35 = that line arrives 35% of an interval sooner.  <br /></td></tr>
 <tr class="separator:a37c8f81313b27845d06db758f98f865a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe037710257d9a098c47c317921fae47" id="r_abe037710257d9a098c47c317921fae47"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abe037710257d9a098c47c317921fae47">PressureBuildSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:abe037710257d9a098c47c317921fae47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds of comfortable play (no need) that build pressure from none to full; need slows it.  <br /></td></tr>
+<tr class="separator:abe037710257d9a098c47c317921fae47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25d314a71bf35afe02fd602a5c83efdc" id="r_a25d314a71bf35afe02fd602a5c83efdc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a25d314a71bf35afe02fd602a5c83efdc">PressureHoldOccupancy</a><code> [get]</code></td></tr>
+<tr class="memdesc:a25d314a71bf35afe02fd602a5c83efdc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Share of the open slots in balloons at or above which pressure stops building and holds.  <br /></td></tr>
+<tr class="separator:a25d314a71bf35afe02fd602a5c83efdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5cb0ea7b51d5a79e1162c499fd93d65" id="r_af5cb0ea7b51d5a79e1162c499fd93d65"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af5cb0ea7b51d5a79e1162c499fd93d65">PressureKeptOnHeartLoss</a><code> [get]</code></td></tr>
+<tr class="memdesc:af5cb0ea7b51d5a79e1162c499fd93d65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Share of the pressure kept when a line costs a heart, 0 to 1.  <br /></td></tr>
+<tr class="separator:af5cb0ea7b51d5a79e1162c499fd93d65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c9e1fae46d86bd3f0cd35098b692f73" id="r_a2c9e1fae46d86bd3f0cd35098b692f73"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c9e1fae46d86bd3f0cd35098b692f73">PressureSpeedup</a><code> [get]</code></td></tr>
+<tr class="memdesc:a2c9e1fae46d86bd3f0cd35098b692f73"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much faster the clock runs at full pressure (1 = never).  <br /></td></tr>
+<tr class="separator:a2c9e1fae46d86bd3f0cd35098b692f73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa173f4601d26778f7f687554b608aa56" id="r_aa173f4601d26778f7f687554b608aa56"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa173f4601d26778f7f687554b608aa56">SparseBoardSpeedup</a><code> [get]</code></td></tr>
 <tr class="memdesc:aa173f4601d26778f7f687554b608aa56"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much faster the clock runs on an empty board.  <br /></td></tr>
 <tr class="separator:aa173f4601d26778f7f687554b608aa56"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -540,6 +552,111 @@ Properties</h2></td></tr>
 <p>It shrinks as the board fills, to nothing at its normal fill. One ball at a time costs nothing. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a1c7080dbc36603b8731f85e0e5ab259a">BalloonParty.Configuration.Level.SpawnClockSettings</a>.</p>
+
+</div>
+</div>
+<a id="abe037710257d9a098c47c317921fae47" name="abe037710257d9a098c47c317921fae47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe037710257d9a098c47c317921fae47">&#9670;&#160;</a></span>PressureBuildSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.ISpawnClockSettings.PressureBuildSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds of comfortable play (no need) that build pressure from none to full; need slows it. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a4059149f542b128119dcca5004581e83">BalloonParty.Configuration.Level.SpawnClockSettings</a>.</p>
+
+</div>
+</div>
+<a id="a25d314a71bf35afe02fd602a5c83efdc" name="a25d314a71bf35afe02fd602a5c83efdc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25d314a71bf35afe02fd602a5c83efdc">&#9670;&#160;</a></span>PressureHoldOccupancy</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.ISpawnClockSettings.PressureHoldOccupancy</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Share of the open slots in balloons at or above which pressure stops building and holds. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a315dd864da26a5773dca151579e15157">BalloonParty.Configuration.Level.SpawnClockSettings</a>.</p>
+
+</div>
+</div>
+<a id="af5cb0ea7b51d5a79e1162c499fd93d65" name="af5cb0ea7b51d5a79e1162c499fd93d65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5cb0ea7b51d5a79e1162c499fd93d65">&#9670;&#160;</a></span>PressureKeptOnHeartLoss</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.ISpawnClockSettings.PressureKeptOnHeartLoss</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Share of the pressure kept when a line costs a heart, 0 to 1. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a90e2de843159f66d6d988c20fbb245ef">BalloonParty.Configuration.Level.SpawnClockSettings</a>.</p>
+
+</div>
+</div>
+<a id="a2c9e1fae46d86bd3f0cd35098b692f73" name="a2c9e1fae46d86bd3f0cd35098b692f73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c9e1fae46d86bd3f0cd35098b692f73">&#9670;&#160;</a></span>PressureSpeedup</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Level.ISpawnClockSettings.PressureSpeedup</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How much faster the clock runs at full pressure (1 = never). </p>
+<p>Pressure is the push back on a comfortable player: it builds while the board stays under <a class="el" href="#a25d314a71bf35afe02fd602a5c83efdc" title="Share of the open slots in balloons at or above which pressure stops building and holds.">PressureHoldOccupancy</a> and the player is not in need, holds above it, and partly goes when a line costs a heart. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a02f63f70f07cedea47a125fcdc1c3c52">BalloonParty.Configuration.Level.SpawnClockSettings</a>.</p>
 
 </div>
 </div>

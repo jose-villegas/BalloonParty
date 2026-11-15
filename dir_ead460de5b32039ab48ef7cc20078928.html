@@ -175,6 +175,9 @@ Other help that follows the need</h1>
 <td class="markdownTableBodyNone">A retry's bonus card leans defensive   </td><td class="markdownTableBodyNone"><code>Game/Upgrades/RunUpgrades.BonusDealWeight</code>   </td><td class="markdownTableBodyNone">Each card's deal weight × (1 + <code>IUpgradeCardSettings.RetryDealBoost</code>): Thick Skin 1, so twice as likely. A retry follows a lost run, so it reads full need without asking. The deal stays seeded   </td></tr>
 </table>
 <h1><a class="anchor" id="autotoc_md188"></a>
+The other side: pressure</h1>
+<p>Need only ever helps. The push back on a player who is comfortable lives in the spawn clock (<code>Balloon/Spawner/SpawnClock</code>, <code>ISpawnClockSettings.Pressure*</code>). While the board stays under its hold occupancy and the need is low, the clock runs ever faster, up to 2×, until the board climbs. The need slows that build, and on the last heart it builds none. A struggling player never builds it, and a strong build is pushed until its board climbs.</p>
+<h1><a class="anchor" id="autotoc_md189"></a>
 Adding a roll</h1>
 <p>Give the roll a <code>PityRoll</code> with its own <code>PitySettings</code> on <code>AssistSettings</code>, read <code>IPlayerNeed.Need</code> when it rolls, and clear the pity on a run reset. A roll with more outcomes than hit or miss (the item wave's count) draws its own result and reports it with <code>PityRoll.Record</code>, reading <code>ChanceFor</code> for the raised chance. A roll that already scales with need (the heart's chance grows with missing hearts) wants a gentler growth than one that doesn't. </p>
 </div><!-- contents -->

@@ -129,6 +129,9 @@ Properties</h2></td></tr>
 <tr class="memitem:ad0991e3e87e34c233618b03dd793fe2b" id="r_ad0991e3e87e34c233618b03dd793fe2b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad0991e3e87e34c233618b03dd793fe2b">NextLineProgress</a><code> [get]</code></td></tr>
 <tr class="memdesc:ad0991e3e87e34c233618b03dd793fe2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">0 just after a line lands (or as a level's grace starts), rising to 1 as the next line arrives.  <br /></td></tr>
 <tr class="separator:ad0991e3e87e34c233618b03dd793fe2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69a269e653c108f8d5288fa0c6971265" id="r_a69a269e653c108f8d5288fa0c6971265"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a69a269e653c108f8d5288fa0c6971265">Pressure</a><code> [get]</code></td></tr>
+<tr class="memdesc:a69a269e653c108f8d5288fa0c6971265"><td class="mdescLeft">&#160;</td><td class="mdescRight">The push back on a comfortable player, 0 to 1: at 1 the clock runs <code>ISpawnClockSettings.PressureSpeedup</code> times faster.  <br /></td></tr>
+<tr class="separator:a69a269e653c108f8d5288fa0c6971265"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21782b6473b41f977ecf3b7a3009d117" id="r_a21782b6473b41f977ecf3b7a3009d117"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a21782b6473b41f977ecf3b7a3009d117">SecondsOnLevel</a><code> [get]</code></td></tr>
 <tr class="memdesc:a21782b6473b41f977ecf3b7a3009d117"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds of play on the current level, counted under the clock's holds (<a class="el" href="namespaceBalloonParty_1_1Game.html">Game</a> screen, Playing, not paused); 0 again at each level start and run reset.  <br /></td></tr>
 <tr class="separator:a21782b6473b41f977ecf3b7a3009d117"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -183,6 +186,33 @@ Properties</h2></td></tr>
 <p>0 just after a line lands (or as a level's grace starts), rising to 1 as the next line arrives. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a920ae1b670b7dcf6ec08aa1da2990e8f">BalloonParty.Balloon.Spawner.SpawnClock</a>.</p>
+
+</div>
+</div>
+<a id="a69a269e653c108f8d5288fa0c6971265" name="a69a269e653c108f8d5288fa0c6971265"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69a269e653c108f8d5288fa0c6971265">&#9670;&#160;</a></span>Pressure</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Balloon.Spawner.ISpawnClock.Pressure</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The push back on a comfortable player, 0 to 1: at 1 the clock runs <code>ISpawnClockSettings.PressureSpeedup</code> times faster. </p>
+<p>It lasts through levels, not runs. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a9a86aa00964e1d875f26e8c79ab1cdb1">BalloonParty.Balloon.Spawner.SpawnClock</a>.</p>
 
 </div>
 </div>

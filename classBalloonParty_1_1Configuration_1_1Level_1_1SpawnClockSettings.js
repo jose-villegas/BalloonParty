@@ -1,7 +1,7 @@
 var classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings =
 [
     [ "SpawnClockSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#adc7a21c25e3338aedefe03ff6c239c72", null ],
-    [ "SpawnClockSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#af694e1abd6757bbc1823b36cfb05ff34", null ],
+    [ "SpawnClockSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a974a30d7b351d37fd36247e324319cdf", null ],
     [ "IntervalForLevel", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a64697f030cf1338f753efbfc0d5cc1cc", null ],
     [ "StepsToMinInterval", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a4ad7d504412e5515c1d039db9374fd71", null ],
     [ "_breatherClear", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#aea34d028064dbab9441b708581825077", null ],
@@ -22,6 +22,10 @@ var classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings =
     [ "_minInterval", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a2efaf17c8640d9935d5871171e417d6c", null ],
     [ "_occupancyWeight", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#ade80ff796109e3a3916ad6a8fd6aa1dc", null ],
     [ "_overlapShotPull", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a334649a339ac588a676ba1393d49f7ab", null ],
+    [ "_pressureBuildSeconds", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#ac7ede047ba477d4c1432ac3dd91dc044", null ],
+    [ "_pressureHoldOccupancy", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a70aeffc9eec4308db742d98f750c046b", null ],
+    [ "_pressureKeptOnHeartLoss", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#aa90ba7e97dd960cc56765749e32fee53", null ],
+    [ "_pressureSpeedup", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a9053f05c73d928c51b1654224bf87a7d", null ],
     [ "_sparseBoardSpeedup", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#ace8cfc41cc7809c0e57d89d0922a981e", null ],
     [ "_targetOccupancy", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#aed9c77d5c9a39b4591a7aa1acfddcc05", null ],
     [ "BreatherClear", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#adcd0363ff40fa39d00a2c872cdae13e5", null ],
@@ -37,6 +41,10 @@ var classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings =
     [ "LinesPerWave", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a12faa55ede98a8df67e7db5cf337f6bc", null ],
     [ "OccupancyWeight", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a8503d0555bbd85e3953332e25ca61ae3", null ],
     [ "OverlapShotPull", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a1c7080dbc36603b8731f85e0e5ab259a", null ],
+    [ "PressureBuildSeconds", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a4059149f542b128119dcca5004581e83", null ],
+    [ "PressureHoldOccupancy", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a315dd864da26a5773dca151579e15157", null ],
+    [ "PressureKeptOnHeartLoss", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a90e2de843159f66d6d988c20fbb245ef", null ],
+    [ "PressureSpeedup", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a02f63f70f07cedea47a125fcdc1c3c52", null ],
     [ "SparseBoardSpeedup", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#aeba089fda0f83e847a7e90cdb548e7a5", null ],
     [ "TargetOccupancy", "classBalloonParty_1_1Configuration_1_1Level_1_1SpawnClockSettings.html#a5998c743f39e1e857d4f5b68c4cf5ed0", null ]
 ];
