@@ -28,6 +28,7 @@ var annotated_dup =
         [ "Routing", "namespaceBalloonParty_1_1Audio_1_1Routing.html", [
           [ "CombatSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter.html", "classBalloonParty_1_1Audio_1_1Routing_1_1CombatSoundRouter" ],
           [ "DangerSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1DangerSoundRouter.html", "classBalloonParty_1_1Audio_1_1Routing_1_1DangerSoundRouter" ],
+          [ "DiscoSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1DiscoSoundRouter.html", "classBalloonParty_1_1Audio_1_1Routing_1_1DiscoSoundRouter" ],
           [ "ItemSightSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSightSoundRouter.html", "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSightSoundRouter" ],
           [ "ItemSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html", "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter" ],
           [ "MusicSoundRouter", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter.html", "classBalloonParty_1_1Audio_1_1Routing_1_1MusicSoundRouter" ],
@@ -923,6 +924,8 @@ var annotated_dup =
           [ "BoardDepletedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BoardDepletedMessage.html", null ],
           [ "BonusCardDealtMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage" ],
           [ "DeflectChainMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1DeflectChainMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1DeflectChainMessage" ],
+          [ "DiscoWaveAdvancedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveAdvancedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveAdvancedMessage" ],
+          [ "DiscoWaveReachedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveReachedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveReachedMessage" ],
           [ "EndRunRequestedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1EndRunRequestedMessage.html", null ],
           [ "ForceDestroyProjectileMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ForceDestroyProjectileMessage.html", null ],
           [ "GameOverDismissedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1GameOverDismissedMessage.html", null ],

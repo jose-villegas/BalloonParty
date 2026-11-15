@@ -7,6 +7,8 @@ var dir_c46868fe3e223da89641514498b57a94 =
     [ "BoardDepletedMessage.cs", "BoardDepletedMessage_8cs.html", "BoardDepletedMessage_8cs" ],
     [ "BonusCardDealtMessage.cs", "BonusCardDealtMessage_8cs.html", "BonusCardDealtMessage_8cs" ],
     [ "DeflectChainMessage.cs", "DeflectChainMessage_8cs.html", "DeflectChainMessage_8cs" ],
+    [ "DiscoWaveAdvancedMessage.cs", "DiscoWaveAdvancedMessage_8cs.html", "DiscoWaveAdvancedMessage_8cs" ],
+    [ "DiscoWaveReachedMessage.cs", "DiscoWaveReachedMessage_8cs.html", "DiscoWaveReachedMessage_8cs" ],
     [ "EndRunRequestedMessage.cs", "EndRunRequestedMessage_8cs.html", "EndRunRequestedMessage_8cs" ],
     [ "ForceDestroyProjectileMessage.cs", "ForceDestroyProjectileMessage_8cs.html", "ForceDestroyProjectileMessage_8cs" ],
     [ "GameOverDismissedMessage.cs", "GameOverDismissedMessage_8cs.html", "GameOverDismissedMessage_8cs" ],

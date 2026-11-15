@@ -204,6 +204,9 @@ var NAVTREEINDEX0 =
 "DevLogConsole_8cs.html":[7,0,2,9],
 "DiscoBallLook_8cs.html":[7,0,1,5,2],
 "DiscoBalloonModel_8cs.html":[7,0,1,2,6],
+"DiscoSoundRouter_8cs.html":[7,0,0,2,2],
+"DiscoWaveAdvancedMessage_8cs.html":[7,0,14,7,7],
+"DiscoWaveReachedMessage_8cs.html":[7,0,14,7,8],
 "DiscoWaveSettings_8cs.html":[7,0,3,0,4],
 "DiscoWaveView_8cs.html":[7,0,1,6,2],
 "DiscoWave_8cs.html":[7,0,1,3,0],
@@ -222,7 +225,7 @@ var NAVTREEINDEX0 =
 "EffectPreviewContext_8cs.html":[7,0,6,1,2],
 "EffectViewPreviewPlayer_8cs.html":[7,0,6,1,3],
 "EffectView_8cs.html":[7,0,14,9,1],
-"EndRunRequestedMessage_8cs.html":[7,0,14,7,7],
+"EndRunRequestedMessage_8cs.html":[7,0,14,7,9],
 "EnumIndexedAttribute_8cs.html":[7,0,14,17],
 "EnumIndexedDrawer_8cs.html":[7,0,6,20],
 "ExtraColorLevelSettings_8cs.html":[7,0,3,9,6],
@@ -236,7 +239,7 @@ var NAVTREEINDEX0 =
 "FlightStatsService_8cs.html":[7,0,7,4,0],
 "FlyingTrail_8cs.html":[7,0,18,8,1],
 "FoldRule_8cs.html":[7,0,7,10,7],
-"ForceDestroyProjectileMessage_8cs.html":[7,0,14,7,8],
+"ForceDestroyProjectileMessage_8cs.html":[7,0,14,7,10],
 "ForceGameOverCheat_8cs.html":[7,0,2,12],
 "ForceRestartCheat_8cs.html":[7,0,2,13],
 "FormationAssignment_8cs.html":[7,0,1,1,0],
@@ -246,8 +249,5 @@ var NAVTREEINDEX0 =
 "FormattedLabel_8cs.html":[7,0,18,16],
 "FrameDebuggerDumper_8cs.html":[7,0,6,2,0],
 "FrameDebuggerEventReader_8cs.html":[7,0,6,2,1],
-"FrameDebuggerEventWalker_8cs.html":[7,0,6,2,2],
-"FrameDebuggerReflection_8cs.html":[7,0,6,2,3],
-"FrameRateSettings_8cs.html":[7,0,14,2,2],
-"FreesoundQueryBuilder_8cs.html":[7,0,0,1,2]
+"FrameDebuggerEventWalker_8cs.html":[7,0,6,2,2]
 };

@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave =
 [
-    [ "DiscoWave", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a5c7dfce1ba779013eab90498bc219792", null ],
+    [ "DiscoWave", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a0db635e786524e66a2cb9cf1d802261e", null ],
     [ "Advance", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#aff0e04aab54b9b867fd0bcbf7790dc47", null ],
     [ "Dispose", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a3c1712f8c99b75969632d84d2fea172c", null ],
     [ "FarthestReach", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a0debb41097e186130e90a810e900d624", null ],
@@ -12,6 +12,7 @@ var classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave =
     [ "Stop", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a170da329269b17b2ef38e848d176c544", null ],
     [ "Sweep", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a777f9cb228f8f625a840c5620ce1e6e2", null ],
     [ "Tick", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a89bc5450c07fec3dd39d87443edcd3b4", null ],
+    [ "_advancedPublisher", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#ac5844cff28277dcd232cfabf6304f1b1", null ],
     [ "_center", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a2c040e2bfc184005202a9c75782c3206", null ],
     [ "_disturbanceField", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a65790f52591e717b428f405bf197cfc5", null ],
     [ "_elapsed", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a89eb52786d2075457928fcac55da46b8", null ],
@@ -25,6 +26,7 @@ var classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave =
     [ "_paintLedger", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a1826ad5a297a5901aae8879e297cee7c", null ],
     [ "_palette", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#ae3143e145987904aaaae4b179057d9fd", null ],
     [ "_reached", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#aa599cd9a220de2d2ae5440e05d3c5448", null ],
+    [ "_reachedPublisher", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a3b9988b940a2356cba11e1ca1483af38", null ],
     [ "_running", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a35b03c92d7e63dba61ed5e4c356cf218", null ],
     [ "_settings", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#a7320e0383d52ee64c5f9bdf780a3511f", null ],
     [ "_shot", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html#ac5252c16779d383ca0444aeb1fc3af6c", null ],

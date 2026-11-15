@@ -56,6 +56,10 @@ var GameSoundId_8cs =
       [ "BalloonParty.Audio.GameSoundId.BalloonPopHeart", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13af85d58c6f16554dc45df5ab38da217cd", null ],
       [ "BalloonParty.Audio.GameSoundId.BalloonDeflectGolden", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a3b996b75cf3bf098505493637212e4e1", null ],
       [ "BalloonParty.Audio.GameSoundId.BalloonPopGolden", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a5a26f3e47748c8276d5021eb897b3870", null ],
-      [ "BalloonParty.Audio.GameSoundId.SnipeSkyLight", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a5f9970ae34cc55664cd63fa680706728", null ]
+      [ "BalloonParty.Audio.GameSoundId.SnipeSkyLight", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a5f9970ae34cc55664cd63fa680706728", null ],
+      [ "BalloonParty.Audio.GameSoundId.BalloonDeflectDisco", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a88620468b3e22a3eb2368781ec9db89c", null ],
+      [ "BalloonParty.Audio.GameSoundId.BalloonPopDisco", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a2e2ce19fdc886ae5fbd7e0cbeb72b628", null ],
+      [ "BalloonParty.Audio.GameSoundId.DiscoWaveGlissando", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a551d798d6f3a2467739e1337c799b13e", null ],
+      [ "BalloonParty.Audio.GameSoundId.DiscoWaveTick", "namespaceBalloonParty_1_1Audio.html#a34d84681cf5add3207ad00ef8bfa0a13a5563329f1dd68fd93489131ccb18a306", null ]
     ] ]
 ];

@@ -1,16 +1,19 @@
 var NAVTREEINDEX1 =
 {
+"FrameDebuggerReflection_8cs.html":[7,0,6,2,3],
+"FrameRateSettings_8cs.html":[7,0,14,2,2],
+"FreesoundQueryBuilder_8cs.html":[7,0,0,1,2],
 "FreesoundResponseParser_8cs.html":[7,0,0,1,3],
 "FreesoundSfxProvider_8cs.html":[7,0,0,1,4],
 "FreesoundTokenSource_8cs.html":[7,0,0,1,5],
 "GameDisplayConfigurationDrawer_8cs.html":[7,0,3,4,1],
 "GameDisplayConfiguration_8cs.html":[7,0,3,13],
 "GameLifetimeScope_8cs.html":[7,0,7,15],
-"GameOverDismissedMessage_8cs.html":[7,0,14,7,9],
+"GameOverDismissedMessage_8cs.html":[7,0,14,7,11],
 "GameOverLayoutBuilder_8cs.html":[7,0,6,21],
 "GameOverLifetimeScope_8cs.html":[7,0,18,4,0],
 "GameOverLossCinematic_8cs.html":[7,0,7,2,9],
-"GameOverMessage_8cs.html":[7,0,14,7,10],
+"GameOverMessage_8cs.html":[7,0,14,7,12],
 "GameOverPresentationGate_8cs.html":[7,0,7,8,2],
 "GameOverScreen_8cs.html":[7,0,18,4,1],
 "GamePaletteAdapter_8cs.html":[7,0,6,22],
@@ -147,7 +150,7 @@ var NAVTREEINDEX1 =
 "IHeadsUpSettings_8cs.html":[7,0,3,7,5],
 "IHeadsUps_8cs.html":[7,0,7,5,8],
 "IHeldCards_8cs.html":[7,0,7,11,1],
-"IHitDispatcher_8cs.html":[7,0,14,7,11],
+"IHitDispatcher_8cs.html":[7,0,14,7,13],
 "IHitable_8cs.html":[7,0,15,1,11],
 "IHostsSpinningItem_8cs.html":[7,0,8,14],
 "IItemConfiguration_8cs.html":[7,0,3,8,0],
@@ -246,8 +249,5 @@ var NAVTREEINDEX1 =
 "ITimeOfDaySettings_8cs.html":[7,0,3,5,19],
 "ITimeScaleClaims_8cs.html":[7,0,14,8,0],
 "ITrailEndpoint_8cs.html":[7,0,14,9,5],
-"ITransformCapture_8cs.html":[7,0,8,26],
-"ITransitionOutgoingContent_8cs.html":[7,0,15,0,14],
-"IUnbreakableFormationSettings_8cs.html":[7,0,3,0,9],
-"IUpgradeDraft_8cs.html":[7,0,7,11,3]
+"ITransformCapture_8cs.html":[7,0,8,26]
 };
