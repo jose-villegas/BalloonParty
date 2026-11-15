@@ -107,6 +107,20 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
+        public void TheChainsShields_CountEveryShieldItHasPaid()
+        {
+            var ball = NewBall();
+
+            for (var i = 0; i < 7; i++)
+            {
+                Deflect(ball);
+            }
+
+            CollectionAssert.AreEqual(new[] { 0, 1, 1, 1, 2, 2 }, _chains.ConvertAll(c => c.ChainShields),
+                "deflects 2 to 7, a shield every third");
+        }
+
+        [Test]
         public void AWallBetweenDeflects_BreaksTheChain()
         {
             var ball = NewBall();

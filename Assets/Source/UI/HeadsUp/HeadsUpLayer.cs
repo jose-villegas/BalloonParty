@@ -37,6 +37,9 @@ namespace BalloonParty.UI.HeadsUp
 
         // Per style, its text for each small number, so a burst of the same heads-up formats once.
         private string[][] _texts;
+
+        // Per style, its text with a detail line, keyed by number and detail, both under CachedArgs.
+        private Dictionary<int, string>[] _detailTexts;
         private SimplePoolChannel<HandwrittenHeadsUp> _pool;
         private Camera _camera;
 
@@ -51,6 +54,7 @@ namespace BalloonParty.UI.HeadsUp
         internal void Construct()
         {
             _texts = new string[HeadsUpStyleIds.Count][];
+            _detailTexts = new Dictionary<int, string>[HeadsUpStyleIds.Count];
             _pool = new SimplePoolChannel<HandwrittenHeadsUp>(_linePrefab);
             _pool.SetParent(transform);
             // Released and evicted lines fade beside the ones that replaced them, and held ones sit outside the cap.
@@ -196,6 +200,12 @@ namespace BalloonParty.UI.HeadsUp
             }
 
             var arg = request.Arg;
+            var detail = request.Detail;
+            if (detail > 0 && !string.IsNullOrEmpty(style.DetailFormat))
+            {
+                return TextWithDetail(style, arg, detail);
+            }
+
             if (arg < 0 || arg >= CachedArgs)
             {
                 return string.Format(CultureInfo.InvariantCulture, style.Format, arg);
@@ -203,6 +213,30 @@ namespace BalloonParty.UI.HeadsUp
 
             var texts = _texts[(int)style.Id] ??= new string[CachedArgs];
             return texts[arg] ??= string.Format(CultureInfo.InvariantCulture, style.Format, arg);
+        }
+
+        private string TextWithDetail(HeadsUpStyleSettings style, int arg, int detail)
+        {
+            if (arg < 0 || arg >= CachedArgs || detail >= CachedArgs)
+            {
+                return Compose(style, arg, detail);
+            }
+
+            var texts = _detailTexts[(int)style.Id] ??= new Dictionary<int, string>();
+            var key = arg * CachedArgs + detail;
+            if (!texts.TryGetValue(key, out var text))
+            {
+                text = Compose(style, arg, detail);
+                texts[key] = text;
+            }
+
+            return text;
+        }
+
+        private static string Compose(HeadsUpStyleSettings style, int arg, int detail)
+        {
+            return string.Format(CultureInfo.InvariantCulture, style.Format, arg)
+                   + string.Format(CultureInfo.InvariantCulture, style.DetailFormat, detail);
         }
 
         // Written first so the ink's size is known, then moved: clear of the lines still showing where it can

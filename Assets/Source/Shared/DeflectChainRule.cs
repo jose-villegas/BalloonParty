@@ -15,5 +15,11 @@ namespace BalloonParty.Shared
         {
             return every > 0 && chain > 0 && chain % every == 0;
         }
+
+        /// <summary>The shields the first <paramref name="chain" /> deflects in a row have paid; 0 or less = never.</summary>
+        internal static int ShieldsPaid(int chain, int every)
+        {
+            return every > 0 && chain > 0 ? chain / every : 0;
+        }
     }
 }

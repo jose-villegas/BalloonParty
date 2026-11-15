@@ -27,7 +27,7 @@ Each kind of heads-up has a look of its own, so the player reads what happened f
 | `-1 bounce` leaving the last shield | Dark vermilion `#B34700` | 0.9× | Bold | No |
 | `+n bounce` | Blue `#0072B2` | 1× | Bold | ×(1 + 0.15·log2 n), up to 1.35× |
 | `xn ricochet` | Plum `#8E3B8E` | 1.1× | Bold | ×(1 + 0.25·log2 n), up to 1.6× |
-| `+1 bounce` under a ricochet that paid | Blue, as a pickup | 0.65× of the ricochet line | Bold | With the ricochet line |
+| `+n bounce` under a ricochet chain that has paid n shields | Blue, as a pickup | 0.65× of the ricochet line | Bold | With the ricochet line |
 
 - **Words in italics, numbers upright**, through rich text in the format strings (`+{0} <i>bounce</i>`).
 - **Luminance reads, hue means.** Legibility comes from dark ink on the cream halo, not from colour, which only says what kind of event it was. The sign, the word and the place say it too, so nothing depends on colour alone.

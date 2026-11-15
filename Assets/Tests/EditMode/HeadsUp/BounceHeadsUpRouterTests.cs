@@ -126,15 +126,29 @@ namespace BalloonParty.Tests.HeadsUp
             Assert.AreEqual(new Vector2(-3f, 1f), _requests[0].Anchor.Position);
         }
 
-        [TestCase(false)]
-        [TestCase(true)]
-        public void ARicochet_WritesItsCount_WithThePaidShieldUnderIt(bool paidShield)
+        [TestCase(0)]
+        [TestCase(2)]
+        public void ARicochet_WritesItsCount_WithTheChainsShieldsUnderIt(int chainShields)
         {
-            _onChain.Handle(new DeflectChainMessage(_ball, 3, new Vector3(2f, 2f, 0f), paidShield));
+            _onChain.Handle(new DeflectChainMessage(_ball, 6, new Vector3(2f, 2f, 0f), true, chainShields));
 
-            Assert.AreEqual(paidShield ? HeadsUpStyleId.RicochetPaid : HeadsUpStyleId.Ricochet, _requests[0].Style);
-            Assert.AreEqual(3, _requests[0].Arg);
+            Assert.AreEqual(HeadsUpStyleId.Ricochet, _requests[0].Style);
+            Assert.AreEqual(6, _requests[0].Arg);
+            Assert.AreEqual(chainShields, _requests[0].Detail);
             Assert.AreEqual(new Vector2(2f, 2f), _requests[0].Anchor.Position);
+        }
+
+        [Test]
+        public void AChainsDeflects_ShareOneLinePerBall()
+        {
+            var other = Substitute.For<IProjectileModel>();
+
+            _onChain.Handle(new DeflectChainMessage(_ball, 2, Vector3.zero, false));
+            _onChain.Handle(new DeflectChainMessage(_ball, 3, Vector3.one, true, 1));
+            _onChain.Handle(new DeflectChainMessage(other, 2, Vector3.zero, false));
+
+            Assert.AreEqual(_requests[0].MergeKey, _requests[1].MergeKey, "the chain grows in its own line");
+            Assert.AreNotEqual(_requests[0].MergeKey, _requests[2].MergeKey, "another ball's chain is its own");
         }
 
         private static int[] ArgsOf(List<HeadsUpRequest> requests)

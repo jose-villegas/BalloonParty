@@ -15,6 +15,10 @@ namespace BalloonParty.Configuration.HeadsUp
         [Tooltip("Rich text. {0} is the event's number, or its word for a style that takes one (a colour's name).")]
         [SerializeField] private string _format;
 
+        [Tooltip("Rich text written under the line when a request carries a second number above 0 (a ricochet " +
+                 "chain's shields); {0} is that number. Empty = never.")]
+        [SerializeField] private string _detailFormat;
+
         [SerializeField] private HeadsUpStyle _look;
 
         [Tooltip("When the screen is full, a heads-up evicts the oldest of the lowest priority showing, if that " +
@@ -47,6 +51,7 @@ namespace BalloonParty.Configuration.HeadsUp
 
         public HeadsUpStyleId Id => _id;
         public string Format => _format;
+        public string DetailFormat => _detailFormat;
         public HeadsUpStyle Look => _look;
         public int Priority => _priority;
         public float CooldownSeconds => _cooldownSeconds;
@@ -112,6 +117,12 @@ namespace BalloonParty.Configuration.HeadsUp
         {
             _minArg = min;
             _maxArg = max;
+            return this;
+        }
+
+        internal HeadsUpStyleSettings WithDetail(string format)
+        {
+            _detailFormat = format;
             return this;
         }
 

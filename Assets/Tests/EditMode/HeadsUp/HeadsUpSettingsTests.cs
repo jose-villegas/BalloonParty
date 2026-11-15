@@ -86,6 +86,18 @@ namespace BalloonParty.Tests.HeadsUp
         }
 
         [Test]
+        public void OnlyARicochet_WritesADetailLine()
+        {
+            foreach (HeadsUpStyleId id in Enum.GetValues(typeof(HeadsUpStyleId)))
+            {
+                var detail = _settings.Style(id).DetailFormat;
+                Assert.AreEqual(id == HeadsUpStyleId.Ricochet, !string.IsNullOrEmpty(detail), id.ToString());
+            }
+
+            StringAssert.Contains("{0}", _settings.Style(HeadsUpStyleId.Ricochet).DetailFormat);
+        }
+
+        [Test]
         public void ARicochetsSize_GrowsFromItsSecond()
         {
             var ricochet = _settings.Style(HeadsUpStyleId.Ricochet);

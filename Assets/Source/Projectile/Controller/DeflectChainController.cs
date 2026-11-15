@@ -75,8 +75,10 @@ namespace BalloonParty.Projectile.Controller
             }
 
             var writeable = ball as IWriteableProjectileModel;
-            var pays = writeable != null && DeflectChainRule.GrantsShield(chain, _runConfig.DeflectChainShieldEvery);
-            _chainPublisher.Publish(new DeflectChainMessage(ball, chain, msg.WorldPosition, pays));
+            var every = _runConfig.DeflectChainShieldEvery;
+            var pays = writeable != null && DeflectChainRule.GrantsShield(chain, every);
+            var shields = writeable != null ? DeflectChainRule.ShieldsPaid(chain, every) : 0;
+            _chainPublisher.Publish(new DeflectChainMessage(ball, chain, msg.WorldPosition, pays, shields));
             if (pays)
             {
                 writeable.ShieldsRemaining.Value++;

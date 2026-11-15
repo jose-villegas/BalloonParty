@@ -12,12 +12,14 @@ namespace BalloonParty.Game.HeadsUp.Routing
     /// <summary>
     ///     How a ball's bounces go, where it happens: <c>+n bounce</c> at a shield it picks up (n counting its
     ///     pickups this flight), <c>-1 bounce</c> where a wall spends one (loud when it leaves the last), and
-    ///     <c>xn ricochet</c> where it deflects off balloons n times in a row. A ricochet that paid the ball a
-    ///     shield writes the <c>+1 bounce</c> under itself, so that shield's own pickup writes nothing, though it
-    ///     still counts toward the next.
+    ///     <c>xn ricochet</c> where it deflects off balloons n times in a row. A chain is one line, rewritten as it
+    ///     grows, with the shields it has paid written under it (<c>+n bounce</c>), so a long chain doesn't stack a
+    ///     line per deflect. A ricochet's shield writes no pickup of its own, though it still counts toward the next.
     /// </summary>
     internal sealed class BounceHeadsUpRouter : IStartable, IDisposable
     {
+        private const string RicochetChannel = "ricochet";
+
         private readonly IHeadsUps _headsUps;
         private readonly SlotGrid _grid;
         private readonly IProjectileRegistry _projectiles;
@@ -84,8 +86,8 @@ namespace BalloonParty.Game.HeadsUp.Routing
 
         private void OnDeflectChain(DeflectChainMessage msg)
         {
-            var style = msg.PaidShield ? HeadsUpStyleId.RicochetPaid : HeadsUpStyleId.Ricochet;
-            _headsUps.Request(new HeadsUpRequest(style, msg.Count, HeadsUpAnchor.At(msg.Position)));
+            _headsUps.Request(new HeadsUpRequest(HeadsUpStyleId.Ricochet, msg.Count, HeadsUpAnchor.At(msg.Position),
+                new HeadsUpMergeKey(msg.Projectile, RicochetChannel), detail: msg.ChainShields));
         }
     }
 }

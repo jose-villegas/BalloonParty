@@ -6,16 +6,20 @@ namespace BalloonParty.Shared.Messages
     /// <summary><see cref="Projectile" /> deflected off a balloon for the <see cref="Count" />th time in a row
     /// without touching a wall (from <see cref="DeflectChainRule.MinChain" /> on). <see cref="Position" /> is
     /// the deflecting balloon's. <see cref="PaidShield" /> says this deflect earned the ball a shield; its
-    /// <see cref="ShieldGainedMessage" /> follows, marked <see cref="ShieldGainSource.Ricochet" />.</summary>
+    /// <see cref="ShieldGainedMessage" /> follows, marked <see cref="ShieldGainSource.Ricochet" />.
+    /// <see cref="ChainShields" /> is every shield this run of deflects has paid so far, this one's included.</summary>
     public readonly struct DeflectChainMessage
     {
         public readonly IProjectileModel Projectile;
         public readonly int Count;
         public readonly Vector3 Position;
         public readonly bool PaidShield;
+        public readonly int ChainShields;
 
-        public DeflectChainMessage(IProjectileModel projectile, int count, Vector3 position, bool paidShield)
+        public DeflectChainMessage(IProjectileModel projectile, int count, Vector3 position, bool paidShield,
+            int chainShields = 0)
         {
+            ChainShields = chainShields;
             Projectile = projectile;
             Count = count;
             Position = position;

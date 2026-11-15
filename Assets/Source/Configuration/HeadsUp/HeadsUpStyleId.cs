@@ -11,7 +11,8 @@ namespace BalloonParty.Configuration.HeadsUp
         BounceWall = 2,
         BounceWallLast = 3,
         Ricochet = 4,
-        RicochetPaid = 5,
+
+        // 5 was RicochetPaid, retired: a chain's shields ride on Ricochet's detail line.
         Streak = 6,
         SpeedTap = 7,
         Pierce = 8,

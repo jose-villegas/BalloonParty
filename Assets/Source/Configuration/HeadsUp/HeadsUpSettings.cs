@@ -78,11 +78,8 @@ namespace BalloonParty.Configuration.HeadsUp
                     .WithOffset(0f, 0.25f),
                 new HeadsUpStyleSettings(HeadsUpStyleId.Ricochet, "x{0} <i>ricochet</i>",
                         Look(Plum, 1f, 1.1f, 0.25f, 1.6f, FontStyles.Bold), 3)
-                    .WithOffset(0f, 0.25f).EscalatingFrom(2),
-                new HeadsUpStyleSettings(HeadsUpStyleId.RicochetPaid,
-                        $"x{{0}} <i>ricochet</i>\n<size=65%><color=#{Blue:X6}>+1 <i>bounce</i></color></size>",
-                        Look(Plum, 1f, 1.1f, 0.25f, 1.6f, FontStyles.Bold), 3)
-                    .WithOffset(0f, 0.25f).EscalatingFrom(2),
+                    .WithOffset(0f, 0.25f).EscalatingFrom(2)
+                    .WithDetail($"\n<size=65%><color=#{Blue:X6}>+{{0}} <i>bounce</i></color></size>"),
                 new HeadsUpStyleSettings(HeadsUpStyleId.Streak, "x{0}!",
                         Look(Ochre, 1f, 1.1f, 0.25f, 1.6f, FontStyles.Bold), 3)
                     .WithOffset(0f, 0.3f).WithArgRange(3, 0).EscalatingFrom(3).UnderlinedFrom(6),

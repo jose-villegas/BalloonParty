@@ -17,9 +17,14 @@ namespace BalloonParty.Game.HeadsUp
         /// <summary>For a style whose format takes a word rather than the number; an existing string, never built.</summary>
         public readonly string Word;
 
+        /// <summary>A second number, written under the line by the style's detail format when above 0.</summary>
+        public readonly int Detail;
+
         public HeadsUpRequest(
-            HeadsUpStyleId style, int arg, HeadsUpAnchor anchor, HeadsUpMergeKey mergeKey = default, string word = null)
+            HeadsUpStyleId style, int arg, HeadsUpAnchor anchor, HeadsUpMergeKey mergeKey = default, string word = null,
+            int detail = 0)
         {
+            Detail = detail;
             Style = style;
             Arg = arg;
             Anchor = anchor;
