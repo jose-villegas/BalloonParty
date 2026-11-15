@@ -37,7 +37,7 @@ TICK_RE = re.compile(
     r"^(?P<t>[\d.]+) L(?P<level>\d+) score (?P<score>-?\d+) hearts (?P<hearts>-?\d+) "
     r"(?P<nav>\w+)/(?P<phase>\w+) shots (?P<shots>\d+)(?: fill (?P<fill>[\d.]+))?(?: inflight (?P<inflight>\d+))?"
     r"(?: breather (?P<breather>[\d.]+))?"
-    r"(?: rewards (?P<golden_placed>\d+) (?P<heart_placed>\d+)(?P<rewards_off> off)?)?$")
+    r"(?: rewards (?P<golden_placed>\d+) (?P<heart_placed>\d+)(?: (?P<disco_placed>\d+))?(?P<rewards_off> off)?)?$")
 FLOAT_FIELDS = ("t", "fill", "breather")
 # A loss the tick answered with a retry, which keeps the run going: "<time> RETRY ad <0|1>" or "<time> BONUS ad 1".
 RETRY_RE = re.compile(r" (RETRY|BONUS) ad ([01])$")
@@ -395,7 +395,7 @@ def reward_lines(samples, records):
     if not counted:
         return []
     last = counted[-1]
-    popped = {"Golden": 0, "Heart": 0}
+    popped = {"Golden": 0, "Heart": 0, "Disco": 0}
     for record in records:
         if record.get("record_kind") == "level":
             by_type = record.get("axes", {}).get("pops_balloon_type", {})
@@ -404,10 +404,11 @@ def reward_lines(samples, records):
     lines = ["## Reward balloons", "",
              "Placed: counted on the bot's 50 ms loop when the reward service marks one on the board. Popped: the "
              "telemetry's pops by balloon type. A golden pop pays a card (or a heart with every card at its limit), "
-             "a heart pop a heart (past the maximum on a purple level).", "",
+             "a heart pop a heart (past the maximum on a purple level), a disco pop paints the board rainbow.", "",
              "| Balloon | Placed | Popped |", "|---|---|---|",
              f"| Golden | {last['golden_placed']} | {popped['Golden']} |",
-             f"| Heart | {last['heart_placed']} | {popped['Heart']} |", ""]
+             f"| Heart | {last['heart_placed']} | {popped['Heart']} |",
+             f"| Disco | {last.get('disco_placed') or 0} | {popped['Disco']} |", ""]
     if any(s.get("rewards_off") for s in counted):
         lines += ["The placement counter switched itself off after an error (a renamed field: the Editor console has "
                   "it), so the placed counts stop there.", ""]

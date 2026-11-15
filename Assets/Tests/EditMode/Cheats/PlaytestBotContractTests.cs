@@ -34,7 +34,11 @@ namespace BalloonParty.Tests.Cheats
             Assert.That(TypeNamed(typeName).GetProperty(property, Any), Is.Not.Null, $"{typeName}.{property}");
         }
 
-        [TestCase("BalloonParty.Balloon.Reward.RewardBalloonService", "_goldenAlive", typeof(bool))]
+        [TestCase("BalloonParty.Balloon.Reward.RewardBalloonService", "_golden",
+            typeof(BalloonParty.Balloon.Reward.PlatedRewardSchedule))]
+        [TestCase("BalloonParty.Balloon.Reward.RewardBalloonService", "_disco",
+            typeof(BalloonParty.Balloon.Reward.PlatedRewardSchedule))]
+        [TestCase("BalloonParty.Balloon.Reward.PlatedRewardSchedule", "_alive", typeof(bool))]
         [TestCase("BalloonParty.Balloon.Reward.RewardBalloonService", "_heartAlive", typeof(bool))]
         [TestCase("BalloonParty.Game.Health.PlayerHealthController", "_current", typeof(UniRx.ReactiveProperty<int>))]
         [TestCase("BalloonParty.Cheats.CheatState", "StartLevel", typeof(int))]

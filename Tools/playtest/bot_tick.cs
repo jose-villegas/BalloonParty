@@ -20,7 +20,7 @@
 // - bonus:   presses the bonus retry (a rewarded ad for a bonus card on the retry) while it is offered,
 //            else as retry. In the Editor no ad SDK is plugged in, so every ad counts as watched.
 // Each tick returns one line:
-//   <time> L<level> score <score> hearts <hearts> <navigation>/<phase> shots <shots fired so far> fill <board fill> inflight <balls in the air> breather <seconds left> rewards <golden placed> <heart placed>[ off]
+//   <time> L<level> score <score> hearts <hearts> <navigation>/<phase> shots <shots fired so far> fill <board fill> inflight <balls in the air> breather <seconds left> rewards <golden placed> <heart placed> <disco placed>[ off]
 // (board fill: the share of open slots balloons fill, IBoardFill.Occupancy; a full board is where hearts are lost;
 // breather: seconds left in the spawn clock's breather after a big clear, ISpawnClock.BreatherSecondsLeft,
 // 0 outside one; rewards: the reward balloons placed so far, "off" once their counter stopped on an error.
@@ -145,10 +145,18 @@ object watchedGame = null;
 object rewardService = null;
 var goldenWasAlive = false;
 var heartWasAlive = false;
+var discoWasAlive = false;
 var rewardsBroken = false;
 void CountUp(string key)
 {
     UnityEditor.SessionState.SetInt(RewardsKey + key, UnityEditor.SessionState.GetInt(RewardsKey + key, 0) + 1);
+}
+
+// The plated balloons (golden, disco) each keep their on-board flag in their own PlatedRewardSchedule.
+bool PlatedAlive(string scheduleField)
+{
+    var schedule = rewardService.GetType().GetField(scheduleField, flags).GetValue(rewardService);
+    return (bool)schedule.GetType().GetField("_alive", flags).GetValue(schedule);
 }
 
 void WatchRewards(VContainer.IObjectResolver resolver)
@@ -158,11 +166,13 @@ void WatchRewards(VContainer.IObjectResolver resolver)
         watchedGame = resolver;
         rewardService = resolver.Resolve(asm.GetType("BalloonParty.Balloon.Reward.IRewardBalloonRequests"));
         // A shooter installed again mid-session finds a balloon already on the board: counted when it came.
-        goldenWasAlive = (bool)rewardService.GetType().GetField("_goldenAlive", flags).GetValue(rewardService);
+        goldenWasAlive = PlatedAlive("_golden");
+        discoWasAlive = PlatedAlive("_disco");
         heartWasAlive = (bool)rewardService.GetType().GetField("_heartAlive", flags).GetValue(rewardService);
     }
 
-    var goldenAlive = (bool)rewardService.GetType().GetField("_goldenAlive", flags).GetValue(rewardService);
+    var goldenAlive = PlatedAlive("_golden");
+    var discoAlive = PlatedAlive("_disco");
     var heartAlive = (bool)rewardService.GetType().GetField("_heartAlive", flags).GetValue(rewardService);
     if (goldenAlive && !goldenWasAlive)
     {
@@ -174,15 +184,21 @@ void WatchRewards(VContainer.IObjectResolver resolver)
         CountUp("HeartPlaced");
     }
 
+    if (discoAlive && !discoWasAlive)
+    {
+        CountUp("DiscoPlaced");
+    }
+
     goldenWasAlive = goldenAlive;
     heartWasAlive = heartAlive;
+    discoWasAlive = discoAlive;
 }
 
 string Rewards()
 {
     int Count(string key) { return UnityEditor.SessionState.GetInt(RewardsKey + key, 0); }
     var off = UnityEditor.SessionState.GetString(RewardsKey + "Off", "") != "" ? " off" : "";
-    return " rewards " + Count("GoldenPlaced") + " " + Count("HeartPlaced") + off;
+    return " rewards " + Count("GoldenPlaced") + " " + Count("HeartPlaced") + " " + Count("DiscoPlaced") + off;
 }
 
 var now = UnityEngine.Time.realtimeSinceStartup;
