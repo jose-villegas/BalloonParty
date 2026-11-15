@@ -33,9 +33,9 @@ namespace BalloonParty.Game
 
         public void Start()
         {
-            if (_save.TryLoad(out var snapshot))
+            if (_save.TryLoad(out _))
             {
-                _view.Show(snapshot.Level);
+                _view.Show();
             }
             else
             {

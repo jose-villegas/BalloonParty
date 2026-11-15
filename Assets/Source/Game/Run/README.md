@@ -53,7 +53,7 @@ boundaries only: a resume replays the saved level from its start, so there's no 
 restore.
 
 ```
-launch → save exists → Continue (level N) beside Play
+launch → save exists → the Continue balloon drifts about beside Play
        → LaunchContinueController: IRunResumeRequest.Request(), then the Play ascent
        → RunResumeController (still on Launch): IRunSave.TryLoad → RetryTracker.PrepareResume(snapshot)
                                                → RunController.ResumeRun()

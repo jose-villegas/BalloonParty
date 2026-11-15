@@ -1,6 +1,7 @@
 using BalloonParty.Game;
 using BalloonParty.Shared.GameState;
 using BalloonParty.UI;
+using BalloonParty.UI.ClothRibbon;
 using TMPro;
 using UnityEditor;
 using UnityEditor.Events;
@@ -8,26 +9,33 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace BalloonParty.Editor
 {
     /// <summary>
-    ///     Adds the launch screen's Continue button to the Launcher scene: a copy of the Play button under it, with
-    ///     Play's press actions (hide, title out, scene activation) kept, its <c>LaunchPlayTrigger.Play</c> calls
-    ///     swapped for <see cref="LaunchContinueView.Continue" />, which plays the ascent itself once the resume is
-    ///     requested, and the view handed to <see cref="LaunchLifetimeScope" />. Starts inactive: the controller
-    ///     shows it only while a run is saved. Running it again does nothing once the scene has a Continue button.
+    ///     Builds the launch screen's Continue in the Launcher scene, replacing any built before: a root stretched over
+    ///     the launch canvas holding <see cref="LaunchContinueView" />, the spring line, the cloth ribbon with
+    ///     "continue" on both faces, and a small white copy of the Play balloon. The copy keeps Play's press actions
+    ///     (hide, title out, scene activation), with Play's <c>LaunchPlayTrigger.Play</c> swapped for
+    ///     <see cref="LaunchContinueView.Continue" />, which plays the ascent itself once the resume is requested; its
+    ///     hide hides the whole Continue, and its scene activation is Play's own. Starts inactive: the controller shows
+    ///     it only while a run is saved.
     /// </summary>
     internal static class LaunchContinueButtonBuilder
     {
         private const string ScenePath = "Assets/Scenes/Launcher.unity";
-        private const string ButtonName = "Continue";
-        private const string LabelTemplate = "continue {0}";
+        private const string RibbonMaterialPath = "Assets/Materials/UI/CardRevealRibbon.mat";
+        private const string FontPath = "Assets/Fonts/PatrickHand-Regular SDF.asset";
+        private const string Label = "continue";
+        private const float BalloonScale = 0.36f;
+        private const float FontSize = 9.5f;
 
-        // Below Play, by this much of Play's height.
-        private const float VerticalStep = 1.25f;
+        private static readonly Color White = new(0.97f, 0.97f, 0.98f, 1f);
+        private static readonly Color RibbonColor = new(0.98f, 0.965f, 0.925f, 1f);
+        private static readonly Color InkColor = new(0.2f, 0.2f, 0.2f, 1f);
 
-        [MenuItem("Tools/BalloonParty/Launch/Add Continue Button")]
+        [MenuItem("Tools/BalloonParty/Launch/Build Continue Balloon")]
         private static void Build()
         {
             var scene = SceneManager.GetSceneByPath(ScenePath);
@@ -59,12 +67,6 @@ namespace BalloonParty.Editor
                 return false;
             }
 
-            if (Find<LaunchContinueView>(scene) != null)
-            {
-                Debug.Log("[LaunchContinueButtonBuilder] The Launcher scene already has a Continue button.");
-                return false;
-            }
-
             var playButton = FindPlayButton(scene, play);
             if (playButton == null)
             {
@@ -72,42 +74,117 @@ namespace BalloonParty.Editor
                 return false;
             }
 
+            var built = Find<LaunchContinueView>(scene);
+            if (built != null)
+            {
+                Undo.DestroyObjectImmediate(built.gameObject);
+            }
+
             var source = playButton.gameObject;
-            var copy = Object.Instantiate(source, source.transform.parent);
-            Undo.RegisterCreatedObjectUndo(copy, "Add Continue Button");
-            copy.name = ButtonName;
-            copy.transform.SetSiblingIndex(source.transform.GetSiblingIndex() + 1);
-            if (copy.transform is RectTransform rect && source.transform is RectTransform sourceRect)
-            {
-                rect.anchoredPosition = sourceRect.anchoredPosition
-                    - new Vector2(0f, sourceRect.rect.height * VerticalStep);
-            }
+            var root = NewChild("Continue", source.transform.parent);
+            root.transform.SetSiblingIndex(source.transform.GetSiblingIndex() + 1);
+            Undo.RegisterCreatedObjectUndo(root, "Build Continue Balloon");
+            var rootRect = (RectTransform)root.transform;
+            rootRect.anchorMin = Vector2.zero;
+            rootRect.anchorMax = Vector2.one;
+            rootRect.offsetMin = Vector2.zero;
+            rootRect.offsetMax = Vector2.zero;
 
-            var label = copy.GetComponentInChildren<TMP_Text>(true);
-            if (label != null)
-            {
-                label.text = LabelTemplate;
-            }
+            var line = NewChild("Line", root.transform).AddComponent<SpringLineGraphic>();
+            line.color = White;
+            line.raycastTarget = false;
 
-            var view = copy.AddComponent<LaunchContinueView>();
+            var ribbon = NewChild("Ribbon", root.transform).AddComponent<ClothRibbonGraphic>();
+            ribbon.material = AssetDatabase.LoadAssetAtPath<Material>(RibbonMaterialPath);
+            ribbon.color = RibbonColor;
+            ribbon.raycastTarget = false;
+            var writing = ribbon.gameObject.AddComponent<ClothRibbonWriting>();
+            var font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(FontPath);
+            var front = NewText("Front", ribbon.transform, font);
+            var back = NewText("Back", ribbon.transform, font);
+            var writingObject = new SerializedObject(writing);
+            writingObject.FindProperty("_front").objectReferenceValue = front;
+            writingObject.FindProperty("_back").objectReferenceValue = back;
+            writingObject.ApplyModifiedPropertiesWithoutUndo();
+
+            var balloon = Object.Instantiate(source, root.transform);
+            balloon.name = "Balloon";
+            var balloonRect = (RectTransform)balloon.transform;
+            balloonRect.anchorMin = balloonRect.anchorMax = new Vector2(0.5f, 0.5f);
+            balloonRect.anchoredPosition = Vector2.zero;
+            balloonRect.localScale = new Vector3(BalloonScale, BalloonScale, 1f);
+            Whiten(balloon);
+
+            var view = root.AddComponent<LaunchContinueView>();
             var viewObject = new SerializedObject(view);
-            viewObject.FindProperty("_levelLabel").objectReferenceValue = label;
+            viewObject.FindProperty("_balloon").objectReferenceValue = balloonRect;
+            viewObject.FindProperty("_play").objectReferenceValue = source.transform;
+            viewObject.FindProperty("_line").objectReferenceValue = line;
+            viewObject.FindProperty("_ribbon").objectReferenceValue = ribbon;
+            viewObject.FindProperty("_writing").objectReferenceValue = writing;
             viewObject.ApplyModifiedPropertiesWithoutUndo();
 
-            RewirePress(copy.GetComponent<ScaleDownButton>(), play, view, source.GetComponent<SceneTransition>());
+            RewirePress(balloon.GetComponent<ScaleDownButton>(), play, view, source.GetComponent<SceneTransition>());
 
             var scopeObject = new SerializedObject(scope);
             scopeObject.FindProperty("_continueView").objectReferenceValue = view;
             scopeObject.ApplyModifiedProperties();
 
-            copy.SetActive(false);
-            Debug.Log("[LaunchContinueButtonBuilder] Added the Continue button under Play; position and style it as you like.");
+            root.SetActive(false);
+            Debug.Log("[LaunchContinueButtonBuilder] Built the Continue balloon; tune it on LaunchContinueView.");
             return true;
         }
 
+        private static GameObject NewChild(string name, Transform parent)
+        {
+            var child = new GameObject(name, typeof(RectTransform));
+            child.layer = parent.gameObject.layer;
+            var rect = (RectTransform)child.transform;
+            rect.SetParent(parent, false);
+            rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = Vector2.zero;
+            rect.sizeDelta = Vector2.zero;
+            return child;
+        }
+
+        private static TMP_Text NewText(string name, Transform parent, TMP_FontAsset font)
+        {
+            var text = NewChild(name, parent).AddComponent<TextMeshProUGUI>();
+            if (font != null)
+            {
+                text.font = font;
+            }
+
+            text.text = Label;
+            text.fontSize = FontSize;
+            text.color = InkColor;
+            text.alignment = TextAlignmentOptions.Center;
+            text.textWrappingMode = TextWrappingModes.NoWrap;
+            text.raycastTarget = false;
+            return text;
+        }
+
+        // The writing is on the ribbon now; the balloon is plain white.
+        private static void Whiten(GameObject balloon)
+        {
+            var label = balloon.GetComponentInChildren<TMP_Text>(true);
+            if (label != null)
+            {
+                Object.DestroyImmediate(label.gameObject);
+            }
+
+            foreach (var image in balloon.GetComponentsInChildren<Image>(true))
+            {
+                if (image.name is "Icon" or "BakedShadow")
+                {
+                    image.color = White;
+                }
+            }
+        }
+
         // The view requests the resume and then plays the ascent, so Play's own calls come off the copy. The copy's
-        // scene activation goes to Play's SceneTransition and the copied one is removed: it would preload a second
-        // Game scene the moment the button first shows.
+        // hide is retargeted to the whole Continue, and its scene activation to Play's SceneTransition, the copied
+        // one removed: it would preload a second Game scene the moment the balloon first shows.
         private static void RewirePress(
             ScaleDownButton button, LaunchPlayTrigger play, LaunchContinueView view, SceneTransition playTransition)
         {
@@ -123,6 +200,10 @@ namespace BalloonParty.Editor
                 if (target == play)
                 {
                     UnityEventTools.RemovePersistentListener(press, i);
+                }
+                else if (target == button.gameObject && press.GetPersistentMethodName(i) == nameof(GameObject.SetActive))
+                {
+                    UnityEventTools.RegisterBoolPersistentListener(press, i, view.gameObject.SetActive, false);
                 }
                 else if (copiedTransition != null && target == copiedTransition && playTransition != null)
                 {
