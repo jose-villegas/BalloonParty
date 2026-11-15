@@ -59,6 +59,7 @@ namespace BalloonParty.Scenario
         private readonly ISubscriber<LevelUpDismissedMessage> _levelUpDismissedSubscriber;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
         private readonly ISubscriber<RunResetMessage> _runResetSubscriber;
+        private readonly ISubscriber<LevelTransitionCompletedMessage> _transitionCompletedSubscriber;
         private readonly IActiveScenario _scenario;
         private readonly SmokeFieldResources _resources = new();
         private readonly SmokeFieldResources _inkResources = new("_InkFieldTex");
@@ -78,6 +79,7 @@ namespace BalloonParty.Scenario
         private IDisposable _gameOverSubscription;
         private IDisposable _scenarioSubscription;
         private IDisposable _runResetSubscription;
+        private IDisposable _transitionCompletedSubscription;
 
         // Whether ink-layer sources stamp: on paper, with the ink switched on.
         internal bool IsInking { get; private set; }
@@ -89,6 +91,7 @@ namespace BalloonParty.Scenario
             ISubscriber<LevelUpDismissedMessage> levelUpDismissedSubscriber,
             ISubscriber<GameOverMessage> gameOverSubscriber,
             ISubscriber<RunResetMessage> runResetSubscriber,
+            ISubscriber<LevelTransitionCompletedMessage> transitionCompletedSubscriber,
             IActiveScenario scenario)
         {
             _settings = settings;
@@ -97,6 +100,7 @@ namespace BalloonParty.Scenario
             _levelUpDismissedSubscriber = levelUpDismissedSubscriber;
             _gameOverSubscriber = gameOverSubscriber;
             _runResetSubscriber = runResetSubscriber;
+            _transitionCompletedSubscriber = transitionCompletedSubscriber;
             _scenario = scenario;
         }
 
@@ -104,6 +108,12 @@ namespace BalloonParty.Scenario
         {
             // Before the resources, so the ink switch follows the scenario even with the field disabled.
             _scenarioSubscription = _scenario.Current.Subscribe(shift => SetPaper(shift.Kind == ScenarioKind.Paper));
+
+            // The ink stays on the page while it leaves: through the level-up's ascent and the swap out to the next
+            // scenario, and under the game-over screen. It goes once the ascent has settled, when the page is gone
+            // or, on a second paper level in a row, is a fresh page; and on a restart (below), which a pause-menu
+            // restart publishes too, so the ink never carries over onto the retried page.
+            _transitionCompletedSubscription = _transitionCompletedSubscriber.Subscribe(_ => ClearInk());
 
             if (_settings?.StampShader == null || _settings.DecayShader == null || _display == null)
             {
@@ -120,11 +130,8 @@ namespace BalloonParty.Scenario
             PushBoundsGlobals();
             Shader.SetGlobalFloat(ActiveId, 1f);
             _lastDecayTime = Time.time;
-            _levelUpDismissedSubscription = _levelUpDismissedSubscriber.Subscribe(_ => Clear());
-            _gameOverSubscription = _gameOverSubscriber.Subscribe(_ => Clear());
-
-            // A restart from the pause menu publishes neither of the above. The smoke would fade on its own; the ink
-            // would carry over onto the retried page.
+            _levelUpDismissedSubscription = _levelUpDismissedSubscriber.Subscribe(_ => ClearSmoke());
+            _gameOverSubscription = _gameOverSubscriber.Subscribe(_ => ClearSmoke());
             _runResetSubscription = _runResetSubscriber.Subscribe(_ => Clear());
         }
 
@@ -158,6 +165,7 @@ namespace BalloonParty.Scenario
             _gameOverSubscription?.Dispose();
             _scenarioSubscription?.Dispose();
             _runResetSubscription?.Dispose();
+            _transitionCompletedSubscription?.Dispose();
             Shader.SetGlobalFloat(ActiveId, 0f);
             Shader.SetGlobalFloat(InkActiveId, 0f);
             _resources.Dispose();
@@ -317,14 +325,13 @@ namespace BalloonParty.Scenario
                 return;
             }
 
-            var wasInking = IsInking;
+            // Leaving paper stops the stamping but keeps what is on the page, which still shows while the swap
+            // takes it away; the ink clears once the transition settles (ClearInk).
             IsInking = paper && _settings.InkOnPaper;
-            if (wasInking && !IsInking)
+            if (IsInking)
             {
-                ClearInk();
+                Shader.SetGlobalFloat(InkActiveId, 1f);
             }
-
-            Shader.SetGlobalFloat(InkActiveId, IsInking ? 1f : 0f);
         }
 
         // Ink always overwrites and measures round; the smoke's stamp material keeps both off.
@@ -342,15 +349,21 @@ namespace BalloonParty.Scenario
 
         private void Clear()
         {
+            ClearSmoke();
+            ClearInk();
+        }
+
+        private void ClearSmoke()
+        {
             _pendingStamps.Clear();
             _resources.Clear();
-            ClearInk();
         }
 
         private void ClearInk()
         {
             _pendingInkStamps.Clear();
             _inkResources.Clear();
+            Shader.SetGlobalFloat(InkActiveId, IsInking ? 1f : 0f);
         }
 
         private void FlushPendingStamps(List<PendingStamp> pending, SmokeFieldResources target)

@@ -391,8 +391,11 @@ field, and only on paper. Two do: every pop (`BalloonPopPresenter`, `PaintSource
 colour) and the Paint item's blobs (`PaintItemHandler`, `PaintSource.PaintSplash`, in the holder's colour). Both
 call `Smear`, which drags the stamp back the way the shot or the blob came for the profile's `Smear` length,
 thinning toward the tail, so a blot smears; a pop with no shot behind it (a board clear) leaves a round one.
-The ink never decays: it stays until the level clears the fields as usual (the level-up dismissal, a game over,
-a restart), and leaving paper clears it. Its stamp material overwrites (`_StampOverwrite`): a new blot covers the
+The ink never decays, and it outlives the smoke: the level-up dismissal and a game over clear only the smoke,
+and leaving paper only stops the stamping, so the page keeps its colours through the ascent and the swap out
+(and under the game-over screen). The ink clears once the ascent settles (`LevelTransitionCompletedMessage`),
+when the page has gone or, on a second paper level in a row, turns to a fresh one, and on a restart
+(`RunResetMessage`). Its stamp material overwrites (`_StampOverwrite`): a new blot covers the
 colour under it instead of mixing, and its opacity is the strongest stamp's, not their sum, so overlapping
 capsules don't swell its edge into scallops. Its stamps measure round (`_StampAspect`; the smoke keeps the
 vertical stretch its look was tuned with), ramp their edge over a few texels (the field is coarse, and a short

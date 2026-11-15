@@ -23,6 +23,7 @@ namespace BalloonParty.Tests.Scenario
         private IGameDisplayConfiguration _display;
         private IGamePalette _palette;
         private ISubscriber<LevelUpDismissedMessage> _levelUpDismissedSubscriber;
+        private IMessageHandler<LevelTransitionCompletedMessage> _transitionCompleted;
         private SmokeFieldService _service;
         private ActiveScenario _scenario;
 
@@ -71,8 +72,15 @@ namespace BalloonParty.Tests.Scenario
                 .Subscribe(Arg.Any<IMessageHandler<RunResetMessage>>(), Arg.Any<MessageHandlerFilter<RunResetMessage>[]>())
                 .Returns(Substitute.For<System.IDisposable>());
 
+            _transitionCompleted = null;
+            var transitionCompletedSubscriber = Substitute.For<ISubscriber<LevelTransitionCompletedMessage>>();
+            transitionCompletedSubscriber
+                .Subscribe(Arg.Do<IMessageHandler<LevelTransitionCompletedMessage>>(h => _transitionCompleted = h),
+                    Arg.Any<MessageHandlerFilter<LevelTransitionCompletedMessage>[]>())
+                .Returns(Substitute.For<System.IDisposable>());
+
             _service = new SmokeFieldService(_settings, _display, _palette, _levelUpDismissedSubscriber, gameOverSubscriber,
-                runResetSubscriber, _scenario);
+                runResetSubscriber, transitionCompletedSubscriber, _scenario);
         }
 
         [TearDown]
@@ -137,7 +145,7 @@ namespace BalloonParty.Tests.Scenario
         }
 
         [Test]
-        public void LeavingPaper_StopsInking()
+        public void LeavingPaper_StopsInking_ButTheLeavingPageKeepsItsInk()
         {
             _scenario.Cut(ScenarioKind.Paper);
             Start();
@@ -145,7 +153,31 @@ namespace BalloonParty.Tests.Scenario
             _scenario.Reveal(ScenarioKind.Ground, 4f);
 
             Assert.IsFalse(_service.IsInking);
+            Assert.AreEqual(1f, Shader.GetGlobalFloat(InkActiveId), "the page swaps out in its colours, not blank");
+        }
+
+        [Test]
+        public void TransitionSettled_AfterLeavingPaper_ClearsTheInk()
+        {
+            _scenario.Cut(ScenarioKind.Paper);
+            Start();
+            _scenario.Reveal(ScenarioKind.Ground, 4f);
+
+            _transitionCompleted.Handle(new LevelTransitionCompletedMessage());
+
             Assert.AreEqual(0f, Shader.GetGlobalFloat(InkActiveId));
+        }
+
+        [Test]
+        public void TransitionSettled_OnASecondPaperLevel_KeepsInking()
+        {
+            _scenario.Cut(ScenarioKind.Paper);
+            Start();
+
+            _transitionCompleted.Handle(new LevelTransitionCompletedMessage());
+
+            Assert.IsTrue(_service.IsInking);
+            Assert.AreEqual(1f, Shader.GetGlobalFloat(InkActiveId));
         }
 
         [Test]
