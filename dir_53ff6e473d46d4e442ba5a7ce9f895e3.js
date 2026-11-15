@@ -2,6 +2,7 @@ var dir_53ff6e473d46d4e442ba5a7ce9f895e3 =
 [
     [ "Binding", "dir_a2fa71ae67099e80bf9505400e79082c.html", "dir_a2fa71ae67099e80bf9505400e79082c" ],
     [ "CardReveal", "dir_436d0bc43ae649255cb38f812f4c8d62.html", "dir_436d0bc43ae649255cb38f812f4c8d62" ],
+    [ "ClothRibbon", "dir_681e840ad52d880a14dd5991f4c51dff.html", "dir_681e840ad52d880a14dd5991f4c51dff" ],
     [ "Danger", "dir_e704b1c5c79caef2daaf89d0e1463a9e.html", "dir_e704b1c5c79caef2daaf89d0e1463a9e" ],
     [ "GameOver", "dir_b9166310bb0e1328aeeabf4398682117.html", "dir_b9166310bb0e1328aeeabf4398682117" ],
     [ "HeadsUp", "dir_c518195ef2d88898cf0deb5fc0a8361f.html", "dir_c518195ef2d88898cf0deb5fc0a8361f" ],

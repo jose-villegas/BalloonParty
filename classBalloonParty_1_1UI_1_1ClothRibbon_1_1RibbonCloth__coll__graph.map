@@ -1,0 +1,5 @@
+<map id="BalloonParty.UI.ClothRibbon.RibbonCloth" name="BalloonParty.UI.ClothRibbon.RibbonCloth">
+<area shape="rect" id="Node000001" title="A line hanging from an anchor with a ribbon of cloth tied to its end, simulated as points joined by s..." alt="" coords="5,115,212,160"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html" title="The spring line and cloth ribbon&#39;s shape and physics, in canvas units and seconds." alt="" coords="5,5,212,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,64,111,115,106,114,107,68"/>
+</map>

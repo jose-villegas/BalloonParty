@@ -13,6 +13,8 @@ var dir_c33286056d2acf479cd8641ef845fec1 =
     [ "Telemetry", "dir_62d04610ab7eeb16116e00faf518798d.html", "dir_62d04610ab7eeb16116e00faf518798d" ],
     [ "Upgrades", "dir_6c0b5e166ba3b9275cf269c98f1fc961.html", "dir_6c0b5e166ba3b9275cf269c98f1fc961" ],
     [ "AppLifetimeScope.cs", "AppLifetimeScope_8cs.html", "AppLifetimeScope_8cs" ],
+    [ "BalloonWander.cs", "BalloonWander_8cs.html", "BalloonWander_8cs" ],
+    [ "BalloonWanderSettings.cs", "BalloonWanderSettings_8cs.html", "BalloonWanderSettings_8cs" ],
     [ "GameLifetimeScope.cs", "GameLifetimeScope_8cs.html", "GameLifetimeScope_8cs" ],
     [ "GameScopeRegistration.cs", "GameScopeRegistration_8cs.html", "GameScopeRegistration_8cs" ],
     [ "HitPipeline.cs", "HitPipeline_8cs.html", "HitPipeline_8cs" ],

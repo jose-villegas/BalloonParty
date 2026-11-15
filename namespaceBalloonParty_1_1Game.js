@@ -13,6 +13,8 @@ var namespaceBalloonParty_1_1Game =
     [ "Telemetry", "namespaceBalloonParty_1_1Game_1_1Telemetry.html", "namespaceBalloonParty_1_1Game_1_1Telemetry" ],
     [ "Upgrades", "namespaceBalloonParty_1_1Game_1_1Upgrades.html", "namespaceBalloonParty_1_1Game_1_1Upgrades" ],
     [ "AppLifetimeScope", "classBalloonParty_1_1Game_1_1AppLifetimeScope.html", "classBalloonParty_1_1Game_1_1AppLifetimeScope" ],
+    [ "BalloonWander", "classBalloonParty_1_1Game_1_1BalloonWander.html", "classBalloonParty_1_1Game_1_1BalloonWander" ],
+    [ "BalloonWanderSettings", "classBalloonParty_1_1Game_1_1BalloonWanderSettings.html", "classBalloonParty_1_1Game_1_1BalloonWanderSettings" ],
     [ "GameLifetimeScope", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html", "classBalloonParty_1_1Game_1_1GameLifetimeScope" ],
     [ "GameScopeRegistration", "classBalloonParty_1_1Game_1_1GameScopeRegistration.html", "classBalloonParty_1_1Game_1_1GameScopeRegistration" ],
     [ "HitPipeline", "classBalloonParty_1_1Game_1_1HitPipeline.html", "classBalloonParty_1_1Game_1_1HitPipeline" ],

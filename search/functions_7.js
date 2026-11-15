@@ -72,6 +72,7 @@ var searchData=
   ['holds_69',['Holds',['../classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#ae1d78285e6c51ede05df6322ace948be',1,'BalloonParty::Balloon::Formation::FormationPlanner']]],
   ['holdsheets_70',['HoldSheets',['../classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html#aee535847d81c69cede87a4099e59a32a',1,'BalloonParty::UI::CardReveal::CardRevealView']]],
   ['holdsstrokes_71',['HoldsStrokes',['../classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html#af7d2ccfa09af417fe581f9c45c9682a0',1,'BalloonParty::Item::Snipe::SnipeLanceLines']]],
-  ['hostscovereditem_72',['HostsCoveredItem',['../classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a4fb0b287f3a00c6ac72eb5fa413bb5e2',1,'BalloonParty::Balloon::Formation::FormationPlanner']]],
-  ['humanize_73',['Humanize',['../classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#afe79c53a22211cd3556701e8ffdc5090',1,'BalloonParty::Editor::MetricBindingDrawer']]]
+  ['holdupright_72',['HoldUpright',['../classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonCloth.html#a0b34fa899737852e32e79505a40a0830',1,'BalloonParty::UI::ClothRibbon::RibbonCloth']]],
+  ['hostscovereditem_73',['HostsCoveredItem',['../classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html#a4fb0b287f3a00c6ac72eb5fa413bb5e2',1,'BalloonParty::Balloon::Formation::FormationPlanner']]],
+  ['humanize_74',['Humanize',['../classBalloonParty_1_1Editor_1_1MetricBindingDrawer.html#afe79c53a22211cd3556701e8ffdc5090',1,'BalloonParty::Editor::MetricBindingDrawer']]]
 ];

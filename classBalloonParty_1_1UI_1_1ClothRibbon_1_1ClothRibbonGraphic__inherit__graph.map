@@ -1,0 +1,5 @@
+<map id="BalloonParty.UI.ClothRibbon.ClothRibbonGraphic" name="BalloonParty.UI.ClothRibbon.ClothRibbonGraphic">
+<area shape="rect" id="Node000001" title="Draws a RibbonCloth&#39;s ribbon: its three rows of points as a strip, notched at both ends,..." alt="" coords="5,81,212,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="42,5,175,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,47,111,81,106,79,107,51"/>
+</map>

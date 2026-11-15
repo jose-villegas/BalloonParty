@@ -142,6 +142,10 @@ Directories</h2></td></tr>
 Files</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="AppLifetimeScope_8cs.html">AppLifetimeScope.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="BalloonWander_8cs.html">BalloonWander.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="BalloonWanderSettings_8cs.html">BalloonWanderSettings.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="GameLifetimeScope_8cs.html">GameLifetimeScope.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="GameScopeRegistration_8cs.html">GameScopeRegistration.cs</a></td></tr>
@@ -173,34 +177,36 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>LaunchLifetimeScope</code>   </td><td class="markdownTableBodyNone">VContainer root for the Launcher scene. Child of <code>AppLifetimeScope</code>, which provides most of what the launch screen needs (display config, camera, live backdrop, the run save). Its one registration is Continue: when <code>_continueView</code> is assigned it registers the view, the <code>LaunchPlayTrigger</code> on its own GameObject and <code>LaunchContinueController</code>; with none assigned, the screen offers Play alone    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>LaunchContinueView</code>   </td><td class="markdownTableBodyNone">The Continue button's <code>MonoBehaviour</code>, beside Play. Shown only while a run is saved, its label template (<code>{0}</code>) filled with the saved level. Wire <code>Continue()</code> to the button's <code>ScaleDownButton</code> On Scale Complete, as Play is wired to <code>LaunchPlayTrigger.Play</code>. <b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Launch &gt; Add Continue Button</b> (<code>Editor/LaunchContinueButtonBuilder</code>) adds it to the Launcher scene: a copy of the Play button under it, keeping Play's press actions (hide, title out, <code>SceneTransition.Load</code>) but calling <code>Continue()</code> in place of <code>LaunchPlayTrigger.Play</code>, inactive until the controller shows it, and handed to <code>LaunchLifetimeScope</code>    </td></tr>
+<td class="markdownTableBodyNone"><code>LaunchContinueView</code>   </td><td class="markdownTableBodyNone">The launch screen's Continue: a small white copy of the Play balloon, shown only while a run is saved, drifting about the screen (<code>BalloonWander</code>) and carrying a ribbon that says "continue" on a spring line (<code>UI/ClothRibbon/</code>). It keeps clear of Play, with room below for what hangs from it; the line and ribbon are pushed off Play's balloon if they swing into it. The balloon art's light-driven materials turn their highlights about a pivot authored for Play at the canvas's centre, so the view gives this balloon its own copies whose pivot follows it. Wire <code>Continue()</code> to the balloon's <code>ScaleDownButton</code> On Scale Complete, as Play is wired to <code>LaunchPlayTrigger.Play</code>. <b>Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Launch &gt; Build Continue Balloon</b> (<code>Editor/LaunchContinueButtonBuilder</code>) builds it in the Launcher scene, replacing any built before: a root stretched over the launch canvas with the view, the line, the ribbon and its writing, and the balloon, which keeps Play's press actions (its hide hides the whole Continue; scene activation is Play's own <code>SceneTransition</code>) but calls <code>Continue()</code> in place of <code>LaunchPlayTrigger.Play</code>; inactive until the controller shows it, and handed to <code>LaunchLifetimeScope</code>. Its drift, line and ribbon are tuned on the view    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>LaunchContinueController</code>   </td><td class="markdownTableBodyNone">Plain C# (<code>IStartable</code>). Shows or hides the view from <code>IRunSave</code>; a press hands the resume to the game (<code>IRunResumeRequest</code>, see <code><a class="el" href="Game_2Run_2README_8md.html">Run/README.md</a></code>) and plays the same ascent as Play. Ignored once Play is pressed    </td></tr>
+<td class="markdownTableBodyNone"><code>BalloonWander</code>   </td><td class="markdownTableBodyNone">Plain C#. A balloon drifting about an area: it heads for random spots one after another, easing in, and slides round a keep-out (a <code>KeepOut</code> capsule) it never enters; a spot it can't reach in time is given up. Tuned by <code>BalloonWanderSettings</code>    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>LaunchContinueController</code>   </td><td class="markdownTableBodyNone">Plain C# (<code>IStartable</code>). Shows or hides the view by whether <code>IRunSave</code> holds a run; a press hands the resume to the game (<code>IRunResumeRequest</code>, see <code><a class="el" href="Game_2Run_2README_8md.html">Run/README.md</a></code>) and plays the same ascent as Play. Ignored once Play is pressed    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>LaunchDisturbanceStamp</code>   </td><td class="markdownTableBodyNone"><code>ITickable</code>, registered in <code>GameScopeRegistration</code> — lets the player poke the shared disturbance field with a finger on the launch screen while the game pre-warms, using the same stamp the projectile wake uses. Only active while <code>NavigationState.Launch</code> is current    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>LaunchPlayTrigger</code>   </td><td class="markdownTableBodyNone">Launch screen's Play button <code>MonoBehaviour</code> (wired in the Launcher scene in place of the plain <code>NavigationTrigger</code>). Starts the <code>LaunchAscend</code> cloud scroll, waits for it to finish, then transitions to <code>NavigationState.Game</code> — so the game doesn't appear mid-scroll    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>HitPipeline</code>   </td><td class="markdownTableBodyNone"><code>IHitDispatcher</code> — the single entry point for actor hits; runs the order-dependent stages before broadcasting <code>ActorHitMessage</code> (see Architecture)    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>Score/</code>   </td><td class="markdownTableBodyNone">Score tracking, level progress, streaks, and trail orb management — see <code>Score/README.md</code>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>Run/</code>   </td><td class="markdownTableBodyNone">Run lifecycle — end-of-run commit, restart reset ordering, best-run meta — see <code><a class="el" href="Game_2Run_2README_8md.html">Run/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>Upgrades/</code>   </td><td class="markdownTableBodyNone">Run-scoped upgrade cards dealt at level-ups, and the weapon they add up to (ball cap, reload, shields, item odds) — see <code><a class="el" href="Game_2Upgrades_2README_8md.html">Upgrades/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>Health/</code>   </td><td class="markdownTableBodyNone">Player hit-point pool and loss forecast — see <code><a class="el" href="Game_2Health_2README_8md.html">Health/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>Danger/</code>   </td><td class="markdownTableBodyNone">Space-pressure early-warning signal — see <code><a class="el" href="Game_2Danger_2README_8md.html">Danger/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>Assist/</code>   </td><td class="markdownTableBodyNone">Help that comes only when the player needs it: how much trouble they're in, and the pity that makes a rolled help (a Snipe, a heart) likelier the longer it misses in trouble — see <code><a class="el" href="Game_2Assist_2README_8md.html">Assist/README.md</a></code>    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>HeadsUp/</code>   </td><td class="markdownTableBodyNone">Which handwritten heads-ups show, and when: the routers that turn gameplay messages into requests, the queue that caps and prioritises them, and the service that drives the view — see <code>HeadsUp/README.md</code>    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>Cinematics/</code>   </td><td class="markdownTableBodyNone">Cinematic director, camera rig, and the level-up / heart-drain producers — see <code><a class="el" href="Game_2Cinematics_2README_8md.html">Cinematics/README.md</a></code>    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>Flight/</code>   </td><td class="markdownTableBodyNone"><code>FlightStatsService</code> — the single owner of per-ball flight counts (pops, deflects, wall bounces, pierce discharges), read per ball via <code>IFlightStatsSource.Of(ball)</code> by both audio and telemetry so neither keeps its own copy    </td></tr>
+<td class="markdownTableBodyNone"><code>Cinematics/</code>   </td><td class="markdownTableBodyNone">Cinematic director, camera rig, and the level-up / heart-drain producers — see <code><a class="el" href="Game_2Cinematics_2README_8md.html">Cinematics/README.md</a></code>    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>Flight/</code>   </td><td class="markdownTableBodyNone"><code>FlightStatsService</code> — the single owner of per-ball flight counts (pops, deflects, wall bounces, pierce discharges), read per ball via <code>IFlightStatsSource.Of(ball)</code> by both audio and telemetry so neither keeps its own copy    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>Telemetry/</code>   </td><td class="markdownTableBodyNone">Gameplay metrics — counts what happens during play at four nested scopes (Session ⊃ Run ⊃ Level ⊃ Flight) and serves the level-up/game-over popups, a local JSON Lines log, and (unbuilt) an external analytics export — see <code>Telemetry/README.md</code>   </td></tr>
 </table>
 <h1><a class="anchor" id="autotoc_md234"></a>

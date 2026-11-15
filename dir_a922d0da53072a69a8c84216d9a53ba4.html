@@ -238,7 +238,7 @@ Loss flow</h1>
 <h1><a class="anchor" id="autotoc_md239"></a>
 Resuming an interrupted run</h1>
 <p>A phone call or the OS killing the app would otherwise cost the whole run. The run is saved at level boundaries only: a resume replays the saved level from its start, so there's no mid-level board to restore.</p>
-<div class="fragment"><div class="line">launch → save exists → Continue (level N) beside Play</div>
+<div class="fragment"><div class="line">launch → save exists → the Continue balloon drifts about beside Play</div>
 <div class="line">       → LaunchContinueController: IRunResumeRequest.Request(), then the Play ascent</div>
 <div class="line">       → RunResumeController (still on Launch): IRunSave.TryLoad → RetryTracker.PrepareResume(snapshot)</div>
 <div class="line">                                               → RunController.ResumeRun()</div>

@@ -66,6 +66,7 @@ var searchData=
   ['lightningsettings_63',['LightningSettings',['../classBalloonParty_1_1Configuration_1_1Items_1_1LightningSettings.html',1,'BalloonParty::Configuration::Items']]],
   ['lightregistrationhandle_64',['LightRegistrationHandle',['../classBalloonParty_1_1Shared_1_1SceneLight_1_1SceneLightFieldService_1_1LightRegistrationHandle.html',1,'BalloonParty::Shared::SceneLight::SceneLightFieldService']]],
   ['listextensions_65',['ListExtensions',['../classBalloonParty_1_1Shared_1_1Extensions_1_1ListExtensions.html',1,'BalloonParty::Shared::Extensions']]],
-  ['log_66',['Log',['../classBalloonParty_1_1Shared_1_1Diagnostics_1_1Log.html',1,'BalloonParty::Shared::Diagnostics']]],
-  ['lossforecast_67',['LossForecast',['../classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html',1,'BalloonParty::Game::Health']]]
+  ['litmaterial_66',['LitMaterial',['../structBalloonParty_1_1Game_1_1LaunchContinueView_1_1LitMaterial.html',1,'BalloonParty::Game::LaunchContinueView']]],
+  ['log_67',['Log',['../classBalloonParty_1_1Shared_1_1Diagnostics_1_1Log.html',1,'BalloonParty::Shared::Diagnostics']]],
+  ['lossforecast_68',['LossForecast',['../classBalloonParty_1_1Game_1_1Health_1_1LossForecast.html',1,'BalloonParty::Game::Health']]]
 ];

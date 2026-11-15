@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="The launch screen&#39;s Continue button, beside Play: shown only while a run is saved,...">
+<g id="a_Node000001"><a xlink:title="The launch screen&#39;s Continue: a white balloon drifting about the screen, shown only while a run is sa...">
 <polygon fill="#999999" stroke="#666666" points="145.75,-33.5 0,-33.5 0,0 145.75,0 145.75,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.Launch</text>
 <text xml:space="preserve" text-anchor="middle" x="72.88" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">ContinueView</text>

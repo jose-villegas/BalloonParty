@@ -1,0 +1,5 @@
+<map id="BalloonParty.UI.ClothRibbon.ClothRibbonWriting" name="BalloonParty.UI.ClothRibbon.ClothRibbonWriting">
+<area shape="rect" id="Node000001" title="Writes a line on both faces of a RibbonCloth&#39;s ribbon, each glyph corner carried on the cloth where i..." alt="" coords="5,81,212,126"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="47,5,170,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,47,111,81,106,79,107,51"/>
+</map>

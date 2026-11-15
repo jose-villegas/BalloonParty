@@ -615,6 +615,8 @@ var annotated_dup =
           [ "RunUpgrades", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades" ]
         ] ],
         [ "AppLifetimeScope", "classBalloonParty_1_1Game_1_1AppLifetimeScope.html", "classBalloonParty_1_1Game_1_1AppLifetimeScope" ],
+        [ "BalloonWander", "classBalloonParty_1_1Game_1_1BalloonWander.html", "classBalloonParty_1_1Game_1_1BalloonWander" ],
+        [ "BalloonWanderSettings", "classBalloonParty_1_1Game_1_1BalloonWanderSettings.html", "classBalloonParty_1_1Game_1_1BalloonWanderSettings" ],
         [ "GameLifetimeScope", "classBalloonParty_1_1Game_1_1GameLifetimeScope.html", "classBalloonParty_1_1Game_1_1GameLifetimeScope" ],
         [ "GameScopeRegistration", "classBalloonParty_1_1Game_1_1GameScopeRegistration.html", "classBalloonParty_1_1Game_1_1GameScopeRegistration" ],
         [ "HitPipeline", "classBalloonParty_1_1Game_1_1HitPipeline.html", "classBalloonParty_1_1Game_1_1HitPipeline" ],
@@ -1190,6 +1192,14 @@ var annotated_dup =
           [ "RibbonGraphic", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonGraphic.html", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonGraphic" ],
           [ "RibbonPiece", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece.html", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonPiece" ],
           [ "RibbonStrike", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonStrike.html", "classBalloonParty_1_1UI_1_1CardReveal_1_1RibbonStrike" ]
+        ] ],
+        [ "ClothRibbon", "namespaceBalloonParty_1_1UI_1_1ClothRibbon.html", [
+          [ "ClothRibbonGraphic", "classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonGraphic.html", "classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonGraphic" ],
+          [ "ClothRibbonWriting", "classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonWriting.html", "classBalloonParty_1_1UI_1_1ClothRibbon_1_1ClothRibbonWriting" ],
+          [ "KeepOut", "structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html", "structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut" ],
+          [ "RibbonCloth", "classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonCloth.html", "classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonCloth" ],
+          [ "RibbonClothSettings", "classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html", "classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings" ],
+          [ "SpringLineGraphic", "classBalloonParty_1_1UI_1_1ClothRibbon_1_1SpringLineGraphic.html", "classBalloonParty_1_1UI_1_1ClothRibbon_1_1SpringLineGraphic" ]
         ] ],
         [ "Danger", "namespaceBalloonParty_1_1UI_1_1Danger.html", [
           [ "DangerGradientView", "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html", "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView" ],

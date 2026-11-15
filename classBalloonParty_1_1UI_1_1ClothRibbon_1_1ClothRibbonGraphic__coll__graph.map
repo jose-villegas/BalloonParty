@@ -1,0 +1,9 @@
+<map id="BalloonParty.UI.ClothRibbon.ClothRibbonGraphic" name="BalloonParty.UI.ClothRibbon.ClothRibbonGraphic">
+<area shape="rect" id="Node000001" title="Draws a RibbonCloth&#39;s ribbon: its three rows of points as a strip, notched at both ends,..." alt="" coords="28,225,234,269"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,124,139,151"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="88,163,122,224,116,225,85,167"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonCloth.html" title="A line hanging from an anchor with a ribbon of cloth tied to its end, simulated as points joined by s..." alt="" coords="162,115,368,160"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="229,169,159,226,156,222,224,170"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonClothSettings.html" title="The spring line and cloth ribbon&#39;s shape and physics, in canvas units and seconds." alt="" coords="162,5,368,50"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="267,64,268,115,263,113,264,68"/>
+</map>

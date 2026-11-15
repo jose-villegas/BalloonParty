@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['labeltemplate_0',['LabelTemplate',['../classBalloonParty_1_1Editor_1_1LaunchContinueButtonBuilder.html#aaf61ff543983845432709230c4a24c2c',1,'BalloonParty::Editor::LaunchContinueButtonBuilder']]],
+  ['label_0',['Label',['../classBalloonParty_1_1Editor_1_1LaunchContinueButtonBuilder.html#a76070189305bfc4bdad156f4294e6d5d',1,'BalloonParty::Editor::LaunchContinueButtonBuilder']]],
   ['ladderdenominations_1',['LadderDenominations',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#a9a0a7367cd9449ed628d1868d7a1fbbd',1,'BalloonParty::Game::Score::Behaviours::ShapeCatalog']]],
   ['landed_2',['Landed',['../classBalloonParty_1_1Editor_1_1EffectPreview_1_1PaintSplashPreviewModule_1_1FlightState.html#a2b4d7bc34bfe4af454c6d2490298fc86',1,'BalloonParty.Editor.EffectPreview.PaintSplashPreviewModule.FlightState.Landed'],['../classBalloonParty_1_1Item_1_1Paint_1_1PaintSplashView_1_1BlobFlight.html#a62bc8b7b1aa21661acf730f1f920c752',1,'BalloonParty.Item.Paint.PaintSplashView.BlobFlight.Landed']]],
   ['laser_3',['Laser',['../structBalloonParty_1_1Item_1_1Effects_1_1ItemEffectParams.html#ab43895f3a4df1daac43707f2f86155d3',1,'BalloonParty::Item::Effects::ItemEffectParams']]],
@@ -87,7 +87,8 @@ var searchData=
   ['localpenspeed_84',['LocalPenSpeed',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationState.html#a4b96381e40d6030a2e20133285af1e0c',1,'BalloonParty::Game::Score::Behaviours::ShapeFormationTicker::FormationState']]],
   ['localscale_85',['LocalScale',['../structBalloonParty_1_1Item_1_1TransformSnapshot.html#a6097e3088454dd1fec15a62b8f23ed9b',1,'BalloonParty::Item::TransformSnapshot']]],
   ['logtag_86',['LogTag',['../classBalloonParty_1_1Game_1_1Telemetry_1_1TelemetrySinkBase.html#a0d7c489a2c51307f42a5cc22db24ac48',1,'BalloonParty.Game.Telemetry.TelemetrySinkBase.LogTag'],['../classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#a6fd7464ac440c7b7a8a7d57d4179e146',1,'BalloonParty.Shared.Thermal.ThermalFrameRateGovernor.LogTag']]],
-  ['loosebonusname_87',['LooseBonusName',['../classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder.html#a4bf9c871f0623c55bcea3b70543fa288',1,'BalloonParty::Editor::GameOverLayoutBuilder']]],
-  ['losttrigger_88',['LostTrigger',['../classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterAnimation.html#a1b941a2675d9b0f459fc260fd25a942e',1,'BalloonParty::UI::Shields::ShieldCounterAnimation']]],
-  ['lowqualitymp3_89',['LowQualityMp3',['../classBalloonParty_1_1Audio_1_1Editor_1_1FreesoundResponseParser_1_1Previews.html#a7c29f096834b0d966f39e7a5d77d4474',1,'BalloonParty::Audio::Editor::FreesoundResponseParser::Previews']]]
+  ['longestframe_87',['LongestFrame',['../classBalloonParty_1_1UI_1_1ClothRibbon_1_1RibbonCloth.html#a43366f2f35a100a3688c9721883878c8',1,'BalloonParty::UI::ClothRibbon::RibbonCloth']]],
+  ['loosebonusname_88',['LooseBonusName',['../classBalloonParty_1_1Editor_1_1GameOverLayoutBuilder.html#a4bf9c871f0623c55bcea3b70543fa288',1,'BalloonParty::Editor::GameOverLayoutBuilder']]],
+  ['losttrigger_89',['LostTrigger',['../classBalloonParty_1_1UI_1_1Shields_1_1ShieldCounterAnimation.html#a1b941a2675d9b0f459fc260fd25a942e',1,'BalloonParty::UI::Shields::ShieldCounterAnimation']]],
+  ['lowqualitymp3_90',['LowQualityMp3',['../classBalloonParty_1_1Audio_1_1Editor_1_1FreesoundResponseParser_1_1Previews.html#a7c29f096834b0d966f39e7a5d77d4474',1,'BalloonParty::Audio::Editor::FreesoundResponseParser::Previews']]]
 ];
