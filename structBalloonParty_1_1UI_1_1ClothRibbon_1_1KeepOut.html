@@ -110,7 +110,8 @@ $(function(){initNavTree('structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.htm
   <div class="summary">
 <a href="#pac-methods">Package Functions</a> &#124;
 <a href="#pac-attribs">Package Attributes</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.UI.ClothRibbon.KeepOut Struct Reference</div></div>
 </div><!--header-->
@@ -123,12 +124,15 @@ $(function(){initNavTree('structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.htm
 Package Functions</h2></td></tr>
 <tr class="memitem:a0e1f05c0ad94b4ddb31015e38847f9be" id="r_a0e1f05c0ad94b4ddb31015e38847f9be"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e1f05c0ad94b4ddb31015e38847f9be">KeepOut</a> (Vector2 bottom, Vector2 top, float radius)</td></tr>
 <tr class="separator:a0e1f05c0ad94b4ddb31015e38847f9be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b4b3c20ad880e05e4fe345f735312df" id="r_a8b4b3c20ad880e05e4fe345f735312df"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8b4b3c20ad880e05e4fe345f735312df">Blocks</a> (Vector2 from, Vector2 to)</td></tr>
+<tr class="memdesc:a8b4b3c20ad880e05e4fe345f735312df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether the straight path from <em>from</em>  to <em>to</em>  passes through.  <br /></td></tr>
+<tr class="separator:a8b4b3c20ad880e05e4fe345f735312df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a411cdcea3bb3626c7e69d480f0a05f25" id="r_a411cdcea3bb3626c7e69d480f0a05f25"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a411cdcea3bb3626c7e69d480f0a05f25">Contains</a> (Vector2 point)</td></tr>
 <tr class="separator:a411cdcea3bb3626c7e69d480f0a05f25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02a5f4cf3f0625d7c465450f6de44c70" id="r_a02a5f4cf3f0625d7c465450f6de44c70"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02a5f4cf3f0625d7c465450f6de44c70">DistanceFrom</a> (Vector2 point)</td></tr>
 <tr class="separator:a02a5f4cf3f0625d7c465450f6de44c70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2009378d999c5e9cfc85125c45b16416" id="r_a2009378d999c5e9cfc85125c45b16416"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2009378d999c5e9cfc85125c45b16416">PushOut</a> (Vector2 point, out Vector2 outward)</td></tr>
-<tr class="memdesc:a2009378d999c5e9cfc85125c45b16416"><td class="mdescLeft">&#160;</td><td class="mdescRight"><em>point</em>  moved straight out to the edge if it is inside, else unchanged, with the outward direction there.  <br /></td></tr>
+<tr class="memdesc:a2009378d999c5e9cfc85125c45b16416"><td class="mdescLeft">&#160;</td><td class="mdescRight"><em>point</em>  moved straight out to just past the edge if it is inside, else unchanged, with the outward direction there.  <br /></td></tr>
 <tr class="separator:a2009378d999c5e9cfc85125c45b16416"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-attribs" name="pac-attribs"></a>
@@ -140,10 +144,19 @@ Package Attributes</h2></td></tr>
 <tr class="memitem:a1a7ea0134128446eee839e4a82410c5b" id="r_a1a7ea0134128446eee839e4a82410c5b"><td class="memItemLeft" align="right" valign="top">readonly Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a7ea0134128446eee839e4a82410c5b">Top</a></td></tr>
 <tr class="separator:a1a7ea0134128446eee839e4a82410c5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
-Private Member Functions</h2></td></tr>
-<tr class="memitem:a26627120f9b5746e5848cc52ba956cc3" id="r_a26627120f9b5746e5848cc52ba956cc3"><td class="memItemLeft" align="right" valign="top">Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a26627120f9b5746e5848cc52ba956cc3">Nearest</a> (Vector2 point)</td></tr>
-<tr class="separator:a26627120f9b5746e5848cc52ba956cc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a65db02f9c56704113a7740c9d47caa94" id="r_a65db02f9c56704113a7740c9d47caa94"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a65db02f9c56704113a7740c9d47caa94">Crosses</a> (Vector2 a, Vector2 b, Vector2 c, Vector2 d)</td></tr>
+<tr class="separator:a65db02f9c56704113a7740c9d47caa94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e6dd4d7d3c040d6055fe6cde4091e8a" id="r_a1e6dd4d7d3c040d6055fe6cde4091e8a"><td class="memItemLeft" align="right" valign="top">static Vector2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1e6dd4d7d3c040d6055fe6cde4091e8a">Nearest</a> (Vector2 point, Vector2 start, Vector2 end)</td></tr>
+<tr class="separator:a1e6dd4d7d3c040d6055fe6cde4091e8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a657896f65e8fcb6b69a9250501c820c2" id="r_a657896f65e8fcb6b69a9250501c820c2"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a657896f65e8fcb6b69a9250501c820c2">Side</a> (Vector2 start, Vector2 end, Vector2 point)</td></tr>
+<tr class="separator:a657896f65e8fcb6b69a9250501c820c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a639698243ad47777954fc112a5b93d50" id="r_a639698243ad47777954fc112a5b93d50"><td class="memItemLeft" align="right" valign="top">const float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a639698243ad47777954fc112a5b93d50">Skin</a> = 1e-3f</td></tr>
+<tr class="separator:a639698243ad47777954fc112a5b93d50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A round area to stay out of, stretched upward into a capsule: every point within <a class="el" href="#abbbe73fa7220e10e4674be7baf0d3c0a">Radius</a> of the segment from <a class="el" href="#abd86b4bd78b6539b58dd6dbc10426798">Bottom</a> to <a class="el" href="#a1a7ea0134128446eee839e4a82410c5b">Top</a>. </p>
@@ -184,6 +197,37 @@ Private Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a8b4b3c20ad880e05e4fe345f735312df" name="a8b4b3c20ad880e05e4fe345f735312df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b4b3c20ad880e05e4fe345f735312df">&#9670;&#160;</a></span>Blocks()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.UI.ClothRibbon.KeepOut.Blocks </td>
+          <td>(</td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>from</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>to</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Whether the straight path from <em>from</em>  to <em>to</em>  passes through. </p>
+
+</div>
+</div>
 <a id="a411cdcea3bb3626c7e69d480f0a05f25" name="a411cdcea3bb3626c7e69d480f0a05f25"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a411cdcea3bb3626c7e69d480f0a05f25">&#9670;&#160;</a></span>Contains()</h2>
 
@@ -203,6 +247,45 @@ Private Member Functions</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a65db02f9c56704113a7740c9d47caa94" name="a65db02f9c56704113a7740c9d47caa94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65db02f9c56704113a7740c9d47caa94">&#9670;&#160;</a></span>Crosses()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool BalloonParty.UI.ClothRibbon.KeepOut.Crosses </td>
+          <td>(</td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>a</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>b</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>c</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>d</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -234,8 +317,8 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a26627120f9b5746e5848cc52ba956cc3" name="a26627120f9b5746e5848cc52ba956cc3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a26627120f9b5746e5848cc52ba956cc3">&#9670;&#160;</a></span>Nearest()</h2>
+<a id="a1e6dd4d7d3c040d6055fe6cde4091e8a" name="a1e6dd4d7d3c040d6055fe6cde4091e8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e6dd4d7d3c040d6055fe6cde4091e8a">&#9670;&#160;</a></span>Nearest()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -244,15 +327,24 @@ Private Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Vector2 BalloonParty.UI.ClothRibbon.KeepOut.Nearest </td>
+          <td class="memname">static Vector2 BalloonParty.UI.ClothRibbon.KeepOut.Nearest </td>
           <td>(</td>
-          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>point</em></span></td><td>)</td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>point</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>start</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>end</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -286,7 +378,41 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p><em>point</em>  moved straight out to the edge if it is inside, else unchanged, with the outward direction there. </p>
+<p><em>point</em>  moved straight out to just past the edge if it is inside, else unchanged, with the outward direction there. </p>
+
+</div>
+</div>
+<a id="a657896f65e8fcb6b69a9250501c820c2" name="a657896f65e8fcb6b69a9250501c820c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a657896f65e8fcb6b69a9250501c820c2">&#9670;&#160;</a></span>Side()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static float BalloonParty.UI.ClothRibbon.KeepOut.Side </td>
+          <td>(</td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>start</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>end</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>point</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -329,6 +455,28 @@ Private Member Functions</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a639698243ad47777954fc112a5b93d50" name="a639698243ad47777954fc112a5b93d50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a639698243ad47777954fc112a5b93d50">&#9670;&#160;</a></span>Skin</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const float BalloonParty.UI.ClothRibbon.KeepOut.Skin = 1e-3f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

@@ -1,7 +1,7 @@
 var searchData=
 [
   ['navigationreadygate_0',['NavigationReadyGate',['../classBalloonParty_1_1Shared_1_1GameState_1_1NavigationReadyGate.html#acc9af2c41079857e6fe14ed6bbe92f04',1,'BalloonParty::Shared::GameState::NavigationReadyGate']]],
-  ['nearest_1',['Nearest',['../structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html#a26627120f9b5746e5848cc52ba956cc3',1,'BalloonParty::UI::ClothRibbon::KeepOut']]],
+  ['nearest_1',['Nearest',['../structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html#a1e6dd4d7d3c040d6055fe6cde4091e8a',1,'BalloonParty::UI::ClothRibbon::KeepOut']]],
   ['nearestblob_2',['NearestBlob',['../classBalloonParty_1_1Item_1_1Paint_1_1PaintItemHandler.html#a1cfd52d3d3bee36509dee2ab065cfcc8',1,'BalloonParty.Item.Paint.PaintItemHandler.NearestBlob()'],['../classBalloonParty_1_1Item_1_1Paint_1_1PaintSpread.html#a8fde3dccc72557b34e36c7a774e504f2',1,'BalloonParty.Item.Paint.PaintSpread.NearestBlob()']]],
   ['nearestsametypesqrdistance_3',['NearestSameTypeSqrDistance',['../classBalloonParty_1_1Shared_1_1Extensions_1_1BalanceBiasExtensions.html#ae45a8a9f3a9361a4956eb7422199a259',1,'BalloonParty::Shared::Extensions::BalanceBiasExtensions']]],
   ['newchild_4',['NewChild',['../classBalloonParty_1_1Editor_1_1LaunchContinueButtonBuilder.html#aa7ddc8ed1d3bad7a946428f261ff7d2b',1,'BalloonParty::Editor::LaunchContinueButtonBuilder']]],

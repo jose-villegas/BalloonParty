@@ -275,11 +275,12 @@ var searchData=
   ['createtip_272',['CreateTip',['../classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html#aa02c95f0f1277ef063767cdc8903f0c9',1,'BalloonParty::Editor::HeadsUpBuilder']]],
   ['createtween_273',['CreateTween',['../classBalloonParty_1_1Shared_1_1Animation_1_1TweenOscillator.html#ae2a525b0e13724be0b3961f40d9f5adc',1,'BalloonParty::Shared::Animation::TweenOscillator']]],
   ['createunderline_274',['CreateUnderline',['../classBalloonParty_1_1Editor_1_1HeadsUpBuilder.html#a9943670bae4b393c1b5d82dbf5f090a8',1,'BalloonParty::Editor::HeadsUpBuilder']]],
-  ['cruisetargetmultiplier_275',['CruiseTargetMultiplier',['../classBalloonParty_1_1Solver_1_1ShotSimulator.html#ac672ed5a52a35ba05d3aa4e623d4c460',1,'BalloonParty::Solver::ShotSimulator']]],
-  ['cumulativemilestone_276',['CumulativeMilestone',['../structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a7a19b4d58c8b0cce74a57f14cf18cf3d',1,'BalloonParty::Configuration::Level::LevelScoringCurve']]],
-  ['currentballooncenter_277',['CurrentBalloonCenter',['../classBalloonParty_1_1Solver_1_1ShotSimulator.html#a0f019c8c9a9cbce1de0bb79dd0625e06',1,'BalloonParty::Solver::ShotSimulator']]],
-  ['currentguids_278',['CurrentGuids',['../classBalloonParty_1_1Editor_1_1TextureAuditWindow.html#a65f53e7ad2d2181353c0a4db1880f32a',1,'BalloonParty::Editor::TextureAuditWindow']]],
-  ['currentspeed_279',['CurrentSpeed',['../classBalloonParty_1_1Solver_1_1ShotSimulator.html#a4bf2536e898eda069a89bd78261f2bda',1,'BalloonParty::Solver::ShotSimulator']]],
-  ['cut_280',['Cut',['../classBalloonParty_1_1Scenario_1_1ActiveScenario.html#ab4f75b45d5370e1cd6cc98d8544ce56d',1,'BalloonParty.Scenario.ActiveScenario.Cut()'],['../classBalloonParty_1_1Scenario_1_1View_1_1GroundView.html#af597e3aa241ec92cff80f9a8c676e014',1,'BalloonParty.Scenario.View.GroundView.Cut()']]],
-  ['cyclic_281',['Cyclic',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#a56ef58f60255e1b854ec4cbcb9b0d5c9',1,'BalloonParty::Game::Score::Behaviours::ShapeCatalog']]]
+  ['crosses_275',['Crosses',['../structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html#a65db02f9c56704113a7740c9d47caa94',1,'BalloonParty::UI::ClothRibbon::KeepOut']]],
+  ['cruisetargetmultiplier_276',['CruiseTargetMultiplier',['../classBalloonParty_1_1Solver_1_1ShotSimulator.html#ac672ed5a52a35ba05d3aa4e623d4c460',1,'BalloonParty::Solver::ShotSimulator']]],
+  ['cumulativemilestone_277',['CumulativeMilestone',['../structBalloonParty_1_1Configuration_1_1Level_1_1LevelScoringCurve.html#a7a19b4d58c8b0cce74a57f14cf18cf3d',1,'BalloonParty::Configuration::Level::LevelScoringCurve']]],
+  ['currentballooncenter_278',['CurrentBalloonCenter',['../classBalloonParty_1_1Solver_1_1ShotSimulator.html#a0f019c8c9a9cbce1de0bb79dd0625e06',1,'BalloonParty::Solver::ShotSimulator']]],
+  ['currentguids_279',['CurrentGuids',['../classBalloonParty_1_1Editor_1_1TextureAuditWindow.html#a65f53e7ad2d2181353c0a4db1880f32a',1,'BalloonParty::Editor::TextureAuditWindow']]],
+  ['currentspeed_280',['CurrentSpeed',['../classBalloonParty_1_1Solver_1_1ShotSimulator.html#a4bf2536e898eda069a89bd78261f2bda',1,'BalloonParty::Solver::ShotSimulator']]],
+  ['cut_281',['Cut',['../classBalloonParty_1_1Scenario_1_1ActiveScenario.html#ab4f75b45d5370e1cd6cc98d8544ce56d',1,'BalloonParty.Scenario.ActiveScenario.Cut()'],['../classBalloonParty_1_1Scenario_1_1View_1_1GroundView.html#af597e3aa241ec92cff80f9a8c676e014',1,'BalloonParty.Scenario.View.GroundView.Cut()']]],
+  ['cyclic_282',['Cyclic',['../classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeCatalog.html#a56ef58f60255e1b854ec4cbcb9b0d5c9',1,'BalloonParty::Game::Score::Behaviours::ShapeCatalog']]]
 ];

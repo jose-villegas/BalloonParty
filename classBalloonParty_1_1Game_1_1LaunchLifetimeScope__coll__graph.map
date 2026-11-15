@@ -26,7 +26,7 @@
 <area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="544,113,650,115,645,117,545,118"/>
 <area shape="rect" id="Node000012" href="$classBalloonParty_1_1Game_1_1BalloonWanderSettings.html" title="How a BalloonWander drifts, in canvas units and seconds." alt="" coords="327,431,524,475"/>
 <area shape="poly" id="edge13_Node000003_Node000012" title=" " alt="" coords="539,442,630,431,734,414,843,389,949,356,1020,329,1025,327,951,361,845,394,735,419,631,436,540,447"/>
-<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Game_1_1BalloonWander.html" title="A balloon drifting about an area on its own: it heads for one spot after another, picked at random,..." alt="" coords="652,483,850,527"/>
+<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Game_1_1BalloonWander.html" title="A balloon drifting about an area on its own: it heads for one spot after another, picked at random am..." alt="" coords="652,483,850,527"/>
 <area shape="poly" id="edge17_Node000014_Node000012" title=" " alt="" coords="540,469,655,489,649,489,540,474"/>
 <area shape="rect" id="Node000013" href="$structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html" title="A round area to stay out of, stretched upward into a capsule: every point within Radius of the segmen..." alt="" coords="323,524,529,569"/>
 <area shape="poly" id="edge15_Node000003_Node000013" title=" " alt="" coords="544,564,615,571,694,573,775,569,854,554,906,535,948,501,986,457,1017,409,1059,329,1063,326,1022,411,990,460,952,504,908,540,855,559,775,574,694,579,615,576,544,569"/>

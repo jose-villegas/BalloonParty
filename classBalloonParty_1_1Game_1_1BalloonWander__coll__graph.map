@@ -1,5 +1,5 @@
 <map id="BalloonParty.Game.BalloonWander" name="BalloonParty.Game.BalloonWander">
-<area shape="rect" id="Node000001" title="A balloon drifting about an area on its own: it heads for one spot after another, picked at random,..." alt="" coords="117,115,315,160"/>
+<area shape="rect" id="Node000001" title="A balloon drifting about an area on its own: it heads for one spot after another, picked at random am..." alt="" coords="117,115,315,160"/>
 <area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1BalloonWanderSettings.html" title="How a BalloonWander drifts, in canvas units and seconds." alt="" coords="5,5,203,50"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="138,58,196,114,191,115,136,63"/>
 <area shape="rect" id="Node000003" href="$structBalloonParty_1_1UI_1_1ClothRibbon_1_1KeepOut.html" title="A round area to stay out of, stretched upward into a capsule: every point within Radius of the segmen..." alt="" coords="226,5,432,50"/>

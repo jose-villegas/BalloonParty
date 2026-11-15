@@ -311,7 +311,7 @@
 <!-- Node15 -->
 <g id="Node000015" class="node">
 <title>Node15</title>
-<g id="a_Node000015"><a xlink:href="classBalloonParty_1_1Game_1_1BalloonWander.html" target="_top" xlink:title="A balloon drifting about an area on its own: it heads for one spot after another, picked at random,...">
+<g id="a_Node000015"><a xlink:href="classBalloonParty_1_1Game_1_1BalloonWander.html" target="_top" xlink:title="A balloon drifting about an area on its own: it heads for one spot after another, picked at random am...">
 <polygon fill="white" stroke="#666666" points="633.38,-106.86 485.38,-106.86 485.38,-73.36 633.38,-73.36 633.38,-106.86"/>
 <text xml:space="preserve" text-anchor="start" x="493.38" y="-93.36" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.Balloon</text>
 <text xml:space="preserve" text-anchor="middle" x="559.38" y="-80.61" font-family="Helvetica,sans-Serif" font-size="10.00">Wander</text>
