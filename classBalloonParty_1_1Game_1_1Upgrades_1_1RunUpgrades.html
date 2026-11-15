@@ -171,6 +171,9 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
+<tr class="memitem:a05d6acb103cbc34b19e3eae691b9a74d" id="r_a05d6acb103cbc34b19e3eae691b9a74d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a05d6acb103cbc34b19e3eae691b9a74d">BonusDealWeight</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> card)</td></tr>
+<tr class="memdesc:a05d6acb103cbc34b19e3eae691b9a74d"><td class="mdescLeft">&#160;</td><td class="mdescRight">How likely <em>card</em>  is as a bought retry's bonus card: its <a class="el" href="#af6b57fbee98d4ba9aa01827667ab247f" title="How likely card  is in a deal: its weight, and Raise the Bar&#39;s once for every card at its limit,...">DealWeight</a>, raised by its <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#a49932e84894e8b6a9fd1b52c1ac68c76" title="Extra odds of this card being a bought retry&#39;s bonus card, on top of Weight: × (1 + this).">IUpgradeCardSettings.RetryDealBoost</a>.  <br /></td></tr>
+<tr class="separator:a05d6acb103cbc34b19e3eae691b9a74d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6b57fbee98d4ba9aa01827667ab247f" id="r_af6b57fbee98d4ba9aa01827667ab247f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af6b57fbee98d4ba9aa01827667ab247f">DealWeight</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> card)</td></tr>
 <tr class="memdesc:af6b57fbee98d4ba9aa01827667ab247f"><td class="mdescLeft">&#160;</td><td class="mdescRight">How likely <em>card</em>  is in a deal: its weight, and Raise the Bar's once for every card at its limit, so the more cards are capped, the likelier the raise.  <br /></td></tr>
 <tr class="separator:af6b57fbee98d4ba9aa01827667ab247f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -262,6 +265,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:af9bdebc79b614933a6f1dc8f8e3507ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d4176655dd4ef70713ca32611075c7e" id="r_a7d4176655dd4ef70713ca32611075c7e"><td class="memItemLeft" align="right" valign="top">readonly IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html">BonusCardDealtMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d4176655dd4ef70713ca32611075c7e">_bonusDealtPublisher</a></td></tr>
 <tr class="separator:a7d4176655dd4ef70713ca32611075c7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa75e53ac1d6c327686c93d5fc1e9f951" id="r_aa75e53ac1d6c327686c93d5fc1e9f951"><td class="memItemLeft" align="right" valign="top">readonly Func&lt; <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a>, float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa75e53ac1d6c327686c93d5fc1e9f951">_bonusDealWeight</a></td></tr>
+<tr class="separator:aa75e53ac1d6c327686c93d5fc1e9f951"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3250cb9232f23933e69520e2aa3951d9" id="r_a3250cb9232f23933e69520e2aa3951d9"><td class="memItemLeft" align="right" valign="top">readonly IPublisher&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage.html">UpgradeCardHeldMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3250cb9232f23933e69520e2aa3951d9">_cardHeldPublisher</a></td></tr>
 <tr class="separator:a3250cb9232f23933e69520e2aa3951d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a117624d390ff92ad4f889f76ddfca671" id="r_a117624d390ff92ad4f889f76ddfca671"><td class="memItemLeft" align="right" valign="top">readonly Func&lt; <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a>, float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a117624d390ff92ad4f889f76ddfca671">_dealWeight</a></td></tr>
@@ -416,6 +421,33 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a05d6acb103cbc34b19e3eae691b9a74d" name="a05d6acb103cbc34b19e3eae691b9a74d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05d6acb103cbc34b19e3eae691b9a74d">&#9670;&#160;</a></span>BonusDealWeight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Game.Upgrades.RunUpgrades.BonusDealWeight </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a></td>          <td class="paramname"><span class="paramname"><em>card</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How likely <em>card</em>  is as a bought retry's bonus card: its <a class="el" href="#af6b57fbee98d4ba9aa01827667ab247f" title="How likely card  is in a deal: its weight, and Raise the Bar&#39;s once for every card at its limit,...">DealWeight</a>, raised by its <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#a49932e84894e8b6a9fd1b52c1ac68c76" title="Extra odds of this card being a bought retry&#39;s bonus card, on top of Weight: × (1 + this).">IUpgradeCardSettings.RetryDealBoost</a>. </p>
 
 </div>
 </div>
@@ -1177,6 +1209,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly IPublisher&lt;<a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html">BonusCardDealtMessage</a>&gt; BalloonParty.Game.Upgrades.RunUpgrades._bonusDealtPublisher</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa75e53ac1d6c327686c93d5fc1e9f951" name="aa75e53ac1d6c327686c93d5fc1e9f951"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa75e53ac1d6c327686c93d5fc1e9f951">&#9670;&#160;</a></span>_bonusDealWeight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly Func&lt;<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a>, float&gt; BalloonParty.Game.Upgrades.RunUpgrades._bonusDealWeight</td>
         </tr>
       </table>
   </td>

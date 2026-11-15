@@ -1,12 +1,13 @@
 var classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock =
 [
-    [ "SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a18534d9149806058c16f2774c5575206", null ],
+    [ "SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a2f11069a27fc1263dd9db2b6868b7596", null ],
     [ "Advance", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a0fdff0c4fd714ec4ffdaa872eea5ecbd", null ],
     [ "AgeFlights", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a9db27699abea2c79bb4f8a14479b1de8", null ],
     [ "AnotherBallInFlight", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a609377121378f09bc17a5d24c71bccdd", null ],
     [ "BoardFill", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#ad547f013d76961ee804988af447d8585", null ],
     [ "BreatherBlend", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a27302135e846a67488416839114c7fda", null ],
     [ "Dispose", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a3a2957e3af5c7544c1ef0d8be8a733cd", null ],
+    [ "InDanger", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a35fd86ce2d366e05fe8909218dd76b6c", null ],
     [ "IsRunning", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a68cbf55f2f23499013f1cac36a90c0e7", null ],
     [ "LineInterval", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a29ee069e745e2870e4558a1cf65b9955", null ],
     [ "OnFired", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a82df526b296e5819fd17efb963048355", null ],
@@ -22,6 +23,7 @@ var classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock =
     [ "_boardFill", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a4e5780fec1b9945aed16640a36ce2a5a", null ],
     [ "_breatherLeft", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a6020fe38cca4586c5828d9ba83f204f1", null ],
     [ "_cooldownLeft", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a95d0e3ab64c8f6c20aa535b87f8f4a26", null ],
+    [ "_danger", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#aaec99b4a5e7c73fd95278dc0ae73e73a", null ],
     [ "_firedSubscriber", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#affc45ff5f400ee9fc885273e2ba24c34", null ],
     [ "_flightAges", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#a08ec7e48aec5d2880ea6fa50e19076e3", null ],
     [ "_flightConfig", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html#ae1431ee7c2b1eefe090a696c32085e12", null ],

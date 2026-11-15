@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService =
 [
-    [ "UnbreakableFormationService", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a6f07a26a9fcd38d43beecb954a27ebc8", null ],
+    [ "UnbreakableFormationService", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a07f679a7086bd028b1950688ba71ed46", null ],
     [ "Apply", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#ab442350e34bf8157b511cdbb0a5ead8a", null ],
     [ "ArrangeAtWaveStart", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#af1a38e69f86794b616c1a9463dab17fe", null ],
     [ "ChangeFormationsDoneHolding", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a22448bb2d2a61965153c156ac350a6db", null ],
@@ -47,6 +47,7 @@ var classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService =
     [ "_snakePulses", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#ac9580c5f41a6bb8eae2ae114626f80b1", null ],
     [ "_spareFormations", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a6b8453d12111df7c9ca29bc809c1faad", null ],
     [ "_subscriptions", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a11f4c0aee35d032feb96210d5fb3d599", null ],
+    [ "_threatEase", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#adbcc99db0ededd586452a8a8c2877c1d", null ],
     [ "_unbreakablesOnBoard", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a734de00aaa95f8c82076389c0eefc8a3", null ],
     [ "_wall", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a26c862e7620263a62064e245f194fb61", null ],
     [ "ByColumn", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html#a51a6b4986cb6bef5432b491cbe37affe", null ],

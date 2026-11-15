@@ -115,7 +115,7 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1Effects_1_1Groun
 </div><!--header-->
 <div class="contents">
 
-<p>Authored tuning for the surface backdrops: the floor quad and the grass blades over it on ground levels, the water surface on water levels, and the mist reveal between either and the sky.  
+<p>Authored tuning for the surface backdrops: the floor quad and the grass blades over it on ground levels, the water surface on water levels, the paper page of bonus levels, and the mist reveal between either and the sky.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Configuration.Effects.GroundSettings:</div>
@@ -185,6 +185,15 @@ Properties</h2></td></tr>
 <tr class="memitem:aef7f8878d444cf4f163c275e3d1a0415" id="r_aef7f8878d444cf4f163c275e3d1a0415"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aef7f8878d444cf4f163c275e3d1a0415">OverscanMultiplier</a><code> [get]</code></td></tr>
 <tr class="memdesc:aef7f8878d444cf4f163c275e3d1a0415"><td class="mdescLeft">&#160;</td><td class="mdescRight">Quad size over the reference world size — &gt;1 so a camera shake or cinematic pan never reveals an edge.  <br /></td></tr>
 <tr class="separator:aef7f8878d444cf4f163c275e3d1a0415"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a494029054b5ae592f3ff40417095adc5" id="r_a494029054b5ae592f3ff40417095adc5"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a494029054b5ae592f3ff40417095adc5">PaperBounceReference</a><code> [get]</code></td></tr>
+<tr class="memdesc:a494029054b5ae592f3ff40417095adc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The paper's average unlit colour, which the GI measures bounce against on bonus levels.  <br /></td></tr>
+<tr class="separator:a494029054b5ae592f3ff40417095adc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56fdc3cdb6fd556f216ba333176e5a86" id="r_a56fdc3cdb6fd556f216ba333176e5a86"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ac8d798dbe9f853e4e465315f979903a1">Material</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a56fdc3cdb6fd556f216ba333176e5a86">PaperMaterial</a><code> [get]</code></td></tr>
+<tr class="memdesc:a56fdc3cdb6fd556f216ba333176e5a86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Material using BalloonParty/Scenario/Paper: the page bonus levels play on, drawn on its own quad over the floor.  <br /></td></tr>
+<tr class="separator:a56fdc3cdb6fd556f216ba333176e5a86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a14ae897dff7d21947481b829e555f8" id="r_a6a14ae897dff7d21947481b829e555f8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a14ae897dff7d21947481b829e555f8">PaperSortingOrder</a><code> [get]</code></td></tr>
+<tr class="memdesc:a6a14ae897dff7d21947481b829e555f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sorting order for the paper quad — above the floor and the blades, below the smoke and the clouds.  <br /></td></tr>
+<tr class="separator:a6a14ae897dff7d21947481b829e555f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21452860b0fdd90a8080d0511942d7ee" id="r_a21452860b0fdd90a8080d0511942d7ee"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a21452860b0fdd90a8080d0511942d7ee">PatchSize</a><code> [get]</code></td></tr>
 <tr class="memdesc:a21452860b0fdd90a8080d0511942d7ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">World size of the floor's patches, shared with the blades so their drier tips sit over the floor's lighter patches.  <br /></td></tr>
 <tr class="separator:a21452860b0fdd90a8080d0511942d7ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -261,6 +270,12 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a6e54c567ea25f51713b3a268071807fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac6cb4ab5c3fa832d162deb06b25a877" id="r_aac6cb4ab5c3fa832d162deb06b25a877"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aac6cb4ab5c3fa832d162deb06b25a877">_overscanMultiplier</a> = 1.6f</td></tr>
 <tr class="separator:aac6cb4ab5c3fa832d162deb06b25a877"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7cd9f35ca474a6a34c5190a3d6f58e94" id="r_a7cd9f35ca474a6a34c5190a3d6f58e94"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7cd9f35ca474a6a34c5190a3d6f58e94">_paperBounceReference</a> = new(0.86f, 0.83f, 0.75f, 1f)</td></tr>
+<tr class="separator:a7cd9f35ca474a6a34c5190a3d6f58e94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abed33d0a6db9139336ebc7d66123d1c5" id="r_abed33d0a6db9139336ebc7d66123d1c5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ac8d798dbe9f853e4e465315f979903a1">Material</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abed33d0a6db9139336ebc7d66123d1c5">_paperMaterial</a></td></tr>
+<tr class="separator:abed33d0a6db9139336ebc7d66123d1c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeabb5950898436918398b2af8fde0a22" id="r_aeabb5950898436918398b2af8fde0a22"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeabb5950898436918398b2af8fde0a22">_paperSortingOrder</a> = -13</td></tr>
+<tr class="separator:aeabb5950898436918398b2af8fde0a22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac5124ba6eb0619e335eb3f41e50065f6" id="r_ac5124ba6eb0619e335eb3f41e50065f6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac5124ba6eb0619e335eb3f41e50065f6">_patchSize</a> = 3.5f</td></tr>
 <tr class="separator:ac5124ba6eb0619e335eb3f41e50065f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1aa572cea90113c568d8374b90c6086" id="r_ab1aa572cea90113c568d8374b90c6086"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab1aa572cea90113c568d8374b90c6086">_revealDepthZoom</a> = 1.5f</td></tr>
@@ -289,7 +304,7 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a73c02baac676a7bff8b38e79c64acb7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Authored tuning for the surface backdrops: the floor quad and the grass blades over it on ground levels, the water surface on water levels, and the mist reveal between either and the sky. </p>
+<div class="textblock"><p>Authored tuning for the surface backdrops: the floor quad and the grass blades over it on ground levels, the water surface on water levels, the paper page of bonus levels, and the mist reveal between either and the sky. </p>
 <p>Assign both materials here and wire the asset into GameLifetimeScope. </p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="ad6375b47c3055cd3cde77c28a59be78f" name="ad6375b47c3055cd3cde77c28a59be78f"></a>
@@ -655,6 +670,72 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.Configuration.Effects.GroundSettings._overscanMultiplier = 1.6f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7cd9f35ca474a6a34c5190a3d6f58e94" name="a7cd9f35ca474a6a34c5190a3d6f58e94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7cd9f35ca474a6a34c5190a3d6f58e94">&#9670;&#160;</a></span>_paperBounceReference</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Color BalloonParty.Configuration.Effects.GroundSettings._paperBounceReference = new(0.86f, 0.83f, 0.75f, 1f)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abed33d0a6db9139336ebc7d66123d1c5" name="abed33d0a6db9139336ebc7d66123d1c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abed33d0a6db9139336ebc7d66123d1c5">&#9670;&#160;</a></span>_paperMaterial</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#ac8d798dbe9f853e4e465315f979903a1">Material</a> BalloonParty.Configuration.Effects.GroundSettings._paperMaterial</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aeabb5950898436918398b2af8fde0a22" name="aeabb5950898436918398b2af8fde0a22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeabb5950898436918398b2af8fde0a22">&#9670;&#160;</a></span>_paperSortingOrder</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Effects.GroundSettings._paperSortingOrder = -13</td>
         </tr>
       </table>
   </td>
@@ -1394,6 +1475,85 @@ Private Attributes</h2></td></tr>
 <p>Quad size over the reference world size — &gt;1 so a camera shake or cinematic pan never reveals an edge. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#aae0d8d9a8e87907edd3b1e7647c60d29">BalloonParty.Configuration.Effects.IGroundSettings</a>.</p>
+
+</div>
+</div>
+<a id="a494029054b5ae592f3ff40417095adc5" name="a494029054b5ae592f3ff40417095adc5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a494029054b5ae592f3ff40417095adc5">&#9670;&#160;</a></span>PaperBounceReference</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Color BalloonParty.Configuration.Effects.GroundSettings.PaperBounceReference</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The paper's average unlit colour, which the GI measures bounce against on bonus levels. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#a684180dd114fe9a3d96ce3dcc23df1a4">BalloonParty.Configuration.Effects.IGroundSettings</a>.</p>
+
+</div>
+</div>
+<a id="a56fdc3cdb6fd556f216ba333176e5a86" name="a56fdc3cdb6fd556f216ba333176e5a86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56fdc3cdb6fd556f216ba333176e5a86">&#9670;&#160;</a></span>PaperMaterial</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#ac8d798dbe9f853e4e465315f979903a1">Material</a> BalloonParty.Configuration.Effects.GroundSettings.PaperMaterial</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Material using BalloonParty/Scenario/Paper: the page bonus levels play on, drawn on its own quad over the floor. </p>
+<p>Without one bonus levels show the sky. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#afa6c0011ebc981a34295d24d912659b4">BalloonParty.Configuration.Effects.IGroundSettings</a>.</p>
+
+</div>
+</div>
+<a id="a6a14ae897dff7d21947481b829e555f8" name="a6a14ae897dff7d21947481b829e555f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a14ae897dff7d21947481b829e555f8">&#9670;&#160;</a></span>PaperSortingOrder</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Effects.GroundSettings.PaperSortingOrder</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sorting order for the paper quad — above the floor and the blades, below the smoke and the clouds. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html#a1824033ee970d052e6442aee9c397987">BalloonParty.Configuration.Effects.IGroundSettings</a>.</p>
 
 </div>
 </div>

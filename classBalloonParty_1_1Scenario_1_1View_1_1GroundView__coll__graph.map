@@ -4,7 +4,7 @@
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="644,27,695,42,761,72,787,91,816,120,860,182,894,248,918,310,933,359,928,357,913,312,889,250,855,184,812,124,784,95,759,77,693,47,646,33"/>
 <area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Slots_1_1Actor_1_1ITransitionOutgoingContent.html" title="Keeps outgoing visuals on screen during a level transition so the Ascent&#39;s board clear doesn&#39;t blink ..." alt="" coords="469,57,668,102"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="682,98,752,124,786,142,815,165,858,213,891,266,916,317,931,359,926,357,911,319,886,269,853,216,812,169,783,147,750,129,683,103"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html" title="Read&#45;only tuning for the surface backdrops (ground and water) (see GroundView)." alt="" coords="470,126,667,171"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html" title="Read&#45;only tuning for the surface backdrops (ground, water and the bonus levels&#39; paper) (see GroundVie..." alt="" coords="470,126,667,171"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="681,172,751,199,784,216,815,237,849,266,879,298,924,358,919,357,875,302,845,270,812,241,781,221,748,204,682,178"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Configuration_1_1IGameDisplayConfiguration.html" title=" " alt="" coords="468,196,669,240"/>
 <area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="670,242,694,250,756,270,815,297,864,326,908,358,903,357,862,330,812,302,754,275,693,255,671,248"/>
@@ -30,7 +30,7 @@
 <area shape="poly" id="edge11_Node000010_Node000012" title=" " alt="" coords="377,727,464,718,469,717,377,732"/>
 <area shape="rect" id="Node000013" title=" " alt="" coords="5,732,113,760"/>
 <area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="128,743,164,745,159,746,128,748"/>
-<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Scenario_1_1BackdropMix.html" title="How much of the screen the surface backdrop covers this frame, written by GroundView as its reveal ru..." alt="" coords="443,749,694,777"/>
+<area shape="rect" id="Node000014" href="$classBalloonParty_1_1Scenario_1_1BackdropMix.html" title="How much of the screen a surface backdrop covers this frame, written by GroundView as its reveal runs..." alt="" coords="443,749,694,777"/>
 <area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="708,745,764,724,789,709,812,690,841,656,865,618,884,578,900,537,921,460,932,405,936,401,926,461,905,538,889,580,869,621,845,660,816,694,792,713,766,729,709,750"/>
 <area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="679,466,813,427,886,402,881,404,815,432,681,471"/>
 <area shape="poly" id="edge16_Node000001_Node000016" title=" " alt="" coords="671,535,693,527,755,507,812,478,867,440,910,405,915,402,870,444,815,482,757,511,695,532,672,540"/>

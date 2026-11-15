@@ -109,6 +109,7 @@ $(function(){initNavTree('classBalloonParty_1_1Shared_1_1Extensions_1_1Animation
 <div class="header">
   <div class="summary">
 <a href="#pac-static-methods">Static Package Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="classBalloonParty_1_1Shared_1_1Extensions_1_1AnimationCurveExtensions-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Shared.Extensions.AnimationCurveExtensions Class Reference</div></div>
 </div><!--header-->
@@ -116,6 +117,9 @@ $(function(){initNavTree('classBalloonParty_1_1Shared_1_1Extensions_1_1Animation
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
+<tr class="memitem:ab40b361bc84dce66b2229cc92c74c7da" id="r_ab40b361bc84dce66b2229cc92c74c7da"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab40b361bc84dce66b2229cc92c74c7da">ChanceOfAnyCount</a> (this AnimationCurve weights)</td></tr>
+<tr class="memdesc:ab40b361bc84dce66b2229cc92c74c7da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chance <a class="el" href="#abc4456415402f9f560e33029b6e09cbc" title="Weighted-random draw from a curve keyed by integer count (X = count, Y = weight); empty/all-zero weig...">SampleWeightedCount</a> draws more than 0 off the curve; 0 for empty/all-zero weights.  <br /></td></tr>
+<tr class="separator:ab40b361bc84dce66b2229cc92c74c7da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4fb0c20f499639659da2e5e47e4a1b5e" id="r_a4fb0c20f499639659da2e5e47e4a1b5e"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4fb0c20f499639659da2e5e47e4a1b5e">Duration</a> (this AnimationCurve curve)</td></tr>
 <tr class="separator:a4fb0c20f499639659da2e5e47e4a1b5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade4cf211b72599b2949fa8d55f093690" id="r_ade4cf211b72599b2949fa8d55f093690"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ade4cf211b72599b2949fa8d55f093690">MaxKeyValue</a> (this AnimationCurve curve)</td></tr>
@@ -127,8 +131,42 @@ Static Package Functions</h2></td></tr>
 <tr class="memitem:aad6ac8bd82b682388d8c4c23772b3342" id="r_aad6ac8bd82b682388d8c4c23772b3342"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aad6ac8bd82b682388d8c4c23772b3342">ScaleByVelocity</a> (this AnimationCurve curve, float baseValue, float t)</td></tr>
 <tr class="memdesc:aad6ac8bd82b682388d8c4c23772b3342"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespaceBalloonParty_1_1Shared.html">Shared</a> velocity-scaling formula: appliedValue = baseValue * (curve.Evaluate(t) + 1).  <br /></td></tr>
 <tr class="separator:aad6ac8bd82b682388d8c4c23772b3342"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:ab55fd00d8ac43506b48024afe6e880b6" id="r_ab55fd00d8ac43506b48024afe6e880b6"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab55fd00d8ac43506b48024afe6e880b6">MaxCount</a> (AnimationCurve weights)</td></tr>
+<tr class="separator:ab55fd00d8ac43506b48024afe6e880b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc2f034b28bb12973e3caeed1b084e13" id="r_afc2f034b28bb12973e3caeed1b084e13"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afc2f034b28bb12973e3caeed1b084e13">TotalWeight</a> (AnimationCurve weights, int maxCount)</td></tr>
+<tr class="separator:afc2f034b28bb12973e3caeed1b084e13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab40b361bc84dce66b2229cc92c74c7da" name="ab40b361bc84dce66b2229cc92c74c7da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab40b361bc84dce66b2229cc92c74c7da">&#9670;&#160;</a></span>ChanceOfAnyCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static float BalloonParty.Shared.Extensions.AnimationCurveExtensions.ChanceOfAnyCount </td>
+          <td>(</td>
+          <td class="paramtype">this AnimationCurve</td>          <td class="paramname"><span class="paramname"><em>weights</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Chance <a class="el" href="#abc4456415402f9f560e33029b6e09cbc" title="Weighted-random draw from a curve keyed by integer count (X = count, Y = weight); empty/all-zero weig...">SampleWeightedCount</a> draws more than 0 off the curve; 0 for empty/all-zero weights. </p>
+
+</div>
+</div>
 <a id="a4fb0c20f499639659da2e5e47e4a1b5e" name="a4fb0c20f499639659da2e5e47e4a1b5e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4fb0c20f499639659da2e5e47e4a1b5e">&#9670;&#160;</a></span>Duration()</h2>
 
@@ -148,6 +186,31 @@ Static Package Functions</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab55fd00d8ac43506b48024afe6e880b6" name="ab55fd00d8ac43506b48024afe6e880b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab55fd00d8ac43506b48024afe6e880b6">&#9670;&#160;</a></span>MaxCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int BalloonParty.Shared.Extensions.AnimationCurveExtensions.MaxCount </td>
+          <td>(</td>
+          <td class="paramtype">AnimationCurve</td>          <td class="paramname"><span class="paramname"><em>weights</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -247,6 +310,35 @@ Static Package Functions</h2></td></tr>
 
 <p><a class="el" href="namespaceBalloonParty_1_1Shared.html">Shared</a> velocity-scaling formula: appliedValue = baseValue * (curve.Evaluate(t) + 1). </p>
 <p>Author the curve's y≈0 at t=0 so a normal-speed sample reproduces the un-scaled base value. A null/empty (unauthored) curve evaluates to 0 everywhere, so it's also a safe no-op default. </p>
+
+</div>
+</div>
+<a id="afc2f034b28bb12973e3caeed1b084e13" name="afc2f034b28bb12973e3caeed1b084e13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc2f034b28bb12973e3caeed1b084e13">&#9670;&#160;</a></span>TotalWeight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static float BalloonParty.Shared.Extensions.AnimationCurveExtensions.TotalWeight </td>
+          <td>(</td>
+          <td class="paramtype">AnimationCurve</td>          <td class="paramname"><span class="paramname"><em>weights</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>maxCount</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

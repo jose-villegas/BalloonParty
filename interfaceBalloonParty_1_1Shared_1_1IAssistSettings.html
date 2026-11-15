@@ -132,9 +132,15 @@ Properties</h2></td></tr>
 <tr class="memitem:a5ea2f30e7ba9e3e9a648629236f6d66b" id="r_a5ea2f30e7ba9e3e9a648629236f6d66b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPitySettings.html">IPitySettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5ea2f30e7ba9e3e9a648629236f6d66b">HeartPity</a><code> [get]</code></td></tr>
 <tr class="memdesc:a5ea2f30e7ba9e3e9a648629236f6d66b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The heart balloon's roll on an ordinary level.  <br /></td></tr>
 <tr class="separator:a5ea2f30e7ba9e3e9a648629236f6d66b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29f4a3ccdfd1473363b966e2fa44ed81" id="r_a29f4a3ccdfd1473363b966e2fa44ed81"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPitySettings.html">IPitySettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29f4a3ccdfd1473363b966e2fa44ed81">ItemPity</a><code> [get]</code></td></tr>
+<tr class="memdesc:a29f4a3ccdfd1473363b966e2fa44ed81"><td class="mdescLeft">&#160;</td><td class="mdescRight">A cadence wave's roll for any item at all, off its item-count curve.  <br /></td></tr>
+<tr class="separator:a29f4a3ccdfd1473363b966e2fa44ed81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56d8a0c7a52140733cd57f9a68c7a575" id="r_a56d8a0c7a52140733cd57f9a68c7a575"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPitySettings.html">IPitySettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a56d8a0c7a52140733cd57f9a68c7a575">SnipePity</a><code> [get]</code></td></tr>
 <tr class="memdesc:a56d8a0c7a52140733cd57f9a68c7a575"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Sharpshooter card's Snipe roll.  <br /></td></tr>
 <tr class="separator:a56d8a0c7a52140733cd57f9a68c7a575"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18831719b06e732f28def3863b1ddaf2" id="r_a18831719b06e732f28def3863b1ddaf2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18831719b06e732f28def3863b1ddaf2">ThreatEaseAtFullNeed</a><code> [get]</code></td></tr>
+<tr class="memdesc:a18831719b06e732f28def3863b1ddaf2"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much the threats that come by chance ease off at full need, 0 to 1: the extra balloon a pop can spawn and an untouched formation's call for reinforcements.  <br /></td></tr>
+<tr class="separator:a18831719b06e732f28def3863b1ddaf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Help that comes only when the player needs it: how need is judged (<code>Game/Assist/PlayerNeed</code>) and how each chance-rolled help forgives misses made in need (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPitySettings.html" title="How a chance roll forgives a player in trouble (Game/Assist/PityRoll): each roll it misses while the ...">IPitySettings</a>). </p>
@@ -192,6 +198,32 @@ Properties</h2></td></tr>
 
 </div>
 </div>
+<a id="a29f4a3ccdfd1473363b966e2fa44ed81" name="a29f4a3ccdfd1473363b966e2fa44ed81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29f4a3ccdfd1473363b966e2fa44ed81">&#9670;&#160;</a></span>ItemPity</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPitySettings.html">IPitySettings</a> BalloonParty.Shared.IAssistSettings.ItemPity</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A cadence wave's roll for any item at all, off its item-count curve. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1AssistSettings.html#a4f4e99f7145b63c1e35c636764b2bebd">BalloonParty.Configuration.AssistSettings</a>.</p>
+
+</div>
+</div>
 <a id="a56d8a0c7a52140733cd57f9a68c7a575" name="a56d8a0c7a52140733cd57f9a68c7a575"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a56d8a0c7a52140733cd57f9a68c7a575">&#9670;&#160;</a></span>SnipePity</h2>
 
@@ -215,6 +247,33 @@ Properties</h2></td></tr>
 <p>The Sharpshooter card's Snipe roll. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1AssistSettings.html#ae223114a954c5daa31c058e9b338d3d4">BalloonParty.Configuration.AssistSettings</a>.</p>
+
+</div>
+</div>
+<a id="a18831719b06e732f28def3863b1ddaf2" name="a18831719b06e732f28def3863b1ddaf2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18831719b06e732f28def3863b1ddaf2">&#9670;&#160;</a></span>ThreatEaseAtFullNeed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Shared.IAssistSettings.ThreatEaseAtFullNeed</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How much the threats that come by chance ease off at full need, 0 to 1: the extra balloon a pop can spawn and an untouched formation's call for reinforcements. </p>
+<p>0.5 = half as likely at the last heart. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1AssistSettings.html#a3761a3a63e556b47634734db46a39826">BalloonParty.Configuration.AssistSettings</a>.</p>
 
 </div>
 </div>

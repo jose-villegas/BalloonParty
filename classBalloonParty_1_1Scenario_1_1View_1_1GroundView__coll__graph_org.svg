@@ -58,7 +58,7 @@
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html" target="_top" xlink:title="Read&#45;only tuning for the surface backdrops (ground and water) (see GroundView).">
+<g id="a_Node000004"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html" target="_top" xlink:title="Read&#45;only tuning for the surface backdrops (ground, water and the bonus levels&#39; paper) (see GroundVie...">
 <polygon fill="white" stroke="#666666" points="496,-488.12 348.75,-488.12 348.75,-454.62 496,-454.62 496,-488.12"/>
 <text xml:space="preserve" text-anchor="start" x="356.75" y="-474.62" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text xml:space="preserve" text-anchor="middle" x="422.38" y="-461.88" font-family="Helvetica,sans-Serif" font-size="10.00">Effects.IGroundSettings</text>
@@ -309,7 +309,7 @@
 <!-- Node14 -->
 <g id="Node000014" class="node">
 <title>Node14</title>
-<g id="a_Node000014"><a xlink:href="classBalloonParty_1_1Scenario_1_1BackdropMix.html" target="_top" xlink:title="How much of the screen the surface backdrop covers this frame, written by GroundView as its reveal ru...">
+<g id="a_Node000014"><a xlink:href="classBalloonParty_1_1Scenario_1_1BackdropMix.html" target="_top" xlink:title="How much of the screen a surface backdrop covers this frame, written by GroundView as its reveal runs...">
 <polygon fill="white" stroke="#666666" points="516.25,-20.75 328.5,-20.75 328.5,0 516.25,0 516.25,-20.75"/>
 <text xml:space="preserve" text-anchor="middle" x="422.38" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Scenario.BackdropMix</text>
 </a>

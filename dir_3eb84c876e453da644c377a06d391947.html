@@ -180,7 +180,7 @@ Snakes</h1>
 <p>The shot solver predicts the pulse's rise but not a snake's step, so a shot that meets a step mid-flight can play out differently from its prediction.</p>
 <h1><a class="anchor" id="autotoc_md23"></a>
 Reinforcements</h1>
-<p>A formation the player doesn't break calls for help. At each wave start, every formation that has had no member pierced since it formed rolls <code>ReinforcementChance</code>. Each success calls in one more unbreakable. The wave a formation forms in doesn't roll, so the player always gets a wave to answer it. A formation keeps its record through shape changes: once pierced, it never calls again.</p>
+<p>A formation the player doesn't break calls for help. At each wave start, every formation that has had no member pierced since it formed rolls <code>ReinforcementChance</code>, eased while the player is in need (<code>Game/Assist/ThreatEase</code>: half as likely on the last heart). Each success calls in one more unbreakable. The wave a formation forms in doesn't roll, so the player always gets a wave to answer it. A formation keeps its record through shape changes: once pierced, it never calls again.</p>
 <p>The service only counts the calls (<code>IFormationReinforcements</code>). <code>BalloonSpawner</code> takes them right after the formations arrange, since both run at the wave's first line, and adds that many unbreakables to the line. They enter like any other balloon. They don't count against the level's own unbreakable cap or wave quota. Instead, at most <code>ReinforcementCeiling</code> of them are on the board at once (<code>ReinforcementPlan</code>). Calls past the ceiling, or past the line's open places, are dropped. On the board they are ordinary unbreakables: they roam, and once enough are free they form a formation of their own.</p>
 <h1><a class="anchor" id="autotoc_md24"></a>
 Rules a formation keeps</h1>
@@ -215,7 +215,7 @@ Settings</h1>
 <li><code>HorizontalMaxMembers</code> (3, for horizontal lines; an item cover takes three to six)</li>
 <li><code>SnakeMaxMembers</code> (4) and <code>SnakeStepPulses</code> (1: a step on every pulse)</li>
 <li><code>SpotChoices</code> (3)</li>
-<li><code>ReinforcementChance</code> (0.35) and <code>ReinforcementCeiling</code> (4)</li>
+<li><code>ReinforcementChance</code> (0.35, eased in need by <code>Game/Assist/ThreatEase</code>) and <code>ReinforcementCeiling</code> (4)</li>
 <li>the shape weights: horizontal 1, each diagonal 1, item cover 2, snake 1</li>
 <li><code>SnakeWeightPerExtraUnbreakable</code> (0.5: the snake's weight 1.5x with one unbreakable past <code>MinMembers</code>, 2x with two)</li>
 </ul>

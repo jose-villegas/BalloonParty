@@ -21,7 +21,7 @@
 <!-- Node2 -->
 <g id="Node000002" class="node">
 <title>Node2</title>
-<g id="a_Node000002"><a xlink:href="classBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGradeSettings.html" target="_top" xlink:title="Authored colour grade for each scenario, so the sky, the meadow and the water read in the same light ...">
+<g id="a_Node000002"><a xlink:href="classBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGradeSettings.html" target="_top" xlink:title="Authored colour grade for each scenario, so the sky, the meadow, the water and the paper read in the ...">
 <polygon fill="white" stroke="#666666" points="164.5,-33.5 1.5,-33.5 1.5,0 164.5,0 164.5,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="9.5" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text xml:space="preserve" text-anchor="middle" x="83" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">Effects.ScenarioGradeSettings</text>

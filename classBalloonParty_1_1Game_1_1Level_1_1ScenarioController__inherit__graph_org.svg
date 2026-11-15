@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Keeps ActiveScenario on the current level&#39;s scenario (sky or ground, per ILevelPacingConfiguration....">
+<g id="a_Node000001"><a xlink:title="Keeps ActiveScenario on the current level&#39;s backdrop (LevelBackdrop: its scheduled sky,...">
 <polygon fill="#999999" stroke="#666666" points="144.88,-33.5 4.38,-33.5 4.38,0 144.88,0 144.88,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="12.38" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.Level.</text>
 <text xml:space="preserve" text-anchor="middle" x="74.62" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">ScenarioController</text>

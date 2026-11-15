@@ -17,6 +17,7 @@ var dir_b27bc693c6b7f05286ab1d00a653a044 =
     [ "ISpawnClockSettings.cs", "ISpawnClockSettings_8cs.html", "ISpawnClockSettings_8cs" ],
     [ "ItemContentEntry.cs", "ItemContentEntry_8cs.html", "ItemContentEntry_8cs" ],
     [ "ItemCountStep.cs", "ItemCountStep_8cs.html", "ItemCountStep_8cs" ],
+    [ "LevelBackdrop.cs", "LevelBackdrop_8cs.html", "LevelBackdrop_8cs" ],
     [ "LevelGenerationSettings.cs", "LevelGenerationSettings_8cs.html", "LevelGenerationSettings_8cs" ],
     [ "LevelGenerator.cs", "LevelGenerator_8cs.html", "LevelGenerator_8cs" ],
     [ "LevelPacingConfiguration.cs", "LevelPacingConfiguration_8cs.html", "LevelPacingConfiguration_8cs" ],

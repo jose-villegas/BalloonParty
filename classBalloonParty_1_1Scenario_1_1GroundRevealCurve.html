@@ -134,6 +134,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a383fe226278d69ec7b54d8c01bfdd446" id="r_a383fe226278d69ec7b54d8c01bfdd446"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a383fe226278d69ec7b54d8c01bfdd446">Opening</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> target, float progress)</td></tr>
 <tr class="memdesc:a383fe226278d69ec7b54d8c01bfdd446"><td class="mdescLeft">&#160;</td><td class="mdescRight">How open the ground is at this point of a reveal toward <em>target</em> .  <br /></td></tr>
 <tr class="separator:a383fe226278d69ec7b54d8c01bfdd446"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf508b0788ea8f43099227416109559c" id="r_abf508b0788ea8f43099227416109559c"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abf508b0788ea8f43099227416109559c">SwapOpening</a> (float progress)</td></tr>
+<tr class="memdesc:abf508b0788ea8f43099227416109559c"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far a paper swap's hole has opened, 0..1 over the beat, eased at both ends.  <br /></td></tr>
+<tr class="separator:abf508b0788ea8f43099227416109559c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The timing of the mist reveal, as one curve over how open the ground is. </p>
@@ -266,6 +269,34 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>How open the ground is at this point of a reveal toward <em>target</em> . </p>
+
+</div>
+</div>
+<a id="abf508b0788ea8f43099227416109559c" name="abf508b0788ea8f43099227416109559c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf508b0788ea8f43099227416109559c">&#9670;&#160;</a></span>SwapOpening()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static float BalloonParty.Scenario.GroundRevealCurve.SwapOpening </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>progress</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How far a paper swap's hole has opened, 0..1 over the beat, eased at both ends. </p>
+<p>It has no mist to roll in first: the surface under it already covers the screen, so the hole grows the whole way. </p>
 
 </div>
 </div>

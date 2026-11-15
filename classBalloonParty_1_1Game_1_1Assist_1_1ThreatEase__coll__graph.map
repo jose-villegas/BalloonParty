@@ -1,0 +1,7 @@
+<map id="BalloonParty.Game.Assist.ThreatEase" name="BalloonParty.Game.Assist.ThreatEase">
+<area shape="rect" id="Node000001" title="Eases the threats that come by chance while the player is in need: a threat&#39;s chance scaled down by I..." alt="" coords="115,115,306,160"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Game_1_1Assist_1_1IPlayerNeed.html" title="How much trouble the player is in right now, 0 (none) to 1 (one mistake from losing the run)." alt="" coords="5,5,197,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="135,59,191,114,186,115,133,64"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html" title="Help that comes only when the player needs it: how need is judged (Game/Assist/PlayerNeed) and how ea..." alt="" coords="221,5,418,50"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="289,60,234,117,231,112,284,62"/>
+</map>

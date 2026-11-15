@@ -136,17 +136,24 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad93ef4997a80ea587529b349b314576d" id="r_ad93ef4997a80ea587529b349b314576d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad93ef4997a80ea587529b349b314576d">FillGuaranteedItems</a> (List&lt; <a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html">ItemSettings</a> &gt; output, Dictionary&lt; string, int &gt; activeCounts)</td></tr>
 <tr class="memdesc:ad93ef4997a80ea587529b349b314576d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Picks guaranteed items for the initial board, respecting caps. Returns the number placed.  <br /></td></tr>
 <tr class="separator:ad93ef4997a80ea587529b349b314576d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a7c11ee950d23e64f3af03670669156" id="r_a6a7c11ee950d23e64f3af03670669156"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html">BalloonPrefabEntry</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6a7c11ee950d23e64f3af03670669156">PickBalloonEntry</a> (IReadOnlyDictionary&lt; string, int &gt; activeCounts, IReadOnlyDictionary&lt; string, int &gt; waveQuotas=null)</td></tr>
-<tr class="memdesc:a6a7c11ee950d23e64f3af03670669156"><td class="mdescLeft">&#160;</td><td class="mdescRight"><dl class="params"><dt>Parameters</dt><dd>
+<tr class="memitem:adbfd21716f4bca2f94bb65fd9856b6a8" id="r_adbfd21716f4bca2f94bb65fd9856b6a8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html">BalloonPrefabEntry</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adbfd21716f4bca2f94bb65fd9856b6a8">PickBalloonEntry</a> (IReadOnlyDictionary&lt; string, int &gt; activeCounts, IReadOnlyDictionary&lt; string, int &gt; waveQuotas=null, float need=0f)</td></tr>
+<tr class="memdesc:adbfd21716f4bca2f94bb65fd9856b6a8"><td class="mdescLeft">&#160;</td><td class="mdescRight"><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">waveQuotas</td><td>Remaining per-wave allowance by pool key; entries at 0 are excluded, absent keys are unlimited.</td></tr>
+    <tr><td class="paramname">waveQuotas</td><td>Remaining per-wave allowance by pool key; entries at 0 are excluded, absent keys are unlimited. </td></tr>
   </table>
   </dd>
 </dl>
  <br /></td></tr>
-<tr class="separator:a6a7c11ee950d23e64f3af03670669156"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a523be777f92d0ecb7f5ec2fb5039097c" id="r_a523be777f92d0ecb7f5ec2fb5039097c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html">ItemSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a523be777f92d0ecb7f5ec2fb5039097c">PickItemEntry</a> (IReadOnlyDictionary&lt; string, int &gt; activeCounts)</td></tr>
-<tr class="separator:a523be777f92d0ecb7f5ec2fb5039097c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:adbfd21716f4bca2f94bb65fd9856b6a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a382e5d8ad069d6325b75ea09fe7f478d" id="r_a382e5d8ad069d6325b75ea09fe7f478d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html">ItemSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a382e5d8ad069d6325b75ea09fe7f478d">PickItemEntry</a> (IReadOnlyDictionary&lt; string, int &gt; activeCounts, float need=0f)</td></tr>
+<tr class="memdesc:a382e5d8ad069d6325b75ea09fe7f478d"><td class="mdescLeft">&#160;</td><td class="mdescRight"><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">need</td><td>The player's need, 0 to 1: favours the items that help most (<a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a343dd998f2ad8da08c46912f2ee7cb3d">ItemSettings.NeedWeightBoost</a>).</td></tr>
+  </table>
+  </dd>
+</dl>
+ <br /></td></tr>
+<tr class="separator:a382e5d8ad069d6325b75ea09fe7f478d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c6daa3990df43137d4afe2c01764145" id="r_a3c6daa3990df43137d4afe2c01764145"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html">BalloonPrefabEntry</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3c6daa3990df43137d4afe2c01764145">PickSimpleBalloonEntry</a> (IReadOnlyDictionary&lt; string, int &gt; activeCounts)</td></tr>
 <tr class="memdesc:a3c6daa3990df43137d4afe2c01764145"><td class="mdescLeft">&#160;</td><td class="mdescRight">Weighted pick restricted to the level's simple-family entries (plain/silver/gold) — used for extra pop-spawns.  <br /></td></tr>
 <tr class="separator:a3c6daa3990df43137d4afe2c01764145"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -267,8 +274,8 @@ Properties</h2></td></tr>
 
 </div>
 </div>
-<a id="a6a7c11ee950d23e64f3af03670669156" name="a6a7c11ee950d23e64f3af03670669156"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6a7c11ee950d23e64f3af03670669156">&#9670;&#160;</a></span>PickBalloonEntry()</h2>
+<a id="adbfd21716f4bca2f94bb65fd9856b6a8" name="adbfd21716f4bca2f94bb65fd9856b6a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbfd21716f4bca2f94bb65fd9856b6a8">&#9670;&#160;</a></span>PickBalloonEntry()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -281,25 +288,36 @@ Properties</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">IReadOnlyDictionary&lt; string, int &gt;</td>          <td class="paramname"><span class="paramname"><em>waveQuotas</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>&#160;)</td>
+          <td class="paramtype">IReadOnlyDictionary&lt; string, int &gt;</td>          <td class="paramname"><span class="paramname"><em>waveQuotas</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>need</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0f</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">waveQuotas</td><td>Remaining per-wave allowance by pool key; entries at 0 are excluded, absent keys are unlimited.</td></tr>
+    <tr><td class="paramname">waveQuotas</td><td>Remaining per-wave allowance by pool key; entries at 0 are excluded, absent keys are unlimited. </td></tr>
   </table>
   </dd>
 </dl>
 </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">need</td><td>The player's need, 0 to 1: favours the balloons that help (<a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonPrefabEntry.html#ac2e14a23d330899f3a200bb92c889032">BalloonPrefabEntry.NeedWeightBoost</a>).</td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a21ca0f6867ea9551ea306fad9b496939">BalloonParty.Configuration.Level.LevelParameters</a>.</p>
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a8becbba32726f762fd1e4a41ad9c2446">BalloonParty.Configuration.Level.LevelParameters</a>.</p>
 
 </div>
 </div>
-<a id="a523be777f92d0ecb7f5ec2fb5039097c" name="a523be777f92d0ecb7f5ec2fb5039097c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a523be777f92d0ecb7f5ec2fb5039097c">&#9670;&#160;</a></span>PickItemEntry()</h2>
+<a id="a382e5d8ad069d6325b75ea09fe7f478d" name="a382e5d8ad069d6325b75ea09fe7f478d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a382e5d8ad069d6325b75ea09fe7f478d">&#9670;&#160;</a></span>PickItemEntry()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -307,13 +325,25 @@ Properties</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html">ItemSettings</a> BalloonParty.Configuration.Level.ILevelParameters.PickItemEntry </td>
           <td>(</td>
-          <td class="paramtype">IReadOnlyDictionary&lt; string, int &gt;</td>          <td class="paramname"><span class="paramname"><em>activeCounts</em></span></td><td>)</td>
+          <td class="paramtype">IReadOnlyDictionary&lt; string, int &gt;</td>          <td class="paramname"><span class="paramname"><em>activeCounts</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>need</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0f</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#af5b8f1896827e828f0cdf5cba2c5f20c">BalloonParty.Configuration.Level.LevelParameters</a>.</p>
+<p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">need</td><td>The player's need, 0 to 1: favours the items that help most (<a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#a343dd998f2ad8da08c46912f2ee7cb3d">ItemSettings.NeedWeightBoost</a>).</td></tr>
+  </table>
+  </dd>
+</dl>
+</p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelParameters.html#a24cdbd864c4ad7a8ffe9f159ba91ebac">BalloonParty.Configuration.Level.LevelParameters</a>.</p>
 
 </div>
 </div>

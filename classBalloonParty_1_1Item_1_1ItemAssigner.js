@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Item_1_1ItemAssigner =
 [
-    [ "ItemAssigner", "classBalloonParty_1_1Item_1_1ItemAssigner.html#ad36c8068bae9311c138af793558443b3", null ],
+    [ "ItemAssigner", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a737237a08901556094ebe2fe6137e00e", null ],
     [ "AssignItems", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a467f9a5721e231e1cc089b5cd27173d8", null ],
     [ "BuildFan", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a8be026ce9d4a1d7bb776e18fe8dd3d11", null ],
     [ "CollectEligibleSlots", "classBalloonParty_1_1Item_1_1ItemAssigner.html#ab98b666d9d5d35c94a7e39dd8d83def0", null ],
@@ -15,6 +15,8 @@ var classBalloonParty_1_1Item_1_1ItemAssigner =
     [ "PlaceGuaranteedItems", "classBalloonParty_1_1Item_1_1ItemAssigner.html#aa99f70ee8f6049d2c94c09eea6329348", null ],
     [ "PlaceWeightedItems", "classBalloonParty_1_1Item_1_1ItemAssigner.html#aeb8a4a94105056900266b94b542378a9", null ],
     [ "PlanShieldChain", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a6a9488e2e476323c468649573d46badb", null ],
+    [ "ResetRun", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a74d52e1b4b0abe5a3ea296df02942b05", null ],
+    [ "RollWaveCount", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a451aa48304a26db727092f88e5d68c51", null ],
     [ "SampleCount", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a45579ed2660e38050093396143754f96", null ],
     [ "Start", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a107d73bb4d3c62860e396f86e153edf8", null ],
     [ "TryTakeChainHost", "classBalloonParty_1_1Item_1_1ItemAssigner.html#ab14cec020b5585dfb077c73ca3943eee", null ],
@@ -32,10 +34,13 @@ var classBalloonParty_1_1Item_1_1ItemAssigner =
     [ "_flightConfig", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a879465a128270ee5fa416b7c4952d5d5", null ],
     [ "_grid", "classBalloonParty_1_1Item_1_1ItemAssigner.html#aed3b750610f1a5d99922216d64e03b17", null ],
     [ "_gridConfig", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a1fd25e92d1f5ed6a88235e97644ff8cc", null ],
+    [ "_itemPity", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a970f7eba952691dfc6958f42f0a06f0a", null ],
     [ "_levelParams", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a521074af522ca5ea01030d508bb48237", null ],
+    [ "_need", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a892207ae3bb2e571ac0f67b1c8e7730c", null ],
     [ "_origin", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a382a07363d360f2c2f3cb879dab87964", null ],
     [ "_radii", "classBalloonParty_1_1Item_1_1ItemAssigner.html#ac9251be363dcf016b9e2a907a6d9e3fa", null ],
     [ "_runConfig", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a403a3a02a50546534428a031d5288e86", null ],
     [ "_subscription", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a7dfae65abbb49fb0ed25a3f945a86976", null ],
-    [ "_weapon", "classBalloonParty_1_1Item_1_1ItemAssigner.html#aaa975a5e40fc14869bf2687c73d1c7cc", null ]
+    [ "_weapon", "classBalloonParty_1_1Item_1_1ItemAssigner.html#aaa975a5e40fc14869bf2687c73d1c7cc", null ],
+    [ "ResetOrder", "classBalloonParty_1_1Item_1_1ItemAssigner.html#a5970f5b1a41262dd09c9c0810447c70c", null ]
 ];

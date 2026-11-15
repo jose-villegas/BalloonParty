@@ -4,6 +4,7 @@ var classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry =
     [ "GuaranteedInitialCount", "classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html#a044cdc9307526be293bee9b60ec81659", null ],
     [ "InitialCountWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html#abc2c821dbc1ca1e34e0aa10d3249b612", null ],
     [ "MaxCount", "classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html#a77245b4be02369236c3855f2b46acded", null ],
+    [ "NeedBoost", "classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html#ad53dc41a2446a2a0523d6fc1f0e0b3e6", null ],
     [ "PoolKey", "classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html#ad78e168d6216be448421036f36656b34", null ],
     [ "Source", "classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html#a604665dccc4ba451e3a72734534cda15", null ],
     [ "WaveCountWeights", "classBalloonParty_1_1Configuration_1_1Level_1_1ResolvedBalloonEntry.html#a15e2ad73cd54e758e6f9eee51dba1ff8", null ],

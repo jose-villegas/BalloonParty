@@ -141,6 +141,8 @@ Properties</h2></td></tr>
 <tr class="memitem:a8296b730b0b997e0ea64ec1cfbde0f8c" id="r_a8296b730b0b997e0ea64ec1cfbde0f8c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8296b730b0b997e0ea64ec1cfbde0f8c">MaximumAllowed</a><code> [get]</code></td></tr>
 <tr class="memdesc:a8296b730b0b997e0ea64ec1cfbde0f8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Catalog fallback unless <a class="el" href="structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#a6c943c210f7bb9b1e6436d523e5019d0">ItemTypeWeight.MaximumAllowedOverride</a> is set.  <br /></td></tr>
 <tr class="separator:a8296b730b0b997e0ea64ec1cfbde0f8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a343dd998f2ad8da08c46912f2ee7cb3d" id="r_a343dd998f2ad8da08c46912f2ee7cb3d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a343dd998f2ad8da08c46912f2ee7cb3d">NeedWeightBoost</a><code> [get]</code></td></tr>
+<tr class="separator:a343dd998f2ad8da08c46912f2ee7cb3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac77da00238f9d5b57343490b11524490" id="r_ac77da00238f9d5b57343490b11524490"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1PaintSettings.html">PaintSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac77da00238f9d5b57343490b11524490">Paint</a><code> [get]</code></td></tr>
 <tr class="separator:ac77da00238f9d5b57343490b11524490"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a146f9079602cd7f719a6aa2d88804de0" id="r_a146f9079602cd7f719a6aa2d88804de0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1SnipeSettings.html">SnipeSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a146f9079602cd7f719a6aa2d88804de0">Snipe</a><code> [get]</code></td></tr>
@@ -168,6 +170,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a2e6263b1cb5109291646277d172d4e85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa3f1c28a0d51837dec38d4b8b92d4259" id="r_aa3f1c28a0d51837dec38d4b8b92d4259"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa3f1c28a0d51837dec38d4b8b92d4259">_maximumAllowed</a></td></tr>
 <tr class="separator:aa3f1c28a0d51837dec38d4b8b92d4259"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68033d37d26a00e228a2a06f8fc02c12" id="r_a68033d37d26a00e228a2a06f8fc02c12"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a68033d37d26a00e228a2a06f8fc02c12">_needWeightBoost</a></td></tr>
+<tr class="separator:a68033d37d26a00e228a2a06f8fc02c12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45d98401723006aa9a36e697497016ae" id="r_a45d98401723006aa9a36e697497016ae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1PaintSettings.html">PaintSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a45d98401723006aa9a36e697497016ae">_paint</a> = new()</td></tr>
 <tr class="separator:a45d98401723006aa9a36e697497016ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1952ddfb585745764ffb169468deebeb" id="r_a1952ddfb585745764ffb169468deebeb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1Items_1_1SnipeSettings.html">SnipeSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1952ddfb585745764ffb169468deebeb">_snipe</a> = new()</td></tr>
@@ -343,6 +347,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">int BalloonParty.Configuration.Items.ItemSettings._maximumAllowed</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a68033d37d26a00e228a2a06f8fc02c12" name="a68033d37d26a00e228a2a06f8fc02c12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68033d37d26a00e228a2a06f8fc02c12">&#9670;&#160;</a></span>_needWeightBoost</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Items.ItemSettings._needWeightBoost</td>
         </tr>
       </table>
   </td>
@@ -618,6 +644,28 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Catalog fallback unless <a class="el" href="structBalloonParty_1_1Configuration_1_1Items_1_1ItemTypeWeight.html#a6c943c210f7bb9b1e6436d523e5019d0">ItemTypeWeight.MaximumAllowedOverride</a> is set. </p>
+
+</div>
+</div>
+<a id="a343dd998f2ad8da08c46912f2ee7cb3d" name="a343dd998f2ad8da08c46912f2ee7cb3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a343dd998f2ad8da08c46912f2ee7cb3d">&#9670;&#160;</a></span>NeedWeightBoost</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Items.ItemSettings.NeedWeightBoost</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

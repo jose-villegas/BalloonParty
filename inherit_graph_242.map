@@ -1,3 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ScoreTrailBehaviourResolver.html" title="Maps a score group to its choreography handler by group total: the highest&#45;MinPoints entry whose thre..." alt="" coords="5,5,233,67"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailBehaviour.html" title="A per&#45;group choreography handler: it owns everything between the group&#39;s spawn and its arrivals." alt="" coords="5,44,237,89"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html" title="Decomposes a big score into a catalog of 3D shapes and launches them all at once." alt="" coords="285,5,533,50"/>
+<area shape="poly" id="edge563_Node000000_Node000001" title=" " alt="" coords="252,46,287,44,282,45,253,51"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html" title="Byte&#45;for&#45;byte parity with the pre&#45;seam pipeline: one pooled trail per point, fanned out into a scatte..." alt="" coords="304,74,514,136"/>
+<area shape="poly" id="edge564_Node000000_Node000002" title=" " alt="" coords="252,81,306,91,301,91,252,87"/>
 </map>

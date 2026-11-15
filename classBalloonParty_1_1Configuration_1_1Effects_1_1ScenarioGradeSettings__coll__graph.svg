@@ -22,7 +22,7 @@
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Authored colour grade for each scenario, so the sky, the meadow and the water read in the same light ...">
+<g id="a_Node000001"><a xlink:title="Authored colour grade for each scenario, so the sky, the meadow, the water and the paper read in the ...">
 <polygon fill="#999999" stroke="#666666" points="415.25,-115.5 252.25,-115.5 252.25,-82 415.25,-82 415.25,-115.5"/>
 <text xml:space="preserve" text-anchor="start" x="260.25" y="-102" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text xml:space="preserve" text-anchor="middle" x="333.75" y="-89.25" font-family="Helvetica,sans-Serif" font-size="10.00">Effects.ScenarioGradeSettings</text>
@@ -80,13 +80,14 @@
 <g id="edge3_Node000001_Node000004" class="edge">
 <title>Node4&#45;&gt;Node1</title>
 <g id="a_edge3_Node000001_Node000004"><a xlink:title=" ">
-<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M167.78,-36.59C189.61,-42.39 212.97,-49.17 234.25,-56.5 255.18,-63.72 277.94,-73.35 296.3,-81.6"/>
-<polygon fill="#9a32cd" stroke="#9a32cd" points="168.89,-33.26 158.33,-34.12 167.12,-40.04 168.89,-33.26"/>
+<path fill="none" stroke="#9a32cd" stroke-dasharray="5,2" d="M168.38,-26.86C190.21,-30.84 213.42,-36.3 234.25,-43.75 260.62,-53.18 288.27,-69.24 307.53,-81.58"/>
+<polygon fill="#9a32cd" stroke="#9a32cd" points="169.05,-23.42 158.6,-25.17 167.86,-30.32 169.05,-23.42"/>
 </a>
 </g>
 <text xml:space="preserve" text-anchor="middle" x="209.12" y="-85.25" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey"> _meadow</text>
-<text xml:space="preserve" text-anchor="middle" x="209.12" y="-72.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey">_sky</text>
-<text xml:space="preserve" text-anchor="middle" x="209.12" y="-59.75" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey">_water</text>
+<text xml:space="preserve" text-anchor="middle" x="209.12" y="-72.5" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey">_paper</text>
+<text xml:space="preserve" text-anchor="middle" x="209.12" y="-59.75" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey">_sky</text>
+<text xml:space="preserve" text-anchor="middle" x="209.12" y="-47" font-family="Helvetica,sans-Serif" font-size="10.00" fill="grey">_water</text>
 </g>
 <!-- Node4&#45;&gt;Node4 -->
 <g id="edge4_Node000004_Node000004" class="edge">

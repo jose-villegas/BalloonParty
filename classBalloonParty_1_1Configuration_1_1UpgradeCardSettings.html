@@ -137,8 +137,8 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1UpgradeCardSetti
 Package Functions</h2></td></tr>
 <tr class="memitem:a404c3c2f99b05e95c9ef38db9a0080bc" id="r_a404c3c2f99b05e95c9ef38db9a0080bc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a404c3c2f99b05e95c9ef38db9a0080bc">UpgradeCardSettings</a> ()</td></tr>
 <tr class="separator:a404c3c2f99b05e95c9ef38db9a0080bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0510edb70491190fc982494411b876d" id="r_ab0510edb70491190fc982494411b876d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab0510edb70491190fc982494411b876d">UpgradeCardSettings</a> (<a class="el" href="namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523">UpgradeKind</a> kind, string title, string description, float amount, int maxStacks, float weight=1f)</td></tr>
-<tr class="separator:ab0510edb70491190fc982494411b876d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1086c54431f95750df087cc36e3d3d03" id="r_a1086c54431f95750df087cc36e3d3d03"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1086c54431f95750df087cc36e3d3d03">UpgradeCardSettings</a> (<a class="el" href="namespaceBalloonParty_1_1Shared.html#a54f7c8f51fc5a46c93f1ad9577243523">UpgradeKind</a> kind, string title, string description, float amount, int maxStacks, float weight=1f, float retryDealBoost=0f)</td></tr>
+<tr class="separator:a1086c54431f95750df087cc36e3d3d03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -152,6 +152,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a834f656ae0efac2706045e79da9c5a20" id="r_a834f656ae0efac2706045e79da9c5a20"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a834f656ae0efac2706045e79da9c5a20">MaxStacks</a><code> [get]</code></td></tr>
 <tr class="memdesc:a834f656ae0efac2706045e79da9c5a20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Most times a run can hold this card, before any UpgradeKind.RaiseLimits card; a card at its limit stops being offered.  <br /></td></tr>
 <tr class="separator:a834f656ae0efac2706045e79da9c5a20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3aaaacf0cb976b787dd96a746586d6f" id="r_af3aaaacf0cb976b787dd96a746586d6f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af3aaaacf0cb976b787dd96a746586d6f">RetryDealBoost</a><code> [get]</code></td></tr>
+<tr class="memdesc:af3aaaacf0cb976b787dd96a746586d6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extra odds of this card being a bought retry's bonus card, on top of <a class="el" href="#a3e9c3e275d68511f7ceaa6b8064c59eb" title="Relative odds of the card being dealt. 0 keeps it out of the deck.">Weight</a>: × (1 + this).  <br /></td></tr>
+<tr class="separator:af3aaaacf0cb976b787dd96a746586d6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47c27fb7212dde51b6c8ecede9b7ffd5" id="r_a47c27fb7212dde51b6c8ecede9b7ffd5"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a47c27fb7212dde51b6c8ecede9b7ffd5">Title</a><code> [get]</code></td></tr>
 <tr class="separator:a47c27fb7212dde51b6c8ecede9b7ffd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e9c3e275d68511f7ceaa6b8064c59eb" id="r_a3e9c3e275d68511f7ceaa6b8064c59eb"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3e9c3e275d68511f7ceaa6b8064c59eb">Weight</a><code> [get]</code></td></tr>
@@ -168,6 +171,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:abf43f3b4474762195d14565146253e6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8a8bf800875c74e56ace6cdc1d9a23c" id="r_ab8a8bf800875c74e56ace6cdc1d9a23c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab8a8bf800875c74e56ace6cdc1d9a23c">_maxStacks</a> = 3</td></tr>
 <tr class="separator:ab8a8bf800875c74e56ace6cdc1d9a23c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbce7c96ada7386841a2100297d51377" id="r_adbce7c96ada7386841a2100297d51377"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adbce7c96ada7386841a2100297d51377">_retryDealBoost</a></td></tr>
+<tr class="separator:adbce7c96ada7386841a2100297d51377"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab0ce7f820c9862db68440b1b2e57b933" id="r_ab0ce7f820c9862db68440b1b2e57b933"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab0ce7f820c9862db68440b1b2e57b933">_title</a></td></tr>
 <tr class="separator:ab0ce7f820c9862db68440b1b2e57b933"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d5d8bbad33b2733ab94348d56f3a711" id="r_a7d5d8bbad33b2733ab94348d56f3a711"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7d5d8bbad33b2733ab94348d56f3a711">_weight</a> = 1f</td></tr>
@@ -201,8 +206,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ab0510edb70491190fc982494411b876d" name="ab0510edb70491190fc982494411b876d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab0510edb70491190fc982494411b876d">&#9670;&#160;</a></span>UpgradeCardSettings() <span class="overload">[2/2]</span></h2>
+<a id="a1086c54431f95750df087cc36e3d3d03" name="a1086c54431f95750df087cc36e3d3d03"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1086c54431f95750df087cc36e3d3d03">&#9670;&#160;</a></span>UpgradeCardSettings() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -238,7 +243,12 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>weight</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1f</span>&#160;)</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>weight</em></span><span class="paramdefsep"> = </span><span class="paramdefval">1f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>retryDealBoost</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0f</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -328,6 +338,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">int BalloonParty.Configuration.UpgradeCardSettings._maxStacks = 3</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adbce7c96ada7386841a2100297d51377" name="adbce7c96ada7386841a2100297d51377"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbce7c96ada7386841a2100297d51377">&#9670;&#160;</a></span>_retryDealBoost</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.UpgradeCardSettings._retryDealBoost</td>
         </tr>
       </table>
   </td>
@@ -481,6 +513,33 @@ Private Attributes</h2></td></tr>
 <p>Most times a run can hold this card, before any UpgradeKind.RaiseLimits card; a card at its limit stops being offered. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#af57c63e37b105adc392737b0449e34fd">BalloonParty.Shared.IUpgradeCardSettings</a>.</p>
+
+</div>
+</div>
+<a id="af3aaaacf0cb976b787dd96a746586d6f" name="af3aaaacf0cb976b787dd96a746586d6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3aaaacf0cb976b787dd96a746586d6f">&#9670;&#160;</a></span>RetryDealBoost</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.UpgradeCardSettings.RetryDealBoost</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Extra odds of this card being a bought retry's bonus card, on top of <a class="el" href="#a3e9c3e275d68511f7ceaa6b8064c59eb" title="Relative odds of the card being dealt. 0 keeps it out of the deck.">Weight</a>: × (1 + this). </p>
+<p>A retry follows a lost run, so the cards that keep the player alive come likelier. 0 = no extra. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#a49932e84894e8b6a9fd1b52c1ac68c76">BalloonParty.Shared.IUpgradeCardSettings</a>.</p>
 
 </div>
 </div>

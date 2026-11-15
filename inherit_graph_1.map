@@ -38,7 +38,7 @@
 <area shape="rect" id="Node000045" href="$interfaceBalloonParty_1_1Configuration_1_1GridActors_1_1IGridActorConfiguration.html" title=" " alt="" coords="259,768,504,813"/>
 <area shape="rect" id="Node000044" href="$classBalloonParty_1_1Configuration_1_1GridActors_1_1GridActorConfiguration.html" title=" " alt="" coords="552,768,793,813"/>
 <area shape="poly" id="edge14_Node000045_Node000044" title=" " alt="" coords="518,788,554,789,550,792,521,792"/>
-<area shape="rect" id="Node000024" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html" title="Read&#45;only tuning for the surface backdrops (ground and water) (see GroundView)." alt="" coords="283,837,480,882"/>
+<area shape="rect" id="Node000024" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html" title="Read&#45;only tuning for the surface backdrops (ground, water and the bonus levels&#39; paper) (see GroundVie..." alt="" coords="283,837,480,882"/>
 <area shape="rect" id="Node000023" href="$classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html" title="Authored tuning for the surface backdrops: the floor quad and the grass blades over it on ground leve..." alt="" coords="574,837,771,882"/>
 <area shape="poly" id="edge15_Node000024_Node000023" title=" " alt="" coords="494,857,576,858,572,861,497,862"/>
 <area shape="rect" id="Node000047" href="$interfaceBalloonParty_1_1Configuration_1_1HeadsUp_1_1IHeadsUpSettings.html" title="The heads&#45;ups&#39; rules and looks (see Plans/PLAN&#45;HeadsUp.md §6): how many may show at once,..." alt="" coords="281,907,482,951"/>
@@ -69,7 +69,7 @@
 <area shape="rect" id="Node000062" href="$classBalloonParty_1_1Configuration_1_1RunConfig.html" title=" " alt="" coords="574,1531,771,1575"/>
 <area shape="poly" id="edge24_Node000063_Node000062" title=" " alt="" coords="488,1551,576,1552,572,1554,490,1555"/>
 <area shape="rect" id="Node000028" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IScenarioGradeSettings.html" title="Read&#45;only tuning for the whole&#45;frame colour grade per scenario (see ScenarioGradeView)." alt="" coords="271,1600,492,1645"/>
-<area shape="rect" id="Node000027" href="$classBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGradeSettings.html" title="Authored colour grade for each scenario, so the sky, the meadow and the water read in the same light ..." alt="" coords="564,1600,781,1645"/>
+<area shape="rect" id="Node000027" href="$classBalloonParty_1_1Configuration_1_1Effects_1_1ScenarioGradeSettings.html" title="Authored colour grade for each scenario, so the sky, the meadow, the water and the paper read in the ..." alt="" coords="564,1600,781,1645"/>
 <area shape="poly" id="edge25_Node000028_Node000027" title=" " alt="" coords="506,1620,566,1621,561,1624,509,1625"/>
 <area shape="rect" id="Node000030" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1ISceneLightFieldSettings.html" title="Read&#45;only tuning for the scene&#45;light field (see Milestone 3)." alt="" coords="267,2224,496,2269"/>
 <area shape="rect" id="Node000029" href="$classBalloonParty_1_1Configuration_1_1Effects_1_1SceneLightFieldSettings.html" title=" " alt="" coords="560,2224,785,2269"/>

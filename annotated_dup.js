@@ -272,6 +272,7 @@ var annotated_dup =
           [ "ISpawnClockSettings", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings" ],
           [ "ItemContentEntry", "structBalloonParty_1_1Configuration_1_1Level_1_1ItemContentEntry.html", "structBalloonParty_1_1Configuration_1_1Level_1_1ItemContentEntry" ],
           [ "ItemCountStep", "structBalloonParty_1_1Configuration_1_1Level_1_1ItemCountStep.html", "structBalloonParty_1_1Configuration_1_1Level_1_1ItemCountStep" ],
+          [ "LevelBackdrop", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelBackdrop.html", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelBackdrop" ],
           [ "LevelGenerationSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings" ],
           [ "LevelGenerator", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator" ],
           [ "LevelPacingConfiguration", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration" ],
@@ -444,7 +445,8 @@ var annotated_dup =
         [ "Assist", "namespaceBalloonParty_1_1Game_1_1Assist.html", [
           [ "IPlayerNeed", "interfaceBalloonParty_1_1Game_1_1Assist_1_1IPlayerNeed.html", "interfaceBalloonParty_1_1Game_1_1Assist_1_1IPlayerNeed" ],
           [ "PityRoll", "classBalloonParty_1_1Game_1_1Assist_1_1PityRoll.html", "classBalloonParty_1_1Game_1_1Assist_1_1PityRoll" ],
-          [ "PlayerNeed", "classBalloonParty_1_1Game_1_1Assist_1_1PlayerNeed.html", "classBalloonParty_1_1Game_1_1Assist_1_1PlayerNeed" ]
+          [ "PlayerNeed", "classBalloonParty_1_1Game_1_1Assist_1_1PlayerNeed.html", "classBalloonParty_1_1Game_1_1Assist_1_1PlayerNeed" ],
+          [ "ThreatEase", "classBalloonParty_1_1Game_1_1Assist_1_1ThreatEase.html", "classBalloonParty_1_1Game_1_1Assist_1_1ThreatEase" ]
         ] ],
         [ "CardReveal", "namespaceBalloonParty_1_1Game_1_1CardReveal.html", [
           [ "CardRevealBoardHold", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealBoardHold.html", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealBoardHold" ],

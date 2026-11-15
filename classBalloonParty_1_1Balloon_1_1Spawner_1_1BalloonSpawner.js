@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner =
 [
-    [ "BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a38eac8f43cbdc71eedffca2a093d17ed", null ],
+    [ "BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a114d691da4237851d7be6f22ec48102f", null ],
     [ "AddReinforcements", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#acf96a4255f5f62cbb0cce9d5da55cba6", null ],
     [ "AddRewardBalloon", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a1e5b9160255940bb1e160973f05c781c", null ],
     [ "ArrangeInitialLayers", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a24bb087142589d3c4ed32ef4d9c8afeb", null ],
@@ -75,6 +75,7 @@ var classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner =
     [ "_spawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a0cf9a73647ab309d9a6fff5ebe2930a7", null ],
     [ "_spawnPathBuffer", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#aff08ff00311e470044ed10b8d9129c6e", null ],
     [ "_subscriptions", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a587de79ef0b4f85c14024728a72cfae2", null ],
+    [ "_threatEase", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#aa2c3bf20de95c664ad02bec24cc9ef7c", null ],
     [ "_unbreakableEntry", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#ae7ea7369ce1a7bc58f5a7e2fe9c09cbf", null ],
     [ "_waterBatch", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a0fbf9e595d30981c9168394a74248662", null ],
     [ "_waveDamagePublisher", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a0b662632e8d9d37208dabb1c1d085d4f", null ],

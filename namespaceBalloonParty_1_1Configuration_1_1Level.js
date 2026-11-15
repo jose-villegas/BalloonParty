@@ -16,6 +16,7 @@ var namespaceBalloonParty_1_1Configuration_1_1Level =
     [ "ISpawnClockSettings", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1ISpawnClockSettings" ],
     [ "ItemContentEntry", "structBalloonParty_1_1Configuration_1_1Level_1_1ItemContentEntry.html", "structBalloonParty_1_1Configuration_1_1Level_1_1ItemContentEntry" ],
     [ "ItemCountStep", "structBalloonParty_1_1Configuration_1_1Level_1_1ItemCountStep.html", "structBalloonParty_1_1Configuration_1_1Level_1_1ItemCountStep" ],
+    [ "LevelBackdrop", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelBackdrop.html", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelBackdrop" ],
     [ "LevelGenerationSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings" ],
     [ "LevelGenerator", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator" ],
     [ "LevelPacingConfiguration", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration.html", "classBalloonParty_1_1Configuration_1_1Level_1_1LevelPacingConfiguration" ],
@@ -41,7 +42,8 @@ var namespaceBalloonParty_1_1Configuration_1_1Level =
     [ "ScenarioKind", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08", [
       [ "Sky", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08a03462a41aec357b74c89eb8d272532f7", null ],
       [ "Ground", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08a3519d51443d41746a097cd54cd5c11cf", null ],
-      [ "Water", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08a27634ff8002b12e75d98e07ccd005d18", null ]
+      [ "Water", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08a27634ff8002b12e75d98e07ccd005d18", null ],
+      [ "Paper", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08ad0a662a5235ecde30739fe50cf0de830", null ]
     ] ],
     [ "SegmentMode", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a6f10485b2af91bced864457369fdcd4b", [
       [ "Smooth", "namespaceBalloonParty_1_1Configuration_1_1Level.html#a6f10485b2af91bced864457369fdcd4bae510cdf33cd497134b47b9316314d4b4", null ],

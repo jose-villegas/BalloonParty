@@ -58,7 +58,7 @@ var sectionId = 'dynsection-1';
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="Keeps ActiveScenario on the current level&#39;s scenario (sky or ground, per ILevelPacingConfiguration....">
+<g id="a_Node000001"><a xlink:title="Keeps ActiveScenario on the current level&#39;s backdrop (LevelBackdrop: its scheduled sky,...">
 <polygon fill="#999999" stroke="#666666" points="624.25,-182.5 483.75,-182.5 483.75,-149 624.25,-149 624.25,-182.5"/>
 <text xml:space="preserve" text-anchor="start" x="491.75" y="-169" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.Level.</text>
 <text xml:space="preserve" text-anchor="middle" x="554" y="-156.25" font-family="Helvetica,sans-Serif" font-size="10.00">ScenarioController</text>

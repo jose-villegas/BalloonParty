@@ -1,5 +1,7 @@
 var NAVTREEINDEX4 =
 {
+"TimeScaleSource_8cs.html":[7,0,14,8,6],
+"TimerCatalog_8cs.html":[7,0,7,10,31],
 "TimerId_8cs.html":[7,0,7,10,32],
 "TmpTextExtensions_8cs.html":[7,0,14,4,19],
 "TooltipBanner_8cs.html":[7,0,18,11,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX4 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a8c5b924e8f687fb98beadadf2fe3a2b2":[5,0,0,0,0,3,42],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a8c5b924e8f687fb98beadadf2fe3a2b2":[6,0,0,0,0,3,42],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a91f682f6cd4f81e494a6319cdb93ab83":[5,0,0,0,0,3,18],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a91f682f6cd4f81e494a6319cdb93ab83":[6,0,0,0,0,3,18],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a9a9892cda9d3150ad0e5c1a2f9076d44":[5,0,0,0,0,3,23],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a9a9892cda9d3150ad0e5c1a2f9076d44":[6,0,0,0,0,3,23]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a91f682f6cd4f81e494a6319cdb93ab83":[6,0,0,0,0,3,18]
 };

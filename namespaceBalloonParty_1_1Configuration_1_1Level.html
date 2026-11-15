@@ -161,6 +161,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1ItemCountStep.html">ItemCountStep</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The item-count distributions in force from <a class="el" href="structBalloonParty_1_1Configuration_1_1Level_1_1ItemCountStep.html#a3de39dfdafe41d9e61f1b19e44954ec7">FromLevel</a> on.  <a href="structBalloonParty_1_1Configuration_1_1Level_1_1ItemCountStep.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelBackdrop.html">LevelBackdrop</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The scenario a level's backdrop shows.  <a href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelBackdrop.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html">LevelGenerationSettings</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">What <a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerator.html" title="Builds a level&#39;s mix from LevelGenerationSettings.">LevelGenerator</a> builds every positive level from: formulas for the level's shape and its two budgets, and a catalogue of content pieces that unlock by level.  <a href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelGenerationSettings.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -223,8 +226,9 @@ Enumerations</h2></td></tr>
 <tr class="memitem:a01e4593a9e3e5db9a1d18043a7098c08" id="r_a01e4593a9e3e5db9a1d18043a7098c08"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> { <a class="el" href="#a01e4593a9e3e5db9a1d18043a7098c08a03462a41aec357b74c89eb8d272532f7">Sky</a> = 0
 , <a class="el" href="#a01e4593a9e3e5db9a1d18043a7098c08a3519d51443d41746a097cd54cd5c11cf">Ground</a> = 1
 , <a class="el" href="#a01e4593a9e3e5db9a1d18043a7098c08a27634ff8002b12e75d98e07ccd005d18">Water</a> = 2
+, <a class="el" href="#a01e4593a9e3e5db9a1d18043a7098c08ad0a662a5235ecde30739fe50cf0de830">Paper</a> = 3
  }</td></tr>
-<tr class="memdesc:a01e4593a9e3e5db9a1d18043a7098c08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where a level is set: open sky, or one of the surfaces the board rests over (a meadow, or water).  <a href="#a01e4593a9e3e5db9a1d18043a7098c08">More...</a><br /></td></tr>
+<tr class="memdesc:a01e4593a9e3e5db9a1d18043a7098c08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Where a level is set: open sky, or one of the surfaces the board rests over (a meadow, water, or the paper page of a bonus level).  <a href="#a01e4593a9e3e5db9a1d18043a7098c08">More...</a><br /></td></tr>
 <tr class="separator:a01e4593a9e3e5db9a1d18043a7098c08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f10485b2af91bced864457369fdcd4b" id="r_a6f10485b2af91bced864457369fdcd4b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f10485b2af91bced864457369fdcd4b">SegmentMode</a> { <a class="el" href="#a6f10485b2af91bced864457369fdcd4bae510cdf33cd497134b47b9316314d4b4">Smooth</a>
 , <a class="el" href="#a6f10485b2af91bced864457369fdcd4ba32a843da6ea40ab3b17a3421ccdf671b">Linear</a>
@@ -288,11 +292,13 @@ Enumerations</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Where a level is set: open sky, or one of the surfaces the board rests over (a meadow, or water). </p>
+<p>Where a level is set: open sky, or one of the surfaces the board rests over (a meadow, water, or the paper page of a bonus level). </p>
+<p>The schedule (<a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ScenarioSchedule.html" title="Pure, seeded answer to &quot;is this level in the sky, on the ground or over water, and how far into that ...">ScenarioSchedule</a>) only deals sky, meadow and water; paper is a backdrop a bonus level shows over its scheduled scenario (<a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1LevelBackdrop.html" title="The scenario a level&#39;s backdrop shows.">LevelBackdrop</a>). </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a01e4593a9e3e5db9a1d18043a7098c08a03462a41aec357b74c89eb8d272532f7" name="a01e4593a9e3e5db9a1d18043a7098c08a03462a41aec357b74c89eb8d272532f7"></a>Sky&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a01e4593a9e3e5db9a1d18043a7098c08a3519d51443d41746a097cd54cd5c11cf" name="a01e4593a9e3e5db9a1d18043a7098c08a3519d51443d41746a097cd54cd5c11cf"></a>Ground&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a01e4593a9e3e5db9a1d18043a7098c08a27634ff8002b12e75d98e07ccd005d18" name="a01e4593a9e3e5db9a1d18043a7098c08a27634ff8002b12e75d98e07ccd005d18"></a>Water&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a01e4593a9e3e5db9a1d18043a7098c08ad0a662a5235ecde30739fe50cf0de830" name="a01e4593a9e3e5db9a1d18043a7098c08ad0a662a5235ecde30739fe50cf0de830"></a>Paper&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>

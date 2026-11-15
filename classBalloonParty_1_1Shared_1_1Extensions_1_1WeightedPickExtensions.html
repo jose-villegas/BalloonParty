@@ -109,6 +109,7 @@ $(function(){initNavTree('classBalloonParty_1_1Shared_1_1Extensions_1_1WeightedP
 <div class="header">
   <div class="summary">
 <a href="#pac-static-methods">Static Package Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Shared_1_1Extensions_1_1WeightedPickExtensions-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Shared.Extensions.WeightedPickExtensions Class Reference</div></div>
@@ -117,12 +118,17 @@ $(function(){initNavTree('classBalloonParty_1_1Shared_1_1Extensions_1_1WeightedP
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
 Static Package Functions</h2></td></tr>
-<tr class="memitem:a29c7c5b6d6f653ae66dfb85cf9bc2909" id="r_a29c7c5b6d6f653ae66dfb85cf9bc2909"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a29c7c5b6d6f653ae66dfb85cf9bc2909">PickRandom&lt; T &gt;</a> (this IReadOnlyList&lt; T &gt; entries, IReadOnlyDictionary&lt; string, int &gt; activeCounts, IReadOnlyDictionary&lt; string, int &gt; waveQuotas=null)</td></tr>
-<tr class="memdesc:a29c7c5b6d6f653ae66dfb85cf9bc2909"><td class="mdescLeft">&#160;</td><td class="mdescRight">Weighted-random pick, excluding entries at their <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html#a21f9c08b80c0d07d98db6fa77320d50b">IWeightedEntry.MaxCount</a> limit or with an exhausted <em>waveQuotas</em>  allowance (absent key = unlimited); returns <code>default</code> if none remain.  <br /></td></tr>
-<tr class="separator:a29c7c5b6d6f653ae66dfb85cf9bc2909"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a423bd9fd1a4a38c68e29028b2f8a7fd7" id="r_a423bd9fd1a4a38c68e29028b2f8a7fd7"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a423bd9fd1a4a38c68e29028b2f8a7fd7">PickRandom&lt; T &gt;</a> (this IReadOnlyList&lt; T &gt; entries, IReadOnlyDictionary&lt; string, int &gt; activeCounts, IReadOnlyDictionary&lt; string, int &gt; waveQuotas=null, float need=0f)</td></tr>
+<tr class="memdesc:a423bd9fd1a4a38c68e29028b2f8a7fd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Weighted-random pick, excluding entries at their <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html#a21f9c08b80c0d07d98db6fa77320d50b">IWeightedEntry.MaxCount</a> limit or with an exhausted <em>waveQuotas</em>  allowance (absent key = unlimited); returns <code>default</code> if none remain. The player's <em>need</em>  (0 to 1) raises each entry's weight by its <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html#aaea857b208edfb40876065199f826813" title="How much the player&#39;s need raises Weight: × (1 + this × need), need 0 to 1.">IWeightedEntry.NeedBoost</a>.  <br /></td></tr>
+<tr class="separator:a423bd9fd1a4a38c68e29028b2f8a7fd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3d13e2ffed3103fce38b9b3bf81856c" id="r_ab3d13e2ffed3103fce38b9b3bf81856c"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab3d13e2ffed3103fce38b9b3bf81856c">PickWeightedIndex&lt; T &gt;</a> (this IReadOnlyList&lt; T &gt; items, Func&lt; T, float &gt; weightOf, float roll01)</td></tr>
 <tr class="memdesc:ab3d13e2ffed3103fce38b9b3bf81856c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Weighted index into <em>items</em>  for a caller-supplied <em>roll01</em>  in [0, 1), so a seeded draw stays reproducible; -1 when the list is empty or every weight is 0.  <br /></td></tr>
 <tr class="separator:ab3d13e2ffed3103fce38b9b3bf81856c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a1b30472c2f9b3e78a7da9bb6d935f3b0" id="r_a1b30472c2f9b3e78a7da9bb6d935f3b0"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1b30472c2f9b3e78a7da9bb6d935f3b0">WeightOf</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html">IWeightedEntry</a> entry, float need)</td></tr>
+<tr class="separator:a1b30472c2f9b3e78a7da9bb6d935f3b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -130,8 +136,8 @@ Static Private Attributes</h2></td></tr>
 <tr class="separator:ab2c40155fc91fd07da0a99915a47c74a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a29c7c5b6d6f653ae66dfb85cf9bc2909" name="a29c7c5b6d6f653ae66dfb85cf9bc2909"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a29c7c5b6d6f653ae66dfb85cf9bc2909">&#9670;&#160;</a></span>PickRandom&lt; T &gt;()</h2>
+<a id="a423bd9fd1a4a38c68e29028b2f8a7fd7" name="a423bd9fd1a4a38c68e29028b2f8a7fd7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a423bd9fd1a4a38c68e29028b2f8a7fd7">&#9670;&#160;</a></span>PickRandom&lt; T &gt;()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -152,7 +158,12 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">IReadOnlyDictionary&lt; string, int &gt;</td>          <td class="paramname"><span class="paramname"><em>waveQuotas</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>&#160;)</td>
+          <td class="paramtype">IReadOnlyDictionary&lt; string, int &gt;</td>          <td class="paramname"><span class="paramname"><em>waveQuotas</em></span><span class="paramdefsep"> = </span><span class="paramdefval">null</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>need</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0f</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -162,7 +173,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Weighted-random pick, excluding entries at their <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html#a21f9c08b80c0d07d98db6fa77320d50b">IWeightedEntry.MaxCount</a> limit or with an exhausted <em>waveQuotas</em>  allowance (absent key = unlimited); returns <code>default</code> if none remain. </p>
+<p>Weighted-random pick, excluding entries at their <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html#a21f9c08b80c0d07d98db6fa77320d50b">IWeightedEntry.MaxCount</a> limit or with an exhausted <em>waveQuotas</em>  allowance (absent key = unlimited); returns <code>default</code> if none remain. The player's <em>need</em>  (0 to 1) raises each entry's weight by its <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html#aaea857b208edfb40876065199f826813" title="How much the player&#39;s need raises Weight: × (1 + this × need), need 0 to 1.">IWeightedEntry.NeedBoost</a>. </p>
 <div class="typeconstraint">
 <dl><dt><b>Type Constraints</b></dt><dd>
 <table border="0" cellspacing="2" cellpadding="0">
@@ -209,6 +220,35 @@ Static Private Attributes</h2></td></tr>
 
 <p>Weighted index into <em>items</em>  for a caller-supplied <em>roll01</em>  in [0, 1), so a seeded draw stays reproducible; -1 when the list is empty or every weight is 0. </p>
 <p>Pass a non-capturing lambda for <em>weightOf</em>  so the delegate is cached. </p>
+
+</div>
+</div>
+<a id="a1b30472c2f9b3e78a7da9bb6d935f3b0" name="a1b30472c2f9b3e78a7da9bb6d935f3b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b30472c2f9b3e78a7da9bb6d935f3b0">&#9670;&#160;</a></span>WeightOf()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static float BalloonParty.Shared.Extensions.WeightedPickExtensions.WeightOf </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Ranges_1_1IWeightedEntry.html">IWeightedEntry</a></td>          <td class="paramname"><span class="paramname"><em>entry</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>need</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

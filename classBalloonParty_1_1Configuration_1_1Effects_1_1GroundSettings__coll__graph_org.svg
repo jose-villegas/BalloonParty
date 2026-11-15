@@ -39,7 +39,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html" target="_top" xlink:title="Read&#45;only tuning for the surface backdrops (ground and water) (see GroundView).">
+<g id="a_Node000003"><a xlink:href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html" target="_top" xlink:title="Read&#45;only tuning for the surface backdrops (ground, water and the bonus levels&#39; paper) (see GroundVie...">
 <polygon fill="white" stroke="#666666" points="261.75,-103 114.5,-103 114.5,-69.5 261.75,-69.5 261.75,-103"/>
 <text xml:space="preserve" text-anchor="start" x="122.5" y="-89.5" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Configuration.</text>
 <text xml:space="preserve" text-anchor="middle" x="188.12" y="-76.75" font-family="Helvetica,sans-Serif" font-size="10.00">Effects.IGroundSettings</text>

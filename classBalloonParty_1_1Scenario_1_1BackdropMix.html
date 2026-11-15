@@ -115,13 +115,15 @@ $(function(){initNavTree('classBalloonParty_1_1Scenario_1_1BackdropMix.html','')
 </div><!--header-->
 <div class="contents">
 
-<p>How much of the screen the surface backdrop covers this frame, written by <code>GroundView</code> as its reveal runs: 0 is all sky, 1 all <a class="el" href="#a36d8a1006a35d430ada0e29820cee76a">Surface</a> (the meadow or the water).  
+<p>How much of the screen a surface backdrop covers this frame, written by <code>GroundView</code> as its reveal runs: <a class="el" href="#a36d8a1006a35d430ada0e29820cee76a">Surface</a> (the meadow, the water or the paper) over <a class="el" href="#aa80ab12954cdaec11874ca772467c022">Under</a>, the layer it opens out of or closes into.  
  <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a3b1a630e860767bcba0a848e6b96f1df" id="r_a3b1a630e860767bcba0a848e6b96f1df"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3b1a630e860767bcba0a848e6b96f1df">Set</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> surface, float coverage)</td></tr>
 <tr class="separator:a3b1a630e860767bcba0a848e6b96f1df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab89238b84231989b22257daa190eed60" id="r_ab89238b84231989b22257daa190eed60"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab89238b84231989b22257daa190eed60">Set</a> (<a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> surface, <a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> under, float coverage)</td></tr>
+<tr class="separator:ab89238b84231989b22257daa190eed60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -129,13 +131,15 @@ Properties</h2></td></tr>
 <tr class="separator:ae652272e4c06370f4dc45cbc0e2a7e4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36d8a1006a35d430ada0e29820cee76a" id="r_a36d8a1006a35d430ada0e29820cee76a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a36d8a1006a35d430ada0e29820cee76a">Surface</a> = ScenarioKind.Ground<code> [get, private set]</code></td></tr>
 <tr class="separator:a36d8a1006a35d430ada0e29820cee76a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa80ab12954cdaec11874ca772467c022" id="r_aa80ab12954cdaec11874ca772467c022"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa80ab12954cdaec11874ca772467c022">Under</a> = ScenarioKind.Sky<code> [get, private set]</code></td></tr>
+<tr class="separator:aa80ab12954cdaec11874ca772467c022"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>How much of the screen the surface backdrop covers this frame, written by <code>GroundView</code> as its reveal runs: 0 is all sky, 1 all <a class="el" href="#a36d8a1006a35d430ada0e29820cee76a">Surface</a> (the meadow or the water). </p>
-<p>The sky always sits between two surfaces in the schedule, so one surface and one amount describe every frame. Polled each frame by whatever follows the backdrop (the colour grade), so it is plain state, not reactive. </p>
+<div class="textblock"><p>How much of the screen a surface backdrop covers this frame, written by <code>GroundView</code> as its reveal runs: <a class="el" href="#a36d8a1006a35d430ada0e29820cee76a">Surface</a> (the meadow, the water or the paper) over <a class="el" href="#aa80ab12954cdaec11874ca772467c022">Under</a>, the layer it opens out of or closes into. </p>
+<p>0 is all <a class="el" href="#aa80ab12954cdaec11874ca772467c022">Under</a>, 1 all <a class="el" href="#a36d8a1006a35d430ada0e29820cee76a">Surface</a>. A mist reveal always has the sky under its surface; paper opening over the meadow or the water has that surface under it. Polled each frame by whatever follows the backdrop (the colour grade), so it is plain state, not reactive. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a3b1a630e860767bcba0a848e6b96f1df" name="a3b1a630e860767bcba0a848e6b96f1df"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b1a630e860767bcba0a848e6b96f1df">&#9670;&#160;</a></span>Set()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b1a630e860767bcba0a848e6b96f1df">&#9670;&#160;</a></span>Set() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -144,6 +148,32 @@ Properties</h2></td></tr>
           <td class="memname">void BalloonParty.Scenario.BackdropMix.Set </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a></td>          <td class="paramname"><span class="paramname"><em>surface</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>coverage</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab89238b84231989b22257daa190eed60" name="ab89238b84231989b22257daa190eed60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab89238b84231989b22257daa190eed60">&#9670;&#160;</a></span>Set() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Scenario.BackdropMix.Set </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a></td>          <td class="paramname"><span class="paramname"><em>surface</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a></td>          <td class="paramname"><span class="paramname"><em>under</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -189,6 +219,28 @@ Properties</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> BalloonParty.Scenario.BackdropMix.Surface = ScenarioKind.Ground</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel private-set">private set</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa80ab12954cdaec11874ca772467c022" name="aa80ab12954cdaec11874ca772467c022"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa80ab12954cdaec11874ca772467c022">&#9670;&#160;</a></span>Under</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceBalloonParty_1_1Configuration_1_1Level.html#a01e4593a9e3e5db9a1d18043a7098c08">ScenarioKind</a> BalloonParty.Scenario.BackdropMix.Under = ScenarioKind.Sky</td>
         </tr>
       </table>
   </td>

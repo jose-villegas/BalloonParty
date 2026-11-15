@@ -1,5 +1,5 @@
 <map id="BalloonParty.Game.Level.ScenarioController" name="BalloonParty.Game.Level.ScenarioController">
-<area shape="rect" id="Node000001" title="Keeps ActiveScenario on the current level&#39;s scenario (sky or ground, per ILevelPacingConfiguration...." alt="" coords="650,169,838,214"/>
+<area shape="rect" id="Node000001" title="Keeps ActiveScenario on the current level&#39;s backdrop (LevelBackdrop: its scheduled sky,..." alt="" coords="650,169,838,214"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="342,5,426,33"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="441,27,504,43,568,65,628,96,678,131,721,169,716,168,675,135,625,100,566,70,503,48,442,32"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="336,57,433,85"/>
