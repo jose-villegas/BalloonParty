@@ -53,8 +53,7 @@ namespace BalloonParty.Tests.Game
         {
             var scope = MetricScope.Create(MetricScopeKind.Run, 1, () => 0f);
             var envelope = new TelemetryEnvelope(
-                RecordKind.Run, 3, "abc-session", 5, 2, 1, 7, 2, 0, false, false, "GameOver", 0L, scope.Seal(7, false),
-                resumed: true);
+                RecordKind.Run, 3, "abc-session", 5, 2, 1, 7, 2, 0, false, false, "GameOver", 0L, scope.Seal(), resumed: true);
 
             Assert.That(_serializer.Serialize(envelope), Does.Contain("\"resumed\":true"));
         }
