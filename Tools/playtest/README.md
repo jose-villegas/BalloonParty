@@ -33,7 +33,7 @@ Two options set up the first run, for measuring what only comes late or to a pla
 |---|---|
 | `--purple` | Once the first run is in play, restarts it on the first level its seed makes purple (one more colour, the golden balloon's level), through the Start From Level cheat with the seed kept, so the same roll holds. The run's first moments, before the restart, are on level 1 |
 | `--seed N` | With `--purple`: restarts on run seed N instead of the run's own, so every session given the same N plays the same purple level |
-| `--no-disco` | Places no disco ball all session: the control for measuring one. A purple level otherwise brings a sure one |
+| `--no-disco` | Places no disco ball all session: the control for measuring one. A purple level otherwise brings a sure one. PLAN-DiscoBalloon's *Measured* section pairs the two |
 | `--hearts N` | Once that run is in play, sets the player's hearts to N, so the session starts low on hearts (where the heart balloon comes). A later run (`--on-loss restart`) starts as configured |
 
 ```bash

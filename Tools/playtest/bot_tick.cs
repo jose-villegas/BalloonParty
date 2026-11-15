@@ -211,6 +211,7 @@ if (UnityEditor.SessionState.GetString(IdKey, "") != botId)
     UnityEditor.SessionState.SetInt(ShotsKey, 0);
     UnityEditor.SessionState.EraseInt(RewardsKey + "GoldenPlaced");
     UnityEditor.SessionState.EraseInt(RewardsKey + "HeartPlaced");
+    UnityEditor.SessionState.EraseInt(RewardsKey + "DiscoPlaced");
     UnityEditor.SessionState.EraseString(RewardsKey + "Off");
 }
 

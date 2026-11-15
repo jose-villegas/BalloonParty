@@ -340,7 +340,7 @@ namespace BalloonParty.Tests.Balloon
         {
             PopDisco();
 
-            Assert.AreEqual(new DiscoWaveSettings().RainbowLines, _rainbowLines.Owed);
+            Assert.AreEqual(3, _rainbowLines.Owed, "the shipped default");
         }
 
         [Test]

@@ -309,11 +309,13 @@ chime over it. Picked without listening, so they want a pass by ear.
    fill most of a level's goals. The ledger stops the streak trap but deliberately leaves this alone. Is a
    near-level-skip what you want from it? The levers, if not: place it earlier in the level (so there's more
    left to fill), make it rarer, or have the wave skip a share of the board. Skipping goes against the spec,
-   so the plan doesn't propose it. The bot measurement in Phase 6 is the evidence.
+   so the plan doesn't propose it. The bot measurement in Phase 6 is the evidence: where the ball was popped,
+   the level took about half the time and half the shots (*Measured* below). That's a big jackpot, but not a skip.
 2. **The next throw's streak.** Every later throw climbs one step per rainbow pop, with no cap. The streak
    resets on each load, so it is bounded by a single shot, but a pierce through a rainbow board will set a
    record multiplier. The streak cap was tried and reverted (score is not difficulty), so the plan accepts
-   this as the reward unless you say otherwise.
+   this as the reward unless you say otherwise. Measured: where the ball popped, the level's peak streak about
+   doubled (22 and 23 against 10 and 11), and it went no higher than the control's best on another level (23).
 3. **Items on painted balloons.** An item hosted on a balloon the wave paints becomes the rainbow version
    (a rainbow bomb converts its survivors, a rainbow laser, a rainbow Snipe lance blooms). The board's items
    all go rainbow together and can cascade. Do you want that, or should a hosted item keep its concrete
@@ -362,3 +364,29 @@ fixes; then your sign-off.
 6. **Docs and measuring.** READMEs (Reward, Type, Nudge, Paint, Projectile), plus the playtest bot on a
    forced disco level against the same seed without one: level time, shots to clear, and peak multiplier.
    This is the evidence for open questions 1 and 2. Then a device build for the capture cost.
+   Done: the READMEs, and the measurement below. Still open: the device build for the capture cost, and the
+   shatter sheet (`PSVFX_DiscoPop`) from Phase 4.
+
+## Measured
+
+On 2026-11-15, with the rainbow lines in, the playtest bot played three seeds (`--purple --seed N`, average
+skill, 300 s each). It played each once as configured and once with no disco ball (`--no-disco`). A purple
+level brings a sure disco ball. No session hit a game over.
+
+| Seed | Level | Disco ball | With: seconds / shots / peak streak | Without: seconds / shots / peak streak |
+|---|---|---|---|---|
+| 2202 | 18 | popped | 38 / 16 / 22 | 102 / 42 / 10 |
+| 3303 | 22 (purple) | more than one, popped | 101 / 37 / 23 | 184 / 70 / 11 |
+| 1101 | 14 (purple) | placed, never popped | 71 / 28 / 14 | 88 / 35 / 11 |
+| 2202 | 16 (purple) | placed, never popped | 89 / 31 / 10 | 60 / 22 / 23 |
+
+- **The rows where it never popped are the noise.** The ball changed nothing there, and the two arms still
+  differ by 20 to 30% either way.
+- **Where it popped**, the level took 45 to 60% less time and shots. That is well outside the noise, though
+  it rests on two levels.
+- **The average bot often leaves a ball unpopped**: it breaks one only with a pierce, and two of the four levels kept theirs. Since this
+  measurement, a bomb's blast beside a plated balloon breaks it too, which should raise that share.
+- **The peak streak** on a popped level roughly doubled. It is bounded by the shot: the control reached 23 on
+  a level with no ball.
+- The bot is not a person, and two popped levels are thin evidence. Rerun with more seeds, or after a
+  tuning change, using the same two flags.
