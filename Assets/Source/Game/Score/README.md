@@ -205,9 +205,14 @@ overkill for a background flourish):
    whole push, into the same persistent `SeparationOffset`, and the relax brings it back onto its path once
    the ball has passed: the shape slides round the ball. The principal is pushed at full weight here
    (`PrincipalPushDamping` only steadies it against other formations; a principal the cinematic has taken is
-   Paused, so never pushed). The push is capped by a speed, `IClearanceSettings.FormationPushSpeed`, not a share
-   of the radius: a shape still blooming from a point has almost no radius, and a ball at about 10 world units
-   a second would cross a full-size shape before a radius-scaled push moved it.
+   Paused, so never pushed). The push is a velocity, not a per-frame step: the overlap left to clear sets the
+   speed the formation wants (`ClearanceVelocity`, capped at `IClearanceSettings.FormationPushSpeed`), and its
+   speed eases toward that, so the shape speeds up out of the way and coasts to a stop rather than lurching or
+   flipping direction as a ball passes through it; a lurch would drag its pens' ribbons into long straight
+   streaks. The cap is a speed, not a share of the radius: a shape still blooming from a point has almost no
+   radius, and a ball at about 10 world units a second would cross a full-size shape before a radius-scaled
+   push moved it. The guide's comet line is carried along by each frame's push (`ClearanceStep`), so stepping
+   aside doesn't kink it.
 
 **Transport bridge** — the group's anchor `TrailFlight` handle is the pause/snap/slow-mo interface, shared by
 every formation in the group (so a cinematic pause/completion fans out to the whole constellation), polled per

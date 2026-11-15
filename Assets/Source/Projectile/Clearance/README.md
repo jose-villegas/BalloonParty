@@ -44,8 +44,8 @@ The ball held in the thrower gets no circle: it sits below the board, where noth
 ## Who reads it
 
 - **Score formations** (`Game/Score/Behaviours/ShapeFormationTicker`): after their own overlap packing,
-  each moving formation is pushed out of every circle into its persistent `SeparationOffset`, at up to
-  `FormationPushSpeed` world units a second. The circles never give way. See `Game/Score/README.md`,
+  each moving formation is pushed out of every circle into its persistent `SeparationOffset`, at an eased
+  speed of up to `FormationPushSpeed` world units a second. The circles never give way. See `Game/Score/README.md`,
   Overlap Resolution.
 - **Score trails** (`UI/Score/FlyingTrail`): `ScoreTrailService` builds its `TrailSpawner`s with the field
   (or null with `BendTrails` off), and the spawner hands it to every trail it spawns on a flight. In
@@ -68,5 +68,5 @@ The ball held in the thrower gets no circle: it sits below the board, where noth
 | `RimSoftness` | 0.4 | Width of the smooth edge, as a share of the radius |
 | `FadeIn` / `FadeOut` | 0.15 s / 0.4 s | How fast a circle eases in at launch and out after landing |
 | `EffectFloorAlpha` | 0.3 | Alpha an effect keeps at a full-strength circle's centre |
-| `FormationPushSpeed` | 14 | World units a second a formation slides out of a circle; faster than a ball (about 10) |
+| `FormationPushSpeed` | 14 | Top speed a formation slides out of a circle at, in world units a second; faster than a ball (about 10) |
 | `PushFormations` / `BendTrails` / `FadeEffects` | on | Switch each reader off on its own, to compare in a playtest |

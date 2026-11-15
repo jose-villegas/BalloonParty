@@ -23,8 +23,8 @@ namespace BalloonParty.Configuration.Effects
                  "ball shows through.")]
         [SerializeField, Range(0f, 1f)] private float _effectFloorAlpha = 0.3f;
 
-        [Tooltip("World units per second a score formation slides out of a circle. Faster than a ball (about " +
-                 "10 u/s), so a ball can't overrun a shape.")]
+        [Tooltip("Top speed, in world units per second, a score formation slides out of a circle at; it eases " +
+                 "up to it and back down. Faster than a ball (about 10 u/s), so a ball can't overrun a shape.")]
         [SerializeField, Min(0f)] private float _formationPushSpeed = 14f;
 
         [Header("Consumers")]

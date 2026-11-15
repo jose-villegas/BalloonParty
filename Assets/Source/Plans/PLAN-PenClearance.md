@@ -128,6 +128,10 @@ each moving formation out of every clearance circle:
   cross a full-size shape before a radius-scaled push moved it. The clearance pass caps its push by a
   speed instead, `FormationPushSpeed` (world units a second, faster than a ball), so a shape slides out of
   the way smoothly at any frame rate, and one born on the ball slides off it while it blooms.
+- The push is a velocity that eases toward the speed the overlap asks for, not a capped step each frame.
+  The first build stepped, and in playtest a ball passing through a shape made it lurch and flip direction,
+  which dragged its pens' ribbons into long straight streaks. Eased, the shape speeds up out of the way and
+  coasts to a stop. The guide's comet line is carried along by each frame's push, so it doesn't kink.
 
 ### Trails bend round the rim
 
@@ -202,7 +206,7 @@ sweeps onto it), the ribbon thins out rather than crossing over.
 | `FadeIn` | 0.15 s | No circle pops in at launch |
 | `FadeOut` | 0.4 s | The last pop's site stays clear while its effects start |
 | `EffectFloorAlpha` | 0.3 | How much of an effect is left at the ball |
-| `FormationPushSpeed` | 14 world units/s | How fast a formation slides out of a circle: faster than a ball (about 10 u/s), so one can't overrun a shape |
+| `FormationPushSpeed` | 14 world units/s | Top speed a formation slides out of a circle at: faster than a ball (about 10 u/s), so one can't overrun a shape |
 | `PushFormations` / `BendTrails` / `FadeEffects` | on | Each consumer can be switched off on its own, to compare in a playtest (`FadeEffects` off publishes no circles to the shaders) |
 
 `ClearanceSettings` is a new SO under `Assets/Configuration/`, bound as `IClearanceSettings` in

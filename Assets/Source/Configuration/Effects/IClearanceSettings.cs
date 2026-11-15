@@ -18,7 +18,7 @@ namespace BalloonParty.Configuration.Effects
         /// <summary>Alpha left of an effect at the centre of a full-strength circle.</summary>
         float EffectFloorAlpha { get; }
 
-        /// <summary>World units per second a score formation slides out of a circle.</summary>
+        /// <summary>Top speed, in world units per second, a score formation slides out of a circle at.</summary>
         float FormationPushSpeed { get; }
 
         bool PushFormations { get; }
