@@ -56,6 +56,7 @@ var hierarchy =
     [ "BalloonParty.Configuration.Items.BombSettings", "classBalloonParty_1_1Configuration_1_1Items_1_1BombSettings.html", null ],
     [ "BalloonParty.Shared.Messages.BonusCardDealtMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html", null ],
     [ "BalloonParty.Balloon.Controller.BubbleMergeCandidate", "structBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeCandidate.html", null ],
+    [ "BalloonParty.Shared.Messages.BubbleMergedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BubbleMergedMessage.html", null ],
     [ "BalloonParty.Balloon.Controller.BubbleMergeRule", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeRule.html", null ],
     [ "BalloonParty.Configuration.Level.BubbleRiseCurve", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseCurve.html", null ],
     [ "BalloonParty.Configuration.Level.BudgetFormula", "structBalloonParty_1_1Configuration_1_1Level_1_1BudgetFormula.html", null ],
@@ -203,6 +204,7 @@ var hierarchy =
     [ "BalloonParty.Game.Run.HeldCardRecord", "classBalloonParty_1_1Game_1_1Run_1_1HeldCardRecord.html", null ],
     [ "BalloonParty.Slots.Grid.HexCoordinates", "classBalloonParty_1_1Slots_1_1Grid_1_1HexCoordinates.html", null ],
     [ "BalloonParty.Configuration.Balloons.HitVfxOverride", "classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html", null ],
+    [ "BalloonParty.Balloon.View.BubbleMergeView.Hop", "structBalloonParty_1_1Balloon_1_1View_1_1BubbleMergeView_1_1Hop.html", null ],
     [ "BalloonParty.Game.Level.IActiveLevelParameters", "interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html", [
       [ "BalloonParty.Game.Level.LevelDifficultyResolver", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html", null ]
     ] ],
@@ -289,6 +291,12 @@ var hierarchy =
     ] ],
     [ "BalloonParty.Game.Level.IBonusLevelCue", "interfaceBalloonParty_1_1Game_1_1Level_1_1IBonusLevelCue.html", [
       [ "BalloonParty.Game.Level.BonusLevelCue", "classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html", null ]
+    ] ],
+    [ "BalloonParty.Configuration.Balloons.IBubbleMergeCueSettings", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBubbleMergeCueSettings.html", [
+      [ "BalloonParty.Configuration.Balloons.BubbleMergeCueSettings", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BubbleMergeCueSettings.html", null ]
+    ] ],
+    [ "BalloonParty.Balloon.View.IBubbleMergeReactive", "interfaceBalloonParty_1_1Balloon_1_1View_1_1IBubbleMergeReactive.html", [
+      [ "BalloonParty.Balloon.Type.SoapBubbleClusterVariant", "classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html", null ]
     ] ],
     [ "BalloonParty.Configuration.Level.IBubbleRiseSettings", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html", [
       [ "BalloonParty.Configuration.Level.BubbleRiseSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html", null ]
@@ -1281,6 +1289,7 @@ var hierarchy =
       [ "BalloonParty.Editor.GradientTextureDrawer", "classBalloonParty_1_1Editor_1_1GradientTextureDrawer.html", null ]
     ] ],
     [ "BalloonParty.Editor.CardRevealBuilder.Materials", "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html", null ],
+    [ "BalloonParty.Balloon.View.BubbleMergeView.MergeEnds", "classBalloonParty_1_1Balloon_1_1View_1_1BubbleMergeView_1_1MergeEnds.html", null ],
     [ "BalloonParty.Shared.Rendering.MeshHelper", "classBalloonParty_1_1Shared_1_1Rendering_1_1MeshHelper.html", null ],
     [ "BalloonParty.Shared.Rendering.MeshRendererBuilder", "classBalloonParty_1_1Shared_1_1Rendering_1_1MeshRendererBuilder.html", null ],
     [ "BalloonParty.UI.Telemetry.MetricBinding", "structBalloonParty_1_1UI_1_1Telemetry_1_1MetricBinding.html", null ],
@@ -1301,6 +1310,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Type.UnbreakableFormationLook", "classBalloonParty_1_1Balloon_1_1Type_1_1UnbreakableFormationLook.html", null ],
       [ "BalloonParty.Balloon.View.BalanceGizmos", "classBalloonParty_1_1Balloon_1_1View_1_1BalanceGizmos.html", null ],
       [ "BalloonParty.Balloon.View.BalloonView", "classBalloonParty_1_1Balloon_1_1View_1_1BalloonView.html", null ],
+      [ "BalloonParty.Balloon.View.BubbleMergeView", "classBalloonParty_1_1Balloon_1_1View_1_1BubbleMergeView.html", null ],
       [ "BalloonParty.Balloon.View.DiscoWaveView", "classBalloonParty_1_1Balloon_1_1View_1_1DiscoWaveView.html", null ],
       [ "BalloonParty.Balloon.View.PaintDripOverlay", "classBalloonParty_1_1Balloon_1_1View_1_1PaintDripOverlay.html", null ],
       [ "BalloonParty.Cheats.DevLogConsole", "classBalloonParty_1_1Cheats_1_1DevLogConsole.html", null ],

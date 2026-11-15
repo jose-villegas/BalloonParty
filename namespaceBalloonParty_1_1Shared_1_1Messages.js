@@ -6,6 +6,7 @@ var namespaceBalloonParty_1_1Shared_1_1Messages =
     [ "BoardClearMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1BoardClearMessage" ],
     [ "BoardDepletedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BoardDepletedMessage.html", null ],
     [ "BonusCardDealtMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage" ],
+    [ "BubbleMergedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1BubbleMergedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1BubbleMergedMessage" ],
     [ "DeflectChainMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1DeflectChainMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1DeflectChainMessage" ],
     [ "DiscoWaveAdvancedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveAdvancedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveAdvancedMessage" ],
     [ "DiscoWaveReachedMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveReachedMessage.html", "structBalloonParty_1_1Shared_1_1Messages_1_1DiscoWaveReachedMessage" ],

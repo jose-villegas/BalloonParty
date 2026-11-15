@@ -1,17 +1,23 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" title=" " alt="" coords="5,222,139,250"/>
-<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteColorMaskAttribute.html" title=" " alt="" coords="189,5,430,50"/>
-<area shape="poly" id="edge744_Node000000_Node000001" title=" " alt="" coords="82,206,98,173,120,133,149,94,185,60,208,48,205,52,188,64,153,97,125,136,102,175,87,208"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Configuration_1_1Palette_1_1PaletteColorNameAttribute.html" title=" " alt="" coords="187,75,432,119"/>
-<area shape="poly" id="edge745_Node000000_Node000002" title=" " alt="" coords="93,209,133,168,185,129,213,118,210,122,188,134,137,172,97,212"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Shared_1_1EnumIndexedAttribute.html" title="Labels a serialized array indexed by enum ordinal with the enum value&#39;s name instead of &quot;Element N&quot;." alt="" coords="214,144,405,189"/>
-<area shape="poly" id="edge746_Node000000_Node000003" title=" " alt="" coords="133,215,186,198,229,188,225,191,187,204,136,219"/>
-<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Shared_1_1MusicalNoteAttribute.html" title="Renders an int semitone field as a musical&#45;note dropdown (C, C#, D, …) instead of a raw number." alt="" coords="207,213,412,258"/>
-<area shape="poly" id="edge747_Node000000_Node000004" title=" " alt="" coords="153,233,209,234,204,237,155,238"/>
-<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Shared_1_1ShowIfEnumAttribute.html" title="Hides the decorated field in the inspector unless a sibling enum field (on the same serialized object..." alt="" coords="215,283,404,327"/>
-<area shape="poly" id="edge748_Node000000_Node000005" title=" " alt="" coords="134,252,187,268,230,281,225,283,186,273,135,257"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Shared_1_1SortingLayerNameAttribute.html" title="Draws a string field as a dropdown of the project&#39;s sorting layers." alt="" coords="209,352,410,397"/>
-<area shape="poly" id="edge749_Node000000_Node000006" title=" " alt="" coords="95,259,137,300,188,337,214,351,209,352,185,342,133,304,95,264"/>
-<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Shared_1_1UnitCircleAttribute.html" title="Draws a Vector2 field as a unit&#45;circle direction picker: click or drag inside the disc to aim the vec..." alt="" coords="219,421,400,466"/>
-<area shape="poly" id="edge750_Node000000_Node000007" title=" " alt="" coords="85,261,102,296,125,335,153,374,188,407,221,426,216,426,185,411,149,378,120,338,98,299,84,267"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,326,120,354"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Game_1_1AppLifetimeScope.html" title="The persistent app root: the single VContainer scope that lives for the whole session (DontDestroyOnL..." alt="" coords="175,5,402,50"/>
+<area shape="poly" id="edge727_Node000000_Node000001" title=" " alt="" coords="64,310,72,257,89,190,120,121,140,89,166,60,185,48,182,53,169,64,145,92,124,123,94,192,77,258,69,311"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1GameLifetimeScope.html" title=" " alt="" coords="168,75,409,119"/>
+<area shape="poly" id="edge728_Node000000_Node000002" title=" " alt="" coords="68,310,80,270,99,221,128,172,166,130,187,118,184,122,169,134,132,175,104,224,85,272,73,312"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Game_1_1LaunchLifetimeScope.html" title=" " alt="" coords="191,144,386,189"/>
+<area shape="poly" id="edge729_Node000000_Node000003" title=" " alt="" coords="75,311,111,254,136,224,166,199,192,186,189,190,169,203,140,228,115,257,80,313"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Thrower_1_1ThrowerLifetimeScope.html" title=" " alt="" coords="181,213,396,258"/>
+<area shape="poly" id="edge730_Node000000_Node000004" title=" " alt="" coords="91,315,127,290,167,268,199,257,195,260,169,273,130,295,96,318"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1UI_1_1Danger_1_1DangerUILifetimeScope.html" title="Child scope for the danger early&#45;warning UI; binds every DangerGradientView to the parent scope&#39;s dan..." alt="" coords="178,283,398,327"/>
+<area shape="poly" id="edge731_Node000000_Node000005" title=" " alt="" coords="134,326,180,320,176,324,137,331"/>
+<area shape="rect" id="Node000006" href="$classBalloonParty_1_1UI_1_1GameOver_1_1GameOverLifetimeScope.html" title=" " alt="" coords="190,352,386,397"/>
+<area shape="poly" id="edge732_Node000000_Node000006" title=" " alt="" coords="134,348,192,358,188,361,136,353"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1UI_1_1Health_1_1HealthUILifetimeScope.html" title="Child scope for the health UI; binds HealthCounterLabel to live HP and drives HeartTrailController." alt="" coords="182,421,395,466"/>
+<area shape="poly" id="edge733_Node000000_Node000007" title=" " alt="" coords="93,360,130,385,169,407,200,420,195,422,167,411,127,389,94,366"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpLifetimeScope.html" title=" " alt="" coords="198,491,378,535"/>
+<area shape="poly" id="edge734_Node000000_Node000008" title=" " alt="" coords="77,365,115,422,140,451,169,476,201,494,195,495,166,481,136,455,111,425,77,370"/>
+<area shape="rect" id="Node000009" href="$classBalloonParty_1_1UI_1_1Score_1_1ScoreUILifetimeScope.html" title=" " alt="" coords="189,560,388,605"/>
+<area shape="poly" id="edge735_Node000000_Node000009" title=" " alt="" coords="70,366,85,408,104,456,132,504,169,546,191,561,186,561,166,550,128,507,99,458,80,409,70,371"/>
+<area shape="rect" id="Node000010" href="$classBalloonParty_1_1UI_1_1Shields_1_1ShieldUILifetimeScope.html" title=" " alt="" coords="201,629,376,674"/>
+<area shape="poly" id="edge736_Node000000_Node000010" title=" " alt="" coords="67,366,77,421,94,488,124,556,145,588,169,615,204,637,198,637,166,619,140,591,120,559,89,489,72,422,66,371"/>
 </map>

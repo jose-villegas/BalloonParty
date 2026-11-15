@@ -1,5 +1,6 @@
 var interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration =
 [
+    [ "BubbleMergeCue", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a7938e4dda91935a91d314c9fecb87c20", null ],
     [ "BubbleMergeMax", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a95784529211c68181bb56a6161802d14", null ],
     [ "BubbleMergeSeconds", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#af6f40a26e4f5612261dc160b6997f9b6", null ],
     [ "DefaultBalloonMoveSpeed", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#a4dba1e0e7385bf68bf5c79d7a393ac4a", null ],

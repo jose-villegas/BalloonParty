@@ -109,6 +109,7 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClus
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#properties">Properties</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
@@ -124,14 +125,14 @@ $(function(){initNavTree('classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClus
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant__inherit__graph.svg" width="444" height="176"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant__inherit__graph.svg" width="444" height="246"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Balloon.Type.SoapBubbleClusterVariant:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant__coll__graph.svg" width="444" height="176"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant__coll__graph.svg" width="100%" height="536"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -142,25 +143,59 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a2f5ed2a91a0ecbefb920c103419197b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Binds the variant to its model and applies any spawn-time setup (e.g.  <br /></td></tr>
 <tr class="separator:a2f5ed2a91a0ecbefb920c103419197b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
+Properties</h2></td></tr>
+<tr class="memitem:ac2c4b70e49fe2800d4f1206eb552fc6e" id="r_ac2c4b70e49fe2800d4f1206eb552fc6e"><td class="memItemLeft" align="right" valign="top">int IBubbleMergeReactive.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac2c4b70e49fe2800d4f1206eb552fc6e">Binding</a><code> [get]</code></td></tr>
+<tr class="memdesc:ac2c4b70e49fe2800d4f1206eb552fc6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Changes whenever the holds are dropped with the binding (despawn, a level transition's freeze), so a merge can tell its holds are gone and must not release holds taken since.  <br /></td></tr>
+<tr class="separator:ac2c4b70e49fe2800d4f1206eb552fc6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accc4335c98427e8a34a4c8a47d0353fa" id="r_accc4335c98427e8a34a4c8a47d0353fa"><td class="memItemLeft" align="right" valign="top">SpriteRenderer IBubbleMergeReactive.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#accc4335c98427e8a34a4c8a47d0353fa">BubbleRenderer</a><code> [get]</code></td></tr>
+<tr class="memdesc:accc4335c98427e8a34a4c8a47d0353fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">The cluster's renderer, which a hopping bubble copies its look from.  <br /></td></tr>
+<tr class="separator:accc4335c98427e8a34a4c8a47d0353fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5111cdce8338e6c65518a79dd8b0baaf" id="r_a5111cdce8338e6c65518a79dd8b0baaf"><td class="memItemLeft" align="right" valign="top">Vector3 IBubbleMergeReactive.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5111cdce8338e6c65518a79dd8b0baaf">BubbleWorldScale</a><code> [get]</code></td></tr>
+<tr class="memdesc:a5111cdce8338e6c65518a79dd8b0baaf"><td class="mdescLeft">&#160;</td><td class="mdescRight">A bubble's world size at rest, without a wobble in progress.  <br /></td></tr>
+<tr class="separator:a5111cdce8338e6c65518a79dd8b0baaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a5b0996ab53ed74a410b470cf524237cc" id="r_a5b0996ab53ed74a410b470cf524237cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5b0996ab53ed74a410b470cf524237cc">Awake</a> ()</td></tr>
 <tr class="separator:a5b0996ab53ed74a410b470cf524237cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e9a7d64ec98c6c3d8a01af3f1a627e0" id="r_a2e9a7d64ec98c6c3d8a01af3f1a627e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2e9a7d64ec98c6c3d8a01af3f1a627e0">EnsureBlock</a> ()</td></tr>
 <tr class="separator:a2e9a7d64ec98c6c3d8a01af3f1a627e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2c3bfaac91142cec9095828a8516928" id="r_ac2c3bfaac91142cec9095828a8516928"><td class="memItemLeft" align="right" valign="top">void IBubbleMergeReactive.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac2c3bfaac91142cec9095828a8516928">HoldCount</a> ()</td></tr>
+<tr class="memdesc:ac2c3bfaac91142cec9095828a8516928"><td class="mdescLeft">&#160;</td><td class="mdescRight">Freezes the shown count where it is. Holds stack: each needs its own <a class="el" href="#ac731d1d785edd73df7b2ab526373dfc2" title="Lets go of one hold; the last shows the model&#39;s count again.">ReleaseCount</a>.  <br /></td></tr>
+<tr class="separator:ac2c3bfaac91142cec9095828a8516928"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af56a0e0f3e41daea79556ee41cc9aeb0" id="r_af56a0e0f3e41daea79556ee41cc9aeb0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af56a0e0f3e41daea79556ee41cc9aeb0">OnHitsChanged</a> (int hits)</td></tr>
+<tr class="separator:af56a0e0f3e41daea79556ee41cc9aeb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f8c115cafa9c816f4ee8da8ad6c6752" id="r_a6f8c115cafa9c816f4ee8da8ad6c6752"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6f8c115cafa9c816f4ee8da8ad6c6752">OnValidate</a> ()</td></tr>
 <tr class="separator:a6f8c115cafa9c816f4ee8da8ad6c6752"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3360a4a71d75a6f92f479c2f5598ef6" id="r_ab3360a4a71d75a6f92f479c2f5598ef6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab3360a4a71d75a6f92f479c2f5598ef6">PushBubbleCount</a> (int count)</td></tr>
 <tr class="separator:ab3360a4a71d75a6f92f479c2f5598ef6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0b02d7d381ca31137854d696ef8912f1" id="r_a0b02d7d381ca31137854d696ef8912f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b02d7d381ca31137854d696ef8912f1">PushRuntimeClock</a> ()</td></tr>
 <tr class="separator:a0b02d7d381ca31137854d696ef8912f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac731d1d785edd73df7b2ab526373dfc2" id="r_ac731d1d785edd73df7b2ab526373dfc2"><td class="memItemLeft" align="right" valign="top">void IBubbleMergeReactive.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac731d1d785edd73df7b2ab526373dfc2">ReleaseCount</a> ()</td></tr>
+<tr class="memdesc:ac731d1d785edd73df7b2ab526373dfc2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lets go of one hold; the last shows the model's count again.  <br /></td></tr>
+<tr class="separator:ac731d1d785edd73df7b2ab526373dfc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1432b9e75b7aa8ddc21e63ef49ba97c" id="r_ab1432b9e75b7aa8ddc21e63ef49ba97c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab1432b9e75b7aa8ddc21e63ef49ba97c">ResetMergeCue</a> ()</td></tr>
+<tr class="separator:ab1432b9e75b7aa8ddc21e63ef49ba97c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc6c4cd902bcd9ad83ed1309b6d41b40" id="r_abc6c4cd902bcd9ad83ed1309b6d41b40"><td class="memItemLeft" align="right" valign="top">void IBubbleMergeReactive.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc6c4cd902bcd9ad83ed1309b6d41b40">StepCount</a> (int delta)</td></tr>
+<tr class="memdesc:abc6c4cd902bcd9ad83ed1309b6d41b40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the shown count by <em>delta</em>  bubbles while held.  <br /></td></tr>
+<tr class="separator:abc6c4cd902bcd9ad83ed1309b6d41b40"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a886b82832d29d2d107a2842add73cb53" id="r_a886b82832d29d2d107a2842add73cb53"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a886b82832d29d2d107a2842add73cb53">Update</a> ()</td></tr>
 <tr class="separator:a886b82832d29d2d107a2842add73cb53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1181096dfd4395ff2d0033ac01388f41" id="r_a1181096dfd4395ff2d0033ac01388f41"><td class="memItemLeft" align="right" valign="top">void IBubbleMergeReactive.&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1181096dfd4395ff2d0033ac01388f41">Wobble</a> (float strength, float seconds)</td></tr>
+<tr class="memdesc:a1181096dfd4395ff2d0033ac01388f41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Punches the bubbles out by <em>strength</em>  of their size and lets them settle.  <br /></td></tr>
+<tr class="separator:a1181096dfd4395ff2d0033ac01388f41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a75b3aa1149c5f6f75692639c4d52c2d9" id="r_a75b3aa1149c5f6f75692639c4d52c2d9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a75b3aa1149c5f6f75692639c4d52c2d9">_binding</a></td></tr>
+<tr class="separator:a75b3aa1149c5f6f75692639c4d52c2d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a274fdeba18e3d47c5741a3490dd392ab" id="r_a274fdeba18e3d47c5741a3490dd392ab"><td class="memItemLeft" align="right" valign="top">MaterialPropertyBlock&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a274fdeba18e3d47c5741a3490dd392ab">_block</a></td></tr>
 <tr class="separator:a274fdeba18e3d47c5741a3490dd392ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7123aae86c8a5bc04d661d9fa4a03759" id="r_a7123aae86c8a5bc04d661d9fa4a03759"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7123aae86c8a5bc04d661d9fa4a03759">_countHolds</a></td></tr>
+<tr class="separator:a7123aae86c8a5bc04d661d9fa4a03759"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5df7517614e1c9877f3daa8b1aa4ff4e" id="r_a5df7517614e1c9877f3daa8b1aa4ff4e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasDurability.html">IHasDurability</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5df7517614e1c9877f3daa8b1aa4ff4e">_durable</a></td></tr>
+<tr class="separator:a5df7517614e1c9877f3daa8b1aa4ff4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0cf4c9bb922e5c747db5ef1d6cfd8565" id="r_a0cf4c9bb922e5c747db5ef1d6cfd8565"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0cf4c9bb922e5c747db5ef1d6cfd8565">_floatSpeed</a> = 0.8f</td></tr>
 <tr class="separator:a0cf4c9bb922e5c747db5ef1d6cfd8565"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf7f142ccadb0083defc3e4ae7a8f467" id="r_abf7f142ccadb0083defc3e4ae7a8f467"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abf7f142ccadb0083defc3e4ae7a8f467">_instancePhase</a></td></tr>
@@ -173,10 +208,14 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ad998bdc3029c62e5c41d12b1cdd7d9f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c1831279b85446759b612966a113548" id="r_a2c1831279b85446759b612966a113548"><td class="memItemLeft" align="right" valign="top">SpriteRenderer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c1831279b85446759b612966a113548">_renderer</a></td></tr>
 <tr class="separator:a2c1831279b85446759b612966a113548"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a72d67a39d89a74ce09a2dc7ff11017" id="r_a2a72d67a39d89a74ce09a2dc7ff11017"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a72d67a39d89a74ce09a2dc7ff11017">_rendererRestScale</a> = Vector3.one</td></tr>
+<tr class="separator:a2a72d67a39d89a74ce09a2dc7ff11017"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82d1f3318f110b8c36464d9f76e829c4" id="r_a82d1f3318f110b8c36464d9f76e829c4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a82d1f3318f110b8c36464d9f76e829c4">_rotationAngle</a></td></tr>
 <tr class="separator:a82d1f3318f110b8c36464d9f76e829c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85f3460412cb502358037bef10e455fd" id="r_a85f3460412cb502358037bef10e455fd"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a85f3460412cb502358037bef10e455fd">_rotationSpeedRad</a></td></tr>
 <tr class="separator:a85f3460412cb502358037bef10e455fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9072c56fa7d5774d1addcc84af086644" id="r_a9072c56fa7d5774d1addcc84af086644"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9072c56fa7d5774d1addcc84af086644">_shownCount</a></td></tr>
+<tr class="separator:a9072c56fa7d5774d1addcc84af086644"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -193,6 +232,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Drives the SoapBubbleCluster shader's bubble count and float/spin clock; the shader animates itself from <code>_Time.y</code> after Bind. </p>
+<p>During a merge it shows the count a bubble at a time and wobbles (<a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IBubbleMergeReactive.html" title="A bubble cluster&#39;s look as a merge plays out (BubbleMergeView).">IBubbleMergeReactive</a>). </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a5b0996ab53ed74a410b470cf524237cc" name="a5b0996ab53ed74a410b470cf524237cc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5b0996ab53ed74a410b470cf524237cc">&#9670;&#160;</a></span>Awake()</h2>
@@ -267,6 +307,35 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ac2c3bfaac91142cec9095828a8516928" name="ac2c3bfaac91142cec9095828a8516928"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2c3bfaac91142cec9095828a8516928">&#9670;&#160;</a></span>HoldCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void IBubbleMergeReactive. BalloonParty.Balloon.Type.SoapBubbleClusterVariant.HoldCount </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Freezes the shown count where it is. Holds stack: each needs its own <a class="el" href="#ac731d1d785edd73df7b2ab526373dfc2" title="Lets go of one hold; the last shows the model&#39;s count again.">ReleaseCount</a>. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IBubbleMergeReactive.html#a2ff3de0a656c5fa451ef91e39b24ee4e">BalloonParty.Balloon.View.IBubbleMergeReactive</a>.</p>
+
+</div>
+</div>
 <a id="a2f5ed2a91a0ecbefb920c103419197b9" name="a2f5ed2a91a0ecbefb920c103419197b9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2f5ed2a91a0ecbefb920c103419197b9">&#9670;&#160;</a></span>Initialize()</h2>
 
@@ -296,6 +365,31 @@ Static Private Attributes</h2></td></tr>
 </dl>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Type_1_1IBalloonVariant.html#a86fbebbbec71bdf4a8abf04cf6a2a530">BalloonParty.Balloon.Type.IBalloonVariant</a>.</p>
+
+</div>
+</div>
+<a id="af56a0e0f3e41daea79556ee41cc9aeb0" name="af56a0e0f3e41daea79556ee41cc9aeb0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af56a0e0f3e41daea79556ee41cc9aeb0">&#9670;&#160;</a></span>OnHitsChanged()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Type.SoapBubbleClusterVariant.OnHitsChanged </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>hits</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -374,6 +468,89 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ac731d1d785edd73df7b2ab526373dfc2" name="ac731d1d785edd73df7b2ab526373dfc2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac731d1d785edd73df7b2ab526373dfc2">&#9670;&#160;</a></span>ReleaseCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void IBubbleMergeReactive. BalloonParty.Balloon.Type.SoapBubbleClusterVariant.ReleaseCount </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Lets go of one hold; the last shows the model's count again. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IBubbleMergeReactive.html#a0ba7f609a70cc454aecf25b201f81a25">BalloonParty.Balloon.View.IBubbleMergeReactive</a>.</p>
+
+</div>
+</div>
+<a id="ab1432b9e75b7aa8ddc21e63ef49ba97c" name="ab1432b9e75b7aa8ddc21e63ef49ba97c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1432b9e75b7aa8ddc21e63ef49ba97c">&#9670;&#160;</a></span>ResetMergeCue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Balloon.Type.SoapBubbleClusterVariant.ResetMergeCue </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abc6c4cd902bcd9ad83ed1309b6d41b40" name="abc6c4cd902bcd9ad83ed1309b6d41b40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc6c4cd902bcd9ad83ed1309b6d41b40">&#9670;&#160;</a></span>StepCount()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void IBubbleMergeReactive. BalloonParty.Balloon.Type.SoapBubbleClusterVariant.StepCount </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>delta</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Moves the shown count by <em>delta</em>  bubbles while held. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IBubbleMergeReactive.html#a80baa6ed9afe741c6b571bdb9fd290bd">BalloonParty.Balloon.View.IBubbleMergeReactive</a>.</p>
+
+</div>
+</div>
 <a id="a886b82832d29d2d107a2842add73cb53" name="a886b82832d29d2d107a2842add73cb53"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a886b82832d29d2d107a2842add73cb53">&#9670;&#160;</a></span>Update()</h2>
 
@@ -399,7 +576,62 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a1181096dfd4395ff2d0033ac01388f41" name="a1181096dfd4395ff2d0033ac01388f41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1181096dfd4395ff2d0033ac01388f41">&#9670;&#160;</a></span>Wobble()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void IBubbleMergeReactive. BalloonParty.Balloon.Type.SoapBubbleClusterVariant.Wobble </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>strength</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>seconds</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Punches the bubbles out by <em>strength</em>  of their size and lets them settle. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IBubbleMergeReactive.html#a62dba8d7e74de3fa47d43c151d6c7ce2">BalloonParty.Balloon.View.IBubbleMergeReactive</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a75b3aa1149c5f6f75692639c4d52c2d9" name="a75b3aa1149c5f6f75692639c4d52c2d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75b3aa1149c5f6f75692639c4d52c2d9">&#9670;&#160;</a></span>_binding</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Type.SoapBubbleClusterVariant._binding</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a274fdeba18e3d47c5741a3490dd392ab" name="a274fdeba18e3d47c5741a3490dd392ab"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a274fdeba18e3d47c5741a3490dd392ab">&#9670;&#160;</a></span>_block</h2>
 
@@ -411,6 +643,50 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">MaterialPropertyBlock BalloonParty.Balloon.Type.SoapBubbleClusterVariant._block</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7123aae86c8a5bc04d661d9fa4a03759" name="a7123aae86c8a5bc04d661d9fa4a03759"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7123aae86c8a5bc04d661d9fa4a03759">&#9670;&#160;</a></span>_countHolds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Type.SoapBubbleClusterVariant._countHolds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5df7517614e1c9877f3daa8b1aa4ff4e" name="a5df7517614e1c9877f3daa8b1aa4ff4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5df7517614e1c9877f3daa8b1aa4ff4e">&#9670;&#160;</a></span>_durable</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interfaceBalloonParty_1_1Slots_1_1Capabilities_1_1IHasDurability.html">IHasDurability</a> BalloonParty.Balloon.Type.SoapBubbleClusterVariant._durable</td>
         </tr>
       </table>
   </td>
@@ -554,6 +830,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a2a72d67a39d89a74ce09a2dc7ff11017" name="a2a72d67a39d89a74ce09a2dc7ff11017"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a72d67a39d89a74ce09a2dc7ff11017">&#9670;&#160;</a></span>_rendererRestScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector3 BalloonParty.Balloon.Type.SoapBubbleClusterVariant._rendererRestScale = Vector3.one</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a82d1f3318f110b8c36464d9f76e829c4" name="a82d1f3318f110b8c36464d9f76e829c4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a82d1f3318f110b8c36464d9f76e829c4">&#9670;&#160;</a></span>_rotationAngle</h2>
 
@@ -587,6 +885,28 @@ Static Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.Balloon.Type.SoapBubbleClusterVariant._rotationSpeedRad</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9072c56fa7d5774d1addcc84af086644" name="a9072c56fa7d5774d1addcc84af086644"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9072c56fa7d5774d1addcc84af086644">&#9670;&#160;</a></span>_shownCount</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Type.SoapBubbleClusterVariant._shownCount</td>
         </tr>
       </table>
   </td>
@@ -705,6 +1025,85 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Property Documentation</h2>
+<a id="ac2c4b70e49fe2800d4f1206eb552fc6e" name="ac2c4b70e49fe2800d4f1206eb552fc6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2c4b70e49fe2800d4f1206eb552fc6e">&#9670;&#160;</a></span>Binding</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int IBubbleMergeReactive. BalloonParty.Balloon.Type.SoapBubbleClusterVariant.Binding</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Changes whenever the holds are dropped with the binding (despawn, a level transition's freeze), so a merge can tell its holds are gone and must not release holds taken since. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IBubbleMergeReactive.html#a68bc7295c42cda54050355836f3575b7">BalloonParty.Balloon.View.IBubbleMergeReactive</a>.</p>
+
+</div>
+</div>
+<a id="accc4335c98427e8a34a4c8a47d0353fa" name="accc4335c98427e8a34a4c8a47d0353fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#accc4335c98427e8a34a4c8a47d0353fa">&#9670;&#160;</a></span>BubbleRenderer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">SpriteRenderer IBubbleMergeReactive. BalloonParty.Balloon.Type.SoapBubbleClusterVariant.BubbleRenderer</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The cluster's renderer, which a hopping bubble copies its look from. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IBubbleMergeReactive.html#aee526fba09461a8733de2bb146adae33">BalloonParty.Balloon.View.IBubbleMergeReactive</a>.</p>
+
+</div>
+</div>
+<a id="a5111cdce8338e6c65518a79dd8b0baaf" name="a5111cdce8338e6c65518a79dd8b0baaf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5111cdce8338e6c65518a79dd8b0baaf">&#9670;&#160;</a></span>BubbleWorldScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector3 IBubbleMergeReactive. BalloonParty.Balloon.Type.SoapBubbleClusterVariant.BubbleWorldScale</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>A bubble's world size at rest, without a wobble in progress. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1View_1_1IBubbleMergeReactive.html#a1014e51e6e592d3aa4fcca6228ab08fc">BalloonParty.Balloon.View.IBubbleMergeReactive</a>.</p>
 
 </div>
 </div>

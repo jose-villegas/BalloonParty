@@ -1,0 +1,5 @@
+<map id="BalloonParty.Balloon.View.IBubbleMergeReactive" name="BalloonParty.Balloon.View.IBubbleMergeReactive">
+<area shape="rect" id="Node000001" title="A bubble cluster&#39;s look as a merge plays out (BubbleMergeView)." alt="" coords="5,5,199,50"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Type_1_1SoapBubbleClusterVariant.html" title="Drives the SoapBubbleCluster shader&#39;s bubble count and float/spin clock; the shader animates itself f..." alt="" coords="6,98,198,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,64,104,99,100,97,100,68"/>
+</map>

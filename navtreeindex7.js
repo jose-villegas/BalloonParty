@@ -1,5 +1,10 @@
 var NAVTREEINDEX7 =
 {
+"classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#a0df10f3223ebcb5816901fb1a810ed24":[6,0,0,0,2,4,5],
+"classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#a129a6ea00d3b0dd137c3729463bcdf1e":[5,0,0,0,2,4,4],
+"classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#a129a6ea00d3b0dd137c3729463bcdf1e":[6,0,0,0,2,4,4],
+"classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#a4959c6e0ea61cb712997b587faf41c53":[5,0,0,0,2,4,12],
+"classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#a4959c6e0ea61cb712997b587faf41c53":[6,0,0,0,2,4,12],
 "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#a67b5cfaeb327de30d0d739525017cfa8":[5,0,0,0,2,4,9],
 "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#a67b5cfaeb327de30d0d739525017cfa8":[6,0,0,0,2,4,9],
 "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#a67f8d9096f6e2dd85ec1981bad3cf794":[5,0,0,0,2,4,11],
@@ -244,10 +249,5 @@ var NAVTREEINDEX7 =
 "classBalloonParty_1_1Audio_1_1SfxService.html#af1e1329cdfb28606b8541950ec61a6eb":[6,0,0,0,12,39],
 "classBalloonParty_1_1Audio_1_1SfxService.html#af463f5c103db39822f1cc1d1de2e2092":[5,0,0,0,12,31],
 "classBalloonParty_1_1Audio_1_1SfxService.html#af463f5c103db39822f1cc1d1de2e2092":[6,0,0,0,12,31],
-"classBalloonParty_1_1Audio_1_1SfxService.html#afcaa2b696df7cbb3617a597e542ab33a":[5,0,0,0,12,2],
-"classBalloonParty_1_1Audio_1_1SfxService.html#afcaa2b696df7cbb3617a597e542ab33a":[6,0,0,0,12,2],
-"classBalloonParty_1_1Audio_1_1SfxThrottleGate.html":[5,0,0,0,13],
-"classBalloonParty_1_1Audio_1_1SfxThrottleGate.html":[6,0,0,0,13],
-"classBalloonParty_1_1Audio_1_1SfxThrottleGate.html#a2efcf768d8ddf7af4e8cde955b0aa3eb":[5,0,0,0,13,4],
-"classBalloonParty_1_1Audio_1_1SfxThrottleGate.html#a2efcf768d8ddf7af4e8cde955b0aa3eb":[6,0,0,0,13,4]
+"classBalloonParty_1_1Audio_1_1SfxService.html#afcaa2b696df7cbb3617a597e542ab33a":[5,0,0,0,12,2]
 };

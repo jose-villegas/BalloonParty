@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="structBalloonParty_1_1Solver_1_1ShotFlightSeed.html" target="_top" xlink:title="Seeds a ShotFlightState at construction — the test seam standing in for a mid&#45;flight item grant (Phas...">
+<g id="a_Node000000"><a xlink:href="classBalloonParty_1_1Solver_1_1ShotBoardDynamics.html" target="_top" xlink:title="Owns a real headless SlotGrid + GridBalanceQuery + BalancePlanner over stub actors,...">
 <polygon fill="white" stroke="#666666" points="133.75,-33.5 0,-33.5 0,0 133.75,0 133.75,-33.5"/>
 <text xml:space="preserve" text-anchor="start" x="8" y="-20" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Solver.Shot</text>
-<text xml:space="preserve" text-anchor="middle" x="66.88" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">FlightSeed</text>
+<text xml:space="preserve" text-anchor="middle" x="66.88" y="-7.25" font-family="Helvetica,sans-Serif" font-size="10.00">BoardDynamics</text>
 </a>
 </g>
 </g>

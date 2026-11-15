@@ -1,5 +1,10 @@
 var NAVTREEINDEX8 =
 {
+"classBalloonParty_1_1Audio_1_1SfxService.html#afcaa2b696df7cbb3617a597e542ab33a":[6,0,0,0,12,2],
+"classBalloonParty_1_1Audio_1_1SfxThrottleGate.html":[5,0,0,0,13],
+"classBalloonParty_1_1Audio_1_1SfxThrottleGate.html":[6,0,0,0,13],
+"classBalloonParty_1_1Audio_1_1SfxThrottleGate.html#a2efcf768d8ddf7af4e8cde955b0aa3eb":[5,0,0,0,13,4],
+"classBalloonParty_1_1Audio_1_1SfxThrottleGate.html#a2efcf768d8ddf7af4e8cde955b0aa3eb":[6,0,0,0,13,4],
 "classBalloonParty_1_1Audio_1_1SfxThrottleGate.html#a39fa14af311a171cf387be7f8cda2d2b":[5,0,0,0,13,8],
 "classBalloonParty_1_1Audio_1_1SfxThrottleGate.html#a39fa14af311a171cf387be7f8cda2d2b":[6,0,0,0,13,8],
 "classBalloonParty_1_1Audio_1_1SfxThrottleGate.html#a3ac3ee0bf2456850d4e4c53193523dae":[5,0,0,0,13,2],
@@ -244,10 +249,5 @@ var NAVTREEINDEX8 =
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner.html#ad79ad1860192fbca42d1c85dc3129c35":[6,0,0,1,0,2,9],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner.html#afbabfcdc50d06d28df722a8f1ad4fda9":[5,0,0,1,0,2,2],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner.html#afbabfcdc50d06d28df722a8f1ad4fda9":[6,0,0,1,0,2,2],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html":[5,0,0,1,0,3],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html":[6,0,0,1,0,3],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a0405283c3ca289df39114c1ce6eef0cb":[5,0,0,1,0,3,42],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a0405283c3ca289df39114c1ce6eef0cb":[6,0,0,1,0,3,42],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a0740c78aa316d6f37f7b8585c8db7600":[5,0,0,1,0,3,3],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a0740c78aa316d6f37f7b8585c8db7600":[6,0,0,1,0,3,3]
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html":[5,0,0,1,0,3]
 };

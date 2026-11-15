@@ -29,5 +29,6 @@ var searchData=
   ['hitpipeline_26',['HitPipeline',['../classBalloonParty_1_1Game_1_1HitPipeline.html',1,'BalloonParty::Game']]],
   ['hitvfxoverride_27',['HitVfxOverride',['../classBalloonParty_1_1Configuration_1_1Balloons_1_1HitVfxOverride.html',1,'BalloonParty::Configuration::Balloons']]],
   ['hitvfxoverridedrawer_28',['HitVfxOverrideDrawer',['../classBalloonParty_1_1Configuration_1_1Editor_1_1HitVfxOverrideDrawer.html',1,'BalloonParty::Configuration::Editor']]],
-  ['hudcamera_29',['HudCamera',['../classBalloonParty_1_1Display_1_1HudCamera.html',1,'BalloonParty::Display']]]
+  ['hop_29',['Hop',['../structBalloonParty_1_1Balloon_1_1View_1_1BubbleMergeView_1_1Hop.html',1,'BalloonParty::Balloon::View::BubbleMergeView']]],
+  ['hudcamera_30',['HudCamera',['../classBalloonParty_1_1Display_1_1HudCamera.html',1,'BalloonParty::Display']]]
 ];

@@ -1,5 +1,6 @@
 var classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration =
 [
+    [ "_bubbleMergeCue", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#a0c5d2bb7894079338075ba97574eb838", null ],
     [ "_bubbleMergeMax", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#a74ebc42cc8b40b022f5671c9b2737902", null ],
     [ "_bubbleMergeSeconds", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#a8e0473ac0ad632ee8a350e46a9b2bc4e", null ],
     [ "_defaultBalloonMoveSpeed", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#a133b4aac19b318d4b2b8e8f5f006c3f9", null ],
@@ -22,6 +23,7 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration =
     [ "_timeForBalloonsBalance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#a57dd550289de5cfc0ee45a14b137403d", null ],
     [ "_toughLayerSpacing", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#a69ff9a937d29f0f1613d1f40395534b3", null ],
     [ "_unbreakableFormation", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#aa217c1eef329053b825d755f82ab4b18", null ],
+    [ "BubbleMergeCue", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#ac880531bcaefc3113168c40ab73ac650", null ],
     [ "BubbleMergeMax", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#a579fcc1f7cd954ee6716bf0cfadf07c0", null ],
     [ "BubbleMergeSeconds", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#a632481cf32b29d758e244585e46c6d91", null ],
     [ "DefaultBalloonMoveSpeed", "classBalloonParty_1_1Configuration_1_1Balloons_1_1BalloonsConfiguration.html#a3d20ea4ac363e804c585e8e73ca59833", null ],

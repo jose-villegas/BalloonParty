@@ -1,5 +1,10 @@
 var NAVTREEINDEX9 =
 {
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html":[6,0,0,1,0,3],
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a0405283c3ca289df39114c1ce6eef0cb":[5,0,0,1,0,3,42],
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a0405283c3ca289df39114c1ce6eef0cb":[6,0,0,1,0,3,42],
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a0740c78aa316d6f37f7b8585c8db7600":[5,0,0,1,0,3,3],
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a0740c78aa316d6f37f7b8585c8db7600":[6,0,0,1,0,3,3],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a08664ec4bf751fc5d494b358c96eb892":[5,0,0,1,0,3,15],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a08664ec4bf751fc5d494b358c96eb892":[6,0,0,1,0,3,15],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a0baf34e32201ad77440d44ccb6e10f78":[5,0,0,1,0,3,55],
@@ -244,10 +249,5 @@ var NAVTREEINDEX9 =
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#ae12c581eb948b18190d4e679d39f72e1":[6,0,0,1,0,6,3],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#aef4e63f35cb6e229bce89c6756d63d9c":[5,0,0,1,0,6,21],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#aef4e63f35cb6e229bce89c6756d63d9c":[6,0,0,1,0,6,21],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker.html":[5,0,0,1,0,7],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker.html":[6,0,0,1,0,7],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker.html#a01366b8f73b03c78d6bfa9cc9cb1afbe":[5,0,0,1,0,7,2],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker.html#a01366b8f73b03c78d6bfa9cc9cb1afbe":[6,0,0,1,0,7,2],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker.html#a08ac4ca2d78196f8f17562ddcd3951bf":[5,0,0,1,0,7,10],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker.html#a08ac4ca2d78196f8f17562ddcd3951bf":[6,0,0,1,0,7,10]
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker.html":[5,0,0,1,0,7]
 };
