@@ -14,6 +14,9 @@ namespace BalloonParty.Shared.Pause
         LevelTransition = 3,
 
         /// <summary>The debug cheat console is open — holds the thrower so stray fires don't disturb testing.</summary>
-        Cheat = 4
+        Cheat = 4,
+
+        /// <summary>A card reveal is playing over play (a retry's bonus card): the player can't aim through it.</summary>
+        CardReveal = 5
     }
 }
