@@ -1,5 +1,11 @@
 var NAVTREEINDEX9 =
 {
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner.html#aa76cc611d22f769443b5add7fbbb2a90":[6,0,0,1,0,2,12],
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner.html#ad79ad1860192fbca42d1c85dc3129c35":[5,0,0,1,0,2,9],
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner.html#ad79ad1860192fbca42d1c85dc3129c35":[6,0,0,1,0,2,9],
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner.html#afbabfcdc50d06d28df722a8f1ad4fda9":[5,0,0,1,0,2,2],
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner.html#afbabfcdc50d06d28df722a8f1ad4fda9":[6,0,0,1,0,2,2],
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html":[5,0,0,1,0,3],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html":[6,0,0,1,0,3],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a0405283c3ca289df39114c1ce6eef0cb":[5,0,0,1,0,3,42],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a0405283c3ca289df39114c1ce6eef0cb":[6,0,0,1,0,3,42],
@@ -243,11 +249,5 @@ var NAVTREEINDEX9 =
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#acbb5facfa49888f3679aed5e67f513c2":[6,0,0,1,0,6,16],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#ad8ccd5990f3c8cd2d537aedf90655fee":[5,0,0,1,0,6,23],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#ad8ccd5990f3c8cd2d537aedf90655fee":[6,0,0,1,0,6,23],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#ad9c3028835fbbdf5a8f5c474a280d683":[5,0,0,1,0,6,24],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#ad9c3028835fbbdf5a8f5c474a280d683":[6,0,0,1,0,6,24],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#ae12c581eb948b18190d4e679d39f72e1":[5,0,0,1,0,6,3],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#ae12c581eb948b18190d4e679d39f72e1":[6,0,0,1,0,6,3],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#aef4e63f35cb6e229bce89c6756d63d9c":[5,0,0,1,0,6,21],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#aef4e63f35cb6e229bce89c6756d63d9c":[6,0,0,1,0,6,21],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonMotionTicker.html":[5,0,0,1,0,7]
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonControllerRegistry.html#ad9c3028835fbbdf5a8f5c474a280d683":[5,0,0,1,0,6,24]
 };

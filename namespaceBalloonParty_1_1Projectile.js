@@ -1,6 +1,7 @@
 var namespaceBalloonParty_1_1Projectile =
 [
     [ "Buffs", "namespaceBalloonParty_1_1Projectile_1_1Buffs.html", "namespaceBalloonParty_1_1Projectile_1_1Buffs" ],
+    [ "Clearance", "namespaceBalloonParty_1_1Projectile_1_1Clearance.html", "namespaceBalloonParty_1_1Projectile_1_1Clearance" ],
     [ "Controller", "namespaceBalloonParty_1_1Projectile_1_1Controller.html", "namespaceBalloonParty_1_1Projectile_1_1Controller" ],
     [ "Model", "namespaceBalloonParty_1_1Projectile_1_1Model.html", "namespaceBalloonParty_1_1Projectile_1_1Model" ],
     [ "View", "namespaceBalloonParty_1_1Projectile_1_1View.html", "namespaceBalloonParty_1_1Projectile_1_1View" ],

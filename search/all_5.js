@@ -16,10 +16,10 @@ var searchData=
   ['5_20persistence_13',['4.5 Persistence',['../plan_future_ideas.html#autotoc_md507',1,'']]],
   ['5_20phase_202_3a_20rapid_20fire_14',['5. Phase 2: rapid fire',['../plan_fast_paced.html#autotoc_md471',1,'']]],
   ['5_20phases_15',['5. Phases',['../plan_coins.html#autotoc_md397',1,'']]],
-  ['5_20test_20plan_20per_20test_20everything_20full_20detail_20in_20the_20review_20transcript_16',['5. Test plan (per test-everything; full detail in the review transcript)',['../plan_shot_solver_accuracy.html#autotoc_md838',1,'']]],
+  ['5_20test_20plan_20per_20test_20everything_20full_20detail_20in_20the_20review_20transcript_16',['5. Test plan (per test-everything; full detail in the review transcript)',['../plan_shot_solver_accuracy.html#autotoc_md852',1,'']]],
   ['5_20the_20holds_20—_20predicate_20is_20tt_20phase_20playing_20tt_20never_20tt_20completing_20tt_17',['6.5 The holds — predicate is &lt;tt&gt;Phase != Playing&lt;/tt&gt;, NEVER &lt;tt&gt;== Completing&lt;/tt&gt;',['../plan_level_up_timing.html#autotoc_md759',1,'']]],
   ['5_20the_20orchestrator_20is_20the_20existing_20phase_20machine_18',['5. The orchestrator IS the existing phase machine',['../plan_level_up_timing.html#autotoc_md753',1,'']]],
-  ['5_20thermal_20baseline_19',['5. Thermal baseline',['../plan_performance_recovery.html#autotoc_md779',1,'']]],
+  ['5_20thermal_20baseline_19',['5. Thermal baseline',['../plan_performance_recovery.html#autotoc_md793',1,'']]],
   ['5_20tt_20ipassthrough_20tt_20behaviour_20extensions_20em_20from_20plan_20gridactorexpansion_20em_20',['5.5 &lt;tt&gt;IPassThrough&lt;/tt&gt; Behaviour Extensions &lt;em&gt;(from PLAN-GridActorExpansion)&lt;/em&gt;',['../plan_future_ideas.html#autotoc_md514',1,'']]],
   ['5_20visual_20feedback_21',['8.5 Visual Feedback',['../plan_future_ideas.html#autotoc_md529',1,'']]],
   ['5_3a_20checkpoint_20and_20upgrades_22',['8. Phase 5: checkpoint and upgrades',['../plan_fast_paced.html#autotoc_md477',1,'']]]

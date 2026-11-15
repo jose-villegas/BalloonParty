@@ -1,7 +1,11 @@
 <map id="BalloonParty.Game.Score.Behaviours.ShapeFormationTicker" name="BalloonParty.Game.Score.Behaviours.ShapeFormationTicker">
-<area shape="rect" id="Node000001" title="Pooled, zero&#45;allocation per&#45;frame driver for every in&#45;flight shape formation." alt="" coords="29,98,273,143"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,14,113,42"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,50,132,97,126,98,82,55"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreShapeCover.html" title="How much of the board the BigScore shapes being drawn in the air take up right now." alt="" coords="136,5,352,50"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="214,60,174,100,171,96,209,62"/>
+<area shape="rect" id="Node000001" title="Pooled, zero&#45;allocation per&#45;frame driver for every in&#45;flight shape formation." alt="" coords="397,92,640,136"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="60,5,167,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="183,31,373,75,429,91,424,91,372,80,182,37"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreShapeCover.html" title="How much of the board the BigScore shapes being drawn in the air take up right now." alt="" coords="5,57,222,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="237,87,399,102,394,105,237,92"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Projectile_1_1Clearance_1_1IClearanceField.html" title="The clear circles around the balls in flight, plus the fading ones balls left behind." alt="" coords="18,126,209,171"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="224,136,398,123,394,126,225,142"/>
+<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IClearanceSettings.html" title="Read&#45;only tuning for the clear circle every ball in flight carries (see Projectile/Clearance)." alt="" coords="15,196,212,240"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="226,192,372,156,445,137,450,136,373,161,227,197"/>
 </map>

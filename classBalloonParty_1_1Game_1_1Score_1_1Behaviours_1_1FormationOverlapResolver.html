@@ -124,6 +124,9 @@ Static Package Functions</h2></td></tr>
 <tr class="memitem:a606dc142fc5ef58751bc8c8bad713ade" id="r_a606dc142fc5ef58751bc8c8bad713ade"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a606dc142fc5ef58751bc8c8bad713ade">Resolve</a> (Vector3[] centers, float[] radii, float[] moveWeights, float[] paddings, float[] maxPushFractions, int count, Vector3[] offsets)</td></tr>
 <tr class="memdesc:a606dc142fc5ef58751bc8c8bad713ade"><td class="mdescLeft">&#160;</td><td class="mdescRight">Single relaxation pass over the first <em>count</em>  entries: for every overlapping pair, splits the correction by <em>moveWeights</em>  (0 = immovable — its partner absorbs the whole correction instead of a 50/50 split) and clamps THIS CALL's offset to <code>radius * maxPushFractions[i]</code> (per-formation, not a single shared value — two concurrent groups could author different settings).  <br /></td></tr>
 <tr class="separator:a606dc142fc5ef58751bc8c8bad713ade"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d0d66b6455c14af570ed37a3a1c0a5e" id="r_a4d0d66b6455c14af570ed37a3a1c0a5e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4d0d66b6455c14af570ed37a3a1c0a5e">ResolveAgainstFixed</a> (Vector3[] centers, float[] radii, float[] paddings, int count, Vector2[] fixedCenters, float[] fixedRadii, int fixedCount, float maxPush, Vector3[] offsets)</td></tr>
+<tr class="memdesc:a4d0d66b6455c14af570ed37a3a1c0a5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pushes each of the first <em>count</em>  formations out of every fixed circle (the balls' clear circles): the circles never give way, so the formation takes the whole correction.  <br /></td></tr>
+<tr class="separator:a4d0d66b6455c14af570ed37a3a1c0a5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -226,6 +229,73 @@ Static Private Attributes</h2></td></tr>
 <p>Single relaxation pass over the first <em>count</em>  entries: for every overlapping pair, splits the correction by <em>moveWeights</em>  (0 = immovable — its partner absorbs the whole correction instead of a 50/50 split) and clamps THIS CALL's offset to <code>radius * maxPushFractions[i]</code> (per-formation, not a single shared value — two concurrent groups could author different settings). </p>
 <p>This method holds no state of its own — every call reads only the <em>centers</em>  passed in — the caller decides whether that's a one-shot fresh position or, as <code><a class="el" href="classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html" title="Pooled, zero-allocation per-frame driver for every in-flight shape formation.">ShapeFormationTicker</a></code> does, a persistent accumulator plus the last resolved offset; see that class's <code>ResolveOverlaps</code> for why a sustained overlap needs the latter.</p>
 <p>Distances are measured in the XY PLANE ONLY (Z is zeroed before every distance/direction computation) — the board reads as flat 2D under an orthographic camera, but formation centers travel a large, camera-invisible Z distance toward the score-bar canvas as they fly. Resolving in 3D would judge two formations "apart" the instant their travel progress differs by even a couple of frames, silently defeating the cross-group case this exists for. Projecting to XY also leaves each candidate center's Z (the travel depth curve) completely untouched by the correction. </p>
+
+</div>
+</div>
+<a id="a4d0d66b6455c14af570ed37a3a1c0a5e" name="a4d0d66b6455c14af570ed37a3a1c0a5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d0d66b6455c14af570ed37a3a1c0a5e">&#9670;&#160;</a></span>ResolveAgainstFixed()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void BalloonParty.Game.Score.Behaviours.FormationOverlapResolver.ResolveAgainstFixed </td>
+          <td>(</td>
+          <td class="paramtype">Vector3[]</td>          <td class="paramname"><span class="paramname"><em>centers</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float[]</td>          <td class="paramname"><span class="paramname"><em>radii</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float[]</td>          <td class="paramname"><span class="paramname"><em>paddings</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>count</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2[]</td>          <td class="paramname"><span class="paramname"><em>fixedCenters</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float[]</td>          <td class="paramname"><span class="paramname"><em>fixedRadii</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>fixedCount</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>maxPush</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3[]</td>          <td class="paramname"><span class="paramname"><em>offsets</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Pushes each of the first <em>count</em>  formations out of every fixed circle (the balls' clear circles): the circles never give way, so the formation takes the whole correction. </p>
+<p>Each formation's offset this call is capped at <em>maxPush</em>  world units, a distance rather than a share of its radius, so a shape still blooming from a point can still slide off a ball. XY only, like <a class="el" href="#a606dc142fc5ef58751bc8c8bad713ade" title="Single relaxation pass over the first count  entries: for every overlapping pair, splits the correcti...">Resolve</a>; a circle of radius 0 pushes nothing. </p>
 
 </div>
 </div>

@@ -1,0 +1,7 @@
+<map id="BalloonParty.Configuration.Effects.ClearanceSettings" name="BalloonParty.Configuration.Effects.ClearanceSettings">
+<area shape="rect" id="Node000001" title=" " alt="" coords="65,98,261,143"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,14,134,42"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,50,143,97,138,98,93,55"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IClearanceSettings.html" title="Read&#45;only tuning for the clear circle every ball in flight carries (see Projectile/Clearance)." alt="" coords="158,5,354,50"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="226,60,186,100,183,96,221,62"/>
+</map>

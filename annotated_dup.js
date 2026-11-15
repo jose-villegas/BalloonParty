@@ -208,10 +208,12 @@ var annotated_dup =
           [ "BackgroundFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1BackgroundFieldSettings" ],
           [ "BushSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings" ],
           [ "BushVariantData", "classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1BushVariantData" ],
+          [ "ClearanceSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1ClearanceSettings.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1ClearanceSettings" ],
           [ "DisturbanceFieldSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1DisturbanceFieldSettings" ],
           [ "GroundSettings", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings.html", "classBalloonParty_1_1Configuration_1_1Effects_1_1GroundSettings" ],
           [ "IBackgroundFieldSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBackgroundFieldSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBackgroundFieldSettings" ],
           [ "IBushSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IBushSettings" ],
+          [ "IClearanceSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IClearanceSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IClearanceSettings" ],
           [ "IDisturbanceFieldSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IDisturbanceFieldSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IDisturbanceFieldSettings" ],
           [ "IGroundSettings", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IGroundSettings" ],
           [ "IProjectileVisualConfig", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig" ],
@@ -784,6 +786,12 @@ var annotated_dup =
           [ "PierceEndedEndCondition", "classBalloonParty_1_1Projectile_1_1Buffs_1_1PierceEndedEndCondition.html", "classBalloonParty_1_1Projectile_1_1Buffs_1_1PierceEndedEndCondition" ],
           [ "ProjectileBuffService", "classBalloonParty_1_1Projectile_1_1Buffs_1_1ProjectileBuffService.html", "classBalloonParty_1_1Projectile_1_1Buffs_1_1ProjectileBuffService" ],
           [ "WallBounceEndCondition", "classBalloonParty_1_1Projectile_1_1Buffs_1_1WallBounceEndCondition.html", "classBalloonParty_1_1Projectile_1_1Buffs_1_1WallBounceEndCondition" ]
+        ] ],
+        [ "Clearance", "namespaceBalloonParty_1_1Projectile_1_1Clearance.html", [
+          [ "ClearanceCircle", "structBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceCircle.html", "structBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceCircle" ],
+          [ "ClearanceField", "classBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceField.html", "classBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceField" ],
+          [ "ClearanceFieldTicker", "classBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceFieldTicker.html", "classBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceFieldTicker" ],
+          [ "IClearanceField", "interfaceBalloonParty_1_1Projectile_1_1Clearance_1_1IClearanceField.html", "interfaceBalloonParty_1_1Projectile_1_1Clearance_1_1IClearanceField" ]
         ] ],
         [ "Controller", "namespaceBalloonParty_1_1Projectile_1_1Controller.html", [
           [ "ActiveProjectilePierce", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce.html", "classBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce" ],

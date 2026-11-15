@@ -1,7 +1,7 @@
 var NAVTREEINDEX0 =
 {
 "AbsorberActorModel_8cs.html":[7,0,15,0,0,0],
-"ActiveProjectilePierce_8cs.html":[7,0,12,1,0],
+"ActiveProjectilePierce_8cs.html":[7,0,12,2,0],
 "ActiveScenario_8cs.html":[7,0,13,1],
 "ActorHitMessage_8cs.html":[7,0,14,7,0],
 "AddShieldCheat_8cs.html":[7,0,2,1],
@@ -102,7 +102,7 @@ var NAVTREEINDEX0 =
 "BudgetFormula_8cs.html":[7,0,3,9,3],
 "BuffConfiguration_8cs.html":[7,0,3,1,0],
 "BuffEntry_8cs.html":[7,0,3,1,1],
-"BuffModifierOp_8cs.html":[7,0,12,2,0],
+"BuffModifierOp_8cs.html":[7,0,12,3,0],
 "BuildInfo_8cs.html":[7,0,14,2,0],
 "BushBakerState_8cs.html":[7,0,6,0,0],
 "BushBakerWindow_8cs.html":[7,0,6,0,1],
@@ -164,6 +164,10 @@ var NAVTREEINDEX0 =
 "Cinematic_8cs.html":[7,0,14,5,0],
 "CinematicsSettings_8cs.html":[7,0,3,3,2],
 "CircleContact_8cs.html":[7,0,14,14],
+"ClearanceCircle_8cs.html":[7,0,12,1,0],
+"ClearanceFieldTicker_8cs.html":[7,0,12,1,2],
+"ClearanceField_8cs.html":[7,0,12,1,1],
+"ClearanceSettings_8cs.html":[7,0,3,5,3],
 "ClipPickMode_8cs.html":[7,0,0,0,1],
 "ClipWrapMode_8cs.html":[7,0,0,0,2],
 "ClothRibbonGraphic_8cs.html":[7,0,18,2,0],
@@ -200,7 +204,7 @@ var NAVTREEINDEX0 =
 "DangerSoundRouter_8cs.html":[7,0,0,2,1],
 "DangerUILifetimeScope_8cs.html":[7,0,18,3,2],
 "DefaultScoreTrailBehaviour_8cs.html":[7,0,7,9,0,2],
-"DeflectChainController_8cs.html":[7,0,12,1,1],
+"DeflectChainController_8cs.html":[7,0,12,2,1],
 "DeflectChainMessage_8cs.html":[7,0,14,7,7],
 "DeflectChainRule_8cs.html":[7,0,14,16],
 "DeflectorActorModel_8cs.html":[7,0,15,0,0,10],
@@ -216,7 +220,7 @@ var NAVTREEINDEX0 =
 "DisturbanceFieldCoordinates_8cs.html":[7,0,14,3,0],
 "DisturbanceFieldResources_8cs.html":[7,0,14,3,1],
 "DisturbanceFieldService_8cs.html":[7,0,14,3,2],
-"DisturbanceFieldSettings_8cs.html":[7,0,3,5,3],
+"DisturbanceFieldSettings_8cs.html":[7,0,3,5,4],
 "DisturbancePulseExtensions_8cs.html":[7,0,14,4,6],
 "DisturbanceStampCheat_8cs.html":[7,0,2,10],
 "DisturbanceTweenExtensions_8cs.html":[7,0,14,4,7],
@@ -245,9 +249,5 @@ var NAVTREEINDEX0 =
 "ForceDestroyProjectileMessage_8cs.html":[7,0,14,7,11],
 "ForceGameOverCheat_8cs.html":[7,0,2,12],
 "ForceRestartCheat_8cs.html":[7,0,2,13],
-"FormationAssignment_8cs.html":[7,0,1,1,0],
-"FormationOverlapResolver_8cs.html":[7,0,7,9,0,3],
-"FormationPlanner_8cs.html":[7,0,1,1,1],
-"FormationShape_8cs.html":[7,0,1,1,2],
-"FormattedLabel_8cs.html":[7,0,18,16]
+"FormationAssignment_8cs.html":[7,0,1,1,0]
 };
