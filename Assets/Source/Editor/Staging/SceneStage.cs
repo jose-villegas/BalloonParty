@@ -368,8 +368,11 @@ namespace BalloonParty.Editor.Staging
                 return $"error: no balloon at {target}";
             }
 
-            PopSlot(Resolve<SlotGrid>(), view.Model.SlotIndex.Value);
-            return $"popped {view.Model.TypeName} at {view.Model.SlotIndex.Value.x},{view.Model.SlotIndex.Value.y}";
+            // Read before the pop: a balloon that despawns at once (a reward balloon) has no model after it.
+            var typeName = view.Model.TypeName;
+            var slot = view.Model.SlotIndex.Value;
+            PopSlot(Resolve<SlotGrid>(), slot);
+            return $"popped {typeName} at {slot.x},{slot.y}";
         }
 
         /// <summary>
