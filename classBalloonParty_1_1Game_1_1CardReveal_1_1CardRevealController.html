@@ -147,6 +147,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa382606199882fa9581ba5e859a11b6c" id="r_aa382606199882fa9581ba5e859a11b6c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa382606199882fa9581ba5e859a11b6c">Finish</a> (<a class="el" href="classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html">RevealedCard</a> done)</td></tr>
 <tr class="memdesc:aa382606199882fa9581ba5e859a11b6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The stage is done with <em>done</em> : if it's still <a class="el" href="#a87413acc6a4d2ce312f414f388b5572b" title="The reveal to play now, or null between reveals.">Current</a>, the next queued reveal, if any, starts.  <br /></td></tr>
 <tr class="separator:aa382606199882fa9581ba5e859a11b6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34a9913e3f28592c573cfd7f0e8087af" id="r_a34a9913e3f28592c573cfd7f0e8087af"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a34a9913e3f28592c573cfd7f0e8087af">MarkShown</a> (<a class="el" href="classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html">RevealedCard</a> shown)</td></tr>
+<tr class="memdesc:a34a9913e3f28592c573cfd7f0e8087af"><td class="mdescLeft">&#160;</td><td class="mdescRight">The stage has <em>shown</em> 's card out.  <br /></td></tr>
+<tr class="separator:a34a9913e3f28592c573cfd7f0e8087af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9827c944a3c115b219783c2d8f8d3f38" id="r_a9827c944a3c115b219783c2d8f8d3f38"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9827c944a3c115b219783c2d8f8d3f38">ResetRun</a> (int generation)</td></tr>
 <tr class="memdesc:a9827c944a3c115b219783c2d8f8d3f38"><td class="mdescLeft">&#160;</td><td class="mdescRight"><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -179,9 +182,14 @@ Properties</h2></td></tr>
 <tr class="separator:a3706fbc63442fb310946ee4658b75f4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b04ffbb812ebd78f86135d1b2893f89" id="r_a6b04ffbb812ebd78f86135d1b2893f89"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6b04ffbb812ebd78f86135d1b2893f89">ResetOrder</a><code> [get]</code></td></tr>
 <tr class="separator:a6b04ffbb812ebd78f86135d1b2893f89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c69865e70faad4cc3e7491eb3f754a4" id="r_a1c69865e70faad4cc3e7491eb3f754a4"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1c69865e70faad4cc3e7491eb3f754a4">Shown</a><code> [get]</code></td></tr>
+<tr class="memdesc:a1c69865e70faad4cc3e7491eb3f754a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether <a class="el" href="#a87413acc6a4d2ce312f414f388b5572b" title="The reveal to play now, or null between reveals.">Current</a>'s card is out: its ribbons have burst from the balloon.  <br /></td></tr>
+<tr class="separator:a1c69865e70faad4cc3e7491eb3f754a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a9aaa23f16c7b73cb34b43c2e889784b1" id="r_a9aaa23f16c7b73cb34b43c2e889784b1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9aaa23f16c7b73cb34b43c2e889784b1">Clear</a> ()</td></tr>
+<tr class="separator:a9aaa23f16c7b73cb34b43c2e889784b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad3a774f88dfa6a9307612e9e4d4bd1d9" id="r_ad3a774f88dfa6a9307612e9e4d4bd1d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3a774f88dfa6a9307612e9e4d4bd1d9">Enqueue</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> card, int stacks, bool isBonus, bool isCapped)</td></tr>
 <tr class="separator:ad3a774f88dfa6a9307612e9e4d4bd1d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4571bd9d6802bf38512e4348b2959f68" id="r_a4571bd9d6802bf38512e4348b2959f68"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4571bd9d6802bf38512e4348b2959f68">PickPop</a> ()</td></tr>
@@ -214,6 +222,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a652af528e4f8c07616ed674d05edba84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aacdda76b666aad7ff4247982319cbc07" id="r_aacdda76b666aad7ff4247982319cbc07"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aacdda76b666aad7ff4247982319cbc07">_settings</a></td></tr>
 <tr class="separator:aacdda76b666aad7ff4247982319cbc07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd8090368c6c7d8986dc48ddf6929fd4" id="r_acd8090368c6c7d8986dc48ddf6929fd4"><td class="memItemLeft" align="right" valign="top">readonly ReactiveProperty&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acd8090368c6c7d8986dc48ddf6929fd4">_shown</a> = new()</td></tr>
+<tr class="separator:acd8090368c6c7d8986dc48ddf6929fd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aacf2014ce6293232379cb83393bbb1c8" id="r_aacf2014ce6293232379cb83393bbb1c8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aacf2014ce6293232379cb83393bbb1c8">_stages</a></td></tr>
 <tr class="separator:aacf2014ce6293232379cb83393bbb1c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab1c7506d02875197178fe9c128848ae6" id="r_ab1c7506d02875197178fe9c128848ae6"><td class="memItemLeft" align="right" valign="top">readonly CompositeDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab1c7506d02875197178fe9c128848ae6">_subscriptions</a> = new()</td></tr>
@@ -323,6 +333,31 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1CardReveal_1_1ICardReveals.html#abd638f676a32082186f411f2d5722c4b">BalloonParty.Game.CardReveal.ICardReveals</a>.</p>
+
+</div>
+</div>
+<a id="a9aaa23f16c7b73cb34b43c2e889784b1" name="a9aaa23f16c7b73cb34b43c2e889784b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9aaa23f16c7b73cb34b43c2e889784b1">&#9670;&#160;</a></span>Clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Game.CardReveal.CardRevealController.Clear </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -445,6 +480,28 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a34a9913e3f28592c573cfd7f0e8087af" name="a34a9913e3f28592c573cfd7f0e8087af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34a9913e3f28592c573cfd7f0e8087af">&#9670;&#160;</a></span>MarkShown()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Game.CardReveal.CardRevealController.MarkShown </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html">RevealedCard</a></td>          <td class="paramname"><span class="paramname"><em>shown</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The stage has <em>shown</em> 's card out. </p>
+<p>Like <a class="el" href="#aa382606199882fa9581ba5e859a11b6c" title="The stage is done with done : if it&#39;s still Current, the next queued reveal, if any,...">Finish</a>, a reveal that is no longer <a class="el" href="#a87413acc6a4d2ce312f414f388b5572b" title="The reveal to play now, or null between reveals.">Current</a> changes nothing. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1CardReveal_1_1ICardReveals.html#a64b0094029b258f7e437b2857f6918f3">BalloonParty.Game.CardReveal.ICardReveals</a>.</p>
 
 </div>
 </div>
@@ -741,6 +798,28 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="acd8090368c6c7d8986dc48ddf6929fd4" name="acd8090368c6c7d8986dc48ddf6929fd4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd8090368c6c7d8986dc48ddf6929fd4">&#9670;&#160;</a></span>_shown</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly ReactiveProperty&lt;bool&gt; BalloonParty.Game.CardReveal.CardRevealController._shown = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aacf2014ce6293232379cb83393bbb1c8" name="aacf2014ce6293232379cb83393bbb1c8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aacf2014ce6293232379cb83393bbb1c8">&#9670;&#160;</a></span>_stages</h2>
 
@@ -886,6 +965,32 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html#a347699f041bd2f73a8326aa24a351d81">BalloonParty.Game.Run.IRunResettable</a>.</p>
+
+</div>
+</div>
+<a id="a1c69865e70faad4cc3e7491eb3f754a4" name="a1c69865e70faad4cc3e7491eb3f754a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c69865e70faad4cc3e7491eb3f754a4">&#9670;&#160;</a></span>Shown</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyReactiveProperty&lt;bool&gt; BalloonParty.Game.CardReveal.CardRevealController.Shown</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Whether <a class="el" href="#a87413acc6a4d2ce312f414f388b5572b" title="The reveal to play now, or null between reveals.">Current</a>'s card is out: its ribbons have burst from the balloon. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1CardReveal_1_1ICardReveals.html#a14c11d854cbf193431cfd3a5f573998c">BalloonParty.Game.CardReveal.ICardReveals</a>.</p>
 
 </div>
 </div>

@@ -26,7 +26,7 @@ var classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView =
     [ "PlacePin", "classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html#aeb6df8935ca928c82bfc47f1d8e0f0fb", null ],
     [ "PlayAsync", "classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html#a08fadd66f47f120cf54d5aa20caf2908", null ],
     [ "PlayBonusRibbon", "classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html#ae4dc3ebb1c7ac6196d6ba4e937d5177b", null ],
-    [ "PopAsync", "classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html#ad7e2dec05e3001f7c2a10bf89b9a1bee", null ],
+    [ "PopAsync", "classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html#ada78bb1aa514a7ce519745ced9baf9e4", null ],
     [ "Progress", "classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html#a351e6bc7590f6815c1799e2a053a3e2a", null ],
     [ "Puncture", "classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html#a2ddd1a260efe6d3786d1a21a07735f6c", null ],
     [ "RibbonsGoneAt", "classBalloonParty_1_1UI_1_1CardReveal_1_1CardRevealView.html#ae59c3eb1f7a1e3a1884c63136f0f36b1", null ],

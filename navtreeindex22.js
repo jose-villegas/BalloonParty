@@ -1,5 +1,9 @@
 var NAVTREEINDEX22 =
 {
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#af33c31370e34ee30164d00ea0da1b789":[6,0,0,3,5,1,5],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#af68416591d4104012f66019cd8fc9f3d":[5,0,0,3,5,1,49],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#af68416591d4104012f66019cd8fc9f3d":[6,0,0,3,5,1,49],
+"classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#af7344ce6365bbedab0ec03d73e02318a":[5,0,0,3,5,1,39],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#af7344ce6365bbedab0ec03d73e02318a":[6,0,0,3,5,1,39],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#afa0045ab94882db0e880d698d36dac14":[5,0,0,3,5,1,33],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1BushSettings.html#afa0045ab94882db0e880d698d36dac14":[6,0,0,3,5,1,33],
@@ -245,9 +249,5 @@ var NAVTREEINDEX22 =
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a48be1086ce9b25aefa8b07ed7de58119":[6,0,0,3,5,25,22],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a5313ab744951be6c7c68f7ee1fcf4fdd":[5,0,0,3,5,25,5],
 "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a5313ab744951be6c7c68f7ee1fcf4fdd":[6,0,0,3,5,25,5],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a573d49cfa5a6848dc7eccb3d06e5f000":[5,0,0,3,5,25,11],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a573d49cfa5a6848dc7eccb3d06e5f000":[6,0,0,3,5,25,11],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a5786402b3125eec65b05d6ac4bd64c62":[5,0,0,3,5,25,19],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a5786402b3125eec65b05d6ac4bd64c62":[6,0,0,3,5,25,19],
-"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a58a3307474da181c18c9605b08be4baf":[5,0,0,3,5,25,9]
+"classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html#a573d49cfa5a6848dc7eccb3d06e5f000":[5,0,0,3,5,25,11]
 };

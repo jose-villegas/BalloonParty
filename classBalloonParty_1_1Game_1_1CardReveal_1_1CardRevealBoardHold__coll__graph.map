@@ -1,15 +1,22 @@
 <map id="BalloonParty.Game.CardReveal.CardRevealBoardHold" name="BalloonParty.Game.CardReveal.CardRevealBoardHold">
-<area shape="rect" id="Node000001" title="Holds the board while a card reveal plays over play (a retry&#39;s bonus card, or a reveal that runs on i..." alt="" coords="634,109,862,154"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="332,5,417,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="432,29,489,43,611,79,689,108,683,108,610,84,488,48,432,34"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="326,57,423,85"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="438,78,611,106,637,112,631,113,610,111,438,84"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1CardReveal_1_1ICardReveals.html" title="The reveals a stage plays, one at a time." alt="" coords="261,109,488,154"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="504,129,636,131,631,132,504,134"/>
-<area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1GameState_1_1INavigation.html" title="Injectable seam over the static Navigation, testable without global state." alt="" coords="278,178,471,223"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="486,177,636,152,631,153,487,182"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html" title="Reference&#45;counted per source so nested pause calls don&#39;t prematurely resume." alt="" coords="276,248,473,292"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="464,240,488,233,549,215,609,194,700,155,705,153,611,199,551,220,489,238,465,245"/>
-<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,248,212,292"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="227,267,279,270,273,270,227,272"/>
+<area shape="rect" id="Node000001" title="Holds the board while a card reveal plays over play (a retry&#39;s bonus card, or a reveal that runs on i..." alt="" coords="639,220,867,264"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="335,5,419,33"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="434,18,477,23,524,32,572,47,617,69,659,103,695,143,723,184,743,220,738,218,718,187,691,147,655,107,614,73,570,52,523,37,476,28,435,24"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="338,57,417,85"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="432,66,474,67,521,72,570,83,617,101,656,126,690,157,739,219,734,219,686,161,652,130,614,106,569,88,521,78,474,73,433,71"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,130,212,175"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="226,146,261,145,377,138,429,138,494,145,556,158,616,179,707,219,702,219,614,184,555,163,493,150,428,144,378,144,261,150,228,150"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html" title="Reference&#45;counted per source so nested pause calls don&#39;t prematurely resume." alt="" coords="279,160,475,204"/>
+<area shape="poly" id="edge8_Node000008_Node000004" title=" " alt="" coords="226,163,281,170,276,172,228,168"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="328,228,426,256"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="441,239,641,241,637,243,442,244"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Game_1_1CardReveal_1_1ICardReveals.html" title="The reveals a stage plays, one at a time." alt="" coords="264,280,491,324"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="505,279,615,262,642,260,636,261,616,267,507,284"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Shared_1_1GameState_1_1INavigation.html" title="Injectable seam over the static Navigation, testable without global state." alt="" coords="280,349,474,394"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="480,342,614,299,701,266,706,264,616,304,481,347"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="490,197,641,223,636,225,491,202"/>
+<area shape="rect" id="Node000009" href="$interfaceBalloonParty_1_1Shared_1_1Pause_1_1ITimeScaleClaims.html" title="Write surface of the time&#45;scale claim stack." alt="" coords="279,418,475,463"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="472,410,492,403,555,382,614,353,677,307,726,266,731,263,680,311,617,357,557,387,494,408,473,416"/>
+<area shape="rect" id="Node000010" href="$interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html" title="The card reveal (Game/CardReveal/, UI/CardReveal/): which balloon pops there are, how one is chosen,..." alt="" coords="261,488,493,532"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="490,480,554,454,585,437,614,417,653,379,688,337,737,266,741,263,692,340,657,383,617,421,588,441,556,459,491,485"/>
 </map>

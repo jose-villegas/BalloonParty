@@ -1,13 +1,13 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
 <area shape="rect" id="Node000000" title=" " alt="" coords="5,152,96,180"/>
 <area shape="rect" id="Node000001" href="$structBalloonParty_1_1Audio_1_1SoundHandle.html" title="Identifies one play of a voice slot — the only way to ISoundPlayer.Stop a loop." alt="" coords="161,5,348,50"/>
-<area shape="poly" id="edge691_Node000000_Node000001" title=" " alt="" coords="67,138,99,98,142,60,167,49,164,52,145,65,103,102,71,141"/>
+<area shape="poly" id="edge693_Node000000_Node000001" title=" " alt="" coords="67,138,99,98,142,60,167,49,164,52,145,65,103,102,71,141"/>
 <area shape="rect" id="Node000002" href="$structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpHandle.html" title="One showing heads&#45;up: its slot in the queue and that slot&#39;s generation, so a handle kept past its lin..." alt="" coords="149,75,360,119"/>
-<area shape="poly" id="edge692_Node000000_Node000002" title=" " alt="" coords="102,144,143,129,181,118,177,122,145,134,105,149"/>
+<area shape="poly" id="edge694_Node000000_Node000002" title=" " alt="" coords="102,144,143,129,181,118,177,122,145,134,105,149"/>
 <area shape="rect" id="Node000003" href="$structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpMergeKey.html" title="What makes two heads&#45;ups of one style the same line: a showing line with the same style and key is re..." alt="" coords="149,144,360,189"/>
-<area shape="poly" id="edge693_Node000000_Node000003" title=" " alt="" coords="110,164,151,165,146,168,112,169"/>
+<area shape="poly" id="edge695_Node000000_Node000003" title=" " alt="" coords="110,164,151,165,146,168,112,169"/>
 <area shape="rect" id="Node000004" href="$structBalloonParty_1_1Game_1_1Score_1_1TrailId.html" title="Uniquely identifies a score trail by color and score value; no level component since a trail is only ..." alt="" coords="160,213,348,258"/>
-<area shape="poly" id="edge694_Node000000_Node000004" title=" " alt="" coords="103,184,145,198,181,212,176,214,143,204,103,189"/>
+<area shape="poly" id="edge696_Node000000_Node000004" title=" " alt="" coords="103,184,145,198,181,212,176,214,143,204,103,189"/>
 <area shape="rect" id="Node000005" href="$structBalloonParty_1_1Scenario_1_1ScenarioShift.html" title="A switch of the backdrop to Kind: a cut when Seconds is 0, otherwise the mist reveal played over that..." alt="" coords="144,283,365,327"/>
-<area shape="poly" id="edge695_Node000000_Node000005" title=" " alt="" coords="70,191,103,231,145,268,168,282,163,282,142,273,99,235,69,196"/>
+<area shape="poly" id="edge697_Node000000_Node000005" title=" " alt="" coords="70,191,103,231,145,268,168,282,163,282,142,273,99,235,69,196"/>
 </map>

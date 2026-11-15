@@ -1,5 +1,9 @@
 var NAVTREEINDEX30 =
 {
+"classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#ad7b1add70bd869ffd05fc1ddb4848b77":[6,0,0,3,24,9],
+"classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#af038481bb56ed1e28595de96536c02f3":[5,0,0,3,24,0],
+"classBalloonParty_1_1Configuration_1_1PredictionTraceConfig.html#af038481bb56ed1e28595de96536c02f3":[6,0,0,3,24,0],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html":[5,0,0,3,25],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html":[6,0,0,3,25],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a0b4b8e0a2b681b38319035c55f47ad4b":[5,0,0,3,25,18],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#a0b4b8e0a2b681b38319035c55f47ad4b":[6,0,0,3,25,18],
@@ -245,9 +249,5 @@ var NAVTREEINDEX30 =
 "classBalloonParty_1_1Configuration_1_1SlotGridConfig.html#afc1d517e3415d76a4a6d642f357eaa1b":[6,0,0,3,30,3],
 "classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html":[5,0,0,3,31],
 "classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html":[6,0,0,3,31],
-"classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html#a0e69ccd6d38d838abafa1f00317ee0d7":[5,0,0,3,31,13],
-"classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html#a0e69ccd6d38d838abafa1f00317ee0d7":[6,0,0,3,31,13],
-"classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html#a330f35aaac729fabfbf3143c56c2163d":[5,0,0,3,31,6],
-"classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html#a330f35aaac729fabfbf3143c56c2163d":[6,0,0,3,31,6],
-"classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html#a37e35fa8b88946f0a6669c7fe2ea19d5":[5,0,0,3,31,12]
+"classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html#a0e69ccd6d38d838abafa1f00317ee0d7":[5,0,0,3,31,13]
 };

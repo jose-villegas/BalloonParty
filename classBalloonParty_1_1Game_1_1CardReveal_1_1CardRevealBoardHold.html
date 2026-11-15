@@ -110,6 +110,7 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealB
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pac-methods">Package Functions</a> &#124;
+<a href="#properties">Properties</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealBoardHold-members.html">List of all members</a>  </div>
@@ -117,34 +118,52 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealB
 </div><!--header-->
 <div class="contents">
 
-<p>Holds the board while a card reveal plays over play (a retry's bonus card, or a reveal that runs on into play): the reveal takes the screen and the player can't aim, so lines landing and balls flying meanwhile would be time taken from them.  
+<p>Holds the board while a card reveal plays over play (a retry's bonus card, or a reveal that runs on into play): the balloon takes the screen and the player can't aim, so lines landing and balls flying meanwhile would be time taken from them.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Game.CardReveal.CardRevealBoardHold:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealBoardHold__inherit__graph.svg" width="239" height="131"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealBoardHold__inherit__graph.svg" width="550" height="148"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Game.CardReveal.CardRevealBoardHold:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealBoardHold__coll__graph.svg" width="100%" height="523"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealBoardHold__coll__graph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:af516f7ddff411e24ab462fc3b446865c" id="r_af516f7ddff411e24ab462fc3b446865c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af516f7ddff411e24ab462fc3b446865c">Dispose</a> ()</td></tr>
 <tr class="separator:af516f7ddff411e24ab462fc3b446865c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcc3e3a7856b9135ac6e7939ec177be2" id="r_adcc3e3a7856b9135ac6e7939ec177be2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adcc3e3a7856b9135ac6e7939ec177be2">ResetRun</a> (int generation)</td></tr>
+<tr class="memdesc:adcc3e3a7856b9135ac6e7939ec177be2"><td class="mdescLeft">&#160;</td><td class="mdescRight"><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">generation</td><td>Monotonically increasing run number; frame-deferred async can compare it to drop stale work.</td></tr>
+  </table>
+  </dd>
+</dl>
+ <br /></td></tr>
+<tr class="separator:adcc3e3a7856b9135ac6e7939ec177be2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21883aa757df4adc55386628fa878b5f" id="r_a21883aa757df4adc55386628fa878b5f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a21883aa757df4adc55386628fa878b5f">Start</a> ()</td></tr>
 <tr class="separator:a21883aa757df4adc55386628fa878b5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adafa452e3ce19c1a538392e8ab286ecb" id="r_adafa452e3ce19c1a538392e8ab286ecb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adafa452e3ce19c1a538392e8ab286ecb">Tick</a> ()</td></tr>
+<tr class="separator:adafa452e3ce19c1a538392e8ab286ecb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pac-methods" name="pac-methods"></a>
 Package Functions</h2></td></tr>
-<tr class="memitem:a02c2373d87340c73ae91410ae6c08212" id="r_a02c2373d87340c73ae91410ae6c08212"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a02c2373d87340c73ae91410ae6c08212">CardRevealBoardHold</a> (<a class="el" href="interfaceBalloonParty_1_1Game_1_1CardReveal_1_1ICardReveals.html">ICardReveals</a> reveals, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1GameState_1_1INavigation.html">INavigation</a> navigation, <a class="el" href="classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html">PauseService</a> pauseService)</td></tr>
-<tr class="separator:a02c2373d87340c73ae91410ae6c08212"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5f2cea4051dc7eeb83e16ebfdabce2b" id="r_aa5f2cea4051dc7eeb83e16ebfdabce2b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5f2cea4051dc7eeb83e16ebfdabce2b">CardRevealBoardHold</a> (<a class="el" href="interfaceBalloonParty_1_1Game_1_1CardReveal_1_1ICardReveals.html">ICardReveals</a> reveals, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1GameState_1_1INavigation.html">INavigation</a> navigation, <a class="el" href="classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html">PauseService</a> pauseService, <a class="el" href="interfaceBalloonParty_1_1Shared_1_1Pause_1_1ITimeScaleClaims.html">ITimeScaleClaims</a> timeScale, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a> settings)</td></tr>
+<tr class="separator:aa5f2cea4051dc7eeb83e16ebfdabce2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78702c421be12be479969e248736321a" id="r_a78702c421be12be479969e248736321a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a78702c421be12be479969e248736321a">Advance</a> (float unscaledSeconds)</td></tr>
+<tr class="separator:a78702c421be12be479969e248736321a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
+Properties</h2></td></tr>
+<tr class="memitem:a72647442b2c6bcaa49d0151953db6725" id="r_a72647442b2c6bcaa49d0151953db6725"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a72647442b2c6bcaa49d0151953db6725">ResetOrder</a><code> [get]</code></td></tr>
+<tr class="separator:a72647442b2c6bcaa49d0151953db6725"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -152,6 +171,10 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a331c72b9a64ea2657944f94b1d988403"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a874f42b29b2027362edce6f2ff1f4b18" id="r_a874f42b29b2027362edce6f2ff1f4b18"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a874f42b29b2027362edce6f2ff1f4b18">SetHolding</a> (bool holding)</td></tr>
 <tr class="separator:a874f42b29b2027362edce6f2ff1f4b18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a927209158af81a2bc94e9ef99c7a1f22" id="r_a927209158af81a2bc94e9ef99c7a1f22"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a927209158af81a2bc94e9ef99c7a1f22">StartReturn</a> ()</td></tr>
+<tr class="separator:a927209158af81a2bc94e9ef99c7a1f22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc47c3a6077ae088f44d47f8548fd24a" id="r_abc47c3a6077ae088f44d47f8548fd24a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abc47c3a6077ae088f44d47f8548fd24a">StopReturn</a> ()</td></tr>
+<tr class="separator:abc47c3a6077ae088f44d47f8548fd24a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -161,17 +184,25 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a3b2d02aad00dead1dc15f5a3d180b425"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac56bf87d5a933c89c128c8a006937464" id="r_ac56bf87d5a933c89c128c8a006937464"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html">PauseService</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac56bf87d5a933c89c128c8a006937464">_pauseService</a></td></tr>
 <tr class="separator:ac56bf87d5a933c89c128c8a006937464"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab36cc70333252f5a7a2dbe238ba5fe94" id="r_ab36cc70333252f5a7a2dbe238ba5fe94"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab36cc70333252f5a7a2dbe238ba5fe94">_returnElapsed</a></td></tr>
+<tr class="separator:ab36cc70333252f5a7a2dbe238ba5fe94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79dd7ce3b5ca755dda93d7f17eff4e85" id="r_a79dd7ce3b5ca755dda93d7f17eff4e85"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a79dd7ce3b5ca755dda93d7f17eff4e85">_returning</a></td></tr>
+<tr class="separator:a79dd7ce3b5ca755dda93d7f17eff4e85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa19cc840494d3eaba4f206a2de8f77e9" id="r_aa19cc840494d3eaba4f206a2de8f77e9"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1CardReveal_1_1ICardReveals.html">ICardReveals</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa19cc840494d3eaba4f206a2de8f77e9">_reveals</a></td></tr>
 <tr class="separator:aa19cc840494d3eaba4f206a2de8f77e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa428cd09d28ad99840b82e2701782ff6" id="r_aa428cd09d28ad99840b82e2701782ff6"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa428cd09d28ad99840b82e2701782ff6">_settings</a></td></tr>
+<tr class="separator:aa428cd09d28ad99840b82e2701782ff6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac32bcc9da223feee95ad72d7bbc34b4d" id="r_ac32bcc9da223feee95ad72d7bbc34b4d"><td class="memItemLeft" align="right" valign="top">readonly CompositeDisposable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac32bcc9da223feee95ad72d7bbc34b4d">_subscriptions</a> = new()</td></tr>
 <tr class="separator:ac32bcc9da223feee95ad72d7bbc34b4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18a27df6530134cbe7f5fe911eb1944f" id="r_a18a27df6530134cbe7f5fe911eb1944f"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1Pause_1_1ITimeScaleClaims.html">ITimeScaleClaims</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18a27df6530134cbe7f5fe911eb1944f">_timeScale</a></td></tr>
+<tr class="separator:a18a27df6530134cbe7f5fe911eb1944f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Holds the board while a card reveal plays over play (a retry's bonus card, or a reveal that runs on into play): the reveal takes the screen and the player can't aim, so lines landing and balls flying meanwhile would be time taken from them. </p>
-<p>Pauses PauseSource.CardReveal for as long as one plays in NavigationState.Game; a level-up's reveal during its ceremony and ascent needs no hold. </p>
+<div class="textblock"><p>Holds the board while a card reveal plays over play (a retry's bonus card, or a reveal that runs on into play): the balloon takes the screen and the player can't aim, so lines landing and balls flying meanwhile would be time taken from them. </p>
+<p>Pauses PauseSource.CardReveal in NavigationState.Game until the reveal's card is out (<a class="el" href="interfaceBalloonParty_1_1Game_1_1CardReveal_1_1ICardReveals.html#a14c11d854cbf193431cfd3a5f573998c" title="Whether Current&#39;s card is out: its ribbons have burst from the balloon.">ICardReveals.Shown</a>), then hands play back with time eased up from a standstill over <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aa7cf22e3bf03823cbf9b042fc38a4016" title="Seconds of real time play takes to come back to full speed, from a standstill, once a reveal that hel...">ICardRevealSettings.BoardReturnSeconds</a> of real time, while the ribbons still fly. A level-up's reveal during its ceremony and ascent needs no hold. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a02c2373d87340c73ae91410ae6c08212" name="a02c2373d87340c73ae91410ae6c08212"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a02c2373d87340c73ae91410ae6c08212">&#9670;&#160;</a></span>CardRevealBoardHold()</h2>
+<a id="aa5f2cea4051dc7eeb83e16ebfdabce2b" name="aa5f2cea4051dc7eeb83e16ebfdabce2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5f2cea4051dc7eeb83e16ebfdabce2b">&#9670;&#160;</a></span>CardRevealBoardHold()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -192,7 +223,17 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html">PauseService</a></td>          <td class="paramname"><span class="paramname"><em>pauseService</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html">PauseService</a></td>          <td class="paramname"><span class="paramname"><em>pauseService</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1Pause_1_1ITimeScaleClaims.html">ITimeScaleClaims</a></td>          <td class="paramname"><span class="paramname"><em>timeScale</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a></td>          <td class="paramname"><span class="paramname"><em>settings</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -205,6 +246,31 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a78702c421be12be479969e248736321a" name="a78702c421be12be479969e248736321a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78702c421be12be479969e248736321a">&#9670;&#160;</a></span>Advance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Game.CardReveal.CardRevealBoardHold.Advance </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>unscaledSeconds</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="af516f7ddff411e24ab462fc3b446865c" name="af516f7ddff411e24ab462fc3b446865c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af516f7ddff411e24ab462fc3b446865c">&#9670;&#160;</a></span>Dispose()</h2>
 
@@ -247,6 +313,33 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="adcc3e3a7856b9135ac6e7939ec177be2" name="adcc3e3a7856b9135ac6e7939ec177be2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adcc3e3a7856b9135ac6e7939ec177be2">&#9670;&#160;</a></span>ResetRun()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Game.CardReveal.CardRevealBoardHold.ResetRun </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>generation</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">generation</td><td>Monotonically increasing run number; frame-deferred async can compare it to drop stale work.</td></tr>
+  </table>
+  </dd>
+</dl>
+</p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html#aec1cf0f6798b207b14f85f1fce54e2dd">BalloonParty.Game.Run.IRunResettable</a>.</p>
+
+</div>
+</div>
 <a id="a874f42b29b2027362edce6f2ff1f4b18" name="a874f42b29b2027362edce6f2ff1f4b18"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a874f42b29b2027362edce6f2ff1f4b18">&#9670;&#160;</a></span>SetHolding()</h2>
 
@@ -280,6 +373,73 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">void BalloonParty.Game.CardReveal.CardRevealBoardHold.Start </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a927209158af81a2bc94e9ef99c7a1f22" name="a927209158af81a2bc94e9ef99c7a1f22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a927209158af81a2bc94e9ef99c7a1f22">&#9670;&#160;</a></span>StartReturn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Game.CardReveal.CardRevealBoardHold.StartReturn </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abc47c3a6077ae088f44d47f8548fd24a" name="abc47c3a6077ae088f44d47f8548fd24a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc47c3a6077ae088f44d47f8548fd24a">&#9670;&#160;</a></span>StopReturn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Game.CardReveal.CardRevealBoardHold.StopReturn </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adafa452e3ce19c1a538392e8ab286ecb" name="adafa452e3ce19c1a538392e8ab286ecb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adafa452e3ce19c1a538392e8ab286ecb">&#9670;&#160;</a></span>Tick()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Game.CardReveal.CardRevealBoardHold.Tick </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -356,6 +516,50 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ab36cc70333252f5a7a2dbe238ba5fe94" name="ab36cc70333252f5a7a2dbe238ba5fe94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab36cc70333252f5a7a2dbe238ba5fe94">&#9670;&#160;</a></span>_returnElapsed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Game.CardReveal.CardRevealBoardHold._returnElapsed</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a79dd7ce3b5ca755dda93d7f17eff4e85" name="a79dd7ce3b5ca755dda93d7f17eff4e85"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79dd7ce3b5ca755dda93d7f17eff4e85">&#9670;&#160;</a></span>_returning</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Game.CardReveal.CardRevealBoardHold._returning</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aa19cc840494d3eaba4f206a2de8f77e9" name="aa19cc840494d3eaba4f206a2de8f77e9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa19cc840494d3eaba4f206a2de8f77e9">&#9670;&#160;</a></span>_reveals</h2>
 
@@ -367,6 +571,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1CardReveal_1_1ICardReveals.html">ICardReveals</a> BalloonParty.Game.CardReveal.CardRevealBoardHold._reveals</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa428cd09d28ad99840b82e2701782ff6" name="aa428cd09d28ad99840b82e2701782ff6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa428cd09d28ad99840b82e2701782ff6">&#9670;&#160;</a></span>_settings</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a> BalloonParty.Game.CardReveal.CardRevealBoardHold._settings</td>
         </tr>
       </table>
   </td>
@@ -397,6 +623,53 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a18a27df6530134cbe7f5fe911eb1944f" name="a18a27df6530134cbe7f5fe911eb1944f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18a27df6530134cbe7f5fe911eb1944f">&#9670;&#160;</a></span>_timeScale</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Shared_1_1Pause_1_1ITimeScaleClaims.html">ITimeScaleClaims</a> BalloonParty.Game.CardReveal.CardRevealBoardHold._timeScale</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Property Documentation</h2>
+<a id="a72647442b2c6bcaa49d0151953db6725" name="a72647442b2c6bcaa49d0151953db6725"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a72647442b2c6bcaa49d0151953db6725">&#9670;&#160;</a></span>ResetOrder</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Game.CardReveal.CardRevealBoardHold.ResetOrder</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html#a347699f041bd2f73a8326aa24a351d81">BalloonParty.Game.Run.IRunResettable</a>.</p>
 
 </div>
 </div>

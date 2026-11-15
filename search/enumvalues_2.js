@@ -1,7 +1,7 @@
 var searchData=
 [
   ['capture_0',['Capture',['../namespaceBalloonParty_1_1Shared_1_1Pause.html#acc1e7c1eb619c5c323a6c18c9a586b9aa44a50f07b4bdc57740901280f9eddaf5',1,'BalloonParty::Shared::Pause']]],
-  ['cardreveal_1',['CardReveal',['../namespaceBalloonParty_1_1Shared_1_1Pause.html#ab006bd98ba69f3aaa2ba396e176136b5a5fd69af7dfec39ca9709b909d5212277',1,'BalloonParty::Shared::Pause']]],
+  ['cardreveal_1',['CardReveal',['../namespaceBalloonParty_1_1Shared_1_1Pause.html#ab006bd98ba69f3aaa2ba396e176136b5a5fd69af7dfec39ca9709b909d5212277',1,'BalloonParty.Shared.Pause.CardReveal'],['../namespaceBalloonParty_1_1Shared_1_1Pause.html#acc1e7c1eb619c5c323a6c18c9a586b9aa5fd69af7dfec39ca9709b909d5212277',1,'BalloonParty.Shared.Pause.CardReveal']]],
   ['carrystreak_2',['CarryStreak',['../namespaceBalloonParty_1_1Slots_1_1Capabilities.html#af915a4f3df9f513ca2c08e1a87aff762aff6e0f3ea4bd148ea37497a00a98bf98',1,'BalloonParty::Slots::Capabilities']]],
   ['cc0_3',['Cc0',['../namespaceBalloonParty_1_1Audio_1_1Editor.html#aa262f9b9965eb614ed0767c6d5473bcca2d9b2dd4c51c161de81cf4d6db3983a9',1,'BalloonParty::Audio::Editor']]],
   ['center_4',['Center',['../namespaceBalloonParty_1_1Shared_1_1Animation.html#aadaa00068d0fdfa46a6b8e77f5899708a4f1f6016fc9f3f2353c0cc7c67b292bd',1,'BalloonParty.Shared.Animation.Center'],['../namespaceBalloonParty_1_1Shared_1_1Rendering.html#a63cfabf5179e57786c7237e9ce726787a4f1f6016fc9f3f2353c0cc7c67b292bd',1,'BalloonParty.Shared.Rendering.Center']]],

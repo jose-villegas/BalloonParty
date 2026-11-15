@@ -1,6 +1,7 @@
 var interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings =
 [
     [ "BalloonColor", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a85506378245e5c6b777be02e5c7b5701", null ],
+    [ "BoardReturnSeconds", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aa7cf22e3bf03823cbf9b042fc38a4016", null ],
     [ "BonusRibbonDelaySeconds", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a636ff9c091469630fb2f5021fe6cfd31", null ],
     [ "BonusRibbonSeconds", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a35b974ee3d71f8dec32f36456a72efe3", null ],
     [ "BonusRibbonText", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ac1adfefd86084797af0a5768727f39f0", null ],

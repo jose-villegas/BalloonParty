@@ -134,6 +134,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a834c055d5590fe737bdeb12a65671c2f" id="r_a834c055d5590fe737bdeb12a65671c2f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a834c055d5590fe737bdeb12a65671c2f">Finish</a> (<a class="el" href="classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html">RevealedCard</a> done)</td></tr>
 <tr class="memdesc:a834c055d5590fe737bdeb12a65671c2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The stage is done with <em>done</em> : if it's still <a class="el" href="#a4a228cf5cd0578d86fdaaf1e232bbb87" title="The reveal to play now, or null between reveals.">Current</a>, the next queued reveal, if any, starts.  <br /></td></tr>
 <tr class="separator:a834c055d5590fe737bdeb12a65671c2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64b0094029b258f7e437b2857f6918f3" id="r_a64b0094029b258f7e437b2857f6918f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a64b0094029b258f7e437b2857f6918f3">MarkShown</a> (<a class="el" href="classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html">RevealedCard</a> shown)</td></tr>
+<tr class="memdesc:a64b0094029b258f7e437b2857f6918f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The stage has <em>shown</em> 's card out.  <br /></td></tr>
+<tr class="separator:a64b0094029b258f7e437b2857f6918f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -146,6 +149,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a1a5b8d2616374946587a2fa8a2a49beb" id="r_a1a5b8d2616374946587a2fa8a2a49beb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a5b8d2616374946587a2fa8a2a49beb">NextPop</a><code> [get]</code></td></tr>
 <tr class="memdesc:a1a5b8d2616374946587a2fa8a2a49beb"><td class="mdescLeft">&#160;</td><td class="mdescRight">The pop the next reveal will play, chosen a reveal ahead so the stage can load its sheet while the game plays.  <br /></td></tr>
 <tr class="separator:a1a5b8d2616374946587a2fa8a2a49beb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14c11d854cbf193431cfd3a5f573998c" id="r_a14c11d854cbf193431cfd3a5f573998c"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a14c11d854cbf193431cfd3a5f573998c">Shown</a><code> [get]</code></td></tr>
+<tr class="memdesc:a14c11d854cbf193431cfd3a5f573998c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether <a class="el" href="#a4a228cf5cd0578d86fdaaf1e232bbb87" title="The reveal to play now, or null between reveals.">Current</a>'s card is out: its ribbons have burst from the balloon.  <br /></td></tr>
+<tr class="separator:a14c11d854cbf193431cfd3a5f573998c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The reveals a stage plays, one at a time. </p>
@@ -208,6 +214,28 @@ Properties</h2></td></tr>
 <p>A reveal a reset or detach already dropped finishes nothing, so a stage still animating it can't cut off the reveal that replaced it. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#aa382606199882fa9581ba5e859a11b6c">BalloonParty.Game.CardReveal.CardRevealController</a>.</p>
+
+</div>
+</div>
+<a id="a64b0094029b258f7e437b2857f6918f3" name="a64b0094029b258f7e437b2857f6918f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64b0094029b258f7e437b2857f6918f3">&#9670;&#160;</a></span>MarkShown()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Game.CardReveal.ICardReveals.MarkShown </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBalloonParty_1_1Game_1_1CardReveal_1_1RevealedCard.html">RevealedCard</a></td>          <td class="paramname"><span class="paramname"><em>shown</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The stage has <em>shown</em> 's card out. </p>
+<p>Like <a class="el" href="#a834c055d5590fe737bdeb12a65671c2f" title="The stage is done with done : if it&#39;s still Current, the next queued reveal, if any,...">Finish</a>, a reveal that is no longer <a class="el" href="#a4a228cf5cd0578d86fdaaf1e232bbb87" title="The reveal to play now, or null between reveals.">Current</a> changes nothing. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a34a9913e3f28592c573cfd7f0e8087af">BalloonParty.Game.CardReveal.CardRevealController</a>.</p>
 
 </div>
 </div>
@@ -288,6 +316,32 @@ Properties</h2></td></tr>
 <p>Chosen when a stage first attaches, and re-chosen as each reveal starts, before <a class="el" href="#a4a228cf5cd0578d86fdaaf1e232bbb87" title="The reveal to play now, or null between reveals.">Current</a> publishes; -1 before a stage attaches. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a3706fbc63442fb310946ee4658b75f4d">BalloonParty.Game.CardReveal.CardRevealController</a>.</p>
+
+</div>
+</div>
+<a id="a14c11d854cbf193431cfd3a5f573998c" name="a14c11d854cbf193431cfd3a5f573998c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14c11d854cbf193431cfd3a5f573998c">&#9670;&#160;</a></span>Shown</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyReactiveProperty&lt;bool&gt; BalloonParty.Game.CardReveal.ICardReveals.Shown</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Whether <a class="el" href="#a4a228cf5cd0578d86fdaaf1e232bbb87" title="The reveal to play now, or null between reveals.">Current</a>'s card is out: its ribbons have burst from the balloon. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a1c69865e70faad4cc3e7491eb3f754a4">BalloonParty.Game.CardReveal.CardRevealController</a>.</p>
 
 </div>
 </div>

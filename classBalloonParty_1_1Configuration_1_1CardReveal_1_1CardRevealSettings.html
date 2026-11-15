@@ -137,6 +137,9 @@ Properties</h2></td></tr>
 <tr class="memitem:ae17ae7beb541a12f90a19c9bc5ecd673" id="r_ae17ae7beb541a12f90a19c9bc5ecd673"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae17ae7beb541a12f90a19c9bc5ecd673">BalloonColor</a><code> [get]</code></td></tr>
 <tr class="memdesc:ae17ae7beb541a12f90a19c9bc5ecd673"><td class="mdescLeft">&#160;</td><td class="mdescRight">The prize balloon's colour: none of the board's, so it reads as the reward.  <br /></td></tr>
 <tr class="separator:ae17ae7beb541a12f90a19c9bc5ecd673"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13a993094dd4ab470bf48aa17dc6b142" id="r_a13a993094dd4ab470bf48aa17dc6b142"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a13a993094dd4ab470bf48aa17dc6b142">BoardReturnSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:a13a993094dd4ab470bf48aa17dc6b142"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds of real time play takes to come back to full speed, from a standstill, once a reveal that held the board has its card out.  <br /></td></tr>
+<tr class="separator:a13a993094dd4ab470bf48aa17dc6b142"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada690440e9dba104cef52bdd23bba1f0" id="r_ada690440e9dba104cef52bdd23bba1f0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada690440e9dba104cef52bdd23bba1f0">BonusRibbonDelaySeconds</a><code> [get]</code></td></tr>
 <tr class="memdesc:ada690440e9dba104cef52bdd23bba1f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds after a purple level's play begins before its bonus ribbon bursts in.  <br /></td></tr>
 <tr class="separator:ada690440e9dba104cef52bdd23bba1f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -314,6 +317,8 @@ Properties</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a2091f49f89bb1f573405e725c7639fca" id="r_a2091f49f89bb1f573405e725c7639fca"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2091f49f89bb1f573405e725c7639fca">_balloonColor</a> = new(0.8f, 0.82f, 0.87f, 1f)</td></tr>
 <tr class="separator:a2091f49f89bb1f573405e725c7639fca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:addc6f48036971d9ec8e212190419712f" id="r_addc6f48036971d9ec8e212190419712f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#addc6f48036971d9ec8e212190419712f">_boardReturnSeconds</a> = 1.5f</td></tr>
+<tr class="separator:addc6f48036971d9ec8e212190419712f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2943ba0cddfb03588e875a00fe7bd0f0" id="r_a2943ba0cddfb03588e875a00fe7bd0f0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2943ba0cddfb03588e875a00fe7bd0f0">_bonusRibbonDelaySeconds</a> = 0.4f</td></tr>
 <tr class="separator:a2943ba0cddfb03588e875a00fe7bd0f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a51d0785269b6ea40ac395b4183341e" id="r_a7a51d0785269b6ea40ac395b4183341e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7a51d0785269b6ea40ac395b4183341e">_bonusRibbonSeconds</a> = 2.2f</td></tr>
@@ -446,6 +451,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">Color BalloonParty.Configuration.CardReveal.CardRevealSettings._balloonColor = new(0.8f, 0.82f, 0.87f, 1f)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="addc6f48036971d9ec8e212190419712f" name="addc6f48036971d9ec8e212190419712f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#addc6f48036971d9ec8e212190419712f">&#9670;&#160;</a></span>_boardReturnSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._boardReturnSeconds = 1.5f</td>
         </tr>
       </table>
   </td>
@@ -1757,6 +1784,32 @@ Private Attributes</h2></td></tr>
 <p>The prize balloon's colour: none of the board's, so it reads as the reward. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a85506378245e5c6b777be02e5c7b5701">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="a13a993094dd4ab470bf48aa17dc6b142" name="a13a993094dd4ab470bf48aa17dc6b142"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13a993094dd4ab470bf48aa17dc6b142">&#9670;&#160;</a></span>BoardReturnSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings.BoardReturnSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds of real time play takes to come back to full speed, from a standstill, once a reveal that held the board has its card out. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aa7cf22e3bf03823cbf9b042fc38a4016">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
 
 </div>
 </div>

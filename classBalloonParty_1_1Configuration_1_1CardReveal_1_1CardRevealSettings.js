@@ -1,6 +1,7 @@
 var classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings =
 [
     [ "_balloonColor", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a2091f49f89bb1f573405e725c7639fca", null ],
+    [ "_boardReturnSeconds", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#addc6f48036971d9ec8e212190419712f", null ],
     [ "_bonusRibbonDelaySeconds", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a2943ba0cddfb03588e875a00fe7bd0f0", null ],
     [ "_bonusRibbonSeconds", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a7a51d0785269b6ea40ac395b4183341e", null ],
     [ "_bonusRibbonText", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a4ad1ee88d0d7a3712eb8a2e84caa995b", null ],
@@ -60,6 +61,7 @@ var classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings =
     [ "_sheetRows", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a31aa3f0032f47d9c42bed0ab39a436e1", null ],
     [ "_shredsPrefab", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ae443524951a659437a369e5c5a4bb68e", null ],
     [ "BalloonColor", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ae17ae7beb541a12f90a19c9bc5ecd673", null ],
+    [ "BoardReturnSeconds", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a13a993094dd4ab470bf48aa17dc6b142", null ],
     [ "BonusRibbonDelaySeconds", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ada690440e9dba104cef52bdd23bba1f0", null ],
     [ "BonusRibbonSeconds", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ad4e300709a273b3bd3a3093a410f587b", null ],
     [ "BonusRibbonText", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a65402f404bda6bcf03ef59b3247b0618", null ],

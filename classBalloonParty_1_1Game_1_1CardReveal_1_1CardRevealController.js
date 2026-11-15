@@ -3,11 +3,13 @@ var classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController =
     [ "CardRevealController", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#acf4883c6ad6b15bea9cb7d6d176dd114", null ],
     [ "CardRevealController", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a77abecc18fd2d946584fb8a5971fcb28", null ],
     [ "AttachStage", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ae9639baa7efd942db67301a316976d14", null ],
+    [ "Clear", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a9aaa23f16c7b73cb34b43c2e889784b1", null ],
     [ "DetachStage", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a0d9618716a7e97f3d5abf050dd68b520", null ],
     [ "Dispose", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#aced2faf1f4e3638f99fee5fcf731d57e", null ],
     [ "Enqueue", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ad3a774f88dfa6a9307612e9e4d4bd1d9", null ],
     [ "Finish", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#aa382606199882fa9581ba5e859a11b6c", null ],
     [ "IsOnStage", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a52e0a8049acbaf64983afb0c5e574cb7", null ],
+    [ "MarkShown", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a34a9913e3f28592c573cfd7f0e8087af", null ],
     [ "PickPop", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a4571bd9d6802bf38512e4348b2959f68", null ],
     [ "ResetRun", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a9827c944a3c115b219783c2d8f8d3f38", null ],
     [ "Start", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a9848c68a3af98e7fc6e7fa7ce2c6aefb", null ],
@@ -21,10 +23,12 @@ var classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController =
     [ "_random", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#af621aa488ebba9103b8d2090632f85ec", null ],
     [ "_recentPops", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a652af528e4f8c07616ed674d05edba84", null ],
     [ "_settings", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#aacdda76b666aad7ff4247982319cbc07", null ],
+    [ "_shown", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#acd8090368c6c7d8986dc48ddf6929fd4", null ],
     [ "_stages", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#aacf2014ce6293232379cb83393bbb1c8", null ],
     [ "_subscriptions", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#ab1c7506d02875197178fe9c128848ae6", null ],
     [ "Current", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a87413acc6a4d2ce312f414f388b5572b", null ],
     [ "HasStage", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#aec05337071a0f49ae917788a05473118", null ],
     [ "NextPop", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a3706fbc63442fb310946ee4658b75f4d", null ],
-    [ "ResetOrder", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a6b04ffbb812ebd78f86135d1b2893f89", null ]
+    [ "ResetOrder", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a6b04ffbb812ebd78f86135d1b2893f89", null ],
+    [ "Shown", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html#a1c69865e70faad4cc3e7491eb3f754a4", null ]
 ];
