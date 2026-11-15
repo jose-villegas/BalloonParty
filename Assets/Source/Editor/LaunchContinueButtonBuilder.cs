@@ -32,6 +32,11 @@ namespace BalloonParty.Editor
         private const float FontSize = 9.5f;
 
         private static readonly Color White = new(0.97f, 0.97f, 0.98f, 1f);
+
+        // The body art is a flat silhouette; the balloon's depth is all in its specular glows. A white body under
+        // them would hide them, so it's a pale cool grey and the glows pure white, standing out as Play's cream
+        // glows do on its blue.
+        private static readonly Color BodyColor = new(0.8f, 0.82f, 0.87f, 1f);
         private static readonly Color RibbonColor = new(0.98f, 0.965f, 0.925f, 1f);
         private static readonly Color InkColor = new(0.2f, 0.2f, 0.2f, 1f);
 
@@ -113,7 +118,7 @@ namespace BalloonParty.Editor
             balloonRect.anchorMin = balloonRect.anchorMax = new Vector2(0.5f, 0.5f);
             balloonRect.anchoredPosition = Vector2.zero;
             balloonRect.localScale = new Vector3(BalloonScale, BalloonScale, 1f);
-            Whiten(balloon);
+            Recolor(balloon);
 
             var view = root.AddComponent<LaunchContinueView>();
             var viewObject = new SerializedObject(view);
@@ -164,8 +169,8 @@ namespace BalloonParty.Editor
             return text;
         }
 
-        // The writing is on the ribbon now; the balloon is plain white.
-        private static void Whiten(GameObject balloon)
+        // The writing is on the ribbon now; the balloon is white, shaded by its glows.
+        private static void Recolor(GameObject balloon)
         {
             var label = balloon.GetComponentInChildren<TMP_Text>(true);
             if (label != null)
@@ -177,7 +182,11 @@ namespace BalloonParty.Editor
             {
                 if (image.name is "Icon" or "BakedShadow")
                 {
-                    image.color = White;
+                    image.color = BodyColor;
+                }
+                else if (image.name.StartsWith("Specular"))
+                {
+                    image.color = Color.white;
                 }
             }
         }

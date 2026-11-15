@@ -39,8 +39,11 @@ namespace BalloonParty.Game
         [Tooltip("The body's radius, in the balloon's own units.")]
         [SerializeField] [Min(1f)] private float _bodyRadius = 53f;
 
-        [Tooltip("Room kept between the balloons, and from the screen's edges, in canvas units.")]
+        [Tooltip("Room kept from the screen's edges, in canvas units.")]
         [SerializeField] [Min(0f)] private float _clearance = 4f;
+
+        [Tooltip("Room kept between this balloon and Play's, its tail included, in canvas units.")]
+        [SerializeField] [Min(0f)] private float _playGap = 16f;
 
         [SerializeField] private BalloonWanderSettings _wander = new();
         [SerializeField] private RibbonClothSettings _cloth = new();
@@ -113,8 +116,11 @@ namespace BalloonParty.Game
                 area.xMin + radius + _clearance, area.yMin + hang + _clearance,
                 area.xMax - radius - _clearance, area.yMax - radius - _clearance);
 
-            // Above Play the ribbon hangs toward it, so the keep-out reaches up by the hang.
-            var keepOut = new KeepOut(playCentre, playCentre + Vector2.up * hang, playRadius + radius + _clearance);
+            // Below Play its tail hangs past the body down to the knot, so the keep-out reaches down to keep the gap
+            // from the tail too; above Play the ribbon hangs toward it, so the keep-out reaches up by the hang.
+            var tail = Mathf.Max(0f, (_bodyCentre.y - _knot.y) * playScale - playRadius);
+            var keepOut = new KeepOut(
+                playCentre + Vector2.down * tail, playCentre + Vector2.up * hang, playRadius + radius + _playGap);
             var start = new Vector2(Mathf.Lerp(bounds.xMin, bounds.xMax, 0.8f), bounds.yMin);
             _wanderer = new BalloonWander(_wander, bounds, keepOut, start, Random.Range(int.MinValue, int.MaxValue));
             _obstacles[0] = new KeepOut(playCentre, playCentre, playRadius);
