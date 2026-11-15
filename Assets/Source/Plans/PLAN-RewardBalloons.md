@@ -22,12 +22,12 @@
      level still ahead of them. On a purple level its pop used to roll once for another (25%, then 10%);
      since 2026-11-15 (the owner) a purple level rolls for it every 6 lines from 15% done instead, 35%, then
      20%, then 10%: three a level at most, each rarer. Never more than one on the board.
-   - Normal hits do nothing: the shot bounces off it as off an unbreakable. Items do nothing either
-     (bomb, lightning, paint): a bomb beside it must not hand out the card.
+   - Normal hits do nothing: the shot bounces off it as off an unbreakable. Lightning and paint do
+     nothing either. A bomb's blast beside it pops it, as it pops an unbreakable (since 2026-11-15, the
+     owner; it first did nothing, so a bomb couldn't hand out the card).
    - A piercing shot pops it: a cruise-earned pierce or a Snipe lance. It is plowed and shatters at
      the shot's next wall bounce, as an unbreakable is.
-   - A laser beam pops it too (added after playtests): the beam's damage carries `DamageFlags.Beam`,
-     which a bomb's blast never does.
+   - A laser beam pops it too (added after playtests): the beam's damage carries `DamageFlags.Beam`.
    - Popped, it gives a **free upgrade card**, kept for the run, shown with the card reveal.
    - It still looks like a balloon (body and knot, unlike the unbreakable's sphere), plated in metallic
      gold: plates wrapping it, each catching the light on its own, with glitter where the speculars land.
@@ -60,7 +60,7 @@
 | `RewardBalloonPayout` | `Balloon/Reward/` | Reads the reward balloons' pops from `ActorHitMessage` and pays them: the golden one's card (or heart), the heart balloon's heart |
 | `IPlayerHealing` | `Game/Health/` | `Heal(amount)` on `PlayerHealthController`, up to `IPlayerHealth.Max` without trimming extras, and `HealPastMax(amount)` for a purple level's heart |
 | `IRewardBalloonSettings` | `Configuration/Balloons/` | The tuning below, a block on `BalloonsConfiguration` |
-| Shot solver | `Solver/` | `ShotBoardGather` builds a target for both (today it would see neither); the golden one deflects unless pierced, and is immune to the shared bomb core but not the laser's |
+| Shot solver | `Solver/` | `ShotBoardGather` builds a target for both (today it would see neither); the golden one deflects unless pierced, and a piercing item effect (a bomb's blast, the laser) pops it as it pops an unbreakable |
 
 ```mermaid
 sequenceDiagram

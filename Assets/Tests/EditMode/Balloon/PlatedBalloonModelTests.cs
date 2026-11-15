@@ -13,10 +13,10 @@ using NUnit.Framework;
 namespace BalloonParty.Tests.Balloon
 {
     /// <summary>
-    ///     The plated reward balloons, the golden balloon and the disco ball (PLAN-DiscoBalloon phase 1): only the
-    ///     shot's own pierce or a laser beam pops them; the shot's ordinary hit bounces off, and no other item
-    ///     (bomb, lightning, paint) touches them, however their damage is flagged. Each fixture runs once per
-    ///     plated type, so the two can't drift apart.
+    ///     The plated reward balloons, the golden balloon and the disco ball (PLAN-DiscoBalloon phase 1): they take
+    ///     hits as an unbreakable does. Any piercing hit pops them (the shot's own pierce, a bomb's blast beside
+    ///     them, a laser beam), the shot's ordinary hit bounces off, and an item's plain damage (lightning, paint)
+    ///     does nothing. Each fixture runs once per plated type, so the two can't drift apart.
     /// </summary>
     [TestFixture(BalloonType.Golden)]
     [TestFixture(BalloonType.Disco)]
@@ -58,12 +58,22 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(HitOutcome.Pop, _model.EvaluateHit(new DamageContext(1, flags)));
         }
 
-        // Lightning and paint deal plain item damage; a bomb's blast on its neighbours carries Piercing.
-        [TestCase(DamageFlags.Normal, TestName = "AnItemsOrdinaryDamage_DoesNothing")]
-        [TestCase(DamageFlags.Piercing, TestName = "ABombsNeighboursPiercingDamage_DoesNothing")]
-        public void ItemDamage_DoesNothing(DamageFlags flags)
+        // Lightning and paint deal plain item damage.
+        [Test]
+        public void AnItemsOrdinaryDamage_DoesNothing()
         {
-            Assert.AreEqual(HitOutcome.None, _model.EvaluateHit(new DamageContext(99, flags)));
+            Assert.AreEqual(HitOutcome.None, _model.EvaluateHit(new DamageContext(99, DamageFlags.Normal)));
+        }
+
+        // A bomb's blast on its neighbours carries Piercing and no DirectHit, and pops an unbreakable beside it.
+        [Test]
+        public void ABombsNeighboursPiercingDamage_Pops_AsItPopsAnUnbreakable()
+        {
+            var blast = new DamageContext(1, DamageFlags.Piercing);
+            var unbreakable = new UnbreakableBalloonModel(new BalloonModelConfig());
+
+            Assert.AreEqual(unbreakable.EvaluateHit(blast), _model.EvaluateHit(blast));
+            Assert.AreEqual(HitOutcome.Pop, _model.EvaluateHit(blast));
         }
 
         // The laser's beam carries Piercing like a bomb's blast; Beam is what tells it apart.

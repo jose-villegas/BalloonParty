@@ -16,8 +16,8 @@
 1. **A third reward balloon**, placed by `RewardBalloonService` and never by a level's mix, like the golden
    and heart balloons (`Plans/PLAN-RewardBalloons.md`). It is rare, and there is at most one on the board.
 2. **It breaks like the golden balloon.** An ordinary hit from the shot bounces off it. A piercing shot plows
-   it, and it shatters at the shot's next wall. A laser beam breaks it at once. Nothing else touches it: a
-   bomb, lightning or paint has no effect. It has no colour and no score of its own, resists paint, and
+   it, and it shatters at the shot's next wall. A laser beam breaks it at once, and so does a bomb's blast
+   beside it, as it breaks an unbreakable. Lightning and paint have no effect. It has no colour and no score of its own, resists paint, and
    carries no item.
 3. **Its pop paints the board rainbow, as a wave.** A disc grows out from where the ball was. Each balloon
    the edge reaches is nudged away from the ball, gives a small pop burst, plays the paint drip, and is
@@ -112,8 +112,8 @@ These are the golden balloon's rules, through the shared `PlatedBalloonModel`:
 - **A piercing shot** (a pierce earned in cruise, or a Snipe lance) plows it. It pops at the shot's next
   wall discharge, as the golden balloon does, and the wave starts from the ball's slot at that moment.
 - **A laser beam** pops it at once (`DamageFlags.Beam`).
-- **A bomb's blast** carries `Piercing` but never `DirectHit` or `Beam`, so it does nothing. Lightning,
-  paint and snipe blooms do nothing either. A board clear or a level change takes the ball away with no
+- **A bomb's blast** carries `Piercing`, so it pops the ball, as it pops an unbreakable beside it (changed
+  2026-11-15 at the owner's ask; it first did nothing). Lightning, paint and snipe blooms do nothing. A board clear or a level change takes the ball away with no
   wave: only a pop pays, as with the other rewards.
 
 Its pop scores nothing and leaves the streak alone, because the ball has no colour. Everything it gives

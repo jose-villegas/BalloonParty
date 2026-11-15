@@ -12,8 +12,8 @@ namespace BalloonParty.Tests.ShotSolver
 {
     /// <summary>The plated reward balloons in the solver, the golden balloon (PLAN-RewardBalloons phase 2) and the
     /// disco ball (PLAN-DiscoBalloon phase 1): each deflects the ordinary shot forever, pops to a piercing shot
-    /// or a laser beam, pays no score, leaves the streak alone, is untouched by every other item effect, and is
-    /// counted apart from the other. Mirrors <c>PlatedBalloonModel.EvaluateHit</c>.</summary>
+    /// a laser beam or a bomb's blast beside it (as an unbreakable does), pays no score, leaves the streak alone,
+    /// and is counted apart from the other. Mirrors <c>PlatedBalloonModel.EvaluateHit</c>.</summary>
     [TestFixture(BalloonType.Golden)]
     [TestFixture(BalloonType.Disco)]
     public class ShotPlatedBalloonTests
@@ -166,10 +166,10 @@ namespace BalloonParty.Tests.ShotSolver
         }
 
         [Test]
-        public void ApplyEffectHits_BombBesidePlated_LeavesItStanding()
+        public void ApplyEffectHits_BombBesidePlated_PopsIt_AsItPopsAnUnbreakable()
         {
-            // A bomb's hex neighbours take a guaranteed piercing kill (an int.MaxValue tough neighbour dies
-            // to it, the control below), but the plated balloon answers an item's hit with None.
+            // A bomb's hex neighbours take a guaranteed piercing kill: an int.MaxValue tough neighbour (an
+            // unbreakable, the control below) dies to it, and so does the plated balloon.
             var host = ShotBoardBuilder.Green(
                 new Vector2(0f, 1f), 0.05f, "Red", 1, 1, new Vector2Int(3, 3), 0, 0, 0f, false, null,
                 item: ItemType.Bomb);
@@ -180,8 +180,9 @@ namespace BalloonParty.Tests.ShotSolver
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
                 workingSet: workingSet, items: CreateBombItemLayer());
 
-            Assert.AreEqual(1, result.Pops, "only the host pops");
-            Assert.IsFalse(result.BoardCleared);
+            Assert.AreEqual(2, result.Pops, "the plated balloon pops beside the bomb");
+            Assert.AreEqual(1, result.RawScore, "only the host scores");
+            Assert.IsTrue(result.BoardCleared);
 
             var control = new[]
             {

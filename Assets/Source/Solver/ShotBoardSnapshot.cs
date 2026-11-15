@@ -134,10 +134,6 @@ namespace BalloonParty.Solver
         /// reward balloon is <c>IHasScoreColor</c>, so <c>ScoreController</c> skips it).</summary>
         public readonly ShotRewardKind Reward;
 
-        /// <summary>Item effects (bomb, lightning) do nothing to it, all but the laser's beam: a plated reward
-        /// balloon pops only to the shot's own pierce or a laser.</summary>
-        public readonly bool ImmuneToEffects;
-
         /// <summary>Passthrough so downstream reads stay tidy — null/empty means colourless, exactly as
         /// <see cref="ColorProfile.ColorId" /> does.</summary>
         public string ColorId => Color.ColorId;
@@ -145,7 +141,7 @@ namespace BalloonParty.Solver
         private ShotBalloonSnapshot(
             Vector2 position, float radius, int scoreValue, int hitsRemaining, ColorProfile color,
             BalanceProfile? balance, ShotContactKind contactKind, ItemProfile? item, Vector2Int? staticSlotIndex,
-            ShotRewardKind reward = ShotRewardKind.None, bool immuneToEffects = false)
+            ShotRewardKind reward = ShotRewardKind.None)
         {
             Position = position;
             Radius = radius;
@@ -157,7 +153,6 @@ namespace BalloonParty.Solver
             Item = item;
             StaticSlotIndex = staticSlotIndex;
             Reward = reward;
-            ImmuneToEffects = immuneToEffects;
         }
 
         /// <summary>A poppable/deflectable colour-scoring target — mirrors a live balloon with
@@ -235,14 +230,15 @@ namespace BalloonParty.Solver
         }
 
         /// <summary>A plated reward balloon: colourless, deflecting every ordinary hit forever
-        /// (<c>int.MaxValue</c>, so a pierce plows it and the discharge pops it), scoreless, and untouched by
-        /// item effects but the laser's — mirrors <c>PlatedBalloonModel</c>.</summary>
+        /// (<c>int.MaxValue</c>, so a pierce plows it and the discharge pops it), and scoreless. Item effects treat
+        /// it as an unbreakable: a piercing one (a bomb's blast, a laser) pops it, plain damage never wears it
+        /// down. Mirrors <c>PlatedBalloonModel</c>.</summary>
         private static ShotBalloonSnapshot ForPlatedTarget(
             Vector2 position, float radius, BalanceProfile? balance, ShotRewardKind reward)
         {
             return new ShotBalloonSnapshot(
                 position, radius, 0, int.MaxValue, new ColorProfile(null, false, false), balance,
-                ShotContactKind.Poppable, null, null, reward, immuneToEffects: true);
+                ShotContactKind.Poppable, null, null, reward);
         }
     }
 
@@ -270,7 +266,6 @@ namespace BalloonParty.Solver
         public bool WashesProjectileColor;
         public bool PaysSourceColor;
         public ShotRewardKind Reward;
-        public bool ImmuneToEffects;
         // Painted rainbow by this shot's own disco ball pop: mirrors ShotPaintLedger, for the one shot simulated.
         public bool OwnPaint;
         public ShotSimDynamicActor Actor;
@@ -294,7 +289,6 @@ namespace BalloonParty.Solver
             IsRainbow = snapshot.Color.IsRainbow;
             IsStatic = snapshot.StaticSlotIndex.HasValue;
             Reward = snapshot.Reward;
-            ImmuneToEffects = snapshot.ImmuneToEffects;
             OwnPaint = false;
             Actor = null;
         }

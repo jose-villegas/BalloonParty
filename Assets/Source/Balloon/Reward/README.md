@@ -23,10 +23,10 @@ more are missing. At most one of each is on the board. The plans are `Plans/PLAN
 
 The golden balloon itself is `Balloon/Model/GoldenBalloonModel`, a `PlatedBalloonModel`, whose hit rules a third
 reward balloon, the disco ball (`DiscoBalloonModel`, `Plans/PLAN-DiscoBalloon.md`), shares: the shot's own ordinary hit bounces
-off it, a pierce pops it (it is tough, so the pierce plows it and it shatters at the next wall), and
-so does a laser beam: the laser marks its damage `DamageFlags.Beam`. No other item touches it: an
-item's damage has no `DirectHit`, and its hit is `HitOutcome.None`. A bomb's blast on its neighbours
-carries `Piercing` like the beam, but never `Beam`, so a bomb beside it hands out no card. It is
+off it, and it takes hits as an unbreakable does: any `Piercing` damage pops it. That is a pierce (it is
+tough, so the pierce plows it and it shatters at the next wall), a bomb's blast beside it, or a laser beam
+(the laser also marks its damage `DamageFlags.Beam`, which pops it even without `Piercing`). An item's plain
+damage (lightning, paint) has no `DirectHit`, and its hit is `HitOutcome.None`. It is
 colourless and scoreless, resists paint, and carries no item. Its prefab (`Prefabs/Balloon/Golden`) is
 built from the tough balloon's, so it looks like a balloon, with a gold-plated body
 (`Shaders/BalloonParty/Balloon/GoldenBalloon.shader`) and a dark gold knot. Faint god rays turn and breathe

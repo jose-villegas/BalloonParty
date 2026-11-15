@@ -20,7 +20,7 @@ when, is decided by `Game/CardReveal/`; this folder only plays it. The design is
 
 A purple level starts with a ribbon naming it: `ICardRevealSettings.BonusRibbonText` ("Bonus"), on a copy of
 the capped ribbon tinted the level's extra colour (the last of its colours), its text `BonusRibbonTextColor`
-(charcoal) so it reads on the purple. `CardRevealView` plays it off
+(white). `CardRevealView` plays it off
 `Game/Level/IBonusLevelCue`, `BonusRibbonDelaySeconds` (0.4) after play begins, growing in from
 `_bonusRibbonFrom` to `_bonusRibbonTo` (the view's own layout, high in the middle of the board) and flying
 `BonusRibbonSeconds` (2.2) with its exit, all on unscaled time. It is drawn `_bonusRibbonScale` (1.8) times a

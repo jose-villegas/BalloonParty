@@ -981,13 +981,6 @@ namespace BalloonParty.Solver
                 // exactly like a pop does.
                 NudgeItemHit(dynamics, workingSet[index], tHit);
 
-                // A plated reward balloon: an item's hit is HitOutcome.None, neither a pop nor spent durability,
-                // except the laser's beam (DamageFlags.Beam), which pops it.
-                if (workingSet[index].ImmuneToEffects && activation.Item != ItemType.Laser)
-                {
-                    continue;
-                }
-
                 var flags = hit.Kind == EffectHitKind.PiercingDamage ? DamageFlags.Piercing : outcome.Flags;
                 var pops = hit.Kind == EffectHitKind.PiercingDamage || flags.HasFlag(DamageFlags.Piercing);
                 if (!pops)
