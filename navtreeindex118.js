@@ -40,10 +40,12 @@ var NAVTREEINDEX118 =
 "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileFiredMessage.html#ace1192022ae45e01b5965289e9661d14":[6,0,0,12,7,31,3],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html":[5,0,0,12,7,32],
 "structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html":[6,0,0,12,7,32],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html#a0a04ba80b903aa07e735fecdf7142994":[5,0,0,12,7,32,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html#a0a04ba80b903aa07e735fecdf7142994":[6,0,0,12,7,32,0],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html#af305a03533683b446b16637a0a847df7":[5,0,0,12,7,32,1],
-"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html#af305a03533683b446b16637a0a847df7":[6,0,0,12,7,32,1],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html#a5b5bf160a6be03d7129a5d6f99517eca":[5,0,0,12,7,32,1],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html#a5b5bf160a6be03d7129a5d6f99517eca":[6,0,0,12,7,32,1],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html#af305a03533683b446b16637a0a847df7":[5,0,0,12,7,32,2],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html#af305a03533683b446b16637a0a847df7":[6,0,0,12,7,32,2],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html#afb1a58fd748077609747736dffa36b04":[5,0,0,12,7,32,0],
+"structBalloonParty_1_1Shared_1_1Messages_1_1ProjectileLoadedMessage.html#afb1a58fd748077609747736dffa36b04":[6,0,0,12,7,32,0],
 "structBalloonParty_1_1Shared_1_1Messages_1_1RestartRiseStartedMessage.html":[5,0,0,12,7,33],
 "structBalloonParty_1_1Shared_1_1Messages_1_1RestartRiseStartedMessage.html":[6,0,0,12,7,33],
 "structBalloonParty_1_1Shared_1_1Messages_1_1RunResetMessage.html":[5,0,0,12,7,34],
@@ -247,7 +249,5 @@ var NAVTREEINDEX118 =
 "structBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycleState.html#ad56181bdcf2c23c05415aeadced3da28":[5,0,0,12,10,3,2],
 "structBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycleState.html#ad56181bdcf2c23c05415aeadced3da28":[6,0,0,12,10,3,2],
 "structBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycleState.html#ae51dc491c864ba2b7a70ca66d07290da":[5,0,0,12,10,3,6],
-"structBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycleState.html#ae51dc491c864ba2b7a70ca66d07290da":[6,0,0,12,10,3,6],
-"structBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycleState.html#aeae6958bc2883e4cd5a302ff1f4cc289":[5,0,0,12,10,3,0],
-"structBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycleState.html#aeae6958bc2883e4cd5a302ff1f4cc289":[6,0,0,12,10,3,0]
+"structBalloonParty_1_1Shared_1_1Rendering_1_1ColorCycleState.html#ae51dc491c864ba2b7a70ca66d07290da":[6,0,0,12,10,3,6]
 };
