@@ -57,8 +57,14 @@ Shader "BalloonParty/Scenario/SmokeTrailDisplay"
         // The ink's blur: how far either side of the edge level the edge fades, in opacity, so the blob bleeds
         // softly into the paper. 0 = the antialiased edge alone.
         _InkBlur            ("Ink Blur",                Range(0, 0.4))      = 0.22
-        // How much of the smoke's edge warp the ink keeps, so the blob follows the paper rather than the field's texels.
-        _InkEdgeWarp        ("Ink Edge Wobble",         Range(0, 1))        = 0.5
+        // The ink's ragged border: two taps of a tileable noise (R) push the edge about and lift or drop its level,
+        // so a blob's outline wanders instead of following its stamps' straight sides.
+        [NoScaleOffset] _InkNoiseTex ("Ink Edge Noise (R)",    2D)                 = "gray" {}
+        _InkNoiseSize       ("Ink Noise Size (world)",  Float)              = 1.4
+        // How far the noise pushes the edge, in world units.
+        _InkEdgeWarp        ("Ink Edge Wander",         Range(0, 0.5))      = 0.16
+        // How much it lifts or drops the edge level, in opacity: ragged where the ink thins.
+        _InkEdgeNoise       ("Ink Edge Raggedness",     Range(0, 0.6))      = 0.3
         // How much darker and deeper than the stroke's own colour the ink dries: 0 = the colour itself.
         _InkDeepen          ("Ink Darkness",            Range(0, 1))        = 0.35
         // Pigment gathered where the ink stopped spreading, a darker line just inside the edge.
@@ -159,6 +165,9 @@ Shader "BalloonParty/Scenario/SmokeTrailDisplay"
             float  _InkEdgeSoftness;
             float  _InkBlur;
             float  _InkEdgeWarp;
+            sampler2D _InkNoiseTex;
+            float  _InkNoiseSize;
+            float  _InkEdgeNoise;
             float  _InkDeepen;
             float  _InkRim;
             float  _InkRimWidth;
@@ -261,16 +270,23 @@ Shader "BalloonParty/Scenario/SmokeTrailDisplay"
             // wisps: ink on paper stays put.
             fixed4 InkFrag(float2 worldPos, fixed4 vertexColor)
             {
-                float2 wp = lerp(worldPos, WarpedEdgePos(worldPos), _InkEdgeWarp);
+                // Two taps of the edge noise, the second finer and offset: together they warp the lookup both ways
+                // and set the edge level, so the border wanders at two scales.
+                float2 noiseUV = worldPos / max(_InkNoiseSize, 1e-3);
+                float coarse = tex2D(_InkNoiseTex, noiseUV).r - 0.5;
+                float fine = tex2D(_InkNoiseTex, noiseUV * 2.7 + float2(0.37, 0.61)).r - 0.5;
+                float2 wp = worldPos + float2(coarse, fine) * (2.0 * _InkEdgeWarp);
+                float level = _InkThreshold + (coarse * 0.6 + fine * 0.4) * _InkEdgeNoise;
+
                 float4 ink = SmokeFieldInkSample(wp);
                 float width = max(max(fwidth(ink.a), 1e-4) * _InkEdgeSoftness, _InkBlur);
-                float body = smoothstep(_InkThreshold - width, _InkThreshold + width, ink.a);
+                float body = smoothstep(level - width, level + width, ink.a);
                 if (body < 0.001)
                 {
                     discard;
                 }
 
-                float rim = 1.0 - smoothstep(_InkThreshold, _InkThreshold + _InkRimWidth, ink.a);
+                float rim = 1.0 - smoothstep(level, level + _InkRimWidth, ink.a);
                 float3 rgb = lerp(ink.rgb, ink.rgb * ink.rgb, _InkDeepen);
                 rgb *= 1.0 - rim * _InkRim;
 

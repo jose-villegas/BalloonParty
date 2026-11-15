@@ -28,6 +28,9 @@ namespace BalloonParty.Scenario
     /// </summary>
     internal sealed class SmokeFieldService : IStartable, ITickable, IDisposable, ICadencedEffect
     {
+        // A smear is a few capsules end to end, each thinner than the one before.
+        private const int SmearSegments = 3;
+        private const float SmearTailRadius = 0.45f;
         private const int MaxStampsPerBatch = 32;
 
         private static readonly int BoundsMinId = Shader.PropertyToID("_SmokeBoundsMin");
@@ -189,26 +192,30 @@ namespace BalloonParty.Scenario
         internal void Paint(PaintSource source, Vector3 worldPosition, Vector3 prevWorldPosition,
             int paletteIndex = -1)
         {
-            if (!_resources.IsReady)
+            if (TryResolveStamp(source, paletteIndex, out var profile, out var color))
+            {
+                QueueStamp(worldPosition, prevWorldPosition, profile.Radius, color);
+            }
+        }
+
+        /// <summary>Drags the source's stroke back from <paramref name="worldPosition"/>, against
+        /// <paramref name="direction"/>, for its profile's <see cref="PaintProfile.Smear"/>, thinning toward the
+        /// tail: a flung blob of wet paint smearing where it lands.</summary>
+        internal void Smear(PaintSource source, Vector2 worldPosition, Vector2 direction, int paletteIndex = -1)
+        {
+            if (!TryResolveStamp(source, paletteIndex, out var profile, out var color))
             {
                 return;
             }
 
-            var profile = _settings.GetProfile(source);
-            var color = ResolveColor(profile, paletteIndex);
-            if (!color.HasValue || (profile.PaperOnly && !_inking.Value))
+            var tail = -direction.normalized * profile.Smear;
+            for (var i = 0; i < SmearSegments; i++)
             {
-                return;
+                var from = worldPosition + tail * ((float)i / SmearSegments);
+                var to = worldPosition + tail * ((float)(i + 1) / SmearSegments);
+                var thinning = Mathf.Lerp(1f, SmearTailRadius, (float)i / (SmearSegments - 1));
+                QueueStamp(from, to, profile.Radius * thinning, color);
             }
-
-            var c = color.Value;
-            _pendingStamps.Add(new PendingStamp
-            {
-                Center = _coords.WorldToUV(worldPosition),
-                PrevCenter = _coords.WorldToUV(prevWorldPosition),
-                Radius = _coords.WorldRadiusToUV(profile.Radius * _strokeScale),
-                Color = new Vector4(c.r, c.g, c.b, Mathf.Clamp01(profile.Opacity))
-            });
         }
 
         /// <summary>Scatters <paramref name="count"/> stamps in a random ring of <paramref name="scatterRadius"/>
@@ -249,6 +256,38 @@ namespace BalloonParty.Scenario
                     Color = stampColor
                 });
             }
+        }
+
+        private bool TryResolveStamp(PaintSource source, int paletteIndex, out PaintProfile profile, out Vector4 color)
+        {
+            profile = default;
+            color = default;
+            if (!_resources.IsReady)
+            {
+                return false;
+            }
+
+            profile = _settings.GetProfile(source);
+            var resolved = ResolveColor(profile, paletteIndex);
+            if (!resolved.HasValue || (profile.PaperOnly && !_inking.Value))
+            {
+                return false;
+            }
+
+            var c = resolved.Value;
+            color = new Vector4(c.r, c.g, c.b, Mathf.Clamp01(profile.Opacity));
+            return true;
+        }
+
+        private void QueueStamp(Vector3 worldPosition, Vector3 prevWorldPosition, float radius, Vector4 color)
+        {
+            _pendingStamps.Add(new PendingStamp
+            {
+                Center = _coords.WorldToUV(worldPosition),
+                PrevCenter = _coords.WorldToUV(prevWorldPosition),
+                Radius = _coords.WorldRadiusToUV(radius * _strokeScale),
+                Color = color
+            });
         }
 
         private Color? ResolveColor(PaintProfile profile, int paletteIndex)

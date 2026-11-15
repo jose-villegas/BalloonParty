@@ -34,6 +34,7 @@ MonoBehaviour:
     PaletteColorName: 
     CustomColor: {r: 1, g: 1, b: 1, a: 1}
     PaperOnly: 0
+    Smear: 0
   - Sources: 2
     Radius: 0.35
     Opacity: 0.85
@@ -41,6 +42,7 @@ MonoBehaviour:
     PaletteColorName: Tough
     CustomColor: {r: 1, g: 1, b: 1, a: 1}
     PaperOnly: 0
+    Smear: 0
   - Sources: 4
     Radius: 0.3
     Opacity: 0.75
@@ -48,6 +50,7 @@ MonoBehaviour:
     PaletteColorName: Tough
     CustomColor: {r: 1, g: 1, b: 1, a: 1}
     PaperOnly: 0
+    Smear: 0
   - Sources: 8
     Radius: 0.2
     Opacity: 0.8
@@ -55,6 +58,7 @@ MonoBehaviour:
     PaletteColorName: Tough
     CustomColor: {r: 1, g: 1, b: 1, a: 1}
     PaperOnly: 0
+    Smear: 0
   - Sources: 16
     Radius: 0.25
     Opacity: 0.7
@@ -62,6 +66,7 @@ MonoBehaviour:
     PaletteColorName: SnipeSkyLight
     CustomColor: {r: 1, g: 1, b: 1, a: 1}
     PaperOnly: 0
+    Smear: 0
   - Sources: 32
     Radius: 0.22
     Opacity: 0.9
@@ -69,3 +74,4 @@ MonoBehaviour:
     PaletteColorName:
     CustomColor: {r: 1, g: 1, b: 1, a: 1}
     PaperOnly: 1
+    Smear: 0.8

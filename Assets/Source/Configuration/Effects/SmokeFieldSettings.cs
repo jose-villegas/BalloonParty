@@ -47,6 +47,11 @@ namespace BalloonParty.Configuration.Effects
 
         [Tooltip("Stamps only while the field is ink on paper; anywhere else the source leaves no smoke.")]
         public bool PaperOnly;
+
+        [Tooltip("World length a smeared stamp drags back along the way it came, thinning toward its tail " +
+                 "(SmokeFieldService.Smear only).")]
+        [Min(0f)]
+        public float Smear;
     }
 
     /// <summary>Authored tuning for the smoke field; assign stamp/decay shaders + resolution here and

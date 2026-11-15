@@ -135,8 +135,9 @@ namespace BalloonParty.Item.Paint
                 var paletteIndex = _palette.PaletteIndexOf(paintColor);
                 _disturbanceField.Stamp(StampSource.Paint, landing, direction, paletteIndex: paletteIndex);
 
-                // On paper each blob also lands as ink on the page (the profile stamps nowhere else).
-                _smokeField?.Paint(PaintSource.PaintSplash, landing, paletteIndex);
+                // On paper each blob also lands as ink on the page, smeared back the way it flew (the profile
+                // stamps nowhere else).
+                _smokeField?.Smear(PaintSource.PaintSplash, landing, direction, paletteIndex);
 
                 ApplyPaint(targetsByBlob[index], paintColor, tint);
             }
