@@ -1,5 +1,13 @@
 var NAVTREEINDEX108 =
 {
+"plan_performance_recovery.html#autotoc_md784":[3,12,0,6,0],
+"plan_performance_recovery.html#autotoc_md785":[3,12,0,6,1],
+"plan_performance_recovery.html#autotoc_md786":[3,12,0,6,2],
+"plan_performance_recovery.html#autotoc_md788":[3,12,0,7],
+"plan_performance_recovery.html#autotoc_md789":[3,12,0,8],
+"plan_performance_recovery.html#autotoc_md790":[3,12,0,9],
+"plan_performance_recovery.html#autotoc_md792":[3,12,0,10],
+"plan_performance_recovery.html#autotoc_md794":[3,12,0,11],
 "plan_reward_balloons.html":[3,22],
 "plan_reward_balloons.html#autotoc_md795":[3,22,0],
 "plan_reward_balloons.html#autotoc_md797":[3,22,0,0],
@@ -241,13 +249,5 @@ var NAVTREEINDEX108 =
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a02b1886e2f53b34563ee080f2f0a7e7c":[5,0,0,1,0,1,0],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a02b1886e2f53b34563ee080f2f0a7e7c":[6,0,0,1,0,1,0],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a1e33a67aace9f709d18e001aaf08bbbd":[5,0,0,1,0,1,3],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a1e33a67aace9f709d18e001aaf08bbbd":[6,0,0,1,0,1,3],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a5f2c277f41fb18ff29406b17b5366b75":[5,0,0,1,0,1,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a5f2c277f41fb18ff29406b17b5366b75":[6,0,0,1,0,1,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#ac91efd65201a510ee5eb4d1168155d87":[5,0,0,1,0,1,2],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#ac91efd65201a510ee5eb4d1168155d87":[6,0,0,1,0,1,2],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner_1_1PassCandidate.html":[5,0,0,1,0,2,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner_1_1PassCandidate.html":[6,0,0,1,0,2,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner_1_1PassCandidate.html#a957f695296400c59df19664b5a2cce0a":[5,0,0,1,0,2,0,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalancePlanner_1_1PassCandidate.html#a957f695296400c59df19664b5a2cce0a":[6,0,0,1,0,2,0,1]
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceMove.html#a1e33a67aace9f709d18e001aaf08bbbd":[6,0,0,1,0,1,3]
 };

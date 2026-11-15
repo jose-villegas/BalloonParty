@@ -1,5 +1,13 @@
 var NAVTREEINDEX121 =
 {
+"structBalloonParty_1_1Solver_1_1ShotScoreRules.html#a3c486cb11415589d529c9289e8fdaec3":[5,0,0,14,18,0],
+"structBalloonParty_1_1Solver_1_1ShotScoreRules.html#a3c486cb11415589d529c9289e8fdaec3":[6,0,0,14,18,0],
+"structBalloonParty_1_1Solver_1_1ShotScoreRules.html#ab6f7f606563809f8c89d75839741ceaa":[5,0,0,14,18,1],
+"structBalloonParty_1_1Solver_1_1ShotScoreRules.html#ab6f7f606563809f8c89d75839741ceaa":[6,0,0,14,18,1],
+"structBalloonParty_1_1Solver_1_1ShotScoreRules.html#ac3d05ed9907bb6acb89b4f290e227ed8":[5,0,0,14,18,3],
+"structBalloonParty_1_1Solver_1_1ShotScoreRules.html#ac3d05ed9907bb6acb89b4f290e227ed8":[6,0,0,14,18,3],
+"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html":[5,0,0,14,22],
+"structBalloonParty_1_1Solver_1_1ShotSimulationResult.html":[6,0,0,14,22],
 "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a11dd18570c10430a11750c2eb568ab2c":[5,0,0,14,22,10],
 "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a11dd18570c10430a11750c2eb568ab2c":[6,0,0,14,22,10],
 "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#a13d013506632605b32f4a2f2cfebe3fc":[5,0,0,14,22,3],
