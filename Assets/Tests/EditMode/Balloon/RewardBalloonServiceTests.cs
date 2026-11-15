@@ -843,6 +843,21 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void Heart_RunReset_ClearsThePity()
+        {
+            _level.IsExtraColorLevel.Returns(false);
+            _hearts.Value = 1;
+            _need.Need.Returns(1f);
+            _roll = 0.2f;
+            _service.TryTakeDue(out _);
+            _service.TryTakeDue(out _);
+
+            _service.ResetRun(1);
+
+            Assert.IsFalse(_service.TryTakeDue(out _), "a new run starts at the settings' 12%");
+        }
+
+        [Test]
         public void Heart_RolledButNotPlaced_StaysDueWithoutRollingAgain()
         {
             _level.IsExtraColorLevel.Returns(false);

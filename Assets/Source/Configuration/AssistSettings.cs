@@ -20,7 +20,7 @@ namespace BalloonParty.Configuration
         [SerializeField] private PitySettings _snipePity = new(4f, 0.5f);
 
         [Tooltip("The heart balloon's roll on an ordinary level: each line rolled without one while in need raises " +
-            "the next line's chance.")]
+            "the next line's chance. Its base chance already grows with the hearts missing, so its growth is gentler.")]
         [SerializeField] private PitySettings _heartPity = new(0.5f, 0.5f);
 
         public float DangerNeedWeight => _dangerNeedWeight;

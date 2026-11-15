@@ -50,6 +50,7 @@ namespace BalloonParty.Configuration
         [Header("Upgrades")]
         [SerializeField] private UpgradeSettings _upgrades = new();
 
+        [Header("Assist")]
         [SerializeField] private AssistSettings _assist = new();
 
         public int StartingHitPoints => _startingHitPoints;
