@@ -31,7 +31,8 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Score formations slide out of the circles.")]
         [SerializeField] private bool _pushFormations = true;
 
-        [Tooltip("Flying trails bend round the circles' rims.")]
+        [Tooltip("Flying trails bend round the circles' rims. Read when the score trail service starts, so a " +
+                 "change takes effect on the next scene load.")]
         [SerializeField] private bool _bendTrails = true;
 
         [Tooltip("Effects drawn over the ball fade inside the circles. Off leaves every effect at full alpha.")]

@@ -10,7 +10,8 @@ them. This folder owns the circles; the features that keep out of them read them
 | File | What it does |
 |---|---|
 | `ClearanceCircle` | One circle this frame: centre in the board's XY plane, effective radius (the settings' radius × strength), and strength 0..1 |
-| `IClearanceField` | The read side: `Count` and `CircleAt(i)`. Formations read it; trails will too |
+| `IClearanceField` | The read side: `Count`, `CircleAt(i)` (an index is good for one frame only), and `Deflect(point)`, which bends a point out of every circle in turn |
+| `ClearanceGeometry` | The bend itself, for one circle: a pure function, EditMode-tested |
 | `ClearanceField` | The circles themselves: `ClearanceCircle.MaxCircles` (8) fixed slots, keyed by the ball's model reference. Plain C#, EditMode-tested (`ClearanceFieldTests`) |
 | `ClearanceFieldTicker` | `IStartable` + `ITickable` + `IDisposable` (game scope): publishes an empty field on start, then each frame tracks every ball in `IProjectileRegistry`'s in-flight list into the field, advances it, and publishes it to the shader globals. On dispose it zeroes `_ClearanceCount`, since globals outlive the scope |
 
@@ -46,6 +47,15 @@ The ball held in the thrower gets no circle: it sits below the board, where noth
   each moving formation is pushed out of every circle into its persistent `SeparationOffset`, at up to
   `FormationPushSpeed` world units a second. The circles never give way. See `Game/Score/README.md`,
   Overlap Resolution.
+- **Score trails** (`UI/Score/FlyingTrail`): `ScoreTrailService` builds its `TrailSpawner`s with the field
+  (or null with `BendTrails` off), and the spawner hands it to every trail it spawns on a flight. In
+  `LateUpdate`, after DOTween or the follow has moved it, a trail on its own flight replaces its position
+  with `Deflect(position)`, so its ribbon curves round the ball. A head nothing moved since its last bend (a
+  tween paused by the level-up cinematic) is left alone: the bend is not idempotent and would creep it out
+  to the band's edge. The bend's soft band lies just outside the
+  circle (out to radius × (1 + `RimSoftness`)) and everything inside is squeezed into it, so a bent trail
+  never enters the circle; the effect fade's soft edge lies just inside, so a bent trail is never also faded.
+  Formation pens, range pens and the heart trail don't bend (see the plan for why).
 - **Effect shaders**: the ticker publishes `_ClearanceCircles` (8 × `float4`: centre xy, effective
   radius, strength), `_ClearanceCount`, `_ClearanceFloor` and `_ClearanceSoftness` every frame. With
   `FadeEffects` off it publishes a count of 0.

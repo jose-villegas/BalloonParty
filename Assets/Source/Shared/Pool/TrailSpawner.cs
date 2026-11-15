@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using BalloonParty.Projectile.Clearance;
 using BalloonParty.UI.Score;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -16,21 +17,32 @@ namespace BalloonParty.Shared.Pool
         private readonly string _poolKey;
         private readonly int _sortingOrder;
 
+        // Handed to every trail on a Spawn* flight so it bends round the balls' clear circles; null for a
+        // spawner whose trails must fly straight (or when the settings switch the bend off).
+        private readonly IClearanceField _clearance;
+
         internal TrailSpawner(
             PoolManager poolManager,
             string poolKey,
             Func<PoolChannel<FlyingTrail>> channelFactory,
-            int sortingOrder = -1)
+            int sortingOrder = -1,
+            IClearanceField clearance = null)
         {
             _poolManager = poolManager;
             _poolKey = poolKey;
             _channelFactory = channelFactory;
             _sortingOrder = sortingOrder;
+            _clearance = clearance;
         }
 
         // Convenience: pools the prefab through a SimplePoolChannel (no injection).
-        internal TrailSpawner(PoolManager poolManager, string poolKey, FlyingTrail prefab, int sortingOrder = -1)
-            : this(poolManager, poolKey, () => new SimplePoolChannel<FlyingTrail>(prefab), sortingOrder)
+        internal TrailSpawner(
+            PoolManager poolManager,
+            string poolKey,
+            FlyingTrail prefab,
+            int sortingOrder = -1,
+            IClearanceField clearance = null)
+            : this(poolManager, poolKey, () => new SimplePoolChannel<FlyingTrail>(prefab), sortingOrder, clearance)
         {
         }
 
@@ -49,6 +61,7 @@ namespace BalloonParty.Shared.Pool
             trail.transform.position = center;
             trail.transform.localScale = Vector3.one;
             ApplySortingOrder(trail);
+            trail.SetClearance(_clearance);
             trail.SetupBurst(burstTo,
                 to,
                 color,
@@ -77,6 +90,7 @@ namespace BalloonParty.Shared.Pool
             trail.transform.position = from;
             trail.transform.localScale = Vector3.one;
             ApplySortingOrder(trail);
+            trail.SetClearance(_clearance);
             trail.SetupFollow(targetProvider,
                 duration,
                 () =>
@@ -103,6 +117,7 @@ namespace BalloonParty.Shared.Pool
             trail.transform.position = from;
             trail.transform.localScale = Vector3.one;
             ApplySortingOrder(trail);
+            trail.SetClearance(_clearance);
 
             void OnArrived()
             {
@@ -131,6 +146,7 @@ namespace BalloonParty.Shared.Pool
             trail.transform.localScale = Vector3.one;
             ApplySortingOrder(trail);
             trail.SetColor(color);
+            trail.SetClearance(null);
             return trail;
         }
 

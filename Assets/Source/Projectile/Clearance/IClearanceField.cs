@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace BalloonParty.Projectile.Clearance
 {
     /// <summary>
@@ -11,5 +13,11 @@ namespace BalloonParty.Projectile.Clearance
         int Count { get; }
 
         ClearanceCircle CircleAt(int index);
+
+        /// <summary>
+        ///     <paramref name="point" /> bent out of every circle in turn (<see cref="ClearanceGeometry.Deflect" />),
+        ///     XY only; Z is kept.
+        /// </summary>
+        Vector3 Deflect(Vector3 point);
     }
 }

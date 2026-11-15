@@ -137,21 +137,26 @@ position absolutely each frame: DOTween writes `Lerp(start, end, ease(t))` in `U
 tween has moved it, a flying trail replaces its position with `IClearanceField.Deflect(position)`. The
 ribbon records the bent position, so the curve round the ball is drawn into the trail itself.
 
-`Deflect` moves a point inside a circle (or in its soft rim) radially out with a smooth, monotonic
-falloff, so a trail beside a circle bends gently and one passing through never snaps. Overlapping circles
-apply in turn.
+`Deflect` (`ClearanceGeometry.Deflect`) pushes a point radially out of a circle. Its soft band lies just
+outside the circle, out to radius × (1 + `RimSoftness`): everything inside that band's outer edge is
+squeezed into the band, so a bent trail never enters the circle itself, while the effect fade's soft edge
+lies just inside it, so a bent trail is never also faded. The map is smooth and monotonic and meets the
+identity at the band's edge with a matching slope, so a trail beside a circle bends gently and one passing
+through never snaps. Overlapping circles apply in turn.
 
-Which trails bend: the one-per-point score trails, the heart trail (`UI/Health/HeartTrailController`), and
-any other `FlyingTrail` on a tween or follow path. Which don't:
+Which trails bend: the one-per-point score trails (`ScoreTrailService`'s spawners). Which don't:
 
 - **Formation pens** are placed by `ShapeFormationTicker` every frame, rigid in the shape's own frame, and
   never run a tween. The whole formation moves round the circle instead (above); bending each pen would
   shear the drawn figure.
 - **Range pens** (`Item/Preview/HighlightTrail`, a separate class) draw where an item will strike. Bending
   them would draw the range wrong.
+- **The heart trail** (`UI/Health/HeartTrailController`) is a pencil whose flight ends in a scribble across
+  the doomed line; it marks that line, and a bend would move where the mark starts.
+- **The level-up popup's fill trails** fly on the popup's canvas, not over the board.
 
-The field reaches each trail through `TrailSpawner`, which hands it over on spawn. A trail with no field
-(edit-mode previews, the level-up popup's trails) doesn't bend.
+The field reaches each trail through `TrailSpawner`, which hands it to every trail it spawns on a flight;
+a spawner built without one (or with `BendTrails` off) hands over null, and that trail doesn't bend.
 
 ### Effects thin out inside the circle
 

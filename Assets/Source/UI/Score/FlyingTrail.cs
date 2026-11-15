@@ -1,4 +1,5 @@
 using System;
+using BalloonParty.Projectile.Clearance;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
@@ -27,6 +28,12 @@ namespace BalloonParty.UI.Score
         [SerializeField] private MotionStyle[] _motions;
 
         private Tweener _moveTween;
+        private IClearanceField _clearance;
+
+        // Where the last bend put the head. Deflect is not idempotent (it pushes a point already in the band a
+        // little further out), so a head nothing has moved since (a paused tween, a tween at timeScale 0) must
+        // not be bent again, or it would creep out to the band's edge.
+        private Vector3 _lastBent = new(float.NaN, float.NaN, float.NaN);
 
         private Func<Vector3> _followTarget;
         private Action _followArrived;
@@ -80,6 +87,28 @@ namespace BalloonParty.UI.Score
             }
         }
 
+        // After every Update has moved the head (DOTween's DOMove and the follow above both write an absolute
+        // position each frame, so the bend never accumulates), carry it round the balls' clear circles: the
+        // ribbon records the bent position, so the curve round the ball is drawn into the trail. Only a trail
+        // on its own flight bends (a formation pen is placed by someone else), and only when something moved
+        // it since the last bend.
+        private void LateUpdate()
+        {
+            if (_clearance == null || _clearance.Count == 0 || !IsOnOwnFlight())
+            {
+                return;
+            }
+
+            var position = transform.position;
+            if (position == _lastBent)
+            {
+                return;
+            }
+
+            _lastBent = _clearance.Deflect(position);
+            transform.position = _lastBent;
+        }
+
         public void OnSpawned()
         {
             // Reset to authored colour so a pooled trail never inherits a previous tint.
@@ -89,6 +118,8 @@ namespace BalloonParty.UI.Score
         public void OnDespawned()
         {
             _moveTween = null;
+            _clearance = null;
+            _lastBent = new Vector3(float.NaN, float.NaN, float.NaN);
             _following = false;
             _followTarget = null;
             _followArrived = null;
@@ -198,6 +229,13 @@ namespace BalloonParty.UI.Score
             LifecycleHelper.KillAndClear(ref _moveTween);
         }
 
+        // The clear circles this trail bends round while it flies; null (the default) never bends.
+        internal void SetClearance(IClearanceField clearance)
+        {
+            _clearance = clearance;
+            _lastBent = new Vector3(float.NaN, float.NaN, float.NaN);
+        }
+
         // Solid tint with no flight gradient — for trails a caller drives directly (formation vertices/carrier)
         // rather than through Setup, which would otherwise apply the colour for it.
         internal void SetColor(Color color)
@@ -280,6 +318,11 @@ namespace BalloonParty.UI.Score
         internal void ClearRibbon()
         {
             _trailRenderer.Clear();
+        }
+
+        private bool IsOnOwnFlight()
+        {
+            return _following || (_moveTween != null && _moveTween.IsActive());
         }
 
         // Shared by the plain flight and the burst's second leg.

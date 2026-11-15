@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using BalloonParty.Configuration.Effects;
 using BalloonParty.Game.Run;
 using BalloonParty.Game.Score.Behaviours;
+using BalloonParty.Projectile.Clearance;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Messages;
@@ -36,6 +38,7 @@ namespace BalloonParty.Game.Score
         private readonly Dictionary<string, TrailSpawner> _spawners = new();
         private readonly TrailEndpointRegistry _endpoints;
         private readonly FlyingTrail _trailPrefab;
+        private readonly IClearanceField _clearance;
 
         private CancellationTokenSource _groupCts = new();
         private IDisposable _scoreSubscription;
@@ -56,7 +59,9 @@ namespace BalloonParty.Game.Score
             PoolManager poolManager,
             TrailEndpointRegistry endpoints,
             ScoreTrailBehaviourResolver resolver,
-            FlyingTrail trailPrefab)
+            FlyingTrail trailPrefab,
+            IClearanceField clearance,
+            IClearanceSettings clearanceSettings)
         {
             _scoreConfig = scoreConfig;
             _gridConfig = gridConfig;
@@ -67,6 +72,7 @@ namespace BalloonParty.Game.Score
             _endpoints = endpoints;
             _resolver = resolver;
             _trailPrefab = trailPrefab;
+            _clearance = clearanceSettings.BendTrails ? clearance : null;
         }
 
         public void Dispose()
@@ -128,7 +134,7 @@ namespace BalloonParty.Game.Score
             }
 
             var spawner = new TrailSpawner(
-                _poolManager, $"ScoreTrail_{colorName}", _trailPrefab, ScoreTrailSortingOrder);
+                _poolManager, $"ScoreTrail_{colorName}", _trailPrefab, ScoreTrailSortingOrder, _clearance);
             _spawners[colorName] = spawner;
 
             // Amortized over frames so registering a color at level setup never spikes into a hitch.

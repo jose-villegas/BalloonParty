@@ -33,6 +33,17 @@ namespace BalloonParty.Projectile.Clearance
             return _circles[index];
         }
 
+        public Vector3 Deflect(Vector3 point)
+        {
+            var xy = new Vector2(point.x, point.y);
+            for (var i = 0; i < _count; i++)
+            {
+                xy = ClearanceGeometry.Deflect(xy, in _circles[i], _settings.RimSoftness);
+            }
+
+            return new Vector3(xy.x, xy.y, point.z);
+        }
+
         /// <summary>A ball in flight this frame at <paramref name="center" />.</summary>
         internal void Track(object key, Vector2 center)
         {

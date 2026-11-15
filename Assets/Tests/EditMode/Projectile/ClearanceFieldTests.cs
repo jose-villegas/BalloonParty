@@ -214,6 +214,71 @@ namespace BalloonParty.Tests.Projectile
             Assert.IsTrue(HasCircleAtX(1f), "the stronger fading circle survives");
         }
 
+        [Test]
+        public void Deflect_NoCircles_PointUnchanged()
+        {
+            var point = new Vector3(1f, 2f, 3f);
+
+            Assert.AreEqual(point, _field.Deflect(point));
+        }
+
+        [Test]
+        public void Deflect_PointInsideCircle_IsPushedOutAndKeepsZ()
+        {
+            _settings.RimSoftness = 0.5f;
+            FullyInTracked(new object(), Vector2.zero);
+
+            var result = _field.Deflect(new Vector3(0.5f, 0f, 7f));
+
+            Assert.GreaterOrEqual(new Vector2(result.x, result.y).magnitude, Radius - Tolerance);
+            Assert.AreEqual(7f, result.z);
+            Assert.AreEqual(0f, result.y, Tolerance, "stays on the ray from the centre");
+        }
+
+        [Test]
+        public void Deflect_PointFarFromEveryCircle_Unchanged()
+        {
+            _settings.RimSoftness = 0.5f;
+            FullyInTracked(new object(), Vector2.zero);
+
+            var point = new Vector3(50f, 50f, 1f);
+
+            Assert.AreEqual(point, _field.Deflect(point));
+        }
+
+        [Test]
+        public void Deflect_TwoOverlappingCircles_AppliesEachInSlotOrder()
+        {
+            _settings.RimSoftness = 0.5f;
+            var a = new Vector2(-1f, 0f);
+            var b = new Vector2(1f, 0f);
+            _field.Track(new object(), a);
+            _field.Track(new object(), b);
+            _field.Advance(1f);
+            var point = new Vector3(0f, 0.5f, 0f);
+
+            var expected = new Vector2(point.x, point.y);
+            for (var i = 0; i < _field.Count; i++)
+            {
+                var circle = _field.CircleAt(i);
+                expected = ClearanceGeometry.Deflect(expected, in circle, 0.5f);
+            }
+
+            var result = _field.Deflect(point);
+
+            Assert.AreEqual(expected.x, result.x, Tolerance);
+            Assert.AreEqual(expected.y, result.y, Tolerance);
+            Assert.AreNotEqual(point.y, result.y, "both circles cover the point, so it must move");
+        }
+
+        private void FullyInTracked(object key, Vector2 center)
+        {
+            _field.Track(key, center);
+            _field.Advance(1f);
+            _field.Track(key, center);
+            _field.Advance(0.01f);
+        }
+
         private void TrackAllExcept(object[] balls, int skipA, int skipB)
         {
             for (var i = 0; i < balls.Length; i++)
