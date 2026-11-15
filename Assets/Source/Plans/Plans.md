@@ -31,3 +31,4 @@ Working design plans and roadmaps for upcoming features.
 - @subpage plan_card_reveal
 - @subpage plan_reward_balloons
 - @subpage plan_disco_balloon
+- @subpage plan_pen_clearance
