@@ -1,6 +1,6 @@
 var classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner =
 [
-    [ "BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a114d691da4237851d7be6f22ec48102f", null ],
+    [ "BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a485c715906dab6817d858aa7bfa093ae", null ],
     [ "AddReinforcements", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#acf96a4255f5f62cbb0cce9d5da55cba6", null ],
     [ "AddRewardBalloon", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a1e5b9160255940bb1e160973f05c781c", null ],
     [ "ArrangeInitialLayers", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a24bb087142589d3c4ed32ef4d9c8afeb", null ],
@@ -62,6 +62,7 @@ var classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner =
     [ "_poolManager", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a03798fcb54798d6e43a1a34c6c3e81b5", null ],
     [ "_popSpawnColumns", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#aeb5a4069534a544880049fa3790f14ff", null ],
     [ "_prewarmed", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a9ae806f11d71531173897cecb45b6362", null ],
+    [ "_rainbowLines", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#afcda19c03c5fbd330fe22d2c334fe9ff", null ],
     [ "_reinforcements", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#ac898d3c990c95ab900edda92250f51c9", null ],
     [ "_reinforcementsAlive", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a12db45564150eae3725e5977de1b505a", null ],
     [ "_rejectedBalloon", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#a3a398fe114ce54f423794b74fd0104cd", null ],

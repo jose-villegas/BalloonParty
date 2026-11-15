@@ -58,7 +58,7 @@ var sectionId = 'dynsection-0';
 <!-- Node1 -->
 <g id="Node000001" class="node">
 <title>Node1</title>
-<g id="a_Node000001"><a xlink:title="A plated reward balloon (the golden balloon, the disco ball): the shot&#39;s own ordinary hit bounces off...">
+<g id="a_Node000001"><a xlink:title="A plated reward balloon (the golden balloon, the disco ball): it takes hits as an unbreakable does.">
 <polygon fill="#999999" stroke="#666666" points="1119.75,-111.5 968,-111.5 968,-78 1119.75,-78 1119.75,-111.5"/>
 <text xml:space="preserve" text-anchor="start" x="976" y="-98" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
 <text xml:space="preserve" text-anchor="middle" x="1043.88" y="-85.25" font-family="Helvetica,sans-Serif" font-size="10.00">PlatedBalloonModel</text>

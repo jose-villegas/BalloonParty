@@ -1,5 +1,7 @@
 var NAVTREEINDEX6 =
 {
+"classBalloonParty_1_1Audio_1_1Editor_1_1SoundBankClipAssigner.html#affd08d176973bd0324af1a1055aaee5c":[5,0,0,0,1,11,0],
+"classBalloonParty_1_1Audio_1_1Editor_1_1SoundBankClipAssigner.html#affd08d176973bd0324af1a1055aaee5c":[6,0,0,0,1,11,0],
 "classBalloonParty_1_1Audio_1_1Editor_1_1SoundBankConfigurationEditor.html":[5,0,0,0,1,12],
 "classBalloonParty_1_1Audio_1_1Editor_1_1SoundBankConfigurationEditor.html":[6,0,0,0,1,12],
 "classBalloonParty_1_1Audio_1_1Editor_1_1SoundBankConfigurationEditor.html#a13b19640e1ed48e2c50cc52baba2de99":[5,0,0,0,1,12,10],
@@ -247,7 +249,5 @@ var NAVTREEINDEX6 =
 "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#a129a6ea00d3b0dd137c3729463bcdf1e":[5,0,0,0,2,4,4],
 "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#a129a6ea00d3b0dd137c3729463bcdf1e":[6,0,0,0,2,4,4],
 "classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#a4959c6e0ea61cb712997b587faf41c53":[5,0,0,0,2,4,12],
-"classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#a4959c6e0ea61cb712997b587faf41c53":[6,0,0,0,2,4,12],
-"classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#a67b5cfaeb327de30d0d739525017cfa8":[5,0,0,0,2,4,9],
-"classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#a67b5cfaeb327de30d0d739525017cfa8":[6,0,0,0,2,4,9]
+"classBalloonParty_1_1Audio_1_1Routing_1_1ItemSoundRouter.html#a4959c6e0ea61cb712997b587faf41c53":[6,0,0,0,2,4,12]
 };

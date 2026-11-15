@@ -101,7 +101,7 @@ var searchData=
   ['forcolortarget_98',['ForColorTarget',['../structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a5de603fe9f4b4f8e42870b24e84cd978',1,'BalloonParty::Solver::ShotBalloonSnapshot']]],
   ['fordiscotarget_99',['ForDiscoTarget',['../structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a26f8a7fb0a3cd9dae0934d4fae2c11a0',1,'BalloonParty::Solver::ShotBalloonSnapshot']]],
   ['foreachcommonchild_100',['ForEachCommonChild',['../classBalloonParty_1_1Editor_1_1PropertyDrawerHelper.html#a6565f6733f052588357c4ff329d6c741',1,'BalloonParty::Editor::PropertyDrawerHelper']]],
-  ['forget_101',['Forget',['../classBalloonParty_1_1Projectile_1_1ProjectileTally.html#ac1153069dfe1be4ab95c7dc18cab4b0a',1,'BalloonParty::Projectile::ProjectileTally']]],
+  ['forget_101',['Forget',['../classBalloonParty_1_1Balloon_1_1Reward_1_1RainbowLines.html#aca325677bc03d59e3dd6fcdabc0cfa22',1,'BalloonParty.Balloon.Reward.RainbowLines.Forget()'],['../classBalloonParty_1_1Projectile_1_1ProjectileTally.html#ac1153069dfe1be4ab95c7dc18cab4b0a',1,'BalloonParty.Projectile.ProjectileTally.Forget()']]],
   ['forgetheartslevel_102',['ForgetHeartsLevel',['../classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a4e04961198f9ffea812f620614dcd48f',1,'BalloonParty::Balloon::Reward::RewardBalloonService']]],
   ['forgetlevel_103',['ForgetLevel',['../classBalloonParty_1_1Balloon_1_1Reward_1_1PlatedRewardSchedule.html#aa1eb4170cbad0641db22ee0d330bc31b',1,'BalloonParty::Balloon::Reward::PlatedRewardSchedule']]],
   ['forgetlevelsrewards_104',['ForgetLevelsRewards',['../classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a0f5787372c09f1ad7541afd32e89e2b3',1,'BalloonParty::Balloon::Reward::RewardBalloonService']]],

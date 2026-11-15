@@ -193,13 +193,14 @@ var NAVTREEINDEX1 =
 "IProjectileRegistry_8cs.html":[7,0,12,5],
 "IProjectileVisualConfig_8cs.html":[7,0,3,5,9],
 "IPuffCloudSettings_8cs.html":[7,0,3,5,10],
+"IRainbowLines_8cs.html":[7,0,1,3,1],
 "IReactiveBindable_8cs.html":[7,0,18,0,1],
 "IReadOnlyMetricSet_8cs.html":[7,0,7,10,10],
 "IReadyGate_8cs.html":[7,0,14,26],
 "IResistsPaint_8cs.html":[7,0,15,1,15],
 "IRetryStaging_8cs.html":[7,0,7,8,7],
 "IRetryState_8cs.html":[7,0,7,8,8],
-"IRewardBalloonRequests_8cs.html":[7,0,1,3,1],
+"IRewardBalloonRequests_8cs.html":[7,0,1,3,2],
 "IRewardBalloonSettings_8cs.html":[7,0,3,0,8],
 "IRunConfig_8cs.html":[7,0,14,27],
 "IRunMeta_8cs.html":[7,0,7,8,9],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "ITimeOfDayNight_8cs.html":[7,0,14,11,1],
 "ITimeOfDaySettings_8cs.html":[7,0,3,5,19],
 "ITimeScaleClaims_8cs.html":[7,0,14,8,0],
-"ITrailEndpoint_8cs.html":[7,0,14,9,5],
-"ITransformCapture_8cs.html":[7,0,8,26]
+"ITrailEndpoint_8cs.html":[7,0,14,9,5]
 };

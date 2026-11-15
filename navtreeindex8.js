@@ -1,5 +1,7 @@
 var NAVTREEINDEX8 =
 {
+"classBalloonParty_1_1Audio_1_1SfxThrottleGate.html#a39fa14af311a171cf387be7f8cda2d2b":[5,0,0,0,13,8],
+"classBalloonParty_1_1Audio_1_1SfxThrottleGate.html#a39fa14af311a171cf387be7f8cda2d2b":[6,0,0,0,13,8],
 "classBalloonParty_1_1Audio_1_1SfxThrottleGate.html#a3ac3ee0bf2456850d4e4c53193523dae":[5,0,0,0,13,2],
 "classBalloonParty_1_1Audio_1_1SfxThrottleGate.html#a3ac3ee0bf2456850d4e4c53193523dae":[6,0,0,0,13,2],
 "classBalloonParty_1_1Audio_1_1SfxThrottleGate.html#a3bac6f95f95a01fbfa47877b594346ff":[5,0,0,0,13,5],
@@ -247,7 +249,5 @@ var NAVTREEINDEX8 =
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a0405283c3ca289df39114c1ce6eef0cb":[5,0,0,1,0,3,42],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a0405283c3ca289df39114c1ce6eef0cb":[6,0,0,1,0,3,42],
 "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a0740c78aa316d6f37f7b8585c8db7600":[5,0,0,1,0,3,3],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a0740c78aa316d6f37f7b8585c8db7600":[6,0,0,1,0,3,3],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a08664ec4bf751fc5d494b358c96eb892":[5,0,0,1,0,3,15],
-"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a08664ec4bf751fc5d494b358c96eb892":[6,0,0,1,0,3,15]
+"classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html#a0740c78aa316d6f37f7b8585c8db7600":[6,0,0,1,0,3,3]
 };

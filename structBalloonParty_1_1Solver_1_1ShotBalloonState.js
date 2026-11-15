@@ -5,7 +5,6 @@ var structBalloonParty_1_1Solver_1_1ShotBalloonState =
     [ "ColorId", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#ad62f78a22fb477944f01895e58090215", null ],
     [ "ContactKind", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#ab145041a2b20a2f4236746f660b1c620", null ],
     [ "HitsRemaining", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a25ce084feb61fbe6ec5280ffa290cd7e", null ],
-    [ "ImmuneToEffects", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a6f298208af13ea353c9964e13907403c", null ],
     [ "IsRainbow", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#af81944253f912ab978653780d366029f", null ],
     [ "IsStatic", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#a52ca95532ecb22762735202f7795dbe2", null ],
     [ "Item", "structBalloonParty_1_1Solver_1_1ShotBalloonState.html#aef4754fb2bc81cbbecd295872e4b1817", null ],

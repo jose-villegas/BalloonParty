@@ -1,5 +1,5 @@
 <map id="BalloonParty.Balloon.Model.PlatedBalloonModel" name="BalloonParty.Balloon.Model.PlatedBalloonModel">
-<area shape="rect" id="Node000001" title="A plated reward balloon (the golden balloon, the disco ball): the shot&#39;s own ordinary hit bounces off..." alt="" coords="1296,317,1498,362"/>
+<area shape="rect" id="Node000001" title="A plated reward balloon (the golden balloon, the disco ball): it takes hits as an unbreakable does." alt="" coords="1296,317,1498,362"/>
 <area shape="rect" id="Node000002" href="$classBalloonParty_1_1Balloon_1_1Model_1_1BalloonModelBase.html" title=" " alt="" coords="1036,213,1238,258"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1230,261,1249,268,1354,317,1349,317,1247,273,1230,266"/>
 <area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableBalloonModel.html" title=" " alt="" coords="765,109,968,154"/>

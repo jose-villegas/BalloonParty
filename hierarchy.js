@@ -401,6 +401,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Controller.BubbleMergeService", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html", null ],
       [ "BalloonParty.Balloon.Formation.UnbreakableFormationService", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html", null ],
       [ "BalloonParty.Balloon.Reward.DiscoWave", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html", null ],
+      [ "BalloonParty.Balloon.Reward.RainbowLines", "classBalloonParty_1_1Balloon_1_1Reward_1_1RainbowLines.html", null ],
       [ "BalloonParty.Balloon.Reward.RewardBalloonPayout", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html", null ],
       [ "BalloonParty.Balloon.Reward.RewardBalloonService", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html", null ],
       [ "BalloonParty.Balloon.Spawner.BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html", null ],
@@ -791,6 +792,9 @@ var hierarchy =
     [ "BalloonParty.Configuration.Effects.IProjectileVisualConfig", "interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IProjectileVisualConfig.html", [
       [ "BalloonParty.Configuration.Effects.ProjectileVisualConfig", "classBalloonParty_1_1Configuration_1_1Effects_1_1ProjectileVisualConfig.html", null ]
     ] ],
+    [ "BalloonParty.Balloon.Reward.IRainbowLines", "interfaceBalloonParty_1_1Balloon_1_1Reward_1_1IRainbowLines.html", [
+      [ "BalloonParty.Balloon.Reward.RainbowLines", "classBalloonParty_1_1Balloon_1_1Reward_1_1RainbowLines.html", null ]
+    ] ],
     [ "BalloonParty.UI.Binding.IReactiveBindable< T >", "interfaceBalloonParty_1_1UI_1_1Binding_1_1IReactiveBindable-1-g.html", [
       [ "BalloonParty.UI.Danger.DangerGradientView", "classBalloonParty_1_1UI_1_1Danger_1_1DangerGradientView.html", null ],
       [ "BalloonParty.UI.ReactiveCounterLabel", "classBalloonParty_1_1UI_1_1ReactiveCounterLabel.html", [
@@ -843,6 +847,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Controller.BalloonBalancer", "classBalloonParty_1_1Balloon_1_1Controller_1_1BalloonBalancer.html", null ],
       [ "BalloonParty.Balloon.Formation.UnbreakableFormationService", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html", null ],
       [ "BalloonParty.Balloon.Reward.DiscoWave", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html", null ],
+      [ "BalloonParty.Balloon.Reward.RainbowLines", "classBalloonParty_1_1Balloon_1_1Reward_1_1RainbowLines.html", null ],
       [ "BalloonParty.Balloon.Reward.RewardBalloonService", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html", null ],
       [ "BalloonParty.Balloon.Spawner.BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html", null ],
       [ "BalloonParty.Balloon.Spawner.RejectedBalloonEffect", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html", null ],
@@ -1045,6 +1050,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Controller.BubbleMergeService", "classBalloonParty_1_1Balloon_1_1Controller_1_1BubbleMergeService.html", null ],
       [ "BalloonParty.Balloon.Formation.UnbreakableFormationService", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html", null ],
       [ "BalloonParty.Balloon.Reward.DiscoWave", "classBalloonParty_1_1Balloon_1_1Reward_1_1DiscoWave.html", null ],
+      [ "BalloonParty.Balloon.Reward.RainbowLines", "classBalloonParty_1_1Balloon_1_1Reward_1_1RainbowLines.html", null ],
       [ "BalloonParty.Balloon.Reward.RewardBalloonPayout", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonPayout.html", null ],
       [ "BalloonParty.Balloon.Reward.RewardBalloonService", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html", null ],
       [ "BalloonParty.Balloon.Spawner.BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html", null ],

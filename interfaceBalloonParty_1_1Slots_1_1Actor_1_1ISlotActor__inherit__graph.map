@@ -18,7 +18,7 @@
 <area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="1217,260,1291,282,1285,282,1218,265"/>
 <area shape="rect" id="Node000008" href="$classBalloonParty_1_1Balloon_1_1Model_1_1HeartBalloonModel.html" title="The heart reward balloon (PLAN&#45;RewardBalloons): a heart wrapped in bandages that gives a heart back." alt="" coords="1271,5,1473,50"/>
 <area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="1141,198,1194,129,1230,92,1270,60,1294,49,1290,52,1272,65,1233,96,1198,132,1144,202"/>
-<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel.html" title="A plated reward balloon (the golden balloon, the disco ball): the shot&#39;s own ordinary hit bounces off..." alt="" coords="1271,75,1473,119"/>
+<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Balloon_1_1Model_1_1PlatedBalloonModel.html" title="A plated reward balloon (the golden balloon, the disco ball): it takes hits as an unbreakable does." alt="" coords="1271,75,1473,119"/>
 <area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="1159,202,1210,165,1270,129,1300,119,1295,121,1272,134,1213,169,1161,206"/>
 <area shape="rect" id="Node000012" href="$classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html" title=" " alt="" coords="1271,144,1473,189"/>
 <area shape="poly" id="edge11_Node000005_Node000012" title=" " alt="" coords="1217,206,1290,188,1285,190,1218,211"/>

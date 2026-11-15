@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"ProjectileStep_8cs.html":[7,0,12,1,8],
 "ProjectileTally_8cs.html":[7,0,12,11],
 "ProjectileTapResolver_8cs.html":[7,0,12,1,9],
 "ProjectileTrail_8cs.html":[7,0,12,3,1],
@@ -14,6 +15,7 @@ var NAVTREEINDEX3 =
 "QuadRendererBuilder_8cs.html":[7,0,14,10,9],
 "RainbowBalloonVariantEditor_8cs.html":[7,0,6,40],
 "RainbowBalloonVariant_8cs.html":[7,0,1,5,5],
+"RainbowLines_8cs.html":[7,0,1,3,5],
 "RandomSlotSelectionStrategy_8cs.html":[7,0,15,0,17],
 "RangeMode_8cs.html":[7,0,3,11,3],
 "RangedFloat_8cs.html":[7,0,3,11,1],
@@ -38,9 +40,9 @@ var NAVTREEINDEX3 =
 "RetryTracker_8cs.html":[7,0,7,8,18],
 "RevealCardCheat_8cs.html":[7,0,2,19],
 "RevealedCard_8cs.html":[7,0,7,1,3],
-"RewardBalloonPayout_8cs.html":[7,0,1,3,4],
-"RewardBalloonPop_8cs.html":[7,0,1,3,5],
-"RewardBalloonService_8cs.html":[7,0,1,3,6],
+"RewardBalloonPayout_8cs.html":[7,0,1,3,6],
+"RewardBalloonPop_8cs.html":[7,0,1,3,7],
+"RewardBalloonService_8cs.html":[7,0,1,3,8],
 "RewardBalloonSettings_8cs.html":[7,0,3,0,11],
 "RibbonClothSettings_8cs.html":[7,0,18,2,4],
 "RibbonCloth_8cs.html":[7,0,18,2,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX3 =
 "TexturePreviewBox_8cs.html":[7,0,6,52],
 "ThermalFrameRateGovernor_8cs.html":[7,0,14,12,3],
 "ThermalGovernorSettings_8cs.html":[7,0,3,28],
-"ThreatEase_8cs.html":[7,0,7,0,3],
-"ThrowerController_8cs.html":[7,0,17,2],
-"ThrowerLifetimeScope_8cs.html":[7,0,17,3]
+"ThreatEase_8cs.html":[7,0,7,0,3]
 };

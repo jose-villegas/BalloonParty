@@ -1,6 +1,6 @@
 var structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot =
 [
-    [ "ShotBalloonSnapshot", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#aa755df35fde7f6feb538d52f9e5426d8", null ],
+    [ "ShotBalloonSnapshot", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a66f93dcea7fa84deb57c02e643856224", null ],
     [ "ForColorTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a5de603fe9f4b4f8e42870b24e84cd978", null ],
     [ "ForDiscoTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a26f8a7fb0a3cd9dae0934d4fae2c11a0", null ],
     [ "ForGoldenTarget", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a947847b185f8db3f3058dfe987127b51", null ],
@@ -13,7 +13,6 @@ var structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot =
     [ "Color", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#abf5fc63a971d17396a5dfb9f1b8275dd", null ],
     [ "ContactKind", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a6eafeb123b55382b8abdb57ca2eeae69", null ],
     [ "HitsRemaining", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a5512ca360b8804e3e7ec60738d6009cf", null ],
-    [ "ImmuneToEffects", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#afed526596b37860d43204885c1da4b44", null ],
     [ "Item", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#abede3ca7e487c0107ff5aec9e0342f5a", null ],
     [ "Position", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#a89254385521172cf7eeb90c03513a999", null ],
     [ "Radius", "structBalloonParty_1_1Solver_1_1ShotBalloonSnapshot.html#aece45edafd880994da1c976318f231be", null ],

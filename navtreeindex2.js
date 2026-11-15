@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"ITransformCapture_8cs.html":[7,0,8,26],
 "ITransitionOutgoingContent_8cs.html":[7,0,15,0,14],
 "IUnbreakableFormationSettings_8cs.html":[7,0,3,0,9],
 "IUpgradeDraft_8cs.html":[7,0,7,11,3],
@@ -196,8 +197,8 @@ var NAVTREEINDEX2 =
 "PitySettings_8cs.html":[7,0,3,21],
 "PlainCounterDisplay_8cs.html":[7,0,18,17],
 "PlatedBalloonModel_8cs.html":[7,0,1,2,14],
-"PlatedRewardSchedule_8cs.html":[7,0,1,3,2],
-"PlatedRewardTuning_8cs.html":[7,0,1,3,3],
+"PlatedRewardSchedule_8cs.html":[7,0,1,3,3],
+"PlatedRewardTuning_8cs.html":[7,0,1,3,4],
 "PlayerHealthController_8cs.html":[7,0,7,6,5],
 "PlayerNeed_8cs.html":[7,0,7,0,2],
 "PlayerPrefsRunSave_8cs.html":[7,0,7,8,17],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "ProjectilePoolChannel_8cs.html":[7,0,12,8],
 "ProjectileRegistryExtensions_8cs.html":[7,0,12,10],
 "ProjectileRegistry_8cs.html":[7,0,12,9],
-"ProjectileShieldView_8cs.html":[7,0,12,3,0],
-"ProjectileStep_8cs.html":[7,0,12,1,8]
+"ProjectileShieldView_8cs.html":[7,0,12,3,0]
 };

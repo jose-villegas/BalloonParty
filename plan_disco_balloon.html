@@ -121,7 +121,7 @@ Disco Balloon</h1>
 Goals</h2>
 <ol type="1">
 <li><b>A third reward balloon</b>, placed by <code>RewardBalloonService</code> and never by a level's mix, like the golden and heart balloons (<code><a class="el" href="PLAN-RewardBalloons_8md.html">Plans/PLAN-RewardBalloons.md</a></code>). It is rare, and there is at most one on the board.</li>
-<li><b>It breaks like the golden balloon.</b> An ordinary hit from the shot bounces off it. A piercing shot plows it, and it shatters at the shot's next wall. A laser beam breaks it at once. Nothing else touches it: a bomb, lightning or paint has no effect. It has no colour and no score of its own, resists paint, and carries no item.</li>
+<li><b>It breaks like the golden balloon.</b> An ordinary hit from the shot bounces off it. A piercing shot plows it, and it shatters at the shot's next wall. A laser beam breaks it at once, and so does a bomb's blast beside it, as it breaks an unbreakable. Lightning and paint have no effect. It has no colour and no score of its own, resists paint, and carries no item.</li>
 <li><b>Its pop paints the board rainbow, as a wave.</b> A disc grows out from where the ball was. Each balloon the edge reaches is nudged away from the ball, gives a small pop burst, plays the paint drip, and is painted rainbow. Paint-immune balloons are nudged and play the drip, but the paint runs off and their colour stays, exactly as under the Paint item.</li>
 <li><b>The wave never feeds its own shot.</b> The shot that broke the ball is often still flying when the board turns rainbow. It must not climb its own streak on balloons it just painted (see <em>Self-feeding check</em>).</li>
 <li><b>The look:</b> a mirror ball that reflects the board, its tiles flashing as they turn through the light, lit by the scene light (bright at noon, dim and tinted at night), with rainbow god rays behind it.</li>
@@ -155,16 +155,18 @@ How it fits</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ShotPaintLedger</code> (new)   </td><td class="markdownTableBodyNone"><code>Projectile/Controller/</code>   </td><td class="markdownTableBodyNone">Remembers which balloons a given shot's effects painted rainbow. <code>ProjectileHitResolver</code> asks it before marking a wildcard pop. Entries are cleared when the shot ends (<em>Self-feeding check</em>)    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>RainbowLines</code>, <code>IRainbowLines</code> (new)   </td><td class="markdownTableBodyNone"><code>Balloon/Reward/</code>   </td><td class="markdownTableBodyNone">The clock lines a pop owes rainbow, painted as the spawner places them (<em>The lines after it</em>)    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>NudgeType.Wave</code> (new flag)   </td><td class="markdownTableBodyNone"><code><a class="el" href="NudgeType_8cs.html">Nudge/NudgeType.cs</a></code>   </td><td class="markdownTableBodyNone">The wave nudges each balloon on its own with <code>NudgeMessage(actor, ballPosition, NudgeType.Wave, overrides)</code>. <code>NudgeService.HandleSingleActor</code> already supports exactly that. A separate flag lets a prefab's <code>NudgeOverrides</code> tune the wave's push apart from a deflect or a neighbour hit. <code>Shockwave</code> doesn't fit, because it nudges the whole board at once    </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>GodRaysLook</code>   </td><td class="markdownTableBodyNone"><code>Balloon/Type/</code>   </td><td class="markdownTableBodyNone">Used as it is, on a <code>DiscoRays</code> material and palette entry (<em>The look</em>)    </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>CombatSoundRouter</code>, <code>GameSoundId</code>   </td><td class="markdownTableBodyNone"><code>Audio/</code>   </td><td class="markdownTableBodyNone"><code>BalloonDeflectDisco</code>, <code>BalloonPopDisco</code>, and the wave's two cues (<code>DiscoWaveGlissando</code>, <code>DiscoWaveTick</code>), appended    </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>DiscoSoundRouter</code> (new)   </td><td class="markdownTableBodyNone"><code>Audio/Routing/</code>   </td><td class="markdownTableBodyNone">Plays the wave's cues from <code>DiscoWaveAdvancedMessage</code> and <code>DiscoWaveReachedMessage</code>, which <code>DiscoWave</code> publishes    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Solver   </td><td class="markdownTableBodyNone"><code>Solver/</code>   </td><td class="markdownTableBodyNone"><code>ShotBalloonSnapshot.ForDiscoTarget</code>, with the golden balloon's hit rules. The simulator applies the ledger rule, and the ranking values a disco pop (<em>Phases</em>)    </td></tr>
+<td class="markdownTableBodyNone"><code>DiscoSoundRouter</code> (new)   </td><td class="markdownTableBodyNone"><code>Audio/Routing/</code>   </td><td class="markdownTableBodyNone">Plays the wave's cues from <code>DiscoWaveAdvancedMessage</code> and <code>DiscoWaveReachedMessage</code>, which <code>DiscoWave</code> publishes    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">Solver   </td><td class="markdownTableBodyNone"><code>Solver/</code>   </td><td class="markdownTableBodyNone"><code>ShotBalloonSnapshot.ForDiscoTarget</code>, with the golden balloon's hit rules. The simulator applies the ledger rule, and the ranking values a disco pop (<em>Phases</em>)    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Spawn-balloon cheat   </td><td class="markdownTableBodyNone"><code>Cheats/</code>   </td><td class="markdownTableBodyNone">Sends <code>Disco</code> through the service, as the golden balloon already does   </td></tr>
 </table>
 <div class="fragment"><div class="line">sequenceDiagram</div>
@@ -216,11 +218,12 @@ Breaking it</h2>
 <li><b>The shot's ordinary hit</b> deflects: <code>BalloonDeflectedMessage</code>, the deflect nudge, and the deflect stamp.</li>
 <li><b>A piercing shot</b> (a pierce earned in cruise, or a Snipe lance) plows it. It pops at the shot's next wall discharge, as the golden balloon does, and the wave starts from the ball's slot at that moment.</li>
 <li><b>A laser beam</b> pops it at once (<code>DamageFlags.Beam</code>).</li>
-<li><b>A bomb's blast</b> carries <code>Piercing</code> but never <code>DirectHit</code> or <code>Beam</code>, so it does nothing. Lightning, paint and snipe blooms do nothing either. A board clear or a level change takes the ball away with no wave: only a pop pays, as with the other rewards.</li>
+<li><b>A bomb's blast</b> carries <code>Piercing</code>, so it pops the ball, as it pops an unbreakable beside it (changed 2026-11-15 at the owner's ask; it first did nothing). Lightning, paint and snipe blooms do nothing. A board clear or a level change takes the ball away with no wave: only a pop pays, as with the other rewards.</li>
 </ul>
 <p>Its pop scores nothing and leaves the streak alone, because the ball has no colour. Everything it gives comes from the wave.</p>
 <h2><a class="anchor" id="autotoc_md457"></a>
 The wave</h2>
+<p><b>The lines after it.</b> The party outlasts the wave: the pop owes the next clock lines rainbow (<code>DiscoWaveSettings.RainbowLines</code>, 3 by default; asked for on 2026-11-15). <code>RainbowLines</code> holds the count, and <code>BalloonSpawner</code> hands it each clock line's new balloons once they are placed, before the item roll. Each line that brings a balloon pays one, by the wave's rules (<code>PaintTargets</code>): a paintable balloon arrives rainbow and a paint-immune one keeps its look. A line that brings none, because the board is full, doesn't count, so every line owed arrives. A second pop tops the count up to the setting instead of adding to it. A level change or a run reset forgets what is still owed. The painted balloons are booked to the breaking shot while it flies, so the self-feeding check holds for them too.</p>
 <p><b>Shape and timing.</b> The disc is centred on the ball's position at the moment of the pop. It does not follow the board afterwards, so a balloon line arriving mid-wave doesn't drag the disc with it.</p>
 <ul>
 <li><code>R_max</code> is the distance from that centre to the farthest corner of the board's slot bounds, plus one balloon radius. So a ball in a corner still covers the whole board, and the wave lasts the same time wherever the ball was.</li>
@@ -289,8 +292,8 @@ The look</h2>
 <h2><a class="anchor" id="autotoc_md460"></a>
 Open questions</h2>
 <ol type="1">
-<li><b>How big is the jackpot?</b> A rainbow pop pays its full score to <em>every</em> allowed colour (<code>BalloonModel.ResolveRainbowAttribution</code>). A whole board turned rainbow lets the next two or three shots fill most of a level's goals. The ledger stops the streak trap but deliberately leaves this alone. Is a near-level-skip what you want from it? The levers, if not: place it earlier in the level (so there's more left to fill), make it rarer, or have the wave skip a share of the board. Skipping goes against the spec, so the plan doesn't propose it. The bot measurement in Phase 6 is the evidence.</li>
-<li><b>The next throw's streak.</b> Every later throw climbs one step per rainbow pop, with no cap. The streak resets on each load, so it is bounded by a single shot, but a pierce through a rainbow board will set a record multiplier. The streak cap was tried and reverted (score is not difficulty), so the plan accepts this as the reward unless you say otherwise.</li>
+<li><b>How big is the jackpot?</b> A rainbow pop pays its full score to <em>every</em> allowed colour (<code>BalloonModel.ResolveRainbowAttribution</code>). A whole board turned rainbow lets the next two or three shots fill most of a level's goals. The ledger stops the streak trap but deliberately leaves this alone. Is a near-level-skip what you want from it? The levers, if not: place it earlier in the level (so there's more left to fill), make it rarer, or have the wave skip a share of the board. Skipping goes against the spec, so the plan doesn't propose it. The bot measurement in Phase 6 is the evidence: where the ball was popped, the level took about half the time and half the shots (<em>Measured</em> below). That's a big jackpot, but not a skip.</li>
+<li><b>The next throw's streak.</b> Every later throw climbs one step per rainbow pop, with no cap. The streak resets on each load, so it is bounded by a single shot, but a pierce through a rainbow board will set a record multiplier. The streak cap was tried and reverted (score is not difficulty), so the plan accepts this as the reward unless you say otherwise. Measured: where the ball popped, the level's peak streak about doubled (22 and 23 against 10 and 11), and it went no higher than the control's best on another level (23).</li>
 <li><b>Items on painted balloons.</b> An item hosted on a balloon the wave paints becomes the rainbow version (a rainbow bomb converts its survivors, a rainbow laser, a rainbow Snipe lance blooms). The board's items all go rainbow together and can cascade. Do you want that, or should a hosted item keep its concrete version?</li>
 <li><b>Reflection cost.</b> <code>SceneCaptureService</code> renders a second camera while a ball is on screen. The unbreakable balloon already pays this cost, and the two share one capture. If a device build shows the cost, fall back to the golden balloon's horizon reflection.</li>
 <li><b>The silhouette.</b> The plan keeps the balloon outline and knot, as the reward plan decided for the golden balloon, so it reads as a balloon. The alternative is a true sphere, like the unbreakable, which looks more like a disco ball but less like a balloon.</li>
@@ -306,8 +309,30 @@ Phases</h2>
 <li><b>The wave, without the look.</b> <code>PaintTargets</code> taken out of <code>PaintItemHandler</code>, <code>DiscoWave</code>, <code>NudgeType.Wave</code>, the per-frame visit, the final sweep, cancellation on reset, the recolour burst, and the drip. A placeholder disc (a plain ring). <code>ShotPaintLedger</code>, <code>DamageFlags.OwnPaint</code>, and the resolver and score changes, with the solver mirroring them. Tests: the wave paints every paintable and none of the immune; a balloon is painted once; the final sweep; the cancel; and, written first, <b>the breaking shot's later pop of a painted balloon leaves its streak unchanged while another shot's pop climbs</b>. Built, with the shield refund guarded too (see the self-feeding check). The disc's settings are <code>IBalloonsConfiguration.DiscoWave</code>; the ring is a <code>LineRenderer</code> (<code>DiscoWaveView</code>).</li>
 <li><b>The look.</b> <code>DiscoBall.shader</code>, <code>DiscoBallLook</code>, the prefab built from the golden balloon's, the rainbow <code>GodRays</code> toggle and <code>DiscoRays</code>, <code>DiscoWave.shader</code>, the rainbow <code>PaintDrip</code>, and the shatter sheet and <code>PSVFX_DiscoPop</code>. <b>Shaders: <code>dotnet build</code> doesn't check them.</b> Checked in the Editor at noon and at night with <code>Tools/stage/stage.py</code>, and frames sent to you for sign-off. Written: everything but the shatter, which needs a capture of the ball in the Editor (<code>Tools/art/shatter</code>); the pop keeps the golden balloon's burst until then. Not yet compiled or seen in the Editor.</li>
 <li><b>Sound.</b> The three cues, layered in <code>SoundBankConfiguration</code>. Built: the wave's glissando and ticks are two cues, played by <code>DiscoSoundRouter</code>; the clips want a pass by ear.</li>
-<li><b>Docs and measuring.</b> READMEs (Reward, Type, Nudge, Paint, Projectile), plus the playtest bot on a forced disco level against the same seed without one: level time, shots to clear, and peak multiplier. This is the evidence for open questions 1 and 2. Then a device build for the capture cost. </li>
+<li><b>Docs and measuring.</b> READMEs (Reward, Type, Nudge, Paint, Projectile), plus the playtest bot on a forced disco level against the same seed without one: level time, shots to clear, and peak multiplier. This is the evidence for open questions 1 and 2. Then a device build for the capture cost. Done: the READMEs, and the measurement below. Still open: the device build for the capture cost, and the shatter sheet (<code>PSVFX_DiscoPop</code>) from Phase 4.</li>
 </ol>
+<h2><a class="anchor" id="autotoc_md462"></a>
+Measured</h2>
+<p>On 2026-11-15, with the rainbow lines in, the playtest bot played three seeds (<code>--purple --seed N</code>, average skill, 300 s each). It played each once as configured and once with no disco ball (<code>--no-disco</code>). A purple level brings a sure disco ball. No session hit a game over.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Seed   </th><th class="markdownTableHeadNone">Level   </th><th class="markdownTableHeadNone">Disco ball   </th><th class="markdownTableHeadNone">With: seconds / shots / peak streak   </th><th class="markdownTableHeadNone">Without: seconds / shots / peak streak    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">2202   </td><td class="markdownTableBodyNone">18   </td><td class="markdownTableBodyNone">popped   </td><td class="markdownTableBodyNone">38 / 16 / 22   </td><td class="markdownTableBodyNone">102 / 42 / 10    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">3303   </td><td class="markdownTableBodyNone">22 (purple)   </td><td class="markdownTableBodyNone">more than one, popped   </td><td class="markdownTableBodyNone">101 / 37 / 23   </td><td class="markdownTableBodyNone">184 / 70 / 11    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">1101   </td><td class="markdownTableBodyNone">14 (purple)   </td><td class="markdownTableBodyNone">placed, never popped   </td><td class="markdownTableBodyNone">71 / 28 / 14   </td><td class="markdownTableBodyNone">88 / 35 / 11    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">2202   </td><td class="markdownTableBodyNone">16 (purple)   </td><td class="markdownTableBodyNone">placed, never popped   </td><td class="markdownTableBodyNone">89 / 31 / 10   </td><td class="markdownTableBodyNone">60 / 22 / 23   </td></tr>
+</table>
+<ul>
+<li><b>The rows where it never popped are the noise.</b> The ball changed nothing there, and the two arms still differ by 20 to 30% either way.</li>
+<li><b>Where it popped</b>, the level took 45 to 60% less time and shots. That is well outside the noise, though it rests on two levels.</li>
+<li><b>The average bot often leaves a ball unpopped</b>: it breaks one only with a pierce, and two of the four levels kept theirs. Since this measurement, a bomb's blast beside a plated balloon breaks it too, which should raise that share.</li>
+<li><b>The peak streak</b> on a popped level roughly doubled. It is bounded by the shot: the control reached 23 on a level with no ball.</li>
+<li>The bot is not a person, and two popped levels are thin evidence. Rerun with more seeds, or after a tuning change, using the same two flags. </li>
+</ul>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->
