@@ -768,10 +768,9 @@ namespace BalloonParty.UI.CardReveal
             }
 
             var colors = _levelParams?.Current?.AllowedColors;
-            var graphic = _bonusRibbon.GetComponentInChildren<RibbonGraphic>(true);
-            if (graphic != null && colors is { Count: > 0 })
+            if (colors is { Count: > 0 })
             {
-                graphic.color = _palette.GetColor(colors[colors.Count - 1]);
+                _bonusRibbon.Recolor(_palette.GetColor(colors[colors.Count - 1]), _settings.BonusRibbonTextColor);
             }
 
             _bonusRibbon.gameObject.SetActive(false);

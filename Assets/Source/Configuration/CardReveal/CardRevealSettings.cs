@@ -180,6 +180,9 @@ namespace BalloonParty.Configuration.CardReveal
                  "Ribbon Delay Seconds after play begins and flying Bonus Ribbon Seconds, its exit included.")]
         [SerializeField] private string _bonusRibbonText = "Bonus";
 
+        [Tooltip("The bonus ribbon's text colour: dark, since the pale text of the reveal ribbons washes out on purple.")]
+        [SerializeField] private Color _bonusRibbonTextColor = new(0.21f, 0.22f, 0.24f, 1f);
+
         [SerializeField] [Min(0f)] private float _bonusRibbonDelaySeconds = 0.4f;
         [SerializeField] [Min(0.1f)] private float _bonusRibbonSeconds = 2.2f;
 
@@ -202,6 +205,7 @@ namespace BalloonParty.Configuration.CardReveal
         public float RibbonBurstSeconds => _ribbonBurstSeconds;
         public float RibbonExitSeconds => _ribbonExitSeconds;
         public string BonusRibbonText => _bonusRibbonText;
+        public Color BonusRibbonTextColor => _bonusRibbonTextColor;
         public float BonusRibbonDelaySeconds => _bonusRibbonDelaySeconds;
         public float BonusRibbonSeconds => _bonusRibbonSeconds;
         public float CappedDissolveDelay => _cappedDissolveDelay;

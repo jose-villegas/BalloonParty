@@ -79,6 +79,9 @@ namespace BalloonParty.Configuration.CardReveal
         /// <summary>What the ribbon a purple level starts with says.</summary>
         string BonusRibbonText { get; }
 
+        /// <summary>The colour of the bonus ribbon's text.</summary>
+        Color BonusRibbonTextColor { get; }
+
         /// <summary>Seconds after a purple level's play begins before its bonus ribbon bursts in.</summary>
         float BonusRibbonDelaySeconds { get; }
 

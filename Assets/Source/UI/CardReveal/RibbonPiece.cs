@@ -61,6 +61,13 @@ namespace BalloonParty.UI.CardReveal
         private Color32[][] _sourceColors = Array.Empty<Color32[]>();
         private float _dissolve;
 
+        /// <summary>Paints the ribbon and its text, before it is shown.</summary>
+        internal void Recolor(Color ribbon, Color text)
+        {
+            _ribbon.color = ribbon;
+            _text.color = text;
+        }
+
         /// <summary>
         ///     Writes <paramref name="line" /> on the ribbon, <paramref name="struck" /> through or not, and sizes the
         ///     ribbon to it. The ribbon comes back whole.

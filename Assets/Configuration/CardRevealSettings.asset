@@ -84,5 +84,6 @@ MonoBehaviour:
   _pinRecoilDistance: 36
   _pinLeaveSeconds: 0.4
   _bonusRibbonText: Bonus
+  _bonusRibbonTextColor: {r: 0.21, g: 0.22, b: 0.24, a: 1}
   _bonusRibbonDelaySeconds: 0.4
   _bonusRibbonSeconds: 2.2
