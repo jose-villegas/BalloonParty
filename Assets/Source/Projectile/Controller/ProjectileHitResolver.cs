@@ -105,7 +105,7 @@ namespace BalloonParty.Projectile.Controller
             // that trigger another pierce resolve before this loop finishes).
             var pendingCount = pending.Count;
             var resolvedCount = 0;
-            var hitsCut = 0;
+            var armourCut = 0;
             var center = Vector3.zero;
             for (var i = 0; i < pendingCount; i++)
             {
@@ -119,7 +119,7 @@ namespace BalloonParty.Projectile.Controller
 
                 resolvedCount++;
                 // Read before the hit: the piercing kill takes them all at once.
-                hitsCut += balloon is IHasDurability durable ? Mathf.Max(1, durable.HitsRemaining.Value) : 1;
+                armourCut += balloon is IHasDurability durable ? Mathf.Max(1, durable.HitsRemaining.Value) : 1;
                 center += hit.Position;
                 var context = new DamageContext(1, flags, projectile.ColorName.Value, projectile);
                 var outcome = balloon.EvaluateHit(context);
@@ -136,13 +136,20 @@ namespace BalloonParty.Projectile.Controller
             // shockwave / slow-mo. Centred on the plowed line, carrying the charge (tough count) and
             // whether the shot was rainbow.
             _flightStats.RecordPierceDischarge(projectile);
+            projectile.Flight.LanceArmourCut += armourCut;
             // The plowed line's centroid ("center") sits behind the shot by the time it discharges — the
             // wall bounce already moved it on to SegmentStartPosition, which the bloom needs as the ANCHOR
             // for its "don't repaint what I'm about to fly back through" exclusion (the centroid would
             // exclude the wrong half — see PierceDischargedMessage's doc).
             _dischargedPublisher.Publish(new PierceDischargedMessage(
-                projectile, center / resolvedCount, resolvedCount, hitsCut, isRainbowBuff,
+                projectile, center / resolvedCount, resolvedCount, projectile.Flight.LanceArmourCut, isRainbowBuff,
                 projectile.Direction, projectile.Flight.SegmentStartPosition));
+
+            // SpendPierce already ran: a banked charge kept the lance armed, and its count carries on.
+            if (!projectile.IsPiercing.Value)
+            {
+                projectile.Flight.LanceArmourCut = 0;
+            }
 
             pending.Clear();
             return true;

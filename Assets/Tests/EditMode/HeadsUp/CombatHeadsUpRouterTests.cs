@@ -84,7 +84,7 @@ namespace BalloonParty.Tests.HeadsUp
         }
 
         [Test]
-        public void APierceDischarge_WritesTheHitPointsItCut()
+        public void APierceDischarge_WritesTheArmourItsLanceCut_MergedPerBall()
         {
             _onDischarge.Handle(new PierceDischargedMessage(_ball, Vector3.zero, 2, 5, false, Vector3.up,
                 new Vector3(0f, 6f, 0f)));
@@ -92,6 +92,9 @@ namespace BalloonParty.Tests.HeadsUp
             Assert.AreEqual(HeadsUpStyleId.Shattered, _requests[0].Style);
             Assert.AreEqual(5, _requests[0].Arg);
             Assert.AreEqual(new Vector2(0f, 6f), _requests[0].Anchor.Position);
+            Assert.AreSame(_ball, _requests[0].MergeKey.Owner);
+            Assert.AreNotEqual(new HeadsUpMergeKey(_ball, "Red"), _requests[0].MergeKey,
+                "a streak's line on the same ball is not the armour line");
         }
 
         [Test]

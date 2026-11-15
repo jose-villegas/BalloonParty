@@ -320,7 +320,7 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
-        public void DischargePending_CountsTheHitPointsTheToughsStillHad()
+        public void DischargePending_CountsTheArmourTheToughsStillHad()
         {
             _projectile.IsPiercing.Value = true;
             var threeHit = new BalloonModel(new BalloonModelConfig(hitsToPop: 3));
@@ -333,7 +333,38 @@ namespace BalloonParty.Tests.Projectile
             _resolver.DischargePending(_projectile);
 
             _dischargedPublisher.Received(1).Publish(Arg.Is<PierceDischargedMessage>(m =>
-                m.ToughCount == 2 && m.HitsCut == 5));
+                m.ToughCount == 2 && m.ArmourCut == 5));
+        }
+
+        [Test]
+        public void DischargePending_ALanceStillArmed_CarriesItsArmourOnToTheNextDischarge()
+        {
+            _projectile.IsPiercing.Value = true;
+            PlaceAndRecordTough(new Vector2Int(2, 3));
+            _resolver.DischargePending(_projectile);
+
+            PlaceAndRecordTough(new Vector2Int(2, 5));
+            _resolver.DischargePending(_projectile);
+
+            _dischargedPublisher.Received(1).Publish(Arg.Is<PierceDischargedMessage>(m => m.ArmourCut == 2));
+            _dischargedPublisher.Received(1).Publish(Arg.Is<PierceDischargedMessage>(m => m.ArmourCut == 4));
+        }
+
+        [Test]
+        public void DischargePending_TheDischargeThatEndsThePierce_StartsTheNextLanceFromNothing()
+        {
+            _projectile.IsPiercing.Value = true;
+            PlaceAndRecordTough(new Vector2Int(2, 3));
+            _projectile.IsPiercing.Value = false;
+            _resolver.DischargePending(_projectile);
+
+            Assert.AreEqual(0, _projectile.Flight.LanceArmourCut);
+
+            _projectile.IsPiercing.Value = true;
+            PlaceAndRecordTough(new Vector2Int(2, 5));
+            _resolver.DischargePending(_projectile);
+
+            _dischargedPublisher.Received(2).Publish(Arg.Is<PierceDischargedMessage>(m => m.ArmourCut == 2));
         }
 
         [Test]
@@ -346,7 +377,7 @@ namespace BalloonParty.Tests.Projectile
 
             _resolver.DischargePending(_projectile);
 
-            _dischargedPublisher.Received(1).Publish(Arg.Is<PierceDischargedMessage>(m => m.HitsCut == 1));
+            _dischargedPublisher.Received(1).Publish(Arg.Is<PierceDischargedMessage>(m => m.ArmourCut == 1));
         }
 
         [Test]

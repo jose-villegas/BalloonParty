@@ -74,7 +74,7 @@ namespace BalloonParty.Tests.HeadsUp
         }
 
         [Test]
-        public void HitsCut_ShowsFromOne_AndOutsizesAStreak()
+        public void ArmourCut_ShowsFromOne_AndOutsizesAStreak()
         {
             var hits = _settings.Style(HeadsUpStyleId.Shattered);
             var streak = _settings.Style(HeadsUpStyleId.Streak);

@@ -46,6 +46,11 @@ namespace BalloonParty.Projectile.Model
         // so HasBuff would already read false by then.
         public bool PierceWasRainbow { get; set; }
 
+        // The armour (hit points the shattered toughs still had) the running lance has cut over all its
+        // discharges so far: a banked Snipe charge re-arming at a discharge carries the count on, and the
+        // discharge that ends the pierce clears it.
+        public int LanceArmourCut { get; set; }
+
         // Snipe pickups taken while the shot was ALREADY piercing. Two pierces can't overlap, so the
         // grant is saved instead of wasted: each charge re-arms the lance at the discharge that spends
         // the current pierce (see ProjectileModelExtensions.SpendPierce). Rainbow charges are counted
