@@ -44,7 +44,7 @@ namespace BalloonParty.Tests.Configuration
                 AssetDatabase.LoadAssetAtPath<LevelPacingConfiguration>("Assets/Configuration/LevelPacingConfiguration.asset");
             Assert.IsNotNull(pacing);
 
-            for (var level = 13; level <= 40; level++)
+            for (var level = 8; level <= 40; level++)
             {
                 var colors = pacing.ColorsForLevel(level);
                 var ordinary = pacing.ThresholdForLevel(level);
