@@ -1,5 +1,9 @@
 var NAVTREEINDEX108 =
 {
+"plan_performance_recovery.html#autotoc_md756":[3,12,0,2,2],
+"plan_performance_recovery.html#autotoc_md757":[3,12,0,2,3],
+"plan_performance_recovery.html#autotoc_md758":[3,12,0,2,4],
+"plan_performance_recovery.html#autotoc_md759":[3,12,0,2,5],
 "plan_performance_recovery.html#autotoc_md760":[3,12,0,2,6],
 "plan_performance_recovery.html#autotoc_md761":[3,12,0,2,7],
 "plan_performance_recovery.html#autotoc_md762":[3,12,0,2,8],
@@ -245,9 +249,5 @@ var NAVTREEINDEX108 =
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1EdgeRecord.html#af8c74db7395a4e568dc9591b9a7f74ab":[5,0,0,1,0,0,0,1],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1EdgeRecord.html#af8c74db7395a4e568dc9591b9a7f74ab":[6,0,0,1,0,0,0,1],
 "structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1MoveRecord.html":[5,0,0,1,0,0,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1MoveRecord.html":[6,0,0,1,0,0,1],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1MoveRecord.html#a1782c2c46e2fb9144142cd8cbd402146":[5,0,0,1,0,0,1,2],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1MoveRecord.html#a1782c2c46e2fb9144142cd8cbd402146":[6,0,0,1,0,0,1,2],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1MoveRecord.html#a2a6071378e7905fca52f4dfa4d4a438b":[5,0,0,1,0,0,1,0],
-"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1MoveRecord.html#a2a6071378e7905fca52f4dfa4d4a438b":[6,0,0,1,0,0,1,0]
+"structBalloonParty_1_1Balloon_1_1Controller_1_1BalanceDebugRecorder_1_1MoveRecord.html":[6,0,0,1,0,0,1]
 };

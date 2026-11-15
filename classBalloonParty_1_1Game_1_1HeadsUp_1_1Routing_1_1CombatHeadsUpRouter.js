@@ -16,5 +16,6 @@ var classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter =
     [ "_projectiles", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html#ae0ce57c4e65cf9da3f09c5bff1bb8da6", null ],
     [ "_streakSubscriber", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html#a3d74b27ece7f48b213899c59cda43524", null ],
     [ "_subscriptions", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html#a57663e544190c5929176f3c31675a2a1", null ],
-    [ "_tapSubscriber", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html#ac87d2292e426f284d70426c0e6638b69", null ]
+    [ "_tapSubscriber", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html#ac87d2292e426f284d70426c0e6638b69", null ],
+    [ "ArmourChannel", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html#afd9a028b840ef9bdf6ff01dd341bf1c5", null ]
 ];

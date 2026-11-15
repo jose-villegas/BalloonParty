@@ -1,5 +1,9 @@
 var NAVTREEINDEX96 =
 {
+"interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html#a843a3af2b56fadf7fdcd7d43859ab9d9":[5,0,0,1,2,9,2],
+"interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html#a843a3af2b56fadf7fdcd7d43859ab9d9":[6,0,0,1,2,9,2],
+"interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html#ae295e13669f2335dde5195f851710138":[5,0,0,1,2,9,1],
+"interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html#ae295e13669f2335dde5195f851710138":[6,0,0,1,2,9,1],
 "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IHasWriteableItemSlot.html":[5,0,0,1,2,10],
 "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IHasWriteableItemSlot.html":[6,0,0,1,2,10],
 "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IHasWriteableItemSlot.html#a2ea195ee2cb350469fc02ef37c1e7917":[5,0,0,1,2,10,1],
@@ -245,9 +249,5 @@ var NAVTREEINDEX96 =
 "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a87bae69d5a8c6c65abda8f8069f45484":[5,0,0,3,2,1,29],
 "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a87bae69d5a8c6c65abda8f8069f45484":[6,0,0,3,2,1,29],
 "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a8e2ebb469603095696fe8d697f26ec26":[5,0,0,3,2,1,17],
-"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a8e2ebb469603095696fe8d697f26ec26":[6,0,0,3,2,1,17],
-"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a8e96cb923ff27cc2048de1a588339bfd":[5,0,0,3,2,1,8],
-"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a8e96cb923ff27cc2048de1a588339bfd":[6,0,0,3,2,1,8],
-"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a9def9d9f28897111011c7ecddddc3254":[5,0,0,3,2,1,18],
-"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a9def9d9f28897111011c7ecddddc3254":[6,0,0,3,2,1,18]
+"interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a8e2ebb469603095696fe8d697f26ec26":[6,0,0,3,2,1,17]
 };

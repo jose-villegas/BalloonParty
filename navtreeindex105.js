@@ -1,5 +1,9 @@
 var NAVTREEINDEX105 =
 {
+"namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da94c7b886faf6f349c007fc101ccdaf00":[5,0,0,3,7,6,7],
+"namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da9b9288a52ab2d6fb37e00b022d524575":[5,0,0,3,7,6,11],
+"namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da9f85c7f28ee59c7d2ba73c30a2c7ea49":[5,0,0,3,7,6,5],
+"namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56dad7ae23504c10caf6fdcacff88a864cfe":[5,0,0,3,7,6,3],
 "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56dad8f3658e1be8bbf0ae20fdbd26574569":[5,0,0,3,7,6,10],
 "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56dae38f161f104780d651e487674b3130ac":[5,0,0,3,7,6,4],
 "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56dae7d31fc0602fb2ede144d18cdffd816b":[5,0,0,3,7,6,0],
@@ -245,9 +249,5 @@ var NAVTREEINDEX105 =
 "namespaceBalloonParty_1_1Shared_1_1GameState.html#a215f59d6ae03f95cde0cf7bc71abdd3ea5336ad98defcb67c0b4465d92c35399c":[5,0,0,12,5,12,5],
 "namespaceBalloonParty_1_1Shared_1_1GameState.html#a215f59d6ae03f95cde0cf7bc71abdd3ea6adf97f83acf6453d4a6a4b1070f3754":[5,0,0,12,5,12,0],
 "namespaceBalloonParty_1_1Shared_1_1GameState.html#a215f59d6ae03f95cde0cf7bc71abdd3ea7b549c39b6c31bcfbcc0dfda6224863b":[5,0,0,12,5,12,3],
-"namespaceBalloonParty_1_1Shared_1_1GameState.html#a215f59d6ae03f95cde0cf7bc71abdd3ea8143eb3223b0fb12c5201192275bc100":[5,0,0,12,5,12,2],
-"namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6":[5,0,0,12,5,14],
-"namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6a63d72051e901c069f8aa1b32aa0c43bb":[5,0,0,12,5,14,1],
-"namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6a8f347bc7cebca9fa6d97e70c6bc29eb3":[5,0,0,12,5,14,3],
-"namespaceBalloonParty_1_1Shared_1_1GameState.html#a59d8996d0c851ba4d4a00fb55277bbd6a9506f0fd0f7f1b07960b15b4c9e68d1a":[5,0,0,12,5,14,0]
+"namespaceBalloonParty_1_1Shared_1_1GameState.html#a215f59d6ae03f95cde0cf7bc71abdd3ea8143eb3223b0fb12c5201192275bc100":[5,0,0,12,5,12,2]
 };

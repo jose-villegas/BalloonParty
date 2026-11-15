@@ -120,17 +120,17 @@ $(function(){initNavTree('structBalloonParty_1_1Shared_1_1Messages_1_1PierceDisc
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9f97503bc1e4e3a049d325b1d8aa20eb" id="r_a9f97503bc1e4e3a049d325b1d8aa20eb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9f97503bc1e4e3a049d325b1d8aa20eb">PierceDischargedMessage</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> projectile, Vector3 center, int toughCount, int hitsCut, bool isRainbow, Vector3 direction, Vector3 position)</td></tr>
-<tr class="separator:a9f97503bc1e4e3a049d325b1d8aa20eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4f109f5b2b341380beb4063abfb7afa" id="r_ac4f109f5b2b341380beb4063abfb7afa"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac4f109f5b2b341380beb4063abfb7afa">PierceDischargedMessage</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> projectile, Vector3 center, int toughCount, int armourCut, bool isRainbow, Vector3 direction, Vector3 position)</td></tr>
+<tr class="separator:ac4f109f5b2b341380beb4063abfb7afa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a4d49dfd5159b1192c5dd9d152c0250a4" id="r_a4d49dfd5159b1192c5dd9d152c0250a4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4d49dfd5159b1192c5dd9d152c0250a4">ArmourCut</a><code> [get]</code></td></tr>
+<tr class="separator:a4d49dfd5159b1192c5dd9d152c0250a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a645e1f948ea02ea2afb32bb85ee89844" id="r_a645e1f948ea02ea2afb32bb85ee89844"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a645e1f948ea02ea2afb32bb85ee89844">Center</a><code> [get]</code></td></tr>
 <tr class="separator:a645e1f948ea02ea2afb32bb85ee89844"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01c3c80e94b9e8ab105cebbcfe371766" id="r_a01c3c80e94b9e8ab105cebbcfe371766"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a01c3c80e94b9e8ab105cebbcfe371766">Direction</a><code> [get]</code></td></tr>
 <tr class="separator:a01c3c80e94b9e8ab105cebbcfe371766"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68cc0a8e4cc47509d697d658fa55ac83" id="r_a68cc0a8e4cc47509d697d658fa55ac83"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a68cc0a8e4cc47509d697d658fa55ac83">HitsCut</a><code> [get]</code></td></tr>
-<tr class="separator:a68cc0a8e4cc47509d697d658fa55ac83"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a842ed960c853255e2c0964c3b30311" id="r_a1a842ed960c853255e2c0964c3b30311"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a842ed960c853255e2c0964c3b30311">IsRainbow</a><code> [get]</code></td></tr>
 <tr class="separator:a1a842ed960c853255e2c0964c3b30311"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c41f0b587b4ced50911dec14818319f" id="r_a1c41f0b587b4ced50911dec14818319f"><td class="memItemLeft" align="right" valign="top">Vector3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1c41f0b587b4ced50911dec14818319f">Position</a><code> [get]</code></td></tr>
@@ -142,10 +142,10 @@ Properties</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Published when a piercing shot discharges — shattering the toughs it plowed through. </p>
-<p>Carries the centre of the plowed line (<a class="el" href="#a645e1f948ea02ea2afb32bb85ee89844">Center</a>, used to shape the rainbow bloom's radius), how many toughs it ate (the charge), whether the shot was rainbow, the direction the shot is travelling as of that moment (already reflected off the wall it just discharged at — see <code>ProjectileHitResolver.DischargePending</code>, called after the bounce), and where the shot actually is right now (<a class="el" href="#a1c41f0b587b4ced50911dec14818319f">Position</a> — the wall-contact point, NOT <a class="el" href="#a645e1f948ea02ea2afb32bb85ee89844">Center</a>, which sits back along the plowed line the shot has already left behind). A rainbow bloom must anchor its "don't paint what I'm about to re-enter" test on <a class="el" href="#a1c41f0b587b4ced50911dec14818319f">Position</a>: the shot resumes travel from there, not from the plowed line's centre. <a class="el" href="#a01c3c80e94b9e8ab105cebbcfe371766">Direction</a> and <a class="el" href="#a1c41f0b587b4ced50911dec14818319f">Position</a> are both required (no defaulting) — an anti-exploit guard that silently falls back to "exclude nothing" on a forgotten argument is worse than a compile error. The discharge feel subscribes: the rainbow bloom, and (later) lights/shockwave. <a class="el" href="namespaceBalloonParty_1_1Projectile.html">Projectile</a> is the shot that discharged. <a class="el" href="#a68cc0a8e4cc47509d697d658fa55ac83">HitsCut</a> is the hit points the shattered toughs still had (a 3-hit and a 2-hit make 5; one without hit points, an unbreakable, counts 1): what the heads-up writes. </p>
+<p>Carries the centre of the plowed line (<a class="el" href="#a645e1f948ea02ea2afb32bb85ee89844">Center</a>, used to shape the rainbow bloom's radius), how many toughs it ate (the charge), whether the shot was rainbow, the direction the shot is travelling as of that moment (already reflected off the wall it just discharged at — see <code>ProjectileHitResolver.DischargePending</code>, called after the bounce), and where the shot actually is right now (<a class="el" href="#a1c41f0b587b4ced50911dec14818319f">Position</a> — the wall-contact point, NOT <a class="el" href="#a645e1f948ea02ea2afb32bb85ee89844">Center</a>, which sits back along the plowed line the shot has already left behind). A rainbow bloom must anchor its "don't paint what I'm about to re-enter" test on <a class="el" href="#a1c41f0b587b4ced50911dec14818319f">Position</a>: the shot resumes travel from there, not from the plowed line's centre. <a class="el" href="#a01c3c80e94b9e8ab105cebbcfe371766">Direction</a> and <a class="el" href="#a1c41f0b587b4ced50911dec14818319f">Position</a> are both required (no defaulting) — an anti-exploit guard that silently falls back to "exclude nothing" on a forgotten argument is worse than a compile error. The discharge feel subscribes: the rainbow bloom, and (later) lights/shockwave. <a class="el" href="namespaceBalloonParty_1_1Projectile.html">Projectile</a> is the shot that discharged. <a class="el" href="#a4d49dfd5159b1192c5dd9d152c0250a4">ArmourCut</a> is the armour the lance has cut so far: the hit points its shattered toughs still had (a 3-hit and a 2-hit make 5; one without hit points, an unbreakable, counts 1), summed over every discharge of the same lance (a banked Snipe charge re-arming carries it on). What the heads-up writes. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a9f97503bc1e4e3a049d325b1d8aa20eb" name="a9f97503bc1e4e3a049d325b1d8aa20eb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9f97503bc1e4e3a049d325b1d8aa20eb">&#9670;&#160;</a></span>PierceDischargedMessage()</h2>
+<a id="ac4f109f5b2b341380beb4063abfb7afa" name="ac4f109f5b2b341380beb4063abfb7afa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4f109f5b2b341380beb4063abfb7afa">&#9670;&#160;</a></span>PierceDischargedMessage()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -168,7 +168,7 @@ Properties</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>hitsCut</em></span>, </td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>armourCut</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -191,6 +191,28 @@ Properties</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="a4d49dfd5159b1192c5dd9d152c0250a4" name="a4d49dfd5159b1192c5dd9d152c0250a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d49dfd5159b1192c5dd9d152c0250a4">&#9670;&#160;</a></span>ArmourCut</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Shared.Messages.PierceDischargedMessage.ArmourCut</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a645e1f948ea02ea2afb32bb85ee89844" name="a645e1f948ea02ea2afb32bb85ee89844"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a645e1f948ea02ea2afb32bb85ee89844">&#9670;&#160;</a></span>Center</h2>
 
@@ -224,28 +246,6 @@ Properties</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">Vector3 BalloonParty.Shared.Messages.PierceDischargedMessage.Direction</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a68cc0a8e4cc47509d697d658fa55ac83" name="a68cc0a8e4cc47509d697d658fa55ac83"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68cc0a8e4cc47509d697d658fa55ac83">&#9670;&#160;</a></span>HitsCut</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int BalloonParty.Shared.Messages.PierceDischargedMessage.HitsCut</td>
         </tr>
       </table>
   </td>

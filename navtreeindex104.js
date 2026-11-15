@@ -1,5 +1,9 @@
 var NAVTREEINDEX104 =
 {
+"interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html#a76294bf735ba1535932a393b29e045c4":[5,0,0,13,0,14,1],
+"interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html#a76294bf735ba1535932a393b29e045c4":[6,0,0,13,0,14,1],
+"interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html#a79f895784526050bfcff55519d8bc44a":[5,0,0,13,0,14,2],
+"interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html#a79f895784526050bfcff55519d8bc44a":[6,0,0,13,0,14,2],
 "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html#adb6f47d0cdc46121366eff80c4a6f0ff":[5,0,0,13,0,14,0],
 "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableDynamicSlotActor.html#adb6f47d0cdc46121366eff80c4a6f0ff":[6,0,0,13,0,14,0],
 "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IWriteableSlotActor.html":[5,0,0,13,0,15],
@@ -245,9 +249,5 @@ var NAVTREEINDEX104 =
 "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da2e332c4ba8afe0ecff50eb58cc6b2fb6":[5,0,0,3,7,6,1],
 "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da40294a18436f1da3ed7661bbd90f9b9d":[5,0,0,3,7,6,13],
 "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da4aca5ee9a087fb9218bfb662fe92605c":[5,0,0,3,7,6,12],
-"namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da623c468df79e6c7a55db12e4fc2f7807":[5,0,0,3,7,6,9],
-"namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da94c7b886faf6f349c007fc101ccdaf00":[5,0,0,3,7,6,7],
-"namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da9b9288a52ab2d6fb37e00b022d524575":[5,0,0,3,7,6,11],
-"namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da9f85c7f28ee59c7d2ba73c30a2c7ea49":[5,0,0,3,7,6,5],
-"namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56dad7ae23504c10caf6fdcacff88a864cfe":[5,0,0,3,7,6,3]
+"namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da623c468df79e6c7a55db12e4fc2f7807":[5,0,0,3,7,6,9]
 };

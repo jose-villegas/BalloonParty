@@ -1,5 +1,9 @@
 var NAVTREEINDEX86 =
 {
+"classBalloonParty_1_1Thrower_1_1ThrowerController.html#a7ea8fb8763d77a78e0c8badb5c81cb64":[5,0,0,15,2,14],
+"classBalloonParty_1_1Thrower_1_1ThrowerController.html#a7ea8fb8763d77a78e0c8badb5c81cb64":[6,0,0,15,2,14],
+"classBalloonParty_1_1Thrower_1_1ThrowerController.html#a7fcf520635a8c45e35b01794e2ddcc5f":[5,0,0,15,2,38],
+"classBalloonParty_1_1Thrower_1_1ThrowerController.html#a7fcf520635a8c45e35b01794e2ddcc5f":[6,0,0,15,2,38],
 "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a80b7fd3528b065366b32c4b2156675c1":[5,0,0,15,2,37],
 "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a80b7fd3528b065366b32c4b2156675c1":[6,0,0,15,2,37],
 "classBalloonParty_1_1Thrower_1_1ThrowerController.html#a80dac184d9fc2bed491bee514149e740":[5,0,0,15,2,59],
@@ -245,9 +249,5 @@ var NAVTREEINDEX86 =
 "classBalloonParty_1_1UI_1_1CameraFittedCanvas.html#aeda6518a3b962604d12d5141398766ea":[5,0,0,16,12,2],
 "classBalloonParty_1_1UI_1_1CameraFittedCanvas.html#aeda6518a3b962604d12d5141398766ea":[6,0,0,16,12,2],
 "classBalloonParty_1_1UI_1_1CanvasCameraBinder.html":[5,0,0,16,13],
-"classBalloonParty_1_1UI_1_1CanvasCameraBinder.html":[6,0,0,16,13],
-"classBalloonParty_1_1UI_1_1CanvasCameraBinder.html#a1aff80e89a16770d867d58cfaa1f2314":[5,0,0,16,13,2],
-"classBalloonParty_1_1UI_1_1CanvasCameraBinder.html#a1aff80e89a16770d867d58cfaa1f2314":[6,0,0,16,13,2],
-"classBalloonParty_1_1UI_1_1CanvasCameraBinder.html#a625b5369845cb2b1037aec33f6dc4673":[5,0,0,16,13,4],
-"classBalloonParty_1_1UI_1_1CanvasCameraBinder.html#a625b5369845cb2b1037aec33f6dc4673":[6,0,0,16,13,4]
+"classBalloonParty_1_1UI_1_1CanvasCameraBinder.html":[6,0,0,16,13]
 };

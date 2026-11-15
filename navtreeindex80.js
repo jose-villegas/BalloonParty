@@ -1,5 +1,9 @@
 var NAVTREEINDEX80 =
 {
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GridActorView.html#a42d8ba4dde1f3c299d42826c4146f760":[5,0,0,13,0,0,13,10],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GridActorView.html#a42d8ba4dde1f3c299d42826c4146f760":[6,0,0,13,0,0,13,10],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GridActorView.html#a5500c61032c18133f6a86ecc50b38b6e":[5,0,0,13,0,0,13,3],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GridActorView.html#a5500c61032c18133f6a86ecc50b38b6e":[6,0,0,13,0,0,13,3],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GridActorView.html#a559cbbbd9c116f2424fb8c31f3332dee":[5,0,0,13,0,0,13,1],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GridActorView.html#a559cbbbd9c116f2424fb8c31f3332dee":[6,0,0,13,0,0,13,1],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1GridActorView.html#a83d70b2629325a468256bb061b1d65cb":[5,0,0,13,0,0,13,6],
@@ -245,9 +249,5 @@ var NAVTREEINDEX80 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterView.html#a57962836e55097122f3984c3dfbae203":[5,0,0,13,0,1,0,23],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterView.html#a57962836e55097122f3984c3dfbae203":[6,0,0,13,0,1,0,23],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterView.html#a5ce98b14178699d6c41c8c9d8f152496":[5,0,0,13,0,1,0,12],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterView.html#a5ce98b14178699d6c41c8c9d8f152496":[6,0,0,13,0,1,0,12],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterView.html#a61e98fb5324c396836c7a8307b73400e":[5,0,0,13,0,1,0,8],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterView.html#a61e98fb5324c396836c7a8307b73400e":[6,0,0,13,0,1,0,8],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterView.html#a6dfc65926c619220495611c1b8e4ddbf":[5,0,0,13,0,1,0,5],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterView.html#a6dfc65926c619220495611c1b8e4ddbf":[6,0,0,13,0,1,0,5]
+"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1ClusterView.html#a5ce98b14178699d6c41c8c9d8f152496":[6,0,0,13,0,1,0,12]
 };

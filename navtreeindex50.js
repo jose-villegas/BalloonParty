@@ -1,5 +1,7 @@
 var NAVTREEINDEX50 =
 {
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#aff7ab0dcff98194e0b05585c4500b78e":[5,0,0,6,8,0,3,11],
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1BigScoreTrailBehaviour.html#aff7ab0dcff98194e0b05585c4500b78e":[6,0,0,6,8,0,3,11],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html":[5,0,0,6,8,0,4],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html":[6,0,0,6,8,0,4],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1DefaultScoreTrailBehaviour.html#a07d7473510fe727059b546e6a8ddbfd2":[5,0,0,6,8,0,4,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX50 =
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#ad8c655f2b9262afc78dbfb0c0629d655":[5,0,0,6,8,0,14,26],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#ad8c655f2b9262afc78dbfb0c0629d655":[6,0,0,6,8,0,14,26],
 "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#adc1b91fe097c06c91973e2acc1889ef4":[5,0,0,6,8,0,14,23],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#adc1b91fe097c06c91973e2acc1889ef4":[6,0,0,6,8,0,14,23],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#adec6901ed367f27c5050c82f7b9894f0":[5,0,0,6,8,0,14,42],
-"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#adec6901ed367f27c5050c82f7b9894f0":[6,0,0,6,8,0,14,42]
+"classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker.html#adc1b91fe097c06c91973e2acc1889ef4":[6,0,0,6,8,0,14,23]
 };

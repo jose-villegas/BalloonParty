@@ -1,5 +1,9 @@
 var NAVTREEINDEX78 =
 {
+"classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#a299dfd0979626195d09e48636c9ff611":[5,0,0,12,12,2,1],
+"classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#a299dfd0979626195d09e48636c9ff611":[6,0,0,12,12,2,1],
+"classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#a3745746c0862b7418557cf0abc14537a":[5,0,0,12,12,2,17],
+"classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#a3745746c0862b7418557cf0abc14537a":[6,0,0,12,12,2,17],
 "classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#a4e0266b367edf1855b2b52040a56a6fb":[5,0,0,12,12,2,9],
 "classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#a4e0266b367edf1855b2b52040a56a6fb":[6,0,0,12,12,2,9],
 "classBalloonParty_1_1Shared_1_1Thermal_1_1ThermalFrameRateGovernor.html#a6c42ca80a6e8eac97ff35d1c786f5bf3":[5,0,0,12,12,2,16],
@@ -245,9 +249,5 @@ var NAVTREEINDEX78 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#abbca447b5d54a283ccd4c44963b050b3":[5,0,0,13,0,0,7,17],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#abbca447b5d54a283ccd4c44963b050b3":[6,0,0,13,0,0,7,17],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#ac71caa55b977d4bcef8e6d96e400e375":[5,0,0,13,0,0,7,2],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#ac71caa55b977d4bcef8e6d96e400e375":[6,0,0,13,0,0,7,2],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#ad9dc92c4ca3130edf24649cd0ff5b8b7":[5,0,0,13,0,0,7,6],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#ad9dc92c4ca3130edf24649cd0ff5b8b7":[6,0,0,13,0,0,7,6],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#adf7e6fbe8e39fdcb9507ab058bc5f461":[5,0,0,13,0,0,7,13],
-"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#adf7e6fbe8e39fdcb9507ab058bc5f461":[6,0,0,13,0,0,7,13]
+"classBalloonParty_1_1Slots_1_1Actor_1_1Archetype_1_1BushShaderProperties.html#ac71caa55b977d4bcef8e6d96e400e375":[6,0,0,13,0,0,7,2]
 };
