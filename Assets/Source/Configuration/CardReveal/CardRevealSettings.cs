@@ -186,6 +186,10 @@ namespace BalloonParty.Configuration.CardReveal
         [SerializeField] [Min(0f)] private float _bonusRibbonDelaySeconds = 0.4f;
         [SerializeField] [Min(0.1f)] private float _bonusRibbonSeconds = 2.2f;
 
+        [Tooltip("A reveal over play holds the board until its card is out; then play comes back, time easing up from " +
+                 "a standstill to full speed over these seconds of real time.")]
+        [SerializeField] [Min(0f)] private float _boardReturnSeconds = 1.5f;
+
         public IReadOnlyList<string> PopSheetPaths => _popSheetPaths;
         public int PopCount => Mathf.Max(1, _popSheetPaths.Length);
         public int RecentPopsAvoided => Mathf.Max(0, _recentPopsAvoided);
@@ -208,6 +212,7 @@ namespace BalloonParty.Configuration.CardReveal
         public Color BonusRibbonTextColor => _bonusRibbonTextColor;
         public float BonusRibbonDelaySeconds => _bonusRibbonDelaySeconds;
         public float BonusRibbonSeconds => _bonusRibbonSeconds;
+        public float BoardReturnSeconds => _boardReturnSeconds;
         public float CappedDissolveDelay => _cappedDissolveDelay;
         public float CappedDissolveSeconds => _cappedDissolveSeconds;
         public float RibbonGrowth => _ribbonGrowth;

@@ -437,7 +437,7 @@ namespace BalloonParty.UI.CardReveal
                     PlacePin(t * contactAt - contactAt);
                 }, token);
                 Float(float.PositiveInfinity);
-                await PopAsync(startedAt, token);
+                await PopAsync(reveal, startedAt, token);
                 _group.alpha = 0f;
                 _cardReveals.Finish(reveal);
             }
@@ -452,7 +452,7 @@ namespace BalloonParty.UI.CardReveal
         // skipped, not delayed. The ribbons' end is looked at again each frame until they start to leave, since the
         // level's ascent can begin after they are out. Both clocks are unscaled: the ascent runs on unscaled time
         // too (LevelAscendCinematic), so its length here is its length on screen.
-        private async UniTask PopAsync(float revealStartedAt, CancellationToken token)
+        private async UniTask PopAsync(RevealedCard reveal, float revealStartedAt, CancellationToken token)
         {
             var frames = _settings.SheetColumns * _settings.SheetRows;
             var releaseAt = Mathf.Min(_settings.RibbonsFromFrame, frames - 1) / _settings.FramesPerSecond;
@@ -472,6 +472,11 @@ namespace BalloonParty.UI.CardReveal
                 Fall(FallDistance(elapsed, _settings), swing);
                 PlacePin(elapsed);
                 BurstOnTear(frame);
+                if (elapsed >= releaseAt && float.IsNaN(_releasedAt))
+                {
+                    _cardReveals.MarkShown(reveal);
+                }
+
                 var gone = elapsed >= releaseAt && FlyRibbons(revealStartedAt) >= 1f;
                 if (gone && elapsed * _settings.FramesPerSecond >= frames)
                 {

@@ -107,6 +107,9 @@ Current claimants:
   wall-time clock, so a ball left alone resumes its last breath where it now is.
 - **`BoardPopWave`** (`TimeScaleSource.LevelTransition`, `Game/Cinematics/`) — slow-mo while the
   Ascent pop wave clears the old level's balloons band by band.
+- **`CardRevealBoardHold`** (`TimeScaleSource.CardReveal`, `Game/CardReveal/`) — a card reveal over
+  play holds the board (`PauseSource.CardReveal`) until its card is out; then play comes back from a
+  standstill, eased up to full speed over `ICardRevealSettings.BoardReturnSeconds` of real time.
 
 `PauseService` handles *logical* pause coordination (projectile, trail spawning);
 `TimeScaleService` handles *visual* time warping. The two are independent.

@@ -88,6 +88,12 @@ namespace BalloonParty.Configuration.CardReveal
         /// <summary>Seconds the bonus ribbon flies, from its burst to gone, its exit included.</summary>
         float BonusRibbonSeconds { get; }
 
+        /// <summary>
+        ///     Seconds of real time play takes to come back to full speed, from a standstill, once a reveal that held
+        ///     the board has its card out.
+        /// </summary>
+        float BoardReturnSeconds { get; }
+
         /// <summary>How long a capped title stands, once the capped ribbon has burst out, before it dissolves.</summary>
         float CappedDissolveDelay { get; }
 

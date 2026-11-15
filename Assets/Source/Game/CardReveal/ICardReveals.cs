@@ -11,6 +11,9 @@ namespace BalloonParty.Game.CardReveal
         /// <summary>The reveal to play now, or null between reveals.</summary>
         IReadOnlyReactiveProperty<RevealedCard> Current { get; }
 
+        /// <summary>Whether <see cref="Current" />'s card is out: its ribbons have burst from the balloon.</summary>
+        IReadOnlyReactiveProperty<bool> Shown { get; }
+
         /// <summary>Whether a stage is attached, so cards are announced by the reveal rather than the tooltip.</summary>
         bool HasStage { get; }
 
@@ -31,5 +34,11 @@ namespace BalloonParty.Game.CardReveal
         ///     animating it can't cut off the reveal that replaced it.
         /// </summary>
         void Finish(RevealedCard done);
+
+        /// <summary>
+        ///     The stage has <paramref name="shown" />'s card out. Like <see cref="Finish" />, a reveal that is no
+        ///     longer <see cref="Current" /> changes nothing.
+        /// </summary>
+        void MarkShown(RevealedCard shown);
     }
 }

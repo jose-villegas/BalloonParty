@@ -24,6 +24,10 @@ namespace BalloonParty.Shared.Pause
 
         /// <summary>An editor tool holding the world still to take a shot (<c>Editor/ReadmeShotCapture</c>);
         /// claimed exclusively, so nothing in play moves it on.</summary>
-        Capture
+        Capture,
+
+        /// <summary>Play coming back after a card reveal held the board: eased up from a standstill once the card
+        /// is out (<c>Game/CardReveal/CardRevealBoardHold</c>).</summary>
+        CardReveal
     }
 }

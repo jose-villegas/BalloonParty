@@ -161,6 +161,40 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void MarkShown_OfTheRevealPlaying_SaysItsCardIsOut_UntilTheNextOneStarts()
+        {
+            _controller.AttachStage();
+            Held(_shield);
+            Bonus(_reload);
+            Assert.IsFalse(_controller.Shown.Value, "a reveal starts with its card still in the balloon");
+
+            _controller.MarkShown(_controller.Current.Value);
+            Assert.IsTrue(_controller.Shown.Value);
+
+            _controller.Finish(_controller.Current.Value);
+            Assert.AreSame(_reload, _controller.Current.Value.Card);
+            Assert.IsFalse(_controller.Shown.Value, "the next reveal's card is still in its balloon");
+
+            _controller.MarkShown(_controller.Current.Value);
+            _controller.Finish(_controller.Current.Value);
+            Assert.IsFalse(_controller.Shown.Value, "nothing is out with no reveal playing");
+        }
+
+        [Test]
+        public void MarkShown_OfAReveal_TheResetAlreadyDropped_LeavesTheNewOneInItsBalloon()
+        {
+            _controller.AttachStage();
+            Held(_shield);
+            var old = _controller.Current.Value;
+
+            _controller.ResetRun(1);
+            Bonus(_reload);
+            _controller.MarkShown(old);
+
+            Assert.IsFalse(_controller.Shown.Value);
+        }
+
+        [Test]
         public void AttachingAStage_OffTheGameScreen_WaitsForPlay()
         {
             _navigation.Value = NavigationState.GameOver;

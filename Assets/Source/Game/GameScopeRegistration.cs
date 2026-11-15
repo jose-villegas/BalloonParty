@@ -211,7 +211,7 @@ namespace BalloonParty.Game
                 .As<IWeaponStats>().As<IShieldsPerBall>().As<IUpgradeDraft>().As<IBonusCardSource>()
                 .As<IFreeCardGrant>().As<IHeldCards>().As<IRunResettable>();
             builder.RegisterEntryPoint<CardRevealController>().As<ICardReveals>().As<IRunResettable>();
-            builder.RegisterEntryPoint<CardRevealBoardHold>();
+            builder.RegisterEntryPoint<CardRevealBoardHold>().As<IRunResettable>();
 
 #if UNITY_ANDROID && !UNITY_EDITOR
             builder.Register<IThermalSource, AndroidThermalSource>(Lifetime.Singleton);

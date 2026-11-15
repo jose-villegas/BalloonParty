@@ -33,6 +33,7 @@ namespace BalloonParty.Game.CardReveal
         private readonly Queue<(IUpgradeCardSettings Card, int Stacks, bool IsBonus, bool IsCapped)> _queue = new();
         private readonly List<int> _recentPops = new();
         private readonly ReactiveProperty<RevealedCard> _current = new();
+        private readonly ReactiveProperty<bool> _shown = new();
         private readonly CompositeDisposable _subscriptions = new();
 
         private int _stages;
@@ -42,6 +43,7 @@ namespace BalloonParty.Game.CardReveal
         // reveals never drops the new one's.
         public int ResetOrder => RunResetOrder.Quiesce;
         public IReadOnlyReactiveProperty<RevealedCard> Current => _current;
+        public IReadOnlyReactiveProperty<bool> Shown => _shown;
         public bool HasStage => _stages > 0;
         public int NextPop => _nextPop;
 
@@ -78,13 +80,14 @@ namespace BalloonParty.Game.CardReveal
         public void ResetRun(int generation)
         {
             _queue.Clear();
-            _current.Value = null;
+            Clear();
         }
 
         public void Dispose()
         {
             _subscriptions.Dispose();
             _current.Dispose();
+            _shown.Dispose();
         }
 
         public void AttachStage()
@@ -105,7 +108,7 @@ namespace BalloonParty.Game.CardReveal
             if (_stages == 0)
             {
                 _queue.Clear();
-                _current.Value = null;
+                Clear();
             }
         }
 
@@ -116,8 +119,16 @@ namespace BalloonParty.Game.CardReveal
                 return;
             }
 
-            _current.Value = null;
+            Clear();
             TryStartNext();
+        }
+
+        public void MarkShown(RevealedCard shown)
+        {
+            if (shown != null && ReferenceEquals(shown, _current.Value))
+            {
+                _shown.Value = true;
+            }
         }
 
         private void Enqueue(IUpgradeCardSettings card, int stacks, bool isBonus, bool isCapped)
@@ -150,7 +161,15 @@ namespace BalloonParty.Game.CardReveal
             var (card, stacks, isBonus, isCapped) = _queue.Dequeue();
             var pop = _nextPop;
             _nextPop = PickPop();
+            _shown.Value = false;
             _current.Value = new RevealedCard(card, stacks, isBonus, pop, isCapped);
+        }
+
+        // The reveal goes before its flag: seeing a finished reveal unshown again, the board hold would hold for it.
+        private void Clear()
+        {
+            _current.Value = null;
+            _shown.Value = false;
         }
 
         // Uniform over the pops not among the last few chosen, which are the last few shown, a reveal on: those
