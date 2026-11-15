@@ -127,11 +127,13 @@ $(function(){initNavTree('structBalloonParty_1_1Shared_1_1Messages_1_1DeflectCha
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:abba411253c38e65ea35039fd33c1f361" id="r_abba411253c38e65ea35039fd33c1f361"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abba411253c38e65ea35039fd33c1f361">DeflectChainMessage</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> projectile, int count, Vector3 position, bool paidShield)</td></tr>
-<tr class="separator:abba411253c38e65ea35039fd33c1f361"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4a81b6d7ed72a526ccba9439ace396d" id="r_aa4a81b6d7ed72a526ccba9439ace396d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa4a81b6d7ed72a526ccba9439ace396d">DeflectChainMessage</a> (<a class="el" href="interfaceBalloonParty_1_1Projectile_1_1Model_1_1IProjectileModel.html">IProjectileModel</a> projectile, int count, Vector3 position, bool paidShield, int chainShields=0)</td></tr>
+<tr class="separator:aa4a81b6d7ed72a526ccba9439ace396d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:a227847689519164717e078bbffbeb62a" id="r_a227847689519164717e078bbffbeb62a"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a227847689519164717e078bbffbeb62a">ChainShields</a></td></tr>
+<tr class="separator:a227847689519164717e078bbffbeb62a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30d8b146104fe0a30f0cb5110bd9058e" id="r_a30d8b146104fe0a30f0cb5110bd9058e"><td class="memItemLeft" align="right" valign="top">readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a30d8b146104fe0a30f0cb5110bd9058e">Count</a></td></tr>
 <tr class="separator:a30d8b146104fe0a30f0cb5110bd9058e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac4e6877bb26501acd9b58bfc158402af" id="r_ac4e6877bb26501acd9b58bfc158402af"><td class="memItemLeft" align="right" valign="top">readonly bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac4e6877bb26501acd9b58bfc158402af">PaidShield</a></td></tr>
@@ -143,10 +145,10 @@ Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="namespaceBalloonParty_1_1Projectile.html">Projectile</a> deflected off a balloon for the <a class="el" href="#a30d8b146104fe0a30f0cb5110bd9058e">Count</a>th time in a row without touching a wall (from <a class="el" href="classBalloonParty_1_1Shared_1_1DeflectChainRule.html#ae92f1c49f53186cd38eef25d4f04548f" title="The deflect count from which a chain is worth announcing.">DeflectChainRule.MinChain</a> on). </p>
-<p><a class="el" href="#a7959f999297bbd1f39911b6a28675b97">Position</a> is the deflecting balloon's. <a class="el" href="#ac4e6877bb26501acd9b58bfc158402af">PaidShield</a> says this deflect earned the ball a shield; its <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html" title="Projectile gained a shield from the actor at SlotIndex, for the reason in Source.">ShieldGainedMessage</a> follows, marked <a class="el" href="namespaceBalloonParty_1_1Shared_1_1Messages.html#a1a885ac3fd6e8e290b39752bfe7e21c5ae38f161f104780d651e487674b3130ac" title="Deflects in a row without a wall (DeflectChainRule).">ShieldGainSource.Ricochet</a>. </p>
+<p><a class="el" href="#a7959f999297bbd1f39911b6a28675b97">Position</a> is the deflecting balloon's. <a class="el" href="#ac4e6877bb26501acd9b58bfc158402af">PaidShield</a> says this deflect earned the ball a shield; its <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1ShieldGainedMessage.html" title="Projectile gained a shield from the actor at SlotIndex, for the reason in Source.">ShieldGainedMessage</a> follows, marked <a class="el" href="namespaceBalloonParty_1_1Shared_1_1Messages.html#a1a885ac3fd6e8e290b39752bfe7e21c5ae38f161f104780d651e487674b3130ac" title="Deflects in a row without a wall (DeflectChainRule).">ShieldGainSource.Ricochet</a>. <a class="el" href="#a227847689519164717e078bbffbeb62a">ChainShields</a> is every shield this run of deflects has paid so far, this one's included. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="abba411253c38e65ea35039fd33c1f361" name="abba411253c38e65ea35039fd33c1f361"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abba411253c38e65ea35039fd33c1f361">&#9670;&#160;</a></span>DeflectChainMessage()</h2>
+<a id="aa4a81b6d7ed72a526ccba9439ace396d" name="aa4a81b6d7ed72a526ccba9439ace396d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4a81b6d7ed72a526ccba9439ace396d">&#9670;&#160;</a></span>DeflectChainMessage()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -169,7 +171,12 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>paidShield</em></span>&#160;)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>paidShield</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>chainShields</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -177,6 +184,20 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a227847689519164717e078bbffbeb62a" name="a227847689519164717e078bbffbeb62a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a227847689519164717e078bbffbeb62a">&#9670;&#160;</a></span>ChainShields</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Shared.Messages.DeflectChainMessage.ChainShields</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a30d8b146104fe0a30f0cb5110bd9058e" name="a30d8b146104fe0a30f0cb5110bd9058e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a30d8b146104fe0a30f0cb5110bd9058e">&#9670;&#160;</a></span>Count</h2>
 

@@ -6,7 +6,6 @@ var HeadsUpStyleId_8cs =
       [ "BalloonParty.Configuration.HeadsUp.HeadsUpStyleId.BounceWall", "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da10ed866882d075a693cfe6d80ce7b07b", null ],
       [ "BalloonParty.Configuration.HeadsUp.HeadsUpStyleId.BounceWallLast", "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56dad7ae23504c10caf6fdcacff88a864cfe", null ],
       [ "BalloonParty.Configuration.HeadsUp.HeadsUpStyleId.Ricochet", "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56dae38f161f104780d651e487674b3130ac", null ],
-      [ "BalloonParty.Configuration.HeadsUp.HeadsUpStyleId.RicochetPaid", "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da9f85c7f28ee59c7d2ba73c30a2c7ea49", null ],
       [ "BalloonParty.Configuration.HeadsUp.HeadsUpStyleId.Streak", "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56daf4bb7b4d64f470dc5e5aca7aa1cfe624", null ],
       [ "BalloonParty.Configuration.HeadsUp.HeadsUpStyleId.SpeedTap", "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da94c7b886faf6f349c007fc101ccdaf00", null ],
       [ "BalloonParty.Configuration.HeadsUp.HeadsUpStyleId.Pierce", "namespaceBalloonParty_1_1Configuration_1_1HeadsUp.html#a68201558b6833c8e802011a7df79f56da1958644733cccedb376abfb93038da9a", null ],

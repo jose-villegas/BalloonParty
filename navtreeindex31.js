@@ -1,5 +1,11 @@
 var NAVTREEINDEX31 =
 {
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#af3802a27f5dd5c63043bccd20abec192":[5,0,0,3,27,50],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#af3802a27f5dd5c63043bccd20abec192":[6,0,0,3,27,50],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#af99d14316205f479911eee67668aa5b4":[5,0,0,3,27,29],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#af99d14316205f479911eee67668aa5b4":[6,0,0,3,27,29],
+"classBalloonParty_1_1Configuration_1_1RunConfig.html":[5,0,0,3,28],
+"classBalloonParty_1_1Configuration_1_1RunConfig.html":[6,0,0,3,28],
 "classBalloonParty_1_1Configuration_1_1RunConfig.html#a00b23f79bdf559143f4d79ed1bd7015d":[5,0,0,3,28,21],
 "classBalloonParty_1_1Configuration_1_1RunConfig.html#a00b23f79bdf559143f4d79ed1bd7015d":[6,0,0,3,28,21],
 "classBalloonParty_1_1Configuration_1_1RunConfig.html#a13fb8fd9929d99649c76578b210eba1b":[5,0,0,3,28,13],
@@ -243,11 +249,5 @@ var NAVTREEINDEX31 =
 "classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#ab15501b9e2301eeaa0f21ed5014512bf":[5,0,0,4,0,6],
 "classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#ab15501b9e2301eeaa0f21ed5014512bf":[6,0,0,4,0,6],
 "classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#acabb46987997ef9a8876bc3fc2a0e26c":[5,0,0,4,0,7],
-"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#acabb46987997ef9a8876bc3fc2a0e26c":[6,0,0,4,0,7],
-"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#af1fe45e2c48ea44e6c6432ee0a699f4f":[5,0,0,4,0,1],
-"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#af1fe45e2c48ea44e6c6432ee0a699f4f":[6,0,0,4,0,1],
-"classBalloonParty_1_1Display_1_1CameraShakeController.html":[5,0,0,4,1],
-"classBalloonParty_1_1Display_1_1CameraShakeController.html":[6,0,0,4,1],
-"classBalloonParty_1_1Display_1_1CameraShakeController.html#a01ff3dd6b6cefb8ccaadb7605564f40a":[5,0,0,4,1,3],
-"classBalloonParty_1_1Display_1_1CameraShakeController.html#a01ff3dd6b6cefb8ccaadb7605564f40a":[6,0,0,4,1,3]
+"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#acabb46987997ef9a8876bc3fc2a0e26c":[6,0,0,4,0,7]
 };

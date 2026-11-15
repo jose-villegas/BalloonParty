@@ -1,5 +1,11 @@
 var NAVTREEINDEX29 =
 {
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#adbea8c1eb12cf7454e7075ecbfbebbe3":[5,0,0,3,9,26,15],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#adbea8c1eb12cf7454e7075ecbfbebbe3":[6,0,0,3,9,26,15],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ade93678d434e8698681361eeea195248":[5,0,0,3,9,26,23],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ade93678d434e8698681361eeea195248":[6,0,0,3,9,26,23],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ae6b2f97066105dfba6ca65ce8838ab5f":[5,0,0,3,9,26,16],
+"classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ae6b2f97066105dfba6ca65ce8838ab5f":[6,0,0,3,9,26,16],
 "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ae99552ceaf009581d1154c6add61e67f":[5,0,0,3,9,26,10],
 "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#ae99552ceaf009581d1154c6add61e67f":[6,0,0,3,9,26,10],
 "classBalloonParty_1_1Configuration_1_1Level_1_1RangedLevelParameters.html#af7cff732bdd8b626c26f3b7c71211ad4":[5,0,0,3,9,26,9],
@@ -243,11 +249,5 @@ var NAVTREEINDEX29 =
 "classBalloonParty_1_1Configuration_1_1OverflowSettings.html#acb7fe77d48689658add78d82d1eaa0ad":[5,0,0,3,24,15],
 "classBalloonParty_1_1Configuration_1_1OverflowSettings.html#acb7fe77d48689658add78d82d1eaa0ad":[6,0,0,3,24,15],
 "classBalloonParty_1_1Configuration_1_1OverflowSettings.html#af225d8810d9f472630eb9792d5338d4c":[5,0,0,3,24,4],
-"classBalloonParty_1_1Configuration_1_1OverflowSettings.html#af225d8810d9f472630eb9792d5338d4c":[6,0,0,3,24,4],
-"classBalloonParty_1_1Configuration_1_1OverflowSettings.html#afcce13bd080986cd198c61d4c5f48eb8":[5,0,0,3,24,9],
-"classBalloonParty_1_1Configuration_1_1OverflowSettings.html#afcce13bd080986cd198c61d4c5f48eb8":[6,0,0,3,24,9],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html":[5,0,0,3,10,0],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html":[6,0,0,3,10,0],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a130895b754a403c50873b2fb8ed9b9cf":[5,0,0,3,10,0,5],
-"classBalloonParty_1_1Configuration_1_1Palette_1_1GamePalette.html#a130895b754a403c50873b2fb8ed9b9cf":[6,0,0,3,10,0,5]
+"classBalloonParty_1_1Configuration_1_1OverflowSettings.html#af225d8810d9f472630eb9792d5338d4c":[6,0,0,3,24,4]
 };

@@ -99,7 +99,7 @@ var searchData=
   ['headsuppacking_2ecs_96',['HeadsUpPacking.cs',['../HeadsUpPacking_8cs.html',1,'']]],
   ['headsupqueue_97',['HeadsUpQueue',['../classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html',1,'BalloonParty.Game.HeadsUp.HeadsUpQueue'],['../classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpQueue.html#a019bf480b27923515b8c9e354a9e4c81',1,'BalloonParty.Game.HeadsUp.HeadsUpQueue.HeadsUpQueue()']]],
   ['headsupqueue_2ecs_98',['HeadsUpQueue.cs',['../HeadsUpQueue_8cs.html',1,'']]],
-  ['headsuprequest_99',['HeadsUpRequest',['../structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html',1,'BalloonParty.Game.HeadsUp.HeadsUpRequest'],['../structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#ad11c675b6ef59c64d64761f27b309ddf',1,'BalloonParty.Game.HeadsUp.HeadsUpRequest.HeadsUpRequest()']]],
+  ['headsuprequest_99',['HeadsUpRequest',['../structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html',1,'BalloonParty.Game.HeadsUp.HeadsUpRequest'],['../structBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpRequest.html#a50a97971b1b69d7f7bef6c0108eb201f',1,'BalloonParty.Game.HeadsUp.HeadsUpRequest.HeadsUpRequest()']]],
   ['headsuprequest_2ecs_100',['HeadsUpRequest.cs',['../HeadsUpRequest_8cs.html',1,'']]],
   ['headsupservice_101',['HeadsUpService',['../classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpService.html',1,'BalloonParty.Game.HeadsUp.HeadsUpService'],['../classBalloonParty_1_1Game_1_1HeadsUp_1_1HeadsUpService.html#a72e040b308e135edc66e0df6eb5839b9',1,'BalloonParty.Game.HeadsUp.HeadsUpService.HeadsUpService()']]],
   ['headsupservice_2ecs_102',['HeadsUpService.cs',['../HeadsUpService_8cs.html',1,'']]],

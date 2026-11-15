@@ -163,7 +163,7 @@ var searchData=
   ['completeall_160',['CompleteAll',['../classBalloonParty_1_1Shared_1_1Pool_1_1TrailFlightRegistry-1-g.html#ab8f489baf7ff4d709f1ba99d16c05394',1,'BalloonParty::Shared::Pool::TrailFlightRegistry-1-g']]],
   ['completefill_161',['CompleteFill',['../classBalloonParty_1_1UI_1_1LevelUp_1_1LevelUpPopUp.html#a7121e77698362451cb5c8537b1878842',1,'BalloonParty::UI::LevelUp::LevelUpPopUp']]],
   ['completescene_162',['CompleteScene',['../classBalloonParty_1_1Game_1_1Cinematics_1_1CinematicDirector.html#a3aff4b681d28408808057123d97c3262',1,'BalloonParty::Game::Cinematics::CinematicDirector']]],
-  ['compose_163',['Compose',['../classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a1ec21029adc06b083e8f89c7d710ce7d',1,'BalloonParty::Slots::Actor::ScenarioContentRoot']]],
+  ['compose_163',['Compose',['../classBalloonParty_1_1Slots_1_1Actor_1_1ScenarioContentRoot.html#a1ec21029adc06b083e8f89c7d710ce7d',1,'BalloonParty.Slots.Actor.ScenarioContentRoot.Compose()'],['../classBalloonParty_1_1UI_1_1HeadsUp_1_1HeadsUpLayer.html#a899414ba4a8a24ebf20ba63f1bd7b0e6',1,'BalloonParty.UI.HeadsUp.HeadsUpLayer.Compose()']]],
   ['composeatlas_164',['ComposeAtlas',['../classBalloonParty_1_1Editor_1_1Bush_1_1LeafAtlasPacker.html#a9d31f16136ac8b392c4dabf580b8fd4e',1,'BalloonParty::Editor::Bush::LeafAtlasPacker']]],
   ['compositetelemetrysink_165',['CompositeTelemetrySink',['../classBalloonParty_1_1Game_1_1Telemetry_1_1CompositeTelemetrySink.html#a843601a661d44238648a4283c41fcf7e',1,'BalloonParty::Game::Telemetry::CompositeTelemetrySink']]],
   ['compressedforphones_166',['CompressedForPhones',['../classBalloonParty_1_1Editor_1_1CardRevealBuilder.html#ac6b53b050b4e2bb7d9dfd219ec87f485',1,'BalloonParty::Editor::CardRevealBuilder']]],

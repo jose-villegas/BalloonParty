@@ -13,5 +13,6 @@ var classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter =
     [ "_projectiles", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#a32d5218dc51aa5d819da0257fbfc540f", null ],
     [ "_shieldSubscriber", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#ae0f29edcc02dc9c13c66d64b3c246d4a", null ],
     [ "_subscriptions", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#a8df3bd42af1853d77392bd86f54a15d6", null ],
-    [ "_wallSubscriber", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#a77ce70ee5eb83f35a15b38db48a18386", null ]
+    [ "_wallSubscriber", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#a77ce70ee5eb83f35a15b38db48a18386", null ],
+    [ "RicochetChannel", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter.html#aa5b72e3b8e80b1a9aa3eaca1b3573a2a", null ]
 ];

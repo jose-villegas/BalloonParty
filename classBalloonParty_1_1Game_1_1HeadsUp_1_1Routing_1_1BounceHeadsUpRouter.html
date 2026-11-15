@@ -112,6 +112,7 @@ $(function(){initNavTree('classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1Bou
 <a href="#pac-methods">Package Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1BounceHeadsUpRouter-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">BalloonParty.Game.HeadsUp.Routing.BounceHeadsUpRouter Class Reference<span class="mlabels"><span class="mlabel sealed">sealed</span></span></div></div>
 </div><!--header-->
@@ -173,10 +174,15 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a8df3bd42af1853d77392bd86f54a15d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77ce70ee5eb83f35a15b38db48a18386" id="r_a77ce70ee5eb83f35a15b38db48a18386"><td class="memItemLeft" align="right" valign="top">readonly ISubscriber&lt; <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1WallHitMessage.html">WallHitMessage</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a77ce70ee5eb83f35a15b38db48a18386">_wallSubscriber</a></td></tr>
 <tr class="separator:a77ce70ee5eb83f35a15b38db48a18386"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:aa5b72e3b8e80b1a9aa3eaca1b3573a2a" id="r_aa5b72e3b8e80b1a9aa3eaca1b3573a2a"><td class="memItemLeft" align="right" valign="top">const string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa5b72e3b8e80b1a9aa3eaca1b3573a2a">RicochetChannel</a> = &quot;ricochet&quot;</td></tr>
+<tr class="separator:aa5b72e3b8e80b1a9aa3eaca1b3573a2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>How a ball's bounces go, where it happens: <code>+n bounce</code> at a shield it picks up (n counting its pickups this flight), <code>-1 bounce</code> where a wall spends one (loud when it leaves the last), and <code>xn ricochet</code> where it deflects off balloons n times in a row. </p>
-<p>A ricochet that paid the ball a shield writes the <code>+1 bounce</code> under itself, so that shield's own pickup writes nothing, though it still counts toward the next. </p>
+<p>A chain is one line, rewritten as it grows, with the shields it has paid written under it (<code>+n bounce</code>), so a long chain doesn't stack a line per deflect. A ricochet's shield writes no pickup of its own, though it still counts toward the next. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af1374ee7013ec6a69d97bb88280893f7" name="af1374ee7013ec6a69d97bb88280893f7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af1374ee7013ec6a69d97bb88280893f7">&#9670;&#160;</a></span>BounceHeadsUpRouter()</h2>
@@ -508,6 +514,28 @@ Private Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa5b72e3b8e80b1a9aa3eaca1b3573a2a" name="aa5b72e3b8e80b1a9aa3eaca1b3573a2a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5b72e3b8e80b1a9aa3eaca1b3573a2a">&#9670;&#160;</a></span>RicochetChannel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const string BalloonParty.Game.HeadsUp.Routing.BounceHeadsUpRouter.RicochetChannel = &quot;ricochet&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
