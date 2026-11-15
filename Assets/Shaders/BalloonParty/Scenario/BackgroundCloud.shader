@@ -100,6 +100,8 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
             float  _NormalStrength;
             float  _NormalEpsilon;
             float  _GroundBodyFade;
+            // How much of the surface under the clouds is paper (GroundView): a page takes no cloud shadows.
+            float  _GroundPaper;
 
             #ifdef _SHADOW_ON
             fixed4 _ShadowColor;
@@ -179,7 +181,8 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
                     // Unscaled on the meadow, so the shadows rest where they will be when the reveal cuts and the
                     // sky's scale returns to 1; the main path below eases into this tap across the soft edge.
                     float shadowOnlyCloud = BackgroundFieldDensityLOD(wp + SceneLightDirectionAtLOD(wp) * _ShadowDistance);
-                    float shadowOnlyAlpha = shadowOnlyCloud * _ShadowColor.a * IN.color.a * ShadowLightFadeAtLOD(wp);
+                    float shadowOnlyAlpha = shadowOnlyCloud * _ShadowColor.a * IN.color.a * ShadowLightFadeAtLOD(wp)
+                                          * (1.0 - _GroundPaper);
                     #ifndef _LOW_QUALITY_CLOUD
                     shadowOnlyAlpha *= smoothstep(0.0, _ShadowSoftness + 0.01, shadowOnlyCloud);
                     #endif
@@ -226,7 +229,7 @@ Shader "BalloonParty/Scenario/BackgroundCloud"
                     #ifndef _LOW_QUALITY_CLOUD
                     shadowAlpha *= smoothstep(0.0, _ShadowSoftness + 0.01, shadowCloud);
                     #endif
-                    shadowAlpha *= ShadowLightFadeAtLOD(wp);
+                    shadowAlpha *= ShadowLightFadeAtLOD(wp) * (1.0 - _GroundPaper * GroundCoverageAt(wp));
                 }
 
                 if (cloud < 0.001 && shadowAlpha < 0.001)

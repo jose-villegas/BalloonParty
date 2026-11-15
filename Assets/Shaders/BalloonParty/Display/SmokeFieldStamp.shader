@@ -27,6 +27,7 @@ Shader "BalloonParty/Display/SmokeFieldStamp"
             #define MAX_STAMPS 32
 
             sampler2D _MainTex;
+            float4 _MainTex_TexelSize;
             int _StampCount;
             float4 _StampCenters[MAX_STAMPS];
             float _StampRadii[MAX_STAMPS];
@@ -64,6 +65,11 @@ Shader "BalloonParty/Display/SmokeFieldStamp"
                 float stampCover = 0.0;
                 float stampPeak = 0.0;
 
+                // Ink edges ramp over a few texels, centred on the radius: the field is coarse (a stroke is a couple
+                // of texels wide), so the smoke's short ramp steps along the texel grid, and the ink display's hard
+                // cut draws every step as a scallop. A ramp that wide is one bilinear filtering draws smooth.
+                float inkRamp = 1.5 * _MainTex_TexelSize.x * _StampOverwrite;
+
                 for (int s = 0; s < _StampCount; s++)
                 {
                     float2 b = _StampCenters[s].xy;
@@ -77,7 +83,8 @@ Shader "BalloonParty/Display/SmokeFieldStamp"
                     float h = saturate(dot(pa, ba) / (dot(ba, ba) + 1e-6));
                     float dist = length(pa - ba * h);
 
-                    float mask = 1.0 - smoothstep(radius * 0.7, radius, dist);
+                    float inner = lerp(radius * 0.7, radius - inkRamp, _StampOverwrite);
+                    float mask = 1.0 - smoothstep(inner, radius + inkRamp, dist);
                     stampCover = max(stampCover, mask);
                     mask *= _StampColors[s].a;
                     stampPeak = max(stampPeak, mask);

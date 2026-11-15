@@ -16,6 +16,11 @@ namespace BalloonParty.Scenario
         public ScenarioKind Surface { get; private set; } = ScenarioKind.Ground;
         public ScenarioKind Under { get; private set; } = ScenarioKind.Sky;
         public float Coverage { get; private set; }
+        // How much of what the surfaces cover is paper: all of it when paper opens out of the sky, the hole's share
+        // when it opens over the meadow or the water (which cover the rest).
+        public float PaperShareOfSurfaces => Surface != ScenarioKind.Paper ? 0f
+            : Under == ScenarioKind.Sky ? 1f
+            : Coverage;
 
         public void Set(ScenarioKind surface, float coverage)
         {

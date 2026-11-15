@@ -60,6 +60,7 @@ namespace BalloonParty.Scenario.View
         private static readonly int MistOpacityId = Shader.PropertyToID("_MistOpacity");
         private static readonly int PaperRevealId = Shader.PropertyToID("_PaperReveal");
         private static readonly int PaperEdgeDeckleId = Shader.PropertyToID("_EdgeDeckle");
+        private static readonly int GroundPaperId = Shader.PropertyToID("_GroundPaper");
 
         private readonly CompositeDisposable _subscriptions = new();
 
@@ -213,6 +214,7 @@ namespace BalloonParty.Scenario.View
             Shader.SetGlobalFloat(GroundCoverageId, 0f);
             Shader.SetGlobalVector(GroundRevealId, Vector4.zero);
             Shader.SetGlobalVector(PaperRevealId, Vector4.zero);
+            Shader.SetGlobalFloat(GroundPaperId, 0f);
             _scenarioRoot.SetDepth(1f, 1f);
             _wake?.Dispose();
             _caustics?.Dispose();
@@ -481,7 +483,7 @@ namespace BalloonParty.Scenario.View
             var depth = GroundRevealCurve.Depth(_revealTarget, opening, _settings.RevealDepthZoom);
             _groundScale = depth.Ground;
             _scenarioRoot.SetDepth(depth.Incoming, depth.Outgoing);
-            _mix.Set(_layer, opening);
+            SetMix(_layer, ScenarioKind.Sky, opening);
 
             // While the hole is closed the ground covers nothing: skip its full-screen blended pass and the blade
             // mesh's vertices rather than draw them at zero coverage.
@@ -499,7 +501,7 @@ namespace BalloonParty.Scenario.View
         {
             var open = GroundRevealCurve.SwapOpening(progress);
             var paperIncoming = _revealTarget == ScenarioKind.Paper;
-            _mix.Set(ScenarioKind.Paper, _surface, paperIncoming ? open : 1f - open);
+            SetMix(ScenarioKind.Paper, _surface, paperIncoming ? open : 1f - open);
 
             Shader.SetGlobalVector(GroundRevealId, new Vector4(
                 0f, Mathf.Lerp(_closedRadius - _paperFray, _openRadius + _paperFray, open),
@@ -546,7 +548,15 @@ namespace BalloonParty.Scenario.View
 
             _sky?.SetVisible(!surface);
             Shader.SetGlobalFloat(GroundCoverageId, surface ? 1f : 0f);
-            _mix.Set(_layer, surface ? 1f : 0f);
+            SetMix(_layer, ScenarioKind.Sky, surface ? 1f : 0f);
+        }
+
+        // The clouds' shadows fall on the meadow and the water but not on the page, so they read how much of the
+        // surface is paper.
+        private void SetMix(ScenarioKind surface, ScenarioKind under, float coverage)
+        {
+            _mix.Set(surface, under, coverage);
+            Shader.SetGlobalFloat(GroundPaperId, _mix.PaperShareOfSurfaces);
         }
 
         private void RestartIncoming(ScenarioKind target)

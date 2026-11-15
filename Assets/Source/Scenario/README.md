@@ -241,7 +241,10 @@ schedule: `LevelBackdrop.BackdropForLevel` (`Configuration/Level/`) is paper whe
 level in a meadow stretch keeps its meadow's bushes, now drawn standing on the page.
 
 Paper is a surface like the meadow and the water, so at rest everything above applies: `_GroundCoverage` is 1,
-the sky is hidden, the clouds keep only their shadows, and the sprites' drop shadows land on it. It draws on a
+the sky is hidden, the clouds fade, and the sprites' drop shadows land on it. The clouds' own shadows don't:
+a page lies indoors, and their drifting shadows read as grime on it. `GroundView` publishes how much of the
+surface is paper (`BackdropMix.PaperShareOfSurfaces`, the global `_GroundPaper`), and `BackgroundCloud` takes
+that share off its ground shadows. It draws on a
 quad of its own (`IGroundSettings.PaperMaterial`, sorting order −13: over the floor and the blades, under the
 smoke and the clouds), not on the floor quad, because it can arrive straight from the meadow or the water: a bonus
 level in a surface stretch has no sky on either side.
