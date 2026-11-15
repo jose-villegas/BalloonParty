@@ -38,15 +38,12 @@ namespace BalloonParty.Configuration.Effects
         /// <summary>How fast the wind swings back and forth (cycles per second).</summary>
         float WindSwingSpeed { get; }
 
-        /// <summary>Whether the smoke stays on paper (bonus) levels: no decay, so every stroke stays on the page and a
-        /// newer one paints over what is under it.</summary>
-        bool PersistOnPaper { get; }
-
-        /// <summary>Whether paper levels draw the smoke as flat ink blobs with clean edges instead of soft wisps.</summary>
+        /// <summary>Whether paper (bonus) levels keep an ink field: the <see cref="PaintLayer.Ink" /> sources (pops,
+        /// the Paint item) stamp into it, it never decays, and the paper draws it into the page.</summary>
         bool InkOnPaper { get; }
 
-        /// <summary>How much wider every stroke stamps on paper levels (1 = as authored), so the ink, which never
-        /// spreads like the smoke, still reads as blobs.</summary>
+        /// <summary>How much wider an ink stamp is than its profile's radius (1 = as authored), so the ink, which never
+        /// spreads like the smoke, still reads as blots.</summary>
         float PaperStrokeScale { get; }
 
         PaintProfile GetProfile(PaintSource source);

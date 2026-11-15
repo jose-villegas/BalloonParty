@@ -234,7 +234,7 @@ bounce reference to `WaterBounceReference`.
 ### Paper
 
 Bonus (extra-colour, purple) levels play on a fourth scenario, **paper** (`ScenarioKind.Paper`): a papyrus-like
-page the balloons cast their shadows on and the smoke dries on as ink. It is a backdrop, not a place in the
+page the balloons cast their shadows on and every pop leaves a blot of ink on. It is a backdrop, not a place in the
 schedule: `LevelBackdrop.BackdropForLevel` (`Configuration/Level/`) is paper wherever
 `ILevelPacingConfiguration.IsExtraColorLevel` rolls one and the scheduled scenario everywhere else, and
 `ScenarioController` writes that to `ActiveScenario`. The level's content still follows the schedule: a bonus
@@ -272,8 +272,18 @@ level in a surface stretch has no sky on either side.
   `_PaperColor` and `_FibreColor`, so a retint needs no rebake. In a swap its edge frays along the fibres (the
   tile's slope), browns a little just inside, and casts a soft shadow on the surface under it, away from the
   light. Premultiplied by its coverage, opaque at rest, writing colour only, like the floor.
+- The ink is drawn into the page by the same shader: it reads `SmokeFieldService`'s ink field (`_InkFieldTex`,
+  four taps with the colour weighted by opacity, so the empty texels round a blot don't darken its edge) and
+  mixes the ink in before the relief and the light, so a blot takes the page's fibres, swells and time of day
+  and soaks in rather than lying on top. One flat colour per blot out to a soft edge about a set opacity
+  (`_InkThreshold`, blurred by `_InkBlur`), a little deeper than the colour itself (`_InkDeepen`), with a dried
+  line just inside the edge (`_InkRim`). The border wanders: two taps of the cloud noise (`_InkNoiseTex`) push
+  the edge about a little (`_InkEdgeWarp`) and lift or drop its level (`_InkEdgeNoise`). It covers the screen
+  wherever the page does, and, writing colour only, never reads as a caster to the GI. The ink's taps run only
+  while the level inks (`_InkFieldActive`).
 
-The smoke turns to ink on paper; see `SmokeFieldService` below.
+The smoke on paper is the same smoke as anywhere; pops and the Paint item ink the page. See
+`SmokeFieldService` below.
 
 Shader changes are checked in the editor only; `dotnet build` doesn't compile them.
 
@@ -371,30 +381,20 @@ stamps get dampened wind so they don't smear.
 **Lifecycle:** clears the RT on `LevelUpDismissedMessage` (new level = blank canvas), on
 `GameOverMessage` (descend/game-over = blank canvas) and on `RunResetMessage` (a restart).
 
-**Ink on paper:** while `IActiveScenario` is on paper, the smoke is ink on the page. The decay pass doesn't run
-(`ISmokeFieldSettings.PersistOnPaper`), so nothing drifts, spreads or fades, and every stroke stays until the level
-clears the field as usual (the level-up dismissal, a game over, a restart; leaving paper clears it too).
-The stamp shader's `_StampOverwrite` makes a new stroke cover the colour under it wherever it lands in full,
-instead of mixing with it, so newer strokes paint over older ones; its opacity is the strongest stamp's rather
-than their sum, so a stroke's overlapping capsules don't swell its edge into scallops. Strokes stamp wider
-(`PaperStrokeScale`, 1.6), since ink never spreads the way the smoke does. And the global `_SmokeInk`
-(`InkOnPaper`) switches `SmokeTrailDisplay` to its ink branch: one flat colour per blob out to a soft edge
-that bleeds into the paper about a set opacity (`_InkThreshold`, blurred by `_InkBlur`), a little darker than
-the stroke's colour (`_InkDeepen`), with a dried line just inside the edge, the paper grain through it and the
-scene light on it, and no swirl or wisps. Its border is ragged: two taps of a tileable noise
-(`_InkNoiseTex`, the cloud noise) push the edge about (`_InkEdgeWarp`) and lift or drop its level
-(`_InkEdgeNoise`), so an outline wanders rather than following its stamps' straight sides. Ink stamps measure their radius the same way across and up the field,
-so a blob lands round (the smoke keeps the vertical stretch its look was tuned with), and their edge ramps over
-a few texels: the field is coarse, and a short ramp would step along its grid.
-The Paint item's blobs land on the page as ink too, smeared: `PaintItemHandler` calls
-`SmokeFieldService.Smear` for each landing with `PaintSource.PaintSplash`, which drags the stroke back the way
-the blob flew for its profile's `Smear` length, thinning toward the tail. The profile is `PaperOnly`, so on
-every other scenario it leaves no smoke.
-The ink reads the field through `SmokeFieldInkSample`, which weighs each texel's colour by its own opacity, so the
-empty texels around a stroke don't darken its edge.
-`SmokeFieldView` follows `SmokeFieldService.Inking` and switches its material's alpha blend (`_CoverSrcBlend`,
-`_CoverDstBlend`) so the ink leaves the target's alpha alone: the scene capture reads alpha as the GI's casters,
-and ink lying flat on the page would otherwise cast a grey copy of every stroke beside it.
+**Ink on paper:** while `IActiveScenario` is on paper (and `InkOnPaper` is on), a second field runs beside the
+smoke: the ink, its own pair of RTs (`SmokeFieldResources("_InkFieldTex")`) over the same bounds, drawn by the
+paper (see Paper above). A source's profile picks its layer (`PaintProfile.Layer`): `Smoke` sources (the trail,
+the tough balloon's puffs, the Sharpshooter's light) smoke as they do on any level; `Ink` sources stamp the ink
+field, and only on paper. Two do: every pop (`BalloonPopPresenter`, `PaintSource.BalloonPop`, in the balloon's
+colour) and the Paint item's blobs (`PaintItemHandler`, `PaintSource.PaintSplash`, in the holder's colour). Both
+call `Smear`, which drags the stamp back the way the shot or the blob came for the profile's `Smear` length,
+thinning toward the tail, so a blot smears; a pop with no shot behind it (a board clear) leaves a round one.
+The ink never decays: it stays until the level clears the fields as usual (the level-up dismissal, a game over,
+a restart), and leaving paper clears it. Its stamp material overwrites (`_StampOverwrite`): a new blot covers the
+colour under it instead of mixing, and its opacity is the strongest stamp's, not their sum, so overlapping
+capsules don't swell its edge into scallops. Its stamps measure round (`_StampAspect`; the smoke keeps the
+vertical stretch its look was tuned with), ramp their edge over a few texels (the field is coarse, and a short
+ramp would step along its grid), and stamp wider than their profile (`PaperStrokeScale`, 1.6).
 
 ### SmokeFieldResources
 
@@ -405,7 +405,8 @@ separated from the service so resource lifecycle is testable independently.
 ### SmokeFieldView
 
 `View/SmokeFieldView.cs` — a `MonoBehaviour` that renders the smoke field RT as visible smoke
-behind the cloud backdrop. Builds a viewport-sized quad at startup, assigns the `SmokeTrailDisplay`
+behind the cloud backdrop. Builds a quad at startup the size of the larger of the reference and the real view
+(the field covers the real one, so a wider screen doesn't see the smoke cut short of its edges), assigns the `SmokeTrailDisplay`
 material, and sits on the Default sorting layer at order −1 (behind the clouds at 0). Registered via
 `RegisterComponentInHierarchy<SmokeFieldView>()`.
 
@@ -415,15 +416,15 @@ material, and sits on the Default sorting layer at order −1 (behind the clouds
 |---|---|
 | `SmokeFieldStamp` | Capsule SDF batched blit (32 stamps/pass) |
 | `SmokeFieldDecay` | Smoke dispersion: wind + turbulence + expansion + erosion + decay |
-| `SmokeTrailDisplay` | Display: curl-noise swirl, 5-tap bleed, sigmoid edges, wisp noise, paper grain, sky transmission, shadow lift, scene-light integration; on paper, flat ink blobs instead |
-| `SmokeField.cginc` | Consumer include — exposes global `_SmokeTex`, and `SmokeFieldInkSample` for the ink |
+| `SmokeTrailDisplay` | Display: curl-noise swirl, 5-tap bleed, sigmoid edges, wisp noise, paper grain, sky transmission, shadow lift, scene-light integration |
+| `SmokeField.cginc` | Consumer include — exposes global `_SmokeTex` and the field's bounds (`SmokeFieldUV`, which the paper's ink reuses) |
 
 ### Configuration
 
 `ISmokeFieldSettings` / `SmokeFieldSettings` SO — stamps shader, decay shader, texels-per-unit,
 decay rate, decay tick interval, wind speed/influence/age-bias/direction/swing, and a `PaintProfile[]`
 array (each entry maps `PaintSource` flags → radius, opacity, `PaintColorMode`, palette name / custom
-color), and the paper switches: `PersistOnPaper`, `InkOnPaper`, `PaperStrokeScale`. `GetProfile(PaintSource)`
+color, `Layer`, `Smear`), and the paper's ink: `InkOnPaper`, `PaperStrokeScale`. `GetProfile(PaintSource)`
 resolves the active profile for a given source.
 
 ## WallNetView

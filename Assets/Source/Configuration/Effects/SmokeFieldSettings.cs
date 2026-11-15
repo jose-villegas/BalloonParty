@@ -13,6 +13,14 @@ namespace BalloonParty.Configuration.Effects
         ToughDeflect     = 1 << 3,
         SnipeSkyLight    = 1 << 4,
         PaintSplash      = 1 << 5,
+        BalloonPop       = 1 << 6,
+    }
+
+    /// <summary>Which field a source stamps: the smoke, everywhere, or the paper's ink, only on paper.</summary>
+    internal enum PaintLayer
+    {
+        Smoke,
+        Ink,
     }
 
     internal enum PaintColorMode
@@ -45,8 +53,9 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Fixed color (used when ColorMode is Custom).")]
         public Color CustomColor;
 
-        [Tooltip("Stamps only while the field is ink on paper; anywhere else the source leaves no smoke.")]
-        public bool PaperOnly;
+        [Tooltip("Smoke = the smoke field, on every level. Ink = the paper's ink field, only on paper; anywhere " +
+                 "else the source leaves nothing.")]
+        public PaintLayer Layer;
 
         [Tooltip("World length a smeared stamp drags back along the way it came, thinning toward its tail " +
                  "(SmokeFieldService.Smear only).")]
@@ -103,13 +112,10 @@ namespace BalloonParty.Configuration.Effects
         [SerializeField] [Range(0.01f, 2f)] private float _windSwingSpeed = 0.1f;
 
         [Header("Paper")]
-        [Tooltip("Keep the smoke on paper (bonus) levels: it never decays, so every stroke stays on the page and a newer one paints over what is under it. It still clears with the level.")]
-        [SerializeField] private bool _persistOnPaper = true;
-
-        [Tooltip("Draw the smoke on paper levels as flat ink blobs with clean edges instead of soft wisps. The ink's look (edge, darkness, grain) is tuned on the SmokeTrailDisplay material.")]
+        [Tooltip("Keep an ink field on paper (bonus) levels: the Ink-layer sources (pops, the Paint item) stamp into it, it never decays, and the paper draws it into the page. The ink's look (edge, blur, darkness) is tuned on the Paper material.")]
         [SerializeField] private bool _inkOnPaper = true;
 
-        [Tooltip("How much wider every stroke stamps on paper levels (1 = as authored). The ink never spreads the way the smoke does, so a wider stroke keeps it reading as blobs.")]
+        [Tooltip("How much wider an ink stamp is than its profile's radius (1 = as authored). The ink never spreads the way the smoke does, so a wider stamp keeps it reading as blots.")]
         [SerializeField] [Range(1f, 3f)] private float _paperStrokeScale = 1.6f;
 
         [Header("Stamp Profiles")]
@@ -132,7 +138,6 @@ namespace BalloonParty.Configuration.Effects
         public Vector2 WindDirection => _windDirection.normalized;
         public float WindSwingAngle => _windSwingAngle;
         public float WindSwingSpeed => _windSwingSpeed;
-        public bool PersistOnPaper => _persistOnPaper;
         public bool InkOnPaper => _inkOnPaper;
         public float PaperStrokeScale => _paperStrokeScale;
 

@@ -23,6 +23,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _InkNoiseTex:
+        m_Texture: {fileID: 2800000, guid: 7b72793e0d38043d3aeba7c3a42b4ac0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _GlintTex:
         m_Texture: {fileID: 2800000, guid: 59714f7282df40f18cc27ba035608618, type: 3}
         m_Scale: {x: 1, y: 1}

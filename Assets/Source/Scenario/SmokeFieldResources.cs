@@ -5,10 +5,11 @@ using UnityEngine;
 namespace BalloonParty.Scenario
 {
     /// <summary>Holds the smoke field's GPU resources: ping-pong RTs and blit-and-swap,
-    /// separate from <see cref="SmokeFieldService"/>'s stamp/decay logic.</summary>
+    /// separate from <see cref="SmokeFieldService"/>'s stamp/decay logic. The paper's ink field is a second set,
+    /// published under its own global name.</summary>
     internal sealed class SmokeFieldResources
     {
-        private static readonly int GlobalSmokeTexId = Shader.PropertyToID("_SmokeTex");
+        private readonly int _globalTextureId;
 
         private RenderTexture _fieldA;
         private RenderTexture _fieldB;
@@ -22,6 +23,11 @@ namespace BalloonParty.Scenario
         public bool IsReady => _fieldA != null && _stampMaterial != null;
 
         private RenderTexture WriteTexture => _readFromA ? _fieldB : _fieldA;
+
+        public SmokeFieldResources(string globalTextureName = "_SmokeTex")
+        {
+            _globalTextureId = Shader.PropertyToID(globalTextureName);
+        }
 
         public void Initialize(ISmokeFieldSettings settings, int width, int height)
         {
@@ -70,7 +76,7 @@ namespace BalloonParty.Scenario
             var tex = ReadTexture;
             if (tex != null)
             {
-                Shader.SetGlobalTexture(GlobalSmokeTexId, tex);
+                Shader.SetGlobalTexture(_globalTextureId, tex);
             }
         }
 

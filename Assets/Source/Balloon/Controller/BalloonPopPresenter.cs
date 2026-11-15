@@ -46,10 +46,13 @@ namespace BalloonParty.Balloon.Controller
             Vector3 hitDirection = default)
         {
             var colorId = model.GetPopColorId();
+            var paletteIndex = _palette.PaletteIndexOf(colorId);
 
-            _disturbanceField.Stamp(
-                StampSource.BalloonPop, worldPos, Vector2.zero,
-                paletteIndex: _palette.PaletteIndexOf(colorId));
+            _disturbanceField.Stamp(StampSource.BalloonPop, worldPos, Vector2.zero, paletteIndex: paletteIndex);
+
+            // On paper every pop leaves a blot of its colour, smeared along the shot that burst it (the profile is
+            // ink-only, so elsewhere this leaves nothing).
+            _smokeField.Smear(PaintSource.BalloonPop, worldPos, hitDirection, paletteIndex);
 
             // A rainbow is a wildcard with no single colour, so it flashes a neutral key-light burst — a beat
             // of light to sell the whole-palette payout. Radius/intensity/duration authored on the config.

@@ -23,7 +23,6 @@ MonoBehaviour:
   _windDirection: {x: 0, y: 0.1}
   _windSwingAngle: 15
   _windSwingSpeed: 0.1
-  _persistOnPaper: 1
   _inkOnPaper: 1
   _paperStrokeScale: 1.6
   _stampProfiles:
@@ -33,7 +32,7 @@ MonoBehaviour:
     ColorMode: 0
     PaletteColorName: 
     CustomColor: {r: 1, g: 1, b: 1, a: 1}
-    PaperOnly: 0
+    Layer: 0
     Smear: 0
   - Sources: 2
     Radius: 0.35
@@ -41,7 +40,7 @@ MonoBehaviour:
     ColorMode: 1
     PaletteColorName: Tough
     CustomColor: {r: 1, g: 1, b: 1, a: 1}
-    PaperOnly: 0
+    Layer: 0
     Smear: 0
   - Sources: 4
     Radius: 0.3
@@ -49,7 +48,7 @@ MonoBehaviour:
     ColorMode: 1
     PaletteColorName: Tough
     CustomColor: {r: 1, g: 1, b: 1, a: 1}
-    PaperOnly: 0
+    Layer: 0
     Smear: 0
   - Sources: 8
     Radius: 0.2
@@ -57,7 +56,7 @@ MonoBehaviour:
     ColorMode: 1
     PaletteColorName: Tough
     CustomColor: {r: 1, g: 1, b: 1, a: 1}
-    PaperOnly: 0
+    Layer: 0
     Smear: 0
   - Sources: 16
     Radius: 0.25
@@ -65,7 +64,7 @@ MonoBehaviour:
     ColorMode: 1
     PaletteColorName: SnipeSkyLight
     CustomColor: {r: 1, g: 1, b: 1, a: 1}
-    PaperOnly: 0
+    Layer: 0
     Smear: 0
   - Sources: 32
     Radius: 0.22
@@ -73,5 +72,13 @@ MonoBehaviour:
     ColorMode: 0
     PaletteColorName:
     CustomColor: {r: 1, g: 1, b: 1, a: 1}
-    PaperOnly: 1
+    Layer: 1
     Smear: 0.8
+  - Sources: 64
+    Radius: 0.3
+    Opacity: 0.95
+    ColorMode: 0
+    PaletteColorName:
+    CustomColor: {r: 1, g: 1, b: 1, a: 1}
+    Layer: 1
+    Smear: 0.35

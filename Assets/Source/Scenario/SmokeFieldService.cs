@@ -22,9 +22,10 @@ namespace BalloonParty.Scenario
     ///     (<c>_SmokeTex</c>, <c>_SmokeBoundsMin/Size</c>) so any consumer can sample it.
     ///     Architecture mirrors <c>DisturbanceFieldService</c> / <c>SceneLightFieldService</c>:
     ///     plain-C# DI singleton, no MonoBehaviour, ping-pong blit pipeline. On a paper (bonus) level
-    ///     (<see cref="IActiveScenario" />) the smoke turns to ink: it stops decaying, so every stroke stays on the page,
-    ///     a newer stroke paints over what is under it, strokes stamp wider, and the global <c>_SmokeInk</c> tells the
-    ///     display to draw flat blobs instead of wisps.
+    ///     (<see cref="IActiveScenario" />) a second field runs beside it, the ink: sources whose profile is on the
+    ///     <see cref="PaintLayer.Ink" /> layer (pops, the Paint item) stamp there instead, wider, each newer stroke
+    ///     covering what is under it, and never decay. It is published as <c>_InkFieldTex</c> (same bounds), and the
+    ///     paper draws it into the page. The smoke itself is the same on paper as anywhere.
     /// </summary>
     internal sealed class SmokeFieldService : IStartable, ITickable, IDisposable, ICadencedEffect
     {
@@ -47,8 +48,8 @@ namespace BalloonParty.Scenario
         private static readonly int WindDirId = Shader.PropertyToID("_WindDir");
         private static readonly int WindAgeBiasId = Shader.PropertyToID("_WindAgeBias");
         private static readonly int SmokeTimeId = Shader.PropertyToID("_SmokeTime");
-        private static readonly int TexelSizeId = Shader.PropertyToID("_SmokeTexelSize");
-        private static readonly int SmokeInkId = Shader.PropertyToID("_SmokeInk");
+        private static readonly int InkActiveId = Shader.PropertyToID("_InkFieldActive");
+        private static readonly int InkTexelSizeId = Shader.PropertyToID("_InkFieldTexelSize");
         private static readonly int StampOverwriteId = Shader.PropertyToID("_StampOverwrite");
         private static readonly int StampAspectId = Shader.PropertyToID("_StampAspect");
 
@@ -60,11 +61,12 @@ namespace BalloonParty.Scenario
         private readonly ISubscriber<RunResetMessage> _runResetSubscriber;
         private readonly IActiveScenario _scenario;
         private readonly SmokeFieldResources _resources = new();
+        private readonly SmokeFieldResources _inkResources = new("_InkFieldTex");
         private readonly List<PendingStamp> _pendingStamps = new();
+        private readonly List<PendingStamp> _pendingInkStamps = new();
         private readonly Vector4[] _batchCenters = new Vector4[MaxStampsPerBatch];
         private readonly float[] _batchRadii = new float[MaxStampsPerBatch];
         private readonly Vector4[] _batchColors = new Vector4[MaxStampsPerBatch];
-        private readonly ReactiveProperty<bool> _inking = new ReactiveProperty<bool>(false);
 
         private DisturbanceFieldCoordinates _coords;
         private Rect _bounds;
@@ -76,11 +78,9 @@ namespace BalloonParty.Scenario
         private IDisposable _gameOverSubscription;
         private IDisposable _scenarioSubscription;
         private IDisposable _runResetSubscription;
-        private float _strokeScale = 1f;
 
-        internal bool IsPersistent { get; private set; }
-        // Whether the display draws the field as ink; SmokeFieldView reads it to keep ink out of the GI's casters.
-        internal IReadOnlyReactiveProperty<bool> Inking => _inking;
+        // Whether ink-layer sources stamp: on paper, with the ink switched on.
+        internal bool IsInking { get; private set; }
 
         public SmokeFieldService(
             ISmokeFieldSettings settings,
@@ -114,7 +114,8 @@ namespace BalloonParty.Scenario
             _coords = new DisturbanceFieldCoordinates(_display, _settings.TexelsPerUnit);
             _bounds = _coords.Bounds;
             _resources.Initialize(_settings, _coords.Width, _coords.Height);
-            PushStampOverwrite();
+            _inkResources.Initialize(_settings, _coords.Width, _coords.Height);
+            ConfigureInkStamp();
 
             PushBoundsGlobals();
             Shader.SetGlobalFloat(ActiveId, 1f);
@@ -143,16 +144,12 @@ namespace BalloonParty.Scenario
             _smokeTime += dt;
             Shader.SetGlobalFloat(SmokeTimeId, _smokeTime);
 
-            bool stamped = FlushPendingStamps();
-            bool decayed = TickDecay();
+            FlushPendingStamps(_pendingStamps, _resources);
+            FlushPendingStamps(_pendingInkStamps, _inkResources);
+            TickDecay();
 
             // Reset wind dampen accumulator for next frame (min of all callers wins).
             _windDampen = 1f;
-
-            if (!stamped && !decayed)
-            {
-                return;
-            }
         }
 
         void IDisposable.Dispose()
@@ -162,9 +159,9 @@ namespace BalloonParty.Scenario
             _scenarioSubscription?.Dispose();
             _runResetSubscription?.Dispose();
             Shader.SetGlobalFloat(ActiveId, 0f);
-            Shader.SetGlobalFloat(SmokeInkId, 0f);
-            _inking.Dispose();
+            Shader.SetGlobalFloat(InkActiveId, 0f);
             _resources.Dispose();
+            _inkResources.Dispose();
         }
 
         int ICadencedEffect.BlitWeight => 1;
@@ -194,13 +191,13 @@ namespace BalloonParty.Scenario
         {
             if (TryResolveStamp(source, paletteIndex, out var profile, out var color))
             {
-                QueueStamp(worldPosition, prevWorldPosition, profile.Radius, color);
+                QueueStamp(profile, worldPosition, prevWorldPosition, profile.Radius, color);
             }
         }
 
         /// <summary>Drags the source's stroke back from <paramref name="worldPosition"/>, against
         /// <paramref name="direction"/>, for its profile's <see cref="PaintProfile.Smear"/>, thinning toward the
-        /// tail: a flung blob of wet paint smearing where it lands.</summary>
+        /// tail: a flung blob of wet paint smearing where it lands. A zero direction leaves a round blot.</summary>
         internal void Smear(PaintSource source, Vector2 worldPosition, Vector2 direction, int paletteIndex = -1)
         {
             if (!TryResolveStamp(source, paletteIndex, out var profile, out var color))
@@ -214,7 +211,7 @@ namespace BalloonParty.Scenario
                 var from = worldPosition + tail * ((float)i / SmearSegments);
                 var to = worldPosition + tail * ((float)(i + 1) / SmearSegments);
                 var thinning = Mathf.Lerp(1f, SmearTailRadius, (float)i / (SmearSegments - 1));
-                QueueStamp(from, to, profile.Radius * thinning, color);
+                QueueStamp(profile, from, to, profile.Radius * thinning, color);
             }
         }
 
@@ -224,21 +221,10 @@ namespace BalloonParty.Scenario
         internal void PaintScatter(PaintSource source, Vector3 worldPosition, int count, float scatterRadius,
             int paletteIndex = -1)
         {
-            if (!_resources.IsReady || count <= 0)
+            if (count <= 0 || !TryResolveStamp(source, paletteIndex, out var profile, out var color))
             {
                 return;
             }
-
-            var profile = _settings.GetProfile(source);
-            var color = ResolveColor(profile, paletteIndex);
-            if (!color.HasValue || (profile.PaperOnly && !_inking.Value))
-            {
-                return;
-            }
-
-            var c = color.Value;
-            var stampColor = new Vector4(c.r, c.g, c.b, Mathf.Clamp01(profile.Opacity));
-            var stampRadius = _coords.WorldRadiusToUV(profile.Radius * _strokeScale);
 
             for (var i = 0; i < count; i++)
             {
@@ -246,16 +232,14 @@ namespace BalloonParty.Scenario
                 var dist = UnityEngine.Random.Range(0f, scatterRadius);
                 var offset = new Vector3(Mathf.Cos(angle) * dist, Mathf.Sin(angle) * dist, 0f);
                 var pos = worldPosition + offset;
-                var uv = _coords.WorldToUV(pos);
-
-                _pendingStamps.Add(new PendingStamp
-                {
-                    Center = uv,
-                    PrevCenter = uv,
-                    Radius = stampRadius,
-                    Color = stampColor
-                });
+                QueueStamp(profile, pos, pos, profile.Radius, color);
             }
+        }
+
+        /// <summary>Contributes a wind dampen factor for this frame. The minimum of all callers is used.</summary>
+        internal void SetWindDampen(float factor)
+        {
+            _windDampen = Mathf.Min(_windDampen, Mathf.Clamp01(factor));
         }
 
         private bool TryResolveStamp(PaintSource source, int paletteIndex, out PaintProfile profile, out Vector4 color)
@@ -269,7 +253,7 @@ namespace BalloonParty.Scenario
 
             profile = _settings.GetProfile(source);
             var resolved = ResolveColor(profile, paletteIndex);
-            if (!resolved.HasValue || (profile.PaperOnly && !_inking.Value))
+            if (!resolved.HasValue || (profile.Layer == PaintLayer.Ink && !IsInking))
             {
                 return false;
             }
@@ -279,13 +263,16 @@ namespace BalloonParty.Scenario
             return true;
         }
 
-        private void QueueStamp(Vector3 worldPosition, Vector3 prevWorldPosition, float radius, Vector4 color)
+        private void QueueStamp(PaintProfile profile, Vector3 worldPosition, Vector3 prevWorldPosition, float radius,
+            Vector4 color)
         {
-            _pendingStamps.Add(new PendingStamp
+            var ink = profile.Layer == PaintLayer.Ink;
+            var scale = ink ? Mathf.Max(1f, _settings.PaperStrokeScale) : 1f;
+            (ink ? _pendingInkStamps : _pendingStamps).Add(new PendingStamp
             {
                 Center = _coords.WorldToUV(worldPosition),
                 PrevCenter = _coords.WorldToUV(prevWorldPosition),
-                Radius = _coords.WorldRadiusToUV(radius * _strokeScale),
+                Radius = _coords.WorldRadiusToUV(radius * scale),
                 Color = color
             });
         }
@@ -320,15 +307,9 @@ namespace BalloonParty.Scenario
             }
         }
 
-        /// <summary>Contributes a wind dampen factor for this frame. The minimum of all callers is used.</summary>
-        internal void SetWindDampen(float factor)
-        {
-            _windDampen = Mathf.Min(_windDampen, Mathf.Clamp01(factor));
-        }
-
         // The level clears the page as it always clears the smoke (the level-up dismissal, a game over, a restart),
-        // so the field is normally empty by the beat that brings a change. Leaving paper clears it anyway: ink left
-        // there would turn to wisps over the page as it goes.
+        // so the ink is normally gone by the beat that brings a change. Leaving paper clears it anyway, so a later
+        // page starts blank.
         private void SetPaper(bool paper)
         {
             if (_settings == null)
@@ -336,50 +317,57 @@ namespace BalloonParty.Scenario
                 return;
             }
 
-            var wasPersistent = IsPersistent;
-            IsPersistent = paper && _settings.PersistOnPaper;
-            if (wasPersistent && !IsPersistent && _resources.IsReady)
+            var wasInking = IsInking;
+            IsInking = paper && _settings.InkOnPaper;
+            if (wasInking && !IsInking)
             {
-                Clear();
+                ClearInk();
             }
 
-            _strokeScale = paper ? Mathf.Max(1f, _settings.PaperStrokeScale) : 1f;
-            _inking.Value = paper && _settings.InkOnPaper;
-            Shader.SetGlobalFloat(SmokeInkId, _inking.Value ? 1f : 0f);
-            PushStampOverwrite();
+            Shader.SetGlobalFloat(InkActiveId, IsInking ? 1f : 0f);
         }
 
-        private void PushStampOverwrite()
+        // Ink always overwrites and measures round; the smoke's stamp material keeps both off.
+        private void ConfigureInkStamp()
         {
-            if (_resources.StampMaterial != null)
+            var mat = _inkResources.StampMaterial;
+            if (mat == null)
             {
-                _resources.StampMaterial.SetFloat(StampOverwriteId, IsPersistent ? 1f : 0f);
-                _resources.StampMaterial.SetFloat(StampAspectId,
-                    _bounds.width > 0.001f ? _bounds.height / _bounds.width : 1f);
+                return;
             }
+
+            mat.SetFloat(StampOverwriteId, 1f);
+            mat.SetFloat(StampAspectId, _bounds.width > 0.001f ? _bounds.height / _bounds.width : 1f);
         }
 
         private void Clear()
         {
             _pendingStamps.Clear();
             _resources.Clear();
+            ClearInk();
         }
 
-        private bool FlushPendingStamps()
+        private void ClearInk()
         {
-            if (_pendingStamps.Count == 0)
+            _pendingInkStamps.Clear();
+            _inkResources.Clear();
+        }
+
+        private void FlushPendingStamps(List<PendingStamp> pending, SmokeFieldResources target)
+        {
+            if (pending.Count == 0)
             {
-                return false;
+                return;
             }
 
-            var mat = _resources.StampMaterial;
+            var mat = target.StampMaterial;
             if (mat == null)
             {
-                _pendingStamps.Clear();
-                return false;
+                pending.Clear();
+                return;
             }
 
-            int remaining = _pendingStamps.Count;
+            int remaining = pending.Count;
             int offset = 0;
 
             while (remaining > 0)
@@ -388,7 +376,7 @@ namespace BalloonParty.Scenario
 
                 for (int i = 0; i < batch; i++)
                 {
-                    var s = _pendingStamps[offset + i];
+                    var s = pending[offset + i];
                     _batchCenters[i] = new Vector4(s.Center.x, s.Center.y, s.PrevCenter.x, s.PrevCenter.y);
                     _batchRadii[i] = s.Radius;
                     _batchColors[i] = s.Color;
@@ -399,27 +387,21 @@ namespace BalloonParty.Scenario
                 mat.SetFloatArray(StampRadiiId, _batchRadii);
                 mat.SetVectorArray(StampColorsId, _batchColors);
 
-                _resources.BlitAndSwap(mat);
+                target.BlitAndSwap(mat);
 
                 offset += batch;
                 remaining -= batch;
             }
 
-            _pendingStamps.Clear();
-            return true;
+            pending.Clear();
         }
 
-        private bool TickDecay()
+        private void TickDecay()
         {
-            if (IsPersistent)
-            {
-                return false;
-            }
-
             if (_settings.DecayTickInterval > 0f &&
                 Time.time - _lastDecayTime < _settings.DecayTickInterval)
             {
-                return false;
+                return;
             }
 
             _lastDecayTime = Time.time;
@@ -427,7 +409,7 @@ namespace BalloonParty.Scenario
             var mat = _resources.DecayMaterial;
             if (mat == null)
             {
-                return false;
+                return;
             }
 
             float dt = _settings.DecayTickInterval > 0f ? _settings.DecayTickInterval : Time.deltaTime;
@@ -440,14 +422,13 @@ namespace BalloonParty.Scenario
             mat.SetFloat(WindAgeBiasId, _settings.WindAgeBias);
 
             _resources.BlitAndSwap(mat);
-            return true;
         }
 
         private void PushBoundsGlobals()
         {
             Shader.SetGlobalVector(BoundsMinId, new Vector4(_bounds.xMin, _bounds.yMin, 0f, 0f));
             Shader.SetGlobalVector(BoundsSizeId, new Vector4(_bounds.width, _bounds.height, 0f, 0f));
-            Shader.SetGlobalVector(TexelSizeId, new Vector4(1f / _coords.Width, 1f / _coords.Height, 0f, 0f));
+            Shader.SetGlobalVector(InkTexelSizeId, new Vector4(1f / _coords.Width, 1f / _coords.Height, 0f, 0f));
         }
 
         private Vector4 ComputeSwungWindDirection()

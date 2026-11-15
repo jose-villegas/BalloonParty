@@ -17,7 +17,7 @@ namespace BalloonParty.Tests.Scenario
     [TestFixture]
     public class SmokeFieldServiceTests
     {
-        private static readonly int SmokeInkId = Shader.PropertyToID("_SmokeInk");
+        private static readonly int InkActiveId = Shader.PropertyToID("_InkFieldActive");
 
         private ISmokeFieldSettings _settings;
         private IGameDisplayConfiguration _display;
@@ -45,7 +45,6 @@ namespace BalloonParty.Tests.Scenario
                 CustomColor = Color.white
             });
 
-            _settings.PersistOnPaper.Returns(true);
             _settings.InkOnPaper.Returns(true);
             _settings.PaperStrokeScale.Returns(1.6f);
             _scenario = new ActiveScenario();
@@ -124,73 +123,53 @@ namespace BalloonParty.Tests.Scenario
             Assert.AreEqual(1f, GetWindDampen(), 0.001f);
         }
 
-        // --- Paper: persistent ink ---
+        // --- Paper: the ink field ---
 
         [Test]
-        public void Paper_KeepsTheSmoke()
+        public void Paper_Inks()
         {
             Start();
 
             _scenario.Reveal(ScenarioKind.Paper, 4f);
 
-            Assert.IsTrue(_service.IsPersistent);
+            Assert.IsTrue(_service.IsInking);
+            Assert.AreEqual(1f, Shader.GetGlobalFloat(InkActiveId));
         }
 
         [Test]
-        public void LeavingPaper_LetsTheSmokeDecayAgain()
+        public void LeavingPaper_StopsInking()
         {
             _scenario.Cut(ScenarioKind.Paper);
             Start();
 
             _scenario.Reveal(ScenarioKind.Ground, 4f);
 
-            Assert.IsFalse(_service.IsPersistent);
+            Assert.IsFalse(_service.IsInking);
+            Assert.AreEqual(0f, Shader.GetGlobalFloat(InkActiveId));
         }
 
         [Test]
-        public void OtherScenarios_LetTheSmokeDecay()
+        public void OtherScenarios_DontInk()
         {
             Start();
 
             foreach (var kind in new[] { ScenarioKind.Sky, ScenarioKind.Ground, ScenarioKind.Water })
             {
                 _scenario.Cut(kind);
-                Assert.IsFalse(_service.IsPersistent, kind.ToString());
+                Assert.IsFalse(_service.IsInking, kind.ToString());
             }
         }
 
         [Test]
-        public void Paper_WithPersistenceOff_LetsTheSmokeDecay()
-        {
-            _settings.PersistOnPaper.Returns(false);
-            Start();
-
-            _scenario.Cut(ScenarioKind.Paper);
-
-            Assert.IsFalse(_service.IsPersistent);
-        }
-
-        [Test]
-        public void Paper_TurnsTheInkOn_AndLeavingTurnsItOff()
-        {
-            Start();
-
-            _scenario.Cut(ScenarioKind.Paper);
-            Assert.AreEqual(1f, Shader.GetGlobalFloat(SmokeInkId));
-
-            _scenario.Cut(ScenarioKind.Water);
-            Assert.AreEqual(0f, Shader.GetGlobalFloat(SmokeInkId));
-        }
-
-        [Test]
-        public void Paper_WithInkOff_KeepsTheWisps()
+        public void Paper_WithInkOff_DoesntInk()
         {
             _settings.InkOnPaper.Returns(false);
             Start();
 
             _scenario.Cut(ScenarioKind.Paper);
 
-            Assert.AreEqual(0f, Shader.GetGlobalFloat(SmokeInkId));
+            Assert.IsFalse(_service.IsInking);
+            Assert.AreEqual(0f, Shader.GetGlobalFloat(InkActiveId));
         }
 
         // --- Paint rejection (resources not ready) ---

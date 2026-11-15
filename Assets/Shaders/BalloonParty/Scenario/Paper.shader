@@ -11,6 +11,9 @@ Shader "BalloonParty/Scenario/Paper"
     // (GroundCoverageAt). From the meadow or the water it opens straight over them (_PaperReveal, a paper swap): it
     // shows inside the hole on the way in and outside it on the way out, with a frayed, slightly browned edge that
     // casts a soft shadow on the surface under it.
+    // Ink: the pops' and the Paint item's blots (SmokeFieldService's ink field, _InkFieldTex) are drawn into the page
+    // here, under its relief and its light, so they soak into the paper rather than lie on it, and cover the screen
+    // wherever the page does.
     Properties
     {
         [NoScaleOffset] _PaperTex ("Paper (R tone, GB slope, A undulation, linear)", 2D) = "gray" {}
@@ -37,6 +40,24 @@ Shader "BalloonParty/Scenario/Paper"
         // The share of grains that can glint: keep it tiny, a few specks across the screen.
         _GlintShare     ("Glint Share",                 Range(0, 0.05))  = 0.006
         _GlintStrength  ("Glint Strength",              Range(0, 2))     = 0.7
+
+        [Header(Ink)]
+        // The opacity a blot's edge sits at: higher pulls the edge in toward its core.
+        _InkThreshold   ("Ink Edge Level",              Range(0.02, 0.9)) = 0.3
+        // How far either side of the edge level the edge fades, in opacity: the blot bleeds softly into the paper.
+        _InkBlur        ("Ink Blur",                    Range(0, 0.4))   = 0.18
+        // The blot's border wanders: two taps of a tileable noise (R) push the edge about (world units) and lift or
+        // drop its level (opacity), so an outline isn't its stamps' straight sides.
+        [NoScaleOffset] _InkNoiseTex ("Ink Edge Noise (R)", 2D)          = "gray" {}
+        _InkNoiseSize   ("Ink Noise Size (world)",      Float)           = 2.2
+        _InkEdgeWarp    ("Ink Edge Wander",             Range(0, 0.3))   = 0.04
+        _InkEdgeNoise   ("Ink Edge Raggedness",         Range(0, 0.6))   = 0.18
+        // How much darker and deeper than the colour itself the ink dries: 0 = the colour itself.
+        _InkDeepen      ("Ink Darkness",                Range(0, 1))     = 0.3
+        // Pigment gathered where the ink stopped spreading, a darker line just inside the edge.
+        _InkRim         ("Dried Edge",                  Range(0, 1))     = 0.25
+        _InkRimWidth    ("Dried Edge Width",            Range(0.01, 0.5)) = 0.12
+        _InkOpacity     ("Ink Opacity",                 Range(0, 1))     = 0.9
 
         [Header(Lighting)]
         // Scene-light colour x intensity multiplies the paper: 0 = authored colours always, 1 = fully lit.
@@ -86,6 +107,7 @@ Shader "BalloonParty/Scenario/Paper"
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
             #include "../Include/Ground.cginc"
+            #include "../Include/SmokeField.cginc"
 
             sampler2D _PaperTex;
             float  _TileSize;
@@ -107,6 +129,21 @@ Shader "BalloonParty/Scenario/Paper"
             half   _EdgeShadow;
             float  _EdgeShadowOffset;
             float  _EdgeShadowSoftness;
+            float  _InkThreshold;
+            float  _InkBlur;
+            sampler2D _InkNoiseTex;
+            float  _InkNoiseSize;
+            float  _InkEdgeWarp;
+            float  _InkEdgeNoise;
+            half   _InkDeepen;
+            half   _InkRim;
+            float  _InkRimWidth;
+            half   _InkOpacity;
+
+            // SmokeFieldService's ink field: the smoke field's bounds, its own texels, and 1 while the level inks.
+            sampler2D _InkFieldTex;
+            float4 _InkFieldTexelSize;
+            float  _InkFieldActive;
 
             // Pushed by GroundView. x = 1 while the paper opens straight over the meadow or the water (a swap: no mist,
             // the hole read from _GroundReveal.y and _GroundRevealShape while _GroundReveal.x stays 0, so every other
@@ -156,6 +193,45 @@ Shader "BalloonParty/Scenario/Paper"
                 return (half)GroundCoverageAt(worldPos);
             }
 
+            // The ink field at a point. Four taps half a texel out, the colour weighted by each tap's opacity, so the
+            // empty texels around a blot don't darken its edge.
+            float4 InkFieldSample(float2 wp)
+            {
+                float2 uv = SmokeFieldUV(wp);
+                float2 h = _InkFieldTexelSize.xy * 0.5;
+                float4 a = tex2D(_InkFieldTex, uv + float2(-h.x, -h.y));
+                float4 b = tex2D(_InkFieldTex, uv + float2(h.x, -h.y));
+                float4 c = tex2D(_InkFieldTex, uv + float2(-h.x, h.y));
+                float4 d = tex2D(_InkFieldTex, uv + float2(h.x, h.y));
+                float weight = a.a + b.a + c.a + d.a;
+                float3 rgb = (a.rgb * a.a + b.rgb * b.a + c.rgb * c.a + d.rgb * d.a) / max(weight, 1e-4);
+                return float4(rgb, weight * 0.25);
+            }
+
+            // How much ink covers a point, and its colour there: one flat colour per blot out to a soft, wandering
+            // edge, a little deeper than the colour itself, with a dried line just inside the edge.
+            half InkAt(float2 wp, out half3 inkColor)
+            {
+                inkColor = half3(0.0h, 0.0h, 0.0h);
+                [branch] if (_InkFieldActive < 0.5)
+                {
+                    return 0.0h;
+                }
+
+                float2 noiseUV = wp / max(_InkNoiseSize, 1e-3);
+                float coarse = tex2D(_InkNoiseTex, noiseUV).r - 0.5;
+                float fine = tex2D(_InkNoiseTex, noiseUV * 2.7 + float2(0.37, 0.61)).r - 0.5;
+                float level = _InkThreshold + (coarse * 0.6 + fine * 0.4) * _InkEdgeNoise;
+
+                float4 ink = InkFieldSample(wp + float2(coarse, fine) * (2.0 * _InkEdgeWarp));
+                float width = max(fwidth(ink.a) * 1.2, max(_InkBlur, 1e-4));
+                float body = smoothstep(level - width, level + width, ink.a);
+                float rim = 1.0 - smoothstep(level, level + _InkRimWidth, ink.a);
+
+                inkColor = (half3)lerp(ink.rgb, ink.rgb * ink.rgb, _InkDeepen) * (1.0h - (half)rim * _InkRim);
+                return (half)body * _InkOpacity;
+            }
+
             half4 frag(v2f IN) : SV_Target
             {
                 half4 near = tex2D(_PaperTex, IN.tileUV.xy);
@@ -182,6 +258,12 @@ Shader "BalloonParty/Scenario/Paper"
 
                 half tone = lerp(1.0h, near.r * 0.6h + far.r * 0.4h, _ToneStrength);
                 half3 color = lerp(_FibreColor.rgb, _PaperColor.rgb, tone);
+
+                // The ink soaks in: the fibres show a little darker through it, and the relief and the light below
+                // shade it like the page.
+                half3 inkColor;
+                half ink = InkAt(IN.worldPos, inkColor);
+                color = lerp(color, inkColor * (0.85h + 0.15h * tone), ink);
 
                 // Per pixel and field-aware, like the sprites over it: the time of day, plus the local light of pops
                 // and items where the light field carries it.
@@ -210,7 +292,8 @@ Shader "BalloonParty/Scenario/Paper"
                 half4 grain = tex2D(_GlintTex, IN.glintUV);
                 half flagged = smoothstep(0.995h - _GlintShare, 1.005h - _GlintShare, grain.a);
                 half grainFacing = saturate(-dot((grain.gb * 2.0h - 1.0h) + slope * 0.5h, toLight));
-                half glint = flagged * grainFacing * grainFacing * grainFacing * grainFacing * _GlintStrength;
+                half glint = flagged * grainFacing * grainFacing * grainFacing * grainFacing * _GlintStrength
+                           * (1.0h - ink);
 
                 half3 lit = (color * shade + glint) * light;
 

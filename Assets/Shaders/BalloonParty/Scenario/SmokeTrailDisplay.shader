@@ -5,8 +5,6 @@ Shader "BalloonParty/Scenario/SmokeTrailDisplay"
     // _SmokeTex (pushed by SmokeFieldService) and applies: curl-noise swirl, 5-tap bleed,
     // sigmoid edges, wisp noise, paper grain, sky transmission, shadow lift, scene-light
     // integration, interior density modulation, and age-gradient turbulence. Premultiplied alpha.
-    // On paper (bonus) levels SmokeFieldService raises the global _SmokeInk and the field stops decaying: the
-    // smoke is then drawn as ink instead, flat blobs with a clean edge (the Ink properties), and none of the above.
     Properties
     {
         _Color              ("Tint",                    Color)              = (1, 1, 1, 1)
@@ -49,39 +47,9 @@ Shader "BalloonParty/Scenario/SmokeTrailDisplay"
         _SkyTransmissionStrength ("Transmission Strength", Range(0, 1))     = 0.5
         _ShadowLiftColor    ("Shadow Lift Color",       Color)              = (0.88, 0.92, 0.98, 1)
 
-        [Header(Ink (paper levels))]
-        // The opacity the blob's edge sits at: higher pulls the edge in toward the stroke's core.
-        _InkThreshold       ("Ink Edge Level",          Range(0.02, 0.9))   = 0.3
-        // Edge antialiasing, in screen pixels: 1 is crisp, higher softens it.
-        _InkEdgeSoftness    ("Ink Edge Softness",       Range(0.5, 4))      = 1.2
-        // The ink's blur: how far either side of the edge level the edge fades, in opacity, so the blob bleeds
-        // softly into the paper. 0 = the antialiased edge alone.
-        _InkBlur            ("Ink Blur",                Range(0, 0.4))      = 0.22
-        // The ink's ragged border: two taps of a tileable noise (R) push the edge about and lift or drop its level,
-        // so a blob's outline wanders instead of following its stamps' straight sides.
-        [NoScaleOffset] _InkNoiseTex ("Ink Edge Noise (R)",    2D)                 = "gray" {}
-        _InkNoiseSize       ("Ink Noise Size (world)",  Float)              = 1.4
-        // How far the noise pushes the edge, in world units.
-        _InkEdgeWarp        ("Ink Edge Wander",         Range(0, 0.5))      = 0.16
-        // How much it lifts or drops the edge level, in opacity: ragged where the ink thins.
-        _InkEdgeNoise       ("Ink Edge Raggedness",     Range(0, 0.6))      = 0.3
-        // How much darker and deeper than the stroke's own colour the ink dries: 0 = the colour itself.
-        _InkDeepen          ("Ink Darkness",            Range(0, 1))        = 0.35
-        // Pigment gathered where the ink stopped spreading, a darker line just inside the edge.
-        _InkRim             ("Dried Edge",              Range(0, 1))        = 0.3
-        _InkRimWidth        ("Dried Edge Width",        Range(0.01, 0.5))   = 0.12
-        _InkOpacity         ("Ink Opacity",             Range(0, 1))        = 0.92
-        // The paper grain showing through the ink.
-        _InkGrain           ("Ink Grain",               Range(0, 1))        = 0.25
-
         [Header(Lighting)]
         _LightResponse      ("Light Response",          Range(0, 1))        = 0.6
         _LightGlow          ("Local Light Glow",        Range(0, 1))        = 0.3
-
-        // The alpha blend, set by SmokeFieldView: the smoke adds to the scene capture's caster mask as before, the
-        // ink (Zero, One) leaves it, so it never shadows the page it lies on.
-        [HideInInspector] _CoverSrcBlend ("Cover Src Blend", Float) = 1
-        [HideInInspector] _CoverDstBlend ("Cover Dst Blend", Float) = 10
     }
 
     SubShader
@@ -97,7 +65,7 @@ Shader "BalloonParty/Scenario/SmokeTrailDisplay"
         Cull Off
         Lighting Off
         ZWrite Off
-        Blend One OneMinusSrcAlpha, [_CoverSrcBlend] [_CoverDstBlend]
+        Blend One OneMinusSrcAlpha
 
         Pass
         {
@@ -160,19 +128,6 @@ Shader "BalloonParty/Scenario/SmokeTrailDisplay"
             float  _LightResponse;
             float  _LightGlow;
             float  _SmokeTime;
-            float  _SmokeInk;
-            float  _InkThreshold;
-            float  _InkEdgeSoftness;
-            float  _InkBlur;
-            float  _InkEdgeWarp;
-            sampler2D _InkNoiseTex;
-            float  _InkNoiseSize;
-            float  _InkEdgeNoise;
-            float  _InkDeepen;
-            float  _InkRim;
-            float  _InkRimWidth;
-            float  _InkOpacity;
-            float  _InkGrain;
 
             // ────────────────────────────────────────────────────────────────
             // Helpers
@@ -264,42 +219,6 @@ Shader "BalloonParty/Scenario/SmokeTrailDisplay"
                 return blend < 0.5 ? dark : light;
             }
 
-            // Paper levels: the field as ink. One flat colour per blob out to a soft, blurred edge about _InkThreshold
-            // (_InkBlur), a little darker than the stroke's own colour, with a dried line just inside the edge, the
-            // paper grain through it, and the scene light on it like on the page under it. Still, with no swirl or
-            // wisps: ink on paper stays put.
-            fixed4 InkFrag(float2 worldPos, fixed4 vertexColor)
-            {
-                // Two taps of the edge noise, the second finer and offset: together they warp the lookup both ways
-                // and set the edge level, so the border wanders at two scales.
-                float2 noiseUV = worldPos / max(_InkNoiseSize, 1e-3);
-                float coarse = tex2D(_InkNoiseTex, noiseUV).r - 0.5;
-                float fine = tex2D(_InkNoiseTex, noiseUV * 2.7 + float2(0.37, 0.61)).r - 0.5;
-                float2 wp = worldPos + float2(coarse, fine) * (2.0 * _InkEdgeWarp);
-                float level = _InkThreshold + (coarse * 0.6 + fine * 0.4) * _InkEdgeNoise;
-
-                float4 ink = SmokeFieldInkSample(wp);
-                float width = max(max(fwidth(ink.a), 1e-4) * _InkEdgeSoftness, _InkBlur);
-                float body = smoothstep(level - width, level + width, ink.a);
-                if (body < 0.001)
-                {
-                    discard;
-                }
-
-                float rim = 1.0 - smoothstep(level, level + _InkRimWidth, ink.a);
-                float3 rgb = lerp(ink.rgb, ink.rgb * ink.rgb, _InkDeepen);
-                rgb *= 1.0 - rim * _InkRim;
-
-                float grain = tex2D(_GrainTex, wp * _GrainScale).r;
-                rgb *= lerp(1.0, 0.8 + 0.4 * grain, _InkGrain);
-
-                float3 light = SceneLightTintAt(worldPos);
-                rgb *= lerp(float3(1, 1, 1), light, _LightResponse) * vertexColor.rgb;
-
-                float alpha = body * _InkOpacity * vertexColor.a;
-                return fixed4(rgb * alpha, alpha);
-            }
-
             // ────────────────────────────────────────────────────────────────
             // Vertex / Fragment
             // ────────────────────────────────────────────────────────────────
@@ -321,11 +240,6 @@ Shader "BalloonParty/Scenario/SmokeTrailDisplay"
                 if (quickAlpha < 0.001)
                 {
                     discard;
-                }
-
-                [branch] if (_SmokeInk > 0.5)
-                {
-                    return InkFrag(IN.worldPos, IN.color);
                 }
 
                 // 1. Turbulent jitter + 3-octave curl noise swirl.
