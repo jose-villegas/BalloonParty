@@ -126,6 +126,8 @@ Files</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ClearanceFieldTicker_8cs.html">ClearanceFieldTicker.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ClearanceGeometry_8cs.html">ClearanceGeometry.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IClearanceField_8cs.html">IClearanceField.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -139,10 +141,12 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ClearanceCircle</code>   </td><td class="markdownTableBodyNone">One circle this frame: centre in the board's XY plane, effective radius (the settings' radius × strength), and strength 0..1    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>IClearanceField</code>   </td><td class="markdownTableBodyNone">The read side: <code>Count</code> and <code>CircleAt(i)</code>. Formations read it; trails will too    </td></tr>
+<td class="markdownTableBodyNone"><code>IClearanceField</code>   </td><td class="markdownTableBodyNone">The read side: <code>Count</code>, <code>CircleAt(i)</code> (an index is good for one frame only), and <code>Deflect(point)</code>, which bends a point out of every circle in turn    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>ClearanceField</code>   </td><td class="markdownTableBodyNone">The circles themselves: <code>ClearanceCircle.MaxCircles</code> (8) fixed slots, keyed by the ball's model reference. Plain C#, EditMode-tested (<code>ClearanceFieldTests</code>)    </td></tr>
+<td class="markdownTableBodyNone"><code>ClearanceGeometry</code>   </td><td class="markdownTableBodyNone">The bend itself, for one circle: a pure function, EditMode-tested    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>ClearanceField</code>   </td><td class="markdownTableBodyNone">The circles themselves: <code>ClearanceCircle.MaxCircles</code> (8) fixed slots, keyed by the ball's model reference. Plain C#, EditMode-tested (<code>ClearanceFieldTests</code>)    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>ClearanceFieldTicker</code>   </td><td class="markdownTableBodyNone"><code>IStartable</code> + <code>ITickable</code> + <code>IDisposable</code> (game scope): publishes an empty field on start, then each frame tracks every ball in <code>IProjectileRegistry</code>'s in-flight list into the field, advances it, and publishes it to the shader globals. On dispose it zeroes <code>_ClearanceCount</code>, since globals outlive the scope   </td></tr>
 </table>
 <p>Tuning lives in <code>IClearanceSettings</code> (<code>Configuration/Effects/ClearanceSettings</code>, the <code>Assets/Configuration/ClearanceSettings.asset</code> wired on the <code>GameLifetimeScope</code> prefab; an unwired scope falls back to the defaults).</p>
@@ -161,6 +165,7 @@ A circle's life</h1>
 Who reads it</h1>
 <ul>
 <li><b>Score formations</b> (<code>Game/Score/Behaviours/ShapeFormationTicker</code>): after their own overlap packing, each moving formation is pushed out of every circle into its persistent <code>SeparationOffset</code>, at up to <code>FormationPushSpeed</code> world units a second. The circles never give way. See <code><a class="el" href="Game_2Score_2README_8md.html">Game/Score/README.md</a></code>, Overlap Resolution.</li>
+<li><b>Score trails</b> (<code>UI/Score/FlyingTrail</code>): <code>ScoreTrailService</code> builds its <code>TrailSpawner</code>s with the field (or null with <code>BendTrails</code> off), and the spawner hands it to every trail it spawns on a flight. In <code>LateUpdate</code>, after DOTween or the follow has moved it, a trail on its own flight replaces its position with <code>Deflect(position)</code>, so its ribbon curves round the ball. A head nothing moved since its last bend (a tween paused by the level-up cinematic) is left alone: the bend is not idempotent and would creep it out to the band's edge. The bend's soft band lies just outside the circle (out to radius × (1 + <code>RimSoftness</code>)) and everything inside is squeezed into it, so a bent trail never enters the circle; the effect fade's soft edge lies just inside, so a bent trail is never also faded. Formation pens, range pens and the heart trail don't bend (see the plan for why).</li>
 <li><b>Effect shaders</b>: the ticker publishes <code>_ClearanceCircles</code> (8 × <code>float4</code>: centre xy, effective radius, strength), <code>_ClearanceCount</code>, <code>_ClearanceFloor</code> and <code>_ClearanceSoftness</code> every frame. With <code>FadeEffects</code> off it publishes a count of 0.</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md945"></a>

@@ -1,5 +1,6 @@
 var NAVTREEINDEX48 =
 {
+"classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#a5f7896960d42ff019217b95776db8bd5":[5,0,0,6,2,2,6],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#a5f7896960d42ff019217b95776db8bd5":[6,0,0,6,2,2,6],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#a63d75e5db848a8f92859c6f4a42fe26a":[5,0,0,6,2,2,0],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#a63d75e5db848a8f92859c6f4a42fe26a":[6,0,0,6,2,2,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX48 =
 "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#af6c4e9d9584cfc68f6fd642afd2a4c6f":[5,0,0,6,2,9,7],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#af6c4e9d9584cfc68f6fd642afd2a4c6f":[6,0,0,6,2,9,7],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#af7bda1a511254b1ff80657d6160465e1":[5,0,0,6,2,9,23],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#af7bda1a511254b1ff80657d6160465e1":[6,0,0,6,2,9,23],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#afd4bf8f3b0997fb44a6da1b1430daf35":[5,0,0,6,2,9,36]
+"classBalloonParty_1_1Game_1_1Cinematics_1_1GameOverLossCinematic.html#af7bda1a511254b1ff80657d6160465e1":[6,0,0,6,2,9,23]
 };

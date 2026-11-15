@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$structBalloonParty_1_1Projectile_1_1Controller_1_1ActiveProjectilePierce_1_1Tracked.html" title=" " alt="" coords="5,5,240,67"/>
+<area shape="rect" id="Node000000" href="$interfaceBalloonParty_1_1Projectile_1_1Clearance_1_1IClearanceField.html" title="The clear circles around the balls in flight, plus the fading ones balls left behind." alt="" coords="5,5,196,50"/>
+<area shape="rect" id="Node000001" href="$classBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceField.html" title="Fixed&#45;capacity circle slots, one per ball, keyed by the ball&#39;s reference." alt="" coords="244,5,430,50"/>
+<area shape="poly" id="edge604_Node000000_Node000001" title=" " alt="" coords="211,25,246,27,240,28,212,30"/>
 </map>

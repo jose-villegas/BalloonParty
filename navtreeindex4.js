@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"TailGrowthConfig_8cs.html":[7,0,3,9,35],
 "TailGrowthMode_8cs.html":[7,0,3,9,36],
 "TelemetryEnvelopeSerializer_8cs.html":[7,0,7,10,28],
 "TelemetryEnvelope_8cs.html":[7,0,7,10,27],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a319dd22608234db2a5dab1173a03a472":[5,0,0,0,0,3,21],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a319dd22608234db2a5dab1173a03a472":[6,0,0,0,0,3,21],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a31a1df334b0ca100035eec52978eb612":[5,0,0,0,0,3,17],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a31a1df334b0ca100035eec52978eb612":[6,0,0,0,0,3,17],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3687bbf9b9c25e40dfe23768ad0fbbce":[5,0,0,0,0,3,44]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a31a1df334b0ca100035eec52978eb612":[6,0,0,0,0,3,17]
 };

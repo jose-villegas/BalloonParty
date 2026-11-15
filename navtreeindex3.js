@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"ProjectileFlightConfig_8cs.html":[7,0,3,23],
 "ProjectileFlightState_8cs.html":[7,0,12,3,7],
 "ProjectileHitResolver_8cs.html":[7,0,12,2,5],
 "ProjectileHitVisual_8cs.html":[7,0,12,2,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "StreakShieldRule_8cs.html":[7,0,14,36],
 "StrikethroughArrivedMessage_8cs.html":[7,0,14,7,50],
 "StringFormatExtensions_8cs.html":[7,0,14,4,18],
-"StubThermalSource_8cs.html":[7,0,14,12,2],
-"TailGrowthConfig_8cs.html":[7,0,3,9,35]
+"StubThermalSource_8cs.html":[7,0,14,12,2]
 };

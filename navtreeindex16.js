@@ -1,5 +1,6 @@
 var NAVTREEINDEX16 =
 {
+"classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#ae5a3c8d3df43074b84941d1e64209885":[5,0,0,1,4,3,31],
 "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#ae5a3c8d3df43074b84941d1e64209885":[6,0,0,1,4,3,31],
 "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#ae5a8799cd32f887e41c67da26db304cb":[5,0,0,1,4,3,23],
 "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html#ae5a8799cd32f887e41c67da26db304cb":[6,0,0,1,4,3,23],
@@ -248,6 +249,5 @@ var NAVTREEINDEX16 =
 "classBalloonParty_1_1Balloon_1_1Type_1_1ColorableBalloonVariant.html#adc369077f85803722743242e0cf5bf0e":[5,0,0,1,5,0,5],
 "classBalloonParty_1_1Balloon_1_1Type_1_1ColorableBalloonVariant.html#adc369077f85803722743242e0cf5bf0e":[6,0,0,1,5,0,5],
 "classBalloonParty_1_1Balloon_1_1Type_1_1DiscoBallLook.html":[5,0,0,1,5,1],
-"classBalloonParty_1_1Balloon_1_1Type_1_1DiscoBallLook.html":[6,0,0,1,5,1],
-"classBalloonParty_1_1Balloon_1_1Type_1_1DiscoBallLook.html#a01521440b379f1e159fa1bf0eb2c0195":[5,0,0,1,5,1,2]
+"classBalloonParty_1_1Balloon_1_1Type_1_1DiscoBallLook.html":[6,0,0,1,5,1]
 };

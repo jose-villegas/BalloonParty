@@ -1,5 +1,6 @@
 var NAVTREEINDEX47 =
 {
+"classBalloonParty_1_1Game_1_1Assist_1_1ThreatEase.html#aebb67b81ce64c4d091bfcc4083a1d028":[5,0,0,6,0,3,2],
 "classBalloonParty_1_1Game_1_1Assist_1_1ThreatEase.html#aebb67b81ce64c4d091bfcc4083a1d028":[6,0,0,6,0,3,2],
 "classBalloonParty_1_1Game_1_1BalloonWander.html":[5,0,0,6,13],
 "classBalloonParty_1_1Game_1_1BalloonWander.html":[6,0,0,6,13],
@@ -248,6 +249,5 @@ var NAVTREEINDEX47 =
 "classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#a5bfaa66adea542bcc078c7ebd87f2b81":[5,0,0,6,2,2,19],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#a5bfaa66adea542bcc078c7ebd87f2b81":[6,0,0,6,2,2,19],
 "classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#a5e9db8211d3d5881d234f20c0a9c3f65":[5,0,0,6,2,2,10],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#a5e9db8211d3d5881d234f20c0a9c3f65":[6,0,0,6,2,2,10],
-"classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#a5f7896960d42ff019217b95776db8bd5":[5,0,0,6,2,2,6]
+"classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematic.html#a5e9db8211d3d5881d234f20c0a9c3f65":[6,0,0,6,2,2,10]
 };

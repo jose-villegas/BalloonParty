@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"ISpawnClockSettings_8cs.html":[7,0,3,9,14],
 "ISpawnClock_8cs.html":[7,0,1,4,7],
 "ISpeckFieldSettings_8cs.html":[7,0,3,5,20],
 "ISpinningItemVisual_8cs.html":[7,0,8,17],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "ProjectileFacingRotator_8cs.html":[7,0,8,29],
 "ProjectileFacingSource_8cs.html":[7,0,12,8],
 "ProjectileFiredMessage_8cs.html":[7,0,14,7,34],
-"ProjectileFlightConfigEditor_8cs.html":[7,0,3,4,9],
-"ProjectileFlightConfig_8cs.html":[7,0,3,23]
+"ProjectileFlightConfigEditor_8cs.html":[7,0,3,4,9]
 };

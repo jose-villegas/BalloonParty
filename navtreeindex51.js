@@ -1,5 +1,6 @@
 var NAVTREEINDEX51 =
 {
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CannonHeadsUpRouter.html#a716b75fd0db0182aa8e5b363bee4de8f":[5,0,0,6,5,0,1,0],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CannonHeadsUpRouter.html#a716b75fd0db0182aa8e5b363bee4de8f":[6,0,0,6,5,0,1,0],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CannonHeadsUpRouter.html#a8977d727a94d59c958fea2f0d36eebd9":[5,0,0,6,5,0,1,10],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CannonHeadsUpRouter.html#a8977d727a94d59c958fea2f0d36eebd9":[6,0,0,6,5,0,1,10],
@@ -248,6 +249,5 @@ var NAVTREEINDEX51 =
 "classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#a30e39df70eb3dc2ddf9ffcf74f3a7873":[5,0,0,6,20,2],
 "classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#a30e39df70eb3dc2ddf9ffcf74f3a7873":[6,0,0,6,20,2],
 "classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#a42c9bd0ad89d422b07f2fd8b1da35acb":[5,0,0,6,20,0],
-"classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#a42c9bd0ad89d422b07f2fd8b1da35acb":[6,0,0,6,20,0],
-"classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#a9f9d6fee67531dfab3d57edb28429e3d":[5,0,0,6,20,5]
+"classBalloonParty_1_1Game_1_1LaunchDisturbanceStamp.html#a42c9bd0ad89d422b07f2fd8b1da35acb":[6,0,0,6,20,0]
 };

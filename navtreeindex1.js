@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"FormationAssignment_8cs.html":[7,0,1,1,0],
 "FormationOverlapResolver_8cs.html":[7,0,7,9,0,3],
 "FormationPlanner_8cs.html":[7,0,1,1,1],
 "FormationShape_8cs.html":[7,0,1,1,2],
@@ -118,7 +119,7 @@ var NAVTREEINDEX1 =
 "ICinematicFocus_8cs.html":[7,0,7,2,13],
 "ICinematicState_8cs.html":[7,0,14,5,6],
 "ICinematicsSettings_8cs.html":[7,0,3,3,4],
-"IClearanceField_8cs.html":[7,0,12,1,3],
+"IClearanceField_8cs.html":[7,0,12,1,4],
 "IClearanceSettings_8cs.html":[7,0,3,5,8],
 "IClusterViewSettings_8cs.html":[7,0,15,0,1,3],
 "IClusterableSlotActor_8cs.html":[7,0,15,0,1,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "ISnipeArmer_8cs.html":[7,0,8,7,0],
 "ISnipeLanceArming_8cs.html":[7,0,8,7,1],
 "ISoundBankConfiguration_8cs.html":[7,0,0,0,4],
-"ISoundPlayer_8cs.html":[7,0,0,10],
-"ISpawnClockSettings_8cs.html":[7,0,3,9,14]
+"ISoundPlayer_8cs.html":[7,0,0,10]
 };

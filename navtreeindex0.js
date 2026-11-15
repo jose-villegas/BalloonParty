@@ -167,6 +167,7 @@ var NAVTREEINDEX0 =
 "ClearanceCircle_8cs.html":[7,0,12,1,0],
 "ClearanceFieldTicker_8cs.html":[7,0,12,1,2],
 "ClearanceField_8cs.html":[7,0,12,1,1],
+"ClearanceGeometry_8cs.html":[7,0,12,1,3],
 "ClearanceSettings_8cs.html":[7,0,3,5,3],
 "ClipPickMode_8cs.html":[7,0,0,0,1],
 "ClipWrapMode_8cs.html":[7,0,0,0,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "FoldRule_8cs.html":[7,0,7,10,7],
 "ForceDestroyProjectileMessage_8cs.html":[7,0,14,7,11],
 "ForceGameOverCheat_8cs.html":[7,0,2,12],
-"ForceRestartCheat_8cs.html":[7,0,2,13],
-"FormationAssignment_8cs.html":[7,0,1,1,0]
+"ForceRestartCheat_8cs.html":[7,0,2,13]
 };

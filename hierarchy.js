@@ -89,6 +89,7 @@ var hierarchy =
     [ "BalloonParty.Configuration.Cinematics.CinematicStateEntry", "classBalloonParty_1_1Configuration_1_1Cinematics_1_1CinematicStateEntry.html", null ],
     [ "BalloonParty.Shared.CircleContact", "classBalloonParty_1_1Shared_1_1CircleContact.html", null ],
     [ "BalloonParty.Projectile.Clearance.ClearanceCircle", "structBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceCircle.html", null ],
+    [ "BalloonParty.Projectile.Clearance.ClearanceGeometry", "classBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceGeometry.html", null ],
     [ "BalloonParty.Editor.CloudNoiseTextureGenerator", "classBalloonParty_1_1Editor_1_1CloudNoiseTextureGenerator.html", null ],
     [ "BalloonParty.Slots.Actor.ClusterSlotSelectionStrategy.ClusterFill", "classBalloonParty_1_1Slots_1_1Actor_1_1ClusterSlotSelectionStrategy_1_1ClusterFill.html", null ],
     [ "BalloonParty.Shared.Extensions.ColorableRendererExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1ColorableRendererExtensions.html", null ],

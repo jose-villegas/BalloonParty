@@ -1,5 +1,6 @@
 var NAVTREEINDEX34 =
 {
+"classBalloonParty_1_1Configuration_1_1SlotGridConfig.html#afc1d517e3415d76a4a6d642f357eaa1b":[5,0,0,3,32,3],
 "classBalloonParty_1_1Configuration_1_1SlotGridConfig.html#afc1d517e3415d76a4a6d642f357eaa1b":[6,0,0,3,32,3],
 "classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html":[5,0,0,3,33],
 "classBalloonParty_1_1Configuration_1_1ThermalGovernorSettings.html":[6,0,0,3,33],
@@ -248,6 +249,5 @@ var NAVTREEINDEX34 =
 "classBalloonParty_1_1Display_1_1SceneCaptureService.html#ab47ce01e684a64ed6396b6fd69f8d1ad":[5,0,0,4,6,18],
 "classBalloonParty_1_1Display_1_1SceneCaptureService.html#ab47ce01e684a64ed6396b6fd69f8d1ad":[6,0,0,4,6,18],
 "classBalloonParty_1_1Display_1_1SceneCaptureService.html#ac00a5f28e9bfcc44da191d4743bdcb60":[5,0,0,4,6,4],
-"classBalloonParty_1_1Display_1_1SceneCaptureService.html#ac00a5f28e9bfcc44da191d4743bdcb60":[6,0,0,4,6,4],
-"classBalloonParty_1_1Display_1_1SceneCaptureService.html#ac40fba31df12f716aa572fbbd9e4f2c8":[5,0,0,4,6,5]
+"classBalloonParty_1_1Display_1_1SceneCaptureService.html#ac00a5f28e9bfcc44da191d4743bdcb60":[6,0,0,4,6,4]
 };

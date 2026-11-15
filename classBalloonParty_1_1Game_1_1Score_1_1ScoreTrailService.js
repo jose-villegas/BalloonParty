@@ -1,7 +1,7 @@
 var classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService =
 [
     [ "ScoreTrailReporter", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService_1_1ScoreTrailReporter.html", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService_1_1ScoreTrailReporter" ],
-    [ "ScoreTrailService", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html#aa9559e360ebbbab567c712577f33f152", null ],
+    [ "ScoreTrailService", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html#a3cccbe177f445fe5cc89e26993202433", null ],
     [ "Dispose", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html#a3af356ff4269f342a1fe87f90e4f35ce", null ],
     [ "GetTarget", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html#a9dc570afb820f36f6322231996f84739", null ],
     [ "HoldOutgoing", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html#a327b6a37033c788bca9674d0c983dfb7", null ],
@@ -11,6 +11,7 @@ var classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService =
     [ "ResetRun", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html#aa0f5f334d3c4418555407638bdf9cb5f", null ],
     [ "Start", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html#aa065598195055c022bfa9d18c86dd90b", null ],
     [ "_arrivedPublisher", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html#a4aece06c76443c2261eee016be37fe3d", null ],
+    [ "_clearance", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html#a06b518d49d7b2c55d569a4bcd3099a40", null ],
     [ "_colorLookup", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html#aba729bf657da5744276766f13bd4c99d", null ],
     [ "_cts", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html#a6837b093e0ec46753c922fca759eaaf1", null ],
     [ "_endpoints", "classBalloonParty_1_1Game_1_1Score_1_1ScoreTrailService.html#ae8123d2a5e4ec3f8b1de7ad5f7caab11", null ],

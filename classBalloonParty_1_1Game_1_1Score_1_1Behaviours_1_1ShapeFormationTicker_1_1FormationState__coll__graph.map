@@ -1,35 +1,38 @@
 <map id="BalloonParty.Game.Score.Behaviours.ShapeFormationTicker.FormationState" name="BalloonParty.Game.Score.Behaviours.ShapeFormationTicker.FormationState">
-<area shape="rect" id="Node000001" title=" " alt="" coords="1015,395,1262,457"/>
-<area shape="rect" id="Node000002" href="$classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html" title=" " alt="" coords="690,92,894,136"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="831,144,1106,394,1100,395,829,149"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="385,5,508,33"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="522,34,558,42,720,90,715,92,556,47,524,39"/>
-<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="353,57,540,102"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="554,87,693,103,688,105,556,93"/>
-<area shape="rect" id="Node000005" href="$structBalloonParty_1_1UI_1_1Score_1_1FlyingTrail_1_1MotionStyle.html" title=" " alt="" coords="345,126,548,171"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="562,134,693,123,688,125,564,139"/>
-<area shape="rect" id="Node000006" href="$classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html" title=" " alt="" coords="669,395,915,457"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="931,423,1017,425,1012,426,931,428"/>
-<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Shared_1_1Pool_1_1TrailFlight.html" title="Controls a single trail&#39;s in&#45;flight state via transport&#45;style commands over DOTween." alt="" coords="353,196,540,240"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="542,244,558,250,617,283,672,321,760,394,755,394,669,325,614,287,556,255,543,249"/>
-<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Shared_1_1Pool_1_1TrailSpawner.html" title="Handles the pool lifecycle for trail orbs: get, position, setup, return on arrival." alt="" coords="353,265,540,310"/>
-<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="538,312,558,319,647,356,728,394,723,395,645,361,556,324,538,318"/>
-<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="5,265,192,310"/>
-<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="206,285,355,285,351,289,208,290"/>
-<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Shared_1_1Pool_1_1TrailFlightRegistry-1-g.html" title="Central registry for all in&#45;flight trails: per&#45;ID lookup plus bulk operations." alt="" coords="352,334,541,379"/>
-<area shape="poly" id="edge9_Node000006_Node000010" title=" " alt="" coords="556,376,671,401,666,402,557,381"/>
-<area shape="rect" id="Node000011" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailReporter.html" title="Service&#45;owned sink a handler reports group arrivals through." alt="" coords="336,404,557,448"/>
-<area shape="poly" id="edge10_Node000006_Node000011" title=" " alt="" coords="572,423,671,425,666,427,573,428"/>
-<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1ITrailEndpoint.html" title="A named anchor a trail flies to or from, resolved by key through TrailEndpointRegistry." alt="" coords="353,473,540,518"/>
-<area shape="poly" id="edge11_Node000006_Node000012" title=" " alt="" coords="554,471,671,450,666,451,555,476"/>
-<area shape="rect" id="Node000013" href="$structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html" title="Global knobs shared by every BigScore formation: radius, pen speed, coverage, spin and the scale&#45;over..." alt="" coords="348,542,545,587"/>
-<area shape="poly" id="edge12_Node000006_Node000013" title=" " alt="" coords="537,534,556,527,645,491,723,458,728,456,647,496,558,532,539,539"/>
-<area shape="rect" id="Node000014" href="$structBalloonParty_1_1Game_1_1Score_1_1TrailId.html" title="Uniquely identifies a score trail by color and score value; no level component since a trail is only ..." alt="" coords="352,612,540,656"/>
-<area shape="poly" id="edge13_Node000006_Node000014" title=" " alt="" coords="542,603,556,597,614,564,669,527,755,458,760,456,672,531,617,569,558,602,543,608"/>
-<area shape="rect" id="Node000015" title=" " alt="" coords="53,620,144,648"/>
-<area shape="poly" id="edge14_Node000014_Node000015" title=" " alt="" coords="159,631,353,632,350,636,160,636"/>
-<area shape="rect" id="Node000016" href="$classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape.html" title="A drawable formation: its vertex count (== its score denomination == its trail count),..." alt="" coords="690,581,894,626"/>
-<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="850,571,1074,458,1079,457,852,576"/>
-<area shape="rect" id="Node000017" href="$structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationWalk.html" title="A CLOSED WALK a pen orbits forever: an ordered cyclic list of vertex indices whose consecutive pairs ..." alt="" coords="348,681,544,726"/>
-<area shape="poly" id="edge16_Node000016_Node000017" title=" " alt="" coords="559,687,644,667,699,647,746,627,751,625,701,651,646,672,560,692"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="1020,372,1267,434"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html" title=" " alt="" coords="362,104,565,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="554,151,575,158,716,213,855,271,1077,371,1072,372,852,276,714,218,573,163,555,156"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="45,5,169,33"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="181,35,209,42,397,101,392,104,208,47,184,40"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="14,57,200,102"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="215,91,363,111,359,114,216,96"/>
+<area shape="rect" id="Node000005" href="$structBalloonParty_1_1UI_1_1Score_1_1FlyingTrail_1_1MotionStyle.html" title=" " alt="" coords="5,126,209,171"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="223,139,364,130,360,134,225,143"/>
+<area shape="rect" id="Node000006" href="$interfaceBalloonParty_1_1Projectile_1_1Clearance_1_1IClearanceField.html" title="The clear circles around the balls in flight, plus the fading ones balls left behind." alt="" coords="12,197,202,242"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="213,190,328,160,382,147,378,150,329,165,216,195"/>
+<area shape="rect" id="Node000009" href="$classBalloonParty_1_1Shared_1_1Pool_1_1TrailSpawner.html" title="Handles the pool lifecycle for trail orbs: get, position, setup, return on arrival." alt="" coords="370,242,556,287"/>
+<area shape="poly" id="edge10_Node000009_Node000006" title=" " alt="" coords="216,237,233,239,372,255,368,258,232,244,218,242"/>
+<area shape="rect" id="Node000007" href="$classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html" title=" " alt="" coords="682,372,928,434"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="943,401,1023,403,1017,404,944,406"/>
+<area shape="rect" id="Node000008" href="$classBalloonParty_1_1Shared_1_1Pool_1_1TrailFlight.html" title="Controls a single trail&#39;s in&#45;flight state via transport&#45;style commands over DOTween." alt="" coords="370,173,556,218"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="560,221,575,227,633,260,687,298,774,372,769,372,684,303,630,265,573,232,561,226"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="555,290,575,297,662,333,742,372,737,372,660,338,573,302,555,295"/>
+<area shape="rect" id="Node000010" href="$classBalloonParty_1_1Shared_1_1Pool_1_1PoolManager.html" title=" " alt="" coords="14,269,200,314"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="215,292,328,287,372,283,368,285,329,292,217,297"/>
+<area shape="rect" id="Node000011" href="$classBalloonParty_1_1Shared_1_1Pool_1_1TrailFlightRegistry-1-g.html" title="Central registry for all in&#45;flight trails: per&#45;ID lookup plus bulk operations." alt="" coords="369,312,558,356"/>
+<area shape="poly" id="edge11_Node000007_Node000011" title=" " alt="" coords="573,353,685,378,679,379,573,359"/>
+<area shape="rect" id="Node000012" href="$interfaceBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1IScoreTrailReporter.html" title="Service&#45;owned sink a handler reports group arrivals through." alt="" coords="353,381,574,426"/>
+<area shape="poly" id="edge12_Node000007_Node000012" title=" " alt="" coords="589,401,684,402,679,404,590,406"/>
+<area shape="rect" id="Node000013" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1ITrailEndpoint.html" title="A named anchor a trail flies to or from, resolved by key through TrailEndpointRegistry." alt="" coords="370,450,556,495"/>
+<area shape="poly" id="edge13_Node000007_Node000013" title=" " alt="" coords="571,448,684,427,679,429,572,453"/>
+<area shape="rect" id="Node000014" href="$structBalloonParty_1_1Configuration_1_1BigScoreFormationSettings.html" title="Global knobs shared by every BigScore formation: radius, pen speed, coverage, spin and the scale&#45;over..." alt="" coords="365,520,562,564"/>
+<area shape="poly" id="edge14_Node000007_Node000014" title=" " alt="" coords="554,512,573,505,660,468,737,436,742,434,662,473,575,510,556,517"/>
+<area shape="rect" id="Node000015" href="$structBalloonParty_1_1Game_1_1Score_1_1TrailId.html" title="Uniquely identifies a score trail by color and score value; no level component since a trail is only ..." alt="" coords="369,589,558,634"/>
+<area shape="poly" id="edge15_Node000007_Node000015" title=" " alt="" coords="560,580,573,574,630,542,684,504,769,436,774,433,687,508,633,546,575,579,561,585"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="62,597,152,625"/>
+<area shape="poly" id="edge16_Node000015_Node000016" title=" " alt="" coords="168,609,370,609,367,613,168,614"/>
+<area shape="rect" id="Node000017" href="$classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape.html" title="A drawable formation: its vertex count (== its score denomination == its trail count),..." alt="" coords="703,558,907,603"/>
+<area shape="poly" id="edge17_Node000001_Node000017" title=" " alt="" coords="862,548,1080,435,1085,434,864,553"/>
+<area shape="rect" id="Node000018" href="$structBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationWalk.html" title="A CLOSED WALK a pen orbits forever: an ordered cyclic list of vertex indices whose consecutive pairs ..." alt="" coords="365,658,562,703"/>
+<area shape="poly" id="edge18_Node000017_Node000018" title=" " alt="" coords="576,663,657,644,712,624,759,604,764,603,714,629,659,649,577,669"/>
 </map>

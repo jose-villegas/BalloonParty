@@ -4,6 +4,7 @@ var classBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceField =
     [ "Advance", "classBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceField.html#ac8129904737c15dacedceab5d367b48e", null ],
     [ "Allocate", "classBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceField.html#a672511ad228430d1040001ecc13ed05a", null ],
     [ "CircleAt", "classBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceField.html#ac3cbc464cbe035c18ce70d714308c50d", null ],
+    [ "Deflect", "classBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceField.html#afb0b4b43173c480c242c40c71431978a", null ],
     [ "FindLive", "classBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceField.html#a9d87f616ca894df7057d0dde0e252b76", null ],
     [ "Track", "classBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceField.html#a8ed4245a4ca6d9c4dc4c261ffaf361d4", null ],
     [ "_centers", "classBalloonParty_1_1Projectile_1_1Clearance_1_1ClearanceField.html#a737447b0d00eff249da3b6fc051fc4e8", null ],

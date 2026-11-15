@@ -1,13 +1,15 @@
 <map id="BalloonParty.UI.Health.HealthUILifetimeScope" name="BalloonParty.UI.Health.HealthUILifetimeScope">
-<area shape="rect" id="Node000001" title="Child scope for the health UI; binds HealthCounterLabel to live HP and drives HeartTrailController." alt="" coords="686,26,899,71"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="365,5,480,33"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="495,22,688,40,683,41,495,28"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html" title=" " alt="" coords="321,57,524,102"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="539,68,662,58,688,58,683,58,662,63,540,73"/>
+<area shape="rect" id="Node000001" title="Child scope for the health UI; binds HealthCounterLabel to live HP and drives HeartTrailController." alt="" coords="696,61,909,106"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="375,40,490,68"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="505,57,698,74,693,75,505,62"/>
+<area shape="rect" id="Node000003" href="$classBalloonParty_1_1UI_1_1Score_1_1FlyingTrail.html" title=" " alt="" coords="331,92,534,136"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="549,102,672,92,698,92,693,93,672,97,550,107"/>
 <area shape="rect" id="Node000004" title=" " alt="" coords="45,5,169,33"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="184,31,323,58,318,61,184,36"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="182,35,209,42,363,90,359,92,208,47,183,40"/>
 <area shape="rect" id="Node000005" href="$interfaceBalloonParty_1_1Shared_1_1Pool_1_1IPoolable.html" title=" " alt="" coords="14,57,200,102"/>
-<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="215,77,323,78,318,80,216,82"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="216,88,332,102,328,104,216,93"/>
 <area shape="rect" id="Node000006" href="$structBalloonParty_1_1UI_1_1Score_1_1FlyingTrail_1_1MotionStyle.html" title=" " alt="" coords="5,126,209,171"/>
-<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="223,120,317,102,323,101,224,126"/>
+<area shape="poly" id="edge5_Node000003_Node000006" title=" " alt="" coords="224,133,333,124,328,126,225,139"/>
+<area shape="rect" id="Node000007" href="$interfaceBalloonParty_1_1Projectile_1_1Clearance_1_1IClearanceField.html" title="The clear circles around the balls in flight, plus the fading ones balls left behind." alt="" coords="12,196,202,240"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="197,188,306,154,362,138,367,136,307,159,199,193"/>
 </map>
