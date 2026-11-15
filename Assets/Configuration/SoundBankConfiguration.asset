@@ -1379,6 +1379,142 @@ MonoBehaviour:
     _tensionSemitones: 0
     _layers: []
     _fetchPrompt: 'A short gust of wind that swells in and fades: a light falls from the sky onto the cannon and a whirlwind spins up around it.'
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: 0370e279dcf51485896dad01ce536809, type: 3}
+    _clipPickMode: 0
+    _clipWrapMode: 0
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 0.3, y: 0.3}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 8
+    _priority: 150
+    _loop: 0
+    _singleInstance: 0
+    _pan2D: 1
+    _delaySeconds: 0
+    _fadeInSeconds: 0
+    _fadeOutSeconds: 0.12
+    _maxPlaySeconds: 0.3
+    _stopsOnPlay: 
+    _melodicMode: 3
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 12
+    _layers:
+    - _clips:
+      - {fileID: 8300000, guid: c1ad86570c491441486dc69979a91eab, type: 3}
+      _clipPickMode: 0
+      _clipWrapMode: 0
+      _pitchRange: {x: 1.6, y: 1.6}
+      _volumeRange: {x: 0.3, y: 0.3}
+      _melodicMode: 0
+      _melodicMaxOctaves: 2
+      _melodicSkipSteps: 1
+      _tensionSemitones: 0
+    _fetchPrompt: 'A short glassy tick, like a ball glancing off a mirror ball.'
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: a8be14a2d166e4967af5241db0524b8c, type: 3}
+    _clipPickMode: 0
+    _clipWrapMode: 0
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 0.7, y: 0.7}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 150
+    _loop: 0
+    _singleInstance: 0
+    _pan2D: 1
+    _delaySeconds: 0
+    _fadeInSeconds: 0
+    _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
+    _stopsOnPlay: 
+    _melodicMode: 1
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _layers:
+    - _clips:
+      - {fileID: 8300000, guid: 7c17adf0654b347e8928bd8e442f1daa, type: 3}
+      _clipPickMode: 0
+      _clipWrapMode: 0
+      _pitchRange: {x: 1.15, y: 1.15}
+      _volumeRange: {x: 0.6, y: 0.6}
+      _melodicMode: 0
+      _melodicMaxOctaves: 2
+      _melodicSkipSteps: 1
+      _tensionSemitones: 0
+    - _clips:
+      - {fileID: 8300000, guid: 0370e279dcf51485896dad01ce536809, type: 3}
+      _clipPickMode: 0
+      _clipWrapMode: 0
+      _pitchRange: {x: 1.0, y: 1.0}
+      _volumeRange: {x: 0.5, y: 0.5}
+      _melodicMode: 3
+      _melodicMaxOctaves: 2
+      _melodicSkipSteps: 1
+      _tensionSemitones: 12
+    - _clips:
+      - {fileID: 8300000, guid: 4d7ee98f7531dd04baebfe7d06802cc6, type: 3}
+      _clipPickMode: 0
+      _clipWrapMode: 0
+      _pitchRange: {x: 1.0, y: 1.0}
+      _volumeRange: {x: 0.45, y: 0.45}
+      _melodicMode: 0
+      _melodicMaxOctaves: 2
+      _melodicSkipSteps: 1
+      _tensionSemitones: 0
+    _fetchPrompt: 'A bright balloon pop with a chime and a glassy shimmer: a mirror ball breaks and paints the board.'
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: 8781a1418c410044c90981f31b48027f, type: 3}
+    _clipPickMode: 0
+    _clipWrapMode: 0
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 0.35, y: 0.35}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 6
+    _priority: 140
+    _loop: 0
+    _singleInstance: 0
+    _pan2D: 0
+    _delaySeconds: 0
+    _fadeInSeconds: 0
+    _fadeOutSeconds: 0.3
+    _maxPlaySeconds: 0.6
+    _stopsOnPlay: 
+    _melodicMode: 1
+    _melodicMaxOctaves: 4
+    _melodicSkipSteps: 5
+    _tensionSemitones: 0
+    _layers: []
+    _fetchPrompt: 'A harp glissando sweeping upward as colour washes across the board.'
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: 8781a1418c410044c90981f31b48027f, type: 3}
+    _clipPickMode: 0
+    _clipWrapMode: 0
+    _pitchRange: {x: 1, y: 1}
+    _volumeRange: {x: 0.15, y: 0.15}
+    _cooldownSeconds: 0.07
+    _maxConcurrentVoices: 4
+    _priority: 100
+    _loop: 0
+    _singleInstance: 0
+    _pan2D: 1
+    _delaySeconds: 0
+    _fadeInSeconds: 0
+    _fadeOutSeconds: 0.08
+    _maxPlaySeconds: 0.15
+    _stopsOnPlay: 
+    _melodicMode: 1
+    _melodicMaxOctaves: 4
+    _melodicSkipSteps: 5
+    _tensionSemitones: 0
+    _layers: []
+    _fetchPrompt: 'A tiny quiet pluck as one balloon turns rainbow.'
   _melodicScale: 0000000002000000040000000700000009000000i
   _melodicRootSemitone: 0
   _globalVoiceCap: 64

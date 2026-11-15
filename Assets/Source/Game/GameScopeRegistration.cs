@@ -138,6 +138,8 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<LevelUpDismissedMessage>(options);
             builder.RegisterMessageBroker<TooltipMessage>(options);
             builder.RegisterMessageBroker<BonusCardDealtMessage>(options);
+            builder.RegisterMessageBroker<DiscoWaveAdvancedMessage>(options);
+            builder.RegisterMessageBroker<DiscoWaveReachedMessage>(options);
             builder.RegisterMessageBroker<UpgradeCardHeldMessage>(options);
             builder.RegisterMessageBroker<GameOverDismissedMessage>(options);
             builder.RegisterMessageBroker<LevelTransitionCompletedMessage>(options);
@@ -467,6 +469,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<MusicSoundRouter>();
             builder.RegisterEntryPoint<AudioChannelController>();
             builder.RegisterEntryPoint<ItemSightSoundRouter>();
+            builder.RegisterEntryPoint<DiscoSoundRouter>();
         }
 
         // The dictionary is the choreography seam: the resolver maps each ScoreTrailBehaviourId to its handler.

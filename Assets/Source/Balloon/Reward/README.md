@@ -118,6 +118,14 @@ sorts below the balloons, so it sweeps through the gaps, and the balloons show t
 rainbow. Each painted balloon's drip is a rainbow one (`IPaintReactive.PlayPaintDrip`'s `rainbow`). The pop
 itself takes the rainbow balloon's key-light flash (`BalloonPopPresenter`).
 
+The wave's sound follows two messages it publishes: `DiscoWaveAdvancedMessage`, the share of its time gone
+(0 as it starts), each frame; and `DiscoWaveReachedMessage` for each balloon it paints, the immune ones
+included, with how far from the pop it sits over the disc's full radius. `Audio/Routing/DiscoSoundRouter`
+plays them as a rising harp glissando through the board's key and a quiet pluck for each balloon, higher the
+farther out it is. The ball's own cues are `CombatSoundRouter`'s: `BalloonDeflectDisco`, a glassy tick (a
+ping-pong bump under a glassy chime an octave over the board's key), and `BalloonPopDisco`, the golden
+balloon's pop with the item-sighted wind chime shimmering over it.
+
 ## Leaving the board
 
 Every way off the board (a pop, a board clear, a level change) calls the leave callback, which frees the

@@ -164,7 +164,8 @@ namespace BalloonParty.Audio.Routing
                     var offset = -(hitsLost - 1);
                     _player.Play(deflectId, message.WorldPosition, semitoneOffset: offset);
                 }
-                else if (deflectId is GameSoundId.BalloonDeflectUnbreakable or GameSoundId.BalloonDeflectGolden)
+                else if (deflectId is GameSoundId.BalloonDeflectUnbreakable or GameSoundId.BalloonDeflectGolden
+                         or GameSoundId.BalloonDeflectDisco)
                 {
                     // Clamped: a deflect no ball caused (a cheat) isn't counted, and would play below the root.
                     // Each type climbs on its own deflects.
@@ -196,6 +197,7 @@ namespace BalloonParty.Audio.Routing
                 BalloonType.Rainbow => GameSoundId.BalloonPopRainbow,
                 BalloonType.Unbreakable => GameSoundId.BalloonPopUnbreakable,
                 BalloonType.Golden => GameSoundId.BalloonPopGolden,
+                BalloonType.Disco => GameSoundId.BalloonPopDisco,
                 BalloonType.Heart => GameSoundId.BalloonPopHeart,
                 BalloonType.SimpleSilver => GameSoundId.BalloonPopSilver,
                 BalloonType.SimpleGold => GameSoundId.BalloonPopGold,
@@ -203,7 +205,8 @@ namespace BalloonParty.Audio.Routing
             };
         }
 
-        // Unbreakables get the metallic deflect, the plated golden balloon its own clink; the generic one otherwise.
+        // Unbreakables get the metallic deflect, the plated golden balloon its own clink and the disco ball a glassy
+        // tick; the generic one otherwise.
         private static GameSoundId DeflectSoundFor(BalloonType type)
         {
             return type switch
@@ -212,6 +215,7 @@ namespace BalloonParty.Audio.Routing
                 BalloonType.Tougher => GameSoundId.BalloonDeflectTougher,
                 BalloonType.Unbreakable => GameSoundId.BalloonDeflectUnbreakable,
                 BalloonType.Golden => GameSoundId.BalloonDeflectGolden,
+                BalloonType.Disco => GameSoundId.BalloonDeflectDisco,
                 _ => GameSoundId.BalloonDeflect,
             };
         }

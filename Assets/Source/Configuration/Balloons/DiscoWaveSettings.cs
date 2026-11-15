@@ -9,7 +9,8 @@ namespace BalloonParty.Configuration.Balloons
     public class DiscoWaveSettings : IDiscoWaveSettings
     {
         [Tooltip("Seconds the disc takes to reach the farthest slot from the pop, easing out: fast at first, " +
-                 "settling as it reaches the far side.")]
+                 "settling as it reaches the far side. The glissando plays a note each tenth of it, so under about " +
+                 "0.6 s its notes crowd the sound service's burst window and detune.")]
         [SerializeField] [Min(0.05f)] private float _seconds = 0.9f;
 
         [Tooltip("The nudge each balloon gets as the disc's edge reaches it, away from the pop. Applies To must " +

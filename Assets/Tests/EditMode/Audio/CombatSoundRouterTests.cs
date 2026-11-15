@@ -192,6 +192,41 @@ namespace BalloonParty.Tests.Audio
         }
 
         [Test]
+        public void OnActorHit_DiscoPop_PlaysTheDiscoPop()
+        {
+            var disco = Substitute.For<IBalloonModel>();
+            disco.TypeName.Returns(BalloonType.Disco);
+
+            _hitHandler.Handle(new ActorHitMessage(disco, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+
+            _player.Received(1).Play(GameSoundId.BalloonPopDisco, Vector3.zero);
+        }
+
+        [Test]
+        public void OnActorHit_DiscoDeflect_PlaysTheDiscoDeflect()
+        {
+            var disco = Substitute.For<IBalloonModel>();
+            disco.TypeName.Returns(BalloonType.Disco);
+
+            _hitHandler.Handle(new ActorHitMessage(disco, Vector3.zero, Vector3.zero, HitOutcome.Deflect));
+
+            _player.Received(1).Play(GameSoundId.BalloonDeflectDisco, Vector3.zero);
+        }
+
+        [Test]
+        public void OnActorHit_DiscoDeflects_ClimbASemitoneEach()
+        {
+            var disco = Substitute.For<IBalloonModel>();
+            disco.TypeName.Returns(BalloonType.Disco);
+
+            _hitHandler.Handle(new ActorHitMessage(disco, Vector3.zero, Vector3.zero, HitOutcome.Deflect));
+            _hitHandler.Handle(new ActorHitMessage(disco, Vector3.zero, Vector3.zero, HitOutcome.Deflect));
+
+            _player.Received(1).Play(GameSoundId.BalloonDeflectDisco, Vector3.zero, null, 0, 1f);
+            _player.Received(1).Play(GameSoundId.BalloonDeflectDisco, Vector3.zero, null, 1, 1f);
+        }
+
+        [Test]
         public void OnActorHit_HeartPop_PlaysTheHeartPop()
         {
             var heart = Substitute.For<IBalloonModel>();

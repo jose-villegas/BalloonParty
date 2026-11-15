@@ -45,6 +45,8 @@ namespace BalloonParty.Tests.Balloon
         private SlotGrid _grid;
         private IGamePalette _palette;
         private IPublisher<NudgeMessage> _nudgePublisher;
+        private IPublisher<DiscoWaveAdvancedMessage> _advancedPublisher;
+        private IPublisher<DiscoWaveReachedMessage> _reachedPublisher;
         private ProjectileRegistry _registry;
         private ShotPaintLedger _ledger;
         private IDiscoWaveView _view;
@@ -70,6 +72,8 @@ namespace BalloonParty.Tests.Balloon
             balloons.DiscoWave.Returns(new DiscoWaveSettings());
 
             _nudgePublisher = Substitute.For<IPublisher<NudgeMessage>>();
+            _advancedPublisher = Substitute.For<IPublisher<DiscoWaveAdvancedMessage>>();
+            _reachedPublisher = Substitute.For<IPublisher<DiscoWaveReachedMessage>>();
             _registry = new ProjectileRegistry();
             _ledger = new ShotPaintLedger(_registry);
             _view = Substitute.For<IDiscoWaveView>();
@@ -79,7 +83,7 @@ namespace BalloonParty.Tests.Balloon
 
             _wave = new DiscoWave(
                 QuietSubscriber<ActorHitMessage>(), QuietSubscriber<GameOverMessage>(), levelProgress, _grid, _palette,
-                balloons, _nudgePublisher, _ledger,
+                balloons, _nudgePublisher, _advancedPublisher, _reachedPublisher, _ledger,
                 new DisturbanceFieldService(
                     Substitute.For<IDisturbanceFieldSettings>(), Substitute.For<IGameDisplayConfiguration>(),
                     new ImpactEventBus()),
@@ -255,7 +259,7 @@ namespace BalloonParty.Tests.Balloon
             levelProgress.Level.Returns(_level);
             using var wave = new DiscoWave(
                 QuietSubscriber<ActorHitMessage>(), gameOver, levelProgress, _grid, _palette, balloons,
-                _nudgePublisher, _ledger,
+                _nudgePublisher, _advancedPublisher, _reachedPublisher, _ledger,
                 new DisturbanceFieldService(
                     Substitute.For<IDisturbanceFieldSettings>(), Substitute.For<IGameDisplayConfiguration>(),
                     new ImpactEventBus()),
@@ -283,6 +287,50 @@ namespace BalloonParty.Tests.Balloon
             _wave.OnHit(PopOf(disco));
 
             _view.Received(1).Show(Arg.Any<Vector3>());
+        }
+
+        [Test]
+        public void EachBalloonTheWavePaints_PublishesItsReach_FartherOnesReachingFarther()
+        {
+            PlaceBalloon(NearSlot, "Red");
+            PlaceBalloon(FarSlot, "Blue");
+            var tough = new ToughBalloonModel(new BalloonModelConfig(BalloonType.Tough, hitsToPop: 3));
+            PlaceActor(tough, new Vector2Int(3, 3));
+            PlaceBalloon(new Vector2Int(2, 0), GamePalette.RainbowColorId);
+            var nearReach = -1f;
+            var farReach = -1f;
+            _reachedPublisher.When(p => p.Publish(Arg.Any<DiscoWaveReachedMessage>())).Do(call =>
+            {
+                var message = call.Arg<DiscoWaveReachedMessage>();
+                if (message.Position == _grid.IndexToWorldPosition(NearSlot))
+                {
+                    nearReach = message.Reach;
+                }
+                else if (message.Position == _grid.IndexToWorldPosition(FarSlot))
+                {
+                    farReach = message.Reach;
+                }
+            });
+
+            PopDisco();
+            _wave.Advance(WholeWave);
+
+            // The red, the blue and the paint-immune tough tick; the balloon already rainbow takes nothing, and neither
+            // does the disco ball itself.
+            _reachedPublisher.Received(3).Publish(Arg.Any<DiscoWaveReachedMessage>());
+            Assert.That(nearReach, Is.GreaterThan(0f));
+            Assert.That(farReach, Is.GreaterThan(nearReach).And.LessThanOrEqualTo(1f));
+        }
+
+        [Test]
+        public void TheWave_PublishesItsTime_FromNoneAtTheStartToAllOfItAtTheEnd()
+        {
+            PopDisco();
+            _advancedPublisher.Received(1).Publish(new DiscoWaveAdvancedMessage(0f));
+
+            _wave.Advance(WholeWave);
+
+            _advancedPublisher.Received(1).Publish(new DiscoWaveAdvancedMessage(1f));
         }
 
         [Test]

@@ -113,6 +113,16 @@ namespace BalloonParty.Audio
 
         // A ball loading as a Snipe lance (the Sharpshooter card): a gust of wind as the sky light falls onto
         // the cannon and the whirlwind spins up. Played by ItemSoundRouter off the loaded ball's pierce.
-        SnipeSkyLight
+        SnipeSkyLight,
+
+        // The disco ball's own cues (PLAN-DiscoBalloon): a glassy tick when the shot bounces off its mirrors, and
+        // the golden balloon's chime with a shimmer over it when a pierce breaks it.
+        BalloonDeflectDisco,
+        BalloonPopDisco,
+
+        // The disco ball's wave, played by DiscoSoundRouter: a glissando climbing the board's key over the wave's
+        // time, and a quiet tick pitched by its distance from the pop for each balloon the wave paints.
+        DiscoWaveGlissando,
+        DiscoWaveTick
     }
 }

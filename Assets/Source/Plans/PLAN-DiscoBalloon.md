@@ -49,7 +49,8 @@ code is the model, the wave, the ledger that guards the streak, and the look.
 | `ShotPaintLedger` (new) | `Projectile/Controller/` | Remembers which balloons a given shot's effects painted rainbow. `ProjectileHitResolver` asks it before marking a wildcard pop. Entries are cleared when the shot ends (*Self-feeding check*) |
 | `NudgeType.Wave` (new flag) | `Nudge/NudgeType.cs` | The wave nudges each balloon on its own with `NudgeMessage(actor, ballPosition, NudgeType.Wave, overrides)`. `NudgeService.HandleSingleActor` already supports exactly that. A separate flag lets a prefab's `NudgeOverrides` tune the wave's push apart from a deflect or a neighbour hit. `Shockwave` doesn't fit, because it nudges the whole board at once |
 | `GodRaysLook` | `Balloon/Type/` | Used as it is, on a `DiscoRays` material and palette entry (*The look*) |
-| `CombatSoundRouter`, `GameSoundId` | `Audio/` | `BalloonDeflectDisco`, `BalloonPopDisco`, and the wave's cue, appended |
+| `CombatSoundRouter`, `GameSoundId` | `Audio/` | `BalloonDeflectDisco`, `BalloonPopDisco`, and the wave's two cues (`DiscoWaveGlissando`, `DiscoWaveTick`), appended |
+| `DiscoSoundRouter` (new) | `Audio/Routing/` | Plays the wave's cues from `DiscoWaveAdvancedMessage` and `DiscoWaveReachedMessage`, which `DiscoWave` publishes |
 | Solver | `Solver/` | `ShotBalloonSnapshot.ForDiscoTarget`, with the golden balloon's hit rules. The simulator applies the ledger rule, and the ranking values a disco pop (*Phases*) |
 | Spawn-balloon cheat | `Cheats/` | Sends `Disco` through the service, as the golden balloon already does |
 
@@ -277,8 +278,19 @@ using a `disco_parts` sheet cut from a capture of the ball by `Tools/art/shatter
 
 **Sound.** `BalloonDeflectDisco` (a glassy tick), and `BalloonPopDisco` (the golden balloon's chime layered
 with a shimmer). The wave gets a rising glissando through the board's key, and each balloon it paints gets a
-quiet tick pitched by its distance from the centre, capped for each frame so a full board doesn't stack
-fifty clips. All of these are layered from clips already in the sound bank, as the golden balloon's cues are.
+quiet tick pitched by its distance from the centre, capped so a full board doesn't stack fifty clips. All of
+these are layered from clips already in the sound bank, as the golden balloon's cues are.
+
+As built: the glissando is harp notes (`harp005`) walking two octaves of the key, a degree for each tenth of
+the wave's time, from an octave under the root to an octave over it. A slow frame that crosses several notes
+plays only the last, and a wave shorter than about 0.6 s would crowd its notes into the burst window below.
+The last sweep's balloons all arrive in one frame and sound one tick. The ticks are the same harp, shorter and quieter, on the root's octave, at the degree the
+balloon's distance reaches. The cap is the tick's cooldown in the bank (0.07 s): stronger than one a frame,
+and it keeps back-to-back ticks out of `SfxThrottleGate`'s burst window, which would detune them off the key.
+Both entries walk with a four-octave window, because `ScaleWalkUp` folds its top notes back near the edge of
+its window, and `ShippedDiscoSoundsTests` pins every degree climbing. The deflect is a ping-pong bump under
+`Chime 0011` an octave over the board's key; the pop is the golden balloon's pop with the item-sighted wind
+chime over it. Picked without listening, so they want a pass by ear.
 
 ## Open questions
 
@@ -335,7 +347,8 @@ fixes; then your sign-off.
    noon and at night with `Tools/stage/stage.py`, and frames sent to you for sign-off. Written: everything
    but the shatter, which needs a capture of the ball in the Editor (`Tools/art/shatter`); the pop keeps
    the golden balloon's burst until then. Not yet compiled or seen in the Editor.
-5. **Sound.** The three cues, layered in `SoundBankConfiguration`.
+5. **Sound.** The three cues, layered in `SoundBankConfiguration`. Built: the wave's glissando and ticks are
+   two cues, played by `DiscoSoundRouter`; the clips want a pass by ear.
 6. **Docs and measuring.** READMEs (Reward, Type, Nudge, Paint, Projectile), plus the playtest bot on a
    forced disco level against the same seed without one: level time, shots to clear, and peak multiplier.
    This is the evidence for open questions 1 and 2. Then a device build for the capture cost.

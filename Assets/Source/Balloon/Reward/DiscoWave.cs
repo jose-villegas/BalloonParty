@@ -33,7 +33,8 @@ namespace BalloonParty.Balloon.Reward
     ///     paint (<see cref="PaintTargets" />) takes the drip and keeps its colour. Balloons that move while the disc
     ///     grows are caught by a last sweep when it ends. What the wave paints is booked to the breaking shot
     ///     (<see cref="ShotPaintLedger" />), so that shot can't climb its streak on it. A run reset, a level change or
-    ///     game over stops the wave where it is.
+    ///     game over stops the wave where it is. The wave's sound follows its messages: how far through its time it is
+    ///     (<see cref="DiscoWaveAdvancedMessage" />), and each balloon it paints (<see cref="DiscoWaveReachedMessage" />).
     /// </summary>
     internal sealed class DiscoWave : IStartable, ITickable, IRunResettable, IDisposable
     {
@@ -44,6 +45,8 @@ namespace BalloonParty.Balloon.Reward
         private readonly IGamePalette _palette;
         private readonly IDiscoWaveSettings _settings;
         private readonly IPublisher<NudgeMessage> _nudgePublisher;
+        private readonly IPublisher<DiscoWaveAdvancedMessage> _advancedPublisher;
+        private readonly IPublisher<DiscoWaveReachedMessage> _reachedPublisher;
         private readonly ShotPaintLedger _paintLedger;
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly IDiscoWaveView _view;
@@ -70,6 +73,8 @@ namespace BalloonParty.Balloon.Reward
             IGamePalette palette,
             IBalloonsConfiguration balloons,
             IPublisher<NudgeMessage> nudgePublisher,
+            IPublisher<DiscoWaveAdvancedMessage> advancedPublisher,
+            IPublisher<DiscoWaveReachedMessage> reachedPublisher,
             ShotPaintLedger paintLedger,
             DisturbanceFieldService disturbanceField,
             IDiscoWaveView view)
@@ -81,6 +86,8 @@ namespace BalloonParty.Balloon.Reward
             _palette = palette;
             _settings = balloons.DiscoWave;
             _nudgePublisher = nudgePublisher;
+            _advancedPublisher = advancedPublisher;
+            _reachedPublisher = reachedPublisher;
             _paintLedger = paintLedger;
             _disturbanceField = disturbanceField;
             _view = view;
@@ -133,6 +140,7 @@ namespace BalloonParty.Balloon.Reward
             _reached.Clear();
             _reached.Add(balloon);
             _view.Show(_center);
+            _advancedPublisher.Publish(new DiscoWaveAdvancedMessage(0f));
         }
 
         // Scaled time: a pause holds the wave.
@@ -147,6 +155,7 @@ namespace BalloonParty.Balloon.Reward
             var t = Mathf.Clamp01(_elapsed / _settings.Seconds);
             var radius = _maxRadius * t * (2f - t);
             _view.SetRadius(radius, t);
+            _advancedPublisher.Publish(new DiscoWaveAdvancedMessage(t));
             Sweep(radius * radius);
             if (t >= 1f)
             {
@@ -229,13 +238,13 @@ namespace BalloonParty.Balloon.Reward
             }
 
             var view = _grid.ActorViewAt<IPaintReactive>(slot);
+            var position = _grid.IndexToWorldPosition(slot);
             if (verdict == PaintVerdict.Accept)
             {
                 var oldColorId = paintable.Color.Value;
                 paintable.Color.Value = GamePalette.RainbowColorId;
                 view?.PlayRecolourBurst(_palette.GetColor(oldColorId), _settings.BurstScale);
                 // Tagged with the colour that bursts off, as the Paint item tags a blob with its own.
-                var position = _grid.IndexToWorldPosition(slot);
                 _disturbanceField.Stamp(
                     StampSource.Paint, position, ((Vector2)(position - _center)).normalized,
                     paletteIndex: _palette.PaletteIndexOf(oldColorId));
@@ -249,6 +258,8 @@ namespace BalloonParty.Balloon.Reward
 
             // The palette gives the rainbow id white, so the flag is what makes the drip draw the level's bands.
             view?.PlayPaintDrip(_palette.GetColor(GamePalette.RainbowColorId), rainbow: true);
+            var reach = _maxRadius > 0f ? ((Vector2)(position - _center)).magnitude / _maxRadius : 0f;
+            _reachedPublisher.Publish(new DiscoWaveReachedMessage(position, reach));
         }
     }
 }
