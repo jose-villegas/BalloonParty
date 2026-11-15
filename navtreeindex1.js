@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"GameOverMessage_8cs.html":[7,0,14,7,10],
 "GameOverPresentationGate_8cs.html":[7,0,7,7,2],
 "GameOverScreen_8cs.html":[7,0,18,3,1],
 "GamePaletteAdapter_8cs.html":[7,0,6,22],
@@ -62,7 +63,7 @@ var NAVTREEINDEX1 =
 "HitVfxOverrideDrawer_8cs.html":[7,0,3,4,2],
 "HitVfxOverride_8cs.html":[7,0,3,0,4],
 "HudCamera_8cs.html":[7,0,5,3],
-"IActiveLevelParameters_8cs.html":[7,0,7,6,0],
+"IActiveLevelParameters_8cs.html":[7,0,7,6,1],
 "IActiveScenario_8cs.html":[7,0,13,6],
 "IAdService_8cs.html":[7,0,7,7,3],
 "IAudioMixerRouter_8cs.html":[7,0,0,8],
@@ -81,6 +82,7 @@ var NAVTREEINDEX1 =
 "IBoardFill_8cs.html":[7,0,1,4,5],
 "IBoardResettable_8cs.html":[7,0,7,7,4],
 "IBonusCardSource_8cs.html":[7,0,7,7,5],
+"IBonusLevelCue_8cs.html":[7,0,7,6,2],
 "IBubbleRiseSettings_8cs.html":[7,0,3,9,8],
 "IBuffConfiguration_8cs.html":[7,0,3,1,2],
 "IBushSettings_8cs.html":[7,0,3,5,6],
@@ -143,9 +145,9 @@ var NAVTREEINDEX1 =
 "ILevelMetricsView_8cs.html":[7,0,7,9,9],
 "ILevelPacingConfiguration_8cs.html":[7,0,3,9,10],
 "ILevelParameters_8cs.html":[7,0,3,9,11],
-"ILevelProgress_8cs.html":[7,0,7,6,1],
+"ILevelProgress_8cs.html":[7,0,7,6,3],
 "ILevelStep_8cs.html":[7,0,3,9,12],
-"ILevelThresholds_8cs.html":[7,0,7,6,2],
+"ILevelThresholds_8cs.html":[7,0,7,6,4],
 "ILossForecast_8cs.html":[7,0,7,5,1],
 "IMelodicContext_8cs.html":[7,0,0,9],
 "INavigation_8cs.html":[7,0,14,5,7],
@@ -247,7 +249,5 @@ var NAVTREEINDEX1 =
 "ImageShadowBakerEditor_8cs.html":[7,0,6,5,0],
 "ImageShadowBaker_8cs.html":[7,0,14,10,6],
 "ImpactEventBus_8cs.html":[7,0,14,20],
-"InitialLayerPlan_8cs.html":[7,0,1,4,6],
-"InjectingPoolChannel_8cs.html":[7,0,14,9,3],
-"InputHelper_8cs.html":[7,0,14,4,9]
+"InitialLayerPlan_8cs.html":[7,0,1,4,6]
 };

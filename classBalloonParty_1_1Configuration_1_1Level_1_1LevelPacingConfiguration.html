@@ -139,6 +139,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8e5a36830884f82b21a7a176ffd7ab71" id="r_a8e5a36830884f82b21a7a176ffd7ab71"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8e5a36830884f82b21a7a176ffd7ab71">ColorsForLevel</a> (int level)</td></tr>
 <tr class="memdesc:a8e5a36830884f82b21a7a176ffd7ab71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Count of colours allowed at <em>level</em> .  <br /></td></tr>
 <tr class="separator:a8e5a36830884f82b21a7a176ffd7ab71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f120b0c131793d827d3962db811dd53" id="r_a1f120b0c131793d827d3962db811dd53"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1f120b0c131793d827d3962db811dd53">IsExtraColorLevel</a> (int level, int runSeed)</td></tr>
+<tr class="memdesc:a1f120b0c131793d827d3962db811dd53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether <em>level</em>  plays an extra colour in the run rolled by <em>runSeed</em>  (<a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ExtraColorLevelSettings.html" title="A rare level that plays one more colour than its step gives (the fourth, purple), with no threats and...">ExtraColorLevelSettings</a>); a debug preset (level &lt; 1) never does.  <br /></td></tr>
+<tr class="separator:a1f120b0c131793d827d3962db811dd53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad422afeebfcfac10afce06a61283fe44" id="r_ad422afeebfcfac10afce06a61283fe44"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad422afeebfcfac10afce06a61283fe44">MaxConcurrentBalloons</a> (<a class="el" href="namespaceBalloonParty_1_1Balloon_1_1Type.html#a17a93fed9c04e38825567a4f5cc4b60e">BalloonType</a> type, int columns)</td></tr>
 <tr class="memdesc:ad422afeebfcfac10afce06a61283fe44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Upper bound on how many of a balloon type can share the board at any level — the pool prewarm size.  <br /></td></tr>
 <tr class="separator:ad422afeebfcfac10afce06a61283fe44"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -151,9 +154,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a112381fe57eea4555cd8a20ec67f8e1d" id="r_a112381fe57eea4555cd8a20ec67f8e1d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a112381fe57eea4555cd8a20ec67f8e1d">SeedForLevel</a> (int level)</td></tr>
 <tr class="memdesc:a112381fe57eea4555cd8a20ec67f8e1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The seed that rolls <em>level</em> 's mix; the same level always gets the same seed.  <br /></td></tr>
 <tr class="separator:a112381fe57eea4555cd8a20ec67f8e1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a910ae2e8368e2801282b58afd27ef15a" id="r_a910ae2e8368e2801282b58afd27ef15a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a910ae2e8368e2801282b58afd27ef15a">ThresholdForLevel</a> (int level)</td></tr>
-<tr class="memdesc:a910ae2e8368e2801282b58afd27ef15a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Points required per colour to complete <em>level</em>  — derived from the scoring curve's cumulative milestones, divided by colour count, and snapped to a clean multiple.  <br /></td></tr>
-<tr class="separator:a910ae2e8368e2801282b58afd27ef15a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e4f8968190db2ab39fab16378e6f7d0" id="r_a5e4f8968190db2ab39fab16378e6f7d0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e4f8968190db2ab39fab16378e6f7d0">ThresholdForLevel</a> (int level, bool extraColor=false)</td></tr>
+<tr class="memdesc:a5e4f8968190db2ab39fab16378e6f7d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Points required per colour to complete <em>level</em>  — derived from the scoring curve's cumulative milestones, divided by colour count, and snapped to a clean multiple.  <br /></td></tr>
+<tr class="separator:a5e4f8968190db2ab39fab16378e6f7d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
@@ -217,6 +220,31 @@ Private Attributes</h2></td></tr>
 <p>Count of colours allowed at <em>level</em> . </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#a512ea1172a87069162a443a978f8e7e1">BalloonParty.Configuration.Level.ILevelPacingConfiguration</a>.</p>
+
+</div>
+</div>
+<a id="a1f120b0c131793d827d3962db811dd53" name="a1f120b0c131793d827d3962db811dd53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f120b0c131793d827d3962db811dd53">&#9670;&#160;</a></span>IsExtraColorLevel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Configuration.Level.LevelPacingConfiguration.IsExtraColorLevel </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>level</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>runSeed</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Whether <em>level</em>  plays an extra colour in the run rolled by <em>runSeed</em>  (<a class="el" href="classBalloonParty_1_1Configuration_1_1Level_1_1ExtraColorLevelSettings.html" title="A rare level that plays one more colour than its step gives (the fourth, purple), with no threats and...">ExtraColorLevelSettings</a>); a debug preset (level &lt; 1) never does. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#ac3d5e189612ba74d4d859ae5955fe896">BalloonParty.Configuration.Level.ILevelPacingConfiguration</a>.</p>
 
 </div>
 </div>
@@ -369,8 +397,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a910ae2e8368e2801282b58afd27ef15a" name="a910ae2e8368e2801282b58afd27ef15a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a910ae2e8368e2801282b58afd27ef15a">&#9670;&#160;</a></span>ThresholdForLevel()</h2>
+<a id="a5e4f8968190db2ab39fab16378e6f7d0" name="a5e4f8968190db2ab39fab16378e6f7d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e4f8968190db2ab39fab16378e6f7d0">&#9670;&#160;</a></span>ThresholdForLevel()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -378,15 +406,20 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">int BalloonParty.Configuration.Level.LevelPacingConfiguration.ThresholdForLevel </td>
           <td>(</td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>level</em></span></td><td>)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>level</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>extraColor</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Points required per colour to complete <em>level</em>  — derived from the scoring curve's cumulative milestones, divided by colour count, and snapped to a clean multiple. </p>
+<p>An extra-colour level (<em>extraColor</em> ) splits the same points over its one more colour, so it asks no more in all than an ordinary level. </p>
 
-<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#a0a402590276276532114beaa43098433">BalloonParty.Configuration.Level.ILevelPacingConfiguration</a>.</p>
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Level_1_1ILevelPacingConfiguration.html#a0a88ccb8e2d04f18b81f3e270360c2e9">BalloonParty.Configuration.Level.ILevelPacingConfiguration</a>.</p>
 
 </div>
 </div>

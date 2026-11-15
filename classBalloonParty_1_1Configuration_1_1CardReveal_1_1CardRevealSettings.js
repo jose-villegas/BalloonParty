@@ -1,6 +1,10 @@
 var classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings =
 [
     [ "_balloonColor", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a2091f49f89bb1f573405e725c7639fca", null ],
+    [ "_bonusRibbonDelaySeconds", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a2943ba0cddfb03588e875a00fe7bd0f0", null ],
+    [ "_bonusRibbonSeconds", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a7a51d0785269b6ea40ac395b4183341e", null ],
+    [ "_bonusRibbonText", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a4ad1ee88d0d7a3712eb8a2e84caa995b", null ],
+    [ "_bonusRibbonTextColor", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a198592d5576e69a3f014a06dd3a2ed1a", null ],
     [ "_cappedDissolveDelay", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ae017a0e0957bdc84dba04743ba722c47", null ],
     [ "_cappedDissolveSeconds", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a5665dce344b02ef4c1d1df402afdc96e", null ],
     [ "_framesPerSecond", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#acf5dd5188770205802188261cc1217da", null ],
@@ -56,6 +60,10 @@ var classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings =
     [ "_sheetRows", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a31aa3f0032f47d9c42bed0ab39a436e1", null ],
     [ "_shredsPrefab", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ae443524951a659437a369e5c5a4bb68e", null ],
     [ "BalloonColor", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ae17ae7beb541a12f90a19c9bc5ecd673", null ],
+    [ "BonusRibbonDelaySeconds", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ada690440e9dba104cef52bdd23bba1f0", null ],
+    [ "BonusRibbonSeconds", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ad4e300709a273b3bd3a3093a410f587b", null ],
+    [ "BonusRibbonText", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a65402f404bda6bcf03ef59b3247b0618", null ],
+    [ "BonusRibbonTextColor", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#aa7428acc267bbaaa5b7579903a4d8432", null ],
     [ "CappedDissolveDelay", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#ae0bbd3aef91cee896a765a6fa537f9e3", null ],
     [ "CappedDissolveSeconds", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#abbafe003d238b1db075bf3e7a032607d", null ],
     [ "FramesPerSecond", "classBalloonParty_1_1Configuration_1_1CardReveal_1_1CardRevealSettings.html#a15b83647d5a739a165e49ffa7845187e", null ],

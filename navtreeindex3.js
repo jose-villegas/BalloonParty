@@ -1,5 +1,7 @@
 var NAVTREEINDEX3 =
 {
+"RejectedBalloonEffect_8cs.html":[7,0,1,4,9],
+"ReleasePublisher_8cs.html":[7,0,6,4,0],
 "ReleaseUploadWindow_8cs.html":[7,0,6,4,1],
 "ReleaseUploadWindow_8cs.html#a0100be52d45f14348918ea69ec09f959":[7,0,6,4,1,2],
 "RendererExtensions_8cs.html":[7,0,14,4,14],
@@ -33,7 +35,7 @@ var NAVTREEINDEX3 =
 "RunUpgrades_8cs.html":[7,0,7,10,5],
 "ScaleDownButton_8cs.html":[7,0,18,20],
 "ScenarioContentRoot_8cs.html":[7,0,15,0,18],
-"ScenarioController_8cs.html":[7,0,7,6,8],
+"ScenarioController_8cs.html":[7,0,7,6,10],
 "ScenarioGradeCheat_8cs.html":[7,0,2,20],
 "ScenarioGradeSettings_8cs.html":[7,0,3,5,23],
 "ScenarioGradeView_8cs.html":[7,0,13,0,3],
@@ -222,7 +224,7 @@ var NAVTREEINDEX3 =
 "ThrowerView_8cs.html":[7,0,17,7],
 "TimeOfDayCheat_8cs.html":[7,0,2,25],
 "TimeOfDayClock_8cs.html":[7,0,14,11,6],
-"TimeOfDayCycle_8cs.html":[7,0,7,6,9],
+"TimeOfDayCycle_8cs.html":[7,0,7,6,11],
 "TimeOfDayOrbit_8cs.html":[7,0,18,21],
 "TimeOfDayService_8cs.html":[7,0,14,11,7],
 "TimeOfDaySource_8cs.html":[7,0,3,5,34],
@@ -247,7 +249,5 @@ var NAVTREEINDEX3 =
 "TrailFlightRegistry_8cs.html":[7,0,14,9,15],
 "TrailFlight_8cs.html":[7,0,14,9,14],
 "TrailId_8cs.html":[7,0,7,8,6],
-"TrailMotion_8cs.html":[7,0,18,7,8],
-"TrailSpawner_8cs.html":[7,0,14,9,16],
-"TransformCapturedMessage_8cs.html":[7,0,14,7,50]
+"TrailMotion_8cs.html":[7,0,18,7,8]
 };

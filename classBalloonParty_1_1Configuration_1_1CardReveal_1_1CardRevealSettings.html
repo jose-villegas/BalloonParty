@@ -137,6 +137,18 @@ Properties</h2></td></tr>
 <tr class="memitem:ae17ae7beb541a12f90a19c9bc5ecd673" id="r_ae17ae7beb541a12f90a19c9bc5ecd673"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae17ae7beb541a12f90a19c9bc5ecd673">BalloonColor</a><code> [get]</code></td></tr>
 <tr class="memdesc:ae17ae7beb541a12f90a19c9bc5ecd673"><td class="mdescLeft">&#160;</td><td class="mdescRight">The prize balloon's colour: none of the board's, so it reads as the reward.  <br /></td></tr>
 <tr class="separator:ae17ae7beb541a12f90a19c9bc5ecd673"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada690440e9dba104cef52bdd23bba1f0" id="r_ada690440e9dba104cef52bdd23bba1f0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada690440e9dba104cef52bdd23bba1f0">BonusRibbonDelaySeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:ada690440e9dba104cef52bdd23bba1f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds after a purple level's play begins before its bonus ribbon bursts in.  <br /></td></tr>
+<tr class="separator:ada690440e9dba104cef52bdd23bba1f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4e300709a273b3bd3a3093a410f587b" id="r_ad4e300709a273b3bd3a3093a410f587b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad4e300709a273b3bd3a3093a410f587b">BonusRibbonSeconds</a><code> [get]</code></td></tr>
+<tr class="memdesc:ad4e300709a273b3bd3a3093a410f587b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds the bonus ribbon flies, from its burst to gone, its exit included.  <br /></td></tr>
+<tr class="separator:ad4e300709a273b3bd3a3093a410f587b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65402f404bda6bcf03ef59b3247b0618" id="r_a65402f404bda6bcf03ef59b3247b0618"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a65402f404bda6bcf03ef59b3247b0618">BonusRibbonText</a><code> [get]</code></td></tr>
+<tr class="memdesc:a65402f404bda6bcf03ef59b3247b0618"><td class="mdescLeft">&#160;</td><td class="mdescRight">What the ribbon a purple level starts with says.  <br /></td></tr>
+<tr class="separator:a65402f404bda6bcf03ef59b3247b0618"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7428acc267bbaaa5b7579903a4d8432" id="r_aa7428acc267bbaaa5b7579903a4d8432"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa7428acc267bbaaa5b7579903a4d8432">BonusRibbonTextColor</a><code> [get]</code></td></tr>
+<tr class="memdesc:aa7428acc267bbaaa5b7579903a4d8432"><td class="mdescLeft">&#160;</td><td class="mdescRight">The colour of the bonus ribbon's text.  <br /></td></tr>
+<tr class="separator:aa7428acc267bbaaa5b7579903a4d8432"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0bbd3aef91cee896a765a6fa537f9e3" id="r_ae0bbd3aef91cee896a765a6fa537f9e3"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae0bbd3aef91cee896a765a6fa537f9e3">CappedDissolveDelay</a><code> [get]</code></td></tr>
 <tr class="memdesc:ae0bbd3aef91cee896a765a6fa537f9e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">How long a capped title stands, once the capped ribbon has burst out, before it dissolves.  <br /></td></tr>
 <tr class="separator:ae0bbd3aef91cee896a765a6fa537f9e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -302,6 +314,14 @@ Properties</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a2091f49f89bb1f573405e725c7639fca" id="r_a2091f49f89bb1f573405e725c7639fca"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2091f49f89bb1f573405e725c7639fca">_balloonColor</a> = new(0.8f, 0.82f, 0.87f, 1f)</td></tr>
 <tr class="separator:a2091f49f89bb1f573405e725c7639fca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2943ba0cddfb03588e875a00fe7bd0f0" id="r_a2943ba0cddfb03588e875a00fe7bd0f0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2943ba0cddfb03588e875a00fe7bd0f0">_bonusRibbonDelaySeconds</a> = 0.4f</td></tr>
+<tr class="separator:a2943ba0cddfb03588e875a00fe7bd0f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a51d0785269b6ea40ac395b4183341e" id="r_a7a51d0785269b6ea40ac395b4183341e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7a51d0785269b6ea40ac395b4183341e">_bonusRibbonSeconds</a> = 2.2f</td></tr>
+<tr class="separator:a7a51d0785269b6ea40ac395b4183341e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ad1ee88d0d7a3712eb8a2e84caa995b" id="r_a4ad1ee88d0d7a3712eb8a2e84caa995b"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ad1ee88d0d7a3712eb8a2e84caa995b">_bonusRibbonText</a> = &quot;Bonus&quot;</td></tr>
+<tr class="separator:a4ad1ee88d0d7a3712eb8a2e84caa995b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a198592d5576e69a3f014a06dd3a2ed1a" id="r_a198592d5576e69a3f014a06dd3a2ed1a"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a198592d5576e69a3f014a06dd3a2ed1a">_bonusRibbonTextColor</a> = new(0.21f, 0.22f, 0.24f, 1f)</td></tr>
+<tr class="separator:a198592d5576e69a3f014a06dd3a2ed1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae017a0e0957bdc84dba04743ba722c47" id="r_ae017a0e0957bdc84dba04743ba722c47"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae017a0e0957bdc84dba04743ba722c47">_cappedDissolveDelay</a> = 0.5f</td></tr>
 <tr class="separator:ae017a0e0957bdc84dba04743ba722c47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5665dce344b02ef4c1d1df402afdc96e" id="r_a5665dce344b02ef4c1d1df402afdc96e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5665dce344b02ef4c1d1df402afdc96e">_cappedDissolveSeconds</a> = 0.9f</td></tr>
@@ -426,6 +446,94 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">Color BalloonParty.Configuration.CardReveal.CardRevealSettings._balloonColor = new(0.8f, 0.82f, 0.87f, 1f)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2943ba0cddfb03588e875a00fe7bd0f0" name="a2943ba0cddfb03588e875a00fe7bd0f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2943ba0cddfb03588e875a00fe7bd0f0">&#9670;&#160;</a></span>_bonusRibbonDelaySeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._bonusRibbonDelaySeconds = 0.4f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7a51d0785269b6ea40ac395b4183341e" name="a7a51d0785269b6ea40ac395b4183341e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7a51d0785269b6ea40ac395b4183341e">&#9670;&#160;</a></span>_bonusRibbonSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings._bonusRibbonSeconds = 2.2f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4ad1ee88d0d7a3712eb8a2e84caa995b" name="a4ad1ee88d0d7a3712eb8a2e84caa995b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ad1ee88d0d7a3712eb8a2e84caa995b">&#9670;&#160;</a></span>_bonusRibbonText</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string BalloonParty.Configuration.CardReveal.CardRevealSettings._bonusRibbonText = &quot;Bonus&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a198592d5576e69a3f014a06dd3a2ed1a" name="a198592d5576e69a3f014a06dd3a2ed1a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a198592d5576e69a3f014a06dd3a2ed1a">&#9670;&#160;</a></span>_bonusRibbonTextColor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Color BalloonParty.Configuration.CardReveal.CardRevealSettings._bonusRibbonTextColor = new(0.21f, 0.22f, 0.24f, 1f)</td>
         </tr>
       </table>
   </td>
@@ -1649,6 +1757,110 @@ Private Attributes</h2></td></tr>
 <p>The prize balloon's colour: none of the board's, so it reads as the reward. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a85506378245e5c6b777be02e5c7b5701">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="ada690440e9dba104cef52bdd23bba1f0" name="ada690440e9dba104cef52bdd23bba1f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada690440e9dba104cef52bdd23bba1f0">&#9670;&#160;</a></span>BonusRibbonDelaySeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings.BonusRibbonDelaySeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds after a purple level's play begins before its bonus ribbon bursts in. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a636ff9c091469630fb2f5021fe6cfd31">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="ad4e300709a273b3bd3a3093a410f587b" name="ad4e300709a273b3bd3a3093a410f587b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4e300709a273b3bd3a3093a410f587b">&#9670;&#160;</a></span>BonusRibbonSeconds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.CardReveal.CardRevealSettings.BonusRibbonSeconds</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds the bonus ribbon flies, from its burst to gone, its exit included. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a35b974ee3d71f8dec32f36456a72efe3">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="a65402f404bda6bcf03ef59b3247b0618" name="a65402f404bda6bcf03ef59b3247b0618"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65402f404bda6bcf03ef59b3247b0618">&#9670;&#160;</a></span>BonusRibbonText</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string BalloonParty.Configuration.CardReveal.CardRevealSettings.BonusRibbonText</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>What the ribbon a purple level starts with says. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ac1adfefd86084797af0a5768727f39f0">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
+
+</div>
+</div>
+<a id="aa7428acc267bbaaa5b7579903a4d8432" name="aa7428acc267bbaaa5b7579903a4d8432"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7428acc267bbaaa5b7579903a4d8432">&#9670;&#160;</a></span>BonusRibbonTextColor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Color BalloonParty.Configuration.CardReveal.CardRevealSettings.BonusRibbonTextColor</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The colour of the bonus ribbon's text. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ac17f89205e8769e5d969849e47b12daa">BalloonParty.Configuration.CardReveal.ICardRevealSettings</a>.</p>
 
 </div>
 </div>

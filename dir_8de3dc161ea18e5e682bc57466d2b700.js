@@ -1,6 +1,8 @@
 var dir_8de3dc161ea18e5e682bc57466d2b700 =
 [
+    [ "BonusLevelCue.cs", "BonusLevelCue_8cs.html", "BonusLevelCue_8cs" ],
     [ "IActiveLevelParameters.cs", "IActiveLevelParameters_8cs.html", "IActiveLevelParameters_8cs" ],
+    [ "IBonusLevelCue.cs", "IBonusLevelCue_8cs.html", "IBonusLevelCue_8cs" ],
     [ "ILevelProgress.cs", "ILevelProgress_8cs.html", "ILevelProgress_8cs" ],
     [ "ILevelThresholds.cs", "ILevelThresholds_8cs.html", "ILevelThresholds_8cs" ],
     [ "LevelCompletion.cs", "LevelCompletion_8cs.html", "LevelCompletion_8cs" ],

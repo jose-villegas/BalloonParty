@@ -142,9 +142,15 @@ Package Functions</h2></td></tr>
 <tr class="memitem:aae229ce58eac4805376b9380d986d3c6" id="r_aae229ce58eac4805376b9380d986d3c6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aae229ce58eac4805376b9380d986d3c6">Fly</a> (float sinceRelease, float exit, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html">ICardRevealSettings</a> settings)</td></tr>
 <tr class="memdesc:aae229ce58eac4805376b9380d986d3c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Its pose <em>sinceRelease</em>  seconds after the pop let it go: the burst out, then the swell, drift and sway, and <em>exit</em>  (0 to 1) of the way through its flight off.  <br /></td></tr>
 <tr class="separator:aae229ce58eac4805376b9380d986d3c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a987cceb7535c379b848d4e72e757c347" id="r_a987cceb7535c379b848d4e72e757c347"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a987cceb7535c379b848d4e72e757c347">Recolor</a> (Color ribbon, Color text)</td></tr>
+<tr class="memdesc:a987cceb7535c379b848d4e72e757c347"><td class="mdescLeft">&#160;</td><td class="mdescRight">Paints the ribbon and its text, before it is shown.  <br /></td></tr>
+<tr class="separator:a987cceb7535c379b848d4e72e757c347"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a121b52eb29326a04fd449f5120bfcf6c" id="r_a121b52eb29326a04fd449f5120bfcf6c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a121b52eb29326a04fd449f5120bfcf6c">Rest</a> ()</td></tr>
 <tr class="memdesc:a121b52eb29326a04fd449f5120bfcf6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rolled up inside the balloon, before the pop.  <br /></td></tr>
 <tr class="separator:a121b52eb29326a04fd449f5120bfcf6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a1ebee174ff28e463b5c7ba5cde5cae" id="r_a2a1ebee174ff28e463b5c7ba5cde5cae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a1ebee174ff28e463b5c7ba5cde5cae">SetFlight</a> (Vector2 from, float fromTilt, float fromScale, Vector2 to, float tilt, Vector2 drift, Vector2 exitBy)</td></tr>
+<tr class="memdesc:a2a1ebee174ff28e463b5c7ba5cde5cae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets where the piece flies, for one built at runtime rather than laid out in the canvas: from <em>from</em>  (tilted <em>fromTilt</em> , at <em>fromScale</em> ) to <em>to</em>  (tilted <em>tilt</em> ), drifting <em>drift</em>  a second, and off by <em>exitBy</em> .  <br /></td></tr>
+<tr class="separator:a2a1ebee174ff28e463b5c7ba5cde5cae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a869cd897b22ff1b62399cd036009b0a9" id="r_a869cd897b22ff1b62399cd036009b0a9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a869cd897b22ff1b62399cd036009b0a9">Show</a> (string line, bool struck=false)</td></tr>
 <tr class="memdesc:a869cd897b22ff1b62399cd036009b0a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes <em>line</em>  on the ribbon, <em>struck</em>  through or not, and sizes the ribbon to it.  <br /></td></tr>
 <tr class="separator:a869cd897b22ff1b62399cd036009b0a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -406,6 +412,37 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a987cceb7535c379b848d4e72e757c347" name="a987cceb7535c379b848d4e72e757c347"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a987cceb7535c379b848d4e72e757c347">&#9670;&#160;</a></span>Recolor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.CardReveal.RibbonPiece.Recolor </td>
+          <td>(</td>
+          <td class="paramtype">Color</td>          <td class="paramname"><span class="paramname"><em>ribbon</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Color</td>          <td class="paramname"><span class="paramname"><em>text</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Paints the ribbon and its text, before it is shown. </p>
+
+</div>
+</div>
 <a id="a121b52eb29326a04fd449f5120bfcf6c" name="a121b52eb29326a04fd449f5120bfcf6c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a121b52eb29326a04fd449f5120bfcf6c">&#9670;&#160;</a></span>Rest()</h2>
 
@@ -430,6 +467,62 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Rolled up inside the balloon, before the pop. </p>
+
+</div>
+</div>
+<a id="a2a1ebee174ff28e463b5c7ba5cde5cae" name="a2a1ebee174ff28e463b5c7ba5cde5cae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a1ebee174ff28e463b5c7ba5cde5cae">&#9670;&#160;</a></span>SetFlight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.CardReveal.RibbonPiece.SetFlight </td>
+          <td>(</td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>from</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>fromTilt</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>fromScale</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>to</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>tilt</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>drift</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector2</td>          <td class="paramname"><span class="paramname"><em>exitBy</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets where the piece flies, for one built at runtime rather than laid out in the canvas: from <em>from</em>  (tilted <em>fromTilt</em> , at <em>fromScale</em> ) to <em>to</em>  (tilted <em>tilt</em> ), drifting <em>drift</em>  a second, and off by <em>exitBy</em> . </p>
 
 </div>
 </div>

@@ -1,5 +1,7 @@
 var NAVTREEINDEX4 =
 {
+"TrailSpawner_8cs.html":[7,0,14,9,16],
+"TransformCapturedMessage_8cs.html":[7,0,14,7,50],
 "TransformExtensions_8cs.html":[7,0,14,4,20],
 "TransformTrailEndpoint_8cs.html":[7,0,14,9,17],
 "TriggerLevelUpCheat_8cs.html":[7,0,2,26],
@@ -247,7 +249,5 @@ var NAVTREEINDEX4 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#ab3284995fb7c7a5af38d4941df909411":[6,0,0,0,0,3,22],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#ac77d8deb7688abcf83063bcec1ecd1b0":[5,0,0,0,0,3,43],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#ac77d8deb7688abcf83063bcec1ecd1b0":[6,0,0,0,0,3,43],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#ac88fb227084e31ce37d9e82cb33e4ebb":[5,0,0,0,0,3,12],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#ac88fb227084e31ce37d9e82cb33e4ebb":[6,0,0,0,0,3,12],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#aca0e5338b977b84888b87e12744f4ebd":[5,0,0,0,0,3,36]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#ac88fb227084e31ce37d9e82cb33e4ebb":[5,0,0,0,0,3,12]
 };

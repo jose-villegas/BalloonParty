@@ -1,5 +1,7 @@
 var NAVTREEINDEX2 =
 {
+"InjectingPoolChannel_8cs.html":[7,0,14,9,3],
+"InputHelper_8cs.html":[7,0,14,4,9],
 "IntLevelStep_8cs.html":[7,0,3,9,13],
 "ItemActivatedMessage_8cs.html":[7,0,14,7,12],
 "ItemActivationContext_8cs.html":[7,0,8,18],
@@ -54,10 +56,10 @@ var NAVTREEINDEX2 =
 "LevelAscendCinematic_8cs.html":[7,0,7,1,14],
 "LevelAscendSettings_8cs.html":[7,0,3,3,5],
 "LevelAscendStartedMessage_8cs.html":[7,0,14,7,14],
-"LevelCompletion_8cs.html":[7,0,7,6,3],
-"LevelController_8cs.html":[7,0,7,6,4],
+"LevelCompletion_8cs.html":[7,0,7,6,5],
+"LevelController_8cs.html":[7,0,7,6,6],
 "LevelDescendStartedMessage_8cs.html":[7,0,14,7,15],
-"LevelDifficultyResolver_8cs.html":[7,0,7,6,5],
+"LevelDifficultyResolver_8cs.html":[7,0,7,6,7],
 "LevelGenerationPreview_8cs.html":[7,0,6,27],
 "LevelGenerationSettings_8cs.html":[7,0,3,9,17],
 "LevelGenerator_8cs.html":[7,0,3,9,18],
@@ -75,14 +77,14 @@ var NAVTREEINDEX2 =
 "LevelSeedHash_8cs.html":[7,0,3,9,24],
 "LevelSteps_8cs.html":[7,0,3,9,25],
 "LevelTransitionCompletedMessage_8cs.html":[7,0,14,7,16],
-"LevelTransitionController_8cs.html":[7,0,7,6,6],
+"LevelTransitionController_8cs.html":[7,0,7,6,8],
 "LevelUpAbandonedMessage_8cs.html":[7,0,14,7,17],
 "LevelUpAbortedMessage_8cs.html":[7,0,14,7,18],
 "LevelUpCinematic_8cs.html":[7,0,7,1,15],
 "LevelUpDismissedMessage_8cs.html":[7,0,14,7,19],
 "LevelUpFillTrailsMessage_8cs.html":[7,0,14,7,20],
 "LevelUpLifetimeScope_8cs.html":[7,0,18,6,0],
-"LevelUpPhase_8cs.html":[7,0,7,6,7],
+"LevelUpPhase_8cs.html":[7,0,7,6,9],
 "LevelUpPopUp_8cs.html":[7,0,18,6,1],
 "LifecycleHelper_8cs.html":[7,0,14,4,10],
 "LightStampCheat_8cs.html":[7,0,2,17],
@@ -247,7 +249,5 @@ var NAVTREEINDEX2 =
 "RecordField_8cs.html":[7,0,18,9,7],
 "RecordKind_8cs.html":[7,0,7,9,24],
 "RectAnchorMath_8cs.html":[7,0,18,18],
-"ReinforcementPlan_8cs.html":[7,0,1,4,8],
-"RejectedBalloonEffect_8cs.html":[7,0,1,4,9],
-"ReleasePublisher_8cs.html":[7,0,6,4,0]
+"ReinforcementPlan_8cs.html":[7,0,1,4,8]
 };

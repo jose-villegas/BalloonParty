@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.Level.IBonusLevelCue" name="BalloonParty.Game.Level.IBonusLevelCue">
+<area shape="rect" id="Node000001" title="When a purple (extra&#45;colour) level starts: once per level, as play begins on it." alt="" coords="5,5,193,50"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html" title="Says when a purple (extra&#45;colour) level starts, so the screen can name it a bonus: once per level,..." alt="" coords="5,98,193,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="101,64,102,99,96,97,97,68"/>
+</map>

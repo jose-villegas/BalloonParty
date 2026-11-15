@@ -23,7 +23,7 @@ var searchData=
   ['edgeshadeid_20',['EdgeShadeId',['../classBalloonParty_1_1Editor_1_1Bush_1_1BushLeafBaker.html#ad964b75aecf183dddb4175c9e768c805',1,'BalloonParty::Editor::Bush::BushLeafBaker']]],
   ['editmodetestrunner_21',['EditModeTestRunner',['../classBalloonParty_1_1Editor_1_1TestRunner_1_1EditModeTestRunner.html',1,'BalloonParty::Editor::TestRunner']]],
   ['editmodetestrunner_2ecs_22',['EditModeTestRunner.cs',['../EditModeTestRunner_8cs.html',1,'']]],
-  ['editor_23',['Editor',['../plan_future_ideas.html#autotoc_md477',1,'3 — Custom Level Editor'],['../plan_future_ideas.html#autotoc_md480',1,'3.3 Custom Level Editor Window (Unity Editor)'],['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Configuration/README.md#autotoc_md70',1,'Editor'],['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/UI/Telemetry/README.md#autotoc_md1156',1,'Editor']]],
+  ['editor_23',['Editor',['../plan_future_ideas.html#autotoc_md477',1,'3 — Custom Level Editor'],['../plan_future_ideas.html#autotoc_md480',1,'3.3 Custom Level Editor Window (Unity Editor)'],['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Configuration/README.md#autotoc_md70',1,'Editor'],['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/UI/Telemetry/README.md#autotoc_md1157',1,'Editor']]],
   ['editor_24',['3. Overdraw look (editor)',['../plan_performance_recovery.html#autotoc_md758',1,'']]],
   ['editor_202026_2011_2011_25',['Findings from the Editor (2026-11-11)',['../plan_hdr.html#autotoc_md672',1,'']]],
   ['editor_20authoring_20requirements_26',['Configuration (in-editor authoring requirements)',['..//home/runner/work/BalloonParty/BalloonParty/Assets/Source/Audio/README.md#autotoc_md17',1,'']]],

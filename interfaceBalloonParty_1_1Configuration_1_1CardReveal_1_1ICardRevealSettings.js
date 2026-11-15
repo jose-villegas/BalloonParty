@@ -1,6 +1,10 @@
 var interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings =
 [
     [ "BalloonColor", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a85506378245e5c6b777be02e5c7b5701", null ],
+    [ "BonusRibbonDelaySeconds", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a636ff9c091469630fb2f5021fe6cfd31", null ],
+    [ "BonusRibbonSeconds", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a35b974ee3d71f8dec32f36456a72efe3", null ],
+    [ "BonusRibbonText", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ac1adfefd86084797af0a5768727f39f0", null ],
+    [ "BonusRibbonTextColor", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ac17f89205e8769e5d969849e47b12daa", null ],
     [ "CappedDissolveDelay", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#aba63742e62a7e1d45d69d29c39992db9", null ],
     [ "CappedDissolveSeconds", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#ac3de5592b28bdcdfa69ad01c097955d6", null ],
     [ "FramesPerSecond", "interfaceBalloonParty_1_1Configuration_1_1CardReveal_1_1ICardRevealSettings.html#a7519057eaff5377811d9f045fd90d09f", null ],

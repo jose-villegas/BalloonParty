@@ -86,6 +86,7 @@ var NAVTREEINDEX0 =
 "BombItemHandler_8cs.html":[7,0,8,0,1],
 "BombRangePreview_8cs.html":[7,0,8,5,0],
 "BonusCardDealtMessage_8cs.html":[7,0,14,7,5],
+"BonusLevelCue_8cs.html":[7,0,7,6,0],
 "BounceHeadsUpRouter_8cs.html":[7,0,7,4,0,0],
 "BubbleClusterModel_8cs.html":[7,0,1,2,4],
 "BubbleMergeRule_8cs.html":[7,0,1,0,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "GameOverDismissedMessage_8cs.html":[7,0,14,7,9],
 "GameOverLayoutBuilder_8cs.html":[7,0,6,21],
 "GameOverLifetimeScope_8cs.html":[7,0,18,3,0],
-"GameOverLossCinematic_8cs.html":[7,0,7,1,9],
-"GameOverMessage_8cs.html":[7,0,14,7,10]
+"GameOverLossCinematic_8cs.html":[7,0,7,1,9]
 };

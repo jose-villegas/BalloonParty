@@ -275,6 +275,9 @@ var hierarchy =
     [ "BalloonParty.Game.Run.IBonusCardSource", "interfaceBalloonParty_1_1Game_1_1Run_1_1IBonusCardSource.html", [
       [ "BalloonParty.Game.Upgrades.RunUpgrades", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html", null ]
     ] ],
+    [ "BalloonParty.Game.Level.IBonusLevelCue", "interfaceBalloonParty_1_1Game_1_1Level_1_1IBonusLevelCue.html", [
+      [ "BalloonParty.Game.Level.BonusLevelCue", "classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html", null ]
+    ] ],
     [ "BalloonParty.Configuration.Level.IBubbleRiseSettings", "interfaceBalloonParty_1_1Configuration_1_1Level_1_1IBubbleRiseSettings.html", [
       [ "BalloonParty.Configuration.Level.BubbleRiseSettings", "classBalloonParty_1_1Configuration_1_1Level_1_1BubbleRiseSettings.html", null ]
     ] ],
@@ -400,6 +403,7 @@ var hierarchy =
       [ "BalloonParty.Game.HeadsUp.Routing.ProgressHeadsUpRouter", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1ProgressHeadsUpRouter.html", null ],
       [ "BalloonParty.Game.Health.PlayerHealthController", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html", null ],
       [ "BalloonParty.Game.LaunchContinueController", "classBalloonParty_1_1Game_1_1LaunchContinueController.html", null ],
+      [ "BalloonParty.Game.Level.BonusLevelCue", "classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html", null ],
       [ "BalloonParty.Game.Level.LevelController", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html", null ],
       [ "BalloonParty.Game.Level.LevelDifficultyResolver", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html", null ],
       [ "BalloonParty.Game.Level.LevelTransitionController", "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html", null ],
@@ -819,6 +823,7 @@ var hierarchy =
       [ "BalloonParty.Game.Cinematics.HeartDrainCinematic", "classBalloonParty_1_1Game_1_1Cinematics_1_1HeartDrainCinematic.html", null ],
       [ "BalloonParty.Game.Health.HeartTrailTracker", "classBalloonParty_1_1Game_1_1Health_1_1HeartTrailTracker.html", null ],
       [ "BalloonParty.Game.Health.PlayerHealthController", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html", null ],
+      [ "BalloonParty.Game.Level.BonusLevelCue", "classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html", null ],
       [ "BalloonParty.Game.Level.LevelController", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html", null ],
       [ "BalloonParty.Game.Level.LevelDifficultyResolver", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html", null ],
       [ "BalloonParty.Game.Level.TimeOfDayCycle", "classBalloonParty_1_1Game_1_1Level_1_1TimeOfDayCycle.html", null ],
@@ -1024,6 +1029,7 @@ var hierarchy =
       [ "BalloonParty.Game.HeadsUp.Routing.ProgressHeadsUpRouter", "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1ProgressHeadsUpRouter.html", null ],
       [ "BalloonParty.Game.Health.PlayerHealthController", "classBalloonParty_1_1Game_1_1Health_1_1PlayerHealthController.html", null ],
       [ "BalloonParty.Game.LaunchContinueController", "classBalloonParty_1_1Game_1_1LaunchContinueController.html", null ],
+      [ "BalloonParty.Game.Level.BonusLevelCue", "classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html", null ],
       [ "BalloonParty.Game.Level.LevelController", "classBalloonParty_1_1Game_1_1Level_1_1LevelController.html", null ],
       [ "BalloonParty.Game.Level.LevelDifficultyResolver", "classBalloonParty_1_1Game_1_1Level_1_1LevelDifficultyResolver.html", null ],
       [ "BalloonParty.Game.Level.LevelTransitionController", "classBalloonParty_1_1Game_1_1Level_1_1LevelTransitionController.html", null ],

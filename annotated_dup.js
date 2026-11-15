@@ -503,7 +503,9 @@ var annotated_dup =
           [ "WaveDeficitCalculator", "classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator.html", "classBalloonParty_1_1Game_1_1Health_1_1WaveDeficitCalculator" ]
         ] ],
         [ "Level", "namespaceBalloonParty_1_1Game_1_1Level.html", [
+          [ "BonusLevelCue", "classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html", "classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue" ],
           [ "IActiveLevelParameters", "interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters.html", "interfaceBalloonParty_1_1Game_1_1Level_1_1IActiveLevelParameters" ],
+          [ "IBonusLevelCue", "interfaceBalloonParty_1_1Game_1_1Level_1_1IBonusLevelCue.html", "interfaceBalloonParty_1_1Game_1_1Level_1_1IBonusLevelCue" ],
           [ "ILevelProgress", "interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress.html", "interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelProgress" ],
           [ "ILevelThresholds", "interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelThresholds.html", "interfaceBalloonParty_1_1Game_1_1Level_1_1ILevelThresholds" ],
           [ "LevelCompletion", "classBalloonParty_1_1Game_1_1Level_1_1LevelCompletion.html", "classBalloonParty_1_1Game_1_1Level_1_1LevelCompletion" ],
