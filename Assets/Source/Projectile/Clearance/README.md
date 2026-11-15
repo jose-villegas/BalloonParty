@@ -58,7 +58,12 @@ The ball held in the thrower gets no circle: it sits below the board, where noth
   Formation pens, range pens and the heart trail don't bend (see the plan for why).
 - **Effect shaders**: the ticker publishes `_ClearanceCircles` (8 × `float4`: centre xy, effective
   radius, strength), `_ClearanceCount`, `_ClearanceFloor` and `_ClearanceSoftness` every frame. With
-  `FadeEffects` off it publishes a count of 0.
+  `FadeEffects` off it publishes a count of 0. `Shaders/BalloonParty/Include/Clearance.cginc` reads them:
+  `ClearanceAlpha(worldXY)` is 1 outside every circle and eases down to the floor inside. Materials opt in
+  with the "Fade Round Balls" toggle (`_CLEARANCE_FADE`) on `Grid/PuffCloud`, `Particle/Glow`,
+  `Sprite/ShinyDefault` and `Paint/PaintBlob`; it is on for the effects that draw over the ball (puff
+  clouds, the laser, lightning, the bomb burst, paint blobs and splash, score trail ribbons) and off for the
+  balloons and pickups that share those shaders. The shader README lists the materials.
 
 ## Settings
 

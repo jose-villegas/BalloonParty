@@ -179,16 +179,17 @@ half ClearanceAlpha(float2 worldXY);
 
 The loop runs to `_ClearanceCount` (usually 1 to 3), and with no ball in flight it costs one compare. Each
 shader below includes it and multiplies its output by `ClearanceAlpha(worldPos.xy)`: the whole colour for
-the premultiplied ones, alpha alone for straight alpha.
+the premultiplied ones, alpha alone for straight alpha. Each takes a `_CLEARANCE_FADE` material toggle ("Fade Round
+Balls"), so only the materials of effects drawn over the ball fade, not the balloons and pickups that share a shader.
 
 | Shader | Effects | Work |
 |---|---|---|
 | `Grid/PuffCloud.shader` | Puff clouds | World position already in the fragment; fade every return (body and shadow) |
 | `Particle/Glow.shader` | Laser beams, lightning bolts | Add a world-position interpolator (`mul(unity_ObjectToWorld, v.vertex)`); it is world space already for LineRenderers |
-| `Sprite/SpriteShine.shader` | Laser shine and shadow | Fade its output; check its other users first, and gate it behind a material toggle if any must not fade |
-| `Paint/PaintBlob.shader` | Paint blobs | World position already in the fragment |
-| New `Particle/ParticleClearance.shader` | Bomb burst, paint splash and drip particles, score trail ribbons | These use Unity's built-in legacy particle shader, which can't take the include. A small replacement that matches its look (texture × vertex colour, alpha blended) and fades; swapped onto their materials |
-| `Grid/BushLeaf.shader`, `Grid/BushBranch.shader` | Bushes | **Only if** the Frame Debugger shows them drawing over the ball. The leaf shader needs one interpolator |
+| `Sprite/SpriteShine.shader` | Laser shine and shadow | Fade its output. `Shine` and `LaserShadow` are shared with the tough balloon and the laser pickup, so the laser effect gets its own copies, `LaserRangeShine` and `LaserRangeShadow`, with the fade on |
+| `Paint/PaintBlob.shader` | Paint blobs | Its world position only exists with the cloud-fade shadow on, so the fade carries its own. On for the flying blobs (`PaintFlyingBlob`); the paint pickup's `PaintBlob` stays off |
+| `Particle/Glow.shader` again | Bomb burst, paint splash particles, score trail ribbons | These used Unity's built-in Mobile/Particles/Alpha Blended, which can't take the include. `Glow` at `_HdrBoost` 1 with `_SrcBlend` SrcAlpha, `_DstBlend` OneMinusSrcAlpha and `_ColorMask` RGB is the same look (texture × vertex colour, alpha blended, no alpha written), so they moved onto it with the fade on; no new shader |
+| `Grid/BushLeaf.shader`, `Grid/BushBranch.shader` | Bushes | Left alone. `BushView` draws them with `Graphics.DrawMesh`, which takes no sorting layer, so they land on Default, under the ball (`BushSettings.SortingLayerId` is read by nothing) |
 
 The floor is an alpha, not zero: a laser over the ball still reads as a laser, a cloud as a cloud, but the
 ball shows through. 0.3 to start; tuned on the phone.

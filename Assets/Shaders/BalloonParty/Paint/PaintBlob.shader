@@ -4,6 +4,9 @@ Shader "BalloonParty/Paint/PaintBlob"
     {
         _Color              ("Paint Color",          Color)              = (1, 0.2, 0.2, 1)
         [HideInInspector] _RendererColor ("Renderer Color", Color) = (1, 1, 1, 1)
+        // Thins the effect out inside the clear circle round each ball in flight (Include/Clearance.cginc),
+        // so it never buries the ball. For effects drawn over the ball only.
+        [Toggle(_CLEARANCE_FADE)] _ClearanceFade ("Fade Round Balls", Float) = 0
 
         [Header(Blob Shape)]
         _SpriteScale        ("Sprite Scale",         Range(0.50, 1.00))  = 1.0
@@ -78,6 +81,7 @@ Shader "BalloonParty/Paint/PaintBlob"
             #pragma target 3.5
             #pragma shader_feature _SHADOW_ON
             #pragma shader_feature_local _CLOUD_FADE_ON
+            #pragma shader_feature_local _CLEARANCE_FADE
             #pragma multi_compile_instancing
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
@@ -86,6 +90,11 @@ Shader "BalloonParty/Paint/PaintBlob"
             #include "../Include/BackgroundField.cginc"
             #include "../Include/SmokeField.cginc"
             #include "../Include/Ground.cginc"
+            #include "../Include/Clearance.cginc"
+
+            #if defined(_CLEARANCE_FADE) || (defined(_SHADOW_ON) && defined(_CLOUD_FADE_ON))
+            #define BLOB_WORLD_POS
+            #endif
 
             struct appdata_t
             {
@@ -107,13 +116,14 @@ Shader "BalloonParty/Paint/PaintBlob"
                 float3 lightTint : TEXCOORD3;
                 #ifdef _SHADOW_ON
                 float  shadowFade : TEXCOORD4;
-                #if defined(_CLOUD_FADE_ON)
+                #endif
+                #ifdef BLOB_WORLD_POS
                 // The fragment's own world position — the shadow is drawn at the SAME screen/world
                 // pixels as the blob (an SDF-shift trick moves the SHAPE, not the quad), so this is
                 // what's actually "behind" a given shadow pixel. Per-fragment, not per-blob, so the
                 // fade can vary across the shadow's own footprint (e.g. half on a cloud, half off).
+                // The clearance fade reads it too.
                 float2 worldPos : TEXCOORD5;
-                #endif
                 #endif
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
@@ -214,17 +224,17 @@ Shader "BalloonParty/Paint/PaintBlob"
                 OUT.lightTint = SceneLightTintAtLOD(blobCenterWorld);
                 #ifdef _SHADOW_ON
                 OUT.shadowFade = ShadowLightFadeAtLOD(blobCenterWorld);
-                #if defined(_CLOUD_FADE_ON)
+                #endif
+                #ifdef BLOB_WORLD_POS
                 // Per-vertex world position, interpolated to each fragment below — unlike lightDir/
                 // lightTint/shadowFade (deliberately ONE coherent sample per blob), the background field
-                // needs the REAL position under each pixel so the fade can vary across the shadow.
+                // and the clearance fade need the REAL position under each pixel.
                 OUT.worldPos = mul(unity_ObjectToWorld, IN.vertex).xy;
-                #endif
                 #endif
                 return OUT;
             }
 
-            fixed4 frag(v2f IN) : SV_Target
+            fixed4 BlobFrag(v2f IN)
             {
                 UNITY_SETUP_INSTANCE_ID(IN);
                 float2 uv  = (IN.texcoord - 0.5) / _SpriteScale;
@@ -325,6 +335,15 @@ Shader "BalloonParty/Paint/PaintBlob"
                 #else
                 return fixed4(col, alpha);
                 #endif
+            }
+
+            fixed4 frag(v2f IN) : SV_Target
+            {
+                fixed4 color = BlobFrag(IN);
+                #ifdef _CLEARANCE_FADE
+                color.a *= ClearanceAlpha(IN.worldPos);
+                #endif
+                return color;
             }
             ENDCG
         }

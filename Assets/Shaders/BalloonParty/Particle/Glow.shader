@@ -14,10 +14,16 @@ Shader "BalloonParty/Particle/Glow"
         // should bloom, and below about 4 (gamma units, so about 20x in linear light).
         _HdrBoost ("HDR Boost", Range(0, 8)) = 1
         [HideInInspector] _RendererColor ("RendererColor", Color) = (1, 1, 1, 1)
+        // Thins the effect out inside the clear circle round each ball in flight (Include/Clearance.cginc),
+        // so it never buries the ball. For effects drawn over the ball only.
+        [Toggle(_CLEARANCE_FADE)] _ClearanceFade ("Fade Round Balls", Float) = 0
 
         [Header(Blend)]
         [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend ("Src Blend", Float) = 5 // SrcAlpha
         [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend ("Dst Blend", Float) = 10 // OneMinusSrcAlpha
+        // 15 (RGBA) writes the coverage alpha below; 14 (RGB) leaves the target's alpha alone, as the built-in
+        // Mobile/Particles shaders do, for the particles and trails that moved here from them.
+        _ColorMask ("Color Mask", Float) = 15
     }
 
     SubShader
@@ -36,6 +42,7 @@ Shader "BalloonParty/Particle/Glow"
         ZWrite   Off
         // Alpha always blends as coverage, as a sprite's does: the scene capture reads it as an occluder.
         Blend    [_SrcBlend] [_DstBlend], One OneMinusSrcAlpha
+        ColorMask [_ColorMask]
 
         Pass
         {
@@ -43,7 +50,9 @@ Shader "BalloonParty/Particle/Glow"
             #pragma vertex vert
             #pragma fragment frag
             #pragma multi_compile_instancing
+            #pragma shader_feature_local _CLEARANCE_FADE
             #include "UnityCG.cginc"
+            #include "../Include/Clearance.cginc"
 
             struct appdata_t
             {
@@ -59,6 +68,9 @@ Shader "BalloonParty/Particle/Glow"
                 // half, not fixed: OpenGL ES may run fixed at lowp, which only reaches 2.
                 half4 color   : COLOR;
                 float2 uv     : TEXCOORD0;
+                #ifdef _CLEARANCE_FADE
+                float2 worldXY : TEXCOORD1;
+                #endif
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -75,6 +87,7 @@ Shader "BalloonParty/Particle/Glow"
             float4 _MainTex_ST;
             half4 _Color;
             half _HdrBoost;
+            float _SrcBlend;
 
             v2f vert(appdata_t IN)
             {
@@ -85,13 +98,26 @@ Shader "BalloonParty/Particle/Glow"
                 OUT.uv = TRANSFORM_TEX(IN.uv, _MainTex);
                 OUT.color = IN.color * _Color * _RendererColor;
                 OUT.color.rgb *= _HdrBoost;
+                #ifdef _CLEARANCE_FADE
+                OUT.worldXY = mul(unity_ObjectToWorld, IN.vertex).xy;
+                #endif
                 return OUT;
             }
 
             half4 frag(v2f IN) : SV_Target
             {
                 UNITY_SETUP_INSTANCE_ID(IN);
-                return tex2D(_MainTex, IN.uv) * IN.color;
+                half4 color = tex2D(_MainTex, IN.uv) * IN.color;
+                #ifdef _CLEARANCE_FADE
+                half fade = ClearanceAlpha(IN.worldXY);
+                color.a *= fade;
+                // A source blend of One (additive One One, or premultiplied) ignores alpha: scale the colour.
+                if (_SrcBlend < 1.5)
+                {
+                    color.rgb *= fade;
+                }
+                #endif
+                return color;
             }
             ENDCG
         }
