@@ -5,6 +5,8 @@ Shader "BalloonParty/Paint/PaintDrip"
     // whatever is underneath. It never knows accept vs reject — the balloon body has (accept) or has
     // not (reject) already committed the new colour, so the same drip reads as paint settling or
     // sliding off. Driven per-instance by _Progress / _PaintColor / _Seed (MaterialPropertyBlock).
+    // Rainbow paint (_Rainbow, per instance too, so every drip keeps one material) draws the level's own
+    // colours in diagonal bands (Include/RainbowBand.cginc) instead of _PaintColor, as the rainbow body does.
     Properties
     {
         [PerRendererData] _MainTex ("Sprite (silhouette)", 2D) = "white" {}
@@ -13,10 +15,16 @@ Shader "BalloonParty/Paint/PaintDrip"
         [HideInInspector] _PaintColor ("Paint Color", Color) = (1, 0.2, 0.2, 1)
         [HideInInspector] _Progress   ("Progress",    Range(0, 1)) = 0
         [HideInInspector] _Seed       ("Seed",        Float)       = 0
+        [HideInInspector] _Rainbow    ("Rainbow",     Float)       = 0
 
         [Header(Fill)]
         // The settled paint reads a touch deeper than the body so a same-colour reveal is still visible.
         _FillShade ("Fill Shade", Range(0.4, 1.0)) = 0.85
+
+        [Header(Rainbow Paint)]
+        _RainbowStripes ("Stripes",     Range(0.5, 6)) = 1.5
+        _RainbowScroll  ("Scroll Speed", Range(0, 4))  = 0.8
+        _RainbowBlend   ("Band Blend",  Range(0, 1))   = 0.4
 
         [Header(Drip Front)]
         _EdgeSoft  ("Front Softness", Range(0.005, 0.3)) = 0.08
@@ -79,6 +87,7 @@ Shader "BalloonParty/Paint/PaintDrip"
             #pragma target 3.0
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
+            #include "../Include/RainbowBand.cginc"
 
             struct appdata_t
             {
@@ -99,6 +108,10 @@ Shader "BalloonParty/Paint/PaintDrip"
             fixed4 _PaintColor;
             float  _Progress;
             float  _Seed;
+            float  _Rainbow;
+            float  _RainbowStripes;
+            float  _RainbowScroll;
+            float  _RainbowBlend;
             float  _FillShade;
             float  _EdgeSoft;
             float  _WaveAmp;
@@ -164,6 +177,14 @@ Shader "BalloonParty/Paint/PaintDrip"
             {
                 fixed4 tex = tex2D(_MainTex, IN.texcoord);
 
+                fixed3 paint = _PaintColor.rgb;
+                if (_Rainbow > 0.5)
+                {
+                    float s = (IN.texcoord.x + IN.texcoord.y) * _RainbowStripes * max(_RainbowBandCount, 1.0)
+                            + _Time.y * _RainbowScroll + _Seed;
+                    paint = RainbowBandColor(s, _RainbowBlend);
+                }
+
                 // v: 1 at top, 0 at bottom. Paint drains DOWN (toward v=0) as progress climbs.
                 float v = IN.texcoord.y;
 
@@ -199,7 +220,7 @@ Shader "BalloonParty/Paint/PaintDrip"
                 float spec = pow(saturate(dot(N, normalize(L + float3(0.0, 0.0, 1.0)))), _SurfaceGloss);
                 float lit = 1.0 + (ndl - 0.5) * _RippleContrast;
 
-                fixed3 rgb = _PaintColor.rgb * _FillShade * lit
+                fixed3 rgb = paint * _FillShade * lit
                            + _WetColor.rgb * (wet + spec * _SurfaceSpec);
                 fixed  a   = cover * tex.a * _PaintColor.a * IN.color.a;
 
@@ -242,7 +263,7 @@ Shader "BalloonParty/Paint/PaintDrip"
                 float3 Nb = normalize(float3(beadN, bz + 0.15));
                 float  beadSpec = pow(saturate(dot(Nb, normalize(L + float3(0.0, 0.0, 1.0)))), _DropGloss);
 
-                fixed3 dropRgb = _PaintColor.rgb * _FillShade + _WetColor.rgb * beadSpec * _DropShine;
+                fixed3 dropRgb = paint * _FillShade + _WetColor.rgb * beadSpec * _DropShine;
 
                 float onSurface = beadCov * tex.a;
                 fixed3 outRgb = lerp(rgb, dropRgb, onSurface);

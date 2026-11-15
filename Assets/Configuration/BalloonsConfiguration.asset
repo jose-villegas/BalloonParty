@@ -305,3 +305,14 @@ MonoBehaviour:
     _heartChanceMissingOne: 0.04
     _heartChanceMissingTwo: 0.12
     _heartCooldownLines: 12
+  _discoWave:
+    _seconds: 0.9
+    _nudgeOverrides:
+    - _appliesTo: 8
+      _distance: 0.2
+      _duration: 0.18
+      _falloff: 0
+    _burstScale: 0.6
+    _discMaterial: {fileID: 2100000, guid: 8a23dc21809e4ea888ad27f8fbd8c8c2, type: 2}
+    _sortingLayerName: Balloons
+    _sortingOrder: -1

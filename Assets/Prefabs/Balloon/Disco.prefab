@@ -171,7 +171,7 @@ PrefabInstance:
     - target: {fileID: 5110843805831965112, guid: 85afc73ba92384dafa9d8a43874d2dd6, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: e3d4ac01a784443ca8e3f3a0faa45418, type: 2}
+      objectReference: {fileID: 2100000, guid: 6f9fdb1aa26b45f3b3f405c45302c648, type: 2}
     - target: {fileID: 5923847143892959990, guid: 85afc73ba92384dafa9d8a43874d2dd6, type: 3}
       propertyPath: m_Name
       value: Disco
@@ -346,6 +346,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5923847143892959990, guid: 85afc73ba92384dafa9d8a43874d2dd6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3138458729521118798}
+    - targetCorrespondingSourceObject: {fileID: 5923847143892959990, guid: 85afc73ba92384dafa9d8a43874d2dd6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7423519860317245561}
   m_SourcePrefab: {fileID: 100100000, guid: 85afc73ba92384dafa9d8a43874d2dd6, type: 3}
 --- !u!212 &935605061053190623 stripped
 SpriteRenderer:
@@ -386,6 +389,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.Type.ToughBalloonType
   _renderer: {fileID: 1121172538853445364}
   _crackAnimDuration: 2
+--- !u!114 &7423519860317245561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1970275016832787898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f959bb8881224d528b1df3dc949e16e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.Type.DiscoBallLook
+  _body: {fileID: 1121172538853445364}
 --- !u!212 &4404821073302428817 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 8377671993713916893, guid: 85afc73ba92384dafa9d8a43874d2dd6, type: 3}
@@ -450,7 +466,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8f6c9bedf3b34799af3c51a50b832e95, type: 2}
+  - {fileID: 2100000, guid: 15477dba89e34c8e85d88bf89d024698, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -497,7 +513,7 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.Type.GodRaysLook
   _rays: {fileID: 2536592657193030698}
-  _colorId: HeartRays
+  _colorId: DiscoRays
 --- !u!4 &4410392761180234517 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1788660481030380393, guid: 85afc73ba92384dafa9d8a43874d2dd6, type: 3}

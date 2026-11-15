@@ -113,7 +113,7 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(GamePalette.RainbowColorId, near.Color.Value);
             Assert.AreEqual(GamePalette.RainbowColorId, far.Color.Value);
             // Immune: the drip plays and slides off, and nothing bursts.
-            toughView.Received(1).PlayPaintDrip(Arg.Any<Color>());
+            toughView.Received(1).PlayPaintDrip(Arg.Any<Color>(), true);
             toughView.DidNotReceive().PlayRecolourBurst(Arg.Any<Color>(), Arg.Any<float>());
             Assert.IsFalse(_wave.IsRunning);
             _view.Received(1).Hide();
@@ -128,7 +128,7 @@ namespace BalloonParty.Tests.Balloon
             _wave.Advance(WholeWave);
 
             view.Received(1).PlayRecolourBurst(Color.red, new DiscoWaveSettings().BurstScale);
-            view.Received(1).PlayPaintDrip(Color.white);
+            view.Received(1).PlayPaintDrip(Color.white, true);
         }
 
         [Test]
@@ -139,7 +139,7 @@ namespace BalloonParty.Tests.Balloon
             PopDisco();
             _wave.Advance(WholeWave);
 
-            view.DidNotReceive().PlayPaintDrip(Arg.Any<Color>());
+            view.DidNotReceive().PlayPaintDrip(Arg.Any<Color>(), Arg.Any<bool>());
             view.DidNotReceive().PlayRecolourBurst(Arg.Any<Color>(), Arg.Any<float>());
             _nudgePublisher.Received(1).Publish(Arg.Is<NudgeMessage>(m => ReferenceEquals(m.Actor, rainbow)));
         }
@@ -168,7 +168,7 @@ namespace BalloonParty.Tests.Balloon
             _wave.Advance(EarlyStep);
             _wave.Advance(WholeWave);
 
-            view.Received(1).PlayPaintDrip(Arg.Any<Color>());
+            view.Received(1).PlayPaintDrip(Arg.Any<Color>(), true);
             _nudgePublisher.Received(1).Publish(Arg.Is<NudgeMessage>(m =>
                 ReferenceEquals(m.Actor, near) && m.Source == NudgeType.Wave));
         }

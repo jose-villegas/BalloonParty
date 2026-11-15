@@ -139,7 +139,7 @@ namespace BalloonParty.Item.Paint
                 // stamps nowhere else).
                 _smokeField?.Smear(PaintSource.PaintSplash, landing, direction, paletteIndex);
 
-                ApplyPaint(targetsByBlob[index], paintColor, tint);
+                ApplyPaint(targetsByBlob[index], paintColor, tint, _palette.IsRainbow(paintColor));
             }
         }
 
@@ -216,7 +216,7 @@ namespace BalloonParty.Item.Paint
         // Accepts commit the new colour on the model; rejects don't. Both play the drip on the balloon's
         // view (resolved off the grid) with the incoming paint colour — layering makes an accept read as
         // paint settling over the just-committed colour and a reject as paint sliding off the unchanged body.
-        private void ApplyPaint(IReadOnlyList<PaintTarget> targets, string paintColor, Color tint)
+        private void ApplyPaint(IReadOnlyList<PaintTarget> targets, string paintColor, Color tint, bool rainbow)
         {
             if (targets == null)
             {
@@ -230,7 +230,7 @@ namespace BalloonParty.Item.Paint
                     target.Paintable.Color.Value = paintColor;
                 }
 
-                _grid.ActorViewAt<IPaintReactive>(target.Slot)?.PlayPaintDrip(tint);
+                _grid.ActorViewAt<IPaintReactive>(target.Slot)?.PlayPaintDrip(tint, rainbow);
             }
         }
 

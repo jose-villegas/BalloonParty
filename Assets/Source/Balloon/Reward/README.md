@@ -110,8 +110,13 @@ and a rainbow pop would climb its streak whatever the colour. So its own pops of
 its streak as it stands, climb nothing, and refund no streak shield (`DamageFlags.OwnPaint`). Any other
 shot, and every later throw, pops the rainbow board as usual.
 
-For now the disc is drawn as a ring (`DiscoWaveView`, a `LineRenderer` on `IDiscoWaveSettings.RingMaterial`,
-which must be assigned or nothing is drawn); its look is phase 4 of the plan.
+`DiscoWaveView` draws the disc: a quad centred on the pop and sized to the disc each frame, on
+`IDiscoWaveSettings.DiscMaterial` (`BalloonParty/Sprite/DiscoWave`), which must be assigned or nothing is
+drawn. The shader draws a bright edge in the level's own colours, turning by angle, and a soft wash behind it
+that thins as the disc grows. It fades out over the last stretch, so it's gone when the view hides it. It
+sorts below the balloons, so it sweeps through the gaps, and the balloons show the edge as they turn
+rainbow. Each painted balloon's drip is a rainbow one (`IPaintReactive.PlayPaintDrip`'s `rainbow`). The pop
+itself takes the rainbow balloon's key-light flash (`BalloonPopPresenter`).
 
 ## Leaving the board
 

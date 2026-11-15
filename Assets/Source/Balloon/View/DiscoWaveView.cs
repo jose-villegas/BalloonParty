@@ -6,70 +6,85 @@ using VContainer;
 namespace BalloonParty.Balloon.View
 {
     /// <summary>
-    ///     A placeholder for the disco ball's wave (PLAN-DiscoBalloon phase 3): a plain ring at the disc's edge. Phase 4
-    ///     replaces it with the rainbow disc shader.
+    ///     Draws the disco ball's wave: a quad on the <c>BalloonParty/Sprite/DiscoWave</c> material, centred on the
+    ///     pop and sized to the disc each frame, so the shader only runs over the ground the disc covers. The shader
+    ///     draws the rainbow edge and the wash from the radius and progress pushed here.
     /// </summary>
     internal sealed class DiscoWaveView : MonoBehaviour, IDiscoWaveView
     {
-        private const int Segments = 96;
+        // World units past the disc's front, so the antialiased edge never meets the quad's border.
+        private const float EdgeMargin = 0.05f;
 
-        private static readonly Color RingColor = new(1f, 1f, 1f, 0.8f);
+        private static readonly int RadiusId = Shader.PropertyToID("_Radius");
+        private static readonly int ProgressId = Shader.PropertyToID("_Progress");
 
-        private readonly Vector3[] _unitCircle = new Vector3[Segments];
-        private readonly Vector3[] _points = new Vector3[Segments];
+        private Mesh _quad;
+        private MeshRenderer _renderer;
+        private MaterialPropertyBlock _block;
 
-        private LineRenderer _ring;
-        private Vector3 _center;
+        private void OnDestroy()
+        {
+            if (_quad != null)
+            {
+                Destroy(_quad);
+            }
+        }
 
         // Built here, not in Awake: the settings arrive with the injection, after AddComponent's Awake.
         [Inject]
         internal void Construct(IBalloonsConfiguration balloons)
         {
             var settings = balloons.DiscoWave;
-            _ring = gameObject.AddComponent<LineRenderer>();
-            _ring.useWorldSpace = true;
-            _ring.loop = true;
-            _ring.positionCount = Segments;
-            _ring.widthMultiplier = settings.RingWidth;
-            _ring.startColor = RingColor;
-            _ring.endColor = RingColor;
-            _ring.sharedMaterial = settings.RingMaterial;
-            if (settings.RingMaterial == null)
+            _quad = BuildQuad();
+            gameObject.AddComponent<MeshFilter>().sharedMesh = _quad;
+            _renderer = gameObject.AddComponent<MeshRenderer>();
+            _renderer.sharedMaterial = settings.DiscMaterial;
+            if (settings.DiscMaterial == null)
             {
-                Log.Warn("DiscoWaveView", "No ring material on BalloonsConfiguration's Disco Ball Wave: the wave draws nothing.");
+                Log.Warn("DiscoWaveView", "No disc material on BalloonsConfiguration's Disco Ball Wave: the wave draws nothing.");
             }
 
-            _ring.sortingLayerName = settings.SortingLayerName;
-            _ring.sortingOrder = settings.SortingOrder;
-            for (var i = 0; i < Segments; i++)
-            {
-                var angle = i * Mathf.PI * 2f / Segments;
-                _unitCircle[i] = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f);
-            }
-
-            _ring.enabled = false;
+            _renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            _renderer.receiveShadows = false;
+            _renderer.sortingLayerName = settings.SortingLayerName;
+            _renderer.sortingOrder = settings.SortingOrder;
+            _renderer.enabled = false;
+            _block = new MaterialPropertyBlock();
         }
 
         public void Show(Vector3 center)
         {
-            _center = center;
-            SetRadius(0f);
-            _ring.enabled = true;
+            transform.position = center;
+            SetRadius(0f, 0f);
+            _renderer.enabled = true;
         }
 
-        public void SetRadius(float radius)
+        public void SetRadius(float radius, float progress)
         {
-            for (var i = 0; i < Segments; i++)
-            {
-                _points[i] = _center + _unitCircle[i] * radius;
-            }
-
-            _ring.SetPositions(_points);
+            var size = (radius + EdgeMargin) * 2f;
+            transform.localScale = new Vector3(size, size, 1f);
+            _block.SetFloat(RadiusId, radius);
+            _block.SetFloat(ProgressId, progress);
+            _renderer.SetPropertyBlock(_block);
         }
 
         public void Hide()
         {
-            _ring.enabled = false;
+            _renderer.enabled = false;
+        }
+
+        private static Mesh BuildQuad()
+        {
+            var mesh = new Mesh { name = "DiscoWaveQuad" };
+            mesh.SetVertices(new[]
+            {
+                new Vector3(-0.5f, -0.5f, 0f), new Vector3(0.5f, -0.5f, 0f),
+                new Vector3(-0.5f, 0.5f, 0f), new Vector3(0.5f, 0.5f, 0f),
+            });
+            mesh.SetUVs(0, new[] { new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, 1f), new Vector2(1f, 1f) });
+            mesh.SetTriangles(new[] { 0, 2, 1, 2, 3, 1 }, 0);
+            mesh.RecalculateBounds();
+            return mesh;
         }
     }
 }

@@ -66,6 +66,12 @@ namespace BalloonParty.Configuration.Palette
         public const string HeartRaysColorId = "HeartRays";
 
         /// <summary>
+        ///     Presentation-only palette entry for the rainbow god rays behind the disco ball (PLAN-DiscoBalloon); white,
+        ///     as the rays take the level's colours, and its alpha is their strength.
+        /// </summary>
+        public const string DiscoRaysColorId = "DiscoRays";
+
+        /// <summary>
         ///     Presentation-only palette entry for the whirlwind around the thrower when a ball loads Snipe-armed (the
         ///     Sharpshooter card) — authored in the palette asset but never a spawnable balloon color.
         /// </summary>

@@ -20,24 +20,22 @@ namespace BalloonParty.Configuration.Balloons
                  "balloon stays.")]
         [SerializeField] [Range(0f, 2f)] private float _burstScale = 0.6f;
 
-        [Tooltip("World width of the ring drawn at the disc's edge.")]
-        [SerializeField] [Min(0.01f)] private float _ringWidth = 0.15f;
+        [Tooltip("The disc's material (BalloonParty/Sprite/DiscoWave), which holds its edge and wash. Required: " +
+                 "with none the wave paints the board but draws nothing.")]
+        [SerializeField] private Material _discMaterial;
 
-        [Tooltip("The ring's material. Required: with none the wave paints the board but draws nothing.")]
-        [SerializeField] private Material _ringMaterial;
-
-        [Tooltip("Sorting layer for the ring.")]
+        [Tooltip("Sorting layer for the disc.")]
         [SortingLayerName]
         [SerializeField] private string _sortingLayerName = "Balloons";
 
-        [Tooltip("Sorting order on that layer: below the balloons, so the ring passes behind the ones it paints.")]
+        [Tooltip("Sorting order on that layer: below the balloons, so the disc sweeps through the gaps between the " +
+                 "ones it paints.")]
         [SerializeField] private int _sortingOrder = -1;
 
         public float Seconds => _seconds;
         public NudgeOverride[] NudgeOverrides => _nudgeOverrides;
         public float BurstScale => _burstScale;
-        public float RingWidth => _ringWidth;
-        public Material RingMaterial => _ringMaterial;
+        public Material DiscMaterial => _discMaterial;
         public string SortingLayerName => _sortingLayerName;
         public int SortingOrder => _sortingOrder;
     }

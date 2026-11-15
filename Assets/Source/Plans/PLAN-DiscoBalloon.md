@@ -246,10 +246,11 @@ built from the golden balloon's, so it keeps the knot and reads as a balloon.
   `SceneLightDirection()`. As the grid turns, single tiles pass through the light angle and **flash**. Those
   flashes are the disco-ball sparkle, and they follow the time of day. The glitter is gated on the same
   flash, so it only sparkles where the light catches, as on the golden balloon.
-- **A variant `DiscoBallVariant`** (`Balloon/Type/`, `IBalloonVariant` and `IBalloonViewBinding`) pushes the
-  sphere centre and a random spin phase through a `MaterialPropertyBlock`, and handles the capture
-  ref-count. GPU instancing is off on the material, as on the unbreakable, because the properties are set
-  per instance.
+- **`DiscoBallLook`** (`Balloon/Type/`, an `IBalloonViewBinding`) pushes a random spin phase through a
+  `MaterialPropertyBlock` and handles the capture ref-count. It is a binding, not a variant: `BalloonView`
+  takes one variant per balloon, and the prefab keeps the tough balloon's, as the golden one does. The
+  shader reads the ball's centre from its own transform, so nothing else is pushed. GPU instancing is off
+  on the material, as on the unbreakable, because the phase is set per instance.
 
 **The god rays: rainbow.** A `GodRays` child on the root, as on the golden balloon, driven by
 `GodRaysLook`, sorted at -1 on the `Balloons` layer (below every balloon), on `TransparentFX`.
@@ -258,15 +259,17 @@ built from the golden balloon's, so it keeps the knot and reads as a balloon.
 body, so the rays show exactly what the ball will turn the board into. The `DiscoRays` material holds the
 shape: more rays than the golden balloon's, narrower, and visibly spinning: `_SpinSpeed` 0.9 rad/s, above the
 golden balloon's 0.6 and the heart's 0.45, with the second fan counter-rotating at 0.7x as the shader already
-does. A new `DiscoRays` palette entry holds the strength in its alpha. Until then, the phase 2 placeholder
-prefab keeps the golden balloon's `GoldenRays` material, so it spins at the golden balloon's speed.
+does. A new `DiscoRays` palette entry holds the strength in its alpha.
 
-**The disc: `Sprite/DiscoWave.shader`** on `DiscoWaveView`. A quad covering the board, with the centre and
-radius pushed each frame. It draws a soft wash inside the disc that fades as the disc grows, and a bright
+**The disc: `Sprite/DiscoWave.shader`** on `DiscoWaveView`. A quad centred on the pop and sized to the
+disc each frame, so the shader only runs over the ground the disc covers, with the radius and the progress
+pushed each frame. It draws a soft wash inside the disc that fades as the disc grows, and a bright
 edge band whose colour runs through `RainbowBandColor` by angle, turning slowly. It sorts with the god rays,
 below the balloons, so it sweeps through the gaps, and the balloons themselves show the edge as they flip to
-rainbow. A short `SceneLightFieldService.Flash` at the pop (as the rainbow balloon's pop already does) lights
-the board for a beat.
+rainbow. A short `SceneLightFieldService.Flash` at the pop (the rainbow balloon's pop's, in
+`BalloonPopPresenter`) lights the board for a beat. The drip on each painted balloon is a rainbow one: the
+`PaintDrip` shader's per-instance `_Rainbow` draws the level's colours in diagonal bands, and the Paint
+item's rainbow holder now drips the same way.
 
 **Its pop.** The ball shatters into mirror tiles: `PSVFX_DiscoPop`, which is the golden balloon's shatter
 using a `disco_parts` sheet cut from a capture of the ball by `Tools/art/shatter`, lit through
@@ -326,10 +329,12 @@ fixes; then your sign-off.
    breaking shot's later pop of a painted balloon leaves its streak unchanged while another shot's pop
    climbs**. Built, with the shield refund guarded too (see the self-feeding check). The disc's settings
    are `IBalloonsConfiguration.DiscoWave`; the ring is a `LineRenderer` (`DiscoWaveView`).
-4. **The look.** `DiscoBall.shader`, `DiscoBallVariant`, the prefab built from the golden balloon's, the
+4. **The look.** `DiscoBall.shader`, `DiscoBallLook`, the prefab built from the golden balloon's, the
    rainbow `GodRays` toggle and `DiscoRays`, `DiscoWave.shader`, the rainbow `PaintDrip`, and the shatter
    sheet and `PSVFX_DiscoPop`. **Shaders: `dotnet build` doesn't check them.** Checked in the Editor at
-   noon and at night with `Tools/stage/stage.py`, and frames sent to you for sign-off.
+   noon and at night with `Tools/stage/stage.py`, and frames sent to you for sign-off. Written: everything
+   but the shatter, which needs a capture of the ball in the Editor (`Tools/art/shatter`); the pop keeps
+   the golden balloon's burst until then. Not yet compiled or seen in the Editor.
 5. **Sound.** The three cues, layered in `SoundBankConfiguration`.
 6. **Docs and measuring.** READMEs (Reward, Type, Nudge, Paint, Projectile), plus the playtest bot on a
    forced disco level against the same seed without one: level time, shots to clear, and peak multiplier.

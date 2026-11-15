@@ -146,7 +146,7 @@ namespace BalloonParty.Balloon.Reward
             _elapsed += deltaTime;
             var t = Mathf.Clamp01(_elapsed / _settings.Seconds);
             var radius = _maxRadius * t * (2f - t);
-            _view.SetRadius(radius);
+            _view.SetRadius(radius, t);
             Sweep(radius * radius);
             if (t >= 1f)
             {
@@ -247,8 +247,8 @@ namespace BalloonParty.Balloon.Reward
                 }
             }
 
-            // The palette gives the rainbow id white; phase 4 draws the rainbow drip.
-            view?.PlayPaintDrip(_palette.GetColor(GamePalette.RainbowColorId));
+            // The palette gives the rainbow id white, so the flag is what makes the drip draw the level's bands.
+            view?.PlayPaintDrip(_palette.GetColor(GamePalette.RainbowColorId), rainbow: true);
         }
     }
 }

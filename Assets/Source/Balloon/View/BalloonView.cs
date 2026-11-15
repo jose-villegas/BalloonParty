@@ -172,9 +172,9 @@ namespace BalloonParty.Balloon.View
         // The Paint item plays this on both accepted and resisting balloons; the body underneath has
         // already committed the new colour (accept) or not (reject), so the same drip reads as paint
         // settling or sliding off. A no-op when the prefab has no overlay wired.
-        public void PlayPaintDrip(Color paintColor)
+        public void PlayPaintDrip(Color paintColor, bool rainbow)
         {
-            _paintDrip?.Play(paintColor);
+            _paintDrip?.Play(paintColor, rainbow);
         }
 
         // The pool restores the authored scale on spawn, so scaling the spawned burst here never leaks.

@@ -21,11 +21,8 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>A painted balloon's burst of its old colour, as a share of a pop's.</summary>
         float BurstScale { get; }
 
-        /// <summary>World width of the placeholder ring.</summary>
-        float RingWidth { get; }
-
-        /// <summary>The ring's material. Required: with none the ring isn't drawn.</summary>
-        Material RingMaterial { get; }
+        /// <summary>The disc's material, which holds its edge and wash. Required: with none the disc isn't drawn.</summary>
+        Material DiscMaterial { get; }
 
         string SortingLayerName { get; }
 

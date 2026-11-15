@@ -6,14 +6,16 @@ namespace BalloonParty.Balloon.View
     ///     Trigger-and-forget paint-drip overlay: a child sprite over the balloon body that plays a wavy,
     ///     wet dissolve of the incoming paint colour, then hides itself. Accept vs reject is not this
     ///     component's concern — the balloon body underneath has (accept) or hasn't (reject) already
-    ///     committed the colour, so the same drip reads as paint settling or sliding off. Runs entirely
-    ///     off a MaterialPropertyBlock, so many balloons dripping at once batch on one shared material.
+    ///     committed the colour, so the same drip reads as paint settling or sliding off. Rainbow paint
+    ///     draws the level's colours in bands instead of one colour. Runs entirely off a
+    ///     MaterialPropertyBlock, so many balloons dripping at once batch on one shared material.
     /// </summary>
     internal class PaintDripOverlay : MonoBehaviour
     {
         private static readonly int ProgressId = Shader.PropertyToID("_Progress");
         private static readonly int PaintColorId = Shader.PropertyToID("_PaintColor");
         private static readonly int SeedId = Shader.PropertyToID("_Seed");
+        private static readonly int RainbowId = Shader.PropertyToID("_Rainbow");
 
         [SerializeField] private SpriteRenderer _renderer;
 
@@ -53,7 +55,7 @@ namespace BalloonParty.Balloon.View
             }
         }
 
-        internal void Play(Color paintColor)
+        internal void Play(Color paintColor, bool rainbow)
         {
             if (_renderer == null)
             {
@@ -68,6 +70,7 @@ namespace BalloonParty.Balloon.View
             _renderer.GetPropertyBlock(_block);
             _block.SetColor(PaintColorId, paintColor);
             _block.SetFloat(SeedId, Random.Range(0f, 100f));
+            _block.SetFloat(RainbowId, rainbow ? 1f : 0f);
             _renderer.SetPropertyBlock(_block);
 
             Apply(0f);

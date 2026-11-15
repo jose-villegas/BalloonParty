@@ -11,7 +11,8 @@ namespace BalloonParty.Slots.Actor
     /// </summary>
     public interface IPaintReactive : ISlotActorView
     {
-        void PlayPaintDrip(Color paintColor);
+        /// <param name="rainbow">Rainbow paint: the drip draws the level's colours in bands, not <paramref name="paintColor" />.</param>
+        void PlayPaintDrip(Color paintColor, bool rainbow);
 
         /// <summary>
         ///     A small burst of the colour the balloon just lost, for a recolour that should read as a pop without

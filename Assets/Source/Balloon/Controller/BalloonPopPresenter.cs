@@ -55,8 +55,9 @@ namespace BalloonParty.Balloon.Controller
             _smokeField.Smear(PaintSource.BalloonPop, worldPos, hitDirection, paletteIndex);
 
             // A rainbow is a wildcard with no single colour, so it flashes a neutral key-light burst — a beat
-            // of light to sell the whole-palette payout. Radius/intensity/duration authored on the config.
-            if (_palette.IsRainbow(colorId))
+            // of light to sell the whole-palette payout. The disco ball's pop, which paints the board rainbow,
+            // takes the same beat. Radius/intensity/duration authored on the config.
+            if (_palette.IsRainbow(colorId) || model is DiscoBalloonModel)
             {
                 _sceneLightField.Flash(
                     worldPos, _balloonsConfig.RainbowPopFlashRadius,

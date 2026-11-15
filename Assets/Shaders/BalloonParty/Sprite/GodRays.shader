@@ -4,7 +4,8 @@
 // _RayReach. Two fans of broad cosine lobes turn slowly in opposite directions, so they drift through each
 // other instead of reading as a rigid spoked wheel; a lobe's brightness also sets how far it reaches, so
 // the outline is uneven. The whole thing breathes. The renderer's colour tints it, and its alpha is the
-// strength.
+// strength. With Rainbow on (the disco ball's), each ray of the first fan takes one of the level's allowed
+// colours (RainbowBand.cginc), the colours the ball turns the board into.
 Shader "BalloonParty/Sprite/GodRays"
 {
     Properties
@@ -24,6 +25,10 @@ Shader "BalloonParty/Sprite/GodRays"
         _InnerFade("Inner Fade (share of reach)", Range(0,1)) = 0.2
         _Halo("Halo Strength", Range(0,1)) = 0.35
         _HaloSize("Halo Size (share of reach)", Range(0.05,1)) = 0.45
+
+        [Header(Colour)]
+        [Toggle(_RAINBOW_RAYS)] _RainbowRays("Rainbow (the level's colours)", Float) = 0
+        _RainbowSoftness("Rainbow Blend Between Rays", Range(0,1)) = 0.5
 
         [Header(Motion)]
         _SpinSpeed("Spin (radians per second)", Range(0,2)) = 0.12
@@ -59,8 +64,10 @@ Shader "BalloonParty/Sprite/GodRays"
             #pragma fragment frag
             #pragma multi_compile _ PIXELSNAP_ON
             #pragma multi_compile_instancing
+            #pragma shader_feature_local _ _RAINBOW_RAYS
             #include "UnityCG.cginc"
             #include "../Include/MathConst.cginc"
+            #include "../Include/RainbowBand.cginc"
 
             struct appdata_t
             {
@@ -102,6 +109,7 @@ Shader "BalloonParty/Sprite/GodRays"
             float _BreathPeriod;
             float _BreathDepth;
             float _Additive;
+            float _RainbowSoftness;
 
             v2f vert(appdata_t IN)
             {
@@ -151,9 +159,19 @@ Shader "BalloonParty/Sprite/GodRays"
                 float breath = 1.0 - _BreathDepth * (0.5 + 0.5 * sin(_Time.y * BP_TAU / max(_BreathPeriod, 0.01)));
                 float amount = saturate((rays * radial * inner + halo) * breath) * IN.color.a;
 
+                half3 tint = IN.color.rgb;
+                #ifdef _RAINBOW_RAYS
+                // A lobe of the first fan peaks where n(angle - turn) is a whole turn, so this is the ray's index
+                // plus a half there: each ray shows one band whole and blends into the next in the dark between.
+                // A ray count that is a multiple of every band count (12) keeps the colours matching across the
+                // seam at +-pi.
+                float band = (angle - turn) * floor(_RayCount) / BP_TAU + 0.5;
+                tint *= RainbowBandColor(band, _RainbowSoftness);
+                #endif
+
                 // Premultiplied: _Additive 1 adds light without dimming what is behind, 0 blends over it.
                 half4 c;
-                c.rgb = IN.color.rgb * amount;
+                c.rgb = tint * amount;
                 c.a = amount * (1.0 - _Additive);
                 return c;
             }
