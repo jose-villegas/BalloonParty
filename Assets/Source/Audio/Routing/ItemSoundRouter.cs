@@ -47,13 +47,24 @@ namespace BalloonParty.Audio.Routing
         {
             _itemActivatedSubscriber.Subscribe(OnItemActivated).AddTo(_subscriptions);
             _overflowHeartSubscriber.Subscribe(OnOverflowHeart).AddTo(_subscriptions);
-            _loadedSubscriber.Subscribe(_ => _unattributedPickups = 0).AddTo(_subscriptions);
+            _loadedSubscriber.Subscribe(OnLoaded).AddTo(_subscriptions);
             _projectiles.Retired.Subscribe(ball => _pickupsByBall.Remove(ball)).AddTo(_subscriptions);
         }
 
         public void Dispose()
         {
             _subscriptions.Dispose();
+        }
+
+        // The thrower arms a Sharpshooter lance before it publishes the load, so a ball that loads piercing is
+        // one the card's roll just armed: the sky light is falling onto the cannon as this plays.
+        private void OnLoaded(ProjectileLoadedMessage message)
+        {
+            _unattributedPickups = 0;
+            if (message.Model is { IsPiercing: { Value: true } })
+            {
+                _player.Play(GameSoundId.SnipeSkyLight, null);
+            }
         }
 
         private void OnItemActivated(ItemActivatedMessage message)

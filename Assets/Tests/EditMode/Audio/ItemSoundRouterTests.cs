@@ -241,6 +241,27 @@ namespace BalloonParty.Tests.Audio
             _player.Received(1).Play(GameSoundId.HeartDrain, position);
         }
 
+        [Test]
+        public void OnLoaded_BallLoadedAsASnipeLance_PlaysTheSkyLightGust()
+        {
+            var ball = new ProjectileModel();
+            ball.IsPiercing.Value = true;
+
+            _loadedHandler.Handle(new ProjectileLoadedMessage(ball));
+
+            _player.Received(1).Play(GameSoundId.SnipeSkyLight, null, null, 0, 1f);
+        }
+
+        [Test]
+        public void OnLoaded_PlainBall_PlaysNoGust()
+        {
+            _loadedHandler.Handle(new ProjectileLoadedMessage(new ProjectileModel()));
+            _loadedHandler.Handle(new ProjectileLoadedMessage(null));
+
+            _player.DidNotReceive().Play(GameSoundId.SnipeSkyLight, Arg.Any<Vector3?>(), Arg.Any<int?>(),
+                Arg.Any<int>(), Arg.Any<float>());
+        }
+
         private ProjectileModel Fly()
         {
             var ball = new ProjectileModel();

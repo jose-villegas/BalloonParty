@@ -62,7 +62,11 @@ A freshly loaded ball does not fire straight away. It slides from the thrower's 
 the Sharpshooter card's chance (`IWeaponStats.SnipeChance`, see `Game/Upgrades/README.md`). It asks before
 publishing `ProjectileLoadedMessage`, so every reader of that message sees the lance. On a hit the
 controller tells the view to play it (`ThrowerView.PlaySnipeWhirlwind`), with the palette's `SnipeWhirlwind`
-colour for the whirlwind and the `SnipeSkyLight` slot (white) for the light.
+colour for the whirlwind and the `SnipeSkyLight` slot (white) for the light. The same load plays a gust of
+wind (`GameSoundId.SnipeSkyLight`, from `Audio/Routing/ItemSoundRouter`, which hears the load with the ball
+already piercing), swelling in over the fall and fading as the whirlwind ends. The aim line reads the
+loaded ball's pierce too: `PredictionTraceCalculator.Calculate(..., startsPiercing)` draws it straight
+through balloons, turning only at walls, instead of showing a bounce off the first tough.
 
 First a bright scene light (`Shared/SceneLight/`) drops from `_skyLightHeight` (10 world units, above the board's top edge)
 straight down onto the cannon, on an ease-in, so it leaves the sky slowly and lands fast. The roll comes as

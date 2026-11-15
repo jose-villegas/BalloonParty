@@ -340,6 +340,22 @@ namespace BalloonParty.Tests.Prediction
                 "reached the top wall instead of stopping/reversing at the tough");
         }
 
+        // A ball loaded as a Snipe lance leaves the muzzle piercing, so the very first tough in its path is
+        // plowed, not bounced off: the line runs on to the wall and the pierce starts at the muzzle.
+        [Test]
+        public void Calculate_StartsPiercing_RunsThroughTheFirstToughToTheWall()
+        {
+            _config.MaxReflections.Returns(0);
+            _deflectors.Add(new DeflectorCircle(new Vector2(0f, 2f), 0.5f));
+
+            _calculator.Calculate(Vector3.zero, Vector3.up, 0f, _results, out var end, startsPiercing: true);
+
+            Assert.AreEqual(0, end.PierceStartIndex, "the whole line is the pierced run");
+            Assert.AreEqual(PredictionTraceEndKind.Wall, end.Kind);
+            Assert.AreEqual(2, _results.Count, "no bend at the tough");
+            Assert.AreEqual(DefaultLimits.x, _results[1].y, 0.05f, "reached the top wall");
+        }
+
         // A tough that itself hosts the pierce item still deflects at that exact contact — the item's
         // activation lands a frame after the bounce it was hit on — but a SECOND tough further along
         // the reflected path no longer deflects once piercing has armed.

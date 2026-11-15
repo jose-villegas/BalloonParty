@@ -68,7 +68,8 @@ MonoBehaviour:
       _weight: 0.5
     - _kind: 5
       _title: Sharpshooter
-      _description: 15% of pens load as a Snipe
-      _amount: 0.15
+      _description: 10% of pens load as a Snipe
+      _amount: 0.1
       _maxStacks: 3
       _weight: 1
+    _snipeCooldownSeconds: 12

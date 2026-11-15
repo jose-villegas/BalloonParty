@@ -661,10 +661,11 @@ namespace BalloonParty.Thrower
             }
 
             // From the contact circle, not the transform: the collider leads the origin, so a trace
-            // started at the transform begins behind where the shot really is.
+            // started at the transform begins behind where the shot really is. A ball loaded as a Snipe lance
+            // plows through balloons, so its line does too instead of bouncing off the first tough.
             _traceCalculator.Calculate(
                 _loadedView.ContactCenter, _direction, _loadedView.ContactRadius, _tracePoints,
-                out var traceEnd);
+                out var traceEnd, _loadedProjectile.IsPiercing.Value);
             _view.SetTrace(_tracePoints);
             _traceProvider.SetTrace(_tracePoints, traceEnd);
             _traceLights.SetTrace(_tracePoints);

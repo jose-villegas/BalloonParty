@@ -26,7 +26,7 @@ Unity audio only (`AudioSource` + `AudioMixer`), no middleware.
 | `View/AudioSourceVoice` | **View** — the only `MonoBehaviour` in this feature, and the only type that touches `AudioSource` directly. Wraps one `AudioSource`; pooled; schedules its own real-time return |
 | `Routing/CombatSoundRouter` | Hits, shots, reload (on `ThrowerReadyMessage`), cruise loop (one handle per ball, stopped when that ball's cruise ends or the registry retires it), doomed warning, pierce, shield gained/lost |
 | `Routing/ProgressionSoundRouter` | Streak, score chime (the level-complete pop is pitched by the latest ball's colour, via `IProjectileRegistry.ShotOrCurrent`), level-up (+ fill, dismiss), level transition, board clear, game-over (+ dismiss) |
-| `Routing/ItemSoundRouter` | Per-item activation, overflow heart |
+| `Routing/ItemSoundRouter` | Per-item activation, overflow heart, the Sharpshooter sky light's gust when a ball loads piercing |
 | `Routing/DangerSoundRouter` | Starts/stops the `DangerWarn` loop as `IDangerLevel` crosses `DangerLevelThreshold` |
 | `Routing/WindSoundRouter` | Drives the `WindLoop` volume from the fastest cruising ball in flight (TotalCruiseTaps, read from `IProjectileRegistry`) via `SetVolumeFactor` |
 | `Routing/MusicSoundRouter` | Navigation-driven music: plays `LaunchMusic` in the Launch state, stops it (fading) on the move to Game. In `Game`, crossfades a day/night gameplay-loop pair (the current time-of-day loop at full volume, the other ducked, swapping smoothly as `IsNight` flips); both loops duck while a shot is in flight — the window opens on `ProjectileFiredMessage`, not on `ProjectileLoadedMessage` — and pitch down together as danger level rises, toward a tritone at max danger |

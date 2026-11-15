@@ -74,11 +74,16 @@ namespace BalloonParty.Configuration
             new(UpgradeKind.Shield, "Thick Skin", "+1 shield on every pen", 1f, 3),
             new(UpgradeKind.ItemOdds, "Lucky Find", "More items on the board", 0.1f, 4),
             new(UpgradeKind.RaiseLimits, "Raise the Bar", "+1 to every card's limit", 1f, 2, 0.5f),
-            new(UpgradeKind.SnipeChance, "Sharpshooter", "15% of pens load as a Snipe", 0.15f, 3)
+            new(UpgradeKind.SnipeChance, "Sharpshooter", "10% of pens load as a Snipe", 0.1f, 3)
         };
+
+        [Tooltip("Seconds of game time after a pen loads as a Snipe (the Sharpshooter card) before another can, so " +
+            "rapid fire can't chain them. 0 = every load rolls.")]
+        [SerializeField] [Min(0f)] private float _snipeCooldownSeconds = 12f;
 
         public int CardEveryLevels => _cardEveryLevels;
         public int CardsOffered => _cardsOffered;
         public IReadOnlyList<IUpgradeCardSettings> Cards => _cards;
+        public float SnipeCooldownSeconds => _snipeCooldownSeconds;
     }
 }

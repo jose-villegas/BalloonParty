@@ -109,6 +109,10 @@ namespace BalloonParty.Audio
         // The golden reward balloon's own cues: a gold clink when the shot bounces off its plates, and a
         // bright pop with a coin-like chime when a pierce breaks it.
         BalloonDeflectGolden,
-        BalloonPopGolden
+        BalloonPopGolden,
+
+        // A ball loading as a Snipe lance (the Sharpshooter card): a gust of wind as the sky light falls onto
+        // the cannon and the whirlwind spins up. Played by ItemSoundRouter off the loaded ball's pierce.
+        SnipeSkyLight
     }
 }

@@ -17,6 +17,7 @@ namespace BalloonParty.Tests.Item
     {
         private IWeaponStats _weapon;
         private ISnipeArmer _armer;
+        private IUpgradeSettings _settings;
         private SnipeChanceRoll _roll;
         private int _draws;
 
@@ -25,7 +26,8 @@ namespace BalloonParty.Tests.Item
         {
             _weapon = Substitute.For<IWeaponStats>();
             _armer = Substitute.For<ISnipeArmer>();
-            _roll = new SnipeChanceRoll(_weapon, _armer);
+            _settings = Substitute.For<IUpgradeSettings>();
+            _roll = new SnipeChanceRoll(_weapon, _armer, _settings) { Now = () => 0f };
             _draws = 0;
         }
 
@@ -94,7 +96,11 @@ namespace BalloonParty.Tests.Item
             // Two stacks of 0.15 from the real card arithmetic: a draw of 0.25 misses one stack, hits two.
             var rig = new UpgradeRig(Substitute.For<IProjectileFlightConfig>());
             var card = UpgradeRig.Card(UpgradeKind.SnipeChance, 0.15f);
-            var roll = new SnipeChanceRoll(rig.Upgrades, _armer) { Random01 = () => 0.25f };
+            var roll = new SnipeChanceRoll(rig.Upgrades, _armer, rig.Settings)
+            {
+                Random01 = () => 0.25f,
+                Now = () => 0f
+            };
 
             rig.Hold(card);
             Assert.IsFalse(roll.TryArm(new ProjectileModel()));
@@ -102,6 +108,42 @@ namespace BalloonParty.Tests.Item
             rig.Hold(card);
             Assert.IsTrue(roll.TryArm(new ProjectileModel()));
             rig.Upgrades.Dispose();
+        }
+
+        [Test]
+        public void TryArm_AfterAHit_NoLoadRollsUntilTheCooldownHasPassed()
+        {
+            _weapon.SnipeChance.Returns(0.5f);
+            _settings.SnipeCooldownSeconds.Returns(12f);
+            Draw(0f);
+            var now = 0f;
+            _roll.Now = () => now;
+
+            Assert.IsTrue(_roll.TryArm(new ProjectileModel()));
+            var drawsAfterHit = _draws;
+
+            now = 11.9f;
+            Assert.IsFalse(_roll.TryArm(new ProjectileModel()), "still cooling down");
+            Assert.AreEqual(drawsAfterHit, _draws, "a load inside the cooldown spends no draw");
+
+            now = 12f;
+            Assert.IsTrue(_roll.TryArm(new ProjectileModel()), "the cooldown is over");
+        }
+
+        [Test]
+        public void TryArm_AMiss_StartsNoCooldown()
+        {
+            _weapon.SnipeChance.Returns(0.3f);
+            _settings.SnipeCooldownSeconds.Returns(12f);
+            var now = 0f;
+            _roll.Now = () => now;
+
+            Draw(0.9f);
+            Assert.IsFalse(_roll.TryArm(new ProjectileModel()));
+
+            now = 1f;
+            Draw(0.1f);
+            Assert.IsTrue(_roll.TryArm(new ProjectileModel()), "only a hit starts the wait");
         }
 
         private void Draw(float value)

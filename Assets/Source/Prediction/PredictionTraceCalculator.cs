@@ -59,13 +59,17 @@ namespace BalloonParty.Prediction
         ///     contact lets one draw the bounce leaving it without re-deriving a normal this already
         ///     solved.
         /// </param>
+        /// <param name="startsPiercing">
+        ///     The shot leaves the muzzle already piercing (a ball loaded as a Snipe lance): the whole line runs
+        ///     straight through balloons, turning only at walls, and its pierce starts at its first point.
+        /// </param>
         public void Calculate(
             Vector3 origin, Vector3 direction, float projectileContactRadius, List<Vector3> results,
-            out PredictionTraceEnd end)
+            out PredictionTraceEnd end, bool startsPiercing = false)
         {
             results.Clear();
             results.Add(origin);
-            var pierceStartIndex = -1;
+            var pierceStartIndex = startsPiercing ? 0 : -1;
 
             _deflectors.Clear();
             _deflectorField?.CollectDeflectors(_deflectors);
@@ -76,7 +80,7 @@ namespace BalloonParty.Prediction
             var walls = new WallLimits(_flightConfig.LimitsClockwise);
             var stepsLeft = _config.MaxSegments;
             var reflectsLeft = _config.MaxReflections;
-            var isPiercing = false;
+            var isPiercing = startsPiercing;
 
             while (stepsLeft > 0)
             {

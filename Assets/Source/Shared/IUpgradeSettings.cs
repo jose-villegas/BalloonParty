@@ -60,5 +60,11 @@ namespace BalloonParty.Shared
         int CardsOffered { get; }
 
         IReadOnlyList<IUpgradeCardSettings> Cards { get; }
+
+        /// <summary>
+        ///     Seconds of game time after a ball loads as a Snipe (<see cref="UpgradeKind.SnipeChance" />) before the
+        ///     next load can roll again. 0 = every load rolls.
+        /// </summary>
+        float SnipeCooldownSeconds { get; }
     }
 }
