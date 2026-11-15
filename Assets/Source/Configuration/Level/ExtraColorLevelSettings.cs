@@ -16,7 +16,7 @@ namespace BalloonParty.Configuration.Level
         private const int RollSalt = 0x3C6EF372;
 
         [Tooltip("First level that can roll an extra colour.")]
-        [SerializeField] [Min(1)] private int _fromLevel = 13;
+        [SerializeField] [Min(1)] private int _fromLevel = 8;
 
         [Tooltip("Chance each level from From Level rolls one more colour, with no threats and faster lines. A " +
                  "level right after one never plays one, so fewer levels get it than rolled it: about 1 in 6 at 0.2. " +
