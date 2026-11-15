@@ -12,8 +12,8 @@ Shader "BalloonParty/Scenario/Paper"
     // shows inside the hole on the way in and outside it on the way out, with a frayed, slightly browned edge that
     // casts a soft shadow on the surface under it.
     // Ink: the pops' and the Paint item's blots (SmokeFieldService's ink field, _InkFieldTex) are drawn into the page
-    // here, under its relief and its light, so they soak into the paper rather than lie on it, and cover the screen
-    // wherever the page does.
+    // here as a watercolour glaze, under its relief and its light, so they soak into the paper rather than lie on it
+    // and never hide the balloons' colours, and cover the screen wherever the page does.
     Properties
     {
         [NoScaleOffset] _PaperTex ("Paper (R tone, GB slope, A undulation, linear)", 2D) = "gray" {}
@@ -52,12 +52,14 @@ Shader "BalloonParty/Scenario/Paper"
         _InkNoiseSize   ("Ink Noise Size (world)",      Float)           = 2.2
         _InkEdgeWarp    ("Ink Edge Wander",             Range(0, 0.3))   = 0.04
         _InkEdgeNoise   ("Ink Edge Raggedness",         Range(0, 0.6))   = 0.18
-        // How much darker and deeper than the colour itself the ink dries: 0 = the colour itself.
-        _InkDeepen      ("Ink Darkness",                Range(0, 1))     = 0.3
-        // Pigment gathered where the ink stopped spreading, a darker line just inside the edge.
-        _InkRim         ("Dried Edge",                  Range(0, 1))     = 0.25
+        // Watercolour: the ink glazes the page (multiplies it) rather than covering it, so the paper and whatever
+        // sits over it keep their own colour. How much pigment a blot's body lays down: 1 = the colour itself.
+        _InkWash        ("Wash Strength",               Range(0, 1))     = 0.4
+        // Pigment gathered where the wash stopped spreading: extra strength in a line just inside the edge.
+        _InkRim         ("Dried Edge",                  Range(0, 1))     = 0.3
         _InkRimWidth    ("Dried Edge Width",            Range(0.01, 0.5)) = 0.12
-        _InkOpacity     ("Ink Opacity",                 Range(0, 1))     = 0.9
+        // Pigment settling into the fibres' hollows (the tile's darker tone), so the wash is grainy, not flat.
+        _InkGranulation ("Granulation",                 Range(0, 1))     = 0.5
 
         [Header(Lighting)]
         // Scene-light colour x intensity multiplies the paper: 0 = authored colours always, 1 = fully lit.
@@ -135,10 +137,10 @@ Shader "BalloonParty/Scenario/Paper"
             float  _InkNoiseSize;
             float  _InkEdgeWarp;
             float  _InkEdgeNoise;
-            half   _InkDeepen;
+            half   _InkWash;
             half   _InkRim;
             float  _InkRimWidth;
-            half   _InkOpacity;
+            half   _InkGranulation;
 
             // SmokeFieldService's ink field: the smoke field's bounds, its own texels, and 1 while the level inks.
             sampler2D _InkFieldTex;
@@ -208,8 +210,8 @@ Shader "BalloonParty/Scenario/Paper"
                 return float4(rgb, weight * 0.25);
             }
 
-            // How much ink covers a point, and its colour there: one flat colour per blot out to a soft, wandering
-            // edge, a little deeper than the colour itself, with a dried line just inside the edge.
+            // How much pigment a point holds, and its colour: one colour per blot out to a soft, wandering edge, a
+            // light wash in the body and a stronger dried line just inside the edge.
             half InkAt(float2 wp, out half3 inkColor)
             {
                 inkColor = half3(0.0h, 0.0h, 0.0h);
@@ -228,8 +230,8 @@ Shader "BalloonParty/Scenario/Paper"
                 float body = smoothstep(level - width, level + width, ink.a);
                 float rim = 1.0 - smoothstep(level, level + _InkRimWidth, ink.a);
 
-                inkColor = (half3)lerp(ink.rgb, ink.rgb * ink.rgb, _InkDeepen) * (1.0h - (half)rim * _InkRim);
-                return (half)body * _InkOpacity;
+                inkColor = (half3)ink.rgb;
+                return (half)(body * saturate(_InkWash + rim * _InkRim));
             }
 
             half4 frag(v2f IN) : SV_Target
@@ -259,11 +261,13 @@ Shader "BalloonParty/Scenario/Paper"
                 half tone = lerp(1.0h, near.r * 0.6h + far.r * 0.4h, _ToneStrength);
                 half3 color = lerp(_FibreColor.rgb, _PaperColor.rgb, tone);
 
-                // The ink soaks in: the fibres show a little darker through it, and the relief and the light below
-                // shade it like the page.
+                // The ink glazes the page like watercolour: multiplied in, so the fibres show through and the balloons
+                // over it still read in their own colour, and the relief and the light below shade it like the page.
+                // The pigment settles a little deeper in the fibres' darker hollows.
                 half3 inkColor;
                 half ink = InkAt(IN.worldPos, inkColor);
-                color = lerp(color, inkColor * (0.85h + 0.15h * tone), ink);
+                ink = saturate(ink * (1.0h + _InkGranulation * (1.0h - tone) * 2.0h - _InkGranulation * 0.3h));
+                color *= lerp(half3(1.0h, 1.0h, 1.0h), inkColor, ink);
 
                 // Per pixel and field-aware, like the sprites over it: the time of day, plus the local light of pops
                 // and items where the light field carries it.

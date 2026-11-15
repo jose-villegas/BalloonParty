@@ -274,10 +274,12 @@ level in a surface stretch has no sky on either side.
   light. Premultiplied by its coverage, opaque at rest, writing colour only, like the floor.
 - The ink is drawn into the page by the same shader: it reads `SmokeFieldService`'s ink field (`_InkFieldTex`,
   four taps with the colour weighted by opacity, so the empty texels round a blot don't darken its edge) and
-  mixes the ink in before the relief and the light, so a blot takes the page's fibres, swells and time of day
-  and soaks in rather than lying on top. One flat colour per blot out to a soft edge about a set opacity
-  (`_InkThreshold`, blurred by `_InkBlur`), a little deeper than the colour itself (`_InkDeepen`), with a dried
-  line just inside the edge (`_InkRim`). The border wanders: two taps of the cloud noise (`_InkNoiseTex`) push
+  glazes the ink in before the relief and the light, so a blot takes the page's fibres, swells and time of day
+  and soaks in rather than lying on top. It is watercolour, not paint: the page is multiplied by a light wash of
+  the blot's colour (`_InkWash`), so the paper shows through and a balloon over a blot of its own colour still
+  reads. One colour per blot out to a soft edge about a set opacity (`_InkThreshold`, blurred by `_InkBlur`),
+  with a stronger dried line just inside the edge (`_InkRim`) and the pigment settling deeper in the fibres'
+  darker hollows (`_InkGranulation`). The border wanders: two taps of the cloud noise (`_InkNoiseTex`) push
   the edge about a little (`_InkEdgeWarp`) and lift or drop its level (`_InkEdgeNoise`). It covers the screen
   wherever the page does, and, writing colour only, never reads as a caster to the GI. The ink's taps run only
   while the level inks (`_InkFieldActive`).
