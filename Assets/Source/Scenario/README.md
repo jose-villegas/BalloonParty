@@ -378,9 +378,14 @@ The stamp shader's `_StampOverwrite` makes a new stroke cover the colour under i
 instead of mixing with it, so newer strokes paint over older ones; its opacity is the strongest stamp's rather
 than their sum, so a stroke's overlapping capsules don't swell its edge into scallops. Strokes stamp wider
 (`PaperStrokeScale`, 1.6), since ink never spreads the way the smoke does. And the global `_SmokeInk`
-(`InkOnPaper`) switches `SmokeTrailDisplay` to its ink branch: one flat colour per blob out to a clean,
-antialiased edge at a set opacity (`_InkThreshold`), a little darker than the stroke's colour (`_InkDeepen`), with
-a dried line just inside the edge, the paper grain through it and the scene light on it, and no swirl or wisps.
+(`InkOnPaper`) switches `SmokeTrailDisplay` to its ink branch: one flat colour per blob out to a soft edge
+that bleeds into the paper about a set opacity (`_InkThreshold`, blurred by `_InkBlur`), a little darker than
+the stroke's colour (`_InkDeepen`), with a dried line just inside the edge, the paper grain through it and the
+scene light on it, and no swirl or wisps. Ink stamps measure their radius the same way across and up the field,
+so a blob lands round (the smoke keeps the vertical stretch its look was tuned with), and their edge ramps over
+a few texels: the field is coarse, and a short ramp would step along its grid.
+The Paint item's blobs land on the page as ink too: `PaintItemHandler` stamps each landing with
+`PaintSource.PaintSplash`, whose profile is `PaperOnly`, so on every other scenario it leaves no smoke.
 The ink reads the field through `SmokeFieldInkSample`, which weighs each texel's colour by its own opacity, so the
 empty texels around a stroke don't darken its edge.
 `SmokeFieldView` follows `SmokeFieldService.Inking` and switches its material's alpha blend (`_CoverSrcBlend`,

@@ -33,27 +33,39 @@ MonoBehaviour:
     ColorMode: 0
     PaletteColorName: 
     CustomColor: {r: 1, g: 1, b: 1, a: 1}
+    PaperOnly: 0
   - Sources: 2
     Radius: 0.35
     Opacity: 0.85
     ColorMode: 1
     PaletteColorName: Tough
     CustomColor: {r: 1, g: 1, b: 1, a: 1}
+    PaperOnly: 0
   - Sources: 4
     Radius: 0.3
     Opacity: 0.75
     ColorMode: 1
     PaletteColorName: Tough
     CustomColor: {r: 1, g: 1, b: 1, a: 1}
+    PaperOnly: 0
   - Sources: 8
     Radius: 0.2
     Opacity: 0.8
     ColorMode: 1
     PaletteColorName: Tough
     CustomColor: {r: 1, g: 1, b: 1, a: 1}
+    PaperOnly: 0
   - Sources: 16
     Radius: 0.25
     Opacity: 0.7
     ColorMode: 1
     PaletteColorName: SnipeSkyLight
     CustomColor: {r: 1, g: 1, b: 1, a: 1}
+    PaperOnly: 0
+  - Sources: 32
+    Radius: 0.22
+    Opacity: 0.9
+    ColorMode: 0
+    PaletteColorName:
+    CustomColor: {r: 1, g: 1, b: 1, a: 1}
+    PaperOnly: 1

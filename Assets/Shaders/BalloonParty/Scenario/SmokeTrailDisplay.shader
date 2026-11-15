@@ -54,6 +54,9 @@ Shader "BalloonParty/Scenario/SmokeTrailDisplay"
         _InkThreshold       ("Ink Edge Level",          Range(0.02, 0.9))   = 0.3
         // Edge antialiasing, in screen pixels: 1 is crisp, higher softens it.
         _InkEdgeSoftness    ("Ink Edge Softness",       Range(0.5, 4))      = 1.2
+        // The ink's blur: how far either side of the edge level the edge fades, in opacity, so the blob bleeds
+        // softly into the paper. 0 = the antialiased edge alone.
+        _InkBlur            ("Ink Blur",                Range(0, 0.4))      = 0.22
         // How much of the smoke's edge warp the ink keeps, so the blob follows the paper rather than the field's texels.
         _InkEdgeWarp        ("Ink Edge Wobble",         Range(0, 1))        = 0.5
         // How much darker and deeper than the stroke's own colour the ink dries: 0 = the colour itself.
@@ -154,6 +157,7 @@ Shader "BalloonParty/Scenario/SmokeTrailDisplay"
             float  _SmokeInk;
             float  _InkThreshold;
             float  _InkEdgeSoftness;
+            float  _InkBlur;
             float  _InkEdgeWarp;
             float  _InkDeepen;
             float  _InkRim;
@@ -251,14 +255,15 @@ Shader "BalloonParty/Scenario/SmokeTrailDisplay"
                 return blend < 0.5 ? dark : light;
             }
 
-            // Paper levels: the field as ink. One flat colour per blob out to a clean edge at _InkThreshold, a little
-            // darker than the stroke's own colour, with a dried line just inside the edge, the paper grain through it,
-            // and the scene light on it like on the page under it. Still, with no swirl or wisps: ink on paper stays put.
+            // Paper levels: the field as ink. One flat colour per blob out to a soft, blurred edge about _InkThreshold
+            // (_InkBlur), a little darker than the stroke's own colour, with a dried line just inside the edge, the
+            // paper grain through it, and the scene light on it like on the page under it. Still, with no swirl or
+            // wisps: ink on paper stays put.
             fixed4 InkFrag(float2 worldPos, fixed4 vertexColor)
             {
                 float2 wp = lerp(worldPos, WarpedEdgePos(worldPos), _InkEdgeWarp);
                 float4 ink = SmokeFieldInkSample(wp);
-                float width = max(fwidth(ink.a), 1e-4) * _InkEdgeSoftness;
+                float width = max(max(fwidth(ink.a), 1e-4) * _InkEdgeSoftness, _InkBlur);
                 float body = smoothstep(_InkThreshold - width, _InkThreshold + width, ink.a);
                 if (body < 0.001)
                 {

@@ -47,6 +47,7 @@ namespace BalloonParty.Scenario
         private static readonly int TexelSizeId = Shader.PropertyToID("_SmokeTexelSize");
         private static readonly int SmokeInkId = Shader.PropertyToID("_SmokeInk");
         private static readonly int StampOverwriteId = Shader.PropertyToID("_StampOverwrite");
+        private static readonly int StampAspectId = Shader.PropertyToID("_StampAspect");
 
         private readonly ISmokeFieldSettings _settings;
         private readonly IGameDisplayConfiguration _display;
@@ -195,7 +196,7 @@ namespace BalloonParty.Scenario
 
             var profile = _settings.GetProfile(source);
             var color = ResolveColor(profile, paletteIndex);
-            if (!color.HasValue)
+            if (!color.HasValue || (profile.PaperOnly && !_inking.Value))
             {
                 return;
             }
@@ -223,7 +224,7 @@ namespace BalloonParty.Scenario
 
             var profile = _settings.GetProfile(source);
             var color = ResolveColor(profile, paletteIndex);
-            if (!color.HasValue)
+            if (!color.HasValue || (profile.PaperOnly && !_inking.Value))
             {
                 return;
             }
@@ -314,6 +315,8 @@ namespace BalloonParty.Scenario
             if (_resources.StampMaterial != null)
             {
                 _resources.StampMaterial.SetFloat(StampOverwriteId, IsPersistent ? 1f : 0f);
+                _resources.StampMaterial.SetFloat(StampAspectId,
+                    _bounds.width > 0.001f ? _bounds.height / _bounds.width : 1f);
             }
         }
 

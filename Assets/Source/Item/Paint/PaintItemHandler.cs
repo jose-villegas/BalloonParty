@@ -13,6 +13,7 @@ using VContainer;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Scenario;
 using BalloonParty.Shared.Extensions;
 
 namespace BalloonParty.Item.Paint
@@ -31,6 +32,7 @@ namespace BalloonParty.Item.Paint
         private readonly SlotGrid _grid;
         private readonly PoolManager _poolManager;
         private readonly DisturbanceFieldService _disturbanceField;
+        private readonly SmokeFieldService _smokeField;
 
         public ItemType Type => ItemType.Paint;
 
@@ -40,13 +42,15 @@ namespace BalloonParty.Item.Paint
             IItemConfiguration itemConfig,
             SlotGrid grid,
             PoolManager poolManager,
-            DisturbanceFieldService disturbanceField)
+            DisturbanceFieldService disturbanceField,
+            SmokeFieldService smokeField)
         {
             _palette = palette;
             _itemConfig = itemConfig;
             _grid = grid;
             _poolManager = poolManager;
             _disturbanceField = disturbanceField;
+            _smokeField = smokeField;
         }
 
         public UniTask Activate(ItemActivationContext context)
@@ -128,9 +132,11 @@ namespace BalloonParty.Item.Paint
 
                 var landing = blobPositions[index];
                 var direction = (landing - (Vector2)worldPosition).normalized;
-                _disturbanceField.Stamp(
-                    StampSource.Paint, landing, direction,
-                    paletteIndex: _palette.PaletteIndexOf(paintColor));
+                var paletteIndex = _palette.PaletteIndexOf(paintColor);
+                _disturbanceField.Stamp(StampSource.Paint, landing, direction, paletteIndex: paletteIndex);
+
+                // On paper each blob also lands as ink on the page (the profile stamps nowhere else).
+                _smokeField?.Paint(PaintSource.PaintSplash, landing, paletteIndex);
 
                 ApplyPaint(targetsByBlob[index], paintColor, tint);
             }

@@ -12,6 +12,7 @@ namespace BalloonParty.Configuration.Effects
         ToughBreathing   = 1 << 2,
         ToughDeflect     = 1 << 3,
         SnipeSkyLight    = 1 << 4,
+        PaintSplash      = 1 << 5,
     }
 
     internal enum PaintColorMode
@@ -43,6 +44,9 @@ namespace BalloonParty.Configuration.Effects
 
         [Tooltip("Fixed color (used when ColorMode is Custom).")]
         public Color CustomColor;
+
+        [Tooltip("Stamps only while the field is ink on paper; anywhere else the source leaves no smoke.")]
+        public bool PaperOnly;
     }
 
     /// <summary>Authored tuning for the smoke field; assign stamp/decay shaders + resolution here and

@@ -33,6 +33,7 @@ Shader "BalloonParty/Display/SmokeFieldStamp"
             float _StampRadii[MAX_STAMPS];
             float4 _StampColors[MAX_STAMPS];
             float _StampOverwrite;
+            float _StampAspect;
 
             struct appdata
             {
@@ -68,7 +69,11 @@ Shader "BalloonParty/Display/SmokeFieldStamp"
                 // Ink edges ramp over a few texels, centred on the radius: the field is coarse (a stroke is a couple
                 // of texels wide), so the smoke's short ramp steps along the texel grid, and the ink display's hard
                 // cut draws every step as a scallop. A ramp that wide is one bilinear filtering draws smooth.
-                float inkRamp = 1.5 * _MainTex_TexelSize.x * _StampOverwrite;
+                float inkRamp = 2.5 * _MainTex_TexelSize.x * _StampOverwrite;
+
+                // Radii are in the field's width; v spans its height. Ink measures in width units both ways, so a blob
+                // lands round. The smoke keeps the stretch its look was tuned with.
+                float2 toWidth = float2(1.0, lerp(1.0, max(_StampAspect, 1e-3), _StampOverwrite));
 
                 for (int s = 0; s < _StampCount; s++)
                 {
@@ -78,8 +83,8 @@ Shader "BalloonParty/Display/SmokeFieldStamp"
                     float3 stampColor = _StampColors[s].rgb;
 
                     // Capsule SDF: distance from pixel to the line segment a→b.
-                    float2 pa = i.uv - a;
-                    float2 ba = b - a;
+                    float2 pa = (i.uv - a) * toWidth;
+                    float2 ba = (b - a) * toWidth;
                     float h = saturate(dot(pa, ba) / (dot(ba, ba) + 1e-6));
                     float dist = length(pa - ba * h);
 
