@@ -78,6 +78,22 @@ namespace BalloonParty.Configuration.Level
         /// </summary>
         float BreatherDanger { get; }
 
+        /// <summary>
+        ///     How much faster the clock runs at full pressure (1 = never). Pressure is the push back on a comfortable
+        ///     player: it builds while the board stays under <see cref="PressureHoldOccupancy" /> and the player
+        ///     is not in need, holds above it, and partly goes when a line costs a heart.
+        /// </summary>
+        float PressureSpeedup { get; }
+
+        /// <summary>Seconds of comfortable play (no need) that build pressure from none to full; need slows it.</summary>
+        float PressureBuildSeconds { get; }
+
+        /// <summary>Share of the open slots in balloons at or above which pressure stops building and holds.</summary>
+        float PressureHoldOccupancy { get; }
+
+        /// <summary>Share of the pressure kept when a line costs a heart, 0 to 1.</summary>
+        float PressureKeptOnHeartLoss { get; }
+
         /// <summary>Seconds between lines at <paramref name="level" />; levels below 1 run at level 1's pace.</summary>
         float IntervalForLevel(int level);
     }

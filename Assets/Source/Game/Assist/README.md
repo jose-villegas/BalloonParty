@@ -36,6 +36,14 @@ applies, and loads inside it neither roll nor build pity.
 | A breather before the line that would cost a heart | `Balloon/Spawner/SpawnClock`, `ISpawnClockSettings.BreatherDanger` (1) | Danger at or above it starts the breather a big clear earns, under the same cooldown: a full board on the last heart. At 0.5 it played too slow: a board left full with two hearts was slowed nearly half the time |
 | A retry's bonus card leans defensive | `Game/Upgrades/RunUpgrades.BonusDealWeight` | Each card's deal weight × (1 + `IUpgradeCardSettings.RetryDealBoost`): Thick Skin 1, so twice as likely. A retry follows a lost run, so it reads full need without asking. The deal stays seeded |
 
+## The other side: pressure
+
+Need only ever helps. The push back on a player who is comfortable lives in the spawn clock
+(`Balloon/Spawner/SpawnClock`, `ISpawnClockSettings.Pressure*`). While the board stays under its hold
+occupancy and the need is low, the clock runs ever faster, up to 2×, until the board climbs. The need slows
+that build, and on the last heart it builds none. A struggling player never builds it, and a strong build
+is pushed until its board climbs.
+
 ## Adding a roll
 
 Give the roll a `PityRoll` with its own `PitySettings` on `AssistSettings`, read `IPlayerNeed.Need` when it

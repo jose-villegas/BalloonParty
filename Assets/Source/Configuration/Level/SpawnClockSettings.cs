@@ -107,6 +107,25 @@ namespace BalloonParty.Configuration.Level
                  "second to last. 0 = never.")]
         [SerializeField] [Range(0f, 1f)] private float _breatherDanger = 1f;
 
+        [Tooltip("How much faster the clock runs at full pressure, the push back on a player who is comfortable: " +
+                 "pressure builds while the board stays under the hold occupancy and the hearts are healthy, so " +
+                 "a strong build is pushed until its board climbs. A struggling player never builds it. " +
+                 "1 = never.")]
+        [SerializeField] [Min(1f)] private float _pressureSpeedup = 2f;
+
+        [Tooltip("Seconds of comfortable play (the board under the hold occupancy, no need) that build pressure " +
+                 "from none to full. Need slows it: at half need it takes twice as long, on the last heart it " +
+                 "never builds. It stays through levels and goes at a run's end.")]
+        [SerializeField] [Min(1f)] private float _pressureBuildSeconds = 120f;
+
+        [Tooltip("Share of the board's open slots in balloons at or above which pressure stops building and " +
+                 "holds: set near full, so a pushed board settles where one bad stretch costs a heart.")]
+        [SerializeField] [Range(0.05f, 1f)] private float _pressureHoldOccupancy = 0.85f;
+
+        [Tooltip("Share of the pressure kept when a line costs a heart: 0.5 = it halves, so losing a heart eases " +
+                 "the push without giving all of it back.")]
+        [SerializeField] [Range(0f, 1f)] private float _pressureKeptOnHeartLoss = 0.5f;
+
         public float GraceSeconds => _graceSeconds;
         public float OverlapShotPull => _overlapShotPull;
         public float SparseBoardSpeedup => Mathf.Max(1f, _sparseBoardSpeedup);
@@ -122,6 +141,10 @@ namespace BalloonParty.Configuration.Level
         public float BreatherCooldownSeconds => Mathf.Max(0f, _breatherCooldownSeconds);
         public float BreatherShapeCover => Mathf.Clamp01(_breatherShapeCover);
         public float BreatherDanger => Mathf.Clamp01(_breatherDanger);
+        public float PressureSpeedup => Mathf.Max(1f, _pressureSpeedup);
+        public float PressureBuildSeconds => Mathf.Max(1f, _pressureBuildSeconds);
+        public float PressureHoldOccupancy => Mathf.Clamp(_pressureHoldOccupancy, 0.05f, 1f);
+        public float PressureKeptOnHeartLoss => Mathf.Clamp01(_pressureKeptOnHeartLoss);
 
         public SpawnClockSettings()
         {
@@ -133,8 +156,13 @@ namespace BalloonParty.Configuration.Level
             float flightPressureSeconds = 6f, float lateIntervalDecayPerLevel = 1f, float lateMinInterval = 0.1f,
             float breatherClear = 0f, float breatherClearWindow = 2f, float breatherSeconds = 6f,
             float breatherPace = 0.2f, float breatherCooldownSeconds = 0f, float breatherShapeCover = 0f,
-            float breatherDanger = 0f)
+            float breatherDanger = 0f, float pressureSpeedup = 1f, float pressureBuildSeconds = 120f,
+            float pressureHoldOccupancy = 0.85f, float pressureKeptOnHeartLoss = 0.5f)
         {
+            _pressureSpeedup = pressureSpeedup;
+            _pressureBuildSeconds = pressureBuildSeconds;
+            _pressureHoldOccupancy = pressureHoldOccupancy;
+            _pressureKeptOnHeartLoss = pressureKeptOnHeartLoss;
             _breatherShapeCover = breatherShapeCover;
             _breatherDanger = breatherDanger;
             _breatherCooldownSeconds = breatherCooldownSeconds;

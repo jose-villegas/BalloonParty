@@ -1,6 +1,7 @@
 using System;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Configuration.Level;
+using BalloonParty.Game.Assist;
 using BalloonParty.Game.Danger;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Score.Behaviours;
@@ -34,6 +35,9 @@ namespace BalloonParty.Tests.Balloon
         private IProjectileFlightConfig _flightConfig;
         private ReactiveProperty<float> _danger;
         private IDangerLevel _dangerLevel;
+        private IPlayerNeed _need;
+        private ISubscriber<WaveDamageMessage> _damageSubscriber;
+        private IMessageHandler<WaveDamageMessage> _damageHandler;
         private SpawnClock _clock;
         private NavigationState _previousNavigation;
         private int _lines;
@@ -80,6 +84,13 @@ namespace BalloonParty.Tests.Balloon
             _danger = new ReactiveProperty<float>(0f);
             _dangerLevel = Substitute.For<IDangerLevel>();
             _dangerLevel.Level.Returns(_danger);
+            _need = Substitute.For<IPlayerNeed>();
+            _damageSubscriber = Substitute.For<ISubscriber<WaveDamageMessage>>();
+            _damageSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<WaveDamageMessage>>(h => _damageHandler = h),
+                    Arg.Any<MessageHandlerFilter<WaveDamageMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
             _flightConfig = Substitute.For<IProjectileFlightConfig>();
             _flightConfig.LimitsClockwise.Returns(new Vector4(4f, 2f, -4f, -2f));
 
@@ -743,6 +754,109 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void Pressure_BuildsWhileTheBoardStaysUnderTheHold()
+        {
+            UsePressure();
+
+            Run(5f);
+
+            Assert.AreEqual(0.5f, _clock.Pressure, 0.01f, "half of the 10s build");
+        }
+
+        [Test]
+        public void Pressure_HoldsOnceTheBoardReachesTheHold()
+        {
+            UsePressure();
+            Run(5f);
+
+            _boardFill.Occupancy.Returns(0.85f);
+            Run(5f);
+
+            Assert.AreEqual(0.5f, _clock.Pressure, 0.01f);
+        }
+
+        [Test]
+        public void Pressure_NeedSlowsTheBuild_AndTheLastHeartStopsIt()
+        {
+            UsePressure();
+            _need.Need.Returns(0.5f);
+            Run(5f);
+            Assert.AreEqual(0.25f, _clock.Pressure, 0.01f, "half need, half the build");
+
+            _need.Need.Returns(1f);
+            Run(5f);
+            Assert.AreEqual(0.25f, _clock.Pressure, 0.01f, "the last heart builds none");
+        }
+
+        [Test]
+        public void Pressure_AtFull_RunsTheClockAtItsSpeedup()
+        {
+            UsePressure();
+            Run(10f);
+            Assert.AreEqual(1f, _clock.Pressure, 1e-4f);
+
+            // The build spent 10 + 5 of the 100s grace; the 85 left go at 2x.
+            Run(42.3f);
+            Assert.AreEqual(0, _lines);
+
+            Run(0.4f);
+            Assert.AreEqual(1, _lines);
+        }
+
+        [Test]
+        public void Pressure_ALineThatCostsAHeart_HalvesIt()
+        {
+            UsePressure();
+            Run(10f);
+
+            _damageHandler.Handle(new WaveDamageMessage(0, 3, 6));
+            Assert.AreEqual(1f, _clock.Pressure, 1e-4f, "slots blocked short of a line cost no heart");
+
+            _damageHandler.Handle(new WaveDamageMessage(1, 6, 6));
+            Assert.AreEqual(0.5f, _clock.Pressure, 1e-4f);
+        }
+
+        [Test]
+        public void Pressure_DoesNotBuildThroughABreather()
+        {
+            BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 100f, breatherSeconds: 4f, breatherDanger: 1f,
+                pressureSpeedup: 2f, pressureBuildSeconds: 10f));
+            _boardFill.Occupancy.Returns(0.5f);
+            _danger.Value = 1f;
+
+            Run(2f);
+
+            Assert.Greater(_clock.BreatherSecondsLeft, 0f);
+            Assert.AreEqual(0f, _clock.Pressure);
+        }
+
+        [Test]
+        public void Pressure_LastsThroughALevel_AndGoesWithTheRun()
+        {
+            UsePressure();
+            Run(5f);
+
+            _level.Value = 2;
+            Assert.AreEqual(0.5f, _clock.Pressure, 0.01f, "a strong build is still strong next level");
+
+            _clock.ResetRun(2);
+            Assert.AreEqual(0f, _clock.Pressure);
+        }
+
+        [Test]
+        public void Pressure_Off_NeverMovesTheClock()
+        {
+            BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f));
+            _boardFill.Occupancy.Returns(0.5f);
+
+            Run(3.9f);
+            Assert.AreEqual(0, _lines, "a speedup of 1 leaves the 4s grace as it is");
+
+            Run(0.2f);
+            Assert.AreEqual(1, _lines);
+        }
+
+        [Test]
         public void Breather_DangerAtItsLevel_StartsOne()
         {
             UseDangerBreather();
@@ -877,7 +991,8 @@ namespace BalloonParty.Tests.Balloon
             var pacing = Substitute.For<ILevelPacingConfiguration>();
             pacing.SpawnClock.Returns(settings);
             _clock = new SpawnClock(pacing, _progress, _pauseService, _registry, _boardFill, _publisher,
-                _firedSubscriber, levelParams ?? UsualLevel(), _shapeCover, _flightConfig, _dangerLevel);
+                _firedSubscriber, levelParams ?? UsualLevel(), _shapeCover, _flightConfig, _dangerLevel, _need,
+                _damageSubscriber);
             _clock.Start();
         }
 
@@ -916,6 +1031,15 @@ namespace BalloonParty.Tests.Balloon
         }
 
         // As UseBreather, with a 5s cooldown after each breather.
+        // A 100s grace at plain pace on a board half full (under the 0.85 hold): pressure builds to full in 10s,
+        // doubling the pace there.
+        private void UsePressure()
+        {
+            BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 100f, pressureSpeedup: 2f, pressureBuildSeconds: 10f,
+                pressureHoldOccupancy: 0.85f, pressureKeptOnHeartLoss: 0.5f));
+            _boardFill.Occupancy.Returns(0.5f);
+        }
+
         // Only danger starts a breather here: 0.5 or more starts a 4s one at a standstill.
         private void UseDangerBreather()
         {

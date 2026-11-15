@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration.Level;
+using BalloonParty.Game.Assist;
 using BalloonParty.Game.Danger;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
@@ -38,6 +39,10 @@ namespace BalloonParty.Balloon.Spawner
     ///     after a great shot lasts a moment before the tension builds again. A cooldown after each
     ///     (<see cref="ISpawnClockSettings.BreatherCooldownSeconds" />) keeps releases rarer than the clears.
     ///     A board about to cost the last heart earns one too (<see cref="ISpawnClockSettings.BreatherDanger" />).
+    ///     Pressure pushes back on a comfortable player: while the board stays under
+    ///     <see cref="ISpawnClockSettings.PressureHoldOccupancy" /> and the player is not in need, it builds toward
+    ///     <see cref="ISpawnClockSettings.PressureSpeedup" />, so a strong build is pushed until its board climbs. It
+    ///     holds above that line and partly goes when a line costs a heart.
     /// </summary>
     internal sealed class SpawnClock : IStartable, ITickable, IRunResettable, IDisposable, ISpawnClock
     {
@@ -52,6 +57,8 @@ namespace BalloonParty.Balloon.Spawner
         private readonly IScoreShapeCover _shapeCover;
         private readonly IProjectileFlightConfig _flightConfig;
         private readonly IDangerLevel _danger;
+        private readonly IPlayerNeed _need;
+        private readonly ISubscriber<WaveDamageMessage> _damageSubscriber;
         private readonly CompositeDisposable _subscriptions = new();
 
         // Each in-flight ball's flight time while the clock runs; dropped when the ball retires.
@@ -67,11 +74,13 @@ namespace BalloonParty.Balloon.Spawner
         private float _recentPeakOccupancy;
         private float _breatherLeft;
         private float _cooldownLeft;
+        private float _pressure;
 
         public int ResetOrder => RunResetOrder.Counters;
         public float NextLineProgress => _window > 0f ? 1f - _remaining / _window : 0f;
         public float SecondsOnLevel => _secondsOnLevel;
         public float BreatherSecondsLeft => _breatherLeft;
+        public float Pressure => _pressure;
 
         [Inject]
         internal SpawnClock(
@@ -85,9 +94,13 @@ namespace BalloonParty.Balloon.Spawner
             IActiveLevelParameters levelParams,
             IScoreShapeCover shapeCover,
             IProjectileFlightConfig flightConfig,
-            IDangerLevel danger)
+            IDangerLevel danger,
+            IPlayerNeed need,
+            ISubscriber<WaveDamageMessage> damageSubscriber)
         {
             _danger = danger;
+            _need = need;
+            _damageSubscriber = damageSubscriber;
             _levelParams = levelParams;
             _shapeCover = shapeCover;
             _flightConfig = flightConfig;
@@ -107,6 +120,7 @@ namespace BalloonParty.Balloon.Spawner
             _levelProgress.Level.Skip(1).Subscribe(_ => StartLevel()).AddTo(_subscriptions);
             _firedSubscriber.Subscribe(OnFired).AddTo(_subscriptions);
             _projectiles.Retired.Subscribe(ball => _flightAges.Remove(ball)).AddTo(_subscriptions);
+            _damageSubscriber.Subscribe(OnWaveDamage).AddTo(_subscriptions);
         }
 
         public void Tick()
@@ -117,6 +131,7 @@ namespace BalloonParty.Balloon.Spawner
         public void ResetRun(int generation)
         {
             _flightAges.Clear();
+            _pressure = 0f;
             StartLevel();
         }
 
@@ -136,7 +151,9 @@ namespace BalloonParty.Balloon.Spawner
             _secondsOnLevel += deltaTime;
             var flightSeconds = AgeFlights(deltaTime);
             TrackClears(deltaTime);
-            _remaining -= deltaTime * Mathf.Lerp(_settings.BreatherPace, 1f, BreatherBlend()) * Pace(flightSeconds);
+            BuildPressure(deltaTime);
+            _remaining -= deltaTime * Mathf.Lerp(_settings.BreatherPace, 1f, BreatherBlend()) * Pace(flightSeconds)
+                          * Mathf.Lerp(1f, _settings.PressureSpeedup, _pressure);
             if (_remaining > 0f)
             {
                 return;
@@ -272,6 +289,27 @@ namespace BalloonParty.Balloon.Spawner
             var limits = _flightConfig.LimitsClockwise;
             var playArea = (limits.y - limits.w) * (limits.x - limits.z);
             return playArea > 0f && _shapeCover.CoveredArea >= share * playArea;
+        }
+
+        // The board climbing past the hold occupancy is the push working, so it holds there. A breather is the
+        // release, so it doesn't build through one; on the last heart (full need) it never builds.
+        private void BuildPressure(float deltaTime)
+        {
+            if (_breatherLeft > 0f || _boardFill.Occupancy >= _settings.PressureHoldOccupancy)
+            {
+                return;
+            }
+
+            var comfort = 1f - Mathf.Clamp01(_need.Need);
+            _pressure = Mathf.Min(1f, _pressure + deltaTime * comfort / _settings.PressureBuildSeconds);
+        }
+
+        private void OnWaveDamage(WaveDamageMessage msg)
+        {
+            if (msg.HeartsLost > 0)
+            {
+                _pressure *= _settings.PressureKeptOnHeartLoss;
+            }
         }
 
         // A board about to cost the last heart gets the release a big clear earns, so the player can dig

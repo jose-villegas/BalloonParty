@@ -1175,6 +1175,10 @@ MonoBehaviour:
     _breatherCooldownSeconds: 14
     _breatherShapeCover: 0.5
     _breatherDanger: 1
+    _pressureSpeedup: 2
+    _pressureBuildSeconds: 120
+    _pressureHoldOccupancy: 0.85
+    _pressureKeptOnHeartLoss: 0.5
   _scoringCurve:
     _controlPoints:
     - _level: 1

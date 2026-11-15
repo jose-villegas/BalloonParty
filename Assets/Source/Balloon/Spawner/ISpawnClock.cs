@@ -12,5 +12,9 @@ namespace BalloonParty.Balloon.Spawner
         /// <summary>Seconds left in the breather a big clear earned, 0 outside one: the release the clock gives
         /// before the pressure builds again.</summary>
         float BreatherSecondsLeft { get; }
+
+        /// <summary>The push back on a comfortable player, 0 to 1: at 1 the clock runs
+        /// <c>ISpawnClockSettings.PressureSpeedup</c> times faster. It lasts through levels, not runs.</summary>
+        float Pressure { get; }
     }
 }
