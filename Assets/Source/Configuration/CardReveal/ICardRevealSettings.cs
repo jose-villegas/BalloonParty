@@ -76,6 +76,15 @@ namespace BalloonParty.Configuration.CardReveal
         /// <summary>How long the ribbons take to fly off and fade at the end.</summary>
         float RibbonExitSeconds { get; }
 
+        /// <summary>What the ribbon a purple level starts with says.</summary>
+        string BonusRibbonText { get; }
+
+        /// <summary>Seconds after a purple level's play begins before its bonus ribbon bursts in.</summary>
+        float BonusRibbonDelaySeconds { get; }
+
+        /// <summary>Seconds the bonus ribbon flies, from its burst to gone, its exit included.</summary>
+        float BonusRibbonSeconds { get; }
+
         /// <summary>How long a capped title stands, once the capped ribbon has burst out, before it dissolves.</summary>
         float CappedDissolveDelay { get; }
 

@@ -176,6 +176,13 @@ namespace BalloonParty.Configuration.CardReveal
         [SerializeField] [Min(0f)] private float _pinRecoilDistance = 36f;
         [SerializeField] [Min(0f)] private float _pinLeaveSeconds = 0.4f;
 
+        [Tooltip("A purple level starts with a ribbon naming it: this text, in the level's purple, bursting in Bonus " +
+                 "Ribbon Delay Seconds after play begins and flying Bonus Ribbon Seconds, its exit included.")]
+        [SerializeField] private string _bonusRibbonText = "Bonus";
+
+        [SerializeField] [Min(0f)] private float _bonusRibbonDelaySeconds = 0.4f;
+        [SerializeField] [Min(0.1f)] private float _bonusRibbonSeconds = 2.2f;
+
         public IReadOnlyList<string> PopSheetPaths => _popSheetPaths;
         public int PopCount => Mathf.Max(1, _popSheetPaths.Length);
         public int RecentPopsAvoided => Mathf.Max(0, _recentPopsAvoided);
@@ -194,6 +201,9 @@ namespace BalloonParty.Configuration.CardReveal
         public int RibbonsFromFrame => _ribbonsFromFrame;
         public float RibbonBurstSeconds => _ribbonBurstSeconds;
         public float RibbonExitSeconds => _ribbonExitSeconds;
+        public string BonusRibbonText => _bonusRibbonText;
+        public float BonusRibbonDelaySeconds => _bonusRibbonDelaySeconds;
+        public float BonusRibbonSeconds => _bonusRibbonSeconds;
         public float CappedDissolveDelay => _cappedDissolveDelay;
         public float CappedDissolveSeconds => _cappedDissolveSeconds;
         public float RibbonGrowth => _ribbonGrowth;

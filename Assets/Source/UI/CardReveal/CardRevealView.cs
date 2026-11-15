@@ -5,6 +5,8 @@ using BalloonParty.Configuration.CardReveal;
 using BalloonParty.Configuration.Cinematics;
 using BalloonParty.Game.CardReveal;
 using BalloonParty.Configuration.Effects;
+using BalloonParty.Configuration.Palette;
+using BalloonParty.Game.Level;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
@@ -73,6 +75,21 @@ namespace BalloonParty.UI.CardReveal
         [Tooltip("How far below its place the balloon starts its rise, in canvas units.")]
         [SerializeField] private float _riseDistance = 260f;
 
+        [Header("Bonus ribbon")]
+        [Tooltip("A purple level starts with a ribbon naming it, a copy of the capped ribbon in the level's purple: " +
+                 "it grows in from here (canvas units from the canvas's centre), tilted and scaled as below.")]
+        [SerializeField] private Vector2 _bonusRibbonFrom = new(0f, 62f);
+
+        [SerializeField] private float _bonusRibbonFromTilt = -12f;
+        [SerializeField] [Range(0.1f, 1f)] private float _bonusRibbonFromScale = 0.2f;
+
+        [Tooltip("Where the bonus ribbon bursts to, its tilt there, its drift a second, and how far it flies off.")]
+        [SerializeField] private Vector2 _bonusRibbonTo = new(0f, 70f);
+
+        [SerializeField] private float _bonusRibbonTilt = -4f;
+        [SerializeField] private Vector2 _bonusRibbonDrift = new(0f, 3f);
+        [SerializeField] private Vector2 _bonusRibbonExitBy = new(0f, 120f);
+
         [Inject] private ICardReveals _cardReveals;
         [Inject] private ICardRevealSettings _settings;
         [Inject] private ICinematicsSettings _cinematics;
@@ -80,9 +97,15 @@ namespace BalloonParty.UI.CardReveal
         [Inject] private SceneLightFieldService _lightField;
         [Inject] private DisturbanceFieldService _disturbanceField;
         [Inject] private PoolManager _pool;
+        [Inject] private IBonusLevelCue _bonusLevelCue;
+        [Inject] private IActiveLevelParameters _levelParams;
+        [Inject] private IGamePalette _palette;
 
         private CancellationTokenSource _playing;
+        private CancellationTokenSource _bonusPlaying;
         private IDisposable _subscriptions;
+        private IDisposable _bonusSubscription;
+        private RibbonPiece _bonusRibbon;
         private PopSheetLoader _sheets;
         private Material _rubber;
         private Material _rubberShadow;
@@ -113,6 +136,8 @@ namespace BalloonParty.UI.CardReveal
 
         private void Start()
         {
+            // Apart from the reveals: a canvas with no pops baked still names a bonus level.
+            _bonusSubscription = _bonusLevelCue?.Started.Subscribe(_ => PlayBonusRibbon());
             if (_settings.PopSheetPaths.Count == 0)
             {
                 return;
@@ -140,7 +165,9 @@ namespace BalloonParty.UI.CardReveal
             // Unsubscribed first: detaching drops the queue, and the null that publishes must not reach a view
             // being torn down.
             _subscriptions?.Dispose();
+            _bonusSubscription?.Dispose();
             Stop();
+            StopBonusRibbon();
             _sheets?.Dispose();
             if (_attached)
             {
@@ -701,6 +728,81 @@ namespace BalloonParty.UI.CardReveal
             }
 
             step(1f);
+        }
+
+        // Built on first use from the capped ribbon, outside the reveal's group, so it shows without a reveal and
+        // sits over one still flying. Tinted the level's extra colour, the last of its colours.
+        private void PlayBonusRibbon()
+        {
+            StopBonusRibbon();
+            if (_bonusRibbon == null)
+            {
+                if (_cappedRibbon == null)
+                {
+                    return;
+                }
+
+                _bonusRibbon = Instantiate(_cappedRibbon, transform);
+                _bonusRibbon.name = "BonusRibbon";
+                var rect = (RectTransform)_bonusRibbon.transform;
+                rect.anchorMin = new Vector2(0.5f, 0.5f);
+                rect.anchorMax = new Vector2(0.5f, 0.5f);
+                _bonusRibbon.SetFlight(_bonusRibbonFrom, _bonusRibbonFromTilt, _bonusRibbonFromScale, _bonusRibbonTo,
+                    _bonusRibbonTilt, _bonusRibbonDrift, _bonusRibbonExitBy);
+            }
+
+            var colors = _levelParams?.Current?.AllowedColors;
+            var graphic = _bonusRibbon.GetComponentInChildren<RibbonGraphic>(true);
+            if (graphic != null && colors is { Count: > 0 })
+            {
+                graphic.color = _palette.GetColor(colors[colors.Count - 1]);
+            }
+
+            _bonusRibbon.gameObject.SetActive(false);
+            _bonusPlaying = new CancellationTokenSource();
+            FlyBonusRibbonAsync(_bonusRibbon, _bonusPlaying.Token).Forget();
+        }
+
+        private void StopBonusRibbon()
+        {
+            if (_bonusPlaying != null)
+            {
+                _bonusPlaying.Cancel();
+                _bonusPlaying.Dispose();
+                _bonusPlaying = null;
+            }
+
+            if (_bonusRibbon != null)
+            {
+                _bonusRibbon.gameObject.SetActive(false);
+            }
+        }
+
+        // On unscaled time, as the reveals: a slow-motion beat right as the level starts mustn't stall it.
+        private async UniTask FlyBonusRibbonAsync(RibbonPiece piece, CancellationToken token)
+        {
+            try
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(_settings.BonusRibbonDelaySeconds), DelayType.UnscaledDeltaTime,
+                    PlayerLoopTiming.Update, token);
+                piece.gameObject.SetActive(true);
+                piece.Show(_settings.BonusRibbonText);
+                var total = _settings.BonusRibbonSeconds;
+                var exitSeconds = Mathf.Clamp(_settings.RibbonExitSeconds, 0.01f, total);
+                var elapsed = 0f;
+                while (elapsed < total)
+                {
+                    piece.Fly(elapsed, Mathf.Clamp01((elapsed - (total - exitSeconds)) / exitSeconds), _settings);
+                    await UniTask.Yield(PlayerLoopTiming.Update, token);
+                    elapsed += Time.unscaledDeltaTime;
+                }
+
+                piece.gameObject.SetActive(false);
+            }
+            catch (OperationCanceledException)
+            {
+                // Stopped for a newer bonus level or the scene closing.
+            }
         }
     }
 }

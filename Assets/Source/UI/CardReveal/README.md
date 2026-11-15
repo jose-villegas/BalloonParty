@@ -16,6 +16,16 @@ when, is decided by `Game/CardReveal/`; this folder only plays it. The design is
 | `RibbonGraphic` | The ribbon itself, a UI graphic: a strip with a V notch cut in each end, and a wave running along it. Cel shaded by its material (`BalloonParty/Sprite/CelRibbon`, `Materials/UI/CardRevealRibbon`): folds turned toward the scene light in the ribbon's colour, those turned away in a shadow tone, a satin sheen along the lit folds' middle, all in the scene light field's light where each vertex is (see below). The mesh carries a second copy of the strip, which the shader moves away from the light as the ribbon's drop shadow. Its `Dissolve` fades it away in ragged patches eating in from the left (`DissolvedAt`), through the vertex alpha |
 | `RibbonStrike` | A pen stroke through a ribbon's line, a UI graphic under the text: bent by the ribbon's wave so it rides the folds with the letters, rising a little toward its end like a quick stroke, and dissolving with the ribbon |
 
+## The bonus ribbon
+
+A purple level starts with a ribbon naming it: `ICardRevealSettings.BonusRibbonText` ("Bonus"), on a copy of
+the capped ribbon tinted the level's extra colour (the last of its colours). `CardRevealView` plays it off
+`Game/Level/IBonusLevelCue`, `BonusRibbonDelaySeconds` (0.4) after play begins, growing in from
+`_bonusRibbonFrom` to `_bonusRibbonTo` (the view's own layout, high in the middle of the board) and flying
+`BonusRibbonSeconds` (2.2) with its exit, all on unscaled time. The copy is made the first time, under the
+canvas and outside the reveal's group, so it shows without a reveal and over one still flying. It works
+with no pops baked too. It doesn't hold the board.
+
 ## A reveal, step by step
 
 All on unscaled time, so slow-motion beats don't stretch it.

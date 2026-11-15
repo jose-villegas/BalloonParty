@@ -83,3 +83,6 @@ MonoBehaviour:
   _pinStaySeconds: 0.08
   _pinRecoilDistance: 36
   _pinLeaveSeconds: 0.4
+  _bonusRibbonText: Bonus
+  _bonusRibbonDelaySeconds: 0.4
+  _bonusRibbonSeconds: 2.2

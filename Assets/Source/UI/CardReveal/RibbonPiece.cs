@@ -99,6 +99,24 @@ namespace BalloonParty.UI.CardReveal
             }
         }
 
+        /// <summary>
+        ///     Sets where the piece flies, for one built at runtime rather than laid out in the canvas: from
+        ///     <paramref name="from" /> (tilted <paramref name="fromTilt" />, at <paramref name="fromScale" />) to
+        ///     <paramref name="to" /> (tilted <paramref name="tilt" />), drifting <paramref name="drift" /> a second,
+        ///     and off by <paramref name="exitBy" />.
+        /// </summary>
+        internal void SetFlight(Vector2 from, float fromTilt, float fromScale, Vector2 to, float tilt, Vector2 drift,
+            Vector2 exitBy)
+        {
+            _restPosition = from;
+            _restTilt = fromTilt;
+            _restScale = Mathf.Clamp(fromScale, 0.1f, 1f);
+            _burstTo = to;
+            _tilt = tilt;
+            _drift = drift;
+            _exitBy = exitBy;
+        }
+
         /// <summary>Rolled up inside the balloon, before the pop.</summary>
         internal void Rest()
         {
