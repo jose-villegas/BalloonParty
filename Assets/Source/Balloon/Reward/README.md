@@ -67,8 +67,10 @@ has an entry for.
   (`SureGoldenAtCompletion`, 10% done), so every player meets a golden balloon with the level still ahead.
 - **Heart, elsewhere.** A roll per line while a heart is missing: `HeartChanceMissingOne`, or
   `HeartChanceMissingTwo` with two or more missing. After one is placed, `HeartCooldownLines` lines pass
-  before the next roll. A heart rolled for a line with no room for it is owed to the next line, unless
-  the player has healed to full in between. Extra hearts past the maximum count as full.
+  before the next roll. Each line rolled without one while the player is in need raises the next line's
+  chance (`IAssistSettings.HeartPity`, a `Game/Assist/PityRoll`: on the last heart 12%, 18%, 24%…). A heart
+  rolled for a line with no room for it is owed to the next line, unless the player has healed to full in
+  between. Extra hearts past the maximum count as full.
 
 The tuning is `IRewardBalloonSettings`, a block on `BalloonsConfiguration`.
 

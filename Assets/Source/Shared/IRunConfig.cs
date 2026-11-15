@@ -54,5 +54,8 @@ namespace BalloonParty.Shared
 
         /// <summary>The upgrade cards a level-up deals, and how often.</summary>
         IUpgradeSettings Upgrades { get; }
+
+        /// <summary>Help that comes only when the player needs it.</summary>
+        IAssistSettings Assist { get; }
     }
 }

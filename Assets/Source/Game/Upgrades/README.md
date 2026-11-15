@@ -30,7 +30,7 @@ and `Cards`, each with a kind, title, description, a per-stack `Amount`, `MaxSta
 | `Shield` | +`Amount` starting shields on every ball (rounded) | `ThrowerController.LoadProjectile`, the shield-chain planner in `ItemAssigner`, and the shot solver (`ShotBoardGather.Gather`'s `startingShields`, passed by the Fire Best Shot cheat and the Shot Solver window) |
 | `RaiseLimits` | +`Amount` to every other card's limit (rounded), so a card at its limit is dealt again. Dealt only once some card has reached its limit, and likelier the more have: its weight counts once for every card at its limit (`DealWeight`). Never the ad's bonus card (that lasts one attempt, with no room to grow into). Its own limit is its `MaxStacks`. Raise the Bar in the deck: +1 a stack, 2 stacks, half the others' weight | `RunUpgrades.LimitOf`, which the deal, the pick and the pick screen's `held/limit` label read |
 | `ItemOdds` | On every item roll (the initial board fill included), each item the level holds gets a chance of `Amount` × its `ExtraItemShare` (`ItemConfiguration`) at an extra copy: 1 for the Shield, down to 0.25 for the Snipe, so strong items grow slower. The whole part always lands; the fraction is a chance; the level's caps still hold | `ILevelParameters.FillExtraItems`, placed by `ItemAssigner` |
-| `SnipeChance` | +`Amount` chance that each ball the thrower loads starts armed as a Snipe lance; the total never passes 1. Sharpshooter in the deck: 10% a stack, 3 stacks, and no roll for `SnipeCooldownSeconds` (8 s) after a hit. See "Sharpshooter" below | `ThrowerController.LoadProjectile`, through `SnipeChanceRoll` (`Item/Snipe/`) |
+| `SnipeChance` | +`Amount` chance that each ball the thrower loads starts armed as a Snipe lance; the total never passes 1. Sharpshooter in the deck: 1% a stack, 3 stacks, raised by pity while the player is in trouble, and no roll for `SnipeCooldownSeconds` (8 s) after a hit. See "Sharpshooter" below | `ThrowerController.LoadProjectile`, through `SnipeChanceRoll` (`Item/Snipe/`) |
 
 Every card is read live, so a held card applies from the next ball loaded and the next item roll.
 
@@ -44,7 +44,10 @@ new kind needs its icon drawn and named there too; an EditMode test fails until 
 
 The roll happens once per ball, the moment the thrower loads it (`SnipeChanceRoll.TryArm`), which is also
 when its reload starts. After a hit no load rolls for `IUpgradeSettings.SnipeCooldownSeconds` (8 s of game
-time, on `RunConfig`'s upgrades block), so rapid fire can't chain lances; a miss starts no wait. A hit arms the ball the way a Snipe pickup arms the ball still in the thrower
+time, on `RunConfig`'s upgrades block), so rapid fire can't chain lances; a miss starts no wait. The card's
+chance is low on purpose: each ball loaded without a Snipe while the player is in trouble (low hearts or a
+dangerous board) raises the next ball's chance (`IAssistSettings.SnipePity`, see `Game/Assist/README.md`), so
+the lance comes when it's needed rather than when the player is already winning. A hit arms the ball the way a Snipe pickup arms the ball still in the thrower
 (`ISnipeArmer`, implemented by `SnipeItemHandler`): it pierces, carries the Snipe's speed buff, and its
 pencil line starts at the muzzle when it fires. So it plays, scores and discharges like any Snipe lance,
 and the thrower's "ready" heads-up reads it as armed through `IsPiercing`. While it waits in the thrower it

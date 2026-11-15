@@ -18,6 +18,7 @@ using BalloonParty.Balloon.Spawner;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Display;
+using BalloonParty.Game.Assist;
 using BalloonParty.Game.CardReveal;
 using BalloonParty.Game.Cinematics;
 using BalloonParty.Game.Danger;
@@ -300,6 +301,7 @@ namespace BalloonParty.Game
                 .As<IPlayerHealing>();
             builder.Register<ILossForecast, LossForecast>(Lifetime.Singleton);
             builder.RegisterEntryPoint<SpaceDanger>().AsSelf().As<IDangerLevel>();
+            builder.Register<PlayerNeed>(Lifetime.Singleton).As<IPlayerNeed>();
             builder.Register<HeartTrailTracker>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
             builder.Register<DefaultScoreTrailBehaviour>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<ShapeFormationTicker>().AsSelf().As<IScoreShapeCover>();
@@ -335,7 +337,7 @@ namespace BalloonParty.Game
             builder.Register<PaintItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<SnipeItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<SnipeLanceLines>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<SnipeChanceRoll>(Lifetime.Singleton).As<ISnipeChanceRoll>();
+            builder.Register<SnipeChanceRoll>(Lifetime.Singleton).As<ISnipeChanceRoll>().As<IRunResettable>();
             builder.RegisterEntryPoint<SnipeDischargeBloom>();
             builder.RegisterEntryPoint<ItemSightTracker>().AsSelf();
 

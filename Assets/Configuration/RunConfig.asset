@@ -68,8 +68,16 @@ MonoBehaviour:
       _weight: 0.5
     - _kind: 5
       _title: Sharpshooter
-      _description: 10% of pens load as a Snipe
-      _amount: 0.1
+      _description: Pens load as Snipes in a pinch
+      _amount: 0.01
       _maxStacks: 3
       _weight: 1
     _snipeCooldownSeconds: 8
+  _assist:
+    _dangerNeedWeight: 1
+    _snipePity:
+      _growthPerMiss: 4
+      _maxChance: 0.5
+    _heartPity:
+      _growthPerMiss: 0.5
+      _maxChance: 0.5

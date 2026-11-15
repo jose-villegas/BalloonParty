@@ -1,3 +1,4 @@
+using BalloonParty.Game.Assist;
 using BalloonParty.Game.Upgrades;
 using BalloonParty.Item.Snipe;
 using BalloonParty.Projectile.Model;
@@ -18,6 +19,8 @@ namespace BalloonParty.Tests.Item
         private IWeaponStats _weapon;
         private ISnipeArmer _armer;
         private IUpgradeSettings _settings;
+        private IPlayerNeed _need;
+        private IAssistSettings _assist;
         private SnipeChanceRoll _roll;
         private int _draws;
 
@@ -27,7 +30,13 @@ namespace BalloonParty.Tests.Item
             _weapon = Substitute.For<IWeaponStats>();
             _armer = Substitute.For<ISnipeArmer>();
             _settings = Substitute.For<IUpgradeSettings>();
-            _roll = new SnipeChanceRoll(_weapon, _armer, _settings) { Now = () => 0f };
+            _need = Substitute.For<IPlayerNeed>();
+            var pity = Substitute.For<IPitySettings>();
+            pity.GrowthPerMiss.Returns(4f);
+            pity.MaxChance.Returns(0.5f);
+            _assist = Substitute.For<IAssistSettings>();
+            _assist.SnipePity.Returns(pity);
+            _roll = new SnipeChanceRoll(_weapon, _armer, _settings, _need, _assist) { Now = () => 0f };
             _draws = 0;
         }
 
@@ -96,7 +105,7 @@ namespace BalloonParty.Tests.Item
             // Two stacks of 0.15 from the real card arithmetic: a draw of 0.25 misses one stack, hits two.
             var rig = new UpgradeRig(Substitute.For<IProjectileFlightConfig>());
             var card = UpgradeRig.Card(UpgradeKind.SnipeChance, 0.15f);
-            var roll = new SnipeChanceRoll(rig.Upgrades, _armer, rig.Settings)
+            var roll = new SnipeChanceRoll(rig.Upgrades, _armer, rig.Settings, _need, _assist)
             {
                 Random01 = () => 0.25f,
                 Now = () => 0f
@@ -144,6 +153,79 @@ namespace BalloonParty.Tests.Item
             now = 1f;
             Draw(0.1f);
             Assert.IsTrue(_roll.TryArm(new ProjectileModel()), "only a hit starts the wait");
+        }
+
+        [Test]
+        public void TryArm_InNeed_EachBallLoadedWithoutASnipe_RaisesTheNextOnesChance()
+        {
+            // 1% from the card; at full need each miss adds four times that.
+            _weapon.SnipeChance.Returns(0.01f);
+            _need.Need.Returns(1f);
+            Draw(0.08f);
+
+            Assert.IsFalse(_roll.TryArm(new ProjectileModel()), "1%");
+            Assert.IsFalse(_roll.TryArm(new ProjectileModel()), "5%");
+            Assert.IsTrue(_roll.TryArm(new ProjectileModel()), "9%");
+        }
+
+        [Test]
+        public void TryArm_OutOfNeed_StaysAtTheCardsChance()
+        {
+            _weapon.SnipeChance.Returns(0.01f);
+            Draw(0.02f);
+
+            for (var i = 0; i < 20; i++)
+            {
+                Assert.IsFalse(_roll.TryArm(new ProjectileModel()), "no trouble, no help");
+            }
+        }
+
+        [Test]
+        public void TryArm_PityBuiltInNeed_HelpsOnlyWhileTheNeedLasts()
+        {
+            _weapon.SnipeChance.Returns(0.01f);
+            _need.Need.Returns(1f);
+            Draw(0.08f);
+            _roll.TryArm(new ProjectileModel());
+            _roll.TryArm(new ProjectileModel());
+
+            _need.Need.Returns(0f);
+            Assert.IsFalse(_roll.TryArm(new ProjectileModel()), "back out of trouble, the card's 1% again");
+
+            _need.Need.Returns(1f);
+            Assert.IsTrue(_roll.TryArm(new ProjectileModel()), "the pity was kept, so trouble brings it back");
+        }
+
+        [Test]
+        public void TryArm_AHit_ClearsThePity()
+        {
+            _weapon.SnipeChance.Returns(0.01f);
+            _need.Need.Returns(1f);
+            Draw(0.08f);
+            _roll.TryArm(new ProjectileModel());
+            _roll.TryArm(new ProjectileModel());
+            Assert.IsTrue(_roll.TryArm(new ProjectileModel()));
+
+            Assert.IsFalse(_roll.TryArm(new ProjectileModel()), "back to the card's 1%");
+        }
+
+        [Test]
+        public void ResetRun_ClearsThePityAndTheCooldown()
+        {
+            _weapon.SnipeChance.Returns(0.01f);
+            _settings.SnipeCooldownSeconds.Returns(12f);
+            _need.Need.Returns(1f);
+            Draw(0.08f);
+            _roll.TryArm(new ProjectileModel());
+            _roll.TryArm(new ProjectileModel());
+
+            _roll.ResetRun(1);
+            Assert.IsFalse(_roll.TryArm(new ProjectileModel()), "a new run starts at the card's 1%");
+
+            Draw(0f);
+            _roll.TryArm(new ProjectileModel());
+            _roll.ResetRun(2);
+            Assert.IsTrue(_roll.TryArm(new ProjectileModel()), "no cooldown carried over from the last run");
         }
 
         private void Draw(float value)

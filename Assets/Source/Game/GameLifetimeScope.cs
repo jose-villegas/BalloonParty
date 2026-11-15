@@ -125,6 +125,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance<IPredictionTraceConfig>(_predictionTraceConfig);
             builder.RegisterInstance<IRunConfig>(_runConfig);
             builder.RegisterInstance<IUpgradeSettings>(_runConfig.Upgrades);
+            builder.RegisterInstance<IAssistSettings>(_runConfig.Assist);
             builder.RegisterInstance<IItemConfiguration>(_itemConfiguration);
             builder.RegisterInstance<IGamePalette>(_gamePalette);
             builder.RegisterInstance<IBalloonsConfiguration>(_balloonsConfiguration);

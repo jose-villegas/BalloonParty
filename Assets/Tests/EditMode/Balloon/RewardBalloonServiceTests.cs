@@ -5,8 +5,10 @@ using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Level;
+using BalloonParty.Game.Assist;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
+using BalloonParty.Shared;
 using NSubstitute;
 using NUnit.Framework;
 using UniRx;
@@ -36,6 +38,8 @@ namespace BalloonParty.Tests.Balloon
         private ReactiveProperty<int> _hearts;
         private IActiveLevelParameters _levelParams;
         private IPlayerHealth _health;
+        private IPlayerNeed _need;
+        private IAssistSettings _assist;
         private RewardBalloonService _service;
         private float _roll;
         private int _draws;
@@ -75,6 +79,12 @@ namespace BalloonParty.Tests.Balloon
             _health = Substitute.For<IPlayerHealth>();
             _health.Current.Returns(_hearts);
             _health.Max.Returns(StartingHearts);
+            _need = Substitute.For<IPlayerNeed>();
+            var pity = Substitute.For<IPitySettings>();
+            pity.GrowthPerMiss.Returns(0.5f);
+            pity.MaxChance.Returns(0.5f);
+            _assist = Substitute.For<IAssistSettings>();
+            _assist.HeartPity.Returns(pity);
 
             _roll = 1f;
             _draws = 0;
@@ -728,6 +738,34 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void Heart_InNeed_EachLineRolledWithoutOne_RaisesTheNextLinesChance()
+        {
+            // The last heart: 12% from the settings, and each miss at full need adds half of that.
+            _level.IsExtraColorLevel.Returns(false);
+            _hearts.Value = 1;
+            _need.Need.Returns(1f);
+            _roll = 0.2f;
+
+            Assert.IsFalse(_service.TryTakeDue(out _), "12%");
+            Assert.IsFalse(_service.TryTakeDue(out _), "18%");
+            Assert.IsTrue(_service.TryTakeDue(out var type), "24%");
+            Assert.AreEqual(BalloonType.Heart, type);
+        }
+
+        [Test]
+        public void Heart_OutOfNeed_LinesWithoutOne_KeepTheChance()
+        {
+            _level.IsExtraColorLevel.Returns(false);
+            _hearts.Value = 1;
+            _roll = 0.2f;
+
+            for (var i = 0; i < 10; i++)
+            {
+                Assert.IsFalse(_service.TryTakeDue(out _));
+            }
+        }
+
+        [Test]
         public void Heart_MissingOne_RollAtTheChance_NotDue()
         {
             _level.IsExtraColorLevel.Returns(false);
@@ -937,7 +975,7 @@ namespace BalloonParty.Tests.Balloon
             balloons.RewardBalloons.Returns(_settings);
             balloons.Entries.Returns(entries);
 
-            var service = new RewardBalloonService(balloons, _levelProgress, _levelParams, _health)
+            var service = new RewardBalloonService(balloons, _levelProgress, _levelParams, _health, _need, _assist)
             {
                 Random01 = () =>
                 {

@@ -19,6 +19,7 @@ The entry point that starts and runs the game.
 | `Upgrades/` | Run-scoped upgrade cards dealt at level-ups, and the weapon they add up to (ball cap, reload, shields, item odds) — see `Upgrades/README.md` |
 | `Health/` | Player hit-point pool and loss forecast — see `Health/README.md` |
 | `Danger/` | Space-pressure early-warning signal — see `Danger/README.md` |
+| `Assist/` | Help that comes only when the player needs it: how much trouble they're in, and the pity that makes a rolled help (a Snipe, a heart) likelier the longer it misses in trouble — see `Assist/README.md` |
 | `HeadsUp/` | Which handwritten heads-ups show, and when: the routers that turn gameplay messages into requests, the queue that caps and prioritises them, and the service that drives the view — see `HeadsUp/README.md` |
 | `Cinematics/` | Cinematic director, camera rig, and the level-up / heart-drain producers — see `Cinematics/README.md` |
 | `Flight/` | `FlightStatsService` — the single owner of per-ball flight counts (pops, deflects, wall bounces, pierce discharges), read per ball via `IFlightStatsSource.Of(ball)` by both audio and telemetry so neither keeps its own copy |

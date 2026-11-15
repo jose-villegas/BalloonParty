@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Level;
+using BalloonParty.Game.Assist;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
+using BalloonParty.Shared;
 using UniRx;
 using VContainer.Unity;
 using Random = UnityEngine.Random;
@@ -37,6 +39,8 @@ namespace BalloonParty.Balloon.Reward
         private readonly ILevelProgress _levelProgress;
         private readonly IActiveLevelParameters _levelParams;
         private readonly IPlayerHealth _health;
+        private readonly IPlayerNeed _need;
+        private readonly PityRoll _heartPity;
         private readonly bool _goldenPlaceable;
         private readonly bool _heartPlaceable;
 
@@ -72,12 +76,16 @@ namespace BalloonParty.Balloon.Reward
             IBalloonsConfiguration balloons,
             ILevelProgress levelProgress,
             IActiveLevelParameters levelParams,
-            IPlayerHealth health)
+            IPlayerHealth health,
+            IPlayerNeed need,
+            IAssistSettings assist)
         {
             _settings = balloons.RewardBalloons;
             _levelProgress = levelProgress;
             _levelParams = levelParams;
             _health = health;
+            _need = need;
+            _heartPity = new PityRoll(assist.HeartPity);
             _goldenPlaceable = HasEntry(balloons, BalloonType.Golden);
             _heartPlaceable = HasEntry(balloons, BalloonType.Heart);
             _linesSinceHeart = _settings.HeartCooldownLines;
@@ -149,6 +157,7 @@ namespace BalloonParty.Balloon.Reward
             _heartAlive = false;
             _heartPending = false;
             _linesSinceHeart = _settings.HeartCooldownLines;
+            _heartPity.Clear();
         }
 
         public void Dispose()
@@ -299,8 +308,9 @@ namespace BalloonParty.Balloon.Reward
                 return false;
             }
 
+            // Pity forgives the lines rolled without a heart while in trouble (IAssistSettings.HeartPity).
             var chance = HeartChance(_settings, missing);
-            _heartPending = chance > 0f && Random01() < chance;
+            _heartPending = chance > 0f && _heartPity.Roll(chance, _need.Need, Random01());
             return _heartPending;
         }
 

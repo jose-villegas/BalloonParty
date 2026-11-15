@@ -1,4 +1,6 @@
 using System;
+using BalloonParty.Game.Assist;
+using BalloonParty.Game.Run;
 using BalloonParty.Game.Upgrades;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
@@ -19,29 +21,36 @@ namespace BalloonParty.Item.Snipe
 
     /// <summary>
     ///     The Sharpshooter card's roll, once per ball the thrower loads. A hit arms the ball through the Snipe's own
-    ///     path (<see cref="ISnipeArmer" />), so it is a Snipe lance in every way, pencil line included. After a hit,
-    ///     no load rolls for <see cref="IUpgradeSettings.SnipeCooldownSeconds" />, so rapid fire can't chain lances.
+    ///     path (<see cref="ISnipeArmer" />), so it is a Snipe lance in every way, pencil line included. The card's
+    ///     chance is low; pity (<see cref="IAssistSettings.SnipePity" />) raises it for each ball loaded without a
+    ///     Snipe while the player is in trouble (<see cref="IPlayerNeed" />). After a hit, no load rolls for
+    ///     <see cref="IUpgradeSettings.SnipeCooldownSeconds" />, so rapid fire can't chain lances.
     /// </summary>
-    internal sealed class SnipeChanceRoll : ISnipeChanceRoll
+    internal sealed class SnipeChanceRoll : ISnipeChanceRoll, IRunResettable
     {
         private readonly IWeaponStats _weapon;
         private readonly ISnipeArmer _armer;
         private readonly IUpgradeSettings _settings;
+        private readonly IPlayerNeed _need;
+        private readonly PityRoll _pity;
 
         private float _lastArmedAt = float.NegativeInfinity;
 
         // Tests replace the draw to pin the roll, and the clock to step through the cooldown.
         internal Func<float> Random01 { get; set; } = () => Random.value;
         internal Func<float> Now { get; set; } = () => Time.time;
+        public int ResetOrder => RunResetOrder.Counters;
 
-        internal SnipeChanceRoll(IWeaponStats weapon, ISnipeArmer armer, IUpgradeSettings settings)
+        internal SnipeChanceRoll(IWeaponStats weapon, ISnipeArmer armer, IUpgradeSettings settings, IPlayerNeed need,
+            IAssistSettings assist)
         {
             _weapon = weapon;
             _armer = armer;
             _settings = settings;
+            _need = need;
+            _pity = new PityRoll(assist.SnipePity);
         }
 
-        // Random.value can return 1, so a chance of 1 has to hit without the draw.
         public bool TryArm(IWriteableProjectileModel loaded)
         {
             var chance = _weapon.SnipeChance;
@@ -56,7 +65,7 @@ namespace BalloonParty.Item.Snipe
                 return false;
             }
 
-            if (chance < 1f && Random01() >= chance)
+            if (!_pity.Roll(chance, _need.Need, Random01()))
             {
                 return false;
             }
@@ -64,6 +73,13 @@ namespace BalloonParty.Item.Snipe
             _lastArmedAt = now;
             _armer.Arm(loaded);
             return true;
+        }
+
+        // A new run starts with no pity and no cooldown left over from the last.
+        public void ResetRun(int generation)
+        {
+            _lastArmedAt = float.NegativeInfinity;
+            _pity.Clear();
         }
     }
 }
