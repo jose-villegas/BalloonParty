@@ -22,6 +22,8 @@ namespace BalloonParty.Game
 
         private bool _triggered;
 
+        internal bool Triggered => _triggered;
+
         public void Play()
         {
             if (_triggered)

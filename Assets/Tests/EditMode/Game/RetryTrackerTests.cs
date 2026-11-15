@@ -152,6 +152,56 @@ namespace BalloonParty.Tests.Game
             Assert.AreEqual(2, tracker.RetriesRemaining);
         }
 
+        [Test]
+        public void PrepareResume_StagesTheSavedLevelForTheResetCascade()
+        {
+            var tracker = Tracker(0);
+            var save = new RunSnapshot { Level = 8, Hearts = 2, RetriesUsed = 2 };
+
+            tracker.PrepareResume(save);
+
+            Assert.AreEqual(8, tracker.RetryLevel, "the retry path's readers set the level up as its retry would");
+            Assert.AreSame(save, tracker.Resuming);
+            Assert.IsFalse(tracker.RetryWithBonusCard);
+        }
+
+        [Test]
+        public void Resume_SpendsNoRetry_AndKeepsTheSavedCount()
+        {
+            var tracker = Tracker(0);
+
+            tracker.PrepareResume(new RunSnapshot { Level = 8, Hearts = 2, RetriesUsed = 3 });
+            tracker.ResetRun(0);
+
+            Assert.AreEqual(3, tracker.RetriesUsed, "not one more (a resume isn't a retry), not zero (the ad gate)");
+            Assert.AreEqual(0, tracker.RetryLevel);
+            Assert.IsNull(tracker.Resuming, "cleared with the retry level");
+        }
+
+        [Test]
+        public void RetryAfterAResume_CountsOnFromTheSavedRetries()
+        {
+            var tracker = Tracker(5);
+            tracker.PrepareResume(new RunSnapshot { Level = 8, Hearts = 2, RetriesUsed = 3 });
+            tracker.ResetRun(0);
+
+            Retry(tracker, 8);
+
+            Assert.AreEqual(4, tracker.RetriesUsed);
+            Assert.AreEqual(1, tracker.RetriesRemaining);
+        }
+
+        [Test]
+        public void PrepareRetry_AfterAStagedResume_IsAPlainRetry()
+        {
+            var tracker = Tracker(0);
+            tracker.PrepareResume(new RunSnapshot { Level = 8, Hearts = 2, RetriesUsed = 3 });
+
+            tracker.PrepareRetry(8, withBonusCard: false);
+
+            Assert.IsNull(tracker.Resuming);
+        }
+
         private static RetryTracker Tracker(int maxRetries)
         {
             var config = Substitute.For<IRunConfig>();

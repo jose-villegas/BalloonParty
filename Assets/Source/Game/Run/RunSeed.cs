@@ -31,6 +31,14 @@ namespace BalloonParty.Game.Run
 
         public void ResetRun(int generation)
         {
+            // The saved seed, so the resumed level is set where it was.
+            var resuming = _retryState.Resuming;
+            if (resuming != null)
+            {
+                _value = resuming.Seed;
+                return;
+            }
+
             if (_retryState.RetryLevel > 0)
             {
                 return;

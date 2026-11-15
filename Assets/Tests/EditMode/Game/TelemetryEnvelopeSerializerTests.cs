@@ -45,6 +45,18 @@ namespace BalloonParty.Tests.Game
             Assert.That(json, Does.Contain("\"completed\":true"));
             Assert.That(json, Does.Contain("\"cheat_active\":true"));
             Assert.That(json, Does.Contain("\"end_cause\":\"GameOver\""));
+            Assert.That(json, Does.Contain("\"resumed\":false"));
+        }
+
+        [Test]
+        public void Serialize_MarksAResumedAttempt()
+        {
+            var scope = MetricScope.Create(MetricScopeKind.Run, 1, () => 0f);
+            var envelope = new TelemetryEnvelope(
+                RecordKind.Run, 3, "abc-session", 5, 2, 1, 7, 2, 0, false, false, "GameOver", 0L, scope.Seal(7, false),
+                resumed: true);
+
+            Assert.That(_serializer.Serialize(envelope), Does.Contain("\"resumed\":true"));
         }
 
         [Test]

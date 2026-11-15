@@ -49,6 +49,8 @@ namespace BalloonParty.Game.Score
 
         public IReadOnlyReactiveProperty<int> TotalScore => _totalScore;
 
+        public int LevelStartScore => _levelStartScore;
+
         // Resets after grid/gameplay state — no teardown dependencies.
         public int ResetOrder => RunResetOrder.Score;
 
@@ -97,6 +99,13 @@ namespace BalloonParty.Game.Score
 
         private void ClearRunState()
         {
+            // A resume is a retry of the saved level, starting from the score that level began with.
+            var resuming = _retryState.Resuming;
+            if (resuming != null)
+            {
+                _levelStartScore = resuming.LevelStartScore;
+            }
+
             if (_retryState.RetryLevel > 0)
             {
                 _totalScore.Value = _levelStartScore;

@@ -40,6 +40,17 @@ namespace BalloonParty.Tests.Game
             Assert.AreEqual(first, _seed.Value);
         }
 
+        [Test]
+        public void AResume_TakesTheSavedSeed()
+        {
+            _retry.RetryLevel.Returns(9);
+            _retry.Resuming.Returns(new RunSnapshot { Level = 9, Seed = 424242, Hearts = 1 });
+
+            _seed.ResetRun(1);
+
+            Assert.AreEqual(424242, _seed.Value, "the resumed level is set where it was");
+        }
+
 #if UNITY_ENABLE_CHECKS
         [Test]
         public void KeepRunSeed_KeepsTheSeedForOneResetOnly()

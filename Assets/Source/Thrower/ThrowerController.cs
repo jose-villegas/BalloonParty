@@ -557,8 +557,9 @@ namespace BalloonParty.Thrower
             _lanceCarried = false;
 
             // Only an immediate restart reloads here; a cinematic-deferred board waits for
-            // RunRestartCompletedMessage so the shot lands with the settled board, not mid-transition.
-            if (message.BoardReset)
+            // RunRestartCompletedMessage so the shot lands with the settled board, not mid-transition. Before the
+            // entrance (a run resumed on the launch screen) nothing is held or flying, and the entrance loads.
+            if (message.BoardReset && _isMovable)
             {
                 Reload();
             }

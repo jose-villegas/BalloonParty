@@ -26,5 +26,12 @@ namespace BalloonParty.Game.Run
         ///     <see cref="RetryLevel" /> during the reset cascade, and cleared with it.
         /// </summary>
         bool RetryWithBonusCard { get; }
+
+        /// <summary>
+        ///     The saved run the staged retry resumes, or null when it's a plain retry or a fresh run. Read with
+        ///     <see cref="RetryLevel" /> during the reset cascade, by each service that restores its part of the
+        ///     save (seed, score, hearts, cards), and cleared with it.
+        /// </summary>
+        RunSnapshot Resuming { get; }
     }
 }

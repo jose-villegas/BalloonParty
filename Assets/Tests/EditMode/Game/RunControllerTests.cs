@@ -244,6 +244,45 @@ namespace BalloonParty.Tests.Game
             _runMeta.DidNotReceive().RecordRun(Arg.Any<int>(), Arg.Any<int>());
         }
 
+        [Test]
+        public void ResumeRun_ResetsTheRunButNotTheBoard_AndStaysOnTheLaunchScreen()
+        {
+            var runReset = false;
+            var boardReset = false;
+            var controller = CreateController(
+                new RecordingResettable(10, _ => runReset = true),
+                new RecordingBoardResettable(() => boardReset = true));
+
+            controller.ResumeRun();
+
+            Assert.IsTrue(runReset);
+            Assert.IsFalse(boardReset, "nothing has spawned yet; the first spawn, held for Game, lays the board out");
+            _resetPublisher.Received(1).Publish(Arg.Is<RunResetMessage>(m => m.BoardReset));
+            _navigation.DidNotReceiveWithAnyArgs().TransitionTo(default);
+        }
+
+        [Test]
+        public void RestoreLoss_PublishesARestoredGameOver_WithoutRecordingTheRunAgain()
+        {
+            CreateController().RestoreLoss(6, 1100);
+
+            _gameOverPublisher.Received(1).Publish(
+                Arg.Is<GameOverMessage>(m => m.Restored && m.FinalLevel == 6 && m.FinalScore == 1100));
+            _navigation.Received(1).TransitionTo(NavigationState.GameOver);
+            _runMeta.DidNotReceiveWithAnyArgs().RecordRun(default, default);
+        }
+
+        [Test]
+        public void RestoreLoss_BeforeTheGameShows_DoesNothing()
+        {
+            _navState.Value = NavigationState.Launch;
+
+            CreateController().RestoreLoss(6, 1100);
+
+            _gameOverPublisher.DidNotReceiveWithAnyArgs().Publish(default);
+            _navigation.DidNotReceiveWithAnyArgs().TransitionTo(default);
+        }
+
         private RunController CreateController(params IRunResettable[] resettables)
         {
             return new RunController(
@@ -276,6 +315,23 @@ namespace BalloonParty.Tests.Game
             {
                 LastGeneration = generation;
                 _onReset(generation);
+            }
+        }
+
+        private sealed class RecordingBoardResettable : IBoardResettable
+        {
+            private readonly Action _onReset;
+
+            public RecordingBoardResettable(Action onReset)
+            {
+                _onReset = onReset;
+            }
+
+            public int ResetOrder => RunResetOrder.Board;
+
+            public void ResetRun(int generation)
+            {
+                _onReset();
             }
         }
     }

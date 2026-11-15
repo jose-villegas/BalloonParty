@@ -13,7 +13,7 @@ particular never rises with level, only through a card.
 |---|---|
 | `IWeaponStats` | The run's weapon after its cards: `MaxBallsInFlight`, `ReloadSeconds` (the reload while another ball flies), `IdleReloadSeconds` (the near-instant one with nothing flying, which no card changes), `StartingShields`, `ExtraItemChance`, `SnipeChance`. Each value is the configured base (`IProjectileFlightConfig`) plus every card held. Read these, not the flight config, wherever a card can change the value |
 | `IUpgradeDraft` | The cards side: `Offer` (the hand of the level-up being presented, empty when none is pending or it deals none), `BonusCard` (the current attempt's bonus card, or null), `StacksOf(card)`, `LimitOf(card)` (its `MaxStacks` plus what held Raise the Bar cards add), and `Pick(slot)`, which stages a card of the hand as the level-up's pick |
-| `RunUpgrades` | Implements both, plus `Game/Run`'s `IBonusCardSource`, `IFreeCardGrant`, `IRunResettable` and `IStartable` (it follows `ILevelProgress.Phase`). Holds the stack count per card and the bonus card, and recomputes the weapon when either changes |
+| `RunUpgrades` | Implements both, plus `Game/Run`'s `IBonusCardSource`, `IFreeCardGrant`, `IRunResettable` and `IStartable` (it follows `ILevelProgress.Phase`). Its own `IHeldCards` is what the run save records. Holds the stack count per card and the bonus card, and recomputes the weapon when either changes |
 | `IFreeCardGrant` | `GrantFreeCard(noCardLeft)`: a card won in play, the golden balloon's (`Balloon/Reward/README.md`). See "Free cards" below |
 
 The deck and its rules are `IUpgradeSettings` (authored in `RunConfig` as `Upgrades`, and registered
@@ -103,6 +103,14 @@ re-detected level-up after an abort.
 
 `ResetRun` drops every card on a fresh run and keeps them on a retry (`IRetryState.RetryLevel > 0`).
 It runs at `RunResetOrder.Counters`, before `RetryTracker` consumes the staged retry level.
+
+A run the app was killed in is saved at each level boundary (`Game/Run/README.md`), cards included.
+`RecordHeld` (the `IHeldCards` side) writes the cards a replay of the level being played starts with:
+each card by its title with its stacks, minus any free card won on that level (its retry gives those
+back), the free cards dealt so far, and the attempt's bonus card while the attempt is live (a loss ends
+the attempt it was for, so the game-over save leaves it out). On a resume (`IRetryState.Resuming`),
+`ResetRun` holds the saved cards instead, silently, and the weapon is rebuilt from them. A card renamed
+or dropped from the deck since the save is lost with a warning rather than mistaken for another.
 
 A fresh run that a start-level cheat begins past level 1 (`CheatState.StartLevel`, in checked builds)
 then takes the cards a run that played up to it would hold (`TakeCardsOnTheWayTo`): every card

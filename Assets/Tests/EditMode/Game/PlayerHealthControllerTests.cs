@@ -1,5 +1,6 @@
 using System;
 using BalloonParty.Game.Health;
+using BalloonParty.Game.Run;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
@@ -19,6 +20,7 @@ namespace BalloonParty.Tests.Game
         private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private IMessageHandler<ScoreLevelUpMessage> _levelUpHandler;
         private IPublisher<EndRunRequestedMessage> _endRunPublisher;
+        private IRetryState _retryState;
 
         private PlayerHealthController _controller;
 
@@ -27,6 +29,7 @@ namespace BalloonParty.Tests.Game
         {
             _config = Substitute.For<IRunConfig>();
             _config.StartingHitPoints.Returns(StartingHitPoints);
+            _retryState = Substitute.For<IRetryState>();
 
             _waveDamageSubscriber = Substitute.For<ISubscriber<WaveDamageMessage>>();
             _waveDamageSubscriber
@@ -102,6 +105,26 @@ namespace BalloonParty.Tests.Game
             _controller.ResetRun(2);
 
             Assert.AreEqual(StartingHitPoints, _controller.Current.Value);
+        }
+
+        [Test]
+        public void ResetRun_Resuming_RestoresTheHeartsTheSavedLevelBeganWith()
+        {
+            _retryState.Resuming.Returns(new RunSnapshot { Level = 4, Hearts = 2 });
+
+            _controller.ResetRun(2);
+
+            Assert.AreEqual(2, _controller.Current.Value, "hearts lost on earlier levels carry over a resume");
+        }
+
+        [Test]
+        public void ResetRun_ResumingPastTheMaximum_KeepsTheExtraHearts()
+        {
+            _retryState.Resuming.Returns(new RunSnapshot { Level = 4, Hearts = StartingHitPoints + 2 });
+
+            _controller.ResetRun(2);
+
+            Assert.AreEqual(StartingHitPoints + 2, _controller.Current.Value);
         }
 
         [Test]
@@ -291,7 +314,8 @@ namespace BalloonParty.Tests.Game
 
         private PlayerHealthController BuildController()
         {
-            return new PlayerHealthController(_config, _waveDamageSubscriber, _levelUpSubscriber, _endRunPublisher);
+            return new PlayerHealthController(_config, _waveDamageSubscriber, _levelUpSubscriber, _endRunPublisher,
+                _retryState);
         }
     }
 }

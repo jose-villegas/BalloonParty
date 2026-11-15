@@ -144,6 +144,12 @@ namespace BalloonParty.Audio.Routing
 
         private void OnGameOver(GameOverMessage message)
         {
+            // A loss restored with a saved run was heard when it happened.
+            if (message.Restored)
+            {
+                return;
+            }
+
             _player.Play(GameSoundId.GameOver, null);
         }
 

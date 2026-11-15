@@ -108,6 +108,11 @@ namespace BalloonParty.Game
             // Object pooling — app-wide so both Launch and Game consumers resolve from the same pool root.
             builder.Register<PoolManager>(Lifetime.Singleton);
 
+            // The interrupted run's save, and the launch screen's Continue handed to the game. Here, not in the
+            // Game scope, because the launch screen reads the save and makes the request.
+            builder.Register<Run.IRunSave, Run.PlayerPrefsRunSave>(Lifetime.Singleton);
+            builder.Register<Run.IRunResumeRequest, Run.RunResumeRequest>(Lifetime.Singleton);
+
             // Session identity for telemetry (R22 of @ref plan_gameplay_telemetry). Here, not in the Game
             // scope: a restart rebuilds that scope, and a per-scene session id would shatter one play
             // session into several in the warehouse. The id is a per-launch Guid, never persisted.

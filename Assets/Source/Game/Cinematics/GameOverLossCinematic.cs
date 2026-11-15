@@ -105,7 +105,7 @@ namespace BalloonParty.Game.Cinematics
         {
             _holdSeconds = Settings.EntryOf(CinematicState.GameOverLoss).Rig.TimeScaleCurve.Duration();
             _restoreFloorSeconds = Settings.EntryOf(CinematicState.GameOverLossRestore).Rig.TimeScaleCurve.Duration();
-            _gameOverSubscription = _gameOverSubscriber.Subscribe(_ => OnGameOver());
+            _gameOverSubscription = _gameOverSubscriber.Subscribe(OnGameOver);
             _dismissedSubscription = _dismissedSubscriber.Subscribe(_ => OnDismissed());
         }
 
@@ -118,10 +118,19 @@ namespace BalloonParty.Game.Cinematics
             ResumeCinematicPause();
         }
 
-        private void OnGameOver()
+        private void OnGameOver(GameOverMessage message)
         {
             _gate.Arm();
             _awaitingDismiss = false;
+
+            // A loss brought back with a saved run already had its beat: the screen shows bare, and a dismiss
+            // takes the skip path's immediate restart.
+            if (message.Restored)
+            {
+                _gate.Open();
+                return;
+            }
+
             PlayPanInAsync().Forget();
         }
 

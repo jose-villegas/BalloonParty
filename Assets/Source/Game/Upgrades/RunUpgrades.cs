@@ -29,7 +29,7 @@ namespace BalloonParty.Game.Upgrades
     ///     always does.
     /// </summary>
     internal sealed class RunUpgrades : IWeaponStats, IShieldsPerBall, IUpgradeDraft, IBonusCardSource,
-        IFreeCardGrant, IRunResettable, IStartable, IDisposable
+        IFreeCardGrant, IHeldCards, IRunResettable, IStartable, IDisposable
     {
         // Keep the deals off the generator's and the resolver's streams, which share the level's seed.
         private const int DealSeedSalt = 0x2C1B3C6D;
@@ -195,7 +195,12 @@ namespace BalloonParty.Game.Upgrades
             CloseHand();
             _bonus = null;
             GiveBackFreeCards();
-            if (_retryState.RetryLevel <= 0)
+            var resuming = _retryState.Resuming;
+            if (resuming != null)
+            {
+                RestoreHeld(resuming);
+            }
+            else if (_retryState.RetryLevel <= 0)
             {
                 _stacks.Clear();
                 _freeCardsDealt = 0;
@@ -207,6 +212,22 @@ namespace BalloonParty.Game.Upgrades
             }
 
             Recompute();
+        }
+
+        public void RecordHeld(RunSnapshot snapshot, bool withBonus)
+        {
+            snapshot.Cards.Clear();
+            foreach (var (card, count) in _stacks)
+            {
+                var held = count - CountWonThisLevel(card);
+                if (held > 0)
+                {
+                    snapshot.Cards.Add(new HeldCardRecord(card.Title, held));
+                }
+            }
+
+            snapshot.FreeCardsDealt = _freeCardsDealt - _freeThisLevel.Count;
+            snapshot.BonusCard = withBonus ? _bonus?.Title : null;
         }
 
         // Counted from level 1, so every N level-ups lands on the same levels whatever level a retry
@@ -407,6 +428,55 @@ namespace BalloonParty.Game.Upgrades
             }
 
             _freeThisLevel.Clear();
+        }
+
+        // Cards are saved by title, so a card renamed or dropped from the deck since the save is lost, not
+        // mistaken for another.
+        private void RestoreHeld(RunSnapshot snapshot)
+        {
+            _stacks.Clear();
+            foreach (var record in snapshot.Cards)
+            {
+                var card = CardTitled(record.Title);
+                if (card == null)
+                {
+                    Log.Warn("Upgrades", $"Saved card {record.Title} is no longer in the deck; dropped");
+                    continue;
+                }
+
+                _stacks[card] = StacksOf(card) + record.Stacks;
+            }
+
+            _freeCardsDealt = snapshot.FreeCardsDealt;
+            _bonus = string.IsNullOrEmpty(snapshot.BonusCard) ? null : CardTitled(snapshot.BonusCard);
+        }
+
+        private IUpgradeCardSettings CardTitled(string title)
+        {
+            var cards = _settings.Cards;
+            for (var i = 0; i < cards.Count; i++)
+            {
+                if (cards[i] != null && cards[i].Title == title)
+                {
+                    return cards[i];
+                }
+            }
+
+            return null;
+        }
+
+        private int CountWonThisLevel(IUpgradeCardSettings card)
+        {
+            var count = 0;
+            foreach (var won in _freeThisLevel)
+            {
+                if (won == card)
+                {
+                    count++;
+                }
+            }
+
+            return count;
         }
 
         private int DealSeed(int level, int salt, int step)

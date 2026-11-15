@@ -48,6 +48,7 @@ namespace BalloonParty.Game.Telemetry
             AppendInt("flight_index", envelope.FlightIndex);
             AppendBool("completed", envelope.Completed);
             AppendBool("cheat_active", envelope.CheatActive);
+            AppendBool("resumed", envelope.Resumed);
             AppendString("end_cause", envelope.EndCause);
             AppendTimestamp(envelope.TimestampUtcTicks);
             AppendMetrics(envelope.Metrics);

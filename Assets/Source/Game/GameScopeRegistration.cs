@@ -203,13 +203,13 @@ namespace BalloonParty.Game
             builder.Register<ICinematicState, CinematicStateService>(Lifetime.Singleton);
             builder.Register<RunMeta>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.Register<RetryTracker>(Lifetime.Singleton)
-                .As<IRetryState>().As<IRetryStaging>().As<IRunResettable>();
+                .As<IRetryState>().As<IRetryStaging>().As<IRunResumeStaging>().As<IRunResettable>();
             builder.Register<RunSeed>(Lifetime.Singleton).As<IRunSeed>().As<IRunResettable>();
             builder.Register<IAdService, NoAdService>(Lifetime.Singleton);
             builder.Register<IFailureOffers, FailureOffers>(Lifetime.Singleton);
             builder.RegisterEntryPoint<RunUpgrades>()
                 .As<IWeaponStats>().As<IShieldsPerBall>().As<IUpgradeDraft>().As<IBonusCardSource>()
-                .As<IFreeCardGrant>().As<IRunResettable>();
+                .As<IFreeCardGrant>().As<IHeldCards>().As<IRunResettable>();
             builder.RegisterEntryPoint<CardRevealController>().As<ICardReveals>().As<IRunResettable>();
             builder.RegisterEntryPoint<CardRevealBoardHold>();
 
@@ -291,6 +291,9 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<ScenarioController>();
             builder.Register<HitPipeline>(Lifetime.Singleton).As<IHitDispatcher>();
             builder.RegisterEntryPoint<RunController>().AsSelf();
+            // IRunSave and IRunResumeRequest come from AppLifetimeScope, so the launch screen shares them.
+            builder.RegisterEntryPoint<RunSaveRecorder>().As<IRunResettable>();
+            builder.RegisterEntryPoint<RunResumeController>();
             builder.Register<BoardClearController>(Lifetime.Singleton).As<IRunResettable>();
             builder.RegisterEntryPoint<PlayerHealthController>().AsSelf().As<IRunResettable>().As<IPlayerHealth>()
                 .As<IPlayerHealing>();

@@ -31,6 +31,10 @@ namespace BalloonParty.Game.Telemetry
 
         public bool CheatActive { get; }
 
+        // The attempt began from a run saved in an earlier launch and resumed: its run_id is new to this session,
+        // and the chain's earlier attempts are in another session's records.
+        public bool Resumed { get; }
+
         public string EndCause { get; }
 
         public long TimestampUtcTicks { get; }
@@ -51,7 +55,8 @@ namespace BalloonParty.Game.Telemetry
             bool cheatActive,
             string endCause,
             long timestampUtcTicks,
-            ISealedMetrics metrics)
+            ISealedMetrics metrics,
+            bool resumed = false)
         {
             Kind = kind;
             SchemaVersion = schemaVersion;
@@ -67,6 +72,7 @@ namespace BalloonParty.Game.Telemetry
             EndCause = endCause;
             TimestampUtcTicks = timestampUtcTicks;
             Metrics = metrics;
+            Resumed = resumed;
         }
     }
 }

@@ -55,7 +55,10 @@ quarter of the light's tint through a `TimeOfDayTint` on the card. Text uses one
 
 - **`GameOverMessage`** — published by `RunController.EndRun` (see `Game/Run/`); carries the final
   level/score. Populates the labels and starts the loss cinematic; the screen reveals once the
-  cinematic opens `GameOverPresentationGate`.
+  cinematic opens `GameOverPresentationGate`. A run killed on this screen comes back to it on the next
+  launch: `RunController.RestoreLoss` publishes the message again with `Restored` set, the cinematic opens
+  the gate without its beat, and the screen shows the same offer (the run's retries used are restored
+  with it).
 - **`GameOverDismissedMessage`** — published by the screen on Restart; `GameOverLossCinematic` plays
   the restore in response and restarts the run when it ends.
 - **`IRunMeta`** — read for best level/score (the only cross-run persisted progression).

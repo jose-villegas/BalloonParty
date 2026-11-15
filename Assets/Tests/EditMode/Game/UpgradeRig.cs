@@ -86,6 +86,17 @@ namespace BalloonParty.Tests.Game
             RetryState.RetryWithBonusCard.Returns(false);
         }
 
+        /// <summary>The reset of a resume of <paramref name="snapshot" />, consumed afterwards as RetryTracker would.</summary>
+        internal void Resume(RunSnapshot snapshot)
+        {
+            RetryState.RetryLevel.Returns(snapshot.Level);
+            RetryState.Resuming.Returns(snapshot);
+            Level.Value = snapshot.Level;
+            Upgrades.ResetRun(1);
+            RetryState.RetryLevel.Returns(0);
+            RetryState.Resuming.Returns((RunSnapshot)null);
+        }
+
         /// <summary>Holds <paramref name="card" /> through a real deal, pick and advance.</summary>
         internal void Hold(IUpgradeCardSettings card)
         {

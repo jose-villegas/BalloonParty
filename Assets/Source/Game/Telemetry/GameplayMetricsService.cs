@@ -108,6 +108,7 @@ namespace BalloonParty.Game.Telemetry
         private LevelState _state = LevelState.Idle;
         private bool _paused;
         private bool _runCheatActive;
+        private bool _attemptResumed;
         private bool _levelDirty;
         private int _runId = 1;
         private int _attemptId = 1;
@@ -280,9 +281,19 @@ namespace BalloonParty.Game.Telemetry
             // Read before RetryTracker (ResetOrder 110) zeroes it. A retry is a continuation of one run
             // chain: the score carries over and only the attempt changes (R14).
             var retryLevel = _retryState.RetryLevel;
+            var resuming = _retryState.Resuming;
 
             _attemptId = generation;
-            if (retryLevel > 0)
+            _attemptResumed = resuming != null;
+            if (resuming != null)
+            {
+                // A run saved in an earlier launch: new to this session, so a new run id, but its attempt index
+                // carries on from the retries it had used.
+                _runId++;
+                _attemptIndex = resuming.RetriesUsed;
+                _levelAttemptsByLevel.Clear();
+            }
+            else if (retryLevel > 0)
             {
                 _attemptIndex++;
             }
@@ -759,6 +770,16 @@ namespace BalloonParty.Game.Telemetry
                 return;
             }
 
+            // A loss restored with a saved run was recorded in the launch it happened in. The resumed level
+            // opened by the reset was never played, so nothing of it is written either.
+            if (message.Restored)
+            {
+                DiscardFlights();
+                _state = LevelState.Ended;
+                RefreshClocks();
+                return;
+            }
+
             // A loss deferred by the level-up gate is re-fired from RunController.OnNavigationChanged,
             // which LevelController drives from inside its OWN LevelTransitionCompletedMessage handler —
             // so on that path the GameOver below lands nested, before this service has seen the
@@ -1070,7 +1091,8 @@ namespace BalloonParty.Game.Telemetry
                     cheatActive,
                     endCause,
                     DateTime.UtcNow.Ticks,
-                    metrics));
+                    metrics,
+                    _attemptResumed));
             }
             catch (Exception exception)
             {

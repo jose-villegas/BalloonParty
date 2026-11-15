@@ -31,6 +31,7 @@ namespace BalloonParty.Tests.Game
         private IPublisher<ScorePointsGroupMessage> _scoredPublisher;
         private IPublisher<StreakGrewMessage> _streakGrewPublisher;
         private ITimeOfDayNight _timeOfDayNight;
+        private IRetryState _retryState;
         private ScoreController _controller;
         private ColorStreakTracker _streakTracker;
         private ProjectileRegistry _registry;
@@ -52,6 +53,7 @@ namespace BalloonParty.Tests.Game
             _palette.ColorNames.Returns(new[] { Red, Blue });
             _palette.ProgressColorNames.Returns(new[] { Red, Blue });
 
+            _retryState = Substitute.For<IRetryState>();
             _controller = BuildController();
             _controller.Start();
         }
@@ -105,7 +107,7 @@ namespace BalloonParty.Tests.Game
                 _streakGrewPublisher,
                 _levelProgress,
                 _palette,
-                Substitute.For<IRetryState>(),
+                _retryState,
                 _streakTracker,
                 _timeOfDayNight);
         }
@@ -679,6 +681,19 @@ namespace BalloonParty.Tests.Game
             _controller.ResetRun(2);
 
             Assert.AreEqual(0, _controller.TotalScore.Value);
+        }
+
+        [Test]
+        public void ResetRun_Resuming_StartsFromTheSavedLevelStartScore()
+        {
+            FireTrailArrived(Red, 3);
+            _retryState.RetryLevel.Returns(6);
+            _retryState.Resuming.Returns(new RunSnapshot { Level = 6, LevelStartScore = 1450, Hearts = 2 });
+
+            _controller.ResetRun(2);
+
+            Assert.AreEqual(1450, _controller.TotalScore.Value);
+            Assert.AreEqual(1450, _controller.LevelStartScore, "a retry of the resumed level starts there too");
         }
 
         [Test]

@@ -323,6 +323,12 @@ terminal transition no matter which state it lands from.
   generation), `AttemptIndex` (0 for the original) and `LevelAttemptOrdinal` (per level
   number, incremented when the level opens). The run's total points are taken from
   `GameOverMessage.FinalScore`, never summed across level records — a retry replays a level.
+- **A resumed run is marked, not continued.** A run saved in an earlier launch and resumed
+  (`IRetryState.Resuming`, see `Game/Run/README.md`) starts a new `RunId` in this session, its
+  `AttemptIndex` (and `retries_used`) carrying on from the retries it had used, and every record of
+  that attempt has `resumed: true`; the next retry's records don't. The restored game-over screen
+  (`GameOverMessage.Restored`) writes nothing: that loss was recorded in the launch it happened in.
+  The run save is progression the player keeps, so no metric goes into it.
 - **Nothing is persisted.** Scopes live in memory, are snapshotted, handed to the sink and
   reset. A metric someone wants to keep for the player has stopped being telemetry.
 

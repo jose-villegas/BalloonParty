@@ -1244,5 +1244,81 @@ namespace BalloonParty.Tests.Game
             first.Upgrades.Dispose();
             second.Upgrades.Dispose();
         }
+
+        [Test]
+        public void RecordHeld_ThenResume_HoldsTheSameCardsInANewLaunch()
+        {
+            _rig.Hold(_shield);
+            _rig.Hold(_shield);
+            _rig.Hold(_reload);
+            var save = new RunSnapshot { Level = 6, Hearts = 2 };
+            Upgrades.RecordHeld(save, withBonus: true);
+
+            var next = new UpgradeRig(_flight);
+            next.Cards.AddRange(_rig.Cards);
+            next.Resume(save);
+
+            Assert.AreEqual(2, next.Upgrades.StacksOf(_shield));
+            Assert.AreEqual(1, next.Upgrades.StacksOf(_reload));
+            Assert.AreEqual(0, next.Upgrades.StacksOf(_ballCap));
+            Assert.AreEqual(BaseShields + 2, next.Upgrades.StartingShields, "the weapon is rebuilt from the cards");
+            next.Upgrades.Dispose();
+        }
+
+        [Test]
+        public void RecordHeld_LeavesOutAFreeCardWonOnTheLevelBeingPlayed()
+        {
+            _rig.Level.Value = 5;
+            Upgrades.GrantFreeCard(null);
+            var won = _rig.Cards.First(card => Upgrades.StacksOf(card) > 0);
+            var save = new RunSnapshot { Level = 5, Hearts = 2 };
+
+            Upgrades.RecordHeld(save, withBonus: true);
+
+            Assert.IsEmpty(save.Cards, $"{won.Title} goes back, as on the level's retry");
+            Assert.AreEqual(0, save.FreeCardsDealt);
+        }
+
+        [Test]
+        public void RecordHeld_KeepsTheAttemptsBonusOnlyWhileTheAttemptIsLive()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_shield);
+            _rig.Retry(4, withBonusCard: true);
+            var playing = new RunSnapshot { Level = 4, Hearts = 2 };
+            var lost = new RunSnapshot { Level = 4, OnGameOver = true };
+
+            Upgrades.RecordHeld(playing, withBonus: true);
+            Upgrades.RecordHeld(lost, withBonus: false);
+
+            Assert.AreEqual(_shield.Title, playing.BonusCard, "the ad-bought bonus survives a kill mid-attempt");
+            Assert.IsNull(lost.BonusCard, "a loss ends the attempt the bonus was for");
+        }
+
+        [Test]
+        public void Resume_RestoresTheBonusCardOfTheSavedAttempt()
+        {
+            _rig.Cards.Clear();
+            _rig.Cards.Add(_shield);
+
+            _rig.Resume(new RunSnapshot { Level = 4, Hearts = 2, BonusCard = _shield.Title });
+
+            Assert.AreSame(_shield, Upgrades.BonusCard);
+            Assert.AreEqual(BaseShields + 1, Upgrades.StartingShields);
+            _rig.BonusDealt.DidNotReceiveWithAnyArgs().Publish(default);
+        }
+
+        [Test]
+        public void Resume_ACardNoLongerInTheDeck_IsDropped()
+        {
+            var save = new RunSnapshot { Level = 4, Hearts = 2 };
+            save.Cards.Add(new HeldCardRecord("Retired card", 2));
+            save.Cards.Add(new HeldCardRecord(_reload.Title, 1));
+
+            _rig.Resume(save);
+
+            Assert.AreEqual(1, _rig.Cards.Sum(Upgrades.StacksOf));
+            Assert.AreEqual(1, Upgrades.StacksOf(_reload));
+        }
     }
 }

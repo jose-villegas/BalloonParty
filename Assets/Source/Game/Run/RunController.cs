@@ -101,6 +101,42 @@ namespace BalloonParty.Game.Run
         // transition cinematic that swaps it in itself (holds the outgoing actors, spawns the incoming).
         public void RestartRun(bool resetBoard = true)
         {
+            ResetRunState(resetBoard);
+
+            // For views that can't reset reactively or live outside the reset graph's scope. BoardReset
+            // tells them whether the board was swapped now (immediate) or is deferred to a cinematic.
+            _resetPublisher.Publish(new RunResetMessage(resetBoard));
+
+            _navigation.TransitionTo(NavigationState.Game);
+        }
+
+        // A saved run picked up on the launch screen, with the resume already staged (IRunResumeStaging): the
+        // reset runs as the saved level's retry would. Navigation stays on Launch; the launch screen's own
+        // transition shows the game. The board is left alone because nothing has spawned before the first Game,
+        // and the first spawn, held for Game, lays out the resumed level; resetting it here would spawn it twice.
+        // Nothing waits on a cinematic, so the reset message says the board is settled.
+        public void ResumeRun()
+        {
+            ResetRunState(resetBoard: false);
+            _resetPublisher.Publish(new RunResetMessage(true));
+        }
+
+        // A resumed run that was saved on the game-over screen goes back to it once the game shows: the loss
+        // is published again, marked restored, so the screen fills in and offers what it offered.
+        public void RestoreLoss(int level, int score)
+        {
+            if (_navigation.Current.Value != NavigationState.Game)
+            {
+                return;
+            }
+
+            Log.Info("Run", $"Game over restored — level {level}, score {score}");
+            _gameOverPublisher.Publish(new GameOverMessage(level, score, restored: true));
+            _navigation.TransitionTo(NavigationState.GameOver);
+        }
+
+        private void ResetRunState(bool resetBoard)
+        {
             _lossPending = false;
             _generation++;
 
@@ -115,12 +151,6 @@ namespace BalloonParty.Game.Run
 
                 resettable.ResetRun(_generation);
             }
-
-            // For views that can't reset reactively or live outside the reset graph's scope. BoardReset
-            // tells them whether the board was swapped now (immediate) or is deferred to a cinematic.
-            _resetPublisher.Publish(new RunResetMessage(resetBoard));
-
-            _navigation.TransitionTo(NavigationState.Game);
         }
 
         // Fires a loss that was deferred by the level-up gates the moment play resumes.

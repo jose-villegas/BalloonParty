@@ -112,6 +112,48 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void AResumedAttempt_IsMarkedResumed_AndCarriesTheSavedRetries()
+        {
+            Resume(level: 6, retriesUsed: 2);
+
+            Play();
+            _harness.GameOver.Handle(new GameOverMessage(6, 900));
+
+            var run = _harness.LastOf(RecordKind.Run);
+            Assert.IsTrue(run.Resumed);
+            Assert.IsTrue(_harness.LastOf(RecordKind.Level).Resumed);
+            Assert.AreEqual(2, run.AttemptIndex, "the attempt index carries on from the retries the run had used");
+            Assert.AreEqual(2, run.Metrics[MetricId.RetriesUsed]);
+            Assert.AreEqual(2, run.RunId, "new to this session, so a run id of its own");
+        }
+
+        [Test]
+        public void TheRetryAfterAResume_IsNotItselfResumed()
+        {
+            Resume(level: 6, retriesUsed: 2);
+            _harness.RetryState.RetryLevel.Returns(6);
+            _harness.Service.ResetRun(3);
+
+            Play();
+            _harness.GameOver.Handle(new GameOverMessage(6, 900));
+
+            var run = _harness.LastOf(RecordKind.Run);
+            Assert.IsFalse(run.Resumed);
+            Assert.AreEqual(3, run.AttemptIndex);
+            Assert.AreEqual(2, run.RunId, "the same chain");
+        }
+
+        [Test]
+        public void ARestoredGameOver_WritesNothing()
+        {
+            Resume(level: 6, retriesUsed: 2);
+
+            _harness.GameOver.Handle(new GameOverMessage(6, 900, restored: true));
+
+            Assert.IsEmpty(_harness.Written, "the loss was recorded in the launch it happened in");
+        }
+
+        [Test]
         public void LevelAttemptOrdinal_CountsTheReplayedLevelOnly()
         {
             // Walk the chain up to level 3, so level 3 has been opened exactly once.
@@ -202,6 +244,16 @@ namespace BalloonParty.Tests.Game
         }
 
         // Any real play at all, so the partial level record at game over is not skipped as a phantom.
+        // The reset of a resume, consumed afterwards as RetryTracker would.
+        private void Resume(int level, int retriesUsed)
+        {
+            _harness.RetryState.RetryLevel.Returns(level);
+            _harness.RetryState.Resuming.Returns(new RunSnapshot { Level = level, Hearts = 2, RetriesUsed = retriesUsed });
+            _harness.Service.ResetRun(2);
+            _harness.RetryState.RetryLevel.Returns(0);
+            _harness.RetryState.Resuming.Returns((RunSnapshot)null);
+        }
+
         private void Play()
         {
             _harness.ProjectileFired.Handle(new ProjectileFiredMessage(null, Vector3.zero, Vector3.up));

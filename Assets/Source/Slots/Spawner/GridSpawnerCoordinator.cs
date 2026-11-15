@@ -16,6 +16,8 @@ namespace BalloonParty.Slots.Spawner
         private readonly NavigationReadyGate _gate;
         private readonly CancellationTokenSource _cts = new();
 
+        private bool _populated;
+
         public int ResetOrder => RunResetOrder.Respawn;
 
         [Inject]
@@ -40,6 +42,7 @@ namespace BalloonParty.Slots.Spawner
         // IBoardResettable) when the loss→restart cinematic drives the board swap itself.
         public void ResetRun(int generation)
         {
+            _populated = true;
             RunGroupsAsync(_cts.Token).Forget();
         }
 
@@ -57,9 +60,17 @@ namespace BalloonParty.Slots.Spawner
             }
         }
 
+        // A reset before the first Game (a run resumed on the game-over screen, then retried) has already
+        // populated the board; the held first spawn would lay a second one over it.
         private async UniTaskVoid CoordinateAsync(CancellationToken ct)
         {
             await _gate.WaitAsync(ct);
+            if (_populated)
+            {
+                return;
+            }
+
+            _populated = true;
             await RunGroupsAsync(ct);
         }
 

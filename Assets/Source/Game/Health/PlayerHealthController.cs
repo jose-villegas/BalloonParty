@@ -19,6 +19,7 @@ namespace BalloonParty.Game.Health
         private readonly ISubscriber<WaveDamageMessage> _waveDamageSubscriber;
         private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private readonly IPublisher<EndRunRequestedMessage> _endRunPublisher;
+        private readonly IRetryState _retryState;
         private readonly ReactiveProperty<int> _current = new();
 
         private IDisposable _subscription;
@@ -28,12 +29,14 @@ namespace BalloonParty.Game.Health
             IRunConfig config,
             ISubscriber<WaveDamageMessage> waveDamageSubscriber,
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
-            IPublisher<EndRunRequestedMessage> endRunPublisher)
+            IPublisher<EndRunRequestedMessage> endRunPublisher,
+            IRetryState retryState)
         {
             _config = config;
             _waveDamageSubscriber = waveDamageSubscriber;
             _levelUpSubscriber = levelUpSubscriber;
             _endRunPublisher = endRunPublisher;
+            _retryState = retryState;
         }
 
         public IReadOnlyReactiveProperty<int> Current => _current;
@@ -51,9 +54,14 @@ namespace BalloonParty.Game.Health
             _levelUpSubscription = _levelUpSubscriber.Subscribe(_ => Heal(_config.LevelUpHeartRefill));
         }
 
+        // A retry starts with full hearts; a resume with the hearts its level began with (none on the game-over
+        // screen), since the hearts lost on earlier levels carry over.
         public void ResetRun(int generation)
         {
-            _current.Value = ClampedStartingHitPoints();
+            var resuming = _retryState.Resuming;
+            _current.Value = resuming != null
+                ? Mathf.Clamp(resuming.Hearts, 0, MaxHitPoints)
+                : ClampedStartingHitPoints();
         }
 
         public void Dispose()

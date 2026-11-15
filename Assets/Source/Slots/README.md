@@ -162,7 +162,7 @@ Transit slots are tracked per-actor and released via `Release(actor)` when the b
 
 `GridSpawnerCoordinator` owns the sequencing of all grid population. Individual spawners (`StaticActorSpawner`, `BalloonSpawner`) implement `IGridSpawner` and declare their priority via `SpawnStage`. The coordinator:
 
-1. **Waits** on an injected `NavigationReadyGate(Game)` — nothing spawns until the game scene is fully active. (The gate reads an injected `INavigation`, so it's unit-testable without touching the static `Navigation`.)
+1. **Waits** on an injected `NavigationReadyGate(Game)` — nothing spawns until the game scene is fully active. (The gate reads an injected `INavigation`, so it's unit-testable without touching the static `Navigation`.) A reset that repopulated the board first (a run resumed on the game-over screen, then retried, resets before the game has ever shown) cancels this held spawn, so the board is laid once.
 2. **Groups** all registered spawners by `SpawnStage`, sorted ascending.
 3. **Runs** each group with `UniTask.WhenAll` (parallel within a stage) before advancing to the next stage.
 
