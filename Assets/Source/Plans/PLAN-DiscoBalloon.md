@@ -357,15 +357,16 @@ fixes; then your sign-off.
    rainbow `GodRays` toggle and `DiscoRays`, `DiscoWave.shader`, the rainbow `PaintDrip`, and the shatter
    sheet and `PSVFX_DiscoPop`. **Shaders: `dotnet build` doesn't check them.** Checked in the Editor at
    noon and at night with `Tools/stage/stage.py`, and frames sent to you for sign-off. Written: everything
-   but the shatter, which needs a capture of the ball in the Editor (`Tools/art/shatter`); the pop keeps
-   the golden balloon's burst until then. Not yet compiled or seen in the Editor.
+   but the shatter, which needed a capture of the ball in the Editor (`Tools/art/shatter`). The shatter came
+   after Phase 6: `disco_parts` is baked from that capture with the golden balloon's settings, and
+   `PSVFX_DiscoPop` is the golden pop with its start sizes scaled to the wider body.
 5. **Sound.** The three cues, layered in `SoundBankConfiguration`. Built: the wave's glissando and ticks are
    two cues, played by `DiscoSoundRouter`; the clips want a pass by ear.
 6. **Docs and measuring.** READMEs (Reward, Type, Nudge, Paint, Projectile), plus the playtest bot on a
    forced disco level against the same seed without one: level time, shots to clear, and peak multiplier.
    This is the evidence for open questions 1 and 2. Then a device build for the capture cost.
-   Done: the READMEs, and the measurement below. Still open: the device build for the capture cost, and the
-   shatter sheet (`PSVFX_DiscoPop`) from Phase 4.
+   Done: the READMEs, the measurement below, and Phase 4's shatter. Still open: the device build for the
+   capture cost.
 
 ## Measured
 

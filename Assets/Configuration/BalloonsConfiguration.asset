@@ -235,7 +235,7 @@ MonoBehaviour:
       _falloff: 0
     _hitVfxOverrides:
     - _appliesTo: 4
-      _prefab: {fileID: 2148469744637963286, guid: c8751959a4d94c87a7fbdfb33b3fc94a, type: 3}
+      _prefab: {fileID: 2148469744637963286, guid: 82fb2f36b1434933a4afea23a2184f49, type: 3}
     _hitsToPop: -1
     _scoreValue: 20
     _itemActivationWeight: 0

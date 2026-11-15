@@ -11,6 +11,7 @@ Every shatter sheet comes from here, cut from the captures in `sources/`:
 |---|---|---|
 | `Unbreakable/unbreakable_parts.png` | `PSVFX_UnbreakablePop` | the defaults: 9 plates on 3x3 |
 | `Golden/golden_parts.png` | `PSVFX_GoldenPop` | the defaults |
+| `Disco/disco_parts.png` | `PSVFX_DiscoPop` | the defaults; the pop's start sizes are the golden's scaled to the disco ball's wider body (0.72 against 0.64) |
 | `Unbreakable/tough_parts.png` | `PSVFX_ToughBalloonPop` | `--pieces 10 --grid 4x3 --diameter 0.73 --swirl 3` |
 | `Unbreakable/tougher_parts.png` | `PSVFX_TougherBalloonPop` | as the tough's, from the tougher's capture |
 

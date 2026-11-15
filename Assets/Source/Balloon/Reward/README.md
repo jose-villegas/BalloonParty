@@ -127,6 +127,10 @@ sorts below the balloons, so it sweeps through the gaps, and the balloons show t
 rainbow. Each painted balloon's drip is a rainbow one (`IPaintReactive.PlayPaintDrip`'s `rainbow`). The pop
 itself takes the rainbow balloon's key-light flash (`BalloonPopPresenter`).
 
+The ball itself shatters into mirror plates: `PSVFX_DiscoPop` is the golden balloon's shatter drawing
+`Sprites/Balloons/Disco/disco_parts`, which `Tools/art/shatter` cut from a capture of the ball. Its shards are
+sized to the disco ball's wider body.
+
 The wave's sound follows two messages it publishes: `DiscoWaveAdvancedMessage`, the share of its time gone
 (0 as it starts), each frame; and `DiscoWaveReachedMessage` for each balloon it paints, the immune ones
 included, with how far from the pop it sits over the disc's full radius. `Audio/Routing/DiscoSoundRouter`
