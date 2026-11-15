@@ -32,9 +32,15 @@ Material:
     - PixelSnap: 0
     - _AmbientDimming: 0.4
     - _AmbientHue: 0.25
+    - _BevelContrast: 1.6
+    - _BevelWidth: 0.2
     - _EdgePower: 3.5
-    - _FlashIntensity: 2.2
-    - _FlashPower: 90
+    - _EnvHorizon: -0.1
+    - _EnvStrength: 0.35
+    - _FlashIntensity: 2.5
+    - _FlashPower: 40
+    - _FormShade: 0.45
+    - _FormWrap: 0.35
     - _GlitterChance: 0.5
     - _GlitterIntensity: 4
     - _GlitterReach: 5
@@ -47,20 +53,22 @@ Material:
     - _LightInfluence: 1
     - _ReflectionDetail: 0.3
     - _ReflectionReach: 3
-    - _ReflectionStrength: 0.6
+    - _ReflectionStrength: 0.75
     - _RimBlend: 0.5
     - _RimWidth: 0.1
-    - _SheenIntensity: 0.35
+    - _SheenIntensity: 0.6
     - _SheenPower: 6
     - _SpinPhase: 0
     - _SpinSpeed: 0.35
     - _SpriteScale: 1
     - _TileRows: 11
     - _TileTilt: 0.12
-    - _TileVariance: 0.18
+    - _TileVariance: 0.4
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EdgeColor: {r: 0.1, g: 0.1, b: 0.12, a: 1}
+    - _EnvFloor: {r: 0.12, g: 0.12, b: 0.15, a: 1}
+    - _EnvSky: {r: 1, g: 1, b: 1, a: 1}
     - _FlashColor: {r: 1, g: 1, b: 1, a: 1}
     - _GlitterColor: {r: 1, g: 1, b: 1, a: 1}
     - _GroutColor: {r: 0.08, g: 0.08, b: 0.1, a: 1}

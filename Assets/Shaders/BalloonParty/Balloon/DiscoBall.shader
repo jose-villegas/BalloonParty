@@ -7,8 +7,11 @@ Shader "BalloonParty/Balloon/DiscoBall"
     // makes it read as a mosaic and not as chrome: it reflects its own piece of the board from the shared scene
     // capture (_SceneCaptureTex, SceneCaptureService), and the pieces jump from tile to tile. The base silver is
     // lit by the scene light at the ball, so it is bright at noon and dim at night; a tile whose normal turns
-    // through the light's angle flashes, and the glitter sparkles only on those flashes. DiscoBallVariant pushes
-    // the per-instance spin phase and holds the capture while a ball is on screen.
+    // through the light's angle flashes, and the glitter sparkles only on those flashes. Three cues give it depth
+    // under the reflection: the whole ball, mirrors and all, is shaded as one sphere (a lit side and a shadow side);
+    // each tile also mirrors a fixed sky and floor (bright above the horizon, dark below), so the tiles darken
+    // toward the bottom and the limb; and each tile is bevelled, its edges catching or losing the light.
+    // DiscoBallLook pushes the per-instance spin phase and holds the capture while a ball is on screen.
 
     Properties
     {
@@ -23,7 +26,10 @@ Shader "BalloonParty/Balloon/DiscoBall"
         _Grout       ("Grout", Range(0, 0.3)) = 0.08
         _GroutColor  ("Grout Colour", Color) = (0.08, 0.08, 0.10, 1)
         _TileTilt    ("Tile Tilt", Range(0, 0.4)) = 0.12
-        _TileVariance ("Brightness Variance", Range(0, 0.5)) = 0.18
+        _TileVariance ("Brightness Variance", Range(0, 0.5)) = 0.4
+        // The bevel round each tile, in tile units, and how much its slope lights or darkens the edge.
+        _BevelWidth    ("Bevel Width", Range(0, 0.45)) = 0.2
+        _BevelContrast ("Bevel Contrast", Range(0, 3)) = 1.6
         // Radians per second about the balloon's up.
         _SpinSpeed   ("Spin Speed", Range(0, 2)) = 0.35
         [PerRendererData] _SpinPhase ("Spin Phase", Float) = 0
@@ -34,20 +40,28 @@ Shader "BalloonParty/Balloon/DiscoBall"
         _EdgeColor   ("Edge", Color) = (0.10, 0.10, 0.12, 1)
         _EdgePower   ("Edge Falloff", Range(1, 8)) = 3.5
         _LightHeight ("Light Height", Range(0.1, 3)) = 0.9
+        // The ball as one sphere: how dark its far side gets, and how far the light wraps round it.
+        _FormShade   ("Form Shade", Range(0, 1)) = 0.45
+        _FormWrap    ("Form Wrap", Range(0, 1)) = 0.35
 
         [Header(Reflection)]
-        _ReflectionStrength ("Strength", Range(0, 1)) = 0.6
+        _ReflectionStrength ("Strength", Range(0, 1)) = 0.75
         // How much of the board around the ball a tile can show, in ball radii.
         _ReflectionReach    ("Reach (radii)", Range(0.5, 8)) = 3
         // How much of its piece a tile shows across itself: 0 is one flat colour per tile.
         _ReflectionDetail   ("Detail Within a Tile", Range(0, 1)) = 0.3
+        // A fixed sky and floor every tile mirrors under the board's piece: bright above the horizon, dark below.
+        _EnvSky      ("Sky", Color) = (1.00, 1.00, 1.00, 1)
+        _EnvFloor    ("Floor", Color) = (0.12, 0.12, 0.15, 1)
+        _EnvStrength ("Sky And Floor Strength", Range(0, 1)) = 0.35
+        _EnvHorizon  ("Horizon", Range(-0.8, 0.8)) = -0.1
 
         [Header(Flash)]
         _FlashColor     ("Colour", Color) = (1.00, 1.00, 1.00, 1)
-        _FlashPower     ("Sharpness", Range(8, 400)) = 90
-        _FlashIntensity ("Intensity", Range(0, 4)) = 2.2
+        _FlashPower     ("Sharpness", Range(8, 400)) = 40
+        _FlashIntensity ("Intensity", Range(0, 4)) = 2.5
         _SheenPower     ("Sheen Sharpness", Range(1, 32)) = 6
-        _SheenIntensity ("Sheen Intensity", Range(0, 2)) = 0.35
+        _SheenIntensity ("Sheen Intensity", Range(0, 2)) = 0.6
 
         [Header(Glitter)]
         _GlitterColor     ("Colour", Color) = (1.00, 1.00, 1.00, 1)
@@ -135,6 +149,8 @@ Shader "BalloonParty/Balloon/DiscoBall"
             half4  _GroutColor;
             float  _TileTilt;
             float  _TileVariance;
+            float  _BevelWidth;
+            float  _BevelContrast;
             float  _SpinSpeed;
             float  _SpinPhase;
 
@@ -143,10 +159,16 @@ Shader "BalloonParty/Balloon/DiscoBall"
             half4  _EdgeColor;
             float  _EdgePower;
             float  _LightHeight;
+            float  _FormShade;
+            float  _FormWrap;
 
             float  _ReflectionStrength;
             float  _ReflectionReach;
             float  _ReflectionDetail;
+            half4  _EnvSky;
+            half4  _EnvFloor;
+            float  _EnvStrength;
+            float  _EnvHorizon;
 
             half4  _FlashColor;
             float  _FlashPower;
@@ -257,10 +279,26 @@ Shader "BalloonParty/Balloon/DiscoBall"
                 float  edgeSoft = max(fwidth(v), 0.002);
                 float  onTile = smoothstep(_Grout - edgeSoft, _Grout + edgeSoft, edge);
 
+                // The bevel: near an edge the tile slopes down toward it, so its normal leans out along the
+                // sphere's east (across the row) or north (up the rows), whichever edge is nearer.
+                float3 east  = float3(cos(tileLon), 0.0, -sin(tileLon));
+                float3 north = float3(-sin(rowLat) * sin(tileLon), cos(rowLat), -sin(rowLat) * cos(tileLon));
+                float2 fromCentre = inTile - 0.5;
+                float3 lean = abs(fromCentre.x) > abs(fromCentre.y)
+                            ? east * sign(fromCentre.x)
+                            : north * sign(fromCentre.y);
+                float  bevel = 1.0 - smoothstep(_Grout, _Grout + max(_BevelWidth, 1e-3), edge);
+                float3 bevelNormal = normalize(tileNormal + lean * bevel);
+
                 // The base silver, lit by the scene light.
                 float facing = saturate(dot(tileNormal, IN.toLight));
                 half3 col3 = lerp(_SilverShade.rgb, _SilverLit.rgb, facing);
                 col3 *= 1.0 + (tileRnd - 0.5) * 2.0 * _TileVariance;
+
+                // Every tile also mirrors a fixed sky and floor, by where its reflection points.
+                float  reflectUp = 2.0 * tileNormal.z * tileNormal.y;
+                half3  env = lerp(_EnvFloor.rgb, _EnvSky.rgb, smoothstep(_EnvHorizon - 0.25, _EnvHorizon + 0.25, reflectUp));
+                col3 = lerp(col3, env, _EnvStrength);
                 col3 *= lerp(float3(1.0, 1.0, 1.0), IN.lightTint, _LightInfluence);
 
                 // The view looks straight down -z, so a mirror sends it along (2 n.z n.x, 2 n.z n.y). A tile
@@ -290,7 +328,14 @@ Shader "BalloonParty/Balloon/DiscoBall"
                     col3 += _GlitterColor.rgb * glitter * glitterGate * _GlitterIntensity * lightColour;
                 }
 
+                // The bevel's slope against the light: the edge facing it brightens, the far one darkens.
+                col3 *= saturate(1.0 + (dot(bevelNormal, IN.toLight) - dot(tileNormal, IN.toLight)) * _BevelContrast);
+
                 col3 = lerp(_GroutColor.rgb * lightColour, col3, onTile);
+
+                // The ball as one sphere, mirrors and all, wrapped so the shadow side isn't black.
+                float form = saturate((dot(normal, IN.toLight) + _FormWrap) / (1.0 + _FormWrap));
+                col3 *= lerp(_FormShade, 1.0, form);
                 col3 = lerp(col3, _EdgeColor.rgb, pow(rFlat, _EdgePower));
 
                 // World space, so the rim never turns with the sway.
