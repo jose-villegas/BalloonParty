@@ -4,9 +4,10 @@ using UnityEngine;
 namespace BalloonParty.Game
 {
     /// <summary>
-    ///     A balloon drifting about an area on its own: it heads for one spot after another, picked at random,
-    ///     easing in as it arrives, and slides round a keep-out it may never enter. A spot it can't reach in time is
-    ///     given up for another. <see cref="Shown" /> adds a gentle bob.
+    ///     A balloon drifting about an area on its own: it heads for one spot after another, picked at random among
+    ///     those it can reach in a straight line past a keep-out it may never enter, easing in as it arrives. Should
+    ///     it still meet the keep-out it slides round it, and a spot it can't reach in time is given up for another.
+    ///     <see cref="Shown" /> adds a gentle bob.
     /// </summary>
     internal sealed class BalloonWander
     {
@@ -115,7 +116,10 @@ namespace BalloonParty.Game
             for (var i = 0; i < TargetTries; i++)
             {
                 var candidate = RandomPoint();
-                if (Allowed(candidate) && Vector2.Distance(candidate, Position) > 2f * _settings.ArrivedWithin)
+                // Only a spot in plain sight: sliding round a keep-out toward one behind it comes to rest on the
+                // keep-out's far side from it, and sits there.
+                if (Allowed(candidate) && Vector2.Distance(candidate, Position) > 2f * _settings.ArrivedWithin
+                    && !_keepOut.Blocks(Position, candidate))
                 {
                     _target = candidate;
                     return;
