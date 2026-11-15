@@ -313,6 +313,7 @@ MonoBehaviour:
       _duration: 0.18
       _falloff: 0
     _burstScale: 0.6
+    _rainbowLines: 3
     _discMaterial: {fileID: 2100000, guid: 8a23dc21809e4ea888ad27f8fbd8c8c2, type: 2}
     _sortingLayerName: Balloons
     _sortingOrder: -1

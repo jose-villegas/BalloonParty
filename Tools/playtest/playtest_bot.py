@@ -545,9 +545,16 @@ def main():
     parser.add_argument("--wild", type=float, help="human: share of shots fired unaimed, at any angle (0-1)")
     parser.add_argument("--purple", action="store_true",
                         help="restart the first run on the first purple (extra colour) level its seed rolls")
+    parser.add_argument("--seed", type=int, default=0,
+                        help="with --purple: restart on this run seed instead of the run's own, so sessions compare "
+                             "on the same level")
+    parser.add_argument("--no-disco", action="store_true",
+                        help="place no disco ball: the control for measuring one")
     parser.add_argument("--hearts", type=int, default=0,
                         help="start the first run with this many hearts (default: as configured)")
     args = parser.parse_args()
+    if args.seed and not args.purple:
+        parser.error("--seed only applies with --purple")
     if args.restart and args.on_loss == "stop":
         args.on_loss = "restart"
     for knob, value in SKILLS[args.skill].items():
@@ -567,8 +574,12 @@ def main():
                  .replace("__BOT_ID__", stamp)
                  .replace("__ON_LOSS__", args.on_loss)
                  .replace("__PURPLE__", "true" if args.purple else "false")
+                 .replace("__SEED__", str(args.seed))
+                 .replace("__NO_DISCO__", "true" if args.no_disco else "false")
                  .replace("__HEARTS__", str(args.hearts)))
     setup = ", ".join(([("started on the run's first purple level, through Start From Level")] if args.purple else [])
+                      + ([f"on run seed {args.seed}"] if args.seed else [])
+                      + (["no disco ball placed"] if args.no_disco else [])
                       + ([f"started with {args.hearts} heart{'s' if args.hearts != 1 else ''}"] if args.hearts > 0 else []))
     if args.player == "best":
         player = "best (the solver, fired the moment the cannon is ready)"

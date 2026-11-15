@@ -20,6 +20,7 @@ more are missing. At most one of each is on the board. The plans are `Plans/PLAN
 | `RewardBalloonPayout` | Pays a reward balloon's pop, read from `ActorHitMessage`. The golden balloon: a free card (`IFreeCardGrant`), or a heart (`IPlayerHealing.Heal`) when every card is at its limit. The heart balloon: a heart, or on a purple level an extra one past the maximum (`HealPastMax`). Pays each balloon once |
 | `RewardBalloonPop` | `TryGet(hit, out balloon)`: a reward balloon's pop. The payout and the service both read pops through it, so what one pays the other counts |
 | `DiscoWave` | The disco ball's pop: a disc that grows from it across the board and paints every paintable balloon rainbow. Registered as an entry point and `IRunResettable`; drawn by `Balloon/View/DiscoWaveView` |
+| `RainbowLines`, `IRainbowLines` | The clock lines a disco ball's pop owes rainbow: `DiscoWave` grants them, and the spawner hands each clock line's new balloons to `PaintLine`. Registered as an entry point and `IRunResettable` |
 
 The golden balloon itself is `Balloon/Model/GoldenBalloonModel`, a `PlatedBalloonModel`, whose hit rules a third
 reward balloon, the disco ball (`DiscoBalloonModel`, `Plans/PLAN-DiscoBalloon.md`), shares: the shot's own ordinary hit bounces
@@ -104,11 +105,19 @@ reached, on the next frame. When the time is up a last sweep reaches anything le
 change or game over stops the wave where it is; what it painted stays painted. It runs on scaled time, so a
 pause holds it.
 
+The party outlasts the wave: the pop also owes the next clock lines rainbow (`IDiscoWaveSettings.RainbowLines`,
+3 by default). `Balloon/Spawner/BalloonSpawner` hands each clock line's new balloons to `RainbowLines.PaintLine`
+once they are placed, before the line's item roll. A line that brings a balloon pays one line, by the wave's rules:
+a paintable balloon arrives rainbow and a paint-immune one keeps its look. A line that brings none (a full board)
+pays nothing. A second disco pop while lines are still owed tops them up to the setting rather than adding to
+them. A level change or a run reset forgets what is still owed.
+
 What the wave paints is booked to the shot that broke the ball (`Projectile/Controller/ShotPaintLedger`).
 That shot is still flying (a pierce breaks the ball at the next wall, and the shot behind a laser flies on),
 and a rainbow pop would climb its streak whatever the colour. So its own pops of what it painted score at
 its streak as it stands, climb nothing, and refund no streak shield (`DamageFlags.OwnPaint`). Any other
-shot, and every later throw, pops the rainbow board as usual.
+shot, and every later throw, pops the rainbow board as usual. The rainbow lines are booked to the same shot
+while it still flies, so it can't climb on them either.
 
 `DiscoWaveView` draws the disc: a quad centred on the pop and sized to the disc each frame, on
 `IDiscoWaveSettings.DiscMaterial` (`BalloonParty/Sprite/DiscoWave`), which must be assigned or nothing is

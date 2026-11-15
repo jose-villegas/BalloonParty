@@ -21,6 +21,11 @@ namespace BalloonParty.Configuration.Balloons
                  "balloon stays.")]
         [SerializeField] [Range(0f, 2f)] private float _burstScale = 0.6f;
 
+        [Tooltip("How many clock lines after the pop arrive rainbow, so the party outlasts the wave. A line that " +
+                 "brings no balloon (a full board) doesn't count; paint-immune balloons keep their look, as under " +
+                 "the wave. 0 turns it off.")]
+        [SerializeField] [Min(0)] private int _rainbowLines = 3;
+
         [Tooltip("The disc's material (BalloonParty/Sprite/DiscoWave), which holds its edge and wash. Required: " +
                  "with none the wave paints the board but draws nothing.")]
         [SerializeField] private Material _discMaterial;
@@ -36,6 +41,7 @@ namespace BalloonParty.Configuration.Balloons
         public float Seconds => _seconds;
         public NudgeOverride[] NudgeOverrides => _nudgeOverrides;
         public float BurstScale => _burstScale;
+        public int RainbowLines => _rainbowLines;
         public Material DiscMaterial => _discMaterial;
         public string SortingLayerName => _sortingLayerName;
         public int SortingOrder => _sortingOrder;

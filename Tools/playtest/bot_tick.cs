@@ -36,6 +36,8 @@ var wildChance = __WILD__f;
 var botId = "__BOT_ID__";
 var onLoss = "__ON_LOSS__";
 var purple = __PURPLE__;
+var forcedSeed = __SEED__;
+var noDisco = __NO_DISCO__;
 var startHearts = __HEARTS__;
 const string IdKey = "BalloonPartyBot.Id";
 const string ShooterKey = "BalloonPartyBot.Shooter";
@@ -399,7 +401,7 @@ if (setupStage < 2 && InPlay(game))
         if (setupStage == 0 && purple)
         {
             var seedType = asm.GetType("BalloonParty.Game.Run.IRunSeed");
-            var seed = (int)Prop(game.Resolve(seedType), seedType, "Value");
+            var seed = forcedSeed != 0 ? forcedSeed : (int)Prop(game.Resolve(seedType), seedType, "Value");
             // The level the game would make of each number, from the pacing the game scope plays with.
             var pacingType = asm.GetType("BalloonParty.Configuration.Level.ILevelPacingConfiguration");
             var pacing = game.Resolve(pacingType);
@@ -426,7 +428,16 @@ if (setupStage < 2 && InPlay(game))
 
             UnityEditor.SessionState.SetInt(setupKey + ".PreviousStart", (int)cheatState.GetField("StartLevel", staticFlags).GetValue(null));
             cheatState.GetField("StartLevel", staticFlags).SetValue(null, purpleLevel);
-            cheatState.GetField("KeepRunSeed", staticFlags).SetValue(null, true);
+            // A forced seed restarts on that seed (the same level for every session given it); otherwise the run's own.
+            if (forcedSeed != 0)
+            {
+                cheatState.GetField("ForcedRunSeed", staticFlags).SetValue(null, forcedSeed);
+            }
+            else
+            {
+                cheatState.GetField("KeepRunSeed", staticFlags).SetValue(null, true);
+            }
+
             var runController = game.Resolve(asm.GetType("BalloonParty.Game.Run.RunController"));
             runController.GetType().GetMethod("RestartRun", flags).Invoke(runController, new object[] { true });
             UnityEditor.SessionState.SetInt(setupKey, 1);
@@ -473,6 +484,14 @@ if (setupStage < 2 && InPlay(game))
         var cause = exception.InnerException ?? exception;
         return time + " SETUP failed: " + cause.GetType().Name + " " + cause.Message;
     }
+}
+
+// The control for a disco measurement: no disco ball is placed. Set every tick, as cheap as a field write, so it
+// holds through restarts whatever they rebuild.
+if (noDisco)
+{
+    var requests = game.Resolve(asm.GetType("BalloonParty.Balloon.Reward.IRewardBalloonRequests"));
+    requests.GetType().GetField("_discoPlaceable", flags).SetValue(requests, false);
 }
 
 var progress = game.Resolve(progressType);

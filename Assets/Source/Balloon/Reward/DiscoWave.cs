@@ -33,7 +33,8 @@ namespace BalloonParty.Balloon.Reward
     ///     paint (<see cref="PaintTargets" />) takes the drip and keeps its colour. Balloons that move while the disc
     ///     grows are caught by a last sweep when it ends. What the wave paints is booked to the breaking shot
     ///     (<see cref="ShotPaintLedger" />), so that shot can't climb its streak on it. A run reset, a level change or
-    ///     game over stops the wave where it is. The wave's sound follows its messages: how far through its time it is
+    ///     game over stops the wave where it is. The pop also owes the next clock lines rainbow
+    ///     (<see cref="RainbowLines" />). The wave's sound follows its messages: how far through its time it is
     ///     (<see cref="DiscoWaveAdvancedMessage" />), and each balloon it paints (<see cref="DiscoWaveReachedMessage" />).
     /// </summary>
     internal sealed class DiscoWave : IStartable, ITickable, IRunResettable, IDisposable
@@ -48,6 +49,7 @@ namespace BalloonParty.Balloon.Reward
         private readonly IPublisher<DiscoWaveAdvancedMessage> _advancedPublisher;
         private readonly IPublisher<DiscoWaveReachedMessage> _reachedPublisher;
         private readonly ShotPaintLedger _paintLedger;
+        private readonly RainbowLines _rainbowLines;
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly IDiscoWaveView _view;
         private readonly HashSet<ISlotActor> _reached = new();
@@ -76,6 +78,7 @@ namespace BalloonParty.Balloon.Reward
             IPublisher<DiscoWaveAdvancedMessage> advancedPublisher,
             IPublisher<DiscoWaveReachedMessage> reachedPublisher,
             ShotPaintLedger paintLedger,
+            RainbowLines rainbowLines,
             DisturbanceFieldService disturbanceField,
             IDiscoWaveView view)
         {
@@ -89,6 +92,7 @@ namespace BalloonParty.Balloon.Reward
             _advancedPublisher = advancedPublisher;
             _reachedPublisher = reachedPublisher;
             _paintLedger = paintLedger;
+            _rainbowLines = rainbowLines;
             _disturbanceField = disturbanceField;
             _view = view;
         }
@@ -140,6 +144,7 @@ namespace BalloonParty.Balloon.Reward
             _reached.Clear();
             _reached.Add(balloon);
             _view.Show(_center);
+            _rainbowLines.Grant(_settings.RainbowLines, _shot);
             _advancedPublisher.Publish(new DiscoWaveAdvancedMessage(0f));
         }
 

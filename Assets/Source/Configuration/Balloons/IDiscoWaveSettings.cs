@@ -21,6 +21,9 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>A painted balloon's burst of its old colour, as a share of a pop's.</summary>
         float BurstScale { get; }
 
+        /// <summary>How many clock lines after the pop arrive rainbow, counting only lines that bring a balloon.</summary>
+        int RainbowLines { get; }
+
         /// <summary>The disc's material, which holds its edge and wash. Required: with none the disc isn't drawn.</summary>
         Material DiscMaterial { get; }
 

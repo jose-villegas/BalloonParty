@@ -60,6 +60,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly IRunSeed _runSeed;
         private readonly IFormationReinforcements _reinforcements;
         private readonly IRewardBalloonRequests _rewards;
+        private readonly IRainbowLines _rainbowLines;
         private readonly ThreatEase _threatEase;
         private readonly List<Vector3> _spawnPathBuffer = new();
         private readonly List<BalloonPrefabEntry> _spawnBatch = new();
@@ -122,6 +123,7 @@ namespace BalloonParty.Balloon.Spawner
             IRunSeed runSeed,
             IFormationReinforcements reinforcements,
             IRewardBalloonRequests rewards,
+            IRainbowLines rainbowLines,
             ThreatEase threatEase)
         {
             _grid = grid;
@@ -145,6 +147,7 @@ namespace BalloonParty.Balloon.Spawner
             _runSeed = runSeed;
             _reinforcements = reinforcements;
             _rewards = rewards;
+            _rainbowLines = rainbowLines;
             _threatEase = threatEase;
             _bubbleEntry = FindEntry(balloonsConfig, BalloonType.BubbleCluster);
             _unbreakableEntry = FindEntry(balloonsConfig, BalloonType.Unbreakable);
@@ -448,7 +451,10 @@ namespace BalloonParty.Balloon.Spawner
                 _rejectedBalloon.BeginDoomedLine(0);
             }
 
+            var lineStart = _newlySpawnedBalloons.Count;
             SpawnLineInternal(PlacementReach.Pressure);
+            // Before the item roll below, so an item rolled onto a painted balloon comes as its rainbow version.
+            _rainbowLines.PaintLine(_newlySpawnedBalloons, lineStart);
             if (doomed)
             {
                 _rejectedBalloon.EndDoomedLine();

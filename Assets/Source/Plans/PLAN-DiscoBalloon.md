@@ -47,6 +47,7 @@ code is the model, the wave, the ledger that guards the streak, and the look.
 | `DiscoWaveView` (new) | `Balloon/View/` | A pooled `MonoBehaviour` quad drawing the disc. The wave pushes the centre and radius to it each frame, so what you see and what gets painted can't drift apart. Its `CompositeDisposable` is cleared and its tweens are killed in `OnDespawned` |
 | `PaintTargets` (new, static) | `Item/Paint/` | Moves `PaintItemHandler.TryClassify` out so it can be shared. Accept: paintable and not already that colour. Reject: `IResistsPaint`, or a rainbow balloon hit by concrete paint. Ignore: anything else. The Paint item and the wave both classify through it, so a balloon immune to the Paint item is immune to the wave |
 | `ShotPaintLedger` (new) | `Projectile/Controller/` | Remembers which balloons a given shot's effects painted rainbow. `ProjectileHitResolver` asks it before marking a wildcard pop. Entries are cleared when the shot ends (*Self-feeding check*) |
+| `RainbowLines`, `IRainbowLines` (new) | `Balloon/Reward/` | The clock lines a pop owes rainbow, painted as the spawner places them (*The lines after it*) |
 | `NudgeType.Wave` (new flag) | `Nudge/NudgeType.cs` | The wave nudges each balloon on its own with `NudgeMessage(actor, ballPosition, NudgeType.Wave, overrides)`. `NudgeService.HandleSingleActor` already supports exactly that. A separate flag lets a prefab's `NudgeOverrides` tune the wave's push apart from a deflect or a neighbour hit. `Shockwave` doesn't fit, because it nudges the whole board at once |
 | `GodRaysLook` | `Balloon/Type/` | Used as it is, on a `DiscoRays` material and palette entry (*The look*) |
 | `CombatSoundRouter`, `GameSoundId` | `Audio/` | `BalloonDeflectDisco`, `BalloonPopDisco`, and the wave's two cues (`DiscoWaveGlissando`, `DiscoWaveTick`), appended |
@@ -120,6 +121,15 @@ Its pop scores nothing and leaves the streak alone, because the ball has no colo
 comes from the wave.
 
 ## The wave
+
+**The lines after it.** The party outlasts the wave: the pop owes the next clock lines rainbow
+(`DiscoWaveSettings.RainbowLines`, 3 by default; asked for on 2026-11-15). `RainbowLines` holds the count, and
+`BalloonSpawner` hands it each clock line's new balloons once they are placed, before the item roll. Each line
+that brings a balloon pays one, by the wave's rules (`PaintTargets`): a paintable balloon arrives rainbow and a
+paint-immune one keeps its look. A line that brings none, because the board is full, doesn't count, so every
+line owed arrives. A second pop tops the count up to the setting instead of adding to it. A level change or a
+run reset forgets what is still owed. The painted balloons are booked to the breaking shot while it flies, so
+the self-feeding check holds for them too.
 
 **Shape and timing.** The disc is centred on the ball's position at the moment of the pop. It does not
 follow the board afterwards, so a balloon line arriving mid-wave doesn't drag the disc with it.

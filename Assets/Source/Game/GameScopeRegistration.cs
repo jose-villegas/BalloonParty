@@ -261,6 +261,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<RewardBalloonService>().As<IRewardBalloonRequests>().As<IRunResettable>();
             builder.RegisterEntryPoint<RewardBalloonPayout>();
             builder.RegisterEntryPoint<DiscoWave>().As<IRunResettable>();
+            builder.RegisterEntryPoint<RainbowLines>().As<IRainbowLines>().As<IRunResettable>().AsSelf();
             builder.RegisterComponentOnNewGameObject<DiscoWaveView>(Lifetime.Singleton, "DiscoWave").As<IDiscoWaveView>();
             builder.RegisterEntryPoint<GridActorHitController>();
             builder.Register<NavigationReadyGate>(Lifetime.Singleton).WithParameter(NavigationState.Game);

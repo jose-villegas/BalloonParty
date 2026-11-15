@@ -49,6 +49,7 @@ namespace BalloonParty.Tests.Balloon
         private IPublisher<DiscoWaveReachedMessage> _reachedPublisher;
         private ProjectileRegistry _registry;
         private ShotPaintLedger _ledger;
+        private RainbowLines _rainbowLines;
         private IDiscoWaveView _view;
         private ReactiveProperty<int> _level;
         private DiscoWave _wave;
@@ -80,10 +81,11 @@ namespace BalloonParty.Tests.Balloon
             _level = new ReactiveProperty<int>(1);
             var levelProgress = Substitute.For<ILevelProgress>();
             levelProgress.Level.Returns(_level);
+            _rainbowLines = new RainbowLines(_palette, _ledger, _registry, levelProgress);
 
             _wave = new DiscoWave(
                 QuietSubscriber<ActorHitMessage>(), QuietSubscriber<GameOverMessage>(), levelProgress, _grid, _palette,
-                balloons, _nudgePublisher, _advancedPublisher, _reachedPublisher, _ledger,
+                balloons, _nudgePublisher, _advancedPublisher, _reachedPublisher, _ledger, _rainbowLines,
                 new DisturbanceFieldService(
                     Substitute.For<IDisturbanceFieldSettings>(), Substitute.For<IGameDisplayConfiguration>(),
                     new ImpactEventBus()),
@@ -259,7 +261,7 @@ namespace BalloonParty.Tests.Balloon
             levelProgress.Level.Returns(_level);
             using var wave = new DiscoWave(
                 QuietSubscriber<ActorHitMessage>(), gameOver, levelProgress, _grid, _palette, balloons,
-                _nudgePublisher, _advancedPublisher, _reachedPublisher, _ledger,
+                _nudgePublisher, _advancedPublisher, _reachedPublisher, _ledger, _rainbowLines,
                 new DisturbanceFieldService(
                     Substitute.For<IDisturbanceFieldSettings>(), Substitute.For<IGameDisplayConfiguration>(),
                     new ImpactEventBus()),
@@ -331,6 +333,14 @@ namespace BalloonParty.Tests.Balloon
             _wave.Advance(WholeWave);
 
             _advancedPublisher.Received(1).Publish(new DiscoWaveAdvancedMessage(1f));
+        }
+
+        [Test]
+        public void ThePop_OwesTheNextClockLinesRainbow()
+        {
+            PopDisco();
+
+            Assert.AreEqual(new DiscoWaveSettings().RainbowLines, _rainbowLines.Owed);
         }
 
         [Test]

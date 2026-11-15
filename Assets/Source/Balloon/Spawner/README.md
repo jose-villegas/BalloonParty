@@ -60,6 +60,10 @@ it lands, `Placed` hands back the callback the balloon calls on leaving, in plac
 release. A line with no room for it leaves it due for the next. It stays out of the item roll. Without a
 catalogue entry for the type nothing comes; each entry is prewarmed to one.
 
+Once a clock line is placed, its new balloons go to `IRainbowLines.PaintLine`. That paints them rainbow while a
+disco ball's pop still owes lines (see `Balloon/Reward/README.md`), and does nothing otherwise. It runs before
+the item roll, so an item rolled onto a painted balloon comes as its rainbow version.
+
 ### Placement under pressure (clock lines)
 
 A blocked column isn't lost immediately. `BalloonPlacementResolver.Resolve` picks a slot in order, scanning columns nearest-first (`TryNearestColumn`):
