@@ -43,7 +43,7 @@ Material:
     - _RaySharpness: 3
     - _SecondFan: 0.45
     - _ShortestRay: 0.6
-    - _SpinSpeed: 0.12
+    - _SpinSpeed: 0.6
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
