@@ -4,6 +4,7 @@ using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration;
 using NUnit.Framework;
+using UnityEditor;
 using UnityEngine;
 using BalloonParty.Configuration.Level;
 
@@ -34,6 +35,26 @@ namespace BalloonParty.Tests.Configuration
 
             Assert.AreEqual(0, pacing.DebugPresets.Count);
             Assert.Greater(pacing.ParametersForLevel(1, 0).BalloonWeights[0].Weight, 0f);
+        }
+
+        [Test]
+        public void Shipped_ThresholdForLevel_AnExtraColorLevel_SplitsTheSamePointsOverOneMoreColour()
+        {
+            ILevelPacingConfiguration pacing =
+                AssetDatabase.LoadAssetAtPath<LevelPacingConfiguration>("Assets/Configuration/LevelPacingConfiguration.asset");
+            Assert.IsNotNull(pacing);
+
+            for (var level = 13; level <= 40; level++)
+            {
+                var colors = pacing.ColorsForLevel(level);
+                var ordinary = pacing.ThresholdForLevel(level);
+                var extra = pacing.ThresholdForLevel(level, extraColor: true);
+
+                Assert.Less(extra, ordinary, $"level {level}: each colour's goal shrinks");
+                // Only the clean-multiple rounding of each goal separates the two totals.
+                Assert.AreEqual(ordinary * colors, extra * (colors + 1), 50 * (colors + 1),
+                    $"level {level}: an extra-colour level asks about what an ordinary one does in all");
+            }
         }
 
         [Test]

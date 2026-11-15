@@ -34,8 +34,19 @@ namespace BalloonParty.Configuration.Level
         /// </summary>
         ScenarioKind ScenarioForLevel(int level, int runSeed);
 
-        /// <summary>Points required per colour to complete <paramref name="level" /> — derived from the scoring curve's cumulative milestones, divided by colour count, and snapped to a clean multiple.</summary>
-        int ThresholdForLevel(int level);
+        /// <summary>
+        ///     Points required per colour to complete <paramref name="level" /> — derived from the scoring curve's
+        ///     cumulative milestones, divided by colour count, and snapped to a clean multiple. An extra-colour level
+        ///     (<paramref name="extraColor" />) splits the same points over its one more colour, so it asks no more in
+        ///     all than an ordinary level.
+        /// </summary>
+        int ThresholdForLevel(int level, bool extraColor = false);
+
+        /// <summary>
+        ///     Whether <paramref name="level" /> plays an extra colour in the run rolled by <paramref name="runSeed" />
+        ///     (<see cref="ExtraColorLevelSettings" />); a debug preset (level &lt; 1) never does.
+        /// </summary>
+        bool IsExtraColorLevel(int level, int runSeed);
 
         /// <summary>Count of colours allowed at <paramref name="level" />.</summary>
         int ColorsForLevel(int level);

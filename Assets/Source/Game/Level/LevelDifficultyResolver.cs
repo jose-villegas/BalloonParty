@@ -103,9 +103,11 @@ namespace BalloonParty.Game.Level
             _subscription?.Dispose();
         }
 
+        // Read for a level about to start too (the progress bars at a level-up), so it rolls the level's colour
+        // count from the run seed rather than reading Current.
         public int PointsRequiredForLevel(int level)
         {
-            return _pacing.ThresholdForLevel(level);
+            return _pacing.ThresholdForLevel(level, _pacing.IsExtraColorLevel(level, _runSeed.Value));
         }
 
         private void ResolveFor(int level)

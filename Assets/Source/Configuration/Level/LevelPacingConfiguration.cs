@@ -104,13 +104,18 @@ namespace BalloonParty.Configuration.Level
             return _generation.ScenarioForLevel(level, runSeed);
         }
 
-        public int ThresholdForLevel(int level)
+        public int ThresholdForLevel(int level, bool extraColor = false)
         {
             var cumThis = _scoringCurve.CumulativeMilestone(level);
             var cumPrev = _scoringCurve.CumulativeMilestone(level - 1);
             var increment = cumThis - cumPrev;
-            var perColor = Mathf.RoundToInt(increment / ColorsForLevel(level));
+            var perColor = Mathf.RoundToInt(increment / (ColorsForLevel(level) + (extraColor ? 1 : 0)));
             return Mathf.Max(1, RoundThreshold(perColor));
+        }
+
+        public bool IsExtraColorLevel(int level, int runSeed)
+        {
+            return level > 0 && _generation.ExtraColor.IsExtraColorLevel(level, runSeed);
         }
 
         public int MaxConcurrentBalloons(BalloonType type, int columns)

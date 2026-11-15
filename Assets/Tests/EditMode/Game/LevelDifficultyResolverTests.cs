@@ -89,6 +89,17 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void PointsRequiredForLevel_AnExtraColorLevel_AsksForItsSplitThreshold()
+        {
+            SetSingleRange(1, 0, BalloonType.Simple, 1f);
+            _pacing.IsExtraColorLevel(5, Arg.Any<int>()).Returns(true);
+            _pacing.ThresholdForLevel(5, true).Returns(30);
+            _pacing.ThresholdForLevel(5, false).Returns(40);
+
+            Assert.AreEqual(30, BuildResolver().PointsRequiredForLevel(5));
+        }
+
+        [Test]
         public void PickBalloonEntry_TypeAbsentFromRange_NeverPicked()
         {
             var simple = CreateCatalogEntry("Simple", BalloonType.Simple, weight: 1f, maxCount: 0);
