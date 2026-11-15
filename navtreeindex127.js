@@ -1,5 +1,11 @@
 var NAVTREEINDEX127 =
 {
+"structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a365a3b3a9ef13e8f357513103da901a6":[6,0,0,14,7,1],
+"structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a3b95fc46b3359fb8eeb71fcb79bcb24c":[5,0,0,14,7,3],
+"structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a3b95fc46b3359fb8eeb71fcb79bcb24c":[6,0,0,14,7,3],
+"structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a3f48532d3c6e14b7e836cd3c1a319966":[5,0,0,14,7,6],
+"structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a3f48532d3c6e14b7e836cd3c1a319966":[6,0,0,14,7,6],
+"structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a76bd3ee39c5eb911ff8a6845ef9483a1":[5,0,0,14,7,7],
 "structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a76bd3ee39c5eb911ff8a6845ef9483a1":[6,0,0,14,7,7],
 "structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a7a4b2bde33b3c55858c2eaab018fd705":[5,0,0,14,7,2],
 "structBalloonParty_1_1Solver_1_1ShotCruiseConfig.html#a7a4b2bde33b3c55858c2eaab018fd705":[6,0,0,14,7,2],
@@ -243,11 +249,5 @@ var NAVTREEINDEX127 =
 "structBalloonParty_1_1Solver_1_1ShotSimulationResult.html#aff4003a39ba14a157101e3ae63cc5888":[6,0,0,14,22,9],
 "structBalloonParty_1_1Solver_1_1ShotSlotLattice.html":[5,0,0,14,24],
 "structBalloonParty_1_1Solver_1_1ShotSlotLattice.html":[6,0,0,14,24],
-"structBalloonParty_1_1Solver_1_1ShotSlotLattice.html#a0bf0239030714781bcacf3306eaa49f4":[5,0,0,14,24,6],
-"structBalloonParty_1_1Solver_1_1ShotSlotLattice.html#a0bf0239030714781bcacf3306eaa49f4":[6,0,0,14,24,6],
-"structBalloonParty_1_1Solver_1_1ShotSlotLattice.html#a2c354be865b947f65c43e134bfdf438d":[5,0,0,14,24,3],
-"structBalloonParty_1_1Solver_1_1ShotSlotLattice.html#a2c354be865b947f65c43e134bfdf438d":[6,0,0,14,24,3],
-"structBalloonParty_1_1Solver_1_1ShotSlotLattice.html#aa059f646b2ea6d40c85646353db4e485":[5,0,0,14,24,2],
-"structBalloonParty_1_1Solver_1_1ShotSlotLattice.html#aa059f646b2ea6d40c85646353db4e485":[6,0,0,14,24,2],
-"structBalloonParty_1_1Solver_1_1ShotSlotLattice.html#aa0b3f2d841a98ccd48c10b3e122ea2f2":[5,0,0,14,24,0]
+"structBalloonParty_1_1Solver_1_1ShotSlotLattice.html#a0bf0239030714781bcacf3306eaa49f4":[5,0,0,14,24,6]
 };

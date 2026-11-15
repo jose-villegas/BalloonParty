@@ -1,5 +1,11 @@
 var NAVTREEINDEX112 =
 {
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a70fd8bf1148bf059d1e9549b680d3a18acb5feb1b7314637725a2e73bdc9f7295":[5,0,0,6,10,27,0],
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a7d92d3154f481b1e25541b132865a4f1":[5,0,0,6,10,26],
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a7d92d3154f481b1e25541b132865a4f1a6a061313d22e51e0f25b7cd4dc065233":[5,0,0,6,10,26,1],
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a7d92d3154f481b1e25541b132865a4f1aa0ec87054b5e5b7847d0d8780a01a3d5":[5,0,0,6,10,26,0],
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#a7d92d3154f481b1e25541b132865a4f1ad55b30607c2a9a2616347d6edb789f6b":[5,0,0,6,10,26,2],
+"namespaceBalloonParty_1_1Game_1_1Telemetry.html#afe92d9f4b6c560e2af24ec284ae652c1":[5,0,0,6,10,31],
 "namespaceBalloonParty_1_1Game_1_1Telemetry.html#afe92d9f4b6c560e2af24ec284ae652c1a6288740a1cd0de37312619df3b6ddcf3":[5,0,0,6,10,31,0],
 "namespaceBalloonParty_1_1Game_1_1Telemetry.html#afe92d9f4b6c560e2af24ec284ae652c1a94e8a499539d1a472f3b5dbbb85508c0":[5,0,0,6,10,31,2],
 "namespaceBalloonParty_1_1Game_1_1Telemetry.html#afe92d9f4b6c560e2af24ec284ae652c1ab243e7fccc7a9e8b7cbce046875c08ac":[5,0,0,6,10,31,1],
@@ -243,11 +249,5 @@ var NAVTREEINDEX112 =
 "namespaceBalloonParty_1_1UI_1_1CardReveal.html":[5,0,0,16,1],
 "namespaceBalloonParty_1_1UI_1_1ClothRibbon.html":[5,0,0,16,2],
 "namespaceBalloonParty_1_1UI_1_1Danger.html":[5,0,0,16,3],
-"namespaceBalloonParty_1_1UI_1_1GameOver.html":[5,0,0,16,4],
-"namespaceBalloonParty_1_1UI_1_1HeadsUp.html":[5,0,0,16,5],
-"namespaceBalloonParty_1_1UI_1_1Health.html":[5,0,0,16,6],
-"namespaceBalloonParty_1_1UI_1_1LevelUp.html":[5,0,0,16,7],
-"namespaceBalloonParty_1_1UI_1_1Score.html":[5,0,0,16,8],
-"namespaceBalloonParty_1_1UI_1_1Score.html#a86f03547512dfa6ce827879a999ee3db":[5,0,0,16,8,8],
-"namespaceBalloonParty_1_1UI_1_1Score.html#a86f03547512dfa6ce827879a999ee3dba58fa788345ab5ac21c2cef38907d4580":[5,0,0,16,8,8,2]
+"namespaceBalloonParty_1_1UI_1_1GameOver.html":[5,0,0,16,4]
 };

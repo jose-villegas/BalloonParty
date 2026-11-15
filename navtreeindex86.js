@@ -1,5 +1,11 @@
 var NAVTREEINDEX86 =
 {
+"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotCluster.html#a7aed305259fd5ef86710b19d67eaf56c":[6,0,0,13,0,1,5,0],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotCluster.html#ab2dfcc198e0ecfeeba83dd5617c81f75":[5,0,0,13,0,1,5,1],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotCluster.html#ab2dfcc198e0ecfeeba83dd5617c81f75":[6,0,0,13,0,1,5,1],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotCluster.html#adfd4e6030d3225326700283783be9699":[5,0,0,13,0,1,5,3],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotCluster.html#adfd4e6030d3225326700283783be9699":[6,0,0,13,0,1,5,3],
+"classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html":[5,0,0,13,0,1,7],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html":[6,0,0,13,0,1,7],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html#a007d47bc8543a80976b69ceb091a2b72":[5,0,0,13,0,1,7,13],
 "classBalloonParty_1_1Slots_1_1Actor_1_1Cluster_1_1SlotClusterRegistry-1-g.html#a007d47bc8543a80976b69ceb091a2b72":[6,0,0,13,0,1,7,13],
@@ -243,11 +249,5 @@ var NAVTREEINDEX86 =
 "classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#aa7119fa53b0508256726cdd83371388c":[6,0,0,13,0,18,53],
 "classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#aa77d965d56dc519903288f2bc8d0bb29":[5,0,0,13,0,18,5],
 "classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#aa77d965d56dc519903288f2bc8d0bb29":[6,0,0,13,0,18,5],
-"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#aadddf4f5dc1a0d317298044aa10ef8ee":[5,0,0,13,0,18,102],
-"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#aadddf4f5dc1a0d317298044aa10ef8ee":[6,0,0,13,0,18,102],
-"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#aae87bd0abcbdc04c7062bbc84c6060e9":[5,0,0,13,0,18,2],
-"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#aae87bd0abcbdc04c7062bbc84c6060e9":[6,0,0,13,0,18,2],
-"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#aaebbeea91a0703bf7f6b79f79bc3db07":[5,0,0,13,0,18,37],
-"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#aaebbeea91a0703bf7f6b79f79bc3db07":[6,0,0,13,0,18,37],
-"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#ab320796f6f977e604421afdb95ae3f7a":[5,0,0,13,0,18,54]
+"classBalloonParty_1_1Slots_1_1Actor_1_1SpeckField.html#aadddf4f5dc1a0d317298044aa10ef8ee":[5,0,0,13,0,18,102]
 };

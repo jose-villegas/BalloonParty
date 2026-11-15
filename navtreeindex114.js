@@ -1,5 +1,11 @@
 var NAVTREEINDEX114 =
 {
+"plan_gameplay_telemetry.html#autotoc_md599":[3,11,0,3,2],
+"plan_gameplay_telemetry.html#autotoc_md600":[3,11,0,3,3],
+"plan_gameplay_telemetry.html#autotoc_md602":[3,11,0,4],
+"plan_gameplay_telemetry.html#autotoc_md605":[3,11,0,5],
+"plan_gameplay_telemetry.html#autotoc_md606":[3,11,0,5,0],
+"plan_gameplay_telemetry.html#autotoc_md607":[3,11,0,5,0,0],
 "plan_gameplay_telemetry.html#autotoc_md608":[3,11,0,5,0,1],
 "plan_gameplay_telemetry.html#autotoc_md609":[3,11,0,5,1],
 "plan_gameplay_telemetry.html#autotoc_md611":[3,11,0,6],
@@ -243,11 +249,5 @@ var NAVTREEINDEX114 =
 "plan_unbreakable_formations.html#autotoc_md888":[3,1,0,8,1],
 "plan_unbreakable_formations.html#autotoc_md889":[3,1,0,8,2],
 "plan_unbreakable_formations.html#autotoc_md891":[3,1,0,9],
-"plan_water_scenario.html":[3,10],
-"plan_water_scenario.html#autotoc_md892":[3,10,0],
-"plan_water_scenario.html#autotoc_md894":[3,10,0,0],
-"plan_water_scenario.html#autotoc_md895":[3,10,0,1],
-"plan_water_scenario.html#autotoc_md896":[3,10,0,2],
-"plan_water_scenario.html#autotoc_md897":[3,10,0,2,0],
-"plan_water_scenario.html#autotoc_md898":[3,10,0,2,1]
+"plan_water_scenario.html":[3,10]
 };

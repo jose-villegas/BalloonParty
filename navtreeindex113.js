@@ -1,5 +1,11 @@
 var NAVTREEINDEX113 =
 {
+"namespaceBalloonParty_1_1UI_1_1HeadsUp.html":[5,0,0,16,5],
+"namespaceBalloonParty_1_1UI_1_1Health.html":[5,0,0,16,6],
+"namespaceBalloonParty_1_1UI_1_1LevelUp.html":[5,0,0,16,7],
+"namespaceBalloonParty_1_1UI_1_1Score.html":[5,0,0,16,8],
+"namespaceBalloonParty_1_1UI_1_1Score.html#a86f03547512dfa6ce827879a999ee3db":[5,0,0,16,8,8],
+"namespaceBalloonParty_1_1UI_1_1Score.html#a86f03547512dfa6ce827879a999ee3dba58fa788345ab5ac21c2cef38907d4580":[5,0,0,16,8,8,2],
 "namespaceBalloonParty_1_1UI_1_1Score.html#a86f03547512dfa6ce827879a999ee3dba7a1920d61156abc05a60135aefe8bc67":[5,0,0,16,8,8,0],
 "namespaceBalloonParty_1_1UI_1_1Score.html#a86f03547512dfa6ce827879a999ee3dba988fd738de9c6d177440c5dcf69e73ce":[5,0,0,16,8,8,1],
 "namespaceBalloonParty_1_1UI_1_1Shields.html":[5,0,0,16,9],
@@ -243,11 +249,5 @@ var NAVTREEINDEX113 =
 "plan_gameplay_telemetry.html#autotoc_md593":[3,11,0,2,7],
 "plan_gameplay_telemetry.html#autotoc_md596":[3,11,0,3],
 "plan_gameplay_telemetry.html#autotoc_md597":[3,11,0,3,0],
-"plan_gameplay_telemetry.html#autotoc_md598":[3,11,0,3,1],
-"plan_gameplay_telemetry.html#autotoc_md599":[3,11,0,3,2],
-"plan_gameplay_telemetry.html#autotoc_md600":[3,11,0,3,3],
-"plan_gameplay_telemetry.html#autotoc_md602":[3,11,0,4],
-"plan_gameplay_telemetry.html#autotoc_md605":[3,11,0,5],
-"plan_gameplay_telemetry.html#autotoc_md606":[3,11,0,5,0],
-"plan_gameplay_telemetry.html#autotoc_md607":[3,11,0,5,0,0]
+"plan_gameplay_telemetry.html#autotoc_md598":[3,11,0,3,1]
 };

@@ -1,10 +1,11 @@
 var classBalloonParty_1_1Scenario_1_1SmokeFieldService =
 [
     [ "PendingStamp", "structBalloonParty_1_1Scenario_1_1SmokeFieldService_1_1PendingStamp.html", "structBalloonParty_1_1Scenario_1_1SmokeFieldService_1_1PendingStamp" ],
-    [ "SmokeFieldService", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#a23f9713bb0e9f37c24228b66c6101d53", null ],
+    [ "SmokeFieldService", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#ae741671ecfcce741179c0f761180266a", null ],
     [ "ApplyPhaseOffset", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#a4db7a608c45ee886b44fd6678b659e67", null ],
     [ "Clear", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#a4be8c856aa5649026890afc71fa2e52c", null ],
     [ "ClearInk", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#a1b02ada7bb82c3940c79f2d026d8f507", null ],
+    [ "ClearSmoke", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#a6b3b10722b942175043a9ed962b219c5", null ],
     [ "ComputeSwungWindDirection", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#a7f6d9d951b7b479c79e7d56bfebcdac0", null ],
     [ "ConfigureInkStamp", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#a08a36cf1fa7543db386407c8f83cf36e", null ],
     [ "Dispose", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#a03231d8b04d8d533e7a38b3f987f1d14", null ],
@@ -45,6 +46,8 @@ var classBalloonParty_1_1Scenario_1_1SmokeFieldService =
     [ "_settings", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#ac499634decfb2d7abc89854fd99605e9", null ],
     [ "_smokeTime", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#a58518351c8493e957b884c96f93bc8b8", null ],
     [ "_timePhase", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#a8f42090674ddb76a0c97b1765e97253c", null ],
+    [ "_transitionCompletedSubscriber", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#a1384918069615bba0858eaaf312375ff", null ],
+    [ "_transitionCompletedSubscription", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#aa56cc50bc0a66c1ff83a5dd9d018d29b", null ],
     [ "_windDampen", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#aa4b2d552d9aa1c5bc01a944dc5e350aa", null ],
     [ "ActiveId", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#af8a54e7d367e7ada93fe2d8b534c27e0", null ],
     [ "BoundsMinId", "classBalloonParty_1_1Scenario_1_1SmokeFieldService.html#a39cd478f39bf42366e7468fd439ab240", null ],
