@@ -227,7 +227,8 @@ Effects thin out inside the circle</h3>
 <div class="line"> </div>
 <div class="line">// 1 outside every circle, falling smoothly to _ClearanceFloor at a circle&#39;s centre.</div>
 <div class="line">half ClearanceAlpha(float2 worldXY);</div>
-</div><!-- fragment --><p>The loop runs to <code>_ClearanceCount</code> (usually 1 to 3), and with no ball in flight it costs one compare. Each shader below includes it and multiplies its output by <code>ClearanceAlpha(worldPos.xy)</code>: the whole colour for the premultiplied ones, alpha alone for straight alpha.</p>
+</div><!-- fragment --><p>The loop runs to <code>_ClearanceCount</code> (usually 1 to 3), and with no ball in flight it costs one compare. Each shader below includes it and multiplies its output by <code>ClearanceAlpha(worldPos.xy)</code>: the whole colour for the premultiplied ones, alpha alone for straight alpha. Each takes a <code>_CLEARANCE_FADE</code> material toggle ("Fade Round
+Balls"), so only the materials of effects drawn over the ball fade, not the balloons and pickups that share a shader.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Shader   </th><th class="markdownTableHeadNone">Effects   </th><th class="markdownTableHeadNone">Work    </th></tr>
@@ -236,13 +237,13 @@ Effects thin out inside the circle</h3>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>Particle/Glow.shader</code>   </td><td class="markdownTableBodyNone">Laser beams, lightning bolts   </td><td class="markdownTableBodyNone">Add a world-position interpolator (<code>mul(unity_ObjectToWorld, v.vertex)</code>); it is world space already for LineRenderers    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>Sprite/SpriteShine.shader</code>   </td><td class="markdownTableBodyNone">Laser shine and shadow   </td><td class="markdownTableBodyNone">Fade its output; check its other users first, and gate it behind a material toggle if any must not fade    </td></tr>
+<td class="markdownTableBodyNone"><code>Sprite/SpriteShine.shader</code>   </td><td class="markdownTableBodyNone">Laser shine and shadow   </td><td class="markdownTableBodyNone">Fade its output. <code>Shine</code> and <code>LaserShadow</code> are shared with the tough balloon and the laser pickup, so the laser effect gets its own copies, <code>LaserRangeShine</code> and <code>LaserRangeShadow</code>, with the fade on    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>Paint/PaintBlob.shader</code>   </td><td class="markdownTableBodyNone">Paint blobs   </td><td class="markdownTableBodyNone">World position already in the fragment    </td></tr>
+<td class="markdownTableBodyNone"><code>Paint/PaintBlob.shader</code>   </td><td class="markdownTableBodyNone">Paint blobs   </td><td class="markdownTableBodyNone">Its world position only exists with the cloud-fade shadow on, so the fade carries its own. On for the flying blobs (<code>PaintFlyingBlob</code>); the paint pickup's <code>PaintBlob</code> stays off    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">New <code>Particle/ParticleClearance.shader</code>   </td><td class="markdownTableBodyNone">Bomb burst, paint splash and drip particles, score trail ribbons   </td><td class="markdownTableBodyNone">These use Unity's built-in legacy particle shader, which can't take the include. A small replacement that matches its look (texture × vertex colour, alpha blended) and fades; swapped onto their materials    </td></tr>
+<td class="markdownTableBodyNone"><code>Particle/Glow.shader</code> again   </td><td class="markdownTableBodyNone">Bomb burst, paint splash particles, score trail ribbons   </td><td class="markdownTableBodyNone">These used Unity's built-in Mobile/Particles/Alpha Blended, which can't take the include. <code>Glow</code> at <code>_HdrBoost</code> 1 with <code>_SrcBlend</code> SrcAlpha, <code>_DstBlend</code> OneMinusSrcAlpha and <code>_ColorMask</code> RGB is the same look (texture × vertex colour, alpha blended, no alpha written), so they moved onto it with the fade on; no new shader    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>Grid/BushLeaf.shader</code>, <code>Grid/BushBranch.shader</code>   </td><td class="markdownTableBodyNone">Bushes   </td><td class="markdownTableBodyNone"><b>Only if</b> the Frame Debugger shows them drawing over the ball. The leaf shader needs one interpolator   </td></tr>
+<td class="markdownTableBodyNone"><code>Grid/BushLeaf.shader</code>, <code>Grid/BushBranch.shader</code>   </td><td class="markdownTableBodyNone">Bushes   </td><td class="markdownTableBodyNone">Left alone. <code>BushView</code> draws them with <code>Graphics.DrawMesh</code>, which takes no sorting layer, so they land on Default, under the ball (<code>BushSettings.SortingLayerId</code> is read by nothing)   </td></tr>
 </table>
 <p>The floor is an alpha, not zero: a laser over the ball still reads as a laser, a cloud as a cloud, but the ball shows through. 0.3 to start; tuned on the phone.</p>
 <p><b>The score trail ribbons</b> fade as a backstop. The formations and trails above keep most of them off the ball. Where one still crosses it (a formation's ink while it is pushed off, a trail caught when a circle sweeps onto it), the ribbon thins out rather than crossing over.</p>
