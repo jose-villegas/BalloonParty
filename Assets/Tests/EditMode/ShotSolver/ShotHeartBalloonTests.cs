@@ -60,6 +60,7 @@ namespace BalloonParty.Tests.ShotSolver
             Assert.AreEqual(1 + 10 * 2, result.RawScore, "the heart pays nothing and the streak climbs through it");
             Assert.AreEqual(1, result.HeartPops, "counted apart, for a ranking that wants it");
             Assert.AreEqual(0, result.GoldenPops);
+            Assert.AreEqual(0, result.DiscoPops);
             Assert.AreEqual(0, result.ToughsCleared, "scoreless: not tallied as a tough clear either");
             Assert.IsTrue(result.BoardCleared);
         }
@@ -79,6 +80,7 @@ namespace BalloonParty.Tests.ShotSolver
 
             Assert.AreEqual(2, result.Pops, "the host, then the heart beside it");
             Assert.AreEqual(1, result.HeartPops, "an item's pop counts too");
+            Assert.AreEqual(0, result.GoldenPops + result.DiscoPops, "a heart is neither plated kind");
             Assert.AreEqual(1, result.RawScore, "only the host scores");
             Assert.IsTrue(result.BoardCleared);
         }

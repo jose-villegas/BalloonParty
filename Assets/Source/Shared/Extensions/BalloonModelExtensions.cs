@@ -16,10 +16,10 @@ namespace BalloonParty.Shared.Extensions
         }
 
         /// <summary>The reserved presentation color for a heavy type's impacts: metallic sparks for the
-        /// unbreakable and the golden balloon, the tough entry otherwise.</summary>
+        /// unbreakable and the plated reward balloons, the tough entry otherwise.</summary>
         internal static string GetImpactColorId(this IBalloonModel model)
         {
-            return model.TypeName is BalloonType.Unbreakable or BalloonType.Golden
+            return model.TypeName is BalloonType.Unbreakable or BalloonType.Golden or BalloonType.Disco
                 ? GamePalette.SparksColorId
                 : GamePalette.ToughColorId;
         }
@@ -34,7 +34,8 @@ namespace BalloonParty.Shared.Extensions
                 return color;
             }
 
-            var isHeavy = model.TypeName is BalloonType.Tough or BalloonType.Unbreakable or BalloonType.Golden;
+            var isHeavy = model.TypeName is BalloonType.Tough or BalloonType.Unbreakable or BalloonType.Golden
+                          or BalloonType.Disco;
             return isHeavy ? model.GetImpactColorId() : color;
         }
 

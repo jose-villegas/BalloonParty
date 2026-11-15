@@ -186,6 +186,7 @@ namespace BalloonParty.Solver
         public int Pops;
         public int GoldenPops;
         public int HeartPops;
+        public int DiscoPops;
         public int ToughsCleared;
         public int Events;
         public bool Died;
@@ -227,6 +228,7 @@ namespace BalloonParty.Solver
             Pops = 0;
             GoldenPops = 0;
             HeartPops = 0;
+            DiscoPops = 0;
             ToughsCleared = 0;
             Events = 0;
             Died = false;

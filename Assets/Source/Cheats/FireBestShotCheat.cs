@@ -174,7 +174,8 @@ namespace BalloonParty.Cheats
 
         private static string Describe(in ShotSimulationResult best)
         {
-            return $"predicted score {best.RawScore}, golden pops {best.GoldenPops}, heart pops {best.HeartPops}";
+            return $"predicted score {best.RawScore}, golden pops {best.GoldenPops}, heart pops {best.HeartPops}, "
+                   + $"disco pops {best.DiscoPops}";
         }
 
         private bool TrySolve(out float bestAngle, out ShotSimulationResult best)

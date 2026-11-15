@@ -338,6 +338,9 @@ namespace BalloonParty.Solver
                 case BalloonType.Heart:
                     snapshot = ShotBalloonSnapshot.ForHeartTarget(position, radius, balance);
                     return true;
+                case BalloonType.Disco:
+                    snapshot = ShotBalloonSnapshot.ForDiscoTarget(position, radius, balance);
+                    return true;
                 default:
                     snapshot = default;
                     return false;

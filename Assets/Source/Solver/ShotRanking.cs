@@ -3,8 +3,9 @@ namespace BalloonParty.Solver
     /// <summary>
     ///     Orders simulated shots the way a player who knows the rewards would. A golden balloon's free card
     ///     outweighs any score, and a heart balloon outweighs score while its heart counts: up to the hearts
-    ///     missing, or any number on a purple level, where each is an extra one. Score decides the rest.
-    ///     Neither reward balloon scores, so ranking on score alone never aims at one.
+    ///     missing, or any number on a purple level, where each is an extra one. A disco ball's rainbow board
+    ///     comes next: it pays the shots after this one, so a heart that counts now goes first. Score decides
+    ///     the rest. No reward balloon scores, so ranking on score alone never aims at one.
     /// </summary>
     internal static class ShotRanking
     {
@@ -21,6 +22,11 @@ namespace BalloonParty.Solver
             if (candidateHearts != bestHearts)
             {
                 return candidateHearts > bestHearts;
+            }
+
+            if (candidate.DiscoPops != best.DiscoPops)
+            {
+                return candidate.DiscoPops > best.DiscoPops;
             }
 
             return candidate.RawScore > best.RawScore;

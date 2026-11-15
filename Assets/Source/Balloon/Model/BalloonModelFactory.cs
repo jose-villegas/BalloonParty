@@ -31,6 +31,7 @@ namespace BalloonParty.Balloon.Model
                 BalloonType.Unbreakable => new UnbreakableBalloonModel(config, palette, allowedColors),
                 BalloonType.Golden => new GoldenBalloonModel(config),
                 BalloonType.Heart => new HeartBalloonModel(config),
+                BalloonType.Disco => new DiscoBalloonModel(config),
                 _ => throw new ArgumentOutOfRangeException(nameof(entry), entry.BalloonType, null)
             };
         }

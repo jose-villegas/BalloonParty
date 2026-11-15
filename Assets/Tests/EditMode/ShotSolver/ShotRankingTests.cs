@@ -5,14 +5,14 @@ namespace BalloonParty.Tests.ShotSolver
 {
     /// <summary>
     ///     How the Fire Best Shot cheat, and the bots that aim with it, order shots: a golden balloon over any
-    ///     score, a heart that adds one over score, then score.
+    ///     score, a heart that adds one over score, a disco ball over score, then score.
     /// </summary>
     [TestFixture]
     public class ShotRankingTests
     {
-        private static ShotSimulationResult Shot(int score, int golden = 0, int heart = 0)
+        private static ShotSimulationResult Shot(int score, int golden = 0, int heart = 0, int disco = 0)
         {
-            return new ShotSimulationResult(score, 0, 0, false, 0, false, false, false, golden, heart);
+            return new ShotSimulationResult(score, 0, 0, false, 0, false, false, false, golden, heart, disco);
         }
 
         [Test]
@@ -55,6 +55,22 @@ namespace BalloonParty.Tests.ShotSolver
         {
             Assert.IsTrue(ShotRanking.IsBetter(Shot(50, heart: 1), Shot(0, heart: 2), heartsWanted: 1));
             Assert.IsTrue(ShotRanking.IsBetter(Shot(0, heart: 2), Shot(50, heart: 1), heartsWanted: 2));
+        }
+
+        [Test]
+        public void IsBetter_ADiscoPop_BeatsAnyScore()
+        {
+            Assert.IsTrue(ShotRanking.IsBetter(Shot(0, disco: 1), Shot(100000), heartsWanted: 0));
+            Assert.IsFalse(ShotRanking.IsBetter(Shot(100000), Shot(0, disco: 1), heartsWanted: 0));
+        }
+
+        // The disco ball pays the shots after this one; a golden card or a heart that counts pays now.
+        [Test]
+        public void IsBetter_AGoldenPopOrAHeartThatCounts_BeatsADiscoPop()
+        {
+            Assert.IsTrue(ShotRanking.IsBetter(Shot(0, golden: 1), Shot(0, disco: 1), heartsWanted: 0));
+            Assert.IsTrue(ShotRanking.IsBetter(Shot(0, heart: 1), Shot(0, disco: 1), heartsWanted: 1));
+            Assert.IsTrue(ShotRanking.IsBetter(Shot(0, disco: 1), Shot(0, heart: 1), heartsWanted: 0));
         }
 
         [TestCase(1, 3, false, 2)]

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Item.Effects;
@@ -9,20 +10,42 @@ using UnityEngine;
 
 namespace BalloonParty.Tests.ShotSolver
 {
-    /// <summary>The golden reward balloon in the solver (PLAN-RewardBalloons phase 2): it deflects the
-    /// ordinary shot forever, pops to a piercing shot or a laser beam, pays no score, leaves the streak alone,
-    /// and is untouched by every other item effect. Mirrors <c>GoldenBalloonModel.EvaluateHit</c>.</summary>
-    [TestFixture]
-    public class ShotGoldenBalloonTests
+    /// <summary>The plated reward balloons in the solver, the golden balloon (PLAN-RewardBalloons phase 2) and the
+    /// disco ball (PLAN-DiscoBalloon phase 1): each deflects the ordinary shot forever, pops to a piercing shot
+    /// or a laser beam, pays no score, leaves the streak alone, is untouched by every other item effect, and is
+    /// counted apart from the other. Mirrors <c>PlatedBalloonModel.EvaluateHit</c>.</summary>
+    [TestFixture(BalloonType.Golden)]
+    [TestFixture(BalloonType.Disco)]
+    public class ShotPlatedBalloonTests
     {
         private static readonly Vector4 WideOpenWalls = new(1000f, 1000f, -1000f, -1000f);
 
-        private static ShotBalloonSnapshot Golden(Vector2 position, float radius, Vector2Int? slot = null)
+        private readonly BalloonType _type;
+
+        public ShotPlatedBalloonTests(BalloonType type)
+        {
+            _type = type;
+        }
+
+        private ShotBalloonSnapshot Plated(Vector2 position, float radius, Vector2Int? slot = null)
         {
             var balance = slot.HasValue
                 ? new BalanceProfile(slot.Value, 0, 0, 0f, false, null)
                 : (BalanceProfile?)null;
-            return ShotBalloonSnapshot.ForGoldenTarget(position, radius, balance);
+            return _type == BalloonType.Golden
+                ? ShotBalloonSnapshot.ForGoldenTarget(position, radius, balance)
+                : ShotBalloonSnapshot.ForDiscoTarget(position, radius, balance);
+        }
+
+        // This fixture's own kind's pops; the other plated kind's must stay at zero.
+        private int RewardPops(in ShotSimulationResult result)
+        {
+            return _type == BalloonType.Golden ? result.GoldenPops : result.DiscoPops;
+        }
+
+        private int OtherPlatedPops(in ShotSimulationResult result)
+        {
+            return _type == BalloonType.Golden ? result.DiscoPops : result.GoldenPops;
         }
 
         private static ShotItemLayer CreateSnipeItemLayer()
@@ -74,13 +97,13 @@ namespace BalloonParty.Tests.ShotSolver
         }
 
         [Test]
-        public void Simulate_PlainShotAtGolden_DeflectsEveryTimeAndNeverPops()
+        public void Simulate_PlainShotAtPlated_DeflectsEveryTimeAndNeverPops()
         {
-            // Dead-centre shot at a golden with a bottom wall one shield away: deflect, bounce, deflect
+            // Dead-centre shot at a plated balloon with a bottom wall one shield away: deflect, bounce, deflect
             // again, then the second bounce outruns the shield. A plain shot never pops it however often it
             // comes back, unlike a two-hit tough which would have popped on the second contact.
             var walls = new Vector4(1000f, 1000f, -1f, -1000f);
-            var board = new[] { Golden(new Vector2(0f, 2f), 0.3f) };
+            var board = new[] { Plated(new Vector2(0f, 2f), 0.3f) };
             var workingSet = new ShotBalloonState[board.Length];
 
             var result = ShotSimulator.Simulate(
@@ -88,7 +111,7 @@ namespace BalloonParty.Tests.ShotSolver
                 workingSet: workingSet);
 
             Assert.AreEqual(0, result.Pops);
-            Assert.AreEqual(0, result.GoldenPops);
+            Assert.AreEqual(0, RewardPops(result));
             Assert.AreEqual(0, result.RawScore);
             Assert.AreEqual(0, result.ToughsCleared);
             Assert.IsFalse(result.BoardCleared);
@@ -96,16 +119,16 @@ namespace BalloonParty.Tests.ShotSolver
         }
 
         [Test]
-        public void Simulate_PiercingShotThroughGolden_PopsItScorelessAndKeepsTheStreak()
+        public void Simulate_PiercingShotThroughPlated_PopsItScorelessAndKeepsTheStreak()
         {
-            // A Snipe host arms the pierce, which plows the golden. The two Reds either side are one
-            // same-colour streak only if the golden touched neither the streak count nor the colour: 1*1
-            // for the first, 10*2 for the second. A golden that reset the streak like a tough pop would
+            // A Snipe host arms the pierce, which plows the plated balloon. The two Reds either side are one
+            // same-colour streak only if the plated balloon touched neither the streak count nor the colour: 1*1
+            // for the first, 10*2 for the second. A plated balloon that reset the streak like a tough pop would
             // leave 1 + 10.
             var board = new[]
             {
                 ShotBoardBuilder.Green(new Vector2(0f, 1f), 0.05f, "Red", 1, 1, item: ItemType.Snipe),
-                Golden(new Vector2(0f, 2f), 0.05f),
+                Plated(new Vector2(0f, 2f), 0.05f),
                 ShotBoardBuilder.Green(new Vector2(0f, 3f), 0.05f, "Red", 10, 1),
             };
             var workingSet = new ShotBalloonState[board.Length];
@@ -114,21 +137,22 @@ namespace BalloonParty.Tests.ShotSolver
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
                 workingSet: workingSet, items: CreateSnipeItemLayer());
 
-            Assert.AreEqual(1 + 10 * 2, result.RawScore, "the golden pays nothing and the streak climbs through it");
+            Assert.AreEqual(1 + 10 * 2, result.RawScore, "the plated balloon pays nothing and the streak climbs through it");
             Assert.AreEqual(3, result.Pops);
-            Assert.AreEqual(1, result.GoldenPops, "counted apart, for a ranking that wants it");
+            Assert.AreEqual(1, RewardPops(result), "counted apart, for a ranking that wants it");
+            Assert.AreEqual(0, OtherPlatedPops(result));
             Assert.AreEqual(0, result.HeartPops);
             Assert.AreEqual(0, result.ToughsCleared, "scoreless: not tallied as a tough clear either");
             Assert.IsTrue(result.BoardCleared);
         }
 
         [Test]
-        public void Simulate_PiercingShotThroughGoldenAlone_ClearsBoardForNothing()
+        public void Simulate_PiercingShotThroughPlatedAlone_ClearsBoardForNothing()
         {
             var board = new[]
             {
                 ShotBoardBuilder.Green(new Vector2(0f, 1f), 0.05f, "Red", 1, 1, item: ItemType.Snipe),
-                Golden(new Vector2(0f, 2f), 0.05f),
+                Plated(new Vector2(0f, 2f), 0.05f),
             };
             var workingSet = new ShotBalloonState[board.Length];
 
@@ -142,14 +166,14 @@ namespace BalloonParty.Tests.ShotSolver
         }
 
         [Test]
-        public void ApplyEffectHits_BombBesideGolden_LeavesItStanding()
+        public void ApplyEffectHits_BombBesidePlated_LeavesItStanding()
         {
             // A bomb's hex neighbours take a guaranteed piercing kill (an int.MaxValue tough neighbour dies
-            // to it, the control below), but the golden answers an item's hit with None.
+            // to it, the control below), but the plated balloon answers an item's hit with None.
             var host = ShotBoardBuilder.Green(
                 new Vector2(0f, 1f), 0.05f, "Red", 1, 1, new Vector2Int(3, 3), 0, 0, 0f, false, null,
                 item: ItemType.Bomb);
-            var board = new[] { host, Golden(new Vector2(0.5f, 1f), 0.05f, new Vector2Int(2, 3)) };
+            var board = new[] { host, Plated(new Vector2(0.5f, 1f), 0.05f, new Vector2Int(2, 3)) };
             var workingSet = new ShotBalloonState[board.Length];
 
             var result = ShotSimulator.Simulate(
@@ -173,13 +197,13 @@ namespace BalloonParty.Tests.ShotSolver
         }
 
         [Test]
-        public void ApplyEffectHits_LaserThroughGolden_PopsItScorelessWithTheRest()
+        public void ApplyEffectHits_LaserThroughPlated_PopsItScorelessWithTheRest()
         {
             var board = new[]
             {
                 ShotBoardBuilder.Green(
                     new Vector2(1f, 1f), 0.05f, "Blue", 3, 1, new Vector2Int(1, 0), 0, 0, 0f, false, null),
-                Golden(new Vector2(2f, 1f), 0.05f, new Vector2Int(2, 0)),
+                Plated(new Vector2(2f, 1f), 0.05f, new Vector2Int(2, 0)),
                 ShotBoardBuilder.Green(
                     new Vector2(0f, 1f), 0.05f, "Red", 2, 1, new Vector2Int(9, 9), 0, 0, 0f, false, null,
                     item: ItemType.Laser),
@@ -190,9 +214,10 @@ namespace BalloonParty.Tests.ShotSolver
                 board, WideOpenWalls, Vector2.zero, Vector2.up, startingShields: 0, projectileContactRadius: 0f,
                 workingSet: workingSet, items: CreateLaserItemLayer());
 
-            Assert.AreEqual(3, result.Pops, "host, the Blue and the golden in the corridor");
-            Assert.AreEqual(1, result.GoldenPops);
-            Assert.AreEqual(2 + 3, result.RawScore, "the golden pays nothing");
+            Assert.AreEqual(3, result.Pops, "host, the Blue and the plated balloon in the corridor");
+            Assert.AreEqual(1, RewardPops(result));
+            Assert.AreEqual(0, OtherPlatedPops(result));
+            Assert.AreEqual(2 + 3, result.RawScore, "the plated balloon pays nothing");
             Assert.AreEqual(0, result.ToughsCleared);
             Assert.IsTrue(result.BoardCleared);
         }

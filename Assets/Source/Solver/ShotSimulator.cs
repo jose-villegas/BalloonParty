@@ -4,6 +4,7 @@ using BalloonParty.Configuration.Items;
 using BalloonParty.Item.Effects;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Diagnostics;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
@@ -120,6 +121,7 @@ namespace BalloonParty.Solver
         public readonly int GoldenPops;
 
         public readonly int HeartPops;
+        public readonly int DiscoPops;
         public readonly int ToughsCleared;
         public readonly bool BoardCleared;
         public readonly int Events;
@@ -129,12 +131,13 @@ namespace BalloonParty.Solver
 
         public ShotSimulationResult(
             int rawScore, int pops, int toughsCleared, bool boardCleared, int events, bool died, bool capped,
-            bool absorbed, int goldenPops, int heartPops)
+            bool absorbed, int goldenPops, int heartPops, int discoPops)
         {
             RawScore = rawScore;
             Pops = pops;
             GoldenPops = goldenPops;
             HeartPops = heartPops;
+            DiscoPops = discoPops;
             ToughsCleared = toughsCleared;
             BoardCleared = boardCleared;
             Events = events;
@@ -311,7 +314,7 @@ namespace BalloonParty.Solver
 
             return new ShotSimulationResult(
                 state.RawScore, state.Pops, state.ToughsCleared, activeCount == 0, state.Events, state.Died,
-                state.Capped, state.Absorbed, state.GoldenPops, state.HeartPops);
+                state.Capped, state.Absorbed, state.GoldenPops, state.HeartPops, state.DiscoPops);
         }
 
         private static bool TryFindNearestBalloonEntryAny(
@@ -975,8 +978,8 @@ namespace BalloonParty.Solver
                 // exactly like a pop does.
                 NudgeItemHit(dynamics, workingSet[index], tHit);
 
-                // The golden balloon: an item's hit is HitOutcome.None, neither a pop nor spent durability, except
-                // the laser's beam (DamageFlags.Beam), which pops it.
+                // A plated reward balloon: an item's hit is HitOutcome.None, neither a pop nor spent durability,
+                // except the laser's beam (DamageFlags.Beam), which pops it.
                 if (workingSet[index].ImmuneToEffects && activation.Item != ItemType.Laser)
                 {
                     continue;
@@ -1144,15 +1147,21 @@ namespace BalloonParty.Solver
                 return;
             }
 
-            // A reward balloon: no score, and the streak is left as it was. Only the golden is immune to
-            // item effects, which tells the two apart.
-            if (balloon.ImmuneToEffects)
+            // A reward balloon: no score, and the streak is left as it was. Each kind is counted apart.
+            switch (balloon.Reward)
             {
-                state.GoldenPops++;
-            }
-            else
-            {
-                state.HeartPops++;
+                case ShotRewardKind.Golden:
+                    state.GoldenPops++;
+                    break;
+                case ShotRewardKind.Heart:
+                    state.HeartPops++;
+                    break;
+                case ShotRewardKind.Disco:
+                    state.DiscoPops++;
+                    break;
+                default:
+                    Log.Assert(false, "ShotSimulator", $"Scoreless pop of an uncounted reward kind {balloon.Reward}.");
+                    break;
             }
         }
 

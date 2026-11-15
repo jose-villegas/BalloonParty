@@ -23,6 +23,9 @@ namespace BalloonParty.Balloon.Type
 
         // Reward balloons (PLAN-RewardBalloons): placed by RewardBalloonService, never by a level's mix.
         Golden,
-        Heart
+        Heart,
+
+        // PLAN-DiscoBalloon: a plated reward balloon whose pop paints the board rainbow.
+        Disco
     }
 }

@@ -130,12 +130,12 @@ namespace BalloonParty.Solver
         /// landmine).</summary>
         public readonly Vector2Int? StaticSlotIndex;
 
-        /// <summary>A reward balloon: its pop pays no score and leaves the streak alone (neither reward balloon
-        /// is <c>IHasScoreColor</c>, so <c>ScoreController</c> skips it).</summary>
-        public readonly bool Scoreless;
+        /// <summary>Which reward balloon this is, if any: its pop pays no score and leaves the streak alone (no
+        /// reward balloon is <c>IHasScoreColor</c>, so <c>ScoreController</c> skips it).</summary>
+        public readonly ShotRewardKind Reward;
 
-        /// <summary>Item effects (bomb, lightning) do nothing to it, all but the laser's beam: the golden balloon
-        /// pops only to the shot's own pierce or a laser.</summary>
+        /// <summary>Item effects (bomb, lightning) do nothing to it, all but the laser's beam: a plated reward
+        /// balloon pops only to the shot's own pierce or a laser.</summary>
         public readonly bool ImmuneToEffects;
 
         /// <summary>Passthrough so downstream reads stay tidy — null/empty means colourless, exactly as
@@ -145,7 +145,7 @@ namespace BalloonParty.Solver
         private ShotBalloonSnapshot(
             Vector2 position, float radius, int scoreValue, int hitsRemaining, ColorProfile color,
             BalanceProfile? balance, ShotContactKind contactKind, ItemProfile? item, Vector2Int? staticSlotIndex,
-            bool scoreless = false, bool immuneToEffects = false)
+            ShotRewardKind reward = ShotRewardKind.None, bool immuneToEffects = false)
         {
             Position = position;
             Radius = radius;
@@ -156,7 +156,7 @@ namespace BalloonParty.Solver
             ContactKind = contactKind;
             Item = item;
             StaticSlotIndex = staticSlotIndex;
-            Scoreless = scoreless;
+            Reward = reward;
             ImmuneToEffects = immuneToEffects;
         }
 
@@ -186,14 +186,16 @@ namespace BalloonParty.Solver
                 balance, ShotContactKind.Poppable, null, null);
         }
 
-        /// <summary>The golden reward balloon: colourless, deflecting every ordinary hit forever
-        /// (<c>int.MaxValue</c>, so a pierce plows it and the discharge pops it), scoreless, and untouched by
-        /// item effects but the laser's — mirrors <c>GoldenBalloonModel</c>.</summary>
+        /// <summary>The golden reward balloon — see <see cref="ForPlatedTarget" />.</summary>
         public static ShotBalloonSnapshot ForGoldenTarget(Vector2 position, float radius, BalanceProfile? balance = null)
         {
-            return new ShotBalloonSnapshot(
-                position, radius, 0, int.MaxValue, new ColorProfile(null, false, false), balance,
-                ShotContactKind.Poppable, null, null, scoreless: true, immuneToEffects: true);
+            return ForPlatedTarget(position, radius, balance, ShotRewardKind.Golden);
+        }
+
+        /// <summary>The disco ball reward balloon — see <see cref="ForPlatedTarget" />.</summary>
+        public static ShotBalloonSnapshot ForDiscoTarget(Vector2 position, float radius, BalanceProfile? balance = null)
+        {
+            return ForPlatedTarget(position, radius, balance, ShotRewardKind.Disco);
         }
 
         /// <summary>The heart reward balloon: colourless, scoreless, one hit pops it, the shot's or an item's —
@@ -202,7 +204,7 @@ namespace BalloonParty.Solver
         {
             return new ShotBalloonSnapshot(
                 position, radius, 0, 1, new ColorProfile(null, false, false), balance,
-                ShotContactKind.Poppable, null, null, scoreless: true);
+                ShotContactKind.Poppable, null, null, ShotRewardKind.Heart);
         }
 
         /// <summary>A poppable rainbow/wildcard target — mirrors a live balloon whose colour is the
@@ -231,6 +233,17 @@ namespace BalloonParty.Solver
             return new ShotBalloonSnapshot(
                 position, radius, 0, hitsRemaining, default, null, kind, null, slotIndex);
         }
+
+        /// <summary>A plated reward balloon: colourless, deflecting every ordinary hit forever
+        /// (<c>int.MaxValue</c>, so a pierce plows it and the discharge pops it), scoreless, and untouched by
+        /// item effects but the laser's — mirrors <c>PlatedBalloonModel</c>.</summary>
+        private static ShotBalloonSnapshot ForPlatedTarget(
+            Vector2 position, float radius, BalanceProfile? balance, ShotRewardKind reward)
+        {
+            return new ShotBalloonSnapshot(
+                position, radius, 0, int.MaxValue, new ColorProfile(null, false, false), balance,
+                ShotContactKind.Poppable, null, null, reward, immuneToEffects: true);
+        }
     }
 
     /// <summary>Mutable per-simulation copy of a <see cref="ShotBalloonSnapshot" /> — <see cref="HitsRemaining" />
@@ -256,9 +269,11 @@ namespace BalloonParty.Solver
         public bool IsStatic;
         public bool WashesProjectileColor;
         public bool PaysSourceColor;
-        public bool Scoreless;
+        public ShotRewardKind Reward;
         public bool ImmuneToEffects;
         public ShotSimDynamicActor Actor;
+
+        public bool Scoreless => Reward != ShotRewardKind.None;
 
         public ShotBalloonState(in ShotBalloonSnapshot snapshot)
         {
@@ -276,7 +291,7 @@ namespace BalloonParty.Solver
             PaysSourceColor = snapshot.Color.PaysSourceColor;
             IsRainbow = snapshot.Color.IsRainbow;
             IsStatic = snapshot.StaticSlotIndex.HasValue;
-            Scoreless = snapshot.Scoreless;
+            Reward = snapshot.Reward;
             ImmuneToEffects = snapshot.ImmuneToEffects;
             Actor = null;
         }

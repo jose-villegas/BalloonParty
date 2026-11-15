@@ -13,18 +13,27 @@ using NUnit.Framework;
 namespace BalloonParty.Tests.Balloon
 {
     /// <summary>
-    ///     The golden reward balloon: only the shot's own pierce pops it; the shot's ordinary hit bounces off, and
-    ///     no item (bomb, laser, lightning) touches it, however their damage is flagged.
+    ///     The plated reward balloons, the golden balloon and the disco ball (PLAN-DiscoBalloon phase 1): only the
+    ///     shot's own pierce or a laser beam pops them; the shot's ordinary hit bounces off, and no other item
+    ///     (bomb, lightning, paint) touches them, however their damage is flagged. Each fixture runs once per
+    ///     plated type, so the two can't drift apart.
     /// </summary>
-    [TestFixture]
-    public class GoldenBalloonModelTests
+    [TestFixture(BalloonType.Golden)]
+    [TestFixture(BalloonType.Disco)]
+    public class PlatedBalloonModelTests
     {
-        private GoldenBalloonModel _model;
+        private readonly BalloonType _type;
+        private IBalloonModel _model;
+
+        public PlatedBalloonModelTests(BalloonType type)
+        {
+            _type = type;
+        }
 
         [SetUp]
         public void SetUp()
         {
-            _model = new GoldenBalloonModel(new BalloonModelConfig(BalloonType.Golden, scoreValue: 0));
+            _model = BalloonModelFactory.Create(Entry(_type), Palette());
         }
 
         [Test]
@@ -49,6 +58,7 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(HitOutcome.Pop, _model.EvaluateHit(new DamageContext(1, flags)));
         }
 
+        // Lightning and paint deal plain item damage; a bomb's blast on its neighbours carries Piercing.
         [TestCase(DamageFlags.Normal, TestName = "AnItemsOrdinaryDamage_DoesNothing")]
         [TestCase(DamageFlags.Piercing, TestName = "ABombsNeighboursPiercingDamage_DoesNothing")]
         public void ItemDamage_DoesNothing(DamageFlags flags)
@@ -95,18 +105,32 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void TheFactory_BuildsAGoldenBalloonForItsEntry()
+        public void IsAReward_SoNoLevelMixBringsIt()
+        {
+            Assert.IsTrue(_type.IsReward());
+        }
+
+        [Test]
+        public void TheFactory_BuildsItsOwnModelForItsEntry()
+        {
+            Assert.IsInstanceOf(_type == BalloonType.Golden ? typeof(GoldenBalloonModel) : typeof(DiscoBalloonModel),
+                _model);
+            Assert.AreEqual(_type, _model.TypeName);
+        }
+
+        private static BalloonPrefabEntry Entry(BalloonType type)
         {
             var entry = new BalloonPrefabEntry();
             typeof(BalloonPrefabEntry).GetField("_balloonType", BindingFlags.NonPublic | BindingFlags.Instance)!
-                .SetValue(entry, BalloonType.Golden);
+                .SetValue(entry, type);
+            return entry;
+        }
+
+        private static IGamePalette Palette()
+        {
             var palette = Substitute.For<IGamePalette>();
             palette.Colors.Returns(new List<PaletteEntry>());
-
-            var model = BalloonModelFactory.Create(entry, palette);
-
-            Assert.IsInstanceOf<GoldenBalloonModel>(model);
-            Assert.AreEqual(BalloonType.Golden, model.TypeName);
+            return palette;
         }
     }
 }
