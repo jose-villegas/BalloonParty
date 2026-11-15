@@ -42,8 +42,9 @@ namespace BalloonParty.Configuration.Level
         [SerializeField] [Min(1)] private int _linesPerWave = 3;
 
         [Tooltip("Share of the current wait a ball fired while another is still flying takes off the next " +
-                 "line: 0.35 = it arrives 35% of an interval sooner. One ball at a time costs nothing, so " +
-                 "rapid fire trades board space for firepower. 0 = firing never moves the clock.")]
+                 "line on an empty board: 0.35 = it arrives 35% of an interval sooner. It shrinks as the board " +
+                 "fills and is gone at its normal fill, so it refills what rapid fire clears without crowding a " +
+                 "full board. One ball at a time costs nothing. 0 = firing never moves the clock.")]
         [SerializeField] [Range(0f, 1f)] private float _overlapShotPull = 0.35f;
 
         [Tooltip("How much faster the clock runs on an empty board: 8 = eight times the pace. It scales down " +
@@ -59,10 +60,11 @@ namespace BalloonParty.Configuration.Level
                  "occupancy against the target, 0.5 = an even blend.")]
         [SerializeField] [Range(0f, 1f)] private float _occupancyWeight = 0.5f;
 
-        [Tooltip("How much balls in the air push the clock: at full flight pressure it runs this many times " +
-                 "faster than the board alone would have it, the extra added on top. Pressure grows with " +
-                 "every ball's flight time, so long ricochets and rapid fire both bring lines sooner while " +
-                 "they clear. 1 = flight never matters.")]
+        [Tooltip("How much balls in the air push the clock on an empty board: at full flight pressure it runs " +
+                 "this many times faster than the board alone would have it, the extra added on top. Pressure " +
+                 "grows with every ball's flight time, so long ricochets and rapid fire refill what they clear. " +
+                 "The extra shrinks as the board fills and is gone at its normal fill, so balls in the air never " +
+                 "crowd a full board. 1 = flight never matters.")]
         [SerializeField] [Min(1f)] private float _flightSpeedup = 3f;
 
         [Tooltip("Summed flight seconds of all balls in the air that reach full flight pressure: 6 = one " +

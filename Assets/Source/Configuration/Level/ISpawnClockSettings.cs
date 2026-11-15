@@ -12,8 +12,9 @@ namespace BalloonParty.Configuration.Level
         int LinesPerWave { get; }
 
         /// <summary>
-        ///     Share of the current wait a ball fired while another is still flying takes off the next line:
-        ///     0.35 = that line arrives 35% of an interval sooner. One ball at a time costs nothing.
+        ///     Share of the current wait a ball fired while another is still flying takes off the next line on
+        ///     an empty board: 0.35 = that line arrives 35% of an interval sooner. It shrinks as the board fills,
+        ///     to nothing at its normal fill. One ball at a time costs nothing.
         /// </summary>
         float OverlapShotPull { get; }
 
@@ -34,8 +35,9 @@ namespace BalloonParty.Configuration.Level
         float OccupancyWeight { get; }
 
         /// <summary>
-        ///     Pace balls in flight add on top of the board's: at full flight pressure the clock runs
-        ///     this many times faster than the board alone would have it (1 = flight never matters).
+        ///     Pace balls in flight add on top of the board's: at full flight pressure, on an empty board, the
+        ///     clock runs this many times faster than the board alone would have it. The extra shrinks as the
+        ///     board fills, to nothing at its normal fill (1 = flight never matters).
         /// </summary>
         float FlightSpeedup { get; }
 

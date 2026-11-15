@@ -350,6 +350,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void Fire_WithNoOtherBallFlying_LeavesTheClockAlone()
         {
+            UseEmptyBoardPull();
             Fire(Fly());
 
             _clock.Advance(3.5f);
@@ -360,6 +361,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void Fire_WhileAnotherBallFlies_PullsTheNextLineCloser()
         {
+            UseEmptyBoardPull();
             Fly();
             Fire(Fly());
 
@@ -373,6 +375,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void Fire_EachOverlapShot_PullsAgain()
         {
+            UseEmptyBoardPull();
             Fly();
             Fire(Fly());
             Fire(Fly());
@@ -385,6 +388,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void Fire_PullingPastZero_LandsOneLineOnTheNextTick()
         {
+            UseEmptyBoardPull();
             Fly();
             for (var i = 0; i < 6; i++)
             {
@@ -400,6 +404,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void Fire_PullsAShareOfTheWindow_NotOfWhatIsLeft()
         {
+            UseEmptyBoardPull();
             _clock.Advance(4f);
             _clock.Advance(2f);
 
@@ -408,6 +413,33 @@ namespace BalloonParty.Tests.Balloon
 
             _clock.Advance(0.25f);
             Assert.AreEqual(2, _lines, "1s left of the 3s interval, minus a 0.75s pull");
+        }
+
+        [Test]
+        public void Fire_OnABoardAtItsFill_PullsNothing()
+        {
+            Fly();
+            Fire(Fly());
+
+            _clock.Advance(3.9f);
+
+            Assert.AreEqual(0, _lines, "a full board needs balls in the air, and they mustn't crowd it more");
+        }
+
+        [Test]
+        public void Fire_OnAHalfFullBoard_PullsHalf()
+        {
+            UseEmptyBoardPull();
+            _boardFill.StartingFill.Returns(0.5f);
+            _boardFill.Occupancy.Returns(0.25f);
+
+            Fly();
+            Fire(Fly());
+            _clock.Advance(3.4f);
+            Assert.AreEqual(0, _lines);
+
+            _clock.Advance(0.15f);
+            Assert.AreEqual(1, _lines, "half the 1s pull off the 4s grace");
         }
 
         [Test]
@@ -500,9 +532,44 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void Flight_AddsOnTopOfTheBoardPace()
+        public void Flight_OnABoardAtItsFill_AddsNothing()
         {
             UseFlightPressure();
+            _boardFill.StartingFill.Returns(1f);
+            _boardFill.Occupancy.Returns(1f);
+            for (var i = 0; i < 8; i++)
+            {
+                Fly();
+            }
+
+            _clock.Advance(3.9f);
+
+            Assert.AreEqual(0, _lines, "full flight pressure on a full board: still the plain 4s grace");
+        }
+
+        [Test]
+        public void Flight_OnAHalfFullBoard_AddsHalf()
+        {
+            UseFlightPressure();
+            _boardFill.StartingFill.Returns(0.5f);
+            _boardFill.Occupancy.Returns(0.25f);
+            for (var i = 0; i < 8; i++)
+            {
+                Fly();
+            }
+
+            _clock.Advance(1.95f);
+            Assert.AreEqual(0, _lines, "1x plus half of the 2x extra: 2x, so the 4s grace takes 2s");
+
+            _clock.Advance(0.1f);
+            Assert.AreEqual(1, _lines);
+        }
+
+        [Test]
+        public void Flight_AddsOnTopOfTheBoardPace()
+        {
+            BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, sparseBoardSpeedup: 3f, targetOccupancy: 0.5f,
+                occupancyWeight: 0.5f, flightSpeedup: 3f, flightPressureSeconds: 4f));
             _boardFill.StartingFill.Returns(0f);
             _boardFill.Occupancy.Returns(0f);
             for (var i = 0; i < 8; i++)
@@ -713,6 +780,7 @@ namespace BalloonParty.Tests.Balloon
         public void Breather_ScalesTheOverlapPullToo()
         {
             UseBreather(0.5f);
+            _boardFill.StartingFill.Returns(0f);
             Run(1f);
             _boardFill.Occupancy.Returns(0.4f);
             Run(0.05f);
@@ -749,11 +817,23 @@ namespace BalloonParty.Tests.Balloon
             _clock.Start();
         }
 
-        // Full flight pressure (3x on a full board) at 4 summed flight seconds; no overlap pull.
+        // Full flight pressure (3x on an empty board, with no sparse-board speedup) at 4 summed flight seconds; no
+        // overlap pull.
         private void UseFlightPressure()
         {
-            BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, sparseBoardSpeedup: 3f, targetOccupancy: 0.5f,
-                occupancyWeight: 0.5f, flightSpeedup: 3f, flightPressureSeconds: 4f));
+            BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, targetOccupancy: 0.5f, occupancyWeight: 0.5f,
+                flightSpeedup: 3f, flightPressureSeconds: 4f));
+            _boardFill.StartingFill.Returns(0f);
+            _boardFill.Occupancy.Returns(0f);
+        }
+
+        // An empty board, so a pull counts in full, with no sparse-board speedup: only the 25% pull moves the clock.
+        private void UseEmptyBoardPull()
+        {
+            BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, overlapShotPull: 0.25f, targetOccupancy: 0.5f,
+                occupancyWeight: 0.5f));
+            _boardFill.StartingFill.Returns(0f);
+            _boardFill.Occupancy.Returns(0f);
         }
 
         // Board fill never moves the pace here; losing half the board within 1s starts a 4s breather that

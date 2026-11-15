@@ -25,12 +25,13 @@ namespace BalloonParty.Balloon.Spawner
     ///     Scaled, so slow-mo slows it with everything else. It stops outright through
     ///     pauses, the level-up and game over, and while a lone doomed ball glides its last breath: lines
     ///     landing in that frozen moment read wrong, and the board must hold still under the glide.
-    ///     Firing while another ball is still flying pulls the next line closer
-    ///     (<see cref="ISpawnClockSettings.OverlapShotPull" />), so every extra ball in the air costs room.
     ///     A sparse board runs the clock faster (<see cref="ISpawnClockSettings.SparseBoardSpeedup" />), so
-    ///     clearing it never leaves the player waiting on an empty screen. Balls in the air push it too, by
-    ///     how long each has flown (<see cref="ISpawnClockSettings.FlightSpeedup" />): the board refills
-    ///     while long ricochets and rapid fire clear it. A big clear in a short window
+    ///     clearing it never leaves the player waiting on an empty screen. Balls in the air push it too, but only
+    ///     to refill a board below its normal fill, in proportion to how far below: firing while another ball
+    ///     still flies pulls the next line closer (<see cref="ISpawnClockSettings.OverlapShotPull" />), and
+    ///     every ball's flight time speeds the clock (<see cref="ISpawnClockSettings.FlightSpeedup" />), so the
+    ///     board refills while long ricochets and rapid fire clear it. On a board at its fill they add nothing:
+    ///     a crowded board needs more balls in the air, and those must not bring its lines sooner. A big clear in a short window
     ///     (<see cref="ISpawnClockSettings.BreatherClear" />) earns a breather instead: the clock drops to
     ///     <see cref="ISpawnClockSettings.BreatherPace" /> and eases back to its full pace, so the release
     ///     after a great shot lasts a moment before the tension builds again. A cooldown after each
@@ -146,7 +147,7 @@ namespace BalloonParty.Balloon.Spawner
         {
             if (AnotherBallInFlight(msg.Projectile))
             {
-                _remaining -= _window * _settings.OverlapShotPull
+                _remaining -= _window * _settings.OverlapShotPull * (1f - BoardFill())
                               * Mathf.Lerp(_settings.BreatherPace, 1f, BreatherBlend());
             }
         }
@@ -181,16 +182,23 @@ namespace BalloonParty.Balloon.Spawner
             return total;
         }
 
-        // The board sets the base: full speedup on an empty board, easing to normal pace as it reaches both
-        // the level's starting fill and the target occupancy (blended by OccupancyWeight). Flight adds on
-        // top, so a healthy board still speeds up while balls cruise.
+        // The board sets the base: full speedup on an empty board, easing to normal pace as it reaches its fill.
+        // Flight adds on top in proportion to the room left below that fill, so it refills what the balls cleared
+        // and never rushes a board that is already full.
         private float Pace(float flightSeconds)
         {
-            var occupancy = Mathf.Clamp01(_boardFill.Occupancy / _settings.TargetOccupancy);
-            var fill = Mathf.Lerp(_boardFill.StartingFill, occupancy, _settings.OccupancyWeight);
+            var fill = BoardFill();
             var boardPace = Mathf.Lerp(_settings.SparseBoardSpeedup, 1f, fill);
             var flightPressure = Mathf.Clamp01(flightSeconds / _settings.FlightPressureSeconds);
-            return boardPace + (_settings.FlightSpeedup - 1f) * flightPressure;
+            return boardPace + (_settings.FlightSpeedup - 1f) * flightPressure * (1f - fill);
+        }
+
+        // 0 on an empty board to 1 once it is at both the level's starting fill and the target occupancy
+        // (blended by OccupancyWeight).
+        private float BoardFill()
+        {
+            var occupancy = Mathf.Clamp01(_boardFill.Occupancy / _settings.TargetOccupancy);
+            return Mathf.Clamp01(Mathf.Lerp(_boardFill.StartingFill, occupancy, _settings.OccupancyWeight));
         }
 
         // Counts down a running breather and the cooldown after it, or starts one when the board has lost
