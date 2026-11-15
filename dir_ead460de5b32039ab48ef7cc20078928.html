@@ -170,7 +170,7 @@ Other help that follows the need</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Fewer reinforcement calls   </td><td class="markdownTableBodyNone"><code>Balloon/Formation/UnbreakableFormationService</code>, <code>ReinforcementChance</code>   </td><td class="markdownTableBodyNone">Eased by <code>ThreatEase</code>    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">A breather before the line that would cost a heart   </td><td class="markdownTableBodyNone"><code>Balloon/Spawner/SpawnClock</code>, <code>ISpawnClockSettings.BreatherDanger</code> (0.5)   </td><td class="markdownTableBodyNone">Danger at or above it starts the breather a big clear earns, under the same cooldown: a full board with two hearts or one left    </td></tr>
+<td class="markdownTableBodyNone">A breather before the line that would cost a heart   </td><td class="markdownTableBodyNone"><code>Balloon/Spawner/SpawnClock</code>, <code>ISpawnClockSettings.BreatherDanger</code> (1)   </td><td class="markdownTableBodyNone">Danger at or above it starts the breather a big clear earns, under the same cooldown: a full board on the last heart. At 0.5 it played too slow: a board left full with two hearts was slowed nearly half the time    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">A retry's bonus card leans defensive   </td><td class="markdownTableBodyNone"><code>Game/Upgrades/RunUpgrades.BonusDealWeight</code>   </td><td class="markdownTableBodyNone">Each card's deal weight × (1 + <code>IUpgradeCardSettings.RetryDealBoost</code>): Thick Skin 1, so twice as likely. A retry follows a lost run, so it reads full need without asking. The deal stays seeded   </td></tr>
 </table>
