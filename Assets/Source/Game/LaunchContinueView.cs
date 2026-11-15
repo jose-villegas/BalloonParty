@@ -118,6 +118,7 @@ namespace BalloonParty.Game
             var start = new Vector2(Mathf.Lerp(bounds.xMin, bounds.xMax, 0.8f), bounds.yMin);
             _wanderer = new BalloonWander(_wander, bounds, keepOut, start, Random.Range(int.MinValue, int.MaxValue));
             _obstacles[0] = new KeepOut(playCentre, playCentre, playRadius);
+            _ribbonCloth.SetRoom(area.xMin + _clearance, area.xMax - _clearance);
             PlaceBalloon();
             _ribbonCloth.Place(Knot());
             Draw();

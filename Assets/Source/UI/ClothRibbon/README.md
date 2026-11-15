@@ -22,6 +22,9 @@ solver passes pull every spring back toward its rest length and push points out 
   over `Turn Rate`, and while it turns the tail is pushed out of the screen (`Swing Kick`). So the ribbon swings
   round through depth to trail the other way, rather than flipping over; on the way, and once it trails the
   other way, its back faces the screen.
+- **Room.** Given the sideways room it has (`SetRoom`), the breeze streams the ribbon toward the side with
+  room for it, even against the travel, rather than off the edge; turning back takes a margin over the ribbon's
+  length, so it doesn't flutter at the edge of room.
 - **The wave** runs down the ribbon toward the tail, growing from nothing at the pivot: mostly a fold in depth,
   a little lift. With the springs it reads as cloth fluttering.
 - **Obstacles** (`KeepOut`: a circle, or a capsule) push points out sideways, never in depth.

@@ -76,6 +76,21 @@ namespace BalloonParty.Tests.UI
         }
 
         [Test]
+        public void NearAnEdge_TheRibbonStreamsTowardTheRoom_EvenAgainstTheTravel()
+        {
+            var cloth = new RibbonCloth(_settings, Length);
+            cloth.SetRoom(-200f, 100f);
+            cloth.Place(new Vector3(90f, 0f, 0f));
+
+            // Travelling left would stream it right, off the edge 10 units away.
+            var end = Run(cloth, new Vector3(90f, 0f, 0f), new Vector3(80f, 0f, 0f), 3f);
+            Run(cloth, end, end, 2f);
+
+            Assert.That(cloth.Heading, Is.EqualTo(-1f).Within(1e-4f));
+            Assert.That(cloth.Surface(1f, 0f).x, Is.LessThan(end.x));
+        }
+
+        [Test]
         public void SlowDrift_DoesNotTurnTheBreeze()
         {
             var cloth = new RibbonCloth(_settings, Length);

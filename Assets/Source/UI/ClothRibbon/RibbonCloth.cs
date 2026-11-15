@@ -21,6 +21,7 @@ namespace BalloonParty.UI.ClothRibbon
         private const int Bottom = 2;
         private const int MaxStepsPerFrame = 8;
         private const float LongestFrame = 0.1f;
+        private const float RoomMargin = 1.25f;
 
         private readonly RibbonClothSettings _settings;
         private readonly Vector3[] _position;
@@ -38,6 +39,8 @@ namespace BalloonParty.UI.ClothRibbon
         private float _headingTarget = 1f;
         private float _turning;
         private bool _placed;
+        private float _roomLeft = float.NegativeInfinity;
+        private float _roomRight = float.PositiveInfinity;
 
         /// <summary>Points along the line, from the anchor to the ribbon's pivot.</summary>
         internal int LinePoints => _lineEnd + 1;
@@ -81,6 +84,16 @@ namespace BalloonParty.UI.ClothRibbon
             return _position[ClothIndex(column, row)];
         }
 
+        /// <summary>
+        ///     The sideways room between <paramref name="left" /> and <paramref name="right" />: the breeze streams the
+        ///     ribbon toward the side that has room for it, even against the travel, rather than off the edge.
+        /// </summary>
+        internal void SetRoom(float left, float right)
+        {
+            _roomLeft = left;
+            _roomRight = right;
+        }
+
         /// <summary>Lays the line straight down from <paramref name="anchor" /> and the ribbon out flat, at rest.</summary>
         internal void Place(Vector3 anchor)
         {
@@ -107,7 +120,7 @@ namespace BalloonParty.UI.ClothRibbon
                 return;
             }
 
-            Steer((anchor.x - _anchor.x) / deltaTime, deltaTime);
+            Steer(anchor.x, (anchor.x - _anchor.x) / deltaTime, deltaTime);
             var from = _anchor;
             var step = 1f / _settings.StepsPerSecond;
             var steps = 0;
@@ -260,17 +273,28 @@ namespace BalloonParty.UI.ClothRibbon
 
         // The breeze follows the anchor's sideways travel, streaming the ribbon behind it; a turn of the breeze is
         // what swings the tail round, so how fast it turns is kept for the push.
-        private void Steer(float sidewaysSpeed, float deltaTime)
+        private void Steer(float x, float sidewaysSpeed, float deltaTime)
         {
-            if (Mathf.Abs(sidewaysSpeed) > _settings.HeadingSpeed)
+            var wanted = Mathf.Abs(sidewaysSpeed) > _settings.HeadingSpeed ? -Mathf.Sign(sidewaysSpeed) : _headingTarget;
+
+            // A side without room for the ribbon gives way to the other, if that has more. Turning back takes a
+            // margin over the ribbon's length, so it doesn't flutter at the edge of room.
+            var need = Mathf.Approximately(wanted, _headingTarget) ? Length : Length * RoomMargin;
+            if (RoomToward(wanted, x) < need && RoomToward(-wanted, x) > RoomToward(wanted, x))
             {
-                _headingTarget = -Mathf.Sign(sidewaysSpeed);
+                wanted = -wanted;
             }
 
+            _headingTarget = wanted;
             var before = _heading;
             var fullTurn = 2f * _settings.TurnRate;
             _heading = Mathf.MoveTowards(_heading, _headingTarget, fullTurn * deltaTime);
             _turning = Mathf.Abs(_heading - before) / (fullTurn * deltaTime);
+        }
+
+        private float RoomToward(float side, float x)
+        {
+            return side > 0f ? _roomRight - x : x - _roomLeft;
         }
 
         private void Substep(Vector3 anchor, float step, IReadOnlyList<KeepOut> obstacles)
