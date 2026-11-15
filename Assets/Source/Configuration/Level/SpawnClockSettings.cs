@@ -93,6 +93,12 @@ namespace BalloonParty.Configuration.Level
                  "0 = the next clear can earn one at once.")]
         [SerializeField] [Min(0f)] private float _breatherCooldownSeconds = 14f;
 
+        [Tooltip("Share of the play area the BigScore shapes being drawn in the air must cover (their bounding " +
+                 "circles summed, overlaps counted twice) to earn a breather, as a big clear does: the same length, " +
+                 "pace and cooldown. A screen full of shapes hides the board, so the pressure lets up while they " +
+                 "fly. 0 = never.")]
+        [SerializeField] [Range(0f, 1f)] private float _breatherShapeCover = 0.5f;
+
         public float GraceSeconds => _graceSeconds;
         public float OverlapShotPull => _overlapShotPull;
         public float SparseBoardSpeedup => Mathf.Max(1f, _sparseBoardSpeedup);
@@ -106,6 +112,7 @@ namespace BalloonParty.Configuration.Level
         public float BreatherSeconds => Mathf.Max(0.1f, _breatherSeconds);
         public float BreatherPace => Mathf.Clamp01(_breatherPace);
         public float BreatherCooldownSeconds => Mathf.Max(0f, _breatherCooldownSeconds);
+        public float BreatherShapeCover => Mathf.Clamp01(_breatherShapeCover);
 
         public SpawnClockSettings()
         {
@@ -116,8 +123,9 @@ namespace BalloonParty.Configuration.Level
             float targetOccupancy = 0.5f, float occupancyWeight = 0f, float flightSpeedup = 1f,
             float flightPressureSeconds = 6f, float lateIntervalDecayPerLevel = 1f, float lateMinInterval = 0.1f,
             float breatherClear = 0f, float breatherClearWindow = 2f, float breatherSeconds = 6f,
-            float breatherPace = 0.2f, float breatherCooldownSeconds = 0f)
+            float breatherPace = 0.2f, float breatherCooldownSeconds = 0f, float breatherShapeCover = 0f)
         {
+            _breatherShapeCover = breatherShapeCover;
             _breatherCooldownSeconds = breatherCooldownSeconds;
             _breatherClear = breatherClear;
             _breatherClearWindow = breatherClearWindow;

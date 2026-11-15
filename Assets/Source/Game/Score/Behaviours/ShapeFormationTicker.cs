@@ -110,7 +110,7 @@ namespace BalloonParty.Game.Score.Behaviours
     ///       object REFERENCES, not indices, and a freshly-launched state's <c>PendingRelease</c> starts
     ///       false. Don't refactor either list to store indices without re-checking this.
     /// </summary>
-    internal sealed class ShapeFormationTicker : ILateTickable
+    internal sealed class ShapeFormationTicker : ILateTickable, IScoreShapeCover
     {
         private const int MaxVertexCount = 100;
         private const float SnapFadeDuration = 0.1f;
@@ -146,6 +146,21 @@ namespace BalloonParty.Game.Score.Behaviours
         private float[] _correctionPadding = new float[16];
         private float[] _correctionMaxPush = new float[16];
         private Vector3[] _correctionOffsets = new Vector3[16];
+
+        public float CoveredArea
+        {
+            get
+            {
+                var area = 0f;
+                for (var i = 0; i < _states.Count; i++)
+                {
+                    var radius = _states[i].FormationRadius * _states[i].LastScale;
+                    area += Mathf.PI * radius * radius;
+                }
+
+                return area;
+            }
+        }
 
         public void LateTick()
         {

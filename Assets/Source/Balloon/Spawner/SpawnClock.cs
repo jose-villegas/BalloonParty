@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
+using BalloonParty.Game.Score.Behaviours;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
+using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
@@ -44,6 +46,8 @@ namespace BalloonParty.Balloon.Spawner
         private readonly IPublisher<SpawnBalloonLineMessage> _linePublisher;
         private readonly IActiveLevelParameters _levelParams;
         private readonly ISubscriber<ProjectileFiredMessage> _firedSubscriber;
+        private readonly IScoreShapeCover _shapeCover;
+        private readonly IProjectileFlightConfig _flightConfig;
         private readonly CompositeDisposable _subscriptions = new();
 
         // Each in-flight ball's flight time while the clock runs; dropped when the ball retires.
@@ -74,9 +78,13 @@ namespace BalloonParty.Balloon.Spawner
             IBoardFill boardFill,
             IPublisher<SpawnBalloonLineMessage> linePublisher,
             ISubscriber<ProjectileFiredMessage> firedSubscriber,
-            IActiveLevelParameters levelParams)
+            IActiveLevelParameters levelParams,
+            IScoreShapeCover shapeCover,
+            IProjectileFlightConfig flightConfig)
         {
             _levelParams = levelParams;
+            _shapeCover = shapeCover;
+            _flightConfig = flightConfig;
             _settings = pacing.SpawnClock;
             _levelProgress = levelProgress;
             _pauseService = pauseService;
@@ -186,8 +194,9 @@ namespace BalloonParty.Balloon.Spawner
         }
 
         // Counts down a running breather and the cooldown after it, or starts one when the board has lost
-        // BreatherClear of its open slots within about the window. The peak follows the board through both,
-        // so no clear made then can start a breather once they end.
+        // BreatherClear of its open slots within about the window, or when score shapes cover BreatherShapeCover
+        // of the play area. The peak follows the board through both, so no clear made then can start a breather
+        // once they end.
         private void TrackClears(float deltaTime)
         {
             var occupancy = _boardFill.Occupancy;
@@ -210,6 +219,12 @@ namespace BalloonParty.Balloon.Spawner
                 return;
             }
 
+            if (ShapesCoverTheBoard())
+            {
+                StartBreather(occupancy);
+                return;
+            }
+
             var clear = _settings.BreatherClear;
             if (clear <= 0f)
             {
@@ -220,9 +235,30 @@ namespace BalloonParty.Balloon.Spawner
             _recentPeakOccupancy = Mathf.Max(occupancy, _recentPeakOccupancy - fall);
             if (_recentPeakOccupancy - occupancy >= clear)
             {
-                _breatherLeft = _settings.BreatherSeconds;
-                _recentPeakOccupancy = occupancy;
+                StartBreather(occupancy);
             }
+        }
+
+        private void StartBreather(float occupancy)
+        {
+            _breatherLeft = _settings.BreatherSeconds;
+            _recentPeakOccupancy = occupancy;
+        }
+
+        // A burst of big scores draws shapes over most of the board and hides it, so the player gets the release a
+        // big clear earns while they fly.
+        private bool ShapesCoverTheBoard()
+        {
+            var share = _settings.BreatherShapeCover;
+            if (share <= 0f || _shapeCover == null)
+            {
+                return false;
+            }
+
+            // Clockwise from the top: top, right, bottom, left.
+            var limits = _flightConfig.LimitsClockwise;
+            var playArea = (limits.y - limits.w) * (limits.x - limits.z);
+            return playArea > 0f && _shapeCover.CoveredArea >= share * playArea;
         }
 
         // 0 as a breather starts, easing to 1 as it ends; 1 outside one.

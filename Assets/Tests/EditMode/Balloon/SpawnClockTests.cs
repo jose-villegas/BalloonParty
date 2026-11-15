@@ -2,8 +2,10 @@ using System;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Game.Level;
+using BalloonParty.Game.Score.Behaviours;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
+using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
@@ -27,6 +29,8 @@ namespace BalloonParty.Tests.Balloon
         private IBoardFill _boardFill;
         private ILevelProgress _progress;
         private ISubscriber<ProjectileFiredMessage> _firedSubscriber;
+        private IScoreShapeCover _shapeCover;
+        private IProjectileFlightConfig _flightConfig;
         private SpawnClock _clock;
         private NavigationState _previousNavigation;
         private int _lines;
@@ -67,6 +71,11 @@ namespace BalloonParty.Tests.Balloon
                     Arg.Do<IMessageHandler<ProjectileFiredMessage>>(h => _firedHandler = h),
                     Arg.Any<MessageHandlerFilter<ProjectileFiredMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
+
+            // A 4 x 8 play area (32 units squared), with no score shapes in the air.
+            _shapeCover = Substitute.For<IScoreShapeCover>();
+            _flightConfig = Substitute.For<IProjectileFlightConfig>();
+            _flightConfig.LimitsClockwise.Returns(new Vector4(4f, 2f, -4f, -2f));
 
             _clock = null;
             BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, overlapShotPull: 0.25f,
@@ -648,6 +657,59 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void Breather_ScoreShapesCoveringHalfThePlayArea_StartOne()
+        {
+            UseShapeBreather();
+            Run(1f);
+
+            _shapeCover.CoveredArea.Returns(16f);
+            Run(3f);
+
+            Assert.Greater(_clock.BreatherSecondsLeft, 0f);
+            Assert.AreEqual(0, _lines, "without the breather the 4s grace is over by now");
+        }
+
+        [Test]
+        public void Breather_ScoreShapesShortOfTheShare_StartNone()
+        {
+            UseShapeBreather();
+            Run(1f);
+
+            _shapeCover.CoveredArea.Returns(15f);
+            Run(3.1f);
+
+            Assert.AreEqual(0f, _clock.BreatherSecondsLeft);
+            Assert.AreEqual(1, _lines);
+        }
+
+        [Test]
+        public void Breather_ScoreShapes_WaitOutTheCooldownLikeAClear()
+        {
+            BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, breatherClear: 0f, breatherClearWindow: 1f,
+                breatherSeconds: 4f, breatherPace: 0f, breatherCooldownSeconds: 5f, breatherShapeCover: 0.5f));
+            _shapeCover.CoveredArea.Returns(32f);
+            Run(4.1f);
+            Assert.AreEqual(0f, _clock.BreatherSecondsLeft, "the 4s breather is over");
+
+            Run(4.8f);
+            Assert.AreEqual(0f, _clock.BreatherSecondsLeft, "shapes still covering the board wait out the 5s cooldown");
+
+            Run(0.3f);
+            Assert.Greater(_clock.BreatherSecondsLeft, 0f, "past the cooldown they earn the next one");
+        }
+
+        [Test]
+        public void Breather_ZeroShapeCover_NeverStartsOneFromShapes()
+        {
+            BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, breatherClear: 0f, breatherSeconds: 4f,
+                breatherPace: 0f, breatherShapeCover: 0f));
+            _shapeCover.CoveredArea.Returns(32f);
+            Run(1f);
+
+            Assert.AreEqual(0f, _clock.BreatherSecondsLeft);
+        }
+
+        [Test]
         public void Breather_ScalesTheOverlapPullToo()
         {
             UseBreather(0.5f);
@@ -683,7 +745,7 @@ namespace BalloonParty.Tests.Balloon
             var pacing = Substitute.For<ILevelPacingConfiguration>();
             pacing.SpawnClock.Returns(settings);
             _clock = new SpawnClock(pacing, _progress, _pauseService, _registry, _boardFill, _publisher,
-                _firedSubscriber, levelParams ?? UsualLevel());
+                _firedSubscriber, levelParams ?? UsualLevel(), _shapeCover, _flightConfig);
             _clock.Start();
         }
 
@@ -700,6 +762,13 @@ namespace BalloonParty.Tests.Balloon
         {
             BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, overlapShotPull: overlapShotPull,
                 breatherClear: 0.5f, breatherClearWindow: 1f, breatherSeconds: 4f, breatherPace: 0f));
+        }
+
+        // Only score shapes start a breather here: covering half the play area starts a 4s one at a standstill.
+        private void UseShapeBreather()
+        {
+            BuildClock(new SpawnClockSettings(3f, 0.5f, 1f, 4f, breatherClear: 0f, breatherSeconds: 4f,
+                breatherPace: 0f, breatherShapeCover: 0.5f));
         }
 
         // As UseBreather, with a 5s cooldown after each breather.

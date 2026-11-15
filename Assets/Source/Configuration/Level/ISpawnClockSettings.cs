@@ -64,6 +64,12 @@ namespace BalloonParty.Configuration.Level
         /// <summary>Seconds of play after a breather ends before a big clear can earn the next; 0 at a level's start.</summary>
         float BreatherCooldownSeconds { get; }
 
+        /// <summary>
+        ///     Share of the play area that BigScore shapes drawn in the air must cover to earn a breather, as a big
+        ///     clear does (same length, pace and cooldown). 0 = never.
+        /// </summary>
+        float BreatherShapeCover { get; }
+
         /// <summary>Seconds between lines at <paramref name="level" />; levels below 1 run at level 1's pace.</summary>
         float IntervalForLevel(int level);
     }
