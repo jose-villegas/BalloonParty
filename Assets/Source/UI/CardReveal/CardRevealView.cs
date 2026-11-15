@@ -730,8 +730,10 @@ namespace BalloonParty.UI.CardReveal
             step(1f);
         }
 
-        // Built on first use from the capped ribbon, outside the reveal's group, so it shows without a reveal and
-        // sits over one still flying. Tinted the level's extra colour, the last of its colours.
+        // Built on first use from the capped ribbon, on the canvas beside this view: the view's own object carries the
+        // reveal's group, faded out between reveals, so the ribbon must sit outside it to show without one and over
+        // one still flying. The view fills the canvas, so the layout reads the same from either. Tinted the level's
+        // extra colour, the last of its colours.
         private void PlayBonusRibbon()
         {
             StopBonusRibbon();
@@ -742,7 +744,7 @@ namespace BalloonParty.UI.CardReveal
                     return;
                 }
 
-                _bonusRibbon = Instantiate(_cappedRibbon, transform);
+                _bonusRibbon = Instantiate(_cappedRibbon, transform.parent != null ? transform.parent : transform);
                 _bonusRibbon.name = "BonusRibbon";
                 var rect = (RectTransform)_bonusRibbon.transform;
                 rect.anchorMin = new Vector2(0.5f, 0.5f);
