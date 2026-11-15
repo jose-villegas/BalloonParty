@@ -57,11 +57,12 @@ namespace BalloonParty.Audio.Routing
         }
 
         // The thrower arms a Sharpshooter lance before it publishes the load, so a ball that loads piercing is
-        // one the card's roll just armed: the sky light is falling onto the cannon as this plays.
+        // one the card's roll just armed: the sky light is falling onto the cannon as this plays. A lance carried
+        // from the last level loads piercing too, but no light falls for it.
         private void OnLoaded(ProjectileLoadedMessage message)
         {
             _unattributedPickups = 0;
-            if (message.Model is { IsPiercing: { Value: true } })
+            if (!message.LanceCarried && message.Model is { IsPiercing: { Value: true } })
             {
                 _player.Play(GameSoundId.SnipeSkyLight, null);
             }

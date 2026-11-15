@@ -6,9 +6,16 @@ namespace BalloonParty.Shared.Messages
     {
         public IProjectileModel Model { get; }
 
-        public ProjectileLoadedMessage(IProjectileModel model)
+        /// <summary>
+        ///     The ball took over a Snipe lance carried from the last level: it was already given, so nothing
+        ///     announces it again.
+        /// </summary>
+        public bool LanceCarried { get; }
+
+        public ProjectileLoadedMessage(IProjectileModel model, bool lanceCarried = false)
         {
             Model = model;
+            LanceCarried = lanceCarried;
         }
     }
 }

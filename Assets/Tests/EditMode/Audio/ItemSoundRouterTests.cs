@@ -253,6 +253,18 @@ namespace BalloonParty.Tests.Audio
         }
 
         [Test]
+        public void OnLoaded_ALanceCarriedFromTheLastLevel_PlaysNoGust()
+        {
+            var ball = new ProjectileModel();
+            ball.IsPiercing.Value = true;
+
+            _loadedHandler.Handle(new ProjectileLoadedMessage(ball, lanceCarried: true));
+
+            _player.DidNotReceive().Play(GameSoundId.SnipeSkyLight, Arg.Any<Vector3?>(), Arg.Any<int?>(),
+                Arg.Any<int>(), Arg.Any<float>());
+        }
+
+        [Test]
         public void OnLoaded_PlainBall_PlaysNoGust()
         {
             _loadedHandler.Handle(new ProjectileLoadedMessage(new ProjectileModel()));

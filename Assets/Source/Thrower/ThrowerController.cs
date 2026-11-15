@@ -407,14 +407,13 @@ namespace BalloonParty.Thrower
             // Rolled as the reload starts, so the sky light falls and the whirlwind spins up while the ball is
             // still sliding out to the muzzle, timed by the reload a shot in flight gets (the one just fired is):
             // the ball is armed from here, even if fired before they finish. Before the loaded message, so every reader of it (the
-            // auto-fire cheat's solve among them) sees the lance. A carried lance arms without the roll (and the
-            // roll then skips the already-piercing ball), and replays the cue so the player sees it survived.
+            // auto-fire cheat's solve among them) sees the lance. A carried lance arms quietly, without the roll or
+            // the cue: it was given in the last level, and falling from the sky again would read as a second one.
             if (lanceCarried)
             {
                 _snipeArmer.Arm(_loadedProjectile);
             }
-
-            if (lanceCarried || _snipeChance.TryArm(_loadedProjectile))
+            else if (_snipeChance.TryArm(_loadedProjectile))
             {
                 _view.PlaySnipeWhirlwind(
                     _palette.GetColor(GamePalette.SnipeWhirlwindColorId),
@@ -422,7 +421,7 @@ namespace BalloonParty.Thrower
                     _weapon.ReloadSeconds);
             }
 
-            _loadedPublisher.Publish(new ProjectileLoadedMessage(_loadedProjectile));
+            _loadedPublisher.Publish(new ProjectileLoadedMessage(_loadedProjectile, lanceCarried));
             _reload.Restart();
         }
 
