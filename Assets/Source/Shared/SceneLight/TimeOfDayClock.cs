@@ -113,9 +113,11 @@ namespace BalloonParty.Shared.SceneLight
 
         /// <summary>Jumps the clock to a specific angle (scrub the time of day) and republishes — the dev
         /// cheat's write path. Works even when this driver is idle (non-Realtime source): it sets the
-        /// direction once, which then holds until the active driver next writes.</summary>
+        /// direction once, which then holds until the active driver next writes. It ends the game-start sweep,
+        /// which would otherwise carry on from the old angle and overwrite the jump.</summary>
         internal void SetAngleDegrees(float degrees)
         {
+            _sweeping = false;
             _angleDegrees = Mathf.Repeat(degrees, 360f);
             Apply();
         }
