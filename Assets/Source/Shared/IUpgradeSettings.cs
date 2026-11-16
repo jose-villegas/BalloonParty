@@ -30,7 +30,7 @@ namespace BalloonParty.Shared
         SnipeChance,
 
         /// <summary>
-        ///     The reward balloons (golden, heart, disco) come likelier: every roll that brings one has its chance
+        ///     The reward balloons (golden, heart, disco, nuke) come likelier: every roll that brings one has its chance
         ///     × (1 + <see cref="IUpgradeCardSettings.Amount" />) per stack, up to certain. A sure one stays sure.
         /// </summary>
         RewardOdds
@@ -60,6 +60,12 @@ namespace BalloonParty.Shared
         ///     A retry follows a lost run, so the cards that keep the player alive come likelier. 0 = no extra.
         /// </summary>
         float RetryDealBoost { get; }
+
+        /// <summary>
+        ///     The run's first card is this one, whatever deals it: the first level-up's hand (in its first slot, the
+        ///     one the level-up takes), a golden balloon or a bought retry's bonus card, while the run holds none.
+        /// </summary>
+        bool DealtFirst { get; }
     }
 
     /// <summary>When the level-up deals cards, how many, and from which deck.</summary>

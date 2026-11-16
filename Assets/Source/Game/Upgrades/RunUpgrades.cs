@@ -27,6 +27,8 @@ namespace BalloonParty.Game.Upgrades
     ///     it's won (or, while a level-up's hand is on screen, once its pick is held), and kept once its level is
     ///     won; a retry of that level drops it, so the retry starts with the cards held when the level began, as it
     ///     always does.
+    ///     While the run holds no card, whichever of these deals one deals the deck's
+    ///     <see cref="IUpgradeCardSettings.DealtFirst" /> card (Sharpshooter), so every run starts the same way.
     /// </summary>
     internal sealed class RunUpgrades : IWeaponStats, IShieldsPerBall, IUpgradeDraft, IBonusCardSource,
         IFreeCardGrant, IHeldCards, IRunResettable, IStartable, IDisposable
@@ -322,8 +324,15 @@ namespace BalloonParty.Game.Upgrades
             }
 
             BuildDeck(forBonus: false);
+            var first = FirstCard(forBonus: false);
+            if (first != null)
+            {
+                _offer.Add(first);
+                _deck.Remove(first);
+            }
+
             var rng = new System.Random(_pacing.SeedForLevel(newLevel) ^ DealSeedSalt);
-            var deal = Mathf.Min(_settings.CardsOffered, _deck.Count);
+            var deal = Mathf.Min(_settings.CardsOffered - _offer.Count, _deck.Count);
             for (var i = 0; i < deal; i++)
             {
                 // Every deck card has a positive weight, so the pick is never -1.
@@ -365,7 +374,8 @@ namespace BalloonParty.Game.Upgrades
             }
 
             var rng = new System.Random(DealSeed(level, BonusSeedSalt, _retryState.RetriesUsed));
-            var pick = _deck[_deck.PickWeightedIndex(_bonusDealWeight, (float)rng.NextDouble())];
+            var pick = FirstCard(forBonus: true)
+                       ?? _deck[_deck.PickWeightedIndex(_bonusDealWeight, (float)rng.NextDouble())];
             if (StacksOf(pick) >= LimitOf(pick))
             {
                 // Only broken on screen when a card with room can take its place.
@@ -397,9 +407,14 @@ namespace BalloonParty.Game.Upgrades
                 return;
             }
 
-            var seed = DealSeed(_levelProgress.Level.Value, FreeCardSeedSalt, _freeCardsDealt);
-            var rng = new System.Random(seed);
-            var card = _deck[_deck.PickWeightedIndex(_dealWeight, (float)rng.NextDouble())];
+            var card = FirstCard(forBonus: false);
+            if (card == null)
+            {
+                var seed = DealSeed(_levelProgress.Level.Value, FreeCardSeedSalt, _freeCardsDealt);
+                var rng = new System.Random(seed);
+                card = _deck[_deck.PickWeightedIndex(_dealWeight, (float)rng.NextDouble())];
+            }
+
             _deck.Clear();
 
             _stacks[card] = StacksOf(card) + 1;
@@ -496,6 +511,26 @@ namespace BalloonParty.Game.Upgrades
         private int DealSeed(int level, int salt, int step)
         {
             return unchecked((_pacing.SeedForLevel(level) ^ salt) + step * RetrySeedStep);
+        }
+
+        // A bonus card is only lent for one attempt, so it leaves the run holding none: the next deal is first too.
+        private IUpgradeCardSettings FirstCard(bool forBonus)
+        {
+            if (_stacks.Count > 0)
+            {
+                return null;
+            }
+
+            var cards = _settings.Cards;
+            for (var i = 0; i < cards.Count; i++)
+            {
+                if (cards[i] != null && cards[i].DealtFirst && IsDealable(cards[i], forBonus, withCapped: false))
+                {
+                    return cards[i];
+                }
+            }
+
+            return null;
         }
 
         private void CloseHand()

@@ -43,6 +43,7 @@ MonoBehaviour:
       _maxStacks: 3
       _weight: 1
       _retryDealBoost: 0
+      _dealtFirst: 0
     - _kind: 1
       _title: Quick Hands
       _description: Reload 15% faster
@@ -50,6 +51,7 @@ MonoBehaviour:
       _maxStacks: 4
       _weight: 1
       _retryDealBoost: 0
+      _dealtFirst: 0
     - _kind: 2
       _title: Thick Skin
       _description: +1 shield on every pen
@@ -57,6 +59,7 @@ MonoBehaviour:
       _maxStacks: 3
       _weight: 1
       _retryDealBoost: 1
+      _dealtFirst: 0
     - _kind: 3
       _title: Lucky Find
       _description: More items on the board
@@ -64,6 +67,7 @@ MonoBehaviour:
       _maxStacks: 4
       _weight: 1
       _retryDealBoost: 0
+      _dealtFirst: 0
     - _kind: 4
       _title: Raise the Bar
       _description: +1 to every card's limit
@@ -71,6 +75,7 @@ MonoBehaviour:
       _maxStacks: 2
       _weight: 0.5
       _retryDealBoost: 0
+      _dealtFirst: 0
     - _kind: 5
       _title: Sharpshooter
       _description: Increased Snipe chance
@@ -78,13 +83,15 @@ MonoBehaviour:
       _maxStacks: 3
       _weight: 1
       _retryDealBoost: 0
+      _dealtFirst: 1
     - _kind: 6
       _title: Party Favors
-      _description: More reward balloons
+      _description: Increased gift chance
       _amount: 0.25
       _maxStacks: 3
       _weight: 1
       _retryDealBoost: 0
+      _dealtFirst: 0
     _snipeCooldownSeconds: 8
   _assist:
     _dangerNeedWeight: 1

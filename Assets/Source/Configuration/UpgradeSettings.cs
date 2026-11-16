@@ -31,6 +31,10 @@ namespace BalloonParty.Configuration
             "come likelier. 0 = no extra.")]
         [SerializeField] [Min(0f)] private float _retryDealBoost;
 
+        [Tooltip("The run's first card is this one, whatever deals it (the first level-up, a golden balloon, an " +
+            "ad's bonus card), so every run starts the same way. The first card in the list with this set wins.")]
+        [SerializeField] private bool _dealtFirst;
+
         public UpgradeKind Kind => _kind;
         public string Title => _title;
         public string Description => _description;
@@ -38,6 +42,7 @@ namespace BalloonParty.Configuration
         public int MaxStacks => _maxStacks;
         public float Weight => _weight;
         public float RetryDealBoost => _retryDealBoost;
+        public bool DealtFirst => _dealtFirst;
 
         // Unity's serializer and the inspector's "add element" construct through this one.
         internal UpgradeCardSettings()
@@ -45,8 +50,9 @@ namespace BalloonParty.Configuration
         }
 
         internal UpgradeCardSettings(UpgradeKind kind, string title, string description, float amount,
-            int maxStacks, float weight = 1f, float retryDealBoost = 0f)
+            int maxStacks, float weight = 1f, float retryDealBoost = 0f, bool dealtFirst = false)
         {
+            _dealtFirst = dealtFirst;
             _retryDealBoost = retryDealBoost;
             _kind = kind;
             _title = title;
@@ -81,8 +87,8 @@ namespace BalloonParty.Configuration
             new(UpgradeKind.Shield, "Thick Skin", "+1 shield on every pen", 1f, 3, retryDealBoost: 1f),
             new(UpgradeKind.ItemOdds, "Lucky Find", "More items on the board", 0.1f, 4),
             new(UpgradeKind.RaiseLimits, "Raise the Bar", "+1 to every card's limit", 1f, 2, 0.5f),
-            new(UpgradeKind.SnipeChance, "Sharpshooter", "Increased Snipe chance", 0.01f, 3),
-            new(UpgradeKind.RewardOdds, "Party Favors", "More reward balloons", 0.25f, 3)
+            new(UpgradeKind.SnipeChance, "Sharpshooter", "Increased Snipe chance", 0.01f, 3, dealtFirst: true),
+            new(UpgradeKind.RewardOdds, "Party Favors", "Increased gift chance", 0.25f, 3)
         };
 
         [Tooltip("Seconds of game time after a pen loads as a Snipe (the Sharpshooter card) before another can, so " +
