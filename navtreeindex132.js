@@ -1,5 +1,13 @@
 var NAVTREEINDEX132 =
 {
+"structBalloonParty_1_1Solver_1_1BalanceProfile.html":[6,0,0,14,0],
+"structBalloonParty_1_1Solver_1_1BalanceProfile.html#a06110aa3d7951e09a38645c0157d964d":[5,0,0,14,0,1],
+"structBalloonParty_1_1Solver_1_1BalanceProfile.html#a06110aa3d7951e09a38645c0157d964d":[6,0,0,14,0,1],
+"structBalloonParty_1_1Solver_1_1BalanceProfile.html#a09b697dd2b9df3ce446113190ad85d2c":[5,0,0,14,0,5],
+"structBalloonParty_1_1Solver_1_1BalanceProfile.html#a09b697dd2b9df3ce446113190ad85d2c":[6,0,0,14,0,5],
+"structBalloonParty_1_1Solver_1_1BalanceProfile.html#a19d19f7a0aa762628adef4b597e9570e":[5,0,0,14,0,11],
+"structBalloonParty_1_1Solver_1_1BalanceProfile.html#a19d19f7a0aa762628adef4b597e9570e":[6,0,0,14,0,11],
+"structBalloonParty_1_1Solver_1_1BalanceProfile.html#a1ba295c9ca35a3363a45126c43227fc1":[5,0,0,14,0,6],
 "structBalloonParty_1_1Solver_1_1BalanceProfile.html#a1ba295c9ca35a3363a45126c43227fc1":[6,0,0,14,0,6],
 "structBalloonParty_1_1Solver_1_1BalanceProfile.html#a5bc782bc30b57819f858e8228a461666":[5,0,0,14,0,9],
 "structBalloonParty_1_1Solver_1_1BalanceProfile.html#a5bc782bc30b57819f858e8228a461666":[6,0,0,14,0,9],
@@ -241,13 +249,5 @@ var NAVTREEINDEX132 =
 "structBalloonParty_1_1Solver_1_1ShotFlightState.html#a56b42443311726ffd331b72e68560abb":[6,0,0,14,10,24],
 "structBalloonParty_1_1Solver_1_1ShotFlightState.html#a635c17677a8f657f8962a90136f1a25e":[5,0,0,14,10,6],
 "structBalloonParty_1_1Solver_1_1ShotFlightState.html#a635c17677a8f657f8962a90136f1a25e":[6,0,0,14,10,6],
-"structBalloonParty_1_1Solver_1_1ShotFlightState.html#a63741f4af08ea0c4b9c7fa07f3552903":[5,0,0,14,10,14],
-"structBalloonParty_1_1Solver_1_1ShotFlightState.html#a63741f4af08ea0c4b9c7fa07f3552903":[6,0,0,14,10,14],
-"structBalloonParty_1_1Solver_1_1ShotFlightState.html#a69f8aa70c65cb55050730a7935ec666d":[5,0,0,14,10,15],
-"structBalloonParty_1_1Solver_1_1ShotFlightState.html#a69f8aa70c65cb55050730a7935ec666d":[6,0,0,14,10,15],
-"structBalloonParty_1_1Solver_1_1ShotFlightState.html#a711c37ce5c12d232575ec90422667fb9":[5,0,0,14,10,35],
-"structBalloonParty_1_1Solver_1_1ShotFlightState.html#a711c37ce5c12d232575ec90422667fb9":[6,0,0,14,10,35],
-"structBalloonParty_1_1Solver_1_1ShotFlightState.html#a7b19ece1cdadf6e179052f9fc5fae696":[5,0,0,14,10,18],
-"structBalloonParty_1_1Solver_1_1ShotFlightState.html#a7b19ece1cdadf6e179052f9fc5fae696":[6,0,0,14,10,18],
-"structBalloonParty_1_1Solver_1_1ShotFlightState.html#a7e9ce022885325beb1400e388a83b378":[5,0,0,14,10,22]
+"structBalloonParty_1_1Solver_1_1ShotFlightState.html#a63741f4af08ea0c4b9c7fa07f3552903":[5,0,0,14,10,14]
 };

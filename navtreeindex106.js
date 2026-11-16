@@ -1,5 +1,13 @@
 var NAVTREEINDEX106 =
 {
+"interfaceBalloonParty_1_1Audio_1_1Editor_1_1ISfxProvider.html":[6,0,0,0,1,6],
+"interfaceBalloonParty_1_1Audio_1_1Editor_1_1ISfxProvider.html#a1d34e1a9f13a8b07893c8b97f822e79b":[5,0,0,0,1,6,0],
+"interfaceBalloonParty_1_1Audio_1_1Editor_1_1ISfxProvider.html#a1d34e1a9f13a8b07893c8b97f822e79b":[6,0,0,0,1,6,0],
+"interfaceBalloonParty_1_1Audio_1_1IAudioMixerRouter.html":[5,0,0,0,7],
+"interfaceBalloonParty_1_1Audio_1_1IAudioMixerRouter.html":[6,0,0,0,7],
+"interfaceBalloonParty_1_1Audio_1_1IAudioMixerRouter.html#a8e7d5db59a43d91b7e6ad2ca33e95869":[5,0,0,0,7,1],
+"interfaceBalloonParty_1_1Audio_1_1IAudioMixerRouter.html#a8e7d5db59a43d91b7e6ad2ca33e95869":[6,0,0,0,7,1],
+"interfaceBalloonParty_1_1Audio_1_1IAudioMixerRouter.html#acf30cfa388e60c22bae9c5d3650f866e":[5,0,0,0,7,0],
 "interfaceBalloonParty_1_1Audio_1_1IAudioMixerRouter.html#acf30cfa388e60c22bae9c5d3650f866e":[6,0,0,0,7,0],
 "interfaceBalloonParty_1_1Audio_1_1IMelodicContext.html":[5,0,0,0,8],
 "interfaceBalloonParty_1_1Audio_1_1IMelodicContext.html":[6,0,0,0,8],
@@ -241,13 +249,5 @@ var NAVTREEINDEX106 =
 "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#ae22a1474fe15f596b0a0e5f7082c5047":[6,0,0,3,0,7,20],
 "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#af6f40a26e4f5612261dc160b6997f9b6":[5,0,0,3,0,7,2],
 "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#af6f40a26e4f5612261dc160b6997f9b6":[6,0,0,3,0,7,2],
-"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#afe10e33ccf54d9a4110537a15c1fae27":[5,0,0,3,0,7,13],
-"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#afe10e33ccf54d9a4110537a15c1fae27":[6,0,0,3,0,7,13],
-"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#afe51c74f72c91843e8e3e6ded6db062e":[5,0,0,3,0,7,4],
-"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#afe51c74f72c91843e8e3e6ded6db062e":[6,0,0,3,0,7,4],
-"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#aff26d2f5807e3d5ac48c9ba4d3023ef7":[5,0,0,3,0,7,6],
-"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#aff26d2f5807e3d5ac48c9ba4d3023ef7":[6,0,0,3,0,7,6],
-"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBubbleMergeCueSettings.html":[5,0,0,3,0,8],
-"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBubbleMergeCueSettings.html":[6,0,0,3,0,8],
-"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBubbleMergeCueSettings.html#a13a5c7f3e291df0855cb14fce40e8d9e":[5,0,0,3,0,8,2]
+"interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IBalloonsConfiguration.html#afe10e33ccf54d9a4110537a15c1fae27":[5,0,0,3,0,7,13]
 };

@@ -1,5 +1,13 @@
 var NAVTREEINDEX70 =
 {
+"classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#a4c0a5f490cbf8739c3b3cd54e27ede9e":[6,0,0,7,28,1],
+"classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#a5d0c74b4223f992a12191201d3fa123c":[5,0,0,7,28,11],
+"classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#a5d0c74b4223f992a12191201d3fa123c":[6,0,0,7,28,11],
+"classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#a6088cdce6c46dab4945ccaf1f0669eca":[5,0,0,7,28,0],
+"classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#a6088cdce6c46dab4945ccaf1f0669eca":[6,0,0,7,28,0],
+"classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#a65685918471a6d862bb49f80a18dff11":[5,0,0,7,28,14],
+"classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#a65685918471a6d862bb49f80a18dff11":[6,0,0,7,28,14],
+"classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#a721f399146d72dee8df00af2c4af5a8c":[5,0,0,7,28,15],
 "classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#a721f399146d72dee8df00af2c4af5a8c":[6,0,0,7,28,15],
 "classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#a7a0df794a1cff413301beac12f10ca1a":[5,0,0,7,28,9],
 "classBalloonParty_1_1Item_1_1SightGlitterDriftReaction.html#a7a0df794a1cff413301beac12f10ca1a":[6,0,0,7,28,9],
@@ -241,13 +249,5 @@ var NAVTREEINDEX70 =
 "classBalloonParty_1_1Item_1_1Snipe_1_1SharpshooterSnipeGift.html#afea35f9e96a0554dc537759070d8915a":[6,0,0,7,7,5,8],
 "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html":[5,0,0,7,7,6],
 "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html":[6,0,0,7,7,6],
-"classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#a02365f2b586ca87883d24c9b9afef883":[5,0,0,7,7,6,0],
-"classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#a02365f2b586ca87883d24c9b9afef883":[6,0,0,7,7,6,0],
-"classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#a072d07e6213b003714886eceb063d30e":[5,0,0,7,7,6,4],
-"classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#a072d07e6213b003714886eceb063d30e":[6,0,0,7,7,6,4],
-"classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#a140e3502add28003bbda891f5c7d5c5f":[5,0,0,7,7,6,1],
-"classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#a140e3502add28003bbda891f5c7d5c5f":[6,0,0,7,7,6,1],
-"classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#a207b1eeb3b602a1a9d76332fce7e86cc":[5,0,0,7,7,6,5],
-"classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#a207b1eeb3b602a1a9d76332fce7e86cc":[6,0,0,7,7,6,5],
-"classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#a4ac5500bcafe9b6897e6cf1ced73c3b0":[5,0,0,7,7,6,13]
+"classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#a02365f2b586ca87883d24c9b9afef883":[5,0,0,7,7,6,0]
 };

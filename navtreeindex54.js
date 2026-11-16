@@ -1,5 +1,13 @@
 var NAVTREEINDEX54 =
 {
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html#a81798347d39039e5a518c35f668894fb":[6,0,0,6,5,0,2,7],
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html#aa5b3d5b13ddd4b310cb2589d7f831f72":[5,0,0,6,5,0,2,0],
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html#aa5b3d5b13ddd4b310cb2589d7f831f72":[6,0,0,6,5,0,2,0],
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html#aad253176d50b161852e05fe4e584dc9b":[5,0,0,6,5,0,2,8],
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html#aad253176d50b161852e05fe4e584dc9b":[6,0,0,6,5,0,2,8],
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html#ac1335198cc07c435ac07a93739a39961":[5,0,0,6,5,0,2,6],
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html#ac1335198cc07c435ac07a93739a39961":[6,0,0,6,5,0,2,6],
+"classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html#ac7e6fc2d698407428c0ac0c778e7c6ab":[5,0,0,6,5,0,2,3],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html#ac7e6fc2d698407428c0ac0c778e7c6ab":[6,0,0,6,5,0,2,3],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html#ac8648be1032b742a3e1a56f4917d7366":[5,0,0,6,5,0,2,12],
 "classBalloonParty_1_1Game_1_1HeadsUp_1_1Routing_1_1CombatHeadsUpRouter.html#ac8648be1032b742a3e1a56f4917d7366":[6,0,0,6,5,0,2,12],
@@ -241,13 +249,5 @@ var NAVTREEINDEX54 =
 "classBalloonParty_1_1Game_1_1LaunchPlayTrigger.html#a8f7bda883addd19bde66f77cc485ad61":[6,0,0,6,22,5],
 "classBalloonParty_1_1Game_1_1LaunchPlayTrigger.html#a91cc0c6e1e052d1c55f35299b922d564":[5,0,0,6,22,2],
 "classBalloonParty_1_1Game_1_1LaunchPlayTrigger.html#a91cc0c6e1e052d1c55f35299b922d564":[6,0,0,6,22,2],
-"classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html":[5,0,0,6,7,0],
-"classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html":[6,0,0,6,7,0],
-"classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#a011c6d8b977beb71a1956c75e3c114e5":[5,0,0,6,7,0,7],
-"classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#a011c6d8b977beb71a1956c75e3c114e5":[6,0,0,6,7,0,7],
-"classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#a03f98aeebae8c29bdf7c19b254a8a3e1":[5,0,0,6,7,0,10],
-"classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#a03f98aeebae8c29bdf7c19b254a8a3e1":[6,0,0,6,7,0,10],
-"classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#a0c439c7fd82e357925fd0d29206e1eb9":[5,0,0,6,7,0,9],
-"classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#a0c439c7fd82e357925fd0d29206e1eb9":[6,0,0,6,7,0,9],
-"classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html#a40eaf90aebbd48d836e0a058612fad24":[5,0,0,6,7,0,2]
+"classBalloonParty_1_1Game_1_1Level_1_1BonusLevelCue.html":[5,0,0,6,7,0]
 };
