@@ -147,12 +147,24 @@ namespace BalloonParty.Balloon.Formation
         }
 
         /// <summary>
-        ///     Counts one balancer pulse; true when a snake on the board is due its step
-        ///     (<see cref="IUnbreakableFormationSettings.SnakeStepPulses" /> pulses apart). With no snake the count
-        ///     starts over, so a new snake's first step comes a full beat after it forms.
+        ///     Counts one snake beat; true when a snake on the board is due its step
+        ///     (<see cref="IUnbreakableFormationSettings.SnakeStepPulses" /> beats apart). With no snake the count
+        ///     starts over, so a snake formed at wave start takes its first step a full beat later. Toughs that
+        ///     landed since the wave started start their snake on the beat, and it steps off at once.
         /// </summary>
         internal bool TakeSnakeBeat()
         {
+            // A level can end before its next wave start, so toughs that land late would otherwise never snake.
+            if (_settings.Enabled && _settings.ToughSnakes && !HasToughSnake())
+            {
+                FormToughSnake();
+                if (HasToughSnake())
+                {
+                    RebuildMemberList();
+                    _snakePulses = _settings.SnakeStepPulses - 1;
+                }
+            }
+
             if (!HasSnake())
             {
                 _snakePulses = 0;
@@ -436,7 +448,8 @@ namespace BalloonParty.Balloon.Formation
 
         // The board's toughs are one body. With none walking and MinMembers toughs landed, the toughest of them
         // within the rows a snake walks starts it where it stands, heading east or west at random; the rest fall in
-        // behind its tail as it walks (Walk). It waits for the next beat to take its first step.
+        // behind its tail as it walks (Walk). Formed at wave start, it waits for the next beat to take its first
+        // step; formed on a beat (TakeSnakeBeat), it steps off on that one.
         private void FormToughSnake()
         {
             if (HasToughSnake())

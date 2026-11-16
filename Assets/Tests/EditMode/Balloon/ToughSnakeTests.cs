@@ -89,6 +89,7 @@ namespace BalloonParty.Tests.Balloon
 
             Arrange();
 
+            Assert.IsFalse(_service.TakeSnakeBeat());
             Assert.AreEqual(0, _service.Formations.Count);
         }
 
@@ -371,6 +372,33 @@ namespace BalloonParty.Tests.Balloon
             GrowSnake(3, 2, 1);
 
             Assert.IsTrue(_service.TakeSnakeBeat());
+        }
+
+        [Test]
+        public void ToughsLandedSinceTheWaveStart_StartTheSnakeOnTheBeat_AndItStepsOffAtOnce()
+        {
+            // A level can end before its next wave start; the toughs shouldn't wait for one.
+            _settings.SnakeStepPulses.Returns(2);
+            AddTough(new Vector2Int(0, 0), 1);
+            var toughest = AddTough(new Vector2Int(6, 4), 3);
+            AddTough(new Vector2Int(3, 5), 2);
+
+            Assert.IsTrue(_service.TakeSnakeBeat(), "it steps on the beat that starts it");
+            Assert.AreSame(toughest, SingleSnake().Members[0]);
+            Assert.IsTrue(toughest.IsAnchored);
+            Assert.AreEqual(1, _service.Members.Count);
+            Assert.IsFalse(_service.TakeSnakeBeat(), "then keeps the beat's count");
+        }
+
+        [Test]
+        public void ToughsStillLanding_StartNothingOnTheBeat()
+        {
+            AddTough(new Vector2Int(0, 0), 1);
+            AddTough(new Vector2Int(6, 4), 3);
+            AddTough(new Vector2Int(3, 5), 2).IsStable.Value = false;
+
+            Assert.IsFalse(_service.TakeSnakeBeat());
+            Assert.AreEqual(0, _service.Formations.Count);
         }
 
         // A snake of the given armour, head first, grown the way the game grows it: the head starts at the west end

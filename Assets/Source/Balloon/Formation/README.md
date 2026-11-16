@@ -82,10 +82,12 @@ The board's toughs and toughers (`ToughBalloonModel`, an `IArmouredFormationMemb
 single snake of their own, walking on the same beat and with the same `SnakeWalk` as an unbreakable snake.
 Toughs never join an unbreakable formation, and unbreakables never join theirs.
 
-- **Starting.** At a wave start with no tough snake on the board, once `MinMembers` toughs have landed
-  (`IsStable`: not still gliding in from a spawn line), the toughest of them starts it, where it stands.
-  Ties go to the higher row. The head is never one in the bottom `HorizontalBottomClearance` rows, which
-  a snake never walks. It sets off east or west at random, and takes its first step on the next beat.
+- **Starting.** With no tough snake on the board, once `MinMembers` toughs have landed (`IsStable`: not
+  still gliding in from a spawn line), the toughest of them starts it, where it stands. That is checked at
+  each wave start and on each snake beat, since a level can end before its next wave start. Ties go to the
+  higher row. The head is never one in the bottom `HorizontalBottomClearance` rows, which a snake never
+  walks. It sets off east or west at random: started at a wave start, it takes its first step on the next
+  beat; started on a beat, it steps off on that one.
 - **Joining at the tail.** At each step, the free tough nearest the tail falls in behind it, into the slot
   the tail just left: one per step, so the body grows by one a beat. A tough still landing waits. Its
   glide to the tail is one move, so a tough far from the tail crosses the board to join.
@@ -105,7 +107,7 @@ Toughs never join an unbreakable formation, and unbreakables never join theirs.
   round like any snake, and its toughest works back to the new front the same way.
 - **Walking until the last pops.** The tough snake has no other shape to change to, so it never holds or
   re-plans, and it doesn't break below `MinMembers`: it walks on with whoever is left. When its last
-  member pops it ends, and the next wave start can start another. It calls no reinforcements.
+  member pops it ends, and the next wave start or beat can start another. It calls no reinforcements.
 - **No wall from toughs.** A tough gives way to enough hits, so it never counts toward the wall across the
   board (`ShotWall.Walls`), and the tough snake's step skips that check.
 
