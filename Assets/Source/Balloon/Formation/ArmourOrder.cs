@@ -6,7 +6,8 @@ namespace BalloonParty.Balloon.Formation
 {
     /// <summary>
     ///     The order of a tough snake, head to tail: the most armour (hits left) leads. Toughs with equal armour
-    ///     keep the order they stand in, so a snake only re-orders when a hit changes someone's armour.
+    ///     keep the order they stand in. A walking snake moves toward that order one place per step, so a hit or a
+    ///     tough joining at the tail never sends a member leaping along the body.
     /// </summary>
     internal sealed class ArmourOrder
     {
@@ -14,24 +15,29 @@ namespace BalloonParty.Balloon.Formation
         private readonly List<Vector2Int> _slots = new();
 
         /// <summary>
-        ///     Sorts <paramref name="members" /> most armour first. Stable: equal armour keeps its place, so a
-        ///     snake with no hit since its last step keeps its body as it is.
+        ///     One step of <paramref name="members" /> toward most armour first: from the head down, each member with
+        ///     more armour than the one ahead of it trades places with it. No member moves more than one place, so a
+        ///     tough joined at the tail, or one hit at the head, works its way to its place a step at a time, and the
+        ///     one it passes waits a beat beside it. Equal armour never trades. True when anyone moved.
         /// </summary>
-        internal static void Sort(List<IWriteableFormationMember> members)
+        internal static bool StepTowardOrder(List<IWriteableFormationMember> members)
         {
-            for (var i = 1; i < members.Count; i++)
+            var moved = false;
+            for (var i = 0; i < members.Count - 1; i++)
             {
-                var member = members[i];
-                var armour = Of(member);
-                var j = i - 1;
-                while (j >= 0 && Of(members[j]) < armour)
+                if (Of(members[i]) >= Of(members[i + 1]))
                 {
-                    members[j + 1] = members[j];
-                    j--;
+                    continue;
                 }
 
-                members[j + 1] = member;
+                (members[i], members[i + 1]) = (members[i + 1], members[i]);
+                moved = true;
+
+                // Past the pair just traded, so neither of them moves again this step.
+                i++;
             }
+
+            return moved;
         }
 
         internal static int Of(IWriteableFormationMember member)

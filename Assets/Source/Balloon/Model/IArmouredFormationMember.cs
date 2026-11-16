@@ -1,8 +1,8 @@
 namespace BalloonParty.Balloon.Model
 {
     /// <summary>
-    ///     A formation member with armour: a tough balloon. Toughs only ever form snakes of their own, never with
-    ///     unbreakables, and a tough snake runs head to tail from the most <see cref="Armour" /> to the least.
+    ///     A formation member with armour: a tough balloon. Toughs only ever walk in a snake of their own, never
+    ///     with unbreakables, and it runs head to tail from the most <see cref="Armour" /> to the least.
     /// </summary>
     internal interface IArmouredFormationMember : IWriteableFormationMember
     {

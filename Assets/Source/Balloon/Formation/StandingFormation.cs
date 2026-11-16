@@ -27,8 +27,9 @@ namespace BalloonParty.Balloon.Formation
         internal int ArrangedOnPass { get; set; }
 
         /// <summary>
-        ///     A snake of toughs (<see cref="IArmouredFormationMember" />): it runs head to tail by armour, walks
-        ///     until it breaks, and never changes shape or calls reinforcements.
+        ///     The snake of toughs (<see cref="IArmouredFormationMember" />), one at most: it runs head to tail by
+        ///     armour, takes every other tough in at its tail, walks until it breaks, and never changes shape or
+        ///     calls reinforcements.
         /// </summary>
         internal bool Armoured { get; set; }
 

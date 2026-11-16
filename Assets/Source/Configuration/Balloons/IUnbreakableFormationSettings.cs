@@ -9,8 +9,8 @@ namespace BalloonParty.Configuration.Balloons
         bool Enabled { get; }
 
         /// <summary>
-        ///     Toughs gather into snakes of their own, ordered head to tail by hits left. Only while
-        ///     <see cref="Enabled" />.
+        ///     The board's toughs walk as one snake of their own, ordered head to tail by hits left, and every
+        ///     other tough joins at its tail. Only while <see cref="Enabled" />.
         /// </summary>
         bool ToughSnakes { get; }
 

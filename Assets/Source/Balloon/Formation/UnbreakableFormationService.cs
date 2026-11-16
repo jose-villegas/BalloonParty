@@ -20,9 +20,9 @@ namespace BalloonParty.Balloon.Formation
     ///     <see cref="IUnbreakableFormationSettings.HoldWaves" /> waves, then plans a different shape, and the
     ///     unbreakables left free form new ones. It hands the balancer the moves and anchors the members. A
     ///     formation that loses members below the minimum breaks at once. One that stands untouched may call
-    ///     in another unbreakable (<see cref="IFormationReinforcements" />). The board's toughs gather into
-    ///     snakes of their own (<see cref="IUnbreakableFormationSettings.ToughSnakes" />), ordered by armour, that
-    ///     walk until they break.
+    ///     in another unbreakable (<see cref="IFormationReinforcements" />). The board's toughs are one snake of
+    ///     their own (<see cref="IUnbreakableFormationSettings.ToughSnakes" />), ordered by armour: every tough
+    ///     that lands falls in behind its tail, and it walks until it breaks.
     /// </summary>
     internal sealed class UnbreakableFormationService : IStartable, IRunResettable, IDisposable,
         IFormationReinforcements
@@ -135,7 +135,7 @@ namespace BalloonParty.Balloon.Formation
                 FormFromFreeUnbreakables(relocate);
                 if (_settings.ToughSnakes)
                 {
-                    FormToughSnakes(relocate);
+                    FormToughSnake(relocate);
                 }
             }
             finally
@@ -245,23 +245,66 @@ namespace BalloonParty.Balloon.Formation
                 _trail.Add(members[i].SlotIndex.Value);
             }
 
-            // A tough hit since the last step falls back behind those with more armour left; turned round, the
-            // toughest moves up to the new front.
+            var tailSlot = members[^1].SlotIndex.Value;
+
+            // A tough snake moves one place per step toward armour order: a tough hit since the last step drops
+            // back past one with more armour left, and one that joined at the tail works its way forward.
             if (snake.Armoured)
             {
-                ArmourOrder.Sort(members);
+                ArmourOrder.StepTowardOrder(members);
             }
 
             _steps.Clear();
             for (var i = 0; i < members.Count; i++)
             {
-                var member = members[i];
-                member.SetWalking(true);
-                member.SetFormationHeading(heading);
-                _steps.Add(new FormationAssignment(member, _trail[i]));
+                _steps.Add(new FormationAssignment(members[i], _trail[i]));
+            }
+
+            // The board's toughs are one body: a free tough that has landed falls in behind the tail, one per step.
+            if (snake.Armoured && TryFindJoiner(tailSlot, out var joiner))
+            {
+                joiner.SetInFormation(true);
+                members.Add(joiner);
+                _formationOf[joiner] = snake;
+                _steps.Add(new FormationAssignment(joiner, tailSlot));
+                RebuildMemberList();
+            }
+
+            for (var i = 0; i < members.Count; i++)
+            {
+                members[i].SetWalking(true);
+                members[i].SetFormationHeading(heading);
             }
 
             _shuffle.Run(_grid, _steps, relocate);
+        }
+
+        // The free tough nearest the tail's slot, once it has landed: one still gliding in from its spawn waits.
+        private bool TryFindJoiner(Vector2Int tailSlot, out IWriteableFormationMember joiner)
+        {
+            joiner = null;
+            var best = int.MaxValue;
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                for (var row = 0; row < _grid.Rows; row++)
+                {
+                    var slot = new Vector2Int(col, row);
+                    if (_grid.IsEmpty(col, row) || _grid.At(slot) is not IArmouredFormationMember tough
+                        || _formationOf.ContainsKey(tough) || !tough.IsStable.Value)
+                    {
+                        continue;
+                    }
+
+                    var distance = HexCoordinates.Distance(tailSlot, slot);
+                    if (distance < best)
+                    {
+                        best = distance;
+                        joiner = tough;
+                    }
+                }
+            }
+
+            return joiner != null;
         }
 
         /// <summary>
@@ -366,24 +409,40 @@ namespace BalloonParty.Balloon.Formation
             }
         }
 
-        // Free toughs form snakes, MinMembers to SnakeMaxMembers long, after the unbreakables have taken their
-        // slots. Each pass takes at least MinMembers, so the loop ends.
-        private void FormToughSnakes(Action<IWriteableDynamicSlotActor, Vector2Int> relocate)
+        // The board's toughs are one body. With none walking, MinMembers free toughs start it as a row of at most
+        // SnakeMaxMembers, after the unbreakables have taken their slots; every other tough joins at its tail as
+        // it walks (Walk).
+        private void FormToughSnake(Action<IWriteableDynamicSlotActor, Vector2Int> relocate)
         {
-            while (true)
+            if (HasToughSnake())
             {
-                CollectCandidates(null, armoured: true);
-                if (_candidates.Count < _settings.MinMembers
-                    || !_planner.TryPlan(_grid, FormationShape.Snake, _candidates, _settings, _pickIndex, _assignments))
-                {
-                    return;
-                }
-
-                var formation = TakeSpareFormation();
-                formation.Armoured = true;
-                _formations.Add(formation);
-                Apply(formation, FormationShape.Snake, relocate);
+                return;
             }
+
+            CollectCandidates(null, armoured: true);
+            if (_candidates.Count < _settings.MinMembers
+                || !_planner.TryPlan(_grid, FormationShape.Snake, _candidates, _settings, _pickIndex, _assignments))
+            {
+                return;
+            }
+
+            var formation = TakeSpareFormation();
+            formation.Armoured = true;
+            _formations.Add(formation);
+            Apply(formation, FormationShape.Snake, relocate);
+        }
+
+        private bool HasToughSnake()
+        {
+            for (var i = 0; i < _formations.Count; i++)
+            {
+                if (_formations[i].Armoured)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void Apply(

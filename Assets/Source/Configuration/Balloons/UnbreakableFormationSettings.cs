@@ -9,8 +9,9 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Off: unbreakables only roam, as before formations, and toughs never snake.")]
         [SerializeField] private bool _enabled = true;
 
-        [Tooltip("Toughs (and toughers) gather into snakes of their own, Min Members to Snake Max Members " +
-                 "long, led by the one with the most hits left. They walk like an unbreakable snake.")]
+        [Tooltip("The board's toughs (and toughers) walk as one snake of their own, led by the one with the most " +
+                 "hits left. Min Members start it as a row of at most Snake Max Members; every other tough falls " +
+                 "in behind its tail, one per step.")]
         [SerializeField] private bool _toughSnakes = true;
 
         [Tooltip("Fewest unbreakables on the board that gather into a formation.")]
