@@ -1,5 +1,15 @@
 var NAVTREEINDEX37 =
 {
+"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#aee34641b7cc8bcd2c2c9216e9709fbf8":[5,0,0,3,35,1],
+"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#aee34641b7cc8bcd2c2c9216e9709fbf8":[6,0,0,3,35,1],
+"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html":[5,0,0,4,0],
+"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html":[6,0,0,4,0],
+"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#a03e5163665f8ba4139a7bf1a51f1ab2f":[5,0,0,4,0,4],
+"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#a03e5163665f8ba4139a7bf1a51f1ab2f":[6,0,0,4,0,4],
+"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#a0e4c62ad4275084d44b1eb8f8c60655b":[5,0,0,4,0,0],
+"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#a0e4c62ad4275084d44b1eb8f8c60655b":[6,0,0,4,0,0],
+"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#a415957323b093afd0691e8d4e377414c":[5,0,0,4,0,8],
+"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#a415957323b093afd0691e8d4e377414c":[6,0,0,4,0,8],
 "classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#a512dcfb8911aaadb0fc720fd5358fd09":[5,0,0,4,0,2],
 "classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#a512dcfb8911aaadb0fc720fd5358fd09":[6,0,0,4,0,2],
 "classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#aa330c87b0bd43fa9c1d7a8e06ebf786e":[5,0,0,4,0,5],
@@ -239,15 +249,5 @@ var NAVTREEINDEX37 =
 "classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ada4406cc7a510a0f05d2993e476d2728":[5,0,0,4,7,6],
 "classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ada4406cc7a510a0f05d2993e476d2728":[6,0,0,4,7,6],
 "classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ae04bc28a57e2af6746cece48af95c801":[5,0,0,4,7,26],
-"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ae04bc28a57e2af6746cece48af95c801":[6,0,0,4,7,26],
-"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ae1940f1a2b97960663bf2f35dbcba1d0":[5,0,0,4,7,38],
-"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ae1940f1a2b97960663bf2f35dbcba1d0":[6,0,0,4,7,38],
-"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ae6a58ebe92c084286186f099def11064":[5,0,0,4,7,0],
-"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ae6a58ebe92c084286186f099def11064":[6,0,0,4,7,0],
-"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ae9d4cb184deddd1dfdf2d94bb58fa668":[5,0,0,4,7,18],
-"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ae9d4cb184deddd1dfdf2d94bb58fa668":[6,0,0,4,7,18],
-"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#af101d81473238b872b56f3dae76c502b":[5,0,0,4,7,8],
-"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#af101d81473238b872b56f3dae76c502b":[6,0,0,4,7,8],
-"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#af78ef629c50a12e9521ab577a53e78f4":[5,0,0,4,7,40],
-"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#af78ef629c50a12e9521ab577a53e78f4":[6,0,0,4,7,40]
+"classBalloonParty_1_1Display_1_1ScreenSpaceLightService.html#ae04bc28a57e2af6746cece48af95c801":[6,0,0,4,7,26]
 };

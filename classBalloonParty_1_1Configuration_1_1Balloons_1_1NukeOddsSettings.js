@@ -13,6 +13,8 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeOddsSettings =
     [ "_maxChance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeOddsSettings.html#a7ae3d19c74849e946d1f9a509927c581", null ],
     [ "_perLevel", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeOddsSettings.html#a8e81c3edd9e8aeea4caf94ba3296e9df", null ],
     [ "_pressureWeight", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeOddsSettings.html#abcf84d8e47be689f1cb496a8548e8a77", null ],
+    [ "_sureAfterLines", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeOddsSettings.html#ae3f8cf2cff7fea1f12c45da3c10fd7ba", null ],
+    [ "_sureLevel", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeOddsSettings.html#ad3c2f4348f19b49dcfeae5d2fec31515", null ],
     [ "BaseChance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeOddsSettings.html#ae13203b1ff100ad5fad523982e8fd10e", null ],
     [ "CooldownLines", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeOddsSettings.html#a289b785b825e51f05d4294800d1c87ff", null ],
     [ "FillFrom", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeOddsSettings.html#a1e9c4286b3eb20e6d311f446701c9d05", null ],
@@ -25,5 +27,7 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeOddsSettings =
     [ "LossWeight", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeOddsSettings.html#a176f828599cae10c7156a4f1400b326f", null ],
     [ "MaxChance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeOddsSettings.html#ab882b0c6a1c96c062c05447d7e88a5ea", null ],
     [ "PerLevel", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeOddsSettings.html#a18eb57a5a6c8dfae1e81252ac2625e73", null ],
-    [ "PressureWeight", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeOddsSettings.html#a079b07e98749c5c8c17895dcdb59955c", null ]
+    [ "PressureWeight", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeOddsSettings.html#a079b07e98749c5c8c17895dcdb59955c", null ],
+    [ "SureAfterLines", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeOddsSettings.html#a3f5c3ea951ba7c066d126dcc87a30759", null ],
+    [ "SureLevel", "classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeOddsSettings.html#a93411b7d0da96850941856594af990ef", null ]
 ];

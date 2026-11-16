@@ -9,6 +9,7 @@ var classBalloonParty_1_1Balloon_1_1Reward_1_1NukeSchedule =
     [ "Roll", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeSchedule.html#ad7aae5dcbc34bf8f76bdec94defcac7f", null ],
     [ "_alive", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeSchedule.html#af4559320112db4acf957e1656a488e78", null ],
     [ "_linesSinceLast", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeSchedule.html#ac8bcd79f69767481555859efe6424c8c", null ],
+    [ "_linesThisLevel", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeSchedule.html#ada573f12e207c63dd5ca2b7ee39469cc", null ],
     [ "_odds", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeSchedule.html#aebdf049e629f0c9396da43bddeadb674", null ],
     [ "_owed", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeSchedule.html#afab542bc4688e0f9e759d15ac20d59e9", null ],
     [ "_placedThisLevel", "classBalloonParty_1_1Balloon_1_1Reward_1_1NukeSchedule.html#a5fd2e5cb0dc9cf9516d6536e407361a1", null ],

@@ -12,5 +12,7 @@ var interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings =
     [ "LossWeight", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#a9c0df18f219bb424da2c6e370141eb86", null ],
     [ "MaxChance", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#a1e74b29bac595f9b46b19508a029e6e6", null ],
     [ "PerLevel", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#a48da7b282ccc4ffd07a48626f54db7eb", null ],
-    [ "PressureWeight", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#a409eeb468397a1833e1967642fd0ef06", null ]
+    [ "PressureWeight", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#a409eeb468397a1833e1967642fd0ef06", null ],
+    [ "SureAfterLines", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#a578348ced681edf51b96c4fa6e6f8130", null ],
+    [ "SureLevel", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#aedee0018349c9969394e4db827716f69", null ]
 ];

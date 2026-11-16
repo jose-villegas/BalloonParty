@@ -1,5 +1,15 @@
 var NAVTREEINDEX73 =
 {
+"classBalloonParty_1_1Projectile_1_1Buffs_1_1WallBounceEndCondition.html":[5,0,0,10,0,3],
+"classBalloonParty_1_1Projectile_1_1Buffs_1_1WallBounceEndCondition.html":[6,0,0,10,0,3],
+"classBalloonParty_1_1Projectile_1_1Buffs_1_1WallBounceEndCondition.html#a05997db33d74ceab162149cf509e6b39":[5,0,0,10,0,3,0],
+"classBalloonParty_1_1Projectile_1_1Buffs_1_1WallBounceEndCondition.html#a05997db33d74ceab162149cf509e6b39":[6,0,0,10,0,3,0],
+"classBalloonParty_1_1Projectile_1_1Buffs_1_1WallBounceEndCondition.html#a26da08b4025e9bb80972d4539869790f":[5,0,0,10,0,3,2],
+"classBalloonParty_1_1Projectile_1_1Buffs_1_1WallBounceEndCondition.html#a26da08b4025e9bb80972d4539869790f":[6,0,0,10,0,3,2],
+"classBalloonParty_1_1Projectile_1_1Buffs_1_1WallBounceEndCondition.html#a4e586779dfe8ffee47236579b6291d5c":[5,0,0,10,0,3,1],
+"classBalloonParty_1_1Projectile_1_1Buffs_1_1WallBounceEndCondition.html#a4e586779dfe8ffee47236579b6291d5c":[6,0,0,10,0,3,1],
+"classBalloonParty_1_1Projectile_1_1Buffs_1_1WallBounceEndCondition.html#a8722f46c985188a73f9a63bb7d4c3876":[5,0,0,10,0,3,3],
+"classBalloonParty_1_1Projectile_1_1Buffs_1_1WallBounceEndCondition.html#a8722f46c985188a73f9a63bb7d4c3876":[6,0,0,10,0,3,3],
 "classBalloonParty_1_1Projectile_1_1Buffs_1_1WallBounceEndCondition.html#ab1816ad04a8a6aba501611480b381139":[5,0,0,10,0,3,4],
 "classBalloonParty_1_1Projectile_1_1Buffs_1_1WallBounceEndCondition.html#ab1816ad04a8a6aba501611480b381139":[6,0,0,10,0,3,4],
 "classBalloonParty_1_1Projectile_1_1Buffs_1_1WallBounceEndCondition.html#ae16b1b7c570175556ec969a0a02a9b96":[5,0,0,10,0,3,6],
@@ -239,15 +249,5 @@ var NAVTREEINDEX73 =
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ShotPaintLedger.html#a5c910e5547c98ec63fdc9bfc5218b6df":[5,0,0,10,1,11,6],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ShotPaintLedger.html#a5c910e5547c98ec63fdc9bfc5218b6df":[6,0,0,10,1,11,6],
 "classBalloonParty_1_1Projectile_1_1Controller_1_1ShotPaintLedger.html#a7a3d2dce5a86b152b831bb61c833d36e":[5,0,0,10,1,11,4],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ShotPaintLedger.html#a7a3d2dce5a86b152b831bb61c833d36e":[6,0,0,10,1,11,4],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ShotPaintLedger.html#ac8066d6664a75b85b67f60ae8d6328b0":[5,0,0,10,1,11,0],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ShotPaintLedger.html#ac8066d6664a75b85b67f60ae8d6328b0":[6,0,0,10,1,11,0],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ShotPaintLedger.html#ae5000d3ac45020c1f25e7255b42cabea":[5,0,0,10,1,11,5],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ShotPaintLedger.html#ae5000d3ac45020c1f25e7255b42cabea":[6,0,0,10,1,11,5],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ShotPaintLedger.html#ae595c76f0a11b7f3cd21e7c8f57bd032":[5,0,0,10,1,11,3],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ShotPaintLedger.html#ae595c76f0a11b7f3cd21e7c8f57bd032":[6,0,0,10,1,11,3],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ShotPaintLedger.html#af07013b8973295068f53c6d12f94565d":[5,0,0,10,1,11,7],
-"classBalloonParty_1_1Projectile_1_1Controller_1_1ShotPaintLedger.html#af07013b8973295068f53c6d12f94565d":[6,0,0,10,1,11,7],
-"classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileBuff.html":[5,0,0,10,2,5],
-"classBalloonParty_1_1Projectile_1_1Model_1_1ProjectileBuff.html":[6,0,0,10,2,5]
+"classBalloonParty_1_1Projectile_1_1Controller_1_1ShotPaintLedger.html#a7a3d2dce5a86b152b831bb61c833d36e":[6,0,0,10,1,11,4]
 };

@@ -164,6 +164,12 @@ Properties</h2></td></tr>
 <tr class="memitem:a409eeb468397a1833e1967642fd0ef06" id="r_a409eeb468397a1833e1967642fd0ef06"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a409eeb468397a1833e1967642fd0ef06">PressureWeight</a><code> [get]</code></td></tr>
 <tr class="memdesc:a409eeb468397a1833e1967642fd0ef06"><td class="mdescLeft">&#160;</td><td class="mdescRight">The spawn clock's pressure (0 to 1) is the signal as it stands.  <br /></td></tr>
 <tr class="separator:a409eeb468397a1833e1967642fd0ef06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a578348ced681edf51b96c4fa6e6f8130" id="r_a578348ced681edf51b96c4fa6e6f8130"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a578348ced681edf51b96c4fa6e6f8130">SureAfterLines</a><code> [get]</code></td></tr>
+<tr class="memdesc:a578348ced681edf51b96c4fa6e6f8130"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clock lines into <a class="el" href="#aedee0018349c9969394e4db827716f69" title="The level that always brings one, past the odds and the cooldown, once SureAfterLines lines in; 0 for...">SureLevel</a> before its nuke comes.  <br /></td></tr>
+<tr class="separator:a578348ced681edf51b96c4fa6e6f8130"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedee0018349c9969394e4db827716f69" id="r_aedee0018349c9969394e4db827716f69"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aedee0018349c9969394e4db827716f69">SureLevel</a><code> [get]</code></td></tr>
+<tr class="memdesc:aedee0018349c9969394e4db827716f69"><td class="mdescLeft">&#160;</td><td class="mdescRight">The level that always brings one, past the odds and the cooldown, once <a class="el" href="#a578348ced681edf51b96c4fa6e6f8130" title="Clock lines into SureLevel before its nuke comes.">SureAfterLines</a> lines in; 0 for none.  <br /></td></tr>
+<tr class="separator:aedee0018349c9969394e4db827716f69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>When the nuke balloon comes (PLAN-NukeBalloon): a tiny chance on each clock line, raised toward <a class="el" href="#a1e74b29bac595f9b46b19508a029e6e6" title="The chance on a line in full trouble.">MaxChance</a> by the trouble the player is in. </p>
@@ -502,6 +508,58 @@ Properties</h2></td></tr>
 <p>The spawn clock's pressure (0 to 1) is the signal as it stands. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeOddsSettings.html#a079b07e98749c5c8c17895dcdb59955c">BalloonParty.Configuration.Balloons.NukeOddsSettings</a>.</p>
+
+</div>
+</div>
+<a id="a578348ced681edf51b96c4fa6e6f8130" name="a578348ced681edf51b96c4fa6e6f8130"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a578348ced681edf51b96c4fa6e6f8130">&#9670;&#160;</a></span>SureAfterLines</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.INukeOddsSettings.SureAfterLines</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Clock lines into <a class="el" href="#aedee0018349c9969394e4db827716f69" title="The level that always brings one, past the odds and the cooldown, once SureAfterLines lines in; 0 for...">SureLevel</a> before its nuke comes. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeOddsSettings.html#a3f5c3ea951ba7c066d126dcc87a30759">BalloonParty.Configuration.Balloons.NukeOddsSettings</a>.</p>
+
+</div>
+</div>
+<a id="aedee0018349c9969394e4db827716f69" name="aedee0018349c9969394e4db827716f69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aedee0018349c9969394e4db827716f69">&#9670;&#160;</a></span>SureLevel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.INukeOddsSettings.SureLevel</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The level that always brings one, past the odds and the cooldown, once <a class="el" href="#a578348ced681edf51b96c4fa6e6f8130" title="Clock lines into SureLevel before its nuke comes.">SureAfterLines</a> lines in; 0 for none. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1NukeOddsSettings.html#a93411b7d0da96850941856594af990ef">BalloonParty.Configuration.Balloons.NukeOddsSettings</a>.</p>
 
 </div>
 </div>

@@ -231,6 +231,7 @@ When it comes</h2>
 <li>At most <code>PerLevel</code> (1) a level.</li>
 <li>After one is placed, <code>CooldownLines</code> (150) lines pass before the next roll. Lines come every 2 s on the first level and every 0.55 s late in a run, so that is about two to five minutes.</li>
 <li>A won roll stays owed until placed, as for the other rewards. A new level drops it.</li>
+<li>Level <code>SureLevel</code> (10) always brings one, <code>SureAfterLines</code> (10) lines in so the board has filled: past the odds and the cooldown, so every run that gets that far sees a nuke. Not if one is already on the board, or the level has already had its <code>PerLevel</code>. 0 turns it off.</li>
 </ul>
 <p><b>The chance.</b> Each line rolls</p>
 <p><code>chance = BaseChance + (MaxChance - BaseChance) × urgency</code></p>

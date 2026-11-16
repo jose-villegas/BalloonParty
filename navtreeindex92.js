@@ -1,5 +1,15 @@
 var NAVTREEINDEX92 =
 {
+"classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a40cc2cc519142490a721946c7f2e0d5e":[5,0,0,13,2,7,17],
+"classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a40cc2cc519142490a721946c7f2e0d5e":[6,0,0,13,2,7,17],
+"classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a4ca8de50cf843754e2ab8211763888e3":[5,0,0,13,2,7,18],
+"classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a4ca8de50cf843754e2ab8211763888e3":[6,0,0,13,2,7,18],
+"classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a5260414784faa7763acd5421fde06b19":[5,0,0,13,2,7,15],
+"classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a5260414784faa7763acd5421fde06b19":[6,0,0,13,2,7,15],
+"classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a56c3d97a65440cfb4a78ff028540218d":[5,0,0,13,2,7,21],
+"classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a56c3d97a65440cfb4a78ff028540218d":[6,0,0,13,2,7,21],
+"classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a59c232c7fea34f928bc6af22ffd311ae":[5,0,0,13,2,7,9],
+"classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a59c232c7fea34f928bc6af22ffd311ae":[6,0,0,13,2,7,9],
 "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a5b15f79b040184bdb9b8dd73c78b2c9e":[5,0,0,13,2,7,29],
 "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a5b15f79b040184bdb9b8dd73c78b2c9e":[6,0,0,13,2,7,29],
 "classBalloonParty_1_1Slots_1_1Grid_1_1SlotGrid.html#a70f21918e2b35c41446ebfb175fa5ed8":[5,0,0,13,2,7,11],
@@ -239,15 +249,5 @@ var NAVTREEINDEX92 =
 "classBalloonParty_1_1Solver_1_1ShotMotionMath.html#a8e6edd3d27ea0118bce4ac5a0aa22054":[5,0,0,14,14,4],
 "classBalloonParty_1_1Solver_1_1ShotMotionMath.html#a8e6edd3d27ea0118bce4ac5a0aa22054":[6,0,0,14,14,4],
 "classBalloonParty_1_1Solver_1_1ShotMotionMath.html#ac018f1c22686e3065ee0722a43293108":[5,0,0,14,14,0],
-"classBalloonParty_1_1Solver_1_1ShotMotionMath.html#ac018f1c22686e3065ee0722a43293108":[6,0,0,14,14,0],
-"classBalloonParty_1_1Solver_1_1ShotMotionMath.html#accc4cb0aa93ba1f33e0f80aeedb8f79d":[5,0,0,14,14,1],
-"classBalloonParty_1_1Solver_1_1ShotMotionMath.html#accc4cb0aa93ba1f33e0f80aeedb8f79d":[6,0,0,14,14,1],
-"classBalloonParty_1_1Solver_1_1ShotMotionMath.html#ae8663275de562b36ffa78b86358d133d":[5,0,0,14,14,2],
-"classBalloonParty_1_1Solver_1_1ShotMotionMath.html#ae8663275de562b36ffa78b86358d133d":[6,0,0,14,14,2],
-"classBalloonParty_1_1Solver_1_1ShotMotionMath.html#af45226f6e43e5384810a6b4ba31c482f":[5,0,0,14,14,3],
-"classBalloonParty_1_1Solver_1_1ShotMotionMath.html#af45226f6e43e5384810a6b4ba31c482f":[6,0,0,14,14,3],
-"classBalloonParty_1_1Solver_1_1ShotRanking.html":[5,0,0,14,17],
-"classBalloonParty_1_1Solver_1_1ShotRanking.html":[6,0,0,14,17],
-"classBalloonParty_1_1Solver_1_1ShotRanking.html#a8f90182cac9db594680eac4091c9bb6c":[5,0,0,14,17,0],
-"classBalloonParty_1_1Solver_1_1ShotRanking.html#a8f90182cac9db594680eac4091c9bb6c":[6,0,0,14,17,0]
+"classBalloonParty_1_1Solver_1_1ShotMotionMath.html#ac018f1c22686e3065ee0722a43293108":[6,0,0,14,14,0]
 };

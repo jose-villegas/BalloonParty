@@ -153,6 +153,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:af4559320112db4acf957e1656a488e78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8bcd79f69767481555859efe6424c8c" id="r_ac8bcd79f69767481555859efe6424c8c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac8bcd79f69767481555859efe6424c8c">_linesSinceLast</a></td></tr>
 <tr class="separator:ac8bcd79f69767481555859efe6424c8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada573f12e207c63dd5ca2b7ee39469cc" id="r_ada573f12e207c63dd5ca2b7ee39469cc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada573f12e207c63dd5ca2b7ee39469cc">_linesThisLevel</a></td></tr>
+<tr class="separator:ada573f12e207c63dd5ca2b7ee39469cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebdf049e629f0c9396da43bddeadb674" id="r_aebdf049e629f0c9396da43bddeadb674"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Reward_1_1INukeOdds.html">INukeOdds</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aebdf049e629f0c9396da43bddeadb674">_odds</a></td></tr>
 <tr class="separator:aebdf049e629f0c9396da43bddeadb674"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afab542bc4688e0f9e759d15ac20d59e9" id="r_afab542bc4688e0f9e759d15ac20d59e9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afab542bc4688e0f9e759d15ac20d59e9">_owed</a></td></tr>
@@ -168,7 +170,7 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>When the nuke balloon is due (PLAN-NukeBalloon), and whether one is on the board. </p>
-<p>Every clock line from <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#ab0a8fec625472ff938f7ae17be6f1f7b" title="The first level that can roll one; 0 or 1 for every level.">INukeOddsSettings.FromLevel</a> on rolls <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Reward_1_1INukeOdds.html#aadbefccefc7924761a2483cad31581ff" title="The chance this clock line brings a nuke, read when the line rolls.">INukeOdds.Chance</a>, up to <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#a48da7b282ccc4ffd07a48626f54db7eb" title="How many a level can bring at most.">INukeOddsSettings.PerLevel</a> a level, once <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#adcdc4e81d1cc8964783b3b001ba3d433" title="Clock lines after one is placed before the next can roll.">INukeOddsSettings.CooldownLines</a> lines have passed since the last was placed. A won roll stays due until the nuke is placed: a line with no room for it passes it on. A new level drops one still owed. </p>
+<p>Every clock line from <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#ab0a8fec625472ff938f7ae17be6f1f7b" title="The first level that can roll one; 0 or 1 for every level.">INukeOddsSettings.FromLevel</a> on rolls <a class="el" href="interfaceBalloonParty_1_1Balloon_1_1Reward_1_1INukeOdds.html#aadbefccefc7924761a2483cad31581ff" title="The chance this clock line brings a nuke, read when the line rolls.">INukeOdds.Chance</a>, up to <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#a48da7b282ccc4ffd07a48626f54db7eb" title="How many a level can bring at most.">INukeOddsSettings.PerLevel</a> a level, once <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#adcdc4e81d1cc8964783b3b001ba3d433" title="Clock lines after one is placed before the next can roll.">INukeOddsSettings.CooldownLines</a> lines have passed since the last was placed. <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#aedee0018349c9969394e4db827716f69" title="The level that always brings one, past the odds and the cooldown, once SureAfterLines lines in; 0 for...">INukeOddsSettings.SureLevel</a> brings one for sure, <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#a578348ced681edf51b96c4fa6e6f8130" title="Clock lines into SureLevel before its nuke comes.">INukeOddsSettings.SureAfterLines</a> lines in. A won roll stays due until the nuke is placed: a line with no room for it passes it on. A new level drops one still owed. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af30492ce25624deccd144b212d7dc7b2" name="af30492ce25624deccd144b212d7dc7b2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af30492ce25624deccd144b212d7dc7b2">&#9670;&#160;</a></span>NukeSchedule()</h2>
@@ -391,6 +393,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">int BalloonParty.Balloon.Reward.NukeSchedule._linesSinceLast</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ada573f12e207c63dd5ca2b7ee39469cc" name="ada573f12e207c63dd5ca2b7ee39469cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada573f12e207c63dd5ca2b7ee39469cc">&#9670;&#160;</a></span>_linesThisLevel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Reward.NukeSchedule._linesThisLevel</td>
         </tr>
       </table>
   </td>

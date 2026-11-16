@@ -169,6 +169,12 @@ Properties</h2></td></tr>
 <tr class="memitem:a079b07e98749c5c8c17895dcdb59955c" id="r_a079b07e98749c5c8c17895dcdb59955c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a079b07e98749c5c8c17895dcdb59955c">PressureWeight</a><code> [get]</code></td></tr>
 <tr class="memdesc:a079b07e98749c5c8c17895dcdb59955c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The spawn clock's pressure (0 to 1) is the signal as it stands.  <br /></td></tr>
 <tr class="separator:a079b07e98749c5c8c17895dcdb59955c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f5c3ea951ba7c066d126dcc87a30759" id="r_a3f5c3ea951ba7c066d126dcc87a30759"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3f5c3ea951ba7c066d126dcc87a30759">SureAfterLines</a><code> [get]</code></td></tr>
+<tr class="memdesc:a3f5c3ea951ba7c066d126dcc87a30759"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clock lines into <a class="el" href="#a93411b7d0da96850941856594af990ef" title="The level that always brings one, past the odds and the cooldown, once SureAfterLines lines in; 0 for...">SureLevel</a> before its nuke comes.  <br /></td></tr>
+<tr class="separator:a3f5c3ea951ba7c066d126dcc87a30759"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93411b7d0da96850941856594af990ef" id="r_a93411b7d0da96850941856594af990ef"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a93411b7d0da96850941856594af990ef">SureLevel</a><code> [get]</code></td></tr>
+<tr class="memdesc:a93411b7d0da96850941856594af990ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">The level that always brings one, past the odds and the cooldown, once <a class="el" href="#a3f5c3ea951ba7c066d126dcc87a30759" title="Clock lines into SureLevel before its nuke comes.">SureAfterLines</a> lines in; 0 for none.  <br /></td></tr>
+<tr class="separator:a93411b7d0da96850941856594af990ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -198,6 +204,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a8e81c3edd9e8aeea4caf94ba3296e9df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abcf84d8e47be689f1cb496a8548e8a77" id="r_abcf84d8e47be689f1cb496a8548e8a77"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abcf84d8e47be689f1cb496a8548e8a77">_pressureWeight</a> = 0.25f</td></tr>
 <tr class="separator:abcf84d8e47be689f1cb496a8548e8a77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3f8cf2cff7fea1f12c45da3c10fd7ba" id="r_ae3f8cf2cff7fea1f12c45da3c10fd7ba"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae3f8cf2cff7fea1f12c45da3c10fd7ba">_sureAfterLines</a> = 10</td></tr>
+<tr class="separator:ae3f8cf2cff7fea1f12c45da3c10fd7ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3c2f4348f19b49dcfeae5d2fec31515" id="r_ad3c2f4348f19b49dcfeae5d2fec31515"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3c2f4348f19b49dcfeae5d2fec31515">_sureLevel</a> = 10</td></tr>
+<tr class="separator:ad3c2f4348f19b49dcfeae5d2fec31515"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a3dfa9a096998fa57671ab7a1885a0eb5" name="a3dfa9a096998fa57671ab7a1885a0eb5"></a>
@@ -475,6 +485,50 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.Configuration.Balloons.NukeOddsSettings._pressureWeight = 0.25f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae3f8cf2cff7fea1f12c45da3c10fd7ba" name="ae3f8cf2cff7fea1f12c45da3c10fd7ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3f8cf2cff7fea1f12c45da3c10fd7ba">&#9670;&#160;</a></span>_sureAfterLines</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.NukeOddsSettings._sureAfterLines = 10</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad3c2f4348f19b49dcfeae5d2fec31515" name="ad3c2f4348f19b49dcfeae5d2fec31515"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3c2f4348f19b49dcfeae5d2fec31515">&#9670;&#160;</a></span>_sureLevel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.NukeOddsSettings._sureLevel = 10</td>
         </tr>
       </table>
   </td>
@@ -820,6 +874,58 @@ Private Attributes</h2></td></tr>
 <p>The spawn clock's pressure (0 to 1) is the signal as it stands. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#a409eeb468397a1833e1967642fd0ef06">BalloonParty.Configuration.Balloons.INukeOddsSettings</a>.</p>
+
+</div>
+</div>
+<a id="a3f5c3ea951ba7c066d126dcc87a30759" name="a3f5c3ea951ba7c066d126dcc87a30759"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f5c3ea951ba7c066d126dcc87a30759">&#9670;&#160;</a></span>SureAfterLines</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.NukeOddsSettings.SureAfterLines</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Clock lines into <a class="el" href="#a93411b7d0da96850941856594af990ef" title="The level that always brings one, past the odds and the cooldown, once SureAfterLines lines in; 0 for...">SureLevel</a> before its nuke comes. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#a578348ced681edf51b96c4fa6e6f8130">BalloonParty.Configuration.Balloons.INukeOddsSettings</a>.</p>
+
+</div>
+</div>
+<a id="a93411b7d0da96850941856594af990ef" name="a93411b7d0da96850941856594af990ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93411b7d0da96850941856594af990ef">&#9670;&#160;</a></span>SureLevel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.NukeOddsSettings.SureLevel</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The level that always brings one, past the odds and the cooldown, once <a class="el" href="#a3f5c3ea951ba7c066d126dcc87a30759" title="Clock lines into SureLevel before its nuke comes.">SureAfterLines</a> lines in; 0 for none. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1INukeOddsSettings.html#aedee0018349c9969394e4db827716f69">BalloonParty.Configuration.Balloons.INukeOddsSettings</a>.</p>
 
 </div>
 </div>

@@ -1,5 +1,19 @@
 var NAVTREEINDEX133 =
 {
+"structBalloonParty_1_1Solver_1_1ShotPopCause.html#a666dda46a57f7aef6b3627bc20c92d2f":[6,0,0,14,16,4],
+"structBalloonParty_1_1Solver_1_1ShotPopCause.html#a6be68b6a41232e021e3fdfb32ca56e68":[5,0,0,14,16,5],
+"structBalloonParty_1_1Solver_1_1ShotPopCause.html#a6be68b6a41232e021e3fdfb32ca56e68":[6,0,0,14,16,5],
+"structBalloonParty_1_1Solver_1_1ShotPopCause.html#a773ddf77ebba32851df4670ab0bd60ea":[5,0,0,14,16,1],
+"structBalloonParty_1_1Solver_1_1ShotPopCause.html#a773ddf77ebba32851df4670ab0bd60ea":[6,0,0,14,16,1],
+"structBalloonParty_1_1Solver_1_1ShotPopCause.html#a83cf06bb589facb2cab5873962babee0":[5,0,0,14,16,2],
+"structBalloonParty_1_1Solver_1_1ShotPopCause.html#a83cf06bb589facb2cab5873962babee0":[6,0,0,14,16,2],
+"structBalloonParty_1_1Solver_1_1ShotScoreRules.html":[5,0,0,14,18],
+"structBalloonParty_1_1Solver_1_1ShotScoreRules.html":[6,0,0,14,18],
+"structBalloonParty_1_1Solver_1_1ShotScoreRules.html#a02814ad7c50320ffdb7e0eb89cdfecb7":[5,0,0,14,18,2],
+"structBalloonParty_1_1Solver_1_1ShotScoreRules.html#a02814ad7c50320ffdb7e0eb89cdfecb7":[6,0,0,14,18,2],
+"structBalloonParty_1_1Solver_1_1ShotScoreRules.html#a1104452934b6ac299c219844d8120d39":[5,0,0,14,18,4],
+"structBalloonParty_1_1Solver_1_1ShotScoreRules.html#a1104452934b6ac299c219844d8120d39":[6,0,0,14,18,4],
+"structBalloonParty_1_1Solver_1_1ShotScoreRules.html#a3c486cb11415589d529c9289e8fdaec3":[5,0,0,14,18,0],
 "structBalloonParty_1_1Solver_1_1ShotScoreRules.html#a3c486cb11415589d529c9289e8fdaec3":[6,0,0,14,18,0],
 "structBalloonParty_1_1Solver_1_1ShotScoreRules.html#ab6f7f606563809f8c89d75839741ceaa":[5,0,0,14,18,1],
 "structBalloonParty_1_1Solver_1_1ShotScoreRules.html#ab6f7f606563809f8c89d75839741ceaa":[6,0,0,14,18,1],
@@ -235,6 +249,5 @@ var NAVTREEINDEX133 =
 "style_guide.html#autotoc_md994":[1,0,13],
 "style_guide.html#autotoc_md995":[1,0,13,0],
 "style_guide.html#autotoc_md996":[1,0,13,1],
-"style_guide.html#autotoc_md997":[1,0,13,2],
-"style_guide.html#autotoc_md999":[1,0,14]
+"style_guide.html#autotoc_md997":[1,0,13,2]
 };

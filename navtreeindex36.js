@@ -1,5 +1,15 @@
 var NAVTREEINDEX36 =
 {
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ab56d29d81304fde60300ff576350dc11":[5,0,0,3,27,44],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ab56d29d81304fde60300ff576350dc11":[6,0,0,3,27,44],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ab573b2040314a8f2ad964f3cd5887241":[5,0,0,3,27,30],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ab573b2040314a8f2ad964f3cd5887241":[6,0,0,3,27,30],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ab6006532a08fac86e0e6788db4565cbf":[5,0,0,3,27,40],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ab6006532a08fac86e0e6788db4565cbf":[6,0,0,3,27,40],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ab779baf137ca780db50ada2f7235b6fc":[5,0,0,3,27,17],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ab779baf137ca780db50ada2f7235b6fc":[6,0,0,3,27,17],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ac2f59d9bb0ae0d60b22f038eb1eeb0b4":[5,0,0,3,27,42],
+"classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ac2f59d9bb0ae0d60b22f038eb1eeb0b4":[6,0,0,3,27,42],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ac3b7f460bac8bf66958da027958c26ab":[5,0,0,3,27,32],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#ac3b7f460bac8bf66958da027958c26ab":[6,0,0,3,27,32],
 "classBalloonParty_1_1Configuration_1_1ProjectileFlightConfig.html#aca717c7ab73b2cea13500060c5efef9f":[5,0,0,3,27,14],
@@ -239,15 +249,5 @@ var NAVTREEINDEX36 =
 "classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a9ba582abbdc53585ec3b40808988fbb9":[5,0,0,3,35,0],
 "classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#a9ba582abbdc53585ec3b40808988fbb9":[6,0,0,3,35,0],
 "classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#aa0730b84d05c1596ec73dab1b66c45ef":[5,0,0,3,35,3],
-"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#aa0730b84d05c1596ec73dab1b66c45ef":[6,0,0,3,35,3],
-"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#aee34641b7cc8bcd2c2c9216e9709fbf8":[5,0,0,3,35,1],
-"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#aee34641b7cc8bcd2c2c9216e9709fbf8":[6,0,0,3,35,1],
-"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html":[5,0,0,4,0],
-"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html":[6,0,0,4,0],
-"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#a03e5163665f8ba4139a7bf1a51f1ab2f":[5,0,0,4,0,4],
-"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#a03e5163665f8ba4139a7bf1a51f1ab2f":[6,0,0,4,0,4],
-"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#a0e4c62ad4275084d44b1eb8f8c60655b":[5,0,0,4,0,0],
-"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#a0e4c62ad4275084d44b1eb8f8c60655b":[6,0,0,4,0,0],
-"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#a415957323b093afd0691e8d4e377414c":[5,0,0,4,0,8],
-"classBalloonParty_1_1Display_1_1CameraBackgroundTint.html#a415957323b093afd0691e8d4e377414c":[6,0,0,4,0,8]
+"classBalloonParty_1_1Configuration_1_1UpgradeSettings.html#aa0730b84d05c1596ec73dab1b66c45ef":[6,0,0,3,35,3]
 };

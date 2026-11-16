@@ -293,7 +293,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Jumps the clock to a specific angle (scrub the time of day) and republishes — the dev cheat's write path. </p>
-<p>Works even when this driver is idle (non-Realtime source): it sets the direction once, which then holds until the active driver next writes. </p>
+<p>Works even when this driver is idle (non-Realtime source): it sets the direction once, which then holds until the active driver next writes. It ends the game-start sweep, which would otherwise carry on from the old angle and overwrite the jump. </p>
 
 </div>
 </div>
