@@ -58,6 +58,7 @@ pressable (after the loss cinematic, as a finger would), and plays on until the 
 | `restart` (or `--restart`) | Restart: a new run from level 1 |
 | `retry` | Retry, replaying the level with the hearts refilled, while the run has a retry: the free ones (`RunConfig.RetriesBeforeAd`), then the ones behind a rewarded ad. Restart once none is left |
 | `bonus` | The bonus retry while the game offers it: a rewarded ad that buys a card for the retried level. Otherwise as `retry` |
+| `free` | Retry while the run has a free one (`RunConfig.RetriesBeforeAd`). The session ends at the first loss that would need an ad: how far a player gets who never watches one |
 
 A press that stages nothing (an ad skipped or not shown: the screen comes back) steps down for that loss: a
 failed bonus retry is followed by a plain retry, a failed retry by Restart. The report lists such a press but

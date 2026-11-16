@@ -48,6 +48,7 @@ ON_LOSS = {
     "restart": "Restart, a new run",
     "retry": "Retry while the run has one (free first, then behind an ad), else Restart",
     "bonus": "the bonus retry (a rewarded ad for a bonus card) while it is offered, else Retry, else Restart",
+    "free": "Retry while the run has a free one; the session ends at the first loss that would need an ad",
 }
 # A gap between two playing ticks longer than this (a level-up, a pause, a restart) ends a release or tension stretch.
 STRETCH_BREAK_SECONDS = 2.0

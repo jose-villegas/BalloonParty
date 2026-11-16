@@ -368,7 +368,7 @@ if (nav == "GameOver")
         var presses = UnityEditor.SessionState.GetInt(LossPressesKey, 0);
         UnityEditor.SessionState.SetInt(LossPressesKey, presses + 1);
         object offer = null;
-        if (onLoss == "retry" || onLoss == "bonus")
+        if (onLoss == "retry" || onLoss == "bonus" || onLoss == "free")
         {
             try
             {
@@ -382,6 +382,18 @@ if (nav == "GameOver")
         }
 
         bool Offers(string field) { return offer != null && (bool)offer.GetType().GetField(field).GetValue(offer); }
+        // A player who never watches an ad: the free retries, then the run is over and so is the session.
+        if (onLoss == "free")
+        {
+            if (presses == 0 && Offers("CanRetry") && !Offers("RetryNeedsAd"))
+            {
+                screen.OnRetryPressed();
+                return time + " RETRY ad 0";
+            }
+
+            return time + " GAMEOVER";
+        }
+
         if (onLoss == "bonus" && presses == 0 && Offers("CanBonusRetry"))
         {
             screen.OnBonusRetryPressed();
