@@ -446,8 +446,8 @@ namespace BalloonParty.Balloon.Formation
             }
         }
 
-        // The board's toughs are one body. With none walking and MinMembers toughs landed, the toughest of them
-        // within the rows a snake walks starts it where it stands, heading east or west at random; the rest fall in
+        // The board's toughs are one body. With none walking and MinMembers toughs on the board, landed or still
+        // gliding in, the toughest landed one within the rows a snake walks starts it where it stands, heading east or west at random; the rest fall in
         // behind its tail as it walks (Walk). Formed at wave start, it waits for the next beat to take its first
         // step; formed on a beat (TakeSnakeBeat), it steps off on that one.
         private void FormToughSnake()
@@ -459,26 +459,25 @@ namespace BalloonParty.Balloon.Formation
 
             var lastRow = LastSnakeRow();
             IWriteableFormationMember head = null;
-            var landed = 0;
+            var toughs = 0;
             for (var col = 0; col < _grid.Columns; col++)
             {
                 for (var row = 0; row < _grid.Rows; row++)
                 {
-                    if (_grid.IsEmpty(col, row) || _grid.At(new Vector2Int(col, row)) is not IArmouredFormationMember tough
-                        || !tough.IsStable.Value)
+                    if (_grid.IsEmpty(col, row) || _grid.At(new Vector2Int(col, row)) is not IArmouredFormationMember tough)
                     {
                         continue;
                     }
 
-                    landed++;
-                    if (row <= lastRow && (head == null || LeadsBetter(tough, head)))
+                    toughs++;
+                    if (tough.IsStable.Value && row <= lastRow && (head == null || LeadsBetter(tough, head)))
                     {
                         head = tough;
                     }
                 }
             }
 
-            if (head == null || landed < _settings.MinMembers)
+            if (head == null || toughs < _settings.MinMembers)
             {
                 return;
             }

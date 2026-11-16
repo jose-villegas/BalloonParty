@@ -94,15 +94,16 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void AToughStillLanding_DoesntCountToStartIt()
+        public void AToughStillLanding_CountsToStartIt_ButCantLeadIt()
         {
-            AddTough(new Vector2Int(0, 0), 1);
-            AddTough(new Vector2Int(6, 4), 3);
+            var head = AddTough(new Vector2Int(0, 0), 1);
+            AddTough(new Vector2Int(6, 4), 3).IsStable.Value = false;
             AddTough(new Vector2Int(3, 5), 2).IsStable.Value = false;
 
             Arrange();
 
-            Assert.AreEqual(0, _service.Formations.Count);
+            Assert.AreSame(head, SingleSnake().Members[0], "the toughest that has landed");
+            Assert.AreEqual(1, _service.Members.Count);
         }
 
         [Test]
@@ -393,8 +394,8 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void ToughsStillLanding_StartNothingOnTheBeat()
         {
-            AddTough(new Vector2Int(0, 0), 1);
-            AddTough(new Vector2Int(6, 4), 3);
+            AddTough(new Vector2Int(0, 0), 1).IsStable.Value = false;
+            AddTough(new Vector2Int(6, 4), 3).IsStable.Value = false;
             AddTough(new Vector2Int(3, 5), 2).IsStable.Value = false;
 
             Assert.IsFalse(_service.TakeSnakeBeat());

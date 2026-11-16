@@ -82,8 +82,9 @@ The board's toughs and toughers (`ToughBalloonModel`, an `IArmouredFormationMemb
 single snake of their own, walking on the same beat and with the same `SnakeWalk` as an unbreakable snake.
 Toughs never join an unbreakable formation, and unbreakables never join theirs.
 
-- **Starting.** With no tough snake on the board, once `MinMembers` toughs have landed (`IsStable`: not
-  still gliding in from a spawn line), the toughest of them starts it, where it stands. That is checked at
+- **Starting.** With no tough snake on the board, once `MinMembers` toughs are on it, the toughest that
+  has landed (`IsStable`: not still gliding in from a spawn line) starts it, where it stands; the others
+  join as they land. That is checked at
   each wave start and on each snake beat, since a level can end before its next wave start. Ties go to the
   higher row. The head is never one in the bottom `HorizontalBottomClearance` rows, which a snake never
   walks. It sets off east or west at random: started at a wave start, it takes its first step on the next
