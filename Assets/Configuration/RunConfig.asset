@@ -86,7 +86,7 @@ MonoBehaviour:
       _dealtFirst: 1
     - _kind: 6
       _title: Party Favors
-      _description: Increased gift chance
+      _description: Increased gift balloon chance
       _amount: 0.25
       _maxStacks: 3
       _weight: 1

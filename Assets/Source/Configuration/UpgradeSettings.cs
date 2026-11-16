@@ -88,7 +88,7 @@ namespace BalloonParty.Configuration
             new(UpgradeKind.ItemOdds, "Lucky Find", "More items on the board", 0.1f, 4),
             new(UpgradeKind.RaiseLimits, "Raise the Bar", "+1 to every card's limit", 1f, 2, 0.5f),
             new(UpgradeKind.SnipeChance, "Sharpshooter", "Increased Snipe chance", 0.01f, 3, dealtFirst: true),
-            new(UpgradeKind.RewardOdds, "Party Favors", "Increased gift chance", 0.25f, 3)
+            new(UpgradeKind.RewardOdds, "Party Favors", "Increased gift balloon chance", 0.25f, 3)
         };
 
         [Tooltip("Seconds of game time after a pen loads as a Snipe (the Sharpshooter card) before another can, so " +
