@@ -1,5 +1,6 @@
 using System;
 using BalloonParty.Game.Assist;
+using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Game.Upgrades;
 using BalloonParty.Projectile.Model;
@@ -25,7 +26,8 @@ namespace BalloonParty.Item.Snipe
     ///     chance is low; pity (<see cref="IAssistSettings.SnipePity" />) raises it for each ball loaded without a
     ///     Snipe while the player is in trouble (<see cref="IPlayerNeed" />) or armour has stood on the board too long
     ///     (<see cref="IArmourNeed" />), whichever is the more. After a hit, no load rolls for
-    ///     <see cref="IUpgradeSettings.SnipeCooldownSeconds" />, so rapid fire can't chain lances. A guaranteed
+    ///     <see cref="IUpgradeSettings.SnipeCooldownSeconds" />, so rapid fire can't chain lances. A purple level
+    ///     raises the card's chance (<see cref="IUpgradeSettings.PurpleLevelSnipeChanceScale" />). A guaranteed
     ///     load (<see cref="ISnipeGuarantee" />, the first golden balloon's lesson) arms with no roll and no cooldown.
     /// </summary>
     internal sealed class SnipeChanceRoll : ISnipeChanceRoll, ISnipeGuarantee, IRunResettable
@@ -35,6 +37,7 @@ namespace BalloonParty.Item.Snipe
         private readonly IUpgradeSettings _settings;
         private readonly IPlayerNeed _need;
         private readonly IArmourNeed _armour;
+        private readonly IActiveLevelParameters _level;
         private readonly PityRoll _pity;
 
         private float _lastArmedAt = float.NegativeInfinity;
@@ -46,13 +49,14 @@ namespace BalloonParty.Item.Snipe
         public int ResetOrder => RunResetOrder.Counters;
 
         internal SnipeChanceRoll(IWeaponStats weapon, ISnipeArmer armer, IUpgradeSettings settings, IPlayerNeed need,
-            IArmourNeed armour, IAssistSettings assist)
+            IArmourNeed armour, IAssistSettings assist, IActiveLevelParameters level)
         {
             _weapon = weapon;
             _armer = armer;
             _settings = settings;
             _need = need;
             _armour = armour;
+            _level = level;
             _pity = new PityRoll(assist.SnipePity);
         }
 
@@ -81,6 +85,11 @@ namespace BalloonParty.Item.Snipe
             if (now - _lastArmedAt < _settings.SnipeCooldownSeconds)
             {
                 return false;
+            }
+
+            if (_level.Current is { IsExtraColorLevel: true })
+            {
+                chance *= _settings.PurpleLevelSnipeChanceScale;
             }
 
             var need = Mathf.Max(_need.Need, _armour.Need);

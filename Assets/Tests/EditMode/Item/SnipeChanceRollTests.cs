@@ -1,4 +1,6 @@
+using BalloonParty.Configuration.Level;
 using BalloonParty.Game.Assist;
+using BalloonParty.Game.Level;
 using BalloonParty.Game.Upgrades;
 using BalloonParty.Item.Snipe;
 using BalloonParty.Projectile.Model;
@@ -22,6 +24,8 @@ namespace BalloonParty.Tests.Item
         private IPlayerNeed _need;
         private IArmourNeed _armour;
         private IAssistSettings _assist;
+        private ILevelParameters _levelNow;
+        private IActiveLevelParameters _level;
         private SnipeChanceRoll _roll;
         private int _draws;
 
@@ -38,7 +42,14 @@ namespace BalloonParty.Tests.Item
             pity.MaxChance.Returns(0.5f);
             _assist = Substitute.For<IAssistSettings>();
             _assist.SnipePity.Returns(pity);
-            _roll = new SnipeChanceRoll(_weapon, _armer, _settings, _need, _armour, _assist) { Now = () => 0f };
+            _settings.PurpleLevelSnipeChanceScale.Returns(3f);
+            _levelNow = Substitute.For<ILevelParameters>();
+            _level = Substitute.For<IActiveLevelParameters>();
+            _level.Current.Returns(_levelNow);
+            _roll = new SnipeChanceRoll(_weapon, _armer, _settings, _need, _armour, _assist, _level)
+            {
+                Now = () => 0f
+            };
             _draws = 0;
         }
 
@@ -65,6 +76,40 @@ namespace BalloonParty.Tests.Item
 
             Assert.AreEqual(armed, _roll.TryArm(ball));
             _armer.Received(armed ? 1 : 0).Arm(ball);
+        }
+
+        // A purple level's golden balloons are armoured: the card's chance is tripled there, to crack them.
+        [TestCase(false, 0.25f, false)]
+        [TestCase(true, 0.25f, true)]
+        [TestCase(true, 0.3f, false)]
+        public void TryArm_PurpleLevel_ScalesTheCardsChance(bool purple, float draw, bool armed)
+        {
+            _weapon.SnipeChance.Returns(0.1f);
+            _levelNow.IsExtraColorLevel.Returns(purple);
+            Draw(draw);
+
+            Assert.AreEqual(armed, _roll.TryArm(new ProjectileModel()));
+        }
+
+        [Test]
+        public void TryArm_PurpleLevel_WithoutTheCard_StillNeverArms()
+        {
+            _weapon.SnipeChance.Returns(0f);
+            _levelNow.IsExtraColorLevel.Returns(true);
+            Draw(0f);
+
+            Assert.IsFalse(_roll.TryArm(new ProjectileModel()));
+            Assert.AreEqual(0, _draws);
+        }
+
+        [Test]
+        public void TryArm_NoLevelYet_RollsTheCardsOwnChance()
+        {
+            _weapon.SnipeChance.Returns(0.1f);
+            _level.Current.Returns((ILevelParameters)null);
+            Draw(0.25f);
+
+            Assert.IsFalse(_roll.TryArm(new ProjectileModel()));
         }
 
         [Test]
@@ -107,7 +152,7 @@ namespace BalloonParty.Tests.Item
             // Two stacks of 0.15 from the real card arithmetic: a draw of 0.25 misses one stack, hits two.
             var rig = new UpgradeRig(Substitute.For<IProjectileFlightConfig>());
             var card = UpgradeRig.Card(UpgradeKind.SnipeChance, 0.15f);
-            var roll = new SnipeChanceRoll(rig.Upgrades, _armer, rig.Settings, _need, _armour, _assist)
+            var roll = new SnipeChanceRoll(rig.Upgrades, _armer, rig.Settings, _need, _armour, _assist, _level)
             {
                 Random01 = () => 0.25f,
                 Now = () => 0f

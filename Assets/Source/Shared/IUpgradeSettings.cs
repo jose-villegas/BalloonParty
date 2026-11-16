@@ -84,5 +84,11 @@ namespace BalloonParty.Shared
         ///     next load can roll again. 0 = every load rolls.
         /// </summary>
         float SnipeCooldownSeconds { get; }
+
+        /// <summary>
+        ///     On a purple (extra-colour) level, the Sharpshooter card's Snipe chance times this: its golden
+        ///     balloons are armoured, and the lance is what cracks them. 1 = no change.
+        /// </summary>
+        float PurpleLevelSnipeChanceScale { get; }
     }
 }

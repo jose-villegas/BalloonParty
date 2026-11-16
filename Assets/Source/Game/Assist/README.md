@@ -19,7 +19,7 @@ balloons that help, and eases off the threats that come by chance.
 
 | Roll | Base chance | Pity (`RunConfig`, `_assist` block) |
 |---|---|---|
-| Sharpshooter's Snipe (`Item/Snipe/SnipeChanceRoll`), once per ball loaded | The card's: 1% a stack, 3 stacks | `SnipePity`: growth 4, cap 50%. On the last heart, one stack goes 1%, 5%, 9%… a ball; three stacks 3%, 15%, 27%… It reads the larger of the player's need and the armour's, so armour left standing too long builds pity at full hearts too, gentler: at full armour (need 0.4) one stack goes 1%, 1.6%, 2.3%… a ball, 7.4% after ten |
+| Sharpshooter's Snipe (`Item/Snipe/SnipeChanceRoll`), once per ball loaded | The card's: 1% a stack, 3 stacks, tripled on a purple level (pity raises that) | `SnipePity`: growth 4, cap 50%. On the last heart, one stack goes 1%, 5%, 9%… a ball; three stacks 3%, 15%, 27%… It reads the larger of the player's need and the armour's, so armour left standing too long builds pity at full hearts too, gentler: at full armour (need 0.4) one stack goes 1%, 1.6%, 2.3%… a ball, 7.4% after ten |
 | Heart balloon off a purple level (`Balloon/Reward/RewardBalloonService`), once per line while a heart is missing | `HeartChanceMissingOne` (4%) / `HeartChanceMissingTwo` (12%) | `HeartPity`: growth 0.5, cap 50%. On the last heart: 12%, 18%, 24%… a line |
 | Any item on a cadence wave (`Item/ItemAssigner.RollWaveCount`) | The level's item-count curve's chance of more than 0 | `ItemPity`: growth 0.5, cap 90%. The curve's draw stands; a wave it gives none is lifted to one item by the share of the raised chance the curve leaves out, so any item comes at the raised chance. The initial board never rolls it, and a level without items builds none |
 

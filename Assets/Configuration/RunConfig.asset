@@ -93,6 +93,7 @@ MonoBehaviour:
       _retryDealBoost: 0
       _dealtFirst: 0
     _snipeCooldownSeconds: 8
+    _purpleLevelSnipeChanceScale: 3
   _assist:
     _dangerNeedWeight: 1
     _snipePity:

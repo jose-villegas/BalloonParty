@@ -95,9 +95,14 @@ namespace BalloonParty.Configuration
             "rapid fire can't chain them. 0 = every load rolls.")]
         [SerializeField] [Min(0f)] private float _snipeCooldownSeconds = 8f;
 
+        [Tooltip("On a purple (extra-colour) level, the Sharpshooter card's Snipe chance times this, for the armoured " +
+            "golden balloons there. 3 = a 1% card rolls 3% a pen. 1 = no change.")]
+        [SerializeField] [Min(1f)] private float _purpleLevelSnipeChanceScale = 3f;
+
         public int CardEveryLevels => _cardEveryLevels;
         public int CardsOffered => _cardsOffered;
         public IReadOnlyList<IUpgradeCardSettings> Cards => _cards;
         public float SnipeCooldownSeconds => _snipeCooldownSeconds;
+        public float PurpleLevelSnipeChanceScale => _purpleLevelSnipeChanceScale;
     }
 }
