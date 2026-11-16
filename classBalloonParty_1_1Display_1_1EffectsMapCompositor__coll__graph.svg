@@ -86,7 +86,7 @@ var sectionId = 'dynsection-1';
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:href="classBalloonParty_1_1Display_1_1EffectsClearingMaskView.html" target="_top" xlink:title="The clearing mask (Effects Layer Clearing): a small single&#45;channel target, bound globally as _Effects...">
+<g id="a_Node000004"><a xlink:href="classBalloonParty_1_1Display_1_1EffectsClearingMaskView.html" target="_top" xlink:title="The clearing mask (Effects Layer Clearing): a small two&#45;channel target, bound globally as _EffectsCle...">
 <polygon fill="white" stroke="#666666" points="401.75,-78.12 251.5,-78.12 251.5,-44.62 401.75,-44.62 401.75,-78.12"/>
 <text xml:space="preserve" text-anchor="start" x="259.5" y="-64.62" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Display.Effects</text>
 <text xml:space="preserve" text-anchor="middle" x="326.62" y="-51.88" font-family="Helvetica,sans-Serif" font-size="10.00">ClearingMaskView</text>

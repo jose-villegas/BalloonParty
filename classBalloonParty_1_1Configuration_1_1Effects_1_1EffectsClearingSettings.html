@@ -134,9 +134,6 @@ $(function(){initNavTree('classBalloonParty_1_1Configuration_1_1Effects_1_1Effec
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
-<tr class="memitem:a16f39afd1a1ce187a43742a8a68c00d4" id="r_a16f39afd1a1ce187a43742a8a68c00d4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a16f39afd1a1ce187a43742a8a68c00d4">ClearRadius</a><code> [get]</code></td></tr>
-<tr class="memdesc:a16f39afd1a1ce187a43742a8a68c00d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">World units from the ball's path to the clearing's edge, before it starts to close.  <br /></td></tr>
-<tr class="separator:a16f39afd1a1ce187a43742a8a68c00d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61c9ec13fc40e09bf32b9bd49e3f6776" id="r_a61c9ec13fc40e09bf32b9bd49e3f6776"><td class="memItemLeft" align="right" valign="top">Shader&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a61c9ec13fc40e09bf32b9bd49e3f6776">CompositeShader</a><code> [get]</code></td></tr>
 <tr class="separator:a61c9ec13fc40e09bf32b9bd49e3f6776"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abbc957a96b08d19af0bae6b81afecf39" id="r_abbc957a96b08d19af0bae6b81afecf39"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abbc957a96b08d19af0bae6b81afecf39">EdgeHigh</a><code> [get]</code></td></tr>
@@ -147,6 +144,15 @@ Properties</h2></td></tr>
 <tr class="separator:a52aed2196ec6ffb3dbc4745f8d85cc0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a475d847adea2c1f3e7965cd4692d1b61" id="r_a475d847adea2c1f3e7965cd4692d1b61"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a475d847adea2c1f3e7965cd4692d1b61">Enabled</a><code> [get]</code></td></tr>
 <tr class="separator:a475d847adea2c1f3e7965cd4692d1b61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2764fe9344c4b17c3a026572caeb7047" id="r_a2764fe9344c4b17c3a026572caeb7047"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2764fe9344c4b17c3a026572caeb7047">LensDispersion</a><code> [get]</code></td></tr>
+<tr class="memdesc:a2764fe9344c4b17c3a026572caeb7047"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far the dome's colours split apart, as a fraction of its bend.  <br /></td></tr>
+<tr class="separator:a2764fe9344c4b17c3a026572caeb7047"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac207a533416937da80b076750f475460" id="r_ac207a533416937da80b076750f475460"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac207a533416937da80b076750f475460">LensHighlight</a><code> [get]</code></td></tr>
+<tr class="memdesc:ac207a533416937da80b076750f475460"><td class="mdescLeft">&#160;</td><td class="mdescRight">Brightness of the glint and rim on the dome; 0 hides the glass.  <br /></td></tr>
+<tr class="separator:ac207a533416937da80b076750f475460"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64c46fea52267b895c09768bfff45331" id="r_a64c46fea52267b895c09768bfff45331"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a64c46fea52267b895c09768bfff45331">LensRefraction</a><code> [get]</code></td></tr>
+<tr class="memdesc:a64c46fea52267b895c09768bfff45331"><td class="mdescLeft">&#160;</td><td class="mdescRight">How far the glass dome over a ball bends the effects under its rim, as a fraction of its radius; 0 for none.  <br /></td></tr>
+<tr class="separator:a64c46fea52267b895c09768bfff45331"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d75e423e47651238b32af4c46437ab9" id="r_a5d75e423e47651238b32af4c46437ab9"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d75e423e47651238b32af4c46437ab9">LingerSeconds</a><code> [get]</code></td></tr>
 <tr class="memdesc:a5d75e423e47651238b32af4c46437ab9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds a stamp takes to decay from full to nothing.  <br /></td></tr>
 <tr class="separator:a5d75e423e47651238b32af4c46437ab9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -158,6 +164,15 @@ Properties</h2></td></tr>
 <tr class="separator:ae6c85ec15158a71a4c2afd6af6cdd514"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adea168a301633e1e2b7a79342f0deb2d" id="r_adea168a301633e1e2b7a79342f0deb2d"><td class="memItemLeft" align="right" valign="top">Shader&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adea168a301633e1e2b7a79342f0deb2d">MaskShader</a><code> [get]</code></td></tr>
 <tr class="separator:adea168a301633e1e2b7a79342f0deb2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a688aaf6187efb0ea8f546f8b528b300a" id="r_a688aaf6187efb0ea8f546f8b528b300a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a688aaf6187efb0ea8f546f8b528b300a">MaxClearRadius</a><code> [get]</code></td></tr>
+<tr class="memdesc:a688aaf6187efb0ea8f546f8b528b300a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clearing radius in world units for a ball with <a class="el" href="#ad8fc129350eedfafdf6cad07df4d472c" title="The shield count at which a clearing reaches MaxClearRadius.">ShieldsForMaxRadius</a> shields or more; between the two it grows evenly with each shield.  <br /></td></tr>
+<tr class="separator:a688aaf6187efb0ea8f546f8b528b300a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae80f0cb4df65013533b18e72d7390461" id="r_ae80f0cb4df65013533b18e72d7390461"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae80f0cb4df65013533b18e72d7390461">MinClearRadius</a><code> [get]</code></td></tr>
+<tr class="memdesc:ae80f0cb4df65013533b18e72d7390461"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clearing radius in world units for a ball with one shield; one with none left clears as one.  <br /></td></tr>
+<tr class="separator:ae80f0cb4df65013533b18e72d7390461"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8fc129350eedfafdf6cad07df4d472c" id="r_ad8fc129350eedfafdf6cad07df4d472c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad8fc129350eedfafdf6cad07df4d472c">ShieldsForMaxRadius</a><code> [get]</code></td></tr>
+<tr class="memdesc:ad8fc129350eedfafdf6cad07df4d472c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The shield count at which a clearing reaches <a class="el" href="#a688aaf6187efb0ea8f546f8b528b300a" title="Clearing radius in world units for a ball with ShieldsForMaxRadius shields or more; between the two i...">MaxClearRadius</a>.  <br /></td></tr>
+<tr class="separator:ad8fc129350eedfafdf6cad07df4d472c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8df62ee99a3492a5ab7f2abf424a6d97" id="r_a8df62ee99a3492a5ab7f2abf424a6d97"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8df62ee99a3492a5ab7f2abf424a6d97">Strength</a><code> [get]</code></td></tr>
 <tr class="memdesc:a8df62ee99a3492a5ab7f2abf424a6d97"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much of the effects a full clearing removes: 1 hides them, below 1 leaves a trace.  <br /></td></tr>
 <tr class="separator:a8df62ee99a3492a5ab7f2abf424a6d97"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -167,24 +182,34 @@ Properties</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a4948ed486c0280cdcc0df2b60598b416" id="r_a4948ed486c0280cdcc0df2b60598b416"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4948ed486c0280cdcc0df2b60598b416">_clearRadius</a> = 1.2f</td></tr>
-<tr class="separator:a4948ed486c0280cdcc0df2b60598b416"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a056f2fb9845e4c4c11be00b545f0315c" id="r_a056f2fb9845e4c4c11be00b545f0315c"><td class="memItemLeft" align="right" valign="top">Shader&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a056f2fb9845e4c4c11be00b545f0315c">_compositeShader</a></td></tr>
 <tr class="separator:a056f2fb9845e4c4c11be00b545f0315c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9aa4b47810e28144572f7eaaf5b8ef8" id="r_aa9aa4b47810e28144572f7eaaf5b8ef8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9aa4b47810e28144572f7eaaf5b8ef8">_edgeHigh</a> = 0.35f</td></tr>
+<tr class="memitem:aa9aa4b47810e28144572f7eaaf5b8ef8" id="r_aa9aa4b47810e28144572f7eaaf5b8ef8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9aa4b47810e28144572f7eaaf5b8ef8">_edgeHigh</a> = 0.9f</td></tr>
 <tr class="separator:aa9aa4b47810e28144572f7eaaf5b8ef8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5c20a07e5ef5f30bc219f3bf3086b5a" id="r_ac5c20a07e5ef5f30bc219f3bf3086b5a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac5c20a07e5ef5f30bc219f3bf3086b5a">_edgeLow</a> = 0.05f</td></tr>
+<tr class="memitem:ac5c20a07e5ef5f30bc219f3bf3086b5a" id="r_ac5c20a07e5ef5f30bc219f3bf3086b5a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac5c20a07e5ef5f30bc219f3bf3086b5a">_edgeLow</a> = 0f</td></tr>
 <tr class="separator:ac5c20a07e5ef5f30bc219f3bf3086b5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ecf4bbf9f1a2a9a71f06ef021203450" id="r_a6ecf4bbf9f1a2a9a71f06ef021203450"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6ecf4bbf9f1a2a9a71f06ef021203450">_enabled</a> = true</td></tr>
 <tr class="separator:a6ecf4bbf9f1a2a9a71f06ef021203450"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e58ad18809d3559113e61423cbca91d" id="r_a8e58ad18809d3559113e61423cbca91d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8e58ad18809d3559113e61423cbca91d">_lensDispersion</a> = 0.15f</td></tr>
+<tr class="separator:a8e58ad18809d3559113e61423cbca91d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee4bfab04c9b6c528f855e477454f4b2" id="r_aee4bfab04c9b6c528f855e477454f4b2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aee4bfab04c9b6c528f855e477454f4b2">_lensHighlight</a> = 0.6f</td></tr>
+<tr class="separator:aee4bfab04c9b6c528f855e477454f4b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a8109105929b3f578f650e6cb8e4848" id="r_a8a8109105929b3f578f650e6cb8e4848"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a8109105929b3f578f650e6cb8e4848">_lensRefraction</a> = 0.4f</td></tr>
+<tr class="separator:a8a8109105929b3f578f650e6cb8e4848"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeab976381e012927fba1eb2c26a7f033" id="r_aeab976381e012927fba1eb2c26a7f033"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeab976381e012927fba1eb2c26a7f033">_lingerSeconds</a> = 0.6f</td></tr>
 <tr class="separator:aeab976381e012927fba1eb2c26a7f033"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2fcf6e66dd6b2f49f0fd311e35f2a122" id="r_a2fcf6e66dd6b2f49f0fd311e35f2a122"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2fcf6e66dd6b2f49f0fd311e35f2a122">_mapDownscale</a> = 1</td></tr>
 <tr class="separator:a2fcf6e66dd6b2f49f0fd311e35f2a122"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad0070669bf49bda2aff6eaf3ff392c78" id="r_ad0070669bf49bda2aff6eaf3ff392c78"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad0070669bf49bda2aff6eaf3ff392c78">_maskDownscale</a> = 8</td></tr>
+<tr class="memitem:ad0070669bf49bda2aff6eaf3ff392c78" id="r_ad0070669bf49bda2aff6eaf3ff392c78"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad0070669bf49bda2aff6eaf3ff392c78">_maskDownscale</a> = 4</td></tr>
 <tr class="separator:ad0070669bf49bda2aff6eaf3ff392c78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae87dc91c90241d42fa1c01f85a87e81e" id="r_ae87dc91c90241d42fa1c01f85a87e81e"><td class="memItemLeft" align="right" valign="top">Shader&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae87dc91c90241d42fa1c01f85a87e81e">_maskShader</a></td></tr>
 <tr class="separator:ae87dc91c90241d42fa1c01f85a87e81e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab420e006ccba0888125eb5dbdc82e8cb" id="r_ab420e006ccba0888125eb5dbdc82e8cb"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab420e006ccba0888125eb5dbdc82e8cb">_maxClearRadius</a> = 1.2f</td></tr>
+<tr class="separator:ab420e006ccba0888125eb5dbdc82e8cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b8324d7b9324fc79e7429dae39f8c9c" id="r_a0b8324d7b9324fc79e7429dae39f8c9c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0b8324d7b9324fc79e7429dae39f8c9c">_minClearRadius</a> = 0.48f</td></tr>
+<tr class="separator:a0b8324d7b9324fc79e7429dae39f8c9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5565f6b19640965ee7de0d3477368f10" id="r_a5565f6b19640965ee7de0d3477368f10"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5565f6b19640965ee7de0d3477368f10">_shieldsForMaxRadius</a> = 10</td></tr>
+<tr class="separator:a5565f6b19640965ee7de0d3477368f10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d1c3d8a36f66d087a9aa21559e24dde" id="r_a5d1c3d8a36f66d087a9aa21559e24dde"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d1c3d8a36f66d087a9aa21559e24dde">_strength</a> = 1f</td></tr>
 <tr class="separator:a5d1c3d8a36f66d087a9aa21559e24dde"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4095d9aaa31d9031352dbaf666ca043e" id="r_a4095d9aaa31d9031352dbaf666ca043e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4095d9aaa31d9031352dbaf666ca043e">_useUnscaledTime</a></td></tr>
@@ -193,28 +218,6 @@ Private Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Authored tuning for the effects clearing; wired into <code>AppLifetimeScope</code>. </p>
 </div><h2 class="groupheader">Member Data Documentation</h2>
-<a id="a4948ed486c0280cdcc0df2b60598b416" name="a4948ed486c0280cdcc0df2b60598b416"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4948ed486c0280cdcc0df2b60598b416">&#9670;&#160;</a></span>_clearRadius</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float BalloonParty.Configuration.Effects.EffectsClearingSettings._clearRadius = 1.2f</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a056f2fb9845e4c4c11be00b545f0315c" name="a056f2fb9845e4c4c11be00b545f0315c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a056f2fb9845e4c4c11be00b545f0315c">&#9670;&#160;</a></span>_compositeShader</h2>
 
@@ -247,7 +250,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Configuration.Effects.EffectsClearingSettings._edgeHigh = 0.35f</td>
+          <td class="memname">float BalloonParty.Configuration.Effects.EffectsClearingSettings._edgeHigh = 0.9f</td>
         </tr>
       </table>
   </td>
@@ -269,7 +272,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">float BalloonParty.Configuration.Effects.EffectsClearingSettings._edgeLow = 0.05f</td>
+          <td class="memname">float BalloonParty.Configuration.Effects.EffectsClearingSettings._edgeLow = 0f</td>
         </tr>
       </table>
   </td>
@@ -292,6 +295,72 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">bool BalloonParty.Configuration.Effects.EffectsClearingSettings._enabled = true</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8e58ad18809d3559113e61423cbca91d" name="a8e58ad18809d3559113e61423cbca91d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e58ad18809d3559113e61423cbca91d">&#9670;&#160;</a></span>_lensDispersion</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.EffectsClearingSettings._lensDispersion = 0.15f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aee4bfab04c9b6c528f855e477454f4b2" name="aee4bfab04c9b6c528f855e477454f4b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee4bfab04c9b6c528f855e477454f4b2">&#9670;&#160;</a></span>_lensHighlight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.EffectsClearingSettings._lensHighlight = 0.6f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8a8109105929b3f578f650e6cb8e4848" name="a8a8109105929b3f578f650e6cb8e4848"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a8109105929b3f578f650e6cb8e4848">&#9670;&#160;</a></span>_lensRefraction</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.EffectsClearingSettings._lensRefraction = 0.4f</td>
         </tr>
       </table>
   </td>
@@ -357,7 +426,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">int BalloonParty.Configuration.Effects.EffectsClearingSettings._maskDownscale = 8</td>
+          <td class="memname">int BalloonParty.Configuration.Effects.EffectsClearingSettings._maskDownscale = 4</td>
         </tr>
       </table>
   </td>
@@ -380,6 +449,72 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">Shader BalloonParty.Configuration.Effects.EffectsClearingSettings._maskShader</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab420e006ccba0888125eb5dbdc82e8cb" name="ab420e006ccba0888125eb5dbdc82e8cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab420e006ccba0888125eb5dbdc82e8cb">&#9670;&#160;</a></span>_maxClearRadius</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.EffectsClearingSettings._maxClearRadius = 1.2f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0b8324d7b9324fc79e7429dae39f8c9c" name="a0b8324d7b9324fc79e7429dae39f8c9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b8324d7b9324fc79e7429dae39f8c9c">&#9670;&#160;</a></span>_minClearRadius</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.EffectsClearingSettings._minClearRadius = 0.48f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5565f6b19640965ee7de0d3477368f10" name="a5565f6b19640965ee7de0d3477368f10"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5565f6b19640965ee7de0d3477368f10">&#9670;&#160;</a></span>_shieldsForMaxRadius</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Effects.EffectsClearingSettings._shieldsForMaxRadius = 10</td>
         </tr>
       </table>
   </td>
@@ -436,32 +571,6 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
-<a id="a16f39afd1a1ce187a43742a8a68c00d4" name="a16f39afd1a1ce187a43742a8a68c00d4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a16f39afd1a1ce187a43742a8a68c00d4">&#9670;&#160;</a></span>ClearRadius</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">float BalloonParty.Configuration.Effects.EffectsClearingSettings.ClearRadius</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>World units from the ball's path to the clearing's edge, before it starts to close. </p>
-
-<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html#a2fd7c2a3aac71aa9598997c2d66dd94f">BalloonParty.Configuration.Effects.IEffectsClearingSettings</a>.</p>
-
-</div>
-</div>
 <a id="a61c9ec13fc40e09bf32b9bd49e3f6776" name="a61c9ec13fc40e09bf32b9bd49e3f6776"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a61c9ec13fc40e09bf32b9bd49e3f6776">&#9670;&#160;</a></span>CompositeShader</h2>
 
@@ -559,6 +668,84 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html#a609ca420c9188dc4cc2b801e167b2734">BalloonParty.Configuration.Effects.IEffectsClearingSettings</a>.</p>
+
+</div>
+</div>
+<a id="a2764fe9344c4b17c3a026572caeb7047" name="a2764fe9344c4b17c3a026572caeb7047"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2764fe9344c4b17c3a026572caeb7047">&#9670;&#160;</a></span>LensDispersion</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.EffectsClearingSettings.LensDispersion</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How far the dome's colours split apart, as a fraction of its bend. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html#af818f3771f8ebc89f091955970d64ddb">BalloonParty.Configuration.Effects.IEffectsClearingSettings</a>.</p>
+
+</div>
+</div>
+<a id="ac207a533416937da80b076750f475460" name="ac207a533416937da80b076750f475460"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac207a533416937da80b076750f475460">&#9670;&#160;</a></span>LensHighlight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.EffectsClearingSettings.LensHighlight</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Brightness of the glint and rim on the dome; 0 hides the glass. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html#a2c8079b2ba6028ba9646f04cfb2def1a">BalloonParty.Configuration.Effects.IEffectsClearingSettings</a>.</p>
+
+</div>
+</div>
+<a id="a64c46fea52267b895c09768bfff45331" name="a64c46fea52267b895c09768bfff45331"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64c46fea52267b895c09768bfff45331">&#9670;&#160;</a></span>LensRefraction</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.EffectsClearingSettings.LensRefraction</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How far the glass dome over a ball bends the effects under its rim, as a fraction of its radius; 0 for none. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html#a40dec346f386b7c5733073903712fc19">BalloonParty.Configuration.Effects.IEffectsClearingSettings</a>.</p>
 
 </div>
 </div>
@@ -661,6 +848,84 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html#a6b708c324bdfa4ab3e6aa15e7bb273b6">BalloonParty.Configuration.Effects.IEffectsClearingSettings</a>.</p>
+
+</div>
+</div>
+<a id="a688aaf6187efb0ea8f546f8b528b300a" name="a688aaf6187efb0ea8f546f8b528b300a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a688aaf6187efb0ea8f546f8b528b300a">&#9670;&#160;</a></span>MaxClearRadius</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.EffectsClearingSettings.MaxClearRadius</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Clearing radius in world units for a ball with <a class="el" href="#ad8fc129350eedfafdf6cad07df4d472c" title="The shield count at which a clearing reaches MaxClearRadius.">ShieldsForMaxRadius</a> shields or more; between the two it grows evenly with each shield. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html#ad9bb87b827a231dd09daeaa722373003">BalloonParty.Configuration.Effects.IEffectsClearingSettings</a>.</p>
+
+</div>
+</div>
+<a id="ae80f0cb4df65013533b18e72d7390461" name="ae80f0cb4df65013533b18e72d7390461"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae80f0cb4df65013533b18e72d7390461">&#9670;&#160;</a></span>MinClearRadius</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.Effects.EffectsClearingSettings.MinClearRadius</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Clearing radius in world units for a ball with one shield; one with none left clears as one. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html#aa736dc5247795adbf0298402ec063a6c">BalloonParty.Configuration.Effects.IEffectsClearingSettings</a>.</p>
+
+</div>
+</div>
+<a id="ad8fc129350eedfafdf6cad07df4d472c" name="ad8fc129350eedfafdf6cad07df4d472c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8fc129350eedfafdf6cad07df4d472c">&#9670;&#160;</a></span>ShieldsForMaxRadius</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Effects.EffectsClearingSettings.ShieldsForMaxRadius</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The shield count at which a clearing reaches <a class="el" href="#a688aaf6187efb0ea8f546f8b528b300a" title="Clearing radius in world units for a ball with ShieldsForMaxRadius shields or more; between the two i...">MaxClearRadius</a>. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html#a0f25ac274940ed27b28d8fb1f043a848">BalloonParty.Configuration.Effects.IEffectsClearingSettings</a>.</p>
 
 </div>
 </div>

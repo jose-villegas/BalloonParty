@@ -120,7 +120,7 @@ $(function(){initNavTree('classBalloonParty_1_1Display_1_1EffectsClearingMaskVie
 </div><!--header-->
 <div class="contents">
 
-<p>The clearing mask (<a class="el" href="plan_effects_layer_clearing.html">Effects Layer Clearing</a>): a small single-channel target, bound globally as <code>_EffectsClearMask</code>, that says how cleared each point of the screen is.  
+<p>The clearing mask (<a class="el" href="plan_effects_layer_clearing.html">Effects Layer Clearing</a>): a small two-channel target, bound globally as <code>_EffectsClearMask</code>, that says how cleared each point of the screen is (red) and how wide the dome there is (green, its radius in view heights).  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Display.EffectsClearingMaskView:</div>
@@ -193,6 +193,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a60e5bd4371937cf6068edf5c4d5310e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ec899b28b1f42038f80fde46d4a0b30" id="r_a1ec899b28b1f42038f80fde46d4a0b30"><td class="memItemLeft" align="right" valign="top">Material&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1ec899b28b1f42038f80fde46d4a0b30">_material</a></td></tr>
 <tr class="separator:a1ec899b28b1f42038f80fde46d4a0b30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a62c907097bb7e7f091236afcb66e7e" id="r_a8a62c907097bb7e7f091236afcb66e7e"><td class="memItemLeft" align="right" valign="top">readonly float[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8a62c907097bb7e7f091236afcb66e7e">_radii</a> = new float[<a class="el" href="classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#a28fd5f656d4be042e15e061a2bf90020">EffectsClearingStamper.MaxStamps</a>]</td></tr>
+<tr class="separator:a8a62c907097bb7e7f091236afcb66e7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af82012d8392a6150c20da7366903d8c1" id="r_af82012d8392a6150c20da7366903d8c1"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af82012d8392a6150c20da7366903d8c1">_remaining</a></td></tr>
 <tr class="separator:af82012d8392a6150c20da7366903d8c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3af9a51ca934d48c586c8c3a7d5c1167" id="r_a3af9a51ca934d48c586c8c3a7d5c1167"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html">IEffectsClearingSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3af9a51ca934d48c586c8c3a7d5c1167">_settings</a></td></tr>
@@ -206,21 +208,23 @@ Private Attributes</h2></td></tr>
 Static Private Attributes</h2></td></tr>
 <tr class="memitem:a83dae416f7e4eb6befc8066df0ea1d40" id="r_a83dae416f7e4eb6befc8066df0ea1d40"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a83dae416f7e4eb6befc8066df0ea1d40">AspectId</a> = Shader.PropertyToID(&quot;_Aspect&quot;)</td></tr>
 <tr class="separator:a83dae416f7e4eb6befc8066df0ea1d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26e0908a3d96490693c5f4fae5895d21" id="r_a26e0908a3d96490693c5f4fae5895d21"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a26e0908a3d96490693c5f4fae5895d21">ClearLensId</a> = Shader.PropertyToID(&quot;_EffectsClearLens&quot;)</td></tr>
+<tr class="separator:a26e0908a3d96490693c5f4fae5895d21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8cf80c4c9c7e04ab8a07e29c709c13a" id="r_ae8cf80c4c9c7e04ab8a07e29c709c13a"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae8cf80c4c9c7e04ab8a07e29c709c13a">ClearParamsId</a> = Shader.PropertyToID(&quot;_EffectsClearParams&quot;)</td></tr>
 <tr class="separator:ae8cf80c4c9c7e04ab8a07e29c709c13a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae516a69c2a39ea64b3de461b7e0a3f6f" id="r_ae516a69c2a39ea64b3de461b7e0a3f6f"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae516a69c2a39ea64b3de461b7e0a3f6f">DecayId</a> = Shader.PropertyToID(&quot;_Decay&quot;)</td></tr>
 <tr class="separator:ae516a69c2a39ea64b3de461b7e0a3f6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee2dfb0a9f042df58b6bac35f181d1b3" id="r_aee2dfb0a9f042df58b6bac35f181d1b3"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aee2dfb0a9f042df58b6bac35f181d1b3">MaskTexId</a> = Shader.PropertyToID(&quot;_EffectsClearMask&quot;)</td></tr>
 <tr class="separator:aee2dfb0a9f042df58b6bac35f181d1b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c79cc940657f344539a48f2ff2273ab" id="r_a2c79cc940657f344539a48f2ff2273ab"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2c79cc940657f344539a48f2ff2273ab">RadiusId</a> = Shader.PropertyToID(&quot;_Radius&quot;)</td></tr>
-<tr class="separator:a2c79cc940657f344539a48f2ff2273ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0d55bb5baade44d75e8cc2d81fe152e" id="r_ab0d55bb5baade44d75e8cc2d81fe152e"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab0d55bb5baade44d75e8cc2d81fe152e">RadiiId</a> = Shader.PropertyToID(&quot;_Radii&quot;)</td></tr>
+<tr class="separator:ab0d55bb5baade44d75e8cc2d81fe152e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50b96826a342893366f639e3867edc50" id="r_a50b96826a342893366f639e3867edc50"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a50b96826a342893366f639e3867edc50">StampCountId</a> = Shader.PropertyToID(&quot;_StampCount&quot;)</td></tr>
 <tr class="separator:a50b96826a342893366f639e3867edc50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae5cca99d180a2a95ad05569ebedbd299" id="r_ae5cca99d180a2a95ad05569ebedbd299"><td class="memItemLeft" align="right" valign="top">static readonly int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae5cca99d180a2a95ad05569ebedbd299">StampsId</a> = Shader.PropertyToID(&quot;_Stamps&quot;)</td></tr>
 <tr class="separator:ae5cca99d180a2a95ad05569ebedbd299"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The clearing mask (<a class="el" href="plan_effects_layer_clearing.html">Effects Layer Clearing</a>): a small single-channel target, bound globally as <code>_EffectsClearMask</code>, that says how cleared each point of the screen is. </p>
+<div class="textblock"><p>The clearing mask (<a class="el" href="plan_effects_layer_clearing.html">Effects Layer Clearing</a>): a small two-channel target, bound globally as <code>_EffectsClearMask</code>, that says how cleared each point of the screen is (red) and how wide the dome there is (green, its radius in view heights). </p>
 <p>Once a frame one blit decays last frame's mask and stamps each ball in flight on it. A stamp peaks on the ball's path, so as it decays the cleared area shrinks inward. Goes idle (no blit, mask black) once nothing has stamped for a full linger time. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a9c82f43bfdaf889af9f6e95ee4628b4d" name="a9c82f43bfdaf889af9f6e95ee4628b4d"></a>
@@ -615,6 +619,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a8a62c907097bb7e7f091236afcb66e7e" name="a8a62c907097bb7e7f091236afcb66e7e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a62c907097bb7e7f091236afcb66e7e">&#9670;&#160;</a></span>_radii</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly float [] BalloonParty.Display.EffectsClearingMaskView._radii = new float[<a class="el" href="classBalloonParty_1_1Display_1_1EffectsClearingStamper.html#a28fd5f656d4be042e15e061a2bf90020">EffectsClearingStamper.MaxStamps</a>]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="af82012d8392a6150c20da7366903d8c1" name="af82012d8392a6150c20da7366903d8c1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af82012d8392a6150c20da7366903d8c1">&#9670;&#160;</a></span>_remaining</h2>
 
@@ -725,6 +751,28 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a26e0908a3d96490693c5f4fae5895d21" name="a26e0908a3d96490693c5f4fae5895d21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26e0908a3d96490693c5f4fae5895d21">&#9670;&#160;</a></span>ClearLensId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Display.EffectsClearingMaskView.ClearLensId = Shader.PropertyToID(&quot;_EffectsClearLens&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ae8cf80c4c9c7e04ab8a07e29c709c13a" name="ae8cf80c4c9c7e04ab8a07e29c709c13a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae8cf80c4c9c7e04ab8a07e29c709c13a">&#9670;&#160;</a></span>ClearParamsId</h2>
 
@@ -813,8 +861,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a2c79cc940657f344539a48f2ff2273ab" name="a2c79cc940657f344539a48f2ff2273ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2c79cc940657f344539a48f2ff2273ab">&#9670;&#160;</a></span>RadiusId</h2>
+<a id="ab0d55bb5baade44d75e8cc2d81fe152e" name="ab0d55bb5baade44d75e8cc2d81fe152e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0d55bb5baade44d75e8cc2d81fe152e">&#9670;&#160;</a></span>RadiiId</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -823,7 +871,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">readonly int BalloonParty.Display.EffectsClearingMaskView.RadiusId = Shader.PropertyToID(&quot;_Radius&quot;)</td>
+          <td class="memname">readonly int BalloonParty.Display.EffectsClearingMaskView.RadiiId = Shader.PropertyToID(&quot;_Radii&quot;)</td>
         </tr>
       </table>
   </td>

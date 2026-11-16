@@ -202,48 +202,60 @@ Main effects map (phase 3, open)</h3>
 <hr  />
 <h2><a class="anchor" id="autotoc_md473"></a>
 The clearing mask</h2>
-<p>One low-resolution, single-channel target: <code>R8</code>, screen size divided by <code>MaskDownscale</code> (default 8, so 135 × 300 on a 1080 × 2400 phone). Two of them ping-pong. Once a frame, from <code>LateUpdate</code> (blits stay outside URP's RenderGraph, as <code><a class="el" href="Display_2README_8md.html">Display/README.md</a></code> requires), one blit:</p>
+<p>One low-resolution, two-channel target: <code>RGHalf</code> (<code>ARGBHalf</code>, then <code>ARGB32</code>, where a device lacks it), screen size divided by <code>MaskDownscale</code> (default 4, so 270 × 600 on a 1080 × 2400 phone; the glass below reads its slope, which shows steps at 8 bits or past 4). Red is how cleared a point is; green is the radius of the stamp that set it, so the glass knows how big the dome under each point is. Two of them ping-pong. Once a frame, from <code>LateUpdate</code> (blits stay outside URP's RenderGraph, as <code><a class="el" href="Display_2README_8md.html">Display/README.md</a></code> requires), one blit:</p>
 <ol type="1">
 <li><b>Decay</b>: <code>mask = max(0, previous − Δt / LingerSeconds)</code>.</li>
-<li><b>Stamp</b>: for each of up to <code>MaxStamps</code> capsules (8, the shader's fixed array), <code>mask = max(mask, profile(d / Radius))</code>, where <code>d</code> is the distance from the fragment to the capsule's segment, and <code>profile(x) = 1 − x²</code> inside the radius, 0 outside.</li>
+<li><b>Stamp</b>: for each of up to <code>MaxStamps</code> capsules (8, the shader's fixed array), <code>mask = max(mask, profile(d / Radius))</code>, where <code>d</code> is the distance from the fragment to the capsule's segment, <code>Radius</code> that stamp's own, and <code>profile(x) = 1 − x²</code> inside the radius, 0 outside. Green takes the radius of whichever stamp, or last frame's value, won.</li>
 </ol>
 <p>The composite reads the mask bilinearly and fades the map by <code>fade = 1 − Strength × smoothstep(EdgeLow, EdgeHigh, mask)</code>. Because the stamp peaks at the centre and the decay is uniform, the visible edge (where <code>mask</code> crosses <code>EdgeLow</code>) moves inward over time. That is the decaying radius. The clearing's visible radius at age <code>t</code> is about \(R\sqrt{1 - E - t/L}\), with \(E\) the edge and \(L\) the linger time, so it closes up at \(t = L(1 - E)\).</p>
+<h3><a class="anchor" id="autotoc_md474"></a>
+The glass</h3>
+<p>The cut alone read too strong to the owner, so the clearing is drawn as a dome of thick glass over each ball. A stamp's profile, 1 − (d/R)², is a dome's height, so the composite takes the mask's slope (four more mask taps, a few texels apart) as the glass's surface:</p>
+<ul>
+<li><b>Refraction.</b> The map is sampled toward the top of the dome, by <code>LensRefraction</code> of the dome's radius at a fresh rim, so what lies under the glass reads magnified and spreads away from the ball, and a small dome is the same glass as a big one. The bend eases in over the glass's outer edge, so the rim meets what lies outside it without a tear.</li>
+<li><b>Dispersion.</b> Red and blue sample a little further and nearer than green (<code>LensDispersion</code>, a fraction of the bend): a colour fringe where the glass is steep.</li>
+<li><b>Fade.</b> Effects under the glass fade from the rim in: <code>EdgeLow</code> 0 and <code>EdgeHigh</code> 0.9 spread the fade over the whole dome, so they thin slowly from the rim and are near gone only over the ball, which stays readable.</li>
+<li><b>Glint.</b> A mirror highlight off the dome's normal and a thin bright rim (<code>LensHighlight</code>) are added light, so the dome shows over the board too, not only over effects.</li>
+</ul>
+<p>Decay subtracts evenly, so an older part of the dome keeps its slope and shrinks inward: the corridor behind a ball is a glass tube that narrows and closes. Outside the glass the composite branches to one plain map tap. The glass bends only the effects map. The ball and the board under it stay sharp, which is the point.</p>
 <p>How the stamps are fed:</p>
 <ul>
 <li><code>EffectsClearingController</code> loops <code>IProjectileRegistry.InFlightCount</code> / <code>InFlightPositionAt(i)</code> every frame. The registry already exists, is run-scoped and is cheap to walk.</li>
 <li><code>EffectsClearingStamper</code> remembers each ball's last position, keyed by its registry model, so a stamp is a capsule from last frame's position to this frame's. A fast ball leaves an unbroken corridor instead of a row of dots. A ball seen for the first time stamps a disc. A ball that retired drops out.</li>
-<li>Positions go to viewport space through the main camera. The radius is in world units (<code>ClearRadius</code>) and converted with the camera's orthographic size, so a cinematic zoom scales the clearing with the board.</li>
-<li>The radius is deliberately large: the default is about two balloon widths, to be tuned on the phone. The rejected attempt used a circle a little wider than the ball, and it read as nothing.</li>
+<li>Positions go to viewport space through the main camera. The radius is in world units and converted with the camera's orthographic size, so a cinematic zoom scales the clearing with the board.</li>
+<li><b>The radius follows the ball's shields</b>, as the owner asked: <code>MinClearRadius</code> (0.48) at one shield, growing evenly with each shield to <code>MaxClearRadius</code> (1.2) at <code>ShieldsForMaxRadius</code> (10), and no wider past it. A ball with no shields left, on its last leg, clears as one. The rejected attempt used a circle a little wider than the ball, and it read as nothing, so one shield is still about a balloon wide.</li>
 <li>Δt is <b>game time</b> (<code>Time.deltaTime</code>) while a ball flies: slow-mo stretches a clearing along with the ball, and a pause holds it. Once no ball is in flight it's real time, so a freeze that starts after the shot can't hold a clearing open. <code>UseUnscaledTime</code> puts the flight on real time too.</li>
 </ul>
 <p><code>MaxStamps</code> caps the uniform array. It's a constant, not a setting: a shader array's size is fixed when it compiles. More balls than that in flight (a split shot, say) keep the nearest <code>MaxStamps</code> to the screen's centre. Nothing in today's shots comes close.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md475"></a>
+<h2><a class="anchor" id="autotoc_md476"></a>
 Compositing</h2>
 <p>The effects camera is a runtime child of the camera it serves, like <code>SceneCaptureService</code>'s capture camera. It has the same projection, mirrored every frame, culls only the effect layers, clears to transparent black and has post-processing off. Its target is the map: <code>ARGB32</code> for the HUD and <code>ARGBHalf</code> for the main camera, whose colour buffer is HDR and so keeps values above 1 for bloom.</p>
 <p>Effects render into the map <em>premultiplied</em>, with correct coverage in alpha. Most shaders already do that: URP's sprite shaders blend alpha with <code>One OneMinusSrcAlpha</code>, the built-in <code>Sprites/Default</code> and TMP are premultiplied, and <code>Particle/Glow</code> and <code>Particle/SceneLit</code> set alpha blending of their own. Shaders that write <code>Blend [_SrcBlend] [_DstBlend]</code> with no alpha term (<code>Particle/LightResponsive</code>, <code>Particle/SpecularDrop</code>, <code>Display/TraceGlitterLine</code>) would leave the wrong coverage. Each gets an explicit alpha blend: <code>One OneMinusSrcAlpha</code> when alpha-blended, <code>Zero One</code> when additive, so additive light adds no coverage. Phase 2 audits the materials actually in the HUD map. Phase 3 does the same for the main map.</p>
 <p>The composite is one camera-fitted quad (built with <code>QuadRendererBuilder</code>, like the light overlay) with <code>Blend One OneMinusSrcAlpha</code>, returning <code>map × fade</code>. With the mask empty, <code>fade</code> is 1 and the result is the effects exactly as they drew before, the same blend into the same frame.</p>
-<h3><a class="anchor" id="autotoc_md476"></a>
+<h3><a class="anchor" id="autotoc_md477"></a>
 Idle</h3>
 <p>While no ball is in flight and the mask has fully decayed, a map would only reproduce the frame. So the compositor turns it off: the effect layers go back into the camera's own mask, the effects camera stops and the quad hides. The first ball fired turns it back on. The mask is empty on that frame, so the switch can't be seen. Aiming, the level-up and menus cost nothing extra.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md478"></a>
+<h2><a class="anchor" id="autotoc_md479"></a>
 Mobile cost</h2>
 <p>Measured against a 1080 × 2400 panel at 60 fps (2.6 M pixels). Real numbers come from the device, not from this table.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Item   </th><th class="markdownTableHeadNone">Per frame while live   </th><th class="markdownTableHeadNone">Notes    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Mask blit   </td><td class="markdownTableBodyNone">40 k fragments, 8 capsule tests each   </td><td class="markdownTableBodyNone">negligible    </td></tr>
+<td class="markdownTableBodyNone">Mask blit   </td><td class="markdownTableBodyNone">160 k fragments, 8 capsule tests each   </td><td class="markdownTableBodyNone">negligible    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Mask sample in the composite   </td><td class="markdownTableBodyNone">1 bilinear tap per pixel from a 40 kB texture   </td><td class="markdownTableBodyNone">stays in cache    </td></tr>
+<td class="markdownTableBodyNone">Mask sample in the composite   </td><td class="markdownTableBodyNone">1 bilinear tap per pixel from a 650 kB texture   </td><td class="markdownTableBodyNone">stays in cache    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">The glass   </td><td class="markdownTableBodyNone">4 more mask taps and 3 map taps (not 1) per pixel under a dome   </td><td class="markdownTableBodyNone">a few balls' worth of the screen    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">HUD map, <code>ARGB32</code>   </td><td class="markdownTableBodyNone">about 10 MB stored + 10 MB read back ≈ 1.2 GB/s   </td><td class="markdownTableBodyNone"><code>MapDownscale</code> 2 quarters it, at the cost of softer lines. Default 1    </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Main map, <code>ARGBHalf</code>   </td><td class="markdownTableBodyNone">about 2.4 GB/s at full size   </td><td class="markdownTableBodyNone">the expensive one, which is one reason phase 3 is gated    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Extra camera per map   </td><td class="markdownTableBodyNone">one cull and one RenderGraph setup on the CPU   </td><td class="markdownTableBodyNone">effect layers only, so few renderers    </td></tr>
+<td class="markdownTableBodyNone">Main map, <code>ARGBHalf</code>   </td><td class="markdownTableBodyNone">about 2.4 GB/s at full size   </td><td class="markdownTableBodyNone">the expensive one, which is one reason phase 3 is gated    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Extra camera per map   </td><td class="markdownTableBodyNone">one cull and one RenderGraph setup on the CPU   </td><td class="markdownTableBodyNone">effect layers only, so few renderers    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Effects no longer drawn by their own camera   </td><td class="markdownTableBodyNone">a saving   </td><td class="markdownTableBodyNone">they draw once, into the map   </td></tr>
 </table>
 <p>The idle rule means none of this is paid while aiming. The HUD stack already pays one full-screen copy (see <code>HudCamera</code>). The HUD map is a second one of about that size, so the expected cost is "one more HUD camera" for the time a ball is in flight. Phase 2 measures it on the phone with the profiler before phase 3 is started.</p>
@@ -253,18 +265,18 @@ Mobile cost</h2>
 <li><b>Masking inside every effect shader</b> with no map: the cheapest on the GPU, but every effect shader, including the stock sprite, particle and TMP ones, would need a project copy that samples the mask. Every future effect would have to remember to opt in. It also isn't the layered composition asked for.</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md480"></a>
+<h2><a class="anchor" id="autotoc_md481"></a>
 Phases</h2>
 <p>Each phase follows the per-phase review protocol: implement, review, curate, owner signs off.</p>
-<h3><a class="anchor" id="autotoc_md481"></a>
+<h3><a class="anchor" id="autotoc_md482"></a>
 Phase 1: the clearing mask</h3>
 <ul>
-<li><code>IEffectsClearingSettings</code> + <code>EffectsClearingSettings</code> SO (under <code>Configuration/Effects/</code>), registered in <code>AppLifetimeScope</code>: <code>Enabled</code>, <code>ClearRadius</code>, <code>LingerSeconds</code>, <code>EdgeLow</code>, <code>EdgeHigh</code>, <code>Strength</code>, <code>MaskDownscale</code>, <code>MapDownscale</code>, <code>UseUnscaledTime</code>, mask and composite shaders.</li>
+<li><code>IEffectsClearingSettings</code> + <code>EffectsClearingSettings</code> SO (under <code>Configuration/Effects/</code>), registered in <code>AppLifetimeScope</code>: <code>Enabled</code>, <code>MinClearRadius</code>, <code>MaxClearRadius</code>, <code>ShieldsForMaxRadius</code>, <code>LingerSeconds</code>, <code>EdgeLow</code>, <code>EdgeHigh</code>, <code>Strength</code>, <code>LensRefraction</code>, <code>LensDispersion</code>, <code>LensHighlight</code>, <code>MaskDownscale</code>, <code>MapDownscale</code>, <code>UseUnscaledTime</code>, mask and composite shaders.</li>
 <li><code>EffectsClearingStamper</code> (pure) + EditMode tests: a first sighting stamps a disc, a moving ball a capsule from its last position, retired balls drop out, the radius scales with orthographic size, the cap keeps the most central balls.</li>
 <li><code>EffectsClearingController</code> (run-scoped) feeding <code>EffectsClearingMaskView</code> (persistent camera) and the <code>EffectsClearingMask</code> shader. The mask shows in <code>Editor/Maps/GameRenderMapsWindow</code>.</li>
 <li>Nothing on screen changes yet. The mask can be watched in the maps window during a run.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md482"></a>
+<h3><a class="anchor" id="autotoc_md483"></a>
 Phase 2: the HUD effects map</h3>
 <ul>
 <li><code>EffectsMapCompositor</code> + <code>EffectsMapComposite</code> shader, on the HUD camera, reading the <code>Trail</code> layer.</li>
@@ -272,7 +284,7 @@ Phase 2: the HUD effects map</h3>
 <li>A <code>stage.py</code> command to hold a ball mid-flight (<code>ball x,y --from x,y --seconds s</code>), so a still can show a ball inside a burst of score shapes, with the clearing on and off.</li>
 <li>A phone check: does the shot read now? And a profile of the cost.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md483"></a>
+<h3><a class="anchor" id="autotoc_md484"></a>
 As built (phases 1 and 2)</h3>
 <ul>
 <li><b>Alpha audit.</b> The HUD map draws <code>Sprites/Default</code> (the trail heads; premultiplied, correct coverage), URP <code>Unlit</code> set to alpha blending with <code>One OneMinusSrcAlpha</code> on alpha (the highlight trail) and the project's <code>PencilLine</code> (premultiplied). The score trail's ribbon material (<code>TrailMaterial_ScoreTrail</code>) was on the built-in <code>Mobile/Particles/Alpha Blended</code>, which writes no correct coverage. It moved to <code>Sprites/Default</code>, which draws the same colour (texture × vertex colour, the material's tint white) and writes its coverage, so it looks the same drawn straight in.</li>
@@ -281,12 +293,12 @@ As built (phases 1 and 2)</h3>
 <li><b>The decay clock.</b> Game time while a ball flies (slow-mo stretches the clearing, a pause holds it), real time once none does. Otherwise a freeze that starts just after a shot, the level-up's, would hold the hole open through the cinematic. <code>UseUnscaledTime</code> puts the flight on real time too.</li>
 <li><b>Update order.</b> The mask view runs after every <code>LateUpdate</code> that moves the camera (<code>[DefaultExecutionOrder]</code> 1000), and the compositor right after it, so the stamps frame the view this frame renders and the map turns on in the same frame as the first stamp.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md484"></a>
+<h3><a class="anchor" id="autotoc_md485"></a>
 Phase 3: the main effects map (gated)</h3>
 <p>Only if phase 2 reads well on the phone and its cost leaves room, and after open questions 1 and 2 are answered. The owner adds the <code>Effects</code> physics layer. Effect prefabs move to it, and the main camera gets its own <code>EffectsMapCompositor</code> (<code>ARGBHalf</code>, composite at Sky −1). Its alpha audit covers the particle shaders.</p>
 <p>The main camera's culling mask has two writers then: <code>NavigationCameraReveal</code> replaces the whole mask on each navigation change, and the compositor takes <code>Effects</code> out while it runs. A navigation change while live would put <code>Effects</code> back (drawn twice), or leak it into the launch screen at idle. So the mask gets one owner first, the way <code>TimeScaleService</code> owns the time scale: navigation sets the base mask (the game mask <em>includes</em> <code>Effects</code>), compositors claim the layers they suppress, and the camera draws the base mask minus the claims. The compositor's mask writes are already in one method, <code>SuppressEffectLayers</code>.</p>
 <hr  />
-<h2><a class="anchor" id="autotoc_md486"></a>
+<h2><a class="anchor" id="autotoc_md487"></a>
 Out of scope</h2>
 <ul>
 <li>Anything that moves, bends or fades individual objects. That approach was tried and removed.</li>
@@ -297,12 +309,12 @@ Out of scope</h2>
 <li>Per-device resolution tiers for the maps. <code>MapDownscale</code> is a single setting for now.</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md488"></a>
+<h2><a class="anchor" id="autotoc_md489"></a>
 Open questions for the owner</h2>
 <ol type="1">
 <li><b>Pops.</b> Balloon pops draw over the balloons, so they hide what the ball just hit, but they are also the feedback that it hit. Should pops (and the pop-like nuke cloud, disc wave and merge cue) clear around the ball, or stay?</li>
 <li><b>Phase 3 at all.</b> The score shapes and trails are the HUD map. Should item VFX, range previews, shield VFX and the dust specks clear as well, at roughly twice the HUD map's cost?</li>
-<li><b>How clear is clear.</b> Should effects vanish inside a clearing (<code>Strength</code> 1), or keep a faint trace (about 0.85) so the burst still reads as being there?</li>
+<li><b>How clear is clear.</b> Answered: a hard cut near the rim read too strong. The clearing is now the glass dome above, its effects thinning slowly from the rim to near nothing over the ball, with the lens the owner picked from stills (refraction 0.5, dispersion 0.15). It still needs a look in play.</li>
 <li><b>Heads-ups.</b> They are on the <code>UI</code> layer with the canvases, so the HUD map can't take them alone. One way is an <code>Effects</code>-style physics layer for them, which you'd add in the Editor (the same one phase 3 needs). The other is the <code>Trail</code> layer, which needs no new layer but puts their text into the GI capture, so it shades the board a little under each line. Which one, or should they stay as they are? </li>
 </ol>
 </div></div><!-- contents -->

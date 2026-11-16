@@ -6777,7 +6777,7 @@
 <!-- Node125 -->
 <g id="Node000125" class="node">
 <title>Node125</title>
-<g id="a_Node000125"><a xlink:href="classBalloonParty_1_1Display_1_1EffectsClearingMaskView.html" target="_top" xlink:title="The clearing mask (Effects Layer Clearing): a small single&#45;channel target, bound globally as _Effects...">
+<g id="a_Node000125"><a xlink:href="classBalloonParty_1_1Display_1_1EffectsClearingMaskView.html" target="_top" xlink:title="The clearing mask (Effects Layer Clearing): a small two&#45;channel target, bound globally as _EffectsCle...">
 <polygon fill="white" stroke="#666666" points="552,-8361.5 401.75,-8361.5 401.75,-8328 552,-8328 552,-8361.5"/>
 <text xml:space="preserve" text-anchor="start" x="409.75" y="-8348" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Display.Effects</text>
 <text xml:space="preserve" text-anchor="middle" x="476.88" y="-8335.25" font-family="Helvetica,sans-Serif" font-size="10.00">ClearingMaskView</text>

@@ -1,0 +1,5 @@
+<map id="BalloonParty.Display.EffectsClearingStamper" name="BalloonParty.Display.EffectsClearingStamper">
+<area shape="rect" id="Node000001" title="Turns the balls in flight into the clearing mask&#39;s stamps: one capsule per ball, from where it was la..." alt="" coords="17,115,218,160"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Configuration_1_1Effects_1_1IEffectsClearingSettings.html" title="Read&#45;only tuning for the effects clearing (see Effects Layer Clearing): how wide a clearing each ball..." alt="" coords="5,5,230,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,64,120,115,115,114,116,68"/>
+</map>

@@ -126,16 +126,16 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Display_1_1IEffectsClearingSo
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a27ce9487b3b7f7eca180c5f477698523" id="r_a27ce9487b3b7f7eca180c5f477698523"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a27ce9487b3b7f7eca180c5f477698523">FillStamps</a> (in <a class="el" href="structBalloonParty_1_1Display_1_1ClearingView.html">ClearingView</a> view, Vector4[] stamps)</td></tr>
-<tr class="memdesc:a27ce9487b3b7f7eca180c5f477698523"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes this frame's stamps (capsules in mask UV) and returns how many.  <br /></td></tr>
-<tr class="separator:a27ce9487b3b7f7eca180c5f477698523"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab148884b161cfec8e68909632aa55954" id="r_ab148884b161cfec8e68909632aa55954"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab148884b161cfec8e68909632aa55954">FillStamps</a> (in <a class="el" href="structBalloonParty_1_1Display_1_1ClearingView.html">ClearingView</a> view, Vector4[] stamps, float[] radii)</td></tr>
+<tr class="memdesc:ab148884b161cfec8e68909632aa55954"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes this frame's stamps (capsules in mask UV) and their radii (in view heights) and returns how many.  <br /></td></tr>
+<tr class="separator:ab148884b161cfec8e68909632aa55954"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Where the clearing mask gets its stamps from. </p>
 <p>The mask view lives on the persistent camera and pulls once a frame, so the run-scoped source never races its <code>LateUpdate</code>. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a27ce9487b3b7f7eca180c5f477698523" name="a27ce9487b3b7f7eca180c5f477698523"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a27ce9487b3b7f7eca180c5f477698523">&#9670;&#160;</a></span>FillStamps()</h2>
+<a id="ab148884b161cfec8e68909632aa55954" name="ab148884b161cfec8e68909632aa55954"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab148884b161cfec8e68909632aa55954">&#9670;&#160;</a></span>FillStamps()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -148,14 +148,19 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Vector4[]</td>          <td class="paramname"><span class="paramname"><em>stamps</em></span>&#160;)</td>
+          <td class="paramtype">Vector4[]</td>          <td class="paramname"><span class="paramname"><em>stamps</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float[]</td>          <td class="paramname"><span class="paramname"><em>radii</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Writes this frame's stamps (capsules in mask UV) and returns how many. </p>
+<p>Writes this frame's stamps (capsules in mask UV) and their radii (in view heights) and returns how many. </p>
 
-<p>Implemented in <a class="el" href="classBalloonParty_1_1Display_1_1EffectsClearingController.html#ace8aec96dcd70b53ebc3f12652c3ae18">BalloonParty.Display.EffectsClearingController</a>.</p>
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Display_1_1EffectsClearingController.html#a6938c28ace97f9269f801bb170baea9a">BalloonParty.Display.EffectsClearingController</a>.</p>
 
 </div>
 </div>
