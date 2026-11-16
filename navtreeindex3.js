@@ -1,5 +1,7 @@
 var NAVTREEINDEX3 =
 {
+"PredictionTraceConfig_8cs.html":[7,0,3,22],
+"PredictionTraceEnd_8cs.html":[7,0,11,2],
 "PredictionTraceLights_8cs.html":[7,0,11,3],
 "PredictionTraceProvider_8cs.html":[7,0,11,4],
 "PredictionTraceView_8cs.html":[7,0,11,5],
@@ -219,14 +221,14 @@ var NAVTREEINDEX3 =
 "SmokeFieldSettings_8cs.html":[7,0,3,5,27],
 "SmokeFieldView_8cs.html":[7,0,13,0,4],
 "SnakeWalk_8cs.html":[7,0,1,1,4],
-"SnipeChanceRoll_8cs.html":[7,0,8,7,2],
-"SnipeDischargeBloom_8cs.html":[7,0,8,7,3],
-"SnipeItemHandler_8cs.html":[7,0,8,7,4],
-"SnipeLanceLinePrefab_8cs.html":[7,0,8,7,5],
-"SnipeLanceLineView_8cs.html":[7,0,8,7,7],
-"SnipeLanceLines_8cs.html":[7,0,8,7,6],
-"SnipeLanceStroke_8cs.html":[7,0,8,7,8],
-"SnipeLanceTrace_8cs.html":[7,0,8,7,9],
+"SnipeChanceRoll_8cs.html":[7,0,8,7,4],
+"SnipeDischargeBloom_8cs.html":[7,0,8,7,5],
+"SnipeItemHandler_8cs.html":[7,0,8,7,6],
+"SnipeLanceLinePrefab_8cs.html":[7,0,8,7,7],
+"SnipeLanceLineView_8cs.html":[7,0,8,7,9],
+"SnipeLanceLines_8cs.html":[7,0,8,7,8],
+"SnipeLanceStroke_8cs.html":[7,0,8,7,10],
+"SnipeLanceTrace_8cs.html":[7,0,8,7,11],
 "SnipeRangePreview_8cs.html":[7,0,8,5,15],
 "SnipeWhirlwindView_8cs.html":[7,0,17,1],
 "SoapBubbleClusterVariant_8cs.html":[7,0,1,5,8],
@@ -247,7 +249,5 @@ var NAVTREEINDEX3 =
 "SpawnStage_8cs.html":[7,0,15,3,2],
 "SpeckAppearanceSettings_8cs.html":[7,0,3,5,28],
 "SpeckFieldSettings_8cs.html":[7,0,3,5,29],
-"SpeckField_8cs.html":[7,0,15,0,21],
-"SpeckLookProfile_8cs.html":[7,0,3,5,30],
-"SpeckMotionProfile_8cs.html":[7,0,3,5,31]
+"SpeckField_8cs.html":[7,0,15,0,21]
 };

@@ -1,11 +1,13 @@
 var NAVTREEINDEX2 =
 {
+"ISlotActor_8cs.html":[7,0,15,0,11],
 "ISlotClusterSource_8cs.html":[7,0,15,0,1,4],
 "ISlotGridConfig_8cs.html":[7,0,14,30],
 "ISlotSelectionStrategy_8cs.html":[7,0,15,0,13],
 "ISmokeFieldSettings_8cs.html":[7,0,3,5,17],
-"ISnipeArmer_8cs.html":[7,0,8,7,0],
-"ISnipeLanceArming_8cs.html":[7,0,8,7,1],
+"ISnipeArmer_8cs.html":[7,0,8,7,1],
+"ISnipeGuarantee_8cs.html":[7,0,8,7,2],
+"ISnipeLanceArming_8cs.html":[7,0,8,7,3],
 "ISoundBankConfiguration_8cs.html":[7,0,0,0,4],
 "ISoundPlayer_8cs.html":[7,0,0,10],
 "ISpawnClockSettings_8cs.html":[7,0,3,9,14],
@@ -247,7 +249,5 @@ var NAVTREEINDEX2 =
 "PopSheetLoader_8cs.html":[7,0,18,1,1],
 "PredictionSightProbe_8cs.html":[7,0,11,0],
 "PredictionSightSpiral_8cs.html":[7,0,8,28],
-"PredictionTraceCalculator_8cs.html":[7,0,11,1],
-"PredictionTraceConfig_8cs.html":[7,0,3,22],
-"PredictionTraceEnd_8cs.html":[7,0,11,2]
+"PredictionTraceCalculator_8cs.html":[7,0,11,1]
 };

@@ -1,5 +1,11 @@
 var NAVTREEINDEX31 =
 {
+"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a111d37613e1c0f3613b7a68863f75971":[5,0,0,3,7,4,24],
+"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a111d37613e1c0f3613b7a68863f75971":[6,0,0,3,7,4,24],
+"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a114727327b803229d76357e79f04c7a1":[5,0,0,3,7,4,27],
+"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a114727327b803229d76357e79f04c7a1":[6,0,0,3,7,4,27],
+"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a1b7a31e1c5e598a964afa71820033b0b":[5,0,0,3,7,4,16],
+"classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a1b7a31e1c5e598a964afa71820033b0b":[6,0,0,3,7,4,16],
 "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a1ea1f1f48f691e0fdac11f44ecd61752":[5,0,0,3,7,4,13],
 "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a1ea1f1f48f691e0fdac11f44ecd61752":[6,0,0,3,7,4,13],
 "classBalloonParty_1_1Configuration_1_1HeadsUp_1_1HeadsUpStyleSettings.html#a210caba1df5bbecdb58b456b6d48071d":[5,0,0,3,7,4,26],
@@ -243,11 +249,5 @@ var NAVTREEINDEX31 =
 "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#acb1fc9c9aa0e81ff6428ff40d65e94ab":[5,0,0,3,8,3,18],
 "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#acb1fc9c9aa0e81ff6428ff40d65e94ab":[6,0,0,3,8,3,18],
 "classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#ae7340b8c676b75d5b85fbd9991a06994":[5,0,0,3,8,3,25],
-"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#ae7340b8c676b75d5b85fbd9991a06994":[6,0,0,3,8,3,25],
-"classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html":[5,0,0,3,8,5],
-"classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html":[6,0,0,3,8,5],
-"classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html#a00e44c704c0264ffa639289a6782a9d6":[5,0,0,3,8,5,6],
-"classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html#a00e44c704c0264ffa639289a6782a9d6":[6,0,0,3,8,5,6],
-"classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html#a0a61f881855b975f02168a668009b357":[5,0,0,3,8,5,13],
-"classBalloonParty_1_1Configuration_1_1Items_1_1LaserSettings.html#a0a61f881855b975f02168a668009b357":[6,0,0,3,8,5,13]
+"classBalloonParty_1_1Configuration_1_1Items_1_1ItemSettings.html#ae7340b8c676b75d5b85fbd9991a06994":[6,0,0,3,8,3,25]
 };

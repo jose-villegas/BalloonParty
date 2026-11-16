@@ -16,6 +16,7 @@ var classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades =
     [ "DealSeed", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#af54d1d8d48e6dee7c4345ab744cd6a27", null ],
     [ "DealWeight", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#af6b57fbee98d4ba9aa01827667ab247f", null ],
     [ "Dispose", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#ac5df6870bd948feb54bedaac72ae434e", null ],
+    [ "FirstCard", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a9327939611aabd8d562a8a7940adab6a", null ],
     [ "GiveBackFreeCards", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a5d1ba05030351d7faaba994dbf8c04b4", null ],
     [ "GrantFreeCard", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a181238319ead33ac16d2cfe895451156", null ],
     [ "IsCardLevel", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html#a293b77f7b1316bc594c57a2c36c5e107", null ],

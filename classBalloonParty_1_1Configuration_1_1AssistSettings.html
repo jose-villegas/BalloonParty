@@ -146,6 +146,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a46d35c410009d8b5cc6528432f33fecf" id="r_a46d35c410009d8b5cc6528432f33fecf"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a46d35c410009d8b5cc6528432f33fecf">DangerNeedWeight</a><code> [get]</code></td></tr>
 <tr class="memdesc:a46d35c410009d8b5cc6528432f33fecf"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much the danger signal counts toward need, 0 to 1: at 1, a board one line from a lost heart is as much need as the last heart.  <br /></td></tr>
 <tr class="separator:a46d35c410009d8b5cc6528432f33fecf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad62001e9e1f8dda53a90ff9139af2a3a" id="r_ad62001e9e1f8dda53a90ff9139af2a3a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad62001e9e1f8dda53a90ff9139af2a3a">FirstGoldenSnipeAfterDeflects</a><code> [get]</code></td></tr>
+<tr class="memdesc:ad62001e9e1f8dda53a90ff9139af2a3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bounces off the run's first golden balloon after which the next ball loaded is a Snipe lance, whatever the Sharpshooter roll, so the player learns what pops it.  <br /></td></tr>
+<tr class="separator:ad62001e9e1f8dda53a90ff9139af2a3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa186a227d4d5543a8f4b3ded71dedbe9" id="r_aa186a227d4d5543a8f4b3ded71dedbe9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPitySettings.html">IPitySettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa186a227d4d5543a8f4b3ded71dedbe9">HeartPity</a><code> [get]</code></td></tr>
 <tr class="memdesc:aa186a227d4d5543a8f4b3ded71dedbe9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The heart balloon's roll on an ordinary level.  <br /></td></tr>
 <tr class="separator:aa186a227d4d5543a8f4b3ded71dedbe9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -169,6 +172,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:abafa375e0d33588dc6f0d752ccd43edc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a90e740951207c951998c6b983f2664aa" id="r_a90e740951207c951998c6b983f2664aa"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a90e740951207c951998c6b983f2664aa">_dangerNeedWeight</a> = 1f</td></tr>
 <tr class="separator:a90e740951207c951998c6b983f2664aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7e8817a52cf91dcc53c790d5e462b87" id="r_ac7e8817a52cf91dcc53c790d5e462b87"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac7e8817a52cf91dcc53c790d5e462b87">_firstGoldenSnipeAfterDeflects</a> = 3</td></tr>
+<tr class="separator:ac7e8817a52cf91dcc53c790d5e462b87"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b4976648fae43845427f05900531296" id="r_a8b4976648fae43845427f05900531296"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1PitySettings.html">PitySettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8b4976648fae43845427f05900531296">_heartPity</a> = new(0.5f, 0.5f)</td></tr>
 <tr class="separator:a8b4976648fae43845427f05900531296"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adea6990146679c7bc90ac368ac99bed0" id="r_adea6990146679c7bc90ac368ac99bed0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classBalloonParty_1_1Configuration_1_1PitySettings.html">PitySettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adea6990146679c7bc90ac368ac99bed0">_itemPity</a> = new(0.5f, 0.9f)</td></tr>
@@ -258,6 +263,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">float BalloonParty.Configuration.AssistSettings._dangerNeedWeight = 1f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac7e8817a52cf91dcc53c790d5e462b87" name="ac7e8817a52cf91dcc53c790d5e462b87"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7e8817a52cf91dcc53c790d5e462b87">&#9670;&#160;</a></span>_firstGoldenSnipeAfterDeflects</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.AssistSettings._firstGoldenSnipeAfterDeflects = 3</td>
         </tr>
       </table>
   </td>
@@ -461,6 +488,33 @@ Private Attributes</h2></td></tr>
 <p>Need is the larger of the hearts' and the danger's. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html#a631339a39903fbbd938a84b89af71314">BalloonParty.Shared.IAssistSettings</a>.</p>
+
+</div>
+</div>
+<a id="ad62001e9e1f8dda53a90ff9139af2a3a" name="ad62001e9e1f8dda53a90ff9139af2a3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad62001e9e1f8dda53a90ff9139af2a3a">&#9670;&#160;</a></span>FirstGoldenSnipeAfterDeflects</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.AssistSettings.FirstGoldenSnipeAfterDeflects</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Bounces off the run's first golden balloon after which the next ball loaded is a Snipe lance, whatever the Sharpshooter roll, so the player learns what pops it. </p>
+<p>Once a run. 0 = never. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html#af595570fad902e64dbcbbf0365c3b8b9">BalloonParty.Shared.IAssistSettings</a>.</p>
 
 </div>
 </div>

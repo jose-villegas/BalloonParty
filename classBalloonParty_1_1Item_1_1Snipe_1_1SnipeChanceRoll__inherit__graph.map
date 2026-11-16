@@ -1,7 +1,9 @@
 <map id="BalloonParty.Item.Snipe.SnipeChanceRoll" name="BalloonParty.Item.Snipe.SnipeChanceRoll">
-<area shape="rect" id="Node000001" title="The Sharpshooter card&#39;s roll, once per ball the thrower loads." alt="" coords="113,98,293,143"/>
-<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeChanceRoll.html" title="What the thrower asks of each ball it loads: roll the Sharpshooter card&#39;s chance at a Snipe lance." alt="" coords="5,5,185,50"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="133,57,180,97,175,98,131,62"/>
-<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="209,5,416,50"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="277,59,230,100,228,95,272,61"/>
+<area shape="rect" id="Node000001" title="The Sharpshooter card&#39;s roll, once per ball the thrower loads." alt="" coords="260,75,439,119"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeChanceRoll.html" title="What the thrower asks of each ball it loads: roll the Sharpshooter card&#39;s chance at a Snipe lance." alt="" coords="19,5,198,50"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="203,52,272,73,266,75,203,57"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeGuarantee.html" title="Makes the next ball the thrower loads a Snipe lance, whatever the Sharpshooter roll would say." alt="" coords="19,75,198,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="213,94,262,96,257,98,214,100"/>
+<area shape="rect" id="Node000004" href="$interfaceBalloonParty_1_1Game_1_1Run_1_1IRunResettable.html" title="RunController invokes implementations in ascending ResetOrder, lower first." alt="" coords="5,144,212,189"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="202,137,266,121,272,119,203,142"/>
 </map>

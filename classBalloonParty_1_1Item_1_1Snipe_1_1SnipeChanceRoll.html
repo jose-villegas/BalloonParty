@@ -124,7 +124,7 @@ $(function(){initNavTree('classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll__inherit__graph.svg" width="422" height="148"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll__inherit__graph.svg" width="444" height="195"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-1-trigger" src="closed.png" alt="+"/> Collaboration diagram for BalloonParty.Item.Snipe.SnipeChanceRoll:</div>
@@ -136,6 +136,9 @@ $(function(){initNavTree('classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a140e3502add28003bbda891f5c7d5c5f" id="r_a140e3502add28003bbda891f5c7d5c5f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a140e3502add28003bbda891f5c7d5c5f">GuaranteeNext</a> ()</td></tr>
+<tr class="memdesc:a140e3502add28003bbda891f5c7d5c5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The next ball loaded is armed with no roll and no cooldown, once.  <br /></td></tr>
+<tr class="separator:a140e3502add28003bbda891f5c7d5c5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae59a399b4a9c0db2c2fe05b2dad5597c" id="r_ae59a399b4a9c0db2c2fe05b2dad5597c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae59a399b4a9c0db2c2fe05b2dad5597c">ResetRun</a> (int generation)</td></tr>
 <tr class="memdesc:ae59a399b4a9c0db2c2fe05b2dad5597c"><td class="mdescLeft">&#160;</td><td class="mdescRight"><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -169,6 +172,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a072d07e6213b003714886eceb063d30e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a207b1eeb3b602a1a9d76332fce7e86cc" id="r_a207b1eeb3b602a1a9d76332fce7e86cc"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Assist_1_1IArmourNeed.html">IArmourNeed</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a207b1eeb3b602a1a9d76332fce7e86cc">_armour</a></td></tr>
 <tr class="separator:a207b1eeb3b602a1a9d76332fce7e86cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a832e040ae52e2831ce40a7cf8a202a5e" id="r_a832e040ae52e2831ce40a7cf8a202a5e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a832e040ae52e2831ce40a7cf8a202a5e">_guaranteed</a></td></tr>
+<tr class="separator:a832e040ae52e2831ce40a7cf8a202a5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2b073936df3274ee467f9c67ed913d7" id="r_ae2b073936df3274ee467f9c67ed913d7"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae2b073936df3274ee467f9c67ed913d7">_lastArmedAt</a> = float.NegativeInfinity</td></tr>
 <tr class="separator:ae2b073936df3274ee467f9c67ed913d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55c6b356ebebdbff50b3a78087461b55" id="r_a55c6b356ebebdbff50b3a78087461b55"><td class="memItemLeft" align="right" valign="top">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Assist_1_1IPlayerNeed.html">IPlayerNeed</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a55c6b356ebebdbff50b3a78087461b55">_need</a></td></tr>
@@ -182,7 +187,7 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The Sharpshooter card's roll, once per ball the thrower loads. </p>
-<p>A hit arms the ball through the <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a>'s own path (<a class="el" href="interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeArmer.html" title="Arms a shot as a Snipe lance without a pickup: what SnipeItemHandler does for one.">ISnipeArmer</a>), so it is a <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a> lance in every way, pencil line included. The card's chance is low; pity (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html#a56d8a0c7a52140733cd57f9a68c7a575" title="The Sharpshooter card&#39;s Snipe roll.">IAssistSettings.SnipePity</a>) raises it for each ball loaded without a <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a> while the player is in trouble (<a class="el" href="interfaceBalloonParty_1_1Game_1_1Assist_1_1IPlayerNeed.html" title="How much trouble the player is in right now, 0 (none) to 1 (one mistake from losing the run).">IPlayerNeed</a>) or armour has stood on the board too long (<a class="el" href="interfaceBalloonParty_1_1Game_1_1Assist_1_1IArmourNeed.html" title="How much armour has stood on the board too long, 0 (none) to Shared.IAssistSettings....">IArmourNeed</a>), whichever is the more. After a hit, no load rolls for <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html#a15d87374de3fc76122c686ddd8513808" title="Seconds of game time after a ball loads as a Snipe (UpgradeKind.SnipeChance) before the next load can...">IUpgradeSettings.SnipeCooldownSeconds</a>, so rapid fire can't chain lances. </p>
+<p>A hit arms the ball through the <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a>'s own path (<a class="el" href="interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeArmer.html" title="Arms a shot as a Snipe lance without a pickup: what SnipeItemHandler does for one.">ISnipeArmer</a>), so it is a <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a> lance in every way, pencil line included. The card's chance is low; pity (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html#a56d8a0c7a52140733cd57f9a68c7a575" title="The Sharpshooter card&#39;s Snipe roll.">IAssistSettings.SnipePity</a>) raises it for each ball loaded without a <a class="el" href="namespaceBalloonParty_1_1Item_1_1Snipe.html">Snipe</a> while the player is in trouble (<a class="el" href="interfaceBalloonParty_1_1Game_1_1Assist_1_1IPlayerNeed.html" title="How much trouble the player is in right now, 0 (none) to 1 (one mistake from losing the run).">IPlayerNeed</a>) or armour has stood on the board too long (<a class="el" href="interfaceBalloonParty_1_1Game_1_1Assist_1_1IArmourNeed.html" title="How much armour has stood on the board too long, 0 (none) to Shared.IAssistSettings....">IArmourNeed</a>), whichever is the more. After a hit, no load rolls for <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeSettings.html#a15d87374de3fc76122c686ddd8513808" title="Seconds of game time after a ball loads as a Snipe (UpgradeKind.SnipeChance) before the next load can...">IUpgradeSettings.SnipeCooldownSeconds</a>, so rapid fire can't chain lances. A guaranteed load (<a class="el" href="interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeGuarantee.html" title="Makes the next ball the thrower loads a Snipe lance, whatever the Sharpshooter roll would say.">ISnipeGuarantee</a>, the first golden balloon's lesson) arms with no roll and no cooldown. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a4344d82d7b5a9812f1712a2d24a7aaf1" name="a4344d82d7b5a9812f1712a2d24a7aaf1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4344d82d7b5a9812f1712a2d24a7aaf1">&#9670;&#160;</a></span>SnipeChanceRoll()</h2>
@@ -234,6 +239,27 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a140e3502add28003bbda891f5c7d5c5f" name="a140e3502add28003bbda891f5c7d5c5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a140e3502add28003bbda891f5c7d5c5f">&#9670;&#160;</a></span>GuaranteeNext()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Snipe.SnipeChanceRoll.GuaranteeNext </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The next ball loaded is armed with no roll and no cooldown, once. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeGuarantee.html#a5dd09aecd8249c23e969629ad0c334e0">BalloonParty.Item.Snipe.ISnipeGuarantee</a>.</p>
+
+</div>
+</div>
 <a id="ae59a399b4a9c0db2c2fe05b2dad5597c" name="ae59a399b4a9c0db2c2fe05b2dad5597c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae59a399b4a9c0db2c2fe05b2dad5597c">&#9670;&#160;</a></span>ResetRun()</h2>
 
@@ -317,6 +343,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">readonly <a class="el" href="interfaceBalloonParty_1_1Game_1_1Assist_1_1IArmourNeed.html">IArmourNeed</a> BalloonParty.Item.Snipe.SnipeChanceRoll._armour</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a832e040ae52e2831ce40a7cf8a202a5e" name="a832e040ae52e2831ce40a7cf8a202a5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a832e040ae52e2831ce40a7cf8a202a5e">&#9670;&#160;</a></span>_guaranteed</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Item.Snipe.SnipeChanceRoll._guaranteed</td>
         </tr>
       </table>
   </td>

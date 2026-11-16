@@ -471,6 +471,7 @@ var hierarchy =
       [ "BalloonParty.Item.Laser.LaserItemHandler", "classBalloonParty_1_1Item_1_1Laser_1_1LaserItemHandler.html", null ],
       [ "BalloonParty.Item.Preview.ItemPreviewTicker", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker.html", null ],
       [ "BalloonParty.Item.Preview.ItemRangePreviewController", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html", null ],
+      [ "BalloonParty.Item.Snipe.GoldenSnipeGift", "classBalloonParty_1_1Item_1_1Snipe_1_1GoldenSnipeGift.html", null ],
       [ "BalloonParty.Item.Snipe.SnipeDischargeBloom", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeDischargeBloom.html", null ],
       [ "BalloonParty.Item.Snipe.SnipeItemHandler", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html", null ],
       [ "BalloonParty.Item.Snipe.SnipeLanceLines", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html", null ],
@@ -932,6 +933,7 @@ var hierarchy =
       [ "BalloonParty.Game.Telemetry.GameplayMetricsService", "classBalloonParty_1_1Game_1_1Telemetry_1_1GameplayMetricsService.html", null ],
       [ "BalloonParty.Game.Upgrades.RunUpgrades", "classBalloonParty_1_1Game_1_1Upgrades_1_1RunUpgrades.html", null ],
       [ "BalloonParty.Item.ItemAssigner", "classBalloonParty_1_1Item_1_1ItemAssigner.html", null ],
+      [ "BalloonParty.Item.Snipe.GoldenSnipeGift", "classBalloonParty_1_1Item_1_1Snipe_1_1GoldenSnipeGift.html", null ],
       [ "BalloonParty.Item.Snipe.SnipeChanceRoll", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html", null ],
       [ "BalloonParty.Shared.Pause.PauseService", "classBalloonParty_1_1Shared_1_1Pause_1_1PauseService.html", null ],
       [ "BalloonParty.Shared.Pause.TimeScaleService", "classBalloonParty_1_1Shared_1_1Pause_1_1TimeScaleService.html", null ],
@@ -1062,6 +1064,9 @@ var hierarchy =
     [ "BalloonParty.Item.Snipe.ISnipeChanceRoll", "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeChanceRoll.html", [
       [ "BalloonParty.Item.Snipe.SnipeChanceRoll", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html", null ]
     ] ],
+    [ "BalloonParty.Item.Snipe.ISnipeGuarantee", "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeGuarantee.html", [
+      [ "BalloonParty.Item.Snipe.SnipeChanceRoll", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html", null ]
+    ] ],
     [ "BalloonParty.Item.Snipe.ISnipeLanceArming", "interfaceBalloonParty_1_1Item_1_1Snipe_1_1ISnipeLanceArming.html", [
       [ "BalloonParty.Item.Snipe.SnipeLanceLines", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html", null ]
     ] ],
@@ -1150,6 +1155,7 @@ var hierarchy =
       [ "BalloonParty.Item.Laser.LaserItemHandler", "classBalloonParty_1_1Item_1_1Laser_1_1LaserItemHandler.html", null ],
       [ "BalloonParty.Item.Preview.ItemPreviewPoolBootstrap", "classBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewPoolBootstrap.html", null ],
       [ "BalloonParty.Item.Preview.ItemRangePreviewController", "classBalloonParty_1_1Item_1_1Preview_1_1ItemRangePreviewController.html", null ],
+      [ "BalloonParty.Item.Snipe.GoldenSnipeGift", "classBalloonParty_1_1Item_1_1Snipe_1_1GoldenSnipeGift.html", null ],
       [ "BalloonParty.Item.Snipe.SnipeDischargeBloom", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeDischargeBloom.html", null ],
       [ "BalloonParty.Item.Snipe.SnipeItemHandler", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeItemHandler.html", null ],
       [ "BalloonParty.Item.Snipe.SnipeLanceLines", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeLanceLines.html", null ],

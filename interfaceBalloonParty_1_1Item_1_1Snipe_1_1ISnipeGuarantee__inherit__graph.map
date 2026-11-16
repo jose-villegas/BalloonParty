@@ -1,0 +1,5 @@
+<map id="BalloonParty.Item.Snipe.ISnipeGuarantee" name="BalloonParty.Item.Snipe.ISnipeGuarantee">
+<area shape="rect" id="Node000001" title="Makes the next ball the thrower loads a Snipe lance, whatever the Sharpshooter roll would say." alt="" coords="5,5,185,50"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html" title="The Sharpshooter card&#39;s roll, once per ball the thrower loads." alt="" coords="5,98,185,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,64,98,99,92,97,93,68"/>
+</map>

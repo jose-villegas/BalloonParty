@@ -1,10 +1,12 @@
 var classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll =
 [
     [ "SnipeChanceRoll", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#a4344d82d7b5a9812f1712a2d24a7aaf1", null ],
+    [ "GuaranteeNext", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#a140e3502add28003bbda891f5c7d5c5f", null ],
     [ "ResetRun", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#ae59a399b4a9c0db2c2fe05b2dad5597c", null ],
     [ "TryArm", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#ac8354bb15b27d8f0174e32e7714e14d7", null ],
     [ "_armer", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#a072d07e6213b003714886eceb063d30e", null ],
     [ "_armour", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#a207b1eeb3b602a1a9d76332fce7e86cc", null ],
+    [ "_guaranteed", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#a832e040ae52e2831ce40a7cf8a202a5e", null ],
     [ "_lastArmedAt", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#ae2b073936df3274ee467f9c67ed913d7", null ],
     [ "_need", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#a55c6b356ebebdbff50b3a78087461b55", null ],
     [ "_pity", "classBalloonParty_1_1Item_1_1Snipe_1_1SnipeChanceRoll.html#adc2c72e0e6ef1d12b12230ac1fe7ff97", null ],

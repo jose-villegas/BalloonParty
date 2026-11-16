@@ -1,6 +1,7 @@
 var interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings =
 [
     [ "Amount", "interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#a19c3bc16482462914e62886e6d32f15f", null ],
+    [ "DealtFirst", "interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#afe0bdabef598d786b468c5dea3b7181d", null ],
     [ "Description", "interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#a7e4016602dc7738982b1bf87bc1e36c4", null ],
     [ "Kind", "interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#acd73ddcc2474f9fd01cdf07922cc3187", null ],
     [ "MaxStacks", "interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#af57c63e37b105adc392737b0449e34fd", null ],

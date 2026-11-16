@@ -208,7 +208,7 @@ Properties</h2></td></tr>
 <tr class="memitem:a039c8a7d612ba419c5c782dad780545b" id="r_a039c8a7d612ba419c5c782dad780545b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a039c8a7d612ba419c5c782dad780545b">ResetOrder</a><code> [get]</code></td></tr>
 <tr class="separator:a039c8a7d612ba419c5c782dad780545b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c7002f437a4d11d1fb4ef9a06fa5e9f" id="r_a1c7002f437a4d11d1fb4ef9a06fa5e9f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1c7002f437a4d11d1fb4ef9a06fa5e9f">RewardBalloonOdds</a><code> [get]</code></td></tr>
-<tr class="memdesc:a1c7002f437a4d11d1fb4ef9a06fa5e9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Party Favors' boost to the reward balloons: each roll that brings a golden, heart or disco balloon has its chance × (1 + this).  <br /></td></tr>
+<tr class="memdesc:a1c7002f437a4d11d1fb4ef9a06fa5e9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Party Favors' boost to the reward balloons: each roll that brings a golden, heart, disco or nuke balloon has its chance × (1 + this).  <br /></td></tr>
 <tr class="separator:a1c7002f437a4d11d1fb4ef9a06fa5e9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ba90e7ea13f34da1c6355006d8b6dd2" id="r_a6ba90e7ea13f34da1c6355006d8b6dd2"><td class="memItemLeft" align="right" valign="top">IReadOnlyReactiveProperty&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6ba90e7ea13f34da1c6355006d8b6dd2">ShieldsPerBall</a><code> [get]</code></td></tr>
 <tr class="separator:a6ba90e7ea13f34da1c6355006d8b6dd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -245,6 +245,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a4de99556c302588154ffdaf4e7897add"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af54d1d8d48e6dee7c4345ab744cd6a27" id="r_af54d1d8d48e6dee7c4345ab744cd6a27"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af54d1d8d48e6dee7c4345ab744cd6a27">DealSeed</a> (int level, int salt, int step)</td></tr>
 <tr class="separator:af54d1d8d48e6dee7c4345ab744cd6a27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9327939611aabd8d562a8a7940adab6a" id="r_a9327939611aabd8d562a8a7940adab6a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9327939611aabd8d562a8a7940adab6a">FirstCard</a> (bool forBonus)</td></tr>
+<tr class="separator:a9327939611aabd8d562a8a7940adab6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d1ba05030351d7faaba994dbf8c04b4" id="r_a5d1ba05030351d7faaba994dbf8c04b4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d1ba05030351d7faaba994dbf8c04b4">GiveBackFreeCards</a> ()</td></tr>
 <tr class="separator:a5d1ba05030351d7faaba994dbf8c04b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:affdaa038957e30fe9d80bdec502939b6" id="r_affdaa038957e30fe9d80bdec502939b6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#affdaa038957e30fe9d80bdec502939b6">IsDealable</a> (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> card, bool forBonus, bool withCapped)</td></tr>
@@ -330,7 +332,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The cards a run holds, the hand a level-up deals, and the weapon the cards add up to. </p>
-<p>The hand follows the level-up phase: it opens on LevelUpPhase.Pending, its pick is held on LevelUpPhase.Transitioning (the level has advanced), and anything else voids it. So a card is held only once the level that dealt it is completed, and the cards held at a loss are the ones held when that level began, which is what a retry keeps. Each card held at a level-up is announced with <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage.html" title="A level-up&#39;s card is now held: published as the level advances, when its pick is kept.">UpgradeCardHeldMessage</a> (the card reveal's cue). A retry bought with a rewarded ad also gets a bonus card: dealt at the retry's reset (announced with <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html" title="A retry bought with a rewarded ad was dealt its bonus card, for that attempt only.">BonusCardDealtMessage</a>), applied on top of the held cards, and dropped when that attempt ends, won or lost. A free card (<a class="el" href="interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IFreeCardGrant.html" title="A card won in play rather than at a level-up (the golden balloon&#39;s pop).">IFreeCardGrant</a>, the golden balloon's) is held the moment it's won (or, while a level-up's hand is on screen, once its pick is held), and kept once its level is won; a retry of that level drops it, so the retry starts with the cards held when the level began, as it always does. </p>
+<p>The hand follows the level-up phase: it opens on LevelUpPhase.Pending, its pick is held on LevelUpPhase.Transitioning (the level has advanced), and anything else voids it. So a card is held only once the level that dealt it is completed, and the cards held at a loss are the ones held when that level began, which is what a retry keeps. Each card held at a level-up is announced with <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1UpgradeCardHeldMessage.html" title="A level-up&#39;s card is now held: published as the level advances, when its pick is kept.">UpgradeCardHeldMessage</a> (the card reveal's cue). A retry bought with a rewarded ad also gets a bonus card: dealt at the retry's reset (announced with <a class="el" href="structBalloonParty_1_1Shared_1_1Messages_1_1BonusCardDealtMessage.html" title="A retry bought with a rewarded ad was dealt its bonus card, for that attempt only.">BonusCardDealtMessage</a>), applied on top of the held cards, and dropped when that attempt ends, won or lost. A free card (<a class="el" href="interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IFreeCardGrant.html" title="A card won in play rather than at a level-up (the golden balloon&#39;s pop).">IFreeCardGrant</a>, the golden balloon's) is held the moment it's won (or, while a level-up's hand is on screen, once its pick is held), and kept once its level is won; a retry of that level drops it, so the retry starts with the cards held when the level began, as it always does. While the run holds no card, whichever of these deals one deals the deck's <a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html#afe0bdabef598d786b468c5dea3b7181d" title="The run&#39;s first card is this one, whatever deals it: the first level-up&#39;s hand (in its first slot,...">IUpgradeCardSettings.DealtFirst</a> card (Sharpshooter), so every run starts the same way. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a11699648e5d47772eb9e3e91f0f2ca46" name="a11699648e5d47772eb9e3e91f0f2ca46"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a11699648e5d47772eb9e3e91f0f2ca46">&#9670;&#160;</a></span>RunUpgrades()</h2>
@@ -763,6 +765,31 @@ Static Private Attributes</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9327939611aabd8d562a8a7940adab6a" name="a9327939611aabd8d562a8a7940adab6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9327939611aabd8d562a8a7940adab6a">&#9670;&#160;</a></span>FirstCard()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interfaceBalloonParty_1_1Shared_1_1IUpgradeCardSettings.html">IUpgradeCardSettings</a> BalloonParty.Game.Upgrades.RunUpgrades.FirstCard </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>forBonus</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -2068,7 +2095,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Party Favors' boost to the reward balloons: each roll that brings a golden, heart or disco balloon has its chance × (1 + this). </p>
+<p>Party Favors' boost to the reward balloons: each roll that brings a golden, heart, disco or nuke balloon has its chance × (1 + this). </p>
 <p>0 without the card. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Game_1_1Upgrades_1_1IWeaponStats.html#a7314de42c8dd30d9821dc616288cad37">BalloonParty.Game.Upgrades.IWeaponStats</a>.</p>

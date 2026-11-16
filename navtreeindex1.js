@@ -33,6 +33,7 @@ var NAVTREEINDEX1 =
 "GizmoDrawingHelper_8cs.html":[7,0,14,10,4],
 "GodRaysLook_8cs.html":[7,0,1,5,3],
 "GoldenBalloonModel_8cs.html":[7,0,1,2,7],
+"GoldenSnipeGift_8cs.html":[7,0,8,7,0],
 "GradientTextureDrawer_8cs.html":[7,0,6,23],
 "GradientTextureHelper_8cs.html":[7,0,14,10,5],
 "GraphicColorableRenderer_8cs.html":[7,0,18,8,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "IShieldsPerBall_8cs.html":[7,0,7,11,2],
 "ISkyBackdrop_8cs.html":[7,0,13,7],
 "ISkyScatterSettings_8cs.html":[7,0,3,5,16],
-"ISlotActorView_8cs.html":[7,0,15,0,12],
-"ISlotActor_8cs.html":[7,0,15,0,11]
+"ISlotActorView_8cs.html":[7,0,15,0,12]
 };
