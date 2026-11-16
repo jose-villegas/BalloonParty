@@ -20,7 +20,9 @@ namespace BalloonParty.Balloon.Formation
     ///     <see cref="IUnbreakableFormationSettings.HoldWaves" /> waves, then plans a different shape, and the
     ///     unbreakables left free form new ones. It hands the balancer the moves and anchors the members. A
     ///     formation that loses members below the minimum breaks at once. One that stands untouched may call
-    ///     in another unbreakable (<see cref="IFormationReinforcements" />).
+    ///     in another unbreakable (<see cref="IFormationReinforcements" />). The board's toughs gather into
+    ///     snakes of their own (<see cref="IUnbreakableFormationSettings.ToughSnakes" />), ordered by armour, that
+    ///     walk until they break.
     /// </summary>
     internal sealed class UnbreakableFormationService : IStartable, IRunResettable, IDisposable,
         IFormationReinforcements
@@ -42,6 +44,8 @@ namespace BalloonParty.Balloon.Formation
         private readonly IUnbreakableFormationSettings _settings;
         private readonly ThreatEase _threatEase;
         private readonly FormationPlanner _planner = new();
+        private readonly MemberShuffle _shuffle = new();
+        private readonly ArmourOrder _armourOrder = new();
         private readonly ShotWall _wall = new();
         private readonly List<IWriteableFormationMember> _candidates = new();
         private readonly List<IWriteableFormationMember> _members = new();
@@ -49,6 +53,8 @@ namespace BalloonParty.Balloon.Formation
         private readonly List<StandingFormation> _spareFormations = new();
         private readonly Dictionary<IWriteableFormationMember, StandingFormation> _formationOf = new();
         private readonly List<FormationAssignment> _assignments = new();
+        private readonly List<FormationAssignment> _steps = new();
+        private readonly List<Vector2Int> _trail = new();
         private readonly List<FormationShape> _shapePool = new();
         private readonly CompositeDisposable _subscriptions = new();
         private readonly Func<int, int> _pickIndex;
@@ -127,6 +133,10 @@ namespace BalloonParty.Balloon.Formation
             {
                 ChangeFormationsDoneHolding(relocate);
                 FormFromFreeUnbreakables(relocate);
+                if (_settings.ToughSnakes)
+                {
+                    FormToughSnakes(relocate);
+                }
             }
             finally
             {
@@ -204,7 +214,9 @@ namespace BalloonParty.Balloon.Formation
         private void Walk(StandingFormation snake, int lastRow, Action<IWriteableDynamicSlotActor, Vector2Int> relocate)
         {
             var members = snake.MemberList;
-            var wall = LoadWall();
+
+            // A tough never walls, so moving one can't close a wall.
+            var wall = snake.Armoured ? null : LoadWall();
             if (!SnakeWalk.TryStep(_grid, members[0].SlotIndex.Value, members[^1].SlotIndex.Value, snake.Heading,
                     lastRow, wall, out var direction))
             {
@@ -223,19 +235,33 @@ namespace BalloonParty.Balloon.Formation
 
             snake.Heading = direction;
             var heading = DirectionHeading(direction);
-            var target = HexCoordinates.Step(members[0].SlotIndex.Value, direction);
 
-            // Head first: each member's slot is free by the time the one behind steps into it, even across a gap
-            // a popped member left.
+            // The trail: the slot ahead, then each member's slot head to tail. Even across a gap a popped member
+            // left, the member behind it takes the slot the one ahead of it just left.
+            _trail.Clear();
+            _trail.Add(HexCoordinates.Step(members[0].SlotIndex.Value, direction));
+            for (var i = 0; i < members.Count - 1; i++)
+            {
+                _trail.Add(members[i].SlotIndex.Value);
+            }
+
+            // A tough hit since the last step falls back behind those with more armour left; turned round, the
+            // toughest moves up to the new front.
+            if (snake.Armoured)
+            {
+                ArmourOrder.Sort(members);
+            }
+
+            _steps.Clear();
             for (var i = 0; i < members.Count; i++)
             {
                 var member = members[i];
-                var from = member.SlotIndex.Value;
                 member.SetWalking(true);
                 member.SetFormationHeading(heading);
-                relocate(member, target);
-                target = from;
+                _steps.Add(new FormationAssignment(member, _trail[i]));
             }
+
+            _shuffle.Run(_grid, _steps, relocate);
         }
 
         /// <summary>
@@ -281,9 +307,10 @@ namespace BalloonParty.Balloon.Formation
                 return;
             }
 
+            // Only unbreakables call unbreakables in; a tough snake calls no one.
             for (var i = 0; i < _formations.Count; i++)
             {
-                if (!_formations[i].Touched && Random01() < chance)
+                if (!_formations[i].Armoured && !_formations[i].Touched && Random01() < chance)
                 {
                     _reinforcementCalls++;
                 }
@@ -295,13 +322,20 @@ namespace BalloonParty.Balloon.Formation
             for (var i = 0; i < _formations.Count; i++)
             {
                 var formation = _formations[i];
+
+                // A tough snake has no other shape to change to: it walks until it breaks.
+                if (formation.Armoured)
+                {
+                    continue;
+                }
+
                 if (formation.WavesLeft > 0)
                 {
                     formation.WavesLeft--;
                     continue;
                 }
 
-                CollectCandidates(formation);
+                CollectCandidates(formation, armoured: false);
                 if (_candidates.Count < _settings.MinMembers || !TryPlanNextShape(formation.Shape, out var shape))
                 {
                     // The balancer runs the race right after this, so the released members settle there.
@@ -320,7 +354,7 @@ namespace BalloonParty.Balloon.Formation
         {
             while (true)
             {
-                CollectCandidates(null);
+                CollectCandidates(null, armoured: false);
                 if (_candidates.Count < _settings.MinMembers || !TryPlanNextShape(null, out var shape))
                 {
                     return;
@@ -332,10 +366,38 @@ namespace BalloonParty.Balloon.Formation
             }
         }
 
+        // Free toughs form snakes, MinMembers to SnakeMaxMembers long, after the unbreakables have taken their
+        // slots. Each pass takes at least MinMembers, so the loop ends.
+        private void FormToughSnakes(Action<IWriteableDynamicSlotActor, Vector2Int> relocate)
+        {
+            while (true)
+            {
+                CollectCandidates(null, armoured: true);
+                if (_candidates.Count < _settings.MinMembers
+                    || !_planner.TryPlan(_grid, FormationShape.Snake, _candidates, _settings, _pickIndex, _assignments))
+                {
+                    return;
+                }
+
+                var formation = TakeSpareFormation();
+                formation.Armoured = true;
+                _formations.Add(formation);
+                Apply(formation, FormationShape.Snake, relocate);
+            }
+        }
+
         private void Apply(
             StandingFormation formation, FormationShape shape, Action<IWriteableDynamicSlotActor, Vector2Int> relocate)
         {
             var heading = HeadingFor(shape);
+
+            // A snake sets off along its row, east or west at random. A tough snake lines up by armour, the most
+            // at the leading end, which can swap members round, so the moves run through the shuffle.
+            var east = shape == FormationShape.Snake && Random01() < 0.5f;
+            if (shape == FormationShape.Snake && formation.Armoured)
+            {
+                _armourOrder.LineUp(_assignments, east);
+            }
 
             // Only members the new shape drops go back to red; a member that stays never dips out of it.
             var members = formation.MemberList;
@@ -360,30 +422,30 @@ namespace BalloonParty.Balloon.Formation
                 member.SetWalking(false);
                 members.Add(member);
                 _formationOf[member] = formation;
-                if (member.SlotIndex.Value != assignment.Target)
-                {
-                    relocate(member, assignment.Target);
-                }
             }
 
+            _shuffle.Run(_grid, _assignments, relocate);
             formation.Shape = shape;
             formation.WavesLeft = _settings.HoldWaves - 1;
             formation.ArrangedOnPass = _arrangePass;
             if (shape == FormationShape.Snake)
             {
-                LineUpSnake(formation);
+                LineUpSnake(formation, east);
             }
         }
 
-        // A snake forms as a row and sets off along it, east or west at random, led by the member at that end.
-        private void LineUpSnake(StandingFormation snake)
+        // A snake forms as a row and sets off along it, led by the member at that end: an unbreakable snake by
+        // where its members stand, a tough snake in the armour order its line-up gave it.
+        private void LineUpSnake(StandingFormation snake, bool east)
         {
             var members = snake.MemberList;
-            members.Sort(ByColumn);
-            var east = Random01() < 0.5f;
-            if (east)
+            if (!snake.Armoured)
             {
-                members.Reverse();
+                members.Sort(ByColumn);
+                if (east)
+                {
+                    members.Reverse();
+                }
             }
 
             snake.Heading = east ? 0 : 3;
@@ -394,9 +456,10 @@ namespace BalloonParty.Balloon.Formation
             }
         }
 
-        // The unbreakables a formation may plan with: its own members and every free unbreakable. Members of
-        // other formations are left out, so the planner treats their slots as taken. Null: free ones only.
-        private void CollectCandidates(StandingFormation own)
+        // The members a formation may plan with: its own and every free one of its kind (toughs when armoured,
+        // else unbreakables). Members of other formations are left out, so the planner treats their slots as
+        // taken. Null: free ones only.
+        private void CollectCandidates(StandingFormation own, bool armoured)
         {
             _candidates.Clear();
             for (var col = 0; col < _grid.Columns; col++)
@@ -404,6 +467,11 @@ namespace BalloonParty.Balloon.Formation
                 for (var row = 0; row < _grid.Rows; row++)
                 {
                     if (_grid.IsEmpty(col, row) || _grid.At(new Vector2Int(col, row)) is not IWriteableFormationMember member)
+                    {
+                        continue;
+                    }
+
+                    if ((member is IArmouredFormationMember) != armoured)
                     {
                         continue;
                     }
@@ -487,7 +555,8 @@ namespace BalloonParty.Balloon.Formation
             };
         }
 
-        // Every unbreakable on the board, in a formation or not: the snake's weight grows with them.
+        // Every unbreakable on the board, in a formation or not: the snake's weight grows with them. Toughs don't
+        // count.
         private int CountUnbreakables()
         {
             var count = 0;
@@ -495,7 +564,8 @@ namespace BalloonParty.Balloon.Formation
             {
                 for (var row = 0; row < _grid.Rows; row++)
                 {
-                    if (!_grid.IsEmpty(col, row) && _grid.At(new Vector2Int(col, row)) is IWriteableFormationMember)
+                    if (!_grid.IsEmpty(col, row)
+                        && _grid.At(new Vector2Int(col, row)) is IWriteableFormationMember and not IArmouredFormationMember)
                     {
                         count++;
                     }

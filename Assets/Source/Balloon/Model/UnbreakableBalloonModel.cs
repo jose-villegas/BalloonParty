@@ -13,10 +13,7 @@ namespace BalloonParty.Balloon.Model
         IPreBalanceRelocatable, IResistsPaint, IDeflectsShots, IBalanceAnchor, IWriteableFormationMember
     {
         private readonly ColorSource _colorSource;
-        private readonly ReactiveProperty<bool> _inFormation = new(false);
-
-        private Vector2 _formationHeading = Vector2.right;
-        private bool _walking;
+        private readonly FormationMembership _membership = new();
 
         public float DeflectStampScale { get; }
         public int ScoreValue { get; }
@@ -25,10 +22,10 @@ namespace BalloonParty.Balloon.Model
         public override PressureResponse PushResponse => PressureResponse.RelocateFarthest;
 
         // A formation member hovers where its formation put it until the formation changes or breaks.
-        public bool IsAnchored => _inFormation.Value;
-        public IReadOnlyReactiveProperty<bool> InFormation => _inFormation;
-        public Vector2 FormationHeading => _formationHeading;
-        public bool Walking => _walking;
+        public bool IsAnchored => _membership.InFormation.Value;
+        public IReadOnlyReactiveProperty<bool> InFormation => _membership.InFormation;
+        public Vector2 FormationHeading => _membership.Heading;
+        public bool Walking => _membership.Walking;
 
         // Always: EvaluateHit returns Deflect for every non-piercing hit, and there is no durability to
         // spend down.
@@ -46,21 +43,17 @@ namespace BalloonParty.Balloon.Model
 
         public void SetInFormation(bool inFormation)
         {
-            _inFormation.Value = inFormation;
-            if (!inFormation)
-            {
-                _walking = false;
-            }
+            _membership.SetInFormation(inFormation);
         }
 
         public void SetWalking(bool walking)
         {
-            _walking = walking;
+            _membership.SetWalking(walking);
         }
 
         public void SetFormationHeading(Vector2 heading)
         {
-            _formationHeading = heading;
+            _membership.SetHeading(heading);
         }
 
         public void ResolveScoreAttribution(

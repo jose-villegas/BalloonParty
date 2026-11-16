@@ -8,6 +8,12 @@ namespace BalloonParty.Configuration.Balloons
     {
         bool Enabled { get; }
 
+        /// <summary>
+        ///     Toughs gather into snakes of their own, ordered head to tail by hits left. Only while
+        ///     <see cref="Enabled" />.
+        /// </summary>
+        bool ToughSnakes { get; }
+
         /// <summary>Fewest unbreakables on the board that form up.</summary>
         int MinMembers { get; }
 

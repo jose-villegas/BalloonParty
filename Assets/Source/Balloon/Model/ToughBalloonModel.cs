@@ -6,13 +6,15 @@ using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
 using UniRx;
 using BalloonParty.Configuration.Palette;
+using UnityEngine;
 
 namespace BalloonParty.Balloon.Model
 {
     internal class ToughBalloonModel : BalloonModelBase, IHasDeflectStamp, IHasDurability, IHasScore,
-        IHasScoreColor, IResistsPaint, IDeflectsShots
+        IHasScoreColor, IResistsPaint, IDeflectsShots, IBalanceAnchor, IArmouredFormationMember
     {
         private readonly ColorSource _colorSource;
+        private readonly FormationMembership _membership = new();
         private readonly float _balanceBias;
 
         public float DeflectStampScale { get; }
@@ -32,6 +34,13 @@ namespace BalloonParty.Balloon.Model
         // Mirrors EvaluateNormalHit: the LAST hit pops rather than bouncing.
         public bool DeflectsOrdinaryHit => HitsRemaining.Value > 1;
 
+        // A tough in a snake hovers where the snake walks it, until the snake breaks.
+        public bool IsAnchored => _membership.InFormation.Value;
+        public IReadOnlyReactiveProperty<bool> InFormation => _membership.InFormation;
+        public Vector2 FormationHeading => _membership.Heading;
+        public bool Walking => _membership.Walking;
+        public int Armour => HitsRemaining.Value;
+
         internal ToughBalloonModel(
             BalloonModelConfig config, IGamePalette palette = null, IReadOnlyList<string> allowedColors = null)
             : base(config)
@@ -41,6 +50,21 @@ namespace BalloonParty.Balloon.Model
             DeflectStampScale = config.DeflectStampScale;
             ScoreValue = config.ScoreValue;
             NudgeOverrides = config.NudgeOverrides;
+        }
+
+        public void SetInFormation(bool inFormation)
+        {
+            _membership.SetInFormation(inFormation);
+        }
+
+        public void SetWalking(bool walking)
+        {
+            _membership.SetWalking(walking);
+        }
+
+        public void SetFormationHeading(Vector2 heading)
+        {
+            _membership.SetHeading(heading);
         }
 
         public void ResolveScoreAttribution(

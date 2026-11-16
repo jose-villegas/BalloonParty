@@ -310,10 +310,11 @@ namespace BalloonParty.Balloon.Formation
                 _wall.Set(toTargets ? a.Member.SlotIndex.Value : a.Target, false);
             }
 
+            // A tough gives way to enough hits, so its slot never walls.
             for (var i = 0; i < assignments.Count; i++)
             {
                 var a = assignments[i];
-                _wall.Set(toTargets ? a.Target : a.Member.SlotIndex.Value, true);
+                _wall.Set(toTargets ? a.Target : a.Member.SlotIndex.Value, ShotWall.Walls(a.Member));
             }
         }
 

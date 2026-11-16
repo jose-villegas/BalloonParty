@@ -9,16 +9,21 @@ Several formations can stand at once. Unbreakables left over after one formation
 one, so two lines can stack into a blockade. A formation the player leaves alone calls in more
 unbreakables, past the level's usual cap, and those form formations of their own.
 
+Tough balloons (toughs and toughers) gather too, but only into snakes of their own: three or more free toughs
+line up and walk the board, the one with the most hits left at the head. See "Tough snakes" below.
+
 ## Contents
 
 | File | What it does |
 |---|---|
 | `FormationShape` | The five shapes: `Horizontal`, `DiagonalDownRight`, `DiagonalDownLeft`, `ItemCover` (three to six around a balloon carrying a bomb, a snipe or a lightning, shielding it from the cannon: below it first, then its sides, then above), and `Snake` (a line that walks the board) |
 | `SnakeWalk` | Where a snake's head steps next: straight on if it can, else the gentlest open turn |
+| `ArmourOrder` | A tough snake's order, head to tail by armour (hits left). Equal armour keeps the order it stands in |
+| `MemberShuffle` | Moves members onto their slots, each once its slot is free. Members that only trade places (a tough snake re-ordered) wait on each other in a ring, so one steps aside to the nearest free slot first |
 | `FormationPlanner` | Pure planning. For one shape it lists every spot on the board where the shape fits, works out how far the members would travel to fill it, and picks at random among the few cheapest spots. It then says which member goes to which slot. It reads the grid but never changes it |
 | `FormationAssignment` | One member and the slot it goes to |
-| `StandingFormation` | One standing formation: its members, its shape, the waves it has left to hold, and whether a member was pierced since it formed |
-| `UnbreakableFormationService` | The controller. It decides when each formation forms, holds, changes and breaks up, marks members as in formation, and rolls for reinforcements |
+| `StandingFormation` | One standing formation: its members, its shape, the waves it has left to hold, whether a member was pierced since it formed, and whether it is a tough snake (`Armoured`) |
+| `UnbreakableFormationService` | The controller. It decides when each formation forms, holds, changes and breaks up, marks members as in formation, rolls for reinforcements, and gathers the toughs into their snakes |
 | `IFormationReinforcements` | The reinforcements the formations have called in. `BalloonSpawner` takes them at each wave's first line |
 
 ## How a formation runs
@@ -67,6 +72,35 @@ each step in the same pulse. The snake keeps the row's limits: never in the bott
 
 The shot solver predicts the pulse's rise but not a snake's step, so a shot that meets a step mid-flight
 can play out differently from its prediction.
+
+## Tough snakes
+
+Toughs and toughers (`ToughBalloonModel`, an `IArmouredFormationMember`) walk the board as snakes too, on
+the same beat and with the same `SnakeWalk`. They never join an unbreakable formation, and unbreakables
+never join theirs.
+
+- **Forming.** At each wave start, after the unbreakables have arranged, the free toughs form snakes while
+  at least `MinMembers` of them are free, each at most `SnakeMaxMembers` long. The planner finds the row
+  as it does for an unbreakable snake. The snake sets off east or west at random, and `ArmourOrder` lines
+  it up by **armour** (hits left): the most at the leading end, the least at the tail. Toughs with equal
+  armour keep the order they stand in, so a row of them that is already in order doesn't move.
+- **Most armour leads.** The head is the hardest balloon to stop. The worn ones trail behind it.
+- **Re-ordering as it walks.** Before every step the snake sorts itself by its members' armour at that
+  moment. A tough hit since the last step falls back behind the ones with more armour left, and the
+  others overtake it as they step. Boxed in, a tough snake turns round like any snake, and the toughest
+  moves up to the new front.
+- **Trading places.** A new order can ask two toughs for each other's slot. `MemberShuffle` moves each
+  member once its slot is free. When members only wait on each other, one steps aside to the nearest free
+  slot first, and its glide bends through that slot.
+- **Walking until it breaks.** A tough snake has no other shape to change to, so it never holds or
+  re-plans: it walks until fewer than `MinMembers` are left, and then the rest are released and rise like
+  any balloon. It calls no reinforcements.
+- **No wall from toughs.** A tough gives way to enough hits, so it never counts toward the wall across the
+  board (`ShotWall.Walls`). A tough snake's step skips that check, and the planner's wall check counts a
+  tough's slot as open.
+
+Members are anchored (`IBalanceAnchor`) while in their snake, exactly as unbreakables are. A tough snake
+has no look of its own: its members look like any tough.
 
 ## Reinforcements
 
@@ -142,7 +176,9 @@ match. All the blue comes from the palette's `UnbreakableFormation` entry. See `
 
 The settings are `IUnbreakableFormationSettings`, nested in `BalloonsConfiguration` under
 "Unbreakable Formations":
-- `Enabled`
+- `Enabled` (all formations, tough snakes too)
+- `ToughSnakes` (on: toughs walk as snakes; they share `MinMembers`, `SnakeMaxMembers`, `SnakeStepPulses`,
+  the clearances and `SpotChoices`)
 - `MinMembers` (3) and `MaxMembers` (5)
 - `HoldWaves` (3)
 - `BottomClearance` (2) and `HorizontalBottomClearance` (4, for horizontal lines)

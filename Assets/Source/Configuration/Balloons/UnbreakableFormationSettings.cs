@@ -6,8 +6,12 @@ namespace BalloonParty.Configuration.Balloons
     [Serializable]
     public class UnbreakableFormationSettings : IUnbreakableFormationSettings
     {
-        [Tooltip("Off: unbreakables only roam, as before formations.")]
+        [Tooltip("Off: unbreakables only roam, as before formations, and toughs never snake.")]
         [SerializeField] private bool _enabled = true;
+
+        [Tooltip("Toughs (and toughers) gather into snakes of their own, Min Members to Snake Max Members " +
+                 "long, led by the one with the most hits left. They walk like an unbreakable snake.")]
+        [SerializeField] private bool _toughSnakes = true;
 
         [Tooltip("Fewest unbreakables on the board that gather into a formation.")]
         [SerializeField] [Min(2)] private int _minMembers = 3;
@@ -68,6 +72,7 @@ namespace BalloonParty.Configuration.Balloons
         [SerializeField] [Min(0f)] private float _snakeWeightPerExtraUnbreakable = 0.5f;
 
         public bool Enabled => _enabled;
+        public bool ToughSnakes => _toughSnakes;
         public int MinMembers => _minMembers;
         public int MaxMembers => Mathf.Max(_maxMembers, _minMembers);
         public int HoldWaves => _holdWaves;

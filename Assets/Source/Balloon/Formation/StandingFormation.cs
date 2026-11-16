@@ -26,9 +26,16 @@ namespace BalloonParty.Balloon.Formation
         /// <summary>The wave-start arrangement that last formed or re-planned it.</summary>
         internal int ArrangedOnPass { get; set; }
 
+        /// <summary>
+        ///     A snake of toughs (<see cref="IArmouredFormationMember" />): it runs head to tail by armour, walks
+        ///     until it breaks, and never changes shape or calls reinforcements.
+        /// </summary>
+        internal bool Armoured { get; set; }
+
         internal void Reset()
         {
             MemberList.Clear();
+            Armoured = false;
             WavesLeft = 0;
             Touched = false;
             Heading = 0;
