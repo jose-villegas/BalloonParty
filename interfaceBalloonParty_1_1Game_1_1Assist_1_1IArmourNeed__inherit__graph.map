@@ -1,0 +1,5 @@
+<map id="BalloonParty.Game.Assist.IArmourNeed" name="BalloonParty.Game.Assist.IArmourNeed">
+<area shape="rect" id="Node000001" title="How much armour has stood on the board too long, 0 (none) to Shared.IAssistSettings...." alt="" coords="5,5,197,50"/>
+<area shape="rect" id="Node000002" href="$classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html" title="Need from armour left standing: each tough (or tougher) or unbreakable balloon on the board counts fr..." alt="" coords="5,98,197,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,64,103,99,99,97,99,68"/>
+</map>

@@ -121,7 +121,7 @@ Reward Balloons</h1>
 Goals</h2>
 <ol type="1">
 <li><b>Golden balloon.</b><ul>
-<li>On purple (extra-colour) levels, placed when the level is about half done (75% at first; moved to 50% after playtests). Added after playtests: every fifth level that isn't purple rolls once (40%) for a single golden balloon, at the same completion, whose pop rolls for no other. Level 5 always gets that single one, with no roll and at 10% completion rather than half: every player sees a golden balloon early, with the level still ahead of them. On a purple level its pop used to roll once for another (25%, then 10%); since 2026-11-15 (the owner) a purple level rolls for it every 6 lines from 15% done instead, 35%, then 20%, then 10%: three a level at most, each rarer. Never more than one on the board.</li>
+<li>On purple (extra-colour) levels, placed when the level is about half done (75% at first; moved to 50% after playtests). Added after playtests: every fifth level that isn't purple rolls once (40%) for a single golden balloon, at the same completion, whose pop rolls for no other. Since 2026-11-16 (the owner: too rare off bonus levels) every such level rolls, at 20% easing off over the run, with a hard pity after four levels without one. Level 5 always gets that single one, with no roll and at 10% completion rather than half: every player sees a golden balloon early, with the level still ahead of them. On a purple level its pop used to roll once for another (25%, then 10%); since 2026-11-15 (the owner) a purple level rolls for it every 6 lines from 15% done instead, 35%, then 20%, then 10%: three a level at most, each rarer. Never more than one on the board.</li>
 <li>Normal hits do nothing: the shot bounces off it as off an unbreakable. Lightning and paint do nothing either. A bomb's blast beside it pops it, as it pops an unbreakable (since 2026-11-15, the owner; it first did nothing, so a bomb couldn't hand out the card).</li>
 <li>A piercing shot pops it: a cruise-earned pierce or a Snipe lance. It is plowed and shatters at the shot's next wall bounce, as an unbreakable is.</li>
 <li>A laser beam pops it too (added after playtests): the beam's damage carries <code>DamageFlags.Beam</code>.</li>
@@ -205,9 +205,13 @@ Tuning (<code>IRewardBalloonSettings</code>)</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>PurpleHeartChances</code>   </td><td class="markdownTableBodyNone">0.4, 0.3, 0.2, 0.12, 0.06   </td><td class="markdownTableBodyNone">The same for heart balloons, from the level's start    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>OrdinaryGoldenEveryLevels</code>   </td><td class="markdownTableBodyNone">5   </td><td class="markdownTableBodyNone">Off a purple level, every this many levels rolls for a single golden balloon (0 is off)    </td></tr>
+<td class="markdownTableBodyNone"><code>OrdinaryGoldenEveryLevels</code>   </td><td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone">Off a purple level, every this many levels rolls for a single golden balloon (0 is off)    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code>OrdinaryGoldenChance</code>   </td><td class="markdownTableBodyNone">0.4   </td><td class="markdownTableBodyNone">That roll's chance    </td></tr>
+<td class="markdownTableBodyNone"><code>OrdinaryGoldenChance</code>   </td><td class="markdownTableBodyNone">0.2   </td><td class="markdownTableBodyNone">That roll's chance at the sure level    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>OrdinaryChanceHalvedAfterLevels</code>   </td><td class="markdownTableBodyNone">20   </td><td class="markdownTableBodyNone">How the ordinary chance eases off: halved this many levels past the sure level, a third at twice that (shared with the disco ball)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>GoldenPityLevels</code>   </td><td class="markdownTableBodyNone">4   </td><td class="markdownTableBodyNone">Hard pity: after this many levels in a row without a golden balloon, the next ordinary level brings one with no roll (0 is none)    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>SureGoldenLevel</code>   </td><td class="markdownTableBodyNone">5   </td><td class="markdownTableBodyNone">A level that always brings a single golden balloon, with no roll (0 for none)    </td></tr>
 <tr class="markdownTableRowOdd">

@@ -1,10 +1,13 @@
 var interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings =
 [
     [ "DiscoAtCompletion", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a67e1c837d5f0ea9211b29d32c26cb91b", null ],
+    [ "DiscoPityLevels", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a057309314d117b36a6056950ead8d8bd", null ],
     [ "GoldenAtCompletion", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#ad81a3e19697759c3c484d8036213de15", null ],
+    [ "GoldenPityLevels", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a15edf0ee491bc86aa41a73d4ad1fef5d", null ],
     [ "HeartChanceMissingOne", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a58c12265db08ed1f781ec0c850fd0959", null ],
     [ "HeartChanceMissingTwo", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#ab625a56cf3537bb851b5fa3bc05abb51", null ],
     [ "HeartCooldownLines", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a284eedc24d6c9d3e74c2d6efa2650496", null ],
+    [ "OrdinaryChanceHalvedAfterLevels", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a470573ff4a6d11a6309a7952057662d9", null ],
     [ "OrdinaryDiscoChance", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a39fb2b2bba9f293faf79de0847a508d0", null ],
     [ "OrdinaryDiscoEveryLevels", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a6247442c27e12ddc1639d3776ebc23dc", null ],
     [ "OrdinaryGoldenChance", "interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#ac9ba86798c8a075e34b54ade964f7751", null ],

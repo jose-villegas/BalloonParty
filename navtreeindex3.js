@@ -1,5 +1,7 @@
 var NAVTREEINDEX3 =
 {
+"ProjectileModelExtensions_8cs.html":[7,0,12,2,9],
+"ProjectileModel_8cs.html":[7,0,12,2,8],
 "ProjectileMotionResolver_8cs.html":[7,0,12,1,7],
 "ProjectilePoolChannel_8cs.html":[7,0,12,8],
 "ProjectileRegistryExtensions_8cs.html":[7,0,12,10],
@@ -247,7 +249,5 @@ var NAVTREEINDEX3 =
 "TailGrowthMode_8cs.html":[7,0,3,9,36],
 "TelemetryEnvelopeSerializer_8cs.html":[7,0,7,10,28],
 "TelemetryEnvelope_8cs.html":[7,0,7,10,27],
-"TelemetryLogMenu_8cs.html":[7,0,6,50],
-"TelemetrySinkBase_8cs.html":[7,0,7,10,29],
-"TelemetryStopwatch_8cs.html":[7,0,7,10,30]
+"TelemetryLogMenu_8cs.html":[7,0,6,50]
 };

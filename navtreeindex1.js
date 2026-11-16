@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"FormattedLabel_8cs.html":[7,0,18,16],
 "FrameDebuggerDumper_8cs.html":[7,0,6,2,0],
 "FrameDebuggerEventReader_8cs.html":[7,0,6,2,1],
 "FrameDebuggerEventWalker_8cs.html":[7,0,6,2,2],
@@ -82,6 +83,7 @@ var NAVTREEINDEX1 =
 "IActiveLevelParameters_8cs.html":[7,0,7,7,1],
 "IActiveScenario_8cs.html":[7,0,13,6],
 "IAdService_8cs.html":[7,0,7,8,3],
+"IArmourNeed_8cs.html":[7,0,7,0,1],
 "IAssistSettings_8cs.html":[7,0,14,18],
 "IAudioMixerRouter_8cs.html":[7,0,0,8],
 "IAudioMixerSettings_8cs.html":[7,0,0,0,3],
@@ -182,7 +184,7 @@ var NAVTREEINDEX1 =
 "IPitySettings_8cs.html":[7,0,14,23],
 "IPlayerHealing_8cs.html":[7,0,7,6,2],
 "IPlayerHealth_8cs.html":[7,0,7,6,3],
-"IPlayerNeed_8cs.html":[7,0,7,0,0],
+"IPlayerNeed_8cs.html":[7,0,7,0,2],
 "IPoolable_8cs.html":[7,0,14,9,4],
 "IPreBalanceRelocatable_8cs.html":[7,0,15,0,10],
 "IPredictionTraceConfig_8cs.html":[7,0,14,24],
@@ -247,7 +249,5 @@ var NAVTREEINDEX1 =
 "ISpawnClock_8cs.html":[7,0,1,4,7],
 "ISpeckFieldSettings_8cs.html":[7,0,3,5,18],
 "ISpinningItemVisual_8cs.html":[7,0,8,17],
-"ISplashEffect_8cs.html":[7,0,8,4,0],
-"ITelemetrySink_8cs.html":[7,0,7,10,12],
-"IThermalGovernorSettings_8cs.html":[7,0,3,19]
+"ISplashEffect_8cs.html":[7,0,8,4,0]
 };

@@ -126,6 +126,15 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Shared_1_1IAssistSettings.htm
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:aeff452b6337811b0e406e4225a28e39e" id="r_aeff452b6337811b0e406e4225a28e39e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeff452b6337811b0e406e4225a28e39e">ArmourCountForFull</a><code> [get]</code></td></tr>
+<tr class="memdesc:aeff452b6337811b0e406e4225a28e39e"><td class="mdescLeft">&#160;</td><td class="mdescRight">How many armoured balloons, each standing its full age, make full armour.  <br /></td></tr>
+<tr class="separator:aeff452b6337811b0e406e4225a28e39e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c8bb1f30b9adaec2a8e1e90d3e88295" id="r_a3c8bb1f30b9adaec2a8e1e90d3e88295"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3c8bb1f30b9adaec2a8e1e90d3e88295">ArmourNeedWeight</a><code> [get]</code></td></tr>
+<tr class="memdesc:a3c8bb1f30b9adaec2a8e1e90d3e88295"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much armour left standing counts toward the Snipe roll's need, 0 to 1: at full armour (<a class="el" href="#aeff452b6337811b0e406e4225a28e39e" title="How many armoured balloons, each standing its full age, make full armour.">ArmourCountForFull</a> toughs or unbreakables, each <a class="el" href="#a9dc97b66a9aa67de2ee1eafaa37a22c7" title="Seconds of game time an armoured balloon stands before it counts in full; it counts from 0 as it land...">ArmourSecondsForFull</a> on the board) the roll reads this much need, so its pity builds even while the hearts are full.  <br /></td></tr>
+<tr class="separator:a3c8bb1f30b9adaec2a8e1e90d3e88295"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9dc97b66a9aa67de2ee1eafaa37a22c7" id="r_a9dc97b66a9aa67de2ee1eafaa37a22c7"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9dc97b66a9aa67de2ee1eafaa37a22c7">ArmourSecondsForFull</a><code> [get]</code></td></tr>
+<tr class="memdesc:a9dc97b66a9aa67de2ee1eafaa37a22c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Seconds of game time an armoured balloon stands before it counts in full; it counts from 0 as it lands.  <br /></td></tr>
+<tr class="separator:a9dc97b66a9aa67de2ee1eafaa37a22c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a631339a39903fbbd938a84b89af71314" id="r_a631339a39903fbbd938a84b89af71314"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a631339a39903fbbd938a84b89af71314">DangerNeedWeight</a><code> [get]</code></td></tr>
 <tr class="memdesc:a631339a39903fbbd938a84b89af71314"><td class="mdescLeft">&#160;</td><td class="mdescRight">How much the danger signal counts toward need, 0 to 1: at 1, a board one line from a lost heart is as much need as the last heart.  <br /></td></tr>
 <tr class="separator:a631339a39903fbbd938a84b89af71314"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -145,6 +154,85 @@ Properties</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Help that comes only when the player needs it: how need is judged (<code>Game/Assist/PlayerNeed</code>) and how each chance-rolled help forgives misses made in need (<a class="el" href="interfaceBalloonParty_1_1Shared_1_1IPitySettings.html" title="How a chance roll forgives a player in trouble (Game/Assist/PityRoll): each roll it misses while the ...">IPitySettings</a>). </p>
 </div><h2 class="groupheader">Property Documentation</h2>
+<a id="aeff452b6337811b0e406e4225a28e39e" name="aeff452b6337811b0e406e4225a28e39e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeff452b6337811b0e406e4225a28e39e">&#9670;&#160;</a></span>ArmourCountForFull</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Shared.IAssistSettings.ArmourCountForFull</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How many armoured balloons, each standing its full age, make full armour. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1AssistSettings.html#a4c5d6eae7a7d0477a057fd7c1c5906e1">BalloonParty.Configuration.AssistSettings</a>.</p>
+
+</div>
+</div>
+<a id="a3c8bb1f30b9adaec2a8e1e90d3e88295" name="a3c8bb1f30b9adaec2a8e1e90d3e88295"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c8bb1f30b9adaec2a8e1e90d3e88295">&#9670;&#160;</a></span>ArmourNeedWeight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Shared.IAssistSettings.ArmourNeedWeight</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How much armour left standing counts toward the Snipe roll's need, 0 to 1: at full armour (<a class="el" href="#aeff452b6337811b0e406e4225a28e39e" title="How many armoured balloons, each standing its full age, make full armour.">ArmourCountForFull</a> toughs or unbreakables, each <a class="el" href="#a9dc97b66a9aa67de2ee1eafaa37a22c7" title="Seconds of game time an armoured balloon stands before it counts in full; it counts from 0 as it land...">ArmourSecondsForFull</a> on the board) the roll reads this much need, so its pity builds even while the hearts are full. </p>
+<p>The roll takes the larger of this and the player's need. 0 = armour never counts. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1AssistSettings.html#a0a8c53088b6a7b47202182a685010456">BalloonParty.Configuration.AssistSettings</a>.</p>
+
+</div>
+</div>
+<a id="a9dc97b66a9aa67de2ee1eafaa37a22c7" name="a9dc97b66a9aa67de2ee1eafaa37a22c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9dc97b66a9aa67de2ee1eafaa37a22c7">&#9670;&#160;</a></span>ArmourSecondsForFull</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Shared.IAssistSettings.ArmourSecondsForFull</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Seconds of game time an armoured balloon stands before it counts in full; it counts from 0 as it lands. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1AssistSettings.html#a4fc213a00b9b0868dbc0840f2d3145f0">BalloonParty.Configuration.AssistSettings</a>.</p>
+
+</div>
+</div>
 <a id="a631339a39903fbbd938a84b89af71314" name="a631339a39903fbbd938a84b89af71314"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a631339a39903fbbd938a84b89af71314">&#9670;&#160;</a></span>DangerNeedWeight</h2>
 

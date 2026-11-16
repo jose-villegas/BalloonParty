@@ -120,6 +120,10 @@ $(function(){initNavTree('dir_ead460de5b32039ab48ef7cc20078928.html',''); initRe
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="files" name="files"></a>
 Files</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ArmourNeed_8cs.html">ArmourNeed.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IArmourNeed_8cs.html">IArmourNeed.cs</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IPlayerNeed_8cs.html">IPlayerNeed.cs</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top"><span class="icondoc"></span>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PityRoll_8cs.html">PityRoll.cs</a></td></tr>
@@ -139,8 +143,10 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>IPlayerNeed</code> / <code>PlayerNeed</code>   </td><td class="markdownTableBodyNone">How much trouble the player is in, 0 to 1, read when a roll asks. It is the larger of two needs. The hearts' is 0 at full and 1 on the last heart, linear between (2 of 3 hearts is 0.5); hearts past full count as full. The board's is <code>IDangerLevel.Level</code> (1 when the next line would cost a heart) times <code>IAssistSettings.DangerNeedWeight</code> (1). A run of one heart reads no need from its hearts    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><code>ThreatEase</code>   </td><td class="markdownTableBodyNone">Scales a threat's chance down by <code>IAssistSettings.ThreatEaseAtFullNeed</code> (0.5) times the need: half as likely on the last heart, unchanged at full health. Also hands the need to the balloon pick    </td></tr>
+<td class="markdownTableBodyNone"><code>IArmourNeed</code> / <code>ArmourNeed</code>   </td><td class="markdownTableBodyNone">A need of the board's armour, read only by the Snipe roll, since a lance is what clears armour. Each tough (or tougher) and unbreakable balloon counts from 0 as it lands to 1 once it has stood <code>IAssistSettings.ArmourSecondsForFull</code> (30 s of game time); <code>ArmourCountForFull</code> (6) such balloons at full age are full armour. The need is that share times <code>ArmourNeedWeight</code> (0.4). A balloon moved between slots keeps its age; a popped one is forgotten    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>ThreatEase</code>   </td><td class="markdownTableBodyNone">Scales a threat's chance down by <code>IAssistSettings.ThreatEaseAtFullNeed</code> (0.5) times the need: half as likely on the last heart, unchanged at full health. Also hands the need to the balloon pick    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code>PityRoll</code>   </td><td class="markdownTableBodyNone">One forgiving roll. Each roll it misses adds the need at that moment to its <b>pity</b>, so misses out of trouble add nothing. The chance is <code>base × (1 + GrowthPerMiss × pity × need now)</code>, capped at <code>MaxChance</code> (a base above the cap is kept). Out of trouble that is the base, so the help is there only while it is needed, and pity built earlier comes back with the trouble. A hit clears the pity   </td></tr>
 </table>
 <h1><a class="anchor" id="autotoc_md187"></a>
@@ -149,7 +155,7 @@ Where it is used</h1>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Roll   </th><th class="markdownTableHeadNone">Base chance   </th><th class="markdownTableHeadNone">Pity (<code>RunConfig</code>, <code>_assist</code> block)    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Sharpshooter's Snipe (<code>Item/Snipe/SnipeChanceRoll</code>), once per ball loaded   </td><td class="markdownTableBodyNone">The card's: 1% a stack, 3 stacks   </td><td class="markdownTableBodyNone"><code>SnipePity</code>: growth 4, cap 50%. On the last heart, one stack goes 1%, 5%, 9… a ball; three stacks 3%, 15%, 27…    </td></tr>
+<td class="markdownTableBodyNone">Sharpshooter's Snipe (<code>Item/Snipe/SnipeChanceRoll</code>), once per ball loaded   </td><td class="markdownTableBodyNone">The card's: 1% a stack, 3 stacks   </td><td class="markdownTableBodyNone"><code>SnipePity</code>: growth 4, cap 50%. On the last heart, one stack goes 1%, 5%, 9… a ball; three stacks 3%, 15%, 27… It reads the larger of the player's need and the armour's, so armour left standing too long builds pity at full hearts too, gentler: at full armour (need 0.4) one stack goes 1%, 1.6%, 2.3… a ball, 7.4% after ten    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Heart balloon off a purple level (<code>Balloon/Reward/RewardBalloonService</code>), once per line while a heart is missing   </td><td class="markdownTableBodyNone"><code>HeartChanceMissingOne</code> (4%) / <code>HeartChanceMissingTwo</code> (12%)   </td><td class="markdownTableBodyNone"><code>HeartPity</code>: growth 0.5, cap 50%. On the last heart: 12%, 18%, 24… a line    </td></tr>
 <tr class="markdownTableRowOdd">

@@ -114,7 +114,7 @@ $(function(){initNavTree('interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1
 </div><!--header-->
 <div class="contents">
 
-<p>When the reward balloons come (PLAN-RewardBalloons): on a purple level, both rolled every few lines with each further one rarer; elsewhere, now and then a single golden one, and a heart one for a player missing hearts.  
+<p>When the reward balloons come (PLAN-RewardBalloons): on a purple level, both rolled every few lines with each further one rarer; elsewhere, now and then a single golden one or disco ball, never too many levels apart, and a heart one for a player missing hearts.  
  <a href="#details">More...</a></p>
 <div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for BalloonParty.Configuration.Balloons.IRewardBalloonSettings:</div>
@@ -129,9 +129,15 @@ Properties</h2></td></tr>
 <tr class="memitem:a67e1c837d5f0ea9211b29d32c26cb91b" id="r_a67e1c837d5f0ea9211b29d32c26cb91b"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a67e1c837d5f0ea9211b29d32c26cb91b">DiscoAtCompletion</a><code> [get]</code></td></tr>
 <tr class="memdesc:a67e1c837d5f0ea9211b29d32c26cb91b"><td class="mdescLeft">&#160;</td><td class="mdescRight">The disco ball's completion, 0 to 1, from which an ordinary level that won it brings it (<a class="el" href="#a6247442c27e12ddc1639d3776ebc23dc" title="Off a purple level, every this many levels, from SureDiscoLevel on, rolls once (OrdinaryDiscoChance) ...">OrdinaryDiscoEveryLevels</a>).  <br /></td></tr>
 <tr class="separator:a67e1c837d5f0ea9211b29d32c26cb91b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a057309314d117b36a6056950ead8d8bd" id="r_a057309314d117b36a6056950ead8d8bd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a057309314d117b36a6056950ead8d8bd">DiscoPityLevels</a><code> [get]</code></td></tr>
+<tr class="memdesc:a057309314d117b36a6056950ead8d8bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">The disco ball's hard pity, as <a class="el" href="#a15edf0ee491bc86aa41a73d4ad1fef5d" title="Hard pity: after this many levels in a row without a golden balloon placed, the next level off purple...">GoldenPityLevels</a>.  <br /></td></tr>
+<tr class="separator:a057309314d117b36a6056950ead8d8bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad81a3e19697759c3c484d8036213de15" id="r_ad81a3e19697759c3c484d8036213de15"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad81a3e19697759c3c484d8036213de15">GoldenAtCompletion</a><code> [get]</code></td></tr>
-<tr class="memdesc:ad81a3e19697759c3c484d8036213de15"><td class="mdescLeft">&#160;</td><td class="mdescRight">The level's completion, 0 to 1, from which an ordinary level that won its golden balloon brings it (<a class="el" href="#acb82f6a9feb081f72dc8fb1138df44e3" title="Off a purple level, every this many levels rolls once (OrdinaryGoldenChance) for a single golden ball...">OrdinaryGoldenEveryLevels</a>).  <br /></td></tr>
+<tr class="memdesc:ad81a3e19697759c3c484d8036213de15"><td class="mdescLeft">&#160;</td><td class="mdescRight">The level's completion, 0 to 1, from which an ordinary level that won its golden balloon brings it (<a class="el" href="#acb82f6a9feb081f72dc8fb1138df44e3" title="Off a purple level, every this many levels from SureGoldenLevel on rolls once (OrdinaryGoldenChance) ...">OrdinaryGoldenEveryLevels</a>).  <br /></td></tr>
 <tr class="separator:ad81a3e19697759c3c484d8036213de15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15edf0ee491bc86aa41a73d4ad1fef5d" id="r_a15edf0ee491bc86aa41a73d4ad1fef5d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a15edf0ee491bc86aa41a73d4ad1fef5d">GoldenPityLevels</a><code> [get]</code></td></tr>
+<tr class="memdesc:a15edf0ee491bc86aa41a73d4ad1fef5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hard pity: after this many levels in a row without a golden balloon placed, the next level off purple, from <a class="el" href="#a194ec25e5d96516ba4b63ee3575ca6c0" title="A level that always brings a single golden balloon, with no roll; 0 for none.">SureGoldenLevel</a> on, brings one with no roll.  <br /></td></tr>
+<tr class="separator:a15edf0ee491bc86aa41a73d4ad1fef5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58c12265db08ed1f781ec0c850fd0959" id="r_a58c12265db08ed1f781ec0c850fd0959"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a58c12265db08ed1f781ec0c850fd0959">HeartChanceMissingOne</a><code> [get]</code></td></tr>
 <tr class="memdesc:a58c12265db08ed1f781ec0c850fd0959"><td class="mdescLeft">&#160;</td><td class="mdescRight">Chance per spawn line of a heart balloon while one heart is missing, off a purple level.  <br /></td></tr>
 <tr class="separator:a58c12265db08ed1f781ec0c850fd0959"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -141,15 +147,20 @@ Properties</h2></td></tr>
 <tr class="memitem:a284eedc24d6c9d3e74c2d6efa2650496" id="r_a284eedc24d6c9d3e74c2d6efa2650496"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a284eedc24d6c9d3e74c2d6efa2650496">HeartCooldownLines</a><code> [get]</code></td></tr>
 <tr class="memdesc:a284eedc24d6c9d3e74c2d6efa2650496"><td class="mdescLeft">&#160;</td><td class="mdescRight">Spawn lines after a heart balloon is placed before another can roll.  <br /></td></tr>
 <tr class="separator:a284eedc24d6c9d3e74c2d6efa2650496"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a470573ff4a6d11a6309a7952057662d9" id="r_a470573ff4a6d11a6309a7952057662d9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a470573ff4a6d11a6309a7952057662d9">OrdinaryChanceHalvedAfterLevels</a><code> [get]</code></td></tr>
+<tr class="memdesc:a470573ff4a6d11a6309a7952057662d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">How the golden balloon's and the disco ball's ordinary chances ease off over a run: halved this many levels past each one's sure level, a third at twice that.  <br /></td></tr>
+<tr class="separator:a470573ff4a6d11a6309a7952057662d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39fb2b2bba9f293faf79de0847a508d0" id="r_a39fb2b2bba9f293faf79de0847a508d0"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a39fb2b2bba9f293faf79de0847a508d0">OrdinaryDiscoChance</a><code> [get]</code></td></tr>
+<tr class="memdesc:a39fb2b2bba9f293faf79de0847a508d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The ordinary roll's chance at the sure level, eased off over the run (<a class="el" href="#a470573ff4a6d11a6309a7952057662d9" title="How the golden balloon&#39;s and the disco ball&#39;s ordinary chances ease off over a run: halved this many ...">OrdinaryChanceHalvedAfterLevels</a>).  <br /></td></tr>
 <tr class="separator:a39fb2b2bba9f293faf79de0847a508d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6247442c27e12ddc1639d3776ebc23dc" id="r_a6247442c27e12ddc1639d3776ebc23dc"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6247442c27e12ddc1639d3776ebc23dc">OrdinaryDiscoEveryLevels</a><code> [get]</code></td></tr>
-<tr class="memdesc:a6247442c27e12ddc1639d3776ebc23dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Off a purple level, every this many levels, from <a class="el" href="#afb7d5c1e35fe97c1377dd79cfb7c63de" title="A level that always brings a single disco ball, with no roll; 0 for none.">SureDiscoLevel</a> on, rolls once (<a class="el" href="#a39fb2b2bba9f293faf79de0847a508d0">OrdinaryDiscoChance</a>) for a single disco ball.  <br /></td></tr>
+<tr class="memdesc:a6247442c27e12ddc1639d3776ebc23dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Off a purple level, every this many levels, from <a class="el" href="#afb7d5c1e35fe97c1377dd79cfb7c63de" title="A level that always brings a single disco ball, with no roll; 0 for none.">SureDiscoLevel</a> on, rolls once (<a class="el" href="#a39fb2b2bba9f293faf79de0847a508d0" title="The ordinary roll&#39;s chance at the sure level, eased off over the run (OrdinaryChanceHalvedAfterLevels...">OrdinaryDiscoChance</a>) for a single disco ball.  <br /></td></tr>
 <tr class="separator:a6247442c27e12ddc1639d3776ebc23dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9ba86798c8a075e34b54ade964f7751" id="r_ac9ba86798c8a075e34b54ade964f7751"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac9ba86798c8a075e34b54ade964f7751">OrdinaryGoldenChance</a><code> [get]</code></td></tr>
+<tr class="memdesc:ac9ba86798c8a075e34b54ade964f7751"><td class="mdescLeft">&#160;</td><td class="mdescRight">The ordinary roll's chance at the sure level, eased off over the run (<a class="el" href="#a470573ff4a6d11a6309a7952057662d9" title="How the golden balloon&#39;s and the disco ball&#39;s ordinary chances ease off over a run: halved this many ...">OrdinaryChanceHalvedAfterLevels</a>).  <br /></td></tr>
 <tr class="separator:ac9ba86798c8a075e34b54ade964f7751"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb82f6a9feb081f72dc8fb1138df44e3" id="r_acb82f6a9feb081f72dc8fb1138df44e3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acb82f6a9feb081f72dc8fb1138df44e3">OrdinaryGoldenEveryLevels</a><code> [get]</code></td></tr>
-<tr class="memdesc:acb82f6a9feb081f72dc8fb1138df44e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Off a purple level, every this many levels rolls once (<a class="el" href="#ac9ba86798c8a075e34b54ade964f7751">OrdinaryGoldenChance</a>) for a single golden balloon at <a class="el" href="#ad81a3e19697759c3c484d8036213de15" title="The level&#39;s completion, 0 to 1, from which an ordinary level that won its golden balloon brings it (O...">GoldenAtCompletion</a>.  <br /></td></tr>
+<tr class="memdesc:acb82f6a9feb081f72dc8fb1138df44e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Off a purple level, every this many levels from <a class="el" href="#a194ec25e5d96516ba4b63ee3575ca6c0" title="A level that always brings a single golden balloon, with no roll; 0 for none.">SureGoldenLevel</a> on rolls once (<a class="el" href="#ac9ba86798c8a075e34b54ade964f7751" title="The ordinary roll&#39;s chance at the sure level, eased off over the run (OrdinaryChanceHalvedAfterLevels...">OrdinaryGoldenChance</a>) for a single golden balloon at <a class="el" href="#ad81a3e19697759c3c484d8036213de15" title="The level&#39;s completion, 0 to 1, from which an ordinary level that won its golden balloon brings it (O...">GoldenAtCompletion</a>.  <br /></td></tr>
 <tr class="separator:acb82f6a9feb081f72dc8fb1138df44e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a711906511fd5e71450fcd394f968cf51" id="r_a711906511fd5e71450fcd394f968cf51"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a711906511fd5e71450fcd394f968cf51">PurpleDiscoAtCompletion</a><code> [get]</code></td></tr>
 <tr class="memdesc:a711906511fd5e71450fcd394f968cf51"><td class="mdescLeft">&#160;</td><td class="mdescRight">The level's completion, 0 to 1, from which a purple level rolls for disco balls.  <br /></td></tr>
@@ -182,7 +193,7 @@ Properties</h2></td></tr>
 <tr class="separator:a194ec25e5d96516ba4b63ee3575ca6c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>When the reward balloons come (PLAN-RewardBalloons): on a purple level, both rolled every few lines with each further one rarer; elsewhere, now and then a single golden one, and a heart one for a player missing hearts. </p>
+<div class="textblock"><p>When the reward balloons come (PLAN-RewardBalloons): on a purple level, both rolled every few lines with each further one rarer; elsewhere, now and then a single golden one or disco ball, never too many levels apart, and a heart one for a player missing hearts. </p>
 </div><h2 class="groupheader">Property Documentation</h2>
 <a id="a67e1c837d5f0ea9211b29d32c26cb91b" name="a67e1c837d5f0ea9211b29d32c26cb91b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a67e1c837d5f0ea9211b29d32c26cb91b">&#9670;&#160;</a></span>DiscoAtCompletion</h2>
@@ -211,6 +222,32 @@ Properties</h2></td></tr>
 
 </div>
 </div>
+<a id="a057309314d117b36a6056950ead8d8bd" name="a057309314d117b36a6056950ead8d8bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a057309314d117b36a6056950ead8d8bd">&#9670;&#160;</a></span>DiscoPityLevels</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.IRewardBalloonSettings.DiscoPityLevels</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The disco ball's hard pity, as <a class="el" href="#a15edf0ee491bc86aa41a73d4ad1fef5d" title="Hard pity: after this many levels in a row without a golden balloon placed, the next level off purple...">GoldenPityLevels</a>. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a07b44c089ebab035342db107fa825efb">BalloonParty.Configuration.Balloons.RewardBalloonSettings</a>.</p>
+
+</div>
+</div>
 <a id="ad81a3e19697759c3c484d8036213de15" name="ad81a3e19697759c3c484d8036213de15"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad81a3e19697759c3c484d8036213de15">&#9670;&#160;</a></span>GoldenAtCompletion</h2>
 
@@ -231,9 +268,36 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The level's completion, 0 to 1, from which an ordinary level that won its golden balloon brings it (<a class="el" href="#acb82f6a9feb081f72dc8fb1138df44e3" title="Off a purple level, every this many levels rolls once (OrdinaryGoldenChance) for a single golden ball...">OrdinaryGoldenEveryLevels</a>). </p>
+<p>The level's completion, 0 to 1, from which an ordinary level that won its golden balloon brings it (<a class="el" href="#acb82f6a9feb081f72dc8fb1138df44e3" title="Off a purple level, every this many levels from SureGoldenLevel on rolls once (OrdinaryGoldenChance) ...">OrdinaryGoldenEveryLevels</a>). </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a367fc8cf38e0ae27a48dbb948c5afcb9">BalloonParty.Configuration.Balloons.RewardBalloonSettings</a>.</p>
+
+</div>
+</div>
+<a id="a15edf0ee491bc86aa41a73d4ad1fef5d" name="a15edf0ee491bc86aa41a73d4ad1fef5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15edf0ee491bc86aa41a73d4ad1fef5d">&#9670;&#160;</a></span>GoldenPityLevels</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.IRewardBalloonSettings.GoldenPityLevels</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Hard pity: after this many levels in a row without a golden balloon placed, the next level off purple, from <a class="el" href="#a194ec25e5d96516ba4b63ee3575ca6c0" title="A level that always brings a single golden balloon, with no roll; 0 for none.">SureGoldenLevel</a> on, brings one with no roll. </p>
+<p>0 is none. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#ac00c4be4eac474c77a2c1da5279c651e">BalloonParty.Configuration.Balloons.RewardBalloonSettings</a>.</p>
 
 </div>
 </div>
@@ -315,6 +379,33 @@ Properties</h2></td></tr>
 
 </div>
 </div>
+<a id="a470573ff4a6d11a6309a7952057662d9" name="a470573ff4a6d11a6309a7952057662d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a470573ff4a6d11a6309a7952057662d9">&#9670;&#160;</a></span>OrdinaryChanceHalvedAfterLevels</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.Balloons.IRewardBalloonSettings.OrdinaryChanceHalvedAfterLevels</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>How the golden balloon's and the disco ball's ordinary chances ease off over a run: halved this many levels past each one's sure level, a third at twice that. </p>
+<p>0 is never. </p>
+
+<p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#ac82a5341d12e53821132fbd6070896d4">BalloonParty.Configuration.Balloons.RewardBalloonSettings</a>.</p>
+
+</div>
+</div>
 <a id="a39fb2b2bba9f293faf79de0847a508d0" name="a39fb2b2bba9f293faf79de0847a508d0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a39fb2b2bba9f293faf79de0847a508d0">&#9670;&#160;</a></span>OrdinaryDiscoChance</h2>
 
@@ -334,6 +425,8 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>The ordinary roll's chance at the sure level, eased off over the run (<a class="el" href="#a470573ff4a6d11a6309a7952057662d9" title="How the golden balloon&#39;s and the disco ball&#39;s ordinary chances ease off over a run: halved this many ...">OrdinaryChanceHalvedAfterLevels</a>). </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a60b312590904babc893ed8b7ca580132">BalloonParty.Configuration.Balloons.RewardBalloonSettings</a>.</p>
 
@@ -359,8 +452,8 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Off a purple level, every this many levels, from <a class="el" href="#afb7d5c1e35fe97c1377dd79cfb7c63de" title="A level that always brings a single disco ball, with no roll; 0 for none.">SureDiscoLevel</a> on, rolls once (<a class="el" href="#a39fb2b2bba9f293faf79de0847a508d0">OrdinaryDiscoChance</a>) for a single disco ball. </p>
-<p>0 is off. </p>
+<p>Off a purple level, every this many levels, from <a class="el" href="#afb7d5c1e35fe97c1377dd79cfb7c63de" title="A level that always brings a single disco ball, with no roll; 0 for none.">SureDiscoLevel</a> on, rolls once (<a class="el" href="#a39fb2b2bba9f293faf79de0847a508d0" title="The ordinary roll&#39;s chance at the sure level, eased off over the run (OrdinaryChanceHalvedAfterLevels...">OrdinaryDiscoChance</a>) for a single disco ball. </p>
+<p>1 is every level, 0 is off. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a033383acdd2d40a9ad51d5729f281951">BalloonParty.Configuration.Balloons.RewardBalloonSettings</a>.</p>
 
@@ -386,6 +479,8 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>The ordinary roll's chance at the sure level, eased off over the run (<a class="el" href="#a470573ff4a6d11a6309a7952057662d9" title="How the golden balloon&#39;s and the disco ball&#39;s ordinary chances ease off over a run: halved this many ...">OrdinaryChanceHalvedAfterLevels</a>). </p>
+
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a048d5775cb87bf8875a4fa1b71114ae1">BalloonParty.Configuration.Balloons.RewardBalloonSettings</a>.</p>
 
 </div>
@@ -410,8 +505,8 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Off a purple level, every this many levels rolls once (<a class="el" href="#ac9ba86798c8a075e34b54ade964f7751">OrdinaryGoldenChance</a>) for a single golden balloon at <a class="el" href="#ad81a3e19697759c3c484d8036213de15" title="The level&#39;s completion, 0 to 1, from which an ordinary level that won its golden balloon brings it (O...">GoldenAtCompletion</a>. </p>
-<p>0 is off. </p>
+<p>Off a purple level, every this many levels from <a class="el" href="#a194ec25e5d96516ba4b63ee3575ca6c0" title="A level that always brings a single golden balloon, with no roll; 0 for none.">SureGoldenLevel</a> on rolls once (<a class="el" href="#ac9ba86798c8a075e34b54ade964f7751" title="The ordinary roll&#39;s chance at the sure level, eased off over the run (OrdinaryChanceHalvedAfterLevels...">OrdinaryGoldenChance</a>) for a single golden balloon at <a class="el" href="#ad81a3e19697759c3c484d8036213de15" title="The level&#39;s completion, 0 to 1, from which an ordinary level that won its golden balloon brings it (O...">GoldenAtCompletion</a>. </p>
+<p>1 is every level, 0 is off. </p>
 
 <p>Implemented in <a class="el" href="classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a29ed3a5c6c4ba3cd7d37adf019afd7cb">BalloonParty.Configuration.Balloons.RewardBalloonSettings</a>.</p>
 

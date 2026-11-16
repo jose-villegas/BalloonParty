@@ -1,10 +1,12 @@
 var NAVTREEINDEX4 =
 {
+"TelemetrySinkBase_8cs.html":[7,0,7,10,29],
+"TelemetryStopwatch_8cs.html":[7,0,7,10,30],
 "TextureAuditWindow_8cs.html":[7,0,6,51],
 "TexturePreviewBox_8cs.html":[7,0,6,52],
 "ThermalFrameRateGovernor_8cs.html":[7,0,14,12,3],
 "ThermalGovernorSettings_8cs.html":[7,0,3,28],
-"ThreatEase_8cs.html":[7,0,7,0,3],
+"ThreatEase_8cs.html":[7,0,7,0,5],
 "ThrowerController_8cs.html":[7,0,17,2],
 "ThrowerLifetimeScope_8cs.html":[7,0,17,3],
 "ThrowerOriginProvider_8cs.html":[7,0,17,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX4 =
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3687bbf9b9c25e40dfe23768ad0fbbce":[6,0,0,0,0,3,44],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3e26ed679bfcc356d10c54213fe89adb":[5,0,0,0,0,3,41],
 "classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a3e26ed679bfcc356d10c54213fe89adb":[6,0,0,0,0,3,41],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a44f9b214c8bb534badae2c7fa15d7174":[5,0,0,0,0,3,37],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a44f9b214c8bb534badae2c7fa15d7174":[6,0,0,0,0,3,37],
-"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a48c3170743a4904ade4e383e90a923be":[5,0,0,0,0,3,7]
+"classBalloonParty_1_1Audio_1_1Configuration_1_1SfxEntry.html#a44f9b214c8bb534badae2c7fa15d7174":[5,0,0,0,0,3,37]
 };

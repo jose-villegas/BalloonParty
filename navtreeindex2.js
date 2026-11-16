@@ -1,5 +1,7 @@
 var NAVTREEINDEX2 =
 {
+"ITelemetrySink_8cs.html":[7,0,7,10,12],
+"IThermalGovernorSettings_8cs.html":[7,0,3,19],
 "IThermalSource_8cs.html":[7,0,14,12,1],
 "ITimeOfDayNight_8cs.html":[7,0,14,11,1],
 "ITimeOfDaySettings_8cs.html":[7,0,3,5,19],
@@ -198,14 +200,14 @@ var NAVTREEINDEX2 =
 "PierceEndedEndCondition_8cs.html":[7,0,12,0,1],
 "PierceTelegraphScan_8cs.html":[7,0,12,1,3],
 "PierceWallReachedMessage_8cs.html":[7,0,14,7,26],
-"PityRoll_8cs.html":[7,0,7,0,1],
+"PityRoll_8cs.html":[7,0,7,0,3],
 "PitySettings_8cs.html":[7,0,3,21],
 "PlainCounterDisplay_8cs.html":[7,0,18,17],
 "PlatedBalloonModel_8cs.html":[7,0,1,2,14],
 "PlatedRewardSchedule_8cs.html":[7,0,1,3,3],
 "PlatedRewardTuning_8cs.html":[7,0,1,3,4],
 "PlayerHealthController_8cs.html":[7,0,7,6,5],
-"PlayerNeed_8cs.html":[7,0,7,0,2],
+"PlayerNeed_8cs.html":[7,0,7,0,4],
 "PlayerPrefsRunSave_8cs.html":[7,0,7,8,17],
 "PointFocus_8cs.html":[7,0,7,2,16],
 "PoolChannel_8cs.html":[7,0,14,9,9],
@@ -247,7 +249,5 @@ var NAVTREEINDEX2 =
 "ProjectileFlightState_8cs.html":[7,0,12,2,7],
 "ProjectileHitResolver_8cs.html":[7,0,12,1,5],
 "ProjectileHitVisual_8cs.html":[7,0,12,1,6],
-"ProjectileLoadedMessage_8cs.html":[7,0,14,7,35],
-"ProjectileModelExtensions_8cs.html":[7,0,12,2,9],
-"ProjectileModel_8cs.html":[7,0,12,2,8]
+"ProjectileLoadedMessage_8cs.html":[7,0,14,7,35]
 };

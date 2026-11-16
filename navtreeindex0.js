@@ -14,6 +14,7 @@ var NAVTREEINDEX0 =
 "AnimatorEffectView_8cs.html":[7,0,14,9,0],
 "AnimatorGameEntryGate_8cs.html":[7,0,18,12],
 "AppLifetimeScope_8cs.html":[7,0,7,12],
+"ArmourNeed_8cs.html":[7,0,7,0,0],
 "AssemblyInfo_8cs.html":[7,0,19],
 "AssistSettings_8cs.html":[7,0,3,12],
 "AttributionLedger_8cs.html":[7,0,0,1,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "FormationAssignment_8cs.html":[7,0,1,1,0],
 "FormationOverlapResolver_8cs.html":[7,0,7,9,0,3],
 "FormationPlanner_8cs.html":[7,0,1,1,1],
-"FormationShape_8cs.html":[7,0,1,1,2],
-"FormattedLabel_8cs.html":[7,0,18,16]
+"FormationShape_8cs.html":[7,0,1,1,2]
 };

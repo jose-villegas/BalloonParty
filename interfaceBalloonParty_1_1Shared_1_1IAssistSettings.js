@@ -1,5 +1,8 @@
 var interfaceBalloonParty_1_1Shared_1_1IAssistSettings =
 [
+    [ "ArmourCountForFull", "interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html#aeff452b6337811b0e406e4225a28e39e", null ],
+    [ "ArmourNeedWeight", "interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html#a3c8bb1f30b9adaec2a8e1e90d3e88295", null ],
+    [ "ArmourSecondsForFull", "interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html#a9dc97b66a9aa67de2ee1eafaa37a22c7", null ],
     [ "DangerNeedWeight", "interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html#a631339a39903fbbd938a84b89af71314", null ],
     [ "HeartPity", "interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html#a5ea2f30e7ba9e3e9a648629236f6d66b", null ],
     [ "ItemPity", "interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html#a29f4a3ccdfd1473363b966e2fa44ed81", null ],

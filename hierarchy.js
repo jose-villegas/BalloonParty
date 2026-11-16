@@ -217,6 +217,9 @@ var hierarchy =
     [ "BalloonParty.Game.Run.IAdService", "interfaceBalloonParty_1_1Game_1_1Run_1_1IAdService.html", [
       [ "BalloonParty.Game.Run.NoAdService", "classBalloonParty_1_1Game_1_1Run_1_1NoAdService.html", null ]
     ] ],
+    [ "BalloonParty.Game.Assist.IArmourNeed", "interfaceBalloonParty_1_1Game_1_1Assist_1_1IArmourNeed.html", [
+      [ "BalloonParty.Game.Assist.ArmourNeed", "classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html", null ]
+    ] ],
     [ "BalloonParty.Shared.IAssistSettings", "interfaceBalloonParty_1_1Shared_1_1IAssistSettings.html", [
       [ "BalloonParty.Configuration.AssistSettings", "classBalloonParty_1_1Configuration_1_1AssistSettings.html", null ]
     ] ],
@@ -415,6 +418,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Spawner.BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html", null ],
       [ "BalloonParty.Balloon.Spawner.SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html", null ],
       [ "BalloonParty.Display.CameraShakeController", "classBalloonParty_1_1Display_1_1CameraShakeController.html", null ],
+      [ "BalloonParty.Game.Assist.ArmourNeed", "classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html", null ],
       [ "BalloonParty.Game.CardReveal.CardRevealBoardHold", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealBoardHold.html", null ],
       [ "BalloonParty.Game.CardReveal.CardRevealController", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html", null ],
       [ "BalloonParty.Game.Cinematics.CameraRigCinematicProducer", "classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematicProducer.html", [
@@ -860,6 +864,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Spawner.BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html", null ],
       [ "BalloonParty.Balloon.Spawner.RejectedBalloonEffect", "classBalloonParty_1_1Balloon_1_1Spawner_1_1RejectedBalloonEffect.html", null ],
       [ "BalloonParty.Balloon.Spawner.SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html", null ],
+      [ "BalloonParty.Game.Assist.ArmourNeed", "classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html", null ],
       [ "BalloonParty.Game.CardReveal.CardRevealBoardHold", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealBoardHold.html", null ],
       [ "BalloonParty.Game.CardReveal.CardRevealController", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html", null ],
       [ "BalloonParty.Game.Cinematics.HeartDrainCinematic", "classBalloonParty_1_1Game_1_1Cinematics_1_1HeartDrainCinematic.html", null ],
@@ -1064,6 +1069,7 @@ var hierarchy =
       [ "BalloonParty.Balloon.Spawner.BalloonSpawner", "classBalloonParty_1_1Balloon_1_1Spawner_1_1BalloonSpawner.html", null ],
       [ "BalloonParty.Balloon.Spawner.SpawnClock", "classBalloonParty_1_1Balloon_1_1Spawner_1_1SpawnClock.html", null ],
       [ "BalloonParty.Display.CameraShakeController", "classBalloonParty_1_1Display_1_1CameraShakeController.html", null ],
+      [ "BalloonParty.Game.Assist.ArmourNeed", "classBalloonParty_1_1Game_1_1Assist_1_1ArmourNeed.html", null ],
       [ "BalloonParty.Game.CardReveal.CardRevealBoardHold", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealBoardHold.html", null ],
       [ "BalloonParty.Game.CardReveal.CardRevealController", "classBalloonParty_1_1Game_1_1CardReveal_1_1CardRevealController.html", null ],
       [ "BalloonParty.Game.Cinematics.CameraRigCinematicProducer", "classBalloonParty_1_1Game_1_1Cinematics_1_1CameraRigCinematicProducer.html", null ],
