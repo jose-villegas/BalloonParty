@@ -1357,7 +1357,7 @@ MonoBehaviour:
     _fetchPrompt: 'A bright balloon pop with a coin-like chime ringing over it: a gold-plated balloon breaks and pays a reward.'
   - _channel: 0
     _clips:
-    - {fileID: 8300000, guid: 0716c6332088142299121f5b0466ad01, type: 3}
+    - {fileID: 8300000, guid: eaa63d4c805fd4c27976a46fd84f3610, type: 3}
     _clipPickMode: 0
     _clipWrapMode: 0
     _pitchRange: {x: 1, y: 1}
