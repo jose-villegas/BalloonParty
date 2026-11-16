@@ -1,7 +1,11 @@
 <map id="BalloonParty.Balloon.Model.IFormationMember" name="BalloonParty.Balloon.Model.IFormationMember">
-<area shape="rect" id="Node000001" title="A balloon that can join an unbreakable formation; the view reads it to swap its lights." alt="" coords="8,5,211,50"/>
-<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html" title="The side of a formation member that only UnbreakableFormationService drives." alt="" coords="5,98,214,143"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,63,112,98,107,97,108,68"/>
-<area shape="rect" id="Node000003" href="$classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html" title=" " alt="" coords="8,191,211,235"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="111,156,112,191,107,190,108,160"/>
+<area shape="rect" id="Node000001" title="A balloon that can join an unbreakable formation; the view reads it to swap its lights." alt="" coords="5,40,208,85"/>
+<area shape="rect" id="Node000002" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html" title="The side of a formation member that only UnbreakableFormationService drives." alt="" coords="256,40,464,85"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="223,60,258,62,253,63,223,65"/>
+<area shape="rect" id="Node000003" href="$interfaceBalloonParty_1_1Balloon_1_1Model_1_1IArmouredFormationMember.html" title="A formation member with armour: a tough balloon." alt="" coords="512,5,721,50"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="479,44,514,41,509,42,480,49"/>
+<area shape="rect" id="Node000005" href="$classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html" title=" " alt="" coords="516,75,718,119"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="480,76,518,83,512,83,479,81"/>
+<area shape="rect" id="Node000004" href="$classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html" title=" " alt="" coords="769,5,972,50"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="737,25,772,27,766,28,737,30"/>
 </map>

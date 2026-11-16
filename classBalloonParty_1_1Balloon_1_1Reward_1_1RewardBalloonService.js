@@ -8,6 +8,7 @@ var classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService =
     [ "HeartChance", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a1cbc6e3792f1abfe9c10d1747ce207c8", null ],
     [ "HeartDue", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a370e5b898a3d7398e8f5e331f35dbded", null ],
     [ "HeartLeft", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#af08f48055cec8a5989b529e338997481", null ],
+    [ "HeartRunEase", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#ab6cb6f37c99a027ffe4da24722d45926", null ],
     [ "Placed", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a199b35f6a164e895144350892302c761", null ],
     [ "PlatedDue", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a73ec4c81a0e85310a1ad2044439fcaf8", null ],
     [ "ResetRun", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#ac79485bb876a1680306d2ae73772460e", null ],
@@ -35,6 +36,7 @@ var classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService =
     [ "_purpleHeartOwed", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a2c1e1cc079819ec95f80bee8a4a7e5e6", null ],
     [ "_settings", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a2231ffbfa5ed73b71115fc772ade5ba9", null ],
     [ "_weapon", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a80606d69e2b6c368f298134fc0d4bfe0", null ],
+    [ "LevelNumber", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a30507a7b350d104c22eb021ad23a091e", null ],
     [ "Odds", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a872ca71934b86eb663bdc08340e8ad6f", null ],
     [ "Random01", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#afefb190136bac91ad6c7ce0e50aef0ed", null ],
     [ "ResetOrder", "classBalloonParty_1_1Balloon_1_1Reward_1_1RewardBalloonService.html#a792f0a70d2bf552fd036e72f3352ff7a", null ]

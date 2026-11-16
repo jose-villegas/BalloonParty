@@ -1,5 +1,9 @@
 var NAVTREEINDEX3 =
 {
+"PopSheetLoader_8cs.html":[7,0,18,1,1],
+"PredictionSightProbe_8cs.html":[7,0,11,0],
+"PredictionSightSpiral_8cs.html":[7,0,8,28],
+"PredictionTraceCalculator_8cs.html":[7,0,11,1],
 "PredictionTraceConfig_8cs.html":[7,0,3,22],
 "PredictionTraceEnd_8cs.html":[7,0,11,2],
 "PredictionTraceLights_8cs.html":[7,0,11,3],
@@ -221,7 +225,7 @@ var NAVTREEINDEX3 =
 "SmokeFieldService_8cs.html":[7,0,13,11],
 "SmokeFieldSettings_8cs.html":[7,0,3,5,27],
 "SmokeFieldView_8cs.html":[7,0,13,0,4],
-"SnakeWalk_8cs.html":[7,0,1,1,4],
+"SnakeWalk_8cs.html":[7,0,1,1,6],
 "SnipeChanceRoll_8cs.html":[7,0,8,7,5],
 "SnipeDischargeBloom_8cs.html":[7,0,8,7,6],
 "SnipeItemHandler_8cs.html":[7,0,8,7,7],
@@ -245,9 +249,5 @@ var NAVTREEINDEX3 =
 "SpawnBalloonCheat_8cs.html":[7,0,2,22],
 "SpawnBalloonLineCheat_8cs.html":[7,0,2,23],
 "SpawnBalloonLineMessage_8cs.html":[7,0,14,7,50],
-"SpawnClockSettings_8cs.html":[7,0,3,9,34],
-"SpawnClock_8cs.html":[7,0,1,4,11],
-"SpawnStage_8cs.html":[7,0,15,3,2],
-"SpeckAppearanceSettings_8cs.html":[7,0,3,5,28],
-"SpeckFieldSettings_8cs.html":[7,0,3,5,29]
+"SpawnClockSettings_8cs.html":[7,0,3,9,34]
 };

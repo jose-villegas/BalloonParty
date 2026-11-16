@@ -7,6 +7,7 @@ var hierarchy =
     [ "BalloonParty.Editor.GradientTextureDrawer.GradientStorage.AlphaKeyEntry", "classBalloonParty_1_1Editor_1_1GradientTextureDrawer_1_1GradientStorage_1_1AlphaKeyEntry.html", null ],
     [ "BalloonParty.Shared.Extensions.AnimationCurveExtensions", "classBalloonParty_1_1Shared_1_1Extensions_1_1AnimationCurveExtensions.html", null ],
     [ "BalloonParty.Item.Preview.ItemPreviewTicker.ApproachPen", "structBalloonParty_1_1Item_1_1Preview_1_1ItemPreviewTicker_1_1ApproachPen.html", null ],
+    [ "BalloonParty.Balloon.Formation.ArmourOrder", "classBalloonParty_1_1Balloon_1_1Formation_1_1ArmourOrder.html", null ],
     [ "BalloonParty.Editor.Release.ReleasePublisher.AssetResponse", "classBalloonParty_1_1Editor_1_1Release_1_1ReleasePublisher_1_1AssetResponse.html", null ],
     [ "BalloonParty.Audio.Editor.AttributionLedger", "classBalloonParty_1_1Audio_1_1Editor_1_1AttributionLedger.html", null ],
     [ "BalloonParty.Audio.Editor.AttributionRecord", "classBalloonParty_1_1Audio_1_1Editor_1_1AttributionRecord.html", null ],
@@ -163,6 +164,7 @@ var hierarchy =
     [ "BalloonParty.Shared.Messages.ForceDestroyProjectileMessage", "structBalloonParty_1_1Shared_1_1Messages_1_1ForceDestroyProjectileMessage.html", null ],
     [ "BalloonParty.Balloon.Formation.FormationAssignment", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html", null ],
     [ "BalloonParty.Game.Score.Behaviours.ShapeFormationTicker.FormationGroup", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1ShapeFormationTicker_1_1FormationGroup.html", null ],
+    [ "BalloonParty.Balloon.Model.FormationMembership", "classBalloonParty_1_1Balloon_1_1Model_1_1FormationMembership.html", null ],
     [ "BalloonParty.Game.Score.Behaviours.FormationOverlapResolver", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationOverlapResolver.html", null ],
     [ "BalloonParty.Balloon.Formation.FormationPlanner", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html", null ],
     [ "BalloonParty.Game.Score.Behaviours.FormationShape", "classBalloonParty_1_1Game_1_1Score_1_1Behaviours_1_1FormationShape.html", null ],
@@ -237,6 +239,7 @@ var hierarchy =
     ] ],
     [ "BalloonParty.Slots.Actor.IBalanceAnchor", "interfaceBalloonParty_1_1Slots_1_1Actor_1_1IBalanceAnchor.html", [
       [ "BalloonParty.Balloon.Model.NukeBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1NukeBalloonModel.html", null ],
+      [ "BalloonParty.Balloon.Model.ToughBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html", null ],
       [ "BalloonParty.Balloon.Model.UnbreakableBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html", null ],
       [ "BalloonParty.Solver.ShotSimDynamicActor", "classBalloonParty_1_1Solver_1_1ShotSimDynamicActor.html", null ]
     ] ],
@@ -563,6 +566,9 @@ var hierarchy =
     ] ],
     [ "BalloonParty.Balloon.Model.IFormationMember", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html", [
       [ "BalloonParty.Balloon.Model.IWriteableFormationMember", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IWriteableFormationMember.html", [
+        [ "BalloonParty.Balloon.Model.IArmouredFormationMember", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IArmouredFormationMember.html", [
+          [ "BalloonParty.Balloon.Model.ToughBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html", null ]
+        ] ],
         [ "BalloonParty.Balloon.Model.UnbreakableBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1UnbreakableBalloonModel.html", null ]
       ] ]
     ] ],
@@ -1356,6 +1362,7 @@ var hierarchy =
       [ "BalloonParty.Editor.GradientTextureDrawer", "classBalloonParty_1_1Editor_1_1GradientTextureDrawer.html", null ]
     ] ],
     [ "BalloonParty.Editor.CardRevealBuilder.Materials", "structBalloonParty_1_1Editor_1_1CardRevealBuilder_1_1Materials.html", null ],
+    [ "BalloonParty.Balloon.Formation.MemberShuffle", "classBalloonParty_1_1Balloon_1_1Formation_1_1MemberShuffle.html", null ],
     [ "BalloonParty.Balloon.View.BubbleMergeView.MergeEnds", "classBalloonParty_1_1Balloon_1_1View_1_1BubbleMergeView_1_1MergeEnds.html", null ],
     [ "BalloonParty.Shared.Rendering.MeshHelper", "classBalloonParty_1_1Shared_1_1Rendering_1_1MeshHelper.html", null ],
     [ "BalloonParty.Shared.Rendering.MeshRendererBuilder", "classBalloonParty_1_1Shared_1_1Rendering_1_1MeshRendererBuilder.html", null ],

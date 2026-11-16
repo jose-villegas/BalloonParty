@@ -17,6 +17,7 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettin
     [ "_snakeWeight", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#aa60454dfcd1273fd3a73090aeca8534a", null ],
     [ "_snakeWeightPerExtraUnbreakable", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a8a6af8b219d888b0e9adac6e3eb84da4", null ],
     [ "_spotChoices", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#ac7344a28bdd942d3472fbeb79033e65e", null ],
+    [ "_toughSnakes", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#aaa3e32d684e6d9e90175c0bab38ff235", null ],
     [ "BottomClearance", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#ab5c0ad5596ec2193680a896854ae5369", null ],
     [ "DiagonalWeight", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a4dc4b4513ca9d8bd892c94934e9c4a2a", null ],
     [ "Enabled", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a7909bcc38346b71d0414ae7d06ce131a", null ],
@@ -33,5 +34,6 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettin
     [ "SnakeStepPulses", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#aeac828bffe74a0739ca98c9f8e84be6c", null ],
     [ "SnakeWeight", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a186aa4137e2010dd61e369cd2746228e", null ],
     [ "SnakeWeightPerExtraUnbreakable", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#accb63262a78672191bd2e7e71e1e487c", null ],
-    [ "SpotChoices", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a95e1c1f792b7403976313e50a1e782ff", null ]
+    [ "SpotChoices", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#a95e1c1f792b7403976313e50a1e782ff", null ],
+    [ "ToughSnakes", "classBalloonParty_1_1Configuration_1_1Balloons_1_1UnbreakableFormationSettings.html#ad90394008eac39f7d303295f5de7a6bd", null ]
 ];

@@ -165,9 +165,14 @@ Static Package Functions</h2></td></tr>
 <tr class="memitem:a1cbc6e3792f1abfe9c10d1747ce207c8" id="r_a1cbc6e3792f1abfe9c10d1747ce207c8"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1cbc6e3792f1abfe9c10d1747ce207c8">HeartChance</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html">IRewardBalloonSettings</a> settings, int missingHearts)</td></tr>
 <tr class="memdesc:a1cbc6e3792f1abfe9c10d1747ce207c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">The heart balloon's chance on a line off a purple level: none at full hearts (or past them), more the more are missing.  <br /></td></tr>
 <tr class="separator:a1cbc6e3792f1abfe9c10d1747ce207c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6cb6f37c99a027ffe4da24722d45926" id="r_ab6cb6f37c99a027ffe4da24722d45926"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab6cb6f37c99a027ffe4da24722d45926">HeartRunEase</a> (<a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html">IRewardBalloonSettings</a> settings, int level)</td></tr>
+<tr class="memdesc:ab6cb6f37c99a027ffe4da24722d45926"><td class="mdescLeft">&#160;</td><td class="mdescRight">What every heart balloon roll is multiplied by on <em>level</em> : 1 on the first, half <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a969305f2e103e9051694cb86b817b34c" title="How every heart balloon&#39;s chance eases off over a run, a purple level&#39;s too: halved this many levels ...">IRewardBalloonSettings.HeartChanceHalvedAfterLevels</a> in, a third at twice that.  <br /></td></tr>
+<tr class="separator:ab6cb6f37c99a027ffe4da24722d45926"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a30507a7b350d104c22eb021ad23a091e" id="r_a30507a7b350d104c22eb021ad23a091e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a30507a7b350d104c22eb021ad23a091e">LevelNumber</a><code> [get]</code></td></tr>
+<tr class="separator:a30507a7b350d104c22eb021ad23a091e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a872ca71934b86eb663bdc08340e8ad6f" id="r_a872ca71934b86eb663bdc08340e8ad6f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a872ca71934b86eb663bdc08340e8ad6f">Odds</a><code> [get]</code></td></tr>
 <tr class="separator:a872ca71934b86eb663bdc08340e8ad6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afefb190136bac91ad6c7ce0e50aef0ed" id="r_afefb190136bac91ad6c7ce0e50aef0ed"><td class="memItemLeft" align="right" valign="top">Func&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afefb190136bac91ad6c7ce0e50aef0ed">Random01</a> = () =&gt; Random.value<code> [get, set]</code></td></tr>
@@ -474,6 +479,37 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab6cb6f37c99a027ffe4da24722d45926" name="ab6cb6f37c99a027ffe4da24722d45926"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6cb6f37c99a027ffe4da24722d45926">&#9670;&#160;</a></span>HeartRunEase()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static float BalloonParty.Balloon.Reward.RewardBalloonService.HeartRunEase </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html">IRewardBalloonSettings</a></td>          <td class="paramname"><span class="paramname"><em>settings</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>level</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>What every heart balloon roll is multiplied by on <em>level</em> : 1 on the first, half <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IRewardBalloonSettings.html#a969305f2e103e9051694cb86b817b34c" title="How every heart balloon&#39;s chance eases off over a run, a purple level&#39;s too: halved this many levels ...">IRewardBalloonSettings.HeartChanceHalvedAfterLevels</a> in, a third at twice that. </p>
 
 </div>
 </div>
@@ -1080,6 +1116,28 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
+<a id="a30507a7b350d104c22eb021ad23a091e" name="a30507a7b350d104c22eb021ad23a091e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30507a7b350d104c22eb021ad23a091e">&#9670;&#160;</a></span>LevelNumber</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Balloon.Reward.RewardBalloonService.LevelNumber</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a872ca71934b86eb663bdc08340e8ad6f" name="a872ca71934b86eb663bdc08340e8ad6f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a872ca71934b86eb663bdc08340e8ad6f">&#9670;&#160;</a></span>Odds</h2>
 

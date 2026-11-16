@@ -135,7 +135,7 @@ Files</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Upgrade cards: the run's source of power. Every few level-ups a hand of cards is dealt and one card is taken, which stays for the rest of the run. For now the level-up takes the hand's first card in play and names it in the tooltip; the pick screen that lets the player choose is switched off because it stopped play (see <code><a class="el" href="UI_2LevelUp_2README_8md.html">UI/LevelUp/README.md</a></code>). Pressure grows with level (the spawn clock, the level budget); power grows only with the player's picks. The ball cap in particular never rises with level, only through a card.</p>
-<h1><a class="anchor" id="autotoc_md274"></a>
+<h1><a class="anchor" id="autotoc_md275"></a>
 Components</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -151,7 +151,7 @@ Components</h1>
 </table>
 <p>The deck and its rules are <code>IUpgradeSettings</code> (authored in <code>RunConfig</code> as <code>Upgrades</code>, and registered on its own so <code>RunUpgrades</code> depends on the deck alone): <code>CardEveryLevels</code> (2), <code>CardsOffered</code> (3) and <code>Cards</code>, each with a kind, title, description, a per-stack <code>Amount</code>, <code>MaxStacks</code> and a deal <code>Weight</code>.</p>
 <p>The run's first card is the deck's <code>DealtFirst</code> card, Sharpshooter, whatever deals it: the first level-up's hand leads with it (in its first slot, the one the level-up takes), a golden balloon's free card is it, and a bought retry's bonus card lends it. It goes by the cards the run holds, not by which deal comes first: while the run holds none, every deal brings it, so a lent bonus card leaves the next level-up to deal it again. Once the run holds a card, every deal is by weight. A fresh run starts over.</p>
-<h1><a class="anchor" id="autotoc_md275"></a>
+<h1><a class="anchor" id="autotoc_md276"></a>
 The cards</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -173,14 +173,14 @@ The cards</h1>
 </table>
 <p>Every card is read live, so a held card applies from the next ball loaded and the next item roll.</p>
 <p>Wherever a card is named (the pick screen, the reveal's ribbon, the tooltips), its title starts with a hand-drawn icon for its kind: <code>UpgradeCardText.Title</code> writes it as a TextMeshPro sprite from the <code>CardIcons</code> sprite asset, tinted with the text. The icons are drawn by <code>Tools/art/make_card_icons.py</code> and built into the sprite asset by Tools &gt; <a class="el" href="namespaceBalloonParty.html">BalloonParty</a> &gt; Upgrades &gt; Build Card Icons (<code>CardIconSpriteAssetBuilder</code>). A new kind needs its icon drawn and named there too; an EditMode test fails until it is.</p>
-<h2><a class="anchor" id="autotoc_md276"></a>
+<h2><a class="anchor" id="autotoc_md277"></a>
 Sharpshooter</h2>
 <p>The run's first golden balloon teaches it: once that balloon has turned away <code>IAssistSettings.FirstGoldenSnipeAfterDeflects</code> (3) of the shot's hits, the next ball loaded is a Snipe lance whatever the card's chance, with no cooldown in the way (<code>Item/Snipe/GoldenSnipeGift</code> calls <code>ISnipeGuarantee.GuaranteeNext</code> on <code>SnipeChanceRoll</code>). The player sees the lance pop what bounced their shots. It counts only that first golden balloon, comes once a run, and a retry keeps it given.</p>
 <p>Winning the card shows it too: the first time the run gets Sharpshooter (a level-up's pick or a golden balloon's free card, so an <code>UpgradeCardHeldMessage</code>), the next ball loaded is a Snipe lance the same way (<code>Item/Snipe/SharpshooterSnipeGift</code>). The card an ad lends for one retry isn't won and doesn't count. Once a run, and a retry keeps it given.</p>
 <p>The roll happens once per ball, the moment the thrower loads it (<code>SnipeChanceRoll.TryArm</code>), which is also when its reload starts. After a hit no load rolls for <code>IUpgradeSettings.SnipeCooldownSeconds</code> (8 s of game time, on <code>RunConfig</code>'s upgrades block), so rapid fire can't chain lances; a miss starts no wait. The card's chance is low on purpose: each ball loaded without a Snipe while the player is in trouble (low hearts or a dangerous board) raises the next ball's chance (<code>IAssistSettings.SnipePity</code>, see <code><a class="el" href="Game_2Assist_2README_8md.html">Game/Assist/README.md</a></code>), so the lance comes when it's needed rather than when the player is already winning. On a purple (extra-colour) level the card's chance is tripled (<code>IUpgradeSettings.PurpleLevelSnipeChanceScale</code>, 3): one stack rolls 3% a ball, three stacks 9%, since that level's golden balloons are armoured and the lance is what cracks them. A hit arms the ball the way a Snipe pickup arms the ball still in the thrower (<code>ISnipeArmer</code>, implemented by <code>SnipeItemHandler</code>): it pierces, carries the Snipe's speed buff, and its pencil line starts at the muzzle when it fires. So it plays, scores and discharges like any Snipe lance, and the thrower's "ready" heads-up reads it as armed through <code>IsPiercing</code>. While it waits in the thrower it doesn't count as piercing for <code>IActiveProjectilePierce</code> (<code>Projectile/Controller/</code>): the pierce loop and the Pierce heads-up start when it fires, as they do for a ball armed in flight.</p>
 <p>A hit also drops a white light from the sky onto the cannon, trailing white smoke and a wake through the clouds, and where it lands a burst shoves the field aside and a whirlwind plays around the cannon (<code>Thrower/SnipeWhirlwindView</code>, see <code><a class="el" href="Thrower_2README_8md.html">Thrower/README.md</a></code>), while the ball slides out to the muzzle: the roll has already landed, and they announce it before the ball can be fired. It plays on top of the ball's own Snipe look.</p>
 <p>The roll comes before <code>ProjectileLoadedMessage</code>, so everything that reads the loaded ball sees the lance, the bots included: the shot solver seeds a ball armed in the thrower as piercing (<code>ShotBoardGather.SeedFor</code>, see <code>Solver/README.md</code>). A ball that already pierces is never rolled for. The draw is <code>Random.value</code>, not seeded, like the reward balloons' rolls.</p>
-<h1><a class="anchor" id="autotoc_md277"></a>
+<h1><a class="anchor" id="autotoc_md278"></a>
 A level-up's hand</h1>
 <p>The hand follows the level-up phase (<code><a class="el" href="Game_2Level_2README_8md.html">Game/Level/README.md</a></code>):</p>
 <div class="fragment"><div class="line">stateDiagram-v2</div>
@@ -209,12 +209,12 @@ A level-up's hand</h1>
 <p>So a card is held only once the level that dealt it is completed. That is what lets a retry keep "the cards held when the level started" without a snapshot: the cards held at a loss are always the ones held when the lost level began.</p>
 <p>A level-up deals cards when <code>(newLevel − 1)</code> is a multiple of <code>CardEveryLevels</code>: with 2, entering levels 3, 5, 7 and so on. For now every level-up passes in play, and a card level-up takes the hand's first card, already the first draw by weight (see <code><a class="el" href="UI_2LevelUp_2README_8md.html">UI/LevelUp/README.md</a></code>). 0 turns cards off.</p>
 <p>The hand is drawn by weight (<code>WeightedPickExtensions.PickWeightedIndex</code>), without repeats, from the cards not yet maxed and not zero-weight; fewer are dealt when fewer are left, and none once every card is maxed. The draw is seeded from the level's seed (<code>ILevelPacingConfiguration.SeedForLevel</code>, salted), so reaching the same level-up with the same cards held deals the same hand, including the re-detected level-up after an abort.</p>
-<h1><a class="anchor" id="autotoc_md278"></a>
+<h1><a class="anchor" id="autotoc_md279"></a>
 Run scope and retries</h1>
 <p><code>ResetRun</code> drops every card on a fresh run and keeps them on a retry (<code>IRetryState.RetryLevel &gt; 0</code>). It runs at <code>RunResetOrder.Counters</code>, before <code>RetryTracker</code> consumes the staged retry level.</p>
 <p>A run the app was killed in is saved at each level boundary (<code><a class="el" href="Game_2Run_2README_8md.html">Game/Run/README.md</a></code>), cards included. <code>RecordHeld</code> (the <code>IHeldCards</code> side) writes the cards a replay of the level being played starts with: each card by its title with its stacks, minus any free card won on that level (its retry gives those back), the free cards dealt so far, and the attempt's bonus card while the attempt is live (a loss ends the attempt it was for, so the game-over save leaves it out). On a resume (<code>IRetryState.Resuming</code>), <code>ResetRun</code> holds the saved cards instead, silently, and the weapon is rebuilt from them. A card renamed or dropped from the deck since the save is lost with a warning rather than mistaken for another.</p>
 <p>A fresh run that a start-level cheat begins past level 1 (<code>CheatState.StartLevel</code>, in checked builds) then takes the cards a run that played up to it would hold (<code>TakeCardsOnTheWayTo</code>): every card level-up on the way deals its seeded hand and takes the first card, as the level-up does in play. <code>Start</code> does the same for a session that opens at a start level. Without this, a jumped run plays a deep level with the base weapon, which makes it both too slow to clear and unlike the real level.</p>
-<h1><a class="anchor" id="autotoc_md279"></a>
+<h1><a class="anchor" id="autotoc_md280"></a>
 The bonus card</h1>
 <p>The game-over screen can offer a retry with a bonus card, bought with a rewarded ad (<code>IFailureOffers.TryBonusRetryAsync</code>, see <code><a class="el" href="Game_2Run_2README_8md.html">Game/Run/README.md</a></code>). When that retry's reset runs (<code>IRetryState.RetryWithBonusCard</code>), <code>ResetRun</code> deals one card by weight (<code>BonusDealWeight</code>: the deal weight × (1 + <code>RetryDealBoost</code>), so Thick Skin comes twice as often) and publishes <code>BonusCardDealtMessage</code> with the stacks the attempt plays with (held plus the bonus); the on-screen tooltip names it once play resumes (see <code><a class="el" href="UI_2Tooltip_2README_8md.html">UI/Tooltip/README.md</a></code>), or the card reveal shows it when its view is attached (<code><a class="el" href="Game_2CardReveal_2README_8md.html">Game/CardReveal/README.md</a></code>).</p>
 <table class="markdownTable">
@@ -234,7 +234,7 @@ The bonus card</h1>
 <td class="markdownTableBodyNone">Leans defensive (<code>RetryDealBoost</code>)   </td><td class="markdownTableBodyNone">A retry follows a lost run, so the cards that keep the player alive come likelier. The weights change, not the seed, so the deal stays deterministic   </td></tr>
 </table>
 <p><code>CanDealBonus</code> (its <code>IBonusCardSource</code> side) is false once only Extra Pen and maxed cards are left, and the screen then hides the bonus button.</p>
-<h1><a class="anchor" id="autotoc_md280"></a>
+<h1><a class="anchor" id="autotoc_md281"></a>
 Free cards</h1>
 <p>Popping the golden balloon wins a card in play (<code>IFreeCardGrant.GrantFreeCard</code>). It is dealt from the same deck as a level-up's hand (an Extra Pen can come, a maxed card can't), held at once, and announced with <code>UpgradeCardHeldMessage</code>, so the card reveal plays it over the board. With every card at its limit it calls the caller's <code>noCardLeft</code> instead, and the golden balloon gives a heart. That holds for a card that waited for the pick too: if the pick took the last card, the fallback runs then.</p>
 <table class="markdownTable">
@@ -251,7 +251,7 @@ Free cards</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Seeded by the level and the free cards dealt this run   </td><td class="markdownTableBodyNone">A replay of the level deals the same card, and a second one isn't stuck repeating the first   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md281"></a>
+<h1><a class="anchor" id="autotoc_md282"></a>
 Not built yet</h1>
 <ul>
 <li><b>A pick for the bonus card.</b> It's dealt at random and named in the tooltip; a quick pick screen (three cards, as at a level-up) is banked for later.</li>

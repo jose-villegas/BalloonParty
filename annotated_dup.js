@@ -75,9 +75,11 @@ var annotated_dup =
           [ "PressurePropagation", "classBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation.html", "classBalloonParty_1_1Balloon_1_1Controller_1_1PressurePropagation" ]
         ] ],
         [ "Formation", "namespaceBalloonParty_1_1Balloon_1_1Formation.html", [
+          [ "ArmourOrder", "classBalloonParty_1_1Balloon_1_1Formation_1_1ArmourOrder.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1ArmourOrder" ],
           [ "FormationAssignment", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment.html", "structBalloonParty_1_1Balloon_1_1Formation_1_1FormationAssignment" ],
           [ "FormationPlanner", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1FormationPlanner" ],
           [ "IFormationReinforcements", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements.html", "interfaceBalloonParty_1_1Balloon_1_1Formation_1_1IFormationReinforcements" ],
+          [ "MemberShuffle", "classBalloonParty_1_1Balloon_1_1Formation_1_1MemberShuffle.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1MemberShuffle" ],
           [ "SnakeWalk", "classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1SnakeWalk" ],
           [ "StandingFormation", "classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1StandingFormation" ],
           [ "UnbreakableFormationService", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService.html", "classBalloonParty_1_1Balloon_1_1Formation_1_1UnbreakableFormationService" ]
@@ -90,8 +92,10 @@ var annotated_dup =
           [ "BubbleClusterModel", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1BubbleClusterModel" ],
           [ "ColorSource", "structBalloonParty_1_1Balloon_1_1Model_1_1ColorSource.html", "structBalloonParty_1_1Balloon_1_1Model_1_1ColorSource" ],
           [ "DiscoBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1DiscoBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1DiscoBalloonModel" ],
+          [ "FormationMembership", "classBalloonParty_1_1Balloon_1_1Model_1_1FormationMembership.html", "classBalloonParty_1_1Balloon_1_1Model_1_1FormationMembership" ],
           [ "GoldenBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1GoldenBalloonModel" ],
           [ "HeartBalloonModel", "classBalloonParty_1_1Balloon_1_1Model_1_1HeartBalloonModel.html", "classBalloonParty_1_1Balloon_1_1Model_1_1HeartBalloonModel" ],
+          [ "IArmouredFormationMember", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IArmouredFormationMember.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IArmouredFormationMember" ],
           [ "IBalloonModel", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IBalloonModel" ],
           [ "IFormationMember", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IFormationMember" ],
           [ "IHasWriteableItemSlot", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IHasWriteableItemSlot.html", "interfaceBalloonParty_1_1Balloon_1_1Model_1_1IHasWriteableItemSlot" ],

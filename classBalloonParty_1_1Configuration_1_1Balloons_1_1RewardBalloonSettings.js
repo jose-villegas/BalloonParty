@@ -2,6 +2,7 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings =
 [
     [ "_discoAtCompletion", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a4b0b17eed38f22fd97826036558f5760", null ],
     [ "_goldenAtCompletion", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#ae333ba6706d3162ede733ecadd84525d", null ],
+    [ "_heartChanceHalvedAfterLevels", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a5ddcd3aa4a3f5036aefa6989bf38b690", null ],
     [ "_heartChanceMissingOne", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#aee182b990bdb0719923937622c47c623", null ],
     [ "_heartChanceMissingTwo", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a3ae5768ae5f6a4cad63abde1405acea9", null ],
     [ "_heartCooldownLines", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#aa3c925294653d5175ee1b6b2ba5007b6", null ],
@@ -23,6 +24,7 @@ var classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings =
     [ "_sureGoldenLevel", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a9744ae49c574a2270aadcd55c0a95596", null ],
     [ "DiscoAtCompletion", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#af81ed83af26431f8d145f99dd9241631", null ],
     [ "GoldenAtCompletion", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a367fc8cf38e0ae27a48dbb948c5afcb9", null ],
+    [ "HeartChanceHalvedAfterLevels", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a1cb16d67811b21d2594580dbc7c41dfe", null ],
     [ "HeartChanceMissingOne", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a5fd348ccdbc2e7ec4856366d25b50dd0", null ],
     [ "HeartChanceMissingTwo", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#a8caff051914e3ec6d6dc8392a9505a48", null ],
     [ "HeartCooldownLines", "classBalloonParty_1_1Configuration_1_1Balloons_1_1RewardBalloonSettings.html#aa16191cd1fa456cda3392ed541de9132", null ],

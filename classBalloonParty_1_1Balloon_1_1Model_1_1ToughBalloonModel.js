@@ -4,9 +4,14 @@ var classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel =
     [ "EvaluateHit", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a6b2a2a013b955cd134440cbfcbd607b1", null ],
     [ "EvaluateNormalHit", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a38f649d61b0710f4730ca8060ec7d969", null ],
     [ "ResolveScoreAttribution", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a9a51028728bd222bb0c9c8300083cb52", null ],
+    [ "SetFormationHeading", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#ad899ca3b0fe243e02cc3655171be67f1", null ],
+    [ "SetInFormation", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a9d36e6bb97b32ba0491c6cb3f002dceb", null ],
+    [ "SetWalking", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#ab4490180024ea7dd5e81fff42a8743b9", null ],
     [ "WeightBias", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#aea56ecf61f3446e632329fee67d94ed8", null ],
     [ "_balanceBias", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#af3ed2d931e429987a33c692553d01cd3", null ],
     [ "_colorSource", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a3713ab40c2405cb75d2cdec910aa7f92", null ],
+    [ "_membership", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a8872375e2d75b730497b5813c092b133", null ],
+    [ "Armour", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a5626a5d3610348e0f73e85eb3f9c0530", null ],
     [ "BalancePriority", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a2600a21c9a273a51aafc048e85c4e6fd", null ],
     [ "BiasKind", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a103b51e99261c48d5de7a784b933aa2e", null ],
     [ "BiasTypeId", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a8c3761c788318a9a6e9a675fe237cd2d", null ],
@@ -15,7 +20,10 @@ var classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel =
     [ "DeflectsOrdinaryHit", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a793f123d637f32c0ee384ff70609318f", null ],
     [ "DeflectStampScale", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a6f08947fcf6700473c56b15f6cbde2c0", null ],
     [ "DirectBalanceMotion", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a23aad630e6dd316a26c31b21063ae9e0", null ],
+    [ "FormationHeading", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a11856434d656cd445cce8c7d3f1a9d6a", null ],
     [ "HitsRemaining", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#ae86922261682f7187590d5d69fd4a632", null ],
+    [ "InFormation", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a5f8c840483dc7613e15eb8d115cf1a18", null ],
+    [ "IsAnchored", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a9ccb63a3068a778c9d0b488fa820e0f4", null ],
     [ "IsStable", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a128f930790cc3c403f5a9e41dabb8e02", null ],
     [ "IsStable", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a4317e4eba6bbe3ecc25b2cf82c48d935", null ],
     [ "Kind", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a62c9013b13683f11b5fdbcf41755e20d", null ],
@@ -32,5 +40,6 @@ var classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel =
     [ "SlotIndex", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a3dc2521cee200da8e6891ca6f284e06f", null ],
     [ "SlotIndex", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a2066d9ec0d8b0cee371c41689c99ef27", null ],
     [ "SurviveOutcome", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#a12f0ee5ef74d8f18775db75521028eac", null ],
-    [ "TypeName", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#ae76ae1159cbc6a4d31c8242453ac46f8", null ]
+    [ "TypeName", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#ae76ae1159cbc6a4d31c8242453ac46f8", null ],
+    [ "Walking", "classBalloonParty_1_1Balloon_1_1Model_1_1ToughBalloonModel.html#ac7a69a7392c1d369bca8719b6e5f9077", null ]
 ];

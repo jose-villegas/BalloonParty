@@ -1,5 +1,8 @@
 var NAVTREEINDEX2 =
 {
+"ISkyBackdrop_8cs.html":[7,0,13,7],
+"ISkyScatterSettings_8cs.html":[7,0,3,5,16],
+"ISlotActorView_8cs.html":[7,0,15,0,12],
 "ISlotActor_8cs.html":[7,0,15,0,11],
 "ISlotClusterSource_8cs.html":[7,0,15,0,1,4],
 "ISlotGridConfig_8cs.html":[7,0,14,30],
@@ -30,9 +33,9 @@ var NAVTREEINDEX2 =
 "IWashesProjectileColor_8cs.html":[7,0,15,1,16],
 "IWeaponStats_8cs.html":[7,0,7,11,4],
 "IWeightedEntry_8cs.html":[7,0,3,11,0],
-"IWriteableBalloonModel_8cs.html":[7,0,1,2,12],
+"IWriteableBalloonModel_8cs.html":[7,0,1,2,14],
 "IWriteableDynamicSlotActor_8cs.html":[7,0,15,0,15],
-"IWriteableFormationMember_8cs.html":[7,0,1,2,13],
+"IWriteableFormationMember_8cs.html":[7,0,1,2,15],
 "IWriteableProjectileModel_8cs.html":[7,0,12,2,5],
 "IWriteableSlotActor_8cs.html":[7,0,15,0,16],
 "IdleMode_8cs.html":[7,0,8,13],
@@ -138,6 +141,7 @@ var NAVTREEINDEX2 =
 "ListExtensions_8cs.html":[7,0,14,4,11],
 "Log_8cs.html":[7,0,14,2,3],
 "LossForecast_8cs.html":[7,0,7,6,4],
+"MemberShuffle_8cs.html":[7,0,1,1,5],
 "MeshHelper_8cs.html":[7,0,14,10,7],
 "MeshRendererBuilder_8cs.html":[7,0,14,10,8],
 "MetricAxis_8cs.html":[7,0,7,10,16],
@@ -177,7 +181,7 @@ var NAVTREEINDEX2 =
 "NudgeService_8cs.html":[7,0,9,5],
 "NudgeType_8cs.html":[7,0,9,6],
 "NukeArmedMessage_8cs.html":[7,0,14,7,25],
-"NukeBalloonModel_8cs.html":[7,0,1,2,14],
+"NukeBalloonModel_8cs.html":[7,0,1,2,16],
 "NukeBlastSettings_8cs.html":[7,0,3,0,15],
 "NukeBlastView_8cs.html":[7,0,1,6,12],
 "NukeBlast_8cs.html":[7,0,1,3,6],
@@ -234,7 +238,7 @@ var NAVTREEINDEX2 =
 "PityRoll_8cs.html":[7,0,7,0,3],
 "PitySettings_8cs.html":[7,0,3,21],
 "PlainCounterDisplay_8cs.html":[7,0,18,17],
-"PlatedBalloonModel_8cs.html":[7,0,1,2,15],
+"PlatedBalloonModel_8cs.html":[7,0,1,2,17],
 "PlatedRewardSchedule_8cs.html":[7,0,1,3,10],
 "PlatedRewardTuning_8cs.html":[7,0,1,3,11],
 "PlayerHealthController_8cs.html":[7,0,7,6,5],
@@ -245,9 +249,5 @@ var NAVTREEINDEX2 =
 "PoolManagerExtensions_8cs.html":[7,0,14,4,13],
 "PoolManager_8cs.html":[7,0,14,9,10],
 "PoolableParticle_8cs.html":[7,0,14,9,8],
-"PopPulse_8cs.html":[7,0,3,0,18],
-"PopSheetLoader_8cs.html":[7,0,18,1,1],
-"PredictionSightProbe_8cs.html":[7,0,11,0],
-"PredictionSightSpiral_8cs.html":[7,0,8,28],
-"PredictionTraceCalculator_8cs.html":[7,0,11,1]
+"PopPulse_8cs.html":[7,0,3,0,18]
 };

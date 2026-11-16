@@ -180,6 +180,9 @@ Properties</h2></td></tr>
 <tr class="memitem:a95e1c1f792b7403976313e50a1e782ff" id="r_a95e1c1f792b7403976313e50a1e782ff"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a95e1c1f792b7403976313e50a1e782ff">SpotChoices</a><code> [get]</code></td></tr>
 <tr class="memdesc:a95e1c1f792b7403976313e50a1e782ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">A formation picks at random among this many of its least-travel spots.  <br /></td></tr>
 <tr class="separator:a95e1c1f792b7403976313e50a1e782ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad90394008eac39f7d303295f5de7a6bd" id="r_ad90394008eac39f7d303295f5de7a6bd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad90394008eac39f7d303295f5de7a6bd">ToughSnakes</a><code> [get]</code></td></tr>
+<tr class="memdesc:ad90394008eac39f7d303295f5de7a6bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Toughs gather into snakes of their own, ordered head to tail by hits left.  <br /></td></tr>
+<tr class="separator:ad90394008eac39f7d303295f5de7a6bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -217,6 +220,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a8a6af8b219d888b0e9adac6e3eb84da4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7344a28bdd942d3472fbeb79033e65e" id="r_ac7344a28bdd942d3472fbeb79033e65e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac7344a28bdd942d3472fbeb79033e65e">_spotChoices</a> = 3</td></tr>
 <tr class="separator:ac7344a28bdd942d3472fbeb79033e65e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa3e32d684e6d9e90175c0bab38ff235" id="r_aaa3e32d684e6d9e90175c0bab38ff235"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaa3e32d684e6d9e90175c0bab38ff235">_toughSnakes</a> = true</td></tr>
+<tr class="separator:aaa3e32d684e6d9e90175c0bab38ff235"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a88838cb7d01d1dbde6216d9758885fec" name="a88838cb7d01d1dbde6216d9758885fec"></a>
@@ -582,6 +587,28 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">int BalloonParty.Configuration.Balloons.UnbreakableFormationSettings._spotChoices = 3</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aaa3e32d684e6d9e90175c0bab38ff235" name="aaa3e32d684e6d9e90175c0bab38ff235"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa3e32d684e6d9e90175c0bab38ff235">&#9670;&#160;</a></span>_toughSnakes</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Configuration.Balloons.UnbreakableFormationSettings._toughSnakes = true</td>
         </tr>
       </table>
   </td>
@@ -1029,6 +1056,33 @@ Private Attributes</h2></td></tr>
 <p>A formation picks at random among this many of its least-travel spots. </p>
 
 <p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#ada71cd4f8cd3413be4ec54509e232556">BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings</a>.</p>
+
+</div>
+</div>
+<a id="ad90394008eac39f7d303295f5de7a6bd" name="ad90394008eac39f7d303295f5de7a6bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad90394008eac39f7d303295f5de7a6bd">&#9670;&#160;</a></span>ToughSnakes</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Configuration.Balloons.UnbreakableFormationSettings.ToughSnakes</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Toughs gather into snakes of their own, ordered head to tail by hits left. </p>
+<p>Only while <a class="el" href="#a7909bcc38346b71d0414ae7d06ce131a">Enabled</a>. </p>
+
+<p>Implements <a class="el" href="interfaceBalloonParty_1_1Configuration_1_1Balloons_1_1IUnbreakableFormationSettings.html#a11b522ef2c041a3e16995984ded83d73">BalloonParty.Configuration.Balloons.IUnbreakableFormationSettings</a>.</p>
 
 </div>
 </div>
