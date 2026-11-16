@@ -12,7 +12,7 @@ using VContainer.Unity;
 namespace BalloonParty.Balloon.Controller
 {
     /// <summary>Routes each balloon's hit reaction to its owning controller via a flat-array index, avoiding per-balloon subscriptions.</summary>
-    internal class BalloonControllerRegistry : IStartable, IDisposable
+    internal class BalloonControllerRegistry : IStartable, IDisposable, IBalloonPopper
     {
         // Comfortably above the 66-slot board plus spawn/transit overlap.
         private const int InitialCapacity = 128;
@@ -100,7 +100,7 @@ namespace BalloonParty.Balloon.Controller
 
         // Pops one balloon on demand; routes through HandleBoardClear, not the projectile-hit Pop() path.
         // playPopVfx is false for effects that already animated the balloon away (e.g. the float dissolve).
-        internal bool TryPopSingle(IBalloonModel model, bool playPopVfx = true)
+        public bool TryPopSingle(IBalloonModel model, bool playPopVfx = true)
         {
             if (!TryResolve(model, out var controller))
             {

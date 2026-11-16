@@ -713,6 +713,47 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void Grant_InsideACooldown_StartsABreatherAnyway()
+        {
+            UseBreatherWithCooldown();
+            Run(1f);
+            _boardFill.Occupancy.Returns(0.4f);
+            Run(4.2f);
+            Assert.AreEqual(0f, _clock.BreatherSecondsLeft, "the 4s breather is over, the 5s cooldown running");
+
+            _clock.Grant();
+
+            Assert.AreEqual(4f, _clock.BreatherSecondsLeft, "a full breather, though a clear now earns none");
+        }
+
+        [Test]
+        public void Grant_OnAnOrdinaryTick_StartsAFullBreather_ThatSlowsTheClock()
+        {
+            UseBreather();
+            Run(1f);
+
+            _clock.Grant();
+            Run(3f);
+
+            Assert.AreEqual(0, _lines, "without the breather the 4s grace is over by now");
+            Assert.Greater(_clock.BreatherSecondsLeft, 0f);
+        }
+
+        [Test]
+        public void Grant_WhileOneRuns_StartsItOver()
+        {
+            UseBreather();
+            Run(1f);
+            _clock.Grant();
+            Run(2f);
+            Assert.Less(_clock.BreatherSecondsLeft, 2.5f);
+
+            _clock.Grant();
+
+            Assert.AreEqual(4f, _clock.BreatherSecondsLeft);
+        }
+
+        [Test]
         public void Breather_ASlowClearOfTheSameSize_EarnsNone()
         {
             UseBreather();

@@ -38,13 +38,14 @@ namespace BalloonParty.Balloon.Spawner
     ///     <see cref="ISpawnClockSettings.BreatherPace" /> and eases back to its full pace, so the release
     ///     after a great shot lasts a moment before the tension builds again. A cooldown after each
     ///     (<see cref="ISpawnClockSettings.BreatherCooldownSeconds" />) keeps releases rarer than the clears.
-    ///     A board about to cost the last heart earns one too (<see cref="ISpawnClockSettings.BreatherDanger" />).
+    ///     A board about to cost the last heart earns one too (<see cref="ISpawnClockSettings.BreatherDanger" />),
+    ///     and the nuke's blast grants one whatever the cooldown (<see cref="IBreatherGrant" />).
     ///     Pressure pushes back on a comfortable player: while the board stays under
     ///     <see cref="ISpawnClockSettings.PressureHoldOccupancy" /> and the player is not in need, it builds toward
     ///     <see cref="ISpawnClockSettings.PressureSpeedup" />, so a strong build is pushed until its board climbs. It
     ///     holds above that line and partly goes when a line costs a heart.
     /// </summary>
-    internal sealed class SpawnClock : IStartable, ITickable, IRunResettable, IDisposable, ISpawnClock
+    internal sealed class SpawnClock : IStartable, ITickable, IRunResettable, IDisposable, ISpawnClock, IBreatherGrant
     {
         private readonly ISpawnClockSettings _settings;
         private readonly ILevelProgress _levelProgress;
@@ -138,6 +139,14 @@ namespace BalloonParty.Balloon.Spawner
         public void Dispose()
         {
             _subscriptions.Dispose();
+        }
+
+        // The nuke's blast (PLAN-NukeBalloon) has cleared the board: the release a big clear earns, even inside the
+        // cooldown of the last one.
+        public void Grant()
+        {
+            _cooldownLeft = 0f;
+            StartBreather(_boardFill.Occupancy);
         }
 
         // Internal for tests: Time.deltaTime isn't injectable.

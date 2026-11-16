@@ -53,12 +53,14 @@ unbreakable pool is prewarmed with room for the ceiling.
 ### Reward balloons
 
 Each clock line asks `IRewardBalloonRequests.TryTakeDue` once, before the reinforcements, whether it
-brings a reward balloon (the golden one or the disco ball, a heart for a player missing hearts; see
+brings a reward balloon (the golden one, the disco ball or the nuke, a heart for a player missing hearts; see
 `Balloon/Reward/README.md`), and finds its catalogue entry by type. The answer takes one of the line's places, outside the level's caps and
 counts, and goes to the front of the batch after the sort, so a crowded line drops something else. When
 it lands, `Placed` hands back the callback the balloon calls on leaving, in place of the active-count
 release. A line with no room for it leaves it due for the next. It stays out of the item roll. Without a
 catalogue entry for the type nothing comes; each entry is prewarmed to one.
+
+`SpawnClock` also implements `IBreatherGrant`: `Grant()` starts the breather at once, even inside the cooldown of the last one, and the nuke's blast calls it when it ends, and the nuke's wind gust follows (the breather itself is unchanged: the clock drops to `BreatherPace`, eases back over `BreatherSeconds`, then the cooldown holds).
 
 Once a clock line is placed, its new balloons go to `IRainbowLines.PaintLine`. That paints them rainbow while a
 disco ball's pop still owes lines (see `Balloon/Reward/README.md`), and does nothing otherwise. It runs before

@@ -42,6 +42,8 @@ namespace BalloonParty.Tests.Balloon
         private IPlayerNeed _need;
         private IAssistSettings _assist;
         private IWeaponStats _weapon;
+        private INukeOddsSettings _nukeSettings;
+        private INukeOdds _nukeOdds;
         private RewardBalloonService _service;
         private float _roll;
         private int _draws;
@@ -88,6 +90,13 @@ namespace BalloonParty.Tests.Balloon
             _assist = Substitute.For<IAssistSettings>();
             _weapon = Substitute.For<IWeaponStats>();
             _assist.HeartPity.Returns(pity);
+
+            // Only a catalogue with a Nuke entry reaches these; the odds read 0 until a test raises them.
+            _nukeSettings = Substitute.For<INukeOddsSettings>();
+            _nukeSettings.FromLevel.Returns(1);
+            _nukeSettings.PerLevel.Returns(1);
+            _nukeSettings.CooldownLines.Returns(3);
+            _nukeOdds = Substitute.For<INukeOdds>();
 
             _roll = 1f;
             _draws = 0;
@@ -973,6 +982,161 @@ namespace BalloonParty.Tests.Balloon
             Assert.IsFalse(_service.TryTakeDue(out _));
         }
 
+        [Test]
+        public void Nuke_ChanceOne_ComesBeforeADueGolden()
+        {
+            UseNuke(BalloonType.Golden, BalloonType.Heart);
+            SetCompletion(0.8f);
+
+            Assert.IsTrue(_service.TryTakeDue(out var first));
+            Assert.AreEqual(BalloonType.Nuke, first);
+            _service.Placed(BalloonType.Nuke);
+
+            Assert.IsTrue(_service.TryTakeDue(out var second), "the golden was only held back a line");
+            Assert.AreEqual(BalloonType.Golden, second);
+        }
+
+        [Test]
+        public void Nuke_ChanceZero_LeavesTheGoldenItsLine()
+        {
+            UseNuke(BalloonType.Golden);
+            _nukeOdds.Chance.Returns(0f);
+            SetCompletion(0.8f);
+
+            Assert.IsTrue(_service.TryTakeDue(out var type));
+            Assert.AreEqual(BalloonType.Golden, type);
+        }
+
+        // Party Favors raises the other rewards' rolls, not the nuke's: it follows trouble, not a build.
+        [Test]
+        public void Nuke_PartyFavors_LeavesItsChanceAlone()
+        {
+            UseNuke();
+            _weapon.RewardBalloonOdds.Returns(1f);
+            _nukeOdds.Chance.Returns(0.3f);
+            _roll = 0.45f;
+
+            Assert.IsFalse(_service.TryTakeDue(out _), "0.45 misses 0.3, doubled or not");
+        }
+
+        // The default catalogue has no Nuke entry: the odds are never read, so a game without one draws as before.
+        [Test]
+        public void Nuke_NoCatalogueEntry_NothingNukeHappensAndNoExtraDraws()
+        {
+            _nukeOdds.Chance.Returns(1f);
+            SetCompletion(0.8f);
+
+            Assert.IsTrue(_service.TryTakeDue(out var type));
+            Assert.AreEqual(BalloonType.Golden, type);
+            Assert.AreEqual(0, _draws);
+            _nukeOdds.DidNotReceive().LinePassed();
+            _ = _nukeOdds.DidNotReceive().Chance;
+        }
+
+        [Test]
+        public void Nuke_OutsidePlaying_NotDueAndTheLineIsNotCounted()
+        {
+            UseNuke(BalloonType.Golden);
+            _phase.Value = LevelUpPhase.Pending;
+
+            Assert.IsFalse(_service.TryTakeDue(out _));
+            _nukeOdds.DidNotReceive().LinePassed();
+        }
+
+        [Test]
+        public void Nuke_EveryLinePlayed_TellsTheOddsALinePassed()
+        {
+            UseNuke(BalloonType.Nuke);
+            _nukeOdds.Chance.Returns(0f);
+
+            _service.TryTakeDue(out _);
+            _service.TryTakeDue(out _);
+
+            _nukeOdds.Received(2).LinePassed();
+        }
+
+        [Test]
+        public void Nuke_OnTheBoard_NotDueAgainUntilItLeavesAndTheCooldownPasses()
+        {
+            UseNuke(BalloonType.Nuke);
+            _nukeSettings.PerLevel.Returns(5);
+            Assert.IsTrue(_service.TryTakeDue(out _));
+            var left = _service.Placed(BalloonType.Nuke);
+
+            for (var line = 0; line < 6; line++)
+            {
+                Assert.IsFalse(_service.TryTakeDue(out _), $"line {line + 1} with it on the board");
+            }
+
+            left();
+
+            Assert.IsTrue(_service.TryTakeDue(out var type), "long past the cooldown");
+            Assert.AreEqual(BalloonType.Nuke, type);
+        }
+
+        [Test]
+        public void Nuke_PlacedAndGone_NextRollWaitsTheCooldownLines()
+        {
+            UseNuke(BalloonType.Nuke);
+            _nukeSettings.PerLevel.Returns(5);
+            _service.TryTakeDue(out _);
+            _service.Placed(BalloonType.Nuke)();
+
+            Assert.IsFalse(_service.TryTakeDue(out _), "line 1");
+            Assert.IsFalse(_service.TryTakeDue(out _), "line 2");
+            Assert.IsTrue(_service.TryTakeDue(out var type), "line 3, the cooldown over");
+            Assert.AreEqual(BalloonType.Nuke, type);
+        }
+
+        [Test]
+        public void Nuke_NewLevel_ResetsThePerLevelCap_AndDropsOneStillOwed()
+        {
+            UseNuke(BalloonType.Nuke);
+            _nukeSettings.CooldownLines.Returns(0);
+            _service.TryTakeDue(out _);
+            _service.Placed(BalloonType.Nuke)();
+            Assert.IsFalse(_service.TryTakeDue(out _), "the level's one is placed");
+
+            _levelNumber.Value = 2;
+
+            Assert.IsTrue(_service.TryTakeDue(out var type));
+            Assert.AreEqual(BalloonType.Nuke, type);
+
+            _levelNumber.Value = 3;
+            _nukeOdds.Chance.Returns(0f);
+            Assert.IsFalse(_service.TryTakeDue(out _), "the owed one went with its level");
+        }
+
+        [Test]
+        public void Nuke_RunReset_FirstLineHasNoCooldown_AndAStaleLeaveIsIgnored()
+        {
+            UseNuke(BalloonType.Nuke);
+            _service.TryTakeDue(out _);
+            var staleLeft = _service.Placed(BalloonType.Nuke);
+
+            _service.ResetRun(1);
+            Assert.IsTrue(_service.TryTakeDue(out _), "no cooldown for a run's first");
+            _service.Placed(BalloonType.Nuke);
+            staleLeft();
+
+            for (var line = 0; line < 6; line++)
+            {
+                Assert.IsFalse(_service.TryTakeDue(out _), $"line {line + 1}, the new one is still up");
+            }
+        }
+
+        [TestCase(3, 2, false)]
+        [TestCase(3, 3, true)]
+        [TestCase(1, 1, true)]
+        public void Nuke_FromLevel_NothingBeforeIt(int fromLevel, int level, bool due)
+        {
+            UseNuke(BalloonType.Nuke);
+            _nukeSettings.FromLevel.Returns(fromLevel);
+            _levelNumber.Value = level;
+
+            Assert.AreEqual(due, _service.TryTakeDue(out _));
+        }
+
         [TestCase(0, 0f)]
         [TestCase(-1, 0f)]
         [TestCase(1, 0.04f)]
@@ -1312,8 +1476,10 @@ namespace BalloonParty.Tests.Balloon
             var balloons = Substitute.For<IBalloonsConfiguration>();
             balloons.RewardBalloons.Returns(_settings);
             balloons.Entries.Returns(entries);
+            balloons.NukeOdds.Returns(_nukeSettings);
 
-            var service = new RewardBalloonService(balloons, _levelProgress, _levelParams, _health, _need, _assist, _weapon)
+            var service = new RewardBalloonService(
+                balloons, _levelProgress, _levelParams, _health, _need, _assist, _weapon, _nukeOdds)
             {
                 Random01 = () =>
                 {
@@ -1438,6 +1604,16 @@ namespace BalloonParty.Tests.Balloon
             _settings.SureDiscoAtCompletion.Returns(0.15f);
             _service.Dispose();
             _service = CreateService(BalloonType.Golden, BalloonType.Disco, BalloonType.Heart);
+        }
+
+        // A catalogue with the nuke balloon, its odds a sure thing.
+        private void UseNuke(params BalloonType[] catalogue)
+        {
+            _nukeOdds.Chance.Returns(1f);
+            _service.Dispose();
+            var all = new List<BalloonType> { BalloonType.Nuke };
+            all.AddRange(catalogue);
+            _service = CreateService(all.ToArray());
         }
 
         // A non-purple level, with the roll it will make; the golden balloon's ordinary roll stays off.

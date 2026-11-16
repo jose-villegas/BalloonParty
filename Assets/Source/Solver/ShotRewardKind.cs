@@ -9,6 +9,7 @@ namespace BalloonParty.Solver
         None,
         Golden,
         Heart,
-        Disco
+        Disco,
+        Nuke
     }
 }

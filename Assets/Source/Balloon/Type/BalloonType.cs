@@ -26,6 +26,9 @@ namespace BalloonParty.Balloon.Type
         Heart,
 
         // PLAN-DiscoBalloon: a plated reward balloon whose pop paints the board rainbow.
-        Disco
+        Disco,
+
+        // PLAN-NukeBalloon: a lead-plated reward balloon whose pop clears the board.
+        Nuke
     }
 }

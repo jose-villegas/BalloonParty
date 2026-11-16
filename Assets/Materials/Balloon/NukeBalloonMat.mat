@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: NukeBalloonMat
+  m_Shader: {fileID: 4800000, guid: fbd4fa07a87f47a4bd7f51d448da1df9, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - PixelSnap: 0
+    - _AmbientDimming: 0.4
+    - _AmbientHue: 0.25
+    - _BevelDepth: 0.7
+    - _BevelWidth: 0.16
+    - _BoltDome: 1.4
+    - _BoltInset: 0.62
+    - _BoltRadius: 0.09
+    - _CastShadow: 0.55
+    - _EdgePower: 3
+    - _EnvHorizon: -0.05
+    - _EnvStrength: 0.25
+    - _GapShadow: 0.3
+    - _GapWidth: 0.11
+    - _GlintIntensity: 0.9
+    - _GlintPower: 10
+    - _GlitterChance: 0
+    - _GlitterIntensity: 0
+    - _GlitterReach: 6
+    - _GlitterScale: 16
+    - _GlitterSharpness: 6
+    - _GlitterSize: 0.3
+    - _GlitterSpeed: 4
+    - _LightHeight: 0.9
+    - _LightInfluence: 1
+    - _PlateScale: 1.8
+    - _PlateThickness: 0.07
+    - _PlateTilt: 0.16
+    - _PlateVariance: 0.2
+    - _PlateWobble: 0.1
+    - _PlateWobbleSpeed: 0.4
+    - _RimBlend: 0.6
+    - _RimWidth: 0.12
+    - _RubberGloss: 0.4
+    - _RubberGlossPower: 24
+    - _SheenIntensity: 0.35
+    - _SheenPower: 5
+    - _SpriteScale: 1
+    - _WallShade: 0.5
+    m_Colors:
+    - _BoltRingColor: {r: 0.1, g: 0.1, b: 0.11, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _GlintColor: {r: 0.82, g: 0.86, b: 0.9, a: 1}
+    - _GlitterColor: {r: 0.8, g: 0.84, b: 0.88, a: 1}
+    - _GoldEdge: {r: 0.05, g: 0.06, b: 0.07, a: 1}
+    - _GoldLit: {r: 0.5, g: 0.53, b: 0.56, a: 1}
+    - _GoldShade: {r: 0.19, g: 0.21, b: 0.24, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _RimColor: {r: 0.33, g: 0.35, b: 0.38, a: 1}
+    - _RubberLit: {r: 0.27, g: 0.28, b: 0.3, a: 1}
+    - _RubberShade: {r: 0.07, g: 0.07, b: 0.08, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

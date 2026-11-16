@@ -62,5 +62,11 @@ namespace BalloonParty.Configuration.Balloons
         IRewardBalloonSettings RewardBalloons { get; }
 
         IDiscoWaveSettings DiscoWave { get; }
+
+        INukeOddsSettings NukeOdds { get; }
+
+        INukeBlastSettings NukeBlast { get; }
+
+        INukeFuseSettings NukeFuse { get; }
     }
 }

@@ -20,6 +20,7 @@ namespace BalloonParty.Shared.Extensions
         internal static string GetImpactColorId(this IBalloonModel model)
         {
             return model.TypeName is BalloonType.Unbreakable or BalloonType.Golden or BalloonType.Disco
+                or BalloonType.Nuke
                 ? GamePalette.SparksColorId
                 : GamePalette.ToughColorId;
         }
@@ -35,12 +36,12 @@ namespace BalloonParty.Shared.Extensions
             }
 
             var isHeavy = model.TypeName is BalloonType.Tough or BalloonType.Unbreakable or BalloonType.Golden
-                          or BalloonType.Disco;
+                          or BalloonType.Disco or BalloonType.Nuke;
             return isHeavy ? model.GetImpactColorId() : color;
         }
 
         /// <summary>Whether a piercing shot plows this actor rather than one-shotting it — a durable
-        /// balloon with more than one hit left, or one that deflects an ordinary hit (an unbreakable, the golden
+        /// balloon with more than one hit left (the nuke too), or one that deflects an ordinary hit (an unbreakable, the golden
         /// balloon).</summary>
         internal static bool IsTough(this IBalloonModel model)
         {

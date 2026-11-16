@@ -227,6 +227,35 @@ namespace BalloonParty.Tests.Audio
         }
 
         [Test]
+        public void OnActorHit_NukePop_PlaysTheNukePop()
+        {
+            var nuke = Substitute.For<IBalloonModel>();
+            nuke.TypeName.Returns(BalloonType.Nuke);
+
+            _hitHandler.Handle(new ActorHitMessage(nuke, Vector3.zero, Vector3.zero, HitOutcome.Pop));
+
+            _player.Received(1).Play(GameSoundId.BalloonPopNuke, Vector3.zero);
+        }
+
+        // The nuke wears down like a tough balloon, so its clank drops a semitone with each dent it has taken.
+        [Test]
+        public void OnActorHit_NukeDents_PlayTheLeadClank_ASemitoneLowerEach()
+        {
+            var nuke = Substitute.For<IBalloonModel, IHasDurability>();
+            nuke.TypeName.Returns(BalloonType.Nuke);
+            var hitsRemaining = new ReactiveProperty<int>(2);
+            ((IHasDurability)nuke).MaxHitPoints.Returns(3);
+            ((IHasDurability)nuke).HitsRemaining.Returns(hitsRemaining);
+
+            _hitHandler.Handle(new ActorHitMessage(nuke, Vector3.zero, Vector3.zero, HitOutcome.Deflect));
+            hitsRemaining.Value = 1;
+            _hitHandler.Handle(new ActorHitMessage(nuke, Vector3.zero, Vector3.zero, HitOutcome.Deflect));
+
+            _player.Received(1).Play(GameSoundId.BalloonDeflectNuke, Vector3.zero, null, 0, 1f);
+            _player.Received(1).Play(GameSoundId.BalloonDeflectNuke, Vector3.zero, null, -1, 1f);
+        }
+
+        [Test]
         public void OnActorHit_HeartPop_PlaysTheHeartPop()
         {
             var heart = Substitute.For<IBalloonModel>();

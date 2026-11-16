@@ -47,6 +47,7 @@ namespace BalloonParty.Thrower
         private readonly ISubscriber<RunRestartCompletedMessage> _restartCompletedSubscriber;
         private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
         private readonly ISubscriber<ForceDestroyProjectileMessage> _forceDestroySubscriber;
+        private readonly ISubscriber<ClearShotsInFlightMessage> _clearShotsSubscriber;
         private readonly ISubscriber<LevelTransitionCompletedMessage> _levelTransitionCompletedSubscriber;
         private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
@@ -124,6 +125,7 @@ namespace BalloonParty.Thrower
             ISubscriber<RunRestartCompletedMessage> restartCompletedSubscriber,
             ISubscriber<BoardClearMessage> boardClearSubscriber,
             ISubscriber<ForceDestroyProjectileMessage> forceDestroySubscriber,
+            ISubscriber<ClearShotsInFlightMessage> clearShotsSubscriber,
             ISubscriber<LevelTransitionCompletedMessage> levelTransitionCompletedSubscriber,
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
             ISubscriber<GameOverMessage> gameOverSubscriber,
@@ -154,6 +156,7 @@ namespace BalloonParty.Thrower
             _restartCompletedSubscriber = restartCompletedSubscriber;
             _boardClearSubscriber = boardClearSubscriber;
             _forceDestroySubscriber = forceDestroySubscriber;
+            _clearShotsSubscriber = clearShotsSubscriber;
             _levelTransitionCompletedSubscriber = levelTransitionCompletedSubscriber;
             _levelUpSubscriber = levelUpSubscriber;
             _gameOverSubscriber = gameOverSubscriber;
@@ -213,6 +216,9 @@ namespace BalloonParty.Thrower
             // Force-destroy: the level controller commands every shot to die through its canonical
             // death path (board depleted, or the CompletingCap timed out).
             _forceDestroySubscriber.Subscribe(_ => ForceDestroyProjectiles()).AddTo(_subscriptions);
+            // The nuke's blast kills the shots in flight the same way, but keeps the loaded ball: it is the player's
+            // next turn, not something on the board.
+            _clearShotsSubscriber.Subscribe(_ => DestroyShotsInFlight()).AddTo(_subscriptions);
             _levelTransitionCompletedSubscriber.Subscribe(_ => LoadForNewLevel()).AddTo(_subscriptions);
 
             // A shot fired in the very frame the level-up triggers never takes a physics step before the
@@ -494,6 +500,12 @@ namespace BalloonParty.Thrower
                 return;
             }
 
+            DestroyShotsInFlight();
+        }
+
+        private void DestroyShotsInFlight()
+        {
+            // Copied first: each death takes its shot out of the in-flight list.
             _killBuffer.Clear();
             _killBuffer.AddRange(_inFlight);
             foreach (var view in _killBuffer)

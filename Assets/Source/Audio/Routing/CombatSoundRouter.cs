@@ -198,6 +198,7 @@ namespace BalloonParty.Audio.Routing
                 BalloonType.Unbreakable => GameSoundId.BalloonPopUnbreakable,
                 BalloonType.Golden => GameSoundId.BalloonPopGolden,
                 BalloonType.Disco => GameSoundId.BalloonPopDisco,
+                BalloonType.Nuke => GameSoundId.BalloonPopNuke,
                 BalloonType.Heart => GameSoundId.BalloonPopHeart,
                 BalloonType.SimpleSilver => GameSoundId.BalloonPopSilver,
                 BalloonType.SimpleGold => GameSoundId.BalloonPopGold,
@@ -205,8 +206,8 @@ namespace BalloonParty.Audio.Routing
             };
         }
 
-        // Unbreakables get the metallic deflect, the plated golden balloon its own clink and the disco ball a glassy
-        // tick; the generic one otherwise.
+        // Unbreakables get the metallic deflect, the plated golden balloon its own clink, the disco ball a glassy tick
+        // and the nuke a lead clank; the generic one otherwise.
         private static GameSoundId DeflectSoundFor(BalloonType type)
         {
             return type switch
@@ -216,6 +217,7 @@ namespace BalloonParty.Audio.Routing
                 BalloonType.Unbreakable => GameSoundId.BalloonDeflectUnbreakable,
                 BalloonType.Golden => GameSoundId.BalloonDeflectGolden,
                 BalloonType.Disco => GameSoundId.BalloonDeflectDisco,
+                BalloonType.Nuke => GameSoundId.BalloonDeflectNuke,
                 _ => GameSoundId.BalloonDeflect,
             };
         }

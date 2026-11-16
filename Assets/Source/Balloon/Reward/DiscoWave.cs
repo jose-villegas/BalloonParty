@@ -53,6 +53,7 @@ namespace BalloonParty.Balloon.Reward
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly IDiscoWaveView _view;
         private readonly HashSet<ISlotActor> _reached = new();
+        private readonly List<Vector2Int> _slots = new();
         private readonly CompositeDisposable _subscriptions = new();
 
         private bool _running;
@@ -138,7 +139,7 @@ namespace BalloonParty.Balloon.Reward
             _lastSource = balloon;
             _running = true;
             _center = msg.WorldPosition;
-            _maxRadius = FarthestReach(_center);
+            _maxRadius = BoardDisc.FarthestReach(_grid, _center);
             _elapsed = 0f;
             _shot = msg.Context.Projectile;
             _reached.Clear();
@@ -158,7 +159,7 @@ namespace BalloonParty.Balloon.Reward
 
             _elapsed += deltaTime;
             var t = Mathf.Clamp01(_elapsed / _settings.Seconds);
-            var radius = _maxRadius * t * (2f - t);
+            var radius = BoardDisc.RadiusAt(_maxRadius, t);
             _view.SetRadius(radius, t);
             _advancedPublisher.Publish(new DiscoWaveAdvancedMessage(t));
             Sweep(radius * radius);
@@ -166,23 +167,6 @@ namespace BalloonParty.Balloon.Reward
             {
                 Finish();
             }
-        }
-
-        // The disc ends past the farthest slot by a balloon's radius, so its edge clears the last balloon.
-        private float FarthestReach(Vector3 center)
-        {
-            var farthestSqr = 0f;
-            for (var col = 0; col < _grid.Columns; col++)
-            {
-                for (var row = 0; row < _grid.Rows; row++)
-                {
-                    var offset = (Vector2)(_grid.IndexToWorldPosition(new Vector2Int(col, row)) - center);
-                    farthestSqr = Mathf.Max(farthestSqr, offset.sqrMagnitude);
-                }
-            }
-
-            var spacing = _grid.IndexToWorldPosition(new Vector2Int(1, 0)) - _grid.IndexToWorldPosition(Vector2Int.zero);
-            return Mathf.Sqrt(farthestSqr) + spacing.magnitude * 0.5f;
         }
 
         private void Finish()
@@ -206,26 +190,12 @@ namespace BalloonParty.Balloon.Reward
 
         private void Sweep(float radiusSqr)
         {
-            for (var col = 0; col < _grid.Columns; col++)
+            BoardDisc.SlotsWithin(_grid, _center, radiusSqr, _reached, _slots);
+            foreach (var slot in _slots)
             {
-                for (var row = 0; row < _grid.Rows; row++)
-                {
-                    if (_grid.IsEmpty(col, row))
-                    {
-                        continue;
-                    }
-
-                    var slot = new Vector2Int(col, row);
-                    var actor = _grid.At(slot);
-                    if (_reached.Contains(actor)
-                        || ((Vector2)(_grid.IndexToWorldPosition(slot) - _center)).sqrMagnitude > radiusSqr)
-                    {
-                        continue;
-                    }
-
-                    _reached.Add(actor);
-                    Reach(slot, actor);
-                }
+                var actor = _grid.At(slot);
+                _reached.Add(actor);
+                Reach(slot, actor);
             }
         }
 

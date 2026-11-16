@@ -122,6 +122,7 @@ namespace BalloonParty.Solver
 
         public readonly int HeartPops;
         public readonly int DiscoPops;
+        public readonly int NukePops;
         public readonly int ToughsCleared;
         public readonly bool BoardCleared;
         public readonly int Events;
@@ -131,13 +132,14 @@ namespace BalloonParty.Solver
 
         public ShotSimulationResult(
             int rawScore, int pops, int toughsCleared, bool boardCleared, int events, bool died, bool capped,
-            bool absorbed, int goldenPops, int heartPops, int discoPops)
+            bool absorbed, int goldenPops, int heartPops, int discoPops, int nukePops = 0)
         {
             RawScore = rawScore;
             Pops = pops;
             GoldenPops = goldenPops;
             HeartPops = heartPops;
             DiscoPops = discoPops;
+            NukePops = nukePops;
             ToughsCleared = toughsCleared;
             BoardCleared = boardCleared;
             Events = events;
@@ -314,7 +316,8 @@ namespace BalloonParty.Solver
 
             return new ShotSimulationResult(
                 state.RawScore, state.Pops, state.ToughsCleared, activeCount == 0, state.Events, state.Died,
-                state.Capped, state.Absorbed, state.GoldenPops, state.HeartPops, state.DiscoPops);
+                state.Capped, state.Absorbed, state.GoldenPops, state.HeartPops, state.DiscoPops,
+                state.NukePops);
         }
 
         private static bool TryFindNearestBalloonEntryAny(
@@ -754,11 +757,31 @@ namespace BalloonParty.Solver
 
             var center = CurrentBalloonCenter(workingSet, index, tHit, dynamics);
 
+            // A nuke never pops on contact (NukeBalloonModel): its last dent, or a pierce, arms it and the ball
+            // bounces off, and once armed it bounces every ball. A pierce with dents to spare plows on through,
+            // arming it on the way. Its blast comes a fuse later, past this flight, so arming is what's counted.
+            var armsNuke = balloon.Reward == ShotRewardKind.Nuke && (state.IsPiercing || balloon.HitsRemaining <= 1);
+            if (armsNuke && state.IsPiercing && balloon.HitsRemaining > 1)
+            {
+                ArmNuke(ref balloon, ref state);
+                state.SegmentSweepValid = false;
+                state.PierceSpeedScale *= 0.5f;
+                return;
+            }
+
             // A piercing shot pops EVERYTHING it touches (DamageFlags.Piercing — unbreakables
             // included) and flies on unbent; only unarmed shots deflect off durable actors.
-            if (!state.IsPiercing && balloon.HitsRemaining > 1)
+            if (armsNuke || (!state.IsPiercing && balloon.HitsRemaining > 1))
             {
-                balloon.HitsRemaining--;
+                if (armsNuke)
+                {
+                    ArmNuke(ref balloon, ref state);
+                }
+                else
+                {
+                    balloon.HitsRemaining--;
+                }
+
                 DeflectOffBalloon(
                     center, balloon.Radius + projectileContactRadius, contactPosition, ref state.Direction);
 
@@ -983,6 +1006,18 @@ namespace BalloonParty.Solver
 
                 var flags = hit.Kind == EffectHitKind.PiercingDamage ? DamageFlags.Piercing : outcome.Flags;
                 var pops = hit.Kind == EffectHitKind.PiercingDamage || flags.HasFlag(DamageFlags.Piercing);
+                // A nuke's dents come only from the shot's own hit: plain item damage is HitOutcome.None live, and
+                // piercing damage arms it rather than popping it.
+                if (workingSet[index].Reward == ShotRewardKind.Nuke)
+                {
+                    if (pops)
+                    {
+                        ArmNuke(ref workingSet[index], ref state);
+                    }
+
+                    continue;
+                }
+
                 if (!pops)
                 {
                     workingSet[index].HitsRemaining -= outcome.Damage;
@@ -1155,6 +1190,9 @@ namespace BalloonParty.Solver
                     break;
                 case ShotRewardKind.Disco:
                     state.DiscoPops++;
+                    break;
+                case ShotRewardKind.Nuke:
+                    state.NukePops++;
                     break;
                 default:
                     Log.Assert(false, "ShotSimulator", $"Scoreless pop of an uncounted reward kind {balloon.Reward}.");
@@ -1406,6 +1444,19 @@ namespace BalloonParty.Solver
                     workingSet[i].OwnPaint = true;
                 }
             }
+        }
+
+        // An armed nuke is one with no dents left; it stays on the board, counted once (NukePops). The board it clears
+        // goes after its fuse, which outlasts the flight and kills every shot still in it (NukeBlast).
+        private static void ArmNuke(ref ShotBalloonState nuke, ref ShotFlightState state)
+        {
+            if (nuke.HitsRemaining <= 0)
+            {
+                return;
+            }
+
+            nuke.HitsRemaining = 0;
+            state.NukePops++;
         }
 
         private static void RemoveActive(ShotBalloonState[] workingSet, ref int activeCount, int index)

@@ -38,6 +38,7 @@ var onLoss = "__ON_LOSS__";
 var purple = __PURPLE__;
 var forcedSeed = __SEED__;
 var noDisco = __NO_DISCO__;
+var noNuke = __NO_NUKE__;
 var startHearts = __HEARTS__;
 const string IdKey = "BalloonPartyBot.Id";
 const string ShooterKey = "BalloonPartyBot.Shooter";
@@ -148,13 +149,15 @@ object rewardService = null;
 var goldenWasAlive = false;
 var heartWasAlive = false;
 var discoWasAlive = false;
+var nukeWasAlive = false;
 var rewardsBroken = false;
 void CountUp(string key)
 {
     UnityEditor.SessionState.SetInt(RewardsKey + key, UnityEditor.SessionState.GetInt(RewardsKey + key, 0) + 1);
 }
 
-// The plated balloons (golden, disco) each keep their on-board flag in their own PlatedRewardSchedule.
+// The plated balloons (golden, disco) each keep their on-board flag in their own PlatedRewardSchedule, and the nuke in
+// its NukeSchedule, under the same name.
 bool PlatedAlive(string scheduleField)
 {
     var schedule = rewardService.GetType().GetField(scheduleField, flags).GetValue(rewardService);
@@ -170,11 +173,13 @@ void WatchRewards(VContainer.IObjectResolver resolver)
         // A shooter installed again mid-session finds a balloon already on the board: counted when it came.
         goldenWasAlive = PlatedAlive("_golden");
         discoWasAlive = PlatedAlive("_disco");
+        nukeWasAlive = PlatedAlive("_nuke");
         heartWasAlive = (bool)rewardService.GetType().GetField("_heartAlive", flags).GetValue(rewardService);
     }
 
     var goldenAlive = PlatedAlive("_golden");
     var discoAlive = PlatedAlive("_disco");
+    var nukeAlive = PlatedAlive("_nuke");
     var heartAlive = (bool)rewardService.GetType().GetField("_heartAlive", flags).GetValue(rewardService);
     if (goldenAlive && !goldenWasAlive)
     {
@@ -191,16 +196,23 @@ void WatchRewards(VContainer.IObjectResolver resolver)
         CountUp("DiscoPlaced");
     }
 
+    if (nukeAlive && !nukeWasAlive)
+    {
+        CountUp("NukePlaced");
+    }
+
     goldenWasAlive = goldenAlive;
     heartWasAlive = heartAlive;
     discoWasAlive = discoAlive;
+    nukeWasAlive = nukeAlive;
 }
 
 string Rewards()
 {
     int Count(string key) { return UnityEditor.SessionState.GetInt(RewardsKey + key, 0); }
     var off = UnityEditor.SessionState.GetString(RewardsKey + "Off", "") != "" ? " off" : "";
-    return " rewards " + Count("GoldenPlaced") + " " + Count("HeartPlaced") + " " + Count("DiscoPlaced") + off;
+    return " rewards " + Count("GoldenPlaced") + " " + Count("HeartPlaced") + " " + Count("DiscoPlaced") + " "
+           + Count("NukePlaced") + off;
 }
 
 var now = UnityEngine.Time.realtimeSinceStartup;
@@ -212,6 +224,7 @@ if (UnityEditor.SessionState.GetString(IdKey, "") != botId)
     UnityEditor.SessionState.EraseInt(RewardsKey + "GoldenPlaced");
     UnityEditor.SessionState.EraseInt(RewardsKey + "HeartPlaced");
     UnityEditor.SessionState.EraseInt(RewardsKey + "DiscoPlaced");
+    UnityEditor.SessionState.EraseInt(RewardsKey + "NukePlaced");
     UnityEditor.SessionState.EraseString(RewardsKey + "Off");
 }
 
@@ -493,6 +506,13 @@ if (noDisco)
 {
     var requests = game.Resolve(asm.GetType("BalloonParty.Balloon.Reward.IRewardBalloonRequests"));
     requests.GetType().GetField("_discoPlaceable", flags).SetValue(requests, false);
+}
+
+// The control for a nuke measurement: no nuke is placed.
+if (noNuke)
+{
+    var requests = game.Resolve(asm.GetType("BalloonParty.Balloon.Reward.IRewardBalloonRequests"));
+    requests.GetType().GetField("_nukePlaceable", flags).SetValue(requests, false);
 }
 
 var progress = game.Resolve(progressType);

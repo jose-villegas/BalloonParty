@@ -39,6 +39,10 @@ namespace BalloonParty.Tests.Cheats
         [TestCase("BalloonParty.Balloon.Reward.RewardBalloonService", "_disco",
             typeof(BalloonParty.Balloon.Reward.PlatedRewardSchedule))]
         [TestCase("BalloonParty.Balloon.Reward.PlatedRewardSchedule", "_alive", typeof(bool))]
+        [TestCase("BalloonParty.Balloon.Reward.RewardBalloonService", "_nuke",
+            typeof(BalloonParty.Balloon.Reward.NukeSchedule))]
+        [TestCase("BalloonParty.Balloon.Reward.NukeSchedule", "_alive", typeof(bool))]
+        [TestCase("BalloonParty.Balloon.Reward.RewardBalloonService", "_nukePlaceable", typeof(bool))]
         [TestCase("BalloonParty.Balloon.Reward.RewardBalloonService", "_heartAlive", typeof(bool))]
         [TestCase("BalloonParty.Balloon.Reward.RewardBalloonService", "_discoPlaceable", typeof(bool))]
         [TestCase("BalloonParty.Game.Health.PlayerHealthController", "_current", typeof(UniRx.ReactiveProperty<int>))]

@@ -123,6 +123,17 @@ namespace BalloonParty.Audio
         // The disco ball's wave, played by DiscoSoundRouter: a glissando climbing the board's key over the wave's
         // time, and a quiet tick pitched by its distance from the pop for each balloon the wave paints.
         DiscoWaveGlissando,
-        DiscoWaveTick
+        DiscoWaveTick,
+
+        // The nuke's own cues (PLAN-NukeBalloon): a dull lead clank when the shot dents its plates, a semitone lower
+        // for each dent, and a deep boom under a tam-tam when it goes off.
+        BalloonDeflectNuke,
+        BalloonPopNuke,
+
+        // The nuke's fuse, played by NukeSoundRouter: a hard click with a low alarm as it is armed, a short beep on
+        // each count (a step higher each time), and a long gust of wind as the breather after its blast starts.
+        NukeArmed,
+        NukeCountdownBeep,
+        NukeBreatherWind
     }
 }

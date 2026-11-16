@@ -1,6 +1,7 @@
 # Balloon/Reward
 
-Three balloons are rewards rather than threats, and no level's mix brings them. On a purple level all three
+Four balloons are not threats, and no level's mix brings them. Three are rewards; the fourth, the nuke, is a
+rescue (see The nuke). On a purple level all three rewards
 are rolled every few lines, each further one rarer: the **heart balloon** from the level's start, up to five,
 even at full hearts, where its pop gives an extra heart past the maximum; the **golden balloon** from 15% done,
 up to three; the **disco ball** from 25% done, the first one sure, up to three. Level 5 always gets a single
@@ -8,8 +9,9 @@ golden one early on, the player's first, and level 8 a single disco ball; after 
 get one or the other, about every 5 levels each: a little likelier early in the run, and likelier the longer
 since the last. Off a purple level the heart comes to a player who is missing hearts, more often the more are
 missing. The Party Favors card raises every one of these rolls' chances by 25% a stack (`IWeaponStats.RewardBalloonOdds`,
-`Game/Upgrades/README.md`). At most one of each is on the board. The plans are `Plans/PLAN-RewardBalloons.md` and
-`Plans/PLAN-DiscoBalloon.md`. The disco ball's pop paints the board rainbow (see The disco ball's wave).
+`Game/Upgrades/README.md`), all but the nuke's. At most one of each is on the board. The plans are
+`Plans/PLAN-RewardBalloons.md` and `Plans/PLAN-DiscoBalloon.md`; the nuke's is `Plans/PLAN-NukeBalloon.md`. The disco
+ball's pop paints the board rainbow (see The disco ball's wave).
 
 ## Contents
 
@@ -17,6 +19,11 @@ missing. The Party Favors card raises every one of these rolls' chances by 25% a
 |---|---|
 | `IRewardBalloonRequests` | What `BalloonSpawner` asks. `TryTakeDue` once per clock line: whether this line brings one, and which. `Placed` once it is on the board: returns the callback to call when it leaves |
 | `RewardBalloonService` | The rules behind the answer. Registered as `IRewardBalloonRequests` and `IRunResettable` |
+| `NukeSchedule` | When the nuke is due, and whether one is on the board: its gates (`FromLevel`, `PerLevel`, `CooldownLines`) and the roll against `INukeOdds.Chance`. The service asks it first on a line |
+| `INukeOdds`, `NukeOdds` | The nuke's chance on a line: a tiny base raised by the trouble the player is in (board fill, spawn-clock pressure, low hearts, hearts lost in succession, read from `WaveDamageMessage` and fading each line). Registered as an entry point and `IRunResettable` |
+| `NukeFuse` | The armed nuke's three-second countdown: publishes `NukeArmedMessage` and a `NukeCountdownMessage` each second, pulls the nearby balloons in, then calls `INukeDetonator.Detonate`. Stops with no blast on a level change, game over or run reset. Registered as an entry point and `IRunResettable` |
+| `INukeDetonator`, `NukeBlast` | `Detonate` is the blast itself: pops the nuke, kills the shots in flight, then grows a disc from it that pops every balloon it reaches but the other rewards, scoring nothing, and finally asks the spawn clock for a breather. `NukeBlast` implements it, as an entry point and `IRunResettable`; drawn by `Balloon/View/NukeBlastView` and `NukeCloudView` |
+| `BoardDisc` | The disc's shape and the last sweep, shared by `DiscoWave` and `NukeBlast`: the radius at a share of the time, which slots the edge has reached |
 | `PlatedRewardSchedule` | When one plated balloon (the golden one, the disco ball) is due, and whether one is on the board: the purple rolls, the ordinary level's single roll, the sure level. The service runs one for each; `RollPurple` is shared with the heart |
 | `PlatedRewardTuning` | One plated balloon's numbers, read from `IRewardBalloonSettings` each line (`Golden(settings)`, `Disco(settings)`), so the two share the rules and differ only in these |
 | `RewardBalloonPayout` | Pays a reward balloon's pop, read from `ActorHitMessage`. The golden balloon: a free card (`IFreeCardGrant`), or a heart (`IPlayerHealing.Heal`) when every card is at its limit. The heart balloon: a heart, or on a purple level an extra one past the maximum (`HealPastMax`). Pays each balloon once |
@@ -69,7 +76,8 @@ has an entry for.
   roll stays due until it is placed (a line with no room for it passes it on). A new level starts both counts
   over and drops anything owed. The disco ball rolls like the golden one, from `PurpleDiscoAtCompletion`
   (0.25), on `PurpleDiscoChances` (100%, 25%, 15%): the first is sure, so every purple level gets one. A line
-  brings one balloon at most: the golden first, then the disco ball, then the heart; the others stay due.
+  brings one balloon at most: the nuke first (see The nuke), then the golden, then the disco ball, then the heart; the
+  others stay due.
 - **Golden, on another level.** A single one. Every `OrdinaryGoldenEveryLevels` (1: every) level that
   isn't purple rolls once, on its first line, against `OrdinaryGoldenChance` (10%). The chance eases off
   as the run goes on: it is halved `OrdinaryChanceHalvedAfterLevels` (20) levels past the sure level, a
@@ -128,7 +136,7 @@ its streak as it stands, climb nothing, and refund no streak shield (`DamageFlag
 shot, and every later throw, pops the rainbow board as usual. The rainbow lines are booked to the same shot
 while it still flies, so it can't climb on them either.
 
-`DiscoWaveView` draws the disc: a quad centred on the pop and sized to the disc each frame, on
+`DiscoWaveView` draws the disc (the quad-sizing part is `GrowingDiscView`, which `NukeBlastView` shares): a quad centred on the pop and sized to the disc each frame, on
 `IDiscoWaveSettings.DiscMaterial` (`BalloonParty/Sprite/DiscoWave`), which must be assigned or nothing is
 drawn. The shader draws a bright edge in the level's own colours, turning by angle, and a soft wash behind it
 that thins as the disc grows. It fades out over the last stretch, so it's gone when the view hides it. It
@@ -147,6 +155,55 @@ plays them as a rising harp glissando through the board's key and a quiet pluck 
 farther out it is. The ball's own cues are `CombatSoundRouter`'s: `BalloonDeflectDisco`, a glassy tick (a
 ping-pong bump under a glassy chime an octave over the board's key), and `BalloonPopDisco`, the golden
 balloon's pop with the item-sighted wind chime shimmering over it.
+
+## The nuke
+
+The fourth balloon is a rescue, not a prize. It comes rarely, and more often the more trouble the player is in.
+Shooting it three times, or hitting it with anything piercing, does not pop it: it arms it. A three-second fuse
+counts down on its body, and then the blast sweeps the board and pops every balloon but the other rewards, and the
+spawn clock gives a breather. It scores nothing and is placed by the service like the others
+(`Plans/PLAN-NukeBalloon.md`).
+
+**The balloon.** `Balloon/Model/NukeBalloonModel` is a `PlatedBalloonModel` that is also `IHasDurability`, with
+its hits from its catalogue entry (3). The shot's ordinary hit bounces off and costs one. The last one, or any
+`Piercing` damage or laser beam, arms it (`Armed`) instead of popping it. An item's plain damage does nothing, as on
+the golden balloon. Once armed it deflects every ball and takes no more damage, and it is anchored
+(`IBalanceAnchor`), so the balancing of the board leaves it where it is. Its prefab (`Prefabs/Balloon/Nuke`) is
+the golden one's, with a lead-plated body (`Balloon/NukeBalloon.shader`: bolted plates, a radiation mark on a yellow
+placard) whose plates tip and darken as it is dented, and red rays behind it (`NukeRays` palette entry and
+material). `Balloon/Type/NukeFuseView` drives the shader's LED counter and status lamp from the fuse's messages: the
+lamp is green until the nuke is armed and then red, blinking with each beep, and the rays turn red too. Cues: `BalloonDeflectNuke`, a lead clank a
+semitone lower on each dent, and `BalloonPopNuke`, a deep boom.
+
+**When it comes.** `NukeSchedule` asks, first on every clock line while the level is played: from
+`INukeOddsSettings.FromLevel` on, `PerLevel` a level, `CooldownLines` lines apart, one on the board at most. The
+roll's chance is `BaseChance` raised toward `MaxChance` by the weighted sum of four signals (`NukeOdds`), capped
+at 1: the board's fill (`FillFrom` to `FillFull`), the spawn clock's pressure, `PlayerNeed.HeartsNeed` (full hearts
+to the last one), and hearts lost recently (each `WaveDamageMessage` adds its loss, and each line keeps
+`LossKeptPerLine` of the sum). Party Favors does not raise it. The settings are `IBalloonsConfiguration.NukeOdds`.
+
+**The fuse.** When the nuke is armed, `NukeFuse` publishes `NukeArmedMessage` and counts down
+`INukeFuseSettings.Seconds` (`IBalloonsConfiguration.NukeFuse`, 3 s), publishing a `NukeCountdownMessage` with the
+whole seconds left each second. `NukeFuseView` shows the digit and lamp, and `NukeSoundRouter` plays the alarm once
+and a beep for each count, each a step higher. Meanwhile the board is pulled in: `NukeBlastView.Implode` stamps an
+implosion into the disturbance field (the clouds, grass and specks lean towards the nuke), and every
+`PullInterval` the balloons within `PullRadius` get an inward `NudgeType.Wave` nudge, a longer one each time. A level
+change, a game over or a run reset stops the fuse with no blast.
+
+**The blast.** When the fuse runs out, `NukeFuse` calls `INukeDetonator.Detonate` (`NukeBlast`). In order: the nuke
+pops; `ClearShotsInFlightMessage` makes `ThrowerController` kill every shot in flight (the ball loaded to throw next
+stays); `NukeDetonatedMessage` plays the boom. Then a disc grows from the nuke over `INukeBlastSettings.Seconds`
+(`IBalloonsConfiguration.NukeBlast`), by `BoardDisc`, as the disco wave does. `NukeBlastView` draws it on
+`Sprite/NukeBlast.shader` (a white flood over the board, white-hot core, ragged orange ring, scorch), lights the
+scene with a blinding light that fades as the disc spreads, and gives the disturbance field the strongest push on it.
+`NukeCloudView` spreads a mushroom cloud seen from above (`Sprite/NukeCloud.shader`, material `NukeCloud`: a
+billowing cap that starts as fire and cools to lit smoke, its shadow on the board, and a dust ring racing out). Every balloon and grid actor gets an outward nudge `NudgeLead` ahead of the edge, and
+every balloon the edge reaches pops through `IBalloonPopper` (`BalloonControllerRegistry.TryPopSingle`): its pop
+effects play and its slot is freed, but no hit is published, so nothing scores, no streak moves, no goal advances
+and no item fires. Other reward balloons and grid actors are spared. A last sweep at the end pops what is left,
+and then `IBreatherGrant.Grant` (`SpawnClock`) starts the breather a big clear earns, even inside the cooldown of an
+earlier one, and `NukeBreatherMessage` has `NukeSoundRouter` play a gust of wind. A level change, a game over or a
+run reset stops the blast where it is, with no breather.
 
 ## Leaving the board
 

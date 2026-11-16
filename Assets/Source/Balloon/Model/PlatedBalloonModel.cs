@@ -9,13 +9,14 @@ namespace BalloonParty.Balloon.Model
     ///     shot's own ordinary hit bounces off it, and any piercing hit pops it: a piercing shot (plowing it and
     ///     shattering it at the next wall), a bomb's blast beside it, or a laser beam. Colourless and scoreless, so it never counts
     ///     toward a goal or moves the streak, and it resists paint. Not an <see cref="UnbreakableBalloonModel" />:
-    ///     that would pull it into formations and roaming. Each subclass differs only in what its pop pays.
+    ///     that would pull it into formations and roaming. Each subclass differs in what its pop pays, and the nuke
+    ///     also wears down under ordinary hits (<see cref="NukeBalloonModel" />).
     /// </summary>
     internal abstract class PlatedBalloonModel : BalloonModelBase, IHasDeflectStamp, IResistsPaint, IDeflectsShots
     {
         public float DeflectStampScale { get; }
         public override IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
-        public bool DeflectsOrdinaryHit => true;
+        public virtual bool DeflectsOrdinaryHit => true;
 
         protected PlatedBalloonModel(BalloonModelConfig config)
             : base(config)

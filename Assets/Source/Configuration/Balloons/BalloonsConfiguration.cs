@@ -88,6 +88,15 @@ namespace BalloonParty.Configuration.Balloons
         [Header("Disco Ball Wave")]
         [SerializeField] private DiscoWaveSettings _discoWave = new();
 
+        [Header("Nuke Odds")]
+        [SerializeField] private NukeOddsSettings _nukeOdds = new();
+
+        [Header("Nuke Blast")]
+        [SerializeField] private NukeBlastSettings _nukeBlast = new();
+
+        [Header("Nuke Fuse")]
+        [SerializeField] private NukeFuseSettings _nukeFuse = new();
+
         public IReadOnlyList<BalloonPrefabEntry> Entries => _entries;
         public ParticleSystem DefaultPopVfxPrefab => _defaultPopVfxPrefab;
         public Material RainbowMaterial => _rainbowMaterial;
@@ -111,5 +120,8 @@ namespace BalloonParty.Configuration.Balloons
         public IUnbreakableFormationSettings UnbreakableFormation => _unbreakableFormation;
         public IRewardBalloonSettings RewardBalloons => _rewardBalloons;
         public IDiscoWaveSettings DiscoWave => _discoWave;
+        public INukeOddsSettings NukeOdds => _nukeOdds;
+        public INukeBlastSettings NukeBlast => _nukeBlast;
+        public INukeFuseSettings NukeFuse => _nukeFuse;
     }
 }

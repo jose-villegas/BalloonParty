@@ -1,16 +1,7 @@
-using UnityEngine;
-
 namespace BalloonParty.Balloon.View
 {
     /// <summary>The disco ball's wave as drawn: a disc grown from the pop to the radius the wave has reached.</summary>
-    internal interface IDiscoWaveView
+    internal interface IDiscoWaveView : IGrowingDiscView
     {
-        void Show(Vector3 center);
-
-        /// <param name="radius">World radius of the disc.</param>
-        /// <param name="progress">0 at the pop, 1 when the disc covers the board.</param>
-        void SetRadius(float radius, float progress);
-
-        void Hide();
     }
 }

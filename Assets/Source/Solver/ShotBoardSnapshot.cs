@@ -193,6 +193,19 @@ namespace BalloonParty.Solver
             return ForPlatedTarget(position, radius, balance, ShotRewardKind.Disco);
         }
 
+        /// <summary>The nuke reward balloon: a plated balloon that dents. Only the shot's ordinary hit dents it: it
+        /// deflects and costs a hit, and the last one arms it instead of popping it. A pierce plows it while it has
+        /// more than one left and arms it, and a piercing item effect (a bomb's blast, a laser) arms it. Armed, it
+        /// deflects every ball and stays on the board. Plain item damage never wears it
+        /// (<c>ShotSimulator.ApplyEffectHits</c>). Mirrors <c>NukeBalloonModel</c>.</summary>
+        public static ShotBalloonSnapshot ForNukeTarget(
+            Vector2 position, float radius, int hitsRemaining, BalanceProfile? balance = null)
+        {
+            return new ShotBalloonSnapshot(
+                position, radius, 0, hitsRemaining, new ColorProfile(null, false, false), balance,
+                ShotContactKind.Poppable, null, null, ShotRewardKind.Nuke);
+        }
+
         /// <summary>The heart reward balloon: colourless, scoreless, one hit pops it, the shot's or an item's —
         /// mirrors <c>HeartBalloonModel</c>.</summary>
         public static ShotBalloonSnapshot ForHeartTarget(Vector2 position, float radius, BalanceProfile? balance = null)

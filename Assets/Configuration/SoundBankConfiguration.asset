@@ -1515,6 +1515,186 @@ MonoBehaviour:
     _tensionSemitones: 0
     _layers: []
     _fetchPrompt: 'A tiny quiet pluck as one balloon turns rainbow.'
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: bd0186159f3724640a66cca038bf1579, type: 3}
+    _clipPickMode: 0
+    _clipWrapMode: 0
+    _pitchRange: {x: 0.7, y: 0.7}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 4
+    _priority: 150
+    _loop: 0
+    _singleInstance: 0
+    _pan2D: 1
+    _delaySeconds: 0
+    _fadeInSeconds: 0
+    _fadeOutSeconds: 0
+    _maxPlaySeconds: 0
+    _stopsOnPlay:
+    _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _layers:
+    - _clips:
+      - {fileID: 8300000, guid: c1ad86570c491441486dc69979a91eab, type: 3}
+      _clipPickMode: 0
+      _clipWrapMode: 0
+      _pitchRange: {x: 0.55, y: 0.55}
+      _volumeRange: {x: 0.5, y: 0.5}
+      _melodicMode: 0
+      _melodicMaxOctaves: 2
+      _melodicSkipSteps: 1
+      _tensionSemitones: 0
+    _fetchPrompt: 'A dull heavy clank, like a ball denting a lead plate bolted over something dangerous.'
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: 5891122117dcf4d0380a9699075bd97b, type: 3}
+    _clipPickMode: 0
+    _clipWrapMode: 0
+    _pitchRange: {x: 0.7, y: 0.7}
+    _volumeRange: {x: 1, y: 1}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 2
+    _priority: 200
+    _loop: 0
+    _singleInstance: 0
+    _pan2D: 1
+    _delaySeconds: 0
+    _fadeInSeconds: 0
+    _fadeOutSeconds: 0.6
+    _maxPlaySeconds: 1.6
+    _stopsOnPlay:
+    _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _layers:
+    - _clips:
+      - {fileID: 8300000, guid: 3fc1997488ca94ea5a9cc3f9e56413a5, type: 3}
+      _clipPickMode: 0
+      _clipWrapMode: 0
+      _pitchRange: {x: 0.6, y: 0.6}
+      _volumeRange: {x: 0.9, y: 0.9}
+      _melodicMode: 0
+      _melodicMaxOctaves: 2
+      _melodicSkipSteps: 1
+      _tensionSemitones: 0
+    - _clips:
+      - {fileID: 8300000, guid: 69891ea74c16c4a00bfe6742a2943c4b, type: 3}
+      _clipPickMode: 0
+      _clipWrapMode: 0
+      _pitchRange: {x: 0.8, y: 0.8}
+      _volumeRange: {x: 1, y: 1}
+      _melodicMode: 0
+      _melodicMaxOctaves: 2
+      _melodicSkipSteps: 1
+      _tensionSemitones: 0
+    _fetchPrompt: 'A deep boom with a rolling tam-tam over it: a bomb goes off and clears the whole board.'
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: bd0186159f3724640a66cca038bf1579, type: 3}
+    _clipPickMode: 0
+    _clipWrapMode: 0
+    _pitchRange: {x: 1.3, y: 1.3}
+    _volumeRange: {x: 0.9, y: 0.9}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 2
+    _priority: 200
+    _loop: 0
+    _singleInstance: 0
+    _pan2D: 1
+    _delaySeconds: 0
+    _fadeInSeconds: 0
+    _fadeOutSeconds: 0.3
+    _maxPlaySeconds: 0.9
+    _stopsOnPlay:
+    _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _layers:
+    - _clips:
+      - {fileID: 8300000, guid: 8e637bea94c694bcfac0ad7803fb1c8c, type: 3}
+      _clipPickMode: 0
+      _clipWrapMode: 0
+      _pitchRange: {x: 0.7, y: 0.7}
+      _volumeRange: {x: 0.45, y: 0.45}
+      _melodicMode: 0
+      _melodicMaxOctaves: 2
+      _melodicSkipSteps: 1
+      _tensionSemitones: 0
+    _fetchPrompt: 'A hard metallic click with a low electronic alarm under it: a bomb is armed.'
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: 8e637bea94c694bcfac0ad7803fb1c8c, type: 3}
+    _clipPickMode: 0
+    _clipWrapMode: 0
+    _pitchRange: {x: 2.0, y: 2.0}
+    _volumeRange: {x: 0.7, y: 0.7}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 2
+    _priority: 200
+    _loop: 0
+    _singleInstance: 0
+    _pan2D: 1
+    _delaySeconds: 0
+    _fadeInSeconds: 0
+    _fadeOutSeconds: 0.05
+    _maxPlaySeconds: 0.16
+    _stopsOnPlay:
+    _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _layers:
+    - _clips:
+      - {fileID: 8300000, guid: 0370e279dcf51485896dad01ce536809, type: 3}
+      _clipPickMode: 0
+      _clipWrapMode: 0
+      _pitchRange: {x: 1.6, y: 1.6}
+      _volumeRange: {x: 0.3, y: 0.3}
+      _melodicMode: 0
+      _melodicMaxOctaves: 2
+      _melodicSkipSteps: 1
+      _tensionSemitones: 0
+    _fetchPrompt: 'A short clean electronic beep, like a countdown timer ticking down a second.'
+  - _channel: 0
+    _clips:
+    - {fileID: 8300000, guid: 7ba78a0dff9d94cf18f67115f729b616, type: 3}
+    _clipPickMode: 0
+    _clipWrapMode: 0
+    _pitchRange: {x: 0.8, y: 0.8}
+    _volumeRange: {x: 0.8, y: 0.8}
+    _cooldownSeconds: 0
+    _maxConcurrentVoices: 1
+    _priority: 160
+    _loop: 0
+    _singleInstance: 0
+    _pan2D: 0
+    _delaySeconds: 0
+    _fadeInSeconds: 0.3
+    _fadeOutSeconds: 1.0
+    _maxPlaySeconds: 3.5
+    _stopsOnPlay:
+    _melodicMode: 0
+    _melodicMaxOctaves: 2
+    _melodicSkipSteps: 1
+    _tensionSemitones: 0
+    _layers:
+    - _clips:
+      - {fileID: 8300000, guid: 0716c6332088142299121f5b0466ad01, type: 3}
+      _clipPickMode: 0
+      _clipWrapMode: 0
+      _pitchRange: {x: 0.7, y: 0.7}
+      _volumeRange: {x: 0.5, y: 0.5}
+      _melodicMode: 0
+      _melodicMaxOctaves: 2
+      _melodicSkipSteps: 1
+      _tensionSemitones: 0
+    _fetchPrompt: 'A long gust of wind swelling in and fading as the dust settles after a blast.'
   _melodicScale: 0000000002000000040000000700000009000000i
   _melodicRootSemitone: 0
   _globalVoiceCap: 64

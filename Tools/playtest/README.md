@@ -34,6 +34,7 @@ Two options set up the first run, for measuring what only comes late or to a pla
 | `--purple` | Once the first run is in play, restarts it on the first level its seed makes purple (one more colour, the golden balloon's level), through the Start From Level cheat with the seed kept, so the same roll holds. The run's first moments, before the restart, are on level 1 |
 | `--seed N` | With `--purple`: restarts on run seed N instead of the run's own, so every session given the same N plays the same purple level |
 | `--no-disco` | Places no disco ball all session: the control for measuring one. A purple level otherwise brings a sure one. PLAN-DiscoBalloon's *Measured* section pairs the two |
+| `--no-nuke` | Places no nuke all session: the control for measuring one (a nuke clears the board, so it changes hearts lost and level times). The Reward balloons table counts nukes placed and popped |
 | `--hearts N` | Once that run is in play, sets the player's hearts to N, so the session starts low on hearts (where the heart balloon comes). A later run (`--on-loss restart`) starts as configured |
 
 ```bash
@@ -100,7 +101,7 @@ breather, and the reward balloons placed so far) and `report.md`:
 | Section | From | Says |
 |---|---|---|
 | Header | `ProjectileFlightConfig.asset`, the arguments | The reload and ball-cap values, and the player, the session ran with |
-| Reward balloons | The ticks, the telemetry | How many golden and heart balloons were placed in the session, counted on the shooter's 50 ms loop (the reward service's on-board flags), and popped (the telemetry's pops by balloon type) |
+| Reward balloons | The ticks, the telemetry | How many golden, heart, disco and nuke balloons were placed in the session, counted on the shooter's 50 ms loop (the reward service's on-board flags), and popped (the telemetry's pops by balloon type) |
 | Runs | The ticks | Each run's outcome (game over or still playing), highest level, score, hearts left, shots and length, its retries (how many were bonus retries, how many asked for an ad), and how many runs ended in a game over. A retry doesn't end the run |
 | Losses | The ticks | With `--on-loss retry` or `bonus`: every game over, the level it came on and how the bot answered it |
 | Hearts lost | The ticks | Every heart lost: run, level, seconds into the level, hearts left, and the lead-up (the 10 s before it): board fill just before and on average, shots per 10 s, balls in flight |

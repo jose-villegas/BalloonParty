@@ -13,7 +13,8 @@ namespace BalloonParty.Shared.Extensions
         /// <summary>The reward balloons, which only <c>RewardBalloonService</c> brings, never a level's mix.</summary>
         internal static bool IsReward(this BalloonType type)
         {
-            return type is BalloonType.Golden or BalloonType.Heart or BalloonType.Disco;
+            return type is BalloonType.Golden or BalloonType.Heart or BalloonType.Disco
+                or BalloonType.Nuke;
         }
     }
 }

@@ -140,6 +140,11 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<BonusCardDealtMessage>(options);
             builder.RegisterMessageBroker<DiscoWaveAdvancedMessage>(options);
             builder.RegisterMessageBroker<DiscoWaveReachedMessage>(options);
+            builder.RegisterMessageBroker<NukeArmedMessage>(options);
+            builder.RegisterMessageBroker<NukeCountdownMessage>(options);
+            builder.RegisterMessageBroker<NukeDetonatedMessage>(options);
+            builder.RegisterMessageBroker<NukeBreatherMessage>(options);
+            builder.RegisterMessageBroker<ClearShotsInFlightMessage>(options);
             builder.RegisterMessageBroker<BubbleMergedMessage>(options);
             builder.RegisterMessageBroker<UpgradeCardHeldMessage>(options);
             builder.RegisterMessageBroker<GameOverDismissedMessage>(options);
@@ -262,11 +267,16 @@ namespace BalloonParty.Game
             builder.RegisterBuildCallback(resolver => resolver.Resolve<BubbleMergeView>());
             builder.RegisterEntryPoint<UnbreakableFormationService>().AsSelf().As<IRunResettable>()
                 .As<IFormationReinforcements>();
+            builder.RegisterEntryPoint<NukeOdds>().As<INukeOdds>().As<IRunResettable>();
             builder.RegisterEntryPoint<RewardBalloonService>().As<IRewardBalloonRequests>().As<IRunResettable>();
             builder.RegisterEntryPoint<RewardBalloonPayout>();
             builder.RegisterEntryPoint<DiscoWave>().As<IRunResettable>();
             builder.RegisterEntryPoint<RainbowLines>().As<IRainbowLines>().As<IRunResettable>().AsSelf();
             builder.RegisterComponentOnNewGameObject<DiscoWaveView>(Lifetime.Singleton, "DiscoWave").As<IDiscoWaveView>();
+            builder.RegisterEntryPoint<NukeBlast>().As<INukeDetonator>().As<IRunResettable>();
+            builder.RegisterEntryPoint<NukeFuse>().As<IRunResettable>();
+            builder.RegisterComponentOnNewGameObject<NukeBlastView>(Lifetime.Singleton, "NukeBlast").As<INukeBlastView>();
+            builder.RegisterComponentOnNewGameObject<NukeCloudView>(Lifetime.Singleton, "NukeCloud").As<INukeCloudView>();
             builder.RegisterEntryPoint<GridActorHitController>();
             builder.Register<NavigationReadyGate>(Lifetime.Singleton).WithParameter(NavigationState.Game);
             builder.RegisterEntryPoint<GridSpawnerCoordinator>().AsSelf().As<IRunResettable>();
@@ -279,7 +289,7 @@ namespace BalloonParty.Game
                 .AsImplementedInterfaces().AsSelf();
             builder.RegisterEntryPoint<BalloonMotionTicker>().AsSelf();
             builder.RegisterEntryPoint<RejectedBalloonEffect>().AsSelf().As<IRunResettable>();
-            builder.RegisterEntryPoint<BalloonControllerRegistry>().AsSelf();
+            builder.RegisterEntryPoint<BalloonControllerRegistry>().AsSelf().As<IBalloonPopper>();
             builder.Register<BalloonPopPresenter>(Lifetime.Singleton);
             builder.Register<BalloonControllerContext>(Lifetime.Singleton);
             builder.Register<BalloonPlacementResolver>(Lifetime.Singleton);
@@ -293,7 +303,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<LevelDifficultyResolver>().AsSelf().As<IActiveLevelParameters>().As<ILevelThresholds>().As<IRunResettable>();
             builder.RegisterEntryPoint<BalloonSpawner>().As<IGridSpawner>().AsSelf().As<IRunResettable>();
             builder.Register<BoardFill>(Lifetime.Singleton).As<IBoardFill>();
-            builder.RegisterEntryPoint<SpawnClock>().As<ISpawnClock>().As<IRunResettable>();
+            builder.RegisterEntryPoint<SpawnClock>().As<ISpawnClock>().As<IRunResettable>().As<IBreatherGrant>();
             builder.RegisterEntryPoint<ScoreController>().AsSelf().As<IRunScore>().As<IRunResettable>();
             builder.RegisterEntryPoint<LevelController>().AsSelf().As<ILevelProgress>().As<IRunResettable>();
             builder.RegisterEntryPoint<BonusLevelCue>().As<IBonusLevelCue>().As<IRunResettable>();
@@ -476,6 +486,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<AudioChannelController>();
             builder.RegisterEntryPoint<ItemSightSoundRouter>();
             builder.RegisterEntryPoint<DiscoSoundRouter>();
+            builder.RegisterEntryPoint<NukeSoundRouter>();
         }
 
         // The dictionary is the choreography seam: the resolver maps each ScoreTrailBehaviourId to its handler.

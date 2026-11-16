@@ -37,7 +37,8 @@ TICK_RE = re.compile(
     r"^(?P<t>[\d.]+) L(?P<level>\d+) score (?P<score>-?\d+) hearts (?P<hearts>-?\d+) "
     r"(?P<nav>\w+)/(?P<phase>\w+) shots (?P<shots>\d+)(?: fill (?P<fill>[\d.]+))?(?: inflight (?P<inflight>\d+))?"
     r"(?: breather (?P<breather>[\d.]+))?"
-    r"(?: rewards (?P<golden_placed>\d+) (?P<heart_placed>\d+)(?: (?P<disco_placed>\d+))?(?P<rewards_off> off)?)?$")
+    r"(?: rewards (?P<golden_placed>\d+) (?P<heart_placed>\d+)(?: (?P<disco_placed>\d+))?(?: (?P<nuke_placed>\d+))?"
+    r"(?P<rewards_off> off)?)?$")
 FLOAT_FIELDS = ("t", "fill", "breather")
 # A loss the tick answered with a retry, which keeps the run going: "<time> RETRY ad <0|1>" or "<time> BONUS ad 1".
 RETRY_RE = re.compile(r" (RETRY|BONUS) ad ([01])$")
@@ -395,7 +396,7 @@ def reward_lines(samples, records):
     if not counted:
         return []
     last = counted[-1]
-    popped = {"Golden": 0, "Heart": 0, "Disco": 0}
+    popped = {"Golden": 0, "Heart": 0, "Disco": 0, "Nuke": 0}
     for record in records:
         if record.get("record_kind") == "level":
             by_type = record.get("axes", {}).get("pops_balloon_type", {})
@@ -404,11 +405,13 @@ def reward_lines(samples, records):
     lines = ["## Reward balloons", "",
              "Placed: counted on the bot's 50 ms loop when the reward service marks one on the board. Popped: the "
              "telemetry's pops by balloon type. A golden pop pays a card (or a heart with every card at its limit), "
-             "a heart pop a heart (past the maximum on a purple level), a disco pop paints the board rainbow.", "",
+             "a heart pop a heart (past the maximum on a purple level), a disco pop paints the board rainbow, a nuke pop "
+             "clears the board.", "",
              "| Balloon | Placed | Popped |", "|---|---|---|",
              f"| Golden | {last['golden_placed']} | {popped['Golden']} |",
              f"| Heart | {last['heart_placed']} | {popped['Heart']} |",
-             f"| Disco | {last.get('disco_placed') or 0} | {popped['Disco']} |", ""]
+             f"| Disco | {last.get('disco_placed') or 0} | {popped['Disco']} |",
+             f"| Nuke | {last.get('nuke_placed') or 0} | {popped['Nuke']} |", ""]
     if any(s.get("rewards_off") for s in counted):
         lines += ["The placement counter switched itself off after an error (a renamed field: the Editor console has "
                   "it), so the placed counts stop there.", ""]
@@ -550,6 +553,8 @@ def main():
                              "on the same level")
     parser.add_argument("--no-disco", action="store_true",
                         help="place no disco ball: the control for measuring one")
+    parser.add_argument("--no-nuke", action="store_true",
+                        help="place no nuke balloon: the control for measuring one")
     parser.add_argument("--hearts", type=int, default=0,
                         help="start the first run with this many hearts (default: as configured)")
     args = parser.parse_args()
@@ -576,10 +581,12 @@ def main():
                  .replace("__PURPLE__", "true" if args.purple else "false")
                  .replace("__SEED__", str(args.seed))
                  .replace("__NO_DISCO__", "true" if args.no_disco else "false")
+                 .replace("__NO_NUKE__", "true" if args.no_nuke else "false")
                  .replace("__HEARTS__", str(args.hearts)))
     setup = ", ".join(([("started on the run's first purple level, through Start From Level")] if args.purple else [])
                       + ([f"on run seed {args.seed}"] if args.seed else [])
                       + (["no disco ball placed"] if args.no_disco else [])
+                      + (["no nuke placed"] if args.no_nuke else [])
                       + ([f"started with {args.hearts} heart{'s' if args.hearts != 1 else ''}"] if args.hearts > 0 else []))
     if args.player == "best":
         player = "best (the solver, fired the moment the cannon is ready)"

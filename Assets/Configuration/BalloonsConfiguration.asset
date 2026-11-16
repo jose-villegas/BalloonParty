@@ -248,6 +248,32 @@ MonoBehaviour:
     _deflectStampScale: 1.75
     _spawnWeight: 0
     _needWeightBoost: 0
+  - _prefab: {fileID: 2456788019005336009, guid: b6ef0ee3e0e546309d61fbcf12947904, type: 3}
+    _balloonType: 11
+    _nudgeOverrides:
+    - _appliesTo: 1
+      _distance: 0.05
+      _duration: 0.5
+      _falloff: 0
+    - _appliesTo: 2
+      _distance: 0.02
+      _duration: 0.25
+      _falloff: 0
+    _hitVfxOverrides:
+    - _appliesTo: 4
+      _prefab: {fileID: 2148469744637963286, guid: c8751959a4d94c87a7fbdfb33b3fc94a, type: 3}
+    _hitsToPop: 3
+    _scoreValue: 20
+    _itemActivationWeight: 0
+    _balanceBias: 2
+    _maxBalanceSteps: 0
+    _moveSpeed: 2
+    _balancePriority: 0
+    _directBalanceMotion: 1
+    _omnidirectionalBalance: 0
+    _deflectStampScale: 1.75
+    _spawnWeight: 0
+    _needWeightBoost: 0
   _defaultPopVfxPrefab: {fileID: 2148469744637963286, guid: 4a7c3a51e0404c1479c70235419a474d, type: 3}
   _rainbowMaterial: {fileID: 2100000, guid: 2a0e218b129144e0ca18ebc8a64ea0c4, type: 2}
   _rainbowPopFlashRadius: 1.5
@@ -317,3 +343,48 @@ MonoBehaviour:
     _discMaterial: {fileID: 2100000, guid: 8a23dc21809e4ea888ad27f8fbd8c8c2, type: 2}
     _sortingLayerName: Balloons
     _sortingOrder: -1
+  _nukeOdds:
+    _fromLevel: 4
+    _perLevel: 1
+    _cooldownLines: 150
+    _baseChance: 0.0005
+    _maxChance: 0.04
+    _fillFrom: 0.7
+    _fillFull: 0.95
+    _fillWeight: 0.5
+    _pressureWeight: 0.25
+    _heartsWeight: 0.5
+    _lossWeight: 0.5
+    _lossesForFull: 2
+    _lossKeptPerLine: 0.75
+  _nukeBlast:
+    _seconds: 1
+    _nudgeOverrides:
+    - _appliesTo: 8
+      _distance: 0.35
+      _duration: 0.3
+      _falloff: 0
+    _nudgeLead: 1.2
+    _blastMaterial: {fileID: 2100000, guid: ab398cdcdc8a4b36999da6d3e26bcabb, type: 2}
+    _sortingLayerName: Balloons
+    _sortingOrder: -1
+    _lightIntensity: 6
+    _lightReach: 2
+    _lightLinger: 0.6
+    _lightAtEdge: 0.5
+    _pushRadius: 12
+    _pushStrength: 9
+    _pushSeconds: 0.8
+    _cloudMaterial: {fileID: 2100000, guid: 0a530a8f2fd24668800e16d6cf2a90b4, type: 2}
+    _cloudSeconds: 5
+    _cloudReach: 5.5
+    _cloudSortingOrder: 40
+  _nukeFuse:
+    _seconds: 3
+    _pullInterval: 0.5
+    _pullRadius: 4
+    _pullDistanceStart: 0.04
+    _pullDistanceEnd: 0.16
+    _pullSeconds: 0.8
+    _implodeRadius: 3
+    _implodeStrength: 3

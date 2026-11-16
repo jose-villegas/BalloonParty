@@ -52,9 +52,15 @@ MonoBehaviour:
   - _name: DiscoRays
     _color: {r: 1, g: 1, b: 1, a: 0.55}
     _presentationOnly: 1
+  - _name: NukeRays
+    _color: {r: 0.45, g: 1, b: 0.2, a: 0.7}
+    _presentationOnly: 1
   - _name: SnipeWhirlwind
     _color: {r: 0.92, g: 0.96, b: 1, a: 1}
     _presentationOnly: 1
   - _name: SnipeSkyLight
     _color: {r: 1, g: 1, b: 1, a: 1}
+    _presentationOnly: 1
+  - _name: NukeArmedRays
+    _color: {r: 1, g: 0.16, b: 0.08, a: 0.6}
     _presentationOnly: 1

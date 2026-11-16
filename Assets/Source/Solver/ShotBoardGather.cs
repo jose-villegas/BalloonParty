@@ -263,7 +263,9 @@ namespace BalloonParty.Solver
             {
                 LocateTarget(grid, index, out var rewardPosition, out var rewardRadius);
                 var rewardBalance = BuildTargetBalance(balloonsConfig, index, actor);
-                return TryBuildRewardSnapshot(type, rewardPosition, rewardRadius, rewardBalance, out snapshot);
+                var rewardHits = actor is IHasDurability rewardDurable ? rewardDurable.HitsRemaining.Value : 1;
+                return TryBuildRewardSnapshot(
+                    type, rewardPosition, rewardRadius, rewardHits, rewardBalance, out snapshot);
             }
 
             int hitsRemaining;
@@ -328,7 +330,8 @@ namespace BalloonParty.Solver
         // One snapshot per reward type, as BalloonModelFactory builds one model per type. An unmapped reward
         // is no target: the solver aims as if it were not there rather than failing the shot.
         private static bool TryBuildRewardSnapshot(
-            BalloonType type, Vector2 position, float radius, BalanceProfile balance, out ShotBalloonSnapshot snapshot)
+            BalloonType type, Vector2 position, float radius, int hitsRemaining, BalanceProfile balance,
+            out ShotBalloonSnapshot snapshot)
         {
             switch (type)
             {
@@ -340,6 +343,9 @@ namespace BalloonParty.Solver
                     return true;
                 case BalloonType.Disco:
                     snapshot = ShotBalloonSnapshot.ForDiscoTarget(position, radius, balance);
+                    return true;
+                case BalloonType.Nuke:
+                    snapshot = ShotBalloonSnapshot.ForNukeTarget(position, radius, hitsRemaining, balance);
                     return true;
                 default:
                     snapshot = default;

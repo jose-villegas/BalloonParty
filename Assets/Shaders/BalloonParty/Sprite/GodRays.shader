@@ -5,7 +5,8 @@
 // other instead of reading as a rigid spoked wheel; a lobe's brightness also sets how far it reaches, so
 // the outline is uneven. The whole thing breathes. The renderer's colour tints it, and its alpha is the
 // strength. With Rainbow on (the disco ball's), each ray of the first fan takes one of the level's allowed
-// colours (RainbowBand.cginc), the colours the ball turns the board into.
+// colours (RainbowBand.cginc), the colours the ball turns the board into. A Second Fan Colour with alpha above 0
+// (the nuke's yellow among its green) colours the second fan's rays apart from the first's.
 Shader "BalloonParty/Sprite/GodRays"
 {
     Properties
@@ -29,6 +30,8 @@ Shader "BalloonParty/Sprite/GodRays"
         [Header(Colour)]
         [Toggle(_RAINBOW_RAYS)] _RainbowRays("Rainbow (the level's colours)", Float) = 0
         _RainbowSoftness("Rainbow Blend Between Rays", Range(0,1)) = 0.5
+        // Its alpha is how far the second fan's rays take this colour over the renderer's; 0 leaves them alike.
+        _SecondFanColor("Second Fan Colour", Color) = (1,1,1,0)
 
         [Header(Motion)]
         _SpinSpeed("Spin (radians per second)", Range(0,2)) = 0.12
@@ -110,6 +113,7 @@ Shader "BalloonParty/Sprite/GodRays"
             float _BreathDepth;
             float _Additive;
             float _RainbowSoftness;
+            fixed4 _SecondFanColor;
 
             v2f vert(appdata_t IN)
             {
@@ -147,9 +151,9 @@ Shader "BalloonParty/Sprite/GodRays"
                 float turn = _Time.y * _SpinSpeed;
 
                 // The second fan turns the other way, a little slower, so the lobes shift through each other.
-                float rays = lerp(Fan(angle, _RayCount, turn, 0.0),
-                                  Fan(angle, _RayCount2, -0.7 * turn, 1.3),
-                                  _SecondFan);
+                float first = Fan(angle, _RayCount, turn, 0.0);
+                float second = Fan(angle, _RayCount2, -0.7 * turn, 1.3);
+                float rays = lerp(first, second, _SecondFan);
 
                 float reach = lerp(_ShortestRay, 1.0, rays);
                 float radial = pow(saturate(1.0 - r / reach), _Falloff);
@@ -160,6 +164,9 @@ Shader "BalloonParty/Sprite/GodRays"
                 float amount = saturate((rays * radial * inner + halo) * breath) * IN.color.a;
 
                 half3 tint = IN.color.rgb;
+                // The second fan's share of the light where both fans overlap.
+                float secondShare = second * _SecondFan / max(first * (1.0 - _SecondFan) + second * _SecondFan, 1e-4);
+                tint = lerp(tint, _SecondFanColor.rgb, _SecondFanColor.a * secondShare);
                 #ifdef _RAINBOW_RAYS
                 // A lobe of the first fan peaks where n(angle - turn) is a whole turn, so this is the ray's index
                 // plus a half there: each ray shows one band whole and blends into the next in the dark between.

@@ -29,9 +29,13 @@ namespace BalloonParty.Balloon.Reward
     ///         each further one rarer (<see cref="IRewardBalloonSettings.PurpleHeartChances" />). Elsewhere it comes from
     ///         a roll on every line while a heart is missing, likelier the more are, after a cooldown since the last.
     ///     </para>
-    ///     A line brings one at most: the golden balloon first, then the disco ball, then the heart. One that loses the
-    ///     line stays due for the next. The Party Favors card (<see cref="IWeaponStats.RewardBalloonOdds" />) raises
-    ///     every roll's chance.
+    ///     <para>
+    ///         The nuke (PLAN-NukeBalloon) rolls on every line from its first level, its chance raised by the trouble
+    ///         the player is in (<see cref="NukeSchedule" />, <see cref="INukeOdds" />).
+    ///     </para>
+    ///     A line brings one at most: the nuke first, then the golden balloon, the disco ball and the heart. One that
+    ///     loses the line stays due for the next. The Party Favors card (<see cref="IWeaponStats.RewardBalloonOdds" />)
+    ///     raises every roll's chance but the nuke's, which follows trouble rather than a build.
     /// </summary>
     internal sealed class RewardBalloonService : IRewardBalloonRequests, IStartable, IRunResettable, IDisposable
     {
@@ -44,9 +48,11 @@ namespace BalloonParty.Balloon.Reward
         private readonly PityRoll _heartPity;
         private readonly PlatedRewardSchedule _golden;
         private readonly PlatedRewardSchedule _disco;
+        private readonly NukeSchedule _nuke;
         private readonly bool _goldenPlaceable;
         private readonly bool _discoPlaceable;
         private readonly bool _heartPlaceable;
+        private readonly bool _nukePlaceable;
 
         private IDisposable _levelSubscription;
         private int _heartsThisLevel;
@@ -76,7 +82,8 @@ namespace BalloonParty.Balloon.Reward
             IPlayerHealth health,
             IPlayerNeed need,
             IAssistSettings assist,
-            IWeaponStats weapon)
+            IWeaponStats weapon,
+            INukeOdds nukeOdds)
         {
             _settings = balloons.RewardBalloons;
             _levelProgress = levelProgress;
@@ -88,9 +95,11 @@ namespace BalloonParty.Balloon.Reward
             // Through the property each draw, so a test's seam set after construction still reaches the schedules.
             _golden = new PlatedRewardSchedule(() => Random01());
             _disco = new PlatedRewardSchedule(() => Random01());
+            _nuke = new NukeSchedule(balloons.NukeOdds, nukeOdds, () => Random01());
             _goldenPlaceable = HasEntry(balloons, BalloonType.Golden);
             _discoPlaceable = HasEntry(balloons, BalloonType.Disco);
             _heartPlaceable = HasEntry(balloons, BalloonType.Heart);
+            _nukePlaceable = HasEntry(balloons, BalloonType.Nuke);
             _linesSinceHeart = _settings.HeartCooldownLines;
         }
 
@@ -109,6 +118,12 @@ namespace BalloonParty.Balloon.Reward
             }
 
             _linesSinceHeart++;
+            if (_nukePlaceable && _nuke.Due(_levelProgress.Level.Value))
+            {
+                type = BalloonType.Nuke;
+                return true;
+            }
+
             if (_goldenPlaceable && PlatedDue(_golden, PlatedRewardTuning.Golden(_settings)))
             {
                 type = BalloonType.Golden;
@@ -138,6 +153,8 @@ namespace BalloonParty.Balloon.Reward
                     return _golden.Placed(_levelProgress.Level.Value);
                 case BalloonType.Disco:
                     return _disco.Placed(_levelProgress.Level.Value);
+                case BalloonType.Nuke:
+                    return _nuke.Placed();
                 case BalloonType.Heart:
                 {
                     _heartsThisLevel++;
@@ -157,6 +174,7 @@ namespace BalloonParty.Balloon.Reward
         {
             _golden.ResetRun(_settings.PurpleRollEveryLines);
             _disco.ResetRun(_settings.PurpleRollEveryLines);
+            _nuke.ResetRun();
             _heartPlacement++;
             ForgetHeartsLevel();
             _heartAlive = false;
@@ -208,6 +226,7 @@ namespace BalloonParty.Balloon.Reward
         {
             _golden.ForgetLevel(_settings.PurpleRollEveryLines);
             _disco.ForgetLevel(_settings.PurpleRollEveryLines);
+            _nuke.ForgetLevel();
             ForgetHeartsLevel();
         }
 

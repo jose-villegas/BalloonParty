@@ -72,6 +72,18 @@ namespace BalloonParty.Configuration.Palette
         public const string DiscoRaysColorId = "DiscoRays";
 
         /// <summary>
+        ///     Presentation-only palette entry for the green flare behind the nuke while it waits (PLAN-NukeBalloon); its
+        ///     material turns a yellow fan through it. Its alpha is its strength.
+        /// </summary>
+        public const string NukeRaysColorId = "NukeRays";
+
+        /// <summary>
+        ///     The red flare behind the nuke once it is armed and its fuse runs; its alpha is its strength. It sits past
+        ///     the scene-light field's slots (<c>PaletteChannelEncoding.Slots</c>), which only lights need.
+        /// </summary>
+        public const string NukeArmedRaysColorId = "NukeArmedRays";
+
+        /// <summary>
         ///     Presentation-only palette entry for the whirlwind around the thrower when a ball loads Snipe-armed (the
         ///     Sharpshooter card) — authored in the palette asset but never a spawnable balloon color.
         /// </summary>

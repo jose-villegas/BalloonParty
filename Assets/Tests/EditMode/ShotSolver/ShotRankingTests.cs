@@ -10,9 +10,9 @@ namespace BalloonParty.Tests.ShotSolver
     [TestFixture]
     public class ShotRankingTests
     {
-        private static ShotSimulationResult Shot(int score, int golden = 0, int heart = 0, int disco = 0)
+        private static ShotSimulationResult Shot(int score, int golden = 0, int heart = 0, int disco = 0, int nuke = 0)
         {
-            return new ShotSimulationResult(score, 0, 0, false, 0, false, false, false, golden, heart, disco);
+            return new ShotSimulationResult(score, 0, 0, false, 0, false, false, false, golden, heart, disco, nuke);
         }
 
         [Test]
@@ -71,6 +71,35 @@ namespace BalloonParty.Tests.ShotSolver
             Assert.IsTrue(ShotRanking.IsBetter(Shot(0, golden: 1), Shot(0, disco: 1), heartsWanted: 0));
             Assert.IsTrue(ShotRanking.IsBetter(Shot(0, heart: 1), Shot(0, disco: 1), heartsWanted: 1));
             Assert.IsTrue(ShotRanking.IsBetter(Shot(0, disco: 1), Shot(0, heart: 1), heartsWanted: 0));
+        }
+
+        [Test]
+        public void IsBetter_ANukePop_BeatsAnyScore()
+        {
+            Assert.IsTrue(ShotRanking.IsBetter(Shot(0, nuke: 1), Shot(100000), heartsWanted: 0));
+            Assert.IsFalse(ShotRanking.IsBetter(Shot(100000), Shot(0, nuke: 1), heartsWanted: 0));
+        }
+
+        [Test]
+        public void IsBetter_ANukePop_BeatsADiscoPop()
+        {
+            Assert.IsTrue(ShotRanking.IsBetter(Shot(0, nuke: 1), Shot(0, disco: 1), heartsWanted: 0));
+            Assert.IsFalse(ShotRanking.IsBetter(Shot(0, disco: 1), Shot(0, nuke: 1), heartsWanted: 0));
+        }
+
+        [Test]
+        public void IsBetter_AGoldenPopOrAHeartThatCounts_BeatsANukePop()
+        {
+            Assert.IsTrue(ShotRanking.IsBetter(Shot(0, golden: 1), Shot(0, nuke: 1), heartsWanted: 0));
+            Assert.IsTrue(ShotRanking.IsBetter(Shot(0, heart: 1), Shot(0, nuke: 1), heartsWanted: 1));
+            Assert.IsFalse(ShotRanking.IsBetter(Shot(0, nuke: 1), Shot(0, heart: 1), heartsWanted: 1));
+        }
+
+        // A heart that adds nothing doesn't outrank a nuke pop.
+        [Test]
+        public void IsBetter_ANukePop_BeatsAHeartThatDoesntCount()
+        {
+            Assert.IsTrue(ShotRanking.IsBetter(Shot(0, nuke: 1), Shot(0, heart: 1), heartsWanted: 0));
         }
 
         [TestCase(1, 3, false, 2)]
