@@ -234,7 +234,11 @@ prefab's baked shadow child, as the golden balloon's is.
   past white so it blooms. Unarmed it shows a green heart. Armed it shows the seconds left, bright red.
 - **The lamp.** A small domed lamp above the placard. Unarmed it pulses green. Armed it is red and blinks
   with each beep. Both are drawn by the body shader from `_FuseArmed` and `_FuseDigit`, which
-  `NukeFuseView` pushes.
+  `NukeFuseView` pushes, and both shine `_FuseGlow` (3) times past white.
+- **The seam light.** A thin line of light down the gaps between the plates, with a soft glow either side:
+  HDR green while it waits, dim red once armed, flaring bright red on each count (`_FuseBeat`).
+- The LED, the lamp and the seam light are the only parts of a balloon that bloom: every other balloon
+  colour is capped at white (Plans/PLAN-HDR), so the shader adds them after the cap.
 - **The flare.** God rays behind it (`GodRaysLook`, `NukeRays`), spinning like the other reward balloons'. One
   fan is green (palette `NukeRays`) and the other yellow (the material's second fan colour) while it waits; once
   armed the green fan turns red (palette `NukeArmedRays`).

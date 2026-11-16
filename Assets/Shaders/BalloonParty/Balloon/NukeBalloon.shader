@@ -9,7 +9,10 @@ Shader "BalloonParty/Balloon/NukeBalloon"
     // glass, and above it a domed lamp; NukeFuseView pushes the fuse they show (_FuseArmed, _FuseDigit, _FuseBeat).
     // Unarmed, the LED shows a green heart and the lamp pulses green; armed, the LED counts the fuse down in bright
     // red digits and the lamp turns red, flashing with each count. Both shine by themselves, so the night doesn't dim
-    // them. The shadow comes from the prefab's baked shadow child.
+    // them. A thin line of light runs along the seams between the plates: HDR green while it waits, dim red once
+    // armed, flaring bright red on each count. The seam light, the LED's heart and digits and the lamp are the parts
+    // of a balloon that bloom (Plans/PLAN-HDR caps the rest at white), so they are added after the cap. The shadow
+    // comes from the prefab's baked shadow child.
 
     Properties
     {
@@ -98,6 +101,17 @@ Shader "BalloonParty/Balloon/NukeBalloon"
         _LampRed    ("Lamp Armed", Color) = (1.00, 0.10, 0.05, 1)
         // The glow the lamp throws on the plating around it, as a share of the lamp's own light.
         _LampHalo   ("Lamp Halo", Range(0, 1)) = 0.35
+        // How far past white the LED's heart and digits and the lamp shine, so they bloom.
+        _FuseGlow   ("Glow (HDR)", Range(1, 8)) = 3
+        [Header(Seam Light)]
+        // A line of light along the seams between the plates, in plate units, and the glow it spills over the
+        // rubber either side.
+        _SeamWidth     ("Line Half Width", Range(0, 0.1)) = 0.028
+        _SeamHalo      ("Halo", Range(0, 1)) = 0.4
+        [HDR] _SeamGreen ("Waiting", Color) = (0.5, 3.2, 0.8, 1)
+        [HDR] _SeamRed   ("Armed Count", Color) = (4.5, 0.35, 0.15, 1)
+        // How bright the red line stays between counts, as a share of its flare on a count.
+        _SeamArmedIdle ("Armed Between Counts", Range(0, 1)) = 0.12
         [HideInInspector] _FuseArmed ("Armed", Float) = 0
         [HideInInspector] _FuseDigit ("Digit", Float) = 3
         [HideInInspector] _FuseBeat  ("Last Count", Float) = -100
@@ -247,6 +261,12 @@ Shader "BalloonParty/Balloon/NukeBalloon"
             half4  _LampGreen;
             half4  _LampRed;
             float  _LampHalo;
+            float  _FuseGlow;
+            float  _SeamWidth;
+            float  _SeamHalo;
+            half4  _SeamGreen;
+            half4  _SeamRed;
+            float  _SeamArmedIdle;
             float  _FuseArmed;
             float  _FuseDigit;
             float  _FuseBeat;
@@ -338,6 +358,18 @@ Shader "BalloonParty/Balloon/NukeBalloon"
                 return lerp(col, plate, placard);
             }
 
+            // How much of p the placard, the LED housing and the lamp cover: the seam light runs under them.
+            float FuseCover(float2 p)
+            {
+                float  placard = 1.0 - smoothstep(0.97, 1.03, length(p - float2(0.0, _MarkLift)) / _MarkRadius);
+                float2 h = abs(p - float2(0.0, _MarkLift - _MarkRadius - _LedGap - _LedSize.y)) - _LedSize.xy;
+                float  box = length(max(h, 0.0)) + min(max(h.x, h.y), 0.0) - 0.02;
+                float  housing = 1.0 - smoothstep(-0.006, 0.006, box);
+                float2 lampCenter = float2(0.0, _MarkLift + _MarkRadius + _LampGap + _LampRadius);
+                float  lamp = 1.0 - smoothstep(0.97, 1.03, length(p - lampCenter) / _LampRadius);
+                return saturate(max(placard, max(housing, lamp)));
+            }
+
             // Whether seven-segment segment i (a to g: top, upper right, lower right, bottom, lower left, upper left,
             // middle) is lit for a digit.
             float SegmentOn(float digit, float segment)
@@ -384,8 +416,10 @@ Shader "BalloonParty/Balloon/NukeBalloon"
 
             // The LED counter under the placard and the lamp over it. They shine by themselves: the glass and the
             // bezel take the scene light (tint), the digit and the lamp don't.
-            half3 FuseParts(half3 col, float2 p, half3 tint)
+            // What shines by itself goes out in glow, to be added past the white cap, so it blooms.
+            half3 FuseParts(half3 col, float2 p, half3 tint, out half3 glowOut)
             {
+                glowOut = 0.0;
                 // The LED: a rounded box of dark glass in a steel bezel, one digit behind it.
                 float2 ledCenter = float2(0.0, _MarkLift - _MarkRadius - _LedGap - _LedSize.y);
                 float2 d = p - ledCenter;
@@ -422,8 +456,9 @@ Shader "BalloonParty/Balloon/NukeBalloon"
                     float  bright = lerp(_LedIdle, 1.0, _FuseArmed);
                     // The heart glows the lamp's green; the count, the LED's red.
                     half3  glow = lerp(_LampGreen.rgb, _LedColor.rgb, _FuseArmed);
-                    half3  led = glass + _LedColor.rgb * ghost * 0.06 + glow * lit * bright * 1.4;
+                    half3  led = glass + _LedColor.rgb * ghost * 0.06;
                     col = lerp(col, led, housing);
+                    glowOut += glow * lit * bright * 1.4 * _FuseGlow * housing;
                 }
 
                 // The lamp: a small dome, pulsing green while it waits, red and flashing on each count once armed.
@@ -436,10 +471,12 @@ Shader "BalloonParty/Balloon/NukeBalloon"
                 half3  light = lerp(_LampGreen.rgb * waiting, _LampRed.rgb * (0.45 + 0.9 * flash), _FuseArmed);
                 float  lamp = 1.0 - smoothstep(1.0 - la, 1.0 + la, r);
                 float  spot = pow(saturate(1.0 - length(l - float2(-0.35, 0.4)) * 1.8), 3.0);
-                half3  dome = lerp(_MarkBlack.rgb * 3.0 * tint, light * 1.3 + spot * 0.8, smoothstep(1.0, 0.75, r));
+                float  inner = smoothstep(1.0, 0.75, r);
+                half3  dome = lerp(_MarkBlack.rgb * 3.0 * tint, spot * 0.8, inner);
                 col = lerp(col, dome, lamp);
+                glowOut += light * 1.3 * _FuseGlow * inner * lamp;
                 float  halo = saturate(1.0 - (r - 1.0) / 1.6);
-                col += light * _LampHalo * halo * halo * (1.0 - lamp);
+                glowOut += light * _LampHalo * halo * halo * (1.0 - lamp);
                 return col;
             }
 
@@ -602,6 +639,19 @@ Shader "BalloonParty/Balloon/NukeBalloon"
                 rubber *= 1.0 - _CastShadow * smoothstep(-edgeSoft, edgeSoft, casterEdge - _GapWidth);
                 rubber = lerp(rubber, _RubberShade.rgb * 0.5, pow(rFlat, _EdgePower));
                 col = layers + rubber * (1.0 - cover);
+
+                // The seam light: a thin line down the middle of each gap on the rubber, and a soft glow either side
+                // of it, both hidden where a plate's wall stands in front and thinned toward the rim.
+                float  seamAA = max(fwidth(floorEdge), 0.002);
+                float  seamLine = 1.0 - smoothstep(_SeamWidth - seamAA, _SeamWidth + seamAA, floorEdge);
+                float  seamGlow = exp(-floorEdge / max(_GapWidth * 0.45, 0.001)) * _SeamHalo;
+                float  seamShow = (1.0 - cover) * (1.0 - pow(rFlat, _EdgePower));
+                float  seamBeat = exp(-max(_Time.y - _FuseBeat, 0.0) * 5.0);
+                float  seamWaiting = 0.8 + 0.2 * sin(_Time.y * 3.0);
+                half3  seamLight = lerp(_SeamGreen.rgb * seamWaiting,
+                                        _SeamRed.rgb * lerp(_SeamArmedIdle, 1.0, seamBeat), _FuseArmed);
+                half3  seam = seamLight * saturate(seamLine + seamGlow) * seamShow * (1.0 - FuseCover(p));
+
                 col = DangerPlacard(col, p, normal, IN.toLight, IN.halfway);
 
                 // World space, so the rim never turns with the sway.
@@ -613,9 +663,11 @@ Shader "BalloonParty/Balloon/NukeBalloon"
                 // prefab, and kept so a renderer colour can still dim or tint the balloon.
                 half3 tint = lerp(float3(1.0, 1.0, 1.0), IN.lightTint, _LightInfluence) * IN.color.rgb;
                 col *= tint;
-                col = FuseParts(col, p, tint);
-                // Balloons never bloom (Plans/PLAN-HDR): the glint and glitter top out at white.
-                col = SceneLightCapToWhite(col);
+                half3 fuseGlow;
+                col = FuseParts(col, p, tint, fuseGlow);
+                // Balloons never bloom (Plans/PLAN-HDR): the glint and glitter top out at white. The seam light and
+                // the fuse's lights are the exception, so they go on after the cap, and shine through the night.
+                col = SceneLightCapToWhite(col) + seam + fuseGlow;
 
                 return fixed4(col * alpha, alpha);
             }
