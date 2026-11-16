@@ -4,8 +4,8 @@ namespace BalloonParty.Configuration.Balloons
 {
     /// <summary>
     ///     When the reward balloons come (PLAN-RewardBalloons): on a purple level, both rolled every few lines with
-    ///     each further one rarer; elsewhere, now and then a single golden one, and a heart one for a player missing
-    ///     hearts.
+    ///     each further one rarer; elsewhere, now and then a single golden one or disco ball, never too many levels
+    ///     apart, and a heart one for a player missing hearts.
     /// </summary>
     public interface IRewardBalloonSettings
     {
@@ -16,12 +16,23 @@ namespace BalloonParty.Configuration.Balloons
         float GoldenAtCompletion { get; }
 
         /// <summary>
-        ///     Off a purple level, every this many levels rolls once (<see cref="OrdinaryGoldenChance" />) for a single
-        ///     golden balloon at <see cref="GoldenAtCompletion" />. 0 is off.
+        ///     Off a purple level, every this many levels from <see cref="SureGoldenLevel" /> on rolls once
+        ///     (<see cref="OrdinaryGoldenChance" />) for a single golden balloon at <see cref="GoldenAtCompletion" />.
+        ///     1 is every level, 0 is off.
         /// </summary>
         int OrdinaryGoldenEveryLevels { get; }
 
+        /// <summary>
+        ///     The ordinary roll's chance at the sure level, eased off over the run
+        ///     (<see cref="OrdinaryChanceHalvedAfterLevels" />).
+        /// </summary>
         float OrdinaryGoldenChance { get; }
+
+        /// <summary>
+        ///     Hard pity: after this many levels in a row without a golden balloon placed, the next level off purple,
+        ///     from <see cref="SureGoldenLevel" /> on, brings one with no roll. 0 is none.
+        /// </summary>
+        int GoldenPityLevels { get; }
 
         /// <summary>A level that always brings a single golden balloon, with no roll; 0 for none.</summary>
         int SureGoldenLevel { get; }
@@ -59,11 +70,24 @@ namespace BalloonParty.Configuration.Balloons
 
         /// <summary>
         ///     Off a purple level, every this many levels, from <see cref="SureDiscoLevel" /> on, rolls once
-        ///     (<see cref="OrdinaryDiscoChance" />) for a single disco ball. 0 is off.
+        ///     (<see cref="OrdinaryDiscoChance" />) for a single disco ball. 1 is every level, 0 is off.
         /// </summary>
         int OrdinaryDiscoEveryLevels { get; }
 
+        /// <summary>
+        ///     The ordinary roll's chance at the sure level, eased off over the run
+        ///     (<see cref="OrdinaryChanceHalvedAfterLevels" />).
+        /// </summary>
         float OrdinaryDiscoChance { get; }
+
+        /// <summary>The disco ball's hard pity, as <see cref="GoldenPityLevels" />.</summary>
+        int DiscoPityLevels { get; }
+
+        /// <summary>
+        ///     How the golden balloon's and the disco ball's ordinary chances ease off over a run: halved this many
+        ///     levels past each one's sure level, a third at twice that. 0 is never.
+        /// </summary>
+        int OrdinaryChanceHalvedAfterLevels { get; }
 
         /// <summary>A level that always brings a single disco ball, with no roll; 0 for none.</summary>
         int SureDiscoLevel { get; }

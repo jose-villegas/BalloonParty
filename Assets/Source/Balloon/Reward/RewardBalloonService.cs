@@ -20,8 +20,8 @@ namespace BalloonParty.Balloon.Reward
     ///         The plated ones, the golden balloon and the disco ball, share their rules (<see cref="PlatedRewardSchedule" />)
     ///         and differ only in their numbers: on a purple level, rolled every
     ///         <see cref="IRewardBalloonSettings.PurpleRollEveryLines" /> lines from a share of the level done, each
-    ///         further one rarer; elsewhere, now and then a single one, and always one on its sure level. The disco ball's
-    ///         first on a purple level is sure.
+    ///         further one rarer; elsewhere, now and then a single one, likelier early in the run, sure after a few
+    ///         levels without one, and always one on its sure level. The disco ball's first on a purple level is sure.
     ///     </para>
     ///     <para>
     ///         The heart, on a purple level, is rolled every few lines from the level's start (at full hearts too),
@@ -127,9 +127,9 @@ namespace BalloonParty.Balloon.Reward
             switch (type)
             {
                 case BalloonType.Golden:
-                    return _golden.Placed();
+                    return _golden.Placed(_levelProgress.Level.Value);
                 case BalloonType.Disco:
-                    return _disco.Placed();
+                    return _disco.Placed(_levelProgress.Level.Value);
                 case BalloonType.Heart:
                 {
                     _heartsThisLevel++;

@@ -1135,6 +1135,88 @@ namespace BalloonParty.Tests.Balloon
             Assert.AreEqual(0, _draws);
         }
 
+        // Hard pity: four levels in a row without a golden balloon, and the fifth brings one with no roll.
+        [Test]
+        public void GoldenPity_AfterItsLevelsWithoutOne_TheNextBringsOneWithoutARoll()
+        {
+            UseGoldenPity(4);
+
+            for (var level = 6; level <= 9; level++)
+            {
+                _levelNumber.Value = level;
+                Assert.IsFalse(LinesUntilDue(5), $"level {level}: a lost roll");
+            }
+
+            _levelNumber.Value = 10;
+            var draws = _draws;
+            Assert.IsTrue(LinesUntilDue(1), "the fifth level without one");
+            Assert.AreEqual(draws, _draws, "the pity needs no roll");
+        }
+
+        [Test]
+        public void GoldenPity_AWonRoll_StartsTheCountOver()
+        {
+            UseGoldenPity(4);
+            _levelNumber.Value = 7;
+            _roll = 0f;
+            Assert.IsTrue(LinesUntilDue(1), "level 7 wins its roll");
+            _service.Placed(BalloonType.Golden)();
+
+            _roll = 0.99f;
+            for (var level = 8; level <= 11; level++)
+            {
+                _levelNumber.Value = level;
+                Assert.IsFalse(LinesUntilDue(5), $"level {level}: counted from level 7");
+            }
+
+            _levelNumber.Value = 12;
+            Assert.IsTrue(LinesUntilDue(1));
+        }
+
+        // The pity is each kind's own: the disco ball's comes on its own count, with the golden's off.
+        [Test]
+        public void DiscoPity_CountsFromTheLastDiscoBall()
+        {
+            UseDisco();
+            _settings.DiscoPityLevels.Returns(2);
+            UseOrdinaryLevel(level: 8, roll: 0.99f);
+            SetCompletion(0.9f);
+            Assert.AreEqual(1, FirstDueLine(BalloonType.Disco, 1), "the sure level");
+            _service.Placed(BalloonType.Disco)();
+
+            _levelNumber.Value = 10;
+            Assert.AreEqual(0, FirstDueLine(BalloonType.Disco, 5), "two levels without one");
+
+            _levelNumber.Value = 11;
+            Assert.AreEqual(1, FirstDueLine(BalloonType.Disco, 1), "the third");
+        }
+
+        [TestCase(0, 45, 0.2f)]
+        [TestCase(20, 3, 0.2f)]
+        [TestCase(20, 5, 0.2f)]
+        [TestCase(20, 25, 0.1f)]
+        [TestCase(20, 45, 0.2f / 3f)]
+        public void OrdinaryChance_EasesOffSoftlyOverTheRun(int halvedAfter, int level, float expected)
+        {
+            var tuning = new PlatedRewardTuning(1, 0.2f, 0.5f, 5, 0.1f, 0.15f, null, 0, halvedAfter);
+
+            Assert.AreEqual(expected, PlatedRewardSchedule.OrdinaryChance(in tuning, level), 1e-5f);
+        }
+
+        // Twenty levels past the sure level the 20% roll is 10%: a draw the sure level's chance would win, loses.
+        [Test]
+        public void OrdinaryGolden_LateInTheRun_RollsTheEasedChance()
+        {
+            UseOrdinaryGolden(level: 25, roll: 0.15f);
+            _settings.OrdinaryGoldenEveryLevels.Returns(1);
+            _settings.OrdinaryGoldenChance.Returns(0.2f);
+            _settings.SureGoldenLevel.Returns(5);
+            _settings.OrdinaryChanceHalvedAfterLevels.Returns(20);
+            SetCompletion(0.8f);
+
+            Assert.IsFalse(LinesUntilDue(5));
+        }
+
         [TestCase(4, 0, 4, true)]
         [TestCase(4, 0, 6, false)]
         [TestCase(4, 8, 4, false)]
@@ -1275,6 +1357,19 @@ namespace BalloonParty.Tests.Balloon
             _level.IsExtraColorLevel.Returns(false);
             _levelNumber.Value = level;
             _roll = roll;
+        }
+
+        // A golden balloon rolled on every ordinary level, every roll lost, with the given hard pity; the sure level 5
+        // has placed its one and it is gone.
+        private void UseGoldenPity(int pityLevels)
+        {
+            UseOrdinaryGolden(level: 5, roll: 0.99f);
+            _settings.OrdinaryGoldenEveryLevels.Returns(1);
+            _settings.SureGoldenLevel.Returns(5);
+            _settings.GoldenPityLevels.Returns(pityLevels);
+            SetCompletion(0.8f);
+            Assert.IsTrue(LinesUntilDue(1), "the sure level");
+            _service.Placed(BalloonType.Golden)();
         }
 
         // A catalogue with the disco ball, on its own numbers: sure first on a purple level from 25% done, then 25%;

@@ -17,10 +17,13 @@ namespace BalloonParty.Balloon.Reward
         public readonly float SureAtCompletion;
         public readonly float PurpleAtCompletion;
         public readonly IReadOnlyList<float> PurpleChances;
+        public readonly int PityLevels;
+        public readonly int ChanceHalvedAfterLevels;
 
         internal PlatedRewardTuning(
             int ordinaryEveryLevels, float ordinaryChance, float atCompletion, int sureLevel, float sureAtCompletion,
-            float purpleAtCompletion, IReadOnlyList<float> purpleChances)
+            float purpleAtCompletion, IReadOnlyList<float> purpleChances, int pityLevels = 0,
+            int chanceHalvedAfterLevels = 0)
         {
             OrdinaryEveryLevels = ordinaryEveryLevels;
             OrdinaryChance = ordinaryChance;
@@ -29,6 +32,8 @@ namespace BalloonParty.Balloon.Reward
             SureAtCompletion = sureAtCompletion;
             PurpleAtCompletion = purpleAtCompletion;
             PurpleChances = purpleChances;
+            PityLevels = pityLevels;
+            ChanceHalvedAfterLevels = chanceHalvedAfterLevels;
         }
 
         internal static PlatedRewardTuning Golden(IRewardBalloonSettings settings)
@@ -36,7 +41,7 @@ namespace BalloonParty.Balloon.Reward
             return new PlatedRewardTuning(
                 settings.OrdinaryGoldenEveryLevels, settings.OrdinaryGoldenChance, settings.GoldenAtCompletion,
                 settings.SureGoldenLevel, settings.SureGoldenAtCompletion, settings.PurpleGoldenAtCompletion,
-                settings.PurpleGoldenChances);
+                settings.PurpleGoldenChances, settings.GoldenPityLevels, settings.OrdinaryChanceHalvedAfterLevels);
         }
 
         internal static PlatedRewardTuning Disco(IRewardBalloonSettings settings)
@@ -44,7 +49,7 @@ namespace BalloonParty.Balloon.Reward
             return new PlatedRewardTuning(
                 settings.OrdinaryDiscoEveryLevels, settings.OrdinaryDiscoChance, settings.DiscoAtCompletion,
                 settings.SureDiscoLevel, settings.SureDiscoAtCompletion, settings.PurpleDiscoAtCompletion,
-                settings.PurpleDiscoChances);
+                settings.PurpleDiscoChances, settings.DiscoPityLevels, settings.OrdinaryChanceHalvedAfterLevels);
         }
     }
 }
